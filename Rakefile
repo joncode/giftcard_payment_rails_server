@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Template1::Application.load_tasks
+Drinkboard::Application.load_tasks

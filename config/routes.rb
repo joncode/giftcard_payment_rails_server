@@ -1,4 +1,4 @@
-Template1::Application.routes.draw do
+Drinkboard::Application.routes.draw do
   
   resources :relationships
   resources :sessions, only: [:new, :create, :destroy]
