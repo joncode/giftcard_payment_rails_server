@@ -1,0 +1,8 @@
+Template is the deploy version of DriveIn
+
+twitter bootstrap
+LESS 
+sqlite in development
+pg in production
+
+thin web server or webbrick
