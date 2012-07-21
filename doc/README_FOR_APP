@@ -4,9 +4,9 @@ zip template1 from github
 rename folder to project name
 git init
 gc "initial commit"
+
 search 't~emplate1' in project, replace with project name
 search 'T~emplate1' in project, replace with project name
-
 -  tilda is used so it doesnt show up in find in project
 
 set up github - use git config -l to check progress
