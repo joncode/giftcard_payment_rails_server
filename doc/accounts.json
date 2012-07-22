@@ -1,0 +1,53 @@
+/**
+ Export to JSON plugin for PHPMyAdmin
+ @version 0.1
+ */
+
+/* Database 'adflytoo_drinkboard' */ 
+/* adflytoo_drinkboard.accounts */
+
+[
+{"phone": 0,
+"first_name": "",
+"last_name": "",
+"email": "",
+"address": "",
+"city": "",
+"state": "",
+"zip": 0,
+"credit_number": null,
+"photo": null
+},
+{"phone": 0,
+"first_name": "",
+"last_name": "",
+"email": "",
+"address": "",
+"city": "",
+"state": "",
+"zip": 0,
+"credit_number": null,
+"photo": null}, 
+{"phone": 0,"first_name": "","last_name": "","email": "","address": "","city": "","state": "","zip": 0,"credit_number": null,"photo": null}, {"phone": 0,"first_name": "","last_name": "","email": "","address": "","city": "","state": "","zip": 0,"credit_number": null,"photo": null}, {"phone": 0,"first_name": "","last_name": "","email": "","address": "","city": "","state": "","zip": 0,"credit_number": null,"photo": null}, {"phone": 0,"first_name": "","last_name": "","email": "","address": "","city": "","state": "","zip": 0,"credit_number": null,"photo": null}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

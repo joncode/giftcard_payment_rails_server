@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120510183209) do
+ActiveRecord::Schema.define(:version => 20120722210851) do
 
   create_table "microposts", :force => true do |t|
     t.string   "content"
@@ -33,14 +33,23 @@ ActiveRecord::Schema.define(:version => 20120510183209) do
   add_index "relationships", ["follower_id"], :name => "index_relationships_on_follower_id"
 
   create_table "users", :force => true do |t|
-    t.string   "name"
+    t.string   "username"
     t.string   "email"
     t.boolean  "admin",           :default => false
-    t.string   "photo_url"
+    t.string   "photo"
     t.string   "password_digest"
     t.string   "remember_token"
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
+    t.string   "address"
+    t.string   "address_2"
+    t.string   "city"
+    t.string   "state"
+    t.integer  "zip"
+    t.string   "credit_number"
+    t.string   "phone"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
 end
