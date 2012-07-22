@@ -4,7 +4,7 @@ gem 'rails', '3.2.3'
 
 group :production do
 	gem 'pg', '0.12.2'
-	# gem 'thin'
+	gem 'thin'
 end
 
 group :development do
