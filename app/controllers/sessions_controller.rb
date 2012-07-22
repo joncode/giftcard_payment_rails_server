@@ -42,7 +42,7 @@ class SessionsController < ApplicationController
   end
  
   def make_password(user)
-    password = user.name * 2
+    password = user.username * 2
   end
 
 end

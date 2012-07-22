@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 User.delete_all
-User.create(username: 'admin', email: 'test@test.com', admin: true, password: 'testtest', password_confirmation: 'testtest', first_name: 'Jon', last_name: 'Gutwillig' , city: 'New York', state: 'NY', zip: 11238, phone: '1-646-493-4870', address: '127 Cambridge Pl', credit_number: '4444444444444444')
+User.create(username: 'admin', email: 'test@test.com', admin: true, password: 'testtest', password_confirmation: 'testtest', first_name: 'Larry', last_name: 'Page' , city: 'New York', state: 'NY', zip: 11238, phone: '1-646-493-4870', address: '1 Google Drive', credit_number: '4444444444444444')
 
 
 

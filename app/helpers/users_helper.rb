@@ -6,7 +6,7 @@ module UsersHelper
     else
       gravatar_url =  user.photo_url.to_s
     end 
-    image_tag(gravatar_url, alt: user.name, class: "gravatar") 
+    image_tag(gravatar_url, alt: user.username, class: "gravatar") 
   end 
    
 end

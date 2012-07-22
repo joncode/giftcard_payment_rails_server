@@ -3,7 +3,7 @@
     <section>
       <h1>
         <%= gravatar_for @user %>
-        <%= @user.name %>
+        <%= @user.username %>
       </h1>
       <%= render 'shared/stats' %> 
       <%= render 'follow_form' if signed_in? %>
@@ -21,7 +21,7 @@
         <%= render 'shared/feed' %>
       </ol>
     <% else %>
-      <h3> <%= @user.name %> has no microposts</h3>
+      <h3> <%= @user.username %> has no microposts</h3>
     <% end %>
   </div>
 </div>

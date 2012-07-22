@@ -3,7 +3,7 @@
     <section>
       <h1>
         <%= gravatar_for @user %>
-        <%= @user.name %>
+        <%= @user.username %>
       </h1>
       <div class="form-actions">
         <%= link_to t('.back', :default => t("helpers.links.back")),
