@@ -8,6 +8,3 @@
 
 User.delete_all
 User.create(username: 'admin', email: 'test@test.com', admin: true, password: 'testtest', password_confirmation: 'testtest', first_name: 'Larry', last_name: 'Page' , city: 'New York', state: 'NY', zip: 11238, phone: '1-646-493-4870', address: '1 Google Drive', credit_number: '4444444444444444')
-
-
-

@@ -1,3 +1,13 @@
+# if you want to check client json code ->
+
+# curl localhost:3000/app/create_account.json -d "data={\"username\":\"admin\",\"email\":\"teeest@teeest.com\",\"password\":\"teeest\",\"password_confirmation\":\"teeest\",\"first_name\":\"Larry\",\"last_name\":\"Page\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":11238,\"phone\":\"2342345656\",\"address\":\"1 Google Drive\",\"credit_number\":\"4444444444444444\"}"
+
+# { username: 'admin', email: 'teeest@teeest.com', password: 'teeest', password_confirmation: 'teeest', first_name: 'Larry', last_name: 'Page' , city: 'New York', state: 'NY', zip: 11238, phone: '1-201-493-4870', address: '1 Google Drive', credit_number: '4444444444444444' }
+
+#"{\"data\":{\"username\":\"admin\",\"email\":\"teeest@teeest.com\",\"password\":\"teeest\",\"password_confirmation\":\"teeest\",\"first_name\":\"Larry\",\"last_name\":\"Page\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":11238,\"phone\":\"2342345656\",\"address\":\"1 Google Drive\",\"credit_number\":\"4444444444444444\"}}"
+
+# curl localhost:3000/app/create_account.json -d "data={\"username\":\"admin\",\"email\":\"teeest@teeest.com\",\"password\":\"teeest\",\"password_confirmation\":\"teeest\",\"first_name\":\"Larry\",\"last_name\":\"Page\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":11238,\"phone\":\"2342345656\",\"address\":\"1 Google Drive\",\"credit_number\":\"4444444444444444\"}"
+
 /**
  Export to JSON plugin for PHPMyAdmin
  @version 0.1
@@ -5,6 +15,10 @@
 
 /* Database 'adflytoo_drinkboard' */ 
 /* adflytoo_drinkboard.accounts */
+
+
+"{\"address\":\"127 Cambridge Pl\",\"address_2\":null,\"admin\":true,\"city\":\"New York\",\"created_at\":\"2012-07-22T23:05:41Z\",\"credit_number\":\"4444444444444444\",\"email\":\"test@test.com\",\"first_name\":\"Jon\",\"id\":1,\"last_name\":\"Gutwillig\",\"password_digest\":\"$2a$10$iW9P4z0.39GAI3cJ1fYs9.wGTzzfV2RZFzKaq/RJyHUtvTemc52AC\",\"phone\":\"1-646-493-4870\",\"photo\":null,\"remember_token\":\"VkDcLcABKmP_5dRjt4WEMA\",\"state\":\"NY\",\"updated_at\":\"2012-07-22T23:05:41Z\",\"username\":\"admin\",\"zip\":11238}"
+
 
 [
 {"phone": 0,
@@ -18,16 +32,15 @@
 "credit_number": null,
 "photo": null
 },
-{"phone": 0,
-"first_name": "",
+{"first_name": "",
 "last_name": "",
 "email": "",
 "address": "",
 "city": "",
 "state": "",
-"zip": 0,
-"credit_number": null,
-"photo": null}, 
+"zip": 0,}
+
+, 
 {"phone": 0,"first_name": "","last_name": "","email": "","address": "","city": "","state": "","zip": 0,"credit_number": null,"photo": null}, {"phone": 0,"first_name": "","last_name": "","email": "","address": "","city": "","state": "","zip": 0,"credit_number": null,"photo": null}, {"phone": 0,"first_name": "","last_name": "","email": "","address": "","city": "","state": "","zip": 0,"credit_number": null,"photo": null}, {"phone": 0,"first_name": "","last_name": "","email": "","address": "","city": "","state": "","zip": 0,"credit_number": null,"photo": null}]
 
 

@@ -7,7 +7,9 @@ Drinkboard::Application.routes.draw do
   match '/signout', to: 'sessions#destroy', via: :delete
   resources :admins, only: [:new, :create, :destroy]
   root to: 'admins#hello'
-
+  
+  match 'app/create_account', to: 'iphone#create_account', via: :post
+  
   match '/about', to: 'home#about'
   match '/contact', to: 'home#contact'
   match '/home', to: 'home#index'

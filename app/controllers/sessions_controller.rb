@@ -8,7 +8,6 @@ class SessionsController < ApplicationController
     transfer = false
     if params[:page] == 'development'
       user = User.find_by_email(params[:email])
-      #password = make_password(user)
       case params[:email]
       when 'test@test.com'
         password = 'testtest'
@@ -39,10 +38,6 @@ class SessionsController < ApplicationController
   def destroy
     sign_out
     redirect_to home_path
-  end
- 
-  def make_password(user)
-    password = user.username * 2
   end
 
 end
