@@ -16,13 +16,7 @@ Drinkboard::Application.routes.draw do
   match '/channel', to: 'home#channel'
   match '/learn', to: 'home#learn'
   match '/news', to: 'home#news'
-  
-  match '/theatre', to: 'wireframe#theatre'
-  match '/screening_room', to: 'wireframe#screening_room'
-  match '/cutting_room', to: 'wireframe#cutting_room'
-  match '/suitcase', to: 'wireframe#suitcase'
-  match '/tabloids', to: 'wireframe#tabloids'
-  match '/surf', to: 'wireframe#surf'
+
   
   resources :microposts, only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
