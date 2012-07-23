@@ -11,8 +11,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
-      </a>
-      <%= link_to image_tag("clapboard-icon.jpg"), home_path, {:class => "brand"} %>
+      </a>  
+      <h1>
+        <strong><%= PAGE_NAME %></strong>&nbsp;
+        <%= link_to image_tag("88-beer-glass-white.png"), home_path, {:class => "brand"} %>
+      </h1>
       <div class="nav-collapse">
         <% if signed_in? %>
         <ul class="nav">
