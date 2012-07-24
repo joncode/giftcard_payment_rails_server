@@ -20,16 +20,16 @@
         <% if signed_in? %>
         <ul class="nav">
           
-          <li><%= link_to "wf 1", about_path %></li>
-          <li><%= link_to "wf 2", channel_path %></li>
-          <li><%= link_to "wf 3", contact_path %></li>
-          <li><%= link_to "wf 4", news_path %></li>
-          <li><%= link_to "wf 5", learn_path %></li>
+          <li><%= link_to "Gift", gift_path %></li>
+          <li><%= link_to "Buy", buy_path %></li>
+          <li><%= link_to "Drinkboard", board_path %></li>
+          <li><%= link_to "Profile", current_user %></li>
+          <li><%= link_to "Users", users_path %></li>
+          <li><%= link_to "Learn", learn_path %></li>
         </ul>
         <% end %>
         <ul class="nav pull-right">
           <% if signed_in? %>
-            <li><%= link_to "Users", users_path %></li>
             <li id="fat-menu" class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
                   <ul class="dropdown-menu">
