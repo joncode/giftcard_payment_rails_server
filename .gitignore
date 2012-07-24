@@ -23,6 +23,7 @@ capybara-*.html
 /log/*
 /tmp/*
 .DS_Store
+/doc/*
 
 /db/*.sqlite3
 /public/system/*
