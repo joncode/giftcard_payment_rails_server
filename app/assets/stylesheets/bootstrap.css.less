@@ -15,7 +15,7 @@
 //@fontAwesomeSvgPath: asset-path('fontawesome-webfont.svg');
 
 // Font Awesome
-// @import "fontawesome";
+// @import "MarkerFelt-Thin";
 
 
 
@@ -32,7 +32,34 @@
 @navbarHeight: 60px;
 @navbarLinkBackgroundHover: transparent;
 
+// Embed Fonts
+
+@font-face {
+    font-family: 'PoscaMadThrasherz';
+    src: url('fonts/posca_mad_thrasherz-webfont.eot');
+    src: url('fonts/posca_mad_thrasherz-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/posca_mad_thrasherz-webfont.woff') format('woff'),
+         url('fonts/posca_mad_thrasherz-webfont.ttf') format('truetype'),
+         url('fonts/posca_mad_thrasherz-webfont.svg#PoscaMadThrasherz') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+	font-family: 'MarkerFelt';
+	src: url('fonts/MarkerFelt.ttc');
+}
+
+// End Fonts
+
 body { padding-top: 100px; }
+
+h1, h2, h3, h4, h5, p , strong, li, a ,td {
+	font-family: 'MarkerFelt';
+	font-weight: normal;
+	letter-spacing: 2px;
+}
+
 
 .navbar .brand {
   color: @dark_shade;
