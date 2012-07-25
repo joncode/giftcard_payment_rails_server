@@ -14,8 +14,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def show
-    
+  def show    
     @user = User.find(params[:id])
     @microposts = @user.microposts.all(limit:15)
     @feed_items = @microposts
@@ -27,8 +26,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def new
-    
+  def new    
     @user = User.new
 
     respond_to do |format|
