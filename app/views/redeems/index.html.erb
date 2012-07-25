@@ -1,0 +1,27 @@
+<h1>Listing redeems</h1>
+
+<table>
+  <tr>
+    <th>Gift</th>
+    <th>Reply message</th>
+    <th>Redeem code</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @redeems.each do |redeem| %>
+  <tr>
+    <td><%= redeem.gift_id %></td>
+    <td><%= redeem.reply_message %></td>
+    <td><%= redeem.redeem_code %></td>
+    <td><%= link_to 'Show', redeem %></td>
+    <td><%= link_to 'Edit', edit_redeem_path(redeem) %></td>
+    <td><%= link_to 'Destroy', redeem, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Redeem', new_redeem_path %>

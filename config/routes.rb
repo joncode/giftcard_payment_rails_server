@@ -1,5 +1,13 @@
 Drinkboard::Application.routes.draw do
   
+  resources :orders
+  resources :redeems
+  resources :gifts
+  resources :menu_items
+  resources :menus
+  resources :menu_strings
+  resources :providers
+
   resources :relationships
   resources :sessions, only: [:new, :create, :destroy]
   match '/signup', to: 'users#new'

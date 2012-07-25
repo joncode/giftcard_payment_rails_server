@@ -1,0 +1,65 @@
+<%= form_for(@gift) do |f| %>
+  <% if @gift.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@gift.errors.count, "error") %> prohibited this gift from being saved:</h2>
+
+      <ul>
+      <% @gift.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :giver_id %><br />
+    <%= f.number_field :giver_id %>
+  </div>
+  <div class="field">
+    <%= f.label :receiver_id %><br />
+    <%= f.number_field :receiver_id %>
+  </div>
+  <div class="field">
+    <%= f.label :menu_item_id %><br />
+    <%= f.number_field :menu_item_id %>
+  </div>
+  <div class="field">
+    <%= f.label :price %><br />
+    <%= f.text_field :price %>
+  </div>
+  <div class="field">
+    <%= f.label :quantity %><br />
+    <%= f.number_field :quantity %>
+  </div>
+  <div class="field">
+    <%= f.label :total %><br />
+    <%= f.text_field :total %>
+  </div>
+  <div class="field">
+    <%= f.label :credit_card %><br />
+    <%= f.text_field :credit_card %>
+  </div>
+  <div class="field">
+    <%= f.label :provider_id %><br />
+    <%= f.number_field :provider_id %>
+  </div>
+  <div class="field">
+    <%= f.label :message %><br />
+    <%= f.text_field :message %>
+  </div>
+  <div class="field">
+    <%= f.label :special_instructions %><br />
+    <%= f.text_field :special_instructions %>
+  </div>
+  <div class="field">
+    <%= f.label :redeem_id %><br />
+    <%= f.number_field :redeem_id %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
