@@ -7,8 +7,7 @@ Drinkboard::Application.routes.draw do
   resources :menus
   resources :menu_strings
   resources :providers
-
-  resources :relationships
+  resources :connections, only: [:create, :destroy]
   resources :sessions, only: [:new, :create, :destroy]
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'
@@ -17,7 +16,7 @@ Drinkboard::Application.routes.draw do
   root to: 'admins#hello'
   
   match 'app/create_account', to: 'iphone#create_account', via: :post
-  match '/gift', to: 'home#gift'
+
   match '/buy', to: 'home#buy'
   match '/board', to: 'home#drinkboard'
   match '/about', to: 'home#about'
