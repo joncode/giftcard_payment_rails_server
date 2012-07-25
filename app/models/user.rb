@@ -24,7 +24,9 @@
 
 class User < ActiveRecord::Base
   attr_accessible :username, :email, :password, :password_confirmation, :photo, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin
-  
+  has_many :providers
+  has_many :gifts
+  has_many :redeems 
   has_many :microposts, dependent: :destroy
   has_many :followed_users, through: :relationships, source: "followed"
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy

@@ -3,7 +3,7 @@ Drinkboard::Application.routes.draw do
   resources :orders
   resources :redeems
   resources :gifts
-  resources :menu_items
+  resources :items
   resources :menus
   resources :menu_strings
   resources :providers

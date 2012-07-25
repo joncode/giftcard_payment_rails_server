@@ -1,4 +1,4 @@
-<h1>Listing menu_items</h1>
+<h1>Listing items</h1>
 
 <table>
   <tr>
@@ -10,18 +10,18 @@
     <th></th>
   </tr>
 
-<% @menu_items.each do |menu_item| %>
+<% @items.each do |item| %>
   <tr>
-    <td><%= menu_item.item_name %></td>
-    <td><%= menu_item.detail %></td>
-    <td><%= menu_item.category %></td>
-    <td><%= link_to 'Show', menu_item %></td>
-    <td><%= link_to 'Edit', edit_menu_item_path(menu_item) %></td>
-    <td><%= link_to 'Destroy', menu_item, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= item.item_name %></td>
+    <td><%= item.detail %></td>
+    <td><%= item.category %></td>
+    <td><%= link_to 'Show', item %></td>
+    <td><%= link_to 'Edit', edit_item_path(item) %></td>
+    <td><%= link_to 'Destroy', item, confirm: 'Are you sure?', method: :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New Menu item', new_menu_item_path %>
+<%= link_to 'New Menu item', new_item_path %>

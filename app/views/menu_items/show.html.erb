@@ -2,19 +2,19 @@
 
 <p>
   <b>Item name:</b>
-  <%= @menu_item.item_name %>
+  <%= @item.item_name %>
 </p>
 
 <p>
   <b>Detail:</b>
-  <%= @menu_item.detail %>
+  <%= @item.detail %>
 </p>
 
 <p>
   <b>Category:</b>
-  <%= @menu_item.category %>
+  <%= @item.category %>
 </p>
 
 
-<%= link_to 'Edit', edit_menu_item_path(@menu_item) %> |
-<%= link_to 'Back', menu_items_path %>
+<%= link_to 'Edit', edit_item_path(@item) %> |
+<%= link_to 'Back', items_path %>

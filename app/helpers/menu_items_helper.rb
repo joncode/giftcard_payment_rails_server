@@ -1,2 +1,2 @@
-module MenuItemsHelper
+module ItemsHelper
 end

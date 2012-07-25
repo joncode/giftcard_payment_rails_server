@@ -3,7 +3,7 @@ class CreateGifts < ActiveRecord::Migration
     create_table :gifts do |t|
       t.integer :giver_id
       t.integer :receiver_id
-      t.integer :menu_item_id
+      t.integer :item_id
       t.decimal :price
       t.integer :quantity
       t.decimal :total
