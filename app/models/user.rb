@@ -24,9 +24,17 @@
 
 class User < ActiveRecord::Base
   attr_accessible :username, :email, :password, :password_confirmation, :photo, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin
+
   has_many :providers
   has_many :gifts
-  has_many :redeems 
+  has_many :givers, through: :connections, source: "giver"
+  has_many :connections, foreign_key: "receiver_id", dependent: :destroy
+  has_many :reverse_connections, foreign_key: "giver_id",
+                                  class_name: "Connection",
+                                  dependent: :destroy
+  has_many :receivers, through: :reverse_connections, source: :receiver
+  
+  
   has_many :microposts, dependent: :destroy
   has_many :followed_users, through: :relationships, source: "followed"
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
@@ -34,6 +42,7 @@ class User < ActiveRecord::Base
                                   class_name: "Relationship",
                                   dependent: :destroy
   has_many :followers, through: :reverse_relationships, source: :follower
+
   has_secure_password
   
   before_save { |user| user.email = email.downcase }
