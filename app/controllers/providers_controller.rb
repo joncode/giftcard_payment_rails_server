@@ -1,6 +1,5 @@
 class ProvidersController < ApplicationController
-  # GET /providers
-  # GET /providers.json
+
   def index
     @providers = Provider.all
 
@@ -10,8 +9,6 @@ class ProvidersController < ApplicationController
     end
   end
 
-  # GET /providers/1
-  # GET /providers/1.json
   def show
     @provider = Provider.find(params[:id])
 
@@ -21,8 +18,6 @@ class ProvidersController < ApplicationController
     end
   end
 
-  # GET /providers/new
-  # GET /providers/new.json
   def new
     @provider = Provider.new
 
@@ -32,13 +27,10 @@ class ProvidersController < ApplicationController
     end
   end
 
-  # GET /providers/1/edit
   def edit
     @provider = Provider.find(params[:id])
   end
 
-  # POST /providers
-  # POST /providers.json
   def create
     @provider = Provider.new(params[:provider])
 
@@ -53,8 +45,6 @@ class ProvidersController < ApplicationController
     end
   end
 
-  # PUT /providers/1
-  # PUT /providers/1.json
   def update
     @provider = Provider.find(params[:id])
 
@@ -69,8 +59,6 @@ class ProvidersController < ApplicationController
     end
   end
 
-  # DELETE /providers/1
-  # DELETE /providers/1.json
   def destroy
     @provider = Provider.find(params[:id])
     @provider.destroy

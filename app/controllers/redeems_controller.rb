@@ -1,6 +1,5 @@
 class RedeemsController < ApplicationController
-  # GET /redeems
-  # GET /redeems.json
+
   def index
     @redeems = Redeem.all
 
@@ -10,8 +9,6 @@ class RedeemsController < ApplicationController
     end
   end
 
-  # GET /redeems/1
-  # GET /redeems/1.json
   def show
     @redeem = Redeem.find(params[:id])
 
@@ -21,8 +18,6 @@ class RedeemsController < ApplicationController
     end
   end
 
-  # GET /redeems/new
-  # GET /redeems/new.json
   def new
     @redeem = Redeem.new
 
@@ -32,13 +27,10 @@ class RedeemsController < ApplicationController
     end
   end
 
-  # GET /redeems/1/edit
   def edit
     @redeem = Redeem.find(params[:id])
   end
 
-  # POST /redeems
-  # POST /redeems.json
   def create
     @redeem = Redeem.new(params[:redeem])
 
@@ -53,8 +45,6 @@ class RedeemsController < ApplicationController
     end
   end
 
-  # PUT /redeems/1
-  # PUT /redeems/1.json
   def update
     @redeem = Redeem.find(params[:id])
 
@@ -69,8 +59,6 @@ class RedeemsController < ApplicationController
     end
   end
 
-  # DELETE /redeems/1
-  # DELETE /redeems/1.json
   def destroy
     @redeem = Redeem.find(params[:id])
     @redeem.destroy

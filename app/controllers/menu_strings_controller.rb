@@ -1,6 +1,5 @@
 class MenuStringsController < ApplicationController
-  # GET /menu_strings
-  # GET /menu_strings.json
+
   def index
     @menu_strings = MenuString.all
 
@@ -10,8 +9,6 @@ class MenuStringsController < ApplicationController
     end
   end
 
-  # GET /menu_strings/1
-  # GET /menu_strings/1.json
   def show
     @menu_string = MenuString.find(params[:id])
 
@@ -21,8 +18,6 @@ class MenuStringsController < ApplicationController
     end
   end
 
-  # GET /menu_strings/new
-  # GET /menu_strings/new.json
   def new
     @menu_string = MenuString.new
 
@@ -32,13 +27,10 @@ class MenuStringsController < ApplicationController
     end
   end
 
-  # GET /menu_strings/1/edit
   def edit
     @menu_string = MenuString.find(params[:id])
   end
 
-  # POST /menu_strings
-  # POST /menu_strings.json
   def create
     @menu_string = MenuString.new(params[:menu_string])
 
@@ -53,8 +45,6 @@ class MenuStringsController < ApplicationController
     end
   end
 
-  # PUT /menu_strings/1
-  # PUT /menu_strings/1.json
   def update
     @menu_string = MenuString.find(params[:id])
 
@@ -69,8 +59,6 @@ class MenuStringsController < ApplicationController
     end
   end
 
-  # DELETE /menu_strings/1
-  # DELETE /menu_strings/1.json
   def destroy
     @menu_string = MenuString.find(params[:id])
     @menu_string.destroy

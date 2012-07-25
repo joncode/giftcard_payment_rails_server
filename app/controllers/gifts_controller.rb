@@ -1,6 +1,5 @@
 class GiftsController < ApplicationController
-  # GET /gifts
-  # GET /gifts.json
+
   def index
     @gifts = Gift.all
 
@@ -10,8 +9,6 @@ class GiftsController < ApplicationController
     end
   end
 
-  # GET /gifts/1
-  # GET /gifts/1.json
   def show
     @gift = Gift.find(params[:id])
 
@@ -21,8 +18,6 @@ class GiftsController < ApplicationController
     end
   end
 
-  # GET /gifts/new
-  # GET /gifts/new.json
   def new
     @gift = Gift.new
 
@@ -32,13 +27,10 @@ class GiftsController < ApplicationController
     end
   end
 
-  # GET /gifts/1/edit
   def edit
     @gift = Gift.find(params[:id])
   end
 
-  # POST /gifts
-  # POST /gifts.json
   def create
     @gift = Gift.new(params[:gift])
 
@@ -53,8 +45,6 @@ class GiftsController < ApplicationController
     end
   end
 
-  # PUT /gifts/1
-  # PUT /gifts/1.json
   def update
     @gift = Gift.find(params[:id])
 
@@ -69,8 +59,6 @@ class GiftsController < ApplicationController
     end
   end
 
-  # DELETE /gifts/1
-  # DELETE /gifts/1.json
   def destroy
     @gift = Gift.find(params[:id])
     @gift.destroy
