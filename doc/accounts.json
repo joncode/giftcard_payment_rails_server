@@ -8,6 +8,13 @@
 
 # curl localhost:3000/app/create_account.json -d "data={\"username\":\"admin\",\"email\":\"teeest@teeest.com\",\"password\":\"teeest\",\"password_confirmation\":\"teeest\",\"first_name\":\"Larry\",\"last_name\":\"Page\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":11238,\"phone\":\"2342345656\",\"address\":\"1 Google Drive\",\"credit_number\":\"4444444444444444\"}"
 
+# curl localhost:3000/app/create_account.json -d "{\"username\":\"admin\",\"email\":\"teeest@teeest.com\",\"password\":\"teeest\",\"password_confirmation\":\"teeest\",\"first_name\":\"Larry\",\"last_name\":\"Page\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":11238,\"phone\":\"2342345656\",\"address\":\"1 Google Drive\",\"credit_number\":\"4444444444444444\"}"
+
+# curl localhost:3000/app/create_account.json -d {Parameters:{\"username\":\"admin\",\"email\":\"teeest@teeest.com\",\"password\":\"teeest\",\"password_confirmation\":\"teeest\",\"first_name\":\"Larry\",\"last_name\":\"Page\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":11238,\"phone\":\"2342345656\",\"address\":\"1 Google Drive\",\"credit_number\":\"4444444444444444\"}}
+
+
+
+
 /**
  Export to JSON plugin for PHPMyAdmin
  @version 0.1

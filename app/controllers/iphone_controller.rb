@@ -2,7 +2,7 @@ class IphoneController < AppController
   
   def create_account
     @message = ""
-    data = params["data"]
+    data = params['iphone']
     if data.nil?
       @message = "Data not received correctly. "
     else
