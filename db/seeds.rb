@@ -237,7 +237,7 @@ gift_hash = {}
       redeem.reply_message = reply[reply_index]
     end
     redeem.redeem_code = rand 10000
-    gift.update_attribute(:status, 'notified')
+    redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem})
     if odds != 2  
       notes_index = rand notes_total
       redeem.special_instructions = notes[notes_index]
@@ -269,8 +269,7 @@ gift_hash = {}
      order.redeem_id = redeem
      order.redeem_code = redeem.redeem_code
      order.save
-     gift = Gift.find(order.gift_id)
-     gift.update_attribute(:status, 'redeemed')
+     order.gift.update_attribute(:status, "redeemed")
   end
 end
 

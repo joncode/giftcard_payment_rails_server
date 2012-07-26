@@ -26,5 +26,6 @@ class Gift < ActiveRecord::Base
   has_one     :redeem
   belongs_to  :provider
   belongs_to  :item
+  has_many    :orders
   
 end
