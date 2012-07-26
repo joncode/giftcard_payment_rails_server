@@ -2,11 +2,11 @@
 
 User.delete_all
 User.create([
-  {username: 'admin', email: 'test@test.com', admin: true, password: 'testtest', password_confirmation: 'testtest', first_name: 'Larry', last_name: 'Page' , city: 'New York', state: 'NY', zip: "11238", phone: '1-646-493-4870', address: '1 Google Drive', credit_number: '4444444444444444'},
-  {username: '', email: 'jb@jb.com', admin: true, password: 'jessjess', password_confirmation: 'jessjess', first_name: 'Jessica', last_name: 'Balzock' , city: 'New York', state: 'NY', zip: "11238", phone: '345-345-3456', address: '1 Google Drive', credit_number: '4444444444444444'},
-  {username: '', email: 'gj@gj.com', admin: true, password: 'johnjohn', password_confirmation: 'johnjohn', first_name: 'Greg', last_name: 'Johns' , city: 'New York', state: 'NY', zip: "11238", phone: '4564564567', address: '1 Google Drive', credit_number: '4444444444444444'},
-  {username: '', email: 'fl@fl.com', admin: true, password: 'fredfred', password_confirmation: 'fredfred', first_name: 'Fredrick', last_name: 'Longfellow' , city: 'New York', state: 'NY', zip: "11238", phone: '+1(567)567-5678', address: '1 Google Drive', credit_number: '4444444444444444'},
-  {username: '', email: 'jp@jp.com', admin: true, password: 'janejane', password_confirmation: 'janejane', first_name: 'Fredrick', last_name: 'Longfellow' , city: 'New York', state: 'NY', zip: "11238", phone: '6786786789', address: '1 Google Drive', credit_number: '4444444444444444'}
+  { email: 'test@test.com', admin: true, password: 'testtest', password_confirmation: 'testtest', first_name: 'Larry', last_name: 'Page' , city: 'New York', state: 'NY', zip: "11238", phone: '1-646-493-4870', address: '1 Google Drive', credit_number: '4444444444444444'},
+  { email: 'jb@jb.com', admin: true, password: 'jessjess', password_confirmation: 'jessjess', first_name: 'Jessica', last_name: 'Balzock' , city: 'New York', state: 'NY', zip: "11238", phone: '345-345-3456', address: '1 Google Drive', credit_number: '4444444444444444'},
+  {email: 'gj@gj.com', admin: true, password: 'johnjohn', password_confirmation: 'johnjohn', first_name: 'Greg', last_name: 'Johns' , city: 'New York', state: 'NY', zip: "11238", phone: '4564564567', address: '1 Google Drive', credit_number: '4444444444444444'},
+  {email: 'fl@fl.com', admin: true, password: 'fredfred', password_confirmation: 'fredfred', first_name: 'Fredrick', last_name: 'Longfellow' , city: 'New York', state: 'NY', zip: "11238", phone: '+1(567)567-5678', address: '1 Google Drive', credit_number: '4444444444444444'},
+  {email: 'jp@jp.com', admin: true, password: 'janejane', password_confirmation: 'janejane', first_name: 'Fredrick', last_name: 'Longfellow' , city: 'New York', state: 'NY', zip: "11238", phone: '6786786789', address: '1 Google Drive', credit_number: '4444444444444444'}
 ])
 
 # put user_ids in Provider
@@ -71,7 +71,6 @@ Item.create([
 
 providers = Provider.all
 p_id  = providers.map { |p| p.id }
-providers_unique = providers.unique
 item = Item.all
 i_id  = item.map { |i| i.id }
 
@@ -85,7 +84,7 @@ p_id.each do |prov_id|
   # for each item_id run this command
   i_id.each do |item_id|
     # make a hash 
-      menu_hash = { provider_id: prov_id, item_id: item_id, price : "10"}
+      menu_hash = { provider_id: prov_id, item_id: item_id, price: "10"}
     # add hash to the menu_array
       menu_array << menu_hash
   end
@@ -101,7 +100,7 @@ Menu.create(menu_array)
 # "provider_id"
 # "menu_id" 
 # "full_address"
-# "menu"
+# "data"
 MenuString.delete_all
 p_id.each do |provider|
   menu = Menu.find_all_by_provider_id(provider)
@@ -127,7 +126,7 @@ p_id.each do |provider|
   # string_for_json = {} 
   # string_for_json[provider] = full_menu_string 
   string_for_json = Hash[provider, full_menu_string]
-  menu_string.menu = string_for_json.to_json
+  menu_string.data = string_for_json.to_json
   menu_string.save!
 end
   

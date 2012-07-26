@@ -27,27 +27,26 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
     t.integer  "giver_id"
     t.integer  "receiver_id"
     t.integer  "item_id"
-    t.decimal  "price"
-    t.integer  "quantity"
-    t.decimal  "total"
-    t.string   "credit_card"
+    t.string   "price",                :limit => 20
+    t.integer  "quantity",                            :null => false
+    t.string   "total",                :limit => 20
+    t.string   "credit_card",          :limit => 100
     t.integer  "provider_id"
-    t.string   "message"
-    t.string   "special_instructions"
+    t.text     "message"
+    t.text     "special_instructions"
     t.integer  "redeem_id"
     t.string   "status"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
   end
 
   create_table "items", :force => true do |t|
-    t.string   "item_name"
-    t.string   "detail"
-    t.integer  "category"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.string   "proof"
-    t.string   "type_of"
+    t.string  "item_name",   :limit => 50, :null => false
+    t.string  "detail"
+    t.text    "description"
+    t.integer "category",    :limit => 20, :null => false
+    t.string  "proof"
+    t.string  "type_of"
   end
 
   create_table "items_menus", :id => false, :force => true do |t|
@@ -57,26 +56,25 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
 
   create_table "menu_strings", :force => true do |t|
     t.integer  "version"
-    t.integer  "provider_id"
-    t.integer  "menu_id"
+    t.integer  "provider_id",  :null => false
     t.string   "full_address"
-    t.text     "menu"
+    t.text     "data",         :null => false
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
 
   create_table "menus", :force => true do |t|
-    t.integer  "provider_id"
-    t.integer  "item_id"
-    t.decimal  "price"
-    t.integer  "position"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "provider_id",               :null => false
+    t.integer  "item_id",                   :null => false
+    t.string   "price",       :limit => 20
+    t.integer  "position",    :limit => 8
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "microposts", :force => true do |t|
-    t.string   "content"
-    t.integer  "user_id"
+    t.string   "content",    :null => false
+    t.integer  "user_id",    :null => false
     t.integer  "video_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
@@ -91,17 +89,18 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
   end
 
   create_table "providers", :force => true do |t|
-    t.string   "name"
-    t.string   "description"
+    t.string   "name",                      :null => false
+    t.string   "zinger"
+    t.text     "description"
     t.string   "address"
     t.string   "address_2"
-    t.string   "city"
-    t.string   "state"
-    t.integer  "zip"
-    t.integer  "user_id"
+    t.string   "city",        :limit => 32
+    t.string   "state",       :limit => 2
+    t.string   "zip",         :limit => 16
+    t.integer  "user_id",                   :null => false
     t.string   "logo"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
     t.string   "phone"
     t.string   "email"
     t.string   "twitter"
@@ -129,19 +128,18 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
   add_index "relationships", ["follower_id"], :name => "index_relationships_on_follower_id"
 
   create_table "users", :force => true do |t|
-    t.string   "username"
-    t.string   "email"
-    t.boolean  "admin",           :default => false
+    t.string   "email",                                            :null => false
+    t.boolean  "admin",                         :default => false
     t.string   "photo"
-    t.string   "password_digest"
-    t.string   "remember_token"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
+    t.string   "password_digest",                                  :null => false
+    t.string   "remember_token",                                   :null => false
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
     t.string   "address"
     t.string   "address_2"
-    t.string   "city"
-    t.string   "state"
-    t.integer  "zip"
+    t.string   "city",            :limit => 20
+    t.string   "state",           :limit => 2
+    t.string   "zip",             :limit => 16
     t.string   "credit_number"
     t.string   "phone"
     t.string   "first_name"

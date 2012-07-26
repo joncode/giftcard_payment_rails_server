@@ -11,7 +11,7 @@
 #
 
 class Micropost < ActiveRecord::Base
-  attr_accessible :content, :video_id
+  attr_accessible :content
   
   belongs_to :user
   belongs_to :video
