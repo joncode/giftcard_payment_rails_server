@@ -215,7 +215,7 @@ gift_hash = {}
        status: 'open'}
     Gift.create([gift_hash])
   end
-  gifts = Gift.all
+  gifts = Gift.where(status: 'open')
   gifts_total = gifts.count
   10.times do 
     index = rand gifts_total
@@ -237,11 +237,15 @@ gift_hash = {}
     redeem.save
   end
   redeems = Redeem.all
+  # find all redeems where the redeem.gift.status == 'notified'
+  # find all redeems where the redeem.gift.redeem_id != nil
   redeems_total = redeems.count
   6.times do
-     redeem_index = rand redeems_total
-     redeem = redeems.slice! redeem_index
-     redeems_total -= 1
+     begin
+       redeem_index = rand redeems_total
+       redeem = redeems.slice! redeem_index
+       redeems_total -= 1
+     end while redeem.gift.status != 'notified'
      order = Order.new
      order.gift_id = redeem.gift_id
      order.redeem_id = redeem.id
