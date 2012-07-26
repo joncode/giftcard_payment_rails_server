@@ -7,7 +7,7 @@ class IphoneController < AppController
     if data.nil?
       @message = "Data not received correctly. "
     else
-      @new_user = create_user_account(data)           
+      @new_user = create_user_object(data)           
     end
     
     respond_to do |format|
@@ -23,12 +23,13 @@ class IphoneController < AppController
   
   private
   
-    def create_user_account(data)
+    def create_user_object(data)
       obj = JSON.parse data
       obj.symbolize_keys!
+      User.new(obj)
     end
   
-    def create_user_account_from_obj(data)
+    def create_user_object_from_json_obj(data)
       worked_data = data.symbolize_keys
       worked_data.delete :controller
       worked_data.delete :action
