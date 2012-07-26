@@ -10,7 +10,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
-/public/assets
+# /public/assets
 /app/assets/images/video/*
 
 *.rbc
