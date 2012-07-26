@@ -111,60 +111,28 @@ p_id.each do |provider|
   menu_string = MenuString.new
   # take the menu.provider_id and save it into this
   menu_string.provider_id = provider
-  # menu_string.menu_id = menu.id   *** does not work
+  menu_string.version = 1
   # get the provider address information and make the full address
   menu_string.full_address = "#{menu.provider.address},  #{menu.provider.city}, #{menu.provider.state}"
-  menu_string.version = 1
   # make an array of hashes of the items
-  menu_row_hash = {}
+  full_menu_string = { full_address: menu_string.full_address, 
+    location_name: menu_string.provider.name }
   num = 1
   menu.each do |m_item|
     # hash keys
-    m_item_hash = { item_id: m_item.item_id, item_name: m_item.item.item_name, category: m_item.item.category, detail: m_item.item.detail, price: m_item.price}
-    # item_id
-    # item_name
-    # category
-    # detail
-    # price   - this is from the menu.price
+    m_item_hash = { item_id: m_item.item_id,
+       item_name: m_item.item.item_name, 
+       category: m_item.item.category, 
+       detail: m_item.item.detail, 
+       price: m_item.price}
   # put the menu.items into an array
-    menu_row_hash[num] = m_item_hash
+    full_menu_string[num] = m_item_hash
     num += 1
   end
-  # take the menu_array and set menu_string.menu equal to it
-  menu_string.menu = menu_row_hash
-  # create the 
-
-
-  # save the location_name into the hash system
-  location_name = menu_string.provider.name
-{"1":
-  {"full_address": "131 W 3rd Street, New York City, NY","location_name": "Blue Note Jazz Club",
-    "menu": [
-    {"item_id":"101","item_name":"Corona","category":"1","detail":"Mexico City, Mexico (bottle)","price":"$5.25"},
-    {"item_id":"102","item_name":"Bud Light","category":"1","detail":"St. Louis, Missouri, USA (bottle)","price":"$4.00"},
-    {"item_id":"103","item_name":"White Zenfindel","category":"2","detail":"St. Louis, Missouri, USA (glass)","price":"$8.00"}]
-},
-
-"2":
-  {"full_address":"56 Beaver Street, New York City, NY",
-    "location_name":"Delmonico's",
-    "1":
-      {"item_id":"104","item_name":"Vegas Bomb",
-      "category":"4","detail":"peach snops, red bull, crown royal",
-      "price":"$7.50"},
-    "2":
-      {"item_id":"105",
-        "item_name":"3",
-        "category":"Purple Martini",
-        "detail":"special blend",
-        "price":"$10.00"},
-
-"3":{"item_id":"106","item_name":"1","category":"Stella Artios","detail":"Leuven, Belgium (tap)","price":"$5.50"}},"3":{"full_address":"1650 Broadway, New York City, NY","location_name":"Iridium","1":{"item_id":"107","item_name":"Wyders Pear Cider","category":"1","detail":"Port Moody, British Columbia (bottle)","price":"$5.25"},"2":{"item_id":"108","item_name":"Hurricane","category":"0","detail":"for a limited time (20oz)","price":"$12.00"},"3":{"item_id":"109","item_name":"Lemon Drop","category":"4","detail":"sour mix, vodka, special ingredients","price":"$4.00"}}}
-
-
-
-
-
-
-
+  # create the full menu_string
+  string_for_json = Hash["#{provider}", full_menu_string] 
+  menu_string.menu = string_for_json.to_json
+  menu_string.save!
+end
+  
 
