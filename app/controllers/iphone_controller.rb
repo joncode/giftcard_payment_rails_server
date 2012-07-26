@@ -1,5 +1,7 @@
 class IphoneController < AppController
   
+  LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]
+  
   def create_account
     data = params["data"]
 
@@ -20,6 +22,27 @@ class IphoneController < AppController
       format.json { render text: response.to_json }
     end
   end
+  
+  def login
+    email = params["email"]
+    password = params["password"]
+    
+    if email.nil? || password.nil?
+      response = { "error" => "Data not received."}.to_json
+    else
+      user = User.find_by_email(email)     
+      if user && user.authenticate(password)
+        response = user.to_json only: LOGIN_REPLY
+      else
+        response = { "error" => 'Invalid email/password combination' }.to_json
+      end
+    end
+    
+    respond_to do |format|
+      format.json { render text: response }
+    end
+  end
+  
   
   private
   
