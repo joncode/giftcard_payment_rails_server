@@ -1,6 +1,5 @@
 ######################                USERS               ######################
 
-
 User.delete_all
 User.create([
   {username: 'admin', email: 'test@test.com', admin: true, password: 'testtest', password_confirmation: 'testtest', first_name: 'Larry', last_name: 'Page' , city: 'New York', state: 'NY', zip: 11238, phone: '1-646-493-4870', address: '1 Google Drive', credit_number: '4444444444444444'},
@@ -32,7 +31,6 @@ Provider.create([
   { name: "PT's Pub" , description: "Real. Local. Play.", address: "1661 East Sunset Road", city: "Las Vegas", state: "NV", zip: 89119, user_id: u_id[4] },  
   { name: "PT's Pub" , description: "Real. Local. Play.", address: "739 South Rainbow Boulevard", city: "Las Vegas", state: "NV", zip: 89145, user_id: u_id[4] }     
 ])
-
 
 
 ######################                ITEMS                ######################
@@ -100,19 +98,15 @@ Menu.create(menu_array)
 ######################                MENU_STRINGS                ######################
 # "version"
 # "provider_id"
-# "menu_id"                this does not work because menu_id is only an ITEM WRAPPER
+# "menu_id" 
 # "full_address"
 # "menu"
 MenuString.delete_all
-# iterate thru each provider_id
 p_id.each do |provider|
   menu = Menu.find_all_by_provider_id(provider)
-  # make a new MenuString object
   menu_string = MenuString.new
-  # take the menu.provider_id and save it into this
   menu_string.provider_id = provider
   menu_string.version = 1
-  # get the provider address information and make the full address
   provider_obj = Provider.find(provider)
   menu_string.full_address = "#{provider_obj.address},  #{provider_obj.city}, #{provider_obj.state}"
   # make an array of hashes of the items
@@ -120,20 +114,29 @@ p_id.each do |provider|
     location_name: menu_string.provider.name }
   num = 1
   menu.each do |m_item|
-    # hash keys
+    item = Item.find(m_item.item_id)
     m_item_hash = { item_id: m_item.item_id,
-       item_name: m_item.items.item_name, 
-       category: m_item.items.category, 
-       detail: m_item.items.detail, 
+       item_name: item.item_name, 
+       category: item.category, 
+       detail: item.detail, 
        price: m_item.price}
-  # put the menu.items into an array
     full_menu_string[num] = m_item_hash
     num += 1
   end
-  # create the full menu_string
-  string_for_json = Hash["#{provider}", full_menu_string] 
+  # string_for_json = {} 
+  # string_for_json[provider] = full_menu_string 
+  string_for_json = Hash[provider, full_menu_string]
   menu_string.menu = string_for_json.to_json
   menu_string.save!
 end
   
+  
+  
+# database issues    
 
+# 1 has and belongs to many association from items and menu are off
+# 2 association between menu_string and menu is off because .menu in menu_strings breaks due to confusion with association
+# 3 menu_id in menu_string is so far useless
+# 4 the json string has row numbers for iphone when it should just be a menu key with an array of item hashes
+# 5 price is a one digit decimal, should be two digits 
+# 6 zip is an integer but it really should just be a string length max of 9
