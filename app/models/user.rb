@@ -37,13 +37,13 @@ class User < ActiveRecord::Base
   before_save { |user| user.email = email.downcase }
   before_save :create_remember_token
   
-  validates_presence_of :city, :state, :zip, :address, :credit_number
-  validates :first_name  , presence: true, length: { maximum: 50 }
-  validates :last_name  , presence: true, length: { maximum: 50 }
-  validates :phone , presence: true, format: { with: VALID_PHONE_REGEX }, uniqueness: true
-  validates :email , presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :password, length: { minimum: 6 }, on: :create
-  validates :password_confirmation, presence: true, on: :create
+  #validates_presence_of :city, :state, :zip, :address, :credit_number
+  #validates :first_name  , presence: true, length: { maximum: 50 }
+  #validates :last_name  , presence: true, length: { maximum: 50 }
+  #validates :phone , presence: true, format: { with: VALID_PHONE_REGEX }, uniqueness: true
+  #validates :email , presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
+  #validates :password, length: { minimum: 6 }, on: :create
+  #validates :password_confirmation, presence: true, on: :create
   
   def feed
     Micropost.from_users_followed_by(self)

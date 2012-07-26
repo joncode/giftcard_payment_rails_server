@@ -24,18 +24,24 @@ class IphoneController < AppController
   
     def create_user_account(data)
       # data_hash = JSON.parse data
-      new_user = User.new
-      new_user.credit_number = data["credit_number"]
-      new_user.phone = data["phone"]
-      new_user.email = data["email"]
-      new_user.password = data["password"]
-      new_user.password_confirmation = data["password_confirmation"]
-      new_user.state = data["state"]
-      new_user.city = data["city"]
-      new_user.zip = data["zip"].to_i
-      new_user.first_name = data["first_name"]
-      new_user.last_name = data["last_name"]
-      new_user.address = data["address"]
+      worked_data = data.symbolize_keys
+      zip_code = worked_data[:zip]
+      worked_data[:zip] = zip_code.to_i
+      worked_data.delete :controller
+      worked_data.delete :action
+      worked_data.delete :format
+      new_user = User.new(worked_data)
+      # new_user.credit_number = data["credit_number"]
+      # new_user.phone = data["phone"]
+      # new_user.email = data["email"]
+      # new_user.password = data["password"]
+      # new_user.password_confirmation = data["password_confirmation"]
+      # new_user.state = data["state"]
+      # new_user.city = data["city"]
+      # new_user.zip = data["zip"].to_i
+      # new_user.first_name = data["first_name"]
+      # new_user.last_name = data["last_name"]
+      # new_user.address = data["address"]
       return new_user
     end
 end
