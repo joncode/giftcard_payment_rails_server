@@ -167,8 +167,8 @@ items_array = Item.all
 messages_total = message.count
 notes_total = notes.count
 gift_hash = {}
-5.times do |l|
-  20.times do |t| 
+5.times do 
+  20.times do 
     giving_user_index = receiving_user_index = rand users_total
     while receiving_user_index == giving_user_index
       receiving_user_index = rand users_total
@@ -213,13 +213,14 @@ gift_hash = {}
   gifts = Gift.all
   gifts_total = gifts.count
   replies = reply.count
-  10.times do |t|
+  10.times do 
     index = rand gifts_total
 
     gift = gifts.slice!(index)
     redeem = Redeem.new
     redeem.gift_id = gift
-    if t % 2 == 0
+    odds = rand 3
+    if odds != 0
       reply_index = rand replies  
       redeem.reply_message = reply[reply_index]
     end
