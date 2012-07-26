@@ -172,7 +172,6 @@ messages_total  = messages.count
 notes_total     = notes.count
 replies = reply.count
 
-
 gift_hash = {}
 
 5.times do 
@@ -190,8 +189,7 @@ gift_hash = {}
     provider        = providers_array[provider_index]
   
     item_index      = rand items_total 
-    item            = items_array[item_index]
-    
+    item            = items_array[item_index]   
     menu_item = Menu.find_by_item_id_and_provider_id item, provider
     quantity = rand(5) + 1
     total = menu_item.price.to_i * (quantity + 1)
@@ -205,8 +203,6 @@ gift_hash = {}
       notes_index = rand notes_total
       note = notes[notes_index]
     end
-  
-    # gift_hash = {}
     gift_hash = {giver_id: giving_user.id, 
       receiver_id: receiving_user.id,
       provider_id: provider.id, 
@@ -216,15 +212,8 @@ gift_hash = {}
        status: 'open'}
     Gift.create([gift_hash])
   end
-   
-  ######################                REDEEMS               ######################
-   #  gift_id       :integer
-   #  reply_message :string(255)
-   #  redeem_code   :integer
-
   gifts = Gift.all
   gifts_total = gifts.count
-
   10.times do 
     index = rand gifts_total
     gift = gifts.slice! index
@@ -242,24 +231,10 @@ gift_hash = {}
       notes_index = rand notes_total
       redeem.special_instructions = notes[notes_index]
     end
-    
     redeem.save
-    # how to make the redeem code uniq, but adding the location_id and comparing
   end
-
-
-######################                ORDERS               ######################
-#  id          :integer         not null, primary key
-#  redeem_id   :integer
-#  gift_id     :integer
-#  redeem_code :integer
-#  created_at  :datetime        not null
-#  updated_at  :datetime        not null
-# make 3 orders per 5 redeems undone 
-
   redeems = Redeem.all
   redeems_total = redeems.count
-
   6.times do
      redeem_index = rand redeems_total
      redeem = redeems.slice! redeem_index
