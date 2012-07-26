@@ -2,7 +2,7 @@ class IphoneController < AppController
   
   def create_account
     @message = ""
-    data = params["iphone"]
+    data = params["data"]
 
     if data.nil?
       @message = "Data not received correctly. "
@@ -15,7 +15,7 @@ class IphoneController < AppController
         rtoken = @new_user.remember_token
         format.json { render text: rtoken.to_s } 
       else
-        @message += " Unable to save to database"
+        @message += " Unable to save to database" 
         format.json { render text: @message.to_s }
       end
     end
@@ -24,6 +24,11 @@ class IphoneController < AppController
   private
   
     def create_user_account(data)
+      obj = JSON.parse data
+      obj.symbolize_keys!
+    end
+  
+    def create_user_account_from_obj(data)
       worked_data = data.symbolize_keys
       worked_data.delete :controller
       worked_data.delete :action
