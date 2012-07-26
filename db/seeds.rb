@@ -157,6 +157,7 @@ end
 # randomly pick an item
 messages = ["Happy Birthday!", "Congratulations!", "One good turn deserves another", "have fun tonight", "Cheers"]
 notes = ["Shaken not Stirred", "Draft if you got it", "Fireworks!", "Ice Cold", "Surprise please", "Umbrellas" ]
+reply = ["thanks dude your rock!", "yo yo yo get over here", "thats so sweet of you ", "there is a season", "Cheers!", "down the hatch!"] 
 users_total = User.count
 users_array = User.all
 providers_total = Provider.count
@@ -166,43 +167,67 @@ items_array = Item.all
 messages_total = message.count
 notes_total = notes.count
 gift_hash = {}
-20.times do |t|
+5.times do |l|
+  20.times do |t| 
+    giving_user_index = receiving_user_index = rand users_total
+    while receiving_user_index == giving_user_index
+      receiving_user_index = rand users_total
+    end
+    giving_user = User.find users_array[giving_user_index]
+    receiving_user = User.find users_array[receiving_user_index]
   
-  giving_user_index = receiving_user_index = rand users_total
-  while receiving_user_index == giving_user_index
-    receiving_user_index = rand users_total
+    provider_index = rand providers_total 
+    provider = Provider.find providers_array[provider_index]
+  
+    item_index = rand items_total 
+    item = Item.find items_array[item_index]
+    menu_item = Menu.find_by_item_id_and_provider_id item, provider
+    quantity = rand(5) + 1
+    total = mene_item.price.to_i * (quantity + 1)
+    message = note = ""
+    if quantity < 4 
+      message_index = rand messages_total
+      message = messages[message_index]
+    end
+    if giving_user_index < 3  
+      notes_index = rand notes_total
+      note = notes[notes_index]
+    end
+  
+    gift_hash = {}
+    gift_hash = {giver_id: giving_user.id, 
+      receiver_id: receiving_user.id,
+      provider_id: provider.id, 
+      item_id: item.id, price: menu_item.price, 
+      quantity: quantity, total: total.to_s,
+       message: message, special_instruction: note
+       status: 'open'}
+    Gift.create([gift_hash])
   end
-  giving_user = User.find users_array[giving_user_index]
-  receiving_user = User.find users_array[receiving_user_index]
-  
-  provider_index = rand providers_total 
-  provider = Provider.find providers_array[provider_index]
-  
-  item_index = rand items_total 
-  item = Item.find items_array[item_index]
-  menu_item = Menu.find_by_item_id_and_provider_id item, provider
-  quantity = rand(5) + 1
-  total = mene_item.price.to_i * (quantity + 1)
-  message = note = ""
-  if quantity < 4 
-    message_index = rand messages_total
-    message = messages[message_index]
-  end
-  if giving_user_index < 3  
-    notes_index = rand notes_total
-    note = notes[notes_index]
-  end
-  
-  gift_hash = {}
-  gift_hash = {giver_id: giving_user.id, 
-    receiver_id: receiving_user.id,
-    provider_id: provider.id, 
-    item_id: item.id, price: menu_item.price, 
-    quantity: quantity, total: total.to_s,
-     message: message, special_instruction: note
-     status: 'open'}
-  Gift.create([gift_hash])
-end
-     
+   
+  ######################                REDEEMS               ######################
+   #  gift_id       :integer
+   #  reply_message :string(255)
+   #  redeem_code   :integer
 
+  gifts = Gift.all
+  gifts_total = gifts.count
+  replies = reply.count
+  10.times do |t|
+    index = rand gifts_total
+
+    gift = gifts.slice!(index)
+    redeem = Redeem.new
+    redeem.gift_id = gift
+    if t % 2 == 0
+      reply_index = rand replies  
+      redeem.reply_message = reply[reply_index]
+    end
+    redeem.redeem_code = rand 10000
+    redeem.save
+    # how to make the redeem code uniq, but adding the location_id and comparing
+  end
+end
+
+######################                ORDERS               ######################
 
