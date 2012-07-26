@@ -1,3 +1,11 @@
+  
+  
+# database issues    
+
+# 2 association between menu_string and menu is off because .menu in menu_strings breaks due to confusion with association
+# 1 has and belongs to many association from items and menu are off
+
+# 4 the json string has row numbers for iphone when it should just be a menu key with an array of item hashes
 ######################                USERS               ######################
 
 User.delete_all

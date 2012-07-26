@@ -4,7 +4,7 @@ class CreateRedeems < ActiveRecord::Migration
       t.integer :gift_id
       t.string  :reply_message
       t.integer :redeem_code
-
+      t.text    :special_instructions
       t.timestamps
     end
   end

@@ -3,19 +3,18 @@
 # Table name: users
 #
 #  id              :integer         not null, primary key
-#  username        :string(255)
-#  email           :string(255)
+#  email           :string(255)     not null
 #  admin           :boolean         default(FALSE)
 #  photo           :string(255)
-#  password_digest :string(255)
-#  remember_token  :string(255)
+#  password_digest :string(255)     not null
+#  remember_token  :string(255)     not null
 #  created_at      :datetime        not null
 #  updated_at      :datetime        not null
 #  address         :string(255)
 #  address_2       :string(255)
-#  city            :string(255)
-#  state           :string(255)
-#  zip             :integer
+#  city            :string(20)
+#  state           :string(2)
+#  zip             :string(16)
 #  credit_number   :string(255)
 #  phone           :string(255)
 #  first_name      :string(255)

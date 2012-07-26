@@ -75,7 +75,6 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
   create_table "microposts", :force => true do |t|
     t.string   "content",    :null => false
     t.integer  "user_id",    :null => false
-    t.integer  "video_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
@@ -112,8 +111,9 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
     t.integer  "gift_id"
     t.string   "reply_message"
     t.integer  "redeem_code"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.text     "special_instructions"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
 
   create_table "relationships", :force => true do |t|
