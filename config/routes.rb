@@ -15,8 +15,10 @@ Drinkboard::Application.routes.draw do
   resources :admins, only: [:new, :create, :destroy]
   root to: 'admins#hello'
   
+  ###  mobile app routes
   match 'app/create_account', to: 'iphone#create_account', via: :post
-
+  match 'app/login', to: 'iphone#login', via: :post
+  ###
   match '/buy', to: 'home#buy'
   match '/board', to: 'home#drinkboard'
   match '/about', to: 'home#about'
