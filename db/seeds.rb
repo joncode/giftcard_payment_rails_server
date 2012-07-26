@@ -137,7 +137,10 @@ p_id.each do |provider|
   menu_string.data = string_for_json.to_json
   menu_string.save!
 end
-  
+
+Gift.delete_all
+Redeem.delete_all
+Order.delete_all
 ######################                GIFTS               ######################
 
 #  credit_card          :string(100)
