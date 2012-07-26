@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Gift:</b>
+  <%= @redeem.gift_id %>
+</p>
+
+<p>
+  <b>Reply message:</b>
+  <%= @redeem.reply_message %>
+</p>
+
+<p>
+  <b>Redeem code:</b>
+  <%= @redeem.redeem_code %>
+</p>
+
+
+<%= link_to 'Edit', edit_redeem_path(@redeem) %> |
+<%= link_to 'Back', redeems_path %>
