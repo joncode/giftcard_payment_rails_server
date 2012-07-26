@@ -24,7 +24,7 @@ class IphoneController < AppController
   
     def create_user_account(data)
       # data_hash = JSON.parse data
-      new_user = User.new(data_hash)
+      new_user = User.new(data)
       return new_user
     end
 end
