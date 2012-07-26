@@ -140,3 +140,4 @@ end
 # 4 the json string has row numbers for iphone when it should just be a menu key with an array of item hashes
 # 5 price is a one digit decimal, should be two digits 
 # 6 zip is an integer but it really should just be a string length max of 9
+# 7 username in users table is not used 
