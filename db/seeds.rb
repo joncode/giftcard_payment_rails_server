@@ -219,7 +219,7 @@ gift_hash = {}
     gift = gifts.slice! index
     gifts_total -= 1
     redeem = Redeem.new
-    redeem.gift_id = gift
+    redeem.gift_id = gift.id
     odds = rand 3
     if odds != 0
       reply_index = rand replies  
@@ -241,7 +241,7 @@ gift_hash = {}
      redeems_total -= 1
      order = Order.new
      order.gift_id = redeem.gift_id
-     order.redeem_id = redeem
+     order.redeem_id = redeem.id
      order.redeem_code = redeem.redeem_code
      order.save
      order.gift.update_attribute(:status, "redeemed")
