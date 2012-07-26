@@ -1,23 +1,23 @@
 class IphoneController < AppController
   
   def create_account
-    @message = ""
     data = params["data"]
 
     if data.nil?
-      @message = "Data not received correctly. "
+      message = "Data not received correctly. "
     else
-      @new_user = create_user_object(data)           
+      new_user = create_user_object(data) 
+      message = ""          
     end
     
     respond_to do |format|
-      if !data.nil? && @new_user.save
-        rtoken = @new_user.remember_token
-        format.json { render text: rtoken.to_s } 
+      if !data.nil? && new_user.save
+        response = { "success" => new_user.remember_token }
       else
-        @message += " Unable to save to database" 
-        format.json { render text: @message.to_s }
+        message += " Unable to save to database" 
+        response = { "error" => message }
       end
+      format.json { render text: response.to_json }
     end
   end
   
@@ -29,12 +29,11 @@ class IphoneController < AppController
       User.new(obj)
     end
   
-    def create_user_object_from_json_obj(data)
-      worked_data = data.symbolize_keys
-      worked_data.delete :controller
-      worked_data.delete :action
-      worked_data.delete :format
-      new_user = User.new(worked_data)
-      return new_user
-    end
+    # def create_user_object_from_json_obj(data)
+    #   worked_data = data.symbolize_keys
+    #   worked_data.delete :controller
+    #   worked_data.delete :action
+    #   worked_data.delete :format
+    #   User.new(worked_data)
+    # end
 end
