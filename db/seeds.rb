@@ -106,14 +106,15 @@ Menu.create(menu_array)
 MenuString.delete_all
 # iterate thru each provider_id
 p_id.each do |provider|
-  menu = Menu.find_by_provider_id(provider)
+  menu = Menu.find_all_by_provider_id(provider)
   # make a new MenuString object
   menu_string = MenuString.new
   # take the menu.provider_id and save it into this
   menu_string.provider_id = provider
   menu_string.version = 1
   # get the provider address information and make the full address
-  menu_string.full_address = "#{menu.provider.address},  #{menu.provider.city}, #{menu.provider.state}"
+  provider_obj = Provider.find(provider)
+  menu_string.full_address = "#{provider_obj.address},  #{provider_obj.city}, #{provider_obj.state}"
   # make an array of hashes of the items
   full_menu_string = { full_address: menu_string.full_address, 
     location_name: menu_string.provider.name }
@@ -121,9 +122,9 @@ p_id.each do |provider|
   menu.each do |m_item|
     # hash keys
     m_item_hash = { item_id: m_item.item_id,
-       item_name: m_item.item.item_name, 
-       category: m_item.item.category, 
-       detail: m_item.item.detail, 
+       item_name: m_item.items.item_name, 
+       category: m_item.items.category, 
+       detail: m_item.items.detail, 
        price: m_item.price}
   # put the menu.items into an array
     full_menu_string[num] = m_item_hash

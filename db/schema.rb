@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120725031308) do
+ActiveRecord::Schema.define(:version => 20120725222919) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -46,6 +46,8 @@ ActiveRecord::Schema.define(:version => 20120725031308) do
     t.integer  "category"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "proof"
+    t.string   "type_of"
   end
 
   create_table "menu_strings", :force => true do |t|
@@ -95,6 +97,11 @@ ActiveRecord::Schema.define(:version => 20120725031308) do
     t.string   "logo"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.string   "phone"
+    t.string   "email"
+    t.string   "twitter"
+    t.string   "facebook"
+    t.string   "website"
   end
 
   create_table "redeems", :force => true do |t|
