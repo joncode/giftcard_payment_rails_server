@@ -2,7 +2,7 @@ class IphoneController < AppController
   
   def create_account
     @message = ""
-    data = params['iphone']
+    data = params["iphone"]
     if data.nil?
       @message = "Data not received correctly. "
     else
@@ -23,7 +23,7 @@ class IphoneController < AppController
   private
   
     def create_user_account(data)
-      data_hash = JSON.parse data
+      # data_hash = JSON.parse data
       new_user = User.new(data_hash)
       return new_user
     end
