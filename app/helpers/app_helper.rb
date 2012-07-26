@@ -6,7 +6,7 @@ module AppHelper
   end
    
   def d1efault_serialization_options(options={})
-    options[:only] = [:username, :user_id, :updated_at, :created_at]
+    options[:only] = [ :user_id, :updated_at, :created_at]
   end
   
 end

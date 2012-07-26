@@ -1,11 +1,10 @@
 class CreateItems < ActiveRecord::Migration
   def change
     create_table :items do |t|
-      t.string  :item_name
+      t.string  :item_name, limit: 50, null: false 
       t.string  :detail
-      t.integer :category
-
-      t.timestamps
+      t.text    :description
+      t.integer :category, limit: 20, null: false
     end
   end
 end

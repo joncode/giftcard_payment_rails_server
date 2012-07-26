@@ -25,8 +25,6 @@ class IphoneController < AppController
   
     def create_user_account(data)
       worked_data = data.symbolize_keys
-      zip_code = worked_data[:zip]
-      worked_data[:zip] = zip_code.to_i
       worked_data.delete :controller
       worked_data.delete :action
       worked_data.delete :format

@@ -23,7 +23,7 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessible :username, :email, :password, :password_confirmation, :photo, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin
+  attr_accessible  :email, :password, :password_confirmation, :photo, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin
 
   has_many :providers
   has_many :gifts
@@ -58,6 +58,10 @@ class User < ActiveRecord::Base
   
   def feed
     Micropost.from_users_followed_by(self)
+  end
+  
+  def username
+    "#{self.first_name} #{self.last_name}"
   end
   
   def following?(other_user)
