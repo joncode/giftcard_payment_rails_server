@@ -9,6 +9,8 @@ Drinkboard::Application.config.secret_token = '80cb854c626de01bc9fce3ffdbb7c8396
 PAGE_NAME = 'Drinkboard'
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 VALID_PHONE_REGEX = /1?\s*\W?\s*([2-9][0-8][0-9])\s*\W?\s*([2-9][0-9]{2})\s*\W?\s*([0-9]{4})(\se?x?t?(\d*))?/
+
 CLEARANCE = ['admin', 'full', 'staff']
 BEVERAGE_CATEGORIES = ['special', 'beer', 'wine', 'cocktail', 'shot', 'non-alcohol']
 GIFT_STATUS = ['open', 'notified', 'redeemed', 'regifted', 'returned']
+PROOF_LEVELS = ['zero', 'lite', 'normal', 'double']
