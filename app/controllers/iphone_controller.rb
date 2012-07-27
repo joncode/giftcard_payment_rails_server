@@ -1,10 +1,17 @@
 class IphoneController < AppController
  include ActionView::Helpers::DateHelper
+ require 'logger'
   
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
   GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
   BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
   BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name"] 
+  
+  def time_ago_in_words
+    super
+    ActiveRecord::Base.logger = Logger.new("in method")
+  end
+  
   def create_account
     data = params["data"]
 

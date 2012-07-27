@@ -1,8 +1,9 @@
 class GiftsController < ApplicationController
-
+  require 'logger'
   def index
     @user = current_user
     @gifts = Gift.get_gifts(@user)
+    ActiveRecord::Base.logger = Logger.new("in method")
     
     respond_to do |format|
       format.html # index.html.erb

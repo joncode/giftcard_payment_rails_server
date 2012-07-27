@@ -1,19 +1,9 @@
 
 <%- model_class = User.new.class -%>
-<h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
-<table class="table table-striped">
+<table>
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:avatar) %></th>
-      <th><%= model_class.human_attribute_name(:phone) %></th>
-      <th>Follows You?</th>
-      <th>Follow Them?</th>
-      
-      <th><%= model_class.human_attribute_name(:email) %></th>
-      
-      <% if current_user.admin?  %>
-        <th><%=t '.actions', :default => t("helpers.actions") %></th>
-      <% end %>
+      <th colspan="6">Who's About</th>
     </tr>
   </thead>
   <tbody>
