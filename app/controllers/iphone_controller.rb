@@ -47,44 +47,44 @@ class IphoneController < AppController
   
   def gifts
     @user  = User.find_by_remember_token(params["token"])
-    gifts = Gift.get_gifts(@user)
-    @gifts = to_hash!(gifts) 
+    @gifts = Gift.get_gifts(@user)
+    gift_hash = hash_this @gifts
+
     
     respond_to do |format|
-      format.json { render json: @gifts, only: GIFT_REPLY }
+      format.json { render text: gift_hash.to_json }
     end
   end
 
   def buys
     @user  = User.find_by_remember_token(params["token"])
-    gifts = Gift.get_buy_history(@user)
-    @gifts = to_hash!(gifts) 
+    @gifts = Gift.get_buy_history(@user)
+    gift_hash = hash_this @gifts
     
     respond_to do |format|
-      format.json { render json: @gifts, only: GIFT_REPLY }
+      #format.json { render json: @gifts, only: GIFT_REPLY }
+      format.json { render text: gift_hash.to_json }
     end
   end
   
   def activity
     @user  = User.find_by_remember_token(params["token"])
-    gifts = Gift.get_activity
-    @gifts = to_hash!(gifts) 
+    @gifts = Gift.get_activity
+    gift_hash = hash_this @gifts
     
     respond_to do |format|
-      format.json { render json: @gifts, only: GIFT_REPLY }
+      format.json { render text: gift_hash.to_json }
     end
   end
   
-  def to_hash!(array)
-    index = 0
-    total = array.count
-    hash = {}
-    while index < total
-      num = index + 1
-      hash[num] = array[index]
+  def hash_this(obj)
+    gift_hash = {}
+    index = 1 
+    obj.each do |g|
+      gift_hash["#{index}"] = g.serializable_hash only: GIFT_REPLY
       index += 1
     end
-    return hash
+    return gift_hash
   end
   
   private

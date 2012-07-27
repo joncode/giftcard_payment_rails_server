@@ -57,8 +57,8 @@
 
 # curl localhost:3000/app/create_account.json -d {Parameters:{\"username\":\"admin\",\"email\":\"teeest@teeest.com\",\"password\":\"teeest\",\"password_confirmation\":\"teeest\",\"first_name\":\"Larry\",\"last_name\":\"Page\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":11238,\"phone\":\"2342345656\",\"address\":\"1 Google Drive\",\"credit_number\":\"4444444444444444\"}}
 
-
-
+curl localhost:3000/app/gifts.json -d "{Parameters={\"token\":\"rmg8onZ33xjpwDpMVqxIRQ\"}}"
+curl localhost:3000/app/gifts.json -d "{\"token\":\"rmg8onZ33xjpwDpMVqxIRQ\"}" 
 
 /**
  Export to JSON plugin for PHPMyAdmin
