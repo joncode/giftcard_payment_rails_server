@@ -29,21 +29,21 @@ class Gift < ActiveRecord::Base
   has_many    :orders
   
   def self.get_gifts(user)
-    gifts = Gift.where( receiver_id: user).where(status: 'open').order(created_at:'DESC')
-    gifts.concat Gift.where( receiver_id: user).where(status: 'notified').order(created_at:'DESC')
-    gifts.concat Gift.where( receiver_id: user).where(status: 'redeemed').order(created_at:'DESC')
+    gifts = Gift.where( receiver_id: user).where(status: 'open').order("created_at DESC")
+    gifts.concat Gift.where( receiver_id: user).where(status: 'notified').order("created_at DESC")
+    gifts.concat Gift.where( receiver_id: user).where(status: 'redeemed').order("created_at DESC")
   end
   
   def self.get_buy_history(user)
-    gifts = Gift.where( giver_id: user).where(status: 'open').order(created_at:'DESC')
-    gifts.concat Gift.where( giver_id: user).where(status: 'notified').order(created_at:'DESC')
-    gifts.concat Gift.where( giver_id: user).where(status: 'redeemed').order(created_at:'DESC')
+    gifts = Gift.where( giver_id: user).where(status: 'open').order("created_at DESC")
+    gifts.concat Gift.where( giver_id: user).where(status: 'notified').order("created_at DESC")
+    gifts.concat Gift.where( giver_id: user).where(status: 'redeemed').order("created_at DESC")
   end
   
   def self.get_activity
-    gifts = Gift.where(status: 'open').order(created_at:'DESC')
-    gifts.concat Gift.where(status: 'notified').order(created_at:'DESC')
-    gifts.concat Gift.where(status: 'redeemed').order(created_at:'DESC')   
+    gifts = Gift.where(status: 'open').order("created_at DESC")
+    gifts.concat Gift.where(status: 'notified').order("created_at DESC")
+    gifts.concat Gift.where(status: 'redeemed').order("created_at DESC")   
   end
   
 end
