@@ -20,7 +20,7 @@
 #
 
 class Gift < ActiveRecord::Base
-  attr_accessible :credit_card, :giver_id, :item_id, :message, :price, :provider_id, :quantity, :receiver_id, :redeem_id, :special_instructions, :status, :total, :giver_name, :receiver_name, :receiver_name ,  :provider_name, :item_name 
+  attr_accessible :credit_card, :giver_id, :item_id, :message, :price, :provider_id, :quantity, :receiver_id, :redeem_id, :special_instructions, :status, :total, :giver_name, :receiver_name, :receiver_name ,  :provider_name, :item_name , :category
   
   belongs_to  :user
   has_one     :redeem
@@ -50,10 +50,6 @@ class Gift < ActiveRecord::Base
     gifts = Gift.where(provider_id: provider.id).where(status: 'open').order("created_at DESC")
     gifts.concat Gift.where(provider_id: provider.id).where(status: 'notified').order("created_at DESC")
     gifts.concat Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
-  end
-  
-  def convert_date
-    created_at.time_ago_in_words
   end
     
 end

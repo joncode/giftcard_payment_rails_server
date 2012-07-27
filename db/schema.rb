@@ -32,16 +32,17 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
     t.integer  "receiver_id"
     t.integer  "item_id"
     t.string   "price",                :limit => 20
-    t.integer  "quantity",                            :null => false
+    t.integer  "quantity",                                                :null => false
     t.string   "total",                :limit => 20
     t.string   "credit_card",          :limit => 100
     t.integer  "provider_id"
     t.text     "message"
     t.text     "special_instructions"
     t.integer  "redeem_id"
-    t.string   "status"
-    t.datetime "created_at",                          :null => false
-    t.datetime "updated_at",                          :null => false
+    t.string   "status",                              :default => "open"
+    t.string   "category"
+    t.datetime "created_at",                                              :null => false
+    t.datetime "updated_at",                                              :null => false
   end
 
   create_table "items", :force => true do |t|
@@ -86,7 +87,7 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
   create_table "orders", :force => true do |t|
     t.integer  "redeem_id"
     t.integer  "gift_id"
-    t.integer  "redeem_code"
+    t.string   "redeem_code"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
@@ -114,7 +115,7 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
   create_table "redeems", :force => true do |t|
     t.integer  "gift_id"
     t.string   "reply_message"
-    t.integer  "redeem_code"
+    t.string   "redeem_code"
     t.text     "special_instructions"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false

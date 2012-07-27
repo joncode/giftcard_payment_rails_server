@@ -3,7 +3,7 @@ class CreateOrders < ActiveRecord::Migration
     create_table :orders do |t|
       t.integer :redeem_id
       t.integer :gift_id
-      t.integer :redeem_code
+      t.string  :redeem_code
 
       t.timestamps
     end

@@ -3,7 +3,7 @@ class CreateRedeems < ActiveRecord::Migration
     create_table :redeems do |t|
       t.integer :gift_id
       t.string  :reply_message
-      t.integer :redeem_code
+      t.string  :redeem_code
       t.text    :special_instructions
       t.timestamps
     end

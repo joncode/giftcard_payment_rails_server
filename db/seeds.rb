@@ -2,10 +2,11 @@
   
 # database issues    
 #FiXES
-  # status default for gift shold be "open"
-  # gift should pluralize the drink order @ creation
-  # gift should save category @ creation
-  # needs to be a 4 digit precision in the redeem code
+  # X - status default for gift shold be "open"
+  # X - gift should pluralize the drink order @ creation
+  # X - gift should save category @ creation
+  # X - needs to be a 4 digit precision in the redeem code
+  # menu_string[:data] should be saved without integers
 
 # MODELS
   # association between menu_string and menu is off because .menu in menu_strings breaks due to confusion with association
@@ -22,7 +23,8 @@ User.create([
   { email: 'jb@jb.com', admin: true, password: 'jessjess', password_confirmation: 'jessjess', first_name: 'Jessica', last_name: 'Balzock' , city: 'New York', state: 'NY', zip: "11238", phone: '345-345-3456', address: '1 Google Drive', credit_number: '4444444444444444'},
   {email: 'gj@gj.com', admin: true, password: 'johnjohn', password_confirmation: 'johnjohn', first_name: 'Greg', last_name: 'Johns' , city: 'New York', state: 'NY', zip: "11238", phone: '4564564567', address: '1 Google Drive', credit_number: '4444444444444444'},
   {email: 'fl@fl.com', admin: true, password: 'fredfred', password_confirmation: 'fredfred', first_name: 'Fredrick', last_name: 'Longfellow' , city: 'New York', state: 'NY', zip: "11238", phone: '+1(567)567-5678', address: '1 Google Drive', credit_number: '4444444444444444'},
-  {email: 'jp@jp.com', admin: true, password: 'janejane', password_confirmation: 'janejane', first_name: 'Jane', last_name: 'Peppermill' , city: 'New York', state: 'NY', zip: "11238", phone: '6786786789', address: '1 Google Drive', credit_number: '4444444444444444'}
+  {email: 'jp@jp.com', admin: true, password: 'janejane', password_confirmation: 'janejane', first_name: 'Jane', last_name: 'Peppermill' , city: 'New York', state: 'NY', zip: "11238", phone: '6786786789', address: '1 Google Drive', credit_number: '4444444444444444'},
+  {email: 'tayloraddison1@gmail.com', admin: true, password: 'drinkb06', password_confirmation: 'drinkb06', first_name: 'Taylor', last_name: 'Addison' , city: 'Tuscaloosa', state: 'AL', zip: "35401", phone: '2052920078', address: '2610 Packberry Lane', credit_number: '2222222222222222'}
 ])
 
 # put user_ids in Provider
@@ -111,7 +113,7 @@ Menu.create(menu_array)
 
 
 
-######################                MENU_STRINGS                ######################
+######################          MENU_STRINGS            #####################
 # "version"
 # "provider_id"
 # "menu_id" 
@@ -130,9 +132,9 @@ p_id.each do |provider|
   num = 1
   menu.each do |m_item|
     item = Item.find(m_item.item_id)
-    m_item_hash = { item_id: m_item.item_id,
+    m_item_hash = { item_id: m_item.item_id.to_s,
        item_name: item.item_name, 
-       category: item.category, 
+       category: item.category.to_s, 
        detail: item.detail, 
        price: m_item.price}
     full_menu_string[num] = m_item_hash
@@ -182,92 +184,98 @@ replies = reply.count
 
 gift_hash = {}
 
-5.times do 
-  20.times do 
-    begin
-      receiving_user_index    = rand users_total
-      giving_user_index       = rand users_total
-    end while receiving_user_index == giving_user_index
+# 2.times do
+  5.times do 
+    20.times do 
+      begin
+        receiving_user_index    = rand users_total
+        giving_user_index       = rand users_total
+      end while receiving_user_index == giving_user_index
       
-    giving_user     = users_array[giving_user_index]
-    receiving_user  = users_array[receiving_user_index]
+      giving_user     = users_array[giving_user_index]
+      receiving_user  = users_array[receiving_user_index]
   
-    provider_index  = rand providers_total 
-    provider        = providers_array[provider_index]
+      provider_index  = rand providers_total 
+      provider        = providers_array[provider_index]
   
-    item_index      = rand items_total 
-    item            = items_array[item_index]   
-    menu_item = Menu.find_by_item_id_and_provider_id item, provider
-    quantity = rand(5) + 1
-    total = menu_item.price.to_i * (quantity + 1)
-    message = "" 
-    note = ""
-    if quantity < 4 
-      message_index = rand messages_total
-      message = messages[message_index]
+      item_index      = rand items_total 
+      item            = items_array[item_index]   
+      menu_item = Menu.find_by_item_id_and_provider_id item, provider
+      quantity = rand(5) + 1
+      total = menu_item.price.to_i * (quantity + 1)
+      item.item_name = item.item_name.pluralize if quantity > 1
+      message = "" 
+      note = ""
+      if quantity < 4 
+        message_index = rand messages_total
+        message = messages[message_index]
+      end
+      if giving_user_index < 3  
+        notes_index = rand notes_total
+        note = notes[notes_index]
+      end
+      gift_hash = {
+        giver_id: giving_user.id, 
+        receiver_id: receiving_user.id,
+        giver_name: giving_user.username ,
+        receiver_name: receiving_user.username,
+        provider_name: provider.name,
+        item_name: item.item_name,
+        provider_id: provider.id, 
+        item_id: item.id, 
+        price: menu_item.price, 
+        quantity: quantity, 
+        total: total.to_s,
+        message: message, 
+        special_instructions: note,
+        status: 'open',
+        category: item.category.to_s
+        }
+        # sleep 20
+      Gift.create([gift_hash])
     end
-    if giving_user_index < 3  
-      notes_index = rand notes_total
-      note = notes[notes_index]
+    gifts = Gift.where(status: 'open')
+    gifts_total = gifts.count
+    10.times do 
+      index = rand gifts_total
+      gift = gifts.slice! index
+      gifts_total -= 1
+      redeem = Redeem.new
+      redeem.gift_id = gift.id
+      odds = rand 3
+      if odds != 0
+        reply_index = rand replies  
+        redeem.reply_message = reply[reply_index]
+      end
+      redeem.redeem_code = "%04d" % rand(10000)
+      redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem})
+      if odds != 2  
+        notes_index = rand notes_total
+        redeem.special_instructions = notes[notes_index]
+      end
+      # sleep 20
+      redeem.save
     end
-    gift_hash = {
-      giver_id: giving_user.id, 
-      receiver_id: receiving_user.id,
-      giver_name: giving_user.username ,
-      receiver_name: receiving_user.username,
-      provider_name: provider.name,
-      item_name: item.item_name,
-      provider_id: provider.id, 
-      item_id: item.id, 
-      price: menu_item.price, 
-      quantity: quantity, 
-      total: total.to_s,
-      message: message, 
-      special_instructions: note,
-      status: 'open',
-      category: item.category.to_s
-      }
-    Gift.create([gift_hash])
+    redeems = Redeem.all
+    # find all redeems where the redeem.gift.status == 'notified'
+    # find all redeems where the redeem.gift.redeem_id != nil
+    redeems_total = redeems.count
+    6.times do
+       begin
+         redeem_index = rand redeems_total
+         redeem = redeems.slice! redeem_index
+         redeems_total -= 1
+       end while redeem.gift.status != 'notified'
+       order = Order.new
+       order.gift_id = redeem.gift_id
+       order.redeem_id = redeem.id
+       order.redeem_code = redeem.redeem_code
+       # sleep 20
+       order.save
+       order.gift.update_attribute(:status, "redeemed")
+    end
   end
-  gifts = Gift.where(status: 'open')
-  gifts_total = gifts.count
-  10.times do 
-    index = rand gifts_total
-    gift = gifts.slice! index
-    gifts_total -= 1
-    redeem = Redeem.new
-    redeem.gift_id = gift.id
-    odds = rand 3
-    if odds != 0
-      reply_index = rand replies  
-      redeem.reply_message = reply[reply_index]
-    end
-    redeem.redeem_code = rand 10000
-    redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem})
-    if odds != 2  
-      notes_index = rand notes_total
-      redeem.special_instructions = notes[notes_index]
-    end
-    redeem.save
-  end
-  redeems = Redeem.all
-  # find all redeems where the redeem.gift.status == 'notified'
-  # find all redeems where the redeem.gift.redeem_id != nil
-  redeems_total = redeems.count
-  6.times do
-     begin
-       redeem_index = rand redeems_total
-       redeem = redeems.slice! redeem_index
-       redeems_total -= 1
-     end while redeem.gift.status != 'notified'
-     order = Order.new
-     order.gift_id = redeem.gift_id
-     order.redeem_id = redeem.id
-     order.redeem_code = redeem.redeem_code
-     order.save
-     order.gift.update_attribute(:status, "redeemed")
-  end
-end
+# end
 
 
 

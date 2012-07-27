@@ -27,6 +27,7 @@ Drinkboard::Application.routes.draw do
   match 'app/buys', to: 'iphone#buys', via: :post
   match 'app/activity', to: 'iphone#activity', via: :post
   match 'app/provider', to: 'iphone#provider', via: :post
+  match 'app/locations', to: 'iphone#locations', via: :post
   ###
 
   match '/about', to: 'home#about'

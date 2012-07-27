@@ -1,5 +1,4 @@
 class IphoneController < AppController
- include ActionView::Helpers::DateHelper
   
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
   GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
@@ -51,7 +50,7 @@ class IphoneController < AppController
   def gifts
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_gifts(@user)
-    gift_hash = hash_this(@gifts, GIFT_REPLY)
+    gift_hash = hash_these_gifts(@gifts, GIFT_REPLY)
 
     
     respond_to do |format|
@@ -62,7 +61,7 @@ class IphoneController < AppController
   def buys
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_buy_history(@user)
-    gift_hash = hash_this(@gifts, BUY_REPLY)
+    gift_hash = hash_these_gifts(@gifts, BUY_REPLY)
     
     respond_to do |format|
       #format.json { render json: @gifts, only: GIFT_REPLY }
@@ -73,7 +72,7 @@ class IphoneController < AppController
   def activity
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_activity
-    gift_hash = hash_this(@gifts, BOARD_REPLY) 
+    gift_hash = hash_these_gifts(@gifts, BOARD_REPLY) 
     
     respond_to do |format|
       format.json { render text: gift_hash.to_json }
@@ -84,46 +83,58 @@ class IphoneController < AppController
     # @user  = User.find_by_remember_token(params["token"])
     @provider = Provider.find(params["provider_id"])
     @gifts = Gift.get_provider(@provider)
-    gift_hash = hash_this(@gifts, PROVIDER_REPLY) 
+    gift_hash = hash_these_gifts(@gifts, PROVIDER_REPLY) 
     respond_to do |format|
       format.json { render text: gift_hash.to_json }
     end
   end
   
-  def hash_this(obj, send_fields)
-    gift_hash = {}
-    index = 1 
-    obj.each do |g|
-      
-      ### >>>>>>>    remove this line of code after re-running seed.rb
-      g.item_name = g.item_name.pluralize if g.quantity > 1
-      ###  7/27 6:45 UTC
-      
-      time = g.created_at.to_time
-      time_string = time_ago_in_words(time)
-      
-      gift_obj = g.serializable_hash only: send_fields
-      gift_hash["#{index}"] = gift_obj.each_key do |key|
-        value = gift_obj[key]
-        gift_obj[key] = value.to_s
-      end
-      
-      ### >>>>>>>    remove this line of code after re-running seed.rb
-      gift_obj["category"] = g.item.category.to_s      
-      ###  7/27 6:45 UTC
-
-      gift_obj["time_ago"]    = time_string
-      
-      ### >>>>>>>    remove this line of code after re-running seed.rb
-      gift_obj["redeem_code"] = add_redeem_code(g)
-      ###  07-27 9:08 UTC
-            
-      index += 1
+  def locations
+    @providers = Provider.all
+    menus = {}
+    @providers.each do |p|
+      menu = JSON.parse p.menu_string.data
+      menus.merge!(menu)
     end
-    return gift_hash
+    respond_to do |format|
+      format.json { render text: menus.to_json }
+    end
   end
   
   private
+  
+    def hash_these_gifts(obj, send_fields)
+      gift_hash = {}
+      index = 1 
+      obj.each do |g|
+      
+        ### >>>>>>>    item_name pluralizer
+        # g.item_name = g.item_name.pluralize if g.quantity > 1
+        ###  7/27 6:45 UTC
+      
+        time = g.created_at.to_time
+        time_string = time_ago_in_words(time)
+      
+        gift_obj = g.serializable_hash only: send_fields
+        gift_hash["#{index}"] = gift_obj.each_key do |key|
+          value = gift_obj[key]
+          gift_obj[key] = value.to_s
+        end
+      
+        ### >>>>>>>   add item category to gift
+        # gift_obj["category"] = g.item.category.to_s      
+        ###  7/27 6:45 UTC
+
+        gift_obj["time_ago"]    = time_string
+      
+        ### >>>>>>>    this is not stored in gift object
+        gift_obj["redeem_code"] = add_redeem_code(g)
+        ###  07-27 9:08 UTC
+            
+        index += 1
+      end
+      return gift_hash
+    end
     
     def add_redeem_code(obj)
       if obj.status == "notified" 

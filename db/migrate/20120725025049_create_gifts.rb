@@ -15,8 +15,9 @@ class CreateGifts < ActiveRecord::Migration
       t.integer :provider_id
       t.text    :message
       t.text    :special_instructions
-      t.integer :redeem_id
-      t.string  :status
+      t.integer :redeem_id 
+      t.string  :status, default: "open"
+      t.string  :category
 
       t.timestamps
     end
