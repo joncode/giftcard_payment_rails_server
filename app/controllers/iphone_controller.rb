@@ -86,6 +86,7 @@ class IphoneController < AppController
         value = gift_obj[key]
         gift_obj[key] = value.to_s
       end
+      gift_obj["category"] = g.item.category.to_s
       index += 1
     end
     return gift_hash
