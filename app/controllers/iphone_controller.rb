@@ -3,7 +3,7 @@ class IphoneController < AppController
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
   GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
   BUY_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-
+  BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
   def create_account
     data = params["data"]
 
@@ -68,7 +68,6 @@ class IphoneController < AppController
   end
   
   def activity
-    BOARD_REPLY =  BUY_REPLY.concat(GIFT_REPLY).uniq
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_activity
     gift_hash = hash_this(@gifts, BOARD_REPLY) 
