@@ -65,7 +65,7 @@ class IphoneController < AppController
   
   def activity
     @user  = User.find_by_remember_token(params["token"])
-    @gifts = Gift.get_buy_history(@user)
+    @gifts = Gift.get_activity
     
     respond_to do |format|
       format.json { render json: @gifts, only: GIFT_REPLY }

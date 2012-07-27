@@ -40,4 +40,10 @@ class Gift < ActiveRecord::Base
     gifts.concat Gift.where( giver_id: user).where(status: 'redeemed').order(created_at:'DESC')
   end
   
+  def self.get_activity
+    gifts = Gift.where(status: 'open').order(created_at:'DESC')
+    gifts.concat Gift.where(status: 'notified').order(created_at:'DESC')
+    gifts.concat Gift.where(status: 'redeemed').order(created_at:'DESC')   
+  end
+  
 end

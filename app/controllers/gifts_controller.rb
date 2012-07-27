@@ -22,9 +22,7 @@ class GiftsController < ApplicationController
   
   def activity
     @user = current_user
-    @gifts = Gift.where(status: 'open').order(created_at:'DESC')
-    @gifts.concat Gift.where(status: 'notified').order(created_at:'DESC')
-    @gifts.concat Gift.where(status: 'redeemed').order(created_at:'DESC')
+    @gifts = Gift.get_activity
     
     respond_to do |format|
       format.html 
