@@ -1,4 +1,5 @@
 class IphoneController < AppController
+ include ApplicationHelper
   
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
   GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
@@ -80,7 +81,7 @@ class IphoneController < AppController
   def provider
     # @user  = User.find_by_remember_token(params["token"])
     @provider = Provider.find(params["provider_id"])
-    @gifts = Gift.get_provider
+    @gifts = Gift.get_provider(@provider)
     gift_hash = hash_this(@gifts, BOARD_REPLY) 
     respond_to do |format|
       format.json { render text: gift_hash.to_json }
@@ -92,6 +93,7 @@ class IphoneController < AppController
     index = 1 
     obj.each do |g|
       # g = g.convert_date
+      g.item_name.pluralize if g.quantity > 1
       gift_obj = g.serializable_hash only: send_fields
       gift_hash["#{index}"] = gift_obj.each_key do |key|
         value = gift_obj[key]

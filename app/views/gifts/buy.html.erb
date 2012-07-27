@@ -12,7 +12,7 @@
 
 <% @gifts.each do |gift| %>
   <tr>
-    <td><%= gift.created_at.to_formatted_s(:custom) %></td>
+    <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
     <td><%= gift.receiver_name %></td>
     <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
     <td><%= gift.provider_name %></td>
