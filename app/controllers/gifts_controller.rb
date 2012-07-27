@@ -1,8 +1,10 @@
 class GiftsController < ApplicationController
 
   def index
-    @gifts = Gift.all
-
+    @gifts = Gift.where(status: 'open').order(created_at:'DESC')
+    @gifts.concat Gift.where(status: 'notified').order(created_at:'DESC')
+    @gifts.concat Gift.where(status: 'redeemed').order(created_at:'DESC')
+    
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @gifts }
