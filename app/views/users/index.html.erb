@@ -1,4 +1,4 @@
-
+<div class="center hero-unit">
 <%- model_class = User.new.class -%>
 <table>
   <thead>
@@ -9,30 +9,29 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= gravatar_for user %></td>
-        <td><%= link_to user.username, user %></td>
-        <% if user != current_user %>
-        <td><%= user.following?(current_user) ? 'Yes' : 'No' %></td>
-        <td><%= current_user.following?(user) ? 'Yes' : 'No'  %></td>
-        <% else %>
-        <td></td>
-        <td></td>
-        <% end %>
-        
-        <td><%= user.email %></td>
-        
-        <% if current_user.admin?  %>
-          <td>
+        <td colspan="6">
+          <%= gravatar_for user %>
+          <%= link_to user.username, user %>
+          <%= user.following?(current_user) ? 'You are following' : 'doesnt follow you' %>
+          <% if current_user.following?(user) %>
+              <%= render 'unfollow' %> 
+          <% else %>  
+              <%= render 'follow' %>  
+          <% end %>
+
+          <% if current_user.admin?  %>
+
             <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                         user_path(user),
                         :method => :delete,
                         :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
                         :class => 'btn btn-mini btn-danger' %>
+          <% end %>
           </td>
-        <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
+</div>
 
 

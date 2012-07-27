@@ -6,6 +6,9 @@ class IphoneController < AppController
   GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
   BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
   BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name"] 
+  PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name"]
+
+
   
   def time_ago_in_words
     super
@@ -89,7 +92,7 @@ class IphoneController < AppController
     # @user  = User.find_by_remember_token(params["token"])
     @provider = Provider.find(params["provider_id"])
     @gifts = Gift.get_provider(@provider)
-    gift_hash = hash_this(@gifts, BOARD_REPLY) 
+    gift_hash = hash_this(@gifts, PROVIDER_REPLY) 
     respond_to do |format|
       format.json { render text: gift_hash.to_json }
     end
