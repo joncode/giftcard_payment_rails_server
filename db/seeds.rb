@@ -115,8 +115,7 @@ p_id.each do |provider|
   menu_string = MenuString.new
   menu_string.provider_id = provider
   menu_string.version = 1
-  provider_obj = Provider.find(provider)
-  menu_string.full_address = "#{provider_obj.address},  #{provider_obj.city}, #{provider_obj.state}"
+  menu_string.full_address = menu_string.provider.full_address
   # make an array of hashes of the items
   full_menu_string = { full_address: menu_string.full_address, 
     location_name: menu_string.provider.name }
@@ -131,8 +130,6 @@ p_id.each do |provider|
     full_menu_string[num] = m_item_hash
     num += 1
   end
-  # string_for_json = {} 
-  # string_for_json[provider] = full_menu_string 
   string_for_json = Hash[provider, full_menu_string]
   menu_string.data = string_for_json.to_json
   menu_string.save!

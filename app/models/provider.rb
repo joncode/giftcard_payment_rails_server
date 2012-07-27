@@ -30,4 +30,8 @@ class Provider < ActiveRecord::Base
   has_many   :orders                                                                            
   has_one    :menu_string
   has_many   :gifts
+  
+  def full_address
+    "#{self.address},  #{self.city}, #{self.state}"
+  end
 end
