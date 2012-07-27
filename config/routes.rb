@@ -2,7 +2,12 @@ Drinkboard::Application.routes.draw do
   
   resources :orders
   resources :redeems
-  resources :gifts
+  resources :gifts do
+    collection do
+      get 'buy'
+      get 'activity'
+    end
+  end
   resources :items
   resources :menus
   resources :menu_strings
@@ -19,8 +24,8 @@ Drinkboard::Application.routes.draw do
   match 'app/create_account', to: 'iphone#create_account', via: :post
   match 'app/login', to: 'iphone#login', via: :post
   ###
-  match '/buy', to: 'home#buy'
-  match '/board', to: 'home#drinkboard'
+  # match '/buy', to: 'gifts#buy'
+  # match '/board', to: 'gifts#drinkboard'
   match '/about', to: 'home#about'
   match '/contact', to: 'home#contact'
   match '/home', to: 'home#index'

@@ -5,7 +5,7 @@
       <h2>You are signed in as </h2>
       <%= render 'shared/user_info' %> 
       <p></p>
-      <div><%= link_to "Not #{current_user.phone}?", signout_path, method: "delete"%></div>
+      <div><%= link_to "Not #{current_user.username}?", signout_path, method: "delete"%></div>
     <% else %>
       <table class="table table-striped">
         <thead>
@@ -17,7 +17,7 @@
           <% @users.each do |u| %>
             <tr>
               <td><%= u.password %></td>
-              <td><%= u.phone %></td>
+              <td><%= u.username %></td>
               <td>
                 <%= link_to "Sign In As", sessions_path(email: u.email, page: 'development'), :class => 'btn btn-large btn-info', method: :post %>
               </td>

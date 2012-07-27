@@ -14,7 +14,7 @@ User.create([
   { email: 'jb@jb.com', admin: true, password: 'jessjess', password_confirmation: 'jessjess', first_name: 'Jessica', last_name: 'Balzock' , city: 'New York', state: 'NY', zip: "11238", phone: '345-345-3456', address: '1 Google Drive', credit_number: '4444444444444444'},
   {email: 'gj@gj.com', admin: true, password: 'johnjohn', password_confirmation: 'johnjohn', first_name: 'Greg', last_name: 'Johns' , city: 'New York', state: 'NY', zip: "11238", phone: '4564564567', address: '1 Google Drive', credit_number: '4444444444444444'},
   {email: 'fl@fl.com', admin: true, password: 'fredfred', password_confirmation: 'fredfred', first_name: 'Fredrick', last_name: 'Longfellow' , city: 'New York', state: 'NY', zip: "11238", phone: '+1(567)567-5678', address: '1 Google Drive', credit_number: '4444444444444444'},
-  {email: 'jp@jp.com', admin: true, password: 'janejane', password_confirmation: 'janejane', first_name: 'Fredrick', last_name: 'Longfellow' , city: 'New York', state: 'NY', zip: "11238", phone: '6786786789', address: '1 Google Drive', credit_number: '4444444444444444'}
+  {email: 'jp@jp.com', admin: true, password: 'janejane', password_confirmation: 'janejane', first_name: 'Jane', last_name: 'Peppermill' , city: 'New York', state: 'NY', zip: "11238", phone: '6786786789', address: '1 Google Drive', credit_number: '4444444444444444'}
 ])
 
 # put user_ids in Provider

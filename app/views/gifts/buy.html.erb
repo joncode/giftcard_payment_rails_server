@@ -1,6 +1,6 @@
 <table>
   <tr>
-    <th>From</th>
+    <th>To</th>
     <th>Drink</th>
     <th>Location</th>
     <th>Message</th>
@@ -10,7 +10,7 @@
 
 <% @gifts.each do |gift| %>
   <tr>
-    <td><%= gift.giver_name %></td>
+    <td><%= gift.receiver_name %></td>
     <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
     <td><%= gift.provider_name %></td>
     <td><%= gift.message %></td>
