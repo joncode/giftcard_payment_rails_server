@@ -179,12 +179,11 @@ gift_hash = {}
 
 5.times do 
   20.times do 
-    first_user_id           = rand users_total
-    giving_user_index       = first_user_id
-    receiving_user_index    = first_user_id
-    while receiving_user_index == giving_user_index
-      receiving_user_index  = rand users_total
-    end
+    begin
+      receiving_user_index    = rand users_total
+      giving_user_index       = rand users_total
+    end while receiving_user_index == giving_user_index
+      
     giving_user     = users_array[giving_user_index]
     receiving_user  = users_array[receiving_user_index]
   
