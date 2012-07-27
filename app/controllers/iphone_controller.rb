@@ -1,9 +1,9 @@
 class IphoneController < AppController
   
-  LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]
-  
+  LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
   GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-  
+  BUY_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
+
   def create_account
     data = params["data"]
 
@@ -48,7 +48,7 @@ class IphoneController < AppController
   def gifts
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_gifts(@user)
-    gift_hash = hash_this @gifts
+    gift_hash = hash_this(@gifts, GIFT_REPLY)
 
     
     respond_to do |format|
@@ -59,7 +59,7 @@ class IphoneController < AppController
   def buys
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_buy_history(@user)
-    gift_hash = hash_this @gifts
+    gift_hash = hash_this(@gifts, BUY_REPLY)
     
     respond_to do |format|
       #format.json { render json: @gifts, only: GIFT_REPLY }
@@ -68,20 +68,29 @@ class IphoneController < AppController
   end
   
   def activity
+    BOARD_REPLY =  BUY_REPLY.concat(GIFT_REPLY).uniq
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_activity
-    gift_hash = hash_this @gifts
+    gift_hash = hash_this(@gifts, BOARD_REPLY) 
     
     respond_to do |format|
       format.json { render text: gift_hash.to_json }
     end
   end
   
-  def hash_this(obj)
+  def hash_this(obj, send_fields)
     gift_hash = {}
     index = 1 
     obj.each do |g|
-      gift_hash["#{index}"] = g.serializable_hash only: GIFT_REPLY
+      gift_obj = g.serializable_hash only: send_fields
+      # take each Key value pair of gift_obj
+      k = gift_obj.keys
+      k.each do |key|
+        value = gift_obj[key]
+        new_value = value.to_s
+        gift_obj[key] = new_value
+      end   
+      gift_hash["#{index}"] = gift_obj
       index += 1
     end
     return gift_hash
