@@ -82,14 +82,10 @@ class IphoneController < AppController
     index = 1 
     obj.each do |g|
       gift_obj = g.serializable_hash only: send_fields
-      # take each Key value pair of gift_obj
-      k = gift_obj.keys
-      k.each do |key|
+      gift_hash["#{index}"] = gift_obj.each_key do |key|
         value = gift_obj[key]
-        new_value = value.to_s
-        gift_obj[key] = new_value
-      end   
-      gift_hash["#{index}"] = gift_obj
+        gift_obj[key] = value.to_s
+      end
       index += 1
     end
     return gift_hash
@@ -102,12 +98,5 @@ class IphoneController < AppController
       obj.symbolize_keys!
       User.new(obj)
     end
-  
-    # def create_user_object_from_json_obj(data)
-    #   worked_data = data.symbolize_keys
-    #   worked_data.delete :controller
-    #   worked_data.delete :action
-    #   worked_data.delete :format
-    #   User.new(worked_data)
-    # end
+
 end
