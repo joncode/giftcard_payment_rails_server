@@ -1,11 +1,19 @@
   
   
 # database issues    
+#FiXES
+  # status default for gift shold be "open"
+  # gift should pluralize the drink order @ creation
+  # gift should save category @ creation
+  # needs to be a 4 digit precision in the redeem code
 
-# 2 association between menu_string and menu is off because .menu in menu_strings breaks due to confusion with association
-# 1 has and belongs to many association from items and menu are off
+# MODELS
+  # association between menu_string and menu is off because .menu in menu_strings breaks due to confusion with association
+  # has and belongs to many association from items and menu are off
 
-# 4 the json string has row numbers for iphone when it should just be a menu key with an array of item hashes
+# THOUGHTS
+  # 4 the json string has row numbers for iphone when it should just be a menu key with an array of item hashes
+  
 ######################                USERS               ######################
 
 User.delete_all

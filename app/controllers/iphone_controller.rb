@@ -113,14 +113,26 @@ class IphoneController < AppController
       ###  7/27 6:45 UTC
 
       gift_obj["time_ago"]    = time_string
-      gift_obj["redeem_code"] = g.redeem.redeem_code
+      
+      ### >>>>>>>    remove this line of code after re-running seed.rb
+      gift_obj["redeem_code"] = add_redeem_code(g)
+      ###  07-27 9:08 UTC
+            
       index += 1
     end
     return gift_hash
   end
   
   private
-  
+    
+    def add_redeem_code(obj)
+      if obj.status == "notified" 
+        obj.redeem.redeem_code
+      else
+        "none"
+      end
+    end
+    
     def create_user_object(data)
       obj = JSON.parse data
       obj.symbolize_keys!
