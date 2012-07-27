@@ -10,6 +10,9 @@
 
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <% Time::DATE_FORMATS[:custom] = "%B %e at %I:%M %p" %>
+  <% Time::DATE_FORMATS[:custom_form] = "%b %e" %>
 </head>
 <body>
 

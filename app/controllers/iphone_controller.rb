@@ -2,6 +2,8 @@ class IphoneController < AppController
   
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]
   
+  GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
+  
   def create_account
     data = params["data"]
 
@@ -43,6 +45,32 @@ class IphoneController < AppController
     end
   end
   
+  def gifts
+    @user  = User.find_by_remember_token(params["token"])
+    @gifts = Gift.get_gifts(@user)
+    
+    respond_to do |format|
+      format.json { render json: @gifts, only: GIFT_REPLY }
+    end
+  end
+
+  def buys
+    @user  = User.find_by_remember_token(params["token"])
+    @gifts = Gift.get_buy_history(@user)
+    
+    respond_to do |format|
+      format.json { render json: @gifts, only: GIFT_REPLY }
+    end
+  end
+  
+  def activity
+    @user  = User.find_by_remember_token(params["token"])
+    @gifts = Gift.get_buy_history(@user)
+    
+    respond_to do |format|
+      format.json { render json: @gifts, only: GIFT_REPLY }
+    end
+  end
   
   private
   

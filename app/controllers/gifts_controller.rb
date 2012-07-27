@@ -2,9 +2,7 @@ class GiftsController < ApplicationController
 
   def index
     @user = current_user
-    @gifts = Gift.where( receiver_id: @user).where(status: 'open').order(created_at:'DESC')
-    @gifts.concat Gift.where( receiver_id: @user).where(status: 'notified').order(created_at:'DESC')
-    @gifts.concat Gift.where( receiver_id: @user).where(status: 'redeemed').order(created_at:'DESC')
+    @gifts = Gift.get_gifts(@user)
     
     respond_to do |format|
       format.html # index.html.erb
@@ -14,9 +12,7 @@ class GiftsController < ApplicationController
   
   def buy
     @user = current_user
-    @gifts = Gift.where( giver_id: @user).where(status: 'open').order(created_at:'DESC')
-    @gifts.concat Gift.where( giver_id: @user).where(status: 'notified').order(created_at:'DESC')
-    @gifts.concat Gift.where( giver_id: @user).where(status: 'redeemed').order(created_at:'DESC')
+    @gifts = Gift.get_buy_history(@user)
     
     respond_to do |format|
       format.html 
