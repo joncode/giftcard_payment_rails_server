@@ -47,7 +47,8 @@ class IphoneController < AppController
   
   def gifts
     @user  = User.find_by_remember_token(params["token"])
-    @gifts = Gift.get_gifts(@user)
+    gifts = Gift.get_gifts(@user)
+    @gifts = to_hash!(gifts) 
     
     respond_to do |format|
       format.json { render json: @gifts, only: GIFT_REPLY }
@@ -56,7 +57,8 @@ class IphoneController < AppController
 
   def buys
     @user  = User.find_by_remember_token(params["token"])
-    @gifts = Gift.get_buy_history(@user)
+    gifts = Gift.get_buy_history(@user)
+    @gifts = to_hash!(gifts) 
     
     respond_to do |format|
       format.json { render json: @gifts, only: GIFT_REPLY }
@@ -65,11 +67,24 @@ class IphoneController < AppController
   
   def activity
     @user  = User.find_by_remember_token(params["token"])
-    @gifts = Gift.get_activity
+    gifts = Gift.get_activity
+    @gifts = to_hash!(gifts) 
     
     respond_to do |format|
       format.json { render json: @gifts, only: GIFT_REPLY }
     end
+  end
+  
+  def to_hash!(array)
+    index = 0
+    total = array.count
+    hash = {}
+    while index < total
+      num = index + 1
+      hash[num] = array[index]
+      index += 1
+    end
+    return hash
   end
   
   private

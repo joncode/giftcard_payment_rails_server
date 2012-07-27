@@ -43,7 +43,7 @@ class Gift < ActiveRecord::Base
   def self.get_activity
     gifts = Gift.where(status: 'open').order("created_at DESC")
     gifts.concat Gift.where(status: 'notified').order("created_at DESC")
-    gifts.concat Gift.where(status: 'redeemed').order("created_at DESC")   
+    gifts.concat Gift.where(status: 'redeemed').order("created_at DESC") 
   end
-  
+    
 end
