@@ -45,5 +45,15 @@ class Gift < ActiveRecord::Base
     gifts.concat Gift.where(status: 'notified').order("created_at DESC")
     gifts.concat Gift.where(status: 'redeemed').order("created_at DESC") 
   end
+  
+  def self.get_provider(provider)
+    gifts = Gift.where(provider_id: provider.id).where(status: 'open').order("created_at DESC")
+    gifts.concat Gift.where(provider_id: provider.id).where(status: 'notified').order("created_at DESC")
+    gifts.concat Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
+  end
+  
+  def convert_date
+    created_at.time_ago_in_words
+  end
     
 end

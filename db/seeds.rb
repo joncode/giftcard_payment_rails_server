@@ -216,7 +216,8 @@ gift_hash = {}
       total: total.to_s,
       message: message, 
       special_instructions: note,
-      status: 'open'
+      status: 'open',
+      category: item.category.to_s
       }
     Gift.create([gift_hash])
   end

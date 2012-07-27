@@ -1,9 +1,9 @@
 class IphoneController < AppController
   
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
-  GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-  BUY_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-  BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
+  GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
+  BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
+  BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name"] 
   def create_account
     data = params["data"]
 
@@ -77,16 +77,31 @@ class IphoneController < AppController
     end
   end
   
+  def provider
+    # @user  = User.find_by_remember_token(params["token"])
+    @provider = Provider.find(params["provider_id"])
+    @gifts = Gift.get_provider
+    gift_hash = hash_this(@gifts, BOARD_REPLY) 
+    respond_to do |format|
+      format.json { render text: gift_hash.to_json }
+    end
+  end
+  
   def hash_this(obj, send_fields)
     gift_hash = {}
     index = 1 
     obj.each do |g|
+      # g = g.convert_date
       gift_obj = g.serializable_hash only: send_fields
       gift_hash["#{index}"] = gift_obj.each_key do |key|
         value = gift_obj[key]
         gift_obj[key] = value.to_s
       end
+      
+      ### >>>>>>>    remove this line of code after re-running seed.rb
       gift_obj["category"] = g.item.category.to_s
+      ###  7/27 6:45 UTC
+      
       index += 1
     end
     return gift_hash
