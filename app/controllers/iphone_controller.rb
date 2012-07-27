@@ -93,7 +93,11 @@ class IphoneController < AppController
     index = 1 
     obj.each do |g|
       # g = g.convert_date
-      g.item_name.pluralize if g.quantity > 1
+      
+      ### >>>>>>>    remove this line of code after re-running seed.rb
+      g.item_name = g.item_name.pluralize if g.quantity > 1
+      ###  7/27 6:45 UTC
+      
       gift_obj = g.serializable_hash only: send_fields
       gift_hash["#{index}"] = gift_obj.each_key do |key|
         value = gift_obj[key]
