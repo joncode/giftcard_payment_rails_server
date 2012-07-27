@@ -1,5 +1,5 @@
 class IphoneController < AppController
- include ApplicationHelper
+ include ActionView::Helpers::DateHelper
   
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
   GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
@@ -92,11 +92,13 @@ class IphoneController < AppController
     gift_hash = {}
     index = 1 
     obj.each do |g|
-      # g = g.convert_date
       
       ### >>>>>>>    remove this line of code after re-running seed.rb
       g.item_name = g.item_name.pluralize if g.quantity > 1
       ###  7/27 6:45 UTC
+      
+      time = g.created_at.to_time
+      time_string = time_ago_in_words(time)
       
       gift_obj = g.serializable_hash only: send_fields
       gift_hash["#{index}"] = gift_obj.each_key do |key|
@@ -105,9 +107,10 @@ class IphoneController < AppController
       end
       
       ### >>>>>>>    remove this line of code after re-running seed.rb
-      gift_obj["category"] = g.item.category.to_s
+      gift_obj["category"] = g.item.category.to_s      
       ###  7/27 6:45 UTC
-      
+
+      gift_ago["time_ago"] = time_string 
       index += 1
     end
     return gift_hash
