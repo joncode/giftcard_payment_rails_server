@@ -112,7 +112,7 @@ class IphoneController < AppController
       gift_obj["category"] = g.item.category.to_s      
       ###  7/27 6:45 UTC
 
-      gift_ago["time_ago"] = time_string 
+      gift_obj["time_ago"] = time_string 
       index += 1
     end
     return gift_hash
