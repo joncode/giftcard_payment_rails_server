@@ -24,6 +24,10 @@ ActiveRecord::Schema.define(:version => 20120726045422) do
   add_index "connections", ["receiver_id"], :name => "index_connections_on_receiver_id"
 
   create_table "gifts", :force => true do |t|
+    t.string   "giver_name"
+    t.string   "receiver_name"
+    t.string   "provider_name"
+    t.string   "item_name"
     t.integer  "giver_id"
     t.integer  "receiver_id"
     t.integer  "item_id"

@@ -205,13 +205,22 @@ gift_hash = {}
       notes_index = rand notes_total
       note = notes[notes_index]
     end
-    gift_hash = {giver_id: giving_user.id, 
+    gift_hash = {
+      giver_id: giving_user.id, 
       receiver_id: receiving_user.id,
+      giver_name: giving_user.username ,
+      receiver_name: receiving_user.username,
+      provider_name: provider.name,
+      item_name: item.item_name,
       provider_id: provider.id, 
-      item_id: item.id, price: menu_item.price, 
-      quantity: quantity, total: total.to_s,
-       message: message, special_instructions: note,
-       status: 'open'}
+      item_id: item.id, 
+      price: menu_item.price, 
+      quantity: quantity, 
+      total: total.to_s,
+      message: message, 
+      special_instructions: note,
+      status: 'open'
+      }
     Gift.create([gift_hash])
   end
   gifts = Gift.where(status: 'open')

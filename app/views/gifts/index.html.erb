@@ -1,9 +1,7 @@
-<h1>Drinkboard ALL GIFTS</h1>
-
 <table>
   <tr>
-    <th>From</th>
     <th>To</th>
+    <th>From</th>
     <th>Drink</th>
     <th>Location</th>
     <th>Message</th>
@@ -13,10 +11,10 @@
 
 <% @gifts.each do |gift| %>
   <tr>
-    <td><%= User.find(gift.giver_id).username %></td>
-    <td><%= User.find(gift.receiver_id).username %></td>
-    <td><%= gift.quantity %>&nbsp;<%= Item.find(gift.item_id).item_name %></td>
-    <td><%= Provider.find(gift.provider_id).name %></td>
+    <td><%= gift.receiver_name %></td>
+    <td><%= gift.giver_name %></td>
+    <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
+    <td><%= gift.provider_name %></td>
     <td><%= gift.message %></td>
     <td><%= gift.status %></td>
     <td><%= link_to 'Details', gift %></td>

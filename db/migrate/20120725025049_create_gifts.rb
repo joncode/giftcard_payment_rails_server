@@ -1,6 +1,10 @@
 class CreateGifts < ActiveRecord::Migration
   def change
     create_table :gifts do |t|
+      t.string  :giver_name
+      t.string  :receiver_name
+      t.string  :provider_name
+      t.string  :item_name
       t.integer :giver_id
       t.integer :receiver_id
       t.integer :item_id

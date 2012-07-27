@@ -1,58 +1,28 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>Giver:</b>
-  <%= @gift.giver_id %>
+  <b>To:</b>
+  <%= @gift.receiver_name %>
 </p>
 
 <p>
-  <b>Receiver:</b>
-  <%= @gift.receiver_id %>
+  <b>From:</b>
+  <%= @gift.giver_name %>
 </p>
 
 <p>
-  <b>Menu item:</b>
-  <%= @gift.item_id %>
+  <b>Drink:</b>
+  <%= @gift.quantity %>&nbsp;<%= @gift.item_name %>
 </p>
 
 <p>
-  <b>Price:</b>
-  <%= @gift.price %>
-</p>
-
-<p>
-  <b>Quantity:</b>
-  <%= @gift.quantity %>
-</p>
-
-<p>
-  <b>Total:</b>
-  <%= @gift.total %>
-</p>
-
-<p>
-  <b>Credit card:</b>
-  <%= @gift.credit_card %>
-</p>
-
-<p>
-  <b>Provider:</b>
-  <%= @gift.provider_id %>
+  <b>Location:</b>
+  <%= @gift.provider_name %>
 </p>
 
 <p>
   <b>Message:</b>
   <%= @gift.message %>
-</p>
-
-<p>
-  <b>Special instructions:</b>
-  <%= @gift.special_instructions %>
-</p>
-
-<p>
-  <b>Redeem:</b>
-  <%= @gift.redeem_id %>
 </p>
 
 <p>
