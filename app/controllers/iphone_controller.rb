@@ -36,6 +36,9 @@ class IphoneController < AppController
     else
       user = User.find_by_email(email)     
       if user && user.authenticate(password)
+        if user.providers.count > 0
+          user.provider_id = user.providers.shift
+        end
         response = user.to_json only: LOGIN_REPLY
       else
         response = { "error" => "Invalid email/password combination" }.to_json
