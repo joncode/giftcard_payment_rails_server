@@ -16,4 +16,11 @@ class Redeem < ActiveRecord::Base
   belongs_to     :gift
   has_one        :order
   
+  before_create :create_redeem_code
+  
+  private
+
+    def create_redeem_code
+      self.redeem_code = "%04d" % rand(10000)
+    end
 end

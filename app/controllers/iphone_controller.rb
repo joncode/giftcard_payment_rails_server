@@ -105,7 +105,8 @@ class IphoneController < AppController
   def create_gift
     message = ""
     response = {}
-    gift = Gift.new(params["gift"])
+    gift_obj = JSON.parse params["gift"]
+    gift = Gift.new(gift_obj)
     giver = User.find_by_remember_token(params["token"])
     if giver.nil?
       message = "Couldn't identify app user. "

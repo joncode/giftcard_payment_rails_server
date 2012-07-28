@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   
   helper :all
-  protect_from_forgery
+  protect_from_forgery unless params[:controller] == "iphone"
   include SessionsHelper
   
   before_filter :prepare_for_mobile

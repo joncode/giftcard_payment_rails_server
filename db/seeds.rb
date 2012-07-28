@@ -248,7 +248,7 @@ gift_hash = {}
         reply_index = rand replies  
         redeem.reply_message = reply[reply_index]
       end
-      redeem.redeem_code = "%04d" % rand(10000)
+      # redeem.redeem_code = "%04d" % rand(10000)
       if odds != 2  
         notes_index = rand notes_total
         redeem.special_instructions = notes[notes_index]
