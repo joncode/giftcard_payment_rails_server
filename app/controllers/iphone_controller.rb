@@ -7,6 +7,7 @@ class IphoneController < AppController
   PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_id", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
   
   def create_account
+    puts "Create Account"
     data = params["data"]
 
     if data.nil?
@@ -23,11 +24,13 @@ class IphoneController < AppController
         message += " Unable to save to database" 
         response = { "error" => message }
       end
+      puts response
       format.json { render text: response.to_json }
     end
   end
   
   def login
+    puts "Login"
     email = params["email"]
     password = params["password"]
     
@@ -46,53 +49,63 @@ class IphoneController < AppController
     end
     
     respond_to do |format|
+      puts response
       format.json { render text: response }
     end
   end
   
   def gifts
+    puts "Gifts"
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_gifts(@user)
     gift_hash = hash_these_gifts(@gifts, GIFT_REPLY)
 
     
     respond_to do |format|
+      puts gift_hash
       format.json { render text: gift_hash.to_json }
     end
   end
 
   def buys
+    puts "Buys"
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_buy_history(@user)
     gift_hash = hash_these_gifts(@gifts, BUY_REPLY)
     
     respond_to do |format|
       #format.json { render json: @gifts, only: GIFT_REPLY }
+      puts gift_hash
       format.json { render text: gift_hash.to_json }
     end
   end
   
   def activity
+    puts "Activity"
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_activity
     gift_hash = hash_these_gifts(@gifts, BOARD_REPLY) 
     
     respond_to do |format|
+      puts gift_hash
       format.json { render text: gift_hash.to_json }
     end
   end
   
   def provider
+    puts "Provider"
     # @user  = User.find_by_remember_token(params["token"])
     @provider = Provider.find(params["provider_id"])
     @gifts = Gift.get_provider(@provider)
     gift_hash = hash_these_gifts(@gifts, PROVIDER_REPLY) 
     respond_to do |format|
+      puts gift_hash
       format.json { render text: gift_hash.to_json }
     end
   end
   
   def locations
+    puts "Locations"
     # @user  = User.find_by_remember_token(params["token"])
     @providers = Provider.all
     menus = {}
@@ -101,11 +114,13 @@ class IphoneController < AppController
       menus.merge!(menu)
     end
     respond_to do |format|
+      puts menus
       format.json { render text: menus.to_json }
     end
   end
   
   def create_gift
+    puts "Create Gift"
     message = ""
     response = {}
     gift_obj = JSON.parse params["gift"]
@@ -137,12 +152,13 @@ class IphoneController < AppController
       else
         response["error_server"]  = " Gift unable to process to database." 
       end
+      puts response
       format.json { render json: response.to_json }
     end  
   end
 
   def create_redeem
-    puts "HELLOOOO LOGGS"
+    puts "Create Redeem"
     message = ""
     response = {}
     redeem_obj = JSON.parse params["redeem"]
@@ -172,11 +188,13 @@ class IphoneController < AppController
         message += " Gift unable to process to database. Please retry later."
         response["error_server"] = message 
       end
+      puts response
       format.json { render text: response.to_json}
     end
   end
 
   def create_order
+    puts "Create Order"
     message = ""
     response = {} 
     order_obj = JSON.parse params["data"]
@@ -217,6 +235,7 @@ class IphoneController < AppController
       else
         response["error_server"] = " the redeem code you entered did not match. "
       end
+      puts response
       format.json { render text: response.json }
     end  
   end
