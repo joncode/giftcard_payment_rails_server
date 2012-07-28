@@ -256,7 +256,7 @@ gift_hash = {}
       end
       # sleep 20
       redeem.save
-      redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem})
+      redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem.id})
     end
     redeems = Redeem.all
     # find all redeems where the redeem.gift.status == 'notified'

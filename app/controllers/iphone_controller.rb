@@ -162,7 +162,7 @@ class IphoneController < AppController
 
     respond_to do |format|
       if redeem.save
-        redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem})
+        redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem.id})
         response["success"] = redeem.redeem_code
       else
         message += " Gift unable to process to database. Please retry later."
@@ -191,8 +191,13 @@ class IphoneController < AppController
       redeem = Redeem.find(order_obj.redeem_id)
       redeem_code = redeem.redeem_code
     rescue
-      message += " Could not find redeem code. "
-      redeem_code = "X"
+      message += " Could not find redeem code via redeem_id. "
+      redeem = Redeem.find_by_gift_id(order.obj.gift_id)
+      if redeem
+        redeem_code = redeem.redeem_code
+      else
+        redeem_code = "X"
+      end
     end
     response = { "error" => message } if message != "" 
 
