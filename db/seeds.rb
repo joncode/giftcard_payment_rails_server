@@ -38,7 +38,7 @@ u_id  = user.map { |u| u.id }
 Provider.delete_all
 Provider.create([
   { name: "Double Down Saloon" , description: "SHUT UP and DRINK", address: "4640 Paradise Rd", city: "Las Vegas", state: "NV", zip: "89169", user_id: u_id[0] },
-  { name: "Hard Rock Hotel & Casino" , description: "Get a Room", address: "4455 Paradise Road", city: "Las Vegas", state: "NV", zip: "89169", user_id: u_id[1] },
+  { name: "Hard Rock Hotel & Casino" , description: "Get a Room", address: "4455 Paradise Road", city: "Las Vegas", state: "NV", zip: "89169", user_id: u_id[5] },
   { name: "Hard Rock Hotel & Casino" , description: "Get a Room", address: "207 5th Avenue", city: "San Diego", state: "CA", zip: "92101", user_id: u_id[1] },
   { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "825 3rd Avenue", city: "New York", state: "NY", zip: "10022", user_id: u_id[2] },
   { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "475 West Broadway", city: "New York", state: "NY", zip: "10012", user_id: u_id[2] },
