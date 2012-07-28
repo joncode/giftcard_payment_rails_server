@@ -5,5 +5,6 @@
 // the compiled file. remeber_to_require jquery.ui.all
 //
 //= require jquery
-//= require_tree .
+//= require twitter/bootstrap
+//= require jquery.ui.all
 
