@@ -142,6 +142,7 @@ class IphoneController < AppController
   end
 
   def create_redeem
+    puts "HELLOOOO LOGGS"
     message = ""
     response = {}
     redeem_obj = JSON.parse params["redeem"]
