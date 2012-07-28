@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120728022208) do
+ActiveRecord::Schema.define(:version => 20120728050322) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -150,6 +150,7 @@ ActiveRecord::Schema.define(:version => 20120728022208) do
     t.string   "phone"
     t.string   "first_name"
     t.string   "last_name"
+    t.integer  "provider_id"
   end
 
 end

@@ -119,15 +119,13 @@ class IphoneController < AppController
     rescue
       message += "Couldn't identify app user. "
     end
-
-    end
-    receiver = User.find_by_phone(params["phone"])
-    if receiver.nil?
-      message += "The person you've bought a gift for is not in our database. "
-      gift.receiver_phone = params["phone"]
-    else
+    begin
+      receiver = User.find_by_phone(params["phone"])
       gift.receiver_name = receiver.username
       gift.receiver_id = receiver.id
+    rescue
+      message += "The person you've bought a gift for is not in our database. "
+      gift.receiver_phone = params["phone"]
     end
     response = { "error" => message } if message != "" 
     respond_to do |format|
@@ -188,7 +186,7 @@ class IphoneController < AppController
     end
     begin
       provider_user = User.find_by_remember_token(params["token"])
-      # provider = Provider.find_by_
+      provider = Provider.find(provider_user.provider_id)
     rescue
       @message = "Couldn't identify app user. "
     end
