@@ -90,6 +90,7 @@ class IphoneController < AppController
   end
   
   def locations
+    # @user  = User.find_by_remember_token(params["token"])
     @providers = Provider.all
     menus = {}
     @providers.each do |p|
@@ -99,6 +100,37 @@ class IphoneController < AppController
     respond_to do |format|
       format.json { render text: menus.to_json }
     end
+  end
+  
+  def create_gift
+    message = ""
+    response = {}
+    gift = Gift.new(params["gift"])
+    giver = User.find_by_remember_token(params["token"])
+    if giver.nil?
+      message = "Couldn't identify app user. "
+    else
+      gift.giver_id = giver.id
+      gift.giver_name = giver.username
+    end
+    receiver = User.find_by_phone(params["phone"])
+    if receiver.nil?
+      message += "The person you've bought a gift for is not in our database. "
+      gift.receiver_phone = params["phone"]
+    else
+      gift.receiver_name = receiver.username
+      gift.receiver_id = receiver.id
+    end
+    response = { "error" => message } if message != "" 
+    respond_to do |format|
+      if gift.save
+        response["success"] = "Gift received - Thank you!"
+        format.json { render json: response.to_json }
+      else
+        response["error"] += " Gift unable to process to database." 
+        format.json { render json: response.to_json }
+      end
+    end  
   end
   
   private

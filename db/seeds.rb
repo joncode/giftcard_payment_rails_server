@@ -6,7 +6,8 @@
   # X - gift should pluralize the drink order @ creation
   # X - gift should save category @ creation
   # X - needs to be a 4 digit precision in the redeem code
-  # menu_string[:data] should be saved without integers
+  # X - menu_string[:data] should be saved without integers
+  # format prices -> add dollar sign && 2 decimal points
 
 # MODELS
   # association between menu_string and menu is off because .menu in menu_strings breaks due to confusion with association
@@ -14,8 +15,8 @@
 
 # THOUGHTS
   # 4 the json string has row numbers for iphone when it should just be a menu key with an array of item hashes
-  
-######################                USERS               ######################
+  # what happens when somebody buys a drink and there phone number does not produce an app user, either the phone is wrong or changed or the person has yet to set up an account
+######################        USERS        ######################
 
 User.delete_all
 User.create([
@@ -31,7 +32,7 @@ User.create([
 user = User.all
 u_id  = user.map { |u| u.id }
 
-######################                PROVIDERS                ######################
+######################       PROVIDERS         ######################
 
 Provider.delete_all
 Provider.create([
@@ -113,7 +114,7 @@ Menu.create(menu_array)
 
 
 
-######################          MENU_STRINGS            #####################
+######################          MENU_STRINGS       #####################
 # "version"
 # "provider_id"
 # "menu_id" 
@@ -148,7 +149,7 @@ end
 Gift.delete_all
 Redeem.delete_all
 Order.delete_all
-######################                GIFTS               ######################
+######################           GIFTS           ######################
 
 #  credit_card          :string(100)
 #  redeem_id            :integer
@@ -248,13 +249,13 @@ gift_hash = {}
         redeem.reply_message = reply[reply_index]
       end
       redeem.redeem_code = "%04d" % rand(10000)
-      redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem})
       if odds != 2  
         notes_index = rand notes_total
         redeem.special_instructions = notes[notes_index]
       end
       # sleep 20
       redeem.save
+      redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem})
     end
     redeems = Redeem.all
     # find all redeems where the redeem.gift.status == 'notified'
