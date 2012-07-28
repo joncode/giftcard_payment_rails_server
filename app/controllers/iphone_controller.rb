@@ -1,10 +1,10 @@
 class IphoneController < AppController
   
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
-  GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-  BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-  BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name"] 
-  PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name"]
+  GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "gift_id"]
+  BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "gift_id"]
+  BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "gift_id"] 
+  PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", , "gift_id"]
   
   def create_account
     data = params["data"]
@@ -106,13 +106,20 @@ class IphoneController < AppController
     message = ""
     response = {}
     gift_obj = JSON.parse params["gift"]
-    gift = Gift.new(gift_obj)
-    giver = User.find_by_remember_token(params["token"])
-    if giver.nil?
-      message = "Couldn't identify app user. "
+    if gift_obj.nil?
+      message = "data did not transfer. "
+      gift = Gift.new
     else
+      gift = Gift.new(gift_obj)
+    end
+    begin
+      giver = User.find_by_remember_token(params["token"])
       gift.giver_id = giver.id
       gift.giver_name = giver.username
+    rescue
+      message += "Couldn't identify app user. "
+    end
+
     end
     receiver = User.find_by_phone(params["phone"])
     if receiver.nil?
@@ -138,14 +145,20 @@ class IphoneController < AppController
     @message = ""
     response = {}
     redeem_obj = JSON.parse params["redeem"]
-    redeem = Redeem.new(redeem_obj)
-    receiver = User.find_by_remember_token(params["token"])
-    if receiver.nil?
+    if redeem_obj.nil?
+      @message = "data did not transfer. "
+      redeem = Redeem.new
+    else
+      redeem = Redeem.new(redeem_obj)
+    end
+    begin
+      receiver = User.find_by_remember_token(params["token"])
+    rescue
       @message = "Couldn't identify app user. "
     end
-
-    gift = Gift.find(params["redeem"]["gift_id"])
-    if gift.nil?
+    begin
+      gift = Gift.find(params["redeem"]["gift_id"])
+    rescue
       @message += " Could not locate gift in the database"    
     end
     response = { "error" => @message } if @message != "" 
@@ -161,6 +174,27 @@ class IphoneController < AppController
         format.json { render text: response.to_json }
       end
     end
+  end
+  
+  def create_order
+    @message = ""
+    response = {} 
+    order_obj = JSON.parse params["data"]
+    if order_obj.nil?
+      @message = "Data not received correctly. "
+      order = Order.new
+    else
+      order = Order.new(order_obj)
+    end
+    begin
+      provider_user = User.find_by_remember_token(params["token"])
+      # provider = Provider.find_by_
+    rescue
+      @message = "Couldn't identify app user. "
+    end
+
+
+
   end
   
   private
