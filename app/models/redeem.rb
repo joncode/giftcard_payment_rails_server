@@ -18,6 +18,8 @@ class Redeem < ActiveRecord::Base
   
   before_create :create_redeem_code
   
+  validates :gift_id , presence: true, uniqueness: true
+
   private
 
     def create_redeem_code

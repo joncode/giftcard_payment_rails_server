@@ -155,7 +155,7 @@ class IphoneController < AppController
       @message = "Couldn't identify app user. "
     end
     begin
-      gift = Gift.find(params["redeem"]["gift_id"])
+      gift = Gift.find(redeem_obj["gift_id"])
     rescue
       @message += " Could not locate gift in the database"    
     end
