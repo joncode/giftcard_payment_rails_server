@@ -16,4 +16,6 @@ class Order < ActiveRecord::Base
   belongs_to  :provider
   belongs_to  :redeem
   belongs_to  :gift
+  
+  validates_presence_of :gift_id, :redeem_code, :redeem_id
 end

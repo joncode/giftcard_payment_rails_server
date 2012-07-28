@@ -131,20 +131,19 @@ class IphoneController < AppController
     respond_to do |format|
       if gift.save
         response["success"] = "Gift received - Thank you!"
-        format.json { render json: response.to_json }
       else
-        response["error"] += " Gift unable to process to database." 
-        format.json { render json: response.to_json }
+        response["error_server"]  = " Gift unable to process to database." 
       end
+      format.json { render json: response.to_json }
     end  
   end
 
   def create_redeem
-    @message = ""
+    message = ""
     response = {}
     redeem_obj = JSON.parse params["redeem"]
     if redeem_obj.nil?
-      @message = "data did not transfer. "
+      message = "data did not transfer. "
       redeem = Redeem.new
     else
       redeem = Redeem.new(redeem_obj)
@@ -152,49 +151,67 @@ class IphoneController < AppController
     begin
       receiver = User.find_by_remember_token(params["token"])
     rescue
-      @message = "Couldn't identify app user. "
+      message += "Couldn't identify app user. "
     end
     begin
       gift = Gift.find(redeem_obj["gift_id"])
     rescue
-      @message += " Could not locate gift in the database"    
+      message += " Could not locate gift in the database"    
     end
-    response = { "error" => @message } if @message != "" 
+    response = { "error" => message } if message != "" 
 
     respond_to do |format|
       if redeem.save
         redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem})
         response["success"] = redeem.redeem_code
-        format.json { render text: response.to_json}
       else
-        @message += " Gift unable to process to database. Please retry later."
-        response["error"] = @message 
-        format.json { render text: response.to_json }
+        message += " Gift unable to process to database. Please retry later."
+        response["error_server"] = message 
       end
+      format.json { render text: response.to_json}
     end
   end
-  
-# def create_order
-#   @message = ""
-#   response = {} 
-#   order_obj = JSON.parse params["data"]
-#   if order_obj.nil?
-#     @message = "Data not received correctly. "
-#     order = Order.new
-#   else
-#     order = Order.new(order_obj)
-#   end
-#   begin
-#     provider_user = User.find_by_remember_token(params["token"])
-#     provider = Provider.find(provider_user.provider_id)
-#   rescue
-#     @message = "Couldn't identify app user. "
-#   end
-#
-#
-#
-# end
-  
+
+  def create_order
+    message = ""
+    response = {} 
+    order_obj = JSON.parse params["data"]
+    if order_obj.nil?
+      message = "Data not received correctly. "
+      order = Order.new
+    else
+      order = Order.new(order_obj)
+    end
+    begin
+      provider_user = User.find_by_remember_token(params["token"])
+    rescue
+      message += "Couldn't identify app user. "
+    end
+    begin
+      redeem = Redeem.find(order_obj.redeem_id)
+      redeem_code = redeem.redeem_code
+    rescue
+      message += " Could not find redeem code. "
+      redeem_code = "X"
+    end
+    response = { "error" => message } if message != "" 
+
+    respond_to do |format|
+      if order.redeem_code == redeem_code
+        if order.save
+          response["success"] = " Sale Confirmed. Thank you!"
+          order.gift.update_attribute(:status, "redeemed")
+        else
+          order.gift.update_attribute(:status, "redeemed")
+          response["error_server"] = " Order processed - database error"
+        end
+      else
+        response["error_server"] = " the redeem code you entered did not match. "
+      end
+      format.json { render text: response.json }
+    end  
+  end
+ 
   private
   
     def hash_these_gifts(obj, send_fields)
