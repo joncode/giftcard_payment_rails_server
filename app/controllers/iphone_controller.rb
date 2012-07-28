@@ -133,6 +133,35 @@ class IphoneController < AppController
       end
     end  
   end
+
+  def create_redeem
+    @message = ""
+    response = {}
+    redeem_obj = JSON.parse params["redeem"]
+    redeem = Redeem.new(redeem_obj)
+    receiver = User.find_by_remember_token(params["token"])
+    if receiver.nil?
+      @message = "Couldn't identify app user. "
+    end
+
+    gift = Gift.find(params["redeem"]["gift_id"])
+    if gift.nil?
+      @message += " Could not locate gift in the database"    
+    end
+    response = { "error" => @message } if @message != "" 
+
+    respond_to do |format|
+      if redeem.save
+        redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem})
+        response["success"] = redeem.redeem_code
+        format.json { render text: response.to_json}
+      else
+        @message += " Gift unable to process to database. Please retry later."
+        response["error"] = @message 
+        format.json { render text: response.to_json }
+      end
+    end
+  end
   
   private
   
@@ -153,10 +182,6 @@ class IphoneController < AppController
           value = gift_obj[key]
           gift_obj[key] = value.to_s
         end
-      
-        ### >>>>>>>   add item category to gift
-        # gift_obj["category"] = g.item.category.to_s      
-        ###  7/27 6:45 UTC
 
         gift_obj["time_ago"]    = time_string
       
