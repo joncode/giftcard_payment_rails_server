@@ -1,10 +1,10 @@
 class IphoneController < AppController
   
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
-  GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "gift_id"]
-  BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "gift_id"]
-  BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "gift_id"] 
-  PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", "gift_id"]
+  GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
+  BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
+  BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "id"] 
+  PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
   
   def create_account
     data = params["data"]
@@ -174,26 +174,26 @@ class IphoneController < AppController
     end
   end
   
-  def create_order
-    @message = ""
-    response = {} 
-    order_obj = JSON.parse params["data"]
-    if order_obj.nil?
-      @message = "Data not received correctly. "
-      order = Order.new
-    else
-      order = Order.new(order_obj)
-    end
-    begin
-      provider_user = User.find_by_remember_token(params["token"])
-      provider = Provider.find(provider_user.provider_id)
-    rescue
-      @message = "Couldn't identify app user. "
-    end
-
-
-
-  end
+# def create_order
+#   @message = ""
+#   response = {} 
+#   order_obj = JSON.parse params["data"]
+#   if order_obj.nil?
+#     @message = "Data not received correctly. "
+#     order = Order.new
+#   else
+#     order = Order.new(order_obj)
+#   end
+#   begin
+#     provider_user = User.find_by_remember_token(params["token"])
+#     provider = Provider.find(provider_user.provider_id)
+#   rescue
+#     @message = "Couldn't identify app user. "
+#   end
+#
+#
+#
+# end
   
   private
   
