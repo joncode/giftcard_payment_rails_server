@@ -37,7 +37,7 @@ class IphoneController < AppController
       user = User.find_by_email(email)     
       if user && user.authenticate(password)
         if user.providers.count > 0
-          user.provider_id = user.providers.shift
+          user.provider_id = user.providers.dup.shift.id
         end
         response = user.to_json only: LOGIN_REPLY
       else
