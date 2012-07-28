@@ -4,7 +4,7 @@ class IphoneController < AppController
   GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "gift_id"]
   BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "gift_id"]
   BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "gift_id"] 
-  PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", , "gift_id"]
+  PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", "gift_id"]
   
   def create_account
     data = params["data"]

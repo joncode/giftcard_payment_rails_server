@@ -30,6 +30,7 @@ Drinkboard::Application.routes.draw do
   match 'app/locations', to: 'iphone#locations', via: :post
   match 'app/buy_gift', to: 'iphone#create_gift', via: :post
   match 'app/redeem', to: 'iphone#create_redeem', via: :post
+  match 'app/order', to: 'iphone#create_order', via: :post
 
   ###
 
