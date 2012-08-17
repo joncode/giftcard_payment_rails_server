@@ -292,9 +292,12 @@ class IphoneController < AppController
         end
         
         if address_get
-          gift_obj["provider_address"] = g.provider.address
-          #gift_obj["provider_city"]    = g.provider.city
-          #gift_obj["provider_state"]   = g.provider.state
+          address = g.provider.address
+          city = g.provider.city
+          state = g.provider.state
+          zip = g.provider.zip
+          provider_address_string = "#{address} \n#{city} #{state} #{zip}"
+          gift_obj["provider_address"] = provider_address_string
         end
         gift_obj["time_ago"]    = time_string
       
