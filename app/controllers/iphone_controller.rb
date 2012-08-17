@@ -58,7 +58,7 @@ class IphoneController < AppController
     logger.info "Gifts"
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_gifts(@user)
-    gift_hash = hash_these_gifts(@gifts, GIFT_REPLY)
+    gift_hash = hash_these_gifts(@gifts, GIFT_REPLY, true)
 
     
     respond_to do |format|
@@ -78,6 +78,12 @@ class IphoneController < AppController
       logger.debug gift_hash
       format.json { render text: gift_hash.to_json }
     end
+  end
+  
+  def drinkboard_users
+    @user  = User.find_by_remember_token(params["token"])
+    @users = User.all
+    
   end
   
   def activity
@@ -242,7 +248,7 @@ class IphoneController < AppController
  
   private
   
-    def hash_these_gifts(obj, send_fields)
+    def hash_these_gifts(obj, send_fields, address_get=false)
       gift_hash = {}
       index = 1 
       obj.each do |g|
@@ -259,7 +265,13 @@ class IphoneController < AppController
           value = gift_obj[key]
           gift_obj[key] = value.to_s
         end
-
+        
+        # find provider via id
+        # get the address from provider
+        # add that address into the gift_obj hash
+        if address_get
+          gift_obj["provider_address"] = g.provider.address
+        end
         gift_obj["time_ago"]    = time_string
       
         ### >>>>>>>    this is not stored in gift object
