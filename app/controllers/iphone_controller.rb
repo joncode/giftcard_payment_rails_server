@@ -5,6 +5,7 @@ class IphoneController < AppController
   BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
   BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "id"] 
   PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_id", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
+  USER_REPLY = ["id", "first_name", "last_name", "email", "phone"]
   
   def create_account
     logger.info "Create Account"
@@ -59,8 +60,7 @@ class IphoneController < AppController
     @user  = User.find_by_remember_token(params["token"])
     @gifts = Gift.get_gifts(@user)
     gift_hash = hash_these_gifts(@gifts, GIFT_REPLY, true)
-
-    
+  
     respond_to do |format|
       logger.debug gift_hash
       format.json { render text: gift_hash.to_json }
@@ -82,8 +82,19 @@ class IphoneController < AppController
   
   def drinkboard_users
     @user  = User.find_by_remember_token(params["token"])
-    @users = User.all
-    
+    @users_with_user = User.all
+    # do this in database call
+    @users = []
+    @users_with_user.each do |u|
+      if u != @user
+        @users << u
+      end
+    end
+    user_hash = hash_these_users(@users, USER_REPLY)
+    respond_to do |format|
+      logger.debug user_hash
+      format.json { render text: user_hash.to_json }
+    end
   end
   
   def activity
@@ -248,6 +259,20 @@ class IphoneController < AppController
  
   private
   
+    def hash_these_users(obj, send_fields)
+      user_hash = {}
+      index = 1 
+      obj.each do |g|
+        user_obj = g.serializable_hash only: send_fields
+        user_hash["#{index}"] = user_obj.each_key do |key|
+          value = user_obj[key]
+          user_obj[key] = value.to_s
+        end
+        index += 1
+      end
+      return user_hash
+    end
+  
     def hash_these_gifts(obj, send_fields, address_get=false)
       gift_hash = {}
       index = 1 
@@ -266,11 +291,10 @@ class IphoneController < AppController
           gift_obj[key] = value.to_s
         end
         
-        # find provider via id
-        # get the address from provider
-        # add that address into the gift_obj hash
         if address_get
           gift_obj["provider_address"] = g.provider.address
+          #gift_obj["provider_city"]    = g.provider.city
+          #gift_obj["provider_state"]   = g.provider.state
         end
         gift_obj["time_ago"]    = time_string
       
