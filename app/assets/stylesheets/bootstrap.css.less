@@ -54,18 +54,38 @@
 
 // End Fonts
 
-body { padding-top: 100px; }
+body { padding-top: 100px;
+	background-color	: #222;
+	 }
 
 h1, h2, h3, h4, h5, p , strong, li, a ,td {
 	font-family: 'MarkerFelt';
 	font-weight: normal;
 	letter-spacing: 2px;
+	font-size : 125%;
+	color : #9ba;
 }
 
+strong {
+	color : #aaa;
+}
+
+.container {
+	padding: .8em;
+}
+
+/* main nav bar links  */
 
 .navbar .brand {
   color: @dark_shade;
 	border : 0px;
+}
+
+
+.navbar .nav > li > a {
+	padding-top : 33px ;
+	font-size : 1.2em;
+	color: @navbarText;
 }
 
 ul {
@@ -258,6 +278,9 @@ th {
 a {
 color: black;
 text-decoration: none;
+}
+.hero-unit {
+	background-color : #333;
 }
 
 

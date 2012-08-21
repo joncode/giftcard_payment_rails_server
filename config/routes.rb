@@ -34,7 +34,7 @@ Drinkboard::Application.routes.draw do
   match 'app/users', to: 'iphone#drinkboard_users', via: :post
 
   ###
-
+  match '/drinkboard', to: 'gifts#activity'
   match '/about', to: 'home#about'
   match '/contact', to: 'home#contact'
   match '/home', to: 'home#index'

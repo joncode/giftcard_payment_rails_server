@@ -10,7 +10,8 @@
       <h1>
         <%= link_to image_tag("88-beer-glass-white.png"), home_path, {:class => "brand"} %>
       </h1>
-      <%= link_to PAGE_NAME, activity_gifts_path, {:class => "brand"} %>
+      <%= link_to PAGE_NAME, drinkboard_path, {:class => "brand"} %>
+
       
       <div class="nav pull-right">
         <% if signed_in? %>
@@ -21,7 +22,9 @@
           <li><%= link_to "Social", users_path %></li>
           <li><%= link_to "Profile", current_user %></li>
           <% if signed_in? %>
+
             <li><%= link_to "Log Off", signout_path, method: :delete %></li>
+
           <% else %>
             <li><%= link_to "Log Off", root_path %></li>
           <% end %>

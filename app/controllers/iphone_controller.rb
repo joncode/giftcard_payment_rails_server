@@ -1,4 +1,6 @@
 class IphoneController < AppController
+  include ActionView::Helpers::DateHelper
+  require 'logger'
   
   LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone", "provider_id"]  
   GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
@@ -6,6 +8,15 @@ class IphoneController < AppController
   BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "id"] 
   PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_id", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
   USER_REPLY = ["id", "first_name", "last_name", "email", "phone"]
+
+
+
+  
+  # def time_ago_in_words
+  #   super
+  #   ActiveRecord::Base.logger = Logger.new("in method")
+  # end
+
   
   def create_account
     logger.info "Create Account"
@@ -114,7 +125,9 @@ class IphoneController < AppController
     # @user  = User.find_by_remember_token(params["token"])
     @provider = Provider.find(params["provider_id"])
     @gifts = Gift.get_provider(@provider)
+
     gift_hash = hash_these_gifts(@gifts, PROVIDER_REPLY) 
+
     respond_to do |format|
       logger.debug gift_hash
       format.json { render text: gift_hash.to_json }

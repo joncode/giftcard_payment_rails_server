@@ -8,7 +8,6 @@
     <th>Location</th>
     <th>Message</th>
     <th>Status</th>
-    <th></th>
   </tr>
 
 <% @gifts.each do |gift| %>
@@ -20,7 +19,6 @@
     <td><%= gift.provider_name %></td>
     <td><%= gift.message %></td>
     <td><%= gift.status %></td>
-    <td><%= link_to 'Details', gift %></td>
   </tr>
 <% end %>
 </table>
