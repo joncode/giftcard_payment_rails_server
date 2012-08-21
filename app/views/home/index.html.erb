@@ -1,4 +1,31 @@
+    
 <div class="center hero-unit">
   <div class="row">
+    <%= link_to image_tag("my_gifts.png"), gifts_path, {:class => "button_maker"} %>
+    <%= link_to image_tag("buy_drink.png"), buy_path, {:class => "button_maker"} %>
+    <%= link_to image_tag("send_gift.png"), new_gift_path, {:class => "button_maker"} %>
+    <%= link_to image_tag("RedeemNowButton.png"), redeems_path, {:class => "button_maker long"} %>
+    <%= link_to image_tag("MerchantRedeemButton.png"), redeems_path, {:class => "button_maker long"} %>
+  </div>
+
+  <div class="row">
+    <%= link_to image_tag("friends.png"), users_path, {:class => "button_maker"} %>
+    <%= link_to image_tag("invite.png"), '#', {:class => "button_maker"} %>
+    <%= link_to image_tag("places.png"), providers_path, {:class => "button_maker"} %>
+    <%= link_to image_tag("near_you.png"), providers_path, {:class => "button_maker"} %>
+    <%= link_to image_tag("check_in_panel.png"), '#', {:class => "button_maker"} %>
+
+  </div>
+
+  <div class="row">
+    <%= link_to image_tag("profile.png"), current_user, {:class => "button_maker"} %>
+    <%= link_to image_tag("profile2.png"), current_user, {:class => "button_maker"} %>
+    <%= link_to image_tag("search.png"), '#', {:class => "button_maker"} %>
+    <%= link_to image_tag("my_drinkboard.png"), drinkboard_path, {:class => "button_maker"} %>
   </div>
 </div>
+        
+
+<li><%= link_to "Sign out", signout_path, method: :delete %></li>
+<li><%= link_to "Not #{current_user.username}?", signout_path, method: "delete"%></li>
+              

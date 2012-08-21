@@ -4,6 +4,7 @@
     <th>Date</th>
     <th>To</th>
     <th>From</th>
+    <th></th>
     <th>Drink</th>
     <th>Location</th>
     <th>Message</th>
@@ -15,7 +16,8 @@
     <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
     <td><%= gift.receiver_name %></td>
     <td><%= gift.giver_name %></td>
-    <td><%= image_tag get_category_image(gift) %>&nbsp;<%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
+    <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
+    <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
     <td><%= gift.provider_name %></td>
     <td><%= gift.message %></td>
     <td><%= gift.status %></td>

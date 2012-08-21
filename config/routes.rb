@@ -42,6 +42,7 @@ Drinkboard::Application.routes.draw do
   match '/learn', to: 'home#learn'
   match '/news', to: 'home#news'
   match '/choose', to: 'home#choose_user'
+  match '/buy', to: 'home#buy'
 
   
   resources :microposts, only: [:create, :destroy]
