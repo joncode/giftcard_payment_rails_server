@@ -6,7 +6,7 @@ class HomeController < ApplicationController
         @user = current_user
         format.html
       else
-        format.html { redirect_to choose_user_path }
+        format.html { redirect_to choose_path }
       end
     end
   end

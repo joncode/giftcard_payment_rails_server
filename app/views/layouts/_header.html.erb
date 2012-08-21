@@ -8,10 +8,8 @@
   <div class="navbar-inner">
     <div class="container">
       <h1>
-        <%= link_to image_tag("88-beer-glass-white.png"), home_path, {:class => "brand"} %>
+        <%= link_to image_tag("logo5.png"), home_path, {:class => "brand"} %>
       </h1>
-      <%= link_to PAGE_NAME, drinkboard_path, {:class => "brand"} %>
-
       
       <div class="nav pull-right">
         <% if signed_in? %>
@@ -20,14 +18,18 @@
           <li><%= link_to "Gift", gifts_path %></li>
           <li><%= link_to "Buys", buy_gifts_path %></li>
           <li><%= link_to "Social", users_path %></li>
-          <li><%= link_to "Profile", current_user %></li>
-          <% if signed_in? %>
-
-            <li><%= link_to "Log Off", signout_path, method: :delete %></li>
-
-          <% else %>
-            <li><%= link_to "Log Off", root_path %></li>
-          <% end %>
+          <ul class="nav pull-right">
+              <li><%= link_to "Users", users_path %></li>
+              <li id="fat-menu" class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><%= link_to "Profile", current_user %></li>
+                      <li><%= link_to "Settings" %></li>
+                      <li class="divider"></li>
+                      <li><%= link_to "Sign out", signout_path, method: "delete" %></li>
+                    </ul>
+              </li>
+          </ul>
         </ul>
         <% end %>
       </div>
