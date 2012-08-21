@@ -1,7 +1,18 @@
 class HomeController < ApplicationController
   
   def index
-    @users = User.order('id DESC') 
+    respond_to do  |format|
+      if signed_in?
+        @user = current_user
+        format.html
+      else
+        format.html { redirect_to choose_user_path }
+      end
+    end
+  end
+  
+  def choose_user
+     @users = User.order('id DESC')
   end
   
   def gift

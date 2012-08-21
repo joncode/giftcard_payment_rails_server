@@ -136,7 +136,7 @@ class IphoneController < AppController
     end
   end
   
-  def create_gift
+  def create_gift 
     logger.info "Create Gift"
     message = ""
     response = {}
