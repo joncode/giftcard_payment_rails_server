@@ -16,10 +16,14 @@
 <body>
 
   <div class="container-fluid">
-    <% if signed_in? %>
-      <%= render 'layouts/header' %>
-    <% else %>  
-      <%= render 'layouts/intro' %>
+    <% if params[:controller] == 'admins' %>
+      <%= render 'layouts/login' %>
+    <% else %>
+      <% if signed_in? %>
+        <%= render 'layouts/header' %>
+      <% else %>  
+        <%= render 'layouts/intro' %>
+      <% end %>
     <% end %>
     <div class="row-fluid">
       <div>

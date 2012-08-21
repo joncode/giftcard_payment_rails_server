@@ -7,8 +7,7 @@ class AdminsController < ApplicationController
   def create
     admin = params[:admin][:username]
     password = params[:admin][:password]
-    if admin == "wibble" && password == "drivein"
-      
+    if admin == "wibble" && password == "drivein"    
       redirect_to home_path
     else
       flash.now[:error] = 'Invalid email/password combination'

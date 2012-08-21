@@ -13,7 +13,7 @@
             <td><%= u.password %></td>
             <td><%= u.username %></td>
             <td>
-              <%= link_to "Sign In As", sessions_path(email: u.email, page: 'development'), :class => 'btn btn-large btn-info', method: :post %>
+              <%= button_to "Sign In As", sessions_path(email: u.email, page: 'development'), :class => 'btn btn-large btn-info'%>
             </td>
           </tr>
         <% end %>
