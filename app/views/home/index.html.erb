@@ -1,8 +1,6 @@
 <div class="center hero-unit">
   <div class="row">
-    <h2>You are signed in as </h2>
     <%= render 'shared/user_info' %> 
-    <p></p>
     <div><%= link_to "Not #{current_user.username}?", signout_path, method: "delete"%></div>
   </div>
 </div>

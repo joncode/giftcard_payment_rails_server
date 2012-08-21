@@ -16,7 +16,7 @@ Drinkboard::Application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   match '/signup', to: 'users#new'
   match '/signin', to: 'sessions#new'
-  match '/signout', to: 'sessions#destroy', via: :delete
+  match '/signout', to: 'sessions#destroy'
   resources :admins, only: [:new, :create, :destroy]
   root to: 'admins#hello'
   
