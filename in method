@@ -1,0 +1,130 @@
+# Logfile created on 2012-08-21 01:03:56 -0400 by logger.rb/31641
+  [1m[36mItem Load (0.2ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 68 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 78 LIMIT 1[0m
+  [1m[35mItem Load (0.2ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 63 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 62 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 64 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 78 LIMIT 1[0m
+  [1m[35mItem Load (0.2ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 70 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 78 LIMIT 1
+  [1m[36mItem Load (0.2ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 75 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 80 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 64 LIMIT 1[0m
+  [1m[35mItem Load (0.2ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 77 LIMIT 1
+  [1m[36mUser Load (0.3ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."remember_token" = '6xlips8_nIXF334e0__TKA' LIMIT 1[0m
+  [1m[35mGift Load (0.3ms)[0m  SELECT "gifts".* FROM "gifts" WHERE "gifts"."giver_id" = 23 AND "gifts"."status" = 'open' ORDER BY created_at DESC
+  [1m[36mGift Load (0.3ms)[0m  [1mSELECT "gifts".* FROM "gifts" WHERE "gifts"."giver_id" = 23 AND "gifts"."status" = 'notified' ORDER BY created_at DESC[0m
+  [1m[35mGift Load (0.3ms)[0m  SELECT "gifts".* FROM "gifts" WHERE "gifts"."giver_id" = 23 AND "gifts"."status" = 'redeemed' ORDER BY created_at DESC
+  [1m[36mItem Load (0.2ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 67 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 70 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 72 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 63 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 77 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 76 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 67 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 70 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 76 LIMIT 1
+  [1m[36mItem Load (0.2ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 61 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 79 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users" WHERE "users"."remember_token" = '6xlips8_nIXF334e0__TKA' LIMIT 1
+  [1m[36mGift Load (0.3ms)[0m  [1mSELECT "gifts".* FROM "gifts" WHERE "gifts"."giver_id" = 23 AND "gifts"."status" = 'open' ORDER BY created_at DESC[0m
+  [1m[35mGift Load (0.2ms)[0m  SELECT "gifts".* FROM "gifts" WHERE "gifts"."giver_id" = 23 AND "gifts"."status" = 'notified' ORDER BY created_at DESC
+  [1m[36mGift Load (0.2ms)[0m  [1mSELECT "gifts".* FROM "gifts" WHERE "gifts"."giver_id" = 23 AND "gifts"."status" = 'redeemed' ORDER BY created_at DESC[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 67 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 70 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 72 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 63 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 77 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 76 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 67 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 70 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 76 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 61 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 79 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."remember_token" = '6xlips8_nIXF334e0__TKA' LIMIT 1[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT "users".* FROM "users" WHERE (id != 23)
+  [1m[36mRelationship Load (0.2ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 19 AND "relationships"."followed_id" = 23 LIMIT 1[0m
+  [1m[35mRelationship Load (0.1ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 19 LIMIT 1
+  [1m[36mRelationship Load (0.2ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 20 AND "relationships"."followed_id" = 23 LIMIT 1[0m
+  [1m[35mRelationship Load (0.1ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 20 LIMIT 1
+  [1m[36mRelationship Load (0.2ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 21 AND "relationships"."followed_id" = 23 LIMIT 1[0m
+  [1m[35mRelationship Load (0.1ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 21 LIMIT 1
+  [1m[36mRelationship Load (0.2ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 22 AND "relationships"."followed_id" = 23 LIMIT 1[0m
+  [1m[35mRelationship Load (0.1ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 22 LIMIT 1
+  [1m[36mRelationship Load (0.2ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 24 AND "relationships"."followed_id" = 23 LIMIT 1[0m
+  [1m[35mRelationship Load (0.1ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 24 LIMIT 1
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."remember_token" = '6xlips8_nIXF334e0__TKA' LIMIT 1[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", "23"]]
+  [1m[36mMicropost Load (0.2ms)[0m  [1mSELECT "microposts".* FROM "microposts" WHERE "microposts"."user_id" = 23 ORDER BY microposts.created_at DESC LIMIT 15[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."followed_id" WHERE "relationships"."follower_id" = 23
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."follower_id" WHERE "relationships"."followed_id" = 23[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users" WHERE "users"."remember_token" = '6xlips8_nIXF334e0__TKA' LIMIT 1
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users" WHERE (id != 23)[0m
+  [1m[35mRelationship Load (0.2ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 19 AND "relationships"."followed_id" = 23 LIMIT 1
+  [1m[36mRelationship Load (0.2ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 19 LIMIT 1[0m
+  [1m[35mRelationship Load (0.2ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 20 AND "relationships"."followed_id" = 23 LIMIT 1
+  [1m[36mRelationship Load (0.1ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 20 LIMIT 1[0m
+  [1m[35mRelationship Load (0.2ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 21 AND "relationships"."followed_id" = 23 LIMIT 1
+  [1m[36mRelationship Load (0.1ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 21 LIMIT 1[0m
+  [1m[35mRelationship Load (0.2ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 22 AND "relationships"."followed_id" = 23 LIMIT 1
+  [1m[36mRelationship Load (0.1ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 22 LIMIT 1[0m
+  [1m[35mRelationship Load (0.2ms)[0m  SELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 24 AND "relationships"."followed_id" = 23 LIMIT 1
+  [1m[36mRelationship Load (0.1ms)[0m  [1mSELECT "relationships".* FROM "relationships" WHERE "relationships"."follower_id" = 23 AND "relationships"."followed_id" = 24 LIMIT 1[0m
+  [1m[35mUser Load (0.2ms)[0m  SELECT "users".* FROM "users" WHERE "users"."remember_token" = '6xlips8_nIXF334e0__TKA' LIMIT 1
+  [1m[36mGift Load (0.3ms)[0m  [1mSELECT "gifts".* FROM "gifts" WHERE "gifts"."giver_id" = 23 AND "gifts"."status" = 'open' ORDER BY created_at DESC[0m
+  [1m[35mGift Load (0.3ms)[0m  SELECT "gifts".* FROM "gifts" WHERE "gifts"."giver_id" = 23 AND "gifts"."status" = 'notified' ORDER BY created_at DESC
+  [1m[36mGift Load (0.3ms)[0m  [1mSELECT "gifts".* FROM "gifts" WHERE "gifts"."giver_id" = 23 AND "gifts"."status" = 'redeemed' ORDER BY created_at DESC[0m
+  [1m[35mItem Load (0.2ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 67 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 70 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 72 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 63 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 77 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1[0m
+  [1m[35mItem Load (0.2ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 76 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 67 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 70 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 76 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 61 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 79 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."remember_token" = '6xlips8_nIXF334e0__TKA' LIMIT 1[0m
+  [1m[35mGift Load (0.3ms)[0m  SELECT "gifts".* FROM "gifts" WHERE "gifts"."receiver_id" = 23 AND "gifts"."status" = 'open' ORDER BY created_at DESC
+  [1m[36mGift Load (0.2ms)[0m  [1mSELECT "gifts".* FROM "gifts" WHERE "gifts"."receiver_id" = 23 AND "gifts"."status" = 'notified' ORDER BY created_at DESC[0m
+  [1m[35mGift Load (0.2ms)[0m  SELECT "gifts".* FROM "gifts" WHERE "gifts"."receiver_id" = 23 AND "gifts"."status" = 'redeemed' ORDER BY created_at DESC
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 68 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 71 LIMIT 1[0m
+  [1m[35mItem Load (0.2ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 78 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 63 LIMIT 1
+  [1m[36mItem Load (0.1ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 62 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 64 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 78 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 70 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 65 LIMIT 1[0m
+  [1m[35mCACHE (0.0ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 78 LIMIT 1
+  [1m[36mItem Load (0.2ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 75 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 80 LIMIT 1
+  [1m[36mCACHE (0.0ms)[0m  [1mSELECT "items".* FROM "items" WHERE "items"."id" = 64 LIMIT 1[0m
+  [1m[35mItem Load (0.1ms)[0m  SELECT "items".* FROM "items" WHERE "items"."id" = 77 LIMIT 1
+  [1m[36mUser Load (0.2ms)[0m  [1mSELECT "users".* FROM "users" WHERE "users"."remember_token" = '6xlips8_nIXF334e0__TKA' LIMIT 1[0m
+  [1m[35mUser Load (0.1ms)[0m  SELECT "users".* FROM "users" WHERE "users"."id" = ? LIMIT 1  [["id", "23"]]
+  [1m[36mMicropost Load (0.2ms)[0m  [1mSELECT "microposts".* FROM "microposts" WHERE "microposts"."user_id" = 23 ORDER BY microposts.created_at DESC LIMIT 15[0m
+  [1m[35m (0.2ms)[0m  SELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."followed_id" WHERE "relationships"."follower_id" = 23
+  [1m[36m (0.2ms)[0m  [1mSELECT COUNT(*) FROM "users" INNER JOIN "relationships" ON "users"."id" = "relationships"."follower_id" WHERE "relationships"."followed_id" = 23[0m
+  [1m[35mUser Load (0.3ms)[0m  SELECT "users".* FROM "users" WHERE "users"."remember_token" = '6xlips8_nIXF334e0__TKA' LIMIT 1
+  [1m[36m (0.1ms)[0m  [1mSELECT COUNT(*) FROM "microposts" WHERE "microposts"."user_id" = 23[0m
