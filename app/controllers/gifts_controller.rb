@@ -64,13 +64,16 @@ class GiftsController < ApplicationController
   end
 
   def new
-    @gift = Gift.new(params[:gift])
-    item = params[:item]
-    price = params[:price]
-    @gift.item_id = item.id
-    @gift.price = price
-    @gift.item_name = item.item_name
-    
+    if params[:gift]
+      @gift = Gift.new(params[:gift])
+      item = params[:item]
+      price = params[:price]
+      @gift.item_id = item.id
+      @gift.price = price
+      @gift.item_name = item.item_name
+    else
+      @gift = Gift.new
+    end
 
     respond_to do |format|
       format.html # new.html.erb
