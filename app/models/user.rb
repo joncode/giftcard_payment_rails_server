@@ -67,12 +67,12 @@ class User < ActiveRecord::Base
     relationships.find_by_followed_id(other_user.id)
   end
   
-  def users_without_current_user(current_user)
+  def users_without_current_user
     users_with_user = User.all
     # do this in database call
     users = []
     users_with_user.each do |u|
-      if u != current_user
+      if u != self
         users << u
       end
     end

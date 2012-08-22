@@ -80,7 +80,7 @@ class GiftsController < ApplicationController
   
   def browse
     # @gift = Gift.new
-    @users = User.all
+    @users = current_user.users_without_current_user
     @providers = Provider.all
 
     respond_to do |format|
@@ -96,7 +96,7 @@ class GiftsController < ApplicationController
   
   def browse_with_location
     @provider = Provider.find(params[:id])
-    @users = User.all    
+    @users = current_user.users_without_current_user  
   end
   
   def choose_from_menu
