@@ -241,7 +241,7 @@ class IphoneController < AppController
     begin
     #   redeem = Redeem.find(order_obj.redeem_id)
     #   redeem_code = redeem.redeem_code
-      redeem = Redeem.find_by_gift_id(order_obj.gift_id)
+      redeem = Redeem.find_by_gift_id(order.gift_id)
     rescue
       message += " Could not find redeem code via gift_id. "
       if redeem
