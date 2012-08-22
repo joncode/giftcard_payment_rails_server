@@ -9,12 +9,13 @@
       </ul>
       <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade in active" id="friends">
-          <table class="table table-condensed">
+          <table class="table listed">
             <thead>
               <tr>
                 <th></th>
                 <th>Name</th>
                 <th>Network</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -23,7 +24,7 @@
                 <td><%= list_icon_for user %></td>
                 <td><%= link_to user.username, '#' %></td>
                 <td><%= user.following?(current_user) ? 'You are following' : 'doesnt follow you' %></td>
-                <td><%= button_to "Select", browse_with_contact_gifts_path(id: user.id) %>
+                <td><%= button_to "Select", browse_with_contact_gifts_path(id: user.id) %></td>
               </tr>
               <% end %>
             </tbody>
@@ -34,18 +35,22 @@
         </div>
         <div class="tab-pane fade" id="locations">
           <table class="table listed">
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-            </tr>
-             <% @providers.each do |p| %>
-            <tr>
-               <td><%= link_to p.name, '#', {:class => "iconListView"} %></td>
-               <td><%= p.description %></td>
-               <td><%= button_to "Select", browse_with_location_gifts_path(id: p.id)%>
-
-            </tr> 
-             <% end %>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @providers.each do |p| %>
+              <tr>
+                 <td><%= link_to p.name, '#', {:class => "iconListView"} %></td>
+                 <td><%= p.description %></td>
+                 <td><%= button_to "Select", browse_with_location_gifts_path(id: p.id)%></td>
+              </tr> 
+              <% end %>
+            </tbody>
           </table>       
         </div>
         <div class="tab-pane fade" id="drinks">

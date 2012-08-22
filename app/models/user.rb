@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
   
   def users_without_current_user
     users_with_user = User.all
-    # do this in database call
+    # do this in database scope
     users = []
     users_with_user.each do |u|
       if u != self
