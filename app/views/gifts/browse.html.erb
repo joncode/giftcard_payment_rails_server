@@ -21,8 +21,9 @@
               <% @users.each do |user| %>
               <tr>
                 <td><%= list_icon_for user %></td>
-                <td><%= link_to user.username, browse_with_contact_gifts_path(id: user.id) %></td>
+                <td><%= link_to user.username, '#' %></td>
                 <td><%= user.following?(current_user) ? 'You are following' : 'doesnt follow you' %></td>
+                <td><%= button_to "Select", browse_with_contact_gifts_path(id: user.id) %>
               </tr>
               <% end %>
             </tbody>
@@ -39,8 +40,9 @@
             </tr>
              <% @providers.each do |p| %>
             <tr>
-               <td><%= link_to p.name, browse_with_location_gifts_path(id: p.id), {:class => "iconListView"} %></td>
+               <td><%= link_to p.name, '#', {:class => "iconListView"} %></td>
                <td><%= p.description %></td>
+               <td><%= button_to "Select", browse_with_location_gifts_path(id: p.id)%>
 
             </tr> 
              <% end %>

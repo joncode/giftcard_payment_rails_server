@@ -7,9 +7,10 @@ Drinkboard::Application.routes.draw do
       get 'buy'
       get 'activity'
       get 'browse'
-      get 'browse_with_contact'
-      get 'browse_with_location'
-      get 'choose_from_menu'
+      post 'browse_with_contact'
+      post 'browse_with_location'
+      post 'choose_from_menu'
+      post 'bill'
     end
   end
   

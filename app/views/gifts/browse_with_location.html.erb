@@ -17,14 +17,16 @@
             <th></th>
             <th>Name</th>
             <th>Network</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <% @users.each do |user| %>
           <tr>
             <td><%= list_icon_for user %></td>
-            <td><%= link_to user.username, choose_from_menu_gifts_path(user_id: user.id, provider_id: @provider.id) %></td>
+            <td><%= link_to user.username, '#' %></td>
             <td><%= user.following?(current_user) ? 'You are following' : 'doesnt follow you' %></td>
+            <td><%= button_to "Select", choose_from_menu_gifts_path(user_id: user.id, provider_id: @provider.id) %>         
           </tr>
           <% end %>
         </tbody>

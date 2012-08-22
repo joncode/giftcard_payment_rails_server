@@ -1,11 +1,14 @@
+<%= @gift.inspect %>
 <h2>
   the Gift is for:
   <%= list_icon_for @receiver %>
   <%= @receiver.username %>
   <br />
   to be redeemed at:
+  <br />
   <%= @provider.name %>
-  <%= @provider.description %>
+  "<%= @provider.description %>"
+  <%= @provider.full_address %>
 </h2>
 
 <table>
@@ -15,6 +18,7 @@
     <th>Detail</th>
     <th>Description</th>
     <th>Price</th>
+    <th></th>
   </tr>
   <% @menu.each do |m| %>
   <tr>
@@ -25,6 +29,7 @@
     <td><%= item.detail %></td>
     <td><%= item.description %></td>
     <td><%= price %></td>
+    <td><%= button_to "Select", bill_gifts_path(provider_id: @provider.id, item_id: item.id, price: price, receiver_id: @receiver.id) %>
   </tr>
   <% end %>
 </table>
