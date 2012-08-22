@@ -124,11 +124,15 @@ class GiftsController < ApplicationController
   
   private
   
-    def create_menu_from_items(@provider)     
-      menu_bulk = Menu.where(provider_id: @provider.id)
+    def create_menu_from_items(provider)     
+      menu_bulk = Menu.where(provider_id: provider.id)
+      items = []
       menu_bulk.each do |item|
-        menu_item = Item.find(item.item_id)
-        
-      
+         indi = Item.find(item.item_id)
+         price = item.price
+         item_array = [indi, price]
+         items << item_array  
+      end
+      return items
     end
 end

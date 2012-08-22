@@ -7,4 +7,12 @@
   <%= @provider.name %>
   <%= @provider.description %>
 </h2>
-<%= @menu.inspect %>
+<% @menu.each do |m| %>
+  <% item = m[0] %>
+  <% price = m[1] %>
+  <%= item.category %>
+  <%= item.item_name %>
+  <%= item.detail %>
+  <%= item.description %>
+  <%= price %>
+<% end %>
