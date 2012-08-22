@@ -6,7 +6,7 @@ class IphoneController < AppController
   BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
   BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "id"] 
   PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_id", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
-  USER_REPLY = ["id", "first_name", "last_name", "email", "phone"]
+  USER_REPLY = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
 
 
 
@@ -232,7 +232,7 @@ class IphoneController < AppController
       message += "Couldn't identify app user. "
     end
     begin
-    #   redeem = Redeem.find(order_obj.redeem_id)
+    #   redeem = Redeem.find(order.redeem_id)
     #   redeem_code = redeem.redeem_code
       redeem = Redeem.find_by_gift_id(order.gift_id)
     rescue
