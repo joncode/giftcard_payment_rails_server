@@ -92,14 +92,7 @@ class IphoneController < AppController
   
   def drinkboard_users
     @user  = User.find_by_remember_token(params["token"])
-    @users_with_user = User.all
-    # do this in database call
-    @users = []
-    @users_with_user.each do |u|
-      if u != @user
-        @users << u
-      end
-    end
+    @users = @user.users_without_current_user
     user_hash = hash_these_users(@users, USER_REPLY)
     respond_to do |format|
       logger.debug user_hash
@@ -244,11 +237,11 @@ class IphoneController < AppController
       redeem = Redeem.find_by_gift_id(order.gift_id)
     rescue
       message += " Could not find redeem code via gift_id. "
-      if redeem
-        redeem_code = redeem.redeem_code
-      else
-        redeem_code = "X"
-      end
+    end
+    if redeem
+      redeem_code = redeem.redeem_code
+    else
+      redeem_code = "X"
     end
     response = { "error" => message } if message != "" 
 
@@ -258,8 +251,8 @@ class IphoneController < AppController
           response["success"] = " Sale Confirmed. Thank you!"
           order.gift.update_attribute(:status, "redeemed")
         else
-          order.gift.update_attribute(:status, "redeemed")
-          response["error_server"] = " Order processed - database error"
+          # order.gift.update_attribute(:status, "redeemed")
+          response["error_server"] = " Order not processed - database error"
         end
       else
         response["error_server"] = " the redeem code you entered did not match. "
