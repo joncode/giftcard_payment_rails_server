@@ -67,6 +67,18 @@ class User < ActiveRecord::Base
     relationships.find_by_followed_id(other_user.id)
   end
   
+  def users_without_current_user(current_user)
+    users_with_user = User.all
+    # do this in database call
+    users = []
+    users_with_user.each do |u|
+      if u != current_user
+        users << u
+      end
+    end
+    return users
+  end
+  
   def follow!(other_user)
     relationships.create!(followed_id: other_user.id)
   end
