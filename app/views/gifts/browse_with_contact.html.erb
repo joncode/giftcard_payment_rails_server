@@ -26,12 +26,14 @@
         <tr>
           <th>Name</th>
           <th>Description</th>
+          <th></th>
         </tr>
 
          <% @providers.each do |p| %>
         <tr>
-           <td><%= link_to p.name, choose_from_menu_gifts_path(provider_id: p.id, user_id: @user.id), {:class => "iconListView"} %></td>
+           <td><%= link_to p.name, '#' , {:class => "iconListView"} %></td>
            <td><%= p.description %></td>
+           <td><%= button_to "Select", choose_from_menu_gifts_path(provider_id: p.id, user_id: @user.id) %>
         </tr> 
          <% end %>
 

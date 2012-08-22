@@ -4,8 +4,10 @@
   <%= @receiver.username %>
   <br />
   to be redeemed at:
+  <br />
   <%= @provider.name %>
-  <%= @provider.description %>
+  "<%= @provider.description %>"
+  <%= @provider.full_address %>
 </h2>
 
 <table>
@@ -15,6 +17,7 @@
     <th>Detail</th>
     <th>Description</th>
     <th>Price</th>
+    <th></th>
   </tr>
   <% @menu.each do |m| %>
   <tr>
@@ -25,6 +28,7 @@
     <td><%= item.detail %></td>
     <td><%= item.description %></td>
     <td><%= price %></td>
+    <td><%= button_to "Select", '#' %>
   </tr>
   <% end %>
 </table>
