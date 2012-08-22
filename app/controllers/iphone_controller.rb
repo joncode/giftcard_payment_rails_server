@@ -244,11 +244,11 @@ class IphoneController < AppController
       redeem = Redeem.find_by_gift_id(order.gift_id)
     rescue
       message += " Could not find redeem code via gift_id. "
-      if redeem
-        redeem_code = redeem.redeem_code
-      else
-        redeem_code = "X"
-      end
+    end
+    if redeem
+      redeem_code = redeem.redeem_code
+    else
+      redeem_code = "X"
     end
     response = { "error" => message } if message != "" 
 
