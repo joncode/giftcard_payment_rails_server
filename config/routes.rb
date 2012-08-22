@@ -10,6 +10,7 @@ Drinkboard::Application.routes.draw do
       post 'browse_with_contact'
       post 'browse_with_location'
       post 'choose_from_menu'
+      post 'bill'
     end
   end
   

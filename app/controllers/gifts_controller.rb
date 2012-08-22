@@ -40,10 +40,37 @@ class GiftsController < ApplicationController
     end
   end
 
+  def bill
+    @gift = Gift.new()
+    @provider = Provider.find(params[:provider_id])
+    @receiver = User.find(params[:receiver_id])
+    @item = Item.find(params[:item_id])
+    @gift.provider_id = @provider.id
+    @gift.provider_name = @provider.name
+    @gift.receiver_id = @receiver.id
+    @gift.receiver_name = @receiver.username
+    @gift.giver_name = current_user.username
+    @gift.giver_id = current_user.id
+    @gift.receiver_phone = @receiver.phone
+    @gift.item_id = @item.id
+    @gift.price = params[:price]
+    @gift.item_name = @item.item_name
+    
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @gift }
+    end
+  end
+
   def new
-    @gift = Gift.new
-    @users = User.all
-    @providers = Provider.all
+    @gift = Gift.new(params[:gift])
+    item = params[:item]
+    price = params[:price]
+    @gift.item_id = item.id
+    @gift.price = price
+    @gift.item_name = item.item_name
+    
 
     respond_to do |format|
       format.html # new.html.erb
@@ -77,6 +104,14 @@ class GiftsController < ApplicationController
     @receiver = User.find(params[:user_id])
     @menu_string = @provider.menu_string.data
     @menu = create_menu_from_items(@provider)
+    @gift = Gift.new
+    @gift.provider_id = @provider.id
+    @gift.provider_name = @provider.name
+    @gift.receiver_id = @receiver.id
+    @gift.receiver_name = @receiver.username
+    @gift.giver_name = current_user.username
+    @gift.giver_id = current_user.id
+    @gift.receiver_phone = @receiver.phone 
     
   end
 

@@ -1,3 +1,4 @@
+<%= @gift.inspect %>
 <h2>
   the Gift is for:
   <%= list_icon_for @receiver %>
@@ -28,7 +29,7 @@
     <td><%= item.detail %></td>
     <td><%= item.description %></td>
     <td><%= price %></td>
-    <td><%= button_to "Select", '#' %>
+    <td><%= button_to "Select", bill_gifts_path(provider_id: @provider.id, item_id: item.id, price: price, receiver_id: @receiver.id) %>
   </tr>
   <% end %>
 </table>
