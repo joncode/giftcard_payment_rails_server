@@ -2,8 +2,8 @@
 <div class="center hero-unit">
   <div class="row">
     <%= link_to image_tag("my_gifts.png"), gifts_path, {:class => "button_maker"} %>
-    <%= link_to image_tag("buy_drink.png"), buy_path, {:class => "button_maker"} %>
-    <%= link_to image_tag("send_gift.png"), new_gift_path, {:class => "button_maker"} %>
+    <%= link_to image_tag("buy_drink.png"), browse_gifts_path, {:class => "button_maker"} %>
+    <%= link_to image_tag("send_gift.png"), browse_gifts_path, {:class => "button_maker"} %>
     <%= link_to image_tag("RedeemNowButton.png"), redeems_path, {:class => "button_maker long"} %>
     <%= link_to image_tag("MerchantRedeemButton.png"), redeems_path, {:class => "button_maker long"} %>
   </div>
@@ -21,7 +21,7 @@
     <%= link_to image_tag("profile.png"), current_user, {:class => "button_maker"} %>
     <%= link_to image_tag("profile2.png"), current_user, {:class => "button_maker"} %>
     <%= link_to image_tag("search.png"), '#', {:class => "button_maker"} %>
-    <%= link_to image_tag("my_drinkboard.png"), drinkboard_path, {:class => "button_maker"} %>
+    <%= link_to image_tag("my_drinkboard.png"), activity_gifts_path, {:class => "button_maker"} %>
   </div>
 </div>
               

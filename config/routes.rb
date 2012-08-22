@@ -6,8 +6,10 @@ Drinkboard::Application.routes.draw do
     collection do
       get 'buy'
       get 'activity'
+      get 'browse'
     end
   end
+  
   resources :items
   resources :menus
   resources :menu_strings
@@ -34,7 +36,7 @@ Drinkboard::Application.routes.draw do
   match 'app/users', to: 'iphone#drinkboard_users', via: :post
 
   ###
-  match '/drinkboard', to: 'gifts#activity'
+  # match '/drinkboard', to: 'gifts#activity'
   match '/about', to: 'home#about'
   match '/contact', to: 'home#contact'
   match '/home', to: 'home#index'
@@ -42,7 +44,7 @@ Drinkboard::Application.routes.draw do
   match '/learn', to: 'home#learn'
   match '/news', to: 'home#news'
   match '/choose', to: 'home#choose_user'
-  match '/buy', to: 'home#buy'
+  # match '/browse', to: 'gifts#browse'
 
   
   resources :microposts, only: [:create, :destroy]

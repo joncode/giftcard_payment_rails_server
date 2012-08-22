@@ -20,6 +20,8 @@ class HomeController < ApplicationController
   end
   
   def buy
+    @users = User.all
+    @providers = Provider.all
     
   end
   

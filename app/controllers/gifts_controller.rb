@@ -1,5 +1,5 @@
 class GiftsController < ApplicationController
-  require 'logger'
+
   def index
     @user = current_user
     @gifts = Gift.get_gifts(@user)
@@ -42,6 +42,19 @@ class GiftsController < ApplicationController
 
   def new
     @gift = Gift.new
+    @users = User.all
+    @providers = Provider.all
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @gift }
+    end
+  end
+  
+  def browse
+    @gift = Gift.new
+    @users = User.all
+    @providers = Provider.all
 
     respond_to do |format|
       format.html # new.html.erb
