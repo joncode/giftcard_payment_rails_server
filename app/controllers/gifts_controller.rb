@@ -79,14 +79,7 @@ class GiftsController < ApplicationController
   end
   
   def browse
-    @users_with_user = User.all
-    # do this in database call
-    @users = []
-    @users_with_user.each do |u|
-      if u != current_user
-        @users << u
-      end
-    end
+    @users = User.all
     @providers = Provider.all
 
     respond_to do |format|
@@ -102,14 +95,7 @@ class GiftsController < ApplicationController
   
   def browse_with_location
     @provider = Provider.find(params[:id])
-    @users_with_user = User.all
-    # do this in database call
-    @users = []
-    @users_with_user.each do |u|
-      if u != current_user
-        @users << u
-      end
-    end    
+    @users = User.all   
   end
   
   def choose_from_menu
