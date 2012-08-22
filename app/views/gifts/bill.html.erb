@@ -2,31 +2,36 @@
   <div class="row">
     <table>
       <thead>
-        <th>Order Details</th>
-        <th></th>
+        <th colspan="2">Order Details</th>
       </thead>
       <tbody>
-        <tr><td><%= @gift.receiver_name %></td></tr>
-        <tr><td><%= @gift.item_name %>&nbsp;$<%= @gift.price %></td></tr>
-        <tr><td><%= @gift.provider_name %></td></tr>
-        <tr><td>Quantity:
-          <p>
-            <button class="btn btn-mini" type="button">-</button>
-            <button class="btn btn-mini" type="button">+</button>
-          </p>
-        </td></tr>
-        <tr><td>SubTotal: </td></tr>
-        <tr><td>Tip: 
-          <div class="btn-group" data-toggle="buttons-radio">
-            <button type="button" class="btn">$1 per</button>
-            <button type="button" class="btn">15%</button>
-            <button type="button" class="btn">20%</button>
+        <tr><td colspan="2"><%= @gift.receiver_name %></td></tr>
+        <tr><td><%= @gift.item_name %></td><td>$<%= @gift.price %></td></tr>
+        <tr><td colspan="2"><%= @gift.provider_name %></td></tr>
+        <tr><td>
+          <div class="input-append">Quantity:
+            <button class="btn" type="button">-</button>
+            <button class="btn" type="button">+</button></div></td><td><div>
+            <input class="span2" id="appendedInputButtons" size="16" type="text" value="1"/>
           </div>
         </td></tr>
-        <tr><td>Total: </td></tr>
-        <tr><td><%= button_to 'Credit Card', '#' %></td></tr>
-        <tr><td>Drinkboard <%= button_to "Terms & Conditions", '#' %></td></tr>
-        <tr><td><%= button_to "Buy Drink", '#' %></td></tr>
+        <tr><td> 
+          <div class="input-append">SubTotal:</div></td><td><div>
+            <input class="span2" id="appendedInputButtons" size="16" type="text" value="<%= @gift.price * 1 %>"/>
+          </div>
+        </td></tr>
+        <tr><td> 
+          <div class="input-append" data-toggle="buttons-radio">Tip:
+            <button type="button" class="btn">$1 per</button>
+            <button type="button" class="btn">15%</button>
+            <button type="button" class="btn">20%</button></div></td>
+            <td><div><input class="span2" id="appendedInputButtons" size="16" type="text" />
+          </div>
+        </td></tr>
+        <tr><td>Total: </td><td>Please leave a tip</td></tr>
+        <tr><td>Credit Card</td><td></td></tr>
+        <tr><td  colspan="2">Drinkboard <button type="button" class="btn">Terms & Conditions</button></td></tr>
+        <tr><td  colspan="2"><%= button_to "Buy Drink", '#', :class=>"btn-large btn-success" %></td></tr>
       </tbody> 
     </table>       
   </div>
