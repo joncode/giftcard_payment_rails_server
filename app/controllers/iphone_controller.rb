@@ -35,7 +35,7 @@ class IphoneController < AppController
         message += " Unable to save to database" 
         response = { "error" => message }
       end
-      logger.debug response
+      logger.info response
       format.json { render text: response.to_json }
     end
   end
@@ -60,7 +60,7 @@ class IphoneController < AppController
     end
     
     respond_to do |format|
-      logger.debug response
+      logger.info response
       format.json { render text: response }
     end
   end
@@ -121,7 +121,7 @@ class IphoneController < AppController
     gift_hash = hash_these_gifts(@gifts, PROVIDER_REPLY) 
 
     respond_to do |format|
-      logger.debug gift_hash
+      logger.info gift_hash
       format.json { render text: gift_hash.to_json }
     end
   end
@@ -174,7 +174,7 @@ class IphoneController < AppController
       else
         response["error_server"]  = " Gift unable to process to database." 
       end
-      logger.debug response
+      logger.info response
       format.json { render json: response.to_json }
     end  
   end
@@ -210,7 +210,7 @@ class IphoneController < AppController
         message += " Gift unable to process to database. Please retry later."
         response["error_server"] = message 
       end
-      logger.debug response
+      logger.info response
       format.json { render text: response.to_json}
     end
   end
@@ -257,7 +257,7 @@ class IphoneController < AppController
       else
         response["error_server"] = " the redeem code you entered did not match. "
       end
-      logger.debug response
+      logger.info response
       format.json { render text: response.to_json }
     end  
   end
