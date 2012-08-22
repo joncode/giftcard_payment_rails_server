@@ -20,13 +20,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
           <% @users.each do |user| %>
+          <tr>
             <td><%= list_icon_for user %></td>
             <td><%= link_to user.username, choose_from_menu_gifts_path(user_id: user.id, provider_id: @provider.id) %></td>
             <td><%= user.following?(current_user) ? 'You are following' : 'doesnt follow you' %></td>
-          <% end %>
           </tr>
+          <% end %>
         </tbody>
       </table>
     </div>

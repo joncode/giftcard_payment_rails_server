@@ -7,12 +7,24 @@
   <%= @provider.name %>
   <%= @provider.description %>
 </h2>
-<% @menu.each do |m| %>
-  <% item = m[0] %>
-  <% price = m[1] %>
-  <%= item.category %>
-  <%= item.item_name %>
-  <%= item.detail %>
-  <%= item.description %>
-  <%= price %>
-<% end %>
+
+<table>
+  <tr>
+    <th>Category</th>
+    <th>Name</th>
+    <th>Detail</th>
+    <th>Description</th>
+    <th>Price</th>
+  </tr>
+  <% @menu.each do |m| %>
+  <tr>
+    <% item = m[0] %>
+    <% price = m[1] %>
+    <td><%= image_tag get_category_from_item(item), {:class => 'iconListView'} %></td>
+    <td><%= item.item_name %></td>
+    <td><%= item.detail %></td>
+    <td><%= item.description %></td>
+    <td><%= price %></td>
+  </tr>
+  <% end %>
+</table>
