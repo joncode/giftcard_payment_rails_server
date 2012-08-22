@@ -75,6 +75,7 @@ class GiftsController < ApplicationController
   def choose_from_menu
     @provider = Provider.find(params[:provider_id])
     @receiver = User.find(params[:user_id])
+    @menu = @provider.menu_string.data
     
   end
 

@@ -238,18 +238,18 @@ class IphoneController < AppController
     rescue
       message += "Couldn't identify app user. "
     end
-    # begin
+    begin
     #   redeem = Redeem.find(order_obj.redeem_id)
     #   redeem_code = redeem.redeem_code
-    # rescue
-      # message += " Could not find redeem code via redeem_id. "
       redeem = Redeem.find_by_gift_id(order_obj.gift_id)
+    rescue
+      message += " Could not find redeem code via gift_id. "
       if redeem
         redeem_code = redeem.redeem_code
       else
         redeem_code = "X"
       end
-    # end
+    end
     response = { "error" => message } if message != "" 
 
     respond_to do |format|
