@@ -265,7 +265,7 @@ class IphoneController < AppController
         response["error_server"] = " the redeem code you entered did not match. "
       end
       logger.debug response
-      format.json { render text: response.json }
+      format.json { render text: response.to_json }
     end  
   end
  
