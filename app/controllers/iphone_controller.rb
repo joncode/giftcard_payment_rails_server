@@ -249,7 +249,7 @@ class IphoneController < AppController
       else
         redeem_code = "X"
       end
-    end
+    # end
     response = { "error" => message } if message != "" 
 
     respond_to do |format|

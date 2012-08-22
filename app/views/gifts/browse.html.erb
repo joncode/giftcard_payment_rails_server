@@ -21,7 +21,7 @@
               <tr>
               <% @users.each do |user| %>
                 <td><%= list_icon_for user %></td>
-                <td><%= link_to user.username, '#' %></td>
+                <td><%= link_to user.username, browse_with_contact_gifts_path %></td>
                 <td><%= user.following?(current_user) ? 'You are following' : 'doesnt follow you' %></td>
               <% end %>
               </tr>
@@ -39,7 +39,7 @@
             </tr>
             <tr>
              <% @providers.each do |p| %>
-               <td><%= link_to p.name, '#', {:class => "iconListView"} %></td>
+               <td><%= link_to p.name, browse_with_location_gifts_path, {:class => "iconListView"} %></td>
                <td><%= p.description %></td>
              <% end %>
             </tr> 

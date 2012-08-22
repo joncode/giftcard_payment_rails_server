@@ -52,7 +52,7 @@ class GiftsController < ApplicationController
   end
   
   def browse
-    @gift = Gift.new
+    # @gift = Gift.new
     @users = User.all
     @providers = Provider.all
 
@@ -60,6 +60,14 @@ class GiftsController < ApplicationController
       format.html # new.html.erb
       format.json { render json: @gift }
     end
+  end
+  
+  def browse_with_contact
+    @providers = Provider.all
+  end
+  
+  def browse_with_location
+    @users = User.all    
   end
 
   def edit

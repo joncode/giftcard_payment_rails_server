@@ -7,6 +7,8 @@ Drinkboard::Application.routes.draw do
       get 'buy'
       get 'activity'
       get 'browse'
+      get 'browse_with_contact'
+      get 'browse_with_location'
     end
   end
   
