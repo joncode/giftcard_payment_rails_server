@@ -75,7 +75,8 @@ class GiftsController < ApplicationController
   def choose_from_menu
     @provider = Provider.find(params[:provider_id])
     @receiver = User.find(params[:user_id])
-    @menu = @provider.menu_string.data
+    @menu_string = @provider.menu_string.data
+    @menu = create_menu_from_items(@provider)
     
   end
 
@@ -120,4 +121,14 @@ class GiftsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  private
+  
+    def create_menu_from_items(@provider)     
+      menu_bulk = Menu.where(provider_id: @provider.id)
+      menu_bulk.each do |item|
+        menu_item = Item.find(item.item_id)
+        
+      
+    end
 end
