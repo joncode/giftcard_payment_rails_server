@@ -1,8 +1,33 @@
 <div class="center hero-unit">
   <div class="row">
-
-    <h2>Buy a Friend a Drink!</h2>
-    <p><%= @gift.inspect %></p>
-    <hr class="bs-docs-separator">
+    <table>
+      <thead>
+        <th>Order Details</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <tr><td><%= @gift.receiver_name %></td></tr>
+        <tr><td><%= @gift.item_name %>&nbsp;$<%= @gift.price %></td></tr>
+        <tr><td><%= @gift.provider_name %></td></tr>
+        <tr><td>Quantity:
+          <p>
+            <button class="btn btn-mini" type="button">-</button>
+            <button class="btn btn-mini" type="button">+</button>
+          </p>
+        </td></tr>
+        <tr><td>SubTotal: </td></tr>
+        <tr><td>Tip: 
+          <div class="btn-group" data-toggle="buttons-radio">
+            <button type="button" class="btn">$1 per</button>
+            <button type="button" class="btn">15%</button>
+            <button type="button" class="btn">20%</button>
+          </div>
+        </td></tr>
+        <tr><td>Total: </td></tr>
+        <tr><td><%= button_to 'Credit Card', '#' %></td></tr>
+        <tr><td>Drinkboard <%= button_to "Terms & Conditions", '#' %></td></tr>
+        <tr><td><%= button_to "Buy Drink", '#' %></td></tr>
+      </tbody> 
+    </table>       
   </div>
 </div>
