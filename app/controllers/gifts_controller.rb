@@ -63,11 +63,19 @@ class GiftsController < ApplicationController
   end
   
   def browse_with_contact
+    @user = User.find(params[:id])
     @providers = Provider.all
   end
   
   def browse_with_location
+    @provider = Provider.find(params[:id])
     @users = User.all    
+  end
+  
+  def choose_from_menu
+    @provider = Provider.find(params[:provider_id])
+    @receiver = User.find(params[:user_id])
+    
   end
 
   def edit

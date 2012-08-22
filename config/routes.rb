@@ -9,6 +9,7 @@ Drinkboard::Application.routes.draw do
       get 'browse'
       get 'browse_with_contact'
       get 'browse_with_location'
+      get 'choose_from_menu'
     end
   end
   
