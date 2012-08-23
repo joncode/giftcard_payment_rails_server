@@ -5,7 +5,7 @@
 #  id          :integer         not null, primary key
 #  redeem_id   :integer
 #  gift_id     :integer
-#  redeem_code :integer
+#  redeem_code :string(255)
 #  created_at  :datetime        not null
 #  updated_at  :datetime        not null
 #

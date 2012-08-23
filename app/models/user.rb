@@ -19,6 +19,9 @@
 #  phone           :string(255)
 #  first_name      :string(255)
 #  last_name       :string(255)
+#  provider_id     :string(255)
+#  facebook_id     :string(255)
+#  handle          :string(255)
 #
 
 class User < ActiveRecord::Base

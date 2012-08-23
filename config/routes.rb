@@ -18,11 +18,14 @@ Drinkboard::Application.routes.draw do
       get 'detail'
     end
   end
+
+  resources :providers 
+  resources :merchants
   
   resources :items
   resources :menus
   resources :menu_strings
-  resources :providers
+
   resources :connections, only: [:create, :destroy]
   resources :sessions, only: [:new, :create, :destroy]
   match '/signup', to: 'users#new'

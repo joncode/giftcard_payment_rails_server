@@ -2,12 +2,13 @@
 #
 # Table name: redeems
 #
-#  id            :integer         not null, primary key
-#  gift_id       :integer
-#  reply_message :string(255)
-#  redeem_code   :integer
-#  created_at    :datetime        not null
-#  updated_at    :datetime        not null
+#  id                   :integer         not null, primary key
+#  gift_id              :integer
+#  reply_message        :string(255)
+#  redeem_code          :string(255)
+#  special_instructions :text
+#  created_at           :datetime        not null
+#  updated_at           :datetime        not null
 #
 
 class Redeem < ActiveRecord::Base

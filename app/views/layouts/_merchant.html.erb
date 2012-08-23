@@ -14,6 +14,7 @@
       <div class="nav pull-right">
         <% if signed_in? %>
         <ul class="nav">
+          <li><%= link_to "Merchant-Home", merchants_path %></li>
           <li><%= link_to "Gift", gifts_path %></li>
           <li><%= link_to "Buys", buy_gifts_path %></li>
           <li><%= link_to "Activity", activity_gifts_path %></li>

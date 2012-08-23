@@ -3,6 +3,10 @@
 # Table name: gifts
 #
 #  id                   :integer         not null, primary key
+#  giver_name           :string(255)
+#  receiver_name        :string(255)
+#  provider_name        :string(255)
+#  item_name            :string(255)
 #  giver_id             :integer
 #  receiver_id          :integer
 #  item_id              :integer
@@ -14,9 +18,11 @@
 #  message              :text
 #  special_instructions :text
 #  redeem_id            :integer
-#  status               :string(255)
+#  status               :string(255)     default("open")
+#  category             :string(255)
 #  created_at           :datetime        not null
 #  updated_at           :datetime        not null
+#  receiver_phone       :string(255)
 #
 
 class Gift < ActiveRecord::Base

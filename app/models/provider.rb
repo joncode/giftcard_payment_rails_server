@@ -20,6 +20,8 @@
 #  twitter     :string(255)
 #  facebook    :string(255)
 #  website     :string(255)
+#  photo       :string(255)
+#  staff_id    :string(255)
 #
 
 class Provider < ActiveRecord::Base
