@@ -42,15 +42,16 @@ class Gift < ActiveRecord::Base
   end
   
   def self.get_buy_history(user)
-    gifts = Gift.where( giver_id: user).where(status: 'open').order("created_at DESC")
-    gifts.concat Gift.where( giver_id: user).where(status: 'notified').order("created_at DESC")
-    gifts.concat Gift.where( giver_id: user).where(status: 'redeemed').order("created_at DESC")
+    gifts = Gift.where( giver_id: user).where(status: 'open').order("created_at ASC")
+    gifts.concat Gift.where( giver_id: user).where(status: 'notified').order("created_at ASC")
+    past_gifts = Gift.where( giver_id: user).where(status: 'redeemed').order("created_at ASC")
+    return gifts, past_gifts
   end
   
   def self.get_activity
-    gifts = Gift.where(status: 'open').order("created_at DESC")
-    gifts.concat Gift.where(status: 'notified').order("created_at DESC")
-    gifts.concat Gift.where(status: 'redeemed').order("created_at DESC") 
+    gifts = Gift.where(status: 'open').order("created_at ASC")
+    gifts.concat Gift.where(status: 'notified').order("created_at ASC")
+    gifts.concat Gift.where(status: 'redeemed').order("created_at ASC") 
   end
   
   def self.get_provider(provider)

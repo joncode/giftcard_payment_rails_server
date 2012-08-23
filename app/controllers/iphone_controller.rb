@@ -80,7 +80,7 @@ class IphoneController < AppController
   def buys
     logger.info "Buys"
     @user  = User.find_by_remember_token(params["token"])
-    @gifts = Gift.get_buy_history(@user)
+    @gifts, @past_gifts = Gift.get_buy_history(@user)
     gift_hash = hash_these_gifts(@gifts, BUY_REPLY)
     
     respond_to do |format|

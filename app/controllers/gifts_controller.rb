@@ -24,7 +24,7 @@ class GiftsController < ApplicationController
   
   def buy
     @user = current_user
-    @gifts = Gift.get_buy_history(@user)
+    @gifts, @past_gifts = Gift.get_buy_history(@user)
     
     respond_to do |format|
       format.html 
