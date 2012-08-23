@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120823195047) do
+ActiveRecord::Schema.define(:version => 20120823230612) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -155,6 +155,7 @@ ActiveRecord::Schema.define(:version => 20120823195047) do
     t.string   "provider_id"
     t.string   "facebook_id"
     t.string   "handle"
+    t.string   "server_code"
   end
 
 end

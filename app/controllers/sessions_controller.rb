@@ -51,7 +51,7 @@ class SessionsController < ApplicationController
       # make an array of provider id's
       if !provider_array.empty?
         provider_ids = array_of_ids(provider_array)     
-        user.update_attributes(:provider_id => provider_ids)
+        user.update_attributes(:provider_id => provider_ids, :server_code => "0000")
         # update user to have provider_id in attributes
       end
     end
