@@ -36,7 +36,31 @@
       </table>
     </div>
     <div class="tab-pane fade" id="recent">
-      <p>gift activity based on created at time , not on status</p>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2">To</th>
+            <th colspan="2">Drink</th>
+            <th colspan="2">Location</th>
+            <th>Message</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recents.each do |gift| %>
+            <tr>
+              <td><%= list_icon_with_id_for gift.receiver_id %></td> 
+              <td><%= gift.receiver_name %></td>
+              <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
+              <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
+              <td><%= logo_from_id_for gift.provider_id %></td>
+              <td><%= gift.provider_name %></td>
+              <td><%= gift.message %></td>
+              <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
     <div class="tab-pane fade" id="history">
       <table>

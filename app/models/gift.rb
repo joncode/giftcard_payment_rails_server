@@ -48,6 +48,10 @@ class Gift < ActiveRecord::Base
     return gifts, past_gifts
   end
   
+  def self.get_buy_recents(user)
+    Gift.where( giver_id: user).order("created_at DESC").limit(10)
+  end
+  
   def self.get_activity
     gifts = Gift.where(status: 'open').order("created_at ASC")
     gifts.concat Gift.where(status: 'notified').order("created_at ASC")
