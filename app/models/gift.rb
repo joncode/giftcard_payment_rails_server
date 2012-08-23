@@ -76,7 +76,10 @@ class Gift < ActiveRecord::Base
   def self.get_provider(provider)
     gifts = Gift.where(provider_id: provider.id).where(status: 'open').order("created_at DESC")
     gifts.concat Gift.where(provider_id: provider.id).where(status: 'notified').order("created_at DESC")
-    gifts.concat Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
+  end
+  
+  def self.get_history_provider(provider)
+    Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
   end
     
 end

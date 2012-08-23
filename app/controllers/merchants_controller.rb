@@ -20,13 +20,49 @@ class MerchantsController < ApplicationController
     @gifts = Gift.get_activity_at_provider(@provider)
   end
 
+  def redeems
+    @provider = Provider.find(params[:id])
+    @gifts = Gift.get_provider(@provider)
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @gifts }
+    end
+  end
+
+  def past_redeems
+    @provider = Provider.find(params[:id])
+    @gifts = Gift.get_history_provider(@provider)
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @gifts }
+    end
+  end
+
+  def detail
+    @gift = Gift.find(params[:id])
+    @giver = User.find(@gift.giver_id)
+    @receiver = User.find(@gift.receiver_id)
+    @provider = @gift.provider
+    
+    respond_to do |format|
+      format.html # detail.html.erb
+      format.json { render json: @gift }
+    end
+  end
+
+  def redeem
+    @gift = Gift.find(params[:id])
+    @redeem = Redeem.find_by_gift_id(@gift)
+    @provider = @gift.provider
 
 
-
-
-
-
-
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @redeem }
+    end
+  end
 
 
 

@@ -20,7 +20,14 @@ Drinkboard::Application.routes.draw do
   end
 
   resources :providers 
-  resources :merchants
+  resources :merchants do
+    member do
+      get 'redeems'
+      get 'past_redeems'
+      get 'detail'
+      get 'redeem'
+    end
+  end
   
   resources :items
   resources :menus
