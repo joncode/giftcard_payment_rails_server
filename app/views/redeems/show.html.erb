@@ -1,20 +1,23 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <b>Gift:</b>
-  <%= @redeem.gift_id %>
-</p>
+<h4><%= list_icon_for @giver %> <%= @gift.giver_name %><span> bought you </span></h4>
+<h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
+<h3>@ <%= @gift.provider_name %></h3>
 
 <p>
-  <b>Reply message:</b>
-  <%= @redeem.reply_message %>
+  <b>Message:</b>
+  <%= @gift.message %>
 </p>
 
-<p>
-  <b>Redeem code:</b>
-  <%= @redeem.redeem_code %>
-</p>
+<h4>Give this code to your server to Redeem: 
+  <a href="#" class="btn btn-large btn-primary disabled"><%= @redeem.redeem_code %></a>
+  <hr />
+</h4>
+<h4>You can also enter the 4-digit Server Code here:
+  <input type="text" placeholder="4 digit Server Code"> 
+  <%= button_to 'Enter Server Code', '#' %>
+  <hr />
+</h4>
 
-
-<%= link_to 'Edit', edit_redeem_path(@redeem) %> |
-<%= link_to 'Back', redeems_path %>
+<%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id) %>
+<%= button_to 'Not Now', gifts_path, method: :get %>

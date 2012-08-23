@@ -11,6 +11,9 @@ class RedeemsController < ApplicationController
 
   def show
     @redeem = Redeem.find(params[:id])
+    @gift = @redeem.gift
+    giver = @redeem.gift.giver_id
+    @giver = User.find(giver)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -35,13 +38,18 @@ class RedeemsController < ApplicationController
   def create
     gift_id = params[:gift_id]
     if @redeem = Redeem.find_by_gift_id(gift_id)
-      # do nothing
+      notice = nil
     else
       @redeem = Redeem.new(gift_id: gift_id)
+      notice  = 'Give your code to your server.'
     end
     respond_to do |format|
       if @redeem.save
-        format.html { redirect_to @redeem, notice: 'Redeem was successfully created.' }
+        if notice
+          format.html { redirect_to @redeem, notice: notice }
+        else
+          format.html { redirect_to @redeem }
+        end
         format.json { render json: @redeem, status: :created, location: @redeem }
       else
         format.html { render action: "new" }
