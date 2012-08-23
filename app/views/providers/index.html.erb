@@ -9,16 +9,13 @@
     <th>Address</th>
   </tr>
 
-<% @providers.each do |provider| %>
-  <tr>
-    <td><%= logo_for(provider) %></td>
-    <td><%= link_to provider.name, provider %></td>
-    <td><%= provider.description %></td>
-    <td><%= provider.full_address %></td>
-  </tr>
-<% end %>
+  <% @providers.each do |provider| %>
+    <tr>
+      <td><%= logo_for(provider) %></td>
+      <td><%= link_to provider.name, provider %></td>
+      <td><%= provider.description %></td>
+      <td><%= provider.full_address %></td>
+    </tr>
+  <% end %>
 </table>
 
-<br />
-
-<%= link_to 'New Provider', new_provider_path %>
