@@ -87,6 +87,10 @@ class User < ActiveRecord::Base
     relationships.find_by_followed_id(other_user.id).destroy
   end
   
+  def full_address
+    "#{self.address},  #{self.city}, #{self.state}"
+  end
+  
   private
   
     def create_remember_token

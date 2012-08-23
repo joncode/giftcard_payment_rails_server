@@ -62,7 +62,7 @@ class GiftsController < ApplicationController
   end
 
   def bill
-    @gift = Gift.new()
+    @gift = Gift.new
     @provider = Provider.find(params[:provider_id])
     @receiver = User.find(params[:receiver_id])
     @item = Item.find(params[:item_id])
@@ -119,7 +119,8 @@ class GiftsController < ApplicationController
   
   def browse_with_location
     @provider = Provider.find(params[:id])
-    @users = current_user.users_without_current_user  
+    @users = current_user.users_without_current_user
+    @menu = create_menu_from_items(@provider)  
 
   end
   
@@ -134,8 +135,21 @@ class GiftsController < ApplicationController
     @gift.receiver_name = @receiver.username
     @gift.giver_name = current_user.username
     @gift.giver_id = current_user.id
-    @gift.receiver_phone = @receiver.phone 
-    
+    @gift.receiver_phone = @receiver.phone     
+  end
+
+  def choose_from_contacts
+    @provider = Provider.find(params[:provider_id])
+    @item = Item.find(params[:item_id])
+    @users = User.all
+    @gift = Gift.new
+    @price = params[:price]
+    @gift.provider_id = @provider.id
+    @gift.provider_name = @provider.name
+    @gift.item_id = @item.id
+    @gift.item_name = @item.item_name
+    @gift.giver_name = current_user.username
+    @gift.giver_id = current_user.id   
   end
 
   def edit
