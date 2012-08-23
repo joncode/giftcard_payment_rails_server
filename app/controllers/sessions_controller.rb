@@ -28,7 +28,7 @@ class SessionsController < ApplicationController
     end
     if user && user.authenticate(password)
       sign_in user
-      redirect_to user
+      redirect_to home_path
     else
       flash[:error] = 'Invalid email/password combination' if !transfer
       render 'new'
