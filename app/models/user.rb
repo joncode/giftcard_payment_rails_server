@@ -22,8 +22,10 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessible  :email, :password, :password_confirmation, :photo, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin
-
+  attr_accessible  :email, :password, :password_confirmation, :photo, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :provider_id, :handle
+  
+  serialize :provider_id, Array
+  
   has_many :providers
   has_many :gifts
   has_many :givers, through: :connections, source: "giver"
