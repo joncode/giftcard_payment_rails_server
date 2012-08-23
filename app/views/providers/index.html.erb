@@ -1,33 +1,20 @@
-<h1>Listing providers</h1>
-
 <table>
   <tr>
+    <th colspan="4">Check Out Locations</th>
+  </tr>
+  <tr>
+    <th>Logo</th>
     <th>Name</th>
     <th>Description</th>
     <th>Address</th>
-    <th>City</th>
-    <th>State</th>
-    <th>Zip</th>
-    <th>User</th>
-    <th>Logo</th>
-    <th></th>
-    <th></th>
-    <th></th>
   </tr>
 
 <% @providers.each do |provider| %>
   <tr>
-    <td><%= provider.name %></td>
+    <td><%= logo_for(provider) %></td>
+    <td><%= link_to provider.name, provider %></td>
     <td><%= provider.description %></td>
-    <td><%= provider.address %></td>
-    <td><%= provider.city %></td>
-    <td><%= provider.state %></td>
-    <td><%= provider.zip %></td>
-    <td><%= provider.user_id %></td>
-    <td><%= provider.logo %></td>
-    <td><%= link_to 'Show', provider %></td>
-    <td><%= link_to 'Edit', edit_provider_path(provider) %></td>
-    <td><%= link_to 'Destroy', provider, confirm: 'Are you sure?', method: :delete %></td>
+    <td><%= provider.full_address %></td>
   </tr>
 <% end %>
 </table>

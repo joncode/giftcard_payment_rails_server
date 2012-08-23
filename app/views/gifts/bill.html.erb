@@ -5,9 +5,9 @@
         <th colspan="2">Order Details</th>
       </thead>
       <tbody>
-        <tr><td colspan="2"><%= @gift.receiver_name %></td></tr>
+        <tr><td colspan="2"><%= list_icon_with_id_for @gift.receiver_id %>&nbsp;<%= @gift.receiver_name %></td></tr>
+        <tr><td colspan="2"><%= logo_from_id_for @gift.provider_id %>&nbsp;<%= @gift.provider_name %></td></tr>
         <tr><td><%= @gift.item_name %></td><td>$<%= @gift.price %></td></tr>
-        <tr><td colspan="2"><%= @gift.provider_name %></td></tr>
         <tr><td>
           <div class="input-append">Quantity:
             <button class="btn" type="button">-</button>
@@ -30,7 +30,7 @@
           </div>
         </td></tr>
         <tr><td>Total: </td><td>Please leave a tip</td></tr>
-        <tr><td>Credit Card</td><td></td></tr>
+        <tr><td colspan="2">Credit Card</td></tr>
         <tr><td  colspan="2">Drinkboard <button type="button" class="btn">Terms & Conditions</button></td></tr>
         <tr><td  colspan="2"><%= button_to "Buy Drink", '#', :class=>"btn-large btn-success" %></td></tr>
       </tbody> 

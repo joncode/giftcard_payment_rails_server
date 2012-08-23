@@ -37,7 +37,7 @@
           <table class="table listed">
             <thead>
               <tr>
-                <th>Name</th>
+                <th colspan="2">Name</th>
                 <th>Description</th>
                 <th></th>
               </tr>
@@ -45,6 +45,7 @@
             <tbody>
               <% @providers.each do |p| %>
               <tr>
+                 <td><%= logo_for(p) %></td>
                  <td><%= link_to p.name, '#', {:class => "iconListView"} %></td>
                  <td><%= p.description %></td>
                  <td><%= button_to "Select", browse_with_location_gifts_path(id: p.id)%></td>

@@ -14,7 +14,7 @@
           <tr>
             <th colspan="2">To</th>
             <th colspan="2">Drink</th>
-            <th>Location</th>
+            <th colspan="2">Location</th>
             <th>Message</th>
             <th>Date</th>
           </tr>
@@ -26,6 +26,7 @@
               <td><%= gift.receiver_name %></td>
               <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
               <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
+              <td><%= logo_from_id_for gift.provider_id %></td>
               <td><%= gift.provider_name %></td>
               <td><%= gift.message %></td>
               <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
@@ -43,7 +44,7 @@
           <tr>
             <th colspan="2">To</th>
             <th colspan="2">Drink</th>
-            <th>Location</th>
+            <th colspan="2">Location</th>
             <th>Message</th>
             <th>Date</th>
           </tr>
@@ -55,6 +56,7 @@
               <td><%= gift.receiver_name %></td>
               <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
               <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
+              <td><%= logo_from_id_for gift.provider_id %></td>
               <td><%= gift.provider_name %></td>
               <td><%= gift.message %></td>
               <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>

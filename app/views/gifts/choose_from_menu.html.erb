@@ -1,4 +1,3 @@
-<%= @gift.inspect %>
 <h2>
   the Gift is for:
   <%= list_icon_for @receiver %>
@@ -6,6 +5,7 @@
   <br />
   to be redeemed at:
   <br />
+  <%= logo_for @provider %>
   <%= @provider.name %>
   "<%= @provider.description %>"
   <%= @provider.full_address %>

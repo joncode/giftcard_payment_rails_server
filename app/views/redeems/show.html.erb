@@ -2,8 +2,8 @@
 
 <h4><%= list_icon_for @giver %> <%= @gift.giver_name %><span> bought you </span></h4>
 <h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
-<h3>@ <%= @gift.provider_name %></h3>
-
+<h3><%= logo_from_id_for @gift.provider_id %>
+@ <%= @gift.provider_name %></h3>
 <p>
   <b>Message:</b>
   <%= @gift.message %>
@@ -13,7 +13,8 @@
   <a href="#" class="btn btn-large btn-primary disabled"><%= @redeem.redeem_code %></a>
   <hr />
 </h4>
-<h4>You can also enter the 4-digit Server Code here:
+<h4>Server's phone unavailable?
+  Enter the 4-digit Server Code here:
   <input type="text" placeholder="4 digit Server Code"> 
   <%= button_to 'Enter Server Code', '#' %>
   <hr />
