@@ -1,28 +1,34 @@
 <div class="gradientBackground"></div>
+<%= link_to 'Buy a Gift for a friend', browse_gifts_path %> |
+<%= link_to 'Past Gifts', past_gifts_path %>
 <table>
   <tr>
-    <th>Date</th>
-    <th>From</th>
     <th></th>
-    <th>Drink</th>
-    <th>Location</th>
+    <th colspan="2">Drink</th>
+    <th colspan="2">Location</th>
     <th>Message</th>
-    <th>Status</th>
+    <th>Date</th>
+    <th colspan="2">From</th>
+    <th></th>
   </tr>
 
 <% @gifts.each do |gift| %>
   <tr>
-    <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
-    <td><%= gift.giver_name %></td>
-    <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
-    <td><%= gift.quantity %><%= gift.item_name %></td>
+    <td><%= button_to "Redeem Now", redeems_path(gift_id: gift.id) %></td>
+    <td colspan="2">
+      <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
+      <%= gift.quantity %>&nbsp;<%= gift.item_name %>
+    </td>
+    <td><%= logo_from_id_for gift.provider_id %></td>
     <td><%= gift.provider_name %></td>
     <td><%= gift.message %></td>
-    <td><%= gift.status %></td>
+    <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
+    <td><%= list_icon_with_id_for gift.receiver_id %></td>
+    <td><%= gift.giver_name %></td>
+    <td><%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: gift.giver_id) %></td>
   </tr>
 <% end %>
 </table>
 
-<br />
 
-<%= link_to 'New Gift', new_gift_path %>
+

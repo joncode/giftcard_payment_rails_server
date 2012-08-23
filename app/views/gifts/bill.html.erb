@@ -1,8 +1,39 @@
 <div class="center hero-unit">
   <div class="row">
-
-    <h2>Buy a Friend a Drink!</h2>
-    <p><%= @gift.inspect %></p>
-    <hr class="bs-docs-separator">
+    <table>
+      <thead>
+        <th colspan="2">Order Details</th>
+      </thead>
+      <tbody>
+        <tr><td colspan="2"><%= list_icon_with_id_for @gift.receiver_id %>&nbsp;<%= @gift.receiver_name %></td></tr>
+        <tr><td colspan="2"><%= logo_from_id_for @gift.provider_id %>&nbsp;<%= @gift.provider_name %></td></tr>
+        <tr><td><%= @gift.item_name %></td><td>$<%= @gift.price %></td></tr>
+        <tr><td>
+          <div class="input-append">Quantity:
+            <button class="btn" type="button">-</button>
+            <button class="btn" type="button">+</button></div></td><td><div>
+            <input class="span2" id="appendedInputButtons" size="16" type="text" value="1"/>
+          </div>
+        </td></tr>
+        <tr><td>Tax:</td><td></td></tr>
+        <tr><td> 
+          <div class="input-append">SubTotal:</div></td><td><div>
+            <input class="span2" id="appendedInputButtons" size="16" type="text" value="<%= @gift.price * 1 %>"/>
+          </div>
+        </td></tr>
+        <tr><td> 
+          <div class="input-append" data-toggle="buttons-radio">Tip:
+            <button type="button" class="btn">$1 per</button>
+            <button type="button" class="btn">15%</button>
+            <button type="button" class="btn">20%</button></div></td>
+            <td><div><input class="span2" id="appendedInputButtons" size="16" type="text" />
+          </div>
+        </td></tr>
+        <tr><td>Total: </td><td>Please leave a tip</td></tr>
+        <tr><td colspan="2">Credit Card</td></tr>
+        <tr><td  colspan="2">Drinkboard <button type="button" class="btn">Terms & Conditions</button></td></tr>
+        <tr><td  colspan="2"><%= button_to "Buy Drink", '#', :class=>"btn-large btn-success" %></td></tr>
+      </tbody> 
+    </table>       
   </div>
 </div>

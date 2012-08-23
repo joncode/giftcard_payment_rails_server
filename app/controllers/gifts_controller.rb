@@ -11,9 +11,20 @@ class GiftsController < ApplicationController
     end
   end
   
+  def past
+    @user = current_user
+    @gifts = Gift.get_past_gifts(@user)
+    # ActiveRecord::Base.logger = Logger.new("in method")
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @gifts }
+    end
+  end
+  
   def buy
     @user = current_user
-    @gifts = Gift.get_buy_history(@user)
+    @gifts, @past_gifts = Gift.get_buy_history(@user)
     
     respond_to do |format|
       format.html 
@@ -36,6 +47,16 @@ class GiftsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.json { render json: @gift }
+    end
+  end
+  
+  def detail
+    @gift = Gift.find(params[:id])
+    @giver = User.find(@gift.giver_id)
+
+    respond_to do |format|
+      format.html # detail.html.erb
       format.json { render json: @gift }
     end
   end
@@ -64,13 +85,16 @@ class GiftsController < ApplicationController
   end
 
   def new
-    @gift = Gift.new(params[:gift])
-    item = params[:item]
-    price = params[:price]
-    @gift.item_id = item.id
-    @gift.price = price
-    @gift.item_name = item.item_name
-    
+    if params[:gift]
+      @gift = Gift.new(params[:gift])
+      item = params[:item]
+      price = params[:price]
+      @gift.item_id = item.id
+      @gift.price = price
+      @gift.item_name = item.item_name
+    else
+      @gift = Gift.new
+    end
 
     respond_to do |format|
       format.html # new.html.erb
@@ -79,8 +103,7 @@ class GiftsController < ApplicationController
   end
   
   def browse
-    # @gift = Gift.new
-    @users = User.all
+    @users = current_user.users_without_current_user
     @providers = Provider.all
 
     respond_to do |format|
@@ -96,13 +119,13 @@ class GiftsController < ApplicationController
   
   def browse_with_location
     @provider = Provider.find(params[:id])
-    @users = User.all    
+    @users = current_user.users_without_current_user  
+
   end
   
   def choose_from_menu
     @provider = Provider.find(params[:provider_id])
     @receiver = User.find(params[:user_id])
-    @menu_string = @provider.menu_string.data
     @menu = create_menu_from_items(@provider)
     @gift = Gift.new
     @gift.provider_id = @provider.id
@@ -157,17 +180,4 @@ class GiftsController < ApplicationController
     end
   end
   
-  private
-  
-    def create_menu_from_items(provider)     
-      menu_bulk = Menu.where(provider_id: provider.id)
-      items = []
-      menu_bulk.each do |item|
-         indi = Item.find(item.item_id)
-         price = item.price
-         item_array = [indi, price]
-         items << item_array  
-      end
-      return items
-    end
 end

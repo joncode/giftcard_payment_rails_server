@@ -1,28 +1,73 @@
 <div class="gradientBackground"></div>
-<table>
-  <tr>
-    <th>Date</th>
-    <th>To</th>
-    <th></th>
-    <th>Drink</th>
-    <th>Location</th>
-    <th>Message</th>
-    <th>Status</th>
-  </tr>
+<%= link_to 'Buy a friend a Gift', browse_gifts_path %>
+<div class="bs-docs-example">
+  <ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="#open" data-toggle="tab">Open</a></li>
+    <li><a href="#recent" data-toggle="tab">Recents</a></li>
+    <li><a href="#history" data-toggle="tab">History</a></li>
+    <li><a href="#drinks" data-toggle="tab">Drinks</a></li>
+  </ul>
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade in active" id="open">
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2">To</th>
+            <th colspan="2">Drink</th>
+            <th colspan="2">Location</th>
+            <th>Message</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @gifts.each do |gift| %>
+            <tr>
+              <td><%= list_icon_with_id_for gift.receiver_id %></td> 
+              <td><%= gift.receiver_name %></td>
+              <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
+              <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
+              <td><%= logo_from_id_for gift.provider_id %></td>
+              <td><%= gift.provider_name %></td>
+              <td><%= gift.message %></td>
+              <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="tab-pane fade" id="recent">
+      <p>gift activity based on created at time , not on status</p>
+    </div>
+    <div class="tab-pane fade" id="history">
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2">To</th>
+            <th colspan="2">Drink</th>
+            <th colspan="2">Location</th>
+            <th>Message</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @past_gifts.each do |gift| %>
+            <tr>
+              <td><%= list_icon_with_id_for gift.receiver_id %></td>
+              <td><%= gift.receiver_name %></td>
+              <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
+              <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
+              <td><%= logo_from_id_for gift.provider_id %></td>
+              <td><%= gift.provider_name %></td>
+              <td><%= gift.message %></td>
+              <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>      
+    </div>
+    <div class="tab-pane fade" id="drinks">
+      <p>Drinks you have bought</p>
+    </div>
+  </div>
+</div>
 
-<% @gifts.each do |gift| %>
-  <tr>
-    <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
-    <td><%= gift.receiver_name %></td>
-    <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
-    <td><%= gift.quantity %><%= gift.item_name %></td>
-    <td><%= gift.provider_name %></td>
-    <td><%= gift.message %></td>
-    <td><%= gift.status %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Gift', new_gift_path %>

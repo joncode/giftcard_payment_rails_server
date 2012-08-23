@@ -6,7 +6,7 @@ class IphoneController < AppController
   BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
   BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "id"] 
   PROVIDER_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_id", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
-  USER_REPLY = ["id", "first_name", "last_name", "email", "phone"]
+  USER_REPLY = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
 
 
 
@@ -35,7 +35,7 @@ class IphoneController < AppController
         message += " Unable to save to database" 
         response = { "error" => message }
       end
-      logger.debug response
+      logger.info response
       format.json { render text: response.to_json }
     end
   end
@@ -60,7 +60,7 @@ class IphoneController < AppController
     end
     
     respond_to do |format|
-      logger.debug response
+      logger.info response
       format.json { render text: response }
     end
   end
@@ -80,7 +80,7 @@ class IphoneController < AppController
   def buys
     logger.info "Buys"
     @user  = User.find_by_remember_token(params["token"])
-    @gifts = Gift.get_buy_history(@user)
+    @gifts, @past_gifts = Gift.get_buy_history(@user)
     gift_hash = hash_these_gifts(@gifts, BUY_REPLY)
     
     respond_to do |format|
@@ -92,14 +92,7 @@ class IphoneController < AppController
   
   def drinkboard_users
     @user  = User.find_by_remember_token(params["token"])
-    @users_with_user = User.all
-    # do this in database call
-    @users = []
-    @users_with_user.each do |u|
-      if u != @user
-        @users << u
-      end
-    end
+    @users = @user.users_without_current_user
     user_hash = hash_these_users(@users, USER_REPLY)
     respond_to do |format|
       logger.debug user_hash
@@ -128,7 +121,7 @@ class IphoneController < AppController
     gift_hash = hash_these_gifts(@gifts, PROVIDER_REPLY) 
 
     respond_to do |format|
-      logger.debug gift_hash
+      logger.info gift_hash
       format.json { render text: gift_hash.to_json }
     end
   end
@@ -181,7 +174,7 @@ class IphoneController < AppController
       else
         response["error_server"]  = " Gift unable to process to database." 
       end
-      logger.debug response
+      logger.info response
       format.json { render json: response.to_json }
     end  
   end
@@ -217,7 +210,7 @@ class IphoneController < AppController
         message += " Gift unable to process to database. Please retry later."
         response["error_server"] = message 
       end
-      logger.debug response
+      logger.info response
       format.json { render text: response.to_json}
     end
   end
@@ -239,16 +232,16 @@ class IphoneController < AppController
       message += "Couldn't identify app user. "
     end
     begin
-    #   redeem = Redeem.find(order_obj.redeem_id)
+    #   redeem = Redeem.find(order.redeem_id)
     #   redeem_code = redeem.redeem_code
       redeem = Redeem.find_by_gift_id(order.gift_id)
     rescue
       message += " Could not find redeem code via gift_id. "
-      if redeem
-        redeem_code = redeem.redeem_code
-      else
-        redeem_code = "X"
-      end
+    end
+    if redeem
+      redeem_code = redeem.redeem_code
+    else
+      redeem_code = "X"
     end
     response = { "error" => message } if message != "" 
 
@@ -258,13 +251,13 @@ class IphoneController < AppController
           response["success"] = " Sale Confirmed. Thank you!"
           order.gift.update_attribute(:status, "redeemed")
         else
-          order.gift.update_attribute(:status, "redeemed")
-          response["error_server"] = " Order processed - database error"
+          # order.gift.update_attribute(:status, "redeemed")
+          response["error_server"] = " Order not processed - database error"
         end
       else
         response["error_server"] = " the redeem code you entered did not match. "
       end
-      logger.debug response
+      logger.info response
       format.json { render text: response.to_json }
     end  
   end

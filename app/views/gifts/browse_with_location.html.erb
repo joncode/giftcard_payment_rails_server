@@ -1,4 +1,5 @@
 <h2>
+  <%= logo_for @provider %>
   <%= @provider.name %>
   "<%= @provider.description %>"
   <%= @provider.full_address %>
@@ -11,7 +12,7 @@
   </ul>
   <div id="myTabContent" class="tab-content">
     <div class="tab-pane fade in active" id="friends">
-      <table class="table table-condensed">
+      <table class="table listed">
         <thead>
           <tr>
             <th></th>
@@ -26,7 +27,7 @@
             <td><%= list_icon_for user %></td>
             <td><%= link_to user.username, '#' %></td>
             <td><%= user.following?(current_user) ? 'You are following' : 'doesnt follow you' %></td>
-            <td><%= button_to "Select", choose_from_menu_gifts_path(user_id: user.id, provider_id: @provider.id) %>         
+            <td><%= button_to "Select", choose_from_menu_gifts_path(user_id: user.id, provider_id: @provider.id) %></td>
           </tr>
           <% end %>
         </tbody>

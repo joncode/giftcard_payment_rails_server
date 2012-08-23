@@ -22,5 +22,17 @@ class ApplicationController < ActionController::Base
       session[:mobile] = params[:mobile] if params[:mobile]
       #  request.format   = :mobile if mobile_device?
     end
+
+    def create_menu_from_items(provider)     
+      menu_bulk = Menu.where(provider_id: provider.id)
+      items = []
+      menu_bulk.each do |item|
+         indi = Item.find(item.item_id)
+         price = item.price
+         item_array = [indi, price]
+         items << item_array  
+      end
+      return items
+    end
   
 end
