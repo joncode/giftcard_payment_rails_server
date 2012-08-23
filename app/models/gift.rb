@@ -54,6 +54,10 @@ class Gift < ActiveRecord::Base
     gifts.concat Gift.where(status: 'redeemed').order("created_at ASC") 
   end
   
+  def self.get_activity_at_provider(provider)
+    Gift.where(provider_id: provider.id).order("created_at ASC")
+  end
+  
   def self.get_provider(provider)
     gifts = Gift.where(provider_id: provider.id).where(status: 'open').order("created_at DESC")
     gifts.concat Gift.where(provider_id: provider.id).where(status: 'notified').order("created_at DESC")
