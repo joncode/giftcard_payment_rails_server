@@ -1,4 +1,5 @@
 <div class="gradientBackground"></div>
+<%= link_to 'Buy a friend a Gift', browse_gifts_path %>
 <table>
   <tr>
     <th>Date</th>
@@ -15,7 +16,7 @@
     <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
     <td><%= gift.receiver_name %></td>
     <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
-    <td><%= gift.quantity %><%= gift.item_name %></td>
+    <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
     <td><%= gift.provider_name %></td>
     <td><%= gift.message %></td>
     <td><%= gift.status %></td>
@@ -25,4 +26,4 @@
 
 <br />
 
-<%= link_to 'New Gift', new_gift_path %>
+
