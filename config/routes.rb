@@ -11,6 +11,10 @@ Drinkboard::Application.routes.draw do
       post 'browse_with_location'
       post 'choose_from_menu'
       post 'bill'
+      get 'past'
+    end
+    member do
+      get 'detail'
     end
   end
   

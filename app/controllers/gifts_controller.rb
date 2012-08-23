@@ -11,6 +11,17 @@ class GiftsController < ApplicationController
     end
   end
   
+  def past
+    @user = current_user
+    @gifts = Gift.get_past_gifts(@user)
+    # ActiveRecord::Base.logger = Logger.new("in method")
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @gifts }
+    end
+  end
+  
   def buy
     @user = current_user
     @gifts = Gift.get_buy_history(@user)
@@ -36,6 +47,16 @@ class GiftsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.json { render json: @gift }
+    end
+  end
+  
+  def detail
+    @gift = Gift.find(params[:id])
+    @giver = User.find(@gift.giver_id)
+
+    respond_to do |format|
+      format.html # detail.html.erb
       format.json { render json: @gift }
     end
   end

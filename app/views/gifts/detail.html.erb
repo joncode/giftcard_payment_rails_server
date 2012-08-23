@@ -1,0 +1,17 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Thank You!</h2>
+<h3>- The Drinkboard Staff</h3>
+
+<h4><%= time_ago_in_words(@gift.created_at) %>&nbsp;ago</h4>
+<h4><%= list_icon_for @giver %> <%= @gift.giver_name %><span> bought you </span></h4>
+<h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
+<h3>@ <%= @gift.provider_name %></h3>
+
+<p>
+  <b>Message:</b>
+  <%= @gift.message %>
+</p>
+
+<%= button_to 'Past Gifts', past_gifts_path, method: :get %>
+<%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id) %>
