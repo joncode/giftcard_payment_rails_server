@@ -19,6 +19,7 @@ class RedeemsController < ApplicationController
   end
 
   def new
+    @gift = Gift.find(params[:gift_id])
     @redeem = Redeem.new
 
     respond_to do |format|
@@ -32,8 +33,12 @@ class RedeemsController < ApplicationController
   end
 
   def create
-    @redeem = Redeem.new(params[:redeem])
-
+    gift_id = params[:gift_id]
+    if @redeem = Redeem.find_by_gift_id(gift_id)
+      # do nothing
+    else
+      @redeem = Redeem.new(gift_id: gift_id)
+    end
     respond_to do |format|
       if @redeem.save
         format.html { redirect_to @redeem, notice: 'Redeem was successfully created.' }

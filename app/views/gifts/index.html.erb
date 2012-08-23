@@ -14,7 +14,7 @@
 
 <% @gifts.each do |gift| %>
   <tr>
-    <td><%= button_to "Redeem Now", gift_path(gift), method: :get %></td>
+    <td><%= button_to "Redeem Now", redeems_path(gift_id: gift.id) %></td>
     <td colspan="2">
       <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
       <%= gift.quantity %>&nbsp;<%= gift.item_name %>
