@@ -1,7 +1,8 @@
 class MerchantsController < ApplicationController
   
   def index
-    providers = current_user.provider_id
+    providers = current_user.provider_id    
+    providers = [] if !(providers.kind_of? Array)
 
     respond_to do |format|
       if providers.count == 1
@@ -66,8 +67,8 @@ class MerchantsController < ApplicationController
 
   def customers
     @provider = Provider.find(params[:id])    
-    @user  = current_user
-    @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
+    @user     = current_user
+    @users    = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
     # list customers on the screen with most recent activity first
         # most drinks ordered
         # most money spent
