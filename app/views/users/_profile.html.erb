@@ -4,11 +4,11 @@
   <%= render 'shared/error_messages' %>
 
   <div class="form-horizontal">
-    <% if @user.photo_url %>
+    <% if @user.photo %>
       <%= gravatar_for @user %>
     <% end %>
     <%= f.label :upload_new_photo? %>
-    <%= f.file_field :photo_url %>
+    <%= f.file_field :photo %>
     <%= f.input :name %>
     <%= f.input :email %>
   </div>
