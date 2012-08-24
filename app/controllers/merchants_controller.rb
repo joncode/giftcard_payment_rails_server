@@ -64,7 +64,23 @@ class MerchantsController < ApplicationController
     end
   end
 
-
+  def customers
+    @provider = Provider.find(params[:id])    
+    @user  = current_user
+    @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
+    # list customers on the screen with most recent activity first
+        # most drinks ordered
+        # most money spent
+    # check all the gifts , get the giver and receiver user ids
+    # assign those ids to the gift.updated_at field 
+    # make a uniq array of all user ids
+    # remove employees from that list 
+    # list those customers on the screen by gift.updated_at
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @users }
+    end
+  end
 
 
 

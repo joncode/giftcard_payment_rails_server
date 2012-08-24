@@ -26,6 +26,7 @@ Drinkboard::Application.routes.draw do
       get 'past_redeems'
       get 'detail'
       get 'redeem'
+      get 'customers'
     end
   end
   

@@ -104,7 +104,7 @@ class GiftsController < ApplicationController
   end
   
   def browse
-    @users = current_user.users_without_current_user
+    @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
     @providers = Provider.all
 
     respond_to do |format|
@@ -120,7 +120,7 @@ class GiftsController < ApplicationController
   
   def browse_with_location
     @provider = Provider.find(params[:id])
-    @users = current_user.users_without_current_user
+    @users = User.find(:all, :conditions => ["id != ?", current_user.id])
     @menu = create_menu_from_items(@provider)  
 
   end
@@ -129,28 +129,28 @@ class GiftsController < ApplicationController
     @provider = Provider.find(params[:provider_id])
     @receiver = User.find(params[:user_id])
     @menu = create_menu_from_items(@provider)
-    @gift = Gift.new
-    @gift.provider_id = @provider.id
-    @gift.provider_name = @provider.name
-    @gift.receiver_id = @receiver.id
-    @gift.receiver_name = @receiver.username
-    @gift.giver_name = current_user.username
-    @gift.giver_id = current_user.id
-    @gift.receiver_phone = @receiver.phone     
+    @gift                 = Gift.new
+    @gift.provider_id     = @provider.id
+    @gift.provider_name   = @provider.name
+    @gift.receiver_id     = @receiver.id
+    @gift.receiver_name   = @receiver.username
+    @gift.giver_name      = current_user.username
+    @gift.giver_id        = current_user.id
+    @gift.receiver_phone  = @receiver.phone     
   end
 
   def choose_from_contacts
     @provider = Provider.find(params[:provider_id])
-    @item = Item.find(params[:item_id])
+    @item  = Item.find(params[:item_id])
     @users = User.all
-    @gift = Gift.new
     @price = params[:price]
-    @gift.provider_id = @provider.id
+    @gift               = Gift.new
+    @gift.provider_id   = @provider.id
     @gift.provider_name = @provider.name
-    @gift.item_id = @item.id
-    @gift.item_name = @item.item_name
-    @gift.giver_name = current_user.username
-    @gift.giver_id = current_user.id   
+    @gift.item_id       = @item.id
+    @gift.item_name     = @item.item_name
+    @gift.giver_name    = current_user.username
+    @gift.giver_id      = current_user.id   
   end
 
   def edit

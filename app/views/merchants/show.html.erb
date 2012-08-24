@@ -12,10 +12,9 @@
   </ul>
     <div id="myTabContent" class="tab-content">
       <div class="tab-pane fade in active" id="panel">
-        <%= link_to "Public Profile", provider_path(@provider) %>  |
         <%= link_to "Message Center", '#' %>                       |
-        <%= link_to "Customers", '#' %>                            |
-        <%= link_to "Orders", redeems_merchant_path(@provider) %>                               |
+        <%= link_to "Customers", customers_merchant_path(@provider) %> |
+        <%= link_to "Orders", redeems_merchant_path(@provider) %> |
         <%= link_to "Search", '#' %>                               |
         <%= link_to "Reports", '#' %>                              |
         <%= link_to "Staff", '#' %>                                |
@@ -60,7 +59,6 @@
               <th>Name</th>
               <th>Detail</th>
               <th>Price</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -72,7 +70,6 @@
               <td><%= item.item_name %></td>
               <td><%= item.detail %></td>
               <td><%= price %></td>
-              <td><%= button_to "Select", '#' %></td>
             </tr>
             <% end %>
           </tbody>

@@ -92,8 +92,9 @@ class IphoneController < AppController
   
   def drinkboard_users
     @user  = User.find_by_remember_token(params["token"])
-    @users = @user.users_without_current_user
+    @users = User.find(:all, :conditions => ["id != ?", @user.id]))    
     user_hash = hash_these_users(@users, USER_REPLY)
+    
     respond_to do |format|
       logger.debug user_hash
       format.json { render text: user_hash.to_json }

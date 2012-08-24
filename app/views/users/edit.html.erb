@@ -1,3 +1,29 @@
 <h1>Editing user</h1>
 
-
+<%= simple_form_for(@user, :html => { :multipart => true }) do |f| %>
+  <%= f.error_notification %>
+  <%= render 'shared/error_messages' %>
+  <%= link_to 'Manage Credit Cards' %>
+  <div class="form-horizontal">
+    <% if @user.photo %>
+      <%= gravatar_for @user %>
+    <% end %>
+    <%= f.label :upload_new_photo? %>
+    <%= f.file_field :photo_url %>
+    <%= f.input :first_name %>
+    <%= f.input :last_name %>
+    <%= f.input :handle %>
+    <%= f.input :email %>
+    <%= f.input :address %>
+    <%= f.input :address_2 %>
+    <%= f.input :city %>
+    <%= f.input :state %>
+    <%= f.input :zip %>
+    <%= f.input :phone %>
+  </div>
+  <div class="form-actions">
+    <%= f.submit "Update Account", :class => "btn-primary" %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                                            @user, :class => 'btn' %>
+  </div>
+<% end %>
