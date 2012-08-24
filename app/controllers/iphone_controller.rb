@@ -92,7 +92,7 @@ class IphoneController < AppController
   
   def drinkboard_users
     @user  = User.find_by_remember_token(params["token"])
-    @users = User.find(:all, :conditions => ["id != ?", @user.id]))    
+    @users = User.find(:all, :conditions => ["id != ?", @user.id])    
     user_hash = hash_these_users(@users, USER_REPLY)
     
     respond_to do |format|
