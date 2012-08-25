@@ -26,31 +26,27 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
   MM     YA.   ,A9 MM    MM MM   L.   I8 
 .JMML.    `Ybmd9'.JMML  JMML`MbmoM9mmmP' 
 */
-@import url(http://fonts.googleapis.com/css?family=Merriweather:900);
-@import url(http://fonts.googleapis.com/css?family=Gentium+Book+Basic);
+@import url(http://fonts.googleapis.com/css?family=Averia+Serif+Libre);
 @import url(http://fonts.googleapis.com/css?family=Muli);
-@import url(http://fonts.googleapis.com/css?family=Dosis);
+@import url(http://fonts.googleapis.com/css?family=Oleo+Script);
+
 
 h1 {
-	font-family: 'Merriweather', serif;
-	//font-family: 'Gentium+Book+Basic', serif;
+	font-family: 'Oleo Script', serif;
 	color: @darkGrey;
 	padding: 20px 0 20px 0;
 	font-size: 2.9em;
-	/*text-shadow: 1px 1px 0 @red,
-				 2px 2px 0 @red,
+	font-weight: normal;
+	text-shadow: 1px 1px 0 @red,
 				 0px 0px 0 @red,
-				-1px -1px 0 @red,
-			    -2px -2px 0 @red;
-	*/
+				-1px -1px 0 @red;
 }
 
-
-
 h2 {
-	font-family: 'Dosis', sans-serif;
+	font-family: 'Averia Serif Libre', sans-serif;
 	color: #282424;
 	font-weight: normal;
+	font-size: 1.6em;
 }
 
 /*                                                              
@@ -66,13 +62,15 @@ h2 {
                                                            OOb"                          
 */
 
+.redBorder {
+	border: 1px solid red;
+}
+
 * { 
   -moz-box-sizing: border-box; 
   -webkit-box-sizing: border-box; 
   box-sizing: border-box; 
-}
 
-* {
   -webkit-transition: all 0.5s ease;
   -moz-transition:    all 0.5s ease;
   -ms-transition:     all 0.5s ease;
@@ -91,13 +89,21 @@ label {
 }
 
 input.btn {
-	margin-top: 10px;
-	font-size: 1em;
+	margin-top: 0px;
+	font-size: 1.5em;
+	box-shadow: 0 0 2px @darkGrey;
+	transition: box-shadow .5s ease-in-out;
+	-moz-transition: box-shadow .5s ease-in-out;
+	-webkit-transition: box-shadow .5s ease-in-out;
+
+	&:hover {
+		box-shadow: 0 0 10px @darkGrey;
+	}
 }
 
 input, textarea, select, .uneditable-input {
 	color: @red;
-	font-family: 'Merriweather', sans-serif;
+	font-family: 'Oleo Script', sans-serif;
 	font-size: .9em;
 	letter-spacing: .03em;
 	padding: 0 0 0 10px;
@@ -117,6 +123,17 @@ body {
 	width: 100%;
 	height: 100%;
 }
+
+.borderBox {
+	border: 6px solid #282424;
+	border-radius: 10px;
+}
+
+.hero-unit {
+	background: @lightGrey;
+	border: 6px solid #282424;
+	border-radius: 10px;
+}
 	
 
 /*                 
@@ -130,18 +147,19 @@ body {
 .JMML.  .JMML.`Mbmmd' `Moo9^Yo.`Wbmd"MML.`Mbmmd'.JMML.   
 */
 
-.logIn, .borderBox {
+.logIn {
 	max-width: 450px;
 	margin: 0 auto;
 	background-color: #CBCFD5;
-	border: 6px solid #282424;
+	
 	/*
 	-moz-box-shadow: 0 0 5px 4px #888;
  -webkit-box-shadow: 0 0 5px 4px #888;
          box-shadow: 0 0 5px 4px #888;
     */
-	border-radius: 10px;
+	
 	padding: 20px;
+	margin-top: 200px;
 
 	.loginForm {
 		max-width: 300px;
@@ -161,10 +179,19 @@ body {
 		left: -153px;
 		width: 260px;
 		height: 260px;
-		
 	}
+}  
 
-}        
+.logOff h2 {
+	font-size: 1.5em;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	text-align: right;
+	color: @darkGrey;
+	padding: 20px;
+}      
 
 /*                                                                                           
                             ,,                                         ,,                  
@@ -181,7 +208,8 @@ body {
 
 
 .chooseUser {
-
+	max-width: 450px;
+	margin: 0 auto;
 
 	h2.username {
 		

@@ -1,9 +1,9 @@
-<div class="center hero-unit">
+<div class="row-fluid">
 
 
 <div class="row">
-  <aside class="span8 offset2">
-    <section>
+
+
       <h1>
         <%= gravatar_for @user %>
         <%= @user.username %>
@@ -12,9 +12,9 @@
       <%= render 'shared/stats' %>
 
   
-      <p><%= render 'shared/micropost_form' %></p>
-    </section>
-  </aside>
+    <p1><%= render 'shared/micropost_form' %></p1>
+
+
   
       <div> 
       <%= link_to "Edit Profile", edit_user_path(current_user) %> | 
