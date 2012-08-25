@@ -14,8 +14,7 @@
   <% Time::DATE_FORMATS[:custom_form] = "%b %e" %>
 </head>
 <body>
-
-  <div class="container-fluid">
+  <div class="container-fluid mainWrapper">
     <% if params[:controller] == 'admins' %>
       <%= render 'layouts/login' %>
     <% else %>
@@ -29,11 +28,8 @@
         <%= render 'layouts/intro' %>
       <% end %>
     <% end %>
-    <div class="row-fluid">
-      <div>
-        <div class="gradientBackground"></div>
-        <%= yield %>
-      </div>
+    <div class="mainContent center">
+      <%= yield %>
     </div>
     <p>
       <% if mobile_device? %>
