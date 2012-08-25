@@ -14,7 +14,7 @@
 
 <% @gifts.each do |gift| %>
   <tr>
-    <td><%= button_to "Redeem Now", redeems_path(gift_id: gift.id), {:class => "btn"} %></td>
+    <td><%= button_to "Redeem Now", redeems_path(gift_id: gift.id) %></td>
     <td colspan="2">
       <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
       <%= gift.quantity %>&nbsp;<%= gift.item_name %>
@@ -25,7 +25,7 @@
     <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
     <td><%= list_icon_with_id_for gift.giver_id %></td>
     <td><%= gift.giver_name %></td>
-    <td><%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: gift.giver_id), {:class => "btn"} %></td>
+    <td><%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: gift.giver_id) %></td>
   </tr>
 <% end %>
 </table>
