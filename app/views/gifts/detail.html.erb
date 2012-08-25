@@ -14,5 +14,5 @@
   <%= @gift.message %>
 </p>
 
-<%= button_to 'Past Gifts', past_gifts_path, method: :get %>
-<%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id) %>
+<%= button_to 'Past Gifts', past_gifts_path, method: :get  %>
+<%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id), {:class => "btn"}  %>
