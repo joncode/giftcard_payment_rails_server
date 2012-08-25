@@ -1,7 +1,7 @@
 @import "twitter/bootstrap";
 
 // import responsive layout
-@import "twitter/bootstrap/responsive";
+//@import "twitter/bootstrap/responsive";
 
 // Set the correct sprite paths
 @iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
@@ -23,12 +23,12 @@
 @highlight_shade: rgba(190,173,161,1);
 @middle_shade: rgba(151,110,78,0.8);
 @dark_shade:rgba(100,71,40,0.5);
-@darker_shade: rgba(77,34,20,0.8) ;
-@navbarBackground: @highlight_shade;
-@navbarBackgroundHighlight: @middle_shade;
+//@darker_shade: rgba(77,34,20,0.8) ;
+//@navbarBackground: @highlight_shade;
+//@navbarBackgroundHighlight: @middle_shade;
 @navbarText: #eee;
 @navbarLinkColor: #eee;
-@bodyBackground: #eee;
+//@bodyBackground: #eee;
 @navbarHeight: 60px;
 @navbarLinkBackgroundHover: transparent;
 
@@ -97,20 +97,12 @@ footer ul li {
 
 /*** site  ****/
 body { padding-top: 150px;
-	background-color	: #222;
+	//background-color	: #222;
 	 }
 
 a.brand {
 	margin : 0px;
 	padding : 0px;
-}
-
-h1, h2, h3, h4, h5, p , strong, li, a ,td {
-	font-family: 'MarkerFelt';
-	font-weight: normal;
-	letter-spacing: 2px;
-	font-size : 125%;
-	color : #9ba;
 }
 
 strong {
@@ -143,14 +135,7 @@ ul {
 
 
 /* forms */
-input, textarea, select, .uneditable-input {
-	border: 1px solid #bbb;
-	width: 100%;
-	padding: 10px;
-	height: 50px;
-	margin-bottom: 15px;
-	/* @include box_sizing; */
-}
+
 
 #error_explanation {
 	color:#f00;
@@ -287,27 +272,6 @@ aside {
 	.gravatar {
 		margin: 1px 1px;
 	}
-}
-
-
-.gradientBackground {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: -1000;
-
-background: rgb(240,183,161); /* Old browsers */
-background: -moz-linear-gradient(top,  @highlight_shade 16%, @dark_shade 67%, @darker_shade 88%, @middle_shade 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(16%,@highlight_shade), color-stop(67%,@dark_shade), color-stop(88%,@darker_shade), color-stop(100%,@middle_shade)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  @highlight_shade 16%,@dark_shade 67%,@darker_shade 88%,@middle_shade 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  @highlight_shade 16%,@dark_shade 67%,@darker_shade 88%,@middle_shade 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  @highlight_shade 16%,@dark_shade 67%,@darker_shade 88%,@middle_shade 100%); /* IE10+ */
-background: linear-gradient(to bottom,  @highlight_shade 16%,@dark_shade 67%,@darker_shade 88%,@middle_shade 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0b7a1', endColorstr='#bf6e4e',GradientType=0 ); /* IE6-9 */
-
-
 }
 
 td {

@@ -1,29 +1,17 @@
-<div class="center hero-unit">
-  <div class="row">
-    <h1><strong><%= PAGE_NAME %></strong>&nbsp;<%= image_tag "88-beer-glass-gray.png" %></h1>
-    <table class="table table-striped">
-      <thead>
-        <td></td>
-        <td><h2>Choose a User to Sign In As ...</h2></td>
-        <td></td>
-      </thead>
-      <tbody>  
-        <% @users.each do |u| %>
-          <tr>
-            <td><%= u.password %></td>
-            <td><%= u.username %></td>
-            <td>
-              <%= button_to "Sign In As", sessions_path(email: u.email, page: 'development'), :class => 'btn btn-large btn-info'%>
-            </td>
-          </tr>
-        <% end %>
-        </tr>
-        <tr>
-          <td></td>
-          <td>New User</td>
-          <td><%= link_to "Sign Up", signup_path, class: "btn btn-large btn-success" %></td>
-        </tr>
-      </tbody>
-      </table>
+<div class="row-fluid">
+  <%= link_to image_tag("logoCap1.png"), home_path, {:class => "brand"} %>
+</div>
+
+<div class="chooseUser borderBox center container-fluid">
+
+  <h1 class="row-fluid center">Choose a user to sign in as...</h1>
+  <div class="">
+    <% @users.each do |u| %>
+      <h2><%= u.password %></h2>
+      <h2 class="username"><%= u.username %></h2>
+      <%= button_to "Sign In", sessions_path(email: u.email, page: 'development'), :class => 'btn btnSignIn'%>
+    <% end %>
+    <h2>New User</h2>
+    <%= link_to "Sign Up", signup_path, class: "btn btn-large btn-success" %>
   </div>
 </div>

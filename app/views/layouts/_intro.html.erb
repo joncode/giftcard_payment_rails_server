@@ -1,15 +1,9 @@
-<div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <h1>
-        <%= link_to image_tag("logo5.png"), home_path, {:class => "brand"} %>
-      </h1>
-      <div class="nav-collapse">
-      <ul class="nav pull-right">
-        <li><%= link_to "Log Off", root_path %></li>
-      </ul> 
-      </div>
-    </div>
+<div class="">
+  <%= render 'layouts/header' %>
+  <div class="nav-collapse">
+    <ul class="nav pull-right">
+      <li><%= link_to "Log Off", root_path %></li>
+    </ul> 
   </div>
 </div>
 <% flash.each do |name, msg| %>

@@ -1,14 +1,17 @@
 <% provide(:title, "Sign in") %>
-<div class="center hero-unit">
-  <h2>Log In with your Admin Credentials</h2>
-  <div class="row">
-    <div class="span6 offset3">
+
+<div class="center logIn">
+  <div class="loginHeader">
+  <%= link_to image_tag("logoCap1.png"), home_path, {:class => "brand"} %>
+</div>
+  <h1 class="row-fluid">Please Log in</h1>
+  <div class="row-fluid loginForm">
       <%= form_for(:admin, url: admins_path) do |f| %>
-        <%= f.label :username %>
-        <%= f.text_field :username, value: 'wibble' %>
-        <%= f.label :password %>
-        <%= f.password_field :password, value: 'drivein' %>
-        <%= f.submit "Log in", class: "btn btn-large btn-danger" %>
+        <h2 class="row-fluid"><%= f.label :username %></h2>
+        <h2><%= f.text_field :username, value: 'wibble' %></h2>
+        <h2 class="row-fluid"><%= f.label :password %></h2>
+        <h2><%= f.password_field :password, value: 'drivein' %></h2>
+        <%= f.submit "Log in", class: "btn btn-large " %>
       <% end %>
     </div>
   </div>
