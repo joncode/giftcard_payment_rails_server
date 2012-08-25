@@ -1,0 +1,241 @@
+/*                                                                
+                                     ,,                          
+     ,.-==-.       .g8"""bgd       `7MM                          
+  ,pd'      `g.  .dP'     `M         MM                          
+ ,P   ,dMb.A  Y. dM'       `,pW"Wq.  MM  ,pW"Wq.`7Mb,od8 ,pP"Ybd 
+,P   dP  ,MP  j8 MM        6W'   `Wb MM 6W'   `Wb MM' "' 8I   `" 
+8:  dM'  dM   d' MM.       8M     M8 MM 8M     M8 MM     `YMMMa. 
+Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8 
+ Wb  ``""^`"'      `"bmmmd' `Ybmd9'.JMML.`Ybmd9'.JMML.   M9mmmP' 
+  `M..     .,!                                                   
+    `Ybmmd'                                                      
+*/
+
+@darkGrey: #282424;
+@midGrey: #CBCFD5;
+@lightGrey: #DDE0E7;
+@red: #C7282D;
+
+
+/*                                     
+`7MM"""YMM                  mm           
+  MM    `7                  MM           
+  MM   d  ,pW"Wq.`7MMpMMMbmmMMmm ,pP"Ybd 
+  MM""MM 6W'   `Wb MM    MM MM   8I   `" 
+  MM   Y 8M     M8 MM    MM MM   `YMMMa. 
+  MM     YA.   ,A9 MM    MM MM   L.   I8 
+.JMML.    `Ybmd9'.JMML  JMML`MbmoM9mmmP' 
+*/
+@import url(http://fonts.googleapis.com/css?family=Averia+Serif+Libre);
+@import url(http://fonts.googleapis.com/css?family=Muli);
+@import url(http://fonts.googleapis.com/css?family=Oleo+Script);
+
+
+h1 {
+	font-family: 'Oleo Script', serif;
+	color: @darkGrey;
+	padding: 20px 0 20px 0;
+	font-size: 2.9em;
+	font-weight: normal;
+	text-shadow: 1px 1px 0 @red,
+				 0px 0px 0 @red,
+				-1px -1px 0 @red;
+}
+
+h2 {
+	font-family: 'Averia Serif Libre', sans-serif;
+	color: #282424;
+	font-weight: normal;
+	font-size: 1.6em;
+}
+
+/*                                                              
+                         ,,                                          ,,                  
+`7MMM.     ,MMF'         db                  .M"""bgd mm           `7MM                  
+  MMMb    dPMM                              ,MI    "Y MM             MM                  
+  M YM   ,M MM  ,6"Yb. `7MM `7MMpMMMb.      `MMb.   mmMMmm `7M'   `MFMM  .gP"Ya  ,pP"Ybd 
+  M  Mb  M' MM 8)   MM   MM   MM    MM        `YMMNq. MM     VA   ,V MM ,M'   Yb 8I   `" 
+  M  YM.P'  MM  ,pm9MM   MM   MM    MM      .     `MM MM      VA ,V  MM 8M"""""" `YMMMa. 
+  M  `YM'   MM 8M   MM   MM   MM    MM      Mb     dM MM       VVV   MM YM.    , L.   I8 
+.JML. `'  .JMML`Moo9^Yo.JMML.JMML  JMML.    P"Ybmmd"  `Mbmo    ,V  .JMML.`Mbmmd' M9mmmP' 
+                                                             ,V                         
+                                                           OOb"                          
+*/
+
+.redBorder {
+	border: 1px solid red;
+}
+
+* { 
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box; 
+
+  -webkit-transition: all 0.5s ease;
+  -moz-transition:    all 0.5s ease;
+  -ms-transition:     all 0.5s ease;
+  -o-transition:      all 0.5s ease;
+}
+
+label {
+	font-family: 'Dosis', sans-serif;
+	font-size: 1em; 
+	font-weight: normal;
+	display: block;
+	min-width: 300px;
+	text-align: center;
+	margin: 10px 0 10px 0;
+
+}
+
+input.btn {
+	margin-top: 0px;
+	font-size: 1.5em;
+	box-shadow: 0 0 2px @darkGrey;
+	transition: box-shadow .5s ease-in-out;
+	-moz-transition: box-shadow .5s ease-in-out;
+	-webkit-transition: box-shadow .5s ease-in-out;
+
+	&:hover {
+		box-shadow: 0 0 10px @darkGrey;
+	}
+}
+
+input, textarea, select, .uneditable-input {
+	color: @red;
+	font-family: 'Oleo Script', sans-serif;
+	font-size: .9em;
+	letter-spacing: .03em;
+	padding: 0 0 0 10px;
+	margin: 0;
+	height: 40px;
+	width: 100%;
+	border-radius: 10px;
+	-moz-box-shadow: inset 0 0 0px 3px @darkGrey;
+ -webkit-box-shadow: inset 0 0 0px 3px @darkGrey;
+         box-shadow: inset 0 0 0px 3px @darkGrey;
+    background-color: 0;
+}
+
+body {
+	background-color: #DDE0E7;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.borderBox {
+	border: 6px solid #282424;
+	border-radius: 10px;
+}
+
+.hero-unit {
+	background: @lightGrey;
+	border: 6px solid #282424;
+	border-radius: 10px;
+}
+	
+
+/*                 
+                                     ,,                  
+`7MMF'  `7MMF'                     `7MM                  
+  MM      MM                         MM                  
+  MM      MM  .gP"Ya   ,6"Yb.   ,M""bMM  .gP"Ya `7Mb,od8 
+  MMmmmmmmMM ,M'   Yb 8)   MM ,AP    MM ,M'   Yb  MM' "' 
+  MM      MM 8M""""""  ,pm9MM 8MI    MM 8M""""""  MM     
+  MM      MM YM.    , 8M   MM `Mb    MM YM.    ,  MM     
+.JMML.  .JMML.`Mbmmd' `Moo9^Yo.`Wbmd"MML.`Mbmmd'.JMML.   
+*/
+
+.logIn {
+	max-width: 450px;
+	margin: 0 auto;
+	background-color: #CBCFD5;
+	
+	/*
+	-moz-box-shadow: 0 0 5px 4px #888;
+ -webkit-box-shadow: 0 0 5px 4px #888;
+         box-shadow: 0 0 5px 4px #888;
+    */
+	
+	padding: 20px;
+	margin-top: 200px;
+
+	.loginForm {
+		max-width: 300px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+.loginHeader {
+	height: 0;
+	width: 500px;
+
+	img {
+		display: block;
+		position: relative;
+		top: -222px;
+		left: -153px;
+		width: 260px;
+		height: 260px;
+	}
+}  
+
+.logOff h2 {
+	font-size: 1.5em;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	text-align: right;
+	color: @darkGrey;
+	padding: 20px;
+}      
+
+/*                                                                                           
+                            ,,                                         ,,                  
+`7MM"""Yp,                `7MM                 .M"""bgd mm           `7MM                  
+  MM    Yb                  MM                ,MI    "Y MM             MM                  
+  MM    dP  ,pW"Wq.    ,M""bMM `7M'   `MF'    `MMb.   mmMMmm `7M'   `MFMM  .gP"Ya  ,pP"Ybd 
+  MM"""bg. 6W'   `Wb ,AP    MM   VA   ,V        `YMMNq. MM     VA   ,V MM ,M'   Yb 8I   `" 
+  MM    `Y 8M     M8 8MI    MM    VA ,V       .     `MM MM      VA ,V  MM 8M"""""" `YMMMa. 
+  MM    ,9 YA.   ,A9 `Mb    MM     VVV        Mb     dM MM       VVV   MM YM.    , L.   I8 
+.JMMmmmd9   `Ybmd9'   `Wbmd"MML.   ,V         P"Ybmmd"  `Mbmo    ,V  .JMML.`Mbmmd' M9mmmP' 
+                                  ,V                            ,V                         
+                               OOb"                          OOb"                                                                          
+*/   
+
+
+.chooseUser {
+	max-width: 450px;
+	margin: 0 auto;
+
+	h2.username {
+		
+	}
+
+	.btnSignIn {
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

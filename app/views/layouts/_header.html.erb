@@ -4,34 +4,29 @@
     <%= msg %>
   </div>
 <% end %>
-<div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
-      <h1>
-        <%= link_to image_tag("logo5.png"), home_path, {:class => "brand"} %>
-      </h1>
-      
-      <div class="nav pull-right">
-        <% if signed_in? %>
-        <ul class="nav">
-          
-          <li><%= link_to "Gift", gifts_path %></li>
-          <li><%= link_to "Buys", buy_gifts_path %></li>
-          <li><%= link_to "Social", activity_gifts_path %></li>
-          <ul class="nav pull-right">
-              <li id="fat-menu" class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.username %> <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                      <li><%= link_to "Profile", current_user %></li>
-                      <li><%= link_to "Settings" %></li>
-                      <li class="divider"></li>
-                      <li><%= link_to "Sign out", signout_path, method: :delete %></li>
-                    </ul>
-              </li>
-          </ul>
-        </ul>
-        <% end %>
-      </div>
-    </div>
-  </div>
+<!--!
+<div class="loginHeader">
+  <%= link_to image_tag("logoCap1.png"), home_path, {:class => "brand"} %>
 </div>
+ !-->
+<div class="nav row-">
+  <% if signed_in? %>
+  <ul class="nav">    
+    <li><%= link_to "Gift", gifts_path %></li>
+    <li><%= link_to "Buys", buy_gifts_path %></li>
+    <li><%= link_to "Social", activity_gifts_path %></li>
+      <ul class="nav">
+        <li id="fat-menu" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.username %> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to "Profile", current_user %></li>
+                <li><%= link_to "Settings" %></li>
+                <li class="divider"></li>
+                <li><%= link_to "Sign out", signout_path, method: :delete %></li>
+              </ul>
+          </li>
+        </ul>
+      </ul>
+      <% end %>
+</div>
+
