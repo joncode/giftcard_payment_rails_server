@@ -1,8 +1,8 @@
-<div class="center borderBox">
+<div class="center">
   <table>
     <thead>
       <tr>
-        <th colspan="5">Who's About</th>
+        <th colspan="4">Who's About</th>
       </tr>
     </thead>
     <tbody>
@@ -12,7 +12,6 @@
           <td><%= link_to user.username, user %></td>
           <td><%= user.full_address %></td>
           <td><%= number_to_phone user.phone %>
-          <td></td>
         </tr>
       <% end %>
     </tbody>

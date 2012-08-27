@@ -63,7 +63,7 @@
               <td><%= item.item_name %></td>
               <td><%= item.detail %></td>
               <td><%= price %></td>
-              <td><%= button_to "Select", '#' %></td>
+              <td><%= button_to "Select", choose_from_contacts_gifts_path(provider_id: @provider.id, item_id: item.id, price: price) %></td>
             </tr>
             <% end %>
           </tbody>
