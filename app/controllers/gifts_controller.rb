@@ -77,6 +77,7 @@ class GiftsController < ApplicationController
     @gift.item_id = @item.id
     @gift.price = params[:price]
     @gift.item_name = @item.item_name
+    @provider.sales_tax ||= "5"
     
 
     respond_to do |format|

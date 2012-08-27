@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120825021020) do
+ActiveRecord::Schema.define(:version => 20120827183154) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(:version => 20120825021020) do
     t.string   "website"
     t.string   "photo"
     t.string   "staff_id"
+    t.string   "sales_tax"
   end
 
   create_table "redeems", :force => true do |t|

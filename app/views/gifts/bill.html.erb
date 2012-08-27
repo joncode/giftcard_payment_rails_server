@@ -5,7 +5,7 @@
 		  <div class="span7 borderBox">
 			<form action="<%= gifts_path %>" method="post" name="order" id="order">
 					<legend class="label">Order Details</legend>
-					<div class="row">						
+					<div class="row">
 						<div class="span3">
 						  <label for="receiver" class="label">For:</label>
 						  <label><%= list_icon_with_id_for @gift.receiver_id %></label>
@@ -38,27 +38,27 @@
 					<div class="row">
 					  <div class="span3">
 					    <span>Quantity:</span>
-              <button class="btn" type="button">-</button>
-              <button class="btn" type="button">+</button>
+              <button class="btn disabled" type="button" id="decreaseQ">-</button>
+              <button class="btn" type="button" id="increaseQ">+</button>
 						</div>
 						<div class="span3">
-              <input class="span1" id="quantity" size="16" type="text" value="1"/>
+              <input class="span1" id="quantityAmount" size="16" type="text" />
 						</div>
 					</div>
 					<div class="row">
 					  <div class="span3">
-              <span>Local Sales Tax: 10%</span>
+              <span>Local Sales Tax: <%= @provider.sales_tax.to_i %>%</span>
 						</div>
 						<div class="span3">
-              <span id="tax" class="label">???</span>
+              <span id="taxAmount" class="label">Calculating ...</span>
 						</div>
 					</div>
 					<div class="row">
 					  <div class="span3">
-              <label for="item" class="label">SubTotal:</label>
+              <label for="subTotal" class="label">SubTotal:</label>
 						</div>
 						<div class="span3">
-              <label for="item" class="label">???</label>
+              <label for="subTotalAmount" id="subTotalAmount" class="label">Calculating ...</label>
 						</div>
 					</div>
 					<div class="row">
@@ -87,6 +87,101 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+  $(function() {
+    var price = <%= @gift.price.to_i %>;
+    var quantity = 1;
+    $('#quantityAmount').val(quantity);
+    var sales_tax = <%= @provider.sales_tax.to_i %>;
+    var preTaxTotal = price * quantity;
+    calcSubTotal(preTaxTotal, sales_tax);
+    $('#increaseQ').click(function() {
+      quantity = increaseQuantity(price, quantity, sales_tax);
+    });
+    $('#decreaseQ').click(function() {
+      if (!$(this).hasClass('disabled')) {
+        quantity = decreaseQuantity(price, quantity, sales_tax);
+      }
+    });
+    $('input#quantityAmount').blur(function() {
+      var fieldValue = $(this).val();
+      if (isNaN(fieldValue)) {
+        alert('please supply a number');
+        $(this).val(quantity);
+      }
+      if (fieldValue < 1) {
+        alert('please supply a number 1 or more');
+        $(this).val(quantity);
+      }
+      if (fieldValue > 0) {
+        quantity = updateQuantity(price, fieldValue, sales_tax);
+      }
+    });
+  });
+  
+  function calcSubTotal(preTaxTotal, sales_tax) {
+    var taxAmount   = (preTaxTotal * sales_tax)/100;
+    $('span#taxAmount.label').text('$ ' + taxAmount);
+    var subTotal    = preTaxTotal + taxAmount;
+    $('label#subTotalAmount.label').text('$ ' + subTotal);
+  };
+  
+  function updateQuantity(price, quantity, sales_tax) {
+    var preTaxTotal = price * quantity; 
+    calcSubTotal(preTaxTotal, sales_tax);
+    controlDecreaseQ(quantity); 
+    return quantity;
+  };
+  
+  function increaseQuantity(price, quantity, sales_tax) {
+      quantity ++;
+      // add updated quantity to input field
+      $('#quantityAmount').val(quantity);
+      // enable the minus button if its disabled or new quantity == 2
+      controlDecreaseQ(quantity); 
+      // re-run calSubTotal with new quantity amount
+      var preTaxTotal = price * quantity; 
+      calcSubTotal(preTaxTotal, sales_tax);
+
+      return quantity;       
+  };
+  
+  function decreaseQuantity(price, quantity, sales_tax) {
+      quantity --;
+      // add updated quantity to input field
+      $('#quantityAmount').val(quantity);
+      // enable the minus button if its disabled or new quantity == 2
+      controlDecreaseQ(quantity); 
+      // re-run calSubTotal with new quantity amount
+      var preTaxTotal = price * quantity; 
+      calcSubTotal(preTaxTotal, sales_tax); 
+      return quantity;       
+  };
+  
+  function controlDecreaseQ(quantity) {
+      if (quantity == 1) {
+        $('#decreaseQ').addClass('disabled');  
+      }
+      if ((quantity > 1) && $('#decreaseQ').hasClass('disabled')) {
+        $('#decreaseQ').removeClass('disabled');  
+      }
+  }
+  
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
 
