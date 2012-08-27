@@ -1,122 +1,92 @@
 <div class="wrapper">
 	<div class="content">
-		<div class="bill">
-			<form action="../chapter10/order.php" method="post" name="order" id="order">
-				<fieldset>
-					<legend>Order Details</legend>
-					<div>
-						<label for="name" class="label">For:</label>
-						<input name="name" type="text" id="name" size="36" value="<%= @gift.receiver_name %>">
-					</div>
-					<div>
-						<label for="address" class="label">Location:</label>
-						<input name="address" type="text" id="address" size="36" value="<%= @gift.provider_name %>">
-					</div>
-					<div>
-						<label for="city" class="label">City</label>
-						<input name="city" type="text" id="city" size="36">
-					</div>
-					<div>
-						<label for="city" class="label">State/Province</label>
-						<input name="city" type="text" id="city" size="36">
-					</div>
-					<div>
-						<label for="zip" class="label">Postal Code</label>
-						<input name="zip" type="text" id="zip" size="36">
-					</div>
-					<div><span class="label">Payment Method</span>
-						<input type="radio" name="payment" id="paypal" value="paypal">
-						<label for="paypal">PayPal</label>
-						<input type="radio" name="payment" id="visa" value="visa">
-						<label for="visa">Visa</label>
-						<input type="radio" name="payment" id="mastercard" value="mastercard">
-						<label for="mastercard">MasterCard</label>
-					</div>
-					<div id="creditCard" class="indent">
-						<div>
-							<label for="cardNumber" class="label">Card Number</label>
-							<input type="text" name="cardNumber" id="cardNumber">
+		<div class="row">
+		  <div class="span2">&nbsp;</div>
+		  <div class="span7 borderBox">
+			<form action="<%= gifts_path %>" method="post" name="order" id="order">
+					<legend class="label">Order Details</legend>
+					<div class="row">						
+						<div class="span3">
+						  <label for="receiver" class="label">For:</label>
+						  <label><%= list_icon_with_id_for @gift.receiver_id %></label>
 						</div>
-						<div>
-							<label for="expiration" class="label">Expiration Date</label>
-							<input type="text" name="expiration" id="expiration">
+						<div class="span3">
+						  <label name="provider" class="label" ><%= @gift.receiver_name %></label>
+						  <span><%= User.find(@gift.receiver_id).handle %></span>
 						</div>
 					</div>
-				</fieldset>
-				<fieldset>
-					<legend>Shipping Information</legend>
-					<div class="indent">
-						<input type="checkbox" name="hideShip" id="hideShip">
-						<label for="hideShip">Same as billing</label>
-					</div>
-					<div id="shipping">
-						<div>
-							<label for="shipName" class="label">Name</label>
-							<input name="shipName" type="text" id="shipName" size="36">
+					<div class="row">
+					  <div class="span3">
+  						<label for="provider" class="label">Location:</label>					    
+						  <label><%= logo_from_id_for @gift.provider_id %></label>
 						</div>
-						<div>
-							<label for="shipAddress" class="label">Address</label>
-							<input name="shipAddress" type="text" id="shipAddress" size="36">
-						</div>
-						<div>
-							<label for="shipCity" class="label">City</label>
-							<input name="shipCity" type="text" id="shipCity" size="36">
-						</div>
-						<div>
-							<label for="shipState" class="label">State/Province</label>
-							<input name="shipState" type="text" id="shipState" size="36">
-						</div>
-						<div>
-							<label for="shipZip" class="label">Postal Code</label>
-							<input name="shipZip" type="text" id="shipZip" size="36">
-						</div>
-						<div>
-							<label for="shipCountry" class="label">Country</label>
-
+						<div class="span3">
+						  <label name="receiver" class="label" ><%= @gift.provider_name %></label>
+						  <span><%= @gift.provider.full_address %></span>
 						</div>
 					</div>
-				</fieldset>
+					<div class="row">
+					  <div class="span3">
+  						<label for="item" class="label">Item:</label>
+						  <label><%= image_tag get_category_image(@gift), {:class => 'iconListView'} %></label>
+						</div>
+						<div class="span3">
+						  <label name="receiver" class="label" ><%= @gift.item_name %></label>
+						  <span>$<%= @gift.price %></span>
+						</div>
+					</div>
+					<div class="row">
+					  <div class="span3">
+					    <span>Quantity:</span>
+              <button class="btn" type="button">-</button>
+              <button class="btn" type="button">+</button>
+						</div>
+						<div class="span3">
+              <input class="span1" id="quantity" size="16" type="text" value="1"/>
+						</div>
+					</div>
+					<div class="row">
+					  <div class="span3">
+              <span>Local Sales Tax: 10%</span>
+						</div>
+						<div class="span3">
+              <span id="tax" class="label">???</span>
+						</div>
+					</div>
+					<div class="row">
+					  <div class="span3">
+              <label for="item" class="label">SubTotal:</label>
+						</div>
+						<div class="span3">
+              <label for="item" class="label">???</label>
+						</div>
+					</div>
+					<div class="row">
+					  <div class="span3 input-append" data-toggle="buttons-radio">Tip:
+                 <button type="button" class="btn">$1 per</button>
+                 <button type="button" class="btn">15%</button>
+                 <button type="button" class="btn">20%</button>
+						</div>
+						<div class="span3">
+              <input class="span2" id="tip" size="16" type="text" value="Please leave a tip"/>
+						</div>
+					</div>
+					<div class="row">
+					  <div class="span3">
+					    	<label for="total" class="label">Total:</label>
+                <span id="total">Click here to Send Gift</span>
+						</div>
+						<div class="span3">
+              <label for="item" class="label">???</label>
+        			<input class="btn btn-large btn-info disabled" type="button" name="submit" id="submit" value="Please Leave a Tip">
+						</div>
+					</div>					
 			</form>
+			</div>
+			<div class="span2">&nbsp;</div>
 		</div>
 	</div>
 </div>
 
-<div class="center">
-  <div class="row">
-    <table>
-      <thead>
-        <th colspan="2">Order Details</th>
-      </thead>
-      <tbody>
-        <tr><td colspan="2">For:<%= list_icon_with_id_for @gift.receiver_id %>&nbsp;<%= @gift.receiver_name %></td></tr>
-        <tr><td colspan="2">Where:<%= logo_from_id_for @gift.provider_id %>&nbsp;<%= @gift.provider_name %></td></tr>
-        <tr><td><%= @gift.item_name %></td><td>$<%= @gift.price %></td></tr>
-        <tr><td>
-          <div class="input-append">Quantity:
-            <button class="btn" type="button">-</button>
-            <button class="btn" type="button">+</button></div></td><td><div>
-            <input class="span2" id="appendedInputButtons" size="16" type="text" value="1"/>
-          </div>
-        </td></tr>
-        <tr><td>Tax:</td><td></td></tr>
-        <tr><td> 
-          <div class="input-append">SubTotal:</div></td><td><div>
-            <input class="span2" id="appendedInputButtons" size="16" type="text" value="<%= @gift.price * 1 %>"/>
-          </div>
-        </td></tr>
-        <tr><td> 
-          <div class="input-append" data-toggle="buttons-radio">Tip:
-            <button type="button" class="btn">$1 per</button>
-            <button type="button" class="btn">15%</button>
-            <button type="button" class="btn">20%</button></div></td>
-            <td><div><input class="span2" id="appendedInputButtons" size="16" type="text" />
-          </div>
-        </td></tr>
-        <tr><td>Total: </td><td>Please leave a tip</td></tr>
-        <tr><td colspan="2">Credit Card</td></tr>
-        <tr><td  colspan="2">Drinkboard <button type="button" class="btn">Terms & Conditions</button></td></tr>
-        <tr><td  colspan="2"><%= button_to "Buy Drink", '#', :class=>"btn-large btn-success" %></td></tr>
-      </tbody> 
-    </table>       
-  </div>
-</div>
+    
+
