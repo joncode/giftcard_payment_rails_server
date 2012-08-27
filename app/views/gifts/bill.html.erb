@@ -63,12 +63,12 @@
 					</div>
 					<div class="row">
 					  <div class="span3 input-append" data-toggle="buttons-radio">Tip:
-                 <button type="button" class="btn">$1 per</button>
-                 <button type="button" class="btn">15%</button>
-                 <button type="button" class="btn">20%</button>
+                 <button type="button" class="btn" id="perItem">$1 per</button>
+                 <button type="button" class="btn" id="fifteenPrecent">15%</button>
+                 <button type="button" class="btn" id="twentyPercent">20%</button>
 						</div>
 						<div class="span3">
-              <input class="span2" id="tip" size="16" type="text" value="Please leave a tip"/>
+              <input class="span2" id="tip" size="16" type="text" value="Choose Tip Amount"/>
 						</div>
 					</div>
 					<div class="row">
@@ -77,7 +77,7 @@
                 <span id="total">Click here to Send Gift</span>
 						</div>
 						<div class="span3">
-              <label for="item" class="label">???</label>
+              <label for="total" class="label" id="totalAmount">???</label>
         			<input class="btn btn-large btn-info disabled" type="button" name="submit" id="submit" value="Please Leave a Tip">
 						</div>
 					</div>					
@@ -93,6 +93,7 @@
     var price = <%= @gift.price.to_i %>;
     var quantity = 1;
     $('#quantityAmount').val(quantity);
+    $(':input#tip').val('Choose Tip Amount');
     var sales_tax = <%= @provider.sales_tax.to_i %>;
     var preTaxTotal = price * quantity;
     calcSubTotal(preTaxTotal, sales_tax);
@@ -104,7 +105,7 @@
         quantity = decreaseQuantity(price, quantity, sales_tax);
       }
     });
-    $('input#quantityAmount').blur(function() {
+    $(':input#quantityAmount').blur(function() {
       var fieldValue = $(this).val();
       if (isNaN(fieldValue)) {
         alert('please supply a number');
@@ -118,13 +119,73 @@
         quantity = updateQuantity(price, fieldValue, sales_tax);
       }
     });
+    $(':input#tip').focus(function() {
+      var field = $(this);
+      if (field.val()=='Choose Tip Amount') {
+        field.val('');
+      }
+    });
+    $('#tip').blur(function() {
+      var fieldValue = $(this).val();
+      if (isNaN(fieldValue)) {
+        $(this).val('Choose Tip Amount');
+      }
+      if (fieldValue < 1) {
+        $(this).val('Choose Tip Amount');
+      }
+      if (fieldValue > 0) {
+        calcTotal(parseInt(fieldValue));
+      }
+    });
+    $('#perItem').click(function() {
+      calcTip($(this).text());
+    });
+    $('#fifteenPrecent').click(function() {
+      calcTip($(this).text());
+    });
+    $('#twentyPercent').click(function() {
+      calcTip($(this).text());
+      // update send button
+      // deselect tip choice buttons
+    });    
+
   });
+  
+  function calcTip(button) {
+    if (button=='20%') {
+      subTotalString = $('label#subTotalAmount.label').text();
+      subTotal = parseFloat(subTotalString);
+      tipAmount = subTotal * 0.20;
+      $(':input#tip').val(tipAmount);
+    }
+    if (button=='15%') {
+      subTotalString = $('label#subTotalAmount.label').text();
+      subTotal = parseFloat(subTotalString);
+      tipAmount = subTotal * 0.15;
+      $(':input#tip').val(tipAmount);
+    }
+    if (button=='$1 per') {
+      tipText = $('#quantityAmount').val();
+      tipAmount = parseInt(tipText);
+      $(':input#tip').val(tipAmount);
+    }
+    calcTotal(tipAmount);
+  };
+
+  function calcTotal(tipAmount) {
+    subTotalString = $('label#subTotalAmount.label').text();
+    subTotal = parseFloat(subTotalString);
+    total = subTotal + tipAmount;
+    $('label#totalAmount.label').text(total);
+    $(':input#submit').val('Buy Gift');
+    $(':input#submit').removeClass('disabled');
+  };
   
   function calcSubTotal(preTaxTotal, sales_tax) {
     var taxAmount   = (preTaxTotal * sales_tax)/100;
     $('span#taxAmount.label').text('$ ' + taxAmount);
     var subTotal    = preTaxTotal + taxAmount;
-    $('label#subTotalAmount.label').text('$ ' + subTotal);
+    $('label#subTotalAmount.label').text(subTotal);
   };
   
   function updateQuantity(price, quantity, sales_tax) {
@@ -167,6 +228,8 @@
         $('#decreaseQ').removeClass('disabled');  
       }
   }
+
+  
   
 </script>
 
