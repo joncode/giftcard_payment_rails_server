@@ -78,6 +78,7 @@ class GiftsController < ApplicationController
     @gift.price = params[:price]
     @gift.item_name = @item.item_name
     @gift.quantity ||= 1
+    @gift.category = @item.category
     @provider.sales_tax ||= "7.25"
     @disabled = @gift.quantity == 1 ? 'disabled' : ''
 

@@ -16,7 +16,8 @@
 @gift.quantity ||= 1
 @provider.sales_tax ||= "7.25"
 @disabled = @gift.quantity == 1 ? 'disabled' : ''
-x  t.string   "giver_name"        x
+ x t.integer  "provider_id"           x
+ x  t.string   "giver_name"        x
 x  t.string   "receiver_name"     x
 x  t.string   "provider_name"     x
 x  t.string   "item_name"        x
@@ -24,21 +25,20 @@ x  t.integer  "giver_id"           x
 x  t.integer  "receiver_id"        x
 x  t.integer  "item_id"          x
 x  t.string   "price",            x   
-  t.integer  "quantity",        form 
-  t.string   "total",             form   
+x  t.integer  "quantity",        form 
+x  t.string   "total",             form   
   t.string   "credit_card",          form
- x t.integer  "provider_id"           x
   t.text     "message"               form
   t.text     "special_instructions"  n/a
   t.integer  "redeem_id"              n/a
-  t.string   "status",               callback
-  t.string   "category"              should be server
-  t.datetime "created_at",           db
-  t.datetime "updated_at",           db
+x  t.string   "status",               callback
+x  t.string   "category"              should be server
+ x t.datetime "created_at",           db
+x  t.datetime "updated_at",           db
 x  t.string   "receiver_phone"         x
-  add tax and tip to the gift fields
-  add hidden input for the total / tax
-  update hidden fields in the js
+x  add tax and tip to the gift fields
+ x add hidden input for the total / tax
+x  update hidden fields in the js
   add text field for the message
   add hidden div off click button for credit cards ?
 x  add @gift to the params somehow - put giver/receiver/provider/item id's in post params ?
@@ -61,6 +61,7 @@ end -->
     			<%= f.hidden_field :provider_name  %>
     			<%= f.hidden_field :provider_id  %>
     			<%= f.hidden_field :price  %>
+    			<%= f.hidden_field :category  %>
 					<legend class="label">Order Details</legend>
 					<div class="row">
 						<div class="span3">
@@ -85,7 +86,7 @@ end -->
 					<div class="row">
 					  <div class="span3">
   						<label for="item" class="label">Item:</label>
-						  <label><%= image_tag get_category_image(@gift), {:class => 'iconListView'} %></label>
+						  <label><%= image_tag get_category(@gift.category), {:class => 'iconListView'} %></label>
 						</div>
 						<div class="span3">
 						  <label name="receiver" class="label" ><%= @gift.item_name %></label>
@@ -107,7 +108,8 @@ end -->
               <span>Local Sales Tax: <%= @provider.sales_tax.to_f %>%</span>
 						</div>
 						<div class="span3">
-              <span id="taxAmount" class="label">Calculating ...</span>
+              <span id="taxAmount" class="label">Calculating ...</span> 
+              <%= f.hidden_field :tax , id: "taxInput" %>
 						</div>
 					</div>
 					<div class="row">
@@ -285,6 +287,7 @@ end -->
   function calcSubTotal(preTaxTotal, sales_tax) {
     var taxAmount   = (preTaxTotal * sales_tax)/100;
     $('span#taxAmount.label').text('$ ' + formatCurrency(taxAmount));
+    $(':input#taxInput').val(formatCurrency(taxAmount));
     subTotal = preTaxTotal + taxAmount;
     $('label#subTotalAmount.label').text('$ ' + formatCurrency(subTotal));
   };
