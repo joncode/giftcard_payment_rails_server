@@ -22,7 +22,8 @@ class RedeemsController < ApplicationController
   end
 
   def new
-    @gift = Gift.find(params[:gift_id])
+    #@gift = Gift.find(params[:gift_id])
+    @gift = Gift.new
     @redeem = Redeem.new
 
     respond_to do |format|

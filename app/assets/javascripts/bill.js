@@ -1,66 +1,9 @@
-<!-- create_table "gifts", :force => true do |t|
-@gift = Gift.new
-@provider = Provider.find(params[:provider_id])
-@receiver = User.find(params[:receiver_id])
-@item = Item.find(params[:item_id])
-@gift.provider_id = @provider.id
-@gift.provider_name = @provider.name
-@gift.receiver_id = @receiver.id
-@gift.receiver_name = @receiver.username
-@gift.giver_name = current_user.username
-@gift.giver_id = current_user.id
-@gift.receiver_phone = @receiver.phone
-@gift.item_id = @item.id
-@gift.price = params[:price]
-@gift.item_name = @item.item_name
-@gift.quantity ||= 1
-@provider.sales_tax ||= "7.25"
-@disabled = @gift.quantity == 1 ? 'disabled' : ''
-x  t.string   "giver_name"        x
-x  t.string   "receiver_name"     x
-x  t.string   "provider_name"     x
-x  t.string   "item_name"        x
-x  t.integer  "giver_id"           x
-x  t.integer  "receiver_id"        x
-x  t.integer  "item_id"          x
-x  t.string   "price",            x   
-  t.integer  "quantity",        form 
-  t.string   "total",             form   
-  t.string   "credit_card",          form
- x t.integer  "provider_id"           x
-  t.text     "message"               form
-  t.text     "special_instructions"  n/a
-  t.integer  "redeem_id"              n/a
-  t.string   "status",               callback
-  t.string   "category"              should be server
-  t.datetime "created_at",           db
-  t.datetime "updated_at",           db
-x  t.string   "receiver_phone"         x
-  add tax and tip to the gift fields
-  add hidden input for the total / tax
-  update hidden fields in the js
-  add text field for the message
-  add hidden div off click button for credit cards ?
-x  add @gift to the params somehow - put giver/receiver/provider/item id's in post params ?
-  
-end -->
 <div class="wrapper">
 	<div class="content">
 		<div class="row">
 		  <div class="span2">&nbsp;</div>
 		  <div class="span7 borderBox">
-      <!-- <form accept-charset="UTF-8" action="<%= gifts_path %>" class="new_gift" method="post" name="new_gift" id="new_gift"> -->
-    	<%= form_for @gift do |f| %>
-    			<%= f.hidden_field :giver_id  %>
-    			<%= f.hidden_field :giver_name  %>
-    			<%= f.hidden_field :receiver_id  %>
-    			<%= f.hidden_field :receiver_name  %>
-    			<%= f.hidden_field :receiver_phone  %>
-    			<%= f.hidden_field :item_id  %>
-          <%= f.hidden_field :item_name  %>
-    			<%= f.hidden_field :provider_name  %>
-    			<%= f.hidden_field :provider_id  %>
-    			<%= f.hidden_field :price  %>
+			<form accept-charset="UTF-8" action="<%= gifts_path %>" class="new_gift" method="post" name="new_gift" id="new_gift">
 					<legend class="label">Order Details</legend>
 					<div class="row">
 						<div class="span3">
@@ -133,16 +76,12 @@ end -->
 					    	<label for="total" class="label">Total:</label>
                 <span id="total">&nbsp;</span>
 						</div>
-
 						<div class="span3">
               <label for="total" class="label" id="totalAmount">$</label>
-              <%= f.hidden_field :total , id: "totalInput" %>
-              <!-- <input class="btn btn-large btn-info disabled" type="submit" name="submit" id="submit" value="Please Leave a Tip"/> -->
-        			<%= submit_tag "Please Leave a Tip", :class => "btn btn-large btn-info disabled", :id => "submit" %>
+        			<input class="btn btn-large btn-info disabled" type="submit" name="submit" id="submit" value="Please Leave a Tip"/>
 						</div>
 					</div>					
-      <!-- </form> -->
-      <% end %>
+			</form>
 			</div>
 			<div class="span2">&nbsp;</div>
 		</div>
@@ -277,7 +216,6 @@ end -->
   function calcTotal(tipAmount) {
     total = subTotal + tipAmount;
     $('label#totalAmount.label').text('$ ' + formatCurrency(total));
-    $(':input#totalInput').val(formatCurrency(total));
     $(':input#submit').val('Click Here to Send Gift');
     $(':input#submit').removeClass('disabled');
   };
