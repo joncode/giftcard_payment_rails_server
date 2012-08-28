@@ -77,8 +77,9 @@ class GiftsController < ApplicationController
     @gift.item_id = @item.id
     @gift.price = params[:price]
     @gift.item_name = @item.item_name
-    @provider.sales_tax ||= "5"
-    
+    @gift.quantity ||= 1
+    @provider.sales_tax ||= "7.25"
+    @disabled = @gift.quantity == 1 ? 'disabled' : ''
 
     respond_to do |format|
       format.html # new.html.erb

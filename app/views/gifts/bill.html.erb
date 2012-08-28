@@ -38,7 +38,7 @@
 					<div class="row">
 					  <div class="span3">
 					    <span>Quantity:</span>
-              <button class="btn disabled" type="button" id="decreaseQ">-</button>
+              <button class="btn <%= @disabled %>" type="button" id="decreaseQ">-</button>
               <button class="btn" type="button" id="increaseQ">+</button>
 						</div>
 						<div class="span3">
@@ -47,7 +47,7 @@
 					</div>
 					<div class="row">
 					  <div class="span3">
-              <span>Local Sales Tax: <%= @provider.sales_tax.to_i %>%</span>
+              <span>Local Sales Tax: <%= @provider.sales_tax.to_f %>%</span>
 						</div>
 						<div class="span3">
               <span id="taxAmount" class="label">Calculating ...</span>
@@ -63,21 +63,21 @@
 					</div>
 					<div class="row">
 					  <div class="span3 input-append" data-toggle="buttons-radio">Tip:
-                 <button type="button" class="btn" id="perItem">$1 per</button>
-                 <button type="button" class="btn" id="fifteenPrecent">15%</button>
-                 <button type="button" class="btn" id="twentyPercent">20%</button>
+                 <button type="button" class="btn tip" id="perItem">$1 per</button>
+                 <button type="button" class="btn tip" id="fifteenPrecent">15%</button>
+                 <button type="button" class="btn tip" id="twentyPercent">20%</button>
 						</div>
 						<div class="span3">
-              <input class="span2" id="tip" size="16" type="text" value="Choose Tip Amount"/>
+              $<input class="span2" id="tip" size="16" type="text" value="Choose Tip Amount"/>
 						</div>
 					</div>
 					<div class="row">
 					  <div class="span3">
 					    	<label for="total" class="label">Total:</label>
-                <span id="total">Click here to Send Gift</span>
+                <span id="total">&nbsp;</span>
 						</div>
 						<div class="span3">
-              <label for="total" class="label" id="totalAmount">???</label>
+              <label for="total" class="label" id="totalAmount">$</label>
         			<input class="btn btn-large btn-info disabled" type="button" name="submit" id="submit" value="Please Leave a Tip">
 						</div>
 					</div>					
@@ -89,22 +89,38 @@
 </div>
 
 <script type="text/javascript">
+  //                              embed data from server              //
+  var price = <%= @gift.price.to_i %>;
+  var quantity = <%= @gift.quantity  %>;
+  var sales_tax = <%= @provider.sales_tax.to_f %>;
+  var preTaxTotal = price * quantity;
+  var subTotal = calcSubTotal(preTaxTotal, sales_tax);
+  
   $(function() {
-    var price = <%= @gift.price.to_i %>;
-    var quantity = 1;
+    
+    //                           initialize form                        //
     $('#quantityAmount').val(quantity);
     $(':input#tip').val('Choose Tip Amount');
-    var sales_tax = <%= @provider.sales_tax.to_i %>;
-    var preTaxTotal = price * quantity;
     calcSubTotal(preTaxTotal, sales_tax);
+
+    //                           set event handlers                     //
     $('#increaseQ').click(function() {
-      quantity = increaseQuantity(price, quantity, sales_tax);
+      quantity ++;
+      changeQuantity(price, quantity, sales_tax, true);
+      changeTotalsFromQuantity();
     });
     $('#decreaseQ').click(function() {
       if (!$(this).hasClass('disabled')) {
-        quantity = decreaseQuantity(price, quantity, sales_tax);
+        quantity --;
+        changeQuantity(price, quantity, sales_tax, true);
+        changeTotalsFromQuantity();
       }
     });
+    $('#perItem, #fifteenPrecent, #twentyPercent').click(function() {
+      calcTip($(this).text());
+    });
+    
+    //                           set input field events                      //
     $(':input#quantityAmount').blur(function() {
       var fieldValue = $(this).val();
       if (isNaN(fieldValue)) {
@@ -112,124 +128,142 @@
         $(this).val(quantity);
       }
       if (fieldValue < 1) {
-        alert('please supply a number 1 or more');
+        alert('please supply a number - 1 or more');
         $(this).val(quantity);
       }
-      if (fieldValue > 0) {
-        quantity = updateQuantity(price, fieldValue, sales_tax);
+      if (fieldValue >= 1) {
+        //round unwanted user entered decimels
+        quantity = formatQuantity(fieldValue);
+        $(':input#quantityAmount').val(quantity);
+        changeQuantity(price, quantity, sales_tax, false);
+        changeTotalsFromQuantity();        
       }
     });
+    
+    $(':input#quantityAmount').keyup(function(e) {      
+      // Detect Enter
+      if(e.which === 13){ 
+        $(this).blur();
+      }     
+    });
+    
     $(':input#tip').focus(function() {
       var field = $(this);
       if (field.val()=='Choose Tip Amount') {
         field.val('');
       }
     });
-    $('#tip').blur(function() {
+    
+    $(':input#tip').blur(function() {
       var fieldValue = $(this).val();
+      // if field is not changed should it change the tip buttons?
       if (isNaN(fieldValue)) {
         $(this).val('Choose Tip Amount');
+        resetSubmitButton();
+        alert('please supply a number');
       }
       if (fieldValue < 1) {
         $(this).val('Choose Tip Amount');
+        resetSubmitButton();
+        alert('please supply a number - 1 or more');
       }
-      if (fieldValue > 0) {
-        calcTotal(parseInt(fieldValue));
+      if (fieldValue >= 1) {
+        // round user entered decimels beyond 2 digits
+        formattedFieldValue = formatCurrency(fieldValue);
+        $(':input#tip').val(formattedFieldValue);
+        calcTotal(parseFloat(formattedFieldValue));
+        $(':button').removeClass('active');
       }
     });
-    $('#perItem').click(function() {
-      calcTip($(this).text());
-    });
-    $('#fifteenPrecent').click(function() {
-      calcTip($(this).text());
-    });
-    $('#twentyPercent').click(function() {
-      calcTip($(this).text());
-      // update send button
-      // deselect tip choice buttons
-    });    
+    
+    $(':input#tip').keyup(function(e) {      
+      // Detect Enter
+      if(e.which === 13){ 
+          $(this).blur(); 
+      }     
+    }); 
+  }); // end document ready function
 
-  });
+  //                             calculate field values                     //
+  function changeTotalsFromQuantity() {
+    if ($(':button.active').text()) {
+      var button = $(':button.active').text();
+      calcTip(button);
+    } else {
+      if (!isNaN($('#tip').val())) {
+        var tipAmount = parseFloat($('#tip').val());
+        calcTotal(tipAmount);
+      }
+    }
+  };
   
   function calcTip(button) {
     if (button=='20%') {
-      subTotalString = $('label#subTotalAmount.label').text();
-      subTotal = parseFloat(subTotalString);
       tipAmount = subTotal * 0.20;
-      $(':input#tip').val(tipAmount);
     }
     if (button=='15%') {
-      subTotalString = $('label#subTotalAmount.label').text();
-      subTotal = parseFloat(subTotalString);
       tipAmount = subTotal * 0.15;
-      $(':input#tip').val(tipAmount);
     }
     if (button=='$1 per') {
       tipText = $('#quantityAmount').val();
-      tipAmount = parseInt(tipText);
-      $(':input#tip').val(tipAmount);
+      tipAmount = parseFloat(tipText);
     }
+    $(':input#tip').val(formatCurrency(tipAmount));
     calcTotal(tipAmount);
   };
 
   function calcTotal(tipAmount) {
-    subTotalString = $('label#subTotalAmount.label').text();
-    subTotal = parseFloat(subTotalString);
     total = subTotal + tipAmount;
-    $('label#totalAmount.label').text(total);
-    $(':input#submit').val('Buy Gift');
+    $('label#totalAmount.label').text('$ ' + formatCurrency(total));
+    $(':input#submit').val('Click Here to Send Gift');
     $(':input#submit').removeClass('disabled');
   };
   
   function calcSubTotal(preTaxTotal, sales_tax) {
     var taxAmount   = (preTaxTotal * sales_tax)/100;
-    $('span#taxAmount.label').text('$ ' + taxAmount);
-    var subTotal    = preTaxTotal + taxAmount;
-    $('label#subTotalAmount.label').text(subTotal);
+    $('span#taxAmount.label').text('$ ' + formatCurrency(taxAmount));
+    subTotal = preTaxTotal + taxAmount;
+    $('label#subTotalAmount.label').text('$ ' + formatCurrency(subTotal));
   };
   
-  function updateQuantity(price, quantity, sales_tax) {
-    var preTaxTotal = price * quantity; 
-    calcSubTotal(preTaxTotal, sales_tax);
-    controlDecreaseQ(quantity); 
-    return quantity;
-  };
-  
-  function increaseQuantity(price, quantity, sales_tax) {
-      quantity ++;
-      // add updated quantity to input field
-      $('#quantityAmount').val(quantity);
-      // enable the minus button if its disabled or new quantity == 2
-      controlDecreaseQ(quantity); 
-      // re-run calSubTotal with new quantity amount
+  function changeQuantity(price, quantity, sales_tax, button) {
       var preTaxTotal = price * quantity; 
-      calcSubTotal(preTaxTotal, sales_tax);
-
-      return quantity;       
+      // add updated quantity to input field for -/+ buttons
+      if (button) {
+        $('#quantityAmount').val(quantity);        
+      }
+      // enable/disable the quantity minus button
+      controlDecreaseQ(); 
+      // re-run calSubTotal with new preTotal and sales tax
+      calcSubTotal(preTaxTotal, sales_tax);     
   };
   
-  function decreaseQuantity(price, quantity, sales_tax) {
-      quantity --;
-      // add updated quantity to input field
-      $('#quantityAmount').val(quantity);
-      // enable the minus button if its disabled or new quantity == 2
-      controlDecreaseQ(quantity); 
-      // re-run calSubTotal with new quantity amount
-      var preTaxTotal = price * quantity; 
-      calcSubTotal(preTaxTotal, sales_tax); 
-      return quantity;       
-  };
-  
-  function controlDecreaseQ(quantity) {
+  //                            set button behaviors                     //    
+  function controlDecreaseQ() {
       if (quantity == 1) {
         $('#decreaseQ').addClass('disabled');  
       }
       if ((quantity > 1) && $('#decreaseQ').hasClass('disabled')) {
         $('#decreaseQ').removeClass('disabled');  
       }
-  }
-
+  };
   
+  function resetSubmitButton() {
+    $(':input#submit').val('Please Leave a Tip');
+    $(':input#submit').addClass('disabled');
+    $(':button').removeClass('active');
+  };
+  
+  //                                format numbers                     //
+  function formatCurrency(num) {
+      num = isNaN(num) || num === '' || num === null ? 0.00 : num;
+      return parseFloat(num).toFixed(2);
+  }
+  
+  function formatQuantity(num) {
+      num = isNaN(num) || num === '' || num === null ? 0.00 : num;
+      return parseFloat(num).toFixed(0);
+  }
   
 </script>
 
