@@ -25,6 +25,7 @@
       <%= f.hidden_field :redeem_id  %>
       <%= f.hidden_field :gift_id  %>
       <%= f.hidden_field :server_id  %>
+      <%= f.hidden_field :provider_id  %>
       <%= f.input :redeem_code, :input_html => { :maxlength => 4 } %>
     </div>
       <%= f.submit "Submit", :class => "btn" %>
@@ -39,12 +40,3 @@
 
 <%= button_to 'Not Now', orders_merchant_path(@provider), method: :get %>
 
-<!-- create_table "orders", :force => true do |t|
-  t.integer  "redeem_id"
-  t.integer  "gift_id"
-  t.string   "redeem_code"
-  t.datetime "created_at",  :null => false
-  t.datetime "updated_at",  :null => false
-  t.string   "server_code"
-  t.integer  "server_id"
-end -->

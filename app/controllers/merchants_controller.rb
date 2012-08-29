@@ -57,12 +57,12 @@ class MerchantsController < ApplicationController
     @gift = Gift.find(params[:id])
     @redeem = Redeem.find_by_gift_id(@gift)
     @provider = @gift.provider
-    @order = Order.new
     
     if @redeem
-      @order.redeem_id = @redeem.id 
-      @order.gift_id = @gift.id
-      @order.server_id = current_user.id
+      @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, server_id: current_user.id, provider_id: @provider.id)
+    else
+      # no redeem = no order possible
+      @order = Order.new
     end
 
 

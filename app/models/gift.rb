@@ -32,11 +32,11 @@ class Gift < ActiveRecord::Base
   has_one     :redeem
   belongs_to  :provider
   belongs_to  :item
-  has_many    :orders
+  has_one     :order
   
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total
   
-  
+  before_create :add_category, :if => :no_category
   
   def self.get_gifts(user)
     Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
@@ -76,5 +76,15 @@ class Gift < ActiveRecord::Base
   def self.get_history_provider(provider)
     Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
   end
+  
+  private
+    
+    def add_category
+      self.category = self.item.category
+    end
+    
+    def no_category
+      self.category.nil?
+    end
     
 end

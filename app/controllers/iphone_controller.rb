@@ -192,16 +192,11 @@ class IphoneController < AppController
     rescue
       message += "Couldn't identify app user. "
     end
-    # begin
-    #   gift = Gift.find(redeem_obj["gift_id"])
-    # rescue
-    #   message += " Could not locate gift in the database"    
-    # end
+
     response = { "error" => message } if message != "" 
 
     respond_to do |format|
       if redeem.save
-        redeem.gift.update_attributes({status:'notified'},{redeem_id: redeem.id})
         response["success"] = redeem.redeem_code
       else
         message += " Gift unable to process to database. Please retry later."
