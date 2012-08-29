@@ -39,8 +39,7 @@ class Gift < ActiveRecord::Base
   
   
   def self.get_gifts(user)
-    gifts = Gift.where( receiver_id: user).where(status: 'open').order("created_at DESC")
-    gifts.concat Gift.where( receiver_id: user).where(status: 'notified').order("created_at DESC")
+    Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
   end
 
   def self.get_past_gifts(user)
@@ -48,9 +47,8 @@ class Gift < ActiveRecord::Base
   end
   
   def self.get_buy_history(user)
-    gifts = Gift.where( giver_id: user).where(status: 'open').order("created_at ASC")
-    gifts.concat Gift.where( giver_id: user).where(status: 'notified').order("created_at ASC")
-    past_gifts = Gift.where( giver_id: user).where(status: 'redeemed').order("created_at ASC")
+    gifts = Gift.where( giver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC") 
+    past_gifts = Gift.where( giver_id: user).where(status: 'redeemed').order("created_at DESC")
     return gifts, past_gifts
   end
   
@@ -59,13 +57,10 @@ class Gift < ActiveRecord::Base
   end
   
   def self.get_activity
-    gifts = Gift.where(status: 'open').order("created_at ASC")
-    gifts.concat Gift.where(status: 'notified').order("created_at ASC")
-    gifts.concat Gift.where(status: 'redeemed').order("created_at ASC") 
+    Gift.order("created_at DESC")
   end
   
   def self.get_user_activity(user)
-    # Gift.where(giver_id: user OR receiver_id: user).order("created_at ASC")
     Gift.where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at ASC")
   end
   
@@ -74,8 +69,8 @@ class Gift < ActiveRecord::Base
   end
   
   def self.get_provider(provider)
-    gifts = Gift.where(provider_id: provider.id).where(status: 'open').order("created_at DESC")
-    gifts.concat Gift.where(provider_id: provider.id).where(status: 'notified').order("created_at DESC")
+    Gift.where(provider_id: provider.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
+
   end
   
   def self.get_history_provider(provider)
