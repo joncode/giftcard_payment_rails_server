@@ -1,49 +1,11 @@
-<!-- create_table "gifts", :force => true do |t|
-@gift = Gift.new
-@provider = Provider.find(params[:provider_id])
-@receiver = User.find(params[:receiver_id])
-@item = Item.find(params[:item_id])
-@gift.provider_id = @provider.id
-@gift.provider_name = @provider.name
-@gift.receiver_id = @receiver.id
-@gift.receiver_name = @receiver.username
-@gift.giver_name = current_user.username
-@gift.giver_id = current_user.id
-@gift.receiver_phone = @receiver.phone
-@gift.item_id = @item.id
-@gift.price = params[:price]
-@gift.item_name = @item.item_name
-@gift.quantity ||= 1
-@provider.sales_tax ||= "7.25"
-@disabled = @gift.quantity == 1 ? 'disabled' : ''
- x t.integer  "provider_id"           x
- x  t.string   "giver_name"        x
-x  t.string   "receiver_name"     x
-x  t.string   "provider_name"     x
-x  t.string   "item_name"        x
-x  t.integer  "giver_id"           x
-x  t.integer  "receiver_id"        x
-x  t.integer  "item_id"          x
-x  t.string   "price",            x   
-x  t.integer  "quantity",        form 
-x  t.string   "total",             form   
+ <!-- TODO
   t.string   "credit_card",          form
   t.text     "message"               form
   t.text     "special_instructions"  n/a
   t.integer  "redeem_id"              n/a
-x  t.string   "status",               callback
-x  t.string   "category"              should be server
- x t.datetime "created_at",           db
-x  t.datetime "updated_at",           db
-x  t.string   "receiver_phone"         x
-x  add tax and tip to the gift fields
- x add hidden input for the total / tax
-x  update hidden fields in the js
   add text field for the message
-  add hidden div off click button for credit cards ?
-x  add @gift to the params somehow - put giver/receiver/provider/item id's in post params ?
-  
-end -->
+  add hidden div off click button for credit cards ? -->
+
 <div class="wrapper">
 	<div class="content">
 		<div class="row">
@@ -140,7 +102,7 @@ end -->
               <label for="total" class="label" id="totalAmount">$</label>
               <%= f.hidden_field :total , id: "totalInput" %>
               <!-- <input class="btn btn-large btn-info disabled" type="submit" name="submit" id="submit" value="Please Leave a Tip"/> -->
-        			<%= submit_tag "Please Leave a Tip", :class => "btn btn-large btn-info disabled", :id => "submit" %>
+              <%= submit_tag "Please Leave a Tip", :class => "btn btn-large btn-info disabled", :id => "submit" %>
 						</div>
 					</div>					
       <!-- </form> -->
@@ -202,12 +164,15 @@ end -->
         changeTotalsFromQuantity();
         //$(':input#tip').focus();        
       }
+      return false;
     });
     
-    $(':input#quantityAmount').keyup(function(e) {      
+    $(':input#quantityAmount').keypress(function(e) {      
       // Detect Enter
       if(e.which === 13){ 
         $(this).blur();
+        $(this).preventDefault();
+        return false;
       }     
     });
     
@@ -238,12 +203,15 @@ end -->
         calcTotal(parseFloat(formattedFieldValue));
         $(':button').removeClass('active');
       }
+      return false;
     });
     
-    $(':input#tip').keyup(function(e) {      
+    $(':input#tip').keypress(function(e) {      
       // Detect Enter
       if(e.which === 13){ 
-          $(this).blur(); 
+          $(this).blur();
+          $(this).preventDefault(); 
+          return false;
       }     
     }); 
   }); // end document ready function

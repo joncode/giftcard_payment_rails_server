@@ -168,7 +168,7 @@ class GiftsController < ApplicationController
         format.html { redirect_to @gift, notice: 'Gift was successfully created.' }
         format.json { render json: @gift, status: :created, location: @gift }
       else
-        format.html { render action: "new" }
+        #format.html { render action: "new" }
         format.json { render json: @gift.errors, status: :unprocessable_entity }
       end
     end
