@@ -160,14 +160,10 @@ class IphoneController < AppController
     rescue
       message += "Couldn't identify app user. "
     end
-    begin
-      receiver = User.find_by_phone(params["phone"])
-      gift.receiver_name = receiver.username
-      gift.receiver_id = receiver.id
-    rescue
-      message += "The person you've bought a gift for is not in our database. "
-      gift.receiver_phone = params["phone"]
-    end
+    
+    # for drinkboard users this will work because we are getting the receiver info from drinkboard
+    # for facebook users this will bnot work because we are not connecting the fb user with a drinkboard account
+    
     response = { "error" => message } if message != "" 
     respond_to do |format|
       if gift.save
@@ -196,11 +192,11 @@ class IphoneController < AppController
     rescue
       message += "Couldn't identify app user. "
     end
-    begin
-      gift = Gift.find(redeem_obj["gift_id"])
-    rescue
-      message += " Could not locate gift in the database"    
-    end
+    # begin
+    #   gift = Gift.find(redeem_obj["gift_id"])
+    # rescue
+    #   message += " Could not locate gift in the database"    
+    # end
     response = { "error" => message } if message != "" 
 
     respond_to do |format|
