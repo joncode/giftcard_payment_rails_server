@@ -4,11 +4,7 @@
 <h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
 
 <% if @redeem %>
-  <h4>Enter the Customers 4-digit Redeem Code here:
-    <input type="text" placeholder="4 digit Redeem Code">
-    <%= button_to 'Enter Server Code', '#' %> <%= @redeem.redeem_code %>
-    <hr />
-  </h4>
+  <%= render 'merchant_redeem' %>
 <% else %>
   <h4>Customer has not Redeemed Gift on their Account yet</h4>
 <% end %>
@@ -16,6 +12,5 @@
   <a href="#" class="btn btn-large btn-primary disabled"><%= current_user.server_code || 'please set your server code' %></a>
   <hr />
 </h4>
-<h3><%= logo_from_id_for @gift.provider_id %>
-@ <%= @gift.provider_name %></h3>
-<%= button_to 'Not Now', redeems_merchant_path(@provider), method: :get %>
+
+<%= button_to 'Not Now', orders_merchant_path(@provider), method: :get %>

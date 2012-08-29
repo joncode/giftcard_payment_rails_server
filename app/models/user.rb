@@ -51,6 +51,13 @@ class User < ActiveRecord::Base
   
   before_save { |user| user.email = email.downcase }
   before_save :create_remember_token
+  # before update
+  # if the update is to the server code
+  # get the providers that the user works for 
+  # save the server code in the provider server code array - remove the old code 
+  # or should this be done thru model associations
+  # where you ask provider.staff.server_codes and get all the server codes associated with that provider
+  
   
   validates_presence_of :city, :state, :zip, :address, :credit_number
   validates :first_name  , presence: true, length: { maximum: 50 }
@@ -59,6 +66,7 @@ class User < ActiveRecord::Base
   validates :email , presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 }, on: :create
   validates :password_confirmation, presence: true, on: :create
+  validates_length_of :server_code, is: 4
   
   def feed
     Micropost.from_users_followed_by(self)

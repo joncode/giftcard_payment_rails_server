@@ -14,6 +14,7 @@ class RedeemsController < ApplicationController
     @gift = @redeem.gift
     giver = @redeem.gift.giver_id
     @giver = User.find(giver)
+    @servers = @gift.provider.get_servers
 
     respond_to do |format|
       format.html # show.html.erb
@@ -42,7 +43,7 @@ class RedeemsController < ApplicationController
       notice = nil
     else
       @redeem = Redeem.new(gift_id: gift_id)
-      notice  = 'Give your code to your server.'
+      notice  = 'Give the code in blue to your server or user the server code by clicking merchant redeem below'
     end
     respond_to do |format|
       if @redeem.save

@@ -1,24 +1,94 @@
 <p id="notice"><%= notice %></p>
-
-<h4><%= list_icon_for @giver %> <%= @gift.giver_name %><span> bought you </span></h4>
-<h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
-<h3><%= logo_from_id_for @gift.provider_id %>
-@ <%= @gift.provider_name %></h3>
-<p>
-  <b>Message:</b>
-  <%= @gift.message %>
-</p>
-
+<div class="row">
+  <div class="span4">
+    <h4><%= list_icon_for @giver %> <%= @gift.giver_name %><span> bought you </span></h4>
+    <h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
+    <h3><%= logo_from_id_for @gift.provider_id %>
+    @ <%= @gift.provider_name %></h3>
+    <% if @gift.message %>
+      <p>
+        <b>Message:</b>
+        <%= @gift.message %>
+      </p>
+    <% end %>
+  </div>
+  <div class="span4">
+    <%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id), :class => "btn" %>
+    <%= button_to 'Not Now', gifts_path, method: :get %>
+  </div>
+</div>
 <h4>Give this code to your server to Redeem: 
   <a href="#" class="btn btn-large btn-primary disabled"><%= @redeem.redeem_code %></a>
   <hr />
 </h4>
 <h4>Server's phone unavailable?
-  Enter the 4-digit Server Code here:
-  <input type="text" placeholder="4 digit Server Code"> 
-  <%= button_to 'Enter Server Code', '#' %>
-  <hr />
+  <button type="button" class="btn btn-large btn-success" id="merchant_redeem">Enter Server Code</button>
+    <div class="row">
+      <div class="span7" id="servers">
+        <table>
+          <thead>
+              <tr>
+                <th colspan="3">Choose Your Server</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @servers.each do |user| %>
+                <tr id="<%= user.id %>">
+                  <td><%= gravatar_for user %></td>
+                  <td><%= user.username %></td>
+                  <td><button type="button" class="btn choose_server" id="<%= user.id %>">Choose</button></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <div class="span4 borderBox" id="server_code_field">
+          <div class="borderBox">
+              <h2>Enter Server Code</h2>  
+                  <div id="server_name"></div>
+                  <div id="serverCode"></div>
+                  <%= text_field :server_code, :size => 4 %>
+                  <%= submit_tag "Submit Server Code", :class => "btn" %>
+          </div>
+          <div>
+              <br /><br />
+              <button type="button" class="btn btn-large btn-success" id="servers_back_button">Choose Another Server</button>
+          </div>
+        </div>
+        
+    </div>
+  </div>
 </h4>
 
-<%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id) %>
-<%= button_to 'Not Now', gifts_path, method: :get %>
+
+<script>
+  $(function() {
+    $('#servers, #server_code_field').hide();
+    $('#merchant_redeem').click(function() {
+      if (!$(this).hasClass('disabled')) {
+        if ($(this).text()=="Enter Server Code") {
+          $('#servers').slideDown('fast');
+          $(this).text("Hide Servers");
+        } else {
+          $('#servers').slideUp('fast');
+          $(this).text("Enter Server Code");
+        } 
+      }    
+    });
+    $('.choose_server').click(function() {
+      if ($(this).hasClass('disabled')) {
+        $('#server_code_field').slideUp('fast');
+        $('.choose_server').removeClass('disabled');
+      } else {
+        $('#server_code_field').slideDown('fast');
+        $('.choose_server').addClass('disabled');
+        $('#merchant_redeem').addClass('disabled');
+      }
+    });
+    $('#servers_back_button').click(function() {
+       $('.choose_server').removeClass('disabled');
+       $('#server_code_field').slideUp('slow');
+       $('#merchant_redeem').removeClass('disabled');
+    });
+  });
+</script>

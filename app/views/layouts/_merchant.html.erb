@@ -18,7 +18,7 @@
         <ul class="nav">
           <% if @provider %>
             <li><%= link_to @provider.name, merchant_path(@provider) %></li>
-            <li><%= link_to "Orders", redeems_merchant_path(@provider) %></li>
+            <li><%= link_to "Orders", orders_merchant_path(@provider) %></li>
           <% else %>
             <li><%= link_to "Merchant-Home", merchants_path %></li>
           <% end %>

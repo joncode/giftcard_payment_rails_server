@@ -22,11 +22,11 @@ Drinkboard::Application.routes.draw do
   resources :providers 
   resources :merchants do
     member do
-      get 'redeems'
-      get 'past_redeems'
+      get 'past_orders'
       get 'detail'
-      get 'redeem'
       get 'customers'
+      get 'orders'
+      get 'order'
     end
   end
   
@@ -73,6 +73,7 @@ Drinkboard::Application.routes.draw do
   resources :users do 
     member do
       get :following, :followers
+      get :servercode
     end
   end
   

@@ -39,4 +39,8 @@ class Provider < ActiveRecord::Base
   def full_address
     "#{self.address},  #{self.city}, #{self.state}"
   end
+  
+  def get_servers
+    User.all
+  end
 end

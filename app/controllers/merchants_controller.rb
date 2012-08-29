@@ -21,7 +21,7 @@ class MerchantsController < ApplicationController
     @gifts = Gift.get_activity_at_provider(@provider)
   end
 
-  def redeems
+  def orders
     @provider = Provider.find(params[:id])
     @gifts = Gift.get_provider(@provider)
     
@@ -53,10 +53,11 @@ class MerchantsController < ApplicationController
     end
   end
 
-  def redeem
+  def order
     @gift = Gift.find(params[:id])
     @redeem = Redeem.find_by_gift_id(@gift)
     @provider = @gift.provider
+    @order = Order.new
 
 
     respond_to do |format|

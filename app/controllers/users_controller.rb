@@ -55,14 +55,15 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
         sign_in @user
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { redirect_to @user, notice: 'Update Successful.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: action}
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -90,6 +91,11 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @users = @user.followers
     render 'show_follow'
+  end
+  
+  def servercode
+    @user = current_user
+    
   end
   
   private

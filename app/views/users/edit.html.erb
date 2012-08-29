@@ -6,11 +6,10 @@
       <%= simple_form_for(@user, :html => { :multipart => true }) do |f| %>
         <%= f.error_notification %>
         <%= render 'shared/error_messages' %>
-        <%= link_to 'Manage Credit Cards' %>
+        <%= link_to 'Manage Credit Cards' %><br />
+        <%= link_to 'Server Code', servercode_user_path(@user) %>
         <div class="form-horizontal">
-          <% if @user.photo %>
-            <%= gravatar_for @user %>
-          <% end %>
+          <%= gravatar_for @user %>
           <%= f.label :upload_new_photo? %>
           <%= f.file_field :photo %>
           <%= f.input :first_name %>
