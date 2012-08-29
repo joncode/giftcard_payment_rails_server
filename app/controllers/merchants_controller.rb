@@ -31,7 +31,7 @@ class MerchantsController < ApplicationController
     end
   end
 
-  def past_redeems
+  def past_orders
     @provider = Provider.find(params[:id])
     @gifts = Gift.get_history_provider(@provider)
     
@@ -58,6 +58,12 @@ class MerchantsController < ApplicationController
     @redeem = Redeem.find_by_gift_id(@gift)
     @provider = @gift.provider
     @order = Order.new
+    
+    if @redeem
+      @order.redeem_id = @redeem.id 
+      @order.gift_id = @gift.id
+      @order.server_id = current_user.id
+    end
 
 
     respond_to do |format|

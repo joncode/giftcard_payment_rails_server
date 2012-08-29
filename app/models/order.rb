@@ -11,7 +11,7 @@
 #
 
 class Order < ActiveRecord::Base
-  attr_accessible :gift_id, :redeem_code, :redeem_id
+  attr_accessible :gift_id, :redeem_code, :redeem_id, :server_code, :server_id
   
   belongs_to  :provider
   belongs_to  :redeem
