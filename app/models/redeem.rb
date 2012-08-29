@@ -20,7 +20,7 @@ class Redeem < ActiveRecord::Base
   before_create :create_redeem_code
   
   validates :gift_id , presence: true, uniqueness: true
-  validates_length_of :redeem_code, is: 4
+
   
   private
 
