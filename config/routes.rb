@@ -4,15 +4,15 @@ Drinkboard::Application.routes.draw do
   resources :redeems
   resources :gifts do
     collection do
-      get 'buy'
-      get 'activity'
-      get 'browse'
+      get  'buy'
+      get  'activity'
+      get  'browse'
       post 'browse_with_contact'
       post 'browse_with_location'
       post 'choose_from_menu'
       post 'choose_from_contacts'
       post 'bill'
-      get 'past'
+      get  'past'
     end
     member do
       get 'detail'
@@ -46,26 +46,26 @@ Drinkboard::Application.routes.draw do
   
   ###  mobile app routes
   match 'app/create_account', to: 'iphone#create_account', via: :post
-  match 'app/login', to: 'iphone#login', via: :post
-  match 'app/gifts', to: 'iphone#gifts', via: :post
-  match 'app/buys', to: 'iphone#buys', via: :post
-  match 'app/activity', to: 'iphone#activity', via: :post
-  match 'app/provider', to: 'iphone#provider', via: :post
-  match 'app/locations', to: 'iphone#locations', via: :post
-  match 'app/buy_gift', to: 'iphone#create_gift', via: :post
-  match 'app/redeem', to: 'iphone#create_redeem', via: :post
-  match 'app/order', to: 'iphone#create_order', via: :post
-  match 'app/users', to: 'iphone#drinkboard_users', via: :post
+  match 'app/login',          to: 'iphone#login', via: :post
+  match 'app/gifts',          to: 'iphone#gifts', via: :post
+  match 'app/buys',           to: 'iphone#buys', via: :post
+  match 'app/activity',       to: 'iphone#activity', via: :post
+  match 'app/provider',       to: 'iphone#provider', via: :post
+  match 'app/locations',      to: 'iphone#locations', via: :post
+  match 'app/buy_gift',       to: 'iphone#create_gift', via: :post
+  match 'app/redeem',         to: 'iphone#create_redeem', via: :post
+  match 'app/order',          to: 'iphone#create_order', via: :post
+  match 'app/users',          to: 'iphone#drinkboard_users', via: :post
 
   ###
   # match '/drinkboard', to: 'gifts#activity'
-  match '/about', to: 'home#about'
-  match '/contact', to: 'home#contact'
-  match '/home', to: 'home#index'
-  match '/channel', to: 'home#channel'
-  match '/learn', to: 'home#learn'
-  match '/news', to: 'home#news'
-  match '/choose', to: 'home#choose_user'
+  match '/about',       to: 'home#about'
+  match '/contact',     to: 'home#contact'
+  match '/home',        to: 'home#index'
+  match '/channel',     to: 'home#channel'
+  match '/learn',       to: 'home#learn'
+  match '/news',        to: 'home#news'
+  match '/choose',      to: 'home#choose_user'
   # match '/browse', to: 'gifts#browse'
 
   
