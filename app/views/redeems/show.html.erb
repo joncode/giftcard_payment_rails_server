@@ -28,7 +28,7 @@
         <table>
           <thead>
               <tr>
-                <th colspan="3">Choose Your Server</th>
+                <th colspan="4">Choose Your Server</th>
               </tr>
             </thead>
             <tbody>
@@ -36,7 +36,8 @@
                 <tr id="<%= user.id %>">
                   <td><%= gravatar_for user %></td>
                   <td><%= user.username %></td>
-                  <td><button type="button" class="btn choose_server" id="<%= user.id %>">Choose</button></td>
+                  <td><%= user.server_code %></td>
+                  <td><button type="button" class="btn choose_server" id="<%= user.id %>" name="<%= user.username %>">Choose</button></td>
                 </tr>
               <% end %>
             </tbody>
@@ -44,11 +45,30 @@
         </div>
         <div class="span4 borderBox" id="server_code_field">
           <div class="borderBox">
-              <h2>Enter Server Code</h2>  
-                  <div id="server_name"></div>
-                  <div id="serverCode"></div>
-                  <%= text_field :server_code, :size => 4 %>
-                  <%= submit_tag "Submit Server Code", :class => "btn" %>
+              <%= simple_form_for @order do |f| %>
+                <%= f.error_notification %>
+                <% if @order.errors.any? %>
+                  <div id="error_explanation">
+                    <div class="alert alert-error">
+                      The form contains <%= pluralize(@order.errors.count, "error") %>.
+                    </div>
+                    <ul>
+                      <% @order.errors.full_messages.each do |msg| %>
+                        <li>* <%= msg %></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
+
+                <div class="form-horizontal">
+                  <%= f.hidden_field :redeem_id  %>
+                  <%= f.hidden_field :gift_id  %>
+                  <%= f.hidden_field :server_id  %>
+                  <%= f.hidden_field :provider_id  %>
+                  <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
+                </div>
+                  <%= f.submit "Submit Server Code", :class => "btn" %>
+              <% end %>
           </div>
           <div>
               <br /><br />
@@ -62,6 +82,8 @@
 
 
 <script>
+  var a = $('#order_server_id');
+
   $(function() {
     $('#servers, #server_code_field').hide();
     $('#merchant_redeem').click(function() {
@@ -83,12 +105,26 @@
         $('#server_code_field').slideDown('fast');
         $('.choose_server').addClass('disabled');
         $('#merchant_redeem').addClass('disabled');
+        var currentId = $(this).attr('id');
+        addServerInfo(currentId);
       }
     });
     $('#servers_back_button').click(function() {
        $('.choose_server').removeClass('disabled');
        $('#server_code_field').slideUp('slow');
        $('#merchant_redeem').removeClass('disabled');
+       removeServerInfo();
     });
   });
+  
+  function addServerInfo(currentId) {
+    // take the server info and place it in the code submit form
+    a.val(currentId);
+  };
+  
+  function removeServerInfo() {
+    a.val('');
+  };
+  
+  
 </script>

@@ -10,7 +10,7 @@
   <h4><%= list_icon_for @receiver %> <%= @gift.receiver_name %><span></span></h4>
   <h3><%= logo_from_id_for @gift.provider_id %>
   @ <%= @gift.provider_name %></h3>
-  <h3>Redeemed on <%= @gift.order.created_at.to_formatted_s(:rfc822)  %>.<br />
+  <h3>Redeemed on <%= @order.created_at.to_formatted_s(:rfc822)  %>.<br />
   By server : <%= @server.username %></h3>
 </div>
-<%= link_to "<- Back to Completed Orders", past_orders_merchant_path(@provider) %>
+<%= link_to "<- Back to Orders", orders_merchant_path(@provider) %>

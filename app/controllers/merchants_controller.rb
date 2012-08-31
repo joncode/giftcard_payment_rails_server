@@ -46,7 +46,11 @@ class MerchantsController < ApplicationController
     @giver = User.find(@gift.giver_id)
     @receiver = User.find(@gift.receiver_id)
     @provider = @gift.provider
-    
+    if @gift.order.server_id
+      @server = User.find(@gift.order.server_id) 
+    else
+      @server = User.new(first_name: "missing", last_name: "person")
+    end
     respond_to do |format|
       format.html # detail.html.erb
       format.json { render json: @gift }
@@ -69,6 +73,23 @@ class MerchantsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @redeem }
+    end
+  end
+  
+  def completed
+    @order = Order.find(params[:id])
+    @gift = @order.gift
+    @giver = User.find(@gift.giver_id)
+    @receiver = User.find(@gift.receiver_id)
+    @provider = @order.provider
+    if @order.server_id
+      @server = User.find(@order.server_id) 
+    else
+      @server = User.new(first_name: "missing", last_name: "person")
+    end
+    respond_to do |format|
+      format.html # detail.html.erb
+      format.json { render json: @gift }
     end
   end
 

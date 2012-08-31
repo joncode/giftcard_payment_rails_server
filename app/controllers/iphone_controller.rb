@@ -241,7 +241,6 @@ class IphoneController < AppController
       if order.redeem_code == redeem_code
         if order.save
           response["success"] = " Sale Confirmed. Thank you!"
-          order.gift.update_attribute(:status, "redeemed")
         else
           # order.gift.update_attribute(:status, "redeemed")
           response["error_server"] = " Order not processed - database error"

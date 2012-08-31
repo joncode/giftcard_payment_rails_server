@@ -13,6 +13,7 @@
 <% @gifts.each do |gift| %>
   <tr>
     <td><%= button_to "Redeem Now", order_merchant_path(gift), method: :get %></td>
+    <!-- <td><%= link_to "Redeem Now", new_order_path(id: gift.id) , :class => "btn" %></td> -->
     <td><%= list_icon_with_id_for gift.receiver_id %></td>
     <td><%= gift.receiver_name %></td>
     <td colspan="2">

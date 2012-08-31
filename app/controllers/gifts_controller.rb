@@ -61,6 +61,23 @@ class GiftsController < ApplicationController
       format.json { render json: @gift }
     end
   end
+  
+  def completed
+    @order = Order.find(params[:id])
+    @gift = @order.gift
+    @giver = User.find(@gift.giver_id)
+    @receiver = User.find(@gift.receiver_id)
+    @provider = @order.provider
+    if @order.server_id
+      @server = User.find(@order.server_id) 
+    else
+      @server = User.new(first_name: "missing", last_name: "person")
+    end
+    respond_to do |format|
+      format.html 
+      format.json { render json: @gift }
+    end    
+  end
 
   def bill
     @gift = Gift.new

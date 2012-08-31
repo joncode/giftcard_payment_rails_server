@@ -9,10 +9,12 @@
 <h3><%= logo_from_id_for @gift.provider_id %>
 @ <%= @gift.provider_name %></h3>
 
-<p>
-  <b>Message:</b>
-  <%= @gift.message %>
-</p>
+<% if @gift.message %>
+  <p>
+    <b>Message:</b>
+    <%= @gift.message %>
+  </p>
+<% end %>
 
 <%= button_to 'Past Gifts', past_gifts_path, method: :get  %>
 <%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id)  %>

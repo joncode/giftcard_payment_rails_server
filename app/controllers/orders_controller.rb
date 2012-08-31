@@ -19,7 +19,18 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = Order.new
+    @gift = Gift.find(params[:id])
+    @redeem = Redeem.find_by_gift_id(@gift)
+    @provider = @gift.provider
+    
+    if @redeem
+      @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, server_id: current_user.id, provider_id: @provider.id)
+    else
+      # no redeem = no order possible
+      @order = Order.new
+    end
+
+
 
     respond_to do |format|
       format.html # new.html.erb
@@ -33,13 +44,23 @@ class OrdersController < ApplicationController
 
   def create
     @order = Order.new(params[:order])
+    @redeem = @order.redeem
+    trigger = @order.redeem_code.nil? ? true : false
 
     respond_to do |format|
       if @order.save
-        format.html { redirect_to @order, notice: 'Order is Completed. Thank You!' }
+        if trigger
+          format.html { redirect_to completed_gift_path(@order), notice: 'Order is Completed. Thank You!' }
+        else
+          format.html { redirect_to completed_merchant_path(@order), notice: 'Order is Completed. Thank You!' }
+        end
         format.json { render json: @order, status: :created, location: @order }
       else
-        format.html { redirect_to order_merchant_path(@order.gift_id), notice: 'Redeem Code did not match order' }
+        if trigger
+          format.html { redirect_to @redeem, notice: "Drink not authorized. Server Code incorrect." }
+        else
+          format.html { redirect_to order_merchant_path(@order.gift_id), notice: "Drink not authorized. Redeem Code incorrect." }
+        end
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end

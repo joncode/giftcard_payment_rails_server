@@ -16,6 +16,7 @@ Drinkboard::Application.routes.draw do
     end
     member do
       get 'detail'
+      get 'completed'
     end
   end
 
@@ -27,6 +28,7 @@ Drinkboard::Application.routes.draw do
       get 'customers'
       get 'orders'
       get 'order'
+      get 'completed'
     end
   end
   
