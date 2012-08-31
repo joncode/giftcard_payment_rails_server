@@ -23,15 +23,23 @@
           <% @gifts.each do |gift| %>
             <tr>
               <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
-              <td><%= list_icon_with_id_for gift.receiver_id %></td>
-              <td><%= gift.receiver_name %></td>
-              <td><%= list_icon_with_id_for gift.giver_id %></td>
-              <td><%= gift.giver_name %></td>
-              <td><%= image_tag get_category_image(gift), {:class => 'iconListView'} %></td>
-              <td><%= gift.quantity %>&nbsp;<%= gift.item_name %></td>
+              <td colspan="2">
+                <%= list_icon_with_id_for gift.receiver_id %>
+                <%= gift.receiver_name %>
+              </td>  
+              <td colspan="2">
+                  <%= list_icon_with_id_for gift.giver_id %>
+                  <%= gift.giver_name %>
+              </td>
+              <td colspan="2">
+                <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
+                <%= gift.quantity %>&nbsp;<%= gift.item_name %>
+              </td>
               <td><%= gift.message %></td>
-              <td><%= logo_from_id_for gift.provider_id %></td>
-              <td><%= link_to gift.provider_name, provider_path(gift.provider_id) %></td>
+              <td colspan="2">
+                <%= logo_from_id_for gift.provider_id %>
+                <%= link_to gift.provider_name, provider_path(gift.provider_id) %>
+              </td>
             </tr>
           <% end %>
           </tbody>
