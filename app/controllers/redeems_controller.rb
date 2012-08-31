@@ -16,7 +16,7 @@ class RedeemsController < ApplicationController
     @giver = User.find(giver)
     provider = @gift.provider
     @servers = provider.get_servers
-    @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, provider_id: provider.id)
+    @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id)
 
     respond_to do |format|
       format.html # show.html.erb
