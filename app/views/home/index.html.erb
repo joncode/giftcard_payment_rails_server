@@ -1,27 +1,30 @@
-    
-<div class="center borderBox">
+<style>
+  body { background-color: #000}
+  footer a { color : #666}
+</style>
+<div class="center">
   <div class="row">
-    <%= link_to image_tag("my_gifts.png"), gifts_path, {:class => "button_maker"} %>
-    <%= link_to image_tag("buy_drink.png"), browse_gifts_path, {:class => "button_maker"} %>
-    <%= link_to image_tag("send_gift.png"), browse_gifts_path, {:class => "button_maker"} %>
-    <%= link_to image_tag("RedeemNowButton.png"), gifts_path, {:class => "button_maker long"} %>
-    <%= link_to image_tag("MerchantRedeemButton.png"), gifts_path, {:class => "button_maker long"} %>
-  </div>
+    <div class="span3">&nbsp;</div>   
+    <div class="span6 borderBox">
+      <div class="row">
+        <%= link_to image_tag("my_gifts.png"), gifts_path, {:class => "button_maker"} %>
+        <%= link_to image_tag("send_gift.png"), browse_gifts_path, {:class => "button_maker"} %>
+        <%= link_to image_tag("friends.png"), users_path, {:class => "button_maker"} %>
+      </div>
 
-  <div class="row">
-    <%= link_to image_tag("friends.png"), users_path, {:class => "button_maker"} %>
-    <%= link_to image_tag("invite.png"), '#', {:class => "button_maker"} %>
-    <%= link_to image_tag("places.png"), providers_path, {:class => "button_maker"} %>
-    <%= link_to image_tag("near_you.png"), providers_path, {:class => "button_maker"} %>
-    <%= link_to image_tag("check_in_panel.png"), '#', {:class => "button_maker"} %>
+      <div class="row">
+        <%= link_to image_tag("invite.png"), '#', {:class => "button_maker"} %>
+        <%= link_to image_tag("places.png"), providers_path, {:class => "button_maker"} %>
+        <%= link_to image_tag("near_you.png"), providers_path, {:class => "button_maker"} %>
+      </div>
 
-  </div>
-
-  <div class="row">
-    <%= link_to image_tag("profile.png"), current_user, {:class => "button_maker"} %>
-    <%= link_to image_tag("profile2.png"), current_user, {:class => "button_maker"} %>
-    <%= link_to image_tag("search.png"), '#', {:class => "button_maker"} %>
-    <%= link_to image_tag("my_drinkboard.png"), activity_gifts_path, {:class => "button_maker"} %>
+      <div class="row">
+        <%= link_to image_tag("check_in_panel.png"), '#', {:class => "button_maker"} %>
+        <%= link_to image_tag("profile2.png"), current_user, {:class => "button_maker"} %>
+        <%= link_to image_tag("my_drinkboard.png"), activity_gifts_path, {:class => "button_maker"} %>
+      </div>
+    </div>
+    <div class="span3">&nbsp;</div>   
   </div>
 </div>
               

@@ -33,8 +33,10 @@
         <tbody>
           <% @providers.each do |p| %>
           <tr>
-             <td><%= logo_for(p) %></td>
-             <td><%= link_to p.name, '#', {:class => "iconListView"} %></td>
+             <td colspan="2">
+               <%= logo_for(p) %>
+               <%= link_to p.name, provider_path(p) %>
+             </td>
              <td><%= p.description %></td>
              <td><%= button_to "Select", choose_from_menu_gifts_path(provider_id: p.id, user_id: @user.id)%></td>
           </tr> 

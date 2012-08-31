@@ -14,16 +14,20 @@
   <tr>
     <td><%= button_to "Redeem Now", order_merchant_path(gift), method: :get %></td>
     <!-- <td><%= link_to "Redeem Now", new_order_path(id: gift.id) , :class => "btn" %></td> -->
-    <td><%= list_icon_with_id_for gift.receiver_id %></td>
-    <td><%= gift.receiver_name %></td>
+    <td colspan="2">
+      <%= list_icon_with_id_for gift.receiver_id %>
+      <%= gift.receiver_name %>
+    </td>
     <td colspan="2">
       <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
       <%= gift.quantity %>&nbsp;<%= gift.item_name %>
     </td>
     <td><%= gift.message %></td>
     <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
-    <td><%= list_icon_with_id_for gift.giver_id %></td>
-    <td><%= gift.giver_name %></td>
+    <td colspan="2">
+      <%= list_icon_with_id_for gift.giver_id %>
+      <%= gift.giver_name %>
+    </td>
   </tr>
 <% end %>
 </table>
