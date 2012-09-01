@@ -96,6 +96,9 @@
 					  <div class="span3">
 					    	<label for="total" class="label">Total:</label>
                 <span id="total">&nbsp;</span>
+
+                  <input name="gift[message]" class="span2" id="message" size="16x3" type="text" value="Leave a message ..."/>
+
 						</div>
 
 						<div class="span3">
@@ -176,9 +179,12 @@
       }     
     });
     
-    $(':input#tip').focus(function() {
+    $(':input#tip, :input:#message').focus(function() {
       var field = $(this);
       if (field.val()=='Choose Tip Amount') {
+        field.val('');
+      }
+      if (field.val()=="Leave a message ...") {
         field.val('');
       }
     });
