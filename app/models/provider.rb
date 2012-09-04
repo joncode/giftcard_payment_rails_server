@@ -27,8 +27,8 @@
 class Provider < ActiveRecord::Base
   attr_accessible :address, :city, :description, :logo, :name, :state, :user_id, :staff_id, :zip, :zinger, :phone, :email, :twitter, :facebook, :website
   
-  serialize  :user_id, Array
-  serialize  :staff_id, Array
+  # serialize  :user_id, Array
+  # serialize  :staff_id, Array
                                                                                                   
   belongs_to :user                                                                              
   has_one    :menu                                                                              
