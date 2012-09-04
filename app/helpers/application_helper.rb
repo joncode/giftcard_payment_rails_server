@@ -7,4 +7,10 @@ module ApplicationHelper
       link_to "Merchant Sign In", merchants_path
     end
   end
+  
+  def download_img_url_for(photo)
+    if !photo.nil?
+      AWS::S3::S3Object.url_for(photo, PORTRAIT, :authenticated => false)
+    end
+  end
 end

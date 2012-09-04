@@ -4,18 +4,18 @@ module UsersHelper
     if user.photo.blank?
       gravatar_url = "ninja_ghost_128.png"
     else
-      gravatar_url =  user.photo_url.to_s
+      gravatar_url =  download_img_url_for(user.photo.to_s)
     end 
-    image_tag(gravatar_url, alt: user.phone, class: "gravatar") 
+    image_tag(gravatar_url, alt: "cant locate image", class: "gravatar") 
   end 
   
   def list_icon_for(user)
     if user.photo.blank?
       gravatar_url = "ninja_ghost_128.png"
     else
-      gravatar_url =  user.photo_url.to_s
+      gravatar_url =  download_img_url_for(user.photo.to_s)
     end 
-    image_tag(gravatar_url, alt: user.phone, class: "iconListView")     
+    image_tag(gravatar_url, alt: "cant locate image", class: "iconListView")     
   end
   
   def list_icon_with_id_for(user_id)
@@ -27,9 +27,9 @@ module UsersHelper
     if user.photo.blank?
       gravatar_url = "ninja_ghost_128.png"
     else
-      gravatar_url =  user.photo_url.to_s
+      gravatar_url =  download_img_url_for(user.photo.to_s)
     end 
-    image_tag(gravatar_url, alt: user.phone, class: "iconListView")     
+    image_tag(gravatar_url, alt: "cant locate image", class: "iconListView")     
   end
    
 end

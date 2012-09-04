@@ -1,7 +1,7 @@
 class IphoneController < AppController
 
   
-  LOGIN_REPLY = ["first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone", "provider_id"]  
+  LOGIN_REPLY = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone", "provider_id"]  
   GIFT_REPLY  = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
   BUY_REPLY   = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
   BOARD_REPLY = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "id"] 
