@@ -252,6 +252,30 @@ class IphoneController < AppController
       format.json { render text: response.to_json }
     end  
   end
+  
+  def update_photo
+    logger.info "Update Photo"
+    message = ""
+    response = {} 
+    @user  = User.find_by_remember_token(params["token"])
+    order_obj = JSON.parse params["data"]
+ 
+    respond_to do |format|
+      if order_obj.nil?
+        message = "Photo URL not received correctly from iphone. "
+      else
+        @user.photo = order_obj.photo
+        if @user.update_attributes(photo: @user.photo)
+          response["success"] = "Photo Updated - Thank you!"
+        else
+          response["error_server"]  = "Photo URL unable to process to database." 
+        end
+      end
+
+      logger.info response
+      format.json { render json: response.to_json }
+    end
+  end
  
   private
   
