@@ -293,26 +293,26 @@ gift_hash = {}
 # users = User.all
 # users.select! { |u| u.admin == true }
 # users.select! { |u| u.first_name != 'Taylor' }
-
-i = 0
-users.each do |u|
-  case i
-  when 0
-    providers = Provider.find_all_by_name("PT's Pub")
-  when 1
-    providers = Provider.find_all_by_name("Dos Caminos")
-  when 2
-    providers = Provider.find_all_by_name("Hard Rock Hotel & Casino") 
-  when 3
-    providers = Provider.find_all_by_name("Double Down Saloon")
-  when 4
-    providers = Provider.find_all_by_zip('89109')
-  else
-    providers = []
-  end
-  i += 1
-  # make an array of provider_ids or a single provider_id
-  p_id_array = providers.map { |p| p.id }
-  users[0].update_attributes({provider_id: p_id_array})
+# 
+# i = 0
+# users.each do |u|
+#   case i
+#   when 0
+#     providers = Provider.find_all_by_name("PT's Pub")
+#   when 1
+#     providers = Provider.find_all_by_name("Dos Caminos")
+#   when 2
+#     providers = Provider.find_all_by_name("Hard Rock Hotel & Casino") 
+#   when 3
+#     providers = Provider.find_all_by_name("Double Down Saloon")
+#   when 4
+#     providers = Provider.find_all_by_zip('89109')
+#   else
+#     providers = []
+#   end
+#   i += 1
+#   # make an array of provider_ids or a single provider_id
+#   p_id_array = providers.map { |p| p.id }
+#   users[0].update_attributes({provider_id: p_id_array})
   
 
