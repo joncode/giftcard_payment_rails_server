@@ -51,13 +51,8 @@ class User < ActiveRecord::Base
   # mount_uploader :photo, ImageUploader
   before_save { |user| user.email = email.downcase }
   before_save :create_remember_token
-  # before update
-  # if the update is to the server code
-  # get the providers that the user works for 
-  # save the server code in the provider server code array - remove the old server code 
-  # or should this be done thru model associations
-  # where you ask provider.staff.server_codes and get all the server codes associated with that provider
-  
+  before_update :validate_server_code
+
   
   validates_presence_of :city, :state, :zip, :address, :credit_number
   validates :first_name  , presence: true, length: { maximum: 50 }
@@ -96,6 +91,21 @@ class User < ActiveRecord::Base
   
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64
+    end
+    
+    def validate_server_code
+    # before update
+    # if the update is to the server code
+    # get the providers that the user works for 
+    # save the server code in the provider server code array - remove the old server code 
+    # or should this be done thru model associations
+    # where you ask provider.staff.server_codes and get all the server codes associated with that provider
+
+      flag = true
+      if self.server_code != nil
+        flag = self.server_code.length == 4 ? true : false
+      end
+      return flag
     end
   
 end

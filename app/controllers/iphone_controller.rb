@@ -255,16 +255,20 @@ class IphoneController < AppController
   
   def update_photo
     logger.info "Update Photo"
-    response = {} 
-    @user  = User.find_by_remember_token(params["token"])
+    response = {}
+    begin 
+      user  = User.find_by_remember_token(params["token"])
+    rescue
+      response["error"] = "User not found from remember token"
+    end
+    
     data_obj = JSON.parse params["data"]
- 
+    
     respond_to do |format|
       if data_obj.nil?
         response["error_iphone"] = "Photo URL not received correctly from iphone. "
       else
-        @user.photo = data_obj["photo"]
-        if @user.update_attributes(photo: @user.photo)
+        if user.update_attributes(photo: data_obj["photo"])
           response["success"] = "Photo Updated - Thank you!"
         else
           response["error_server"]  = "Photo URL unable to process to database." 
