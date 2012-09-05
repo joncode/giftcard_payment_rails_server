@@ -258,13 +258,13 @@ class IphoneController < AppController
     message = ""
     response = {} 
     @user  = User.find_by_remember_token(params["token"])
-    order_obj = JSON.parse params["data"]
+    data_obj = JSON.parse params["data"]
  
     respond_to do |format|
-      if order_obj.nil?
+      if data_obj.nil?
         message = "Photo URL not received correctly from iphone. "
       else
-        @user.photo = order_obj.photo
+        @user.photo = data_obj["photo"]
         if @user.update_attributes(photo: @user.photo)
           response["success"] = "Photo Updated - Thank you!"
         else

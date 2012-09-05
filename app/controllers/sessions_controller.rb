@@ -28,7 +28,7 @@ class SessionsController < ApplicationController
     end
     if user && user.authenticate(password)
       # add provider to user
-      add_provider_to_user(user) if user.provider_id.empty?
+      # add_provider_to_user(user) if user.provider_id.empty?
       sign_in user
       redirect_to home_path
     else
