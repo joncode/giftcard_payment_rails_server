@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   # before update
   # if the update is to the server code
   # get the providers that the user works for 
-  # save the server code in the provider server code array - remove the old code 
+  # save the server code in the provider server code array - remove the old server code 
   # or should this be done thru model associations
   # where you ask provider.staff.server_codes and get all the server codes associated with that provider
   
