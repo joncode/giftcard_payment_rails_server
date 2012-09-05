@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   has_secure_password
   # mount_uploader :photo, ImageUploader
   before_save { |user| user.email = email.downcase }
-  before_save :create_remember_token
+  before_create :create_remember_token
   before_update :validate_server_code
 
   
@@ -61,7 +61,6 @@ class User < ActiveRecord::Base
   validates :email , presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 }, on: :create
   validates :password_confirmation, presence: true, on: :create
-  # validates_length_of :server_code, is: 4
   
   def feed
     Micropost.from_users_followed_by(self)

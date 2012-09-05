@@ -162,7 +162,7 @@ class IphoneController < AppController
     end
     
     # for drinkboard users this will work because we are getting the receiver info from drinkboard
-    # for facebook users this will bnot work because we are not connecting the fb user with a drinkboard account
+    # for facebook users this will not work because we are not connecting the fb user with a drinkboard account
     
     response = { "error" => message } if message != "" 
     respond_to do |format|
