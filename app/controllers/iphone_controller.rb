@@ -91,8 +91,14 @@ class IphoneController < AppController
   end
   
   def drinkboard_users
-    @user  = User.find_by_remember_token(params["token"])
-    @users = User.find(:all, :conditions => ["id != ?", @user.id])    
+    logger.info "Drinkboard Users"
+    begin
+      @user  = User.find_by_remember_token(params["token"])
+      # @users = User.find(:all, :conditions => ["id != ?", @user.id])
+    rescue 
+      logger.info "ALERT - cannot find user from token"
+    end
+    @users = User.all   
     user_hash = hash_these_users(@users, USER_REPLY)
     
     respond_to do |format|
