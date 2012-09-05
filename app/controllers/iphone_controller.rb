@@ -81,7 +81,7 @@ class IphoneController < AppController
     logger.info "Buys"
     @user  = User.find_by_remember_token(params["token"])
     @gifts, @past_gifts = Gift.get_buy_history(@user)
-    gift_hash = hash_these_gifts(@gifts, BUY_REPLY)
+    gift_hash = hash_these_gifts(@gifts, BUY_REPLY, true)
     
     respond_to do |format|
       #format.json { render json: @gifts, only: GIFT_REPLY }
@@ -320,6 +320,11 @@ class IphoneController < AppController
           gift_obj[key] = value.to_s
         end
         
+        # add giver photo url 
+        giver_user_obj = User.find(g.giver_id)
+        gift_obj["giver_photo"] = giver_user_obj.photo
+        
+        # add the full provider address
         if address_get
           address = g.provider.address
           city = g.provider.city
