@@ -95,6 +95,7 @@ class IphoneController < AppController
     begin
       @user  = User.find_by_remember_token(params["token"])
       # @users = User.find(:all, :conditions => ["id != ?", @user.id])
+      # providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
     rescue 
       logger.info "ALERT - cannot find user from token"
     end

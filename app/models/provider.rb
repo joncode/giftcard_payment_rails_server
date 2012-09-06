@@ -26,15 +26,14 @@
 
 class Provider < ActiveRecord::Base
   attr_accessible :address, :city, :description, :logo, :name, :state, :user_id, :staff_id, :zip, :zinger, :phone, :email, :twitter, :facebook, :website
-  
-  # serialize  :user_id, Array
-  # serialize  :staff_id, Array
-                                                                                                  
-  belongs_to :user                                                                              
+                                                                                                
+  has_many   :users, :through => :employees                                                                              
+  has_many   :employees
   has_one    :menu                                                                              
   has_many   :orders                                                                            
   has_one    :menu_string
   has_many   :gifts
+
   
   def full_address
     "#{self.address},  #{self.city}, #{self.state}"

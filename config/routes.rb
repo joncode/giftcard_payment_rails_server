@@ -1,5 +1,7 @@
 Drinkboard::Application.routes.draw do
   
+  resources :employees
+
   resources :orders
   resources :redeems
   resources :gifts do

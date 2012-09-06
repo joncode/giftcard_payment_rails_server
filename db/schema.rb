@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120829184806) do
+ActiveRecord::Schema.define(:version => 20120906054600) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -22,6 +22,15 @@ ActiveRecord::Schema.define(:version => 20120829184806) do
 
   add_index "connections", ["giver_id"], :name => "index_connections_on_giver_id"
   add_index "connections", ["receiver_id"], :name => "index_connections_on_receiver_id"
+
+  create_table "employees", :force => true do |t|
+    t.integer  "provider_id"
+    t.integer  "user_id"
+    t.string   "clearance"
+    t.boolean  "active"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "gifts", :force => true do |t|
     t.string   "giver_name"
@@ -107,7 +116,6 @@ ActiveRecord::Schema.define(:version => 20120829184806) do
     t.string   "city",        :limit => 32
     t.string   "state",       :limit => 2
     t.string   "zip",         :limit => 16
-    t.integer  "user_id",                   :null => false
     t.string   "logo"
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
@@ -117,7 +125,6 @@ ActiveRecord::Schema.define(:version => 20120829184806) do
     t.string   "facebook"
     t.string   "website"
     t.string   "photo"
-    t.string   "staff_id"
     t.string   "sales_tax"
   end
 
@@ -158,7 +165,6 @@ ActiveRecord::Schema.define(:version => 20120829184806) do
     t.string   "phone"
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "provider_id"
     t.string   "facebook_id"
     t.string   "handle"
     t.string   "server_code"
