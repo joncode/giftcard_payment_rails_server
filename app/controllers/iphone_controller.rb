@@ -322,7 +322,7 @@ class IphoneController < AppController
         
         # add giver photo url 
         giver_user_obj = User.find(g.giver_id)
-        gift_obj["giver_photo"] = giver_user_obj.photo
+        gift_obj["giver_photo"] = giver_user_obj.photo.nil? ? "" : giver_user_obj.photo
         
         # add the full provider address
         if address_get
