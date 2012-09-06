@@ -38,6 +38,7 @@ class Gift < ActiveRecord::Base
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total
   
   before_create :add_category, :if => :no_category
+  before_save   :pluralizer
   
   def self.get_gifts(user)
     Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
@@ -79,6 +80,12 @@ class Gift < ActiveRecord::Base
   end
   
   private
+    
+    def pluralizer
+      if self.quantity > 1
+        self.item_name << "'s"
+      end
+    end
     
     def add_category
       self.category = self.item.category

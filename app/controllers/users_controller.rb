@@ -75,7 +75,8 @@ class UsersController < ApplicationController
         format.html { redirect_to @user, notice: "Update Successful. #{msg}" }
         format.json { head :no_content }
       else
-        format.html { render action: action}
+        sign_in @user
+        format.html { render action: action, notice: "Update Unsuccessful"}
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

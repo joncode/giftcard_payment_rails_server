@@ -48,11 +48,16 @@ class User < ActiveRecord::Base
 
   has_secure_password
   # mount_uploader :photo, ImageUploader
-  before_save { |user| user.email = email.downcase }
-  before_create :create_remember_token
-  before_update :validate_server_code
-
   
+  # save data to db with proper cases
+  before_save { |user| user.email      = email.downcase }
+  before_save { |user| user.first_name = first_name.capitalize}
+  before_save { |user| user.last_name  = last_name.capitalize}
+  before_save   :extract_phone_digits   # remove all non-digits from phone
+  
+  before_create :create_remember_token  # creates unique remember token for user
+  
+  # before_save   :validate_server_code   # validation does not return error
   validates_presence_of :city, :state, :zip, :address, :credit_number
   validates :first_name  , presence: true, length: { maximum: 50 }
   validates :last_name  , presence: true, length: { maximum: 50 }
@@ -60,6 +65,7 @@ class User < ActiveRecord::Base
   validates :email , presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 }, on: :create
   validates :password_confirmation, presence: true, on: :create
+  validates_length_of :server_code, is: 4, , :if => :check_for_server_code
   
   def feed
     Micropost.from_users_followed_by(self)
@@ -91,11 +97,21 @@ class User < ActiveRecord::Base
       self.remember_token = SecureRandom.urlsafe_base64
     end
     
+    def extract_phone_digits
+      phone_raw   = self.phone
+      phone_match = phone_raw.match(VALID_PHONE_REGEX)
+      self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
+    end
+
+    def check_for_server_code
+      self.server_code != nil
+    end
+    
     def validate_server_code
     # before update
     # if the update is to the server code
     # get the providers that the user works for 
-    # save the server code in the provider server code array - remove the old server code 
+    # save server code in provider server code array - remove the old server code 
     # or should this be done thru model associations
     # where you ask provider.staff.server_codes and get all the server codes associated with that provider
 
