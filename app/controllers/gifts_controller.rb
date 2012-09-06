@@ -124,7 +124,8 @@ class GiftsController < ApplicationController
   end
   
   def browse
-    @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
+    # @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
+    @users = User.all
     @providers = Provider.all
 
     respond_to do |format|
@@ -140,7 +141,8 @@ class GiftsController < ApplicationController
   
   def browse_with_location
     @provider = Provider.find(params[:id])
-    @users = User.find(:all, :conditions => ["id != ?", current_user.id])
+    # @users = User.find(:all, :conditions => ["id != ?", current_user.id])
+    @user = User.all
     @menu = create_menu_from_items(@provider)  
 
   end

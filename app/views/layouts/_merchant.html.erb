@@ -20,11 +20,9 @@
             <li><%= link_to @provider.name, merchant_path(@provider) %></li>
             <li><%= link_to "Orders", orders_merchant_path(@provider) %></li>
           <% else %>
-            <li><%= link_to "Merchant-Home", merchants_path %></li>
+            <li><%= link_to "Merchants", merchants_path %></li>
           <% end %>
-          
-          <li><%= link_to "Buys", buy_gifts_path %></li>
-          <li><%= link_to "Activity", activity_gifts_path %></li>
+
           <ul class="nav pull-right">
               <li id="fat-menu" class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.username %> <b class="caret"></b></a>

@@ -31,6 +31,7 @@ Drinkboard::Application.routes.draw do
       get 'orders'
       get 'order'
       get 'completed'
+      get 'staff'
     end
   end
   

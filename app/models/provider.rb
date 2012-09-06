@@ -40,6 +40,8 @@ class Provider < ActiveRecord::Base
   end
   
   def get_servers
-    User.all
+    # this means get people who are at work not just employed
+    # for now without location data, its just employees
+    self.users
   end
 end

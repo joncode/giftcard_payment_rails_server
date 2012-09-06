@@ -27,8 +27,6 @@ class SessionsController < ApplicationController
       password = params[:session][:password]
     end
     if user && user.authenticate(password)
-      # add provider to user
-      # add_provider_to_user(user) if user.provider_id.empty?
       sign_in user
       redirect_to home_path
     else
@@ -42,30 +40,6 @@ class SessionsController < ApplicationController
     redirect_to home_path
   end
   
-  private
-  
-    def add_provider_to_user(user)
-      # search providers for user_id
-      provider_array = Provider.where(:user_id => user.id)
-      # get the provider_id's
-      # make an array of provider id's
-      if !provider_array.empty?
-        provider_ids = array_of_ids(provider_array)     
-        user.update_attributes(:provider_id => provider_ids, :server_code => "0000")
-        # update user to have provider_id in attributes
-      end
-    end
-    
-    def array_of_ids(provider_array)
-      ids = []
-      provider_array.each do |p|
-        p_id = p.id
-        ids << p_id
-      end
-      return ids
-    end
-  
-
 end
 
 

@@ -297,9 +297,9 @@ gift_hash = {}
 # users.each do |u|
 #   case i
 #   when 0
-#     providers = Provider.find_all_by_name("PT's Pub")
+#     providers ps = Provider.find_all_by_name("PT's Pub")
 #   when 1
-#     providers = Provider.find_all_by_name("Dos Caminos")
+#     providers ps = Provider.find_all_by_name("Dos Caminos")
 #   when 2
 #     providers = Provider.find_all_by_name("Hard Rock Hotel & Casino") 
 #   when 3

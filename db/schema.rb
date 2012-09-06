@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120906054600) do
+ActiveRecord::Schema.define(:version => 20120906072631) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(:version => 20120906054600) do
   end
 
   create_table "providers", :force => true do |t|
-    t.string   "name",                      :null => false
+    t.string   "name",                                        :null => false
     t.string   "zinger"
     t.text     "description"
     t.string   "address"
@@ -117,8 +117,8 @@ ActiveRecord::Schema.define(:version => 20120906054600) do
     t.string   "state",       :limit => 2
     t.string   "zip",         :limit => 16
     t.string   "logo"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.string   "phone"
     t.string   "email"
     t.string   "twitter"
@@ -126,6 +126,7 @@ ActiveRecord::Schema.define(:version => 20120906054600) do
     t.string   "website"
     t.string   "photo"
     t.string   "sales_tax"
+    t.boolean  "active",                    :default => true
   end
 
   create_table "redeems", :force => true do |t|
@@ -169,6 +170,8 @@ ActiveRecord::Schema.define(:version => 20120906054600) do
     t.string   "handle"
     t.string   "server_code"
     t.string   "twitter"
+    t.boolean  "active",                        :default => true
+    t.string   "persona",                       :default => ""
   end
 
 end

@@ -9,7 +9,13 @@
       <li> | </li>
       <li><%= link_to "Learn More", learn_path %> </li> 
       <li> | </li>
-      <li><%= merchant_tag(current_user) %></li>   
+      <% if @provider && params[:controller] == "merchants" %>
+        <li><%= link_to "Merchants", merchants_path %></li>
+        <li> | </li>
+        <li><%= link_to "Add New Merchant", new_provider_path %>
+      <% else %>
+        <li><%= merchant_tag(current_user) %></li> 
+      <% end %>  
     </ul>
   </small>
   <nav>

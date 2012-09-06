@@ -1,15 +1,12 @@
 class MerchantsController < ApplicationController
   
   def index
-    providers = current_user.provider_id    
-    providers = [] if !(providers.kind_of? Array)
+    @providers = current_user.providers    
 
     respond_to do |format|
-      if providers.count == 1
-        provider = Provider.find(providers).pop
-        format.html { redirect_to merchant_path(provider) }
+      if @providers.count == 1
+        format.html { redirect_to merchant_path(@providers.pop) }
       else
-        @providers = Provider.find(providers)
         format.html
       end
     end
@@ -111,7 +108,10 @@ class MerchantsController < ApplicationController
     end
   end
 
-
+  def staff
+    @provider = Provider.find(params[:id])
+    @staff    = @provider.users
+  end
 
 
 end
