@@ -16,8 +16,7 @@
 # THOUGHTS
   # 4 the json string has row numbers for iphone when it should just be a menu key with an array of item hashes
   # what happens when somebody buys a drink and there phone number does not produce an app user, either the phone is wrong or changed or the person has yet to set up an account
-  # do we need provider id checks on the order ? - the user works there?
-  # provider_id on user is not being used .. useless ?
+
 ######################        USERS        ######################
 
 User.delete_all

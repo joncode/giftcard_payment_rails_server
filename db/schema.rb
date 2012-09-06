@@ -24,12 +24,12 @@ ActiveRecord::Schema.define(:version => 20120906054600) do
   add_index "connections", ["receiver_id"], :name => "index_connections_on_receiver_id"
 
   create_table "employees", :force => true do |t|
-    t.integer  "provider_id"
-    t.integer  "user_id"
-    t.string   "clearance"
-    t.boolean  "active"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "provider_id",                      :null => false
+    t.integer  "user_id",                          :null => false
+    t.string   "clearance",   :default => "staff"
+    t.boolean  "active",      :default => true
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
   create_table "gifts", :force => true do |t|

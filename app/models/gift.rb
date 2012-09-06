@@ -28,11 +28,12 @@
 class Gift < ActiveRecord::Base
   attr_accessible :credit_card, :giver_id, :item_id, :message, :price, :provider_id, :quantity, :receiver_id, :redeem_id, :special_instructions, :status, :total, :giver_name, :receiver_name, :receiver_name ,  :provider_name, :item_name , :category, :receiver_phone, :tip, :tax
   
-  belongs_to  :user
   has_one     :redeem
   belongs_to  :provider
   belongs_to  :item
   has_one     :order
+  belongs_to  :giver,    class_name: "User"
+  belongs_to  :receiver, class_name: "User"
   
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total
   

@@ -54,7 +54,7 @@ class GiftsController < ApplicationController
   
   def detail
     @gift = Gift.find(params[:id])
-    @giver = User.find(@gift.giver_id)
+    @giver = @gift.giver
 
     respond_to do |format|
       format.html # detail.html.erb
@@ -63,10 +63,10 @@ class GiftsController < ApplicationController
   end
   
   def completed
-    @order = Order.find(params[:id])
-    @gift = @order.gift
-    @giver = User.find(@gift.giver_id)
-    @receiver = User.find(@gift.receiver_id)
+    @order    = Order.find(params[:id])
+    @gift     = @order.gift
+    @giver    = @gift.giver
+    @receiver = @gift.receiver
     @provider = @order.provider
     if @order.server_id
       @server = User.find(@order.server_id) 

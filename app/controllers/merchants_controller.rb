@@ -43,8 +43,8 @@ class MerchantsController < ApplicationController
 
   def detail
     @gift = Gift.find(params[:id])
-    @giver = User.find(@gift.giver_id)
-    @receiver = User.find(@gift.receiver_id)
+    @giver = @gift.giver
+    @receiver = @gift.receiver
     @provider = @gift.provider
     if @gift.order.server_id
       @server = User.find(@gift.order.server_id) 
@@ -79,8 +79,8 @@ class MerchantsController < ApplicationController
   def completed
     @order = Order.find(params[:id])
     @gift = @order.gift
-    @giver = User.find(@gift.giver_id)
-    @receiver = User.find(@gift.receiver_id)
+    @giver = @gift.giver
+    @receiver = @gift.receiver
     @provider = @order.provider
     if @order.server_id
       @server = User.find(@order.server_id) 
