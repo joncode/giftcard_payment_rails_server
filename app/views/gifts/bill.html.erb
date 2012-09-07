@@ -97,7 +97,7 @@
 					    	<label for="total" class="label">Total:</label>
                 <span id="total">&nbsp;</span>
 
-                  <input name="gift[message]" class="span2" id="message" size="16x3" type="text" value="Leave a message ..."/>
+                  <input name="gift[message]" class="span2" id="message" size="16x3" type="text" placeholder="Leave a message ..."/>
 
 						</div>
 
@@ -105,7 +105,7 @@
               <label for="total" class="label" id="totalAmount">$</label>
               <%= f.hidden_field :total , id: "totalInput" %>
               <!-- <input class="btn btn-large btn-info disabled" type="submit" name="submit" id="submit" value="Please Leave a Tip"/> -->
-              <%= submit_tag "Please Leave a Tip", :class => "btn btn-large btn-info disabled", :id => "submit" %>
+              <%= submit_tag "Please Leave a Tip", :class => "btn btn-large btn-info disabled", :id => "submit", :disabled => 'disabled' %>
 						</div>
 					</div>					
       <!-- </form> -->
@@ -179,12 +179,9 @@
       }     
     });
     
-    $(':input#tip, :input:#message').focus(function() {
+    $(':input#tip').focus(function() {
       var field = $(this);
       if (field.val()=='Choose Tip Amount') {
-        field.val('');
-      }
-      if (field.val()=="Leave a message ...") {
         field.val('');
       }
     });
@@ -256,6 +253,7 @@
     $(':input#totalInput').val(formatCurrency(total));
     $(':input#submit').val('Click Here to Send Gift');
     $(':input#submit').removeClass('disabled');
+    $(':input#submit').removeAttr('disabled');            
   };
   
   function calcSubTotal(preTaxTotal, sales_tax) {
@@ -281,16 +279,17 @@
   //                            set button behaviors                     //    
   function controlDecreaseQ() {
       if (quantity == 1) {
-        $('#decreaseQ').addClass('disabled');  
+        $('#decreaseQ').addClass('disabled');
       }
       if ((quantity > 1) && $('#decreaseQ').hasClass('disabled')) {
-        $('#decreaseQ').removeClass('disabled');  
+        $('#decreaseQ').removeClass('disabled');
       }
   };
   
   function resetSubmitButton() {
     $(':input#submit').val('Please Leave a Tip');
     $(':input#submit').addClass('disabled');
+    $(':input#submit').attr('disabled', 'disabled');  
     $(':button').removeClass('active');
   };
   

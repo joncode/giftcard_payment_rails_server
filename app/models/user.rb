@@ -108,13 +108,11 @@ class User < ActiveRecord::Base
     end
     
     def validate_server_code
-    # before update
-    # if the update is to the server code
+    # before update if the update is to the server code
     # get the providers that the user works for 
     # save server code in provider server code array - remove the old server code 
     # or should this be done thru model associations
     # where you ask provider.staff.server_codes and get all the server codes associated with that provider
-
       flag = true
       if self.server_code != nil
         flag = self.server_code.length == 4 ? true : false

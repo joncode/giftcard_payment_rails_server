@@ -14,20 +14,35 @@
   <b>Drink:</b>
   <%= @gift.quantity %>&nbsp;<%= @gift.item_name %>
 </p>
-
+<p>
+  <b>Cost:</b>
+  $<%= @gift.quantity.to_i * @gift.price.to_i %>
+</p>
 <p>
   <b>Location:</b>
   <%= @gift.provider_name %>
 </p>
+<% if !@gift.message.empty? %>
+  <p>
+    <b>Message:</b>
+    <%= @gift.message %>
+  </p>
+<% end %>
 
 <p>
-  <b>Message:</b>
-  <%= @gift.message %>
+  <b>Tax:</b>
+  $<%= @gift.tax %>
 </p>
-
 <p>
-  <b>Status:</b>
-  <%= @gift.status %>
+  <b>Subtotal:</b>
+  $<%= @gift.quantity.to_f * @gift.price.to_f + @gift.tax.to_f %>
 </p>
-
+<p>
+  <b>Tip:</b>
+  $<%= @gift.tip %>
+</p>
+<p>
+  <b>Total:</b>
+  $<%= @gift.total %>
+</p>
 <%= link_to 'Home', home_path %>
