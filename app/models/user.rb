@@ -50,18 +50,18 @@ class User < ActiveRecord::Base
   # mount_uploader :photo, ImageUploader
   
   # save data to db with proper cases
-  before_save { |user| user.email      = email.downcase }
-  before_save { |user| user.first_name = first_name.capitalize}
-  before_save { |user| user.last_name  = last_name.capitalize}
-  before_save   :extract_phone_digits   # remove all non-digits from phone
+  before_save { |user| user.email      = email.downcase  }
+  before_save { |user| user.first_name = first_name.capitalize if first_name}
+  before_save { |user| user.last_name  = last_name.capitalize if last_name }
+  before_save   :extract_phone_digits    # remove all non-digits from phone
   
   before_create :create_remember_token  # creates unique remember token for user
   
   # before_save   :validate_server_code   # validation does not return error
-  validates_presence_of :city, :state, :zip, :address, :credit_number
-  validates :first_name  , presence: true, length: { maximum: 50 }
-  validates :last_name  , presence: true, length: { maximum: 50 }
-  validates :phone , presence: true, format: { with: VALID_PHONE_REGEX }, uniqueness: true
+  # validates_presence_of :city, :state, :zip, :address, :credit_number
+  # validates :first_name  , presence: true, length: { maximum: 50 }
+  # validates :last_name  , presence: true, length: { maximum: 50 }
+  # validates :phone , presence: true, format: { with: VALID_PHONE_REGEX }, uniqueness: true
   validates :email , presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 }, on: :create
   validates :password_confirmation, presence: true, on: :create
@@ -98,9 +98,11 @@ class User < ActiveRecord::Base
     end
     
     def extract_phone_digits
-      phone_raw   = self.phone
-      phone_match = phone_raw.match(VALID_PHONE_REGEX)
-      self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
+      if self.phone
+        phone_raw   = self.phone
+        phone_match = phone_raw.match(VALID_PHONE_REGEX)
+        self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
+      end
     end
 
     def check_for_server_code
