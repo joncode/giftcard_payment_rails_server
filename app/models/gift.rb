@@ -36,8 +36,8 @@ class Gift < ActiveRecord::Base
   belongs_to  :receiver, class_name: "User"
   
   # add tax and tip when the iphone is ready 
-  validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total# , :tip, :tax
-  validates_numericality_of  :total, :quantity#, :tax, :tip
+  validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total
+  # validates_numericality_of  :total, :quantity
   before_create :add_category, :if => :no_category
   before_save   :pluralizer
   

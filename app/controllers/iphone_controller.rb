@@ -186,7 +186,9 @@ class IphoneController < AppController
       end
     when 'c'
       # contacts - search users for phone
-      if receiver = User.find_by_phone(gift_obj["phone"])
+      phone_received = gift_obj["receiver_phone"]
+      phone = extract_phone_digits(phone_received)
+      if receiver = User.find_by_phone(phone)
         gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
         response["receiver"] = receiver_info_response(receiver)
       else
@@ -324,6 +326,13 @@ class IphoneController < AppController
   end
  
   private
+  
+    def extract_phone_digits(phone_raw)
+      if phone_raw
+        phone_match = phone_raw.match(VALID_PHONE_REGEX)
+        phone       = phone_match[1] + phone_match[2] + phone_match[3]
+      end
+    end
     
     def receiver_info_response(receiver)
       { "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
