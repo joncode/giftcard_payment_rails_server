@@ -93,13 +93,13 @@ class IphoneController < AppController
   def drinkboard_users
     logger.info "Drinkboard Users"
     begin
-      @user  = User.find_by_remember_token(params["token"])
+      @user = User.find_by_remember_token(params["token"])
       # @users = User.find(:all, :conditions => ["id != ?", @user.id])
       # providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
     rescue 
       logger.info "ALERT - cannot find user from token"
     end
-    @users = User.all   
+    @users    = User.all   
     user_hash = hash_these_users(@users, USER_REPLY)
     
     respond_to do |format|
@@ -124,7 +124,7 @@ class IphoneController < AppController
     logger.info "Provider"
     # @user  = User.find_by_remember_token(params["token"])
     @provider = Provider.find(params["provider_id"])
-    @gifts = Gift.get_provider(@provider)
+    @gifts    = Gift.get_provider(@provider)
 
     gift_hash = hash_these_gifts(@gifts, PROVIDER_REPLY) 
 
@@ -138,7 +138,7 @@ class IphoneController < AppController
     logger.info "Locations"
     # @user  = User.find_by_remember_token(params["token"])
     @providers = Provider.all
-    menus = {}
+    menus  = {}
     @providers.each do |p|
       menu = JSON.parse p.menu_string.data
       menus.merge!(menu)
@@ -151,30 +151,65 @@ class IphoneController < AppController
   
   def create_gift 
     logger.info "Create Gift"
-    message = ""
     response = {}
+    message  = ""
+
     gift_obj = JSON.parse params["gift"]
     if gift_obj.nil?
-      message = "data did not transfer. "
-      gift = Gift.new
+      message = "No gift data received.  "
+      gift    = Gift.new
     else
-      gift = Gift.new(gift_obj)
-    end
-    begin
-      giver = User.find_by_remember_token(params["token"])
-      gift.giver_id = giver.id
-      gift.giver_name = giver.username
-    rescue
-      message += "Couldn't identify app user. "
+      gift    = Gift.new(gift_obj)
     end
     
-    # for drinkboard users this will work because we are getting the receiver info from drinkboard
-    # for facebook users this will not work because we are not connecting the fb user with a drinkboard account
+    case params["origin"]
+    when 'd'
+      #drinkboard - data already received
+      response["receiver"]   = "Drinkboard user"
+    when 'f'
+      # facebook - search users for facebook_id
+      if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
+        gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+        response["receiver"] = receiver_info_response(receiver)
+      else                   
+        gift_obj["status"]   = "incomplete"
+        response["receiver"] = "NID"
+      end
+    when 't'
+      #twitter - search users for twitter handle
+      if receiver = User.find_by_twitter(gift_obj["twitter"])
+        gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+        response["receiver"] = receiver_info_response(receiver)
+      else                   
+        gift_obj["status"]   = "incomplete"
+        response["receiver"] = "NID"
+      end
+    when 'c'
+      # contacts - search users for phone
+      if receiver = User.find_by_phone(gift_obj["phone"])
+        gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+        response["receiver"] = receiver_info_response(receiver)
+      else
+        gift_obj["status"]   = "incomplete"
+        response["receiver"] = "NID"
+      end
+    else
+      # what to do here ?
+      response["error_origin"]   = "No origin indicator sent" 
+    end
+
+    begin
+      giver           = User.find_by_remember_token(params["token"])
+      gift.giver_id   = giver.id
+      gift.giver_name = giver.username
+    rescue
+      message = "Couldn't identify app user. "
+    end
     
     response = { "error" => message } if message != "" 
     respond_to do |format|
       if gift.save
-        response["success"] = "Gift received - Thank you!"
+        response["success"]       = "Gift received - Thank you!" 
       else
         response["error_server"]  = " Gift unable to process to database." 
       end
@@ -185,14 +220,15 @@ class IphoneController < AppController
 
   def create_redeem
     logger.info "Create Redeem"
-    message = ""
+    message  = ""
     response = {}
+    
     redeem_obj = JSON.parse params["redeem"]
     if redeem_obj.nil?
       message = "data did not transfer. "
-      redeem = Redeem.new
+      redeem  = Redeem.new
     else
-      redeem = Redeem.new(redeem_obj)
+      redeem  = Redeem.new(redeem_obj)
     end
     begin
       receiver = User.find_by_remember_token(params["token"])
@@ -204,7 +240,7 @@ class IphoneController < AppController
 
     respond_to do |format|
       if redeem.save
-        response["success"] = redeem.redeem_code
+        response["success"]      = redeem.redeem_code
       else
         message += " Gift unable to process to database. Please retry later."
         response["error_server"] = message 
@@ -216,24 +252,24 @@ class IphoneController < AppController
 
   def create_order
     logger.info "Create Order"
-    message = ""
-    response = {} 
+    message   = ""
+    response  = {} 
     order_obj = JSON.parse params["data"]
     if order_obj.nil?
       message = "Data not received correctly. "
-      order = Order.new
+      order   = Order.new
     else
-      order = Order.new(order_obj)
+      order   = Order.new(order_obj)
     end
     begin
       provider_user = User.find_by_remember_token(params["token"])
     rescue
-      message += "Couldn't identify app user. "
+      message      += "Couldn't identify app user. "
     end
     begin
     #   redeem = Redeem.find(order.redeem_id)
     #   redeem_code = redeem.redeem_code
-      redeem = Redeem.find_by_gift_id(order.gift_id)
+      redeem   = Redeem.find_by_gift_id(order.gift_id)
     rescue
       message += " Could not find redeem code via gift_id. "
     end
@@ -247,13 +283,13 @@ class IphoneController < AppController
     respond_to do |format|
       if order.redeem_code == redeem_code
         if order.save
-          response["success"] = " Sale Confirmed. Thank you!"
+          response["success"]      = " Sale Confirmed. Thank you!"
         else
           # order.gift.update_attribute(:status, "redeemed")
           response["error_server"] = " Order not processed - database error"
         end
       else
-        response["error_server"] = " the redeem code you entered did not match. "
+        response["error_server"]   = " the redeem code you entered did not match. "
       end
       logger.info response
       format.json { render text: response.to_json }
@@ -273,12 +309,12 @@ class IphoneController < AppController
     
     respond_to do |format|
       if data_obj.nil?
-        response["error_iphone"] = "Photo URL not received correctly from iphone. "
+        response["error_iphone"]   = "Photo URL not received correctly from iphone. "
       else
         if user.update_attributes(photo: data_obj["photo"])
-          response["success"] = "Photo Updated - Thank you!"
+          response["success"]      = "Photo Updated - Thank you!"
         else
-          response["error_server"]  = "Photo URL unable to process to database." 
+          response["error_server"] = "Photo URL unable to process to database." 
         end
       end
 
@@ -288,6 +324,17 @@ class IphoneController < AppController
   end
  
   private
+    
+    def receiver_info_response(receiver)
+      { "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
+    end
+    
+    def add_receiver_to_gift_obj(receiver, gift_obj)
+      gift_obj["receiver_id"]    = receiver.id
+      gift_obj["receiver_name"]  = receiver.username
+      gift_obj["receiver_phone"] = receiver.phone
+      return gift_obj
+    end
   
     def hash_these_users(obj, send_fields)
       user_hash = {}
