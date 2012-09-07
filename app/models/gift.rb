@@ -37,7 +37,7 @@ class Gift < ActiveRecord::Base
   
   # add tax and tip when the iphone is ready 
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total# , :tip, :tax
-  
+  validates_numericality_of  :total, :quantity#, :tax, :tip
   before_create :add_category, :if => :no_category
   before_save   :pluralizer
   
