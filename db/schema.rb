@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(:version => 20120908052501) do
     t.string   "receiver_phone"
     t.string   "tax"
     t.string   "tip"
-    t.integer  "re_gift_id"
+    t.integer  "gift_id"
   end
 
   create_table "items", :force => true do |t|
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(:version => 20120908052501) do
     t.text     "data",         :null => false
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
-  end
+  end  
 
   create_table "menus", :force => true do |t|
     t.integer  "provider_id",               :null => false
