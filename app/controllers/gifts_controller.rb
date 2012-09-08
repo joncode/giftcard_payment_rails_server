@@ -142,7 +142,7 @@ class GiftsController < ApplicationController
   def browse_with_location
     @provider = Provider.find(params[:id])
     # @users = User.find(:all, :conditions => ["id != ?", current_user.id])
-    @user = User.all
+    @users = User.all
     @menu = create_menu_from_items(@provider)  
 
   end
