@@ -29,6 +29,7 @@ class UsersController < ApplicationController
 
   def new    
     @user = User.new
+    @users = User.where( admin: true)
 
     respond_to do |format|
       format.html # new.html.erb

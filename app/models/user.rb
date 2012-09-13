@@ -121,5 +121,6 @@ class User < ActiveRecord::Base
       end
       return flag
     end
+
   
 end

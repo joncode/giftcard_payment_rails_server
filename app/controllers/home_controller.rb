@@ -6,15 +6,11 @@ class HomeController < ApplicationController
         @user = current_user
         format.html
       else
-        format.html { redirect_to choose_path }
+        format.html { redirect_to root_path }
       end
     end
   end
-  
-  def choose_user
-     @users = User.order('id DESC')
-  end
-  
+
   def gift
   
   end
