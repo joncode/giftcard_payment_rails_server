@@ -1,0 +1,15 @@
+class OAuthController < ApplicationController
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+end
