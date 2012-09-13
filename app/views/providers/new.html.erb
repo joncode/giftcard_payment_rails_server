@@ -1,5 +1,46 @@
-<h1>New provider</h1>
+<div class="merchantSignUpObject">
+  <div class="merchantSignUpBackground"></div>
+  <div class="merchantSignUpWrapper">
+    <h1>New Establishment</h1>
 
-<%= render 'form' %>
+    <%= form_for(@provider) do |f| %>
+      <% if @provider.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
 
-<%= link_to 'Back', providers_path %>
+          <ul>
+          <% @provider.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= f.text_field :name ,       :placeholder => 'Establishment Name'  %>
+      </div>                           
+      <div class="field">              
+        <%= f.text_area :description , :placeholder => 'Description', :rows => 4 %>
+      </div> 
+      <div class="field">              
+        <%= f.text_field :website ,    :placeholder => 'Website'  %>
+      </div>                          
+      <div class="field">              
+        <%= f.text_field :address,     :placeholder => 'Address' %>
+      </div>                           
+      <div class="field">              
+        <%= f.text_field :city ,       :placeholder => 'City' %>
+      </div>                           
+      <div class="field">              
+        <%= f.text_field :state,       :placeholder => 'State' %>
+      </div>                           
+      <div class="field">              
+        <%= f.text_field :zip,         :placeholder => 'Zip' %>
+      </div>    
+      <div class="actions">
+        <%= f.submit "Create Account", class: "btn btn-large btn-success" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+

@@ -90,12 +90,10 @@ label {
 input.btn, form.button_to {
 	margin-top: 0px;
 	font-size: 1.5em;
-	//box-shadow: 0 0 2px @darkGrey;
 	transition: box-shadow .5s ease-in-out;
 	-moz-transition: box-shadow .5s ease-in-out;
 	-webkit-transition: box-shadow .5s ease-in-out;
 	padding : 5px 15px;
-	//box-shadow: 2px 2px 5px @darkGrey;
 
 }
 
@@ -112,11 +110,12 @@ input, textarea, select, .uneditable-input {
 	margin: 0;
 	height: 40px;
 	width: 100%;
-	border-radius: 10px;
-	-moz-box-shadow: inset 0 0 0px 3px @darkGrey;
- -webkit-box-shadow: inset 0 0 0px 3px @darkGrey;
-         box-shadow: inset 0 0 0px 3px @darkGrey;
-    background-color: 0;
+	border-radius: 10px;                
+	//-moz-box-shadow: inset  3px 3px  3px  @darkGrey;
+   //-webkit-box-shadow: inset 3px 3px  3px  @darkGrey;
+   box-shadow: inset 3px 3px  3px  @darkGrey, 
+					inset -1px -1px 2px @darkGrey;
+   background-color: 0;
 }
 
 body {
@@ -387,6 +386,71 @@ table, ul {
 td {
 	color : white;
 }
+
+/********              MERCHANT PAGE             ****************/
+.merchantSignUpObject {
+	position: absolute;
+	width : 400px;
+	height : 550;
+	top : 50px;
+	left : 20px;
+	padding : 10px;
+	box-shadow: 7px 7px 7px #000;
+	border : 2px solid black;
+	border-radius : 8px;
+	
+	.merchantSignUpBackground {
+		position : absolute;
+		top : 0;
+		left : 0;
+		width : 100%;
+		height : 100%;
+		background-color : #B3BFD7;
+		opacity : 0.47;
+
+		z-index : -10;
+	
+	}
+	
+	.merchantSignUpWrapper {
+		.field {
+			border : 0;
+			
+		}
+		display : block;
+		width : 100%;
+		height : 100%;
+		
+		h1 {
+			text-align: center;
+		}
+			
+		input, textarea {
+			margin-bottom : 8px;
+			border : 0;
+			background-color : #D7E4F4;
+			color : #888;
+		}
+	
+		input.btn {
+			display: block;
+			margin: 10px auto;
+			color : white;
+			
+			&:hover {
+				background-color : #51A451;
+				box-shadow : 3px 3px 5px black;
+			}
+		}	
+	}
+
+	textarea {
+		padding : 10px;
+		min-height : 100px;
+		width : 378px;
+	}
+}
+
 
 
 
