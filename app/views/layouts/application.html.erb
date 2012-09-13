@@ -14,7 +14,7 @@
   <% Time::DATE_FORMATS[:custom_form] = "%b %e" %>
 </head>
 <body>
-  <div class="container-fluid mainWrapper">
+  <div class="mainWrapper">
     <% if params[:controller] == 'admins' %>
       <%= render 'layouts/login' %>
     <% else %>
@@ -28,7 +28,7 @@
         <%#= render 'layouts/intro' %>
       <% end %>
     <% end %>
-    <div class="mainContent center">
+    <div class="mainContent">
       <%= yield %>
     </div>
     <p>
