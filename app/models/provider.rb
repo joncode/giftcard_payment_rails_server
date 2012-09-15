@@ -25,7 +25,7 @@
 #
 
 class Provider < ActiveRecord::Base
-  attr_accessible :address, :city, :description, :logo, :name, :state, :user_id, :staff_id, :zip, :zinger, :phone, :email, :twitter, :facebook, :website
+  attr_accessible :address, :city, :description, :logo, :name, :state, :user_id, :staff_id, :zip, :zinger, :phone, :email, :twitter, :facebook, :website, :users
                                                                                                 
   has_many   :users, :through => :employees                                                                              
   has_many   :employees
