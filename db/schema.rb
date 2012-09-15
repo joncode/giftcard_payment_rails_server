@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120908052501) do
+ActiveRecord::Schema.define(:version => 20120915012351) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(:version => 20120908052501) do
     t.text     "data",         :null => false
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
-  end  
+  end
 
   create_table "menus", :force => true do |t|
     t.integer  "provider_id",               :null => false
@@ -109,17 +109,17 @@ ActiveRecord::Schema.define(:version => 20120908052501) do
   end
 
   create_table "providers", :force => true do |t|
-    t.string   "name",                                        :null => false
+    t.string   "name",                                              :null => false
     t.string   "zinger"
     t.text     "description"
     t.string   "address"
     t.string   "address_2"
-    t.string   "city",        :limit => 32
-    t.string   "state",       :limit => 2
-    t.string   "zip",         :limit => 16
+    t.string   "city",              :limit => 32
+    t.string   "state",             :limit => 2
+    t.string   "zip",               :limit => 16
     t.string   "logo"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
     t.string   "phone"
     t.string   "email"
     t.string   "twitter"
@@ -127,7 +127,15 @@ ActiveRecord::Schema.define(:version => 20120908052501) do
     t.string   "website"
     t.string   "photo"
     t.string   "sales_tax"
-    t.boolean  "active",                    :default => true
+    t.boolean  "active",                          :default => true
+    t.string   "account_name"
+    t.string   "aba"
+    t.string   "routing"
+    t.string   "bank_account_name"
+    t.string   "bank_address"
+    t.string   "bank_city"
+    t.string   "bank_state"
+    t.string   "bank_zip"
   end
 
   create_table "redeems", :force => true do |t|

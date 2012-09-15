@@ -1,7 +1,8 @@
 Drinkboard::Application.routes.draw do
   
   resources :employees
-
+  match "/invite/:id" => "invite#show"
+  
   resources :orders
   resources :redeems
   resources :gifts do
@@ -65,7 +66,7 @@ Drinkboard::Application.routes.draw do
   match 'app/order',          to: 'iphone#create_order',      via: :post
   match 'app/users',          to: 'iphone#drinkboard_users',  via: :post
   match 'app/photo',          to: 'iphone#update_photo',      via: :post 
-
+  
   ###
   # match '/drinkboard', to: 'gifts#activity'
   match '/about',       to: 'home#about'
