@@ -80,7 +80,7 @@ class IphoneController < AppController
     
     respond_to do |format|
       #format.json { render json: @gifts, only: GIFT_REPLY }
-      logger.debug gift_hash
+      logger.debug response
       format.json { render text: response.to_json }
     end
   end
