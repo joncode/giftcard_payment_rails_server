@@ -23,6 +23,11 @@ Drinkboard::Application.routes.draw do
   end
 
   resources :providers 
+  
+  # resources :providers, :as => "establishments"
+  # providers should really be merchant side and merchant should be establishments
+  # could make an establishment controller for user side 
+  
   resources :merchants do
     member do
       get 'past_orders'
