@@ -1,9 +1,10 @@
 class InviteController < ApplicationController
   
   def show
-    number = 49387
+    number = 649387
     # remove the permalink from the id
-    @gift = Gift.find(params[:id])
+    id = params[:id].to_i - number
+    @gift = Gift.find(id)
     @giver = @gift.giver
 
     respond_to do |format|
