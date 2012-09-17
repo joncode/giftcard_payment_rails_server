@@ -72,7 +72,6 @@ Drinkboard::Application.routes.draw do
   match '/about',       to: 'home#about'
   match '/contact',     to: 'home#contact'
   match '/home',        to: 'home#index'
-  match '/channel',     to: 'home#channel'
   match '/learn',       to: 'home#learn'
   match '/news',        to: 'home#news'
   # match '/browse', to: 'gifts#browse'
