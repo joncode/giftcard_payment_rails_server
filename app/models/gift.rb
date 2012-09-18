@@ -48,6 +48,10 @@ class Gift < ActiveRecord::Base
   def self.get_past_gifts(user)
     gifts = Gift.where( receiver_id: user).where(status: 'redeemed').order("created_at DESC")
   end
+
+  def self.get_all_gifts(user)
+    Gift.where( receiver_id: user).order("created_at DESC")
+  end
   
   def self.get_buy_history(user)
     gifts = Gift.where( giver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC") 

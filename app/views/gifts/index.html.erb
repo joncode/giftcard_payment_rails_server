@@ -1,28 +1,41 @@
 
-<div class="giftIndexWrapper">
-  <!--!
-      <div class="">
-        <%= link_to 'Buy a Gift for a friend', browse_gifts_path %> |
-        <%= link_to 'Past Gifts', past_gifts_path %>
-      </div>
-  
-      <div>Drink</div>
-      <div>Location</div>
-      <div>Message</div>
-      <div>Date</div>
-      <div>From</div>
-  -->
-  
-  <!-- these are gifts the user has given therefore ... -->
-  <!-- Gift object div's do not have giver_name because the website user is the   giver -->
-  
-  <ul class="allCellWrapper">
-    <% @gifts.each do |gift| %>
-    <li class="cellWrapper">
-      <div class="cellBackground1 borderRad1"></div>
-      <div class="cellBackground2 borderRad2"></div>
-      <div class="cellContent">  
+<div id="giftIndexWrapper">
 
+  <ul id="filters">
+    <li>
+      <div class="allColorBox colorBox"></div>
+      <h1 class="allFilter">
+        <a href="#" data-filter="*">All</a>
+      </h1>
+    </li>
+
+    <li>
+      <div class="allColorBox colorBox"></div>
+      <h1 class="activeFilter">
+        <a href="#" data-filter=".active">Active</a>
+      </h1>
+    </li>
+
+    <li>
+      <div class="allColorBox colorBox"></div>
+      <h1 class="completedFilter">
+        <a href="#" data-filter=".completed">Completed</a>
+      </h2>
+    </li>
+  </ul>
+
+  <ul id="containerIsotope" class="allCellWrapper">
+    <% @gifts.each do |gift| %>
+      <% if gift.status == "redeemed" %>
+        <li class="cellWrapper item completed">
+        <% status_class = "Completed" %>
+      <% else %>
+        <li class="cellWrapper item active">
+        <% status_class = "Active" %>
+      <% end %>
+      <div class="cellBackground1 borderRad1"></div>
+      <div class="cellBackground<%= status_class %> borderRad2"</div>
+      <div class="cellContent">  
         <div class="giftDescription">
           <div class="backgroundMiniCell"></div>
           <%= image_tag get_category_image(gift), {:class => '  iconListView'} %>
@@ -39,30 +52,65 @@
         </div>
         <div class="giverID">
           <%= list_icon_with_id_for gift.giver_id %>
-          <h1><%= gift.giver_name %></h1>
+          <h1 class="giverName"><%= gift.giver_name %></h1>
         </div>
         <div class="timeAgo">
           <h1>
             <%= time_ago_in_words(gift.created_at) %>&nbsp;ago
           </h1>
         </div>
-        <h2 class="redeemButton">
-          <%= button_to "Redeem Now", redeems_path(gift_id: gift.id) %>
-        </h2>
-        <h2 class="sendButton">
+        <h1 class="redeemButton">
+          <% if gift.status == "redeemed" %>
+            <%= button_to "Details", detail_gift_path(gift), method: :get %>
+          <% else %>
+            <%= button_to "Redeem Now", redeems_path(gift_id: gift.id) %>
+          <% end %>
+        </h1>
+        <h1 class="sendButton">
           <%= button_to "Send Them a Drink",  browse_with_contact_gifts_path(id: gift.giver_id) %>
-        </h2>
+        </h1>
         
-
         <!--!
         <div class="giftMessage">
           <h2><%= gift.message %></h2>
         </div>
         -->
       </div>
+      <div class="badge1">
+        <span class="badge">1</span>
+      </div>
+       <div class="badge2">
+        <h2>text</h2>
+      </div>
     </li>
     <% end %>
   </ul>
 </div>
 
+<script type="text/javascript">
+
+$('#giftIndexWrapper').isotope({
+  // options
+  itemSelector : '.item',
+  layoutMode : 'fitRows'
+});
+
+// cache container
+var $container = $('#containerIsotope');
+// initialize isotope
+$container.isotope({
+  // options...
+});
+
+$('#filters a').click(function(){
+  var selector = $(this).attr('data-filter');
+  $container.isotope({ filter: selector });
+  return false;
+});
+
+//$('#giftIndexWrapper').isotope({ filter: '.active' });
+
+
+
+</script>
 
