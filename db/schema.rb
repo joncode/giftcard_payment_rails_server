@@ -136,8 +136,6 @@ ActiveRecord::Schema.define(:version => 20120918205928) do
     t.string   "bank_city"
     t.string   "bank_state"
     t.string   "bank_zip"
-    t.string   "portrait"
-    t.string   "box"
   end
 
   create_table "redeems", :force => true do |t|
