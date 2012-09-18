@@ -25,7 +25,8 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessible  :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :provider_id, :handle, :server_code
+  mount_uploader    :photo, ImageUploader
+  attr_accessible   :crop_x, :crop_y, :crop_w, :crop_h, :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :provider_id, :handle, :server_code
   
   has_many :employees
   has_many :providers, :through => :employees
@@ -47,7 +48,7 @@ class User < ActiveRecord::Base
   has_many :followers, through: :reverse_relationships, source: :follower
 
   has_secure_password
-  mount_uploader :photo, ImageUploader
+
   
   # save data to db with proper cases
   before_save { |user| user.email      = email.downcase  }
@@ -56,6 +57,7 @@ class User < ActiveRecord::Base
   before_save   :extract_phone_digits    # remove all non-digits from phone
   
   before_create :create_remember_token  # creates unique remember token for user
+  after_update :crop_photo
   
   # before_save   :validate_server_code   # validation does not return error
   # validates_presence_of :city, :state, :zip, :address, :credit_number
@@ -92,7 +94,11 @@ class User < ActiveRecord::Base
   end
   
   private
-  
+    
+    def crop_photo
+      photo.recreate_versions! if crop_x.present?
+    end
+    
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64
     end

@@ -84,6 +84,7 @@ Drinkboard::Application.routes.draw do
     member do
       get :following, :followers
       get :servercode
+      get :crop
     end
   end
   

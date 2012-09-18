@@ -58,18 +58,7 @@ class UsersController < ApplicationController
     msg = ""
     @user = User.find(params[:id])
     action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
-      
-    # if params[:user][:photo]
-    #   begin 
-    #     photo_url = "#{@user.id}.png"
-    #     AWS::S3::S3Object.store(photo_url, params[:user][:photo].read, PORTRAIT, :access => :public_read)
-    #     params[:user][:photo] = photo_url
-    #     msg += "Photo Upload Completed."
-    #   rescue
-    #     msg += "Could not complete photo upload.  Please retry later."
-    #   end
-    # end
-    
+
     respond_to do |format|
       if @user.update_attributes(params[:user])
         sign_in @user
@@ -81,6 +70,10 @@ class UsersController < ApplicationController
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  def crop
+    @user = User.find(params[:id])
   end
 
   def destroy

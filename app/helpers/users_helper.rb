@@ -31,5 +31,13 @@ module UsersHelper
       image_tag(user.photo_url(:thumbnail), :width => 50, :height => 50)
     end   
   end
+  
+  def large_photo(user)
+    image_tag(user.photo_url(:large), :width => 400, :height => 400, :id => "cropbox")
+  end
+
+  def preview_large_photo(user)
+    image_tag(user.photo_url(:large), :width => 400, :height => 400, :id => "preview")
+  end
    
 end
