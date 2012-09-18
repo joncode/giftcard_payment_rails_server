@@ -25,7 +25,7 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessible  :email, :password, :password_confirmation, :photo, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :provider_id, :handle, :server_code
+  attr_accessible  :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :provider_id, :handle, :server_code
   
   has_many :employees
   has_many :providers, :through => :employees
@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   has_many :followers, through: :reverse_relationships, source: :follower
 
   has_secure_password
-  # mount_uploader :photo, ImageUploader
+  mount_uploader :photo, ImageUploader
   
   # save data to db with proper cases
   before_save { |user| user.email      = email.downcase  }
