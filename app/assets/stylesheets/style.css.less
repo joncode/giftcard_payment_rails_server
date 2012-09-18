@@ -62,14 +62,6 @@ h2 {
                                                            OOb"                          
 */
 
-.footer {
-	display: none;
-}
-
-/*.redBorder {
-	border: 1px solid red;
-}*/
-
 * { 
   -moz-box-sizing: border-box; 
   -webkit-box-sizing: border-box; 
@@ -79,6 +71,14 @@ h2 {
   -moz-transition:    all 0.5s ease;
   -ms-transition:     all 0.5s ease;
   -o-transition:      all 0.5s ease;
+}
+
+a {
+    outline:0 none !important;
+}
+
+.footer {
+	display: none;
 }
 
 label {
@@ -282,7 +282,6 @@ body {
 	}
 }
 
-
 .signUpHeader {
 	position: ;
 }
@@ -404,6 +403,46 @@ td, span, p {
                                    .JMML.                                                     
 */
 
+.isotope-item {
+  z-index: 5;
+
+}
+
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 4;
+}
+
+/**** Isotope CSS3 transitions ****/
+
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+      -ms-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:         top, left, opacity;
+          transition-property:         transform, opacity;
+}
+
+
+
+
 /*
 .borderRad1 {
 	//border-left: 20px solid black;
@@ -435,7 +474,7 @@ td, span, p {
 */
 
 
-.giftIndexWrapper {
+#giftIndexWrapper {
 	position: relative;
 	top: 100px;
 	width: 80%;
@@ -443,7 +482,60 @@ td, span, p {
 	margin-left: 10%;
 	margin-right: 10%;
 
-	ul {
+	#filters {
+		height: 2%;
+		//border: 4px solid black;
+		z-index: 6;
+
+		li {
+			display: inline;
+			float: left;
+			padding: .5em 1em;
+
+			 h1 {
+				text-align: center;
+				position: relative;
+				font-size: 4em;
+				//color: #333;
+				text-shadow: 1px 1px 0px white,
+										 1px 1px 0px white;
+					a {	
+						color: black;
+						text-decoration: none;
+					}
+				}
+
+				h1.allFilter {
+					color: blue;
+					a {
+						color: #999;
+					}
+				}
+
+				h1.activeFilter {
+
+					a {
+						color: #AE2709;
+					}
+				}
+
+				h1.completedFilter {
+
+					a {
+						color: #333;
+					}
+				}
+
+			h2 {
+				color: black;
+				font-size: 1.2em;
+				line-height: 1.2em;
+			}
+		}	
+	}
+
+
+	ul#containerIsotope {
 		position: absolute;
 		display: block;
 		width: 100%;
@@ -457,37 +549,30 @@ td, span, p {
 			float: left;
 			width: 245px;
 			height: 320px;
-			margin: 0 20px 50px 8px;
+			margin: 50px 20px 50px 8px;
 
-			h2 {
-				color: black;
-				font-size: 1.2em;
-				line-height: 1.2em;
-			}
+			
 
 			.cellBackground1 {
 				width: 100%;
 				height: 100%;
-				background-color: #fff;
-				opacity: .5;
+				background-color: #92AEBF;
+				opacity: .75;
 				z-index: 0;
 
 				border-top-left-radius:     0px;
 				border-top-right-radius:    50px;
 				border-bottom-left-radius:  100px;
 				border-bottom-right-radius: 5px;
-				
-
 			}
 
-			.cellBackground2 {
+			.cellBackgroundActive {
 				position: relative;
 				top: -320px;
 				left: 0;
 				height: 100%;
 				width: 100%; 				
 				z-index: 1;
-
 
 				border-top:    14px solid #AE2709;
 				border-right:  2px solid #AE2709;
@@ -499,8 +584,28 @@ td, span, p {
 				border-bottom-left-radius:  100px;
 				border-bottom-right-radius: 5px;
 
-				box-shadow: 20px 15px 26px 0px black;
+				box-shadow: 10px 17px 30px 0px black;
+			}
 
+			.cellBackgroundCompleted {
+				position: relative;
+				top: -320px;
+				left: 0;
+				height: 100%;
+				width: 100%; 				
+				z-index: 1;
+
+				border-top:    14px solid #333;
+				border-right:  2px  solid #333;
+				border-bottom: 2px  solid #333;
+				border-left:   14px solid #333;
+
+				border-top-left-radius:     0px;
+				border-top-right-radius:    50px;
+				border-bottom-left-radius:  100px;
+				border-bottom-right-radius: 5px;
+
+				box-shadow: 10px 17px 30px 0px black;
 			}
 
 			.cellContent {
@@ -510,26 +615,14 @@ td, span, p {
 				height: 100%;
 				width: 100%;
 				z-index: 2;
-				padding: 20px;
+				padding: 14px 20px 0 14px;
 
 				.giftDescription {
 					position: relative;
 					border-bottom: 4px solid #222;
 					width: 100%;
 					height: auto;
-					border-radius: 60px;
-					border-bottom-right-radius: 0px;
-
-					.backgroundMiniCell {
-						position: absolute;
-						border-radius: 30px;
-						border-bottom-right-radius: 0px;
-						background-color: #777;
-						opacity: .4;
-						height: 100%;
-						width: 100%;
-						z-index: -100;				
-					}
+					border-bottom-left-radius: 40px;
 
 					img {
 						width: 30%;
@@ -540,36 +633,35 @@ td, span, p {
 						background-color: #222;
 						float: left;
 					}
+				}
 
-					h2 {
+
+				h2 {
 						width: 60%;
 						height: 100%;
 						font-weight: bold;
 						font-size: 1.4em;
-						//color: black;
-						//border: 1px solid black;
+						line-height: 1em;
 						float: left;
 						padding: 4px;
 						text-shadow: 0px 0px 10px white;
-
-
 					}
-				}
+				
+					.providerInfo {
+						position: relative;
+						float: left;
+						margin-top: 8px;
+						width: 100%;
+						height: 69px;
+						border-radius: 10px;
+						border-bottom: 4px solid black;
+	
+						border-top-left-radius:     0px;
+						border-bottom-left-radius:  40px;
+						border-top-right-radius:    60px;
+						border-bottom-right-radius: 10px;
 
-				.providerInfo {
-					position: relative;
-					float: left;
-					margin-top: 8px;
-					width: 100%;
-					height: 69px;
-					border-radius: 60px;
-					border-bottom: 4px solid black;
-
-					border-top-left-radius:     0px;
-					border-bottom-left-radius:  30px;
-					border-top-right-radius:    60px;
-					border-bottom-right-radius: 10px;
-
+					/*
 					.backgroundMiniCell {
 						position: absolute;
 						
@@ -583,8 +675,11 @@ td, span, p {
 						opacity: .4;
 						height: 100%;
 						width: 100%;
-						z-index: -100;	
+						z-index: -100;
+							
 					}
+					*/
+				
 
 					img {
 						display: none;
@@ -595,8 +690,6 @@ td, span, p {
 						float: left;
 						width: 30%;
 					}
-
-
 
 					h2.bigAt {
 						font-weight: 100;
@@ -613,12 +706,11 @@ td, span, p {
 						position: relative;
 						float: left; 
 						font-size: 1.3em;
-						padding-left: 4px;
+						padding:  3px 4px 0 7px;
+						line-height: .9em;
 						width: 60%;
-						font-weight: bold;
+						font-weight: normal;
 					}
-
-					
 				}
 
 				.giverID {
@@ -628,24 +720,23 @@ td, span, p {
 					top: 0;
 					left: 0;
 					margin-top: 4px;
-					//border: 1px solid black;
-
+					
 					img {
 						float: left;
 						position: relative;
 						margin-top: 0px;
-
 					}
 
-					h1 {
+					h1.giverName {
 						position: relative;
 						float: left;
 						width: 70%;
 						padding: 0 0 0 4px;
 						font-size: 2em;
 						line-height: 1em;
-						color: black;
-						text-shadow: 2px 2px 0px white;
+						color: #333;
+						text-shadow: 1px 1px 0px white,
+												 1px 1px 0px white;
 
 					}
 				}
@@ -672,84 +763,151 @@ td, span, p {
 					}
 				}
 
-				.redeemButton {
-					//display: none;
-					//width: 70px;
-					margin: 8px -8px 6px 0;
+				h1.redeemButton {
+					position: relative;
 					float: right;
-
-
+					margin: 0px -12px 0 0;
+					padding: 0;
+					font-size: 100%;
+				
 					form.button_to {
 						margin: 0;
 						padding: 0;
 						border: 0;
 						color: black;
-
-
-							input {
-								background-color: #222;
-								font-size: .7em;
-								padding: 7px 40px;
-								margin: 0;
-								height: auto;
-								width: auto;
-								border: 0;
-								color: white;
-								border-radius: 18px;
-								border-bottom-right-radius: 0px;
-
-								&:hover {
-									background: #999;
-									color: #AE2709;
-									border: none;
-								}
-
+					
+						input {
+							background-color: #AE2709;
+							font-size: 1.3em;
+							letter-spacing: .04em;
+							padding: 3px 15px;
+							margin: 0;
+							height: auto;
+							width: auto;
+							border: 0;
+							color: white;
+							border-radius: 18px;
+							border-top-left-radius: 0px;
+							border-bottom-right-radius: 0px;
+							font-family: 'Oleo Script', serif;
+						
+							&:hover {
+								background: transparent;
+								color: #AE2709;
+								border: none;
 							}
 						}
 					}
 				}
-			
+				
+				h1.sendButton {
+					position: relative;
+					float: right;
+					font-size: 100%;
+					margin: -12px -27px 0 0;
+					padding: 0;
 
-			.sendButton {
-				//display: none;
-				width: 100px;
+					form.button_to {
+					
+						input {
+							border-top-left-radius: 0px;
+							border: 0;
+							font-size: .9em;
+							letter-spacing: -.04em;
+							background-color: #90969E;
+							padding: 2px 12px;
+							color: white;
+							border-bottom-right-radius: 0px;
+							font-family: 'Oleo Script', serif;
 
-				form.button_to {
-					padding-left: 3px;
+							&:hover {
+								color: #AE2709;
+							}
+						}
+					}
+				}
+		
+				.giftDescription {
+					float: left;
 
-					input {
-						float: left;
-						clear: both;
-						border: 0;
-						font-size: .6em;
-						background-color: transparent;
-						padding: 2px 12px;
-						color: black;
-						margin-left: 55px;
-						border-bottom-right-radius: 0px;
+					h2 {
+
+					}
+				}
+
+				.providerInfo {
+
+					h2 {
+
 					}
 				}
 			}
-		
-			.giftDescription {
-				float: left;
-
-				h2 {
-
-				}
-			}
-
-			.providerInfo {
-
-				h2 {
-
-				}
-			}
-		}
-	} //end li
-}// end ul
 
 
+
+		} //end li
+	} // end ul
+} // end #giftIndexWrapper
+
+
+.badge1 {
+    //font-family: Helvetica, sans-serif;
+    font-size: 1.4em;
+    line-height: 32px;
+
+		width: 40px; 
+		height: 40px; 
+		background: #919DB5; 
+		-moz-border-radius: 20px; 
+		-webkit-border-radius: 20px; 
+		border-radius: 20px;
+    position: absolute;
+    top: -20px;
+    left:210px;
+    text-align: center;
+    z-index: 20;
+    border: 4px solid #CA6F49;
+    box-shadow: 2px 3px 5px #333;
+
+}
+
+
+.badge2 {
+
+	width: 50px; 
+	height: 40px;
+	top: -20px;
+  left: 150px;
+	background: #86A065; 
+	position: absolute; 
+	-moz-border-radius: 10px; 
+	-webkit-border-radius: 10px; 
+	border-radius: 10px;
+	z-index: 10;
+	border: 1px solid black;
+	box-shadow: 2px 3px 5px #333;
+
+	h2 {
+		color: white;
+		text-align: center;
+		font-size: 1.2em;
+	}
+}
+
+.badge2:before { 
+	content:""; 
+	position: absolute; 
+	right: 100%; 
+	top: 8px; 
+	width: 0; 
+	height: 0; 
+	border-top: 10px 
+	solid transparent; 
+	border-top: 3px solid black;
+
+	border-right: 16px solid #86A065; 
+	border-bottom: 10px solid transparent; 
+}
 
 
 
