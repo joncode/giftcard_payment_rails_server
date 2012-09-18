@@ -44,7 +44,7 @@
   </div>
 </div>
 
-<div class="merchantSignUpObject">
+<div class="merchantSignUpObject merchantSignUpObject2">
   <div class="merchantSignUpBackground"></div>
   <div class-"merchantSignUnBankInfoWrapper">
     <h1>Merchant Bank Information</h1>
@@ -93,4 +93,42 @@
     
   </div>
 </div>
+
+
+<div class="merchantSignUpObject merchantSignUpObject3">
+  <div class="merchantSignUpBackground"></div>
+  <div class-"merchantSignUnBankInfoWrapper">
+    <h1>Photo Upload</h1>
+
+    <%= simple_form_for(@provider, :html => { :multipart => true }) do |f| %>
+      <%= f.error_notification %>
+      <div class="form-horizontal">
+        <h3>Landscape Photo</h3>
+        <%= f.hidden_field  :photo_cache %>
+        <%= f.file_field    :photo %>
+      </div>
+      <div class="form-horizontal">
+        <h3>Logo</h3>
+        <%= f.hidden_field  :logo_cache %>
+        <%= f.file_field    :logo %>
+      </div>
+      <div class="form-horizontal">
+        <h3>Box Image</h3>
+        <%= f.hidden_field  :box_cache  %>
+        <%= f.file_field    :box %>
+      </div>
+      <div class="form-horizontal">
+        <h3>App Full Screen Portrait</h3>
+        <%= f.hidden_field  :portrait_cache %>
+        <%= f.file_field    :portrait %>
+      </div>
+      <div class="borderBox">
+        <%= f.submit "Upload Photos", :class => "btn" %>
+      </div>
+    <% end %>
+    
+  </div>
+</div>
+
+
 
