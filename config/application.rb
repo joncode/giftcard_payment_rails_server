@@ -42,8 +42,6 @@ module Drinkboard
       :access_key_id     => 'AKIAJV7FFALBNSFCZPOA',
       :secret_access_key => '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'
     )
-    CLOUDINARY_URL = ["cloudinary://612474951117397:TInk7mcYaiJ1obEKJmgVc8bwevY@htaaxtzcv"]
-    
     # Use SQL instead of Active Record's schema dumper when creating the database.
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
