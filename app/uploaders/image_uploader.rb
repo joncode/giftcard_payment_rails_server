@@ -11,7 +11,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
   
   version :thumbnail do
-    process :resize_to_fit => [50, 50]
+    process :resize_to_fit => [75, 100]
   end
 
   # def public_id
