@@ -3,9 +3,9 @@
 <div id="giftIndexWrapper">
   
   <% if tab_flag == 'buy' %>
-    <%= render 'tabs_buy' %>
+    <%= render 'gifts/tabs_buy' %>
   <% else %>
-    <%= render 'tabs_activity' %>
+    <%= render 'gifts/tabs_activity' %>
   <% end %>
   <ul id="containerIsotope" class="allCellWrapper">
     <% @gifts.each do |gift| %>
@@ -33,17 +33,26 @@
           <h2 class="bigAt">@</h2>
           <h2 class="providerText"><%= gift.provider_name %></h2>
         </div>
+        <% if tab_flag == "buy"  %>
+         <div class="giverID">
+           <%= list_icon_with_id_for gift.receiver_id %>
+           <h1 class="giverName"><%= gift.receiver_name %></h1>
+         </div> 
+         <% elsif !giver.nil?  %>
         <div class="giverID">
           <%= list_icon_with_id_for gift.giver_id %>
           <h1 class="giverName"><%= gift.giver_name %></h1>
         </div>
+        <% end %>
         <div class="timeAgo">
           <h1>
             <%= time_ago_in_words(gift.created_at) %>&nbsp;ago
           </h1>
         </div>
-        <% if !giver.nil? %>
-          <%= render 'gifts/index_buttons', gift: gift %>
+        <% if tab_flag == "buy" %>
+          <%= render 'gifts/buttons_buy', gift: gift %>
+        <% elsif giver.nil? %>
+          <%= render 'gifts/buttons_index', gift: gift %>
         <% end %>
         
       </div>

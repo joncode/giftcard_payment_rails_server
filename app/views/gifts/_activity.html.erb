@@ -34,7 +34,7 @@
           <h2 class="bigAt">@</h2>
           <h2 class="providerText"><%= gift.provider_name %></h2>
         </div>
-          <% if giver.nil? %>
+          <% if !giver.nil? %>
         <div class="giverID">
           <%= list_icon_with_id_for gift.giver_id %>
           <h1 class="giverName"><%= gift.giver_name %></h1>
@@ -56,8 +56,10 @@
       <div class="badge2">
         <h2><%= gift.message %></h2>
       </div>
-      <% if !giver.nil? %>
-        <%= render 'index_buttons', gift: gift %>
+      <% if tab_flag == "buy" %>
+        <%= render 'gifts/buttons_buy', gift: gift %>
+      <% elsif giver.nil? %>
+        <%= render 'gifts/buttons_index', gift: gift %>
       <% end %> 
     </li>
     <% end %>
