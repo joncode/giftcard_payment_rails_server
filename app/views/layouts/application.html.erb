@@ -13,6 +13,7 @@
   <% Time::DATE_FORMATS[:custom] = "%B %e at %I:%M %p" %>
   <% Time::DATE_FORMATS[:custom_form] = "%b %e" %>
 </head>
+<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
 <body>
   <div class="mainWrapper">
     <% if params[:controller] == 'admins' %>
@@ -32,11 +33,11 @@
       <%= yield %>
     </div>
     <p>
-      <% if mobile_device? %>
+      <!-- <% if mobile_device? %>
         <%#= link_to "Full Site", :mobile => 0 %>
       <% else %>
         <%#= link_to "Mobile Site", :mobile => 1 %>
-      <% end %>
+      <% end %> -->
     </p>
     <% if signed_in? %>
       <%= render 'layouts/footer' %>

@@ -30,26 +30,26 @@ User.create([
 ])
 
 # put user_ids in Provider
-user = User.all
-u_id  = user.map { |u| u.id }
+u_id = User.all
+
 
 ######################       PROVIDERS         ######################
 
 Provider.delete_all
 Provider.create([
-  { name: "Double Down Saloon" , description: "SHUT UP and DRINK", address: "4640 Paradise Rd", city: "Las Vegas", state: "NV", zip: "89169", user_id: u_id[0] },
-  { name: "Hard Rock Hotel & Casino" , description: "Get a Room", address: "4455 Paradise Road", city: "Las Vegas", state: "NV", zip: "89169", user_id: u_id[5] },
-  { name: "Hard Rock Hotel & Casino" , description: "Get a Room", address: "207 5th Avenue", city: "San Diego", state: "CA", zip: "92101", user_id: u_id[1] },
-  { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "825 3rd Avenue", city: "New York", state: "NY", zip: "10022", user_id: u_id[2] },
-  { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "475 West Broadway", city: "New York", state: "NY", zip: "10012", user_id: u_id[2] },
-  { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "675 Hudson Street", city: "New York", state: "NY", zip: "10014", user_id: u_id[2] },
-  { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "373 Park Avenue South", city: "New York", state: "NY", zip: "10016", user_id: u_id[2] },
-  { name: "Wynn" , description: "Where the Players Play", address: "3131 Las Vegas Blvd. South", city: "Las Vegas", state: "NV", zip: "89109", user_id: u_id[3] },
-  { name: "Encore" , description: "Upscale Casino", address: "3131 Las Vegas Boulevard South", city: "Las Vegas", state: "NV", zip: "89109", user_id: u_id[3] },
-  { name: "PT's Pub" , description: "Real. Local. Play.", address: "3935 South Durango Drive ", city: "Las Vegas", state: "NV", zip: "89147", user_id: u_id[4] }, 
-  { name: "PT's Pub" , description: "Real. Local. Play.", address: "4825 West Flamingo Road # 3", city: "Las Vegas", state: "NV", zip: "89103", user_id: u_id[4] },  
-  { name: "PT's Pub" , description: "Real. Local. Play.", address: "1661 East Sunset Road", city: "Las Vegas", state: "NV", zip: "89119", user_id: u_id[4] },  
-  { name: "PT's Pub" , description: "Real. Local. Play.", address: "739 South Rainbow Boulevard", city: "Las Vegas", state: "NV", zip: "89145", user_id: u_id[4] }     
+  { name: "Double Down Saloon" , description: "SHUT UP and DRINK", address: "4640 Paradise Rd", city: "Las Vegas", state: "NV", zip: "89169",                   users: [u_id[0]] },
+  { name: "Hard Rock Hotel & Casino" , description: "Get a Room", address: "4455 Paradise Road", city: "Las Vegas", state: "NV", zip: "89169",                  users: [u_id[5]] },
+  { name: "Hard Rock Hotel & Casino" , description: "Get a Room", address: "207 5th Avenue", city: "San Diego", state: "CA", zip: "92101",                      users: [u_id[1]] },
+  { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "825 3rd Avenue", city: "New York", state: "NY", zip: "10022",        users: [u_id[2]] },
+  { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "475 West Broadway", city: "New York", state: "NY", zip: "10012",     users: [u_id[2]] },
+  { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "675 Hudson Street", city: "New York", state: "NY", zip: "10014",     users: [u_id[2]] },
+  { name: "Dos Caminos" , description: "Modern Mexican Food and Tequila Lounge", address: "373 Park Avenue South", city: "New York", state: "NY", zip: "10016", users: [u_id[2]] },
+  { name: "Wynn" , description: "Where the Players Play", address: "3131 Las Vegas Blvd. South", city: "Las Vegas", state: "NV", zip: "89109",                  users: [u_id[3]] },
+  { name: "Encore" , description: "Upscale Casino", address: "3131 Las Vegas Boulevard South", city: "Las Vegas", state: "NV", zip: "89109",                    users: [u_id[3]] },
+  { name: "PT's Pub" , description: "Real. Local. Play.", address: "3935 South Durango Drive ", city: "Las Vegas", state: "NV", zip: "89147",                   users: [u_id[4]] }, 
+  { name: "PT's Pub" , description: "Real. Local. Play.", address: "4825 West Flamingo Road # 3", city: "Las Vegas", state: "NV", zip: "89103",                 users: [u_id[4]] },  
+  { name: "PT's Pub" , description: "Real. Local. Play.", address: "1661 East Sunset Road", city: "Las Vegas", state: "NV", zip: "89119",                       users: [u_id[4]] },  
+  { name: "PT's Pub" , description: "Real. Local. Play.", address: "739 South Rainbow Boulevard", city: "Las Vegas", state: "NV", zip: "89145",                 users: [u_id[4]] }     
 ])
 
 

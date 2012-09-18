@@ -28,6 +28,12 @@
                     </ul>
               </li>
             </ul>
+            <% if @provider && params[:controller] == "merchants" %>
+          <li><%= link_to "Merchants", merchants_path %></li>
+            <% else %>
+          <li><%= merchant_tag(current_user) %></li> 
+            <% end %> 
+          <li><%= link_to "Add New Merchant", new_provider_path %></li>
         </ul>
         <% end %>
       </div>

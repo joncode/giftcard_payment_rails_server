@@ -39,7 +39,7 @@ class Gift < ActiveRecord::Base
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total
   # validates_numericality_of  :total, :quantity
   before_create :add_category, :if => :no_category
-  before_save   :pluralizer
+  before_create :pluralizer
   
   def self.get_gifts(user)
     Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
@@ -47,6 +47,14 @@ class Gift < ActiveRecord::Base
 
   def self.get_past_gifts(user)
     gifts = Gift.where( receiver_id: user).where(status: 'redeemed').order("created_at DESC")
+  end
+
+  def self.get_all_gifts(user)
+    Gift.where( receiver_id: user).order("created_at DESC")
+  end
+  
+  def self.get_all_gifts(user)
+    Gift.where(receiver_id: user).order("created_at DESC")
   end
   
   def self.get_buy_history(user)

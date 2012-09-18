@@ -1,3 +1,4 @@
+
 @import "twitter/bootstrap";
 
 // import responsive layout
@@ -16,8 +17,6 @@
 
 // Font Awesome
 // @import "MarkerFelt-Thin";
-
-
 
 // Your custom stylesheets goes here (override Less here)
 @highlight_shade: rgba(190,173,161,1);
@@ -45,16 +44,12 @@
     font-style: normal;
 }
 
-/*
-@font-face {
-	font-family: 'MarkerFelt';
-	src: url('MarkerFelt.ttc');
-}*/
-
 
 @darkGrey: #282424;
 @midGrey: #CBCFD5;
 @lightGrey: #DDE0E7;
+@grayLighter: #DDE0E7;
+@grayLight: #DDE0E7;
 @red: #C7282D;
 
 // End Fonts
@@ -86,16 +81,23 @@ body {
 
 /* footer */
 footer {
-	margin-top: 45px;
-	padding-top: 5px;
-	border-top: 1px solid #eaeaea;
+	position : absolute;
+	bottom : 20px;
+	width : 100%;
+	padding: 5px;
+	//border-top: 1px solid #eaeaea;
 	color: #999;
 }
 footer a {
-	color: @darkGrey;
+	color: #fff;
+
+}
+
+footer ul {
+	background-color : transparent;
 }
 footer a:hover {
-	color: #222;
+	color: #6ff;
 }
 footer small {
 	float: left;

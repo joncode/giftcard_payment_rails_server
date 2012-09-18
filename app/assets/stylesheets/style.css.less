@@ -26,6 +26,7 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
   MM     YA.   ,A9 MM    MM MM   L.   I8 
 .JMML.    `Ybmd9'.JMML  JMML`MbmoM9mmmP' 
 */
+
 @import url(http://fonts.googleapis.com/css?family=Averia+Serif+Libre);
 @import url(http://fonts.googleapis.com/css?family=Muli);
 @import url(http://fonts.googleapis.com/css?family=Oleo+Script);
@@ -39,8 +40,7 @@ h1 {
 	font-size: 2.9em;
 	font-weight: normal;
 	text-shadow: 4px 4px 2px black;
-
-}
+	}
 
 h2 {
 	font-family: 'Averia Serif Libre', sans-serif;
@@ -62,10 +62,6 @@ h2 {
                                                            OOb"                          
 */
 
-/*.redBorder {
-	border: 1px solid red;
-}*/
-
 * { 
   -moz-box-sizing: border-box; 
   -webkit-box-sizing: border-box; 
@@ -75,6 +71,14 @@ h2 {
   -moz-transition:    all 0.5s ease;
   -ms-transition:     all 0.5s ease;
   -o-transition:      all 0.5s ease;
+}
+
+a {
+    outline:0 none !important;
+}
+
+.footer {
+	display: none;
 }
 
 label {
@@ -90,13 +94,11 @@ label {
 input.btn, form.button_to {
 	margin-top: 0px;
 	font-size: 1.5em;
-	//box-shadow: 0 0 2px @darkGrey;
 	transition: box-shadow .5s ease-in-out;
 	-moz-transition: box-shadow .5s ease-in-out;
 	-webkit-transition: box-shadow .5s ease-in-out;
 	padding : 5px 15px;
 	//box-shadow: 2px 2px 5px @darkGrey;
-
 }
 
 form.button_to input {
@@ -104,7 +106,7 @@ form.button_to input {
 }
 
 input, textarea, select, .uneditable-input {
-	color: blue;
+	color: red;
 	font-family: 'Averia Serif Libre', sans-serif;
 	font-size: 1.1em;
 	letter-spacing: .03em;
@@ -112,11 +114,12 @@ input, textarea, select, .uneditable-input {
 	margin: 0;
 	height: 40px;
 	width: 100%;
-	border-radius: 10px;
-	-moz-box-shadow: inset 0 0 0px 3px @darkGrey;
- -webkit-box-shadow: inset 0 0 0px 3px @darkGrey;
-         box-shadow: inset 0 0 0px 3px @darkGrey;
-    background-color: 0;
+	border-radius: 10px;                
+	//-moz-box-shadow: inset  3px 3px  3px  @darkGrey;
+   //-webkit-box-shadow: inset 3px 3px  3px  @darkGrey;
+   box-shadow: inset 3px 3px  3px  @darkGrey, 
+					inset -1px -1px 2px @darkGrey;
+   background-color: 0;
 }
 
 body {
@@ -279,7 +282,6 @@ body {
 	}
 }
 
-
 .signUpHeader {
 	position: ;
 }
@@ -303,7 +305,6 @@ body {
 	border : 2px solid black;
 	border-radius : 8px;
 	padding: 12px;
-	//background-color : #999;
 	
 	h1 {
 		width: 100%;
@@ -356,7 +357,6 @@ body {
 	border : 2px solid black;
 	border-radius : 8px;
 	padding: 12px;
-	//background-color : #999;
 	
 	h1 {
 		width: 100%;
@@ -370,23 +370,645 @@ body {
 }
 
 .borderBoxBackground {
-	background-color : #000;
+
 }
 
-table, ul {
+table {
 	margin-top :50px;
-	background-color : #000;
 	opacity : 0.8;
 	font-family: 'Averia Serif Libre', sans-serif;
 	
-	input {
-	 font-size : 0.8em;	
+	input {	
 	}
 }
 
-td {
+td, span, p {
 	color : white;
 }
+
+/********              MERCHANT PAGE             ****************/
+.merchantSignUpObject {
+	position: absolute;
+	width : 400px;
+	height : 550;
+	top : 50px;
+	left : 20px;
+	padding : 10px;
+	box-shadow: 7px 7px 7px #000;
+	border : 2px solid black;
+	border-radius : 8px;
+	
+	.merchantSignUpBackground {
+		position : absolute;
+		top : 0;
+		left : 0;
+		width : 100%;
+		height : 100%;
+		background-color : #B3BFD7;
+		opacity : 0.47;
+
+		z-index : -10;
+	
+	}
+	
+	.merchantSignUpWrapper {
+		.field {
+			border : 0;
+			
+		}
+		display : block;
+		width : 100%;
+		height : 100%;
+		
+		h1 {
+			text-align: center;
+		}
+			
+		input, textarea {
+			margin-bottom : 8px;
+			border : 0;
+			background-color : #D7E4F4;
+			color : #888;
+		}
+	
+		input.btn {
+			display: block;
+			margin: 10px auto;
+			color : white;
+			
+			&:hover {
+				background-color : #51A451;
+				box-shadow : 3px 3px 5px black;
+			}
+		}	
+	}
+
+	textarea {
+		padding : 10px;
+		min-height : 100px;
+		width : 378px;
+	}
+	
+	.merchantSignUnBankInfoWrapper {
+		.field {
+			border : 0;
+			
+		}
+		display : block;
+		width : 100%;
+		height : 100%;
+		
+		h1 {
+			text-align: center;
+		}
+			
+		input, textarea {
+			margin-bottom : 8px;
+			border : 0;
+			background-color : #D7E4F4;
+			color : #888;
+		}
+	
+		input.btn {
+			display: block;
+			margin: 10px auto;
+			color : white;
+			
+			&:hover {
+				background-color : #51A451;
+				box-shadow : 3px 3px 5px black;
+			}
+		}
+	}
+}
+
+.showWrapper {
+	margin-top : 50px;
+}
+
+/*
+                                                                              ,,   ,,         
+`7MMF'                 mm                                    .g8"""bgd      `7MM `7MM         
+  MM                   MM                                  .dP'     `M        MM   MM         
+  MM ,pP"Ybd  ,pW"Wq.mmMMmm ,pW"Wq.`7MMpdMAo.  .gP"Ya      dM'       `.gP"Ya  MM   MM ,pP"Ybd 
+  MM 8I   `" 6W'   `Wb MM  6W'   `Wb MM   `Wb ,M'   Yb     MM        ,M'   Yb MM   MM 8I   `" 
+  MM `YMMMa. 8M     M8 MM  8M     M8 MM    M8 8M""""""     MM.       8M"""""" MM   MM `YMMMa. 
+  MM L.   I8 YA.   ,A9 MM  YA.   ,A9 MM   ,AP YM.    ,     `Mb.     ,YM.    , MM   MM L.   I8 
+.JMMLM9mmmP'  `Ybmd9'  `Mbmo`Ybmd9'  MMbmmd'   `Mbmmd'       `"bmmmd' `Mbmmd.JMML.JMMLM9mmmP' 
+                                     MM                                                       
+                                   .JMML.                                                     
+*/
+
+.isotope-item {
+  z-index: 5;
+
+}
+
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 4;
+}
+
+/**** Isotope CSS3 transitions ****/
+
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+      -ms-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:         top, left, opacity;
+          transition-property:         transform, opacity;
+}
+
+
+
+
+/*
+.borderRad1 {
+	//border-left: 20px solid black;
+	//border-right: 20px solid white;
+
+
+	border-top-left-radius: 60px;
+	border-top-right-radius: 60px;
+	border-bottom-right-radius: 70px;
+	border-bottom-left-radius:  0px;
+
+
+}
+
+.borderRad2 {
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid #AE2709;
+	border-right: 20px solid #AE2709;
+	//border-bottom: 15px solid #AE2709;
+	
+	border-top-left-radius: 60px;
+	border-top-right-radius: 60px;
+	border-bottom-right-radius: 70px;
+	border-bottom-left-radius:  60px;
+
+	//box-shadow: 2px 2px 0px 4px #C7EE91;
+
+}
+*/
+
+
+#giftIndexWrapper {
+	position: relative;
+	top: 100px;
+	width: 80%;
+	height: 100%;
+	margin-left: 10%;
+	margin-right: 10%;
+
+	#filters {
+		height: 2%;
+		//border: 4px solid black;
+		z-index: 6;
+
+		li {
+			display: inline;
+			float: left;
+			padding: .5em 1em;
+
+			 h1 {
+				text-align: center;
+				position: relative;
+				font-size: 4em;
+				//color: #333;
+				text-shadow: 1px 1px 0px white,
+										 1px 1px 0px white;
+					a {	
+						color: black;
+						text-decoration: none;
+					}
+				}
+
+				h1.allFilter {
+					color: blue;
+					a {
+						color: #999;
+					}
+				}
+
+				h1.activeFilter {
+
+					a {
+						color: #AE2709;
+					}
+				}
+
+				h1.completedFilter {
+
+					a {
+						color: #333;
+					}
+				}
+
+			h2 {
+				color: black;
+				font-size: 1.2em;
+				line-height: 1.2em;
+			}
+		}	
+	}
+
+
+	ul#containerIsotope {
+		position: absolute;
+		display: block;
+		width: 100%;
+		height: 900px;
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+
+		li {
+			display: inline;
+			float: left;
+			width: 245px;
+			height: 320px;
+			margin: 50px 20px 50px 8px;
+
+			
+
+			.cellBackground1 {
+				width: 100%;
+				height: 100%;
+				background-color: #92AEBF;
+				opacity: .75;
+				z-index: 0;
+
+				border-top-left-radius:     0px;
+				border-top-right-radius:    50px;
+				border-bottom-left-radius:  100px;
+				border-bottom-right-radius: 5px;
+			}
+
+			.cellBackgroundActive {
+				position: relative;
+				top: -320px;
+				left: 0;
+				height: 100%;
+				width: 100%; 				
+				z-index: 1;
+
+				border-top:    14px solid #AE2709;
+				border-right:  2px solid #AE2709;
+				border-bottom: 2px solid #AE2709;
+				border-left:   14px solid #AE2709;
+
+				border-top-left-radius:     0px;
+				border-top-right-radius:    50px;
+				border-bottom-left-radius:  100px;
+				border-bottom-right-radius: 5px;
+
+				box-shadow: 10px 17px 30px 0px black;
+			}
+
+			.cellBackgroundCompleted {
+				position: relative;
+				top: -320px;
+				left: 0;
+				height: 100%;
+				width: 100%; 				
+				z-index: 1;
+
+				border-top:    14px solid #333;
+				border-right:  2px  solid #333;
+				border-bottom: 2px  solid #333;
+				border-left:   14px solid #333;
+
+				border-top-left-radius:     0px;
+				border-top-right-radius:    50px;
+				border-bottom-left-radius:  100px;
+				border-bottom-right-radius: 5px;
+
+				box-shadow: 10px 17px 30px 0px black;
+			}
+
+			.cellContent {
+				position: relative;
+				top: -640px;
+				left: 0;
+				height: 100%;
+				width: 100%;
+				z-index: 2;
+				padding: 14px 20px 0 14px;
+
+				.giftDescription {
+					position: relative;
+					border-bottom: 4px solid #222;
+					width: 100%;
+					height: auto;
+					border-bottom-left-radius: 40px;
+
+					img {
+						width: 30%;
+						border-top-left-radius:     0px;
+						border-bottom-left-radius:  60px;
+						border-top-right-radius:    60px;
+						border-bottom-right-radius: 60px;
+						background-color: #222;
+						float: left;
+					}
+				}
+
+
+				h2 {
+						width: 60%;
+						height: 100%;
+						font-weight: bold;
+						font-size: 1.4em;
+						line-height: 1em;
+						float: left;
+						padding: 4px;
+						text-shadow: 0px 0px 10px white;
+					}
+				
+					.providerInfo {
+						position: relative;
+						float: left;
+						margin-top: 8px;
+						width: 100%;
+						height: 69px;
+						border-radius: 10px;
+						border-bottom: 4px solid black;
+	
+						border-top-left-radius:     0px;
+						border-bottom-left-radius:  40px;
+						border-top-right-radius:    60px;
+						border-bottom-right-radius: 10px;
+
+					/*
+					.backgroundMiniCell {
+						position: absolute;
+						
+						border-radius: 60px;
+						border-top-left-radius:     40px;
+						border-bottom-left-radius:  30px;
+						border-top-right-radius:    30px;
+						border-bottom-right-radius: 10px;
+						
+						background-color: #777;
+						opacity: .4;
+						height: 100%;
+						width: 100%;
+						z-index: -100;
+							
+					}
+					*/
+				
+
+					img {
+						display: none;
+						border-top-left-radius:     0px;
+						border-bottom-left-radius:  60px;
+						border-top-right-radius:    60px;
+						border-bottom-right-radius: 60px;
+						float: left;
+						width: 30%;
+					}
+
+					h2.bigAt {
+						font-weight: 100;
+						//display: block;
+						position: relative;
+						color: black;
+						float: left;
+						margin-top: -20px;
+						width: 30%;
+						font-size: 6em;
+					}
+
+					h2.providerText {
+						position: relative;
+						float: left; 
+						font-size: 1.3em;
+						padding:  3px 4px 0 7px;
+						line-height: .9em;
+						width: 60%;
+						font-weight: normal;
+					}
+				}
+
+				.giverID {
+					position: relative;
+					float: left;
+					width: 100%;
+					top: 0;
+					left: 0;
+					margin-top: 4px;
+					
+					img {
+						float: left;
+						position: relative;
+						margin-top: 0px;
+					}
+
+					h1.giverName {
+						position: relative;
+						float: left;
+						width: 70%;
+						padding: 0 0 0 4px;
+						font-size: 2em;
+						line-height: 1em;
+						color: #333;
+						text-shadow: 1px 1px 0px white,
+												 1px 1px 0px white;
+
+					}
+				}
+
+				.timeAgo {
+					position: relative;
+					float: left;
+					top: 0;
+					left: 0;
+					line-height: 0;
+					padding: 0;
+					margin: 0;
+					width: 100%;
+					margin-top: -19px;
+					border-bottom: 1px solid black;
+
+					h1 {
+						padding: 0;
+						color: black;
+						text-align: right;
+						font-size: 1.1em;
+						text-shadow: 2px 2px 0px white;
+
+					}
+				}
+
+				h1.redeemButton {
+					position: relative;
+					float: right;
+					margin: 0px -12px 0 0;
+					padding: 0;
+					font-size: 100%;
+				
+					form.button_to {
+						margin: 0;
+						padding: 0;
+						border: 0;
+						color: black;
+					
+						input {
+							background-color: #AE2709;
+							font-size: 1.3em;
+							letter-spacing: .04em;
+							padding: 3px 15px;
+							margin: 0;
+							height: auto;
+							width: auto;
+							border: 0;
+							color: white;
+							border-radius: 18px;
+							border-top-left-radius: 0px;
+							border-bottom-right-radius: 0px;
+							font-family: 'Oleo Script', serif;
+						
+							&:hover {
+								background: transparent;
+								color: #AE2709;
+								border: none;
+							}
+						}
+					}
+				}
+				
+				h1.sendButton {
+					position: relative;
+					float: right;
+					font-size: 100%;
+					margin: -12px -27px 0 0;
+					padding: 0;
+
+					form.button_to {
+					
+						input {
+							border-top-left-radius: 0px;
+							border: 0;
+							font-size: .9em;
+							letter-spacing: -.04em;
+							background-color: #90969E;
+							padding: 2px 12px;
+							color: white;
+							border-bottom-right-radius: 0px;
+							font-family: 'Oleo Script', serif;
+
+							&:hover {
+								color: #AE2709;
+							}
+						}
+					}
+				}
+		
+				.giftDescription {
+					float: left;
+
+					h2 {
+
+					}
+				}
+
+				.providerInfo {
+
+					h2 {
+
+					}
+				}
+			}
+
+
+
+		} //end li
+	} // end ul
+} // end #giftIndexWrapper
+
+
+.badge1 {
+    //font-family: Helvetica, sans-serif;
+    font-size: 1.4em;
+    line-height: 32px;
+
+		width: 40px; 
+		height: 40px; 
+		background: #919DB5; 
+		-moz-border-radius: 20px; 
+		-webkit-border-radius: 20px; 
+		border-radius: 20px;
+    position: absolute;
+    top: -20px;
+    left:210px;
+    text-align: center;
+    z-index: 20;
+    border: 4px solid #CA6F49;
+    box-shadow: 2px 3px 5px #333;
+
+}
+
+
+.badge2 {
+
+	width: 50px; 
+	height: 40px;
+	top: -20px;
+  left: 150px;
+	background: #86A065; 
+	position: absolute; 
+	-moz-border-radius: 10px; 
+	-webkit-border-radius: 10px; 
+	border-radius: 10px;
+	z-index: 10;
+	border: 1px solid black;
+	box-shadow: 2px 3px 5px #333;
+
+	h2 {
+		color: white;
+		text-align: center;
+		font-size: 1.2em;
+	}
+}
+
+.badge2:before { 
+	content:""; 
+	position: absolute; 
+	right: 100%; 
+	top: 8px; 
+	width: 0; 
+	height: 0; 
+	border-top: 10px 
+	solid transparent; 
+	border-top: 3px solid black;
+
+	border-right: 16px solid #86A065; 
+	border-bottom: 10px solid transparent; 
+}
+
+
+
+
+
 
 
 
