@@ -70,7 +70,11 @@ Drinkboard::Application.routes.draw do
   match '/learn',       to: 'home#learn'
   match '/news',        to: 'home#news'
   # match '/browse', to: 'gifts#browse'
-
+  
+  ### authentication via Facebook & Foursquare
+  match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
+  match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
+  ###
   
   resources :microposts,    only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]

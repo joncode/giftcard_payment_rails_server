@@ -45,10 +45,10 @@
     <% end %>
     <h2 class="signinOr">- Or -</h2>
     <div class="fbLoginWrapper">
-      <%= link_to image_tag('fb_login.png') , home_path, :class => "fb_login" %>
+      <%= link_to image_tag('fb_login.png') , APP_CONFIG[:facebook][:loginUrl], :class => "fb_login" %>
     </div>
     <div class="fourSquareLogin">
-      <%= link_to image_tag('signinwith-foursquare.png'), home_path, :class => "sq_login" %>
+      <%= link_to image_tag('signinwith-foursquare.png'), APP_CONFIG[:foursquare][:loginUrl], :class => "sq_login" %>
     </div>
   </div>
   

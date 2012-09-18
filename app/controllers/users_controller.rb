@@ -109,7 +109,6 @@ class UsersController < ApplicationController
   
   def servercode
     @user = current_user
-    
   end
   
   private
