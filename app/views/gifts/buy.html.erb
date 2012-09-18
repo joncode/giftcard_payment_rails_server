@@ -8,20 +8,35 @@
         <a href="#" data-filter="*">All</a>
       </h1>
     </li>
-
+    
     <li>
       <div class="allColorBox colorBox"></div>
       <h1 class="activeFilter">
-        <a href="#" data-filter=".active">Active</a>
+        <a href="#" data-filter=".active">Open</a>
+      </h1>
+    </li>
+    
+    <li>
+      <div class="allColorBox colorBox"></div>
+      <h1 class="activeFilter">
+        <a href="#" data-filter=".recent">Recent</a>
       </h1>
     </li>
 
     <li>
       <div class="allColorBox colorBox"></div>
       <h1 class="completedFilter">
-        <a href="#" data-filter=".completed">Completed</a>
+        <a href="#" data-filter=".completed">History</a>
       </h2>
     </li>
+    
+    <li>
+      <div class="allColorBox colorBox"></div>
+      <h1 class="completedFilter">
+        <a href="#" data-filter=".drink">Drinks</a>
+      </h2>
+    </li>
+    
   </ul>
 
   <ul id="containerIsotope" class="allCellWrapper">
@@ -51,8 +66,8 @@
           <h2 class="providerText"><%= gift.provider_name %></h2>
         </div>
         <div class="giverID">
-          <%= list_icon_with_id_for gift.giver_id %>
-          <h1 class="giverName"><%= gift.giver_name %></h1>
+          <%= list_icon_with_id_for gift.receiver_id %>
+          <h1 class="giverName"><%= gift.receiver_name %></h1>
         </div>
         <div class="timeAgo">
           <h1>
@@ -60,11 +75,7 @@
           </h1>
         </div>
         <h1 class="redeemButton">
-          <% if gift.status == "redeemed" %>
             <%= button_to "Details", detail_gift_path(gift), method: :get %>
-          <% else %>
-            <%= button_to "Redeem Now", redeems_path(gift_id: gift.id) %>
-          <% end %>
         </h1>
         <h1 class="sendButton">
           <%= button_to "Send Them a Drink",  browse_with_contact_gifts_path(id: gift.giver_id) %>
@@ -108,124 +119,8 @@ $('#filters a').click(function(){
   return false;
 });
 
-//$('#giftIndexWrapper').isotope({ filter: '.active' });
+$('#giftIndexWrapper').isotope({ filter: '.active' });
 
 
 
 </script>
-
-
-<%= link_to 'Buy a friend a Gift', browse_gifts_path %>
-<div class="bs-docs-example">
-  <ul id="myTab" class="nav nav-tabs">
-    <li class="active"><a href="#open" data-toggle="tab">Open</a></li>
-    <li><a href="#recent" data-toggle="tab">Recents</a></li>
-    <li><a href="#history" data-toggle="tab">History</a></li>
-    <li><a href="#drinks" data-toggle="tab">Drinks</a></li>
-  </ul>
-  <div id="myTabContent" class="tab-content">
-    <div class="tab-pane fade in active" id="open">
-      <table>
-        <thead>
-          <tr>
-            <th colspan="2">To</th>
-            <th colspan="2">Drink</th>
-            <th colspan="2">Location</th>
-            <th>Message</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @gifts.each do |gift| %>
-            <tr>
-              <td colspan="2">
-                <%= list_icon_with_id_for gift.receiver_id %>
-                <%= gift.receiver_name %>
-              </td>
-              <td colspan="2">
-                <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
-                <%= gift.quantity %>&nbsp;<%= gift.item_name %>
-              </td>
-              <td colspan="2">
-                <%= logo_from_id_for gift.provider_id %>
-                <%= gift.provider_name %>
-              </td>
-              <td><%= gift.message %></td>
-              <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="tab-pane fade" id="recent">
-      <table>
-        <thead>
-          <tr>
-            <th colspan="2">To</th>
-            <th colspan="2">Drink</th>
-            <th colspan="2">Location</th>
-            <th>Message</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @recents.each do |gift| %>
-            <tr>
-              <td colspan="2">
-                <%= list_icon_with_id_for gift.receiver_id %>
-                <%= gift.receiver_name %>
-              </td>
-              <td colspan="2">
-                <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
-                <%= gift.quantity %>&nbsp;<%= gift.item_name %>
-              </td>
-              <td colspan="2">
-                <%= logo_from_id_for gift.provider_id %>
-                <%= gift.provider_name %>
-              </td>
-              <td><%= gift.message %></td>
-              <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="tab-pane fade" id="history">
-      <table>
-        <thead>
-          <tr>
-            <th colspan="2">To</th>
-            <th colspan="2">Drink</th>
-            <th colspan="2">Location</th>
-            <th>Message</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @past_gifts.each do |gift| %>
-            <tr>
-              <td colspan="2">
-                <%= list_icon_with_id_for gift.receiver_id %>
-                <%= gift.receiver_name %>
-              </td>
-              <td colspan="2">
-                <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
-                <%= gift.quantity %>&nbsp;<%= gift.item_name %>
-              </td>
-              <td colspan="2">
-                <%= logo_from_id_for gift.provider_id %>
-                <%= gift.provider_name %>
-              </td>
-              <td><%= gift.message %></td>
-              <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>      
-    </div>
-    <div class="tab-pane fade" id="drinks">
-      <p>Drinks you have bought</p>
-    </div>
-  </div>
-</div>
-
