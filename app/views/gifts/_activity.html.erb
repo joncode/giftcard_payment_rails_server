@@ -1,9 +1,13 @@
 <% giver ||= nil %>
+<% tab_flag ||= nil %>
 <div id="giftIndexWrapper">
 
-  <%= render 'activity_tab' %>
-
-
+  <% if tab_flag == 'buy' %>
+    <%= render 'buy_tab' %>
+  <% else %>
+    <%= render 'activity_tab' %>
+  <% end %>
+  
   <ul id="containerIsotope" class="allCellWrapper">
     <% gifts.each do |gift| %>
       <% if gift.status == "redeemed" %>
@@ -49,7 +53,7 @@
       <div class="badge1">
         <span class="badge">*</span>
       </div>
-       <div class="badge2">
+      <div class="badge2">
         <h2><%= gift.message %></h2>
       </div>
       <% if !giver.nil? %>
