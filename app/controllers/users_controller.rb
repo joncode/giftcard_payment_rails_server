@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     if @user.facebook_access_token
       fb_response = HTTParty.get("https://graph.facebook.com/me/friends?access_token="+@user.facebook_access_token)
       if fb_response.code == 200
-        @fb_users = ActiveSupport::JSON.decode(fb_response.body)
+        @fb_users = ActiveSupport::JSON.decode(fb_response.body)["data"]
       end
     end
     

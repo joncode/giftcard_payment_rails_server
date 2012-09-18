@@ -23,14 +23,15 @@
   <table>
     <thead>
       <tr>
-        <th></th>
+        <th>Name</th>
+        <th>ID</th>
       </tr>
     </thead>
     <tbody>
       <% @fb_users.each do |fbu| %>
         <tr>
-          <td>fbu.name</td>
-          <td>fbu.id</td>
+          <td><%= fbu["name"] %></td>
+          <td><%= fbu["id"] %></td>
         </tr>
       <% end %>
     </tbody>
