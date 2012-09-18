@@ -100,26 +100,26 @@
 
 <script type="text/javascript">
 
-$('#giftIndexWrapper').isotope({
-  // options
-  itemSelector : '.item',
-  layoutMode : 'fitRows'
-});
+  $('#giftIndexWrapper').isotope({
+    // options
+    itemSelector : '.item',
+    layoutMode : 'fitRows'
+  });
 
-// cache container
-var $container = $('#containerIsotope');
-// initialize isotope
-$container.isotope({
-  // options...
-});
+  // cache container
+  var $container = $('#containerIsotope');
+  // initialize isotope
+  $container.isotope({
+    // options...
+  });
 
-$('#filters a').click(function(){
-  var selector = $(this).attr('data-filter');
-  $container.isotope({ filter: selector });
-  return false;
-});
+  $('#filters a').click(function(){
+    var selector = $(this).attr('data-filter');
+    $container.isotope({ filter: selector });
+    return false;
+  });
 
-$('#giftIndexWrapper').isotope({ filter: '.active' });
+  $('#giftIndexWrapper').isotope({ filter: '.active' });
 
 
 
