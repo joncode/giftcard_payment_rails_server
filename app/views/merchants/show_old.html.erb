@@ -21,10 +21,38 @@
         <%= link_to "Settings", '#' %>
       </div>
       <div class="tab-pane fade" id="drinkboard">
-
-        <%= render 'gifts/activity', gifts: @gifts %>
-
-
+        <table class="table listed">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th colspan="2">To</th>
+              <th colspan="2">From</th>
+              <th></th>
+              <th>Drink</th>
+              <th>Message</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% @gifts.each do |gift| %>
+            <tr>
+              <td><%= time_ago_in_words(gift.created_at) %>&nbsp;ago</td>
+              <td colspan="2">
+                <%= list_icon_with_id_for gift.receiver_id %>
+                <%= gift.receiver_name %>
+              </td>
+              <td colspan="2">
+                <%= list_icon_with_id_for gift.giver_id %>
+                <%= gift.giver_name %>
+              </td>
+              <td colspan="2">
+                <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
+                <%= gift.quantity %>&nbsp;<%= gift.item_name %>
+              </td>
+              <td><%= gift.message %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
       </div>
       <div class="tab-pane fade" id="activity">
         <p>Recent Activity At Location</p>
