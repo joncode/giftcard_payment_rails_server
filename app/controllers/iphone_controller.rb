@@ -59,9 +59,9 @@ class IphoneController < AppController
   
   def gifts
     logger.info "Gifts"
-    @user  = User.find_by_remember_token(params["token"])
-    @gifts = Gift.get_gifts(@user)
-    gift_hash = hash_these_gifts(@gifts, GIFT_REPLY, true)
+    user  = User.find_by_remember_token(params["token"])
+    gifts = Gift.get_gifts(user)
+    gift_hash = hash_these_gifts(gifts, GIFT_REPLY, true)
   
     respond_to do |format|
       logger.debug gift_hash
@@ -89,14 +89,14 @@ class IphoneController < AppController
   def drinkboard_users
     logger.info "Drinkboard Users"
     begin
-      @user = User.find_by_remember_token(params["token"])
+      user = User.find_by_remember_token(params["token"])
       # @users = User.find(:all, :conditions => ["id != ?", @user.id])
       # providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
     rescue 
       logger.info "ALERT - cannot find user from token"
     end
-    @users    = User.all   
-    user_hash = hash_these_users(@users, USER_REPLY)
+    users    = User.all   
+    user_hash = hash_these_users(users, USER_REPLY)
     
     respond_to do |format|
       logger.debug user_hash
@@ -107,8 +107,8 @@ class IphoneController < AppController
   def activity
     logger.info "Activity"
     @user  = User.find_by_remember_token(params["token"])
-    @gifts = Gift.get_activity
-    gift_hash = hash_these_gifts(@gifts, BOARD_REPLY) 
+    gifts = Gift.get_activity
+    gift_hash = hash_these_gifts(gifts, BOARD_REPLY) 
     
     respond_to do |format|
       logger.debug gift_hash
@@ -119,10 +119,10 @@ class IphoneController < AppController
   def provider
     logger.info "Provider"
     # @user  = User.find_by_remember_token(params["token"])
-    @provider = Provider.find(params["provider_id"])
-    @gifts    = Gift.get_provider(@provider)
+    provider = Provider.find(params["provider_id"])
+    gifts    = Gift.get_provider(provider)
 
-    gift_hash = hash_these_gifts(@gifts, PROVIDER_REPLY) 
+    gift_hash = hash_these_gifts(gifts, PROVIDER_REPLY) 
 
     respond_to do |format|
       logger.info gift_hash
@@ -133,9 +133,9 @@ class IphoneController < AppController
   def locations
     logger.info "Locations"
     # @user  = User.find_by_remember_token(params["token"])
-    @providers = Provider.all
+    providers = Provider.all
     menus  = {}
-    @providers.each do |p|
+    providers.each do |p|
       menu = JSON.parse p.menu_string.data
       menus.merge!(menu)
     end
