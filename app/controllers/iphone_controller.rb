@@ -71,10 +71,11 @@ class IphoneController < AppController
 
   def buys
     logger.info "Buys"
-    @user                 = User.find_by_remember_token(params["token"])
-    @gifts, @past_gifts   = Gift.get_buy_history(@user)
-    gift_hash             = hash_these_gifts(@gifts, BUY_REPLY, true)
-    past_gift_hash        = hash_these_gifts(@past_gifts, BUY_REPLY, true)
+    response = {}
+    user                  = User.find_by_remember_token(params["token"])
+    gifts, past_gifts     = Gift.get_buy_history(user)
+    gift_hash             = hash_these_gifts(gifts, BUY_REPLY, true)
+    past_gift_hash        = hash_these_gifts(past_gifts, BUY_REPLY, true)
     response["active"]    = gift_hash
     response["completed"] = past_gift_hash
     
