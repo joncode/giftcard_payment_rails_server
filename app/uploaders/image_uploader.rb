@@ -4,8 +4,14 @@ class ImageUploader < CarrierWave::Uploader::Base
   include Cloudinary::CarrierWave
 
   process :convert => 'png'
-  process :tags => ['post_picture']
-  
+  process :tags => ['profile']
+  #   process :transformation => {
+  #     :width => :w, 
+  #   :height => :h, 
+  #   :x => :x, 
+  #   :y => :x
+  # }
+  # process :set_content_type
   version :standard do
     process :resize_to_fill => [100, 150, :north]
   end
@@ -30,7 +36,14 @@ class ImageUploader < CarrierWave::Uploader::Base
       end
     end
   end
-  # def public_id
-  #   return model.short_name
-  # end
+  
+  protected
+    
+    def add_crop_data picture
+      x = model.crop_x.to_i
+      y = model.crop_y.to_i
+      w = model.crop_w.to_i
+      h = model.crop_h.to_i
+      return [x,y,w,h]
+    end
 end
