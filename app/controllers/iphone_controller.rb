@@ -55,7 +55,7 @@ class IphoneController < AppController
         user_json = user.to_json only: LOGIN_REPLY
         response["user"]  = user_json
       else
-        response["error"] = "Invalid email/password combination" }
+        response["error"] = "Invalid email/password combination"
       end
     end
     
