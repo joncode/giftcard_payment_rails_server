@@ -45,7 +45,7 @@ class IphoneController < AppController
         if user.providers.count == 1
           # get single provider id and send in response hash
           provider_id = user.providers.dup.shift.id
-          response["server"] = "#{providers_id}"
+          response["server"] = "#{provider_id}"
         elsif user.providers.count > 1
           # return multiple to alert app to need for multiple providers page
           response["server"] = "multiple"
