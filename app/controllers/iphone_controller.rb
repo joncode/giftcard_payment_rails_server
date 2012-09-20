@@ -42,8 +42,13 @@ class IphoneController < AppController
     else
       user = User.find_by_email(email)     
       if user && user.authenticate(password)
-        if user.providers.count > 0
-          user.provider_id = user.providers.dup.shift.id
+        if user.providers.count == 1
+          # get single provider id and send in response hash
+          provider_id = user.providers.dup.shift.id
+          response["server"] = "#{providers_id}"
+        elsif user.providers.count > 1
+          # return multiple to alert app to need for multiple providers page
+          response["server"] = "multiple"
         end
         response = user.to_json only: LOGIN_REPLY
       else
