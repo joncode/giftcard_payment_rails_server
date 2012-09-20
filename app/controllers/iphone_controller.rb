@@ -34,9 +34,9 @@ class IphoneController < AppController
   
   def login
     logger.info "Login"
-    response = {}
-    email = params["email"]
-    password = params["password"]
+    response  = {}
+    email     = params["email"]
+    password  = params["password"]
     
     if email.nil? || password.nil?
       response["error"] = "Data not received."
@@ -52,7 +52,8 @@ class IphoneController < AppController
           # return multiple to alert app to need for multiple providers page
           response["server"] = "multiple"
         end
-        response["user"]  = user.to_json only: LOGIN_REPLY
+        user_json = user.to_json only: LOGIN_REPLY
+        response["user"]  = user_json
       else
         response["error"] = "Invalid email/password combination" }
       end
