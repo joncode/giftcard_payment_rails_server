@@ -1,5 +1,7 @@
 Drinkboard::Application.routes.draw do
   
+  resources :locations
+
   resources :employees
   match "/invite/:id" => "invite#show"
   

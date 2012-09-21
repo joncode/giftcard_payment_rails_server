@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120918205928) do
+ActiveRecord::Schema.define(:version => 20120921164004) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -70,6 +70,16 @@ ActiveRecord::Schema.define(:version => 20120918205928) do
   create_table "items_menus", :id => false, :force => true do |t|
     t.integer "item_id"
     t.integer "menu_id"
+  end
+
+  create_table "locations", :force => true do |t|
+    t.float    "latitude"
+    t.float    "longitude"
+    t.integer  "provider_id"
+    t.integer  "user_id"
+    t.string   "foursquare_venue_id"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
   end
 
   create_table "menu_strings", :force => true do |t|
@@ -136,6 +146,11 @@ ActiveRecord::Schema.define(:version => 20120918205928) do
     t.string   "bank_city"
     t.string   "bank_state"
     t.string   "bank_zip"
+    t.string   "portrait"
+    t.string   "box"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "foursquare_id"
   end
 
   create_table "redeems", :force => true do |t|
