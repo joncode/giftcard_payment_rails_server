@@ -34,7 +34,9 @@ class ProvidersController < ApplicationController
   end
 
   def create
+    super_user = current_user
     @provider = Provider.new(params[:provider])
+    @provider.users = [super_user]
 
     respond_to do |format|
       if @provider.save
