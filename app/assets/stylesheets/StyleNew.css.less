@@ -1,0 +1,521 @@
+                                                 
+    /*                                      
+`7MM"""Yp,                     mm         
+  MM    Yb                     MM         
+  MM    dP  ,pW"Wq.   ,pW"Wq.mmMMmm       
+  MM"""bg. 6W'   `Wb 6W'   `Wb MM         
+  MM    `Y 8M     M8 8M     M8 MM         
+  MM    ,9 YA.   ,A9 YA.   ,A9 MM         
+.JMMmmmd9 mm`Ybmd9'   `Ybmd9'  `Mbmo      
+          MM                              
+,pP"Ybd mmMMmm `7Mb,od8 ,6"Yb. `7MMpdMAo. 
+8I   `"   MM     MM' "'8)   MM   MM   `Wb 
+`YMMMa.   MM     MM     ,pm9MM   MM    M8 
+L.   I8   MM     MM    8M   MM   MM   ,AP 
+M9mmmP'   `Mbmo.JMML.  `Moo9^Yo. MMbmmd'  
+                                 MM       
+                               .JMML.                                                                               
+ */                                                                          
+
+
+@import "twitter/bootstrap";
+
+
+// Set the correct sprite paths
+@iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
+@iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
+
+// Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
+//@fontAwesomeEotPath: asset-path('fontawesome-webfont.eot');
+//@fontAwesomeWoffPath: asset-path('fontawesome-webfont.woff');
+//@fontAwesomeTtfPath: asset-path('fontawesome-webfont.ttf');
+//@fontAwesomeSvgzPath: asset-path('fontawesome-webfont.svgz');
+//@fontAwesomeSvgPath: asset-path('fontawesome-webfont.svg');
+
+// Font Awesome
+// @import "MarkerFelt-Thin";
+
+// Your custom stylesheets goes here (override Less here)
+@highlight_shade: rgba(190,173,161,1);
+@middle_shade: rgba(151,110,78,0.8);
+@dark_shade:rgba(100,71,40,0.5);
+//@darker_shade: rgba(77,34,20,0.8) ;
+//@navbarBackground: @highlight_shade;
+//@navbarBackgroundHighlight: @middle_shade;
+@navbarText: #eee;
+@navbarLinkColor: #eee;
+//@bodyBackground: #eee;
+@navbarHeight: 60px;
+@navbarLinkBackgroundHover: transparent;
+
+
+
+// Embed Fonts
+
+@font-face {
+    font-family: 'franchiseregular';
+    src: url('franchise-bold-webfont.eot');
+    src: url('franchise-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('franchise-bold-webfont.woff') format('woff'),
+         url('franchise-bold-webfont.ttf') format('truetype'),
+         url('franchise-bold-webfont.svg#franchiseregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+h1 {
+	font-family: 'franchiseregular';
+	font-weight: normal;
+	font-size: 2em;
+}
+
+@import url('http://fonts.googleapis.com/css?family=Lato:400,300italic,300,400italic');
+
+h2 {
+	font-family: 'Lato', sans-serif;
+	font-weight: 300;
+	font-size: 1.5em;
+	color: #444;
+}
+
+@import url('http://fonts.googleapis.com/css?family=Gentium+Book+Basic:400,400italic,700,700italic');
+
+h3 {
+	font-family: 'Gentium Book Basic', serif;
+	font-weight: 400;
+	font-style: italic;
+}
+
+// End Fonts
+
+/*                                                                
+                                     ,,                          
+     ,.-==-.       .g8"""bgd       `7MM                          
+  ,pd'      `g.  .dP'     `M         MM                          
+ ,P   ,dMb.A  Y. dM'       `,pW"Wq.  MM  ,pW"Wq.`7Mb,od8 ,pP"Ybd 
+,P   dP  ,MP  j8 MM        6W'   `Wb MM 6W'   `Wb MM' "' 8I   `" 
+8:  dM'  dM   d' MM.       8M     M8 MM 8M     M8 MM     `YMMMa. 
+Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8 
+ Wb  ``""^`"'      `"bmmmd' `Ybmd9'.JMML.`Ybmd9'.JMML.   M9mmmP' 
+  `M..     .,!                                                   
+    `Ybmmd'                                                      
+*/
+
+@yellow: #F9DD97;
+@redLight: #FF6865;
+@red: #761D1B;
+@blueMid: #61ADD9;
+@blue: #007ED2;
+
+* { 
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box; 
+ }
+
+body {
+	background-color: #222;
+	//position: absolute; 
+	margin: 0 !important;
+}
+
+.mainWrapper {
+	position: relative;
+	width: 768px;
+	height: 1024px;
+	margin: 0 auto;
+	background-color: #CDDBE7;
+}
+
+.mainContent {
+	margin: 25px 25px 25px 25px;
+
+	h1 {
+		height: 46px;
+	}
+}
+
+.headerColorBackground {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 181px;
+	background-color: #F9DD97;
+	margin: 0;
+	padding: 0;
+	border-bottom: 2px solid black;
+
+}
+
+.logoHeader {
+	position: absolute;
+	top: 5px;
+	left: 0;
+	width: 170px;
+	height: 190px;
+	z-index: 100;
+	
+	img {
+		width: 100%;
+		height: 100%
+	}
+}
+
+// First we lay out the general flow of the tabs...
+.navbarWrapper { 
+	position: relative;
+	width: 100%;
+	height: 180px;
+	margin: 0;
+	padding: 0 0 0 200px;
+
+	ul {
+		display: block;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		top: 100px;
+
+		li {
+			display: inline;
+			float: left;
+			height: 50px;
+			margin-right: 25px;
+
+			.cornered {
+				position: relative;
+				top: 0;
+				height: 0px;
+				border-bottom: 25px solid @red;
+    		border-left: 25px solid transparent;
+    		background-color: transparent;
+    		z-index: 10;
+			}
+
+			.backgroundTab {
+				position: relative;
+				background: @red;
+				z-index: 0;
+			}
+
+			h1 {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				top: -10px;
+
+				a {
+					display: block;
+					position: relative;
+					margin-top: 0px;
+					left: 0;
+					margin: 0;
+					padding: 0 7px 0 0;
+					text-align: right;
+				}
+			}
+		}
+	}
+
+	// ..then we go back through an assign specific width's..
+	ul.navMain {
+
+		li.home {
+			width: 125px;
+			
+
+			.cornered {
+				width: 125px;
+			}
+
+			.backgroundTab {
+				width: 125px;
+				height: 25px;
+				left: -25px;
+				top: 25px;
+			}
+		}
+
+		li.gifts{
+			width: 100px;
+
+			.cornered {
+				width: 100px;
+			}
+
+			.backgroundTab {
+				width: 100px;
+				height: 25px;
+				left: -25px;
+				top: 25px;
+			}
+		}
+
+		li.buys {
+
+			.cornered {
+				width: 75px;
+			}
+
+			.backgroundTab {
+				width: 75px;
+				height: 25px;
+				left: -25px;
+				top: 25px;
+			}
+		}
+
+		li.activity {
+			margin-right: 0;
+
+			.cornered {
+				width: 125px;
+			}
+
+			.backgroundTab {
+				width: 125px;
+				height: 25px;
+				left: -25px;
+				top: 25px;
+			}
+		}
+	}
+	// ..and thats the Header. END HEADER
+
+
+
+
+
+
+	// This brings us to the admin/logged in Nav Bar..
+	.navLoggedIn {
+		position: absolute;
+		top: 0px;
+		right: 25px;
+		display: inline;
+		
+			li {
+				float: right;
+				display: inline;
+				width: auto;
+				margin-right: 25px;
+
+				a {
+					color: @blue;
+				}
+			}
+ 
+		a {
+			font-size: .85em;
+		}
+	}
+}
+
+
+
+// User Sign In Area
+
+.signinFormWrapper {
+	position: relative;
+	top: 00px;
+	background-color: @blue;
+	width: 400px;
+
+	h1 {
+		height: 36px;
+		width: 100%;
+		padding-left: 10px;
+	}
+
+	form {
+
+		input {
+			height: 25px;
+			border-radius: 0;
+			box-shadow: 0;
+			text-align: right;
+			border: 0;
+			box-shadow: inset 1px 1px 3px #777;
+			background-color: @yellow;
+
+			&:focus {
+				box-shadow: inset 1px 1px 7px #555;
+			}
+		}
+	}
+
+	.button {
+		border: 0;
+		background-color: @yellow;
+		color: @blue;
+	 	letter-spacing: .02em;
+	 	padding: 0 10px 10px 10px;
+	 	text-shadow: none;
+	 	font-size: 20px;
+	 	font-family: 'Gentium Book Basic', serif;
+	 	font-style: italic;
+	 	font-weight: 400;
+
+	 	&:active {
+	 		margin-top: 2px;
+	 		margin-left: 2px;
+	 		padding-top: 2px;
+	 		padding-right: 10px;
+	 		box-shadow: inset 2px 2px 2px #777;
+	 	}
+	}
+}
+
+.autoSigninUsers {
+	width: 100%;
+	height: 250px;
+
+	.userCell {
+		min-width: 150px; 
+		max-width: 200px;
+		position: relative;
+		width: auto;
+		float: left;
+		max-height: 100px; 
+		padding: 0;
+		margin: 0px 25px 25px 0;
+		//border: 1px solid black;
+		background: #535353;
+
+	 	h2 {
+	 		color: @redLight;
+	 		padding: 0 25px 25px 10px;
+	 	}
+
+	 	h3 {
+	 		position: relative;
+	 		top: 0;
+	 		left: 0;
+	 		height: 100px;
+	 		//border: 1px solid black;
+	 		position: relative;
+	 	}
+		
+		form {
+
+	 		input {
+	 			border-radius: 0;
+	 			border: 0;
+	 			display: block;
+	 			width: 90%;
+	 			height: 25px;
+	 			text-align: right;
+	 			border: 0;
+	 			background-image: none;
+	 			background-color: @red;
+	 			letter-spacing: .02em;
+	 			padding: 0 10px 25px 0;
+	 			text-shadow: none;
+	 			font-size: 20px;
+	 			font-family: 'Gentium Book Basic', serif;
+	 			font-style: italic;
+	 			font-weight: 400;
+	 		}
+	 	}
+	}	
+}
+
+h1.signUpHeader {
+	padding-left: 10px;
+	height: 50px;
+}
+
+.signUpFormWrapper {
+	position: relative;
+	width: 500px;
+	height: 300px;
+	background-color: @yellow;
+
+	form#new_user.simple_form {
+		margin-left: 25px;
+
+		div.form-inputs {
+			padding-top: 25px;
+			margin-bottom: 25px;
+
+			div.input {
+				height: 25px;
+
+				input {
+					height: 25px;
+					color: #ccc;
+					background-color: @blue;
+					border-radius: none;
+				}
+
+			}
+		}
+
+		input.createAccount {
+			background-image: none;
+			background-color: @blue;
+			width: 50%;
+			height: 50px;
+			margin-left: -25px;
+			border-radius: 0;
+			text-align: right;
+			font-family: 'Lato', sans-serif;
+			font-weight: 300;
+			font-size: 1.4em;
+			letter-spacing: .03em;
+		}
+	}
+}
+
+.socialLoginWrapper {
+	position: relative;
+	top: -264px;
+	left: 400px;
+	width: 300px;
+	
+
+	h2.signinOr {
+		font-size: 4em;
+		margin-bottom: 25px;
+	}
+
+	.fbLoginWrapper {
+		margin-bottom: 5px;
+
+		img {
+			height: 25px;
+		}
+	}
+
+	.fourSquareLogin {
+
+		img {
+			height: 25px;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+.footer {
+	display: none;
+}
+
+
+
+
+
+
+
+
+
+
+

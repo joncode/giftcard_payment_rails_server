@@ -1,49 +1,53 @@
   <!--
-    Bottle Cap 
+    Users Sign In 
   -->
 
-  <div class="logoHeader">
-    <%= link_to image_tag("logoCap1.png"), home_path, {:class => "brand"} %>
-  </div>
-  
-  <!--
+<div class="signinFormWrapper">
+  <h1>Sign In</h1>
+    <%= form_for(:session, url: sessions_path) do |f| %>
+      <%= f.text_field :email,        :placeholder => 'Email' %>
+      <%= f.password_field :password, :placeholder => 'Password' %>
+      <%= f.submit "Sign in", class: "button" %>
+    <% end %>
+</div>
+<!--
     Auto Sign In
   -->
-  <div class="autoSigninBackground"></div>
-  <div class="autoSigninWrapper">
-    <h1 class="autoSigninHeader">Auto Log In</h1>
-    <div class="autoSigninUsers">
-      <% @users.each do |u| %>
-        <%= u.password %>
-        <h2 class="username"><%= u.username %></h2>
-        <%= button_to "Sign In", sessions_path(email: u.email, page: 'development'), :class => 'btn btnSignIn btn-success'%>
-      <% end %>
-    </div>
+<h1>Auto Log In</h1>
+<div class="autoSigninUsers">
+  <% @users.each do |u| %>
+  <div class="userCell">
+    <%= u.password %>
+    <h2 class="username">
+      <%= u.username %>
+    </h2>
+    <h3>
+      <%= button_to "Sign In", sessions_path(email: u.email, page: 'development'), :class => 'btn btnSignIn btn-success'%>
+    </h3>
   </div>
-
-	<!--
-	  User Sign In
-	-->
-  <div class="signupFormBackground"></div>
-	<div class="signUpFormWrapper">
-	  <h1 class="signUpHeader">Sign Up</h1>
-    <%= simple_form_for(@user) do |f| %>
-      <%= f.error_notification %>
-      <%= render 'shared/error_messages' %>
-    
-        <div class="form-inputs">
-          <%= f.input :first_name,            :placeholder => 'First Name' %>
-          <%= f.input :last_name,             :placeholder => 'Last Name' %>
-          <%= f.input :email,                 :placeholder => 'Email' %>
-          <%= f.input :password,              :placeholder => 'Password' %>
-          <%= f.input :password_confirmation, :placeholder => 'Password Confirmation' %>
-        </div>
-    
-      <div class="createAccountButton center">
-        <%= f.submit "Create my Account", class: "btn btn-success" %>
-      </div>
     <% end %>
-    <h2 class="signinOr">- Or -</h2>
+</div>
+
+<!--
+  User Sign In
+-->
+  <h1 class="signUpHeader">Sign Up</h1>
+  <div class="signUpFormWrapper">
+    <%= simple_form_for(@user) do |f| %>
+    <%= f.error_notification %>
+    <%= render 'shared/error_messages' %>
+  
+    <div class="form-inputs">
+      <%= f.input :first_name,            :placeholder => 'First Name' %>
+      <%= f.input :last_name,             :placeholder => 'Last Name' %>
+      <%= f.input :email,                 :placeholder => 'Email' %>
+      <%= f.input :password,              :placeholder => 'Password' %>
+      <%= f.input :password_confirmation, :placeholder => 'Password Confirmation' %>
+    </div>
+      <%= f.submit "Create my Account", class: "btn btn-success createAccount" %>
+      <% end %>
+  <div class="socialLoginWrapper">
+    <h2 class="signinOr">Or...</h2>
     <div class="fbLoginWrapper">
       <%= link_to image_tag('fb_login.png') , home_path, :class => "fb_login" %>
     </div>
@@ -51,20 +55,7 @@
       <%= link_to image_tag('signinwith-foursquare.png'), home_path, :class => "sq_login" %>
     </div>
   </div>
-  
-  <!--
-    Users Sign In 
-  -->
-	<div class="signinFormBackground"></div>
-	<div class="signinFormWrapper">
-    <h1>Sign In</h1>
-      <div class="">
-        <%= form_for(:session, url: sessions_path) do |f| %>
-          <%= f.text_field :email,        :placeholder => 'Email' %>
-          <%= f.password_field :password, :placeholder => 'Password' %>
-          <%= f.submit "Sign in", class: "btn btn-large btn-success" %>
-        <% end %>
-      </div>
-  </div>
+</div> 
+
 
 
