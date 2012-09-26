@@ -7,5 +7,8 @@
 //= require jquery
 //= require twitter/bootstrap
 //= require jquery.isotope.min
+//= require jquery.Jcrop.min
 //= require isotope_script
+//= require bootstrap
+
 

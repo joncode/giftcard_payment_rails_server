@@ -3,21 +3,19 @@ module UsersHelper
   def gravatar_for(user)
     if user.photo.blank?
       gravatar_url = "ninja_ghost_128.png"
+      image_tag(gravatar_url, alt: "#{user.username}", class: "gravatar")
     else
-      #gravatar_url =  download_img_url_for(user.photo.to_s)
-      gravatar_url =  download_img_url_for("13.png")
-    end 
-    image_tag(gravatar_url, alt: "cant locate image", class: "gravatar") 
-  end 
+      image_tag(user.photo_url(:thumbnail), :width => 75, :height => 100)
+    end   
+  end
   
   def list_icon_for(user)
     if user.photo.blank?
       gravatar_url = "ninja_ghost_128.png"
+      image_tag(gravatar_url, alt: "#{user.username}", class: "gravatar")
     else
-      #gravatar_url =  download_img_url_for(user.photo.to_s)
-      gravatar_url =  download_img_url_for("13.png")
-    end 
-    image_tag(gravatar_url, alt: "cant locate image", class: "iconListView")     
+      image_tag(user.photo_url(:thumbnail), :width => 50, :height => 50)
+    end   
   end
   
   def list_icon_with_id_for(user_id)
@@ -28,11 +26,18 @@ module UsersHelper
     end
     if user.photo.blank?
       gravatar_url = "ninja_ghost_128.png"
+      image_tag(gravatar_url, alt: "#{user.username}", class: "gravatar")
     else
-      #gravatar_url =  download_img_url_for(user.photo.to_s)
-      gravatar_url =  download_img_url_for("13.png")
-    end 
-    image_tag(gravatar_url, alt: "cant locate image", class: "iconListView")     
+      image_tag(user.photo_url(:thumbnail), :width => 50, :height => 50)
+    end   
+  end
+  
+  def large_photo(user)
+    image_tag(user.photo_url(:large), :width => 400, :height => 400, :id => "cropbox")
+  end
+
+  def preview_large_photo(user)
+    image_tag(user.photo_url(:large), :width => 400, :height => 400, :id => "preview")
   end
    
 end

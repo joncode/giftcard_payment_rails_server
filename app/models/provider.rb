@@ -25,8 +25,9 @@
 #
 
 class Provider < ActiveRecord::Base
-  attr_accessible :address, :city, :description, :logo, :name, :state, :user_id, :staff_id, :zip, :zinger, :phone, :email, :twitter, :facebook, :website, :users
-                                                                                                
+  attr_accessible :address, :city, :description, :logo, :name, :state, :user_id, :staff_id, :zip, :zinger, :phone, :email, :twitter, :facebook, :website, :users, :photo, :photo_cache, :logo_cache, :box, :box_cache, :portrait, :portrait_cache, :account_name, :aba, :routing, :bank_account_name, :bank_address, :bank_city, :bank_state, :bank_zip
+
+
   has_many   :users, :through => :employees                                                                              
   has_many   :employees
   has_one    :menu                                                                              
@@ -34,7 +35,12 @@ class Provider < ActiveRecord::Base
   has_one    :menu_string
   has_many   :gifts
 
+  mount_uploader :photo,    ImageUploader
+  mount_uploader :logo,     ImageUploader
+  mount_uploader :box,      ImageUploader
+  mount_uploader :portrait, ImageUploader
   
+
   def full_address
     "#{self.address},  #{self.city}, #{self.state}"
   end
