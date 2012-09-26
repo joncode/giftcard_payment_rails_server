@@ -1,5 +1,40 @@
-                                                 
-    /*                                      
+                                          
+//                 ,,        ,,             
+// MMP""MM""YMM   *MM      `7MM             
+// P'   MM   `7    MM        MM             
+//      MM  ,6"Yb. MM,dMMb.  MM  .gP"Ya     
+//      MM 8)   MM MM    `Mb MM ,M'   Yb    
+//      MM  ,pm9MM MM     M8 MM 8M""""""    
+//      MM 8M   MM MM.   ,M9 MM YM.    ,    
+//    .JMML`Moo9^YoP^YbmdP'.JMML.`Mbmmd'    q                                                                                                                                                                                                                  
+//              ,...    
+//            .d' ""    
+//            dM`       
+//   ,pW"Wq. mMMmm      
+//  6W'   `Wb MM        
+//  8M     M8 MM        
+//  YA.   ,A9 MM        
+//   `Ybmd9'.JMML.                                                                                                                                
+                                                          
+//    .g8"""bgd                  mm                     mm          
+//  .dP'     `M                  MM                     MM          
+//  dM'       `,pW"Wq.`7MMpMMMbmmMMmm .gP"Ya `7MMpMMMbmmMMmm ,pP"Ybd
+//  MM        6W'   `Wb MM    MM MM  ,M'   Yb  MM    MM MM   8I   `"
+//  MM.       8M     M8 MM    MM MM  8M""""""  MM    MM MM   `YMMMa.
+//  `Mb.     ,YA.   ,A9 MM    MM MM  YM.    ,  MM    MM MM   L.   I8
+//    `"bmmmd' `Ybmd9'.JMML  JMML`Mbmo`Mbmmd'.JMML  JMML`MbmoM9mmmP'
+
+
+// 1. Bootstrap Stuff
+// 2. Fonts
+// 3. Color variables
+// 4. Main Wrapper Layout
+// 5. Header (includes angled corner box-styles for now)
+// 6. User sign in/create account (includes general form/input/button styling)
+// 7. Home Layout (big icons)
+// 8. Gift Panels
+
+ /*                                      
 `7MM"""Yp,                     mm         
   MM    Yb                     MM         
   MM    dP  ,pW"Wq.   ,pW"Wq.mmMMmm       
@@ -18,7 +53,7 @@ M9mmmP'   `Mbmo.JMML.  `Moo9^Yo. MMbmmd'
  */                                                                          
 
 
-@import "twitter/bootstrap";
+//@import "twitter/bootstrap";
 
 
 // Set the correct sprite paths
@@ -47,11 +82,15 @@ M9mmmP'   `Mbmo.JMML.  `Moo9^Yo. MMbmmd'
 //@bodyBackground: #eee;
 @navbarHeight: 60px;
 @navbarLinkBackgroundHover: transparent;
-
-
-
-// Embed Fonts
-
+                                                                               
+// `7MM"""YMM                  mm           
+//   MM    `7                  MM           
+//   MM   d  ,pW"Wq.`7MMpMMMbmmMMmm ,pP"Ybd 
+//   MM""MM 6W'   `Wb MM    MM MM   8I   `" 
+//   MM   Y 8M     M8 MM    MM MM   `YMMMa. 
+//   MM     YA.   ,A9 MM    MM MM   L.   I8 
+// .JMML.    `Ybmd9'.JMML  JMML`MbmoM9mmmP' 
+                                                                               
 @font-face {
     font-family: 'franchiseregular';
     src: url('franchise-bold-webfont.eot');
@@ -61,13 +100,13 @@ M9mmmP'   `Mbmo.JMML.  `Moo9^Yo. MMbmmd'
          url('franchise-bold-webfont.svg#franchiseregular') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
 
 h1 {
 	font-family: 'franchiseregular';
 	font-weight: normal;
 	font-size: 2em;
+	color: @blue;
 }
 
 @import url('http://fonts.googleapis.com/css?family=Lato:400,300italic,300,400italic');
@@ -89,8 +128,7 @@ h3 {
 
 // End Fonts
 
-/*                                                                
-                                     ,,                          
+/*                                                                                       
      ,.-==-.       .g8"""bgd       `7MM                          
   ,pd'      `g.  .dP'     `M         MM                          
  ,P   ,dMb.A  Y. dM'       `,pW"Wq.  MM  ,pW"Wq.`7Mb,od8 ,pP"Ybd 
@@ -107,6 +145,30 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
 @red: #761D1B;
 @blueMid: #61ADD9;
 @blue: #007ED2;
+@greySublime: #2C2C27;
+@blueBackground: #CDDBE7;
+@green: #687A00;
+
+                                                                                                                 
+                                                                                                                 
+// `7MM"""Mq.                             
+//   MM   `MM.                            
+//   MM   ,M9 ,6"Yb.  .P"Ybmmm .gP"Ya     
+//   MMmmdM9 8)   MM :MI  I8  ,M'   Yb    
+//   MM       ,pm9MM  WmmmP"  8M""""""    
+//   MM      8M   MM 8M       YM.    ,    
+// .JMML.    `Moo9^Yo.YMMMMMb  `Mbmmd'    
+//                   6'     dP            
+//                   Ybmmmd'              
+//`7MMF'     A     `7MF'                                                   
+//  `MA     ,MA     ,V                                                     
+//   VM:   ,VVM:   ,V `7Mb,od8 ,6"Yb. `7MMpdMAo`7MMpdMAo.  .gP"Ya `7Mb,od8 
+//    MM.  M' MM.  M'   MM' "'8)   MM   MM   `Wb MM   `Wb ,M'   Yb  MM' "' 
+//    `MM A'  `MM A'    MM     ,pm9MM   MM    M8 MM    M8 8M""""""  MM     
+//     :MM;    :MM;     MM    8M   MM   MM   ,AP MM   ,AP YM.    ,  MM     
+//      VF      VF    .JMML.  `Moo9^Yo. MMbmmd'  MMbmmd'   `Mbmmd'.JMML.    
+//                                      MM       MM                        
+//                                    .JMML.   .JMML.                      
 
 * { 
   -moz-box-sizing: border-box; 
@@ -115,7 +177,7 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
  }
 
 body {
-	background-color: #222;
+	background-color: @greySublime;
 	//position: absolute; 
 	margin: 0 !important;
 }
@@ -125,24 +187,91 @@ body {
 	width: 768px;
 	height: 1024px;
 	margin: 0 auto;
-	background-color: #CDDBE7;
+	background-color: #222;
+	//border: 3px solid @blueBackground;
 }
 
 .mainContent {
 	margin: 25px 25px 25px 25px;
+	position: relative;
+	height: 100%;
+	width: 100%;
 
 	h1 {
 		height: 46px;
 	}
 }
 
+//Helpful go-to list styles
+
+ul.tabsList {
+	display: block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	top: 100px;
+
+	li {
+		float: left;
+		height: 50px;
+		margin-right: 25px;
+		margin-bottom: 25px;
+
+		.cornered {
+			position: relative;
+			top: 0;
+			height: 0px;
+			border-bottom: 25px solid @red;
+   		border-left: 25px solid transparent;
+   		background-color: transparent;
+   		z-index: 10;
+		}
+
+		.backgroundTab {
+			position: relative;
+			background: @red;
+			z-index: 0;
+			top: 25px;
+			margin-left: -25px;
+		}
+
+		h1 {
+			position: relative;
+			height: 25px;
+			min-width: 100px;
+			padding-left: 25px;
+			top: -9px;
+
+			a {
+				display: block;
+				position: relative;
+				margin-top: 0px;
+				left: 0;
+				margin: 0;
+				padding: 0 7px 0 0;
+				text-align: right;
+			}
+		}
+	}
+}   
+
+//                                      ,,                  
+// `7MMF'  `7MMF'                     `7MM                  
+//   MM      MM                         MM                  
+//   MM      MM  .gP"Ya   ,6"Yb.   ,M""bMM  .gP"Ya `7Mb,od8 
+//   MMmmmmmmMM ,M'   Yb 8)   MM ,AP    MM ,M'   Yb  MM' "' 
+//   MM      MM 8M""""""  ,pm9MM 8MI    MM 8M""""""  MM     
+//   MM      MM YM.    , 8M   MM `Mb    MM YM.    ,  MM     
+// .JMML.  .JMML.`Mbmmd' `Moo9^Yo.`Wbmd"MML.`Mbmmd'.JMML.   
+                                                         
 .headerColorBackground {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 181px;
-	background-color: #F9DD97;
+	background-color: @blueMid;
 	margin: 0;
 	padding: 0;
 	border-bottom: 2px solid black;
@@ -163,23 +292,29 @@ body {
 	}
 }
 
-// First we lay out the general flow of the tabs...
+// First we lay out the general flow of the Ul and tabs...
+
 .navbarWrapper { 
 	position: relative;
 	width: 100%;
 	height: 180px;
 	margin: 0;
-	padding: 0 0 0 200px;
+	padding: 0 0 0 200px; //pushes all content besides main logo 200px to the right
+
+	ul a {
+		list-style-type: none;
+	}
 
 	ul {
 		display: block;
-		list-style: none;
+		list-style-type: none;
 		margin: 0;
 		padding: 0;
 		position: relative;
 		top: 100px;
 
 		li {
+			list-style-type: none;
 			display: inline;
 			float: left;
 			height: 50px;
@@ -220,13 +355,12 @@ body {
 		}
 	}
 
-	// ..then we go back through an assign specific width's..
+	// ..then we choose specific width/height/positions for each tab ..
 	ul.navMain {
 
 		li.home {
 			width: 125px;
 			
-
 			.cornered {
 				width: 125px;
 			}
@@ -282,15 +416,10 @@ body {
 				top: 25px;
 			}
 		}
-	}
-	// ..and thats the Header. END HEADER
+	} // and those are the tabs, each with easy moving and resizing.
+	
+	// This brings us to the admin/logged in Nav Bar. We'll stick it in the top right for now.
 
-
-
-
-
-
-	// This brings us to the admin/logged in Nav Bar..
 	.navLoggedIn {
 		position: absolute;
 		top: 0px;
@@ -312,8 +441,19 @@ body {
 			font-size: .85em;
 		}
 	}
-}
+}// ..and thats the Header. Boom. END HEADER
 
+                                                    
+//            ,,                        ,,             
+//  .M"""bgd  db                        db             
+// ,MI    "Y                                           
+// `MMb.    `7MM  .P"Ybmmm `7MMpMMMb. `7MM `7MMpMMMb.  
+//   `YMMNq.  MM :MI  I8     MM    MM   MM   MM    MM  
+// .     `MM  MM  WmmmP"     MM    MM   MM   MM    MM  
+// Mb     dM  MM 8M          MM    MM   MM   MM    MM  
+// P"Ybmmd" .JMML.YMMMMMb  .JMML  JMML.JMML.JMML  JMML.
+//               6'     dP                             
+//               Ybmmmd'                               
 
 
 // User Sign In Area
@@ -497,6 +637,331 @@ h1.signUpHeader {
 		}
 	}
 }
+                                              
+// `7MMF'  `7MMF'                                 
+//   MM      MM                                   
+//   MM      MM  ,pW"Wq.`7MMpMMMb.pMMMb.  .gP"Ya  
+//   MMmmmmmmMM 6W'   `Wb MM    MM    MM ,M'   Yb 
+//   MM      MM 8M     M8 MM    MM    MM 8M"""""" 
+//   MM      MM YA.   ,A9 MM    MM    MM YM.    , 
+// .JMML.  .JMML.`Ybmd9'.JMML  JMML  JMML.`Mbmmd' 
+
+ul.bigList {	
+	display: block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	//top: 100px;
+
+	li {
+		position: relative;
+		float: left;
+		max-width: 200px;
+		min-height: 250px;
+		//margin-top: 160px; 
+		margin-right: 25px;
+		margin-bottom: 25px;
+		//border: 1px solid red;
+	
+		.cornered {
+			display: block;
+			position: relative;
+			top: 0;
+			width: 222px;
+			height: 0px;
+			border-bottom: 50px solid @greySublime;
+	  	border-left: 50px solid transparent;
+	   	background-color: transparent;
+	   	//z-index: 200;
+		}
+	
+		.backgroundTab {
+			display: block;
+			position: relative;
+			width: 222px;
+			height: 200px;
+			left: -50px;
+			top: 50px;
+			background-color: @greySublime;
+
+			img {
+				position: relative;
+				top: -40px;
+				margin-left: 80px;
+				width: 60%;
+			}
+		}
+	}
+	
+	.endItem { //removes margin-right: 25px from 3rd item so rows are centered 
+						//margin-right: 0;
+	}
+}// end big-paneled list on home page
+
+//               ,,     ,...     
+//   .g8"""bgd   db   .d' "mm    
+// .dP'     `M        dM`  MM    
+// dM'       ` `7MM  mMMmmmMMmm  
+// MM            MM   MM   MM    
+// MM.    `7MMF' MM   MM   MM    
+// `Mb.     MM   MM   MM   MM    
+//   `"bmmmdPY .JMML.JMML. `Mbmo 
+//                                       ,,         
+// `7MM"""Mq.                          `7MM         
+//   MM   `MM.                           MM         
+//   MM   ,M9 ,6"Yb. `7MMpMMMb.  .gP"Ya  MM ,pP"Ybd 
+//   MMmmdM9 8)   MM   MM    MM ,M'   Yb MM 8I   `" 
+//   MM       ,pm9MM   MM    MM 8M"""""" MM `YMMMa. 
+//   MM      8M   MM   MM    MM YM.    , MM L.   I8 
+// .JMML.    `Moo9^Yo.JMML  JMML.`Mbmmd.JMMLM9mmmP' 
+
+.allCellWrapper {
+	margin: 0;
+}
+
+#giftIndexWrapper {
+	position: relative;
+	height: 820px !important;
+	width: 768px;
+
+	.filters {
+		display: block;
+		width: 100%;
+		height: 50px;
+		top: 0px;
+		margin-bottom: 25px;
+	}
+
+	.completed {
+		background-color: @greySublime;
+	}
+
+	.active {
+		background-color: @greySublime;
+	}
+
+	.cellWrapper {
+		list-style-type: none;
+		width: 200px;
+		height: 250px; 
+		position: relative;
+		float: left;
+		margin: 25px 25px 0 0;
+		padding: 8px 8px 0 8px;
+		//top: 10px;
+
+		img {
+			position: relative;
+			float: right;
+			width: ;
+			margin-top: -25px;
+			z-index: 200;
+		}
+
+		h3 {
+			text-align: right;
+			font-size: 1em;
+			color: @yellow;
+		}
+
+		h2 {
+			line-height: 1.2em;
+			width: 100%;
+			font-size: 1.1em;
+			color: white;
+		}
+
+		h1.redeemButton { // Also applies to detials button
+			height: 35px;
+			text-align: right;
+			background-color: @redLight;
+			margin-bottom: 10px;
+			margin-right: 50px;
+			margin-left: -7px;
+			padding-right: 5px;
+
+			input {
+				line-height: 0;
+				background: transparent;
+				border: 0;
+				color: white;
+				border-radius: 0;
+				height: 40px;
+				font-family: 'Lato', sans-serif;
+				font-weight: 300;
+				font-size: .8em;
+			}
+		}
+
+		h1.sendButton {
+			text-align: right;
+			background-color: #90D8EE;
+			height: 25px;
+			line-height: 0;
+			margin-left: -7px;
+			margin-right: 60px;
+			font-family: 'Lato', sans-serif;
+
+
+			input {
+				font-family: 'Lato', sans-serif;
+				font-size: .5em;
+				padding-right: 10px;
+				//height: 100px;
+				border: none;
+				background: transparent;
+				background-image: none;
+			}
+		}
+	}
+}
+
+//               ,,     ,...     
+//   .g8"""bgd   db   .d' "mm    
+// .dP'     `M        dM`  MM    
+// dM'       ` `7MM  mMMmmmMMmm  
+// MM            MM   MM   MM    
+// MM.    `7MMF' MM   MM   MM    
+// `Mb.     MM   MM   MM   MM    
+//   `"bmmmdPY .JMML.JMML. `Mbmo
+//                                      ,,   ,,  
+// `7MM"""Yb.             mm            db `7MM  
+//   MM    `Yb.           MM                 MM  
+//   MM     `Mb  .gP"Ya mmMMmm ,6"Yb. `7MM   MM  
+//   MM      MM ,M'   Yb  MM  8)   MM   MM   MM  
+//   MM     ,MP 8M""""""  MM   ,pm9MM   MM   MM  
+//   MM    ,dP' YM.    ,  MM  8M   MM   MM   MM  
+// .JMMmmmdP'    `Mbmmd'  `Mbm`Moo9^Yo.JMML.JMML.
+
+.giftDetailWrapper {
+	position: relative;
+
+	.panel1 {
+		float: left;
+		clear: both;
+		height: 100%;
+		background-color: @greySublime;
+		width: 475px;
+		margin: 0 25px 25px 0;
+
+		.imgUserLarge {
+			width: 30%;
+			float: left;
+			margin: 25px;
+		}
+
+		h2.panel1Text {
+			line-height: 1.34em;
+			color: @redLight;
+			font-weight: 300;
+			font-size: 1.9em;
+			padding: 25px;
+		}
+
+		.panel2 {
+			position: relative; 
+			float: left;
+			clear: both;
+			background-color: @yellow;
+			width: 450px;
+			//height: 200px;
+
+			.providerLogo {
+				width: 50%;
+				padding: 25px;
+				float: left;
+			}
+	
+			.providerName {
+				padding: 0px 0 0 25px;
+				border-bottom: 1px solid black;
+				width: 100%;
+
+				h2 {
+					size: 1.4em;
+					color: @red;
+					margin-top: 15px;
+				}
+
+				.h2Highlight {
+					color: @blue;
+					font-size: 1.5em;
+				}
+			}
+
+		.message {
+			padding-right: 25px;
+			font-size: 2em;
+
+			.h2Highlight {
+				color: @blue;
+				font-size: 1.5em;
+			}
+		}
+
+		h3 {
+			float: right;
+			padding: 25px;
+		}
+	
+		input {
+			color: red;
+
+		}
+	}
+}
+
+.tabsList {
+	position: relative;
+	top: 0;
+
+	li {
+
+		input {
+			background: transparent;
+			border: none;
+			color: white;
+			font-family: 'franchiseregular', sans-serif;
+			font-size: 1.8em;
+			padding: 4px 5px 2px 15px;
+		}
+	}
+}
+
+.thankYou {
+		position: relative;
+		float: left;
+		clear: both;
+		padding-top: 25px;
+	}
+}
+
+.isotope,
+.isotope .isotope-item {
+  /* change duration value to whatever you like */
+  -webkit-transition-duration: 0.5s;
+     -moz-transition-duration: 0.5s;
+      -ms-transition-duration: 0.5s;
+       -o-transition-duration: 0.5s;
+          transition-duration: 0.5s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:         top, left, opacity;
+          transition-property:         transform, opacity;
+}
 
 
 
@@ -504,6 +969,16 @@ h1.signUpHeader {
 
 
 
+
+
+
+// `7MM"""YMM                   mm                   
+//   MM    `7                   MM                   
+//   MM   d  ,pW"Wq.   ,pW"Wq.mmMMmm .gP"Ya `7Mb,od8 
+//   MM""MM 6W'   `Wb 6W'   `Wb MM  ,M'   Yb  MM' "' 
+//   MM   Y 8M     M8 8M     M8 MM  8M""""""  MM     
+//   MM     YA.   ,A9 YA.   ,A9 MM  YM.    ,  MM     
+// .JMML.    `Ybmd9'   `Ybmd9'  `Mbmo`Mbmmd'.JMML.   
 
 .footer {
 	display: none;

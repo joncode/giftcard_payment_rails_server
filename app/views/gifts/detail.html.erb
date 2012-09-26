@@ -1,20 +1,70 @@
-<p id="notice"><%= notice %></p>
+<div class="giftDetailWrapper">
+	<p id="notice">
+		<%= notice %>
+	</p>
+	<!--! 
+		panel1 will containt the user img, gift giver name, quantity and item name (Jaime bought you 3 heinekens)
+	-->
+	<div class="panel1">
+		<div class="imgUserLarge">
+			<%= list_icon_for @giver %>
+		</div>
+		
+		<h2 class="panel1Text">
+			<%= @gift.giver_name %> bought you 
+			<%= @gift.quantity %> <%= @gift.item_name %>
+		</h2>
 
-<h2>Thank You!</h2>
-<h3>- The Drinkboard Staff</h3>
+		<div class="panel2">
+			<div class="providerLogo">
+				<%= logo_from_id_for @gift.provider_id %>
+			</div>
+			<div class="providerName">
+				<h2>
+					Reedem at the provider<br />
+					<span class="h2Highlight">
+						<%= @gift.provider_name %>
+					</span>
+				</h2>
+			</div>
+				<% if @gift.message %>
+				
+			<h2 class="message">
+				Message: 
+					<span class="h2Highlight">
+						<%= @gift.message %>
+					</span>
+			</h2>
+			<h3>
+				<%= time_ago_in_words(@gift.created_at) %>&nbsp;ago
+			</h3>
+				<% end %>
+		</div> <!-- end panel2 -->
+	</div>
 
-<h4><%= time_ago_in_words(@gift.created_at) %>&nbsp;ago</h4>
-<h4><%= list_icon_for @giver %> <%= @gift.giver_name %><span> bought you </span></h4>
-<h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
-<h3><%= logo_from_id_for @gift.provider_id %>
-@ <%= @gift.provider_name %></h3>
+	<ul class="tabsList">
+		<li>
+			<div class="cornered">
+      	<div class="backgroundTab">
+					<%= button_to 'Past Gifts', past_gifts_path, method: :get  %>
+				</div>
+			</div>
+		</li>
 
-<% if @gift.message %>
-  <p>
-    <b>Message:</b>
-    <%= @gift.message %>
-  </p>
-<% end %>
-
-<%= button_to 'Past Gifts', past_gifts_path, method: :get  %>
-<%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id)  %>
+		<li>
+			<div class="cornered">
+      	<div class="backgroundTab">
+			<%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.	giver_id)  %>
+				</div>
+			</div>
+		</li>
+	</ul>
+	<div class="thankYou">
+		<h1>
+			Thank You!
+		</h1>
+		<h2>
+			- The Drinkboard Staff
+		</h2>
+	</div>
+</div>
