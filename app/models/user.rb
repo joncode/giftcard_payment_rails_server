@@ -26,7 +26,7 @@
 
 class User < ActiveRecord::Base
   mount_uploader    :photo, ImageUploader
-  attr_accessible   :crop_x, :crop_y, :crop_w, :crop_h, :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :provider_id, :handle, :server_code
+  attr_accessible   :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :provider_id, :handle, :server_code
   
   has_many :employees
   has_many :providers, :through => :employees
