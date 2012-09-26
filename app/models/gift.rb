@@ -81,7 +81,10 @@ class Gift < ActiveRecord::Base
   
   def self.get_provider(provider)
     Gift.where(provider_id: provider.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
-
+  end
+  
+  def self.get_all_orders(provider)
+    Gift.where(provider_id: provider.id).order("updated_at DESC")
   end
   
   def self.get_history_provider(provider)
