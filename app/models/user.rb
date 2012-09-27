@@ -91,6 +91,13 @@ class User < ActiveRecord::Base
     "#{self.address},  #{self.city}, #{self.state}"
   end
   
+  def checkin_to_foursquare(fsq_id, lat, lng)
+    requrl = "https://foursquare.com/oauth2/access_token"
+    response = HTTParty.post(url, :query => {:venueId => fsq_id, :ll => ["?,?",lat,lng], :oauth_token => self.foursquare_access_token})
+    return false if response.code != 200
+    return true
+  end
+  
   private
   
     def create_remember_token

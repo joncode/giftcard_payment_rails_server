@@ -83,6 +83,10 @@ Drinkboard::Application.routes.draw do
   match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
   ###
   
+  ##Location resources
+  match '/map', to: 'locations#map'
+  match '/map/boundary', to: 'locations#mapForUserWithinBoundary'
+  
   resources :microposts,    only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
   

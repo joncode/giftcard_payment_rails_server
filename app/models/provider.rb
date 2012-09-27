@@ -35,6 +35,10 @@ class Provider < ActiveRecord::Base
   has_many   :gifts
 
   
+  def self.allWithinBounds(bounds)
+    Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
+  end
+  
   def full_address
     "#{self.address},  #{self.city}, #{self.state}"
   end
