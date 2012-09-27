@@ -148,17 +148,11 @@ ActiveRecord::Schema.define(:version => 20120921164004) do
     t.string   "bank_city"
     t.string   "bank_state"
     t.string   "bank_zip"
-<<<<<<< HEAD
-=======
     t.string   "portrait"
     t.string   "box"
-<<<<<<< HEAD
->>>>>>> m2
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
-=======
->>>>>>> master
   end
 
   create_table "redeems", :force => true do |t|
