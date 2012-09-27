@@ -146,8 +146,6 @@ ActiveRecord::Schema.define(:version => 20120921164004) do
     t.string   "bank_city"
     t.string   "bank_state"
     t.string   "bank_zip"
-    t.string   "portrait"
-    t.string   "box"
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"

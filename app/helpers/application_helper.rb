@@ -13,4 +13,5 @@ module ApplicationHelper
       AWS::S3::S3Object.url_for(photo, THUMB, :authenticated => false)
     end
   end
+    
 end
