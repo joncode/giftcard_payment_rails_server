@@ -1,85 +1,74 @@
 <p id="notice"><%= notice %></p>
-<div class="row">
-  <div class="span4">
-    <h4><%= list_icon_for @giver %> <%= @gift.giver_name %><span> bought you </span></h4>
-    <h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
-    <h3><%= logo_from_id_for @gift.provider_id %>
-    @ <%= @gift.provider_name %></h3>
-    <% if @gift.message %>
-      <p>
-        <b>Message:</b>
-        <%= @gift.message %>
-      </p>
-    <% end %>
+
+<%= list_icon_for @giver %> <%= @gift.giver_name %> 
+
+bought you 
+
+<%= @gift.quantity %> <%= @gift.item_name %>
+
+<%= logo_from_id_for @gift.provider_id %>
+
+located at <%= @gift.provider_name %>
+
+<% if @gift.message %>
+Message:
+<%= @gift.message %>
+<% end %>
+
+
+<%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id), :class => "btn" %>
+<%= button_to 'Not Now', gifts_path, method: :get %>
+
+Give this code to your server to Redeem: 
+<a href="#" class="btn btn-large btn-primary disabled"><%= @redeem.redeem_code %></a>
+
+Server's phone unavailable?
+<button type="button" class="btn btn-large btn-success" id="merchant_redeem">
+  Enter Server Code
+</button>
+<div id="servers">
+  Choose Your Server
+  <% @servers.each do |user| %>
+  <div id="<%= user.id %>">
+    <%= gravatar_for user %>
+    <%= user.username %>
+    <%= user.server_code %>
+    <button type="button" class="btn choose_server" id="<%= user.id %>" name="<%= user.username %>">
+      Choose
+    </button>
   </div>
-  <div class="span4">
-    <%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.giver_id), :class => "btn" %>
-    <%= button_to 'Not Now', gifts_path, method: :get %>
+  <% end %>
+</div>
+<div id="server_code_field">
+  <%= simple_form_for @order do |f| %>
+  <%= f.error_notification %>
+  <% if @order.errors.any? %>
+  <div id="error_explanation">
+    <div class="alert alert-error">
+      The form contains <%= pluralize(@order.errors.count, "error") %>.
+    </div>
+    <ul>
+      <% @order.errors.full_messages.each do |msg| %>
+      <li>* <%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <div class="form-horizontal">
+    <%= f.hidden_field :redeem_id  %>
+    <%= f.hidden_field :gift_id  %>
+    <%= f.hidden_field :server_id  %>
+    <%= f.hidden_field :provider_id  %>
+    <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
+  </div>
+  <%= f.submit "Submit Server Code", :class => "btn" %>
+  <% end %>
+  <div>
+    <button type="button" class="btn btn-large btn-success" id="servers_back_button">
+      Choose Another Server
+    </button>
   </div>
 </div>
-<h4>Give this code to your server to Redeem: 
-  <a href="#" class="btn btn-large btn-primary disabled"><%= @redeem.redeem_code %></a>
-  <hr />
-</h4>
-<h4>Server's phone unavailable?
-  <button type="button" class="btn btn-large btn-success" id="merchant_redeem">Enter Server Code</button>
-    <div class="row">
-      <div class="span7" id="servers">
-        <table>
-          <thead>
-              <tr>
-                <th colspan="4">Choose Your Server</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @servers.each do |user| %>
-                <tr id="<%= user.id %>">
-                  <td><%= gravatar_for user %></td>
-                  <td><%= user.username %></td>
-                  <td><%= user.server_code %></td>
-                  <td><button type="button" class="btn choose_server" id="<%= user.id %>" name="<%= user.username %>">Choose</button></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-        <div class="span4 borderBox" id="server_code_field">
-          <div class="borderBox">
-              <%= simple_form_for @order do |f| %>
-                <%= f.error_notification %>
-                <% if @order.errors.any? %>
-                  <div id="error_explanation">
-                    <div class="alert alert-error">
-                      The form contains <%= pluralize(@order.errors.count, "error") %>.
-                    </div>
-                    <ul>
-                      <% @order.errors.full_messages.each do |msg| %>
-                        <li>* <%= msg %></li>
-                      <% end %>
-                    </ul>
-                  </div>
-                <% end %>
-
-                <div class="form-horizontal">
-                  <%= f.hidden_field :redeem_id  %>
-                  <%= f.hidden_field :gift_id  %>
-                  <%= f.hidden_field :server_id  %>
-                  <%= f.hidden_field :provider_id  %>
-                  <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
-                </div>
-                  <%= f.submit "Submit Server Code", :class => "btn" %>
-              <% end %>
-          </div>
-          <div>
-              <br /><br />
-              <button type="button" class="btn btn-large btn-success" id="servers_back_button">Choose Another Server</button>
-          </div>
-        </div>
-        
-    </div>
-  </div>
-</h4>
-
 
 <script>
   var a = $('#order_server_id');

@@ -1,11 +1,8 @@
-<div class="giftDetailWrapper">
+<div class="detailWrapper">
 	<p id="notice">
 		<%= notice %>
 	</p>
-	<!--! 
-		panel1 will containt the user img, gift giver name, quantity and item name (Jaime bought you 3 heinekens)
-	-->
-	<div class="panel1">
+	<div class="userBox">
 		<div class="imgUserLarge">
 			<%= list_icon_for @giver %>
 		</div>
@@ -28,7 +25,6 @@
 				</h2>
 			</div>
 				<% if @gift.message %>
-				
 			<h2 class="message">
 				Message: 
 					<span class="h2Highlight">
