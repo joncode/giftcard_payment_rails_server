@@ -33,6 +33,10 @@
 // 6. User sign in/create account (includes general form/input/button styling)
 // 7. Home Layout (big icons)
 // 8. Gift Panels
+// 9. Detail Pages
+
+
+// xx. Footer
 
  /*                                      
 `7MM"""Yp,                     mm         
@@ -151,15 +155,14 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
 
                                                                                                                  
                                                                                                                  
-// `7MM"""Mq.                             
-//   MM   `MM.                            
-//   MM   ,M9 ,6"Yb.  .P"Ybmmm .gP"Ya     
-//   MMmmdM9 8)   MM :MI  I8  ,M'   Yb    
-//   MM       ,pm9MM  WmmmP"  8M""""""    
-//   MM      8M   MM 8M       YM.    ,    
-// .JMML.    `Moo9^Yo.YMMMMMb  `Mbmmd'    
-//                   6'     dP            
-//                   Ybmmmd'              
+//            ,,                
+//  .M"""bgd  db   mm           
+// ,MI    "Y       MM           
+// `MMb.    `7MM mmMMmm .gP"Ya  
+//   `YMMNq.  MM   MM  ,M'   Yb 
+// .     `MM  MM   MM  8M"""""" 
+// Mb     dM  MM   MM  YM.    , 
+// P"Ybmmd" .JMML. `Mbmo`Mbmmd'        
 //`7MMF'     A     `7MF'                                                   
 //  `MA     ,MA     ,V                                                     
 //   VM:   ,VVM:   ,V `7Mb,od8 ,6"Yb. `7MMpdMAo`7MMpdMAo.  .gP"Ya `7Mb,od8 
@@ -180,19 +183,20 @@ body {
 	background-color: @greySublime;
 	//position: absolute; 
 	margin: 0 !important;
+	padding: 0 !important;
 }
 
 .mainWrapper {
 	position: relative;
 	width: 768px;
-	height: 1024px;
+	height: 100%;
 	margin: 0 auto;
 	background-color: #222;
 	//border: 3px solid @blueBackground;
 }
 
 .mainContent {
-	margin: 25px 25px 25px 25px;
+	margin: 25px 25px 0px 25px;
 	position: relative;
 	height: 100%;
 	width: 100%;
@@ -817,14 +821,7 @@ ul.bigList {
 	}
 }
 
-//               ,,     ,...     
-//   .g8"""bgd   db   .d' "mm    
-// .dP'     `M        dM`  MM    
-// dM'       ` `7MM  mMMmmmMMmm  
-// MM            MM   MM   MM    
-// MM.    `7MMF' MM   MM   MM    
-// `Mb.     MM   MM   MM   MM    
-//   `"bmmmdPY .JMML.JMML. `Mbmo
+
 //                                      ,,   ,,  
 // `7MM"""Yb.             mm            db `7MM  
 //   MM    `Yb.           MM                 MM  
@@ -833,11 +830,20 @@ ul.bigList {
 //   MM     ,MP 8M""""""  MM   ,pm9MM   MM   MM  
 //   MM    ,dP' YM.    ,  MM  8M   MM   MM   MM  
 // .JMMmmmdP'    `Mbmmd'  `Mbm`Moo9^Yo.JMML.JMML.
+// `7MM"""Mq.                                  
+//   MM   `MM.                                 
+//   MM   ,M9 ,6"Yb.  .P"Ybmmm .gP"Ya  ,pP"Ybd 
+//   MMmmdM9 8)   MM :MI  I8  ,M'   Yb 8I   `" 
+//   MM       ,pm9MM  WmmmP"  8M"""""" `YMMMa. 
+//   MM      8M   MM 8M       YM.    , L.   I8 
+// .JMML.    `Moo9^Yo.YMMMMMb  `Mbmmd' M9mmmP' 
+//                   6'     dP                 
+//                   Ybmmmd'                   
 
-.giftDetailWrapper {
+.detailWrapper {
 	position: relative;
 
-	.panel1 {
+	.userBox {
 		float: left;
 		clear: both;
 		height: 100%;
@@ -937,6 +943,16 @@ ul.bigList {
 	}
 }
 
+// `7MMF'                 mm                              
+//   MM                   MM                              
+//   MM ,pP"Ybd  ,pW"Wq.mmMMmm ,pW"Wq.`7MMpdMAo.  .gP"Ya  
+//   MM 8I   `" 6W'   `Wb MM  6W'   `Wb MM   `Wb ,M'   Yb 
+//   MM `YMMMa. 8M     M8 MM  8M     M8 MM    M8 8M"""""" 
+//   MM L.   I8 YA.   ,A9 MM  YA.   ,A9 MM   ,AP YM.    , 
+// .JMMLM9mmmP'  `Ybmd9'  `Mbmo`Ybmd9'  MMbmmd'   `Mbmmd' 
+//                                      MM                
+//                                    .JMML.              
+
 .isotope,
 .isotope .isotope-item {
   /* change duration value to whatever you like */
@@ -962,6 +978,10 @@ ul.bigList {
        -o-transition-property:         top, left, opacity;
           transition-property:         transform, opacity;
 }
+
+
+
+
 
 
 
