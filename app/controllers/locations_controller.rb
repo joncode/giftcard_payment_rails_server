@@ -19,7 +19,12 @@ class LocationsController < ApplicationController
     @providers = Provider.allWithinBounds(bounds)
     
     #All of the users' following people within the boundary
-    followedUserIds = User.find(thisUser.id).followed_users.map{ |user| user.id }
+    
+    
+    # no followed user implemented yet HACK <<<<<<<
+    followedUserIds = User.all.map { |u| u.id }
+    ##followedUserIds = User.find(thisUser.id).followed_users.map{ |user| user.id }
+    
     @followedUsers = Location.allUsersWithinBounds(followedUserIds, bounds)
     
     #Only render in JSON
