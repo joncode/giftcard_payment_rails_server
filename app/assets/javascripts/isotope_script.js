@@ -2,17 +2,18 @@
 $(function() {
 
 	$('#giftIndexWrapper').isotope({
-	  // options
+		// options
 	  itemSelector : '.item',
-	  layoutMode : 'fitRows'
+	  layoutMode : 'masonry',
 	});
 
-	// cache container
-	var $container = $('#containerIsotope');
-	// initialize isotope
-	$container.isotope({
-	  // options...
-	});
+ 	// cache container
+ 	var $container = $('#containerIsotope');
+ 	// initialize isotope
+ 	$container.isotope({
+  	// options...
+  	columnWidth: 180
+ });
 
 	$('#filters a').click(function(){
 	  var selector = $(this).attr('data-filter');

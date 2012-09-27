@@ -1,3 +1,334 @@
+                                                 
+    /*                                      
+`7MM"""Yp,                     mm         
+  MM    Yb                     MM         
+  MM    dP  ,pW"Wq.   ,pW"Wq.mmMMmm       
+  MM"""bg. 6W'   `Wb 6W'   `Wb MM         
+  MM    `Y 8M     M8 8M     M8 MM         
+  MM    ,9 YA.   ,A9 YA.   ,A9 MM         
+.JMMmmmd9 mm`Ybmd9'   `Ybmd9'  `Mbmo      
+          MM                              
+,pP"Ybd mmMMmm `7Mb,od8 ,6"Yb. `7MMpdMAo. 
+8I   `"   MM     MM' "'8)   MM   MM   `Wb 
+`YMMMa.   MM     MM     ,pm9MM   MM    M8 
+L.   I8   MM     MM    8M   MM   MM   ,AP 
+M9mmmP'   `Mbmo.JMML.  `Moo9^Yo. MMbmmd'  
+                                 MM       
+                               .JMML.                                                                               
+ */                                                                          
+
+
+@import "twitter/bootstrap";
+
+// import responsive layout
+//@import "twitter/bootstrap/responsive";
+
+// Set the correct sprite paths
+@iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
+@iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
+
+// Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
+//@fontAwesomeEotPath: asset-path('fontawesome-webfont.eot');
+//@fontAwesomeWoffPath: asset-path('fontawesome-webfont.woff');
+//@fontAwesomeTtfPath: asset-path('fontawesome-webfont.ttf');
+//@fontAwesomeSvgzPath: asset-path('fontawesome-webfont.svgz');
+//@fontAwesomeSvgPath: asset-path('fontawesome-webfont.svg');
+
+// Font Awesome
+// @import "MarkerFelt-Thin";
+
+// Your custom stylesheets goes here (override Less here)
+@highlight_shade: rgba(190,173,161,1);
+@middle_shade: rgba(151,110,78,0.8);
+@dark_shade:rgba(100,71,40,0.5);
+//@darker_shade: rgba(77,34,20,0.8) ;
+//@navbarBackground: @highlight_shade;
+//@navbarBackgroundHighlight: @middle_shade;
+@navbarText: #eee;
+@navbarLinkColor: #eee;
+//@bodyBackground: #eee;
+@navbarHeight: 60px;
+@navbarLinkBackgroundHover: transparent;
+
+// Embed Fonts
+
+@darkGrey: #282424;
+@midGrey: #CBCFD5;
+@lightGrey: #DDE0E7;
+@grayLighter: #DDE0E7;
+@grayLight: #DDE0E7;
+@red: #C7282D;
+
+// End Fonts
+
+html {
+	overflow-y: scroll;
+	background: url(orangeBoardBackground.jpg) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+body {
+	
+	background : transparent;
+}
+
+.blackBack {
+	background-color : #000;
+}
+
+.center {
+	text-align: center;
+}
+.center h1 {
+	margin-bottom: 10px; 
+}
+
+/* footer */
+footer {
+	display: none;
+	position : absolute;
+	bottom : 20px;
+	width : 100%;
+	padding: 5px;
+	//border-top: 1px solid #eaeaea;
+	color: #999;
+}
+footer a {
+	color: #fff;
+
+}
+
+footer ul {
+	background-color : transparent;
+}
+footer a:hover {
+	color: #6ff;
+}
+footer small {
+	float: left;
+}
+footer ul {
+	float: right;
+	width: auto;
+	list-style: none;
+}
+footer ul li {
+	float: left;
+	margin-left: 10px;
+}
+
+/*** site  ****/
+
+
+a.brand {
+	margin : 0px;
+	padding : 0px;
+	color: @darkGrey;
+}
+
+strong {
+	color : #aaa;
+}
+
+.container {
+    margin: 0;
+    padding: 0;
+}
+
+/* main nav bar links  */
+
+
+ul {
+	list-style-type: none;
+}
+
+
+/* forms */
+
+
+#error_explanation {
+	color:#f00;
+	ul {
+		list-style: none;
+		margin: 0 0 18px 0;
+	}
+}
+
+
+
+/* sidebar */
+.stats {
+	overflow: auto;
+	a {
+	float: left;
+	padding: 0 10px;
+	border-left: 1px solid @grayLighter;
+	color: gray;
+		&:first-child {
+			padding-left: 0;
+			border: 0;
+		}
+		&:hover {
+			text-decoration: none;
+			color: @darkGrey;
+		}
+	}
+	strong {
+		display: block;
+	}
+}
+.user_avatars {
+	overflow: auto;
+	margin-top: 10px;
+	.gravatar {
+		margin: 1px 1px;
+	}
+}
+
+.gravatar {
+	width: 80px;
+	height: 80px;
+}
+
+.files-bins {
+	border : 3px solid #aaa;
+}
+
+.vertical {
+	width : 180px;
+	padding: 20px;
+}
+
+.box {
+	border : 2px solid grey;
+	height : 400px;
+}
+
+.timeline {
+	border : 2px solid grey;
+	height : 50px;
+}
+.overlay {
+	border : 2px dotted black;
+	width : 100px;
+	height : 400px;
+	position: fixed;
+	top : 200px;
+	left : 900px;
+	
+}
+
+/* microposts */
+.microposts {
+	list-style: none;
+	height: 150px;
+	margin: 10px 0 10px 0;
+	li {
+		padding: 25px 0;
+		border-top: 1px solid #e8e8e8;
+	}
+}
+.user {
+	display: block;
+}
+.content {
+	/*display: block;*/
+}
+.timestamp {
+	color: @grayLight;
+	display: block;
+}
+ol.gravatar {
+	a {
+		float: left;
+	}
+}
+.gravatar {
+	padding: 10px;
+	margin-right: 10px;
+}
+aside {
+	textarea {
+		height: 80px;
+		margin-bottom: 5px;
+	}
+}
+
+/* stats */
+.stats {
+	overflow: auto;
+	a {
+	float: left;
+	padding: 0 10px;
+	border-left: 1px solid @grayLighter;
+	color: @darkGrey;
+	&:first-child {
+		padding-left: 0;
+		border: 0;
+		}
+		&:hover {
+		text-decoration: none;
+		color: @darkGrey;
+		}
+	}
+	strong {
+		display: block;
+	}
+}
+.user_avatars {
+	overflow: auto;
+	margin-top: 10px;
+	.gravatar {
+		margin: 1px 1px;
+	}
+}
+
+td {
+	padding : 0.5em;
+	border : 1px solid #999;
+	color: @darkGrey;
+	font-size : 130%;
+	letter-spacing : 3.5px;
+}
+
+th {
+	background : #333;
+	color : #bbb;
+	padding : 10px;
+}
+
+a {
+	color: @red;
+	text-decoration: none;
+}
+
+a.button_maker img {
+	height : 110px;
+}
+a.long img {
+	height : 72px;
+}
+
+img.iconListView {
+	height : 60px;
+	width : 60px;
+}
+
+table.listed {
+	width : 500px;
+}
+
+legend {
+	margin-bottom : 0px;
+}
+
+
+
+
+
 /*                                                                
                                      ,,                          
      ,.-==-.       .g8"""bgd       `7MM                          
@@ -49,31 +380,43 @@ h2 {
 	font-size: 1.6em;
 }
 
-/*                                                              
-                         ,,                                          ,,                  
-`7MMM.     ,MMF'         db                  .M"""bgd mm           `7MM                  
-  MMMb    dPMM                              ,MI    "Y MM             MM                  
-  M YM   ,M MM  ,6"Yb. `7MM `7MMpMMMb.      `MMb.   mmMMmm `7M'   `MFMM  .gP"Ya  ,pP"Ybd 
-  M  Mb  M' MM 8)   MM   MM   MM    MM        `YMMNq. MM     VA   ,V MM ,M'   Yb 8I   `" 
-  M  YM.P'  MM  ,pm9MM   MM   MM    MM      .     `MM MM      VA ,V  MM 8M"""""" `YMMMa. 
-  M  `YM'   MM 8M   MM   MM   MM    MM      Mb     dM MM       VVV   MM YM.    , L.   I8 
-.JML. `'  .JMML`Moo9^Yo.JMML.JMML  JMML.    P"Ybmmd"  `Mbmo    ,V  .JMML.`Mbmmd' M9mmmP' 
-                                                             ,V                         
-                                                           OOb"                          
-*/
+                                                              
+//                          ,,                 
+// `7MMM.     ,MMF'         db                 
+//   MMMb    dPMM                              
+//   M YM   ,M MM  ,6"Yb. `7MM `7MMpMMMb.      
+//   M  Mb  M' MM 8)   MM   MM   MM    MM      
+//   M  YM.P'  MM  ,pm9MM   MM   MM    MM      
+//   M  `YM'   MM 8M   MM   MM   MM    MM      
+// .JML. `'  .JMML`Moo9^Yo.JMML.JMML  JMML.
+
+//                          ,,                 
+//  .M"""bgd mm           `7MM                 
+// ,MI    "Y MM             MM                 
+// `MMb.   mmMMmm `7M'   `MFMM  .gP"Ya  ,pP"Ybd
+//   `YMMNq. MM     VA   ,V MM ,M'   Yb 8I   `"
+// .     `MM MM      VA ,V  MM 8M"""""" `YMMMa.
+// Mb     dM MM       VVV   MM YM.    , L.   I8
+// P"Ybmmd"  `Mbmo    ,V  .JMML.`Mbmmd' M9mmmP'
+//                  ,V                         
+//                OOb"                             
+//                                            
+//                                             
+
 
 * { 
   -moz-box-sizing: border-box; 
   -webkit-box-sizing: border-box; 
   box-sizing: border-box; 
+
+  -webkit-transition: all 0.5s ease;
+  -moz-transition:    all 0.5s ease;
+  -ms-transition:     all 0.5s ease;
+  -o-transition:      all 0.5s ease;
 }
 
 a {
     outline:0 none !important;
-}
-
-.footer {
-	display: none;
 }
 
 label {
@@ -118,7 +461,6 @@ input, textarea, select, .uneditable-input {
 }
 
 body {
-	//background-color: #DDE0E7;
 	padding: 0;
 	width: 100%;
 	height: 100%;
@@ -308,7 +650,6 @@ body {
 	}
 }
 
-
 .simple_form label {
 	display : none;
 }
@@ -401,7 +742,6 @@ td, span, p {
 		height : 100%;
 		background-color : #B3BFD7;
 		opacity : 0.47;
-
 		z-index : -10;
 	
 	}
@@ -641,8 +981,8 @@ td, span, p {
 			width: 245px;
 			height: 320px;
 			margin: 50px 20px 50px 8px;
+			perspective: 800px;
 
-			
 
 			.cellBackground1 {
 				width: 100%;
