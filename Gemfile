@@ -4,6 +4,7 @@ gem 'rails', '3.2.3'
 gem 'carrierwave'
 gem 'cloudinary'
 gem 'aws-s3', :require => 'aws/s3' 
+gem 'httparty', '0.9.0'
 
 group :production do
 	gem 'pg', '0.12.2'

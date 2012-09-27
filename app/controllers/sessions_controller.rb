@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
         password = 'janejane'
       else
         transfer = true
-      end  
+      end
     else
       user = User.find_by_email(params[:session][:email])
       password = params[:session][:password]

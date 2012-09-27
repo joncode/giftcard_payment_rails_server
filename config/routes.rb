@@ -54,18 +54,20 @@ Drinkboard::Application.routes.draw do
   root to: 'users#new'
   
   ###  mobile app routes
-  match 'app/create_account', to: 'iphone#create_account',    via: :post
-  match 'app/login',          to: 'iphone#login',             via: :post
-  match 'app/gifts',          to: 'iphone#gifts',             via: :post
-  match 'app/buys',           to: 'iphone#buys',              via: :post
-  match 'app/activity',       to: 'iphone#activity',          via: :post
-  match 'app/provider',       to: 'iphone#provider',          via: :post
-  match 'app/locations',      to: 'iphone#locations',         via: :post
-  match 'app/buy_gift',       to: 'iphone#create_gift',       via: :post
-  match 'app/redeem',         to: 'iphone#create_redeem',     via: :post
-  match 'app/order',          to: 'iphone#create_order',      via: :post
-  match 'app/users',          to: 'iphone#drinkboard_users',  via: :post
-  match 'app/photo',          to: 'iphone#update_photo',      via: :post 
+  match 'app/create_account',   to: 'iphone#create_account',   via: :post
+  match 'app/login',            to: 'iphone#login',            via: :post
+  match 'app/gifts',            to: 'iphone#gifts',            via: :post
+  match 'app/buys',             to: 'iphone#buys',             via: :post
+  match 'app/activity',         to: 'iphone#activity',         via: :post
+  match 'app/provider',         to: 'iphone#provider',         via: :post
+  match 'app/locations',        to: 'iphone#locations',        via: :post
+  match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
+  match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
+  match 'app/order',            to: 'iphone#create_order',     via: :post
+  match 'app/users',            to: 'iphone#drinkboard_users', via: :post
+  match 'app/photo',            to: 'iphone#update_photo',     via: :post 
+  match 'app/merchant/active',  to: 'iphone#active_orders',    via: :post
+  match 'app/merchant/complete',to: 'iphone#completed_orders', via: :post
   
   ###
   # match '/drinkboard', to: 'gifts#activity'
@@ -75,7 +77,11 @@ Drinkboard::Application.routes.draw do
   match '/learn',       to: 'home#learn'
   match '/news',        to: 'home#news'
   # match '/browse', to: 'gifts#browse'
-
+  
+  ### authentication via Facebook & Foursquare
+  match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
+  match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
+  ###
   
   resources :microposts,    only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]

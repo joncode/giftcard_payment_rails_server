@@ -19,6 +19,14 @@ class ApplicationController < ActionController::Base
         end
       end
     end
+    
+    def sniff_browser
+      if request.user_agent =~ /Mobile|webOS/
+        request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
+      else
+        false
+      end
+    end
 
     helper_method :mobile_device?
     
