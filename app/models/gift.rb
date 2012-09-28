@@ -38,9 +38,11 @@ class Gift < ActiveRecord::Base
   # add tax and tip when the iphone is ready 
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total
   # validates_numericality_of  :total, :quantity
+  
   before_create :add_category, :if => :no_category
   before_create :pluralizer
-  
+  before_save   :set_status
+
   def self.get_gifts(user)
     Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
   end
@@ -93,9 +95,19 @@ class Gift < ActiveRecord::Base
   
   private
     
+    def set_status    
+      if !self.receiver_id
+        self.status =  "incomplete"
+      end
+    end
+    
     def pluralizer
       if self.quantity > 1
-        self.item_name << "'s"
+        name_to_match = self.item_name
+              # if item name already has a /'s/ then abort 
+        if !name_to_match.match /'s/
+           self.item_name << "'s"
+        end 
       end
     end
     
