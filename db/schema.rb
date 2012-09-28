@@ -11,9 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
-ActiveRecord::Schema.define(:version => 20120921164004) do
-
+ActiveRecord::Schema.define(:version => 20120928002405) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -58,6 +56,8 @@ ActiveRecord::Schema.define(:version => 20120921164004) do
     t.string   "tax"
     t.string   "tip"
     t.integer  "gift_id"
+    t.string   "foursquare_id"
+    t.string   "facebook_id"
   end
 
   create_table "items", :force => true do |t|
@@ -202,6 +202,7 @@ ActiveRecord::Schema.define(:version => 20120921164004) do
     t.string   "facebook_access_token"
     t.datetime "facebook_expiry"
     t.string   "foursquare_access_token"
+    t.string   "sex"
   end
 
 end
