@@ -23,6 +23,7 @@
 #  facebook_id     :string(255)
 #  handle          :string(255)
 #
+# Can't mass-assign protected attributes:  twitter, active, persona
 
 class User < ActiveRecord::Base
 
@@ -66,18 +67,19 @@ class User < ActiveRecord::Base
   
   before_create :create_remember_token      # creates unique remember token for user
 
-      # searches gift db for ghost gifts that belong to new user
+      # searches gift db for ghost gifts that belong to new user 
       # after_create for new accounts
-      # after_update , :if => :added_social_media
+      # after_update , :if => :added_social_media TODO
       # this after_save covers both those situations , but also runs the code unnecessarily
   after_save    :collect_incomplete_gifts   
 
   # after_update  :crop_photo
   
   # validates_presence_of :city, :state, :zip, :address, :credit_number
+  # unique validation code for facebook_id & foursquare_id TODO
   validates :first_name  , presence: true, length: { maximum: 50 }
   validates :last_name  ,  length: { maximum: 50 }
-  validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true
+  validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
   validates :email , format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 },      on: :create
   validates :password_confirmation, presence: true, on: :create
@@ -185,6 +187,10 @@ class User < ActiveRecord::Base
         phone_match = phone_raw.match(VALID_PHONE_REGEX)
         self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
       end
+    end
+
+    def phone_exists?
+      self.phone != nil
     end
 
     def check_for_server_code
