@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
   end
   
   def username
-    if self.last_name
+    if self.last_name.blank?
       "#{self.first_name} #{self.last_name}"
     else
       "#{self.first_name}"
