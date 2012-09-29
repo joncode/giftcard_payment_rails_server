@@ -23,7 +23,6 @@
 #  facebook_id     :string(255)
 #  handle          :string(255)
 #
-# Can't mass-assign protected attributes:  twitter, active, persona
 
 class User < ActiveRecord::Base
 
@@ -34,15 +33,15 @@ class User < ActiveRecord::Base
   has_many :providers, :through => :employees
   has_many :orders,    :through => :providers
   has_many :gifts
-  has_many :givers, through: :connections, source: "giver"
-  has_many :connections,          foreign_key: "receiver_id", dependent: :destroy
-  has_many :reverse_connections,  foreign_key: "giver_id",
-                                  class_name: "Connection",
-                                  dependent: :destroy
-  has_many :receivers, through: :reverse_connections, source: :receiver
+  # has_many :givers, through: :connections, source: "giver"
+  # has_many :connections,          foreign_key: "receiver_id", dependent: :destroy
+  # has_many :reverse_connections,  foreign_key: "giver_id",
+  #                                class_name: "Connection",
+  #                                dependent: :destroy
+  # has_many :receivers, through: :reverse_connections, source: :receiver
   
   
-  has_many :microposts, dependent: :destroy
+  # has_many :microposts, dependent: :destroy
   has_many :followed_users, through: :relationships, source: "followed"
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
   has_many :reverse_relationships, foreign_key: "followed_id",
@@ -63,7 +62,7 @@ class User < ActiveRecord::Base
   # save data to db with proper cases
   before_save { |user| user.email      = email.downcase  }
   before_save { |user| user.first_name = first_name.capitalize if first_name}
-  before_save { |user| user.last_name  = last_name.capitalize if last_name }
+  before_save { |user| user.last_name  = last_name.capitalize  if last_name }
   before_save   :extract_phone_digits       # remove all non-digits from phone
   
   before_create :create_remember_token      # creates unique remember token for user
@@ -85,16 +84,18 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 },      on: :create
   validates :password_confirmation, presence: true, on: :create
   validates :server_code, length: {is: 4}, numericality: { only_integer: true }, :if => :check_for_server_code
-  
+  validates_with ServerCodeValidator, :record => self
+
+  #/---------------------------------------------------------------------------------------------/
   def feed
     Micropost.from_users_followed_by(self)
   end
   
   def username
     if self.last_name.blank?
-      "#{self.first_name} #{self.last_name}"
-    else
       "#{self.first_name}"
+    else
+      "#{self.first_name} #{self.last_name}"
     end
   end
   
