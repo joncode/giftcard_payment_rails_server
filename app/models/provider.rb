@@ -58,15 +58,12 @@ class Provider < ActiveRecord::Base
   def server_codes
     self.users.collect {|e| e.server_code}
   end
+
+  def get_server_from_code(code)
+    self.users.select {|e| e.server_code == code}
+  end
   
   def server_to_iphone
-        # 2.
-    # hash = {}
-    # self.users.each do |u|
-    #   hash[u.server_code] = [ u.id, u.username, u.photo]
-    # end
-    # return hash
-        # 3.
     send_fields = [ :id, :first_name, :last_name, :photo, :server_code]
     users = self.users.map { |g| g.serializable_hash only: send_fields }
   end

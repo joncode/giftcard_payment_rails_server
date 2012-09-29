@@ -11,8 +11,8 @@ bought you
 located at <%= @gift.provider_name %>
 
 <% if @gift.message %>
-Message:
-<%= @gift.message %>
+  Message:
+  <%= @gift.message %>
 <% end %>
 
 
@@ -23,22 +23,6 @@ Give this code to your server to Redeem:
 <a href="#" class="btn btn-large btn-primary disabled"><%= @redeem.redeem_code %></a>
 
 Server's phone unavailable?
-<button type="button" class="btn btn-large btn-success" id="merchant_redeem">
-  Enter Server Code
-</button>
-<div id="servers">
-  Choose Your Server
-  <% @servers.each do |user| %>
-  <div id="<%= user.id %>">
-    <%= gravatar_for user %>
-    <%= user.username %>
-    <%= user.server_code %>
-    <button type="button" class="btn choose_server" id="<%= user.id %>" name="<%= user.username %>">
-      Choose
-    </button>
-  </div>
-  <% end %>
-</div>
 <div id="server_code_field">
   <%= simple_form_for @order do |f| %>
   <%= f.error_notification %>
@@ -56,64 +40,13 @@ Server's phone unavailable?
   <% end %>
   <div class="form-horizontal">
     <%= f.hidden_field :redeem_id  %>
-    <%= f.hidden_field :gift_id  %>
-    <%= f.hidden_field :server_id  %>
-    <%= f.hidden_field :provider_id  %>
     <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
   </div>
   <%= f.submit "Submit Server Code", :class => "btn" %>
   <% end %>
-  <div>
-    <button type="button" class="btn btn-large btn-success" id="servers_back_button">
-      Choose Another Server
-    </button>
-  </div>
 </div>
 
 <script>
-  var a = $('#order_server_id');
-
-  $(function() {
-    $('#servers, #server_code_field').hide();
-    $('#merchant_redeem').click(function() {
-      if (!$(this).hasClass('disabled')) {
-        if ($(this).text()=="Enter Server Code") {
-          $('#servers').slideDown('fast');
-          $(this).text("Hide Servers");
-        } else {
-          $('#servers').slideUp('fast');
-          $(this).text("Enter Server Code");
-        } 
-      }    
-    });
-    $('.choose_server').click(function() {
-      if ($(this).hasClass('disabled')) {
-        $('#server_code_field').slideUp('fast');
-        $('.choose_server').removeClass('disabled');
-      } else {
-        $('#server_code_field').slideDown('fast');
-        $('.choose_server').addClass('disabled');
-        $('#merchant_redeem').addClass('disabled');
-        var currentId = $(this).attr('id');
-        addServerInfo(currentId);
-      }
-    });
-    $('#servers_back_button').click(function() {
-       $('.choose_server').removeClass('disabled');
-       $('#server_code_field').slideUp('slow');
-       $('#merchant_redeem').removeClass('disabled');
-       removeServerInfo();
-    });
-  });
-  
-  function addServerInfo(currentId) {
-    // take the server info and place it in the code submit form
-    a.val(currentId);
-  };
-  
-  function removeServerInfo() {
-    a.val('');
-  };
-  
-  
+ 
 </script>
+ 

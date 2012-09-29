@@ -24,37 +24,49 @@ class Order < ActiveRecord::Base
   validates :gift_id   , presence: true, uniqueness: true
   validates :redeem_id , presence: true, uniqueness: true
     
+
+  before_validation :add_provider_id, :if => :no_provider_id
   before_validation :authenticate_via_code
-  before_create :add_provider_id, :if => :no_provider_id
-  after_create  :update_gift_status
+  after_create      :update_gift_status
     
   private
     
+    def add_server
+      server_ary = self.provider.get_server_from_code(self.server_code)
+      server_obj = server_ary.pop
+      self.server_id = server_obj.id
+      logger.info "found server #{server_obj.username} #{server_obj.id}" 
+    end
+
     def update_gift_status
       self.gift.update_attributes({status: 'redeemed'})
     end
     
     def authenticate_via_code
+      logger.info "AUTHENTICATE VIA CODE"
       if self.redeem_code
-        # authentication code for redeem_code
-        redeem = Redeem.find(self.redeem_id)
-        # set flag for approved/denied - true/false
-        if self.redeem_code == redeem.redeem_code
+                  # authentication code for redeem_code
+        redeem_obj = self.redeem
+                  # set flag for approved/denied - true/false
+        if self.redeem_code == redeem_obj.redeem_code
           flag = true
         else
           flag = false
+          logger.info "CUSTOMER REDEEM CODE INCORRECT"
         end
       elsif self.server_code
-        # authenticate for server_code
-        server = User.find(server_id)
-        # set flag for approval/denied - true/false
-        if self.server_code == server.server_code
+                  # authenticate for server_code
+        codes = self.provider.server_codes
+                  # set flag for approval/denied - true/false
+        if codes.include? self.server_code
           flag = true
+          add_server
         else
           flag = false
+          logger.info "MERCHANT REDEEM CODE INCORRECT"
         end
       else
-        # no code provided - set flag to denied - false
+                  # no code provided - set flag to denied - false
         flag = false
       end
       return flag
