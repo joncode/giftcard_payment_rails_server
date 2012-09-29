@@ -8,7 +8,6 @@ class ServerCodeValidator < ActiveModel::Validator
 					# 1. check to see if your are making it the same code you already had 
 		record.providers.each do |p|
 			codes = p.server_codes
-			puts codes
 			if codes.include? value 
 				return record.errors[:server_code] << "that server code is taken , please try another"
 			end
