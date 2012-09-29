@@ -40,6 +40,8 @@ Server's phone unavailable?
   <% end %>
   <div class="form-horizontal">
     <%= f.hidden_field :redeem_id  %>
+    <%= f.hidden_field :gift_id    %>
+    <%= f.hidden_field :provider_id    %>
     <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
   </div>
   <%= f.submit "Submit Server Code", :class => "btn" %>

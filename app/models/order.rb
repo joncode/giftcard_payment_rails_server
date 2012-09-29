@@ -16,6 +16,7 @@ class Order < ActiveRecord::Base
   belongs_to  :provider
   belongs_to  :redeem
   belongs_to  :gift
+  belongs_to  :server, class_name: "User"
 
 
   # order must be unique for each gift and redeem 
@@ -24,7 +25,7 @@ class Order < ActiveRecord::Base
   validates :gift_id   , presence: true, uniqueness: true
   validates :redeem_id , presence: true, uniqueness: true
     
-
+  before_validation :add_gift_id,     :if => :no_gift_id
   before_validation :add_provider_id, :if => :no_provider_id
   before_validation :authenticate_via_code
   after_create      :update_gift_status
@@ -72,11 +73,21 @@ class Order < ActiveRecord::Base
       return flag
     end
     
+    def no_gift_id
+      self.gift_id.nil?
+    end
+    
+    def add_gift_id
+      logger.info "ADD GIFT ID"
+      self.gift_id = self.redeem.gift_id
+    end
+
     def no_provider_id
       self.provider_id.nil?
     end
     
     def add_provider_id
+      logger.info "ADD PROVIDER ID"
       self.provider_id = self.gift.provider_id
     end
   

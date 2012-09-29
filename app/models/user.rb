@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
    
   has_many :employees
   has_many :providers, :through => :employees
+  has_many :orders,    :through => :providers
   has_many :gifts
   has_many :givers, through: :connections, source: "giver"
   has_many :connections,          foreign_key: "receiver_id", dependent: :destroy
