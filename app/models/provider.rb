@@ -52,20 +52,20 @@ class Provider < ActiveRecord::Base
   def get_servers
     # this means get people who are at work not just employed
     # for now without location data, its just employees
-    self.users
+    self.employees
   end
   
   def server_codes
-    self.users.collect {|e| e.server_code}
+    self.employees.collect {|e| e.server_code}
   end
 
   def get_server_from_code(code)
-    self.users.select {|e| e.server_code == code}
+    self.employees.select {|e| e.server_code == code}
   end
   
   def server_to_iphone
     send_fields = [ :id, :first_name, :last_name, :photo, :server_code]
-    users = self.users.map { |g| g.serializable_hash only: send_fields }
+    employees = self.employees.map { |g| g.serializable_hash only: send_fields }
   end
 end
 
