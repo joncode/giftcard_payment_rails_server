@@ -144,8 +144,11 @@ class IphoneController < AppController
     providers = Provider.all
     menus  = {}
     providers.each do |p|
-      menu = JSON.parse p.menu_string.data
-      menus.merge!(menu)
+      obj   = ActiveSupport::JSON.decode p.menu_string.data
+      x     = obj.keys.pop
+      value = obj[x]
+      value["sales_tax"]  = p.sales_tax || "7.25"
+      menus.merge!(obj)
     end
     respond_to do |format|
       logger.debug menus
