@@ -58,7 +58,7 @@ class OrdersController < ApplicationController
         format.json { render json: @order, status: :created, location: @order }
       else
         if trigger
-          format.html { redirect_to @redeem, notice: "Drink not authorized. Server Code incorrect." }
+          format.html { redirect_to @order.redeem, notice: "Drink not authorized. Server Code incorrect." }
         else
           format.html { redirect_to order_merchant_path(@order.gift_id), notice: "Drink not authorized. Redeem Code incorrect." }
         end

@@ -84,19 +84,19 @@ class GiftsController < ApplicationController
     @gift = Gift.new
     @provider = Provider.find(params[:provider_id])
     @receiver = User.find(params[:receiver_id])
-    @item = Item.find(params[:item_id])
-    @gift.provider_id = @provider.id
-    @gift.provider_name = @provider.name
-    @gift.receiver_id = @receiver.id
-    @gift.receiver_name = @receiver.username
-    @gift.giver_name = current_user.username
-    @gift.giver_id = current_user.id
-    @gift.receiver_phone = @receiver.phone
-    @gift.item_id = @item.id
-    @gift.price = params[:price]
-    @gift.item_name = @item.item_name
-    @gift.quantity ||= 1
-    @gift.category = @item.category
+    @item     = Item.find(params[:item_id])
+    @gift.provider_id     = @provider.id
+    @gift.provider_name   = @provider.name
+    @gift.receiver_id     = @receiver.id
+    @gift.receiver_name   = @receiver.username
+    @gift.giver_name      = current_user.username
+    @gift.giver_id        = current_user.id
+    @gift.receiver_phone  = @receiver.phone
+    @gift.item_id         = @item.id
+    @gift.price           = params[:price]
+    @gift.item_name       = @item.item_name
+    @gift.quantity      ||= 1
+    @gift.category        = @item.category
     @provider.sales_tax ||= "7.25"
     @disabled = @gift.quantity == 1 ? 'disabled' : ''
 

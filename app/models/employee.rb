@@ -5,6 +5,18 @@ class Employee < ActiveRecord::Base
   belongs_to :provider
   has_many 	 :orders,    :through => :provider
   
-  validates_presence_of :user_id, :provider_id 
+  validates_presence_of :user_id, :provider_id
+
+  def server_code
+  	self.user.server_code 	
+  end
+
+  def name
+  	self.user.username
+  end
+
+  def photo
+  	self.user.photo
+  end
 
 end

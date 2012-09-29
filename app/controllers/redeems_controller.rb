@@ -14,6 +14,7 @@ class RedeemsController < ApplicationController
     @gift     = @redeem.gift
     @giver    = @redeem.giver
     provider  = @redeem.provider
+    @server_codes = provider.server_codes
     @servers  = provider.get_servers
     @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, provider_id: provider.id)
 

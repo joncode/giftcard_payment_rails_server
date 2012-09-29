@@ -35,8 +35,8 @@ class Order < ActiveRecord::Base
     def add_server
       server_ary = self.provider.get_server_from_code(self.server_code)
       server_obj = server_ary.pop
-      self.server_id = server_obj.id
-      logger.info "found server #{server_obj.username} #{server_obj.id}" 
+      self.server_id = server_obj.user.id
+      logger.info "found server #{server_obj.name} #{server_obj.id}" 
     end
 
     def update_gift_status
