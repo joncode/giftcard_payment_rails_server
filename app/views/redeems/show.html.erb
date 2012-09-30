@@ -33,7 +33,10 @@ Server's phone unavailable?
     </div>
     <ul>
       <% @order.errors.full_messages.each do |msg| %>
-      <li>* <%= msg %></li>
+        <li>* <%= msg %></li>
+      <% end %>
+      <% if @order.errors[:server_code] %>
+        <li><%= @order.errors[:server_code] %></li>
       <% end %>
     </ul>
   </div>
