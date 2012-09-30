@@ -81,7 +81,7 @@ class GiftsController < ApplicationController
   end
 
   def bill
-    @gift = Gift.new
+    @gift     = Gift.new
     @provider = Provider.find(params[:provider_id])
     @receiver = User.find(params[:receiver_id])
     @item     = Item.find(params[:item_id])
