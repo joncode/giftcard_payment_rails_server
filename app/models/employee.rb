@@ -19,4 +19,18 @@ class Employee < ActiveRecord::Base
   	self.user.photo
   end
 
+  def servers_hash
+    send_fields = [ :id, :first_name, :last_name, :photo, :server_code]
+    self.users.map { |e| e.serializable_hash only: send_fields  }
+  end
+
+  def servers
+    # get the employee_id and user_id 
+  # from user record
+    # get the full_name 
+    # photo url
+    # server_code
+
+  end
+
 end

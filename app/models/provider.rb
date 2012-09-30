@@ -65,13 +65,28 @@ class Provider < ActiveRecord::Base
   end
   
   def server_to_iphone
-    send_fields = [ :id, :first_name, :last_name, :photo, :server_code]
-    employees = self.employees.map { |g| g.serializable_hash only: send_fields }
+    self.employees.servers_hash
   end
 end
 
 
-
+  # [{"first_name"=>"Larry",
+  #  "id"=>19, 
+  #  "last_name"=>"Page", 
+  #  "photo"=>{
+  #     "url"=>"http://res.cloudinary.com/drinkboard/image/upload/v1347955675/19.png", 
+  #     :standard=>{
+  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fill,g_north,h_150,w_100/v1347955675/19.png"
+  #     }, 
+  #     :large=>{
+  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_400,w_400/v1347955675/19.png"
+  #     }, 
+  #     :thumbnail=>{
+  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fit,h_100,w_75/v1347955675/19.png"
+  #     }
+  #   }, 
+  #   "server_code"=>"1234"
+  # }] 
 
 
 

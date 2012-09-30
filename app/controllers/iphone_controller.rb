@@ -252,6 +252,7 @@ class IphoneController < AppController
     respond_to do |format|
       if redeem.save
         response["success"]      = redeem.redeem_code
+        response["server_codes"] = redeem.provider.server_to_iphone
       else
         message += " Gift unable to process to database. Please retry later."
         response["error_server"] = message 
