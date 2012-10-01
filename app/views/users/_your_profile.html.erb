@@ -1,65 +1,65 @@
-<div class="center">
-  <div class="row">
-    <div class="span4">
-      <div class="row">
-        <div class="span4">
-            <%= gravatar_for @user %>
-        </div>
-        <div class="span6">
-            <h3><%= @user.username %><br />
-              <%= @user.handle %><br />
-              <%= @user.email %><br />
-              <%= number_to_phone(@user.phone, :area_code => true)  %><br />
-              <%= @user.full_address %>
-            </h3>
-        </div>
+<div class="profileWrapper">
+  <div class="profilePic">
+  <%= gravatar_for @user %>
+  </div>
+  <h2 class>
+    <%= @user.username %>
+    <%= @user.handle %>
+    <%= @user.email %>
+    <%= number_to_phone(@user.phone, :area_code => true)  %>
+    <%= @user.full_address %>
+  </h2>
+  
+  <%= link_to "Edit Profile", edit_user_path(current_user) %>
+  <%= link_to "Check In" %>
+  <%= link_to "Public/Private" %>
+  
+  <div class="bs-docs-example">
+    <ul id="myTab" class="nav nav-tabs">
+      <li class="active">
+        <a href="#personality" data-toggle="tab">
+          Personality
+        </a>
+      </li>
+      <li>
+        <a href="#network" data-toggle="tab">
+          Network
+        </a>
+      </li>
+      <li>
+        <a href="#settings" data-toggle="tab">
+          Settings
+        </a>
+      </li>
+      <li>
+        <a href="#info" data-toggle="tab">
+          App Info
+        </a>
+      </li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+      <div class="tab-pane fade in active" id="personality">
+        <%= link_to "Personality" %>
+        <%= link_to "Favorites" %>
+        <%= link_to "Special Ocassions" %>
+      </div>   
+      <div class="tab-pane fade" id="network">
+        <%= link_to "Network" %>
+        <%= link_to "Suggestions" %>
+      </div> 
+      <div class="tab-pane fade" id="settings">            
+        <%= link_to "Update Social Networks" %>
+        <%= link_to "Notification Settings" %>
+        <%= link_to "Manage Credit Cards" %>
+        <%= link_to "Transaction History" %>
       </div>
-      <div class="row">
-        <div class="span12">
-          <br />
-<!--           <p><%= link_to "Crop Photo", crop_user_path(current_user)   %></p>
- -->          <p><%= link_to "Edit Profile", edit_user_path(current_user) %></p>
-          <p><%= link_to "Check In" %></p>
-          <p><%= link_to "Public/Private" %></p>
-        </div>
+      <div class="tab-pane fade" id="info">            
+        <%= link_to "FAQ" %>
+        <%= link_to "Contact Us" %>
+        <%= link_to "Quick Tips" %>
+        <%= link_to "Version" %>
       </div>
     </div>
-    <div class="span6">
-      <div class="bs-docs-example">
-        <ul id="myTab" class="nav nav-tabs">
-          <li class="active"><a href="#personality" data-toggle="tab">Personality</a></li>
-          <li><a href="#network" data-toggle="tab">Network</a></li>
-          <li><a href="#settings" data-toggle="tab">Settings</a></li>
-          <li><a href="#info" data-toggle="tab">App Info</a></li>
-        </ul>
-        <div id="myTabContent" class="tab-content">
-          <div class="tab-pane fade in active" id="personality">
-            <p><%= link_to "Personality" %></p>
-            <p><%= link_to "Favorites" %></p>
-            <p><%= link_to "Special Ocassions" %></p>
-          </div>   
-          <div class="tab-pane fade" id="network">
-            <p><%= link_to "Network" %></p>
-            <p><%= link_to "Suggestions" %></p>
-          </div> 
-          <div class="tab-pane fade" id="settings">            
-            <p><%= link_to "Update Social Networks" %> </p>
-            <p><%= link_to "Notification Settings" %></p>
-            <p><%= link_to "Manage Credit Cards" %></p>
-            <p><%= link_to "Transaction History" %></p>   
-          </div>
-          <div class="tab-pane fade" id="info">            
-            <p><%= link_to "FAQ" %></p>
-            <p><%= link_to "Contact Us" %></p>
-            <p><%= link_to "Quick Tips" %></p>
-            <p><%= link_to "Version" %></p>    
-          </div>
-        </div>
-      </div>
-    </div>     
-  </div>
-  <div class="row">
-    <br />
-    <!-- <%= render 'profile_drinkboard' %> -->
   </div>
 </div>
+

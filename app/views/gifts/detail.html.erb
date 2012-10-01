@@ -1,60 +1,36 @@
 <div class="detailWrapper">
-	<p id="notice">
-		<%= notice %>
-	</p>
-	<div class="userBox">
-		<div class="imgUserLarge">
-			<%= list_icon_for @giver %>
-		</div>
-		
-		<h2 class="panel1Text">
-			<%= @gift.giver_name %> bought you 
-			<%= @gift.quantity %> <%= @gift.item_name %>
-		</h2>
-
-		<div class="panel2">
-			<div class="providerLogo">
-				<%= logo_from_id_for @gift.provider_id %>
-			</div>
-			<div class="providerName">
-				<h2>
-					Reedem at the provider<br />
-					<span class="h2Highlight">
-						<%= @gift.provider_name %>
-					</span>
-				</h2>
-			</div>
-				<% if @gift.message %>
-			<h2 class="message">
-				Message: 
-					<span class="h2Highlight">
-						<%= @gift.message %>
-					</span>
-			</h2>
-			<h3>
-				<%= time_ago_in_words(@gift.created_at) %>&nbsp;ago
-			</h3>
-				<% end %>
-		</div> <!-- end panel2 -->
-	</div>
-
-	<ul class="tabsList">
+	<ul class="actions">
 		<li>
-			<div class="cornered">
-      	<div class="backgroundTab">
-					<%= button_to 'Past Gifts', past_gifts_path, method: :get  %>
-				</div>
-			</div>
+			<%= button_to "Send them a Drink", 	browse_with_contact_gifts_path(id: @gift.	giver_id)	  %>
 		</li>
-
 		<li>
-			<div class="cornered">
-      	<div class="backgroundTab">
-			<%= button_to "Send them a Drink", browse_with_contact_gifts_path(id: @gift.	giver_id)  %>
-				</div>
-			</div>
+			<%= button_to 'Past Gifts', past_gifts_path, method: :get  %>
 		</li>
 	</ul>
+	<div class='profileImage'>
+		<%= list_icon_for @giver %>
+	</div>
+	<h2 class="textTop">
+		<%= @gift.giver_name %> 
+		bought you 
+		<%= @gift.quantity %> 
+		<%= @gift.item_name %> 
+		<%= time_ago_in_words(@gift.created_at) %>
+		ago.
+		<% if @gift.message %>
+		Message: <span class="h2Highlight">
+			"<%= @gift.message %>"</span>
+	</h2>
+	<h2 class="textRedeem">
+		Reedem at the provider
+		<span class="h2Highlight">
+			<%= @gift.provider_name %>
+		</span>
+	</h2>
+	<h2 class="providerPic">
+		<%= logo_from_id_for @gift.provider_id %>
+	</h2>
+	<% end %>
 	<div class="thankYou">
 		<h1>
 			Thank You!

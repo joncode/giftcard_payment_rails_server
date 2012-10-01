@@ -5,117 +5,123 @@
   t.integer  "redeem_id"              n/a
   add text field for the message
   add hidden div off click button for credit cards ? -->
-<style>
-  body {margin-top : 50px;}
-</style>
-<div class="wrapper">
-	<div class="content">
-		<div class="row">
-		  <div class="span2">&nbsp;</div>
-		  <div class="span7 borderBox">
-      <!-- <form accept-charset="UTF-8" action="<%= gifts_path %>" class="new_gift" method="post" name="new_gift" id="new_gift"> -->
-    	<%= form_for @gift do |f| %>
-    			<%= f.hidden_field :giver_id  %>
-    			<%= f.hidden_field :giver_name  %>
-    			<%= f.hidden_field :receiver_id  %>
-    			<%= f.hidden_field :receiver_name  %>
-    			<%= f.hidden_field :receiver_phone  %>
-    			<%= f.hidden_field :item_id  %>
-          <%= f.hidden_field :item_name  %>
-    			<%= f.hidden_field :provider_name  %>
-    			<%= f.hidden_field :provider_id  %>
-    			<%= f.hidden_field :price  %>
-    			<%= f.hidden_field :category  %>
-					<legend class="label">Order Details</legend>
-					<div class="row">
-						<div class="span3">
-						  <label for="receiver" class="label">For:</label>
-						  <label><%= list_icon_with_id_for @gift.receiver_id %></label>
-						</div>
-						<div class="span3">
-						  <label name="gift[receiver_name]" class="label" ><%= @gift.receiver_name %></label>
-						  <span><%= User.find(@gift.receiver_id).handle %></span>
-						</div>
-					</div>
-					<div class="row">
-					  <div class="span3">
-  						<label for="provider" class="label">Location:</label>					    
-						  <label><%= logo_from_id_for @gift.provider_id %></label>
-						</div>
-						<div class="span3">
-						  <label name="gift[provider_name]" class="label" ><%= @gift.provider_name %></label>
-						  <span><%= @gift.provider.full_address %></span>
-						</div>
-					</div>
-					<div class="row">
-					  <div class="span3">
-  						<label for="item" class="label">Item:</label>
-						  <label><%= image_tag get_category(@gift.category), {:class => 'iconListView'} %></label>
-						</div>
-						<div class="span3">
-						  <label name="receiver" class="label" ><%= @gift.item_name %></label>
-						  <span>$<%= @gift.price %></span>
-						</div>
-					</div>
-					<div class="row">
-					  <div class="span3">
-					    <span>Quantity:</span>
-              <button class="btn <%= @disabled %>" type="button" id="decreaseQ">-</button>
-              <button class="btn" type="button" id="increaseQ">+</button>
-						</div>
-						<div class="span3">
-              <input name="gift[quantity]" class="span1" id="quantityAmount" size="16" type="text" />
-						</div>
-					</div>
-					<div class="row">
-					  <div class="span3">
-              <span>Local Sales Tax: <%= @provider.sales_tax.to_f %>%</span>
-						</div>
-						<div class="span3">
-              <span id="taxAmount" class="label">Calculating ...</span> 
-              <%= f.hidden_field :tax , id: "taxInput" %>
-						</div>
-					</div>
-					<div class="row">
-					  <div class="span3">
-              <label for="subTotal" class="label">SubTotal:</label>
-						</div>
-						<div class="span3">
-              <label for="subTotalAmount" id="subTotalAmount" class="label">Calculating ...</label>
-						</div>
-					</div>
-					<div class="row">
-					  <div class="span3 input-append" data-toggle="buttons-radio">Tip:
-                 <button type="button" class="btn tip" id="perItem">$1 per</button>
-                 <button type="button" class="btn tip" id="fifteenPrecent">15%</button>
-                 <button type="button" class="btn tip" id="twentyPercent">20%</button>
-						</div>
-						<div class="span3">
-              $<input name="gift[tip]" class="span2" id="tip" size="16" type="text" value="Choose Tip Amount"/>
-						</div>
-					</div>
-					<div class="row">
-					  <div class="span3">
-					    	<label for="total" class="label">Total:</label>
-                <span id="total">&nbsp;</span>
 
-                  <input name="gift[message]" class="span2" id="message" size="16x3" type="text" placeholder="Leave a message ..."/>
+<div class="giftsBillWrapper">
+  <!-- <form accept-charset="UTF-8" action="<%= gifts_path %>" class="new_gift" method="post" name="new_gift" id="new_gift"> -->
+  <%= form_for @gift do |f| %>
+  <%= f.hidden_field :giver_id  %>
+  <%= f.hidden_field :giver_name  %>
+  <%= f.hidden_field :receiver_id  %>
+  <%= f.hidden_field :receiver_name  %>
+  <%= f.hidden_field :receiver_phone  %>
+  <%= f.hidden_field :item_id  %>
+  <%= f.hidden_field :item_name  %>
+  <%= f.hidden_field :provider_name  %>
+  <%= f.hidden_field :provider_id  %>
+  <%= f.hidden_field :price  %>
+  <%= f.hidden_field :category  %>
+  <div class="billHeader">
+    <h2>
+    Order Details for:
+    </h2>
+  </div>
 
-						</div>
+  <!-- <label>
+    <h2><%= list_icon_with_id_for @gift.receiver_id %>
+  </label> -->
+  <label name="gift[receiver_name]" class="label" >
+    <h2 class="receiverName"><span class="h2Highlight"><%= @gift.receiver_name %></span></h2></label>
+  <span><%= User.find(@gift.receiver_id).handle %></span>
+  <label for="provider" class="label">
+    <h2>Location:</h2></label>					    
+  <!-- <label><%= logo_from_id_for @gift.provider_id %></label> -->
+  <label name="gift[provider_name]" class="label" >
+    <h2><span class="h2Highlight"><%= @gift.provider_name %></span></h2>
+    <h2><span class="h2Highlight"><%= @gift.provider.full_address %></span></h2>
+  </label>
+  <label for="item" class="label">
+    <h2>Item:</h2>
+  </label>
+  <!-- <label>
+    <%= image_tag get_category(@gift.category), {:class => 'iconListView'} %>
+  </label> -->
+  <label name="receiver" class="label">
+    <h2>
+      <span class="h2Highlight">
+        <%= @gift.item_name %> - 
+        $<%= @gift.price %>
+      </span>
+    </h2>
+  </label>
+  
+  <h2 class="quantityButtons">
+    Quantity:
+    <button class=" <%= @disabled %>" type="button" id="decreaseQ">
+      <h2>-</h2>
+    </button>
+    <input name="gift[quantity]" class="" id="quantityAmount" type="text" />
+    <button class="" type="button" id="increaseQ">
+      <h2>+</h2>
+    </button>
+  </h2>
 
-						<div class="span3">
-              <label for="total" class="label" id="totalAmount">$</label>
-              <%= f.hidden_field :total , id: "totalInput" %>
-              <!-- <input class="btn btn-large btn-info disabled" type="submit" name="submit" id="submit" value="Please Leave a Tip"/> -->
-              <%= submit_tag "Please Leave a Tip", :class => "btn btn-large btn-info disabled", :id => "submit", :disabled => 'disabled' %>
-						</div>
-					</div>					
+
+
+  <h2>
+    Local Sales Tax: <%= @provider.sales_tax.to_f %>%
+  </h2>
+  <h2>
+    <span id="taxAmount" class="label">
+      Calculating...
+    </span> 
+  </h2>
+  <%= f.hidden_field :tax , id: "taxInput" %>
+  <label for="subTotal" class="label">
+    <h2>
+      SubTotal:
+    </h2>
+  </label>
+  <h2>
+  <label for="subTotalAmount" id="subTotalAmount" class="label">
+    Calculating...
+  </label>
+  </h2>
+  <h2>
+    <div class="input-append" data-toggle="buttons-radio">
+      Tip:
+      <button type="button" class=" tip" id="perItem">
+        $1 per
+      </button>
+      <button type="button" class=" tip" id="fifteenPrecent">
+        15%
+      </button>
+      <button type="button" class=" tip" id="twentyPercent">
+        20%
+      </button>
+    </div>
+  </h2>
+    <h2>
+      $&nbsp;
+      <input name="gift[tip]" class="" id="tip" type="text" value="Choose Tip Amount"/>
+    </h2>
+    <h2 class="totalAmount">
+      <label for="total" class="label">
+        Total:
+      </label>
+      <label for="total" class="label" id="totalAmount">
+       
+      </label>
+    </h2>
+    <h2>
+      Leave a message
+      <input name="gift[message]" id="message" type="text" placeholder="Leave a message..."/>
+      <%= f.hidden_field :total , id: "totalInput" %>  
+      <!-- <input class=" -large -info disabled" type="submit" name="submit" id="submit" value="Please Leave a Tip"/> --> 
+      <%= submit_tag "Please Leave a Tip", :class => "disabled button", :id => "submit", :disabled => 'disabled' %>
       <!-- </form> -->
       <% end %>
-			</div>
-			<div class="span2">&nbsp;</div>
-		</div>
-	</div>
+    </h2>
+
 </div>
 
 <script type="text/javascript">

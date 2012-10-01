@@ -1,20 +1,71 @@
 
-
-
-
 <% flash.each do |name, msg| %>
   <div class="alert alert-<%= name == :notice ? 'error' : 'error' %>">
     <a class="close" data-dismiss="alert" href="#">×</a>
     <%= msg %>
   </div>
 <% end %>
-<div class="headerColorBackground"></div>
-<div class="logoHeader">
-  <%= image_tag("logoGiftboard.png") %>
+<div class="headerColorBackground">
+  <div class="logoHeader">
+    <%= image_tag("logoGiftboard.png") %>
+  </div>
 </div>
 <div class="navbarWrapper">
   <% if signed_in? %>
+  <ul class="navLoggedIn">
+    <li>
+      <%= link_to "Sign out",signout_path, method: :delete %>
+    </li>
+  
+    <li>
+      <%= link_to "Profile",current_user %>
+    </li>
+  
+    <li> 
+      <a href="#">Welcome back,  
+        <%= current_user.username %> 
+      </a>
+    </li>
+  
+    <li>
+      <%= link_to "Settings" %>
+    </li>
+    
+      <% if @provider && params[:controller] == "merchants" %>
+    <li>
+      <%= link_to "Merchants", merchants_path %>
+    </li>
+      <% else %>
+    <li>
+      <%= merchant_tag(current_user) %>
+    </li> 
+    <% end %> 
+    <li>
+      <%= link_to "Add New Merchant", new_provider_path %>
+    </li>
+  </ul>
+ 
+  <% end %>
+
+  <ul class="navTop">
+    <li class="navTopLi navTopReceive">
+      <%= link_to "", gifts_path %>
+    </li>
+    <li class="navTopLi navTopPurchase">
+      <%= link_to "", buy_gifts_path %>
+    </li>
+    <li class="navTopLi navTopFriends">
+      <%= link_to "", activity_gifts_path %>
+    </li>
+    <li class="navTopLi navTopLocations">
+      <a href="#"></a></li>
+    <li class="navTopLi navTopSettings">
+      <a href="#"><!--! link to Settings --></a>
+    </li>
+  </ul>
+
   <ul class="navMain">
+
     <li class="home">
       <div class="cornered">
         <div class="backgroundTab">
@@ -23,7 +74,8 @@
           </h1>
         </div>
       </div>
-    </li>   
+    </li> 
+    <!--   
     <li class="gifts">
       <div class="cornered">
         <div class="backgroundTab">
@@ -51,36 +103,11 @@
         </div>
       </div>
     </li>
-  </ul>
+  </ul>-->
 
-  <ul class="navLoggedIn">
-    <li>
-      <a href="#">
-        <%= current_user.username %> 
-      </a>
-    </li>
-    <li>
-      <%= link_to "Profile",current_user %>
-    </li>
-    <li>
-      <%= link_to "Settings" %>
-    </li>
-    <li>
-    <%= link_to "Sign out",signout_path, method: :delete %>
-    </li>
-      <% if @provider && params[:controller] == "merchants" %>
-    <li>
-      <%= link_to "Merchants", merchants_path %>
-    </li>
-      <% else %>
-    <li>
-      <%= merchant_tag(current_user) %>
-    </li> 
-  <% end %> 
-    <li>
-      <%= link_to "Add New Merchant", new_provider_path %>
-    </li>
-  </ul>
-  <% end %>
+
+
 </div>
+
+ 
 
