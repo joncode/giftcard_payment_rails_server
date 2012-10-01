@@ -176,7 +176,7 @@ class User < ActiveRecord::Base
     end
     
     def crop_photo
-      photo.recreate_versions! if crop_x.present?
+      # photo.recreate_versions! if crop_x.present?
     end
     
     def create_remember_token
