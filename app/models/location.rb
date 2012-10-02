@@ -25,6 +25,7 @@ class Location < ActiveRecord::Base
   attr_accessible :foursquare_venue_id, :latitude, :longitude, :provider_id, :user_id, :checkin_id, :zip, :state, :city, :street, :name, :country, :vendor_type, :vendor_id
   belongs_to :user
   
+  
   def self.allUsersWithinBounds(userIds,bounds)
     Location.find(:all,{ 
       :joins => :user,
