@@ -1,15 +1,18 @@
-<p id="notice"><%= notice %></p>
-<div class="borderBox">
-  <h2>Thank You!</h2>
-  <h3>- The Drinkboard Staff</h3>
 
-  <h4><%= time_ago_in_words(@gift.created_at) %>&nbsp;ago</h4>
-  <h4><%= list_icon_for @giver %> <%= @gift.giver_name %><span> bought </span></h4>
-  <h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
-  <h2>For:</h2>
-  <h4><%= list_icon_for @receiver %> <%= @gift.receiver_name %></h4>
-  <h3><%= logo_from_id_for @gift.provider_id %>
-  @ <%= @gift.provider_name %></h3>
-  <h3>Redeemed on <%= @order.created_at.to_formatted_s(:rfc822)  %>.<br /></h3>
-  <h4>By server : <%= @server.username %>&nbsp;<%= list_icon_for @server %></h4>
+<div class="completedWrapper">
+c
+  <h2>- The Drinkboard Staff</h2>
+  <%= time_ago_in_words(@gift.created_at) %>
+  &nbsp;ago
+  <%= list_icon_for @giver %>
+  <%= @gift.giver_name %> 
+  bought
+  <%= @gift.quantity %> <%= @gift.item_name %>
+  For:
+  <%= list_icon_for @receiver %>
+  <%= @gift.receiver_name %>
+  <%= logo_from_id_for @gift.provider_id %>
+  @ <%= @gift.provider_name %>
+  Redeemed on <%= @order.created_at.to_formatted_s(:rfc822)  %>
+  By server: <%= @server.username %>&nbsp;<%= list_icon_for @server %>
 </div>
