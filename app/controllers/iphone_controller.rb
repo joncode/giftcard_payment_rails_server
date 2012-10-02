@@ -176,7 +176,7 @@ class IphoneController < AppController
   def create_gift 
     puts "Create Gift"
     puts "#{params}"
-    
+
     response = {}
     message  = ""
 
@@ -340,6 +340,7 @@ class IphoneController < AppController
     end
     
     data_obj = JSON.parse params["data"]
+    puts "#{data_obj}"
     
     respond_to do |format|
       if data_obj.nil?
