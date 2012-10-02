@@ -4,7 +4,7 @@ module UsersHelper
     width   = 75
     height  = 100
     if user.photo.blank?
-      photo = "http://res.cloudinary.com/htaaxtzcv/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
+      photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
       image_tag(photo, alt: "hello",:class => 'gravatar' )
     else
       image_tag(user.photo_url(:gravatar), :width => width, :height => height)
@@ -15,7 +15,7 @@ module UsersHelper
     width   = 150
     height  = 150
     if user.photo.blank?
-      photo = "http://res.cloudinary.com/htaaxtzcv/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
+      photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
       image_tag(photo, alt: "hello",:class => 'gravatar' )
     else
       image_tag(user.photo_url(:standard), :width => width, :height => height)
@@ -26,7 +26,7 @@ module UsersHelper
     width   = 50
     height  = 50
     if user.photo.blank?
-      photo = "http://res.cloudinary.com/htaaxtzcv/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
+      photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
       image_tag(photo, alt: "hello",:class => 'gravatar' )
     else
       image_tag(user.photo_url(:thumbnail), :width => width, :height => height)
@@ -42,11 +42,15 @@ module UsersHelper
     list_icon_for user  
   end
   
-  def custom_image_tag(user,width,height)
-    if user.photo.blank?
-      photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
+  def custom_image_tag(object,width,height)
+    if object.photo.blank?
+      if object.kind_of? User
+        photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
+      else
+        photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349150293/upqygknnlerbevz4jpnw.png"
+      end
     else
-      photo_url = user.photo.dup.to_s
+      photo_url = object.photo.dup.to_s
       photo_array = photo_url.split('upload/')
       photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/#{photo_array[1]}"      
     end 
