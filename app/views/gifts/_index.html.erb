@@ -22,18 +22,17 @@
           <h2>
             You bought
             <%= gift.quantity %> <%= gift.item_name %>
-            for <%= gift.receiver_name %>
-            
+            for <%= gift.receiver_name %> at the venue <%= gift.provider_name %>.
           </h2>
         </div>
-        <div class="providerInfo">
-          <div class="backgroundMiniCell"></div>
+
+          
           <!--
           <%= logo_from_id_for gift.provider_id %>
           -->
-          <h2 class="bigAt">at the venue</h2>
-          <h2 class="providerText"><%= gift.provider_name %></h2>
-        </div>
+
+          
+
         <% if tab_flag == "buy" %>
          <div class="giverID">
            <!--! <%= list_icon_with_id_for gift.receiver_id %> -->
@@ -49,11 +48,13 @@
             <%= time_ago_in_words(gift.created_at) %>&nbsp;ago
           </h3>
         </div>
-        <% if tab_flag == "buy" %>
-          <%= render 'gifts/buttons_buy', gift: gift %>
-        <% elsif giver.nil? %>
+        <div class="bottomBox">
+          <% if tab_flag == "buy" %>
+          <% render 'gifts/buttons_buy', gift: gift %>
+          <% elsif giver.nil? %>
           <%= render 'gifts/buttons_index', gift: gift %>
-        <% end %>
+          <% end %>
+        </div>
       </div>
 
 <!--  <div class="badge1">
@@ -63,7 +64,7 @@
         <h2><%= gift.message %></h2>
       </div> -->
 
-    </li>
+   
     <% end %>
   </ul>
 </div>

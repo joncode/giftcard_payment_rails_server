@@ -1,5 +1,6 @@
 Drinkboard::Application.routes.draw do
   
+  root to: 'users#new'
   resources :locations
 
   resources :employees
@@ -53,7 +54,7 @@ Drinkboard::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy'
   resources :admins, only: [:new, :create, :destroy]
-  root to: 'users#new'
+
   
   ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post

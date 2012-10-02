@@ -25,9 +25,9 @@ class UsersController < ApplicationController
 
   def show    
     @user = User.find(params[:id])
-    @microposts = @user.microposts.all(limit:15)
-    @feed_items = @microposts
-    @micropost = Micropost.new
+    # @microposts = @user.microposts.all(limit:15)
+    #@feed_items = @microposts
+    #@micropost = Micropost.new
     @gifts = Gift.get_user_activity(@user)
     
     respond_to do |format|
@@ -65,6 +65,7 @@ class UsersController < ApplicationController
 
   def update
     msg = ""
+    puts "#{params}"
     @user = User.find(params[:id])
     action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
 

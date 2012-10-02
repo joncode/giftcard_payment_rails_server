@@ -130,7 +130,7 @@ p_id.each do |provider|
   menu_string.full_address = menu_string.provider.full_address
   # make an array of hashes of the items
   full_menu_string = { full_address: menu_string.full_address, 
-    location_name: menu_string.provider.name }
+    location_name: menu_string.provider.name, sales_tax: menu_string.provider.sales_tax }
   num = 1
   menu.each do |m_item|
     item = Item.find(m_item.item_id)
