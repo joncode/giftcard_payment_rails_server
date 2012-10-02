@@ -11,9 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
 ActiveRecord::Schema.define(:version => 20121002180848) do
-
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"

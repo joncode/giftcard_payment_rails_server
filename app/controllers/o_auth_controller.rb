@@ -87,7 +87,9 @@ class OAuthController < ApplicationController
       fbRequest = "https://graph.facebook.com/me/checkins?access_token=#{user[:facebook_access_token]}&limit=1"   #Latest checkin only.
       fbResponse = HTTParty.get(fbRequest)
       fbResponse["data"].each do |checkin|
-        Location.createWithFacebookCheckin(checkin,user)
+        if user[:is_public]
+          Location.createWithFacebookCheckin(checkin,user)
+        end
       end
     end
     
@@ -101,7 +103,9 @@ class OAuthController < ApplicationController
       return render :text => "No response object to parse."
     end
     user = User.find_by_foursquare_id(checkin["user"]["id"])
-    Location.createWithFoursquareCheckin(checkin,user)
+    if user[:is_public]
+      Location.createWithFoursquareCheckin(checkin,user)
+    end
     
     return render :text => "Success"
   end

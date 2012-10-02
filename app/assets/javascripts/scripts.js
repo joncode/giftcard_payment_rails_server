@@ -72,16 +72,3 @@ jQuery.fn.iphoneSwitch = function(start_state, switched_on_callback, switched_of
 		});		
 	});
 };
-
-$(function() {
-	$('#switchMessage').iphoneSwitch("on",
-	  function() {
-	    $('#onOffSwitch').hide('#switchOn');
-	  },
-	  function() {
-	    $('#onOffSwitch').toggle('#switchOff');
-	  },
-	  {
-	    switch_on_container_path: 'assets/iphone_switch_container_off.png'
-	});
-});	
