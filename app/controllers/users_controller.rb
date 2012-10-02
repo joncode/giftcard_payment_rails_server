@@ -65,6 +65,7 @@ class UsersController < ApplicationController
 
   def update
     msg = ""
+    puts "#{params}"
     @user = User.find(params[:id])
     action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
 
