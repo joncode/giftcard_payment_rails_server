@@ -10,13 +10,13 @@ class RedeemsController < ApplicationController
   end
 
   def show
-    @redeem = Redeem.find(params[:id])
-    @gift = @redeem.gift
-    giver = @redeem.gift.giver_id
-    @giver = User.find(giver)
-    provider = @gift.provider
-    @servers = provider.get_servers
-    @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id)
+    @redeem   = Redeem.find(params[:id])
+    @gift     = @redeem.gift
+    @giver    = @redeem.giver
+    provider  = @redeem.provider
+    @server_codes = provider.server_codes
+    @servers  = provider.get_servers
+    @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, provider_id: provider.id)
 
     respond_to do |format|
       format.html # show.html.erb

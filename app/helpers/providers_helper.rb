@@ -1,12 +1,14 @@
 module ProvidersHelper
   
   def logo_for(provider)
+    width   = 150
+    height  = 150
     if provider.logo.blank?
-      gravatar_url = "biz_logo.png"
+      logo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349150293/upqygknnlerbevz4jpnw.png"
+      image_tag(logo, alt: "hello",:class => 'gravatar size150' )
     else
-      gravatar_url =  provider.logo.to_s
+      image_tag(provider.logo_url(:standard), :class => 'size150',:width => width, :height => height)
     end 
-    image_tag(gravatar_url, alt: provider.name, class: "iconListView") 
   end
   
   def logo_from_id_for(provider_id)
@@ -15,12 +17,8 @@ module ProvidersHelper
     else
       provider = Provider.find(provider_id)
     end
-    if provider.logo.blank?
-      gravatar_url = "biz_logo.png"
-    else
-      gravatar_url =  provider.logo.to_s
-    end 
-    image_tag(gravatar_url, alt: provider.name, class: "iconListView") 
+    logo_for provider
   end
-
 end
+
+ 

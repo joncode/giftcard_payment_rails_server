@@ -1,50 +1,53 @@
-<div class="showWrapper">
-  <p id="notice"><%= notice %></p>
+<!-- Thank you page for after buy -->
 
-  <p>
-    <b>To:</b>
-    <%= @gift.receiver_name %>
-  </p>
-
-  <p>
-    <b>From:</b>
-    <%= @gift.giver_name %>
-  </p>
-
-  <p>
-    <b>Drink:</b>
-    <%= @gift.quantity %>&nbsp;<%= @gift.item_name %>
-  </p>
-  <p>
-    <b>Cost:</b>
-    $<%= @gift.quantity.to_i * @gift.price.to_i %>
-  </p>
-  <p>
-    <b>Location:</b>
-    <%= @gift.provider_name %>
-  </p>
-  <% if !@gift.message.empty? %>
-    <p>
-      <b>Message:</b>
-      <%= @gift.message %>
-    </p>
+<div class="thankYouBuyWrapper">
+  <h2 class="thankYouHeader">Thank You!</h2>
+  <h2>
+    <span class="h2Highlight">To:</span> <%= @gift.receiver_name %>
+  </h2>
+  <h2>
+    <span class="h2Highlight">From: </span><%= @gift.giver_name %>
+  </h2>
+  <h2>
+    <span class="h2Highlight">Drink: </span><%= @gift.quantity %>
+    &nbsp;<%= @gift.item_name %>
+  </h2>
+  <h2>
+    <span class="h2Highlight">Cost: </span>$<%= @gift.quantity.to_i * @gift.price.to_i %>
+  </h2>
+  <h2>
+    <span class="h2Highlight">Location: </span><%= @gift.provider_name %>
+  </h2>
+  <h2>
+    <% if !@gift.message.empty? %>
+    <span class="h2Highlight">Message: </span><%= @gift.message %>
+  </h2>
   <% end %>
-
-  <p>
-    <b>Tax:</b>
-    $<%= @gift.tax %>
-  </p>
-  <p>
-    <b>Subtotal:</b>
-    $<%= @gift.quantity.to_f * @gift.price.to_f + @gift.tax.to_f %>
-  </p>
-  <p>
-    <b>Tip:</b>
+  <h2>
+    <span class="h2Highlight">
+      Tax: 
+    </span>
+    $ <%= @gift.tax %>
+  </h2>
+  <h2>
+    <span class="h2Highlight">
+      Subtotal:
+    </span>
+    $ <%= @gift.quantity.to_f * @gift.price.to_f + @gift.tax.to_f %>
+  </h2>
+  <h2>
+    <span class="h2Highlight">
+      Tip: 
+    </span>
     $<%= @gift.tip %>
-  </p>
-  <p>
-    <b>Total:</b>
+  </h2>
+  <h2>
+    <span class="h2Highlight">
+      Total: 
+    </span>
     $<%= @gift.total %>
-  </p>
-  <%= link_to 'Home', home_path %>
+  </h2>
+  <h2>
+    <%= link_to 'Home', home_path %>
+  </h2>
 </div>

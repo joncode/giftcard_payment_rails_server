@@ -1,27 +1,35 @@
-<h1>Listing redeems</h1>
+<!-- Redeems Index -->
 
-<table>
-  <tr>
-    <th>Gift</th>
-    <th>Reply message</th>
-    <th>Redeem code</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @redeems.each do |redeem| %>
-  <tr>
-    <td><%= redeem.gift_id %></td>
-    <td><%= redeem.reply_message %></td>
-    <td><%= redeem.redeem_code %></td>
-    <td><%= link_to 'Show', redeem %></td>
-    <td><%= link_to 'Edit', edit_redeem_path(redeem) %></td>
-    <td><%= link_to 'Destroy', redeem, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Redeem', new_redeem_path %>
+<div class="redeemsIndexWrapper">
+  <h2>
+    <span="h2Highlight">
+    Listing redeems
+    </span>
+  </h2>
+  <h2>Gift</h2>
+  <h2>Reply message</h2>
+  <h2>Redeem code</h2>
+  <% @redeems.each do |redeem| %>
+  <h2>
+    <%= redeem.gift_id %>
+  </h2>
+  <h2>
+    <%= redeem.reply_message %>
+  </h2>
+  <h2>
+    <%= redeem.redeem_code %>
+  </h2>
+  <h2>
+    <%= link_to 'Show', redeem %>
+  </h2>
+  <h2>
+    <%= link_to 'Edit', edit_redeem_path(redeem) %>
+  </h2>
+  <h2>
+    <%= link_to 'Destroy', redeem, confirm: 'Are you sure?', method: :delete %>
+  </h2>
+  <% end %>
+  <h2>
+    <%= link_to 'New Redeem', new_redeem_path %>
+  </h2>
+</div>

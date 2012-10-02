@@ -14,8 +14,11 @@
 class Redeem < ActiveRecord::Base
   attr_accessible :gift_id, :redeem_code, :reply_message, :special_instructions
   
-  belongs_to     :gift
-  has_one        :order
+  belongs_to      :gift
+  has_one         :giver,     :through => :gift
+  has_one         :receiver,  :through => :gift
+  has_one         :provider,  :through => :gift
+  has_one         :order
   
   before_create :create_redeem_code
   after_create  :add_redeem_to_gift

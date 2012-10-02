@@ -4,16 +4,9 @@ class ImageUploader < CarrierWave::Uploader::Base
   include Cloudinary::CarrierWave
 
   process :convert => 'png'
-  process :tags => ['profile']
-  #   process :transformation => {
-  #     :width => :w, 
-  #   :height => :h, 
-  #   :x => :x, 
-  #   :y => :x
-  # }
-  # process :set_content_type
+
   version :standard do
-    process :resize_to_fill => [100, 150, :north]
+    process :resize_to_fill => [150, 150, :north]
   end
   
   version :large do
@@ -21,29 +14,33 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
   
   version :thumbnail do
-    process :resize_to_fit => [75, 100]
+    process :resize_to_fill => [50, 50]
   end
 
-  def crop
-    if model.crop_x.present?
-      resize_to_limit(600, 600)
-      manipulate! do |img|
-        x = model.crop_x.to_i
-        y = model.crop_y.to_i
-        w = model.crop_w.to_i
-        h = model.crop_h.to_i
-        img.crop!(x, y, w, h)
-      end
-    end
+  version :gravatar do
+    process :resize_to_fill => [75, 100]
   end
+
+  # def crop
+    # if model.crop_x.present?
+    #   resize_to_limit(600, 600)
+    #   manipulate! do |img|
+    #     x = model.crop_x.to_i
+    #     y = model.crop_y.to_i
+    #     w = model.crop_w.to_i
+    #     h = model.crop_h.to_i
+    #     img.crop!(x, y, w, h)
+    #   end
+    # end
+  # end
   
-  protected
+  # protected
     
-    def add_crop_data picture
-      x = model.crop_x.to_i
-      y = model.crop_y.to_i
-      w = model.crop_w.to_i
-      h = model.crop_h.to_i
-      return [x,y,w,h]
-    end
+  #   def add_crop_data picture
+  #     x = model.crop_x.to_i
+  #     y = model.crop_y.to_i
+  #     w = model.crop_w.to_i
+  #     h = model.crop_h.to_i
+  #     return [x,y,w,h]
+  #   end
 end

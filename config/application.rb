@@ -38,10 +38,10 @@ module Drinkboard
 
     # Configure sensitive parameters which will be filtered from the log file.
     # config.filter_parameters += [:password, :token, :uid, :credit_number]
-    AWS::S3::Base.establish_connection!(
-      :access_key_id     => 'AKIAJV7FFALBNSFCZPOA',
-      :secret_access_key => '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'
-    )
+    # AWS::S3::Base.establish_connection!(
+    #   :access_key_id     => 'AKIAJV7FFALBNSFCZPOA',
+    #   :secret_access_key => 'r8HxDXQWyx9G8Pa4w0Vkh5MyWk3W/Wf9s9rcrpjL'
+    # )
     # Use SQL instead of Active Record's schema dumper when creating the database.
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
