@@ -6,7 +6,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   process :convert => 'png'
 
   version :standard do
-    process :resize_to_fill => [400, 400, :north]
+    process :resize_to_fill => [150, 150, :north]
   end
   
   version :large do
@@ -14,7 +14,11 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
   
   version :thumbnail do
-    process :resize_to_fit => [75, 100]
+    process :resize_to_fill => [50, 50]
+  end
+
+  version :gravatar do
+    process :resize_to_fill => [75, 100]
   end
 
   # def crop
