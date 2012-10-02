@@ -2,26 +2,34 @@
 #
 # Table name: users
 #
-#  id              :integer         not null, primary key
-#  email           :string(255)     not null
-#  admin           :boolean         default(FALSE)
-#  photo           :string(255)
-#  password_digest :string(255)     not null
-#  remember_token  :string(255)     not null
-#  created_at      :datetime        not null
-#  updated_at      :datetime        not null
-#  address         :string(255)
-#  address_2       :string(255)
-#  city            :string(20)
-#  state           :string(2)
-#  zip             :string(16)
-#  credit_number   :string(255)
-#  phone           :string(255)
-#  first_name      :string(255)
-#  last_name       :string(255)
-#  provider_id     :string(255)
-#  facebook_id     :string(255)
-#  handle          :string(255)
+#  id                      :integer         not null, primary key
+#  email                   :string(255)     not null
+#  admin                   :boolean         default(FALSE)
+#  photo                   :string(255)
+#  password_digest         :string(255)     not null
+#  remember_token          :string(255)     not null
+#  created_at              :datetime        not null
+#  updated_at              :datetime        not null
+#  address                 :string(255)
+#  address_2               :string(255)
+#  city                    :string(20)
+#  state                   :string(2)
+#  zip                     :string(16)
+#  credit_number           :string(255)
+#  phone                   :string(255)
+#  first_name              :string(255)
+#  last_name               :string(255)
+#  facebook_id             :string(255)
+#  handle                  :string(255)
+#  server_code             :string(255)
+#  twitter                 :string(255)
+#  active                  :boolean         default(TRUE)
+#  persona                 :string(255)     default("")
+#  foursquare_id           :string(255)
+#  facebook_access_token   :string(255)
+#  facebook_expiry         :datetime
+#  foursquare_access_token :string(255)
+#  sex                     :string(255)
 #
 
 class User < ActiveRecord::Base

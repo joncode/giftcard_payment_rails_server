@@ -8,6 +8,9 @@
 #  redeem_code :string(255)
 #  created_at  :datetime        not null
 #  updated_at  :datetime        not null
+#  server_code :string(255)
+#  server_id   :integer
+#  provider_id :integer
 #
 
 class Order < ActiveRecord::Base

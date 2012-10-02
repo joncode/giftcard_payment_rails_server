@@ -23,6 +23,11 @@
 #  created_at           :datetime        not null
 #  updated_at           :datetime        not null
 #  receiver_phone       :string(255)
+#  tax                  :string(255)
+#  tip                  :string(255)
+#  gift_id              :integer
+#  foursquare_id        :string(255)
+#  facebook_id          :string(255)
 #
 
 class Gift < ActiveRecord::Base

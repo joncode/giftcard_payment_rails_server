@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: employees
+#
+#  id          :integer         not null, primary key
+#  provider_id :integer         not null
+#  user_id     :integer         not null
+#  clearance   :string(255)     default("staff")
+#  active      :boolean         default(TRUE)
+#  created_at  :datetime        not null
+#  updated_at  :datetime        not null
+#
+
 class Employee < ActiveRecord::Base
   attr_accessible :active, :clearance, :provider_id, :user_id
   
