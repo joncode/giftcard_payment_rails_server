@@ -113,6 +113,16 @@ class UsersController < ApplicationController
     @user = current_user
   end
   
+  def change_public_status
+    newStatus = (params[:newStatus] == "true" ? true : false)
+    if (current_user[:is_public] && !newStatus) || (!current_user[:is_public] && newStatus)
+      current_user[:is_public] = newStatus
+      current_user.save
+      Location.create(:user_id => current_user[:id], :vendor_type => (newStatus ? "activate" : "deactivate"))    #Empty location update juust so we know when the user turns on.
+    end
+    render :json => {success: true}
+  end
+  
   private
 
     
