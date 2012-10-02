@@ -4,7 +4,7 @@ module ProvidersHelper
     width   = 150
     height  = 150
     if provider.logo.blank?
-      logo = "http://res.cloudinary.com/htaaxtzcv/image/upload/c_fill,h_#{height},w_#{width}/v1349150292/oq5vpgltdbet33f0pkn3.png"
+      logo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349150293/upqygknnlerbevz4jpnw.png"
       image_tag(logo, alt: "hello",:class => 'gravatar size150' )
     else
       image_tag(provider.logo_url(:standard), :class => 'size150',:width => width, :height => height)
