@@ -171,8 +171,8 @@ class User < ActiveRecord::Base
       end
         
                 # log the messages output for the method
-      logger.info "COLLECT INCOMPLETE GIFTS"
-      logger.info response
+      puts "COLLECT INCOMPLETE GIFTS"
+      puts response
     end
     
     def crop_photo
