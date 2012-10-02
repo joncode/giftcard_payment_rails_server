@@ -1,5 +1,4 @@
 <div class="detailWrapper redeemWrapper">
-
   <div class="profileImage">
     <%= list_icon_for @giver %> 
   </div>
@@ -39,7 +38,7 @@
     </h2>
 
     <!-- hidden/shown area -->
-    <div id="servers">
+<!--     <div id="servers">
       <h2 class="identifyServerHeader">
         Identify your server:
       </h2>
@@ -55,40 +54,41 @@
             Choose
           </button>
         </h2>
-      <% end %>
-    </div>
-    <div id="server_code_field">
-      <h2>
-        <%= simple_form_for @order do |f| %>
-        <%= f.error_notification %>
-        <% if @order.errors.any? %>
-        <div id="error_explanation">
-          <div class="alert alert-error">
-          The form contains <%= pluralize(@order.errors.count, "error") %>.
+        <% end %>
+      </div>
+      <div id="server_code_field">
+        <h2>
+          <%= simple_form_for @order do |f| %>
+          <%= f.error_notification %>
+          <% if @order.errors.any? %>
+          <div id="error_explanation">
+            <div class="alert alert-error">
+              The form contains <%= pluralize(@order.errors.count, "error") %>.
+            </div>
+            <ul>
+              <% @order.errors.full_messages.each do |msg| %>
+              <li>* <%= msg %></li>
+              <% end %>
+            </ul>
           </div>
-          <ul>
-            <% @order.errors.full_messages.each do |msg| %>
-            <li>* <%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-        <% end %>
-        <div class="form-horizontal">
-          <%= f.hidden_field :redeem_id  %>
-          <%= f.hidden_field :gift_id  %>
-          <%= f.hidden_field :server_id  %>
-          <%= f.hidden_field :provider_id  %>
-          <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
-        </div>
-        <%= f.submit "Submit Server Code", :class => "btn" %>
-        <% end %>
-        <div>
-          <button type="button" class="btn btn-large btn-success" id="servers_back_button">
-            Choose Another Server
-          </button>
-        </div>
-      </h2>
-    </div> <!-- End Actions Wrapper -->
+          <% end %>
+          <div class="form-horizontal">
+            <%= f.hidden_field :redeem_id  %>
+            <%= f.hidden_field :gift_id  %>
+            <%= f.hidden_field :server_id  %>
+            <%= f.hidden_field :provider_id  %>
+            <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
+          </div>
+          <%= f.submit "Submit Server Code", :class => "btn" %>
+          <% end %>
+          <div>
+            <button type="button" class="btn btn-large btn-success" id="servers_back_button">
+              Choose Another Server
+            </button>
+          </div>
+        </h2>
+      </div> 
+    </div> end #servers -->
   </div>
 </div>
 

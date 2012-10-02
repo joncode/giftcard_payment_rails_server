@@ -1,7 +1,7 @@
 <!-- Thank you page for after buy -->
 
 <div class="thankYouBuyWrapper">
-  <h1>Thank You!</h1>
+  <h2 class="thankYouHeader">Thank You!</h2>
   <h2>
     <span class="h2Highlight">To:</span> <%= @gift.receiver_name %>
   </h2>
@@ -25,7 +25,7 @@
   <% end %>
   <h2>
     <span class="h2Highlight">
-      Tax: asdfasdfasf
+      Tax: 
     </span>
     $ <%= @gift.tax %>
   </h2>
@@ -33,20 +33,18 @@
     <span class="h2Highlight">
       Subtotal:
     </span>
+    $ <%= @gift.quantity.to_f * @gift.price.to_f + @gift.tax.to_f %>
   </h2>
   <h2>
     <span class="h2Highlight">
-      $ <%= @gift.quantity.to_f * @gift.price.to_f + @gift.tax.to_f %>
       Tip: 
     </span>
+    $<%= @gift.tip %>
   </h2>
   <h2>
-    $<%= @gift.tip %>
     <span class="h2Highlight">
       Total: 
     </span>
-  </h2>
-  <h2>
     $<%= @gift.total %>
   </h2>
   <h2>

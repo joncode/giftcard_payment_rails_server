@@ -1422,22 +1422,33 @@ ul.bigList {
 .thankYouBuyWrapper {
 	text-align: center;
 
-	h1 {
+
+	.thankYouHeader {
 		font-size: 3em;
+		margin: 10px;
+		color: @redHot;
 	}
 
 	.h2Highlight {
 		color: @blue;
+		font-size: 60%;
+		text-transform: uppercase;
+		margin-right: 10px;
 	}
 
 	h2 {
 		color: @blueLight;
-		font-size: 1.7em;
+		font-size: 2em;
+		margin: 5px;
 
 		a {
 			display: block;
-			font-size: 3em;
+			font-size: 2em;
 			margin: 25px;
+
+			&:hover {
+				color: @redHot;
+			}
 		}
 	}
 }
