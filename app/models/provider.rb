@@ -34,12 +34,17 @@ class Provider < ActiveRecord::Base
   has_many   :orders                                                                            
   has_one    :menu_string
   has_many   :gifts
+  has_many   :servers, class_name: "Employee"
 
   mount_uploader :photo,    ImageUploader
   mount_uploader :logo,     ImageUploader
   mount_uploader :box,      ImageUploader
   mount_uploader :portrait, ImageUploader
   
+
+  def self.allWithinBounds(bounds)
+    Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
+  end
 
   def full_address
     "#{self.address},  #{self.city}, #{self.state}"
@@ -48,28 +53,40 @@ class Provider < ActiveRecord::Base
   def get_servers
     # this means get people who are at work not just employed
     # for now without location data, its just employees
-    self.users
+    self.employees
   end
   
   def server_codes
-    self.users.collect {|e| e.server_code}
+    self.employees.collect {|e| e.server_code}
   end
-  
+
+  def get_server_from_code(code)
+    self.employees.select {|e| e.server_code == code}
+  end
+   
   def server_to_iphone
-        # 2.
-    # hash = {}
-    # self.users.each do |u|
-    #   hash[u.server_code] = [ u.id, u.username, u.photo]
-    # end
-    # return hash
-        # 3.
-    send_fields = [ :id, :first_name, :last_name, :photo, :server_code]
-    users = self.users.map { |g| g.serializable_hash only: send_fields }
+    self.employees.servers_hash
   end
 end
 
 
-
+  # [{"first_name"=>"Larry",
+  #  "id"=>19, 
+  #  "last_name"=>"Page", 
+  #  "photo"=>{
+  #     "url"=>"http://res.cloudinary.com/drinkboard/image/upload/v1347955675/19.png", 
+  #     :standard=>{
+  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fill,g_north,h_150,w_100/v1347955675/19.png"
+  #     }, 
+  #     :large=>{
+  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_400,w_400/v1347955675/19.png"
+  #     }, 
+  #     :thumbnail=>{
+  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fit,h_100,w_75/v1347955675/19.png"
+  #     }
+  #   }, 
+  #   "server_code"=>"1234"
+  # }] 
 
 
 

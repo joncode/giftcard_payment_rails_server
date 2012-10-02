@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120918084638) do
+ActiveRecord::Schema.define(:version => 20120928002405) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(:version => 20120918084638) do
     t.string   "tax"
     t.string   "tip"
     t.integer  "gift_id"
+    t.string   "foursquare_id"
+    t.string   "facebook_id"
   end
 
   create_table "items", :force => true do |t|
@@ -70,6 +72,16 @@ ActiveRecord::Schema.define(:version => 20120918084638) do
   create_table "items_menus", :id => false, :force => true do |t|
     t.integer "item_id"
     t.integer "menu_id"
+  end
+
+  create_table "locations", :force => true do |t|
+    t.float    "latitude"
+    t.float    "longitude"
+    t.integer  "provider_id"
+    t.integer  "user_id"
+    t.string   "foursquare_venue_id"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
   end
 
   create_table "menu_strings", :force => true do |t|
@@ -138,6 +150,9 @@ ActiveRecord::Schema.define(:version => 20120918084638) do
     t.string   "bank_zip"
     t.string   "portrait"
     t.string   "box"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "foursquare_id"
   end
 
   create_table "redeems", :force => true do |t|
@@ -161,18 +176,18 @@ ActiveRecord::Schema.define(:version => 20120918084638) do
   add_index "relationships", ["follower_id"], :name => "index_relationships_on_follower_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                            :null => false
-    t.boolean  "admin",                         :default => false
+    t.string   "email",                                                    :null => false
+    t.boolean  "admin",                                 :default => false
     t.string   "photo"
-    t.string   "password_digest",                                  :null => false
-    t.string   "remember_token",                                   :null => false
-    t.datetime "created_at",                                       :null => false
-    t.datetime "updated_at",                                       :null => false
+    t.string   "password_digest",                                          :null => false
+    t.string   "remember_token",                                           :null => false
+    t.datetime "created_at",                                               :null => false
+    t.datetime "updated_at",                                               :null => false
     t.string   "address"
     t.string   "address_2"
-    t.string   "city",            :limit => 20
-    t.string   "state",           :limit => 2
-    t.string   "zip",             :limit => 16
+    t.string   "city",                    :limit => 20
+    t.string   "state",                   :limit => 2
+    t.string   "zip",                     :limit => 16
     t.string   "credit_number"
     t.string   "phone"
     t.string   "first_name"
@@ -181,8 +196,13 @@ ActiveRecord::Schema.define(:version => 20120918084638) do
     t.string   "handle"
     t.string   "server_code"
     t.string   "twitter"
-    t.boolean  "active",                        :default => true
-    t.string   "persona",                       :default => ""
+    t.boolean  "active",                                :default => true
+    t.string   "persona",                               :default => ""
+    t.string   "foursquare_id"
+    t.string   "facebook_access_token"
+    t.datetime "facebook_expiry"
+    t.string   "foursquare_access_token"
+    t.string   "sex"
   end
 
 end

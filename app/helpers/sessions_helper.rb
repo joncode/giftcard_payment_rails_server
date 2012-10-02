@@ -45,7 +45,7 @@ module SessionsHelper
   private
   
     def user_from_remember_token
-      remember_token = cookies[:remember_token]
+      remember_token = cookies[:remember_token] || params["remember_token"]
       User.find_by_remember_token(remember_token) unless remember_token.nil?
     end
     

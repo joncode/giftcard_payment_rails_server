@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
     @orders = Order.all
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html 
       format.json { render json: @orders }
     end
   end
@@ -13,14 +13,14 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html 
       format.json { render json: @order }
     end
   end
 
   def new
-    @gift = Gift.find(params[:id])
-    @redeem = Redeem.find_by_gift_id(@gift)
+    @gift     = Gift.find(params[:id])
+    @redeem   = @gift.redeem
     @provider = @gift.provider
     
     if @redeem
@@ -43,9 +43,10 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.new(params[:order])
-    @redeem = @order.redeem
-    trigger = @order.redeem_code.nil? ? true : false
+    @order    = Order.new(params[:order])
+            # trigger : true for user side
+            #         : false for merchant side
+    trigger   = @order.redeem_code.nil? ? true : false
 
     respond_to do |format|
       if @order.save
@@ -57,7 +58,7 @@ class OrdersController < ApplicationController
         format.json { render json: @order, status: :created, location: @order }
       else
         if trigger
-          format.html { redirect_to @redeem, notice: "Drink not authorized. Server Code incorrect." }
+          format.html { redirect_to @order.redeem, notice: "Drink not authorized. Server Code incorrect." }
         else
           format.html { redirect_to order_merchant_path(@order.gift_id), notice: "Drink not authorized. Redeem Code incorrect." }
         end

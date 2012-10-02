@@ -5,6 +5,14 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   
   before_filter :prepare_for_mobile
+  
+  def required_params(param_arr)
+    param_arr.each do |p|
+      next if params[p]
+      return false
+    end
+    return true
+  end
 
   private
   

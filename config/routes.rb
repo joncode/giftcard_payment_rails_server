@@ -1,5 +1,8 @@
 Drinkboard::Application.routes.draw do
   
+  root to: 'users#new'
+  resources :locations
+
   resources :employees
   match "/invite/:id" => "invite#show"
   
@@ -51,7 +54,7 @@ Drinkboard::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy'
   resources :admins, only: [:new, :create, :destroy]
-  root to: 'users#new'
+
   
   ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
@@ -82,6 +85,10 @@ Drinkboard::Application.routes.draw do
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
   match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
   ###
+  
+  ##Location resources
+  match '/map', to: 'locations#map'
+  match '/map/boundary', to: 'locations#mapForUserWithinBoundary'
   
   resources :microposts,    only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
