@@ -83,23 +83,6 @@ class Location < ActiveRecord::Base
     })
     #Handle any broadcasting
     broadcastLocationToFriends(newLocation,user)
-    
-    #Reply to the foursquare checkin.
-    followedUserIds = user.followed_users.map { |u| u.id }
-    bounds = {:botLat => newLocation[:latitude]-0.01, :topLat => newLocation[:latitude]+0.01, :leftLng => newLocation[:longitude]-0.01, :rightLng => newLocation[:longitude]+0.01}
-    fourHoursAgo = Time.new - 4.hours
-    friendsNearbyDrinkboardLocs = Location.find(:all,{ 
-      :joins => :user,
-      :order => "locations.created_at",
-      :conditions => ["locations.latitude >= ? AND locations.latitude <= ? AND locations.longitude >= ? AND locations.longitude <= ? AND locations.user_id IN (?) AND locations.created_at > ? AND locations.provider_id IS NOT NULL",bounds[:botLat],bounds[:topLat],bounds[:leftLng],bounds[:rightLng],followedUserIds,fourHoursAgo]
-    })
-    
-    if friendsNearbyDrinkboardLocs.count > 0
-      friendLoc = friendsNearbyDrinkboardLocs[0]
-      friendLocUser = friendLoc.user
-      fsqMsg = "Your friend #{friendLocUser[:first_name]} #{friendLocUser[:last_name]} is nearby at #{friendLoc[:name]}. Check out Drinkboard to buy him a drink."
-      HTTParty.post(["https://api.foursquare.com/v2/checkins/?/reply",newLocation[:checkin_id]], :query => {:text => fsqMsg})
-    end
   end
   
   #Example:
@@ -176,6 +159,23 @@ class Location < ActiveRecord::Base
     })
     #Handle any broadcasting
     broadcastLocationToFriends(newLocation,user)
+    
+    #Reply to the foursquare checkin.
+    followedUserIds = user.followed_users.map { |u| u.id }
+    bounds = {:botLat => newLocation[:latitude]-0.01, :topLat => newLocation[:latitude]+0.01, :leftLng => newLocation[:longitude]-0.01, :rightLng => newLocation[:longitude]+0.01}
+    fourHoursAgo = Time.new - 4.hours
+    friendsNearbyDrinkboardLocs = Location.find(:all,{ 
+      :joins => :user,
+      :order => "locations.created_at",
+      :conditions => ["locations.latitude >= ? AND locations.latitude <= ? AND locations.longitude >= ? AND locations.longitude <= ? AND locations.user_id IN (?) AND locations.created_at > ? AND locations.provider_id IS NOT NULL AND users.is_public = ?",bounds[:botLat],bounds[:topLat],bounds[:leftLng],bounds[:rightLng],followedUserIds,fourHoursAgo,true]
+    })
+    
+    if friendsNearbyDrinkboardLocs.count > 0
+      friendLoc = friendsNearbyDrinkboardLocs[0]
+      friendLocUser = friendLoc.user
+      fsqMsg = "Your friend #{friendLocUser[:first_name]} #{friendLocUser[:last_name]} is nearby at #{friendLoc[:name]}. Check out Drinkboard to buy them a drink."
+      HTTParty.post(["https://api.foursquare.com/v2/checkins/?/reply",newLocation[:checkin_id]], :query => {:text => fsqMsg})
+    end
   end
   
   private

@@ -90,9 +90,9 @@ Drinkboard::Application.routes.draw do
   match '/map', to: 'locations#map'
   match '/map/boundary', to: 'locations#mapForUserWithinBoundary'
   
-  match '/facebook/checkin',   to: 'oAuth#validateFacebookSubscription',  via: :get
-  match '/facebook/checkin',   to: 'oAuth#realTimeFacebookUpdate',        via: :post
-  match '/foursquare/checkin', to: 'oAuth#realTimeFoursquareUpdate',      via: :post
+  match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
+  match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
+  match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
 
   resources :microposts,    only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
