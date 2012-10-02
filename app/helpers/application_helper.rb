@@ -7,12 +7,6 @@ module ApplicationHelper
       link_to "Merchant Sign Up", new_provider_path
     end
   end
-  
-  def download_img_url_for(photo)
-    # if !photo.nil?
-    #   AWS::S3::S3Object.url_for(photo, THUMB, :authenticated => false)
-    # end
-  end
  
   def custom_image_tag(object,width,height)
     if object.photo.blank?
@@ -28,5 +22,5 @@ module ApplicationHelper
     end 
     image_tag(photo, alt: "customImageTag", :class => 'gravatar' )
   end
-  
+
 end
