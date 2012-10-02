@@ -8,7 +8,6 @@
 		</li>
 	</ul>
 	<div class='profileImage'>
-		<%#= list_standard_icon_for @giver %>
 		<%= custom_image_tag(@giver, 150, 150) %>
 	</div>
 	<h2 class="textTop">
@@ -29,7 +28,7 @@
 		</span>
 	</h2>
 	<h2 class="providerPic">
-		<%= logo_from_id_for @gift.provider_id %>
+		<%= custom_image_tag(@gift.provider, 400, 400) %>
 	</h2>
 	<% end %>
 	<div class="thankYou">
