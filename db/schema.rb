@@ -157,11 +157,11 @@ ActiveRecord::Schema.define(:version => 20121002214036) do
     t.string   "bank_city"
     t.string   "bank_state"
     t.string   "bank_zip"
-    t.string   "portrait"
-    t.string   "box"
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
+    t.string   "portrait"
+    t.string   "box"
   end
 
   create_table "redeems", :force => true do |t|

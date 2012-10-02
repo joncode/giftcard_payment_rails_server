@@ -78,10 +78,12 @@ class LocationsController < ApplicationController
       return render :text => "No response object to parse."
     end
     user = User.find_by_foursquare_id(checkin["user"]["id"])
-    if user[:is_public]
+    if user && user[:is_public]
       Location.createWithFoursquareCheckin(checkin,user)
     end
-    
+    puts "FOURSQUARE CHECKIN IS COMING:"
+    puts checkin
+    puts user
     return render :text => "Success"
   end
   
