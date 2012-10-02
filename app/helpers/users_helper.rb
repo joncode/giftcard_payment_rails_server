@@ -42,21 +42,6 @@ module UsersHelper
     list_icon_for user  
   end
   
-  def custom_image_tag(object,width,height)
-    if object.photo.blank?
-      if object.kind_of? User
-        photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
-      else
-        photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349150293/upqygknnlerbevz4jpnw.png"
-      end
-    else
-      photo_url = object.photo.dup.to_s
-      photo_array = photo_url.split('upload/')
-      photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/#{photo_array[1]}"      
-    end 
-    image_tag(photo, alt: "customImageTag", :class => 'gravatar' )
-  end
-
   def large_photo(user)
     image_tag(user.photo_url(:large), :width => 400, :height => 400, :id => "cropbox")
   end
