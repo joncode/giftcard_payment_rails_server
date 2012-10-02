@@ -9,9 +9,9 @@ module ApplicationHelper
   end
   
   def download_img_url_for(photo)
-    if !photo.nil?
-      AWS::S3::S3Object.url_for(photo, THUMB, :authenticated => false)
-    end
+    # if !photo.nil?
+    #   AWS::S3::S3Object.url_for(photo, THUMB, :authenticated => false)
+    # end
   end
     
 end

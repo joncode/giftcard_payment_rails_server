@@ -36,7 +36,7 @@ class Order < ActiveRecord::Base
       server_ary      = self.provider.get_server_from_code(self.server_code)
       server_obj      = server_ary.pop
       self.server_id  = server_obj.user.id
-      logger.info "found server #{server_obj.name} #{server_obj.id}" 
+      puts "found server #{server_obj.name} #{server_obj.id}" 
     end
 
     def update_gift_status
@@ -44,7 +44,7 @@ class Order < ActiveRecord::Base
     end
     
     def authenticate_via_code
-      logger.info "AUTHENTICATE VIA CODE"
+      puts "AUTHENTICATE VIA CODE"
       if self.redeem_code
                   # authentication code for redeem_code
         redeem_obj = self.redeem
@@ -53,7 +53,7 @@ class Order < ActiveRecord::Base
           flag = true
         else
           flag = false
-          logger.info "CUSTOMER REDEEM CODE INCORRECT"
+          puts "CUSTOMER REDEEM CODE INCORRECT"
         end
       elsif self.server_code
                   # authenticate for server_code
@@ -64,7 +64,7 @@ class Order < ActiveRecord::Base
           add_server
         else
           flag = false
-          logger.info "MERCHANT REDEEM CODE INCORRECT"
+          puts "MERCHANT REDEEM CODE INCORRECT"
         end
       else
                   # no code provided - set flag to denied - false
@@ -78,7 +78,7 @@ class Order < ActiveRecord::Base
     end
     
     def add_gift_id
-      logger.info "ADD GIFT ID"
+      puts "ADD GIFT ID"
       self.gift_id = self.redeem.gift_id
     end
 
@@ -87,7 +87,7 @@ class Order < ActiveRecord::Base
     end
     
     def add_provider_id
-      logger.info "ADD PROVIDER ID"
+      puts "ADD PROVIDER ID"
       self.provider_id = self.gift.provider_id
     end
   

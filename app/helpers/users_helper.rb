@@ -1,20 +1,24 @@
 module UsersHelper
   
   def gravatar_for(user)
+    width   = 75
+    height  = 100
     if user.photo.blank?
-      gravatar_url = "ninja_ghost_128.png"
-      image_tag(gravatar_url, alt: "#{user.username}", class: "gravatar")
+      photo = "http://res.cloudinary.com/htaaxtzcv/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
+      image_tag(photo, alt: "hello",:class => 'gravatar' )
     else
-      image_tag(user.photo_url(:thumbnail), :width => 75, :height => 100)
+      image_tag(user.photo_url(:gravatar), :width => width, :height => height)
     end   
   end
   
   def list_icon_for(user)
+    width   = 50
+    height  = 50
     if user.photo.blank?
-      gravatar_url = "ninja_ghost_128.png"
-      image_tag(gravatar_url, alt: "#{user.username}", class: "gravatar")
+      photo = "http://res.cloudinary.com/htaaxtzcv/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
+      image_tag(photo, alt: "hello",:class => 'gravatar' )
     else
-      image_tag(user.photo_url(:thumbnail), :width => 50, :height => 50)
+      image_tag(user.photo_url(:thumbnail), :width => width, :height => height)
     end   
   end
   
@@ -24,12 +28,7 @@ module UsersHelper
     else
       user = User.find(user_id)
     end
-    if user.photo.blank?
-      gravatar_url = "ninja_ghost_128.png"
-      image_tag(gravatar_url, alt: "#{user.username}", class: "gravatar")
-    else
-      image_tag(user.photo_url(:thumbnail), :width => 50, :height => 50)
-    end   
+    list_icon_for user  
   end
   
   def large_photo(user)
