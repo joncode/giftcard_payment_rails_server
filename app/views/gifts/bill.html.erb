@@ -89,15 +89,9 @@
   <h2>
     <div class="input-append" data-toggle="buttons-radio">
       Tip:
-      <button type="button" class=" tip" id="perItem">
-        $1 per
-      </button>
-      <button type="button" class=" tip" id="fifteenPrecent">
-        15%
-      </button>
-      <button type="button" class=" tip" id="twentyPercent">
-        20%
-      </button>
+      <button type="button" class=" tip" id="perItem">$1 per</button>
+      <button type="button" class=" tip" id="fifteenPrecent">15%</button>
+      <button type="button" class=" tip" id="twentyPercent">20%</button>
     </div>
   </h2>
     <h2>
@@ -131,7 +125,7 @@
   var sales_tax = <%= @provider.sales_tax.to_f %>;
   var preTaxTotal = price * quantity;
   var subTotal = calcSubTotal(preTaxTotal, sales_tax);
-  
+
   $(function() {
     
     //                           initialize form                        //
@@ -241,17 +235,24 @@
   };
   
   function calcTip(button) {
+    console.log('in calc tip');
+    console.log(subTotal);
+    console.log(button);
     if (button=='20%') {
+      console.log('in 20%');
       tipAmount = subTotal * 0.20;
     }
     if (button=='15%') {
+      console.log('in 15%');
       tipAmount = subTotal * 0.15;
     }
     if (button=='$1 per') {
+      console.log('$1 per');
       tipText = $('#quantityAmount').val();
       tipAmount = parseFloat(tipText);
     }
     $(':input#tip').val(formatCurrency(tipAmount));
+    console.log(tipAmount);
     calcTotal(tipAmount);
   };
   
