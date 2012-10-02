@@ -18,7 +18,7 @@ production:
     key: "428139010570600"
     secret: "0c8a53b524ca68c8cd102771d9b11654"
     redirect: "/facebook/oauth"
-    permissions: "email"
+    permissions: "email,user_status"
     state: "lasdt95haoe92390540ao1u32q4w823tv8horwdrt0fg9dil3se80esg"     #arbitrary but unique string
   foursquare:
     key: ""

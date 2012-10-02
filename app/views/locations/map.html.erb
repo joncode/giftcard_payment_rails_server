@@ -1,4 +1,4 @@
-<div id="drinkMap" style="width: 1000px; height: 600px; background: #000; margin: 90px auto;"></div>
+<div id="drinkMap" style="width: 93%; height: 400px; margin: 90px 0px;"></div>
 
 
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBsMYRnmKL11bWrzXZPj1H6bdVDVfNdHA4&sensor=false"></script>
@@ -10,7 +10,7 @@
 		var bl = objMap.getBounds().getSouthWest();
 		$.ajax({
 			url: "/map/boundary",
-			data: {bot_lat: bl.lat(), top_lat: tr.lat(), leftLng: bl.lng(), rightLng: tr.lng(), user_id: 21},   //Faking user_id for now
+			data: {bot_lat: bl.lat(), top_lat: tr.lat(), left_lng: bl.lng(), right_lng: tr.lng(), user_id: 21},   //Faking user_id for now
 			dataType: "json",
 			type: "GET",
 			success: function(json){
@@ -18,10 +18,11 @@
 			}
 		});
 	};
+	var markerArr = [];
 	
 	$(document).ready(function(){
 		var mapOptions = {
-    	center: new google.maps.LatLng(40.723330284008725,-73.91679491467283),
+    	center: new google.maps.LatLng(40.727233073346554,-73.96074022717283),
       zoom: 12,
 			disableDefaultUI: true,
 			zoomControl: true,
@@ -32,15 +33,21 @@
 		}
 		objMap = new google.maps.Map(document.getElementById("drinkMap"),mapOptions);
 		google.maps.event.addListener(objMap, 'idle', function() {
-			if (ranOnce)	return false;
+			if (ranOnce) 	return false;
+			for (i in markerArr){
+				markerArr[i].setMap(null);
+			}
+			markerArr = [];
 			getMapData(function(data){
 				//Loop through the data and place a marker for the providers down and another marker for the person's followed users
 				console.log(data);
-				for (provider in data.providers){
-					new google.maps.Marker({position: new google.maps.LatLng(provider.latitude, provider.longitude), map: objMap});
+				for (i in data.providers){
+					var provider = data.providers[i];
+					markerArr.push(new google.maps.Marker({position: new google.maps.LatLng(provider.latitude, provider.longitude), map: objMap}));
 				}
-				for (user in data.followedUsers){
-					new google.maps.Marker({position: new google.maps.LatLng(user.latitude, user.longitude), map: objMap});
+				for (i in data.followedUsers){
+					var user = data.followedUsers[i]
+					markerArr.push(new google.maps.Marker({position: new google.maps.LatLng(user.latitude, user.longitude), map: objMap}));
 				}
 			});
 			ranOnce = true;

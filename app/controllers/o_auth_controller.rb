@@ -56,6 +56,59 @@ class OAuthController < ApplicationController
     deal_with_user_for_service("foursquare",userdetails,accessToken,nil)
   end
   
+  #####Handle subscriptions
+  ###
+  ##
+  #Facebook
+  def validateFacebookSubscription
+    ret = ""
+    if !params["hub.mode"] !! params["hub.challenge"] || params["hub.verify_token"]
+      ret = "Not enough parameters."
+    elsif params["hub.mode"]  != "subscribe"
+     ret = "Hub mode is not subscribe."    
+    elsif  params["hub.verify_token"] != "drinkboard4eva!!1"
+      ret = "Verify token does not match."
+    else
+      ret = params["hub.challenge"] 
+    end
+    return render :text => ret
+  end
+  
+  def realTimeFacebookUpdate
+    if !params["object"] || !params["entry"]
+      return render :text => "Facebook realtime update is incomplete."
+    elsif params["object"] != "user"
+      return render :text => "User object is not being updated."
+    end
+    
+    #For now, assume that fbuser["changed_fields"] is always checkins because that's all we are subscribing to.
+    params["entry"].each do |fbuser|
+      user = User.find_by_facebook_id(fbuser["uid"])
+      fbRequest = "https://graph.facebook.com/me/checkins?access_token=#{user[:facebook_access_token]}&limit=1"   #Latest checkin only.
+      fbResponse = HTTParty.get(fbRequest)
+      fbResponse["data"].each do |checkin|
+        Location.createWithFacebookCheckin(checkin,user)
+      end
+    end
+    
+    return render :text => "Success"
+  end
+  
+  #Foursquare
+  def realTimeFoursquareUpdate
+    checkin = params["checkin"]
+    if !checkin
+      return render :text => "No response object to parse."
+    end
+    user = User.find_by_foursquare_id(checkin["user"]["id"])
+    Location.createWithFoursquareCheckin(checkin,user)
+    
+    return render :text => "Success"
+  end
+  
+  
+  
+  
   private
     def sign_in_and_redirect(user)
       sign_in user

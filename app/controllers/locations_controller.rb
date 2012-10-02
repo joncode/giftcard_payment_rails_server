@@ -12,9 +12,9 @@ class LocationsController < ApplicationController
     if !thisUser
       return render json: {error: {errorDesc: "User not found."}}
     end    
-
-    bounds = {botLat: params[:bot_lat], topLat: params[:top_lat], leftLng: params[:left_lng], rightLng: params[:right_lng]}
     
+    bounds = {botLat: params[:bot_lat].to_f, topLat: params[:top_lat].to_f, leftLng: params[:left_lng].to_f, rightLng: params[:right_lng].to_f}
+    puts bounds
     #All of the provider locations based on the boundary
     @providers = Provider.allWithinBounds(bounds)
     
@@ -30,6 +30,46 @@ class LocationsController < ApplicationController
     #Only render in JSON
     return render json: { providers: @providers, followedUsers: @followedUsers}
   end
+  
+  
+  
+  
+  def logLocation
+    thisUser = getUser
+    if !thisUser
+      return render json: {error: {errorDesc: "User not found."}}
+    end
+    
+    newLocHash = []
+    if params[:isFirstCheckin]
+      thisUser.currently_out = true
+      thisUser.save
+      newLocHash[:first_checkin] = true
+    end
+        
+    if params[:lat] && params[:lng] && (params[:fsq_id] || params[:fb_id])
+      newLocHash[:latitude] = params[:lat]
+      newLocHash[:longitude] = params[:lng]
+      newLocHash[:foursquare_venue_id] = params[:fsq_id] if params[:fsq_id]
+      newLocHash[:facebook_venue_id] = params[:fb_id] if params[:fb_id]
+      #Look to see if a provider matches the facebook or fsq id
+      provider = Provider.where("foursquare_venue_id = ? OR facebook_venue_id = ?",params[:fsq_id],params[:fb_id])
+      newLocHash[:provider_id] = provider.id
+    end
+    
+    @location = Location.create(newLocHash)
+  end
+    
+  def turnOffUserLocation
+    thisUser = getUser
+    if !thisUser
+      return render json: {error: {errorDesc: "User not found."}}
+    end
+    
+    thisUser.currently_out = false
+    thisUser.save
+  end
+  
   
   def checkinUser
     if !required_params ['lat', 'lng', 'foursquare_id']        #Optional params: provider_id

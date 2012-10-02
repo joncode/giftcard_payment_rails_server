@@ -42,6 +42,7 @@ class Provider < ActiveRecord::Base
   
 
   def self.allWithinBounds(bounds)
+    puts bounds
     Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
   end
 
