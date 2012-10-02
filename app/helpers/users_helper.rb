@@ -42,6 +42,8 @@ module UsersHelper
     list_icon_for user  
   end
   
+# SUPER RAD CUSTOM IMAGE TAG
+
   def custom_image_tag(user,width,height)
     if user.photo.blank?
       photo = "http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
