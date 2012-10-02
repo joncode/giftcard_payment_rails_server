@@ -16,3 +16,7 @@ CLOUDINARY_UPLOAD     = "http://api.cloudinary.com/v1_1/drinkboard/image/upload"
 BUCKET    = 'drinkboard'
 THUMB     = 'drinkboard/thumb'
 PORTRAIT  = 'drinkboard/portrait'
+
+
+
+# http://res.cloudinary.com/drinkboard/image/upload/v1349148077/ezsucdxfcc7iwrztkags.png

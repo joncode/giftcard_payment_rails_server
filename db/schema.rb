@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121002180848) do
+ActiveRecord::Schema.define(:version => 20121002231418) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -213,6 +213,10 @@ ActiveRecord::Schema.define(:version => 20121002180848) do
     t.string   "foursquare_access_token"
     t.string   "sex"
     t.boolean  "is_public"
+    t.boolean  "facebook_auth_checkin"
+    t.string   "iphone_photo"
+    t.string   "fb_photo"
+    t.string   "use_photo"
   end
 
 end
