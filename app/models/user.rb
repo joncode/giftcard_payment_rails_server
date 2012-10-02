@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
   validates :password, length: { minimum: 6 },      on: :create
   validates :password_confirmation, presence: true, on: :create
   validates :server_code, length: {is: 4}, numericality: { only_integer: true }, :if => :check_for_server_code
-  validates_with ServerCodeValidator, :record => self
+  # validates_with ServerCodeValidator, :record => self
 
   #/---------------------------------------------------------------------------------------------/
   def feed
