@@ -49,10 +49,10 @@ class Provider < ActiveRecord::Base
   has_many   :gifts
   has_many   :servers, class_name: "Employee"
 
-  mount_uploader :photo,    ImageUploader
-  mount_uploader :logo,     ImageUploader
-  mount_uploader :box,      ImageUploader
-  mount_uploader :portrait, ImageUploader
+  # mount_uploader :photo,    ImageUploader
+  # mount_uploader :logo,     ImageUploader
+  # mount_uploader :box,      ImageUploader
+  # mount_uploader :portrait, ImageUploader
   
 
   def self.allWithinBounds(bounds)
