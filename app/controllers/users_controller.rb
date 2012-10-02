@@ -26,8 +26,8 @@ class UsersController < ApplicationController
   def show    
     @user = User.find(params[:id])
     # @microposts = @user.microposts.all(limit:15)
-    @feed_items = @microposts
-    @micropost = Micropost.new
+    #@feed_items = @microposts
+    #@micropost = Micropost.new
     @gifts = Gift.get_user_activity(@user)
     
     respond_to do |format|

@@ -39,8 +39,6 @@ class User < ActiveRecord::Base
   #                                class_name: "Connection",
   #                                dependent: :destroy
   # has_many :receivers, through: :reverse_connections, source: :receiver
-  
-  
   # has_many :microposts, dependent: :destroy
   has_many :followed_users, through: :relationships, source: "followed"
   has_many :relationships, foreign_key: "follower_id", dependent: :destroy
@@ -51,7 +49,6 @@ class User < ActiveRecord::Base
 
   has_secure_password
 
-  
   #  User.next(user) & previous functions for rails console
   self.class_eval do
     scope :previous,  lambda { |i| {:conditions => ["#{self.table_name}.id < ?", i], :order => "#{self.table_name}.id DESC", :limit => 1 }}
@@ -175,9 +172,9 @@ class User < ActiveRecord::Base
       puts response
     end
     
-    def crop_photo
-      # photo.recreate_versions! if crop_x.present?
-    end
+    # def crop_photo
+    #   # photo.recreate_versions! if crop_x.present?
+    # end
     
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64
