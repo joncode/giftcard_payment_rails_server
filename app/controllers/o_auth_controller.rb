@@ -117,7 +117,7 @@ class OAuthController < ApplicationController
               email: userdetails["email"], 
               first_name: userdetails["first_name"], 
               last_name: userdetails["last_name"], 
-              photo: "http://graph.facebook.com/"+userdetails["id"]+"/picture", 
+              fb_photo: "http://graph.facebook.com/"+userdetails["id"]+"/picture", 
               password: "facebook", 
               password_confirmation: "facebook"
               }
