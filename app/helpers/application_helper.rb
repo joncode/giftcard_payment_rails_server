@@ -46,10 +46,10 @@ module ApplicationHelper
       puts "in choose_photo with fb flag"
       # object.fb_photo
       # need to add code for fb photo store and use  
-      "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
+      "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349148077/yzjd1hk2ljaycqknvtyg.png"
     else
       if object.photo.blank?
-        "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
+        "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349148077/yzjd1hk2ljaycqknvtyg.png"
       else
         photo_url   = object.photo.dup.to_s
         photo_array = photo_url.split('upload/')
