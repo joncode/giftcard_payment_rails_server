@@ -20,3 +20,4 @@ PORTRAIT  = 'drinkboard/portrait'
 
 
 # http://res.cloudinary.com/drinkboard/image/upload/v1349148077/ezsucdxfcc7iwrztkags.png
+# https://d3jpl91pxevbkh.cloudfront.net/drinkboard/image/upload/v1349221640/yzjd1hk2ljaycqknvtyg.png
