@@ -346,7 +346,7 @@ class IphoneController < AppController
       if data_obj.nil?
         response["error_iphone"]   = "Photo URL not received correctly from iphone. "
       else
-        if user.update_attributes(iphone_photo: data_obj["photo"], use_photo: "ios" )
+        if user.update_attributes(iphone_photo: data_obj["iphone_photo"], use_photo: "ios" )
           response["success"]      = "Photo Updated - Thank you!"
         else
           response["error_server"] = "Photo URL unable to process to database." 
