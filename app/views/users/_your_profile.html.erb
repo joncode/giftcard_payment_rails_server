@@ -2,7 +2,7 @@
 
 <div class="profileWrapper">
   <div class="profilePic">
-  <%= gravatar_for @user %>
+  <%= custom_image_tag(@user,80,80) %>
   </div>
   <h2 class>
     <%= @user.username %>
