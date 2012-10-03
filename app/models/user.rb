@@ -34,7 +34,7 @@
 
 class User < ActiveRecord::Base
 
-  attr_accessible  :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :facebook_access_token, :facebook_expiry, :foursquare_id, :foursquare_access_token, :provider_id, :handle, :server_code, :sex
+  attr_accessible  :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :facebook_access_token, :facebook_expiry, :foursquare_id, :foursquare_access_token, :provider_id, :handle, :server_code, :sex, :iphone_photo, :fb_photo, :use_photo
   mount_uploader   :photo, ImageUploader
    
   has_many :employees
@@ -70,7 +70,6 @@ class User < ActiveRecord::Base
   before_save { |user| user.first_name = first_name.capitalize if first_name}
   before_save { |user| user.last_name  = last_name.capitalize  if last_name }
   before_save   :extract_phone_digits       # remove all non-digits from phone
-  
   before_create :create_remember_token      # creates unique remember token for user
 
       # searches gift db for ghost gifts that belong to new user 
@@ -186,7 +185,7 @@ class User < ActiveRecord::Base
     # def crop_photo
     #   # photo.recreate_versions! if crop_x.present?
     # end
-    
+
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64
     end
