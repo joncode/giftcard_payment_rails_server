@@ -4,6 +4,5 @@
  * the top of the compiled file, but it's generally better to create a new file per style scope. remeber_to_require jquery.ui.all
  *= require jquery.Jcrop.min
  *= require_self
- *= require twitter/bootstrap
  *= require_directory .
 */
