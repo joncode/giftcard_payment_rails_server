@@ -154,7 +154,6 @@ DEPENDENCIES
   sass-rails (~> 3.2.3)
   simple_form
   sqlite3
-  therubyracer (~> 0.9.9)
   thin
   twitter-bootstrap-rails (~> 2.0.1.0)
   uglifier (>= 1.2.3)
