@@ -9,7 +9,7 @@
         <%= link_to 'Manage Credit Cards' %><br />
         <%= link_to 'Server Code', servercode_user_path(@user) %>
         <div class="form-horizontal">
-          <%= gravatar_for @user %>
+          <%= custom_image_tag(@user,80,80) %>
           <%= f.label :upload_new_photo? %>
           <%= f.hidden_field :photo_cache %>
           <%= f.file_field :photo %>
