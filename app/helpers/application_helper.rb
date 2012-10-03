@@ -35,12 +35,15 @@ module ApplicationHelper
   def choose_photo(object, width, height)
     case object.use_photo
     when "cw"
+      puts "in choose_photo with cw flag"
       photo_url   = object.photo.dup.to_s
       photo_array = photo_url.split('upload/')
       "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}" 
     when "ios"
+      puts "in choose_photo with ios flag"
       object.iphone_photo
     when "fb"
+      puts "in choose_photo with fb flag"
       # object.fb_photo
       # need to add code for fb photo store and use  
       "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
@@ -50,6 +53,7 @@ module ApplicationHelper
       else
         photo_url   = object.photo.dup.to_s
         photo_array = photo_url.split('upload/')
+        puts "in choose_photo else but object.photo not blank"
         "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}"
       end
     end
