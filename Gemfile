@@ -23,8 +23,9 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   # gem 'jquery-ui-rails'
   gem 'uglifier', '>= 1.2.3'
+  
 end
-gem "twitter-bootstrap-rails", "~> 2.0.1.0"
+gem 'twitter-bootstrap-rails', :git => "git://github.com/seyhunak/twitter-bootstrap-rails.git", :branch => "static"
 gem 'jquery-rails'
 
 # To use ActiveModel has_secure_password
