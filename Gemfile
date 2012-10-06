@@ -7,8 +7,8 @@ gem 'cloudinary'
 gem 'httparty', '0.9.0'
 
 group :production do
-	#gem 'pg', '0.12.2'
-	gem 'thin'
+	gem 'pg', '0.12.2'
+	# gem 'thin'
 end
 
 group :development do
