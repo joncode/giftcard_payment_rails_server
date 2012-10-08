@@ -3,7 +3,7 @@
 // be included in the compiled file accessible from http://example.com/assets/application.js
 // It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 // the compiled file. remeber_to_require jquery.ui.all
-//
+//= require bootstrap.js.coffee
 //= require jquery
 //= require scripts.js
 //= require jquery.isotope.min
