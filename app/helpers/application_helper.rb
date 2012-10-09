@@ -38,7 +38,7 @@ module ApplicationHelper
       puts "in choose_photo with cw flag"
       photo_url   = object.photo.dup.to_s
       photo_array = photo_url.split('upload/')
-      photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}" 
+      photo = "#{CLOUDINARY_IMAGE2_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}" 
     when "ios"
       puts "in choose_photo with ios flag"
       photo_url  = object.iphone_photo
@@ -56,7 +56,7 @@ module ApplicationHelper
         photo_url   = object.photo.dup.to_s
         photo_array = photo_url.split('upload/')
         puts "in choose_photo else but object.photo not blank"
-        photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}"
+        photo = "#{CLOUDINARY_IMAGE2_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}"
       end
     end
     return photo
