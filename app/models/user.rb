@@ -128,6 +128,30 @@ class User < ActiveRecord::Base
     return false if response.code != 200
     return true
   end
+
+  def get_photo
+    case self.use_photo
+    when "cw"
+      photo_url   = self.photo.dup.to_s
+      photo_array = photo_url.split('upload/')
+      photo = "#{photo_array[1]}" 
+    when "ios"
+      photo_url  = self.iphone_photo
+      photo_array = photo_url.split('upload/')
+      photo = "#{photo_array[1]}" 
+    when "fb"
+      # no support yet
+    else 
+      if self.photo.blank?
+        photo = "v1349221640/yzjd1hk2ljaycqknvtyg.png"
+      else
+        photo_url   = self.photo.dup.to_s
+        photo_array = photo_url.split('upload/')
+        photo = "#{photo_array[1]}"
+      end
+    end
+    return photo
+  end
   
   private
     
