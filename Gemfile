@@ -7,8 +7,9 @@ gem 'cloudinary'
 gem 'httparty', '0.9.0'
 
 group :production do
-	#gem 'pg', '0.12.2'
+	gem 'pg', '0.12.2'
 	gem 'thin'
+
 end
 
 group :development do
@@ -21,7 +22,6 @@ end
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-
   # gem 'jquery-ui-rails'
   gem 'uglifier', '>= 1.2.3'
 end

@@ -42,7 +42,6 @@ module UsersHelper
     list_icon_for user  
   end
   
-
   def large_photo(user)
     image_tag(user.photo_url(:large), :width => 400, :height => 400, :id => "cropbox")
   end

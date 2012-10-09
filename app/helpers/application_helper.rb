@@ -7,6 +7,7 @@ module ApplicationHelper
       link_to "Merchant Sign Up", new_provider_path
     end
   end
+
   
   def download_img_url_for(photo)
     # if !photo.nil?
@@ -35,5 +36,5 @@ module ApplicationHelper
     # create cloudinary image tag with custom url 
     image_tag(photo, alt: "customImageTag", :class => 'gravatar' )
   end
-  
+
 end
