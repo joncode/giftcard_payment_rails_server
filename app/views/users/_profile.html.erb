@@ -5,7 +5,7 @@
 
   <div class="form-horizontal">
     <% if @user.photo %>
-      <%= gravatar_for @user %>
+      <%=custom_image_tag(@user,75,100)  %>
     <% end %>
     <%= f.label :upload_new_photo? %>
     <%= f.file_field :photo %>

@@ -19,8 +19,8 @@ jQuery.fn.iphoneSwitch = function(start_state, switched_on_callback, switched_of
 	var settings = {
 		mouse_over: 'pointer',
 		mouse_out:  'default',
-		switch_on_container_path: 'assets/iphone_switch_container_on.png',
-		switch_off_container_path: 'assets/iphone_switch_container_off.png',
+		switch_on_container_path: 'iphone_switch_container_on.png',
+		switch_off_container_path: 'iphone_switch_container_off.png',
 		switch_path: 'assets/iphone_switch.png',
 		switch_height: 27,
 		switch_width: 94

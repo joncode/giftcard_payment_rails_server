@@ -8,38 +8,38 @@
   <% end %>
   <ul id="containerIsotope" class="allCellWrapper ">
     <% @gifts.each do |gift| %>
-      <% if gift.status == "redeemed" %>
-        <li class="cellWrapper item completed">
-        <% status_class = "Completed" %>
-      <% else %>
-        <li class="cellWrapper item active">
-        <% status_class = "Active" %>
-      <% end %>
-      <div class="cellBackground<%= status_class %> borderRad2"></div>
-      <div class="cellContent"> 
-        <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
-        <div class="giftDescription">
-          <h2>
-            You bought
-            <%= gift.quantity %> <%= gift.item_name %>
-            for <%= gift.receiver_name %> at the venue <%= gift.provider_name %>.
-          </h2>
-        </div>
+    <% if gift.status == "redeemed" %>
+    <li class="cellWrapper item completed">
+      <% status_class = "Completed" %>
+    <% else %>
+    <li class="cellWrapper item active">
+      <% status_class = "Active" %>
+    <% end %>
+      
+    <div class="cellContent"> 
+      <%= image_tag get_category_image(gift), {:class => 'iconListView'} %>
+      
+        <h2 class="giftDescription">
+          You bought
+          <%= gift.quantity %> <%= gift.item_name %>
+          for <%= gift.receiver_name %> at the venue <%= gift.provider_name %>.
+        </h2>
+     
 
           
           <!--
-          <%= logo_from_id_for gift.provider_id %>
+          <%= custom_image_tag(gift.provider,150,150)  %>
           -->
 
           
 
         <% if tab_flag == "buy" %>
          <div class="giverID">
-           <!--! <%= list_icon_with_id_for gift.receiver_id %> -->
+           <!--! <%= custom_image_tag(gift.receiver,50,50)  %> -->
          </div> 
          <% elsif !giver.nil?  %>
         <div class="giverID">
-          <%= list_icon_with_id_for gift.giver_id %>
+          <%= custom_image_tag(gift.giver,50,50)  %>
           <h1 class="giverName"><%= gift.giver_name %></h1>
         </div>
         <% end %>

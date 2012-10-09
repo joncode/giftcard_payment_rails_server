@@ -1,37 +1,38 @@
 <h2>
-  the Gift is for:
-  <%= list_icon_for @receiver %>
-  <%= @receiver.username %>
-  <br />
-  to be redeemed at:
-  <br />
-  <%= logo_for @provider %>
-  <%= @provider.name %>
+  the Gift is for <%= @receiver.username %>,
+</h2>
+<h2>
+  to be redeemed at: <%= @provider.name %>
+</h2>
+<%= custom_image_tag(@provider,150,150)  %>
+<h2>
   "<%= @provider.description %>"
+</h2>
+<h2>
   <%= @provider.full_address %>
 </h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Category</th>
-      <th>Name</th>
-      <th>Detail</th>
-      <th>Price</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @menu.each do |m| %>
-      <% item = m[0] %>
-      <% price = m[1] %>
-    <tr>
-      <td><%= image_tag get_category_from_item(item), {:class => 'iconListView'} %></td>
-      <td><%= item.item_name %></td>
-      <td><%= item.detail %></td>
-      <td><%= price %></td>
-      <td><%= button_to "Select", bill_gifts_path(provider_id: @provider.id, item_id: item.id, price: price, receiver_id: @receiver.id) %></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="menuTable">
+  <table>
+    <thead>
+      <tr>
+        <th><h2>Drink</h2></th>
+        <th><h2>Detail</h2></th>
+        <th><h2>Price</h2></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @menu.each do |m| %>
+        <% item = m[0] %>
+        <% price = m[1] %>
+      <tr>
+        <td><%= item.item_name %></td>
+        <td><%= item.detail %></td>
+        <td>$<%= price %>.00</td>
+        <td><%= button_to "add", bill_gifts_path(provider_id: @provider.id, item_id: item.id, price: price, receiver_id: @receiver.id) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

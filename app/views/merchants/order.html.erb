@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h4><%= list_icon_with_id_for @gift.receiver_id %> <%= @gift.receiver_name %><span> has been gifted </span></h4>
+<h4><%= custom_image_tag(@gift.receiver,50,50)  %> <%= @gift.receiver_name %><span> has been gifted </span></h4>
 <h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
 
 <% if @redeem %>

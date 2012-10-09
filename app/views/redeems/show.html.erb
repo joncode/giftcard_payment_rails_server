@@ -3,7 +3,7 @@
 
 <div class="detailWrapper redeemWrapper">
   <div class="profileImage">
-    <%= list_icon_for @giver %> 
+    <%= custom_image_tag(@giver,50,50)  %> 
   </div>
   <h2 class="textTop">
     <span class="h2Highlight"><%= @gift.giver_name %></span>
@@ -15,7 +15,7 @@
     <% end %>
   </h2>
   <h2 class="providerPic">
-    <%= logo_from_id_for @gift.provider_id %>
+    <%= custom_image_tag(@gift.provider,150,150)  %>
   </h2>
   <h2 class="textRedeem">
   Redeem them at <br /><span class="h2Highlight"><%= @gift.provider_name %></span>
@@ -33,7 +33,7 @@
     <h2 class="redeemCode">
       <a href=""><%= @redeem.redeem_code %></a>
     </h2>
-<!--     <h2 class="enterCode">
+<!-- <h2 class="enterCode">
       Server's phone unavailable? <br />
       <button type="button" id="merchant_redeem">
        Enter Server Code
@@ -68,11 +68,12 @@
         <h3><%= s %></h3>
       <% end %>
     </div>
-    <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
+    
   </div>
-  <%= f.submit "Submit Server Code", :class => "btn" %>
-  <% end %>
+  <h2>
 
+    <% end %>
+  </h2>
 </div>
 
  

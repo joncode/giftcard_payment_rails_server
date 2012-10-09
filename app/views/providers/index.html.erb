@@ -11,7 +11,7 @@
 
   <% @providers.each do |provider| %>
     <tr>
-      <td><%= logo_for(provider) %></td>
+      <td><%= custom_image_tag(provider,150,150)  %></td>
       <td><%= link_to provider.name, provider %></td>
       <td><%= provider.description %></td>
       <td><%= provider.full_address %></td>

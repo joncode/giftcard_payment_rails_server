@@ -12,7 +12,7 @@
   <tr>
     <td><%= button_to "Details", detail_merchant_path(gift), method: :get %></td>
     <td colspan="2">
-      <%= list_icon_with_id_for gift.receiver_id %>
+      <%= custom_image_tag(gift.receiver,50,50)  %>
       <%= gift.receiver_name %>
     </td>
     <td colspan="2">
@@ -22,7 +22,7 @@
     <td><%= gift.message %></td>
     <td><%= time_ago_in_words(gift.order.created_at) %>&nbsp;ago</td>
     <td colspan="2">
-      <%= list_icon_with_id_for gift.giver_id %>
+      <%= custom_image_tag(gift.giver,50,50)  %>
       <%= gift.giver_name %>
     </td>
   </tr>

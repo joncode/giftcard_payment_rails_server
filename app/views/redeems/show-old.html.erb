@@ -1,12 +1,12 @@
 <p id="notice"><%= notice %></p>
 
-<%= list_icon_for @giver %> <%= @gift.giver_name %> 
+<%= custom_image_tag(@giver,50,50)  %> <%= @gift.giver_name %> 
 
 bought you 
 
 <%= @gift.quantity %> <%= @gift.item_name %>
 
-<%= logo_from_id_for @gift.provider_id %>
+<%= custom_image_tag(@gift.provider,150,150)  %>
 
 located at <%= @gift.provider_name %>
 
@@ -30,7 +30,7 @@ Server's phone unavailable?
   Choose Your Server
   <% @servers.each do |user| %>
   <div id="<%= user.id %>">
-    <%= gravatar_for user %>
+    <%= custom_image_tag(user,75,100)  %>
     <%= user.username %>
     <%= user.server_code %>
     <button type="button" class="btn choose_server" id="<%= user.id %>" name="<%= user.username %>">
@@ -61,8 +61,10 @@ Server's phone unavailable?
     <%= f.hidden_field :provider_id  %>
     <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
   </div>
-  <%= f.submit "Submit Server Code", :class => "btn" %>
-  <% end %>
+  <h2>
+    <%= f.submit "Submit Server Code", :class => "btn" %>
+    <% end %>
+  </h2>
   <div>
     <button type="button" class="btn btn-large btn-success" id="servers_back_button">
       Choose Another Server
