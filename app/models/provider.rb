@@ -93,7 +93,7 @@ class Provider < ActiveRecord::Base
   def get_server_from_code_to_iphone(code)
     server_in_array = self.employees.select {|e| e.server_code == code}
     server = server_in_array.pop
-    server.server_info_to_iphone
+    server.server_info_to_iphone if server
   end
 
   def server_to_iphone
@@ -106,25 +106,7 @@ class Provider < ActiveRecord::Base
   end
 
 end
-
-
-  # [{"first_name"=>"Larry",
-  #  "id"=>19, 
-  #  "last_name"=>"Page", 
-  #  "photo"=>{
-  #     "url"=>"http://res.cloudinary.com/drinkboard/image/upload/v1347955675/19.png", 
-  #     :standard=>{
-  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fill,g_north,h_150,w_100/v1347955675/19.png"
-  #     }, 
-  #     :large=>{
-  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_400,w_400/v1347955675/19.png"
-  #     }, 
-  #     :thumbnail=>{
-  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fit,h_100,w_75/v1347955675/19.png"
-  #     }
-  #   }, 
-  #   "server_code"=>"1234"
-  # }] 
+ 
 
 
 
