@@ -71,9 +71,11 @@ Drinkboard::Application.routes.draw do
   match 'app/order',            to: 'iphone#create_order',     via: :post
   match 'app/users',            to: 'iphone#drinkboard_users', via: :post
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
-  match 'app/merchant/active',  to: 'iphone#active_orders',    via: :post
-  match 'app/merchant/complete',to: 'iphone#completed_orders', via: :post
   match 'app/out',              to: 'iphone#going_out',        via: :post 
+  match 'app/active',           to: 'iphone#active_orders',    via: :post
+  match 'app/completed',        to: 'iphone#completed_orders', via: :post
+
+
   ###
   # match '/drinkboard', to: 'gifts#activity'
   match '/about',       to: 'home#about'
@@ -81,7 +83,6 @@ Drinkboard::Application.routes.draw do
   match '/home',        to: 'home#index'
   match '/learn',       to: 'home#learn'
   match '/news',        to: 'home#news'
-  # match '/browse', to: 'gifts#browse'
   
   ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
@@ -89,8 +90,8 @@ Drinkboard::Application.routes.draw do
   ###
   
   ##Location resources
-  match '/map', to: 'locations#map'
-  match '/map/boundary', to: 'locations#mapForUserWithinBoundary'
+  match '/map',               to: 'locations#map'
+  match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
   
   match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
   match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
