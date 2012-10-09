@@ -145,6 +145,14 @@ class User < ActiveRecord::Base
       end
     end
   end
+
+  def get_secure_image
+    if self.secure_image.blank?
+      "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+    else
+      self.secure_image
+    end
+  end
   
   private
     

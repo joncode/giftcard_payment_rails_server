@@ -11,8 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121002231418) do
-
+ActiveRecord::Schema.define(:version => 20121009210916) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -158,11 +157,11 @@ ActiveRecord::Schema.define(:version => 20121002231418) do
     t.string   "bank_city"
     t.string   "bank_state"
     t.string   "bank_zip"
+    t.string   "portrait"
+    t.string   "box"
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
-    t.string   "portrait"
-    t.string   "box"
   end
 
   create_table "redeems", :force => true do |t|
@@ -218,6 +217,7 @@ ActiveRecord::Schema.define(:version => 20121002231418) do
     t.string   "iphone_photo"
     t.string   "fb_photo"
     t.string   "use_photo"
+    t.string   "secure_image"
   end
 
 end

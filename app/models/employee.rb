@@ -28,6 +28,10 @@ class Employee < ActiveRecord::Base
   	self.user.username
   end
 
+  def secure_image
+    self.user.get_secure_image
+  end
+
   def photo
   	self.user.get_photo
   end
@@ -41,7 +45,7 @@ class Employee < ActiveRecord::Base
     server                  = {}
     server["full_name"]     = self.name
     server["photo"]         = self.photo
-    server["secure_image"]  = "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+    server["secure_image"]  = self.secure_image
     return server
   end
 end
