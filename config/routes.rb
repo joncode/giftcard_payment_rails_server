@@ -73,7 +73,7 @@ Drinkboard::Application.routes.draw do
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/merchant/active',  to: 'iphone#active_orders',    via: :post
   match 'app/merchant/complete',to: 'iphone#completed_orders', via: :post
-  match 'app/out',              to: 'iphone#going_out' ,       via: :post 
+  match 'app/out',              to: 'iphone#going_out',        via: :post 
   ###
   # match '/drinkboard', to: 'gifts#activity'
   match '/about',       to: 'home#about'
