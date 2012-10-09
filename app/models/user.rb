@@ -34,7 +34,7 @@
 
 class User < ActiveRecord::Base
 
-  attr_accessible  :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :facebook_access_token, :facebook_expiry, :foursquare_id, :foursquare_access_token, :provider_id, :handle, :server_code, :sex, :iphone_photo, :fb_photo, :use_photo
+  attr_accessible  :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :facebook_access_token, :facebook_expiry, :foursquare_id, :foursquare_access_token, :provider_id, :handle, :server_code, :sex, :iphone_photo, :fb_photo, :use_photo, :is_public
   mount_uploader   :photo, ImageUploader
    
   has_many :employees
