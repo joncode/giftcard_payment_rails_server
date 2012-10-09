@@ -469,7 +469,7 @@ class IphoneController < AppController
         
         # add other person photo url 
         if receiver
-          gift_obj["receiver_photo"]   = g.receiver.get_photo
+          # gift_obj["receiver_photo"]   = g.receiver.get_photo
         else
           gift_obj["giver_photo"]      = g.giver.get_photo
         end
