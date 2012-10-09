@@ -38,7 +38,7 @@ class Employee < ActiveRecord::Base
   end
 
   def server_info_to_iphone
-    send_fields = [ :id, :first_name, :last_name, :photo, :iphone_photo, :server_code, :use_photo]
+    send_fields = [:first_name, :last_name, :photo, :iphone_photo, :server_code, :use_photo]
     server = self.user.serializable_hash only: send_fields
     if server["use_photo"]    == "cw"
       # remove extra values from cw photo
