@@ -68,6 +68,23 @@ class IphoneController < AppController
     end
   end
   
+  def update_iphone
+    puts "Update Iphone"
+    puts "#{params}"
+
+    response  = {}
+    user  = User.find_by_remember_token(params["token"])
+    # get app version from data hash
+    # compare app version from version -- in db??
+    # get photo url from data hash 
+    # compare photo version with proper photo for user 
+    # if either are not same 
+    # return "update_photo" or "update_app" or both
+    # put new data into each value for key
+    # if both are the same 
+    # return "success" 
+  end
+
   def gifts
     puts "Gifts"
     puts "#{params}"

@@ -59,6 +59,7 @@ Drinkboard::Application.routes.draw do
   ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
   match 'app/login',            to: 'iphone#login',            via: :post
+  match 'app/update',           to: 'iphone#update_iphone',    via: :post 
   match 'app/gifts',            to: 'iphone#gifts',            via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/activity',         to: 'iphone#activity',         via: :post

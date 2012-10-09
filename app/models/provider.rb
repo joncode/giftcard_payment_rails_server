@@ -85,7 +85,11 @@ class Provider < ActiveRecord::Base
   end
 
   def server_to_iphone
-    self.employees.servers_hash
+    if self.employees.count != 0
+      self.employees.servers_hash
+    else
+      "no servers set up yet"
+    end
   end
 
 end
