@@ -132,19 +132,18 @@ class User < ActiveRecord::Base
   def get_photo
     case self.use_photo
     when "cw"
-      photo   = self.photo.url
+      self.photo.url
     when "ios"
-      photo  = self.iphone_photo
+      self.iphone_photo
     when "fb"
       # no support yet
     else 
       if self.photo.blank?
-        photo = "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+        "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
       else
-        photo = self.photo.url
+        self.photo.url
       end
     end
-    return photo
   end
   
   private

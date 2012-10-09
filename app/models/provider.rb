@@ -65,9 +65,17 @@ class Provider < ActiveRecord::Base
   end
 
   def complete_address
-    "#{self.address} \n #{self.city}, #{self.state} #{self.zip}"
+    "#{self.address}\n#{self.city}, #{self.state} #{self.zip}"
   end
   
+  def get_photo
+    if self.box.blank?
+      "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+    else
+      self.box.url
+    end
+  end
+
   def get_servers
     # this means get people who are at work not just employed
     # for now without location data, its just employees

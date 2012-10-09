@@ -109,8 +109,8 @@ class IphoneController < AppController
     response = {}
     user                  = User.find_by_remember_token(params["token"])
     gifts, past_gifts     = Gift.get_buy_history(user)
-    gift_hash             = hash_these_gifts(gifts, BUY_REPLY, true)
-    past_gift_hash        = hash_these_gifts(past_gifts, BUY_REPLY, true)
+    gift_hash             = hash_these_gifts(gifts, BUY_REPLY, true, true)
+    past_gift_hash        = hash_these_gifts(past_gifts, BUY_REPLY, true, true)
     response["active"]    = gift_hash
     response["completed"] = past_gift_hash
     
@@ -449,7 +449,7 @@ class IphoneController < AppController
       return user_hash
     end
   
-    def hash_these_gifts(obj, send_fields, address_get=false)
+    def hash_these_gifts(obj, send_fields, address_get=false, receiver=false)
       gift_hash = {}
       index = 1 
       obj.each do |g|
@@ -467,20 +467,21 @@ class IphoneController < AppController
           gift_obj[key] = value.to_s
         end
         
-        # add giver photo url 
-        gift_obj["giver_photo"] = g.giver.get_photo
-        
+        # add other person photo url 
+        if receiver
+          gift_obj["receiver_photo"]   = g.receiver.get_photo
+        else
+          gift_obj["giver_photo"]      = g.giver.get_photo
+        end
+
+        provider = g.provider 
+        gift_obj["provider_photo"]     = provider.get_photo
         # add the full provider address
         if address_get
-          provider  = g.provider
-          address   = provider.address
-          city      = provider.city
-          state     = provider.state
-          zip       = provider.zip
-          provider_address_string = "#{address} \n#{city} #{state} #{zip}"
-          gift_obj["provider_address"] = provider_address_string
+          gift_obj["provider_address"] = provider.complete_address
         end
-        gift_obj["time_ago"]    = time_string
+
+        gift_obj["time_ago"] = time_string
       
         ### >>>>>>>    this is not stored in gift object
         gift_obj["redeem_code"] = add_redeem_code(g)
