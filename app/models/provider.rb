@@ -86,7 +86,8 @@ class Provider < ActiveRecord::Base
 
   def server_to_iphone
     if self.employees.count != 0
-      self.employees.servers_hash
+      send_fields = [ :id, :first_name, :last_name, :server_code]
+      self.users.map { |e| e.serializable_hash only: send_fields  }
     else
       "no servers set up yet"
     end
