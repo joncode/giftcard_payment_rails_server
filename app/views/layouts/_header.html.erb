@@ -7,7 +7,7 @@
 <% end %>
 <div class="headerColorBackground">
   <div class="logoHeader">
-    <%= image_tag("logoGiftboard.png") %>
+    <%= link_to image_tag("logoCap1.png"), home_path %>
   </div>
 </div>
 <div class="navbarWrapper">
@@ -22,7 +22,7 @@
     </li>
   
     <li> 
-      <a href="#">Welcome back,  
+      <a>Welcome back,  
         <%= current_user.username %> 
       </a>
     </li>
@@ -68,7 +68,7 @@
   <ul class="navMain">
     <li class="home">
       <h2>
-        <%= link_to "Home", home_path %>
+        <%= link_to "BuyDrink", browse_gifts_path %>
       </h2>
     </li> 
   </ul>
