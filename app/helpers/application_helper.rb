@@ -29,7 +29,7 @@ module ApplicationHelper
     else
       photo = choose_photo(object, width, height)
     end 
-    image_tag(photo, alt: "customImageTag", :class => 'customImageTag' )
+    image_tag(photo, alt: "customImageTag2", :class => 'customImageTag' )
   end
 
   def choose_photo(object, width, height)
