@@ -364,7 +364,7 @@ class IphoneController < AppController
         response["server"]  = redeem.provider.get_server_from_code_to_iphone(order.server_code)
       else
         response["error_server"] = " Order not processed - database error. Server Code you entered did not match."
-        response["server_code"]  = redeem.provider.server_codes.pop
+        response["server_code"]  = redeem ? redeem.provider.server_codes.pop : "not redeemed"
       end
       puts response
       format.json { render text: response.to_json }
