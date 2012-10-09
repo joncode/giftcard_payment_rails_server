@@ -153,6 +153,23 @@ class User < ActiveRecord::Base
       self.secure_image
     end
   end
+
+  def one_provider_to_iphone
+    provider = self.providers.dup.pop
+    provider.table_photo_hash
+  end
+
+  def providers_to_iphone
+      # find out how many merchants the user is connected to 
+    merchants = self.providers.dup
+    response = {}
+    index = 0
+    merchants.each do |m|
+      response["#{index}"] = m.table_photo_hash
+      index += 1
+    end
+    return response
+  end
   
   private
     

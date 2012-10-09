@@ -43,26 +43,18 @@ class IphoneController < AppController
     password  = params["password"]
     
     if email.nil? || password.nil?
-      response["error"] = "Data not received."
+      response["error"]     = "Data not received."
     else
       user = User.find_by_email(email)     
       if user && user.authenticate(password)
-        if user.providers.count == 1
-          # get single provider id and send in response hash
-          provider_id = user.providers.dup.shift.id
-          response["server"] = "#{provider_id}"
-        end
-        if user.providers.count > 1
-          # return multiple to alert app to need for multiple providers page
-          response["server"] = "multiple"
-        end
-        user_json = user.to_json only: LOGIN_REPLY
-        user_small = JSON.parse user_json
+        response["server"]  = user.providers_to_iphone
+        user_json           = user.to_json only: LOGIN_REPLY
+        user_small          = JSON.parse user_json
         user_small["photo"] = user.get_photo
-        user_json = user_small.to_json
-        response["user"]  = user_json
+        user_json           = user_small.to_json
+        response["user"]    = user_json
       else
-        response["error"] = "Invalid email/password combination"
+        response["error"]   = "Invalid email/password combination"
       end
     end
     

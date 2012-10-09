@@ -105,6 +105,17 @@ class Provider < ActiveRecord::Base
     end
   end
 
+  def table_photo_hash
+        # return the merchant name
+        # return the table view photo url
+        # call the table view photo at 320px x 50px off cloudinary
+    response = {}
+    response["provider_name"]   = self.name
+    response["table_photo_url"] = self.photo.url
+    response["provider_id"]     = self.id.to_s 
+    return response   
+  end
+
 end
  
 
