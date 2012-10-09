@@ -472,10 +472,11 @@ class IphoneController < AppController
         
         # add the full provider address
         if address_get
-          address = g.provider.address
-          city = g.provider.city
-          state = g.provider.state
-          zip = g.provider.zip
+          provider  = g.provider
+          address   = provider.address
+          city      = provider.city
+          state     = provider.state
+          zip       = provider.zip
           provider_address_string = "#{address} \n#{city} #{state} #{zip}"
           gift_obj["provider_address"] = provider_address_string
         end

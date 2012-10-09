@@ -63,6 +63,10 @@ class Provider < ActiveRecord::Base
   def full_address
     "#{self.address},  #{self.city}, #{self.state}"
   end
+
+  def complete_address
+    "#{self.address} \n #{self.city}, #{self.state} #{self.zip}"
+  end
   
   def get_servers
     # this means get people who are at work not just employed
