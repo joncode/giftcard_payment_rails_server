@@ -63,11 +63,11 @@ M9mmmP'   `Mbmo.JMML.  `Moo9^Yo. MMbmmd'
 @iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
 
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-//@fontAwesomeEotPath: asset-path('fontawesome-webfont.eot');
-//@fontAwesomeWoffPath: asset-path('fontawesome-webfont.woff');
-//@fontAwesomeTtfPath: asset-path('fontawesome-webfont.ttf');
-//@fontAwesomeSvgzPath: asset-path('fontawesome-webfont.svgz');
-//@fontAwesomeSvgPath: asset-path('fontawesome-webfont.svg');
+@fontAwesomeEotPath: asset-path('fontawesome-webfont.eot');
+@fontAwesomeWoffPath: asset-path('fontawesome-webfont.woff');
+@fontAwesomeTtfPath: asset-path('fontawesome-webfont.ttf');
+@fontAwesomeSvgzPath: asset-path('fontawesome-webfont.svgz');
+@fontAwesomeSvgPath: asset-path('fontawesome-webfont.svg');
 
 // Font Awesome
 // @import "MarkerFelt-Thin";
@@ -117,7 +117,7 @@ h2 {
 	font-family: 'Lato', sans-serif;
 	font-weight: 300;
 	font-size: 1.5em;
-	color: #444;
+	color: @blueLight;
 }
 
 @import url('http://fonts.googleapis.com/css?family=Gentium+Book+Basic:400,400italic,700,700italic');
@@ -151,6 +151,23 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
 @blueHot: #90D8EE;
 @blueLight: #CDDBE7;
 @green: #687A00;
+
+// `7MM"""Mq.        mm     mm                               
+//   MM   `MM.       MM     MM                               
+//   MM   ,M9 ,6"YbmmMMmm mmMMmm `7Mb,od8 `7MMpMMMb. ,pP"Ybd 
+//   MMmmdM9 8)   MM MM     MM     MM' "'   MM    MM 8I   `" 
+//   MM       ,pm9MM MM     MM     MM       MM    MM `YMMMa. 
+//   MM      8M   MM MM     MM     MM       MM    MM L.   I8 
+// .JMML.    `Moo9^Yo`Mbmo  `Mbmo.JMML.   .JMML  JMMLM9mmmP' 
+
+@textureDust: url('dust.png') repeat fixed left top;
+@textureDarkWall: url('dark_wall.png') repeat fixed left top;
+@textureBlackMamba: url('black_mamba.png') repeat fixed left top;
+@textureDenim: url('denim.png') repeat fixed left top;
+
+
+
+
 
                                                                                                                  
                                                                                                                  
@@ -187,10 +204,11 @@ html {
 	min-height: 100%;
 
 	body {
-		background-color: @greySublime;
+		//background-color: @greySublime;
+		background: @textureDarkWall;
 
 		.mainWrapper {
-			background-color: @greySublime;
+			background-color: @textureDarkWall;
 			width: 768px;
 			margin: 0 auto;
 	
@@ -242,7 +260,7 @@ ul.tabsList {
 			position: relative;
 			top: 0;
 			height: 0px;
-			border-bottom: 25px solid @red;
+			border-bottom: 25px solid @redHot;
    		border-left: 25px solid transparent;
    		background-color: transparent;
    		z-index: 10;
@@ -250,7 +268,7 @@ ul.tabsList {
 
 		.backgroundTab {
 			position: relative;
-			background: @red;
+			background: @redHot;
 			z-index: 0;
 			top: 25px;
 			margin-left: -25px;
@@ -290,7 +308,8 @@ ul.tabsList {
 	position: absolute;
 	width: 768px;
 	height: 181px;
-	background-color: @blueMid;
+	background-color:rgba(0,126,210, 0.2);
+	//background-color: @blue;
 	margin: 0 auto;
 	border-bottom: 2px solid black;
 
@@ -855,14 +874,11 @@ ul.bigList {
 	}
 }
 
-
-
-
 .completed {
-	background-color: #444;
+	background: @textureBlackMamba;
 }
 .active {
-	background-color: black;
+	background: @textureDenim;
 }
 
 .cellWrapper {
@@ -965,8 +981,8 @@ ul.bigList {
 
 .detailWrapper {
 	position: relative;
-	width: 600px;
-	background-color: black;
+	width: 768px;
+	background: @textureBlackMamba;
 	margin: 0 auto;
 	float: left;
 	padding-bottom: 50px;
@@ -1452,6 +1468,285 @@ ul.bigList {
 		}
 	}
 }
+
+                                 
+// `7MM"""Yp,                       
+//   MM    Yb                       
+//   MM    dP `7MM  `7MM `7M'   `MF'
+//   MM"""bg.   MM    MM   VA   ,V  
+//   MM    `Y   MM    MM    VA ,V   
+//   MM    ,9   MM    MM     VVV    
+// .JMMmmmd9    `Mbod"YML.   ,V     
+//                          ,V      
+//                       OOb"       
+
+.nav-tabs {
+
+	li {
+		padding: 0 25px;
+	}
+}
+
+.tab-pane {
+	position: relative;
+	margin: 0 auto;
+	padding-left: 25px;
+	background-color: transparent;
+
+
+	h2 {
+		color: @redHot;
+	}
+}
+
+.allMenuCellsWrapper {
+	width: 768px;
+
+	.menuCellWrapper {
+		padding: 0;
+		background: @textureBlackMamba;
+		width: 200px;
+		height: 345px;
+		float: left;
+		margin: 25px 25px 0 0;
+
+		.providerName {
+			font-size: 1.3em;
+			padding: 5px 10px;
+			line-height: 1.2em;
+		}
+
+		.descriptionText {
+			padding: 5px 10px;
+			font-size: 1.3em;
+		}
+
+		img {
+			margin: 0;
+			top: 0;
+			left: 0;
+			padding: 5px;
+		}
+
+		input {
+			background: transparent;
+			width: 100px;
+			text-align: right;
+			display: block;
+			padding: 10px 10px 10px 0;
+			margin-top: 15px;
+			background: @blueHot;
+			border: none;
+			color: black;
+			font-family: 'Lato', sans-serif;
+			font-weight: 100;
+			font-size: 1.3em;
+		}
+	}
+}
+
+ul.menuHeader {
+	width: 768px;
+	display: inline-block;
+	list-style-type: none;
+	margin: 25px 0 0 0;
+	padding: 0;
+	background-color: @textureDarkWall;
+	border: 1px solid red;
+
+	li {
+		float: left;
+		margin: 0;
+		padding: 0;
+		border: 1px solid @blueHot;
+
+		h2 {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+.menuTable {
+	font-family: 'Lato', sans-serif;
+	font-size: 1.5em;
+	margin-bottom: 100px;
+
+	thead {
+		padding: 20px;
+		text-align: left;
+		font-size: 2em;
+		height: 1.4em;
+
+
+		th {
+			padding-right: 30px;
+			border-bottom: 1px solid @blueHot;
+
+			h2 {
+				color: @redHot;
+				padding: 20px;
+				
+			}
+		}
+
+	}
+
+	tbody {
+		background: @textureBlackMamba;
+
+		td {
+			padding: 0 20px;
+			color: white;
+			border-left: 1px solid #fff;
+			border-bottom: 1px dashed #555;
+			font-size: .8em;
+			line-height: 1.3em;
+
+			input {
+				background: transparent;
+				border: 1px solid @blueHot;
+				padding: 2px 10px;
+				color: @redHot;
+				margin: 0;
+				font-size: 1em;
+				display: block;
+				position: relative;
+				top: 10px;
+			}
+		}
+	}
+}
+
+// `7MM"""Yp,                                           
+//   MM    Yb                                           
+//   MM    dP  ,6"Yb. `7Mb,od8                          
+//   MM"""bg. 8)   MM   MM' "'                          
+//   MM    `Y  ,pm9MM   MM                              
+//   MM    ,9 8M   MM   MM                              
+// .JMMmmmd9  `Moo9^Yo.JMML. 
+//                           
+// `7MM"""Mq.                                           
+//   MM   `MM.                                          
+//   MM   ,M9 .gP"Ya `7Mb,od8 `7MMpMMMb.pMMMb.  ,6"Yb.  
+//   MMmmdM9 ,M'   Yb  MM' "'   MM    MM    MM 8)   MM  
+//   MM      8M""""""  MM       MM    MM    MM  ,pm9MM  
+//   MM      YM.    ,  MM       MM    MM    MM 8M   MM  
+// .JMML.     `Mbmmd'.JMML.   .JMML  JMML  JMML`Moo9^Yo.
+
+.providersPermalinkWrapper {
+
+	.providerHeader {
+		font-size: 4em;
+		padding-bottom: 30px;
+	}
+
+	h2 {
+		font-size: 1.8em;
+	}
+
+	img {
+		float: left;
+		margin-right: 25px;
+	}
+
+	.nav-tabs {
+		float: left;
+		clear: both;
+		width: 768px;
+		margin: 0;
+		padding: 0;
+		border: 0;
+
+		li {
+			padding-left: 0;
+		}
+	}
+
+	.providerTab {
+		background: transparent;
+		margin-top: 25px;
+
+		a {
+			background: transparent;
+			border: 0;
+			color: @red;
+			font-size: 2em;
+			font-family: 'Lato', sans-serif;
+			font-weight: 100;
+			padding: 10px 5px;
+			text-decoration: underline;
+
+			&:hover {
+				background: transparent;
+				border: 0;
+				color: @blueHot;
+			}
+		}
+	}
+
+	.providerTab[class*="active"] {
+		
+		a {
+		color: @redHot;
+		}
+	}
+
+	.tab-pane {
+		width: 768px;
+		top: 40px;
+
+	}
+
+	#drinkboard {
+		padding: 0;
+		margin: 25px 0 0 0;
+
+		.cellEventWrapper {
+			background: @textureBlackMamba;
+			width: 200px;
+			height: 220px;
+			margin: 0 25px 25px 0;
+			float: left;
+
+			img {
+				float: left;
+				margin-top: -25px;
+			}
+
+			h2 {
+				margin: 15px;
+				float: left;
+				font-size: 1.3em;
+				line-height: 1.4em;
+
+				a {
+					color: red;
+				}
+			}
+		}
+	}
+
+
+}
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
