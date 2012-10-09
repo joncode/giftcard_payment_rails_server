@@ -1,21 +1,15 @@
 <!-- Profile page(s) -->
 
-<div class="profileWrapper">
-  <div class="profilePic">
-  <%= gravatar_for @user %>
-  </div>
-  <h2 class>
-    <%= @user.username %>
-    <%= @user.handle %>
-    <%= @user.email %>
-    <%= number_to_phone(@user.phone, :area_code => true)  %>
-    <%= @user.full_address %>
-  </h2>
-  
-  <%= link_to "Edit Profile", edit_user_path(current_user) %>
-  <%= link_to "Check In" %>
-  <%= link_to "Public/Private" %>
-  
+<div class="yourProfileWrapper">
+  <div class="profilePic"><%= gravatar_for @user %></div>
+  <h2><%= @user.username %></h2>
+  <h2><%= @user.handle %></h2>
+  <h2><%= @user.email %></h2>
+  <h2><%= number_to_phone(@user.phone, :area_code => true) %></h2>
+  <h2><%= @user.full_address %></h2>
+  <h2><%= link_to "Edit Profile", edit_user_path(current_user) %></h2>
+  <h2><%= link_to "Check In" %></h2>
+  <h2><%= link_to "Public/Private" %></h2>
   <div class="bs-docs-example">
     <ul id="myTab" class="nav nav-tabs">
       <li class="active">
@@ -41,25 +35,25 @@
     </ul>
     <div id="myTabContent" class="tab-content">
       <div class="tab-pane fade in active" id="personality">
-        <%= link_to "Personality" %>
-        <%= link_to "Favorites" %>
-        <%= link_to "Special Ocassions" %>
+        <h2><%= link_to "Personality" %></h2>
+        <h2><%= link_to "Favorites" %></h2>
+        <h2><%= link_to "Special Ocassions" %></h2>
       </div>   
       <div class="tab-pane fade" id="network">
-        <%= link_to "Network" %>
-        <%= link_to "Suggestions" %>
+        <h2><%= link_to "Network" %></h2>
+        <h2><%= link_to "Suggestions" %></h2>
       </div> 
       <div class="tab-pane fade" id="settings">            
-        <%= link_to "Update Social Networks" %>
-        <%= link_to "Notification Settings" %>
-        <%= link_to "Manage Credit Cards" %>
-        <%= link_to "Transaction History" %>
+        <h2><%= link_to "Update Social Networks" %></h2>
+        <h2><%= link_to "Notification Settings" %></h2>
+        <h2><%= link_to "Manage Credit Cards" %></h2>
+        <h2><%= link_to "Transaction History" %></h2>
       </div>
       <div class="tab-pane fade" id="info">            
-        <%= link_to "FAQ" %>
-        <%= link_to "Contact Us" %>
-        <%= link_to "Quick Tips" %>
-        <%= link_to "Version" %>
+        <h2><%= link_to "FAQ" %></h2>
+        <h2><%= link_to "Contact Us" %></h2>
+        <h2><%= link_to "Quick Tips" %></h2>
+        <h2><%= link_to "Version" %></h2>
       </div>
     </div>
   </div>
