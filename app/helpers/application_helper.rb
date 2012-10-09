@@ -38,25 +38,28 @@ module ApplicationHelper
       puts "in choose_photo with cw flag"
       photo_url   = object.photo.dup.to_s
       photo_array = photo_url.split('upload/')
-      "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}" 
+      photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}" 
     when "ios"
       puts "in choose_photo with ios flag"
-      object.iphone_photo
+      photo_url  = object.iphone_photo
+      photo_array = photo_url.split('upload/')
+      photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}" 
     when "fb"
       puts "in choose_photo with fb flag"
       # object.fb_photo
       # need to add code for fb photo store and use  
-      "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+      photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
     else
       if object.photo.blank?
-        "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+        photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
       else
         photo_url   = object.photo.dup.to_s
         photo_array = photo_url.split('upload/')
         puts "in choose_photo else but object.photo not blank"
-        "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}"
+        photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}"
       end
     end
+    return photo
   end
 
 

@@ -8,7 +8,7 @@
         <%= render 'shared/error_messages' %>
 
         <div class="form-horizontal">
-          <%= gravatar_for @user %>
+          <%= custom_image_tag(@user,80,80) %>
           <%= f.input :server_code, :input_html => { :maxlength => 4 } %>
         </div>
           <%= f.submit "Submit Server Code", :class => "btn" %>
