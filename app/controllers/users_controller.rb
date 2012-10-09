@@ -68,8 +68,10 @@ class UsersController < ApplicationController
     puts "#{params}"
     @user = User.find(params[:id])
     action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
-    if !params[:user][:photo].nil? || !params[:user][:photo_cache].empty?
-      params[:user][:use_photo] = "cw"
+    if action == 'edit'
+      if !params[:user][:photo].nil? || !params[:user][:photo_cache].empty?
+        params[:user][:use_photo] = "cw"
+      end
     end
 
     respond_to do |format|
