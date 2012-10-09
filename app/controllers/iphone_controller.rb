@@ -281,6 +281,44 @@ class IphoneController < AppController
     end
   end
 
+  def server_code
+    puts "Server Code (Merchant Redeem)"
+    puts "#{params}"
+
+    message   = ""
+    response  = {} 
+    order_obj = JSON.parse params["data"]
+    if order_obj.nil?
+      message = "Data not received correctly. "
+      order   = Order.new
+    else
+      order   = Order.new(order_obj)
+    end
+    begin
+      user     = User.find_by_remember_token(params["token"])
+    rescue
+      message += "Couldn't identify app user. "
+    end
+    begin
+      redeem          = Redeem.find_by_gift_id(order.gift_id)
+      order.redeem_id = redeem.id
+    rescue
+      message += " Could not find redeem code via gift_id. "
+    end
+    response = { "error" => message } if message != "" 
+
+    respond_to do |format|
+      if order.save
+        response["success"] = " Sale Confirmed. Thank you!"
+        response["server"]  = redeem.provider.get_server_from_code_to_iphone(order.server_code)
+      else
+        response["error_server"] = " Order not processed - database error. Server Code you entered did not match."
+      end
+      puts response
+      format.json { render text: response.to_json }
+    end  
+  end
+
   def create_order
     puts "Create Order"
     puts "#{params}"
@@ -300,8 +338,6 @@ class IphoneController < AppController
       message      += "Couldn't identify app user. "
     end
     begin
-    #   redeem = Redeem.find(order.redeem_id)
-    #   redeem_code = redeem.redeem_code
       redeem   = Redeem.find_by_gift_id(order.gift_id)
     rescue
       message += " Could not find redeem code via gift_id. "

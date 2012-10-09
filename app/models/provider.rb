@@ -78,9 +78,16 @@ class Provider < ActiveRecord::Base
     self.employees.select {|e| e.server_code == code}
   end
    
+  def get_server_from_code_to_iphone(code)
+    server_in_array = self.employees.select {|e| e.server_code == code}
+    server = server_in_array.pop
+    server.server_info_to_iphone
+  end
+
   def server_to_iphone
     self.employees.servers_hash
   end
+
 end
 
 

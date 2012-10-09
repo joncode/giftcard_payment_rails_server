@@ -37,6 +37,30 @@ class Employee < ActiveRecord::Base
     self.users.map { |e| e.serializable_hash only: send_fields  }
   end
 
+  def server_info_to_iphone
+    send_fields = [ :id, :first_name, :last_name, :photo, :iphone_photo, :server_code, :use_photo]
+    server = self.user.serializable_hash only: send_fields
+    if server["use_photo"]    == "cw"
+      # remove extra values from cw photo
+      photo_for_iphone = server["photo"]["url"]
+      server["photo"] = photo_for_iphone
+    elsif server["use_photo"] == "ios"
+      # remove :photo from server hash
+      # rename :iphone_photo to :photo
+      server.delete("photo")
+      server["photo"] = server["iphone_photo"]
+    else
+      # same as cw for now, this should also take into account fb photo etc
+      photo_for_iphone = server["photo"]["url"]
+      server["photo"] = photo_for_iphone      
+    end
+    # remove iphone_photo as this is moved to photo for iphone_photo
+    server.delete("iphone_photo")
+    # remove use_photo , it is not needed in app
+    server.delete("use_photo")
+    return server
+  end
+
   def servers
     # get the employee_id and user_id 
   # from user record
