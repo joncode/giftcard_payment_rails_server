@@ -76,6 +76,10 @@ class Provider < ActiveRecord::Base
     end
   end
 
+  def name
+    super + " fuck off"
+  end
+
   def get_image(flag)
     case flag
     when "logo"
