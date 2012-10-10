@@ -87,7 +87,7 @@ class GiftsController < ApplicationController
     @item     = Item.find(params[:item_id])
     @gift.provider_id     = @provider.id
     @gift.provider_name   = @provider.name
-    @gift.add_receiver(@receiver)
+    @gift.add_receiver @receiver
     @gift.giver_name      = current_user.username
     @gift.giver_id        = current_user.id
     @gift.item_id         = @item.id
@@ -152,11 +152,9 @@ class GiftsController < ApplicationController
     @gift                 = Gift.new
     @gift.provider_id     = @provider.id
     @gift.provider_name   = @provider.name
-    @gift.receiver_id     = @receiver.id
-    @gift.receiver_name   = @receiver.username
+    @gift.add_receiver @receiver
     @gift.giver_name      = current_user.username
-    @gift.giver_id        = current_user.id
-    @gift.receiver_phone  = @receiver.phone     
+    @gift.giver_id        = current_user.id    
   end
 
   def choose_from_contacts

@@ -107,7 +107,7 @@ class Gift < ActiveRecord::Base
     new_gift.giver_name = self.receiver_name
     new_gift.message    = message 
     if receiver
-      new_gift.add_receiver(receiver)
+      new_gift.add_receiver receiver
     else
       new_gift.receiver_id          = nil
       new_gift.receiver_name        = nil
