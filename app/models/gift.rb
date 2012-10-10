@@ -107,9 +107,7 @@ class Gift < ActiveRecord::Base
     new_gift.giver_name = self.receiver_name
     new_gift.message    = message 
     if receiver
-      new_gift.receiver_id          = receiver.id
-      new_gift.receiver_name        = receiver.username
-      new_gift.receiver_phone       = receiver.phone if receiver.phone     
+      new_gift.add_receiver(receiver)
     else
       new_gift.receiver_id          = nil
       new_gift.receiver_name        = nil
@@ -119,6 +117,16 @@ class Gift < ActiveRecord::Base
     new_gift.facebook_id            = nil
     new_gift.special_instructions   = nil    
     return new_gift
+  end
+
+  def add_receiver(receiver)
+    self.receiver_id          = receiver.id
+    self.receiver_name        = receiver.username
+    if receiver.phone       
+      self.receiver_phone     = receiver.phone 
+    else
+      self.receiver_phone     = nil
+    end
   end
  
   private
