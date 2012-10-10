@@ -76,6 +76,23 @@ class Provider < ActiveRecord::Base
     end
   end
 
+  def get_image(flag)
+    case flag
+    when "logo"
+      photo = self.logo.url
+    when "portrait"
+      photo = self.portrait.url
+    when "landscape"
+      photo = self.photo.url
+    else
+      photo = self.box.url 
+    end 
+    if photo.blank?
+      photo = "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+    end
+    return photo
+  end
+
   def get_servers
     # this means get people who are at work not just employed
     # for now without location data, its just employees
