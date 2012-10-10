@@ -97,39 +97,7 @@ class Gift < ActiveRecord::Base
   def self.get_history_provider(provider)
     Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
   end
-
-  def giver
-    if self.special_instructions.nil?
-      User.first
-    else
-      super
-    end
-  end
-
-  def giver.get_photo
-    if self.special_instructions.nil?
-      "test.jpg"
-    else
-      super
-    end
-  end
-
-  def giver_id
-    if self.special_instructions.nil?
-      100000000
-    else
-      super
-    end
-  end
-
-  def giver_name
-    if self.special_instructions.nil?
-      "anonymous"
-    else
-      super
-    end
-  end
-  
+ 
   private
     
     def set_status    
