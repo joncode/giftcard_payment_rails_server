@@ -12,7 +12,7 @@ class RedeemsController < ApplicationController
   def show
     @redeem   = Redeem.find(params[:id])
     @gift     = @redeem.gift
-    @giver    = @redeem.giver
+    @giver    = @gift.giver
     provider  = @redeem.provider
     @server_codes = provider.server_codes
     @servers  = provider.get_servers
