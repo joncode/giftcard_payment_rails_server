@@ -4,11 +4,11 @@
   <h3>- The Drinkboard Staff</h3>
 
   <h4><%= time_ago_in_words(@gift.created_at) %>&nbsp;ago</h4>
-  <h4><%= list_icon_for @giver %> <%= @gift.giver_name %><span> bought </span></h4>
+  <h4><%= custom_image_tag(@giver,50,50)  %> <%= @gift.giver_name %><span> bought </span></h4>
   <h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
   <h2>For:</h2>
-  <h4><%= list_icon_for @receiver %> <%= @gift.receiver_name %><span></span></h4>
-  <h3><%= logo_from_id_for @gift.provider_id %>
+  <h4><%= custom_image_tag(@receiver,50,50)  %> <%= @gift.receiver_name %><span></span></h4>
+  <h3><%= custom_image_tag(@gift.provider,150,150)  %>
   @ <%= @gift.provider_name %></h3>
   <h3>Redeemed on <%= @gift.order.created_at.to_formatted_s(:rfc822)  %>.<br />
   By server : <%= @server.username %></h3>

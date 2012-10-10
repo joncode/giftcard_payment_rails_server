@@ -1,13 +1,14 @@
 class IphoneController < AppController
 
   
-  LOGIN_REPLY     = ["id", "photo", "first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone", "provider_id"]  
+  LOGIN_REPLY     = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone", "provider_id"]  
   GIFT_REPLY      = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
   BUY_REPLY       = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
   BOARD_REPLY     = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name", "id"] 
-  PROVIDER_REPLY  = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_id", "redeem_code", "special_instructions", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
-  USER_REPLY      = ["id", "photo", "first_name", "last_name", "email", "phone", "facebook_id"]
-
+  PROVIDER_REPLY  = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "status", "redeem_id", "redeem_code", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
+  USER_REPLY      = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
+  MERCHANT_REPLY  = ["receiver_id", "receiver_name","giver_name", "item_id", "item_name","category", "quantity","price", "total", "tax" , "tip", "message", "created_at", "id", "redeem_id", "redeem_code"]
+  COMPLETED_REPLY = ["receiver_id", "receiver_name","giver_name", "item_id", "item_name","category", "quantity","price", "total", "tax" , "tip", "message", "updated_at", "id", "redeem_id", "redeem_code"]
   
   def create_account
     puts "Create Account"
@@ -42,23 +43,17 @@ class IphoneController < AppController
     password  = params["password"]
     
     if email.nil? || password.nil?
-      response["error"] = "Data not received."
+      response["error_iphone"]     = "Data not received."
     else
       user = User.find_by_email(email)     
       if user && user.authenticate(password)
-        if user.providers.count == 1
-          # get single provider id and send in response hash
-          provider_id = user.providers.dup.shift.id
-          response["server"] = "#{provider_id}"
-        end
-        if user.providers.count > 1
-          # return multiple to alert app to need for multiple providers page
-          response["server"] = "multiple"
-        end
-        user_json = user.to_json only: LOGIN_REPLY
-        response["user"]  = user_json
+        response["server"]  = user.providers_to_iphone
+        user_json           = user.to_json only: LOGIN_REPLY
+        user_small          = JSON.parse user_json
+        user_small["photo"] = user.get_photo
+        response["user"]    = user_small
       else
-        response["error"] = "Invalid email/password combination"
+        response["error"]   = "Invalid email/password combination"
       end
     end
     
@@ -68,6 +63,53 @@ class IphoneController < AppController
     end
   end
   
+  def update_iphone
+    puts "Update Iphone"
+    puts "#{params}"
+
+    response  = {}
+    user  = User.find_by_remember_token(params["token"])
+    # get app version from data hash
+    # compare app version from version -- in db??
+    # get photo url from data hash 
+    # compare photo version with proper photo for user 
+    # if either are not same 
+    # return "update_photo" or "update_app" or both
+    # put new data into each value for key
+    # if both are the same 
+    # return "success"
+    # send current is_public status
+    # send current badge values - my_gifts , purchase-status updates 
+  end
+
+  def going_out
+    puts "Going Out"
+    puts "#{params}"
+          # send the button status in params["public"]
+          # going out is YES , returning home is NO 
+    response  = {}
+    begin
+      user  = User.find_by_remember_token(params["token"])
+      if    params["public"] == "YES"
+        user.update_attributes(is_public: true) if !user.is_public
+      elsif params["public"] == "NO"
+        user.update_attributes(is_public: false) if user.is_public
+      else
+        response["error_public"] = "did not receiver public params correctly"
+      end
+          # return the updated user.is_public value
+          # if params["public"] is not sent, is_public is not changed
+      response["public"] = user.is_public
+    rescue
+      response["error"] = "could not find user in database"
+    end
+
+    respond_to do |format|
+      logger.debug response
+      format.json { render text: response.to_json }
+    end
+  end
+
   def gifts
     puts "Gifts"
     puts "#{params}"
@@ -82,6 +124,31 @@ class IphoneController < AppController
     end
   end
 
+  def regift
+    puts "ReGift"
+    puts "#{params}"
+
+    user  = User.find_by_remember_token(params["token"])
+    gift  = Gift.find(params["gift_id"])
+    if gift.receiver == user
+      receiver_id = params["regifter_id"] || nil
+      receiver = User.find(receiver_id.to_i)
+      message  = params["message"]     || nil
+      new_gift = gift.regift(receiver, message)
+    else
+      response["error_iphone"]    =  " User cannot regift gift #{gift.id}"
+    end
+    respond_to do |format|
+      if new_gift.save
+        response["success"]       = "ReGifted - Thank you!" 
+      else
+        response["error_server"]  = " ReGift unable to process to database." 
+      end
+      puts response
+      format.json { render json: response.to_json }
+    end 
+  end
+
   def buys
     puts "Buys"
     puts "#{params}"
@@ -89,8 +156,8 @@ class IphoneController < AppController
     response = {}
     user                  = User.find_by_remember_token(params["token"])
     gifts, past_gifts     = Gift.get_buy_history(user)
-    gift_hash             = hash_these_gifts(gifts, BUY_REPLY, true)
-    past_gift_hash        = hash_these_gifts(past_gifts, BUY_REPLY, true)
+    gift_hash             = hash_these_gifts(gifts, BUY_REPLY, true, true)
+    past_gift_hash        = hash_these_gifts(past_gifts, BUY_REPLY, true, true)
     response["active"]    = gift_hash
     response["completed"] = past_gift_hash
     
@@ -271,7 +338,7 @@ class IphoneController < AppController
     respond_to do |format|
       if redeem.save
         response["success"]      = redeem.redeem_code
-        response["server_codes"] = redeem.provider.server_to_iphone
+        response["server_codes"] = redeem.gift.provider.server_to_iphone
       else
         message += " Gift unable to process to database. Please retry later."
         response["error_server"] = message 
@@ -279,6 +346,45 @@ class IphoneController < AppController
       puts response
       format.json { render text: response.to_json}
     end
+  end
+
+  def server_code
+    puts "Server Code (Merchant Redeem)"
+    puts "#{params}"
+
+    message   = ""
+    response  = {} 
+    order_obj = JSON.parse params["data"]
+    if order_obj.nil?
+      message = "Data not received correctly. "
+      order   = Order.new
+    else
+      order   = Order.new(order_obj)
+    end
+    begin
+      user     = User.find_by_remember_token(params["token"])
+    rescue
+      message += "Couldn't identify app user. "
+    end
+    begin
+      redeem          = Redeem.find_by_gift_id(order.gift_id)
+      order.redeem_id = redeem.id
+    rescue
+      message += " Could not find redeem code via gift_id. "
+    end
+    response = { "error" => message } if message != "" 
+
+    respond_to do |format|
+      if order.save
+        response["success"] = " Sale Confirmed. Thank you!"
+        response["server"]  = redeem.provider.get_server_from_code_to_iphone(order.server_code)
+      else
+        response["error_server"] = " Order not processed - database error. Server Code you entered did not match."
+        response["server_code"]  = redeem ? redeem.provider.server_codes.pop : "not redeemed"
+      end
+      puts response
+      format.json { render text: response.to_json }
+    end  
   end
 
   def create_order
@@ -295,13 +401,12 @@ class IphoneController < AppController
       order   = Order.new(order_obj)
     end
     begin
-      provider_user = User.find_by_remember_token(params["token"])
+      provider_user   = User.find_by_remember_token(params["token"])
+      order.server_id = provider_user.id
     rescue
       message      += "Couldn't identify app user. "
     end
     begin
-    #   redeem = Redeem.find(order.redeem_id)
-    #   redeem_code = redeem.redeem_code
       redeem   = Redeem.find_by_gift_id(order.gift_id)
     rescue
       message += " Could not find redeem code via gift_id. "
@@ -309,7 +414,7 @@ class IphoneController < AppController
     if redeem
       redeem_code = redeem.redeem_code
     else
-      redeem_code = "X"
+      redeem_code = "not redeemed"
     end
     response = { "error" => message } if message != "" 
 
@@ -318,11 +423,11 @@ class IphoneController < AppController
         if order.save
           response["success"]      = " Sale Confirmed. Thank you!"
         else
-          # order.gift.update_attribute(:status, "redeemed")
           response["error_server"] = " Order not processed - database error"
         end
       else
         response["error_server"]   = " the redeem code you entered did not match. "
+        response["customer_code"]  = redeem_code
       end
       puts response
       format.json { render text: response.to_json }
@@ -346,7 +451,7 @@ class IphoneController < AppController
       if data_obj.nil?
         response["error_iphone"]   = "Photo URL not received correctly from iphone. "
       else
-        if user.update_attributes(photo: data_obj["photo"])
+        if user.update_attributes(iphone_photo: data_obj["iphone_photo"], use_photo: "ios" )
           response["success"]      = "Photo Updated - Thank you!"
         else
           response["error_server"] = "Photo URL unable to process to database." 
@@ -355,6 +460,48 @@ class IphoneController < AppController
 
       puts response
       format.json { render json: response.to_json }
+    end
+  end
+
+  def active_orders
+    puts "Active Orders"
+    puts "#{params}"
+    response   = {}
+    begin 
+      user     = User.find_by_remember_token(params["token"])
+      provider = Provider.find(params["provider_id"].to_i)
+    rescue
+      response["error"] = "User/Provider not found from remember token/ provider id"
+    end  
+          # get gifts from db that are open or notified
+    gifts = Gift.get_provider provider
+          # hash gifts into form for iphone
+          # include total , tax, tip 
+    gift_hash  = hash_these_gifts(gifts, MERCHANT_REPLY, false, true) 
+    respond_to do |format|
+      puts gift_hash
+      format.json { render text: gift_hash.to_json }
+    end
+  end
+
+  def completed_orders
+    puts "Complete Orders"
+    puts "#{params}"
+    response   = {}  
+    begin 
+      user     = User.find_by_remember_token(params["token"])
+      provider = Provider.find(params["provider_id"].to_i)
+    rescue
+      response["error"] = "User/Provider not found from remember token/ provider id"
+    end
+          # get gifts from db that are completed
+    completed_gifts = Gift.get_history_provider provider
+          # hash gifts into form for iphone
+          # include total , tax, tip 
+    gift_hash  = hash_these_gifts(completed_gifts, COMPLETED_REPLY, false, true) 
+    respond_to do |format|
+      puts gift_hash
+      format.json { render text: gift_hash.to_json }
     end
   end
  
@@ -387,12 +534,13 @@ class IphoneController < AppController
           value = user_obj[key]
           user_obj[key] = value.to_s
         end
+        user_obj["photo"] = g.get_photo
         index += 1
       end
       return user_hash
     end
   
-    def hash_these_gifts(obj, send_fields, address_get=false)
+    def hash_these_gifts(obj, send_fields, address_get=false, receiver=false)
       gift_hash = {}
       index = 1 
       obj.each do |g|
@@ -400,8 +548,12 @@ class IphoneController < AppController
         ### >>>>>>>    item_name pluralizer
         # g.item_name = g.item_name.pluralize if g.quantity > 1
         ###  7/27 6:45 UTC
-      
-        time = g.created_at.to_time
+        
+        if g.created_at
+          time = g.created_at.to_time
+        else
+          time = g.updated_at.to_time
+        end
         time_string = time_ago_in_words(time)
       
         gift_obj = g.serializable_hash only: send_fields
@@ -410,20 +562,25 @@ class IphoneController < AppController
           gift_obj[key] = value.to_s
         end
         
-        # add giver photo url 
-        giver_user_obj = User.find(g.giver_id)
-        gift_obj["giver_photo"] = giver_user_obj.photo.nil? ? "" : giver_user_obj.photo
-        
+        # add other person photo url 
+        if receiver
+          if g.receiver
+            gift_obj["receiver_photo"]  = g.receiver.get_photo
+          else
+            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
+          end
+        else
+          gift_obj["giver_photo"]       = g.giver.get_photo
+        end
+
+        provider = g.provider 
+        gift_obj["provider_photo"]     = provider.get_photo
         # add the full provider address
         if address_get
-          address = g.provider.address
-          city = g.provider.city
-          state = g.provider.state
-          zip = g.provider.zip
-          provider_address_string = "#{address} \n#{city} #{state} #{zip}"
-          gift_obj["provider_address"] = provider_address_string
+          gift_obj["provider_address"] = provider.complete_address
         end
-        gift_obj["time_ago"]    = time_string
+
+        gift_obj["time_ago"] = time_string
       
         ### >>>>>>>    this is not stored in gift object
         gift_obj["redeem_code"] = add_redeem_code(g)

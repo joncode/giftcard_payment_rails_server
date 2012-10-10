@@ -1,0 +1,36 @@
+<%= form_for(@provider) do |f| %>
+
+<div class="merchantSignUpObject merchantSignUpObject2">
+  <div class="merchantSignUpBackground"></div>
+  <div class-"merchantSignUpWrapper">
+    <h1>Bank Information</h1>
+      <div class="field">
+        <%= f.text_field :account_name ,      placeholder: 'Merchant Bank Account Name'  %>
+      </div>                                      
+      <div class="field">                         
+        <%= f.text_field :aba ,               placeholder: 'ABA number'  %>
+      </div>
+      <div class="field">                         
+        <%= f.text_field :routing ,           placeholder: 'Routing Number' %>
+      </div>
+      <div class="field">
+        <%= f.text_field :bank_account_name , placeholder: 'Bank Name'  %>
+      </div>                                                                          
+      <div class="field">                         
+        <%= f.text_field :bank_address,       placeholder: 'Bank Address' %>
+      </div>                                      
+      <div class="field">                         
+        <%= f.text_field :bank_city ,         placeholder: 'Bank City' %>
+      </div>                                      
+      <div class="field">                         
+        <%= f.text_field :bank_state,         placeholder: 'Bank State' %>
+      </div>                                      
+      <div class="field">                         
+        <%= f.text_field :bank_zip,           placeholder: 'Bank Zip' %>
+      </div>    
+  </div>
+</div>
+
+<% end %>
+
+

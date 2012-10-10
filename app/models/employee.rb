@@ -28,8 +28,12 @@ class Employee < ActiveRecord::Base
   	self.user.username
   end
 
+  def secure_image
+    self.user.get_secure_image
+  end
+
   def photo
-  	self.user.photo
+  	self.user.get_photo
   end
 
   def servers_hash
@@ -37,13 +41,11 @@ class Employee < ActiveRecord::Base
     self.users.map { |e| e.serializable_hash only: send_fields  }
   end
 
-  def servers
-    # get the employee_id and user_id 
-  # from user record
-    # get the full_name 
-    # photo url
-    # server_code
-
+  def server_info_to_iphone
+    server                  = {}
+    server["full_name"]     = self.name
+    server["photo"]         = self.photo
+    server["secure_image"]  = self.secure_image
+    return server
   end
-
 end

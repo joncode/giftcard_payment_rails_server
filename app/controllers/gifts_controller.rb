@@ -87,11 +87,9 @@ class GiftsController < ApplicationController
     @item     = Item.find(params[:item_id])
     @gift.provider_id     = @provider.id
     @gift.provider_name   = @provider.name
-    @gift.receiver_id     = @receiver.id
-    @gift.receiver_name   = @receiver.username
+    @gift.add_receiver @receiver
     @gift.giver_name      = current_user.username
     @gift.giver_id        = current_user.id
-    @gift.receiver_phone  = @receiver.phone
     @gift.item_id         = @item.id
     @gift.price           = params[:price]
     @gift.item_name       = @item.item_name
@@ -125,8 +123,7 @@ class GiftsController < ApplicationController
   end
   
   def browse
-    # @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
-    @users = User.all
+    @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
     @providers = Provider.all
 
     respond_to do |format|
@@ -155,11 +152,9 @@ class GiftsController < ApplicationController
     @gift                 = Gift.new
     @gift.provider_id     = @provider.id
     @gift.provider_name   = @provider.name
-    @gift.receiver_id     = @receiver.id
-    @gift.receiver_name   = @receiver.username
+    @gift.add_receiver @receiver
     @gift.giver_name      = current_user.username
-    @gift.giver_id        = current_user.id
-    @gift.receiver_phone  = @receiver.phone     
+    @gift.giver_id        = current_user.id    
   end
 
   def choose_from_contacts

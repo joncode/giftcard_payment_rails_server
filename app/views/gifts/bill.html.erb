@@ -27,14 +27,14 @@
   </div>
 
   <!-- <label>
-    <h2><%= list_icon_with_id_for @gift.receiver_id %>
+    <h2><%= custom_image_tag(@gift.receiver,50,50)  %>
   </label> -->
   <label name="gift[receiver_name]" class="label" >
     <h2 class="receiverName"><span class="h2Highlight"><%= @gift.receiver_name %></span></h2></label>
   <span><%= User.find(@gift.receiver_id).handle %></span>
   <label for="provider" class="label">
     <h2>Location:</h2></label>					    
-  <!-- <label><%= logo_from_id_for @gift.provider_id %></label> -->
+  <!-- <label><%= custom_image_tag(@gift.provider,150,150)  %></label> -->
   <label name="gift[provider_name]" class="label" >
     <h2><span class="h2Highlight"><%= @gift.provider_name %></span></h2>
     <h2><span class="h2Highlight"><%= @gift.provider.full_address %></span></h2>

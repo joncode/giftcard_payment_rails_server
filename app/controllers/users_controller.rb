@@ -8,14 +8,12 @@ class UsersController < ApplicationController
     @user = current_user
     @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
     @fb_users = []
-    if @user.facebook_access_token
-      fb_response = HTTParty.get("https://graph.facebook.com/me/friends?access_token="+@user.facebook_access_token)
-      if fb_response.code == 200
-        @fb_users = ActiveSupport::JSON.decode(fb_response.body)["data"]
-      end
-    end
-    
-
+    # if @user.facebook_access_token
+    #   fb_response = HTTParty.get("https://graph.facebook.com/me/friends?access_token="+@user.facebook_access_token)
+    #   if fb_response.code == 200
+    #     @fb_users = ActiveSupport::JSON.decode(fb_response.body)["data"]
+    #   end
+    # end
     
     respond_to do |format|
       format.html # index.html.erb
@@ -68,6 +66,11 @@ class UsersController < ApplicationController
     puts "#{params}"
     @user = User.find(params[:id])
     action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
+    if action == 'edit'
+      if !params[:user][:photo].nil? || !params[:user][:photo_cache].empty?
+        params[:user][:use_photo] = "cw"
+      end
+    end
 
     respond_to do |format|
       if @user.update_attributes(params[:user])

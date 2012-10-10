@@ -104,10 +104,11 @@ class OAuthController < ApplicationController
               email: userdetails["contact"]["email"], 
               first_name: userdetails["firstName"], 
               last_name: userdetails["lastName"] || " ", 
-              photo: userdetails["photo"]["prefix"][0..-2]+userdetails["photo"]["suffix"],
+              fb_photo: userdetails["photo"]["prefix"][0..-2]+userdetails["photo"]["suffix"],
               phone: userdetails["contact"]["phone"], 
               password: "foursquare", 
-              password_confirmation: "foursquare" 
+              password_confirmation: "foursquare", 
+              use_photo: "fb"
               }
       elsif srv == "facebook"
         newuserhash = {
@@ -117,9 +118,10 @@ class OAuthController < ApplicationController
               email: userdetails["email"], 
               first_name: userdetails["first_name"], 
               last_name: userdetails["last_name"], 
-              photo: "http://graph.facebook.com/"+userdetails["id"]+"/picture", 
+              fb_photo: "http://graph.facebook.com/"+userdetails["id"]+"/picture", 
               password: "facebook", 
-              password_confirmation: "facebook"
+              password_confirmation: "facebook",
+              use_photo: "fb"
               }
       end
       @newuser = User.new(newuserhash)

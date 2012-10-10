@@ -5,21 +5,21 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   process :convert => 'png'
 
-  version :standard do
-    process :resize_to_fill => [150, 150, :north]
-  end
+  # version :standard do
+  #   process :resize_to_fill => [150, 150, :north]
+  # end
   
-  version :large do
-    process :resize_to_fill => [400, 400]
-  end
+  # version :large do
+  #   process :resize_to_fill => [400, 400]
+  # end
   
-  version :thumbnail do
-    process :resize_to_fill => [50, 50]
-  end
+  # version :thumbnail do
+  #   process :resize_to_fill => [50, 50]
+  # end
 
-  version :gravatar do
-    process :resize_to_fill => [75, 100]
-  end
+  # version :gravatar do
+  #   process :resize_to_fill => [75, 100]
+  # end
 
   # def crop
     # if model.crop_x.present?

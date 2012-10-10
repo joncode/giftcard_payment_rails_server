@@ -1,5 +1,5 @@
 <a href="<%= user_path(current_user) %>">
-  <%= gravatar_for current_user %>
+  <%= custom_image_tag(current_user,75,100)  %>
 </a>
 <h1>
   <%= current_user.username %>

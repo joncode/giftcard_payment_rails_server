@@ -33,7 +33,9 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessible  :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :facebook_access_token, :facebook_expiry, :foursquare_id, :foursquare_access_token, :provider_id, :handle, :server_code, :sex
+
+  attr_accessible  :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :facebook_access_token, :facebook_expiry, :foursquare_id, :foursquare_access_token, :provider_id, :handle, :server_code, :sex, :iphone_photo, :fb_photo, :use_photo, :is_public, :secure_image
+
   mount_uploader   :photo, ImageUploader
    
   has_many :employees
@@ -69,7 +71,6 @@ class User < ActiveRecord::Base
   before_save { |user| user.first_name = first_name.capitalize if first_name}
   before_save { |user| user.last_name  = last_name.capitalize  if last_name }
   before_save   :extract_phone_digits       # remove all non-digits from phone
-  
   before_create :create_remember_token      # creates unique remember token for user
 
       # searches gift db for ghost gifts that belong to new user 
@@ -134,6 +135,48 @@ class User < ActiveRecord::Base
     return false if response.code != 200
     return true
   end
+
+  def get_photo
+    case self.use_photo
+    when "cw"
+      self.photo.url
+    when "ios"
+      self.iphone_photo
+    when "fb"
+      # no support yet
+    else 
+      if self.photo.blank?
+        "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+      else
+        self.photo.url
+      end
+    end
+  end
+
+  def get_secure_image
+    if self.secure_image.blank?
+      "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+    else
+      self.secure_image
+    end
+  end
+
+  def one_provider_to_iphone
+    provider = self.providers.dup.pop
+    provider.table_photo_hash
+  end
+
+  def providers_to_iphone
+      # find out how many merchants the user is connected to 
+    merchants = self.providers.dup
+    response = {}
+    index = 0
+    merchants.each do |m|
+      response["#{index}"] = m.table_photo_hash
+      index += 1
+    end
+    return response
+  end
   
   private
     
@@ -191,7 +234,7 @@ class User < ActiveRecord::Base
     # def crop_photo
     #   # photo.recreate_versions! if crop_x.present?
     # end
-    
+
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64
     end

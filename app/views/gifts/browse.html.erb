@@ -21,7 +21,7 @@
             <tbody>
               <% @users.each do |user| %>
               <tr>
-                <td><%= list_icon_for user %></td>
+                <td><%= custom_image_tag(user,50,50)  %></td>
                 <td><%= link_to user.username, user_path(user) %></td>
                 <td><%= user.following?(current_user) ? 'You are following' : 'doesnt follow you' %></td>
                 <td><%= button_to "Select", browse_with_contact_gifts_path(id: user.id) %></td>
@@ -46,7 +46,7 @@
               <% @providers.each do |p| %>
               <tr>
                   <td colspan="2">
-                    <%= logo_for(p) %>
+                    <%= custom_image_tag(p,150,150)  %>
                     <%= link_to p.name, provider_path(p) %>
                   </td>
                   <td><%= p.description %></td>

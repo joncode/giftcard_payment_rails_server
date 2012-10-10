@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121002214036) do
+ActiveRecord::Schema.define(:version => 20121010183321) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -55,9 +55,10 @@ ActiveRecord::Schema.define(:version => 20121002214036) do
     t.string   "receiver_phone"
     t.string   "tax"
     t.string   "tip"
-    t.integer  "gift_id"
+    t.integer  "regift_id"
     t.string   "foursquare_id"
     t.string   "facebook_id"
+    t.integer  "anon_id"
   end
 
   create_table "items", :force => true do |t|
@@ -157,11 +158,11 @@ ActiveRecord::Schema.define(:version => 20121002214036) do
     t.string   "bank_city"
     t.string   "bank_state"
     t.string   "bank_zip"
+    t.string   "portrait"
+    t.string   "box"
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
-    t.string   "portrait"
-    t.string   "box"
   end
 
   create_table "redeems", :force => true do |t|
@@ -214,6 +215,12 @@ ActiveRecord::Schema.define(:version => 20121002214036) do
     t.string   "sex"
     t.boolean  "is_public"
     t.boolean  "facebook_auth_checkin"
+    t.string   "iphone_photo"
+    t.string   "fb_photo"
+    t.string   "use_photo"
+    t.string   "secure_image"
+    t.datetime "reset_token_sent_at"
+    t.string   "reset_token"
   end
 
 end

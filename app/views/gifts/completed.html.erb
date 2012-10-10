@@ -11,7 +11,7 @@
   </h2>
   
   <div class="">
-    <%= list_icon_for @giver %>
+    <%= custom_image_tag(@giver,50,50)  %>
   </div>
   <h2>
     <%= @gift.giver_name %> 
@@ -22,9 +22,9 @@
   </h2>
   <h2>
     For:
-    <%= list_icon_for @receiver %>
+    <%= custom_image_tag(@receiver,50,50)  %>
     <%= @gift.receiver_name %>
-    <%= logo_from_id_for @gift.provider_id %>
+    <%= custom_image_tag(@gift.provider,150,150)  %>
     @ <%= @gift.provider_name %>
     Redeemed on <%= @order.created_at.to_formatted_s(:rfc822)  %>
     By server: <%= @server.username %>&nbsp;<%= list_icon_for @server %>

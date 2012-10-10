@@ -7,20 +7,17 @@ module ApplicationHelper
       link_to "Merchant Sign Up", new_provider_path
     end
   end
- 
-  def custom_image_tag(object,width,height)
-    if object.photo.blank?
-      if object.kind_of? User
-        photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349148077/ezsucdxfcc7iwrztkags.png"
-      else
-        photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/v1349150293/upqygknnlerbevz4jpnw.png"
-      end
+
+  def custom_image_tag(object,width,height,flag=nil)
+    crop  = "/c_fill,h_#{height},w_#{width}/"
+    if flag
+      photo     = object.get_image(flag)
+      url_array = photo.split('upload/')
     else
-      photo_url   = object.photo.dup.to_s
-      photo_array = photo_url.split('upload/')
-      photo = "#{CLOUDINARY_IMAGE_URL}/c_fill,h_#{height},w_#{width}/#{photo_array[1]}"      
-    end 
-    image_tag(photo, alt: "customImageTag", :class => 'customImageTag' )
+      url_array = object.get_photo.split('upload/')
+    end
+    photo = url_array[0] + 'upload' + crop + url_array[1]
+    image_tag(photo, alt: "customImageTag4", :class => 'customImageTag' )
   end
 
 end

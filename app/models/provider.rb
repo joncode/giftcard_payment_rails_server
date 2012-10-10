@@ -63,7 +63,36 @@ class Provider < ActiveRecord::Base
   def full_address
     "#{self.address},  #{self.city}, #{self.state}"
   end
+
+  def complete_address
+    "#{self.address}\n#{self.city}, #{self.state} #{self.zip}"
+  end
   
+  def get_photo
+    if self.box.blank?
+      "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+    else
+      self.box.url
+    end
+  end
+
+  def get_image(flag)
+    case flag
+    when "logo"
+      photo = self.logo.url
+    when "portrait"
+      photo = self.portrait.url
+    when "landscape"
+      photo = self.photo.url
+    else
+      photo = self.box.url 
+    end 
+    if photo.blank?
+      photo = "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+    end
+    return photo
+  end
+
   def get_servers
     # this means get people who are at work not just employed
     # for now without location data, its just employees
@@ -78,29 +107,34 @@ class Provider < ActiveRecord::Base
     self.employees.select {|e| e.server_code == code}
   end
    
-  def server_to_iphone
-    self.employees.servers_hash
+  def get_server_from_code_to_iphone(code)
+    server_in_array = self.employees.select {|e| e.server_code == code}
+    server = server_in_array.pop
+    server.server_info_to_iphone if server
   end
+
+  def server_to_iphone
+    if self.employees.count != 0
+      send_fields = [:first_name, :last_name, :server_code]
+      self.users.map { |e| e.serializable_hash only: send_fields  }
+    else
+      "no servers set up yet"
+    end
+  end
+
+  def table_photo_hash
+        # return the merchant name
+        # return the table view photo url
+        # call the table view photo at 320px x 50px off cloudinary
+    response = {}
+    response["provider_name"]   = self.name
+    response["table_photo_url"] = self.photo.url
+    response["provider_id"]     = self.id.to_s 
+    return response   
+  end 
+
 end
-
-
-  # [{"first_name"=>"Larry",
-  #  "id"=>19, 
-  #  "last_name"=>"Page", 
-  #  "photo"=>{
-  #     "url"=>"http://res.cloudinary.com/drinkboard/image/upload/v1347955675/19.png", 
-  #     :standard=>{
-  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fill,g_north,h_150,w_100/v1347955675/19.png"
-  #     }, 
-  #     :large=>{
-  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fill,h_400,w_400/v1347955675/19.png"
-  #     }, 
-  #     :thumbnail=>{
-  #       "url"=>"http://res.cloudinary.com/drinkboard/image/upload/c_fit,h_100,w_75/v1347955675/19.png"
-  #     }
-  #   }, 
-  #   "server_code"=>"1234"
-  # }] 
+ 
 
 
 

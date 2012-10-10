@@ -47,6 +47,9 @@ Drinkboard::Application.routes.draw do
       get 'order'
       get 'completed'
       get 'staff'
+      get 'edit_info'
+      get 'edit_photo'
+      get 'edit_bank'
     end
   end
   
@@ -65,6 +68,7 @@ Drinkboard::Application.routes.draw do
   ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
   match 'app/login',            to: 'iphone#login',            via: :post
+  match 'app/update',           to: 'iphone#update_iphone',    via: :post 
   match 'app/gifts',            to: 'iphone#gifts',            via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/activity',         to: 'iphone#activity',         via: :post
@@ -72,12 +76,15 @@ Drinkboard::Application.routes.draw do
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
+  match 'app/servercode',       to: 'iphone#server_code',      via: :post
   match 'app/order',            to: 'iphone#create_order',     via: :post
   match 'app/users',            to: 'iphone#drinkboard_users', via: :post
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
-  match 'app/merchant/active',  to: 'iphone#active_orders',    via: :post
-  match 'app/merchant/complete',to: 'iphone#completed_orders', via: :post
-  
+  match 'app/out',              to: 'iphone#going_out',        via: :post 
+  match 'app/active',           to: 'iphone#active_orders',    via: :post
+  match 'app/completed',        to: 'iphone#completed_orders', via: :post
+  match 'app/regift',           to: 'iphone#regift',           via: :post
+
   ###
   # match '/drinkboard', to: 'gifts#activity'
   match '/about',       to: 'home#about'
@@ -85,7 +92,6 @@ Drinkboard::Application.routes.draw do
   match '/home',        to: 'home#index'
   match '/learn',       to: 'home#learn'
   match '/news',        to: 'home#news'
-  # match '/browse', to: 'gifts#browse'
   
   ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
@@ -93,8 +99,8 @@ Drinkboard::Application.routes.draw do
   ###
   
   ##Location resources
-  match '/map', to: 'locations#map'
-  match '/map/boundary', to: 'locations#mapForUserWithinBoundary'
+  match '/map',               to: 'locations#map'
+  match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
   
   match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
   match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
