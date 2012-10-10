@@ -41,6 +41,9 @@ Drinkboard::Application.routes.draw do
       get 'order'
       get 'completed'
       get 'staff'
+      get 'edit_info'
+      get 'edit_photo'
+      get 'edit_bank'
     end
   end
   
