@@ -18,9 +18,34 @@ class MerchantsController < ApplicationController
     @gifts = Gift.get_activity_at_provider(@provider)
   end
 
+  def edit_photo
+    @provider = Provider.find(params[:id])
+  end
+
+  def edit_info
+    @provider = Provider.find(params[:id])
+  end
+
+  def edit_bank
+    @provider = Provider.find(params[:id])
+  end
+
+  def update
+    @provider = Provider.find(params[:id])
+
+    respond_to do |format|
+      if @provider.update_attributes(params[:provider])
+        format.html { redirect_to @provider, notice: 'Provider was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @provider.errors, status: :unprocessable_entity }
+      end
+    end    
+  end
+
   def orders
     @provider = Provider.find(params[:id])
-    # @gifts = Gift.get_provider(@provider)
     @gifts = Gift.get_all_orders(@provider)
     
     respond_to do |format|

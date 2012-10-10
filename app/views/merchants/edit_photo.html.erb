@@ -1,0 +1,40 @@
+<%= form_for(@provider) do |f| %>
+
+<div class="merchantSignUpObject merchantSignUpObject3">
+  <div class="merchantSignUpBackground"></div>
+  <div class-"merchantSignUnBankInfoWrapper">
+    <h1>Photo Upload</h1>
+      <div class="form-horizontal">
+        <h3>Landscape Photo</h3> 
+        <p>width 320px : height 50px</p>
+        <%= f.file_field    :photo %>
+      </div>
+      <div class="form-horizontal">
+        <h3>Logo</h3>
+        <p>square 60px</p>
+        <%= f.hidden_field  :logo_cache %>
+        <%= f.file_field    :logo %>
+      </div>
+      <div class="form-horizontal">
+        <h3>Box Image</h3>
+        <p>square 150px</p>
+        <%= f.hidden_field  :box_cache  %>
+        <%= f.file_field    :box %>
+      </div>
+      <div class="form-horizontal">
+        <h3>App Full Screen Portrait</h3>
+        <p>width 320 px : height 480px</p>
+        <%= f.hidden_field  :portrait_cache %>
+        <%= f.file_field    :portrait %>
+      </div>
+      <hr />
+      <div class="actions">
+        <%= f.submit "Update", class: "btn btn-large btn-success" %>
+      </div>
+
+    
+    </div>
+  </div>
+<% end %>
+
+

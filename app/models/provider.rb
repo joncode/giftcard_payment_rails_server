@@ -114,7 +114,7 @@ class Provider < ActiveRecord::Base
     response["table_photo_url"] = self.photo.url
     response["provider_id"]     = self.id.to_s 
     return response   
-  end
+  end 
 
 end
  
