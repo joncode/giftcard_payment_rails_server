@@ -202,22 +202,6 @@ class IphoneController < AppController
     end
   end
   
-  def provider
-    puts "Provider"
-    puts "#{params}"
-
-    # @user  = User.find_by_remember_token(params["token"])
-    provider = Provider.find(params["provider_id"])
-    gifts    = Gift.get_provider(provider)
-
-    gift_hash = hash_these_gifts(gifts, PROVIDER_REPLY) 
-
-    respond_to do |format|
-      puts gift_hash
-      format.json { render text: gift_hash.to_json }
-    end
-  end
-  
   def locations
     puts "Locations"
     puts "#{params}"
