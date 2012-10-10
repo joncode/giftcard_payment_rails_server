@@ -3,11 +3,11 @@
 # Table name: gifts
 #
 #  id                   :integer         not null, primary key
-#  giver_name           :string(255)
+#  giver_name           :string(255)  !!!
 #  receiver_name        :string(255)
 #  provider_name        :string(255)
 #  item_name            :string(255)
-#  giver_id             :integer
+#  giver_id             :integer      !!!
 #  receiver_id          :integer
 #  item_id              :integer
 #  price                :string(20)
@@ -98,8 +98,20 @@ class Gift < ActiveRecord::Base
     Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
   end
 
-  def giver_name
-    super + "xxx"  
+  def giver
+    if self.status == 'open'
+      User.first
+    else
+      super
+    end
+  end
+
+  def giver_id
+    if self.status == "open"
+      100000000
+    else
+      super
+    end
   end
 
   def giver_name
