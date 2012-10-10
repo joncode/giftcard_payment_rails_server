@@ -99,15 +99,23 @@ class Gift < ActiveRecord::Base
   end
 
   def giver
-    if self.status == 'open'
+    if self.special_instructions.nil?
       User.first
     else
       super
     end
   end
 
+  def giver.get_photo
+    if self.special_instructions.nil?
+      "test.jpg"
+    else
+      super
+    end
+  end
+
   def giver_id
-    if self.status == "open"
+    if self.special_instructions.nil?
       100000000
     else
       super
@@ -115,7 +123,7 @@ class Gift < ActiveRecord::Base
   end
 
   def giver_name
-    if self.status == "open"
+    if self.special_instructions.nil?
       "anonymous"
     else
       super
