@@ -25,13 +25,13 @@
 #  receiver_phone       :string(255)
 #  tax                  :string(255)
 #  tip                  :string(255)
-#  gift_id              :integer
+#  regift_id           :integer
 #  foursquare_id        :string(255)
 #  facebook_id          :string(255)
 #
 
 class Gift < ActiveRecord::Base
-  attr_accessible :credit_card, :giver_id, :item_id, :message, :price, :provider_id, :quantity, :receiver_id, :redeem_id, :special_instructions, :status, :total, :giver_name, :receiver_name, :receiver_name ,  :provider_name, :item_name , :category, :receiver_phone, :tip, :tax, :facebook_id, :foursquare_id
+  attr_accessible :credit_card, :giver_id, :item_id, :message, :price, :provider_id, :quantity, :receiver_id, :redeem_id, :special_instructions, :status, :total, :giver_name, :receiver_name, :receiver_name ,  :provider_name, :item_name , :category, :receiver_phone, :tip, :tax, :facebook_id, :foursquare_id, :regift_id
   
   has_one     :redeem
   belongs_to  :provider
@@ -44,8 +44,10 @@ class Gift < ActiveRecord::Base
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total
   # validates_numericality_of  :total, :quantity
   
-  before_create :add_category, :if => :no_category
+  before_create :add_category,    :if => :no_category
   before_create :pluralizer
+  before_create :add_giver_name,  :if => :no_giver_name
+  before_create :regifted,        :if => :regift_id?
   before_save   :set_status
 
   def self.get_gifts(user)
@@ -97,6 +99,27 @@ class Gift < ActiveRecord::Base
   def self.get_history_provider(provider)
     Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
   end
+
+  def regift(receiver=nil, message=nil)
+    new_gift            = self.dup
+    new_gift.regift_id  = self.id
+    new_gift.giver_id   = self.receiver_id
+    new_gift.giver_name = self.receiver_name
+    new_gift.message    = message 
+    if receiver
+      new_gift.receiver_id          = receiver.id
+      new_gift.receiver_name        = receiver.username
+      new_gift.receiver_phone       = receiver.phone if receiver.phone     
+    else
+      new_gift.receiver_id          = nil
+      new_gift.receiver_name        = nil
+      new_gift.receiver_phone       = nil
+    end
+    new_gift.foursquare_id          = nil
+    new_gift.facebook_id            = nil
+    new_gift.special_instructions   = nil    
+    return new_gift
+  end
  
   private
     
@@ -111,7 +134,7 @@ class Gift < ActiveRecord::Base
         name_to_match = self.item_name
               # if item name already has a /'s/ then abort 
         if !name_to_match.match /'s/
-           self.item_name << "'s"
+           self.item_name << "\'s"
         end 
       end
     end
@@ -122,6 +145,23 @@ class Gift < ActiveRecord::Base
     
     def no_category
       self.category.nil?
+    end
+
+    def add_giver_name
+      self.giver_name = User.find(self.giver_id).username
+    end
+
+    def regifted
+      old_gift = Gift.find(self.regift_id)
+      old_gift.update_attributes(status: 'regifted')
+    end
+
+    def regift_id?
+      self.regift_id
+    end
+
+    def no_giver_name
+      self.giver_name.nil?
     end
     
 end
