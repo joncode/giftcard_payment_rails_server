@@ -1,5 +1,11 @@
 Drinkboard::Application.routes.draw do
   
+  get "email/invite"
+
+  get "email/forgot_pw"
+
+  get "email/new_employee"
+
   root to: 'users#new'
   resources :locations
 
@@ -103,6 +109,11 @@ Drinkboard::Application.routes.draw do
       get :servercode
       get :crop
       get :change_public_status
+    end
+    collection do
+      get :reset_password
+      get :enter_new_password
+      post :enter_new_password
     end
   end
   

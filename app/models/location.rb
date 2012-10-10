@@ -27,11 +27,12 @@ class Location < ActiveRecord::Base
   
   
   def self.allUsersWithinBounds(userIds,bounds)
+    #All the UNIQUE users within given bounds.
     Location.find(:all,{ 
       :joins => :user,
       :order => "locations.created_at",
       :conditions => ["locations.latitude >= ? AND locations.latitude <= ? AND locations.longitude >= ? AND locations.longitude <= ? AND locations.user_id IN (?)",bounds[:botLat],bounds[:topLat],bounds[:leftLng],bounds[:rightLng],userIds]
-    })
+    }).uniq{ |loc| loc[:user_id] }
   end
   
   #Checkin functions. Responsible for maintaining the integrity of the data structure

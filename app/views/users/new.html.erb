@@ -31,8 +31,9 @@
 <!--
   User Sign In
 -->
-  <h1 class="signUpHeader">Sign Up</h1>
-  <div class="signUpFormWrapper">
+	<h1 class="signUpHeader">Sign Up</h1>
+  <%= link_to "Forgot password?", reset_password_users_path %>
+	<div class="signUpFormWrapper">
     <%= simple_form_for(@user) do |f| %>
     <%= f.error_notification %>
     <%= render 'shared/error_messages' %>
@@ -45,7 +46,7 @@
       <%= f.input :password_confirmation, :placeholder => 'Password Confirmation' %>
     </div>
       <%= f.submit "Create my Account", class: "btn btn-success createAccount" %>
-      <% end %>
+    <% end %>
   <div class="socialLoginWrapper">
     <h2 class="signinOr">Or...</h2>
     <div class="fbLoginWrapper">

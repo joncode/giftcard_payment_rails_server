@@ -33,7 +33,6 @@
 #
 
 class User < ActiveRecord::Base
-
   attr_accessible  :email, :password, :password_confirmation, :photo, :photo_cache, :first_name, :last_name, :phone, :address, :address_2, :city, :state, :zip, :credit_number, :admin, :facebook_id, :facebook_access_token, :facebook_expiry, :foursquare_id, :foursquare_access_token, :provider_id, :handle, :server_code, :sex
   mount_uploader   :photo, ImageUploader
    
@@ -121,6 +120,12 @@ class User < ActiveRecord::Base
   
   def full_address
     "#{self.address},  #{self.city}, #{self.state}"
+  end
+  
+  def update_reset_token
+    self.reset_token_sent_at = Time.now
+    self.reset_token = SecureRandom.hex(16)
+    self.save
   end
   
   def checkin_to_foursquare(fsq_id, lat, lng)

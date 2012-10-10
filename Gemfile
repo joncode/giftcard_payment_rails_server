@@ -5,6 +5,7 @@ gem 'carrierwave'
 gem 'cloudinary'
 # gem 'aws-s3', :require => 'aws/s3' 
 gem 'httparty', '0.9.0'
+gem 'resque', '1.23.0'
 
 group :production do
 	gem 'pg', '0.12.2'
