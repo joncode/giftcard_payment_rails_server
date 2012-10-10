@@ -136,6 +136,7 @@ class UsersController < ApplicationController
       user = User.find_by_email(params[:email])
       if user
         user.update_reset_token
+        # UserMailer.reset_password(user)
         Resque.enqueue(EmailJob, 'reset_password', user[:id], {})  
       end
     elsif params[:reset_token]
