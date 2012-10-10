@@ -43,7 +43,7 @@ class IphoneController < AppController
     password  = params["password"]
     
     if email.nil? || password.nil?
-      response["error"]     = "Data not received."
+      response["error_iphone"]     = "Data not received."
     else
       user = User.find_by_email(email)     
       if user && user.authenticate(password)
@@ -51,8 +51,7 @@ class IphoneController < AppController
         user_json           = user.to_json only: LOGIN_REPLY
         user_small          = JSON.parse user_json
         user_small["photo"] = user.get_photo
-        user_json           = user_small.to_json
-        response["user"]    = user_json
+        response["user"]    = user_small
       else
         response["error"]   = "Invalid email/password combination"
       end
