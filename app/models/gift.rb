@@ -99,6 +99,10 @@ class Gift < ActiveRecord::Base
   end
 
   def giver_name
+    super + "xxx"  
+  end
+
+  def giver_name
     if self.status == "open"
       "anonymous"
     else
