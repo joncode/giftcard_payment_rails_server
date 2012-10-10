@@ -97,6 +97,14 @@ class Gift < ActiveRecord::Base
   def self.get_history_provider(provider)
     Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
   end
+
+  def giver_name
+    if self.status == "open"
+      "anonymous"
+    else
+      super
+    end
+  end
   
   private
     
