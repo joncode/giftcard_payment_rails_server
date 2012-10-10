@@ -159,6 +159,10 @@ class Gift < ActiveRecord::Base
       self.giver_name = User.find(self.giver_id).username
     end
 
+    def no_giver_name
+      self.giver_name.nil?
+    end
+
     def regifted
       old_gift = Gift.find(self.regift_id)
       old_gift.update_attributes(status: 'regifted')
@@ -166,10 +170,5 @@ class Gift < ActiveRecord::Base
 
     def regift_id?
       self.regift_id
-    end
-
-    def no_giver_name
-      self.giver_name.nil?
-    end
-    
+    end    
 end
