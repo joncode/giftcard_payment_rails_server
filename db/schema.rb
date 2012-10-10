@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121010065122) do
+ActiveRecord::Schema.define(:version => 20121010164208) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -218,6 +218,8 @@ ActiveRecord::Schema.define(:version => 20121010065122) do
     t.string   "fb_photo"
     t.string   "use_photo"
     t.string   "secure_image"
+    t.datetime "reset_token_sent_at"
+    t.string   "reset_token"
   end
 
 end
