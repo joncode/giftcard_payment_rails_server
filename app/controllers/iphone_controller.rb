@@ -124,6 +124,31 @@ class IphoneController < AppController
     end
   end
 
+  def regift
+    puts "ReGift"
+    puts "#{params}"
+
+    user  = User.find_by_remember_token(params["token"])
+    gift  = Gift.find(params["gift_id"])
+    if gift.receiver == user
+      receiver_id = params["regifter_id"] || nil
+      receiver = User.find(receiver_id.to_i)
+      message  = params["message"]     || nil
+      new_gift = gift.regift(receiver, message)
+    else
+      response["error_iphone"]    =  " User cannot regift gift #{gift.id}"
+    end
+    respond_to do |format|
+      if new_gift.save
+        response["success"]       = "ReGifted - Thank you!" 
+      else
+        response["error_server"]  = " ReGift unable to process to database." 
+      end
+      puts response
+      format.json { render json: response.to_json }
+    end 
+  end
+
   def buys
     puts "Buys"
     puts "#{params}"

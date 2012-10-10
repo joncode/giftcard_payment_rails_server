@@ -77,7 +77,7 @@ Drinkboard::Application.routes.draw do
   match 'app/out',              to: 'iphone#going_out',        via: :post 
   match 'app/active',           to: 'iphone#active_orders',    via: :post
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
-
+  match 'app/regift',           to: 'iphone#regift',           via: :post
 
   ###
   # match '/drinkboard', to: 'gifts#activity'
