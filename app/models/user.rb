@@ -129,6 +129,14 @@ class User < ActiveRecord::Base
     self.save
   end
   
+  def reset_password(password)
+    self.password = password
+    self.password_confirmation = password
+    self.reset_token = nil
+    self.reset_token_sent_at = nil
+    self.save
+  end
+  
   def checkin_to_foursquare(fsq_id, lat, lng)
     requrl = "https://foursquare.com/oauth2/access_token"
     response = HTTParty.post(url, :query => {:venueId => fsq_id, :ll => ["?,?",lat,lng], :oauth_token => self.foursquare_access_token})
