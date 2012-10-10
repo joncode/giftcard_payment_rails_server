@@ -133,7 +133,7 @@ class UsersController < ApplicationController
       user = User.find_by_email(params[:email])
       if user
         user.update_reset_token
-        Resque.enqueue(EmailJob, 'reset_password', user.id, {})  
+        Resque.enqueue(EmailJob, 'reset_password', user[:id], {})  
       end
     elsif params[:reset_token]
       user = User.find_by_reset_token(params[:reset_token])
@@ -155,6 +155,8 @@ class UsersController < ApplicationController
       user[:password_confirmation] = params[:password2]
       user.save
       @message = "Password saved successfully."
+      sign_in user
+      return redirect_to '/home'
     end
   end
   

@@ -3,7 +3,6 @@ class UserMailer < ActionMailer::Base
 
   def emailheader(user,subj)
     return {:to => "#{user.first_name} #{user.last_name} <#{user.email}>", 
-            :bcc => "missioncontrol@boundaboutwith.us", 
             :subject => subj}
   end
   
@@ -15,7 +14,10 @@ class UserMailer < ActionMailer::Base
   def invite_friend(user, friends_name, friends_email)
     @user = user
     @friend = {:name => friends_name, :email => friends_email}
-    mail(emailheader(user,"Your friend #{user.first_name} invited you to drinkboard."))
+    mail({
+      :to => "#{@friend[:name]} <#{@friend[:email]}>",
+      :subject => "Your friend #{user.first_name} invited you to drinkboard."
+    })
   end
   
 end

@@ -8,6 +8,8 @@ class EmailJob
     elsif email_type == "reset_password"
       @user = User.find(user_id)
       UserMailer.reset_password(@user)
+    elsif email_type == "invite_employee"
+      #Do this
     end
   end
   
