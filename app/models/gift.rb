@@ -31,7 +31,7 @@
 #
 
 class Gift < ActiveRecord::Base
-  attr_accessible :credit_card, :giver_id, :item_id, :message, :price, :provider_id, :quantity, :receiver_id, :redeem_id, :special_instructions, :status, :total, :giver_name, :receiver_name, :receiver_name ,  :provider_name, :item_name , :category, :receiver_phone, :tip, :tax, :facebook_id, :foursquare_id, :regift_id
+  attr_accessible :credit_card, :giver_id, :item_id, :message, :price, :provider_id, :quantity, :receiver_id, :redeem_id, :special_instructions, :status, :total, :giver_name, :receiver_name, :receiver_name ,  :provider_name, :item_name , :category, :receiver_phone, :tip, :tax, :facebook_id, :foursquare_id, :regift_id, :anon_id
   
   has_one     :redeem
   belongs_to  :provider
@@ -127,6 +127,13 @@ class Gift < ActiveRecord::Base
     else
       self.receiver_phone     = nil
     end
+  end
+
+  def add_anonymous_giver(giver_id)
+    anon_user       = User.find_by_phone('5555555555')
+    self.giver_id   = anon_user.id
+    self.giver_name = anon_user.username
+    self.anon_id    = giver_id
   end
  
   private
