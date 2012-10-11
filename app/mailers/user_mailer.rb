@@ -1,10 +1,12 @@
 class UserMailer < ActionMailer::Base
-  default :from => "noreplydrinkboard@gmail.com"
+  default :css => :email, :from => "noreplydrinkboard@gmail.com"
   
   def reset_password(user)
     @user = user
-    mail({:to => "#{user.first_name} #{user.last_name} <#{user.email}>", 
-          :subject => "drinkboard: password reset request"})
+    mail({
+      :to => "#{@user.username} <#{@user[:email]}>",
+      :subject => "drinkboard: password reset request"
+    })
   end
     
   def invite_friend(user, friends_name, friends_email)
