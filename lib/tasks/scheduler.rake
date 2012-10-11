@@ -2,7 +2,7 @@ desc "Query Facebook Users to see if they still have the proper permissions for 
 task :cull_facebook_users => :environment do
   facebookEnabledUsers = User.find_by_facebook_auth_checkin(true)
   inQuery = "(#{facebookEnabledUsers.map{ |user| user[:facebook_id] }.join(",")})"
-  response = HTTParty.get("https://graph.facebook.com/fql?q=select user_status, uid FROM permissions WHERE uid IN #{inQuery}")
+  response = HTTParty.get("https://graph.facebook.com/fql?q=select user_status, uid FROM permissions WHERE uid IN #{inQuery}&access_token=#{APP_CONFIG[:facebook][:app_access_token]}")
   
   #For this part, we look at facebookEnabledUsers and remove them one by one if they exist in the permissions hash.
   disableTheseFacebookUsers = facebookEnabledUsers
