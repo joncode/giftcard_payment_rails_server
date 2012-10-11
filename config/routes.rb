@@ -8,9 +8,9 @@ Drinkboard::Application.routes.draw do
 
   root to: 'users#new'
   resources :locations
-
-  resources :employees
-  match "/invite/:id" => "invite#show"
+  
+  match "/invite/:id"       => "invite#show"
+  match "/invite"           => "invite#invite_friend"
   
   resources :orders
   resources :redeems
@@ -50,8 +50,12 @@ Drinkboard::Application.routes.draw do
       get 'edit_info'
       get 'edit_photo'
       get 'edit_bank'
+      get 'invite_employee'
+      post 'invite_employee'
+      get 'add_employee'
     end
   end
+  match "/merchants/:id/employee/:eid/remove"   => "merchants#remove_employee"
   
   resources :items
   resources :menus

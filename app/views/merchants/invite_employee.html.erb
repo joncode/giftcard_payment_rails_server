@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="span8">
+		<br/>
+		<br/>
+		<br/>
+		<% if params[:email] %>
+			<p>We just sent an email to that employee to join drinkboard.</p>
+		<% else %>
+			<%= form_tag(invite_employee_merchant_path(@provider), :method => "post") do %>
+			  <%= label_tag(:email, "Employee's Email Address:") %>
+			  <%= text_field_tag(:email) %>
+			  <%= submit_tag("Submit") %>
+			<% end %>
+		<% end %>
+  </div>
+</div>
