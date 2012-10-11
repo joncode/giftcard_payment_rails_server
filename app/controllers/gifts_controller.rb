@@ -177,6 +177,10 @@ class GiftsController < ApplicationController
 
   def create
     @gift = Gift.new(params[:gift])
+      # add anonymous giver feature
+    if params[:gift][:anon_id] 
+      @gift.add_anonymous_giver(params[:gift][:giver_id])
+    end
 
     respond_to do |format|
       if @gift.save
