@@ -1,5 +1,9 @@
 Drinkboard::Application.routes.draw do
   
+  resources :sales
+
+  resources :cards
+
   get "email/invite"
 
   get "email/forgot_pw"

@@ -42,6 +42,8 @@ class User < ActiveRecord::Base
   has_many :providers, :through => :employees
   has_many :orders,    :through => :providers
   has_many :gifts,     foreign_key: "giver_id"
+  has_many :sales
+  has_many :cards
   has_many :locations
   # has_many :givers, through: :connections, source: "giver"
   # has_many :connections,          foreign_key: "receiver_id", dependent: :destroy
@@ -100,6 +102,18 @@ class User < ActiveRecord::Base
     anon_gifts    = Gift.where(anon_id: self.id)
     normal_gifts  = super
     return anon_gifts + normal_gifts
+  end
+
+  def get_credit_card(card_id)
+    user.cards.select { |c| c.id == card_id}
+  end
+
+  def display_cards
+    user.cards.select do |c| 
+      c.nickname
+      c.id
+      c.last_four
+    end
   end
 
   def bill

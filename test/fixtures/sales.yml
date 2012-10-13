@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  gift_id: 1
+  giver_id: 1
+  card_id: 1
+  request_json: MyString
+  response_json: MyString
+  status: MyString
+  provider_id: 1
+  transaction_id: MyString
+  revenue: 9.99
+
+two:
+  gift_id: 1
+  giver_id: 1
+  card_id: 1
+  request_json: MyString
+  response_json: MyString
+  status: MyString
+  provider_id: 1
+  transaction_id: MyString
+  revenue: 9.99

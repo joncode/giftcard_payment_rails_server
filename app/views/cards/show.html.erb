@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @card.user_id %>
+</p>
+
+<p>
+  <b>Nickname:</b>
+  <%= @card.nickname %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @card.name %>
+</p>
+
+<p>
+  <b>Number digest:</b>
+  <%= @card.number_digest %>
+</p>
+
+<p>
+  <b>Last four:</b>
+  <%= @card.last_four %>
+</p>
+
+<p>
+  <b>Month:</b>
+  <%= @card.month %>
+</p>
+
+<p>
+  <b>Year:</b>
+  <%= @card.year %>
+</p>
+
+<p>
+  <b>Csv:</b>
+  <%= @card.csv %>
+</p>
+
+<p>
+  <b>Type:</b>
+  <%= @card.type %>
+</p>
+
+
+<%= link_to 'Edit', edit_card_path(@card) %> |
+<%= link_to 'Back', cards_path %>

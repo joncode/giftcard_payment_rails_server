@@ -19,6 +19,8 @@ class Order < ActiveRecord::Base
   belongs_to  :provider
   belongs_to  :redeem
   belongs_to  :gift
+  belongs_to  :sales, through: :gift
+  belongs_to  :cards, through: :sales
   belongs_to  :server, class_name: "User"    # this should be class_name "Employee"
 
 

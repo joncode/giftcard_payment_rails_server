@@ -47,6 +47,7 @@ class Provider < ActiveRecord::Base
   has_many   :orders                                                                            
   has_one    :menu_string
   has_many   :gifts
+  has_many   :sales
   has_many   :servers, class_name: "Employee"
 
   mount_uploader :photo,    ImageUploader
