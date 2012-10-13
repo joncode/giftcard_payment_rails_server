@@ -19,7 +19,7 @@ class Order < ActiveRecord::Base
   belongs_to  :provider
   belongs_to  :redeem
   belongs_to  :gift
-  belongs_to  :server, class_name: "User"
+  belongs_to  :server, class_name: "User"    # this should be class_name "Employee"
 
 
   # order must be unique for each gift and redeem 

@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   has_many :employees
   has_many :providers, :through => :employees
   has_many :orders,    :through => :providers
-  has_many :gifts
+  has_many :gifts,     foreign_key: "giver_id"
   has_many :locations
   # has_many :givers, through: :connections, source: "giver"
   # has_many :connections,          foreign_key: "receiver_id", dependent: :destroy
@@ -95,6 +95,26 @@ class User < ActiveRecord::Base
     # need another validator for new servers to locations who already have server codes
     # to check other employees to make sure there arent doubles
   #/---------------------------------------------------------------------------------------------/
+  
+  def gifts
+    anon_gifts    = Gift.where(anon_id: self.id)
+    normal_gifts  = super
+    return anon_gifts + normal_gifts
+  end
+
+  def bill
+    total = self.gifts.sum { |gift| gift.total.to_d }
+    total > 0 ? total.to_digits : "0"
+  end
+
+  def received
+    Gift.where(receiver_id: self.id)
+  end
+
+  def all_gifts
+    Gift.where("giver_id = :user OR receiver_id = :user OR anon_id = :user", :user => self.id ).order("created_at DESC")
+  end
+
   def feed
     Micropost.from_users_followed_by(self)
   end
