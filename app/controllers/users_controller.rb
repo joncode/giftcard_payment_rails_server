@@ -127,10 +127,6 @@ class UsersController < ApplicationController
     render :json => {success: true}
   end
   
-  def invite_friend
-    Resque.enqueue(EmailJob, 'invite_friend', current_user.id, {:name => "Your Friends' Name", :email => "yourfriend@email.com"})
-  end
-  
   def reset_password
     if params[:email]
       user = User.find_by_email(params[:email])

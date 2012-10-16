@@ -139,5 +139,56 @@ class MerchantsController < ApplicationController
     @staff    = @provider.users
   end
 
+  def add_employee
+    return redirect_to "/" if !params[:join_token] && !params[:email]
+
+    provider = Provider.find_by_join_token(params[:join_token])
+    return redirect_to "/" if !provider
+    
+    user = User.find_by_email(params[:email])
+    return redirect_to "/" if !user
+    
+    #Otherwise, put the user in the employees hash.
+    provider.employees << user
+    flash[:notice] = "You successfully joined #{provider.name}."
+    redirect_to "/"
+  end
+
+  def invite_employee
+    @provider = Provider.find(params[:id])
+    if request.get?
+      #Show the page.
+    elsif request.post?
+      #Find the user, etc
+      if !params[:email]
+        return flash[:notice] = "You must enter in a user email."
+      end
+      potential_employee = User.find_by_email(params[:email])
+      if !potential_employee
+        #If the user doesn't exist in the database
+      else
+        #The user does exist in the database        
+      end
+      #For now, we handle either situation the same
+      puts "ENQUEUE"
+      Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email]})
+    end
+  end
+  
+  def remove_employee
+    #REMOVE THIS RETURN STATEMENT TO HAVE THE LINK FUNCTION PROPERLY.
+    return redirect_to "/merchants/#{params[:id]}/staff"
+    if params[:eid]
+      provider = Provider.find(params[:id])
+      provider.employees.each do |employee|
+        if ""+employee.user_id == ""+params[:id]
+          provider.employees.delete(employee)
+          provider.save
+          break
+        end
+      end
+    end
+    redirect_to "/merchants/#{params[:id]}/staff"
+  end
 
 end

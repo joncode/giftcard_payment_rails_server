@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="span8">
+		<% if params[:email] && params[:user_id] %>
+			<p>Thank you for sending an invite!</p>
+		<% else %>
+			<%= form_tag("/invite/", :method => "get") do %>
+			  <%= label_tag(:email, "Friend's Email Address:") %>
+			  <%= text_field_tag(:email) %>
+			  <%= label_tag(:user_id, "Your User ID:") %>
+			  <%= text_field_tag(:user_id) %>
+			  <%= label_tag(:gift_id, "Gift ID (optional):") %>
+			  <%= text_field_tag(:gift_id) %>
+			  <%= submit_tag("Submit") %>
+			<% end %>
+		<% end %>
+  </div>
+</div>

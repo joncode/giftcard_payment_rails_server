@@ -26,4 +26,4 @@ production:
     key: ""
     secret: ""
     redirect: "/foursquare/oauth"
-  baseUrl: "http://www.drinkboard.com"
+  baseUrl: "http://herokuapp.drinkboard.com"
