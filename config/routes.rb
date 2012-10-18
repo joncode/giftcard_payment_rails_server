@@ -74,6 +74,7 @@ Drinkboard::Application.routes.draw do
   match 'app/servercode',       to: 'iphone#server_code',      via: :post
   match 'app/order',            to: 'iphone#create_order',     via: :post
   match 'app/users',            to: 'iphone#drinkboard_users', via: :post
+  match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/out',              to: 'iphone#going_out',        via: :post 
   match 'app/active',           to: 'iphone#active_orders',    via: :post
