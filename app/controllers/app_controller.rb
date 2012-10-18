@@ -33,7 +33,7 @@ class AppController < ApplicationController
 			user_array = array_these_users(users, USER_REPLY)
 		rescue 
 			puts "ALERT - cannot find user from token"
-			user_array = "error" => "cannot find user from token"}
+			user_array = {"error" => "cannot find user from token"}
 		end
 
 
@@ -44,7 +44,7 @@ class AppController < ApplicationController
 	end
 
 	protected
-	
+
 	   	def array_these_gifts(obj, send_fields, address_get=false, receiver=false)
 	      gifts_ary = []
 	      index = 1 
