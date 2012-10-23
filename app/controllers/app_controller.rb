@@ -2,22 +2,41 @@ class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
  	USER_REPLY = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
-
+ 	PROVIDER_REPLY = ["id", "name", "photo", "box", "logo", "portrait", "sales_tax"]
  	def gifts
 	    puts "Gifts"
 	    puts "#{params}"
 
 	    user  = User.find_by_remember_token(params["token"])
 	    if user
-	    	gifts = Gift.get_gifts(user)
+	    	gifts 		= Gift.get_gifts(user)
 	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
 	  	else
-	  		gift_hash = {"error" => "user was not found in database"}
+	  		gift_hash 	= {"error" => "user was not found in database"}
 	  		gifts_array = gift_hash
 	  	end
 	    respond_to do |format|
 	      logger.debug gifts_array
 	      format.json { render text: gifts_array.to_json }
+	    end
+  	end
+
+  	def providers
+  		puts "Providers"
+  		puts "#{params}"
+
+		user  = User.find_by_remember_token(params["token"])
+	    if user
+	    	providers = Provider.all
+	    	providers_array = array_these_providers(providers, PROVIDER_REPLY)
+	  	else
+	  		providers_hash 	= {"error" => "user was not found in database"}
+	  		providers_array = providers_hash
+	  	end
+
+  		respond_to do |format|
+	      logger.debug providers_array
+	      format.json { render text: providers_array.to_json }
 	    end
   	end
 
@@ -104,8 +123,22 @@ class AppController < ApplicationController
 			end
 		end
 
+		def array_these_providers(obj, send_fields)
+			providers_array = []
+			obj.each do |p|
+				prov_obj = p.serializable_hash only: send_fields
+				prov_obj.each_key do |key|
+					value= prov_obj[key]
+					prov_obj[key] = value.to_s
+				end
+				prov_obj["full_address"] = p.full_address
+				providers_array << prov_obj
+			end
+			return providers_array
+		end
+
 	    def array_these_users(obj, send_fields)
-			user_array = []
+			users_array = []
 			obj.each do |u|
 				user_obj = u.serializable_hash only: send_fields
 				user_obj.each_key do |key|
@@ -113,9 +146,9 @@ class AppController < ApplicationController
 				  user_obj[key] = value.to_s
 				end
 				user_obj["photo"] = u.get_photo
-				user_array << user_obj
+				users_array << user_obj
 			end
-			return user_array
+			return users_array
 	    end
  
 end
