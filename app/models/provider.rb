@@ -126,6 +126,16 @@ class Provider < ActiveRecord::Base
     # get all the employees - put there table view info and secure image into an array
     send_fields = [:first_name, :last_name, :photo, :secure_image]
     self.users.map { |e| e.serializable_hash only: send_fields  }
+    employees_array = self.employees.map do |e|    
+      employee_hash = e.user.serializable_hash only: send_fields
+      employee_hash["employee_id"] = "#{e.id}" 
+      employee_hash
+    end
+    if employees_array.count == 0
+      employee_hash["error"] = "no employees set up yet"
+    else
+      employee_hash
+    end
   end
 
   def table_photo_hash

@@ -20,8 +20,8 @@ class Order < ActiveRecord::Base
   belongs_to  :redeem
   belongs_to  :gift
   belongs_to  :server, class_name: "User"
-
-
+  belongs_to  :employee
+  
   # order must be unique for each gift and redeem 
         # validation for provider_id is in callback until data is being sent from iPhone
   validates_presence_of :server_id 

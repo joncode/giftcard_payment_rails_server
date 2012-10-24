@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121009210916) do
+ActiveRecord::Schema.define(:version => 20121024201901) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -55,9 +55,10 @@ ActiveRecord::Schema.define(:version => 20121009210916) do
     t.string   "receiver_phone"
     t.string   "tax"
     t.string   "tip"
-    t.integer  "gift_id"
+    t.integer  "regift_id"
     t.string   "foursquare_id"
     t.string   "facebook_id"
+    t.integer  "anon_id"
   end
 
   create_table "items", :force => true do |t|
@@ -127,6 +128,7 @@ ActiveRecord::Schema.define(:version => 20121009210916) do
     t.string   "server_code"
     t.integer  "server_id"
     t.integer  "provider_id"
+    t.integer  "employee_id"
   end
 
   create_table "providers", :force => true do |t|
@@ -218,6 +220,8 @@ ActiveRecord::Schema.define(:version => 20121009210916) do
     t.string   "fb_photo"
     t.string   "use_photo"
     t.string   "secure_image"
+    t.datetime "reset_token_sent_at"
+    t.string   "reset_token"
   end
 
 end
