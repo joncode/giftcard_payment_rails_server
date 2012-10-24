@@ -66,6 +66,7 @@ Drinkboard::Application.routes.draw do
   match 'app/gifts',            to: 'iphone#gifts',            via: :post
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
   match 'app/providers',        to: 'app#providers',           via: :post
+  match 'app/employees'         to: 'app#create_redeem'        via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/provider',         to: 'iphone#provider',         via: :post

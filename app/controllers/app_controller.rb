@@ -3,6 +3,7 @@ class AppController < ApplicationController
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
  	USER_REPLY = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["id", "name", "photo", "box", "logo", "portrait", "sales_tax"]
+ 	
  	def gifts
 	    puts "Gifts"
 	    puts "#{params}"
@@ -61,6 +62,41 @@ class AppController < ApplicationController
 			format.json { render text: user_array.to_json }
 		end
 	end
+
+	def create_redeem
+    	puts "Create Redeem (App Controller) no server code"
+    	puts "#{params}"
+
+    	message  = ""
+    	response = {}
+    
+    	redeem_obj  = JSON.parse params["data"]
+    	if redeem_obj.nil?
+      		message = "data did not transfer. "
+      		redeem  = Redeem.new
+    	else
+       		# receiving a gift_id from the iPhone here
+     		redeem  = Redeem.new(redeem_obj)
+    	end
+    	begin
+      		receiver = User.find_by_remember_token(params["token"])
+    	rescue
+      		message += "Couldn't identify app user. "
+    	end
+
+    	response = { "error" => message } if message != "" 
+
+		respond_to do |format|
+			if redeem.save
+				response["servers"] = redeem.gift.provider.employees_to_app
+			else
+				message += " Gift unable to process to database. Please retry later."
+				response["error_server"] = message 
+			end
+			puts response
+			format.json { render text: response.to_json}
+		end
+  	end
 
 	protected
 

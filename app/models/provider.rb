@@ -122,6 +122,12 @@ class Provider < ActiveRecord::Base
     end
   end
 
+  def employees_to_app
+    # get all the employees - put there table view info and secure image into an array
+    send_fields = [:first_name, :last_name, :photo, :secure_image]
+    self.users.map { |e| e.serializable_hash only: send_fields  }
+  end
+
   def table_photo_hash
         # return the merchant name
         # return the table view photo url
