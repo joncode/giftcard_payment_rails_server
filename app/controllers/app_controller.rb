@@ -18,7 +18,7 @@ class AppController < ApplicationController
  			menu_string.to_json
  		end
 	    respond_to do |format|
-	      logger.debug gifts_array
+	      logger.debug menu_string
 	      format.json { render text: menu_string }
 	    end
  	end
