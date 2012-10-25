@@ -13,7 +13,6 @@
 
 ActiveRecord::Schema.define(:version => 20121002231418) do
 
-
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
     t.integer  "receiver_id"
@@ -158,11 +157,11 @@ ActiveRecord::Schema.define(:version => 20121002231418) do
     t.string   "bank_city"
     t.string   "bank_state"
     t.string   "bank_zip"
+    t.string   "portrait"
+    t.string   "box"
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
-    t.string   "portrait"
-    t.string   "box"
   end
 
   create_table "redeems", :force => true do |t|
