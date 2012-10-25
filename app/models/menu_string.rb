@@ -19,14 +19,14 @@ class MenuString < ActiveRecord::Base
   def self.get_menu_for_provider(provider_id)
   	menu_string = MenuString.find_by_provider_id(provider_id) 
   	if (!menu_string) || (menu_string.version == 1)
-  		menu_string = generate_menu_string(provider_id, menu_string)
+  		menu_string = menu_string.generate_menu_string(provider_id)
 	end
 	return menu_string	
   end
 
   private
   			# remake menu string from menu
-  	def generate_menu_string(provider_id, menu_string)
+  	def generate_menu_string(provider_id)
 		full_menu_array = []
 		
 			# generate section array from menu items
@@ -45,12 +45,12 @@ class MenuString < ActiveRecord::Base
 		end
 		menu_string_data = full_menu_array.to_json 
 
-  		menu_string.data = menu_string_data
-  		menu_string.version = 2
-  		menu_string.sections_json = sections_array.to_json
-  		menu_string.provider_id = provider_id if !menu_string.provider_id
+  		self.data = menu_string_data
+  		self.version = 2
+  		self.sections_json = sections_array.to_json
+  		self.provider_id = provider_id if !self.provider_id
   		
-  		menu_string.save
+  		self.save
 
   		return menu_string_data
   	end
