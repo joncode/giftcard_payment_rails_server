@@ -4,6 +4,25 @@ class AppController < ApplicationController
  	USER_REPLY = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["id", "name", "photo", "box", "logo", "portrait", "sales_tax"]
  	
+ 	def menu
+ 		puts "Menu App"
+ 		puts "#{params}"
+
+ 		user = User.find_by_remember_token(params["token"])
+ 		provider_id  = JSON.parse params["data"]
+
+ 		if true #user
+ 			menu_string = MenuString.get_menu_for_provider(provider_id.to_i)
+ 		else
+ 			menu_string_hash = {"error" => "user was not found in database"}
+ 			menu_string.to_json
+ 		end
+	    respond_to do |format|
+	      logger.debug gifts_array
+	      format.json { render text: menu_string }
+	    end
+ 	end
+
  	def gifts
 	    puts "Gifts"
 	    puts "#{params}"

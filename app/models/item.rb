@@ -12,8 +12,8 @@
 #
 
 class Item < ActiveRecord::Base
-  attr_accessible :category, :detail, :item_name, :proof, :type_of, :description 
+  attr_accessible :category, :detail, :item_name, :proof, :type_of, :description, :photo
                                                 
   has_many  :gifts
-  # has_and_belongs_to_many  :menus
+  has_many  :menus
 end

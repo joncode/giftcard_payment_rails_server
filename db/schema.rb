@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121024201901) do
+ActiveRecord::Schema.define(:version => 20121025224404) do
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20121024201901) do
     t.integer "category",    :limit => 20, :null => false
     t.string  "proof"
     t.string  "type_of"
+    t.string  "photo"
   end
 
   create_table "items_menus", :id => false, :force => true do |t|
@@ -96,11 +97,12 @@ ActiveRecord::Schema.define(:version => 20121024201901) do
 
   create_table "menu_strings", :force => true do |t|
     t.integer  "version"
-    t.integer  "provider_id",  :null => false
+    t.integer  "provider_id",   :null => false
     t.string   "full_address"
-    t.text     "data",         :null => false
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.text     "data",          :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "sections_json"
   end
 
   create_table "menus", :force => true do |t|
@@ -110,6 +112,10 @@ ActiveRecord::Schema.define(:version => 20121024201901) do
     t.integer  "position",    :limit => 8
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
+    t.string   "item_name"
+    t.string   "photo"
+    t.string   "description"
+    t.string   "section"
   end
 
   create_table "microposts", :force => true do |t|
