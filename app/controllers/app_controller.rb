@@ -8,11 +8,11 @@ class AppController < ApplicationController
  		puts "Menu App"
  		puts "#{params}"
 
- 		user = User.find_by_remember_token(params["token"])
- 		provider_id  = JSON.parse params["data"]
+ 		#user = User.find_by_remember_token(params["token"])
+ 		#provider_id  = JSON.parse params["data"]
 
  		if true #user
- 			menu_string = MenuString.get_menu_for_provider(provider_id.to_i)
+ 			menu_string = MenuString.get_menu_for_provider(40)
  		else
  			menu_string_hash = {"error" => "user was not found in database"}
  			menu_string.to_json
