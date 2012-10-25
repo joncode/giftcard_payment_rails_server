@@ -2,8 +2,8 @@ class Card < ActiveRecord::Base
 	#include ActiveMerchant::Billing::CreditCardMethods
 	#include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
 	
-	attr_accessible :csv, :last_four, :month, :name, :nickname, :
-	number_digest, :type, :user_id, :year
+	attr_accessible :csv, :last_four, :month, :name, :nickname
+	number_digest   :type, :user_id,  :year
 
 	validates_presence_of :csv, :last_four, :month, :name, :nickname, :number_digest, :type, :user_id, :year
 
@@ -14,7 +14,7 @@ class Card < ActiveRecord::Base
 		
 	before_validation :convert_number_to_string
 	before_save 	  :encrypt_number
-	before_save :save_last_four_digits
+	before_save 	  :save_last_four_digits
 	
 	def last_four
 		new_record? ? save_last_four_digits : read_attribute(:last_four_digits)
