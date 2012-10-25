@@ -16,7 +16,7 @@ class MenuString < ActiveRecord::Base
   
   belongs_to :provider
   
-  def get_menu_for_provider(provider_id)
+  def self.get_menu_for_provider(provider_id)
   	menu_string = MenuString.find_by_provider_id(provider_id) 
   	if (!menu_string) || (menu_string.version == 1)
   		menu_string = generate_menu_string(provider_id, menu_string)
