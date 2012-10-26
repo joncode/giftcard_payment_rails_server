@@ -78,7 +78,7 @@ class Menu < ActiveRecord::Base
   	end
 
   	self.save if changed
-	menu_item_obj = self.serializable_hash only: [:item_name, :price, :photo, :section, :description]
+	menu_item_obj = self.serializable_hash only: [:id, :item_name, :price, :photo, :section, :description]
 
   	return menu_item_obj
   end

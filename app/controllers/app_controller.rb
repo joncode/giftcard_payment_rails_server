@@ -9,7 +9,7 @@ class AppController < ApplicationController
  		puts "#{params}"
 
  		user = User.find_by_remember_token(params["token"])
- 		provider_id  = JSON.parse params["data"]
+ 		provider_id  = params["data"]
 
  		if user
  			menu_string = MenuString.get_menu_for_provider(provider_id.to_i)
