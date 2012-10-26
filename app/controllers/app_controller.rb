@@ -89,7 +89,7 @@ class AppController < ApplicationController
     	message  = ""
     	response = {}
     
-    	gift_id  = JSON.parse params["data"]
+    	gift_id  = params["data"]
 
     	if redeem_obj.nil?
       		message = "data did not transfer. "
