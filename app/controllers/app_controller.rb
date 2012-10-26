@@ -89,13 +89,14 @@ class AppController < ApplicationController
     	message  = ""
     	response = {}
     
-    	redeem_obj  = JSON.parse params["data"]
+    	gift_id  = JSON.parse params["data"]
+
     	if redeem_obj.nil?
       		message = "data did not transfer. "
       		redeem  = Redeem.new
     	else
        		# receiving a gift_id from the iPhone here
-     		redeem  = Redeem.new(redeem_obj)
+     		redeem  = Redeem.new(gift_id: gift_id.to_i)
     	end
     	begin
       		receiver = User.find_by_remember_token(params["token"])
