@@ -136,6 +136,7 @@ class Provider < ActiveRecord::Base
     else
       employee_hash
     end
+    return employees_array   
   end
 
   def table_photo_hash

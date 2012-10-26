@@ -88,15 +88,22 @@ class AppController < ApplicationController
 
     	message  = ""
     	response = {}
-    
+    	process  = false
     	gift_id  = params["data"]
+    	gift_id  = gift_id.to_i
 
     	if gift_id.nil?
       		message = "data did not transfer. "
       		redeem  = Redeem.new
     	else
        		# receiving a gift_id from the iPhone here
-     		redeem  = Redeem.new(gift_id: gift_id.to_i)
+     		if redeem = Redeem.find_by_gift_id(gift_id)
+     			process = true
+     		else
+ 				if redeem  = Redeem.create(gift_id: gift_id)
+ 					process = true
+ 				end
+     		end
     	end
     	begin
       		receiver = User.find_by_remember_token(params["token"])
@@ -107,8 +114,8 @@ class AppController < ApplicationController
     	response = { "error" => message } if message != "" 
 
 		respond_to do |format|
-			if redeem.save
-				response["servers"] = redeem.gift.provider.employees_to_app
+			if process
+				response = redeem.gift.provider.employees_to_app
 			else
 				message += " Gift unable to process to database. Please retry later."
 				response["error_server"] = message 
