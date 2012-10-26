@@ -98,10 +98,14 @@ class AppController < ApplicationController
     	else
        		# receiving a gift_id from the iPhone here
      		if redeem = Redeem.find_by_gift_id(gift_id)
+     			puts "FOUND GIFT REDEEM #{gift_id}"
      			process = true
      		else
  				if redeem  = Redeem.create(gift_id: gift_id)
  					process = true
+ 					puts "CREATED GIFT REDEEM #{gift_id}"
+ 				else
+ 					puts "FAILED TO CREATE GIFT REDEEM #{gift_id}"
  				end
      		end
     	end
