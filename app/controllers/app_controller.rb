@@ -14,7 +14,7 @@ class AppController < ApplicationController
  		if user
  			menu_string = MenuString.get_menu_for_provider(provider_id.to_i)
  		else
- 			menu_string_hash = {"error" => "user was not found in database"}
+ 			menu_string = {"error" => "user was not found in database"}
  			menu_string.to_json
  		end
 	    respond_to do |format|
