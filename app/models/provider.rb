@@ -124,11 +124,13 @@ class Provider < ActiveRecord::Base
 
   def employees_to_app
     # get all the employees - put there table view info and secure image into an array
-    send_fields = [:first_name, :last_name, :photo, :secure_image]
+    send_fields = [:first_name, :last_name]
     employees_array = self.employees.map do |e|    
       employee_hash = {}
       employee_hash = e.user.serializable_hash only: send_fields
-      employee_hash["employee_id"] = "#{e.id}" 
+      employee_hash["photo"]        = e.user.get_photo
+      employee_hash["secure_image"] = e.user.get_secure_image
+      employee_hash["employee_id"]  = "#{e.id}" 
       employee_hash
     end
     if employees_array.count == 0
