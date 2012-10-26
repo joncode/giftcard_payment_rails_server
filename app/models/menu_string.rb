@@ -12,17 +12,19 @@
 #
 
 class MenuString < ActiveRecord::Base
-  attr_accessible :full_address, :data, :provider_id, :version, :sections_json
+  	attr_accessible :full_address, :data, :provider_id, :version, :sections_json
   
-  belongs_to :provider
+  	belongs_to :provider
   
-  def self.get_menu_for_provider(provider_id)
-  	menu_string = MenuString.find_by_provider_id(provider_id) 
-  	if (!menu_string) || (menu_string.version == 1)
-  		menu_string = menu_string.generate_menu_string(provider_id)
-	end
-	return menu_string	
-  end
+  	def self.get_menu_for_provider(provider_id)
+  		menu_string = MenuString.find_by_provider_id(provider_id) 
+  		if (!menu_string) || (menu_string.version == 1)
+  			menu_string_data = menu_string.generate_menu_string(provider_id)
+		else
+			menu_string_data = menu_string.data
+		end
+		return menu_string_data	
+  	end
 
 			# remake menu string from menu
 	def generate_menu_string(provider_id)
