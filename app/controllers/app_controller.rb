@@ -91,7 +91,7 @@ class AppController < ApplicationController
     
     	gift_id  = params["data"]
 
-    	if redeem_obj.nil?
+    	if gift_id.nil?
       		message = "data did not transfer. "
       		redeem  = Redeem.new
     	else
