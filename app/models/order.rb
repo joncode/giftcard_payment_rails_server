@@ -14,7 +14,7 @@
 #
 
 class Order < ActiveRecord::Base
-  attr_accessible :gift_id, :redeem_code, :redeem_id, :server_code, :server_id, :provider_id
+  attr_accessible :gift_id, :redeem_code, :redeem_id, :server_code, :server_id, :provider_id, :employee_id
   
   belongs_to  :provider
   belongs_to  :redeem
@@ -24,11 +24,14 @@ class Order < ActiveRecord::Base
   
   # order must be unique for each gift and redeem 
         # validation for provider_id is in callback until data is being sent from iPhone
-  validates_presence_of :server_id 
+  validates_presence_of :employee_id 
   validates :gift_id   , presence: true, uniqueness: true
   validates :redeem_id , presence: true, uniqueness: true
     
   before_validation :add_gift_id,     :if => :no_gift_id
+  before_validation :get_server_id
+  before_validation :get_employee_id
+  before_validation :add_redeem_id,   :if => :no_redeem_id
   before_validation :add_provider_id, :if => :no_provider_id
   before_validation :authenticate_via_code
   after_create      :update_gift_status
@@ -85,6 +88,15 @@ class Order < ActiveRecord::Base
       self.gift_id = self.redeem.gift_id
     end
 
+    def no_redeem_id
+      self.redeem_id.nil?
+    end
+
+    def add_redeem_id
+      puts "ADD REDEEM ID"
+      self.redeem_id = self.gift.redeem_id
+    end
+
     def no_provider_id
       self.provider_id.nil?
     end
@@ -93,5 +105,19 @@ class Order < ActiveRecord::Base
       puts "ADD PROVIDER ID"
       self.provider_id = self.gift.provider_id
     end
-  
+
+    def get_server_id
+      if !self.server_id
+        puts "SET SERVER ID"
+        self.server_id = o.employee.user.id
+      end  
+    end
+
+    def get_employee_id
+      if !self.employee_id
+        puts "SET EMPLOYEE ID"
+        e = Employee.where(provider_id: self.provider.id, user_id: self.server.id)
+        self.employee_id = e.id
+      end  
+    end  
 end

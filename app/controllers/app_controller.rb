@@ -135,30 +135,29 @@ class AppController < ApplicationController
 
 		message   = ""
 		response  = {} 
-		order_obj = JSON.parse params["data"]
-		if order_obj.nil?
+		gift_id 	= params["gift_id"].to_i
+		employee_id = params["employee_id"].to_i
+
+		if gift_id.nil? || employee_id.nil? 
 			message = "Data not received correctly. "
 			order   = Order.new
 		else
-			order   = Order.new(order_obj)
+			order   = Order.new(gift_id: gift_id, employee_id: employee_id)
 		end
 		begin
-			# provider_user   = User.find_by_remember_token(params["token"])
-			order.server_id = provider_user.id
+			user 	 = User.find_by_remember_token(params["token"])
 		rescue
-			message        += "Couldn't identify app user. "
+			message += "Couldn't identify app user. "
 		end
 		begin
-			redeem   = Redeem.find_by_gift_id(order.gift_id)
+			redeem   = Redeem.find_by_gift_id(gift_id)
+			# putting redeem code in order from redeem altho likely not necessary
+			order.redeem_code = redeem.redeem_code
 		rescue
 			message += " Could not find redeem code via gift_id. "
 		end
-		if redeem
-			# putting redeem code in order from redeem altho likely not necessary
-			order.redeem_code = redeem.redeem_code
-		else
-			redeem_code = "not redeemed"
-		end
+
+
 		response = { "error" => message } if message != "" 
 
 		respond_to do |format|
