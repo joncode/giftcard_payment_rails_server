@@ -109,7 +109,7 @@ class Order < ActiveRecord::Base
     def get_server_id
       if !self.server_id
         puts "SET SERVER ID"
-        self.server_id = o.employee.user.id
+        self.server_id = self.employee.user.id
       end  
     end
 
