@@ -47,13 +47,12 @@ class Gift < ActiveRecord::Base
   belongs_to  :giver,    class_name: "User"
   belongs_to  :receiver, class_name: "User"
   
-  # add tax and tip when the iphone is ready 
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total, :tax, :tip
   # validates_numericality_of  :total, :quantity
   
   #before_create :add_category, :if => :no_category
   before_create :pluralizer
-  before_save   :set_status
+  before_create :set_status
 
   def self.get_gifts(user)
     Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")

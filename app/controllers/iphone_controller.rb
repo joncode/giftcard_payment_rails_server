@@ -234,39 +234,65 @@ class IphoneController < AppController
     case params["origin"]
     when 'd'
       #drinkboard - data already received
-      response["receiver"]   = "Drinkboard user"
+      response["receiver"]     = "Drinkboard user"
     when 'f'
       # facebook - search users for facebook_id
-      if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
-        gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-        response["receiver"] = receiver_info_response(receiver)
+      if gift_obj["facebook_id"]
+        if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
+          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+          response["receiver"] = receiver_info_response(receiver)
+        else
+          gift_obj["status"]   = "incomplete"
+          response["receiver"] = "NID"
+        end
       else                   
-        gift_obj["status"]   = "incomplete"
-        response["receiver"] = "NID"
+          gift_obj["status"]   = "incomplete"
+          response["error-receiver"] = "No facebook ID received"
       end
     when 't'
       #twitter - search users for twitter handle
-      if receiver = User.find_by_twitter(gift_obj["twitter"])
-        gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-        response["receiver"] = receiver_info_response(receiver)
-      else                   
-        gift_obj["status"]   = "incomplete"
-        response["receiver"] = "NID"
+      if gift_obj["twitter"]
+        if receiver = User.find_by_twitter(gift_obj["twitter"])
+          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+          response["receiver"] = receiver_info_response(receiver)
+        else                   
+          gift_obj["status"]   = "incomplete"
+          response["receiver"] = "NID"
+        end
+      else
+        gift_obj["status"]     = "incomplete"
+        response["error-receiver"] = "No twitter info received"
       end
     when 'c'
       # contacts - search users for phone
-      phone_received = gift_obj["receiver_phone"]
-      phone = extract_phone_digits(phone_received)
-      if receiver = User.find_by_phone(phone)
-        gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-        response["receiver"] = receiver_info_response(receiver)
+      if gift_obj["receiver_phone"]
+        phone_received = gift_obj["receiver_phone"]
+        phone = extract_phone_digits(phone_received)
+        if receiver = User.find_by_phone(phone)
+          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+          response["receiver"] = receiver_info_response(receiver)
+        else
+          gift_obj["status"]   = "incomplete"
+          response["receiver"] = "NID"
+        end
       else
-        gift_obj["status"]   = "incomplete"
-        response["receiver"] = "NID"
+          gift_obj["status"]   = "incomplete"
+          response["error-receiver"] = "No contact phone received"
       end
     else
-      # what to do here ?
-      response["error_origin"]   = "No origin indicator sent" 
+      # email - search users for phone
+      if gift_obj["receiver_email"]
+        if receiver = User.find_by_email(gift_obj["receiver_email"])
+          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+          response["receiver"] = receiver_info_response(receiver)
+        else
+          gift_obj["status"]   = "incomplete"
+          response["receiver"] = "NID"
+        end
+      else
+          gift_obj["status"]   = "incomplete"
+          response["error-receiver"] = "No contact email received"
+      end
     end
 
     begin
