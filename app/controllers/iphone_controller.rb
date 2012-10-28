@@ -223,6 +223,7 @@ class IphoneController < AppController
     message  = ""
 
     gift_obj = JSON.parse params["gift"]
+    puts "GIFT OBJECT  = #{params["gift"]}"
     if gift_obj.nil?
       message = "No gift data received.  "
       gift    = Gift.new
