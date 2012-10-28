@@ -51,7 +51,7 @@ class Gift < ActiveRecord::Base
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total, :tax, :tip
   # validates_numericality_of  :total, :quantity
   
-  before_create :add_category, :if => :no_category
+  #before_create :add_category, :if => :no_category
   before_create :pluralizer
   before_save   :set_status
 
@@ -124,7 +124,7 @@ class Gift < ActiveRecord::Base
     end
     
     def add_category
-      self.category = self.item.category if self.item.category
+      self.category = self.item.category
     end
     
     def no_category
