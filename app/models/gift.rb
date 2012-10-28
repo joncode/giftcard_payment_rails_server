@@ -31,7 +31,14 @@
 #
 
 class Gift < ActiveRecord::Base
-  attr_accessible :credit_card, :giver_id, :item_id, :message, :price, :provider_id, :quantity, :receiver_id, :redeem_id, :special_instructions, :status, :total, :giver_name, :receiver_name, :receiver_name ,  :provider_name, :item_name , :category, :receiver_phone, :tip, :tax, :facebook_id, :foursquare_id
+  attr_accessible   :giver_id,      :giver_name, :credit_card,    
+      :receiver_id, :receiver_name, :receiver_phone, 
+      :provider_id, :provider_name,
+      :item_id,     :item_name ,    :category, 
+      :message,     :special_instructions,
+      :price,       :quantity,      :tip, :tax, :total, 
+      :facebook_id, :foursquare_id,
+      :redeem_id,   :status
   
   has_one     :redeem
   belongs_to  :provider
@@ -41,7 +48,7 @@ class Gift < ActiveRecord::Base
   belongs_to  :receiver, class_name: "User"
   
   # add tax and tip when the iphone is ready 
-  validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total
+  validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total, :tax, :tip
   # validates_numericality_of  :total, :quantity
   
   before_create :add_category, :if => :no_category
@@ -117,7 +124,7 @@ class Gift < ActiveRecord::Base
     end
     
     def add_category
-      self.category = self.item.category
+      self.category = self.item.category if self.item.category
     end
     
     def no_category
