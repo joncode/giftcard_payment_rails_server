@@ -42,6 +42,9 @@ class User < ActiveRecord::Base
   has_many :orders,    :through => :providers
   has_many :gifts
   has_many :locations
+  has_many :answers
+  has_many :questions, :through => :answers
+  
   # has_many :givers, through: :connections, source: "giver"
   # has_many :connections,          foreign_key: "receiver_id", dependent: :destroy
   # has_many :reverse_connections,  foreign_key: "giver_id",

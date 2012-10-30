@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121025224404) do
+ActiveRecord::Schema.define(:version => 20121030082621) do
+
+  create_table "answers", :force => true do |t|
+    t.string   "answer"
+    t.integer  "user_id"
+    t.integer  "question_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -170,6 +178,11 @@ ActiveRecord::Schema.define(:version => 20121025224404) do
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
+  end
+
+  create_table "questions", :force => true do |t|
+    t.string "left"
+    t.string "right"
   end
 
   create_table "redeems", :force => true do |t|

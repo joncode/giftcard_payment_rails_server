@@ -41,6 +41,34 @@ class AppController < ApplicationController
 	    end
   	end
 
+  	def questions
+  		puts "Questions"
+  		puts "#{params}"
+  		user  = User.find_by_remember_token(params["token"])
+  		
+  		  	# save filled out answers to db
+  		if params["answers"]
+  			answers = JSON.parse params["answers"]
+  			Answer.save_these(answers)
+  		end
+
+  		if user
+	  			# get new pack of questions
+			begin
+	  			questions_array = Question.get_six_new_questions(user)
+	  		rescue
+	  			questions_array = ["error", "could not get questions"]
+	  		end
+	  	else
+	  		questions_array = ["error", "could not find user in db"]
+	  	end
+  		respond_to do |format|
+	      logger.debug questions_array
+	      format.json { render text: questions_array.to_json }
+	    end
+  		
+  	end
+
   	def providers
   		puts "Providers"
   		puts "#{params}"

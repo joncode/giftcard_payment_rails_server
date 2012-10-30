@@ -19,6 +19,22 @@
 
 ######################        USERS        ######################
 
+Question.delete_all
+Question.create([
+{"left" => "Day Drinking", "right" => "Night Drinking"},
+{"left" => "Red Wine",     "right" => "White Wine"},
+{"left" => "White Liqours","right" => "Brown Liqours"},
+{"left" => "Straw",        "right" => "No straw"},
+{"left" => "Light Beer",   "right" => "Dark Beer"},
+{"left" => "Mimosa",       "right" => "Bloody Mary"},
+{"left" => "Rare",         "right" => "Well Done"},
+{"left" => "City Vacation","right" => "Beach Vacation"},
+{"left" => "Shaken",       "right" => "Stirred"},
+{"left" => "Rocks",        "right" => "Neat"},
+{"left" => "Sweet",        "right" => "Sour"},
+{"left" => "Steak",        "right" => "Fish"}
+])
+
 User.delete_all
 User.create([
   { email: 'test@test.com', admin: true, password: 'testtest', password_confirmation: 'testtest', first_name: 'Larry', last_name: 'Page' , city: 'New York', state: 'NY', zip: "11238", phone: '1-646-493-4870', address: '1 Google Drive', credit_number: '4444444444444444', server_code: '4564'},
