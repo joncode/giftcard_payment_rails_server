@@ -103,6 +103,18 @@ class Gift < ActiveRecord::Base
   def self.get_history_provider(provider)
     Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
   end
+
+  def self.transactions(user)
+    gifts_raw = Gift.where(giver_id: user.id)
+    gifts = []
+    gifts_raw.each do |g|
+      gift_hash = g.serializable_hash only: [ :provider_name, :total, :receiver_name]
+      gift_hash["gift_id"] = g.id
+      gift_hash["created_at"] = g.created_at.to_date.inspect
+      gifts << gift_hash
+    end
+    return gifts
+  end
  
   private
     

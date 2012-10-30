@@ -66,7 +66,22 @@ class AppController < ApplicationController
 	      logger.debug questions_array
 	      format.json { render text: questions_array.to_json }
 	    end
-  		
+  	end
+
+  	def transactions
+  		puts "Questions"
+  		puts "#{params}"
+  		user  = User.find_by_remember_token(params["token"])
+
+  		if user
+  			transaction_array = Gift.transactions(user)
+	  	else
+	  		transaction_array = ["error", "could not find user in db"]
+	  	end
+  		respond_to do |format|
+	      logger.debug transaction_array
+	      format.json { render text: transaction_array.to_json }
+	    end
   	end
 
   	def providers
