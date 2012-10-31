@@ -41,6 +41,24 @@ class AppController < ApplicationController
 	    end
   	end
 
+  	 def past_gifts
+	    puts "Gifts"
+	    puts "#{params}"
+
+	    user  = User.find_by_remember_token(params["token"])
+	    if user
+	    	gifts 		= Gift.get_past_gifts(user)
+	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
+	  	else
+	  		gift_hash 	= {"error" => "user was not found in database"}
+	  		gifts_array = gift_hash
+	  	end
+	    respond_to do |format|
+	      logger.debug gifts_array
+	      format.json { render text: gifts_array.to_json }
+	    end
+  	end
+
   	def questions
   		puts "Questions"
   		puts "#{params}"
