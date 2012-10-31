@@ -53,6 +53,7 @@ class Gift < ActiveRecord::Base
   #before_create :add_category, :if => :no_category
   before_create :pluralizer
   before_create :set_status
+  before_create :extract_phone_digits
 
   def self.get_gifts(user)
     Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
@@ -117,7 +118,13 @@ class Gift < ActiveRecord::Base
   end
  
   private
-    
+    def extract_phone_digits
+      if self.receiver_phone
+        phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)
+        self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
+      end
+    end
+
     def set_status    
       if !self.receiver_id
         self.status =  "incomplete"

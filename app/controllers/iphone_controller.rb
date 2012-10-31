@@ -224,13 +224,7 @@ class IphoneController < AppController
 
     gift_obj = JSON.parse params["gift"]
     puts "GIFT OBJECT  = #{params["gift"]}"
-    if gift_obj.nil?
-      message = "No gift data received.  "
-      gift    = Gift.new
-    else
-      gift    = Gift.new(gift_obj)
-    end
-    
+
     case params["origin"]
     when 'd'
       #drinkboard - data already received
@@ -295,6 +289,14 @@ class IphoneController < AppController
       end
     end
 
+    if gift_obj.nil?
+      message = "No gift data received.  "
+      gift    = Gift.new
+    else
+      gift    = Gift.new(gift_obj)
+      puts "Here is GIFT #{gift.inspect}"
+    end
+    
     begin
       giver           = User.find_by_remember_token(params["token"])
       gift.giver_id   = giver.id
@@ -305,6 +307,7 @@ class IphoneController < AppController
     
     response = { "error" => message } if message != "" 
     respond_to do |format|
+      puts " PRE SAVE GIFT OBJECT  = #{gift.inspect}"
       if gift.save
         response["success"]       = "Gift received - Thank you!" 
       else

@@ -1,6 +1,6 @@
 class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
-	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "id"]
+	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
  	USER_REPLY = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["id", "name", "photo", "box", "logo", "portrait", "sales_tax"]
  	
@@ -274,8 +274,9 @@ class AppController < ApplicationController
 	          gift_obj["provider_address"] = provider.complete_address
 	        end
 
+	        gift_obj["gift_id"]  = g.id.to_s
 	        gift_obj["time_ago"] = time_string
-	      
+	      	
 	        ### >>>>>>>    this is not stored in gift object
 	        gift_obj["redeem_code"] = add_redeem_code(g)
 	        ###  07-27 9:08 UTC
