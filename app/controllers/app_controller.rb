@@ -3,7 +3,8 @@ class AppController < ApplicationController
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
- 	
+ 	ACTIVITY_REPLY     = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name"] 
+
  	def menu
  		puts "Menu App"
  		puts "#{params}"
@@ -48,7 +49,7 @@ class AppController < ApplicationController
 	    user  = User.find(params["user_id"])
 	    if user
 	    	gifts 		= Gift.get_user_activity(user)
-	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
+	    	gifts_array = array_these_gifts(gifts, ACTIVITY_REPLY, true, true)
 	  	else
 	  		gift_hash 	= {"error" => "user was not found in database"}
 	  		gifts_array = gift_hash
