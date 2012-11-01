@@ -1,8 +1,8 @@
 class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
- 	USER_REPLY = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
- 	PROVIDER_REPLY = ["id", "name", "photo", "box", "logo", "portrait", "sales_tax"]
+ 	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]
+ 	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
  	
  	def menu
  		puts "Menu App"
@@ -303,6 +303,7 @@ class AppController < ApplicationController
 					prov_obj[key] = value.to_s
 				end
 				prov_obj["full_address"] = p.full_address
+				prov_obj["provider_id"]  = p.id.to_s
 				providers_array << prov_obj
 			end
 			return providers_array
