@@ -283,7 +283,7 @@ class AppController < ApplicationController
 	            gift_obj["giver_photo"]     = g.giver.get_photo
 	          else
 	            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
-	          	gift_obj["receiver_photo"]  = nil
+	          	gift_obj["receiver_photo"]  = ""
 	          	gift_obj["giver_photo"]     = g.giver.get_photo
 	          	if g.receiver_name
 	          		gift_obj["receiver_name"] = g.receiver_name
