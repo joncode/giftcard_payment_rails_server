@@ -1,9 +1,10 @@
 class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
+  	ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
+
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
- 	ACTIVITY_REPLY     = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status", "giver_id", "giver_name"] 
 
  	def menu
  		puts "Menu App"
@@ -279,8 +280,16 @@ class AppController < ApplicationController
 	        if receiver
 	          if g.receiver
 	            gift_obj["receiver_photo"]  = g.receiver.get_photo
+	            gift_obj["giver_photo"]     = g.giver.get_photo
 	          else
 	            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
+	          	gift_obj["receiver_photo"]  = nil
+	          	gift_obj["giver_photo"]     = g.giver.get_photo
+	          	if g.receiver_name
+	          		gift_obj["receiver_name"] = g.receiver_name
+	          	else
+	          		gift_obj["receiver_name"] = "Unregistered"
+	          	end
 	          end
 	        else
 	          gift_obj["giver_photo"]       = g.giver.get_photo
