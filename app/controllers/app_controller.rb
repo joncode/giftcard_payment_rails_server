@@ -45,7 +45,7 @@ class AppController < ApplicationController
 	    puts "User Activity"
 	    puts "#{params}"
 
-	    user  = User.find_by_remember_token(params["token"])
+	    user  = User.find(params["user_id"])
 	    if user
 	    	gifts 		= Gift.get_user_activity(user)
 	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
