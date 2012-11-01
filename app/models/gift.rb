@@ -86,7 +86,7 @@ class Gift < ActiveRecord::Base
   end
   
   def self.get_user_activity(user)
-    Gift.where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at ASC")
+    Gift.where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at DESC")
   end
   
   def self.get_activity_at_provider(provider)

@@ -41,6 +41,24 @@ class AppController < ApplicationController
 	    end
   	end
 
+  	 def user_activity
+	    puts "User Activity"
+	    puts "#{params}"
+
+	    user  = User.find_by_remember_token(params["token"])
+	    if user
+	    	gifts 		= Gift.get_user_activity(user)
+	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
+	  	else
+	  		gift_hash 	= {"error" => "user was not found in database"}
+	  		gifts_array = gift_hash
+	  	end
+	    respond_to do |format|
+	      logger.debug gifts_array
+	      format.json { render text: gifts_array.to_json }
+	    end
+  	end
+
   	 def past_gifts
 	    puts "Gifts"
 	    puts "#{params}"
@@ -317,7 +335,8 @@ class AppController < ApplicationController
 				  value = user_obj[key]
 				  user_obj[key] = value.to_s
 				end
-				user_obj["photo"] = u.get_photo
+				user_obj["photo"] 	= u.get_photo
+				user_obj["user_id"] = u.id.to_s 
 				users_array << user_obj
 			end
 			return users_array
