@@ -200,7 +200,9 @@ class AppController < ApplicationController
 
 		respond_to do |format|
 			if process
-				response = redeem.gift.provider.employees_to_app
+				employees_ary = redeem.gift.provider.employees_to_app
+				redeem_code   = redeem.redeem_code.to_s
+				response = [redeem_code, employees_ary]
 			else
 				message += " Gift unable to process to database. Please retry later."
 				response["error_server"] = message 
