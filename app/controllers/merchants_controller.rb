@@ -170,7 +170,6 @@ class MerchantsController < ApplicationController
         #The user does exist in the database        
       end
       #For now, we handle either situation the same
-      puts "ENQUEUE"
       Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email]})
     end
   end

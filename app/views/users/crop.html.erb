@@ -1,9 +1,111 @@
-<h1>Crop Photo</h1>
+<script type="text/javascript">
+	function showPreview(coords){
+		//Fill in the preview information
+		var origPicWidth = $("#orig_uploaded_photo").width();
+		var origPicHeight = $("#orig_uploaded_photo").height();
+		var previewWidth = $("#preview").width();
+		var previewHeight = $("#preview").height();
+		
+		var widthScale = origPicWidth / coords.w;
+		var heightScale = origPicHeight / coords.h;
+		
+		var bgSizeWidth = widthScale * previewWidth;
+		var bgSizeHeight = heightScale * previewHeight;
+		var newBgSize = bgSizeWidth+"px "+bgSizeHeight+"px";
+		$("#preview").css("backgroundSize",newBgSize);
+		
+		var bgPosX = coords.x * (widthScale/(origPicWidth/previewWidth));
+		var bgPosY = coords.y * (heightScale/(origPicHeight/previewHeight));
+		var newBgPos = "-"+bgPosX+"px -"+bgPosY+"px"
+		$("#preview").css("backgroundPosition",newBgPos);
+		
+		$("#user_crop_x").val(coords.x);
+		$("#user_crop_y").val(coords.y);
+		$("#user_crop_w").val(coords.w);
+		$("#user_crop_h").val(coords.h);
+	}
+	$(document).ready(function(){
+		$('#uploadForm input').change(function(){
+			$(this).parent().ajaxSubmit({
+		  	beforeSubmit: function(a,f,o) {
+		   		o.dataType = 'json';
+					//Show loading animation in the orig_uploaded_photo box.
+		  	},
+		  	complete: function(XMLHttpRequest, textStatus) {
+					var response = JSON.parse(XMLHttpRequest.responseText);
+					$("#orig_uploaded_photo").attr("src",response.url);
+					$("#preview").css("backgroundImage","url("+response.url+")")
+					console.log($("#preview").css("backgroundImage"));
+					
+					var jcrop_api;
+					$('#orig_uploaded_photo').Jcrop({
+						onChange: showPreview,
+						onSelect: showPreview,
+						aspectRatio: 1
+					}, function(){ jcrop_api = this; });
+					$("#orig_uploaded_photo").load(function(){
+						jcrop_api.setSelect([0,0,$(this).width(),$(this).height()]);
+					});
+		  	},
+		 	});
+		});
+		
+		$("#finalize_photo").click(function(){
+			var queryStr = "x="+$("#user_crop_x").val();
+			queryStr += "&y="+$("#user_crop_y").val();
+			queryStr += "&w="+$("#user_crop_w").val();
+			queryStr += "&h="+$("#user_crop_h").val();
+			queryStr += "&url="+$("#orig_uploaded_photo").attr("src");
+			$.ajax({
+				url: "/users/<%=@user.id%>/update_avatar",
+				type: "POST",
+				dataType: "json",
+				data: queryStr,
+				success: function(json){
+					window.location = "/users/<%=@user.id%>"
+				}
+			});
+			return false;
+		});
+	});
+</script>
+<style type="text/css">
+	#uploaded_photo{
+		width: 350px; height: 500px; background: #ddd; float: left; display: table;
+	}
+	#uploaded_photo #inner_wrapper{
+		display: table-cell; vertical-align: middle;
+	}
+	#uploaded_photo #inner_wrapper .jcrop-holder{
+		margin: 0px auto; display: block; background-color: gray !important;
+	}
+	#preview{
+		width: 131px; height: 131px; background: gray; float: left; margin-left: 20px;
+	}
+	#user_crop_x,#user_crop_y,#user_crop_w,#user_crop_h{ display: none; }
+</style>
 
-<div class="cropPhotoBox">
-  <%= large_photo(@user) %>
+
+<div id="uploaded_photo">
+	<div id="inner_wrapper">
+		<img id="orig_uploaded_photo" src="" />
+	</div>
 </div>
+<%= form_for(:image_form, :url => { :controller => "users", :action => :upload_avatar }, :html => { :method => :post, :id => 'uploadForm', :multipart => true }) do |f| %>
+ Upload a file: <%= f.file_field :uploaded_data %>
+<% end %>
 
+<div id="preview" style=""></div>
+
+<% %w[x y w h].each do |attr| %>
+	<input id="user_crop_<%= attr %>" type="text" size="30" name="user[crop_<%= attr %>]">
+<% end %>
+<a href="#" id="finalize_photo">Use This Photo</a>
+<!--
+<div class="cropPhotoBox">
+	<img src="http://res.cloudinary.com/drinkboard/image/upload/v1349221640/yzjd1hk2ljaycqknvtyg.png" id="cropbox" />
+</div>
+<div id="uploader"></div>
 
 <%= form_for @user do |f| %>
   <% %w[x y w h].each do |attr| %>
@@ -15,4 +117,5 @@
   </div>
   
 <% end %>
+-->
 

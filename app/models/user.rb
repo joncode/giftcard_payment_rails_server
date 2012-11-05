@@ -107,6 +107,10 @@ class User < ActiveRecord::Base
     end
   end
   
+  def profile_pic(w,h)
+    self.photo
+  end
+  
   def following?(other_user)
     relationships.find_by_followed_id(other_user.id)
   end

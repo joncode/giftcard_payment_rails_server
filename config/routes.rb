@@ -119,11 +119,13 @@ Drinkboard::Application.routes.draw do
       get :servercode
       get :crop
       get :change_public_status
+      post :update_avatar
     end
     collection do
       get :reset_password
       get :enter_new_password
       post :enter_new_password
+      post :upload_avatar
     end
   end
   
