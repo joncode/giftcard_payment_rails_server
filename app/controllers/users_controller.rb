@@ -144,11 +144,12 @@ class UsersController < ApplicationController
       user = User.find_by_email(params[:email])
       if user
         user.update_reset_token
+        # UserMailer.reset_password(user).deliver
         Resque.enqueue(EmailJob, 'reset_password', user[:id], {})  
       end
     elsif params[:reset_token]
-      @user = User.find_by_reset_token(params[:reset_token])
-      if @user && Time.now - 1.day <= @user[:reset_token_sent_at]
+      user = User.find_by_reset_token(params[:reset_token])
+      if Time.now - 1.day <= user[:reset_token_sent_at]
         return render 'enter_new_password'
       end
     end
@@ -162,13 +163,9 @@ class UsersController < ApplicationController
     if params[:password1] != params[:password2]
       @message = "Your passwords do not match. Try again."
     else
-      user = User.find_by_reset_token(params[:reset_token])
-      if !user
-        flash[:notice] = "Could not find user by reset token."
-        return redirect_to '/'
-      end
-      
-      user.reset_password(params[:password1])
+      user[:password] = params[:password1]
+      user[:password_confirmation] = params[:password2]
+      user.save
       @message = "Password saved successfully."
       sign_in user
       return redirect_to '/home'

@@ -295,8 +295,12 @@ class IphoneController < AppController
 
     begin
       giver           = User.find_by_remember_token(params["token"])
-      gift.giver_id   = giver.id
-      gift.giver_name = giver.username
+      if gift_obj["anon_id"]
+        gift.add_anonymous_giver(giver.id)
+      else
+        gift.giver_id   = giver.id
+        gift.giver_name = giver.username
+      end
     rescue
       message = "Couldn't identify app user. "
     end
