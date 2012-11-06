@@ -85,10 +85,10 @@ class AppController < ApplicationController
   		user  = User.find_by_remember_token(params["token"])
   		
   		  	# save filled out answers to db
-  		if params["answers"]
+  		if params["answers"] && user
         puts "ANSWERS #{params['answers']}"
-  			answers = params["answers"]
-  			Answer.save_these(answers)
+  			answered_questions = params["answers"]
+  			Answer.save_these(answered_questions, user)
   		end
 
   		if user

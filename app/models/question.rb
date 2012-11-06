@@ -22,7 +22,6 @@ class Question < ActiveRecord::Base
       six_new_qs = Question.limit 6
     end
 
-
     puts "HERE ARE NEW QUESTIONS #{six_new_qs.inspect}" 	
   	return six_new_qs
   end

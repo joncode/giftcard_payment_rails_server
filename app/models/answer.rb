@@ -6,10 +6,10 @@ class Answer < ActiveRecord::Base
 
   validates_presence_of :user_id, :answer, :question_id
 
-  def self.save_these(answers)
+  def self.save_these(answered_questions, user)
   	puts "SAVE THESE ANSWERS #{answers.inspect}"
-  	answers.each do |a|
-  		Answer.create(a)
+  	answered_questions.each do |a|
+  		Answer.create(user_id: user.id, question_id: a.question_id, answer: a.answer)   
   	end
   end
 end
