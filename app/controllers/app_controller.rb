@@ -86,7 +86,8 @@ class AppController < ApplicationController
   		
   		  	# save filled out answers to db
   		if params["answers"]
-  			answers = JSON.parse params["answers"]
+        puts "ANSWERS #{params['answers']}"
+  			answers = params["answers"]
   			Answer.save_these(answers)
   		end
 
