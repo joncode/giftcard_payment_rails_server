@@ -7,6 +7,7 @@ class Answer < ActiveRecord::Base
   validates_presence_of :user_id, :answer, :question_id
 
   def self.save_these(answers)
+  	puts "SAVE THESE ANSWERS #{answers.inspect}"
   	answers.each do |a|
   		Answer.create(a)
   	end

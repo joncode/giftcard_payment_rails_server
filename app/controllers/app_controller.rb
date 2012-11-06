@@ -1,7 +1,7 @@
 class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-  	ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
+  ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
 
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
@@ -81,7 +81,7 @@ class AppController < ApplicationController
 
   	def questions
   		puts "Questions"
-  		puts "#{params}"
+  		puts "HERE ARE THE PARAMS #{params}"
   		user  = User.find_by_remember_token(params["token"])
   		
   		  	# save filled out answers to db
@@ -92,13 +92,13 @@ class AppController < ApplicationController
 
   		if user
 	  			# get new pack of questions
-			begin
-	  			questions_array = Question.get_six_new_questions(user)
-	  		rescue
-	  			questions_array = ["error", "could not get questions"]
-	  		end
+			   begin
+	  			  questions_array = Question.get_six_new_questions(user)
+	  		 rescue
+	  			  questions_array = ["error", "could not get questions"]
+	  		 end
 	  	else
-	  		questions_array = ["error", "could not find user in db"]
+	  		 questions_array = ["error", "could not find user in db"]
 	  	end
   		respond_to do |format|
 	      logger.debug questions_array

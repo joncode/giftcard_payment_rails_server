@@ -18,6 +18,7 @@ class Question < ActiveRecord::Base
   	new_qs = all_qs.select { |question| !(answered_q_ids.include? question.id) }
   	# limit 6
   	six_new_qs = new_qs[0..5]
+    puts "HERE ARE ^ NEW QUESTIONS #{six_new_qs.inspect}"
   	return six_new_qs
   end
 end
