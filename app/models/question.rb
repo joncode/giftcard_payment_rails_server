@@ -9,16 +9,20 @@ class Question < ActiveRecord::Base
   	# get the question_id's from the answered questions by users
   	answers = Answer.where user_id: user
   	answered_question_ids = []
-  	answer.each do |a|
-  		answered_q_ids << a.question_id
-  	end
+    if answers.count > 0
+    	answers.each do |a|
+    		answered_q_ids << a.question_id
+    	end
+          # send that array of id's in query to get new questions
+      all_qs = Question.all
+      new_qs = all_qs.select { |question| !(answered_q_ids.include? question.id) }
+        # limit 6
+      six_new_qs = new_qs[0..5]
+      puts "HERE ARE ^ NEW QUESTIONS #{six_new_qs.inspect}"
+    else
+      six_new_qs = Question.limit 6
+    end
   	
-  	# send that array of id's in query to get new questions
-  	all_qs = Question.all
-  	new_qs = all_qs.select { |question| !(answered_q_ids.include? question.id) }
-  	# limit 6
-  	six_new_qs = new_qs[0..5]
-    puts "HERE ARE ^ NEW QUESTIONS #{six_new_qs.inspect}"
   	return six_new_qs
   end
 end
