@@ -47,7 +47,7 @@ class Gift < ActiveRecord::Base
   belongs_to  :giver,    class_name: "User"
   belongs_to  :receiver, class_name: "User"
   
-  validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity, :total, :tax, :tip
+  validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity#, :total, :tax, :tip
   # validates_numericality_of  :total, :quantity
   
   #before_create :add_category, :if => :no_category

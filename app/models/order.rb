@@ -47,6 +47,7 @@ class Order < ActiveRecord::Base
 
     def update_gift_status
       self.gift.update_attributes({status: 'redeemed'})
+      puts "UPDATE GIFT STATUS #{self.gift.status}"
     end
     
     def authenticate_via_code
