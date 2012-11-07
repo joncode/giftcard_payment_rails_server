@@ -4,7 +4,7 @@ class Question < ActiveRecord::Base
     has_many :answers
     has_many :users , :through => :answers
 
-    def get_questions_with_answers(user)
+    def self.get_questions_with_answers(user)
         total = []
         questions = Question.all
         answers = Answer.where(user_id: user.id) 
