@@ -8,7 +8,7 @@ class Question < ActiveRecord::Base
   def self.get_six_new_questions(user)
   	# get the question_id's from the answered questions by users
   	answers = Answer.where(user_id: user.id)
-  	answered_question_ids = []
+  	answered_q_ids = []
     if answers.count > 0
     	answers.each do |a|
     		answered_q_ids << a.question_id
