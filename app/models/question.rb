@@ -12,13 +12,15 @@ class Question < ActiveRecord::Base
         questions.each do |question|
             qHash = question.serializable_hash only: [:left, :right]
             qHash["question_id"] = question.id
-            answers.each do |answer|
-                if answer.question_id   == question.id
-                    if answer.answer    == question.left
-                        qHash["answer"]  = 0
-                    elsif answer.answer == question.right
-                        qHash["answer"]  = 1
-                    end  
+            if answers.count > 0
+                answers.each do |answer|
+                    if answer.question_id   == question.id
+                        if answer.answer    == question.left
+                            qHash["answer"]  = "0"
+                        elsif answer.answer == question.right
+                            qHash["answer"]  = "1"
+                        end  
+                    end
                 end
             end
             total << qHash
