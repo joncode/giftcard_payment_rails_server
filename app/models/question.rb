@@ -25,7 +25,6 @@ class Question < ActiveRecord::Base
           six_new_qs << xtra
           index += 1
         end
-      end
       else
         six_new_qs = new_qs[0..5]
       end
