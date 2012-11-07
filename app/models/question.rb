@@ -19,8 +19,13 @@ class Question < ActiveRecord::Base
         # limit 6
       if new_qs.count < 6
         adds = 6 - new_qs.count
-        xtra = Question.limit(adds)
-        six_new_qs = new_qs + xrta
+        xtra = all_qs.select { |question| (answered_q_ids.include? question.id) }
+        index = 0
+        while index < adds
+          six_new_qs << xtra
+          index += 1
+        end
+      end
       else
         six_new_qs = new_qs[0..5]
       end
