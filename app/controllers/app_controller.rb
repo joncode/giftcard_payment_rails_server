@@ -102,7 +102,7 @@ class AppController < ApplicationController
 	  		 questions_array = ["error", "could not find user in db"]
 	  	end
   		respond_to do |format|
-	      logger.debug questions_array
+	      puts questions_array
 	      format.json { render text: questions_array.to_json }
 	    end
   	end

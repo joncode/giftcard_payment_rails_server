@@ -8,11 +8,11 @@ class Question < ActiveRecord::Base
         total = []
         questions = Question.all
         answers = Answer.where(user_id: user.id) 
-
+        puts "in questions w answers"
         questions.each do |question|
             qHash = question.serializable_hash only: [:left, :right]
             qHash["question_id"] = question.id
-            if answers.count > 0
+            if answers.length > 0
                 answers.each do |answer|
                     if answer.question_id   == question.id
                         if answer.answer    == question.left
@@ -23,6 +23,7 @@ class Question < ActiveRecord::Base
                     end
                 end
             end
+            puts " HERE IS THE QHASH #{qHash}"
             total << qHash
         end
     end
