@@ -26,6 +26,7 @@ class Question < ActiveRecord::Base
             puts " HERE IS THE QHASH #{qHash}"
             total << qHash
         end
+        return total
     end
 
 
