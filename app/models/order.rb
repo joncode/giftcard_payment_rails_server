@@ -46,7 +46,7 @@ class Order < ActiveRecord::Base
     end
 
     def update_gift_status
-      self.gift.update_attributes({status: 'redeemed'})
+      self.gift.update_attribute(:status, 'redeemed')
       puts "UPDATE GIFT STATUS #{self.gift.status}"
     end
     
