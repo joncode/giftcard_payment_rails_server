@@ -9,7 +9,8 @@ class Answer < ActiveRecord::Base
   def self.save_these(answered_questions, user)
   	puts "SAVE THESE ANSWERS #{answered_questions}"
   	answered_questions.each do |a|
-  		Answer.create(user_id: user.id, question_id: a.question_id, answer: a.answer)   
+  		a["user_id"]= user.id
+  		answer = Answer.create(a)
   	end
   end
 end
