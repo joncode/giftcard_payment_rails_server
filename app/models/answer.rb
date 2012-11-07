@@ -9,7 +9,7 @@ class Answer < ActiveRecord::Base
   def self.save_these(answered_questions, user)
   	puts "SAVE THESE ANSWERS #{answered_questions}"
   	answered_questions.each do |a|
-  		if answer = Answer.find_by_question_id(a["question_id"])
+  		if answer = Answer.where(user_id: user.id, question_id: a["question_id"])
   			if answer.answer != a["answer"]
   				answer.update_attributes(answer: a["answer"])
           puts "updated = answer = #{answer}"
