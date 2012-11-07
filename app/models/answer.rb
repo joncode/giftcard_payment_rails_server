@@ -12,11 +12,13 @@ class Answer < ActiveRecord::Base
   		if answer = Answer.find_by_question_id(a["question_id"])
   			if answer.answer != a["answer"]
   				answer.update_attributes(answer: a["answer"])
+          puts "updated = answer = #{answer}"
   			end
   		else
   			a["user_id"]= user.id
   			answer = Answer.create(a)
-  		end
+        puts "created = answer = #{answer} "
+      end
   	end
   end
 end
