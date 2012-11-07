@@ -17,7 +17,13 @@ class Question < ActiveRecord::Base
       all_qs = Question.all
       new_qs = all_qs.select { |question| !(answered_q_ids.include? question.id) }
         # limit 6
-      six_new_qs = new_qs[0..5]
+      if new_qs.count < 6
+        adds = 6 - new_qs.count
+        xtra = Question.limit(adds)
+        six_new_qs = new_qs + xrta
+      else
+        six_new_qs = new_qs[0..5]
+      end
     else
       six_new_qs = Question.limit 6
     end
