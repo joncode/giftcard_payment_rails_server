@@ -95,7 +95,7 @@ class Order < ActiveRecord::Base
 
     def add_redeem_id
       puts "ADD REDEEM ID"
-      self.redeem_id = self.gift.redeem_id
+      self.redeem_id = self.gift.redeem.id
     end
 
     def no_provider_id
