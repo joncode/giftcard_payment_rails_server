@@ -94,7 +94,7 @@ class AppController < ApplicationController
   		if user
 	  			# get new pack of questions
 			   begin
-	  			  questions_array = Question.get_six_new_questions(user)
+	  			  questions_array = Question.get_questions_with_answers(user)
 	  		 rescue
 	  			  questions_array = ["error", "could not get questions"]
 	  		 end
