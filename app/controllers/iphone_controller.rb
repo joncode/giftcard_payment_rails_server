@@ -273,7 +273,7 @@ class IphoneController < AppController
           gift_obj["status"]   = "incomplete"
           response["error-receiver"] = "No contact phone received"
       end
-    else
+    when 'e'
       # email - search users for phone
       if gift_obj["receiver_email"]
         if receiver = User.find_by_email(gift_obj["receiver_email"])
@@ -287,6 +287,9 @@ class IphoneController < AppController
           gift_obj["status"]   = "incomplete"
           response["error-receiver"] = "No contact email received"
       end
+    else
+        #drinkboard - no origin sent
+        response["receiver"]     = "Drinkboard user"
     end
 
     if gift_obj.nil?
