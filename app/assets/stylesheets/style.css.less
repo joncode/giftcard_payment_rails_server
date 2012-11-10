@@ -128,6 +128,14 @@ h3 {
 	font-style: italic;
 }
 
+@import url('http://fonts.googleapis.com/css?family=Oswald:100');
+
+h4 {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 100;
+
+}
+
 // End Fonts
 
 /*                                                                                       
@@ -142,6 +150,7 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
     `Ybmmd'                                                      
 */
 
+@white: #F2F2F2;
 @yellow: #F9DD97;
 @redHot: #FF6865;
 @red: #761D1B;
@@ -1979,13 +1988,102 @@ ul.menuHeader {
 // }
 
 
+// `7MMM.     ,MMF'                            
+//   MMMb    dPMM                              
+//   M YM   ,M MM  .gP"Ya `7MMpMMMb`7MM  `7MM  
+//   M  Mb  M' MM ,M'   Yb  MM    MM MM    MM  
+//   M  YM.P'  MM 8M""""""  MM    MM MM    MM  
+//   M  `YM'   MM YM.    ,  MM    MM MM    MM  
+// .JML. `'  .JMML.`Mbmmd'.JMML  JMML`Mbod"YML.
+//                    ,,   ,,                        
+// `7MM"""YMM       `7MM   db   mm                   
+//   MM    `7         MM        MM                   
+//   MM   d      ,M""bMM `7MM mmMMmm ,pW"Wq.`7Mb,od8 
+//   MMmmMM    ,AP    MM   MM   MM  6W'   `Wb MM' "' 
+//   MM   Y  , 8MI    MM   MM   MM  8M     M8 MM     
+//   MM     ,M `Mb    MM   MM   MM  YA.   ,A9 MM     
+// .JMMmmmmMMM  `Wbmd"MML.JMML. `Mbmo`Ybmd9'.JMML.
 
+.menuBuilderBackground {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #F2F2F2;
+	z-index: -100;
+}
 
+.menuEditWrapper {
+	
+}
 
+.topRow {
+	position: relative;
+	width: 100%;
+	height: 55px;
+	width: 100%;
+	padding: 0 35px;
 
+	.editMenuHeader { //h4
+		position: relative;
+		text-transform: capitalize;
+		padding-top: 17px;
+		font-size: 60px;
+		font-weight: 100;
+		color: #1A1C2A;
+		float:left;
+	}
 
+	.topRowTabsWrapper {
+		position: relative;
+		//left: 20px;
+		float: right;
+		height: 55px;
 
+	}
 
+	.topRowTab {
+		background-image: url('topRowTab.png');
+		width: 97px;
+		height: 26px;
+		float: left;
+		color: @white;
+		margin-right: 2px;
+	}
+
+	.topRowText {
+		color: @white;
+		font-size: 18px;
+		text-align: center;
+		padding-top: 3px;
+
+	}
+
+	.row2Wrapper {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		float: left;
+		padding: 0 20px;
+
+		.row2ButtonUp {
+			width: 92px;
+			height: 42px;
+			background-image: url('row2ButtonUp.png');
+			float: left;
+
+			.row2Text {
+				color: @white;
+				text-align: center;
+				font-size: 17px;
+				font-weight: 100;
+				padding-top: 10px;
+
+			}
+		}
+	}	
+}
 
 
 
@@ -2015,6 +2113,7 @@ ul.menuHeader {
 
 .footer {
 	display: none;
+
 }
 
 
