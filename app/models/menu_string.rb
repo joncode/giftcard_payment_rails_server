@@ -18,8 +18,12 @@ class MenuString < ActiveRecord::Base
   
   	def self.get_menu_for_provider(provider_id)
   		menu_string = MenuString.find_by_provider_id(provider_id) 
-  		if (!menu_string) || (menu_string.version == 1)
+  		if !menu_string
+			menu_string = MenuString.new
+			menu_string_data = menu_string.generate_menu_string(provider_id)
+		elsif menu_string.version == 1
   			menu_string_data = menu_string.generate_menu_string(provider_id)
+		
 		else
 			menu_string_data = menu_string.data
 		end
