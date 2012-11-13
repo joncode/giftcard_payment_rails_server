@@ -33,7 +33,7 @@ class MenusController < ApplicationController
     @menu_string = MenuString.get_menu_for_provider(provider_id)
     @menu = JSON.parse @menu_string
     @sections = Menu.get_sections(provider_id)
-    puts "MENUSTRING __> " + @menu_string
+    puts "MENUSTRING --> " + @menu_string
     puts "MENU ARRAY !!! = " + @menu.inspect
     puts "SECTIONS ARRAY = "  + @sections.inspect
   end
