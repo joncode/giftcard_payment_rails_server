@@ -26,11 +26,11 @@ class Menu < ActiveRecord::Base
    	end
   	
   	sections_array = []
-	BEVERAGE_CATEGORIES.each do |cat|
-		if sections.has_key? cat
-			sections_array << cat
-		end
-	end
+  	BEVERAGE_CATEGORIES.each do |cat|
+  		if sections.has_key? cat
+  			sections_array << cat
+  		end
+  	end
   	return sections_array
   end
 
@@ -78,8 +78,8 @@ class Menu < ActiveRecord::Base
   	end
 
   	self.save if changed
-	menu_item_obj = self.serializable_hash only: [:id, :item_name, :price, :photo, :section, :description]
-	menu_item_obj["menu_item_id"] = self.id 
+	  menu_item_obj = self.serializable_hash only: [:id, :item_name, :price, :photo, :section, :description]
+	  menu_item_obj["menu_item_id"] = self.id 
   	return menu_item_obj
   end
 
