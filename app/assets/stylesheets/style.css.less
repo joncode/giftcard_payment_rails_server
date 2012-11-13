@@ -2015,7 +2015,23 @@ ul.menuHeader {
 }
 
 .menuEditWrapper {
-	
+	margin: 0 auto;
+	width: 670px;
+	height: 600px;
+	//border: 1px solid red;
+
+
+	a {
+		width: 100%;
+		height: 100%;
+		display: block;
+		color: white;
+		text-decoration: none;
+
+		&:hover {
+			color: #1B1D2D
+		}
+	}
 }
 
 .topRow {
@@ -2023,29 +2039,29 @@ ul.menuHeader {
 	width: 100%;
 	height: 55px;
 	width: 100%;
-	padding: 0 35px;
 
 	.editMenuHeader { //h4
 		position: relative;
 		text-transform: capitalize;
 		padding-top: 17px;
-		font-size: 60px;
+		font-size: 72px;
 		font-weight: 100;
 		color: #1A1C2A;
 		float:left;
 	}
 
 	.topRowTabsWrapper {
-		position: relative;
-		//left: 20px;
 		float: right;
-		height: 55px;
-
+		position: relative;
+		width: 300px;
+		height: 26px;
+		left: 11px;
+		top: 32px;
 	}
 
 	.topRowTab {
 		background-image: url('topRowTab.png');
-		width: 97px;
+		width: 94px;
 		height: 26px;
 		float: left;
 		color: @white;
@@ -2057,40 +2073,355 @@ ul.menuHeader {
 		font-size: 18px;
 		text-align: center;
 		padding-top: 3px;
+	}
+}
 
+.row2Wrapper {
+	display: block;
+	width: 100%;
+	height: 42px;
+	float: left;
+	position: relative;
+	top: 7px;
+
+	a:hover {
+		color: @redHot;
 	}
 
-	.row2Wrapper {
+	.row2ButtonUp {
+		margin: 0;
+		padding: 0;
+		width: 95px;
+		height: 42px;
+		background-image: url('row2ButtonUp.png');
+		background-repeat: no-repeat;
+		float: left;
+
+		.row2Text {
+			//color: @white;
+			text-align: center;
+			font-size: 17px;
+			font-weight: 100;
+			padding-top: 10px;
+		}
+	}
+}	
+
+.bigButtons { //a.k.a. row 3
+	display: block;
+	position: relative;
+	width: 100%;
+	height: 33px;
+	top: 12px;
+	left: 5px;
+	float: left; 
+
+	h4 {
+		text-align: center;
+		font-size: 22px;
+		color: white;
+		padding-top: 5px;
+	}
+
+	.bigButtonLeft {
+		width: 323px;
+		height: 33px;
+		margin-right: 5px;
+		background-image: url('bigButtonLeftUp.png');
+		float: left;
+	}
+
+	.bigButtonRight {
+		width: 323px;
+		height: 33px;
+		background-image: url('bigButtonRightUp.png');
+		float: left;
+	}
+}
+
+.bigGreyHeader {
+	float: left;
+	display: block;  
+	width: 616px;
+	height: 47px;
+	margin-left: 22px;
+	margin-top: 17px;
+	background-image: url('bigGreyHeaderBackground.gif');
+	background-repeat: no-repeat;
+
+	h4 {
+		text-align: center;
+		font-size: 18px;
+		padding-top: 6px;
+		letter-spacing: .04em;
+		font-weight: 400;
+	}
+}
+
+.addItemWrapper {
+	width: 900px;
+	height: 211px;
+	float: left;
+	margin-top: -15px;
+
+	.addItemFrame1 {
+		width: 323px;
+		height: 211px;
+		background-image: url('signatureBackground.png');
+		background-repeat: no-repeat;
+		float: left;
+		margin-right: 5px;
+		margin-left: 5px;
+	}
+
+	.addItemFrame2 {
+		width: 323px;
+		height: 211px;
+		background-image: url('signatureBackground.png');
+		background-repeat: no-repeat;
+		float: left;
+	}
+
+	.smallTitleBar {
+		width: 177px;
+		height: 28px;
+		background-image: url('smallTitleBar.png');
+		z-index: 100;
 		position: relative;
+		top: 0;
+		left: 0;
+
+		h4 {
+			text-align: center;
+			color: white;
+			padding-top: 4px;
+			letter-spacing: .04em;
+		}
+	}
+
+//Form styling stuff
+	//Enter signature food form/inputs
+
+	input {
+		padding-left: 10px;
+		border: 1px solid black;
+
+    -moz-box-shadow:    inset 3px 3px 8px #000000;
+    -webkit-box-shadow: inset 3px 3px 8px #000000;
+    box-shadow:         inset 3px 3px 8px #000000;
+
+    &:focus {
+    -moz-box-shadow:    inset 0 0 10px #0088CC;
+    -webkit-box-shadow: inset 0 0 10px #0088CC;
+    box-shadow:         inset 0 0 10px #0088CC;      	
+    }
+	}
+
+	form.enterSigFoodForm {
+		width: 288px;
+		height: 0px;
+		margin: 0;
+		padding: 0;
+		left: 0;
+		top: 0;
+		background-color: blue;
+
+		input.newItemName {
+			position: relative;
+			top: 17px;
+			left: 21px;
+			height: 44px;
+			width: 100%;
+			padding-top: 10px;
+			font-size: 16px;
+		}
+
+		input.newItemDescription {
+			position: relative;
+			top: 19px;
+			left: 21px;
+			height: 63px;
+			width: 100%;
+			font-size: 16px;
+		}
+
+		input.newItemPrice {
+			width: 51px;
+			height: 37px;
+			position: relative;
+			display: block;
+			left: 129px;
+			top: 18px;
+			font-size: 16px;
+			padding-left: 3px;
+			text-align: center;
+		}
+	}
+
+	//Enter signature Drink form/inputs
+	form.enterSigDrinkForm {
+		width: 288px;
+		height: 0px;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		left: 16px;
+		top: 0;
+		float: left;
+
+		input.newItemName {
+			position: relative;
+			top: 17px;
+			left: 0;
+			height: 44px;
+			width: 100%;
+			padding-top: 10px;
+			font-size: 16px;
+		}
+
+		input.newItemDescription {
+			position: relative;
+			top: 19px;
+			left: 0;
+			height: 63px;
+			width: 100%;
+			font-size: 16px;
+		}
+
+		input.newItemPrice {
+			width: 51px;
+			height: 37px;
+			position: relative;
+			display: block;
+			left: 108px;
+			top: 18px;
+			font-size: 16px;
+			padding-left: 3px;
+			text-align: center;
+		}
+	}
+}
+
+.adjustUpDown {
+	width: 30px;
+	height: 0px;
+	position: relative;
+	top: 149px;
+	left: 188px;
+
+	a {
 		width: 100%;
 		height: 100%;
+		display: block;
+	}
+
+	.adjustUp {
+		width: 23px;
+		height: 11px;
+		background-image: url('buttonIncrease.png');
+		background-repeat: no-repeat;
+		margin-bottom: 3px;
+	}
+
+	.adjustDown {
+		width: 23px;
+		height: 11px;
+		background-image: url('buttonDecrease.png');
+		background-repeat: no-repeat;
+	}
+}
+
+.addSignatureItemButton {
+	background-image: url("bigButtonRightUp.png");
+	background-repeat: no-repeat;
+	height: 32px;
+	width: 323px;
+	position: relative;
+	left: 0px;
+	top: 183px;
+
+	a {
+		width: 323px;
+		height: 32px;
+		display: block;
+		color: white;
+		text-decoration: none;
+
+		&:hover {
+			color: #1B1D2D
+		}
+	}
+
+	h4 {
+		font-size: 19px;
+		color: white;
+		text-align: center;
+		padding-top: 6px;
+	}
+}
+
+.greyBox {
+	width: 321px;
+	height: 107px;
+	background-image: url('boxMediumGrey.png');
+	background-repeat: no-repeat;
+	position: relative;
+	z-index: -10;
+	top: 170px;
+	left: 0;
+
+	.drinkIcon {
+		width: 24px;
+		height: 28px;
+		background-image: url('iconDrinkBlueSmall.png');
+		position: relative;
+		left: 20px;
+		top: 43px;
 		float: left;
-		padding: 0 20px;
+	}
+	
+	.foodIcon {
+		width: 46px;
+		height: 31px;
+		background-image: url('foodIconSmall.png');
+		position: relative;
+		left: 20px;
+		top: 40px;
+		float: left;
+	}
 
-		.row2ButtonUp {
-			width: 92px;
-			height: 42px;
-			background-image: url('row2ButtonUp.png');
-			float: left;
+	.itemName, .itemDescription {
+		width: 70%;
+		height: 20px;
+		font-size: 17px;
+		position: relative;
+		display: block;
+		float: right;
+		top: 35px;
+		letter-spacing: .04em;
+	}
+}
 
-			.row2Text {
-				color: @white;
-				text-align: center;
-				font-size: 17px;
-				font-weight: 100;
-				padding-top: 10px;
+.buttonSaveHuge {		
+	background-image: url('buttonSaveHuge.png');
+	float: left;
+	position: relative;
+	width: 512px;
+	height: 48px;
+	top: 131px;
+	left: 143px;
 
-			}
+	h4 {
+		height: 45px;
+		color: green;
+
+		a {
+			text-align: center;
+			font-size: 30px;
+			padding-top: 12px;
 		}
 	}	
 }
-
-
-
-
-
-
-
 
 
 
