@@ -72,3 +72,4 @@ jQuery.fn.iphoneSwitch = function(start_state, switched_on_callback, switched_of
 		});		
 	});
 };
+
