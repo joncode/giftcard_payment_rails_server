@@ -2132,6 +2132,8 @@ ul.menuHeader {
 	}
 }
 
+
+
 .bigGreyHeader {
 	float: left;
 	display: block;  
@@ -2142,17 +2144,168 @@ ul.menuHeader {
 	background-image: url('bigGreyHeaderBackground.gif');
 	background-repeat: no-repeat;
 
-	h4 {
+	.headerTextMenuItems {
 		text-align: center;
 		font-size: 18px;
 		padding-top: 6px;
 		letter-spacing: .04em;
-		font-weight: 400;
+		font-weight: 100;
+		position: relative;
+	}
+
+	.columnHeaderName {
+		left: 127px;
+	}
+
+	.columnHeaderDescription {
+		left: 202px;
+	}
+
+	.columnHeaderPrice {
+		left: 420px;
+	}
+
+	//Show/Hide title bar text
+	h4.headerTextSignature {
+		display: none;
+	}
+
+	.headerTextMenuItems {// h4
+		text-align: left;
+		float: left;
+		font-size: 16px;
+	}	
+}
+
+//End Header
+
+//Begin MENU ITEMS section
+.menuItemsWrapper {
+	//display: none;
+	width: 646px;
+	height: 211px;
+	float: left;
+	margin-top: -15px;
+	margin-left: 9px;
+}
+
+.menuItemRow {
+	background-image: url('menuItemBackground.png');
+	width: 646px;
+	height: 63px;
+}
+
+ul.menuItemList {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	height: 400px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 660px;
+
+	li {
+		float: left;
+		margin: 0;
+		padding: 0;
+
+		input[type=checkbox] {
+			width: 19px;
+			height: 19px;
+			margin-left: 30px;
+			margin-top: 20px;
+			border: 5px solid black;
+			float: left;
+			display: block;
+		}
+
+		h4.itemName, h4.itemDescription {
+			display: block;
+			float: left;
+			font-size: 19px;
+		}
+
+		.itemName {
+			position: relative;
+			top: 0;
+			left: 10px;
+			width: 200px;
+			height: 63px;
+			padding-top: 14px;
+			text-align: center;
+		}
+
+		.itemDescription {
+			height: 63px;
+			width: 250px;
+			position: relative;
+			left: 0px;
+			padding-top: 14px;
+		}
+
+		input.priceDisplay {
+			position: relative;
+			left: 54px;
+			top: 8px;
+			height: 35px;
+			width: 35px;
+			-moz-box-shadow:    inset 3px 3px 5px #555555;
+      -webkit-box-shadow: inset 3px 3px 5px #555555;
+    	box-shadow:         inset 3px 3px 5px #555555;
+		}
 	}
 }
 
+.buttonMoney {
+	width: 40px;
+	height: 37px;
+	background-image: url('buttonMoney.png');
+	position: relative;
+	left: 10px;
+	top: 10px;
+	float: left;
+}
+
+.buttonTrash {
+	width: 40px;
+	height: 37px;
+	background-image: url('buttonTrash.png');
+	position: relative;
+	left: 20px;
+	top: 10px;
+	float: left;
+}
+
+.saveMenuItems {
+	background-image: url('buttonSaveHuge.png');
+	float: left;
+	position: relative;
+	width: 512px;
+	height: 48px;
+	top: 10px;
+	left: 53px;
+
+	h4 {
+		height: 45px;
+		color: green;
+
+		a {
+			text-align: center;
+			font-size: 30px;
+			padding-top: 12px;
+		}
+	}	
+}
+
+
+
+
+
+//Begin Add Items Section
+
 .addItemWrapper {
-	width: 900px;
+	display: none;
+	width: 700px;
 	height: 211px;
 	float: left;
 	margin-top: -15px;
@@ -2188,6 +2341,7 @@ ul.menuHeader {
 			text-align: center;
 			color: white;
 			padding-top: 4px;
+			font-size: 15px;
 			letter-spacing: .04em;
 		}
 	}
@@ -2204,9 +2358,9 @@ ul.menuHeader {
     box-shadow:         inset 3px 3px 8px #000000;
 
     &:focus {
-    -moz-box-shadow:    inset 0 0 10px #0088CC;
-    -webkit-box-shadow: inset 0 0 10px #0088CC;
-    box-shadow:         inset 0 0 10px #0088CC;      	
+    	-moz-box-shadow:    inset 0 0 10px #0088CC;
+    	-webkit-box-shadow: inset 0 0 10px #0088CC;
+    	box-shadow:         inset 0 0 10px #0088CC;      	
     }
 	}
 
