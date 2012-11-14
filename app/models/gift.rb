@@ -119,7 +119,7 @@ class Gift < ActiveRecord::Base
  
   private
     def extract_phone_digits
-      if !self.receiver_phone.empty?
+      if self.receiver_phone && !self.receiver_phone.empty?
         phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)
         self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
       end
