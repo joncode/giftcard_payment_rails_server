@@ -1,7 +1,7 @@
 class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-  ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
+    ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
 
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
