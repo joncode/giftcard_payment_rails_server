@@ -72,6 +72,7 @@ Drinkboard::Application.routes.draw do
   match 'app/complete_order',   to: 'app#create_order',        via: :post
   match 'app/menu',             to: 'app#menu',                via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
+  match 'app/others_questions', to: 'app#others_questions',    via: :post
   match 'app/transactions',     to: 'app#transactions',        via: :post
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
 

@@ -107,6 +107,28 @@ class AppController < ApplicationController
 	    end
   	end
 
+ 	def others_questions
+  		puts "Others Questions"
+  		puts "HERE ARE THE PARAMS #{params}"
+  		user  = User.find_by_remember_token(params["token"])
+  		
+  		other_user = User.find(params["user_id"])
+
+  		if  other_user
+	  			# get new pack of questions
+			begin
+	  			questions_array = Question.get_questions_with_answers(other_user)
+	  		rescue
+	  			questions_array = ["error", "could not get questions"]
+	  		end
+	  	else
+	  		questions_array = ["error", "could not find other user in db"]
+	  	end
+  		respond_to do |format|
+	      	puts questions_array
+	      	format.json { render text: questions_array.to_json }
+	    end
+  	end
   	def transactions
   		puts "Questions"
   		puts "#{params}"
