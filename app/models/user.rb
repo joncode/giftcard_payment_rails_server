@@ -75,7 +75,7 @@ class User < ActiveRecord::Base
   end
   
   
-  # save data to db with proper ca ses
+  # save data to db with proper cases
   before_save { |user| user.email      = email.downcase  }
   before_save { |user| user.first_name = first_name.capitalize if first_name}
   before_save { |user| user.last_name  = last_name.capitalize  if last_name }
