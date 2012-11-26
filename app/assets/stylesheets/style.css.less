@@ -2002,7 +2002,7 @@ ul.menuHeader {
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100%;
+	height: 1000px;
 	background-color: #F2F2F2;
 	z-index: -100;
 }
@@ -2132,8 +2132,6 @@ ul.menuHeader {
 	}
 }
 
-
-
 .bigGreyHeader {
 	float: left;
 	display: block;  
@@ -2171,17 +2169,24 @@ ul.menuHeader {
 	}
 
 	.headerTextMenuItems {// h4
+		display: none;
 		text-align: left;
 		float: left;
 		font-size: 16px;
 	}	
+
+	.headerTextPreview {
+		text-align: center;
+		font-size: 16px;
+		margin-top: 5px;
+	}
 }
 
 //End Header
 
 //Begin MENU ITEMS section
 .menuItemsWrapper {
-	//display: none;
+	display: none;
 	width: 646px;
 	height: 211px;
 	float: left;
@@ -2264,6 +2269,12 @@ ul.menuItemList {
 	left: 10px;
 	top: 10px;
 	float: left;
+
+	&:hover {
+		-moz-box-shadow:    inset 5px 5px 20px #000;
+    -webkit-box-shadow: inset 5px 5px 20px #000;
+    box-shadow:         inset 5px 5px 20px #000;
+	}
 }
 
 .buttonTrash {
@@ -2274,6 +2285,12 @@ ul.menuItemList {
 	left: 20px;
 	top: 10px;
 	float: left;
+
+	&:hover {
+		-moz-box-shadow:    inset 5px 5px 20px #000;
+    -webkit-box-shadow: inset 5px 5px 20px #000;
+    box-shadow:         inset 5px 5px 20px #000;
+	}
 }
 
 .saveMenuItems {
@@ -2297,12 +2314,7 @@ ul.menuItemList {
 	}	
 }
 
-
-
-
-
-//Begin Add Items Section
-
+//Begin ADD ITEMS Section
 .addItemWrapper {
 	display: none;
 	width: 700px;
@@ -2346,8 +2358,9 @@ ul.menuItemList {
 		}
 	}
 
-//Form styling stuff
-	//Enter signature food form/inputs
+	//Form styling stuff
+	
+		//Enter signature food form/inputs
 
 	input {
 		padding-left: 10px;
@@ -2570,10 +2583,118 @@ ul.menuItemList {
 	}	
 }
 
+//menu preview section
 
+.wrapperPreview {
+	display: none;
+	width: 670px;
+	height: 900px;
+	padding-bottom: 100px;
+	position: relative;
+	top: -20px;
+	float: left;
 
+	.thinCategory {
+		background-image: url('thinCategory.gif');
+		background-repeat: no-repeat;
+		position: relative;
+		left: 10px;
+		width: 639px;
+		height: 29px;
+		float: left;
 
+		.thinCategoryText { //h4
+			position: relative;
+			height: 29px;
+			font-size: 18px;
+			color: white;
+			padding: 5px 0 0 10px;
+		}
+	}
 
+	.signatureBox1, .signatureBox2 {
+		background-image: url('boxHalfGrey.gif');
+		position: relative;
+		height: 83px;
+		width: 48%;
+		background-repeat: no-repeat;
+		float: left;
+		left: 8px;
+
+		h4 {
+			width: 240px;
+			font-size: 17px;
+			position: relative;
+			left: 90px;
+			top: -10px;
+			line-height: 1.2em;
+		}
+
+		.signatureIcon1 {
+			background-image: url('iconDrinkBlueSmall.png');
+			width: 24px;
+			height: 28px;
+			position: relative;
+			top: 24px;
+			left: 33px;
+		}
+
+		.signatureIcon2 {
+			background-image: url('foodIconSmall.png');
+			width: 46px;
+			height: 31px;
+			position: relative;
+			top: 24px;
+			left: 23px;
+		}
+	}
+
+	.menuItemListPreview {
+		position: relative;
+		left: 10px;
+		height: auto;
+		float: left;
+
+		li {
+
+			h4 {
+				padding-top: 17px;
+			}
+		}
+	}
+	.buttonSaveHugePreview {
+		background-image: url('buttonSaveHuge.png');
+		float: left;
+		position: relative;
+		width: 512px;
+		height: 48px;
+		left: 143px;
+
+		h4 {
+			height: 45px;
+			color: green;
+
+			a {
+				text-align: center;
+				font-size: 30px;
+				padding-top: 12px;
+			}
+		}	
+	}
+}
+
+.wrapperBeerGrid {
+	position: relative;
+	float: left;
+	height: auto;
+
+	.cellBeer {
+		background-image: url('buttonUpGrid.gif');
+		background-repeat: none;
+		width: 126px;
+		height: 109px;
+	}
+}
 
 
 
