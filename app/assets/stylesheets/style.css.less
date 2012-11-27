@@ -2176,6 +2176,20 @@ ul.menuHeader {
 	}	
 
 	.headerTextPreview {
+		display: none;
+		text-align: center;
+		font-size: 16px;
+		margin-top: 5px;
+	}
+
+	.headerTextBeerGrid {
+		display: none;
+		text-align: center;
+		font-size: 16px;
+		margin-top: 5px;
+	}
+
+	.headerTextAddCustom {
 		text-align: center;
 		font-size: 16px;
 		margin-top: 5px;
@@ -2684,17 +2698,162 @@ ul.menuItemList {
 }
 
 .wrapperBeerGrid {
+	display: none;
 	position: relative;
+	top: -14px;
+	left: 13px;
 	float: left;
 	height: auto;
+	width: 670px;
+
+	.beerGridContainer {
+		width: 670px;
+		height: 350px;
+		overflow: auto;
+	}
 
 	.cellBeer {
 		background-image: url('buttonUpGrid.gif');
 		background-repeat: none;
-		width: 126px;
+		width: 127px;
 		height: 109px;
+		float: left;
+
+		&:hover {
+			background-image: url('buttonDownGrid.gif');
+		}
+
+		h4 {
+			color: white;
+			font-size: 19px;
+			letter-spacing: .04em;
+			text-align: center;
+			padding-top: 40px;
+
+			&:hover {
+				color: @redHot;
+			}
+		}
+	}
+	.buttonSaveHugeBeerGrid {
+		background-image: url('buttonSaveHuge.png');
+		float: left;
+		position: relative;
+		width: 512px;
+		height: 48px;
+		left: 143px;
+		top: 5px;
+
+		h4 {
+			height: 45px;
+			color: green;
+
+			a {
+				text-align: center;
+				font-size: 30px;
+				padding-top: 12px;
+			}
+		}	
 	}
 }
+
+.wrapperAddCustom {
+	width: 670px;
+	position: relative;
+	top: -15px;
+	left: 15px;
+	float: left;
+
+	.addCustomForms {
+		float: left;
+		background-image: url('backgroundAddCustom.gif');
+		width: 630px;
+		height: 77px;
+
+		.addCustomName { //input type: text
+			position: relative;
+			height: 30px;
+			background: none;
+			border: 0;
+			border: 0;
+			width: 170px;
+			height: 50px;
+			top: 12px;
+			left: 20px;
+			font-size: 17px;
+			padding: 15px;
+		}
+		.addCustomDescription {
+			position: relative;
+			height: 30px;
+			background: none;
+			border: 0;
+			border: 0;
+			width: 288px;
+			height: 50px;
+			top: 12px;
+			left: 45px;
+			font-size: 17px;
+			padding: 15px;
+		}
+		.addCustomPrice {
+			position: relative;
+			height: 30px;
+			background: none;
+			border: 0;
+			border: 0;
+			width: 50px;
+			height: 35px;
+			top: 12px;
+			left: 65px;
+			font-size: 17px;
+			padding: 5px;
+			text-align: center;
+		}
+		.upDownAddCustom {
+			position: absolute;
+			width: 26px;
+			height: 29px;
+			top: 25px;
+			left: 590px;
+
+		}
+		.buttonAddItem {
+			position: relative;
+			background-image: url('buttonAddItem.gif');
+			width: 126px;
+			height: 29px;
+			top: 3px;
+			left: 516px;
+		}
+	}
+
+	.menuItemListAddCustom {
+		position: relative;
+		float: left;
+		top: 17px;
+		height: auto;
+
+		.buttonEdit {
+			width: 40px;
+			height: 37px;
+			position: relative;
+			left: 30px;
+			top: 10px;
+			float: left;
+			background-image: url('buttonEditItem.gif');
+			background-repeat: no-repeat;
+		}
+	}
+	.saveButtonAddCustom {
+		position: relative;
+		float: left;
+		top: 20px;
+		left: 134px;
+
+	}
+}
+
 
 
 
