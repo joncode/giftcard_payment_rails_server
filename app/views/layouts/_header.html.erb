@@ -7,7 +7,7 @@
 <% end %>
 <div class="headerColorBackground">
   <div class="logoHeader">
-    <%= link_to image_tag("logoCap1rev.png"), home_path %>
+    <%#= link_to image_tag("logoCap1rev.png"), home_path %>
   </div>
 </div>
 <div class="navbarWrapper">
@@ -55,7 +55,7 @@
       <%= link_to "", buy_gifts_path %>
     </li>
     <li class="navTopLi navTopFriends">
-      <%= link_to "", activity_gifts_path %>
+      <%= link_to "Menus", menus_path %>
     </li>
     <li class="navTopLi navTopLocations">
       <a href="#"><!--! link to Locations --></a>
@@ -65,7 +65,7 @@
     </li>
   </ul>
 
-  <ul class="navMain">
+ <ul class="navMain">
     <li class="home">
       <h2>
         <%= link_to "BuyDrink", browse_gifts_path %>
