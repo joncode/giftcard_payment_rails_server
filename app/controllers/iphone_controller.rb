@@ -297,6 +297,9 @@ class IphoneController < AppController
       gift    = Gift.new
     else
       gift    = Gift.new(gift_obj)
+      if gift_obj["shoppingCart"]
+        gift.shopping_cart_string = gift_obj["shoppingCart"].to_json
+      end
       puts "Here is GIFT #{gift.inspect}"
     end
     
