@@ -34,9 +34,10 @@ class Gift < ActiveRecord::Base
   attr_accessible   :giver_id,      :giver_name, :credit_card,    
       :receiver_id, :receiver_name, :receiver_phone, 
       :provider_id, :provider_name,
-      :item_id,     :item_name ,    :category, 
       :message,     :special_instructions,
-      :price,       :quantity,      :tip, :tax, :total, 
+      :shopping_cart_string,  
+      :category, :quantity, :price, :item_id, :item_name ,  
+      :tip, :tax, :total, 
       :facebook_id, :foursquare_id,
       :redeem_id,   :status
   
