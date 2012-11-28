@@ -36,8 +36,8 @@ class Gift < ActiveRecord::Base
       :provider_id, :provider_name,
       :message,     :special_instructions,
       :shopping_cart_string,  
-      :category, :quantity, :price, :item_id, :item_name ,  
-      :tip, :tax, :total, 
+      :category,    :quantity, :price, :item_id, :item_name ,  
+      :tip, :tax,   :total, 
       :facebook_id, :foursquare_id,
       :redeem_id,   :status
   

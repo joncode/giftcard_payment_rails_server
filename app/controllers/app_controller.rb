@@ -288,19 +288,34 @@ class AppController < ApplicationController
 	        # g.item_name = g.item_name.pluralize if g.quantity > 1
 	        ###  7/27 6:45 UTC
 	        
-	        if g.created_at
+	        if g.created_at 
 	          time = g.created_at.to_time
 	        else
 	          time = g.updated_at.to_time
 	        end
 	        time_string = time_ago_in_words(time)
-	      
-	        gift_obj = g.serializable_hash only: send_fields
+	      	
+		    gift_obj = g.serializable_hash only: send_fields
+
 	        gift_obj.each_key do |key|
 	          value = gift_obj[key]
 	          gift_obj[key] = value.to_s
 	        end
-	        
+
+	        if !g.shopping_cart_string
+	      		# make shopping cart array with item inside as Hash
+	      		# using item_id, item_name, category, quantity, price
+	      		menu_item = {"item_id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => g.quantity.to_s , "price" => g.price.to_s}
+	      		menu_item_array = [menu_item]
+	      			# future CRON job 
+	      		# shopping_cart_string = menu_item_array.to_json
+	      		# g.update_attribute(:shopping_cart_string, shopping_cart_string)
+	      		gift_obj["shopping_cart"] = menu_item_array
+	      	else
+	      		# turn shopping_cart_string into an array with hashes
+	      		gift_obj["shopping_cart"] = JSON.parse g.shopping_cart_string
+	      	end
+
 		        # add other person photo url 
 	        if receiver
 	          if g.receiver
