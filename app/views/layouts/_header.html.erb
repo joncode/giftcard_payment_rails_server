@@ -6,32 +6,33 @@
   </div>
 <% end %>
 <div class="headerColorBackground">
-  <div class="logoHeader">
-    <%#= link_to image_tag("logoCap1rev.png"), home_path %>
-  </div>
+
 </div>
 <div class="navbarWrapper">
   <% if signed_in? %>
   <ul class="navLoggedIn">
+    <li class="logoHeader">
+    <%#= link_to image_tag("logoCap1rev.png"), home_path %>
+    </li>
     <li>
       <%= link_to "Sign out",signout_path, method: :delete %>
     </li>
   
-    <li>
+<!--     <li>
       <%= link_to "Profile",current_user %>
     </li>
-  
-    <li> 
+   -->
+<!-- <li> 
       <a>Welcome back,  
         <%= current_user.username %> 
       </a>
-    </li>
+    </li> -->
   
+<!--  
     <li>
       <%= link_to "Settings" %>
-    </li>
-    
-      <% if @provider && params[:controller] == "merchants" %>
+    </li> -->
+  <% if @provider && params[:controller] == "merchants" %>
     <li>
       <%= link_to "Merchants", merchants_path %>
     </li>
@@ -41,7 +42,12 @@
     </li> 
     <% end %> 
     <li>
-      <%= link_to "Add New Merchant", new_provider_path %>
+      <%= link_to "Merchant", new_provider_path %>
+    </li>
+    <li>
+      <%= link_to "Get the app" %>
+    </li>
+    <li class="appStoreLink">
     </li>
   </ul>
  

@@ -1,38 +1,15 @@
-<script type="text/javascript">
-	$(document).ready(function(){
-		var changeUserStatus = function(newStatus){
-			$.ajax({
-				url: "/users/<%= @user[:id] %>/change_public_status",
-				data: "newStatus="+newStatus,
-				dataType: "json",
-				success:function(json){
-					console.log(json);
-				}
-			});			
-		};
+<div class="homeWrapper">
+	<div class="logoHeaderHome">
 		
-		$('#switchMessage').iphoneSwitch("<%= @user[:is_public] ? "on" : "off" %>",
-		  function() {
-		    $('#onOffSwitch').hide('#switchOn');
-				changeUserStatus(true);
-		  },
-		  function() {
-		    $('#onOffSwitch').toggle('#switchOff');
-				changeUserStatus(false);
-		  },
-		  {switch_on_container_path: 'assets/iphone_switch_container_off.png'}
-		);
-	});
-</script>
-<div class="switchWrapper">
-  <div id="onOffSwitch"></div>
-  <div id="switchMessage"></div>
-  <div id="switchOn"></div>
-  <div id="switchOff"></div>
+	</div>
+	<div class="iphoneImage">
+		
+	</div>
+	<div class="textAreaHome">
+		
+	</div>
 </div>
 
-<div class="mapWrapper">
-</div>
 
 
 

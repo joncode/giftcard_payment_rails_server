@@ -202,14 +202,17 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
  	border-radius: 0 !important;
  }
 
-html {
-	min-height: 100%;
+html { 
 
-	body {
-		//background-color: @greySublime;
-		background: @textureDarkWall;
+	body {  
+		background: url(orangeBoardBackground.jpg) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;   
+		background-size: cover;
 
 		.mainWrapper {
+			//
 			background-color: @textureDarkWall;
 			width: 768px;
 			margin: 0 auto;
@@ -239,7 +242,6 @@ html {
 		a {
 			height: 100%;
 			width: 100%;
-
 		}
 	}
 }
@@ -276,7 +278,7 @@ ul.tabsList {
 			}
 		}
 	}
-}   
+}
 
 //                                      ,,                  
 // `7MMF'  `7MMF'                     `7MM                  
@@ -289,47 +291,38 @@ ul.tabsList {
                                                          
 .headerColorBackground {
 	position: absolute;
-	width: 768px;
-	height: 181px;
-	background-color:rgba(0,126,210, 0.2);
-	//background-color: @blue;
-	margin: 0 auto;
-	border-bottom: 2px solid black;
-
-}
-
-.logoHeader {
-	position: absolute;
-	top: 5px;
 	left: 0;
-	width: 170px;
-	height: 190px;
-	z-index: 100;
-	
-	img {
-		width: 100%;
-		height: 100%;
-	}
+	top: 0;
+	width: 100%;
+	height: 60px;
+	background-color:rgba(0,0,0, 0.3);
+	//background-color: @blue;
+	//margin: 0 auto;
+	//border-bottom: 2px solid black;
 }
+
+
 
 // First we lay out the general flow of the Ul and tabs...
+
 
 .navbarWrapper { 
 	position: relative;
 	width: 100%;
-	height: 180px;
+	height: 100px;
+	top: 18px;
+	left: 14px;
 	margin: 0;
-	padding: 0 0 0 200px; //pushes all content besides main logo 200px to the right
+	padding: 0;
 
 	//Top Nav
 	ul.navTop {
+		display: none;
 		//width: 300px;
 		margin-left: 150px;
 		height: 50px;
 		position: absolute;
 		top: 100px;
-		
-		//border: 1px solid black;
 
 		li {
 			background-repeat: no-repeat;
@@ -427,6 +420,7 @@ ul.tabsList {
 	ul.navMain {
 
 		.home {
+			display: none;
 			background-color: @blue;
 			border-top-left-radius: 20px;
 
@@ -491,27 +485,45 @@ ul.tabsList {
 	
 	// This brings us to the admin/logged in Nav Bar. We'll stick it in the top right for now.
 
-	.navLoggedIn {
+	.navLoggedIn { // new nav area
+		top: 3px;
+		left: 25px;
 		height: 20px;
-		position: absolute;
-		top: 0px;
-		right: 25px;
-		display: inline;
-		
-			li {
-				float: right;
-				display: inline;
-				width: auto;
-				margin-right: 25px;
+		position: relative;
+		width: 700px;
+		margin: 0 auto;
+		display: block;
 
-				a {
-					color: white;
-				}
-			}
- 
-		a {
-			font-size: .85em;
+		.logoHeader {
+			position: relative;
+			left: 10px;
+			top: -8px;
+			width: 43px;
+			height: 36px;
+			z-index: 100;
+			background-image: url('logoHeaderSmall.png');
 		}
+
+		.appStoreLink {
+			width: 120px;
+			height: 39px;
+			top: -11px;
+			background-image: url('appStorePic.png');
+			position: relative;
+		}
+
+		li {
+			float: left;
+			display: inline;
+			width: auto;
+			margin-right: 25px;
+
+			a {
+				color: white;
+				font-size: 14px;
+				letter-spacing: .05em;
+			}
+ 		}
 	}
 }// ..and thats the Header. Boom. END HEADER
 
@@ -632,7 +644,7 @@ ul.tabsList {
 	 			font-weight: 400;
 	 		}
 	 	}
-	}	
+	}
 }
 
 h1.signUpHeader {
@@ -718,8 +730,54 @@ h1.signUpHeader {
 //   MM      MM YA.   ,A9 MM    MM    MM YM.    , 
 // .JMML.  .JMML.`Ybmd9'.JMML  JMML  JMML.`Mbmmd' 
 
+.homeWrapper {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	top: -50px;
+	//border: 1px solid blue;
+	float: left;
+
+	.logoHeaderHome {
+		background-image: url('homeLogoBig.png');
+		width: 536px;
+		height: 91px;
+		position: relative;
+		margin: 0 auto;
+		//float: left;
+	}
+
+	.iphoneImage {
+		width: 157px;
+		height: 468px;
+		background-image: url('iphoneSmall.png');
+		float: left;
+		position: relative;
+		left: -35px;
+		top: 0px;
+	}
+
+	.textAreaHome {
+		background-image: url('textAreaHome.png');
+		width: 389px;
+		height: 409px;
+		position: relative;
+		top: 25px;
+		margin: 0 auto;
+	}
+}
+
+
+
+
+
+
+
+
+
+
 .switchWrapper {
-	display: none;
+	//display: none;
 	position: relative;
 	width: 94px;
 	height: 27px;
@@ -727,13 +785,12 @@ h1.signUpHeader {
 	background: transparent;
 }
 
-.mapWrapper {
-	width: 768px;
-	height: 400px;
-	margin: 25px 0;
-	background-image: url('gmap768x400.png');
-
-}
+// .mapWrapper {
+// 		width: 768px;
+// 		height: 400px;
+// 		margin: 25px 0;
+// 		background-image: url('gmap768x400.png');
+// }
 
 ul.bigList {	
 	min-height: 100%;
