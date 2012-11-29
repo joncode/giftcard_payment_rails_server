@@ -1,21 +1,21 @@
-<h2>Choose Establishment to sign into</h2>
-<table>
-  <tr>
-    <th>Logo</th>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Address</th>
-    <th></th>
-  </tr>
-
-  <% @providers.each do |provider| %>
+<div class="merchantSignInWrapper">
+  <h2>Choose Establishment to sign into</h2>
+  <table>
     <tr>
-      <td><%= custom_image_tag(provider,150,150)  %></td>
-      <td><%= link_to provider.name, provider %></td>
-      <td><%= provider.description %></td>
-      <td><%= provider.full_address %></td>
-      <td><%= button_to "Log In", merchant_path(provider),method: :get, :class => 'btn btn-large btn-info'%>
-      </td>
+      
     </tr>
-  <% end %>
-</table>
+  
+    <% @providers.each do |provider| %>
+      <tr>
+        <td><%= custom_image_tag(provider,100,100)  %></td>
+        <td class="tdProviderName"><%= provider.name %></td>
+        <td class="tdDescription"><%= provider.description %></td>
+        <td class="tdAddress"><%= provider.full_address %></td>
+        <td><%= button_to "Log In", merchant_path(provider  ),method: :get, :class => 'btn btn-large btn- info'%>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <div class="backgroundBox"></div>
+  <div class="backgroundBox2"></div>
+</div>

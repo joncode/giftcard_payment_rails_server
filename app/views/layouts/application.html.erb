@@ -22,7 +22,7 @@
     <% else %>
       <% if signed_in? %>
         <% if params[:controller] == 'merchants' %>
-          <%= render 'layouts/merchant' %>
+          <%= render 'layouts/header' %>
         <% else %>
           <%= render 'layouts/header' %>
         <% end %>
