@@ -34,9 +34,10 @@ class Gift < ActiveRecord::Base
   attr_accessible   :giver_id,      :giver_name, :credit_card,    
       :receiver_id, :receiver_name, :receiver_phone, 
       :provider_id, :provider_name,
-      :item_id,     :item_name ,    :category, 
       :message,     :special_instructions,
-      :price,       :quantity,      :tip, :tax, :total, 
+      :shopping_cart_string,  
+      :category,    :quantity, :price, :item_id, :item_name ,  
+      :tip, :tax,   :total, 
       :facebook_id, :foursquare_id,
       :redeem_id,   :status
   
@@ -119,7 +120,7 @@ class Gift < ActiveRecord::Base
  
   private
     def extract_phone_digits
-      if self.receiver_phone
+      if self.receiver_phone && !self.receiver_phone.empty?
         phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)
         self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
       end

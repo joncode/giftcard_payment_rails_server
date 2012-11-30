@@ -1,7 +1,7 @@
 class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-  ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
+    ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
 
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
@@ -107,6 +107,28 @@ class AppController < ApplicationController
 	    end
   	end
 
+ 	def others_questions
+  		puts "Others Questions"
+  		puts "HERE ARE THE PARAMS #{params}"
+  		user  = User.find_by_remember_token(params["token"])
+  		
+  		other_user = User.find(params["user_id"])
+
+  		if  other_user
+	  			# get new pack of questions
+			begin
+	  			questions_array = Question.get_questions_with_answers(other_user)
+	  		rescue
+	  			questions_array = ["error", "could not get questions"]
+	  		end
+	  	else
+	  		questions_array = ["error", "could not find other user in db"]
+	  	end
+  		respond_to do |format|
+	      	puts questions_array
+	      	format.json { render text: questions_array.to_json }
+	    end
+  	end
   	def transactions
   		puts "Questions"
   		puts "#{params}"
@@ -266,19 +288,34 @@ class AppController < ApplicationController
 	        # g.item_name = g.item_name.pluralize if g.quantity > 1
 	        ###  7/27 6:45 UTC
 	        
-	        if g.created_at
+	        if g.created_at 
 	          time = g.created_at.to_time
 	        else
 	          time = g.updated_at.to_time
 	        end
 	        time_string = time_ago_in_words(time)
-	      
-	        gift_obj = g.serializable_hash only: send_fields
+	      	
+		    gift_obj = g.serializable_hash only: send_fields
+
 	        gift_obj.each_key do |key|
 	          value = gift_obj[key]
 	          gift_obj[key] = value.to_s
 	        end
-	        
+
+	        if !g.shopping_cart_string
+	      		# make shopping cart array with item inside as Hash
+	      		# using item_id, item_name, category, quantity, price
+	      		menu_item = {"item_id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => g.quantity.to_s , "price" => g.price.to_s, "category" => g.category.to_s}
+	      		menu_item_array = [menu_item]
+	      			# future CRON job 
+	      		# shopping_cart_string = menu_item_array.to_json
+	      		# g.update_attribute(:shopping_cart_string, shopping_cart_string)
+	      		gift_obj["shopping_cart"] = menu_item_array
+	      	else
+	      		# turn shopping_cart_string into an array with hashes
+	      		gift_obj["shopping_cart"] = JSON.parse g.shopping_cart_string
+	      	end
+
 		        # add other person photo url 
 	        if receiver
 	          if g.receiver

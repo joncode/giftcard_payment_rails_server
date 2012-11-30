@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121030082621) do
+ActiveRecord::Schema.define(:version => 20121128082039) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.string   "foursquare_id"
     t.string   "facebook_id"
     t.integer  "anon_id"
+    t.string   "shopping_cart_string"
   end
 
   create_table "items", :force => true do |t|

@@ -28,17 +28,12 @@ class MenusController < ApplicationController
   end
 
   def edit
-    # send an array of menu objects sorted by table section
-    # an array of hashes - 
-    # each keyed by a section name 
-    # value is an ordered array of menu_items
-    # isnt this just the menu_string ?
     menu_obj = Menu.find params[:id]
     provider_id = menu_obj.provider_id
     @menu_string = MenuString.get_menu_for_provider(provider_id)
     @menu = JSON.parse @menu_string
     @sections = Menu.get_sections(provider_id)
-    puts "MENUSTRING __> " + @menu_string
+    puts "MENUSTRING --> " + @menu_string
     puts "MENU ARRAY !!! = " + @menu.inspect
     puts "SECTIONS ARRAY = "  + @sections.inspect
   end
