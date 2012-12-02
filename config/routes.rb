@@ -36,7 +36,7 @@ Drinkboard::Application.routes.draw do
       get :change_public_status
     end
   end
-  
+
   resources :employees
   resources :locations
   resources :providers 
@@ -69,7 +69,7 @@ Drinkboard::Application.routes.draw do
   match '/signout', to: 'sessions#destroy'
   resources :admins, only: [:new, :create, :destroy]
  
-  ###  mobile app routes
+    ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
   match 'app/login',            to: 'iphone#login',            via: :post
   match 'app/update',           to: 'iphone#update_iphone',    via: :post 
@@ -102,19 +102,19 @@ Drinkboard::Application.routes.draw do
   match 'app/users',            to: 'iphone#drinkboard_users', via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
 
-  ###   basic footer routes
+    ###   basic footer routes
   match '/about',       to: 'home#about'
   match '/contact',     to: 'home#contact'
   match '/home',        to: 'home#index'
   match '/learn',       to: 'home#learn'
   match '/news',        to: 'home#news'
   
-  ### authentication via Facebook & Foursquare
+    ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
   match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
   ###
   
-  ##Location resources
+    ### Location resources
   match '/map',               to: 'locations#map'
   match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
   match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
@@ -122,7 +122,6 @@ Drinkboard::Application.routes.draw do
   match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
 
   
-
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
