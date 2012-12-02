@@ -1,13 +1,9 @@
 Drinkboard::Application.routes.draw do
   
   root to: 'users#new'
-  resources :locations
-
-  resources :employees
-  match "/invite/:id" => "invite#show"
   
-  resources :orders
-  resources :redeems
+  match "/invite/:id" => "invite#show"
+
   resources :gifts do
     collection do
       get  'buy'
@@ -25,12 +21,29 @@ Drinkboard::Application.routes.draw do
       get 'completed'
     end
   end
+  
+  resources :items
+  resources :menus
+  resources :menu_strings
+  resources :orders
+  resources :redeems
 
+  resources :users do 
+    member do
+      get :following, :followers
+      get :servercode
+      get :crop
+      get :change_public_status
+    end
+  end
+  
+  resources :employees
+  resources :locations
   resources :providers 
   
-  # resources :providers, :as => "establishments"
-  # providers should really be merchant side and merchant should be establishments
-  # could make an establishment controller for user side 
+    # resources :providers, :as => "establishments"
+    # providers should really be merchant side and merchant should be establishments
+    # could make an establishment controller for user side 
   
   resources :merchants do
     member do
@@ -46,19 +59,16 @@ Drinkboard::Application.routes.draw do
       get 'edit_bank'
     end
   end
-  
-  resources :items
-  resources :menus
-  resources :menu_strings
 
+  resources :microposts,    only: [:create, :destroy]
+  resources :relationships, only: [:create, :destroy]
   resources :connections, only: [:create, :destroy]
   resources :sessions,    only: [:new, :create, :destroy]
   match '/signup',  to: 'users#new'
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy'
   resources :admins, only: [:new, :create, :destroy]
-
-  
+ 
   ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
   match 'app/login',            to: 'iphone#login',            via: :post
@@ -75,25 +85,24 @@ Drinkboard::Application.routes.draw do
   match 'app/others_questions', to: 'app#others_questions',    via: :post
   match 'app/transactions',     to: 'app#transactions',        via: :post
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
-
-  match 'app/buys',             to: 'iphone#buys',             via: :post
+  match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/provider',         to: 'iphone#provider',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
-  match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
   match 'app/servercode',       to: 'iphone#server_code',      via: :post
-  match 'app/order',            to: 'iphone#create_order',     via: :post
-  match 'app/users',            to: 'iphone#drinkboard_users', via: :post
-  match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/out',              to: 'iphone#going_out',        via: :post 
   match 'app/active',           to: 'iphone#active_orders',    via: :post
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
 
+    ### deprecated app routes
+  match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
+  match 'app/order',            to: 'iphone#create_order',     via: :post
+  match 'app/users',            to: 'iphone#drinkboard_users', via: :post
+  match 'app/buys',             to: 'iphone#buys',             via: :post
 
-  ###
-  # match '/drinkboard', to: 'gifts#activity'
+  ###   basic footer routes
   match '/about',       to: 'home#about'
   match '/contact',     to: 'home#contact'
   match '/home',        to: 'home#index'
@@ -108,22 +117,10 @@ Drinkboard::Application.routes.draw do
   ##Location resources
   match '/map',               to: 'locations#map'
   match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
-  
   match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
   match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
   match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
 
-  resources :microposts,    only: [:create, :destroy]
-  resources :relationships, only: [:create, :destroy]
-  
-  resources :users do 
-    member do
-      get :following, :followers
-      get :servercode
-      get :crop
-      get :change_public_status
-    end
-  end
   
 
 
