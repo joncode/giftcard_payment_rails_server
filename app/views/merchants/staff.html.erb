@@ -12,8 +12,12 @@
           <td><%= link_to user.username, user %></td>
           <td><%= user.full_address %></td>
           <td><%= number_to_phone user.phone %>
+					<td><%= link_to "Remove Employee", "/merchants/#{@provider.id}/employee/#{user.id}/remove" %>
         </tr>
       <% end %>
     </tbody>
   </table>
+	<br/>
+	<br/>
+	<p><%= link_to "Add Employee", invite_employee_merchant_path(@provider) %></p>
 </div>

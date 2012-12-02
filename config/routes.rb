@@ -11,8 +11,11 @@ Drinkboard::Application.routes.draw do
   get "email/new_employee"
 
   root to: 'users#new'
+
+  resources :locations
   
-  match "/invite/:id" => "invite#show"
+  match "/invite/:id"       => "invite#show"
+  match "/invite"           => "invite#invite_friend"
 
   resources :gifts do
     collection do
@@ -44,18 +47,21 @@ Drinkboard::Application.routes.draw do
       get :servercode
       get :crop
       get :change_public_status
+      post :update_avatar
     end
     collection do
       get :reset_password
       get :enter_new_password
       post :enter_new_password
+      post :upload_avatar
     end
   end
 
   resources :employees
   resources :locations
   resources :providers 
-  
+  match "/merchants/:id/employee/:eid/remove"   => "merchants#remove_employee"
+
     # resources :providers, :as => "establishments"
     # providers should really be merchant side and merchant should be establishments
     # could make an establishment controller for user side 
@@ -72,8 +78,12 @@ Drinkboard::Application.routes.draw do
       get 'edit_info'
       get 'edit_photo'
       get 'edit_bank'
+      get 'invite_employee'
+      post 'invite_employee'
+      get 'add_employee'
     end
   end
+
 
   resources :microposts,    only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
@@ -101,6 +111,7 @@ Drinkboard::Application.routes.draw do
   match 'app/transactions',     to: 'app#transactions',        via: :post
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
+
   match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
@@ -116,8 +127,6 @@ Drinkboard::Application.routes.draw do
   match 'app/order',            to: 'iphone#create_order',     via: :post
   match 'app/users',            to: 'iphone#drinkboard_users', via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
-
-
 
     ###   basic footer routes
   match '/about',       to: 'home#about'
@@ -137,8 +146,6 @@ Drinkboard::Application.routes.draw do
   match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
   match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
   match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
-
-  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -353,6 +353,7 @@ class AppController < ApplicationController
 	      end
 	      return gifts_ary
 	    end
+
 	
 		def add_redeem_code(obj)
 			if obj.status == "notified" 
