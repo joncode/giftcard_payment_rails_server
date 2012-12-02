@@ -1,22 +1,16 @@
 Drinkboard::Application.routes.draw do
   
   resources :sales
-
   resources :cards
 
   get "email/invite"
-
   get "email/forgot_pw"
-
   get "email/new_employee"
-
-  root to: 'users#new'
-
-  resources :locations
-  
   match "/invite/:id"       => "invite#show"
   match "/invite"           => "invite#invite_friend"
 
+  root to: 'users#new'
+  
   resources :gifts do
     collection do
       get  'buy'
@@ -35,6 +29,7 @@ Drinkboard::Application.routes.draw do
     end
   end
   
+  resources :locations
   resources :items
   resources :menus
   resources :menu_strings
