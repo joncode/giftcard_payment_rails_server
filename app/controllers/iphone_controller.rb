@@ -124,6 +124,31 @@ class IphoneController < AppController
     end
   end
 
+  def regift
+    puts "ReGift"
+    puts "#{params}"
+
+    user  = User.find_by_remember_token(params["token"])
+    gift  = Gift.find(params["gift_id"])
+    if gift.receiver == user
+      receiver_id = params["regifter_id"] || nil
+      receiver = User.find(receiver_id.to_i)
+      message  = params["message"]     || nil
+      new_gift = gift.regift(receiver, message)
+    else
+      response["error_iphone"]    =  " User cannot regift gift #{gift.id}"
+    end
+    respond_to do |format|
+      if new_gift.save
+        response["success"]       = "ReGifted - Thank you!" 
+      else
+        response["error_server"]  = " ReGift unable to process to database." 
+      end
+      puts response
+      format.json { render json: response.to_json }
+    end 
+  end
+
   def buys
     puts "Buys"
     puts "#{params}"
@@ -173,22 +198,6 @@ class IphoneController < AppController
     
     respond_to do |format|
       logger.debug gift_hash
-      format.json { render text: gift_hash.to_json }
-    end
-  end
-  
-  def provider
-    puts "Provider"
-    puts "#{params}"
-
-    # @user  = User.find_by_remember_token(params["token"])
-    provider = Provider.find(params["provider_id"])
-    gifts    = Gift.get_provider(provider)
-
-    gift_hash = hash_these_gifts(gifts, PROVIDER_REPLY) 
-
-    respond_to do |format|
-      puts gift_hash
       format.json { render text: gift_hash.to_json }
     end
   end
@@ -305,8 +314,12 @@ class IphoneController < AppController
     
     begin
       giver           = User.find_by_remember_token(params["token"])
-      gift.giver_id   = giver.id
-      gift.giver_name = giver.username
+      if gift_obj["anon_id"]
+        gift.add_anonymous_giver(giver.id)
+      else
+        gift.giver_id   = giver.id
+        gift.giver_name = giver.username
+      end
     rescue
       message = "Couldn't identify app user. "
     end

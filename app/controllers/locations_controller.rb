@@ -19,8 +19,6 @@ class LocationsController < ApplicationController
     @providers = Provider.allWithinBounds(bounds)
     
     #All of the users' following people within the boundary
-    
-    
     # no followed user implemented yet HACK <<<<<<<
     followedUserIds = User.all.map { |u| u.id }
     ##followedUserIds = User.find(thisUser.id).followed_users.map{ |user| user.id }
@@ -81,9 +79,6 @@ class LocationsController < ApplicationController
     if user && user[:is_public]
       Location.createWithFoursquareCheckin(checkin,user)
     end
-    puts "FOURSQUARE CHECKIN IS COMING:"
-    puts checkin
-    puts user
     return render :text => "Success"
   end
   

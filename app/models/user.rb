@@ -41,13 +41,15 @@ class User < ActiveRecord::Base
   :foursquare_id, :foursquare_access_token, :provider_id, :handle, 
   :server_code, :sex, :iphone_photo, :fb_photo, :use_photo, 
   :is_public, :secure_image
-  
+
   mount_uploader   :photo, ImageUploader
    
   has_many :employees
   has_many :providers, :through => :employees
   has_many :orders,    :through => :providers
-  has_many :gifts
+  has_many :gifts,     foreign_key: "giver_id"
+  has_many :sales
+  has_many :cards
   has_many :locations
   has_many :answers
   has_many :questions, :through => :answers
@@ -104,6 +106,38 @@ class User < ActiveRecord::Base
     # need another validator for new servers to locations who already have server codes
     # to check other employees to make sure there arent doubles
   #/---------------------------------------------------------------------------------------------/
+  
+  def gifts
+    anon_gifts    = Gift.where(anon_id: self.id)
+    normal_gifts  = super
+    return anon_gifts + normal_gifts
+  end
+
+  def get_credit_card(card_id)
+    user.cards.select { |c| c.id == card_id}
+  end
+
+  def display_cards
+    user.cards.select do |c| 
+      c.nickname
+      c.id
+      c.last_four
+    end
+  end
+
+  def bill
+    total = self.gifts.sum { |gift| gift.total.to_d }
+    total > 0 ? total.to_digits : "0"
+  end
+
+  def received
+    Gift.where(receiver_id: self.id)
+  end
+
+  def all_gifts
+    Gift.where("giver_id = :user OR receiver_id = :user OR anon_id = :user", :user => self.id ).order("created_at DESC")
+  end
+
   def feed
     Micropost.from_users_followed_by(self)
   end
@@ -130,6 +164,20 @@ class User < ActiveRecord::Base
   
   def full_address
     "#{self.address},  #{self.city}, #{self.state}"
+  end
+  
+  def update_reset_token
+    self.reset_token_sent_at = Time.now
+    self.reset_token = SecureRandom.hex(16)
+    self.save
+  end
+  
+  def reset_password(password)
+    self.password = password
+    self.password_confirmation = password
+    self.reset_token = nil
+    self.reset_token_sent_at = nil
+    self.save
   end
   
   def checkin_to_foursquare(fsq_id, lat, lng)

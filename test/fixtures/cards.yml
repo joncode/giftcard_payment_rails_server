@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  nickname: MyString
+  name: MyString
+  number_digest: MyString
+  last_four: MyString
+  month: MyString
+  year: MyString
+  csv: MyString
+  type: 
+
+two:
+  user_id: 1
+  nickname: MyString
+  name: MyString
+  number_digest: MyString
+  last_four: MyString
+  month: MyString
+  year: MyString
+  csv: MyString
+  type: 

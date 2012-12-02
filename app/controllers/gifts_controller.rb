@@ -87,11 +87,9 @@ class GiftsController < ApplicationController
     @item     = Item.find(params[:item_id])
     @gift.provider_id     = @provider.id
     @gift.provider_name   = @provider.name
-    @gift.receiver_id     = @receiver.id
-    @gift.receiver_name   = @receiver.username
+    @gift.add_receiver @receiver
     @gift.giver_name      = current_user.username
     @gift.giver_id        = current_user.id
-    @gift.receiver_phone  = @receiver.phone
     @gift.item_id         = @item.id
     @gift.price           = params[:price]
     @gift.item_name       = @item.item_name
@@ -154,11 +152,9 @@ class GiftsController < ApplicationController
     @gift                 = Gift.new
     @gift.provider_id     = @provider.id
     @gift.provider_name   = @provider.name
-    @gift.receiver_id     = @receiver.id
-    @gift.receiver_name   = @receiver.username
+    @gift.add_receiver @receiver
     @gift.giver_name      = current_user.username
-    @gift.giver_id        = current_user.id
-    @gift.receiver_phone  = @receiver.phone     
+    @gift.giver_id        = current_user.id    
   end
 
   def choose_from_contacts
@@ -181,6 +177,10 @@ class GiftsController < ApplicationController
 
   def create
     @gift = Gift.new(params[:gift])
+      # add anonymous giver feature
+    if params[:gift][:anon_id] 
+      @gift.add_anonymous_giver(params[:gift][:giver_id])
+    end
 
     respond_to do |format|
       if @gift.save

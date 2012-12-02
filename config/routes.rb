@@ -1,5 +1,15 @@
 Drinkboard::Application.routes.draw do
   
+  resources :sales
+
+  resources :cards
+
+  get "email/invite"
+
+  get "email/forgot_pw"
+
+  get "email/new_employee"
+
   root to: 'users#new'
   
   match "/invite/:id" => "invite#show"
@@ -34,6 +44,11 @@ Drinkboard::Application.routes.draw do
       get :servercode
       get :crop
       get :change_public_status
+    end
+    collection do
+      get :reset_password
+      get :enter_new_password
+      post :enter_new_password
     end
   end
 
@@ -87,7 +102,6 @@ Drinkboard::Application.routes.draw do
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/activity',         to: 'iphone#activity',         via: :post
-  match 'app/provider',         to: 'iphone#provider',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/servercode',       to: 'iphone#server_code',      via: :post
@@ -95,12 +109,15 @@ Drinkboard::Application.routes.draw do
   match 'app/out',              to: 'iphone#going_out',        via: :post 
   match 'app/active',           to: 'iphone#active_orders',    via: :post
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
+  match 'app/regift',           to: 'iphone#regift',           via: :post
 
     ### deprecated app routes
   match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
   match 'app/order',            to: 'iphone#create_order',     via: :post
   match 'app/users',            to: 'iphone#drinkboard_users', via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
+
+
 
     ###   basic footer routes
   match '/about',       to: 'home#about'
