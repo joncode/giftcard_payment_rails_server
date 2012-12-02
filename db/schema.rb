@@ -21,6 +21,20 @@ ActiveRecord::Schema.define(:version => 20121128082039) do
     t.datetime "updated_at",  :null => false
   end
 
+  create_table "cards", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "nickname"
+    t.string   "name"
+    t.string   "number_digest"
+    t.string   "last_four"
+    t.string   "month"
+    t.string   "year"
+    t.string   "csv"
+    t.string   "type"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
     t.integer  "receiver_id"
@@ -68,6 +82,7 @@ ActiveRecord::Schema.define(:version => 20121128082039) do
     t.string   "facebook_id"
     t.integer  "anon_id"
     t.string   "shopping_cart_string"
+    t.integer  "sale_id"
   end
 
   create_table "items", :force => true do |t|
@@ -174,11 +189,12 @@ ActiveRecord::Schema.define(:version => 20121128082039) do
     t.string   "bank_city"
     t.string   "bank_state"
     t.string   "bank_zip"
+    t.string   "portrait"
+    t.string   "box"
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
-    t.string   "portrait"
-    t.string   "box"
+    t.decimal  "rate"
   end
 
   create_table "questions", :force => true do |t|
@@ -205,6 +221,20 @@ ActiveRecord::Schema.define(:version => 20121128082039) do
   add_index "relationships", ["followed_id"], :name => "index_relationships_on_followed_id"
   add_index "relationships", ["follower_id", "followed_id"], :name => "index_relationships_on_follower_id_and_followed_id", :unique => true
   add_index "relationships", ["follower_id"], :name => "index_relationships_on_follower_id"
+
+  create_table "sales", :force => true do |t|
+    t.integer  "gift_id"
+    t.integer  "giver_id"
+    t.integer  "card_id"
+    t.string   "request_string"
+    t.string   "response_string"
+    t.string   "status"
+    t.integer  "provider_id"
+    t.string   "transaction_id"
+    t.decimal  "revenue"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                                                    :null => false
