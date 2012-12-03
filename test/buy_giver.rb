@@ -379,11 +379,18 @@ class BuyTests
       curlString = "curl #{TEST_URL}/app/add_card.json -d'token=#{@user1.remember_token}&data=#{cc_hash_json}'"
       json_string = String.new(%x{#{curlString}})
       response = JSON.parse json_string
-      data = Card.create_card_from_hash cc_hash
-      saved_card = Card.last
+      # data = Card.create_card_from_hash cc_hash
+      # saved_card_str = json_string
+      # puts "json string = #{json_string}"
+      # if response.keys == ["success"]
+      #      saved_card = Card.last
+      #      save_card_str = "#{saved_card.name},#{saved_card.nickname},#{saved_card.user_id},#{saved_card.month},#{saved_card.year}"
+      # end
       data_str = "#{cc_hash['name']},#{cc_hash['nickname']},#{cc_hash['user_id']},#{cc_hash['month']},#{cc_hash['year']}"
-      save_card_str = "#{saved_card.name},#{saved_card.nickname},#{saved_card.user_id},#{saved_card.month},#{saved_card.year}"
-      save_results(save_card_str, data_str, test,method_name, curlString, nil, "string")
+      if response.keys == ["success"]
+      elsif response.keys == ["error-server"]
+      end
+      save_results(json_string, data_str, test,method_name, curlString, nil, "string")
   end  
   
   def test_encrypted_card_on_server
@@ -670,12 +677,12 @@ class BuyTests
   private    
   
     def save_results(response, data, test, method_name, curlString, object=nil, comparitor=nil)
+        puts "response = #{response}"
         @total_tests += 1
         if method_name != @last_method_name
             @total_methods += 1
         end
         @last_method_name = method_name
-        
         if object
             if object.name
                 key = "#{test} - #{object.id} - #{object.name}"

@@ -1,7 +1,7 @@
 class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
-	include ActiveMerchant::Billing::CreditCardMethods
-	include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
+	# include ActiveMerchant::Billing::CreditCardMethods
+	# include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
 	
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
     ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
@@ -328,13 +328,13 @@ class AppController < ApplicationController
     	# end
 
     	respond_to do |format|
-			if message.empty?
+			#if message.empty?
 				if ccard.save
 					response["success"]      = "Card added"
 				else
 					response["error_server"] = ccard.errors.messages
 				end
-			end
+			#end
 			puts response
 			puts message
 			format.json { render text: response.to_json }
