@@ -19,6 +19,23 @@
 
 ######################        USERS        ######################
 
+Tag.delete_all
+Tag.create([
+  {name: "bar"},
+  {name: "club"},
+  {name: "restaurant"},
+  {name: "openlate"},
+  {name: "brunch"},
+  {name: "signature"},
+  {name: "hamburger"},
+  {name: "steak"},
+  {name: "beer"},
+  {name: "wine"},
+  {name: "martini"},
+  {name: "cocktail"},
+  {name: "seafood"}
+])
+
 Question.delete_all
 Question.create([
 {"left" => "Day Drinking", "right" => "Night Drinking"},

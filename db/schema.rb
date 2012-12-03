@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121203102750) do
+ActiveRecord::Schema.define(:version => 20121203153713) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -35,6 +35,8 @@ ActiveRecord::Schema.define(:version => 20121203102750) do
     t.datetime "updated_at",    :null => false
   end
 
+  add_index "cards", ["user_id"], :name => "index_cards_on_user_id"
+
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
     t.integer  "receiver_id"
@@ -53,6 +55,8 @@ ActiveRecord::Schema.define(:version => 20121203102750) do
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
   end
+
+  add_index "employees", ["provider_id"], :name => "index_employees_on_provider_id"
 
   create_table "gifts", :force => true do |t|
     t.string   "giver_name"
@@ -84,6 +88,10 @@ ActiveRecord::Schema.define(:version => 20121203102750) do
     t.string   "shopping_cart_string"
     t.integer  "sale_id"
   end
+
+  add_index "gifts", ["giver_id"], :name => "index_gifts_on_giver_id"
+  add_index "gifts", ["provider_id"], :name => "index_gifts_on_provider_id"
+  add_index "gifts", ["receiver_id"], :name => "index_gifts_on_receiver_id"
 
   create_table "items", :force => true do |t|
     t.string  "item_name",   :limit => 50, :null => false
@@ -129,6 +137,8 @@ ActiveRecord::Schema.define(:version => 20121203102750) do
     t.string   "sections_json"
   end
 
+  add_index "menu_strings", ["provider_id"], :name => "index_menu_strings_on_provider_id"
+
   create_table "menus", :force => true do |t|
     t.integer  "provider_id",               :null => false
     t.integer  "item_id",                   :null => false
@@ -141,6 +151,8 @@ ActiveRecord::Schema.define(:version => 20121203102750) do
     t.string   "description"
     t.string   "section"
   end
+
+  add_index "menus", ["provider_id"], :name => "index_menus_on_provider_id"
 
   create_table "microposts", :force => true do |t|
     t.string   "content",    :null => false
@@ -160,6 +172,8 @@ ActiveRecord::Schema.define(:version => 20121203102750) do
     t.integer  "provider_id"
     t.integer  "employee_id"
   end
+
+  add_index "orders", ["gift_id"], :name => "index_orders_on_gift_id"
 
   create_table "providers", :force => true do |t|
     t.string   "name",                                              :null => false
@@ -196,6 +210,16 @@ ActiveRecord::Schema.define(:version => 20121203102750) do
     t.string   "foursquare_id"
     t.decimal  "rate"
   end
+
+  add_index "providers", ["city"], :name => "index_providers_on_city"
+
+  create_table "providers_tags", :id => false, :force => true do |t|
+    t.integer "provider_id"
+    t.integer "tag_id"
+  end
+
+  add_index "providers_tags", ["provider_id"], :name => "index_providers_tags_on_provider_id"
+  add_index "providers_tags", ["tag_id"], :name => "index_providers_tags_on_tag_id"
 
   create_table "questions", :force => true do |t|
     t.string "left"
@@ -236,6 +260,14 @@ ActiveRecord::Schema.define(:version => 20121203102750) do
     t.datetime "updated_at",      :null => false
   end
 
+  add_index "sales", ["provider_id"], :name => "index_sales_on_provider_id"
+
+  create_table "tags", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "users", :force => true do |t|
     t.string   "email",                                                    :null => false
     t.boolean  "admin",                                 :default => false
@@ -273,5 +305,7 @@ ActiveRecord::Schema.define(:version => 20121203102750) do
     t.datetime "reset_token_sent_at"
     t.string   "reset_token"
   end
+
+  add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
 
 end
