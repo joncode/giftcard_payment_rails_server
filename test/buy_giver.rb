@@ -5,9 +5,6 @@
 #  b = BuyTests.new
 # b.all
 
-
-
-
 class BuyTests
   
   attr_accessor :user1, :user2, :correct, :incorrect, :total_tests, :last_method_name, :total_methods, :show_implemented
