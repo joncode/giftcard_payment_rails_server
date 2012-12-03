@@ -12,10 +12,12 @@
 #
 
 class Menu < ActiveRecord::Base
-  attr_accessible :item_id, :position, :price, :provider_id, :item_name, :photo, :description, :section
+  attr_accessible :item_id, :position, :price, :provider_id, 
+  :item_name, :photo, :description, :section
 
   belongs_to   :provider
   belongs_to   :item
+  has_and_belongs_to_many :gifts
 
   def self.get_sections(provider_id)
   	menu_items = Menu.where(provider_id: provider_id)

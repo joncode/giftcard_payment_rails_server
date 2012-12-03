@@ -45,12 +45,11 @@ class Gift < ActiveRecord::Base
   
   has_one     :redeem
   belongs_to  :provider
-  belongs_to  :item
   belongs_to  :sales
-  belongs_to  :cards, through: :sales
   has_one     :order
   belongs_to  :giver,    class_name: "User"
   belongs_to  :receiver, class_name: "User"
+  has_and_belongs_to_many :menus
   
   validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity#, :total, :tax, :tip
   # validates_numericality_of  :total, :quantity
