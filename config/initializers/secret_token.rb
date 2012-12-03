@@ -14,3 +14,6 @@ CLEARANCE = ['admin', 'full', 'staff']
 BEVERAGE_CATEGORIES = ['special', 'beer', 'wine', 'cocktail', 'shot']
 GIFT_STATUS   = ['open', 'notified', 'redeemed', 'regifted', 'returned', 'incomplete']
 PROOF_LEVELS  = ['zero', 'lite', 'normal', 'double']
+
+TEST_URL = "0.0.0.0:3000"
+BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dinig"]

@@ -114,11 +114,11 @@ class User < ActiveRecord::Base
   end
 
   def get_credit_card(card_id)
-    user.cards.select { |c| c.id == card_id}
+    self.cards.select { |c| c.id == card_id}
   end
 
   def display_cards
-    user.cards.select do |c| 
+    self.cards.select do |c| 
       c.nickname
       c.id
       c.last_four
@@ -148,6 +148,10 @@ class User < ActiveRecord::Base
     else
       "#{self.first_name} #{self.last_name}"
     end
+  end
+
+  def fullname
+    self.username
   end
   
   def profile_pic(w,h)

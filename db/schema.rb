@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121128082039) do
+ActiveRecord::Schema.define(:version => 20121203102750) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(:version => 20121128082039) do
     t.string   "month"
     t.string   "year"
     t.string   "csv"
-    t.string   "type"
+    t.string   "brand"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end

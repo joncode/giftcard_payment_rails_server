@@ -116,6 +116,10 @@ Drinkboard::Application.routes.draw do
   match 'app/active',           to: 'iphone#active_orders',    via: :post
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
   match 'app/regift',           to: 'iphone#regift',           via: :post
+    ## credit card routes
+  match 'app/cards',            to: 'app#get_cards',           via: :post
+  match 'app/add_card',         to: 'app#add_card',            via: :post
+  
 
     ### deprecated app routes
   match 'app/redeem',           to: 'iphone#create_redeem',    via: :post

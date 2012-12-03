@@ -37,7 +37,10 @@ module Drinkboard
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    # config.filter_parameters += [:password, :token, :uid, :credit_number]
+    
+    # config.filter_parameters += [:password, :token, :uid, :credit_number, :card_number, :verification_value]
+    
+
     # AWS::S3::Base.establish_connection!(
     #   :access_key_id     => 'AKIAJV7FFALBNSFCZPOA',
     #   :secret_access_key => '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'
