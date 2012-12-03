@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121203153713) do
+ActiveRecord::Schema.define(:version => 20121203203614) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -20,6 +20,30 @@ ActiveRecord::Schema.define(:version => 20121203153713) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "brands", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.string   "phone"
+    t.string   "website"
+    t.string   "logo"
+    t.string   "banner"
+    t.string   "portrait"
+    t.integer  "user_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "brands_providers", :id => false, :force => true do |t|
+    t.integer "provider_id"
+    t.integer "brand_id"
+  end
+
+  add_index "brands_providers", ["brand_id"], :name => "index_brands_providers_on_brand_id"
+  add_index "brands_providers", ["provider_id"], :name => "index_brands_providers_on_provider_id"
 
   create_table "cards", :force => true do |t|
     t.integer  "user_id"
@@ -54,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20121203153713) do
     t.boolean  "active",      :default => true
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
+    t.integer  "brand_id"
   end
 
   add_index "employees", ["provider_id"], :name => "index_employees_on_provider_id"

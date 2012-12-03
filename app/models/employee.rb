@@ -17,6 +17,7 @@ class Employee < ActiveRecord::Base
   belongs_to :user
   belongs_to :provider
   has_many 	 :orders
+  belongs_to :brand
   
   validates_presence_of :user_id, :provider_id
 

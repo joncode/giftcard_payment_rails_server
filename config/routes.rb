@@ -1,5 +1,7 @@
 Drinkboard::Application.routes.draw do
   
+  resources :brands
+
   resources :sales
   resources :cards
 
