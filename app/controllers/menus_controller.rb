@@ -10,10 +10,11 @@ class MenusController < ApplicationController
   end
 
   def show
-    @menu = Menu.find(params[:id])
+    provider = Provider.find(params[:id])
+    @menu = provider.menu
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html 
       format.json { render json: @menu }
     end
   end

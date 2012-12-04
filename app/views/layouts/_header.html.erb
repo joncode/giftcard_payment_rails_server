@@ -12,7 +12,7 @@
   <% if signed_in? %>
   <ul class="navLoggedIn">
     <li class="logoHeader">
-    <%#= link_to image_tag("logoCap1rev.png"), home_path %>
+      <%#= link_to  home_path %>
     </li>
     <li>
       <%= link_to "Sign out",signout_path, method: :delete %>
@@ -42,10 +42,10 @@
     </li> 
     <% end %> 
     <li>
-      <%= link_to "Merchant", new_provider_path %>
+      <%= link_to "New Merchant", new_provider_path %>
     </li>
     <li>
-      <%= link_to "Get the app" %>
+      <%= link_to "Get the app", home_path %>
     </li>
     <li class="appStoreLink">
     </li>
