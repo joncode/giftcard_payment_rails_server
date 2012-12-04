@@ -88,13 +88,7 @@ class BuyTests
     test_merchant_receives_notification_on_chosen_network
   end
   
-    # run only D tests
-  def td
-     test_add_cards_to_server 
-     test_encrypted_card_on_server
-     test_get_cards_from_server
-     test_send_card_info_to_bank
-  end
+
   ############    A TESTS - get providers
   
   def test_providers_no_data
@@ -366,7 +360,14 @@ class BuyTests
   end
 
   ###############  D TESTS - credit cards
-
+    # run only D tests
+  def d
+     test_add_cards_to_server 
+     test_encrypted_card_on_server
+     test_get_cards_from_server
+     test_send_card_info_to_bank
+  end
+  
   def test_add_cards_to_server
       test = "Test D1"
       method_name = "test_add_cards_to_server"
@@ -433,16 +434,34 @@ class BuyTests
   end
 
   ###############  E TESTS - create a gift
-
+  def e
+    test_create_gift_stores_data_correctly
+    create_gift_has_validations
+    create_gift_success_or_error
+    create_gift_with_email_finds_db_users
+    create_gift_with_facebook_finds_db_users
+    create_gift_with_text_finds_db_users
+    create_gift_with_twitter_finds_db_users
+    test_create_gift_handles_card_errors
+    test_create_gift_handle_card_success
+    test_create_gift_creates_receiver_notification
+    test_create_gift_creates_merchant_notification
+    test_create_gift_creates_correct_sale
+  end
+  
   def test_create_gift_stores_data_correctly
       test = "Test E1"
       method_name = "test_create_gift_stores_data_correctly"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
       
+      params = {"gift"=>"{  \"receiver_email\" : \"tayloraddison1@gmail.com\",  \"facebook_id\" : \"\",  \"quantity\" : \"1\",  \"receiver_phone\" : \"2052920078\",  \"giver_name\" : \"Larry Page\",  \"receiver_id\" : \"34\",  \"total\" : \"33.17\",  \"provider_id\" : \"50\",  \"tip\" : \"1.00\",  \"message\" : \"\",  \"credit_card\" : \"************3042\",  \"provider_name\" : \"PT's Pub\",  \"receiver_name\" : \"Taylor Addison\",  \"shoppingCart\" : \"(        {        \\\"item_name\\\" = \\\"Fat Tire\\\";        price = 10;    },        {        \\\"item_name\\\" = \\\"Fat Tire\\\";        price = 10;    },        {        \\\"item_name\\\" = \\\"Fat Tire\\\";        price = 10;    })\",  \"giver_id\" : 29}", "origin"=>"d", "token"=>"hNgobEA3h_mNeQOPJcVxuA", "controller"=>"iphone", "action"=>"create_gift", "format"=>"json"} 
+
+      curlString = "curl #{TEST_URL}/app/cards.json -d #{params}"
+      json_string = String.new(%x{#{curlString}})
+      response = JSON.parse json_string
+      puts response
       
-      
-      #save_results(response, data, test,method_name, curlString, nil, "size")
-      puts "IMPLEMENT" 
+      save_results(response.keys, "success", test,method_name, curlString, nil, "size")
     
   end
 

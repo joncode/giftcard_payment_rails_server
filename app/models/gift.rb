@@ -34,9 +34,9 @@ class Gift < ActiveRecord::Base
 
   attr_accessible   :giver_id,      :giver_name, :credit_card,    
       :receiver_id, :receiver_name, :receiver_phone, 
-      :provider_id, :provider_name,
+      :provider_id, :provider_name, :receiver_email, 
       :message,     :special_instructions,
-      :shopping_cart_string,  
+      :shopping_cart_string,  :shoppingCart,
       :category,    :quantity, :price, :item_id, :item_name ,  
       :tip, :tax,   :total, 
       :facebook_id, :foursquare_id,
@@ -51,7 +51,7 @@ class Gift < ActiveRecord::Base
   belongs_to  :receiver, class_name: "User"
   has_and_belongs_to_many :menus
   
-  validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity#, :total, :tax, :tip
+  validates_presence_of :giver_id, :price, :provider_id, :quantity#, :total, :tax, :tip
   # validates_numericality_of  :total, :quantity
   
   #before_create :add_category, :if => :no_category

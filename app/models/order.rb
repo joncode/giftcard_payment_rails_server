@@ -20,8 +20,8 @@ class Order < ActiveRecord::Base
   belongs_to  :redeem
   belongs_to  :gift
   belongs_to  :employee
-  belongs_to  :sales, through: :gift
-  belongs_to  :cards, through: :sales
+  belongs_to  :sales
+  belongs_to  :cards
   belongs_to  :server, class_name: "User"    #  be class_name "Employee"
 
   # order must be unique for each gift and redeem 

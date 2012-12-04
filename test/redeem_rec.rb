@@ -2,7 +2,7 @@
 #  this is the tests for the buy database 
 #  in rails console
 # load "test/redeem_rec.rb"
-#  r = RedeemTests
+#  r = RedeemTests.new
 # r.all
 
 class RedeemTests
@@ -43,7 +43,7 @@ class RedeemTests
       @incorrect.each do |c|
         puts c.keys
       end
-      puts "\n\n BuyTests complete"
+      puts "\n\n RedeemTests complete"
       puts "Ran #{@total_tests} total tests"
       puts "In #{@total_methods} total methods"
   end
@@ -179,7 +179,7 @@ class RedeemTests
         puts "IMPLEMENT" 
   end
   
-  ###############  C TESTS - get users
+  ###############  C TESTS 
   def c
     test_app_notifies_server_of_gift_status_changes
     test_server_transfer_notifications_to_giver
@@ -228,7 +228,7 @@ class RedeemTests
       puts "IMPLEMENT"   
   end
 
-  ###############  D TESTS - credit cards
+  ###############  D TESTS
   def d
       test_correct_employees_for_location
       test_sends_only_customer_employees
@@ -243,65 +243,79 @@ class RedeemTests
   
   def test_correct_employees_for_location
       test = "Test D1"
-      method_name = "test_add_cards_to_server"
+      method_name = "test_correct_employees_for_location"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "
-      gift = Gift.first
-      curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
-      json_string = String.new(%x{#{curlString}})
-      r = JSON.parse json_string
-      h = r[1].pop
-      resp = h["employee_id"].to_i
-      data = Employee.where(provider_id: gift.provider.id).pop.id
-      save_results(resp, data, test,method_name, curlString, nil, "id compare")
+      Gift.all.each do |gift|
+          puts "gift id = #{gift.id}"
+          curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
+          json_string = String.new(%x{#{curlString}})
+          r = JSON.parse json_string
+          h = r[1].pop
+          resp = h["employee_id"].to_i
+          data = Employee.where(provider_id: gift.provider.id).pop
+          if !data.nil? 
+              data = data.id 
+          end
+          save_results(resp, data, test,method_name, curlString, nil, "id compare")
+      end
   end  
   
   def test_sends_only_customer_employees
       test = "Test D2"
       method_name = "test_sends_only_customer_employees"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
-      gift = Gift.first
-      curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
-      json_string = String.new(%x{#{curlString}})
-      r = JSON.parse json_string
-      h = r[1].pop
-      resp = h["employee_id"].to_i
-      data = Employee.where(provider_id: gift.provider.id, active: true, retail: true).pop.id
-      save_results(resp, data, test,method_name, curlString, nil, "id compare")
+      Gift.all.each do |gift|
+          puts "gift id = #{gift.id}"
+          curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
+          json_string = String.new(%x{#{curlString}})
+          r = JSON.parse json_string
+          h = r[1].pop
+          resp = h["employee_id"].to_i
+          data = Employee.where(provider_id: gift.provider.id, active: true, retail: true).pop
+          if !data.nil? 
+              data = data.id 
+          end
+          save_results(resp, data, test,method_name, curlString, nil, "id compare")
+      end
   end
   
   def test_gives_correct_route_for_employee_public_photo
       test = "Test D3"
       method_name = "test_gives_correct_route_for_employee_public_photo"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
-      gift = Gift.first
-      curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
-      json_string = String.new(%x{#{curlString}})
-      r = JSON.parse json_string
-      h = r[1].pop
-      resp = h["photo"]
-      employee_id = h["employee_id"].to_i
-      employee = Employee.find(employee_id)
-      user_photo = employee.user.get_photo
-      save_results(resp, user_photo, test,method_name, curlString, nil, "id compare")  
+      Gift.all.each do |gift|
+          puts "gift id = #{gift.id}"
+          curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
+          json_string = String.new(%x{#{curlString}})
+          r = JSON.parse json_string
+          h = r[1].pop
+          resp = h["photo"]
+          employee_id = h["employee_id"].to_i
+          employee = Employee.find(employee_id)
+          user_photo = employee.user.get_photo
+          save_results(resp, user_photo, test,method_name, curlString, nil, "id compare")
+      end  
   end
   
   def test_gives_correct_route_for_employee_secure_image
       test = "Test D4"
       method_name = "test_gives_correct_route_for_employee_secure_image"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
-      gift = Gift.first
-      curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
-      json_string = String.new(%x{#{curlString}})
-      r = JSON.parse json_string
-      h = r[1].pop
-      resp = h["secure_image"]
-      employee_id = h["employee_id"].to_i
-      employee = Employee.find(employee_id)
-      user_secure_img = employee.user.secure_image
-      save_results(resp, user_secure_img, test,method_name, curlString, nil, "id compare")    
+      Gift.all.each do |gift|
+          puts "gift id = #{gift.id}"
+          curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
+          json_string = String.new(%x{#{curlString}})
+          r = JSON.parse json_string
+          h = r[1].pop
+          resp = h["secure_image"]
+          employee_id = h["employee_id"].to_i
+          employee = Employee.find(employee_id)
+          user_secure_img = employee.user.secure_image
+          save_results(resp, user_secure_img, test,method_name, curlString, nil, "id compare") 
+      end   
   end
 
-  ###############  E TESTS - create a gift
+  ###############  E TESTS 
   def e
     test_receives_complete_order_request_and_create_order
     test_server_updates_gift_object_status
@@ -323,7 +337,10 @@ class RedeemTests
   def test_receives_complete_order_request_and_create_order
       test = "Test E1"
       method_name = "test_receives_complete_order_request_and_create_order"
-      puts "\n\n  *******     #{test} - #{method_name}     ********* "  
+      puts "\n\n  *******     #{test} - #{method_name}     ********* " 
+      curlString = "curl #{TEST_URL}/app/complete_order.json -d'token=#{@user1.remember_token}&gift_id=#{gift.id}&employee_id=#{employee.id}'"
+      json_string = String.new(%x{#{curlString}})
+      response = JSON.parse json_string 
       
       
       
