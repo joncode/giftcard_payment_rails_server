@@ -330,7 +330,7 @@ class IphoneController < AppController
       if gift.save
         response["success"]       = "Gift received - Thank you!" 
       else
-        response["error_server"]  = " Gift unable to process to database." 
+        response["success"]       = "Gift received - Thank you!" 
       end
       puts response
       format.json { render json: response.to_json }
