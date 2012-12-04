@@ -455,7 +455,10 @@ class BuyTests
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
       
       # make a sample gift 
+      gift = Gift.new
       # with multiple items
+      provider = Provider.first
+      item1 = provider.menu
       # turn it into a params for the curlString
       
       
