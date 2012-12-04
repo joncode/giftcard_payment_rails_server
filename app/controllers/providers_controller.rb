@@ -40,7 +40,7 @@ class ProvidersController < ApplicationController
 
     respond_to do |format|
       if @provider.save
-        format.html { redirect_to @provider, notice: 'Provider was successfully created.' }
+        format.html { redirect_to merchant_path(@provider), notice: 'Provider was successfully created.' }
         format.json { render json: @provider, status: :created, location: @provider }
       else
         format.html { render action: "new" }

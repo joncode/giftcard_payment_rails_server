@@ -1,10 +1,5 @@
 
-<% flash.each do |name, msg| %>
-  <div class="alert alert-<%= name == :notice ? 'error' : 'error' %>">
-    <a class="close" data-dismiss="alert" href="#">×</a>
-    <%= msg %>
-  </div>
-<% end %>
+
 <div class="headerColorBackground">
 
 </div>
@@ -15,7 +10,7 @@
       <%#= link_to  home_path %>
     </li>
     <li>
-      <%= link_to "Sign out",signout_path, method: :delete %>
+      <%= link_to "Get the App",signout_path, method: :delete %>
     </li>
   
 <!--     <li>
@@ -45,7 +40,7 @@
       <%= link_to "New Merchant", new_provider_path %>
     </li>
     <li>
-      <%= link_to "Get the app", home_path %>
+      <%= link_to "Drinkboard", home_path %>
     </li>
     <li class="appStoreLink">
     </li>
@@ -109,6 +104,11 @@
     </li>
   </ul>-->
 
-
+<% flash.each do |name, msg| %>
+  <div class="alert alert-<%= name == :notice ? 'info' : 'success' %>">
+    <a class="close" data-dismiss="alert" href="#">×</a>
+    <%= msg %>
+  </div>
+<% end %>
  
 

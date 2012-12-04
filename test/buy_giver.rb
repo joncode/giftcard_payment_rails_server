@@ -454,8 +454,12 @@ class BuyTests
       method_name = "test_create_gift_stores_data_correctly"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
       
-      params = {"gift"=>"{  \"receiver_email\" : \"tayloraddison1@gmail.com\",  \"facebook_id\" : \"\",  \"quantity\" : \"1\",  \"receiver_phone\" : \"2052920078\",  \"giver_name\" : \"Larry Page\",  \"receiver_id\" : \"34\",  \"total\" : \"33.17\",  \"provider_id\" : \"50\",  \"tip\" : \"1.00\",  \"message\" : \"\",  \"credit_card\" : \"************3042\",  \"provider_name\" : \"PT's Pub\",  \"receiver_name\" : \"Taylor Addison\",  \"shoppingCart\" : \"(        {        \\\"item_name\\\" = \\\"Fat Tire\\\";        price = 10;    },        {        \\\"item_name\\\" = \\\"Fat Tire\\\";        price = 10;    },        {        \\\"item_name\\\" = \\\"Fat Tire\\\";        price = 10;    })\",  \"giver_id\" : 29}", "origin"=>"d", "token"=>"hNgobEA3h_mNeQOPJcVxuA", "controller"=>"iphone", "action"=>"create_gift", "format"=>"json"} 
-
+      # make a sample gift 
+      # with multiple items
+      # turn it into a params for the curlString
+      
+      
+      
       curlString = "curl #{TEST_URL}/app/cards.json -d #{params}"
       json_string = String.new(%x{#{curlString}})
       response = JSON.parse json_string
