@@ -97,9 +97,10 @@ class Provider < ActiveRecord::Base
   end
 
   def get_servers
-    # this means get people who are at work not just employed
-    # for now without location data, its just employees
-    self.employees
+    # this means get people who are AT work not just employed
+    # for now without location data, 
+    # its just employees who  are active and retail (deal with customers)
+    self.employees.where(active: true, retail: true)
   end
   
   def server_codes
@@ -128,7 +129,7 @@ class Provider < ActiveRecord::Base
   def employees_to_app
     # get all the employees - put there table view info and secure image into an array
     send_fields = [:first_name, :last_name]
-    employees_array = self.employees.map do |e|    
+    employees_array = self.get_servers.map do |e|    
       employee_hash = {}
       employee_hash = e.user.serializable_hash only: send_fields
       employee_hash["photo"]        = e.user.get_photo

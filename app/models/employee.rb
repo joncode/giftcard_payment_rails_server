@@ -12,7 +12,7 @@
 #
 
 class Employee < ActiveRecord::Base
-  attr_accessible :active, :clearance, :provider_id, :user_id
+  attr_accessible :active, :clearance, :provider_id, :user_id, :retail
   
   belongs_to :user
   belongs_to :provider

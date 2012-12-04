@@ -1,9 +1,9 @@
 
 #  this is the tests for the buy database 
 #  in rails console
-# load "test/buy_giver.rb"
-#  b = BuyTests.new
-# b.all
+# load "test/redeem_rec.rb"
+#  r = RedeemTests
+# r.all
 
 class RedeemTests
   
@@ -245,44 +245,60 @@ class RedeemTests
       test = "Test D1"
       method_name = "test_add_cards_to_server"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "
-      curlString = "curl #{TEST_URL}/app/add_card.json -d'token=#{@user1.remember_token}'"
-      #json_string = String.new(%x{#{curlString}})
-
-      #save_results(json_string, data_str, test,method_name, curlString, nil, "string")
-      puts "IMPLEMENT" 
+      gift = Gift.first
+      curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
+      json_string = String.new(%x{#{curlString}})
+      r = JSON.parse json_string
+      h = r[1].pop
+      resp = h["employee_id"].to_i
+      data = Employee.where(provider_id: gift.provider.id).pop.id
+      save_results(resp, data, test,method_name, curlString, nil, "id compare")
   end  
   
   def test_sends_only_customer_employees
       test = "Test D2"
       method_name = "test_sends_only_customer_employees"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
-      curlString = "curl #{TEST_URL}/app/users_array.json -d'token=#{@user1.remember_token}'"
-      #json_string = String.new(%x{#{curlString}})
-      #response = JSON.parse json_string
-      
-      #save_results(response, data, test,method_name, curlString, nil, "size")
-      # card number on saved in db is encrypted
-     puts "IMPLEMENT" 
+      gift = Gift.first
+      curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
+      json_string = String.new(%x{#{curlString}})
+      r = JSON.parse json_string
+      h = r[1].pop
+      resp = h["employee_id"].to_i
+      data = Employee.where(provider_id: gift.provider.id, active: true, retail: true).pop.id
+      save_results(resp, data, test,method_name, curlString, nil, "id compare")
   end
   
   def test_gives_correct_route_for_employee_public_photo
       test = "Test D3"
       method_name = "test_gives_correct_route_for_employee_public_photo"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
-      curlString = "curl #{TEST_URL}/app/cards.json -d'token=#{@user1.remember_token}'"
-      puts "IMPLEMENT"  
+      gift = Gift.first
+      curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
+      json_string = String.new(%x{#{curlString}})
+      r = JSON.parse json_string
+      h = r[1].pop
+      resp = h["photo"]
+      employee_id = h["employee_id"].to_i
+      employee = Employee.find(employee_id)
+      user_photo = employee.user.get_photo
+      save_results(resp, user_photo, test,method_name, curlString, nil, "id compare")  
   end
   
   def test_gives_correct_route_for_employee_secure_image
       test = "Test D4"
       method_name = "test_gives_correct_route_for_employee_secure_image"
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
-      curlString = "curl #{TEST_URL}/app/users_array.json -d'token=#{@user1.remember_token}'"
-      
-      
-      #save_results(response, data, test,method_name, curlString, nil, "size")
-      # decrypts card info and send to bank
-      puts "IMPLEMENT"     
+      gift = Gift.first
+      curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
+      json_string = String.new(%x{#{curlString}})
+      r = JSON.parse json_string
+      h = r[1].pop
+      resp = h["secure_image"]
+      employee_id = h["employee_id"].to_i
+      employee = Employee.find(employee_id)
+      user_secure_img = employee.user.secure_image
+      save_results(resp, user_secure_img, test,method_name, curlString, nil, "id compare")    
   end
 
   ###############  E TESTS - create a gift
