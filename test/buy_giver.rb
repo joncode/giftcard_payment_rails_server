@@ -67,7 +67,7 @@ class BuyTests
     test_user_get_providers_near_other_user_event
     test_user_get_other_user_favorites
     test_user_get_other_user_about_me
-    td
+    d
     create_gift_has_validations
     create_gift_success_or_error
     create_gift_with_email_finds_db_users

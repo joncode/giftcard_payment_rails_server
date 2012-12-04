@@ -338,9 +338,9 @@ class RedeemTests
       test = "Test E1"
       method_name = "test_receives_complete_order_request_and_create_order"
       puts "\n\n  *******     #{test} - #{method_name}     ********* " 
-      curlString = "curl #{TEST_URL}/app/complete_order.json -d'token=#{@user1.remember_token}&gift_id=#{gift.id}&employee_id=#{employee.id}'"
-      json_string = String.new(%x{#{curlString}})
-      response = JSON.parse json_string 
+      #curlString = "curl #{TEST_URL}/app/complete_order.json -d'token=#{@user1.remember_token}&gift_id=#{gift.id}&employee_id=#{employee.id}'"
+      #json_string = String.new(%x{#{curlString}})
+      #response = JSON.parse json_string 
       
       
       
