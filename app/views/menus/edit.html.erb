@@ -34,7 +34,7 @@
 		</div>
 		<div class="row2ButtonUp">
 			<h4 class="row2Text">
-				<a href="">BEER</a>
+				<a href="" class="beerNavClick">BEER</a>
 			</h4>
 		</div>
 		<div class="row2ButtonUp">
@@ -79,7 +79,6 @@
 
 
 	<div class="bigGreyHeader"> 
-
 		<!-- header signature items -->
 		<h4 class="headerTextSignature">ADD SIGNATURE ITEMS</h4>
 
@@ -435,9 +434,41 @@
 	</div>
 </div> <!-- End menuEditWrapper -->
 
+<script>
+
+	$("document").ready(function() {
+		//hide content areas on load
+	$('.menuItemsWrapper, .addItemWrapper, .wrapperBeerGrid, .wrapperAddCustom').	hide();
+		//hide headers on load
+		$('.columnHeaderName, .columnHeaderPrice, .columnHeaderDescription, .headerTextBeerGrid, .headerTextAddCustom, .headerTextSignature').hide();
+	});
+	
+	$('.topRowTabPreview a').click(function() {
+		$('.wrapperPreview, .headerTextPreview').fadeIn(200);
+			return false;
+		$('.menuItemsWrapper, .addItemWrapper, .wrapperBeerGrid, .wrapperAddCustom').fadeOut(200);
+	});
+
+	//Beer Click
+	$('.beerNavClick a').click(function() {
+		$('.wrapperBeerGrid, .headerTextBeerGrid').fadeIn(200);
+			return false;
+		$('.menuItemsWrapper, .addItemWrapper, .wrapperPreview, .wrapperAddCustom').fadeOut(200);
+	});
 
 
 
+</script>
+
+<!--
+
+ beer wine liquor = squares
+
+
+
+
+
+  -->
 
 
 

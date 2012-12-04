@@ -63,10 +63,9 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.string   "receiver_phone"
     t.string   "tax"
     t.string   "tip"
-    t.integer  "regift_id"
+    t.integer  "gift_id"
     t.string   "foursquare_id"
     t.string   "facebook_id"
-    t.integer  "anon_id"
   end
 
   create_table "items", :force => true do |t|
@@ -239,8 +238,6 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.string   "fb_photo"
     t.string   "use_photo"
     t.string   "secure_image"
-    t.datetime "reset_token_sent_at"
-    t.string   "reset_token"
   end
 
 end
