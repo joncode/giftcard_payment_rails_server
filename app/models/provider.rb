@@ -39,7 +39,7 @@
 
 class Provider < ActiveRecord::Base
   attr_accessible :address, :city, :description, :logo, :name, :state, :user_id, :staff_id, :zip, :zinger, :phone, :email, :twitter, :facebook, :website, :users, :photo, :photo_cache, :logo_cache, :box, :box_cache, :portrait, :portrait_cache, :account_name, :aba, :routing, :bank_account_name, :bank_address, :bank_city, :bank_state, :bank_zip
-
+  attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
   has_many   :users, :through => :employees                                                                              
   has_many   :employees
@@ -49,11 +49,10 @@ class Provider < ActiveRecord::Base
   has_many   :gifts
   has_many   :servers, class_name: "Employee"
 
-  mount_uploader :photo,    ImageUploader
-  mount_uploader :logo,     ImageUploader
-  mount_uploader :box,      ImageUploader
-  mount_uploader :portrait, ImageUploader
-  
+  mount_uploader :photo,    ProviderPhotoUploader
+  mount_uploader :logo,     ProviderLogoUploader
+  mount_uploader :box,      ProviderBoxUploader
+  mount_uploader :portrait, ProviderPortraitUploader
 
   def self.allWithinBounds(bounds)
     puts bounds

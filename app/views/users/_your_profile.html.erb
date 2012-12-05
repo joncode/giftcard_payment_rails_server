@@ -1,8 +1,7 @@
 <!-- Profile page(s) -->
 
 <div class="yourProfileWrapper">
-	<p><%= @user.photo %>
-	<div class="profilePic"><%= @user.profile_pic(131,131) %></div>
+	<div class="profilePic"><%= image_tag(@user.photo.large) %></div>
   <h2><%= @user.username %></h2>
   <h2><%= @user.handle %></h2>
   <h2><%= @user.email %></h2>
