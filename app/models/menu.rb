@@ -9,6 +9,10 @@
 #  position    :integer(8)
 #  created_at  :datetime        not null
 #  updated_at  :datetime        not null
+#  item_name   :string(255)
+#  photo       :string(255)
+#  description :string(255)
+#  section     :string(255)
 #
 
 class Menu < ActiveRecord::Base

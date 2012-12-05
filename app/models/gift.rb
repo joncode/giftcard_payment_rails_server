@@ -3,11 +3,11 @@
 # Table name: gifts
 #
 #  id                   :integer         not null, primary key
-#  giver_name           :string(255)  !!!
+#  giver_name           :string(255)
 #  receiver_name        :string(255)
 #  provider_name        :string(255)
 #  item_name            :string(255)
-#  giver_id             :integer      !!!
+#  giver_id             :integer
 #  receiver_id          :integer
 #  item_id              :integer
 #  price                :string(20)
@@ -25,9 +25,14 @@
 #  receiver_phone       :string(255)
 #  tax                  :string(255)
 #  tip                  :string(255)
-#  regift_id           :integer
+#  regift_id            :integer
 #  foursquare_id        :string(255)
 #  facebook_id          :string(255)
+#  anon_id              :integer
+#  shopping_cart_string :string(255)
+#  sale_id              :integer
+#  receiver_email       :string(255)
+#  shoppingCart         :string(255)
 #
 
 class Gift < ActiveRecord::Base
@@ -51,16 +56,17 @@ class Gift < ActiveRecord::Base
   belongs_to  :receiver, class_name: "User"
   has_and_belongs_to_many :menus
   
-  validates_presence_of :giver_id, :price, :provider_id, :quantity#, :total, :tax, :tip
+  validates_presence_of :giver_id, :receiver_name, :shoppingCart, :provider_id, :total, :tip
   # validates_numericality_of  :total, :quantity
   
   #before_create :add_category, :if => :no_category
-  before_create :pluralizer
+  #before_create :pluralizer
   before_create :extract_phone_digits
   before_create :add_giver_name,  :if => :no_giver_name
   before_create :regifted,        :if => :regift_id?
   before_save   :set_status
 
+  ##########   database queries
 
   def self.get_gifts(user)
     Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
@@ -124,11 +130,21 @@ class Gift < ActiveRecord::Base
     return gifts
   end
 
+  ##########  gift creation methods
+
+  def self.init(params)
+    gift = Gift.new(params[:gift])
+      # add anonymous giver feature
+    if params[:gift][:anon_id] 
+      gift.add_anonymous_giver(params[:gift][:giver_id])
+    end
+    return gift
+  end
+
   def regift(receiver=nil, message=nil)
     new_gift            = self.dup
     new_gift.regift_id  = self.id
-    new_gift.giver_id   = self.receiver_id
-    new_gift.giver_name = self.receiver_name
+    new_gift.add_giver receiver
     new_gift.message    = message 
     if receiver
       new_gift.add_receiver receiver
@@ -136,27 +152,34 @@ class Gift < ActiveRecord::Base
       new_gift.receiver_id          = nil
       new_gift.receiver_name        = nil
       new_gift.receiver_phone       = nil
+      new_gift.foursquare_id        = nil
+      new_gift.facebook_id          = nil
     end
-    new_gift.foursquare_id          = nil
-    new_gift.facebook_id            = nil
     new_gift.special_instructions   = nil    
     return new_gift
   end
 
   def add_receiver(receiver)
-    self.receiver_id          = receiver.id
-    self.receiver_name        = receiver.username
-    if receiver.phone       
-      self.receiver_phone     = receiver.phone 
-    else
-      self.receiver_phone     = nil
-    end
+    self.receiver_id    = receiver.id
+    self.receiver_name  = receiver.fullname  
+    self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil   
+    self.receiver_phone = receiver.phone ? receiver.phone : nil
+    self.receiver_email = receiver.email ? receiver.email : nil
+  end
+
+  def add_giver(giver)
+    self.giver_id   = giver.id
+    self.giver_name = giver.fullname
+  end
+
+  def add_provider(provider)
+    self.provider_id     = provider.id
+    self.provider_name   = provider.name    
   end
 
   def add_anonymous_giver(giver_id)
     anon_user       = User.find_by_phone('5555555555')
-    self.giver_id   = anon_user.id
-    self.giver_name = anon_user.username
+    self.add_giver anon_user
     self.anon_id    = giver_id
   end
  

@@ -9,6 +9,9 @@
 #  category    :integer(20)     not null
 #  proof       :string(255)
 #  type_of     :string(255)
+#  photo       :string(255)
+#  brand_id    :integer
+#  supplier_id :integer
 #
 
 class Item < ActiveRecord::Base

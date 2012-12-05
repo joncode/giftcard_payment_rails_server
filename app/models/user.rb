@@ -30,6 +30,14 @@
 #  facebook_expiry         :datetime
 #  foursquare_access_token :string(255)
 #  sex                     :string(255)
+#  is_public               :boolean
+#  facebook_auth_checkin   :boolean
+#  iphone_photo            :string(255)
+#  fb_photo                :string(255)
+#  use_photo               :string(255)
+#  secure_image            :string(255)
+#  reset_token_sent_at     :datetime
+#  reset_token             :string(255)
 #
 
 class User < ActiveRecord::Base

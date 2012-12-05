@@ -11,6 +11,7 @@
 #  server_code :string(255)
 #  server_id   :integer
 #  provider_id :integer
+#  employee_id :integer
 #
 
 class Order < ActiveRecord::Base
@@ -31,7 +32,6 @@ class Order < ActiveRecord::Base
   validates :redeem_id , presence: true, uniqueness: true
     
   before_validation :add_gift_id,     :if => :no_gift_id
-  before_validation :get_server_id
   before_validation :get_employee_id
   before_validation :add_redeem_id,   :if => :no_redeem_id
   before_validation :add_provider_id, :if => :no_provider_id
@@ -119,7 +119,7 @@ class Order < ActiveRecord::Base
     def get_employee_id
       if !self.employee_id
         puts "SET EMPLOYEE ID"
-        e = Employee.where(provider_id: self.provider.id, user_id: self.server.id)
+        e = Employee.where(provider_id: self.gift.provider.id, user_id:  sefl.server_id)
         self.employee_id = e.id
       end  
     end  

@@ -35,6 +35,7 @@
 #  latitude          :float
 #  longitude         :float
 #  foursquare_id     :string(255)
+#  rate              :decimal(, )
 #
 
 class Provider < ActiveRecord::Base

@@ -225,7 +225,7 @@ class IphoneController < AppController
   end
   
   def create_gift 
-    puts "Create Gift"
+    puts "\n\nCreate Gift"
     puts "#{params}"
 
     response = {}
@@ -308,6 +308,7 @@ class IphoneController < AppController
       gift    = Gift.new(gift_obj)
       if gift_obj["shoppingCart"]
         gift.shopping_cart_string = gift_obj["shoppingCart"].to_json
+        gift.shoppingCart = gift.shopping_cart_string
       end
       puts "Here is GIFT #{gift.inspect}"
     end
@@ -330,7 +331,8 @@ class IphoneController < AppController
       if gift.save
         response["success"]       = "Gift received - Thank you!" 
       else
-        response["success"]       = "Gift received - Thank you!" 
+        response["error-server"]       = "Could not process gift to database" 
+        puts "this is the errrors on gift = #{gift.errors.messages}"
       end
       puts response
       format.json { render json: response.to_json }

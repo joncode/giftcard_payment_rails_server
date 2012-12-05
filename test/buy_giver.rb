@@ -7,11 +7,11 @@
 
 class BuyTests
   
-  attr_accessor :user1, :user2, :correct, :incorrect, :total_tests, :last_method_name, :total_methods, :show_implemented
+  attr_accessor :user1, :user2, :correct, :incorrect, :total_tests, :last_method_name, :total_methods, :show_implemented, :gift, :provider
   
   def initialize(user1=nil,user2=nil)
       @user1 = user1.nil? ? User.first : user1
-      @user2 = user2.nil? ? User.last : user2
+      @user2 = user2.nil? ?  User.next(@user1).pop : user2
       @correct = []
       @incorrect = []
       @total_tests = 3
@@ -455,21 +455,56 @@ class BuyTests
       puts "\n\n  *******     #{test} - #{method_name}     ********* "  
       
       # make a sample gift 
-      gift = Gift.new
+      @gift = Gift.new
       # with multiple items
-      provider = Provider.first
-      item1 = provider.menu
-      # turn it into a params for the curlString
-      
-      
-      
-      curlString = "curl #{TEST_URL}/app/cards.json -d #{params}"
+      @provider = Provider.first
+
+      giver    = @user1
+      receiver = @user2
+      @gift.add_provider @provider
+      @gift.add_receiver @user2
+      @gift.add_giver @user1
+      make_gift
+      puts "\nthis is the gift as OBJECT = #{@gift.inspect}"
+          
+      # how to turn these into params ?
+      params = turn_into_params @gift
+      # receiver_photo , receiver_twitter , origin , rename receiver_facebook_id ?
+
+      curlString = "curl #{TEST_URL}/app/buy_gift.json -d 'token=#{@user1.remember_token}&gift=#{params}'"
+      puts "\ncurlString = #{curlString}"
       json_string = String.new(%x{#{curlString}})
       response = JSON.parse json_string
-      puts response
+      puts "\n response from created gift = #{response}"
       
-      save_results(response.keys, "success", test,method_name, curlString, nil, "size")
+      # get gift data from database 
+      data = Gift.last
+      
+      compare_results(@gift, data, test,method_name, curlString, @gift, "params compare")
     
+  end
+  
+  def compare_objects(obj_1, obj_2)
+      same = true
+      tester = Gift.new
+      array_objects = [obj_1, obj_2]
+      new_array = []
+      array_objects.each do |obj|
+          x = obj.attributes
+          x.delete("id")
+          x.delete("created_at")
+          x.delete("updated_at")
+          new_array << x
+      end
+      break_point = []
+      for_keys = new_array[0].keys
+      for_keys.each do |k|
+          if new_array[0]["k"] != new_array[1]["k"]
+                 same = false
+                 break_point << new_array[0]["k"]
+          end
+      end
+      return same,break_point
   end
 
   def create_gift_has_validations
@@ -697,7 +732,42 @@ class BuyTests
         end
    end
    
-  private    
+  private   
+  
+  def compare_results(response, data, test, method_name, curlString, object=nil, comparitor=nil)
+      puts "response = #{response}"
+      @total_tests += 1
+      if method_name != @last_method_name
+          @total_methods += 1
+      end
+      @last_method_name = method_name
+      if object
+          if object.respond_to? "name"
+              key = "#{test} - #{object.id} - #{object.name}"
+          else
+              key = "#{test} - #{object.id}"
+          end
+      else
+          key = test
+      end
+      reason = []
+      answer, reason = compare_objects(response,data)
+      if answer
+        puts "          ^^^^^^^^      Correct #{comparitor} #{key} - #{method_name}    ^^^^^^^^^^^^^           \n"
+        @correct << {key => response }
+      else
+        reason.each do |r|
+            puts "reasons not Equal == #{r}"
+        end
+        puts "        ^^^^^^^^      Incorrect #{comparitor} #{key} - #{method_name}    ^^^^^^^^^^^^^           "
+        incorrect_response = {key => response}
+        @incorrect << incorrect_response
+        puts "response = #{incorrect_response}"
+        puts "db data = #{data}"
+        puts "request string = #{curlString}"
+        puts "         ^^^^^^^^                            ^^^^^^^^^^^^^           "
+      end 
+  end 
   
     def save_results(response, data, test, method_name, curlString, object=nil, comparitor=nil)
         puts "response = #{response}"
@@ -707,7 +777,7 @@ class BuyTests
         end
         @last_method_name = method_name
         if object
-            if object.name
+            if object.respond_to? "name"
                 key = "#{test} - #{object.id} - #{object.name}"
             else
                 key = "#{test} - #{object.id}"
@@ -728,6 +798,44 @@ class BuyTests
           puts "         ^^^^^^^^                            ^^^^^^^^^^^^^           "
         end 
     end
+    
+    
+    def make_gift
+        menus    = Menu.where(provider_id: @provider.id)
+        @gift.total = 0
+        item_in_cart_1, total = prepare_item_for_cart menus[0]
+        @gift.total += total
+        item_in_cart_2, total = prepare_item_for_cart menus[1]
+        @gift.total += total 
+        item_in_cart_3, total = prepare_item_for_cart menus[2]
+        @gift.total += total
+
+        @gift.tip = @gift.total * 0.2
+        @gift.total = @gift.total + @gift.tip
+        @gift.tip = @gift.tip.to_s
+        @gift.total = @gift.total.to_s
+        @gift.shoppingCart = [item_in_cart_1,item_in_cart_2,item_in_cart_3]
+
+    end
+
+    def prepare_item_for_cart(item)
+        quantity = rand(5) + 1
+        h = item.serializable_hash only: ["price","item_name","id"]
+        h["item_id"] = h["id"]
+        h.delete("id")
+        h["quantity"] = quantity
+        total = quantity * item.price.to_i
+        return h, total
+    end
+
+    def turn_into_params(gift)
+
+        params_from_app = ["receiver_email","receiver_name","origin","message","total","receiver_phone","receiver_id","provider_name", "provider_id", "giver_name", "giver_id","tip","credit_card","facebook_id","twitter","shoppingCart"]
+        h = gift.serializable_hash only: params_from_app
+        params = h.to_json
+        return params
+    end
+
 
 end
 
