@@ -1,0 +1,7 @@
+<h1 class="redeemButton">
+  <% if gift.status == "redeemed" %>
+    <%= button_to "Details", detail_merchant_path(gift), method: :get %>
+  <% else %>
+    <%= button_to "Redeem Now", order_merchant_path(gift_id: gift.id) %>
+  <% end %>
+</h1>

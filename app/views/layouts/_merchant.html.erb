@@ -1,49 +1,114 @@
+
+
+<div class="headerColorBackground">
+
+</div>
+<div class="navbarWrapper">
+  <% if signed_in? %>
+  <ul class="navLoggedIn">
+    <li class="logoHeader">
+      <%#= link_to  home_path %>
+    </li>
+    <li>
+      <%= link_to "Sign Out",signout_path, method: :delete %>
+    </li>
+  
+<!--     <li>
+      <%= link_to "Profile",current_user %>
+    </li>
+   -->
+<!-- <li> 
+      <a>Welcome back,  
+        <%= current_user.username %> 
+      </a>
+    </li> -->
+  
+<!--  
+    <li>
+      <%= link_to "Settings" %>
+    </li> -->
+  <% if @provider && params[:controller] == "merchants" %>
+    <li>
+      <%= link_to "Merchant Home", merchant_path(@provider) %>
+    </li>
+      <% else %>
+    <li>
+      <%= merchant_tag(current_user) %>
+    </li> 
+    <% end %> 
+    <li>
+      <%= link_to "New Merchant", new_provider_path %>
+    </li>
+    <li>
+      <%= link_to "Drinkboard", home_path %>
+    </li>
+    <li class="appStoreLink">
+    </li>
+  </ul>
+ 
+  <% end %>
+
+  <ul class="navTop">
+    <li class="navTopLi navTopReceive">
+      <%= link_to "", gifts_path %>
+    </li>
+    <li class="navTopLi navTopPurchase">
+      <%= link_to "", buy_gifts_path %>
+    </li>
+    <li class="navTopLi navTopFriends">
+      <%= link_to "Menus", menus_path %>
+    </li>
+    <li class="navTopLi navTopLocations">
+      <a href="#"><!--! link to Locations --></a>
+    </li>
+    <li class="navTopLi navTopSettings">
+      <a href="#"><!--! link to Settings --></a>
+    </li>
+  </ul>
+
+ <ul class="navMain">
+    <li class="home">
+      <h2>
+        <%= link_to "BuyDrink", browse_gifts_path %>
+      </h2>
+    </li> 
+  </ul>
+</div>
+    <!--   
+    <li class="gifts">
+      <div class="cornered">
+        <div class="backgroundTab">
+          <h1>
+            <%= link_to "Gifts", gifts_path %>
+          </h1>
+        </div>
+      </div>
+    </li>
+    <li class="buys">
+      <div class="cornered">
+        <div class="backgroundTab">
+          <h1>
+            <%= link_to "Buys", buy_gifts_path %>
+          </h1>
+        </div>
+      </div>
+    </li>
+    <li class="activity">
+      <div class="cornered">
+        <div class="backgroundTab">
+          <h1>
+            <%= link_to "Activity", activity_gifts_path %>
+          </h1>
+        </div>
+      </div>
+    </li>
+  </ul>-->
+
 <% flash.each do |name, msg| %>
-  <div class="alert alert-<%= name == :notice ? 'error' : 'error' %>">
+  <div class="alert alert-<%= name == :notice ? 'info' : 'success' %>">
     <a class="close" data-dismiss="alert" href="#">×</a>
     <%= msg %>
   </div>
 <% end %>
-<div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-    <div class="container">
+ 
 
-<!--!
-<div class="loginHeader">
-  <%= link_to image_tag("logoCap1.png"), home_path, {:class => "brand"} %>
-</div>
- !-->
-<div class="nav row-fluid">
-        <% if signed_in? %>
-        <ul class="nav">
-          <% if @provider %>
-            <li><%= link_to @provider.name, merchant_path(@provider) %></li>
-            <li><%= link_to "Orders", orders_merchant_path(@provider) %></li>
-          <% else %>
-            <li><%= link_to "Merchants", merchants_path %></li>
-          <% end %>
-
-          <ul class="nav pull-right">
-              <li id="fat-menu" class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.username %> <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                      <li><%= link_to "Profile", current_user %></li>
-                      <li><%= link_to "Settings" %></li>
-                      <li class="divider"></li>
-                      <li><%= link_to "Sign out", signout_path, method: :delete %></li>
-                    </ul>
-              </li>
-          </ul>
-          <li><%= link_to "Drinkboard-Home", home_path %></li>
-            <% if @provider && params[:controller] == "merchants" %>
-          <li><%= link_to "Merchants", merchants_path %></li>
-            <% else %>
-          <li><%= merchant_tag(current_user) %></li> 
-            <% end %> 
-          <li><%= link_to "Add New Merchant", new_provider_path %></li>
-        </ul>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</div>

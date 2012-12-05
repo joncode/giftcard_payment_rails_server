@@ -4,7 +4,7 @@
 <h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
 
 <% if @redeem %>
-  <h1>Enter Customer Redeem Code : <%= @redeem.redeem_code %></h1>
+  <h1>Enter Customer Redeem Code : </h1>
 
   <%= simple_form_for @order do |f| %>
     <%= f.error_notification %>
@@ -33,8 +33,8 @@
 <% else %>
   <h4>Customer has not Redeemed Gift on their Account yet</h4>
 <% end %>
-<h4>Your 4-digit Server Code is: 
-  <a href="#" class="btn btn-large btn-primary disabled"><%= current_user.server_code || 'please set your server code' %></a>
+<h4>For Test purposes only: 
+  <a href="#" class="btn btn-large btn-primary disabled"><%= @redeem.redeem_code %></a>
   <hr />
 </h4>
 

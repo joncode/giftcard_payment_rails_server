@@ -69,7 +69,7 @@ Drinkboard::Application.routes.draw do
       get 'detail'
       get 'customers'
       get 'orders'
-      get 'order'
+      post 'order'
       get 'completed'
       get 'staff'
       get 'edit_info'
