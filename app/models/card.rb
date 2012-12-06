@@ -52,7 +52,7 @@ class Card < ActiveRecord::Base
 		card.brand = cc_hash["brand"]
 		card.number = cc_hash["number"]
 		card.passphrase = cc_hash["nickname"]
-		puts "making a new card = #{card}"
+		puts "making a new card = #{card.inspect}"
 		return card
 	end
 
@@ -106,6 +106,7 @@ class Card < ActiveRecord::Base
 			errors.add(:year, "is not a valid year") unless valid_expiry_year?(year.to_i)
 			errors.add(:month, "is not a valid month") unless valid_month?(month.to_i)
 			errors.add(:number, "is not a valid credit card number") unless valid_number?(number)
+			puts "error messages = #{errors.messages}"
 			self.brand = brand?(number)
 			errors.add_to_base("We only accept Visa and MasterCard.") unless self.brand == 'master' or self.brand == 'visa'
 		end
