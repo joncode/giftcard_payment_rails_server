@@ -15,6 +15,10 @@ BEVERAGE_CATEGORIES = ['special', 'beer', 'wine', 'cocktail', 'shot']
 GIFT_STATUS   = ['open', 'notified', 'redeemed', 'regifted', 'returned', 'incomplete']
 PROOF_LEVELS  = ['zero', 'lite', 'normal', 'double']
 
-TEST_URL = "0.0.0.0:3000"
-TEST_URL_PROD = "http://drinkboard.herokuapp.com"
+if Rails.env.production?
+	TEST_URL = "http://drinkboard.herokuapp.com"
+else
+	TEST_URL = "0.0.0.0:3000"
+end
+
 BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dinig"]

@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
   :server_code, :sex, :iphone_photo, :fb_photo, :use_photo, 
   :is_public, :secure_image
 
-  attr_accessible :crop_x, :crop_y, :crop_w, :crop_h, 
+  attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
 
