@@ -313,12 +313,12 @@ class AppController < ApplicationController
 		puts "\nAdd Card"
 		puts "#{params}"
 
-		message   = ""
+		message   = "" 
 		response  = {} 
 		# begin
       		user = User.find_by_remember_token(params["token"])
       		puts user
-      		card_data = JSON.parse params["data"]
+      		card_data = params["data"]
       		puts "params data = #{params['data']}"
       		puts "card_data = #{card_data}"
       		ccard = Card.create_card_from_hash card_data
