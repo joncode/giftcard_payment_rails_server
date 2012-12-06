@@ -30,12 +30,9 @@ class RedeemTests
   
   def all
       reset_test_variables
-      puts "Running all tests for BuyTest"
+      puts "Running all tests for RedeemTests"
       run_all_tests
-      puts "\n\nCompleted all tests for BuyTest\n"
-      puts "Correct tests = #{@correct.size}"
-      puts "Incorrect tests = #{@incorrect.size}"
-      puts "\n\nCorrect Tests : #{@correct.size}"
+
       @correct.each do |c|
         puts c.keys
       end
@@ -43,6 +40,10 @@ class RedeemTests
       @incorrect.each do |c|
         puts c.keys
       end
+      puts "\n\nCompleted all tests for RedeemTests\n"
+      puts "Correct tests = #{@correct.size}"
+      puts "Incorrect tests = #{@incorrect.size}"
+      puts "\n\nCorrect Tests : #{@correct.size}"
       puts "\n\n RedeemTests complete"
       puts "Ran #{@total_tests} total tests"
       puts "In #{@total_methods} total methods"
