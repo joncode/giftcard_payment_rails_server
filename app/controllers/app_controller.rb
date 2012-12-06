@@ -227,7 +227,10 @@ class AppController < ApplicationController
     	end
 
     	response = { "error" => message } if message != "" 
-
+    	if redeem.gift.provider.nil? 
+    		process = false 
+    		message += "Gift is missing a provider - GIFT ID = #{redeem.gift.id}"
+    	end
 		respond_to do |format|
 			if process
 				employees_ary = redeem.gift.provider.employees_to_app

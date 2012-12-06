@@ -251,8 +251,12 @@ class RedeemTests
           curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
           json_string = String.new(%x{#{curlString}})
           r = JSON.parse json_string
-          h = r[1].pop
-          resp = h["employee_id"].to_i
+          if r.kind_of? Array
+            h = r[1].pop
+            resp = h["employee_id"].to_i
+          else
+            resp = r
+          end
           data = Employee.where(provider_id: gift.provider.id).pop
           if !data.nil? 
               data = data.id 

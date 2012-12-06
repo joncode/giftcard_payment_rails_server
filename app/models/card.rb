@@ -108,15 +108,15 @@ class Card < ActiveRecord::Base
 			errors.add(:number, "is not a valid credit card number") unless valid_number?(number)
 			puts "error messages = #{errors.messages}"
 			self.brand = brand?(number)
-			errors.add_to_base("We only accept Visa and MasterCard.") unless self.brand == 'master' or self.brand == 'visa'
+			errors.add(:base, "We only accept Visa and MasterCard.") unless self.brand == 'master' or self.brand == 'visa'
 		end
 
 		def month_and_year_should_be_in_future
 			if (Date.new(year.to_i, month.to_i, 1) >> 1) < Date.today
-			 errors.add_to_base("The expiration date must be in the future.") and return false
+			 errors.add(:base,"The expiration date must be in the future.") and return false
 			end
 			rescue ArgumentError => e
-			errors.add_to_base("Date is not valid") and return false
+			errors.add(:base,"Date is not valid") and return false
 		end
 
 		def at_least_two_words_in_name
