@@ -3,16 +3,9 @@ class UsersController < ApplicationController
   before_filter :correct_user, only: [:edit, :update]
   before_filter :admin_user, only: :destroy
 
-  def upload_avatar #350w, 500h
-    uploadInfo = Cloudinary::Uploader.upload(params[:image_form][:uploaded_data],{:width => 350, :height => 500, :crop => :limit})
-    render json: uploadInfo
-  end
-  
   def update_avatar
-    uploadInfo = Cloudinary::Uploader.upload(params[:url], {:x => params[:x], :y => params[:y], :width => params[:w], :height => params[:h], :eager => [{:width => 131, :height => 131, :crop => :fill, :format => :jpg},{:width => 95, :height => 95, :crop => :fill, :format => :jpg}] })
-    current_user.photo = uploadInfo["public_id"]+".jpg"
-    current_user.save
-    render json: {:success => "success"}
+    current_user.update_attributes(params[:user])
+    redirect_to user_path(current_user)
   end
 
   def index
@@ -98,7 +91,11 @@ class UsersController < ApplicationController
   end
   
   def crop
-    @user = User.find(params[:id])
+    @obj_to_edit = User.find(params[:id])
+    @obj_name = "user"
+    @action = "update_avatar"
+    @file_field_name = "photo"
+    render "shared/uploader"
   end
 
   def destroy

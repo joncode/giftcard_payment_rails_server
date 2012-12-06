@@ -50,7 +50,11 @@ class User < ActiveRecord::Base
   :server_code, :sex, :iphone_photo, :fb_photo, :use_photo, 
   :is_public, :secure_image
 
-  mount_uploader   :photo, ImageUploader
+  attr_accessible :crop_x, :crop_y, :crop_w, :crop_h, 
+  attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
+
+
+  mount_uploader   :photo, UserAvatarUploader
    
   has_many :employees
   has_many :providers, :through => :employees
