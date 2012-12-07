@@ -27,7 +27,7 @@ one:
   month: MyString
   year: MyString
   csv: MyString
-  type: 
+  brand:  
 
 two:
   user_id: 1
@@ -38,4 +38,4 @@ two:
   month: MyString
   year: MyString
   csv: MyString
-  type: 
+  brand: 

@@ -1,8 +1,3 @@
-Template is the deploy version of DriveIn
+Server Code for the Drinkboard App
 
-twitter bootstrap
-LESS 
-sqlite in development
-pg in production
 
-thin web server or webbrick

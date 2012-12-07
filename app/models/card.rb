@@ -23,7 +23,8 @@ class Card < ActiveRecord::Base
 	@@CreditCardSecretKey = "Yes yes yes"
 	PASSPHRASE = "Theres no place like home"
 	attr_accessor :number, :passphrase, :iv
-	
+	attr_accessible :csv, :last_four, :month, :brand, :name, :nickname,  :user_id, :year
+
 	validates_presence_of :csv, :last_four, :month, :brand, :name, :nickname,  :user_id, :year
 	validates_presence_of  :number
 

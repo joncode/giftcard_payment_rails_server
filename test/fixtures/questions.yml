@@ -12,9 +12,7 @@
 one:
   left: MyString
   right: MyString
-  answer: MyString
 
 two:
   left: MyString
   right: MyString
-  answer: MyString

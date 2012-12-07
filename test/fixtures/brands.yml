@@ -28,7 +28,7 @@ one:
   state: MyString
   phone: MyString
   website: MyString
-  logo_url: MyString
+  logo: MyString
   user_id: 1
 
 two:
@@ -39,5 +39,5 @@ two:
   state: MyString
   phone: MyString
   website: MyString
-  logo_url: MyString
+  logo: MyString
   user_id: 1

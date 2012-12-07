@@ -1,4 +1,4 @@
-
+ 
 #  this is the tests for the buy database 
 #  in rails console
 # load "test/buy_giver.rb"
@@ -50,48 +50,28 @@ class BuyTests
   end
   
   def run_all_tests
+    a
+    b
+    c
+    d
+    e
+
+    f
+    g
+  end
+  
+
+  ############    A TESTS - get providers
+  
+  def a
     test_providers_no_data
     test_providers_with_token
     test_providers_near_me
     test_providers_best
     test_providers_best_and_city
     test_providers_favorites
-    test_menu # this should test that menus are correctly built from menu db
-    test_menu_from_raw_data
-    test_user_get_other_users
-    test_user_find_users_near_them
-    test_user_get_friends
-    test_user_get_other_user_location
-    test_user_get_providers_near_other_user
-    test_user_get_other_user_events
-    test_user_get_other_user_event_locations
-    test_user_get_providers_near_other_user_event
-    test_user_get_other_user_favorites
-    test_user_get_other_user_about_me
-    d
-    create_gift_has_validations
-    create_gift_success_or_error
-    create_gift_with_email_finds_db_users
-    create_gift_with_text_finds_db_users
-    create_gift_with_facebook_finds_db_users
-    create_gift_with_twitter_finds_db_users
-    test_create_gift_stores_data_correctly
-    test_create_gift_handles_card_errors
-    test_create_gift_handle_card_success
-    test_create_gift_creates_correct_sale
-    test_create_gift_creates_merchant_notification
-    test_create_gift_creates_receiver_notification
-    test_notify_user_of_card_problems
-    test_server_sends_email_to_receiver_with_permalinkPage
-    test_server_notifies_receiver_on_app
-    test_server_notifies_receiver_on_network
-    test_merchant_receives_notification
-    test_merchant_receives_notification_on_chosen_network
   end
-  
 
-  ############    A TESTS - get providers
-  
   def test_providers_no_data
       # route request with no remember token
     test = "Test A1"
@@ -205,6 +185,11 @@ class BuyTests
   
   #############   B TESTS - get menu items
   
+  def b
+    test_menu # this should test that menus are correctly built from menu db
+    test_menu_from_raw_data
+  end
+
   def test_menu
     test = "Test B1"
     method_name = "test_menu"
@@ -236,6 +221,19 @@ class BuyTests
   
   ###############  C TESTS - get users
   
+  def c
+    test_user_get_other_users
+    test_user_find_users_near_them
+    test_user_get_friends
+    test_user_get_other_user_location
+    test_user_get_providers_near_other_user
+    test_user_get_other_user_events
+    test_user_get_other_user_event_locations
+    test_user_get_providers_near_other_user_event
+    test_user_get_other_user_favorites
+    test_user_get_other_user_about_me
+  end
+
   def test_user_get_other_users
       test = "Test C1"
       method_name = "test_user_get_other_users"
@@ -475,6 +473,7 @@ class BuyTests
       curlString = "curl #{TEST_URL}/app/buy_gift.json -d 'token=#{@user1.remember_token}&gift=#{params}'"
       puts "\ncurlString = #{curlString}"
       json_string = String.new(%x{#{curlString}})
+      puts "json_string is #{json_string}"
       response = JSON.parse json_string
       puts "\n response from created gift = #{response}"
       
@@ -638,6 +637,10 @@ class BuyTests
   
     ###############  F TESTS - handle errors
     
+    def f
+      test_notify_user_of_card_problems
+    end
+
     def test_notify_user_of_card_problems
         test = "Test F1"
         method_name = "test_notify_user_of_card_problems"
@@ -650,6 +653,14 @@ class BuyTests
     end
     
     ###############  G TESTS - notify receiver / merchant 
+
+    def g
+        test_server_sends_email_to_receiver_with_permalinkPage
+        test_server_notifies_receiver_on_app
+        test_server_notifies_receiver_on_network
+        test_merchant_receives_notification
+        test_merchant_receives_notification_on_chosen_network
+    end
 
     def test_server_sends_email_to_receiver_with_permalinkPage
         test = "Test G1"

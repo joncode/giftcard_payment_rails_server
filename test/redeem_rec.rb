@@ -257,7 +257,11 @@ class RedeemTests
           else
             resp = r
           end
-          data = Employee.where(provider_id: gift.provider.id).pop
+          data = nil
+          if gift.provider
+            employee = Employee.where(provider_id: gift.provider.id)
+            data = employee.pop if employee
+          end
           if !data.nil? 
               data = data.id 
           end
@@ -276,7 +280,11 @@ class RedeemTests
           r = JSON.parse json_string
           h = r[1].pop
           resp = h["employee_id"].to_i
-          data = Employee.where(provider_id: gift.provider.id, active: true, retail: true).pop
+          data = nil
+          if gift.provider
+            employee = Employee.where(provider_id: gift.provider.id, active: true, retail: true)
+            data = employee.pop if employee
+          end
           if !data.nil? 
               data = data.id 
           end
@@ -293,11 +301,16 @@ class RedeemTests
           curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
           json_string = String.new(%x{#{curlString}})
           r = JSON.parse json_string
-          h = r[1].pop
-          resp = h["photo"]
-          employee_id = h["employee_id"].to_i
-          employee = Employee.find(employee_id)
-          user_photo = employee.user.get_photo
+          if r = "no employees set up yet"
+            r = ""
+            user_photo = ""
+          else
+            h = r[1].pop
+            resp = h["photo"]
+            employee_id = h["employee_id"].to_i
+            employee = Employee.find(employee_id)
+            user_photo = employee.user.get_photo
+          end
           save_results(resp, user_photo, test,method_name, curlString, nil, "id compare")
       end  
   end
@@ -311,11 +324,16 @@ class RedeemTests
           curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
           json_string = String.new(%x{#{curlString}})
           r = JSON.parse json_string
-          h = r[1].pop
-          resp = h["secure_image"]
-          employee_id = h["employee_id"].to_i
-          employee = Employee.find(employee_id)
-          user_secure_img = employee.user.secure_image
+          if r = "no employees set up yet"
+            r = ""
+            user_secure_img = ""
+          else
+            h = r[1].pop
+            resp = h["secure_image"]
+            employee_id = h["employee_id"].to_i
+            employee = Employee.find(employee_id)
+            user_secure_img = employee.user.secure_image
+          end
           save_results(resp, user_secure_img, test,method_name, curlString, nil, "id compare") 
       end   
   end

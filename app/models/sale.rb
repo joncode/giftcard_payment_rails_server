@@ -17,7 +17,8 @@
 #
 
 class Sale < ActiveRecord::Base
- 	attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string, :response_string, :revenue, :status, :transaction
+ 	attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string,
+ 	 :response_string, :revenue, :status, :transaction_id
 	
 	belongs_to :provider	
 	belongs_to :giver, class_name: "User"	

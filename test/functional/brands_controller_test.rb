@@ -18,7 +18,7 @@ class BrandsControllerTest < ActionController::TestCase
 
   test "should create brand" do
     assert_difference('Brand.count') do
-      post :create, brand: { address: @brand.address, city: @brand.city, description: @brand.description, logo_url: @brand.logo_url, name: @brand.name, phone: @brand.phone, state: @brand.state, user_id: @brand.user_id, website: @brand.website }
+      post :create, brand: { address: @brand.address, city: @brand.city, description: @brand.description, logo: @brand.logo, name: @brand.name, phone: @brand.phone, state: @brand.state, user_id: @brand.user_id, website: @brand.website }
     end
 
     assert_redirected_to brand_path(assigns(:brand))
@@ -35,7 +35,7 @@ class BrandsControllerTest < ActionController::TestCase
   end
 
   test "should update brand" do
-    put :update, id: @brand, brand: { address: @brand.address, city: @brand.city, description: @brand.description, logo_url: @brand.logo_url, name: @brand.name, phone: @brand.phone, state: @brand.state, user_id: @brand.user_id, website: @brand.website }
+    put :update, id: @brand, brand: { address: @brand.address, city: @brand.city, description: @brand.description, logo: @brand.logo, name: @brand.name, phone: @brand.phone, state: @brand.state, user_id: @brand.user_id, website: @brand.website }
     assert_redirected_to brand_path(assigns(:brand))
   end
 

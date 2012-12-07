@@ -18,7 +18,7 @@ class SalesControllerTest < ActionController::TestCase
 
   test "should create sale" do
     assert_difference('Sale.count') do
-      post :create, sale: { card_id: @sale.card_id, gift_id: @sale.gift_id, giver_id: @sale.giver_id, provider_id: @sale.provider_id, request_json: @sale.request_json, response_json: @sale.response_json, revenue: @sale.revenue, status: @sale.status, transaction_id: @sale.transaction_id }
+      post :create, sale: { card_id: @sale.card_id, gift_id: @sale.gift_id, giver_id: @sale.giver_id, provider_id: @sale.provider_id, request_string: @sale.request_string, response_string: @sale.response_string, revenue: @sale.revenue, status: @sale.status, transaction_id: @sale.transaction_id }
     end
 
     assert_redirected_to sale_path(assigns(:sale))
@@ -35,7 +35,7 @@ class SalesControllerTest < ActionController::TestCase
   end
 
   test "should update sale" do
-    put :update, id: @sale, sale: { card_id: @sale.card_id, gift_id: @sale.gift_id, giver_id: @sale.giver_id, provider_id: @sale.provider_id, request_json: @sale.request_json, response_json: @sale.response_json, revenue: @sale.revenue, status: @sale.status, transaction_id: @sale.transaction_id }
+    put :update, id: @sale, sale: { card_id: @sale.card_id, gift_id: @sale.gift_id, giver_id: @sale.giver_id, provider_id: @sale.provider_id, request_string: @sale.request_string, response_string: @sale.response_string, revenue: @sale.revenue, status: @sale.status, transaction_id: @sale.transaction_id }
     assert_redirected_to sale_path(assigns(:sale))
   end
 
