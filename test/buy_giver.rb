@@ -486,7 +486,6 @@ class BuyTests
   
   def compare_objects(obj_1, obj_2)
       same = true
-      tester = Gift.new
       array_objects = [obj_1, obj_2]
       new_array = []
       array_objects.each do |obj|
@@ -500,8 +499,8 @@ class BuyTests
       for_keys = new_array[0].keys
       for_keys.each do |k|
           if new_array[0]["k"] != new_array[1]["k"]
-                 same = false
-                 break_point << new_array[0]["k"]
+              same = false
+              break_point << new_array[0]["k"]
           end
       end
       return same,break_point
