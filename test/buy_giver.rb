@@ -50,14 +50,13 @@ class BuyTests
   end
   
   def run_all_tests
-    a
-    b
-    c
-    d
-    e
-
-    f
-    g
+      a
+      b
+      c
+      d
+      e
+      f
+      g
   end
   
 
