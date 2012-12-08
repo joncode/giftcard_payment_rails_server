@@ -154,7 +154,7 @@ class AppController < ApplicationController
 
 		user  = User.find_by_remember_token(params["token"])
 	    if user
-	    	if params["city"] == "all" || !params["city"] 
+	    	if  !params["city"] || params["city"] == "all"
 	    		providers = Provider.all
 	    	else
 	    		providers = Provider.where(city: params["city"])
@@ -251,14 +251,14 @@ class AppController < ApplicationController
 
 		message   = ""
 		response  = {} 
-		gift_id 	= params["gift_id"].to_i
-		employee_id = params["employee_id"].to_i
+		gift_id 	= params["gift_id"]
+		employee_id = params["employee_id"]
 
 		if gift_id.nil? || employee_id.nil? 
 			message = "Data not received correctly. "
 			order   = Order.new
 		else
-			order   = Order.new(gift_id: gift_id, employee_id: employee_id)
+			order   = Order.new(gift_id: gift_id.to_i, employee_id: employee_id.to_i)
 		end
 		begin
 			user 	 = User.find_by_remember_token(params["token"])
