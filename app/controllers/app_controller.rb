@@ -179,7 +179,11 @@ class AppController < ApplicationController
 			user = User.find_by_remember_token(params["token"])
 			# @users = User.find(:all, :conditions => ["id != ?", @user.id])
 			# providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
-			users    = User.all   
+			if !params['city'] || params['city'] == 'all'
+				users    = User.all
+			else
+				users    = User.find_by_city(params['city'])
+			end 
 			user_array = array_these_users(users, USER_REPLY)
 		rescue 
 			puts "ALERT - cannot find user from token"

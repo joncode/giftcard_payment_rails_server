@@ -179,7 +179,7 @@ class IphoneController < AppController
     rescue 
       puts "ALERT - cannot find user from token"
     end
-    users    = User.all   
+    users     = User.all   
     user_hash = hash_these_users(users, USER_REPLY)
     
     respond_to do |format|
@@ -192,8 +192,8 @@ class IphoneController < AppController
     puts "Activity"
     puts "#{params}"
 
-    @user  = User.find_by_remember_token(params["token"])
-    gifts = Gift.get_activity
+    @user     = User.find_by_remember_token(params["token"])
+    gifts     = Gift.get_activity
     gift_hash = hash_these_gifts(gifts, BOARD_REPLY) 
     
     respond_to do |format|
@@ -208,7 +208,7 @@ class IphoneController < AppController
 
     # @user  = User.find_by_remember_token(params["token"])
     providers = Provider.all
-    menus  = {}
+    menus     = {}
     providers.each do |p|
       if p.menu_string
         obj   = ActiveSupport::JSON.decode p.menu_string.data

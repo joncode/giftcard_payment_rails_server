@@ -301,7 +301,7 @@ class RedeemTests
           curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
           json_string = String.new(%x{#{curlString}})
           r = JSON.parse json_string
-          if r = "no employees set up yet"
+          if r == "no employees set up yet"
             r = ""
             user_photo = ""
           else
@@ -324,7 +324,7 @@ class RedeemTests
           curlString = "curl #{TEST_URL}/app/employees.json -d'token=#{@user1.remember_token}&data=#{gift.id}'"
           json_string = String.new(%x{#{curlString}})
           r = JSON.parse json_string
-          if r = "no employees set up yet"
+          if r == "no employees set up yet"
             r = ""
             user_secure_img = ""
           else

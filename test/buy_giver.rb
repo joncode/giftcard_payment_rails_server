@@ -250,13 +250,15 @@ class BuyTests
   def test_user_find_users_near_them
       test = "Test C2"
       method_name = "test_user_find_users_near_them"
-      curlString = "curl #{TEST_URL}/app/menu.json -d'token=#{@user1.remember_token}'"
+      city = @user1.city
+      curlString = "curl #{TEST_URL}/app/menu.json -d'token=#{@user1.remember_token}&city=#{city}'"
       puts "\n\n  *******     #{test} - #{method_name}     ********* " 
+      json_string = String.new(%x{#{curlString}})
+      response = JSON.parse json_string
       
+      data = User.find_all_by_city(city)
       
-      
-      #save_results(response, data, test,method_name, curlString, nil, "size")
-      puts "IMPLEMENT"   
+      save_results(response.size, data.size, test,method_name, curlString, nil, "size") 
   end
   
   def test_user_get_friends
@@ -274,13 +276,16 @@ class BuyTests
   def test_user_get_other_user_location
       test = "Test C4"
       method_name = "test_user_get_other_user_location"
+      #city = @user2.city
+      curlString = "curl #{TEST_URL}/app/menu.json -d'token=#{@user1.remember_token}'"
       puts "\n\n  *******     #{test} - #{method_name}     ********* " 
+      #json_string = String.new(%x{#{curlString}})
+      #response = JSON.parse json_string
       
+      #data = User.find_all_by_city(city)
       
-      
-      
-      #save_results(response, data, test,method_name, curlString, nil, "size")
-      puts "IMPLEMENT"    
+      #save_results(response.size, data.size, test,method_name, curlString, nil, "size")  
+      puts "IMPLEMENT"  
   end
   
   def test_user_get_providers_near_other_user
