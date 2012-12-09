@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121205175202) do
+ActiveRecord::Schema.define(:version => 20121209231816) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -83,6 +83,18 @@ ActiveRecord::Schema.define(:version => 20121205175202) do
   end
 
   add_index "employees", ["provider_id"], :name => "index_employees_on_provider_id"
+
+  create_table "gift_items", :force => true do |t|
+    t.integer  "gift_id"
+    t.integer  "menu_id"
+    t.string   "price"
+    t.integer  "quantity"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "gift_items", ["gift_id"], :name => "index_gift_items_on_gift_id"
 
   create_table "gifts", :force => true do |t|
     t.string   "giver_name"

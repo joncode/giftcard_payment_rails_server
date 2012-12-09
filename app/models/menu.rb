@@ -21,6 +21,7 @@ class Menu < ActiveRecord::Base
 
   belongs_to   :provider
   belongs_to   :item
+  has_many     :gift_items
   has_and_belongs_to_many :gifts
 
   def self.get_sections(provider_id)

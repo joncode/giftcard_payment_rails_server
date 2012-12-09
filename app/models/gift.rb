@@ -52,6 +52,7 @@ class Gift < ActiveRecord::Base
   belongs_to  :provider
   belongs_to  :sales
   has_one     :order
+  has_many    :gift_items
   belongs_to  :giver,    class_name: "User"
   belongs_to  :receiver, class_name: "User"
   has_and_belongs_to_many :menus

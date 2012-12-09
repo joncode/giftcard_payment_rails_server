@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  gift_id: 1
+  menu_id: 1
+  price: MyString
+  quantity: 1
+  name: MyString
+
+two:
+  gift_id: 1
+  menu_id: 1
+  price: MyString
+  quantity: 1
+  name: MyString
