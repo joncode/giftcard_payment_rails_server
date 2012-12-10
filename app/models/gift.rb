@@ -29,7 +29,6 @@
 #  foursquare_id        :string(255)
 #  facebook_id          :string(255)
 #  anon_id              :integer
-#  shopping_cart_string :string(255)
 #  sale_id              :integer
 #  receiver_email       :string(255)
 #  shoppingCart         :string(255)
@@ -41,7 +40,7 @@ class Gift < ActiveRecord::Base
       :receiver_id, :receiver_name, :receiver_phone, 
       :provider_id, :provider_name, :receiver_email, 
       :message,     :special_instructions,
-      :shopping_cart_string,  :shoppingCart,
+      :shoppingCart,
       :category,    :quantity, :price, :item_id, :item_name ,  
       :tip, :tax,   :total, 
       :facebook_id, :foursquare_id,
