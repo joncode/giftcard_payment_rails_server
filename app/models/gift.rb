@@ -56,7 +56,7 @@ class Gift < ActiveRecord::Base
   belongs_to  :receiver, class_name: "User"
   has_and_belongs_to_many :menus
   
-  validates_presence_of :giver_id, :receiver_name, :shoppingCart, :provider_id, :total, :tip
+  validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip
   # validates_numericality_of  :total, :quantity
   
   #before_create :add_category, :if => :no_category
