@@ -307,7 +307,13 @@ class IphoneController < AppController
     else
       gift    = Gift.new(gift_obj)
       if params["shoppingCart"]
-        gift.gift_items = JSON.parse params["shoppingCart"]
+        shoppingCart_array = JSON.parse params["shoppingCart"]
+        gift_item_array = []
+        shoppingCart_array.each do |item|
+          gift_item = GiftItem.initFromDictionary item
+          gift_item_array << gift_item
+        end
+        gift.gift_items = gift_item_array
       end
       puts "Here is GIFT #{gift.inspect}"
     end
