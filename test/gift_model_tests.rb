@@ -1,4 +1,5 @@
 class GiftTests
+    attr_reader :gift
     
     def initialize
         @gift = Gift.new

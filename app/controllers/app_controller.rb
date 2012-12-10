@@ -3,8 +3,8 @@ class AppController < ApplicationController
 	# include ActiveMerchant::Billing::CreditCardMethods
 	# include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
 	
-	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-    ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
+	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "message", "created_at", "status"]
+    ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "message", "created_at", "status"] 
 
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
@@ -377,7 +377,7 @@ class AppController < ApplicationController
 	        if !g.shoppingCart
 	      		# make shopping cart array with item inside as Hash
 	      		# using item_id, item_name, category, quantity, price
-	      		menu_item = {"item_id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => g.quantity.to_s , "price" => g.price.to_s, "category" => g.category.to_s}
+	      		menu_item = {"item_id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s, "category" => g.category.to_s}
 	      		menu_item_array = [menu_item]
 	      			# future CRON job 
 	      		# shoppingCart = menu_item_array.to_json

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121209231816) do
+ActiveRecord::Schema.define(:version => 20121210034932) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -105,7 +105,6 @@ ActiveRecord::Schema.define(:version => 20121209231816) do
     t.integer  "receiver_id"
     t.integer  "item_id"
     t.string   "price",                :limit => 20
-    t.integer  "quantity"
     t.string   "total",                :limit => 20
     t.string   "credit_card",          :limit => 100
     t.integer  "provider_id"
