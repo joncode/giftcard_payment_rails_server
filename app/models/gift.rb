@@ -66,6 +66,7 @@ class Gift < ActiveRecord::Base
   before_create :add_giver_name,  :if => :no_giver_name
   before_create :regifted,        :if => :regift_id?
   before_save   :set_status
+  after_create  :update_shoppingCart
 
   ##########   database queries
 
@@ -135,7 +136,7 @@ class Gift < ActiveRecord::Base
 
   def self.init(params)
     gift = Gift.new(params[:gift])
-      # add anonymous giver feature
+        # add anonymous giver feature
     if params[:gift][:anon_id] 
       gift.add_anonymous_giver(params[:gift][:giver_id])
     end
@@ -185,6 +186,16 @@ class Gift < ActiveRecord::Base
   end
  
   private
+
+    def update_shoppingCart
+      updated_shoppingCart_array = []
+      self.gift_items.each do |item|
+        item_hash = item.prepare_for_shoppingCart
+        updated_shoppingCart_array << item_hash
+      end
+      self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
+    end
+
     def extract_phone_digits
       if self.receiver_phone && !self.receiver_phone.empty?
         phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)

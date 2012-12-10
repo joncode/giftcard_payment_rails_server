@@ -123,10 +123,9 @@ ActiveRecord::Schema.define(:version => 20121209231816) do
     t.string   "foursquare_id"
     t.string   "facebook_id"
     t.integer  "anon_id"
-    t.string   "shopping_cart_string"
     t.integer  "sale_id"
     t.string   "receiver_email"
-    t.string   "shoppingCart"
+    t.text     "shoppingCart"
   end
 
   add_index "gifts", ["giver_id"], :name => "index_gifts_on_giver_id"
