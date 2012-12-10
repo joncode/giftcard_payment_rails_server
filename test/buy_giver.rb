@@ -837,7 +837,9 @@ class BuyTests
         quantity = rand(5) + 1
         h = item.serializable_hash only: ["price","item_name","id"]
         h["item_id"] = h["id"]
+        h["name"] = h["item_name"]
         h.delete("id")
+        h.delete("item_name")
         h["quantity"] = quantity
         total = quantity * item.price.to_i
         return h, total
