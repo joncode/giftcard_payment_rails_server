@@ -192,6 +192,7 @@ class Gift < ActiveRecord::Base
         item_hash = item.prepare_for_shoppingCart
         updated_shoppingCart_array << item_hash
       end
+      puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
       self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
     end
 
