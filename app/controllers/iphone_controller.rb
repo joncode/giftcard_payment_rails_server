@@ -306,8 +306,9 @@ class IphoneController < AppController
       gift    = Gift.new
     else
       gift    = Gift.new(gift_obj)
-      if gift_obj["shoppingCart"]
-        gift.shoppingCart = gift_obj["shoppingCart"].to_json
+      if params["shoppingCart"]
+        # this NEEDS TO GO IN GIFT MODEL !!!!!!
+        gift.gift_items = JSON.parse params["shoppingCart"]
       end
       puts "Here is GIFT #{gift.inspect}"
     end

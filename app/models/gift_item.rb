@@ -10,7 +10,11 @@ class GiftItem < ActiveRecord::Base
 
 		giftItem = GiftItem.new
 		# giftItem.gift_id  = gift.id
-		giftItem.menu_id  = menu_item_hash["id"]
+		if menu_item_hash.has_key?("id")
+			giftItem.menu_id  = menu_item_hash["id"]
+		else
+			giftItem.menu_id  = menu_item_hash["item_id"]
+		end
 		giftItem.price    = menu_item_hash["price"]
 		giftItem.quantity = menu_item_hash["quantity"]
 		giftItem.name 	  = menu_item_hash["item_name"]
