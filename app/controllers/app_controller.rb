@@ -377,7 +377,7 @@ class AppController < ApplicationController
 	        if !g.shoppingCart
 	      		# make shopping cart array with item inside as Hash
 	      		# using item_id, item_name, category, quantity, price
-	      		menu_item = {"item_id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s, "category" => g.category.to_s}
+	      		menu_item = {"id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s, "category" => g.category.to_s}
 	      		menu_item_array = [menu_item]
 	      			# future CRON job 
 	      		# shoppingCart = menu_item_array.to_json
@@ -385,7 +385,7 @@ class AppController < ApplicationController
 	      		gift_obj["shoppingCart"] = menu_item_array
 	      	else
 	      		# turn shoppingCart into an array with hashes
-	      		gift_obj["shoppingCart"] = g.shoppingCart
+	      		gift_obj["shoppingCart"] = JSON.parse g.shoppingCart
 	      	end
 
 		        # add other person photo url 

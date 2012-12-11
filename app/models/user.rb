@@ -81,13 +81,6 @@ class User < ActiveRecord::Base
   has_many :followers, through: :reverse_relationships, source: :follower
 
   has_secure_password
-
-  #  User.next(user) & previous functions for rails console - returns a active record relation
-  self.class_eval do
-    scope :previous,  lambda { |i| {:conditions => ["#{self.table_name}.id < ?", i], :order => "#{self.table_name}.id DESC", :limit => 1 }}
-    scope :next,      lambda { |i| {:conditions => ["#{self.table_name}.id > ?", i], :order => "#{self.table_name}.id ASC",  :limit => 1 }}
-  end
-  
   
   # save data to db with proper cases
   before_save { |user| user.email      = email.downcase  }
