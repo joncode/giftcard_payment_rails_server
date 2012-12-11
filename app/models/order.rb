@@ -119,8 +119,17 @@ class Order < ActiveRecord::Base
     def get_employee_id
       if !self.employee_id
         puts "SET EMPLOYEE ID"
-        e = Employee.where(provider_id: self.gift.provider.id, user_id:  sefl.server_id)
-        self.employee_id = e.id
+        e = Employee.where(provider_id: self.gift.provider.id, user_id:  self.server_id)
+        if e.kind_of? ActiveRecord::Relation
+          if e.size > 0
+            employee = e.shift
+            self.employee_id = employee.id
+          else
+            self.employee_id = nil
+          end
+        else
+          self.employee_id = e.id
+        end
       end  
     end  
 end

@@ -269,6 +269,7 @@ class User < ActiveRecord::Base
           gift_changes                  = {}
           gift_changes[:status]         = "open"
           gift_changes[:receiver_phone] = self.phone if self.phone
+          gift_changes[:receiver_email] = self.email if self.email
           gift_changes[:receiver_id]    = self.id
           gift_changes[:receiver_name]  = self.username
                   
@@ -294,10 +295,6 @@ class User < ActiveRecord::Base
       puts "COLLECT INCOMPLETE GIFTS"
       puts response
     end
-    
-    # def crop_photo
-    #   # photo.recreate_versions! if crop_x.present?
-    # end
 
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64

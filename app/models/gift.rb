@@ -66,6 +66,7 @@ class Gift < ActiveRecord::Base
   before_create :regifted,        :if => :regift_id?
   before_save   :set_status
   after_create  :update_shoppingCart
+  after_update    :create_notification
 
   ##########   database queries
 
@@ -185,6 +186,23 @@ class Gift < ActiveRecord::Base
   end
  
   private
+
+    def create_notification
+      puts "HERE IS THE TIME FOR CREATE NOTIFICATION"
+      puts "the gift status is #{self.status}"
+      case self.status
+      when 'incomplete'
+        puts 'Notification created for gift #{self.id}'
+      when 'open'
+        puts "Notification created for gift if there is none #{self.id}"
+      when 'notified'
+        puts "Notification updated to notified for gift #{self.id}"
+      when 'redeemed'
+        puts "Notification updated to complete for gift #{self.id}"
+      when 'regifted'
+        puts "Notification updated to regifted for gift #{self.id}"
+      end
+    end
 
     def update_shoppingCart
       updated_shoppingCart_array = []
