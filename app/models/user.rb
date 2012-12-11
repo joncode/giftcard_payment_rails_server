@@ -65,6 +65,8 @@ class User < ActiveRecord::Base
   has_many :locations
   has_many :answers
   has_many :questions, :through => :answers
+  has_many :relays , foreign_key: "giver_id"
+  has_many :relays , foreign_key: "receiver_id"
   
   # has_many :givers, through: :connections, source: "giver"
   # has_many :connections,          foreign_key: "receiver_id", dependent: :destroy

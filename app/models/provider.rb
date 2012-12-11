@@ -52,6 +52,7 @@ class Provider < ActiveRecord::Base
 
   has_many   :users, :through => :employees                                                                              
   has_many   :employees
+  has_many   :relays
   has_one    :menu                                                                              
   has_many   :orders                                                                            
   has_one    :menu_string

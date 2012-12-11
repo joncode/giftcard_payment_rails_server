@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  gift_id: 1
+  giver_id: 1
+  provider_id: 1
+  receiver_id: 1
+  status: MyString
+  name: MyString
+
+two:
+  gift_id: 1
+  giver_id: 1
+  provider_id: 1
+  receiver_id: 1
+  status: MyString
+  name: MyString

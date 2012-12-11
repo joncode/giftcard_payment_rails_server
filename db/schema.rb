@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121210034932) do
+ActiveRecord::Schema.define(:version => 20121211171406) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -293,6 +293,20 @@ ActiveRecord::Schema.define(:version => 20121210034932) do
   add_index "relationships", ["followed_id"], :name => "index_relationships_on_followed_id"
   add_index "relationships", ["follower_id", "followed_id"], :name => "index_relationships_on_follower_id_and_followed_id", :unique => true
   add_index "relationships", ["follower_id"], :name => "index_relationships_on_follower_id"
+
+  create_table "relays", :force => true do |t|
+    t.integer  "gift_id"
+    t.integer  "giver_id"
+    t.integer  "provider_id"
+    t.integer  "receiver_id"
+    t.string   "status"
+    t.string   "name"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "relays", ["provider_id"], :name => "index_relays_on_provider_id"
+  add_index "relays", ["receiver_id"], :name => "index_relays_on_receiver_id"
 
   create_table "sales", :force => true do |t|
     t.integer  "gift_id"

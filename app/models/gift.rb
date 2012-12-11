@@ -48,6 +48,7 @@ class Gift < ActiveRecord::Base
 
   
   has_one     :redeem
+  has_one     :relay
   belongs_to  :provider
   belongs_to  :sales
   has_one     :order
@@ -188,19 +189,19 @@ class Gift < ActiveRecord::Base
   private
 
     def create_notification
-      puts "HERE IS THE TIME FOR CREATE NOTIFICATION"
+      puts "HERE IS THE TIME FOR CREATE RELAYS"
       puts "the gift status is #{self.status}"
       case self.status
       when 'incomplete'
-        puts 'Notification created for gift #{self.id}'
+        puts 'Relay created for gift #{self.id}'
       when 'open'
-        puts "Notification created for gift if there is none #{self.id}"
+        puts "Relay created for gift if there is none #{self.id}"
       when 'notified'
-        puts "Notification updated to notified for gift #{self.id}"
+        puts "Relay updated to notified for gift #{self.id}"
       when 'redeemed'
-        puts "Notification updated to complete for gift #{self.id}"
+        puts "Relay updated to redeemed for gift #{self.id}"
       when 'regifted'
-        puts "Notification updated to regifted for gift #{self.id}"
+        puts "Relay updated to regifted for gift #{self.id}"
       end
     end
 
