@@ -377,7 +377,11 @@ class AppController < ApplicationController
 	        if !g.shoppingCart 
 	      		# make shopping cart array with item inside as Hash
 	      		# using item_id, item_name, category, quantity, price
-	      		menu_item = {"id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s, "category" => g.category.to_s, "section" => BEVERAGE_CATEGORIES[g.category] }
+	      		menu_item = {"id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s }
+	      		if g.category
+	      			menu_item["category"] = g.category.to_s
+	      			menu_item["section"] = BEVERAGE_CATEGORIES[g.category] 
+	      		end
 	      		menu_item_array = [menu_item]
 
 	      		# shoppingCart = menu_item_array.to_json
