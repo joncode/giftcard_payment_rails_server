@@ -23,9 +23,11 @@ class GiftItem < ActiveRecord::Base
 	end
 
 	def prepare_for_shoppingCart
-		item_hash = self.serializable_hash only: [:menu_id, :price, :quantity, :name, :id]
-        item_hash["gift_item_id"] = item_hash["id"]
-        item_hash.delete("id")
+		item_hash = self.serializable_hash only: [:menu_id, :price, :quantity, :name]
+        item_hash["item_id"] = item_hash["menu_id"]
+        item_hash["item_name"] = item_hash["name"]
+        item_hash.delete("menu_id")
+        item_hash.delete("name")
         return item_hash
 	end
 end

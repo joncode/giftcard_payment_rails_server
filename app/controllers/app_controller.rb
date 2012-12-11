@@ -385,7 +385,8 @@ class AppController < ApplicationController
 	      		gift_obj["shoppingCart"] = menu_item_array
 	      	else
 	      		# turn shoppingCart into an array with hashes
-	      		gift_obj["shoppingCart"] = JSON.parse g.shoppingCart
+
+	      		gift_obj["shoppingCart"] = convert_shoppingCart_for_app g.shoppingCart
 	      	end
 
 		        # add other person photo url 
@@ -463,6 +464,24 @@ class AppController < ApplicationController
 				users_array << user_obj
 			end
 			return users_array
+	    end
+
+	    def convert_shoppingCart_for_app shoppingCart
+	    	cart_ary = JSON.parse shoppingCart
+	    	new_shopping_cart = []
+	    	if cart_ary[0].has_key? "menu_id"
+		    	cart_ary.each do |item_hash|
+		    		item_hash["item_id"] = item_hash["menu_id"]
+	        		item_hash["item_name"] = item_hash["name"]
+	        		item_hash.delete("menu_id")
+	        		item_hash.delete("name")
+	        		new_shopping_cart << item_hash
+		    	end
+		    else
+		    	new_shopping_cart = cart_ary
+	    	end
+
+	    	return new_shopping_cart
 	    end
  
 end
