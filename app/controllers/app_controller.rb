@@ -379,7 +379,7 @@ class AppController < ApplicationController
 	      		# using item_id, item_name, category, quantity, price
 	      		menu_item = {"id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s, "category" => g.category.to_s}
 	      		menu_item_array = [menu_item]
-	      			# future CRON job 
+
 	      		# shoppingCart = menu_item_array.to_json
 	      		# g.update_attribute(:shoppingCart, shoppingCart)
 	      		gift_obj["shoppingCart"] = menu_item_array
@@ -468,6 +468,7 @@ class AppController < ApplicationController
 
 	    def convert_shoppingCart_for_app shoppingCart
 	    	cart_ary = JSON.parse shoppingCart
+	    	puts "shopping cart = #{shoppingCart}"
 	    	new_shopping_cart = []
 	    	if cart_ary[0].has_key? "menu_id"
 		    	cart_ary.each do |item_hash|
