@@ -380,7 +380,7 @@ class AppController < ApplicationController
 	      		menu_item = {"id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s }
 	      		if g.category
 	      			menu_item["category"] = g.category.to_s
-	      			menu_item["section"] = BEVERAGE_CATEGORIES[g.category] 
+	      			menu_item["section"] = BEVERAGE_CATEGORIES[g.category.to_i] 
 	      		end
 	      		menu_item_array = [menu_item]
 
