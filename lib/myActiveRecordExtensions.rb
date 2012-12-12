@@ -11,7 +11,7 @@ module MyActiveRecordExtensions
 	end
 
 	def previous
-		Gift.previous(self).shift
+		self.class.previous(self).shift
 	end
 	
 end
