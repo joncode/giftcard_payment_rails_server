@@ -6,7 +6,7 @@ class IphoneController < AppController
   BUY_REPLY       = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "id"]
   BOARD_REPLY     = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "giver_id", "giver_name", "id"] 
   PROVIDER_REPLY  = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "status", "redeem_id", "redeem_code", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
-  USER_REPLY      = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
+  # USER_REPLY      = ["id", "first_name", "last_name", "email", "phone", "facebook_id"]
   MERCHANT_REPLY  = ["receiver_id", "receiver_name","giver_name", "item_id", "item_name","category", "price", "total", "tax" , "tip", "message", "created_at", "id", "redeem_id", "redeem_code"]
   COMPLETED_REPLY = ["receiver_id", "receiver_name","giver_name", "item_id", "item_name","category", "price", "total", "tax" , "tip", "message", "updated_at", "id", "redeem_id", "redeem_code"]
   
@@ -61,25 +61,6 @@ class IphoneController < AppController
       puts response
       format.json { render text: response.to_json }
     end
-  end
-  
-  def update_iphone
-    puts "Update Iphone"
-    puts "#{params}"
-
-    response  = {}
-    user  = User.find_by_remember_token(params["token"])
-    # get app version from data hash
-    # compare app version from version -- in db??
-    # get photo url from data hash 
-    # compare photo version with proper photo for user 
-    # if either are not same 
-    # return "update_photo" or "update_app" or both
-    # put new data into each value for key
-    # if both are the same 
-    # return "success"
-    # send current is_public status
-    # send current badge values - my_gifts , purchase-status updates 
   end
 
   def going_out
@@ -162,31 +143,30 @@ class IphoneController < AppController
     response["completed"] = past_gift_hash
     
     respond_to do |format|
-      #format.json { render json: @gifts, only: GIFT_REPLY }
       logger.debug response
       format.json { render text: response.to_json }
     end
   end
   
-  def drinkboard_users
-    puts "Drinkboard Users"
-    puts "#{params}"
+  # def drinkboard_users
+  #   puts "Drinkboard Users"
+  #   puts "#{params}"
 
-    begin
-      user = User.find_by_remember_token(params["token"])
-      # @users = User.find(:all, :conditions => ["id != ?", @user.id])
-      # providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
-    rescue 
-      puts "ALERT - cannot find user from token"
-    end
-    users     = User.all   
-    user_hash = hash_these_users(users, USER_REPLY)
+  #   begin
+  #     user = User.find_by_remember_token(params["token"])
+  #     # @users = User.find(:all, :conditions => ["id != ?", @user.id])
+  #     # providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
+  #   rescue 
+  #     puts "ALERT - cannot find user from token"
+  #   end
+  #   users     = User.all   
+  #   user_hash = hash_these_users(users, USER_REPLY)
     
-    respond_to do |format|
-      logger.debug user_hash
-      format.json { render text: user_hash.to_json }
-    end
-  end
+  #   respond_to do |format|
+  #     logger.debug user_hash
+  #     format.json { render text: user_hash.to_json }
+  #   end
+  # end
   
   def activity
     puts "Activity"
@@ -344,126 +324,126 @@ class IphoneController < AppController
     end  
   end
 
-  def create_redeem
-    puts "Create Redeem"
-    puts "#{params}"
+  # def create_redeem
+  #   puts "Create Redeem"
+  #   puts "#{params}"
 
-    message  = ""
-    response = {}
+  #   message  = ""
+  #   response = {}
     
-    redeem_obj = JSON.parse params["redeem"]
-    if redeem_obj.nil?
-      message = "data did not transfer. "
-      redeem  = Redeem.new
-    else
-      redeem  = Redeem.new(redeem_obj)
-    end
-    begin
-      receiver = User.find_by_remember_token(params["token"])
-    rescue
-      message += "Couldn't identify app user. "
-    end
+  #   redeem_obj = JSON.parse params["redeem"]
+  #   if redeem_obj.nil?
+  #     message = "data did not transfer. "
+  #     redeem  = Redeem.new
+  #   else
+  #     redeem  = Redeem.new(redeem_obj)
+  #   end
+  #   begin
+  #     receiver = User.find_by_remember_token(params["token"])
+  #   rescue
+  #     message += "Couldn't identify app user. "
+  #   end
 
-    response = { "error" => message } if message != "" 
+  #   response = { "error" => message } if message != "" 
 
-    respond_to do |format|
-      if redeem.save
-        response["success"]      = redeem.redeem_code
-        response["server_codes"] = redeem.gift.provider.server_to_iphone
-      else
-        message += " Gift unable to process to database. Please retry later."
-        response["error_server"] = message 
-      end
-      puts response
-      format.json { render text: response.to_json}
-    end
-  end
+  #   respond_to do |format|
+  #     if redeem.save
+  #       response["success"]      = redeem.redeem_code
+  #       response["server_codes"] = redeem.gift.provider.server_to_iphone
+  #     else
+  #       message += " Gift unable to process to database. Please retry later."
+  #       response["error_server"] = message 
+  #     end
+  #     puts response
+  #     format.json { render text: response.to_json}
+  #   end
+  # end
 
-  def server_code
-    puts "Server Code (Merchant Redeem)"
-    puts "#{params}"
+  # def server_code
+  #   puts "Server Code (Merchant Redeem)"
+  #   puts "#{params}"
 
-    message   = ""
-    response  = {} 
-    order_obj = JSON.parse params["data"]
-    if order_obj.nil?
-      message = "Data not received correctly. "
-      order   = Order.new
-    else
-      order   = Order.new(order_obj)
-    end
-    begin
-      user     = User.find_by_remember_token(params["token"])
-    rescue
-      message += "Couldn't identify app user. "
-    end
-    begin
-      redeem          = Redeem.find_by_gift_id(order.gift_id)
-      order.redeem_id = redeem.id
-    rescue
-      message += " Could not find redeem code via gift_id. "
-    end
-    response = { "error" => message } if message != "" 
+  #   message   = ""
+  #   response  = {} 
+  #   order_obj = JSON.parse params["data"]
+  #   if order_obj.nil?
+  #     message = "Data not received correctly. "
+  #     order   = Order.new
+  #   else
+  #     order   = Order.new(order_obj)
+  #   end
+  #   begin
+  #     user     = User.find_by_remember_token(params["token"])
+  #   rescue
+  #     message += "Couldn't identify app user. "
+  #   end
+  #   begin
+  #     redeem          = Redeem.find_by_gift_id(order.gift_id)
+  #     order.redeem_id = redeem.id
+  #   rescue
+  #     message += " Could not find redeem code via gift_id. "
+  #   end
+  #   response = { "error" => message } if message != "" 
 
-    respond_to do |format|
-      if order.save
-        response["success"] = " Sale Confirmed. Thank you!"
-        response["server"]  = redeem.provider.get_server_from_code_to_iphone(order.server_code)
-      else
-        response["error_server"] = " Order not processed - database error. Server Code you entered did not match."
-        response["server_code"]  = redeem ? redeem.provider.server_codes.pop : "not redeemed"
-      end
-      puts response
-      format.json { render text: response.to_json }
-    end  
-  end
+  #   respond_to do |format|
+  #     if order.save
+  #       response["success"] = " Sale Confirmed. Thank you!"
+  #       response["server"]  = redeem.provider.get_server_from_code_to_iphone(order.server_code)
+  #     else
+  #       response["error_server"] = " Order not processed - database error. Server Code you entered did not match."
+  #       response["server_code"]  = redeem ? redeem.provider.server_codes.pop : "not redeemed"
+  #     end
+  #     puts response
+  #     format.json { render text: response.to_json }
+  #   end  
+  # end
 
-  def create_order
-    puts "Create Order"
-    puts "#{params}"
+  # def create_order
+  #   puts "Create Order"
+  #   puts "#{params}"
 
-    message   = ""
-    response  = {} 
-    order_obj = JSON.parse params["data"]
-    if order_obj.nil?
-      message = "Data not received correctly. "
-      order   = Order.new
-    else
-      order   = Order.new(order_obj)
-    end
-    begin
-      provider_user   = User.find_by_remember_token(params["token"])
-      order.server_id = provider_user.id
-    rescue
-      message      += "Couldn't identify app user. "
-    end
-    begin
-      redeem   = Redeem.find_by_gift_id(order.gift_id)
-    rescue
-      message += " Could not find redeem code via gift_id. "
-    end
-    if redeem
-      redeem_code = redeem.redeem_code
-    else
-      redeem_code = "not redeemed"
-    end
-    response = { "error" => message } if message != "" 
+  #   message   = ""
+  #   response  = {} 
+  #   order_obj = JSON.parse params["data"]
+  #   if order_obj.nil?
+  #     message = "Data not received correctly. "
+  #     order   = Order.new
+  #   else
+  #     order   = Order.new(order_obj)
+  #   end
+  #   begin
+  #     provider_user   = User.find_by_remember_token(params["token"])
+  #     order.server_id = provider_user.id
+  #   rescue
+  #     message      += "Couldn't identify app user. "
+  #   end
+  #   begin
+  #     redeem   = Redeem.find_by_gift_id(order.gift_id)
+  #   rescue
+  #     message += " Could not find redeem code via gift_id. "
+  #   end
+  #   if redeem
+  #     redeem_code = redeem.redeem_code
+  #   else
+  #     redeem_code = "not redeemed"
+  #   end
+  #   response = { "error" => message } if message != "" 
 
-    respond_to do |format|
-      if order.redeem_code == redeem_code
-        if order.save
-          response["success"]      = " Sale Confirmed. Thank you!"
-        else
-          response["error_server"] = " Order not processed - database error"
-        end
-      else
-        response["error_server"]   = " the redeem code you entered did not match. "
-        response["customer_code"]  = redeem_code
-      end
-      puts response
-      format.json { render text: response.to_json }
-    end  
-  end
+  #   respond_to do |format|
+  #     if order.redeem_code == redeem_code
+  #       if order.save
+  #         response["success"]      = " Sale Confirmed. Thank you!"
+  #       else
+  #         response["error_server"] = " Order not processed - database error"
+  #       end
+  #     else
+  #       response["error_server"]   = " the redeem code you entered did not match. "
+  #       response["customer_code"]  = redeem_code
+  #     end
+  #     puts response
+  #     format.json { render text: response.to_json }
+  #   end  
+  # end
   
   def update_photo
     puts "Update Photo"
@@ -575,10 +555,6 @@ class IphoneController < AppController
       gift_hash = {}
       index = 1 
       obj.each do |g|
-      
-        ### >>>>>>>    item_name pluralizer
-        # g.item_name = g.item_name.pluralize if g.quantity > 1
-        ###  7/27 6:45 UTC
         
         if g.created_at
           time = g.created_at.to_time
@@ -612,23 +588,20 @@ class IphoneController < AppController
         end
 
         gift_obj["time_ago"] = time_string
-      
-        ### >>>>>>>    this is not stored in gift object
         gift_obj["redeem_code"] = add_redeem_code(g)
-        ###  07-27 9:08 UTC
             
         index += 1
       end
       return gift_hash
     end
     
-    def add_redeem_code(obj)
-      if obj.status == "notified" 
-        obj.redeem.redeem_code
-      else
-        "none"
-      end
-    end
+    # def add_redeem_code(obj)
+    #   if obj.status == "notified" 
+    #     obj.redeem.redeem_code
+    #   else
+    #     "none"
+    #   end
+    # end
     
     def create_user_object(data)
       obj = JSON.parse data

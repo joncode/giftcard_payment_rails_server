@@ -13,5 +13,6 @@ class CreateRelays < ActiveRecord::Migration
 
     add_index :relays, :receiver_id
     add_index :relays, :provider_id
+    add_index :relays, :gift_id
   end
 end

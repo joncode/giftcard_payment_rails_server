@@ -6,10 +6,10 @@ class CustomTester
 
     g = GiftTests.new
 	b = BuyTests.new
-	#b.all
+	b.all
 
 	r = RedeemTests.new
-	#r.all
+	r.all
 	
     
 

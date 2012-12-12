@@ -67,7 +67,7 @@ class Gift < ActiveRecord::Base
   before_create :regifted,        :if => :regift_id?
   before_save   :set_status
   after_create  :update_shoppingCart
-  after_update    :create_notification
+  after_update  :create_notification
 
   ##########   database queries
 
@@ -168,6 +168,7 @@ class Gift < ActiveRecord::Base
     self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil   
     self.receiver_phone = receiver.phone ? receiver.phone : nil
     self.receiver_email = receiver.email ? receiver.email : nil
+    self.status = 'open' if self.status == "incomplete"
   end
 
   def add_giver(giver)
@@ -189,19 +190,26 @@ class Gift < ActiveRecord::Base
   private
 
     def create_notification
-      puts "HERE IS THE TIME FOR CREATE RELAYS"
       puts "the gift status is #{self.status}"
       case self.status
       when 'incomplete'
-        puts 'Relay created for gift #{self.id}'
+        puts "Relay created for gift #{self.id}"
+        Relay.createRelayFromGift self
       when 'open'
         puts "Relay created for gift if there is none #{self.id}"
+        relay = Relay.createRelayFromGift self
+        if relay.errors.messages.has_key? :gift_id
+          relay = Relay.updateRelayFromGift self
+        end 
       when 'notified'
         puts "Relay updated to notified for gift #{self.id}"
+        relay = Relay.updateRelayFromGift self
       when 'redeemed'
         puts "Relay updated to redeemed for gift #{self.id}"
+        relay = Relay.updateRelayFromGift self
       when 'regifted'
         puts "Relay updated to regifted for gift #{self.id}"
+        relay = Relay.updateRelayFromGift self
       end
     end
 

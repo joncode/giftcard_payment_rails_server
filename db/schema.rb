@@ -305,6 +305,7 @@ ActiveRecord::Schema.define(:version => 20121211171406) do
     t.datetime "updated_at",  :null => false
   end
 
+  add_index "relays", ["gift_id"], :name => "index_relays_on_gift_id"
   add_index "relays", ["provider_id"], :name => "index_relays_on_provider_id"
   add_index "relays", ["receiver_id"], :name => "index_relays_on_receiver_id"
 

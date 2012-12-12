@@ -1,30 +1,78 @@
 class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
-	# include ActiveMerchant::Billing::CreditCardMethods
-	# include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
-	
-	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "message", "created_at", "status"]
-    ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "message", "created_at", "status"] 
 
- 	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]
+ 	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
+	GIFT_REPLY = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
+    ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
  	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
+
+ 	def relays
+ 		puts "\nRelays to APP"
+ 		puts "#{params}"
+ 		response = {}
+ 		    # get app version from data hash
+		    # compare app version from version -- in db??
+		    # get photo url from data hash 
+		    # compare photo version with proper photo for user 
+		    # if either are not same 
+		    # return "update_photo" or "update_app" or both
+		    # put new data into each value for key
+		    # if both are the same 
+		    # return "success"
+		    # send current is_public status 
+
+ 		if user = authenticate_app_user(params["token"])
+ 			# user is authenticated
+ 			relays = Relay.where("receiver_id = :id AND status != :msg", :id => user.id, :msg => "redeemed")
+ 			badge  = relays.size
+ 			gift_array = []
+ 			if badge > 0
+	 			relays.each do |relay|
+	 				gift_array << relay.gift
+	 			end
+	 			gift_array_to_app = array_these_gifts(gift_array, GIFT_REPLY, true)
+	 			response["success"] = { "badge" => badge, "gifts" => gift_array_to_app }
+	 		else
+	 			response["success"] = { "badge" => 0 }
+	 		end
+ 		else
+ 			# user is not authenticated
+ 			response["error"] = {"user" => "could not identity app user"}
+ 		end
+ 		respond_to do |format|
+	    	logger.debug response
+	    	format.json { render json: response }
+	    end
+ 	end
+
+ 	def authenticate_app_user(token)
+ 		if user = User.find_by_remember_token(token)
+ 			return user
+ 		else
+ 			return false
+ 		end
+ 	end
+
+ 	def authenticate_public_info(token=nil)
+ 		return true
+ 	end
 
  	def menu
  		puts "\nMenu App"
  		puts "#{params}"
-
- 		user = User.find_by_remember_token(params["token"])
- 		provider_id  = params["data"]
-
- 		if user
- 			menu_string = MenuString.get_menu_for_provider(provider_id.to_i)
+ 		response = {}
+	
+ 		if authenticate_public_info
+ 			provider_id  = params["data"]
+ 			response = []
+ 			response = MenuString.get_menu_for_provider(provider_id.to_i)
  		else
- 			menu_string = {"error" => "user was not found in database"}
- 			menu_string.to_json
+ 			response["error"] = "user was not found in database"
  		end
+	    
 	    respond_to do |format|
-	      logger.debug menu_string
-	      format.json { render text: menu_string }
+	    	logger.debug response
+	    	format.json { render json: response }
 	    end
  	end
 
@@ -32,8 +80,7 @@ class AppController < ApplicationController
 	    puts "\nGifts"
 	    puts "#{params}"
 
-	    user  = User.find_by_remember_token(params["token"])
-	    if user
+	    if user = authenticate_app_user(params["token"])
 	    	gifts 		= Gift.get_gifts(user)
 	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
 	  	else
@@ -42,7 +89,7 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      logger.debug gifts_array
-	      format.json { render text: gifts_array.to_json }
+	      format.json { render json: gifts_array }
 	    end
   	end
 
@@ -51,7 +98,7 @@ class AppController < ApplicationController
 	    puts "#{params}"
 
 	    user  = User.find(params["user_id"])
-	    if user
+	    if user 
 	    	gifts 		= Gift.get_user_activity(user)
 	    	gifts_array = array_these_gifts(gifts, ACTIVITY_REPLY, true, true)
 	  	else
@@ -60,7 +107,7 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      logger.debug gifts_array
-	      format.json { render text: gifts_array.to_json }
+	      format.json { render json: gifts_array }
 	    end
   	end
 
@@ -68,8 +115,7 @@ class AppController < ApplicationController
 	    puts "\nGifts"
 	    puts "#{params}"
 
-	    user  = User.find_by_remember_token(params["token"])
-	    if user
+	    if user = authenticate_app_user(params["token"])
 	    	gifts 		= Gift.get_past_gifts(user)
 	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
 	  	else
@@ -78,73 +124,71 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      logger.debug gifts_array
-	      format.json { render text: gifts_array.to_json }
+	      format.json { render json: gifts_array }
 	    end
   	end
 
   	def questions
   		puts "\nQuestions"
   		puts "HERE ARE THE PARAMS #{params}"
-  		user  = User.find_by_remember_token(params["token"])
-  		
-  		  	# save filled out answers to db
-  		if params["answers"] && user
-        puts "ANSWERS #{params['answers']}"
-  			answered_questions = JSON.parse params["answers"]
-  			Answer.save_these(answered_questions, user)
-  		end
+  		  		
+  		if user = authenticate_app_user(params["token"])
 
-  		if user
+		  	  	# save filled out answers to db
+	  		if params["answers"]
+	        	puts "ANSWERS #{params['answers']}"
+	  			answered_questions = JSON.parse params["answers"]
+	  			Answer.save_these(answered_questions, user)
+	  		end
+
 	  			# get new pack of questions
-			   begin
-	  			  questions_array = Question.get_questions_with_answers(user)
-	  		 rescue
-	  			  questions_array = ["error", "could not get questions"]
-	  		 end
+			begin
+	  			response = Question.get_questions_with_answers(user)
+	  		rescue
+	  			response = ["error", "could not get questions"]
+	  		end
 	  	else
-	  		 questions_array = ["error", "could not find user in db"]
+	  		response = ["error", "could not find user in db"]
 	  	end
+
   		respond_to do |format|
-	      puts questions_array
-	      format.json { render text: questions_array.to_json }
+	      puts response
+	      format.json { render json: response }
 	    end
   	end
 
  	def others_questions
   		puts "\nOthers Questions"
   		puts "HERE ARE THE PARAMS #{params}"
-  		user  = User.find_by_remember_token(params["token"])
+  		# user  = User.find_by_remember_token(params["token"])
   		
-  		other_user = User.find(params["user_id"])
-
-  		if  other_user
+  		if  other_user = User.find(params["user_id"])
 	  			# get new pack of questions
 			begin
-	  			questions_array = Question.get_questions_with_answers(other_user)
+	  			response = Question.get_questions_with_answers(other_user)
 	  		rescue
-	  			questions_array = ["error", "could not get questions"]
+	  			response = ["error", "could not get questions"]
 	  		end
 	  	else
-	  		questions_array = ["error", "could not find other user in db"]
+	  		response = ["error", "could not find other user in db"]
 	  	end
   		respond_to do |format|
-	      	puts questions_array
-	      	format.json { render text: questions_array.to_json }
+	      	puts response
+	      	format.json { render json: response }
 	    end
   	end
   	def transactions
   		puts "\nTransactions"
   		puts "#{params}"
-  		user  = User.find_by_remember_token(params["token"])
 
-  		if user
+  		if user = authenticate_app_user(params["token"])
   			transaction_array = Gift.transactions(user)
 	  	else
 	  		transaction_array = ["error", "could not find user in db"]
 	  	end
   		respond_to do |format|
 	      logger.debug transaction_array
-	      format.json { render text: transaction_array.to_json }
+	      format.json { render json: transaction_array }
 	    end
   	end
 
@@ -152,8 +196,7 @@ class AppController < ApplicationController
   		puts "\nProviders"
   		puts "#{params}"
 
-		user  = User.find_by_remember_token(params["token"])
-	    if user
+	    if authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
 	    		providers = Provider.all
 	    	else
@@ -167,7 +210,7 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      logger.debug providers_array
-	      format.json { render text: providers_array.to_json }
+	      format.json { render json: providers_array }
 	    end
   	end
 
@@ -176,7 +219,7 @@ class AppController < ApplicationController
 		puts "#{params}"
 
 		begin
-			user = User.find_by_remember_token(params["token"])
+			user = authenticate_app_user(params["token"])
 			# @users = User.find(:all, :conditions => ["id != ?", @user.id])
 			# providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
 			if !params['city'] || params['city'] == 'all'
@@ -193,7 +236,7 @@ class AppController < ApplicationController
 
 		respond_to do |format|
 			logger.debug user_array
-			format.json { render text: user_array.to_json }
+			format.json { render json: user_array }
 		end
 	end
 
@@ -225,7 +268,7 @@ class AppController < ApplicationController
      		end
     	end
     	begin
-      		receiver = User.find_by_remember_token(params["token"])
+      		receiver = authenticate_app_user(params["token"])
     	rescue
       		message += "Couldn't identify app user. "
     	end
@@ -245,7 +288,7 @@ class AppController < ApplicationController
 				response["error_server"] = message 
 			end
 			puts response
-			format.json { render text: response.to_json}
+			format.json { render json: response }
 		end
   	end
 
@@ -265,7 +308,7 @@ class AppController < ApplicationController
 			order   = Order.new(gift_id: gift_id.to_i, employee_id: employee_id.to_i)
 		end
 		begin
-			user 	 = User.find_by_remember_token(params["token"])
+			user 	= authenticate_app_user(params["token"])
 		rescue
 			message += "Couldn't identify app user. "
 		end
@@ -287,7 +330,7 @@ class AppController < ApplicationController
 				response["error_server"] = " Order not processed - database error"
 			end
 			puts response
-			format.json { render text: response.to_json }
+			format.json { render json: response }
 		end
 	end  
 
@@ -298,7 +341,7 @@ class AppController < ApplicationController
 		message   = ""
 		response  = {} 
 		begin
-      		user = User.find_by_remember_token(params["token"])
+      		user = authenticate_app_user(params["token"])
       		display_cards = Card.get_cards user
       		if display_cards.empty?
       			response["error"] = "User has no cards on file"
@@ -312,7 +355,7 @@ class AppController < ApplicationController
     	respond_to do |format|
 			puts response
 			puts message
-			format.json { render text: response.to_json }
+			format.json { render json: response }
 		end
 	end
 
@@ -323,7 +366,7 @@ class AppController < ApplicationController
 		message   = "" 
 		response  = {} 
 		# begin
-      		user = User.find_by_remember_token(params["token"])
+      		user = authenticate_app_user(params["token"])
       		puts user
       		card_data = params["data"]
       		puts "params data = #{params['data']}"
@@ -344,7 +387,7 @@ class AppController < ApplicationController
 			#end
 			puts response
 			puts message
-			format.json { render text: response.to_json }
+			format.json { render json: response }
 		end
 		
 	end
@@ -397,11 +440,11 @@ class AppController < ApplicationController
 	        if receiver
 	          if g.receiver
 	            gift_obj["receiver_photo"]  = g.receiver.get_photo
-	            gift_obj["giver_photo"]     = g.giver.get_photo
+	            #gift_obj["giver_photo"]     = g.giver.get_photo
 	          else
 	            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
 	          	gift_obj["receiver_photo"]  = ""
-	          	gift_obj["giver_photo"]     = g.giver.get_photo
+	          	#gift_obj["giver_photo"]     = g.giver.get_photo
 	          	if g.receiver_name
 	          		gift_obj["receiver_name"] = g.receiver_name
 	          	else
@@ -409,9 +452,10 @@ class AppController < ApplicationController
 	          	end
 	          end
 	        else
-	          gift_obj["giver_photo"]       = g.giver.get_photo
+	          #gift_obj["giver_photo"]       = g.giver.get_photo
 	        end
 
+	        gift_obj["giver_photo"]        = g.giver.get_photo
 	        provider = g.provider 
 	        gift_obj["provider_photo"]     = provider.get_photo
 	        # add the full provider address

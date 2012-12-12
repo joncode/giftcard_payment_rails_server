@@ -95,7 +95,7 @@ Drinkboard::Application.routes.draw do
     ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
   match 'app/login',            to: 'iphone#login',            via: :post
-  match 'app/update',           to: 'iphone#update_iphone',    via: :post 
+  match 'app/update',           to: 'iphone#relays',           via: :post 
   match 'app/gifts',            to: 'iphone#gifts',            via: :post
   
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
@@ -109,26 +109,25 @@ Drinkboard::Application.routes.draw do
   match 'app/transactions',     to: 'app#transactions',        via: :post
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
-
+  match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
+  match 'app/photo',            to: 'iphone#update_photo',     via: :post 
+    ## credit card routes
+  match 'app/cards',            to: 'app#get_cards',           via: :post
+  match 'app/add_card',         to: 'app#add_card',            via: :post
+    ### deprecated app routes
   match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
-  match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
-  match 'app/servercode',       to: 'iphone#server_code',      via: :post
-  match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/out',              to: 'iphone#going_out',        via: :post 
   match 'app/active',           to: 'iphone#active_orders',    via: :post
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
   match 'app/regift',           to: 'iphone#regift',           via: :post
-    ## credit card routes
-  match 'app/cards',            to: 'app#get_cards',           via: :post
-  match 'app/add_card',         to: 'app#add_card',            via: :post
-  
-
-    ### deprecated app routes
-  match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
-  match 'app/order',            to: 'iphone#create_order',     via: :post
-  match 'app/users',            to: 'iphone#drinkboard_users', via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
+
+    # to be deleted
+  # match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
+  # match 'app/order',            to: 'iphone#create_order',     via: :post
+  # match 'app/users',            to: 'iphone#drinkboard_users', via: :post
+  # match 'app/servercode',       to: 'iphone#server_code',      via: :post
 
     ###   basic footer routes
   match '/about',       to: 'home#about'
