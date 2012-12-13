@@ -7,11 +7,15 @@ module MyActiveRecordExtensions
 	end
 
   	def next
-		self.class.where("id > ?", id).limit(1).shift
+		record = self.class.where("id > ?", id).limit(1).shift
+		record = self.class.first if record.nil?
+		return record
 	end
 
 	def previous
-		self.class.previous(self).shift
+		record = self.class.previous(self).shift
+		record = self.class.last if record.nil?
+		return record
 	end
 	
 end

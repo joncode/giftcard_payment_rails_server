@@ -140,7 +140,7 @@ class Provider < ActiveRecord::Base
     send_fields = [:first_name, :last_name]
     employees_array = self.get_servers.map do |e|    
       employee_hash = {}
-      employee_hash = e.user.serializable_hash only: send_fields
+      employee_hash = e.user.serializable_hash only: [:first_name, :last_name]
       employee_hash["photo"]        = e.user.get_photo
       employee_hash["secure_image"] = e.user.get_secure_image
       employee_hash["employee_id"]  = "#{e.id}" 

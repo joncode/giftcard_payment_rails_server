@@ -32,14 +32,21 @@ class RedeemTests
       reset_test_variables
       puts "Running all tests for RedeemTests"
       run_all_tests
-
+      correcter = {}
       @correct.each do |c|
-        puts c.keys
+        puts c.keys if !(correcter.has_key? c.keys.shift)
+        correcter[c.keys.shift] = 0
       end
+      incorrecter = {}
       puts "\n\nINcorrect Tests : #{@incorrect.size}"
       @incorrect.each do |c|
-        puts c.keys
+        puts c.keys if !(incorrecter.has_key? c.keys.shift)
+        incorrecter[c.keys.shift] = 0
       end
+      scoreboard
+  end
+
+  def scoreboard
       puts "\n\nCompleted all tests for RedeemTests\n"
       puts "Correct tests = #{@correct.size}"
       puts "Incorrect tests = #{@incorrect.size}"
@@ -259,8 +266,8 @@ class RedeemTests
           end
           data = nil
           if gift.provider
-            employee = Employee.where(provider_id: gift.provider.id)
-            data = employee.pop if employee
+            employees = Employee.where(provider_id: gift.provider.id)
+            data = employees.shift if employees.count > 0
           end
           if !data.nil? 
               data = data.id 

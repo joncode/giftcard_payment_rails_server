@@ -12,6 +12,7 @@ class CustomTester
 	r.all
 	
     
-
+	b.scoreboard
+	r.scoreboard
 
 end
