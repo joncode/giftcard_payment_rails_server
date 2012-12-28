@@ -203,27 +203,33 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
  }
 
 html { 
-
-	body {  
-		background: url(orangeBoardBackground.jpg) no-repeat center center fixed; 
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;   
-		background-size: cover;
-
-		.mainWrapper {
-			//
-			background-color: @textureDarkWall;
-			width: 768px;
-			margin: 0 auto;
+	height: 100%;
+	 	
+	body {
+	 	height: 100%;
 	
-			.mainContent {
-				min-height: 100%;
+		.bodyDiv {  
+			background: url(orangeBoardBackground.jpg) no-repeat center center fixed; 
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;   
+			background-size: cover;
+			height: 700px;
+			position: relative;
+	
+			.mainWrapper {
+				background-color: @textureDarkWall;
 				width: 768px;
-				background: transparent;
-				margin-top: 25px;
-			}
-		} 
+				margin: 0 auto;
+		
+				.mainContent {
+					min-height: 100%;
+					width: 768px;
+					background: transparent;
+					margin-top: 25px;
+				}
+			} 
+		}
 	}
 }
 
@@ -2224,863 +2230,861 @@ ul.menuHeader {
 //   MM     ,M `Mb    MM   MM   MM  YA.   ,A9 MM     
 // .JMMmmmmMMM  `Wbmd"MML.JMML. `Mbmo`Ybmd9'.JMML.
 
-.menuBuilderBackground {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 1000px;
-	background-color: #666;
-	z-index: -100;
-}
+// .menuBuilderBackground {
+// 	position: absolute;
+// 	top: 0;
+// 	left: 0;
+// 	width: 100%;
+// 	height: 1000px;
+// 	background-color: #666;
+// 	z-index: -100;
+// }
 
-.menuEditWrapper {
-	margin: 0 auto;
-	width: 670px;
-	height: 600px;
-	//border: 1px solid red;
+// .menuEditWrapper {
+// 	margin: 0 auto;
+// 	width: 670px;
+// 	height: 600px;
+// 	//border: 1px solid red;
 
-	a {
-		width: 100%;
-		height: 100%;
-		display: block;
-		color: white;
-		text-decoration: none;
+// 	a {
+// 		width: 100%;
+// 		height: 100%;
+// 		display: block;
+// 		color: white;
+// 		text-decoration: none;
 
-		&:hover {
-			color: #1B1D2D
-		}
-	}
-}
+// 		&:hover {
+// 			color: #1B1D2D;
+// 		}
+// 	}
+// }
 
-.topRow {
-	position: relative;
-	width: 100%;
-	height: 55px;
-	width: 100%;
+// .topRow {
+// 	position: relative;
+// 	width: 100%;
+// 	height: 55px;
+// 	width: 100%;
 
-	.editMenuHeader { //h4
-		position: relative;
-		text-transform: capitalize;
-		padding-top: 17px;
-		font-size: 72px;
-		font-weight: 100;
-		color: #1A1C2A;
-		float:left;
-	}
+// 	.editMenuHeader { //h4
+// 		position: relative;
+// 		text-transform: capitalize;
+// 		padding-top: 13px;
+// 		font-size: 72px;
+// 		font-weight: 100;
+// 		color: #1A1C2A;
+// 		float:left;
+// 		z-index: -10;
+// 	}
 
-	.topRowTabsWrapper {
-		float: right;
-		position: relative;
-		width: 300px;
-		height: 26px;
-		left: 11px;
-		top: 32px;
+// 	.topRowTabsWrapper {
+// 		float: right;
+// 		position: relative;
+// 		width: 300px;
+// 		height: 26px;
+// 		left: 11px;
+// 		top: 29px;
+// 	}
 
+// 	.topRowTab {
+// 		background-image: url('topRowTab.png');
+// 		width: 94px;
+// 		height: 26px;
+// 		float: left;
+// 		color: @white;
+// 		margin-right: 2px;
+// 	}
 
-	}
+// 	.topRowText {
+// 		color: @white;
+// 		font-size: 18px;
+// 		text-align: center;
+// 		padding-top: 3px;
+// 	}
+// }
 
-	.topRowTab {
-		background-image: url('topRowTab.png');
-		width: 94px;
-		height: 26px;
-		float: left;
-		color: @white;
-		margin-right: 2px;
-	}
+// .navBackground {
+// 	padding: 0;
+// 	width: 100%;
+// 	height: 42px;
+// 	background-color: #20222E;
+// }
 
-	.topRowText {
-		color: @white;
-		font-size: 18px;
-		text-align: center;
-		padding-top: 3px;
-	}
-}
+// .navTextWrapper {
+// 	text-align: center;
+// 	width: 100%;
+// 	margin: -38px 0 0 23px;
 
-.row2Wrapper {
-	display: block;
-	width: 100%;
-	height: 42px;
-	float: left;
-	position: relative;
-	top: 7px;
+// 	.row2Text { //h4
+// 		//color: @white;
+// 		float: left;
+// 		text-align: center;
+// 		font-size: 23px;
+// 		font-weight: 100;
+// 		padding-top: 9px;
+// 		margin-right: 23px;
 
-	a:hover {
-		color: @redHot;
-	}
+// 		a {
 
-	.row2ButtonUp {
-		margin: 0;
-		padding: 0;
-		width: 95px;
-		height: 42px;
-		background-image: url('row2ButtonUp.png');
-		background-repeat: no-repeat;
-		float: left;
+// 			&:hover {
+// 				color: @redHot;
+// 			}
+// 		}
+// 	}
+// }
 
-		.row2Text {
-			//color: @white;
-			text-align: center;
-			font-size: 17px;
-			font-weight: 100;
-			padding-top: 10px;
-		}
-	}
-}	
+// .bigButtons { //a.k.a. row 3
+// 	//display: block;
+// 	position: relative;
+// 	width: 100%;
+// 	height: 33px;
+// 	top: 12px;
+// 	left: 5px;
+// 	float: left; 
 
-.bigButtons { //a.k.a. row 3
-	//display: block;
-	position: relative;
-	width: 100%;
-	height: 33px;
-	top: 12px;
-	left: 5px;
-	float: left; 
+// 	h4 {
+// 		text-align: center;
+// 		font-size: 22px;
+// 		color: white;
+// 		padding-top: 5px;
+// 	}
 
-	h4 {
-		text-align: center;
-		font-size: 22px;
-		color: white;
-		padding-top: 5px;
-	}
+// 	.bigButtonLeft {
+// 		width: 323px;
+// 		height: 33px;
+// 		margin-right: 5px;
+// 		background-image: url('bigButtonLeftUp.png');
+// 		float: left;
+// 	}
 
-	.bigButtonLeft {
-		width: 323px;
-		height: 33px;
-		margin-right: 5px;
-		background-image: url('bigButtonLeftUp.png');
-		float: left;
-	}
+// 	.bigButtonRight {
+// 		width: 323px;
+// 		height: 33px;
+// 		background-image: url('bigButtonRightUp.png');
+// 		float: left;
+// 	}
+// }
 
-	.bigButtonRight {
-		width: 323px;
-		height: 33px;
-		background-image: url('bigButtonRightUp.png');
-		float: left;
-	}
-}
+// .bigGreyHeader {
+// 	float: left;
+// 	display: block;  
+// 	width: 616px;
+// 	height: 47px;
+// 	margin-left: 22px;
+// 	margin-top: 17px;
+// 	background-image: url('bigGreyHeaderBackground.gif');
+// 	background-repeat: no-repeat;
 
-.bigGreyHeader {
-	float: left;
-	display: block;  
-	width: 616px;
-	height: 47px;
-	margin-left: 22px;
-	margin-top: 17px;
-	background-image: url('bigGreyHeaderBackground.gif');
-	background-repeat: no-repeat;
+// 	.headerTextMenuItems {
+// 		text-align: center;
+// 		font-size: 18px;
+// 		padding-top: 6px;
+// 		letter-spacing: .04em;
+// 		font-weight: 100;
+// 		position: relative;
+// 	}
 
-	.headerTextMenuItems {
-		text-align: center;
-		font-size: 18px;
-		padding-top: 6px;
-		letter-spacing: .04em;
-		font-weight: 100;
-		position: relative;
-	}
+// 	.columnHeaderName {
+// 		left: 127px;
+// 	}
 
-	.columnHeaderName {
-		left: 127px;
-	}
+// 	.columnHeaderDescription {
+// 		left: 202px;
+// 	}
 
-	.columnHeaderDescription {
-		left: 202px;
-	}
+// 	.columnHeaderPrice {
+// 		left: 420px;
+// 	}
 
-	.columnHeaderPrice {
-		left: 420px;
-	}
+// 	//Show/Hide title bar text
+// 	h4.headerTextSignature {
+// 	}
 
-	//Show/Hide title bar text
-	h4.headerTextSignature {
-	}
+// 	.headerTextMenuItems {// h4
+// 		text-align: left;
+// 		float: left;
+// 		font-size: 16px;
+// 	}	
 
-	.headerTextMenuItems {// h4
-		text-align: left;
-		float: left;
-		font-size: 16px;
-	}	
+// 	.headerTextPreview {
+// 		text-align: center;
+// 		font-size: 16px;
+// 		margin-top: 5px;
+// 	}
 
-	.headerTextPreview {
-		text-align: center;
-		font-size: 16px;
-		margin-top: 5px;
-	}
+// 	.headerTextBeerGrid {
+// 		text-align: center;
+// 		font-size: 16px;
+// 		margin-top: 5px;
+// 	}
 
-	.headerTextBeerGrid {
-		text-align: center;
-		font-size: 16px;
-		margin-top: 5px;
-	}
+// 	.headerTextAddCustom {
+// 		text-align: center;
+// 		font-size: 16px;
+// 		margin-top: 5px;
+// 	}
+// }
 
-	.headerTextAddCustom {
-		text-align: center;
-		font-size: 16px;
-		margin-top: 5px;
-	}
-}
+// //End Header
 
-//End Header
+// //Begin MENU ITEMS section
+// .menuItemsWrapper {
 
-//Begin MENU ITEMS section
-.menuItemsWrapper {
+// 	width: 646px;
+// 	height: 211px;
+// 	float: left;
+// 	margin-top: -15px;
+// 	margin-left: 9px;
+// }
 
-	width: 646px;
-	height: 211px;
-	float: left;
-	margin-top: -15px;
-	margin-left: 9px;
-}
+// .menuItemRow {
+// 	background-image: url('menuItemBackground.png');
+// 	width: 646px;
+// 	height: 63px;
+// }
 
-.menuItemRow {
-	background-image: url('menuItemBackground.png');
-	width: 646px;
-	height: 63px;
-}
+// ul.menuItemList {
+// 	list-style: none;
+// 	margin: 0;
+// 	padding: 0;
+// 	height: 400px;
+// 	overflow-x: hidden;
+// 	overflow-y: auto;
+// 	width: 660px;
 
-ul.menuItemList {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	height: 400px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	width: 660px;
+// 	li {
+// 		float: left;
+// 		margin: 0;
+// 		padding: 0;
 
-	li {
-		float: left;
-		margin: 0;
-		padding: 0;
+// 		input[type=checkbox] {
+// 			width: 19px;
+// 			height: 19px;
+// 			margin-left: 30px;
+// 			margin-top: 20px;
+// 			border: 5px solid black;
+// 			float: left;
+// 			display: block;
+// 		}
 
-		input[type=checkbox] {
-			width: 19px;
-			height: 19px;
-			margin-left: 30px;
-			margin-top: 20px;
-			border: 5px solid black;
-			float: left;
-			display: block;
-		}
+// 		h4.itemName, h4.itemDescription {
+// 			display: block;
+// 			float: left;
+// 			font-size: 19px;
+// 		}
 
-		h4.itemName, h4.itemDescription {
-			display: block;
-			float: left;
-			font-size: 19px;
-		}
+// 		.itemName {
+// 			position: relative;
+// 			top: 0;
+// 			left: 10px;
+// 			width: 200px;
+// 			height: 63px;
+// 			padding-top: 14px;
+// 			text-align: center;
+// 		}
 
-		.itemName {
-			position: relative;
-			top: 0;
-			left: 10px;
-			width: 200px;
-			height: 63px;
-			padding-top: 14px;
-			text-align: center;
-		}
+// 		.itemDescription {
+// 			height: 63px;
+// 			width: 250px;
+// 			position: relative;
+// 			left: 0px;
+// 			padding-top: 14px;
+// 		}
 
-		.itemDescription {
-			height: 63px;
-			width: 250px;
-			position: relative;
-			left: 0px;
-			padding-top: 14px;
-		}
+// 		input.priceDisplay {
+// 			position: relative;
+// 			left: 54px;
+// 			top: 8px;
+// 			height: 35px;
+// 			width: 35px;
+// 			-moz-box-shadow:    inset 3px 3px 5px #555555;
+//       -webkit-box-shadow: inset 3px 3px 5px #555555;
+//     	box-shadow:         inset 3px 3px 5px #555555;
+// 		}
+// 	}
+// }
 
-		input.priceDisplay {
-			position: relative;
-			left: 54px;
-			top: 8px;
-			height: 35px;
-			width: 35px;
-			-moz-box-shadow:    inset 3px 3px 5px #555555;
-      -webkit-box-shadow: inset 3px 3px 5px #555555;
-    	box-shadow:         inset 3px 3px 5px #555555;
-		}
-	}
-}
+// .buttonMoney {
+// 	width: 40px;
+// 	height: 37px;
+// 	background-image: url('buttonMoney.png');
+// 	position: relative;
+// 	left: 10px;
+// 	top: 10px;
+// 	float: left;
 
-.buttonMoney {
-	width: 40px;
-	height: 37px;
-	background-image: url('buttonMoney.png');
-	position: relative;
-	left: 10px;
-	top: 10px;
-	float: left;
+// 	&:hover {
+// 		-moz-box-shadow:    inset 5px 5px 20px #000;
+//     -webkit-box-shadow: inset 5px 5px 20px #000;
+//     box-shadow:         inset 5px 5px 20px #000;
+// 	}
+// }
 
-	&:hover {
-		-moz-box-shadow:    inset 5px 5px 20px #000;
-    -webkit-box-shadow: inset 5px 5px 20px #000;
-    box-shadow:         inset 5px 5px 20px #000;
-	}
-}
+// .buttonTrash {
+// 	width: 40px;
+// 	height: 37px;
+// 	background-image: url('buttonTrash.png');
+// 	position: relative;
+// 	left: 20px;
+// 	top: 10px;
+// 	float: left;
 
-.buttonTrash {
-	width: 40px;
-	height: 37px;
-	background-image: url('buttonTrash.png');
-	position: relative;
-	left: 20px;
-	top: 10px;
-	float: left;
+// 	&:hover {
+// 		-moz-box-shadow:    inset 5px 5px 20px #000;
+//     -webkit-box-shadow: inset 5px 5px 20px #000;
+//     box-shadow:         inset 5px 5px 20px #000;
+// 	}
+// }
 
-	&:hover {
-		-moz-box-shadow:    inset 5px 5px 20px #000;
-    -webkit-box-shadow: inset 5px 5px 20px #000;
-    box-shadow:         inset 5px 5px 20px #000;
-	}
-}
+// .saveMenuItems {
+// 	background-image: url('buttonSaveHuge.png');
+// 	float: left;
+// 	position: relative;
+// 	width: 512px;
+// 	height: 48px;
+// 	top: 10px;
+// 	left: 53px;
 
-.saveMenuItems {
-	background-image: url('buttonSaveHuge.png');
-	float: left;
-	position: relative;
-	width: 512px;
-	height: 48px;
-	top: 10px;
-	left: 53px;
+// 	h4 {
+// 		height: 45px;
+// 		color: green;
 
-	h4 {
-		height: 45px;
-		color: green;
+// 		a {
+// 			text-align: center;
+// 			font-size: 30px;
+// 			padding-top: 12px;
+// 		}
+// 	}	
+// }
 
-		a {
-			text-align: center;
-			font-size: 30px;
-			padding-top: 12px;
-		}
-	}	
-}
+// //Begin ADD ITEMS Section
+// .addItemWrapper {
+// 	width: 700px;
+// 	height: 211px;
+// 	float: left;
+// 	margin-top: -15px;
 
-//Begin ADD ITEMS Section
-.addItemWrapper {
-	width: 700px;
-	height: 211px;
-	float: left;
-	margin-top: -15px;
+// 	.addItemFrame1 {
+// 		width: 323px;
+// 		height: 211px;
+// 		background-image: url('signatureBackground.png');
+// 		background-repeat: no-repeat;
+// 		float: left;
+// 		margin-right: 5px;
+// 		margin-left: 5px;
+// 	}
 
-	.addItemFrame1 {
-		width: 323px;
-		height: 211px;
-		background-image: url('signatureBackground.png');
-		background-repeat: no-repeat;
-		float: left;
-		margin-right: 5px;
-		margin-left: 5px;
-	}
+// 	.addItemFrame2 {
+// 		width: 323px;
+// 		height: 211px;
+// 		background-image: url('signatureBackground.png');
+// 		background-repeat: no-repeat;
+// 		float: left;
+// 	}
 
-	.addItemFrame2 {
-		width: 323px;
-		height: 211px;
-		background-image: url('signatureBackground.png');
-		background-repeat: no-repeat;
-		float: left;
-	}
+// 	.smallTitleBar {
+// 		width: 177px;
+// 		height: 28px;
+// 		background-image: url('smallTitleBar.png');
+// 		z-index: 100;
+// 		position: relative;
+// 		top: 0;
+// 		left: 0;
 
-	.smallTitleBar {
-		width: 177px;
-		height: 28px;
-		background-image: url('smallTitleBar.png');
-		z-index: 100;
-		position: relative;
-		top: 0;
-		left: 0;
+// 		h4 {
+// 			text-align: center;
+// 			color: white;
+// 			padding-top: 4px;
+// 			font-size: 15px;
+// 			letter-spacing: .04em;
+// 		}
+// 	}
 
-		h4 {
-			text-align: center;
-			color: white;
-			padding-top: 4px;
-			font-size: 15px;
-			letter-spacing: .04em;
-		}
-	}
-
-	//Form styling stuff
+// 	//Form styling stuff
 	
-		//Enter signature food form/inputs
+// 		//Enter signature food form/inputs
 
-	input {
-		padding-left: 10px;
-		border: 1px solid black;
+// 	input {
+// 		padding-left: 10px;
+// 		border: 1px solid black;
 
-    -moz-box-shadow:    inset 3px 3px 8px #000000;
-    -webkit-box-shadow: inset 3px 3px 8px #000000;
-    box-shadow:         inset 3px 3px 8px #000000;
+//     -moz-box-shadow:    inset 3px 3px 8px #000000;
+//     -webkit-box-shadow: inset 3px 3px 8px #000000;
+//     box-shadow:         inset 3px 3px 8px #000000;
 
-    &:focus {
-    	-moz-box-shadow:    inset 0 0 10px #0088CC;
-    	-webkit-box-shadow: inset 0 0 10px #0088CC;
-    	box-shadow:         inset 0 0 10px #0088CC;      	
-    }
-	}
+//     &:focus {
+//     	-moz-box-shadow:    inset 0 0 10px #0088CC;
+//     	-webkit-box-shadow: inset 0 0 10px #0088CC;
+//     	box-shadow:         inset 0 0 10px #0088CC;      	
+//     }
+// 	}
 
-	form.enterSigFoodForm {
-		width: 288px;
-		height: 0px;
-		margin: 0;
-		padding: 0;
-		left: 0;
-		top: 0;
-		background-color: blue;
+// 	form.enterSigFoodForm {
+// 		width: 288px;
+// 		height: 0px;
+// 		margin: 0;
+// 		padding: 0;
+// 		left: 0;
+// 		top: 0;
+// 		background-color: blue;
 
-		input.newItemName {
-			position: relative;
-			top: 17px;
-			left: 21px;
-			height: 44px;
-			width: 100%;
-			padding-top: 10px;
-			font-size: 16px;
-		}
+// 		input.newItemName {
+// 			position: relative;
+// 			top: 17px;
+// 			left: 21px;
+// 			height: 44px;
+// 			width: 100%;
+// 			padding-top: 10px;
+// 			font-size: 16px;
+// 		}
 
-		input.newItemDescription {
-			position: relative;
-			top: 19px;
-			left: 21px;
-			height: 63px;
-			width: 100%;
-			font-size: 16px;
-		}
+// 		input.newItemDescription {
+// 			position: relative;
+// 			top: 19px;
+// 			left: 21px;
+// 			height: 63px;
+// 			width: 100%;
+// 			font-size: 16px;
+// 		}
 
-		input.newItemPrice {
-			width: 51px;
-			height: 37px;
-			position: relative;
-			display: block;
-			left: 129px;
-			top: 18px;
-			font-size: 16px;
-			padding-left: 3px;
-			text-align: center;
-		}
-	}
+// 		input.newItemPrice {
+// 			width: 51px;
+// 			height: 37px;
+// 			position: relative;
+// 			display: block;
+// 			left: 129px;
+// 			top: 18px;
+// 			font-size: 16px;
+// 			padding-left: 3px;
+// 			text-align: center;
+// 		}
+// 	}
 
-	//Enter signature Drink form/inputs
-	form.enterSigDrinkForm {
-		width: 288px;
-		height: 0px;
-		margin: 0;
-		padding: 0;
-		position: relative;
-		left: 16px;
-		top: 0;
-		float: left;
+// 	//Enter signature Drink form/inputs
+// 	form.enterSigDrinkForm {
+// 		width: 288px;
+// 		height: 0px;
+// 		margin: 0;
+// 		padding: 0;
+// 		position: relative;
+// 		left: 16px;
+// 		top: 0;
+// 		float: left;
 
-		input.newItemName {
-			position: relative;
-			top: 17px;
-			left: 0;
-			height: 44px;
-			width: 100%;
-			padding-top: 10px;
-			font-size: 16px;
-		}
+// 		input.newItemName {
+// 			position: relative;
+// 			top: 17px;
+// 			left: 0;
+// 			height: 44px;
+// 			width: 100%;
+// 			padding-top: 10px;
+// 			font-size: 16px;
+// 		}
 
-		input.newItemDescription {
-			position: relative;
-			top: 19px;
-			left: 0;
-			height: 63px;
-			width: 100%;
-			font-size: 16px;
-		}
+// 		input.newItemDescription {
+// 			position: relative;
+// 			top: 19px;
+// 			left: 0;
+// 			height: 63px;
+// 			width: 100%;
+// 			font-size: 16px;
+// 		}
 
-		input.newItemPrice {
-			width: 51px;
-			height: 37px;
-			position: relative;
-			display: block;
-			left: 108px;
-			top: 18px;
-			font-size: 16px;
-			padding-left: 3px;
-			text-align: center;
-		}
-	}
-}
+// 		input.newItemPrice {
+// 			width: 51px;
+// 			height: 37px;
+// 			position: relative;
+// 			display: block;
+// 			left: 108px;
+// 			top: 18px;
+// 			font-size: 16px;
+// 			padding-left: 3px;
+// 			text-align: center;
+// 		}
+// 	}
+// }
 
-.adjustUpDown {
-	width: 30px;
-	height: 0px;
-	position: relative;
-	top: 149px;
-	left: 188px;
+// .adjustUpDown {
+// 	width: 30px;
+// 	height: 0px;
+// 	position: relative;
+// 	top: 149px;
+// 	left: 188px;
 
-	a {
-		width: 100%;
-		height: 100%;
-		display: block;
-	}
+// 	a {
+// 		width: 100%;
+// 		height: 100%;
+// 		display: block;
+// 	}
 
-	.adjustUp {
-		width: 23px;
-		height: 11px;
-		background-image: url('buttonIncrease.png');
-		background-repeat: no-repeat;
-		margin-bottom: 3px;
-	}
+// 	.adjustUp {
+// 		width: 23px;
+// 		height: 11px;
+// 		background-image: url('buttonIncrease.png');
+// 		background-repeat: no-repeat;
+// 		margin-bottom: 3px;
+// 	}
 
-	.adjustDown {
-		width: 23px;
-		height: 11px;
-		background-image: url('buttonDecrease.png');
-		background-repeat: no-repeat;
-	}
-}
+// 	.adjustDown {
+// 		width: 23px;
+// 		height: 11px;
+// 		background-image: url('buttonDecrease.png');
+// 		background-repeat: no-repeat;
+// 	}
+// }
 
-.addSignatureItemButton {
-	background-image: url("bigButtonRightUp.png");
-	background-repeat: no-repeat;
-	height: 32px;
-	width: 323px;
-	position: relative;
-	left: 0px;
-	top: 183px;
+// .addSignatureItemButton {
+// 	background-image: url("bigButtonRightUp.png");
+// 	background-repeat: no-repeat;
+// 	height: 32px;
+// 	width: 323px;
+// 	position: relative;
+// 	left: 0px;
+// 	top: 183px;
 
-	a {
-		width: 323px;
-		height: 32px;
-		display: block;
-		color: white;
-		text-decoration: none;
+// 	a {
+// 		width: 323px;
+// 		height: 32px;
+// 		display: block;
+// 		color: white;
+// 		text-decoration: none;
 
-		&:hover {
-			color: #1B1D2D
-		}
-	}
+// 		&:hover {
+// 			color: #1B1D2D
+// 		}
+// 	}
 
-	h4 {
-		font-size: 19px;
-		color: white;
-		text-align: center;
-		padding-top: 6px;
-	}
-}
+// 	h4 {
+// 		font-size: 19px;
+// 		color: white;
+// 		text-align: center;
+// 		padding-top: 6px;
+// 	}
+// }
 
-.greyBox {
-	width: 321px;
-	height: 107px;
-	background-image: url('boxMediumGrey.png');
-	background-repeat: no-repeat;
-	position: relative;
-	z-index: -10;
-	top: 170px;
-	left: 0;
+// .greyBox {
+// 	width: 321px;
+// 	height: 107px;
+// 	background-image: url('boxMediumGrey.png');
+// 	background-repeat: no-repeat;
+// 	position: relative;
+// 	z-index: -10;
+// 	top: 170px;
+// 	left: 0;
 
-	.drinkIcon {
-		width: 24px;
-		height: 28px;
-		background-image: url('iconDrinkBlueSmall.png');
-		position: relative;
-		left: 20px;
-		top: 43px;
-		float: left;
-	}
+// 	.drinkIcon {
+// 		width: 24px;
+// 		height: 28px;
+// 		background-image: url('iconDrinkBlueSmall.png');
+// 		position: relative;
+// 		left: 20px;
+// 		top: 43px;
+// 		float: left;
+// 	}
 	
-	.foodIcon {
-		width: 46px;
-		height: 31px;
-		background-image: url('foodIconSmall.png');
-		position: relative;
-		left: 20px;
-		top: 40px;
-		float: left;
-	}
+// 	.foodIcon {
+// 		width: 46px;
+// 		height: 31px;
+// 		background-image: url('foodIconSmall.png');
+// 		position: relative;
+// 		left: 20px;
+// 		top: 40px;
+// 		float: left;
+// 	}
 
-	.itemName, .itemDescription {
-		width: 70%;
-		height: 20px;
-		font-size: 17px;
-		position: relative;
-		display: block;
-		float: right;
-		top: 35px;
-		letter-spacing: .04em;
-	}
-}
+// 	.itemName, .itemDescription {
+// 		width: 70%;
+// 		height: 20px;
+// 		font-size: 17px;
+// 		position: relative;
+// 		display: block;
+// 		float: right;
+// 		top: 35px;
+// 		letter-spacing: .04em;
+// 	}
+// }
 
-.buttonSaveHuge {		
-	background-image: url('buttonSaveHuge.png');
-	float: left;
-	position: relative;
-	width: 512px;
-	height: 48px;
-	top: 131px;
-	left: 143px;
+// .buttonSaveHuge {		
+// 	background-image: url('buttonSaveHuge.png');
+// 	float: left;
+// 	position: relative;
+// 	width: 512px;
+// 	height: 48px;
+// 	top: 131px;
+// 	left: 143px;
 
-	h4 {
-		height: 45px;
-		color: green;
+// 	h4 {
+// 		height: 45px;
+// 		color: green;
 
-		a {
-			text-align: center;
-			font-size: 30px;
-			padding-top: 12px;
-		}
-	}	
-}
+// 		a {
+// 			text-align: center;
+// 			font-size: 30px;
+// 			padding-top: 12px;
+// 		}
+// 	}	
+// }
 
-//menu preview section
+// //menu preview section
 
-.wrapperPreview {
-	width: 670px;
-	height: 900px;
-	padding-bottom: 100px;
-	position: relative;
-	top: -20px;
-	float: left;
+// .wrapperPreview {
+// 	width: 670px;
+// 	height: 900px;
+// 	padding-bottom: 100px;
+// 	position: relative;
+// 	top: -20px;
+// 	float: left;
 
-	.thinCategory {
-		background-image: url('thinCategory.gif');
-		background-repeat: no-repeat;
-		position: relative;
-		left: 10px;
-		width: 639px;
-		height: 29px;
-		float: left;
+// 	.thinCategory {
+// 		background-image: url('thinCategory.gif');
+// 		background-repeat: no-repeat;
+// 		position: relative;
+// 		left: 10px;
+// 		width: 639px;
+// 		height: 29px;
+// 		float: left;
 
-		.thinCategoryText { //h4
-			position: relative;
-			height: 29px;
-			font-size: 18px;
-			color: white;
-			padding: 5px 0 0 10px;
-		}
-	}
+// 		.thinCategoryText { //h4
+// 			position: relative;
+// 			height: 29px;
+// 			font-size: 18px;
+// 			color: white;
+// 			padding: 5px 0 0 10px;
+// 		}
+// 	}
 
-	.signatureBox1, .signatureBox2 {
-		background-image: url('boxHalfGrey.gif');
-		position: relative;
-		height: 83px;
-		width: 48%;
-		background-repeat: no-repeat;
-		float: left;
-		left: 8px;
+// 	.signatureBox1, .signatureBox2 {
+// 		background-image: url('boxHalfGrey.gif');
+// 		position: relative;
+// 		height: 83px;
+// 		width: 48%;
+// 		background-repeat: no-repeat;
+// 		float: left;
+// 		left: 8px;
 
-		h4 {
-			width: 240px;
-			font-size: 17px;
-			position: relative;
-			left: 90px;
-			top: -10px;
-			line-height: 1.2em;
-		}
+// 		h4 {
+// 			width: 240px;
+// 			font-size: 17px;
+// 			position: relative;
+// 			left: 90px;
+// 			top: -10px;
+// 			line-height: 1.2em;
+// 		}
 
-		.signatureIcon1 {
-			background-image: url('iconDrinkBlueSmall.png');
-			width: 24px;
-			height: 28px;
-			position: relative;
-			top: 24px;
-			left: 33px;
-		}
+// 		.signatureIcon1 {
+// 			background-image: url('iconDrinkBlueSmall.png');
+// 			width: 24px;
+// 			height: 28px;
+// 			position: relative;
+// 			top: 24px;
+// 			left: 33px;
+// 		}
 
-		.signatureIcon2 {
-			background-image: url('foodIconSmall.png');
-			width: 46px;
-			height: 31px;
-			position: relative;
-			top: 24px;
-			left: 23px;
-		}
-	}
+// 		.signatureIcon2 {
+// 			background-image: url('foodIconSmall.png');
+// 			width: 46px;
+// 			height: 31px;
+// 			position: relative;
+// 			top: 24px;
+// 			left: 23px;
+// 		}
+// 	}
 
-	.menuItemListPreview {
-		position: relative;
-		left: 10px;
-		height: auto;
-		float: left;
+// 	.menuItemListPreview {
+// 		position: relative;
+// 		left: 10px;
+// 		height: auto;
+// 		float: left;
 
-		li {
+// 		li {
 
-			h4 {
-				padding-top: 17px;
-			}
-		}
-	}
-	.buttonSaveHugePreview {
-		background-image: url('buttonSaveHuge.png');
-		float: left;
-		position: relative;
-		width: 512px;
-		height: 48px;
-		left: 143px;
+// 			h4 {
+// 				padding-top: 17px;
+// 			}
+// 		}
+// 	}
+// 	.buttonSaveHugePreview {
+// 		background-image: url('buttonSaveHuge.png');
+// 		float: left;
+// 		position: relative;
+// 		width: 512px;
+// 		height: 48px;
+// 		left: 143px;
 
-		h4 {
-			height: 45px;
-			color: green;
+// 		h4 {
+// 			height: 45px;
+// 			color: green;
 
-			a {
-				text-align: center;
-				font-size: 30px;
-				padding-top: 12px;
-			}
-		}	
-	}
-}
+// 			a {
+// 				text-align: center;
+// 				font-size: 30px;
+// 				padding-top: 12px;
+// 			}
+// 		}	
+// 	}
+// }
 
-.wrapperBeerGrid {
-	position: relative;
-	top: -14px;
-	left: 13px;
-	float: left;
-	height: auto;
-	width: 670px;
+// .wrapperBeerGrid {
+// 	position: relative;
+// 	top: -14px;
+// 	left: 13px;
+// 	float: left;
+// 	height: auto;
+// 	width: 670px;
 
-	.beerGridContainer {
-		width: 670px;
-		height: 350px;
-		overflow: auto;
-	}
+// 	.beerGridContainer {
+// 		width: 670px;
+// 		height: 350px;
+// 		overflow: auto;
+// 	}
 
-	.cellBeer {
-		background-image: url('buttonUpGrid.gif');
-		background-repeat: none;
-		width: 127px;
-		height: 109px;
-		float: left;
+// 	.cellBeer {
+// 		background-image: url('buttonUpGrid.gif');
+// 		background-repeat: none;
+// 		width: 127px;
+// 		height: 109px;
+// 		float: left;
 
-		&:hover {
-			background-image: url('buttonDownGrid.gif');
-		}
+// 		&:hover {
+// 			background-image: url('buttonDownGrid.gif');
+// 		}
 
-		h4 {
-			color: white;
-			font-size: 19px;
-			letter-spacing: .04em;
-			text-align: center;
-			padding-top: 40px;
+// 		h4 {
+// 			color: white;
+// 			font-size: 19px;
+// 			letter-spacing: .04em;
+// 			text-align: center;
+// 			padding-top: 40px;
 
-			&:hover {
-				color: @redHot;
-			}
-		}
-	}
+// 			&:hover {
+// 				color: @redHot;
+// 			}
+// 		}
+// 	}
 
-	.buttonSaveHugeBeerGrid {
-		background-image: url('buttonSaveHuge.png');
-		float: left;
-		position: relative;
-		width: 512px;
-		height: 48px;
-		left: 143px;
-		top: 5px;
+// 	.buttonSaveHugeBeerGrid {
+// 		background-image: url('buttonSaveHuge.png');
+// 		float: left;
+// 		position: relative;
+// 		width: 512px;
+// 		height: 48px;
+// 		left: 143px;
+// 		top: 5px;
 
-		h4 {
-			height: 45px;
-			color: green;
+// 		h4 {
+// 			height: 45px;
+// 			color: green;
 
-			a {
-				text-align: center;
-				font-size: 30px;
-				padding-top: 12px;
-			}
-		}	
-	}
-}
+// 			a {
+// 				text-align: center;
+// 				font-size: 30px;
+// 				padding-top: 12px;
+// 			}
+// 		}	
+// 	}
+// }
 
-.wrapperAddCustom {
-	width: 670px;
-	position: relative;
-	top: -15px;
-	left: 15px;
-	float: left;
+// .wrapperAddCustom {
+// 	width: 670px;
+// 	position: relative;
+// 	top: -15px;
+// 	left: 15px;
+// 	float: left;
 
-	.addCustomForms {
-		float: left;
-		background-image: url('backgroundAddCustom.gif');
-		width: 630px;
-		height: 77px;
+// 	.addCustomForms {
+// 		float: left;
+// 		background-image: url('backgroundAddCustom.gif');
+// 		width: 630px;
+// 		height: 77px;
 
-		.addCustomName { //input type: text
-			position: relative;
-			height: 30px;
-			background: none;
-			border: 0;
-			border: 0;
-			width: 170px;
-			height: 50px;
-			top: 12px;
-			left: 20px;
-			font-size: 17px;
-			padding: 15px;
-		}
-		.addCustomDescription {
-			position: relative;
-			height: 30px;
-			background: none;
-			border: 0;
-			border: 0;
-			width: 288px;
-			height: 50px;
-			top: 12px;
-			left: 45px;
-			font-size: 17px;
-			padding: 15px;
-		}
-		.addCustomPrice {
-			position: relative;
-			height: 30px;
-			background: none;
-			border: 0;
-			border: 0;
-			width: 50px;
-			height: 35px;
-			top: 12px;
-			left: 65px;
-			font-size: 17px;
-			padding: 5px;
-			text-align: center;
-		}
-		.upDownAddCustom {
-			position: absolute;
-			width: 26px;
-			height: 29px;
-			top: 25px;
-			left: 590px;
+// 		.addCustomName { //input type: text
+// 			position: relative;
+// 			height: 30px;
+// 			background: none;
+// 			border: 0;
+// 			border: 0;
+// 			width: 170px;
+// 			height: 50px;
+// 			top: 12px;
+// 			left: 20px;
+// 			font-size: 17px;
+// 			padding: 15px;
+// 		}
+// 		.addCustomDescription {
+// 			position: relative;
+// 			height: 30px;
+// 			background: none;
+// 			border: 0;
+// 			border: 0;
+// 			width: 288px;
+// 			height: 50px;
+// 			top: 12px;
+// 			left: 45px;
+// 			font-size: 17px;
+// 			padding: 15px;
+// 		}
+// 		.addCustomPrice {
+// 			position: relative;
+// 			height: 30px;
+// 			background: none;
+// 			border: 0;
+// 			border: 0;
+// 			width: 50px;
+// 			height: 35px;
+// 			top: 12px;
+// 			left: 65px;
+// 			font-size: 17px;
+// 			padding: 5px;
+// 			text-align: center;
+// 		}
+// 		.upDownAddCustom {
+// 			position: absolute;
+// 			width: 26px;
+// 			height: 29px;
+// 			top: 25px;
+// 			left: 590px;
 
-		}
-		.buttonAddItem {
-			position: relative;
-			background-image: url('buttonAddItem.gif');
-			width: 126px;
-			height: 29px;
-			top: 3px;
-			left: 516px;
-		}
-	}
+// 		}
+// 		.buttonAddItem {
+// 			position: relative;
+// 			background-image: url('buttonAddItem.gif');
+// 			width: 126px;
+// 			height: 29px;
+// 			top: 3px;
+// 			left: 516px;
+// 		}
+// 	}
 
-	.menuItemListAddCustom {
-		position: relative;
-		float: left;
-		top: 17px;
-		height: auto;
+// 	.menuItemListAddCustom {
+// 		position: relative;
+// 		float: left;
+// 		top: 17px;
+// 		height: auto;
 
-		.buttonEdit {
-			width: 40px;
-			height: 37px;
-			position: relative;
-			left: 30px;
-			top: 10px;
-			float: left;
-			background-image: url('buttonEditItem.gif');
-			background-repeat: no-repeat;
+// 		.buttonEdit {
+// 			width: 40px;
+// 			height: 37px;
+// 			position: relative;
+// 			left: 30px;
+// 			top: 10px;
+// 			float: left;
+// 			background-image: url('buttonEditItem.gif');
+// 			background-repeat: no-repeat;
 
-			&:hover {
-				-moz-box-shadow:    inset 5px 5px 20px #000;
-				-webkit-box-shadow: inset 5px 5px 20px #000;
-				box-shadow:         inset 5px 5px 20px #000;
-			}
-		}
-	}
+// 			&:hover {
+// 				-moz-box-shadow:    inset 5px 5px 20px #000;
+// 				-webkit-box-shadow: inset 5px 5px 20px #000;
+// 				box-shadow:         inset 5px 5px 20px #000;
+// 			}
+// 		}
+// 	}
 
-	.saveButtonAddCustom {
-		position: relative;
-		float: left;
-		top: 20px;
-		left: 134px;
-	}
-}
+// 	.saveButtonAddCustom {
+// 		position: relative;
+// 		float: left;
+// 		top: 20px;
+// 		left: 134px;
+// 	}
+// }
 
 // `7MM"""YMM                   mm                   
 //   MM    `7                   MM                   
