@@ -4,6 +4,8 @@ gem 'rails', '3.2.3'
 gem 'carrierwave'
 gem 'cloudinary'
 gem 'httparty', '0.9.0'
+gem 'resque', '1.23.0'
+gem 'roadie'
 
 group :production do
 	gem 'pg', '0.12.2'
@@ -30,4 +32,5 @@ gem 'jquery-rails'
 gem 'bcrypt-ruby', '~> 3.0.0'
 
 gem 'simple_form'
+gem 'activemerchant'
 

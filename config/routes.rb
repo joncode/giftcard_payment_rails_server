@@ -1,13 +1,18 @@
 Drinkboard::Application.routes.draw do
   
-  root to: 'users#new'
-  resources :locations
+  resources :brands
 
-  resources :employees
-  match "/invite/:id" => "invite#show"
+  resources :sales
+  resources :cards
+
+  get "email/invite"
+  get "email/forgot_pw"
+  get "email/new_employee"
+  match "/invite/:id"       => "invite#show"
+  match "/invite"           => "invite#invite_friend"
+
+  root to: 'users#new'
   
-  resources :orders
-  resources :redeems
   resources :gifts do
     collection do
       get  'buy'
@@ -25,12 +30,38 @@ Drinkboard::Application.routes.draw do
       get 'completed'
     end
   end
-
-  resources :providers 
   
-  # resources :providers, :as => "establishments"
-  # providers should really be merchant side and merchant should be establishments
-  # could make an establishment controller for user side 
+  resources :locations
+  resources :items
+  resources :menus
+  resources :menu_strings
+  resources :orders
+  resources :redeems
+
+  resources :users do 
+    member do
+      get :following, :followers
+      get :servercode
+      get :crop
+      get :change_public_status
+      post :update_avatar
+    end
+    collection do
+      get :reset_password
+      get :enter_new_password
+      post :enter_new_password
+      post :upload_avatar
+    end
+  end
+
+  resources :employees
+  resources :locations
+  resources :providers 
+  match "/merchants/:id/employee/:eid/remove"   => "merchants#remove_employee"
+
+    # resources :providers, :as => "establishments"
+    # providers should really be merchant side and merchant should be establishments
+    # could make an establishment controller for user side 
   
   resources :merchants do
     member do
@@ -44,22 +75,24 @@ Drinkboard::Application.routes.draw do
       get 'edit_info'
       get 'edit_photo'
       get 'edit_bank'
+      get 'invite_employee'
+      post 'invite_employee'
+      get 'add_employee'
+      get 'menu'
     end
   end
-  
-  resources :items
-  resources :menus
-  resources :menu_strings
 
+
+  resources :microposts,    only: [:create, :destroy]
+  resources :relationships, only: [:create, :destroy]
   resources :connections, only: [:create, :destroy]
   resources :sessions,    only: [:new, :create, :destroy]
   match '/signup',  to: 'users#new'
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy'
   resources :admins, only: [:new, :create, :destroy]
-
-  
-  ###  mobile app routes
+ 
+    ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
   match 'app/login',            to: 'iphone#login',            via: :post
   match 'app/update',           to: 'iphone#update_iphone',    via: :post 
@@ -72,59 +105,49 @@ Drinkboard::Application.routes.draw do
   match 'app/complete_order',   to: 'app#create_order',        via: :post
   match 'app/menu',             to: 'app#menu',                via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
+  match 'app/others_questions', to: 'app#others_questions',    via: :post
   match 'app/transactions',     to: 'app#transactions',        via: :post
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
+  match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
 
-  match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/activity',         to: 'iphone#activity',         via: :post
-  match 'app/provider',         to: 'iphone#provider',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
-  match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
   match 'app/servercode',       to: 'iphone#server_code',      via: :post
-  match 'app/order',            to: 'iphone#create_order',     via: :post
-  match 'app/users',            to: 'iphone#drinkboard_users', via: :post
-  match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/out',              to: 'iphone#going_out',        via: :post 
   match 'app/active',           to: 'iphone#active_orders',    via: :post
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
+  match 'app/regift',           to: 'iphone#regift',           via: :post
+    ## credit card routes
+  match 'app/cards',            to: 'app#get_cards',           via: :post
+  match 'app/add_card',         to: 'app#add_card',            via: :post
+  
 
+    ### deprecated app routes
+  match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
+  match 'app/order',            to: 'iphone#create_order',     via: :post
+  match 'app/users',            to: 'iphone#drinkboard_users', via: :post
+  match 'app/buys',             to: 'iphone#buys',             via: :post
 
-  ###
-  # match '/drinkboard', to: 'gifts#activity'
+    ###   basic footer routes
   match '/about',       to: 'home#about'
   match '/contact',     to: 'home#contact'
   match '/home',        to: 'home#index'
   match '/learn',       to: 'home#learn'
   match '/news',        to: 'home#news'
   
-  ### authentication via Facebook & Foursquare
+    ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
   match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
   ###
   
-  ##Location resources
+    ### Location resources
   match '/map',               to: 'locations#map'
   match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
-  
   match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
   match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
   match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
-
-  resources :microposts,    only: [:create, :destroy]
-  resources :relationships, only: [:create, :destroy]
-  
-  resources :users do 
-    member do
-      get :following, :followers
-      get :servercode
-      get :crop
-      get :change_public_status
-    end
-  end
-  
-
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

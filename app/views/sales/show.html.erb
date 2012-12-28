@@ -1,0 +1,50 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Gift:</b>
+  <%= @sale.gift_id %>
+</p>
+
+<p>
+  <b>Giver:</b>
+  <%= @sale.giver_id %>
+</p>
+
+<p>
+  <b>Card:</b>
+  <%= @sale.card_id %>
+</p>
+
+<p>
+  <b>Request json:</b>
+  <%= @sale.request_json %>
+</p>
+
+<p>
+  <b>Response json:</b>
+  <%= @sale.response_json %>
+</p>
+
+<p>
+  <b>Status:</b>
+  <%= @sale.status %>
+</p>
+
+<p>
+  <b>Provider:</b>
+  <%= @sale.provider_id %>
+</p>
+
+<p>
+  <b>Transaction:</b>
+  <%= @sale.transaction_id %>
+</p>
+
+<p>
+  <b>Revenue:</b>
+  <%= @sale.revenue %>
+</p>
+
+
+<%= link_to 'Edit', edit_sale_path(@sale) %> |
+<%= link_to 'Back', sales_path %>

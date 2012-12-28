@@ -25,35 +25,42 @@
 #  receiver_phone       :string(255)
 #  tax                  :string(255)
 #  tip                  :string(255)
-#  gift_id              :integer
+#  regift_id           :integer
 #  foursquare_id        :string(255)
 #  facebook_id          :string(255)
 #
 
 class Gift < ActiveRecord::Base
+
   attr_accessible   :giver_id,      :giver_name, :credit_card,    
       :receiver_id, :receiver_name, :receiver_phone, 
-      :provider_id, :provider_name,
-      :item_id,     :item_name ,    :category, 
+      :provider_id, :provider_name, :receiver_email, 
       :message,     :special_instructions,
-      :price,       :quantity,      :tip, :tax, :total, 
+      :shopping_cart_string,  :shoppingCart,
+      :category,    :quantity, :price, :item_id, :item_name ,  
+      :tip, :tax,   :total, 
       :facebook_id, :foursquare_id,
-      :redeem_id,   :status
+      :redeem_id,   :status, :regift_id, :anon_id
+
   
   has_one     :redeem
   belongs_to  :provider
-  belongs_to  :item
+  belongs_to  :sales
   has_one     :order
   belongs_to  :giver,    class_name: "User"
   belongs_to  :receiver, class_name: "User"
+  has_and_belongs_to_many :menus
   
-  validates_presence_of :giver_id, :item_id, :price, :provider_id, :quantity#, :total, :tax, :tip
+  validates_presence_of :giver_id, :price, :provider_id, :quantity#, :total, :tax, :tip
   # validates_numericality_of  :total, :quantity
   
   #before_create :add_category, :if => :no_category
   before_create :pluralizer
-  before_create :set_status
   before_create :extract_phone_digits
+  before_create :add_giver_name,  :if => :no_giver_name
+  before_create :regifted,        :if => :regift_id?
+  before_save   :set_status
+
 
   def self.get_gifts(user)
     Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
@@ -116,10 +123,46 @@ class Gift < ActiveRecord::Base
     end
     return gifts
   end
+
+  def regift(receiver=nil, message=nil)
+    new_gift            = self.dup
+    new_gift.regift_id  = self.id
+    new_gift.giver_id   = self.receiver_id
+    new_gift.giver_name = self.receiver_name
+    new_gift.message    = message 
+    if receiver
+      new_gift.add_receiver receiver
+    else
+      new_gift.receiver_id          = nil
+      new_gift.receiver_name        = nil
+      new_gift.receiver_phone       = nil
+    end
+    new_gift.foursquare_id          = nil
+    new_gift.facebook_id            = nil
+    new_gift.special_instructions   = nil    
+    return new_gift
+  end
+
+  def add_receiver(receiver)
+    self.receiver_id          = receiver.id
+    self.receiver_name        = receiver.username
+    if receiver.phone       
+      self.receiver_phone     = receiver.phone 
+    else
+      self.receiver_phone     = nil
+    end
+  end
+
+  def add_anonymous_giver(giver_id)
+    anon_user       = User.find_by_phone('5555555555')
+    self.giver_id   = anon_user.id
+    self.giver_name = anon_user.username
+    self.anon_id    = giver_id
+  end
  
   private
     def extract_phone_digits
-      if self.receiver_phone
+      if self.receiver_phone && !self.receiver_phone.empty?
         phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)
         self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
       end
@@ -136,7 +179,7 @@ class Gift < ActiveRecord::Base
         name_to_match = self.item_name
               # if item name already has a /'s/ then abort 
         if !name_to_match.match /'s/
-           self.item_name << "'s"
+           self.item_name << "\'s"
         end 
       end
     end
@@ -148,5 +191,21 @@ class Gift < ActiveRecord::Base
     def no_category
       self.category.nil?
     end
-    
+
+    def add_giver_name
+      self.giver_name = User.find(self.giver_id).username
+    end
+
+    def no_giver_name
+      self.giver_name.nil?
+    end
+
+    def regifted
+      old_gift = Gift.find(self.regift_id)
+      old_gift.update_attributes(status: 'regifted')
+    end
+
+    def regift_id?
+      self.regift_id
+    end    
 end

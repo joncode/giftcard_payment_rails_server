@@ -1,0 +1,53 @@
+<%= form_for(@sale) do |f| %>
+  <% if @sale.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@sale.errors.count, "error") %> prohibited this sale from being saved:</h2>
+
+      <ul>
+      <% @sale.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :gift_id %><br />
+    <%= f.number_field :gift_id %>
+  </div>
+  <div class="field">
+    <%= f.label :giver_id %><br />
+    <%= f.number_field :giver_id %>
+  </div>
+  <div class="field">
+    <%= f.label :card_id %><br />
+    <%= f.number_field :card_id %>
+  </div>
+  <div class="field">
+    <%= f.label :request_json %><br />
+    <%= f.text_field :request_json %>
+  </div>
+  <div class="field">
+    <%= f.label :response_json %><br />
+    <%= f.text_field :response_json %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br />
+    <%= f.text_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :provider_id %><br />
+    <%= f.number_field :provider_id %>
+  </div>
+  <div class="field">
+    <%= f.label :transaction_id %><br />
+    <%= f.text_field :transaction_id %>
+  </div>
+  <div class="field">
+    <%= f.label :revenue %><br />
+    <%= f.text_field :revenue %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

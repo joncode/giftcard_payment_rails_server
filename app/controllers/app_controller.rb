@@ -1,13 +1,16 @@
 class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
+	# include ActiveMerchant::Billing::CreditCardMethods
+	# include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
+	
 	GIFT_REPLY = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"]
-  ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
+    ACTIVITY_REPLY = [ "giver_id", "giver_name","receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category", "quantity", "message", "created_at", "status"] 
 
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]
  	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
 
  	def menu
- 		puts "Menu App"
+ 		puts "\nMenu App"
  		puts "#{params}"
 
  		user = User.find_by_remember_token(params["token"])
@@ -26,7 +29,7 @@ class AppController < ApplicationController
  	end
 
  	def gifts
-	    puts "Gifts"
+	    puts "\nGifts"
 	    puts "#{params}"
 
 	    user  = User.find_by_remember_token(params["token"])
@@ -44,7 +47,7 @@ class AppController < ApplicationController
   	end
 
   	 def user_activity
-	    puts "User Activity"
+	    puts "\nUser Activity"
 	    puts "#{params}"
 
 	    user  = User.find(params["user_id"])
@@ -62,7 +65,7 @@ class AppController < ApplicationController
   	end
 
   	 def past_gifts
-	    puts "Gifts"
+	    puts "\nGifts"
 	    puts "#{params}"
 
 	    user  = User.find_by_remember_token(params["token"])
@@ -80,7 +83,7 @@ class AppController < ApplicationController
   	end
 
   	def questions
-  		puts "Questions"
+  		puts "\nQuestions"
   		puts "HERE ARE THE PARAMS #{params}"
   		user  = User.find_by_remember_token(params["token"])
   		
@@ -107,8 +110,30 @@ class AppController < ApplicationController
 	    end
   	end
 
+ 	def others_questions
+  		puts "\nOthers Questions"
+  		puts "HERE ARE THE PARAMS #{params}"
+  		user  = User.find_by_remember_token(params["token"])
+  		
+  		other_user = User.find(params["user_id"])
+
+  		if  other_user
+	  			# get new pack of questions
+			begin
+	  			questions_array = Question.get_questions_with_answers(other_user)
+	  		rescue
+	  			questions_array = ["error", "could not get questions"]
+	  		end
+	  	else
+	  		questions_array = ["error", "could not find other user in db"]
+	  	end
+  		respond_to do |format|
+	      	puts questions_array
+	      	format.json { render text: questions_array.to_json }
+	    end
+  	end
   	def transactions
-  		puts "Questions"
+  		puts "\nTransactions"
   		puts "#{params}"
   		user  = User.find_by_remember_token(params["token"])
 
@@ -124,12 +149,16 @@ class AppController < ApplicationController
   	end
 
   	def providers
-  		puts "Providers"
+  		puts "\nProviders"
   		puts "#{params}"
 
 		user  = User.find_by_remember_token(params["token"])
 	    if user
-	    	providers = Provider.all
+	    	if params["city"] == "all" || !params["city"] 
+	    		providers = Provider.all
+	    	else
+	    		providers = Provider.where(city: params["city"])
+	    	end
 	    	providers_array = array_these_providers(providers, PROVIDER_REPLY)
 	  	else
 	  		providers_hash 	= {"error" => "user was not found in database"}
@@ -143,7 +172,7 @@ class AppController < ApplicationController
   	end
 
 	def drinkboard_users
-		puts "Drinkboard Users"
+		puts "\nDrinkboard Users"
 		puts "#{params}"
 
 		begin
@@ -165,7 +194,7 @@ class AppController < ApplicationController
 	end
 
 	def create_redeem
-    	puts "Create Redeem (App Controller) no server code"
+    	puts "\nCreate Redeem (App Controller) no server code"
     	puts "#{params}"
 
     	message  = ""
@@ -214,7 +243,7 @@ class AppController < ApplicationController
   	end
 
 	def create_order
-		puts "Create Order"
+		puts "\nCreate Order"
 		puts "#{params}"
 
 		message   = ""
@@ -255,6 +284,64 @@ class AppController < ApplicationController
 		end
 	end  
 
+	def get_cards
+		puts "\nGet Cards"
+		puts "#{params}"
+
+		message   = ""
+		response  = {} 
+		begin
+      		user = User.find_by_remember_token(params["token"])
+      		display_cards = Card.get_cards user
+      		if display_cards.empty?
+      			response["error"] = "User has no cards on file"
+      		else
+      			response["success"] = display_cards
+      		end
+    	rescue
+      		message += "Couldn't identify app user. "
+    	end
+
+    	respond_to do |format|
+			puts response
+			puts message
+			format.json { render text: response.to_json }
+		end
+	end
+
+	def add_card
+		puts "\nAdd Card"
+		puts "#{params}"
+
+		message   = ""
+		response  = {} 
+		# begin
+      		user = User.find_by_remember_token(params["token"])
+      		puts user
+      		card_data = JSON.parse params["data"]
+      		puts "params data = #{params['data']}"
+      		puts "card_data = #{card_data}"
+      		ccard = Card.create_card_from_hash card_data
+      		puts "the new card object is = #{ccard}"
+    	# rescue
+     #  		message += "Couldn't identify app user. "
+    	# end
+
+    	respond_to do |format|
+			#if message.empty?
+				if ccard.save
+					response["success"]      = "Card added"
+				else
+					response["error_server"] = ccard.errors.messages
+				end
+			#end
+			puts response
+			puts message
+			format.json { render text: response.to_json }
+		end
+		
+	end
+
 	protected
 
 	   	def array_these_gifts(obj, send_fields, address_get=false, receiver=false)
@@ -266,19 +353,34 @@ class AppController < ApplicationController
 	        # g.item_name = g.item_name.pluralize if g.quantity > 1
 	        ###  7/27 6:45 UTC
 	        
-	        if g.created_at
+	        if g.created_at 
 	          time = g.created_at.to_time
 	        else
 	          time = g.updated_at.to_time
 	        end
 	        time_string = time_ago_in_words(time)
-	      
-	        gift_obj = g.serializable_hash only: send_fields
+	      	
+		    gift_obj = g.serializable_hash only: send_fields
+
 	        gift_obj.each_key do |key|
 	          value = gift_obj[key]
 	          gift_obj[key] = value.to_s
 	        end
-	        
+
+	        if !g.shopping_cart_string
+	      		# make shopping cart array with item inside as Hash
+	      		# using item_id, item_name, category, quantity, price
+	      		menu_item = {"item_id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => g.quantity.to_s , "price" => g.price.to_s, "category" => g.category.to_s}
+	      		menu_item_array = [menu_item]
+	      			# future CRON job 
+	      		# shopping_cart_string = menu_item_array.to_json
+	      		# g.update_attribute(:shopping_cart_string, shopping_cart_string)
+	      		gift_obj["shopping_cart"] = menu_item_array
+	      	else
+	      		# turn shopping_cart_string into an array with hashes
+	      		gift_obj["shopping_cart"] = JSON.parse g.shopping_cart_string
+	      	end
+
 		        # add other person photo url 
 	        if receiver
 	          if g.receiver
@@ -316,6 +418,7 @@ class AppController < ApplicationController
 	      end
 	      return gifts_ary
 	    end
+
 	
 		def add_redeem_code(obj)
 			if obj.status == "notified" 

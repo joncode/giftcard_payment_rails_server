@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121030082621) do
+ActiveRecord::Schema.define(:version => 20121204052726) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -20,6 +20,46 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end
+
+  create_table "brands", :force => true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.string   "phone"
+    t.string   "website"
+    t.string   "logo"
+    t.string   "banner"
+    t.string   "portrait"
+    t.integer  "user_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "brands_providers", :id => false, :force => true do |t|
+    t.integer "provider_id"
+    t.integer "brand_id"
+  end
+
+  add_index "brands_providers", ["brand_id"], :name => "index_brands_providers_on_brand_id"
+  add_index "brands_providers", ["provider_id"], :name => "index_brands_providers_on_provider_id"
+
+  create_table "cards", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "nickname"
+    t.string   "name"
+    t.string   "number_digest"
+    t.string   "last_four"
+    t.string   "month"
+    t.string   "year"
+    t.string   "csv"
+    t.string   "brand"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "cards", ["user_id"], :name => "index_cards_on_user_id"
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -38,7 +78,11 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.boolean  "active",      :default => true
     t.datetime "created_at",                       :null => false
     t.datetime "updated_at",                       :null => false
+    t.integer  "brand_id"
+    t.boolean  "retail",      :default => true
   end
+
+  add_index "employees", ["provider_id"], :name => "index_employees_on_provider_id"
 
   create_table "gifts", :force => true do |t|
     t.string   "giver_name"
@@ -66,7 +110,27 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.integer  "gift_id"
     t.string   "foursquare_id"
     t.string   "facebook_id"
+<<<<<<< HEAD
+=======
+    t.integer  "anon_id"
+    t.string   "shopping_cart_string"
+    t.integer  "sale_id"
+    t.string   "receiver_email"
+    t.string   "shoppingCart"
+>>>>>>> a72c374606dcdb05672d5db35d7f2b70b5e291c7
   end
+
+  add_index "gifts", ["giver_id"], :name => "index_gifts_on_giver_id"
+  add_index "gifts", ["provider_id"], :name => "index_gifts_on_provider_id"
+  add_index "gifts", ["receiver_id"], :name => "index_gifts_on_receiver_id"
+
+  create_table "gifts_menus", :id => false, :force => true do |t|
+    t.integer "gift_id"
+    t.integer "menu_id"
+  end
+
+  add_index "gifts_menus", ["gift_id"], :name => "index_gifts_menus_on_gift_id"
+  add_index "gifts_menus", ["menu_id"], :name => "index_gifts_menus_on_menu_id"
 
   create_table "items", :force => true do |t|
     t.string  "item_name",   :limit => 50, :null => false
@@ -112,6 +176,8 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.string   "sections_json"
   end
 
+  add_index "menu_strings", ["provider_id"], :name => "index_menu_strings_on_provider_id"
+
   create_table "menus", :force => true do |t|
     t.integer  "provider_id",               :null => false
     t.integer  "item_id",                   :null => false
@@ -124,6 +190,8 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.string   "description"
     t.string   "section"
   end
+
+  add_index "menus", ["provider_id"], :name => "index_menus_on_provider_id"
 
   create_table "microposts", :force => true do |t|
     t.string   "content",    :null => false
@@ -143,6 +211,8 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.integer  "provider_id"
     t.integer  "employee_id"
   end
+
+  add_index "orders", ["gift_id"], :name => "index_orders_on_gift_id"
 
   create_table "providers", :force => true do |t|
     t.string   "name",                                              :null => false
@@ -177,7 +247,18 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
+    t.decimal  "rate"
   end
+
+  add_index "providers", ["city"], :name => "index_providers_on_city"
+
+  create_table "providers_tags", :id => false, :force => true do |t|
+    t.integer "provider_id"
+    t.integer "tag_id"
+  end
+
+  add_index "providers_tags", ["provider_id"], :name => "index_providers_tags_on_provider_id"
+  add_index "providers_tags", ["tag_id"], :name => "index_providers_tags_on_tag_id"
 
   create_table "questions", :force => true do |t|
     t.string "left"
@@ -203,6 +284,28 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
   add_index "relationships", ["followed_id"], :name => "index_relationships_on_followed_id"
   add_index "relationships", ["follower_id", "followed_id"], :name => "index_relationships_on_follower_id_and_followed_id", :unique => true
   add_index "relationships", ["follower_id"], :name => "index_relationships_on_follower_id"
+
+  create_table "sales", :force => true do |t|
+    t.integer  "gift_id"
+    t.integer  "giver_id"
+    t.integer  "card_id"
+    t.string   "request_string"
+    t.string   "response_string"
+    t.string   "status"
+    t.integer  "provider_id"
+    t.string   "transaction_id"
+    t.decimal  "revenue"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "sales", ["provider_id"], :name => "index_sales_on_provider_id"
+
+  create_table "tags", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                                                    :null => false
@@ -239,5 +342,7 @@ ActiveRecord::Schema.define(:version => 20121030082621) do
     t.string   "use_photo"
     t.string   "secure_image"
   end
+
+  add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
 
 end

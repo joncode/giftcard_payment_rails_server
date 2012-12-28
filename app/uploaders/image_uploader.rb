@@ -3,7 +3,7 @@
 class ImageUploader < CarrierWave::Uploader::Base
   include Cloudinary::CarrierWave
 
-  process :convert => 'png'
+  process :convert => 'jpg'
 
   # version :standard do
   #   process :resize_to_fill => [150, 150, :north]

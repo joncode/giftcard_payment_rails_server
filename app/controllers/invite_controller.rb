@@ -21,4 +21,10 @@ class InviteController < ApplicationController
 
   end
   
+  def invite_friend
+    if params[:email] && params[:user_id]
+      Resque.enqueue(EmailJob, 'invite_friend', params[:user_id], {:email => params[:email], :gift_id => params[:gift_id]})
+    end
+  end
+  
 end

@@ -19,6 +19,23 @@
 
 ######################        USERS        ######################
 
+Tag.delete_all
+Tag.create([
+  {name: "bar"},
+  {name: "club"},
+  {name: "restaurant"},
+  {name: "openlate"},
+  {name: "brunch"},
+  {name: "signature"},
+  {name: "hamburger"},
+  {name: "steak"},
+  {name: "beer"},
+  {name: "wine"},
+  {name: "martini"},
+  {name: "cocktail"},
+  {name: "seafood"}
+])
+
 Question.delete_all
 Question.create([
 {"left" => "Day Drinking", "right" => "Night Drinking"},
@@ -37,6 +54,7 @@ Question.create([
 
 User.delete_all
 User.create([
+  { email: 'anonymous@drinkboard.com', admin: false, password: 'jonsanon', password_confirmation: 'jonsanon', first_name: 'Secret', last_name: 'Admirer', phone: '555-555-5555'},
   { email: 'test@test.com', admin: true, password: 'testtest', password_confirmation: 'testtest', first_name: 'Larry', last_name: 'Page' , city: 'New York', state: 'NY', zip: "11238", phone: '1-646-493-4870', address: '1 Google Drive', credit_number: '4444444444444444', server_code: '4564'},
   { email: 'jb@jb.com', admin: true, password: 'jessjess', password_confirmation: 'jessjess', first_name: 'Jessica', last_name: 'Balzock' , city: 'New York', state: 'NY', zip: "11238", phone: '345-345-3456', address: '1 Google Drive', credit_number: '4444444444444444', server_code: '1234'},
   {email: 'gj@gj.com', admin: true, password: 'johnjohn', password_confirmation: 'johnjohn', first_name: 'Greg', last_name: 'Johns' , city: 'New York', state: 'NY', zip: "11238", phone: '4564564567', address: '1 Google Drive', credit_number: '4444444444444444', server_code: '7896'},

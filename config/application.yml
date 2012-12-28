@@ -8,6 +8,7 @@ development:
     redirect: "/facebook/oauth"
     permissions: "email"
     state: "lasdv9239054823t9r8hose81u32q40ewdrt0fg9d0aowil35haotesg"     #arbitrary but unique string
+    app_access_token: "387466064659961|denlUSpjdvdD2mwbR9r4ij3f7Dg"
   foursquare:
     key: "FJ341N31WUYELMVXQFP30PB5EOB4U5OZK5IH2VNAZG3H3GVJ"
     secret: "KAO5HATIMIBTQ2B2QFAMPKX02W53SACABOOI0NNZNSGXB5P4"
@@ -20,8 +21,9 @@ production:
     redirect: "/facebook/oauth"
     permissions: "email,user_status"
     state: "lasdt95haoe92390540ao1u32q4w823tv8horwdrt0fg9dil3se80esg"     #arbitrary but unique string
+    app_access_token: "428139010570600|RJ8w6ClncB8x4dObNCXkXvQSzhw"
   foursquare:
     key: ""
     secret: ""
     redirect: "/foursquare/oauth"
-  baseUrl: "http://www.drinkboard.com"
+  baseUrl: "http://herokuapp.drinkboard.com"

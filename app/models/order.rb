@@ -19,9 +19,11 @@ class Order < ActiveRecord::Base
   belongs_to  :provider
   belongs_to  :redeem
   belongs_to  :gift
-  belongs_to  :server, class_name: "User"
   belongs_to  :employee
-  
+  belongs_to  :sales
+  belongs_to  :cards
+  belongs_to  :server, class_name: "User"    #  be class_name "Employee"
+
   # order must be unique for each gift and redeem 
         # validation for provider_id is in callback until data is being sent from iPhone
   validates_presence_of :employee_id 

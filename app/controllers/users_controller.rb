@@ -3,6 +3,18 @@ class UsersController < ApplicationController
   before_filter :correct_user, only: [:edit, :update]
   before_filter :admin_user, only: :destroy
 
+  def upload_avatar #350w, 500h
+    uploadInfo = Cloudinary::Uploader.upload(params[:image_form][:uploaded_data],{:width => 350, :height => 500, :crop => :limit})
+    render json: uploadInfo
+  end
+  
+  def update_avatar
+    uploadInfo = Cloudinary::Uploader.upload(params[:url], {:x => params[:x], :y => params[:y], :width => params[:w], :height => params[:h], :eager => [{:width => 131, :height => 131, :crop => :fill, :format => :jpg},{:width => 95, :height => 95, :crop => :fill, :format => :jpg}] })
+    current_user.photo = uploadInfo["public_id"]+".jpg"
+    current_user.save
+    render json: {:success => "success"}
+  end
+
   def index
     
     @user = current_user
@@ -122,9 +134,42 @@ class UsersController < ApplicationController
     if (current_user[:is_public] && !newStatus) || (!current_user[:is_public] && newStatus)
       current_user[:is_public] = newStatus
       current_user.save
-      Location.create(:user_id => current_user[:id], :vendor_type => (newStatus ? "activate" : "deactivate"))    #Empty location update juust so we know when the user turns on.
+      Location.create(:user_id => current_user[:id], :vendor_type => (newStatus ? "activate" : "deactivate"), :latitude => params[:lat], :longitude => params[:lng])    #Empty location update juust so we know when the user turns on.
     end
     render :json => {success: true}
+  end
+  
+  def reset_password
+    if params[:email]
+      user = User.find_by_email(params[:email])
+      if user
+        user.update_reset_token
+        # UserMailer.reset_password(user).deliver
+        Resque.enqueue(EmailJob, 'reset_password', user[:id], {})  
+      end
+    elsif params[:reset_token]
+      user = User.find_by_reset_token(params[:reset_token])
+      if Time.now - 1.day <= user[:reset_token_sent_at]
+        return render 'enter_new_password'
+      end
+    end
+  end
+  
+  def enter_new_password
+    if !params[:password1] || !params[:password2]
+      return redirect_to reset_password_users_path
+    end
+    @message = nil
+    if params[:password1] != params[:password2]
+      @message = "Your passwords do not match. Try again."
+    else
+      user[:password] = params[:password1]
+      user[:password_confirmation] = params[:password2]
+      user.save
+      @message = "Password saved successfully."
+      sign_in user
+      return redirect_to '/home'
+    end
   end
   
   private

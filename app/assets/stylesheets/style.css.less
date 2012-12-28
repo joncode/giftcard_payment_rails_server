@@ -1,4 +1,5 @@
 
+
 //                 ,,        ,,             
 // MMP""MM""YMM   *MM      `7MM             
 // P'   MM   `7    MM        MM             
@@ -3097,4 +3098,3116 @@ ul.menuHeader {
 .footer {
 	display: none;
 }
+
+//                 ,,        ,,             
+// MMP""MM""YMM   *MM      `7MM             
+// P'   MM   `7    MM        MM             
+//      MM  ,6"Yb. MM,dMMb.  MM  .gP"Ya     
+//      MM 8)   MM MM    `Mb MM ,M'   Yb    
+//      MM  ,pm9MM MM     M8 MM 8M""""""    
+//      MM 8M   MM MM.   ,M9 MM YM.    ,    
+//    .JMML`Moo9^YoP^YbmdP'.JMML.`Mbmmd'                                                                                                                                                                                                                    
+//              ,...    
+//            .d' ""    
+//            dM`       
+//   ,pW"Wq. mMMmm      
+//  6W'   `Wb MM        
+//  8M     M8 MM        
+//  YA.   ,A9 MM        
+//   `Ybmd9'.JMML.                                                                                                                                
+                                                          
+//    .g8"""bgd                  mm                     mm          
+//  .dP'     `M                  MM                     MM          
+//  dM'       `,pW"Wq.`7MMpMMMbmmMMmm .gP"Ya `7MMpMMMbmmMMmm ,pP"Ybd
+//  MM        6W'   `Wb MM    MM MM  ,M'   Yb  MM    MM MM   8I   `"
+//  MM.       8M     M8 MM    MM MM  8M""""""  MM    MM MM   `YMMMa.
+//  `Mb.     ,YA.   ,A9 MM    MM MM  YM.    ,  MM    MM MM   L.   I8
+//    `"bmmmd' `Ybmd9'.JMML  JMML`Mbmo`Mbmmd'.JMML  JMML`MbmoM9mmmP'
+
+
+// 1. Bootstrap Stuff
+// 2. Fonts
+// 3. Color variables
+// 4. Main Wrapper Layout
+// 5. Header (includes angled corner box-styles for now)
+// 6. User sign in/create account (includes general form/input/button styling)
+// 7. Home Layout (big icons)
+// 8. Gift Panels
+// 9. Detail
+// 10. Bill + Tip Calculation
+
+ /*                                      
+`7MM"""Yp,                     mm         
+  MM    Yb                     MM         
+  MM    dP  ,pW"Wq.   ,pW"Wq.mmMMmm       
+  MM"""bg. 6W'   `Wb 6W'   `Wb MM         
+  MM    `Y 8M     M8 8M     M8 MM         
+  MM    ,9 YA.   ,A9 YA.   ,A9 MM         
+.JMMmmmd9 mm`Ybmd9'   `Ybmd9'  `Mbmo      
+          MM                              
+,pP"Ybd mmMMmm `7Mb,od8 ,6"Yb. `7MMpdMAo. 
+8I   `"   MM     MM' "'8)   MM   MM   `Wb 
+`YMMMa.   MM     MM     ,pm9MM   MM    M8 
+L.   I8   MM     MM    8M   MM   MM   ,AP 
+M9mmmP'   `Mbmo.JMML.  `Moo9^Yo. MMbmmd'  
+                                 MM       
+                               .JMML.                                                                               
+ */                                                                          
+
+
+//@import "twitter/bootstrap";
+
+
+// Set the correct sprite paths
+@iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
+@iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
+
+// Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
+@fontAwesomeEotPath: asset-path('fontawesome-webfont.eot');
+@fontAwesomeWoffPath: asset-path('fontawesome-webfont.woff');
+@fontAwesomeTtfPath: asset-path('fontawesome-webfont.ttf');
+@fontAwesomeSvgzPath: asset-path('fontawesome-webfont.svgz');
+@fontAwesomeSvgPath: asset-path('fontawesome-webfont.svg');
+
+// Font Awesome
+// @import "MarkerFelt-Thin";
+
+// Your custom stylesheets goes here (override Less here)
+@highlight_shade: rgba(190,173,161,1);
+@middle_shade: rgba(151,110,78,0.8);
+@dark_shade:rgba(100,71,40,0.5);
+//@darker_shade: rgba(77,34,20,0.8) ;
+//@navbarBackground: @highlight_shade;
+//@navbarBackgroundHighlight: @middle_shade;
+@navbarText: #eee;
+@navbarLinkColor: #eee;
+//@bodyBackground: #eee;
+@navbarHeight: 60px;
+@navbarLinkBackgroundHover: transparent;
+                                                                               
+// `7MM"""YMM                  mm           
+//   MM    `7                  MM           
+//   MM   d  ,pW"Wq.`7MMpMMMbmmMMmm ,pP"Ybd 
+//   MM""MM 6W'   `Wb MM    MM MM   8I   `" 
+//   MM   Y 8M     M8 MM    MM MM   `YMMMa. 
+//   MM     YA.   ,A9 MM    MM MM   L.   I8 
+// .JMML.    `Ybmd9'.JMML  JMML`MbmoM9mmmP' 
+                                                                               
+@font-face {
+  font-family: 'franchiseregular';
+  src: url('franchise-bold-webfont.eot');
+  src: url('franchise-bold-webfont.eot?#iefix') format('embedded-opentype'),
+       url('franchise-bold-webfont.woff') format('woff'),
+       url('franchise-bold-webfont.ttf') format('truetype'),
+       url('franchise-bold-webfont.svg#franchiseregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+h1 {
+	font-family: 'franchiseregular';
+	font-weight: normal;
+	font-size: 2em;
+	color: @blue;
+}
+
+@import url('http://fonts.googleapis.com/css?family=Lato:400,300italic,300,400italic');
+
+h2 {
+	font-family: 'Lato', sans-serif;
+	font-weight: 300;
+	font-size: 1.5em;
+	color: @blueLight;
+}
+
+@import url('http://fonts.googleapis.com/css?family=Gentium+Book+Basic:400,400italic,700,700italic');
+
+h3 {
+	font-family: 'Gentium Book Basic', serif;
+	font-weight: 400;
+	font-style: italic;
+}
+
+@import url('http://fonts.googleapis.com/css?family=Oswald:100,400,300,700');
+
+h4 {
+	font-family: 'Oswald', sans-serif;
+	font-weight: 100;
+}
+
+// End Fonts
+
+/*                                                                                       
+     ,.-==-.       .g8"""bgd       `7MM                          
+  ,pd'      `g.  .dP'     `M         MM                          
+ ,P   ,dMb.A  Y. dM'       `,pW"Wq.  MM  ,pW"Wq.`7Mb,od8 ,pP"Ybd 
+,P   dP  ,MP  j8 MM        6W'   `Wb MM 6W'   `Wb MM' "' 8I   `" 
+8:  dM'  dM   d' MM.       8M     M8 MM 8M     M8 MM     `YMMMa. 
+Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8 
+ Wb  ``""^`"'      `"bmmmd' `Ybmd9'.JMML.`Ybmd9'.JMML.   M9mmmP' 
+  `M..     .,!                                                   
+    `Ybmmd'                                                      
+*/
+
+@white: #F2F2F2;
+@yellow: #F9DD97;
+@redHot: #FF6865;
+@red: #761D1B;
+@blueMid: #61ADD9;
+@blue: #007ED2;
+@greySublime: #2C2C27;
+@blueHot: #90D8EE;
+@blueLight: #CDDBE7;
+@green: #687A00;
+
+//`7MM"""Mq.        mm     mm                               
+//  MM   `MM.       MM     MM                               
+//  MM   ,M9 ,6"YbmmMMmm mmMMmm `7Mb,od8 `7MMpMMMb. ,pP"Ybd 
+//  MMmmdM9 8)   MM MM     MM     MM' "'   MM    MM 8I   `" 
+//  MM       ,pm9MM MM     MM     MM       MM    MM `YMMMa. 
+//  MM      8M   MM MM     MM     MM       MM    MM L.   I8 
+//.JMML.    `Moo9^Yo`Mbmo  `Mbmo.JMML.   .JMML  JMMLM9mmmP' 
+
+@textureDust: url('dust.png') repeat fixed left top;
+@textureDarkWall: url('dark_wall.png') repeat fixed left top;
+@textureBlackMamba: url('black_mamba.png') repeat fixed left top;
+@textureDenim: url('denim.png') repeat fixed left top;
+                                                                                                               
+// `7MM"""Mq.                             
+//   MM   `MM.                            
+//   MM   ,M9 ,6"Yb.  .P"Ybmmm .gP"Ya     
+//   MMmmdM9 8)   MM :MI  I8  ,M'   Yb    
+//   MM       ,pm9MM  WmmmP"  8M""""""    
+//   MM      8M   MM 8M       YM.    ,    
+// .JMML.    `Moo9^Yo.YMMMMMb  `Mbmmd'    
+//                   6'     dP            
+//                   Ybmmmd'              
+//`7MMF'     A     `7MF'                                                   
+//  `MA     ,MA     ,V                                                     
+//   VM:   ,VVM:   ,V `7Mb,od8 ,6"Yb. `7MMpdMAo`7MMpdMAo.  .gP"Ya `7Mb,od8 
+//    MM.  M' MM.  M'   MM' "'8)   MM   MM   `Wb MM   `Wb ,M'   Yb  MM' "' 
+//    `MM A'  `MM A'    MM     ,pm9MM   MM    M8 MM    M8 8M""""""  MM     
+//     :MM;    :MM;     MM    8M   MM   MM   ,AP MM   ,AP YM.    ,  MM     
+//      VF      VF    .JMML.  `Moo9^Yo. MMbmmd'  MMbmmd'   `Mbmmd'.JMML.    
+//                                      MM       MM                        
+//                                    .JMML.   .JMML.                      
+
+* { 
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box; 
+ }
+
+ input {
+ 	border-radius: 0 !important;
+ }
+
+html { 
+
+	body {  
+		background: url(BACKGROUND.jpg) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;   
+		background-size: cover;
+
+		.mainWrapper {
+			//
+			background-color: @textureDarkWall;
+			width: 768px;
+			margin: 0 auto;
+	
+			.mainContent {
+				min-height: 100%;
+				width: 768px;
+				background: transparent;
+				margin-top: 25px;
+			}
+		} 
+	}
+}
+
+//Helpful go-to list styles
+
+//General Ul
+
+*ul {
+	display: block;
+	list-style-type: none;
+
+	li {
+		display: inline;
+		float: left;
+
+		a {
+			height: 100%;
+			width: 100%;
+		}
+	}
+}
+
+ul.tabsList {
+	display: block;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	top: 100px;
+
+	li {
+		float: left;
+		margin-right: 25px;
+		margin-bottom: 25px;
+
+		h1 {
+			position: relative;
+			height: 25px;
+			min-width: 100px;
+			padding-left: 25px;
+			top: -9px;
+
+			a {
+				height: 100%;
+				width: 100%;
+				display: block;
+				position: relative;
+				left: 0;
+				margin: 0;
+				padding: 0 7px 0 0;
+				text-align: right;
+			}
+		}
+	}
+}
+
+//                                      ,,                  
+// `7MMF'  `7MMF'                     `7MM                  
+//   MM      MM                         MM                  
+//   MM      MM  .gP"Ya   ,6"Yb.   ,M""bMM  .gP"Ya `7Mb,od8 
+//   MMmmmmmmMM ,M'   Yb 8)   MM ,AP    MM ,M'   Yb  MM' "' 
+//   MM      MM 8M""""""  ,pm9MM 8MI    MM 8M""""""  MM     
+//   MM      MM YM.    , 8M   MM `Mb    MM YM.    ,  MM     
+// .JMML.  .JMML.`Mbmmd' `Moo9^Yo.`Wbmd"MML.`Mbmmd'.JMML.   
+                                                         
+.headerColorBackground {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 60px;
+	background-color:rgba(0,0,0, 0.3);
+	//background-color: @blue;
+	//margin: 0 auto;
+	//border-bottom: 2px solid black;
+}
+
+// First we lay out the general flow of the Ul and tabs...
+
+.navbarWrapper { 
+	position: relative;
+	width: 100%;
+	height: 100px;
+	top: 18px;
+	left: 14px;
+	margin: 0;
+	padding: 0;
+
+	//Top Nav
+	ul.navTop {
+		display: none;
+		//width: 300px;
+		margin-left: 150px;
+		height: 50px;
+		position: absolute;
+		top: 100px;
+
+		li {
+			background-repeat: no-repeat;
+			background-position: center bottom;
+
+			a {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+
+		.navTopReceive {
+			width: 23px;
+			background-image: url('iconMartiniFizz.png');
+		}
+
+		.navTopPurchase {
+			width: 18px;
+			background-image: url('iconCash.png');
+		}
+
+		.navTopFriends {
+			width: 34px;
+			background-image: url('iconFaces.png');
+		}
+
+		.navTopLocations {
+			width: 22px;
+			background-image: url('iconMapPin.png');
+		}
+
+		.navTopSettings {
+			width: 34px;
+		 	background-image: url('iconSettings.png');
+		}
+	}
+
+	ul a {
+		list-style-type: none;
+	}
+
+	ul {
+		display: block;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		top: 100px;
+
+		li {
+			list-style-type: none;
+			display: inline;
+			float: left;
+			height: 50px;
+			margin-right: 25px;
+
+			.cornered {
+				position: relative;
+				top: 0;
+				height: 0px;
+				border-bottom: 25px solid @red;
+    		border-left: 25px solid transparent;
+    		background-color: transparent;
+    		z-index: 10;
+			}
+
+			.backgroundTab {
+				position: relative;
+				background: @red;
+				z-index: 0;
+			}
+
+			h1 {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				top: -10px;
+
+				a {
+					display: block;
+					position: relative;
+					margin-top: 0px;
+					left: 0;
+					margin: 0;
+					padding: 0 7px 0 0;
+					text-align: right;
+				}
+			}
+		}
+	}
+
+	// ..then we choose specific width/height/positions for each tab ..
+	ul.navMain {
+
+		.home {
+			display: none;
+			background-color: @blue;
+			border-top-left-radius: 20px;
+
+			h2 {
+				width: 125px;
+				padding-top: 15px;
+				padding-left: 3px;
+
+				a {
+					font-family: 'Lato', sans-serif;
+					font-weight: 100;
+					font-size: 1.5em;
+					color: @redHot;
+				}
+			}
+		}
+
+		li.gifts{
+			width: 100px;
+
+			.cornered {
+				width: 100px;
+			}
+
+			.backgroundTab {
+				width: 100px;
+				height: 25px;
+				left: -25px;
+				top: 25px;
+			}
+		}
+
+		li.buys {
+
+			.cornered {
+				width: 75px;
+			}
+
+			.backgroundTab {
+				width: 75px;
+				height: 25px;
+				left: -25px;
+				top: 25px;
+			}
+		}
+
+		li.activity {
+			margin-right: 0;
+
+			.cornered {
+				width: 125px;
+			}
+
+			.backgroundTab {
+				width: 125px;
+				height: 25px;
+				left: -25px;
+				top: 25px;
+			}
+		}
+	} // and those are the tabs, each with easy moving and resizing.
+	
+	// This brings us to the admin/logged in Nav Bar. We'll stick it in the top right for now.
+
+	.navLoggedIn { // new nav area
+		top: 3px;
+		left: 25px;
+		height: 20px;
+		position: relative;
+		width: 700px;
+		margin: 0 auto;
+		display: block;
+
+		.logoHeader {
+			position: relative;
+			left: 10px;
+			top: -8px;
+			width: 43px;
+			height: 36px;
+			z-index: 100;
+			background-image: url('logoHeaderSmall.png');
+		}
+
+		.appStoreLink {
+			width: 120px;
+			height: 39px;
+			top: -11px;
+			background-image: url('appStorePic.png');
+			position: relative;
+		}
+
+		li {
+			float: left;
+			display: inline;
+			width: auto;
+			margin-right: 25px;
+
+			a {
+				color: white;
+				font-size: 14px;
+				letter-spacing: .05em;
+			}
+ 		}
+	}
+}// ..and thats the Header. Boom. END HEADER
+
+                                                    
+//            ,,                        ,,             
+//  .M"""bgd  db                        db             
+// ,MI    "Y                                           
+// `MMb.    `7MM  .P"Ybmmm `7MMpMMMb. `7MM `7MMpMMMb.  
+//   `YMMNq.  MM :MI  I8     MM    MM   MM   MM    MM  
+// .     `MM  MM  WmmmP"     MM    MM   MM   MM    MM  
+// Mb     dM  MM 8M          MM    MM   MM   MM    MM  
+// P"Ybmmd" .JMML.YMMMMMb  .JMML  JMML.JMML.JMML  JMML.
+//               6'     dP                             
+//               Ybmmmd'                               
+
+// .merchantSignUpWrapper {
+
+// 	form {
+// 		display: block;
+// 		width: 300px;
+// 		margin: 0 auto;
+
+// 		input {
+// 			height: 40px;
+// 		}
+// 	}
+
+// 	h1 {
+// 		font-size: 40px;
+// 		color: @blueHot;
+// 		margin: 20px 20px 20px 0;
+// 	}
+// }
+
+// MERCHANT PAGE
+.merchantSignUpObject {
+	position: relative;
+	float: left;
+	clear: both;
+	margin: 20px auto;
+	width : 60%;
+	padding : 10px;
+	box-shadow: 7px 7px 7px #000;
+	border : 2px solid black;
+	border-radius : 8px;
+
+	h1 {
+		font-size: 40px;
+		padding: 20px;
+		text-align: center;
+		color: black;
+	}
+
+	input {
+		height: 40px;
+		display: block;
+		width: 100%;
+	}
+
+	input.btn {
+		height: 50px;
+	}
+	
+	.merchantSignUpBackground {
+		position : absolute;
+		top : 0;
+		left : 0;
+		width : 100%;
+		height : 100%;
+		background-color : #B3BFD7;
+		opacity : 0.53;
+		z-index : -10;
+	
+	}
+	
+	.merchantSignUpWrapper {
+
+		.field {
+			border : 0;
+			
+		}
+
+		h1 {
+			text-align: center;
+		}
+			
+		input, textarea {
+			margin-bottom : 8px;
+			border : 0;
+			color : #000;
+			height: 30px;
+		}
+	
+		input.btn {
+			display: block;
+			margin: 10px auto;
+			color : white;
+			
+			&:hover {
+				background-color : #51A451;
+				box-shadow : 3px 3px 5px black;
+			}
+		}	
+	}
+
+	textarea {
+		padding : 10px;
+		min-height : 100px;
+		width : 378px;
+	}
+}
+
+.merchantSignUpObject2 {
+
+}
+
+.merchantSignUpObject3 {
+
+}
+
+.showWrapper {
+	margin-top : 50px;
+
+}
+
+
+
+
+.merchantShowWrapper {
+
+	h2 {
+		font-size: 40px;
+		margin-bottom: 20px;
+	}
+
+	h4 {
+		font-size: 25px;
+		text-shadow: 3px 3px 0px black;
+		color: white;
+		line-height: 20px;
+		margin: 20px;
+		letter-spacing: .03em;
+	}
+}
+
+.merchantSignInWrapper {
+	width: 100%;
+	height: 300px;
+
+	h2 {
+		font-size: 30px;
+		text-align: center;
+		margin-bottom: 30px;
+	}
+
+	.tdProviderName {
+		padding-right: 20px;
+		font-size: 30px;
+		color: @blueHot;
+	}
+
+	.tdDescription {
+		padding-right: 25px;
+	}
+
+	.tdAddress {
+		padding-right: 20px;
+	}
+
+	td {
+		font-size: 20px;
+		color: white;
+		padding-bottom: 30px;
+	}
+
+
+
+	img {
+		margin-right: 20px;
+	}
+
+	td a {
+
+	}
+
+	.backgroundBox {
+		z-index: -10;
+		width: 100%;
+		margin-top: 177px;
+		height: 130px;
+		background-color: black;
+		opacity: .3;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.backgroundBox2 {
+		z-index: -10;
+		width: 100%;
+		top: 310px;
+		height: 130px;
+		background-color: black;
+		opacity: .3;
+		position: absolute;
+		left: 0;
+	}
+}
+
+// User Sign In Area
+
+.signinFormWrapper {
+	position: relative;
+	top: 00px;
+	background-color: @blue;
+	width: 400px;
+
+	h1 {
+		height: 36px;
+		width: 100%;
+		padding-left: 10px;
+	}
+
+	form {
+
+		input {
+			height: 25px;
+			border-radius: 0;
+			box-shadow: 0;
+			text-align: right;
+			border: 0;
+			box-shadow: inset 1px 1px 3px #777;
+			background-color: @yellow;
+
+			&:focus {
+				box-shadow: inset 1px 1px 7px #555;
+			}
+		}
+	}
+
+	.button {
+		border: 0;
+		background-color: @yellow;
+		color: @blue;
+	 	letter-spacing: .02em;
+	 	padding: 0 10px 10px 10px;
+	 	text-shadow: none;
+	 	font-size: 20px;
+	 	font-family: 'Gentium Book Basic', serif;
+	 	font-style: italic;
+	 	font-weight: 400;
+
+	 	&:active {
+	 		margin-top: 2px;
+	 		margin-left: 2px;
+	 		padding-top: 2px;
+	 		padding-right: 10px;
+	 		box-shadow: inset 2px 2px 2px #777;
+	 	}
+	}
+}
+
+.autoSigninUsers {
+	width: 100%;
+	height: 250px;
+
+	.userCell {
+		min-width: 150px; 
+		max-width: 200px;
+		position: relative;
+		width: auto;
+		float: left;
+		max-height: 100px; 
+		padding: 0;
+		margin: 0px 25px 25px 0;
+		//border: 1px solid black;
+		background: #535353;
+
+	 	h2 {
+	 		color: @redHot;
+	 		padding: 0 25px 25px 10px;
+	 	}
+
+	 	h3 {
+	 		position: relative;
+	 		top: 0;
+	 		left: 0;
+	 		height: 100px;
+	 		//border: 1px solid black;
+	 		position: relative;
+	 	}
+		
+		form {
+
+	 		input {
+	 			border-radius: 0;
+	 			border: 0;
+	 			display: block;
+	 			width: 90%;
+	 			height: 25px;
+	 			text-align: right;
+	 			border: 0;
+	 			background-image: none;
+	 			background-color: @red;
+	 			letter-spacing: .02em;
+	 			padding: 0 10px 25px 0;
+	 			text-shadow: none;
+	 			font-size: 20px;
+	 			font-family: 'Gentium Book Basic', serif;
+	 			font-style: italic;
+	 			font-weight: 400;
+	 		}
+	 	}
+	}
+}
+
+h1.signUpHeader {
+	padding-left: 10px;
+	height: 50px;
+}
+
+.signUpFormWrapper {
+	position: relative;
+	width: 500px;
+	height: 300px;
+	background-color: @yellow;
+
+	form#new_user.simple_form {
+		margin-left: 25px;
+
+		div.form-inputs {
+			padding-top: 25px;
+			margin-bottom: 25px;
+
+			div.input {
+				height: 25px;
+
+				input {
+					height: 25px;
+					color: #ccc;
+					background-color: @blue;
+					border-radius: none;
+				}
+
+			}
+		}
+
+		input.createAccount {
+			background-image: none;
+			background-color: @blue;
+			width: 50%;
+			height: 50px;
+			margin-left: -25px;
+			border-radius: 0;
+			text-align: right;
+			font-family: 'Lato', sans-serif;
+			font-weight: 300;
+			font-size: 1.4em;
+			letter-spacing: .03em;
+		}
+	}
+}
+
+.socialLoginWrapper {
+	position: relative;
+	top: -264px;
+	left: 400px;
+	width: 300px;
+	
+
+	h2.signinOr {
+		font-size: 4em;
+		margin-bottom: 25px;
+	}
+
+	.fbLoginWrapper {
+		margin-bottom: 5px;
+
+		img {
+			height: 25px;
+		}
+	}
+
+	.fourSquareLogin {
+
+		img {
+			height: 25px;
+		}
+	}
+}
+                                              
+// `7MMF'  `7MMF'                                 
+//   MM      MM                                   
+//   MM      MM  ,pW"Wq.`7MMpMMMb.pMMMb.  .gP"Ya  
+//   MMmmmmmmMM 6W'   `Wb MM    MM    MM ,M'   Yb 
+//   MM      MM 8M     M8 MM    MM    MM 8M"""""" 
+//   MM      MM YA.   ,A9 MM    MM    MM YM.    , 
+// .JMML.  .JMML.`Ybmd9'.JMML  JMML  JMML.`Mbmmd' 
+
+.homeWrapper {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	top: -50px;
+	//border: 1px solid blue;
+	float: left;
+
+	.logoHeaderHome {
+		background-image: url('homeLogoBig.png');
+		width: 536px;
+		height: 91px;
+		position: relative;
+		margin: 0 auto;
+		//float: left;
+	}
+
+	.iphoneImage {
+		width: 157px;
+		height: 468px;
+		background-image: url('iphoneSmall.png');
+		float: left;
+		position: relative;
+		left: -35px;
+		top: 0px;
+	}
+
+	.textAreaHome {
+		background-image: url('textAreaHome.png');
+		width: 389px;
+		height: 409px;
+		position: relative;
+		top: 25px;
+		margin: 0 auto;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+.switchWrapper {
+	//display: none;
+	position: relative;
+	width: 94px;
+	height: 27px;
+	margin: 25px auto 0 auto;
+	background: transparent;
+}
+
+// .mapWrapper {
+// 		width: 768px;
+// 		height: 400px;
+// 		margin: 25px 0;
+// 		background-image: url('gmap768x400.png');
+// }
+
+ul.bigList {	
+	min-height: 100%;
+	width: 768px;
+	display: inline-block;
+	list-style-type: none;
+	margin: 25px 0 0 0;
+	padding: 0;
+	background-color: @greySublime;
+
+	li {
+		position: relative;
+		float: left;
+		width: 125px;
+		min-height: 250px;
+		//margin-top: 160px; 
+		margin-right: 125px;
+		margin-bottom: 25px;
+		//border: 1px solid red;
+	
+		.cornered {
+			display: block;
+			position: relative;
+			top: 0;
+			width: 100px;
+			height: 0px;
+			border-bottom: 50px solid black;
+	  	border-left: 50px solid transparent;
+	   	background-color: transparent;
+	   	//z-index: 200;
+		}
+	
+		.backgroundTab {
+			display: block;
+			position: relative;
+			width: 200px;
+			height: 200px;
+			left: -50px;
+			top: 50px;
+			background-color: black;
+
+			img {
+				position: relative;
+				top: -40px;
+				margin-left: 80px;
+				width: 60%;
+			}
+		}
+	}
+	
+	.endItem { //removes margin-right: 25px from 3rd item so rows are centered 
+						//margin-right: 0;
+	}
+}// end big-paneled list on home page
+
+//               ,,     ,...     
+//   .g8"""bgd   db   .d' "mm    
+// .dP'     `M        dM`  MM    
+// dM'       ` `7MM  mMMmmmMMmm  
+// MM            MM   MM   MM    
+// MM.    `7MMF' MM   MM   MM    
+// `Mb.     MM   MM   MM   MM    
+//   `"bmmmdPY .JMML.JMML. `Mbmo 
+//                                       ,,         
+// `7MM"""Mq.                          `7MM         
+//   MM   `MM.                           MM         
+//   MM   ,M9 ,6"Yb. `7MMpMMMb.  .gP"Ya  MM ,pP"Ybd 
+//   MMmmdM9 8)   MM   MM    MM ,M'   Yb MM 8I   `" 
+//   MM       ,pm9MM   MM    MM 8M"""""" MM `YMMMa. 
+//   MM      8M   MM   MM    MM YM.    , MM L.   I8 
+// .JMML.    `Moo9^Yo.JMML  JMML.`Mbmmd.JMMLM9mmmP' 
+
+
+
+#giftIndexWrapper {
+	min-height: 100%;
+	overflow: visible !important;
+	margin-bottom: 175px;
+
+	.filters {
+		display: block;
+		width: 100%;
+		height: 50px;
+		top: 0;
+		left: 0;
+		margin-bottom: 25px;
+			
+		h2 {
+			background-color: @redHot;
+			text-align: left;
+			padding: 3px 15px;
+			border-top-left-radius: 25px;
+			font-family: 'Lato', sans-serif;
+			
+			a {
+				font-size: 1em;
+			}
+		}
+	}
+	
+
+	ul.allCellWrapper {
+		margin-left: 0;
+		min-height: 100%;
+
+
+		li {
+			padding: 0;
+		}
+	}
+}
+
+.completed {
+	background: @textureBlackMamba;
+}
+
+.active {
+	background: @textureDenim;
+}
+
+.cellWrapper {
+	list-style-type: none;
+	width: 200px;
+	height: 270px; 
+	position: relative;
+	float: left;
+	margin: 25px 25px 0 0;
+	
+	img {
+		position: relative;
+		float: right;
+		left: 20px;
+		margin-top: -25px;
+		margin-left: -35px;
+		z-index: 200;
+	}
+
+	h2 {
+		line-height: 1.2em;
+		width: 70%;
+		font-size: 1.1em;
+		color: white;
+		padding-left: 10px;
+		padding-top: 10px;
+	}
+
+	h3 {
+		text-align: left;
+		font-size: 1em;
+		color: @yellow;
+		padding: 3px 10px;
+	}
+
+	.bottomBox {
+		position: absolute;
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		left: 0;
+		bottom: 0;
+		padding: 10px;
+
+		h1.redeemButton { // Also applies to detials button
+			height: 35px;
+			text-align: right;
+			background-color: @redHot;
+			padding-right: 5px;
+			margin-bottom: 10px;
+	
+			input {
+				line-height: 0;
+				padding-bottom: 10px;
+				background: transparent;
+				border: 0;
+				color: white;
+				border-radius: 0;
+				height: 40px;
+				font-family: 'Lato', sans-serif;
+				font-weight: 300;
+				font-size: .8em;
+			}
+		}
+	
+		h1.sendButton {
+			text-align: right;
+			background-color: @blueHot;
+			height: 25px;
+			line-height: 0;
+			font-family: 'Lato', sans-serif;
+	
+			input {
+				font-family: 'Lato', sans-serif;
+				font-size: .5em;
+				padding-right: 10px;
+				//height: 100px;
+				border: none;
+				background: transparent;
+				background-image: none;
+				font-style: italic;
+			}
+		}
+	}
+}// end #giftIndexWrapper
+
+//                                      ,,   ,,  
+// `7MM"""Yb.             mm            db `7MM  
+//   MM    `Yb.           MM                 MM  
+//   MM     `Mb  .gP"Ya mmMMmm ,6"Yb. `7MM   MM  
+//   MM      MM ,M'   Yb  MM  8)   MM   MM   MM  
+//   MM     ,MP 8M""""""  MM   ,pm9MM   MM   MM  
+//   MM    ,dP' YM.    ,  MM  8M   MM   MM   MM  
+// .JMMmmmdP'    `Mbmmd'  `Mbm`Moo9^Yo.JMML.JMML.
+
+.redeemWrapper {
+	//width: 100%;
+}
+
+.detailWrapper {
+	position: relative;
+	width: 768px;
+	background: @textureBlackMamba;
+	margin: 0 auto;
+	float: left;
+	padding-bottom: 50px;
+	//padding: 25px;
+
+	.actions {
+		list-style-type: none;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		margin: 0;
+		padding: 0;
+
+		li:nth-child(1) {
+
+			input[type="submit"] {
+				background: transparent;
+				width: 200px;
+				text-align: right;
+				display: block;
+				padding: 10px 10px 10px 0;
+				background: @blue;
+				border: none;
+				color: white;
+				font-family: 'franchiseregular', sans-serif;
+				font-size: 2em;
+
+			}
+		}
+
+		li:nth-child(2) {
+
+			input {
+				width: 150px;
+				text-align: right;
+				display: block;
+				padding: 10px;
+				background-color: @red;
+				border: none;
+				color: white;
+				font-family: 'franchiseregular', sans-serif;
+				font-size: 1.5em;
+				box-shadow: none;
+			}
+		}
+	}
+
+	.profileImage {
+		position: relative;
+		width: 150px;
+		margin: 25px;
+		float: left;
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.textTop {
+		font-size: 2em;
+		color: @blue;
+		width: 300px;
+		margin: 25px;
+		float: left;
+
+		.h2Highlight {
+			color: @blueLight;
+		}
+	}
+
+	.textRedeem {
+		width: 250px;
+		height: 175px;
+		margin: 0 25px 0px 25px;
+		float: left;
+		clear: left;
+		color: @blue;
+		font-size: 2em;
+
+		.h2Highlight {
+			color: @blueLight;
+		}
+	}
+
+	.providerPic {
+		margin: 0 0 0 25px;
+		width: 250px;
+		float: left;
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.thankYou {
+		margin: 0 25px 25px 25px;
+		float: right;
+		text-align: right;
+		width: 200px;
+	}
+}
+
+.redeemWrapper {
+	//width: 768px;
+
+	.providerPic {
+		float: right;
+		margin: 25px;
+	}
+
+	.textRedeem {
+		max-height: 125px;
+	}
+
+	.actionsWrapper {
+		float: left;
+
+		.sendDrink {
+			float: left;
+			clear: left;
+
+			input {
+				width: 200px;
+				position: relative;
+				text-align: right;
+				display: block;
+				padding: 10px 10px 10px 0;
+				background: @blue;
+				border: none;
+				color: white;
+				font-family: 'franchiseregular', sans-serif;
+				font-size: 2em;
+			}
+		}
+
+		.saveLater {
+			float: left;
+			clear: left;
+
+			input {
+				width: 175px;
+				position: relative;
+				text-align: right;
+				display: block;
+				padding: 6px 6px 6px 0;
+				background: @yellow;
+				border: none;
+				color: @blue;
+				font-family: 'franchiseregular', sans-serif;
+				font-size: 2em;
+			}
+		}
+
+		.textGive {
+			float: left;
+			font-size: 3.3em;
+			line-height: 1.4em;
+			//width: 100%;
+			margin: 25px 25px 0 25px;
+			text-align: left;
+		}
+
+		.redeemCode {
+			margin: 25px 25px 50px 25px;
+			float: right;
+			font-size: 10em;
+
+			a {
+				display: block;
+				float: right;
+				color: @blue;
+				//font-size: 5em;
+			}
+		}
+
+		.enterCode {
+			float: right;
+			text-align: right;
+			background: @redHot;
+			color: white;
+			width: 60%;
+			padding: 0px 12px 0px 20px;
+			margin-bottom: 25px;
+			font-size: 1.8em;
+			
+			button {
+				display: block;
+				float: right;
+				text-align: right;
+				background-color: @blue;
+				color: @blueLight;
+				border: 0;
+				border-left: 20px solid @yellow;
+				margin: 10px -12px 10px 10px;
+				padding: 10px 5px 10px 25px;
+				font-size: 75%;
+			}
+		}
+
+		#servers {
+			width: 100%;
+			float: left;
+
+			.identifyServerHeader {
+				font-size: 3em;
+				color: @blueLight;
+				margin: 25px;
+			}
+
+			.serverBox {
+				float: left;
+
+				h2 {
+					color: @blueLight;
+					margin: 25px;
+				}
+
+				.serverImage {
+					margin: 25px;
+					margin-top: 0;
+					width: 125px;
+					float: left;
+					color: red;
+	
+					img {
+						width: 100%;
+					}
+				}
+
+				.userId {
+					width: 100%;
+				}
+			}
+
+			#server_code_field {
+				width: 50%;
+				//border: 1px solid red;
+				float: left;
+
+				form {
+					margin: 0;
+					padding: 0;
+				}
+
+				label {
+					color: @blueLight;
+					font-size: 1.1em;
+
+				}
+
+				input#order_server_code {
+					background-color: transparent;
+					border: 3px solid white;
+					height: 50px;
+					color: @redHot;
+					font-size: 1em;	
+					padding: 7px;
+				}
+
+				input[type="submit"] {
+					font-family: "Lato", sans-serif;
+					font-weight: normal;
+					background-color: @blue;
+					color: white;
+					font-size: 1em;
+					background-image: none;
+					border: 0;
+				}
+
+				button {
+					font-size: .8em;
+					border-radius: 0;
+					box-shadow: 0;
+					border: 2px solid @yellow;
+					background: none;
+					color: @blue;
+				}
+			}
+		}	
+	}
+}
+
+//              ,,   ,,   ,,  
+// `7MM"""Yp,   db `7MM `7MM  
+//   MM    Yb        MM   MM  
+//   MM    dP `7MM   MM   MM  
+//   MM"""bg.   MM   MM   MM  
+//   MM    `Y   MM   MM   MM  
+//   MM    ,9   MM   MM   MM  
+// .JMMmmmd9  .JMML.JMML.JMML
+
+.input-prepend .active, .input-append .active {
+	font-size: 105%;
+  background-color: @blue;
+  color: @redHot;
+  border: 0;
+  box-shadow: 3px 3px 0px 0px @redHot;
+}
+
+.label {
+	font-weight: light !important;
+}
+
+.giftsBillWrapper {
+	width: 768px;
+	background-color: black;
+	float: left;
+	padding: 25px;
+
+	form#new_gift {
+		display: block;
+		width: 100%;
+		position: relative;
+	}
+
+	.billHeader {
+		width: 100%;
+		float: left;
+		clear: both;
+	}
+
+	h2 {
+		font-weight: light;
+		color: @blue;
+		display: block;
+		float: left;
+		clear: both;
+		//border: 1px solid @blue;
+
+		input#tip, input#message {
+			margin-top: 6px;
+			height: 25px;
+			background: transparent;
+			border: 1px solid @redHot;
+			padding: 5px;
+
+		}
+
+		span.h2Highlight {
+			color: @blueLight;
+			font-size: 120%;
+		}
+
+
+
+		button {
+			text-shadow: none;
+			padding: 4px 20px;
+			border-radius: 0;
+			background-image: none;
+			background-color: transparent;
+			color: @blueHot;
+			border: 1px solid @redHot;
+			margin: 10px;
+
+			&:hover {
+
+				color: @redHot;
+			}
+
+			h2 {
+				line-height: .8em;
+			}
+		}
+
+		button#perItem {
+			 
+		}
+
+		input#quantityAmount {
+			width: 40px;
+			font-size: 1.4em;
+			text-align: center;
+			color: @blueLight;
+			background: transparent;
+			height: 46px;
+			margin: 0px;
+			padding: 0;
+			border: 0;
+		}
+
+		input#message {
+			margin: 25px;
+		}
+	}
+
+	.label {
+		text-transform: none;
+		display: block;
+		float: left;
+		clear: both;
+		//width: 200px;
+		border-radius: 0;
+		background-color: transparent;
+		font-weight: 100;
+		color: @blueLight;
+		font-size: 1em;
+		//padding: 10px;
+	}
+
+	h2.totalAmount {
+		float: left;
+		border-top:    1px solid @blueHot;
+		border-bottom: 1px solid @blueHot;
+		margin-top: 25px;
+		padding: .7em;
+		font-size: 3em;
+		width: 100%;
+
+		label {
+			display: block;
+			width: 200px;
+			margin: 12px;
+			//border: 1px solid @yellow;
+		}
+	}
+
+	img {
+		float: left;
+		width: 125px;
+	}
+}
+
+//                                ,..,,   ,,          
+// `7MM"""Mq.                   .d' "db `7MM          
+//   MM   `MM.                  dM`       MM          
+//   MM   ,M9 `7Mb,od8 ,pW"Wq. mMMm`7MM   MM  .gP"Ya  
+//   MMmmdM9    MM' "'6W'   `Wb MM   MM   MM ,M'   Yb 
+//   MM         MM    8M     M8 MM   MM   MM 8M"""""" 
+//   MM         MM    YA.   ,A9 MM   MM   MM YM.    , 
+// .JMML.     .JMML.   `Ybmd9'.JMML.JMML.JMML.`Mbmmd'
+
+.yourProfileWrapper {
+	position: relative;
+	width: 100%;
+	background: transparent;
+	margin: 0 auto;
+	float: left;
+	width: 100%;
+
+	h2 {
+		font-size: 2em;
+	}
+
+	.tab-content {
+
+		a {
+			font-size: 2em;
+			padding-right: 40px;
+		}
+	}
+
+	#myTab {
+		text-align: right;
+		border: 0;
+		margin-top: 25px;
+
+		.active {
+			padding: 3px 0 3px 25px;
+			font-size: 110%;
+			box-shadow: 2px 2px 10px #111;
+		}
+
+		li {
+			border-top-left-radius: 20px;
+			border-bottom-left-radius: 20px;
+			
+			a {
+				color: @redHot;
+				font-family: 'Lato', sans-serif;
+				font-weight: 100;
+				font-size: 2em;
+				background: transparent;
+				border: 0;
+				text-align: right;
+			}			
+		}
+	}
+
+	.tab-pane {
+		margin: 0;
+		padding: 0;
+		width: 50%;
+
+		h2 {
+			padding: 10px;
+			font-size: 1em;
+		}
+	}
+
+	li {
+		color: red;
+	}
+}
+
+//                ,,                 ,,               
+// MMP""MM""YMM `7MM                 db               
+// P'   MM   `7   MM                                  
+//      MM        MMpMMMb.  .gP"Ya `7MM `7Mb,od8      
+//      MM        MM    MM ,M'   Yb  MM   MM' "'      
+//      MM        MM    MM 8M""""""  MM   MM          
+//      MM        MM    MM YM.    ,  MM   MM          
+//    .JMML.    .JMML  JMML.`Mbmmd'.JMML.JMML.        
+//                                ,..,,   ,,          
+// `7MM"""Mq.                   .d' "db `7MM          
+//   MM   `MM.                  dM`       MM          
+//   MM   ,M9 `7Mb,od8 ,pW"Wq. mMMm`7MM   MM  .gP"Ya  
+//   MMmmdM9    MM' "'6W'   `Wb MM   MM   MM ,M'   Yb 
+//   MM         MM    8M     M8 MM   MM   MM 8M"""""" 
+//   MM         MM    YA.   ,A9 MM   MM   MM YM.    , 
+// .JMML.     .JMML.   `Ybmd9'.JMML.JMML.JMML.`Mbmmd'
+
+.theirProfileWrapper {
+	background: transparent;
+
+	.tab-pane {
+		background: transparent;
+
+		#containerIsotope {
+
+			li {
+				width: 200px;
+
+				.cellContent {
+					margin-bottom: 25px;
+
+					h2.yourMessage {
+						color: @blue;
+					}
+				}
+
+				.redeemButton {
+
+					form {
+						margin: 0;
+						padding: 0;
+					}
+
+					input {
+						color: @redHot;
+						font-size: .9em;
+						font-weight: 100;
+						letter-spacing: .08em;
+						padding-left: 25px;
+						padding-right: 10px;
+						background: @textureDarkWall;
+						border: 0;
+					}
+				}
+
+				.sendButton {
+
+					input {
+						font-weight: 200;
+						color: @blue;
+						font-size: .72em;
+						letter-spacing: .05em;
+						padding-left: 10px;
+						padding-right: 7px;	
+						padding-top: 1px;
+						padding-bottom: 1px;					
+					}
+				}
+			}
+		}
+	}
+}
+
+//       AW                                             
+//      ,M`7MMF'   `7MF'                                
+//      MV  MM       M                                  
+//     AW   MM       M ,pP"Ybd  .gP"Ya `7Mb,od8 ,pP"Ybd 
+//    ,M'   MM       M 8I   `" ,M'   Yb  MM' "' 8I   `" 
+//    MV    MM       M `YMMMa. 8M""""""  MM     `YMMMa. 
+//   AW     YM.     ,M L.   I8 YM.    ,  MM     L.   I8 
+//  ,M'      `bmmmmd"' M9mmmP'  `Mbmmd'.JMML.   M9mmmP' 
+//  MV                                                  
+// AW                                                   
+
+.userListWrapper {
+
+	.userListWrapper {
+		font-size: 4em;
+		margin: 50px;
+	}
+
+	.userListCell {
+		background: @textureDenim;
+		width: 220px;
+		float: left;
+		margin-right: 25px;
+		margin-bottom: 25px;
+		padding: 10px;
+	}
+
+	h2.sendDrink {
+		background: @textureBlackMamba;
+		margin-left: -10px;
+		text-align: right;
+
+		input {
+			background: transparent;
+			color: @redHot;
+			font-size: 1.1em;
+			font-weight: 100;
+			letter-spacing: .08em;
+			padding-right: 10px;
+			padding-top: 10px;
+			border: 0;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+//                ,,                                           
+// MMP""MM""YMM `7MM                          `7MM             
+// P'   MM   `7   MM                            MM             
+//      MM        MMpMMMb.  ,6"Yb. `7MMpMMMb.   MM  ,MP,pP"Ybd 
+//      MM        MM    MM 8)   MM   MM    MM   MM ;Y  8I   `" 
+//      MM        MM    MM  ,pm9MM   MM    MM   MM;Mm  `YMMMa. 
+//      MM        MM    MM 8M   MM   MM    MM   MM `Mb.L.   I8 
+//    .JMML.    .JMML  JMML`Moo9^Yo.JMML  JMML.JMML. YAM9mmmP' 
+
+.thankYouBuyWrapper {
+	text-align: center;
+
+	.thankYouHeader {
+		font-size: 3em;
+		margin: 10px;
+		color: @redHot;
+	}
+
+	.h2Highlight {
+		color: @blue;
+		font-size: 60%;
+		text-transform: uppercase;
+		margin-right: 10px;
+	}
+
+	h2 {
+		color: @blueLight;
+		font-size: 2em;
+		margin: 5px;
+
+		a {
+			display: block;
+			font-size: 2em;
+			margin: 25px;
+
+			&:hover {
+				color: @redHot;
+			}
+		}
+	}
+}
+
+                                 
+// `7MM"""Yp,                       
+//   MM    Yb                       
+//   MM    dP `7MM  `7MM `7M'   `MF'
+//   MM"""bg.   MM    MM   VA   ,V  
+//   MM    `Y   MM    MM    VA ,V   
+//   MM    ,9   MM    MM     VVV    
+// .JMMmmmd9    `Mbod"YML.   ,V     
+//                          ,V      
+//                       OOb"       
+
+.nav-tabs {
+
+	li {
+		padding: 0 25px;
+	}
+}
+
+.tab-pane {
+	position: relative;
+	margin: 0 auto;
+	padding-left: 25px;
+	background-color: transparent;
+
+
+	h2 {
+		color: @redHot;
+	}
+}
+
+.allMenuCellsWrapper {
+	width: 768px;
+
+	.menuCellWrapper {
+		padding: 0;
+		background: @textureBlackMamba;
+		width: 200px;
+		height: 345px;
+		float: left;
+		margin: 25px 25px 0 0;
+
+		.providerName {
+			font-size: 1.3em;
+			padding: 5px 10px;
+			line-height: 1.2em;
+		}
+
+		.descriptionText {
+			padding: 5px 10px;
+			font-size: 1.3em;
+		}
+
+		img {
+			margin: 0;
+			top: 0;
+			left: 0;
+			padding: 5px;
+		}
+
+		input {
+			background: transparent;
+			width: 100px;
+			text-align: right;
+			display: block;
+			padding: 10px 10px 10px 0;
+			margin-top: 15px;
+			background: @blueHot;
+			border: none;
+			color: black;
+			font-family: 'Lato', sans-serif;
+			font-weight: 100;
+			font-size: 1.3em;
+		}
+	}
+}
+
+ul.menuHeader {
+	width: 768px;
+	display: inline-block;
+	list-style-type: none;
+	margin: 25px 0 0 0;
+	padding: 0;
+	background-color: @textureDarkWall;
+	border: 1px solid red;
+
+	li {
+		float: left;
+		margin: 0;
+		padding: 0;
+		border: 1px solid @blueHot;
+
+		h2 {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+.menuTable {
+	font-family: 'Lato', sans-serif;
+	font-size: 1.5em;
+	margin-bottom: 100px;
+
+	thead {
+		padding: 20px;
+		text-align: left;
+		font-size: 2em;
+		height: 1.4em;
+
+
+		th {
+			padding-right: 30px;
+			border-bottom: 1px solid @blueHot;
+
+			h2 {
+				color: @redHot;
+				padding: 20px;
+				
+			}
+		}
+
+	}
+
+	tbody {
+		background: @textureBlackMamba;
+
+		td {
+			padding: 0 20px;
+			color: white;
+			border-left: 1px solid #fff;
+			border-bottom: 1px dashed #555;
+			font-size: .8em;
+			line-height: 1.3em;
+
+			input {
+				background: transparent;
+				border: 1px solid @blueHot;
+				padding: 2px 10px;
+				color: @redHot;
+				margin: 0;
+				font-size: 1em;
+				display: block;
+				position: relative;
+				top: 10px;
+			}
+		}
+	}
+}
+
+
+
+// `7MM"""Yp,                                           
+//   MM    Yb                                           
+//   MM    dP  ,6"Yb. `7Mb,od8                          
+//   MM"""bg. 8)   MM   MM' "'                          
+//   MM    `Y  ,pm9MM   MM                              
+//   MM    ,9 8M   MM   MM                              
+// .JMMmmmd9  `Moo9^Yo.JMML. 
+//                           
+// `7MM"""Mq.                                           
+//   MM   `MM.                                          
+//   MM   ,M9 .gP"Ya `7Mb,od8 `7MMpMMMb.pMMMb.  ,6"Yb.  
+//   MMmmdM9 ,M'   Yb  MM' "'   MM    MM    MM 8)   MM  
+//   MM      8M""""""  MM       MM    MM    MM  ,pm9MM  
+//   MM      YM.    ,  MM       MM    MM    MM 8M   MM  
+// .JMML.     `Mbmmd'.JMML.   .JMML  JMML  JMML`Moo9^Yo.
+
+.providersPermalinkWrapper {
+
+	.providerHeader {
+		font-size: 4em;
+		padding-bottom: 30px;
+	}
+
+	h2 {
+		font-size: 1.8em;
+	}
+
+	img {
+		float: left;
+		margin-right: 25px;
+	}
+
+	.nav-tabs {
+		float: left;
+		clear: both;
+		width: 768px;
+		margin: 0;
+		padding: 0;
+		border: 0;
+
+		li {
+			padding-left: 0;
+		}
+	}
+
+	.providerTab {
+		background: transparent;
+		margin-top: 25px;
+
+		a {
+			background: transparent;
+			border: 0;
+			color: @red;
+			font-size: 2em;
+			font-family: 'Lato', sans-serif;
+			font-weight: 100;
+			padding: 10px 5px;
+			text-decoration: underline;
+
+			&:hover {
+				background: transparent;
+				border: 0;
+				color: @blueHot;
+			}
+		}
+	}
+
+	.providerTab[class*="active"] {
+		
+		a {
+		color: @redHot;
+		}
+	}
+
+	.tab-pane {
+		width: 768px;
+		top: 40px;
+
+	}
+
+	#drinkboard {
+		padding: 0;
+		margin: 25px 0 0 0;
+
+		.cellEventWrapper {
+			background: @textureBlackMamba;
+			width: 200px;
+			height: 220px;
+			margin: 0 25px 25px 0;
+			float: left;
+
+			img {
+				float: left;
+				margin-top: -25px;
+			}
+
+			h2 {
+				margin: 15px;
+				float: left;
+				font-size: 1.3em;
+				line-height: 1.4em;
+
+				a {
+					color: red;
+				}
+			}
+		}
+	}
+}
+
+.editProfileWrapper {
+
+	h2 {
+		font-size: 3em;
+		color: red;
+		font-weight: 100;
+	}
+
+	label {
+		color: @blueLight;
+		font-size: .5em;
+		margin-top: 10px;
+		margin-right: 25px;
+		font-weight: 100;
+	}
+
+	input {
+		height: 40px;
+		font-size: .4em;
+		color: #888;
+	}
+
+	h2.uploadPhoto input#user_photo {
+		height: 45px;
+	}
+}
+
+	
+
+
+                                                       
+//   ,,                                                   
+//   db                   mm                              
+//                        MM                              
+// `7MM ,pP"Ybd  ,pW"Wq.mmMMmm ,pW"Wq.`7MMpdMAo.  .gP"Ya  
+//   MM 8I   `" 6W'   `Wb MM  6W'   `Wb MM   `Wb ,M'   Yb 
+//   MM `YMMMa. 8M     M8 MM  8M     M8 MM    M8 8M"""""" 
+//   MM L.   I8 YA.   ,A9 MM  YA.   ,A9 MM   ,AP YM.    , 
+// .JMMLM9mmmP'  `Ybmd9'  `Mbmo`Ybmd9'  MMbmmd'   `Mbmmd' 
+//                                      MM                
+//                                    .JMML.              
+
+
+.isotope,
+.isotope .isotope-item {
+  /* change duration value to whatever you like */
+  -webkit-transition-duration: 0.5s;
+     -moz-transition-duration: 0.5s;
+      -ms-transition-duration: 0.5s;
+       -o-transition-duration: 0.5s;
+          transition-duration: 0.5s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:         top, left, opacity;
+          transition-property:         transform, opacity;
+}
+
+
+
+// div[class="backgroundTab"] {
+// 	border: 2px solid @green;
+// }
+
+// input[type="submit"] {
+// 	font-size: 3em;
+// }
+
+
+// `7MMM.     ,MMF'                            
+//   MMMb    dPMM                              
+//   M YM   ,M MM  .gP"Ya `7MMpMMMb`7MM  `7MM  
+//   M  Mb  M' MM ,M'   Yb  MM    MM MM    MM  
+//   M  YM.P'  MM 8M""""""  MM    MM MM    MM  
+//   M  `YM'   MM YM.    ,  MM    MM MM    MM  
+// .JML. `'  .JMML.`Mbmmd'.JMML  JMML`Mbod"YML.
+//                    ,,   ,,                        
+// `7MM"""YMM       `7MM   db   mm                   
+//   MM    `7         MM        MM                   
+//   MM   d      ,M""bMM `7MM mmMMmm ,pW"Wq.`7Mb,od8 
+//   MMmmMM    ,AP    MM   MM   MM  6W'   `Wb MM' "' 
+//   MM   Y  , 8MI    MM   MM   MM  8M     M8 MM     
+//   MM     ,M `Mb    MM   MM   MM  YA.   ,A9 MM     
+// .JMMmmmmMMM  `Wbmd"MML.JMML. `Mbmo`Ybmd9'.JMML.
+
+.menuBuilderBackground {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 1000px;
+	background-color: #666;
+	z-index: -100;
+}
+
+.menuEditWrapper {
+	margin: 0 auto;
+	width: 670px;
+	height: 600px;
+	//border: 1px solid red;
+
+
+	a {
+		width: 100%;
+		height: 100%;
+		display: block;
+		color: white;
+		text-decoration: none;
+
+		&:hover {
+			color: #1B1D2D
+		}
+	}
+}
+
+.topRow {
+	position: relative;
+	width: 100%;
+	height: 55px;
+	width: 100%;
+
+	.editMenuHeader { //h4
+		position: relative;
+		text-transform: capitalize;
+		padding-top: 17px;
+		font-size: 72px;
+		font-weight: 100;
+		color: #1A1C2A;
+		float:left;
+	}
+
+	.topRowTabsWrapper {
+		float: right;
+		position: relative;
+		width: 300px;
+		height: 26px;
+		left: 11px;
+		top: 32px;
+	}
+
+	.topRowTab {
+		background-image: url('topRowTab.png');
+		width: 94px;
+		height: 26px;
+		float: left;
+		color: @white;
+		margin-right: 2px;
+	}
+
+	.topRowText {
+		color: @white;
+		font-size: 18px;
+		text-align: center;
+		padding-top: 3px;
+	}
+}
+
+.row2Wrapper {
+	display: block;
+	width: 100%;
+	height: 42px;
+	float: left;
+	position: relative;
+	top: 7px;
+
+	a:hover {
+		color: @redHot;
+	}
+
+	.row2ButtonUp {
+		margin: 0;
+		padding: 0;
+		width: 95px;
+		height: 42px;
+		background-image: url('row2ButtonUp.png');
+		background-repeat: no-repeat;
+		float: left;
+
+		.row2Text {
+			//color: @white;
+			text-align: center;
+			font-size: 17px;
+			font-weight: 100;
+			padding-top: 10px;
+		}
+	}
+}	
+
+.bigButtons { //a.k.a. row 3
+	//display: block;
+	position: relative;
+	width: 100%;
+	height: 33px;
+	top: 12px;
+	left: 5px;
+	float: left; 
+
+	h4 {
+		text-align: center;
+		font-size: 22px;
+		color: white;
+		padding-top: 5px;
+	}
+
+	.bigButtonLeft {
+		width: 323px;
+		height: 33px;
+		margin-right: 5px;
+		background-image: url('bigButtonLeftUp.png');
+		float: left;
+	}
+
+	.bigButtonRight {
+		width: 323px;
+		height: 33px;
+		background-image: url('bigButtonRightUp.png');
+		float: left;
+	}
+}
+
+.bigGreyHeader {
+	float: left;
+	display: block;  
+	width: 616px;
+	height: 47px;
+	margin-left: 22px;
+	margin-top: 17px;
+	background-image: url('bigGreyHeaderBackground.gif');
+	background-repeat: no-repeat;
+
+	.headerTextMenuItems {
+		text-align: center;
+		font-size: 18px;
+		padding-top: 6px;
+		letter-spacing: .04em;
+		font-weight: 100;
+		position: relative;
+	}
+
+	.columnHeaderName {
+		left: 127px;
+	}
+
+	.columnHeaderDescription {
+		left: 202px;
+	}
+
+	.columnHeaderPrice {
+		left: 420px;
+	}
+
+	//Show/Hide title bar text
+	h4.headerTextSignature {
+		display: none;
+	}
+
+	.headerTextMenuItems {// h4
+		display: none;
+		text-align: left;
+		float: left;
+		font-size: 16px;
+	}	
+
+	.headerTextPreview {
+		display: none;
+		text-align: center;
+		font-size: 16px;
+		margin-top: 5px;
+	}
+
+	.headerTextBeerGrid {
+		display: none;
+		text-align: center;
+		font-size: 16px;
+		margin-top: 5px;
+	}
+
+	.headerTextAddCustom {
+		text-align: center;
+		font-size: 16px;
+		margin-top: 5px;
+	}
+}
+
+//End Header
+
+//Begin MENU ITEMS section
+.menuItemsWrapper {
+	display: none;
+	width: 646px;
+	height: 211px;
+	float: left;
+	margin-top: -15px;
+	margin-left: 9px;
+}
+
+.menuItemRow {
+	background-image: url('menuItemBackground.png');
+	width: 646px;
+	height: 63px;
+}
+
+ul.menuItemList {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	height: 400px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 660px;
+
+	li {
+		float: left;
+		margin: 0;
+		padding: 0;
+
+		input[type=checkbox] {
+			width: 19px;
+			height: 19px;
+			margin-left: 30px;
+			margin-top: 20px;
+			border: 5px solid black;
+			float: left;
+			display: block;
+		}
+
+		h4.itemName, h4.itemDescription {
+			display: block;
+			float: left;
+			font-size: 19px;
+		}
+
+		.itemName {
+			position: relative;
+			top: 0;
+			left: 10px;
+			width: 200px;
+			height: 63px;
+			padding-top: 14px;
+			text-align: center;
+		}
+
+		.itemDescription {
+			height: 63px;
+			width: 250px;
+			position: relative;
+			left: 0px;
+			padding-top: 14px;
+		}
+
+		input.priceDisplay {
+			position: relative;
+			left: 54px;
+			top: 8px;
+			height: 35px;
+			width: 35px;
+			-moz-box-shadow:    inset 3px 3px 5px #555555;
+      -webkit-box-shadow: inset 3px 3px 5px #555555;
+    	box-shadow:         inset 3px 3px 5px #555555;
+		}
+	}
+}
+
+.buttonMoney {
+	width: 40px;
+	height: 37px;
+	background-image: url('buttonMoney.png');
+	position: relative;
+	left: 10px;
+	top: 10px;
+	float: left;
+
+	&:hover {
+		-moz-box-shadow:    inset 5px 5px 20px #000;
+    -webkit-box-shadow: inset 5px 5px 20px #000;
+    box-shadow:         inset 5px 5px 20px #000;
+	}
+}
+
+.buttonTrash {
+	width: 40px;
+	height: 37px;
+	background-image: url('buttonTrash.png');
+	position: relative;
+	left: 20px;
+	top: 10px;
+	float: left;
+
+	&:hover {
+		-moz-box-shadow:    inset 5px 5px 20px #000;
+    -webkit-box-shadow: inset 5px 5px 20px #000;
+    box-shadow:         inset 5px 5px 20px #000;
+	}
+}
+
+.saveMenuItems {
+	background-image: url('buttonSaveHuge.png');
+	float: left;
+	position: relative;
+	width: 512px;
+	height: 48px;
+	top: 10px;
+	left: 53px;
+
+	h4 {
+		height: 45px;
+		color: green;
+
+		a {
+			text-align: center;
+			font-size: 30px;
+			padding-top: 12px;
+		}
+	}	
+}
+
+//Begin ADD ITEMS Section
+.addItemWrapper {
+	display: none;
+	width: 700px;
+	height: 211px;
+	float: left;
+	margin-top: -15px;
+
+	.addItemFrame1 {
+		width: 323px;
+		height: 211px;
+		background-image: url('signatureBackground.png');
+		background-repeat: no-repeat;
+		float: left;
+		margin-right: 5px;
+		margin-left: 5px;
+	}
+
+	.addItemFrame2 {
+		width: 323px;
+		height: 211px;
+		background-image: url('signatureBackground.png');
+		background-repeat: no-repeat;
+		float: left;
+	}
+
+	.smallTitleBar {
+		width: 177px;
+		height: 28px;
+		background-image: url('smallTitleBar.png');
+		z-index: 100;
+		position: relative;
+		top: 0;
+		left: 0;
+
+		h4 {
+			text-align: center;
+			color: white;
+			padding-top: 4px;
+			font-size: 15px;
+			letter-spacing: .04em;
+		}
+	}
+
+	//Form styling stuff
+	
+		//Enter signature food form/inputs
+
+	input {
+		padding-left: 10px;
+		border: 1px solid black;
+
+    -moz-box-shadow:    inset 3px 3px 8px #000000;
+    -webkit-box-shadow: inset 3px 3px 8px #000000;
+    box-shadow:         inset 3px 3px 8px #000000;
+
+    &:focus {
+    	-moz-box-shadow:    inset 0 0 10px #0088CC;
+    	-webkit-box-shadow: inset 0 0 10px #0088CC;
+    	box-shadow:         inset 0 0 10px #0088CC;      	
+    }
+	}
+
+	form.enterSigFoodForm {
+		width: 288px;
+		height: 0px;
+		margin: 0;
+		padding: 0;
+		left: 0;
+		top: 0;
+		background-color: blue;
+
+		input.newItemName {
+			position: relative;
+			top: 17px;
+			left: 21px;
+			height: 44px;
+			width: 100%;
+			padding-top: 10px;
+			font-size: 16px;
+		}
+
+		input.newItemDescription {
+			position: relative;
+			top: 19px;
+			left: 21px;
+			height: 63px;
+			width: 100%;
+			font-size: 16px;
+		}
+
+		input.newItemPrice {
+			width: 51px;
+			height: 37px;
+			position: relative;
+			display: block;
+			left: 129px;
+			top: 18px;
+			font-size: 16px;
+			padding-left: 3px;
+			text-align: center;
+		}
+	}
+
+	//Enter signature Drink form/inputs
+	form.enterSigDrinkForm {
+		width: 288px;
+		height: 0px;
+		margin: 0;
+		padding: 0;
+		position: relative;
+		left: 16px;
+		top: 0;
+		float: left;
+
+		input.newItemName {
+			position: relative;
+			top: 17px;
+			left: 0;
+			height: 44px;
+			width: 100%;
+			padding-top: 10px;
+			font-size: 16px;
+		}
+
+		input.newItemDescription {
+			position: relative;
+			top: 19px;
+			left: 0;
+			height: 63px;
+			width: 100%;
+			font-size: 16px;
+		}
+
+		input.newItemPrice {
+			width: 51px;
+			height: 37px;
+			position: relative;
+			display: block;
+			left: 108px;
+			top: 18px;
+			font-size: 16px;
+			padding-left: 3px;
+			text-align: center;
+		}
+	}
+}
+
+.adjustUpDown {
+	width: 30px;
+	height: 0px;
+	position: relative;
+	top: 149px;
+	left: 188px;
+
+	a {
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
+
+	.adjustUp {
+		width: 23px;
+		height: 11px;
+		background-image: url('buttonIncrease.png');
+		background-repeat: no-repeat;
+		margin-bottom: 3px;
+	}
+
+	.adjustDown {
+		width: 23px;
+		height: 11px;
+		background-image: url('buttonDecrease.png');
+		background-repeat: no-repeat;
+	}
+}
+
+.addSignatureItemButton {
+	background-image: url("bigButtonRightUp.png");
+	background-repeat: no-repeat;
+	height: 32px;
+	width: 323px;
+	position: relative;
+	left: 0px;
+	top: 183px;
+
+	a {
+		width: 323px;
+		height: 32px;
+		display: block;
+		color: white;
+		text-decoration: none;
+
+		&:hover {
+			color: #1B1D2D
+		}
+	}
+
+	h4 {
+		font-size: 19px;
+		color: white;
+		text-align: center;
+		padding-top: 6px;
+	}
+}
+
+.greyBox {
+	width: 321px;
+	height: 107px;
+	background-image: url('boxMediumGrey.png');
+	background-repeat: no-repeat;
+	position: relative;
+	z-index: -10;
+	top: 170px;
+	left: 0;
+
+	.drinkIcon {
+		width: 24px;
+		height: 28px;
+		background-image: url('iconDrinkBlueSmall.png');
+		position: relative;
+		left: 20px;
+		top: 43px;
+		float: left;
+	}
+	
+	.foodIcon {
+		width: 46px;
+		height: 31px;
+		background-image: url('foodIconSmall.png');
+		position: relative;
+		left: 20px;
+		top: 40px;
+		float: left;
+	}
+
+	.itemName, .itemDescription {
+		width: 70%;
+		height: 20px;
+		font-size: 17px;
+		position: relative;
+		display: block;
+		float: right;
+		top: 35px;
+		letter-spacing: .04em;
+	}
+}
+
+.buttonSaveHuge {		
+	background-image: url('buttonSaveHuge.png');
+	float: left;
+	position: relative;
+	width: 512px;
+	height: 48px;
+	top: 131px;
+	left: 143px;
+
+	h4 {
+		height: 45px;
+		color: green;
+
+		a {
+			text-align: center;
+			font-size: 30px;
+			padding-top: 12px;
+		}
+	}	
+}
+
+//menu preview section
+
+.wrapperPreview {
+	display: none;
+	width: 670px;
+	height: 900px;
+	padding-bottom: 100px;
+	position: relative;
+	top: -20px;
+	float: left;
+
+	.thinCategory {
+		background-image: url('thinCategory.gif');
+		background-repeat: no-repeat;
+		position: relative;
+		left: 10px;
+		width: 639px;
+		height: 29px;
+		float: left;
+
+		.thinCategoryText { //h4
+			position: relative;
+			height: 29px;
+			font-size: 18px;
+			color: white;
+			padding: 5px 0 0 10px;
+		}
+	}
+
+	.signatureBox1, .signatureBox2 {
+		background-image: url('boxHalfGrey.gif');
+		position: relative;
+		height: 83px;
+		width: 48%;
+		background-repeat: no-repeat;
+		float: left;
+		left: 8px;
+
+		h4 {
+			width: 240px;
+			font-size: 17px;
+			position: relative;
+			left: 90px;
+			top: -10px;
+			line-height: 1.2em;
+		}
+
+		.signatureIcon1 {
+			background-image: url('iconDrinkBlueSmall.png');
+			width: 24px;
+			height: 28px;
+			position: relative;
+			top: 24px;
+			left: 33px;
+		}
+
+		.signatureIcon2 {
+			background-image: url('foodIconSmall.png');
+			width: 46px;
+			height: 31px;
+			position: relative;
+			top: 24px;
+			left: 23px;
+		}
+	}
+
+	.menuItemListPreview {
+		position: relative;
+		left: 10px;
+		height: auto;
+		float: left;
+
+		li {
+
+			h4 {
+				padding-top: 17px;
+			}
+		}
+	}
+	.buttonSaveHugePreview {
+		background-image: url('buttonSaveHuge.png');
+		float: left;
+		position: relative;
+		width: 512px;
+		height: 48px;
+		left: 143px;
+
+		h4 {
+			height: 45px;
+			color: green;
+
+			a {
+				text-align: center;
+				font-size: 30px;
+				padding-top: 12px;
+			}
+		}	
+	}
+}
+
+.wrapperBeerGrid {
+	display: none;
+	position: relative;
+	top: -14px;
+	left: 13px;
+	float: left;
+	height: auto;
+	width: 670px;
+
+	.beerGridContainer {
+		width: 670px;
+		height: 350px;
+		overflow: auto;
+	}
+
+	.cellBeer {
+		background-image: url('buttonUpGrid.gif');
+		background-repeat: none;
+		width: 127px;
+		height: 109px;
+		float: left;
+
+		&:hover {
+			background-image: url('buttonDownGrid.gif');
+		}
+
+		h4 {
+			color: white;
+			font-size: 19px;
+			letter-spacing: .04em;
+			text-align: center;
+			padding-top: 40px;
+
+			&:hover {
+				color: @redHot;
+			}
+		}
+	}
+	.buttonSaveHugeBeerGrid {
+		background-image: url('buttonSaveHuge.png');
+		float: left;
+		position: relative;
+		width: 512px;
+		height: 48px;
+		left: 143px;
+		top: 5px;
+
+		h4 {
+			height: 45px;
+			color: green;
+
+			a {
+				text-align: center;
+				font-size: 30px;
+				padding-top: 12px;
+			}
+		}	
+	}
+}
+
+.wrapperAddCustom {
+	width: 670px;
+	position: relative;
+	top: -15px;
+	left: 15px;
+	float: left;
+
+	.addCustomForms {
+		float: left;
+		background-image: url('backgroundAddCustom.gif');
+		width: 630px;
+		height: 77px;
+
+		.addCustomName { //input type: text
+			position: relative;
+			height: 30px;
+			background: none;
+			border: 0;
+			border: 0;
+			width: 170px;
+			height: 50px;
+			top: 12px;
+			left: 20px;
+			font-size: 17px;
+			padding: 15px;
+		}
+		.addCustomDescription {
+			position: relative;
+			height: 30px;
+			background: none;
+			border: 0;
+			border: 0;
+			width: 288px;
+			height: 50px;
+			top: 12px;
+			left: 45px;
+			font-size: 17px;
+			padding: 15px;
+		}
+		.addCustomPrice {
+			position: relative;
+			height: 30px;
+			background: none;
+			border: 0;
+			border: 0;
+			width: 50px;
+			height: 35px;
+			top: 12px;
+			left: 65px;
+			font-size: 17px;
+			padding: 5px;
+			text-align: center;
+		}
+		.upDownAddCustom {
+			position: absolute;
+			width: 26px;
+			height: 29px;
+			top: 25px;
+			left: 590px;
+
+		}
+		.buttonAddItem {
+			position: relative;
+			background-image: url('buttonAddItem.gif');
+			width: 126px;
+			height: 29px;
+			top: 3px;
+			left: 516px;
+		}
+	}
+
+	.menuItemListAddCustom {
+		position: relative;
+		float: left;
+		top: 17px;
+		height: auto;
+
+		.buttonEdit {
+			width: 40px;
+			height: 37px;
+			position: relative;
+			left: 30px;
+			top: 10px;
+			float: left;
+			background-image: url('buttonEditItem.gif');
+			background-repeat: no-repeat;
+		}
+	}
+	.saveButtonAddCustom {
+		position: relative;
+		float: left;
+		top: 20px;
+		left: 134px;
+
+	}
+}
+
+
+
+
+
+
+
+
+// `7MM"""YMM                   mm                   
+//   MM    `7                   MM                   
+//   MM   d  ,pW"Wq.   ,pW"Wq.mmMMmm .gP"Ya `7Mb,od8 
+//   MM""MM 6W'   `Wb 6W'   `Wb MM  ,M'   Yb  MM' "' 
+//   MM   Y 8M     M8 8M     M8 MM  8M""""""  MM     
+//   MM     YA.   ,A9 YA.   ,A9 MM  YM.    ,  MM     
+// .JMML.    `Ybmd9'   `Ybmd9'  `Mbmo`Mbmmd'.JMML.   
+
+.footer {
+	display: none;
+
+}
+
+
+
+
+
+
+
+
+
+
 
