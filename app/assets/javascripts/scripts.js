@@ -102,6 +102,15 @@ $(function() {
 			//end switch up/down images/class switch
 	});
 
+		// Cocktail "edit" click functions
+	$('#buttonEditCock a').click(function () {
+		//swap out edit button image on click
+		$('#buttonEditCock').toggleClass('buttonSmallUp');
+		$('.cockEditWrapper, .cockMenuBox, .buttonSaveCock, .cockItemList').toggle();
+		return false;
+			//end switch up/down images/class switch
+	});
+
 	// App "edit" click functions
 	$('#buttonEditApp a').click(function () {
 		//swap out edit button image on click
@@ -111,19 +120,10 @@ $(function() {
 			//end switch up/down images/class switch
 	});
 
-	// Cocktail "edit" click functions
-	$('#buttonEditCock a').click(function () {
-		//swap out edit button image on click
-		$('#editButtonCock').toggleClass('buttonSmallUp');
-		$('.cockEditWrapper, .cockMenuBox, .buttonSaveCock, .cockItemList').toggle();
-		return false;
-			//end switch up/down images/class switch
-	});
-
 	// Entre "edit" click functions
 	$('#buttonEditEntre a').click(function () {
 		//swap out edit button image on click
-		$('#editButtonEntre').toggleClass('buttonSmallUp');
+		$('#buttonEditEntre').toggleClass('buttonSmallUp');
 		$('.entreEditWrapper, .entreMenuBox, .buttonSaveEntre, .entreItemList').toggle();
 		return false;
 			//end switch up/down images/class switch
