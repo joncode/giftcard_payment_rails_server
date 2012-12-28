@@ -25,13 +25,15 @@
         <% if signed_in? %>
           <% if params[:controller] == 'merchants' %>
             <%= render 'layouts/header' %>
+          <% elsif params[:controller] == 'menus' %>
+            <!-- no header for menu builder -->
           <% else %>
             <%= render 'layouts/header' %>
           <% end %>
-          <% else %>  
+        <% else %>  
             <%#= render 'layouts/intro' %>
-          <% end %>
         <% end %>
+      <% end %>
         <div class="mainContent">
           <%= yield %>
         </div>
