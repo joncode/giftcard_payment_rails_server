@@ -4,7 +4,7 @@ class AppController < ApplicationController
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
 	GIFT_REPLY = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
- 	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax"]
+ 	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax", "phone"]
 
  	def relays
  		puts "\nRelays to APP"
