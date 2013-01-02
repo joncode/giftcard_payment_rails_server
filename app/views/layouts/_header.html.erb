@@ -9,7 +9,7 @@
 
   <% if @provider && params[:controller] == "merchants" %>
     <li>
-      <%= link_to @provider.name, '#' %>
+      <%= link_to @provider.name, merchant_path(@provider) %>
     </li>
     <li>
       <%= link_to "Change Merchant", merchants_path %>
