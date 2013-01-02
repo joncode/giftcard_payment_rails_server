@@ -1,10 +1,10 @@
 module ApplicationHelper
   
   def merchant_tag(user)
-    if user.providers
+    if user.providers 
       link_to "Merchant Log In", merchants_path      
     else
-      #link_to "Merchant Sign Up", new_provider_path
+      #link_to "Merchant Home", merchant_path(@provider)
     end
   end
 

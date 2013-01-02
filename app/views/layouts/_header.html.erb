@@ -12,7 +12,9 @@
       <%= link_to @provider.name, merchant_path(@provider) %>
     </li>
     <li>
-      <%= link_to "Change Merchant", merchants_path %>
+      <% if current_user.providers.count > 1 %>
+        <%= link_to "Change Merchant", merchants_path %>
+      <% end %>
     </li>
       <% else %>
     <li>
