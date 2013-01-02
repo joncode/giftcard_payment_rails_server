@@ -1,75 +1,147 @@
 $(function() {
 
+	$('.bodyDiv').css({'background' : 'none'}); //turns off main background picture
 
-});
-
-
-/************************************************ 
-*  jQuery iphoneSwitch plugin                   *
-*                                               *
-*  Author: Daniel LaBare                        *
-*  Date:   2/4/2008                             *
-************************************************/
-
-jQuery.fn.iphoneSwitch = function(start_state, switched_on_callback, switched_off_callback, options) {
-
-	var state = start_state == 'on' ? start_state : 'off';
-	
-	// define default settings
-	var settings = {
-		mouse_over: 'pointer',
-		mouse_out:  'default',
-		switch_on_container_path: 'iphone_switch_container_on.png',
-		switch_off_container_path: 'iphone_switch_container_off.png',
-		switch_path: 'assets/iphone_switch.png',
-		switch_height: 27,
-		switch_width: 94
-	};
-
-	if(options) {
-		jQuery.extend(settings, options);
-	}
-
-	// create the switch
-	return this.each(function() {
-
-		var container;
-		var image;
-		
-		// make the container
-		container = jQuery('<div class="iphone_switch_container" style="height:'+settings.switch_height+'px; width:'+settings.switch_width+'px; position: relative; overflow: hidden"></div>');
-		
-		// make the switch image based on starting state
-		image = jQuery('<img class="iphone_switch" style="height:'+settings.switch_height+'px; width:'+settings.switch_width+'px; background-image:url('+settings.switch_path+'); background-repeat:none; background-position:'+(state == 'on' ? 0 : -53)+'px" src="'+(state == 'on' ? settings.switch_on_container_path : settings.switch_off_container_path)+'" /></div>');
-
-		// insert into placeholder
-		jQuery(this).html(jQuery(container).html(jQuery(image)));
-
-		jQuery(this).mouseover(function(){
-			jQuery(this).css("cursor", settings.mouse_over);
-		});
-
-		jQuery(this).mouseout(function(){
-			jQuery(this).css("background", settings.mouse_out);
-		});
-
-		// click handling
-		jQuery(this).click(function() {
-			if(state == 'on') {
-				jQuery(this).find('.iphone_switch').animate({backgroundPosition: -53}, "slow", function() {
-					jQuery(this).attr('src', settings.switch_off_container_path);
-					switched_off_callback();
-				});
-				state = 'off';
-			}
-			else {
-				jQuery(this).find('.iphone_switch').animate({backgroundPosition: 0}, "slow", function() {
-					switched_on_callback();
-				});
-				jQuery(this).find('.iphone_switch').attr('src', settings.switch_on_container_path);
-				state = 'on';
-			}
-		});		
+	$('.buttonSmallerUp a').hover( function() { //blue hover color
+		$('.buttonSmallerUp h5').css('color', '@blue2')
 	});
-};
+
+	// hide some edit screens on load (toggle them with edit buttons)
+	$('.sigDrinkEditWrapper').toggle();
+	$('.sigFoodEditWrapper').toggle();
+	$('.beerEditWrapper, .liqEditWrapper, .appEditWrapper, .entreEditWrapper').hide();
+	$('.buttonHiderItem, .buttonHiderPrice').hide();
+
+	// Signature Drink "edit" click functions
+	$('#editButtonSigDrink a').click(function () {
+
+		//swap out edit button image on click
+		$('#editButtonSigDrink').toggleClass('buttonSmallUp')
+		$('.sigDrinkMenuBox').fadeToggle(150);
+		$('.sigDrinkEditWrapper').slideToggle(150);
+		return false;
+			//end animation
+	});
+
+	// Signature Food "edit" click functions
+	$('#editButtonSigFood a').click(function () {
+
+		//swap out edit button image on click
+		$('#editButtonSigFood').toggleClass('buttonSmallUp');
+		$('.sigFoodMenuBox').fadeToggle(150);
+		$('.sigFoodEditWrapper').slideToggle(150)
+			return false;
+			//end switch up/down images/class switch
+	});
+
+	// Beer "Edit ITEMS" click functions
+	$('#editItemsButtonBeer a').click(function () {
+
+		//swap out edit button images and a blocker divs on click
+		$('#editItemsButtonBeer').toggleClass('buttonSmallerUp');
+		$('#editPricesButtonBeer').addClass('buttonSmallerUp');
+		$('#editPricesButtonBeer').toggleClass('buttonDeadOpacity');
+		$('.buttonHiderPrice').toggle();
+
+		// Change the 2 edit box states		
+		$('.beerEditWrapper, .buttonSaveBeerItem').fadeToggle(100);
+		$('.beerMenuBox').fadeToggle(100);
+		return false;
+			//end switch up/down images/class switch
+	});
+
+	// Beer "Edit PRICES" click functions
+	$('#editPricesButtonBeer a').click(function () {
+		//swap out edit button image on click
+		$('#editPricesButtonBeer').toggleClass('buttonSmallerUp');
+		$('#editItemsButtonBeer').toggleClass('buttonDeadOpacity');
+		$('.buttonHiderItem').toggle();
+
+		// Change the 2 edit box states
+		$('.beerPriceLine, .dollarSignSmall, .arrowDown, .priceSingleItem, .buttonSaveBeerPrice').fadeToggle(100);
+		return false;
+			//end switch up/down images/class switch
+	});
+
+
+	// Liq "Edit ITEMS" click functions
+	$('#editItemsButtonLiq a').click(function () {
+
+		//swap out edit button images and a blocker divs on click
+		$('#editItemsButtonLiq').toggleClass('buttonSmallerUp');
+		$('#editPricesButtonLiq').addClass('buttonSmallerUp');
+		$('#editPricesButtonLiq').toggleClass('buttonDeadOpacity');
+		$('.buttonHiderPrice').toggle();
+
+		// Change the 2 edit box states		
+		$('.liqEditWrapper, .buttonSaveLiqItem').fadeToggle(100);
+		$('.liqMenuBox').fadeToggle(100);
+		return false;
+			//end switch up/down images/class switch
+	});
+
+	// Liq "Edit PRICES" click functions
+	$('#editPricesButtonLiq a').click(function () {
+		//swap out edit button image on click
+		$('#editPricesButtonLiq').toggleClass('buttonSmallerUp');
+		$('#editItemsButtonLiq').toggleClass('buttonDeadOpacity');
+		$('.buttonHiderItem').toggle();
+
+		// Change the 2 edit box states
+		$('.liqPriceLine, .dollarSignSmall, .arrowDown, .priceSingleItem, .buttonSaveLiqPrice').fadeToggle(100);
+		return false;
+			//end switch up/down images/class switch
+	});
+
+	// Wine "edit" click functions
+	$('#buttonEditWine a').click(function () {
+		//swap out edit button image on click
+		$('#buttonEditWine').toggleClass('buttonSmallUp');
+		$('.wineEditWrapper, .wineMenuBox, .buttonSaveWine').toggle();
+		return false;
+			//end switch up/down images/class switch
+	});
+
+		// Cocktail "edit" click functions
+	$('#buttonEditCock a').click(function () {
+		//swap out edit button image on click
+		$('#buttonEditCock').toggleClass('buttonSmallUp');
+		$('.cockEditWrapper, .cockMenuBox, .buttonSaveCock, .cockItemList').toggle();
+		return false;
+			//end switch up/down images/class switch
+	});
+
+	// App "edit" click functions
+	$('#buttonEditApp a').click(function () {
+		//swap out edit button image on click
+		$('#buttonEditApp').toggleClass('buttonSmallUp');
+		$('.appEditWrapper, .appMenuBox, .buttonSaveApp').toggle();
+		return false;
+			//end switch up/down images/class switch
+	});
+
+	// Entre "edit" click functions
+	$('#buttonEditEntre a').click(function () {
+		//swap out edit button image on click
+		$('#buttonEditEntre').toggleClass('buttonSmallUp');
+		$('.entreEditWrapper, .entreMenuBox, .buttonSaveEntre, .entreItemList').toggle();
+		return false;
+			//end switch up/down images/class switch
+	});
+
+// Static Click Item Selector (blue and grey button grids)
+	//Animate Up/Down States
+	$('a.staticClickOn').click(function () {
+		$(this).parent().toggleClass('staticButtonActive');
+		$(this).parent().toggleClass('staticButtonOff');
+		return false;
+	});
+
+	$('a.staticClickOff').click(function () {
+		$(this).parent().toggleClass('staticButtonActive');
+		$(this).parent().toggleClass('staticButtonOff');
+		return false;
+	});
+
+}); // end
 

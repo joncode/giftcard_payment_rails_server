@@ -1,0 +1,783 @@
+
+a:hover, a:active, a:focus, a:active{
+outline: none;
+-moz-outline-style: none;
+}
+
+@blue2: #5DCFF3;
+@redHot: #FF7287;
+                                                     
+// `7MMM.     ,MMF'                                     
+//   MMMb    dPMM                                       
+//   M YM   ,M MM `7MM  `7MM ,pP"Ybd  .gP"Ya   ,pW"Wq.  
+//   M  Mb  M' MM   MM    MM 8I   `" ,M'   Yb 6W'   `Wb 
+//   M  YM.P'  MM   MM    MM `YMMMa. 8M"""""" 8M     M8 
+//   M  `YM'   MM   MM    MM L.   I8 YM.    , YA.   ,A9 
+// .JML. `'  .JMML. `Mbod"YMLM9mmmP'  `Mbmmd'  `Ybmd9'  
+
+@font-face {
+    font-family: 'museo_sans_300regular';
+    src: url('museosans-300-webfont.eot');
+    src: url('museosans-300-webfont.eot?#iefix') format('embedded-opentype'),
+         url('museosans-300-webfont.woff') format('woff'),
+         url('museosans-300-webfont.ttf') format('truetype'),
+         url('museosans-300-webfont.svg#museo_sans_300regular') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'museo_sans_500regular';
+    src: url('museosans_0-webfont.eot');
+    src: url('museosans_0-webfont.eot?#iefix') format('embedded-opentype'),
+         url('museosans_0-webfont.woff') format('woff'),
+         url('museosans_0-webfont.ttf') format('truetype'),
+         url('museosans_0-webfont.svg#museo_sans_500regular') format('svg');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'museo_sans_700regular';
+    src: url('museosans_1-webfont.eot');
+    src: url('museosans_1-webfont.eot?#iefix') format('embedded-opentype'),
+         url('museosans_1-webfont.woff') format('woff'),
+         url('museosans_1-webfont.ttf') format('truetype'),
+         url('museosans_1-webfont.svg#museo_sans_700regular') format('svg');
+    font-weight: 700;
+    font-style: normal;
+}
+
+h5 {
+	color: white;
+}
+
+.vendorTitle {
+		width: 350px;
+		height: 110px;
+		position: absolute;
+		top: 40px;
+		right: 20px;
+		padding: 30px;
+
+	h5 {
+		font-family: 'museo_sans_500regular';
+		color: white;
+		font-size: 28px;
+		font-weight: 500;
+
+	}
+	
+	h6 {
+		margin-top: 10px;
+		font-size: 13px;
+	}
+}
+
+h5.menuSectionHeader {
+	font-family: 'museo_sans_500regular';
+	font-size: 24px;
+	color: #8596A6;
+	font-weight: 500;
+	padding-top: 11px;
+	float: left;
+}
+
+h5.itemTitle {
+	font-size: 18px;
+	font-weight: normal;
+	font-family: 'museo_sans_500regular';
+	padding-top: 17px;
+	padding-left: 5px;
+	float: left;
+	clear: both;
+}
+
+h5.itemDescription {
+	font-size: 14px;
+	font-weight: normal;
+	font-family: 'museo_sans_300regular';
+	padding-top: 7px;
+	padding-left: 10px;
+	float: left;
+}
+
+.itemPrice {
+	font-size: 18px;
+	font-weight: normal;
+	font-family: 'museo_sans_500regular';
+	padding-top: 9px;
+	opacity: .4;
+	padding-left: 5px;
+	float: left;
+}
+
+.gradient {
+background: #22282d;
+background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSI0NSUiIHN0b3AtY29sb3I9IiMyMjI4MmQiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSI1MyUiIHN0b3AtY29sb3I9IiMyYTJmMzgiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+background: -moz-linear-gradient(top,  #22282d 45%, #2a2f38 53%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(45%,#22282d), color-stop(53%,#2a2f38));
+background: -webkit-linear-gradient(top,  #22282d 45%,#2a2f38 53%);
+background: -o-linear-gradient(top,  #22282d 45%,#2a2f38 53%);
+background: -ms-linear-gradient(top,  #22282d 45%,#2a2f38 53%);
+background: linear-gradient(to bottom,  #22282d 45%,#2a2f38 53%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#22282d', endColorstr='#2a2f38',GradientType=0 );
+}
+
+.rounded {
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	border: 3px solid #222;
+	-moz-box-shadow:    inset 0 0 6px #222;
+  -webkit-box-shadow: inset 0 0 6px #222;
+  box-shadow:         inset 0 0 6px #222;
+}
+
+
+//   ,,                               ,,                  
+// `7MM                             `7MM                  
+//   MM                               MM                  
+//   MMpMMMb.  .gP"Ya   ,6"Yb.   ,M""bMM  .gP"Ya `7Mb,od8 
+//   MM    MM ,M'   Yb 8)   MM ,AP    MM ,M'   Yb  MM' "' 
+//   MM    MM 8M""""""  ,pm9MM 8MI    MM 8M""""""  MM     
+//   MM    MM YM.    , 8M   MM `Mb    MM YM.    ,  MM     
+// .JMML  JMML.`Mbmmd' `Moo9^Yo.`Wbmd"MML.`Mbmmd'.JMML. 
+
+.menuMakerWrapper {
+	// chalkboard image (backgroundMenuBuilder.png)
+	// oranges image ()
+	// city images ()
+	background: url(backgroundMenuBuilder.png) repeat-y center; 
+	min-height: 800px;
+	width: 768px;
+	position: relative;
+	overflow: hidden;
+	top: -25px;
+}
+
+.logoCrooked {
+	background-image: url('logoCrooked.png');
+	background-repeat: no-repeat;
+	width: 191px;
+	height: 198px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.headerImage {
+	background-image: url('headerImageMenuBuilder.png');
+	background-repeat: no-repeat;
+	width: 367px;
+	height: 109px;
+	position: absolute;
+	top: 51px;
+	left: 21px;
+}
+
+// LINES
+.lineVert {
+	background-image: url('lineVert.png');
+	background-repeat: no-repeat;
+	width: 4px;
+	position: relative;
+}
+
+.lineVertHeader {
+	height: 150px;
+	position: absolute;
+	top: 0;
+	left: 397px;
+}
+
+.loggedInBox {
+	background-image: url('loggedInBox.png');
+	background-repeat: no-repeat;
+	width: 255px;
+	height: 41px;
+	position: absolute;
+	top: 0px;
+	right: 10px;
+
+	h5 {
+		width: 100%;
+		text-align: center;
+		color: white;
+		position: relative;
+		top: 10px;
+
+		a {
+			color: @blue2;
+		}
+	}
+}
+
+
+//  ,,                                                  
+// *MM                   mm     mm                      
+//  MM                   MM     MM                      
+//  MM,dMMb.`7MM  `7MM mmMMmm mmMMmm `7MMpMMMb. ,pP"Ybd 
+//  MM    `Mb MM    MM   MM     MM     MM    MM 8I   `" 
+//  MM     M8 MM    MM   MM     MM     MM    MM `YMMMa. 
+//  MM.   ,M9 MM    MM   MM     MM     MM    MM L.   I8 
+//  P^YbmdP'  `Mbod"YML. `Mbmo  `Mbmo.JMML  JMMLM9mmmP' 
+
+// Jquery toggles buttons between these two class/bg images
+.buttonSmallDown {
+	float: right; 
+	background-image: url('buttonEditSmallDown.png');
+	width: 67px;
+	height: 40px;
+
+		h5 a {
+		color: @blue2;
+		text-align: center;
+		display: block;
+		width: 67px;
+		height: 40px;
+		font-size: 17px;
+		text-decoration: none;
+		padding: 8px 6px;
+	}
+}
+
+.buttonSmallUp {
+	float: right;
+	background-image: url('buttonEditSmall.png');
+	width: 67px;
+	height: 40px;
+
+	h5 a {
+		//color: white;
+		text-align: center;
+		display: block;
+		width: 67px;
+		height: 40px;
+		font-size: 17px;
+		text-decoration: none;
+		margin-top: -2px;
+		margin-left: -2px;
+		padding: 9px 2px 0px 5px;
+		
+		&:hover {
+			color: white;
+		}
+	}
+}
+
+.buttonSmallerDown {
+	float: right; 
+	background-image: url('buttonEditSmallerDown.png');
+	background-repeat: no-repeat;
+	width: 105px;
+	height: 30px;
+	position: relative;
+	margin-top: 4px;
+
+		h5 a {
+		color: white;
+		position: relative;
+		left: 0;
+		top: 0;
+		text-align: center;
+		display: block;
+		width: 105px;
+		height: 30px;
+		font-size: 16px;
+		text-decoration: none;
+		padding: 5px 5px 0px 1px;
+	}
+}
+
+.buttonSmallerUp {
+	float: right;
+	background-image: url('buttonEditSmallerUp.png');
+	width: 105px;
+	height: 33px;
+	margin-top: 3px;
+
+	h5 a {
+		color: white;
+		text-align: center;
+		display: block;
+		position: relative;
+		left: 0;
+		top: 0;
+		width: 105px;
+		height: 33px;
+		font-size: 16px;
+		text-decoration: none;
+		margin-top: -2px;
+		margin-left: -2px;
+		padding: 7px 2px 0px 5px;
+		
+		&:hover {
+			color: @blue2;
+		}
+	}
+}
+
+.buttonHiderPrice {
+	width: 105px;
+	height: 33px;
+	position: absolute;
+	top: -2px;
+	left: 0px;
+	z-index: 200;
+}
+
+.buttonHiderItem {
+	width: 105px;
+	height: 33px;
+	position: absolute;
+	top: -2px;
+	left: 0px;
+	z-index: 200;
+}
+
+.buttonDeadOpacity {
+	opacity: .3;
+}
+
+.buttonSave {
+	display: none;
+	float: left;
+	margin-top: 13px;
+	
+	h5 a {
+		color: @blue2;
+
+		&:hover {
+			color: @redHot;
+		}
+	}
+}
+
+.buttonSaveBeer {
+	display: none;
+}
+
+#saveButtonSigFood, #saveButtonSigDrink {
+	color: white;
+	float: right;
+	margin-right: 9px;
+
+	&:hover {
+		color: @redHot;
+	}
+}
+
+.buttonSaveWine, .buttonSaveCock, .buttonSaveApp, .buttonSaveEntre {
+	display: none;
+	position: relative;
+	float: right;
+	margin: 0;
+}
+
+
+.lineHorizHeader {
+	position: absolute;
+	width: 100%;
+	height: 4px;
+	top: 135px;
+	margin-top: 0;
+}
+
+// `7MMM.     ,MMF'                            
+//   MMMb    dPMM                              
+//   M YM   ,M MM  .gP"Ya `7MMpMMMb`7MM  `7MM  
+//   M  Mb  M' MM ,M'   Yb  MM    MM MM    MM  
+//   M  YM.P'  MM 8M""""""  MM    MM MM    MM  
+//   M  `YM'   MM YM.    ,  MM    MM MM    MM  
+// .JML. `'  .JMML.`Mbmmd'.JMML  JMML`Mbod"YML.
+
+.lineHoriz {
+	background-image: url('lineHoriz.png');
+	background-repeat: no-repeat;
+	height: 4px;
+	position: relative;
+	width: 95%;
+	margin-left: 2.5%;
+	float: left;
+	margin-top: 30px;
+	margin-bottom: 20px;
+	float: left;
+}
+
+.lineHorizInner {
+	margin-top: 0;
+}
+
+.editButton {
+	float: right;
+}
+
+.menuCell {
+	position: relative;
+	float: left;
+}
+
+.ulSingleLineItem { // ul
+	position: relative;
+	display: block;
+	margin: 0;
+	margin-top: 0px;
+	float: left;
+
+	.arrowDown {
+		display: none;
+		background-image: url('arrowDown.png');
+		background-repeat: no-repeat;
+		width: 13px;
+		height: 19px;
+		float: left;
+		margin-top: 5px;
+		margin-left: 20px;
+		clear: both;
+	}
+
+	.singleLineItem { //li
+		margin: 0;
+		padding: 0 0 0 5px;
+		margin-top: -7px;
+		float: left;
+
+		.itemTitleSingle { //h5 title
+			float: left;
+
+			span.priceSingleItem {
+				opacity: .5;
+			}
+		}
+	}
+}
+
+.ulListDetail { // ul
+	width: 320px;
+	position: relative;
+	display: block;
+	padding: 0;
+	margin: 0;
+	float: left;
+	
+	.itemTitle { //h5
+		margin: 0;
+		padding: 0;
+	}
+
+	.itemDetail { // li
+		margin: 0;
+		padding: 8px 0 0 10px;
+		width: 100%;
+		float: left;
+		clear: both;
+
+		.itemDescription {
+
+		}
+	}
+}
+
+.columnOne {
+ 	width: 320px;
+ 	float: left;
+ 	margin-right: 60px;
+ 	margin-left: 30px;
+
+ 	.columnTopBlocker {
+ 		float: left;
+ 		width: 320px;
+ 		height: 140px;
+ 	}
+}
+
+.columnTwo { // 
+	float: left;
+	width: 320px;
+
+ 	.columnTopBlocker {
+ 		height: 140px;
+ 		width: 320px;
+ 	}
+}
+
+.sigDrinkWrapper {
+}
+
+.sigFoodWrapper {
+
+}
+
+.beerWrapper {
+
+}
+
+.wineWrapper {
+
+}
+
+.appWrapper {
+	
+}
+
+//                    ,,   ,,                        
+// `7MM"""YMM       `7MM   db   mm                   
+//   MM    `7         MM        MM                   
+//   MM   d      ,M""bMM `7MM mmMMmm                 
+//   MMmmMM    ,AP    MM   MM   MM                   
+//   MM   Y  , 8MI    MM   MM   MM                   
+//   MM     ,M `Mb    MM   MM   MM                   
+// .JMMmmmmMMM  `Wbmd"MML.JMML. `Mbmo                
+//               ,,                                  
+// `7MMF'   `7MF'db                                  
+//   `MA     ,V                                      
+//    VM:   ,V `7MM  .gP"Ya `7M'    ,A    `MF,pP"Ybd 
+//     MM.  M'   MM ,M'   Yb  VA   ,VAA   ,V 8I   `" 
+//     `MM A'    MM 8M""""""   VA ,V  VA ,V  `YMMMa. 
+//      :MM;     MM YM.    ,    VVV    VVV   L.   I8 
+//       VF    .JMML.`Mbmmd'     W      W    M9mmmP'
+
+
+.sigFoodEditWrapper, 
+.sigDrinkEditWrapper, 
+.wineEditWrapper, 
+.wineEditUl, 
+.cockEditWrapper, 
+.cockEditUl,
+.appEditWrapper,
+.appEditUl,
+.entreEditWrapper,
+.entreEditUl {
+	width: 320px;
+	margin-top: 15px;
+	margin-left: 0;
+	padding-top: 14px;
+	float: left;
+	z-index: -100;
+	list-style: none;
+
+	.sigFoodTitle,  
+	.sigFoodDescription, 
+	.sigFoodPrice,
+	.sigDrinkTitle,
+	.sigDrinkDescription,
+	.sigDrinkPrice,
+	.wineTitle,
+	.wineDescription, 
+	.cockDescription,
+	.cockTitle,
+	.appTitle,
+	.appDescription,
+	.entreTitle,
+	.entreDescription
+	{
+		border: 0;
+		box-sizing: border-box;
+		width: 300px;
+		height: 50px;
+		margin-left: 7px;
+		margin-top: -9px;
+		padding-left: 10px;
+		float: left;
+		display: block;
+		background: transparent;
+		background-image: url('backgroundInput.png');
+		background-repeat: no-repeat;
+  	background-size: 100% 100%;
+    box-shadow: none;
+   	font-family: 'museo_sans_500regular';
+		font-size: 19px;
+		color: @blue2;
+		font-weight: 500;
+	}
+
+	input:focus {
+		border: 3px dashed @blue2;
+	}
+	
+	::-webkit-input-placeholder {
+  	color: #666;
+	}
+
+	:-moz-placeholder {  
+  	color: #666;  
+	}
+
+	.sigFoodDescription, .sigDrinkDescription {
+		height: 100px;
+	}
+
+	.dollarSign {
+		position: relative;
+		left: 15px;
+		top: -4px;
+		margin-right: 3px;
+		color: @blue2;
+		opacity: .6;
+	}
+
+	.sigFoodPrice, .sigDrinkPrice {
+		width: 40%;
+		margin-left: -7px;
+		padding-left: 20px;
+	}
+}
+
+.smallDetailList {
+	//font-size: 10px !important;
+
+	input {
+		height: 36px !important;
+		font-size: 17px !important;
+		padding-left: 22px;
+		color: @blue2;
+	}
+}
+
+.dollarSignDetailList {
+	font-size: 17px;
+	float: left;
+	z-index: 200;
+	position: relative;
+	opacity: .5;
+	top: 9px;
+	left: 19px;
+}
+
+.beerEditWrapper, .liqEditWrapper {
+	width: 320px;
+	margin-top: 8px;
+	float: left;
+
+	.beerList, .staticList { //ul
+		list-style: none;
+		float: left;
+		width: 320px;
+		margin: 7px 7px;
+		padding: 0;
+
+		.staticButton {
+			width: 137px;
+			height: 98px;
+			float: left;
+			margin: 7px 7px;
+			padding: 6px 8px 6px 10px;
+
+			a {
+				display: block;
+				width: 137px;
+				height: 98px;
+				position: relative;
+				top: -6px;
+				left: -10px;
+			}
+
+			.staticButtonText { //h5
+  			font-size: 16px;
+  			font-weight: 500;
+  			float: left;
+  		}
+
+  		.staticButtonPrice { //h5
+  			font-size: 16px;
+  			float: left;
+  			clear: both;
+  			padding-top: 11px;
+  			font-weight: 500;
+  		}
+		}
+
+		.staticButtonOff {
+			background-image: url('staticButtonOff.png');
+			text-shadow: 1px 1px 1px #333;
+
+			h5 {
+				opacity: .4;
+			}
+
+			.staticButtonPrice {
+				padding-top: 10px;
+			}
+
+			.plusIcon {
+				background-image: url('plusIcon.png');
+				width: 14px;
+				height: 14px;
+				position: relative;
+  			left: 98px;
+  			bottom: 15px;
+  			float: left;
+  			clear: both;
+			}
+		}
+
+		.staticButtonActive { //li
+			background-image: url('staticButtonActive.png');
+			-moz-box-shadow:    inset 2px 2px 4px #222;
+      -webkit-box-shadow: inset 2px 2px 4px #222;
+  		box-shadow:         inset 2px 2px 4px #222;
+  		text-shadow: 1px 1px 1px #333;
+  		position: relative;
+  		left: 2px;
+  		top: 2px;
+
+  		.minusIcon {
+  			background-image: url('minusIcon.png');
+  			width: 17px;
+  			height: 6px;
+  			position: relative;
+  			left: 98px;
+  			bottom: 12px;
+  			float: left;
+  			clear: both;
+  		}
+		}
+	}
+}
+
+.dollarSignSmall {
+	display: none;
+	position: relative;
+	top: 10px;
+	left: 15px;
+	font-weight: 300;
+	color: @blue2;
+	font-size: 17px;
+	float: left;
+}
+
+.beerPriceLine, .liqPriceLine {
+	display: none;
+	width: 30%;
+	height: 30px;
+	margin-top: 5px;
+	font-size: 16px;
+	color: @blue2;
+	padding-left: 15px;
+}
+
+.wineMenuBox {
+
+}
+
+.wineListDetail {
+
+}
+
+.wineEditWrapper, .cockEditWrapper {
+	display: none;
+	left: 0;
+	width: 320px;
+	//height: 300px;
+	margin: 8px 0 0 0;
+	float: left;
+}
+
+
+
+
+
+
+
+
