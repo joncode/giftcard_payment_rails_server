@@ -24,12 +24,12 @@ and Wrapper           -->
   <div class="headerImage"></div>
   <div class="lineVertHeader lineVert"></div>
   <div class="loggedInBox">
-  	<h5>Logged in as: <a href="">Bob Loblaw</a></h5>
+  	<h5>Logged in as: <a href=""><%= @current_user.fullname %></a></h5>
   </div>
   <div class="vendorTitle">
-  	<h5 class="vendorTitleText">PT's Pub</h5>
-  	<h6 class="vendorAddress">1234 Ft. Worthington Rd.<br />
-  			Las Vegas NV, 11249
+  	<h5 class="vendorTitleText"><%= @provider.name %></h5>
+  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  			<%= @provider.city_state_zip %>
   	</h6>
   </div>
   <div class="lineHorizHeader lineHoriz">

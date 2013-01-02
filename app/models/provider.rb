@@ -70,6 +70,10 @@ class Provider < ActiveRecord::Base
   def complete_address
     "#{self.address}\n#{self.city}, #{self.state} #{self.zip}"
   end
+
+  def city_state_zip
+    "#{self.city}, #{self.state} #{self.zip}"
+  end
   
   def get_photo
     if self.box.blank?

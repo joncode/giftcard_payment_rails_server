@@ -15,30 +15,26 @@ class Menu < ActiveRecord::Base
   attr_accessible :item_id, :position, :price, :provider_id, 
   :item_name, :photo, :description, :section
 
-# <<<<<<< HEAD
-  # belongs_to :provider
-  # belongs_to :item
-# =======
+
   belongs_to   :provider
   belongs_to   :item
   has_and_belongs_to_many :gifts
-# >>>>>>> a72c374606dcdb05672d5db35d7f2b70b5e291c7
 
   def self.get_sections(provider_id)
-   menu_items = Menu.where(provider_id: provider_id)
-   sections = {}
-   menu_items.each do |mi|
-   category = BEVERAGE_CATEGORIES[mi.item.category]
-   sections[category] = ""
+    menu_items = Menu.where(provider_id: provider_id)
+    sections = {}
+    menu_items.each do |mi|
+      category = BEVERAGE_CATEGORIES[mi.item.category]
+      sections[category] = ""
     end
   
-   sections_array = []
-   BEVERAGE_CATEGORIES.each do |cat|
-   if sections.has_key? cat
-   sections_array << cat
-   end
-   end
-   return sections_array
+    sections_array = []
+    BEVERAGE_CATEGORIES.each do |cat|
+      if sections.has_key? cat
+        sections_array << cat
+      end
+    end
+    return sections_array
   end
 
   def self.get_menu_section(provider_id, section_name)
@@ -61,33 +57,33 @@ class Menu < ActiveRecord::Base
    changed = false
   
    # item name
-   if self.item_name.nil?
-   self.item_name = item.item_name
-   changed = true
-   end
+    if self.item_name.nil?
+      self.item_name = item.item_name
+      changed = true
+    end
 
    # photo_url - choose menu photo above item photo
-  if self.photo.nil?
-  self.photo = item.photo
-  changed = true
-  end
+    if self.photo.nil?
+      self.photo = item.photo
+      changed = true
+    end
 
-   # item description
-   if self.description.nil?
-   self.description = item.description
-   changed = true
-   end
+    # item description
+    if self.description.nil?
+      self.description = item.description
+      changed = true
+    end
 
-   # item section
-   if self.section.nil?
-   self.section = BEVERAGE_CATEGORIES[item.category]
-   changed = true
-   end
+    # item section
+    if self.section.nil?
+      self.section = BEVERAGE_CATEGORIES[item.category]
+      changed = true
+    end
 
-   self.save if changed
-menu_item_obj = self.serializable_hash only: [:id, :item_name, :price, :photo, :section, :description]
-menu_item_obj["menu_item_id"] = self.id
-   return menu_item_obj
+    self.save if changed
+    menu_item_obj = self.serializable_hash only: [:id, :item_name, :price, :photo, :section, :description]
+    menu_item_obj["menu_item_id"] = self.id
+    return menu_item_obj
   end
 
 

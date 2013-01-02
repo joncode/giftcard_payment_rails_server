@@ -31,6 +31,8 @@ class MenusController < ApplicationController
   def edit
     menu_obj = Menu.find params[:id]
     provider_id = menu_obj.provider_id
+    @provider = Provider.find provider_id
+    @current_user = current_user
     @menu_string = MenuString.get_menu_for_provider(provider_id)
     @menu = JSON.parse @menu_string
     @sections = Menu.get_sections(provider_id)
