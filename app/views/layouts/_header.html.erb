@@ -9,7 +9,7 @@
 
   <% if @provider && params[:controller] == "merchants" %>
     <li>
-      <%= link_to @provider.name, merchant_path(@provider) %>
+      <%= link_to "#{@provider.name} Home", merchant_path(@provider) %>
     </li>
     <li>
       <% if current_user.providers.count > 1 %>
