@@ -47,11 +47,11 @@ class Gift < ActiveRecord::Base
       :redeem_id,   :status, :regift_id, :anon_id
 
   
-  has_one     :redeem
-  has_one     :relay
+  has_one     :redeem, dependent: :destroy
+  has_one     :relay,  dependent: :destroy
   belongs_to  :provider
   belongs_to  :sales
-  has_one     :order
+  has_one     :order, dependent: :destroy
   has_many    :gift_items
   belongs_to  :giver,    class_name: "User"
   belongs_to  :receiver, class_name: "User"

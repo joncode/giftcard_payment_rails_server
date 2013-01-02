@@ -51,11 +51,11 @@ class AppController < ApplicationController
  		else
  			return false
  		end
- 	end
+	end
 
- 	def authenticate_public_info(token=nil)
+	def authenticate_public_info(token=nil)
  		return true
- 	end
+	end
 
  	def menu
  		puts "\nMenu App"
@@ -93,7 +93,7 @@ class AppController < ApplicationController
 	    end
   	end
 
-  	 def user_activity
+  	def user_activity
 	    puts "\nUser Activity"
 	    puts "#{params}"
 
@@ -111,7 +111,7 @@ class AppController < ApplicationController
 	    end
   	end
 
-  	 def past_gifts
+  	def past_gifts
 	    puts "\nGifts"
 	    puts "#{params}"
 
@@ -177,6 +177,7 @@ class AppController < ApplicationController
 	      	format.json { render json: response }
 	    end
   	end
+
   	def transactions
   		puts "\nTransactions"
   		puts "#{params}"
@@ -398,17 +399,6 @@ class AppController < ApplicationController
 	      gifts_ary = []
 	      index = 1 
 	      obj.each do |g|
-	      
-	        ### >>>>>>>    item_name pluralizer
-	        # g.item_name = g.item_name.pluralize if g.quantity > 1
-	        ###  7/27 6:45 UTC
-	        
-	        if g.created_at 
-	          time = g.created_at.to_time
-	        else
-	          time = g.updated_at.to_time
-	        end
-	        time_string = time_ago_in_words(time)
 	      	
 		    gift_obj = g.serializable_hash only: send_fields
 
@@ -433,7 +423,7 @@ class AppController < ApplicationController
 	      	else
 	      		# turn shoppingCart into an array with hashes
 
-	      		gift_obj["shoppingCart"] = convert_shoppingCart_for_app g.shoppingCart
+	      		gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
 	      	end
 
 		        # add other person photo url 
@@ -464,11 +454,9 @@ class AppController < ApplicationController
 	        end
 
 	        gift_obj["gift_id"]  = g.id.to_s
-	        gift_obj["time_ago"] = time_string
+	        gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
 	      	
-	        ### >>>>>>>    this is not stored in gift object
 	        gift_obj["redeem_code"] = add_redeem_code(g)
-	        ###  07-27 9:08 UTC
 	            
 	        gifts_ary << gift_obj
 	      end
@@ -514,9 +502,9 @@ class AppController < ApplicationController
 			return users_array
 	    end
 
-	    def convert_shoppingCart_for_app shoppingCart
+	    def convert_shoppingCart_for_app(shoppingCart)
 	    	cart_ary = JSON.parse shoppingCart
-	    	puts "shopping cart = #{shoppingCart}"
+	    	puts "shopping cart = #{cart_ary}"
 	    	new_shopping_cart = []
 	    	if cart_ary[0].has_key? "menu_id"
 		    	cart_ary.each do |item_hash|
