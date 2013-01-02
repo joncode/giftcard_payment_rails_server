@@ -11,8 +11,20 @@ Drinkboard::Application.routes.draw do
   match "/invite/:id"       => "invite#show"
   match "/invite"           => "invite#invite_friend"
 
-  root to: 'users#new'
+  root to: 'admins#welcome'
+  match '/welcome', to: 'admins#welcome'
+  match '/login',   to: 'users#new'
+  match '/signup',  to: 'users#new'
+  match '/signin',  to: 'sessions#new'
+  match '/signout', to: 'sessions#destroy'
   
+    ###   basic footer routes
+  match '/about',       to: 'home#about'
+  match '/contact',     to: 'home#contact'
+  match '/home',        to: 'home#index'
+  match '/learn',       to: 'home#learn'
+  match '/news',        to: 'home#news'  
+
   resources :gifts do
     collection do
       get  'buy'
@@ -87,9 +99,6 @@ Drinkboard::Application.routes.draw do
   resources :relationships, only: [:create, :destroy]
   resources :connections, only: [:create, :destroy]
   resources :sessions,    only: [:new, :create, :destroy]
-  match '/signup',  to: 'users#new'
-  match '/signin',  to: 'sessions#new'
-  match '/signout', to: 'sessions#destroy'
   resources :admins, only: [:new, :create, :destroy]
  
     ###  mobile app routes
@@ -128,13 +137,6 @@ Drinkboard::Application.routes.draw do
   # match 'app/order',            to: 'iphone#create_order',     via: :post
   # match 'app/users',            to: 'iphone#drinkboard_users', via: :post
   # match 'app/servercode',       to: 'iphone#server_code',      via: :post
-
-    ###   basic footer routes
-  match '/about',       to: 'home#about'
-  match '/contact',     to: 'home#contact'
-  match '/home',        to: 'home#index'
-  match '/learn',       to: 'home#learn'
-  match '/news',        to: 'home#news'
   
     ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'

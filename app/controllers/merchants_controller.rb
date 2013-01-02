@@ -1,3 +1,4 @@
+
 class MerchantsController < ApplicationController
   
   def index
@@ -10,6 +11,18 @@ class MerchantsController < ApplicationController
         format.html
       end
     end
+  end
+
+  def menu
+    @provider = Provider.find(params[:id])
+    @current_user = current_user
+    @menu_string = MenuString.get_menu_for_provider(@provider)
+    @menu = JSON.parse @menu_string
+    @sections = Menu.get_sections(@provider)
+    puts "MENUSTRING --> " + @menu_string
+    puts "MENU ARRAY !!! = " + @menu.inspect
+    puts "SECTIONS ARRAY = "  + @sections.inspect
+    
   end
 
   def show

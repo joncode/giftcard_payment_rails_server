@@ -18,24 +18,26 @@
 <body>
   <div class="bodyDiv">
     <div class="mainWrapper">
-      <% if params[:controller] == 'admins' %>
-       <%= render 'layouts/login' %>
+
+      <% if signed_in? %>
+
+        <% if params[:controller] == 'merchants' && params[:action] == 'menu' %>
+          <!-- no header for menu builder -->
+        <% else %>
+          <%= render 'layouts/header' %>
+        <% end %>
       <% else %>
-        <% if signed_in? %>
-          <% if params[:controller] == 'merchants' %>
-            <%= render 'layouts/header' %>
-          <% elsif params[:controller] == 'menus' %>
-            <!-- no header for menu builder -->
-          <% else %>
-            <%= render 'layouts/header' %>
-          <% end %>
-        <% else %>  
-            <%#= render 'layouts/intro' %>
+        <% if params[:controller] == 'admins'  %>
+          <%= render 'layouts/intro' %>
+        <% else %> 
+          <%= render 'layouts/login' %>
         <% end %>
       <% end %>
-        <div class="mainContent">
-          <%= yield %>
-        </div>
+
+
+      <div class="mainContent">
+        <%= yield %>
+      </div>
 
         <!-- <% if mobile_device? %>
           <%#= link_to "Full Site", :mobile => 0 %>

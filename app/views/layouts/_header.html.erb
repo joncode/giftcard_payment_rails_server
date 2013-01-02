@@ -1,108 +1,38 @@
-
-
 <div class="headerColorBackground">
-
 </div>
+
 <div class="navbarWrapper">
-  <% if signed_in? %>
   <ul class="navLoggedIn">
     <li class="logoHeader">
       <%#= link_to  home_path %>
     </li>
-    <li>
-      <%= link_to "Get the App",signout_path, method: :delete %>
-    </li>
-  
-<!--     <li>
-      <%= link_to "Profile",current_user %>
-    </li>
-   -->
-<!-- <li> 
-      <a>Welcome back,  
-        <%= current_user.username %> 
-      </a>
-    </li> -->
-  
-<!--  
-    <li>
-      <%= link_to "Settings" %>
-    </li> -->
+
   <% if @provider && params[:controller] == "merchants" %>
     <li>
-      <%= link_to "Merchants", merchants_path %>
+      <%= link_to @provider.name, '#' %>
+    </li>
+    <li>
+      <%= link_to "Change Merchant", merchants_path %>
     </li>
       <% else %>
+    <li>
+      <%= link_to "Drinkboard", '#' %>
+    </li>
     <li>
       <%= merchant_tag(current_user) %>
     </li> 
     <% end %> 
     <li>
-      <%= link_to "New Merchant", new_provider_path %>
+      <%= link_to "Add Merchant", new_provider_path %>
     </li>
     <li>
-      <%= link_to "Drinkboard", home_path %>
+      <%= link_to "Log Out", signout_path, method: :delete %>
     </li>
     <li class="appStoreLink">
     </li>
   </ul>
- 
-  <% end %>
-
-  <ul class="navTop">
-    <li class="navTopLi navTopReceive">
-      <%= link_to "", gifts_path %>
-    </li>
-    <li class="navTopLi navTopPurchase">
-      <%= link_to "", buy_gifts_path %>
-    </li>
-    <li class="navTopLi navTopFriends">
-      <%= link_to "Menus", menus_path %>
-    </li>
-    <li class="navTopLi navTopLocations">
-      <a href="#"><!--! link to Locations --></a>
-    </li>
-    <li class="navTopLi navTopSettings">
-      <a href="#"><!--! link to Settings --></a>
-    </li>
-  </ul>
-
- <ul class="navMain">
-    <li class="home">
-      <h2>
-        <%= link_to "BuyDrink", browse_gifts_path %>
-      </h2>
-    </li> 
-  </ul>
 </div>
-    <!--   
-    <li class="gifts">
-      <div class="cornered">
-        <div class="backgroundTab">
-          <h1>
-            <%= link_to "Gifts", gifts_path %>
-          </h1>
-        </div>
-      </div>
-    </li>
-    <li class="buys">
-      <div class="cornered">
-        <div class="backgroundTab">
-          <h1>
-            <%= link_to "Buys", buy_gifts_path %>
-          </h1>
-        </div>
-      </div>
-    </li>
-    <li class="activity">
-      <div class="cornered">
-        <div class="backgroundTab">
-          <h1>
-            <%= link_to "Activity", activity_gifts_path %>
-          </h1>
-        </div>
-      </div>
-    </li>
-  </ul>-->
+
 
 <% flash.each do |name, msg| %>
   <div class="alert alert-<%= name == :notice ? 'info' : 'success' %>">

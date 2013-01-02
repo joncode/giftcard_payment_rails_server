@@ -1,6 +1,13 @@
+abbr {
+    border-bottom: 0 dotted #DDDDDD;
+    cursor: help;
+    font-size: 90%;
+    text-transform: uppercase;
+}
 .simple_form label {
   float: left;
   width: 0px;
+  color: #003;
   text-align: right;
   margin: 2px 3px;
   min-width: 100px;

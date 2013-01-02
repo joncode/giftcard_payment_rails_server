@@ -1,5 +1,6 @@
 <div class="merchantSignInWrapper">
   <h2>Choose Establishment to sign into</h2>
+  <% count = @providers.count %>
   <table>
     <tr>
     </tr>
@@ -15,5 +16,19 @@
     <% end %>
   </table>
   <div class="backgroundBox"></div>
-  <div class="backgroundBox2"></div>
+  <% if count > 1 %>
+    <div class="backgroundBox2"></div>
+  <% end %>
+  <% if count > 2 %>
+    <div class="backgroundBox3"></div>
+  <% end %>
+  <% if count > 3 %>
+    <div class="backgroundBox4"></div>
+  <% end %>
+  <% if count > 4 %>
+    <div class="backgroundBox5"></div>
+  <% end %>
+  <% if count > 5 %>
+    <div class="backgroundBox6"></div>  
+  <% end %>
 </div>

@@ -31,7 +31,7 @@ class SessionsController < ApplicationController
       redirect_to home_path
     else
       flash[:error] = 'Invalid email/password combination' if !transfer
-      render 'new'
+      redirect_to "/login"
     end
   end
   

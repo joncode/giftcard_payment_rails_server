@@ -4,7 +4,7 @@ class HomeController < ApplicationController
     respond_to do  |format|
       if signed_in?
         @user = current_user
-        format.html
+        format.html { redirect_to merchants_path }
       else
         format.html { redirect_to root_path }
       end

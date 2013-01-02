@@ -20,6 +20,18 @@ class AdminsController < ApplicationController
     redirect_to root_path
   end
 
+  def welcome
+    respond_to do  |format|
+      if signed_in?
+        @user = current_user
+        format.html { redirect_to home_path }
+      else
+        format.html 
+      end
+    end
+    
+  end
+
 
 
 end
