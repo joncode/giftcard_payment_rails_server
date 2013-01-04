@@ -25,24 +25,18 @@
   	</h6>
   </div>
   <div class="lineHorizHeader lineHoriz"></div>
-
-      <div class="columnOne">
-  <div class="columnTopBlocker"></div>
-  <div class="bankCell">
-  <div class="merchantShowList">
-			<%#= link_to "Orders", orders_merchant_path(@provider) %> |
-	        <%= link_to "Menu Builder", menu_merchant_path(@provider) %> |
-	        <%= link_to "Edit Photos", edit_photo_merchant_path(@provider) %> |
-	        <%= link_to "Edit Profile Information", edit_info_merchant_path(@provider) %> |
-	        <%= link_to "Edit Bank Information", edit_bank_merchant_path(@provider) %> |
-	        <%#= link_to "Edit Servers", "#" %>
-	</div>
-  <div class="merchantShowWrapper">
-  	<%= custom_image_tag(@provider,200,200)  %>
-  	<% if @provider.description %>
-  	<h4>"<%= @provider.description %>"</h4>
-  	<% end %>
-  </div>
-	</div>
+  <div class="columnOne">
+    <div class="columnTopBlocker"></div>
+    <%= render 'merchant_options' %>
+    <div class="merchantShowWrapper rounded gradient">
+      <div class="showImage">
+        <%= custom_image_tag(@provider,180,180)  %>
+      </div>
+      <% if @provider.zinger %>
+        <h4>"<%= @provider.zinger %>"</h4>
+      <% else %>
+        <h4>"<%= @provider.description %>"</h4>
+      <% end %>
+    </div>
 	</div>
 </div>

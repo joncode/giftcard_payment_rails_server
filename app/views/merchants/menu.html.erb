@@ -1,5 +1,4 @@
 <!-- IE 9 Gradient Fix -->
-
 <!--[if gte IE 9]>
   <style type="text/css">
     .gradient {
@@ -28,6 +27,7 @@
   <!-- Column 1 Start -->
   <div class="columnOne">
   	<div class="columnTopBlocker"></div>
+  	<%= render 'merchant_options' %>
     <% last_index = @menu.count %>
     <% index = 0 %>
     <% @menu.each do |section| %>

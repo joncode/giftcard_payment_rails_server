@@ -26,6 +26,7 @@
   <div class="lineHorizHeader lineHoriz"></div>
     <div class="columnOne">
     	<div class="columnTopBlocker"></div>
+    	<%= render 'merchant_options' %>
     	<!-- Start Bank Wrapper -->
   		<div class="bankCell">
 	<h5 class="menuSectionHeader">
@@ -43,7 +44,7 @@
       </ul>
     </div>
   <% end %>
-  <div class="merchantSignUpObject merchantSignUpObject2">
+  <div class="merchantSignUpObject rounded gradient">
     <div class="merchantSignUpBackground"></div>
     <div class="2merchantSignUpWrapper">
         <div class="field">
@@ -53,10 +54,10 @@
           <%= f.text_field :zinger ,     placeholder: 'One Line Zinger'  %>
         </div>
         <div class="field">                         
-          <%= f.text_area :description , placeholder: 'Full Description', :rows => 4 %>
+          <%= f.text_area :description , placeholder: 'Full Description', :rows => 2 %>
         </div>                                                                          
         <div class="field">                         
-          <%= f.text_field :address,     placeholder: 'Address' %>
+          <%= f.text_field :address,     placeholder: 'Street Address' %>
         </div>                                      
         <div class="field">                         
           <%= f.text_field :city ,       placeholder: 'City' %>

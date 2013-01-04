@@ -1,23 +1,50 @@
-<div class="center">
-  <table>
-    <thead>
-      <tr>
-        <th colspan="4">Staff List</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @staff.each do |user| %>
-        <tr>
-          <td><%= custom_image_tag(user,75,100)  %></td>
-          <td><%= link_to user.username, user %></td>
-          <td><%= user.full_address %></td>
-          <td><%= number_to_phone user.phone %>
-					<td><%= link_to "Remove Employee", "/merchants/#{@provider.id}/employee/#{user.id}/remove" %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-	<br/>
-	<br/>
-	<p><%= link_to "Add Employee", invite_employee_merchant_path(@provider) %></p>
+<!-- IE 9 Gradient Fix -->
+
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+
+<!-- Header -->
+<% description =  "please enter description here" %>
+<div class="menuMakerWrapper"> <!-- Background Image -->
+  <div class="logoCrooked"></div>
+  <div class="showHeaderImage"></div>
+  <div class="lineVertHeader lineVert"></div>
+  <div class="loggedInBox">
+  	<h5>Logged in as: <a href="/home"><%= current_user.fullname %></a></h5>
+  </div>
+  
+  <div class="vendorTitle">
+  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
+  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  			<%= @provider.city_state_zip %>
+  	</h6>
+  </div>
+  <div class="lineHorizHeader lineHoriz"></div>
+
+  <div class="columnOne">
+    <div class="columnTopBlocker"></div>
+    <%= render 'merchant_options' %>
+  <% @staff.each do |user| %>  
+    <div class="employeeDisplay"> 
+      <div class="employeeImage">
+        <%= custom_image_tag(user,75,75)  %>
+      </div>
+      <div class="employeeText textTop">
+        <%= user.username %>
+      </div>
+      <div class="employeeText">
+        <%= user.full_address %>
+      </div>
+      <div class="employeeText">
+        <%= number_to_phone user.phone %>
+      </div>
+    </div>
+  <% end %>
+
+	</div>
 </div>

@@ -1,7 +1,38 @@
-<p id="notice"><%= notice %></p>
+<!-- IE 9 Gradient Fix -->
 
-<h4><%= custom_image_tag(@gift.receiver,50,50)  %> <%= @gift.receiver_name %><span> has been gifted </span></h4>
-<h4><%= @gift.quantity %> <%= @gift.item_name %></h4>
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+
+<!-- Header -->
+<% description =  "please enter description here" %>
+<div class="menuMakerWrapper"> <!-- Background Image -->
+  <div class="logoCrooked"></div>
+  <div class="showHeaderImage"></div>
+  <div class="lineVertHeader lineVert"></div>
+  <div class="loggedInBox">
+  	<h5>Logged in as: <a href="/home"><%= current_user.fullname %></a></h5>
+  </div>
+  
+  <div class="vendorTitle">
+  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
+  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  			<%= @provider.city_state_zip %>
+  	</h6>
+  </div>
+  <div class="lineHorizHeader lineHoriz"></div>
+
+  <div class="columnOne">
+    <div class="columnTopBlocker"></div>
+    <%= render 'merchant_options' %>
+    <p id="notice"><%= notice %></p>
+
+<h2><%= custom_image_tag(@gift.receiver,50,50)  %> <%= @gift.receiver_name %><span> has been gifted </span></h2>
+
 
 <% if @redeem %>
   <h1>Enter Customer Redeem Code : </h1>
@@ -26,17 +57,20 @@
       <%= f.hidden_field :gift_id  %>
       <%= f.hidden_field :server_id  %>
       <%= f.hidden_field :provider_id  %>
-      <%= f.input :redeem_code, :input_html => { :maxlength => 4 } %>
+      <%= f.input :redeem_code, :input_html => { :maxlength => 4 }, :placeholder => "redeem code" %>
     </div>
       <%= f.submit "Submit", :class => "btn" %>
   <% end %>
 <% else %>
   <h4>Customer has not Redeemed Gift on their Account yet</h4>
 <% end %>
-<h4>For Test purposes only: 
+<h2>For Test purposes only: 
   <a href="#" class="btn btn-large btn-primary disabled"><%= @redeem.redeem_code %></a>
   <hr />
-</h4>
+</h2>
 
 <%= button_to 'Not Now', orders_merchant_path(@provider), method: :get %>
 
+
+	</div>
+</div>

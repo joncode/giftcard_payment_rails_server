@@ -204,12 +204,13 @@ Wb  YML.dML..d'  `Mb.     ,YA.   ,A9 MM YA.   ,A9 MM     L.   I8
 html { 
 
 	body {  
-		background: url(Brooklyn-BridgeBLUR1.png) no-repeat center center fixed; 
-		//background: url(BACKGROUND.jpg) no-repeat center center fixed; 
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;   
-		background-size: cover;
+		// background: url(Brooklyn-BridgeBLUR1.png) no-repeat center center fixed; 
+		// //background: url(BACKGROUND.jpg) no-repeat center center fixed; 
+		// -webkit-background-size: cover;
+		// -moz-background-size: cover;
+		// -o-background-size: cover;   
+		// background-size: cover;
+		background-color:#232A31; 
 
 		.mainWrapper {
 			//
@@ -498,7 +499,7 @@ ul.tabsList {
 			width: 43px;
 			height: 36px;
 			z-index: 100;
-			background-image: url('logoHeaderSmall.png');
+			background-image: url('logoCrooked.png');
 		}
 
 		.appStoreLink {
@@ -590,8 +591,8 @@ ul.tabsList {
 	margin: 20px auto;
 	width : 60%;
 	padding : 10px;
-	box-shadow: 7px 7px 7px #000;
-	border : 2px solid black;
+	box-shadow: 1px 2px 5px 3px black;
+	border : 1px solid #444A52;
 	border-radius : 8px;
 
 	h1 {
@@ -624,46 +625,16 @@ ul.tabsList {
 	}
 	
 	.merchantSignUpWrapper {
-
-		.field {
-			border : 0;
-			
-		}
-
-		h1 {
-			text-align: center;
-		}
-			
-		input, textarea {
-			margin-bottom : 8px;
-			border : 0;
-			color : #000;
-			height: 30px;
-		}
 	
-		input.btn {
-			display: block;
-			margin: 10px auto;
-			color : white;
-			
-			&:hover {
-				background-color : #51A451;
-				box-shadow : 3px 3px 5px black;
-			}
-		}	
 	}
 
 	textarea {
-		padding : 10px;
-		min-height : 100px;
+		//padding : 10px;
+		min-height : 32px;
 		width: 100%;
 		resize: none;
 		
 	}
-}
-
-.merchantSignUpObject2 {
-
 }
 
 .merchantSignUpObject3 {
@@ -679,7 +650,37 @@ ul.tabsList {
 
 
 .merchantShowWrapper {
-	//background: url(orangeBoardBackground.jpg) no-repeat center center fixed;
+	border: 1px solid #444A52;
+	box-sizing: border-box;
+	width: 600px;
+	height: 220px;
+	margin-left: 37px;
+	margin-top: 20px;
+	padding-left: 12px;
+	padding-top: 11px;
+	float: left;
+	display: block;
+	//background: transparent;
+	//background-image: url('backgroundInput.png');
+	//background-repeat: no-repeat;
+	//background-size: 100% 100%;
+	box-shadow: 1px 2px 5px 3px black;
+	font-family: 'museo_sans_500regular';
+	font-size: 16px;
+	color: @blue2 + #552;
+	font-weight: 500;
+	.showImage {
+		position: relative;
+		float: left;
+		margin: 10px;
+		margin-left: 15px;
+		padding: none;
+		margin-right: 30px;
+		box-shadow: 1px 1px 5px black;
+		img {
+			display: block;
+		}
+	}
 	h2 {
 		font-size: 40px;
 		margin-bottom: 20px;
@@ -689,9 +690,9 @@ ul.tabsList {
 		font-size: 25px;
 		text-shadow: 3px 3px 0px black;
 		color: white;
-		line-height: 20px;
+		line-height: 33px;
 		margin: 20px;
-		letter-spacing: .03em;
+		letter-spacing: .04em;
 	}
 
 	.merchantShowList {
@@ -715,14 +716,17 @@ ul.tabsList {
 		padding-right: 20px;
 		font-size: 30px;
 		color: @blueHot;
+		line-height: 1.1;
 	}
 
 	.tdDescription {
 		padding-right: 25px;
+		line-height: 1.1;
 	}
 
 	.tdAddress {
 		padding-right: 20px;
+		line-height: 1.1;
 	}
 
 	td {
@@ -3188,6 +3192,88 @@ ul.menuItemList {
 	display: none;
 
 }
+
+
+//    Merchant menu tabbar
+@blue2: #5DCFF3;
+.merchantMenu {
+	border: 0;
+	box-sizing: border-box;
+	width: 600px;
+	height: 40px;
+	margin-left: 37px;
+	margin-top: -25px;
+	padding-left: 12px;
+	padding-top: 11px;
+	float: left;
+	display: block;
+	background: transparent;
+	background-image: url('loggedInBox.png');
+	background-repeat: no-repeat;
+		background-size: 100% 100%;
+	box-shadow: none;
+		font-family: 'museo_sans_500regular';
+	font-size: 16px;
+	color: @blue2 + #552;
+	font-weight: 500;
+	a {
+		text-decoration: none;
+		letter-spacing: 1px;
+		&:hover {
+			color: @blue2 + #774;
+		}
+	}
+}
+
+// Employee display
+
+.employeeDisplay {
+	border: 0;
+	box-sizing: border-box;
+	width: 600px;
+	height: 100px;
+	margin-left: 37px;
+	margin-top: 20px;
+	padding-left: 12px;
+	padding-top: 11px;
+	float: left;
+	display: block;
+	background: transparent;
+	background-image: url('backgroundInput.png');
+	background-repeat: no-repeat;
+		background-size: 100% 100%;
+	box-shadow: none;
+		font-family: 'museo_sans_500regular';
+	font-size: 16px;
+	color: @blue2 + #552;
+	font-weight: 500;
+	.employeeImage {
+		position: relative;
+		float: left;
+		margin: 2px;
+		margin-left: 5px;
+		padding: none;
+		margin-right: 20px;
+		box-shadow: 0px 0px 2px black;
+		img {
+			display: block;
+		}
+	}	
+	.textTop {
+		font-size: 20px;
+	}
+	.employeeText {
+		padding: 4px;
+		color: #5DCCEF;
+	}
+	.employeeText {
+		color: #5DCCEF;
+		padding: 4px;
+	} 
+}
+
+
+
 
 
 

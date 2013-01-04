@@ -156,6 +156,7 @@ class MerchantsController < ApplicationController
 
   def staff
     @provider = Provider.find(params[:id])
+    
     @staff    = @provider.users
   end
 
