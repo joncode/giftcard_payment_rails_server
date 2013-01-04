@@ -8,7 +8,7 @@ module ApplicationHelper
     end
   end
 
-  def custom_image_tag(object,width,height,flag=nil, cssClass=nil)
+  def custom_image_tag(object,width,height,flag=nil)
     crop  = "/c_fill,h_#{height},w_#{width}/"
     if flag
       photo     = object.get_image(flag)
@@ -17,7 +17,7 @@ module ApplicationHelper
       url_array = object.get_photo.split('upload/')
     end
     photo = url_array[0] + 'upload' + crop + url_array[1]
-    image_tag(photo, alt: "noImage", :class => "customImageTag #{cssClass}" )
+    image_tag(photo, alt: "noImage", :class => "customImageTag", :style => "height:#{height}px;width:#{width}px;" )
   end
 end
 
