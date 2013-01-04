@@ -3271,8 +3271,69 @@ ul.menuItemList {
 		padding: 4px;
 		color: #5DCCEF;
 	}
-	.employeeText {
-		color: #5DCCEF;
+}
+
+// Merchant Orders display
+
+.ordersDisplay {
+	border: 0;
+	box-sizing: border-box;
+	width: 600px;
+	height: 100px;
+	margin-left: 37px;
+	margin-top: 20px;
+	padding-left: 12px;
+	padding-top: 11px;
+	float: left;
+	display: block;
+	background: transparent;
+	background-image: url('backgroundInput.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	box-shadow: none;
+	font-family: 'museo_sans_500regular';
+	font-size: 16px;
+	color: @blue2 + #552;
+	font-weight: 500;
+	.giftImage {
+		position: relative;
+		float: left;
+		margin: 1px;
+		margin-left: 5px;
+		padding: none;
+		margin-right: 20px;
+		border: 1px solid #444A52;
+		box-shadow: 1px 1px 3px 2px black;
+		img {
+			display: block;
+			height: 75px;
+			width: 75px;
+		}
+	}
+	.giftTextLarge {
+		font-size: 20px;
+	}
+	.giftText {
 		padding: 4px;
-	} 
+		color: #5DCCEF;
+	}
+	.giftRightColumn {
+		float: right;
+		margin: 5px;
+		margin-right: 30px;
+	}
+
+}
+
+.statusopen {
+	color: yellow;
+	padding: 5px;
+}
+.statusnotified {
+	color: red;
+	padding: 5px;
+}
+.statusredeemed {
+	color: darkgray;
+	padding: 5px;
 }

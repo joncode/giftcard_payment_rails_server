@@ -29,56 +29,26 @@
   <div class="columnOne">
     <div class="columnTopBlocker"></div>
     <%= render 'merchant_options' %>
-
+    <% @gifts.each do |gift| %>
+    <div class="ordersDisplay">
+      <div class="giftImage">
+        <%= custom_image_tag( gift.receiver ,75,75)  %>
+      </div> 
+      <div class="giftRightColumn">
+        <%= gift.giver.username %>
+      </div>
+      <div class="giftText giftTextLarge">
+        <%= gift.receiver_name %>
+      </div>
+      <div class="giftText">
+        ID #<%= gift.id %>
+      </div>
+      <div class="giftText">
+        <span class="status<%= gift.status %>"><%= print_gift_status gift %></span><%= time_ago_in_words gift.updated_at %>
+      </div>
+    </div>
+    <% end %>
   </div>
 </div>
-<%#=  gifts: @gifts; giver: true %>
-<% giver ||= nil %>
-<% tab_flag ||= nil %>
-<div id="giftIndexWrapper">
-  <% if tab_flag == 'buy' %>
-    <%= render 'gifts/tabs_buy' %>
-  <% else %>
-    <%= render 'gifts/tabs_activity' %>
-  <% end %>
-  <ul id="containerIsotope" class="allCellWrapper ">
-    <% @gifts.each do |gift| %>
-    <% if gift.status == "redeemed" %>
-    <li class="cellWrapper item completed">
-      <% status_class = "Completed" %>
-    <% else %>
-    <li class="cellWrapper item active">
-      <% status_class = "Active" %>
-    <% end %>
-      
-    <div class="cellContent"> 
-      <%#= image_tag get_category_image(gift), {:class => 'iconListView'} %>
-      
-        <h2 class="giftDescription">
-          from <%= gift.giver_name %> at the venue <%= gift.provider_name %>.
-        </h2>
-        <% if tab_flag == "buy" %>
-         <div class="giverID">
-    
-         </div> 
-         <% elsif !giver.nil?  %>
-        <div class="giverID">
-          <%= custom_image_tag(gift.giver,50,50)  %>
-          <h1 class="giverName"><%= gift.giver_name %></h1>
-        </div>
-        <% end %>
-        <div class="timeAgo">
-          <h3>
-            <%= time_ago_in_words(gift.created_at) %>&nbsp;ago
-          </h3>
-        </div>
-        <div class="bottomBox">
-            <%= render 'merchants/buttons_index', gift: gift %>
-        </div>
-      </div>
 
-   
-    <% end %>
-  </ul>
-</div>
 

@@ -8,7 +8,7 @@ module ApplicationHelper
     end
   end
 
-  def custom_image_tag(object,width,height,flag=nil)
+  def custom_image_tag(object,width,height,flag=nil, cssClass=nil)
     crop  = "/c_fill,h_#{height},w_#{width}/"
     if flag
       photo     = object.get_image(flag)
@@ -17,7 +17,19 @@ module ApplicationHelper
       url_array = object.get_photo.split('upload/')
     end
     photo = url_array[0] + 'upload' + crop + url_array[1]
-    image_tag(photo, alt: "customImageTag4", :class => 'customImageTag' )
+    image_tag(photo, alt: "noImage", :class => "customImageTag #{cssClass}" )
   end
-
 end
+
+  def print_gift_status gift
+    case gift.status
+    when 'open'
+      "New"
+    when 'notified'
+      "Redeem"
+    when 'redeemed'
+      "Completed"
+    else
+      "Regifted"
+    end
+  end
