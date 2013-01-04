@@ -1,5 +1,4 @@
 module GiftsHelper
-  # BEVERAGE_CATEGORIES = ['special', 'beer', 'wine', 'cocktail', 'shot']  
   def get_category(category)
     case category
     when 0

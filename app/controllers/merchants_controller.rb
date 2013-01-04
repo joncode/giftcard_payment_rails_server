@@ -19,10 +19,13 @@ class MerchantsController < ApplicationController
     @menu_string = MenuString.get_menu_for_provider(@provider)
     @menu = JSON.parse @menu_string
     @sections = Menu.get_sections(@provider)
-    puts "MENUSTRING --> " + @menu_string
     puts "MENU ARRAY !!! = " + @menu.inspect
-    puts "SECTIONS ARRAY = "  + @sections.inspect
-    
+    puts "SECTIONS ARRAY = "  + @sections.inspect  
+    ##### what do we need for the data to seed this view
+    # the sections need to go into each title bar
+    # the different array hashes need to be sorted into each section
+    # the data needs to be written into each section as holder data
+    # the id for each product needs to be hidden for each product
   end
 
   def show
