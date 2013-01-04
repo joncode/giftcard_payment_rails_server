@@ -21,7 +21,7 @@
 
       <% if signed_in? %>
 
-        <% if params[:controller] == 'merchants' && params[:action] == 'menu' %>
+        <% if params[:controller] == 'merchants' && params[:action] != 'index' %>
           <!-- no header for menu builder -->
         <% else %>
           <%= render 'layouts/header' %>
@@ -45,7 +45,7 @@
           <%#= link_to "Mobile Site", :mobile => 1 %>
         <% end %> -->
 
-      <% if signed_in? %>
+      <% if false %>
         <%= render 'layouts/footer' %>
       <% end %>
 

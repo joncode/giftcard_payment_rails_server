@@ -1,15 +1,35 @@
-<div class="menuBuilderBackground"></div>
-<div class="merchantShowWrapper">
-	<h2><%= @provider.name %></h2>
-	<%= custom_image_tag(@provider,200,200)  %>
-	<% if @provider.description %>
-	<h4>"<%= @provider.description %>"</h4>
-	<% end %>
-	<% if @provider.full_address %>
-	<h4><%= @provider.full_address %></h4>
-	<% end %>
+<!-- IE 9 Gradient Fix -->
 
-	<div class="merchantShowList">
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+
+<!-- Header -->
+<% description =  "please enter description here" %>
+<div class="menuMakerWrapper"> <!-- Background Image -->
+  <div class="logoCrooked"></div>
+  <div class="showHeaderImage"></div>
+  <div class="lineVertHeader lineVert"></div>
+  <div class="loggedInBox">
+  	<h5>Logged in as: <a href="/home"><%= @current_user.fullname %></a></h5>
+  </div>
+  
+  <div class="vendorTitle">
+  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
+  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  			<%= @provider.city_state_zip %>
+  	</h6>
+  </div>
+  <div class="lineHorizHeader lineHoriz"></div>
+
+      <div class="columnOne">
+  <div class="columnTopBlocker"></div>
+  <div class="bankCell">
+  <div class="merchantShowList">
 			<%#= link_to "Orders", orders_merchant_path(@provider) %> |
 	        <%= link_to "Menu Builder", menu_merchant_path(@provider) %> |
 	        <%= link_to "Edit Photos", edit_photo_merchant_path(@provider) %> |
@@ -17,6 +37,12 @@
 	        <%= link_to "Edit Bank Information", edit_bank_merchant_path(@provider) %> |
 	        <%#= link_to "Edit Servers", "#" %>
 	</div>
+  <div class="merchantShowWrapper">
+  	<%= custom_image_tag(@provider,200,200)  %>
+  	<% if @provider.description %>
+  	<h4>"<%= @provider.description %>"</h4>
+  	<% end %>
+  </div>
+	</div>
+	</div>
 </div>
-
-

@@ -30,20 +30,24 @@ class MerchantsController < ApplicationController
 
   def show
     @provider = Provider.find(params[:id])
+    @current_user = current_user
     @menu = create_menu_from_items(@provider)
     @gifts = Gift.get_activity_at_provider(@provider)
   end
 
   def edit_photo
     @provider = Provider.find(params[:id])
+    @current_user = current_user
   end
 
   def edit_info
     @provider = Provider.find(params[:id])
+    @current_user = current_user
   end
 
   def edit_bank
     @provider = Provider.find(params[:id])
+    @current_user = current_user
   end
 
   def update

@@ -1,53 +1,82 @@
-<%= form_for(@provider) do |f| %>
-<div class="merchantSignUpObject">
-  <div class="merchantSignUpBackground"></div>
- 
- <div class="merchantSignUpWrapper">
-    <h1>Basic Info</h1>
+<!-- IE 9 Gradient Fix -->
 
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
 
-      <% if @provider.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
-
-          <ul>
-          <% @provider.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <div class="field">
-        <%= f.text_field :name ,       placeholder: 'Establishment Name'  %>
-      </div>                                      
-      <div class="field">                         
-        <%= f.text_field :zinger ,     placeholder: 'One Line Zinger'  %>
-      </div>
-      <div class="field">                         
-        <%= f.text_area :description , placeholder: 'Full Description', :rows => 4 %>
-      </div>                                                                          
-      <div class="field">                         
-        <%= f.text_field :address,     placeholder: 'Address' %>
-      </div>                                      
-      <div class="field">                         
-        <%= f.text_field :city ,       placeholder: 'City' %>
-      </div>                                      
-      <div class="field">                         
-        <%= f.text_field :state,       placeholder: 'State' %>
-      </div>                                      
-      <div class="field">                         
-        <%= f.text_field :zip,         placeholder: 'Zip' %>
-      </div>
-      <div class="field">                         
-        <%= f.text_field :sales_tax,   placeholder: 'Local Sales Tax' %>
-      </div> 
-      <div class="actions">
-        <%= f.submit "Update", class: "btn btn-large btn-success" %>
-      </div>    
+<!-- Header -->
+<% description =  "please enter description here" %>
+<div class="menuMakerWrapper"> <!-- Background Image -->
+  <div class="logoCrooked"></div>
+  <div class="profileHeaderImage"></div>
+  <div class="lineVertHeader lineVert"></div>
+  <div class="loggedInBox">
+  	<h5>Logged in as: <a href="/home"><%= @current_user.fullname %></a></h5>
   </div>
+  <div class="vendorTitle">
+  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
+  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  			<%= @provider.city_state_zip %>
+  	</h6>
+  </div>
+  <div class="lineHorizHeader lineHoriz"></div>
+    <div class="columnOne">
+    	<div class="columnTopBlocker"></div>
+    	<!-- Start Bank Wrapper -->
+  		<div class="bankCell">
+	<h5 class="menuSectionHeader">
+		Merchant Profile Information
+	</h5>
+	<%= form_for(@provider) do |f| %>
+  <% if @provider.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
+
+      <ul>
+      <% @provider.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="merchantSignUpObject merchantSignUpObject2">
+    <div class="merchantSignUpBackground"></div>
+    <div class="2merchantSignUpWrapper">
+        <div class="field">
+          <%= f.text_field :name ,       placeholder: 'Establishment Name'  %>
+        </div>                                      
+        <div class="field">                         
+          <%= f.text_field :zinger ,     placeholder: 'One Line Zinger'  %>
+        </div>
+        <div class="field">                         
+          <%= f.text_area :description , placeholder: 'Full Description', :rows => 4 %>
+        </div>                                                                          
+        <div class="field">                         
+          <%= f.text_field :address,     placeholder: 'Address' %>
+        </div>                                      
+        <div class="field">                         
+          <%= f.text_field :city ,       placeholder: 'City' %>
+        </div>                                      
+        <div class="field">                         
+          <%= f.text_field :state,       placeholder: 'State' %>
+        </div>                                      
+        <div class="field">                         
+          <%= f.text_field :zip,         placeholder: 'Zip' %>
+        </div>
+        <div class="field">                         
+          <%= f.text_field :sales_tax,   placeholder: 'Local Sales Tax' %>
+        </div> 
+        <div class="actions">
+          <%= f.submit "Update", class: "btn btn-large btn-info" %>
+        </div>  
+    </div>
+  </div>
+
+  <% end %>
+	</div>
+	</div>
 </div>
-
-<% end %>
-
-

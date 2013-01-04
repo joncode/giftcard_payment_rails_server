@@ -1,0 +1,536 @@
+<div class="menuBuilderBackground"></div>
+<!-- IE 9 Gradient Fix -->
+
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+
+<!-- Header -->
+<div class="menuMakerWrapper"> <!-- Background Image -->
+  <div class="logoCrooked"></div>
+  <div class="headerImage"></div>
+  <div class="lineVertHeader lineVert"></div>
+  <div class="loggedInBox">
+  	<h5>Logged in as: <a href="/home"><%= @current_user.fullname %></a></h5>
+  </div>
+  <div class="vendorTitle">
+  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
+  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  			<%= @provider.city_state_zip %>
+  	</h6>
+  </div>
+  <div class="lineHorizHeader lineHoriz"></div>
+<!-- Beer Wrapper -->
+  <!-- Column 1 Start -->
+  <div class="columnOne">
+  	<div class="columnTopBlocker"></div>
+  	<div class="sigDrinkWrapper menuCell">
+    			<div class="sigDrinkMenu">
+    				<div id="editButtonSigDrink" class="buttonSmallDown buttonSmallUp">
+    					<h5><a href="">edit</a></h5>
+    				</div>
+    				<h5 class="menuSectionHeader">
+    					Signature Drink
+    				</h5>
+    						<% if m2["description"] %>
+    							<% description = m2["description"] %>
+    						<% else %>
+    							<% description = "please enter text here describing your signature drink - ingredients / colors / textures" %>
+    						<% end %>
+
+    				<div class="sigDrinkEditWrapper editDescription rounded gradient">
+    					<input type="text" placeholder="<%= m2["item_name"] %>" class="sigDrinkTitle rounded" />
+    					<textarea placeholder="<%= description %>" class="sigDrinkDescription rounded"></textarea>
+    					<h5 class="menuSectionHeader dollarSign" >$</h5>
+    					<input type="text" placeholder="<%= m2["price"] %>" rows="2" class="sigDrinkPrice rounded">
+    					<div id="saveButtonSigDrink" class="buttonSmallDown buttonSmallUp">
+    						<h5><a href="">save</a></h5>
+    					</div>
+    				</div>
+
+    				<!-- Signature Drink Menu Box -->
+    				<div class="sigDrinkMenuBox">
+    					<h5 class="sigDrinkTitle itemTitle">
+    						<%= m2["item_name"] %>
+    					</h5>
+    					<h5 class="sigDrinkDescription itemDescription">
+    						<%= description %>
+    					</h5>
+    					<h5 class="sigDrinkPrice itemPrice">
+    						<%= m2["price"] %>
+    					</h5>
+    				</div>
+    			</div>
+    		</div>
+
+		<div class="lineHoriz">
+  	</div> 
+  	<!-- Signature -->
+  	<% m2 =  @menu[0]["special"].pop %>
+		<%= render 'general_item',  m2:  m2  %>
+
+  	<div class="lineHoriz">
+  	</div>
+
+		<!-- Start Wine Wrapper -->
+		<div class="wineWrapper menuCell">
+			<div id="buttonEditWine" class="buttonSmallDown buttonSmallUp">
+				<h5><a href="">edit</a></h5>
+			</div>
+			<h5 class="menuSectionHeader">
+				Wine
+			</h5>
+			<div id="" class="buttonSaveWine buttonSave buttonSmallDown buttonSmallUp">
+				<h5><a href="">save</a></h5>
+			</div>
+			<ul class="wineEditWrapper smallDetailList rounded gradient">
+				<li class="editWrapper">
+					<input type="text" placeholder="Title" class="wineTitle">
+					<input type="text" placeholder="Description" class="wineDescription">
+					<h5 class="dollarSignDetailList">$</h5>
+					<input type="text" placeholder="" class="winePrice priceDetial gradient rounded">
+					<div class="lineHoriz lineHorizInner"></div>
+				</li>
+				<li class="editWrapper">
+					<input type="text" placeholder="Title" class="wineTitle">
+					<input type="text" placeholder="Description" class="wineDescription">
+					<h5 class="dollarSignDetailList">$</h5>
+					<input type="text" placeholder="" class="winePrice gradient rounded">
+					<div class="lineHoriz lineHorizInner"></div>
+				</li>
+			</ul>
+
+			<!-- Wine Menu View -->
+			<ul class="wineListDetail wineMenuBox ulListDetail">
+				<li class="itemDetail">
+					<h5 class="wineTitle itemTitle">
+						Wine Title Goes Here
+					</h5>
+					<h5 class="appDescription itemDescription">
+						A blend of Petit Porqis and champagne, dipped in chocolate from central Paraguay
+					</h5>
+					<h5 class="winePrice itemPrice">
+						18
+					</h5>
+				</li>
+				<li class="itemDetail">
+					<h5 class="wineTitle itemTitle">
+						Wine Title Goes Here
+					</h5>
+					<h5 class="appDescription itemDescription">
+						A blend of Petit Porqis and champagne, dipped in chocolate from central Paraguay
+					</h5>
+					<h5 class="sigFoodPrice itemPrice">
+						18
+					</h5>
+				</li>
+			</ul>
+		</div>
+
+		<div class="lineHoriz">
+  	</div>
+
+<!-- Cocktails -->
+  
+		<div class="cockWrapper menuCell">
+			<div id="buttonEditCock" class="buttonSmallDown buttonSmallUp">
+				<h5><a href="">edit</a></h5>
+			</div>
+			<h5 class="menuSectionHeader">
+				Cocktails
+			</h5>
+
+			<div class="buttonSaveCock buttonSave buttonSmallDown buttonSmallUp">
+				<h5><a href="">save</a></h5>
+			</div>
+			<ul class="cockEditWrapper smallDetailList rounded gradient">
+				<li class="editWrapper">
+					<input type="text" placeholder="Title" class="wineTitle rounded gradient">
+					<input type="text" placeholder="Description" class="cockDescription rounded gradient">
+					<h5 class="dollarSignDetailList">$</h5>
+					<input type="text" placeholder="" class="cockPrice priceDetail rounded gradient">
+					<div class="lineHoriz lineHorizInner"></div>
+				</li>
+				<li class="editWrapper">
+					<input type="text" placeholder="Title" class="wineTitle rounded gradient">
+					<input type="text" placeholder="Description" class="cockDescription rounded gradient">
+					<h5 class="dollarSignDetailList">$</h5>
+					<input type="text" placeholder="" class="cockPrice priceDetail rounded gradient">
+					<div class="lineHoriz lineHorizInner"></div>
+				</li>
+				<li class="editWrapper">
+					<input type="text" placeholder="Title" class="wineTitle rounded gradient">
+					<input type="text" placeholder="Description" class="cockDescription rounded gradient">
+					<h5 class="dollarSignDetailList">$</h5>
+					<input type="text" placeholder="" class="cockPrice priceDetail rounded gradient">
+					<div class="lineHoriz lineHorizInner"></div>
+				</li>
+			</ul>
+
+			<!-- Cocktail Menu Entry -->
+			<ul class="cockItemList ulListDetail">
+				<li class="itemCock itemDetail">
+					<h5 class="cockTitle itemTitle">
+						Cocktail Title Goes Here
+					</h5>
+					<h5 class="cockDescription itemDescription">
+						A blend of Petit Porqis and champagne, dipped in chocolate from central Paraguay
+					</h5>
+					<h5 class="cockPrice itemPrice">
+						18
+					</h5>
+				</li>
+				<li class="itemCock itemDetail">
+					<h5 class="cockTitle itemTitle">
+						Cocktail Title Goes Here
+					</h5>
+					<h5 class="cockDescription itemDescription">
+						A blend of Petit Porqis and champagne, dipped in chocolate from central Paraguay
+					</h5>
+					<h5 class="cockPrice itemPrice">
+						18
+					</h5>
+				</li>
+				
+			</ul>
+			<!-- End li's -->
+  	</div>
+
+		<div class="lineHoriz">
+  	</div>
+
+
+
+                                               
+<!-- Liqour -->
+
+		<div class="liqWrapper menuCell">
+			<div id="editPricesButtonLiq" class="buttonSmallerUp buttonSmallerDown">
+				<div class="buttonHiderPrice"></div>
+				<h5><a href="">edit price</a></h5>
+			</div>
+			<div id="editItemsButtonLiq" class="buttonSmallerDown buttonSmallerUp">
+				<div class="buttonHiderItem"></div>
+				<h5><a href="">edit items</a></h5>
+			</div>
+			<h5 class="menuSectionHeader">
+				Liquor
+			</h5>
+			<div class="buttonSave buttonSaveLiqPrice buttonSmallDown buttonSmallUp">
+				<h5><a href="">save</a></h5>
+			</div>
+
+			<!-- liq Edit Wrapper -->
+			<div class="buttonSave buttonSaveLiqItem buttonSmallDown buttonSmallUp">
+				<h5><a href="">save</a></h5>
+			</div>
+
+			<div class="liqEditWrapper rounded gradient">
+				<ul class="liqList staticList">
+					<li class="staticButtonOff staticButton">
+						<h5 class="staticButtonText">
+							Heinekin <br />
+							3 Lines <br />
+							of text <br />
+						</h5>
+						<h5 class="staticButtonPrice">
+							$9
+						</h5>
+						<div class="plusIcon"></div>
+						<div class="minusIcon"></div>
+						<a href="" class="staticClickOff"></a>
+					</li>
+					<li class="staticButtonActive staticButton">
+						<h5 class="staticButtonText">
+							Heinekin <br />
+							3 Lines <br />
+							of text <br />
+						</h5>
+						<h5 class="staticButtonPrice">
+							$9
+						</h5>
+						<div class="minusIcon"></div>
+						<div class="plusIcon"></div>
+						<a href="" class="staticClickOn"></a>
+					</li>
+					<li class="staticButtonActive staticButton">
+						<h5 class="staticButtonText">
+							Heinekin <br />
+							3 Lines <br />
+							of text <br />
+						</h5>
+						<h5 class="staticButtonPrice">
+							$9
+						</h5>
+						<div class="minusIcon"></div>
+						<div class="plusIcon"></div>
+						<a href="" class="staticClickOn"></a>
+					</li>
+					
+				</ul>
+			</div>
+
+			<!-- liq Menu Entry -->
+			<ul class="liqItemsList ulSingleLineItem liqMenuBox">
+				<li class="singleLineItem">
+					<h5 class="liqTitle itemTitle itemTitleSingle">
+						 liq Name Goes Here
+						 <span class="liqPrice priceSingleItem">
+							- 18
+						</span>
+					</h5>
+					<div class="priceEditLine">
+						<div class="arrowDown"></div>
+						<h5 class="dollarSignSmall">$</h5>
+						<input type="text" placeholder="" class="liqPriceLine rounded gradient">
+					</div>
+				</li>
+
+				<li class="singleLineItem">
+					<h5 class="liqTitle itemTitle itemTitleSingle">
+						 liq Name Goes Here
+						 <span class="liqPrice priceSingleItem">
+							- 18
+						</span>
+					</h5>
+					<div class="priceEditLine">
+						<div class="arrowDown"></div>
+						<h5 class="dollarSignSmall">$</h5>
+						<input type="text" placeholder="" class="liqPriceLine rounded gradient">
+					</div>
+				</li>
+
+				<li class="singleLineItem">
+					<h5 class="liqTitle itemTitle itemTitleSingle">
+						 liq Name Goes Here
+						 <span class="liqPrice priceSingleItem">
+							- 18
+						</span>
+					</h5>
+					<div class="priceEditLine">
+						<div class="arrowDown"></div>
+						<h5 class="dollarSignSmall">$</h5>
+						<input type="text" placeholder="" class="liqPriceLine rounded gradient">
+					</div>
+				</li>
+  		</ul>
+		</div>  <!-- End liq Wrapper -->
+
+  	<div class="lineHoriz">
+  	</div>
+	</div>	<!-- End Column 1 -->
+
+<!--                    ,,          
+                 `7MM          
+                   MM          
+ ,p6"bo   ,pW"Wq.  MM  pd*"*b. 
+6M'  OO  6W'   `Wb MM (O)   j8 
+8M       8M     M8 MM     ,;j9 
+YM.    , YA.   ,A9 MM  ,-='    
+ YMbmd'   `Ybmd9'.JMMLAmmmmmmm -->
+
+	<div class="columnTwo">
+		<div class="columnTopBlocker"></div>
+
+  	<!-- Signature Food Wrapper -->
+		<div class="sigFoodWrapper menuCell">
+			<div class="sigFoodMenu">
+				<div id="editButtonSigFood" class="buttonSmallDown buttonSmallUp">
+					<h5><a href="">edit</a></h5>
+				</div>
+				<h5 class="menuSectionHeader">
+					Signature Food
+				</h5>
+
+				<!-- EDIT Signature Food Wrapper -->
+				<div class="sigFoodEditWrapper rounded gradient">
+					<input type="text" placeholder="Title" class="sigFoodTitle rounded">
+					<input type="text" placeholder="Description" class="sigFoodDescription rounded">
+					<h5 class="menuSectionHeader dollarSign">$</h5>
+					<input type="text" placeholder="" class="sigFoodPrice rounded">
+					<div id="saveButtonSigFood" class="buttonSmallDown buttonSmallUp">
+						<h5><a href="">save</a></h5>
+					</div>
+				</div>
+
+				<!-- Signature Food Menu Listing -->
+				<div class="sigFoodMenuBox">
+					<h5 class="sigFoodTitle itemTitle">
+						Signature Food Title Goes Here
+					</h5>
+					<h5 class="sigFoodDescription itemDescription">
+						Roast Beef cooked for 2 months in a jet engine oven/mist baster, blue cheese dressing, kobe beef 	fries with potatoes grown in total darkness. Roast Beef cooked for 2 months in a jet engine 	oven/mist baster, blue cheese dressing, kobe beef fries with potatoes grown in total darkness.
+					</h5>
+					<h5 class="sigFoodPrice itemPrice">
+						18
+					</h5>
+				</div>
+			</div>
+			<div class="lineHoriz">
+  		</div>
+		</div>
+
+<!--       
+      db                                 
+     ;MM:                                
+    ,V^MM.   `7MMpdMAo`7MMpdMAo. ,pP"Ybd 
+   ,M  `MM     MM   `Wb MM   `Wb 8I   `" 
+   AbmmmqMA    MM    M8 MM    M8 `YMMMa. 
+  A'     VML   MM   ,AP MM   ,AP L.   I8 
+.AMA.   .AMMA. MMbmmd'  MMbmmd'  M9mmmP' 
+               MM       MM               
+             .JMML.   .JMML.              -->
+		
+		<div class="appWrapper menuCell">
+			<div id="buttonEditApp" class="buttonSmallDown buttonSmallUp">
+				<h5><a href="">edit</a></h5>
+			</div>
+			<h5 class="menuSectionHeader">
+				Appetizer
+			</h5>
+			<div id="" class="buttonSaveApp buttonSave buttonSmallDown buttonSmallUp">
+				<h5><a href="">save</a></h5>
+			</div>
+			<ul class="appEditWrapper smallDetailList rounded gradient">
+				<li class="editWrapper">
+					<input type="text" placeholder="Title" class="appTitle">
+					<input type="text" placeholder="Description" class="appDescription">
+					<h5 class="dollarSignDetailList">$</h5>
+					<input type="text" placeholder="" class="appPrice priceDetail gradient rounded">
+					<div class="lineHoriz lineHorizInner"></div>
+				</li>
+				<li class="editWrapper">
+					<input type="text" placeholder="Title" class="appTitle">
+					<input type="text" placeholder="Description" class="appDescription">
+					<h5 class="dollarSignDetailList">$</h5>
+					<input type="text" placeholder="" class="appPrice gradient rounded">
+					<div class="lineHoriz lineHorizInner"></div>
+				</li>
+			</ul>
+
+			<!-- App Menu View -->
+			<ul class="appListDetail appMenuBox ulListDetail">
+				<li class="itemDetail">
+					<h5 class="appTitle itemTitle">
+						app Title Goes Here
+					</h5>
+					<h5 class="appDescription itemDescription">
+						A blend of Petit Porqis and champagne, dipped in chocolate from central Paraguay
+					</h5>
+					<h5 class="appPrice itemPrice">
+						18
+					</h5>
+				</li>
+				<li class="itemDetail">
+					<h5 class="appTitle itemTitle">
+						app Title Goes Here
+					</h5>
+					<h5 class="appDescription itemDescription">
+						A blend of Petit Porqis and champagne, dipped in chocolate from central Paraguay
+					</h5>
+					<h5 class="appFoodPrice itemPrice">
+						18
+					</h5>
+				</li>
+			</ul>
+		</div>
+
+		<div class="lineHoriz">
+  	</div>
+
+		
+<!-- 
+`7MM"""YMM             mm                    
+  MM    `7             MM                    
+  MM   d    `7MMpMMMbmmMMmm `7Mb,od8 .gP"Ya  
+  MMmmMM      MM    MM MM     MM' "',M'   Yb 
+  MM   Y  ,   MM    MM MM     MM    8M"""""" 
+  MM     ,M   MM    MM MM     MM    YM.    , 
+.JMMmmmmMMM .JMML  JMML`Mbmo.JMML.   `Mbmmd'  -->
+
+		<div class="entreWrapperEntre menuCell">
+			<div id="buttonEditEntre" class="buttonSmallDown buttonSmallUp">
+				<h5><a href="">edit</a></h5>
+			</div>
+			<h5 class="menuSectionHeader">
+				Entre
+			</h5>
+			<div id="" class="buttonSaveEntre buttonSave buttonSmallDown buttonSmallUp">
+				<h5><a href="">save</a></h5>
+			</div>
+			<ul class="entreEditWrapper smallDetailList rounded gradient">
+				<li class="editWrapperEntre">
+					<input type="text" placeholder="Title" class="entreTitle">
+					<input type="text" placeholder="Description" class="entreDescription">
+					<h5 class="dollarSignDetailList">$</h5>
+					<input type="text" placeholder="" class="entrePrice priceDetail gradient rounded">
+					<div class="lineHoriz lineHorizInner"></div>
+				</li>
+				<li class="editWrapperEntre">
+					<input type="text" placeholder="Title" class="entreTitle">
+					<input type="text" placeholder="Description" class="entreDescription">
+					<h5 class="dollarSignDetailList">$</h5>
+					<input type="text" placeholder="" class="entrePrice gradient rounded">
+					<div class="lineHoriz lineHorizInner"></div>
+				</li>
+			</ul>
+
+			<!-- Entre Menu View -->
+			<ul class="entreListDetail entreMenuBox ulListDetail">
+				<li class="itemDetail">
+					<h5 class="entreTitle itemTitle">
+						entre Title Goes Here
+					</h5>
+					<h5 class="entreDescription itemDescription">
+						A blend of Petit Porqis and champagne, dipped in chocolate from central Paraguay
+					</h5>
+					<h5 class="entrePrice itemPrice">
+						18
+					</h5>
+				</li>
+				<li class="itemDetail">
+					<h5 class="entreTitle itemTitle">
+						entre Title Goes Here
+					</h5>
+					<h5 class="entreDescription itemDescription">
+						A blend of Petit Porqis and champagne, dipped in chocolate from central Paraguay
+					</h5>
+					<h5 class="entrePrice itemPrice">
+						18
+					</h5>
+				</li>
+			</ul>
+		</div>
+
+		<div class="lineHoriz">
+  	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		</div>
+	</div> <!-- End Column Two -->
+</div>
