@@ -36,24 +36,25 @@
       </div>
     </div>
     <% else %>
-    <% @gifts.each do |gift| %>
-    <div class="ordersDisplay">
-      <div class="giftImage">
-        <%= custom_image_tag( gift.receiver ,75,75)  %>
-      </div> 
-      <div class="giftRightColumn">
-        <%= gift.giver.username %>
+      <% @gifts.each do |gift| %>
+      <div class="ordersDisplay">
+        <div class="giftImage">
+          <%= custom_image_tag( gift.receiver ,75,75)  %>
+        </div> 
+        <div class="giftRightColumn">
+          <%= gift.giver.username %>
+        </div>
+        <div class="giftText giftTextLarge">
+          <%= gift.receiver_name %>
+        </div>
+        <div class="giftText">
+          ID #<%= gift.id %>
+        </div>
+        <div class="giftText">
+          <span class="status<%= gift.status %>"><%= print_gift_status gift %></span><%= time_ago_in_words gift.updated_at %>
+        </div>
       </div>
-      <div class="giftText giftTextLarge">
-        <%= gift.receiver_name %>
-      </div>
-      <div class="giftText">
-        ID #<%= gift.id %>
-      </div>
-      <div class="giftText">
-        <span class="status<%= gift.status %>"><%= print_gift_status gift %></span><%= time_ago_in_words gift.updated_at %>
-      </div>
-    </div>
+      <% end %>
     <% end %>
   </div>
 </div>
