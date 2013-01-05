@@ -114,7 +114,7 @@ class Gift < ActiveRecord::Base
   end
   
   def self.get_all_orders(provider)
-    Gift.where(provider_id: provider.id).order("updated_at DESC")
+    Gift.where(provider_id: provider.id).where("status != :stat ", :stat => 'incomplete').order("updated_at DESC")
   end
   
   def self.get_history_provider(provider)

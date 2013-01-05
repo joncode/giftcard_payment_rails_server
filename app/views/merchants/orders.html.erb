@@ -29,6 +29,13 @@
   <div class="columnOne">
     <div class="columnTopBlocker"></div>
     <%= render 'merchant_options' %>
+    <% if @gifts.nil? %>
+    <div class="ordersDisplay">
+      <div class="giftText giftTextLarge">
+        You do not have any orders at this time
+      </div>
+    </div>
+    <% else %>
     <% @gifts.each do |gift| %>
     <div class="ordersDisplay">
       <div class="giftImage">
