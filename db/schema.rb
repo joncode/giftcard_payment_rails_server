@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121211171406) do
+ActiveRecord::Schema.define(:version => 20130106224233) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(:version => 20121211171406) do
     t.string   "receiver_phone"
     t.string   "tax"
     t.string   "tip"
-    t.integer  "gift_id"
+    t.integer  "regift_id"
     t.string   "foursquare_id"
     t.string   "facebook_id"
     t.integer  "anon_id"
@@ -130,14 +130,6 @@ ActiveRecord::Schema.define(:version => 20121211171406) do
   add_index "gifts", ["giver_id"], :name => "index_gifts_on_giver_id"
   add_index "gifts", ["provider_id"], :name => "index_gifts_on_provider_id"
   add_index "gifts", ["receiver_id"], :name => "index_gifts_on_receiver_id"
-
-  create_table "gifts_menus", :id => false, :force => true do |t|
-    t.integer "gift_id"
-    t.integer "menu_id"
-  end
-
-  add_index "gifts_menus", ["gift_id"], :name => "index_gifts_menus_on_gift_id"
-  add_index "gifts_menus", ["menu_id"], :name => "index_gifts_menus_on_menu_id"
 
   create_table "items", :force => true do |t|
     t.string  "item_name",   :limit => 50, :null => false
@@ -365,6 +357,8 @@ ActiveRecord::Schema.define(:version => 20121211171406) do
     t.string   "fb_photo"
     t.string   "use_photo"
     t.string   "secure_image"
+    t.datetime "reset_token_sent_at"
+    t.string   "reset_token"
   end
 
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"

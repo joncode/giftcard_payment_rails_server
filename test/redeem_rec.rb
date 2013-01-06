@@ -115,7 +115,7 @@ class RedeemTests
     test = "Test A3"
     method_name = "test_sends_new_gifts_as_json"
     puts "\n\n  *******     #{test} - #{method_name}     ********* "
-    curlString = "url #{TEST_URL}/app/providers.json -d'token=#{@user1.remember_token}'"
+    curlString = "curl #{TEST_URL}/app/providers.json -d'token=#{@user1.remember_token}'"
     #s = String.new(%x{#{curlString}})
     #response = JSON.parse s
     ###  --- >>>>>>        
@@ -129,7 +129,7 @@ class RedeemTests
     test = "Test A4"
     method_name = "test_sends_correct_info_when_no_gifts"
     puts "\n\n  *******     #{test} - #{method_name}     ********* "
-    curlString = "url #{TEST_URL}/app/providers.json -d'token=#{@user1.remember_token}'"
+    curlString = "curl #{TEST_URL}/app/providers.json -d'token=#{@user1.remember_token}'"
     #s = String.new(%x{#{curlString}})
     #response = JSON.parse s
     ###  --- >>>>>>        

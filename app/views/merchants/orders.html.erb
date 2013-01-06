@@ -32,7 +32,7 @@
     <%= render 'merchant_options' %> 
 
     <!-- CHECK FOR GIFTS IF NONE RENDER APPROPIATE MSG -->    
-    <% if @gifts.nil? %>
+    <% if @gifts.empty? %>
     <div class="ordersDisplay">
       <div class="giftText giftTextLarge">
         <h2>You do not have any orders at this time</h2>
@@ -40,43 +40,68 @@
     </div>
     <% else %>
     <!-- GIFT ID SEARCH FIELD -->
-      <div class="inputWrapper giftIDsearch">
-        <input type="text" placeholder="Enter Gift ID #" id="giftID" name="giftID" class="inputEmploy"/>
-        <span id="giftIDsearch" class="buttonUp">
-          <a href="" id="findButton">Find</a>
-          <a href="" class="buttonUp showAll">All</a>
-        </span>
-
-        
-      </div> 
+    <div class="inputWrapper giftIDsearch">
+      <input type="text" placeholder="Enter Gift ID #" id="giftID" name="giftID" class="inputEmploy"/>
+      <span id="giftIDsearch" class="buttonUp">
+        <a href="" id="findButton">Find</a>
+        <a href="" class="buttonUp showAll">All</a>
+      </span>
+    </div> 
     <!-- GIFT LOOP START -->
-      <% @gifts.each do |gift| %>
-      <div class="ordersDisplay" id="giftID<%= gift.id %>">
-        <div class="giftImage">
+    <% @gifts.each do |gift| %>
+    <div class="ordersDisplay" id="giftID<%= gift.id %>">
+    
+    <!--    Left Column   -->
+      <div class="orderGiftLeft giftImage">
           <%= custom_image_tag( gift.receiver ,75,75)  %>
-        </div> 
-        <div class="timeAgo giftRightColumn">
-          <%= time_ago_in_words gift.updated_at %> ago
+      </div>
+    <!--    Right Column   -->
+      <div class="orderGiftRight">
+        <div class="giftID">
+            ID # <%= gift.id %>
+        </div>    
+        <% if gift.status == 'notified' %>
+        <div class="redeemInput">
+          <input type="text" placeholder="Code" id="redeem" name="redeem" class="inputRedeem" maxlength="4"/>
         </div>
-        <div class="giftText giftID">
-          <%= gift.item_name %>
+        <% end %>
+        <div id="buttonEditWine" class="buttonSmallDown buttonUp">
+          <a href="" class="status<%= gift.status %>">
+            <%= print_gift_status gift %>
+          </a>
+        </div>
+
+      </div>
+      
+    <!--    Middle Column   -->
+      <div class="orderGiftMiddle">
+        <div class="timeAgo">
+          <%= time_ago_in_words gift.updated_at %> ago
         </div>
         <div class="giftText giftTextLarge">
           <%= gift.receiver_name %>
         </div>
-
-        <div class="giftText">      
-          <div id="buttonEditWine" class="buttonSmallDown buttonUp">
-            <a href="" class="status<%= gift.status %>">
-              <%= print_gift_status gift %>
-            </a>
-          </div>
-          <div class="giftID">
-            ID # <%= gift.id %>
-          </div>
-        </div>
+        <ul class="giftCart">
+        <% if gift.shoppingCart %>
+          <!-- turn the shopping cart JSON into an array
+                go thru the array , take each item
+                print THAT item_name to the screen -->
+          <% cart_json = gift.shoppingCart %> 
+          <% cart = JSON.parse cart_json %>
+          <% cart.each do |item| %>
+          <li class="giftItem timeAgo">
+            <%= item["quantity"] %> <%= item["item_name"] %>
+          </li>
+          <% end %> 
+        <% else %>
+        <li class="giftItem timeAgo">
+          <%= rand(3) + 1 %> <%= gift.item_name %>
+        </li>
+        <% end %> 
+        </ul>
       </div>
-      <% end %>
+    </div>  
+    <% end %>
       <!-- GIFT LOOP END -->
     <% end %>
   </div>

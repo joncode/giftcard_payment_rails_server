@@ -282,7 +282,7 @@ class IphoneController < AppController
     end
 
     if gift_obj.nil?
-      message = "No gift data received.  "
+      message += "No gift data received.  "
       gift    = Gift.new
     else
       gift    = Gift.new(gift_obj)
@@ -307,7 +307,7 @@ class IphoneController < AppController
         gift.giver_name = giver.username
       end
     rescue
-      message = "Couldn't identify app user. "
+      message += "Couldn't identify app user. "
     end
     
     response = { "error" => message } if message != "" 

@@ -51,11 +51,11 @@ class Provider < ActiveRecord::Base
 
 
   has_many   :users, :through => :employees                                                                              
-  has_many   :employees
+  has_many   :employees, dependent: :destroy
   has_many   :relays
-  has_one    :menu                                                                              
+  has_one    :menu, dependent: :destroy                                                                              
   has_many   :orders                                                                            
-  has_one    :menu_string
+  has_one    :menu_string, dependent: :destroy
   has_many   :gifts
   has_many   :sales
   has_and_belongs_to_many   :tags
@@ -67,6 +67,8 @@ class Provider < ActiveRecord::Base
   mount_uploader :box,      ProviderBoxUploader
   mount_uploader :portrait, ProviderPortraitUploader
 
+  before_create :extract_phone_digits
+
   def self.allWithinBounds(bounds)
     puts bounds
     Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
@@ -77,7 +79,7 @@ class Provider < ActiveRecord::Base
   end
 
   def complete_address
-    "#{self.address}\n#{self.city}, #{self.state} #{self.zip}"
+    "#{self.address}\n#{self.city_state_zip}"
   end
 
   def city_state_zip
@@ -166,6 +168,14 @@ class Provider < ActiveRecord::Base
     response["provider_id"]     = self.id.to_s 
     return response   
   end 
+
+  private
+    def extract_phone_digits
+      if self.phone && !self.phone.empty?
+        phone_match         = self.phone.match(VALID_PHONE_REGEX)
+        self.phone = phone_match[1] + phone_match[2] + phone_match[3]
+      end
+    end
 
 end
  
