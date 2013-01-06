@@ -67,10 +67,14 @@ class MerchantsController < ApplicationController
   def orders
     @provider = Provider.find(params[:id])
     @gifts = Gift.get_all_orders(@provider)
-    
+
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @gifts }
+      if @gifts.nil?
+        format.html 
+      else
+        format.html # index.html.erb
+        format.json { render json: @gifts }
+      end
     end
   end
 

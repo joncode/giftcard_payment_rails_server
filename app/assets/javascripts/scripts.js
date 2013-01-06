@@ -34,65 +34,6 @@ $(function() {
 			//end switch up/down images/class switch
 	});
 
-	// Beer "Edit ITEMS" click functions
-	$('#editItemsButtonBeer a').click(function () {
-
-		//swap out edit button images and a blocker divs on click
-		$('#editItemsButtonBeer').toggleClass('buttonSmallerUp');
-		$('#editPricesButtonBeer').addClass('buttonSmallerUp');
-		$('#editPricesButtonBeer').toggleClass('buttonDeadOpacity');
-		$('.buttonHiderPrice').toggle();
-
-		// Change the 2 edit box states		
-		$('.beerEditWrapper, .buttonSaveBeerItem').fadeToggle(100);
-		$('.beerMenuBox').fadeToggle(100);
-		return false;
-			//end switch up/down images/class switch
-	});
-
-	// Beer "Edit PRICES" click functions
-	$('#editPricesButtonBeer a').click(function () {
-		//swap out edit button image on click
-		$('#editPricesButtonBeer').toggleClass('buttonSmallerUp');
-		$('#editItemsButtonBeer').toggleClass('buttonDeadOpacity');
-		$('.buttonHiderItem').toggle();
-
-		// Change the 2 edit box states
-		$('.beerPriceLine, .dollarSignSmall, .arrowDown, .priceSingleItem, .buttonSaveBeerPrice').fadeToggle(100);
-		return false;
-			//end switch up/down images/class switch
-	});
-
-
-	// Liq "Edit ITEMS" click functions
-	$('#editItemsButtonLiq a').click(function () {
-
-		//swap out edit button images and a blocker divs on click
-		$('#editItemsButtonLiq').toggleClass('buttonSmallerUp');
-		$('#editPricesButtonLiq').addClass('buttonSmallerUp');
-		$('#editPricesButtonLiq').toggleClass('buttonDeadOpacity');
-		$('.buttonHiderPrice').toggle();
-
-		// Change the 2 edit box states		
-		$('.liqEditWrapper, .buttonSaveLiqItem').fadeToggle(100);
-		$('.liqMenuBox').fadeToggle(100);
-		return false;
-			//end switch up/down images/class switch
-	});
-
-	// Liq "Edit PRICES" click functions
-	$('#editPricesButtonLiq a').click(function () {
-		//swap out edit button image on click
-		$('#editPricesButtonLiq').toggleClass('buttonSmallerUp');
-		$('#editItemsButtonLiq').toggleClass('buttonDeadOpacity');
-		$('.buttonHiderItem').toggle();
-
-		// Change the 2 edit box states
-		$('.liqPriceLine, .dollarSignSmall, .arrowDown, .priceSingleItem, .buttonSaveLiqPrice').fadeToggle(100);
-		return false;
-			//end switch up/down images/class switch
-	});
-
 	// Wine "edit" click functions
 	$('#buttonEditWine a').click(function () {
 		//swap out edit button image on click
@@ -102,32 +43,49 @@ $(function() {
 			//end switch up/down images/class switch
 	});
 
-		// Cocktail "edit" click functions
-	$('#buttonEditCock a').click(function () {
+	// Employee 'Add' click functions
+	$('#buttonAddEmp a').click(function () {
 		//swap out edit button image on click
-		$('#buttonEditCock').toggleClass('buttonSmallUp');
-		$('.cockEditWrapper, .cockMenuBox, .buttonSaveCock, .cockItemList').toggle();
+		$('#buttonAddEmp').toggleClass('buttonLargeUp');
+		$('.addDisplay').toggle();
 		return false;
 			//end switch up/down images/class switch
 	});
 
-	// App "edit" click functions
-	$('#buttonEditApp a').click(function () {
-		//swap out edit button image on click
-		$('#buttonEditApp').toggleClass('buttonSmallUp');
-		$('.appEditWrapper, .appMenuBox, .buttonSaveApp').toggle();
+	// Gift ID search bar methods
+	$('#findButton').click(function () {
+		
+		// get the number from the input field
+		var giftID = $('#giftID').val();
+		if (giftID) {
+					// find the gift object with giftID
+			var searchID = "#giftID" + giftID; 
+			var giftDiv = $(".ordersDisplay");
+
+			if ($(searchID).data()) {
+				// you have the gift
+				// find all the gift objects with backgrounds and hide them
+				$('.ordersDisplay').hide();
+				$(searchID).show();
+				$('.showAll').show();
+				//alert('found it gift ID = ' + giftID);
+			} else {
+				// you dont have the gift
+				// put up an alert box stating you dont have gift 
+				alert('Cannot find that gift ID = ' + giftID);
+			};
+		};
+
 		return false;
-			//end switch up/down images/class switch
+	});
+	$('.showAll').click(function () {
+		// display all the gift objects
+		$('.ordersDisplay').show();
+		$('.showAll').hide();
+		$('#giftID').val('');
+		return false;
 	});
 
-	// Entre "edit" click functions
-	$('#buttonEditEntre a').click(function () {
-		//swap out edit button image on click
-		$('#buttonEditEntre').toggleClass('buttonSmallUp');
-		$('.entreEditWrapper, .entreMenuBox, .buttonSaveEntre, .entreItemList').toggle();
-		return false;
-			//end switch up/down images/class switch
-	});
 
 // Static Click Item Selector (blue and grey button grids)
 	//Animate Up/Down States

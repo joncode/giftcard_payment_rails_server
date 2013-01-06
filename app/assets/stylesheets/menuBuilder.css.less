@@ -151,7 +151,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#22282d', end
 	width: 768px;
 	position: relative;
 	overflow: hidden;
-	top: -25px;
+	top: -70px;
 }
 
 .logoCrooked {
@@ -225,8 +225,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#22282d', end
 .buttonSmallDown {
 	float: right; 
 	background-image: url('buttonEditSmallDown.png');
-	width: 67px;
-	height: 40px;
+	//width: 67px;
+	//height: 40px;
 
 		h5 a {
 		color: @blue2;
@@ -415,6 +415,25 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#22282d', end
 .menuCell {
 	position: relative;
 	float: left;
+	input[type="submit"]  {
+		background-image: url('buttonEditSmall.png');
+		margin-top: 10px;
+		margin-left: 8px;
+		padding-left: 0px !important;
+		height: 36px;
+	    width: 67px;
+	    float: left;
+	    background-color: transparent;
+	    border: medium none;
+	    color: @blue2;
+		font-size: 14px !important;
+		&:hover {
+			color: white;
+		}
+		&:active {
+			background-image: url('buttonEditSmallDown.png');	
+		}
+	}
 }
 
 .ulSingleLineItem { // ul
@@ -551,6 +570,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#22282d', end
 	position: relative;
 	float: left;
 	width: 600px;
+	right: 0px;
 }
 
 .sigFoodEditWrapper, 
@@ -598,9 +618,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#22282d', end
 		background: transparent;
 		background-image: url('backgroundInput.png');
 		background-repeat: no-repeat;
-  	background-size: 100% 100%;
-    box-shadow: none;
-   	font-family: 'museo_sans_500regular';
+  		background-size: 100% 100%;
+    	box-shadow: none;
+   		font-family: 'museo_sans_500regular';
 		font-size: 19px;
 		color: @blue2;
 		font-weight: 500;
@@ -615,7 +635,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#22282d', end
 	}
 
 	:-moz-placeholder {  
-  	color: #666;  
+  		color: #666;  
 	}
 
 	.sigFoodDescription, .sigDrinkDescription {
@@ -787,8 +807,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#22282d', end
 	margin: 8px 0 0 0;
 	float: left;
 }
-
-
 
 
 

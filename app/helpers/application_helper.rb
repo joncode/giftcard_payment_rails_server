@@ -28,7 +28,7 @@ end
     when 'notified'
       "Redeem"
     when 'redeemed'
-      "Completed"
+      "Complete"
     else
       "Regifted"
     end

@@ -27,34 +27,57 @@
   <div class="lineHorizHeader lineHoriz"></div>
 
   <div class="columnOne">
+
     <div class="columnTopBlocker"></div>
-    <%= render 'merchant_options' %>
+    <%= render 'merchant_options' %> 
+
+    <!-- CHECK FOR GIFTS IF NONE RENDER APPROPIATE MSG -->    
     <% if @gifts.nil? %>
     <div class="ordersDisplay">
       <div class="giftText giftTextLarge">
-        You do not have any orders at this time
+        <h2>You do not have any orders at this time</h2>
       </div>
     </div>
     <% else %>
+    <!-- GIFT ID SEARCH FIELD -->
+      <div class="inputWrapper giftIDsearch">
+        <input type="text" placeholder="Enter Gift ID #" id="giftID" name="giftID" class="inputEmploy"/>
+        <span id="giftIDsearch" class="buttonUp">
+          <a href="" id="findButton">Find</a>
+          <a href="" class="buttonUp showAll">All</a>
+        </span>
+
+        
+      </div> 
+    <!-- GIFT LOOP START -->
       <% @gifts.each do |gift| %>
-      <div class="ordersDisplay">
+      <div class="ordersDisplay" id="giftID<%= gift.id %>">
         <div class="giftImage">
           <%= custom_image_tag( gift.receiver ,75,75)  %>
         </div> 
-        <div class="giftRightColumn">
-          <%= gift.giver.username %>
+        <div class="timeAgo giftRightColumn">
+          <%= time_ago_in_words gift.updated_at %> ago
+        </div>
+        <div class="giftText giftID">
+          <%= gift.item_name %>
         </div>
         <div class="giftText giftTextLarge">
           <%= gift.receiver_name %>
         </div>
-        <div class="giftText">
-          ID #<%= gift.id %>
-        </div>
-        <div class="giftText">
-          <span class="status<%= gift.status %>"><%= print_gift_status gift %></span><%= time_ago_in_words gift.updated_at %>
+
+        <div class="giftText">      
+          <div id="buttonEditWine" class="buttonSmallDown buttonUp">
+            <a href="" class="status<%= gift.status %>">
+              <%= print_gift_status gift %>
+            </a>
+          </div>
+          <div class="giftID">
+            ID # <%= gift.id %>
+          </div>
         </div>
       </div>
       <% end %>
+      <!-- GIFT LOOP END -->
     <% end %>
   </div>
 </div>

@@ -43,8 +43,31 @@
       <div class="employeeText">
         <%= number_to_phone user.phone %>
       </div>
+<!--       <div class="giftText">      
+          <div id="buttonEditWine" class="buttonSmallDown buttonUp"><a href="" class="">Active</a></div>
+      </div> -->
     </div>
   <% end %>
-
-	</div>
+  <div id="buttonAddEmp" class="buttonLargeDown buttonLargeUp buttonAddPosition">
+    <h5><a href="">New</a></h5>
+  </div>
+<div class="employeeDisplay addDisplay">
+    <div class="addEmployeeCell">
+          <% if params[:email] %>
+              <p>We just sent an email to that employee to join drinkboard.</p>
+            <% else %>
+              <%= form_tag(invite_employee_merchant_path(@provider), :method => "post") do %>
+                <div class="employeeText">
+                  <%= label_tag(:email, "Add Employee Via Email") %>
+                </div>
+                <span class="inputWrapper rounded gradient">
+                  <input type="text" placeholder="Enter Email Address" id="email" name="email" class="inputEmploy"/>
+                </span> 
+                <%= submit_tag("Submit") %>
+              <% end %>
+            <% end %>
+	   </div>
+  </div>
 </div>
+
+<!-- <input name="commit" type="submit" value="Submit" /> -->

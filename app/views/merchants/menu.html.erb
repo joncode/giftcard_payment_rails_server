@@ -46,12 +46,13 @@
 			<div id="" class="buttonSaveWine buttonSave buttonSmallDown buttonSmallUp">
 				<h5><a href="">save</a></h5>
 			</div>
+      <%= form_tag(menu_path(@provider), :method => "post") do %>
 			<ul class="wineEditWrapper smallDetailList rounded gradient">
         <% items_ary.each do |item| %>
           <% if item["description"] %>
       			<% description = item["description"] %>
       		<% end %>
-  				<li class="editWrapper">
+  				<li class="">
   					<input type="text" placeholder="<%= item["item_name"] %>" class="wineTitle"/>
   					<textarea type="text" style="resize: none;" rows="3" placeholder="<%= description %>" class="wineDescription"></textarea>
   					<h5 class="dollarSignDetailList">$</h5>
@@ -59,6 +60,8 @@
   					<div class="lineHoriz lineHorizInner"></div>
   				</li>
   			<% end %>
+      <%= submit_tag("Submit") %>
+      <% end %>
 
 			</ul>
 

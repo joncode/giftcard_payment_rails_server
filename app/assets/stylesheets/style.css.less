@@ -603,9 +603,10 @@ ul.tabsList {
 	}
 
 	input {
-		height: 40px;
+		height: 20px;
 		display: block;
 		width: 100%;
+		padding: 1px;
 	}
 
 	input.btn {
@@ -3245,9 +3246,9 @@ ul.menuItemList {
 	background: transparent;
 	background-image: url('backgroundInput.png');
 	background-repeat: no-repeat;
-		background-size: 100% 100%;
+	background-size: 100% 100%;
 	box-shadow: none;
-		font-family: 'museo_sans_500regular';
+	font-family: 'museo_sans_500regular';
 	font-size: 16px;
 	color: @blue2 + #552;
 	font-weight: 500;
@@ -3271,14 +3272,56 @@ ul.menuItemList {
 		padding: 4px;
 		color: #5DCCEF;
 	}
+	label {
+		font-family: 'museo_sans_500regular';
+		font-size: 16px;
+		font-weight: 500;
+		margin-left: 50px;
+		color: #0088CC;
+	}
+	.addEmployeeCell {
+		position: relative;
+		float: left;
+	}
+	input[type="submit"]  {
+		background-image: url('buttonEditSmall.png');
+		margin-top: 10px;
+		margin-left: 8px;
+		height: 36px;
+	    width: 67px;
+	    float: left;
+	    background-color: transparent;
+	    border: medium none;
+	    color: @blue2;
+		font-size: 15px;
+		&:hover {
+			color: white;
+		}
+		&:active {
+			background-image: url('buttonEditSmallDown.png');	
+		}
+	}
 }
 
 // Merchant Orders display
+.giftIDsearch {
+	margin-top: 7px;
+	margin-left: 30px;
+	width: 400px !important;
+	.buttonUp {
+		margin-top: -10px;
+	}
+	.showAll {
+		display: none; 
+		margin-top: -40px; 
+		margin-right: -54px;
+	}
+}
 
 .ordersDisplay {
 	border: 0;
 	box-sizing: border-box;
-	width: 600px;
+	width: 400px;
 	height: 100px;
 	margin-left: 37px;
 	margin-top: 20px;
@@ -3309,11 +3352,19 @@ ul.menuItemList {
 		}
 	}
 	.giftTextLarge {
-		font-size: 20px;
+		font-size: 18px;
 	}
 	.giftText {
 		padding: 4px;
 		color: #5DCCEF;
+	}
+	.giftID {
+		color: white;
+		padding: 4px;
+	}
+	.timeAgo {
+		color: #0088CC;
+		font-size: 12px;
 	}
 	.giftRightColumn {
 		float: right;
@@ -3324,14 +3375,152 @@ ul.menuItemList {
 }
 
 .statusopen {
-	color: yellow;
+	color: orange;
 	padding: 5px;
 }
 .statusnotified {
-	color: red;
+	color: yellow;
 	padding: 5px;
 }
 .statusredeemed {
-	color: darkgray;
+	color: grey;
 	padding: 5px;
+}
+
+// ------------------------------------ Buttons ------------------------------------
+
+
+// Jquery toggles buttons between these two class/bg images
+.buttonLargeDown {
+	float: right; 
+	background-image: url('buttonEditSmallDown.png');
+	width: 67px;
+	height: 40px;
+
+	h5 a {
+		color: @blue2;
+		text-align: center;
+		display: block;
+		width: 67px;
+		height: 40px;
+		font-size: 17px;
+		text-decoration: none;
+		padding: 8px 6px;
+	}
+}
+
+.buttonLargeUp {
+	float: right;
+	background-image: url('buttonEditSmall.png');
+	width: 67px;
+	height: 40px;
+
+	h5 a {
+		//color: white;
+		text-align: center;
+		display: block;
+		width: 67px;
+		height: 40px;
+		font-size: 17px;
+		text-decoration: none;
+		margin-top: -2px;
+		margin-left: -2px;
+		padding: 9px 2px 0px 5px;
+		
+		&:hover {
+			color: white;
+		}
+	}
+}
+
+.buttonAddPosition {
+	margin: 10px;
+}
+.addDisplay {
+	display: none;
+	height: 120px;
+}
+
+.buttonEmployeeSubmit {
+	display: none;
+	position: relative;
+	float: right;
+	margin: 10px;
+}
+
+.inputWrapper {
+	float: left;
+	width: 320px;
+	padding-top: 14px;
+	float: left;
+	z-index: -100;
+	list-style: none;
+	.inputEmploy
+	{
+		border: 0;
+		box-sizing: border-box;
+		width: 300px;
+		height: 50px;
+		margin-left: 7px;
+		margin-top: -9px;
+		padding-left: 10px;
+		float: left;
+		display: block;
+		background: transparent;
+		background-image: url('backgroundInput.png');
+		background-repeat: no-repeat;
+  		background-size: 100% 100%;
+    	box-shadow: none;
+   		font-family: 'museo_sans_500regular';
+		font-size: 19px;
+		color: @blue2;
+		font-weight: 500;
+	}
+	input {
+		height: 36px !important;
+		font-size: 15px !important;
+		padding-left: 22px;
+		color: @blue2;
+		background-color: transparent;
+	}
+	input:focus, textarea:focus {
+		border: 3px dashed @blue2;
+	}
+	
+	:-webkit-input-placeholder {
+  		color: #666;
+	}
+
+	:-moz-placeholder {  
+  		color: #666;  
+	}
+}
+
+.buttonUp {
+	float: right;
+	background: url('buttonEditSmall.png') repeat-y;
+	width: 87px;
+	height: 40px;
+	margin-top: -15px;
+	margin-left: -35px;
+	//padding: 10px;
+	a {
+		//color: white;
+		text-align: center;
+		display: block;
+		width: 67px;
+		height: 40px;
+		font-size: 12px;
+		text-decoration: none;
+		//margin-top: -2px;
+		//margin-left: -2px;
+		padding: 9px 2px 0px 5px;
+		
+		&:hover {
+			color: #ddd;
+		}
+		&:active {
+			background-image: url('buttonEditSmallDown.png');	
+		}
+	}
 }
