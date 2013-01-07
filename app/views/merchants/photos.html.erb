@@ -1,53 +1,33 @@
-
 <% if true %>
   <%= render 'header' %>
-<% else %>
-  <div class="menuMakerWrapper">
 <% end %>
+<div class="OBJfullPageWrap POSfullPageWrap">
+  <h2 class="center obj">Image Manager</h2>
+<div class="column">
+
+  <!-- LEFT MENU COLUMN RENDERED in this template -->
+  <h5>Profile Photo</h5> 
+  <%= link_to custom_image_tag(@provider,210,62,'photo'), edit_photo_merchant_path(@provider) %>
+  <h6>width 320px : height 50px</h6>
+  <div class="lineHoriz"></div>
+  <h5>Logo</h5>
+  <%= link_to custom_image_tag(@provider,60,60,'logo'), edit_photo_merchant_path(@provider)  %>
+  <h6>square 60px</h6>
+  <div class="lineHoriz"></div>
+  <h5>Box Image</h5>
+  <%= link_to custom_image_tag(@provider,150,150), edit_photo_merchant_path(@provider)  %>
+  <h6>square 150px</h6>
 
 
-
-    	<!-- Start Bank Wrapper -->
-  		<div class="bankCell">
-	<h5 class="menuSectionHeader"> 
-		Merchant Images
-	</h5>
-  <div class="merchantSignUpObject rounded gradient">
- 
-    <div class="2merchantSignUpWrapper">
-        <div class="form-horizontal">
-          <h5>Landscape Photo</h5> 
-          <%= link_to custom_image_tag(@provider,210,62,'photo'), edit_photo_merchant_path(@provider) %>
-          <h6>width 320px : height 50px</h6>
-
-        </div>
-        <div class="lineHoriz"></div>
-        <div class="form-horizontal">
-          <h5>Logo</h5>
-          <%= link_to custom_image_tag(@provider,60,60,'logo'), edit_photo_merchant_path(@provider)  %>
-          <h6>square 60px</h6>
-
-     
-        </div>
-        <div class="lineHoriz"></div>
-        <div class="form-horizontal">
-          <h5>Box Image</h5>
-          <%= link_to custom_image_tag(@provider,150,150), edit_photo_merchant_path(@provider)  %>
-          <h6>square 150px</h6>
+</div><!-- End Column 1 -->
+<div class="column">
 
 
-        </div>
-                <div class="lineHoriz"></div>
-        <div class="form-horizontal">
-          <h5>App Full Screen Portrait</h5>
-          <%= link_to custom_image_tag(@provider,320,480), edit_photo_merchant_path(@provider)  %>
-          <h6>width 320 px : height 480px</h6>
+  <!-- RIGHT MENU COLUMN RENDERED in this template -->
+  <h5>App Full Screen Portrait</h5>
+  <%= link_to custom_image_tag(@provider,320,480), edit_photo_merchant_path(@provider)  %>
+  <h6>width 320 px : height 480px</h6>
 
 
-        </div>
-        <div class="lineHoriz"></div>
-    </div>
-  </div>
-	</div>
-	</div>
+</div><!-- End Column 2 -->
 </div>
