@@ -1,6 +1,6 @@
 $(function() {
 
-	$('.bodyDiv').css({'background' : 'none'}); //turns off main background picture
+	//$('.bodyDiv').css({'background' : 'none'}); //turns off main background picture
 
 	$('.buttonSmallerUp a').hover( function() { //blue hover color
 		$('.buttonSmallerUp h5').css('color', '@blue2')
@@ -102,4 +102,3 @@ $(function() {
 	});
 
 }); // end
-

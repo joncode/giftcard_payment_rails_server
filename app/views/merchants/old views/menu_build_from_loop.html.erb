@@ -1,0 +1,105 @@
+<!-- IE 9 Gradient Fix -->
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+
+<!-- Header -->
+<% description =  "please enter description here" %>
+<div class="menuMakerWrapper"> <!-- Background Image -->
+  <div class="logoCrooked"></div>
+  <div class="headerImage"></div>
+  <div class="lineVertHeader lineVert"></div>
+  <div class="loggedInBox">
+  	<h5>Logged in as: <a href="/home"><%= @current_user.fullname %></a></h5>
+  </div>
+  <div class="vendorTitle">
+  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
+  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  			<%= @provider.city_state_zip %>
+  	</h6>
+  </div>
+  <div class="lineHorizHeader lineHoriz"></div>
+
+  <!-- Column 1 Start -->
+  <div class="columnOne">
+  	<div class="columnTopBlocker"></div>
+  	<%= render 'merchant_options' %>
+    <% last_index = @menu.count %>
+    <% index = 0 %>
+    <% @menu.each do |section| %>
+    <% index += 1 %>
+    <% header = section.dup %>
+    <% items_ary = section.values[0] %>
+
+		<!-- Start Wine Wrapper -->
+		<div class="wineWrapper menuCell">
+			<div id="buttonEditWine" class="buttonSmallDown buttonSmallUp">
+				<h5><a href="">edit</a></h5>
+			</div>
+			<h5 class="menuSectionHeader">
+				<%= header.keys.pop.capitalize %>
+			</h5>
+			<div id="" class="buttonSaveWine buttonSave buttonSmallDown buttonSmallUp">
+				<h5><a href="">save</a></h5>
+			</div>
+      <%= form_tag(menu_path(@provider), :method => "post") do %>
+			<ul class="wineEditWrapper smallDetailList rounded gradient">
+        <% items_ary.each do |item| %>
+          <% if item["description"] %>
+      			<% description = item["description"] %>
+      		<% end %>
+  				<li class="">
+  					<input type="text" placeholder="<%= item["item_name"] %>" class="wineTitle"/>
+  					<textarea type="text" style="resize: none;" rows="3" placeholder="<%= description %>" class="wineDescription"></textarea>
+  					<h5 class="dollarSignDetailList">$</h5>
+  					<input type="text" placeholder="<%= item["price"] %>" class="winePrice gradient rounded"/>
+  					<div class="lineHoriz lineHorizInner"></div>
+  				</li>
+  			<% end %>
+      <%= submit_tag("Submit") %>
+      <% end %>
+
+			</ul>
+
+			<!-- Wine Menu View -->
+			<ul class="wineListDetail wineMenuBox ulListDetail">
+			  <% items_ary.each do |item| %>
+  			  <% if item["description"] %>
+      			<% description = item["description"] %>
+      		<% end %>
+  				<li class="itemDetail">
+  					<h5 class="wineTitle itemTitle">
+  						<%= item["item_name"] %>
+  					</h5>
+  					<h5 class="appDescription itemDescription">
+  					  <%= description %>
+  					</h5>
+  					<h5 class="winePrice itemPrice">
+  						<%= item["price"] %>
+  					</h5>
+  				</li>
+				<% end %>
+
+			</ul>
+		</div>
+    
+    
+    
+    
+    
+    
+    <% if index < last_index %>
+		  <div class="lineHoriz"></div>
+		<% else %>
+		  <div class="lineHoriz"></div>
+		<% end %>    
+    
+    <% end %>
+		</div>
+	</div> <!-- End Column Two -->
+</div>
+    

@@ -1,0 +1,20 @@
+<!-- Header -->
+<% description =  "enter description here" %>
+<div class="menuMakerWrapper"> <!-- Background Image -->
+  <div class="logoCrooked"></div>
+  <div class="headerImage"></div>
+  <div class="lineVertHeader lineVert"></div>
+  <div class="loggedInBox">
+  	<h5>Logged in as: <a href="/home"><%= @current_user.fullname %></a></h5>
+  </div>
+  <div class="vendorTitle">
+  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
+  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  			<%= @provider.city_state_zip %>
+  	</h6>
+  </div>
+  <div class="lineHorizHeader lineHoriz"></div>
+<!-- Beer Wrapper -->
+  <!-- Column 1 Start -->
+  	<div class="columnTopBlocker"></div>
+  	  	<%= render 'merchant_options' %>

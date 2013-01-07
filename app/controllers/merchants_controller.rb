@@ -16,7 +16,13 @@ class MerchantsController < ApplicationController
   def menu
     @provider           = Provider.find(params[:id])
     @current_user       = current_user
-    @menu = Menu.get_full_menu_array @provider.id
+    @menu     = Menu.get_full_menu_array @provider.id
+    @sections = Menu.get_sections @provider.id 
+    @drink    = @menu[0][@sections[0]].dup.shift
+    @beer     = @menu[1][@sections[1]]
+    @wine     = @menu[2][@sections[2]]
+    @cocktail = @menu[3][@sections[3]]
+    @liquor   = @menu[4][@sections[4]]
   end
 
   def show
