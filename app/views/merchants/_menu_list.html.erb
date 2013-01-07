@@ -11,7 +11,10 @@
         		<a href="">save</a>
       		</span> 
     	</h2>
+
+    	<!-- EACH MENU SECTION ('Beer' or 'Wine' etc) RENDERED in this template -->
 		<%= render 'menu_section', menu_section: menu_section[1] %>
+
 		<% num += 1 %>
 		<% if num <  menu_array.count %>
 			<div class="lineHorizontal"></div>

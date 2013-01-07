@@ -2,7 +2,9 @@
 	<% num = 0 %>
 	<% menu_section.each do |menu_item| %>
 	<li>
+		<!-- EACH MENU ITEM (ie Corona Beer $10 ) RENDERED in this template -->
 		<%= render 'menu_item', menu_item: menu_item %>
+
 	</li>
 		<% num += 1 %>
 		<% if num < menu_section.count %>

@@ -1,9 +1,28 @@
-<% description =  "enter description here" %>
+	<% description =  "enter description here" %>
+		<%# menu_item["description"] ||= description %>
+	<% if menu_item["description"].nil? %> 
+		<!-- print name and price on same line when there is no description -->
 <ul class="menuItem menuItemPos">
+	<li>
+		<h5 class="miTitle" style="width:250px;">
+    		<%= menu_item["item_name"] %>
+    	</h5>
+	</li>
+	<li>
+		<h5 class="miPrice" style="margin-top:8px;">
+    		<%= menu_item["price"] %>
+    	</h5>
+	</li>
+</ul>
+	<% else %>
+		<!-- print name description price on different lines -->
+<ul class="menuItem menuItemPos">
+
 	<li>
 		<h5 class="miTitle" style="width:300px;">
     		<%= menu_item["item_name"] %>
     	</h5>
+	
 	</li>
 	<li>
 		<h5 class="miDescription" style="width:300px;">
@@ -11,11 +30,13 @@
     	</h5>
 	</li>
 	<li>
+
 		<h5 class="miPrice" style="width:300px;">
     		<%= menu_item["price"] %>
     	</h5>
 	</li>
 </ul>
+	<% end %>
 <div class="menuItemForm">
 	<ul class="inputWrap rounded gradient inputWrapPos">
 		<li><input type="text" placeholder="Item Name" 
