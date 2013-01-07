@@ -1,0 +1,12 @@
+<ul>
+	<% num = 0 %>
+	<% menu_section.each do |menu_item| %>
+	<li>
+		<%= render 'menu_item', menu_item: menu_item %>
+	</li>
+		<% num += 1 %>
+		<% if num < menu_section.count %>
+			<div class="lineHorizontal lineSectionPos"></div>
+		<% end %>
+	<% end %>
+</ul>

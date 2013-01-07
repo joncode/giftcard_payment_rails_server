@@ -62,7 +62,6 @@ Drinkboard::Application.routes.draw do
       get :reset_password
       get :enter_new_password
       post :enter_new_password
-      post :upload_avatar
     end
   end
 
@@ -91,6 +90,8 @@ Drinkboard::Application.routes.draw do
       post 'invite_employee'
       get 'add_employee'
       get 'menu'
+      get 'photos'
+      post :update_photos
     end
   end
 

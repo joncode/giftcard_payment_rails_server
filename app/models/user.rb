@@ -164,6 +164,17 @@ class User < ActiveRecord::Base
   def profile_pic(w,h)
     self.photo
   end
+
+
+  def get_image(flag)
+
+    if self.photo.blank?
+      "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+    else
+      self.photo.url
+    end
+
+  end
   
   def following?(other_user)
     relationships.find_by_followed_id(other_user.id)

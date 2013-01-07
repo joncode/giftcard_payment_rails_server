@@ -1,0 +1,91 @@
+<!-- IE 9 Gradient Fix -->
+
+<!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+
+<!-- Header -->
+<% description =  "please enter description here" %>
+<div class="menuMakerWrapper"> <!-- Background Image -->
+  <div class="logoCrooked"></div>
+  <div class="imageHeaderImage"></div>
+  <div class="lineVertHeader lineVert"></div>
+  <div class="loggedInBox">
+  	<h5>Logged in as: <a href="/home"><%= @current_user.fullname %></a></h5>
+  </div>
+  <div class="vendorTitle">
+  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
+  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  			<%= @provider.city_state_zip %>
+  	</h6>
+  </div>
+  <div class="lineHorizHeader lineHoriz"></div>
+    <div class="columnOne">
+    	<div class="columnTopBlocker"></div>
+    	<%= render 'merchant_options' %>
+    	<!-- Start Bank Wrapper -->
+  		<div class="bankCell">
+	<h5 class="menuSectionHeader">
+		Merchant Images
+	</h5>
+	<%= form_for(@provider) do |f| %>
+  <% if @provider.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
+
+      <ul>
+      <% @provider.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="merchantSignUpObject rounded gradient">
+ 
+    <div class="2merchantSignUpWrapper">
+        <div class="form-horizontal">
+          <h5>Landscape Photo</h5> 
+          <%= custom_image_tag @provider,210,62,'landscape' %>
+          <h6>width 320px : height 50px</h6>
+          <%= f.file_field    :photo %>
+        </div>
+        <div class="lineHoriz"></div>
+        <div class="form-horizontal">
+          <h5>Logo</h5>
+          <%= custom_image_tag @provider,60,60,'logo' %>
+          <h6>square 60px</h6>
+          <%= f.hidden_field  :logo_cache %>
+          <%= f.file_field    :logo %>
+        </div>
+        <div class="lineHoriz"></div>
+        <div class="form-horizontal">
+          <h5>Box Image</h5>
+          <%= custom_image_tag @provider,150,150 %>
+          <h6>square 150px</h6>
+          <%= f.hidden_field  :box_cache  %>
+          <%= f.file_field    :box %>
+        </div>
+                <div class="lineHoriz"></div>
+        <div class="form-horizontal">
+          <h5>App Full Screen Portrait</h5>
+          <%= custom_image_tag @provider,320,480 %>
+          <h6>width 320 px : height 480px</h6>
+          <%= f.hidden_field  :portrait_cache %>
+          <%= f.file_field    :portrait %>
+        </div>
+        <div class="lineHoriz"></div>
+        <div class="form-horizontal">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="actions">
+          <%= f.submit "Update", class: "btn btn-large btn-info" %>
+        </div>  
+    </div>
+  </div>
+
+  <% end %>
+	</div>
+	</div>
+</div>

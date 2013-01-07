@@ -68,9 +68,8 @@ class Menu < ActiveRecord::Base
 
       # generate section array from menu items
     sections_array = Menu.get_sections(provider_id)
-      # ["special", "beer", "wine", "cocktail", "shot"]
-    sections_array.each do |section_name|
-      
+
+    sections_array.each do |section_name|      
       # array_of_menu_section = Menu.where(provider_id: provider_id, header: category).order("position ASC")
       array_of_menu_section = Menu.get_menu_in_section(provider_id, section_name)
       if array_of_menu_section.count > 0
@@ -81,6 +80,15 @@ class Menu < ActiveRecord::Base
       end
     end
     return full_menu_array
+  end
+
+  def self.get_menu_array_for_builder(provider)
+    menu        = self.get_full_menu_array provider.id
+    menu_array  = []
+    menu.each do |mi|
+      menu_array << mi.flatten
+    end
+    return menu_array
   end
 
   def display_object

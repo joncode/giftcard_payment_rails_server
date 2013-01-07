@@ -94,9 +94,10 @@
 <%= form_for(:image_form, :url => { :controller => "users", :action => :upload_avatar }, :html => { :method => :post, :id => 'uploadForm', :multipart => true }) do |f| %>
  Upload a file: <%= f.file_field :uploaded_data %>
 <% end %>
-
-<div id="preview" style=""></div>
-
+<div class="photoContainer">
+	<div id="preview" style=""></div>
+	<div class="profilePic"><%= image_tag(@user.photo.large) %></div>
+</div>
 <% %w[x y w h].each do |attr| %>
 	<input id="user_crop_<%= attr %>" type="text" size="30" name="user[crop_<%= attr %>]">
 <% end %>

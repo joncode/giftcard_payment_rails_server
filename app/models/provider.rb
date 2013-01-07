@@ -47,6 +47,7 @@ class Provider < ActiveRecord::Base
   :account_name, :aba, :routing, :bank_account_name, :bank_address,
    :bank_city, :bank_state, :bank_zip, :sales_tax
 
+  attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
 
@@ -100,7 +101,7 @@ class Provider < ActiveRecord::Base
       photo = self.logo.url
     when "portrait"
       photo = self.portrait.url
-    when "landscape"
+    when "photo"
       photo = self.photo.url
     else
       photo = self.box.url 

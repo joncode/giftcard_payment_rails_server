@@ -41,9 +41,13 @@
 
     				<div class="sigDrinkEditWrapper editDescription rounded gradient">
     					<input type="text" placeholder="<%= @drink["item_name"] %>" class="sigDrinkTitle rounded" />
+    					
     					<textarea placeholder="<%= @drink["description"] || description %>" class="sigDrinkDescription rounded" style="resize: none;"></textarea>
+    					
     					<h5 class="menuSectionHeader dollarSign" >$</h5>
+    					
     					<input type="text" placeholder="<%= @drink["price"] %>" rows="2" class="sigDrinkPrice rounded">
+    					
     					<div id="saveButtonSigDrink" class="buttonSmallDown buttonSmallUp">
     						<h5><a href="">save</a></h5>
     					</div>

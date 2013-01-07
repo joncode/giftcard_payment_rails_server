@@ -14,15 +14,21 @@ class MerchantsController < ApplicationController
   end
 
   def menu
-    @provider           = Provider.find(params[:id])
-    @current_user       = current_user
-    @menu     = Menu.get_full_menu_array @provider.id
-    @sections = Menu.get_sections @provider.id 
-    @drink    = @menu[0][@sections[0]].dup.shift
-    @beer     = @menu[1][@sections[1]]
-    @wine     = @menu[2][@sections[2]]
-    @cocktail = @menu[3][@sections[3]]
-    @liquor   = @menu[4][@sections[4]]
+    @provider       = Provider.find(params[:id])
+    @current_user   = current_user
+    @menu_array     = Menu.get_menu_array_for_builder @provider
+    column = 1
+    @left = []
+    @right = []
+    @menu_array.each do |m|
+      if column == 1
+        @left << m
+        column = 2
+      else
+        @right << m 
+        column = 1
+      end
+    end
   end
 
   def show
@@ -32,9 +38,33 @@ class MerchantsController < ApplicationController
     @gifts = Gift.get_activity_at_provider(@provider)
   end
 
+  def photos
+    @provider = Provider.find(params[:id])
+    @current_user = current_user
+  end
+
   def edit_photo
     @provider = Provider.find(params[:id])
     @current_user = current_user
+
+    @obj_to_edit = @provider
+    @obj_name = "provider"
+    @file_field_name = "photo"
+    @obj_width = 210
+    @obj_height = 62
+    @action = "update_photos"
+    render "shared/uploader"
+
+    ##  mount_uploader :photo,    ProviderPhotoUploader
+    ##  mount_uploader :logo,     ProviderLogoUploader
+    ##  mount_uploader :box,      ProviderBoxUploader
+    ##  mount_uploader :portrait, ProviderPortraitUploader
+  end
+
+  def update_photos
+    @provider = Provider.find(params[:id])
+    @provider.update_attributes(params[:provider])
+    redirect_to photos_merchant_path(@provider)
   end
 
   def edit_info

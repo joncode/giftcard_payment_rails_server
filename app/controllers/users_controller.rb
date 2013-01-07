@@ -95,6 +95,8 @@ class UsersController < ApplicationController
     @obj_name = "user"
     @action = "update_avatar"
     @file_field_name = "photo"
+    @obj_width = 131
+    @obj_height = 131
     render "shared/uploader"
   end
 

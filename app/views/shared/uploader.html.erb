@@ -70,7 +70,7 @@
 					$('#imageCanvas').Jcrop({
 						onChange: showPreview,
 						onSelect: showPreview,
-						aspectRatio: 1
+						aspectRatio: <%= @obj_width / @obj_height %>
 					}, function(){ jcrop_api = this; });
 					jcrop_api.setSelect([0,0,canvas.width,canvas.height]);
         }
@@ -91,8 +91,12 @@
 		margin: 0px auto; display: block; background-color: gray !important;
 	}
 	#preview{
-		width: 131px; height: 131px; background: gray;
+		width: <%= @obj_width%>px; height: <%= @obj_height %>px; background: gray;
 	}
+  #upload_wrapper {
+    background-color: #444;
+    color: white;
+  }
 	#crop_coord_x,#crop_coord_y,#crop_coord_w,#crop_coord_h{ display: none; }
 </style>
 
@@ -104,8 +108,10 @@
          <input id="crop_coord_<%= attr %>" type="text" size="30" name="<%= @obj_name %>[crop_<%= attr %>]">
        <% end %>
     </div>
-    <div class="span4">
+    <div class="span4"><div class="photoContainer">
       <div id="preview" style=""></div>
+  <div class="profilePic"><%= custom_image_tag @obj_to_edit, @obj_width, @obj_height, @file_field_name %></div>
+  </div>
       <br/>
       <div class="actions">
         <%= f.submit "Upload Photo" %>

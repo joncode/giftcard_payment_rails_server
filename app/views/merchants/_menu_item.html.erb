@@ -1,0 +1,33 @@
+<% description =  "enter description here" %>
+<ul class="menuItem menuItemPos">
+	<li>
+		<h5 class="miTitle" style="width:300px;">
+    		<%= menu_item["item_name"] %>
+    	</h5>
+	</li>
+	<li>
+		<h5 class="miDescription" style="width:300px;">
+    		<%= menu_item["description"] %>
+    	</h5>
+	</li>
+	<li>
+		<h5 class="miPrice" style="width:300px;">
+    		<%= menu_item["price"] %>
+    	</h5>
+	</li>
+</ul>
+<div class="menuItemForm">
+	<ul class="inputWrap rounded gradient inputWrapPos">
+		<li><input type="text" placeholder="Item Name" 
+			class="miTitleForm rounded inputFieldObj inputFieldPos" />
+		</li>
+		<li><textarea placeholder="<%=  description %>" 
+			class="miDescriptionForm rounded inputFieldObj inputFieldPos" style="resize: none;"></textarea>
+		</li>
+		<li>
+			<h5 class="dollarSignPos dollarSignObj" >$</h5>
+    		<input type="text" placeholder="Price" rows="2" 
+    		class="inputFieldObj miPriceForm rounded">
+    	</li>
+	</ul>
+</div>
