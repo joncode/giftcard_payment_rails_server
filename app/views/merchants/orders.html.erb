@@ -60,17 +60,18 @@
         <div class="giftID">
             ID # <%= gift.id %>
         </div>    
-        <% if gift.status == 'notified' %>
+<!--         <% if gift.status == 'notified' %>
         <div class="redeemInput">
           <input type="text" placeholder="Code" id="redeem" name="redeem" class="inputRedeem" maxlength="4"/>
         </div>
-        <% end %>
+        <% end %>  -->
         <div id="buttonEditWine" class="buttonSmallDown buttonUp">
-          <a href="" class="status<%= gift.status %>">
-            <%= print_gift_status gift %>
-          </a>
+            <% if gift.status != "notified" %>
+              <%= link_to print_gift_status(gift), detail_merchant_path(gift), :class => "status#{gift.status}" %>
+            <% else %>
+              <%= link_to print_gift_status(gift), order_merchant_path(gift_id: gift.id), :class => "status#{gift.status}" %>
+            <% end %>
         </div>
-
       </div>
       
     <!--    Middle Column   -->
@@ -93,10 +94,6 @@
             <%= item["quantity"] %> <%= item["item_name"] %>
           </li>
           <% end %> 
-        <% else %>
-        <li class="giftItem timeAgo">
-          <%= rand(3) + 1 %> <%= gift.item_name %>
-        </li>
         <% end %> 
         </ul>
       </div>

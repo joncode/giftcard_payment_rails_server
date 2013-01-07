@@ -22,7 +22,7 @@ class MenuString < ActiveRecord::Base
   		if !menu_string
 			menu_string = MenuString.new
 			menu_string_data = menu_string.generate_menu_string(provider_id)
-		elsif menu_string.version == 1
+		elsif menu_string.version == 1 
   			menu_string_data = menu_string.generate_menu_string(provider_id)
 		
 		else
@@ -33,23 +33,7 @@ class MenuString < ActiveRecord::Base
 
 			# remake menu string from menu
 	def generate_menu_string(provider_id)
-		full_menu_array = []
-
-			# generate section array from menu items
-		sections_array = Menu.get_sections(provider_id)
-
-		sections_array.each do |section_name|
-			
-			# array_of_menu_section = Menu.where(provider_id: provider_id, header: category).order("position ASC")
-			array_of_menu_section = Menu.get_menu_section(provider_id, section_name)
-			if array_of_menu_section.count > 0
-				section_hash = { section_name => array_of_menu_section }
-				full_menu_array << section_hash 
-			else
-			    # do not build menu for this section heading
-			end
-		end
-		menu_string_data = full_menu_array.to_json 
+		menu_string_data = Menu.get_full_menu_array(provider_id).to_json 
 
 		self.data = menu_string_data
 		# puts menu_string_data

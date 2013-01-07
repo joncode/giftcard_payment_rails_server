@@ -49,18 +49,38 @@ class Menu < ActiveRecord::Base
     return sections_array
   end
 
-  def self.get_menu_section(provider_id, section_name)
-   category = BEVERAGE_CATEGORIES.index(section_name)
-   menu_items = Menu.where(provider_id: provider_id)
-   menu_section = []
-   menu_items.each do |menu|
-   if menu.item.category == category
-   menu_display = menu.display_object
-   menu_section << menu_display
-   end
-   end
+  def self.get_menu_in_section(provider_id, section_name)
+    category = BEVERAGE_CATEGORIES.index(section_name)
+    menu_items = Menu.where(provider_id: provider_id)
+    menu_section = []
+    menu_items.each do |menu|
+      if menu.item.category == category
+        menu_display = menu.display_object
+        menu_section << menu_display
+      end
+    end
 
-   return menu_section
+    return menu_section
+  end
+
+  def self.get_full_menu_array(provider_id)
+    full_menu_array = []
+
+      # generate section array from menu items
+    sections_array = Menu.get_sections(provider_id)
+      # ["special", "beer", "wine", "cocktail", "shot"]
+    sections_array.each do |section_name|
+      
+      # array_of_menu_section = Menu.where(provider_id: provider_id, header: category).order("position ASC")
+      array_of_menu_section = Menu.get_menu_in_section(provider_id, section_name)
+      if array_of_menu_section.count > 0
+        section_hash = { section_name => array_of_menu_section }
+        full_menu_array << section_hash
+      else
+          # do not build menu for this section heading
+      end
+    end
+    return full_menu_array
   end
 
   def display_object

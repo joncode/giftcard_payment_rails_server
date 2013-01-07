@@ -41,11 +41,12 @@ class Gift < ActiveRecord::Base
       :provider_id, :provider_name, :receiver_email, 
       :message,     :special_instructions,
       :shoppingCart,
-      :category,    :quantity, :price, :item_id, :item_name ,  
+      :category,  :price, :item_id, :item_name ,  
       :tip, :tax,   :total, 
       :facebook_id, :foursquare_id,
       :redeem_id,   :status, :regift_id, :anon_id
-
+# to be removed from db via migration
+# :category, :price, :item_id, :item_name, :special_instructions. :redeem_id
   
   has_one     :redeem, dependent: :destroy
   has_one     :relay,  dependent: :destroy
@@ -58,7 +59,7 @@ class Gift < ActiveRecord::Base
   has_and_belongs_to_many :menus
   
   validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip
-  # validates_numericality_of  :total, :quantity
+  # validates_numericality_of  :total
   
   #before_create :add_category, :if => :no_category
   #before_create :pluralizer

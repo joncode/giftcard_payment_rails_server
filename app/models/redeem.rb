@@ -33,6 +33,6 @@ class Redeem < ActiveRecord::Base
     end
     
     def add_redeem_to_gift
-      self.gift.update_attributes({status: 'notified', redeem_id: self.id})
+      self.gift.update_attributes({status: 'notified'})
     end
 end
