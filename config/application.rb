@@ -38,7 +38,7 @@ module Drinkboard
 
     # Configure sensitive parameters which will be filtered from the log file.
     
-    # config.filter_parameters += [:password, :token, :uid, :credit_number, :card_number, :verification_value]
+    config.filter_parameters += [:password, :token, :uid, :credit_number, :card_number, :verification_value]
     
 
     # AWS::S3::Base.establish_connection!(
