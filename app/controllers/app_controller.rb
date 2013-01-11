@@ -342,7 +342,7 @@ class AppController < ApplicationController
 
 		message   = ""
 		response  = {} 
-		
+
       	if user = authenticate_app_user(params["token"])
       		display_cards = Card.get_cards user
       		if display_cards.empty?
@@ -372,8 +372,10 @@ class AppController < ApplicationController
       	if user = authenticate_app_user(params["token"])
       		puts "User = #{user.fullname}"
       		puts "params data = #{params['data']}"
-      		cCard = Card.create_card_from_hash params["data"]
-      		puts "the new card object is = #{cCard}"
+      		card_data = JSON.parse params["data"]
+      		puts "card data post JSON = #{card_data}"
+      		cCard = Card.create_card_from_hash card_data
+      		puts "the new card object is = #{cCard.inspect}"
     	else
      	  	message += "Couldn't identify app user. "
      	  	cCard = nil;

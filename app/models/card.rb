@@ -42,7 +42,8 @@ class Card < ActiveRecord::Base
 	before_save 	  :save_last_four
 	
 	def self.create_card_from_hash cc_hash
-		puts "in create_card_from_hash"
+		x = cc_hash.kind_of? Hash
+		puts "in create_card_from_hash = #{cc_hash}, is it hash ? #{x}"
 		card = Card.new
 		card.name = cc_hash["name"]
 		card.month = cc_hash["month"].to_i
