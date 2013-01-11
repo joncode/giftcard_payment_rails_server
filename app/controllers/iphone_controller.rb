@@ -217,7 +217,7 @@ class IphoneController < AppController
     case params["origin"]
     when 'd'
       #drinkboard - data already received
-      response["receiver"]     = "Drinkboard user"
+      response["receiver"]     = "db user"
     when 'f'
       # facebook - search users for facebook_id
       if gift_obj["facebook_id"]
@@ -278,7 +278,7 @@ class IphoneController < AppController
       end
     else
         #drinkboard - no origin sent
-        response["receiver"]     = "Drinkboard user"
+        response["receiver"]     = "db user"
     end
 
     if gift_obj.nil?

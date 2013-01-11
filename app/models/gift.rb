@@ -123,7 +123,7 @@ class Gift < ActiveRecord::Base
   end
 
   def self.transactions(user)
-    gifts_raw = Gift.where(giver_id: user.id)
+    gifts_raw = Gift.where(giver_id: user.id).order("created_at DESC") 
     gifts = []
     gifts_raw.each do |g|
       gift_hash = g.serializable_hash only: [ :provider_name, :total, :receiver_name]
