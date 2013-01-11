@@ -9,7 +9,7 @@ class AppController < ApplicationController
 
  	def relays
  		puts "\nRelays to APP"
- 		puts "#{params}"
+ 		puts "request = #{params}"
  		response = {}
  		    # get app version from data hash
 		    # compare app version from version -- in db??
@@ -42,6 +42,7 @@ class AppController < ApplicationController
  		end
  		respond_to do |format|
 	    	logger.debug response
+	    	puts "response => #{response}"
 	    	format.json { render json: response }
 	    end
  	end
@@ -60,7 +61,7 @@ class AppController < ApplicationController
 
  	def menu
  		puts "\nMenu App"
- 		puts "#{params}"
+ 		puts "request = #{params}"
  		response = {}
 	
  		if authenticate_public_info
@@ -73,13 +74,14 @@ class AppController < ApplicationController
 	    
 	    respond_to do |format|
 	    	logger.debug response
+	    	puts "response => #{response}"
 	    	format.json { render json: response }
 	    end
  	end
 
  	def gifts
 	    puts "\nGifts"
-	    puts "#{params}"
+	    puts "request = #{params}"
 
 	    if user = authenticate_app_user(params["token"])
 	    	gifts 		= Gift.get_gifts(user)
@@ -90,13 +92,14 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      logger.debug gifts_array
+	      puts "response => #{response}"
 	      format.json { render json: gifts_array }
 	    end
   	end
 
   	def user_activity
 	    puts "\nUser Activity"
-	    puts "#{params}"
+	    puts "request = #{params}"
 
 	    user  = User.find(params["user_id"])
 	    if user 
@@ -108,13 +111,14 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      logger.debug gifts_array
+	      puts "response[0] => #{gifts_array[0]}"
 	      format.json { render json: gifts_array }
 	    end
   	end
 
   	def past_gifts
 	    puts "\nGifts"
-	    puts "#{params}"
+	    puts "request = #{params}"
 
 	    if user = authenticate_app_user(params["token"])
 	    	gifts 		= Gift.get_past_gifts(user)
@@ -125,13 +129,14 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      logger.debug gifts_array
+	      puts "response[0] => #{gifts_array[0]}"
 	      format.json { render json: gifts_array }
 	    end
   	end
 
   	def questions
   		puts "\nQuestions"
-  		puts "HERE ARE THE PARAMS #{params}"
+  		puts "request = #{params}"
   		  		
   		if user = authenticate_app_user(params["token"])
 
@@ -153,14 +158,14 @@ class AppController < ApplicationController
 	  	end
 
   		respond_to do |format|
-	      puts response
-	      format.json { render json: response }
+	    	puts "response => #{response}"
+	    	format.json { render json: response }
 	    end
   	end
 
  	def others_questions
   		puts "\nOthers Questions"
-  		puts "HERE ARE THE PARAMS #{params}"
+  		puts "request = #{params}"
   		# user  = User.find_by_remember_token(params["token"])
   		
   		if  other_user = User.find(params["user_id"])
@@ -174,14 +179,14 @@ class AppController < ApplicationController
 	  		response = ["error", "could not find other user in db"]
 	  	end
   		respond_to do |format|
-	      	puts response
+	      	puts "response => #{response}"
 	      	format.json { render json: response }
 	    end
   	end
 
   	def transactions
   		puts "\nTransactions"
-  		puts "#{params}"
+  		puts "request = #{params}"
 
   		if user = authenticate_app_user(params["token"])
   			transaction_array = Gift.transactions(user)
@@ -190,13 +195,14 @@ class AppController < ApplicationController
 	  	end
   		respond_to do |format|
 	      logger.debug transaction_array
+	      puts "response[0] => #{transaction_array[0]}"
 	      format.json { render json: transaction_array }
 	    end
   	end
 
   	def providers
   		puts "\nProviders"
-  		puts "#{params}"
+  		puts "request = #{params}"
 
 	    if authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
@@ -212,13 +218,14 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      logger.debug providers_array
+	      puts "response[0] => #{providers_array[0]}"
 	      format.json { render json: providers_array }
 	    end
   	end
 
 	def drinkboard_users
 		puts "\nDrinkboard Users"
-		puts "#{params}"
+		puts "request = #{params}"
 
 		begin
 			user = authenticate_app_user(params["token"])
@@ -238,13 +245,14 @@ class AppController < ApplicationController
 
 		respond_to do |format|
 			logger.debug user_array
+			puts "response[0] => #{user_array[0]}"
 			format.json { render json: user_array }
 		end
 	end
 
 	def create_redeem
     	puts "\nCreate Redeem (App Controller) no server code"
-    	puts "#{params}"
+    	puts "request = #{params}"
 
     	message  = ""
     	response = {}
@@ -289,14 +297,14 @@ class AppController < ApplicationController
 				message += " Gift unable to process to database. Please retry later."
 				response["error_server"] = message 
 			end
-			puts response
+			puts "response => #{response}"
 			format.json { render json: response }
 		end
   	end
 
 	def create_order
 		puts "\nCreate Order"
-		puts "#{params}"
+		puts "request = #{params}"
 
 		message   = ""
 		response  = {} 
@@ -331,14 +339,14 @@ class AppController < ApplicationController
 			else
 				response["error_server"] = " Order not processed - database error"
 			end
-			puts response
+			puts "response => #{response}"
 			format.json { render json: response }
 		end
 	end  
 
 	def get_cards
 		puts "\nGet Cards"
-		puts "#{params}"
+		puts "request = #{params}"
 
 		message   = ""
 		response  = {} 
@@ -356,7 +364,7 @@ class AppController < ApplicationController
     	end
 
     	respond_to do |format|
-			puts response
+			puts "response => #{response}"
 			puts message
 			format.json { render json: response }
 		end
@@ -364,7 +372,7 @@ class AppController < ApplicationController
 
 	def add_card
 		puts "\nAdd Card"
-		puts "#{params}"
+		puts "request = #{params}"
 
 		message   = "" 
 		response  = {} 
@@ -390,7 +398,7 @@ class AppController < ApplicationController
 					response["error_server"] = cCard.errors.messages
 				end
 			#end
-			puts response
+			puts "response => #{response}"
 			puts message
 			format.json { render json: response }
 		end
