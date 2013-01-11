@@ -342,16 +342,17 @@ class AppController < ApplicationController
 
 		message   = ""
 		response  = {} 
-		begin
-      		user = authenticate_app_user(params["token"])
+		
+      	if user = authenticate_app_user(params["token"])
       		display_cards = Card.get_cards user
       		if display_cards.empty?
       			response["error"] = "User has no cards on file"
       		else
       			response["success"] = display_cards
       		end
-    	rescue
+    	else
       		message += "Couldn't identify app user. "
+      		response["error"] = message
     	end
 
     	respond_to do |format|
@@ -367,24 +368,23 @@ class AppController < ApplicationController
 
 		message   = "" 
 		response  = {} 
-		# begin
-      		user = authenticate_app_user(params["token"])
-      		puts user
-      		card_data = params["data"]
+
+      	if user = authenticate_app_user(params["token"])
+      		puts "User = #{user.fullName}"
       		puts "params data = #{params['data']}"
-      		puts "card_data = #{card_data}"
-      		ccard = Card.create_card_from_hash card_data
-      		puts "the new card object is = #{ccard}"
-    	# rescue
-     #  		message += "Couldn't identify app user. "
-    	# end
+      		cCard = Card.create_card_from_hash params["data"]
+      		puts "the new card object is = #{cCard}"
+    	else
+     	  	message += "Couldn't identify app user. "
+     	  	cCard = nil;
+    	end
 
     	respond_to do |format|
 			#if message.empty?
-				if ccard.save
+				if cCard.save
 					response["success"]      = "Card added"
 				else
-					response["error_server"] = ccard.errors.messages
+					response["error_server"] = cCard.errors.messages
 				end
 			#end
 			puts response
