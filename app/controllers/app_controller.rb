@@ -370,7 +370,7 @@ class AppController < ApplicationController
 		response  = {} 
 
       	if user = authenticate_app_user(params["token"])
-      		puts "User = #{user.fullName}"
+      		puts "User = #{user.fullname}"
       		puts "params data = #{params['data']}"
       		cCard = Card.create_card_from_hash params["data"]
       		puts "the new card object is = #{cCard}"
