@@ -46,10 +46,10 @@ class Card < ActiveRecord::Base
 		puts "in create_card_from_hash = #{cc_hash}, is it hash ? #{x}"
 		card = Card.new
 		card.name = cc_hash["name"]
-		card.month = cc_hash["month"].to_i
-		card.year = cc_hash["year"].to_i
+		card.month = cc_hash["month"]
+		card.year = cc_hash["year"]
 		card.nickname = cc_hash["nickname"]
-		card.csv = cc_hash["csv"].to_i
+		card.csv = cc_hash["csv"]
 		card.user_id = cc_hash["user_id"]
 		card.brand = cc_hash["brand"]
 		card.number = cc_hash["number"]

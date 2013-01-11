@@ -385,6 +385,7 @@ class AppController < ApplicationController
 			#if message.empty?
 				if cCard.save
 					response["success"]      = "Card added"
+					puts "here is the saved new ccard = #{cCard.inspect}"
 				else
 					response["error_server"] = cCard.errors.messages
 				end

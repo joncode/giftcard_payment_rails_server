@@ -39,8 +39,8 @@ class IphoneController < AppController
     puts "#{params}"
 
     response  = {}
-    email     = params["email"]
-    password  = params["password"]
+    email     = params["email"].downcase
+    password  = params["password"].downcase
     
     if email.nil? || password.nil?
       response["error_iphone"]     = "Data not received."
