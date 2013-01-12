@@ -354,7 +354,7 @@ class AppController < ApplicationController
       	if user = authenticate_app_user(params["token"])
       		display_cards = Card.get_cards user
       		if display_cards.empty?
-      			response["error"] = "User has no cards on file"
+      			response["success"] = []
       		else
       			response["success"] = display_cards
       		end
