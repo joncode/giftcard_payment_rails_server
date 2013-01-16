@@ -351,7 +351,7 @@ class AppController < ApplicationController
 		# message = ""
 		response = {}
 
-		if user = authenticate_app_user["token"]
+		if user = authenticate_app_user(params["token"])
 			cCard = Card.find(params["data"])
 			if cCard.user_id == user.id
 				if cCard.destory
