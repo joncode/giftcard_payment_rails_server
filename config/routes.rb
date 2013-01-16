@@ -124,6 +124,7 @@ Drinkboard::Application.routes.draw do
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post
+  match 'app/delete_card',      to: 'app#delete_card',         via: :post
     ### deprecated app routes
   match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
@@ -132,12 +133,6 @@ Drinkboard::Application.routes.draw do
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
   match 'app/regift',           to: 'iphone#regift',           via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
-
-    # to be deleted
-  # match 'app/redeem',           to: 'iphone#create_redeem',    via: :post
-  # match 'app/order',            to: 'iphone#create_order',     via: :post
-  # match 'app/users',            to: 'iphone#drinkboard_users', via: :post
-  # match 'app/servercode',       to: 'iphone#server_code',      via: :post
   
     ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'

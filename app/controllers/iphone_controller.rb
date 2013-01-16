@@ -459,14 +459,6 @@ class IphoneController < AppController
       return gift_hash
     end
     
-    # def add_redeem_code(obj)
-    #   if obj.status == "notified" 
-    #     obj.redeem.redeem_code
-    #   else
-    #     "none"
-    #   end
-    # end
-    
     def create_user_object(data)
       obj = JSON.parse data
       obj.symbolize_keys!

@@ -342,7 +342,33 @@ class AppController < ApplicationController
 			puts "response => #{response}"
 			format.json { render json: response }
 		end
-	end  
+	end 
+
+	def delete_card
+	 	puts "\nDelete Card"
+		puts "request = #{params}"
+
+		# message = ""
+		response = {}
+
+		if user = authenticate_app_user["token"]
+			cCard = Card.find(params["data"])
+			if cCard.user_id == user.id
+				if cCard.destory
+					response["succes"] = "#{cCard.id}"
+				else
+					response["error_server"] = "#{cCard.nickname} #{cCard.id} could not be deleted"
+				end
+			end
+		else
+			response["error"] = "Couldn't identify app user. "
+		end
+
+		respond_to do |format|
+			puts "response => #{response}"
+			format.json { render json: response }
+		end
+	end 
 
 	def get_cards
 		puts "\nGet Cards"
@@ -420,8 +446,8 @@ class AppController < ApplicationController
 	        end
 
 	        if !g.shoppingCart 
-	      		# make shopping cart array with item inside as Hash
-	      		# using item_id, item_name, category, quantity, price
+	      			# make shopping cart array with item inside as Hash
+	      			# using item_id, item_name, category, quantity, price
 	      		menu_item = {"id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s }
 	      		if g.category
 	      			menu_item["category"] = g.category.to_s
@@ -429,24 +455,23 @@ class AppController < ApplicationController
 	      		end
 	      		menu_item_array = [menu_item]
 
-	      		# shoppingCart = menu_item_array.to_json
-	      		# g.update_attribute(:shoppingCart, shoppingCart)
+	      			# shoppingCart = menu_item_array.to_json
+	      			# g.update_attribute(:shoppingCart, shoppingCart)
 	      		gift_obj["shoppingCart"] = menu_item_array
 	      	else
-	      		# turn shoppingCart into an array with hashes
-
+	      			# turn shoppingCart into an array with hashes
 	      		gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
 	      	end
 
-		        # add other person photo url 
+		        	# add other person photo url 
 	        if receiver
 	          if g.receiver
 	            gift_obj["receiver_photo"]  = g.receiver.get_photo
-	            #gift_obj["giver_photo"]     = g.giver.get_photo
+	            	#gift_obj["giver_photo"]     = g.giver.get_photo
 	          else
 	            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
 	          	gift_obj["receiver_photo"]  = ""
-	          	#gift_obj["giver_photo"]     = g.giver.get_photo
+	          		#gift_obj["giver_photo"]     = g.giver.get_photo
 	          	if g.receiver_name
 	          		gift_obj["receiver_name"] = g.receiver_name
 	          	else
@@ -454,14 +479,15 @@ class AppController < ApplicationController
 	          	end
 	          end
 	        else
-	          #gift_obj["giver_photo"]       = g.giver.get_photo
+	          	#gift_obj["giver_photo"]       = g.giver.get_photo
 	        end
 
 	        gift_obj["giver_photo"]        = g.giver.get_photo
 	        provider = g.provider 
 	        gift_obj["provider_photo"]     = provider.get_photo
 	        gift_obj["provider_phone"]	   = provider.phone
-	        # add the full provider address
+	        gift_obj["provider_city"]	   = provider.city
+	        	# add the full provider address
 	        if address_get
 	          gift_obj["provider_address"] = provider.complete_address
 	        end
@@ -526,6 +552,7 @@ class AppController < ApplicationController
 	        		item_hash.delete("menu_id")
 	        		item_hash.delete("name")
 	        		new_shopping_cart << item_hash
+	        		puts "AppC -convert_shoppingCart_for_app- new shopping cart = #{new_shopping_cart}"
 		    	end
 		    else
 		    	new_shopping_cart = cart_ary
