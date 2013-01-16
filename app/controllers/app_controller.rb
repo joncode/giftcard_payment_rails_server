@@ -355,7 +355,7 @@ class AppController < ApplicationController
 			cCard = Card.find(params["data"])
 			if cCard.user_id == user.id
 				if cCard.destroy
-					response["succes"] = "#{cCard.id}"
+					response["delete"] = "#{cCard.id}"
 				else
 					response["error_server"] = "#{cCard.nickname} #{cCard.id} could not be deleted"
 				end
@@ -418,7 +418,7 @@ class AppController < ApplicationController
     	respond_to do |format|
 			#if message.empty?
 				if cCard.save
-					response["success"]      = "Card added"
+					response["add"]      = "Card added"
 					puts "here is the saved new ccard = #{cCard.inspect}"
 				else
 					response["error_server"] = cCard.errors.messages
