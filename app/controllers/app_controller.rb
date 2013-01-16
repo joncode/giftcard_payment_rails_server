@@ -354,7 +354,7 @@ class AppController < ApplicationController
 		if user = authenticate_app_user(params["token"])
 			cCard = Card.find(params["data"])
 			if cCard.user_id == user.id
-				if cCard.destory
+				if cCard.destroy
 					response["succes"] = "#{cCard.id}"
 				else
 					response["error_server"] = "#{cCard.nickname} #{cCard.id} could not be deleted"
