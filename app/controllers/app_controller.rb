@@ -484,7 +484,7 @@ class AppController < ApplicationController
 
 	        gift_obj["giver_photo"]        = g.giver.get_photo
 	        provider = g.provider 
-	        gift_obj["provider_photo"]     = provider.get_photo
+	        gift_obj["provider_photo"]     = provider.get_image("photo")
 	        gift_obj["provider_phone"]	   = provider.phone
 	        gift_obj["provider_city"]	   = provider.city
 	        	# add the full provider address

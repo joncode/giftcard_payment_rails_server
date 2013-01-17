@@ -53,7 +53,7 @@ class MerchantsController < ApplicationController
     @obj_width = 210
     @obj_height = 62
     @action = "update_photos"
-    render "shared/uploader"
+    #render "shared/uploader"
 
     ##  mount_uploader :photo,    ProviderPhotoUploader
     ##  mount_uploader :logo,     ProviderLogoUploader

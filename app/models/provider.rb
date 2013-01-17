@@ -88,10 +88,10 @@ class Provider < ActiveRecord::Base
   end
   
   def get_photo
-    if self.box.blank?
+    if self.photo.blank?
       "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
     else
-      self.box.url
+      self.photo.url
     end
   end
 
