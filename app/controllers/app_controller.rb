@@ -5,7 +5,7 @@ class AppController < ApplicationController
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
 	GIFT_REPLY = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
- 	PROVIDER_REPLY = ["name", "photo", "box", "logo", "portrait", "sales_tax", "phone"]
+ 	PROVIDER_REPLY = ["name",  "box", "logo", "portrait", "sales_tax", "phone"]
 
  	def relays
  		puts "\nRelays to APP"
@@ -521,6 +521,7 @@ class AppController < ApplicationController
 				end
 				prov_obj["full_address"] = p.full_address
 				prov_obj["provider_id"]  = p.id.to_s
+				prov_obj["photo"] = p.get_image("photo")
 				providers_array << prov_obj
 			end
 			return providers_array
