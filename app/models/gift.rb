@@ -1,39 +1,3 @@
-# == Schema Information
-#
-# Table name: gifts
-#
-#  id                   :integer         not null, primary key
-#  giver_name           :string(255)
-#  receiver_name        :string(255)
-#  provider_name        :string(255)
-#  item_name            :string(255)
-#  giver_id             :integer
-#  receiver_id          :integer
-#  item_id              :integer
-#  price                :string(20)
-#  quantity             :integer         not null
-#  total                :string(20)
-#  credit_card          :string(100)
-#  provider_id          :integer
-#  message              :text
-#  special_instructions :text
-#  redeem_id            :integer
-#  status               :string(255)     default("open")
-#  category             :string(255)
-#  created_at           :datetime        not null
-#  updated_at           :datetime        not null
-#  receiver_phone       :string(255)
-#  tax                  :string(255)
-#  tip                  :string(255)
-#  regift_id            :integer
-#  foursquare_id        :string(255)
-#  facebook_id          :string(255)
-#  anon_id              :integer
-#  sale_id              :integer
-#  receiver_email       :string(255)
-#  shoppingCart         :string(255)
-#
-
 class Gift < ActiveRecord::Base
 
   attr_accessible   :giver_id,      :giver_name, :credit_card,    
@@ -272,3 +236,38 @@ class Gift < ActiveRecord::Base
       self.regift_id
     end    
 end
+# == Schema Information
+#
+# Table name: gifts
+#
+#  id                   :integer         not null, primary key
+#  giver_name           :string(255)
+#  receiver_name        :string(255)
+#  provider_name        :string(255)
+#  item_name            :string(255)
+#  giver_id             :integer
+#  receiver_id          :integer
+#  item_id              :integer
+#  price                :string(20)
+#  total                :string(20)
+#  credit_card          :string(100)
+#  provider_id          :integer
+#  message              :text
+#  special_instructions :text
+#  redeem_id            :integer
+#  status               :string(255)     default("open")
+#  category             :string(255)
+#  created_at           :datetime        not null
+#  updated_at           :datetime        not null
+#  receiver_phone       :string(255)
+#  tax                  :string(255)
+#  tip                  :string(255)
+#  regift_id            :integer
+#  foursquare_id        :string(255)
+#  facebook_id          :string(255)
+#  anon_id              :integer
+#  sale_id              :integer
+#  receiver_email       :string(255)
+#  shoppingCart         :text
+#
+

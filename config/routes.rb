@@ -69,10 +69,6 @@ Drinkboard::Application.routes.draw do
   resources :locations
   resources :providers 
   match "/merchants/:id/employee/:eid/remove"   => "merchants#remove_employee"
-
-    # resources :providers, :as => "establishments"
-    # providers should really be merchant side and merchant should be establishments
-    # could make an establishment controller for user side 
   
   resources :merchants do
     member do
@@ -92,6 +88,7 @@ Drinkboard::Application.routes.draw do
       get 'menu'
       get 'photos'
       post :update_photos
+      get 'staff_profile'
     end
   end
 

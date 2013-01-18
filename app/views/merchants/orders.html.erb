@@ -1,107 +1,77 @@
-<!-- IE 9 Gradient Fix -->
 
-<!--[if gte IE 9]>
-  <style type="text/css">
-    .gradient {
-       filter: none;
-    }
-  </style>
-<![endif]-->
-<div class="logoCrooked"></div>
-<!-- Header -->
-<% description =  "please enter description here" %>
-<div class="menuMakerWrapper"> <!-- Background Image -->
-  
-  <div class="showHeaderImage"></div>
-  <div class="lineVertHeader lineVert"></div>
-  <div class="loggedInBox">
-    <h5>Logged in as: <a href="/home"><%= current_user.fullname %></a></h5>
+<div class="column">
+
+  <!-- CHECK FOR GIFTS IF NONE RENDER APPROPIATE MSG -->    
+  <% if @gifts.empty? %>
+  <div class="ordersDisplay">
+    <div class="giftText giftTextLarge">
+      <h2>You do not have any orders at this time</h2>
+    </div>
   </div>
+  <% else %>
+  <!-- GIFT ID SEARCH FIELD -->
+  <div class="inputWrapper giftIDsearch">
+    <input type="text" placeholder="Enter Gift ID #" id="giftID" name="giftID" class="inputEmploy"/>
+    <span id="giftIDsearch" class="buttonUp">
+      <a href="" id="findButton">Find</a>
+      <a href="" class="buttonUp showAll">All</a>
+    </span>
+  </div> 
+  <!-- GIFT LOOP START -->
+  <% @gifts.each do |gift| %>
+  <div class="ordersDisplay" id="giftID<%= gift.id %>">
   
-  <div class="vendorTitle">
-    <h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
-    <h6 class="vendorAddress"><%= @provider.address %><br />
-        <%= @provider.city_state_zip %>
-    </h6>
-  </div>
-  <div class="lineHorizHeader lineHoriz"></div>
-
-  <div class="columnOne">
-
-    <div class="columnTopBlocker"></div>
-    <%= render 'merchant_options' %> 
-
-    <!-- CHECK FOR GIFTS IF NONE RENDER APPROPIATE MSG -->    
-    <% if @gifts.empty? %>
-    <div class="ordersDisplay">
-      <div class="giftText giftTextLarge">
-        <h2>You do not have any orders at this time</h2>
+  <!--    Left Column   -->
+    <div class="orderGiftLeft giftImage">
+        <%= custom_image_tag( gift.receiver ,75,75)  %>
+    </div>
+  <!--    Right Column   -->
+    <div class="orderGiftRight">
+      <div class="giftID">
+          ID # <%= gift.id %>
+      </div>    
+<!--         <% if gift.status == 'notified' %>
+      <div class="redeemInput">
+        <input type="text" placeholder="Code" id="redeem" name="redeem" class="inputRedeem" maxlength="4"/>
+      </div>
+      <% end %>  -->
+      <div id="buttonEditWine" class="buttonSmallDown buttonUp">
+          <% if gift.status != "notified" %>
+            <%= link_to print_gift_status(gift), detail_merchant_path(gift), :class => "status#{gift.status}" %>
+          <% else %>
+            <%= link_to print_gift_status(gift), order_merchant_path(gift_id: gift.id), :class => "status#{gift.status}" %>
+          <% end %>
       </div>
     </div>
-    <% else %>
-    <!-- GIFT ID SEARCH FIELD -->
-    <div class="inputWrapper giftIDsearch">
-      <input type="text" placeholder="Enter Gift ID #" id="giftID" name="giftID" class="inputEmploy"/>
-      <span id="giftIDsearch" class="buttonUp">
-        <a href="" id="findButton">Find</a>
-        <a href="" class="buttonUp showAll">All</a>
-      </span>
-    </div> 
-    <!-- GIFT LOOP START -->
-    <% @gifts.each do |gift| %>
-    <div class="ordersDisplay" id="giftID<%= gift.id %>">
     
-    <!--    Left Column   -->
-      <div class="orderGiftLeft giftImage">
-          <%= custom_image_tag( gift.receiver ,75,75)  %>
+  <!--    Middle Column   -->
+    <div class="orderGiftMiddle">
+      <div class="timeAgo">
+        <%= time_ago_in_words gift.updated_at %> ago
       </div>
-    <!--    Right Column   -->
-      <div class="orderGiftRight">
-        <div class="giftID">
-            ID # <%= gift.id %>
-        </div>    
-<!--         <% if gift.status == 'notified' %>
-        <div class="redeemInput">
-          <input type="text" placeholder="Code" id="redeem" name="redeem" class="inputRedeem" maxlength="4"/>
-        </div>
-        <% end %>  -->
-        <div id="buttonEditWine" class="buttonSmallDown buttonUp">
-            <% if gift.status != "notified" %>
-              <%= link_to print_gift_status(gift), detail_merchant_path(gift), :class => "status#{gift.status}" %>
-            <% else %>
-              <%= link_to print_gift_status(gift), order_merchant_path(gift_id: gift.id), :class => "status#{gift.status}" %>
-            <% end %>
-        </div>
+      <div class="giftText giftTextLarge">
+        <%= gift.receiver_name %>
       </div>
-      
-    <!--    Middle Column   -->
-      <div class="orderGiftMiddle">
-        <div class="timeAgo">
-          <%= time_ago_in_words gift.updated_at %> ago
-        </div>
-        <div class="giftText giftTextLarge">
-          <%= gift.receiver_name %>
-        </div>
-        <ul class="giftCart">
-        <% if gift.shoppingCart %>
-          <!-- turn the shopping cart JSON into an array
-                go thru the array , take each item
-                print THAT item_name to the screen -->
-          <% cart_json = gift.shoppingCart %> 
-          <% cart = JSON.parse cart_json %>
-          <% cart.each do |item| %>
-          <li class="giftItem timeAgo">
-            <%= item["quantity"] %> <%= item["item_name"] %>
-          </li>
-          <% end %> 
+      <ul class="giftCart">
+      <% if gift.shoppingCart %>
+        <!-- turn the shopping cart JSON into an array
+              go thru the array , take each item
+              print THAT item_name to the screen -->
+        <% cart_json = gift.shoppingCart %> 
+        <% cart = JSON.parse cart_json %>
+        <% cart.each do |item| %>
+        <li class="giftItem timeAgo">
+          <%= item["quantity"] %> <%= item["item_name"] %>
+        </li>
         <% end %> 
-        </ul>
-      </div>
-    </div>  
-    <% end %>
-      <!-- GIFT LOOP END -->
-    <% end %>
-  </div>
+      <% end %> 
+      </ul>
+    </div>
+  </div>  
+  <% end %>
+    <!-- GIFT LOOP END -->
+  <% end %>
 </div>
+
 
 

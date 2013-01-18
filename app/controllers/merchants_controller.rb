@@ -1,4 +1,3 @@
-
 class MerchantsController < ApplicationController
   
   def index
@@ -53,12 +52,6 @@ class MerchantsController < ApplicationController
     @obj_width = 210
     @obj_height = 62
     @action = "update_photos"
-    #render "shared/uploader"
-
-    ##  mount_uploader :photo,    ProviderPhotoUploader
-    ##  mount_uploader :logo,     ProviderLogoUploader
-    ##  mount_uploader :box,      ProviderBoxUploader
-    ##  mount_uploader :portrait, ProviderPortraitUploader
   end
 
   def update_photos
@@ -189,6 +182,11 @@ class MerchantsController < ApplicationController
     @provider = Provider.find(params[:id])
     
     @staff    = @provider.users
+  end
+
+  def staff_profile
+    @provider = Provider.find(params[:id])
+    @user = current_user
   end
 
   def add_employee

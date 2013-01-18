@@ -1,3 +1,8 @@
+class Tag < ActiveRecord::Base
+  attr_accessible :name
+
+  has_and_belongs_to_many :providers
+end
 # == Schema Information
 #
 # Table name: tags
@@ -8,8 +13,3 @@
 #  updated_at :datetime        not null
 #
 
-class Tag < ActiveRecord::Base
-  attr_accessible :name
-
-  has_and_belongs_to_many :providers
-end

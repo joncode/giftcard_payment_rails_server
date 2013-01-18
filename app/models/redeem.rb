@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: redeems
-#
-#  id                   :integer         not null, primary key
-#  gift_id              :integer
-#  reply_message        :string(255)
-#  redeem_code          :string(255)
-#  special_instructions :text
-#  created_at           :datetime        not null
-#  updated_at           :datetime        not null
-#
-
 class Redeem < ActiveRecord::Base
   attr_accessible :gift_id, :redeem_code, :reply_message, :special_instructions
   
@@ -36,3 +23,16 @@ class Redeem < ActiveRecord::Base
       self.gift.update_attributes({status: 'notified'})
     end
 end
+# == Schema Information
+#
+# Table name: redeems
+#
+#  id                   :integer         not null, primary key
+#  gift_id              :integer
+#  reply_message        :string(255)
+#  redeem_code          :string(255)
+#  special_instructions :text
+#  created_at           :datetime        not null
+#  updated_at           :datetime        not null
+#
+

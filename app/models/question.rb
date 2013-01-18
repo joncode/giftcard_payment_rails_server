@@ -1,12 +1,3 @@
-# == Schema Information
-#
-# Table name: questions
-#
-#  id    :integer         not null, primary key
-#  left  :string(255)
-#  right :string(255)
-#
-
 class Question < ActiveRecord::Base
     attr_accessible :answer, :left, :right
 
@@ -71,3 +62,12 @@ class Question < ActiveRecord::Base
       	return six_new_qs
     end
 end
+# == Schema Information
+#
+# Table name: questions
+#
+#  id    :integer         not null, primary key
+#  left  :string(255)
+#  right :string(255)
+#
+

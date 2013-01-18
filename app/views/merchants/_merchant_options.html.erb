@@ -1,5 +1,5 @@
 <div class="merchantMenu">
-    <%= link_to "User", user_path(current_user) %> 
+    <%= link_to "User", staff_profile_merchant_path(@provider) %> 
 	<%= link_to "Orders", orders_merchant_path(@provider) %> 
     <%= link_to "Menu Builder", menu_merchant_path(@provider) %> 
     <%= link_to "Images", photos_merchant_path(@provider) %> 

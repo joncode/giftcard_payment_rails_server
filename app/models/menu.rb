@@ -1,27 +1,3 @@
-# == Schema Information
-#
-# Table name: menus
-#
-#  id          :integer         not null, primary key
-#  provider_id :integer         not null
-#  item_id     :integer         not null
-#  price       :string(20)
-#  position    :integer(8)
-#  created_at  :datetime        not null
-#  updated_at  :datetime        not null
-#  item_name   :string(255)
-#  photo       :string(255)
-#  description :string(255)
-#  section     :string(255)
-# id :integer not null, primary key
-# provider_id :integer not null
-# item_id :integer not null
-# price :string(20)
-# position :integer(8)
-# created_at :datetime not null
-# updated_at :datetime not null
-#
-
 class Menu < ActiveRecord::Base
   attr_accessible :item_id, :position, :price, :provider_id, 
   :item_name, :photo, :description, :section
@@ -129,3 +105,20 @@ class Menu < ActiveRecord::Base
 
   
 end
+# == Schema Information
+#
+# Table name: menus
+#
+#  id          :integer         not null, primary key
+#  provider_id :integer         not null
+#  item_id     :integer         not null
+#  price       :string(20)
+#  position    :integer(8)
+#  created_at  :datetime        not null
+#  updated_at  :datetime        not null
+#  item_name   :string(255)
+#  photo       :string(255)
+#  description :string(255)
+#  section     :string(255)
+#
+

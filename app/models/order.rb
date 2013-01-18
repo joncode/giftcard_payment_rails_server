@@ -1,19 +1,3 @@
-# == Schema Information
-#
-# Table name: orders
-#
-#  id          :integer         not null, primary key
-#  redeem_id   :integer
-#  gift_id     :integer
-#  redeem_code :string(255)
-#  created_at  :datetime        not null
-#  updated_at  :datetime        not null
-#  server_code :string(255)
-#  server_id   :integer
-#  provider_id :integer
-#  employee_id :integer
-#
-
 class Order < ActiveRecord::Base
   attr_accessible :gift_id, :redeem_code, :redeem_id, :server_code, :server_id, :provider_id, :employee_id
   
@@ -133,3 +117,19 @@ class Order < ActiveRecord::Base
       end  
     end  
 end
+# == Schema Information
+#
+# Table name: orders
+#
+#  id          :integer         not null, primary key
+#  redeem_id   :integer
+#  gift_id     :integer
+#  redeem_code :string(255)
+#  created_at  :datetime        not null
+#  updated_at  :datetime        not null
+#  server_code :string(255)
+#  server_id   :integer
+#  provider_id :integer
+#  employee_id :integer
+#
+

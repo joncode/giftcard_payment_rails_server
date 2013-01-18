@@ -1,15 +1,3 @@
-# == Schema Information
-#
-# Table name: answers
-#
-#  id          :integer         not null, primary key
-#  answer      :string(255)
-#  user_id     :integer
-#  question_id :integer
-#  created_at  :datetime        not null
-#  updated_at  :datetime        not null
-#
-
 class Answer < ActiveRecord::Base
   attr_accessible :answer, :question_id, :user_id
 
@@ -34,3 +22,15 @@ class Answer < ActiveRecord::Base
   	end
   end
 end
+# == Schema Information
+#
+# Table name: answers
+#
+#  id          :integer         not null, primary key
+#  answer      :string(255)
+#  user_id     :integer
+#  question_id :integer
+#  created_at  :datetime        not null
+#  updated_at  :datetime        not null
+#
+

@@ -1,11 +1,17 @@
 @blue2: #5DCFF3;
 
+.POSsingleColumn {
+	margin-left: 30%;
+}
+
 .POSfullPageWrap {
 	position: relative;
-	float: left;	
+	float: left;
+	margin-top: 3%;	
+	margin-left: 2.5%;
 }
 .OBJfullPageWrap {
-	width : 100%;
+	width : 95%;
 	padding-top : 20px;
 	padding-bottom : 20px;
 	box-shadow: 1px 2px 5px 3px black;
@@ -15,6 +21,25 @@
 	.column {
 		width: 300px;
 	}	
+}
+
+table {
+	max-width: 95%;
+	tr {
+		background-color: rgba(24,27,32,0.3);
+		border : 2px solid #111;
+	    width: 110%;
+	    td {
+	    	padding: 10px;
+	    }
+	    .tableButton {
+	    	font-size: 17px;
+	    	border: none;
+	    	color: #add;
+	    	width: 64px;
+	    	height: 36px;
+	    }
+	}
 }
 h2.obj {
 	font-family: 'museo_sans_500regular';
@@ -169,7 +194,7 @@ ul.menuItemPos {
 		font-size: 17px !important;
 	}
 	.inputFieldObj
-	{
+	{	
 		border: 0;
 		box-sizing: border-box;
 		width: 280px;

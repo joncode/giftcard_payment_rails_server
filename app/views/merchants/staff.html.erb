@@ -1,34 +1,4 @@
-<!-- IE 9 Gradient Fix -->
-
-<!--[if gte IE 9]>
-  <style type="text/css">
-    .gradient {
-       filter: none;
-    }
-  </style>
-<![endif]-->
-
-<!-- Header -->
-<% description =  "please enter description here" %>
-<div class="menuMakerWrapper"> <!-- Background Image -->
-  <div class="logoCrooked"></div>
-  <div class="showHeaderImage"></div>
-  <div class="lineVertHeader lineVert"></div>
-  <div class="loggedInBox">
-  	<h5>Logged in as: <a href="/home"><%= current_user.fullname %></a></h5>
-  </div>
-  
-  <div class="vendorTitle">
-  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
-  	<h6 class="vendorAddress"><%= @provider.address %><br />
-  			<%= @provider.city_state_zip %>
-  	</h6>
-  </div>
-  <div class="lineHorizHeader lineHoriz"></div>
-
-  <div class="columnOne">
-    <div class="columnTopBlocker"></div>
-    <%= render 'merchant_options' %>
+<div class="column">
   <% @staff.each do |user| %>  
     <div class="employeeDisplay"> 
       <div class="employeeImage">

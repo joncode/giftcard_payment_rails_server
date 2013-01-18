@@ -1,3 +1,9 @@
+class Item < ActiveRecord::Base
+  attr_accessible :category, :detail, :item_name, :proof, :type_of, :description, :photo
+                                                
+  has_many  :gifts
+  has_many  :menus
+end
 # == Schema Information
 #
 # Table name: items
@@ -14,9 +20,3 @@
 #  supplier_id :integer
 #
 
-class Item < ActiveRecord::Base
-  attr_accessible :category, :detail, :item_name, :proof, :type_of, :description, :photo
-                                                
-  has_many  :gifts
-  has_many  :menus
-end

@@ -1,18 +1,24 @@
 <!-- Header -->
-<% description =  "enter description here" %>
-<div class="menuMakerWrapper"> <!-- Background Image -->
   <div class="logoCrooked"></div>
   <div class="headerImage"></div>
   <div class="lineVertHeader lineVert"></div>
   <div class="loggedInBox">
   	<h5>Welcome, <a href="/home"><%= @current_user.fullname %></a></h5>
   </div>
+  <% if @provider %>
   <div class="vendorTitle">
-  	<h5 class="vendorTitleText"><a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a></h5>
-  	<h6 class="vendorAddress"><%= @provider.address %><br />
+  	<h5 class="vendorTitleText">
+      <a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a>
+    </h5>
+  	<h6 class="vendorAddress">
+        <%= @provider.address %>
+        <br />
   			<%= @provider.city_state_zip %>
   	</h6>
   </div>
+  <% end %>
   <div class="lineHorizHeader lineHoriz"></div>
   	<div class="columnTopBlocker"></div>
+      <% if @provider %>
   	  	<%= render 'merchant_options' %>
+      <% end %>
