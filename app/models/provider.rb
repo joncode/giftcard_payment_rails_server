@@ -125,8 +125,12 @@ class Provider < ActiveRecord::Base
         # call the table view photo at 320px x 50px off cloudinary
     response = {}
     response["provider_name"]   = self.name
-    response["table_photo_url"] = self.photo.url
+    response["photo"]           = self.photo.url
     response["provider_id"]     = self.id.to_s 
+    response["phone"]           = self.phone.to_s
+    response["city"]            = self.city
+    response["sales_tax"]       = self.sales_tax
+    response["full_address"]    = self.full_address
     return response   
   end 
 
