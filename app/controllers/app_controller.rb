@@ -168,14 +168,15 @@ class AppController < ApplicationController
   		puts "request = #{params}"
   		# user  = User.find_by_remember_token(params["token"])
   		
-  		if  other_user = User.find(params["user_id"])
+  		begin  
+  			other_user = User.find(params["user_id"])
 	  			# get new pack of questions
 			begin
 	  			response = Question.get_questions_with_answers(other_user)
 	  		rescue
 	  			response = ["error", "could not get questions"]
 	  		end
-	  	else
+	  	rescue
 	  		response = ["error", "could not find other user in db"]
 	  	end
   		respond_to do |format|
@@ -544,7 +545,7 @@ class AppController < ApplicationController
 
 	    def convert_shoppingCart_for_app(shoppingCart)
 	    	cart_ary = JSON.parse shoppingCart
-	    	puts "shopping cart = #{cart_ary}"
+	    	# puts "shopping cart = #{cart_ary}"
 	    	new_shopping_cart = []
 	    	if cart_ary[0].has_key? "menu_id"
 		    	cart_ary.each do |item_hash|

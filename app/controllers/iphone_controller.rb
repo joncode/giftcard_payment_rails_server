@@ -1,7 +1,7 @@
 class IphoneController < AppController
 
   
-  LOGIN_REPLY     = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone", "provider_id"]  
+  LOGIN_REPLY     = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
   GIFT_REPLY      = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "id"]
   BUY_REPLY       = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "id"]
   BOARD_REPLY     = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "giver_id", "giver_name", "id"] 
@@ -35,7 +35,7 @@ class IphoneController < AppController
   end
   
   def login
-    puts "Login"
+    puts "LOGIN"
     puts "request = #{params}"
 
     response  = {}
@@ -58,7 +58,7 @@ class IphoneController < AppController
     end
     
     respond_to do |format|
-      puts "response => #{response}"
+      puts "LOGIN response => #{response}"
       format.json { render text: response.to_json }
     end
   end
