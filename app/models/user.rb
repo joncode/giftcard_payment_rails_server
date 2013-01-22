@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
   validates :email , format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 },      on: :create
   validates :password_confirmation, presence: true, on: :create
-  validates :server_code, length: {is: 4}, numericality: { only_integer: true }, :if => :check_for_server_code
+  # validates :server_code, length: {is: 4}, numericality: { only_integer: true }, :if => :check_for_server_code
   # validates_with ServerCodeValidator, :record => self
     # ^ this should only be when servercode is changed
     # need another validator for new servers to locations who already have server codes
