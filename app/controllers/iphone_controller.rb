@@ -26,9 +26,9 @@ class IphoneController < AppController
         response = { "success" => new_user.remember_token }
       else
         message += " Unable to save to database" 
-        response = { "error" => message }
+        response = { "error" => "#{message}. #{new_user.errors.messages}"}
       end
-      puts "response => #{response}"
+      puts "iPhone -Create_Account- response => #{message}"
       format.json { render text: response.to_json }
     end
   end
@@ -461,6 +461,7 @@ class IphoneController < AppController
     
     def create_user_object(data)
       obj = JSON.parse data
+      puts "Create user after parse = #{obj}"
       obj.symbolize_keys!
       User.new(obj)
     end
