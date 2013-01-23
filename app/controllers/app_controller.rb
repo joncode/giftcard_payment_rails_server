@@ -42,7 +42,7 @@ class AppController < ApplicationController
  		end
  		respond_to do |format|
 	    	logger.debug response
-	    	puts "response => #{response}"
+	    	puts "response => badge = #{badge}"
 	    	format.json { render json: response }
 	    end
  	end
