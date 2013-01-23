@@ -8,10 +8,11 @@
 //= require scripts
 //= require merchant
 //= require twitter/bootstrap
+//= require bootstrap
 //= require jquery.isotope.min
 //= require jquery.Jcrop.min
 //= require jquery.form
-//= require isotope_script
+
 
 
 

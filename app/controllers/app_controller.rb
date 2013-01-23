@@ -15,7 +15,6 @@ class AppController < ApplicationController
  		 			# user is authenticated
  		 	puts "App -Update_user- data = #{params["data"]}"
  		 	updates = JSON.parse params["data"]
- 		 	#updates = params["data"]
  		 	puts "App -Update_user- data = #{updates}"
  		else
  			# user is not authenticated

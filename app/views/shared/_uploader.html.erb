@@ -30,12 +30,13 @@
     var imageLoader = document.getElementById('<%= @obj_name %>_<%= @file_field_name %>');
         imageLoader.addEventListener('change', handleImage, false);
 
-    var maxHeight = 500;
-    var maxWidth = 350;
+    var maxHeight = 320;
+    var maxWidth = 600;
     function handleImage(e){
       $("#imageCanvas").remove();
       $(".jcrop-holder").remove();
       $("#upload_photo_wrapper").append('<canvas id="imageCanvas"></canvas>');
+      $("#upload_wrapper").append('<canvas id="imageCanvas"></canvas>');
       $("#cropTitle").show();
       var canvas = document.getElementById("imageCanvas");
       var ctx = canvas.getContext('2d');
@@ -83,7 +84,7 @@
 </script>
 <style type="text/css">
 	#uploaded_photo{
-		width: 350px; height: 500px; background: #ddd; float: left; display: table;
+		width: 600px; height: 320px; background: #ddd; float: left; display: table;
 	}
 	#uploaded_photo #inner_wrapper{
 		display: table-cell; vertical-align: middle;
@@ -116,7 +117,7 @@
 
 
 <%= form_for(@obj_to_edit, :url => {:action => @action}, :html => { :method => :post, :id => 'uploadForm', :multipart => true }) do |f| %>
-    <div class="column">
+    <div class="doubleColumn"> 
       <div class="photoContainer">
         <div class="giftText giftTextLarge">
           <h2>Current Photo</h2>
@@ -132,9 +133,7 @@
       <div class="actions">
         <%= f.submit "Upload Photo" %>
       </div>
-    </div>
-    <div class="column">
-      <div class="ordersDisplay giftText giftTextLarge input_fieldPOS">
+      <div class="ordersDisplay giftText giftTextLarge">
         <div id="upload_wrapper">
            Upload a file: <%= f.file_field @file_field_name %>
         </div>

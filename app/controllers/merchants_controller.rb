@@ -39,7 +39,8 @@ class MerchantsController < ApplicationController
 
   def photos
     @provider = Provider.find(params[:id])
-    @current_user = current_user
+    #@current_user = current_user
+    redirect_to  edit_photo_merchant_path(@provider)
   end
 
   def edit_photo
@@ -49,8 +50,8 @@ class MerchantsController < ApplicationController
     @obj_to_edit = @provider
     @obj_name = "provider"
     @file_field_name = "photo"
-    @obj_width = 210
-    @obj_height = 62
+    @obj_width = 600
+    @obj_height = 320
     @action = "update_photos"
   end
 
