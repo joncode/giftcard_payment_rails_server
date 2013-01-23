@@ -2,10 +2,36 @@ class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
 	skip_before_filter :verify_authenticity_token
 
+	UPDATE_REPLY  = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone"]  
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
 	GIFT_REPLY = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
  	PROVIDER_REPLY = ["name",  "box", "logo", "portrait", "sales_tax", "phone"]
+
+ 	def update_user
+  		puts "\nUpdate User"
+ 		puts "request = #{params}"	
+ 		if user = authenticate_app_user(params["token"])
+ 		 			# user is authenticated
+ 		 	puts "App -Update_user- data = #{params["data"]}"
+ 		 	updates = JSON.parse params["data"]
+ 		 	#updates = params["data"]
+ 		 	puts "App -Update_user- data = #{updates}"
+ 		else
+ 			# user is not authenticated
+ 			response["error"] = {"user" => "could not identity app user"}
+ 		end
+
+ 		respond_to do |format|
+ 			if user.update_attributes(updates)
+	          response["success"]      = user.to_json only: UPDATE_REPLY
+	        else
+	          response["error_server"] = "Unable to process user updates to database." 
+	        end
+	    	puts "response => #{response}"
+	    	format.json { render json: response }
+	    end	
+ 	end
 
  	def relays
  		puts "\nRelays to APP"

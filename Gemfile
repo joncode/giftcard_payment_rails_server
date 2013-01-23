@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.3'
+gem 'rails', '3.2.11'
 gem 'carrierwave'
 gem 'cloudinary'
 gem 'httparty', '0.9.0'

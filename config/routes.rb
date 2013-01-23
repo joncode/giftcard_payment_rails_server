@@ -104,7 +104,7 @@ Drinkboard::Application.routes.draw do
   match 'app/login',            to: 'iphone#login',            via: :post
   match 'app/update',           to: 'iphone#relays',           via: :post 
   match 'app/gifts',            to: 'iphone#gifts',            via: :post
-  
+  match 'app/update_user',      to: 'app#update_user',         via: :post
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
   match 'app/providers',        to: 'app#providers',           via: :post

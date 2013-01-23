@@ -5,8 +5,8 @@ class User < ActiveRecord::Base
   :address, :address_2, :city, :state, :zip, :credit_number, 
   :admin, :facebook_id, :facebook_access_token, :facebook_expiry, 
   :foursquare_id, :foursquare_access_token, :provider_id, :handle, 
-  :server_code, :sex, :iphone_photo, :fb_photo, :use_photo, 
-  :is_public, :secure_image
+  :server_code, :sex, :birthday, :is_public,
+  :iphone_photo, :fb_photo, :use_photo, :secure_image
 
   attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
@@ -89,6 +89,36 @@ class User < ActiveRecord::Base
       c.last_four
     end
   end
+
+      # custom setters and getters for formatting date to human looking date
+  # def birthday= birthday
+  #   if birthday.kind_of? String
+  #     bday = Date.strptime(birthday, "%m/%d/%Y")
+  #   else
+  #     bday = birthday
+  #   end
+  #   super(bday)
+  # end
+
+  def birthday
+    x = super
+    m = x.month
+    d = x.day
+    y = x.year
+    "#{m}/#{d}/#{y}"
+  end
+
+  # def birthday_in_datetime birthday
+  #   Date.strptime(birthday, "%m/%d/%Y")  
+  # end
+
+  # def bday_to_s
+  #     # formats birthday to "month/date/4 digit year"
+  #   m = self.birthday.month
+  #   d = self.birthday.day
+  #   y = self.birthday.year
+  #   "#{m}/#{d}/#{y}"
+  # end
 
   def bill
     total = self.gifts.sum { |gift| gift.total.to_d }
