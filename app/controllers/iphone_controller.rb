@@ -18,12 +18,12 @@ class IphoneController < AppController
       message = "Data not received correctly. "
     else
       new_user = create_user_object(data) 
-      user_to_app = {"user_id" => new_user.id, "token" => new_user.remember_token}
       message = ""          
     end
     
     respond_to do |format|
       if !data.nil? && new_user.save
+        user_to_app = {"user_id" => new_user.id, "token" => new_user.remember_token}
         response = { "success" => user_to_app }
       else
         message += " Unable to save to database" 
