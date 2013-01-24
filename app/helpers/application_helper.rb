@@ -19,7 +19,6 @@ module ApplicationHelper
     photo = url_array[0] + 'upload' + crop + url_array[1]
     image_tag(photo, alt: "noImage", :class => "customImageTag", :style => "height:#{height}px;width:#{width}px;" )
   end
-end
 
   def print_gift_status gift
     case gift.status
@@ -28,8 +27,9 @@ end
     when 'notified'
       "Redeem"
     when 'redeemed'
-      "Complete"
+      "Details"
     else
       "Regifted"
     end
   end
+end

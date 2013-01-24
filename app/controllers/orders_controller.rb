@@ -44,23 +44,26 @@ class OrdersController < ApplicationController
 
   def create
     @order    = Order.new(params[:order])
-            # trigger : true for user side
+            # trigger : true for customer side
             #         : false for merchant side
     trigger   = @order.redeem_code.nil? ? true : false
 
     respond_to do |format|
       if @order.save
         if trigger
+            # customer side
           format.html { redirect_to completed_gift_path(@order), notice: 'Order is Completed. Thank You!' }
         else
-          format.html { redirect_to completed_merchant_path(@order), notice: 'Order is Completed. Thank You!' }
+            # merchant side
+          format.html { redirect_to orders_merchant_path(@order.provider_id), notice: 'Order is Completed. Thank You!' }
         end
         format.json { render json: @order, status: :created, location: @order }
       else
+        notice = "Drink not authorized. #{human_readable_error_message(@order).to_s}"
         if trigger
           format.html { redirect_to @order.redeem, notice: "Drink not authorized. Server Code incorrect." }
         else
-          format.html { redirect_to order_merchant_path(@order.gift_id), notice: "Drink not authorized. Redeem Code incorrect." }
+          format.html { redirect_to orders_merchant_path(@order.provider_id), notice: notice }
         end
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end

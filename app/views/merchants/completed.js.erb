@@ -1,0 +1,5 @@
+var searchID = "#giftID" + <%= @gift.id %>;
+$('.redeemDisplay').remove();
+$('.ordersDisplay').hide();
+$(searchID).show().after('<%= j render "completed" %>');
+$('.showAll').show();

@@ -1,5 +1,38 @@
 class MerchantsController < ApplicationController
   
+  # test methods
+  def help
+    @provider       = Provider.find(params[:id])
+    @current_user   = current_user
+  end
+
+  def explorer
+    @provider       = Provider.find(params[:id])
+    @current_user   = current_user  
+    @explorer = params["name"].split(".html")[0]
+  end
+
+  def menujs
+    @provider       = Provider.find(params[:id])
+    @current_user   = current_user
+    @menu_array     = Menu.get_menu_array_for_builder @provider
+    column = 1
+    @left = []
+    @right = []
+    @menu_array.each do |m|
+      if column == 1
+        @left << m
+        column = 2
+      else
+        @right << m 
+        column = 1
+      end
+    end
+    @menu_array = @menu_array.to_json
+  end
+
+  # end test methods
+
   def index
     @providers = current_user.providers    
 
@@ -94,6 +127,7 @@ class MerchantsController < ApplicationController
         format.html 
       else
         format.html # index.html.erb
+        format.js
         format.json { render json: @gifts }
       end
     end
@@ -109,29 +143,15 @@ class MerchantsController < ApplicationController
     end
   end
 
-  def detail
-    @gift = Gift.find(params[:id])
-    @giver = @gift.giver
-    @receiver = @gift.receiver
-    @provider = @gift.provider
-    if @gift.order.server_id
-      @server = User.find(@gift.order.server_id) 
-    else
-      @server = User.new(first_name: "missing", last_name: "person")
-    end
-    respond_to do |format|
-      format.html # detail.html.erb
-      format.json { render json: @gift }
-    end
-  end
-
-  def order
-    @gift = Gift.find(params[:id])
+  def redeem
+    @provider = Provider.find(params[:id])
+    @gift = Gift.find(params[:gift_id])
     @redeem = Redeem.find_by_gift_id(@gift)
-    @provider = @gift.provider
+    #@provider = @gift.provider
+    @employee = Employee.where(user_id: current_user.id, provider_id: @provider.id)[0]
     
     if @redeem
-      @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, server_id: current_user.id, provider_id: @provider.id)
+      @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, provider_id: @provider.id, employee_id: @employee.id)
     else
       # no redeem = no order possible
       @order = Order.new
@@ -140,16 +160,17 @@ class MerchantsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.js { render 'order'}
       format.json { render json: @redeem }
     end
   end
   
   def completed
-    @order = Order.find(params[:id])
-    @gift = @order.gift
+    @provider = Provider.find(params[:id])
+    @gift = Gift.find(params[:gift_id])
     @giver = @gift.giver
     @receiver = @gift.receiver
-    @provider = @order.provider
+    @order = @gift.order
     if @order.server_id
       @server = User.find(@order.server_id) 
     else
@@ -157,6 +178,7 @@ class MerchantsController < ApplicationController
     end
     respond_to do |format|
       format.html # detail.html.erb
+      format.js
       format.json { render json: @gift }
     end
   end

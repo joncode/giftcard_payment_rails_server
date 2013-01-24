@@ -3,7 +3,7 @@
 	<h5 class="menuSectionHeader">
 		Merchant Profile Information
 	</h5>
-	<%= form_for(@provider) do |f| %>
+	<%= form_for(@provider, remote: true) do |f| %>
   <% if @provider.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
@@ -44,7 +44,8 @@
         </div> 
         <div class="actions">
           <%= f.submit "Update", class: "btn btn-large btn-info" %>
-        </div>  
+        </div> 
+        <div id="ajax_response"></div> 
     </div>
   </div>
 

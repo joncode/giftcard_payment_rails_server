@@ -71,13 +71,19 @@ Drinkboard::Application.routes.draw do
   match "/merchants/:id/employee/:eid/remove"   => "merchants#remove_employee"
   
   resources :merchants do
+    get 'home'
     member do
+      # test routes
+      get 'baronVonJovi'
+      get 'explorer'
+      get :help
+      get :menujs
+      # end test routes
       get 'past_orders'
-      get 'detail'
       get 'customers'
       get 'orders'
-      post 'order'
-      get 'completed'
+      get 'redeem'
+      get :completed
       get 'staff'
       get 'edit_info'
       get 'edit_photo'
@@ -91,6 +97,8 @@ Drinkboard::Application.routes.draw do
       get 'staff_profile'
     end
   end
+
+
 
 
   resources :microposts,    only: [:create, :destroy]
@@ -108,6 +116,7 @@ Drinkboard::Application.routes.draw do
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
   match 'app/providers',        to: 'app#providers',           via: :post
+  match 'app/get_providers',        to: 'app#providers',           via: :get
   match 'app/employees',        to: 'app#create_redeem',       via: :post
   match 'app/complete_order',   to: 'app#create_order',        via: :post
   match 'app/menu',             to: 'app#menu',                via: :post

@@ -5,8 +5,9 @@
 // the compiled file. remeber_to_require jquery.ui.all
 
 //= require jquery
-//= require scripts
+//= require jquery_ujs
 //= require merchant
+//= require help
 //= require twitter/bootstrap
 //= require bootstrap
 //= require jquery.isotope.min

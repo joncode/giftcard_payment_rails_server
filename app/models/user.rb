@@ -148,6 +148,7 @@ class User < ActiveRecord::Base
   def fullname
     self.username
   end
+
   
   def profile_pic(w,h)
     self.photo

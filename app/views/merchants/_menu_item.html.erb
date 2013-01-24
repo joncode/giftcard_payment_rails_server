@@ -17,7 +17,6 @@
 	<% else %>
 		<!-- print name description price on different lines -->
 <ul class="menuItem menuItemPos">
-
 	<li>
 		<h5 class="miTitle" style="width:300px;">
     		<%= menu_item["item_name"] %>
@@ -38,16 +37,16 @@
 </ul>
 	<% end %>
 <div class="menuItemForm">
-	<ul class="inputWrap rounded gradient inputWrapPos">
-		<li><input type="text" placeholder="Item Name" 
+	<ul id="<%= menu_item["id"] %>" class="inputWrap rounded gradient inputWrapPos">
+		<li><input type="text" placeholder="Item Name" value="<%= menu_item["item_name"] %>"
 			class="miTitleForm rounded inputFieldObj inputFieldPos" />
 		</li>
-		<li><textarea placeholder="<%=  description %>" 
+		<li><textarea placeholder="<%=  description %>" value="<%= menu_item["description"] %>"  
 			class="miDescriptionForm rounded inputFieldObj inputFieldPos" style="resize: none;"></textarea>
 		</li>
 		<li>
 			<h5 class="dollarSignPos dollarSignObj" >$</h5>
-    		<input type="text" placeholder="Price" rows="2" 
+    		<input type="text" placeholder="Price" value="<%= menu_item["price"] %>" rows="2" 
     		class="inputFieldObj miPriceForm rounded">
     	</li>
 	</ul>

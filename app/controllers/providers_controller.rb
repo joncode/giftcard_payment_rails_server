@@ -42,9 +42,11 @@ class ProvidersController < ApplicationController
     respond_to do |format|
       if @provider.save
         format.html { redirect_to merchant_path(@provider), notice: 'Provider was successfully created.' }
+        format.js 
         format.json { render json: merchant_path(@provider), status: :created, location: @provider }
       else
         format.html { render action: "new" }
+        format.js
         format.json { render json: @provider.errors, status: :unprocessable_entity }
       end
     end
@@ -55,10 +57,15 @@ class ProvidersController < ApplicationController
 
     respond_to do |format|
       if @provider.update_attributes(params[:provider])
+        @partial_to_render = "success"
         format.html { redirect_to merchant_path(@provider), notice: 'Provider was successfully updated.' }
+        format.js 
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        @partial_to_render = "error"
+        @message = human_readable_error_message @provider
+        format.html { redirect_to edit_info_merchant_path(@provider), notice: 'Update was unsuccessful' }
+        format.js { render 'error' }
         format.json { render json: @provider.errors, status: :unprocessable_entity }
       end
     end

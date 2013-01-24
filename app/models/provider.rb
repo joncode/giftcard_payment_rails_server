@@ -28,6 +28,10 @@ class Provider < ActiveRecord::Base
   mount_uploader :box,      ProviderBoxUploader
   mount_uploader :portrait, ProviderPortraitUploader
 
+  #validates_numericality_of :sales_tax, :zip, :routing, :aba
+  #validates_length_of :aba, :is => 9
+  #validates_length_of :routing, :within => 9..14
+
   before_create :extract_phone_digits
 
   def self.allWithinBounds(bounds)

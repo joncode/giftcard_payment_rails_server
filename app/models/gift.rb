@@ -23,7 +23,7 @@ class Gift < ActiveRecord::Base
   has_and_belongs_to_many :menus
   
   validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip
-  # validates_numericality_of  :total
+  # validates_numericality_of  :total, :tip, :tax
   
   #before_create :add_category, :if => :no_category
   #before_create :pluralizer
