@@ -378,7 +378,7 @@ class AppController < ApplicationController
 				response["success"]      = " Sale Confirmed. Thank you!"
 			else
 				response["error_server"] = " Order not processed - database error"
-				messsage += order.errors.messages
+				messsage += "#{order.errors.messages}"
 			end
 			puts "AC CreateOrder response => #{message} #{response}"
 			format.json { render json: response }
