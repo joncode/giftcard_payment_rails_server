@@ -11,7 +11,7 @@ class Order < ActiveRecord::Base
 
   # order must be unique for each gift and redeem 
         # validation for provider_id is in callback until data is being sent from iPhone
-  validates_presence_of :employee_id , :server_code, :server_id
+  validates_presence_of :employee_id #, :server_code, :server_id
   validates :gift_id   , presence: true, uniqueness: true
   validates :redeem_id , presence: true, uniqueness: true 
 
