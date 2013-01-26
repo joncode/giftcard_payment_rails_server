@@ -4,13 +4,11 @@
 	<!-- LEFT MENU COLUMN RENDERED in this template -->
 
 
-
 </div><!-- End Column 1 -->
 <div id="right" class="column">
 
 
 	<!-- RIGHT MENU COLUMN RENDERED in this template -->
-
 
 
 </div><!-- End Column 2 -->
@@ -38,7 +36,7 @@
 <% description =  "enter description here" %>
 			<!-- Display Menu Item With Description -->
 <div class="displayMenuItemDesc template">
-	<ul class="menuItem menuItemPos">
+	<ul id="displayMenuItemDesc" class="menuItem menuItemPos template">
 		<li>
 			<h5 class="miTitle" style="width:300px;">
 	    		<!-- menu_item["item_name"] %> -->Test
@@ -60,7 +58,7 @@
 </div>
 			<!-- Display Menu Item WithOUT Description -->
 <div class="displayMenuItem template">
-	<ul class="menuItem menuItemPos">
+	<ul id="displayMenuItem" class="menuItem menuItemPos template">
 		<li>
 			<h5 class="miTitle" style="width:250px;">
 	    		<!-- menu_item["item_name"] %> -->
@@ -131,11 +129,11 @@
 	};
 
 	function getDisplayTemplateDesc() {
-		return $('.displayMenuItemDesc.template').clone().removeClass('template');
+		return $('#displayMenuItemDesc.template').clone().removeClass('template');
 	};
 
 	function getDisplayTemplate() {
-		return $('.displayMenuItem.template').clone().removeClass('template');
+		return $('#displayMenuItem.template').clone().removeClass('template');
 	};
 
 	function getSectionDivider() {
@@ -149,19 +147,17 @@
 	function makeMenuList(menuList, columnStr) {
 		var columnObj = $('#' + columnStr);
 		var num = 0;
-		var startTag = '<ul>';
-		var endTag   = '</ul>';
-		$(columnObj).append(startTag);
+		$(columnObj).append('<ul>');
 		$.each(menuList, function() {
-			startTag = '<li class="menu_section">';
-			$(columnObj).append(startTag);
+			$(columnObj).append('<li class="menu_section">');
 			var hdr = getSectionHeaderWithTitle(this[0]);
 			$(columnObj).append(hdr);
-			//hdr.text(this[0]); // put section name in header
 
 			var index = 0;
 			var items_ary = this[1];
+			$(columnObj).append('<ul>');
 			$.each(items_ary, function() {
+				$(columnObj).append('<li>');
 				index ++;
 				//alert(this);
 				var displayObj = getDisplayTemplate();
@@ -169,14 +165,15 @@
 					displayObj = getDisplayTemplateDesc();
 				};
 				setValuesForDisplay(displayObj, this);
+				
 				$(columnObj).append(displayObj);
 				
 				if (index < items_ary.length) {
 					$(columnObj).append(getItemDivider());
 				};
-
+				$(columnObj).append('</li>');
 			});
-			
+			$(columnObj).append('</ul>');
 			//alert(hdr.text());
 			num ++;
 			if (num == menuList.length) {
@@ -184,8 +181,7 @@
 			} else {
 				$(columnObj).append(getSectionDivider());
 			};
-			endTag = '</li>';
-			$(columnObj).append(endTag);
+			$(columnObj).append('</li>');
 		});
 		$(columnObj).append('</ul>');
 	};

@@ -3,7 +3,7 @@ class MenuString < ActiveRecord::Base
   
   	belongs_to :provider
   
-  	def self.get_menu_for_provider(provider_id)
+   	def self.get_menu_for_provider(provider_id)
   		menu_string = MenuString.find_by_provider_id(provider_id) 
   		if !menu_string
 			menu_string = MenuString.new
@@ -22,7 +22,7 @@ class MenuString < ActiveRecord::Base
 		menu_string_data = Menu.get_full_menu_array(provider_id).to_json 
 
 		self.data = menu_string_data
-		# puts menu_string_data
+		puts "IN GENERATE MENU STRING"
 		self.version = 2
 		self.sections_json = sections_array.to_json
 		self.provider_id = provider_id if !self.provider_id
