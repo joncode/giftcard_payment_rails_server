@@ -29,7 +29,7 @@ class IphoneController < AppController
         message += " Unable to save to database" 
         response = { "error" => "#{message}. #{new_user.errors.messages}"}
       end
-      puts "iPhone -Create_Account- response => #{message}"
+      puts "iPhone -Create_Account- response => #{response}"
       format.json { render text: response.to_json }
     end
   end
@@ -137,19 +137,20 @@ class IphoneController < AppController
 
     response = {}
     if user = authenticate_app_user(params["token"])
-      puts "IT WORKS IT INHERITS !!!!"
+      puts "authenticate_app_user INHERITS !!!!"
     else
       user = User.find_by_remember_token(params["token"])
     end
     gifts, past_gifts     = Gift.get_buy_history(user)
-    gift_hash             = array_these_gifts(gifts, BUY_REPLY, true, true)
-    past_gift_hash        = array_these_gifts(past_gifts, BUY_REPLY, true, true)
-    response["active"]    = gift_hash
-    response["completed"] = past_gift_hash
-    
+    gift_array            = array_these_gifts(gifts, BUY_REPLY, true, true)
+    past_gift_array       = array_these_gifts(past_gifts, BUY_REPLY, true, true)
+    response["active"]    = gift_array
+    response["completed"] = past_gift_array
+    logmsg = gift_array[0]
+
     respond_to do |format|
-      logger.debug response
-      puts "response => #{response}"
+      # logger.debug response
+      puts "response => #{logmsg}"
       format.json { render text: response.to_json }
     end
   end
