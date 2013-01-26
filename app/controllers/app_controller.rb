@@ -377,10 +377,9 @@ class AppController < ApplicationController
 			if order.save
 				response["success"]      = " Sale Confirmed. Thank you!"
 			else
-				response["error_server"] = " Order not processed - database error"
-				messsage += "#{order.errors.messages}"
+				response["error_server"] = order.errors.messages
 			end
-			puts "AC CreateOrder response => #{message} #{response}"
+			puts "AC CreateOrder response => #{response}"
 			format.json { render json: response }
 		end
 	end 
