@@ -11,11 +11,12 @@ class AppController < ApplicationController
  	def update_user
   		puts "\nUpdate User"
  		puts "request = #{params}"	
+ 		response = {}
  		if user = authenticate_app_user(params["token"])
  		 			# user is authenticated
  		 	puts "App -Update_user- data = #{params["data"]}"
  		 	updates = JSON.parse params["data"]
- 		 	puts "App -Update_user- data = #{updates}"
+ 		 	puts "App -Update_user- parsed data = #{updates}"
  		else
  			# user is not authenticated
  			response["error"] = {"user" => "could not identity app user"}
@@ -23,7 +24,7 @@ class AppController < ApplicationController
 
  		respond_to do |format|
  			if user.update_attributes(updates)
-	          response["success"]      = user.to_json only: UPDATE_REPLY
+	          response["success"]      = user.serializable_hash only: UPDATE_REPLY
 	        else
 	          response["error_server"] = "Unable to process user updates to database." 
 	        end
@@ -66,7 +67,7 @@ class AppController < ApplicationController
  			response["error"] = {"user" => "could not identity app user"}
  		end
  		respond_to do |format|
-	    	logger.debug response
+	    	# logger.debug response
 	    	puts "AC Relays response => badge = #{badge}"
 	    	format.json { render json: response }
 	    end

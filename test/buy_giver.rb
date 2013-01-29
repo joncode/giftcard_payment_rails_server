@@ -66,6 +66,18 @@ class BuyTests
       g
   end
   
+  def update_user_test
+    test = "Test H1"
+    method_name = "update_user_test"
+    puts "\n\n  *******     #{test} - #{method_name}     ********* "
+    @user1.phone = "6546546544"
+    @user1.sex = 'female' if @user1.sex == 'male'
+    @user1.sex = "male" if @user1.sex.nil?
+
+
+    s = String.new(%x{curl #{TEST_URL}/app/update_user.json -d'token=#{@user1.remember_token}'})
+
+  end
 
   ############    A TESTS - get providers
   
