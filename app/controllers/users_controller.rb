@@ -39,7 +39,8 @@ class UsersController < ApplicationController
     end
   end
 
-  def new    
+  def new  
+    sign_out  
     @user  = User.new
     @users = User.where(admin: true)
 

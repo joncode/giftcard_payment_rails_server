@@ -16,11 +16,12 @@ class Order < ActiveRecord::Base
   validates :redeem_id , presence: true, uniqueness: true 
 
   before_validation :add_gift_id,     :if => :no_gift_id
-  before_validation :get_employee_id
+  # before_validation :get_employee_id
   before_validation :add_redeem_id,   :if => :no_redeem_id
   before_validation :add_provider_id, :if => :no_provider_id
   before_validation :authenticate_via_code
   after_create      :update_gift_status
+  after_destroy     :rewind_gift_status
     
   private
     
@@ -35,9 +36,18 @@ class Order < ActiveRecord::Base
       self.gift.update_attribute(:status, 'redeemed')
       puts "UPDATE GIFT STATUS #{self.gift.status}"
     end
+
+    def rewind_gift_status
+      self.gift.update_attribute(:status, 'notified')
+      puts "UPDATE GIFT STATUS DELETED ORDER ID=#{self.id}, GiftID = #{self.gift.id} #{self.gift.status}"
+    end
     
     def authenticate_via_code
       puts "AUTHENTICATE VIA CODE"
+      if self.gift.nil? || self.redeem.nil?
+        errors.add(:authenticate, "missing gift or redeem")
+        return false 
+      end
       if self.redeem_code
                   # authentication code for redeem_code
         redeem_obj = self.redeem
@@ -47,6 +57,7 @@ class Order < ActiveRecord::Base
         else
           flag = false
           puts "CUSTOMER REDEEM CODE INCORRECT"
+          errors.add(:redeem_code, "Incorrect Redeem Code")
         end
       elsif self.server_code
                   # authenticate for server_code
@@ -58,9 +69,11 @@ class Order < ActiveRecord::Base
         else
           flag = false
           puts "MERCHANT REDEEM CODE INCORRECT"
+          errors.add(:merchant_redeem_code, "Incorrect Merchant Redeem Code")
         end
       else
                   # no code provided - set flag to denied - false
+        errors.add(:redeem_code, "cant be blank")
         flag = false
       end
       return flag
@@ -72,7 +85,7 @@ class Order < ActiveRecord::Base
     
     def add_gift_id
       puts "ADD GIFT ID"
-      self.gift_id = self.redeem.gift_id
+      self.gift_id = self.redeem.gift_id if self.redeem
     end
 
     def no_redeem_id
@@ -81,7 +94,7 @@ class Order < ActiveRecord::Base
 
     def add_redeem_id
       puts "ADD REDEEM ID"
-      self.redeem_id = self.gift.redeem.id
+      self.redeem_id = self.gift.redeem.id if self.gift
     end
 
     def no_provider_id
@@ -90,7 +103,7 @@ class Order < ActiveRecord::Base
     
     def add_provider_id
       puts "ADD PROVIDER ID"
-      self.provider_id = self.gift.provider_id
+      self.provider_id = self.gift.provider_id if self.gift
     end
 
     def get_server_id

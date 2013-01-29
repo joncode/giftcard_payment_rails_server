@@ -134,7 +134,7 @@ class AppController < ApplicationController
 
 	    if user = authenticate_app_user(params["token"])
 	    	provider 	= Provider.find(params["provider"])
-    		gifts 		= Gift.get_all_orders(provider)
+    		gifts 		= Gift.get_provider(provider)
 	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
 	  		logmsg 		= gifts_array[0]
 	  	else
@@ -154,24 +154,25 @@ class AppController < ApplicationController
 	    puts "\nMerchant Redeem"			
 	    puts "request = #{params}"
 	    response = {}
-
 	    if user = authenticate_app_user(params["token"])
-	    	data = JSON.parse params["data"]
-	    	provider 	= Provider.find(data.provider_id)
-    		gift 		= Gift.find(data.gift_id)
-    		redeem   	= Redeem.find_by_gift_id(gift.id)
-	    	if data.redeem_code == redeem.redeem_code
-	    		# success
-	    	else
-	    		# fail wrong redeem code
-	    	end
+	    	data 				= JSON.parse params["data"]
+    		employee 			= Employee.where(user_id: user.id, provider_id: data["provider_id"])[0]
+	    	data["employee_id"] = employee.id if employee
+	    	order  				= Order.new(data)
+	    	puts "order = #{order.inspect}"
 	  	else
-	  		response 	= {"error" => "user was not found in database"}
+	  		response["error"] = "user was not found in database"
+	  		order 		= Order.new
 	  	end
 	    respond_to do |format|
-	      # logger.debug gifts_array
-	      puts "AC -Merchant Redeem- response => #{response}"
-	      format.json { render json: response }
+	    	if order.save 
+	    		#success
+	    		response["success"] = "Order for Gift-#{order.gift_id} Completed!"
+	    	else
+	    		response["error_server"] = order.errors.messages
+	    	end
+	      	puts "AC -Merchant Redeem- response => #{response}"
+	      	format.json { render json: response }
 	    end
   	end
 

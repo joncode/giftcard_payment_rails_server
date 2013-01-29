@@ -1,33 +1,10 @@
-<div class="headerColorBackground">
-</div>
-
-<div class="navbarWrapper">
-  <ul class="navLoggedIn">
-    <li class="logoHeader">
-    </li>
-    <li>
-      <%= link_to "Drinkboard", '#' %>
-    </li>
-    <li>
-      <%= link_to "Become a Merchant", login_path %>
-    </li>
-    <li>
-      <%= link_to "Log In", login_path %>
-    </li>
-    <li class="appStoreLink">
-    </li>
-  </ul>
-</div>
- 
-
-<% flash.each do |name, msg| %>
-  <div class="alert alert-<%= name == :notice ? 'info' : 'success' %>">
-    <a class="close" data-dismiss="alert" href="#">×</a>
-    <%= msg %>
+<!-- Header -->
+  <div class="logoCrooked"></div>
+  <div class="headerImage"></div>
+  <div class="lineVertHeader lineVert"></div>
+  <div class="loggedInBox">
+    <h6>Welcome</h6>
   </div>
-<% end %>
- 
-<!--  1. create merchant must go to sign in first then create merchant
- 2. log in must go to sign in path with proper header then to user home page
- 3. send a gift link must go to sign in path and send a gift page -->
- 
+  <div class="lineHorizHeader lineHoriz"></div>
+    <div class="columnTopBlocker"></div>
+

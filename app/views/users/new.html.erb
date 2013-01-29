@@ -1,3 +1,5 @@
+
+<div class="doubleColumn">
   <!--
     Users Sign In 
   -->
@@ -45,23 +47,6 @@
     </div>
   </div> -->
 </div> 
-
-<!--
-    Auto Sign In
-  -->
-<h1 class="signUpHeader">Auto Log In</h1>
-<div class="autoSigninUsers">
-  <% @users.each do |u| %>
-  <div class="userCell">
-    <%= u.password %>
-    <h2 class="username">
-      <%= u.username %>
-    </h2>
-    <h3>
-      <%= button_to "Sign In", sessions_path(email: u.email, page: 'development'), :class => 'btn btnSignIn btn-success'%>
-    </h3>
-  </div>
-    <% end %>
 </div>
 
 

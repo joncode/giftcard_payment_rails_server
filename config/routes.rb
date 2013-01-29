@@ -11,7 +11,7 @@ Drinkboard::Application.routes.draw do
   match "/invite/:id"       => "invite#show"
   match "/invite"           => "invite#invite_friend"
 
-  root to: 'admins#welcome'
+  root to: 'users#new'
   match '/welcome', to: 'admins#welcome'
   match '/login',   to: 'users#new'
   match '/signup',  to: 'users#new'

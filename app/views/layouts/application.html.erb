@@ -24,13 +24,13 @@
           <!-- no header for menu builder -->
           <%= render 'merchants/header' %>
         <% else %>
-          <%= render 'layouts/header' %>
+          <%= render 'merchants/header' %>
         <% end %>
       <% else %>
         <% if params[:controller] == 'admins'  %>
           <%= render 'layouts/intro' %>
         <% else %> 
-          <%= render 'layouts/login' %>
+          <%= render 'layouts/intro' %>
         <% end %>
       <% end %>
 
