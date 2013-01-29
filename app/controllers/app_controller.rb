@@ -151,6 +151,29 @@ class AppController < ApplicationController
 	    end
   	end
 
+ 	def merchant_redeem
+ 			# send orders to the app for a provider
+	    puts "\nMerchant Redeem"			
+	    puts "request = #{params}"
+	    response = {}
+
+	    if user = authenticate_app_user(params["token"])
+	    	data = JSON.parse params["data"]
+	    	provider 	= Provider.find(data.provider_id)
+    		gift 		= Gift.find(data.gift_id)
+    		redeem_code = data.redeem_code
+	    	
+	  		response 	=  nil
+	  	else
+	  		response 	= {"error" => "user was not found in database"}
+	  	end
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      puts "AC -Merchant Redeem- response => #{response}"
+	      format.json { render json: response }
+	    end
+  	end
+
   	def user_activity
 	    puts "\nUser Activity"
 	    puts "request = #{params}"

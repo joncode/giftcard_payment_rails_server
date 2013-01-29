@@ -335,7 +335,7 @@ class IphoneController < AppController
         end
       end
 
-      puts "response => #{response}"
+      puts "IC -UpdatePhoto- response => #{response}"
       format.json { render json: response.to_json }
     end
   end

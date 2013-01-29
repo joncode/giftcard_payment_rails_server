@@ -91,21 +91,25 @@ class User < ActiveRecord::Base
   end
 
       # custom setters and getters for formatting date to human looking date
-  # def birthday= birthday
-  #   if birthday.kind_of? String
-  #     bday = Date.strptime(birthday, "%m/%d/%Y")
-  #   else
-  #     bday = birthday
-  #   end
-  #   super(bday)
-  # end
+  def birthday= birthday
+    if birthday.kind_of? String
+      bday = Date.strptime(birthday, "%m/%d/%Y")
+    else
+      bday = birthday
+    end
+    super(bday)
+  end
 
   def birthday
     x = super
-    m = x.month
-    d = x.day
-    y = x.year
-    "#{m}/#{d}/#{y}"
+    if x.kind_of? Date
+      m = x.month
+      d = x.day
+      y = x.year
+      "#{m}/#{d}/#{y}"
+    else
+      x
+    end
   end
 
   def bill
