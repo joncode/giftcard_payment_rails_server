@@ -16,8 +16,6 @@ class AppController < ApplicationController
  		 			# user is authenticated
  		 	puts "App -Update_user- data = #{params["data"]}"
  		 	updates = JSON.parse params["data"]
- 		 	birthday = updates["birthday"]
- 		 	updates["birthday"] = Date.strptime(birthday, "%m/%d/%Y")
  		 	puts "App -Update_user- parsed data = #{updates}"
  		else
  			# user is not authenticated
@@ -161,9 +159,12 @@ class AppController < ApplicationController
 	    	data = JSON.parse params["data"]
 	    	provider 	= Provider.find(data.provider_id)
     		gift 		= Gift.find(data.gift_id)
-    		redeem_code = data.redeem_code
-	    	
-	  		response 	=  nil
+    		redeem   	= Redeem.find_by_gift_id(gift.id)
+	    	if data.redeem_code == redeem.redeem_code
+	    		# success
+	    	else
+	    		# fail wrong redeem code
+	    	end
 	  	else
 	  		response 	= {"error" => "user was not found in database"}
 	  	end
