@@ -95,6 +95,7 @@ Drinkboard::Application.routes.draw do
       get 'photos'
       post :update_photos
       get 'staff_profile'
+      post :update_item
     end
   end
 
@@ -116,7 +117,7 @@ Drinkboard::Application.routes.draw do
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
   match 'app/providers',        to: 'app#providers',           via: :post
-  match 'app/get_providers',        to: 'app#providers',           via: :get
+  match 'app/get_providers',    to: 'app#providers',           via: :get
   match 'app/employees',        to: 'app#create_redeem',       via: :post
   match 'app/complete_order',   to: 'app#create_order',        via: :post
   match 'app/menu',             to: 'app#menu',                via: :post
@@ -127,6 +128,7 @@ Drinkboard::Application.routes.draw do
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
+  match 'app/orders',           to: 'app#orders',              via: :post
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post

@@ -33,6 +33,22 @@ class MerchantsController < ApplicationController
 
   # end test methods
 
+  def update_item
+    @menu = Menu.find(params[:item_id])
+    @menu.item_name = params[:item_name]
+    @menu.description = params[:description]
+    @menu.price = params[:price]
+    respond_to do |format|
+      if @menu.save
+        response = {"success" => "Menu Item Saved!"}
+      else
+        response = {"error" => @menu.errors.messages}
+      end
+      #format.json {redirect_to menu_merchant_path(params[:id])}
+      format.json { render json: response}
+    end
+  end
+
   def index
     @providers = current_user.providers    
 

@@ -189,14 +189,9 @@
 	var menu = <%= raw @menu_array %>;
 	var inputTemplate = getInputTemplate;
 	var displayTemplate = getDisplayTemplate;
-	//$('#placement').html('<h2>Input Form</h2>');
-	//$('#placement').append(inputTemplate);
-	//$('#placement').append(displayTemplate);
 	splitMenu(menu);
-	//alert(left);
 	makeMenuList(left, 'left');
-	makeMenuList(right, 'right');
-	//setValuesForDisplay(displayTemplate);
+	makeMenuList(right, 'right');   
 
 </script>
 

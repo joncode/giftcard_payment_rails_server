@@ -1,20 +1,59 @@
+function getMenuItemData(menuSection) {
+	var menuForm = menuSection.find('.menuItemForm ul');
+	var itemID =  menuForm.attr('id');
+	var itemName = menuForm.find('.miTitleForm').val();
+	var itemDescription = menuForm.find('.miDescriptionForm').val();
+	var itemPrice = menuForm.find('.miPriceForm').val();
+	//alert('id = ' + itemID + ', name =' + itemName + ', descr = ' + itemDescription + ', price = ' + itemPrice);
+		// make a menu item object with these values
+		// return the menu item object
+	var menuItem = {
+		id: itemID,
+		item_name: itemName,
+		description: itemDescription,
+		price: itemPrice
+	};
+	return menuItem;
+}
+
+function toggleMenuItemForm(menuSection, editButton) {
+	editButton.toggleClass('buttonImageUp');
+	editButton.toggleClass('buttonImageDown');	
+	menuSection.find(".menuItem").fadeToggle(150);
+	menuSection.find('.menuListSave').fadeToggle(150);
+	menuSection.find('.menuItemForm').slideToggle(150);
+
+}
+
+
 $(function() {
 
 		// "edit" click function
 	$('.menuListEdit').click(function () {
-
-		//swap out edit button image on click
-		$(this).toggleClass('buttonImageUp');
-		$(this).toggleClass('buttonImageDown');
+			//swap out edit button image on click
 		var menuSection = $(this).closest(".menu_section");
-		menuSection.find(".menuItem").fadeToggle(150);
-		menuSection.find('.menuListSave').fadeToggle(150);
-		menuSection.find('.menuItemForm').slideToggle(150);
+		toggleMenuItemForm(menuSection, $(this));
 		return false;
 	});
 
 		// "save" click function
 	$('.menuListSave').click(function () {
+		var menuSection = $(this).closest(".menu_section");
+		menuItem = getMenuItemData(menuSection)
+		menuItemJson = JSON.stringify(menuItem);
+		//alert(menuItemJson);
+		$.post('update_item',
+		 {item_id: menuItem.id, 
+		 	item_name: menuItem.item_name,
+		 	 description: menuItem.description,
+		 	  price: menuItem.price});
+		var headerButtons = $(this).closest('h2');
+		var editButton = headerButtons.find('.menuListEdit');
+		toggleMenuItemForm(menuSection, editButton);
+		ulID = "#show" + menuItem.id;
+		menuSection.find(ulID + " .miTitle").text(menuItem.item_name);
+		menuSection.find(ulID + " .miDescription").text(menuItem.description);
+		menuSection.find(ulID + " .miPrice").text(menuItem.price);
 		return false;
 	});
 

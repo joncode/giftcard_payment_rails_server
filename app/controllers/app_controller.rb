@@ -127,6 +127,28 @@ class AppController < ApplicationController
 	    end
   	end
 
+ 	def orders
+ 			# send orders to the app for a provider
+	    puts "\nOrders"			
+	    puts "request = #{params}"
+
+	    if user = authenticate_app_user(params["token"])
+	    	provider 	= Provider.find(params["provider"])
+    		gifts 		= Gift.get_all_orders(provider)
+	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
+	  		logmsg 		= gifts_array[0]
+	  	else
+	  		gift_hash 	= {"error" => "user was not found in database"}
+	  		gifts_array = gift_hash
+	  		logmsg 		= gift_hash
+	  	end
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      puts "AC Orders response => #{logmsg}"
+	      format.json { render json: gifts_array }
+	    end
+  	end
+
   	def user_activity
 	    puts "\nUser Activity"
 	    puts "request = #{params}"
