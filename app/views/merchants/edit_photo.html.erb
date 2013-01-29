@@ -118,11 +118,20 @@
 
 <%= form_for(@obj_to_edit, :url => {:action => @action}, :html => { :method => :post, :id => 'uploadForm', :multipart => true }) do |f| %>
     <div class="doubleColumn"> 
-      <div class="photoContainer">
-        <div class="giftText giftTextLarge">
-          <h2>Current Photo</h2>
-        </div> 
-        <div class="profilePic"><%= custom_image_tag @obj_to_edit, @obj_width, @obj_height, @file_field_name %>
+      <div class="ordersDisplay giftText giftTextLarge">
+        <div id="upload_wrapper">
+           Upload a file: <%= f.file_field @file_field_name %>
+        </div>
+      </div>
+      <div class="photoContainer doubleColumn">
+        <div class="actions">
+          <%= f.submit "Upload Photo" %>
+        </div>
+        <div class="profilePic">
+          <div class="giftText giftTextLarge">
+            <h2>Current Photo</h2>
+          </div> 
+          <%= custom_image_tag @obj_to_edit, @obj_width, @obj_height, @file_field_name %>
         </div>
         <div class="giftText giftTextLarge">
           <h2>Preview New Photo</h2>
@@ -130,17 +139,9 @@
         <div id="preview" style=""></div>
       </div>
       <br />
-      <div class="actions">
-        <%= f.submit "Upload Photo" %>
-      </div>
-      <div class="ordersDisplay giftText giftTextLarge">
-        <div id="upload_wrapper">
-           Upload a file: <%= f.file_field @file_field_name %>
-        </div>
-      </div>
       <div class="giftText giftTextLarge" id="cropTitle">
           <h2>Click to Crop</h2>
-      </div> 
+      </div>
       <div id="upload_photo_wrapper" class="photoWrapPOS">
           <% %w[x y w h].each do |attr| %>
              <input id="crop_coord_<%= attr %>" type="text" size="30" name="<%= @obj_name %>[crop_<%= attr %>]" />

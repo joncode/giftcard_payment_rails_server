@@ -16,6 +16,8 @@ class AppController < ApplicationController
  		 			# user is authenticated
  		 	puts "App -Update_user- data = #{params["data"]}"
  		 	updates = JSON.parse params["data"]
+ 		 	birthday = updates["birthday"]
+ 		 	updates["birthday"] = Date.strptime(birthday, "%m/%d/%Y")
  		 	puts "App -Update_user- parsed data = #{updates}"
  		else
  			# user is not authenticated

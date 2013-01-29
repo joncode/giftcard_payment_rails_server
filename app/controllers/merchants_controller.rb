@@ -161,18 +161,16 @@ class MerchantsController < ApplicationController
 
   def redeem
     @provider = Provider.find(params[:id])
-    @gift = Gift.find(params[:gift_id])
-    @redeem = Redeem.find_by_gift_id(@gift)
-    #@provider = @gift.provider
+    @gift     = Gift.find(params[:gift_id])
+    @redeem   = Redeem.find_by_gift_id(@gift)
     @employee = Employee.where(user_id: current_user.id, provider_id: @provider.id)[0]
     
     if @redeem
-      @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, provider_id: @provider.id, employee_id: @employee.id)
+      @order  = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, provider_id: @provider.id, employee_id: @employee.id)
     else
       # no redeem = no order possible
-      @order = Order.new
+      @order  = Order.new
     end
-
 
     respond_to do |format|
       format.html # show.html.erb
