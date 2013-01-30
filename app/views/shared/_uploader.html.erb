@@ -121,11 +121,16 @@
         <h5 class="menuSectionHeader">
               Upload and Crop <%= @image %>
         </h5>
-      <div class="photoContainer">
+      <div class="doubleColumn photoContainer">
         <div class="ordersDisplay giftText giftTextLarge">
           <div id="upload_wrapper">
-             Upload a file: <%= f.file_field @file_field_name %>
+             Upload a photo file: <%= f.file_field @file_field_name %>
           </div>
+        </div>
+      </div>
+      <div class="doubleColumn photoContainer">
+        <div class="actions">
+          <%= f.submit "Upload Photo" %>
         </div>
         <div class="giftText giftTextLarge">
           <h2>Current Photo</h2>
@@ -138,9 +143,6 @@
         <div id="preview" style=""></div>
       </div>
       <br />
-      <div class="actions">
-        <%= f.submit "Upload Photo" %>
-      </div>
       <div class="giftText giftTextLarge" id="cropTitle">
           <h2>Click to Crop</h2>
       </div> 
