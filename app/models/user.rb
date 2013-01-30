@@ -142,28 +142,38 @@ class User < ActiveRecord::Base
     self.username
   end
 
-  
-  def profile_pic(w,h)
-    self.photo
-  end
-
-
   def get_image(flag)
     puts flag
     if flag == 'secure_image'
-      if self.secure_image.blank?
-        "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
-      else
-        self.secure_image.url
-      end
+      self.get_secure_image
     else
+      self.get_photo
+    end
+  end
+
+  def get_photo
+    case self.use_photo
+    when "cw"
+      self.photo.url
+    when "ios"
+      self.iphone_photo
+    when "fb"
+      # no support yet
+    else 
       if self.photo.blank?
         "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
       else
         self.photo.url
       end
     end
-
+  end
+  
+  def get_secure_image
+    if self.secure_image.blank?
+      "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+    else
+      self.secure_image
+    end
   end
   
   def following?(other_user)
@@ -201,31 +211,6 @@ class User < ActiveRecord::Base
     response = HTTParty.post(url, :query => {:venueId => fsq_id, :ll => ["?,?",lat,lng], :oauth_token => self.foursquare_access_token})
     return false if response.code != 200
     return true
-  end
-
-  def get_photo
-    case self.use_photo
-    when "cw"
-      self.photo.url
-    when "ios"
-      self.iphone_photo
-    when "fb"
-      # no support yet
-    else 
-      if self.photo.blank?
-        "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
-      else
-        self.photo.url
-      end
-    end
-  end
-
-  def get_secure_image
-    if self.secure_image.blank?
-      "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
-    else
-      self.secure_image
-    end
   end
 
   def one_provider_to_iphone
