@@ -557,6 +557,8 @@ class AppController < ApplicationController
 	        if receiver
 	          if g.receiver
 	            gift_obj["receiver_photo"]  = g.receiver.get_photo
+	            gift_obj["receiver_name"] 	= g.receiver.username
+	          	gift_obj["receiver_id"]	  	= g.receiver.id
 	            	#gift_obj["giver_photo"]     = g.giver.get_photo
 	          else
 	            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
