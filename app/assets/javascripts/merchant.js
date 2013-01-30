@@ -103,4 +103,12 @@ $(function() {
 		return false;
 	});
 
+	$('#editProfileLink').click(function () {
+			//swap out edit button image on click
+		$('#editProfileForm').fadeToggle(150);
+		// go into the user description with photo and change address data etc
+		
+		return false;
+	});
+
 }); // end
