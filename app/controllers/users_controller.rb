@@ -71,22 +71,25 @@ class UsersController < ApplicationController
     msg = ""
     puts "#{params}"
     @user = User.find(params[:id])
-    action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
-    if action == 'edit'
-      if !params[:user][:photo].nil? || !params[:user][:photo_cache].empty?
-        params[:user][:use_photo] = "cw"
-      end
-    end
+    # action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
+    # if action == 'edit'
+    #   if !params[:user][:photo].nil? || !params[:user][:photo_cache].empty?
+    #     params[:user][:use_photo] = "cw"
+    #   end
+    # end
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        sign_in @user
+        #sign_in @user
         format.html { redirect_to @user, notice: "Update Successful. #{msg}" }
         format.json { head :no_content }
+        format.js
       else
-        sign_in @user
+        #sign_in @user
+        @message = human_readable_error_message @user
         format.html { render action: action, notice: "Update Unsuccessful"}
         format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.js { render 'error' }
       end
     end
   end
