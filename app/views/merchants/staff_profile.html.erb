@@ -1,1 +1,20 @@
-<%= render 'users/your_profile' %>
+<div class="column">
+    <div class="merchantShowWrapper rounded gradient profileShrink">
+      <div class="showImage">
+        <%= custom_image_tag(@user,180,180)  %>
+      </div>
+	  <h4><%= @user.username %></h4>
+	  <h4><%= @user.handle %></h4>
+	  <h4><%= @user.email %></h4>
+	  <h4><%= number_to_phone(@user.phone, :area_code => true) %></h4>
+	  <h4><%= @user.full_address %></h4>
+    </div>
+</div>
+
+<div class="doubleColumn">
+  <h2><%= link_to "Crop Avatar", crop_user_path(current_user) %></h2>
+  <h2><%= link_to "Edit Profile", edit_user_path(current_user) %></h2>
+  <h2><%= link_to "Upload Secure Image", crop_user_path(current_user) %></h2>
+</div>
+
+

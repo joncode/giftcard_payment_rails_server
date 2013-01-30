@@ -135,7 +135,7 @@ class AppController < ApplicationController
 	    if user = authenticate_app_user(params["token"])
 	    	provider 	= Provider.find(params["provider"])
     		gifts 		= Gift.get_provider(provider)
-	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true)
+	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true, true)
 	  		logmsg 		= gifts_array[0]
 	  	else
 	  		gift_hash 	= {"error" => "user was not found in database"}
