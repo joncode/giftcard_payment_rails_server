@@ -92,6 +92,26 @@ class MerchantsController < ApplicationController
     redirect_to  edit_photo_merchant_path(@provider)
   end
 
+  def get_cropper
+    @image = params["image"]
+    @obj_to_edit = current_user
+    @obj_name = "user"
+    @action = "update_avatar"
+    @controller = "users"
+    @file_field_name = @image
+    if @image == 'secure_image'
+      @image = 'Secure Image'
+    else 
+      @image = "Photo"
+    end
+    @obj_width = 131
+    @obj_height = 131
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def edit_photo
     @provider = Provider.find(params[:id])
     @current_user = current_user

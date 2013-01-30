@@ -12,13 +12,13 @@
 </div>
 
 <div class="doubleColumn">
-  <h2><%= link_to "Crop Avatar", crop_user_path(current_user) %></h2>
+  <h2 id="avatarLink"><%= link_to "Crop Avatar", crop_user_path(current_user) %></h2>
   <h2 id="editProfileLink"><%= link_to "Edit Profile", '#' %></h2>
-  <h2><%= link_to "Upload Secure Image", crop_user_path(current_user) %></h2>
+  <h2 id="secureImageLink"><%= link_to "Upload Secure Image", '#' %></h2>
 </div>
 
       <!-- Start Bank Wrapper -->
-
+<div id="cropperWrapper"></div>
 <div id="editProfileForm" class="bankCell POSsingleColumn">
   <h5 class="menuSectionHeader">
     Employee Profile Information

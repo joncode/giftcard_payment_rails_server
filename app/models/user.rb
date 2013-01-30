@@ -13,7 +13,8 @@ class User < ActiveRecord::Base
 
 
   mount_uploader   :photo, UserAvatarUploader
-   
+  mount_uploader   :secure_image, UserAvatarUploader
+
   has_many :employees
   has_many :providers, :through => :employees
   has_many :orders,    :through => :providers
@@ -148,11 +149,19 @@ class User < ActiveRecord::Base
 
 
   def get_image(flag)
-
-    if self.photo.blank?
-      "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+    puts flag
+    if flag == 'secure_image'
+      if self.secure_image.blank?
+        "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+      else
+        self.secure_image.url
+      end
     else
-      self.photo.url
+      if self.photo.blank?
+        "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+      else
+        self.photo.url
+      end
     end
 
   end

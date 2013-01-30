@@ -25,6 +25,11 @@ function toggleMenuItemForm(menuSection, editButton) {
 
 }
 
+function getEmployeeCropper(route) {
+	$.get('get_cropper',
+		 {image: route});
+}
+
 
 $(function() {
 
@@ -107,7 +112,19 @@ $(function() {
 			//swap out edit button image on click
 		$('#editProfileForm').fadeToggle(150);
 		// go into the user description with photo and change address data etc
-		
+		$('#cropperWrapper').hide();
+		return false;
+	});
+
+	$('#avatarLink').click(function () {
+		// call server with avatar and get photo cropper 
+		getEmployeeCropper('photo');
+		return false;
+	});
+
+	$('#secureImageLink').click(function () {
+		// call server with avatar and get photo cropper 
+		getEmployeeCropper('secure_image');
 		return false;
 	});
 

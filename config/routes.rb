@@ -96,6 +96,7 @@ Drinkboard::Application.routes.draw do
       post :update_photos
       get 'staff_profile'
       post :update_item
+      get :get_cropper
     end
   end
 
