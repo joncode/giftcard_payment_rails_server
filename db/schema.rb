@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130131002434) do
+ActiveRecord::Schema.define(:version => 20130131014145) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -360,6 +360,7 @@ ActiveRecord::Schema.define(:version => 20130131002434) do
     t.datetime "reset_token_sent_at"
     t.string   "reset_token"
     t.date     "birthday"
+    t.string   "origin"
   end
 
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"

@@ -469,3 +469,85 @@ class IphoneController < AppController
     end
 
 end
+
+
+    # case params["origin"]
+    # when 'f'
+    #   receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
+    # when 't'
+    #   receiver = User.find_by_twitter(gift_obj["twitter"])
+    # when 'c'
+    #   phone_received = gift_obj["receiver_phone"]
+    #   phone = extract_phone_digits(phone_received)
+    #   receiver = User.find_by_phone(phone)
+    # when 'e'
+    #   receiver = User.find_by_email(gift_obj["receiver_email"])
+    # else
+    #   response["receiver"]     = "db user"
+    # end
+
+    # if receiver
+    #   gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+    #   response["receiver"] = receiver_info_response(receiver)
+    # else
+    #   gift_obj["status"]   = "incomplete"
+    #   response["receiver"] = "NID"
+    # end
+
+    # case params["origin"]
+    # when 'd'
+    #   #drinkboard - data already received
+    #   response["receiver"]     = "db user"
+    # when 'f'
+    #   # facebook - search users for facebook_id
+    #   if gift_obj["facebook_id"]
+
+    #   else                   
+    #       gift_obj["status"]   = "incomplete"
+    #       response["error-receiver"] = "No facebook ID received"
+    #   end
+    # when 't'
+    #   #twitter - search users for twitter handle
+    #   if gift_obj["twitter"]
+
+    #   else
+    #     gift_obj["status"]     = "incomplete"
+    #     response["error-receiver"] = "No twitter info received"
+    #   end
+    # when 'c'
+    #   # contacts - search users for phone
+    #   if gift_obj["receiver_phone"]
+
+    #   else
+    #       gift_obj["status"]   = "incomplete"
+    #       response["error-receiver"] = "No contact phone received"
+    #   end
+    # when 'e'
+    #   # email - search users for phone
+    #   if gift_obj["receiver_email"]
+
+    #   else
+    #       gift_obj["status"]   = "incomplete"
+    #       response["error-receiver"] = "No contact email received"
+    #   end
+    # else
+    #     #drinkboard - no origin sent
+    #     response["receiver"]     = "db user"
+    # end
+
+    # if gift_obj.nil?
+    #   message += "No gift data received.  "
+    #   gift    = Gift.new
+    # else
+    #   gift    = Gift.new(gift_obj)
+    #   if params["shoppingCart"]
+    #     shoppingCart_array = JSON.parse params["shoppingCart"]
+    #     gift_item_array = []
+    #     shoppingCart_array.each do |item|
+    #       gift_item = GiftItem.initFromDictionary item
+    #       gift_item_array << gift_item
+    #     end
+    #     gift.gift_items = gift_item_array
+    #   end
+    #   puts "Here is GIFT #{gift.inspect}"
+    # end
