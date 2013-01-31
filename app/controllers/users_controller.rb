@@ -4,8 +4,9 @@ class UsersController < ApplicationController
   before_filter :admin_user, only: :destroy
 
   def update_avatar
+    @provider = Provider.find(params[:id])
     current_user.update_attributes(params[:user])
-    redirect_to user_path(current_user)
+    redirect_to staff_profile_merchant_path(@provider)
   end
 
   def index

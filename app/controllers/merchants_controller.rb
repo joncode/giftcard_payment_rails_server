@@ -34,6 +34,7 @@ class MerchantsController < ApplicationController
   # end test methods
 
   def update_item
+    puts "#{params}"
     @menu = Menu.find(params[:item_id])
     @menu.item_name = params[:item_name]
     @menu.description = params[:description]
@@ -98,7 +99,7 @@ class MerchantsController < ApplicationController
     @obj_name = "user"
     @action = "update_avatar"
     @controller = "users"
-    @file_field_name = @image
+    @file_field_name = @image.dup
     if @image == 'secure_image'
       @image = 'Secure Image'
     else 
@@ -239,6 +240,7 @@ class MerchantsController < ApplicationController
     @provider = Provider.find(params[:id])
     
     @staff    = @provider.users
+    @nonstaff = @provider.users_not_staff
   end
 
   def staff_profile

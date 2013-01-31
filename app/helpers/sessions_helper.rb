@@ -21,8 +21,9 @@ module SessionsHelper
     end
   end
   
-  def current_user=(user)
+  def current_user=(user, provider=nil)
     @current_user = user
+    @current_provider = provider if provider
   end
   
   def current_user

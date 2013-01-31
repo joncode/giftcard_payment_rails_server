@@ -175,7 +175,7 @@ class User < ActiveRecord::Base
     if self.secure_image.blank?
       "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
     else
-      self.secure_image
+      self.secure_image.url
     end
   end
   

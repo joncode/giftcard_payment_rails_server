@@ -1,18 +1,38 @@
-function getMenuItemData(menuSection) {
+function makeArrayOfItems(menuSection) {
+	var itemArray = new Array();
 	var menuForm = menuSection.find('.menuItemForm ul');
+	console.log(menuForm.length);
+
+	$(menuForm).each(function(index, value) {
+		var menuItem = getMenuItemData($(this));
+		displayItem(menuItem, 'makeArrayOfItems each');
+		itemArray.push(menuItem);
+	});
+	$.each(itemArray, function () {
+		displayItem(this, 'itemArray each');
+	});
+	return itemArray;	
+}
+
+function displayItem(menuItem, fromWhere) {
+	//alert(fromWhere + ' -> id = ' + menuItem.id + ', name =' + menuItem.item_name + ', descr = ' + menuItem.description + ', price = ' + menuItem.price);
+}
+
+function getMenuItemData(menuForm) {
+
 	var itemID =  menuForm.attr('id');
 	var itemName = menuForm.find('.miTitleForm').val();
 	var itemDescription = menuForm.find('.miDescriptionForm').val();
 	var itemPrice = menuForm.find('.miPriceForm').val();
 	//alert('id = ' + itemID + ', name =' + itemName + ', descr = ' + itemDescription + ', price = ' + itemPrice);
-		// make a menu item object with these values
-		// return the menu item object
+
 	var menuItem = {
 		id: itemID,
 		item_name: itemName,
 		description: itemDescription,
 		price: itemPrice
 	};
+	displayItem(menuItem, 'getMenuItemData');
 	return menuItem;
 }
 
@@ -44,14 +64,28 @@ $(function() {
 		// "save" click function
 	$('.menuListSave').click(function () {
 		var menuSection = $(this).closest(".menu_section");
-		menuItem = getMenuItemData(menuSection)
-		menuItemJson = JSON.stringify(menuItem);
-		//alert(menuItemJson);
-		$.post('update_item',
-		 {item_id: menuItem.id, 
-		 	item_name: menuItem.item_name,
-		 	 description: menuItem.description,
-		 	  price: menuItem.price});
+		menuArray = makeArrayOfItems(menuSection);
+		//var num = menuArray.length;
+		if (menuArray.length == 1) {
+			menuItem = menuArray.shift();
+			menuItemJson = JSON.stringify(menuItem);
+			$.post('update_item',  
+				{item_id: menuItem.id, 
+			 	item_name: menuItem.item_name,
+			 	 description: menuItem.description,
+			 	  price: menuItem.price});
+		} else {
+			//menuArrayJson = JSON.stringify();
+			$.each(menuArray, function() {
+				menuItem = this;
+				//displayItem(menuItem, 'multiItem post');
+				$.post('update_item',  
+				{item_id: menuItem.id, 
+			 	item_name: menuItem.item_name,
+			 	 description: menuItem.description,
+			 	  price: menuItem.price});
+			});
+		}
 		var headerButtons = $(this).closest('h2');
 		var editButton = headerButtons.find('.menuListEdit');
 		toggleMenuItemForm(menuSection, editButton);
@@ -59,7 +93,7 @@ $(function() {
 		menuSection.find(ulID + " .miTitle").text(menuItem.item_name);
 		menuSection.find(ulID + " .miDescription").text(menuItem.description);
 		menuSection.find(ulID + " .miPrice").text(menuItem.price);
-		return false;
+		return true;
 	});
 
 		// Employee 'Add' click functions

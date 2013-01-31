@@ -21,21 +21,51 @@
   <div id="buttonAddEmp" class="buttonLargeDown buttonLargeUp buttonAddPosition">
     <h5><a href="">New</a></h5>
   </div>
-<div class="employeeDisplay addDisplay">
-    <div class="addEmployeeCell">
-          <% if params[:email] %>
-              <p>We just sent an email to that employee to join drinkboard.</p>
-            <% else %>
-              <%= form_tag(invite_employee_merchant_path(@provider), :method => "post") do %>
-                <div class="employeeText">
-                  <%= label_tag(:email, "Add Employee Via Email") %>
-                </div>
-                <span class="inputWrapper rounded gradient">
-                  <input type="text" placeholder="Enter Email Address" id="email" name="email" class="inputEmploy"/>
-                </span> 
-                <%= submit_tag("Submit") %>
-              <% end %>
-            <% end %>
-	   </div>
-  </div>
+<div class="column addDisplay">
+  <div class="giftText giftTextLarge">
+    <h2>Choose From Drinkboard Members</h2>
+  </div> 
+
+   <!-- USER ID SEARCH FIELD -->
+<!--   <div class="inputWrapper giftIDsearch">
+    <input type="text" placeholder="Enter User Email #" id="giftID" name="giftID" class="inputEmploy"/>
+    <span id="giftIDsearch" class="buttonUp">
+      <a href="" id="findButton">Find</a>
+      <a href="" class="buttonUp showAll">All</a>
+    </span>
+    <p id="notice"><%= notice %></p>
+  </div> --> 
+  <!-- GIFT LOOP START -->
+  <% @nonstaff.each do |user| %> 
+  <div class="ordersDisplay" id="giftID<%= user.email %>">
+  
+  <!--    Left Column   -->
+    <div class="orderGiftLeft giftImage">
+        <%= custom_image_tag(user,75,75)  %>
+    </div>
+
+      <div class="employeeText textTop">
+        <%= user.username %><br />
+        <%= user.email %><br />
+        <%= user.city %>
+      </div>
+<!--       <div class="giftText">      
+          <div id="buttonEditWine" class="buttonSmallDown buttonUp"><a href="" class="">Active</a></div>
+      </div> -->
+    </div>
+  <!--    Right Column   -->
+    <div class="orderGiftRight">
+      <div class="giftID">
+          
+      </div>    
+
+    
+  <!--    Middle Column   -->
+    <div class="orderGiftMiddle">
+      <div class="giftText giftTextLarge">
+        
+      </div>
+    </div>
+  </div>  
+  <% end %>
 </div>

@@ -106,6 +106,11 @@ class Provider < ActiveRecord::Base
     end
   end
 
+  def users_not_staff
+    User.all
+    
+  end
+
   def employees_to_app
     # get all the employees - put there table view info and secure image into an array
     send_fields = [:first_name, :last_name]
