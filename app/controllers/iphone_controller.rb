@@ -1,7 +1,7 @@
 class IphoneController < AppController
 
   
-  LOGIN_REPLY     = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "remember_token", "email", "phone"]  
+  LOGIN_REPLY     = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "remember_token", "email", "phone", "facebook_id", "twitter"]  
   GIFT_REPLY      = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "id"]
   BUY_REPLY       = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "id"]
   BOARD_REPLY     = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "giver_id", "giver_name", "id"] 
@@ -59,6 +59,45 @@ class IphoneController < AppController
     
     respond_to do |format|
       puts "LOGIN response => #{response}"
+      format.json { render text: response.to_json }
+    end
+  end
+  
+  def login_social
+    puts "LOGIN WITH SOCIAL MEDIA"
+    puts "request = #{params}"
+
+    response  = {}
+    origin    = params["origin"].downcase
+    if origin == 'f'
+      facebook_id = params["facebook_id"]
+    else
+      twitter     = params["twitter"]
+    end
+    
+    if facebook_id.nil? && twitter.nil?
+      response["error_iphone"]     = "Data not received."
+    else
+      if origin == 'f'
+        user = User.find_by_facebook_id(facebook_id) 
+        msg  = "Facebook Account"
+      else
+        user = User.find_by_twitter(twitter)
+        msg  = "Twitter Account"
+      end
+      if user 
+        response["server"]  = user.providers_to_iphone
+        user_json           = user.to_json only: LOGIN_REPLY
+        user_small          = JSON.parse user_json
+        user_small["photo"] = user.get_photo
+        response["user"]    = user_small
+      else
+        response["user"] = "#{msg} not in Drinkboard database " 
+      end
+    end
+    
+    respond_to do |format|
+      puts "LOGIN WITH SOCIAL MEDIA response => #{response}"
       format.json { render text: response.to_json }
     end
   end
