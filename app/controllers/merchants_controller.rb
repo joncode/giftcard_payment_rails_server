@@ -239,7 +239,7 @@ class MerchantsController < ApplicationController
   def staff
     @provider = Provider.find(params[:id])
     
-    @staff    = @provider.users
+    @staff    = @provider.employees
     @nonstaff = @provider.users_not_staff
   end
 
@@ -261,6 +261,14 @@ class MerchantsController < ApplicationController
     provider.employees << user
     flash[:notice] = "You successfully joined #{provider.name}."
     redirect_to "/"
+  end
+
+  def add_member
+    @provider = Provider.find params[:id]
+    @current_user = current_user
+    user = User.find params[:user_id]
+    emp = Employee.create(user_id: user.id, provider_id: @provider.id) 
+    redirect_to staff_merchant_path(@provider)
   end
 
   def invite_employee

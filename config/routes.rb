@@ -91,6 +91,7 @@ Drinkboard::Application.routes.draw do
       get 'invite_employee'
       post 'invite_employee'
       get 'add_employee'
+      get :add_member
       get 'menu'
       get 'photos'
       post :update_photos
