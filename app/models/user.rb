@@ -6,11 +6,14 @@ class User < ActiveRecord::Base
   :admin, :facebook_id, :facebook_access_token, :facebook_expiry, 
   :foursquare_id, :foursquare_access_token, :provider_id, :handle, 
   :server_code, :sex, :birthday, :is_public,
-  :iphone_photo, :fb_photo, :use_photo, :secure_image
+  :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin
+
+  # can't mass assign these attributes
+  # active, created_at, facebook_auth_checkin, id, password_digest, persona, remember_token, reset_token, reset_token_sent_at, twitter, updated_at
+
 
   attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
-
 
   mount_uploader   :photo, UserAvatarUploader
   mount_uploader   :secure_image, UserAvatarUploader
@@ -58,25 +61,25 @@ class User < ActiveRecord::Base
 
   # after_update  :crop_photo
   
-  # validates_presence_of :city, :state, :zip, :address, :credit_number
-  # unique validation code for facebook_id & foursquare_id TODO
   validates :first_name  , presence: true, length: { maximum: 50 }
   validates :last_name  ,  length: { maximum: 50 }
   validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
   validates :email , format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :password, length: { minimum: 6 },      on: :create
-  validates :password_confirmation, presence: true, on: :create
-  # validates :server_code, length: {is: 4}, numericality: { only_integer: true }, :if => :check_for_server_code
-  # validates_with ServerCodeValidator, :record => self
-    # ^ this should only be when servercode is changed
-    # need another validator for new servers to locations who already have server codes
-    # to check other employees to make sure there arent doubles
+  validates :password, length: { minimum: 6 },      on: :create, :unless => :social_media
+  validates :password_confirmation, presence: true, on: :create, :unless => :social_media
+
   #/---------------------------------------------------------------------------------------------/
   
   def gifts
     anon_gifts    = Gift.where(anon_id: self.id)
     normal_gifts  = super
     return anon_gifts + normal_gifts
+  end
+
+  def social_media
+    return true if self.origin == 'f' 
+    return true if self.origin == 't'
+    return false
   end
 
   def get_credit_card(card_id)
@@ -167,7 +170,7 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   def get_secure_image
     if self.secure_image.blank?
       "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
