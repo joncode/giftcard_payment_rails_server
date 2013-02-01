@@ -6,10 +6,10 @@ class User < ActiveRecord::Base
   :admin, :facebook_id, :facebook_access_token, :facebook_expiry, 
   :foursquare_id, :foursquare_access_token, :provider_id, :handle, 
   :server_code, :sex, :birthday, :is_public,
-  :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin
+  :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
 
   # can't mass assign these attributes
-  # active, created_at, facebook_auth_checkin, id, password_digest, persona, remember_token, reset_token, reset_token_sent_at, twitter, updated_at
+  # active, created_at, facebook_auth_checkin, id, password_digest, persona, remember_token, reset_token, reset_token_sent_at, updated_at
 
 
   attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 

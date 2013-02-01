@@ -18,6 +18,7 @@ class IphoneController < AppController
       message = "Data not received correctly. "
     else
       new_user = create_user_object(data) 
+      puts "HERE IS NEW USER DATA #{new_user}"
       message = ""          
     end
     
@@ -81,9 +82,11 @@ class IphoneController < AppController
       if origin == 'f'
         user = User.find_by_facebook_id(facebook_id) 
         msg  = "Facebook Account"
+        resp_key = "facebook"
       else
         user = User.find_by_twitter(twitter)
         msg  = "Twitter Account"
+        resp_key = "twitter"
       end
       if user 
         response["server"]  = user.providers_to_iphone
@@ -92,7 +95,7 @@ class IphoneController < AppController
         user_small["photo"] = user.get_photo
         response["user"]    = user_small
       else
-        response["user"]    = "#{msg} not in Drinkboard database " 
+        response[resp_key]  = "#{msg} not in Drinkboard database " 
       end
     end
     

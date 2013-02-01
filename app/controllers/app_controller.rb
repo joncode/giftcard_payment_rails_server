@@ -2,7 +2,7 @@ class AppController < ApplicationController
 	include ActionView::Helpers::DateHelper
 	skip_before_filter :verify_authenticity_token
 
-	UPDATE_REPLY  = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex"]  
+	UPDATE_REPLY  = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
 	GIFT_REPLY = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
