@@ -76,7 +76,7 @@ class IphoneController < AppController
     end
     
     if facebook_id.nil? && twitter.nil?
-      response["error_iphone"]     = "Data not received."
+      response["error_iphone"] = "Data not received."
     else
       if origin == 'f'
         user = User.find_by_facebook_id(facebook_id) 
@@ -92,7 +92,7 @@ class IphoneController < AppController
         user_small["photo"] = user.get_photo
         response["user"]    = user_small
       else
-        response["user"] = "#{msg} not in Drinkboard database " 
+        response["user"]    = "#{msg} not in Drinkboard database " 
       end
     end
     
