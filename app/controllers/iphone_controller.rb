@@ -505,7 +505,7 @@ class IphoneController < AppController
     
     def create_user_object(data)
       obj = JSON.parse data
-      puts "Create user after parse = #{obj}"
+      puts "CREATE USER OBJECT parse = #{obj}"
       obj.symbolize_keys!
       User.new(obj)
     end

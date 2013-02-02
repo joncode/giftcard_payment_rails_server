@@ -82,6 +82,11 @@ class Provider < ActiveRecord::Base
     # its just employees who  are active and retail (deal with customers)
     self.employees.where(active: true, retail: true)
   end
+
+  def user_clearance(user)
+    emp = self.employees.where(user_id: user.id).pop
+    emp.clearance
+  end
   
   def server_codes
     self.employees.collect {|e| e.server_code}

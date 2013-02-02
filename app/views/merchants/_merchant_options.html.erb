@@ -1,4 +1,5 @@
-<div class="merchantMenu">
+		<% if @provider.user_clearance(@current_user) == 'super' %>
+<div class="merchantMenu level1">
 <!-- 	<%= link_to "User", staff_profile_merchant_path(@provider) %> 
  -->
  	
@@ -12,3 +13,17 @@
  <!--    <%= link_to 'Menujs', menujs_merchant_path(@provider) %> -->
  	<%= link_to "Profile", staff_profile_merchant_path(@provider) %>
 </div>
+		<% else %>
+<div class="merchantMenu level2">
+<!-- 	<%= link_to "User", staff_profile_merchant_path(@provider) %> 
+ -->
+ 	
+    <%= link_to "Menu Builder", menu_merchant_path(@provider) %> 
+    <%= link_to "Orders", orders_merchant_path(@provider) %> 
+    <%= link_to "Images", photos_merchant_path(@provider) %> 
+    <%= link_to "Profile", edit_info_merchant_path(@provider) %> 
+    <%= link_to 'Help', '#' %>
+<!-- 	<%= link_to 'Menujs', menujs_merchant_path(@provider) %> 
+ --> 	<%= link_to "Profile", staff_profile_merchant_path(@provider) %>
+</div>
+		<% end %>
