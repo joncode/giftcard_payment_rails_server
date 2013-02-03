@@ -26,7 +26,7 @@ class AppController < ApplicationController
  			if user.update_attributes(updates)
 	          response["success"]      = user.serializable_hash only: UPDATE_REPLY
 	        else
-	          response["error_server"] = "Unable to process user updates to database." 
+	          response["error_server"] = user.errors.messages 
 	        end
 	    	puts "AC UpdateUSER response => #{response}"
 	    	format.json { render json: response }
