@@ -67,7 +67,8 @@ class User < ActiveRecord::Base
   validates :email , format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 },      on: :create, :unless => :social_media
   validates :password_confirmation, presence: true, on: :create, :unless => :social_media
-  validates_uniqueness_of :twitter, :facebook_id
+  validates :facebook_id, uniqueness: true, :if => :facebook_id_exists?
+  validates :twitter, uniqueness: true, :if => :twitter_exists?
   #/---------------------------------------------------------------------------------------------/
   
   def gifts
@@ -307,6 +308,14 @@ class User < ActiveRecord::Base
 
     def phone_exists?
       self.phone != nil
+    end
+
+    def facebook_id_exists?
+      self.facebook_id != nil
+    end
+
+    def twitter_exists?
+      self.twitter != nil
     end
 
     def check_for_server_code
