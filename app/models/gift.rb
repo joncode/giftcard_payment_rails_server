@@ -11,7 +11,13 @@ class Gift < ActiveRecord::Base
       :redeem_id,   :status, :regift_id, :anon_id
 # to be removed from db via migration
 # :category, :price, :item_id, :item_name, :special_instructions. :redeem_id
-  
+ 
+# {"twitter"=>"Syzzup", "giver_name"=>"Jon gifter ", "tip"=>"6.43", "tax"=>"2.17",
+# "provider_name"=>"Dos Caminos", "giver_id"=>55, "total"=>"38.60", 
+# "message"=>"Hey check this out ", "credit_card"=>980190984, "provider_id"=>"43",
+# "receiver_name"=>"island_chills "} 
+
+
   has_one     :redeem, dependent: :destroy
   has_one     :relay,  dependent: :destroy
   belongs_to  :provider

@@ -244,6 +244,14 @@ class User < ActiveRecord::Base
         g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id)
         gifts.concat g      
       end 
+      if self.twitter
+        g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => self.twitter)
+        gifts.concat g      
+      end
+      if self.email
+        g = Gift.where("status = :stat AND receiver_email = :em", :stat => 'incomplete', :em  => self.email)
+        gifts.concat g      
+      end
       if self.phone
         g = Gift.where("status = :stat AND receiver_phone = :phone", :stat => 'incomplete', :phone   => self.phone)
         gifts.concat g     
@@ -314,7 +322,7 @@ end
 #  email                   :string(255)     not null
 #  admin                   :boolean         default(FALSE)
 #  photo                   :string(255)
-#  password_digest         :string(255)     not null
+#  password_digest         :string(255)
 #  remember_token          :string(255)     not null
 #  created_at              :datetime        not null
 #  updated_at              :datetime        not null
@@ -346,5 +354,7 @@ end
 #  secure_image            :string(255)
 #  reset_token_sent_at     :datetime
 #  reset_token             :string(255)
+#  birthday                :date
+#  origin                  :string(255)
 #
 
