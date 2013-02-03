@@ -264,7 +264,7 @@ class IphoneController < AppController
     when 't'
       #twitter - search users for twitter handle
       if gift_obj["twitter"]
-        if receiver = User.find_by_twitter(gift_obj["twitter"])
+        if receiver = User.find_by_twitter(gift_obj["twitter"].to_s)
           gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
           response["receiver"] = receiver_info_response(receiver)
         else                   

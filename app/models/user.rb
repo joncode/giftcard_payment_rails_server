@@ -67,7 +67,7 @@ class User < ActiveRecord::Base
   validates :email , format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
   validates :password, length: { minimum: 6 },      on: :create, :unless => :social_media
   validates :password_confirmation, presence: true, on: :create, :unless => :social_media
-
+  validates_uniqueness_of :twitter, :facebook_id
   #/---------------------------------------------------------------------------------------------/
   
   def gifts
