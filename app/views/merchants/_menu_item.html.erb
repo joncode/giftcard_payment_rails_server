@@ -1,7 +1,4 @@
 	<% description =  "enter description here" %>
-		<%# menu_item["description"] ||= description %>
-	<% if menu_item["description"].nil? || menu_item["description"].size == 0 %> 
-		<!-- print name and price on same line when there is no description -->
 <ul id="show<%= menu_item["id"] %>" class="menuItem menuItemPos">
 	<li>
 		<h5 class="miTitle" style="width:250px;">
@@ -13,29 +10,15 @@
     		<%= menu_item["price"] %>
     	</h5>
 	</li>
-</ul>
-	<% else %>
-		<!-- print name description price on different lines -->
-<ul id="show<%= menu_item["id"] %>" class="menuItem menuItemPos">
-	<li>
-		<h5 class="miTitle" style="width:300px;">
-    		<%= menu_item["item_name"] %>
-    	</h5>
-	
-	</li>
+		<% if menu_item["description"].nil? || menu_item["description"].size == 0 %> 
+		<% else %>
 	<li>
 		<h5 class="miDescription" style="width:300px;">
     		<%= menu_item["description"] %>
     	</h5>
 	</li>
-	<li>
-
-		<h5 class="miPrice" style="width:300px;">
-    		<%= menu_item["price"] %>
-    	</h5>
-	</li>
+		<% end %>
 </ul>
-	<% end %>
 <div class="menuItemForm">
 	<ul id="<%= menu_item["id"] %>" class="inputWrap rounded gradient inputWrapPos">
 		<li><input type="text" placeholder="Item Name" value="<%= menu_item["item_name"] %>"
@@ -48,6 +31,9 @@
 			<h5 class="dollarSignPos dollarSignObj" >$</h5>
     		<input type="text" placeholder="Price" value="<%= menu_item["price"] %>" rows="2" 
     		class="inputFieldObj miPriceForm rounded">
+    		<span class="menuListDelete buttonMenuList buttonDeletePos buttonImageUp">
+        		<a href="">delete</a>
+      		</span>
     	</li>
 	</ul>
 </div>

@@ -43,7 +43,6 @@ class UsersController < ApplicationController
   def new  
     sign_out  
     @user  = User.new
-    @users = User.where(admin: true)
 
     respond_to do |format|
       format.html # new.html.erb

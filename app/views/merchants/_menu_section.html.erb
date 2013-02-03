@@ -1,14 +1,27 @@
-<ul>
+<ul class="menuSectionUL">
 	<% num = 0 %>
-	<% menu_section.each do |menu_item| %>
-	<li>
+	<% menu_section[1].each do |menu_item| %>
+	<li class="menuItemLI">
+		
 		<!-- EACH MENU ITEM (ie Corona Beer $10 ) RENDERED in this template -->
 		<%= render 'menu_item', menu_item: menu_item %>
 
-	</li>
 		<% num += 1 %>
-		<% if num < menu_section.count %>
+		<% if num < menu_section[1].count %>
 			<div class="lineHorizontal lineSectionPos"></div>
 		<% end %>
+	</li>
 	<% end %>
+	<!-- Add menu item section here -->
+	<% if menu_section[0] != "special" || menu_section[1].count == 0 %>
+	<li>
+	<%  if menu_section[1].count != 0 %>					
+	<div class="lineHorizontal lineSectionPos"></div>
+	<% end %>
+	<div class="addItemJS addItemLink">
+		<%= link_to 'Add New Menu Item?', '#' %>
+	</div>
+	</li>
+	<% end %>
+
 </ul>

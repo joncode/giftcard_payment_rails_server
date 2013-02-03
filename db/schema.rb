@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130131014145) do
+ActiveRecord::Schema.define(:version => 20130202234116) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -180,8 +180,8 @@ ActiveRecord::Schema.define(:version => 20130131014145) do
   add_index "menu_strings", ["provider_id"], :name => "index_menu_strings_on_provider_id"
 
   create_table "menus", :force => true do |t|
-    t.integer  "provider_id",               :null => false
-    t.integer  "item_id",                   :null => false
+    t.integer  "provider_id"
+    t.integer  "item_id"
     t.string   "price",       :limit => 20
     t.integer  "position",    :limit => 8
     t.datetime "created_at",                :null => false

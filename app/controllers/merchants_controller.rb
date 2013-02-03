@@ -1,5 +1,6 @@
 class MerchantsController < ApplicationController
-  
+  before_filter :signed_in_user
+ 
   # test methods
   def help
     @provider       = Provider.find(params[:id])
@@ -34,8 +35,14 @@ class MerchantsController < ApplicationController
   # end test methods
 
   def update_item
-    puts "#{params}"
-    @menu = Menu.find(params[:item_id])
+    puts "update item => #{params}"
+    if params[:item_id]
+      @menu = Menu.find(params[:item_id])
+    else
+      @menu = Menu.new
+      @menu.provider_id = params[:id]
+      @menu.section = params[:section]
+    end
     @menu.item_name = params[:item_name]
     @menu.description = params[:description]
     @menu.price = params[:price]
@@ -47,6 +54,20 @@ class MerchantsController < ApplicationController
       end
       #format.json {redirect_to menu_merchant_path(params[:id])}
       format.json { render json: response}
+    end
+  end
+
+  def delete_item
+    puts "delete item => #{params}"
+    item = Menu.find(params[:item_id])
+    respond_to do |format|
+      if item.destroy
+        response = {"success" => "Menu Item Deleted"}
+      else
+        response = {"error" => item.errors.messages}
+      end
+
+      format.js 
     end
   end
 
@@ -83,8 +104,8 @@ class MerchantsController < ApplicationController
   def show
     @provider = Provider.find(params[:id])
     @current_user = current_user
-    @menu = create_menu_from_items(@provider)
-    @gifts = Gift.get_activity_at_provider(@provider)
+    #@menu = create_menu_from_items(@provider)
+    #@gifts = Gift.get_activity_at_provider(@provider)
   end
 
   def photos

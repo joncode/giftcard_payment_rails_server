@@ -6,14 +6,20 @@ class Menu < ActiveRecord::Base
   belongs_to   :provider
   belongs_to   :item
   has_many     :gift_items
-  has_and_belongs_to_many :gifts
+
+  validates_presence_of :item_name, :price, :provider_id, :section
 
   def self.get_sections(provider_id)
     menu_items = Menu.where(provider_id: provider_id)
+    # sections = {"special" => "", "beer" => "", "wine" => "", "cocktail"=> "", "shot" => ""}
     sections = {}
     menu_items.each do |mi|
-      category = BEVERAGE_CATEGORIES[mi.item.category]
-      sections[category] = ""
+      if !mi.section
+        category = BEVERAGE_CATEGORIES[mi.item.category]
+        sections[category] = ""
+      else
+        sections[mi.section] = ""
+      end
     end
   
     sections_array = []
@@ -26,11 +32,17 @@ class Menu < ActiveRecord::Base
   end
 
   def self.get_menu_in_section(provider_id, section_name)
-    category = BEVERAGE_CATEGORIES.index(section_name)
+    # category = BEVERAGE_CATEGORIES.index(section_name)
     menu_items = Menu.where(provider_id: provider_id)
     menu_section = []
     menu_items.each do |menu|
-      if menu.item.category == category
+        # the old way 
+      # if menu.item.category == category
+      #   menu_display = menu.display_object
+      #   menu_section << menu_display
+      # end
+        # the new way
+      if menu.section == section_name
         menu_display = menu.display_object
         menu_section << menu_display
       end
@@ -39,16 +51,18 @@ class Menu < ActiveRecord::Base
     return menu_section
   end
 
-  def self.get_full_menu_array(provider_id)
+  def self.get_full_menu_array(provider_id,sections_array=nil)
     full_menu_array = []
 
       # generate section array from menu items
-    sections_array = Menu.get_sections(provider_id)
+    if !sections_array
+      sections_array = Menu.get_sections(provider_id)
+    end
 
     sections_array.each do |section_name|      
       # array_of_menu_section = Menu.where(provider_id: provider_id, header: category).order("position ASC")
       array_of_menu_section = Menu.get_menu_in_section(provider_id, section_name)
-      if array_of_menu_section.count > 0
+      if #array_of_menu_section.count > 0
         section_hash = { section_name => array_of_menu_section }
         full_menu_array << section_hash
       else
@@ -59,7 +73,7 @@ class Menu < ActiveRecord::Base
   end
 
   def self.get_menu_array_for_builder(provider)
-    menu        = self.get_full_menu_array provider.id
+    menu        = self.get_full_menu_array(provider.id,BEVERAGE_CATEGORIES)
     menu_array  = []
     menu.each do |mi|
       menu_array << mi.flatten
@@ -68,34 +82,34 @@ class Menu < ActiveRecord::Base
   end
 
   def display_object
-   item = self.item
+    changed = false
+    if item = self.item
 
-   changed = false
   
-   # item name
-    if self.item_name.nil?
-      self.item_name = item.item_name
-      changed = true
-    end
+      # item name
+      if self.item_name.nil?
+        self.item_name = item.item_name
+        changed = true
+      end
 
-   # photo_url - choose menu photo above item photo
-    if self.photo.nil?
-      self.photo = item.photo
-      changed = true
-    end
+      # photo_url - choose menu photo above item photo
+      if self.photo.nil?
+        self.photo = item.photo
+        changed = true
+      end
 
-    # item description
-    if self.description.nil?
-      self.description = item.description
-      changed = true
-    end
+      # item description
+      if self.description.nil?
+        self.description = item.description
+        changed = true
+      end
 
-    # item section
-    if self.section.nil?
-      self.section = BEVERAGE_CATEGORIES[item.category]
-      changed = true
+      # item section
+      if self.section.nil?
+        self.section = BEVERAGE_CATEGORIES[item.category]
+        changed = true
+      end
     end
-
     self.save if changed
     menu_item_obj = self.serializable_hash only: [:id, :item_name, :price, :photo, :section, :description]
     menu_item_obj["menu_item_id"] = self.id

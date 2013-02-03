@@ -3,6 +3,8 @@ class SessionsController < ApplicationController
   def new
     @text = params[:text]
     sign_out
+    @user  = User.new
+    render 'users/new'
   end
   
   def create

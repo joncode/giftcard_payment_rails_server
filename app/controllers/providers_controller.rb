@@ -1,4 +1,5 @@
 class ProvidersController < ApplicationController
+  # before_filter :signed_in_user - WILL THIS BREAK IPHONE - iphone user current user?
 
 
   def index
