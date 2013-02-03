@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130203135644) do
+ActiveRecord::Schema.define(:version => 20130203141014) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -100,21 +100,15 @@ ActiveRecord::Schema.define(:version => 20130203135644) do
     t.string   "giver_name"
     t.string   "receiver_name"
     t.string   "provider_name"
-    t.string   "item_name"
     t.integer  "giver_id"
     t.integer  "receiver_id"
-    t.integer  "item_id"
-    t.string   "price",                :limit => 20
-    t.string   "total",                :limit => 20
-    t.string   "credit_card",          :limit => 100
+    t.string   "total",          :limit => 20
+    t.string   "credit_card",    :limit => 100
     t.integer  "provider_id"
     t.text     "message"
-    t.text     "special_instructions"
-    t.integer  "redeem_id"
-    t.string   "status",                              :default => "open"
-    t.string   "category"
-    t.datetime "created_at",                                              :null => false
-    t.datetime "updated_at",                                              :null => false
+    t.string   "status",                        :default => "open"
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
     t.string   "receiver_phone"
     t.string   "tax"
     t.string   "tip"
