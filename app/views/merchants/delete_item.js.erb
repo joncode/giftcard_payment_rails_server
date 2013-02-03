@@ -1,0 +1,9 @@
+$('#ajax_response').empty();
+$('#ajax_response').append('<h5 style="color:#ffff00;text-align:center;">Item Deleted</h5>');
+$('#ajax_response h5').css({color:'#ffff33', padding:'3px'});
+setTimeout(function(){
+	$('#ajax_response h5').css({color:'#ffcc00', padding:'3px'});
+	setTimeout(function(){ 
+		$('#ajax_response').empty();
+	},2000);
+},1800);
