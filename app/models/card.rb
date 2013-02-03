@@ -92,7 +92,7 @@ class Card < ActiveRecord::Base
 			errors.add(:number, "is not a valid credit card number") unless valid_number?(number)
 			puts "error messages = #{errors.messages}"
 			self.brand = brand?(number)
-			errors.add(:base, "We only accept AmEx, Visa, & MasterCard.") unless (self.brand == 'master' || self.brand == 'visa' || self.brand == 'amex')
+			errors.add(:base, "We only accept AmEx, Visa, & MasterCard.") unless (self.brand == 'master' || self.brand == 'visa' || self.brand == 'american_express')
 		end
 
 		def month_and_year_should_be_in_future
