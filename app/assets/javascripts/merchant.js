@@ -166,19 +166,22 @@ $(function() {
 		var menuItemID = $(this).closest('ul').attr('id');
 		var menuSection = $(this).closest(".menu_section");
 		var editButton = menuSection.find('.menuListEdit');
+		var itemName = $(this).closest('ul').find('.miTitleForm').val();
 		// post route to delete menu record
-		alert('Are you sure? menu Item = ' + menuItemID);
-		$.post('delete_item',{item_id: menuItemID});
-		// remove the divs from the view
-		var formForDelete = $(this).closest('.menuItemForm');
-		formForDelete.fadeOut(1000, function () {
-			formForDelete.closest('.menuItemLI').remove();	
-			// if there is no more objects, return to display mode
-			if ($('.menuItemLI').length == 0) {
-				toggleMenuItemForm(menuSection, editButton);
-				menuSection.find(".addItemLink").toggle();
-			}			
-		});
+		var r = confirm('Are you sure? menu Item = ' + itemName);
+		if (r) {
+			$.post('delete_item',{item_id: menuItemID});
+			// remove the divs from the view
+			var formForDelete = $(this).closest('.menuItemForm');
+			formForDelete.fadeOut(1000, function () {
+				formForDelete.closest('.menuItemLI').remove();	
+				// if there is no more objects, return to display mode
+				if ($('.menuItemLI').length == 0) {
+					toggleMenuItemForm(menuSection, editButton);
+					menuSection.find(".addItemLink").toggle();
+				}			
+			});
+		};
 
 		return false;
 	});
