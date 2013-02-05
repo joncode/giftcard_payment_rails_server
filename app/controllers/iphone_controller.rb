@@ -18,7 +18,7 @@ class IphoneController < AppController
       message = "Data not received correctly. "
     else
       new_user = create_user_object(data) 
-      puts "HERE IS NEW USER DATA #{new_user}"
+      puts "HERE IS NEW USER DATA #{new_user.inspect}"
       message = ""          
     end
     
@@ -505,7 +505,7 @@ class IphoneController < AppController
     
     def create_user_object(data)
       obj = JSON.parse data
-      puts "CREATE USER OBJECT parse = #{obj}"
+      #puts "CREATE USER OBJECT parse = #{obj}"
       obj.symbolize_keys!
       User.new(obj)
     end
