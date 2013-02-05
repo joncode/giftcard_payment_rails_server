@@ -61,8 +61,8 @@ class MerchantsController < ApplicationController
     puts "delete item => #{params}"
     item = Menu.find(params[:item_id])
     respond_to do |format|
-      if item.destroy
-        response = {"success" => "Menu Item Deleted"}
+      if item.update_attributes({active: false})
+        response = {"success" => "Menu Item Deactivated"}
       else
         response = {"error" => item.errors.messages}
       end

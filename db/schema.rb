@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130203141014) do
+ActiveRecord::Schema.define(:version => 20130204013134) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -179,12 +179,13 @@ ActiveRecord::Schema.define(:version => 20130203141014) do
     t.integer  "item_id"
     t.string   "price",       :limit => 20
     t.integer  "position",    :limit => 8
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.string   "item_name"
     t.string   "photo"
     t.string   "description"
     t.string   "section"
+    t.boolean  "active",                    :default => true
   end
 
   add_index "menus", ["provider_id"], :name => "index_menus_on_provider_id"

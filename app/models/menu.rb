@@ -1,6 +1,6 @@
 class Menu < ActiveRecord::Base
   attr_accessible :item_id, :position, :price, :provider_id, 
-  :item_name, :photo, :description, :section
+  :item_name, :photo, :description, :section, :active
 
 
   belongs_to   :provider
@@ -10,7 +10,7 @@ class Menu < ActiveRecord::Base
   validates_presence_of :item_name, :price, :provider_id, :section
 
   def self.get_sections(provider_id)
-    menu_items = Menu.where(provider_id: provider_id)
+    menu_items = Menu.where(active: true, provider_id: provider_id)
     # sections = {"special" => "", "beer" => "", "wine" => "", "cocktail"=> "", "shot" => ""}
     sections = {}
     menu_items.each do |mi|
@@ -33,7 +33,7 @@ class Menu < ActiveRecord::Base
 
   def self.get_menu_in_section(provider_id, section_name)
     # category = BEVERAGE_CATEGORIES.index(section_name)
-    menu_items = Menu.where(provider_id: provider_id)
+    menu_items = Menu.where(active: true, provider_id: provider_id)
     menu_section = []
     menu_items.each do |menu|
         # the old way 

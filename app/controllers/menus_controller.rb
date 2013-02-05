@@ -1,7 +1,7 @@
 class MenusController < ApplicationController
 
   def index
-    @menus = Menu.all
+    @menus = Menu.where(acive: true)
 
     respond_to do |format|
       format.html # index.html.erb
