@@ -3,40 +3,39 @@
   <!--
     Users Sign In 
   -->
-  <h1 class="signUpHeader">Sign In</h1>
-<div class="signinFormWrapper">
-
-    <%= form_for(:session, url: sessions_path) do |f| %>
-    <div class="for-inputs">
-      <%= f.text_field :email,        :placeholder => 'Email' %>
-      <%= f.password_field :password, :placeholder => 'Password' %>
-    </div>
-      <%= f.submit "Sign in", class: "button" %>
-    <% end %>
+  <ul>
+    <li style="width:500px;padding-top:30px;">
+      <h1 style="letter-spacing:0.1em;">Sign In</h1>
+    </li>
+    <li class="ordersDisplay" style="width:450px;">
+      <%= form_for(:session, url: sessions_path) do |f| %>
+      <div class="inputWrap" style="width:376px;">
+        <%= f.text_field :email,        :placeholder => 'Email', :class => "miTitleForm rounded inputFieldObj formObj" %>
+        
+        <%= f.password_field :password, :placeholder => 'Password', :class => "miTitleForm rounded inputFieldObj formObj" %>
+        <%= f.submit "Sign in", class: "buttonInput buttonImageUp signInPOS", style: "margin-top: -45px;padding:4px;" %>
+        <%= link_to "Forgot password?", reset_password_users_path, style: "padding-left:30px;font-size:12px;" %>
+      </div>
+      <% end %>
+    </li>
+    <li style="width:500px;padding-top:30px;">
+	    <h1 style="letter-spacing:0.1em;">Sign Up</h1>
+    </li>
+    <li class="ordersDisplay" style="width:450px;">
+      <%= form_for(@user) do |f| %>
+      <div class="inputWrap" style="width:376px;">
+        <%= f.text_field :first_name,            :placeholder => 'First Name', :class => "miTitleForm rounded inputFieldObj formObj" %>
+        <%= f.text_field :last_name,             :placeholder => 'Last Name', :class => "miTitleForm rounded inputFieldObj formObj" %>
+        <%= f.text_field :email,                 :placeholder => 'Email', :class => "miTitleForm rounded inputFieldObj formObj" %>
+        <%= f.password_field :password,              :placeholder => 'Password', :class => "miTitleForm rounded inputFieldObj formObj" %>
+        <%= f.password_field :password_confirmation, :placeholder => 'Password Confirmation', :class => "miTitleForm rounded inputFieldObj formObj" %>
+        <%= f.submit "Create", class: "buttonInput buttonImageUp signInPOS", style: "margin-top: -45px;padding:4px;" %>
+      </div>
+      <% end %>
+    </li>
+  <ul>
 </div>
 
-
-<!--
-  User Sign In
--->
-	<h1 class="signUpHeader">Sign Up</h1>
-
-<div class="signUpFormWrapper">
-    <%= simple_form_for(@user) do |f| %>
-    <%= f.error_notification %>
-    <%= render 'shared/error_messages' %>
-  
-    <div class="form-inputs">
-      <%= f.input :first_name,            :placeholder => 'First Name' %>
-      <%= f.input :last_name,             :placeholder => 'Last Name' %>
-      <%= f.input :email,                 :placeholder => 'Email' %>
-      <%= f.input :password,              :placeholder => 'Password' %>
-      <%= f.input :password_confirmation, :placeholder => 'Password Confirmation' %>
-    </div>
-      <%= f.submit "Create my Account", class: "btn btn-success createAccount" %>
-      <br />
-      <%= link_to "Forgot password?", reset_password_users_path %>
-    <% end %>
 <!--   <div class="socialLoginWrapper">
     <h2 class="signinOr">Or...</h2>
     <div class="fbLoginWrapper">
@@ -45,9 +44,8 @@
     <div class="fourSquareLogin">
       <%= link_to image_tag('signinwith-foursquare.png'), APP_CONFIG[:foursquare][:loginUrl], :class => "sq_login" %>
     </div>
-  </div> -->
-</div> 
-</div>
+  </div> 
+
 
 
 

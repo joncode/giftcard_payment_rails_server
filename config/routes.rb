@@ -60,6 +60,7 @@ Drinkboard::Application.routes.draw do
     end
     collection do
       get :reset_password
+      post :reset_password
       get :enter_new_password
       post :enter_new_password
     end
