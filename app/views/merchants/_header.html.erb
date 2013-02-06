@@ -20,5 +20,5 @@
   <div class="lineHorizHeader lineHoriz"></div>
   	<div class="columnTopBlocker"></div>
       <% if @provider %>
-  	  	<%= render 'merchant_options' %>
+  	  	<%= render 'merchant_options', tab: params[:action] %>
       <% end %>

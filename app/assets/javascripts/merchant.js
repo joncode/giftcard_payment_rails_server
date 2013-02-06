@@ -287,4 +287,8 @@ $(function() {
 		return false;
 	});
 
+	$('.option').click(function () {
+		$(this).css({color:'#666'});
+	});
+ 
 }); // end
