@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
     end
 
     def create_menu_from_items(provider)     
-      menu_bulk = Menu.where(active: true, provider_id: provider.id)
+      menu_bulk = Menu.where(provider_id: provider.id)
       items = []
       menu_bulk.each do |item|
          indi = Item.find(item.item_id)

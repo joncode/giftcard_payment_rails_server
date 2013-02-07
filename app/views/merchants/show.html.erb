@@ -1,13 +1,13 @@
-  <div class="doubleColumn">
-    <div class="merchantShowWrapper rounded gradient">
-      <div class="showImage">
-        <%= custom_image_tag(@provider,180,180)  %>
-      </div>
-      <% if @provider.zinger %>
-        <h4>"<%= @provider.zinger %>"</h4>
-      <% else %>
-        <h4>"<%= @provider.description %>"</h4>
-      <% end %>
+<div class="doubleColumn">
+  <div class="merchantShowWrapper rounded gradient">
+    <div class="imageBorder">
+      <%= custom_image_tag(@provider,180,180)  %>
     </div>
-	</div>
+    <% if @provider.zinger %>
+      <h4>"<%= @provider.zinger %>"</h4>
+    <% else %>
+      <h4>"<%= @provider.description %>"</h4>
+    <% end %>
+  </div>
+</div>
 

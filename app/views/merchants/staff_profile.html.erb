@@ -1,6 +1,6 @@
 <div class="column">
     <div class="merchantShowWrapper rounded gradient profileShrink">
-      <div class="showImage">
+      <div class="imageBorder">
         <%= custom_image_tag(@user,180,180)  %>
       </div>
 	  <h4><%= @user.username %></h4>
@@ -12,7 +12,7 @@
 </div>
 
 <div class="doubleColumn">
-  <h2 id="avatarLink"><%= link_to "Crop Avatar", crop_user_path(current_user) %></h2>
+  <h2 id="avatarLink"><%= link_to "Crop Avatar", '#' %></h2>
   <h2 id="editProfileLink"><%= link_to "Edit Profile", '#' %></h2>
   <h2 id="secureImageLink"><%= link_to "Upload Secure Image", '#' %></h2>
 </div>
