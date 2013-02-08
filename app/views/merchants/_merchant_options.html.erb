@@ -18,7 +18,7 @@
     <%= link_to "Orders", orders_merchant_path(@provider), :id => 'orders', :class => "option" %> 
     <%= link_to "Images", photos_merchant_path(@provider), :id => 'edit_photo', :class => "option" %> 
     <%= link_to "Info", edit_info_merchant_path(@provider), :id => 'edit_info', :class => "option" %> 
-    <%= link_to 'Help', '#', :id => 'help', :class => "option" %>
+    <%= link_to 'POS', pos_merchant_path(@provider), :id => 'help', :class => "option" %>
 	<%= link_to "User", staff_profile_merchant_path(@provider), :id => 'staff_profile', :class => "option" %>
 </div>
 		<% end %>

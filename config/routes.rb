@@ -78,6 +78,8 @@ Drinkboard::Application.routes.draw do
       get 'baronVonJovi'
       get 'explorer'
       get :help
+      get :pos
+      get :pos_request
       get :menujs
       # end test routes
       get 'past_orders'
