@@ -1,28 +1,9 @@
 <div class="doubleColumn redeemDisplay">
 <p id="notice"><%= notice %></p>
 <div class="borderBox">
-  <h2>Thank You!</h2>
-  <h3>- The Drinkboard Staff</h3>
-
-  <h5><%= time_ago_in_words(@gift.created_at) %>&nbsp;ago</h5>
+  <h3>Purchased on <%= time_ago_in_words(@gift.created_at) %>&nbsp;ago</h3>
   <h4 class="obj"><%= custom_image_tag(@giver,50,50)  %> <%= @giver.fullname %><span> bought </span></h4>
-  <ul class="giftCart">
-    <% if @gift.shoppingCart %>
-      <!-- turn the shopping cart JSON into an array
-            go thru the array , take each item
-            print THAT item_name to the screen -->
-      <% cart_json = @gift.shoppingCart %> 
-      <% cart = JSON.parse cart_json %>
-      <% cart.each do |item| %>
-      <li class="giftItem timeAgo">
-        <%= item["quantity"] %> <%= item["item_name"] %>
-      </li>
-      <% end %> 
-    <% end %> 
-  </ul>
-  <h2>For:</h2>
-  <h4><%= custom_image_tag(@receiver,50,50)  %> <%= @gift.receiver_name %><span></span></h4>
-  <h3>Redeemed on <%= @order.created_at.to_formatted_s(:rfc822)  %>.<br />
+  <h3>Redeemed on <%= @order.created_at.to_formatted_s(:custom)  %>.<br />
   By server : <%= @server.username %></h3>
 </div>
 <%= link_to "<- Back to Orders", orders_merchant_path(@provider), remote: true %>
