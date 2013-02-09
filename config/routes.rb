@@ -1,5 +1,8 @@
 Drinkboard::Application.routes.draw do
   
+
+
+
   resources :brands
 
   resources :sales
@@ -79,7 +82,6 @@ Drinkboard::Application.routes.draw do
       get 'explorer'
       get :help
       get :pos
-      get :pos_request
       get :menujs
       # end test routes
       get 'past_orders'
@@ -105,6 +107,9 @@ Drinkboard::Application.routes.draw do
     end
   end
 
+  resources :subtle_data do
+    get :pos_request
+  end
 
 
 

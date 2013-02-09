@@ -35,6 +35,10 @@ $(function() {
 		e.preventDefault();
 	});
 
-
+	$('#clear a').click(function() {
+		alert('got the click');
+		$('#response').empty();
+		return false;
+	});
 
 });

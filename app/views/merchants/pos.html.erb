@@ -1,6 +1,24 @@
-<div class="doubleColumn">
-	<h2>POS page for links to subtle data</h2>
-	<h2> <%= @response %></h2>
-	<div id="linkDb"><a href="#" id="getData">LinkerDb test</a></div>
-	<div id="request"><%= link_to '0000', pos_request_merchant_path(@provider), remote: :true %></div>
+<style>
+	.request ul li {
+		width: 700px;
+		padding: 0 30px;
+	}
+	.request a {
+			color:rgba(84,178,209,1);
+	}
+</style>
+
+<div class="doubleColumn inputWrap">
+	<h2>POS page for links to subtle data</h2><h5 id="clear"><%= link_to 'Clear' %></h5>
+	<div class="request">
+		<ul>
+			<li><%= link_to 'App StartUp - 0000', subtle_data_path(:call => '0000'), remote: :true %>
+			</li>
+			<li><%= link_to 'Get Location by Identifier - 0300', subtle_data_path(:call => '0300'), remote: :true %>
+			</li>
+			<li><%= link_to 'Get Employees - 1002', subtle_data_path(:call => '1002'), remote: :true %>
+			</li>
+		</ul>
+	</div>
+	<div id="response"></div>
 </div>
