@@ -107,10 +107,7 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-  resources :subtle_data do
-    get :pos_request
-  end
-
+  resources :subtle_data
 
 
   resources :microposts,    only: [:create, :destroy]

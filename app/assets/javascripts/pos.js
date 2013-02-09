@@ -5,24 +5,6 @@ $(function() {
 	var key = "RlgrM1Uw";
 	var call = "0000";
 
-	// 		// using .ajax to POST to the providers app route for providers
-	// $('#linkDb a').click(function(e) {
-	// 	var base = sdroot;
-	// 	var url = sdroot + call + pipe + key;
-	// 	alert(url);
-	// 	var _linkDb = $(this);
-	// 	$.ajax({
-	// 		type: 'GET',
-	// 		url: url,
-	// 		success: function(data) {
-	// 			$.each(data, function() {
-	// 				_linkDb.after('<h2>'+ this + '</h2>');
-	// 			});
-	// 		}
-	// 	});
-	// 	e.preventDefault();
-	// });
-
 	$('#linkDb a').click(function(e) {
 		var base = sdroot;
 		var url = sdroot + call + pipe + key;

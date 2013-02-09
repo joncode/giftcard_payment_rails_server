@@ -1,1 +1,1 @@
-$('#response').append('<h2><%= @response %></h2>');
+$('#response').empty().append('<h2><%= @query if @query %></h2><h2><%= @data %></h2>');
