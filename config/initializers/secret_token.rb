@@ -10,10 +10,15 @@ PAGE_NAME = 'Drinkboard'
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 VALID_PHONE_REGEX = /1?\s*\W?\s*([2-9][0-8][0-9])\s*\W?\s*([2-9][0-9]{2})\s*\W?\s*([0-9]{4})(\se?x?t?(\d*))?/
 # this regex for phone does not work for '(210)-' unusual but possible mistake
-CLEARANCE = ['admin', 'full', 'staff']
+CLEARANCE 			= ['admin', 'full', 'staff']
 BEVERAGE_CATEGORIES = ['special', 'beer', 'wine', 'cocktail', 'shot']
-GIFT_STATUS   = ['open', 'notified', 'redeemed', 'regifted', 'returned', 'incomplete']
-PROOF_LEVELS  = ['zero', 'lite', 'normal', 'double']
+GIFT_STATUS   		= ['open', 'notified', 'redeemed', 'regifted', 'returned', 'incomplete']
+PROOF_LEVELS  		= ['zero', 'lite', 'normal', 'double']
+
+	# Subtle Data Constants
+PIPE        = "%7C"
+SD_ROOT     = "https://www.subtledata.com/API/M/1/?Q="
+WEB_KEY     = "RlgrM1Uw"
 
 if Rails.env.production?
 	TEST_URL = "http://drinkboard.herokuapp.com"

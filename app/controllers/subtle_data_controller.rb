@@ -1,8 +1,8 @@
 class SubtleDataController < ApplicationController
     LOCATION_ID = "604"
-    PIPE        = "%7C"
-    WEB_KEY     = "RlgrM1Uw"
-    SD_ROOT     = "https://www.subtledata.com/API/M/1/?Q="
+    USER_ID     = "1822"
+
+    # 0109 0110 0120 0130 0140 0410 0620 0511 0460
 
     respond_to :js
     # before_filter :have_token? # - have to have this token persist between instances
@@ -11,8 +11,7 @@ class SubtleDataController < ApplicationController
         @call   ||= params[:call] 
         @data     = nil
         @token  ||= "M1UwX0ZY"
-
-        
+ 
         @url      = "#{SD_ROOT}#{@call}"
         self.send("make_URL_for_" + @call)
         
@@ -41,6 +40,7 @@ class SubtleDataController < ApplicationController
             end
         end
 
+            # app start up 
         def make_URL_for_0000
             @url  += "#{PIPE}#{WEB_KEY}"
         end
@@ -49,6 +49,7 @@ class SubtleDataController < ApplicationController
             item_str.split('^')
         end
 
+            # get items for category or ALL
         def make_URL_for_0201 category=nil
             header = "#{@token}#{PIPE}"
             category ||= "4904"
@@ -59,6 +60,7 @@ class SubtleDataController < ApplicationController
             return SDMenuItem.new item_str 
         end
 
+            # menu categories for location
         def make_URL_for_0203
             header = "#{@token}#{PIPE}"
             @url  += "#{header}#{LOCATION_ID}#{PIPE}0"
@@ -68,6 +70,7 @@ class SubtleDataController < ApplicationController
             return SDCategory.new item_str
         end
 
+            # get location info by location id
         def make_URL_for_0300
             header = "#{@token}#{PIPE}"
             @url  += "#{header}#{LOCATION_ID}"
@@ -77,6 +80,7 @@ class SubtleDataController < ApplicationController
             return SDLocation.new item_str
         end
 
+            # get employees at location
         def make_URL_for_1002
             header = "#{@token}#{PIPE}"
             @url  += "#{header}#{LOCATION_ID}"
@@ -86,78 +90,7 @@ class SubtleDataController < ApplicationController
             return SDEmployee.new item_str 
         end        
 
-        def make_URL_for_0109
-            header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}#{PIPE}0"
-        end
-
-        def init_data_for_0109 item_str
-            item_str.split('^')
-        end 
-
-        def make_URL_for_0110
-            header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}#{PIPE}0"
-        end
-
-        def init_data_for_0110 item_str
-            item_str.split('^')
-        end
-
-        def make_URL_for_0120
-            header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
-        end
-
-        def init_data_for_0120 item_str
-            item_str.split('^')
-        end
-
-        def make_URL_for_0130
-            header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
-        end
-
-        def init_data_for_0130 item_str
-            item_str.split('^')
-        end
-
-        def make_URL_for_0410
-            header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
-        end
-
-        def init_data_for_0410 item_str
-            item_str.split('^')
-        end
-
-        def make_URL_for_0620
-            header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
-        end
-
-        def init_data_for_0620 item_str
-            item_str.split('^')
-        end
-
-        def make_URL_for_0511
-            header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
-        end
-
-        def init_data_for_0511 item_str
-            item_str.split('^')
-        end
-
-        def make_URL_for_0460
-            header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
-        end
-
-        def init_data_for_0460 item_str
-            item_str.split('^')
-        end
-
+            # get clocked in employees
         def make_URL_for_1001
             header = "#{@token}#{PIPE}"
             @url  += "#{header}#{LOCATION_ID}"
@@ -167,17 +100,149 @@ class SubtleDataController < ApplicationController
             return SDEmployee.new item_str 
         end
 
+            # get user info
+        def make_URL_for_0109
+            # send sd_user_id as arg1 OR sd_user_name as arg2
+            # Q=0109@@@||2025551212
+            header = "#{@token}#{PIPE}"
+            @url  += "#{header}#{USER_ID}"
+        end
+
+        def init_data_for_0109 item_str
+            return SDUser.new item_str 
+        end 
+
+            # create new user
+        def make_URL_for_0110
+            header       = "#{@token}#{PIPE}"
+            new_user_str = current_user.sd_serialize
+            puts "USeR serialized #{new_user_str}"
+            @url        += "#{header}#{new_user_str}"
+        end
+
+        def init_data_for_0110 item_str
+                # parse the response
+            user_ary = item_str.split("|")
+                # save the sd_user_id onto the current_user object
+            puts "CURRENT USER ID - sd_user_id = #{user_ary[0]}"
+                # current_user.udate_attribute(:sd_user_id, user_ary[0])
+        end
+
+            # create credit card
+        def make_URL_for_0120
+            header = "#{@token}#{PIPE}"
+            card = Card.first
+            credit_card_str = "#{USER_ID}" + card.sd_serialize
+            puts "Credit Card String = #{credit_card_str}"
+            @url  += "#{header}#{credit_card_str}"
+        end
+
+        def init_data_for_0120 item_str
+            return item_str
+        end
+
+            # get credit cards for user
+        def make_URL_for_0130
+            header = "#{@token}#{PIPE}"
+            @url  += "#{header}#{USER_ID}"
+        end
+
+        def init_data_for_0130 item_str
+            item_str.split('^')
+        end
+
+            # delete card from SD
+        def make_URL_for_0140
+            header = "#{@token}#{PIPE}"
+            card = Card.first
+            sd_card_id = card.sd_card_id 
+            @url  += "#{header}#{USER_ID}#{PIPE}#{sd_card_id}"
+        end
+
+        def init_data_for_0140 item_str
+            item_str.split('^')
+        end
+
+            # create a ticket
+        def make_URL_for_0410
+            header = "#{@token}#{PIPE}"
+            @url  += "#{header}#{LOCATION_ID}"
+            #Arg 1:              Location ID
+            #Arg 2:              Revenue Center ID
+            #Arg 3:              User ID
+            #                Note:       From the Create User call.
+            #Arg 4:              Device ID
+            #                Note:       From the Create User and Authenticate User calls
+            #Arg 5:              Table ID
+            #Arg 6:              Number of People in Party
+            #Arg 7:              Business Expense?
+            #                0   =   No
+            #                1   =   Yes
+            #Arg 8:              Notes from user describing purpose of ticket such as “dinner with Bob”
+            #Arg 9:              Latitude
+            #                Note:       Send empty string or 0 if unknown.
+            #Arg 10:             Longitude
+            #                Note:       Send empty string or 0 if unknown.
+            #Arg 11:             Custom Ticket Name
+            #                Note:       Optional and not supported on all POS systems.
+        end
+
+        def init_data_for_0410 item_str
+            item_str.split('^')
+        end
+
+            # add credit card payment to ticket
+        def make_URL_for_0620
+            header = "#{@token}#{PIPE}"
+            @url  += "#{header}#{LOCATION_ID}"
+        end
+
+        def init_data_for_0620 item_str
+            item_str.split('^')
+        end
+
+            # place current order
+        def make_URL_for_0511
+            header = "#{@token}#{PIPE}"
+            @url  += "#{header}#{LOCATION_ID}"
+        end
+
+        def init_data_for_0511 item_str
+            item_str.split('^')
+        end
+
+            # cancel ticket 
+        def make_URL_for_0460
+            header = "#{@token}#{PIPE}"
+            @url  += "#{header}#{LOCATION_ID}"
+        end
+
+        def init_data_for_0460 item_str
+            item_str.split('^')
+        end
+
         def parseQuery
             x = @response.split('|')
             puts "parseQuery #{@response}"
-            if x.count == 2
+            if x.count == 2 
+                    # typical remove the query from the response
                 @query  = x[0]
                 @data   = x[1]
                 parseData
             elsif x.count == 1
+                    # you get query response but no data
                 @query  = x[0]
                 @data   = "No Data"
+            else
+                    # in the case of a user object where the whole string is pipe separated
+                @query  = x.shift
+                @data   = x
+                @data = parseUserData
             end
+        end
+
+        def parseUserData
+            self.send('init_data_for_' + @call, @data)
         end
 
         def parseData
@@ -223,6 +288,7 @@ end
 class SDCategory
     attr_reader :sd_category_id, :name, :instructs, :items, :subcategories, :image_type,
                 :image_url, :modifiers
+
     def initialize item_str
         x = item_str.split('^')
         @sd_category_id = x[0]
@@ -243,6 +309,7 @@ class SDEmployee
     attr_reader :sd_employee_id, :user_name, :first_name, 
                 :middle_name, :last_name, :birthday, :email,
                 :manager 
+
     def initialize item_str
         x = item_str.split('^')
         @sd_employee_id = x[0]
@@ -256,7 +323,29 @@ class SDEmployee
     end
 end
 
+class SDUser
+    include SubtleDataHelper
+    attr_reader :sd_user_id, :user_name, :first_name, 
+                :middle_name, :last_name, :birthday, :phone, :email,
+                :latitude, :longitude 
+
+    def initialize x 
+        x = x.split('^') if x.kind_of? String
+        @sd_user_id     = x[0]
+        @user_name      = x[1]
+        @first_name     = x[2]
+        @middle_name    = x[3]
+        @last_name      = x[4]
+        @birthday       = x[5]
+        @phone          = x[6]
+        @email          = x[7]
+        @latitude       = remove_trailing_zeros x[8]
+        @longitude      = remove_trailing_zeros x[9] 
+    end
+end
+
 class SDLocation
+    include SubtleDataHelper
     attr_reader :sd_location_id, :name, :address, :address_2, :city, :state, :zip,
                 :latitude, :longitude, :phone, :website_url, :neighborhood, :cross_streets,
                 :price_rating, :user_rating, :logo_url, :photo_url, :employee_request,
@@ -294,26 +383,4 @@ class SDLocation
         @process_new_cc     = x[26] == "1" ? true : false
         @process_pre_auth_cc = x[27] == "1" ? true : false
     end
-
-    private
-
-        def remove_trailing_zeros str
-            while str.chomp!('0')
-            end
-            return str             
-        end
-
-        def convert_price_rating rating
-            rating_str = ""
-            rating = rating.to_i
-            case rating
-            when 0
-                rating_str = "No rating"
-            else
-                rating.times do 
-                    rating_str += '$'
-                end
-            end
-            return rating_str
-        end
 end

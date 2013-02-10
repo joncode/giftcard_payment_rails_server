@@ -59,7 +59,7 @@ class Card < ActiveRecord::Base
 	def decrypt!(passphrase)
         @number = decrypt_number(passphrase)
         self
-   end
+    end
 
 	def last_four
 		new_record? ? save_last_four : read_attribute(:last_four)
@@ -81,6 +81,11 @@ class Card < ActiveRecord::Base
 
 	def number=(number)
 		@number = number	
+	end
+
+	def sd_serialize
+		self.decrypt! @@CreditCardSecretKey
+		"#{PIPE}#{self.name}#{PIPE}#{self.number}#{PIPE}#{self.month}#{PIPE}#{self.year[2,3]}#{PIPE}#{self.user.zip}#{PIPE}#{self.nickname}#{PIPE}0#{PIPE}0#{PIPE}0#{PIPE}0#{PIPE}0"
 	end
 
 	private

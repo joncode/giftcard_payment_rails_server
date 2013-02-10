@@ -231,6 +231,10 @@ class User < ActiveRecord::Base
     end
     return response
   end
+
+  def sd_serialize
+    "#{self.phone}#{PIPE}#{self.remember_token}#{PIPE}#{self.first_name}#{PIPE}#{PIPE}#{self.last_name}#{PIPE}#{self.birthday}#{PIPE}#{self.phone}#{PIPE}#{self.email}#{PIPE}#{PIPE}#{PIPE}#{self.remember_token}"
+  end
   
   private
     
