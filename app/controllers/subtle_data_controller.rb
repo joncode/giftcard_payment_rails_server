@@ -1,8 +1,11 @@
 class SubtleDataController < ApplicationController
     LOCATION_ID = "604"
     USER_ID     = "1822"
+    DEVICE_ID   = "1536"
+    TABLE_ID    = "27493"
+    TICKET_ID   = "123913"
 
-    # 0109 0110 0120 0130 0140 0410 0620 0511 0460
+    # 0120 0130 0140 0410 0620 0511 0460
 
     respond_to :js
     # before_filter :have_token? # - have to have this token persist between instances
@@ -128,6 +131,22 @@ class SubtleDataController < ApplicationController
                 # current_user.udate_attribute(:sd_user_id, user_ary[0])
         end
 
+            # authenticate user
+        def make_URL_for_0111
+            header       = "#{@token}#{PIPE}"
+            u = current_user
+            new_user_str = "#{u.phone}#{PIPE}#{u.remember_token}#{PIPE}0#{PIPE}0#{PIPE}#{u.remember_token}"
+            puts "USeR to authenticate #{new_user_str}"
+            @url        += "#{header}#{new_user_str}"
+        end
+
+        def init_data_for_0111 item_str
+                # parse the response
+            user_ary = item_str.split("|")
+                # save the sd_user_id onto the current_user object
+            puts "CURRENT USER ID - sd_user_id = #{user_ary[0]}"
+                # current_user.udate_attribute(:sd_user_id, user_ary[0])
+        end
             # create credit card
         def make_URL_for_0120
             header = "#{@token}#{PIPE}"
@@ -163,62 +182,91 @@ class SubtleDataController < ApplicationController
             item_str.split('^')
         end
 
+            # get tables for location
+        def make_URL_for_0331
+            header = "#{@token}#{PIPE}"
+            @url  += "#{header}#{LOCATION_ID}#{PIPE}0"
+        end
+
+        def init_data_for_0331 item_str
+            return SDTable.new item_str
+        end
+
+            # get open tickets for tables
+        def make_URL_for_0403
+            header = "#{@token}#{PIPE}"
+            @url  += "#{header}#{LOCATION_ID}#{PIPE}#{TABLE_ID}"
+        end
+
+        def init_data_for_0403 item_str
+           return SDTicket.new item_str
+        end
+
             # create a ticket
         def make_URL_for_0410
             header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
-            #Arg 1:              Location ID
-            #Arg 2:              Revenue Center ID
-            #Arg 3:              User ID
-            #                Note:       From the Create User call.
-            #Arg 4:              Device ID
-            #                Note:       From the Create User and Authenticate User calls
-            #Arg 5:              Table ID
-            #Arg 6:              Number of People in Party
-            #Arg 7:              Business Expense?
-            #                0   =   No
-            #                1   =   Yes
-            #Arg 8:              Notes from user describing purpose of ticket such as “dinner with Bob”
-            #Arg 9:              Latitude
-            #                Note:       Send empty string or 0 if unknown.
-            #Arg 10:             Longitude
-            #                Note:       Send empty string or 0 if unknown.
-            #Arg 11:             Custom Ticket Name
-            #                Note:       Optional and not supported on all POS systems.
+            @url  += "#{header}#{LOCATION_ID}#{PIPE}0#{PIPE}#{USER_ID}#{PIPE}#{DEVICE_ID}#{PIPE}27493#{PIPE}1#{PIPE}0#{PIPE}Drinkboard Gift#{PIPE}0#{PIPE}0#{PIPE}"
         end
 
         def init_data_for_0410 item_str
-            item_str.split('^')
+            "Ticket ID = #{item_str}"
+        end
+
+            # add item to ticket
+        def make_URL_for_0520
+            header = "#{@token}#{PIPE}"
+            @url  += "#{header}#{TICKET_ID}#{PIPE}#{USER_ID}#{PIPE}#{}#{PIPE}#{DEVICE_ID}#{PIPE}27493#{PIPE}1#{PIPE}0#{PIPE}Drinkboard Gift#{PIPE}0#{PIPE}0#{PIPE}"
+            
+            #Arg 1:              Ticket ID
+            #Arg 2:              User ID
+            #Arg 3:              Order Item Collection
+            #Arg 4:              Cover number
+            #                1   =   Main person
+            #                2+  =   If more than one person
+            #Arg 5:              Date to Fire (UTC)
+            #                Format:     MM/DD/YYYY HH:MM:SS AM/PM
+            #                “”  =   Fire Immediately
+            #Order Item Collection
+            #Position 1:         Item ID
+            #Position 2:         Quantity
+            #Position 3:         Instructions
+            #Position 4:         Order Modifier Collection
+            #Order Modifier Collection
+            #Position 1:         Modifier ID
+        end
+
+        def init_data_for_0520 item_str
+            "Ticket ID = #{item_str}"
         end
 
             # add credit card payment to ticket
         def make_URL_for_0620
             header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
+            @url  += "#{header}#{TICKET_ID}#{PIPE}#{USER_ID}#{PIPE}TEST CARD#{PIPE}0#{PIPE}100#{PIPE}20#{PIPE}#{PIPE}1"
         end
 
         def init_data_for_0620 item_str
-            item_str.split('^')
+            item_str
         end
 
             # place current order
         def make_URL_for_0511
             header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
+            @url  += "#{header}#{TICKET_ID}#{PIPE}#{USER_ID}#{PIPE}#{PIPE}"
         end
 
         def init_data_for_0511 item_str
-            item_str.split('^')
+            item_str
         end
 
             # cancel ticket 
         def make_URL_for_0460
             header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{LOCATION_ID}"
+            @url  += "#{header}#{LOCATION_ID}#{PIPE}#{TICKET_ID}#{PIPE}0#{PIPE}0#{PIPE}#{USER_ID}"
         end
 
         def init_data_for_0460 item_str
-            item_str.split('^')
+            item_str
         end
 
         def parseQuery
@@ -266,6 +314,41 @@ class SubtleDataController < ApplicationController
             query , @token = response.split('|')
             puts "GET TOKEN #{@token}"  
         end
+end
+
+class SDTicket
+    attr_reader :ticket_id, :pos_ticket,  :table_id, :table_name, :sd_employee_id, :sd_user_id,
+                :subtotal, :tax, :discount, :total, :remaining_balance,
+                :service_charge, :date_opened, :covers
+    
+    def initialize(item_str)
+        x = item_str.split('^')
+        @ticket_id = x[0]
+        @pos_ticket = x[1]
+        @table_id = x[2]
+        @table_name = x[3]
+        @sd_employee_id = x[4]
+        @sd_user_id = x[5]
+        @subtotal = x[6]
+        @tax = x[7]
+        @discount = x[8]
+        @total = x[9]
+        @remaining_balance = x[10]
+        @service_charge = x[11]
+        @date_opened = x[12]
+        @covers = x[13]
+    end
+end
+
+class SDTable
+    attr_reader :table_id, :name, :identifier
+    
+    def initialize(item_str)
+        x = item_str.split('^')
+        @table_id = x[0]
+        @identifier  = x[1]
+        @name = x[2]
+    end
 end
 
 class SDMenuItem

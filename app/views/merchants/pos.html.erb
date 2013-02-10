@@ -22,6 +22,8 @@
 				</li>
 				<li><%= link_to 'Create New User - 0110', subtle_data_path(:call => '0110'), remote: :true %>
 				</li>
+				<li><%= link_to 'Authenticate User - 0111', subtle_data_path(:call => '0111'), remote: :true %>
+				</li>
 			</ul>
 		</div>
 	<h3>2. get menu items for menu builder</h3>
@@ -57,7 +59,13 @@
 	<h3>5. make ticket / order drink / pay for order</h3>
 		<div class="request">
 			<ul>
+				<li><%= link_to 'Get tables - 0331', subtle_data_path(:call => '0331'), remote: :true %>
+				</li>
+				<li><%= link_to 'Get Open Tickets - 0403', subtle_data_path(:call => '0403'), remote: :true %>
+				</li>
 				<li><%= link_to 'Create Ticket - 0410', subtle_data_path(:call => '0410'), remote: :true %>
+				</li>
+				<li><%= link_to 'Add Item to Ticket - 0520', subtle_data_path(:call => '0520'), remote: :true %>
 				</li>
 				<li><%= link_to 'Add CC payment to ticket - 0620', subtle_data_path(:call => '0620'), remote: :true %>
 				</li>
