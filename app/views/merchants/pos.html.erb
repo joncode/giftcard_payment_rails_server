@@ -9,18 +9,61 @@
 </style>
 
 <div class="doubleColumn inputWrap">
-	<h2>POS page for links to subtle data</h2><h5 id="clear"><%= link_to 'Clear' %></h5>
-	<div class="request">
-		<ul>
-			<li><%= link_to 'App StartUp - 0000', subtle_data_path(:call => '0000'), remote: :true %>
-			</li>
-			<li><%= link_to 'Get Location by Identifier - 0300', subtle_data_path(:call => '0300'), remote: :true %>
-			</li>
-			<li><%= link_to 'Categories by Location - 0203', subtle_data_path(:call => '0203'), remote: :true %>
-			</li>
-			<li><%= link_to 'Get Employees - 1002', subtle_data_path(:call => '1002'), remote: :true %>
-			</li>
-		</ul>
-	</div>
+	<h2>POS page for links to subtle data</h2>
+	<h5 id="clear"><%= link_to 'Clear' %></h5>
+	<h3>1. initialize SubtleData and user</h3>
+		<div class="request">
+			<ul>
+				<li><%= link_to 'App StartUp - 0000', subtle_data_path(:call => '0000'), remote: :true %>
+				</li>
+				<li><%= link_to 'Get Location by Identifier - 0300', subtle_data_path(:call => '0300'), remote: :true %>
+				</li>
+				<li><%= link_to 'Get User Info - 0109', subtle_data_path(:call => '0109'), remote: :true %>
+				</li>
+				<li><%= link_to 'Create New User - 0110', subtle_data_path(:call => '0110'), remote: :true %>
+				</li>
+			</ul>
+		</div>
+	<h3>2. get menu items for menu builder</h3>
+		<div class="request">
+			<ul>
+
+				<li><%= link_to 'Categories by Location - 0203', subtle_data_path(:call => '0203'), remote: :true %>
+				</li>
+				<li><%= link_to 'Get Items for Category - 0201', subtle_data_path(:call => '0201'), remote: :true %>
+				</li>
+			</ul>
+		</div>
+	<h3>3. get employees working at location</h3>
+		<div class="request">
+			<ul>
+				<li><%= link_to 'Get Employees - 1002', subtle_data_path(:call => '1002'), remote: :true %>
+				</li>
+				<li><%= link_to 'Get Clocked In Employees - 1001', subtle_data_path(:call => '1001'), remote: :true %>
+				</li>
+			</ul>
+		</div>
+	<h3>4. store user credit card and retrieve info</h3>
+		<div class="request">
+			<ul>
+				<li><%= link_to 'Create Credit Card - 0120', subtle_data_path(:call => '0120'), remote: :true %>
+				</li>
+				<li><%= link_to 'Get Credit Cards - 0130', subtle_data_path(:call => '0130'), remote: :true %>
+				</li>
+			</ul>
+		</div>
+	<h3>5. make ticket / order drink / pay for order</h3>
+		<div class="request">
+			<ul>
+				<li><%= link_to 'Create Ticket - 0410', subtle_data_path(:call => '0410'), remote: :true %>
+				</li>
+				<li><%= link_to 'Add CC payment to ticket - 0620', subtle_data_path(:call => '0620'), remote: :true %>
+				</li>
+				<li><%= link_to 'Place Current Order - 0511', subtle_data_path(:call => '0511'), remote: :true %>
+				</li>
+				<li><%= link_to 'Cancel Ticket - 0460', subtle_data_path(:call => '0460'), remote: :true %>
+				</li>
+			</ul>
+		</div>
 	<div id="response"></div>
 </div>

@@ -1,0 +1,19 @@
+<style>
+	h2 {
+		width: 600px;
+	}
+</style>
+<h2>Identifier : <%= @query if @query %></h2>
+<% if @data.kind_of? Array %>
+	<% @data.each do |data| %>
+		<% if data.kind_of? Array %>
+			<% data.each do |d| %>
+				<h2><%= d.inspect %></h2>
+			<% end %>
+		<% else %>
+			<h2><%= data.inspect %></h2>
+		<% end %>
+	<% end %>
+<% else %>
+	<h2><%= @data %></h2>
+<% end %>

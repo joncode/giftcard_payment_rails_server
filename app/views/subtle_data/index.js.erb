@@ -1,1 +1,1 @@
-$('#response').empty().append('<h2><%= @query if @query %></h2><h2><%= @data %></h2>');
+$('#response').empty().append('<%= j render("index") %>');
