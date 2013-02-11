@@ -1,5 +1,5 @@
         <% if @provider.user_clearance(@current_user) == 'super' %>
-<div class="merchantMenu level1">
+<div class="merchantMenu merchantMenuPOS width1">
 <!-- 	<%= link_to "User", staff_profile_merchant_path(@provider) %> 
  -->
     <%= link_to "Menu Builder", menu_merchant_path(@provider), :id => 'menu', :class => "option" %> 
@@ -11,7 +11,7 @@
  	<%= link_to "User", staff_profile_merchant_path(@provider), :id => 'staff_profile', :class => "option" %>
 </div>
 		<% else %>
-<div class="merchantMenu level2">
+<div class="merchantMenu merchantMenuPOS width2">
 <!-- 	<%= link_to "User", staff_profile_merchant_path(@provider) %> 
  -->
     <%= link_to "Menu Builder", menu_merchant_path(@provider), :id => 'menu', :class => "option" %> 

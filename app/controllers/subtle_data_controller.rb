@@ -1,24 +1,29 @@
 class SubtleDataController < ApplicationController
+    include SubtleDataHelper
     LOCATION_ID = "604"
     USER_ID     = "1822"
     DEVICE_ID   = "1536"
     TABLE_ID    = "27493"
     TICKET_ID   = "123913"
+    ITEM_ID     = "26093"
+    CARD_ID     = "1109"
 
-    # 0120 0130 0140 0410 0620 0511 0460
+    # 0410 0620 0511 0460
 
     respond_to :js
     # before_filter :have_token? # - have to have this token persist between instances
 
     def index
         @call   ||= params[:call] 
+        @vars     = SDRequest.new params[:vars]
+        puts "HERE ARE THE VARS #{@vars}"
         @data     = nil
         @token  ||= "M1UwX0ZY"
  
         @url      = "#{SD_ROOT}#{@call}"
         self.send("make_URL_for_" + @call)
-        
-        @response = String.new(%x{curl #{@url}})
+        @url = @url.gsub(' ', '+')
+        @response = String.new(%x(curl #{@url}))
         
         puts "Here is the request #{@url}"
         puts "Here is the response #{@response}"
@@ -28,6 +33,7 @@ class SubtleDataController < ApplicationController
         else
             parseQuery
         end
+        @vars = @vars.serialize
     end
 
     private
@@ -173,9 +179,7 @@ class SubtleDataController < ApplicationController
             # delete card from SD
         def make_URL_for_0140
             header = "#{@token}#{PIPE}"
-            card = Card.first
-            sd_card_id = card.sd_card_id 
-            @url  += "#{header}#{USER_ID}#{PIPE}#{sd_card_id}"
+            @url  += "#{header}#{USER_ID}#{PIPE}#{CARD_ID}"
         end
 
         def init_data_for_0140 item_str
@@ -214,29 +218,16 @@ class SubtleDataController < ApplicationController
 
             # add item to ticket
         def make_URL_for_0520
-            header = "#{@token}#{PIPE}"
-            @url  += "#{header}#{TICKET_ID}#{PIPE}#{USER_ID}#{PIPE}#{}#{PIPE}#{DEVICE_ID}#{PIPE}27493#{PIPE}1#{PIPE}0#{PIPE}Drinkboard Gift#{PIPE}0#{PIPE}0#{PIPE}"
-            
-            #Arg 1:              Ticket ID
-            #Arg 2:              User ID
-            #Arg 3:              Order Item Collection
-            #Arg 4:              Cover number
-            #                1   =   Main person
-            #                2+  =   If more than one person
-            #Arg 5:              Date to Fire (UTC)
-            #                Format:     MM/DD/YYYY HH:MM:SS AM/PM
-            #                “”  =   Fire Immediately
-            #Order Item Collection
-            #Position 1:         Item ID
-            #Position 2:         Quantity
-            #Position 3:         Instructions
-            #Position 4:         Order Modifier Collection
-            #Order Modifier Collection
-            #Position 1:         Modifier ID
+            quantity    = 3
+            header      = "#{@token}#{PIPE}"
+            order_item1 = "#{ITEM_ID}^#{quantity}^^"
+            order_item2 = "#{ITEM_ID}^#{quantity}^^"
+
+            @url        += "#{header}#{TICKET_ID}#{PIPE}#{USER_ID}#{PIPE}#{order_item1}#{PIPE}1#{PIPE}"
         end
 
         def init_data_for_0520 item_str
-            "Ticket ID = #{item_str}"
+            return SDTicket.new item_str 
         end
 
             # add credit card payment to ticket
@@ -323,7 +314,7 @@ class SDTicket
     
     def initialize(item_str)
         x = item_str.split('^')
-        @ticket_id = x[0]
+        @sd_ticket_id = x[0]
         @pos_ticket = x[1]
         @table_id = x[2]
         @table_name = x[3]
@@ -345,7 +336,7 @@ class SDTable
     
     def initialize(item_str)
         x = item_str.split('^')
-        @table_id = x[0]
+        @sd_table_id = x[0]
         @identifier  = x[1]
         @name = x[2]
     end
@@ -356,10 +347,10 @@ class SDMenuItem
     
     def initialize(item_str)
         x = item_str.split('^')
-        @sd_id = x[0]
+        @sd_item_id = x[0]
         @name  = x[1]
         @price = x[2]
-        puts "AS OBJ #{self.inspect}"
+        # puts "AS OBJ #{self.inspect}"
         if x[3]
             ic = x[3].split('`')
             @image_type = ic[0]
@@ -437,33 +428,33 @@ class SDLocation
 
     def initialize item_str
         x = item_str.split('^')
-        @sd_location_id     = x[0]
-        @name               = x[1]
-        @address            = x[2]
-        @address_2          = x[3]
-        @city               = x[4]
-        @state              = x[5]
-        @zip                = x[6]
-        @latitude           = remove_trailing_zeros x[7]
-        @longitude          = remove_trailing_zeros x[8]
-        @phone              = x[9]
-        @website_url        = x[10]
-        @neighborhood       = x[11]
-        @cross_streets      = x[12]
-        @price_rating       = convert_price_rating x[13]
-        @user_rating        = x[14] == "0" ? "No rating" : x[14]
-        @logo_url           = x[15]
-        @photo_url          = x[16]
-        @employee_request   = x[17] == "1" ? true : false
-        @color_theme        = x[18]
-        @table_instr        = x[19]
-        @receipt_instr      = x[20]
-        @specials           = x[21] == "1" ? true : false
-        @ordering           = x[22]
-        @cc_on              = x[23]
-        @cat_avail          = x[24] == "1" ? true : false
-        @fav_avail          = x[25] == "1" ? true : false
-        @process_new_cc     = x[26] == "1" ? true : false
+        @sd_location_id      = x[0]
+        @name                = x[1]
+        @address             = x[2]
+        @address_2           = x[3]
+        @city                = x[4]
+        @state               = x[5]
+        @zip                 = x[6]
+        @latitude            = remove_trailing_zeros x[7]
+        @longitude           = remove_trailing_zeros x[8]
+        @phone               = x[9]
+        @website_url         = x[10]
+        @neighborhood        = x[11]
+        @cross_streets       = x[12]
+        @price_rating        = convert_price_rating x[13]
+        @user_rating         = x[14] == "0" ? "No rating" : x[14]
+        @logo_url            = x[15]
+        @photo_url           = x[16]
+        @employee_request    = x[17] == "1" ? true : false
+        @color_theme         = x[18]
+        @table_instr         = x[19]
+        @receipt_instr       = x[20]
+        @specials            = x[21] == "1" ? true : false
+        @ordering            = x[22]
+        @cc_on               = x[23]
+        @cat_avail           = x[24] == "1" ? true : false
+        @fav_avail           = x[25] == "1" ? true : false
+        @process_new_cc      = x[26] == "1" ? true : false
         @process_pre_auth_cc = x[27] == "1" ? true : false
     end
 end

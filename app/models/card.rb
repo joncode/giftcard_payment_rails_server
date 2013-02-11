@@ -85,7 +85,7 @@ class Card < ActiveRecord::Base
 
 	def sd_serialize
 		self.decrypt! @@CreditCardSecretKey
-		"#{PIPE}#{self.name}#{PIPE}#{self.number}#{PIPE}#{self.month}#{PIPE}#{self.year[2,3]}#{PIPE}#{self.user.zip}#{PIPE}#{self.nickname}#{PIPE}0#{PIPE}0#{PIPE}0#{PIPE}0#{PIPE}0"
+		"#{PIPE}\"#{self.name}\"#{PIPE}#{self.number}#{PIPE}#{self.month.rjust(2,'0')}#{PIPE}#{self.year[2,3]}#{PIPE}#{self.user.zip}#{PIPE}\"#{self.nickname}\"#{PIPE}0#{PIPE}0#{PIPE}0#{PIPE}0#{PIPE}0"
 	end
 
 	private

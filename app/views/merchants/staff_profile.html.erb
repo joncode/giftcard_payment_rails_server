@@ -12,9 +12,11 @@
 </div>
 
 <div class="doubleColumn">
-  <h2 id="avatarLink"><%= link_to "Crop Avatar", '#' %></h2>
-  <h2 id="editProfileLink"><%= link_to "Edit Profile", '#' %></h2>
-  <h2 id="secureImageLink"><%= link_to "Upload Secure Image", '#' %></h2>
+  <div class="merchantMenu staffProfileMenuPOS width3">
+    <%= link_to "Crop Avatar", '#', :id => "avatarLink" %>
+    <%= link_to "Edit Profile", '#', :id => "editProfileLink" %>
+    <%= link_to "Upload Secure Image", '#', :id => "secureImageLink" %>
+  </div>
 </div>
 
       <!-- Start Bank Wrapper -->

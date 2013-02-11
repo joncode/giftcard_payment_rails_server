@@ -1,4 +1,5 @@
 class MerchantsController < ApplicationController
+    include SubtleDataHelper
     before_filter :signed_in_user
 
     # test methods
@@ -16,6 +17,7 @@ class MerchantsController < ApplicationController
     def pos
         @provider       = Provider.find(params[:id])
         @current_user   = current_user
+        @vars = SDRequest.new({}).serialize
     end
 
     def menujs
