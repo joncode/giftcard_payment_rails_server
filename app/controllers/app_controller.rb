@@ -1,6 +1,8 @@
 class AppController < ApplicationController
+
 	include ActionView::Helpers::DateHelper
 	skip_before_filter :verify_authenticity_token
+	after_filter :cross_origin_allow_header
 
 	UPDATE_REPLY  = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
@@ -522,6 +524,11 @@ class AppController < ApplicationController
 	end
 
 	protected
+
+		def cross_origin_allow_header
+			headers['Access-Control-Allow-Origin'] = "*"
+			headers['Access-Control-Request-Method'] = '*'
+		end
 
 	   	def array_these_gifts(obj, send_fields, address_get=false, receiver=false)
 	      gifts_ary = []

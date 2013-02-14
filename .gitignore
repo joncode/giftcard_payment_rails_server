@@ -9,7 +9,8 @@
 
 # Ignore all logfiles and tempfiles.
 /log/development.log
-/tmp
+/log/test.log
+/tmp/*
 # /public/assets
 /app/assets/images/video/*
 
@@ -18,10 +19,7 @@
 .sass-cache
 capybara-*.html
 .rspec
-/.bundle
 /vendor/bundle
-/log/*
-/tmp/*
 .DS_Store
 /doc/*
 

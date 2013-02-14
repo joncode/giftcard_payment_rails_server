@@ -24,7 +24,14 @@ class GiftItem < ActiveRecord::Base
 
 	def prepare_for_shoppingCart
 		item_hash = self.serializable_hash only: [:menu_id, :price, :quantity, :name]
-		item_hash["section"]   = self.menu.section
+			# this puts section in item when the menu item has been deleted from menu.rb
+			# fix this after db is repaired from menu delete additions now (active: false)
+		if self.menu.section
+			item_hash["section"]   = self.menu.section 
+		else
+			mitem = Menu.find_by_item_name item_hash["name"]
+			item_hash["section"]   = mitem.section if mitem
+		end
         item_hash["item_id"]   = item_hash["menu_id"]
         item_hash["item_name"] = item_hash["name"]
         item_hash.delete("menu_id")

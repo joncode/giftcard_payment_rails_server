@@ -1,6 +1,5 @@
 class IphoneController < AppController
 
-  
   LOGIN_REPLY     = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "remember_token", "email", "phone", "facebook_id", "twitter"]  
   GIFT_REPLY      = ["giver_id", "giver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "id"]
   BUY_REPLY       = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "id"]
@@ -328,6 +327,7 @@ class IphoneController < AppController
     end
     
     begin
+      # we already have this data, we do not need to re-save it onto the gift
       giver           = User.find_by_remember_token(params["token"])
       if gift_obj["anon_id"]
         gift.add_anonymous_giver(giver.id)
