@@ -10,7 +10,7 @@
 # Ignore all logfiles and tempfiles.
 /log/development.log
 /log/test.log
-/tmp
+/tmp/*
 # /public/assets
 /app/assets/images/video/*
 
