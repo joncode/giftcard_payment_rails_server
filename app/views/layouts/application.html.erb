@@ -15,44 +15,19 @@
 
   <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
 </head>
+
 <body>
-    <div class="mainWrapper">
-      <div class="wholePageWrapper">
-      <% if signed_in? %>
 
-        <% if params[:controller] == 'merchants' %>
-          <!-- no header for menu builder -->
-          <%= render 'merchants/header' %>
+    <div class="centerMainWrapper wholePageOBJ">
+        <% if signed_in? %>
+            <%= render 'merchants/header' %>
         <% else %>
-          <%= render 'merchants/header' %>
+            <%= render 'layouts/intro' %>
         <% end %>
-      <% else %>
-        <% if params[:controller] == 'admins'  %>
-          <%= render 'layouts/intro' %>
-        <% else %> 
-          <%= render 'layouts/intro' %>
-        <% end %>
-      <% end %>
 
-
-      <div class="mainContent">
         <%= yield %>
-      </div>
-
-        <!-- 
-          <% if mobile_device? %>
-            <%#= link_to "Full Site", :mobile => 0 %>
-          <% else %>
-            <%#= link_to "Mobile Site", :mobile => 1 %>
-          <% end %> 
-        -->
-
-      <% if false %>
-        <%= render 'layouts/footer' %>
-      <% end %>
+    
     </div>
-  </div>
-
 
 </body>
 
