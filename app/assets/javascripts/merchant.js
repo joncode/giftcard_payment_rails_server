@@ -254,7 +254,14 @@ $(function() {
 				alert('Cannot find that gift ID = ' + giftID);
 			};
 		};
+		return false;
+	});
 
+	$('#compileButton').click(function () {
+		var r = confirm('Menu updates will go live to app now\n Are you sure?');
+		if (r) {
+			$.get('compile_menu');
+		};
 		return false;
 	});
 	

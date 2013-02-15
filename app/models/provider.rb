@@ -14,7 +14,7 @@ class Provider < ActiveRecord::Base
   has_many   :users, :through => :employees                                                                              
   has_many   :employees, dependent: :destroy
   has_many   :relays
-  has_one    :menu, dependent: :destroy                                                                              
+  has_many   :menus, dependent: :destroy                                                                              
   has_many   :orders                                                                            
   has_one    :menu_string, dependent: :destroy
   has_many   :gifts

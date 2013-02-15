@@ -41,6 +41,22 @@ class MerchantsController < ApplicationController
 
     # end test methods
 
+    def compile_menu
+      merchant = Provider.find(params[:id])
+      
+      respond_to do |format|
+        if MenuString.compile_menu_to_menu_string(merchant.id)
+          # update the menu string to show the menustring is up to date 
+          # render success
+          format.js
+        else
+          # render error
+          @message = human_readable_error_message menu_string
+          format.js { render 'compile_error'}
+        end
+      end
+    end
+
     def update_item
         puts "update item => #{params}"
         if params[:item_id]
