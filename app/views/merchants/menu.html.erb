@@ -3,11 +3,11 @@
 		<li><div class="lineHorizontal lineSectionPos"></div></li>
 		<li style="width:50px;"><h1>Menu</h1></li>
 		<li><div class="lineHorizontal lineSectionPos"></div></li>
-		<li style="width:50px;">
-			<span id="compileButton" class="buttonMenuList buttonImageUp">
-				<a href="">Save to App</a>
-			</span>
-		</li>
+			<% if @provider.menu_is_live %>
+		<%= render 'live_menu_notice' %>
+			<% else %>
+		<%= render 'compile_menu_button' %>	
+			<% end %>
 	</ul>
 	<div id="ajax_response"></div>
 <div class="column">

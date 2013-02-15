@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130204013134) do
+ActiveRecord::Schema.define(:version => 20130215003320) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(:version => 20130204013134) do
   add_index "orders", ["gift_id"], :name => "index_orders_on_gift_id"
 
   create_table "providers", :force => true do |t|
-    t.string   "name",                                              :null => false
+    t.string   "name",                                               :null => false
     t.string   "zinger"
     t.text     "description"
     t.string   "address"
@@ -221,8 +221,8 @@ ActiveRecord::Schema.define(:version => 20130204013134) do
     t.string   "state",             :limit => 2
     t.string   "zip",               :limit => 16
     t.string   "logo"
-    t.datetime "created_at",                                        :null => false
-    t.datetime "updated_at",                                        :null => false
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.string   "phone"
     t.string   "email"
     t.string   "twitter"
@@ -245,6 +245,7 @@ ActiveRecord::Schema.define(:version => 20130204013134) do
     t.float    "longitude"
     t.string   "foursquare_id"
     t.decimal  "rate"
+    t.boolean  "menu_is_live",                    :default => false
   end
 
   add_index "providers", ["city"], :name => "index_providers_on_city"

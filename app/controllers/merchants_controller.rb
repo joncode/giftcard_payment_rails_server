@@ -48,7 +48,9 @@ class MerchantsController < ApplicationController
         if MenuString.compile_menu_to_menu_string(merchant.id)
           # update the menu string to show the menustring is up to date 
           # render success
-          format.js
+            @message = "Merchant Menu on App is Updated and Now Live"
+            @go_live = "live_menu_notice"
+            format.js 
         else
           # render error
           @message = human_readable_error_message menu_string
@@ -71,26 +73,33 @@ class MerchantsController < ApplicationController
         @menu.price = params[:price]
         respond_to do |format|
           if @menu.save
-            response = {"success" => "Menu Item Saved!"}
+            @menu.provider.update_attribute(:menu_is_live, false)
+            # response = {"success" => "Menu Item Saved!"}
+            @message = "#{@menu.item_name} Updated"
+            @go_live = "compile_menu_button"
+            format.js { render 'compile_menu'}
           else
-            response = {"error" => @menu.errors.messages}
+            @message = human_readable_error_message @menu
+            format.js { render 'compile_error'}
           end
-          #format.json {redirect_to menu_merchant_path(params[:id])}
-          format.json { render json: response}
         end
     end
 
     def delete_item
         puts "delete item => #{params}"
         item = Menu.find(params[:item_id])
+
         respond_to do |format|
           if item.update_attributes({active: false})
-            response = {"success" => "Menu Item Deactivated"}
+            item.provider.update_attribute(:menu_is_live, false)
+            # response = {"success" => "Menu Item Deactivated"}
+            @message = "#{item.item_name} De-Activated"
+            @go_live = "compile_menu_button"
+            format.js { render 'compile_menu'}
           else
-            response = {"error" => item.errors.messages}
+            @message = human_readable_error_message @menu
+            format.js { render 'compile_error'}
           end
-
-          format.js 
         end
     end
 

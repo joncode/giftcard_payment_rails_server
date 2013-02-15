@@ -4,6 +4,12 @@ class MenuString < ActiveRecord::Base
   	belongs_to :provider
 
   	validates_uniqueness_of :provider_id
+
+  	def save
+  		merchant = self.provider
+  		merchant.update_attribute(:menu_is_live, true)
+  		super
+  	end
   
    	def self.get_menu_for_provider(provider_id)
   		menu_string = MenuString.find_by_provider_id(provider_id) 
