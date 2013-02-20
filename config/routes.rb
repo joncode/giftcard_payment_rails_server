@@ -1,8 +1,6 @@
 Drinkboard::Application.routes.draw do
   
-
-
-
+  root to: 'users#new'
   resources :brands
 
   resources :sales
@@ -14,7 +12,7 @@ Drinkboard::Application.routes.draw do
   match "/invite/:id"       => "invite#show"
   match "/invite"           => "invite#invite_friend"
 
-  root to: 'users#new'
+  
   match '/welcome', to: 'admins#welcome'
   match '/login',   to: 'users#new'
   match '/signup',  to: 'users#new'
@@ -55,16 +53,16 @@ Drinkboard::Application.routes.draw do
 
   resources :users do 
     member do
-      get :following, :followers
-      get :servercode
-      get :crop
-      get :change_public_status
+      get  :following, :followers
+      get  :servercode
+      get  :crop
+      get  :change_public_status
       post :update_avatar
     end
     collection do
-      get :reset_password
+      get  :reset_password
       post :reset_password
-      get :enter_new_password
+      get  :enter_new_password
       post :enter_new_password
     end
   end
@@ -80,15 +78,15 @@ Drinkboard::Application.routes.draw do
       # test routes
       get 'baronVonJovi'
       get 'explorer'
-      get :help
-      get :pos
-      get :menujs
+      get  :help
+      get  :pos
+      get  :menujs
       # end test routes
       get 'past_orders'
       get 'customers'
       get 'orders'
       get 'redeem'
-      get :completed
+      get  :completed
       get 'staff'
       get 'edit_info'
       get 'edit_photo'
@@ -96,15 +94,15 @@ Drinkboard::Application.routes.draw do
       get 'invite_employee'
       post 'invite_employee'
       get 'add_employee'
-      get :add_member
+      get  :add_member
       get 'menu'
       get 'photos'
       post :update_photos
       get 'staff_profile'
       post :update_item
       post :delete_item
-      get :get_cropper
-      get :compile_menu
+      get  :get_cropper
+      get  :compile_menu
     end
   end
 

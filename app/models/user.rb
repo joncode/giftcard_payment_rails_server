@@ -11,7 +11,6 @@ class User < ActiveRecord::Base
   # can't mass assign these attributes
   # active, created_at, facebook_auth_checkin, id, password_digest, persona, remember_token, reset_token, reset_token_sent_at, updated_at
 
-
   attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
@@ -162,7 +161,7 @@ class User < ActiveRecord::Base
     when "ios"
       self.iphone_photo
     when "fb"
-      # no support yet
+      self.fb_photo
     else 
       if self.photo.blank?
         "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
