@@ -63,7 +63,7 @@ Drinkboard::Application.routes.draw do
       get  :reset_password
       post :reset_password
       get  :enter_new_password
-      post :enter_new_password
+      put  :enter_new_password
     end
   end
 
@@ -138,6 +138,7 @@ Drinkboard::Application.routes.draw do
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/orders',           to: 'app#orders',              via: :post
   match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
+  match 'app/forgot_password',  to: 'app#forgot_password',     via: :post
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post

@@ -523,6 +523,25 @@ class AppController < ApplicationController
 		
 	end
 
+	def forgot_password
+		puts "\nForgot Password"
+		puts "request = #{params}"
+
+		message   = "" 
+		response  = {} 	
+		email = JSON.parse params["email"]
+		if user = User.find_by_email(email)
+			user.update_reset_token
+			Resque.enqueue(EmailJob, 'reset_password', user[:id], {}) 
+		end
+		response["success"] = "An email with reset link has been sent to #{email}" 
+		respond_to do |format|
+	    	# logger.debug response
+	    	puts "AC forgot_password response => #{response}"
+	    	format.json { render json: response }
+	    end
+	end
+
 	protected
 
 		def cross_origin_allow_header

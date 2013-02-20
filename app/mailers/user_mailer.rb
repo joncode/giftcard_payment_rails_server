@@ -4,8 +4,9 @@ class UserMailer < ActionMailer::Base
   
   def reset_password(user)
     @user = user
+    puts "We are in reset password in usermailer for #{user.username}"
     mail({
-      :to => "#{@user.username} <#{@user[:email]}>",
+      :to => "#{@user.username} <#{@user.email}>",
       :subject => "drinkboard: password reset request"
     })
   end
