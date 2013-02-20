@@ -1,0 +1,7 @@
+<% content_for :body do %>
+	<p>Hey there <%= @user.first_name.capitalize %>,</p>
+	<p>Your Drinkboard gift to <%= @gift.receiver_name %> has been collected!</p>
+	<p>You purchased drinks at <%= @gift.provider_name %></p>
+	<div><%= list_shopping_cart(@gift) %></div>
+	<p>Drinkboard is the best way to remotely buy drinks for your friends.</p>
+<% end %>

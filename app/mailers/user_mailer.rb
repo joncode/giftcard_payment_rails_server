@@ -6,7 +6,7 @@ class UserMailer < ActionMailer::Base
     @user = user
     puts "We are in reset password in usermailer for #{user.username}"
     mail({
-      :to => "#{@user.username} <#{@user.email}>",
+      :to => "#{@user.fullname} <#{@user.email}>",
       :subject => "drinkboard: password reset request"
     })
   end
@@ -29,6 +29,41 @@ class UserMailer < ActionMailer::Base
       :subject => "Drinkboard Employee Request"
     })
   end
-  
+
+  def notify_giver(giver, gift)
+    @user = giver
+    @gift = gift
+    mail({
+      :to => "#{@user.fullname} <#{@user.email}>",
+      :subject => "Gift purchase complete"
+    })
+  end
+
+  def notify_receiver(gift)
+    @gift  = gift
+    mail({
+      :to => "#{@gift.receiver_name} <#{@gift.receiver_email}>",
+      :subject => "A Gift has been purchased for You!"
+    })
+  end
+
+  def notify_giver_completion(giver, gift)
+    @user = giver
+    @gift = gift
+    mail({
+      :to => "#{@user.fullname} <#{@user.email}>",
+      :subject => "Gift Redeem complete"
+    })    
+  end
+
+  def alert_giver(giver, gift)
+    @user = giver
+    @gift = gift
+    mail({
+      :to => "#{@user.fullname} <#{@user.email}>",
+      :subject => "Gift to #{@gift.receiver_name} has been received!"
+    })    
+  end
+
 end
 
