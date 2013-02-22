@@ -348,7 +348,7 @@ class MerchantsController < ApplicationController
         if params[:eid]
           provider = Provider.find(params[:id])
           provider.employees.each do |employee|
-            if ""+employee.user_id == ""+params[:id]
+            if "" + employee.user_id == "" + params[:id]
               provider.employees.delete(employee)
               provider.save
               break

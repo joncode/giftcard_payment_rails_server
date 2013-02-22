@@ -8,7 +8,6 @@ class InviteController < ApplicationController
     @gift = Gift.find(id)
     @giver = @gift.giver
     
-    
     # check to see if its a mobile browser here
     # if so , change the render format to .mobile
     # add that format to the views folder and add to respond_to
@@ -25,6 +24,15 @@ class InviteController < ApplicationController
     if params[:email] && params[:user_id]
       Resque.enqueue(EmailJob, 'invite_friend', params[:user_id], {:email => params[:email], :gift_id => params[:gift_id]})
     end
+  end
+
+  def display_email
+    @email_title = "Drinkboard Email Messenger"
+    request.format = :email
+    respond_to do |format|
+      format.email
+    end
+    
   end
   
 end

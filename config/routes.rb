@@ -6,11 +6,9 @@ Drinkboard::Application.routes.draw do
   resources :sales
   resources :cards
 
-  get "email/invite"
-  get "email/forgot_pw"
-  get "email/new_employee"
-  match "/invite/:id"       => "invite#show"
-  match "/invite"           => "invite#invite_friend"
+  match "/invite/:id"      => "invite#show"
+  match "/invite"          => "invite#invite_friend"
+  match "/webview"       => "invite#display_email", :via => :get
 
   
   match '/welcome', to: 'admins#welcome'
