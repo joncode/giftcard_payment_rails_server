@@ -164,7 +164,7 @@ class User < ActiveRecord::Base
       self.fb_photo
     else 
       if self.photo.blank?
-        "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+        nil # "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
       else
         self.photo.url
       end
@@ -173,7 +173,7 @@ class User < ActiveRecord::Base
 
   def get_secure_image
     if self.secure_image.blank?
-      "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+      nil # "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
     else
       self.secure_image.url
     end
