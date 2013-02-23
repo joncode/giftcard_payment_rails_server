@@ -8,7 +8,7 @@ Drinkboard::Application.routes.draw do
 
   match "/invite/:id"      => "invite#show"
   match "/invite"          => "invite#invite_friend"
-  match "/webview"       => "invite#display_email", :via => :get
+  match "/webview(/:template(/:var1))"   => "invite#display_email", :via => :get
 
   
   match '/welcome', to: 'admins#welcome'

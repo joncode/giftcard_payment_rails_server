@@ -38,8 +38,11 @@
         </tr>
       </tbody>
       </table>
-
-      <%= render 'layouts/email_footer' %>
+      <% if @social == 1 %>
+        <%= render 'layouts/email_footer' %>
+      <% else %>
+        <%= render 'layouts/official_footer' %>
+      <% end %>
 
   </tr>
 </tbody>

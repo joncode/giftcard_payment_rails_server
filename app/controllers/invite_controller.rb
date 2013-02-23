@@ -29,19 +29,30 @@ class InviteController < ApplicationController
   def display_email
     @email_title = "Drinkboard Email Messenger"
     request.format = :email
-
-    case email_type
+    @header_text = "Make Others Happy and Have Some Fun While Your At It"
+    @social = 1
+    case params[:template]
     when 'confirm_email'
+      email_view = "confirm_email"
     when 'forgot_password'
+      email_view = "forgot_password"
+      @user = User.find(params[:var1])
+      @header_text = ""
+      @social = 0
     when 'invoice_giver'
+      email_view = "invoice_giver"
     when 'notify_receiver'
+      email_view = "notify_receiver"
     when 'notify_giver_order_complete'
+      email_view = "notify_giver_order_complete"
     when 'notify_giver_created_user'
+      email_view = "notify_giver_created_user"
     else
+      email_view = "display_email"
     end
-    
+
     respond_to do |format|
-      format.email
+      format.email { render email_view }
     end
     
   end
