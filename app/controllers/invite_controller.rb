@@ -27,34 +27,52 @@ class InviteController < ApplicationController
   end
 
   def display_email
-    @email_title = "Drinkboard Email Messenger"
+    @email_title   = "Drinkboard Email Messenger"
     request.format = :email
-    @header_text = "Make Others Happy and Have Some Fun While Your At It"
+    @header_text   = "#MobileGifting"
     @social = 1
+    @web_view_route = create_webview_link
+
     case params[:template]
     when 'confirm_email'
-      email_view = "confirm_email"
+      email_view    = "confirm_email"
+      @user         = User.find(params[:var1])
+      @header_text  = "Confirm Your Email Address"
+      @social       = 0
     when 'forgot_password'
-      email_view = "forgot_password"
-      @user = User.find(params[:var1])
-      @header_text = ""
-      @social = 0
+      email_view    = "forgot_password"
+      @user         = User.find(params[:var1])
+      @header_text  = ""
+      @social       = 0
     when 'invoice_giver'
-      email_view = "invoice_giver"
+      email_view    = "invoice_giver"
+      @header_text  = "Thank You for Your Purchase"
+      @gift         = Gift.find(params[:var1])
     when 'notify_receiver'
-      email_view = "notify_receiver"
+      email_view    = "notify_receiver"
+      @header_text  = "You have Received a Gift"
+      @gift         = Gift.find(params[:var1])
     when 'notify_giver_order_complete'
-      email_view = "notify_giver_order_complete"
+      email_view    = "notify_giver_order_complete"
+      @header_text  = "Your Gift Has Been Redeemed"
+      @gift         = Gift.find(params[:var1])
     when 'notify_giver_created_user'
-      email_view = "notify_giver_created_user"
-    else
-      email_view = "display_email"
+      email_view    = "notify_giver_created_user"
+      @header_text  = "Your Gift has been Received"
+      @gift         = Gift.find(params[:var1])
+    else # join drinkboard email
+      email_view    = "display_email"
+      @web_view_route = "/webview/display_email"
     end
 
     respond_to do |format|
       format.email { render email_view }
     end
     
+  end
+
+  def create_webview_link
+    "/webview/#{params[:template]}/#{params[:var1]}"
   end
   
 end

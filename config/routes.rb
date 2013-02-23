@@ -43,7 +43,6 @@ Drinkboard::Application.routes.draw do
   end
   
   resources :locations
-  resources :items
   resources :menus
   resources :menu_strings
   resources :orders
