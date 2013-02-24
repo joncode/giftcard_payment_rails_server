@@ -138,6 +138,22 @@ class UsersController < ApplicationController
     end
     render :json => {success: true}
   end
+
+  def confirm_email
+    request.format = :email
+    if params[:reset_token]
+      @user = User.find_by_reset_token(params[:reset_token])
+      confirm = "1" + @user.confirm[1]
+      @user.update_attribute(:confirm, confirm)
+      template = "/invite/confirm_email"
+    else
+      template = "/invite/error"
+    end
+
+    respond_to do |format|
+        format.email { redirect_to :controller => :invite, :action => :error } 
+    end
+  end
   
   def reset_password
 

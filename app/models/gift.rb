@@ -148,7 +148,16 @@ class Gift < ActiveRecord::Base
     self.add_giver anon_user
     self.anon_id    = giver_id
   end
- 
+  
+  def ary_of_shopping_cart_as_hash
+    cart = JSON.parse self.shoppingCart
+    item_ary = []
+    cart.each do |item|
+      item_ary << item
+    end
+    return item_ary
+  end
+
   private
 
     def notify_receiver

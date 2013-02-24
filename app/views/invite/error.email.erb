@@ -1,15 +1,3 @@
-<% content_for :item do %>
-  <% @cart.each do |item| %>
-    <p><%= item["quantity"] %>&nbsp;<%= item["item_name"] %></p>
-  <% end %>
-<% end %>
-
-<% content_for :body do %>
-  <p>Your Friend, <%= @gift.receiver_name %>, just joined Drinkboard and received your gift. </p>
-  <p>At the <%= @gift.provider_name %></p>
-  <p><%= yield :item %></p>
-<% end %>
-
 <table style="width: 584px;" class="table" border="0" cellpadding="0"
 cellspacing="0">
 <tbody>
@@ -31,48 +19,32 @@ cellspacing="0">
     40px;" width="500">
     <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
     18px; color: #000; margin-top: 0; margin-left: 0; margin-bottom: 17px;
-    margin-right: 0; padding: 0;">Hi <%= @gift.giver_name %>,</p>
+    margin-right: 0; padding: 0;">Drinkboard User,</p>
     <p style="font-family: georgia, serif; font-weight: normal; font-size:
     15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0;
-    margin-bottom: 20px; margin-right: 0; padding: 0;"><%= yield %></p>
+    margin-bottom: 20px; margin-right: 0; padding: 0;"></p>
     <table style="margin: 0pt; padding: 0pt; width: 100%;" class="list"
     border="0" cellpadding="0" cellspacing="0">
     <tbody>
       <tr>
         <td style="vertical-align: top; text-align: left; padding: 0 20px 0 0;
         margin: 0;" class="list-item" width="1">
-        <%= image_tag @gift.receiver.get_photo, :class => "list-image", :style => "-ms-interpolation-mode: bicubic; border: 1px solid white;
-  box-shadow: 1px 1px 3px 1px black;" , height: "100" , wdith: "114" , alt: "Logo Image" %>
+        <%= image_tag 'icon114.png', :class => "list-image", :style => "-ms-interpolation-mode: bicubic;" , height: "100" , wdith: "114" , alt: "Logo Image" %>
         </td>
         <td style="vertical-align: top; text-align: left; padding: 0; margin: 0;">
           <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
           15px; line-height: 20px; color: rgba(50,58,69,1); margin-top: 0; margin-left: 0;
-          margin-bottom: 15px; margin-right: 0; padding: 0;">
-      <!-- LINK to gift -->
-          <%= yield :body %>
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <td></td><td></td>
-        <td>
-          <a
-  href="http://bit.ly/drinkboard"
-  style="color: #69aa35; text-decoration: none;"><span style="color:
-  rgba(84,178,209,1);">OPEN APP</span></a>
+          margin-bottom: 15px; margin-right: 0; padding: 0;">It is possible that you received your email in error or your token has expired.<br /> </p>
         </td>
       </tr>
     </tbody>
   </table>
-  <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
-  15px; line-height: 20px; color: #595959; margin-top: 10px; margin-left: 0;
-  margin-bottom: 15px; margin-right: 0; padding: 0;">Drinkboard is the best way to remotely buy drinks for your friends.
-  </p>
-
+ 
   <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
   15px; line-height: 20px; color: #595959; margin-top: 15px; margin-left: 0;
-  margin-bottom: 20px; margin-right: 0; padding: 0;">Cheers,<br /> - Drinkboard
+  margin-bottom: 20px; margin-right: 0; padding: 0;">- Drinkboard
   Staff</p>
+
 <img src="http://lists.evernote.com/admin/temp/user/1/spacer.gif"
 border="0" height="15" width="1" /></td>
 </tr>

@@ -2,12 +2,11 @@ module UserMailerHelper
 
 	def list_shopping_cart(gift)
 		cart = JSON.parse gift.shoppingCart
-		html_string = ""
+		item_ary = []
 		cart.each do |item|
-			str = "<p>#{item.quantity} - #{item.item_name}</p>"
-			html_string << str
+			item_ary << item
 		end
-		return html_string
+		return item_ary
 	end
 
 end

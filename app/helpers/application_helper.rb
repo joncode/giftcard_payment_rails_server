@@ -32,4 +32,8 @@ module ApplicationHelper
       "Regifted"
     end
   end
+
+  def time_and_date_official
+    "%l:%M %p - %A, %B %e"
+  end
 end

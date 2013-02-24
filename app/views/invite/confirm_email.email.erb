@@ -1,3 +1,11 @@
+<% content_for :confirm_email_link do %>
+  <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
+  15px; line-height: 20px; color: #595959; margin-top: 10px; margin-left: 0;
+  margin-bottom: 15px; margin-right: 0; padding: 0;"> 
+    <%= link_to "Confirm Email", confirm_email_users_url(:reset_token => @user.reset_token), :style => "color: rgba(84,178,209,1); text-decoration: none;" %>
+  </p>
+<% end %>
+
 <table style="width: 584px;" class="table" border="0" cellpadding="0"
 cellspacing="0">
 <tbody>
@@ -19,7 +27,7 @@ cellspacing="0">
     40px;" width="500">
     <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
     18px; color: #000; margin-top: 0; margin-left: 0; margin-bottom: 17px;
-    margin-right: 0; padding: 0;">Welcome to Drinkboard,</p>
+    margin-right: 0; padding: 0;"><%= @user.fullname %>,</p>
     <p style="font-family: georgia, serif; font-weight: normal; font-size:
     15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0;
     margin-bottom: 20px; margin-right: 0; padding: 0;"><%= yield %></p>
@@ -30,12 +38,10 @@ cellspacing="0">
         <td style="vertical-align: top; text-align: left; padding: 0; margin: 0;">
           <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
           15px; line-height: 20px; color: rgba(50,58,69,1); margin-top: 0; margin-left: 0;
-          margin-bottom: 15px; margin-right: 0; padding: 0;">Thank you for joining. Please click the link below to confirm this email account.<br /> 
+          margin-bottom: 15px; margin-right: 0; padding: 0;">Welcome to Drinkboard!<br />Thank you for joining. Please click the link to confirm this email account.<br /><p><%= @user.email %> </p>
 <!-- LINK to home web page -->
-          <a
-          href="http://bit.ly/drinkboard"
-          style="color: rgba(84,178,209,1); text-decoration: none;"><span style="color:
-          rgba(84,178,209,1);">Confirm Email &rarr;</span></a></p>
+          <%= yield :confirm_email_link %>
+          </p>
         </td>
       </tr>
     </tbody>

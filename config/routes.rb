@@ -6,6 +6,7 @@ Drinkboard::Application.routes.draw do
   resources :sales
   resources :cards
 
+  match "/invite/error"    => "invite#error"
   match "/invite/:id"      => "invite#show"
   match "/invite"          => "invite#invite_friend"
   match "/webview(/:template(/:var1))"   => "invite#display_email", :via => :get
@@ -57,6 +58,7 @@ Drinkboard::Application.routes.draw do
       post :update_avatar
     end
     collection do
+      get  :confirm_email
       get  :reset_password
       post :reset_password
       get  :enter_new_password
