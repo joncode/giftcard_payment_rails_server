@@ -6,6 +6,7 @@ Drinkboard::Application.routes.draw do
   resources :sales
   resources :cards
 
+  match "/invite/email_confirmed" => "invite#email_confirmed"
   match "/invite/error"    => "invite#error"
   match "/invite/:id"      => "invite#show"
   match "/invite"          => "invite#invite_friend"

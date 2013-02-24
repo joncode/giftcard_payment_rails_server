@@ -141,17 +141,20 @@ class UsersController < ApplicationController
 
   def confirm_email
     request.format = :email
-    if params[:reset_token]
-      @user = User.find_by_reset_token(params[:reset_token])
-      confirm = "1" + @user.confirm[1]
-      @user.update_attribute(:confirm, confirm)
-      template = "/invite/confirm_email"
+    if @user = User.find_by_email(params[:email])
+      if @user.id == params[:user].to_i
+        confirm   = "1" + @user.confirm[1]
+        @user.update_attribute(:confirm, confirm)
+        action  = :email_confirmed
+      else
+        action  = :error
+      end
     else
-      template = "/invite/error"
+      action   = :error
     end
 
     respond_to do |format|
-        format.email { redirect_to :controller => :invite, :action => :error } 
+        format.email { redirect_to :controller => :invite, :action => action } 
     end
   end
   

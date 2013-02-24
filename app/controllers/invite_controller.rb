@@ -31,7 +31,19 @@ class InviteController < ApplicationController
     request.format = :email
     @header_text   = "We're Sorry but there was an Error"
     @social = 1
-    @web_view_route = create_webview_link
+    @web_view_route = "/invite/error"
+
+    respond_to do |format|
+      format.email 
+    end
+  end
+
+  def email_confirmed
+    @email_title   = "Drinkboard Email Messenger"
+    request.format = :email
+    @header_text   = "Thank You, Your Email is Confirmed"
+    @social = 1
+    @web_view_route = "/invite/email_confirmed"
 
     respond_to do |format|
       format.email 
@@ -53,41 +65,41 @@ class InviteController < ApplicationController
       @header_text  = "Confirm Your Email Address"
       @social       = 0
     when 'forgot_password'
-        # ! you have forgotten your password and would like to reset it
+        #  you have forgotten your password and would like to reset it
       email_view    = "forgot_password"
       @user         = User.find(params[:var1])
       @header_text  = ""
       @social       = 0
     when 'invoice_giver'
-        # ! giver gets invoice email when gift is purchased - incomplete or open
+        #  giver gets invoice email when gift is purchased - incomplete or open
       email_view    = "invoice_giver"
       @header_text  = "Purchase Complete , Thank You"
       @gift         = Gift.find(params[:var1])
       @cart         = @gift.ary_of_shopping_cart_as_hash
       @merchant     = @gift.provider
     when 'notify_receiver'
-        # ! receiver gets email when gift is purchased for them - open
+        #  receiver gets email when gift is purchased for them - open
       email_view    = "notify_receiver"
       @header_text  = "You have Received a Gift"
       @gift         = Gift.find(params[:var1])
       @cart         = @gift.ary_of_shopping_cart_as_hash
       @merchant     = @gift.provider
     when 'notify_giver_order_complete'
-        # ! giver gets email when order is created (completed gift)
+        #  giver gets email when order is created (completed gift)
       email_view    = "notify_giver_order_complete"
       @header_text  = "Your Gift Has Been Redeemed"
       @gift         = Gift.find(params[:var1])
       @cart         = @gift.ary_of_shopping_cart_as_hash
       @merchant     = @gift.provider
     when 'notify_giver_created_user'
-        # ! giver gets email when receiver has received email - incomplete => open
+        #  giver gets email when receiver has received email - incomplete => open
       email_view    = "notify_giver_created_user"
       @header_text  = "Your Gift has been Received"
       @gift         = Gift.find(params[:var1])
       @cart         = @gift.ary_of_shopping_cart_as_hash
       @merchant     = @gift.provider
     else 
-        # ! join drinkboard email
+        #  join drinkboard email
       email_view    = "display_email"
       @web_view_route = "/webview/display_email"
     end
