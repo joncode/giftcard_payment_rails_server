@@ -1,7 +1,10 @@
 <% content_for :item do %>
+  <hr />
   <% @cart.each do |item| %>
     <p><%= item["quantity"] %>&nbsp;<%= item["item_name"] %></p>
   <% end %>
+  <hr />
+  <p>Total : <%= number_to_currency @gift.total %></p>
 <% end %>
 
 <% content_for :main do %>
@@ -91,7 +94,7 @@
           font-size: 12px; margin: 0; padding: 20px 0 0 0;">
             <span style="font-weight: bold;"><%= @gift.provider_name %></span>
             <br /><%= @merchant.complete_address %>
-            <br /><%= @merchant.email %>
+            <br /><%= @merchant.website %>
             <br /><%= number_to_phone @merchant.phone %>
           </p>
         </td>
