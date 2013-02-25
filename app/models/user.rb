@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   :address, :address_2, :city, :state, :zip, :credit_number, 
   :admin, :facebook_id, :facebook_access_token, :facebook_expiry, 
   :foursquare_id, :foursquare_access_token, :provider_id, :handle, 
-  :server_code, :sex, :birthday, :is_public,
+  :server_code, :sex, :birthday, :is_public, :confirm,
   :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
 
   # can't mass assign these attributes
@@ -56,7 +56,8 @@ class User < ActiveRecord::Base
       # after_create for new accounts
       # after_update , :if => :added_social_media TODO
       # this after_save covers both those situations , but also runs the code unnecessarily
-  after_save    :collect_incomplete_gifts   
+  after_save    :collect_incomplete_gifts  
+  after_create  :confirm_email 
 
   # after_update  :crop_photo
   
@@ -236,7 +237,15 @@ class User < ActiveRecord::Base
   end
   
   private
-    
+  
+    def confirm_email
+      if self.email
+        if self.confirm[0] == '0'
+          Resque.enqueue(EmailJob, 'confirm_email', self.giver_id , {})  
+        end
+      end
+    end
+
     def collect_incomplete_gifts
               # check Gift.rb for ghost gifts connected to newly created user 
       gifts = []
