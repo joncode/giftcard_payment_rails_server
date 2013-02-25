@@ -8,7 +8,7 @@ class AppController < ApplicationController
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
 	GIFT_REPLY = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
- 	PROVIDER_REPLY = ["name",  "box", "logo", "portrait", "sales_tax", "phone"]
+ 	PROVIDER_REPLY = ["name", "sales_tax", "phone"]
 
  	def update_user
   		puts "\nUpdate User"
