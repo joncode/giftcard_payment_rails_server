@@ -18,6 +18,13 @@
       </div>
       <% end %>
     </li>
+    <% unless flash.empty? %>
+    <li style="margin-top: 10px;width:450px; text-align: center;"><div class="info">
+      <%- flash.each do |name, msg| -%>
+        <%= content_tag :div, msg, :id => "flash_#{name}" %>
+      <%- end -%>
+    </div></li>
+    <% end %>
     <li style="width:500px;padding-top:30px;">
 	    <h1 style="letter-spacing:0.1em;">Sign Up</h1>
     </li>
