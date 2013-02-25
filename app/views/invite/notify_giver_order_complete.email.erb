@@ -4,7 +4,7 @@
   <% end %>
 <% end %>
 
-<% content_for :body do %>
+<% content_for :main do %>
   <p>Purchased for <%= @gift.receiver_name %></p>
   <p>Redeemd at the <%= @gift.provider_name %></p>
   <p><%= @gift.order.created_at.strftime(time_and_date_official) %></p>
@@ -48,7 +48,7 @@ cellspacing="0">
           15px; line-height: 20px; color: rgba(50,58,69,1); margin-top: 0; margin-left: 0;
           margin-bottom: 15px; margin-right: 0; padding: 0;">
       <!-- LINK to gift -->
-          <%= yield :body %>
+          <%= yield :main %>
           </p>
         </td>
       </tr>

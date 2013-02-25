@@ -27,7 +27,7 @@ class Gift < ActiveRecord::Base
   before_create :regifted,        :if => :regift_id?
   before_save   :set_status
   after_create  :update_shoppingCart
-  after_create  :notify_giver
+  after_create  :invoice_giver
   after_create  :notify_receiver
   after_save    :create_notification
 
@@ -168,10 +168,10 @@ class Gift < ActiveRecord::Base
       end      
     end
 
-    def notify_giver
+    def invoice_giver
       puts "emailing the gift giver for #{self.id}"
       # notify the giver via email
-      Resque.enqueue(EmailJob, 'notify_giver', self.giver_id , {:gift_id => self.id}) 
+      Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id}) 
     end
 
     def create_notification

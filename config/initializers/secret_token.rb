@@ -23,7 +23,7 @@ WEB_KEY     = "RlgrM1Uw"
 if Rails.env.production?
 	TEST_URL = "http://drinkboard.herokuapp.com"
 else
-	TEST_URL = "0.0.0.0:3000"
+	TEST_URL = "http://0.0.0.0:3000"
 end
 
 BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dinig"]

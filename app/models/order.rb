@@ -21,16 +21,16 @@ class Order < ActiveRecord::Base
   before_validation :add_provider_id, :if => :no_provider_id
   before_validation :authenticate_via_code
   after_create      :update_gift_status
-  after_create      :notify_giver
+  after_create      :notify_giver_order_complete
   after_destroy     :rewind_gift_status
     
   private
 
-    def notify_giver
+    def notify_giver_order_complete
       puts "emailing the gift giver for #{self.id}"
       # notify the giver via email
       gift = self.gift
-      Resque.enqueue(EmailJob, 'notify_giver_completion', gift.giver_id , {:gift_id => gift.id}) 
+      Resque.enqueue(EmailJob, 'notify_giver_order_complete', gift.giver_id , {:gift_id => gift.id}) 
     end
     
     def add_server

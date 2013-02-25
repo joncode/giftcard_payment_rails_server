@@ -3,6 +3,9 @@ class EmailJob
   
   def self.perform(email_type, user_id, opthash = {})
     case email_type
+    when "confirm_email"
+      @user = User.find(user_id)
+      UserMailer.confirm_email(@user).deliver
     when "reset_password"
       @user = User.find(user_id)
       UserMailer.reset_password(@user).deliver
@@ -20,26 +23,26 @@ class EmailJob
       @user = User.find(user_id)    #Person making the request
       @provider = Provider.find(opthash[:provider_id])
       UserMailer.invite_employee(@user,@provider,opthash["email"]).deliver
-    when "notify_giver" 
-      puts "OPTHASH NOTIFY GIVER"
+    when "invoice_giver" 
+      puts "OPTHASH INVOICE GIVER"
       @user = User.find(user_id)
       @gift = Gift.find(opthash[:gift_id])
-      UserMailer.notify_giver(@user, @gift).deliver
+      UserMailer.invoice_giver(@user, @gift).deliver
     when "notify_receiver" 
       puts "OPTHASH NOTIFY RECEIVER"
       email = opthash[:email]
       @gift = Gift.find(opthash[:gift_id])
       UserMailer.notify_receiver(@gift).deliver
-    when "notify_giver_completion"
-      puts "OPTHASH NOTIFY GIVER COMPLETION"
+    when "notify_giver_order_complete"
+      puts "OPTHASH NOTIFY GIVER ORDER COMPLETE"
       @user = User.find(user_id)
       @gift = Gift.find(opthash[:gift_id])
-      UserMailer.notify_giver_completion(@user, @gift).deliver
-    when "alert_giver"
-      puts "OPTHASH ALERT GIVER TO COLLECTED GIFT"
+      UserMailer.notify_giver_order_complete(@user, @gift).deliver
+    when "notify_giver_created_user"
+      puts "OPTHASH NOTIFY GIVER CREATED USER"
       @user = User.find(user_id)
       @gift = Gift.find(opthash[:gift_id])
-      UserMailer.alert_giver(@user, @gift).deliver
+      UserMailer.notify_giver_created_user(@user, @gift).deliver
     end 
   end
   
