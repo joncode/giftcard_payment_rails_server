@@ -26,7 +26,7 @@ class GiftItem < ActiveRecord::Base
 		item_hash = self.serializable_hash only: [:menu_id, :price, :quantity, :name]
 			# this puts section in item when the menu item has been deleted from menu.rb
 			# fix this after db is repaired from menu delete additions now (active: false)
-		if self.menu.section
+		if self.menu
 			item_hash["section"]   = self.menu.section 
 		else
 			mitem = Menu.find_by_item_name item_hash["name"]
