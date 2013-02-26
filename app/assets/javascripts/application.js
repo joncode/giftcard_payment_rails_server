@@ -7,7 +7,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require merchant
-//= require pos
 //= require bootstrap
 //= require jquery.isotope.min
 //= require jquery.Jcrop.min
