@@ -164,7 +164,7 @@ class User < ActiveRecord::Base
       self.fb_photo
     else 
       if self.photo.blank?
-        "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898360/ezsucdxfcc7iwrztkags.jpg"
+        "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
       else
         self.photo.url
       end
@@ -174,7 +174,7 @@ class User < ActiveRecord::Base
   def get_photo_for_web
     photo_url = get_photo
     if photo_url.nil?
-      photo_url = "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898360/ezsucdxfcc7iwrztkags.jpg"
+      photo_url = "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
     end
 
     return photo_url
@@ -182,7 +182,7 @@ class User < ActiveRecord::Base
 
   def get_secure_image
     if self.secure_image.blank?
-      "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898360/ezsucdxfcc7iwrztkags.jpg"
+      "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
     else
       self.secure_image.url
     end
