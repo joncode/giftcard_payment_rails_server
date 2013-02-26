@@ -14,7 +14,7 @@ module ApplicationHelper
       photo     = object.get_image(flag)
       url_array = photo.split('upload/')
     else
-      url_array = object.get_photo.split('upload/')
+      url_array = object.get_photo_for_web.split('upload/')
     end
     photo = url_array[0] + 'upload' + crop + url_array[1]
     image_tag(photo, alt: "noImage", :class => "customImageTag", :style => "height:#{height}px;width:#{width}px;" )
