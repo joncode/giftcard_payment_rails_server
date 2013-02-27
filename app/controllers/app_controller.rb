@@ -523,6 +523,26 @@ class AppController < ApplicationController
 		
 	end
 
+	def reset_password
+		puts "\nReset Password"
+		puts "request = #{params}"
+		if params[:email]
+			user = User.find_by_email(params[:email])
+			if user
+				user.update_reset_token
+				Resque.enqueue(EmailJob, 'reset_password', user.id, {})  
+				response = {"success" => "Email is Sent , check your inbox"}
+			else
+				response = {"error" => "We do not have record of that email"}
+			end
+		else
+			response = {"error" => "no email sent"}
+		end	
+
+		respond_to do |format|
+		format.json {render json: response }	
+	end
+
 	protected
 
 		def cross_origin_allow_header
