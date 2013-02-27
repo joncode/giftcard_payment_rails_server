@@ -1,8 +1,9 @@
 class Brand < ActiveRecord::Base
 	attr_accessible :address, :city, :description, 
-	:logo, :name, :phone, :state, :user_id, :website
+	:logo, :name, :phone, :state, :user_id, :website, :banner, :portrait
 
-	has_and_belongs_to_many :providers
+
+	has_many :providers
 	has_many :employees
 end
 # == Schema Information
