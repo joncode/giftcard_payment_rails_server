@@ -103,6 +103,7 @@ Drinkboard::Application.routes.draw do
       post :delete_item
       get  :get_cropper
       get  :compile_menu
+      get  :menu_builder
     end
   end
 

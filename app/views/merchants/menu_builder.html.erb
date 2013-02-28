@@ -1,0 +1,49 @@
+<div class="doubleColumn">
+<h1 style="width=600px;text-align=center;">Get Started</h1>
+
+	<h3>Populate your menu from our options</h3>
+
+  <div class="ordersDisplay builderButtonHolder" id="giftID">  
+  <!--    Left Column   -->
+
+  <!--    Right Column   -->
+    <div class="orderGiftRight">
+      <div class="giftID">         
+      </div>    
+      <div class="buttonSmallDown buttonUp">
+    	 <%= link_to 'POS', pos_merchant_path(@provider) %> 
+      </div>
+    </div>
+  <!--    Middle Column   -->
+    <div class="orderGiftMiddle">
+      <div class="timeAgo">
+       upload from your
+      </div>
+      <div class="giftText giftTextLarge">
+        POS machine
+      </div>
+    </div>
+  </div>  
+  <div class="ordersDisplay builderButtonHolder" id="giftID">  
+
+  <!--    Left Column   -->
+
+  <!--    Right Column   -->
+    <div class="orderGiftRight">
+      <div class="giftID">         
+      </div>    
+      <div class="buttonSmallDown buttonUp">
+    	 <%= link_to 'Custom', menu_merchant_path(@provider) %> 
+      </div>
+    </div>
+  <!--    Middle Column   -->
+    <div class="orderGiftMiddle">
+      <div class="timeAgo">
+       enter custom descriptions
+      </div>
+      <div class="giftText giftTextLarge">
+        Menu Builder
+      </div>
+    </div>
+  </div>  
+</div>

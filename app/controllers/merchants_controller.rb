@@ -1,28 +1,23 @@
 class MerchantsController < ApplicationController
     include SubtleDataHelper
+    ACTIONS_WITH_HEADERS = [ :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
+    ACTIONS_WITHOUT_HEADERS = [:update_item, :delete_item, :index, :get_cropper, :add_employee, :remove_employee  ]
     before_filter :signed_in_user
+    before_filter :populate_locals, only: ACTIONS_WITH_HEADERS
 
     # test methods
     def help
-        @provider       = Provider.find(params[:id])
-        @current_user   = current_user
     end
 
     def explorer
-        @provider       = Provider.find(params[:id])
-        @current_user   = current_user  
         @explorer = params["name"].split(".html")[0]
     end
 
     def pos
-        @provider       = Provider.find(params[:id])
-        @current_user   = current_user
         @vars = SDRequest.new({}).serialize
     end
 
     def menujs
-        @provider       = Provider.find(params[:id])
-        @current_user   = current_user
         @menu_array     = Menu.get_menu_array_for_builder @provider
         column = 1
         @left = []
@@ -42,10 +37,10 @@ class MerchantsController < ApplicationController
     # end test methods
 
     def compile_menu
-      merchant = Provider.find(params[:id])
+      @provider = Provider.find(params[:id])
       
       respond_to do |format|
-        if MenuString.compile_menu_to_menu_string(merchant.id)
+        if MenuString.compile_menu_to_menu_string(@provider.id)
           # update the menu string to show the menustring is up to date 
           # render success
             @message = "Merchant Menu on App is Updated and Now Live"
@@ -116,8 +111,6 @@ class MerchantsController < ApplicationController
     end
 
     def menu
-        @provider       = Provider.find(params[:id])
-        @current_user   = current_user
         @menu_array     = Menu.get_menu_array_for_builder @provider
         column = 1
         @left = []
@@ -133,14 +126,14 @@ class MerchantsController < ApplicationController
         end
     end
 
+    def menu_builder
+      
+    end
+
     def show
-        @provider = Provider.find(params[:id])
-        @current_user = current_user
     end
 
     def photos
-        @provider = Provider.find(params[:id])
-        #@current_user = current_user
         redirect_to  edit_photo_merchant_path(@provider)
     end
 
@@ -165,9 +158,6 @@ class MerchantsController < ApplicationController
     end
 
     def edit_photo
-        @provider = Provider.find(params[:id])
-        @current_user = current_user
-
         @obj_to_edit = @provider
         @obj_name = "provider"
         @file_field_name = "photo"
@@ -177,23 +167,17 @@ class MerchantsController < ApplicationController
     end
 
     def update_photos
-        @provider = Provider.find(params[:id])
         @provider.update_attributes(params[:provider])
         redirect_to photos_merchant_path(@provider)
     end
 
     def edit_info
-        @provider = Provider.find(params[:id])
-        @current_user = current_user
     end
 
     def edit_bank
-        @provider = Provider.find(params[:id])
-        @current_user = current_user
     end
 
     def update
-        @provider = Provider.find(params[:id])
 
         respond_to do |format|
           if @provider.update_attributes(params[:provider])
@@ -207,7 +191,6 @@ class MerchantsController < ApplicationController
     end
 
     def orders
-        @provider = Provider.find(params[:id])
         @gifts = Gift.get_all_orders(@provider)
 
         respond_to do |format|
@@ -222,7 +205,6 @@ class MerchantsController < ApplicationController
     end
 
     def past_orders
-        @provider = Provider.find(params[:id])
         @gifts = Gift.get_history_provider(@provider)
 
         respond_to do |format|
@@ -232,7 +214,6 @@ class MerchantsController < ApplicationController
     end
 
     def redeem
-        @provider = Provider.find(params[:id])
         @gift     = Gift.find(params[:gift_id])
         @redeem   = Redeem.find_by_gift_id(@gift)
         @employee = Employee.where(user_id: current_user.id, provider_id: @provider.id)[0]
@@ -252,11 +233,10 @@ class MerchantsController < ApplicationController
     end
 
     def completed
-        @provider = Provider.find(params[:id])
-        @gift = Gift.find(params[:gift_id])
-        @giver = @gift.giver
+        @gift     = Gift.find(params[:gift_id])
+        @giver    = @gift.giver
         @receiver = @gift.receiver
-        @order = @gift.order
+        @order    = @gift.order
         if @order.server_id
           @server = User.find(@order.server_id) 
         else
@@ -270,9 +250,7 @@ class MerchantsController < ApplicationController
     end
 
     def customers
-        @provider = Provider.find(params[:id])    
-        @user     = current_user
-        @users    = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
+        @users    = (@current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", @current_user.id]))
         # list customers on the screen with most recent activity first
             # most drinks ordered
             # most money spent
@@ -288,15 +266,11 @@ class MerchantsController < ApplicationController
     end
 
     def staff
-        @provider = Provider.find(params[:id])
-
         @staff    = @provider.employees
         @nonstaff = @provider.users_not_staff
     end
 
     def staff_profile
-        @provider = Provider.find(params[:id])
-        @user = current_user
     end
 
     def add_employee
@@ -315,15 +289,12 @@ class MerchantsController < ApplicationController
     end
 
     def add_member
-        @provider = Provider.find params[:id]
-        @current_user = current_user
         user = User.find params[:user_id]
         emp = Employee.create(user_id: user.id, provider_id: @provider.id) 
         redirect_to staff_merchant_path(@provider)
     end
 
     def invite_employee
-        @provider = Provider.find(params[:id])
         if request.get?
           #Show the page.
         elsif request.post?
@@ -357,5 +328,12 @@ class MerchantsController < ApplicationController
         end
         redirect_to "/merchants/#{params[:id]}/staff"
     end
+
+    private
+
+      def populate_locals
+        @provider       = Provider.find(params[:id])
+        @current_user   = current_user
+      end
 
 end

@@ -1,13 +1,13 @@
 <div class="column">
     <div class="merchantShowWrapper rounded gradient profileShrink">
       <div class="imageBorder">
-        <%= custom_image_tag(@user,180,180)  %>
+        <%= custom_image_tag(@current_user,180,180)  %>
       </div>
-	  <h4><%= @user.username %></h4>
-	  <h4><%= @user.handle %></h4>
-	  <h4><%= @user.email %></h4>
-	  <h4><%= number_to_phone(@user.phone, :area_code => true) %></h4>
-	  <h4><%= @user.full_address %></h4>
+	  <h4><%= @current_user.username %></h4>
+	  <h4><%= @current_user.handle %></h4>
+	  <h4><%= @current_user.email %></h4>
+	  <h4><%= number_to_phone(@current_user.phone, :area_code => true) %></h4>
+	  <h4><%= @current_user.full_address %></h4>
     </div>
 </div>
 
@@ -25,7 +25,7 @@
   <h5 class="menuSectionHeader">
     Employee Profile Information
   </h5>
-  <%= form_for(@user, remote: true) do |f| %>
+  <%= form_for(@current_user, remote: true) do |f| %>
   <% if @provider.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
@@ -62,7 +62,7 @@
           <%= f.text_field :zip,         placeholder: 'Zip' %>
         </div>
         <div class="field">                         
-          <%= f.text_field :phone,   placeholder: 'Phone Number' , value: number_to_phone(@user.phone, :area_code => true) %>
+          <%= f.text_field :phone,   placeholder: 'Phone Number' , value: number_to_phone(@current_user.phone, :area_code => true) %>
         </div> 
         <div class="actions">
           <%= f.submit "Update", class: "btn btn-large btn-info" %>
