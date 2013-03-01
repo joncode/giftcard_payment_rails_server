@@ -10,6 +10,10 @@ function getBackButton() {
 	return $('#backButton').clone().removeAttr('id').removeClass('template').addClass('menuListBack').css({display:'block'});
 }
 
+function getTodaysCredits() {
+    return
+}
+
 function buildHeaderForAddItem(menuSection, items) {
 	var sectionHeader = menuSection.closest(".menu_section");
 	var sectionTitle = sectionHeader.find('h2').attr('id');
@@ -297,5 +301,13 @@ $(function() {
 	$('.option').click(function () {
 		$(this).css({color:'#666'});
 	});
+
+    $('#todayCredits').click(function () {
+        // call server with avatar and get photo cropper
+        getTodaysCredits();
+        return false;
+    });
+
+
  
 }); // end
