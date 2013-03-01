@@ -34,6 +34,10 @@ class Provider < ActiveRecord::Base
 
   before_create :extract_phone_digits
 
+  def get_todays_credits
+    self.orders.where("updated_at > ?", (Time.now - 1.day))   
+  end
+
   def self.allWithinBounds(bounds)
     puts bounds
     Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))

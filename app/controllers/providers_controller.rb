@@ -13,8 +13,8 @@ class ProvidersController < ApplicationController
 
   def show
     @provider = Provider.find(params[:id])
-    @menu = create_menu_from_items(@provider)
-    @gifts = Gift.get_activity_at_provider(@provider)
+    @menu     = create_menu_from_items(@provider)
+    @gifts    = Gift.get_activity_at_provider(@provider)
     
     respond_to do |format|
       format.html # show.html.erb
@@ -36,8 +36,8 @@ class ProvidersController < ApplicationController
   end
 
   def create
-    super_user = current_user
-    @provider = Provider.new(params[:provider])
+    super_user  = current_user
+    @provider   = Provider.new(params[:provider])
     @provider.users = [super_user]
 
     respond_to do |format|

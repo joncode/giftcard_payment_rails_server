@@ -301,12 +301,5 @@ $(function() {
 		$(this).css({color:'#666'});
 	});
 
-    $('#todayCredits').click(function () {
-        // call server with avatar and get photo cropper
-        getTodaysCredits();
-        return false;
-    });
-
-
  
 }); // end

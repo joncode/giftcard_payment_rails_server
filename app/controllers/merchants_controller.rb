@@ -126,8 +126,9 @@ class MerchantsController < ApplicationController
         end
     end
 
-    def todaysCredits
-      @orders = @provider.get_todays_credits
+    def todays_credits
+      @provider = Provider.find(params[:id])
+      @orders   = @provider.get_todays_credits
 
       respond_to do |format|
         format.js

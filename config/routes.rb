@@ -82,6 +82,7 @@ Drinkboard::Application.routes.draw do
       get  :pos
       get  :menujs
       # end test routes
+      get  :todays_credits
       get 'past_orders'
       get 'customers'
       get 'orders'
@@ -104,7 +105,7 @@ Drinkboard::Application.routes.draw do
       get  :get_cropper
       get  :compile_menu
       get  :menu_builder
-      get  :todaysCredits
+
     end
   end
 
