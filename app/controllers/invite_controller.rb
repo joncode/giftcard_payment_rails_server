@@ -7,8 +7,7 @@ class InviteController < ApplicationController
     id = params[:id].to_i - number
     @gift = Gift.find(id)
     @giver = @gift.giver
-    
-    
+        
     # check to see if its a mobile browser here
     # if so , change the render format to .mobile
     # add that format to the views folder and add to respond_to
