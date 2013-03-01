@@ -10,10 +10,6 @@ function getBackButton() {
 	return $('#backButton').clone().removeAttr('id').removeClass('template').addClass('menuListBack').css({display:'block'});
 }
 
-function getTodaysCredits() {
-    return
-}
-
 function buildHeaderForAddItem(menuSection, items) {
 	var sectionHeader = menuSection.closest(".menu_section");
 	var sectionTitle = sectionHeader.find('h2').attr('id');
@@ -136,6 +132,9 @@ function getEmployeeCropper(route) {
 		 {image: route});
 }
 
+function getTodaysCredits() {
+    $.get('todaysCredits');
+}
 
 $(function() {
 

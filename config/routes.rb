@@ -104,6 +104,7 @@ Drinkboard::Application.routes.draw do
       get  :get_cropper
       get  :compile_menu
       get  :menu_builder
+      get  :todaysCredits
     end
   end
 
