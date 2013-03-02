@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130227050128) do
+ActiveRecord::Schema.define(:version => 20130301235356) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -249,6 +249,7 @@ ActiveRecord::Schema.define(:version => 20130227050128) do
     t.boolean  "menu_is_live",                    :default => false
     t.integer  "brand_id"
     t.integer  "building_id"
+    t.integer  "sd_location_id"
   end
 
   add_index "providers", ["city"], :name => "index_providers_on_city"
