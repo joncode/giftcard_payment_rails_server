@@ -357,8 +357,7 @@ class IphoneController < AppController
   end
   
   def update_photo
-    puts "Update Photo"
-    puts "#{params}"
+    puts "Update Photo - #{params}"
     response = {}
     begin 
       user  = User.find_by_remember_token(params["token"])

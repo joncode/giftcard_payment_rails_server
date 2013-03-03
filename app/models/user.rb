@@ -250,7 +250,7 @@ class User < ActiveRecord::Base
     def confirm_email
       if self.email
         if self.confirm[0] == '0'
-          Resque.enqueue(EmailJob, 'confirm_email', self.giver_id , {})  
+          Resque.enqueue(EmailJob, 'confirm_email', self.id , {})  
         end
       end
     end
