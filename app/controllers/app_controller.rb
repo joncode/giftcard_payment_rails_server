@@ -8,7 +8,7 @@ class AppController < ApplicationController
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
 	GIFT_REPLY = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
- 	PROVIDER_REPLY = ["name",  "box", "logo", "portrait", "sales_tax", "phone"]
+ 	PROVIDER_REPLY = ["name", "phone"]
 
  	def update_user
   		puts "\nUpdate User"
@@ -523,23 +523,25 @@ class AppController < ApplicationController
 		
 	end
 
-	def forgot_password
-		puts "\nForgot Password"
+	def reset_password
+		puts "\nReset Password"
 		puts "request = #{params}"
+		if params[:email]
+			user = User.find_by_email(params[:email])
+			if user
+				user.update_reset_token
+				Resque.enqueue(EmailJob, 'reset_password', user.id, {})  
+				response = {"success" => "Email is Sent , check your inbox"}
+			else
+				response = {"error" => "We do not have record of that email"}
+			end
+		else
+			response = {"error" => "no email sent"}
+		end	
 
-		message   = "" 
-		response  = {} 	
-		email = JSON.parse params["email"]
-		if user = User.find_by_email(email)
-			user.update_reset_token
-			Resque.enqueue(EmailJob, 'reset_password', user[:id], {}) 
-		end
-		response["success"] = "An email with reset link has been sent to #{email}" 
 		respond_to do |format|
-	    	# logger.debug response
-	    	puts "AC forgot_password response => #{response}"
-	    	format.json { render json: response }
-	    end
+			format.json {render json: response }
+		end	
 	end
 
 	protected
@@ -634,12 +636,13 @@ class AppController < ApplicationController
 			obj.each do |p|
 				prov_obj = p.serializable_hash only: send_fields
 				prov_obj.each_key do |key|
-					value= prov_obj[key]
+					value	= prov_obj[key]
 					prov_obj[key] = value.to_s
 				end
 				prov_obj["full_address"] = p.full_address
+				prov_obj["sales_tax"]  	 = p.sales_tax || "5"
 				prov_obj["provider_id"]  = p.id.to_s
-				prov_obj["photo"] = p.get_image("photo")
+				prov_obj["photo"] 		 = p.get_image("photo")
 				providers_array << prov_obj
 			end
 			return providers_array

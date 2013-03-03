@@ -103,6 +103,7 @@ Drinkboard::Application.routes.draw do
       post :delete_item
       get  :get_cropper
       get  :compile_menu
+      get  :menu_builder
     end
   end
 
@@ -139,6 +140,8 @@ Drinkboard::Application.routes.draw do
   match 'app/orders',           to: 'app#orders',              via: :post
   match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
   match 'app/forgot_password',  to: 'app#forgot_password',     via: :post
+  match 'app/reset_password',   to: 'app#reset_password',      via: :post
+
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post

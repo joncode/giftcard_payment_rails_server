@@ -20,7 +20,7 @@ class Provider < ActiveRecord::Base
   has_many   :gifts
   has_many   :sales
   has_and_belongs_to_many   :tags
-  has_and_belongs_to_many   :brands
+  belongs_to :brands
   has_many   :servers, class_name: "Employee"
 
   mount_uploader :photo,    ProviderPhotoUploader
@@ -52,6 +52,14 @@ class Provider < ActiveRecord::Base
   end
   
   def get_photo
+    if self.photo.blank?
+      "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+    else
+      self.photo.url
+    end
+  end
+
+  def get_photo_for_web
     if self.photo.blank?
       "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
     else

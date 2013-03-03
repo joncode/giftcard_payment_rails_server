@@ -40,7 +40,7 @@ $(function() {
 
 		// using .ajax to POST to the providers app route for providers
 	$('#linkDb a').click(function(e) {
-		var base = "http://localhost:3000/"
+		var base = "http://drinkboard.herokuapp.com/"
 		var url = "app/providers";
 		var _linkDb = $(this);
 		$.ajax({

@@ -5,6 +5,7 @@ class UsersController < ApplicationController
 
   def update_avatar
     @provider = Provider.find(params[:id])
+    params[:user][:use_photo] = "cw"
     current_user.update_attributes(params[:user])
     redirect_to staff_profile_merchant_path(@provider)
   end

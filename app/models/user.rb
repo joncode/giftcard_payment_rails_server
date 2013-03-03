@@ -165,16 +165,25 @@ class User < ActiveRecord::Base
       self.fb_photo
     else 
       if self.photo.blank?
-        "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+        "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
       else
         self.photo.url
       end
     end
   end
 
+  def get_photo_for_web
+    photo_url = get_photo
+    if photo_url.nil?
+      photo_url = "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+    end
+
+    return photo_url
+  end
+
   def get_secure_image
     if self.secure_image.blank?
-      "#{CLOUDINARY_IMAGE_URL}/v1349221640/yzjd1hk2ljaycqknvtyg.png"
+      "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
     else
       self.secure_image.url
     end

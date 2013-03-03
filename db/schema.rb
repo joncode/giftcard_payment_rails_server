@@ -11,7 +11,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130224082821) do
+ActiveRecord::Schema.define(:version => 20130227050128) do
+
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -35,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20130224082821) do
     t.integer  "user_id"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.integer  "owner_id"
   end
 
   create_table "brands_providers", :id => false, :force => true do |t|
@@ -246,6 +248,8 @@ ActiveRecord::Schema.define(:version => 20130224082821) do
     t.string   "foursquare_id"
     t.decimal  "rate"
     t.boolean  "menu_is_live",                    :default => false
+    t.integer  "brand_id"
+    t.integer  "building_id"
   end
 
   add_index "providers", ["city"], :name => "index_providers_on_city"

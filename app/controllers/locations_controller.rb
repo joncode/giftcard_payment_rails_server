@@ -81,19 +81,7 @@ class LocationsController < ApplicationController
     end
     return render :text => "Success"
   end
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+ 
   def logLocation
     thisUser = getUser
     if !thisUser
