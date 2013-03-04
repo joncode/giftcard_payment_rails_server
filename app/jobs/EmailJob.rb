@@ -7,6 +7,7 @@ class EmailJob
       @user = User.find(user_id)
       UserMailer.confirm_email(@user).deliver
     when "reset_password"
+      puts "OPT RESETPASSWORD"
       @user = User.find(user_id)
       UserMailer.reset_password(@user).deliver
     when "invite_friend"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130304002523) do
+ActiveRecord::Schema.define(:version => 20130304025447) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -320,12 +320,13 @@ ActiveRecord::Schema.define(:version => 20130304002523) do
 
   create_table "settings", :force => true do |t|
     t.integer  "user_id"
-    t.boolean  "email_invoice",   :default => true
-    t.boolean  "email_redeem",    :default => true
-    t.boolean  "email_invite",    :default => true
-    t.boolean  "email_follow_up", :default => true
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.boolean  "email_invoice",      :default => true
+    t.boolean  "email_redeem",       :default => true
+    t.boolean  "email_invite",       :default => true
+    t.boolean  "email_follow_up",    :default => true
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.boolean  "email_receiver_new"
   end
 
   create_table "tags", :force => true do |t|

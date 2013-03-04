@@ -1,6 +1,6 @@
 class Setting < ActiveRecord::Base
   attr_accessible :email_follow_up, :email_invite, 
-  :email_invoice, :email_redeem, :user_id
+  :email_invoice, :email_redeem, :user_id , :email_receiver_new
 
   belongs_to :user
 
