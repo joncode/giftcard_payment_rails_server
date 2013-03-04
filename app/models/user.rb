@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   mount_uploader   :photo, UserAvatarUploader
   mount_uploader   :secure_image, UserAvatarUploader
 
+  has_one  :setting
   has_many :employees
   has_many :providers, :through => :employees
   has_many :orders,    :through => :providers

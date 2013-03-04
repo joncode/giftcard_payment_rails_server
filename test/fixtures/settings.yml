@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  email_invoice: false
+  email_redeem: false
+  email_invite: false
+  email_follow_up: false
+
+two:
+  user_id: 1
+  email_invoice: false
+  email_redeem: false
+  email_invite: false
+  email_follow_up: false
