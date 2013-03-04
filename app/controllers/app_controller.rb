@@ -568,7 +568,7 @@ class AppController < ApplicationController
   		  		
   		if user = authenticate_app_user(params["token"])
 			data = JSON.parse params["data"]
-	  		if response = user.save_settings data
+	  		if user.save_settings(data)
 	  			response = { "success" => "Settings saved" }
 	  		else
 	  			response = { "error" => "could not save settings" }

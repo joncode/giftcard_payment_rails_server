@@ -12,3 +12,10 @@ class Setting < ActiveRecord::Base
 
 
 end
+
+
+# connecting the attributes above to the notifications is as follows
+# 1. Invoice Email - after purchase == "email_invoice"
+# 2. Gift Redeemed - after your gift is completed == "email_redeem"
+# 3. Invite Accepted - your invite to the app has been accepted == "email_invite"
+# 4. Redeem Gift Follow Up - next day reminding you the details of the gift and news of the platform , new items, features == "email_follow_up"
