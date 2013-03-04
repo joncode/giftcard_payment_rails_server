@@ -22,6 +22,8 @@ class ApplicationController < ActionController::Base
       else
         if request.user_agent =~ /Mobile|webOS/
           request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
+          false
+           # ^^ remove this is you want this to work
         else
           false
         end

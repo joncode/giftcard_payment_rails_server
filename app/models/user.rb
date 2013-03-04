@@ -184,7 +184,7 @@ class User < ActiveRecord::Base
 
   def get_secure_image
     if self.secure_image.blank?
-      "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+      "http://res.cloudinary.com/htaaxtzcv/image/upload/v1362365994/rxnr2tqsee9fjydm8irz.jpg"
     else
       self.secure_image.url
     end
