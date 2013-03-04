@@ -9,7 +9,7 @@ module ApplicationHelper
   end
 
   def custom_image_tag(object,width,height,flag=nil)
-    crop  = "/c_fill,h_#{height},w_#{width}/"
+    crop  = "/c_fill,h_#{height},w_#{width},a_exif/"
     if flag 
       photo     = object.get_image(flag)
       url_array = photo.split('upload/')
