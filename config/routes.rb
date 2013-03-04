@@ -141,6 +141,8 @@ Drinkboard::Application.routes.draw do
   match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
   match 'app/forgot_password',  to: 'app#forgot_password',     via: :post
   match 'app/reset_password',   to: 'app#reset_password',      via: :post
+  match 'app/get_settings',     to: 'app#get_settings',       via: :post
+  match 'app/save_settings',    to: 'app#save_settings',      via: :post
 
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post

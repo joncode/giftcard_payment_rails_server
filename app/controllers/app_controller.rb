@@ -544,6 +544,45 @@ class AppController < ApplicationController
 		end	
 	end
 
+	def get_settings
+  		puts "\nSettings  \n  request = #{params}"
+  		  		
+  		if user = authenticate_app_user(params["token"])
+			begin
+	  			response = {"success" => user.get_settings }
+	  		rescue
+	  			response = {"error" => "could not get settings"}
+	  		end
+	  	else
+	  		response = {"error" => "could not find user in db"}
+	  	end
+
+  		respond_to do |format|
+	    	puts "AC Settings response => #{response}"
+	    	format.json { render json: response }
+	    end		
+	end
+
+	def save_settings
+  		puts "\nSave Settings    \n  request = #{params}"
+  		  		
+  		if user = authenticate_app_user(params["token"])
+			data = JSON.parse params["data"]
+	  		if response = user.save_settings data
+	  			response = { "success" => "Settings saved" }
+	  		else
+	  			response = { "error" => "could not save settings" }
+	  		end
+	  	else
+	  		response = { "error" => "could not find user in db" }
+	  	end
+
+  		respond_to do |format|
+	    	puts "AC Save Settings response => #{response}"
+	    	format.json { render json: response }
+	    end			
+	end
+
 	protected
 
 		def cross_origin_allow_header

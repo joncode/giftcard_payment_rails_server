@@ -245,6 +245,23 @@ class User < ActiveRecord::Base
   def sd_serialize
     "#{self.phone}#{PIPE}#{self.remember_token}#{PIPE}#{self.first_name}#{PIPE}#{PIPE}#{self.last_name}#{PIPE}#{self.birthday}#{PIPE}#{self.phone}#{PIPE}#{self.email}#{PIPE}#{PIPE}#{PIPE}#{self.remember_token}"
   end
+
+  def get_settings
+    if settings = self.setting.nil?
+      settings = Setting.new(user_id: self.id)
+    end
+    settings.serialize
+  end
+
+  def save_settings(data)
+    if settings = self.setting.nil?
+      settings = Setting.new(user_id: self.id)
+    end
+    if settings.update_attributes(data)
+      return true
+    end
+    return false
+  end
   
   private
   
