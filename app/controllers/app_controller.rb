@@ -2,7 +2,9 @@ class AppController < ApplicationController
 
 	include ActionView::Helpers::DateHelper
 	skip_before_filter :verify_authenticity_token
+	before_filter :method_start_log_message
 	after_filter :cross_origin_allow_header
+	after_filter :method_end_log_message
 
 	UPDATE_REPLY  = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
@@ -334,7 +336,12 @@ class AppController < ApplicationController
   		x.delete('controller')
   		x.delete('action')
   		x.delete('format')
-  		puts "START LOG MSG: #{params["controller"].upcase} -#{params["action"]}- request: #{x}"
+  		puts "#{params["controller"].upcase} -#{params["action"]}- request: #{x}"
+  	end
+
+  	def method_end_log_message
+  		print "END "
+  		method_start_log_message
   	end
 
   	def short_photo_url photo_url
@@ -363,9 +370,6 @@ class AppController < ApplicationController
   	end
 
   	def providers_short_ph_url
-  		puts "NEW PROVIDERS SHORT PHOTO URL"
-  		method_start_log_message
-
 	    if  authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
 	    		providers = Provider.all
