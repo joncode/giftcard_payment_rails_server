@@ -329,6 +329,65 @@ class AppController < ApplicationController
 	    end
   	end
 
+  	def method_start_log_message
+  		x = params.dup
+  		x.delete('controller')
+  		x.delete('action')
+  		x.delete('format')
+  		puts "START LOG MSG: #{params["controller"].upcase} -#{params["action"]}- request: #{x}"
+  	end
+
+  	def short_photo_url photo_url
+  		url_ary = photo_url.split('upload/')
+  		shorten_url = url_ary[1]
+
+  		identifier, tag = shorten_url.split('.')
+
+  		new_photo_ary = ['d', identifier , 'j']
+  		if photo_url.match 'htaaxtzcv'
+  			new_photo_ary[0] = 'h'
+  		end
+
+  		if !tag.match('jpg')
+  			new_photo_ary[2] = tag.match('png') ? 'p' : tag
+  		end
+
+  		return new_photo_ary.join("|")
+  	end
+
+  	def shorten_url_for_provider_ary providers_array
+  		providers_array.each do |prov|
+  			short_photo_url = short_photo_url prov["photo"]
+  			prov["photo"] = short_photo_url
+  		end
+  	end
+
+  	def providers_short_ph_url
+  		puts "NEW PROVIDERS SHORT PHOTO URL"
+  		method_start_log_message
+
+	    if  authenticate_public_info
+	    	if  !params["city"] || params["city"] == "all"
+	    		providers = Provider.all
+	    	else
+	    		providers = Provider.where(city: params["city"])
+	    	end
+	    	providers_array = array_these_providers(providers, PROVIDER_REPLY)
+	    	providers_array = shorten_url_for_provider_ary providers_array
+	    	logmsg 			= providers_array[0]
+	  	else
+	  		providers_hash 	= {"error" => "user was not found in database"}
+	  		providers_array = providers_hash
+	  		logmsg 			= providers_hash
+	  	end
+
+  		respond_to do |format|
+	      # logger.debug providers_array
+	      puts "AC ProvidersShortPhotoURL response[0] => #{logmsg}"
+	      format.json { render json: providers_array }
+	    end
+  	end
+
 	def drinkboard_users
 		puts "\nDrinkboard Users"
 		puts "request = #{params}"

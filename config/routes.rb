@@ -144,6 +144,9 @@ Drinkboard::Application.routes.draw do
   match 'app/get_settings',     to: 'app#get_settings',       via: :post
   match 'app/save_settings',    to: 'app#save_settings',      via: :post
 
+    ## test new data methods routes
+  match 'app/new_pic', to: 'app#providers_short_ph_url', via: :post
+
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post
