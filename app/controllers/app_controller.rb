@@ -10,6 +10,22 @@ class AppController < ApplicationController
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
  	PROVIDER_REPLY = ["name", "phone"]
 
+ 	def stringify_error_messages(object)
+ 		msgs = object.errors.messages
+ 		msgs.stringify_keys!
+ 		msgs.each_key do |key|
+ 			value_as_array 	= msgs[key]
+ 			value_as_string = value_as_array.join(' | ')
+ 			msgs[key] 		= value_as_string
+ 		end
+
+### testing multiple error messages - remove after 
+ 		msgs["Test Error"] = "This is a test error"
+### remove
+
+ 		return msgs
+ 	end
+
  	def update_user
   		puts "\nUpdate User"
  		puts "request = #{params}"	
@@ -28,7 +44,7 @@ class AppController < ApplicationController
  			if user.update_attributes(updates)
 	          response["success"]      = user.serializable_hash only: UPDATE_REPLY
 	        else
-	          response["error_server"] = user.errors.messages 
+	          response["error_server"] = stringify_error_messages user 
 	        end
 	    	puts "AC UpdateUSER response => #{response}"
 	    	format.json { render json: response }
@@ -171,7 +187,7 @@ class AppController < ApplicationController
 	    		#success
 	    		response["success"] = "Order for Gift-#{order.gift_id} Completed!"
 	    	else
-	    		response["error_server"] = order.errors.messages
+	    		response["error_server"] = stringify_error_messages order
 	    	end
 	      	puts "AC -Merchant Redeem- response => #{response}"
 	      	format.json { render json: response }
@@ -429,7 +445,7 @@ class AppController < ApplicationController
 			if order.save
 				response["success"]      = " Sale Confirmed. Thank you!"
 			else
-				response["error_server"] = order.errors.messages
+				response["error_server"] = stringify_error_messages order
 			end
 			puts "AC CreateOrder response => #{response}"
 			format.json { render json: response }
@@ -513,7 +529,7 @@ class AppController < ApplicationController
 					response["add"]      = "Card added"
 					puts "here is the saved new ccard = #{cCard.inspect}"
 				else
-					response["error_server"] = cCard.errors.messages
+					response["error_server"] = stringify_error_messages cCard
 				end
 			#end
 			puts "AC AddCard response => #{response}"
