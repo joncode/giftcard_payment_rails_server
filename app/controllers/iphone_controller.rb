@@ -27,7 +27,7 @@ class IphoneController < AppController
         response = { "success" => user_to_app }
       else
         message += " Unable to save to database" 
-        error_msg_string = stringify_error_messages new_user 
+        error_msg_string = stringify_error_messages new_user if new_user 
         response = { "error_server" => error_msg_string }
       end
       puts "iPhone -Create_Account- response => #{response} && #{response.to_json}"

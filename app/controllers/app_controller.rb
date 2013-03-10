@@ -342,6 +342,7 @@ class AppController < ApplicationController
   	def method_end_log_message
   		print "END "
   		method_start_log_message
+  		# puts "Response = #{response.body}"
   	end
 
   	def short_photo_url photo_url
