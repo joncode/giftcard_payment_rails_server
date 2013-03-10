@@ -63,7 +63,7 @@ class IphoneController < AppController
     
     respond_to do |format|
       puts "LOGIN response => #{response}"
-      format.json { render text: response.to_json }
+      format.json { render json: response }
     end
   end
   
@@ -104,7 +104,7 @@ class IphoneController < AppController
     
     respond_to do |format|
       puts "LOGIN WITH SOCIAL MEDIA response => #{response}"
-      format.json { render text: response.to_json }
+      format.json { render json: response }
     end
   end
 
@@ -133,7 +133,7 @@ class IphoneController < AppController
     respond_to do |format|
       logger.debug response
       puts "response => #{response}"
-      format.json { render text: response.to_json }
+      format.json { render json: response }
     end
   end
 
@@ -172,7 +172,7 @@ class IphoneController < AppController
         response["error_server"]  = " ReGift unable to process to database." 
       end
       puts "response => #{response}"
-      format.json { render json: response.to_json }
+      format.json { render json: response }
     end 
   end
 
@@ -196,7 +196,7 @@ class IphoneController < AppController
     respond_to do |format|
       # logger.debug response
       puts "response => #{logmsg}"
-      format.json { render text: response.to_json }
+      format.json { render json: response }
     end
   end
   
@@ -349,11 +349,11 @@ class IphoneController < AppController
       if gift.save
         response["success"]       = "Gift received - Thank you!" 
       else
-        response["error-server"]       = "Could not process gift to database" 
+        response["error_server"]       = stringify_error_messages gift
         puts "this is the errrors on gift = #{gift.errors.messages}"
       end
       puts "response => #{response}"
-      format.json { render json: response.to_json }
+      format.json { render json: response }
     end  
   end
   
@@ -381,7 +381,7 @@ class IphoneController < AppController
       end
 
       puts "IC -UpdatePhoto- response => #{response}"
-      format.json { render json: response.to_json }
+      format.json { render json: response }
     end
   end
 
