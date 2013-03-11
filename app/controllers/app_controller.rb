@@ -21,10 +21,6 @@ class AppController < ApplicationController
  			msgs[key] 		= value_as_string
  		end
 
-### testing multiple error messages - remove after 
- 		msgs["Test Error"] = "This is a test error"
-### remove
-
  		return msgs
  	end
 
