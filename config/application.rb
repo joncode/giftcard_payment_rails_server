@@ -40,6 +40,8 @@ module Drinkboard
     
     config.filter_parameters += [:password, :password_digest, :token, :uid, :credit_number, :card_number, :verification_value]
     
+    # this stops rails from connecting the database before aset precompile which heroku will not allow
+    config.assets.initialize_on_precompile = false
 
     # AWS::S3::Base.establish_connection!(
     #   :access_key_id     => 'AKIAJV7FFALBNSFCZPOA',
