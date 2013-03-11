@@ -226,7 +226,7 @@ class IphoneController < AppController
     message  = ""
 
     gift_obj = JSON.parse params["gift"]
-    puts "GIFT OBJECT  = #{params["gift"]}"
+    logger.debug "GIFT OBJECT  = #{params["gift"]}"
 
     case params["origin"]
     when 'd'
@@ -309,7 +309,7 @@ class IphoneController < AppController
         end
         gift.gift_items = gift_item_array
       end
-      puts "Here is GIFT #{gift.inspect}"
+      logger.debug "Here is GIFT #{gift.inspect}"
     end
     
     begin
@@ -327,12 +327,12 @@ class IphoneController < AppController
     
     response = { "error" => message } if message != "" 
     respond_to do |format|
-      puts " PRE SAVE GIFT OBJECT  = #{gift.inspect}"
+      logger.debug " PRE SAVE GIFT OBJECT  = #{gift.inspect}"
       if gift.save
         response["success"]       = "Gift received - Thank you!" 
       else
         response["error_server"]       = stringify_error_messages gift
-        puts "this is the errrors on gift = #{gift.errors.messages}"
+        logger.debug "this is the errrors on gift = #{gift.errors.messages}"
       end
       puts "response => #{response}"
       format.json { render json: response }
