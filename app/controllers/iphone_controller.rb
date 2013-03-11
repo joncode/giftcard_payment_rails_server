@@ -9,8 +9,7 @@ class IphoneController < AppController
   COMPLETED_REPLY = ["receiver_id", "receiver_name","giver_name", "item_id", "item_name","category", "price", "total", "tax" , "tip", "message", "updated_at", "id", "redeem_id", "redeem_code"]
   
   def create_account
-    puts "Create Account"
-    puts "request = #{params}"
+
     data = params["data"]
 
     if data.nil?
@@ -36,8 +35,6 @@ class IphoneController < AppController
   end
   
   def login
-    puts "LOGIN"
-    puts "request = #{params}"
 
     response  = {}
     email     = params["email"].downcase
@@ -68,8 +65,6 @@ class IphoneController < AppController
   end
   
   def login_social
-    puts "LOGIN WITH SOCIAL MEDIA"
-    puts "request = #{params}"
 
     response  = {}
     origin    = params["origin"].downcase
@@ -109,8 +104,7 @@ class IphoneController < AppController
   end
 
   def going_out
-    puts "Going Out"
-    puts "request = #{params}"
+
           # send the button status in params["public"]
           # going out is YES , returning home is NO 
     response  = {}
@@ -138,8 +132,6 @@ class IphoneController < AppController
   end
 
   def gifts
-    puts "Gifts"
-    puts "request = #{params}"
 
     user  = User.find_by_remember_token(params["token"])
     gifts = Gift.get_gifts(user)
@@ -152,8 +144,6 @@ class IphoneController < AppController
   end
 
   def regift
-    puts "ReGift"
-    puts "request = #{params}"
 
     user  = User.find_by_remember_token(params["token"])
     gift  = Gift.find(params["gift_id"])
@@ -177,8 +167,6 @@ class IphoneController < AppController
   end
 
   def buys
-    puts "Buys"
-    puts "request = #{params}"
 
     response = {}
     if user = authenticate_app_user(params["token"])
@@ -201,8 +189,6 @@ class IphoneController < AppController
   end
   
   def activity
-    puts "Activity"
-    puts "#{params}"
 
     @user     = User.find_by_remember_token(params["token"])
     gifts     = Gift.get_activity
@@ -215,8 +201,6 @@ class IphoneController < AppController
   end
   
   def locations
-    puts "Locations"
-    puts "#{params}"
 
     # @user  = User.find_by_remember_token(params["token"])
     providers = Provider.all
@@ -237,8 +221,6 @@ class IphoneController < AppController
   end
   
   def create_gift 
-    puts "\n\nCreate Gift"
-    puts "#{params}"
 
     response = {}
     message  = ""
@@ -358,7 +340,7 @@ class IphoneController < AppController
   end
   
   def update_photo
-    puts "Update Photo - #{params}"
+
     response = {}
     begin 
       user  = User.find_by_remember_token(params["token"])
@@ -386,8 +368,7 @@ class IphoneController < AppController
   end
 
   def active_orders
-    puts "Active Orders"
-    puts "#{params}"
+
     response   = {}
     begin 
       user     = User.find_by_remember_token(params["token"])
@@ -407,8 +388,7 @@ class IphoneController < AppController
   end
 
   def completed_orders
-    puts "Complete Orders"
-    puts "#{params}"
+
     response   = {}  
     begin 
       user     = User.find_by_remember_token(params["token"])
