@@ -29,8 +29,7 @@ class AppController < ApplicationController
  	end
 
  	def update_user
-  		puts "\nUpdate User"
- 		puts "request = #{params}"	
+
  		response = {}
  		if user = authenticate_app_user(params["token"])
  		 			# user is authenticated
@@ -54,8 +53,7 @@ class AppController < ApplicationController
  	end
 
  	def relays
- 		puts "\nRelays to APP"
- 		puts "request = #{params}"
+
  		response = {}
  		    # get app version from data hash
 		    # compare app version from version -- in db??
@@ -106,8 +104,7 @@ class AppController < ApplicationController
 	end
 
  	def menu
- 		puts "\nMenu App"
- 		puts "request = #{params}"
+
  		response = {}
 	
  		if authenticate_public_info
@@ -128,8 +125,6 @@ class AppController < ApplicationController
  	end
 
  	def gifts
-	    puts "\nGifts"
-	    puts "request = #{params}"
 
 	    if user = authenticate_app_user(params["token"])
 	    	gifts 		= Gift.get_gifts(user)
@@ -149,8 +144,6 @@ class AppController < ApplicationController
 
  	def orders
  			# send orders to the app for a provider
-	    puts "\nOrders"			
-	    puts "request = #{params}"
 
 	    if user = authenticate_app_user(params["token"])
 	    	provider 	= Provider.find(params["provider"])
@@ -171,8 +164,6 @@ class AppController < ApplicationController
 
  	def merchant_redeem
  			# send orders to the app for a provider
-	    puts "\nMerchant Redeem"			
-	    puts "request = #{params}"
 	    response = {}
 	    if user = authenticate_app_user(params["token"])
 	    	data 				= JSON.parse params["data"]
@@ -197,8 +188,6 @@ class AppController < ApplicationController
   	end
 
   	def user_activity
-	    puts "\nUser Activity"
-	    puts "request = #{params}"
 
 	    user  = User.find(params["user_id"])
 	    if user 
@@ -218,8 +207,6 @@ class AppController < ApplicationController
   	end
 
   	def past_gifts
-	    puts "\nGifts"
-	    puts "request = #{params}"
 
 	    if user = authenticate_app_user(params["token"])
 	    	gifts 		= Gift.get_past_gifts(user)
@@ -238,8 +225,6 @@ class AppController < ApplicationController
   	end
 
   	def questions
-  		puts "\nQuestions"
-  		puts "request = #{params}"
   		  		
   		if user = authenticate_app_user(params["token"])
 
@@ -267,8 +252,6 @@ class AppController < ApplicationController
   	end
 
  	def others_questions
-  		puts "\nOthers Questions"
-  		puts "request = #{params}"
   		# user  = User.find_by_remember_token(params["token"])
   		
   		begin  
@@ -289,8 +272,6 @@ class AppController < ApplicationController
   	end
 
   	def transactions
-  		puts "\nTransactions"
-  		puts "request = #{params}"
 
   		if user = authenticate_app_user(params["token"])
   			transaction_array = Gift.transactions(user)
@@ -307,8 +288,6 @@ class AppController < ApplicationController
   	end
 
   	def providers
-  		puts "\nProviders"
-  		puts "request = #{params}"
 
 	    if authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
@@ -394,8 +373,6 @@ class AppController < ApplicationController
   	end
 
 	def drinkboard_users
-		puts "\nDrinkboard Users"
-		puts "request = #{params}"
 
 		begin
 			user = authenticate_app_user(params["token"])
@@ -475,8 +452,6 @@ class AppController < ApplicationController
   	end
 
 	def create_order
-		puts "\nCreate Order"
-		puts "request = #{params}"
 
 		message   = ""
 		response  = {} 
@@ -517,8 +492,6 @@ class AppController < ApplicationController
 	end 
 
 	def delete_card
-	 	puts "\nDelete Card"
-		puts "request = #{params}"
 
 		# message = ""
 		response = {}
@@ -543,8 +516,6 @@ class AppController < ApplicationController
 	end 
 
 	def get_cards
-		puts "\nGet Cards"
-		puts "request = #{params}"
 
 		message   = ""
 		response  = {} 
@@ -569,8 +540,6 @@ class AppController < ApplicationController
 	end
 
 	def add_card
-		puts "\nAdd Card"
-		puts "request = #{params}"
 
 		message   = "" 
 		response  = {} 
@@ -604,8 +573,7 @@ class AppController < ApplicationController
 	end
 
 	def reset_password
-		puts "\nReset Password"
-		puts "request = #{params}"
+
 		if params[:email]
 			user = User.find_by_email(params[:email])
 			if user
@@ -625,7 +593,6 @@ class AppController < ApplicationController
 	end
 
 	def get_settings
-  		puts "\nSettings  \n  request = #{params}"
   		  		
   		if user = authenticate_app_user(params["token"])
 			begin
@@ -644,7 +611,6 @@ class AppController < ApplicationController
 	end
 
 	def save_settings
-  		puts "\nSave Settings    \n  request = #{params}"
   		  		
   		if user = authenticate_app_user(params["token"])
 			data = JSON.parse params["data"]
