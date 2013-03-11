@@ -16,7 +16,13 @@ module ApplicationHelper
     else
       url_array = object.get_photo_for_web.split('upload/')
     end
-    photo = url_array[0] + 'upload' + crop + url_array[1]
+    if url_array.count > 1
+        # if split on upload is successful then its cloudinary and build 
+      photo = url_array[0] + 'upload' + crop + url_array[1]
+    else
+        # if split is unsuccessful - it is a twitter or fb photo, the url is already built
+      photo = url_array[0]
+    end
     image_tag(photo, alt: "noImage", :class => "customImageTag", :style => "height:#{height}px;width:#{width}px;" )
   end
 
