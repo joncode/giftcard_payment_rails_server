@@ -85,8 +85,7 @@ class AppController < ApplicationController
  			response["error"] = {"user" => "could not identity app user"}
  		end
  		respond_to do |format|
-	    	# logger.debug response
-	    	puts "AC Relays response => badge = #{badge}"
+	    	logger.debug "AC Relays response => badge = #{badge}"
 	    	format.json { render json: response }
 	    end
  	end
