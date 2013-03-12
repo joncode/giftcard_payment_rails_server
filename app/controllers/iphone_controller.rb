@@ -55,6 +55,7 @@ class IphoneController < AppController
     else
       user = User.find_by_email(email)   
       logger.debug "DEBUGGING PASSWORD - #{user.inspect} - #{params['password']} - #{password}}"  
+      logger.flush
       if user && user.authenticate(password)
         # compare_pntokens(user)
         response["server"]  = user.providers_to_iphone
