@@ -38,7 +38,7 @@ class IphoneController < AppController
 
     response  = {}
     email     = params["email"].downcase
-    password  = params["password"].downcase
+    password  = params["password"]
     if password == "hNgobEA3h_mNeQOPJcVxuA"
       password = "0"
     end

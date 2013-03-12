@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   :admin, :facebook_id, :facebook_access_token, :facebook_expiry, 
   :foursquare_id, :foursquare_access_token, :provider_id, :handle, 
   :server_code, :sex, :birthday, :is_public, :confirm,
-  :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
+  :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter,
+  :pntoken
 
   # can't mass assign these attributes
   # active, created_at, facebook_auth_checkin, id, password_digest, persona, remember_token, reset_token, reset_token_sent_at, updated_at
@@ -66,8 +67,8 @@ class User < ActiveRecord::Base
   validates :last_name  ,  length: { maximum: 50 }, :unless => :social_media
   validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
   validates :email , format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :password, length: { minimum: 6 },      on: :create, :unless => :social_media
-  validates :password_confirmation, presence: true, on: :create, :unless => :social_media
+  validates :password, length: { minimum: 6 },      on: :create
+  validates :password_confirmation, presence: true, on: :create
   validates :facebook_id, uniqueness: true, :if => :facebook_id_exists?
   validates :twitter, uniqueness: true, :if => :twitter_exists?
   #/---------------------------------------------------------------------------------------------/
