@@ -34,6 +34,13 @@ class IphoneController < AppController
     end
   end
   
+  def compare_pntokens(user)
+    # sent_token = params["pntoken"]
+    # if sent_token && user.pntoken != sent_token
+    #   # update the pntoken 
+    # end
+  end
+
   def login
 
     response  = {}
@@ -46,8 +53,10 @@ class IphoneController < AppController
     if email.nil? || password.nil?
       response["error_iphone"]     = "Data not received."
     else
-      user = User.find_by_email(email)     
+      user = User.find_by_email(email)   
+      logger.debug "DEBUGGING PASSWORD - #{user.inspect} - #{params['password']} - #{password}}"  
       if user && user.authenticate(password)
+        # compare_pntokens(user)
         response["server"]  = user.providers_to_iphone
         user_json           = user.to_json only: LOGIN_REPLY
         user_small          = JSON.parse user_json
