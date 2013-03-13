@@ -9,9 +9,8 @@ class UserMailer < ActionMailer::Base
     @email_title    = "Drinkboard Email Messenger"
     @web_view_route = "#{TEST_URL}/webview/confirm_email/#{user.id}"
     @social         = 0 
-    # :to => "#{@user.fullname} <#{@user.email}>"
     mail({
-      :to => "jon.gutwillig@drinkboard.com",
+      :to => "#{@user.fullname} <#{@user.email}>",
       :subject => "Drinkboard: confirm your email #{@user.fullname}"
     })       
   end
@@ -23,9 +22,8 @@ class UserMailer < ActionMailer::Base
     @email_title    = "Drinkboard Email Messenger"
     @web_view_route = "#{TEST_URL}/webview/forgot_password/#{user.id}"
     puts "reset_password -UserMailer-  for #{user.username}"
-    # :to => "#{@user.fullname} <#{@user.email}>"
     mail({
-      :to => "jon.gutwillig@drinkboard.com",
+      :to => "#{@user.fullname} <#{@user.email}>",
       :subject => "Drinkboard: password reset request #{@user.fullname}"
     })
   end

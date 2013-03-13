@@ -54,7 +54,7 @@ class IphoneController < AppController
       response["error_iphone"]     = "Data not received."
     else
       user = User.find_by_email(email)   
-      puts "DEBUGGING PASSWORD - #{user.inspect} - #{params['password']} - #{password}}"  
+      puts "DEBUGGING PASSWORD - #{user.inspect} - #{params['password']} - #{password}"  
 
       if user && user.authenticate(password)
         # compare_pntokens(user)
