@@ -17,7 +17,7 @@ class Gift < ActiveRecord::Base
   belongs_to  :giver,    class_name: "User"
   belongs_to  :receiver, class_name: "User"
   
-  validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip
+  validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip, :credit_card
   # validates_numericality_of  :total, :tip, :tax
   
   #before_create :add_category, :if => :no_category
@@ -25,11 +25,12 @@ class Gift < ActiveRecord::Base
   before_create :extract_phone_digits
   before_create :add_giver_name,  :if => :no_giver_name
   before_create :regifted,        :if => :regift_id?
-
+  before_create :set_unpaid_status
+  
   after_create  :authorize_capture
-
-  before_save   :set_status
+ 
   after_create  :update_shoppingCart
+  after_create  :set_status
   after_create  :invoice_giver
   after_create  :notify_receiver
   after_save    :create_notification
@@ -101,6 +102,7 @@ class Gift < ActiveRecord::Base
   ##########  gift creation methods
 
   def authorize_capture
+    puts "BEGIN AUTH CAPTURE for GIFT ID #{self.id}"
       # Authorize Transaction Method
     # A - create a sale object that stores the record of the auth.net transaction    
     sale = Sale.init self
@@ -246,8 +248,15 @@ class Gift < ActiveRecord::Base
 
     def set_status    
       if !self.receiver_id
-        self.status =  "incomplete"
+        status =  "incomplete"
+      else
+        status = 'open'
       end
+      self.update_attribute(:status, status)
+    end
+
+    def set_unpaid_status
+      self.status = "unpaid"
     end
     
     def pluralizer

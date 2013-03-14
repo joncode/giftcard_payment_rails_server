@@ -16,6 +16,7 @@ class Sale < ActiveRecord::Base
 	belongs_to :card
 
 	before_create :add_gateway_data	
+	
 
 ### AUTHORIZE TRANSACTION METHODS
 
