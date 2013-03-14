@@ -3,9 +3,6 @@ Drinkboard::Application.routes.draw do
   root to: 'users#new'
   resources :brands
 
-  resources :sales
-  resources :cards
-
   match "/invite/email_confirmed" => "invite#email_confirmed"
   match "/invite/error"    => "invite#error"
   match "/invite/:id"      => "invite#show"
@@ -67,10 +64,9 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-  resources :employees
   resources :locations
   resources :providers 
-  match "/merchants/:id/employee/:eid/remove"   => "merchants#remove_employee"
+  match "/merchants/:id/employee/:eid/remove"  => "merchants#remove_employee"
   
   resources :merchants do
     get 'home'

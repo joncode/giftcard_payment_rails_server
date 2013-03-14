@@ -1,4 +1,10 @@
+require 'authorize_net'
+
 class Sale < ActiveRecord::Base
+ 	AUTHORIZE_API_LOGIN 	  = '7esX3XfuS5w'
+ 	AUTHORIZE_TRANSACTION_KEY = '3y9dLy3Pm37AK9qT'
+ 	GATEWAY 			      = :sandbox
+
  	attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string,
  	 :response_string, :revenue, :status, :transaction_id
 	
@@ -7,6 +13,27 @@ class Sale < ActiveRecord::Base
 	has_one	   :gift
 	has_one    :order, through: :gift
 	belongs_to :card	
+
+### AUTHORIZE TRANSACTION METHODS
+
+
+	def auth_capture
+		    # A - create a sale object that stores the record of the auth.net transaction
+		card_number = '4111111111111111'	
+		month_year 	= "MMYY" 
+		total_amount =  '10.00'  
+      	# -- sale object ---
+        
+        # 1 makes a transaction
+        transaction = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
+        # 2 makes a credit card
+        credit_card = AuthorizeNet::CreditCard.new(card_number, month_year)
+        # 3 gets a response from auth.net
+        response = transaction.purchase(total_amount, credit_card)
+
+	end
+
+
 
 
 end
