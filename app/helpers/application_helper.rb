@@ -9,14 +9,20 @@ module ApplicationHelper
   end
 
   def custom_image_tag(object,width,height,flag=nil)
-    crop  = "/c_fill,h_#{height},w_#{width}/"
+    crop  = "/c_fill,h_#{height},w_#{width},a_exif/"
     if flag 
       photo     = object.get_image(flag)
       url_array = photo.split('upload/')
     else
       url_array = object.get_photo_for_web.split('upload/')
     end
-    photo = url_array[0] + 'upload' + crop + url_array[1]
+    if url_array.count > 1
+        # if split on upload is successful then its cloudinary and build 
+      photo = url_array[0] + 'upload' + crop + url_array[1]
+    else
+        # if split is unsuccessful - it is a twitter or fb photo, the url is already built
+      photo = url_array[0]
+    end
     image_tag(photo, alt: "noImage", :class => "customImageTag", :style => "height:#{height}px;width:#{width}px;" )
   end
 
@@ -31,5 +37,9 @@ module ApplicationHelper
     else
       "Regifted"
     end
+  end
+
+  def time_and_date_official
+    "%l:%M %p - %A, %B %e"
   end
 end

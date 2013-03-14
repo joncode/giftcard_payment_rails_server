@@ -9,8 +9,7 @@ class IphoneController < AppController
   COMPLETED_REPLY = ["receiver_id", "receiver_name","giver_name", "item_id", "item_name","category", "price", "total", "tax" , "tip", "message", "updated_at", "id", "redeem_id", "redeem_code"]
   
   def create_account
-    puts "Create Account"
-    puts "request = #{params}"
+
     data = params["data"]
 
     if data.nil?
@@ -27,20 +26,26 @@ class IphoneController < AppController
         response = { "success" => user_to_app }
       else
         message += " Unable to save to database" 
-        response = { "error" => "#{message}. #{new_user.errors.messages}"}
+        error_msg_string = stringify_error_messages new_user if new_user 
+        response = { "error_server" => error_msg_string }
       end
-      puts "iPhone -Create_Account- response => #{response}"
-      format.json { render text: response.to_json }
+      puts "iPhone -Create_Account- response => #{response} && #{response.to_json}"
+      format.json { render json: response }
     end
   end
   
+  def compare_pntokens(user)
+    # sent_token = params["pntoken"]
+    # if sent_token && user.pntoken != sent_token
+    #   # update the pntoken 
+    # end
+  end
+
   def login
-    puts "LOGIN"
-    puts "request = #{params}"
 
     response  = {}
     email     = params["email"].downcase
-    password  = params["password"].downcase
+    password  = params["password"]
     if password == "hNgobEA3h_mNeQOPJcVxuA"
       password = "0"
     end
@@ -48,8 +53,11 @@ class IphoneController < AppController
     if email.nil? || password.nil?
       response["error_iphone"]     = "Data not received."
     else
-      user = User.find_by_email(email)     
+      user = User.find_by_email(email)   
+      puts "DEBUGGING PASSWORD - #{user.inspect} - #{params['password']} - #{password}"  
+
       if user && user.authenticate(password)
+        # compare_pntokens(user)
         response["server"]  = user.providers_to_iphone
         user_json           = user.to_json only: LOGIN_REPLY
         user_small          = JSON.parse user_json
@@ -62,13 +70,11 @@ class IphoneController < AppController
     
     respond_to do |format|
       puts "LOGIN response => #{response}"
-      format.json { render text: response.to_json }
+      format.json { render json: response }
     end
   end
   
   def login_social
-    puts "LOGIN WITH SOCIAL MEDIA"
-    puts "request = #{params}"
 
     response  = {}
     origin    = params["origin"].downcase
@@ -103,13 +109,12 @@ class IphoneController < AppController
     
     respond_to do |format|
       puts "LOGIN WITH SOCIAL MEDIA response => #{response}"
-      format.json { render text: response.to_json }
+      format.json { render json: response }
     end
   end
 
   def going_out
-    puts "Going Out"
-    puts "request = #{params}"
+
           # send the button status in params["public"]
           # going out is YES , returning home is NO 
     response  = {}
@@ -132,13 +137,11 @@ class IphoneController < AppController
     respond_to do |format|
       logger.debug response
       puts "response => #{response}"
-      format.json { render text: response.to_json }
+      format.json { render json: response }
     end
   end
 
   def gifts
-    puts "Gifts"
-    puts "request = #{params}"
 
     user  = User.find_by_remember_token(params["token"])
     gifts = Gift.get_gifts(user)
@@ -151,8 +154,6 @@ class IphoneController < AppController
   end
 
   def regift
-    puts "ReGift"
-    puts "request = #{params}"
 
     user  = User.find_by_remember_token(params["token"])
     gift  = Gift.find(params["gift_id"])
@@ -171,13 +172,11 @@ class IphoneController < AppController
         response["error_server"]  = " ReGift unable to process to database." 
       end
       puts "response => #{response}"
-      format.json { render json: response.to_json }
+      format.json { render json: response }
     end 
   end
 
   def buys
-    puts "Buys"
-    puts "request = #{params}"
 
     response = {}
     if user = authenticate_app_user(params["token"])
@@ -195,13 +194,11 @@ class IphoneController < AppController
     respond_to do |format|
       # logger.debug response
       puts "response => #{logmsg}"
-      format.json { render text: response.to_json }
+      format.json { render json: response }
     end
   end
   
   def activity
-    puts "Activity"
-    puts "#{params}"
 
     @user     = User.find_by_remember_token(params["token"])
     gifts     = Gift.get_activity
@@ -214,8 +211,6 @@ class IphoneController < AppController
   end
   
   def locations
-    puts "Locations"
-    puts "#{params}"
 
     # @user  = User.find_by_remember_token(params["token"])
     providers = Provider.all
@@ -236,14 +231,12 @@ class IphoneController < AppController
   end
   
   def create_gift 
-    puts "\n\nCreate Gift"
-    puts "#{params}"
 
     response = {}
     message  = ""
 
     gift_obj = JSON.parse params["gift"]
-    puts "GIFT OBJECT  = #{params["gift"]}"
+    logger.debug "GIFT OBJECT  = #{params["gift"]}"
 
     case params["origin"]
     when 'd'
@@ -326,7 +319,7 @@ class IphoneController < AppController
         end
         gift.gift_items = gift_item_array
       end
-      puts "Here is GIFT #{gift.inspect}"
+      logger.debug "Here is GIFT #{gift.inspect}"
     end
     
     begin
@@ -344,21 +337,20 @@ class IphoneController < AppController
     
     response = { "error" => message } if message != "" 
     respond_to do |format|
-      puts " PRE SAVE GIFT OBJECT  = #{gift.inspect}"
+      logger.debug " PRE SAVE GIFT OBJECT  = #{gift.inspect}"
       if gift.save
         response["success"]       = "Gift received - Thank you!" 
       else
-        response["error-server"]       = "Could not process gift to database" 
-        puts "this is the errrors on gift = #{gift.errors.messages}"
+        response["error_server"]       = stringify_error_messages gift
+        logger.debug "this is the errrors on gift = #{gift.errors.messages}"
       end
       puts "response => #{response}"
-      format.json { render json: response.to_json }
+      format.json { render json: response }
     end  
   end
   
   def update_photo
-    puts "Update Photo"
-    puts "#{params}"
+
     response = {}
     begin 
       user  = User.find_by_remember_token(params["token"])
@@ -381,13 +373,12 @@ class IphoneController < AppController
       end
 
       puts "IC -UpdatePhoto- response => #{response}"
-      format.json { render json: response.to_json }
+      format.json { render json: response }
     end
   end
 
   def active_orders
-    puts "Active Orders"
-    puts "#{params}"
+
     response   = {}
     begin 
       user     = User.find_by_remember_token(params["token"])
@@ -407,8 +398,7 @@ class IphoneController < AppController
   end
 
   def completed_orders
-    puts "Complete Orders"
-    puts "#{params}"
+
     response   = {}  
     begin 
       user     = User.find_by_remember_token(params["token"])

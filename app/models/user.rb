@@ -5,8 +5,9 @@ class User < ActiveRecord::Base
   :address, :address_2, :city, :state, :zip, :credit_number, 
   :admin, :facebook_id, :facebook_access_token, :facebook_expiry, 
   :foursquare_id, :foursquare_access_token, :provider_id, :handle, 
-  :server_code, :sex, :birthday, :is_public,
-  :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
+  :server_code, :sex, :birthday, :is_public, :confirm,
+  :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter,
+  :pntoken
 
   # can't mass assign these attributes
   # active, created_at, facebook_auth_checkin, id, password_digest, persona, remember_token, reset_token, reset_token_sent_at, updated_at
@@ -17,6 +18,7 @@ class User < ActiveRecord::Base
   mount_uploader   :photo, UserAvatarUploader
   mount_uploader   :secure_image, UserAvatarUploader
 
+  has_one  :setting
   has_many :employees
   has_many :providers, :through => :employees
   has_many :orders,    :through => :providers
@@ -56,7 +58,8 @@ class User < ActiveRecord::Base
       # after_create for new accounts
       # after_update , :if => :added_social_media TODO
       # this after_save covers both those situations , but also runs the code unnecessarily
-  after_save    :collect_incomplete_gifts   
+  after_save    :collect_incomplete_gifts  
+  after_create  :confirm_email 
 
   # after_update  :crop_photo
   
@@ -64,8 +67,8 @@ class User < ActiveRecord::Base
   validates :last_name  ,  length: { maximum: 50 }, :unless => :social_media
   validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
   validates :email , format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :password, length: { minimum: 6 },      on: :create, :unless => :social_media
-  validates :password_confirmation, presence: true, on: :create, :unless => :social_media
+  validates :password, length: { minimum: 6 },      on: :create
+  validates :password_confirmation, presence: true, on: :create
   validates :facebook_id, uniqueness: true, :if => :facebook_id_exists?
   validates :twitter, uniqueness: true, :if => :twitter_exists?
   #/---------------------------------------------------------------------------------------------/
@@ -182,7 +185,7 @@ class User < ActiveRecord::Base
 
   def get_secure_image
     if self.secure_image.blank?
-      "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+      "http://res.cloudinary.com/htaaxtzcv/image/upload/v1362365994/rxnr2tqsee9fjydm8irz.jpg"
     else
       self.secure_image.url
     end
@@ -243,9 +246,34 @@ class User < ActiveRecord::Base
   def sd_serialize
     "#{self.phone}#{PIPE}#{self.remember_token}#{PIPE}#{self.first_name}#{PIPE}#{PIPE}#{self.last_name}#{PIPE}#{self.birthday}#{PIPE}#{self.phone}#{PIPE}#{self.email}#{PIPE}#{PIPE}#{PIPE}#{self.remember_token}"
   end
+
+  def get_settings
+    if settings = self.setting.nil?
+      settings = Setting.new(user_id: self.id)
+    end
+    settings.serialize
+  end
+
+  def save_settings(data)
+    if settings = self.setting.nil?
+      settings = Setting.new(user_id: self.id)
+    end
+    if settings.update_attributes(data)
+      return true
+    end
+    return false
+  end
   
   private
-    
+  
+    def confirm_email
+      if self.email
+        if self.confirm[0] == '0'
+          Resque.enqueue(EmailJob, 'confirm_email', self.id , {})  
+        end
+      end
+    end
+
     def collect_incomplete_gifts
               # check Gift.rb for ghost gifts connected to newly created user 
       gifts = []
@@ -285,6 +313,12 @@ class User < ActiveRecord::Base
                   
           if g.update_attributes(gift_changes)
             success += 1
+                # mail the giver that receiver has gotten the gift 
+            if g.receiver_email
+              puts "emailing the gift giver that gift has been collected for #{g.id}"
+                # notify the giver via email
+              Resque.enqueue(EmailJob, 'alert_giver', g.giver_id , {:gift_id => g.id}) 
+            end 
           else
             error   += 1
           end

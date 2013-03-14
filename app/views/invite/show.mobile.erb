@@ -1,5 +1,3 @@
-<%= stylesheet_link_tag    "mobile"  %>
-
 <div class="cellBackground1 borderRad1"></div>
 <div class="cellBackgroundActive borderRad2"</div>
 <div class="cellContent">  
@@ -7,8 +5,7 @@
     <div class="backgroundMiniCell"></div>
     <%= image_tag get_category_image(@gift), {:class => '  iconListView'} %>
     <h2>
-      <%= @gift.quantity %>
-      <%= @gift.item_name %>
+      <%= list_shopping_cart(@gift) %> 
     </h2>
   </div>
   <div class="providerInfo">

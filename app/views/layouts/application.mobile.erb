@@ -3,6 +3,7 @@
 <html>
   <head>
     <title><%= h(yield(:title) || PAGE_NAME) %></title>
+    <%= stylesheet_link_tag    "mobile/mobile"  %>
     <%= stylesheet_link_tag "/jqtouch/themes/css/jqtouch.css", "/jqtouch/themes/css/apple.css" %>
     <%= javascript_include_tag "/jqtouch/src/lib/zepto.min.js" %>
     <%= javascript_include_tag "/jqtouch/src/jqtouch-jquery.min.js", "/jqtouch/src/jqtouch.min.js", "mobile" %>

@@ -6,6 +6,8 @@ gem 'cloudinary'
 gem 'httparty', '0.9.0'
 gem 'resque', '1.23.0'
 gem 'roadie'
+gem 'newrelic_rpm'
+# gem 'authorize-net'
 
 group :production do
 	gem 'pg', '0.12.2'

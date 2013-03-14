@@ -6,11 +6,11 @@ Drinkboard::Application.routes.draw do
   resources :sales
   resources :cards
 
-  get "email/invite"
-  get "email/forgot_pw"
-  get "email/new_employee"
-  match "/invite/:id"       => "invite#show"
-  match "/invite"           => "invite#invite_friend"
+  match "/invite/email_confirmed" => "invite#email_confirmed"
+  match "/invite/error"    => "invite#error"
+  match "/invite/:id"      => "invite#show"
+  match "/invite"          => "invite#invite_friend"
+  match "/webview(/:template(/:var1))"   => "invite#display_email", :via => :get
 
   
   match '/welcome', to: 'admins#welcome'
@@ -45,7 +45,6 @@ Drinkboard::Application.routes.draw do
   end
   
   resources :locations
-  resources :items
   resources :menus
   resources :menu_strings
   resources :orders
@@ -60,10 +59,11 @@ Drinkboard::Application.routes.draw do
       post :update_avatar
     end
     collection do
+      get  :confirm_email
       get  :reset_password
       post :reset_password
       get  :enter_new_password
-      post :enter_new_password
+      put  :enter_new_password
     end
   end
 
@@ -122,7 +122,7 @@ Drinkboard::Application.routes.draw do
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
   match 'app/login',            to: 'iphone#login',            via: :post
   match 'app/login_social',     to: 'iphone#login_social',     via: :post
-  match 'app/update',           to: 'iphone#relays',           via: :post 
+  match 'app/update',           to: 'app#relays',              via: :post 
   match 'app/gifts',            to: 'iphone#gifts',            via: :post
   match 'app/update_user',      to: 'app#update_user',         via: :post
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
@@ -141,7 +141,14 @@ Drinkboard::Application.routes.draw do
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/orders',           to: 'app#orders',              via: :post
   match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
+  match 'app/forgot_password',  to: 'app#forgot_password',     via: :post
   match 'app/reset_password',   to: 'app#reset_password',      via: :post
+  match 'app/get_settings',     to: 'app#get_settings',       via: :post
+  match 'app/save_settings',    to: 'app#save_settings',      via: :post
+
+    ## test new data methods routes
+  match 'app/new_pic', to: 'app#providers_short_ph_url', via: :post
+
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post

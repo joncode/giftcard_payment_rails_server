@@ -2,7 +2,9 @@ class AppController < ApplicationController
 
 	include ActionView::Helpers::DateHelper
 	skip_before_filter :verify_authenticity_token
+	before_filter :method_start_log_message
 	after_filter :cross_origin_allow_header
+	after_filter :method_end_log_message
 
 	UPDATE_REPLY  = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
  	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
@@ -10,9 +12,20 @@ class AppController < ApplicationController
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
  	PROVIDER_REPLY = ["name", "phone"]
 
+ 	def stringify_error_messages(object)
+ 		msgs = object.errors.messages
+ 		msgs.stringify_keys!
+ 		msgs.each_key do |key|
+ 			value_as_array 	= msgs[key]
+ 			value_as_string = value_as_array.join(' | ')
+ 			msgs[key] 		= value_as_string
+ 		end
+
+ 		return msgs
+ 	end
+
  	def update_user
-  		puts "\nUpdate User"
- 		puts "request = #{params}"	
+
  		response = {}
  		if user = authenticate_app_user(params["token"])
  		 			# user is authenticated
@@ -28,7 +41,7 @@ class AppController < ApplicationController
  			if user.update_attributes(updates)
 	          response["success"]      = user.serializable_hash only: UPDATE_REPLY
 	        else
-	          response["error_server"] = user.errors.messages 
+	          response["error_server"] = stringify_error_messages user 
 	        end
 	    	puts "AC UpdateUSER response => #{response}"
 	    	format.json { render json: response }
@@ -36,8 +49,7 @@ class AppController < ApplicationController
  	end
 
  	def relays
- 		puts "\nRelays to APP"
- 		puts "request = #{params}"
+
  		response = {}
  		    # get app version from data hash
 		    # compare app version from version -- in db??
@@ -69,8 +81,7 @@ class AppController < ApplicationController
  			response["error"] = {"user" => "could not identity app user"}
  		end
  		respond_to do |format|
-	    	# logger.debug response
-	    	puts "AC Relays response => badge = #{badge}"
+	    	logger.debug "AC Relays response => badge = #{badge}"
 	    	format.json { render json: response }
 	    end
  	end
@@ -88,8 +99,7 @@ class AppController < ApplicationController
 	end
 
  	def menu
- 		puts "\nMenu App"
- 		puts "request = #{params}"
+
  		response = {}
 	
  		if authenticate_public_info
@@ -110,8 +120,6 @@ class AppController < ApplicationController
  	end
 
  	def gifts
-	    puts "\nGifts"
-	    puts "request = #{params}"
 
 	    if user = authenticate_app_user(params["token"])
 	    	gifts 		= Gift.get_gifts(user)
@@ -131,8 +139,6 @@ class AppController < ApplicationController
 
  	def orders
  			# send orders to the app for a provider
-	    puts "\nOrders"			
-	    puts "request = #{params}"
 
 	    if user = authenticate_app_user(params["token"])
 	    	provider 	= Provider.find(params["provider"])
@@ -153,8 +159,6 @@ class AppController < ApplicationController
 
  	def merchant_redeem
  			# send orders to the app for a provider
-	    puts "\nMerchant Redeem"			
-	    puts "request = #{params}"
 	    response = {}
 	    if user = authenticate_app_user(params["token"])
 	    	data 				= JSON.parse params["data"]
@@ -171,7 +175,7 @@ class AppController < ApplicationController
 	    		#success
 	    		response["success"] = "Order for Gift-#{order.gift_id} Completed!"
 	    	else
-	    		response["error_server"] = order.errors.messages
+	    		response["error_server"] = stringify_error_messages order
 	    	end
 	      	puts "AC -Merchant Redeem- response => #{response}"
 	      	format.json { render json: response }
@@ -179,8 +183,6 @@ class AppController < ApplicationController
   	end
 
   	def user_activity
-	    puts "\nUser Activity"
-	    puts "request = #{params}"
 
 	    user  = User.find(params["user_id"])
 	    if user 
@@ -200,8 +202,6 @@ class AppController < ApplicationController
   	end
 
   	def past_gifts
-	    puts "\nGifts"
-	    puts "request = #{params}"
 
 	    if user = authenticate_app_user(params["token"])
 	    	gifts 		= Gift.get_past_gifts(user)
@@ -220,8 +220,6 @@ class AppController < ApplicationController
   	end
 
   	def questions
-  		puts "\nQuestions"
-  		puts "request = #{params}"
   		  		
   		if user = authenticate_app_user(params["token"])
 
@@ -249,8 +247,6 @@ class AppController < ApplicationController
   	end
 
  	def others_questions
-  		puts "\nOthers Questions"
-  		puts "request = #{params}"
   		# user  = User.find_by_remember_token(params["token"])
   		
   		begin  
@@ -271,8 +267,6 @@ class AppController < ApplicationController
   	end
 
   	def transactions
-  		puts "\nTransactions"
-  		puts "request = #{params}"
 
   		if user = authenticate_app_user(params["token"])
   			transaction_array = Gift.transactions(user)
@@ -289,8 +283,6 @@ class AppController < ApplicationController
   	end
 
   	def providers
-  		puts "\nProviders"
-  		puts "request = #{params}"
 
 	    if authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
@@ -313,9 +305,69 @@ class AppController < ApplicationController
 	    end
   	end
 
+  	def method_start_log_message
+  		x = params.dup
+  		x.delete('controller')
+  		x.delete('action')
+  		x.delete('format')
+  		puts "#{params["controller"].upcase} -#{params["action"]}- request: #{x}"
+  	end
+
+  	def method_end_log_message
+  		print "END "
+  		method_start_log_message
+  		# puts "Response = #{response.body}"
+  	end
+
+  	def short_photo_url photo_url
+  		url_ary = photo_url.split('upload/')
+  		shorten_url = url_ary[1]
+
+  		identifier, tag = shorten_url.split('.')
+
+  		new_photo_ary = ['d', identifier , 'j']
+  		if photo_url.match 'htaaxtzcv'
+  			new_photo_ary[0] = 'h'
+  		end
+
+  		if !tag.match('jpg')
+  			new_photo_ary[2] = tag.match('png') ? 'p' : tag
+  		end
+
+  		return new_photo_ary.join("|")
+  	end
+
+  	def shorten_url_for_provider_ary providers_array
+  		providers_array.each do |prov|
+  			short_photo_url = short_photo_url prov["photo"]
+  			prov["photo"] = short_photo_url
+  		end
+  	end
+
+  	def providers_short_ph_url
+	    if  authenticate_public_info
+	    	if  !params["city"] || params["city"] == "all"
+	    		providers = Provider.all
+	    	else
+	    		providers = Provider.where(city: params["city"])
+	    	end
+	    	providers_array = array_these_providers(providers, PROVIDER_REPLY)
+	    	providers_array = shorten_url_for_provider_ary providers_array
+	    	logmsg 			= providers_array[0]
+	  	else
+	  		providers_hash 	= {"error" => "user was not found in database"}
+	  		providers_array = providers_hash
+	  		logmsg 			= providers_hash
+	  	end
+
+  		respond_to do |format|
+	      # logger.debug providers_array
+	      puts "AC ProvidersShortPhotoURL response[0] => #{logmsg}"
+	      format.json { render json: providers_array }
+	    end
+  	end
+
 	def drinkboard_users
-		puts "\nDrinkboard Users"
-		puts "request = #{params}"
 
 		begin
 			user = authenticate_app_user(params["token"])
@@ -395,8 +447,6 @@ class AppController < ApplicationController
   	end
 
 	def create_order
-		puts "\nCreate Order"
-		puts "request = #{params}"
 
 		message   = ""
 		response  = {} 
@@ -429,7 +479,7 @@ class AppController < ApplicationController
 			if order.save
 				response["success"]      = " Sale Confirmed. Thank you!"
 			else
-				response["error_server"] = order.errors.messages
+				response["error_server"] = stringify_error_messages order
 			end
 			puts "AC CreateOrder response => #{response}"
 			format.json { render json: response }
@@ -437,8 +487,6 @@ class AppController < ApplicationController
 	end 
 
 	def delete_card
-	 	puts "\nDelete Card"
-		puts "request = #{params}"
 
 		# message = ""
 		response = {}
@@ -463,8 +511,6 @@ class AppController < ApplicationController
 	end 
 
 	def get_cards
-		puts "\nGet Cards"
-		puts "request = #{params}"
 
 		message   = ""
 		response  = {} 
@@ -489,8 +535,6 @@ class AppController < ApplicationController
 	end
 
 	def add_card
-		puts "\nAdd Card"
-		puts "request = #{params}"
 
 		message   = "" 
 		response  = {} 
@@ -513,7 +557,7 @@ class AppController < ApplicationController
 					response["add"]      = "Card added"
 					puts "here is the saved new ccard = #{cCard.inspect}"
 				else
-					response["error_server"] = cCard.errors.messages
+					response["error_server"] = stringify_error_messages cCard
 				end
 			#end
 			puts "AC AddCard response => #{response}"
@@ -524,8 +568,7 @@ class AppController < ApplicationController
 	end
 
 	def reset_password
-		puts "\nReset Password"
-		puts "request = #{params}"
+
 		if params[:email]
 			user = User.find_by_email(params[:email])
 			if user
@@ -542,6 +585,43 @@ class AppController < ApplicationController
 		respond_to do |format|
 			format.json {render json: response }
 		end	
+	end
+
+	def get_settings
+  		  		
+  		if user = authenticate_app_user(params["token"])
+			begin
+	  			response = {"success" => user.get_settings }
+	  		rescue
+	  			response = {"error" => "could not get settings"}
+	  		end
+	  	else
+	  		response = {"error" => "could not find user in db"}
+	  	end
+
+  		respond_to do |format|
+	    	puts "AC Settings response => #{response}"
+	    	format.json { render json: response }
+	    end		
+	end
+
+	def save_settings
+  		  		
+  		if user = authenticate_app_user(params["token"])
+			data = JSON.parse params["data"]
+	  		if user.save_settings(data)
+	  			response = { "success" => "Settings saved" }
+	  		else
+	  			response = { "error" => "could not save settings" }
+	  		end
+	  	else
+	  		response = { "error" => "could not find user in db" }
+	  	end
+
+  		respond_to do |format|
+	    	puts "AC Save Settings response => #{response}"
+	    	format.json { render json: response }
+	    end			
 	end
 
 	protected

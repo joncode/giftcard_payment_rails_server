@@ -27,7 +27,7 @@ module Drinkboard
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
-    # config.time_zone = 'Central Time (US & Canada)'
+    config.time_zone = 'Eastern Time (US & Canada)'
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
@@ -38,8 +38,10 @@ module Drinkboard
 
     # Configure sensitive parameters which will be filtered from the log file.
     
-    config.filter_parameters += [:password, :token, :uid, :credit_number, :card_number, :verification_value]
+    config.filter_parameters += [:password, :password_digest, :token, :uid, :credit_number, :card_number, :verification_value]
     
+    # this stops rails from connecting the database before aset precompile which heroku will not allow
+    config.assets.initialize_on_precompile = false
 
     # AWS::S3::Base.establish_connection!(
     #   :access_key_id     => 'AKIAJV7FFALBNSFCZPOA',

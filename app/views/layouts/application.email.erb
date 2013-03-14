@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+ "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title><%= @email_title || "Drinkboard" %></title>
+  <link rel="stylesheet" type="text/css" href="/assets/email/email"> 
+</head>
+
+<body bgcolor="#e6e6e6" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" style="-webkit-font-smoothing: antialiased;width:100% !important;background:#e4e4e4;-webkit-text-size-adjust:none;">
+<table style="width: 100%;" bgcolor="#e6e6e6" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+  <tr>
+    <td bgcolor="#e6e6e6" width="100%">
+
+      <table style="width: 584px;" class="table" align="center" border="0" cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td class="cell" width="584">
+            <p style="color: #808080; font-size: 11px; line-height: 30px; font-family:
+            'Helvetica Neue',Helvetica,Arial,sans-serif; margin: 0; padding: 0;
+            font-weight: normal; text-align: center;">
+              <a href="<%= @web_view_route %>" style="color: #808080;">
+                <span style="color: #808080;">View in web browser</span>
+              </a>
+            </p>
+
+            <%= render 'layouts/email_header' %>
+        
+            <%= yield %>
+
+          </td>
+        </tr>
+        <tr>
+          <td class="footer" style="background-color: rgba(50,58,69,1); padding: 0; margin: 0;  height: 15px; border: 2px solid #bbb; border-top:1px solid #bbb;" height="15">
+          </td>
+        </tr>
+      </tbody>
+      </table>
+      <% if @social == 1 %>
+        <%= render 'layouts/email_footer' %>
+      <% else %>
+        <%= render 'layouts/official_footer' %>
+      <% end %>
+
+  </tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<img src="/assets/spacers/open.gif"
+height="1" width="10">
+</body>
+</html>

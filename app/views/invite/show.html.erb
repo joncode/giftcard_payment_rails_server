@@ -3,10 +3,9 @@
 <div class="cellContent">  
   <div class="giftDescription">
     <div class="backgroundMiniCell"></div>
-    <%= image_tag get_category_image(@gift), {:class => '  iconListView'} %>
+    <%= image_tag get_category_image(@gift), {:class => 'iconListView'} %>
     <h2>
-      <%= @gift.quantity %>
-      <%= @gift.item_name %>
+      <%= list_shopping_cart(@gift) %>     
     </h2>
   </div>
   <div class="providerInfo">

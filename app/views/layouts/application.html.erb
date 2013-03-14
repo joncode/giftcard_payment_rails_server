@@ -18,16 +18,16 @@
 
 <body>
 
-    <div class="centerMainWrapper wholePageOBJ">
-        <% if signed_in? %>
-            <%= render 'merchants/header' %>
-        <% else %>
-            <%= render 'layouts/intro' %>
-        <% end %>
+  <div class="centerMainWrapper wholePageOBJ">
+      <% if signed_in? %>
+          <%= render 'merchants/header' %>
+      <% else %>
+          <%= render 'layouts/intro' %>
+      <% end %>
 
-        <%= yield %>
-    
-    </div>
+      <%= yield %>
+  
+  </div>
 
 </body>
 
