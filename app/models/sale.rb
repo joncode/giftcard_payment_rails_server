@@ -16,7 +16,7 @@ class Sale < ActiveRecord::Base
 	belongs_to :card
 
 	before_create :add_gateway_data	
-	
+
 
 ### AUTHORIZE TRANSACTION METHODS
 
@@ -49,7 +49,7 @@ class Sale < ActiveRecord::Base
         
         # populate the transaction with data
         @transaction.fields[:first_name] = card.first_name
-		@transaction.fields[:last_name] = card.last_name
+		@transaction.fields[:last_name]  = card.last_name
 
         # 3 gets a response from auth.net
         @response 	 = @transaction.purchase(total_amount, credit_card)
@@ -57,14 +57,14 @@ class Sale < ActiveRecord::Base
 	end
 
 	def add_gateway_data
-		self.transaction_id    = self.response.fields[:transaction_id]
+		self.transaction_id    = self.response.transaction_id
 		self.response_string   = self.response.fields.to_json
 		raw_request			   = self.transaction.fields
 		card_num 			   = raw_request[:card_num]
 		last_four			   = "XXXX" + card_num[12..15]
 		raw_request[:card_num] = last_four
 		self.request_string    = raw_request.to_json
-		self.status			   = self.response.fields[:response_code]
+		self.status			   = self.response.response_code
 	end
 
 end

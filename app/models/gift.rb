@@ -30,7 +30,7 @@ class Gift < ActiveRecord::Base
   after_create  :authorize_capture
  
   after_create  :update_shoppingCart
-  after_create  :set_status
+  # after_create  :set_status
   after_create  :invoice_giver
   after_create  :notify_receiver
   after_save    :create_notification
@@ -105,7 +105,7 @@ class Gift < ActiveRecord::Base
     puts "BEGIN AUTH CAPTURE for GIFT ID #{self.id}"
       # Authorize Transaction Method
     # A - create a sale object that stores the record of the auth.net transaction    
-    sale = Sale.init self
+    sale     = Sale.init self
     response = sale.auth_capture
     
     # B - authorize transaction via auth.net
@@ -123,6 +123,22 @@ class Gift < ActiveRecord::Base
             # transaction key is no longer good
           # sale db issues
             # could not save item
+    case response.response_code
+    when '1'
+      # Approved
+     self.set_status 
+    when '2'
+      # Declined 
+    when '3'
+      # Error 
+    when '4' 
+      # Held for Review
+    else
+      # not a listed error code
+      puts "UNKNOWN ERROR CODE RECEIVED FOR AUTH>NET - CODE = #{response.response_code}"
+      puts "TEXT IS #{response.response_reason_text} for GIFT ID = #{self.id}"
+    end
+    reply = response.response_reason_text
     
     # C - saves the sale object into the sale db
     sale.save
