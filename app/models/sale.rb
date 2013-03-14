@@ -13,7 +13,9 @@ class Sale < ActiveRecord::Base
 	belongs_to :giver, class_name: "User"	
 	has_one	   :gift
 	has_one    :order, through: :gift
-	belongs_to :card	
+	belongs_to :card
+
+	before_create :add_gateway_data	
 
 ### AUTHORIZE TRANSACTION METHODS
 
@@ -31,7 +33,6 @@ class Sale < ActiveRecord::Base
 	def auth_capture
         # 1 makes a transaction
         @transaction = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
-
         # 2 makes a credit card
 		card 		 = self.card
 		month 		 = card.month
@@ -45,13 +46,25 @@ class Sale < ActiveRecord::Base
        
         @credit_card = AuthorizeNet::CreditCard.new(card_number, month_year)
         
+        # populate the transaction with data
+        @transaction.fields[:first_name] = card.first_name
+		@transaction.fields[:last_name] = card.last_name
+
         # 3 gets a response from auth.net
         @response 	 = @transaction.purchase(total_amount, credit_card)
 
 	end
 
-
-
+	def add_gateway_data
+		self.transaction_id    = self.response.fields[:transaction_id]
+		self.response_string   = self.response.fields.to_json
+		raw_request			   = self.transaction.fields
+		card_num 			   = raw_request[:card_num]
+		last_four			   = "XXXX" + card_num[12..15]
+		raw_request[:card_num] = last_four
+		self.request_string    = raw_request.to_json
+		self.status			   = self.response.fields[:response_code]
+	end
 
 end
 # == Schema Information

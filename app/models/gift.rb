@@ -102,18 +102,11 @@ class Gift < ActiveRecord::Base
 
   def authorize_capture
       # Authorize Transaction Method
+    # A - create a sale object that stores the record of the auth.net transaction    
     sale = Sale.init self
     response = sale.auth_capture
-    # A - create a sale object that stores the record of the auth.net transaction
-      # -- sale object ---
-        # 1 makes a transaction
-          # transaction = AuthorizeNet::AIM::Transaction.new('YOUR_API_LOGIN_ID', 'YOUR_TRANSACTION_KEY', :gateway => :sandbox)
-        # 2 makes a credit card
-          # credit_card = AuthorizeNet::CreditCard.new('4111111111111111', '1120')
-        # 3 gets a response from auth.net
-          # response = transaction.purchase('10.00', credit_card)
-    # B - saves the sale object into the sale db
-    # C - checks the sale object to see if transaction is authorized
+    
+    # B - authorize transaction via auth.net
       # -- returns data --
         # 1 success
           # go ahead and save the gift - process complete
@@ -128,6 +121,9 @@ class Gift < ActiveRecord::Base
             # transaction key is no longer good
           # sale db issues
             # could not save item
+    
+    # C - saves the sale object into the sale db
+    sale.save
   end
 
   def self.init(params)
