@@ -102,6 +102,8 @@ class Gift < ActiveRecord::Base
 
   def authorize_capture
       # Authorize Transaction Method
+    sale = Sale.init self
+    response = sale.auth_capture
     # A - create a sale object that stores the record of the auth.net transaction
       # -- sale object ---
         # 1 makes a transaction

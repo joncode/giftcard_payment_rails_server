@@ -5,8 +5,9 @@ class Sale < ActiveRecord::Base
  	AUTHORIZE_TRANSACTION_KEY = '3y9dLy3Pm37AK9qT'
  	GATEWAY 			      = :sandbox
 
- 	attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string,
- 	 :response_string, :revenue, :status, :transaction_id
+ 	attr_accessor :transaction, :credit_card, :response, :total
+ 	# NOTE - Revenue is a decimal value - gift.total is a string - converted in self.init below
+ 	# attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string, :response_string, :revenue, :status, :transaction_id
 	
 	belongs_to :provider	
 	belongs_to :giver, class_name: "User"	
