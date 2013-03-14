@@ -11,7 +11,7 @@ class Sale < ActiveRecord::Base
 	
 	belongs_to :provider	
 	belongs_to :giver, class_name: "User"	
-	has_one	   :gift
+	belongs_to :gift
 	has_one    :order, through: :gift
 	belongs_to :card
 
@@ -41,7 +41,11 @@ class Sale < ActiveRecord::Base
 			month 	 = "0" + month
 		end
 		year 		 = card.year[2..3]
+
+		######### put in real credit card details when in production
 		card_number  = '4111111111111111'	
+		######### 
+
 		month_year 	 = "#{month}#{year}" 
 		total_amount =  self.total  
        
@@ -57,14 +61,16 @@ class Sale < ActiveRecord::Base
 	end
 
 	def add_gateway_data
-		self.transaction_id    = self.response.transaction_id
-		self.response_string   = self.response.fields.to_json
-		raw_request			   = self.transaction.fields
-		card_num 			   = raw_request[:card_num]
-		last_four			   = "XXXX" + card_num[12..15]
-		raw_request[:card_num] = last_four
-		self.request_string    = raw_request.to_json
-		self.status			   = self.response.response_code
+		self.transaction_id    	= self.response.transaction_id
+		self.resp_json   		= self.response.fields.to_json
+		raw_request			   	= self.transaction.fields
+		card_num 			   	= raw_request[:card_num]
+		last_four			   	= "XXXX" + card_num[12..15]
+		raw_request[:card_num] 	= last_four
+		self.req_json    	   	= raw_request.to_json
+		self.resp_code		 	= self.response.response_code.to_i
+		self.reason_text		= self.response.response_reason_text
+		self.reason_code		= self.response.response_reason_code.to_i
 	end
 
 end

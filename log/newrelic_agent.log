@@ -25,3 +25,16 @@
 [03/14/13 03:57:25 -0400 Slimms-MacBook-Air.local (15369)] INFO : Installing Rails 3.1/3.2 view instrumentation
 [03/14/13 03:57:25 -0400 Slimms-MacBook-Air.local (15369)] INFO : Installing Rails3 Error instrumentation
 [03/14/13 03:57:25 -0400 Slimms-MacBook-Air.local (15369)] INFO : Finished instrumentation
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Starting the New Relic Agent.
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Environment: development
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Dispatcher: thin
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] WARN : Agent configured not to send data in this environment.
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Installing ActiveMerchant instrumentation
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Installing ActiveRecord instrumentation
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Installing Net instrumentation
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Installing Resque instrumentation
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Installing Rails 3 Controller instrumentation
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Installing Rails3 Error instrumentation
+[03/14/13 19:23:41 -0400 Slimms-MacBook-Air.local (17271)] INFO : Finished instrumentation

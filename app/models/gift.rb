@@ -11,7 +11,7 @@ class Gift < ActiveRecord::Base
   has_one     :redeem, dependent: :destroy
   has_one     :relay,  dependent: :destroy
   belongs_to  :provider
-  belongs_to  :sales
+  has_many    :sales
   has_one     :order, dependent: :destroy
   has_many    :gift_items, dependent: :destroy
   belongs_to  :giver,    class_name: "User"
@@ -26,11 +26,8 @@ class Gift < ActiveRecord::Base
   before_create :add_giver_name,  :if => :no_giver_name
   before_create :regifted,        :if => :regift_id?
   before_create :set_unpaid_status
-  
-  after_create  :authorize_capture
  
   after_create  :update_shoppingCart
-  # after_create  :set_status
   after_create  :invoice_giver
   after_create  :notify_receiver
   after_save    :create_notification
@@ -101,6 +98,15 @@ class Gift < ActiveRecord::Base
 
   ##########  gift creation methods
 
+  def set_status    
+    if !self.receiver_id
+      status = "incomplete"
+    else
+      status = 'open'
+    end
+    self.update_attribute(:status, status)
+  end
+
   def authorize_capture
     puts "BEGIN AUTH CAPTURE for GIFT ID #{self.id}"
       # Authorize Transaction Method
@@ -111,7 +117,7 @@ class Gift < ActiveRecord::Base
     # B - authorize transaction via auth.net
       # -- returns data --
         # 1 success
-          # go ahead and save the gift - process complete
+          # go ahead and savre the gift - process complete
         # failure
           # credit card issues
             # card expired
@@ -139,9 +145,10 @@ class Gift < ActiveRecord::Base
       puts "TEXT IS #{response.response_reason_text} for GIFT ID = #{self.id}"
     end
     reply = response.response_reason_text
-    
+    puts "HERE IS THE REPLY #{reply}"
     # C - saves the sale object into the sale db
     sale.save
+    return sale
   end
 
   def self.init(params)
@@ -260,15 +267,6 @@ class Gift < ActiveRecord::Base
         phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)
         self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
       end
-    end
-
-    def set_status    
-      if !self.receiver_id
-        status =  "incomplete"
-      else
-        status = 'open'
-      end
-      self.update_attribute(:status, status)
     end
 
     def set_unpaid_status
