@@ -1,8 +1,8 @@
 require 'authorize_net'
 
 class Sale < ActiveRecord::Base
- 	AUTHORIZE_API_LOGIN 	  = '7esX3XfuS5w'
- 	AUTHORIZE_TRANSACTION_KEY = '3y9dLy3Pm37AK9qT'
+ 	AUTHORIZE_API_LOGIN 	  = '9tp38Ga4CQ'
+ 	AUTHORIZE_TRANSACTION_KEY = '9Rn239V73nfe7D2y'
  	GATEWAY 			      = :sandbox
 
  	attr_accessor :transaction, :credit_card, :response, :total

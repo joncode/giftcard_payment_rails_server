@@ -77,8 +77,8 @@ class Gift < ActiveRecord::Base
   end
   
   def self.get_all_orders(provider)
-    Gift.where(provider_id: provider.id).where("status != :stat ", :stat => 'incomplete').order("updated_at DESC")
-  end
+    Gift.where(provider_id: provider.id).where("status != :stat OR status != :other", :stat => 'incomplete', :other => 'unpaid').order("updated_at DESC")
+  end 
   
   def self.get_history_provider(provider)
     Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
