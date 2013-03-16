@@ -6,8 +6,7 @@ class User < ActiveRecord::Base
   :admin, :facebook_id, :facebook_access_token, :facebook_expiry, 
   :foursquare_id, :foursquare_access_token, :provider_id, :handle, 
   :server_code, :sex, :birthday, :is_public, :confirm,
-  :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter,
-  :pntoken
+  :iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
 
   # can't mass assign these attributes
   # active, created_at, facebook_auth_checkin, id, password_digest, persona, remember_token, reset_token, reset_token_sent_at, updated_at
@@ -247,22 +246,37 @@ class User < ActiveRecord::Base
     "#{self.phone}#{PIPE}#{self.remember_token}#{PIPE}#{self.first_name}#{PIPE}#{PIPE}#{self.last_name}#{PIPE}#{self.birthday}#{PIPE}#{self.phone}#{PIPE}#{self.email}#{PIPE}#{PIPE}#{PIPE}#{self.remember_token}"
   end
 
-  def get_settings
-    if settings = self.setting.nil?
-      settings = Setting.new(user_id: self.id)
+  #########   settings methods   ###########
+
+  def get_or_create_settings
+    if setting = Setting.find_by_user_id(self.id)
+      return setting
+    else
+      return Setting.new(user_id: self.id)
     end
-    settings.serialize
+  end
+
+  def remove_key_from_hash(obj_hash, key_for_removal)
+    if obj_hash.has_key? key_for_removal
+      obj_hash.delete(key_for_removal)
+    end
+  end
+
+  def get_settings
+    settings = get_or_create_settings
+    return settings.serialize
   end
 
   def save_settings(data)
-    if settings = self.setting.nil?
-      settings = Setting.new(user_id: self.id)
-    end
+    settings = get_or_create_settings
+    remove_key_from_hash(data, "user_id")
     if settings.update_attributes(data)
       return true
     end
     return false
   end
+
+  ###########  end settings methods    ##########
   
   private
   
