@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   mount_uploader   :secure_image, UserAvatarUploader
 
   has_one  :setting
+  has_many :pn_tokens
   has_many :employees
   has_many :providers, :through => :employees
   has_many :orders,    :through => :providers
@@ -274,6 +275,16 @@ class User < ActiveRecord::Base
       return true
     end
     return false
+  end
+
+  def pn_token=(value)
+    if pn_token = PnToken.find_by_pn_token(value)
+      if pn_token.user_id != self.id
+        pn_token.update_attributes({user_id: self.id})
+      end
+    else
+      PnToken.create!(user_id: self.id, pn_token: value)
+    end
   end
 
   ###########  end settings methods    ##########
