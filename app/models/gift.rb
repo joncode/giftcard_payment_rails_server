@@ -34,7 +34,7 @@ class Gift < ActiveRecord::Base
   ##########   database queries
 
   def self.get_gifts(user)
-    Gift.where(receiver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
+    Gift.where(receiver_id: user.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
   end
 
   def self.get_past_gifts(user)

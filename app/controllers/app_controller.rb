@@ -2,13 +2,13 @@ class AppController < ApplicationController
 
 	include ActionView::Helpers::DateHelper
 	skip_before_filter :verify_authenticity_token
-	before_filter :method_start_log_message
-	after_filter :cross_origin_allow_header
-	after_filter :method_end_log_message
+	before_filter 	:method_start_log_message
+	after_filter 	:cross_origin_allow_header
+	after_filter 	:method_end_log_message
 
 	UPDATE_REPLY  = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
- 	USER_REPLY = ["first_name", "last_name", "email", "phone", "facebook_id"]	
-	GIFT_REPLY = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
+ 	USER_REPLY 	  = ["first_name", "last_name", "email", "phone", "facebook_id"]	
+	GIFT_REPLY 	  = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
  	PROVIDER_REPLY = ["name", "phone"]
 
@@ -48,30 +48,31 @@ class AppController < ApplicationController
 	    end	
  	end
 
+ 	def relay_gifts_to_app(user)
+	 	relays = Relay.where("receiver_id = :id AND status != :msg", :id => user.id, :msg => "redeemed")
+		badge  = relays.size
+		gift_array = []
+		if badge > 0
+ 			relays.each do |relay|
+ 				gift_array << relay.gift
+ 			end
+ 			gift_array_to_app   = array_these_gifts(gift_array, GIFT_REPLY, true)
+ 			response["success"] = { "badge" => badge, "gifts" => gift_array_to_app }
+ 		else
+ 			response["success"] = { "badge" => 0 }
+ 		end	
+ 		return response	
+ 	end
+
  	def relays
 
  		response = {}
- 		    # get app version from data hash
-		    # compare app version from version -- in db??
-		    # get photo url from data hash 
-		    # compare photo version with proper photo for user 
-		    # if either are not same 
-		    # return "update_photo" or "update_app" or both
-		    # put new data into each value for key
-		    # if both are the same 
-		    # return "success"
-		    # send current is_public status 
-
- 		if user = authenticate_app_user(params["token"])
+ 		if user  = authenticate_app_user(params["token"])
  			# user is authenticated
- 			relays = Relay.where("receiver_id = :id AND status != :msg", :id => user.id, :msg => "redeemed")
- 			badge  = relays.size
- 			gift_array = []
+ 			gift_array 	= Gift.get_gifts(user)
+ 			badge 		= gift_array.size
  			if badge > 0
-	 			relays.each do |relay|
-	 				gift_array << relay.gift
-	 			end
-	 			gift_array_to_app = array_these_gifts(gift_array, GIFT_REPLY, true)
+ 				gift_array_to_app   = array_these_gifts(gift_array, GIFT_REPLY, true)
 	 			response["success"] = { "badge" => badge, "gifts" => gift_array_to_app }
 	 		else
 	 			response["success"] = { "badge" => 0 }
@@ -643,23 +644,27 @@ class AppController < ApplicationController
 	          gift_obj[key] = value.to_s
 	        end
 
-	        if !g.shoppingCart 
-	      			# make shopping cart array with item inside as Hash
-	      			# using item_id, item_name, category, quantity, price
-	      		menu_item = {"id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s }
-	      		if g.category
-	      			menu_item["category"] = g.category.to_s
-	      			menu_item["section"] = BEVERAGE_CATEGORIES[g.category.to_i] 
-	      		end
-	      		menu_item_array = [menu_item]
+	        ##############  deprecated code from old gift system
+	       #  if !g.shoppingCart 
+	      	# 		# make shopping cart array with item inside as Hash
+	      	# 		# using item_id, item_name, category, quantity, price
+	      	# 	menu_item = {"id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s }
+	      	# 	if g.category
+	      	# 		menu_item["category"] = g.category.to_s
+	      	# 		menu_item["section"] = BEVERAGE_CATEGORIES[g.category.to_i] 
+	      	# 	end
+	      	# 	menu_item_array = [menu_item]
 
-	      			# shoppingCart = menu_item_array.to_json
-	      			# g.update_attribute(:shoppingCart, shoppingCart)
-	      		gift_obj["shoppingCart"] = menu_item_array
-	      	else
+	      	# 		# shoppingCart = menu_item_array.to_json
+	      	# 		# g.update_attribute(:shoppingCart, shoppingCart)
+	      	# 	gift_obj["shoppingCart"] = menu_item_array
+	      	# else
+	      			
 	      			# turn shoppingCart into an array with hashes
 	      		gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
-	      	end
+	      	
+	      	# end
+	      	##############  
 
 		        	# add other person photo url 
 	        if receiver
@@ -667,11 +672,11 @@ class AppController < ApplicationController
 	            gift_obj["receiver_photo"]  = g.receiver.get_photo
 	            gift_obj["receiver_name"] 	= g.receiver.username
 	          	gift_obj["receiver_id"]	  	= g.receiver.id
-	            	#gift_obj["giver_photo"]     = g.giver.get_photo
+	            	# gift_obj["giver_photo"]     = g.giver.get_photo
 	          else
 	            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
 	          	gift_obj["receiver_photo"]  = ""
-	          		#gift_obj["giver_photo"]     = g.giver.get_photo
+	          		# gift_obj["giver_photo"]     = g.giver.get_photo
 	          	if g.receiver_name
 	          		gift_obj["receiver_name"] = g.receiver_name
 	          	else
@@ -679,7 +684,7 @@ class AppController < ApplicationController
 	          	end
 	          end
 	        else
-	          	#gift_obj["giver_photo"]       = g.giver.get_photo
+	          	# gift_obj["giver_photo"]       = g.giver.get_photo
 	        end
 
 	        gift_obj["giver_photo"]        = g.giver.get_photo
