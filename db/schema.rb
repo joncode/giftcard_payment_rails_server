@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130314114539) do
+ActiveRecord::Schema.define(:version => 20130317170729) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -107,9 +107,9 @@ ActiveRecord::Schema.define(:version => 20130314114539) do
     t.string   "credit_card",    :limit => 100
     t.integer  "provider_id"
     t.text     "message"
-    t.string   "status",                        :default => "unpaid"
-    t.datetime "created_at",                                          :null => false
-    t.datetime "updated_at",                                          :null => false
+    t.string   "status",                        :default => "open"
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
     t.string   "receiver_phone"
     t.string   "tax"
     t.string   "tip"
@@ -212,6 +212,13 @@ ActiveRecord::Schema.define(:version => 20130314114539) do
 
   add_index "orders", ["gift_id"], :name => "index_orders_on_gift_id"
 
+  create_table "pn_tokens", :force => true do |t|
+    t.integer "user_id"
+    t.string  "pn_token"
+  end
+
+  add_index "pn_tokens", ["user_id"], :name => "index_pn_tokens_on_user_id"
+
   create_table "providers", :force => true do |t|
     t.string   "name",                                               :null => false
     t.string   "zinger"
@@ -309,13 +316,11 @@ ActiveRecord::Schema.define(:version => 20130314114539) do
     t.integer  "provider_id"
     t.string   "transaction_id"
     t.decimal  "revenue"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.text     "resp_json"
-    t.text     "req_json"
-    t.integer  "resp_code"
-    t.string   "reason_text"
-    t.integer  "reason_code"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.string   "response_string"
+    t.string   "request_string"
+    t.string   "status"
   end
 
   add_index "sales", ["provider_id"], :name => "index_sales_on_provider_id"
