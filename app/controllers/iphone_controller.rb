@@ -10,7 +10,8 @@ class IphoneController < AppController
   
   def create_account
 
-    data = params["data"]
+    data     = params["data"]
+    pn_token = params["pn_token"] || nil
 
     if data.nil?
       message = "Data not received correctly. "
@@ -22,6 +23,7 @@ class IphoneController < AppController
     
     respond_to do |format|
       if !data.nil? && new_user.save
+        new_user.pn_token = pn_token if pn_token
         user_to_app = {"user_id" => new_user.id, "token" => new_user.remember_token}
         response = { "success" => user_to_app }
       else
@@ -33,19 +35,14 @@ class IphoneController < AppController
       format.json { render json: response }
     end
   end
-  
-  def compare_pntokens(user)
-    # sent_token = params["pntoken"]
-    # if sent_token && user.pntoken != sent_token
-    #   # update the pntoken 
-    # end
-  end
 
   def login
 
     response  = {}
     email     = params["email"].downcase
     password  = params["password"]
+    pn_token  = params["pn_token"] || nil
+
     if password == "hNgobEA3h_mNeQOPJcVxuA"
       password = "0"
     end
@@ -54,10 +51,10 @@ class IphoneController < AppController
       response["error_iphone"]     = "Data not received."
     else
       user = User.find_by_email(email)   
-      puts "DEBUGGING PASSWORD - #{user.inspect} - #{params['password']} - #{password}"  
+      logger.debug "logger.debug PASSWORD - #{user.inspect} - #{params['password']} - #{password}"  
 
       if user && user.authenticate(password)
-        # compare_pntokens(user)
+        user.pn_token       = pn_token if pn_token
         response["server"]  = user.providers_to_iphone
         user_json           = user.to_json only: LOGIN_REPLY
         user_small          = JSON.parse user_json
@@ -78,6 +75,7 @@ class IphoneController < AppController
 
     response  = {}
     origin    = params["origin"].downcase
+    pn_token  = params["pn_token"] || nil
     if origin == 'f'
       facebook_id = params["facebook_id"]
     else
@@ -97,6 +95,7 @@ class IphoneController < AppController
         resp_key = "twitter"
       end
       if user 
+        user.pn_token       = pn_token if pn_token
         response["server"]  = user.providers_to_iphone
         user_json           = user.to_json only: LOGIN_REPLY
         user_small          = JSON.parse user_json
