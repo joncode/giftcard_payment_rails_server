@@ -163,15 +163,16 @@ class Gift < ActiveRecord::Base
     def notify_receiver
       if self.receiver_email
         puts "emailing the gift receiver for #{self.id}"
-        # notify the giver via email
-        Resque.enqueue(EmailJob, 'notify_receiver', 1 , {:gift_id => self.id, :email => self.receiver_email}) 
+        # notify the receiver via email
+        user_id = self.receiver_id.nil? ?  'NID' : self.receiver_id 
+        Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => self.id, :email => self.receiver_email}) 
       end      
     end
 
     def invoice_giver
       puts "emailing the gift giver for #{self.id}"
       # notify the giver via email
-      Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id}) 
+      Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id})
     end
 
     def create_notification

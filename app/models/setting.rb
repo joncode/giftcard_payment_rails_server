@@ -10,7 +10,6 @@ class Setting < ActiveRecord::Base
   	setings_hash = self.serializable_hash except: [:created_at, :updated_at, :id]
   end
 
-
 end
 
 
