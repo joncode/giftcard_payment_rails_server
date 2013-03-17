@@ -56,7 +56,7 @@ class UserMailer < ActionMailer::Base
     @email_title    = "Drinkboard Email Messenger"
 
     @header_text    = "Purchase Complete , Thank You"
-    @social         = 1
+    @social         = 0
     @web_view_route = "/webview/invoice_giver/#{gift.id}"
     # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
@@ -70,7 +70,7 @@ class UserMailer < ActionMailer::Base
     @email_title    = "Drinkboard Email Messenger"
 
     @header_text    = "You have Received a Gift"
-    @social         = 1
+    @social         = 0
     @web_view_route = "/webview/notify_receiver/#{gift.id}"
     # :to => "#{@gift.receiver_name} <#{@gift.receiver_email}>",
     mail({
@@ -85,7 +85,7 @@ class UserMailer < ActionMailer::Base
     @email_title    = "Drinkboard Email Messenger"
 
     @header_text    = "Your Gift Has Been Redeemed"
-    @social         = 1
+    @social         = 0
     @web_view_route = "/webview/notify_giver_order_complete/#{gift.id}"
     # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
@@ -100,7 +100,7 @@ class UserMailer < ActionMailer::Base
     @email_title    = "Drinkboard Email Messenger"
 
     @header_text    = "Your Gift has been Received"
-    @social         = 1
+    @social         = 0
     @web_view_route = "/webview/notify_giver_created_user/#{gift.id}"
     # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
