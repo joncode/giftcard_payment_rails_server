@@ -254,9 +254,9 @@ ActiveRecord::Schema.define(:version => 20130317170729) do
     t.string   "foursquare_id"
     t.decimal  "rate"
     t.boolean  "menu_is_live",                    :default => false
+    t.integer  "sd_location_id"
     t.integer  "brand_id"
     t.integer  "building_id"
-    t.integer  "sd_location_id"
   end
 
   add_index "providers", ["city"], :name => "index_providers_on_city"
@@ -331,9 +331,9 @@ ActiveRecord::Schema.define(:version => 20130317170729) do
     t.boolean  "email_redeem",       :default => true
     t.boolean  "email_invite",       :default => true
     t.boolean  "email_follow_up",    :default => true
+    t.boolean  "email_receiver_new", :default => true
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
-    t.boolean  "email_receiver_new", :default => true
   end
 
   create_table "tags", :force => true do |t|
