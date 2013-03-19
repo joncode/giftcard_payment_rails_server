@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-
+  before_filter :signed_in_user
   def index
     @orders = Order.all
 

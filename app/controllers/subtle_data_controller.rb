@@ -1,4 +1,5 @@
 class SubtleDataController < ApplicationController
+    before_filter :signed_in_user
     include SubtleDataHelper
     LOCATION_ID = "604"
     USER_ID     = "1822"

@@ -1,5 +1,5 @@
 class GiftsController < ApplicationController
-
+  before_filter :signed_in_user
   def index
     @user = current_user
     @gifts = Gift.get_all_gifts(@user)

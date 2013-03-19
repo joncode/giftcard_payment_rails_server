@@ -1,5 +1,5 @@
 class MenusController < ApplicationController
-
+  before_filter :signed_in_user
   def index
     @menus = Menu.where(acive: true)
 

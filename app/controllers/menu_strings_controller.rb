@@ -1,5 +1,5 @@
 class MenuStringsController < ApplicationController
-
+  before_filter :signed_in_user
   def index
     @menu_strings = MenuString.all
 

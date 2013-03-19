@@ -1,4 +1,5 @@
 class EmployeesController < ApplicationController
+  before_filter :signed_in_user
   # GET /employees
   # GET /employees.json
   def index

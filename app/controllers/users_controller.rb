@@ -59,7 +59,7 @@ class UsersController < ApplicationController
     if @user.save
       sign_in @user
       flash[:notice] = "Welcome to #{PAGE_NAME}!"
-      redirect_back_or @user
+      redirect_back_or merchants_path
     else
       flash[:error] = human_readable_error_message(@user).join(' - ')
       render 'new'

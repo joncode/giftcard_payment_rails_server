@@ -1,4 +1,4 @@
-
+<% if @providers.count > 1 %>
 <div class="merchantSignInWrapper POSfullPageWrap">
   <h2>Choose Establishment to sign into</h2>
   <% count = @providers.count %>
@@ -18,3 +18,12 @@
     <% end %>
   </table>
 </div>
+<% else %>
+<div class="merchantSignInWrapper POSfullPageWrap">
+  <h2>This website is for Merchants only.</h2>
+  <h3>If you are a merchant employee and are seeing this message,</h3>
+  <h3>Please contact your employer to connect your Drinkboard account</h3>
+
+</div>
+<% end %>
+
