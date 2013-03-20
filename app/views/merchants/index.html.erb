@@ -1,5 +1,10 @@
+
+
 <% if @providers.count > 1 %>
 <div class="merchantSignInWrapper POSfullPageWrap">
+  <% if @current_user.admin %>
+    <%= link_to 'ADMIN' %>
+  <% end %>
   <h2>Choose Establishment to sign into</h2>
   <% count = @providers.count %>
   <table class="rounded gradient">
