@@ -3,7 +3,7 @@
   <div class="headerImage"></div>
   <div class="lineVertHeader lineVert"></div>
   <div class="loggedInBox">
-  	<h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="/home"><%= @current_user.fullname %></a></h5>
+  	<h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="/merchants"><%= @current_user.fullname %></a></h5>
   </div>
   <% if @provider %>
   <div class="vendorTitle">
