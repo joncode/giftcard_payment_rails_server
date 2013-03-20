@@ -12,7 +12,7 @@ module ApplicationHelper
     crop  = "/c_fill,h_#{height},w_#{width},a_exif/"
     if flag 
       photo     = object.get_image(flag)
-      url_array = photo.split('upload/')
+      url_array = photo.split('upload/') 
     else
       url_array = object.get_photo_for_web.split('upload/')
     end

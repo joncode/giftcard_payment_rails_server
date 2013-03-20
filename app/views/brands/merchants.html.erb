@@ -1,0 +1,50 @@
+<div class="merchantSignInWrapper POSfullPageWrap">
+<% if @merchants.count > 0 %>
+
+<h1>Listing Merchants</h1>
+
+<table>
+  <tr style="color:#ccc">
+    <th>Name</th>
+    <th>Description</th>
+    <th>Photo</th>
+    <th>Brand</th>
+    <th>Building</th>
+
+  </tr>
+
+    <% @merchants.each do |merchant| %>
+      <tr>
+        <td><%= merchant.name %></td>
+        <td><%= merchant.description %></td>
+        <td><%= custom_image_tag(merchant, 100, 50) %></td>
+        <% if merchant.brand_id == @brand.id %>
+        <td><%= link_to 'true', brand_merchant_brand_path(@brand, :offset => @page, :merchant => merchant.id)%>
+        </td>
+        <% elsif merchant.brand_id.nil? %>
+        <td><%= link_to 'Brand', brand_merchant_brand_path(@brand, :offset => @page,:merchant => merchant.id) %>
+        </td>
+        <% else %>
+        <td>NA</td>
+        <% end %>
+        <% if merchant.building_id == @brand.id %>
+        <td><%= link_to 'true', building_merchant_brand_path(@brand, :offset => @page, merchant: merchant.id) %>
+        </td>
+        <% elsif merchant.building_id.nil? %>
+        <td><%= link_to 'Building', building_merchant_brand_path(@brand,:offset => @page, :merchant => merchant.id) %>
+        </td>
+        <% else %>
+        <td>NA</td>
+        <% end %>
+
+      </tr>
+    <% end %>
+</table>
+	<% if  %>
+		<%= link_to 'Next Merchants', merchants_brand_path(@brand, offset: @offset) %>
+	<% end %>
+<% end %>
+<br />
+
+<%= link_to 'Brand Index', brands_path %>
+</div>

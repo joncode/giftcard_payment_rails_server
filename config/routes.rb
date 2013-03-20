@@ -1,7 +1,15 @@
 Drinkboard::Application.routes.draw do
   
   root to: 'users#new'
-  resources :brands
+  resources :brands do
+    member do
+      get :add_photo
+      post :upload_photo
+      get :merchants
+      get :brand_merchant
+      get :building_merchant
+    end
+  end
 
   # resources :sales
   # resources :cards
@@ -123,6 +131,8 @@ Drinkboard::Application.routes.draw do
   match 'app/update_user',      to: 'app#update_user',         via: :post
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
+  match 'app/brands',           to: 'app#brands',              via: :post
+  match 'app/brand_merchants',  to: 'app#brand_merchants',     via: :post
   match 'app/providers',        to: 'app#providers',           via: :post
   match 'app/get_providers',    to: 'app#providers',           via: :get
   match 'app/employees',        to: 'app#create_redeem',       via: :post

@@ -2,9 +2,27 @@ class Brand < ActiveRecord::Base
 	attr_accessible :address, :city, :description, 
 	:logo, :name, :phone, :state, :user_id, :website, :banner, :portrait
 
+	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
+  	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
 	has_many :providers
 	has_many :employees
+	belongs_to :user
+
+  	mount_uploader :banner,    BrandBannerUploader
+
+	def get_image
+		self.banner.url
+	end
+
+	def get_photo_for_web
+		self.get_image
+	end
+
+	def providers
+		Provider.where("brand_id = ? OR building_id = ?", self.id, self.id)
+	end
+
 end
 # == Schema Information
 #

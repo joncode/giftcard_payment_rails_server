@@ -1,52 +1,34 @@
 <div class="merchantSignInWrapper POSfullPageWrap">
 <p id="notice"><%= notice %></p>
 
-<p>
+  <% if !@brand.banner.file.nil? %>
+  <div class="doubleColumn">
+
+    <%= link_to custom_image_tag(@brand, 600,320), add_photo_brand_path(@brand) %>
+  </div>
+  <% end %><h2>
   <b>Name:</b>
   <%= @brand.name %>
-</p>
+</h2>
 
-<p>
+
+<h2>
   <b>Description:</b>
   <%= @brand.description %>
-</p>
+</h2>
 
-<p>
-  <b>Address:</b>
-  <%= @brand.address %>
-</p>
-
-<p>
-  <b>City:</b>
-  <%= @brand.city %>
-</p>
-
-<p>
-  <b>State:</b>
-  <%= @brand.state %>
-</p>
-
-<p>
-  <b>Phone:</b>
-  <%= @brand.phone %>
-</p>
-
-<p>
+<h2>
   <b>Website:</b>
   <%= @brand.website %>
-</p>
+</h2>
 
-<p>
-  <b>Logo:</b>
-  <%= @brand.logo%>
-</p>
-
-<p>
-  <b>User:</b>
-  <%= @brand.user_id %>
-</p>
+<h2>
+  <b>Super User:</b>
+  <%= @brand.user.fullname %>
+</h2>
 
 
 <%= link_to 'Edit', edit_brand_path(@brand) %> |
-<%= link_to 'Back', brands_path %>
+<%= link_to 'Connect Merchants', merchants_brand_path(@brand) %> |
+<%= link_to 'Index', brands_path %>
 </div>

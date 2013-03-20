@@ -15,6 +15,64 @@ class BrandsController < ApplicationController
     end
   end
 
+  def merchants
+    @offset = params[:offset].to_i || 0
+    @page = @offset
+    @brand = Brand.find(params[:id].to_i)
+    @merchants = Provider.limit(10).offset(@offset)
+    if @merchants.count == 10
+      @offset += 10 
+    else
+      @offset = 0
+    end
+  end
+
+  def building_merchant
+    @brand = Brand.find(params[:id].to_i)
+    merchant = Provider.find(params[:merchant].to_i)
+    if merchant.building_id != @brand.id
+      merchant.building_id = @brand.id
+    else
+      merchant.building_id = nil
+    end
+    merchant.save
+    
+    respond_to do |format|
+      format.html { redirect_to merchants_brand_path(@brand, :offset => params[:offset])}
+    end
+  end
+
+  def brand_merchant
+    @brand = Brand.find(params[:id].to_i)
+    merchant = Provider.find(params[:merchant].to_i)
+    if merchant.brand_id != @brand.id
+      merchant.brand_id = @brand.id
+    else
+      merchant.brand_id = nil
+    end
+    merchant.save
+
+    respond_to do |format|
+      format.html { redirect_to merchants_brand_path(@brand, :offset => params[:offset])}
+    end    
+  end
+
+  def add_photo
+    @brand = Brand.find(params[:id].to_i)
+    @obj_to_edit = @brand
+    @obj_name = "brand"
+    @file_field_name = "banner"
+    @obj_width = 600
+    @obj_height = 320
+    @action = "upload_photo"
+  end
+
+  def upload_photo
+    @brand = Brand.find(params[:id].to_i)
+    @brand.update_attributes(params[:brand])
+    redirect_to brand_path(@brand)    
+  end
+
   def show
     @brand = Brand.find(params[:id].to_i)
 
@@ -39,10 +97,12 @@ class BrandsController < ApplicationController
 
   def create
     @brand = Brand.new(params[:brand])
+    @current_user   = current_user
+    @brand.user_id = @current_user.id
 
     respond_to do |format|
       if @brand.save
-        format.html { redirect_to @brand, notice: 'Brand was successfully created.' }
+        format.html { redirect_to add_photo_brand_path(@brand), notice: 'Brand was successfully created.' }
         format.json { render json: @brand, status: :created, location: @brand }
       else
         format.html { render action: "new" }

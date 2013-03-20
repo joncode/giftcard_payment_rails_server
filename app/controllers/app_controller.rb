@@ -11,6 +11,7 @@ class AppController < ApplicationController
 	GIFT_REPLY 	  = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
  	PROVIDER_REPLY = ["name", "phone"]
+ 	BRAND_REPLY = ["name"]
 
  	def stringify_error_messages(object)
  		msgs = object.errors.messages
@@ -345,6 +346,13 @@ class AppController < ApplicationController
   		end
   	end
 
+  	def shorten_url_for_brand_ary brands_array
+  		brands_array.each do |brand|
+  			short_photo_url = short_photo_url brand["photo"]
+  			brand["photo"] = short_photo_url
+  		end
+  	end
+
   	def providers_short_ph_url
 	    if  authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
@@ -364,6 +372,49 @@ class AppController < ApplicationController
   		respond_to do |format|
 	      # logger.debug providers_array
 	      puts "AC ProvidersShortPhotoURL response[0] => #{logmsg}"
+	      format.json { render json: providers_array }
+	    end
+  	end
+
+  	def brands
+  		if  authenticate_public_info
+	    	if  !params["city"] || params["city"] == "all"
+	    		brands = Brand.all
+	    	else
+	    		brands = Brand.where(city: params["city"])
+	    	end
+	    	brands_array = array_these_brands(brands, BRAND_REPLY)
+	    	brands_array = shorten_url_for_brand_ary brands_array
+	    	logmsg 			= brands_array[0]
+	  	else
+	  		brands_hash 	= {"error" => "user was not found in database"}
+	  		brands_array 	= brands_hash
+	  		logmsg 			= brands_hash
+	  	end
+
+  		respond_to do |format|
+	      # logger.debug providers_array
+	      puts "AC Brands response[0] => #{logmsg}"
+	      format.json { render json: brands_array }
+	    end
+  	end
+
+  	def brand_merchants
+	    if  authenticate_public_info
+	    	brand_id = params["brand"].to_i
+	    	brand = Brand.find brand_id
+	    	providers_array = array_these_providers(brand.providers, PROVIDER_REPLY)
+	    	providers_array = shorten_url_for_provider_ary providers_array
+	    	logmsg 			= providers_array[0]
+	  	else
+	  		providers_hash 	= {"error" => "user was not found in database"}
+	  		providers_array = providers_hash
+	  		logmsg 			= providers_hash
+	  	end
+
+  		respond_to do |format|
+	      # logger.debug providers_array
+	      puts "AC BrandMerchants response[0] => #{logmsg}"
 	      format.json { render json: providers_array }
 	    end
   	end
@@ -731,6 +782,21 @@ class AppController < ApplicationController
 				providers_array << prov_obj
 			end
 			return providers_array
+		end
+
+		def array_these_brands(obj, send_fields)
+			brands_array = []
+			obj.each do |p|
+				brand_obj = p.serializable_hash only: send_fields
+				brand_obj.each_key do |key|
+					value	= brand_obj[key]
+					brand_obj[key] = value.to_s
+				end
+				brand_obj["brand_id"]  = p.id.to_s
+				brand_obj["photo"] 	   = p.get_image
+				brands_array << brand_obj
+			end
+			return brands_array
 		end
 
 	    def array_these_users(obj, send_fields)

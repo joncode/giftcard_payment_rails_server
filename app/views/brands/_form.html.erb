@@ -3,7 +3,13 @@
   <h5 class="menuSectionHeader">
     Brand Profile Information
   </h5>
-  <%= form_for(@brand, remote: true) do |f| %>
+  <% if !@brand.banner.file.nil? %>
+  <div class="doubleColumn">
+        <br />
+    <%= link_to custom_image_tag(@brand, 300,160), add_photo_brand_path(@brand) %>
+  </div>
+  <% end %>
+  <%= form_for @brand do |f| %>
   <% if @brand.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@brand.errors.count, "error") %> prohibited this brand from being saved:</h2>
@@ -23,19 +29,10 @@
         </div>                                      
         <div class="field">                         
           <%= f.text_area :description , placeholder: 'Full Description', :rows => 2 %>
-        </div> 
-        <div class="field">                         
-          <%= f.text_field :phone,   placeholder: 'Phone Number' , value: number_to_phone(@brand.phone, :area_code => true) %>
         </div>                                                                          
         <div class="field">                         
-          <%= f.text_field :address,     placeholder: 'Street Address' %>
-        </div>                                      
-        <div class="field">                         
-          <%= f.text_field :city ,       placeholder: 'City' %>
-        </div>                                      
-        <div class="field">                         
-          <%= f.text_field :state,       placeholder: 'State' %>
-        </div>                                      
+          <%= f.text_field :website,     placeholder: 'Website' %>
+        </div>                                                                           
         <div class="actions">
           <%= f.submit "Create", class: "btn btn-large btn-info" %>
         </div> 

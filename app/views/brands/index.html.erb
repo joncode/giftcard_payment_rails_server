@@ -4,16 +4,11 @@
 <h1>Listing brands</h1>
 
 <table>
-  <tr>
+  <tr style="color:#ccc">
     <th>Name</th>
     <th>Description</th>
-    <th>Address</th>
-    <th>City</th>
-    <th>State</th>
-    <th>Phone</th>
     <th>Website</th>
     <th>Logo url</th>
-    <th>User</th>
     <th></th>
     <th></th>
     <th></th>
@@ -23,13 +18,12 @@
       <tr>
         <td><%= brand.name %></td>
         <td><%= brand.description %></td>
-        <td><%= brand.address %></td>
-        <td><%= brand.city %></td>
-        <td><%= brand.state %></td>
-        <td><%= brand.phone %></td>
         <td><%= brand.website %></td>
-        <td><%= brand.logo %></td>
-        <td><%= brand.user_id %></td>
+            <% if brand.banner.file.nil? %>
+        <td></td>
+            <% else %>
+        <td><%= custom_image_tag(brand, 50, 50) %></td>
+            <% end %>
         <td><%= link_to 'Show', brand %></td>
         <td><%= link_to 'Edit', edit_brand_path(brand) %></td>
         <td><%= link_to 'Destroy', brand, confirm: 'Are you sure?', method: :delete %></td>
