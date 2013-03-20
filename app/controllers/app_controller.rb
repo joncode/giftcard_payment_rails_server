@@ -799,6 +799,7 @@ class AppController < ApplicationController
 				end
 				brand_obj["brand_id"]  = p.id.to_s
 				brand_obj["photo"] 	   = p.get_image
+				brand_obj["next_step"] = "merchant"
 				brands_array << brand_obj
 			end
 			return brands_array
