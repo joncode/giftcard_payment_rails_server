@@ -13,7 +13,7 @@
 /tmp/*
 # /public/assets
 /app/assets/images/video/*
-
+/dump.rdb
 *.rbc
 *.sassc
 .sass-cache
