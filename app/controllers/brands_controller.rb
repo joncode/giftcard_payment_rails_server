@@ -2,21 +2,21 @@ class BrandsController < ApplicationController
   before_filter :signed_in_user
   before_filter :admin_user?
 
-  # GET /brands
-  # GET /brands.json
   def index
     @brands = Brand.all
 
     respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @brands }
+      if @brands.count > 0
+        format.html # index.html.erb
+        format.json { render json: @brands }
+      else
+        format.html {redirect_to new_brand_path }
+      end
     end
   end
 
-  # GET /brands/1
-  # GET /brands/1.json
   def show
-    @brand = Brand.find(params[:id])
+    @brand = Brand.find(params[:id].to_i)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -24,8 +24,6 @@ class BrandsController < ApplicationController
     end
   end
 
-  # GET /brands/new
-  # GET /brands/new.json
   def new
     @brand = Brand.new
 
@@ -35,13 +33,10 @@ class BrandsController < ApplicationController
     end
   end
 
-  # GET /brands/1/edit
   def edit
-    @brand = Brand.find(params[:id])
+    @brand = Brand.find(params[:id].to_i)
   end
 
-  # POST /brands
-  # POST /brands.json
   def create
     @brand = Brand.new(params[:brand])
 
@@ -56,10 +51,8 @@ class BrandsController < ApplicationController
     end
   end
 
-  # PUT /brands/1
-  # PUT /brands/1.json
   def update
-    @brand = Brand.find(params[:id])
+    @brand = Brand.find(params[:id].to_i)
 
     respond_to do |format|
       if @brand.update_attributes(params[:brand])
@@ -72,10 +65,8 @@ class BrandsController < ApplicationController
     end
   end
 
-  # DELETE /brands/1
-  # DELETE /brands/1.json
   def destroy
-    @brand = Brand.find(params[:id])
+    @brand = Brand.find(params[:id].to_i)
     @brand.destroy
 
     respond_to do |format|
