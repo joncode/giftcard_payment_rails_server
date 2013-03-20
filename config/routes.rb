@@ -71,7 +71,7 @@ Drinkboard::Application.routes.draw do
   match "/merchants/:id/employee/:eid/remove"   => "merchants#remove_employee"
   
   resources :merchants do
-    get 'home'
+    # get 'home'
     member do
       # test routes
       get 'baronVonJovi'
