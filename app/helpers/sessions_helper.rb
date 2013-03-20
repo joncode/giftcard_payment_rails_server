@@ -20,6 +20,12 @@ module SessionsHelper
       redirect_to signin_path, notice: "Please sign in." unless signed_in?
     end
   end
+
+  def admin_user?
+    unless current_user.admin
+      redirect_to signin_path, notice: "Please sign in." 
+    end
+  end
   
   def current_user=(user, provider=nil)
     @current_user = user

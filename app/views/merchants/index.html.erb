@@ -1,5 +1,5 @@
 <% content_for :brand_link do %>
-  <h2>Click <%= link_to 'HERE' %> to go to the Brand Site</h2>
+  <h2>Click <%= link_to 'HERE', brands_path %> to go to the Brand Site</h2>
 <% end %>
 
       <% if @providers.count > 1 %>
@@ -33,6 +33,7 @@
   <h2>This website is for Merchants only.</h2>
   <h3>If you are a merchant employee and are seeing this message,</h3>
   <h3>Please contact your employer to connect your Drinkboard account</h3>
+  <h3>Click this link if you are looking for <%= link_to "www.drinkboard.com",  "http://www.drinkboard.com" %></h3>
 
 </div>
       <% end %>

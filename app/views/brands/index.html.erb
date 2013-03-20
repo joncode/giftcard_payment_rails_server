@@ -1,3 +1,6 @@
+<div class="merchantSignInWrapper POSfullPageWrap">
+<% if @brands.count > 0 %>
+
 <h1>Listing brands</h1>
 
 <table>
@@ -16,24 +19,25 @@
     <th></th>
   </tr>
 
-<% @brands.each do |brand| %>
-  <tr>
-    <td><%= brand.name %></td>
-    <td><%= brand.description %></td>
-    <td><%= brand.address %></td>
-    <td><%= brand.city %></td>
-    <td><%= brand.state %></td>
-    <td><%= brand.phone %></td>
-    <td><%= brand.website %></td>
-    <td><%= brand.logo %></td>
-    <td><%= brand.user_id %></td>
-    <td><%= link_to 'Show', brand %></td>
-    <td><%= link_to 'Edit', edit_brand_path(brand) %></td>
-    <td><%= link_to 'Destroy', brand, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
-<% end %>
+    <% @brands.each do |brand| %>
+      <tr>
+        <td><%= brand.name %></td>
+        <td><%= brand.description %></td>
+        <td><%= brand.address %></td>
+        <td><%= brand.city %></td>
+        <td><%= brand.state %></td>
+        <td><%= brand.phone %></td>
+        <td><%= brand.website %></td>
+        <td><%= brand.logo %></td>
+        <td><%= brand.user_id %></td>
+        <td><%= link_to 'Show', brand %></td>
+        <td><%= link_to 'Edit', edit_brand_path(brand) %></td>
+        <td><%= link_to 'Destroy', brand, confirm: 'Are you sure?', method: :delete %></td>
+      </tr>
+    <% end %>
 </table>
-
+<% end %>
 <br />
 
 <%= link_to 'New Brand', new_brand_path %>
+</div>
