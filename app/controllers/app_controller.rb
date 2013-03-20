@@ -401,11 +401,16 @@ class AppController < ApplicationController
 
   	def brand_merchants
 	    if  authenticate_public_info
-	    	brand_id = params["brand"].to_i
-	    	brand = Brand.find brand_id
-	    	providers_array = array_these_providers(brand.providers, PROVIDER_REPLY)
-	    	providers_array = shorten_url_for_provider_ary providers_array
-	    	logmsg 			= providers_array[0]
+	    	brand_id = params["data"].to_i
+	    	begin
+	    		brand = Brand.find brand_id
+	    		providers_array = array_these_providers(brand.providers, PROVIDER_REPLY)
+	    		providers_array = shorten_url_for_provider_ary providers_array
+	    		logmsg 			= providers_array[0]
+	    	rescue
+	    		logmsg 			= { "error_server" => { "data_error" => "Cant find Brand with that ID"}}
+	    		providers_array = logmsg
+	    	end
 	  	else
 	  		providers_hash 	= {"error" => "user was not found in database"}
 	  		providers_array = providers_hash
