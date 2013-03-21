@@ -3,11 +3,19 @@ class ProvidersController < ApplicationController
 
 
   def index
-    @providers = Provider.all
+    @offset = params[:offset].to_i || 0
+    @page = @offset
+    paginate = 9
+    @merchants = Provider.limit(paginate).offset(@offset) 
+    if @merchants.count == paginate
+      @offset += paginate
+    else
+      @offset = 0
+    end
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render json: @providers }
+      format.json { render json: @merchants }
     end
   end
 
@@ -80,5 +88,21 @@ class ProvidersController < ApplicationController
       format.html { redirect_to providers_url }
       format.json { head :no_content }
     end
+  end
+
+  def add_photo
+    @provider = Provider.find(params[:id].to_i)
+    @obj_to_edit = @brand
+    @obj_name = "provider"
+    @file_field_name = "photo"
+    @obj_width = 600
+    @obj_height = 320
+    @action = "upload_photo"
+  end
+
+  def upload_photo
+    @provider = Provider.find(params[:id].to_i)
+    @provider.update_attributes(params[:provider])
+    redirect_to brands_provider_path(@provider)    
   end
 end

@@ -19,9 +19,10 @@ class BrandsController < ApplicationController
     @offset = params[:offset].to_i || 0
     @page = @offset
     @brand = Brand.find(params[:id].to_i)
-    @merchants = Provider.limit(10).offset(@offset)
-    if @merchants.count == 10
-      @offset += 10 
+    paginate = 10
+    @merchants = Provider.limit(paginate).offset(@offset)
+    if @merchants.count == paginate
+      @offset += paginate 
     else
       @offset = 0
     end

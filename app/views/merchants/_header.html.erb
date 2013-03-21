@@ -3,12 +3,13 @@
   <div class="headerImage"></div>
   <div class="lineVertHeader lineVert"></div>
   <div class="loggedInBox">
+       <% if @provider  %>
   	<h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="/merchants"><%= @current_user.fullname %></a></h5>
   </div>
-  <% if @provider || @brand %>
-    <% @provider = @brand unless @provider %>
+  
   <div class="vendorTitle">
   	<h5 class="vendorTitleText">
+ 
       <a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a>
     </h5>
   	<h6 class="vendorAddress">
@@ -17,9 +18,35 @@
   			<%= @provider.city_state_zip %>
   	</h6>
   </div>
+  <% elsif params[:controller] == "brands" %>
+    <h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="/admin"><%= @current_user.fullname %></a></h5>
+  </div>
+  
+  <div class="vendorTitle">
+    <h5 class="vendorTitleText">
+      <a href="/brands/<%= @brand.id if @brand %>"><%= @brand.name if @brand %></a>
+    </h5>
+    <h6 class="vendorAddress">
+        <%= @brand.description if @brand %>
+        <br />
+        <%= @brand.website if @brand %>
+    </h6>
+  </div>  
+  <% else %>
+    <h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="#"><%= @current_user.fullname %></a></h5>
+  </div>
+  
+  <div class="vendorTitle">
+    <h5 class="vendorTitleText">
+      <a href="/"></a>
+    </h5>
+    <h6 class="vendorAddress">
+        
+        <br />
+        
+    </h6>
+  </div> 
   <% end %>
   <div class="lineHorizHeader lineHoriz"></div>
   	<div class="columnTopBlocker"></div>
-      <% if @provider && !@brand %>
-  	  	<%= render 'merchant_options', tab: params[:action] %>
-      <% end %>
+

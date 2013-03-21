@@ -76,7 +76,16 @@ Drinkboard::Application.routes.draw do
 
   # resources :employees
   # resources :locations
-  resources :providers 
+  resources :providers do
+    member do
+      get :add_photo
+      post :upload_photo
+      get :brands
+      get :brand_merchant
+      get :building_merchant
+    end
+  end
+  
   match "/merchants/:id/employee/:eid/remove"   => "merchants#remove_employee"
   
   resources :merchants do
