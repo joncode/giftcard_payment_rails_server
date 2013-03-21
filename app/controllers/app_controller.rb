@@ -663,13 +663,13 @@ class AppController < ApplicationController
 	end
 
 	def save_settings
-  		  		
+  		response = {} 		
   		if user = authenticate_app_user(params["token"])
 			data = JSON.parse params["data"]
 	  		if user.save_settings(data)
 	  			response = { "success" => "Settings saved" }
 	  		else
-	  			response = { "error" => "could not save settings" }
+	  			response["error_server"] = stringify_error_messages user
 	  		end
 	  	else
 	  		response = { "error" => "could not find user in db" }
