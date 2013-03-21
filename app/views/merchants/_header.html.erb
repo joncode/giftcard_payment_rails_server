@@ -5,7 +5,8 @@
   <div class="loggedInBox">
   	<h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="/merchants"><%= @current_user.fullname %></a></h5>
   </div>
-  <% if @provider %>
+  <% if @provider || @brand %>
+    <% @provider = @brand unless @provider %>
   <div class="vendorTitle">
   	<h5 class="vendorTitleText">
       <a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a>
@@ -19,6 +20,6 @@
   <% end %>
   <div class="lineHorizHeader lineHoriz"></div>
   	<div class="columnTopBlocker"></div>
-      <% if @provider %>
+      <% if @provider && !@brand %>
   	  	<%= render 'merchant_options', tab: params[:action] %>
       <% end %>

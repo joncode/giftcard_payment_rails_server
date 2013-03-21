@@ -10,7 +10,7 @@ class Brand < ActiveRecord::Base
 	belongs_to :user
 
   	mount_uploader :banner,    BrandBannerUploader
-  	
+
 
 	def get_image
 		self.banner.url
@@ -22,6 +22,10 @@ class Brand < ActiveRecord::Base
 
 	def providers
 		Provider.where("brand_id = ? OR building_id = ?", self.id, self.id)
+	end
+
+	def city_state_zip
+	    "#{self.description}"
 	end
 
 end
