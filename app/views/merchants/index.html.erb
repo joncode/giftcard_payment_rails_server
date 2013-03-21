@@ -1,12 +1,5 @@
-<% content_for :brand_link do %>
-  <h2>Click <%= link_to 'HERE', brands_path %> to go to the Brand Site</h2>
-<% end %>
-
       <% if @providers.count > 1 %>
 <div class="merchantSignInWrapper POSfullPageWrap">
-  <% if @current_user.admin %>
-    <%= yield :brand_link %>
-  <% end %>
   <h2>Choose Establishment to sign into</h2>
   <% count = @providers.count %>
   <table class="rounded gradient">
@@ -27,9 +20,6 @@
 </div>
       <% else %>
 <div class="merchantSignInWrapper POSfullPageWrap">
-  <% if @current_user.admin %>
-    <%= yield :brand_link %>
-  <% end %>
   <h2>This website is for Merchants only.</h2>
   <h3>If you are a merchant employee and are seeing this message,</h3>
   <h3>Please contact your employer to connect your Drinkboard account</h3>

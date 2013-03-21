@@ -117,7 +117,7 @@
 
 
 <%= form_for(@obj_to_edit, :url => {:action => @action}, :html => { :method => :post, :id => 'uploadForm', :multipart => true }) do |f| %>
-    <div class="doubleColumn"> 
+    <div class="merchantSignInWrapper POSfullPageWrap">
     	<h2>Upload a new Brand here</h2>
 <h1>Follow these steps</h1>
 <h1>Step 1: Add information</h1>
@@ -152,9 +152,6 @@
              <input id="crop_coord_<%= attr %>" type="text" size="30" name="<%= @obj_name %>[crop_<%= attr %>]" />
           <% end %>
       </div>
-
-<%= link_to 'Show', brand_path(@brand) %> |
-<%= link_to 'Index', brands_path %>
     </div>
 
 <% end %>

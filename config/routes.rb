@@ -24,7 +24,8 @@ Drinkboard::Application.routes.draw do
   match '/signup',  to: 'users#new'
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy'
-  
+  match '/admin',   to: 'admin#show'
+
     ###   basic footer routes
   # match '/about',       to: 'home#about'
   # match '/contact',     to: 'home#contact'

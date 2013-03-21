@@ -1,0 +1,11 @@
+<% content_for :brand_link do  %>
+  <h2>Click <%= link_to 'HERE', brands_path %> to go to the Brands Site</h2>
+<% end %>
+<% content_for :merchant_link do  %>
+  <h2>Click <%= link_to 'HERE', providers_path %> to go to the Merchants Site</h2>
+<% end %>
+
+<div class="merchantSignInWrapper POSfullPageWrap">
+	<%= yield :brand_link  %>
+	<%= yield :merchant_link %>
+</div>

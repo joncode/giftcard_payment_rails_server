@@ -21,6 +21,9 @@
   <div class="centerMainWrapper wholePageOBJ">
       <% if signed_in? %>
           <%= render 'merchants/header' %>
+          <% if params[:controller] ==  "brands" %>
+            <%= render 'brands/menu', tab: params[:action] %>
+          <% end %>
       <% else %>
           <%= render 'layouts/intro' %>
       <% end %>
