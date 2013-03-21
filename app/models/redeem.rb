@@ -14,10 +14,7 @@ class Redeem < ActiveRecord::Base
   # redeem must be unique for gift
   
   def self.find_or_create_with_gift(gift)
-    if redeem = gift.redeem
-        # redeem exists
-
-    else
+    unless redeem = gift.redeem
         # redeem must be created
       redeem = Redeem.init_with_gift(gift)
     end

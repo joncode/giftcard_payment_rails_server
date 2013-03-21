@@ -18,6 +18,10 @@ class AppController < ApplicationController
  		{"Failed Authentication" => "Please log out and re-log into app"}	
  	end
 
+ 	def database_error
+ 		{"Failed Data Transfer" => "Please log out and re-log into app"}
+ 	end
+
  	def stringify_error_messages(object)
  		msgs = object.errors.messages
  		msgs.stringify_keys!
@@ -512,16 +516,20 @@ class AppController < ApplicationController
   					# authenticate user
   		if receiver = authenticate_app_user(params["token"])
   					# get gift from db
-  			gift = Gift.find params["data"].to_i
-  					# find or create redeem for gift
-  						# if redeem exists app should not call server 
-  						# gift.status == "notified" if redeem exists
-  			redeem = Redeem.find_or_create_with_gift(gift)
-  			if redeem.save
-  				response["success"] = redeem.redeem_code.to_s
-  			else
-  				response["error_server"] = stringify_error_messages redeem
-  			end
+  			begin
+	  			gift = Gift.find params["data"].to_i
+	  					# find or create redeem for gift
+	  						# if redeem exists app should not call server 
+	  						# gift.status == "notified" if redeem exists
+	  			redeem = Redeem.find_or_create_with_gift(gift)
+	  			if redeem.redeem_code
+	  				response["success"] = redeem.redeem_code.to_s
+	  			else
+	  				response["error_server"] = database_error
+	  			end
+	  		rescue
+	  			response["error_server"] = database_error
+	  		end
   		else
   			response["error"] = unauthorized_user
   		end
