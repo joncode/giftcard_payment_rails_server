@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130321025806) do
+ActiveRecord::Schema.define(:version => 20130321192053) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -277,11 +277,9 @@ ActiveRecord::Schema.define(:version => 20130321025806) do
 
   create_table "redeems", :force => true do |t|
     t.integer  "gift_id"
-    t.string   "reply_message"
     t.string   "redeem_code"
-    t.text     "special_instructions"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "relationships", :force => true do |t|
