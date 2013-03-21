@@ -6,7 +6,7 @@
  
   <h2>"<%= @provider.description %>"</h2>
   <h2><%= @provider.full_address %></h2>
-  <%= custom_image_tag(@provider,600,320)  %>
+  <%= link_to custom_image_tag(@provider,600,320), add_photo_provider_path(@provider)  %>
 </div>
 </div>
 
