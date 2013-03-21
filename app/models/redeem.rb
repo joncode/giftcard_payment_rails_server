@@ -1,18 +1,33 @@
 class Redeem < ActiveRecord::Base
-  attr_accessible :gift_id, :redeem_code, :reply_message, :special_instructions
+  attr_accessible :gift_id, :redeem_code
   
   belongs_to      :gift
   has_one         :giver,     :through => :gift
   has_one         :receiver,  :through => :gift
   has_one         :provider,  :through => :gift
   has_one         :order
-  
+    # have to remove :reply_message && :special instructions from the db 
   before_create :create_redeem_code
   after_create  :add_redeem_to_gift
   
   validates :gift_id , presence: true, uniqueness: true
   # redeem must be unique for gift
   
+  def self.find_or_create_with_gift(gift)
+    if redeem = gift.redeem
+        # redeem exists
+
+    else
+        # redeem must be created
+      redeem = Redeem.init_with_gift(gift)
+    end
+    return redeem
+  end
+
+  def self.init_with_gift(gift)
+    Redeem.create(gift_id: gift.id)
+  end
+
   private
 
     def create_redeem_code

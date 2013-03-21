@@ -145,7 +145,8 @@ Drinkboard::Application.routes.draw do
   match 'app/brand_merchants',  to: 'app#brand_merchants',     via: :post
   match 'app/providers',        to: 'app#providers',           via: :post
   match 'app/get_providers',    to: 'app#providers',           via: :get
-  match 'app/employees',        to: 'app#create_redeem',       via: :post
+  match 'app/employees',        to: 'app#create_redeem_emps',  via: :post
+  match 'app/redeem',           to: 'app#create_redeem',       via: :post
   match 'app/complete_order',   to: 'app#create_order',        via: :post
   match 'app/menu',             to: 'app#menu',                via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
