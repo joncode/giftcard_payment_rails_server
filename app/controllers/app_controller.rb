@@ -6,20 +6,20 @@ class AppController < ApplicationController
 	after_filter 	:cross_origin_allow_header
 	after_filter 	:method_end_log_message
 
-	UPDATE_REPLY  = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
- 	USER_REPLY 	  = ["first_name", "last_name", "email", "phone", "facebook_id"]	
-	GIFT_REPLY 	  = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
-    ACTIVITY_REPLY = GIFT_REPLY + [ "receiver_id", "receiver_name"] 
- 	PROVIDER_REPLY = ["name", "phone"]
- 	BRAND_REPLY = ["name"]
+	UPDATE_REPLY  	= ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
+ 	USER_REPLY 	  	= ["first_name", "last_name", "email", "phone", "facebook_id"]	
+	GIFT_REPLY 	  	= ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
+    ACTIVITY_REPLY 	= GIFT_REPLY + [ "receiver_id", "receiver_name"] 
+ 	PROVIDER_REPLY 	= ["name", "phone"]
+ 	BRAND_REPLY 	= ["name"]
 
 
  	def unauthorized_user
- 		{"Failed Authentication" => "Please log out and re-log into app"}	
+ 		{ "Failed Authentication" => "Please log out and re-log into app" }	
  	end
 
  	def database_error
- 		{"Failed Data Transfer" => "Please log out and re-log into app"}
+ 		{ "Data Transfer Error"   => "Please Reload Gift Center" }
  	end
 
  	def stringify_error_messages(object)
@@ -511,7 +511,6 @@ class AppController < ApplicationController
   	end
 
   	def create_redeem
-
   		# receive {"token" => "<token>", "data" => "<gift_id>" }
   					# authenticate user
   		if receiver = authenticate_app_user(params["token"])
@@ -537,8 +536,7 @@ class AppController < ApplicationController
   		respond_to do |format|
   			puts "AC CreateRedeem response => #{response}"
   			format.json { render json: response}
-  		end
-  		
+  		end 		
   	end
 
 	def create_order
