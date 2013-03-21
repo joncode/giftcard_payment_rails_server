@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130317170729) do
+ActiveRecord::Schema.define(:version => 20130321025806) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(:version => 20130317170729) do
     t.string   "receiver_email"
     t.text     "shoppingCart"
     t.string   "twitter"
+    t.string   "service"
   end
 
   add_index "gifts", ["giver_id"], :name => "index_gifts_on_giver_id"
