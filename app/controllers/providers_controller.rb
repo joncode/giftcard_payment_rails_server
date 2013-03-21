@@ -105,4 +105,47 @@ class ProvidersController < ApplicationController
     @provider.update_attributes(params[:provider])
     redirect_to provider_path(@provider)    
   end
+
+  def brands
+    @offset = params[:offset].to_i || 0
+    @page = @offset
+    @provider = Provider.find(params[:id].to_i)
+    paginate = 10
+    @brands = Brand.limit(paginate).offset(@offset)
+    if @brands.count == paginate
+      @offset += paginate 
+    else
+      @offset = 0
+    end
+  end
+
+  def building
+    @provider = Provider.find(params[:id].to_i)
+    brand = Brand.find(params[:brand].to_i)
+    if @provider.building_id != brand.id
+      @provider.building_id = brand.id
+    else
+      @provider.building_id = nil
+    end
+    @provider.save
+    
+    respond_to do |format|
+      format.html { redirect_to brands_provider_path(@provider, :offset => params[:offset])}
+    end
+  end
+
+  def brand
+    @provider = Provider.find(params[:id].to_i)
+    brand = Brand.find(params[:brand].to_i)
+    if @provider.brand_id != brand.id
+      @provider.brand_id = brand.id 
+    else
+      @provider.brand_id = nil
+    end
+    @provider.save
+
+    respond_to do |format|
+      format.html { redirect_to brands_provider_path(@provider, :offset => params[:offset])}
+    end    
+  end
 end

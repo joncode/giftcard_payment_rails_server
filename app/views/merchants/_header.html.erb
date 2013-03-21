@@ -33,7 +33,7 @@
     </h6>
   </div>  
   <% else %>
-    <h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="#"><%= @current_user.fullname %></a></h5>
+    <h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="/admin"><%= @current_user.fullname %></a></h5>
   </div>
   
   <div class="vendorTitle">

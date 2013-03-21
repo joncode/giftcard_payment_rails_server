@@ -81,8 +81,8 @@ Drinkboard::Application.routes.draw do
       get :add_photo
       post :upload_photo
       get :brands
-      get :brand_merchant
-      get :building_merchant
+      get :brand
+      get :building
     end
   end
   
