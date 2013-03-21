@@ -6,6 +6,6 @@ class RemoveReplayMessageAndSpecialInstructionsFromRedeems < ActiveRecord::Migra
 
   def down
   	add_column :redeems, :reply_message, :string
-  	add_column :redeems, :special_instructions, :string
+  	add_column :redeems, :special_instructions, :text
   end
 end

@@ -6,7 +6,7 @@ class Redeem < ActiveRecord::Base
   has_one         :receiver,  :through => :gift
   has_one         :provider,  :through => :gift
   has_one         :order
-    # have to remove :reply_message && :special instructions from the db 
+
   before_create :create_redeem_code
   after_create  :add_redeem_to_gift
   
@@ -45,8 +45,6 @@ end
 #  id                   :integer         not null, primary key
 #  gift_id              :integer
 #  reply_message        :string(255)
-#  redeem_code          :string(255)
-#  special_instructions :text
 #  created_at           :datetime        not null
 #  updated_at           :datetime        not null
 #
