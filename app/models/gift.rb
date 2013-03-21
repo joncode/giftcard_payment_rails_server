@@ -4,9 +4,17 @@ class Gift < ActiveRecord::Base
       :receiver_id, :receiver_name, :receiver_phone, 
       :provider_id, :provider_name, :receiver_email, 
       :message,    :shoppingCart, 
-      :tip, :tax,   :total, 
+      :tip, :tax,   :total, :service,
       :facebook_id, :foursquare_id, :twitter,
-      :status, :regift_id, :anon_id
+      :status
+      # should be removed from accessible = giver_id, giver_name, shoppingCart, status
+      
+      # from the app on create gift
+# \"receiver_email\" \"facebook_id\"\"tax\"  \"receiver_phone\"  \"giver_name\" 
+# \"receiver_id\"  \"total\"  \"provider_id\"  \"tip\"  \"service\"  \"message\"  
+# \"credit_card\"  \"provider_name\"  \"receiver_name\"  \"giver_id\"  "origin"=>"d"
+# "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":1,\"item_id\":920,\"item_name\":\"Fireman's Special\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":901,\"item_name\":\"Corona\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":902,\"item_name\":\"Budwesier\"}]",
+# "token"=>"LlWODlRC9M3VDbzPHuWMdA"}
 
   has_one     :redeem, dependent: :destroy
   has_one     :relay,  dependent: :destroy
@@ -97,14 +105,14 @@ class Gift < ActiveRecord::Base
 
   ##########  gift creation methods
 
-  def self.init(params)
-    gift = Gift.new(params[:gift])
-        # add anonymous giver feature
-    if params[:gift][:anon_id] 
-      gift.add_anonymous_giver(params[:gift][:giver_id])
-    end
-    return gift
-  end
+  # def self.init(params)
+  #   gift = Gift.new(params[:gift])
+  #       # add anonymous giver feature
+  #   if params[:gift][:anon_id] 
+  #     gift.add_anonymous_giver(params[:gift][:giver_id])
+  #   end
+  #   return gift
+  # end
 
   def regift(receiver=nil, message=nil)
     new_gift            = self.dup
