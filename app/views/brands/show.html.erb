@@ -22,10 +22,12 @@
   <%= @brand.website %>
 </h2>
 
+<% if @brand.user %>
 <h2>
   <b>Super User:</b>
-  <%= @brand.user.fullname %>
+  <%= @brand.user.fullname  %>
 </h2>
+<% end %>
 
 
 <%= link_to 'Edit', edit_brand_path(@brand) %> |

@@ -10,13 +10,14 @@ class Brand < ActiveRecord::Base
 	belongs_to :user
 
   	mount_uploader :banner,    BrandBannerUploader
+  	
 
 	def get_image
 		self.banner.url
 	end
 
 	def get_photo_for_web
-		self.get_image
+		self.banner.url
 	end
 
 	def providers
