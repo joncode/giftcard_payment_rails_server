@@ -1,6 +1,6 @@
 class ProvidersController < ApplicationController
-  # before_filter :signed_in_user - WILL THIS BREAK IPHONE - iphone user current user?
-
+  before_filter :signed_in_user
+  before_filter :admin_user?
 
   def index
     @offset = params[:offset].to_i || 0
@@ -46,11 +46,11 @@ class ProvidersController < ApplicationController
   def create
     super_user = current_user
     @provider = Provider.new(params[:provider])
-    @provider.users = [super_user]
 
     respond_to do |format|
       if @provider.save
-        format.html { redirect_to merchant_path(@provider), notice: 'Provider was successfully created.' }
+        Employee.create!(provider_id: @provider.id, user_id: super_user.id, clearance: 'super')
+        format.html { redirect_to provider_path(@provider), notice: 'Provider was successfully created.' }
         format.js 
         format.json { render json: merchant_path(@provider), status: :created, location: @provider }
       else
@@ -92,7 +92,7 @@ class ProvidersController < ApplicationController
 
   def add_photo
     @provider = Provider.find(params[:id].to_i)
-    @obj_to_edit = @brand
+    @obj_to_edit = @provider
     @obj_name = "provider"
     @file_field_name = "photo"
     @obj_width = 600
@@ -103,6 +103,6 @@ class ProvidersController < ApplicationController
   def upload_photo
     @provider = Provider.find(params[:id].to_i)
     @provider.update_attributes(params[:provider])
-    redirect_to brands_provider_path(@provider)    
+    redirect_to provider_path(@provider)    
   end
 end

@@ -8,6 +8,8 @@ class Employee < ActiveRecord::Base
   
   validates_presence_of :user_id, :provider_id
 
+  #clearance = "super", "staff"
+
   def self.create_employee(user, provider)
       # this takes IDs or OBJECTs
     Employee.create(user_id: user, provider_id: provider)

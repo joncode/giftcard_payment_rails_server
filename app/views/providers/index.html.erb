@@ -9,6 +9,7 @@
     <th>Name</th>
     <th>Description</th>
     <th>Address</th>
+    <th></th>
   </tr>
 
   <% @merchants.each do |provider| %>
@@ -17,6 +18,9 @@
       <td><%= link_to provider.name, provider %></td>
       <td><%= provider.description %></td>
       <td><%= provider.full_address %></td>
+      <td><%= link_to 'Show', provider %>
+        <%= link_to 'Edit', edit_provider_path(provider) %>
+        <%= link_to 'Destroy', provider, confirm: 'Are you sure?', method: :delete %></td>
     </tr>
   <% end %>
 </table>
