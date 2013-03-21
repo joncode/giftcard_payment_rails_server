@@ -539,7 +539,33 @@ class AppController < ApplicationController
   		end 		
   	end
 
-	def create_order
+  	def create_order
+  		# receive {"token" => "<token>", "data" => "<gift_id>" }
+  		  			# authenticate user
+  		if receiver = authenticate_app_user(params["token"])
+  					# get gift from db
+  			begin
+	  			gift  = Gift.find params["data"].to_i
+	  			order = Order.init_with_gift(gift)
+	  			if order.save
+	  				response["success"] = { "order_number" => order.id.to_s }
+	  			else
+	  				response["error_server"] = database_error_redeem
+	  			end
+	  		rescue
+	  			response["error_server"] = database_error_redeem
+	  		end
+	  	else
+  			response["error"] = unauthorized_user
+  		end
+
+  		respond_to do |format|
+  			puts "AC CreateORDER response => #{response}"
+  			format.json { render json: response}
+  		end 
+  	end
+
+	def create_order_emp
 
 		message   = ""
 		response  = {} 

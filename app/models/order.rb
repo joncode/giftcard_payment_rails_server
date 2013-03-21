@@ -11,19 +11,32 @@ class Order < ActiveRecord::Base
 
   # order must be unique for each gift and redeem 
         # validation for provider_id is in callback until data is being sent from iPhone
-  validates_presence_of :employee_id #, :server_code, :server_id
+  # validates_presence_of :employee_id #, :server_code, :server_id
   validates :gift_id   , presence: true, uniqueness: true
-  validates :redeem_id , presence: true, uniqueness: true 
+  validates :redeem_id , presence: true, uniqueness: true
+  validates :provider_id , presence: true
 
   before_validation :add_gift_id,     :if => :no_gift_id
-  # before_validation :get_employee_id
   before_validation :add_redeem_id,   :if => :no_redeem_id
   before_validation :add_provider_id, :if => :no_provider_id
   before_validation :authenticate_via_code
   after_create      :update_gift_status
   after_create      :notify_giver_order_complete
   after_destroy     :rewind_gift_status
-    
+  
+  def self.init_with_gift(gift)
+    order = Order.new
+    if redeem = gift.redeem
+      order.gift_id     = gift.id
+      order.provider_id = gift.provider_id
+      order.redeem_id   = redeem.id
+      order.redeem_code = redeem.redeem_code
+    else
+      return nil
+    end
+    return order
+  end
+
   private
 
     def notify_giver_order_complete
@@ -121,22 +134,22 @@ class Order < ActiveRecord::Base
       end  
     end
 
-    def get_employee_id
-      if !self.employee_id
-        puts "SET EMPLOYEE ID"
-        e = Employee.where(provider_id: self.gift.provider.id, user_id:  self.server_id)
-        if e.kind_of? ActiveRecord::Relation
-          if e.size > 0
-            employee = e.shift
-            self.employee_id = employee.id
-          else
-            self.employee_id = nil
-          end
-        else
-          self.employee_id = e.id
-        end
-      end  
-    end  
+    # def get_employee_id
+    #   if !self.employee_id
+    #     puts "SET EMPLOYEE ID"
+    #     e = Employee.where(provider_id: self.gift.provider.id, user_id:  self.server_id)
+    #     if e.kind_of? ActiveRecord::Relation
+    #       if e.size > 0
+    #         employee = e.shift
+    #         self.employee_id = employee.id
+    #       else
+    #         self.employee_id = nil
+    #       end
+    #     else
+    #       self.employee_id = e.id
+    #     end
+    #   end  
+    # end  
 end
 # == Schema Information
 #
