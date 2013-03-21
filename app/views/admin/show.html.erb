@@ -8,4 +8,25 @@
 <div class="merchantSignInWrapper POSfullPageWrap">
 	<%= yield :brand_link  %>
 	<%= yield :merchant_link %>
+
+  <h2>Sign into Merchant Tools for an Establishment</h2>
+     <% unless (@page == 0 && @offset == 0)  %>
+        <%= link_to 'Next Page', admin_path(offset: @offset) %>
+    <% end %>
+  <% count = @providers.count %>
+  <table class="rounded gradient">
+    <tr>
+    </tr>
+    <% @providers.each do |provider| %>
+      <tr>
+        <td class="imageBorder" style="margin: 10px; border-top-width: 1px; padding: 0px; height: 100px; width: 100px;"><%= custom_image_tag(provider,100,100)  %>
+        </td>
+        <td class="tdProviderName"><%= provider.name %></td>
+        <td class="tdDescription"><%= provider.description %></td>
+        <td class="tdAddress"><%= provider.full_address %></td>
+        <td><%= button_to "Log In", merchant_path(provider  ),method: :get, :class => 'buttonImageUp tableButton'%>
+        </td>
+      </tr>
+    <% end %>
+  </table>
 </div>

@@ -3,8 +3,9 @@
   <div class="headerImage"></div>
   <div class="lineVertHeader lineVert"></div>
   <div class="loggedInBox">
-       <% if params[:controller] == "merchants" %>
-  	<h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="/merchants"><%= @current_user.fullname %></a></h5>
+       <% if params[:controller] == "merchants" && @provider %>
+  	<h6><%= link_to 'Logout', signout_path %></h6>
+    <h5>Welcome, <a href="/merchants"><%= @current_user.fullname %></a></h5>
   </div>
   
   <div class="vendorTitle">
