@@ -18,7 +18,7 @@ class AppController < ApplicationController
  		{ "Failed Authentication" => "Please log out and re-log into app" }	
  	end
 
- 	def database_error
+ 	def database_error_redeem
  		{ "Data Transfer Error"   => "Please Reload Gift Center" }
  	end
 
@@ -524,10 +524,10 @@ class AppController < ApplicationController
 	  			if redeem.redeem_code
 	  				response["success"] = redeem.redeem_code.to_s
 	  			else
-	  				response["error_server"] = database_error
+	  				response["error_server"] = database_error_redeem
 	  			end
 	  		rescue
-	  			response["error_server"] = database_error
+	  			response["error_server"] = database_error_redeem
 	  		end
   		else
   			response["error"] = unauthorized_user
