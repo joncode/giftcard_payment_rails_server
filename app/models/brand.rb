@@ -1,6 +1,7 @@
 class Brand < ActiveRecord::Base
 	attr_accessible :address, :city, :description, 
-	:logo, :name, :phone, :state, :user_id, :website, :photo, :portrait
+	:logo, :name, :phone, :state, :user_id, :website, 
+	:photo, :portrait
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
   	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
