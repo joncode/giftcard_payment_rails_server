@@ -17,7 +17,10 @@ class Brand < ActiveRecord::Base
 	end
 
 	def get_photo_for_web
-		self.banner.url
+		unless image = self.banner.url
+			image = "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+		end
+		return image
 	end
 
 	def providers
