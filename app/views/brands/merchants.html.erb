@@ -8,7 +8,7 @@
 <table>
   <tr style="color:#ccc">
     <th>Name</th>
-    <th>Description</th>
+    <th>Zinger</th>
     <th>Photo</th>
     <th>Brand</th>
     <th>Building</th>
@@ -18,7 +18,7 @@
     <% @merchants.each do |merchant| %>
       <tr>
         <td><%= merchant.name %></td>
-        <td><%= merchant.description %></td>
+        <td><%= merchant.zinger %></td>
         <td><%= custom_image_tag(merchant, 100, 50) %></td>
         <% if merchant.brand_id == @brand.id %>
         <td><%= link_to 'true', brand_merchant_brand_path(@brand, :offset => @page, :merchant => merchant.id)%>

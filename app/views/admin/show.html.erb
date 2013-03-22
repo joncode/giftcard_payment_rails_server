@@ -22,7 +22,7 @@
         <td class="imageBorder" style="margin: 10px; border-top-width: 1px; padding: 0px; height: 100px; width: 100px;"><%= custom_image_tag(provider,100,100)  %>
         </td>
         <td class="tdProviderName"><%= provider.name %></td>
-        <td class="tdDescription"><%= provider.description %></td>
+        <td class="tdDescription"><%= provider.zinger %></td>
         <td class="tdAddress"><%= provider.full_address %></td>
         <td><%= button_to "Log In", merchant_path(provider  ),method: :get, :class => 'buttonImageUp tableButton'%>
         </td>
