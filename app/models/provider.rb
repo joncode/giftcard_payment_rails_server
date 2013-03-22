@@ -92,8 +92,12 @@ class Provider < ActiveRecord::Base
   end
 
   def user_clearance(user)
-    emp = self.employees.where(user_id: user.id).pop
-    emp.clearance
+    if user.admin
+      return "super"
+    else
+      emp = self.employees.where(user_id: user.id).pop
+      return emp.clearance
+    end
   end
   
   def server_codes
