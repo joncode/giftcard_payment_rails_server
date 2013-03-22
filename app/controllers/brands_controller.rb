@@ -16,25 +16,25 @@ class BrandsController < ApplicationController
   end
 
   def merchants
-    @offset = params[:offset].to_i || 0
-    @page = @offset
-    @brand = Brand.find(params[:id].to_i)
-    paginate = 10
+    @offset    = params[:offset].to_i || 0
+    @page      = @offset
+    @brand     = Brand.find(params[:id].to_i)
+    paginate   = 10
     @merchants = Provider.limit(paginate).offset(@offset)
     if @merchants.count == paginate
       @offset += paginate 
     else
-      @offset = 0
+      @offset  = 0
     end
   end
 
   def building_merchant
-    @brand = Brand.find(params[:id].to_i)
+    @brand   = Brand.find(params[:id].to_i)
     merchant = Provider.find(params[:merchant].to_i)
     if merchant.building_id != @brand.id
-      merchant.building_id = @brand.id
+      merchant.building_id   = @brand.id
     else
-      merchant.building_id = nil
+      merchant.building_id   = nil
     end
     merchant.save
     
@@ -44,12 +44,12 @@ class BrandsController < ApplicationController
   end
 
   def brand_merchant
-    @brand = Brand.find(params[:id].to_i)
+    @brand   = Brand.find(params[:id].to_i)
     merchant = Provider.find(params[:merchant].to_i)
     if merchant.brand_id != @brand.id
-      merchant.brand_id = @brand.id
+      merchant.brand_id   = @brand.id
     else
-      merchant.brand_id = nil
+      merchant.brand_id   = nil
     end
     merchant.save
 
@@ -59,13 +59,13 @@ class BrandsController < ApplicationController
   end
 
   def add_photo
-    @brand = Brand.find(params[:id].to_i)
-    @obj_to_edit = @brand
-    @obj_name = "brand"
-    @file_field_name = "banner"
-    @obj_width = 600
-    @obj_height = 320
-    @action = "upload_photo"
+    @brand           = Brand.find(params[:id].to_i)
+    @obj_to_edit     = @brand
+    @obj_name        = "brand"
+    @file_field_name = "photo"
+    @obj_width       = 600
+    @obj_height      = 320
+    @action          = "upload_photo"
   end
 
   def upload_photo
@@ -98,7 +98,7 @@ class BrandsController < ApplicationController
 
   def create
     @brand = Brand.new(params[:brand])
-    @current_user   = current_user
+    @current_user  = current_user
     @brand.user_id = @current_user.id
 
     respond_to do |format|
