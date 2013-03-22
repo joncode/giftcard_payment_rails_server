@@ -9,7 +9,7 @@
     <th>Name</th>
     <th>Description</th>
     <th>Website</th>
-    <th>Logo url</th>
+    <th>Photo url</th>
     <th></th>
 
   </tr>
@@ -19,10 +19,10 @@
         <td><%= link_to brand.name, brand %></td>
         <td><%= brand.description %></td>
         <td><%= brand.website %></td>
-            <% if brand.banner.file.nil? %>
-        <td></td>
-            <% else %>
+            <% if brand.has_photo? %>
         <td><%= custom_image_tag(brand, 50, 50) %></td>
+            <% else %>
+        <td></td>
             <% end %>
         <td><%= link_to 'Show', brand %>
         <%= link_to 'Edit', edit_brand_path(brand) %>

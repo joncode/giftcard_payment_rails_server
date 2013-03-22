@@ -3,7 +3,7 @@
   <h5 class="menuSectionHeader">
     Brand Profile Information
   </h5>
-  <% if !@brand.banner.file.nil? %>
+  <% if @brand.has_photo? %>
   <div class="doubleColumn">
         <br />
     <%= link_to custom_image_tag(@brand, 300,160), add_photo_brand_path(@brand) %>

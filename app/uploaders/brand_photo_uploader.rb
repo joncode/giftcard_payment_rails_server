@@ -1,4 +1,4 @@
-class BrandBannerUploader < CarrierWave::Uploader::Base
+class BrandPhotoUploader < CarrierWave::Uploader::Base
   include Cloudinary::CarrierWave
 
   process :convert => 'jpg'

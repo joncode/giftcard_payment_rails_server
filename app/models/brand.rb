@@ -1,6 +1,6 @@
 class Brand < ActiveRecord::Base
 	attr_accessible :address, :city, :description, 
-	:logo, :name, :phone, :state, :user_id, :website, :banner, :portrait
+	:logo, :name, :phone, :state, :user_id, :website, :photo, :portrait
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
   	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
@@ -9,15 +9,18 @@ class Brand < ActiveRecord::Base
 	has_many :employees
 	belongs_to :user
 
-  	mount_uploader :banner,    BrandBannerUploader
+  	mount_uploader :photo,    BrandPhotoUploader
 
+  	def has_photo?
+  		!self.photo.file.nil?
+  	end
 
 	def get_image
-		self.banner.url
+		self.photo.url
 	end
 
 	def get_photo_for_web
-		unless image = self.banner.url
+		unless image = self.photo.url
 			image = "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
 		end
 		return image
@@ -45,7 +48,7 @@ end
 #  phone       :string(255)
 #  website     :string(255)
 #  logo        :string(255)
-#  banner      :string(255)
+#  photo      :string(255)
 #  portrait    :string(255)
 #  user_id     :integer
 #  created_at  :datetime        not null

@@ -21,10 +21,10 @@
         <td><%= brand.name %></td>
         <td><%= brand.description %></td>
         <td><%= brand.website %></td>
-            <% if brand.banner.file.nil? %>
-        <td></td>
-            <% else %>
+            <% if brand.has_photo? %>
         <td><%= custom_image_tag(brand, 50, 50) %></td>
+            <% else %>
+        <td></td>
             <% end %>
                 
                 <% if brand.id == @provider.brand_id %>

@@ -1,12 +1,13 @@
 <div class="merchantSignInWrapper POSfullPageWrap">
 <p id="notice"><%= notice %></p>
 
-  <% if !@brand.banner.file.nil? %>
+  <% if @brand.has_photo? %>
   <div class="doubleColumn">
 
     <%= link_to custom_image_tag(@brand, 600,320), add_photo_brand_path(@brand) %>
   </div>
-  <% end %><h2>
+  <% end %>
+<h2>
   <b>Name:</b>
   <%= @brand.name %>
 </h2>

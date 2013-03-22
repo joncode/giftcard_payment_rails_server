@@ -129,6 +129,7 @@
         <div class="actions">
           <%= f.submit "Upload Photo" %>
         </div>
+        <% if @obj_to_edit.has_photo? %>
         <div class="profilePic">
           <div class="giftText giftTextLarge">
             <h2>Current Photo</h2>
@@ -138,6 +139,7 @@
           </div>
         </div>
       </div>
+      <% end %>
       <br />
       <div class="giftText giftTextLarge" id="cropTitle">
           <h2>Click to Crop</h2>

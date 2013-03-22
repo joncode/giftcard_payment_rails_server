@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(:version => 20130322173209) do
     t.string   "phone"
     t.string   "website"
     t.string   "logo"
-    t.string   "banner"
+    t.string   "photo"
     t.string   "portrait"
     t.integer  "user_id"
     t.datetime "created_at",  :null => false
