@@ -9,6 +9,9 @@
     <% if @provider.description %>
       <h4><%= @provider.description %></h4>
     <% end %>
+    <% if @provider.phone %>
+      <h4><%= number_to_phone @provider.phone %></h4>
+    <% end %>
   </div>
 </div>
 
