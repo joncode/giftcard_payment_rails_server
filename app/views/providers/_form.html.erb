@@ -27,6 +27,9 @@
         <%= f.text_area :description , placeholder: 'Full Description', :rows => 4 %>
       </div>                                                                          
       <div class="field">                         
+        <%= f.text_field :phone,   placeholder: 'Phone Number' , value: number_to_phone(@provider.phone, :area_code => true) %>
+      </div> 
+      <div class="field">                         
         <%= f.text_field :address,     placeholder: 'Address' %>
       </div>                                      
       <div class="field">                         
