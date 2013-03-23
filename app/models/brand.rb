@@ -38,7 +38,15 @@ class Brand < ActiveRecord::Base
 	end
 
 	def providers
-		Provider.where("brand_id = ? OR building_id = ?", self.id, self.id)
+		merchants = Provider.where("brand_id = ? OR building_id = ?", self.id, self.id)
+		if self.child
+			# getting the merchants connected to child brands
+			children = self.brands
+			children.each do |child|
+				child_merchants = Provider.where("brand_id = ? OR building_id = ?", child.id, child.id)
+				merchants.concat child_merchants
+			end
+		end
 	end
 
 	def brands
