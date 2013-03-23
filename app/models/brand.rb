@@ -47,6 +47,7 @@ class Brand < ActiveRecord::Base
 				merchants.concat child_merchants
 			end
 		end
+		return merchants
 	end
 
 	def brands

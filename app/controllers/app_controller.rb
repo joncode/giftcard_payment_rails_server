@@ -386,11 +386,11 @@ class AppController < ApplicationController
 
   	def brands
   		if  authenticate_public_info
-	    	if  !params["city"] || params["city"] == "all"
+	    	# if  !params["city"] || params["city"] == "all"
 	    		brands = Brand.all
-	    	else
-	    		brands = Brand.where(city: params["city"])
-	    	end
+	    	# else
+	    	# 	brands = Brand.where(city: params["city"])
+	    	# end
 	    	brands_array = array_these_brands(brands)
 	    	# brands_array = shorten_url_for_brand_ary brands_array
 	    	logmsg 			= brands_array[0]
@@ -853,7 +853,7 @@ class AppController < ApplicationController
 		def array_these_brands(obj)
 			brands_array = []
 			obj.each do |b|
-				brand_obj = b.serializable
+				brand_obj = b.serialize
 				brands_array << brand_obj
 			end
 			return brands_array
