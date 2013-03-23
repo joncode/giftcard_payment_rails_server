@@ -386,11 +386,11 @@ class AppController < ApplicationController
 
   	def brands
   		if  authenticate_public_info
-	    	# if  !params["city"] || params["city"] == "all"
+	    	if  !params["city"] || params["city"] == "all"
 	    		brands = Brand.all
-	    	# else
-	    	# 	brands = Brand.where(city: params["city"])
-	    	# end
+	    	else
+	    		brands = Brand.where(city: params["city"])
+	    	end
 	    	brands_array = array_these_brands(brands)
 	    	# brands_array = shorten_url_for_brand_ary brands_array
 	    	logmsg 			= brands_array[0]
@@ -413,7 +413,7 @@ class AppController < ApplicationController
 	    	begin
 	    		brand = Brand.find brand_id
 	    		providers_array = array_these_providers(brand.providers, PROVIDER_REPLY)
-	    		providers_array = shorten_url_for_provider_ary providers_array
+	    		# providers_array = shorten_url_for_provider_ary providers_array
 	    		logmsg 			= providers_array[0]
 	    	rescue
 	    		logmsg 			= { "error_server" => { "data_error" => "Cant find Brand with that ID"}}
