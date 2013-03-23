@@ -61,6 +61,7 @@ class Provider < ActiveRecord::Base
 
   def sales_tax=(sales_tax)
     sales_tax.gsub!('%', '')
+    sales_tax.gsub!(' ', '')
     super(sales_tax)
   end
 

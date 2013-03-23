@@ -1,7 +1,7 @@
 class Brand < ActiveRecord::Base
 	attr_accessible :address, :city, :description, 
 	:logo, :name, :phone, :state, :user_id, :website, 
-	:photo, :portrait
+	:photo, :portrait, :next_view
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
   	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
@@ -10,7 +10,17 @@ class Brand < ActiveRecord::Base
 	has_many :employees
 	belongs_to :user
 
+	after_save :update_parent_brand
+
   	mount_uploader :photo,    BrandPhotoUploader
+
+  	def serialize
+  		brand_hash 	= self.serializable_hash only: [ :name, :next_view ]
+  		brand_hash["brand_id"]  = self.id.to_s
+  		brand_hash["photo"] 	= self.get_image
+  		brand_hash["next_view"] = "m" unless self.next_view
+  		return brand_hash
+  	end
 
   	def has_photo?
   		!self.photo.file.nil?
@@ -31,9 +41,27 @@ class Brand < ActiveRecord::Base
 		Provider.where("brand_id = ? OR building_id = ?", self.id, self.id)
 	end
 
+	def brands
+		Brand.where(owner_id: self.id)
+	end
+
+	def owner
+		Brand.find owner_id if owner_id
+	end
+
 	def city_state_zip
 	    "#{self.description}"
 	end
+
+	private
+
+		def update_parent_brand
+			if self.owner_id
+				owner_brand = Brand.find(self.owner_id)
+				owner_brand.update_attribute(:child, true) unless owner_brand.child
+				puts "Updated owner brand = #{owner_brand.id}"
+			end
+		end
 
 end
 # == Schema Information

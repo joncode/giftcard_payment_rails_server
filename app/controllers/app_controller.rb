@@ -11,7 +11,6 @@ class AppController < ApplicationController
 	GIFT_REPLY 	  	= ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY 	= GIFT_REPLY + [ "receiver_id", "receiver_name"] 
  	PROVIDER_REPLY 	= ["name", "phone"]
- 	BRAND_REPLY 	= ["name"]
 
 
  	def unauthorized_user
@@ -392,8 +391,8 @@ class AppController < ApplicationController
 	    	else
 	    		brands = Brand.where(city: params["city"])
 	    	end
-	    	brands_array = array_these_brands(brands, BRAND_REPLY)
-	    	brands_array = shorten_url_for_brand_ary brands_array
+	    	brands_array = array_these_brands(brands)
+	    	# brands_array = shorten_url_for_brand_ary brands_array
 	    	logmsg 			= brands_array[0]
 	  	else
 	  		brands_hash 	= {"error" => "user was not found in database"}
@@ -851,17 +850,10 @@ class AppController < ApplicationController
 			return providers_array
 		end
 
-		def array_these_brands(obj, send_fields)
+		def array_these_brands(obj)
 			brands_array = []
-			obj.each do |p|
-				brand_obj = p.serializable_hash only: send_fields
-				brand_obj.each_key do |key|
-					value	= brand_obj[key]
-					brand_obj[key] = value.to_s
-				end
-				brand_obj["brand_id"]  = p.id.to_s
-				brand_obj["photo"] 	   = p.get_image
-				brand_obj["next_step"] = "merchant"
+			obj.each do |b|
+				brand_obj = b.serializable
 				brands_array << brand_obj
 			end
 			return brands_array
@@ -888,7 +880,7 @@ class AppController < ApplicationController
 	    	new_shopping_cart = []
 	    	if cart_ary[0].has_key? "menu_id"
 		    	cart_ary.each do |item_hash|
-		    		item_hash["item_id"] = item_hash["menu_id"]
+		    		item_hash["item_id"]   = item_hash["menu_id"]
 	        		item_hash["item_name"] = item_hash["name"]
 	        		item_hash.delete("menu_id")
 	        		item_hash.delete("name")
