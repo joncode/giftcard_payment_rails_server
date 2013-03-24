@@ -7,10 +7,8 @@ class AppController < ApplicationController
 	after_filter 	:method_end_log_message
 
 	UPDATE_REPLY  	= ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
- 	USER_REPLY 	  	= ["first_name", "last_name", "email", "phone", "facebook_id"]	
 	GIFT_REPLY 	  	= ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     ACTIVITY_REPLY 	= GIFT_REPLY + [ "receiver_id", "receiver_name"] 
- 	PROVIDER_REPLY 	= ["name", "phone"]
 
 
  	def unauthorized_user
@@ -300,7 +298,7 @@ class AppController < ApplicationController
 	    	else
 	    		providers = Provider.where(city: params["city"])
 	    	end
-	    	providers_array = array_these_providers(providers, PROVIDER_REPLY)
+	    	providers_array = serialize_objs_in_ary providers
 	    	logmsg 			= providers_array[0]
 	  	else
 	  		providers_hash 	= {"error" => "user was not found in database"}
@@ -368,7 +366,7 @@ class AppController < ApplicationController
 	    	else
 	    		providers = Provider.where(city: params["city"])
 	    	end
-	    	providers_array = array_these_providers(providers, PROVIDER_REPLY)
+	    	providers_array = serialize_objs_in_ary providers
 	    	providers_array = shorten_url_for_provider_ary providers_array
 	    	logmsg 			= providers_array[0]
 	  	else
@@ -391,8 +389,8 @@ class AppController < ApplicationController
 	    	else
 	    		brands = Brand.where(city: params["city"])
 	    	end
-	    	brands_array = array_these_brands(brands)
-	    	# brands_array = shorten_url_for_brand_ary brands_array
+	    	brands_array 	= serialize_objs_in_ary brands
+	    	# brands_array  = shorten_url_for_brand_ary brands_array
 	    	logmsg 			= brands_array[0]
 	  	else
 	  		brands_hash 	= {"error" => "user was not found in database"}
@@ -411,8 +409,8 @@ class AppController < ApplicationController
 	    if  authenticate_public_info
 	    	brand_id = params["data"].to_i
 	    	begin
-	    		brand = Brand.find brand_id
-	    		providers_array = array_these_providers(brand.providers, PROVIDER_REPLY)
+	    		brand 			= Brand.find brand_id
+	    		providers_array = serialize_objs_in_ary brand.providers
 	    		# providers_array = shorten_url_for_provider_ary providers_array
 	    		logmsg 			= providers_array[0]
 	    	rescue
@@ -443,7 +441,7 @@ class AppController < ApplicationController
 			else
 				users    = User.find_by_city(params['city'])
 			end 
-			user_array = array_these_users(users, USER_REPLY)
+			user_array = serialize_objs_in_ary users
 			logmsg 	   = user_array[0]
 		rescue 
 			puts "ALERT - cannot find user from token"
@@ -808,7 +806,8 @@ class AppController < ApplicationController
 	        provider = g.provider 
 	        gift_obj["provider_photo"]     = provider.get_image("photo")
 	        gift_obj["provider_phone"]	   = provider.phone
-	        gift_obj["provider_city"]	   = provider.city
+	        gift_obj["city"]	   		   = provider.city
+	        gift_obj["sales_tax"]		   = provider.sales_tax
 	        	# add the full provider address
 	        if address_get
 	          gift_obj["provider_address"] = provider.complete_address
@@ -833,46 +832,9 @@ class AppController < ApplicationController
 			end
 		end
 
-		def array_these_providers(obj, send_fields)
-			providers_array = []
-			obj.each do |p|
-				prov_obj = p.serializable_hash only: send_fields
-				prov_obj.each_key do |key|
-					value	= prov_obj[key]
-					prov_obj[key] = value.to_s
-				end
-				prov_obj["full_address"] = p.full_address
-				prov_obj["sales_tax"]  	 = p.sales_tax || "5"
-				prov_obj["provider_id"]  = p.id.to_s
-				prov_obj["photo"] 		 = p.get_image("photo")
-				providers_array << prov_obj
-			end
-			return providers_array
+		def serialize_objs_in_ary ary
+			ary.map { |o| o.serialize }
 		end
-
-		def array_these_brands(obj)
-			brands_array = []
-			obj.each do |b|
-				brand_obj = b.serialize
-				brands_array << brand_obj
-			end
-			return brands_array
-		end
-
-	    def array_these_users(obj, send_fields)
-			users_array = []
-			obj.each do |u|
-				user_obj = u.serializable_hash only: send_fields
-				user_obj.each_key do |key|
-				  value = user_obj[key]
-				  user_obj[key] = value.to_s
-				end
-				user_obj["photo"] 	= u.get_photo
-				user_obj["user_id"] = u.id.to_s 
-				users_array << user_obj
-			end
-			return users_array
-	    end
 
 	    def convert_shoppingCart_for_app(shoppingCart)
 	    	cart_ary = JSON.parse shoppingCart

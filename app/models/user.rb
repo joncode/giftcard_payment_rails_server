@@ -74,6 +74,14 @@ class User < ActiveRecord::Base
   validates :twitter, uniqueness: true, :if => :twitter_exists?
   #/---------------------------------------------------------------------------------------------/
   
+  def serialize
+    usr_hash  = self.serializable_hash only: ["first_name", "last_name", "email", "phone", "facebook_id", "twitter"]
+    usr_hash["photo"]   = self.get_photo
+    usr_hash["user_id"] = self.id.to_s 
+    usr_hash.keep_if {|k, v| !v.nil? }
+    return usr_hash
+  end
+
   def gifts
     anon_gifts    = Gift.where(anon_id: self.id)
     normal_gifts  = super

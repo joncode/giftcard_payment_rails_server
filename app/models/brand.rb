@@ -10,6 +10,7 @@ class Brand < ActiveRecord::Base
 	has_many :employees
 	belongs_to :user
 
+	validates_presence_of :name
 	after_save :update_parent_brand
 
   	mount_uploader :photo,    BrandPhotoUploader
@@ -18,8 +19,11 @@ class Brand < ActiveRecord::Base
   		brand_hash 	= self.serializable_hash only: [ :name, :next_view ]
   		brand_hash["brand_id"]  = self.id.to_s
   		brand_hash["photo"] 	= self.get_image
-  		brand_hash["next_view"] = "m" unless self.next_view
   		return brand_hash
+  	end
+
+  	def next_view
+  		super || "m"
   	end
 
   	def has_photo?

@@ -31,8 +31,21 @@ class Provider < ActiveRecord::Base
   #validates_numericality_of :sales_tax, :zip, :routing, :aba
   #validates_length_of :aba, :is => 9
   #validates_length_of :routing, :within => 9..14
+  before_save :extract_phone_digits
 
-  before_create :extract_phone_digits
+  validates_presence_of :name, :city, :address, :zip , :state, :phone
+  validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
+ 
+
+
+  def serialize
+    prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax]
+    prov_hash["provider_id"]  = self.id.to_s
+    prov_hash["photo"]        = self.get_image("photo")
+    prov_hash["full_address"] = self.full_address
+    prov_hash["city"]         = self.city
+    return prov_hash
+  end
 
   def self.allWithinBounds(bounds)
     puts bounds
@@ -59,9 +72,16 @@ class Provider < ActiveRecord::Base
     end
   end
 
+  def sales_tax
+    tax = super
+    tax.nil? || tax.empty? ? "8" : tax
+  end
+
   def sales_tax=(sales_tax)
-    sales_tax.gsub!('%', '')
-    sales_tax.gsub!(' ', '')
+    unless sales_tax.nil?
+      sales_tax.gsub!('%', '')
+      sales_tax.gsub!(' ', '')
+    end
     super(sales_tax)
   end
 
@@ -169,11 +189,15 @@ class Provider < ActiveRecord::Base
   private
     def extract_phone_digits
       if self.phone && !self.phone.empty?
-        phone_match         = self.phone.match(VALID_PHONE_REGEX)
-        self.phone = phone_match[1] + phone_match[2] + phone_match[3]
+        phone_raw   = self.phone
+        phone_match = phone_raw.match(VALID_PHONE_REGEX)
+        self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
       end
     end
 
+    def phone_exists?
+      self.phone != nil
+    end
 end
 # == Schema Information
 #
