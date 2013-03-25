@@ -508,6 +508,7 @@ class AppController < ApplicationController
   	end
 
   	def create_redeem
+  		response = {}
   		# receive {"token" => "<token>", "data" => "<gift_id>" }
   					# authenticate user
   		if receiver = authenticate_app_user(params["token"])
@@ -537,6 +538,7 @@ class AppController < ApplicationController
   	end
 
   	def create_order
+  		response = {}
   		# receive {"token" => "<token>", "data" => "<gift_id>" }
   		  			# authenticate user
   		if receiver = authenticate_app_user(params["token"])
