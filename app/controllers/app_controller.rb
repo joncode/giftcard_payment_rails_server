@@ -733,7 +733,7 @@ class AppController < ApplicationController
 	  			response["error_server"] = stringify_error_messages user
 	  		end
 	  	else
-	  		response = { "error" => "could not find user in db" }
+	  		response = { "error" => unauthorized_user }
 	  	end
 
   		respond_to do |format|
