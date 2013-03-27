@@ -548,7 +548,7 @@ class AppController < ApplicationController
 	  			gift  = Gift.find params["data"].to_i
 	  			order = Order.init_with_gift(gift)
 	  			if order.save
-	  				response["success"] = { "order_number" => order.o.make_order_num }
+	  				response["success"] = { "order_number" => order.make_order_num }
 	  			else
 	  				response["error_server"] = database_error_redeem
 	  			end
