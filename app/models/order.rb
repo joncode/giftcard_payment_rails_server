@@ -9,9 +9,6 @@ class Order < ActiveRecord::Base
   belongs_to  :cards
   belongs_to  :server, class_name: "User"    #  be class_name "Employee"
 
-  # order must be unique for each gift and redeem 
-        # validation for provider_id is in callback until data is being sent from iPhone
-  # validates_presence_of :employee_id #, :server_code, :server_id
   validates :gift_id   , presence: true, uniqueness: true
   validates :redeem_id , presence: true, uniqueness: true
   validates :provider_id , presence: true
@@ -19,7 +16,7 @@ class Order < ActiveRecord::Base
   before_validation :add_gift_id,     :if => :no_gift_id
   before_validation :add_redeem_id,   :if => :no_redeem_id
   before_validation :add_provider_id, :if => :no_provider_id
-  before_validation :authenticate_via_code
+  # before_validation :authenticate_via_code
   after_create      :update_gift_status
   after_create      :notify_giver_order_complete
   after_destroy     :rewind_gift_status
@@ -37,7 +34,27 @@ class Order < ActiveRecord::Base
     return order
   end
 
+  def make_order_num
+      number   = self.id
+      div      = number / 26
+      letter2  = number_to_letter(number % 26)
+      div2     = div / 10000
+      numbers  = make_numbers(div)
+      over     = div2 / 26
+      letter1  = number_to_letter(div2 % 26)
+      return "#{letter1.to_s}#{letter2.to_s}#{numbers.to_s}"
+  end
+
   private
+
+    def make_numbers(div)
+      num = "%04d" % (div % 10000)
+      "-#{num[3]}#{num[0]}-#{num[2]}#{num[1]}"
+    end
+
+    def number_to_letter(num)
+      return (num + 10).to_s(36).capitalize
+    end
 
     def notify_giver_order_complete
       puts "emailing the gift giver for #{self.id}"
@@ -54,8 +71,14 @@ class Order < ActiveRecord::Base
     end
 
     def update_gift_status
-      self.gift.update_attribute(:status, 'redeemed')
-      puts "UPDATE GIFT STATUS #{self.gift.status}"
+      gift = self.gift
+      gift.order_num = self.make_order_num
+      gift.status    = 'redeemed'
+      if gift.save
+        puts "UPDATE GIFT #{gift.order_num} STATUS #{gift.status}"
+      else
+        puts "FAILED !!! ORDER gift.SAVE #{gift.order_num} STATUS #{gift.status}"
+      end
     end
 
     def rewind_gift_status
@@ -63,42 +86,42 @@ class Order < ActiveRecord::Base
       puts "UPDATE GIFT STATUS DELETED ORDER ID=#{self.id}, GiftID = #{self.gift.id} #{self.gift.status}"
     end
     
-    def authenticate_via_code
-      puts "AUTHENTICATE VIA CODE"
-      if self.gift.nil? || self.redeem.nil?
-        errors.add(:authenticate, "missing gift or redeem")
-        return false 
-      end
-      if self.redeem_code
-                  # authentication code for redeem_code
-        redeem_obj = self.redeem
-                  # set flag for approved/denied - true/false
-        if self.redeem_code == redeem_obj.redeem_code
-          flag = true
-        else
-          flag = false
-          puts "CUSTOMER REDEEM CODE INCORRECT"
-          errors.add(:redeem_code, "Incorrect Redeem Code")
-        end
-      elsif self.server_code
-                  # authenticate for server_code
-        codes = self.provider.server_codes
-                  # set flag for approval/denied - true/false
-        if codes.include? self.server_code
-          flag = true
-          add_server
-        else
-          flag = false
-          puts "MERCHANT REDEEM CODE INCORRECT"
-          errors.add(:merchant_redeem_code, "Incorrect Merchant Redeem Code")
-        end
-      else
-                  # no code provided - set flag to denied - false
-        errors.add(:redeem_code, "cant be blank")
-        flag = false
-      end
-      return flag
-    end
+    # def authenticate_via_code
+    #   puts "AUTHENTICATE VIA CODE"
+    #   if self.gift.nil? || self.redeem.nil?
+    #     errors.add(:authenticate, "missing gift or redeem")
+    #     return false 
+    #   end
+    #   if self.redeem_code
+    #               # authentication code for redeem_code
+    #     redeem_obj = self.redeem
+    #               # set flag for approved/denied - true/false
+    #     if self.redeem_code == redeem_obj.redeem_code
+    #       flag = true
+    #     else
+    #       flag = false
+    #       puts "CUSTOMER REDEEM CODE INCORRECT"
+    #       errors.add(:redeem_code, "Incorrect Redeem Code")
+    #     end
+    #   elsif self.server_code
+    #               # authenticate for server_code
+    #     codes = self.provider.server_codes
+    #               # set flag for approval/denied - true/false
+    #     if codes.include? self.server_code
+    #       flag = true
+    #       add_server
+    #     else
+    #       flag = false
+    #       puts "MERCHANT REDEEM CODE INCORRECT"
+    #       errors.add(:merchant_redeem_code, "Incorrect Merchant Redeem Code")
+    #     end
+    #   else
+    #               # no code provided - set flag to denied - false
+    #     errors.add(:redeem_code, "cant be blank")
+    #     flag = false
+    #   end
+    #   return flag
+    # end
     
     def no_gift_id
       self.gift_id.nil?

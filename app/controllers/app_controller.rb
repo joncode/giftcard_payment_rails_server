@@ -8,6 +8,7 @@ class AppController < ApplicationController
 
 	UPDATE_REPLY  	= ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
 	GIFT_REPLY 	  	= ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
+    MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "total", "order_num"]
     ACTIVITY_REPLY 	= GIFT_REPLY + [ "receiver_id", "receiver_name"] 
 
 
@@ -151,7 +152,7 @@ class AppController < ApplicationController
 	    if user = authenticate_app_user(params["token"])
 	    	provider 	= Provider.find(params["provider"])
     		gifts 		= Gift.get_history_provider(provider)
-	    	gifts_array = array_these_gifts(gifts, GIFT_REPLY, true, true)
+	    	gifts_array = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 	  		logmsg 		= gifts_array[0]
 	  	else
 	  		gift_hash 	= {"error" => "user was not found in database"}
@@ -547,7 +548,7 @@ class AppController < ApplicationController
 	  			gift  = Gift.find params["data"].to_i
 	  			order = Order.init_with_gift(gift)
 	  			if order.save
-	  				response["success"] = { "order_number" => order.id.to_s }
+	  				response["success"] = { "order_number" => order.o.make_order_num }
 	  			else
 	  				response["error_server"] = database_error_redeem
 	  			end
@@ -749,7 +750,7 @@ class AppController < ApplicationController
 			headers['Access-Control-Request-Method'] = '*'
 		end
 
-	   	def array_these_gifts(obj, send_fields, address_get=false, receiver=false)
+	   	def array_these_gifts(obj, send_fields, address_get=false, receiver=false, order_num=false)
 	      gifts_ary = []
 	      index = 1 
 	      obj.each do |g|
@@ -761,27 +762,7 @@ class AppController < ApplicationController
 	          gift_obj[key] = value.to_s
 	        end
 
-	        ##############  deprecated code from old gift system
-	       #  if !g.shoppingCart 
-	      	# 		# make shopping cart array with item inside as Hash
-	      	# 		# using item_id, item_name, category, quantity, price
-	      	# 	menu_item = {"id" => g.item_id.to_s, "item_name" => g.item_name, "quantity" => 4 , "price" => g.price.to_s }
-	      	# 	if g.category
-	      	# 		menu_item["category"] = g.category.to_s
-	      	# 		menu_item["section"] = BEVERAGE_CATEGORIES[g.category.to_i] 
-	      	# 	end
-	      	# 	menu_item_array = [menu_item]
-
-	      	# 		# shoppingCart = menu_item_array.to_json
-	      	# 		# g.update_attribute(:shoppingCart, shoppingCart)
-	      	# 	gift_obj["shoppingCart"] = menu_item_array
-	      	# else
-	      			
-	      			# turn shoppingCart into an array with hashes
-	      		gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
-	      	
-	      	# end
-	      	##############  
+	      	gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
 
 		        	# add other person photo url 
 	        if receiver
@@ -789,37 +770,35 @@ class AppController < ApplicationController
 	            gift_obj["receiver_photo"]  = g.receiver.get_photo
 	            gift_obj["receiver_name"] 	= g.receiver.username
 	          	gift_obj["receiver_id"]	  	= g.receiver.id
-	            	# gift_obj["giver_photo"]     = g.giver.get_photo
 	          else
 	            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
 	          	gift_obj["receiver_photo"]  = ""
-	          		# gift_obj["giver_photo"]     = g.giver.get_photo
 	          	if g.receiver_name
 	          		gift_obj["receiver_name"] = g.receiver_name
 	          	else
 	          		gift_obj["receiver_name"] = "Unregistered"
 	          	end
 	          end
-	        else
-	          	# gift_obj["giver_photo"]       = g.giver.get_photo
 	        end
-
-	        gift_obj["giver_photo"]        = g.giver.get_photo
-	        provider = g.provider 
-	        gift_obj["provider_photo"]     = provider.get_image("photo")
-	        gift_obj["provider_phone"]	   = provider.phone
-	        gift_obj["city"]	   		   = provider.city
-	        gift_obj["sales_tax"]		   = provider.sales_tax
-	        	# add the full provider address
-	        if address_get
-	          gift_obj["provider_address"] = provider.complete_address
-	        end
+	        if !order_num
+	        	# in MERCHANT_REPLY
+		        gift_obj["giver_photo"]        = g.giver.get_photo
+		        provider = g.provider 
+		        gift_obj["provider_photo"]     = provider.get_image("photo")
+		        gift_obj["provider_phone"]	   = provider.phone
+		        gift_obj["city"]	   		   = provider.city
+		        gift_obj["sales_tax"]		   = provider.sales_tax
+		        	# add the full provider address
+		        if address_get
+		          gift_obj["provider_address"] = provider.complete_address
+		        end
+	    	end
 
 	        gift_obj["gift_id"]  = g.id.to_s
 	        gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
 	      	
-	        gift_obj["redeem_code"] = add_redeem_code(g)
-	            
+	        gift_obj["redeem_code"]	  = add_redeem_code(g)
+
 	        gifts_ary << gift_obj
 	      end
 	      return gifts_ary
