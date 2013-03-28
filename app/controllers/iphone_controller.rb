@@ -338,7 +338,12 @@ class IphoneController < AppController
     respond_to do |format|
       logger.debug " PRE SAVE GIFT OBJECT  = #{gift.inspect}"
       if gift.save
-        response["success"]       = "Gift received - Thank you!" 
+        sale = gift.authorize_capture
+        if sale.resp_code == '1'
+          response["success"]       = "Gift received - Thank you!" 
+        else
+          response["error_server"]  = { "credit_card" => sale.reason_text }
+        end
       else
         response["error_server"]       = stringify_error_messages gift
         logger.debug "this is the errrors on gift = #{gift.errors.messages}"

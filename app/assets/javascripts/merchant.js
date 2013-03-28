@@ -132,6 +132,9 @@ function getEmployeeCropper(route) {
 		 {image: route});
 }
 
+function getTodaysCredits() {
+    $.get('todaysCredits');
+}
 
 $(function() {
 
@@ -297,5 +300,6 @@ $(function() {
 	$('.option').click(function () {
 		$(this).css({color:'#666'});
 	});
+
  
 }); // end

@@ -11,9 +11,6 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-  # resources :sales
-  # resources :cards
-
   match "/invite/email_confirmed" => "invite#email_confirmed"
   match "/invite/error"    => "invite#error"
   match "/invite/:id"      => "invite#show"
@@ -25,37 +22,6 @@ Drinkboard::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy'
   match '/admin',   to: 'admin#show'
-
-    ###   basic footer routes
-  # match '/about',       to: 'home#about'
-  # match '/contact',     to: 'home#contact'
-  # match '/home',        to: 'home#index'
-  # match '/learn',       to: 'home#learn'
-  # match '/news',        to: 'home#news'  
-
-  # resources :gifts do
-  #   collection do
-  #     get  'buy'
-  #     get  'activity'
-  #     get  'browse'
-  #     post 'browse_with_contact'
-  #     post 'browse_with_location'
-  #     post 'choose_from_menu'
-  #     post 'choose_from_contacts'
-  #     post 'bill'
-  #     get  'past'
-  #   end
-  #   member do
-  #     get 'detail'
-  #     get 'completed'
-  #   end
-  # end
-  
-  # resources :locations
-  # resources :menus
-  # resources :menu_strings
-  # resources :orders
-  # resources :redeems
 
   resources :users do 
     member do
@@ -86,7 +52,7 @@ Drinkboard::Application.routes.draw do
     end
   end
   
-  match "/merchants/:id/employee/:eid/remove"   => "merchants#remove_employee"
+  match "/merchants/:id/employee/:eid/remove"  => "merchants#remove_employee"
   
   resources :merchants do
     # get 'home'
@@ -98,6 +64,7 @@ Drinkboard::Application.routes.draw do
       get  :pos
       get  :menujs
       # end test routes
+      get  :todays_credits
       get 'past_orders'
       get 'customers'
       get 'orders'
@@ -120,6 +87,7 @@ Drinkboard::Application.routes.draw do
       get  :get_cropper
       get  :compile_menu
       get  :menu_builder
+
     end
   end
 
