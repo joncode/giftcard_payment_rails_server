@@ -180,16 +180,16 @@ class IphoneController < AppController
     response = {}
     if user = authenticate_app_user(params["token"])
       puts "authenticate_app_user INHERITS !!!!"
-    else
-      user = User.find_by_remember_token(params["token"])
-    end
-    gifts, past_gifts     = Gift.get_buy_history(user)
-    gift_array            = array_these_gifts(gifts, BUY_REPLY, true, true)
-    past_gift_array       = array_these_gifts(past_gifts, BUY_REPLY, true, true)
-    response["active"]    = gift_array
-    response["completed"] = past_gift_array
-    logmsg = gift_array[0]
 
+      gifts, past_gifts     = Gift.get_buy_history(user)
+      gift_array            = array_these_gifts(gifts, BUY_REPLY, true, true)
+      past_gift_array       = array_these_gifts(past_gifts, BUY_REPLY, true, true)
+      response["active"]    = gift_array
+      response["completed"] = past_gift_array
+      logmsg = gift_array[0]
+    else
+      response["error"] = unauthorized_user
+    end
     respond_to do |format|
       # logger.debug response
       puts "response => #{logmsg}"

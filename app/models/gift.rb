@@ -25,11 +25,8 @@ class Gift < ActiveRecord::Base
   belongs_to  :giver,    class_name: "User"
   belongs_to  :receiver, class_name: "User"
   
-  validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip
-  # validates_numericality_of  :total, :tip, :tax
-  
-  #before_create :add_category, :if => :no_category
-  #before_create :pluralizer
+  validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip 
+
   before_create :extract_phone_digits
   before_create :add_giver_name,  :if => :no_giver_name
   before_create :regifted,        :if => :regift_id?
@@ -230,23 +227,23 @@ class Gift < ActiveRecord::Base
       end
     end
     
-    def pluralizer
-      if self.quantity > 1
-        name_to_match = self.item_name
-              # if item name already has a /'s/ then abort 
-        if !name_to_match.match /'s/
-           self.item_name << "\'s"
-        end 
-      end
-    end
+    # def pluralizer
+    #   if self.quantity > 1
+    #     name_to_match = self.item_name
+    #           # if item name already has a /'s/ then abort 
+    #     if !name_to_match.match /'s/
+    #        self.item_name << "\'s"
+    #     end 
+    #   end
+    # end
     
-    def add_category
-      self.category = self.item.category
-    end
+    # def add_category
+    #   self.category = self.item.category
+    # end
     
-    def no_category
-      self.category.nil?
-    end
+    # def no_category
+    #   self.category.nil?
+    # end
 
     def add_giver_name
       self.giver_name = User.find(self.giver_id).username

@@ -56,22 +56,6 @@ class AppController < ApplicationController
 	    end	
  	end
 
- 	def relay_gifts_to_app(user)
-	 	relays = Relay.where("receiver_id = :id AND status != :msg", :id => user.id, :msg => "redeemed")
-		badge  = relays.size
-		gift_array = []
-		if badge > 0
- 			relays.each do |relay|
- 				gift_array << relay.gift
- 			end
- 			gift_array_to_app   = array_these_gifts(gift_array, GIFT_REPLY, true)
- 			response["success"] = { "badge" => badge, "gifts" => gift_array_to_app }
- 		else
- 			response["success"] = { "badge" => 0 }
- 		end	
- 		return response	
- 	end
-
  	def relays
 
  		response = {}
@@ -728,6 +712,28 @@ class AppController < ApplicationController
   		response = {} 		
   		if user = authenticate_app_user(params["token"])
 			data = JSON.parse params["data"]
+	  		if user.save_settings(data)
+	  			response = { "success" => "Settings saved" }
+	  		else
+	  			response["error_server"] = stringify_error_messages user
+	  		end
+	  	else
+	  		response = { "error" => unauthorized_user }
+	  	end
+
+  		respond_to do |format|
+	    	puts "AC Save Settings response => #{response}"
+	    	format.json { render json: response }
+	    end			
+	end
+
+	def save_settings_m
+  		response = {} 	
+
+  		if user = authenticate_app_user(params["token"])
+  			data = params
+			data.delete("token")
+
 	  		if user.save_settings(data)
 	  			response = { "success" => "Settings saved" }
 	  		else
