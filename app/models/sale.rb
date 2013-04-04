@@ -47,22 +47,16 @@ class Sale < ActiveRecord::Base
 		month 		 = "%02d" % card.month
 		year 		 = card.year[2..3]
 		card.decrypt! "Theres no place like home"
-		######### put in real credit card details when in production
-		num = card.number
-		card_number  = "4427427042229494"	
-		        # populate the transaction with data
-        @transaction.fields[:first_name] = "Dave"
-		@transaction.fields[:last_name]  = "Leibner"
-		month = "03"
-		year  = "16"
-		######### 
-
+		card_number  = card.number	
 		month_year 	 = "#{month}#{year}" 
+		
+		######### put in real credit card details when in production
 		tots = self.total.to_f / 100
 		x = tots.to_s.split('.')
 		total_amount = x[0] + '.' + x[1][0..1]
 		puts "HERE is the TOTAL = #{total_amount}"
-       
+        ######### 
+
         @credit_card = AuthorizeNet::CreditCard.new(card_number, month_year)
         
         # 3 gets a response from auth.net
