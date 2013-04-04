@@ -61,7 +61,7 @@ class UserMailer < ActionMailer::Base
     @merchant       = @gift.provider
     @header_text    = "Purchase Complete , Thank You"
     @social         = 0
-    @web_view_route = "/webview/invoice_giver/#{gift.id}"
+    @web_view_route = "#{TEST_URL}/webview/invoice_giver/#{gift.id}"
     # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
       :to => EMAIL_TO,
@@ -76,7 +76,7 @@ class UserMailer < ActionMailer::Base
     @merchant       = @gift.provider
     @header_text    = "You have Received a Gift"
     @social         = 0
-    @web_view_route = "/webview/notify_receiver/#{gift.id}"
+    @web_view_route = "#{TEST_URL}/webview/notify_receiver/#{gift.id}"
     # :to => "#{@gift.receiver_name} <#{@gift.receiver_email}>",
     mail({
       :to => EMAIL_TO,
@@ -92,7 +92,7 @@ class UserMailer < ActionMailer::Base
     @merchant       = @gift.provider
     @header_text    = "Your Gift Has Been Redeemed"
     @social         = 0
-    @web_view_route = "/webview/notify_giver_order_complete/#{gift.id}"
+    @web_view_route = "#{TEST_URL}/webview/notify_giver_order_complete/#{gift.id}"
     # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
       :to => EMAIL_TO,
@@ -108,7 +108,7 @@ class UserMailer < ActionMailer::Base
     @merchant       = @gift.provider
     @header_text    = "Your Gift has been Received"
     @social         = 0
-    @web_view_route = "/webview/notify_giver_created_user/#{gift.id}"
+    @web_view_route = "#{TEST_URL}/webview/notify_giver_created_user/#{gift.id}"
     # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
       :to => EMAIL_TO,
