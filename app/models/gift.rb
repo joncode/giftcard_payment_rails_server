@@ -112,6 +112,21 @@ class Gift < ActiveRecord::Base
     self.update_attribute(:status, status)
   end
 
+  def charge_card
+        # if giver is one jb@jb.com
+        # call authorize capture on the gift and create the sale object
+    giver = User.find self.giver_id
+    if giver.email == "test@test.com"
+        sale = self.authorize_capture
+        puts "SALE ! #{JSON.parse sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{gift.total}"
+    else
+        sale = Sale.new
+        sale.resp_code = 1
+    end
+        # otherwise return a sale object with resp_code == 1
+    return sale
+  end
+
   def authorize_capture
     puts "BEGIN AUTH CAPTURE for GIFT ID #{self.id}"
       # Authorize Transaction Method
@@ -134,15 +149,16 @@ class Gift < ActiveRecord::Base
             # transaction key is no longer good
           # sale db issues
             # could not save item
-    case response.response_code
-    when '1'
+    case response.response_code.to_i
+    when 1
       # Approved
      self.set_status 
-    when '2'
+    when 2
       # Declined 
-    when '3'
+    when 3
       # Error 
-    when '4' 
+      # duplicate transaction response subcode = 1
+    when 4 
       # Held for Review
     else
       # not a listed error code
@@ -215,6 +231,17 @@ class Gift < ActiveRecord::Base
       item_ary << item
     end
     return item_ary
+  end
+
+  def make_gift_items(shoppingCart_array)
+    puts "In make gift items #{shoppingCart_array}"
+    gift_item_array = []
+    shoppingCart_array.each do |item|
+        gift_item = GiftItem.initFromDictionary item
+        gift_item_array << gift_item
+    end
+    puts "made it thru gift items #{gift_item_array}"
+    self.gift_items = gift_item_array
   end
 
   private

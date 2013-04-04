@@ -123,7 +123,7 @@ Drinkboard::Application.routes.draw do
   match 'app/transactions',     to: 'app#transactions',        via: :post
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
-  match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
+  match 'app/create_gift',      to: 'app#create_gift',         via: :post
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/orders',           to: 'app#orders',              via: :post
   match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
@@ -133,7 +133,7 @@ Drinkboard::Application.routes.draw do
   match 'app/save_settings',    to: 'app#save_settings',       via: :post
   match 'app/m_save_settings',  to: 'app#save_settings_m',     via: :post
     ## test new data methods routes
-  match 'app/new_pic', to: 'app#providers_short_ph_url', via: :post
+  match 'app/new_pic',          to: 'app#providers_short_ph_url', via: :post
 
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
@@ -147,7 +147,8 @@ Drinkboard::Application.routes.draw do
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
   match 'app/regift',           to: 'iphone#regift',           via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
-  
+  match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
+
     ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
   match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
