@@ -560,41 +560,36 @@ class AppController < ApplicationController
   		gift_obj = JSON.parse params["gift"]
   		  			# authenticate user
   		if giver = authenticate_app_user(params["token"])
-  					# get gift from db
-  			begin
   					# check to see that the gift has the correct data to save
   					# check to see that the gift has a shoppingCart
-  				if gift_obj.nil? || params["shoppingCart"].nil?
-  						# nothing can be done without the data 
-  					response["error_server"] = "Data didnt arrive #{database_error_gift}"	
+			if gift_obj.nil? || params["shoppingCart"].nil?
+						# nothing can be done without the data 
+				response["error_server"] = "Data didnt arrive #{database_error_gift}"	
+		    else
+		    		# add the receiver + receiver checks to the gift object 
+		        puts "Lets make this gift !!!"
+		        add_receiver_by_origin(params["origin"], gift_obj, response)
+		        gift    = Gift.new(gift_obj)
+		        sc = JSON.parse params["shoppingCart"]
+		        gift.make_gift_items(sc)
+				puts "Made it thru original git making process"
+	  				# add the giver info to the gift object
+	  			if gift_obj["anon_id"]
+			        gift.add_anonymous_giver(giver.id)
 			    else
-			    		# add the receiver + receiver checks to the gift object 
-			        puts "Lets make this gift !!!"
-			        add_receiver_by_origin(params["origin"], gift_obj, response)
-			        gift    = Gift.new(gift_obj)
-			        sc = JSON.parse params["shoppingCart"]
-			        gift.make_gift_items(sc)
-					puts "Made it thru original git making process"
-		  				# add the giver info to the gift object
-		  			if gift_obj["anon_id"]
-				        gift.add_anonymous_giver(giver.id)
-				    else
-				      	gift.add_giver(giver)
-				     end
-		  			puts "Here is GIFT #{gift.inspect}"
-		  			if gift.save
-		  				sale = gift.charge_card
-				        if sale.resp_code == 1
-				        	response["success"]       = {"Gift Created" => "Success!"}
-				        else
-				        	response["error_server"]  = { "Credit Card" => sale.reason_text }
-				        end
-		  			else
-		  				response["error_server"] = stringify_error_messages gift
-		  			end
-		  		end
-	  		rescue
-	  			response["error_server"] = database_error_gift
+			      	gift.add_giver(giver)
+			    end
+	  			puts "Here is GIFT #{gift.inspect}"
+	  			if gift.save
+	  				sale = gift.charge_card
+			        if sale.resp_code == 1
+			        	response["success"]       = {"Gift Created" => "Success!"}
+			        else
+			        	response["error_server"]  = { "Credit Card" => sale.reason_text }
+			        end
+	  			else
+	  				response["error_server"] = stringify_error_messages gift
+	  			end
 	  		end
 	  	else
   			response["error"] = unauthorized_user
