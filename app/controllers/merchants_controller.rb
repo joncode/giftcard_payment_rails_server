@@ -37,7 +37,7 @@ class MerchantsController < ApplicationController
     # end test methods
 
     def compile_menu
-      @provider = Provider.find(params[:id])
+      @provider = Provider.find(params[:id].to_i)
       
       respond_to do |format|
         if MenuString.compile_menu_to_menu_string(@provider.id)
@@ -57,10 +57,10 @@ class MerchantsController < ApplicationController
     def update_item
         puts "update item => #{params}"
         if params[:item_id]
-          @menu = Menu.find(params[:item_id])
+          @menu = Menu.find(params[:item_id].to_i)
         else
           @menu = Menu.new
-          @menu.provider_id = params[:id]
+          @menu.provider_id = params[:id].to_i
           @menu.section = params[:section]
         end
         @menu.item_name = params[:item_name]
@@ -82,7 +82,7 @@ class MerchantsController < ApplicationController
 
     def delete_item
         puts "delete item => #{params}"
-        item = Menu.find(params[:item_id])
+        item = Menu.find(params[:item_id].to_i)
 
         respond_to do |format|
           if item.update_attributes({active: false})
@@ -127,7 +127,7 @@ class MerchantsController < ApplicationController
     end
 
     def todays_credits
-      @provider = Provider.find(params[:id])
+      @provider = Provider.find(params[:id].to_i)
       @orders   = @provider.get_todays_credits
 
       respond_to do |format|
@@ -223,7 +223,7 @@ class MerchantsController < ApplicationController
     end
 
     def redeem
-        @gift     = Gift.find(params[:gift_id])
+        @gift     = Gift.find(params[:gift_id].to_i)
         @redeem   = Redeem.find_by_gift_id(@gift)
         @employee = Employee.where(user_id: current_user.id, provider_id: @provider.id)[0]
 
@@ -242,7 +242,7 @@ class MerchantsController < ApplicationController
     end
 
     def completed
-        @gift     = Gift.find(params[:gift_id])
+        @gift     = Gift.find(params[:gift_id].to_i)
         @giver    = @gift.giver
         @receiver = @gift.receiver
         @order    = @gift.order
@@ -298,7 +298,7 @@ class MerchantsController < ApplicationController
     end
 
     def add_member
-        user = User.find params[:user_id]
+        user = User.find params[:user_id].to_i
         emp = Employee.create(user_id: user.id, provider_id: @provider.id) 
         redirect_to staff_merchant_path(@provider)
     end
@@ -326,9 +326,9 @@ class MerchantsController < ApplicationController
         #REMOVE THIS RETURN STATEMENT TO HAVE THE LINK FUNCTION PROPERLY.
         return redirect_to "/merchants/#{params[:id]}/staff"
         if params[:eid]
-          provider = Provider.find(params[:id])
+          provider = Provider.find(params[:id].to_i)
           provider.employees.each do |employee|
-            if "" + employee.user_id == "" + params[:id]
+            if "" + employee.user_id == "" + params[:id].to_i
               provider.employees.delete(employee)
               provider.save
               break

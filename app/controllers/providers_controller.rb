@@ -20,7 +20,7 @@ class ProvidersController < ApplicationController
   end
 
   def show
-    @provider = Provider.find(params[:id])
+    @provider = Provider.find(params[:id].to_i)
     
     respond_to do |format|
       format.html # show.html.erb
@@ -38,7 +38,7 @@ class ProvidersController < ApplicationController
   end
 
   def edit
-    @provider = Provider.find(params[:id])
+    @provider = Provider.find(params[:id].to_i)
   end
 
   def create
@@ -62,7 +62,7 @@ class ProvidersController < ApplicationController
   end
 
   def update
-    @provider = Provider.find(params[:id])
+    @provider = Provider.find(params[:id].to_i)
 
     respond_to do |format|
       if @provider.update_attributes(params[:provider])
@@ -81,7 +81,7 @@ class ProvidersController < ApplicationController
   end
 
   def destroy
-    @provider = Provider.find(params[:id])
+    @provider = Provider.find(params[:id].to_i)
     @provider.destroy
 
     respond_to do |format|
