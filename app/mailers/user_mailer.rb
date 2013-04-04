@@ -3,7 +3,7 @@ class UserMailer < ActionMailer::Base
   dev       = "noreplydrinkboard@gmail.com"
   prod      = "no-reply@drinkboard.com"
   email_to  = "programcodex@gmail.com"
-  default :css => 'email/email', :from => dev
+  default :css => 'email/email', :from => prod
 
   def confirm_email(user)
       #  you've just joined the app , confirm your email 

@@ -24,14 +24,14 @@ class EmailJob
       puts "OPTHASH INVITE EMPLOYEE"
       puts opthash
       @user = User.find(user_id)    #Person making the request
-      @provider = Provider.find(opthash[:provider_id])
+      @provider = Provider.find(opthash["provider_id"].to_i)
       UserMailer.invite_employee(@user,@provider,opthash["email"]).deliver
     
     when "invoice_giver" 
       puts "OPTHASH INVOICE GIVER"
       @user = User.find(user_id)
-      if @user.setting.email_invoice
-        @gift = Gift.find(opthash[:gift_id])
+      if @user.get_or_create_settings.email_invoice
+        @gift = Gift.find(opthash["gift_id"].to_i)
         UserMailer.invoice_giver(@user, @gift).deliver
       else
         puts "#{@user.fullname} does not receiver Invoice Giver Email"
@@ -39,20 +39,26 @@ class EmailJob
     
     when "notify_receiver" 
       puts "OPTHASH NOTIFY RECEIVER"
-      email = opthash[:email]
-      @gift = Gift.find(opthash[:gift_id])
-      send  = true
-      if @gift.receiver_id.to_i > 1
+      email = opthash["email"]
+      @gift = Gift.find(opthash["gift_id"].to_i)
+      send  = false
+      if @gift.receiver_id.to_i > 0
         receiver = User.find(receiver_id)
-        send     = receiver.setting.email_receiver_new
+        send     = receiver.get_or_create_settings.email_receiver_new
+      elsif !@gift.receiver_email.nil?
+        send     = true
       end
-      UserMailer.notify_receiver(@gift).deliver if send
-    
+      if send
+        UserMailer.notify_receiver(@gift).deliver 
+      else
+        puts "Receiver is origin (fb,tw,txt) or no notify receiver via email giftID = #{@gift.id.to_s}"
+      end
+
     when "notify_giver_order_complete"
       puts "OPTHASH NOTIFY GIVER ORDER COMPLETE"
       @user = User.find(user_id)
-      if @user.setting.email_redeem
-        @gift = Gift.find(opthash[:gift_id])
+      if @user.get_or_create_settings.email_redeem
+        @gift = Gift.find(opthash["gift_id"].to_i)
         UserMailer.notify_giver_order_complete(@user, @gift).deliver
       else
         puts "#{@user.fullname} does not receiver Invoice Giver Email"
@@ -61,7 +67,7 @@ class EmailJob
     when "notify_giver_created_user"
       puts "OPTHASH NOTIFY GIVER CREATED USER"
       @user = User.find(user_id)
-      @gift = Gift.find(opthash[:gift_id])
+      @gift = Gift.find(opthash["gift_id"].to_i)
       UserMailer.notify_giver_created_user(@user, @gift).deliver
     end 
   end
