@@ -186,7 +186,7 @@ class AppController < ApplicationController
  			# send orders to the app for a provider
 
 	    if user = authenticate_app_user(params["token"])
-	    	provider 	= Provider.find(params["provider"])
+	    	provider 	= Provider.find(params["provider"].to_i)
     		gifts 		= Gift.get_history_provider(provider)
 	    	gifts_array = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 	  		logmsg 		= gifts_array[0]
@@ -229,7 +229,7 @@ class AppController < ApplicationController
 
   	def user_activity
 
-	    user  = User.find(params["user_id"])
+	    user  = User.find(params["user_id"].to_i)
 	    if user 
 	    	gifts 		= Gift.get_user_activity(user)
 	    	gifts_array = array_these_gifts(gifts, ACTIVITY_REPLY, true, true)
@@ -295,7 +295,7 @@ class AppController < ApplicationController
   		# user  = User.find_by_remember_token(params["token"])
   		
   		begin  
-  			other_user = User.find(params["user_id"])
+  			other_user = User.find(params["user_id"].to_i)
 	  			# get new pack of questions
 			begin
 	  			response = Question.get_questions_with_answers(other_user)
@@ -453,10 +453,9 @@ class AppController < ApplicationController
     	message  = ""
     	response = {}
     	process  = false
-    	gift_id  = params["data"]
-    	gift_id  = gift_id.to_i
+    	gift_id  = params["data"].to_i
 
-    	if gift_id.nil?
+    	if gift_id == 0
       		message = "data did not transfer. "
       		redeem  = Redeem.new
     	else
@@ -608,10 +607,10 @@ class AppController < ApplicationController
 
 		message   = ""
 		response  = {} 
-		gift_id 	= params["gift_id"]
-		employee_id = params["employee_id"]
+		gift_id 	= params["gift_id"].to_i
+		employee_id = params["employee_id"].to_i
 
-		if gift_id.nil? || employee_id.nil? 
+		if gift_id == 0 || employee_id == 0 
 			message = "Data not received correctly. "
 			order   = Order.new
 		else
@@ -650,7 +649,7 @@ class AppController < ApplicationController
 		response = {}
 
 		if user = authenticate_app_user(params["token"])
-			cCard = Card.find(params["data"])
+			cCard = Card.find(params["data"].to_i)
 			if cCard.user_id == user.id
 				if cCard.destroy
 					response["delete"] = "#{cCard.id}"

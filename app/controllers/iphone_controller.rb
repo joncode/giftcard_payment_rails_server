@@ -155,7 +155,7 @@ class IphoneController < AppController
   def regift
 
     user  = User.find_by_remember_token(params["token"])
-    gift  = Gift.find(params["gift_id"])
+    gift  = Gift.find(params["gift_id"].to_i)
     if gift.receiver == user
       receiver_id = params["regifter_id"] || nil
       receiver = User.find(receiver_id.to_i)
