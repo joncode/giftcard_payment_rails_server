@@ -146,7 +146,7 @@ class Gift < ActiveRecord::Base
       # Held for Review
     else
       # not a listed error code
-      puts "UNKNOWN ERROR CODE RECEIVED FOR AUTH>NET - CODE = #{response.response_code}"
+      puts "UNKNOWN ERROR CODE RECEIVED FOR AUTH.NET - CODE = #{response.response_code}"
       puts "TEXT IS #{response.response_reason_text} for GIFT ID = #{self.id}"
     end
     reply = response.response_reason_text
