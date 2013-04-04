@@ -1,13 +1,87 @@
+require 'authorize_net'
+
 class Sale < ActiveRecord::Base
- 	attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string,
- 	 :response_string, :revenue, :status, :transaction_id
+		# real account
+ 	AUTHORIZE_API_LOGIN 	  = '9tp38Ga4CQ'
+ 	AUTHORIZE_TRANSACTION_KEY = '9EcTk32BHeE8279P'
+ 	GATEWAY 			      = :production
+ 		# sandbox account
+ 	# AUTHORIZE_API_LOGIN 	  = '7esX3XfuS5w'
+ 	# AUTHORIZE_TRANSACTION_KEY = '3y9dLy3Pm37AK9qT'
+ 	# GATEWAY 			      = :sandbox
+ 	attr_accessor :transaction, :credit_card, :response, :total
+ 	# NOTE - Revenue is a decimal value - gift.total is a string - converted in self.init below
+ 	# attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string, :response_string, :revenue, :status, :transaction_id
 	
 	belongs_to :provider	
 	belongs_to :giver, class_name: "User"	
-	has_one	   :gift
+	belongs_to :gift
 	has_one    :order, through: :gift
-	belongs_to :card	
+	belongs_to :card
 
+	before_create :add_gateway_data	
+
+
+### AUTHORIZE TRANSACTION METHODS
+
+	def self.init gift
+		puts "in Sale.init"
+		sale_obj 		     = Sale.new
+		sale_obj.card_id 	 = gift.credit_card
+		sale_obj.gift_id 	 = gift.id
+		sale_obj.giver_id 	 = gift.giver_id
+		sale_obj.provider_id = gift.provider_id
+		sale_obj.revenue 	 = gift.total
+		sale_obj.total 	     = gift.total
+		return sale_obj
+	end
+
+	def auth_capture
+		puts "in auth capture in Sale.rb"
+        # 1 makes a transaction
+        @transaction = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
+        # 2 makes a credit card
+        @transaction.fields[:first_name] = card.first_name
+		@transaction.fields[:last_name]  = card.last_name
+		card 		 = self.card
+		month 		 = "%02d" % card.month
+		year 		 = card.year[2..3]
+		card.decrypt! "Theres no place like home"
+		######### put in real credit card details when in production
+		num = card.number
+		card_number  = "4427427042229494"	
+		        # populate the transaction with data
+        @transaction.fields[:first_name] = "Dave"
+		@transaction.fields[:last_name]  = "Leibner"
+		month = "03"
+		year  = "16"
+		######### 
+
+		month_year 	 = "#{month}#{year}" 
+		tots = self.total.to_f / 100
+		x = tots.to_s.split('.')
+		total_amount = x[0] + '.' + x[1][0..1]
+		puts "HERE is the TOTAL = #{total_amount}"
+       
+        @credit_card = AuthorizeNet::CreditCard.new(card_number, month_year)
+        
+        # 3 gets a response from auth.net
+        @response 	 = @transaction.purchase(total_amount, @credit_card)
+
+	end
+
+	def add_gateway_data
+		self.transaction_id    	= self.response.transaction_id
+		self.resp_json   		= self.response.fields.to_json
+		raw_request			   	= self.transaction.fields
+		card_num 			   	= raw_request[:card_num]
+		last_four			   	= "XXXX" + card_num[12..15]
+		raw_request[:card_num] 	= last_four
+		self.req_json    	   	= raw_request.to_json
+		self.resp_code		 	= self.response.response_code.to_i
+		self.reason_text		= self.response.response_reason_text
+		self.reason_code		= self.response.response_reason_code.to_i
+	end
 
 end
 # == Schema Information

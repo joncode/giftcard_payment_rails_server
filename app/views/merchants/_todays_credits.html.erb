@@ -1,0 +1,12 @@
+<div class="doubleColumn">
+	<% if @orders.count > 0 %>
+		<h2>Here are todays' Credits</h2>
+			<%= @orders.each do |o| %>
+		<p>o.inspect</p>
+			<% end %>
+	<% else %>
+		<h2>There are no credits in the last 24 hrs up to <%= Time.now.strftime("%l:%M %p")  %> today</h2>
+		<h3>Refresh page to get more recent orders</h3>
+	<% end %>
+
+</div>

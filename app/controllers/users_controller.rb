@@ -161,7 +161,7 @@ class UsersController < ApplicationController
   end
   
   def reset_password
-
+    puts "IN RESET PASSWORD"
     if params[:user] && params[:user].has_key?("email")
       email = params[:user]["email"]
       if user = User.find_by_email(email)

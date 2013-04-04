@@ -1,215 +1,136 @@
-# Logfile created on 2013-03-09 22:15:49 -0500 by logger.rb/31641
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Starting the New Relic Agent.
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Environment: development
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Dispatcher: thin
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] WARN : Agent configured not to send data in this environment.
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Installing ActiveMerchant instrumentation
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Installing ActiveRecord instrumentation
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Installing Net instrumentation
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Installing Resque instrumentation
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Installing Rails 3 Controller instrumentation
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Installing Rails 3.1/3.2 view instrumentation
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Installing Rails3 Error instrumentation
-[03/09/13 22:15:49 -0500 Slimms-MacBook-Air.local (3054)] INFO : Finished instrumentation
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Starting the New Relic Agent.
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Environment: development
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Dispatcher: thin
-[03/19/13 11:32:50 -0400 new-host.home (11899)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
-[03/19/13 11:32:50 -0400 new-host.home (11899)] WARN : Agent configured not to send data in this environment.
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Installing ActiveMerchant instrumentation
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Installing ActiveRecord instrumentation
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Installing Net instrumentation
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Installing Resque instrumentation
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Installing Rails 3 Controller instrumentation
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Installing Rails 3.1/3.2 view instrumentation
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Installing Rails3 Error instrumentation
-[03/19/13 11:32:50 -0400 new-host.home (11899)] INFO : Finished instrumentation
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Starting the New Relic Agent.
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Environment: development
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Dispatcher: thin
-[03/19/13 23:26:20 -0400 new-host.home (14020)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
-[03/19/13 23:26:20 -0400 new-host.home (14020)] WARN : Agent configured not to send data in this environment.
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Installing ActiveMerchant instrumentation
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Installing ActiveRecord instrumentation
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Installing Net instrumentation
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Installing Resque instrumentation
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Installing Rails 3 Controller instrumentation
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Installing Rails 3.1/3.2 view instrumentation
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Installing Rails3 Error instrumentation
-[03/19/13 23:26:20 -0400 new-host.home (14020)] INFO : Finished instrumentation
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Starting the New Relic Agent.
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Environment: development
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Dispatcher: thin
-[03/19/13 23:26:32 -0400 new-host.home (14025)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
-[03/19/13 23:26:32 -0400 new-host.home (14025)] WARN : Agent configured not to send data in this environment.
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Installing ActiveMerchant instrumentation
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Installing ActiveRecord instrumentation
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Installing Net instrumentation
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Installing Resque instrumentation
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Installing Rails 3 Controller instrumentation
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Installing Rails 3.1/3.2 view instrumentation
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Installing Rails3 Error instrumentation
-[03/19/13 23:26:32 -0400 new-host.home (14025)] INFO : Finished instrumentation
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Starting the New Relic Agent.
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Environment: development
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Dispatcher: thin
-[03/19/13 23:26:54 -0400 new-host.home (14028)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
-[03/19/13 23:26:54 -0400 new-host.home (14028)] WARN : Agent configured not to send data in this environment.
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Installing ActiveMerchant instrumentation
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Installing ActiveRecord instrumentation
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Installing Net instrumentation
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Installing Resque instrumentation
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Installing Rails 3 Controller instrumentation
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Installing Rails 3.1/3.2 view instrumentation
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Installing Rails3 Error instrumentation
-[03/19/13 23:26:54 -0400 new-host.home (14028)] INFO : Finished instrumentation
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Starting the New Relic Agent.
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Environment: development
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Dispatcher: thin
-[03/19/13 23:31:32 -0400 new-host.home (14045)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
-[03/19/13 23:31:32 -0400 new-host.home (14045)] WARN : Agent configured not to send data in this environment.
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Installing ActiveMerchant instrumentation
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Installing ActiveRecord instrumentation
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Installing Net instrumentation
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Installing Resque instrumentation
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Installing Rails 3 Controller instrumentation
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Installing Rails 3.1/3.2 view instrumentation
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Installing Rails3 Error instrumentation
-[03/19/13 23:31:32 -0400 new-host.home (14045)] INFO : Finished instrumentation
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Starting the New Relic Agent.
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Environment: development
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Dispatcher: thin
-[03/19/13 23:31:57 -0400 new-host.home (14049)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
-[03/19/13 23:31:57 -0400 new-host.home (14049)] WARN : Agent configured not to send data in this environment.
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Installing ActiveMerchant instrumentation
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Installing ActiveRecord instrumentation
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Installing Net instrumentation
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Installing Resque instrumentation
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Installing Rails 3 Controller instrumentation
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Installing Rails 3.1/3.2 view instrumentation
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Installing Rails3 Error instrumentation
-[03/19/13 23:31:57 -0400 new-host.home (14049)] INFO : Finished instrumentation
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Starting the New Relic Agent.
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Environment: development
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Dispatcher: thin
-[03/19/13 23:53:00 -0400 new-host.home (14133)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
-[03/19/13 23:53:00 -0400 new-host.home (14133)] WARN : Agent configured not to send data in this environment.
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Installing ActiveMerchant instrumentation
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Installing ActiveRecord instrumentation
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Installing Net instrumentation
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Installing Resque instrumentation
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Installing Rails 3 Controller instrumentation
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Installing Rails 3.1/3.2 view instrumentation
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Installing Rails3 Error instrumentation
-[03/19/13 23:53:00 -0400 new-host.home (14133)] INFO : Finished instrumentation
-[03/20/13 00:49:36 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:49:52 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `empty?' for #<BrandBannerUploader:0x007ff1661c4a80>
-[03/20/13 00:49:52 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `empty?' for #<BrandBannerUploader:0x007ff1661c4a80>
-[03/20/13 00:50:01 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:50:01 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:50:48 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:50:48 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:50:49 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:50:49 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:56:21 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:56:21 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:56:34 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 00:56:34 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `split' for nil:NilClass
-[03/20/13 01:19:51 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined local variable or method `merchatn' for #<#<Class:0x007ff163fbffe8>:0x007ff163fd2580>
-[03/20/13 01:19:51 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined local variable or method `merchatn' for #<#<Class:0x007ff163fbffe8>:0x007ff163fd2580>
-[03/20/13 01:21:33 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `item' for #<Gift:0x007ff16134b818>
-[03/20/13 01:21:33 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `item' for #<Gift:0x007ff16134b818>
-[03/20/13 01:29:07 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: /Users/jongutwillig/Rails/drinkboard/app/controllers/brands_controller.rb:20: syntax error, unexpected tASSOC, expecting ')'
-...nd_id => nil && :building_id => nil )
-...                               ^
-/Users/jongutwillig/Rails/drinkboard/app/controllers/brands_controller.rb:100: syntax error, unexpected $end, expecting keyword_end
-[03/20/13 01:31:52 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: uninitialized constant BrandsController::NULL
-[03/20/13 01:31:52 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: uninitialized constant BrandsController::NULL
-[03/20/13 01:32:02 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: uninitialized constant BrandsController::NULL
-[03/20/13 01:32:02 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: uninitialized constant BrandsController::NULL
-[03/20/13 01:32:11 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: uninitialized constant BrandsController::NULL
-[03/20/13 01:32:11 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: uninitialized constant BrandsController::NULL
-[03/20/13 01:33:17 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: /Users/jongutwillig/Rails/drinkboard/app/controllers/brands_controller.rb:20: syntax error, unexpected keyword_or, expecting ')'
-...vider.where(:brand_id => nil or :building_id => nil)
-...                               ^
-/Users/jongutwillig/Rails/drinkboard/app/controllers/brands_controller.rb:101: syntax error, unexpected $end, expecting keyword_end
-[03/20/13 01:33:23 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: /Users/jongutwillig/Rails/drinkboard/app/controllers/brands_controller.rb:20: syntax error, unexpected tCONSTANT, expecting ')'
-...vider.where(:brand_id => nil OR :building_id => nil)
-...                               ^
-/Users/jongutwillig/Rails/drinkboard/app/controllers/brands_controller.rb:101: syntax error, unexpected $end, expecting keyword_end
-[03/20/13 01:35:30 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: wrong number of bind variables (1 for 2) in: brand_id = ? OR building_id = ?
-[03/20/13 01:35:30 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: wrong number of bind variables (1 for 2) in: brand_id = ? OR building_id = ?
-[03/20/13 01:40:00 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `brand_merchant_brand_path' for #<#<Class:0x007ff164c80e80>:0x007ff164a59da0>
-[03/20/13 01:40:00 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `brand_merchant_brand_path' for #<#<Class:0x007ff164c80e80>:0x007ff164a59da0>
-[03/20/13 01:42:19 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing template brands/brand_merchant, application/brand_merchant with {:locale=>[:en], :formats=>[:js, :html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
-  * "/Users/jongutwillig/Rails/drinkboard/app/views"
-
-[03/20/13 01:42:19 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing template brands/brand_merchant, application/brand_merchant with {:locale=>[:en], :formats=>[:js, :html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
-  * "/Users/jongutwillig/Rails/drinkboard/app/views"
-
-[03/20/13 01:50:15 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: /Users/jongutwillig/Rails/drinkboard/app/views/brands/merchants.html.erb:22: syntax error, unexpected tIDENTIFIER, expecting ')'
-...ant_brand_path(@brand  merchant: merchant.id), remote: true ...
-...                               ^
-/Users/jongutwillig/Rails/drinkboard/app/views/brands/merchants.html.erb:22: syntax error, unexpected tLABEL
-...merchant: merchant.id), remote: true  );@output_buffer.safe_...
-...                               ^
-[03/20/13 01:50:15 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: /Users/jongutwillig/Rails/drinkboard/app/views/brands/merchants.html.erb:22: syntax error, unexpected tIDENTIFIER, expecting ')'
-...ant_brand_path(@brand  merchant: merchant.id), remote: true ...
-...                               ^
-/Users/jongutwillig/Rails/drinkboard/app/views/brands/merchants.html.erb:22: syntax error, unexpected tLABEL
-...merchant: merchant.id), remote: true  );@output_buffer.safe_...
-...                               ^
-[03/20/13 01:55:42 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Can't mass-assign protected attributes: brand_id
-[03/20/13 01:55:42 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Can't mass-assign protected attributes: brand_id
-[03/20/13 01:56:08 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Can't mass-assign protected attributes: brand_id
-[03/20/13 01:56:08 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Can't mass-assign protected attributes: brand_id
-[03/20/13 01:58:15 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing template /brands/23/merchants with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
-  * "/Users/jongutwillig/Rails/drinkboard/app/views"
-  * "/Users/jongutwillig/Rails/drinkboard"
-  * "/"
-
-[03/20/13 01:58:15 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing template /brands/23/merchants with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
-  * "/Users/jongutwillig/Rails/drinkboard/app/views"
-  * "/Users/jongutwillig/Rails/drinkboard"
-  * "/"
-
-[03/20/13 01:58:18 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing template /brands/23/merchants with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
-  * "/Users/jongutwillig/Rails/drinkboard/app/views"
-  * "/Users/jongutwillig/Rails/drinkboard"
-  * "/"
-
-[03/20/13 01:58:18 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing template /brands/23/merchants with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
-  * "/Users/jongutwillig/Rails/drinkboard/app/views"
-  * "/Users/jongutwillig/Rails/drinkboard"
-  * "/"
-
-[03/20/13 01:59:47 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Called id for nil, which would mistakenly be 4 -- if you really wanted the id of nil, use object_id
-[03/20/13 01:59:47 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Called id for nil, which would mistakenly be 4 -- if you really wanted the id of nil, use object_id
-[03/20/13 02:02:42 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: private method `update' called for #<Provider:0x007ff162a74030>
-[03/20/13 02:02:42 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: private method `update' called for #<Provider:0x007ff162a74030>
-[03/20/13 02:07:14 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `merchants_brand' for #<#<Class:0x007ff1639f69e0>:0x007ff163f8c9e0>
-[03/20/13 02:07:14 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `merchants_brand' for #<#<Class:0x007ff1639f69e0>:0x007ff163f8c9e0>
-[03/20/13 02:07:29 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: can't convert Fixnum into String
-[03/20/13 02:07:29 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: can't convert Fixnum into String
-[03/20/13 03:20:26 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Brand with id=0
-[03/20/13 03:20:26 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Brand with id=0
-[03/20/13 03:21:17 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Brand with id=22
-[03/20/13 03:21:17 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Brand with id=22
-[03/20/13 03:22:31 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `errors' for nil:NilClass
-[03/20/13 03:22:31 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `errors' for nil:NilClass
-[03/20/13 03:23:09 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `errors' for nil:NilClass
-[03/20/13 03:23:09 -0400 new-host.home (14133)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `errors' for nil:NilClass
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Starting the New Relic Agent.
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Environment: development
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Dispatcher: thin
-[03/24/13 02:50:14 -0400 new-host.home (3156)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
-[03/24/13 02:50:14 -0400 new-host.home (3156)] WARN : Agent configured not to send data in this environment.
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Installing ActiveMerchant instrumentation
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Installing ActiveRecord instrumentation
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Installing Net instrumentation
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Installing Resque instrumentation
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Installing Rails 3 Controller instrumentation
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Installing Rails 3.1/3.2 view instrumentation
-[03/24/13 02:50:14 -0400 new-host.home (3156)] INFO : Installing Rails3 Error instrumentation
-[03/24/13 02:50:15 -0400 new-host.home (3156)] INFO : Finished instrumentation
+[04/03/13 22:32:50 -0400 new-host.home (30769)] INFO : Starting the New Relic Agent.
+[04/03/13 22:32:50 -0400 new-host.home (30769)] INFO : Environment: development
+[04/03/13 22:32:50 -0400 new-host.home (30769)] INFO : Dispatcher: thin
+[04/03/13 22:32:50 -0400 new-host.home (30769)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[04/03/13 22:32:50 -0400 new-host.home (30769)] WARN : Agent configured not to send data in this environment.
+[04/03/13 22:32:51 -0400 new-host.home (30769)] INFO : Installing ActiveMerchant instrumentation
+[04/03/13 22:32:51 -0400 new-host.home (30769)] INFO : Installing ActiveRecord instrumentation
+[04/03/13 22:32:51 -0400 new-host.home (30769)] INFO : Installing Net instrumentation
+[04/03/13 22:32:51 -0400 new-host.home (30769)] INFO : Installing Resque instrumentation
+[04/03/13 22:32:51 -0400 new-host.home (30769)] INFO : Installing Rails 3 Controller instrumentation
+[04/03/13 22:32:51 -0400 new-host.home (30769)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[04/03/13 22:32:51 -0400 new-host.home (30769)] INFO : Installing Rails3 Error instrumentation
+[04/03/13 22:32:51 -0400 new-host.home (30769)] INFO : Finished instrumentation
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Starting the New Relic Agent.
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Environment: development
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Dispatcher: thin
+[04/03/13 22:40:55 -0400 new-host.home (30794)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[04/03/13 22:40:55 -0400 new-host.home (30794)] WARN : Agent configured not to send data in this environment.
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Installing ActiveMerchant instrumentation
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Installing ActiveRecord instrumentation
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Installing Net instrumentation
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Installing Resque instrumentation
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Installing Rails 3 Controller instrumentation
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Installing Rails3 Error instrumentation
+[04/03/13 22:40:55 -0400 new-host.home (30794)] INFO : Finished instrumentation
+[04/03/13 22:41:16 -0400 new-host.home (30840)] INFO : Starting the New Relic Agent.
+[04/03/13 22:41:16 -0400 new-host.home (30840)] INFO : Installing ActiveMerchant instrumentation
+[04/03/13 22:41:16 -0400 new-host.home (30840)] INFO : Installing ActiveRecord instrumentation
+[04/03/13 22:41:16 -0400 new-host.home (30840)] INFO : Installing Net instrumentation
+[04/03/13 22:41:16 -0400 new-host.home (30840)] INFO : Installing Resque instrumentation
+[04/03/13 22:41:16 -0400 new-host.home (30840)] INFO : Installing Rails 3 Controller instrumentation
+[04/03/13 22:41:16 -0400 new-host.home (30840)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[04/03/13 22:41:16 -0400 new-host.home (30840)] INFO : Installing Rails3 Error instrumentation
+[04/03/13 22:41:16 -0400 new-host.home (30840)] INFO : Finished instrumentation
+[04/03/13 22:41:17 -0400 new-host.home (30840)] INFO : Starting the New Relic Agent.
+[04/03/13 22:41:17 -0400 new-host.home (30840)] INFO : Environment: development
+[04/03/13 22:41:17 -0400 new-host.home (30840)] INFO : Dispatcher: resque
+[04/03/13 22:41:17 -0400 new-host.home (30840)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[04/03/13 22:41:17 -0400 new-host.home (30840)] WARN : Agent configured not to send data in this environment.
+[04/03/13 22:41:27 -0400 new-host.home (30847)] INFO : Starting Agent shutdown
+[04/03/13 22:41:28 -0400 new-host.home (30848)] INFO : Starting Agent shutdown
+[04/03/13 22:44:13 -0400 new-host.home (30852)] INFO : Starting Agent shutdown
+[04/03/13 22:44:13 -0400 new-host.home (30853)] INFO : Starting Agent shutdown
+[04/03/13 22:44:48 -0400 new-host.home (30859)] INFO : Starting Agent shutdown
+[04/03/13 22:44:48 -0400 new-host.home (30860)] INFO : Starting Agent shutdown
+[04/03/13 23:00:19 -0400 new-host.home (30901)] INFO : Starting Agent shutdown
+[04/03/13 23:00:19 -0400 new-host.home (30902)] INFO : Starting Agent shutdown
+[04/04/13 00:39:27 -0400 new-host.home (31181)] INFO : Starting Agent shutdown
+[04/04/13 00:39:27 -0400 new-host.home (31182)] INFO : Starting Agent shutdown
+[04/04/13 00:43:07 -0400 new-host.home (31194)] INFO : Starting Agent shutdown
+[04/04/13 00:43:07 -0400 new-host.home (31195)] INFO : Starting Agent shutdown
+[04/04/13 00:45:58 -0400 new-host.home (31207)] INFO : Starting Agent shutdown
+[04/04/13 00:45:58 -0400 new-host.home (31208)] INFO : Starting Agent shutdown
+[04/04/13 00:49:38 -0400 new-host.home (31220)] INFO : Starting Agent shutdown
+[04/04/13 00:49:38 -0400 new-host.home (31221)] INFO : Starting Agent shutdown
+[04/04/13 00:52:58 -0400 new-host.home (31233)] INFO : Starting Agent shutdown
+[04/04/13 00:52:59 -0400 new-host.home (31234)] INFO : Starting Agent shutdown
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Starting the New Relic Agent.
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Environment: development
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Dispatcher: thin
+[04/04/13 00:57:12 -0400 new-host.home (31243)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[04/04/13 00:57:12 -0400 new-host.home (31243)] WARN : Agent configured not to send data in this environment.
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Installing ActiveMerchant instrumentation
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Installing ActiveRecord instrumentation
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Installing Net instrumentation
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Installing Resque instrumentation
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Installing Rails 3 Controller instrumentation
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Installing Rails3 Error instrumentation
+[04/04/13 00:57:12 -0400 new-host.home (31243)] INFO : Finished instrumentation
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Starting the New Relic Agent.
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Environment: development
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Dispatcher: thin
+[04/04/13 01:00:42 -0400 new-host.home (31262)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[04/04/13 01:00:42 -0400 new-host.home (31262)] WARN : Agent configured not to send data in this environment.
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Installing ActiveMerchant instrumentation
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Installing ActiveRecord instrumentation
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Installing Net instrumentation
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Installing Resque instrumentation
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Installing Rails 3 Controller instrumentation
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Installing Rails3 Error instrumentation
+[04/04/13 01:00:42 -0400 new-host.home (31262)] INFO : Finished instrumentation
+[04/04/13 01:00:54 -0400 new-host.home (31266)] INFO : Starting Agent shutdown
+[04/04/13 01:00:54 -0400 new-host.home (31267)] INFO : Starting Agent shutdown
+[04/04/13 01:02:09 -0400 new-host.home (31271)] INFO : Starting Agent shutdown
+[04/04/13 01:02:09 -0400 new-host.home (31272)] INFO : Starting Agent shutdown
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Starting the New Relic Agent.
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Environment: development
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Dispatcher: thin
+[04/04/13 02:00:35 -0400 new-host.home (31434)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[04/04/13 02:00:35 -0400 new-host.home (31434)] WARN : Agent configured not to send data in this environment.
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Installing ActiveMerchant instrumentation
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Installing ActiveRecord instrumentation
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Installing Net instrumentation
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Installing Resque instrumentation
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Installing Rails 3 Controller instrumentation
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Installing Rails3 Error instrumentation
+[04/04/13 02:00:35 -0400 new-host.home (31434)] INFO : Finished instrumentation
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Starting the New Relic Agent.
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Environment: development
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Dispatcher: thin
+[04/04/13 03:18:48 -0400 new-host.home (31644)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[04/04/13 03:18:48 -0400 new-host.home (31644)] WARN : Agent configured not to send data in this environment.
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Installing ActiveMerchant instrumentation
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Installing ActiveRecord instrumentation
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Installing Net instrumentation
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Installing Resque instrumentation
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Installing Rails 3 Controller instrumentation
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Installing Rails3 Error instrumentation
+[04/04/13 03:18:48 -0400 new-host.home (31644)] INFO : Finished instrumentation
+[04/04/13 03:21:38 -0400 new-host.home (31661)] INFO : Starting Agent shutdown
+[04/04/13 03:21:39 -0400 new-host.home (31662)] INFO : Starting Agent shutdown
+[04/04/13 03:26:34 -0400 new-host.home (31673)] INFO : Starting Agent shutdown
+[04/04/13 03:26:34 -0400 new-host.home (31674)] INFO : Starting Agent shutdown
+[04/04/13 03:40:10 -0400 new-host.home (31770)] INFO : Starting Agent shutdown
+[04/04/13 03:40:10 -0400 new-host.home (31771)] INFO : Starting Agent shutdown
+[04/04/13 03:40:55 -0400 new-host.home (31774)] INFO : Starting Agent shutdown
+[04/04/13 03:40:55 -0400 new-host.home (31775)] INFO : Starting Agent shutdown
+[04/04/13 03:46:10 -0400 new-host.home (31812)] INFO : Starting Agent shutdown
+[04/04/13 03:46:11 -0400 new-host.home (31813)] INFO : Starting Agent shutdown
+[04/04/13 03:47:11 -0400 new-host.home (31816)] INFO : Starting Agent shutdown
+[04/04/13 03:47:11 -0400 new-host.home (31817)] INFO : Starting Agent shutdown
+[04/04/13 03:47:51 -0400 new-host.home (31825)] INFO : Starting Agent shutdown
+[04/04/13 03:47:51 -0400 new-host.home (31826)] INFO : Starting Agent shutdown
+[04/04/13 03:55:07 -0400 new-host.home (31843)] INFO : Starting Agent shutdown
+[04/04/13 03:55:07 -0400 new-host.home (31844)] INFO : Starting Agent shutdown
+[04/04/13 03:57:32 -0400 new-host.home (31854)] INFO : Starting Agent shutdown
+[04/04/13 03:57:32 -0400 new-host.home (31856)] INFO : Starting Agent shutdown
+[04/04/13 03:58:27 -0400 new-host.home (31860)] INFO : Starting Agent shutdown
+[04/04/13 03:58:28 -0400 new-host.home (31861)] INFO : Starting Agent shutdown
+[04/04/13 03:59:13 -0400 new-host.home (31865)] INFO : Starting Agent shutdown
+[04/04/13 03:59:13 -0400 new-host.home (31866)] INFO : Starting Agent shutdown

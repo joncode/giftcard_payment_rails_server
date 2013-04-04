@@ -19,18 +19,19 @@ class Gift < ActiveRecord::Base
   has_one     :redeem, dependent: :destroy
   has_one     :relay,  dependent: :destroy
   belongs_to  :provider
-  belongs_to  :sales
+  has_many    :sales
   has_one     :order, dependent: :destroy
   has_many    :gift_items, dependent: :destroy
   belongs_to  :giver,    class_name: "User"
   belongs_to  :receiver, class_name: "User"
-  
-  validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip 
+
+  validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip, :credit_card
 
   before_create :extract_phone_digits
   before_create :add_giver_name,  :if => :no_giver_name
   before_create :regifted,        :if => :regift_id?
-  before_save   :set_status
+  before_create :set_unpaid_status
+ 
   after_create  :update_shoppingCart
   after_create  :invoice_giver
   after_create  :notify_receiver
@@ -81,8 +82,8 @@ class Gift < ActiveRecord::Base
   end
   
   def self.get_all_orders(provider)
-    Gift.where(provider_id: provider.id).where("status != :stat ", :stat => 'incomplete').order("updated_at DESC")
-  end
+    Gift.where(provider_id: provider.id).where("status != :stat OR status != :other", :stat => 'incomplete', :other => 'unpaid').order("updated_at DESC")
+  end 
   
   def self.get_history_provider(provider)
     Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
@@ -102,14 +103,85 @@ class Gift < ActiveRecord::Base
 
   ##########  gift creation methods
 
-  # def self.init(params)
-  #   gift = Gift.new(params[:gift])
-  #       # add anonymous giver feature
-  #   if params[:gift][:anon_id] 
-  #     gift.add_anonymous_giver(params[:gift][:giver_id])
-  #   end
-  #   return gift
-  # end
+  def set_status    
+    if !self.receiver_id
+      status = "incomplete"
+    else
+      status = 'open'
+    end
+    self.update_attribute(:status, status)
+  end
+
+  def charge_card
+        # if giver is one jb@jb.com
+        # call authorize capture on the gift and create the sale object
+    giver = User.find self.giver_id
+    if giver.email == "test@test.com"
+        sale = self.authorize_capture
+        puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
+    else
+        sale = Sale.new
+        sale.resp_code = 1
+    end
+        # otherwise return a sale object with resp_code == 1
+    return sale
+  end
+
+  def authorize_capture
+    puts "BEGIN AUTH CAPTURE for GIFT ID #{self.id}"
+      # Authorize Transaction Method
+    # A - create a sale object that stores the record of the auth.net transaction    
+    sale     = Sale.init self
+    response = sale.auth_capture
+    
+    # B - authorize transaction via auth.net
+      # -- returns data --
+        # 1 success
+          # go ahead and savre the gift - process complete
+        # failure
+          # credit card issues
+            # card expired
+            # insufficient funds
+            # card is blocked
+          # auth.net issues
+            # cannot connect to server 
+            # no response from server
+            # transaction key is no longer good
+          # sale db issues
+            # could not save item
+    case response.response_code.to_i
+    when 1
+      # Approved
+      puts "setting the gift status off unpaid"
+     self.set_status 
+    when 2
+      # Declined 
+    when 3
+      # Error 
+      # duplicate transaction response subcode = 1
+    when 4 
+      # Held for Review
+    else
+      # not a listed error code
+      puts "UNKNOWN ERROR CODE RECEIVED FOR AUTH.NET - CODE = #{response.response_code}"
+      puts "TEXT IS #{response.response_reason_text} for GIFT ID = #{self.id}"
+    end
+    reply = response.response_reason_text
+    puts "HERE IS THE REPLY #{reply}"
+    # C - saves the sale object into the sale db
+    sale.save
+    puts "save of sale successful"
+    return sale
+  end
+
+  def self.init(params)
+    gift = Gift.new(params[:gift])
+        # add anonymous giver feature
+    if params[:gift][:anon_id] 
+      gift.add_anonymous_giver(params[:gift][:giver_id])
+    end
+    return gift
+  end
 
   def regift(receiver=nil, message=nil)
     new_gift            = self.dup
@@ -161,6 +233,17 @@ class Gift < ActiveRecord::Base
       item_ary << item
     end
     return item_ary
+  end
+
+  def make_gift_items(shoppingCart_array)
+    puts "In make gift items #{shoppingCart_array}"
+    gift_item_array = []
+    shoppingCart_array.each do |item|
+        gift_item = GiftItem.initFromDictionary item
+        gift_item_array << gift_item
+    end
+    puts "made it thru gift items #{gift_item_array}"
+    self.gift_items = gift_item_array
   end
 
   private
@@ -221,10 +304,8 @@ class Gift < ActiveRecord::Base
       end
     end
 
-    def set_status    
-      if !self.receiver_id
-        self.status =  "incomplete"
-      end
+    def set_unpaid_status
+      self.status = "unpaid"
     end
     
     # def pluralizer

@@ -14,4 +14,12 @@
     <% end %>
   </div>
 </div>
+ 
+<div class="doubleColumn">
+  <div class="merchantMenu staffProfileMenuPOS width3">
+    <%= link_to "Today's Credits", todays_credits_merchant_path(@provider), :id => "today" , remote: true %>
+    <%= link_to "Redeem", orders_merchant_path(@provider) %>
+  </div>
+</div>
 
+<div id="cropperWrapper"></div>

@@ -1,6 +1,9 @@
 class UserMailer < ActionMailer::Base
 
-  default :css => 'email/email', :from => "noreplydrinkboard@gmail.com"
+  dev       = "noreplydrinkboard@gmail.com"
+  prod      = "no-reply@drinkboard.com"
+  email_to  = "programcodex@gmail.com"
+  default :css => 'email/email', :from => dev
 
   def confirm_email(user)
       #  you've just joined the app , confirm your email 
@@ -10,7 +13,7 @@ class UserMailer < ActionMailer::Base
     @web_view_route = "#{TEST_URL}/webview/confirm_email/#{user.id}"
     @social         = 0 
     mail({
-      :to => "#{@user.fullname} <#{@user.email}>",
+      :to =>  email_to,# "#{@user.fullname} <#{@user.email}>",
       :subject => "Drinkboard: confirm your email #{@user.fullname}"
     })       
   end
@@ -23,7 +26,7 @@ class UserMailer < ActionMailer::Base
     @web_view_route = "#{TEST_URL}/webview/forgot_password/#{user.id}"
     puts "reset_password -UserMailer-  for #{user.username}"
     mail({
-      :to => "#{@user.fullname} <#{@user.email}>",
+      :to => email_to, #"#{@user.fullname} <#{@user.email}>",
       :subject => "Drinkboard: password reset request #{@user.fullname}"
     })
   end
@@ -35,7 +38,7 @@ class UserMailer < ActionMailer::Base
     @gift_id = gift_id
     # :to => "#{@friends_email}",
     mail({
-      :to => "jon.gutwillig@drinkboard.com",
+      :to => email_to,
       :subject => "Your friend #{@user.first_name} invited you to drinkboard. #{@friends_email}"
     })
   end
@@ -45,7 +48,7 @@ class UserMailer < ActionMailer::Base
     @provider = provider
     # :to => "#{employee_email}",
     mail({
-      :to => "jon.gutwillig@drinkboard.com",
+      :to => email_to,
       :subject => "Drinkboard Employee Request #{employee_email}"
     })
   end
@@ -60,7 +63,7 @@ class UserMailer < ActionMailer::Base
     @web_view_route = "/webview/invoice_giver/#{gift.id}"
     # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
-      :to => "jon.gutwillig@drinkboard.com",
+      :to => email_to,
       :subject => "Gift purchase complete #{@user.fullname}"
     })
   end
@@ -74,7 +77,7 @@ class UserMailer < ActionMailer::Base
     @web_view_route = "/webview/notify_receiver/#{gift.id}"
     # :to => "#{@gift.receiver_name} <#{@gift.receiver_email}>",
     mail({
-      :to => "jon.gutwillig@drinkboard.com",
+      :to => email_to,
       :subject => "A Gift has been purchased for You! #{@gift.receiver_name}"
     })
   end
@@ -89,7 +92,7 @@ class UserMailer < ActionMailer::Base
     @web_view_route = "/webview/notify_giver_order_complete/#{gift.id}"
     # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
-      :to => "jon.gutwillig@drinkboard.com",
+      :to => email_to,
       :subject => "Gift Redeem complete #{@user.fullname}"
     })    
   end
@@ -104,7 +107,7 @@ class UserMailer < ActionMailer::Base
     @web_view_route = "/webview/notify_giver_created_user/#{gift.id}"
     # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
-      :to => "jon.gutwillig@drinkboard.com",
+      :to => email_to,
       :subject => "Gift to #{@gift.receiver_name} has been received! #{@user.fullname}"
     })    
   end

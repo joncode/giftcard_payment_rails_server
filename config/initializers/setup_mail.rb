@@ -5,7 +5,7 @@ ActionMailer::Base.smtp_settings = {
   :domain               => "gmail.com",
   :authentication       => "plain",
   :user_name            => "noreplydrinkboard",
-  :password             => "noreplydboard",
+  :password             => "CherryOnTop",
   :enable_starttls_auto => true
 }
 

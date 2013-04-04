@@ -126,6 +126,15 @@ class MerchantsController < ApplicationController
         end
     end
 
+    def todays_credits
+      @provider = Provider.find(params[:id])
+      @orders   = @provider.get_todays_credits
+
+      respond_to do |format|
+        format.js
+      end
+    end
+
     def menu_builder
       
     end

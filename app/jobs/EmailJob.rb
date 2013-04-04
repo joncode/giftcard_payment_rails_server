@@ -4,6 +4,7 @@ class EmailJob
   def self.perform(email_type, user_id, opthash = {})
     case email_type
     when "confirm_email"
+      puts "OPT CONFIRM EMAIL"
       @user = User.find(user_id)
       UserMailer.confirm_email(@user).deliver
     
@@ -14,13 +15,13 @@ class EmailJob
     
     when "invite_friend"
       @user = User.find(user_id)
-      puts "OPTHASH"
+      puts "OPTHASH INVITE FRIEND"
       puts opthash
       puts opthash["email"]
       UserMailer.invite_friend(@user, opthash["email"], opthash["gift_id"]).deliver
     
     when "invite_employee"
-      puts "OPTHASH EMPLOYEE"
+      puts "OPTHASH INVITE EMPLOYEE"
       puts opthash
       @user = User.find(user_id)    #Person making the request
       @provider = Provider.find(opthash[:provider_id])

@@ -109,9 +109,9 @@ ActiveRecord::Schema.define(:version => 20130327204737) do
     t.string   "credit_card",    :limit => 100
     t.integer  "provider_id"
     t.text     "message"
-    t.string   "status",                        :default => "open"
-    t.datetime "created_at",                                        :null => false
-    t.datetime "updated_at",                                        :null => false
+    t.string   "status",                        :default => "unpaid"
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
     t.string   "receiver_phone"
     t.string   "tax"
     t.string   "tip"
@@ -318,11 +318,13 @@ ActiveRecord::Schema.define(:version => 20130327204737) do
     t.integer  "provider_id"
     t.string   "transaction_id"
     t.decimal  "revenue"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-    t.string   "response_string"
-    t.string   "request_string"
-    t.string   "status"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.text     "resp_json"
+    t.text     "req_json"
+    t.integer  "resp_code"
+    t.string   "reason_text"
+    t.integer  "reason_code"
   end
 
   add_index "sales", ["provider_id"], :name => "index_sales_on_provider_id"

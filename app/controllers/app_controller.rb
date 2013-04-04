@@ -11,6 +11,17 @@ class AppController < ApplicationController
     MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "total", "order_num"]
     ACTIVITY_REPLY 	= GIFT_REPLY + [ "receiver_id", "receiver_name"] 
 
+ 	def authenticate_app_user(token)
+ 		if user = User.find_by_remember_token(token)
+ 			return user
+ 		else
+ 			return false
+ 		end
+	end
+
+	def authenticate_public_info(token=nil)
+ 		return true
+	end
 
  	def unauthorized_user
  		{ "Failed Authentication" => "Please log out and re-log into app" }	
@@ -18,6 +29,10 @@ class AppController < ApplicationController
 
  	def database_error_redeem
  		{ "Data Transfer Error"   => "Please Reload Gift Center" }
+ 	end
+
+ 	def database_error_gift
+ 		{ "Data Transfer Error"   => "Please Retry Sending Gift" }
  	end
 
  	def stringify_error_messages(object)
@@ -31,6 +46,55 @@ class AppController < ApplicationController
 
  		return msgs
  	end
+
+  	def shorten_url_for_provider_ary providers_array
+  		providers_array.each do |prov|
+  			short_photo_url = short_photo_url prov["photo"]
+  			prov["photo"] = short_photo_url
+  		end
+  	end
+
+  	def shorten_url_for_brand_ary brands_array
+  		brands_array.each do |brand|
+  			short_photo_url = short_photo_url brand["photo"]
+  			brand["photo"] = short_photo_url
+  		end
+  	end
+
+  	def log_message_header
+  		"#{params["controller"].upcase} -#{params["action"].upcase}-"
+  	end
+
+  	def method_start_log_message
+  		x = params.dup
+  		x.delete('controller')
+  		x.delete('action')
+  		x.delete('format')
+  		puts "#{log_message_header} request: #{x}"
+  	end
+
+  	def method_end_log_message
+  		print "END #{log_message_header} "
+  		puts "response: #{@app_response}" if @app_response
+  	end
+
+  	def short_photo_url photo_url
+  		url_ary = photo_url.split('upload/')
+  		shorten_url = url_ary[1]
+
+  		identifier, tag = shorten_url.split('.')
+
+  		new_photo_ary = ['d', identifier , 'j']
+  		if photo_url.match 'htaaxtzcv'
+  			new_photo_ary[0] = 'h'
+  		end
+
+  		if !tag.match('jpg')
+  			new_photo_ary[2] = tag.match('png') ? 'p' : tag
+  		end
+
+  		return new_photo_ary.join("|")
+  	end
 
  	def update_user
 
@@ -78,18 +142,6 @@ class AppController < ApplicationController
 	    	format.json { render json: response }
 	    end
  	end
-
- 	def authenticate_app_user(token)
- 		if user = User.find_by_remember_token(token)
- 			return user
- 		else
- 			return false
- 		end
-	end
-
-	def authenticate_public_info(token=nil)
- 		return true
-	end
 
  	def menu
 
@@ -298,52 +350,6 @@ class AppController < ApplicationController
 	    end
   	end
 
-  	def method_start_log_message
-  		x = params.dup
-  		x.delete('controller')
-  		x.delete('action')
-  		x.delete('format')
-  		puts "#{params["controller"].upcase} -#{params["action"]}- request: #{x}"
-  	end
-
-  	def method_end_log_message
-  		print "END "
-  		method_start_log_message
-  		# puts "Response = #{response.body}"
-  	end
-
-  	def short_photo_url photo_url
-  		url_ary = photo_url.split('upload/')
-  		shorten_url = url_ary[1]
-
-  		identifier, tag = shorten_url.split('.')
-
-  		new_photo_ary = ['d', identifier , 'j']
-  		if photo_url.match 'htaaxtzcv'
-  			new_photo_ary[0] = 'h'
-  		end
-
-  		if !tag.match('jpg')
-  			new_photo_ary[2] = tag.match('png') ? 'p' : tag
-  		end
-
-  		return new_photo_ary.join("|")
-  	end
-
-  	def shorten_url_for_provider_ary providers_array
-  		providers_array.each do |prov|
-  			short_photo_url = short_photo_url prov["photo"]
-  			prov["photo"] = short_photo_url
-  		end
-  	end
-
-  	def shorten_url_for_brand_ary brands_array
-  		brands_array.each do |brand|
-  			short_photo_url = short_photo_url brand["photo"]
-  			brand["photo"] = short_photo_url
-  		end
-  	end
-
   	def providers_short_ph_url
 	    if  authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
@@ -545,6 +551,60 @@ class AppController < ApplicationController
 
   		respond_to do |format|
   			puts "AC CreateORDER response => #{response}"
+  			format.json { render json: response}
+  		end 
+  	end
+
+  	def create_gift
+  		response = {}
+  		gift_obj = JSON.parse params["gift"]
+  		  			# authenticate user
+  		if giver = authenticate_app_user(params["token"])
+  					# get gift from db
+  			begin
+  					# check to see that the gift has the correct data to save
+  					# check to see that the gift has a shoppingCart
+  				if gift_obj.nil? || params["shoppingCart"].nil?
+  						# nothing can be done without the data 
+  					response["error_server"] = "Data didnt arrive #{database_error_gift}"	
+			    else
+			    		# add the receiver + receiver checks to the gift object 
+			        puts "Lets make this gift !!!"
+			        add_receiver_by_origin(params["origin"], gift_obj, response)
+			        gift    = Gift.new(gift_obj)
+			        sc = JSON.parse params["shoppingCart"]
+			        gift.make_gift_items(sc)
+					puts "Made it thru original git making process"
+		  				# add the giver info to the gift object
+		  			if gift_obj["anon_id"]
+				        gift.add_anonymous_giver(giver.id)
+				    else
+				      	gift.add_giver(giver)
+				     end
+		  			puts "Here is GIFT #{gift.inspect}"
+		  			if gift.save
+		  				sale = gift.charge_card
+				        if sale.resp_code == 1
+				        	response["success"]       = {"Gift Created" => "Success!"}
+				        else
+				        	response["error_server"]  = { "Credit Card" => sale.reason_text }
+				        end
+		  			else
+		  				response["error_server"] = stringify_error_messages gift
+		  			end
+		  		end
+	  		rescue
+	  			response["error_server"] = database_error_gift
+	  		end
+	  	else
+  			response["error"] = unauthorized_user
+  		end
+
+  		respond_to do |format|
+  			if response.has_key? "error_server"
+  				@app_response = stringify_error_messages gift
+  			end
+  			@app_response = "AppC #{response}"
   			format.json { render json: response}
   		end 
   	end
@@ -842,5 +902,93 @@ class AppController < ApplicationController
 
 	    	return new_shopping_cart
 	    end
+
+		def add_receiver_by_origin(origin, gift_obj, response)
+			case origin
+		    when 'd'
+		      #drinkboard - data already received
+		      response["origin"]     = "d"
+		    when 'f'
+		      # facebook - search users for facebook_id
+		      if gift_obj["facebook_id"]
+		        if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
+		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+		          response["origin"] = receiver_info_response(receiver)
+		        else
+		          gift_obj["status"]   = "incomplete"
+		          response["origin"] = "NID"
+		        end
+		      else                   
+		          gift_obj["status"]   = "incomplete"
+		          response["error-receiver"] = "No facebook ID received"
+		      end
+		    when 't'
+		      #twitter - search users for twitter handle
+		      if gift_obj["twitter"]
+		        if receiver = User.find_by_twitter(gift_obj["twitter"].to_s)
+		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+		          response["origin"] = receiver_info_response(receiver)
+		        else                   
+		          gift_obj["status"]   = "incomplete"
+		          response["origin"] = "NID"
+		        end
+		      else
+		        gift_obj["status"]     = "incomplete"
+		        response["error-receiver"] = "No twitter info received"
+		      end
+		    when 'c'
+		      # contacts - search users for phone
+		      if gift_obj["receiver_phone"]
+		        phone_received = gift_obj["receiver_phone"]
+		        phone = extract_phone_digits(phone_received)
+		        if receiver = User.find_by_phone(phone)
+		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+		          response["origin"] = receiver_info_response(receiver)
+		        else
+		          gift_obj["status"]   = "incomplete"
+		          response["origin"] = "NID"
+		        end
+		      else
+		          gift_obj["status"]   = "incomplete"
+		          response["error-receiver"] = "No contact phone received"
+		      end
+		    when 'e'
+		      # email - search users for phone
+		      if gift_obj["receiver_email"]
+		        if receiver = User.find_by_email(gift_obj["receiver_email"])
+		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+		          response["receiver"] = receiver_info_response(receiver)
+		        else
+		          gift_obj["status"]   = "incomplete"
+		          response["origin"] = "NID"
+		        end
+		      else
+		          gift_obj["status"]   = "incomplete"
+		          response["error-receiver"] = "No contact email received"
+		      end
+		    else
+		        #drinkboard - no origin sent
+		        response["origin"]     = "d"
+		    end
+		end
+
+		def extract_phone_digits(phone_raw)
+			if phone_raw
+				phone_match = phone_raw.match(VALID_PHONE_REGEX)
+				phone       = phone_match[1] + phone_match[2] + phone_match[3]
+			end
+	    end
+	    
+	    def receiver_info_response(receiver)
+	      	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
+	    end
+	    
+	    def add_receiver_to_gift_obj(receiver, gift_obj)
+	      	gift_obj["receiver_id"]    = receiver.id
+	      	gift_obj["receiver_name"]  = receiver.username
+	      	gift_obj["receiver_phone"] = receiver.phone
+	      	return gift_obj
+	    end
+
  
 end
