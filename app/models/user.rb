@@ -109,7 +109,7 @@ class User < ActiveRecord::Base
       # custom setters and getters for formatting date to human looking date
   def birthday= birthday
     if birthday.kind_of? String
-      bday = birthday.to_date
+      bday = Date.strptime(birthday, "%m/%d/%Y")
     else
       bday = birthday
     end
