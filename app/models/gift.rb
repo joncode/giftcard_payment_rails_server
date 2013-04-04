@@ -113,6 +113,7 @@ class Gift < ActiveRecord::Base
           status = 'incomplete'
         end
     end
+    puts "gift SET STATUS #{self.status}"
   end
 
   def card_enabled?
