@@ -579,10 +579,11 @@ class AppController < ApplicationController
 			    else
 			      	gift.add_giver(giver)
 			    end
-	  			puts "Here is GIFT #{gift.inspect}"
-	  			if giver.email != "test@test.com"
-	  				gift.set_no_pay_status
+			    gift.set_no_pay_status
+	  			if giver.email == "test@test.com"
+	  				gift.status = "unpaid"
 	  			end
+	  			puts "Here is GIFT #{gift.inspect}"
 	  			if gift.save
 	  				sale = gift.charge_card
 			        if sale.resp_code == 1
