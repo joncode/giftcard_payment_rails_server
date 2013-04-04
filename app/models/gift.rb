@@ -112,6 +112,14 @@ class Gift < ActiveRecord::Base
     self.update_attribute(:status, status)
   end
 
+  def set_no_pay_status
+    if !self.receiver_id
+      self.status = "incomplete"
+    else
+      self.status = 'open'
+    end
+  end
+
   def charge_card
         # if giver is one jb@jb.com
         # call authorize capture on the gift and create the sale object

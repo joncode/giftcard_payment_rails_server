@@ -580,6 +580,9 @@ class AppController < ApplicationController
 			      	gift.add_giver(giver)
 			    end
 	  			puts "Here is GIFT #{gift.inspect}"
+	  			if giver.email != "test@test.com"
+	  				gift.set_no_pay_status
+	  			end
 	  			if gift.save
 	  				sale = gift.charge_card
 			        if sale.resp_code == 1
