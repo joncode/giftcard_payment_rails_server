@@ -579,7 +579,6 @@ class AppController < ApplicationController
 			    else
 			      	gift.add_giver(giver)
 			    end
-			    gift.set_status
 	  			puts "Here is GIFT #{gift.inspect}"
 	  			if gift.save
 	  				sale = gift.charge_card
