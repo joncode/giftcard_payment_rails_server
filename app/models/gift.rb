@@ -3,7 +3,7 @@ class Gift < ActiveRecord::Base
   attr_accessible   :giver_id,      :giver_name, :credit_card,    
       :receiver_id, :receiver_name, :receiver_phone, 
       :provider_id, :provider_name, :receiver_email, 
-      :message,    :shoppingCart, 
+      :message,     :shoppingCart, 
       :tip, :tax,   :total, :service,
       :facebook_id, :foursquare_id, :twitter,
       :status
@@ -30,7 +30,7 @@ class Gift < ActiveRecord::Base
   before_create :extract_phone_digits
   before_create :add_giver_name,  :if => :no_giver_name
   before_create :regifted,        :if => :regift_id?
-  before_create :set_unpaid_status
+  before_create :set_status
  
   after_create  :update_shoppingCart
   after_create  :invoice_giver
@@ -103,29 +103,30 @@ class Gift < ActiveRecord::Base
 
   ##########  gift creation methods
 
-  def set_status    
-    if !self.receiver_id
-      status = "incomplete"
-    else
-      status = 'open'
+  def set_status 
+    if self.card_enabled?
+        self.status = "unpaid"
+    else   
+        if self.receiver_id
+          status = "open"
+        else
+          status = 'incomplete'
+        end
     end
-    self.update_attribute(:status, status)
   end
 
-  def set_no_pay_status
-    if self.receiver_id
-      self.status = "open"
+  def card_enabled?
+    if self.giver.email == "test@test.com"
+        return true
     else
-      self.status = 'incomplete'
+        return false
     end
-    puts "SETTING THE NO pAY STATUS #{self.status}"
   end
 
   def charge_card
         # if giver is one jb@jb.com
         # call authorize capture on the gift and create the sale object
-    giver = User.find self.giver_id
-    if giver.email == "test@test.com"
+    if self.card_enabled?
         sale = self.authorize_capture
         puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
     else
@@ -312,28 +313,6 @@ class Gift < ActiveRecord::Base
         self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
       end
     end
-
-    def set_unpaid_status
-      self.status = "unpaid"
-    end
-    
-    # def pluralizer
-    #   if self.quantity > 1
-    #     name_to_match = self.item_name
-    #           # if item name already has a /'s/ then abort 
-    #     if !name_to_match.match /'s/
-    #        self.item_name << "\'s"
-    #     end 
-    #   end
-    # end
-    
-    # def add_category
-    #   self.category = self.item.category
-    # end
-    
-    # def no_category
-    #   self.category.nil?
-    # end
 
     def add_giver_name
       self.giver_name = User.find(self.giver_id).username
