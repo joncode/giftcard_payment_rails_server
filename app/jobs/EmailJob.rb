@@ -5,16 +5,16 @@ class EmailJob
     case email_type
     when "confirm_email"
       puts "OPT CONFIRM EMAIL"
-      @user = User.find(user_id)
+      @user = User.find(user_id.to_i)
       UserMailer.confirm_email(@user).deliver
     
     when "reset_password"
       puts "OPT RESETPASSWORD"
-      @user = User.find(user_id)
+      @user = User.find(user_id.to_i)
       UserMailer.reset_password(@user).deliver
     
     when "invite_friend"
-      @user = User.find(user_id)
+      @user = User.find(user_id.to_i)
       puts "OPTHASH INVITE FRIEND"
       puts opthash
       puts opthash["email"]
@@ -23,7 +23,7 @@ class EmailJob
     when "invite_employee"
       puts "OPTHASH INVITE EMPLOYEE"
       puts opthash
-      @user = User.find(user_id)    #Person making the request
+      @user = User.find(user_id.to_i)    #Person making the request
       @provider = Provider.find(opthash["provider_id"].to_i)
       UserMailer.invite_employee(@user,@provider,opthash["email"]).deliver
     
@@ -43,7 +43,7 @@ class EmailJob
       @gift = Gift.find(opthash["gift_id"].to_i)
       send  = false
       if @gift.receiver_id.to_i > 0
-        receiver = User.find(receiver_id)
+        receiver = @gift.receiver
         send     = receiver.get_or_create_settings.email_receiver_new
       elsif !@gift.receiver_email.nil?
         send     = true
@@ -56,7 +56,7 @@ class EmailJob
 
     when "notify_giver_order_complete"
       puts "OPTHASH NOTIFY GIVER ORDER COMPLETE"
-      @user = User.find(user_id)
+      @user = User.find(user_id.to_i)
       if @user.get_or_create_settings.email_redeem
         @gift = Gift.find(opthash["gift_id"].to_i)
         UserMailer.notify_giver_order_complete(@user, @gift).deliver
@@ -66,7 +66,7 @@ class EmailJob
     
     when "notify_giver_created_user"
       puts "OPTHASH NOTIFY GIVER CREATED USER"
-      @user = User.find(user_id)
+      @user = User.find(user_id.to_i)
       @gift = Gift.find(opthash["gift_id"].to_i)
       UserMailer.notify_giver_created_user(@user, @gift).deliver
     end 
