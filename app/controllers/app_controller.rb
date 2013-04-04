@@ -907,16 +907,16 @@ class AppController < ApplicationController
 			case origin
 		    when 'd'
 		      #drinkboard - data already received
-		      response["receiver"]     = "db user"
+		      response["origin"]     = "d"
 		    when 'f'
 		      # facebook - search users for facebook_id
 		      if gift_obj["facebook_id"]
 		        if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
 		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-		          response["receiver"] = receiver_info_response(receiver)
+		          response["origin"] = receiver_info_response(receiver)
 		        else
 		          gift_obj["status"]   = "incomplete"
-		          response["receiver"] = "NID"
+		          response["origin"] = "NID"
 		        end
 		      else                   
 		          gift_obj["status"]   = "incomplete"
@@ -927,10 +927,10 @@ class AppController < ApplicationController
 		      if gift_obj["twitter"]
 		        if receiver = User.find_by_twitter(gift_obj["twitter"].to_s)
 		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-		          response["receiver"] = receiver_info_response(receiver)
+		          response["origin"] = receiver_info_response(receiver)
 		        else                   
 		          gift_obj["status"]   = "incomplete"
-		          response["receiver"] = "NID"
+		          response["origin"] = "NID"
 		        end
 		      else
 		        gift_obj["status"]     = "incomplete"
@@ -943,10 +943,10 @@ class AppController < ApplicationController
 		        phone = extract_phone_digits(phone_received)
 		        if receiver = User.find_by_phone(phone)
 		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-		          response["receiver"] = receiver_info_response(receiver)
+		          response["origin"] = receiver_info_response(receiver)
 		        else
 		          gift_obj["status"]   = "incomplete"
-		          response["receiver"] = "NID"
+		          response["origin"] = "NID"
 		        end
 		      else
 		          gift_obj["status"]   = "incomplete"
@@ -960,7 +960,7 @@ class AppController < ApplicationController
 		          response["receiver"] = receiver_info_response(receiver)
 		        else
 		          gift_obj["status"]   = "incomplete"
-		          response["receiver"] = "NID"
+		          response["origin"] = "NID"
 		        end
 		      else
 		          gift_obj["status"]   = "incomplete"
@@ -968,7 +968,7 @@ class AppController < ApplicationController
 		      end
 		    else
 		        #drinkboard - no origin sent
-		        response["receiver"]     = "db user"
+		        response["origin"]     = "d"
 		    end
 		end
 

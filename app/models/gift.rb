@@ -118,7 +118,7 @@ class Gift < ActiveRecord::Base
     giver = User.find self.giver_id
     if giver.email == "test@test.com"
         sale = self.authorize_capture
-        puts "SALE ! #{JSON.parse sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{gift.total}"
+        puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
     else
         sale = Sale.new
         sale.resp_code = 1
@@ -152,6 +152,7 @@ class Gift < ActiveRecord::Base
     case response.response_code.to_i
     when 1
       # Approved
+      puts "setting the gift status off unpaid"
      self.set_status 
     when 2
       # Declined 
@@ -169,6 +170,7 @@ class Gift < ActiveRecord::Base
     puts "HERE IS THE REPLY #{reply}"
     # C - saves the sale object into the sale db
     sale.save
+    puts "save of sale successful"
     return sale
   end
 

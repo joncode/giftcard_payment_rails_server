@@ -25,6 +25,7 @@ class Sale < ActiveRecord::Base
 ### AUTHORIZE TRANSACTION METHODS
 
 	def self.init gift
+		puts "in Sale.init"
 		sale_obj 		     = Sale.new
 		sale_obj.card_id 	 = gift.credit_card
 		sale_obj.gift_id 	 = gift.id
@@ -36,6 +37,7 @@ class Sale < ActiveRecord::Base
 	end
 
 	def auth_capture
+		puts "in auth capture in Sale.rb"
         # 1 makes a transaction
         @transaction = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
         # 2 makes a credit card
@@ -56,9 +58,10 @@ class Sale < ActiveRecord::Base
 		######### 
 
 		month_year 	 = "#{month}#{year}" 
-		tots = self.revenue.to_f / 100
+		tots = self.total.to_f / 100
 		x = tots.to_s.split('.')
-		total_amount = x[0] + '.' + x[1][0..1] 
+		total_amount = x[0] + '.' + x[1][0..1]
+		puts "HERE is the TOTAL = #{total_amount}"
        
         @credit_card = AuthorizeNet::CreditCard.new(card_number, month_year)
         
