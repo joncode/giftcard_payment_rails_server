@@ -108,9 +108,9 @@ class Gift < ActiveRecord::Base
         self.status = "unpaid"
     else   
         if self.receiver_id.nil?
-          status = "incomplete"
+            self.status = "incomplete"
         else
-          status = 'open'
+            self.status = 'open'
         end
     end
     puts "gift SET STATUS #{self.status}"
