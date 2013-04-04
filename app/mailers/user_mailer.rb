@@ -54,10 +54,11 @@ class UserMailer < ActionMailer::Base
   end
 
   def invoice_giver(giver, gift)
-    @user = giver
-    @gift = gift
+    @user           = giver
+    @gift           = gift
     @email_title    = "Drinkboard Email Messenger"
-
+    @cart           = @gift.ary_of_shopping_cart_as_hash
+    @merchant       = @gift.provider
     @header_text    = "Purchase Complete , Thank You"
     @social         = 0
     @web_view_route = "/webview/invoice_giver/#{gift.id}"
@@ -69,9 +70,10 @@ class UserMailer < ActionMailer::Base
   end
 
   def notify_receiver(gift)
-    @gift  = gift
+    @gift           = gift
     @email_title    = "Drinkboard Email Messenger"
-
+    @cart           = @gift.ary_of_shopping_cart_as_hash
+    @merchant       = @gift.provider
     @header_text    = "You have Received a Gift"
     @social         = 0
     @web_view_route = "/webview/notify_receiver/#{gift.id}"
@@ -83,10 +85,11 @@ class UserMailer < ActionMailer::Base
   end
 
   def notify_giver_order_complete(giver, gift)
-    @user = giver
-    @gift = gift
+    @user           = giver
+    @gift           = gift
     @email_title    = "Drinkboard Email Messenger"
-
+    @cart           = @gift.ary_of_shopping_cart_as_hash
+    @merchant       = @gift.provider
     @header_text    = "Your Gift Has Been Redeemed"
     @social         = 0
     @web_view_route = "/webview/notify_giver_order_complete/#{gift.id}"
@@ -98,10 +101,11 @@ class UserMailer < ActionMailer::Base
   end
 
   def notify_giver_created_user(giver, gift)
-    @user = giver
-    @gift = gift
+    @user           = giver
+    @gift           = gift
     @email_title    = "Drinkboard Email Messenger"
-
+    @cart           = @gift.ary_of_shopping_cart_as_hash
+    @merchant       = @gift.provider
     @header_text    = "Your Gift has been Received"
     @social         = 0
     @web_view_route = "/webview/notify_giver_created_user/#{gift.id}"
