@@ -7,7 +7,7 @@
 <% content_for :main do %>
   <p>A Gift is ready for you on Drinkboard!</p>
   <p>Purchased by <%= @gift.giver_name %></p>
-  <p>Your drinks are at the <%= @gift.provider_name %></p>
+  <p>Your drinks are at the <%= @merchant.name %></p>
   <div><%=  yield :item %></div>
 <% end %>
 <table style="width: 584px;" class="table" border="0" cellpadding="0"
@@ -105,7 +105,7 @@ cellspacing="0">
       valign="middle">
       <p style="color: #595959; font-family: 'Trebuchet MS', helvetica, sans serif;
       font-size: 12px; margin: 0; padding: 20px 0 0 0;">
-        <span style="font-weight: bold;"><%= @gift.provider_name %></span>
+        <span style="font-weight: bold;"><%= @merchant.name %></span>
         <br /><%= @merchant.complete_address %>
         <br /><%= @merchant.email %>
         <br /><%= number_to_phone @merchant.phone %>
