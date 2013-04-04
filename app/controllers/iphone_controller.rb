@@ -229,67 +229,6 @@ class IphoneController < AppController
     end
   end
   
-  # def create_gift 
-
-  #   response = {}
-  #   message  = ""
-
-  #   gift_obj = JSON.parse params["gift"]
-  #   logger.debug "GIFT OBJECT  = #{params["gift"]}"
-
-  #   add_receiver_by_origin(params["origin"], gift_obj, response)
-
-  #   if gift_obj.nil? || params["shoppingCart"].nil?
-  #     message += "No gift data received.  "
-  #     if params["shoppingCart"].nil?
-  #       message += "Gift Items are missing"
-  #     end
-  #     gift    = Gift.new
-  #   else
-  #     gift    = Gift.new(gift_obj)
-  #     gift.make_gift_items(shoppingCart)
-  #     # shoppingCart_array = JSON.parse params["shoppingCart"]
-  #     # gift_item_array = []
-  #     # shoppingCart_array.each do |item|
-  #     #   gift_item = GiftItem.initFromDictionary item
-  #     #   gift_item_array << gift_item
-  #     # end
-  #     # gift.gift_items = gift_item_array
-  #     logger.debug "Here is GIFT #{gift.inspect}"
-  #   end
-    
-  #   begin
-  #     # we already have this data, we do not need to re-save it onto the gift
-  #     giver           = User.find_by_remember_token(params["token"])
-  #     if gift_obj["anon_id"]
-  #       gift.add_anonymous_giver(giver.id)
-  #     else
-  #       gift.giver_id   = giver.id
-  #       gift.giver_name = giver.username
-  #     end
-  #   rescue
-  #     message += "Couldn't identify app user. "
-  #   end
-    
-  #   response = { "error" => message } if message != "" 
-  #   respond_to do |format|
-  #     logger.debug " PRE SAVE GIFT OBJECT  = #{gift.inspect}"
-  #     if gift.save
-  #       sale = gift.charge_card
-  #       if sale.resp_code == 1
-  #         response["success"]       = "Gift received - Thank you!" 
-  #       else
-  #         response["error_server"]  = { "credit_card" => sale.reason_text }
-  #       end
-  #     else
-  #       response["error_server"]       = stringify_error_messages gift
-  #       logger.debug "this is the errrors on gift = #{gift.errors.messages}"
-  #     end
-  #     puts "response => #{response}"
-  #     format.json { render json: response }
-  #   end  
-  # end
-  
   def update_photo
 
     response = {}

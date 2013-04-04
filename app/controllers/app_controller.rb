@@ -115,7 +115,7 @@ class AppController < ApplicationController
 	        else
 	          response["error_server"] = stringify_error_messages user 
 	        end
-	    	puts "AC UpdateUSER response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end	
  	end
@@ -138,7 +138,7 @@ class AppController < ApplicationController
  			response["error"] = {"user" => "could not identity app user"}
  		end
  		respond_to do |format|
-	    	logger.debug "AC Relays response => badge = #{badge}"
+	    	@app_response = "AC badge = #{badge}"
 	    	format.json { render json: response }
 	    end
  	end
@@ -159,7 +159,7 @@ class AppController < ApplicationController
 	    
 	    respond_to do |format|
 	    	# logger.debug response
-	    	puts "AC Menu response => #{logmsg}"
+	    	@app_response = "AC response[0] => #{logmsg}"
 	    	format.json { render json: response }
 	    end
  	end
@@ -177,7 +177,7 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      # logger.debug gifts_array
-	      puts "AC Gifts response => #{logmsg}"
+	      @app_response = "AC response[0] => #{logmsg}"
 	      format.json { render json: gifts_array }
 	    end
   	end
@@ -197,7 +197,7 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      # logger.debug gifts_array
-	      puts "AC Orders response => #{logmsg}"
+	      @app_response = "AC response[0] => #{logmsg}"
 	      format.json { render json: gifts_array }
 	    end
   	end
@@ -222,7 +222,7 @@ class AppController < ApplicationController
 	    	else
 	    		response["error_server"] = stringify_error_messages order
 	    	end
-	      	puts "AC -Merchant Redeem- response => #{response}"
+	      	@app_response = "AppC #{response}"
 	      	format.json { render json: response }
 	    end
   	end
@@ -241,7 +241,7 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      # logger.debug gifts_array
-	      puts "AC UserActivity response[0] => #{logmsg}"
+	      @app_response = "AC response[0] => #{logmsg}"
 	      format.json { render json: gifts_array }
 	    end
   	end
@@ -259,7 +259,7 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      # logger.debug gifts_array
-	      puts "AC PastGifts response[0] => #{logmsg}"
+	      @app_response = "AC response[0] => #{logmsg}"
 	      format.json { render json: gifts_array }
 	    end
   	end
@@ -286,7 +286,7 @@ class AppController < ApplicationController
 	  	end
 
   		respond_to do |format|
-	    	puts "AC Questions response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end
   	end
@@ -306,7 +306,7 @@ class AppController < ApplicationController
 	  		response = ["error", "could not find other user in db"]
 	  	end
   		respond_to do |format|
-	      	puts "AC OtherQuestions response => #{response}"
+	      	@app_response = "AppC #{response}"
 	      	format.json { render json: response }
 	    end
   	end
@@ -322,7 +322,7 @@ class AppController < ApplicationController
 	  	end
   		respond_to do |format|
 	      # logger.debug transaction_array
-	      puts "AC Transactions response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: transaction_array }
 	    end
   	end
@@ -345,7 +345,7 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      # logger.debug providers_array
-	      puts "AC Providers response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: providers_array }
 	    end
   	end
@@ -368,7 +368,7 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      # logger.debug providers_array
-	      puts "AC ProvidersShortPhotoURL response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: providers_array }
 	    end
   	end
@@ -391,7 +391,7 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      # logger.debug providers_array
-	      puts "AC Brands response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: brands_array }
 	    end
   	end
@@ -416,7 +416,7 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      # logger.debug providers_array
-	      puts "AC BrandMerchants response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: providers_array }
 	    end
   	end
@@ -443,8 +443,8 @@ class AppController < ApplicationController
 
 		respond_to do |format|
 			# logger.debug user_array
+			@app_response = "AppC response[0] => #{logmsg}"
 			format.json { render json: user_array }
-			puts "AC DbUSERS response[0] => #{logmsg}"
 		end
 	end
 
@@ -493,7 +493,7 @@ class AppController < ApplicationController
 				message += " Gift unable to process to database. Please retry later."
 				response["error_server"] = message 
 			end
-			puts "AC CreateRedeem response => #{response}"
+			@app_response = "AppC #{response}"
 			format.json { render json: response }
 		end
   	end
@@ -523,7 +523,7 @@ class AppController < ApplicationController
   		end
 
   		respond_to do |format|
-  			puts "AC CreateRedeem response => #{response}"
+  			@app_response = "AppC #{response}"
   			format.json { render json: response}
   		end 		
   	end
@@ -550,7 +550,7 @@ class AppController < ApplicationController
   		end
 
   		respond_to do |format|
-  			puts "AC CreateORDER response => #{response}"
+  			@app_response = "AppC #{response}"
   			format.json { render json: response}
   		end 
   	end
@@ -639,7 +639,7 @@ class AppController < ApplicationController
 			else
 				response["error_server"] = stringify_error_messages order
 			end
-			puts "AC CreateOrder response => #{response}"
+			@app_response = "AppC #{response}"
 			format.json { render json: response }
 		end
 	end 
@@ -663,7 +663,7 @@ class AppController < ApplicationController
 		end
 
 		respond_to do |format|
-			puts "AC DeleteCard response => #{response}"
+			@app_response = "AppC #{response}"
 			format.json { render json: response }
 		end
 	end 
@@ -686,7 +686,7 @@ class AppController < ApplicationController
     	end
 
     	respond_to do |format|
-			puts "AC GetCards response => #{response}"
+			@app_response = "AppC #{response}"
 			puts message
 			format.json { render json: response }
 		end
@@ -718,7 +718,7 @@ class AppController < ApplicationController
 					response["error_server"] = stringify_error_messages cCard
 				end
 			#end
-			puts "AC AddCard response => #{response}"
+			@app_response = "AppC #{response}"
 			puts message
 			format.json { render json: response }
 		end
@@ -741,6 +741,7 @@ class AppController < ApplicationController
 		end	
 
 		respond_to do |format|
+			@app_response = "AppC #{response}"
 			format.json {render json: response }
 		end	
 	end
@@ -758,7 +759,7 @@ class AppController < ApplicationController
 	  	end
 
   		respond_to do |format|
-	    	puts "AC Settings response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end		
 	end
@@ -777,7 +778,7 @@ class AppController < ApplicationController
 	  	end
 
   		respond_to do |format|
-	    	puts "AC Save Settings response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end			
 	end
@@ -799,7 +800,7 @@ class AppController < ApplicationController
 	  	end
 
   		respond_to do |format|
-	    	puts "AC Save Settings response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end			
 	end
