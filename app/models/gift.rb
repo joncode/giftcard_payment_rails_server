@@ -113,11 +113,12 @@ class Gift < ActiveRecord::Base
   end
 
   def set_no_pay_status
-    if !self.receiver_id
-      self.status = "incomplete"
+    if self.receiver_id
+      self.status = "open"
     else
-      self.status = 'open'
+      self.status = 'incomplete'
     end
+    puts "SETTING THE NO pAY STATUS #{self.status}"
   end
 
   def charge_card
