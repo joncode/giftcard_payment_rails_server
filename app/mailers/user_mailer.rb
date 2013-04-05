@@ -1,7 +1,7 @@
 class UserMailer < ActionMailer::Base
 
   prod      = "no-reply@drinkboard.com"
-  EMAIL_TO  = "noreplydrinkboard@gmail.com"
+  # EMAIL_TO  = "noreplydrinkboard@gmail.com"
   default :css => 'email/email', :from => prod
 
   def confirm_email(user)
@@ -12,7 +12,7 @@ class UserMailer < ActionMailer::Base
     @web_view_route = "#{TEST_URL}/webview/confirm_email/#{user.id}"
     @social         = 0 
     mail({
-      :to =>  EMAIL_TO ,# "#{@user.fullname} <#{@user.email}>",
+      :to => "#{@user.fullname} <#{whitelist_user(@user)}>",
       :subject => "Drinkboard: confirm your email #{@user.fullname}"
     })       
   end
@@ -25,7 +25,7 @@ class UserMailer < ActionMailer::Base
     @web_view_route = "#{TEST_URL}/webview/forgot_password/#{user.id}"
     puts "reset_password -UserMailer-  for #{user.username}"
     mail({
-      :to => EMAIL_TO, #"#{@user.fullname} <#{@user.email}>",
+      :to => "#{@user.fullname} <#{whitelist_user(@user)}>",
       :subject => "Drinkboard: password reset request #{@user.fullname}"
     })
   end
@@ -35,9 +35,8 @@ class UserMailer < ActionMailer::Base
     @friends_email = friends_email
 
     @gift_id = gift_id
-    # :to => "#{@friends_email}",
     mail({
-      :to => EMAIL_TO,
+      :to => "#{whitelist_email(@friends_email)}",
       :subject => "Your friend #{@user.first_name} invited you to drinkboard. #{@friends_email}"
     })
   end
@@ -45,9 +44,8 @@ class UserMailer < ActionMailer::Base
   def invite_employee(user,provider,employee_email)
     @user = user
     @provider = provider
-    # :to => "#{employee_email}",
     mail({
-      :to => EMAIL_TO,
+      :to => "#{whitelist_email(employee_email)}",
       :subject => "Drinkboard Employee Request #{employee_email}"
     })
   end
@@ -61,9 +59,8 @@ class UserMailer < ActionMailer::Base
     @header_text    = "Purchase Complete , Thank You"
     @social         = 0
     @web_view_route = "#{TEST_URL}/webview/invoice_giver/#{gift.id}"
-    # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
-      :to => EMAIL_TO,
+      :to => "#{@user.fullname} <#{whitelist_user(@user)}>",
       :subject => "Gift purchase complete #{@user.fullname}"
     })
   end
@@ -76,9 +73,8 @@ class UserMailer < ActionMailer::Base
     @header_text    = "You have Received a Gift"
     @social         = 0
     @web_view_route = "#{TEST_URL}/webview/notify_receiver/#{gift.id}"
-    # :to => "#{@gift.receiver_name} <#{@gift.receiver_email}>",
     mail({
-      :to => EMAIL_TO,
+      :to => "#{@gift.receiver_name} <#{whitelist_email(@gift.receiver_email)}>",
       :subject => "A Gift has been purchased for You! #{@gift.receiver_name}"
     })
   end
@@ -92,9 +88,8 @@ class UserMailer < ActionMailer::Base
     @header_text    = "Your Gift Has Been Redeemed"
     @social         = 0
     @web_view_route = "#{TEST_URL}/webview/notify_giver_order_complete/#{gift.id}"
-    # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
-      :to => EMAIL_TO,
+      :to => "#{@user.fullname} <#{whitelist_user(@user)}>",
       :subject => "Gift Redeem complete #{@user.fullname}"
     })    
   end
@@ -108,12 +103,30 @@ class UserMailer < ActionMailer::Base
     @header_text    = "Your Gift has been Received"
     @social         = 0
     @web_view_route = "#{TEST_URL}/webview/notify_giver_created_user/#{gift.id}"
-    # :to => "#{@user.fullname} <#{@user.email}>",
     mail({
-      :to => EMAIL_TO,
+      :to => "#{@user.fullname} <#{whitelist_user(@user)}>",
       :subject => "Gift to #{@gift.receiver_name} has been received! #{@user.fullname}"
     })    
   end
+
+  private
+
+    def whitelist_email(email)
+            # if email is on blacklist then send email to noreplydrinkboard@gmail.com
+            # blacklist is 
+        bad_emails = ["test@test.com", "jp@jp.com", "jb@jb.com", "gj@gj.com", "fl@fl.com", "adam@adam.com", "rs@rs.com","kk@gmail.com", "bitmover1@gmail.com", "app@gmail.com", "spnoge@bob.com", "adam@gmail.com", "gifter@sos.me", "taylor@gmail.com"]  
+        if bad_emails.include?(email)
+            email = "noreplydrinkboard@gmail.com"
+        else
+            email = email
+        end
+        return email       
+    end
+
+    def whitelist_user(user)
+        # if user.email is on blacklist then send email to noreplydrinkboard@gmail.com
+        return whitelist_email(user.email)
+    end
 
 end
 

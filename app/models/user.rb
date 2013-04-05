@@ -351,7 +351,7 @@ class User < ActiveRecord::Base
             if g.receiver_email
               puts "emailing the gift giver that gift has been collected for #{g.id}"
                 # notify the giver via email
-              Resque.enqueue(EmailJob, 'alert_giver', g.giver_id , {:gift_id => g.id}) 
+              Resque.enqueue(EmailJob, 'notify_giver_created_user', g.giver_id , {:gift_id => g.id}) 
             end 
           else
             error   += 1
