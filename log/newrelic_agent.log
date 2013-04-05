@@ -223,3 +223,32 @@
 [04/04/13 19:25:11 -0400 new-host.home (34152)] WARN : Agent configured not to send data in this environment.
 [04/04/13 19:25:40 -0400 new-host.home (34174)] INFO : Starting Agent shutdown
 [04/04/13 19:25:43 -0400 new-host.home (34175)] INFO : Starting Agent shutdown
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Starting the New Relic Agent.
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Environment: development
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Dispatcher: thin
+[04/04/13 19:42:16 -0400 new-host.home (34312)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[04/04/13 19:42:16 -0400 new-host.home (34312)] WARN : Agent configured not to send data in this environment.
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Installing ActiveMerchant instrumentation
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Installing ActiveRecord instrumentation
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Installing Net instrumentation
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Installing Resque instrumentation
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Installing Rails 3 Controller instrumentation
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Installing Rails3 Error instrumentation
+[04/04/13 19:42:16 -0400 new-host.home (34312)] INFO : Finished instrumentation
+[04/04/13 19:42:24 -0400 new-host.home (34315)] INFO : Starting the New Relic Agent.
+[04/04/13 19:42:24 -0400 new-host.home (34315)] INFO : Installing ActiveMerchant instrumentation
+[04/04/13 19:42:24 -0400 new-host.home (34315)] INFO : Installing ActiveRecord instrumentation
+[04/04/13 19:42:24 -0400 new-host.home (34315)] INFO : Installing Net instrumentation
+[04/04/13 19:42:24 -0400 new-host.home (34315)] INFO : Installing Resque instrumentation
+[04/04/13 19:42:24 -0400 new-host.home (34315)] INFO : Installing Rails 3 Controller instrumentation
+[04/04/13 19:42:24 -0400 new-host.home (34315)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[04/04/13 19:42:24 -0400 new-host.home (34315)] INFO : Installing Rails3 Error instrumentation
+[04/04/13 19:42:24 -0400 new-host.home (34315)] INFO : Finished instrumentation
+[04/04/13 19:42:26 -0400 new-host.home (34315)] INFO : Starting the New Relic Agent.
+[04/04/13 19:42:26 -0400 new-host.home (34315)] INFO : Environment: development
+[04/04/13 19:42:26 -0400 new-host.home (34315)] INFO : Dispatcher: resque
+[04/04/13 19:42:26 -0400 new-host.home (34315)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[04/04/13 19:42:26 -0400 new-host.home (34315)] WARN : Agent configured not to send data in this environment.
+[04/04/13 19:42:44 -0400 new-host.home (34329)] INFO : Starting Agent shutdown
+[04/04/13 19:42:47 -0400 new-host.home (34330)] INFO : Starting Agent shutdown

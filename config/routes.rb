@@ -22,6 +22,8 @@ Drinkboard::Application.routes.draw do
   match '/signin',  to: 'sessions#new'
   match '/signout', to: 'sessions#destroy'
   match '/admin',   to: 'admin#show'
+  match '/admin/test_emails', to: 'admin#test_emails'
+  match '/admin/run_tests',   to: 'admin#run_tests'
 
   resources :users do 
     member do

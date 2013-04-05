@@ -1,8 +1,7 @@
 class UserMailer < ActionMailer::Base
 
-  dev       = "noreplydrinkboard@gmail.com"
   prod      = "no-reply@drinkboard.com"
-  EMAIL_TO  = "programcodex@gmail.com"
+  EMAIL_TO  = "noreplydrinkboard@gmail.com"
   default :css => 'email/email', :from => prod
 
   def confirm_email(user)
