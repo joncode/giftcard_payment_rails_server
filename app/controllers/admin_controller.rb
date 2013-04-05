@@ -47,6 +47,7 @@ class AdminController < ApplicationController
 
 	def find_gift_with_order_and_shoppingCart(gifts)
 		flag = false
+		gift = gifts[0]
 		gifts.each do |g|
 			if g.order 
 				flag = true 
@@ -54,7 +55,6 @@ class AdminController < ApplicationController
 			end
 		end
 		
-		gift = gifts[0] if !flag
 		cart = JSON.parse gift.shoppingCart
 		items = cart.count
 		index = 1
