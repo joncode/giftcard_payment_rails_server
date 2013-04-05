@@ -23,7 +23,7 @@ class AdminController < ApplicationController
 			# 1. email to "noreplydrinkboard@gmail.com"
 			# 2. have gift data
 			# 3. have provider data
-		email = "noreplydrinkboard@gmail.com"
+		email = "test@test.com"
 		user  = User.find_by_email "test@test.com"
 		gifts = Gift.where(giver_id: user.id, receiver_id: user.id)
 		# needs to check that there is a shoppingCart
