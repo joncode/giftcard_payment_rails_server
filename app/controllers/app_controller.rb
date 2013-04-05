@@ -1,10 +1,10 @@
 class AppController < ApplicationController
 
 	include ActionView::Helpers::DateHelper
-	skip_before_filter :verify_authenticity_token
-	before_filter 	:method_start_log_message
-	after_filter 	:cross_origin_allow_header
-	after_filter 	:method_end_log_message
+	skip_before_filter 	:verify_authenticity_token
+	before_filter 		:method_start_log_message
+	after_filter 		:cross_origin_allow_header
+	after_filter 		:method_end_log_message
 
 	UPDATE_REPLY  	= ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
 	GIFT_REPLY 	  	= ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
@@ -35,6 +35,10 @@ class AppController < ApplicationController
  		{ "Data Transfer Error"   => "Please Retry Sending Gift" }
  	end
 
+ 	def database_error_general
+ 		{ "Data Transfer Error"   => "Please Reset App" }
+ 	end
+
  	def stringify_error_messages(object)
  		msgs = object.errors.messages
  		msgs.stringify_keys!
@@ -46,20 +50,6 @@ class AppController < ApplicationController
 
  		return msgs
  	end
-
-  	def shorten_url_for_provider_ary providers_array
-  		providers_array.each do |prov|
-  			short_photo_url = short_photo_url prov["photo"]
-  			prov["photo"] = short_photo_url
-  		end
-  	end
-
-  	def shorten_url_for_brand_ary brands_array
-  		brands_array.each do |brand|
-  			short_photo_url = short_photo_url brand["photo"]
-  			brand["photo"] = short_photo_url
-  		end
-  	end
 
   	def log_message_header
   		"#{params["controller"].upcase} -#{params["action"].upcase}-"
@@ -78,13 +68,27 @@ class AppController < ApplicationController
   		puts "response: #{@app_response}" if @app_response
   	end
 
+  	def shorten_url_for_provider_ary providers_array
+  		providers_array.each do |prov|
+  			short_photo_url = short_photo_url prov["photo"]
+  			prov["photo"] 	= short_photo_url
+  		end
+  	end
+
+  	def shorten_url_for_brand_ary brands_array
+  		brands_array.each do |brand|
+  			short_photo_url = short_photo_url brand["photo"]
+  			brand["photo"] 	= short_photo_url
+  		end
+  	end
+
   	def short_photo_url photo_url
-  		url_ary = photo_url.split('upload/')
-  		shorten_url = url_ary[1]
+  		url_ary 		= photo_url.split('upload/')
+  		shorten_url 	= url_ary[1]
 
   		identifier, tag = shorten_url.split('.')
 
-  		new_photo_ary = ['d', identifier , 'j']
+  		new_photo_ary 	= ['d', identifier , 'j']
   		if photo_url.match 'htaaxtzcv'
   			new_photo_ary[0] = 'h'
   		end
@@ -184,17 +188,23 @@ class AppController < ApplicationController
 
  	def orders
  			# send orders to the app for a provider
-
-	    if user = authenticate_app_user(params["token"])
-	    	provider 	= Provider.find(params["provider"].to_i)
-    		gifts 		= Gift.get_history_provider(provider)
-	    	gifts_array = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-	  		logmsg 		= gifts_array[0]
-	  	else
-	  		gift_hash 	= {"error" => "user was not found in database"}
-	  		gifts_array = gift_hash
-	  		logmsg 		= gift_hash
-	  	end
+ 		provider_id = params["provider"].to_i
+ 		if provider_id > 0 
+		    if user = authenticate_app_user(params["token"])
+		    	provider 	= Provider.find(provider_id)
+	    		gifts 		= Gift.get_history_provider(provider)
+		    	gifts_array = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+		  		logmsg 		= gifts_array[0]
+		  	else
+		  		gift_hash 	= {"error" => "user was not found in database"}
+		  		gifts_array = gift_hash
+		  		logmsg 		= gift_hash
+		  	end
+		else
+			gift_hash 	= {"error" => database_error_general }
+		  	gifts_array = gift_hash
+		  	logmsg 		= gift_hash
+		end
 	    respond_to do |format|
 	      # logger.debug gifts_array
 	      @app_response = "AC response[0] => #{logmsg}"
