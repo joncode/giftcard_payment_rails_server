@@ -28,6 +28,7 @@ class AdminController < ApplicationController
 		gifts = Gift.where(giver_id: user.id, receiver_id: user.id)
 		# needs to check that there is a shoppingCart
 		gift, flag = find_gift_with_order_and_shoppingCart(gifts)
+		puts "TEST ALL GIFTS WITH #{gift.inspect}"
 
 		if flag
 			Resque.enqueue(EmailJob, 'notify_giver_order_complete', user.id , {:gift_id => gift.id}) 
@@ -46,6 +47,11 @@ class AdminController < ApplicationController
 	end
 
 	def find_gift_with_order_and_shoppingCart(gifts)
+		# criteria for a proper gift
+		# - has a shopping cart 
+		# - has an order
+		# - has a receiver with image
+
 		flag = false
 		gift = gifts[0]
 		gifts.each do |g|
@@ -58,13 +64,15 @@ class AdminController < ApplicationController
 		cart = JSON.parse gift.shoppingCart
 		items = cart.count
 		index = 1
-		while items < 2
+		while items == 0
 			cart = JSON.parse gifts[index].shoppingCart
 			items = cart.count
 			gift = gifts[index]
 			index += 1
 			if index == gifts.count
-				items = 3
+				if gift.receiver_id
+					items = 3
+				end
 			end
 		end
 		return gift, flag
