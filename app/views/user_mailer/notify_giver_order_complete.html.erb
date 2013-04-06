@@ -7,7 +7,7 @@
 <% content_for :main do %>
   <p>Purchased for <%= @gift.receiver_name %></p>
   <p>Redeemd at the <%= @merchant.name %></p>
-  <p><%= @gift.order.created_at.strftime(time_and_date_official) %></p>
+  <p><%= @gift.order.created_at.strftime("%l:%M %p - %A, %B %e") %></p>
 <% end %>
 
 <% content_for :body do %>
@@ -40,11 +40,14 @@
         border="0" cellpadding="0" cellspacing="0">
         <tbody>
           <tr>
+                        <% if @gift.receiver %>
             <td style="vertical-align: top; text-align: left; padding: 0 20px 0 0;
             margin: 0;" class="list-item" width="1">
+
             <%= image_tag @gift.receiver.get_photo, :class => "list-image", :style => "-ms-interpolation-mode: bicubic; border: 1px solid white;
       box-shadow: 1px 1px 3px 1px black;" , height: "100" , wdith: "114" , alt: "Logo Image" %>
             </td>
+                        <% end %>
             <td style="vertical-align: top; text-align: left; padding: 0; margin: 0;">
               <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
               15px; line-height: 20px; color: rgba(50,58,69,1); margin-top: 0; margin-left: 0;

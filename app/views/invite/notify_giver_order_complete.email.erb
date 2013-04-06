@@ -7,7 +7,7 @@
 <% content_for :main do %>
   <p>Purchased for <%= @gift.receiver_name %></p>
   <p>Redeemd at the <%= @merchant.name %></p>
-  <p><%= @gift.order.created_at.strftime(time_and_date_official) %></p>
+  <p><%= @gift.order.created_at.strftime("%l:%M %p - %A, %B %e") %></p>
 <% end %>
 <table style="width: 584px;" class="table" border="0" cellpadding="0"
 cellspacing="0">
