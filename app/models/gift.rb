@@ -117,7 +117,8 @@ class Gift < ActiveRecord::Base
   end
 
   def card_enabled?
-    if self.giver.email == "test@test.com"
+    whitelist = ["test@test.com", "deb@knead4health.com", "dfennell@graywolves.com", "dfennell@webteampros.com"]
+    if whitelist.include?(self.giver.email)
         return true
     else
         return false

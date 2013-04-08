@@ -5,10 +5,7 @@ class Sale < ActiveRecord::Base
  	AUTHORIZE_API_LOGIN 	  = '9tp38Ga4CQ'
  	AUTHORIZE_TRANSACTION_KEY = '9EcTk32BHeE8279P'
  	GATEWAY 			      = :production
- 		# sandbox account
- 	# AUTHORIZE_API_LOGIN 	  = '7esX3XfuS5w'
- 	# AUTHORIZE_TRANSACTION_KEY = '3y9dLy3Pm37AK9qT'
- 	# GATEWAY 			      = :sandbox
+
  	attr_accessor :transaction, :credit_card, :response, :total
  	# NOTE - Revenue is a decimal value - gift.total is a string - converted in self.init below
  	# attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string, :response_string, :revenue, :status, :transaction_id
