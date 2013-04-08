@@ -44,7 +44,16 @@ class Provider < ActiveRecord::Base
     prov_hash["photo"]        = self.get_image("photo")
     prov_hash["full_address"] = self.full_address
     prov_hash["city"]         = self.city
+    prov_hash["live"]         = self.live
     return prov_hash
+  end
+
+  def live
+    if self.sd_location_id == nil
+      return false
+    else
+      return true
+    end
   end
 
   def get_todays_credits
