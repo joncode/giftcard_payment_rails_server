@@ -9,7 +9,7 @@ class ProvidersController < ApplicationController
     @offset = params[:offset].to_i || 0
     @page = @offset
     paginate = 9
-    @merchants = Provider.limit(paginate).offset(@offset) 
+    @merchants = Provider.order("updated_at DESC").limit(paginate).offset(@offset) 
     if @merchants.count == paginate
       @offset += paginate
     else
@@ -75,7 +75,7 @@ class ProvidersController < ApplicationController
       else
         @partial_to_render = "error"
         @message = human_readable_error_message @provider
-        format.html { redirect_to edit_info_merchant_path(@provider), notice: 'Update was unsuccessful' }
+        format.html { render action: "edit", notice: 'Update was unsuccessful' }
         format.js { render 'error' }
         format.json { render json: @provider.errors, status: :unprocessable_entity }
       end
