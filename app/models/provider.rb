@@ -55,7 +55,7 @@ class Provider < ActiveRecord::Base
     end
   end
 
-  def self.where(params)
+  def self.where(params={})
       if params.kind_of?(Hash) && !params.has_key?(:active) && !params.has_key?("active")
         params[:active] = true
       end
