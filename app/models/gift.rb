@@ -86,7 +86,7 @@ class Gift < ActiveRecord::Base
   end 
   
   def self.get_history_provider(provider)
-    Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
+    Gift.where(provider_id: provider.id).where(status: 'redeemed').order("updated_at DESC") 
   end
 
   def self.transactions(user)
