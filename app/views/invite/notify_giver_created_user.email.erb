@@ -6,7 +6,7 @@
 
 <% content_for :main do %>
   <p>Your Friend, <%= @gift.receiver_name %>, just joined Drinkboard and received your gift. </p>
-  <p>At the <%= @gift.provider_name %></p>
+  <p>At the <%= @merchant.name %></p>
   <p><%= yield :item %></p>
 <% end %>
 

@@ -31,7 +31,7 @@ class InviteController < ApplicationController
     request.format = :email
     @header_text   = "We're Sorry but there was an Error"
     @social = 1
-    @web_view_route = "/invite/error"
+    @web_view_route = "#{TEST_URL}/invite/error"
 
     respond_to do |format|
       format.email 
@@ -43,7 +43,7 @@ class InviteController < ApplicationController
     request.format = :email
     @header_text   = "Thank You, Your Email is Confirmed"
     @social = 1
-    @web_view_route = "/invite/email_confirmed"
+    @web_view_route = "#{TEST_URL}/invite/email_confirmed"
 
     respond_to do |format|
       format.email 
@@ -101,7 +101,7 @@ class InviteController < ApplicationController
     else 
         #  join drinkboard email
       email_view    = "display_email"
-      @web_view_route = "/webview/display_email"
+      @web_view_route = "#{TEST_URL}/webview/display_email"
     end
 
     respond_to do |format|
@@ -111,7 +111,7 @@ class InviteController < ApplicationController
   end
 
   def create_webview_link
-    "/webview/#{params[:template]}/#{params[:var1]}"
+    "#{TEST_URL}/webview/#{params[:template]}/#{params[:var1]}"
   end
   
 end

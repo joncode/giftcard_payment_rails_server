@@ -1,14 +1,14 @@
 class AppController < ApplicationController
 
 	include ActionView::Helpers::DateHelper
-	skip_before_filter :verify_authenticity_token
-	before_filter 	:method_start_log_message
-	after_filter 	:cross_origin_allow_header
-	after_filter 	:method_end_log_message
+	skip_before_filter 	:verify_authenticity_token
+	before_filter 		:method_start_log_message
+	after_filter 		:cross_origin_allow_header
+	after_filter 		:method_end_log_message
 
 	UPDATE_REPLY  	= ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
 	GIFT_REPLY 	  	= ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
-    MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "total", "order_num"]
+    MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "order_num"]
     ACTIVITY_REPLY 	= GIFT_REPLY + [ "receiver_id", "receiver_name"] 
 
  	def authenticate_app_user(token)
@@ -35,6 +35,10 @@ class AppController < ApplicationController
  		{ "Data Transfer Error"   => "Please Retry Sending Gift" }
  	end
 
+ 	def database_error_general
+ 		{ "Data Transfer Error"   => "Please Reset App" }
+ 	end
+
  	def stringify_error_messages(object)
  		msgs = object.errors.messages
  		msgs.stringify_keys!
@@ -46,20 +50,6 @@ class AppController < ApplicationController
 
  		return msgs
  	end
-
-  	def shorten_url_for_provider_ary providers_array
-  		providers_array.each do |prov|
-  			short_photo_url = short_photo_url prov["photo"]
-  			prov["photo"] = short_photo_url
-  		end
-  	end
-
-  	def shorten_url_for_brand_ary brands_array
-  		brands_array.each do |brand|
-  			short_photo_url = short_photo_url brand["photo"]
-  			brand["photo"] = short_photo_url
-  		end
-  	end
 
   	def log_message_header
   		"#{params["controller"].upcase} -#{params["action"].upcase}-"
@@ -78,13 +68,27 @@ class AppController < ApplicationController
   		puts "response: #{@app_response}" if @app_response
   	end
 
+  	def shorten_url_for_provider_ary providers_array
+  		providers_array.each do |prov|
+  			short_photo_url = short_photo_url prov["photo"]
+  			prov["photo"] 	= short_photo_url
+  		end
+  	end
+
+  	def shorten_url_for_brand_ary brands_array
+  		brands_array.each do |brand|
+  			short_photo_url = short_photo_url brand["photo"]
+  			brand["photo"] 	= short_photo_url
+  		end
+  	end
+
   	def short_photo_url photo_url
-  		url_ary = photo_url.split('upload/')
-  		shorten_url = url_ary[1]
+  		url_ary 		= photo_url.split('upload/')
+  		shorten_url 	= url_ary[1]
 
   		identifier, tag = shorten_url.split('.')
 
-  		new_photo_ary = ['d', identifier , 'j']
+  		new_photo_ary 	= ['d', identifier , 'j']
   		if photo_url.match 'htaaxtzcv'
   			new_photo_ary[0] = 'h'
   		end
@@ -115,7 +119,7 @@ class AppController < ApplicationController
 	        else
 	          response["error_server"] = stringify_error_messages user 
 	        end
-	    	puts "AC UpdateUSER response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end	
  	end
@@ -138,7 +142,7 @@ class AppController < ApplicationController
  			response["error"] = {"user" => "could not identity app user"}
  		end
  		respond_to do |format|
-	    	logger.debug "AC Relays response => badge = #{badge}"
+	    	@app_response = "AC badge = #{badge}"
 	    	format.json { render json: response }
 	    end
  	end
@@ -159,7 +163,7 @@ class AppController < ApplicationController
 	    
 	    respond_to do |format|
 	    	# logger.debug response
-	    	puts "AC Menu response => #{logmsg}"
+	    	@app_response = "AC response[0] => #{logmsg}"
 	    	format.json { render json: response }
 	    end
  	end
@@ -177,27 +181,33 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      # logger.debug gifts_array
-	      puts "AC Gifts response => #{logmsg}"
+	      @app_response = "AC response[0] => #{logmsg}"
 	      format.json { render json: gifts_array }
 	    end
   	end
 
  	def orders
  			# send orders to the app for a provider
-
-	    if user = authenticate_app_user(params["token"])
-	    	provider 	= Provider.find(params["provider"])
-    		gifts 		= Gift.get_history_provider(provider)
-	    	gifts_array = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-	  		logmsg 		= gifts_array[0]
-	  	else
-	  		gift_hash 	= {"error" => "user was not found in database"}
-	  		gifts_array = gift_hash
-	  		logmsg 		= gift_hash
-	  	end
+ 		provider_id = params["provider"].to_i
+ 		if provider_id > 0 
+		    if user = authenticate_app_user(params["token"])
+		    	provider 	= Provider.find(provider_id)
+	    		gifts 		= Gift.get_history_provider(provider)
+		    	gifts_array = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+		  		logmsg 		= gifts_array[0]
+		  	else
+		  		gift_hash 	= {"error" => "user was not found in database"}
+		  		gifts_array = gift_hash
+		  		logmsg 		= gift_hash
+		  	end
+		else
+			gift_hash 	= {"error" => database_error_general }
+		  	gifts_array = gift_hash
+		  	logmsg 		= gift_hash
+		end
 	    respond_to do |format|
 	      # logger.debug gifts_array
-	      puts "AC Orders response => #{logmsg}"
+	      @app_response = "AC response[0] => #{logmsg}"
 	      format.json { render json: gifts_array }
 	    end
   	end
@@ -222,14 +232,14 @@ class AppController < ApplicationController
 	    	else
 	    		response["error_server"] = stringify_error_messages order
 	    	end
-	      	puts "AC -Merchant Redeem- response => #{response}"
+	      	@app_response = "AppC #{response}"
 	      	format.json { render json: response }
 	    end
   	end
 
   	def user_activity
 
-	    user  = User.find(params["user_id"])
+	    user  = User.find(params["user_id"].to_i)
 	    if user 
 	    	gifts 		= Gift.get_user_activity(user)
 	    	gifts_array = array_these_gifts(gifts, ACTIVITY_REPLY, true, true)
@@ -241,7 +251,7 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      # logger.debug gifts_array
-	      puts "AC UserActivity response[0] => #{logmsg}"
+	      @app_response = "AC response[0] => #{logmsg}"
 	      format.json { render json: gifts_array }
 	    end
   	end
@@ -259,7 +269,7 @@ class AppController < ApplicationController
 	  	end
 	    respond_to do |format|
 	      # logger.debug gifts_array
-	      puts "AC PastGifts response[0] => #{logmsg}"
+	      @app_response = "AC response[0] => #{logmsg}"
 	      format.json { render json: gifts_array }
 	    end
   	end
@@ -286,7 +296,7 @@ class AppController < ApplicationController
 	  	end
 
   		respond_to do |format|
-	    	puts "AC Questions response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end
   	end
@@ -295,7 +305,7 @@ class AppController < ApplicationController
   		# user  = User.find_by_remember_token(params["token"])
   		
   		begin  
-  			other_user = User.find(params["user_id"])
+  			other_user = User.find(params["user_id"].to_i)
 	  			# get new pack of questions
 			begin
 	  			response = Question.get_questions_with_answers(other_user)
@@ -306,7 +316,7 @@ class AppController < ApplicationController
 	  		response = ["error", "could not find other user in db"]
 	  	end
   		respond_to do |format|
-	      	puts "AC OtherQuestions response => #{response}"
+	      	@app_response = "AppC #{response}"
 	      	format.json { render json: response }
 	    end
   	end
@@ -322,7 +332,7 @@ class AppController < ApplicationController
 	  	end
   		respond_to do |format|
 	      # logger.debug transaction_array
-	      puts "AC Transactions response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: transaction_array }
 	    end
   	end
@@ -345,7 +355,7 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      # logger.debug providers_array
-	      puts "AC Providers response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: providers_array }
 	    end
   	end
@@ -368,7 +378,7 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      # logger.debug providers_array
-	      puts "AC ProvidersShortPhotoURL response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: providers_array }
 	    end
   	end
@@ -391,7 +401,7 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      # logger.debug providers_array
-	      puts "AC Brands response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: brands_array }
 	    end
   	end
@@ -416,7 +426,7 @@ class AppController < ApplicationController
 
   		respond_to do |format|
 	      # logger.debug providers_array
-	      puts "AC BrandMerchants response[0] => #{logmsg}"
+	      @app_response = "AppC response[0] => #{logmsg}"
 	      format.json { render json: providers_array }
 	    end
   	end
@@ -443,8 +453,8 @@ class AppController < ApplicationController
 
 		respond_to do |format|
 			# logger.debug user_array
+			@app_response = "AppC response[0] => #{logmsg}"
 			format.json { render json: user_array }
-			puts "AC DbUSERS response[0] => #{logmsg}"
 		end
 	end
 
@@ -453,10 +463,9 @@ class AppController < ApplicationController
     	message  = ""
     	response = {}
     	process  = false
-    	gift_id  = params["data"]
-    	gift_id  = gift_id.to_i
+    	gift_id  = params["data"].to_i
 
-    	if gift_id.nil?
+    	if gift_id == 0
       		message = "data did not transfer. "
       		redeem  = Redeem.new
     	else
@@ -493,7 +502,7 @@ class AppController < ApplicationController
 				message += " Gift unable to process to database. Please retry later."
 				response["error_server"] = message 
 			end
-			puts "AC CreateRedeem response => #{response}"
+			@app_response = "AppC #{response}"
 			format.json { render json: response }
 		end
   	end
@@ -523,7 +532,7 @@ class AppController < ApplicationController
   		end
 
   		respond_to do |format|
-  			puts "AC CreateRedeem response => #{response}"
+  			@app_response = "AppC #{response}"
   			format.json { render json: response}
   		end 		
   	end
@@ -550,7 +559,7 @@ class AppController < ApplicationController
   		end
 
   		respond_to do |format|
-  			puts "AC CreateORDER response => #{response}"
+  			@app_response = "AppC #{response}"
   			format.json { render json: response}
   		end 
   	end
@@ -560,41 +569,36 @@ class AppController < ApplicationController
   		gift_obj = JSON.parse params["gift"]
   		  			# authenticate user
   		if giver = authenticate_app_user(params["token"])
-  					# get gift from db
-  			begin
   					# check to see that the gift has the correct data to save
   					# check to see that the gift has a shoppingCart
-  				if gift_obj.nil? || params["shoppingCart"].nil?
-  						# nothing can be done without the data 
-  					response["error_server"] = "Data didnt arrive #{database_error_gift}"	
+			if gift_obj.nil? || params["shoppingCart"].nil?
+						# nothing can be done without the data 
+				response["error_server"] = "Data didnt arrive #{database_error_gift}"	
+		    else
+		    		# add the receiver + receiver checks to the gift object 
+		        puts "Lets make this gift !!!"
+		        add_receiver_by_origin(params["origin"], gift_obj, response)
+		        gift    = Gift.new(gift_obj)
+		        sc = JSON.parse params["shoppingCart"]
+		        gift.make_gift_items(sc)
+				puts "Made it thru original git making process"
+	  				# add the giver info to the gift object
+	  			if gift_obj["anon_id"]
+			        gift.add_anonymous_giver(giver.id)
 			    else
-			    		# add the receiver + receiver checks to the gift object 
-			        puts "Lets make this gift !!!"
-			        add_receiver_by_origin(params["origin"], gift_obj, response)
-			        gift    = Gift.new(gift_obj)
-			        sc = JSON.parse params["shoppingCart"]
-			        gift.make_gift_items(sc)
-					puts "Made it thru original git making process"
-		  				# add the giver info to the gift object
-		  			if gift_obj["anon_id"]
-				        gift.add_anonymous_giver(giver.id)
-				    else
-				      	gift.add_giver(giver)
-				     end
-		  			puts "Here is GIFT #{gift.inspect}"
-		  			if gift.save
-		  				sale = gift.charge_card
-				        if sale.resp_code == 1
-				        	response["success"]       = {"Gift Created" => "Success!"}
-				        else
-				        	response["error_server"]  = { "Credit Card" => sale.reason_text }
-				        end
-		  			else
-		  				response["error_server"] = stringify_error_messages gift
-		  			end
-		  		end
-	  		rescue
-	  			response["error_server"] = database_error_gift
+			      	gift.add_giver(giver)
+			    end
+	  			puts "Here is GIFT #{gift.inspect}"
+	  			if gift.save
+	  				sale = gift.charge_card
+			        if sale.resp_code == 1
+			        	response["success"]       = {"Gift Created" => "Success!"}
+			        else
+			        	response["error_server"]  = { "Credit Card" => sale.reason_text }
+			        end
+	  			else
+	  				response["error_server"] = stringify_error_messages gift
+	  			end
 	  		end
 	  	else
   			response["error"] = unauthorized_user
@@ -613,10 +617,10 @@ class AppController < ApplicationController
 
 		message   = ""
 		response  = {} 
-		gift_id 	= params["gift_id"]
-		employee_id = params["employee_id"]
+		gift_id 	= params["gift_id"].to_i
+		employee_id = params["employee_id"].to_i
 
-		if gift_id.nil? || employee_id.nil? 
+		if gift_id == 0 || employee_id == 0 
 			message = "Data not received correctly. "
 			order   = Order.new
 		else
@@ -644,7 +648,7 @@ class AppController < ApplicationController
 			else
 				response["error_server"] = stringify_error_messages order
 			end
-			puts "AC CreateOrder response => #{response}"
+			@app_response = "AppC #{response}"
 			format.json { render json: response }
 		end
 	end 
@@ -655,20 +659,20 @@ class AppController < ApplicationController
 		response = {}
 
 		if user = authenticate_app_user(params["token"])
-			cCard = Card.find(params["data"])
-			if cCard.user_id == user.id
+			cCard = Card.find(params["data"].to_i)
+			# if cCard.user_id == user.id
 				if cCard.destroy
 					response["delete"] = "#{cCard.id}"
 				else
 					response["error_server"] = "#{cCard.nickname} #{cCard.id} could not be deleted"
 				end
-			end
+			# end
 		else
 			response["error"] = "Couldn't identify app user. "
 		end
 
 		respond_to do |format|
-			puts "AC DeleteCard response => #{response}"
+			@app_response = "AppC #{response}"
 			format.json { render json: response }
 		end
 	end 
@@ -691,7 +695,7 @@ class AppController < ApplicationController
     	end
 
     	respond_to do |format|
-			puts "AC GetCards response => #{response}"
+			@app_response = "AppC #{response}"
 			puts message
 			format.json { render json: response }
 		end
@@ -706,6 +710,9 @@ class AppController < ApplicationController
       		puts "User = #{user.fullname}"
       		puts "params data = #{params['data']}"
       		card_data = JSON.parse params["data"]
+      		if card_data["user_id"].nil?
+      			card_data["user_id"] = user.id
+      		end
       		puts "card data post JSON = #{card_data}"
       		cCard = Card.create_card_from_hash card_data
       		puts "the new card object is = #{cCard.inspect}"
@@ -723,7 +730,7 @@ class AppController < ApplicationController
 					response["error_server"] = stringify_error_messages cCard
 				end
 			#end
-			puts "AC AddCard response => #{response}"
+			@app_response = "AppC #{response}"
 			puts message
 			format.json { render json: response }
 		end
@@ -746,6 +753,7 @@ class AppController < ApplicationController
 		end	
 
 		respond_to do |format|
+			@app_response = "AppC #{response}"
 			format.json {render json: response }
 		end	
 	end
@@ -763,7 +771,7 @@ class AppController < ApplicationController
 	  	end
 
   		respond_to do |format|
-	    	puts "AC Settings response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end		
 	end
@@ -782,7 +790,7 @@ class AppController < ApplicationController
 	  	end
 
   		respond_to do |format|
-	    	puts "AC Save Settings response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end			
 	end
@@ -804,7 +812,7 @@ class AppController < ApplicationController
 	  	end
 
   		respond_to do |format|
-	    	puts "AC Save Settings response => #{response}"
+	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
 	    end			
 	end
@@ -858,10 +866,16 @@ class AppController < ApplicationController
 		        if address_get
 		          gift_obj["provider_address"] = provider.complete_address
 		        end
+		        gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
+	    	else
+	    		# change total to location total
+	    		gift_obj["total"]    = g.ticket_total_string
+	    		gift_obj["subtotal"] = g.subtotal_string
+	    		gift_obj["time_ago"] = time_ago_in_words(g.updated_at.to_time)
 	    	end
 
 	        gift_obj["gift_id"]  = g.id.to_s
-	        gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
+	        
 	      	
 	        gift_obj["redeem_code"]	  = add_redeem_code(g)
 

@@ -56,10 +56,7 @@ class IphoneController < AppController
       if user && user.authenticate(password)
         user.pn_token       = pn_token if pn_token
         response["server"]  = user.providers_to_iphone
-        user_json           = user.to_json only: LOGIN_REPLY
-        user_small          = JSON.parse user_json
-        user_small["photo"] = user.get_photo
-        response["user"]    = user_small
+        response["user"]    = user.serialize(true) 
       else
         response["error"]   = "Invalid email/password combination"
       end
@@ -97,10 +94,7 @@ class IphoneController < AppController
       if user 
         user.pn_token       = pn_token if pn_token
         response["server"]  = user.providers_to_iphone
-        user_json           = user.to_json only: LOGIN_REPLY
-        user_small          = JSON.parse user_json
-        user_small["photo"] = user.get_photo
-        response["user"]    = user_small
+        response["user"]    = user.serialize(true)
       else
         response[resp_key]  = "#{msg} not in Drinkboard database " 
       end
@@ -155,7 +149,7 @@ class IphoneController < AppController
   def regift
 
     user  = User.find_by_remember_token(params["token"])
-    gift  = Gift.find(params["gift_id"])
+    gift  = Gift.find(params["gift_id"].to_i)
     if gift.receiver == user
       receiver_id = params["regifter_id"] || nil
       receiver = User.find(receiver_id.to_i)
@@ -228,67 +222,6 @@ class IphoneController < AppController
       format.json { render text: menus.to_json }
     end
   end
-  
-  # def create_gift 
-
-  #   response = {}
-  #   message  = ""
-
-  #   gift_obj = JSON.parse params["gift"]
-  #   logger.debug "GIFT OBJECT  = #{params["gift"]}"
-
-  #   add_receiver_by_origin(params["origin"], gift_obj, response)
-
-  #   if gift_obj.nil? || params["shoppingCart"].nil?
-  #     message += "No gift data received.  "
-  #     if params["shoppingCart"].nil?
-  #       message += "Gift Items are missing"
-  #     end
-  #     gift    = Gift.new
-  #   else
-  #     gift    = Gift.new(gift_obj)
-  #     gift.make_gift_items(shoppingCart)
-  #     # shoppingCart_array = JSON.parse params["shoppingCart"]
-  #     # gift_item_array = []
-  #     # shoppingCart_array.each do |item|
-  #     #   gift_item = GiftItem.initFromDictionary item
-  #     #   gift_item_array << gift_item
-  #     # end
-  #     # gift.gift_items = gift_item_array
-  #     logger.debug "Here is GIFT #{gift.inspect}"
-  #   end
-    
-  #   begin
-  #     # we already have this data, we do not need to re-save it onto the gift
-  #     giver           = User.find_by_remember_token(params["token"])
-  #     if gift_obj["anon_id"]
-  #       gift.add_anonymous_giver(giver.id)
-  #     else
-  #       gift.giver_id   = giver.id
-  #       gift.giver_name = giver.username
-  #     end
-  #   rescue
-  #     message += "Couldn't identify app user. "
-  #   end
-    
-  #   response = { "error" => message } if message != "" 
-  #   respond_to do |format|
-  #     logger.debug " PRE SAVE GIFT OBJECT  = #{gift.inspect}"
-  #     if gift.save
-  #       sale = gift.charge_card
-  #       if sale.resp_code == 1
-  #         response["success"]       = "Gift received - Thank you!" 
-  #       else
-  #         response["error_server"]  = { "credit_card" => sale.reason_text }
-  #       end
-  #     else
-  #       response["error_server"]       = stringify_error_messages gift
-  #       logger.debug "this is the errrors on gift = #{gift.errors.messages}"
-  #     end
-  #     puts "response => #{response}"
-  #     format.json { render json: response }
-  #   end  
-  # end
   
   def update_photo
 

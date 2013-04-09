@@ -2,9 +2,9 @@ ActionMailer::Base.delivery_method = :smtp
 ActionMailer::Base.smtp_settings = {
   :address              => "smtp.gmail.com",
   :port                 => 587,
-  :domain               => "gmail.com",
+  :domain               => "drinkboard.com",
   :authentication       => "plain",
-  :user_name            => "noreplydrinkboard",
+  :user_name            => "no-reply@drinkboard.com",
   :password             => "CherryOnTop",
   :enable_starttls_auto => true
 }

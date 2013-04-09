@@ -3,7 +3,7 @@ class Gift < ActiveRecord::Base
   attr_accessible   :giver_id,      :giver_name, :credit_card,    
       :receiver_id, :receiver_name, :receiver_phone, 
       :provider_id, :provider_name, :receiver_email, 
-      :message,    :shoppingCart, 
+      :message,     :shoppingCart, 
       :tip, :tax,   :total, :service,
       :facebook_id, :foursquare_id, :twitter,
       :status
@@ -30,7 +30,7 @@ class Gift < ActiveRecord::Base
   before_create :extract_phone_digits
   before_create :add_giver_name,  :if => :no_giver_name
   before_create :regifted,        :if => :regift_id?
-  before_create :set_unpaid_status
+  before_create :set_status
  
   after_create  :update_shoppingCart
   after_create  :invoice_giver
@@ -86,7 +86,7 @@ class Gift < ActiveRecord::Base
   end 
   
   def self.get_history_provider(provider)
-    Gift.where(provider_id: provider.id).where(status: 'redeemed').order("created_at DESC") 
+    Gift.where(provider_id: provider.id).where(status: 'redeemed').order("updated_at DESC") 
   end
 
   def self.transactions(user)
@@ -103,20 +103,32 @@ class Gift < ActiveRecord::Base
 
   ##########  gift creation methods
 
-  def set_status    
-    if !self.receiver_id
-      status = "incomplete"
-    else
-      status = 'open'
+  def set_status 
+    if self.card_enabled?
+        self.status = "unpaid"
+    else   
+        if self.receiver_id.nil?
+            self.status = "incomplete"
+        else
+            self.status = 'open'
+        end
     end
-    self.update_attribute(:status, status)
+    puts "gift SET STATUS #{self.status}"
+  end
+
+  def card_enabled?
+    whitelist = ["test@test.com", "deb@knead4health.com", "dfennell@graywolves.com", "dfennell@webteampros.com"]
+    if whitelist.include?(self.giver.email)
+        return true
+    else
+        return false
+    end
   end
 
   def charge_card
         # if giver is one jb@jb.com
         # call authorize capture on the gift and create the sale object
-    giver = User.find self.giver_id
-    if giver.email == "test@test.com"
+    if self.card_enabled?
         sale = self.authorize_capture
         puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
     else
@@ -181,6 +193,27 @@ class Gift < ActiveRecord::Base
       gift.add_anonymous_giver(params[:gift][:giver_id])
     end
     return gift
+  end
+
+  def format_currency_as_string(float)
+    string = float.to_s
+    x      = string.split('.')
+    x[1]   = "%02d" % x[1]
+    x[1]   = x[1][0..1]
+    tot    = x.join('.')
+    return tot
+  end
+
+  def ticket_total_string
+    ticket_total = (self.total.to_f * 100).to_i - (self.service.to_f * 100).to_i
+    tix_float = ticket_total.to_f / 100
+    return format_currency_as_string(tix_float)
+  end
+
+  def subtotal_string
+    subtotal = (self.ticket_total_string.to_f * 100).to_i  - (self.tax.to_f * 100).to_i - (self.tip.to_f * 100).to_i
+    tix_float = subtotal.to_f / 100
+    return format_currency_as_string(tix_float)
   end
 
   def regift(receiver=nil, message=nil)
@@ -303,28 +336,6 @@ class Gift < ActiveRecord::Base
         self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
       end
     end
-
-    def set_unpaid_status
-      self.status = "unpaid"
-    end
-    
-    # def pluralizer
-    #   if self.quantity > 1
-    #     name_to_match = self.item_name
-    #           # if item name already has a /'s/ then abort 
-    #     if !name_to_match.match /'s/
-    #        self.item_name << "\'s"
-    #     end 
-    #   end
-    # end
-    
-    # def add_category
-    #   self.category = self.item.category
-    # end
-    
-    # def no_category
-    #   self.category.nil?
-    # end
 
     def add_giver_name
       self.giver_name = User.find(self.giver_id).username

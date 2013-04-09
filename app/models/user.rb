@@ -74,11 +74,14 @@ class User < ActiveRecord::Base
   validates :twitter, uniqueness: true, :if => :twitter_exists?
   #/---------------------------------------------------------------------------------------------/
   
-  def serialize
-    usr_hash  = self.serializable_hash only: ["first_name", "last_name", "email", "phone", "facebook_id", "twitter"]
+  def serialize(token=false)
+    usr_hash  = self.serializable_hash only: ["first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "remember_token", "email", "phone", "facebook_id", "twitter"]  
     usr_hash["photo"]   = self.get_photo
     usr_hash["user_id"] = self.id.to_s 
     usr_hash.keep_if {|k, v| !v.nil? }
+    if !token
+      usr_hash.delete("remember_token")
+    end
     return usr_hash
   end
 
@@ -312,15 +315,15 @@ class User < ActiveRecord::Base
               # check Gift.rb for ghost gifts connected to newly created user 
       gifts = []
       if self.facebook_id
-        g = Gift.where("status = :stat AND facebook_id = :fb_id",    :stat => 'incomplete', :fb_id   => self.facebook_id)
+        g = Gift.where("status = :stat AND facebook_id = :fb_id",    :stat => 'incomplete', :fb_id   => self.facebook_id.to_s)
         gifts.concat g
       end
       if self.foursquare_id
-        g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id)
+        g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id.to_s)
         gifts.concat g      
       end 
       if self.twitter
-        g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => self.twitter)
+        g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => self.twitter.to_s)
         gifts.concat g      
       end
       if self.email
@@ -328,7 +331,7 @@ class User < ActiveRecord::Base
         gifts.concat g      
       end
       if self.phone
-        g = Gift.where("status = :stat AND receiver_phone = :phone", :stat => 'incomplete', :phone   => self.phone)
+        g = Gift.where("status = :stat AND receiver_phone = :phone", :stat => 'incomplete', :phone   => self.phone.to_s)
         gifts.concat g     
       end
      
@@ -351,7 +354,7 @@ class User < ActiveRecord::Base
             if g.receiver_email
               puts "emailing the gift giver that gift has been collected for #{g.id}"
                 # notify the giver via email
-              Resque.enqueue(EmailJob, 'alert_giver', g.giver_id , {:gift_id => g.id}) 
+              Resque.enqueue(EmailJob, 'notify_giver_created_user', g.giver_id , {:gift_id => g.id}) 
             end 
           else
             error   += 1

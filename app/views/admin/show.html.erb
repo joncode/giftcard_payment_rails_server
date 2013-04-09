@@ -4,11 +4,14 @@
 <% content_for :merchant_link do  %>
   <h2>Click <%= link_to 'HERE', providers_path %> to go to the Merchants Site</h2>
 <% end %>
+<% content_for :test_emails do  %>
+  <h2>Click <%= link_to 'HERE', '/admin/test_emails' %> to test the email system</h2>
+<% end %>
 
 <div class="merchantSignInWrapper POSfullPageWrap">
 	<%= yield :brand_link  %>
 	<%= yield :merchant_link %>
-
+  <%= yield :test_emails %>
   <h2>Sign into Merchant Tools for an Establishment</h2>
      <% unless (@page == 0 && @offset == 0)  %>
         <%= link_to 'Next Page', admin_path(offset: @offset) %>

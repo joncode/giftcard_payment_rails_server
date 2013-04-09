@@ -5,10 +5,7 @@ class Sale < ActiveRecord::Base
  	AUTHORIZE_API_LOGIN 	  = '9tp38Ga4CQ'
  	AUTHORIZE_TRANSACTION_KEY = '9EcTk32BHeE8279P'
  	GATEWAY 			      = :production
- 		# sandbox account
- 	# AUTHORIZE_API_LOGIN 	  = '7esX3XfuS5w'
- 	# AUTHORIZE_TRANSACTION_KEY = '3y9dLy3Pm37AK9qT'
- 	# GATEWAY 			      = :sandbox
+
  	attr_accessor :transaction, :credit_card, :response, :total
  	# NOTE - Revenue is a decimal value - gift.total is a string - converted in self.init below
  	# attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string, :response_string, :revenue, :status, :transaction_id
@@ -47,22 +44,16 @@ class Sale < ActiveRecord::Base
 		month 		 = "%02d" % card.month
 		year 		 = card.year[2..3]
 		card.decrypt! "Theres no place like home"
-		######### put in real credit card details when in production
-		num = card.number
-		card_number  = "4427427042229494"	
-		        # populate the transaction with data
-        @transaction.fields[:first_name] = "Dave"
-		@transaction.fields[:last_name]  = "Leibner"
-		month = "03"
-		year  = "16"
-		######### 
-
+		card_number  = card.number	
 		month_year 	 = "#{month}#{year}" 
+		
+		######### put in real credit card details when in production
 		tots = self.total.to_f / 100
 		x = tots.to_s.split('.')
 		total_amount = x[0] + '.' + x[1][0..1]
 		puts "HERE is the TOTAL = #{total_amount}"
-       
+        ######### 
+
         @credit_card = AuthorizeNet::CreditCard.new(card_number, month_year)
         
         # 3 gets a response from auth.net
@@ -71,6 +62,7 @@ class Sale < ActiveRecord::Base
 	end
 
 	def add_gateway_data
+		puts "in add gateway data"
 		self.transaction_id    	= self.response.transaction_id
 		self.resp_json   		= self.response.fields.to_json
 		raw_request			   	= self.transaction.fields
@@ -81,6 +73,7 @@ class Sale < ActiveRecord::Base
 		self.resp_code		 	= self.response.response_code.to_i
 		self.reason_text		= self.response.response_reason_text
 		self.reason_code		= self.response.response_reason_code.to_i
+		puts "#{self.inspect}"
 	end
 
 end
