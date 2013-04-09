@@ -1,6 +1,9 @@
 class ProvidersController < ApplicationController
   before_filter :signed_in_user
   before_filter :admin_user?
+  ACTIONS_WITH_HEADERS = [ :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
+
+  before_filter :populate_locals, only: ACTIONS_WITH_HEADERS
 
   def index
     @offset = params[:offset].to_i || 0
@@ -147,4 +150,33 @@ class ProvidersController < ApplicationController
       format.html { redirect_to brands_provider_path(@provider, :offset => params[:offset])}
     end    
   end
+
+  def menu
+    @menu_array     = Menu.get_menu_array_for_builder @provider
+    column = 1
+    @left = []
+    @right = []
+    @menu_array.each do |m|
+      if column == 1
+        @left << m
+        column = 2
+      else
+        @right << m 
+        column = 1
+      end
+    end    
+  end
+
+  def staff
+    @staff    = @provider.employees
+    @nonstaff = @provider.users_not_staff    
+  end
+
+
+    private
+
+      def populate_locals
+        @provider       = Provider.find(params[:id].to_i)
+        @current_user   = current_user
+      end
 end

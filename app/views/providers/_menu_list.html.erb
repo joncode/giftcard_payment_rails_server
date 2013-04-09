@@ -1,0 +1,27 @@
+<ul>
+	<% num = 0 %>
+	<% menu_array.each do |menu_section| %>
+	<li class="menu_section">
+		<h2 id="<%= menu_section[0] -%>" class="obj pos">
+    		<%= menu_section[0] -%>     
+    		<span  class="menuListEdit buttonMenuList buttonEditPos buttonImageUp">
+        		<a href="">edit</a>
+      		</span>
+    		<span  class="menuListSave buttonMenuList buttonSavePos buttonImageUp">
+        		<a href="">save</a>
+      		</span> 
+    	</h2>
+
+    	<!-- EACH MENU SECTION ('Beer' or 'Wine' etc) RENDERED in this template -->
+		<%= render 'menu_section', menu_section: menu_section %>
+
+		<% num += 1 %>
+		<% if num <  menu_array.count %>
+			<div class="lineHorizontal"></div>
+		<% else %>
+			<div class="lineHorizontal" style="background-image:none;"></div>
+		<% end %>
+	</li>
+	<% end %>
+
+</ul>

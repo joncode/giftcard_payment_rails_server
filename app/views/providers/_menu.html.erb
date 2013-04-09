@@ -3,9 +3,8 @@
 	<%= link_to 'Edit', edit_provider_path(@provider), :id => 'edit'  %> |
 	<%= link_to 'Brands', brands_provider_path(@provider), :id => 'brands'  %> |
 	<%= link_to "Change Photo", add_photo_provider_path(@provider), :id => 'add_photo'  %> |
-	<%= link_to "Menu Builder", menu_merchant_path(@provider), :id => 'menu' %> |
-	<%= link_to "Staff", staff_merchant_path(@provider), :id => 'staff' %>
-  
+	<%= link_to "Menu Builder", menu_provider_path(@provider), :id => 'menu' %> |
+	<%= link_to "Staff", staff_provider_path(@provider), :id => 'staff' %> 
 </div>
 
 <script>

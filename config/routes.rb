@@ -51,6 +51,8 @@ Drinkboard::Application.routes.draw do
       get :brands
       get :brand
       get :building
+      get :menu
+      get :staff
     end
   end
   
