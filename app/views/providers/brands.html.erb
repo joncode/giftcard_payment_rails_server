@@ -4,7 +4,7 @@
 
 <h1>Listing brands</h1>
     <% unless (@page == 0 && @offset == 0)  %>
-        <%= link_to 'Next Page', merchants_brand_path(@brand, offset: @offset) %>
+        <%= link_to 'Next Page', brands_provider_path(@brand, offset: @offset) %>
     <% end %>
 <table>
   <tr style="color:#ccc">
