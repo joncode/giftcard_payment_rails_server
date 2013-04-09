@@ -866,14 +866,16 @@ class AppController < ApplicationController
 		        if address_get
 		          gift_obj["provider_address"] = provider.complete_address
 		        end
+		        gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
 	    	else
 	    		# change total to location total
 	    		gift_obj["total"]    = g.ticket_total_string
 	    		gift_obj["subtotal"] = g.subtotal_string
+	    		gift_obj["time_ago"] = time_ago_in_words(g.updated_at.to_time)
 	    	end
 
 	        gift_obj["gift_id"]  = g.id.to_s
-	        gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
+	        
 	      	
 	        gift_obj["redeem_code"]	  = add_redeem_code(g)
 
