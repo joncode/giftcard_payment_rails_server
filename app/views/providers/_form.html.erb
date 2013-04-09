@@ -16,11 +16,12 @@
 <div class="bankCell POSsingleColumn">
 <%= form_for(@provider) do |f| %>
   <div class="merchantSignUpObject rounded gradient">
+    <%= yield :errors %>
     <div class="merchantSignUpBackground"></div>
     <div class="merchantSignUpWrapper">
     <h1>Basic Info</h1>
 
-      <%= yield :errors %>
+      
 
       <div class="field">
         <%= f.text_field :name ,       placeholder: 'Establishment Name'  %>
