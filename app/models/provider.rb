@@ -49,9 +49,9 @@ class Provider < ActiveRecord::Base
 
   def live
     if self.sd_location_id == nil
-      return false
+      return "0"
     else
-      return true
+      return "1"
     end
   end
 
