@@ -55,6 +55,17 @@ class Provider < ActiveRecord::Base
     end
   end
 
+  def self.where(params)
+      if params.kind_of?(Hash) && !params.has_key?(:active) && !params.has_key?("active")
+        params[:active] = true
+      end
+      super(params)
+  end
+
+  def self.all 
+      self.where({})
+  end
+
   def get_todays_credits
     self.orders.where("updated_at > ?", (Time.now - 1.day))   
   end

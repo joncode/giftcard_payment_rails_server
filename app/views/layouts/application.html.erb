@@ -30,6 +30,10 @@
             <% if @provider && !@provider.new_record? %>
               <%= render 'providers/menu', tab: params[:action] %>
             <% end %>
+          <% elsif params[:controller] == "menus" %>
+            <% if @provider && !@provider.new_record? %>
+              <%= render 'providers/menu', tab: params[:action] %>
+            <% end %>
           <% end %>
       <% else %>
           <%= render 'layouts/intro' %>

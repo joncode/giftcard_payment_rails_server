@@ -11,20 +11,23 @@
   </div>
   <% end %>
 <% end %>
-<div class="merchantSignInWrapper POSfullPageWrap">
-<%= yield :errors %>
+<div class="bankCell POSsingleColumn">
 <%= form_for(@menu_item) do |f| %>
-  <h2><%= @menu_item.section %></h2>
+  <div class="merchantSignUpObject rounded gradient">
+    <%= yield :errors %>
+    <div class="merchantSignUpBackground"></div>
+    <div class="merchantSignUpWrapper">
+    <h1><%= @menu_item.section.capitalize %> Section</h1>
   <div class="field">
-    <h1>Item Name</h1><br />
+    <h3>Item Name</h3>
     <%= f.text_field :item_name %>
   </div>
   <div class="field">
-    <h1>Description</h1><br />
+    <h3>Description</h3>
     <%= f.text_field :description %>
   </div>
   <div class="field">
-    <h1>Price</h1><br />
+    <h3>Price</h3>
     <%= f.number_field :price %>
   </div>
     <div class="field">
@@ -35,7 +38,7 @@
   <br />
   <br />
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Submit", class: "btn btn-large btn-info" %>
   </div>
 <% end %>
 

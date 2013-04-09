@@ -23,7 +23,7 @@ class Menu < ActiveRecord::Base
     end
 
     def self.where(params)
-        if params.kind_of? Hash
+        if params.kind_of?(Hash) && !params.has_key?(:active) && !params.has_key?("active")
           params[:active] = true
         end
         super(params)
