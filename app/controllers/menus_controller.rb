@@ -21,6 +21,7 @@ class MenusController < ApplicationController
 
   def new
     @menu = Menu.new
+    @menu_item = @menu
 
     respond_to do |format|
       format.html # new.html.erb
@@ -43,6 +44,7 @@ class MenusController < ApplicationController
 
   def create
     @menu = Menu.new(params[:menu])
+    @menu_item = @menu
 
     respond_to do |format|
       if @menu.save
@@ -57,7 +59,7 @@ class MenusController < ApplicationController
 
   def update
     @menu = Menu.find(params[:id])
-
+    @menu_item = @menu
     respond_to do |format|
       if @menu.update_attributes(params[:menu])
         format.html { redirect_to menu_provider_path(@menu.provider), notice: 'Menu was successfully updated.' }

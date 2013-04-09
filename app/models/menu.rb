@@ -13,11 +13,11 @@ class Menu < ActiveRecord::Base
     after_save :update_provider
 
     def satisfy_item_id_null_constraint
-      if self.item_in.nil?
+      if self.item_id.nil?
         self.item_id = 0
       end
     end
-    
+
     def update_provider
       self.provider.update_attribute(:menu_is_live, false)
     end
