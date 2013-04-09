@@ -1,7 +1,7 @@
 class ProvidersController < ApplicationController
   before_filter :signed_in_user
   before_filter :admin_user?
-  ACTIONS_WITH_HEADERS = [:brands, :brand, :remove_menu_item, :upload_menu, :menu_item, :add_member, :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
+  ACTIONS_WITH_HEADERS = [:building, :brands, :brand, :remove_menu_item, :upload_menu, :menu_item, :add_member, :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
 
   before_filter :populate_locals, only: ACTIONS_WITH_HEADERS
 
@@ -111,7 +111,6 @@ class ProvidersController < ApplicationController
   def brands
     @offset = params[:offset].to_i || 0
     @page = @offset
-    @provider = Provider.find(params[:id].to_i)
     paginate = 10
     @brands = Brand.limit(paginate).offset(@offset)
     if @brands.count == paginate
@@ -122,7 +121,6 @@ class ProvidersController < ApplicationController
   end
 
   def building
-    @provider = Provider.find(params[:id].to_i)
     brand = Brand.find(params[:brand].to_i)
     if @provider.building_id != brand.id
       @provider.building_id = brand.id
@@ -137,7 +135,6 @@ class ProvidersController < ApplicationController
   end
 
   def brand
-    @provider = Provider.find(params[:id].to_i)
     brand = Brand.find(params[:brand].to_i)
     if @provider.brand_id != brand.id
       @provider.brand_id = brand.id 
@@ -177,6 +174,7 @@ class ProvidersController < ApplicationController
     else
       @menu_item = Menu.find(params[:menu_item].to_i)
     end
+
   end
 
   def upload_menu

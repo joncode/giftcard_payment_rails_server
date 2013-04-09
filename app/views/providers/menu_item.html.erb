@@ -1,40 +1,5 @@
 <div class="merchantSignInWrapper POSfullPageWrap">
 
-<%= form_for(@menu_item) do |f| %>
-  <% if @menu_item.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@menu_item.errors.count, "error") %> prohibited this menu from being saved:</h2>
-
-      <ul>
-      <% @menu_item.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-  <h2><%= @menu_item.section %></h2>
-  <div class="field">
-    <h1>Item Name</h1><br />
-    <%= f.text_field :item_name %>
-  </div>
-  <div class="field">
-    <h1>Description</h1><br />
-    <%= f.text_field :description %>
-  </div>
-  <div class="field">
-    <h1>Price</h1><br />
-    <%= f.number_field :price %>
-  </div>
-    <div class="field">
-    <%= f.hidden_field :item_id %>
-    <%= f.hidden_field :provider_id %>
-    <%= f.hidden_field :section %>
-  </div>
-  <br />
-  <br />
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+  <%= render 'menus/form' %>
 
 </div>

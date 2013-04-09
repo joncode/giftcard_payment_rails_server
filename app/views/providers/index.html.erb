@@ -7,7 +7,6 @@
   <tr style="color:#ccc">
     <th>Photo</th>
     <th>Name</th>
-    <th>Zinger</th>
     <th>Address</th>
     <th></th>
   </tr>
@@ -16,7 +15,6 @@
     <tr>
       <td><%= custom_image_tag(provider,180,90)  %></td>
       <td><%= link_to provider.name, provider %></td>
-      <td><%= provider.zinger %></td>
       <td><%= provider.full_address %></td>
       <td><%= link_to 'Edit', edit_provider_path(provider) %></td>
     </tr>
