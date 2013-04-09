@@ -5,10 +5,10 @@ class MenuString < ActiveRecord::Base
 
   	validates_uniqueness_of :provider_id
 
-  	def save
-  		merchant = self.provider
-  		merchant.update_attribute(:menu_is_live, true)
-  		super
+  	after_save :update_merchant
+  	
+  	def update_merchant
+  		self.provider.update_attribute(:menu_is_live, true)
   	end
   
    	def self.get_menu_for_provider(provider_id)

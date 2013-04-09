@@ -58,6 +58,8 @@ Drinkboard::Application.routes.draw do
       get  :compile_menu
       get  :add_member
       get :menu_item
+      get :upload_menu
+      get :remove_menu_item
     end
   end
   

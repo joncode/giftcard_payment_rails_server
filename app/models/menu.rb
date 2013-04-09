@@ -10,6 +10,12 @@ class Menu < ActiveRecord::Base
     validates_presence_of :item_name, :price, :provider_id, :section
     validates_numericality_of :price
 
+    after_save :update_provider
+
+    def update_provider
+      self.provider.update_attribute(:menu_is_live, false)
+    end
+    
     def self.where(params)
         if params.kind_of? Hash
           params[:active] = true

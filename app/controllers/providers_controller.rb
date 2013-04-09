@@ -1,7 +1,7 @@
 class ProvidersController < ApplicationController
   before_filter :signed_in_user
   before_filter :admin_user?
-  ACTIONS_WITH_HEADERS = [ :menu_item, :add_member, :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
+  ACTIONS_WITH_HEADERS = [ :remove_menu_item, :upload_menu, :menu_item, :add_member, :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
 
   before_filter :populate_locals, only: ACTIONS_WITH_HEADERS
 
@@ -162,8 +162,11 @@ class ProvidersController < ApplicationController
       redirect_to staff_provider_path(@provider)
   end
 
+  ####### HTML METHODS
+
   def menu
-    @menu_array     = Menu.get_menu_array_for_builder @provider   
+    @menu_array     = Menu.get_menu_array_for_builder @provider 
+
   end
 
   def menu_item
@@ -175,6 +178,38 @@ class ProvidersController < ApplicationController
       @menu_item = Menu.find(params[:menu_item].to_i)
     end
   end
+
+  def upload_menu
+    @menu_array     = Menu.get_menu_array_for_builder @provider
+    respond_to do |format|
+      if MenuString.compile_menu_to_menu_string(@provider.id)
+        # update the menu string to show the menustring is up to date 
+        # render success
+          @message = "Merchant Menu on App is Updated and Now Live"
+          format.html { redirect_to action: :menu, notice: @message } 
+      else
+        # render error
+        @message = human_readable_error_message menu_string
+        format.html { render action: :menu, notice: @message }
+      end
+    end    
+  end
+
+  def remove_menu_item
+    @menu_item = Menu.find(params[:menu_item].to_i)
+
+    respond_to do |format|
+      if @menu_item.update_attributes({active: false})
+        @message = "#{@menu_item.item_name} De-Activated"
+        format.html { redirect_to action: :menu, notice: @message } 
+      else
+        @message = human_readable_error_message @menu_item
+        format.html { render action: :menu, notice: @message }
+      end
+    end
+  end
+
+  ############ JS Methods
 
   def update_item
     puts "update item => #{params}"

@@ -2,6 +2,13 @@
 <% if @menu_array.count > 0 %>
 
 <h2>Menu</h2>
+<h3>
+	<% if @provider.menu_is_live %>
+		Menu is LIVE on APP
+	<% else %>
+		<%= link_to "Upload Menu to APP" , upload_menu_provider_path(@provider) %>
+	<% end %>
+</h3>
 <% @menu_array.each do |section_items| %>
 	<% section = section_items[0] %>
 	<% items = section_items[1] %>
@@ -12,7 +19,8 @@
 		  <th>Item</th>
 		  <th>Description</th>
 		  <th>Price</th>
-		  <th>&nbsp;</th>
+		  <th>Edit</th>
+		  <th>Remove</th>
 		</tr>
 
 	    <% items.each do |item| %>
@@ -20,11 +28,12 @@
 	        <td><%= item["item_name"] %></td>
 	        <td style="text-align: center;"><%= item["description"] %></td>
 	        <td style="text-align: center;"><%= item["price"] %></td>
-	        <td style="text-align: right;"><%= link_to "Edit", menu_item_provider_path(@provider, menu_item: item["menu_item_id"], section: section) %> </td>	                
+	        <td style="text-align: right;"><%= link_to "Edit", menu_item_provider_path(@provider, menu_item: item["menu_item_id"], section: section) %> </td>
+	        <td style="text-align: right;"><%= link_to "X", remove_menu_item_provider_path(@provider, menu_item: item["menu_item_id"]) %> </td>                
 	      </tr>
 	    <% end %>
 	    <tr>
-	    	<td colspan=4 style="text-align: center;"><%= link_to "Add new #{section}", menu_item_provider_path(@provider, section: section) %></td>
+	    	<td colspan=5 style="text-align: center;"><%= link_to "Add new #{section}", menu_item_provider_path(@provider, section: section) %></td>
 	    </tr>
 	</table>
 <% end %>
