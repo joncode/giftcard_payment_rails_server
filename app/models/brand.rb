@@ -36,7 +36,7 @@ class Brand < ActiveRecord::Base
 
 	def get_photo_for_web
 		unless image = self.photo.url
-			image = "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+			image = MERCHANT_DEFAULT_IMG
 		end
 		return image
 	end

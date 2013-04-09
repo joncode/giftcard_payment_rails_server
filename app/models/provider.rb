@@ -10,7 +10,6 @@ class Provider < ActiveRecord::Base
   attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
-
   has_many   :users, :through => :employees                                                                              
   has_many   :employees, dependent: :destroy
   has_many   :relays
@@ -28,15 +27,15 @@ class Provider < ActiveRecord::Base
   mount_uploader :box,      ProviderBoxUploader
   mount_uploader :portrait, ProviderPortraitUploader
 
-  #validates_numericality_of :sales_tax, :zip, :routing, :aba
-  #validates_length_of :aba, :is => 9
-  #validates_length_of :routing, :within => 9..14
-  before_save :extract_phone_digits
-
-  validates_presence_of :name, :city, :address, :zip , :state, :phone
+  validates_numericality_of :sales_tax
+  validates_length_of :state , :is => 2
+  validates_length_of :zip, :within => 5..10
+  validates_length_of :aba, :is => 9, :if => :aba_exists?
+  validates_length_of :routing, :within => 9..14, :if => :routing_exists?
+  validates_presence_of :name, :city, :address, :zip , :state, :phone, :sales_tax
   validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
  
-
+  before_save :extract_phone_digits
 
   def serialize
     prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax]
@@ -79,7 +78,7 @@ class Provider < ActiveRecord::Base
   
   def get_photo
     if self.photo.blank?
-      "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+      MERCHANT_DEFAULT_IMG
     else
       self.photo.url
     end
@@ -100,7 +99,7 @@ class Provider < ActiveRecord::Base
 
   def get_photo_for_web
     if self.photo.blank?
-      "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+      MERCHANT_DEFAULT_IMG
     else
       self.photo.url
     end
@@ -118,7 +117,7 @@ class Provider < ActiveRecord::Base
       photo = self.box.url 
     end 
     if photo.blank?
-      photo = "#{CLOUDINARY_IMAGE_URL}/v1349150293/upqygknnlerbevz4jpnw.png"
+      photo = MERCHANT_DEFAULT_IMG
     end
     return photo
   end
@@ -209,7 +208,15 @@ class Provider < ActiveRecord::Base
     end
 
     def phone_exists?
-      self.phone != nil
+      self.phone != nil && !self.phone.empty?
+    end
+
+    def aba_exists?
+      self.aba != nil && !self.aba.empty?
+    end
+
+    def routing_exists?
+      self.routing != nil && !self.routing.empty?
     end
 end
 # == Schema Information

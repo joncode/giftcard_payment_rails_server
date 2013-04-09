@@ -44,13 +44,11 @@ class ProvidersController < ApplicationController
   def create
     super_user  = current_user
     @provider   = Provider.new(params[:provider])
-    @provider.users = [super_user]
-
 
     respond_to do |format|
       if @provider.save
         Employee.create!(provider_id: @provider.id, user_id: super_user.id, clearance: 'super')
-        format.html { redirect_to provider_path(@provider), notice: 'Provider was successfully created.' }
+        format.html { redirect_to provider_path(@provider), notice: 'Merchant was successfully created.' }
         format.js 
         format.json { render json: merchant_path(@provider), status: :created, location: @provider }
       else
@@ -67,7 +65,8 @@ class ProvidersController < ApplicationController
     respond_to do |format|
       if @provider.update_attributes(params[:provider])
         @partial_to_render = "success"
-        format.html { redirect_to merchant_path(@provider), notice: 'Provider was successfully updated.' }
+        format.html { redirect_to provider_path(@provider), notice: 'Merchant was successfully updated.' }
+        # format.html { redirect_to merchant_path(@provider), notice: 'Provider was successfully updated.' }
         format.js 
         format.json { head :no_content }
       else

@@ -4,10 +4,14 @@
 <div class="providersPermalinkWrapper">
   <h2 class="providerHeader"><%= @provider.name %></h2>
  
-  <h2>"<%= @provider.description %>"</h2>
-  <h2><%= number_to_phone @provider.phone %></h2>
-  <h2><%= @provider.full_address %></h2>
-  <%= link_to custom_image_tag(@provider,600,320), add_photo_provider_path(@provider)  %>
+  <h1>Description:</h1><h2> "<%= @provider.description %>"</h2>
+  <h1>Phone:</h1><h2> <%= number_to_phone @provider.phone %></h2>
+  <h1>Full Address: </h1><h2><%= @provider.full_address %></h2>
+  <% if @provider.photo.url.blank? || @provider.get_photo == MERCHANT_DEFAULT_IMG %>
+  	<h2><%= link_to "Add Photo", add_photo_provider_path(@provider)  %></h2>
+  <% else %>
+  	<%= link_to custom_image_tag(@provider,600,320), add_photo_provider_path(@provider)  %>
+  <% end %>
 </div>
 </div>
 

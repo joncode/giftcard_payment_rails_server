@@ -9,7 +9,6 @@
 <table>
   <tr style="color:#ccc">
     <th>Name</th>
-    <th>Description</th>
     <th>Website</th>
     <th>Photo url</th>
     <th>Brand</th>
@@ -19,7 +18,6 @@
     <% @brands.each do |brand| %>
       <tr>
         <td><%= brand.name %></td>
-        <td><%= brand.description %></td>
         <td><%= brand.website %></td>
             <% if brand.has_photo? %>
         <td><%= custom_image_tag(brand, 50, 50) %></td>
@@ -28,23 +26,23 @@
             <% end %>
                 
                 <% if brand.id == @provider.brand_id %>
-        <td><%= link_to 'true', brand_provider_path(@provider, :offset => @page, :brand => brand.id)%>
+        <td><%= link_to 'YES', brand_provider_path(@provider, :offset => @page, :brand => brand.id)%>
         </td>
                 <% elsif @provider.brand_id.nil? %>
-        <td><%= link_to 'Brand', brand_provider_path(@provider, :offset => @page,:brand => brand.id) %>
+        <td><%= link_to 'Add', brand_provider_path(@provider, :offset => @page,:brand => brand.id) %>
         </td>
                 <% else %>
-        <td>NA</td>
+        <td>N/A</td>
                 <% end %>
                 
                 <% if brand.id == @provider.building_id   %>
-        <td><%= link_to 'true', building_provider_path(@provider, :offset => @page, brand: brand.id) %>
+        <td><%= link_to 'YES', building_provider_path(@provider, :offset => @page, brand: brand.id) %>
         </td>
                 <% elsif @provider.building_id.nil? %>
-        <td><%= link_to 'Building', building_provider_path(@provider,:offset => @page, :brand => brand.id) %>
+        <td><%= link_to 'Add', building_provider_path(@provider,:offset => @page, :brand => brand.id) %>
         </td>
                 <% else %>
-        <td>NA</td>
+        <td>N/A</td>
                 <% end %>
       </tr>
     <% end %>

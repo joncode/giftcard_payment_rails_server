@@ -14,11 +14,7 @@ CLOUDINARY_SECURE_URL = "https://d3jpl91pxevbkh.cloudfront.net/drinkboard"
 CLOUDINARY_UPLOAD     = "http://api.cloudinary.com/v1_1/drinkboard/image/upload"
 CLOUDINARY_GHOST_USER = "https://d3jpl91pxevbkh.cloudfront.net/drinkboard/image/upload/v1349221640/yzjd1hk2ljaycqknvtyg.png"
 
-# AWS S3 folder info
-BUCKET    = 'drinkboard'
-THUMB     = 'drinkboard/thumb'
-PORTRAIT  = 'drinkboard/portrait'
-
+MERCHANT_DEFAULT_IMG = "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png"
 
 
 # http://res.cloudinary.com/drinkboard/image/upload/v1349148077/ezsucdxfcc7iwrztkags.png

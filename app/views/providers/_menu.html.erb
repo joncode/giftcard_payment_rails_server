@@ -1,12 +1,11 @@
 <div class="merchantMenu merchantMenuPOS width1">
-	<%= link_to 'New Merchant', new_provider_path, :id => 'new' %> |
-	<%= link_to 'Index', providers_path, :id => 'index'  %> |
-			<% if @provider && !@provider.new_record? %>
 	<%= link_to 'Show', @provider, :id => 'show'  %> |
 	<%= link_to 'Edit', edit_provider_path(@provider), :id => 'edit'  %> |
 	<%= link_to 'Brands', brands_provider_path(@provider), :id => 'brands'  %> |
-	<%= link_to "Change Photo", add_photo_provider_path(@provider), :id => 'add_photo'  %>  
-			<% end %>
+	<%= link_to "Change Photo", add_photo_provider_path(@provider), :id => 'add_photo'  %> |
+	<%= link_to "Menu Builder", menu_merchant_path(@provider), :id => 'menu' %> |
+	<%= link_to "Staff", staff_merchant_path(@provider), :id => 'staff' %>
+  
 </div>
 
 <script>

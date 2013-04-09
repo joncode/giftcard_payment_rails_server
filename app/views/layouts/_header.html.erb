@@ -39,11 +39,12 @@
   
   <div class="vendorTitle">
     <h5 class="vendorTitleText">
-      <a href="/"></a>
+      
+  
     </h5>
     <h6 class="vendorAddress">
         
-        <br />
+      <%= link_to 'New Merchant', new_provider_path, :id => 'new' %> |  <%= link_to 'List All', providers_path, :id => 'index'  %> | <a href="/admin">Home</a>
         
     </h6>
   </div> 

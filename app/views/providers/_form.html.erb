@@ -1,3 +1,18 @@
+<% content_for :errors do  %>
+  <% if @provider.errors.any? %>
+  <div id="error_explanation">
+      <h3><%= pluralize(@provider.errors.count, "error") %> prohibited this merchant from being saved:</h3>
+
+      <ul>
+      <% @provider.errors.full_messages.each do |msg| %>
+        <li style="width:350px; color: #cc3366;"><%= msg %></li>
+      <% end %>
+      </ul>
+  </div>
+  <% end %>
+<% end %>
+
+
 <div class="bankCell POSsingleColumn">
 <%= form_for(@provider) do |f| %>
   <div class="merchantSignUpObject rounded gradient">
@@ -5,17 +20,7 @@
     <div class="merchantSignUpWrapper">
     <h1>Basic Info</h1>
 
-      <% if @provider.errors.any? %>
-        <div id="error_explanation">
-          <h2><%= pluralize(@provider.errors.count, "error") %> prohibited this provider from being saved:</h2>
-
-          <ul>
-          <% @provider.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-          </ul>
-        </div>
-      <% end %>
+      <%= yield :errors %>
 
       <div class="field">
         <%= f.text_field :name ,       placeholder: 'Establishment Name'  %>

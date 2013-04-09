@@ -129,6 +129,7 @@
         <div class="actions">
           <%= f.submit "Upload Photo" %>
         </div>
+        <% if !@obj_to_edit.photo.url.blank? %>
         <div class="profilePic">
           <div class="giftText giftTextLarge">
             <h2>Current Photo</h2>
@@ -137,6 +138,7 @@
             <%= custom_image_tag @obj_to_edit, 600, 320 %>
           </div>
         </div>
+        <% end %>
       </div>
       <br />
       <div class="giftText giftTextLarge" id="cropTitle">
