@@ -1,7 +1,7 @@
 class ProvidersController < ApplicationController
   before_filter :signed_in_user
   before_filter :admin_user?
-  ACTIONS_WITH_HEADERS = [ :remove_menu_item, :upload_menu, :menu_item, :add_member, :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
+  ACTIONS_WITH_HEADERS = [:brands, :brand, :remove_menu_item, :upload_menu, :menu_item, :add_member, :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
 
   before_filter :populate_locals, only: ACTIONS_WITH_HEADERS
 
