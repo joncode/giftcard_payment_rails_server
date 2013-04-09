@@ -53,6 +53,9 @@ Drinkboard::Application.routes.draw do
       get :building
       get :menu
       get :staff
+      post :update_item
+      post :delete_item
+      get  :compile_menu
     end
   end
   

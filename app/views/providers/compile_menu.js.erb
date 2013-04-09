@@ -1,0 +1,25 @@
+// compile success
+$('#ajax_response').empty();
+$('#ajax_response').append('<%= j render("compile_success") %>');
+$('#ajax_response h5').css({color:'#ffff33', padding:'3px'});
+$("#menuLiveNotice").remove();
+
+<% if @go_live == "compile_menu_button" %>
+	$('.menuHeader').append('<%= j render "#{@go_live}" %>').find('#compileButton').click(function () {
+		var r = confirm('Menu updates will go live to app now\n Are you sure?');
+		if (r) {
+			$.get('compile_menu');
+		};
+		return false;
+	});
+<% else %>
+	$('.menuHeader').append('<%= j render "#{@go_live}" %>');
+<% end %>
+
+setTimeout(function(){
+	$('#ajax_response h5').css({color:'#ffcc00', padding:'3px'});
+	setTimeout(function(){ 
+		$('#ajax_response').empty();
+	},2500);
+},2000);
+

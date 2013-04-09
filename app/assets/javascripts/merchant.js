@@ -23,7 +23,7 @@ function buildHeaderForAddItem(menuSection, items) {
 		var itemName = menuForm.find('.miTitleForm').val();
 		var itemDescription = menuForm.find('.miDescriptionForm').val();
 		var itemPrice = menuForm.find('.miPriceForm').val();
-
+		//alert('in add item code');
 		$.post('update_item',  
 				{section: sectionTitle, 
 			 	item_name: itemName,
@@ -69,17 +69,18 @@ function makeArrayOfItems(menuSection) {
 
 	$(menuForm).each(function(index, value) {
 		var menuItem = getMenuItemData($(this));
-		displayItem(menuItem, 'makeArrayOfItems each');
+		//displayItem(menuItem, 'makeArrayOfItems each');
 		itemArray.push(menuItem);
 	});
 	$.each(itemArray, function () {
-		displayItem(this, 'itemArray each');
+		//displayItem(this, 'itemArray each');
 	});
 	return itemArray;	
 }
 
 function displayItem(menuItem, fromWhere) {
-	//alert(fromWhere + ' -> id = ' + menuItem.id + ', name =' + menuItem.item_name + ', descr = ' + menuItem.description + ', price = ' + menuItem.price);
+	
+	alert(fromWhere + ' -> id = ' + menuItem.id + ', name =' + menuItem.item_name + ', descr = ' + menuItem.description + ', price = ' + menuItem.price);
 }
 
 function getAddItemData(menuForm) {
@@ -96,7 +97,7 @@ function getAddItemData(menuForm) {
 		description: itemDescription,
 		price: itemPrice
 	};
-	displayItem(menuItem, 'getMenuItemData');
+	//displayItem(menuItem, 'getMenuItemData');
 	return menuItem;
 }
 
@@ -114,7 +115,7 @@ function getMenuItemData(menuForm) {
 		description: itemDescription,
 		price: itemPrice
 	};
-	displayItem(menuItem, 'getMenuItemData');
+	//displayItem(menuItem, 'getMenuItemData');
 	return menuItem;
 }
 
@@ -158,6 +159,7 @@ $(function() {
 		// "edit" click function menu builder
 	$('.menuListEdit').click(function () {
 			//swap out edit button image on click
+		//alert('in menu edit');
 		var menuSection = $(this).closest(".menu_section");
 		toggleMenuItemForm(menuSection, $(this));
 		menuSection.find(".addItemLink").toggle();
@@ -191,12 +193,16 @@ $(function() {
 
 		// "save" click function menu builder
 	$('.menuListSave').click(function () {
+		//alert('in menu list save');
 		var menuSection = $(this).closest(".menu_section");
+		//alert(menuSection);
 		menuArray = makeArrayOfItems(menuSection);
 		//var num = menuArray.length;
+		//alert(menuArray);
 		if (menuArray.length == 1) {
 			menuItem = menuArray.shift();
 			menuItemJson = JSON.stringify(menuItem);
+			//displayItem(menuItem, 'singleItem post');
 			$.post('update_item',  
 				{item_id: menuItem.id, 
 			 	item_name: menuItem.item_name,
@@ -221,7 +227,7 @@ $(function() {
 		menuSection.find(ulID + " .miTitle").text(menuItem.item_name);
 		menuSection.find(ulID + " .miDescription").text(menuItem.description);
 		menuSection.find(ulID + " .miPrice").text(menuItem.price);
-		return true;
+		return false;
 	});
 
 		// Employee 'Add' click functions

@@ -172,11 +172,72 @@ class ProvidersController < ApplicationController
     @nonstaff = @provider.users_not_staff    
   end
 
-
-    private
-
-      def populate_locals
-        @provider       = Provider.find(params[:id].to_i)
-        @current_user   = current_user
+  def update_item
+    puts "update item => #{params}"
+    if params[:item_id]
+      @menu = Menu.find(params[:item_id].to_i)
+    else
+      @menu = Menu.new
+      @menu.provider_id = params[:id].to_i
+      @menu.section = params[:section]
+    end
+    @menu.item_name = params[:item_name]
+    @menu.description = params[:description]
+    @menu.price = params[:price]
+    respond_to do |format|
+      if @menu.save
+        @menu.provider.update_attribute(:menu_is_live, false)
+        # response = {"success" => "Menu Item Saved!"}
+        @message = "#{@menu.item_name} Updated"
+        @go_live = "compile_menu_button"
+        format.js { render 'compile_menu'}
+      else
+        @message = human_readable_error_message @menu
+        format.js { render 'compile_error'}
       end
+    end
+  end
+
+  def delete_item
+      puts "delete item => #{params}"
+      item = Menu.find(params[:item_id].to_i)
+
+      respond_to do |format|
+        if item.update_attributes({active: false})
+          item.provider.update_attribute(:menu_is_live, false)
+          # response = {"success" => "Menu Item Deactivated"}
+          @message = "#{item.item_name} De-Activated"
+          @go_live = "compile_menu_button"
+          format.js { render 'compile_menu'}
+        else
+          @message = human_readable_error_message @menu
+          format.js { render 'compile_error'}
+        end
+      end
+  end
+
+  def compile_menu
+    @provider = Provider.find(params[:id].to_i)
+    
+    respond_to do |format|
+      if MenuString.compile_menu_to_menu_string(@provider.id)
+        # update the menu string to show the menustring is up to date 
+        # render success
+          @message = "Merchant Menu on App is Updated and Now Live"
+          @go_live = "live_menu_notice"
+          format.js 
+      else
+        # render error
+        @message = human_readable_error_message menu_string
+        format.js { render 'compile_error'}
+      end
+    end
+  end
+
+  private
+
+    def populate_locals
+      @provider       = Provider.find(params[:id].to_i)
+      @current_user   = current_user
+    end
 end
