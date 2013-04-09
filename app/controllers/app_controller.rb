@@ -710,6 +710,9 @@ class AppController < ApplicationController
       		puts "User = #{user.fullname}"
       		puts "params data = #{params['data']}"
       		card_data = JSON.parse params["data"]
+      		if card_data["user_id"].nil?
+      			card_data["user_id"] = user.id
+      		end
       		puts "card data post JSON = #{card_data}"
       		cCard = Card.create_card_from_hash card_data
       		puts "the new card object is = #{cCard.inspect}"
