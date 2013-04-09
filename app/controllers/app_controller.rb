@@ -8,7 +8,7 @@ class AppController < ApplicationController
 
 	UPDATE_REPLY  	= ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
 	GIFT_REPLY 	  	= ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
-    MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "total", "order_num"]
+    MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "order_num"]
     ACTIVITY_REPLY 	= GIFT_REPLY + [ "receiver_id", "receiver_name"] 
 
  	def authenticate_app_user(token)
@@ -863,6 +863,10 @@ class AppController < ApplicationController
 		        if address_get
 		          gift_obj["provider_address"] = provider.complete_address
 		        end
+	    	else
+	    		# change total to location total
+	    		gift_obj["total"]    = g.ticket_total_string
+	    		gift_obj["subtotal"] = g.subtotal_string
 	    	end
 
 	        gift_obj["gift_id"]  = g.id.to_s

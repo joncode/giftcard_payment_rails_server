@@ -195,6 +195,27 @@ class Gift < ActiveRecord::Base
     return gift
   end
 
+  def format_currency_as_string(float)
+    string = float.to_s
+    x      = string.split('.')
+    x[1]   = "%02d" % x[1]
+    x[1]   = x[1][0..1]
+    tot    = x.join('.')
+    return tot
+  end
+
+  def ticket_total_string
+    ticket_total = (self.total.to_f * 100).to_i - (self.service.to_f * 100).to_i
+    tix_float = ticket_total.to_f / 100
+    return format_currency_as_string(tix_float)
+  end
+
+  def subtotal_string
+    subtotal = (self.ticket_total_string.to_f * 100).to_i  - (self.tax.to_f * 100).to_i - (self.tip.to_f * 100).to_i
+    tix_float = subtotal.to_f / 100
+    return format_currency_as_string(tix_float)
+  end
+
   def regift(receiver=nil, message=nil)
     new_gift            = self.dup
     new_gift.regift_id  = self.id
