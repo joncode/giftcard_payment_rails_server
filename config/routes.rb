@@ -56,11 +56,13 @@ Drinkboard::Application.routes.draw do
       post :update_item
       post :delete_item
       get  :compile_menu
+      get  :add_member
+      get :menu_item
     end
   end
   
   match "/merchants/:id/employee/:eid/remove"  => "merchants#remove_employee"
-  
+  resources :menus 
   resources :merchants do
     # get 'home'
     member do

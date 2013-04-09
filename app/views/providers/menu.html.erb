@@ -1,76 +1,34 @@
-<div class="wrapColumn">
-	<ul class="menuHeader">
-		<li><div class="lineHorizontal lineSectionPos"></div></li>
-		<li style="width:50px;"><h1>Menu</h1></li>
-		<li><div class="lineHorizontal lineSectionPos"></div></li>
-			<% if @provider.menu_is_live %>
-		<%= render 'live_menu_notice' %>
-			<% else %>
-		<%= render 'compile_menu_button' %>	
-			<% end %>
-	</ul>
-	<div id="ajax_response"></div>
-<div class="column">
+<div class="merchantSignInWrapper POSfullPageWrap">
+<% if @menu_array.count > 0 %>
 
-	<!-- LEFT MENU COLUMN RENDERED in this template -->
-	<%= render 'menu_list', menu_array: @left %>
+<h2>Menu</h2>
+<% @menu_array.each do |section_items| %>
+	<% section = section_items[0] %>
+	<% items = section_items[1] %>
 
+	<h1><%= section %></h1>
+	<table style="width:95%">
+		<tr style="color:#ccc">
+		  <th>Item</th>
+		  <th>Description</th>
+		  <th>Price</th>
+		  <th>&nbsp;</th>
+		</tr>
 
-</div><!-- End Column 1 -->
-<div class="column">
-
-
-	<!-- RIGHT MENU COLUMN RENDERED in this template -->
-	<%= render 'menu_list', menu_array: @right %>
-
-
-</div><!-- End Column 2 -->
-
-			<!-- Input Menu Item -->
-<div class="addItemForm template">
-	<ul>
-		<li>
-			<ul class="inputWrap rounded gradient inputWrapPos">
-				<li><input type="text" placeholder="New Item Name" 
-					class="miTitleForm rounded inputFieldObj inputFieldPos" />
-				</li>
-				<li><textarea placeholder="enter description here" 
-					class="miDescriptionForm rounded inputFieldObj inputFieldPos" style="resize: none;"></textarea>
-				</li>
-				<li>
-					<h5 class="dollarSignPos dollarSignObj" >$</h5>
-					<input type="text" placeholder="Price" rows="2" 
-					class="inputFieldObj miPriceForm rounded">
-				</li>
-			</ul>
-		</li>
-	<!-- 	<li>
-			<div class="lineHorizontal lineSectionPos"></div>
-			<div class="addNewItemJS addItemLink">
-				<%= link_to 'Add Another New Menu Item?', '#' %>
-			</div>
-		</li> -->
-	</ul>
+	    <% items.each do |item| %>
+	      <tr>
+	        <td><%= item["item_name"] %></td>
+	        <td style="text-align: center;"><%= item["description"] %></td>
+	        <td style="text-align: center;"><%= item["price"] %></td>
+	        <td style="text-align: right;"><%= link_to "Edit", menu_item_provider_path(@provider, menu_item: item["menu_item_id"], section: section) %> </td>	                
+	      </tr>
+	    <% end %>
+	    <tr>
+	    	<td colspan=4 style="text-align: center;"><%= link_to "Add new #{section}", menu_item_provider_path(@provider, section: section) %></td>
+	    </tr>
+	</table>
+<% end %>
+	        
+<% end %>
+<br /><br /><br /><br /><br />
 </div>
-</div>
-<span id="backButton" class="buttonMenuList buttonEditPos buttonImageUp template">
-	<a href="">back</a>
-</span>
-<span id="add" class="buttonMenuList buttonSavePos buttonImageUp template">
-	<a href="">save</a>
-</span>
-
-<!-- 
-
-Menu builder flow :
-put list in two colummns - send sections array to each
-loop the sections array
-	1. build header with save/edit buttons object
-	2. build section
-		loop the items array
-			1. choose between 3 item display objects
-				item display w/descr | item display w/o desc | item input data
-			2. line divisor
-	3. line divider
-
- -->

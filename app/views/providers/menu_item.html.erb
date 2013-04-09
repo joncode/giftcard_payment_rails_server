@@ -1,23 +1,18 @@
-<% content_for :errors do  %>
-  <% if @menu.errors.any? %>
-  <div id="error_explanation">
-      <h3><%= pluralize(@menu.errors.count, "error") %> prohibited this Menu Item from being saved:</h3>
-
-      <ul>
-      <% @menu.errors.full_messages.each do |msg| %>
-        <li style="width:350px; color: #cc3366;"><%= msg %></li>
-      <% end %>
-      </ul>
-  </div>
-  <% end %>
-<% end %>
-
 <div class="merchantSignInWrapper POSfullPageWrap">
 
-<%= form_for(@menu) do |f| %>
-  <% if @menu.errors.any? %>
-  	<%= yield :errors %>
+<%= form_for(@menu_item) do |f| %>
+  <% if @menu_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@menu_item.errors.count, "error") %> prohibited this menu from being saved:</h2>
+
+      <ul>
+      <% @menu_item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
   <% end %>
+  <h2><%= @menu_item.section %></h2>
   <div class="field">
     <h1>Item Name</h1><br />
     <%= f.text_field :item_name %>

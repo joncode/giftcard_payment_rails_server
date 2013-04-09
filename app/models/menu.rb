@@ -8,6 +8,7 @@ class Menu < ActiveRecord::Base
     has_many     :gift_items
 
     validates_presence_of :item_name, :price, :provider_id, :section
+    validates_numericality_of :price
 
     def self.where(params)
         if params.kind_of? Hash

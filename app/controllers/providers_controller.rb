@@ -1,7 +1,7 @@
 class ProvidersController < ApplicationController
   before_filter :signed_in_user
   before_filter :admin_user?
-  ACTIONS_WITH_HEADERS = [ :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
+  ACTIONS_WITH_HEADERS = [ :menu_item, :add_member, :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
 
   before_filter :populate_locals, only: ACTIONS_WITH_HEADERS
 
@@ -151,25 +151,29 @@ class ProvidersController < ApplicationController
     end    
   end
 
-  def menu
-    @menu_array     = Menu.get_menu_array_for_builder @provider
-    column = 1
-    @left = []
-    @right = []
-    @menu_array.each do |m|
-      if column == 1
-        @left << m
-        column = 2
-      else
-        @right << m 
-        column = 1
-      end
-    end    
-  end
-
   def staff
     @staff    = @provider.employees
     @nonstaff = @provider.users_not_staff    
+  end
+
+  def add_member
+      user = User.find(params[:user_id].to_i)
+      emp = Employee.create(user_id: user.id, provider_id: @provider.id) 
+      redirect_to staff_provider_path(@provider)
+  end
+
+  def menu
+    @menu_array     = Menu.get_menu_array_for_builder @provider   
+  end
+
+  def menu_item
+    if params[:menu_item].to_i == 0
+      @menu_item = Menu.new
+      @menu_item.section = params[:section]
+      @menu_item.provider_id = @provider.id
+    else
+      @menu_item = Menu.find(params[:menu_item].to_i)
+    end
   end
 
   def update_item
