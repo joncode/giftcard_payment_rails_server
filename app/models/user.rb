@@ -74,11 +74,14 @@ class User < ActiveRecord::Base
   validates :twitter, uniqueness: true, :if => :twitter_exists?
   #/---------------------------------------------------------------------------------------------/
   
-  def serialize
-    usr_hash  = self.serializable_hash only: ["first_name", "last_name", "email", "phone", "facebook_id", "twitter"]
+  def serialize(token=false)
+    usr_hash  = self.serializable_hash only: ["first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "remember_token", "email", "phone", "facebook_id", "twitter"]  
     usr_hash["photo"]   = self.get_photo
     usr_hash["user_id"] = self.id.to_s 
     usr_hash.keep_if {|k, v| !v.nil? }
+    if !token
+      usr_hash.delete("remember_token")
+    end
     return usr_hash
   end
 

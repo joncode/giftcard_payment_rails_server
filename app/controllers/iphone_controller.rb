@@ -56,10 +56,7 @@ class IphoneController < AppController
       if user && user.authenticate(password)
         user.pn_token       = pn_token if pn_token
         response["server"]  = user.providers_to_iphone
-        user_json           = user.to_json only: LOGIN_REPLY
-        user_small          = JSON.parse user_json
-        user_small["photo"] = user.get_photo
-        response["user"]    = user_small
+        response["user"]    = user.serialize(true) 
       else
         response["error"]   = "Invalid email/password combination"
       end
@@ -97,10 +94,7 @@ class IphoneController < AppController
       if user 
         user.pn_token       = pn_token if pn_token
         response["server"]  = user.providers_to_iphone
-        user_json           = user.to_json only: LOGIN_REPLY
-        user_small          = JSON.parse user_json
-        user_small["photo"] = user.get_photo
-        response["user"]    = user_small
+        response["user"]    = user.serialize(true)
       else
         response[resp_key]  = "#{msg} not in Drinkboard database " 
       end
