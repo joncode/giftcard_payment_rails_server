@@ -660,13 +660,13 @@ class AppController < ApplicationController
 
 		if user = authenticate_app_user(params["token"])
 			cCard = Card.find(params["data"].to_i)
-			if cCard.user_id == user.id
+			# if cCard.user_id == user.id
 				if cCard.destroy
 					response["delete"] = "#{cCard.id}"
 				else
 					response["error_server"] = "#{cCard.nickname} #{cCard.id} could not be deleted"
 				end
-			end
+			# end
 		else
 			response["error"] = "Couldn't identify app user. "
 		end
