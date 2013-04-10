@@ -48,11 +48,12 @@ class Sale < ActiveRecord::Base
 		month_year 	 = "#{month}#{year}" 
 		
 		######### put in real credit card details when in production
-		tots = self.total.to_f / 100
-		x = tots.to_s.split('.')
-		total_amount = x[0] + '.' + x[1][0..1]
-		puts "HERE is the TOTAL = #{total_amount}"
+		# tots = self.total.to_f / 100
+		# x = tots.to_s.split('.')
+		# total_amount = x[0] + '.' + x[1][0..1]
+		# puts "HERE is the TOTAL = #{total_amount}"
         ######### 
+        total_amount = self.total
 
         @credit_card = AuthorizeNet::CreditCard.new(card_number, month_year)
         
