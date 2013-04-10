@@ -112,7 +112,11 @@ class User < ActiveRecord::Base
       # custom setters and getters for formatting date to human looking date
   def birthday= birthday
     if birthday.kind_of? String
-      bday = Date.strptime(birthday, "%m/%d/%Y")
+      if !birthday.empty?
+        bday = Date.strptime(birthday, "%m/%d/%Y")
+      else
+        bday = birthday
+      end
     else
       bday = birthday
     end
