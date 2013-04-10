@@ -2,6 +2,7 @@ class AppController < ActionController::Base
 
 	include ActionView::Helpers::DateHelper
 	skip_before_filter 	:verify_authenticity_token
+	before_filter 		:decode_request
 	before_filter 		:method_start_log_message
 	after_filter 		:cross_origin_allow_header
 	after_filter 		:method_end_log_message
@@ -1003,6 +1004,15 @@ class AppController < ActionController::Base
 	      	gift_obj["receiver_name"]  = receiver.username
 	      	gift_obj["receiver_phone"] = receiver.phone
 	      	return gift_obj
+	    end
+
+	    def decode_request
+	    	request = params.dup
+  			request.delete('controller')
+  			request.delete('action')
+  			request.delete('format')
+  			decoded_request = Encode.decode(request)
+  			puts "Here is the decoded request #{decoded_request}"
 	    end
 
  
