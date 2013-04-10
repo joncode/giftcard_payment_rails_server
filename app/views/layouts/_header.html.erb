@@ -3,7 +3,7 @@
   <div class="headerImage"></div>
   <div class="lineVertHeader lineVert"></div>
   <div class="loggedInBox">
-       <% if params[:controller] == "merchants" && @provider %>
+       <% if !current_user.admin && @provider %>
   	<h6><%= link_to 'Logout', signout_path %></h6>
     <h5>Welcome, <a href="/merchants"><%= @current_user.fullname %></a></h5>
   </div>
@@ -38,15 +38,17 @@
   </div>
   
   <div class="vendorTitle">
-    <h5 class="vendorTitleText">
-      
-  
-    </h5>
+
     <h6 class="vendorAddress">
         
       <%= link_to 'New Merchant', new_provider_path, :id => 'new' %> |  <%= link_to 'List All', providers_path, :id => 'index'  %> | <a href="/admin">Home</a>
         
     </h6>
+        <h5 class="vendorTitleText">
+      <% if @provider %>
+        <a href="/providers/<%= @provider.id %>"><%= @provider.name %></a>
+      <% end %>
+    </h5>
   </div> 
   <% end %>
   <div class="lineHorizHeader lineHoriz"></div>
