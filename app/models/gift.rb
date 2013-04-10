@@ -171,6 +171,7 @@ class Gift < ActiveRecord::Base
       # Approved
       puts "setting the gift status off unpaid"
       self.set_status_post_payment 
+      self.save
     when 2
       # Declined 
     when 3
