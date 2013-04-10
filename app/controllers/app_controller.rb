@@ -1,4 +1,4 @@
-class AppController < ApplicationController
+class AppController < ActionController::Base
 
 	include ActionView::Helpers::DateHelper
 	skip_before_filter 	:verify_authenticity_token
@@ -856,12 +856,13 @@ class AppController < ApplicationController
 	        end
 	        if !order_num
 	        	# in MERCHANT_REPLY
-		        gift_obj["giver_photo"]        = g.giver.get_photo
+		        gift_obj["giver_photo"]    = g.giver.get_photo
 		        provider = g.provider 
-		        gift_obj["provider_photo"]     = provider.get_image("photo")
-		        gift_obj["provider_phone"]	   = provider.phone
-		        gift_obj["city"]	   		   = provider.city
-		        gift_obj["sales_tax"]		   = provider.sales_tax
+		        gift_obj["provider_photo"] = provider.get_image("photo")
+		        gift_obj["provider_phone"] = provider.phone
+		        gift_obj["city"]	   	   = provider.city
+		        gift_obj["sales_tax"]	   = provider.sales_tax
+		        gift_obj["live"]		   = provider.live 
 		        	# add the full provider address
 		        if address_get
 		          gift_obj["provider_address"] = provider.complete_address
