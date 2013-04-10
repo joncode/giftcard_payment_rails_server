@@ -107,13 +107,17 @@ class Gift < ActiveRecord::Base
     if self.card_enabled?
         self.status = "unpaid"
     else   
-        if self.receiver_id.nil?
-            self.status = "incomplete"
-        else
-            self.status = 'open'
-        end
+        self.set_status_post_payment
     end
     puts "gift SET STATUS #{self.status}"
+  end
+
+  def set_status_post_payment
+    if self.receiver_id.nil?
+      self.status = "incomplete"
+    else
+      self.status = 'open'
+    end
   end
 
   def card_enabled?
@@ -150,7 +154,7 @@ class Gift < ActiveRecord::Base
     # B - authorize transaction via auth.net
       # -- returns data --
         # 1 success
-          # go ahead and savre the gift - process complete
+          # go ahead and save the gift - process complete
         # failure
           # credit card issues
             # card expired
@@ -166,7 +170,7 @@ class Gift < ActiveRecord::Base
     when 1
       # Approved
       puts "setting the gift status off unpaid"
-     self.set_status 
+      self.set_status_post_payment 
     when 2
       # Declined 
     when 3
@@ -182,8 +186,11 @@ class Gift < ActiveRecord::Base
     reply = response.response_reason_text
     puts "HERE IS THE REPLY #{reply}"
     # C - saves the sale object into the sale db
-    sale.save
-    puts "save of sale successful"
+    if sale.save
+      puts "save of sale successful"
+    else
+      puts "save of sale ERROR #{self.id}"
+    end
     return sale
   end
 
