@@ -207,8 +207,9 @@ class Gift < ActiveRecord::Base
   def format_currency_as_string(float)
     string = float.to_s
     x      = string.split('.')
-    x[1]   = "%02d" % x[1]
+    x[1]   = "%02d" % x[1].to_i
     x[1]   = x[1][0..1]
+    x[1]   = x[1].to_s
     tot    = x.join('.')
     return tot
   end
