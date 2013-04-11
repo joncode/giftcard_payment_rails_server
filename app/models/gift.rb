@@ -33,8 +33,8 @@ class Gift < ActiveRecord::Base
   before_create :set_status
  
   after_create  :update_shoppingCart
-  after_create  :invoice_giver
-  after_create  :notify_receiver
+  # after_create  :invoice_giver
+  # after_create  :notify_receiver
   after_save    :create_notification
 
   ##########   database queries
@@ -291,20 +291,20 @@ class Gift < ActiveRecord::Base
 
   private
 
-    def notify_receiver
-      if self.receiver_email
-        puts "emailing the gift receiver for #{self.id}"
-        # notify the receiver via email
-        user_id = self.receiver_id.nil? ?  'NID' : self.receiver_id 
-        Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => self.id, :email => self.receiver_email}) 
-      end      
-    end
+    # def notify_receiver
+    #   if self.receiver_email
+    #     puts "emailing the gift receiver for #{self.id}"
+    #     # notify the receiver via email
+    #     user_id = self.receiver_id.nil? ?  'NID' : self.receiver_id 
+    #     Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => self.id, :email => self.receiver_email}) 
+    #   end      
+    # end
 
-    def invoice_giver
-      puts "emailing the gift giver for #{self.id}"
-      # notify the giver via email
-      Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id})
-    end
+    # def invoice_giver
+    #   puts "emailing the gift giver for #{self.id}"
+    #   # notify the giver via email
+    #   Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id})
+    # end
 
     def create_notification
       puts "the gift status is #{self.status}"
