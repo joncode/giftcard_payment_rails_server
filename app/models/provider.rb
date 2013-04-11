@@ -55,6 +55,14 @@ class Provider < ActiveRecord::Base
     end
   end
 
+  def live_bool
+    if self.sd_location_id == nil
+      return false
+    else
+      return true
+    end
+  end
+
   def self.where(params={}, *args)
       if params.kind_of?(Hash) && !params.has_key?(:active) && !params.has_key?("active")
         params[:active] = true

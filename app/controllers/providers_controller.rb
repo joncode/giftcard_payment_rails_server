@@ -1,9 +1,7 @@
 class ProvidersController < ApplicationController
   before_filter :signed_in_user
   before_filter :admin_user?
-  ACTIONS_WITH_HEADERS = [:building, :brands, :brand, :remove_menu_item, :upload_menu, :menu_item, :add_member, :help, :explorer, :pos, :menujs, :menu, :edit_photo, :menu_builder, :show, :photos, :edit_info, :edit_bank, :update, :orders, :past_orders, :redeem, :completed, :customers, :staff_profile, :staff ]
-
-  before_filter :populate_locals, only: ACTIONS_WITH_HEADERS
+  before_filter :populate_locals, except: [:index, :new]
 
   def index
     @offset = params[:offset].to_i || 0
@@ -42,6 +40,26 @@ class ProvidersController < ApplicationController
 
   def edit
     @provider = Provider.find(params[:id].to_i)
+    @go_live  = @provider.live_bool ?  ["LIVE","Make Coming Soon"] : ["Coming Soon","Go LIVE"]
+    @active   = @provider.active ?  ["Merchant is Active","De-Activate"] : ["Merchant is De-Activated","Activate"]
+
+  end
+
+  def coming_soon
+    @provider.sd_location_id = @provider.live_bool ? nil : 1
+    @provider.save
+    respond_to do |format|
+      format.html { redirect_to action: 'edit'}
+    end
+
+  end
+
+  def de_activate
+    @provider.active = @provider.active ? false : true
+    @provider.save
+    respond_to do |format|
+      format.html { redirect_to action: 'edit'}
+    end
   end
 
   def create
