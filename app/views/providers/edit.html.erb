@@ -5,12 +5,12 @@
 <div>
 	<h1>Merchant LIVE status</h1>
 	<h1><%= @go_live[0] %></h1>
-	<h1><%= link_to @go_live[1] , coming_soon_provider_path(@provider) %></h1>
+	<h1><%= link_to @go_live[1] , coming_soon_provider_path(@provider), :confirm => "#{@provider.name} #{@go_live[1]} , Are you sure ?"   %></h1>
 </div>
 <div>
 	<h2>Merchant Active Status</h2>
 	<h2><%= @active[0] %></h2>
-	<h2><%= link_to @active[1], de_activate_provider_path(@provider) %></h2>
+	<h2><%= link_to @active[1], de_activate_provider_path(@provider), :confirm => "#{@active[1]} #{@provider.name}, Are you sure ?"   %></h2>
 </div>
 
 </div>
