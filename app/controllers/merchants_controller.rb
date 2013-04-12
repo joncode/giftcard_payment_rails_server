@@ -338,11 +338,4 @@ class MerchantsController < ApplicationController
         redirect_to "/merchants/#{params[:id]}/staff"
     end
 
-    private
-
-      def populate_locals
-        @provider       = Provider.find(params[:id].to_i)
-        @current_user   = current_user
-      end
-
 end

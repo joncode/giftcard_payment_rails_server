@@ -17,11 +17,13 @@
       <td><%= user.username %></td>
       <td><%= user.email %></td>
       <td><%= number_to_phone user.phone %></td>
-      <% if person.kind_of? Employee %>
-      <td><%= link_to "X", remove_employee_provider_path(@provider, eid: person.id), :confirm => "De_Activate #{user.fullname}, Are you sure ?"  %></td>
-      <% else %>
+          <% if person.kind_of? Employee %>
+      <td><%= link_to "X", remove_employee_provider_path(@provider, eid: person.id), :confirm => "De-Activate #{user.fullname}, Are you sure ?"  %></td>
+          <% elsif @provider %>
       <td><%= link_to "Add", add_member_provider_path(@provider, user_id: user.id), :confirm => "Add #{user.fullname}, Are you sure ?"  %></td>
-      <% end %>
+          <% else %>
+      <td></td>
+          <% end %>
     </tr>
   <% end %>
 </table>

@@ -24,7 +24,7 @@
 
           <% if params[:controller] == "merchants" && @provider %>
             <%= render 'merchant_options', tab: params[:action] %>
-          <% elsif params[:controller] ==  "brands" %>
+          <% elsif params[:controller] ==  "brands" && @brand && !@brand.new_record? %>
             <%= render 'brands/menu', tab: params[:action] %>
           <% elsif params[:controller] == "providers" %>
             <% if @provider && !@provider.new_record? %>

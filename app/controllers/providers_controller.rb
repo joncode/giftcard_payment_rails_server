@@ -3,6 +3,8 @@ class ProvidersController < ApplicationController
   before_filter :admin_user?
   before_filter :populate_locals, except: [:index, :new]
 
+  #############  CRUD methods
+
   def index
     @offset = params[:offset].to_i || 0
     @page = @offset
@@ -43,23 +45,6 @@ class ProvidersController < ApplicationController
     @go_live  = @provider.live_bool ?  ["LIVE","Make Coming Soon"] : ["Coming Soon","Go LIVE"]
     @active   = @provider.active ?  ["Merchant is Active","De-Activate"] : ["Merchant is De-Activated","Activate"]
 
-  end
-
-  def coming_soon
-    @provider.sd_location_id = @provider.live_bool ? nil : 1
-    @provider.save
-    respond_to do |format|
-      format.html { redirect_to action: 'edit'}
-    end
-
-  end
-
-  def de_activate
-    @provider.active = @provider.active ? false : true
-    @provider.save
-    respond_to do |format|
-      format.html { redirect_to action: 'edit'}
-    end
   end
 
   def create
@@ -110,6 +95,27 @@ class ProvidersController < ApplicationController
     end
   end
 
+  ###########  STATUS METHODS
+
+  def coming_soon
+    @provider.sd_location_id = @provider.live_bool ? nil : 1
+    @provider.save
+    respond_to do |format|
+      format.html { redirect_to action: 'edit'}
+    end
+
+  end
+
+  def de_activate
+    @provider.active = @provider.active ? false : true
+    @provider.save
+    respond_to do |format|
+      format.html { redirect_to action: 'edit'}
+    end
+  end
+
+  ######### PHOTO METHODS
+
   def add_photo
     @provider = Provider.find(params[:id].to_i)
     @obj_to_edit = @provider
@@ -125,6 +131,8 @@ class ProvidersController < ApplicationController
     @provider.update_attributes(params[:provider])
     redirect_to provider_path(@provider)    
   end
+
+  ########## BRAND ASSOCIATION METHODS
 
   def brands
     @offset = params[:offset].to_i || 0
@@ -223,7 +231,7 @@ class ProvidersController < ApplicationController
       redirect_to staff_provider_path(@provider)
   end
 
-  ####### HTML METHODS
+  ############### MENU BUILDER METHODS
 
   def menu
     @menu_array     = Menu.get_menu_array_for_builder @provider 
@@ -271,74 +279,68 @@ class ProvidersController < ApplicationController
     end
   end
 
-  ############ JS Methods
+  ############ JS Methods - REMOVE CORRESPONDING VIEWS WHEN DELETING
 
-  def update_item
-    puts "update item => #{params}"
-    if params[:item_id]
-      @menu = Menu.find(params[:item_id].to_i)
-    else
-      @menu = Menu.new
-      @menu.provider_id = params[:id].to_i
-      @menu.section = params[:section]
-    end
-    @menu.item_name = params[:item_name]
-    @menu.description = params[:description]
-    @menu.price = params[:price]
-    respond_to do |format|
-      if @menu.save
-        @menu.provider.update_attribute(:menu_is_live, false)
-        # response = {"success" => "Menu Item Saved!"}
-        @message = "#{@menu.item_name} Updated"
-        @go_live = "compile_menu_button"
-        format.js { render 'compile_menu'}
-      else
-        @message = human_readable_error_message @menu
-        format.js { render 'compile_error'}
-      end
-    end
-  end
+  # def update_item
+  #   puts "update item => #{params}"
+  #   if params[:item_id]
+  #     @menu = Menu.find(params[:item_id].to_i)
+  #   else
+  #     @menu = Menu.new
+  #     @menu.provider_id = params[:id].to_i
+  #     @menu.section = params[:section]
+  #   end
+  #   @menu.item_name = params[:item_name]
+  #   @menu.description = params[:description]
+  #   @menu.price = params[:price]
+  #   respond_to do |format|
+  #     if @menu.save
+  #       @menu.provider.update_attribute(:menu_is_live, false)
+  #       # response = {"success" => "Menu Item Saved!"}
+  #       @message = "#{@menu.item_name} Updated"
+  #       @go_live = "compile_menu_button"
+  #       format.js { render 'compile_menu'}
+  #     else
+  #       @message = human_readable_error_message @menu
+  #       format.js { render 'compile_error'}
+  #     end
+  #   end
+  # end
 
-  def delete_item
-      puts "delete item => #{params}"
-      item = Menu.find(params[:item_id].to_i)
+  # def delete_item
+  #     puts "delete item => #{params}"
+  #     item = Menu.find(params[:item_id].to_i)
 
-      respond_to do |format|
-        if item.update_attributes({active: false})
-          item.provider.update_attribute(:menu_is_live, false)
-          # response = {"success" => "Menu Item Deactivated"}
-          @message = "#{item.item_name} De-Activated"
-          @go_live = "compile_menu_button"
-          format.js { render 'compile_menu'}
-        else
-          @message = human_readable_error_message @menu
-          format.js { render 'compile_error'}
-        end
-      end
-  end
+  #     respond_to do |format|
+  #       if item.update_attributes({active: false})
+  #         item.provider.update_attribute(:menu_is_live, false)
+  #         # response = {"success" => "Menu Item Deactivated"}
+  #         @message = "#{item.item_name} De-Activated"
+  #         @go_live = "compile_menu_button"
+  #         format.js { render 'compile_menu'}
+  #       else
+  #         @message = human_readable_error_message @menu
+  #         format.js { render 'compile_error'}
+  #       end
+  #     end
+  # end
 
-  def compile_menu
-    @provider = Provider.find(params[:id].to_i)
+  # def compile_menu
+  #   @provider = Provider.find(params[:id].to_i)
     
-    respond_to do |format|
-      if MenuString.compile_menu_to_menu_string(@provider.id)
-        # update the menu string to show the menustring is up to date 
-        # render success
-          @message = "Merchant Menu on App is Updated and Now Live"
-          @go_live = "live_menu_notice"
-          format.js 
-      else
-        # render error
-        @message = human_readable_error_message menu_string
-        format.js { render 'compile_error'}
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if MenuString.compile_menu_to_menu_string(@provider.id)
+  #       # update the menu string to show the menustring is up to date 
+  #       # render success
+  #         @message = "Merchant Menu on App is Updated and Now Live"
+  #         @go_live = "live_menu_notice"
+  #         format.js 
+  #     else
+  #       # render error
+  #       @message = human_readable_error_message menu_string
+  #       format.js { render 'compile_error'}
+  #     end
+  #   end
+  # end
 
-  private
-
-    def populate_locals
-      @provider       = Provider.find(params[:id].to_i)
-      @current_user   = current_user
-    end
 end

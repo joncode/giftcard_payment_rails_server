@@ -17,6 +17,11 @@ class ApplicationController < ActionController::Base
     return true
   end
 
+  def populate_locals
+      @provider       = Provider.find(params[:id].to_i)
+      @current_user   = current_user
+  end
+
   private
   
     def mobile_device?

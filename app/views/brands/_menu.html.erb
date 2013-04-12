@@ -1,6 +1,6 @@
 <div class="merchantMenu merchantMenuPOS width1">
 	<%= link_to 'New Brand', new_brand_path, :id => 'new' %> |
-	<%= link_to 'Index', brands_path, :id => 'index'  %> |
+	<%= link_to 'List All', brands_path, :id => 'index'  %> |
 			<% if @brand && !@brand.new_record? %>
 	<%= link_to 'Show', @brand, :id => 'show'  %> |
 	<%= link_to 'Edit', edit_brand_path(@brand), :id => 'edit'  %> |
