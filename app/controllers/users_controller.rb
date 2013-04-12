@@ -32,8 +32,19 @@ class UsersController < ApplicationController
   end
 
   def show    
-    @user = User.find(params[:id])
-    @gifts = Gift.get_user_activity(@user)
+    @user         = User.find(params[:id].to_i)
+    total_gifts   = Gift.get_user_activity(@user)
+    @offset       = params[:offset].to_i || 0
+    @page         = @offset
+    paginate      = 4
+      # @gifts    = Gift.order("updated_at DESC").limit(paginate).offset(@offset)
+      # get range of gifts array based on the [offset - page, and offset]
+    @gifts        = total_gifts[@offset .. (@offset + paginate - 1)]
+    if @gifts.count == paginate
+      @offset += paginate
+    else
+      @offset = 0
+    end
     
     respond_to do |format|
       format.html # show.html.erb
@@ -53,7 +64,7 @@ class UsersController < ApplicationController
 
   def edit
     
-    @user = User.find(params[:id])
+    @user = User.find(params[:id].to_i)
   end
 
   def create
@@ -72,7 +83,7 @@ class UsersController < ApplicationController
   def update
     msg = ""
     puts "#{params}"
-    @user = User.find(params[:id])
+    @user = User.find(params[:id].to_i)
     # action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
     # if action == 'edit'
     #   if !params[:user][:photo].nil? || !params[:user][:photo_cache].empty?
@@ -107,7 +118,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:id])
+    @user = User.find(params[:id].to_i)
     @user.destroy
 
     respond_to do |format|
@@ -118,14 +129,14 @@ class UsersController < ApplicationController
   
   def following
     @title = "Following"
-    @user = User.find(params[:id])
+    @user = User.find(params[:id].to_i)
     @users = @user.followed_users
     render 'show_follow'
   end
   
   def followers
     @title = "Followers"
-    @user = User.find(params[:id])
+    @user = User.find(params[:id].to_i)
     @users = @user.followers
     render 'show_follow'
   end
@@ -210,9 +221,5 @@ class UsersController < ApplicationController
     def admin_user
       redirect_to(users_path) unless current_user.admin?
     end
-    
-    def sanitize_filename(file_name)
-      just_filename = File.basename(file_name)
-      just_filename.sub(/[^\w\.\-]/,'_')
-    end
+
 end

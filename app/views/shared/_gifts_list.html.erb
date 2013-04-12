@@ -1,0 +1,34 @@
+<div style="width:95%;color: white;">
+<table>
+  <h1 colspan="4"  style="color:#ccc"><%= title ||= "" %></h1>
+    <%= paginate( @page, @offset, @user) %>
+  <tr>
+    <th>Gift ID</th>
+    <th>Giver</th>
+    <th>Receiver</th>
+    <th>Merchant</th>
+    <th>Time</th>
+    <th>Tender</th>
+    <th>Tax</th>
+    <th>Tip</th>
+    <th>Total</th>
+    <th>Status</th>
+  </tr>
+
+  <% gifts.each do |gift| %>
+    <tr>
+      <td><%= gift.id  %></td>
+      <td><%= gift.giver_name %></td>
+      <td><%= gift.receiver_name %></td>
+      <td><%= gift.provider.name %></td>
+      <td><%= time_ago_in_words gift.updated_at %> ago</td>
+      <td><%= gift.subtotal_string %></td>
+      <td><%= gift.tax %></td>
+      <td><%= gift.tip %></td>
+      <td><%= gift.ticket_total_string %></td>
+      <td><%= gift.status %></td>
+
+    </tr>
+  <% end %>
+</table>
+</div>

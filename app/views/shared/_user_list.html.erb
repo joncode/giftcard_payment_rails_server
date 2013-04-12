@@ -22,7 +22,7 @@
           <% elsif @provider %>
       <td><%= link_to "Add", add_member_provider_path(@provider, user_id: user.id), :confirm => "Add #{user.fullname}, Are you sure ?"  %></td>
           <% else %>
-      <td></td>
+      <td><%= link_to "Show", user_path(person) %></td>
           <% end %>
     </tr>
   <% end %>
