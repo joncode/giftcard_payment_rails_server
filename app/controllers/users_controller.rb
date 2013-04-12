@@ -13,8 +13,11 @@ class UsersController < ApplicationController
   def index
     
     @user = current_user
-    @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
-    @fb_users = []
+    @offset = 0
+    @page = 0
+    # @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
+    @users = User.order("first_name ASC")
+    # @fb_users = []
     # if @user.facebook_access_token
     #   fb_response = HTTParty.get("https://graph.facebook.com/me/friends?access_token="+@user.facebook_access_token)
     #   if fb_response.code == 200

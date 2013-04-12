@@ -1,10 +1,13 @@
 class ApplicationController < ActionController::Base
 
-  helper :all
   protect_from_forgery 
+  helper :all 
   include SessionsHelper
-  
+  # 
+  # before_filter :signed_in_user
   before_filter :prepare_for_mobile
+
+  helper_method :mobile_device?
   
   def required_params(param_arr)
     param_arr.each do |p|
@@ -37,8 +40,6 @@ class ApplicationController < ActionController::Base
         false
       end
     end
-
-    helper_method :mobile_device?
     
     def prepare_for_mobile
       session[:mobile] = params[:mobile] if params[:mobile]

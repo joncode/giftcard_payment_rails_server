@@ -13,62 +13,39 @@
       <div class="employeeText">
         <%= number_to_phone e.user.phone %>
       </div>
-<!--       <div class="giftText">      
-          <div id="buttonEditWine" class="buttonSmallDown buttonUp"><a href="" class="">Active</a></div>
-      </div> -->
     </div>
   <% end %>
   <div id="buttonAddEmp" class="buttonLargeDown buttonLargeUp buttonAddPosition">
     <h5><a href="">New</a></h5>
   </div>
-<div class="column addDisplay">
-  <div class="giftText giftTextLarge">
-    <h2>Choose From Drinkboard Members</h2>
-  </div> 
+  <div class="column addDisplay">
+    <div class="giftText giftTextLarge">
+      <h2>Choose From Drinkboard Members</h2>
+    </div> 
 
-   <!-- USER ID SEARCH FIELD -->
-<!--   <div class="inputWrapper giftIDsearch">
-    <input type="text" placeholder="Enter User Email #" id="giftID" name="giftID" class="inputEmploy"/>
-    <span id="giftIDsearch" class="buttonUp">
-      <a href="" id="findButton">Find</a>
-      <a href="" class="buttonUp showAll">All</a>
-    </span>
-    <p id="notice"><%= notice %></p>
-  </div> --> 
-  <!-- GIFT LOOP START -->
-  <% @nonstaff.each do |user| %> 
-  <div class="ordersDisplay" id="giftID<%= user.email %>">
-  
-  <!--    Left Column   -->
-    <div class="orderGiftLeft imageBorder">
-        <%= custom_image_tag(user,75,75)  %>
+    <div class="merchantSignInWrapper POSfullPageWrap">
+    <table>
+      <h1 colspan="4"  style="color:#ccc">Check Out Users</h1>
+        <% unless (@page == 0 && @offset == 0)  %>
+          <%= link_to "#{@page}/#{@offset}/Next Page", users_path({offset: @offset}) %>
+        <% end %>
+      <tr style="color:#ccc">
+        <th>Photo</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+      </tr>
+
+      <% @nonstaff.each do |user| %>
+        <tr>
+          <td><%= custom_image_tag(user,45,45)  %></td>
+          <td><%= link_to user.username, user  %></td>
+          <td><%= user.email %></td>
+          <td><%= number_to_phone user.phone %></td>
+        </tr>
+      <% end %>
+    </table>
     </div>
 
-      <div class="employeeText textTop">
-        <%= user.username %><br />
-        <%= user.email %><br />
-        <%= user.city %>
-      </div>
-<!--       <div class="giftText">      
-          <div id="buttonEditWine" class="buttonSmallDown buttonUp"><a href="" class="">Active</a></div>
-      </div> -->
-    </div>
-  <!--    Right Column   -->
-    <div class="orderGiftRight">
-      <div class="giftID">
-          
-      </div>    
-      <div class="buttonSmallDown buttonUp">
-            <%= link_to 'Add', add_member_provider_path(@provider, user_id: user.id) %>
-
-      </div>
-    
-  <!--    Middle Column   -->
-    <div class="orderGiftMiddle">
-      <div class="giftText giftTextLarge">
-        
-      </div>
-    </div>
-  </div>  
-  <% end %>
+  </div>
 </div>

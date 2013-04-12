@@ -122,12 +122,13 @@ class Gift < ActiveRecord::Base
 
   def card_enabled?
     # whitelist = ["test@test.com", "deb@knead4health.com", "dfennell@graywolves.com", "dfennell@webteampros.com"]
-    # if whitelist.include?(self.giver.email)
-    #     return true
-    # else
-    #     return false
-    # end
-    return true
+    blacklist = ["addis006@gmail.com"]
+    if blacklist.include?(self.giver.email)
+        return false
+    else
+        return true
+    end
+    # return true
   end
 
   def charge_card

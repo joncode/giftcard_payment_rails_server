@@ -1,33 +1,25 @@
-<div class="userListWrapper">
-  <h2 class="userListWrapper">Who's About?</h2>
-  <% @users.each do |user| %>
-  <div class="userListCell">
-    <h2><%= custom_image_tag(user,75,100)  %></h2>
-    <h2><%= link_to user.username, user %></h2>
-    <h2><%= user.full_address %></h2>
-    <h2><%= number_to_phone user.phone %></h2>
-    <h2 class="sendDrink"><%= button_to "Send them a drink", browse_with_contact_gifts_path(id: user.id) %></h2>
-  </div>
-  <% end %>
-</div>
-<!-- 
-<div class="center">
+<div class="merchantSignInWrapper POSfullPageWrap">
   <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>ID</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @fb_users.each do |fbu| %>
-        <tr>
-          <td><%= fbu["name"] %></td>
-          <td><%= fbu["id"] %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <h1 colspan="4"  style="color:#ccc">Check Out Users</h1>
+    <% unless (@page == 0 && @offset == 0)  %>
+      <%= link_to "#{@page}/#{@offset}/Next Page", users_path({offset: @offset}) %>
+    <% end %>
+  <tr style="color:#ccc">
+    <th>Photo</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+  </tr>
+
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= custom_image_tag(user,45,45)  %></td>
+      <td><%= link_to user.username, user  %></td>
+      <td><%= user.email %></td>
+      <td><%= number_to_phone user.phone %></td>
+    </tr>
+  <% end %>
+</table>
 </div>
- -->
+
 

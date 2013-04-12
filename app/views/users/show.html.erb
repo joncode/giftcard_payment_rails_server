@@ -1,11 +1,17 @@
-<% provide(:title, @user.username) %>
+<!-- User permalink page -->
+<div class="merchantSignInWrapper POSfullPageWrap">
+
+<div class="providersPermalinkWrapper">
+	<div class="profilePic"><%= image_tag(@user.photo.large) %></div>
+	<h2>Name :<%= @user.username %></h2>
+	<h2>Handle :<%= @user.handle %></h2>
+	<h2>Email :<%= @user.email %></h2>
+	<h2>Phone :<%= number_to_phone(@user.phone, :area_code => true) %></h2>
+	<h2>Address :<%= @user.full_address %></h2>
+	<h2><%= link_to "Edit Profile", edit_user_path(current_user) %></h2>
+</div>
 
 
-<% if current_user?(@user) %>
-  <%= render 'your_profile' %>
-<% else %>
-  <%= render 'their_profile' %>
-<% end %>
 
 
 
