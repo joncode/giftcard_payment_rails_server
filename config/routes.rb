@@ -62,6 +62,11 @@ Drinkboard::Application.routes.draw do
       get :remove_menu_item
       get :coming_soon
       get :de_activate
+      get :members
+      get :add_employee
+      get :remove_employee
+      get 'invite_employee'
+      post 'invite_employee'
     end
   end
   

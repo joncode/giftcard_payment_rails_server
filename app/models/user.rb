@@ -259,6 +259,18 @@ class User < ActiveRecord::Base
     return response
   end
 
+  def is_employee? provider 
+    employees = Employee.find(:all, :conditions => ["user_id == ?", self.id])
+    if !employees.nil? && employees.length > 0
+      employees.each do |emp|
+        if emp.provider_id == provider.id
+          return true
+        end
+      end
+    end
+    return false
+  end
+
   def sd_serialize
     "#{self.phone}#{PIPE}#{self.remember_token}#{PIPE}#{self.first_name}#{PIPE}#{PIPE}#{self.last_name}#{PIPE}#{self.birthday}#{PIPE}#{self.phone}#{PIPE}#{self.email}#{PIPE}#{PIPE}#{PIPE}#{self.remember_token}"
   end

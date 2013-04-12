@@ -1,12 +1,14 @@
 class Employee < ActiveRecord::Base
   attr_accessible :active, :clearance, :provider_id, :user_id, :retail
-  
+  CLEARANCE       = ['admin', 'full', 'manager', 'staff']
+
   belongs_to :user
   belongs_to :provider
   has_many 	 :orders
   belongs_to :brand
   
-  validates_presence_of :user_id, :provider_id
+  validates_presence_of  :provider_id, :user_id 
+  validates :user_id ,  uniqueness: true, :if => :no_user_record_at_provider
 
   #clearance = "super", "staff"
 
@@ -14,6 +16,17 @@ class Employee < ActiveRecord::Base
       # this takes IDs or OBJECTs
     Employee.create(user_id: user, provider_id: provider)
   end
+
+  # def self.where(params={}, *args)
+  #     if params.kind_of?(Hash) && !params.has_key?(:active) && !params.has_key?("active")
+  #       params[:active] = true
+  #       super(params, *args)
+  #     elsif params.kind_of?(String)
+  #       super(params, *args).where(active: true)
+  #     else
+  #       super(params, *args)
+  #     end
+  # end
 
   def server_code
   	self.user.server_code 	
@@ -42,6 +55,13 @@ class Employee < ActiveRecord::Base
     server["photo"]         = self.photo
     server["secure_image"]  = self.secure_image
     return server
+  end
+
+  private
+
+  def no_user_record_at_provider
+    user = User.find(self.user_id)
+    user.is_employee?(provider)
   end
 end
 # == Schema Information

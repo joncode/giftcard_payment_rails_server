@@ -1,0 +1,12 @@
+<% content_for :email_link do  %>
+  <h3>Click <%= link_to 'HERE', add_employee_provider_path(@provider) %> to Invite Via Email</h3>
+<% end %>
+<% content_for :db_user_link do  %>
+  <h3>Click <%= link_to 'HERE', members_provider_path(@provider) %> to Add from Drinkboard Users</h3>
+<% end %>
+
+
+
+
+<%= yield :email_link  %>
+<%= yield :db_user_link %>

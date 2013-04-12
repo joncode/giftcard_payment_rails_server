@@ -1,5 +1,10 @@
 module ProvidersHelper
-  
+ 
+    def get_user_from_object(person)
+        person.kind_of?(Employee) ? person.user : person 
+    end
+
+
   def logo_for(provider)
     width   = 150
     height  = 150
@@ -19,6 +24,8 @@ module ProvidersHelper
     end
     logo_for provider
   end
+
+
 end
 
  

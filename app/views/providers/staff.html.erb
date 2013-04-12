@@ -1,51 +1,9 @@
 <div class="column">
-  <% @staff.each do |e| %>  
-    <div class="employeeDisplay"> 
-      <div class="employeeImage">
-        <%= custom_image_tag(e.user,75,75)  %>
-      </div>
-      <div class="employeeText textTop">
-        <%= e.user.username %>
-      </div>
-      <div class="employeeText">
-        <%= e.user.full_address %>
-      </div>
-      <div class="employeeText">
-        <%= number_to_phone e.user.phone %>
-      </div>
-    </div>
-  <% end %>
-  <div id="buttonAddEmp" class="buttonLargeDown buttonLargeUp buttonAddPosition">
-    <h5><a href="">New</a></h5>
-  </div>
-  <div class="column addDisplay">
+
+<%= render 'staff_links' %>
     <div class="giftText giftTextLarge">
+
       <h2>Choose From Drinkboard Members</h2>
     </div> 
-
-    <div class="merchantSignInWrapper POSfullPageWrap">
-    <table>
-      <h1 colspan="4"  style="color:#ccc">Check Out Users</h1>
-        <% unless (@page == 0 && @offset == 0)  %>
-          <%= link_to "#{@page}/#{@offset}/Next Page", users_path({offset: @offset}) %>
-        <% end %>
-      <tr style="color:#ccc">
-        <th>Photo</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-      </tr>
-
-      <% @nonstaff.each do |user| %>
-        <tr>
-          <td><%= custom_image_tag(user,45,45)  %></td>
-          <td><%= link_to user.username, user  %></td>
-          <td><%= user.email %></td>
-          <td><%= number_to_phone user.phone %></td>
-        </tr>
-      <% end %>
-    </table>
-    </div>
-
-  </div>
+    <%= render 'shared/user_list', people: @people, title: "Employees" %>
 </div>

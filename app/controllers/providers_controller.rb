@@ -166,14 +166,60 @@ class ProvidersController < ApplicationController
     end    
   end
 
-  def staff
-    @staff    = @provider.employees
-    @nonstaff = @provider.users_not_staff    
+ ####### EMPLOYEE METHODS
+
+  def staff(email_sent=nil)
+      @people     = Employee.where(provider_id: @provider.id, active: true )
+      @email_sent = email_sent 
+  end
+
+  def members
+      @people = @provider.users_not_staff
+      render 'staff'
   end
 
   def add_member
       user = User.find(params[:user_id].to_i)
-      emp = Employee.create(user_id: user.id, provider_id: @provider.id) 
+      if user.is_employee?(@provider)
+        #success
+        employee = Employee.where(provider_id: @provider.id, user_id: user.id).pop
+        employee.update_attribute(:active, true)
+      else
+        # fail
+        Employee.create(user_id: user.id, provider_id: @provider.id)
+      end 
+      redirect_to staff_provider_path(@provider)
+  end
+
+  def invite_employee
+    respond_to do |format|
+      if request.get?
+        #Show the page.
+        format.html { redirect_to action: :add_employee }
+      elsif request.post?
+        #Find the user, etc
+        if !params[:email]
+          return flash[:notice] = "You must enter in a user email."
+        end
+        potential_employee = User.find_by_email(params[:email])
+        if !potential_employee
+          #If the user doesn't exist in the database
+        else
+          #The user does exist in the database        
+        end
+        #For now, we handle either situation the same
+        Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email]})
+
+        format.html { redirect_to staff_provider_path(@provider) }
+      end
+    end
+  end
+
+  def remove_employee
+      if params[:eid]
+        employee = Employee.find(params[:eid].to_i)
+        employee.update_attribute(:active, false)
+      end
       redirect_to staff_provider_path(@provider)
   end
 

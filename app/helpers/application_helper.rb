@@ -57,5 +57,17 @@ module ApplicationHelper
         end
       end
       return message_ary
+  end
+
+  def paginate( page, offset, provider)
+    unless (page == 0 && offset == 0) || (!page && !offset)
+      link_to "#{page}/#{offset}/Next Page", staff_provider_path(provider,{offset: offset})
     end
+  end
+
+
+
+
+
+
 end
