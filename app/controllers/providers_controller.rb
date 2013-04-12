@@ -42,9 +42,8 @@ class ProvidersController < ApplicationController
 
   def edit
     @provider = Provider.find(params[:id].to_i)
-    @go_live  = @provider.live_bool ?  ["LIVE","Make Coming Soon"] : ["Coming Soon","Go LIVE"]
-    @active   = @provider.active ?  ["Merchant is Active","De-Activate"] : ["Merchant is De-Activated","Activate"]
-
+    @go_live  = set_go_live
+    @active   = set_active
   end
 
   def create
@@ -74,13 +73,14 @@ class ProvidersController < ApplicationController
         format.html { redirect_to provider_path(@provider), notice: 'Merchant was successfully updated.' }
         # format.html { redirect_to merchant_path(@provider), notice: 'Provider was successfully updated.' }
         format.js 
-        format.json { head :no_content }
       else
         @partial_to_render = "error"
         @message = human_readable_error_message @provider
+        puts @message
+        @go_live = set_go_live
+        @active = set_active
         format.html { render action: "edit", notice: 'Update was unsuccessful' }
         format.js { render 'error' }
-        format.json { render json: @provider.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -117,19 +117,24 @@ class ProvidersController < ApplicationController
   ######### PHOTO METHODS
 
   def add_photo
-    @provider = Provider.find(params[:id].to_i)
-    @obj_to_edit = @provider
-    @obj_name = "provider"
+    @provider     = Provider.find(params[:id].to_i)
+    @obj_to_edit  = @provider
+    @obj_name     = "provider"
     @file_field_name = "photo"
-    @obj_width = 600
-    @obj_height = 320
-    @action = "upload_photo"
+    @obj_width    = 600
+    @obj_height   = 320
+    @action       = "upload_photo"
   end
 
   def upload_photo
     @provider = Provider.find(params[:id].to_i)
-    @provider.update_attributes(params[:provider])
-    redirect_to provider_path(@provider)    
+    if @provider.update_attributes(params[:provider])
+      redirect_to provider_path(@provider) 
+    else
+      @partial_to_render = "error"
+        @message = human_readable_error_message @provider
+      redirect_to action: "add_photo"
+    end   
   end
 
   ########## BRAND ASSOCIATION METHODS
@@ -278,6 +283,17 @@ class ProvidersController < ApplicationController
       end
     end
   end
+
+  private
+
+    def set_go_live
+      @provider.live_bool ?  ["LIVE","Make Coming Soon"] : ["Coming Soon","Go LIVE"]
+    end
+
+    def set_active
+      @provider.active ?  ["Merchant is Active","De-Activate"] : ["Merchant is De-Activated","Activate"]
+
+    end
 
   ############ JS Methods - REMOVE CORRESPONDING VIEWS WHEN DELETING
 

@@ -71,7 +71,7 @@ class BrandsController < ApplicationController
   def upload_photo
     @brand = Brand.find(params[:id].to_i)
     @brand.update_attributes(params[:brand])
-    redirect_to merchants_brand_path(@brand)    
+    redirect_to brand_path(@brand)    
   end
 
   def show

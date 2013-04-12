@@ -117,7 +117,7 @@
 
 
 <%= form_for(@obj_to_edit, :url => {:action => @action}, :html => { :method => :post, :id => 'uploadForm', :multipart => true }) do |f| %>
-    <div class="merchantSignInWrapper POSfullPageWrap">
+    
       <h3>PHOTO UPLOADER<h3>
       <div class="ordersDisplay giftText giftTextLarge">
         
@@ -153,6 +153,6 @@
              <input id="crop_coord_<%= attr %>" type="text" size="30" name="<%= @obj_name %>[crop_<%= attr %>]" />
           <% end %>
       </div>
-    </div>
+
 
 <% end %>
