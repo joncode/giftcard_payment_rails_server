@@ -10,8 +10,10 @@
 	<%= form_tag(invite_employee_provider_path(@provider), :method => "post") do %>
 	  <div style="padding:20px;">
 	  <h2>Employee's Email Address:</h2>
+	  <br />
 	  <%= text_field_tag(:email) %>
-	  <%= submit_tag "Send Invite Email for #{@provider.name}", class: "btn btn-large btn-info" %>
+	  <br />
+	  <%= submit_tag "Send Invite Email to #{@provider.name}", class: "btn btn-large btn-info" %>
 	  </div>
 	<% end %>
 <% end %>
