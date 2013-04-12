@@ -1,14 +1,9 @@
 class UsersController < ApplicationController
   before_filter :signed_in_user, except: [:new]
   before_filter :correct_user, only: [:edit, :update]
-  before_filter :admin_user, only: :destroy
+  before_filter :admin_user, except: [:new]
 
-  def update_avatar
-    @provider = Provider.find(params[:id])
-    params[:user][:use_photo] = "cw"
-    current_user.update_attributes(params[:user])
-    redirect_to staff_profile_merchant_path(@provider)
-  end
+  ###########   CRUD METHODS
 
   def index
     
@@ -45,6 +40,8 @@ class UsersController < ApplicationController
     else
       @offset = 0
     end
+
+    @active = set_active
     
     respond_to do |format|
       format.html # show.html.erb
@@ -106,16 +103,6 @@ class UsersController < ApplicationController
       end
     end
   end
-  
-  def crop
-    @obj_to_edit = User.find(params[:id])
-    @obj_name = "user"
-    @action = "update_avatar"
-    @file_field_name = "photo"
-    @obj_width = 131
-    @obj_height = 131
-    render "shared/uploader"
-  end
 
   def destroy
     @user = User.find(params[:id].to_i)
@@ -126,35 +113,87 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  ###########   SECONDARY CRUD METHODS
+
+    def de_activate
+        @user        = User.find(params[:id].to_i) 
+        @user.active = @user.active ? false : true
+
+        respond_to do |format|
+            if @user.save
+                format.html { redirect_to user_path(@user), notice: "User Updated." }
+            else
+                format.html  { redirect_to user_path(@user), notice: human_readable_error_message(@user) }
+            end
+        end
+    end
+
+    def destroy_gifts
+        @user       = User.find(params[:id].to_i)
+        total_gifts = Gift.get_user_activity(@user)
+        test        = total_gifts[0]
+
+        respond_to do |format|
+            if test.destroy
+                format.html { redirect_to user_path(@user), notice: "Gift Destroyed." }
+            else
+                format.html  { redirect_to user_path(@user), notice: human_readable_error_message(test) }
+            end
+        end
+    end
+
+    ########    PHOTO SYSTEM METHODS
   
-  def following
-    @title = "Following"
-    @user = User.find(params[:id].to_i)
-    @users = @user.followed_users
-    render 'show_follow'
-  end
+    def crop
+        @obj_to_edit = User.find(params[:id])
+        @obj_name = "user"
+        @action = "update_avatar"
+        @file_field_name = "photo"
+        @obj_width = 131
+        @obj_height = 131
+        render "shared/uploader"
+    end
+
+    def update_avatar
+        @provider = Provider.find(params[:id])
+        params[:user][:use_photo] = "cw"
+        current_user.update_attributes(params[:user])
+        redirect_to staff_profile_merchant_path(@provider)
+    end
+
+    ############   SOCIAL CONNECTION METHODS
+
+    def following
+        @title = "Following"
+        @user = User.find(params[:id].to_i)
+        @users = @user.followed_users
+        render 'show_follow'
+    end
+
+    def followers
+        @title = "Followers"
+        @user = User.find(params[:id].to_i)
+        @users = @user.followers
+        render 'show_follow'
+    end
+
+    def change_public_status
+        newStatus = (params[:newStatus] == "true" ? true : false)
+        if (current_user[:is_public] && !newStatus) || (!current_user[:is_public] && newStatus)
+            current_user[:is_public] = newStatus
+            current_user.save
+            Location.create(:user_id => current_user[:id], :vendor_type => (newStatus ? "activate" : "deactivate"), :latitude => params[:lat], :longitude => params[:lng])    #Empty location update juust so we know when the user turns on.
+        end
+        render :json => {success: true}
+    end
   
-  def followers
-    @title = "Followers"
-    @user = User.find(params[:id].to_i)
-    @users = @user.followers
-    render 'show_follow'
-  end
-  
+    #############   UTILITY METHODS
+
   def servercode
     @user = current_user
   end
   
-  def change_public_status
-    newStatus = (params[:newStatus] == "true" ? true : false)
-    if (current_user[:is_public] && !newStatus) || (!current_user[:is_public] && newStatus)
-      current_user[:is_public] = newStatus
-      current_user.save
-      Location.create(:user_id => current_user[:id], :vendor_type => (newStatus ? "activate" : "deactivate"), :latitude => params[:lat], :longitude => params[:lng])    #Empty location update juust so we know when the user turns on.
-    end
-    render :json => {success: true}
-  end
-
   def confirm_email
     request.format = :email
     if @user = User.find_by_email(params[:email])
@@ -220,6 +259,10 @@ class UsersController < ApplicationController
     
     def admin_user
       redirect_to(users_path) unless current_user.admin?
+    end
+
+    def set_active
+      @user.active ?  ["User is Active","De-Activate"] : ["User is De-Activated","Activate"]
     end
 
 end
