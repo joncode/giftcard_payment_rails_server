@@ -1,29 +1,19 @@
 Drinkboard::Application.routes.draw do
   
-  root to: 'users#new'
-  resources :brands do
-    member do
-      get :add_photo
-      post :upload_photo
-      get :merchants
-      get :brand_merchant
-      get :building_merchant
-    end
-  end
+  root to: 'sessions#new'
+  resources :sessions, only: [:new, :create, :destroy]
+  match '/signin',       to: 'sessions#new'
+  match '/signout',      to: 'sessions#destroy'
+  
+  match '/admin',             to: 'admin#show'
+  match '/admin/test_emails', to: 'admin#test_emails'
+  match '/admin/run_tests',   to: 'admin#run_tests'
 
   match "/invite/email_confirmed" => "invite#email_confirmed"
   match "/invite/error"    => "invite#error"
   match "/invite/:id"      => "invite#show"
   match "/invite"          => "invite#invite_friend"
-  match "/webview(/:template(/:var1))"   => "invite#display_email", :via => :get
-
-  match '/login',   to: 'users#new'
-  match '/signup',  to: 'users#new'
-  match '/signin',  to: 'sessions#new'
-  match '/signout', to: 'sessions#destroy'
-  match '/admin',   to: 'admin#show'
-  match '/admin/test_emails', to: 'admin#test_emails'
-  match '/admin/run_tests',   to: 'admin#run_tests'
+  match "/webview(/:template(/:var1))"  => "invite#display_email", :via => :get
 
   resources :users do 
     member do
@@ -71,6 +61,16 @@ Drinkboard::Application.routes.draw do
       post 'invite_employee'
     end
   end
+
+  resources :brands do
+    member do
+      get :add_photo
+      post :upload_photo
+      get :merchants
+      get :brand_merchant
+      get :building_merchant
+    end
+  end
   
   match "/merchants/:id/employee/:eid/remove"  => "merchants#remove_employee"
   resources :menus 
@@ -111,14 +111,11 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-  resources :subtle_data
+  # resources :subtle_data
+  # resources :microposts,    only: [:create, :destroy]
+  # resources :relationships, only: [:create, :destroy]
+  # resources :connections, only: [:create, :destroy]
 
-
-  resources :microposts,    only: [:create, :destroy]
-  resources :relationships, only: [:create, :destroy]
-  resources :connections, only: [:create, :destroy]
-  resources :sessions,    only: [:new, :create, :destroy]
-  resources :admins, only: [:new, :create, :destroy]
  
     ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post

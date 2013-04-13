@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
     @text = params[:text]
     sign_out
     @user  = User.new
-    render 'users/new'
+    render 'new'
   end
   
   def create
@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
       end
     else
       flash[:error] = 'Invalid email/password combination'
-      redirect_to "/login"
+      redirect_to "/signin"
     end
   end
   
