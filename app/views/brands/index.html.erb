@@ -1,7 +1,9 @@
 
 <div class="merchantSignInWrapper POSfullPageWrap">
 <% if @brands.count > 0 %>
-
+<div class="bankCell POSsingleColumn">
+    <%= will_paginate(@brands) %>
+</div>
 <h1>Listing brands</h1>
 
 <table>

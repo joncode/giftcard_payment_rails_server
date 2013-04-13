@@ -17,6 +17,10 @@ class Employee < ActiveRecord::Base
     Employee.create(user_id: user, provider_id: provider)
   end
 
+  def self.users_not_staff(provider, user)
+    Employee.where("provider_id = :merchant AND user_id != :user", :merchant => provider.id , :user => user.id).order("created_at DESC").page(params[:page]).per_page(8)
+  end
+
   # def self.where(params={}, *args)
   #     if params.kind_of?(Hash) && !params.has_key?(:active) && !params.has_key?("active")
   #       params[:active] = true

@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     @offset = 0
     @page = 0
     # @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
-    @users = User.order("first_name ASC")
+    @users = User.order("first_name ASC").page(params[:page]).per_page(16)
     # @fb_users = []
     # if @user.facebook_access_token
     #   fb_response = HTTParty.get("https://graph.facebook.com/me/friends?access_token="+@user.facebook_access_token)
@@ -27,19 +27,8 @@ class UsersController < ApplicationController
   end
 
   def show    
-    @user         = User.find(params[:id].to_i)
-    total_gifts   = Gift.get_user_activity(@user)
-    @offset       = params[:offset].to_i || 0
-    @page         = @offset
-    paginate      = 4
-      # @gifts    = Gift.order("updated_at DESC").limit(paginate).offset(@offset)
-      # get range of gifts array based on the [offset - page, and offset]
-    @gifts        = total_gifts[@offset .. (@offset + paginate - 1)]
-    if @gifts.count == paginate
-      @offset += paginate
-    else
-      @offset = 0
-    end
+    @user   = User.find(params[:id].to_i)
+    @gifts  = Gift.get_user_activity(@user).page(params[:page]).per_page(6)
 
     @active = set_active
     

@@ -1,5 +1,5 @@
 <!-- User permalink page -->
-<div class=" POSfullPageWrap">
+<div class="bankCell POSfullPageWrap">
 
 <div class="" style="float:left;padding:10px;border: 1px solid #ADAFB4;">
 	<div style="float:left;padding:10px;border: 1px solid #2159A0;">
@@ -14,7 +14,7 @@
 		<h3>Persona : <%= @user.persona %></h3>
 		<h3>Birthday : <%= @user.birthday %></h3>
 		<h3>Activated :  <%= @user.active ? "yes" : "no" %></h3>
-		<h3>Member Since : <%= time_ago_in_words(@user.created_at) %></h3>
+		<h3>Member For : <%= time_ago_in_words(@user.created_at) %></h3>
 	</div>
 	<div style="float:left;padding:10px;border: 1px solid #2159A0;">
 		<h3>Origin : <%= @user.origin %></h3>
@@ -27,7 +27,8 @@
 		<%=custom_image_tag(@user,90,90)  %>
 	</div>
 </div>
-
+</div>
+<div class="POSfullPageWrap">
 	<% if @gifts.length > 0 %>                                         
 <%= render 'shared/gifts_list', gifts: @gifts, title: "User Gift Activity" %>
 	<% else %>

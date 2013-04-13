@@ -6,15 +6,7 @@ class ProvidersController < ApplicationController
   #############  CRUD methods
 
   def index
-    @offset = params[:offset].to_i || 0
-    @page = @offset
-    paginate = 9
-    @merchants = Provider.order("updated_at DESC").limit(paginate).offset(@offset) 
-    if @merchants.count == paginate
-      @offset += paginate
-    else
-      @offset = 0
-    end
+    @merchants = Provider.order("updated_at DESC").page(params[:page]).per_page(8) 
 
     respond_to do |format|
       format.html # index.html.erb
@@ -140,15 +132,8 @@ class ProvidersController < ApplicationController
   ########## BRAND ASSOCIATION METHODS
 
   def brands
-    @offset = params[:offset].to_i || 0
-    @page = @offset
-    paginate = 10
-    @brands = Brand.limit(paginate).offset(@offset)
-    if @brands.count == paginate
-      @offset += paginate 
-    else
-      @offset = 0
-    end
+    @brands = Brand.order("name ASC").page(params[:page]).per_page(8)
+
   end
 
   def building
@@ -182,12 +167,12 @@ class ProvidersController < ApplicationController
  ####### EMPLOYEE METHODS
 
   def staff(email_sent=nil)
-      @people     = Employee.where(provider_id: @provider.id, active: true )
+      @people     = Employee.where(provider_id: @provider.id, active: true ).page(params[:page]).per_page(8)
       @email_sent = email_sent 
   end
 
   def members
-      @people = @provider.users_not_staff
+      @people = User.page(params[:page]).per_page(8)
       render 'staff'
   end
 

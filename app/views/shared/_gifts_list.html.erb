@@ -1,7 +1,7 @@
 <div style="width:95%;color: white;">
 <table>
   <h1 colspan="4"  style="color:#ccc"><%= title ||= "" %></h1>
-    <%= paginate( @page, @offset, @user) %>
+    <%= will_paginate(gifts) %>
   <tr>
     <th>Gift ID</th>
     <th>Giver</th>

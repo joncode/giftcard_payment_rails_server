@@ -1,7 +1,9 @@
 <div class="merchantSignInWrapper POSfullPageWrap">
 <table>
   <h1 colspan="4"  style="color:#ccc"><%= title ||= "" %></h1>
-    <%= paginate( @page, @offset, @provider) %>
+  <div class="bankCell POSsingleColumn">
+    <%= will_paginate(people) %>
+  </div>
   <tr style="color:#ccc">
     <th>Photo</th>
     <th>Name</th>
