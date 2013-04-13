@@ -52,7 +52,7 @@
 	<h2><%= link_to "This is Final", destroy_gifts_user_path(@user), :confirm => "Destroy all #{@user.fullname} Gifts, Are you sure ?"   %></h2>
 		<% else %>
 	<h2><%= @user.fullname %> : <strong>Destroy Account?</strong></h2>
-	<h2><%= link_to "This is Final", user_path(@user), :confirm => "Destroy #{@user.fullname} Account, Are you sure ?"   %></h2>
+	<h2><%= link_to "This is Final", user_path(@user), :method => :delete, :confirm => "Destroy #{@user.fullname} Account, Are you sure ?"   %></h2>
 		<% end %>
 </div></div>
 

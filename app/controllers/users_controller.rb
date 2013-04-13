@@ -121,13 +121,13 @@ class UsersController < ApplicationController
     def destroy_gifts
         @user       = User.find(params[:id].to_i)
         total_gifts = Gift.get_user_activity(@user)
-        test        = total_gifts[0]
+        total_gifts.each {|gift| gift.destroy}
 
         respond_to do |format|
-            if test.destroy
-                format.html { redirect_to user_path(@user), notice: "Gift Destroyed." }
+            if Gift.get_user_activity(@user).count == 0
+                format.html { redirect_to user_path(@user), notice: "Gifts Destroyed." }
             else
-                format.html  { redirect_to user_path(@user), notice: human_readable_error_message(test) }
+                format.html  { redirect_to user_path(@user), notice: "Error in batch delete gifts" }
             end
         end
     end
