@@ -32,6 +32,8 @@ Drinkboard::Application.routes.draw do
       get  :crop
       get  :change_public_status
       post :update_avatar
+      get  :de_activate
+      get  :destroy_gifts
     end
     collection do
       get  :confirm_email

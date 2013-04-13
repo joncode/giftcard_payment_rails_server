@@ -1,18 +1,61 @@
 <!-- User permalink page -->
-<div class="merchantSignInWrapper POSfullPageWrap">
+<div class="bankCell POSfullPageWrap">
 
-<div class="providersPermalinkWrapper">
-	<div class="profilePic"><%= image_tag(@user.photo.large) %></div>
-	<h2>Name :<%= @user.username %></h2>
-	<h2>Handle :<%= @user.handle %></h2>
-	<h2>Email :<%= @user.email %></h2>
-	<h2>Phone :<%= number_to_phone(@user.phone, :area_code => true) %></h2>
-	<h2>Address :<%= @user.full_address %></h2>
-	<h2><%= link_to "Edit Profile", edit_user_path(current_user) %></h2>
+<div class="" style="float:left;padding:10px;border: 1px solid #ADAFB4;">
+	<div style="float:left;padding:10px;border: 1px solid #2159A0;">
+		<h3>Name : <%= @user.username %></h3>
+		<h3>Sex : <%= @user.sex %></h3>
+		<h3>Email : <%= @user.email %></h3>
+		<h3>Phone : <%= number_to_phone(@user.phone, :area_code => true) %></h3>
+		<h3>Address : <%= @user.full_address %></h3>
+	</div>
+	<div style="float:left;padding:10px;border: 1px solid #2159A0;">
+		<h3>Handle : <%= @user.handle %></h3>
+		<h3>Persona : <%= @user.persona %></h3>
+		<h3>Birthday : <%= @user.birthday %></h3>
+		<h3>Activated :  <%= @user.active ? "yes" : "no" %></h3>
+		<h3>Member For : <%= time_ago_in_words(@user.created_at) %></h3>
+	</div>
+	<div style="float:left;padding:10px;border: 1px solid #2159A0;">
+		<h3>Origin : <%= @user.origin %></h3>
+		<h3>Confirmed Email : <%= @user.confirm[0] == "1" ? "yes" : "no" %></h3>
+		<h3>Confirmed Text : <%= @user.confirm[1] == "1" ? "yes" : "no"   %></h3>
+		<h3>Added Facebook :  <%= !@user.facebook_id.blank? ? "yes" : "no" %></h3>
+		<h3>Added Twitter : <%= !@user.twitter.blank? ? "yes" : "no" %></h3>
+	</div>
+	<div class="profilePic">
+		<%=custom_image_tag(@user,90,90)  %>
+	</div>
 </div>
+</div>
+<div class="POSfullPageWrap">
+	<% if @gifts.length > 0 %>                                         
+<%= render 'shared/gifts_list', gifts: @gifts, title: "User Gift Activity" %>
+	<% else %>
+<div class="bankCell POSsingleColumn">
+<div style="width:95%;color: white;">
+<h2> User Account Has no gifts</h2>
+</div></div>
+	<% end %>
+<div class="bankCell POSsingleColumn">
+  <div class="merchantSignUpObject rounded gradient">
+	<h2><%= @user.fullname %> is : <strong><%= @active[0] %></strong></h2>
+	<h2><%= link_to @active[1] , de_activate_user_path(@user), :confirm => "#{@user.fullname} #{@active[1]} , Are you sure ?"   %></h2>
+</div></div>
 
+<div class="bankCell POSsingleColumn">
+  <div class="merchantSignUpObject rounded gradient">
+		<% if @gifts.length > 0 %> 
+	<h2>To Destroy a User Account :</h2>
+	<h2>You must first destroy all Gifts</h2>
+	<h2><%= @user.fullname %> : <strong>Destroy All Gifts?</strong></h2>
+	<h2><%= link_to "This is Final", destroy_gifts_user_path(@user), :confirm => "Destroy all #{@user.fullname} Gifts, Are you sure ?"   %></h2>
+		<% else %>
+	<h2><%= @user.fullname %> : <strong>Destroy Account?</strong></h2>
+	<h2><%= link_to "This is Final", user_path(@user), :method => :delete, :confirm => "Destroy #{@user.fullname} Account, Are you sure ?"   %></h2>
+		<% end %>
+</div></div>
 
-
-
+</div>
 
 
