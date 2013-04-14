@@ -110,6 +110,8 @@ class InviteController < ApplicationController
     
   end
 
+  private
+
   def create_webview_link
     "#{TEST_URL}/webview/#{params[:template]}/#{params[:var1]}"
   end
