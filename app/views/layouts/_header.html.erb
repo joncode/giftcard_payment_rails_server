@@ -47,9 +47,11 @@
   <div class="vendorTitle">
 
     <h6 class="vendorAddress">
-        
-      <%= link_to 'New Merchant', new_provider_path, :id => 'new' %> |  <%= link_to 'List All', providers_path, :id => 'index'  %> | <a href="/admin">Home</a>
-        
+      <% if params[:controller] == "users" %>
+        <%= link_to 'List All Accounts', users_path, :id => 'index'  %> | <a href="/admin">Home</a>
+      <% else %>
+        <%= link_to 'New Merchant', new_provider_path, :id => 'new' %> |  <%= link_to 'List All', providers_path, :id => 'index'  %> | <a href="/admin">Home</a>
+      <% end %>
     </h6>
         <h5 class="vendorTitleText">
       <% if @provider %>
