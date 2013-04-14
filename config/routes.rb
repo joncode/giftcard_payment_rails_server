@@ -1,11 +1,13 @@
 Drinkboard::Application.routes.draw do
   
   root to: 'sessions#new'
-  resources :sessions, only: [:new, :create, :destroy]
-  match '/signin',          to: 'sessions#new'
-  match '/signout',         to: 'sessions#destroy'
-  match '/forgot_password', to: 'sessions#forgot_password', :via => [:get, :post]
-  
+  resources :sessions,       only: [:new, :create, :destroy]
+  match '/signin',             to: 'sessions#new'
+  match '/signout',            to: 'sessions#destroy'
+  match '/forgot_password',    to: 'sessions#forgot_password',    via: [:get, :post]
+  match '/reset_password',     to: 'sessions#forgot_password',    via:  :get
+  match '/enter_new_password', to: 'sessions#enter_new_password', via: [:get, :put]
+
   match '/admin',             to: 'admin#show'
   match '/admin/test_emails', to: 'admin#test_emails'
   match '/admin/run_tests',   to: 'admin#run_tests'
@@ -28,10 +30,10 @@ Drinkboard::Application.routes.draw do
     end
     collection do
       get  :confirm_email
-      get  :reset_password
-      post :reset_password
-      get  :enter_new_password
-      put  :enter_new_password
+      # get  :reset_password
+      # post :reset_password
+      # get  :enter_new_password
+      # put  :enter_new_password
     end
   end
 
@@ -145,7 +147,6 @@ Drinkboard::Application.routes.draw do
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/orders',           to: 'app#orders',              via: :post
   match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
-  match 'app/forgot_password',  to: 'app#forgot_password',     via: :post
   match 'app/reset_password',   to: 'app#reset_password',      via: :post
   match 'app/get_settings',     to: 'app#get_settings',        via: :post
   match 'app/save_settings',    to: 'app#save_settings',       via: :post

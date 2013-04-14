@@ -22,7 +22,7 @@ class UserMailer < ActionMailer::Base
     @header_text    = ""
     @social         = 0
     @email_title    = "Drinkboard Email Messenger"
-    @web_view_route = "#{TEST_URL}/webview/forgot_password/#{user.id}"
+    @web_view_route = "#{TEST_URL}/webview/reset_password/#{user.id}"
     puts "reset_password -UserMailer-  for #{user.username}"
     mail({
       :to => "#{@user.fullname} <#{whitelist_user(@user)}>",
