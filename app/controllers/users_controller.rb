@@ -7,8 +7,6 @@ class UsersController < ApplicationController
   def index
     
     @user = current_user
-    @offset = 0
-    @page = 0
     # @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
     @users = User.order("first_name ASC").page(params[:page]).per_page(16)
     # @fb_users = []
@@ -80,13 +78,11 @@ class UsersController < ApplicationController
       if @user.update_attributes(params[:user])
         #sign_in @user
         format.html { redirect_to @user, notice: "Update Successful. #{msg}" }
-        format.json { head :no_content }
         format.js
       else
         #sign_in @user
         @message = human_readable_error_message @user
         format.html { render action: action, notice: "Update Unsuccessful"}
-        format.json { render json: @user.errors, status: :unprocessable_entity }
         format.js { render 'error' }
       end
     end
@@ -98,7 +94,6 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to users_path, notice: "User Destroyed." }
-      format.json { head :no_content }
     end
   end
 
