@@ -3,15 +3,7 @@ class AdminController < ApplicationController
   	before_filter :admin_user?
 
 	def show
-	    @offset = params[:offset].to_i || 0
-	    @page = @offset
-	    paginate = 7
-	    @providers = Provider.limit(paginate).offset(@offset)
-	    if @providers.count == paginate
-	      @offset += paginate 
-	    else
-	      @offset = 0
-	    end
+
 	end
 
 	def test_emails
@@ -45,6 +37,8 @@ class AdminController < ApplicationController
 		Resque.enqueue(EmailJob, 'notify_receiver', user.id , 	{:gift_id => gift.id, :email => email}) 
 		Resque.enqueue(EmailJob, 'invoice_giver', 	user.id  , 	{:gift_id => gift.id})
 	end
+
+	private
 
 	def find_gift_with_order_and_shoppingCart(gifts)
 		# criteria for a proper gift

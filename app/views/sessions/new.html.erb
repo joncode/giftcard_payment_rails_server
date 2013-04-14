@@ -13,17 +13,12 @@
         
         <%= f.password_field :password, :placeholder => 'Password', :class => "miTitleForm rounded inputFieldObj formObj" %>
         <%= f.submit "Sign in", class: "buttonInput buttonImageUp signInPOS", style: "margin-top: -45px;padding:4px;" %>
-        <%= link_to "Forgot password?", reset_password_users_path, style: "padding-left:30px;font-size:12px;" %>
+        <%= link_to "Forgot password?", forgot_password_path, style: "padding-left:30px;font-size:12px;" %>
       </div>
       <% end %>
     </li>
-    <% unless flash.empty? %>
-    <li style="margin-top: 10px;width:450px; text-align: center;"><div class="info">
-      <%- flash.each do |name, msg| -%>
-        <%= content_tag :div, msg, :id => "flash_#{name}" %>
-      <%- end -%>
-    </div></li>
-    <% end %>
+ <ul>
+  <%= render 'shared/flash', flash: flash %>
 
-  <ul>
+ 
 </div>

@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :signed_in_user, except: [:new]
-  before_filter :correct_user, only: [:edit, :update]
-  before_filter :admin_user, except: [:new]
+  before_filter :signed_in_user
+  before_filter :admin_user?
 
   ###########   CRUD METHODS
 
@@ -239,16 +238,6 @@ class UsersController < ApplicationController
   end
   
   private
-
-    
-    def correct_user
-      @user = User.find(params[:id])
-      redirect_to(users_path) unless current_user?(@user)
-    end
-    
-    def admin_user
-      redirect_to(users_path) unless current_user.admin?
-    end
 
     def set_active
       @user.active ?  ["User is Active","De-Activate"] : ["User is De-Activated","Activate"]

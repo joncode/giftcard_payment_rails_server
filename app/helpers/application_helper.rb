@@ -59,21 +59,4 @@ module ApplicationHelper
       return message_ary
   end
 
-  def paginate( page, offset, object)
-    if object.kind_of? Provider
-      unless (page == 0 && offset == 0) || (!page && !offset)
-        link_to "#{page} / #{offset} / Next Page", staff_provider_path(object,{offset: offset})
-      end
-    elsif object.kind_of? User
-      unless (page == 0 && offset == 0) || (!page && !offset)
-        link_to "#{page} / #{offset} / Next Page", user_path(object,{offset: offset})
-      end
-    end
-  end
-
-
-
-
-
-
 end

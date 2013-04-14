@@ -2,8 +2,9 @@ Drinkboard::Application.routes.draw do
   
   root to: 'sessions#new'
   resources :sessions, only: [:new, :create, :destroy]
-  match '/signin',       to: 'sessions#new'
-  match '/signout',      to: 'sessions#destroy'
+  match '/signin',          to: 'sessions#new'
+  match '/signout',         to: 'sessions#destroy'
+  match '/forgot_password', to: 'sessions#forgot_password', :via => [:get, :post]
   
   match '/admin',             to: 'admin#show'
   match '/admin/test_emails', to: 'admin#test_emails'
