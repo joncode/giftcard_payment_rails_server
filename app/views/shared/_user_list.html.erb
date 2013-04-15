@@ -1,0 +1,32 @@
+<div class="merchantSignInWrapper POSfullPageWrap">
+<table>
+  <h1 colspan="4"  style="color:#ccc"><%= title ||= "" %></h1>
+  <div class="bankCell POSsingleColumn">
+    <%= will_paginate(people) %>
+  </div>
+  <tr style="color:#ccc">
+    <th>Photo</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Phone</th>
+    <th></th>
+  </tr>
+
+  <% people.each do |person| %>
+    <% user = get_user_from_object(person) %>
+    <tr>
+      <td><%= custom_image_tag(user,45,45)  %></td>
+      <td><%= user.username %></td>
+      <td><%= user.email %></td>
+      <td><%= number_to_phone user.phone %></td>
+          <% if person.kind_of? Employee %>
+      <td><%= link_to "X", remove_employee_provider_path(@provider, eid: person.id), :confirm => "De-Activate #{user.fullname}, Are you sure ?"  %></td>
+          <% elsif @provider %>
+      <td><%= link_to "Add", add_member_provider_path(@provider, user_id: user.id), :confirm => "Add #{user.fullname}, Are you sure ?"  %></td>
+          <% else %>
+      <td><%= link_to "Show", user_path(person) %></td>
+          <% end %>
+    </tr>
+  <% end %>
+</table>
+</div>

@@ -1,0 +1,22 @@
+<div class="bankCell POSsingleColumn">
+
+  <div class="merchantSignUpObject rounded gradient">
+
+
+
+<% if params[:email] %>
+	<h1>We just sent an email to that employee to join drinkboard.</h1>
+<% else %>
+	<%= form_tag(invite_employee_provider_path(@provider), :method => "post") do %>
+	  <div style="padding:20px;">
+	  <h2>Employee's Email Address:</h2>
+	  <br />
+	  <%= text_field_tag(:email) %>
+	  <br />
+	  <%= submit_tag "Send Invite Email to #{@provider.name}", class: "btn btn-large btn-info" %>
+	  </div>
+	<% end %>
+<% end %>
+</div>
+</div>
+

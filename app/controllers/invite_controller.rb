@@ -64,9 +64,9 @@ class InviteController < ApplicationController
       @user         = User.find(params[:var1])
       @header_text  = "Confirm Your Email Address"
       @social       = 0
-    when 'forgot_password'
+    when 'reset_password'
         #  you have forgotten your password and would like to reset it
-      email_view    = "forgot_password"
+      email_view    = "reset_password"
       @user         = User.find(params[:var1])
       @header_text  = ""
       @social       = 0
@@ -109,6 +109,8 @@ class InviteController < ApplicationController
     end
     
   end
+
+  private
 
   def create_webview_link
     "#{TEST_URL}/webview/#{params[:template]}/#{params[:var1]}"

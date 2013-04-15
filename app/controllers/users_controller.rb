@@ -1,20 +1,15 @@
 class UsersController < ApplicationController
-  before_filter :signed_in_user, only: [:index, :edit, :update, :destroy, :show] 
-  before_filter :correct_user, only: [:edit, :update]
-  before_filter :admin_user, only: :destroy
+  before_filter :signed_in_user
+  before_filter :admin_user?
 
-  def update_avatar
-    @provider = Provider.find(params[:id])
-    params[:user][:use_photo] = "cw"
-    current_user.update_attributes(params[:user])
-    redirect_to staff_profile_merchant_path(@provider)
-  end
+  ###########   CRUD METHODS
 
   def index
     
     @user = current_user
-    @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
-    @fb_users = []
+    # @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
+    @users = User.order("first_name ASC").page(params[:page]).per_page(16)
+    # @fb_users = []
     # if @user.facebook_access_token
     #   fb_response = HTTParty.get("https://graph.facebook.com/me/friends?access_token="+@user.facebook_access_token)
     #   if fb_response.code == 200
@@ -29,8 +24,10 @@ class UsersController < ApplicationController
   end
 
   def show    
-    @user = User.find(params[:id])
-    @gifts = Gift.get_user_activity(@user)
+    @user   = User.find(params[:id].to_i)
+    @gifts  = Gift.get_user_activity(@user).page(params[:page]).per_page(6)
+
+    @active = set_active
     
     respond_to do |format|
       format.html # show.html.erb
@@ -50,7 +47,7 @@ class UsersController < ApplicationController
 
   def edit
     
-    @user = User.find(params[:id])
+    @user = User.find(params[:id].to_i)
   end
 
   def create
@@ -69,7 +66,7 @@ class UsersController < ApplicationController
   def update
     msg = ""
     puts "#{params}"
-    @user = User.find(params[:id])
+    @user = User.find(params[:id].to_i)
     # action = params[:commit] == 'Submit Server Code' ? 'servercode' : 'edit'
     # if action == 'edit'
     #   if !params[:user][:photo].nil? || !params[:user][:photo_cache].empty?
@@ -81,66 +78,105 @@ class UsersController < ApplicationController
       if @user.update_attributes(params[:user])
         #sign_in @user
         format.html { redirect_to @user, notice: "Update Successful. #{msg}" }
-        format.json { head :no_content }
         format.js
       else
         #sign_in @user
         @message = human_readable_error_message @user
         format.html { render action: action, notice: "Update Unsuccessful"}
-        format.json { render json: @user.errors, status: :unprocessable_entity }
         format.js { render 'error' }
       end
     end
   end
-  
-  def crop
-    @obj_to_edit = User.find(params[:id])
-    @obj_name = "user"
-    @action = "update_avatar"
-    @file_field_name = "photo"
-    @obj_width = 131
-    @obj_height = 131
-    render "shared/uploader"
-  end
 
   def destroy
-    @user = User.find(params[:id])
+    @user = User.find(params[:id].to_i)
     @user.destroy
 
     respond_to do |format|
       format.html { redirect_to users_path, notice: "User Destroyed." }
-      format.json { head :no_content }
     end
   end
+
+  ###########   SECONDARY CRUD METHODS
+
+    def de_activate
+        @user        = User.find(params[:id].to_i) 
+        @user.active = @user.active ? false : true
+
+        respond_to do |format|
+            if @user.save
+                format.html { redirect_to user_path(@user), notice: "User Updated." }
+            else
+                format.html  { redirect_to user_path(@user), notice: human_readable_error_message(@user) }
+            end
+        end
+    end
+
+    def destroy_gifts
+        @user       = User.find(params[:id].to_i)
+        total_gifts = Gift.get_user_activity(@user)
+        total_gifts.each {|gift| gift.destroy}
+
+        respond_to do |format|
+            if Gift.get_user_activity(@user).count == 0
+                format.html { redirect_to user_path(@user), notice: "Gifts Destroyed." }
+            else
+                format.html  { redirect_to user_path(@user), notice: "Error in batch delete gifts" }
+            end
+        end
+    end
+
+    ########    PHOTO SYSTEM METHODS
   
-  def following
-    @title = "Following"
-    @user = User.find(params[:id])
-    @users = @user.followed_users
-    render 'show_follow'
-  end
+    def crop
+        @obj_to_edit = User.find(params[:id])
+        @obj_name = "user"
+        @action = "update_avatar"
+        @file_field_name = "photo"
+        @obj_width = 131
+        @obj_height = 131
+        render "shared/uploader"
+    end
+
+    def update_avatar
+        @provider = Provider.find(params[:id])
+        params[:user][:use_photo] = "cw"
+        current_user.update_attributes(params[:user])
+        redirect_to staff_profile_merchant_path(@provider)
+    end
+
+    ############   SOCIAL CONNECTION METHODS
+
+    def following
+        @title = "Following"
+        @user = User.find(params[:id].to_i)
+        @users = @user.followed_users
+        render 'show_follow'
+    end
+
+    def followers
+        @title = "Followers"
+        @user = User.find(params[:id].to_i)
+        @users = @user.followers
+        render 'show_follow'
+    end
+
+    def change_public_status
+        newStatus = (params[:newStatus] == "true" ? true : false)
+        if (current_user[:is_public] && !newStatus) || (!current_user[:is_public] && newStatus)
+            current_user[:is_public] = newStatus
+            current_user.save
+            Location.create(:user_id => current_user[:id], :vendor_type => (newStatus ? "activate" : "deactivate"), :latitude => params[:lat], :longitude => params[:lng])    #Empty location update juust so we know when the user turns on.
+        end
+        render :json => {success: true}
+    end
   
-  def followers
-    @title = "Followers"
-    @user = User.find(params[:id])
-    @users = @user.followers
-    render 'show_follow'
-  end
-  
+    #############   UTILITY METHODS
+
   def servercode
     @user = current_user
   end
   
-  def change_public_status
-    newStatus = (params[:newStatus] == "true" ? true : false)
-    if (current_user[:is_public] && !newStatus) || (!current_user[:is_public] && newStatus)
-      current_user[:is_public] = newStatus
-      current_user.save
-      Location.create(:user_id => current_user[:id], :vendor_type => (newStatus ? "activate" : "deactivate"), :latitude => params[:lat], :longitude => params[:lng])    #Empty location update juust so we know when the user turns on.
-    end
-    render :json => {success: true}
-  end
-
   def confirm_email
     request.format = :email
     if @user = User.find_by_email(params[:email])
@@ -160,56 +196,46 @@ class UsersController < ApplicationController
     end
   end
   
-  def reset_password
-    puts "IN RESET PASSWORD"
-    if params[:user] && params[:user].has_key?("email")
-      email = params[:user]["email"]
-      if user = User.find_by_email(email)
-        user.update_reset_token
-        # UserMailer.reset_password(user).deliver # use this for basic rails mailer
-        Resque.enqueue(EmailJob, 'reset_password', user[:id], {})  
-      end
-    elsif params[:reset_token]
-      @user = User.find_by_reset_token(params[:reset_token])
-      if Time.now - 1.day <= @user.reset_token_sent_at
-        return render 'enter_new_password'
-      end
-    end
-  end
+  # def reset_password
+  #   puts "IN RESET PASSWORD"
+  #   if params[:user] && params[:user].has_key?("email")
+  #     email = params[:user]["email"]
+  #     if user = User.find_by_email(email)
+  #       user.update_reset_token
+  #       # UserMailer.reset_password(user).deliver # use this for basic rails mailer
+  #       Resque.enqueue(EmailJob, 'reset_password', user[:id], {})  
+  #     end
+  #   elsif params[:reset_token]
+  #     @user = User.find_by_reset_token(params[:reset_token])
+  #     if Time.now - 1.day <= @user.reset_token_sent_at
+  #       return render 'enter_new_password'
+  #     end
+  #   end
+  # end
   
-  def enter_new_password
-    user_params = params[:user]
-    if !user_params[:password] || !user_params[:password_confirmation]
-      return redirect_to reset_password_users_path
-    end
-    @message = nil
-    if user_params[:password] != user_params[:password_confirmation]
-      @message = "Your passwords do not match. Try again."
-    else
-      user = User.find_by_reset_token(params[:reset_token])
-      user.password = user_params[:password]
-      user.password_confirmation = user_params[:password_confirmation]
-      user.save
-      @message = "Password saved successfully."
-      sign_in user
-      return redirect_to '/home'
-    end
-  end
+  # def enter_new_password
+  #   user_params = params[:user]
+  #   if !user_params[:password] || !user_params[:password_confirmation]
+  #     return redirect_to reset_password_users_path
+  #   end
+  #   @message = nil
+  #   if user_params[:password] != user_params[:password_confirmation]
+  #     @message = "Your passwords do not match. Try again."
+  #   else
+  #     user = User.find_by_reset_token(params[:reset_token])
+  #     user.password = user_params[:password]
+  #     user.password_confirmation = user_params[:password_confirmation]
+  #     user.save
+  #     @message = "Password saved successfully."
+  #     sign_in user
+  #     return redirect_to '/home'
+  #   end
+  # end
   
   private
 
-    
-    def correct_user
-      @user = User.find(params[:id])
-      redirect_to(users_path) unless current_user?(@user)
+    def set_active
+      @user.active ?  ["User is Active","De-Activate"] : ["User is De-Activated","Activate"]
     end
-    
-    def admin_user
-      redirect_to(users_path) unless current_user.admin?
-    end
-    
-    def sanitize_filename(file_name)
-      just_filename = File.basename(file_name)
-      just_filename.sub(/[^\w\.\-]/,'_')
-    end
+
 end

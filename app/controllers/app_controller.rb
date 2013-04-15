@@ -45,7 +45,11 @@ class AppController < ActionController::Base
  		msgs.stringify_keys!
  		msgs.each_key do |key|
  			value_as_array 	= msgs[key]
- 			value_as_string = value_as_array.join(' | ')
+ 			if value_as_array.kind_of? Array
+ 				value_as_string = value_as_array.join(' | ')
+ 			else
+ 				value_as_string = value_as_array
+ 			end
  			msgs[key] 		= value_as_string
  		end
 

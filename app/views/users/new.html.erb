@@ -1,47 +1,19 @@
+<li style="width:500px;padding-top:30px;">
+  <h1 style="letter-spacing:0.1em;">Sign Up</h1>
+</li>
+<li class="ordersDisplay" style="width:450px;">
+  <%= form_for(@user) do |f| %>
+  <div class="inputWrap" style="width:376px;">
+    <%= f.text_field :first_name,            :placeholder => 'First Name', :class => "miTitleForm rounded inputFieldObj formObj" %>
+    <%= f.text_field :last_name,             :placeholder => 'Last Name', :class => "miTitleForm rounded inputFieldObj formObj" %>
+    <%= f.text_field :email,                 :placeholder => 'Email', :class => "miTitleForm rounded inputFieldObj formObj" %>
+    <%= f.password_field :password,              :placeholder => 'Password', :class => "miTitleForm rounded inputFieldObj formObj" %>
+    <%= f.password_field :password_confirmation, :placeholder => 'Password Confirmation', :class => "miTitleForm rounded inputFieldObj formObj" %>
+    <%= f.submit "Create", class: "buttonInput buttonImageUp signInPOS", style: "margin-top: -45px;padding:4px;" %>
+  </div>
+  <% end %>
+</li>
 
-<div class="doubleColumn">
-  <!--
-    Users Sign In 
-  -->
-  <ul>
-    <li style="width:500px;padding-top:30px;">
-      <h1 style="letter-spacing:0.1em;">Sign In</h1>
-    </li>
-    <li class="ordersDisplay" style="width:450px;">
-      <%= form_for(:session, url: sessions_path) do |f| %>
-      <div class="inputWrap" style="width:376px;">
-        <%= f.text_field :email,        :placeholder => 'Email', :class => "miTitleForm rounded inputFieldObj formObj" %>
-        
-        <%= f.password_field :password, :placeholder => 'Password', :class => "miTitleForm rounded inputFieldObj formObj" %>
-        <%= f.submit "Sign in", class: "buttonInput buttonImageUp signInPOS", style: "margin-top: -45px;padding:4px;" %>
-        <%= link_to "Forgot password?", reset_password_users_path, style: "padding-left:30px;font-size:12px;" %>
-      </div>
-      <% end %>
-    </li>
-    <% unless flash.empty? %>
-    <li style="margin-top: 10px;width:450px; text-align: center;"><div class="info">
-      <%- flash.each do |name, msg| -%>
-        <%= content_tag :div, msg, :id => "flash_#{name}" %>
-      <%- end -%>
-    </div></li>
-    <% end %>
-    <li style="width:500px;padding-top:30px;">
-	    <h1 style="letter-spacing:0.1em;">Sign Up</h1>
-    </li>
-    <li class="ordersDisplay" style="width:450px;">
-      <%= form_for(@user) do |f| %>
-      <div class="inputWrap" style="width:376px;">
-        <%= f.text_field :first_name,            :placeholder => 'First Name', :class => "miTitleForm rounded inputFieldObj formObj" %>
-        <%= f.text_field :last_name,             :placeholder => 'Last Name', :class => "miTitleForm rounded inputFieldObj formObj" %>
-        <%= f.text_field :email,                 :placeholder => 'Email', :class => "miTitleForm rounded inputFieldObj formObj" %>
-        <%= f.password_field :password,              :placeholder => 'Password', :class => "miTitleForm rounded inputFieldObj formObj" %>
-        <%= f.password_field :password_confirmation, :placeholder => 'Password Confirmation', :class => "miTitleForm rounded inputFieldObj formObj" %>
-        <%= f.submit "Create", class: "buttonInput buttonImageUp signInPOS", style: "margin-top: -45px;padding:4px;" %>
-      </div>
-      <% end %>
-    </li>
-  <ul>
-</div>
 
 <!--   <div class="socialLoginWrapper">
     <h2 class="signinOr">Or...</h2>

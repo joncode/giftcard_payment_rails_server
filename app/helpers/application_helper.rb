@@ -57,5 +57,6 @@ module ApplicationHelper
         end
       end
       return message_ary
-    end
+  end
+
 end

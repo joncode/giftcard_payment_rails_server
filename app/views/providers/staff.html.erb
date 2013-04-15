@@ -1,74 +1,19 @@
 <div class="column">
-  <% @staff.each do |e| %>  
-    <div class="employeeDisplay"> 
-      <div class="employeeImage">
-        <%= custom_image_tag(e.user,75,75)  %>
-      </div>
-      <div class="employeeText textTop">
-        <%= e.user.username %>
-      </div>
-      <div class="employeeText">
-        <%= e.user.full_address %>
-      </div>
-      <div class="employeeText">
-        <%= number_to_phone e.user.phone %>
-      </div>
-<!--       <div class="giftText">      
-          <div id="buttonEditWine" class="buttonSmallDown buttonUp"><a href="" class="">Active</a></div>
-      </div> -->
-    </div>
-  <% end %>
-  <div id="buttonAddEmp" class="buttonLargeDown buttonLargeUp buttonAddPosition">
-    <h5><a href="">New</a></h5>
-  </div>
-<div class="column addDisplay">
-  <div class="giftText giftTextLarge">
-    <h2>Choose From Drinkboard Members</h2>
-  </div> 
 
-   <!-- USER ID SEARCH FIELD -->
-<!--   <div class="inputWrapper giftIDsearch">
-    <input type="text" placeholder="Enter User Email #" id="giftID" name="giftID" class="inputEmploy"/>
-    <span id="giftIDsearch" class="buttonUp">
-      <a href="" id="findButton">Find</a>
-      <a href="" class="buttonUp showAll">All</a>
-    </span>
-    <p id="notice"><%= notice %></p>
-  </div> --> 
-  <!-- GIFT LOOP START -->
-  <% @nonstaff.each do |user| %> 
-  <div class="ordersDisplay" id="giftID<%= user.email %>">
-  
-  <!--    Left Column   -->
-    <div class="orderGiftLeft imageBorder">
-        <%= custom_image_tag(user,75,75)  %>
-    </div>
+    <% if @people[0].kind_of? User %>
+        <% title = "Drinkboard Members" %>
+    <% else %>
+        <% title = "Staff" %>
+    <% end %>
+    <%= render 'staff_links' %>
 
-      <div class="employeeText textTop">
-        <%= user.username %><br />
-        <%= user.email %><br />
-        <%= user.city %>
-      </div>
-<!--       <div class="giftText">      
-          <div id="buttonEditWine" class="buttonSmallDown buttonUp"><a href="" class="">Active</a></div>
-      </div> -->
-    </div>
-  <!--    Right Column   -->
-    <div class="orderGiftRight">
-      <div class="giftID">
-          
-      </div>    
-      <div class="buttonSmallDown buttonUp">
-            <%= link_to 'Add', add_member_provider_path(@provider, user_id: user.id) %>
 
-      </div>
-    
-  <!--    Middle Column   -->
-    <div class="orderGiftMiddle">
-      <div class="giftText giftTextLarge">
-        
-      </div>
-    </div>
-  </div>  
-  <% end %>
+    <div class="giftText giftTextLarge">
+      <% if @people[0].kind_of? User %>
+        <% title = "Drinkboard Members" %>
+      <% else %>
+        <% title = "Staff" %>
+      <% end %>
+    </div> 
+    <%= render 'shared/user_list', people: @people, title: title %>
 </div>

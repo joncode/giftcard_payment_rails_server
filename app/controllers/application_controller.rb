@@ -1,10 +1,10 @@
 class ApplicationController < ActionController::Base
 
-  helper :all
   protect_from_forgery 
+  helper :all 
   include SessionsHelper
-  
   before_filter :prepare_for_mobile
+  helper_method :mobile_device?
   
   def required_params(param_arr)
     param_arr.each do |p|
@@ -12,6 +12,45 @@ class ApplicationController < ActionController::Base
       return false
     end
     return true
+  end
+
+  def populate_locals
+      @provider       = Provider.find(params[:id].to_i)
+      @current_user   = current_user
+  end
+
+  def sanitize_filename(file_name)
+      just_filename = File.basename(file_name)
+      just_filename.sub(/[^\w\.\-]/,'_')
+  end
+
+
+  def create_menu_from_items(provider)     
+    menu_bulk = Menu.where(provider_id: provider.id)
+    items = []
+    menu_bulk.each do |item|
+       indi = Item.find(item.item_id)
+       price = item.price
+       item_array = [indi, price]
+       items << item_array  
+    end
+    return items
+  end
+
+  def human_readable_error_message obj
+    messages = obj.errors.messages
+    message_ary = ["Error! Data not saved"]
+    messages.each_key do |k|
+      if k != :password_digest
+        values = messages[k]
+        values.each do |v|
+          human_str = "#{k.to_s} "
+          human_str += v
+          message_ary << human_str
+        end 
+      end
+    end
+    return message_ary
   end
 
   private
@@ -37,40 +76,11 @@ class ApplicationController < ActionController::Base
         false
       end
     end
-
-    helper_method :mobile_device?
     
     def prepare_for_mobile
       session[:mobile] = params[:mobile] if params[:mobile]
       #  request.format   = :mobile if mobile_device?
     end
 
-    def create_menu_from_items(provider)     
-      menu_bulk = Menu.where(provider_id: provider.id)
-      items = []
-      menu_bulk.each do |item|
-         indi = Item.find(item.item_id)
-         price = item.price
-         item_array = [indi, price]
-         items << item_array  
-      end
-      return items
-    end
-
-    def human_readable_error_message obj
-      messages = obj.errors.messages
-      message_ary = ["Error! Data not saved"]
-      messages.each_key do |k|
-        if k != :password_digest
-          values = messages[k]
-          values.each do |v|
-            human_str = "#{k.to_s} "
-            human_str += v
-            message_ary << human_str
-          end 
-        end
-      end
-      return message_ary
-    end
   
 end

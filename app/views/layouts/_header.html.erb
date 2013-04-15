@@ -3,7 +3,7 @@
   <div class="headerImage"></div>
   <div class="lineVertHeader lineVert"></div>
   <div class="loggedInBox">
-       <% if params[:controller] == "merchants" && @provider %>
+       <% if !current_user.admin && @provider %>
   	<h6><%= link_to 'Logout', signout_path %></h6>
     <h5>Welcome, <a href="/merchants"><%= @current_user.fullname %></a></h5>
   </div>
@@ -24,10 +24,17 @@
   </div>
   
   <div class="vendorTitle">
+
+    <h6 class="vendorAddress">
+      <%= link_to 'New Brand', new_brand_path, :id => 'new' %> |  <%= link_to 'List All', brands_path, :id => 'index'  %> | <a href="/admin">Home</a>
+
+
+    </h6>
     <h5 class="vendorTitleText">
+
       <a href="/brands/<%= @brand.id if @brand %>"><%= @brand.name if @brand %></a>
     </h5>
-    <h6 class="vendorAddress">
+    <h6>
         <%= @brand.description if @brand %>
         <br />
         <%= @brand.website if @brand %>
@@ -38,14 +45,23 @@
   </div>
   
   <div class="vendorTitle">
-    <h5 class="vendorTitleText">
-      
-  
-    </h5>
+
     <h6 class="vendorAddress">
-        
-      <%= link_to 'New Merchant', new_provider_path, :id => 'new' %> |  <%= link_to 'List All', providers_path, :id => 'index'  %> | <a href="/admin">Home</a>
-        
+      <% if params[:controller] == "users" %>
+        <%= link_to 'List All Accounts', users_path, :id => 'index'  %> | <a href="/admin">Home</a>
+      <% else %>
+        <%= link_to 'New Merchant', new_provider_path, :id => 'new' %> |  <%= link_to 'List All', providers_path, :id => 'index'  %> | <a href="/admin">Home</a>
+      <% end %>
+    </h6>
+        <h5 class="vendorTitleText">
+      <% if @provider %>
+        <a href="/providers/<%= @provider.id %>"><%= @provider.name %></a>
+      <% end %>
+    </h5>
+        <h6>
+        <%= @provider.zinger if @provider %>
+        <br />
+        <%= @provider.city_state_zip if @provider %>
     </h6>
   </div> 
   <% end %>

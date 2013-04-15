@@ -3,7 +3,7 @@ class BrandsController < ApplicationController
   before_filter :admin_user?
 
   def index
-    @brands = Brand.all
+    @brands = Brand.order("updated_at DESC").page(params[:page]).per_page(8)
 
     respond_to do |format|
       if @brands.count > 0
@@ -16,16 +16,9 @@ class BrandsController < ApplicationController
   end
 
   def merchants
-    @offset    = params[:offset].to_i || 0
-    @page      = @offset
     @brand     = Brand.find(params[:id].to_i)
-    paginate   = 10
-    @merchants = Provider.limit(paginate).offset(@offset)
-    if @merchants.count == paginate
-      @offset += paginate 
-    else
-      @offset  = 0
-    end
+    @merchants = Provider.order("name ASC").page(params[:page]).per_page(8)
+
   end
 
   def building_merchant
@@ -71,7 +64,7 @@ class BrandsController < ApplicationController
   def upload_photo
     @brand = Brand.find(params[:id].to_i)
     @brand.update_attributes(params[:brand])
-    redirect_to merchants_brand_path(@brand)    
+    redirect_to brand_path(@brand)    
   end
 
   def show

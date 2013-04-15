@@ -1,0 +1,19 @@
+<% content_for :email_link do  %>
+  <h3>Click to <%= link_to 'Invite Via Email', add_employee_provider_path(@provider) %></h3>
+<% end %>
+<% content_for :db_user_link do  %>
+  <h3>Click to <%= link_to 'Add from Drinkboard Users', members_provider_path(@provider) %>  </h3>
+<% end %>
+<% content_for :staff_link do  %>
+  <h3>Click to <%= link_to 'Return to Staff', staff_provider_path(@provider) %></h3>
+<% end %>
+
+
+  <div class="bankCell POSsingleColumn">
+
+  <div class="merchantSignUpObject rounded gradient">
+<%= yield :email_link  %>
+<%= yield :db_user_link %>
+<%= yield :staff_link %>
+</div>
+</div>

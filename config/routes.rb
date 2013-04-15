@@ -1,29 +1,22 @@
 Drinkboard::Application.routes.draw do
   
-  root to: 'users#new'
-  resources :brands do
-    member do
-      get :add_photo
-      post :upload_photo
-      get :merchants
-      get :brand_merchant
-      get :building_merchant
-    end
-  end
+  root to: 'sessions#new'
+  resources :sessions,       only: [:new, :create, :destroy]
+  match '/signin',             to: 'sessions#new'
+  match '/signout',            to: 'sessions#destroy'
+  match '/forgot_password',    to: 'sessions#forgot_password',    via: [:get, :post]
+  match '/reset_password',     to: 'sessions#forgot_password',    via:  :get
+  match '/enter_new_password', to: 'sessions#enter_new_password', via: [:get, :put]
+
+  match '/admin',             to: 'admin#show'
+  match '/admin/test_emails', to: 'admin#test_emails'
+  match '/admin/run_tests',   to: 'admin#run_tests'
 
   match "/invite/email_confirmed" => "invite#email_confirmed"
   match "/invite/error"    => "invite#error"
   match "/invite/:id"      => "invite#show"
   match "/invite"          => "invite#invite_friend"
-  match "/webview(/:template(/:var1))"   => "invite#display_email", :via => :get
-
-  match '/login',   to: 'users#new'
-  match '/signup',  to: 'users#new'
-  match '/signin',  to: 'sessions#new'
-  match '/signout', to: 'sessions#destroy'
-  match '/admin',   to: 'admin#show'
-  match '/admin/test_emails', to: 'admin#test_emails'
-  match '/admin/run_tests',   to: 'admin#run_tests'
+  match "/webview(/:template(/:var1))"  => "invite#display_email", :via => :get
 
   resources :users do 
     member do
@@ -32,13 +25,15 @@ Drinkboard::Application.routes.draw do
       get  :crop
       get  :change_public_status
       post :update_avatar
+      get  :de_activate
+      get  :destroy_gifts
     end
     collection do
       get  :confirm_email
-      get  :reset_password
-      post :reset_password
-      get  :enter_new_password
-      put  :enter_new_password
+      # get  :reset_password
+      # post :reset_password
+      # get  :enter_new_password
+      # put  :enter_new_password
     end
   end
 
@@ -60,6 +55,23 @@ Drinkboard::Application.routes.draw do
       get :menu_item
       get :upload_menu
       get :remove_menu_item
+      get :coming_soon
+      get :de_activate
+      get :members
+      get :add_employee
+      get :remove_employee
+      get 'invite_employee'
+      post 'invite_employee'
+    end
+  end
+
+  resources :brands do
+    member do
+      get :add_photo
+      post :upload_photo
+      get :merchants
+      get :brand_merchant
+      get :building_merchant
     end
   end
   
@@ -102,14 +114,11 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-  resources :subtle_data
+  # resources :subtle_data
+  # resources :microposts,    only: [:create, :destroy]
+  # resources :relationships, only: [:create, :destroy]
+  # resources :connections, only: [:create, :destroy]
 
-
-  resources :microposts,    only: [:create, :destroy]
-  resources :relationships, only: [:create, :destroy]
-  resources :connections, only: [:create, :destroy]
-  resources :sessions,    only: [:new, :create, :destroy]
-  resources :admins, only: [:new, :create, :destroy]
  
     ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
@@ -138,7 +147,6 @@ Drinkboard::Application.routes.draw do
   match 'app/photo',            to: 'iphone#update_photo',     via: :post 
   match 'app/orders',           to: 'app#orders',              via: :post
   match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
-  match 'app/forgot_password',  to: 'app#forgot_password',     via: :post
   match 'app/reset_password',   to: 'app#reset_password',      via: :post
   match 'app/get_settings',     to: 'app#get_settings',        via: :post
   match 'app/save_settings',    to: 'app#save_settings',       via: :post

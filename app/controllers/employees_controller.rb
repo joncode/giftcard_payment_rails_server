@@ -6,5 +6,9 @@ class EmployeesController < ApplicationController
       # Resque.enqueue(EmailJob, 'invite_employee', params[:user_id], {:provider_id => @provider.id, :email => params[:email], :gift_id => params[:gift_id]})
     end
   end
+
+  def show
+  	
+  end
   
 end

@@ -1,0 +1,9 @@
+<% unless flash.empty? %>
+<div style="margin-top: 10px;width:450px; text-align: center;">
+  <div class="info">
+  <%- flash.each do |name, msg| -%>
+    <%= content_tag :div, msg, :id => "flash_#{name}" %>
+  <%- end -%>
+  </div>
+</div>
+<% end %>

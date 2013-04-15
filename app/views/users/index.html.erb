@@ -1,33 +1,3 @@
-<div class="userListWrapper">
-  <h2 class="userListWrapper">Who's About?</h2>
-  <% @users.each do |user| %>
-  <div class="userListCell">
-    <h2><%= custom_image_tag(user,75,100)  %></h2>
-    <h2><%= link_to user.username, user %></h2>
-    <h2><%= user.full_address %></h2>
-    <h2><%= number_to_phone user.phone %></h2>
-    <h2 class="sendDrink"><%= button_to "Send them a drink", browse_with_contact_gifts_path(id: user.id) %></h2>
-  </div>
-  <% end %>
-</div>
-<!-- 
-<div class="center">
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>ID</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @fb_users.each do |fbu| %>
-        <tr>
-          <td><%= fbu["name"] %></td>
-          <td><%= fbu["id"] %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
- -->
+<%= render 'shared/user_list', people: @users, title: "Accounts" %>
+
 

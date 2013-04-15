@@ -33,8 +33,8 @@ class Gift < ActiveRecord::Base
   before_create :set_status
  
   after_create  :update_shoppingCart
-  after_create  :invoice_giver
-  after_create  :notify_receiver
+  # after_create  :invoice_giver
+  # after_create  :notify_receiver
   after_save    :create_notification
 
   ##########   database queries
@@ -122,12 +122,13 @@ class Gift < ActiveRecord::Base
 
   def card_enabled?
     # whitelist = ["test@test.com", "deb@knead4health.com", "dfennell@graywolves.com", "dfennell@webteampros.com"]
-    # if whitelist.include?(self.giver.email)
-    #     return true
-    # else
-    #     return false
-    # end
-    return true
+    blacklist = ["addis006@gmail.com"]
+    if blacklist.include?(self.giver.email)
+        return false
+    else
+        return true
+    end
+    # return true
   end
 
   def charge_card
@@ -207,8 +208,9 @@ class Gift < ActiveRecord::Base
   def format_currency_as_string(float)
     string = float.to_s
     x      = string.split('.')
-    x[1]   = "%02d" % x[1]
+    x[1]   = "%02d" % x[1].to_i
     x[1]   = x[1][0..1]
+    x[1]   = x[1].to_s
     tot    = x.join('.')
     return tot
   end
@@ -290,20 +292,20 @@ class Gift < ActiveRecord::Base
 
   private
 
-    def notify_receiver
-      if self.receiver_email
-        puts "emailing the gift receiver for #{self.id}"
-        # notify the receiver via email
-        user_id = self.receiver_id.nil? ?  'NID' : self.receiver_id 
-        Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => self.id, :email => self.receiver_email}) 
-      end      
-    end
+    # def notify_receiver
+    #   if self.receiver_email
+    #     puts "emailing the gift receiver for #{self.id}"
+    #     # notify the receiver via email
+    #     user_id = self.receiver_id.nil? ?  'NID' : self.receiver_id 
+    #     Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => self.id, :email => self.receiver_email}) 
+    #   end      
+    # end
 
-    def invoice_giver
-      puts "emailing the gift giver for #{self.id}"
-      # notify the giver via email
-      Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id})
-    end
+    # def invoice_giver
+    #   puts "emailing the gift giver for #{self.id}"
+    #   # notify the giver via email
+    #   Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id})
+    # end
 
     def create_notification
       puts "the gift status is #{self.status}"

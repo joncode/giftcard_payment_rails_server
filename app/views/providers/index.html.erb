@@ -1,9 +1,10 @@
 <div class="merchantSignInWrapper POSfullPageWrap">
+<div class="bankCell POSsingleColumn">
+<h1 colspan="4"  style="color:#ccc">Check Out Merchants</h1>
+<%= will_paginate(@merchants) %></div>
 <table>
-  <h1 colspan="4"  style="color:#ccc">Check Out Merchants</h1>
-    <% unless (@page == 0 && @offset == 0)  %>
-      <%= link_to "#{@page}/#{@offset}/Next Page", providers_path({offset: @offset}) %>
-    <% end %>
+  
+
   <tr style="color:#ccc">
     <th>Photo</th>
     <th>Name</th>
