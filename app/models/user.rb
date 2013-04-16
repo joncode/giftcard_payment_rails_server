@@ -260,7 +260,7 @@ class User < ActiveRecord::Base
   end
 
   def is_employee? provider 
-    employees = Employee.find(:all, :conditions => ["user_id == ?", self.id])
+    employees = Employee.find(:all, :conditions => ["user_id = ?", self.id])
     if !employees.nil? && employees.length > 0
       employees.each do |emp|
         if emp.provider_id == provider.id
