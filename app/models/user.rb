@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
 
   has_one  :setting
   has_many :pn_tokens
-  has_many :employees
+  has_many :employees, dependent: :destroy
   has_many :providers, :through => :employees
   has_many :brands
   has_many :orders,    :through => :providers
