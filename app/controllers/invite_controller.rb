@@ -1,23 +1,89 @@
 class InviteController < ApplicationController
   
+    # INVITE W/O GIFT
+    # sender info :
+        # sender name
+        # sender photo_url
+
+    # request with 
+        # invite/person/782934
+        # 782934 = <user_id + stub value>
+    # respond with
+        # { "user" : <fullname>, "photo" : <user.get_photo> }
+
+    # INVITE W GIFT
+        # sender info (see above)
+    # gift info :
+        # gift items - shopping cart
+        # merchant name
+        # merchant photo_url
+        # merchant address
+        # merchant phone
+
+    # request with 
+        # invite/gift/782934
+        # 782934 = <gift_id + stub value>
+    # respond with
+        # { "user" : <fullname>, 
+        #  "photo" : <user.get_photo>,
+        #  "shoppingCart" : <shopping cart as json hash> ,
+        #  "merchant_name" : <provider_name>,
+        #  "merchant_address" : <provider_full_address>,
+        #  "merchant_phone" : <provider_phone> }
+
   def show
     number = 649387
     
-    # remove the permalink add-number from the id
-    id = params[:id].to_i - number
-    @gift = Gift.find(id)
-    @giver = @gift.giver
-
-    # check to see if its a mobile browser here
-    # if so , change the render format to .mobile
-    # add that format to the views folder and add to respond_to
-    request.format   = :mobile if sniff_browser
-    
-    respond_to do |format|
-      format.html # detail.html.erb
-      format.json { render json: @gift }
+        # remove the permalink add-number from the id
+    id          = params[:id].to_i - number
+    if id < 0
+        id = params[:id].to_i
     end
+    @gift       = Gift.find(id)
+    @giver      = @gift.giver
+    @cart       = @gift.ary_of_shopping_cart_as_hash
+    @merchant   = @gift.provider
 
+        # check to see if its a mobile browser here
+        # if so , change the render format to .mobile
+        # add that format to the views folder and add to respond_to
+    if request.format == :json
+        response_hash                       = {}
+        response_hash["user"]               = @giver.name
+        response_hash["user_photo"]         = @giver.get_photo
+        response_hash["shoppingCart"]       = @gift.ary_of_shopping_cart_as_hash
+        response_hash["merchant_name"]      = @merchant.name
+        response_hash["merchant_address"]   = @merchant.full_address
+        response_hash["merchant_phone"]     = @merchant.phone 
+    else
+        request.format = :email 
+    end
+    respond_to do |format|
+      format.json { render json: response_hash }
+    end
+  end
+
+  def invite
+        number = 649387    
+            # remove the permalink add-number from the id
+        id          = params[:id].to_i - number
+        if id < 0
+            id = params[:id].to_i
+        end
+        @user = User.find(id)
+        if @user.nil?
+            @user = User.find_by_phone("5555555555")
+        end
+        if request.format == :json
+            response_hash                       = {}
+            response_hash["user"]               = @user.name
+            response_hash["user_photo"]         = @user.get_photo
+        else
+            request.format = :email 
+        end
+        respond_to do |format|
+            format.json { render json: response_hash }
+        end
   end
   
   def invite_friend

@@ -152,7 +152,7 @@ class User < ActiveRecord::Base
     Micropost.from_users_followed_by(self)
   end
   
-  def username
+  def name
     if self.last_name.blank?
       "#{self.first_name}"
     else
@@ -160,8 +160,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def username
+    self.name
+  end
+  
   def fullname
-    self.username
+    self.name
   end
 
   def get_image(flag)

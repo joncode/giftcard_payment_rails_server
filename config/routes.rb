@@ -1,22 +1,22 @@
 Drinkboard::Application.routes.draw do
   
-  root to: 'sessions#new'
+  root                         to: 'sessions#new'
   resources :sessions,       only: [:new, :create, :destroy]
-  match '/signin',             to: 'sessions#new'
+  match '/signin',             to: 'sessions#new',                via: :get
   match '/signout',            to: 'sessions#destroy'
   match '/forgot_password',    to: 'sessions#forgot_password',    via: [:get, :post]
   match '/reset_password',     to: 'sessions#forgot_password',    via:  :get
   match '/enter_new_password', to: 'sessions#enter_new_password', via: [:get, :put]
 
-  match '/admin',             to: 'admin#show'
-  match '/admin/test_emails', to: 'admin#test_emails'
-  match '/admin/run_tests',   to: 'admin#run_tests'
+  match '/admin',              to: 'admin#show'        ,           via: :get
+  match '/admin/test_emails',  to: 'admin#test_emails' ,           via: :get
+  match '/admin/run_tests',    to: 'admin#run_tests'   ,           via: :get
 
-  match "/invite/email_confirmed" => "invite#email_confirmed"
-  match "/invite/error"    => "invite#error"
-  match "/invite/:id"      => "invite#show"
-  match "/invite"          => "invite#invite_friend"
-  match "/webview(/:template(/:var1))"  => "invite#display_email", :via => :get
+  match "/invite/email_confirmed"     , to: "invite#email_confirmed", via: :get
+  match "/invite/error"               , to: "invite#error",           via: :get
+  match "/invite/gift/:id"            , to: "invite#show",            via: :get
+  match "/invite/person/:id"          , to: "invite#invite",          via: :get
+  match "/webview(/:template(/:var1))", to: "invite#display_email",   via: :get
 
   resources :users do 
     member do
@@ -75,7 +75,7 @@ Drinkboard::Application.routes.draw do
     end
   end
   
-  match "/merchants/:id/employee/:eid/remove"  => "merchants#remove_employee"
+  match "/merchants/:id/employee/:eid/remove"  => "merchants#remove_employee" , via: :get
   resources :menus 
   resources :merchants do
     # get 'home'
@@ -114,11 +114,8 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-  # resources :subtle_data
   # resources :microposts,    only: [:create, :destroy]
   # resources :relationships, only: [:create, :destroy]
-  # resources :connections, only: [:create, :destroy]
-
  
     ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
