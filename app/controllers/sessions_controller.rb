@@ -58,6 +58,30 @@ class SessionsController < ApplicationController
         end
     end
 
+    def validate_token
+        response_hash = {}
+        if token = params[:reset_token] #&& request.format == :json
+            user = User.find_by_reset_token(token)
+            
+            if user
+                if Time.now - 3.days <= user.reset_token_sent_at
+                    number = 649387
+                    response_hash["success"] = "Valid token |#{(number + user.id)}"
+                else
+                    response_hash["success"] = "Expired Token |0"
+                end
+            else
+                response_hash["success"]     = "Invalid Token |0"
+            end
+        else
+            response_hash["error"]           = "Data not received"
+        end
+        request.format = :json
+        respond_to do |format|
+            format.json { render json: response_hash }
+        end
+    end
+
     def enter_new_password
         user_params = params[:user]
         if !validate_params(user_params)
