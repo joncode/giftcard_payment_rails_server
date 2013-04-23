@@ -8,6 +8,7 @@ Drinkboard::Application.routes.draw do
   match '/reset_password',     to: 'sessions#forgot_password',    via:  :get
   match '/enter_new_password', to: 'sessions#enter_new_password', via: [:get, :put]
   match '/valid_token',        to: 'sessions#validate_token',     via: :get
+  match '/change_password/:id', to: 'sessions#change_password',    via: :post
 
   match '/admin',              to: 'admin#show'        ,           via: :get
   match '/admin/test_emails',  to: 'admin#test_emails' ,           via: :get
