@@ -10,7 +10,7 @@ class MerchantsController < JsonController
 	  	end
 	    respond_to do |format|
 	    	response["success"] = merchants_hash
-	      	@app_response 		= "MerchantsC #{response}"
+	      	@app_response 		= "MerchantsC #{response[0]}"
 	      	format.json { render json: response }
 	    end
 	end
@@ -320,10 +320,11 @@ class MerchantsController < JsonController
 protected
 
 	def authenticate_app_employee(token)
-		if employees = Employee.find_all_by_token(token)
+		employees = Employee.find_all_by_token(token)
+		if employees.count > 0
 			return employees
 		else
-			return nil
+			return false
 		end
 	end
 
