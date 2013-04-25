@@ -1,7 +1,18 @@
 class MerchantsController < JsonController
 
 	def login
-		
+		 	# authenticate merchant tools user
+	    response = {}
+	    if employees = authenticate_app_employee(params["token"])
+	    	merchants_hash = employees.each {|e| e.provider.serialize}
+	  	else
+	  		response["error"] 	= "employee was not found in database"
+	  	end
+	    respond_to do |format|
+	    	response["success"] = merchants_hash
+	      	@app_response 		= "MerchantsC #{response}"
+	      	format.json { render json: response }
+	    end
 	end
 
 	def compile_menu
