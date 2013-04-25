@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130425044811) do
+ActiveRecord::Schema.define(:version => 20130425095423) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -262,6 +262,7 @@ ActiveRecord::Schema.define(:version => 20130425044811) do
     t.integer  "sd_location_id"
     t.integer  "brand_id"
     t.integer  "building_id"
+    t.string   "token"
   end
 
   add_index "providers", ["city"], :name => "index_providers_on_city"

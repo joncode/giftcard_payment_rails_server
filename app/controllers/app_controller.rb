@@ -728,7 +728,7 @@ class AppController < ActionController::Base
     	respond_to do |format|
 			#if message.empty?
 				if cCard.save
-					response["add"]      = "Card added"
+					response["add"]      = cCard.id
 					puts "here is the saved new ccard = #{cCard.inspect}"
 				else
 					response["error_server"] = stringify_error_messages cCard

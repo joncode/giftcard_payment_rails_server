@@ -2,15 +2,39 @@ class MerchantsController < JsonController
 
 	def login
 		 	# authenticate merchant tools user
+		puts "INTO THE LOGIN MERCHANTS"
 	    response = {}
-	    if employees = authenticate_app_employee(params["token"])
-	    	merchants_hash = employees.each {|e| e.provider.serialize}
+	    if authenticate_app_employee(params["token"])
+	    	employees = Employee.where(token: params["token"])
+	    	merchants_hash = employees.map {|e| e.provider.serialize}
+	    	response["success"] = merchants_hash
 	  	else
 	  		response["error"] 	= "employee was not found in database"
 	  	end
-	    respond_to do |format|
-	    	response["success"] = merchants_hash
+	    respond_to do |format|    	
 	      	@app_response 		= "MerchantsC #{response[0]}"
+	      	format.json { render json: response }
+	    end
+	end
+
+	def authorize
+		puts "INTO THE AUTHORIZE MERCHANT"
+	    response = {}
+	    if authenticate_app_employee(params["token"])
+	    	employee_ary = Employee.where(token: params["token"], provider_id: params["merchant_id"])
+	    	employee = employee_ary.shift
+	    	# orders   = Gift.get_history_provider(employee.provider)
+	    	if employee.kind_of? Employee
+	    		# token    = employee.provider.token
+	    		response["success"] = "token"
+	    	else
+	    		response["error_server"] = "Employee Record not found"
+	    	end
+	  	else
+	  		response["error"] 	= "employee was not found in database"
+	  	end
+	    respond_to do |format|    	
+	      	@app_response 		= "MerchantsC #{response}"
 	      	format.json { render json: response }
 	    end
 	end
@@ -320,9 +344,13 @@ class MerchantsController < JsonController
 protected
 
 	def authenticate_app_employee(token)
-		employees = Employee.find_all_by_token(token)
-		if employees.count > 0
-			return employees
+		if token
+			employees = Employee.find_by_token(token)
+			if employees
+				return true
+			else
+				return false
+			end
 		else
 			return false
 		end
