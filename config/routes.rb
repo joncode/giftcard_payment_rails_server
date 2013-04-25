@@ -81,7 +81,7 @@ Drinkboard::Application.routes.draw do
   resources :menus 
   resources :merchants do
     member do
-      post :login
+      post :merchant_login
       get  :todays_credits
       get 'past_orders'
       get 'customers'
