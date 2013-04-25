@@ -1,6 +1,6 @@
 class MerchantsController < JsonController
 
-	def merchant_login
+	def login
 		 	# authenticate merchant tools user
 	    response = {}
 	    if employees = authenticate_app_employee(params["token"])

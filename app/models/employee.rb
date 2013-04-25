@@ -7,7 +7,7 @@ class Employee < ActiveRecord::Base
   has_many 	 :orders
   belongs_to :brand
   
-  validates_presence_of  :provider_id, :user_id 
+  validates_presence_of  :provider_id
   validates :user_id ,  uniqueness: true, :if => :no_user_record_at_provider
 
   #clearance = "super", "staff"

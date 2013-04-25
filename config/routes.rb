@@ -81,7 +81,6 @@ Drinkboard::Application.routes.draw do
   resources :menus 
   resources :merchants do
     member do
-      post :merchant_login
       get  :todays_credits
       get 'past_orders'
       get 'customers'
@@ -108,6 +107,9 @@ Drinkboard::Application.routes.draw do
 
     end
   end
+
+    ## merchant tools routes
+  match 'merchant_login',       to: 'merchants#login',        via: :post
 
   # resources :microposts,    only: [:create, :destroy]
   # resources :relationships, only: [:create, :destroy]
