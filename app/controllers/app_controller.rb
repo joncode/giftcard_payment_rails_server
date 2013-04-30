@@ -2,7 +2,6 @@ class AppController < ActionController::Base
 
 	include ActionView::Helpers::DateHelper
 	skip_before_filter 	:verify_authenticity_token
-	before_filter 		:decode_request
 	before_filter 		:method_start_log_message
 	after_filter 		:cross_origin_allow_header
 	after_filter 		:method_end_log_message
@@ -822,202 +821,191 @@ class AppController < ActionController::Base
 	    end			
 	end
 
-	protected
+protected
 
-		def cross_origin_allow_header
-			headers['Access-Control-Allow-Origin'] = "*"
-			headers['Access-Control-Request-Method'] = '*'
+	def cross_origin_allow_header
+		headers['Access-Control-Allow-Origin'] = "*"
+		headers['Access-Control-Request-Method'] = '*'
+	end
+
+   	def array_these_gifts(obj, send_fields, address_get=false, receiver=false, order_num=false)
+      gifts_ary = []
+      index = 1 
+      obj.each do |g|
+      	
+	    gift_obj = g.serializable_hash only: send_fields
+
+        gift_obj.each_key do |key|
+          value = gift_obj[key]
+          gift_obj[key] = value.to_s
+        end
+
+      	gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
+
+	        	# add other person photo url 
+        if receiver
+          if g.receiver
+            gift_obj["receiver_photo"]  = g.receiver.get_photo
+            gift_obj["receiver_name"] 	= g.receiver.username
+          	gift_obj["receiver_id"]	  	= g.receiver.id
+          else
+            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
+          	gift_obj["receiver_photo"]  = ""
+          	if g.receiver_name
+          		gift_obj["receiver_name"] = g.receiver_name
+          	else
+          		gift_obj["receiver_name"] = "Unregistered"
+          	end
+          end
+        end
+        if !order_num
+        	# in MERCHANT_REPLY
+	        gift_obj["giver_photo"]    = g.giver.get_photo
+	        provider = g.provider 
+	        gift_obj["provider_photo"] = provider.get_image("photo")
+	        gift_obj["provider_phone"] = provider.phone
+	        gift_obj["city"]	   	   = provider.city
+	        gift_obj["sales_tax"]	   = provider.sales_tax
+	        gift_obj["live"]		   = provider.live 
+	        	# add the full provider address
+	        if address_get
+	          gift_obj["provider_address"] = provider.complete_address
+	        end
+	        gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
+    	else
+    		# change total to location total
+    		gift_obj["total"]    = g.ticket_total_string
+    		gift_obj["subtotal"] = g.subtotal_string
+    		gift_obj["time_ago"] = time_ago_in_words(g.updated_at.to_time)
+    	end
+
+        gift_obj["gift_id"]  = g.id.to_s
+        
+      	
+        gift_obj["redeem_code"]	  = add_redeem_code(g)
+
+        gifts_ary << gift_obj
+      end
+      return gifts_ary
+    end
+
+
+	def add_redeem_code(obj)
+		if obj.status == "notified" 
+			obj.redeem.redeem_code
+		else
+			"none"
 		end
+	end
 
-	   	def array_these_gifts(obj, send_fields, address_get=false, receiver=false, order_num=false)
-	      gifts_ary = []
-	      index = 1 
-	      obj.each do |g|
-	      	
-		    gift_obj = g.serializable_hash only: send_fields
+	def serialize_objs_in_ary ary
+		ary.map { |o| o.serialize }
+	end
 
-	        gift_obj.each_key do |key|
-	          value = gift_obj[key]
-	          gift_obj[key] = value.to_s
-	        end
-
-	      	gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
-
-		        	# add other person photo url 
-	        if receiver
-	          if g.receiver
-	            gift_obj["receiver_photo"]  = g.receiver.get_photo
-	            gift_obj["receiver_name"] 	= g.receiver.username
-	          	gift_obj["receiver_id"]	  	= g.receiver.id
-	          else
-	            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
-	          	gift_obj["receiver_photo"]  = ""
-	          	if g.receiver_name
-	          		gift_obj["receiver_name"] = g.receiver_name
-	          	else
-	          		gift_obj["receiver_name"] = "Unregistered"
-	          	end
-	          end
-	        end
-	        if !order_num
-	        	# in MERCHANT_REPLY
-		        gift_obj["giver_photo"]    = g.giver.get_photo
-		        provider = g.provider 
-		        gift_obj["provider_photo"] = provider.get_image("photo")
-		        gift_obj["provider_phone"] = provider.phone
-		        gift_obj["city"]	   	   = provider.city
-		        gift_obj["sales_tax"]	   = provider.sales_tax
-		        gift_obj["live"]		   = provider.live 
-		        	# add the full provider address
-		        if address_get
-		          gift_obj["provider_address"] = provider.complete_address
-		        end
-		        gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
-	    	else
-	    		# change total to location total
-	    		gift_obj["total"]    = g.ticket_total_string
-	    		gift_obj["subtotal"] = g.subtotal_string
-	    		gift_obj["time_ago"] = time_ago_in_words(g.updated_at.to_time)
+    def convert_shoppingCart_for_app(shoppingCart)
+    	cart_ary = JSON.parse shoppingCart
+    	# puts "shopping cart = #{cart_ary}"
+    	new_shopping_cart = []
+    	if cart_ary[0].has_key? "menu_id"
+	    	cart_ary.each do |item_hash|
+	    		item_hash["item_id"]   = item_hash["menu_id"]
+        		item_hash["item_name"] = item_hash["name"]
+        		item_hash.delete("menu_id")
+        		item_hash.delete("name")
+        		new_shopping_cart << item_hash
+        		puts "AppC -convert_shoppingCart_for_app- new shopping cart = #{new_shopping_cart}"
 	    	end
+	    else
+	    	new_shopping_cart = cart_ary
+    	end
 
-	        gift_obj["gift_id"]  = g.id.to_s
-	        
-	      	
-	        gift_obj["redeem_code"]	  = add_redeem_code(g)
+    	return new_shopping_cart
+    end
 
-	        gifts_ary << gift_obj
+	def add_receiver_by_origin(origin, gift_obj, response)
+		case origin
+	    when 'd'
+	      #drinkboard - data already received
+	      response["origin"]     = "d"
+	    when 'f'
+	      # facebook - search users for facebook_id
+	      if gift_obj["facebook_id"]
+	        if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
+	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+	          response["origin"] = receiver_info_response(receiver)
+	        else
+	          gift_obj["status"]   = "incomplete"
+	          response["origin"] = "NID"
+	        end
+	      else                   
+	          gift_obj["status"]   = "incomplete"
+	          response["error-receiver"] = "No facebook ID received"
 	      end
-	      return gifts_ary
+	    when 't'
+	      #twitter - search users for twitter handle
+	      if gift_obj["twitter"]
+	        if receiver = User.find_by_twitter(gift_obj["twitter"].to_s)
+	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+	          response["origin"] = receiver_info_response(receiver)
+	        else                   
+	          gift_obj["status"]   = "incomplete"
+	          response["origin"] = "NID"
+	        end
+	      else
+	        gift_obj["status"]     = "incomplete"
+	        response["error-receiver"] = "No twitter info received"
+	      end
+	    when 'c'
+	      # contacts - search users for phone
+	      if gift_obj["receiver_phone"]
+	        phone_received = gift_obj["receiver_phone"]
+	        phone = extract_phone_digits(phone_received)
+	        if receiver = User.find_by_phone(phone)
+	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+	          response["origin"] = receiver_info_response(receiver)
+	        else
+	          gift_obj["status"]   = "incomplete"
+	          response["origin"] = "NID"
+	        end
+	      else
+	          gift_obj["status"]   = "incomplete"
+	          response["error-receiver"] = "No contact phone received"
+	      end
+	    when 'e'
+	      # email - search users for phone
+	      if gift_obj["receiver_email"]
+	        if receiver = User.find_by_email(gift_obj["receiver_email"])
+	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+	          response["receiver"] = receiver_info_response(receiver)
+	        else
+	          gift_obj["status"]   = "incomplete"
+	          response["origin"] = "NID"
+	        end
+	      else
+	          gift_obj["status"]   = "incomplete"
+	          response["error-receiver"] = "No contact email received"
+	      end
+	    else
+	        #drinkboard - no origin sent
+	        response["origin"]     = "d"
 	    end
+	end
 
-	
-		def add_redeem_code(obj)
-			if obj.status == "notified" 
-				obj.redeem.redeem_code
-			else
-				"none"
-			end
+	def extract_phone_digits(phone_raw)
+		if phone_raw
+			phone_match = phone_raw.match(VALID_PHONE_REGEX)
+			phone       = phone_match[1] + phone_match[2] + phone_match[3]
 		end
-
-		def serialize_objs_in_ary ary
-			ary.map { |o| o.serialize }
-		end
-
-	    def convert_shoppingCart_for_app(shoppingCart)
-	    	cart_ary = JSON.parse shoppingCart
-	    	# puts "shopping cart = #{cart_ary}"
-	    	new_shopping_cart = []
-	    	if cart_ary[0].has_key? "menu_id"
-		    	cart_ary.each do |item_hash|
-		    		item_hash["item_id"]   = item_hash["menu_id"]
-	        		item_hash["item_name"] = item_hash["name"]
-	        		item_hash.delete("menu_id")
-	        		item_hash.delete("name")
-	        		new_shopping_cart << item_hash
-	        		puts "AppC -convert_shoppingCart_for_app- new shopping cart = #{new_shopping_cart}"
-		    	end
-		    else
-		    	new_shopping_cart = cart_ary
-	    	end
-
-	    	return new_shopping_cart
-	    end
-
-		def add_receiver_by_origin(origin, gift_obj, response)
-			case origin
-		    when 'd'
-		      #drinkboard - data already received
-		      response["origin"]     = "d"
-		    when 'f'
-		      # facebook - search users for facebook_id
-		      if gift_obj["facebook_id"]
-		        if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
-		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-		          response["origin"] = receiver_info_response(receiver)
-		        else
-		          gift_obj["status"]   = "incomplete"
-		          response["origin"] = "NID"
-		        end
-		      else                   
-		          gift_obj["status"]   = "incomplete"
-		          response["error-receiver"] = "No facebook ID received"
-		      end
-		    when 't'
-		      #twitter - search users for twitter handle
-		      if gift_obj["twitter"]
-		        if receiver = User.find_by_twitter(gift_obj["twitter"].to_s)
-		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-		          response["origin"] = receiver_info_response(receiver)
-		        else                   
-		          gift_obj["status"]   = "incomplete"
-		          response["origin"] = "NID"
-		        end
-		      else
-		        gift_obj["status"]     = "incomplete"
-		        response["error-receiver"] = "No twitter info received"
-		      end
-		    when 'c'
-		      # contacts - search users for phone
-		      if gift_obj["receiver_phone"]
-		        phone_received = gift_obj["receiver_phone"]
-		        phone = extract_phone_digits(phone_received)
-		        if receiver = User.find_by_phone(phone)
-		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-		          response["origin"] = receiver_info_response(receiver)
-		        else
-		          gift_obj["status"]   = "incomplete"
-		          response["origin"] = "NID"
-		        end
-		      else
-		          gift_obj["status"]   = "incomplete"
-		          response["error-receiver"] = "No contact phone received"
-		      end
-		    when 'e'
-		      # email - search users for phone
-		      if gift_obj["receiver_email"]
-		        if receiver = User.find_by_email(gift_obj["receiver_email"])
-		          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-		          response["receiver"] = receiver_info_response(receiver)
-		        else
-		          gift_obj["status"]   = "incomplete"
-		          response["origin"] = "NID"
-		        end
-		      else
-		          gift_obj["status"]   = "incomplete"
-		          response["error-receiver"] = "No contact email received"
-		      end
-		    else
-		        #drinkboard - no origin sent
-		        response["origin"]     = "d"
-		    end
-		end
-
-		def extract_phone_digits(phone_raw)
-			if phone_raw
-				phone_match = phone_raw.match(VALID_PHONE_REGEX)
-				phone       = phone_match[1] + phone_match[2] + phone_match[3]
-			end
-	    end
-	    
-	    def receiver_info_response(receiver)
-	      	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
-	    end
-	    
-	    def add_receiver_to_gift_obj(receiver, gift_obj)
-	      	gift_obj["receiver_id"]    = receiver.id
-	      	gift_obj["receiver_name"]  = receiver.username
-	      	gift_obj["receiver_phone"] = receiver.phone
-	      	return gift_obj
-	    end
-
-	    def decode_request
-	    	request = params.dup
-  			request.delete('controller')
-  			request.delete('action')
-  			request.delete('format')
-  			decoded_request = Encode.decode(request)
-  			puts "Here is the decoded request #{decoded_request}"
-	    end
-
- 
+    end
+    
+    def receiver_info_response(receiver)
+      	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
+    end
+    
+    def add_receiver_to_gift_obj(receiver, gift_obj)
+      	gift_obj["receiver_id"]    = receiver.id
+      	gift_obj["receiver_name"]  = receiver.username
+      	gift_obj["receiver_phone"] = receiver.phone
+      	return gift_obj
+    end 
 end
