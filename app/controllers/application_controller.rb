@@ -15,7 +15,8 @@ class ApplicationController < ActionController::Base
   end
 
   def populate_locals
-      @provider       = Provider.find(params[:id].to_i)
+      id = params[:id].to_i
+      @provider       = Provider.find(id) if id > 0
       @current_user   = current_user
   end
 

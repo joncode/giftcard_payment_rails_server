@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130327204737) do
+ActiveRecord::Schema.define(:version => 20130425095423) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20130327204737) do
     t.datetime "updated_at",                       :null => false
     t.integer  "brand_id"
     t.boolean  "retail",      :default => true
+    t.string   "token"
   end
 
   add_index "employees", ["provider_id"], :name => "index_employees_on_provider_id"
@@ -261,6 +262,7 @@ ActiveRecord::Schema.define(:version => 20130327204737) do
     t.integer  "sd_location_id"
     t.integer  "brand_id"
     t.integer  "building_id"
+    t.string   "token"
   end
 
   add_index "providers", ["city"], :name => "index_providers_on_city"

@@ -56,7 +56,7 @@ class Gift < ActiveRecord::Base
   end
   
   def self.get_buy_history(user)
-    gifts = Gift.where( giver_id: user).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC") 
+    gifts = Gift.where( giver_id: user).where("status = :open OR status = :notified OR status = :incom", :open => 'open', :notified => 'notified', :incom => "incomplete").order("created_at DESC") 
     past_gifts = Gift.where( giver_id: user).where(status: 'redeemed').order("created_at DESC")
     return gifts, past_gifts
   end

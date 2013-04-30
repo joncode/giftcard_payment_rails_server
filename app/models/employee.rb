@@ -7,8 +7,7 @@ class Employee < ActiveRecord::Base
   has_many 	 :orders
   belongs_to :brand
   
-  validates_presence_of  :provider_id, :user_id 
-  validates :user_id ,  uniqueness: true, :if => :no_user_record_at_provider
+  validates_presence_of :provider_id
 
   #clearance = "super", "staff"
 
@@ -61,12 +60,6 @@ class Employee < ActiveRecord::Base
     return server
   end
 
-  private
-
-  def no_user_record_at_provider
-    user = User.find(self.user_id)
-    user.is_employee?(provider)
-  end
 end
 # == Schema Information
 #

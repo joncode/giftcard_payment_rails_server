@@ -1,5 +1,7 @@
 class SessionsController < ApplicationController
   
+    after_filter :cross_origin_allow_header, only: [:validate_token, :change_password] 
+    
     def new
         @text = params[:text]
         sign_out
@@ -58,18 +60,83 @@ class SessionsController < ApplicationController
         end
     end
 
+    def validate_token
+        response_hash = {}
+        if token = params[:reset_token] #&& request.format == :json
+            user = User.find_by_reset_token(token)
+            
+            if user
+                if Time.now - 3.days <= user.reset_token_sent_at
+                    number = 649387
+                    response_hash["success"] = "Valid token |#{(number + user.id)}"
+                else
+                    response_hash["success"] = "Expired Token |0"
+                end
+            else
+                response_hash["success"]     = "Invalid Token |0"
+            end
+        else
+            response_hash["error"]           = "Data not received"
+        end
+        request.format = :json
+        respond_to do |format|
+            format.json { render json: response_hash }
+        end
+    end
+
+    def change_password
+        # get the user for the user id - number
+        number = 649387
+        response_hash = {}
+        user_id = params["id"].to_i - number
+        if user_id < 1 
+            # failed attempt
+            response_hash["error"] = "Could not Identify User - Please re-try forgot password"
+        else
+            begin
+                user = User.find(user_id)
+                        # confirm that the reset token is proper for the user_id and not expired
+                if user.reset_token == params[:reset_token]
+                            # check that you have received the password and password_conf
+                    if validate_params(params)
+                            # update the user object and save
+                        user.password = params["password"]
+                        user.password_confirmation = params["password_confirmation"]
+                        if user.save
+                            response_hash["success"] = "Password Update Successful!"
+                        else
+                            response_hash["error_server"] = user.errors.messages
+                        end
+                    else
+                        # return that the form did not validate data
+                        response_hash["error"] = "Passwords are invalid or do not match"
+                    end
+                else
+                    # the reset token is invalid
+                    response_hash["success"] = "Invalid Token |0"
+                end
+            rescue
+                response_hash["error"] = "Could not Identify User - Please re-try forgot password"
+            end
+        end
+        respond_to do |format|
+            format.json { render json: response_hash }
+        end
+
+    end
+
     def enter_new_password
         user_params = params[:user]
         if !validate_params(user_params)
-            @user = User.find_by_reset_token(params[:reset_token])
-            flash[:notice] = nil
-            flash[:error] = "Password & Confirmation must be atleast 6 letters"
+            @user           = User.find_by_reset_token(params[:reset_token])
+            flash[:notice]  = nil
+            flash[:error]   = "Password & Confirmation must be atleast 6 letters"
         else
             @message = nil
             if user_params[:password] != user_params[:password_confirmation]
-                @user = User.find_by_reset_token(params[:reset_token])
-                flash[:error] = "Your Passwords do not match. Try again."
-                flash[:notice] = "Password & Confirmation must be atleast 6 letters"
+                @user           = User.find_by_reset_token(params[:reset_token])
+                flash[:error]   = "Your Passwords do not match. Try again."
+                flash[:notice]  = "Password & Confirmation must be atleast 6 letters"
             else
                 user = User.find_by_reset_token(params[:reset_token])
                 user.password = user_params[:password]
@@ -96,6 +163,11 @@ class SessionsController < ApplicationController
         else
             return false
         end
+    end
+
+    def cross_origin_allow_header
+        headers['Access-Control-Allow-Origin'] = "*"
+        headers['Access-Control-Request-Method'] = '*'
     end
   
 end
