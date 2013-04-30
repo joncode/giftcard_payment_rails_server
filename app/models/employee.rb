@@ -7,7 +7,7 @@ class Employee < ActiveRecord::Base
   has_many 	 :orders
   belongs_to :brand
   
-  validates_presence_of  :provider_id
+  validates_presence_of :provider_id
 
   #clearance = "super", "staff"
 
