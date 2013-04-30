@@ -5,7 +5,7 @@ class MerchantsController < JsonController
 		puts "INTO THE LOGIN MERCHANTS"
 	    response = {}
 	    if authenticate_app_employee(params["token"])
-	    	employees = Employee.where(token: params["token"])
+	    	employees 	   = Employee.where(token: params["token"])
 	    	merchants_hash = employees.map {|e| e.provider.serialize}
 	    	response["success"] = merchants_hash
 	  	else
@@ -22,11 +22,9 @@ class MerchantsController < JsonController
 	    response = {}
 	    if authenticate_app_employee(params["token"])
 	    	employee_ary = Employee.where(token: params["token"], provider_id: params["merchant_id"])
-	    	employee = employee_ary.shift
-	    	# orders   = Gift.get_history_provider(employee.provider)
+	    	employee 	 = employee_ary.shift
 	    	if employee.kind_of? Employee
-	    		# token    = employee.provider.token
-	    		response["success"] = "token"
+	    		response["success"] 	 = employee.provider.token
 	    	else
 	    		response["error_server"] = "Employee Record not found"
 	    	end

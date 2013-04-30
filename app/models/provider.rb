@@ -36,6 +36,7 @@ class Provider < ActiveRecord::Base
   validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
  
   before_save :extract_phone_digits
+  before_create :create_token      # creates unique  token for provider
 
   def serialize
     prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax]
@@ -234,7 +235,17 @@ class Provider < ActiveRecord::Base
     return response   
   end 
 
-  private
+  def token
+    token = super
+    if token.nil?    # lazy create & save merchant token
+      create_token
+      self.save
+      token = super
+    end
+    return token
+  end
+
+private
     def extract_phone_digits
       if self.phone && !self.phone.empty?
         phone_raw   = self.phone
@@ -253,6 +264,10 @@ class Provider < ActiveRecord::Base
 
     def routing_exists?
       self.routing != nil && !self.routing.empty?
+    end
+
+    def create_token
+      self.token = SecureRandom.urlsafe_base64
     end
 end
 # == Schema Information
