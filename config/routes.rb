@@ -32,15 +32,9 @@ Drinkboard::Application.routes.draw do
     end
     collection do
       get  :confirm_email
-      # get  :reset_password
-      # post :reset_password
-      # get  :enter_new_password
-      # put  :enter_new_password
     end
   end
 
-  # resources :employees
-  # resources :locations
   resources :providers do
     member do
       get :add_photo

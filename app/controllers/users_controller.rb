@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :signed_in_user
-  before_filter :admin_user?
+  before_filter :signed_in_user , except: [:new, :create]
+  before_filter :admin_user? , except: [:new, :create]
 
   ###########   CRUD METHODS
 
@@ -56,7 +56,7 @@ class UsersController < ApplicationController
     if @user.save
       sign_in @user
       flash[:notice] = "Welcome to #{PAGE_NAME}!"
-      redirect_back_or merchants_path
+      redirect_back_or root_path
     else
       flash[:error] = human_readable_error_message(@user).join(' - ')
       render 'new'

@@ -3,6 +3,7 @@
 </li>
 <li class="ordersDisplay" style="width:450px;">
   <%= form_for(@user) do |f| %>
+  <%= render 'shared/error_messages' %>
   <div class="inputWrap" style="width:376px;">
     <%= f.text_field :first_name,            :placeholder => 'First Name', :class => "miTitleForm rounded inputFieldObj formObj" %>
     <%= f.text_field :last_name,             :placeholder => 'Last Name', :class => "miTitleForm rounded inputFieldObj formObj" %>

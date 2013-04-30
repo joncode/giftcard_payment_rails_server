@@ -24,7 +24,7 @@ class MerchantsController < JsonController
 	    	employee_ary = Employee.where(token: params["token"], provider_id: params["merchant_id"])
 	    	employee 	 = employee_ary.shift
 	    	if employee.kind_of? Employee
-	    		response["success"] 	 = employee.provider.token
+	    		response["success"] 	 = employee.provider.merchantize
 	    	else
 	    		response["error_server"] = "Employee Record not found"
 	    	end

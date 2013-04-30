@@ -39,12 +39,17 @@ class Provider < ActiveRecord::Base
   before_create :create_token      # creates unique  token for provider
 
   def serialize
-    prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax]
+    prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city]
     prov_hash["provider_id"]  = self.id.to_s
     prov_hash["photo"]        = self.get_image("photo")
     prov_hash["full_address"] = self.full_address
-    prov_hash["city"]         = self.city
     prov_hash["live"]         = self.live
+    return prov_hash
+  end
+
+  def merchantize
+    prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :token, :address, :city, :state, :zip]
+    prov_hash["photo"] = self.get_image("photo")
     return prov_hash
   end
 
