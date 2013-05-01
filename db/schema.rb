@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130425095423) do
+ActiveRecord::Schema.define(:version => 20130501160749) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20130425095423) do
   end
 
   add_index "employees", ["provider_id"], :name => "index_employees_on_provider_id"
+  add_index "employees", ["token"], :name => "index_employees_on_token"
 
   create_table "gift_items", :force => true do |t|
     t.integer  "gift_id"
@@ -266,6 +267,7 @@ ActiveRecord::Schema.define(:version => 20130425095423) do
   end
 
   add_index "providers", ["city"], :name => "index_providers_on_city"
+  add_index "providers", ["token"], :name => "index_providers_on_token"
 
   create_table "providers_tags", :id => false, :force => true do |t|
     t.integer "provider_id"

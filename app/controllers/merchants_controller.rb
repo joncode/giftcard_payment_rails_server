@@ -155,13 +155,6 @@ class MerchantsController < JsonController
 		end
 	end
 
-	def menu_builder
-
-	end
-
-	def show
-	end
-
 	def photos
 			redirect_to  edit_photo_merchant_path(@provider)
 	end
@@ -200,12 +193,6 @@ class MerchantsController < JsonController
 			redirect_to photos_merchant_path(@provider)
 	end
 
-	def edit_info
-	end
-
-	def edit_bank
-	end
-
 	def update
 
 			respond_to do |format|
@@ -218,20 +205,6 @@ class MerchantsController < JsonController
 				end
 			end
 	end
-
-	# def orders
-	# 		@gifts = Gift.get_all_orders(@provider)
-
-	# 		respond_to do |format|
-	# 			if @gifts.nil?
-	# 				format.html
-	# 			else
-	# 				format.html # index.html.erb
-	# 				format.js
-	# 				format.json { render json: @gifts }
-	# 			end
-	# 		end
-	# end
 
 	def past_orders
 			@gifts = Gift.get_history_provider(@provider)
@@ -294,14 +267,6 @@ class MerchantsController < JsonController
 			end
 	end
 
-	def staff
-			@staff    = @provider.employees
-			@nonstaff = @provider.users_not_staff
-	end
-
-	def staff_profile
-	end
-
 	def add_employee
 			return redirect_to "/" if !params[:join_token] && !params[:email]
 
@@ -358,7 +323,7 @@ class MerchantsController < JsonController
 			redirect_to "/merchants/#{params[:id]}/staff"
 	end
 
-protected
+private
 
 	def authenticate_app_employee(token)
 		if token

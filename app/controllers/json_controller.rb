@@ -13,34 +13,34 @@ class JsonController < ActionController::Base
 protected
 
     def array_these_gifts(obj, send_fields, address_get=false, receiver=false, order_num=false)
-      gifts_ary = []
-      index = 1
-      obj.each do |g|
+        gifts_ary = []
+        index = 1
+        obj.each do |g|
 
         gift_obj = g.serializable_hash only: send_fields
 
         gift_obj.each_key do |key|
-          value = gift_obj[key]
-          gift_obj[key] = value.to_s
+            value = gift_obj[key]
+            gift_obj[key] = value.to_s
         end
 
         gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
 
                 # add other person photo url
         if receiver
-          if g.receiver
-            gift_obj["receiver_photo"]  = g.receiver.get_photo
-            gift_obj["receiver_name"]   = g.receiver.username
-            gift_obj["receiver_id"]     = g.receiver.id
-          else
-            puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
-            gift_obj["receiver_photo"]  = ""
-            if g.receiver_name
-                gift_obj["receiver_name"] = g.receiver_name
+            if g.receiver
+                gift_obj["receiver_photo"]  = g.receiver.get_photo
+                gift_obj["receiver_name"]   = g.receiver.username
+                gift_obj["receiver_id"]     = g.receiver.id
             else
-                gift_obj["receiver_name"] = "Unregistered"
+                puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
+                gift_obj["receiver_photo"]  = ""
+                if g.receiver_name
+                    gift_obj["receiver_name"] = g.receiver_name
+                else
+                    gift_obj["receiver_name"] = "Unregistered"
+                end
             end
-          end
         end
         if !order_num
             # in MERCHANT_REPLY
