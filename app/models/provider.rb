@@ -244,8 +244,12 @@ class Provider < ActiveRecord::Base
     token = super
     if token.nil?    # lazy create & save merchant token
       create_token
-      self.save
-      token = super
+      if self.save
+        token = super
+      else
+        puts "Provider lazy token FAIL #{self.id}"
+        token = self.errors.messages
+      end
     end
     return token
   end
