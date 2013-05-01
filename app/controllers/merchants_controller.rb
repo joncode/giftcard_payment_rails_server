@@ -38,21 +38,20 @@ class MerchantsController < JsonController
 	end
 
  	def orders
- 		puts params
+ 		response = {}
 	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-    		gifts 		= Gift.get_history_provider(provider)
-	    	gifts_array = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-	  		logmsg 		= gifts_array[0]
+	    	puts provider
+    		gifts 					 = Gift.get_history_provider(provider)
+    		puts gifts
+	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 	  	else
-	  		gift_hash 	= {"error" => authentication_data_error }
-	  		gifts_array = gift_hash
-	  		logmsg 		= gift_hash
+	  		response["error_server"] = authentication_data_error
 	  	end
 
 	    respond_to do |format|
 	      # logger.debug gifts_array
-	      @app_response = "AC response[0] => #{logmsg}"
-	      format.json { render json: gifts_array }
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
 	    end
   	end
 
@@ -338,8 +337,8 @@ private
 	def authenticate_merchant_tools_request(token, merch_token)
 		if token && merch_token
 			provider = Provider.find_by_token merch_token
-			employee = Employee.find_by_token token
-			if employee && provider && employee.provider_id == provider.id
+			employee = Employee.where(provider_id: provider.id, token: token).pop
+			if employee && provider && (employee.provider_id == provider.id)
 				puts "Merchant Tools AUTHENTICATED"
 				return provider
 			end
