@@ -110,6 +110,10 @@ protected
  		{ "Data Transfer Error"   => "Please Reset App" }
  	end
 
+    def authentication_data_error
+        { "Data Transfer Error"   => "Authentication Failed" }
+    end
+
  	def stringify_error_messages(object)
  		msgs = object.errors.messages
  		msgs.stringify_keys!

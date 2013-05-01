@@ -38,13 +38,13 @@ class MerchantsController < JsonController
 	end
 
  	def orders
-	    if authenticate_app_employee(params["token"])
-	    	provider 	= Provider.find_by_token(params["merchant_token"])
+ 		puts params
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
     		gifts 		= Gift.get_history_provider(provider)
 	    	gifts_array = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 	  		logmsg 		= gifts_array[0]
 	  	else
-	  		gift_hash 	= {"error" => "user was not found in database"}
+	  		gift_hash 	= {"error" => authentication_data_error }
 	  		gifts_array = gift_hash
 	  		logmsg 		= gift_hash
 	  	end
@@ -219,19 +219,19 @@ class MerchantsController < JsonController
 			end
 	end
 
-	def orders
-			@gifts = Gift.get_all_orders(@provider)
+	# def orders
+	# 		@gifts = Gift.get_all_orders(@provider)
 
-			respond_to do |format|
-				if @gifts.nil?
-					format.html
-				else
-					format.html # index.html.erb
-					format.js
-					format.json { render json: @gifts }
-				end
-			end
-	end
+	# 		respond_to do |format|
+	# 			if @gifts.nil?
+	# 				format.html
+	# 			else
+	# 				format.html # index.html.erb
+	# 				format.js
+	# 				format.json { render json: @gifts }
+	# 			end
+	# 		end
+	# end
 
 	def past_orders
 			@gifts = Gift.get_history_provider(@provider)
@@ -365,12 +365,21 @@ protected
 			employees = Employee.find_by_token(token)
 			if employees
 				return true
-			else
-				return false
 			end
-		else
-			return false
 		end
+		return false
+	end
+
+	def authenticate_merchant_tools_request(token, merch_token)
+		if token && merch_token
+			provider = Provider.find_by_token merch_token
+			employee = Employee.find_by_token token
+			if employee && provider && employee.provider_id == provider.id
+				puts "WE HAVE AUTHENTICATED USER AND MERCH"
+				return provider
+			end
+		end
+		return false
 	end
 
 end

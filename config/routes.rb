@@ -103,9 +103,9 @@ Drinkboard::Application.routes.draw do
   end
 
     ## merchant tools routes
-  match 'user_login',           to: 'merchants#login',        via: :post
-  match 'merchant_login',       to: 'merchants#authorize',    via: :post
-  match 'orders',               to: 'merchants#orders',       via: :post
+  match 'mt/user_login',           to: 'merchants#login',        via: :post
+  match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
+  match 'mt/orders',               to: 'merchants#orders',       via: :post
   # resources :microposts,    only: [:create, :destroy]
   # resources :relationships, only: [:create, :destroy]
 
