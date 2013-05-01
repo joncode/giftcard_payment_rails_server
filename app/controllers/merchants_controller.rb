@@ -375,7 +375,7 @@ protected
 			provider = Provider.find_by_token merch_token
 			employee = Employee.find_by_token token
 			if employee && provider && employee.provider_id == provider.id
-				puts "WE HAVE AUTHENTICATED USER AND MERCH"
+				puts "Merchant Tools AUTHENTICATED"
 				return provider
 			end
 		end
