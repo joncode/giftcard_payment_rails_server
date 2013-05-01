@@ -1,5 +1,5 @@
 Drinkboard::Application.routes.draw do
-  
+
   root                         to: 'sessions#new'
   resources :sessions,       only: [:new, :create, :destroy]
   match '/signin',             to: 'sessions#new',                via: :get
@@ -20,7 +20,7 @@ Drinkboard::Application.routes.draw do
   match "/invite/person/:id"          , to: "invite#invite",          via: :get
   match "/webview(/:template(/:var1))", to: "invite#display_email",   via: :get
 
-  resources :users do 
+  resources :users do
     member do
       get  :following, :followers
       get  :servercode
@@ -70,9 +70,9 @@ Drinkboard::Application.routes.draw do
       get :building_merchant
     end
   end
-  
+
   match "/merchants/:id/employee/:eid/remove"  => "merchants#remove_employee" , via: :get
-  resources :menus 
+  resources :menus
   resources :merchants do
     member do
       get  :todays_credits
@@ -105,14 +105,15 @@ Drinkboard::Application.routes.draw do
     ## merchant tools routes
   match 'user_login',           to: 'merchants#login',        via: :post
   match 'merchant_login',       to: 'merchants#authorize',    via: :post
+  match 'orders',               to: 'merchants#orders',       via: :post
   # resources :microposts,    only: [:create, :destroy]
   # resources :relationships, only: [:create, :destroy]
- 
+
     ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
   match 'app/login',            to: 'iphone#login',            via: :post
   match 'app/login_social',     to: 'iphone#login_social',     via: :post
-  match 'app/update',           to: 'app#relays',              via: :post 
+  match 'app/update',           to: 'app#relays',              via: :post
   match 'app/gifts',            to: 'iphone#gifts',            via: :post
   match 'app/update_user',      to: 'app#update_user',         via: :post
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
@@ -124,7 +125,7 @@ Drinkboard::Application.routes.draw do
   match 'app/employees',        to: 'app#create_redeem_emps',  via: :post
   match 'app/redeem',           to: 'app#create_redeem',       via: :post
   match 'app/complete_order',   to: 'app#create_order_emp',    via: :post
-  match 'app/order_confirm',    to: 'app#create_order',        via: :post 
+  match 'app/order_confirm',    to: 'app#create_order',        via: :post
   match 'app/menu',             to: 'app#menu',                via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
   match 'app/others_questions', to: 'app#others_questions',    via: :post
@@ -132,7 +133,7 @@ Drinkboard::Application.routes.draw do
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/create_gift',      to: 'app#create_gift',         via: :post
-  match 'app/photo',            to: 'iphone#update_photo',     via: :post 
+  match 'app/photo',            to: 'iphone#update_photo',     via: :post
   match 'app/orders',           to: 'app#orders',              via: :post
   match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
   match 'app/reset_password',   to: 'app#reset_password',      via: :post
@@ -149,7 +150,7 @@ Drinkboard::Application.routes.draw do
     ### deprecated app routes
   match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
-  match 'app/out',              to: 'iphone#going_out',        via: :post 
+  match 'app/out',              to: 'iphone#going_out',        via: :post
   match 'app/active',           to: 'iphone#active_orders',    via: :post
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
   match 'app/regift',           to: 'iphone#regift',           via: :post
@@ -160,7 +161,7 @@ Drinkboard::Application.routes.draw do
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
   match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
   ###
-  
+
     ### Location resources
   match '/map',               to: 'locations#map'
   match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'

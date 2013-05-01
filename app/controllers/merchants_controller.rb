@@ -11,7 +11,7 @@ class MerchantsController < JsonController
 	  	else
 	  		response["error"] 	= "employee was not found in database"
 	  	end
-	    respond_to do |format|    	
+	    respond_to do |format|
 	      	@app_response 		= "MerchantsC #{response[0]}"
 	      	format.json { render json: response }
 	    end
@@ -31,22 +31,41 @@ class MerchantsController < JsonController
 	  	else
 	  		response["error"] 	= "employee was not found in database"
 	  	end
-	    respond_to do |format|    	
+	    respond_to do |format|
 	      	@app_response 		= "MerchantsC #{response}"
 	      	format.json { render json: response }
 	    end
 	end
 
+ 	def orders
+	    if authenticate_app_employee(params["token"])
+	    	provider 	= Provider.find_by_token(params["merchant_token"])
+    		gifts 		= Gift.get_history_provider(provider)
+	    	gifts_array = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	  		logmsg 		= gifts_array[0]
+	  	else
+	  		gift_hash 	= {"error" => "user was not found in database"}
+	  		gifts_array = gift_hash
+	  		logmsg 		= gift_hash
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{logmsg}"
+	      format.json { render json: gifts_array }
+	    end
+  	end
+
 	def compile_menu
 		@provider = Provider.find(params[:id].to_i)
-		
+
 		respond_to do |format|
 			if MenuString.compile_menu_to_menu_string(@provider.id)
-				# update the menu string to show the menustring is up to date 
+				# update the menu string to show the menustring is up to date
 				# render success
 					@message = "Merchant Menu on App is Updated and Now Live"
 					@go_live = "live_menu_notice"
-					format.js 
+					format.js
 			else
 				# render error
 				@message = human_readable_error_message menu_string
@@ -100,7 +119,7 @@ class MerchantsController < JsonController
 	end
 
 	def index
-			@providers = current_user.providers    
+			@providers = current_user.providers
 
 			respond_to do |format|
 				if @providers.count == 1
@@ -121,7 +140,7 @@ class MerchantsController < JsonController
 					@left << m
 					column = 2
 				else
-					@right << m 
+					@right << m
 					column = 1
 				end
 			end
@@ -137,7 +156,7 @@ class MerchantsController < JsonController
 	end
 
 	def menu_builder
-		
+
 	end
 
 	def show
@@ -156,7 +175,7 @@ class MerchantsController < JsonController
 			@file_field_name = @image.dup
 			if @image == 'secure_image'
 				@image = 'Secure Image'
-			else 
+			else
 				@image = "Photo"
 			end
 			@obj_width = 131
@@ -197,7 +216,7 @@ class MerchantsController < JsonController
 					format.html { render action: "edit" }
 					format.json { render json: @provider.errors, status: :unprocessable_entity }
 				end
-			end    
+			end
 	end
 
 	def orders
@@ -205,7 +224,7 @@ class MerchantsController < JsonController
 
 			respond_to do |format|
 				if @gifts.nil?
-					format.html 
+					format.html
 				else
 					format.html # index.html.erb
 					format.js
@@ -248,7 +267,7 @@ class MerchantsController < JsonController
 			@receiver = @gift.receiver
 			@order    = @gift.order
 			if @order.server_id
-				@server = User.find(@order.server_id) 
+				@server = User.find(@order.server_id)
 			else
 				@server = User.new(first_name: "missing", last_name: "person")
 			end
@@ -265,9 +284,9 @@ class MerchantsController < JsonController
 					# most drinks ordered
 					# most money spent
 			# check all the gifts , get the giver and receiver user ids
-			# assign those ids to the gift.updated_at field 
+			# assign those ids to the gift.updated_at field
 			# make a uniq array of all user ids
-			# remove employees from that list 
+			# remove employees from that list
 			# list those customers on the screen by gift.updated_at
 			respond_to do |format|
 				format.html # index.html.erb
@@ -300,7 +319,7 @@ class MerchantsController < JsonController
 
 	def add_member
 			user = User.find params[:user_id].to_i
-			emp = Employee.create(user_id: user.id, provider_id: @provider.id) 
+			emp = Employee.create(user_id: user.id, provider_id: @provider.id)
 			redirect_to staff_merchant_path(@provider)
 	end
 
@@ -316,7 +335,7 @@ class MerchantsController < JsonController
 				if !potential_employee
 					#If the user doesn't exist in the database
 				else
-					#The user does exist in the database        
+					#The user does exist in the database
 				end
 				#For now, we handle either situation the same
 				Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email]})
