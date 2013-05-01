@@ -6,10 +6,10 @@ class AppController < ActionController::Base
 	after_filter 		:cross_origin_allow_header
 	after_filter 		:method_end_log_message
 
-	UPDATE_REPLY  	= ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]  
+	UPDATE_REPLY  	= ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]
 	GIFT_REPLY 	  	= ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "order_num"]
-    ACTIVITY_REPLY 	= GIFT_REPLY + [ "receiver_id", "receiver_name"] 
+    ACTIVITY_REPLY 	= GIFT_REPLY + [ "receiver_id", "receiver_name"]
 
  	def authenticate_app_user(token)
  		if user = User.find_by_remember_token(token)
@@ -24,7 +24,7 @@ class AppController < ActionController::Base
 	end
 
  	def unauthorized_user
- 		{ "Failed Authentication" => "Please log out and re-log into app" }	
+ 		{ "Failed Authentication" => "Please log out and re-log into app" }
  	end
 
  	def database_error_redeem
@@ -121,11 +121,11 @@ class AppController < ActionController::Base
  			if user.update_attributes(updates)
 	          response["success"]      = user.serializable_hash only: UPDATE_REPLY
 	        else
-	          response["error_server"] = stringify_error_messages user 
+	          response["error_server"] = stringify_error_messages user
 	        end
 	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
-	    end	
+	    end
  	end
 
  	def relays
@@ -154,7 +154,7 @@ class AppController < ActionController::Base
  	def menu
 
  		response = {}
-	
+
  		if authenticate_public_info
  			provider_id  = params["data"]
  			response = []
@@ -164,7 +164,7 @@ class AppController < ActionController::Base
  			response["error"] = "user was not found in database"
  			logmsg 	 = response
  		end
-	    
+
 	    respond_to do |format|
 	    	# logger.debug response
 	    	@app_response = "AC response[0] => #{logmsg}"
@@ -193,7 +193,7 @@ class AppController < ActionController::Base
  	def orders
  			# send orders to the app for a provider
  		provider_id = params["provider"].to_i
- 		if provider_id > 0 
+ 		if provider_id > 0
 		    if user = authenticate_app_user(params["token"])
 		    	provider 	= Provider.find(provider_id)
 	    		gifts 		= Gift.get_history_provider(provider)
@@ -230,7 +230,7 @@ class AppController < ActionController::Base
 	  		order 		= Order.new
 	  	end
 	    respond_to do |format|
-	    	if order.save 
+	    	if order.save
 	    		#success
 	    		response["success"] = "Order for Gift-#{order.gift_id} Completed!"
 	    	else
@@ -244,7 +244,7 @@ class AppController < ActionController::Base
   	def user_activity
 
 	    user  = User.find(params["user_id"].to_i)
-	    if user 
+	    if user
 	    	gifts 		= Gift.get_user_activity(user)
 	    	gifts_array = array_these_gifts(gifts, ACTIVITY_REPLY, true, true)
 	  		logmsg 		= gifts_array[0]
@@ -279,7 +279,7 @@ class AppController < ActionController::Base
   	end
 
   	def questions
-  		  		
+
   		if user = authenticate_app_user(params["token"])
 
 		  	  	# save filled out answers to db
@@ -307,8 +307,8 @@ class AppController < ActionController::Base
 
  	def others_questions
   		# user  = User.find_by_remember_token(params["token"])
-  		
-  		begin  
+
+  		begin
   			other_user = User.find(params["user_id"].to_i)
 	  			# get new pack of questions
 			begin
@@ -445,10 +445,10 @@ class AppController < ActionController::Base
 				users    = User.all
 			else
 				users    = User.find_by_city(params['city'])
-			end 
+			end
 			user_array = serialize_objs_in_ary users
 			logmsg 	   = user_array[0]
-		rescue 
+		rescue
 			puts "ALERT - cannot find user from token"
 			user_array = {"error" => "cannot find user from token"}
 			logmsg 	   = user_array
@@ -492,9 +492,9 @@ class AppController < ActionController::Base
       		message += "Couldn't identify app user. "
     	end
 
-    	response = { "error" => message } if message != "" 
-    	if redeem.provider.nil? 
-    		process = false 
+    	response = { "error" => message } if message != ""
+    	if redeem.provider.nil?
+    		process = false
     		message += "Gift is missing a provider - GIFT ID = #{redeem.gift.id}"
     	end
 		respond_to do |format|
@@ -504,7 +504,7 @@ class AppController < ActionController::Base
 				response = [redeem_code, employees_ary]
 			else
 				message += " Gift unable to process to database. Please retry later."
-				response["error_server"] = message 
+				response["error_server"] = message
 			end
 			@app_response = "AppC #{response}"
 			format.json { render json: response }
@@ -520,7 +520,7 @@ class AppController < ActionController::Base
   			begin
 	  			gift = Gift.find params["data"].to_i
 	  					# find or create redeem for gift
-	  						# if redeem exists app should not call server 
+	  						# if redeem exists app should not call server
 	  						# gift.status == "notified" if redeem exists
 	  			redeem = Redeem.find_or_create_with_gift(gift)
 	  			if redeem.redeem_code
@@ -538,7 +538,7 @@ class AppController < ActionController::Base
   		respond_to do |format|
   			@app_response = "AppC #{response}"
   			format.json { render json: response}
-  		end 		
+  		end
   	end
 
   	def create_order
@@ -565,7 +565,7 @@ class AppController < ActionController::Base
   		respond_to do |format|
   			@app_response = "AppC #{response}"
   			format.json { render json: response}
-  		end 
+  		end
   	end
 
   	def create_gift
@@ -576,10 +576,10 @@ class AppController < ActionController::Base
   					# check to see that the gift has the correct data to save
   					# check to see that the gift has a shoppingCart
 			if gift_obj.nil? || params["shoppingCart"].nil?
-						# nothing can be done without the data 
-				response["error_server"] = "Data didnt arrive #{database_error_gift}"	
+						# nothing can be done without the data
+				response["error_server"] = "Data didnt arrive #{database_error_gift}"
 		    else
-		    		# add the receiver + receiver checks to the gift object 
+		    		# add the receiver + receiver checks to the gift object
 		        puts "Lets make this gift !!!"
 		        add_receiver_by_origin(params["origin"], gift_obj, response)
 		        gift    = Gift.new(gift_obj)
@@ -614,17 +614,17 @@ class AppController < ActionController::Base
   			end
   			@app_response = "AppC #{response}"
   			format.json { render json: response}
-  		end 
+  		end
   	end
 
 	def create_order_emp
 
 		message   = ""
-		response  = {} 
+		response  = {}
 		gift_id 	= params["gift_id"].to_i
 		employee_id = params["employee_id"].to_i
 
-		if gift_id == 0 || employee_id == 0 
+		if gift_id == 0 || employee_id == 0
 			message = "Data not received correctly. "
 			order   = Order.new
 		else
@@ -644,7 +644,7 @@ class AppController < ActionController::Base
 		end
 
 
-		response = { "error" => message } if message != "" 
+		response = { "error" => message } if message != ""
 
 		respond_to do |format|
 			if order.save
@@ -655,7 +655,7 @@ class AppController < ActionController::Base
 			@app_response = "AppC #{response}"
 			format.json { render json: response }
 		end
-	end 
+	end
 
 	def delete_card
 
@@ -679,12 +679,12 @@ class AppController < ActionController::Base
 			@app_response = "AppC #{response}"
 			format.json { render json: response }
 		end
-	end 
+	end
 
 	def get_cards
 
 		message   = ""
-		response  = {} 
+		response  = {}
 
       	if user = authenticate_app_user(params["token"])
       		display_cards = Card.get_cards user
@@ -707,8 +707,8 @@ class AppController < ActionController::Base
 
 	def add_card
 
-		message   = "" 
-		response  = {} 
+		message   = ""
+		response  = {}
 
       	if user = authenticate_app_user(params["token"])
       		puts "User = #{user.fullname}"
@@ -738,7 +738,7 @@ class AppController < ActionController::Base
 			puts message
 			format.json { render json: response }
 		end
-		
+
 	end
 
 	def reset_password
@@ -747,23 +747,23 @@ class AppController < ActionController::Base
 			user = User.find_by_email(params[:email])
 			if user
 				user.update_reset_token
-				Resque.enqueue(EmailJob, 'reset_password', user.id, {})  
+				Resque.enqueue(EmailJob, 'reset_password', user.id, {})
 				response = {"success" => "Email is Sent , check your inbox"}
 			else
 				response = {"error" => "We do not have record of that email"}
 			end
 		else
 			response = {"error" => "no email sent"}
-		end	
+		end
 
 		respond_to do |format|
 			@app_response = "AppC #{response}"
 			format.json {render json: response }
-		end	
+		end
 	end
 
 	def get_settings
-  		  		
+
   		if user = authenticate_app_user(params["token"])
 			begin
 	  			response = {"success" => user.get_settings }
@@ -777,11 +777,11 @@ class AppController < ActionController::Base
   		respond_to do |format|
 	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
-	    end		
+	    end
 	end
 
 	def save_settings
-  		response = {} 		
+  		response = {}
   		if user = authenticate_app_user(params["token"])
 			data = JSON.parse params["data"]
 	  		if user.save_settings(data)
@@ -796,11 +796,11 @@ class AppController < ActionController::Base
   		respond_to do |format|
 	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
-	    end			
+	    end
 	end
 
 	def save_settings_m
-  		response = {} 	
+  		response = {}
 
   		if user = authenticate_app_user(params["token"])
   			data = params
@@ -818,7 +818,7 @@ class AppController < ActionController::Base
   		respond_to do |format|
 	    	@app_response = "AppC #{response}"
 	    	format.json { render json: response }
-	    end			
+	    end
 	end
 
 protected
@@ -830,9 +830,9 @@ protected
 
    	def array_these_gifts(obj, send_fields, address_get=false, receiver=false, order_num=false)
       gifts_ary = []
-      index = 1 
+      index = 1
       obj.each do |g|
-      	
+
 	    gift_obj = g.serializable_hash only: send_fields
 
         gift_obj.each_key do |key|
@@ -842,7 +842,7 @@ protected
 
       	gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
 
-	        	# add other person photo url 
+	        	# add other person photo url
         if receiver
           if g.receiver
             gift_obj["receiver_photo"]  = g.receiver.get_photo
@@ -861,12 +861,12 @@ protected
         if !order_num
         	# in MERCHANT_REPLY
 	        gift_obj["giver_photo"]    = g.giver.get_photo
-	        provider = g.provider 
+	        provider = g.provider
 	        gift_obj["provider_photo"] = provider.get_image("photo")
 	        gift_obj["provider_phone"] = provider.phone
 	        gift_obj["city"]	   	   = provider.city
 	        gift_obj["sales_tax"]	   = provider.sales_tax
-	        gift_obj["live"]		   = provider.live 
+	        gift_obj["live"]		   = provider.live
 	        	# add the full provider address
 	        if address_get
 	          gift_obj["provider_address"] = provider.complete_address
@@ -880,10 +880,9 @@ protected
     	end
 
         gift_obj["gift_id"]  = g.id.to_s
-        
-      	
-        gift_obj["redeem_code"]	  = add_redeem_code(g)
 
+
+        gift_obj["redeem_code"]	  = add_redeem_code(g)
         gifts_ary << gift_obj
       end
       return gifts_ary
@@ -891,7 +890,7 @@ protected
 
 
 	def add_redeem_code(obj)
-		if obj.status == "notified" 
+		if obj.status == "notified"
 			obj.redeem.redeem_code
 		else
 			"none"
@@ -937,7 +936,7 @@ protected
 	          gift_obj["status"]   = "incomplete"
 	          response["origin"] = "NID"
 	        end
-	      else                   
+	      else
 	          gift_obj["status"]   = "incomplete"
 	          response["error-receiver"] = "No facebook ID received"
 	      end
@@ -947,7 +946,7 @@ protected
 	        if receiver = User.find_by_twitter(gift_obj["twitter"].to_s)
 	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
 	          response["origin"] = receiver_info_response(receiver)
-	        else                   
+	        else
 	          gift_obj["status"]   = "incomplete"
 	          response["origin"] = "NID"
 	        end
@@ -997,15 +996,15 @@ protected
 			phone       = phone_match[1] + phone_match[2] + phone_match[3]
 		end
     end
-    
+
     def receiver_info_response(receiver)
       	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
     end
-    
+
     def add_receiver_to_gift_obj(receiver, gift_obj)
       	gift_obj["receiver_id"]    = receiver.id
       	gift_obj["receiver_name"]  = receiver.username
       	gift_obj["receiver_phone"] = receiver.phone
       	return gift_obj
-    end 
+    end
 end
