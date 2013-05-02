@@ -40,9 +40,7 @@ class MerchantsController < JsonController
  	def orders
  		response = {}
 	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-	    	puts provider
     		gifts 					 = Gift.get_history_provider(provider)
-    		puts gifts
 	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 	  	else
 	  		response["error_server"] = authentication_data_error
@@ -59,10 +57,7 @@ class MerchantsController < JsonController
   		# @menu_array     = Menu.get_menu_array_for_builder @provider
  		response = {}
 	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-	    	puts provider
-    		gifts 					 = Gift.get_history_provider(provider)
-    		puts gifts
-	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	    	response["success"] 	 = Menu.get_menu_array_for_builder provider
 	  	else
 	  		response["error_server"] = authentication_data_error
 	  	end
@@ -77,9 +72,7 @@ class MerchantsController < JsonController
   	def reports
  		response = {}
 	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-	    	puts provider
     		gifts 					 = Gift.get_history_provider(provider)
-    		puts gifts
 	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 	  	else
 	  		response["error_server"] = authentication_data_error
@@ -95,10 +88,7 @@ class MerchantsController < JsonController
   	def employees
  		response = {}
 	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-	    	puts provider
-    		gifts 					 = Gift.get_history_provider(provider)
-    		puts gifts
-	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	    	response["success"] 	 = provider.employees_to_merchant_tools
 	  	else
 	  		response["error_server"] = authentication_data_error
 	  	end
@@ -113,9 +103,7 @@ class MerchantsController < JsonController
   	def finances
  		response = {}
 	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-	    	puts provider
     		gifts 					 = Gift.get_history_provider(provider)
-    		puts gifts
 	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 	  	else
 	  		response["error_server"] = authentication_data_error

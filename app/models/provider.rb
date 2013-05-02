@@ -155,7 +155,7 @@ class Provider < ActiveRecord::Base
     # this means get people who are AT work not just employed
     # for now without location data,
     # its just employees who  are active and retail (deal with customers)
-    self.employees.where(active: true, retail: true)
+    self.employees.where(active: true)
   end
 
   def user_clearance(user)
@@ -217,6 +217,24 @@ class Provider < ActiveRecord::Base
       employee_hash["photo"]        = e.user.get_photo
       employee_hash["secure_image"] = e.user.get_secure_image
       employee_hash["employee_id"]  = "#{e.id}"
+      employee_hash
+    end
+    if employees_array.count == 0
+      employees_array = ["no employees set up yet"]
+    end
+    return employees_array
+  end
+
+  def employees_to_merchant_tools
+    # get all the employees - put there table view info and secure image into an array
+    send_fields = [:first_name, :last_name]
+    employees_array = self.get_servers.map do |e|
+      employee_hash = {}
+      employee_hash = e.user.serializable_hash only: [:first_name, :last_name]
+      employee_hash["photo"]        = e.user.get_photo
+      employee_hash["email"] = e.user.email
+      employee_hash["phone"]  = e.user.phone
+      employee_hash["clearance"]  = e.clearance
       employee_hash
     end
     if employees_array.count == 0
