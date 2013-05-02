@@ -1,7 +1,5 @@
 class AppController < JsonController
 
-	include ActionView::Helpers::DateHelper
-
  	def authenticate_app_user(token)
  		if user = User.find_by_remember_token(token)
  			return user
@@ -765,14 +763,6 @@ class AppController < JsonController
 	end
 
 protected
-
-	def add_redeem_code(obj)
-		if obj.status == "notified"
-			obj.redeem.redeem_code
-		else
-			"none"
-		end
-	end
 
 	def add_receiver_by_origin(origin, gift_obj, response)
 		case origin

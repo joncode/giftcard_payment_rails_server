@@ -55,6 +55,79 @@ class MerchantsController < JsonController
 	    end
   	end
 
+  	def menu
+  		# @menu_array     = Menu.get_menu_array_for_builder @provider
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+	    	puts provider
+    		gifts 					 = Gift.get_history_provider(provider)
+    		puts gifts
+	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
+  	def reports
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+	    	puts provider
+    		gifts 					 = Gift.get_history_provider(provider)
+    		puts gifts
+	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
+  	def employees
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+	    	puts provider
+    		gifts 					 = Gift.get_history_provider(provider)
+    		puts gifts
+	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
+  	def finances
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+	    	puts provider
+    		gifts 					 = Gift.get_history_provider(provider)
+    		puts gifts
+	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
 	def compile_menu
 		@provider = Provider.find(params[:id].to_i)
 
@@ -125,22 +198,6 @@ class MerchantsController < JsonController
 					format.html { redirect_to merchant_path(@providers.pop) }
 				else
 					format.html
-				end
-			end
-	end
-
-	def menu
-			@menu_array     = Menu.get_menu_array_for_builder @provider
-			column = 1
-			@left = []
-			@right = []
-			@menu_array.each do |m|
-				if column == 1
-					@left << m
-					column = 2
-				else
-					@right << m
-					column = 1
 				end
 			end
 	end

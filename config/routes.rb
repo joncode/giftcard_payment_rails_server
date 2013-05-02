@@ -106,6 +106,11 @@ Drinkboard::Application.routes.draw do
   match 'mt/user_login',           to: 'merchants#login',        via: :post
   match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
   match 'mt/orders',               to: 'merchants#orders',       via: :post
+  match 'mt/menu',                 to: 'merchants#menu',         via: :post
+  match 'mt/reports',              to: 'merchants#reports',      via: :post
+  match 'mt/employees',            to: 'merchants#employees',    via: :post
+  match 'mt/finances',             to: 'merchants#finances',     via: :post
+
   # resources :microposts,    only: [:create, :destroy]
   # resources :relationships, only: [:create, :destroy]
 
