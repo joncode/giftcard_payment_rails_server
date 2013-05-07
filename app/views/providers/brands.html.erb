@@ -24,7 +24,7 @@
             <% else %>
         <td></td>
             <% end %>
-                
+
                 <% if brand.id == @provider.brand_id %>
         <td><%= link_to 'YES', brand_provider_path(@provider, :offset => @page, :brand => brand.id)%>
         </td>
@@ -34,7 +34,7 @@
                 <% else %>
         <td>N/A</td>
                 <% end %>
-                
+
                 <% if brand.id == @provider.building_id   %>
         <td><%= link_to 'YES', building_provider_path(@provider, :offset => @page, brand: brand.id) %>
         </td>

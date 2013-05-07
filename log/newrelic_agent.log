@@ -706,3 +706,29 @@
 [04/30/13 20:41:49 -0400 new-host.home (45819)] INFO : Installing Rails 3.1/3.2 view instrumentation
 [04/30/13 20:41:49 -0400 new-host.home (45819)] INFO : Installing Rails3 Error instrumentation
 [04/30/13 20:41:49 -0400 new-host.home (45819)] INFO : Finished instrumentation
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Starting the New Relic Agent.
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Environment: development
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Dispatcher: thin
+[05/07/13 13:22:15 -0400 new-host.home (79941)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[05/07/13 13:22:15 -0400 new-host.home (79941)] WARN : Agent configured not to send data in this environment.
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Installing ActiveMerchant instrumentation
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Installing ActiveRecord instrumentation
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Installing Net instrumentation
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Installing Resque instrumentation
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Installing Rails 3 Controller instrumentation
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Installing Rails3 Error instrumentation
+[05/07/13 13:22:15 -0400 new-host.home (79941)] INFO : Finished instrumentation
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Starting the New Relic Agent.
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Environment: development
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Dispatcher: thin
+[05/07/13 13:22:27 -0400 new-host.home (79944)] ERROR : Unable to determine application name. Please set the application name in your newrelic.yml or in a NEW_RELIC_APP_NAME environment variable.
+[05/07/13 13:22:27 -0400 new-host.home (79944)] WARN : Agent configured not to send data in this environment.
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Installing ActiveMerchant instrumentation
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Installing ActiveRecord instrumentation
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Installing Net instrumentation
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Installing Resque instrumentation
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Installing Rails 3 Controller instrumentation
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Installing Rails3 Error instrumentation
+[05/07/13 13:22:27 -0400 new-host.home (79944)] INFO : Finished instrumentation

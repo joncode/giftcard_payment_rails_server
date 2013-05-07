@@ -10,19 +10,22 @@
 <% content_for :test_emails do  %>
   <h3>Click to <%= link_to 'Test Email System', '/admin/test_emails' %></h3>
 <% end %>
-
+<% content_for :system_reports do  %>
+  <h3>Click to <%= link_to 'System Reports', gifts_path %></h3>
+<% end %>
 
 <div class="bankCell POSsingleColumn">
   <h2>Welcome to Drinkboard Admin Tools</h2>
   <h3><%= render 'shared/flash', flash: flash %></h3>
   <div class="merchantSignUpObject rounded gradient">
-	
+
   <%= yield :brand_link  %>
 	<%= yield :merchant_link %>
   <%= yield :users_link %>
+  <%= yield :system_reports %>
   <%= yield :test_emails %>
 
   <%#= yield :merchant_tools %>
-</div>  
+</div>
 
 </div>
