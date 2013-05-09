@@ -102,7 +102,7 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-  resources :gifts,       only: [:index]
+  resources :gifts,       only: [:index, :show]
     ## merchant tools routes
   match 'user_login',           to: 'merchants#login',        via: :post
   match 'merchant_login',       to: 'merchants#authorize',    via: :post

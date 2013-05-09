@@ -27,7 +27,7 @@
 
         <% @gifts.each do |gift| %>
     <tr>
-        <td><%= gift.id %></td>
+        <td><%= link_to gift.id, gift_path(gift) %></td>
         <td>#</td>
         <td><%= gift.giver.name %></td>
         <td><%= gift.giver.id %></td>

@@ -1,0 +1,46 @@
+<div class="merchantSignInWrapper POSfullPageWrap">
+<h1>Gift</h1>
+<table>
+    <tr style="color:#ccc">
+        <th>Gift ID</th>
+        <th>Source</th>
+        <th>Giver</th>
+        <th>Giver ID</th>
+        <th>Receiver</th>
+        <th>Receiver ID</th>
+        <th>Merchant</th>
+        <th>Time of Creation</th>
+        <th>Tender</th>
+        <th>Tax</th>
+        <th>Tip</th>
+        <th>Service Charge</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Administrator Action</th>
+    </tr>
+    <tr>
+        <td><%= @gift.id %></td>
+        <td>#</td>
+        <td><%= @gift.giver.name %></td>
+        <td><%= @gift.giver.id %></td>
+            <% if @gift.receiver %>
+        <td><%= @gift.receiver.name  %></td>
+        <td><%= @gift.receiver.id  %></td>
+            <% else %>
+        <td><%= @gift.receiver_name  %></td>
+        <td><p>Pending</p></td>
+            <% end -%>
+        <td><%= @gift.provider.name %></td>
+        <td><%= time_ago_in_words(@gift.created_at) %></td>
+        <td>tender</td>
+        <td><%= @gift.tax %></td>
+        <td><%= @gift.tip %></td>
+        <td><%= @gift.service %></td>
+        <td><%= @gift.total %></td>
+        <td><p><%= @gift.status %></p></td>
+        <td><p>ACTION</p></td>
+    </tr>
+</table>
+<br />
+
+</div>
