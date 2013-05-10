@@ -51,6 +51,7 @@ protected
             gift_obj["city"]           = provider.city
             gift_obj["sales_tax"]      = provider.sales_tax
             gift_obj["live"]           = provider.live
+            gift_obj["server"]         = g.order.server_code
                 # add the full provider address
             if address_get
               gift_obj["provider_address"] = provider.complete_address

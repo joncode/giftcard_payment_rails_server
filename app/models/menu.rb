@@ -1,5 +1,5 @@
 class Menu < ActiveRecord::Base
-    attr_accessible :item_id, :position, :price, :provider_id, 
+    attr_accessible :item_id, :position, :price, :provider_id,
     :item_name, :photo, :description, :section, :active
 
 
@@ -56,7 +56,7 @@ class Menu < ActiveRecord::Base
         menu_items = Menu.where(provider_id: provider_id)
         menu_section = []
         menu_items.each do |menu|
-            # the old way 
+            # the old way
           # if menu.item.category == category
           #   menu_display = menu.display_object
           #   menu_section << menu_display
@@ -79,7 +79,7 @@ class Menu < ActiveRecord::Base
           sections_array = Menu.get_sections(provider_id)
         end
 
-        sections_array.each do |section_name|      
+        sections_array.each do |section_name|
           # array_of_menu_section = Menu.where(provider_id: provider_id, header: category).order("position ASC")
           array_of_menu_section = Menu.get_menu_in_section(provider_id, section_name)
           if #array_of_menu_section.count > 0
@@ -137,7 +137,7 @@ class Menu < ActiveRecord::Base
     end
 
 
-  
+
 end
 # == Schema Information
 #
