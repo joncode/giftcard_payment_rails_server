@@ -51,7 +51,7 @@ protected
             gift_obj["city"]           = provider.city
             gift_obj["sales_tax"]      = provider.sales_tax
             gift_obj["live"]           = provider.live
-            gift_obj["server"]         = g.order.server_code
+
                 # add the full provider address
             if address_get
               gift_obj["provider_address"] = provider.complete_address
@@ -61,7 +61,12 @@ protected
             # change total to location total
             gift_obj["total"]    = g.ticket_total_string
             gift_obj["subtotal"] = g.subtotal_string
-            gift_obj["time_ago"] = time_ago_in_words(g.updated_at.to_time)
+            gift_obj["server"]   = g.order.server_code
+            if (g.updated_at > (g.updated_at - 1.day))
+                gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant)
+            else
+                gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant_date)
+            end
         end
 
         gift_obj["gift_id"]  = g.id.to_s

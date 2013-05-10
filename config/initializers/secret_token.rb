@@ -26,3 +26,6 @@ else
 end
 
 BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dinig"]
+
+Time::DATE_FORMATS[:merchant] = "%I:%M %p"
+Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
