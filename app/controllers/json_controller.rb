@@ -61,8 +61,8 @@ protected
             # change total to location total
             gift_obj["total"]    = g.ticket_total_string
             gift_obj["subtotal"] = g.subtotal_string
-            gift_obj["server"]   = g.order.server_code
-            if (g.updated_at > (g.updated_at - 1.day))
+            gift_obj["server"]   = g.order.server_code if g.order
+            if (g.updated_at > (Time.now  - 1.day))
                 gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant)
             else
                 gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant_date)

@@ -1,11 +1,11 @@
 class ApplicationController < ActionController::Base
 
-  protect_from_forgery 
-  helper :all 
+  protect_from_forgery
+  helper :all
   include SessionsHelper
   before_filter :prepare_for_mobile
   helper_method :mobile_device?
-  
+
   def required_params(param_arr)
     param_arr.each do |p|
       next if params[p]
@@ -26,14 +26,14 @@ class ApplicationController < ActionController::Base
   end
 
 
-  def create_menu_from_items(provider)     
+  def create_menu_from_items(provider)
     menu_bulk = Menu.where(provider_id: provider.id)
     items = []
     menu_bulk.each do |item|
        indi = Item.find(item.item_id)
        price = item.price
        item_array = [indi, price]
-       items << item_array  
+       items << item_array
     end
     return items
   end
@@ -48,14 +48,14 @@ class ApplicationController < ActionController::Base
           human_str = "#{k.to_s} "
           human_str += v
           message_ary << human_str
-        end 
+        end
       end
     end
     return message_ary
   end
 
   private
-  
+
     def mobile_device?
       if session[:mobile]
         session[:mobile] == "1"
@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
         end
       end
     end
-    
+
     def sniff_browser
       if request.user_agent =~ /Mobile|webOS/
         request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
@@ -77,11 +77,11 @@ class ApplicationController < ActionController::Base
         false
       end
     end
-    
+
     def prepare_for_mobile
       session[:mobile] = params[:mobile] if params[:mobile]
       #  request.format   = :mobile if mobile_device?
     end
 
-  
+
 end

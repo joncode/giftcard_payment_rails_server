@@ -40,7 +40,11 @@ class MerchantsController < JsonController
  	def orders
  		response = {}
 	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-    		gifts 					 = Gift.get_history_provider(provider)
+    		if params["status"] == "new"
+    			gifts = Gift.get_provider(provider)
+    		else
+				gifts = Gift.get_history_provider(provider)
+			end
 	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 	  	else
 	  		response["error_server"] = authentication_data_error
@@ -100,6 +104,23 @@ class MerchantsController < JsonController
 	    end
   	end
 
+  	def deactivate_employee
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+    		employee = Employee.find(params["eid"].to_i)
+    		employee.update_attribute(:active, false)
+	    	response["success"] 	 = provider.employees_to_merchant_tools
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
   	def finances
  		response = {}
 	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
@@ -115,6 +136,8 @@ class MerchantsController < JsonController
 	      format.json { render json: response }
 	    end
   	end
+
+  	#### OLD MERCHANT COUPLED SITE METHODS
 
 	def compile_menu
 		@provider = Provider.find(params[:id].to_i)
@@ -382,7 +405,7 @@ private
 	def authenticate_merchant_tools_request(token, merch_token)
 		if token && merch_token
 			provider = Provider.find_by_token merch_token
-			employee = Employee.where(provider_id: provider.id, token: token).pop
+			employee = Employee.where(provider_id: provider.id, token: token, active: true).pop
 			if employee && provider && (employee.provider_id == provider.id)
 				puts "Merchant Tools AUTHENTICATED"
 				return provider
