@@ -1,33 +1,33 @@
 class EmailJob
   @queue = :email
-  
+
   def self.perform(email_type, user_id, opthash = {})
     case email_type
     when "confirm_email"
       puts "OPT CONFIRM EMAIL"
       @user = User.find(user_id.to_i)
       UserMailer.confirm_email(@user).deliver
-    
+
     when "reset_password"
       puts "OPT RESETPASSWORD"
       @user = User.find(user_id.to_i)
       UserMailer.reset_password(@user).deliver
-    
+
     when "invite_friend"
       @user = User.find(user_id.to_i)
       puts "OPTHASH INVITE FRIEND"
       puts opthash
       puts opthash["email"]
       UserMailer.invite_friend(@user, opthash["email"], opthash["gift_id"]).deliver
-    
+
     when "invite_employee"
       puts "OPTHASH INVITE EMPLOYEE"
       puts opthash
       @user = User.find(user_id.to_i)    #Person making the request
       @provider = Provider.find(opthash["provider_id"].to_i)
       UserMailer.invite_employee(@user,@provider,opthash["email"]).deliver
-    
-    when "invoice_giver" 
+
+    when "invoice_giver"
       puts "OPTHASH INVOICE GIVER"
       @user = User.find(user_id)
       if @user.get_or_create_settings.email_invoice
@@ -36,8 +36,8 @@ class EmailJob
       else
         puts "#{@user.fullname} does not receiver Invoice Giver Email"
       end
-    
-    when "notify_receiver" 
+
+    when "notify_receiver"
       puts "OPTHASH NOTIFY RECEIVER"
       email = opthash["email"]
       @gift = Gift.find(opthash["gift_id"].to_i)
@@ -49,7 +49,7 @@ class EmailJob
         send     = true
       end
       if send
-        UserMailer.notify_receiver(@gift).deliver 
+        UserMailer.notify_receiver(@gift).deliver
       else
         puts "Receiver is origin (fb,tw,txt) or no notify receiver via email giftID = #{@gift.id.to_s}"
       end
@@ -63,13 +63,13 @@ class EmailJob
       else
         puts "#{@user.fullname} does not receiver Invoice Giver Email"
       end
-    
+
     when "notify_giver_created_user"
       puts "OPTHASH NOTIFY GIVER CREATED USER"
       @user = User.find(user_id.to_i)
       @gift = Gift.find(opthash["gift_id"].to_i)
       UserMailer.notify_giver_created_user(@user, @gift).deliver
-    end 
+    end
   end
-  
+
 end

@@ -53,6 +53,7 @@ Drinkboard::Application.routes.draw do
       get :remove_menu_item
       get :coming_soon
       get :de_activate
+      get :create_merchant_tools
       get :members
       get :add_employee
       get :remove_employee

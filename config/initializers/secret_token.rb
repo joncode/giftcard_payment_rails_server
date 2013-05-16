@@ -21,8 +21,20 @@ WEB_KEY     = "RlgrM1Uw"
 
 if Rails.env.production?
 	TEST_URL = "http://drinkboard.herokuapp.com"
+elsif Rails.env.stage?
+    TEST_URL = "http://drinkboard.herokuapp.com"
 else
 	TEST_URL = "http://0.0.0.0:3000"
 end
+
+if Rails.env.production?
+    MERCHANT_URL = "http://happy2.herokuapp.com"
+elsif Rails.env.stage?
+    MERCHANT_URL = "http://happy2dev.herokuapp.com"
+else
+    MERCHANT_URL = "http://0.0.0.0:3000"
+end
+
+
 
 BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dinig"]

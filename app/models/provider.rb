@@ -1,20 +1,20 @@
 class Provider < ActiveRecord::Base
 
-  attr_accessible :address, :city, :description, :logo, :name, 
-  :state, :user_id, :staff_id, :zip, :zinger, :phone, :email, 
-  :twitter, :facebook, :website, :users, :photo, :photo_cache, 
-  :logo_cache, :box, :box_cache, :portrait, :portrait_cache, 
+  attr_accessible :address, :city, :description, :logo, :name,
+  :state, :user_id, :staff_id, :zip, :zinger, :phone, :email,
+  :twitter, :facebook, :website, :users, :photo, :photo_cache,
+  :logo_cache, :box, :box_cache, :portrait, :portrait_cache,
   :account_name, :aba, :routing, :bank_account_name, :bank_address,
    :bank_city, :bank_state, :bank_zip, :sales_tax
 
-  attr_accessible :crop_x, :crop_y, :crop_w, :crop_h 
+  attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
-  has_many   :users, :through => :employees                                                                              
+  has_many   :users, :through => :employees
   has_many   :employees, dependent: :destroy
   has_many   :relays
-  has_many   :menus, dependent: :destroy                                                                              
-  has_many   :orders                                                                            
+  has_many   :menus, dependent: :destroy
+  has_many   :orders
   has_one    :menu_string, dependent: :destroy
   has_many   :gifts
   has_many   :sales
@@ -34,7 +34,7 @@ class Provider < ActiveRecord::Base
   validates_length_of :routing, :within => 9..14, :if => :routing_exists?
   validates_presence_of :name, :city, :address, :zip , :state, :phone, :sales_tax
   validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
- 
+
   before_save :extract_phone_digits
   before_create :create_token      # creates unique  token for provider
 
@@ -80,12 +80,12 @@ class Provider < ActiveRecord::Base
       end
   end
 
-  def self.all 
+  def self.all
       self.where({})
   end
 
   def get_todays_credits
-    self.orders.where("updated_at > ?", (Time.now - 1.day))   
+    self.orders.where("updated_at > ?", (Time.now - 1.day))
   end
 
   def self.allWithinBounds(bounds)
@@ -104,7 +104,7 @@ class Provider < ActiveRecord::Base
   def city_state_zip
     "#{self.city}, #{self.state} #{self.zip}"
   end
-  
+
   def get_photo
     if self.photo.blank?
       MERCHANT_DEFAULT_IMG
@@ -143,8 +143,8 @@ class Provider < ActiveRecord::Base
     when "photo"
       photo = self.photo.url
     else
-      photo = self.box.url 
-    end 
+      photo = self.box.url
+    end
     if photo.blank?
       photo = MERCHANT_DEFAULT_IMG
     end
@@ -153,7 +153,7 @@ class Provider < ActiveRecord::Base
 
   def get_servers
     # this means get people who are AT work not just employed
-    # for now without location data, 
+    # for now without location data,
     # its just employees who  are active and retail (deal with customers)
     self.employees.where(active: true, retail: true)
   end
@@ -166,7 +166,7 @@ class Provider < ActiveRecord::Base
       return emp.clearance
     end
   end
-  
+
   def server_codes
     self.employees.collect {|e| e.server_code}
   end
@@ -174,7 +174,7 @@ class Provider < ActiveRecord::Base
   def get_server_from_code(code)
     self.employees.select {|e| e.server_code == code}
   end
-   
+
   def get_server_from_code_to_iphone(code)
     server_in_array = self.employees.select {|e| e.server_code == code}
     server = server_in_array.pop
@@ -194,7 +194,7 @@ class Provider < ActiveRecord::Base
     employees = self.employees
     ids       = employees.map {|e| e.user_id }
     people    = []
-    users     = User.all 
+    users     = User.all
     users.each do |user|
       if ids.include? user.id
         employee = Employee.where(user_id: user.id, provider_id: self.id).pop
@@ -211,18 +211,18 @@ class Provider < ActiveRecord::Base
   def employees_to_app
     # get all the employees - put there table view info and secure image into an array
     send_fields = [:first_name, :last_name]
-    employees_array = self.get_servers.map do |e|    
+    employees_array = self.get_servers.map do |e|
       employee_hash = {}
       employee_hash = e.user.serializable_hash only: [:first_name, :last_name]
       employee_hash["photo"]        = e.user.get_photo
       employee_hash["secure_image"] = e.user.get_secure_image
-      employee_hash["employee_id"]  = "#{e.id}" 
+      employee_hash["employee_id"]  = "#{e.id}"
       employee_hash
     end
     if employees_array.count == 0
       employees_array = ["no employees set up yet"]
     end
-    return employees_array   
+    return employees_array
   end
 
   def table_photo_hash
@@ -232,13 +232,13 @@ class Provider < ActiveRecord::Base
     response = {}
     response["provider_name"]   = self.name
     response["photo"]           = self.photo.url
-    response["provider_id"]     = self.id.to_s 
+    response["provider_id"]     = self.id.to_s
     response["phone"]           = self.phone.to_s
     response["city"]            = self.city
     response["sales_tax"]       = self.sales_tax
     response["full_address"]    = self.full_address
-    return response   
-  end 
+    return response
+  end
 
   def token
     token = super

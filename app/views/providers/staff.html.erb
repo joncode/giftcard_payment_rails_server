@@ -1,19 +1,15 @@
 <div class="column">
 
-    <% if @people[0].kind_of? User %>
-        <% title = "Drinkboard Members" %>
-    <% else %>
-        <% title = "Staff" %>
-    <% end %>
     <%= render 'staff_links' %>
 
 
     <div class="giftText giftTextLarge">
+
       <% if @people[0].kind_of? User %>
         <% title = "Drinkboard Members" %>
       <% else %>
         <% title = "Staff" %>
       <% end %>
-    </div> 
+    </div>
     <%= render 'shared/user_list', people: @people, title: title %>
 </div>
