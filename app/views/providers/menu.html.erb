@@ -29,7 +29,7 @@
 	        <td style="text-align: center;"><%= item["description"] %></td>
 	        <td style="text-align: center;"><%= item["price"] %></td>
 	        <td style="text-align: right;"><%= link_to "Edit", menu_item_provider_path(@provider, menu_item: item["menu_item_id"], section: section) %> </td>
-	        <td style="text-align: right;"><%= link_to "X", remove_menu_item_provider_path(@provider, menu_item: item["menu_item_id"]), :confirm => "De-Activate #{item["item_name"]}, Are you sure ?"  %> </td>                
+	        <td style="text-align: right;"><%= link_to "X", remove_menu_item_provider_path(@provider, menu_item: item["menu_item_id"]), :confirm => "De-Activate #{item["item_name"]}, Are you sure ?"  %> </td>
 	      </tr>
 	    <% end %>
 	    <tr>
@@ -37,7 +37,7 @@
 	    </tr>
 	</table>
 <% end %>
-	        
+
 <% end %>
 <br /><br /><br /><br /><br />
 </div>

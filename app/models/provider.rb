@@ -155,7 +155,7 @@ class Provider < ActiveRecord::Base
     # this means get people who are AT work not just employed
     # for now without location data,
     # its just employees who  are active and retail (deal with customers)
-    self.employees.where(active: true, retail: true)
+    self.employees.where(active: true)
   end
 
   def user_clearance(user)
@@ -225,6 +225,26 @@ class Provider < ActiveRecord::Base
     return employees_array
   end
 
+  def employees_to_merchant_tools
+    # get all the employees - put there table view info and secure image into an array
+    employees_array = self.get_servers.map do |e|
+      employee_hash = {}
+      employee_hash = e.user.serializable_hash only: [:first_name, :last_name]
+      employee_hash["photo"]      = e.user.get_photo
+      employee_hash["email"]      = e.user.email
+      employee_hash["phone"]      = e.user.phone
+      employee_hash["code"]       = e.user.server_code
+      employee_hash["clearance"]  = e.clearance
+      employee_hash["eid"]        = e.id
+      employee_hash
+    end
+
+    if employees_array.count == 0
+      employees_array = ["no employees set up yet"]
+    end
+    return employees_array
+  end
+
   def table_photo_hash
         # return the merchant name
         # return the table view photo url
@@ -244,8 +264,12 @@ class Provider < ActiveRecord::Base
     token = super
     if token.nil?    # lazy create & save merchant token
       create_token
-      self.save
-      token = super
+      if self.save
+        token = super
+      else
+        puts "Provider lazy token FAIL #{self.id}"
+        token = self.errors.messages
+      end
     end
     return token
   end

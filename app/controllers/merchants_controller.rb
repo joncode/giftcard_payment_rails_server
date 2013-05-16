@@ -11,7 +11,7 @@ class MerchantsController < JsonController
 	  	else
 	  		response["error"] 	= "employee was not found in database"
 	  	end
-	    respond_to do |format|    	
+	    respond_to do |format|
 	      	@app_response 		= "MerchantsC #{response[0]}"
 	      	format.json { render json: response }
 	    end
@@ -31,22 +31,124 @@ class MerchantsController < JsonController
 	  	else
 	  		response["error"] 	= "employee was not found in database"
 	  	end
-	    respond_to do |format|    	
+	    respond_to do |format|
 	      	@app_response 		= "MerchantsC #{response}"
 	      	format.json { render json: response }
 	    end
 	end
 
+ 	def orders
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+    		if params["status"] == "new"
+    			gifts = Gift.get_provider(provider)
+    		else
+				gifts = Gift.get_history_provider(provider)
+			end
+	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
+  	def menu
+  		# @menu_array     = Menu.get_menu_array_for_builder @provider
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+	    	response["success"] 	 = Menu.get_menu_array_for_builder provider
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
+  	def reports
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+    		gifts 					 = Gift.get_history_provider(provider)
+	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
+  	def employees
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+	    	response["success"] 	 = provider.employees_to_merchant_tools
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
+  	def deactivate_employee
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+    		employee = Employee.find(params["eid"].to_i)
+    		employee.update_attribute(:active, false)
+	    	response["success"] 	 = provider.employees_to_merchant_tools
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
+  	def finances
+ 		response = {}
+	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+    		gifts 					 = Gift.get_history_provider(provider)
+	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	  	else
+	  		response["error_server"] = authentication_data_error
+	  	end
+
+	    respond_to do |format|
+	      # logger.debug gifts_array
+	      @app_response = "AC response[0] => #{response.values[0]}"
+	      format.json { render json: response }
+	    end
+  	end
+
+  	#### OLD MERCHANT COUPLED SITE METHODS
+
 	def compile_menu
 		@provider = Provider.find(params[:id].to_i)
-		
+
 		respond_to do |format|
 			if MenuString.compile_menu_to_menu_string(@provider.id)
-				# update the menu string to show the menustring is up to date 
+				# update the menu string to show the menustring is up to date
 				# render success
 					@message = "Merchant Menu on App is Updated and Now Live"
 					@go_live = "live_menu_notice"
-					format.js 
+					format.js
 			else
 				# render error
 				@message = human_readable_error_message menu_string
@@ -100,29 +202,13 @@ class MerchantsController < JsonController
 	end
 
 	def index
-			@providers = current_user.providers    
+			@providers = current_user.providers
 
 			respond_to do |format|
 				if @providers.count == 1
 					format.html { redirect_to merchant_path(@providers.pop) }
 				else
 					format.html
-				end
-			end
-	end
-
-	def menu
-			@menu_array     = Menu.get_menu_array_for_builder @provider
-			column = 1
-			@left = []
-			@right = []
-			@menu_array.each do |m|
-				if column == 1
-					@left << m
-					column = 2
-				else
-					@right << m 
-					column = 1
 				end
 			end
 	end
@@ -134,13 +220,6 @@ class MerchantsController < JsonController
 		respond_to do |format|
 			format.js
 		end
-	end
-
-	def menu_builder
-		
-	end
-
-	def show
 	end
 
 	def photos
@@ -156,7 +235,7 @@ class MerchantsController < JsonController
 			@file_field_name = @image.dup
 			if @image == 'secure_image'
 				@image = 'Secure Image'
-			else 
+			else
 				@image = "Photo"
 			end
 			@obj_width = 131
@@ -181,12 +260,6 @@ class MerchantsController < JsonController
 			redirect_to photos_merchant_path(@provider)
 	end
 
-	def edit_info
-	end
-
-	def edit_bank
-	end
-
 	def update
 
 			respond_to do |format|
@@ -196,20 +269,6 @@ class MerchantsController < JsonController
 				else
 					format.html { render action: "edit" }
 					format.json { render json: @provider.errors, status: :unprocessable_entity }
-				end
-			end    
-	end
-
-	def orders
-			@gifts = Gift.get_all_orders(@provider)
-
-			respond_to do |format|
-				if @gifts.nil?
-					format.html 
-				else
-					format.html # index.html.erb
-					format.js
-					format.json { render json: @gifts }
 				end
 			end
 	end
@@ -248,7 +307,7 @@ class MerchantsController < JsonController
 			@receiver = @gift.receiver
 			@order    = @gift.order
 			if @order.server_id
-				@server = User.find(@order.server_id) 
+				@server = User.find(@order.server_id)
 			else
 				@server = User.new(first_name: "missing", last_name: "person")
 			end
@@ -265,22 +324,14 @@ class MerchantsController < JsonController
 					# most drinks ordered
 					# most money spent
 			# check all the gifts , get the giver and receiver user ids
-			# assign those ids to the gift.updated_at field 
+			# assign those ids to the gift.updated_at field
 			# make a uniq array of all user ids
-			# remove employees from that list 
+			# remove employees from that list
 			# list those customers on the screen by gift.updated_at
 			respond_to do |format|
 				format.html # index.html.erb
 				format.json { render json: @users }
 			end
-	end
-
-	def staff
-			@staff    = @provider.employees
-			@nonstaff = @provider.users_not_staff
-	end
-
-	def staff_profile
 	end
 
 	def add_employee
@@ -300,7 +351,7 @@ class MerchantsController < JsonController
 
 	def add_member
 			user = User.find params[:user_id].to_i
-			emp = Employee.create(user_id: user.id, provider_id: @provider.id) 
+			emp = Employee.create(user_id: user.id, provider_id: @provider.id)
 			redirect_to staff_merchant_path(@provider)
 	end
 
@@ -316,7 +367,7 @@ class MerchantsController < JsonController
 				if !potential_employee
 					#If the user doesn't exist in the database
 				else
-					#The user does exist in the database        
+					#The user does exist in the database
 				end
 				#For now, we handle either situation the same
 				Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email]})
@@ -339,19 +390,28 @@ class MerchantsController < JsonController
 			redirect_to "/merchants/#{params[:id]}/staff"
 	end
 
-protected
+private
 
 	def authenticate_app_employee(token)
 		if token
 			employees = Employee.find_by_token(token)
 			if employees
 				return true
-			else
-				return false
 			end
-		else
-			return false
 		end
+		return false
+	end
+
+	def authenticate_merchant_tools_request(token, merch_token)
+		if token && merch_token
+			provider = Provider.find_by_token merch_token
+			employee = Employee.where(provider_id: provider.id, token: token, active: true).pop
+			if employee && provider && (employee.provider_id == provider.id)
+				puts "Merchant Tools AUTHENTICATED"
+				return provider
+			end
+		end
+		return false
 	end
 
 end

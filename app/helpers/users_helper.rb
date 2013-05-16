@@ -1,5 +1,5 @@
 module UsersHelper
-  
+
   def gravatar_for(user)
     width   = 75
     height  = 100
@@ -8,7 +8,7 @@ module UsersHelper
       image_tag(photo, alt: "hello",:class => 'gravatar' )
     else
       image_tag(user.photo_url(:gravatar), :width => width, :height => height)
-    end   
+    end
   end
 
   def list_standard_icon_for(user)
@@ -19,9 +19,9 @@ module UsersHelper
       image_tag(photo, alt: "hello",:class => 'gravatar' )
     else
       image_tag(user.photo_url(:standard), :width => width, :height => height)
-    end   
+    end
   end
-  
+
   def list_icon_for(user)
     width   = 50
     height  = 50
@@ -30,18 +30,18 @@ module UsersHelper
       image_tag(photo, alt: "hello",:class => 'gravatar' )
     else
       image_tag(user.photo_url(:thumbnail), :width => width, :height => height)
-    end   
+    end
   end
-  
+
   def list_icon_with_id_for(user_id)
-    if user_id.nil? 
+    if user_id.nil?
       user = User.new
     else
       user = User.find(user_id)
     end
-    list_icon_for user  
+    list_icon_for user
   end
-  
+
   def large_photo(user)
     image_tag(user.photo_url(:large), :width => 400, :height => 400, :id => "cropbox")
   end
@@ -49,5 +49,5 @@ module UsersHelper
   def preview_large_photo(user)
     image_tag(user.photo_url(:large), :width => 400, :height => 400, :id => "preview")
   end
-   
+
 end
