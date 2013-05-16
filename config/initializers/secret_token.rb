@@ -22,7 +22,7 @@ WEB_KEY     = "RlgrM1Uw"
 if Rails.env.production?
 	TEST_URL = "http://drinkboard.herokuapp.com"
 elsif Rails.env.stage?
-    TEST_URL = "http://drinkboard.herokuapp.com"
+    TEST_URL = "http://dbappdev.herokuapp.com"
 else
 	TEST_URL = "http://0.0.0.0:3000"
 end
