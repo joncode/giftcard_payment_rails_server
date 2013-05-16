@@ -25,7 +25,7 @@ class EmailJob
       puts opthash
       @user = User.find(user_id.to_i)    #Person making the request
       @provider = Provider.find(opthash["provider_id"].to_i)
-      UserMailer.invite_employee(@user,@provider,opthash["email"]).deliver
+      UserMailer.invite_employee(@user,@provider,opthash["email"], opthash["route"]).deliver
 
     when "invoice_giver"
       puts "OPTHASH INVOICE GIVER"

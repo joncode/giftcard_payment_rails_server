@@ -268,7 +268,8 @@ class ProvidersController < ApplicationController
 					puts "TRANSMISSION FAILED - invite employee account"
 					notice_msg = 'Network Failure. No email sent! please retry.'
 				end
-				# Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email]})
+				web_route = MERCHANT_URL + "/invite?token=#{invite_tkn}"
+				Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
 
 				format.html { redirect_to staff_provider_path(@provider), notice: notice_msg }
 			end

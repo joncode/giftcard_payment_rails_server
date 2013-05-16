@@ -1,9 +1,10 @@
 <% content_for :body do %>
 	<p>Hey there,</p>
 	<p><%= @user.username %> invited you to be an employee of <%= @provider.name %>.</p>
-	<p>If you already have a drinkboard account, visit this page to become an employee:</p>
-	<p><%= add_employee_merchant_url(@provider) %>?join_token=<%= "1234" %>&email=<%= @user.email %></p>
-	<p>If not, visit www.drinkboard.com first and create an account - then click on the link.</p>
+	<p>Visit this link to sign up for Drinkboard Merchant Tools Account:</p>
+	<p>
+     <a href="<%= @web_view_route %>">Get Started</a>
+    </p>
 	<p>Best,</p>
 	<p>Drinkboard Team</p>
 <% end %>
