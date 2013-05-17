@@ -1,143 +1,164 @@
 class MerchantsController < JsonController
 
 	def login
-		 	# authenticate merchant tools user
+			# authenticate merchant tools user
 		puts "INTO THE LOGIN MERCHANTS"
-	    response = {}
-	    if authenticate_app_employee(params["token"])
-	    	employees 	   = Employee.where(token: params["token"])
-	    	merchants_hash = employees.map {|e| e.provider.serialize}
-	    	response["success"] = merchants_hash
-	  	else
-	  		response["error"] 	= "employee was not found in database"
-	  	end
-	    respond_to do |format|
-	      	@app_response 		= "MerchantsC #{response[0]}"
-	      	format.json { render json: response }
-	    end
+			response = {}
+			if authenticate_app_employee(params["token"])
+				employees 	   = Employee.where(token: params["token"])
+				merchants_hash = employees.map {|e| e.provider.serialize}
+				response["success"] = merchants_hash
+			else
+				response["error"] 	= "employee was not found in database"
+			end
+			respond_to do |format|
+					@app_response 		= "MerchantsC #{response[0]}"
+					format.json { render json: response }
+			end
 	end
 
 	def authorize
 		puts "INTO THE AUTHORIZE MERCHANT"
-	    response = {}
-	    if authenticate_app_employee(params["token"])
-	    	employee_ary = Employee.where(token: params["token"], provider_id: params["merchant_id"])
-	    	employee 	 = employee_ary.shift
-	    	if employee.kind_of? Employee
-	    		response["success"] 	 = employee.provider.merchantize
-	    	else
-	    		response["error_server"] = "Employee Record not found"
-	    	end
-	  	else
-	  		response["error"] 	= "employee was not found in database"
-	  	end
-	    respond_to do |format|
-	      	@app_response 		= "MerchantsC #{response}"
-	      	format.json { render json: response }
-	    end
+			response = {}
+			if authenticate_app_employee(params["token"])
+				provider = Provider.find_by_token(params["merchant_token"])
+				employee_ary = Employee.where(token: params["token"], provider_id: provider.id)
+				employee 	 = employee_ary.shift
+				if employee.kind_of? Employee
+					response["success"] 	 = employee.provider.merchantize
+				else
+					response["error_server"] = "Employee Record not found"
+				end
+			else
+				response["error"] 	= "employee was not found in database"
+			end
+			respond_to do |format|
+					@app_response 		= "MerchantsC #{response}"
+					format.json { render json: response }
+			end
 	end
 
- 	def orders
- 		response = {}
-	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-    		if params["status"] == "new"
-    			gifts = Gift.get_provider(provider)
-    		else
-				gifts = Gift.get_history_provider(provider)
-			end
-	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-	  	else
-	  		response["error_server"] = authentication_data_error
-	  	end
+	def orders
+		response = {}
+		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+			if params["status"] == "new"
+				gifts = Gift.get_provider(provider)
+			else
+			gifts = Gift.get_history_provider(provider)
+		end
+			response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+		else
+			response["error_server"] = authentication_data_error
+		end
 
-	    respond_to do |format|
-	      # logger.debug gifts_array
-	      @app_response = "AC response[0] => #{response.values[0]}"
-	      format.json { render json: response }
-	    end
-  	end
+		respond_to do |format|
+			# logger.debug gifts_array
+			@app_response = "AC response[0] => #{response.values[0]}"
+			format.json { render json: response }
+		end
+	end
 
-  	def menu
-  		# @menu_array     = Menu.get_menu_array_for_builder @provider
- 		response = {}
-	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-	    	response["success"] 	 = Menu.get_menu_array_for_builder provider
-	  	else
-	  		response["error_server"] = authentication_data_error
-	  	end
+	def menu
+		# @menu_array     = Menu.get_menu_array_for_builder @provider
+		response = {}
+		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+			response["success"] 	 = Menu.get_menu_array_for_builder provider
+		else
+			response["error_server"] = authentication_data_error
+		end
 
-	    respond_to do |format|
-	      # logger.debug gifts_array
-	      @app_response = "AC response[0] => #{response.values[0]}"
-	      format.json { render json: response }
-	    end
-  	end
+		respond_to do |format|
+			# logger.debug gifts_array
+			@app_response = "AC response[0] => #{response.values[0]}"
+			format.json { render json: response }
+		end
+	end
 
-  	def reports
- 		response = {}
-	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-    		gifts 					 = Gift.get_history_provider(provider)
-	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-	  	else
-	  		response["error_server"] = authentication_data_error
-	  	end
+	def reports
+		response = {}
+		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+			gifts 					 = Gift.get_history_provider(provider)
+			response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+		else
+			response["error_server"] = authentication_data_error
+		end
 
-	    respond_to do |format|
-	      # logger.debug gifts_array
-	      @app_response = "AC response[0] => #{response.values[0]}"
-	      format.json { render json: response }
-	    end
-  	end
+		respond_to do |format|
+			# logger.debug gifts_array
+			@app_response = "AC response[0] => #{response.values[0]}"
+			format.json { render json: response }
+		end
+	end
 
-  	def employees
- 		response = {}
-	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-	    	response["success"] 	 = provider.employees_to_merchant_tools
-	  	else
-	  		response["error_server"] = authentication_data_error
-	  	end
+	def employees
+		response = {}
+		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+			response["success"] 	 = provider.employees_to_merchant_tools
+		else
+			response["error_server"] = authentication_data_error
+		end
 
-	    respond_to do |format|
-	      # logger.debug gifts_array
-	      @app_response = "AC response[0] => #{response.values[0]}"
-	      format.json { render json: response }
-	    end
-  	end
+		respond_to do |format|
+			# logger.debug gifts_array
+			@app_response = "AC response[0] => #{response.values[0]}"
+			format.json { render json: response }
+		end
+	end
 
-  	def deactivate_employee
- 		response = {}
-	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-    		employee = Employee.find(params["eid"].to_i)
-    		employee.update_attribute(:active, false)
-	    	response["success"] 	 = provider.employees_to_merchant_tools
-	  	else
-	  		response["error_server"] = authentication_data_error
-	  	end
+	def deactivate_employee
+		response = {}
+		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+			employee = Employee.find(params["eid"].to_i)
+			employee.update_attribute(:active, false)
+			response["success"] 	 = provider.employees_to_merchant_tools
+		else
+			response["error_server"] = authentication_data_error
+		end
 
-	    respond_to do |format|
-	      # logger.debug gifts_array
-	      @app_response = "AC response[0] => #{response.values[0]}"
-	      format.json { render json: response }
-	    end
-  	end
+		respond_to do |format|
+			# logger.debug gifts_array
+			@app_response = "AC response[0] => #{response.values[0]}"
+			format.json { render json: response }
+		end
+	end
 
-  	def finances
- 		response = {}
-	    if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
-    		gifts 					 = Gift.get_history_provider(provider)
-	    	response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-	  	else
-	  		response["error_server"] = authentication_data_error
-	  	end
+	def finances
+		response = {}
+		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+			gifts 					 = Gift.get_history_provider(provider)
+			response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+		else
+			response["error_server"] = authentication_data_error
+		end
 
-	    respond_to do |format|
-	      # logger.debug gifts_array
-	      @app_response = "AC response[0] => #{response.values[0]}"
-	      format.json { render json: response }
-	    end
-  	end
+		respond_to do |format|
+			# logger.debug gifts_array
+			@app_response = "AC response[0] => #{response.values[0]}"
+			format.json { render json: response }
+		end
+	end
 
-  	#### OLD MERCHANT COUPLED SITE METHODS
+	def email_invoice
+		response = {}
+		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+			web_route = MERCHANT_URL + "/invite?token=#{invite_tkn}"
+			Resque.enqueue(EmailJob, 'invite_employee', params["name"], {:provider_id => @provider.id, :email => params[:email], :route => web_route})
+
+			response["status"] 	 = true
+			response["message"]  = "Email sent"
+		else
+			response["status"] 	 = false
+			response["message"]  = 'Unable to authorize email server'
+		end
+
+		respond_to do |format|
+			# logger.debug gifts_array
+			@app_response = "AC response[0] => #{response.values[0]}"
+			format.json { render json: response }
+		end
+	end
+
+		#### OLD MERCHANT COUPLED SITE METHODS
 
 	def compile_menu
 		@provider = Provider.find(params[:id].to_i)
