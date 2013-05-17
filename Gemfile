@@ -14,6 +14,11 @@ group :production do
 	gem 'thin'
 end
 
+group :staging do
+    gem 'pg', '0.12.2'
+    gem 'thin'
+end
+
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
 	gem 'sqlite3'
