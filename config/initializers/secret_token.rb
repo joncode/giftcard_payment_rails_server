@@ -6,7 +6,14 @@
 # no regular words or you'll be exposed to dictionary attacks.
 Drinkboard::Application.config.secret_token = '80cb854c626de01bc9fce3ffdbb7c83961ca54311520874da313b8bb98eeeb3e343843187d0b743604ff43963bb43d0f62f4e13265d3776a9cae2912eb1a2687'
 
-PAGE_NAME = 'Drinkboard Tools'
+if Rails.env.production?
+    PAGE_NAME = 'Drinkboard - Admin Tools'
+elsif Rails.env.staging?
+    PAGE_NAME = 'QA Drinkboard - Admin Tools (staging)'
+else
+    PAGE_NAME = 'Dev Drinkboard - Admin Tools (local)'
+end
+
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 VALID_PHONE_REGEX = /1?\s*\W?\s*([2-9][0-8][0-9])\s*\W?\s*([2-9][0-9]{2})\s*\W?\s*([0-9]{4})(\se?x?t?(\d*))?/
 # this regex for phone does not work for '(210)-' unusual but possible mistake
@@ -21,7 +28,7 @@ WEB_KEY     = "RlgrM1Uw"
 
 if Rails.env.production?
 	TEST_URL = "http://drinkboard.herokuapp.com"
-elsif Rails.env.stage?
+elsif Rails.env.staging?
     TEST_URL = "http://dbappdev.herokuapp.com"
 else
 	TEST_URL = "http://0.0.0.0:3000"
@@ -29,7 +36,7 @@ end
 
 if Rails.env.production?
     MERCHANT_URL = "http://happy2.herokuapp.com"
-elsif Rails.env.stage?
+elsif Rails.env.staging?
     MERCHANT_URL = "http://happy2dev.herokuapp.com"
 else
     MERCHANT_URL = "http://0.0.0.0:3000"
