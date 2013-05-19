@@ -40,7 +40,7 @@ class MerchantsController < JsonController
 
 	def orders
 		response = {}
-		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+		if provider = authenticate_mt_request(params["merchant_token"])
 			if params["status"] == "new"
 				gifts = Gift.get_provider(provider)
 			else
@@ -61,7 +61,7 @@ class MerchantsController < JsonController
 	def menu
 		# @menu_array     = Menu.get_menu_array_for_builder @provider
 		response = {}
-		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+		if provider = authenticate_mt_request(params["merchant_token"])
 			response["success"] 	 = Menu.get_menu_array_for_builder provider
 		else
 			response["error_server"] = authentication_data_error
@@ -76,7 +76,7 @@ class MerchantsController < JsonController
 
 	def reports
 		response = {}
-		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+		if provider = authenticate_mt_request(params["merchant_token"])
 			gifts 					 = Gift.get_history_provider(provider)
 			response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 		else
@@ -92,7 +92,7 @@ class MerchantsController < JsonController
 
 	def employees
 		response = {}
-		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+		if provider = authenticate_mt_request(params["merchant_token"])
 			response["success"] 	 = provider.employees_to_merchant_tools
 		else
 			response["error_server"] = authentication_data_error
@@ -107,7 +107,7 @@ class MerchantsController < JsonController
 
 	def deactivate_employee
 		response = {}
-		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+		if provider = authenticate_mt_request(params["merchant_token"])
 			employee = Employee.find(params["eid"].to_i)
 			employee.update_attribute(:active, false)
 			response["success"] 	 = provider.employees_to_merchant_tools
@@ -124,7 +124,7 @@ class MerchantsController < JsonController
 
 	def finances
 		response = {}
-		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+		if provider = authenticate_mt_request(params["merchant_token"])
 			gifts 					 = Gift.get_history_provider(provider)
 			response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
 		else
@@ -140,7 +140,7 @@ class MerchantsController < JsonController
 
 	def email_invoice
 		response = {}
-		if provider = authenticate_merchant_tools_request(params["token"], params["merchant_token"])
+		if provider = authenticate_mt_request(params["merchant_token"])
 			web_route = MERCHANT_URL + "/invite?token=#{params['invite_tkn']}"
 			Resque.enqueue(EmailJob, 'invite_employee', params["name"], {:provider_id => provider.id, :email => params[:email], :route => web_route})
 
@@ -433,6 +433,19 @@ private
 			end
 		end
 		return false
+	end
+
+	def authenticate_mt_request(merchant_token)
+		if merchant_token
+			provider = Provider.find_by_token merchant_token
+			if provider
+				return provider
+			else
+				return false
+			end
+		else
+			return false
+		end
 	end
 
 end
