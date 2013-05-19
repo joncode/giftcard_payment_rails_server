@@ -1,7 +1,12 @@
 module ProvidersHelper
- 
+
     def get_user_from_object(person)
-        person.kind_of?(Employee) ? person.user : person 
+      user = person.kind_of?(Employee) ? person.user : person
+      if user.nil?
+        return false
+      else
+        return user
+      end
     end
 
 
@@ -13,11 +18,11 @@ module ProvidersHelper
       image_tag(logo, alt: "hello",:class => 'gravatar size150' )
     else
       image_tag(provider.logo_url(:standard), :class => 'size150',:width => width, :height => height)
-    end 
+    end
   end
-  
+
   def logo_from_id_for(provider_id)
-    if provider_id.nil? 
+    if provider_id.nil?
       provider = Provider.new
     else
       provider = Provider.find(provider_id)
@@ -28,4 +33,3 @@ module ProvidersHelper
 
 end
 
- 

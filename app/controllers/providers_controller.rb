@@ -110,35 +110,42 @@ class ProvidersController < ApplicationController
 		notice_msg = ""
 		msg = ""
 		# receive the provider info from the request
-		# convert the provider into json string
-		prov_json = @provider.merchantize.to_json
-		# send json string to the merchant tools API
-		route = MERCHANT_URL + "/app/create_merchant.json"
-		auth_params = { "token" => current_user.remember_token, "data" => prov_json }
-		puts "HERE IS THE ROUTE #{route}  && auth_params #{auth_params.inspect}"
-		parameters = { :body => auth_params }
-		party_response = HTTParty.post(route, parameters)
-		if party_response.code == 200
-			if party_response.parsed_response["status"]
-				# receive true
-					# update the provider that merchant tools is activated
-				@provider.update_attribute(:tools, true)
-					# re-render the show page without the create acount blurb
-				msg = party_response.parsed_response["message"]
-				notice_msg = "Success. #{msg}"
-			else
-				# receive false
-					# re-render the show page with failure message
-				msg = party_response.parsed_response["message"]
-				notice_msg = "Unable to open Merchant Account. #{msg}"
-			end
-		else
-			# transmission failure
-			puts "TRANSMISSION FAILED - create merchant tools account"
-			notice_msg = 'Network Failure. Merchant Account Not Created! please retry.'
-		end
+		token_check = @provider.token
 		respond_to do |format|
-			format.html {redirect_to provider_path(@provider), notice: notice_msg}
+			if token_check.kind_of? Hash
+				# lazy instantiation of the token could fail due to validations
+				# if so , report the validation errors to the screen instead of sending bad data to MT
+				format.html {redirect_to provider_path(@provider), notice: human_readable_error_message(@provider)}
+			else
+				# convert the provider into json string
+				prov_json = @provider.merchantize.to_json
+				# send json string to the merchant tools API
+				route = MERCHANT_URL + "/app/create_merchant.json"
+				auth_params = { "token" => current_user.remember_token, "data" => prov_json }
+				puts "HERE IS THE ROUTE #{route}  && auth_params #{auth_params.inspect}"
+				parameters = { :body => auth_params }
+				party_response = HTTParty.post(route, parameters)
+				if party_response.code == 200
+					if party_response.parsed_response["status"]
+						# receive true
+							# update the provider that merchant tools is activated
+						@provider.update_attribute(:tools, true)
+							# re-render the show page without the create acount blurb
+						msg = party_response.parsed_response["message"]
+						notice_msg = "Success. #{msg}"
+					else
+						# receive false
+							# re-render the show page with failure message
+						msg = party_response.parsed_response["message"]
+						notice_msg = "Unable to open Merchant Account. #{msg}"
+					end
+				else
+					# transmission failure
+					puts "TRANSMISSION FAILED - create merchant tools account"
+					notice_msg = 'Network Failure. Merchant Account Not Created! please retry.'
+				end
+				format.html {redirect_to provider_path(@provider), notice: notice_msg}
+			end
 		end
 	end
 

@@ -1,5 +1,6 @@
 class JsonController < ActionController::Base
     include ActionView::Helpers::DateHelper
+    include CommonUtils
 	skip_before_filter   :verify_authenticity_token
 	before_filter 		 :method_start_log_message
 	after_filter 		 :cross_origin_allow_header
@@ -10,7 +11,7 @@ class JsonController < ActionController::Base
     MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "order_num"]
     ACTIVITY_REPLY  = GIFT_REPLY + [ "receiver_id", "receiver_name"]
 
-protected
+
 
     def array_these_gifts(obj, send_fields, address_get=false, receiver=false, order_num=false)
         gifts_ary = []
@@ -106,19 +107,6 @@ protected
         end
     end
 
-  	def method_start_log_message
-  		x = params.dup
-  		x.delete('controller')
-  		x.delete('action')
-  		x.delete('format')
-  		puts "#{log_message_header} request: #{x}"
-  	end
-
-  	def method_end_log_message
-  		print "END #{log_message_header} "
-  		puts "response: #{@app_response}" if @app_response
-  	end
-
 	def cross_origin_allow_header
 		headers['Access-Control-Allow-Origin'] = "*"
 		headers['Access-Control-Request-Method'] = '*'
@@ -175,9 +163,4 @@ protected
         end
     end
 
-private
-
-	def log_message_header
-        "#{params["controller"].upcase} -#{params["action"].upcase}-"
-    end
 end

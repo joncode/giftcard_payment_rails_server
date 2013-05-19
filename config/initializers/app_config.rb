@@ -1,5 +1,7 @@
 require 'yaml'
 require 'myActiveRecordExtensions.rb'
+require 'common_utils'
+
 ActiveRecord::Base.send(:include, MyActiveRecordExtensions)
 
 yaml_data = YAML::load(ERB.new(IO.read(File.join(Rails.root, 'config', 'application.yml'))).result)
