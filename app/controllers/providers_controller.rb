@@ -239,46 +239,52 @@ class ProvidersController < ApplicationController
 				format.html { redirect_to action: :add_employee }
 			elsif request.post?
 				#Find the user, etc
-				if !params[:email]
-					return flash[:notice] = "You must enter in a user email."
-				end
-				# generate the invite token
-      			invite_tkn = SecureRandom.hex(16)
-      			email = params["email"]
-      			merchant_tkn = @provider.token
-
-				# make the invite json string
-				notice_msg = ""
-				msg = ""
-				invite_hash = {"invite_tkn" => invite_tkn, "email" => email, "merchant_tkn" => merchant_tkn}
-				invite_json = invite_hash.to_json
-
-				route = MERCHANT_URL + "/app/invite_employee.json"
-				auth_params = { "token" => current_user.remember_token, "data" => invite_json }
-				puts "HERE IS THE ROUTE #{route}  && auth_params #{auth_params.inspect}"
-				parameters = { :body => auth_params }
-				party_response = HTTParty.post(route, parameters)
-				if party_response.code == 200
-					if party_response.parsed_response["status"]
-						# receive true
-							# re-render the page with success blurb
-						msg = party_response.parsed_response["message"]
-						notice_msg = "Success! #{msg}"
-					else
-						# receive false
-							# re-render the show page with failure message
-						msg = party_response.parsed_response["message"]
-						notice_msg = "Unable to Invite. #{msg}"
-					end
+				if params[:email].empty?
+					flash[:notice] = "You must enter in a user email."
+					format.html { redirect_to add_employee_provider_path }
 				else
-					# transmission failure
-					puts "TRANSMISSION FAILED - invite employee account"
-					notice_msg = 'Network Failure. No email sent! please retry.'
-				end
-				web_route = MERCHANT_URL + "/invite?token=#{invite_tkn}"
-				Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
+					# generate the invite token
+	      			invite_tkn = SecureRandom.hex(16)
+	      			email = params["email"]
+	      			merchant_tkn = @provider.token
+	      			if merchant_tkn.kind_of? Hash
+	  					flash[:notice] = human_readable_error_message(@provider)
+	  					format.html { redirect_to add_employee_provider_path }
+	  				else
+						# make the invite json string
+						notice_msg = ""
+						msg = ""
+						invite_hash = {"invite_tkn" => invite_tkn, "email" => email, "clearance" => "super", "merchant_tkn" => merchant_tkn}
+						invite_json = invite_hash.to_json
 
-				format.html { redirect_to staff_provider_path(@provider), notice: notice_msg }
+						route = MERCHANT_URL + "/app/invite_employee.json"
+						auth_params = { "token" => current_user.remember_token, "data" => invite_json }
+						puts "HERE IS THE ROUTE #{route}  && auth_params #{auth_params.inspect}"
+						parameters = { :body => auth_params }
+						party_response = HTTParty.post(route, parameters)
+						if party_response.code == 200
+							if party_response.parsed_response["status"]
+								# receive true
+									# re-render the page with success blurb
+								msg = party_response.parsed_response["message"]
+								notice_msg = "Success! #{msg}"
+							else
+								# receive false
+									# re-render the show page with failure message
+								msg = party_response.parsed_response["message"]
+								notice_msg = "Unable to Invite. #{msg}"
+							end
+						else
+							# transmission failure
+							puts "TRANSMISSION FAILED - invite employee account"
+							notice_msg = 'Network Failure. No email sent! please retry.'
+						end
+						web_route = MERCHANT_URL + "/invite?token=#{invite_tkn}"
+						# Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
+
+						format.html { redirect_to staff_provider_path(@provider), notice: notice_msg }
+					end
+				end
 			end
 		end
 	end
