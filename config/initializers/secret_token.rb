@@ -13,7 +13,7 @@ if Rails.env.production?
 elsif Rails.env.staging?
     PAGE_NAME       = 'QA Drinkboard - Admin Tools (staging)'
     TEST_URL        = "http://dbappdev.herokuapp.com"
-    MERCHANT_URL    = "http://happy2dev.herokuapp.com"
+    MERCHANT_URL    = "http://merchtoolsdev.herokuapp.com"
 else
     PAGE_NAME       = 'Dev Drinkboard - Admin Tools (local)'
     TEST_URL        = "http://0.0.0.0:3000"

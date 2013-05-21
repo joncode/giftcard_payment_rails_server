@@ -1,4 +1,5 @@
 class MerchantsController < JsonController
+	include SessionsHelper
 
 	def login
 			# authenticate merchant tools user
@@ -179,59 +180,59 @@ class MerchantsController < JsonController
 	end
 
 	def update_item
-			puts "update item => #{params}"
-			if params[:item_id]
-				@menu = Menu.find(params[:item_id].to_i)
+		puts "update item => #{params}"
+		if params[:item_id]
+			@menu = Menu.find(params[:item_id].to_i)
+		else
+			@menu = Menu.new
+			@menu.provider_id = params[:id].to_i
+			@menu.section = params[:section]
+		end
+		@menu.item_name = params[:item_name]
+		@menu.description = params[:description]
+		@menu.price = params[:price]
+		respond_to do |format|
+			if @menu.save
+				@menu.provider.update_attribute(:menu_is_live, false)
+				# response = {"success" => "Menu Item Saved!"}
+				@message = "#{@menu.item_name} Updated"
+				@go_live = "compile_menu_button"
+				format.js { render 'compile_menu'}
 			else
-				@menu = Menu.new
-				@menu.provider_id = params[:id].to_i
-				@menu.section = params[:section]
+				@message = human_readable_error_message @menu
+				format.js { render 'compile_error'}
 			end
-			@menu.item_name = params[:item_name]
-			@menu.description = params[:description]
-			@menu.price = params[:price]
-			respond_to do |format|
-				if @menu.save
-					@menu.provider.update_attribute(:menu_is_live, false)
-					# response = {"success" => "Menu Item Saved!"}
-					@message = "#{@menu.item_name} Updated"
-					@go_live = "compile_menu_button"
-					format.js { render 'compile_menu'}
-				else
-					@message = human_readable_error_message @menu
-					format.js { render 'compile_error'}
-				end
-			end
+		end
 	end
 
 	def delete_item
-			puts "delete item => #{params}"
-			item = Menu.find(params[:item_id].to_i)
+		puts "delete item => #{params}"
+		item = Menu.find(params[:item_id].to_i)
 
-			respond_to do |format|
-				if item.update_attributes({active: false})
-					item.provider.update_attribute(:menu_is_live, false)
-					# response = {"success" => "Menu Item Deactivated"}
-					@message = "#{item.item_name} De-Activated"
-					@go_live = "compile_menu_button"
-					format.js { render 'compile_menu'}
-				else
-					@message = human_readable_error_message @menu
-					format.js { render 'compile_error'}
-				end
+		respond_to do |format|
+			if item.update_attributes({active: false})
+				item.provider.update_attribute(:menu_is_live, false)
+				# response = {"success" => "Menu Item Deactivated"}
+				@message = "#{item.item_name} De-Activated"
+				@go_live = "compile_menu_button"
+				format.js { render 'compile_menu'}
+			else
+				@message = human_readable_error_message @menu
+				format.js { render 'compile_error'}
 			end
+		end
 	end
 
 	def index
-			@providers = current_user.providers
+		@providers = current_user.providers
 
-			respond_to do |format|
-				if @providers.count == 1
-					format.html { redirect_to merchant_path(@providers.pop) }
-				else
-					format.html
-				end
+		respond_to do |format|
+			if @providers.count == 1
+				format.html { redirect_to merchant_path(@providers.pop) }
+			else
+				format.html
 			end
+		end
 	end
 
 	def todays_credits
