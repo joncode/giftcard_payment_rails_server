@@ -139,11 +139,13 @@ class MerchantsController < JsonController
 		end
 	end
 
-	def email_invoice
+	def email_invite
 		response = {}
 		if provider = authenticate_mt_request(params["merchant_token"])
-			web_route = MERCHANT_URL + "/invite?token=#{params['invite_tkn']}"
-			Resque.enqueue(EmailJob, 'invite_employee', params["name"], {:provider_id => provider.id, :email => params[:email], :route => web_route})
+			data = params["data"]
+			web_route = MERCHANT_URL + "/invite?token=#{data['invite_tkn']}"
+
+			Resque.enqueue(EmailJob, 'invite_employee', data["name"], {:provider_id => provider.id, :email => data["email"], :route => web_route})
 
 			response["status"] 	 = true
 			response["message"]  = "Email sent"

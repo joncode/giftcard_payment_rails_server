@@ -113,7 +113,7 @@ Drinkboard::Application.routes.draw do
   match 'mt/employees',            to: 'merchants#employees',    via: :post
   match 'mt/finances',             to: 'merchants#finances',     via: :post
   match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
-  match 'mt/email_invite',        to: 'merchants#email_invite', via: :post
+  match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
   # resources :microposts,    only: [:create, :destroy]
   # resources :relationships, only: [:create, :destroy]
 
