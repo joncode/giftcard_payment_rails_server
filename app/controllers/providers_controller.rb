@@ -285,7 +285,8 @@ class ProvidersController < ApplicationController
 						elsif Rails.env.staging?
 							UserMailer.invite_employee(current_user, @provider , email, web_route).deliver
 						else
-							Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
+							# Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
+							UserMailer.invite_employee(current_user, @provider , email, web_route).deliver
 						end
 
 						format.html { redirect_to staff_provider_path(@provider), notice: notice_msg }

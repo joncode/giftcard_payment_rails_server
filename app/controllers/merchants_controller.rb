@@ -142,10 +142,18 @@ class MerchantsController < JsonController
 	def email_invite
 		response = {}
 		if provider = authenticate_mt_request(params["merchant_token"])
-			data = params["data"]
-			web_route = MERCHANT_URL + "/invite?token=#{data['invite_tkn']}"
-
-			Resque.enqueue(EmailJob, 'invite_employee', data["name"], {:provider_id => provider.id, :email => data["email"], :route => web_route})
+			data = JSON.parse params["data"]
+			invite_tkn = data["invite_tkn"]
+			web_route = MERCHANT_URL + "/invite?token=#{invite_tkn}"
+			@user = User.new
+			@user.first_name = data["name"]
+			if Rails.env.production?
+				Resque.enqueue(EmailJob, 'invite_employee', @user, {:provider_id => provider.id, :email => data["email"], :route => web_route})
+			elsif Rails.env.staging?
+				UserMailer.invite_employee(@user, provider , data["email"], web_route).deliver
+			else
+				UserMailer.invite_employee(@user, provider , data["email"], web_route).deliver
+			end
 
 			response["status"] 	 = true
 			response["message"]  = "Email sent"
