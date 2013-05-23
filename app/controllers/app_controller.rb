@@ -50,7 +50,11 @@ class AppController < JsonController
  		if user = authenticate_app_user(params["token"])
  		 			# user is authenticated
  		 	puts "App -Update_user- data = #{params["data"]}"
- 		 	updates = JSON.parse params["data"]
+            if params["data"].kind_of? String
+                updates = JSON.parse params["data"]
+            else
+                updates = params["data"]
+            end
  		 	puts "App -Update_user- parsed data = #{updates}"
  		else
  			# user is not authenticated

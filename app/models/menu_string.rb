@@ -1,5 +1,5 @@
 class MenuString < ActiveRecord::Base
-  	attr_accessible :full_address, :data, :provider_id, :version, :sections_json
+  	attr_accessible :full_address, :data, :provider_id, :version, :sections_json, :menu
 
   	belongs_to :provider
 
@@ -60,10 +60,6 @@ class MenuString < ActiveRecord::Base
   		end
 
 		return true
-	end
-
-	def method_name
-
 	end
 end
 

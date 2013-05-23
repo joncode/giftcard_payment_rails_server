@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130516014757) do
+ActiveRecord::Schema.define(:version => 20130523023002) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -177,6 +177,7 @@ ActiveRecord::Schema.define(:version => 20130516014757) do
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
     t.string   "sections_json"
+    t.text     "menu"
   end
 
   add_index "menu_strings", ["provider_id"], :name => "index_menu_strings_on_provider_id"

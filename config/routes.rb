@@ -97,7 +97,6 @@ Drinkboard::Application.routes.draw do
       post :update_item
       post :delete_item
       get  :get_cropper
-      get  :compile_menu
       get  :menu_builder
 
     end
@@ -114,6 +113,8 @@ Drinkboard::Application.routes.draw do
   match 'mt/finances',             to: 'merchants#finances',     via: :post
   match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
   match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
+  match 'mt/compile_menu',        to: 'merchants#compile_menu', via: :post
+
   # resources :microposts,    only: [:create, :destroy]
   # resources :relationships, only: [:create, :destroy]
 

@@ -169,25 +169,43 @@ class MerchantsController < JsonController
 		end
 	end
 
-		#### OLD MERCHANT COUPLED SITE METHODS
+
 
 	def compile_menu
-		@provider = Provider.find(params[:id].to_i)
+		response = {}
+		if provider = authenticate_mt_request(params["merchant_token"])
+			data = params["data"]
+			menu = params["menu"]
+			puts "Old Data = #{data}"
+			puts "new Data = #{menu}"
+			menu_string = provider.menu_string
+			if !menu_string 							# deprecate
+				menu_string = MenuString.create(provider_id: provider.id, data: "[]")
+			end
+			if menu_string.update_attributes({data: data, menu: menu, version: 3})
+				response["status"] 	 = true
+				response["message"]  = "Menu Live on App"
+			else
+				response["status"] 	 = false
+				response["message"]  = "Menu unable to be updated #{menu_string.errors.full_messages}"
+			end
+		else
+			response["status"] 	 = false
+			response["message"]  = 'Unable to authorize merchant'
+		end
 
 		respond_to do |format|
-			if MenuString.compile_menu_to_menu_string(@provider.id)
-				# update the menu string to show the menustring is up to date
-				# render success
-					@message = "Merchant Menu on App is Updated and Now Live"
-					@go_live = "live_menu_notice"
-					format.js
-			else
-				# render error
-				@message = human_readable_error_message menu_string
-				format.js { render 'compile_error'}
-			end
+			# logger.debug gifts_array
+			puts "AC response => #{response}"
+			@app_response = "AC response => #{response}"
+			format.json { render json: response }
 		end
 	end
+
+
+
+
+	#### OLD MERCHANT COUPLED SITE METHODS
 
 	def update_item
 		puts "update item => #{params}"

@@ -37,6 +37,7 @@ class Provider < ActiveRecord::Base
 
 	before_save :extract_phone_digits
 	before_create :create_token      # creates unique  token for provider
+	after_create :make_menu_string
 
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city]
@@ -297,6 +298,10 @@ private
 
 		def create_token
 			self.token = SecureRandom.urlsafe_base64
+		end
+
+		def make_menu_string
+		    Menu_string.create(provider_id: self.id, data: "[]")
 		end
 end
 # == Schema Information
