@@ -488,15 +488,15 @@ class AppController < JsonController
 
   	def create_order
   		response = {}
-  		# receive {"token" => "<token>", "data" => "<gift_id>" }
+  		# receive {"token" => "<token>", "data" => "<gift_id>", "server_code" => <server_code> }
   		  			# authenticate user
   		if receiver = authenticate_app_user(params["token"])
   					# get gift from db
   			begin
 	  			gift  = Gift.find params["data"].to_i
-	  			order = Order.init_with_gift(gift)
+	  			order = Order.init_with_gift(gift, params["server_code"])
 	  			if order.save
-	  				response["success"] = { "order_number" => order.make_order_num,  "tax" => gift.tax, "total" => gift.total, "tip" => gift.tip }
+	  				response["success"] = { "order_number" => order.make_order_num,  "tax" => gift.tax, "total" => gift.total, "tip" => gift.tip, "server" => order.server_code }
 	  			else
 	  				response["error_server"] = stringify_error_messages order
 	  			end
