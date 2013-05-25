@@ -149,11 +149,11 @@ class Gift < ActiveRecord::Base
 				sale.resp_code = 1
 			end
 		elsif Rails.env.staging?
-			esale     = Sale.init self
-			esale.resp_code = 1
+			sale     = Sale.init self
+			sale.resp_code = 1
 		else
-			esale     = Sale.init self
-			esale.resp_code = 1
+			sale     = Sale.init self
+			sale.resp_code = 1
 		end
 				# otherwise return a sale object with resp_code == 1
 		return sale
