@@ -105,9 +105,15 @@ class Gift < ActiveRecord::Base
 
 	def set_status
 		if self.card_enabled?
+			if Rails.env.production?
 				self.status = "unpaid"
-		else
+			elsif Rails.env.staging?
 				self.set_status_post_payment
+			else
+				self.set_status_post_payment
+			end
+		else
+			self.set_status_post_payment
 		end
 		puts "gift SET STATUS #{self.status}"
 	end
@@ -122,12 +128,12 @@ class Gift < ActiveRecord::Base
 
 	def card_enabled?
 		# whitelist = ["test@test.com", "deb@knead4health.com", "dfennell@graywolves.com", "dfennell@webteampros.com"]
-		blacklist = ["addis006@gmail.com"]
-		if blacklist.include?(self.giver.email)
-			return false
-		else
+		# blacklist = ["addis006@gmail.com"]
+		# if blacklist.include?(self.giver.email)
+		# 	return false
+		# else
 			return true
-		end
+		# end
 		# return true
 	end
 
@@ -135,7 +141,7 @@ class Gift < ActiveRecord::Base
 				# if giver is one jb@jb.com
 				# call authorize capture on the gift and create the sale object
 		if Rails.env.production?
-			if self.card_enabled?
+			if true # self.card_enabled?
 				sale = self.authorize_capture
 				puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
 			else
@@ -143,11 +149,11 @@ class Gift < ActiveRecord::Base
 				sale.resp_code = 1
 			end
 		elsif Rails.env.staging?
-				sale     = Sale.init self
-				sale.resp_code = 1
+			esale     = Sale.init self
+			esale.resp_code = 1
 		else
-				sale     = Sale.init self
-				sale.resp_code = 1
+			esale     = Sale.init self
+			esale.resp_code = 1
 		end
 				# otherwise return a sale object with resp_code == 1
 		return sale
