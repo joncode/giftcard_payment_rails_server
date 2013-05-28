@@ -180,7 +180,7 @@ class IphoneController < AppController
 			past_gift_array       = array_these_gifts(past_gifts, BUY_REPLY, true, true)
 			response["active"]    = gift_array
 			response["completed"] = past_gift_array
-			logmsg = gift_array[0]
+			logmsg = "#{gift_array[0]} + #{past_gift_array[0]}"
 		else
 			response["error"] = unauthorized_user
 		end
