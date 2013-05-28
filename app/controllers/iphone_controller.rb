@@ -187,6 +187,7 @@ class IphoneController < AppController
 		respond_to do |format|
 			# logger.debug response
 			puts "response => #{logmsg}"
+			puts "full response => #{response}"
 			format.json { render json: response }
 		end
 	end
