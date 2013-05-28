@@ -528,7 +528,13 @@ class AppController < JsonController
 		        puts "Lets make this gift !!!"
 		        add_receiver_by_origin(params["origin"], gift_obj, response)
 		        gift    = Gift.new(gift_obj)
-		        sc = JSON.parse params["shoppingCart"]
+                cart_p = params["shoppingCart"]
+                begin
+                    sc = JSON.parse cart_p
+                rescue
+                        # bad JSON - app is sending item_description incorrectly
+                    sc = shoppingCartFix(cart_p)
+                end
 		        gift.make_gift_items(sc)
 				puts "Made it thru original git making process"
 	  				# add the giver info to the gift object
@@ -847,4 +853,10 @@ protected
       	gift_obj["receiver_phone"] = receiver.phone
       	return gift_obj
     end
+
+    def shoppingCartFix(sc)
+        new_sc = sc.gsub(",\"item_description\":\"", '')
+        JSON.parse new_sc
+    end
+
 end
