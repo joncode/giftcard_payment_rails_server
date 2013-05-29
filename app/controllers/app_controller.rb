@@ -547,7 +547,7 @@ class AppController < JsonController
 	  			if gift.save
 	  				sale = gift.charge_card
 			        if sale.resp_code == 1
-			        	response["success"]       = {"Gift Created" => "Success!"}
+			        	response["success"]       = { "Gift_id" => gift.id }
 			        else
 			        	response["error_server"]  = { "Credit Card" => sale.reason_text }
 			        end
