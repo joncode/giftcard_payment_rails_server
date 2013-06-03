@@ -3,6 +3,7 @@ def erase_qa_team
     admin_tokens = ["3Yo6C8EtHxAFqT0aACnfhg", "0OUzZks-fC6yT0hEBR1fJg", "FdwgC5gATvuP-oRODEsl0g", "FdwgC5gATvuP-oRODEsl0g", "3Yo6C8EtHxAFqT0aACnfhg", "f0eNS804bPgcKEGqMPrrOw", "PCartgKMRox7TPj6JQkO9g", "0OUzZks-fC6yT0hEBR1fJg", "2FQsCBCNjAqIMmGgtcFv_A", "Fc6AS9gHbwXlg7RpXVmwZA", "AetvlQ5Bb8xBs-28vHDZlQ", "JEUPZ5cIMcTMkaoHYh7k7g", "2C1uuKVMToNX95J81MPWYA"]
     # get the database of users
     users = User.all.to_a
+    deleted_users = []
     # loop thru each user
     users.each do |user|
         # print out user name
@@ -18,9 +19,10 @@ def erase_qa_team
         print "Delete User ? -> (y/n) "
         response = gets.chomp.downcase
         if response == 'y'
-            user.destroy
+            deleted_users << user.destroy
         end
     end
+    return deleted_users.map {|u| " #{u.fullname} #{u.email} "}.join('|')
 end
 
 
