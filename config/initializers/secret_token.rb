@@ -10,14 +10,17 @@ if Rails.env.production?
     PAGE_NAME       = 'Drinkboard - Admin Tools'
     TEST_URL        = "http://drinkboard.herokuapp.com"
     MERCHANT_URL    = "http://merchtools.herokuapp.com"
+    PUBLIC_URL      = "http://www.drinkboard.com"
 elsif Rails.env.staging?
     PAGE_NAME       = 'QA Drinkboard - Admin Tools (staging)'
     TEST_URL        = "http://dbappdev.herokuapp.com"
     MERCHANT_URL    = "http://merchtoolsdev.herokuapp.com"
+    PUBLIC_URL      = "http://qa.drinkboard.com"
 else
     PAGE_NAME       = 'Dev Drinkboard - Admin Tools (local)'
     TEST_URL        = "http://0.0.0.0:3000"
     MERCHANT_URL    = "http://0.0.0.0:3000"
+    PUBLIC_URL      = "http://0.0.0.0:3000"
 end
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
