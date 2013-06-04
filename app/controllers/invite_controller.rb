@@ -1,5 +1,5 @@
 class InviteController < ApplicationController
-
+    layout 'user_mailer' , except: [:show, :invite, :invite_friend]
     # INVITE W/O GIFT
     # sender info :
         # sender name
@@ -56,7 +56,7 @@ class InviteController < ApplicationController
         response_hash["merchant_address"]   = @merchant.full_address
         response_hash["merchant_phone"]     = @merchant.phone
     else
-        request.format = :email
+        # request.format = :email
     end
     respond_to do |format|
       format.json { render json: response_hash }
@@ -79,7 +79,7 @@ class InviteController < ApplicationController
             response_hash["user"]               = @user.name
             response_hash["user_photo"]         = @user.get_photo
         else
-            request.format = :email
+            # request.format = :email
         end
         respond_to do |format|
             format.json { render json: response_hash }
@@ -94,32 +94,32 @@ class InviteController < ApplicationController
 
   def error
     @email_title   = "Drinkboard Email Messenger"
-    request.format = :email
+    # request.format = :email
     @header_text   = "We're Sorry but there was an Error"
     @social = 1
     @web_view_route = "#{TEST_URL}/invite/error"
 
     respond_to do |format|
-      format.email
+      format.html
     end
   end
 
   def email_confirmed
     @email_title   = "Drinkboard Email Messenger"
-    request.format = :email
+    # request.format = :email
 
     @header_text   = "Thank You, Your Email is Confirmed"
     @social = 1
     @web_view_route = "#{TEST_URL}/invite/email_confirmed"
 
     respond_to do |format|
-      format.email
+      format.html
     end
   end
 
   def display_email
     @email_title   = "Drinkboard Email Messenger"
-    request.format = :email
+    # request.format = :email
     @header_text   = "#MobileGifting"
     @social = 1
     @web_view_route = create_webview_link
@@ -172,7 +172,7 @@ class InviteController < ApplicationController
     end
 
     respond_to do |format|
-      format.email { render email_view }
+      format.html { render  email_view }
     end
 
   end
