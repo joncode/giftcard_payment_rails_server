@@ -1,0 +1,8 @@
+<p style="font-weight: bold;">At the <%= @merchant.name %></p>
+<div style="margin-left:50px;">
+  <% @cart.each do |item| %>
+    <p>
+      <%= item["quantity"] %>&nbsp;<%= item["item_name"] %>
+    </p>
+  <% end %>
+</div>

@@ -1,121 +1,24 @@
-<% content_for :item do %>
-  <% @cart.each do |item| %>
-    <p><%= item["quantity"] %>&nbsp;<%= item["item_name"] %></p>
-  <% end %>
-<% end %>
-
-<% content_for :main do %>
-  <p>A Gift is ready for you on Drinkboard!</p>
-  <p>Purchased by <%= @gift.giver_name %></p>
-  <p>Your drinks are at the <%= @merchant.name %></p>
-  <div><%=  yield :item %></div>
-<% end %>
-<table style="width: 584px;" class="table" border="0" cellpadding="0"
-cellspacing="0">
-<tbody>
-<tr>
-<td class="innercell" style="background-color: #fff; background-image:
-url('/assets/backgroundBorderBar320.gif');
-background-position: 0 0; background-repeat: repeat-y; padding-left: 2px;
-padding-right: 2px;" width="580">
-
 <!-- HERE is the main Body -->
 <table style="width: 580px;" class="innertable" border="0" cellpadding="0"
 cellspacing="0">
 <tbody>
   <tr>
 <!-- HERE is the main body image -->
-    <td class="content" style="background-color: #ffffff; background-image:
-    url('/assets/spacers/background_body-top.gif');
-    background-position: 0 0; background-repeat: repeat-x; padding: 38px 40px 0
-    40px;" width="500">
-    <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
-    18px; color: #000; margin-top: 0; margin-left: 0; margin-bottom: 17px;
-    margin-right: 0; padding: 0;">Hey there <%= @gift.receiver_name %>,</p>
-    <p style="font-family: georgia, serif; font-weight: normal; font-size:
-    15px; line-height: 20px; color: #595959; margin-top: 0; margin-left: 0;
-    margin-bottom: 20px; margin-right: 0; padding: 0;"><%= yield %></p>
-    <table style="margin: 0pt; padding: 0pt; width: 100%;" class="list"
-    border="0" cellpadding="0" cellspacing="0">
-    <tbody>
-      <tr>
-        <td style="vertical-align: top; text-align: left; padding: 0 20px 0 0;
-        margin: 0;" class="list-item" width="1">
-        <%= image_tag @gift.giver.get_photo, :class => "list-image", :style => "-ms-interpolation-mode: bicubic; border: 1px solid white;
-  box-shadow: 1px 1px 3px 1px black;" , height: "100" , wdith: "114" , alt: "Logo Image" %>
-        </td>
-        <td style="vertical-align: top; text-align: left; padding: 0; margin: 0;">
-          <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
-          15px; line-height: 20px; color: rgba(50,58,69,1); margin-top: 0; margin-left: 0;
-          margin-bottom: 15px; margin-right: 0; padding: 0;">
-      <!-- LINK to gift -->
-          <%= yield :main %>
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <a
-  href="http://bit.ly/drinkboard"
-  style="color: #69aa35; text-decoration: none;"><span style="color:
-  rgba(84,178,209,1);">OPEN APP</span></a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
-  15px; line-height: 20px; color: #595959; margin-top: 10px; margin-left: 0;
-  margin-bottom: 15px; margin-right: 0; padding: 0;">Drinkboard is the best way to remotely buy drinks for your friends.
-  </p>
-  <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
-  15px; line-height: 20px; color: #595959; margin-top: 10px; margin-left: 0;
-  margin-bottom: 15px; margin-right: 0; padding: 0;">To join
-  Drinkboard, <a
-  href="http://bit.ly/drinkboard"
-  style="color: #69aa35; text-decoration: none;"><span style="color:
-  rgba(84,178,209,1);">download</span></a> it to iPhone or view in your <a
-  href="http://www.drinkboard.com"
-  style="color: #69aa35; text-decoration: none;"><span style="color:
-  rgba(84,178,209,1);">browser</span></a>.</p>
-  <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
-  15px; line-height: 20px; color: #595959; margin-top: 10px; margin-left: 0;
-  margin-bottom: 10px; margin-right: 0; padding: 0;">Read about the social media platform that can actually make you <a
-  href="http://www.drinkboard.com/home/howitworks"
-  style="color: rgba(84,178,209,1); text-decoration: none;"><span style="color:
-  rgba(84,178,209,1);">MORE</span></a> social in our <a
-  href="http://pinterest.com/Drinkboard/"
-  style="color: rgba(84,178,209,1); text-decoration: none;"><span style="color:
-  rgba(84,178,209,1);">Tips and Cool Stuff Gallery</span></a>.</p>
-  <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
-  15px; line-height: 20px; color: #595959; margin-top: 15px; margin-left: 0;
-  margin-bottom: 20px; margin-right: 0; padding: 0;">Cheers,<br /> - Drinkboard
-  Staff</p>
-  <table style="margin: 0pt; padding: 0pt; border-top: 1px solid #cccccc;
-  border-right: 0pt none ! important; border-left: 0pt none ! important;
-  border-bottom: 0pt none ! important; width: 500px;" class="webby"
-  border="0" cellpadding="0" cellspacing="0">
-  <tbody>
-    <tr>
-      <td style="padding-right: 25px; padding-top: 20px; margin: 0;
-      vertical-align: middle;" class="list-item imageBorder" valign="middle">
-        <%= image_tag @merchant.photo, :style => "-ms-interpolation-mode: bicubic; border: 1px solid white;
-	box-shadow: 1px 1px 3px 1px black;", height: "60", width: "89", alt: "Merchants" %>
-      </td>
-      <td style="padding: 0; margin: 0; vertical-align: middle;"
-      valign="middle">
-      <p style="color: #595959; font-family: 'Trebuchet MS', helvetica, sans serif;
-      font-size: 12px; margin: 0; padding: 20px 0 0 0;">
-        <span style="font-weight: bold;"><%= @merchant.name %></span>
-        <br /><%= @merchant.complete_address %>
-        <br /><%= @merchant.email %>
-        <br /><%= number_to_phone @merchant.phone %>
-      </p>
+    <td class="content" style="background-color: #ffffff; background-image: url('/assets/spacers/background_body-top.gif'); background-position: 0 0; background-repeat: repeat-x; padding: 38px 40px 0 40px;" width="500">
+      <%= render 'email/blocks/salutation' %>
+
+      <%= render 'email/blocks/get_gift' %>
+
+      <%= render 'email/blocks/tag_line' %>
+
+      <%= render 'email/blocks/download_browser' %>
+
+      <%= render 'email/blocks/tips' %>
+
+      <%= render 'email/blocks/cheers' %>
+      <%= render 'email/blocks/merchant_row' %>
+      <img src="/assets/spacers/spacer.gif" border="0" height="15" width="1" />
     </td>
   </tr>
-</tbody>
-</table>
-<img src="/assets/spacers/spacer.gif"
-border="0" height="15" width="1" /></td>
-</tr>
 </tbody>
 </table>
