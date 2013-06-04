@@ -9,6 +9,7 @@
 </head>
 
 <body bgcolor="#e6e6e6" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0" style="-webkit-font-smoothing: antialiased;width:100% !important;background:#e4e4e4;-webkit-text-size-adjust:none;">
+
 <table style="width: 100%;" bgcolor="#e6e6e6" border="0" cellpadding="0" cellspacing="0">
 <tbody>
   <tr>
@@ -18,40 +19,40 @@
       <tbody>
         <tr>
           <td class="cell" width="584">
-            <p style="color: #808080; font-size: 11px; line-height: 30px; font-family:
-            'Helvetica Neue',Helvetica,Arial,sans-serif; margin: 0; padding: 0;
-            font-weight: normal; text-align: center;">
-              <a href="<%= @web_view_route %>" style="color: #808080;">
-                <span style="color: #808080;">View in web browser</span>
-              </a>
-            </p>
 
-            <%= render 'layouts/email/email_header' %>
+            <%= render 'layouts/email/view_in_web' %>
 
-            <%= yield %>
+            <table style="width: 584px;" class="table" border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+              <tr>
+                <td class="innercell" style="background-color: #fff; background-image: url('/assets/backgroundBorderBar320.gif'); background-position: 0 0; background-repeat: repeat-y; padding-left: 2px; padding-right: 2px;" width="580">
 
-          </td>
-        </tr>
-        <tr>
-          <td class="footer" style="background-color: rgba(50,58,69,1); padding: 0; margin: 0;  height: 15px; border: 2px solid #bbb; border-top:1px solid #bbb;" height="15">
+                  <%= render 'layouts/email/email_header' %>
+
+                  <%= yield %>
+
+                </td>
+              </tr>
+
+              <%= render 'layouts/email/footer/footer_bar' %>
+
+            </tbody>
+            </table>
+
+            <% if @social == 1 %>
+              <%= render 'layouts/email/footer/email_footer' %>
+            <% else %>
+              <%= render 'layouts/email/footer/official_footer' %>
+            <% end %>
+
           </td>
         </tr>
       </tbody>
       </table>
-      <% if @social == 1 %>
-        <%= render 'layouts/email/footer/email_footer' %>
-      <% else %>
-        <%= render 'layouts/email/footer/official_footer' %>
-      <% end %>
-
+    </td>
   </tr>
 </tbody>
 </table>
-</td>
-</tr>
-</tbody>
-</table>
-<img src="/assets/spacers/open.gif"
-height="1" width="10">
+<img src="/assets/spacers/open.gif" height="1" width="10">
 </body>
 </html>

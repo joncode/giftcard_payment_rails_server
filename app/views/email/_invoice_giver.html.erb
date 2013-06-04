@@ -13,6 +13,7 @@
   <p>Your drinks are at the <%= @merchant.name %></p>
   <div><%=  yield :item %></div>
 <% end %>
+
 <table style="width: 584px;" class="table" border="0" cellpadding="0"
 cellspacing="0">
 <tbody>
@@ -58,10 +59,11 @@ cellspacing="0">
       </tr>
       <tr>
         <td>
-          <a
-  href="http://bit.ly/drinkboard"
-  style="color: #69aa35; text-decoration: none;"><span style="color:
-  rgba(84,178,209,1);">OPEN APP</span></a>
+          <a href="#{PUBLIC_URL}" style="color: #69aa35; text-decoration: none;">
+            <span style="color: rgba(84,178,209,1);">
+              OPEN APP
+            </span>
+          </a>
         </td>
       </tr>
     </tbody>
