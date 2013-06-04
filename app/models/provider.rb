@@ -277,15 +277,14 @@ class Provider < ActiveRecord::Base
 
 private
 		def extract_phone_digits
-			if self.phone && !self.phone.empty?
-				phone_raw   = self.phone
-				phone_match = phone_raw.match(VALID_PHONE_REGEX)
+			if phone_exists?
+				phone_match = self.phone.match(VALID_PHONE_REGEX)
 				self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
 			end
 		end
 
 		def phone_exists?
-			self.phone != nil && !self.phone.empty?
+			self.phone.blank?
 		end
 
 		def aba_exists?

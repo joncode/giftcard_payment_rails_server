@@ -7,7 +7,7 @@ class AdminController < ApplicationController
 	end
 
 	def test_emails
-		
+
 	end
 
 	def run_tests
@@ -23,18 +23,18 @@ class AdminController < ApplicationController
 		puts "TEST ALL GIFTS WITH #{gift.inspect}"
 
 		if flag
-			Resque.enqueue(EmailJob, 'notify_giver_order_complete', user.id , {:gift_id => gift.id}) 
+			Resque.enqueue(EmailJob, 'notify_giver_order_complete', user.id , {:gift_id => gift.id})
  			@message = "8 email tests sent to #{email}"
  		else
  			@message = "7 email tests sent to #{email}, 1 not sent 'noitfy_giver_order_complete'"
  		end
 		provider = gift.provider
-		Resque.enqueue(EmailJob, 'confirm_email', 	user.id , 	{}) 
-		Resque.enqueue(EmailJob, 'reset_password', 	user.id, 	{}) 
+		Resque.enqueue(EmailJob, 'confirm_email', 	user.id , 	{})
+		Resque.enqueue(EmailJob, 'reset_password', 	user.id, 	{})
 		Resque.enqueue(EmailJob, 'invite_friend', 	user.id , 	{:email => email, :gift_id => gift.id})
 		Resque.enqueue(EmailJob, 'invite_employee', user.id , 	{:provider_id => provider.id,:email => email, :gift_id => gift.id})
-		Resque.enqueue(EmailJob, 'notify_giver_created_user', 	user.id  , 	{:gift_id => gift.id}) 
-		Resque.enqueue(EmailJob, 'notify_receiver', user.id , 	{:gift_id => gift.id, :email => email}) 
+		Resque.enqueue(EmailJob, 'notify_giver_created_user', 	user.id  , 	{:gift_id => gift.id})
+		Resque.enqueue(EmailJob, 'notify_receiver', user.id , 	{:gift_id => gift.id, :email => email})
 		Resque.enqueue(EmailJob, 'invoice_giver', 	user.id  , 	{:gift_id => gift.id})
 	end
 
@@ -42,19 +42,19 @@ class AdminController < ApplicationController
 
 	def find_gift_with_order_and_shoppingCart(gifts)
 		# criteria for a proper gift
-		# - has a shopping cart 
+		# - has a shopping cart
 		# - has an order
 		# - has a receiver with image
 
 		flag = false
 		gift = gifts[0]
 		gifts.each do |g|
-			if g.order 
-				flag = true 
+			if g.order
+				flag = true
 				gift = g
 			end
 		end
-		
+
 		cart = JSON.parse gift.shoppingCart
 		items = cart.count
 		index = 1

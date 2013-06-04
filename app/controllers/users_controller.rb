@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   ###########   CRUD METHODS
 
   def index
-    
+
     @user = current_user
     # @users = (current_user.blank? ? User.all : User.find(:all, :conditions => ["id != ?", current_user.id]))
     @users = User.order("first_name ASC").page(params[:page]).per_page(16)
@@ -16,27 +16,27 @@ class UsersController < ApplicationController
     #     @fb_users = ActiveSupport::JSON.decode(fb_response.body)["data"]
     #   end
     # end
-    
+
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @users }
     end
   end
 
-  def show    
+  def show
     @user   = User.find(params[:id].to_i)
     @gifts  = Gift.get_user_activity(@user).page(params[:page]).per_page(6)
 
     @active = set_active
-    
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @user }
     end
   end
 
-  def new  
-    sign_out  
+  def new
+    sign_out
     @user  = User.new
 
     respond_to do |format|
@@ -46,13 +46,13 @@ class UsersController < ApplicationController
   end
 
   def edit
-    
+
     @user = User.find(params[:id].to_i)
   end
 
   def create
     @user = User.new(params[:user])
-    
+
     if @user.save
       sign_in @user
       flash[:notice] = "Welcome to #{PAGE_NAME}!"
@@ -100,7 +100,7 @@ class UsersController < ApplicationController
   ###########   SECONDARY CRUD METHODS
 
     def de_activate
-        @user        = User.find(params[:id].to_i) 
+        @user        = User.find(params[:id].to_i)
         @user.active = @user.active ? false : true
 
         respond_to do |format|
@@ -127,7 +127,7 @@ class UsersController < ApplicationController
     end
 
     ########    PHOTO SYSTEM METHODS
-  
+
     def crop
         @obj_to_edit = User.find(params[:id])
         @obj_name = "user"
@@ -170,13 +170,13 @@ class UsersController < ApplicationController
         end
         render :json => {success: true}
     end
-  
+
     #############   UTILITY METHODS
 
   def servercode
     @user = current_user
   end
-  
+
   def confirm_email
     request.format = :email
     if @user = User.find_by_email(params[:email])
@@ -192,10 +192,10 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-        format.email { redirect_to :controller => :invite, :action => action } 
+        format.email { redirect_to :controller => :invite, :action => action }
     end
   end
-  
+
   # def reset_password
   #   puts "IN RESET PASSWORD"
   #   if params[:user] && params[:user].has_key?("email")
@@ -203,7 +203,7 @@ class UsersController < ApplicationController
   #     if user = User.find_by_email(email)
   #       user.update_reset_token
   #       # UserMailer.reset_password(user).deliver # use this for basic rails mailer
-  #       Resque.enqueue(EmailJob, 'reset_password', user[:id], {})  
+  #       Resque.enqueue(EmailJob, 'reset_password', user[:id], {})
   #     end
   #   elsif params[:reset_token]
   #     @user = User.find_by_reset_token(params[:reset_token])
@@ -212,7 +212,7 @@ class UsersController < ApplicationController
   #     end
   #   end
   # end
-  
+
   # def enter_new_password
   #   user_params = params[:user]
   #   if !user_params[:password] || !user_params[:password_confirmation]
@@ -231,7 +231,7 @@ class UsersController < ApplicationController
   #     return redirect_to '/home'
   #   end
   # end
-  
+
   private
 
     def set_active

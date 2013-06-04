@@ -1,11 +1,11 @@
 class InviteController < ApplicationController
-  
+
     # INVITE W/O GIFT
     # sender info :
         # sender name
         # sender photo_url
 
-    # request with 
+    # request with
         # invite/person/782934
         # 782934 = <user_id + stub value>
     # respond with
@@ -20,11 +20,11 @@ class InviteController < ApplicationController
         # merchant address
         # merchant phone
 
-    # request with 
+    # request with
         # invite/gift/782934
         # 782934 = <gift_id + stub value>
     # respond with
-        # { "user" : <fullname>, 
+        # { "user" : <fullname>,
         #  "photo" : <user.get_photo>,
         #  "shoppingCart" : <shopping cart as json hash> ,
         #  "merchant_name" : <provider_name>,
@@ -33,7 +33,7 @@ class InviteController < ApplicationController
 
   def show
     number = 649387
-    
+
         # remove the permalink add-number from the id
     id          = params[:id].to_i - number
     if id < 0
@@ -54,9 +54,9 @@ class InviteController < ApplicationController
         response_hash["shoppingCart"]       = @gift.ary_of_shopping_cart_as_hash
         response_hash["merchant_name"]      = @merchant.name
         response_hash["merchant_address"]   = @merchant.full_address
-        response_hash["merchant_phone"]     = @merchant.phone 
+        response_hash["merchant_phone"]     = @merchant.phone
     else
-        request.format = :email 
+        request.format = :email
     end
     respond_to do |format|
       format.json { render json: response_hash }
@@ -64,7 +64,7 @@ class InviteController < ApplicationController
   end
 
   def invite
-        number = 649387    
+        number = 649387
             # remove the permalink add-number from the id
         id          = params[:id].to_i - number
         if id < 0
@@ -79,13 +79,13 @@ class InviteController < ApplicationController
             response_hash["user"]               = @user.name
             response_hash["user_photo"]         = @user.get_photo
         else
-            request.format = :email 
+            request.format = :email
         end
         respond_to do |format|
             format.json { render json: response_hash }
         end
   end
-  
+
   def invite_friend
     if params[:email] && params[:user_id]
       Resque.enqueue(EmailJob, 'invite_friend', params[:user_id], {:email => params[:email], :gift_id => params[:gift_id]})
@@ -100,19 +100,20 @@ class InviteController < ApplicationController
     @web_view_route = "#{TEST_URL}/invite/error"
 
     respond_to do |format|
-      format.email 
+      format.email
     end
   end
 
   def email_confirmed
     @email_title   = "Drinkboard Email Messenger"
     request.format = :email
+
     @header_text   = "Thank You, Your Email is Confirmed"
     @social = 1
     @web_view_route = "#{TEST_URL}/invite/email_confirmed"
 
     respond_to do |format|
-      format.email 
+      format.email
     end
   end
 
@@ -125,7 +126,7 @@ class InviteController < ApplicationController
 
     case params[:template]
     when 'confirm_email'
-        #  you've just joined the app , confirm your email 
+        #  you've just joined the app , confirm your email
       email_view    = "confirm_email"
       @user         = User.find(params[:var1])
       @header_text  = "Confirm Your Email Address"
@@ -164,7 +165,7 @@ class InviteController < ApplicationController
       @gift         = Gift.find(params[:var1])
       @cart         = @gift.ary_of_shopping_cart_as_hash
       @merchant     = @gift.provider
-    else 
+    else
         #  join drinkboard email
       email_view    = "display_email"
       @web_view_route = "#{TEST_URL}/webview/display_email"
@@ -173,7 +174,7 @@ class InviteController < ApplicationController
     respond_to do |format|
       format.email { render email_view }
     end
-    
+
   end
 
   private
@@ -181,5 +182,5 @@ class InviteController < ApplicationController
   def create_webview_link
     "#{TEST_URL}/webview/#{params[:template]}/#{params[:var1]}"
   end
-  
+
 end
