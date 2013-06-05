@@ -8,7 +8,7 @@ Drinkboard::Application.config.secret_token = '80cb854c626de01bc9fce3ffdbb7c8396
 
 if Rails.env.production?
     PAGE_NAME       = 'Drinkboard - Admin Tools'
-    TEST_URL        = "http://drinkboard.herokuapp.com"
+    TEST_URL        = "http://www.drinkboardapp.com"
     MERCHANT_URL    = "http://merchtools.herokuapp.com"
     PUBLIC_URL      = "http://www.drinkboard.com"
 elsif Rails.env.staging?
