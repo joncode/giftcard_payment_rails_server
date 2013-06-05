@@ -2,7 +2,7 @@
   <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
   15px; line-height: 20px; color: #595959; margin-top: 10px; margin-left: 0;
   margin-bottom: 15px; margin-right: 0; padding: 0;">
-    <%= link_to 'Confirm Email', confirm_email_users_url(:email => @user.email, :user => @user.id), :style => "color: #fff; background-color:rgba(84,178,209,1); padding: 5px 10px; margin: 10px; text-decoration: none;" %>
+    <a href="<%= TEST_URL %>/confirm_email?email=<%= @user.email %>&amp;user=<%= @user_id %>" style="color: #fff; background-color:rgba(84,178,209,1); padding: 5px 10px; margin: 10px; text-decoration: none;">Confirm Email</a>
   </p>
 <% end %>
 

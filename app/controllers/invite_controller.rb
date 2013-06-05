@@ -32,10 +32,9 @@ class InviteController < ApplicationController
         #  "merchant_phone" : <provider_phone> }
 
   def show
-    number = 649387
 
         # remove the permalink add-number from the id
-    id          = params[:id].to_i - number
+    id          = params[:id].to_i - NUMBER_ID
     if id < 0
         id = params[:id].to_i
     end
@@ -62,9 +61,8 @@ class InviteController < ApplicationController
   end
 
   def invite
-        number = 649387
             # remove the permalink add-number from the id
-        id          = params[:id].to_i - number
+        id          = params[:id].to_i - NUMBER_ID
         if id < 0
             id = params[:id].to_i
         end
@@ -121,7 +119,8 @@ class InviteController < ApplicationController
     when 'confirm_email'
         #  you've just joined the app , confirm your email
       email_view    = "confirm_email"
-      @user         = User.find(params[:var1])
+      user_id       = params[:var1].to_i - NUMBER_ID
+      @user         = User.find(user_id)
       @header_text  = "Confirm Your Email Address"
       @social       = 0
     when 'reset_password'

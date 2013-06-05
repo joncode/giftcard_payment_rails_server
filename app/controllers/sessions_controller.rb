@@ -1,14 +1,14 @@
 class SessionsController < ApplicationController
-  
-    after_filter :cross_origin_allow_header, only: [:validate_token, :change_password] 
-    
+
+    after_filter :cross_origin_allow_header, only: [:validate_token, :change_password]
+
     def new
         @text = params[:text]
         sign_out
         @user  = User.new
         render 'new'
     end
-    
+
     def create
         user = User.find_by_email(params[:session][:email])
         password = params[:session][:password]
@@ -27,7 +27,7 @@ class SessionsController < ApplicationController
             redirect_to "/signin"
         end
     end
-  
+
     def destroy
       sign_out
       redirect_to root_path
@@ -44,9 +44,9 @@ class SessionsController < ApplicationController
             if user = User.find_by_email(email)
                 @progress = 2
                 user.update_reset_token
-                Resque.enqueue(EmailJob, 'reset_password', user.id, {})  
+                Resque.enqueue(EmailJob, 'reset_password', user.id, {})
             else
-                flash[:error] = "Cannot Find Account With Email : #{email}" if !email.blank? 
+                flash[:error] = "Cannot Find Account With Email : #{email}" if !email.blank?
             end
         elsif params[:reset_token]
             user = User.find_by_reset_token(params[:reset_token])
@@ -64,11 +64,10 @@ class SessionsController < ApplicationController
         response_hash = {}
         if token = params[:reset_token] #&& request.format == :json
             user = User.find_by_reset_token(token)
-            
+
             if user
                 if Time.now - 3.days <= user.reset_token_sent_at
-                    number = 649387
-                    response_hash["success"] = "Valid token |#{(number + user.id)}"
+                    response_hash["success"] = "Valid token |#{(NUMBER_ID + user.id)}"
                 else
                     response_hash["success"] = "Expired Token |0"
                 end
@@ -86,10 +85,9 @@ class SessionsController < ApplicationController
 
     def change_password
         # get the user for the user id - number
-        number = 649387
         response_hash = {}
-        user_id = params["id"].to_i - number
-        if user_id < 1 
+        user_id = params["id"].to_i - NUMBER_ID
+        if user_id < 1
             # failed attempt
             response_hash["error"] = "Could not Identify User - Please re-try forgot password"
         else
@@ -156,7 +154,7 @@ class SessionsController < ApplicationController
         if user_params.kind_of? Hash
             if user_params["password"].nil? || user_params["password_confirmation"].nil?
                 return false
-            elsif user_params["password"].length < 6 || user_params["password_confirmation"].length < 6 
+            elsif user_params["password"].length < 6 || user_params["password_confirmation"].length < 6
                 return false
             end
             return true
@@ -169,7 +167,7 @@ class SessionsController < ApplicationController
         headers['Access-Control-Allow-Origin'] = "*"
         headers['Access-Control-Request-Method'] = '*'
     end
-  
+
 end
 
 

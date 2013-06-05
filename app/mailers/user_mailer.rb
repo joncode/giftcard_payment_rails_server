@@ -9,7 +9,8 @@ class UserMailer < ActionMailer::Base
 		@user           = user
 		@header_text    = "Confirm Your Email Address"
 		@email_title    = "Drinkboard Email Messenger"
-		@web_view_route = "#{TEST_URL}/webview/confirm_email/#{user.id}"
+		@user_id 		= user.id + NUMBER_ID
+		@web_view_route = "#{TEST_URL}/webview/confirm_email/#{@user_id}"
 		@social         = 0
 		mail({
 			:to => "#{@user.fullname} <#{whitelist_user(@user)}>",

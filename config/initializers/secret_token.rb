@@ -18,10 +18,12 @@ elsif Rails.env.staging?
     PUBLIC_URL      = "http://qa.drinkboard.com"
 else
     PAGE_NAME       = 'Dev Drinkboard - Admin Tools (local)'
-    TEST_URL        = "http://0.0.0.0:3000"
+    TEST_URL        = "http://0.0.0.0:3001"
     MERCHANT_URL    = "http://0.0.0.0:3000"
-    PUBLIC_URL      = "http://0.0.0.0:3000"
+    PUBLIC_URL      = "http://0.0.0.0:3001"
 end
+
+NUMBER_ID = 649387
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 VALID_PHONE_REGEX = /1?\s*\W?\s*([2-9][0-8][0-9])\s*\W?\s*([2-9][0-9]{2})\s*\W?\s*([0-9]{4})(\se?x?t?(\d*))?/

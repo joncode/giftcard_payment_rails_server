@@ -20,6 +20,8 @@ Drinkboard::Application.routes.draw do
   match "/invite/person/:id"          , to: "invite#invite",          via: :get
   match "/webview(/:template(/:var1))", to: "invite#display_email",   via: :get
 
+  match "/confirm_email(/:email(/:user))", to: "users#confirm_email", via: :get
+
   resources :users do
     member do
       get  :following, :followers
@@ -29,9 +31,6 @@ Drinkboard::Application.routes.draw do
       post :update_avatar
       get  :de_activate
       get  :destroy_gifts
-    end
-    collection do
-      get  :confirm_email
     end
   end
 
