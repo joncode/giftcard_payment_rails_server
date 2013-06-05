@@ -6,7 +6,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title><%= @email_title || "Drinkboard Email Messenger" %></title>
   <% params ||= {} %>
-  <% if true || (params && params[:controller] == 'invite') %>
+  <% if params && params[:controller] == 'invite' %>
     <%= stylesheet_link_tag 'email/email' %>
   <% end %>
 </head>
