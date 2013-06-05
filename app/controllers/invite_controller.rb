@@ -38,23 +38,8 @@ class InviteController < ApplicationController
     if id < 0
         id = params[:id].to_i
     end
-    @gift       = Gift.find(id)
-    @giver      = @gift.giver
-    @cart       = @gift.ary_of_shopping_cart_as_hash
-    @merchant   = @gift.provider
-
-        # check to see if its a mobile browser here
-        # if so , change the render format to .mobile
-        # add that format to the views folder and add to respond_to
-    if request.format == :json
-        response_hash                       = {}
-        response_hash["user"]               = @giver.name
-        response_hash["user_photo"]         = @giver.get_photo
-        response_hash["shoppingCart"]       = @gift.ary_of_shopping_cart_as_hash
-        response_hash["merchant_name"]      = @merchant.name
-        response_hash["merchant_address"]   = @merchant.full_address
-        response_hash["merchant_phone"]     = @merchant.phone
-    end
+    gift       = Gift.find(id)
+    response_hash = gift.serialize
     respond_to do |format|
       format.json { render json: response_hash }
     end

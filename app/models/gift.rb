@@ -37,6 +37,23 @@ class Gift < ActiveRecord::Base
 	# after_create  :notify_receiver
 	after_save    :create_notification
 
+	def serialize
+		giver      = self.giver
+		merchant   = self.provider
+		response_hash                       = {}
+		response_hash["giver"]              = giver.name
+		response_hash["giver_photo"]        = giver.get_photo
+		response_hash["receiver"]           = self.receiver_name
+		response_hash["receiver_photo"]		= self.receiver.get_photo if self.receiver
+		response_hash["message"]            = gift.message
+		response_hash["shoppingCart"]       = self.ary_of_shopping_cart_as_hash
+		response_hash["merchant_name"]      = merchant.name
+		response_hash["merchant_address"]   = merchant.full_address
+		response_hash["merchant_phone"]     = merchant.phone
+		return response_hash
+	end
+
+
 	##########   database queries
 
 	def self.get_gifts(user)
