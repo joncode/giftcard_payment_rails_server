@@ -368,3 +368,35 @@
 [06/04/13 19:22:48 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing partial email/blocks/user_image_td with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
   * "/Users/jongutwillig/Rails/drinkboard/app/views"
 
+[06/04/13 19:37:36 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find User with id=202
+[06/04/13 19:37:36 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find User with id=202
+[06/04/13 19:37:41 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find User with id=35
+[06/04/13 19:37:42 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find User with id=35
+[06/04/13 19:37:44 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find User with id=76
+[06/04/13 19:37:44 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find User with id=76
+[06/04/13 19:37:47 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find User with id=101
+[06/04/13 19:37:47 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find User with id=101
+[06/04/13 19:43:31 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Gift without an ID
+[06/04/13 19:43:31 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Gift without an ID
+[06/04/13 19:43:38 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Gift with id=19
+[06/04/13 19:43:38 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Gift with id=19
+[06/04/13 19:46:58 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing partial email/blocks/receiver_image_td with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
+  * "/Users/jongutwillig/Rails/drinkboard/app/views"
+
+[06/04/13 19:46:58 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing partial email/blocks/receiver_image_td with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
+  * "/Users/jongutwillig/Rails/drinkboard/app/views"
+
+[06/04/13 19:59:39 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing partial email/blocks/receiver_image_td with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
+  * "/Users/jongutwillig/Rails/drinkboard/app/views"
+
+[06/04/13 19:59:39 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing partial email/blocks/receiver_image_td with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
+  * "/Users/jongutwillig/Rails/drinkboard/app/views"
+
+[06/04/13 20:00:05 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing partial blocks/receiver_image_td with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
+  * "/Users/jongutwillig/Rails/drinkboard/app/views"
+
+[06/04/13 20:00:05 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Missing partial blocks/receiver_image_td with {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}. Searched in:
+  * "/Users/jongutwillig/Rails/drinkboard/app/views"
+
+[06/04/13 20:23:11 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `created_at' for nil:NilClass
+[06/04/13 20:23:11 -0400 new-host.home (8344)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `created_at' for nil:NilClass

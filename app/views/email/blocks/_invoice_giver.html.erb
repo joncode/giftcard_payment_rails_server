@@ -1,0 +1,18 @@
+<tr>
+
+  <%= render 'email/blocks/user_image_td' %>
+
+  <td style="vertical-align: top; text-align: left; padding: 0; margin: 0;">
+    <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
+    15px; line-height: 20px; color: rgba(50,58,69,1); margin-top: 0; margin-left: 0;
+    margin-bottom: 15px; margin-right: 0; padding: 0;">
+<!-- LINK to gift -->
+      <p>Thank You For Your Purchase!</p>
+      <p>Purchased for <%= @gift.receiver_name %></p>
+
+      <%= render 'email/blocks/cart' %>
+
+      <p>Total : <%= number_to_currency @gift.total %></p>
+    </p>
+  </td>
+</tr>

@@ -55,8 +55,6 @@ class InviteController < ApplicationController
         response_hash["merchant_name"]      = @merchant.name
         response_hash["merchant_address"]   = @merchant.full_address
         response_hash["merchant_phone"]     = @merchant.phone
-    else
-        # request.format = :email
     end
     respond_to do |format|
       format.json { render json: response_hash }
@@ -78,8 +76,6 @@ class InviteController < ApplicationController
             response_hash                       = {}
             response_hash["user"]               = @user.name
             response_hash["user_photo"]         = @user.get_photo
-        else
-            # request.format = :email
         end
         respond_to do |format|
             format.json { render json: response_hash }
@@ -94,7 +90,6 @@ class InviteController < ApplicationController
 
   def error
     @email_title   = "Drinkboard Email Messenger"
-    # request.format = :email
     @header_text   = "We're Sorry but there was an Error"
     @social = 1
     @web_view_route = "#{TEST_URL}/invite/error"
@@ -106,7 +101,6 @@ class InviteController < ApplicationController
 
   def email_confirmed
     @email_title   = "Drinkboard Email Messenger"
-    # request.format = :email
 
     @header_text   = "Thank You, Your Email is Confirmed"
     @social = 1
@@ -119,7 +113,6 @@ class InviteController < ApplicationController
 
   def display_email
     @email_title   = "Drinkboard Email Messenger"
-    # request.format = :email
     @header_text   = "#MobileGifting"
     @social = 1
     @web_view_route = create_webview_link
