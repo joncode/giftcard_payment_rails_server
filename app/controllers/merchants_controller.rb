@@ -54,7 +54,7 @@ class MerchantsController < JsonController
 
 		respond_to do |format|
 			# logger.debug gifts_array
-			@app_response = "AC response[0] => #{response.values[0]}"
+			@app_response = "AC response[0] => #{response.values[0][0]}"
 			format.json { render json: response }
 		end
 	end
