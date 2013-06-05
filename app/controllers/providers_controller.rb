@@ -279,7 +279,7 @@ class ProvidersController < ApplicationController
 							puts "TRANSMISSION FAILED - invite employee account"
 							notice_msg = 'Network Failure. No email sent! please retry.'
 						end
-						web_route = MERCHANT_URL + "/invite?token=#{invite_tkn}"
+						web_route = PUB_MERCH_URL + "/invite?token=#{invite_tkn}"
 						if Rails.env.production?
 							Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
 						elsif Rails.env.staging?

@@ -144,7 +144,7 @@ class MerchantsController < JsonController
 		if provider = authenticate_mt_request(params["merchant_token"])
 			data = JSON.parse params["data"]
 			invite_tkn = data["invite_tkn"]
-			web_route = MERCHANT_URL + "/invite?token=#{invite_tkn}"
+			web_route = PUB_MERCH_URL + "/invite?token=#{invite_tkn}"
 			@user = User.new
 			@user.first_name = data["name"]
 			if Rails.env.production?
