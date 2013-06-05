@@ -178,11 +178,11 @@ class UsersController < ApplicationController
 	end
 
 	def confirm_email
-		@user_id = params[:user].to_i - NUMBER_ID
-		if @user = User.find_by_email(params[:email])
-			if @user.id == @user_id
-				confirm   = "1" + @user.confirm[1]
-				@user.update_attribute(:confirm, confirm)
+		user_id = params[:user].to_i - NUMBER_ID
+		if user = User.find_by_email(params[:email])
+			if user.id == user_id
+				confirm   = "1" + user.confirm[1]
+				user.update_attribute(:confirm, confirm)
 				action  = :email_confirmed
 			else
 				action  = :error

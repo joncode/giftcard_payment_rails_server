@@ -1,36 +1,20 @@
 
 
-<!-- HERE is the main Body -->
-<table style="width: 580px;" class="innertable" border="0" cellpadding="0"
-cellspacing="0">
+<%= render 'email/blocks/salutation', salute: "Hi #{@gift.giver_name}," %>
+
+<table style="margin: 0pt; padding: 0pt; width: 100%;" class="list"
+border="0" cellpadding="0" cellspacing="0">
 <tbody>
-  <tr>
-<!-- HERE is the main body image -->
-    <td class="content" style="background-color: #ffffff; background-image:
-    url('/spacers/background_body-top.gif');
-    background-position: 0 0; background-repeat: repeat-x; padding: 38px 40px 0
-    40px;" width="500">
 
-      <%= render 'email/blocks/salutation' %>
+  <%= render 'email/blocks/invoice_giver' %>
 
-      <table style="margin: 0pt; padding: 0pt; width: 100%;" class="list"
-      border="0" cellpadding="0" cellspacing="0">
-      <tbody>
+  <%= render 'email/blocks/openapp' %>
 
-      <%= render 'email/blocks/invoice_giver' %>
-
-      <%= render 'email/blocks/openapp' %>
-
-      </tbody>
-      </table>
-      <%= render 'email/blocks/tag_line' %>
-
-      <%= render 'email/blocks/cheers' %>
-
-      <%= render 'email/blocks/merchant_row' %>
-
-      <img src="/spacers/spacer.gif" border="0" height="15" width="1" />
-    </td>
-  </tr>
 </tbody>
 </table>
+<%= render 'email/blocks/tag_line' %>
+
+<%= render 'email/blocks/cheers' %>
+
+<%= render 'email/blocks/merchant_row' %>
+

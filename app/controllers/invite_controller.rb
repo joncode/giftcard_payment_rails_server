@@ -121,6 +121,7 @@ class InviteController < ApplicationController
       email_view    = "confirm_email"
       user_id       = params[:var1].to_i - NUMBER_ID
       @user         = User.find(user_id)
+      @user_id      = @user.id + NUMBER_ID
       @header_text  = "Confirm Your Email Address"
       @social       = 0
     when 'reset_password'
