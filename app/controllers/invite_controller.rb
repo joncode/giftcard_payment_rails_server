@@ -34,12 +34,13 @@ class InviteController < ApplicationController
   def show
 
         # remove the permalink add-number from the id
-    id          = params[:id].to_i - NUMBER_ID
-    if id < 0
-        id = params[:id].to_i
-    end
+    id         = params[:id].to_i - NUMBER_ID
     gift       = Gift.find(id)
-    response_hash = gift.serialize
+    if gift
+      response_hash = gift.serialize
+    else
+      response_hash = { "error" => "Incorrect Data Received"}
+    end
     respond_to do |format|
       format.json { render json: response_hash }
     end
