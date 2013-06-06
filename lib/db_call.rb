@@ -25,12 +25,15 @@ module DbCall
     end
 
     def self.deactivate_from_attr(attribute, data, obj)
-        user = obj.class.where({attribute => data} ).first
-        puts DbCall::string_attribute_obj(attribute, user) + " | #{user.name}"
-        print "Deactivate #{user.name} ? -> (y/n) "
-        response = gets.chomp.downcase
-        if response == 'y'
-            user.update_attribute(:active, false)
+        if user = obj.class.where({attribute => data} ).first
+            puts DbCall::string_attribute_obj(attribute, user) + " | #{user.name}"
+            print "Deactivate #{user.name} ? -> (y/n) "
+            response = gets.chomp.downcase
+            if response == 'y'
+                user.update_attribute(:active, false)
+            end
+        else
+            puts "no record found for #{attribute.to_s} = #{data}"
         end
     end
 
