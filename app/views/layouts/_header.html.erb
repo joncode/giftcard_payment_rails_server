@@ -7,10 +7,10 @@
   	<h6><%= link_to 'Logout', signout_path %></h6>
     <h5>Welcome, <a href="/merchants"><%= @current_user.fullname %></a></h5>
   </div>
-  
+
   <div class="vendorTitle">
   	<h5 class="vendorTitleText">
- 
+
       <a href="/merchants/<%= @provider.id %>"><%= @provider.name %></a>
     </h5>
   	<h6 class="vendorAddress">
@@ -22,7 +22,7 @@
   <% elsif params[:controller] == "brands" %>
     <h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="/admin"><%= @current_user.fullname %></a></h5>
   </div>
-  
+
   <div class="vendorTitle">
 
     <h6 class="vendorAddress">
@@ -39,11 +39,11 @@
         <br />
         <%= @brand.website if @brand %>
     </h6>
-  </div>  
+  </div>
   <% else %>
     <h6><%= link_to 'Logout', signout_path %></h6><h5>Welcome, <a href="/admin"><%= @current_user.fullname %></a></h5>
   </div>
-  
+
   <div class="vendorTitle">
 
     <h6 class="vendorAddress">
@@ -63,7 +63,7 @@
         <br />
         <%= @provider.city_state_zip if @provider %>
     </h6>
-  </div> 
+  </div>
   <% end %>
   <div class="lineHorizHeader lineHoriz"></div>
   	<div class="columnTopBlocker"></div>
