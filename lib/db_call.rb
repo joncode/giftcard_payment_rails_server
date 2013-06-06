@@ -1,14 +1,12 @@
 module DbCall
 
-
-    def self.status_for(gift_array)
-        # print the gift ID and status
-        if gift_array[0].kind_of? Gift
-            gift_array.map  do |g|
-                puts "Gift ID = #{g.id} | status = #{g.status}"
+    def self.pattr(item_array, attribute)
+        if item_array.count > 0
+            item_array.map do |i|
+                puts "#{i.class.to_s} ID = #{i.id} | #{attribute.to_s} = #{i.send(attribute)}"
             end
         else
-            puts "These are not gifts"
+            puts "No Items in array"
         end
         nil
     end

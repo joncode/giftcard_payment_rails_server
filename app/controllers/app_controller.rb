@@ -387,9 +387,9 @@ class AppController < JsonController
 			# @users = User.find(:all, :conditions => ["id != ?", @user.id])
 			# providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
 			if !params['city'] || params['city'] == 'all'
-				users    = User.all
+				users    = User.where(active: true).to_a
 			else
-				users    = User.find_by_city(params['city'])
+				users    = User.where(active: true).find_all_by_city(params['city'])
 			end
 			user_array = serialize_objs_in_ary users
 			logmsg 	   = user_array[0]
