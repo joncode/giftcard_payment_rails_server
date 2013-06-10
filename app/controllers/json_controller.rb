@@ -68,6 +68,7 @@ class JsonController < ActionController::Base
             else
                 gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant_date)
             end
+            gift_obj["updated_at"] = g.updated_at
         end
 
         gift_obj["gift_id"]  = g.id.to_s

@@ -14,7 +14,7 @@ class MenusController < ApplicationController
     @menu = provider.menu
 
     respond_to do |format|
-      format.html 
+      format.html
       format.json { render json: @menu }
     end
   end

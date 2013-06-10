@@ -276,6 +276,7 @@ class Provider < ActiveRecord::Base
 	end
 
 private
+
 		def extract_phone_digits
 			if phone_exists?
 				phone_match = self.phone.match(VALID_PHONE_REGEX)

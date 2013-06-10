@@ -41,15 +41,27 @@ class MerchantsController < JsonController
 
 	def orders
 		response = {}
+
 		if provider = authenticate_mt_request(params["merchant_token"])
-			if params["status"] == "new"
-				gifts = Gift.get_provider(provider)
+
+			gifts = if params["status"] == "new"
+				Gift.get_provider(provider)
+			elsif params["status"] == 'reports'
+				start_time = params["start_time"].to_datetime if params["start_time"]
+				end_time   = params["end_time"].to_datetime   if params["end_time"]
+				# if there are start and end times
+				Gift.get_history_provider_and_range(provider, start_time, end_time )
 			else
-			gifts = Gift.get_history_provider(provider)
-		end
+				Gift.get_history_provider(provider)
+			end
+
 			response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+			response["status"]	     = true
+			response["message"]      = response["success"]
 		else
 			response["error_server"] = authentication_data_error
+			response["status"]	     = false
+			response["message"]      = uauthentication_data_error
 		end
 
 		respond_to do |format|
@@ -191,7 +203,7 @@ class MerchantsController < JsonController
 			end
 		else
 			response["status"] 	 = false
-			response["message"]  = 'Unable to authorize merchant'
+			response["message"]  = authentication_data_error
 		end
 
 		respond_to do |format|

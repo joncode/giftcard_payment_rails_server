@@ -103,7 +103,15 @@ class Gift < ActiveRecord::Base
 	end
 
 	def self.get_history_provider(provider)
-		Gift.where(provider_id: provider.id).where(status: 'redeemed').order("updated_at DESC")
+		Gift.where(provider_id: provider.id, status: 'redeemed').order("updated_at DESC")
+	end
+
+	def self.get_history_provider_and_range(provider, start_date=nil, end_date=nil)
+		if start_date && end_date
+			Gift.where(provider_id: provider.id, status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
+		else
+			Gift.get_history_provider(provider)
+		end
 	end
 
 	def self.transactions(user)

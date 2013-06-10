@@ -11,6 +11,19 @@ module DbCall
         nil
     end
 
+    def self.call_all(obj)
+        methods_ary = obj.methods
+        methods_ary.each do |o|
+            print "#{o} --- "
+            begin
+                puts obj.send(o)
+            rescue
+                puts "fail"
+            end
+        end
+        nil
+    end
+
     def self.deactivate(attribute, data, obj)
         if data.kind_of? Array
             puts "Array received"
