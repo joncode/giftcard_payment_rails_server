@@ -1,4 +1,28 @@
+#1.  make sure location has robust menu items
+  # if not add menu items
+# make a menu item chooser (randomizer)
+#2. build a gift using a user and the menu items and the location data
+# fill out the user added tabs like tip
+  # credit card
+# send the gift to the dev db
 
+#3.  choose gifts from dev db and redeem them
+
+#4 time is a major issue ...
+  # go in an re-write updated at to have a few gifts in each shift for each day for really a few months
+
+  # redeemed gifts between multiple users
+  # same location
+  # different size shopping carts
+  # different server codes redeeming
+
+  # created_at to be spread over 6 months
+  # updated at to be spread also over six months AND at different shifts
+
+
+# # 2000 gifts, range last 6 months (iterate over each day),
+# for each day 10 gifts, randomly redeem from noon to 2am (or 12-2am + noon to midnight)
+#
 
 # database issues
 #FiXES

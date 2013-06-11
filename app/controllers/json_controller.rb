@@ -11,8 +11,6 @@ class JsonController < ActionController::Base
     MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "order_num"]
     ACTIVITY_REPLY  = GIFT_REPLY + [ "receiver_id", "receiver_name"]
 
-
-
     def array_these_gifts(obj, send_fields, address_get=false, receiver=false, order_num=false)
         gifts_ary = []
         index = 1
