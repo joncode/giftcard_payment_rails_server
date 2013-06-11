@@ -41,7 +41,11 @@ class Provider < ActiveRecord::Base
 
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city]
-		prov_hash["provider_id"]  = self.id.to_s
+		if Rails.env.production?
+			prov_hash["provider_id"]  = self.id.to_s
+		else
+			prov_hash["provider_id"]  = self.id
+		end
 		prov_hash["photo"]        = self.get_image("photo")
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live

@@ -17,8 +17,12 @@ class Brand < ActiveRecord::Base
 
   	def serialize
   		brand_hash 	= self.serializable_hash only: [ :name, :next_view ]
-  		brand_hash["brand_id"]  = self.id.to_s
-  		brand_hash["photo"] 	= self.get_image
+  		if Rails.env.production?
+            brand_hash["brand_id"]  = self.id.to_s
+        else
+            brand_hash["brand_id"]  = self.id
+        end
+        brand_hash["photo"] 	= self.get_image
   		return brand_hash
   	end
 
