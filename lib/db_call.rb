@@ -4,9 +4,9 @@ module DbCall
         if item_array.count > 0
             item_array.map do |i|
                 if attribute.kind_of? Array
-                    puts DbCall::string_attributes_ary(attribute, i)
+                    puts self.string_attributes_ary(attribute, i)
                 else
-                    puts DbCall::string_attribute_obj(attribute, i)
+                    puts self.string_attribute_obj(attribute, i)
                 end
             end
         else
@@ -32,18 +32,18 @@ module DbCall
         if data.kind_of? Array
             puts "Array received"
             data.each do |item|
-                DbCall::deactivate_from_attr(attribute, item, obj)
+                self.deactivate_from_attr(attribute, item, obj)
             end
         else
             puts "#{data.class.to_s} received"
-            DbCall::deactivate_from_attr(attribute, data, obj)
+            self.deactivate_from_attr(attribute, data, obj)
         end
         nil
     end
 
     def self.deactivate_from_attr(attribute, data, obj)
         if user = obj.class.where({attribute => data} ).first
-            puts DbCall::string_attribute_obj(attribute, user) + " | #{user.name}"
+            puts self.string_attribute_obj(attribute, user) + " | #{user.name}"
             print "Deactivate #{user.name} ? -> (y/n) "
             response = gets.chomp.downcase
             if response == 'y'
