@@ -351,22 +351,28 @@ class Gift < ActiveRecord::Base
 			case self.status
 			when 'incomplete'
 				puts "Relay created for gift #{self.id}"
-				Relay.createRelayFromGift self
+				# Relay.createRelayFromGift self
+				# send no push
 			when 'open'
 				puts "Relay created for gift if there is none #{self.id}"
-				relay = Relay.createRelayFromGift self
-				if relay.errors.messages.has_key? :gift_id
-					relay = Relay.updateRelayFromGift self
-				end
+				# relay = Relay.createRelayFromGift self
+				# if relay.errors.messages.has_key? :gift_id
+				# 	relay = Relay.updateRelayFromGift self
+				# end
+				# send push to receiver here via db
+				Relay.send_push_notification self
 			when 'notified'
 				puts "Relay updated to notified for gift #{self.id}"
-				relay = Relay.updateRelayFromGift self
+				# relay = Relay.updateRelayFromGift self
+				# send push to provider here
 			when 'redeemed'
 				puts "Relay updated to redeemed for gift #{self.id}"
-				relay = Relay.updateRelayFromGift self
+				# relay = Relay.updateRelayFromGift self
+				# send push to giver here
 			when 'regifted'
 				puts "Relay updated to regifted for gift #{self.id}"
-				relay = Relay.updateRelayFromGift self
+				# relay = Relay.updateRelayFromGift self
+				# do not send push to new receiver here .. sent by new re-gift
 			end
 		end
 
