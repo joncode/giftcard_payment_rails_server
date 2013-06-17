@@ -47,7 +47,7 @@ class IphoneController < AppController
 			password = "0"
 		end
 
-		if email.nil? || password.nil?
+		if email.blank? || password.blank?
 			response["error_iphone"]     = "Data not received."
 		else
 			user = User.find_by_email(email)
@@ -79,7 +79,7 @@ class IphoneController < AppController
 			twitter     = params["twitter"]
 		end
 
-		if facebook_id.nil? && twitter.nil?
+		if facebook_id.blank? && twitter.blank?
 			response["error_iphone"] = "Data not received."
 		else
 			if origin == 'f'
