@@ -3,7 +3,11 @@ module DbCall
     def self.pattr(attribute, item_array)
         if item_array.count > 0
             item_array.map do |i|
-                puts DbCall::string_attribute_obj(attribute, i)
+                if attribute.kind_of? Array
+                    puts DbCall::string_attributes_ary(attribute, i)
+                else
+                    puts DbCall::string_attribute_obj(attribute, i)
+                end
             end
         else
             puts "No Items in array"
@@ -52,6 +56,14 @@ module DbCall
 
     def self.string_attribute_obj(attribute, obj)
         "#{obj.class.to_s} ID = #{obj.id} | #{attribute.to_s} = #{obj.send(attribute)}"
+    end
+
+    def self.string_attributes_ary(attribute, obj)
+        str = "#{obj.class.to_s} ID = #{obj.id}"
+        attribute.each do |attrb|
+            str << " | #{attrb.to_s} = #{obj.send(attrb)}"
+        end
+        return str
     end
 
 
