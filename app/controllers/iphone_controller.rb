@@ -361,7 +361,7 @@ class IphoneController < AppController
 				obj = data
 			end
 			#puts "CREATE USER OBJECT parse = #{obj}"
-			obj.symbolize_keys!
+			# obj.symbolize_keys!
 			User.new(obj)
 		end
 
