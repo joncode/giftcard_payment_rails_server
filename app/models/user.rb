@@ -321,109 +321,109 @@ class User < ActiveRecord::Base
 
   ###########  end settings methods    ##########
 
-  private
+private
 
-    def confirm_email
-      if self.email
-        if self.confirm[0] == '0'
-          Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
-        end
+  def confirm_email
+    if self.email
+      if self.confirm[0] == '0'
+        Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
       end
     end
+  end
 
-    def collect_incomplete_gifts
-              # check Gift.rb for ghost gifts connected to newly created user
-      gifts = []
-      if self.facebook_id
-        g = Gift.where("status = :stat AND facebook_id = :fb_id",    :stat => 'incomplete', :fb_id   => self.facebook_id.to_s)
-        gifts.concat g
-      end
-      if self.foursquare_id
-        g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id.to_s)
-        gifts.concat g
-      end
-      if self.twitter
-        g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => self.twitter.to_s)
-        gifts.concat g
-      end
-      if self.email
-        g = Gift.where("status = :stat AND receiver_email = :em", :stat => 'incomplete', :em  => self.email)
-        gifts.concat g
-      end
-      if self.phone
-        g = Gift.where("status = :stat AND receiver_phone = :phone", :stat => 'incomplete', :phone   => self.phone.to_s)
-        gifts.concat g
-      end
+  def collect_incomplete_gifts
+            # check Gift.rb for ghost gifts connected to newly created user
+    gifts = []
+    if self.facebook_id
+      g = Gift.where("status = :stat AND facebook_id = :fb_id",    :stat => 'incomplete', :fb_id   => self.facebook_id.to_s)
+      gifts.concat g
+    end
+    if self.foursquare_id
+      g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id.to_s)
+      gifts.concat g
+    end
+    if self.twitter
+      g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => self.twitter.to_s)
+      gifts.concat g
+    end
+    if self.email
+      g = Gift.where("status = :stat AND receiver_email = :em", :stat => 'incomplete', :em  => self.email)
+      gifts.concat g
+    end
+    if self.phone
+      g = Gift.where("status = :stat AND receiver_phone = :phone", :stat => 'incomplete', :phone   => self.phone.to_s)
+      gifts.concat g
+    end
 
-              # update incomplete gifts to open gifts with receiver info
-      if gifts.count > 0
-        error   = 0
-        success = 0
+            # update incomplete gifts to open gifts with receiver info
+    if gifts.count > 0
+      error   = 0
+      success = 0
 
-        gifts.each do |g|
-          gift_changes                  = {}
-          gift_changes[:status]         = "open"
-          gift_changes[:receiver_phone] = self.phone if self.phone
-          gift_changes[:receiver_email] = self.email if self.email
-          gift_changes[:receiver_id]    = self.id
-          gift_changes[:receiver_name]  = self.username
+      gifts.each do |g|
+        gift_changes                  = {}
+        gift_changes[:status]         = "open"
+        gift_changes[:receiver_phone] = self.phone if self.phone
+        gift_changes[:receiver_email] = self.email if self.email
+        gift_changes[:receiver_id]    = self.id
+        gift_changes[:receiver_name]  = self.username
 
-          if g.update_attributes(gift_changes)
-            success += 1
-                # mail the giver that receiver has gotten the gift
-            if g.receiver_email
-              puts "emailing the gift giver that gift has been collected for #{g.id}"
-                # notify the giver via email
-              Resque.enqueue(EmailJob, 'notify_giver_created_user', g.giver_id , {:gift_id => g.id})
-            end
-          else
-            error   += 1
+        if g.update_attributes(gift_changes)
+          success += 1
+              # mail the giver that receiver has gotten the gift
+          if g.receiver_email
+            puts "emailing the gift giver that gift has been collected for #{g.id}"
+              # notify the giver via email
+            Resque.enqueue(EmailJob, 'notify_giver_created_user', g.giver_id , {:gift_id => g.id})
           end
-        end
-                # build success & error messages for reference
-        if  error  == 0
-          response = "#{success} incomplete gift(s) updated SUCCESSfully on create of #{self.username} #{self.id}"
         else
-          response = "#{error} ERRORS updating ghost gifts for #{self.username} #{self.id}"
+          error   += 1
         end
-
+      end
+              # build success & error messages for reference
+      if  error  == 0
+        response = "#{success} incomplete gift(s) updated SUCCESSfully on create of #{self.username} #{self.id}"
       else
-                # no incomplete gifts found
-        response   = "ZERO incomplete ghost gifts for  #{self.username} #{self.id}"
+        response = "#{error} ERRORS updating ghost gifts for #{self.username} #{self.id}"
       end
 
-                # log the messages output for the method
-      puts "COLLECT INCOMPLETE GIFTS"
-      puts response
+    else
+              # no incomplete gifts found
+      response   = "ZERO incomplete ghost gifts for  #{self.username} #{self.id}"
     end
 
-    def create_remember_token
-      self.remember_token = SecureRandom.urlsafe_base64
-    end
+              # log the messages output for the method
+    puts "COLLECT INCOMPLETE GIFTS"
+    puts response
+  end
 
-    def extract_phone_digits
-      if self.phone
-        phone_raw   = self.phone
-        phone_match = phone_raw.match(VALID_PHONE_REGEX)
-        self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
-      end
-    end
+  def create_remember_token
+    self.remember_token = SecureRandom.urlsafe_base64
+  end
 
-    def phone_exists?
-      self.phone != nil
+  def extract_phone_digits
+    if phone_exists?
+      phone_raw   = self.phone
+      phone_match = phone_raw.match(VALID_PHONE_REGEX)
+      self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
     end
+  end
 
-    def facebook_id_exists?
-      self.facebook_id != nil
-    end
+  def phone_exists?
+    !self.phone.blank? && self.phone.length > 6
+  end
 
-    def twitter_exists?
-      self.twitter != nil
-    end
+  def facebook_id_exists?
+    !self.facebook_id.blank?
+  end
 
-    def check_for_server_code
-      self.server_code != nil
-    end
+  def twitter_exists?
+    !self.twitter.blank?
+  end
+
+  def check_for_server_code
+    !self.server_code.blank?
+  end
 
 end
 # == Schema Information
