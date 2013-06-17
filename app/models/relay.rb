@@ -39,8 +39,10 @@ class Relay < ActiveRecord::Base
 		# 4. get the user tokens from the pn_token db
 		receiver  = gift.receiver
 		pn_tokens = receiver.pn_token
+		puts "SENDING PUSH NOTE for GIFT ID = #{gift.id} && receiver = #{receiver.id}"
+		puts "PN_TOKENS = #{pn_tokens.to_s}"
 		if pn_tokens.count > 0
-			puts "SENDING PUSH NOTE for GIFT ID = #{gift.id} && receiver = #{receiver.id}"
+			# send push notification HERE
 		end
 	end
 
