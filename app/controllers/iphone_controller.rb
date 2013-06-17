@@ -31,7 +31,7 @@ class IphoneController < AppController
 				error_msg_string = stringify_error_messages new_user if new_user
 				response = { "error_server" => error_msg_string }
 			end
-			puts "iPhone -Create_Account- response => #{response} && #{response.to_json}"
+			@app_response = "iPhoneC #{response} && #{response.to_json}"
 			format.json { render json: response }
 		end
 	end
@@ -63,7 +63,7 @@ class IphoneController < AppController
 		end
 
 		respond_to do |format|
-			puts "LOGIN response => #{response}"
+			@app_response = "iPhoneC #{response}"
 			format.json { render json: response }
 		end
 	end
@@ -101,7 +101,7 @@ class IphoneController < AppController
 		end
 
 		respond_to do |format|
-			puts "LOGIN WITH SOCIAL MEDIA response => #{response}"
+			@app_response = "iPhoneC #{response}"
 			format.json { render json: response }
 		end
 	end
@@ -129,7 +129,7 @@ class IphoneController < AppController
 
 		respond_to do |format|
 			logger.debug response
-			puts "response => #{response}"
+			@app_response = "iPhoneC #{response}"
 			format.json { render json: response }
 		end
 	end
@@ -164,7 +164,7 @@ class IphoneController < AppController
 			else
 				response["error_server"]  = " ReGift unable to process to database."
 			end
-			puts "response => #{response}"
+			@app_response = "iPhoneC #{response}"
 			format.json { render json: response }
 		end
 	end
@@ -186,7 +186,8 @@ class IphoneController < AppController
 		end
 		respond_to do |format|
 			# logger.debug response
-			puts "response => #{logmsg}"
+
+			@app_response = "iPhoneC #{logmsg}"
 			# puts "full response => #{response}"
 			format.json { render json: response }
 		end

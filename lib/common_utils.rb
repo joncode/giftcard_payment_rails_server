@@ -14,7 +14,7 @@ module CommonUtils
 
 	def method_end_log_message
 		print "END #{log_message_header} "
-		puts "response: #{@app_response}" if @app_response
+		puts "response: #{@app_response[0..200]}" if @app_response
 	end
 
 end
