@@ -45,7 +45,7 @@ class Gift < ActiveRecord::Base
 		response_hash["giver_photo"]        = giver.get_photo
 		response_hash["receiver"]           = self.receiver_name
 		response_hash["receiver_photo"]		= self.receiver.get_photo if self.receiver
-		response_hash["message"]            = gift.message
+		response_hash["message"]            = self.message
 		response_hash["shoppingCart"]       = self.ary_of_shopping_cart_as_hash
 		response_hash["merchant_name"]      = merchant.name
 		response_hash["merchant_address"]   = merchant.full_address
