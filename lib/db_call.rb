@@ -20,6 +20,7 @@ module DbCall
         # we set admin = true
         user.admin    = true
         user.save
+        return user
     end
 
     def self.pattr(attribute, item_array)
