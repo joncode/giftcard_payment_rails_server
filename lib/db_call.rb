@@ -1,5 +1,27 @@
 module DbCall
 
+    def self.create_admin_user(email, name=nil)
+        user = User.new
+        # we check for the name
+        if name
+            # we split on ' ', # set first to first last to last
+            user.first_name, user.last_name  = name.split(' ')
+        else
+            # we assume its a drinkboard first.last@db email address
+            # we split on '@'
+            name_part, email_part            = email.split('@')
+            # then we split first half on '.' # set that equal to first name, last name
+            user.first_name, user.last_name  = name_part.split('.')
+        end
+        user.email    = email
+        # we set password to <first name><first name>
+        user.password = user.first_name + user.first_name
+        user.password_confirmation = user.password
+        # we set admin = true
+        user.admin    = true
+        user.save
+    end
+
     def self.pattr(attribute, item_array)
         if item_array.count > 0
             item_array.map do |i|
@@ -53,6 +75,8 @@ module DbCall
             puts "no record found for #{attribute.to_s} = #{data}"
         end
     end
+
+private
 
     def self.string_attribute_obj(attribute, obj)
         "#{obj.class.to_s} ID = #{obj.id} | #{attribute.to_s} = #{obj.send(attribute)}"
