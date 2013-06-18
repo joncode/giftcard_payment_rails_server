@@ -1,4 +1,8 @@
+require 'apns'
+
 class Relay < ActiveRecord::Base
+	include APNS
+
 	attr_accessible :gift_id, :giver_id, :name, :provider_id, :receiver_id, :status
 
 	belongs_to :gift
@@ -36,26 +40,32 @@ class Relay < ActiveRecord::Base
 	end
 
 	def self.send_push_notification(gift)
-		# 4. get the user tokens from the pn_token db
+			# get the user tokens from the pn_token db
 		receiver  = gift.receiver
 		pn_tokens = receiver.pn_token
 		puts "SENDING PUSH NOTE for GIFT ID = #{gift.id} && receiver = #{receiver.id}"
 		puts "PN_TOKENS = #{pn_tokens.to_s}"
-		if pn_tokens.count > 0
 			# send push notification HERE
-			payload = self.format_payload(gift)
-			self.send_to_apns(payload, pn_tokens)
+		if pn_tokens.count == 1
+			payload = self.format_payload(gift, receiver)
+			APNS.send_notification(pn_tokens[0], payload)
+			puts "SENT PUSH NOTE TO #{pn_tokens[0]} with #{payload}"
+		elsif pn_tokens.count > 1
+			devices = pn_tokens.map do |token|
+				payload = self.format_payload(gift, receiver)
+				puts "SENT MULTI PUSH NOTE TO #{token} with #{payload}"
+				[token, payload]
+			end
+			APNS.send_notifications(devices)
 		end
 	end
 
 private
 
-	def self.format_payload(gift)
-		"This will be the payload"
-	end
-
-	def self.send_to_apns(payload, tokens)
-		puts "Send this to APNS payload = #{payload}, pn_token = #{tokens.to_s}"
+	def self.format_payload(gift, receiver)
+		gift_array 	= Gift.get_gifts(receiver)
+		badge 		= gift_array.size
+		{ :aps => { :alert => "{gift.giver_name} sent you a gift at {gift.provider_name}!", :badge => badge, :sound => 'default' }}
 	end
 
 end

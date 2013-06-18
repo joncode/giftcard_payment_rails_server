@@ -8,9 +8,11 @@ module APNS
 	# development: gateway.sandbox.apple.com
 	# @host = 'gateway.sandbox.push.apple.com'
 	if Rails.env.production?
-			@host = 'gateway.push.apple.com'
+		@host = 'gateway.push.apple.com'
+	elsif Rails.env.staging?
+		@host = 'gateway.push.apple.com'
 	else
-			@host = 'gateway.sandbox.push.apple.com'
+		@host = 'gateway.sandbox.push.apple.com'
 	end
 	@port = 2195
 
@@ -19,9 +21,11 @@ module APNS
 	# development: feedback.sandbox.apple.com
 	# @feedback_host = 'feedback.sandbox.push.apple.com'
 	if Rails.env.production?
-			@feedback_host = 'feedback.push.apple.com'
+		@feedback_host = 'feedback.push.apple.com'
+	elsif Rails.env.staging?
+		@feedback_host = 'feedback.push.apple.com'
 	else
-			@feedback_host = 'feedback.sandbox.push.apple.com'
+		@feedback_host = 'feedback.sandbox.push.apple.com'
 	end
 	@feedback_port = 2196
 

@@ -326,86 +326,86 @@ class Gift < ActiveRecord::Base
 		puts "made it thru gift items #{self.gift_items}"
 	end
 
-	private
+private
 
-		# def notify_receiver
-		#   if self.receiver_email
-		#     puts "emailing the gift receiver for #{self.id}"
-		#     # notify the receiver via email
-		#     user_id = self.receiver_id.nil? ?  'NID' : self.receiver_id
-		#     Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => self.id, :email => self.receiver_email})
-		#   end
-		# end
+	# def notify_receiver
+	#   if self.receiver_email
+	#     puts "emailing the gift receiver for #{self.id}"
+	#     # notify the receiver via email
+	#     user_id = self.receiver_id.nil? ?  'NID' : self.receiver_id
+	#     Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => self.id, :email => self.receiver_email})
+	#   end
+	# end
 
-		# def invoice_giver
-		#   puts "emailing the gift giver for #{self.id}"
-		#   # notify the giver via email
-		#   Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id})
-		# end
+	# def invoice_giver
+	#   puts "emailing the gift giver for #{self.id}"
+	#   # notify the giver via email
+	#   Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id})
+	# end
 
-		def create_notification
-			puts "the gift status is #{self.status}"
-			case self.status
-			when 'incomplete'
-				puts "Relay created for gift #{self.id}"
-				# Relay.createRelayFromGift self
-				# send no push
-			when 'open'
-				puts "Relay created for gift if there is none #{self.id}"
-				# relay = Relay.createRelayFromGift self
-				# if relay.errors.messages.has_key? :gift_id
-				# 	relay = Relay.updateRelayFromGift self
-				# end
-				# send push to receiver here via db
-				Relay.send_push_notification self
-			when 'notified'
-				puts "Relay updated to notified for gift #{self.id}"
-				# relay = Relay.updateRelayFromGift self
-				# send push to provider here
-			when 'redeemed'
-				puts "Relay updated to redeemed for gift #{self.id}"
-				# relay = Relay.updateRelayFromGift self
-				# send push to giver here
-			when 'regifted'
-				puts "Relay updated to regifted for gift #{self.id}"
-				# relay = Relay.updateRelayFromGift self
-				# do not send push to new receiver here .. sent by new re-gift
-			end
+	def create_notification
+		puts "the gift status is #{self.status}"
+		case self.status
+		when 'incomplete'
+			puts "Relay created for gift #{self.id}"
+			# Relay.createRelayFromGift self
+			# send no push
+		when 'open'
+			puts "Relay created for gift if there is none #{self.id}"
+			# relay = Relay.createRelayFromGift self
+			# if relay.errors.messages.has_key? :gift_id
+			# 	relay = Relay.updateRelayFromGift self
+			# end
+			# send push to receiver here via db
+			Relay.send_push_notification self
+		when 'notified'
+			puts "Relay updated to notified for gift #{self.id}"
+			# relay = Relay.updateRelayFromGift self
+			# send push to provider here
+		when 'redeemed'
+			puts "Relay updated to redeemed for gift #{self.id}"
+			# relay = Relay.updateRelayFromGift self
+			# send push to giver here
+		when 'regifted'
+			puts "Relay updated to regifted for gift #{self.id}"
+			# relay = Relay.updateRelayFromGift self
+			# do not send push to new receiver here .. sent by new re-gift
 		end
+	end
 
-		def update_shoppingCart
-			updated_shoppingCart_array = []
-			self.gift_items.each do |item|
-				item_hash = item.prepare_for_shoppingCart
-				updated_shoppingCart_array << item_hash
-			end
-			puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
-			self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
+	def update_shoppingCart
+		updated_shoppingCart_array = []
+		self.gift_items.each do |item|
+			item_hash = item.prepare_for_shoppingCart
+			updated_shoppingCart_array << item_hash
 		end
+		puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
+		self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
+	end
 
-		def extract_phone_digits
-			if self.receiver_phone && !self.receiver_phone.empty?
-				phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)
-				self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
-			end
+	def extract_phone_digits
+		if self.receiver_phone && !self.receiver_phone.empty?
+			phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)
+			self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
 		end
+	end
 
-		def add_giver_name
-			self.giver_name = User.find(self.giver_id).username
-		end
+	def add_giver_name
+		self.giver_name = User.find(self.giver_id).username
+	end
 
-		def no_giver_name
-			self.giver_name.nil?
-		end
+	def no_giver_name
+		self.giver_name.nil?
+	end
 
-		def regifted
-			old_gift = Gift.find(self.regift_id)
-			old_gift.update_attributes(status: 'regifted')
-		end
+	def regifted
+		old_gift = Gift.find(self.regift_id)
+		old_gift.update_attributes(status: 'regifted')
+	end
 
-		def regift_id?
-			self.regift_id
-		end
+	def regift_id?
+		self.regift_id
+	end
 end
 # == Schema Information
 #
