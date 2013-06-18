@@ -320,13 +320,10 @@ class Gift < ActiveRecord::Base
 
 	def make_gift_items(shoppingCart_array)
 		puts "In make gift items #{shoppingCart_array}"
-		gift_item_array = []
-		shoppingCart_array.each do |item|
-				gift_item = GiftItem.initFromDictionary item
-				gift_item_array << gift_item
+		self.gift_items = shoppingCart_array.map do |item|
+				GiftItem.initFromDictionary(item)
 		end
-		puts "made it thru gift items #{gift_item_array}"
-		self.gift_items = gift_item_array
+		puts "made it thru gift items #{self.gift_items}"
 	end
 
 	private
