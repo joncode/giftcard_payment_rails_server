@@ -301,7 +301,7 @@ private
 	end
 
 	def make_menu_string
-	    Menu_string.create(provider_id: self.id, data: "[]")
+	    MenuString.create(provider_id: self.id, data: "[]")
 	end
 end
 # == Schema Information
