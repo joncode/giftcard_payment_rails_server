@@ -3,7 +3,7 @@ class BrandsController < ApplicationController
 	before_filter :admin_user?
 
 	def index
-		@brands = Brand.order("updated_at DESC").page(params[:page]).per_page(8)
+		@brands = Brand.order("name ASC").page(params[:page]).per_page(8)
 
 		respond_to do |format|
 			if @brands.count > 0
