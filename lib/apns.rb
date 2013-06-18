@@ -30,7 +30,8 @@ module APNS
 	@feedback_port = 2196
 
 	# openssl pkcs12 -in mycert.p12 -out client-cert.pem -nodes -clcerts
-	@pem = nil # this should be the path of the pem file not the contentes
+	# this should be the path of the pem file not the contents
+	@pem = "#{Rails.root}/lib/certs/DrinkboardDistribution.pem"
 	@pass = nil
 
 	@cache_connections = false
@@ -138,6 +139,7 @@ protected
 private
 
 	def self.open_connection(host, port)
+
 		raise "The path to your pem file is not set. (APNS.pem = /path/to/cert.pem)" unless self.pem
 		raise "The path to your pem file does not exist!" unless File.exist?(self.pem)
 
