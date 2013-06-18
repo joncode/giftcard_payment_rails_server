@@ -152,6 +152,7 @@ private
 		retries = 0
 		begin
 			sock         = TCPSocket.new(host, port)
+			puts "here is the sock #{sock}"
 			ssl          = OpenSSL::SSL::SSLSocket.new(sock, context)
 			ssl.connect
 			return ssl, sock
