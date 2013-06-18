@@ -32,7 +32,7 @@ module APNS
 	# openssl pkcs12 -in mycert.p12 -out client-cert.pem -nodes -clcerts
 	# this should be the path of the pem file not the contents
 	@pem = "#{Rails.root}/lib/certs/DrinkboardDistribution.pem"
-	@pass = nil
+	@pass = "2,7ANaFHW6R5"
 
 	@cache_connections = false
 	@connections = {}
@@ -146,6 +146,8 @@ private
 		context      = OpenSSL::SSL::SSLContext.new
 		context.cert = OpenSSL::X509::Certificate.new(File.read(self.pem))
 		context.key  = OpenSSL::PKey::RSA.new(File.read(self.pem), self.pass)
+		puts context.key
+		puts context.cert
 
 		retries = 0
 		begin
