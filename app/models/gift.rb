@@ -357,7 +357,7 @@ private
 			# 	relay = Relay.updateRelayFromGift self
 			# end
 			# send push to receiver here via db
-			Relay.send_push_notification self
+			# Relay.send_push_notification self
 		when 'notified'
 			puts "Relay updated to notified for gift #{self.id}"
 			# relay = Relay.updateRelayFromGift self
