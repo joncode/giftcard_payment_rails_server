@@ -10,7 +10,7 @@ module APNS
 	if Rails.env.production?
 		@host = 'gateway.push.apple.com'
 	elsif Rails.env.staging?
-		@host = 'gateway.push.apple.com'
+		@host = 'gateway.sandbox.push.apple.com'
 	else
 		@host = 'gateway.sandbox.push.apple.com'
 	end
@@ -23,7 +23,7 @@ module APNS
 	if Rails.env.production?
 		@feedback_host = 'feedback.push.apple.com'
 	elsif Rails.env.staging?
-		@feedback_host = 'feedback.push.apple.com'
+		@feedback_host = 'feedback.sandbox.push.apple.com'
 	else
 		@feedback_host = 'feedback.sandbox.push.apple.com'
 	end
