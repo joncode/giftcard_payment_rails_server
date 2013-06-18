@@ -320,7 +320,7 @@ class User < ActiveRecord::Base
 	end
 
 	def pn_token
-		self.pn_tokens.map {|pnt| pnt.pn_token }
+		self.pn_tokens.map {|pnt| pnt.pn_token.gsub('<','').gsub('>','') }
 	end
 
 
