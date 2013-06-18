@@ -20,7 +20,18 @@ module DbCall
         # we set admin = true
         user.admin    = true
         user.save
+        self.authorize_merchant_tools(user)
         return user
+    end
+
+    def self.mt_admin_users
+
+        # get all users where admin:true
+        users = User.where(admin: true).to_a
+        # put their remeber token in an array
+        users.each do |user|
+            self.authorize_merchant_tools(user)
+        end
     end
 
     def self.pattr(attribute, item_array)
@@ -91,5 +102,37 @@ private
         return str
     end
 
-
+    def self.authorize_merchant_tools(user)
+        # call the merchant tools database with the remember_token
+        # make an httparty request with the admin token
+        # we need an authentication token of some sort
+        # we need a merchant tools route
+        # we need merchant tools to save the remember token into admintokens db
+        # convert the provider into json string
+        route          = MERCHANT_URL + "/app/add_admin_user.json"
+        admin_token    = user.remember_token
+            # send json string to the merchant tools API
+        auth_token     = User.where(admin: true).first.remember_token
+        auth_params    = { "token" => auth_token, "data" => admin_token }
+        parameters     = { :body => auth_params }
+        party_response = HTTParty.post(route, parameters)
+        if party_response.code == 200
+            if party_response.parsed_response["status"]
+                # receive true
+                    # update the provider that merchant tools is activated
+                    # re-render the show page without the create acount blurb
+                msg        = party_response.parsed_response["message"]
+                notice_msg = "Success. #{msg}"
+            else
+                # receive false
+                    # re-render the show page with failure message
+                msg        = party_response.parsed_response["message"]
+                notice_msg = "#{msg}"
+            end
+        else
+            # transmission failure
+            puts "TRANSMISSION FAILED - create merchant tools account"
+            notice_msg     = 'Network Failure. Merchant Account Not Created! please retry.'
+        end
+    end
 end
