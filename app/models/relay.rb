@@ -43,18 +43,18 @@ class Relay < ActiveRecord::Base
 		puts "PN_TOKENS = #{pn_tokens.to_s}"
 		if pn_tokens.count > 0
 			# send push notification HERE
-			payload = format_payload(gift)
-			send_to_apns(payload, pn_tokens)
+			payload = self.format_payload(gift)
+			self.send_to_apns(payload, pn_tokens)
 		end
 	end
 
 private
 
-	def format_payload(gift)
+	def self.format_payload(gift)
 		"This will be the payload"
 	end
 
-	def send_to_apns(payload, tokens)
+	def self.send_to_apns(payload, tokens)
 		puts "Send this to APNS payload = #{payload}, pn_token = #{tokens.to_s}"
 	end
 
