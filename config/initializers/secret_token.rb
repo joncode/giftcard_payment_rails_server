@@ -39,6 +39,7 @@ PROOF_LEVELS  		= ['zero', 'lite', 'normal', 'double']
 PIPE        = "%7C"
 SD_ROOT     = "https://www.subtledata.com/API/M/1/?Q="
 WEB_KEY     = "RlgrM1Uw"
+PEMKEY      = "JG7ta77dl7"
 
 BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dinig"]
 
