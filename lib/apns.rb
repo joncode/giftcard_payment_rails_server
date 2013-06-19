@@ -22,6 +22,7 @@ module APNS
 	@feedback_port = 2196
 	@pass = PEMKEY
 
+
 	@cache_connections = false
 	@connections = {}
 

@@ -281,32 +281,32 @@ class Provider < ActiveRecord::Base
 
 private
 
-		def extract_phone_digits
-			if phone_exists?
-				phone_match = self.phone.match(VALID_PHONE_REGEX)
-				self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
-			end
+	def extract_phone_digits
+		if phone_exists?
+			phone_match = self.phone.match(VALID_PHONE_REGEX)
+			self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
 		end
+	end
 
-		def phone_exists?
-			self.phone.blank?
-		end
+	def phone_exists?
+		!self.phone.blank? && self.phone.length > 6
+	end
 
-		def aba_exists?
-			self.aba != nil && !self.aba.empty?
-		end
+	def aba_exists?
+		self.aba != nil && !self.aba.empty?
+	end
 
-		def routing_exists?
-			self.routing != nil && !self.routing.empty?
-		end
+	def routing_exists?
+		self.routing != nil && !self.routing.empty?
+	end
 
-		def create_token
-			self.token = SecureRandom.urlsafe_base64
-		end
+	def create_token
+		self.token = SecureRandom.urlsafe_base64
+	end
 
-		def make_menu_string
-		    Menu_string.create(provider_id: self.id, data: "[]")
-		end
+	def make_menu_string
+	    MenuString.create(provider_id: self.id, data: "[]")
+	end
 end
 # == Schema Information
 #

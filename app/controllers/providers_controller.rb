@@ -6,7 +6,7 @@ class ProvidersController < ApplicationController
 	#############  CRUD methods
 
 	def index
-		@merchants = Provider.order("updated_at DESC").page(params[:page]).per_page(8)
+		@merchants = Provider.order("name ASC").page(params[:page]).per_page(8)
 
 		respond_to do |format|
 			format.html # index.html.erb

@@ -101,17 +101,16 @@ class AppController < JsonController
 
  		if authenticate_public_info
  			provider_id  = params["data"]
- 			response = []
- 			response = MenuString.get_menu_for_provider(provider_id.to_i)
- 			logmsg 	 = response[0]
+ 			response     = MenuString.get_menu_for_provider(provider_id.to_i)
+ 			logmsg 	     = response
  		else
  			response["error"] = "user was not found in database"
- 			logmsg 	 = response
+ 			logmsg 	     = response.to_s
  		end
 
 	    respond_to do |format|
 	    	# logger.debug response
-	    	@app_response = "AC response[0] => #{logmsg}"
+	    	@app_response = "AC response => #{logmsg}"
 	    	format.json { render json: response }
 	    end
  	end
