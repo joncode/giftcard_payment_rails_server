@@ -135,8 +135,6 @@ private
 		context      = OpenSSL::SSL::SSLContext.new
 		context.cert = OpenSSL::X509::Certificate.new(File.read(self.pem))
 		context.key  = OpenSSL::PKey::RSA.new(File.read(self.pem), self.pass)
-		puts context.key
-		puts context.cert
 
 		retries = 0
 		begin
