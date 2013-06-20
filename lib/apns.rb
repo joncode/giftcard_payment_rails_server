@@ -98,7 +98,7 @@ protected
 		puts "Here is the APNS message #{pm}"
 		puts "Here is the User token #{pt}"
 		x = [0, 0, 32, pt, 0, pm.size, pm].pack("ccca*cca*")
-		puts "Here is the array that is packed line 99 APSN #{x}"
+		puts "Here is the array that is packed line 99 APSN" + x
 		return x
 	end
 
@@ -137,10 +137,10 @@ private
 
 		raise "The path to your pem file is not set. (APNS.pem = /path/to/cert.pem)" unless self.pem
 		raise "The path to your pem file does not exist!" unless File.exist?(self.pem)
-		cert      	 = File.read(self.pem)
+		# cert      	 = File.read(self.pem)
 		context      = OpenSSL::SSL::SSLContext.new
-		context.cert = OpenSSL::X509::Certificate.new(cert)
-		context.key  = OpenSSL::PKey::RSA.new(cert, self.pass)
+		context.cert = OpenSSL::X509::Certificate.new(File.read(self.pem))
+		context.key  = OpenSSL::PKey::RSA.new(File.read(self.pem), self.pass)
 		puts "context = #{context.inspect}"
 		retries = 0
 		begin
