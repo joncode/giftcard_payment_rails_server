@@ -36,6 +36,7 @@ module APNS
 				self.get_connection(self.host, self.port)
 				return true
 			rescue
+				puts "COULD NOT GET CONNECTION APNS line 39"
 			end
 		end
 		return false
@@ -48,6 +49,7 @@ module APNS
 	def self.send_notification(device_token, message)
 		self.with_notification_connection do |conn|
 			conn.write(self.packaged_notification(device_token, message))
+			puts "sending conn #{conn.inspect}"
 			conn.flush
 		end
 	end
@@ -93,7 +95,11 @@ protected
 	def self.packaged_notification(device_token, message)
 		pt = self.packaged_token(device_token)
 		pm = self.packaged_message(message)
-		[0, 0, 32, pt, 0, pm.size, pm].pack("ccca*cca*")
+		puts "Here is the APNS message #{pm}"
+		puts "Here is the User token #{pt}"
+		x = [0, 0, 32, pt, 0, pm.size, pm].pack("ccca*cca*")
+		puts "Here is the array that is packed line 99 APSN #{x}"
+		return x
 	end
 
 	def self.packaged_token(device_token)
@@ -135,16 +141,18 @@ private
 		context      = OpenSSL::SSL::SSLContext.new
 		context.cert = OpenSSL::X509::Certificate.new(File.read(self.pem))
 		context.key  = OpenSSL::PKey::RSA.new(File.read(self.pem), self.pass)
-
+		puts "context = #{context.inspect}"
 		retries = 0
 		begin
 			sock  = TCPSocket.new(host, port)
 			ssl   = OpenSSL::SSL::SSLSocket.new(sock, context)
 			ssl.connect
+			puts "SSL connection SUCCESS"
 			return ssl, sock
 		rescue SystemCallError
 			if (retries += 1) < 5
 				sleep 1
+				puts "retrying failed SSL connection line 155"
 				retry
 			else
 				# Too many retries, re-raise this exception
@@ -211,6 +219,7 @@ private
 		rescue Errno::ECONNABORTED, Errno::EPIPE, Errno::ECONNRESET
 			if (retries += 1) < 5
 				self.remove_connection(host, port)
+				puts "ERROR retrying APNS"
 				retry
 			else
 				# too-many retries, re-raise
