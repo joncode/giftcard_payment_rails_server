@@ -13,6 +13,7 @@ module APNS
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
 		@pem 			= "#{Rails.root}/config/certs/dbdev.pem"
+		puts "pem " + @pem
 	else
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
@@ -20,7 +21,7 @@ module APNS
 
 	@port = 2195
 	@feedback_port = 2196
-	@pass = PEMKEY
+	@pass = 'JG7ta77dl7'
 
 
 	@cache_connections = false
@@ -138,10 +139,12 @@ private
 		raise "The path to your pem file is not set. (APNS.pem = /path/to/cert.pem)" unless self.pem
 		raise "The path to your pem file does not exist!" unless File.exist?(self.pem)
 		# cert      	 = File.read(self.pem)
+
 		context      = OpenSSL::SSL::SSLContext.new
-		context.cert = OpenSSL::X509::Certificate.new(File.read(self.pem))
 		context.key  = OpenSSL::PKey::RSA.new(File.read(self.pem), self.pass)
+		context.cert = OpenSSL::X509::Certificate.new(File.read(self.pem))
 		puts "context = #{context.inspect}"
+
 		retries = 0
 		begin
 			sock  = TCPSocket.new(host, port)
