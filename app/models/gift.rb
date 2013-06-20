@@ -357,7 +357,11 @@ private
 			# 	relay = Relay.updateRelayFromGift self
 			# end
 			# send push to receiver here via db
-			# Relay.send_push_notification self
+			if Rails.env.production?
+				# not in production for APNS YET
+			elsif Rails.env.staging?
+				Relay.send_push_notification self
+			end
 		when 'notified'
 			puts "Relay updated to notified for gift #{self.id}"
 			# relay = Relay.updateRelayFromGift self
