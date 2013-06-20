@@ -136,12 +136,12 @@ private
 
 		raise "The path to your pem file is not set. (APNS.pem = /path/to/cert.pem)" unless self.pem
 		raise "The path to your pem file does not exist!" unless File.exist?(self.pem)
-		puts File.read(self.pem)
+		cert = File.read(self.pem)
 
 		context      = OpenSSL::SSL::SSLContext.new
-		context.key  = OpenSSL::PKey::RSA.new(File.read(self.pem), self.pass)
-		context.cert = OpenSSL::X509::Certificate.new(File.read(self.pem))
-		puts "context = #{context.inspect} | host = #{host} | port = #{port}"
+		context.key  = OpenSSL::PKey::RSA.new(cert, self.pass)
+		context.cert = OpenSSL::X509::Certificate.new(cert)
+		puts "context = #{context.inspect} | pem = #{self.pem}| host = #{host} | port = #{port} | pass = #{self.pass}"
 
 		retries = 0
 		begin
