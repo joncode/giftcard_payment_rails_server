@@ -97,10 +97,8 @@ protected
 		pt = self.packaged_token(device_token)
 		pm = self.packaged_message(message)
 		puts "Here is the APNS message #{pm}"
-		puts "Here is the User token #{pt}"
-		x = [0, 0, 32, pt, 0, pm.size, pm].pack("ccca*cca*")
-		puts "Here is the array that is packed line 99 APSN" + x
-		return x
+		puts "Here is the User byte token #{pt}"
+		[0, 0, 32, pt, 0, pm.length, pm].pack("ccca*cca*")
 	end
 
 	def self.packaged_token(device_token)
