@@ -3,6 +3,11 @@ module APNS
 	require 'openssl'
 	require 'json'
 
+	@host 			= 'gateway.sandbox.push.apple.com'
+	@feedback_host  = 'feedback.sandbox.push.apple.com'
+	@pem 			= "#{Rails.root}/config/certs/dbdev.pem"
+	puts "pem = " + "#{Rails.root}/config/certs/dbdev.pem"
+
 	# openssl pkcs12 -in mycert.p12 -out client-cert.pem -nodes -clcerts
 	# @pem this should be the path of the pem file not the contents
 	if Rails.env.production?
@@ -10,10 +15,7 @@ module APNS
 		@feedback_host 	= 'feedback.push.apple.com'
 		@pem 			= "#{Rails.root}/config/certs/dbdev.pem"
 	elsif Rails.env.staging?
-		@host 			= 'gateway.sandbox.push.apple.com'
-		@feedback_host  = 'feedback.sandbox.push.apple.com'
-		@pem 			= "#{Rails.root}/config/certs/dbdev.pem"
-		puts "pem = " + "#{Rails.root}/config/certs/dbdev.pem"
+
 	else
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
