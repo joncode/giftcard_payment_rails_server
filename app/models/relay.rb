@@ -43,8 +43,7 @@ class Relay < ActiveRecord::Base
 			# get the user tokens from the pn_token db
 		receiver  = gift.receiver
 		pn_tokens = receiver.pn_token
-		puts "SENDING PUSH NOTE for GIFT ID = #{gift.id} && receiver = #{receiver.id}"
-		puts "PN_TOKENS = #{pn_tokens.to_s}"
+		puts "SENDING PUSH NOTE for GIFT ID = #{gift.id}"
 			# send push notification HERE
 		if pn_tokens.count == 1
 			payload = self.format_payload(gift, receiver)

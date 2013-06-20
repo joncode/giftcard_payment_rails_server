@@ -5,8 +5,8 @@ class PnToken < ActiveRecord::Base
 
     validates :pn_token, uniqueness: true
 
-    # def pn_token
-    #     token = super
-    #     token.gsub('<','').gsub('>','')
-    # end
+    def pn_token
+        token = super
+        token.gsub('<','').gsub('>','').gsub(' ','')
+    end
 end
