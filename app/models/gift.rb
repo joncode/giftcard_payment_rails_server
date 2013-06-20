@@ -357,11 +357,7 @@ private
 			# 	relay = Relay.updateRelayFromGift self
 			# end
 			# send push to receiver here via db
-			if Rails.env.production?
-				# not in production for APNS YET
-			elsif Rails.env.staging?
-				Relay.send_push_notification self
-			end
+
 		when 'notified'
 			puts "Relay updated to notified for gift #{self.id}"
 			# relay = Relay.updateRelayFromGift self
@@ -385,6 +381,11 @@ private
 		end
 		puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
 		self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
+		if Rails.env.production?
+			# not in production for APNS YET
+		elsif Rails.env.staging?
+			Relay.send_push_notification self
+		end
 	end
 
 	def extract_phone_digits
