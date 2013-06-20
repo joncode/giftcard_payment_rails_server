@@ -8,11 +8,11 @@ module APNS
 	if Rails.env.production?
 		@host 			= 'gateway.push.apple.com'
 		@feedback_host 	= 'feedback.push.apple.com'
-		@pem 			= "#{Rails.root}/config/certs/DrinkboardProductionAPNS.pem"
+		@pem 			= "#{Rails.root}/config/certs/dbdev.pem"
 	elsif Rails.env.staging?
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
-		@pem 			= "#{Rails.root}/config/certs/DrinkboardQADevAPNS.pem"
+		@pem 			= "#{Rails.root}/config/certs/dbdev.pem"
 	else
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
@@ -137,10 +137,10 @@ private
 
 		raise "The path to your pem file is not set. (APNS.pem = /path/to/cert.pem)" unless self.pem
 		raise "The path to your pem file does not exist!" unless File.exist?(self.pem)
-
+		cert      	 = File.read(self.pem)
 		context      = OpenSSL::SSL::SSLContext.new
-		context.cert = OpenSSL::X509::Certificate.new(File.read(self.pem))
-		context.key  = OpenSSL::PKey::RSA.new(File.read(self.pem), self.pass)
+		context.cert = OpenSSL::X509::Certificate.new(cert)
+		context.key  = OpenSSL::PKey::RSA.new(cert, self.pass)
 		puts "context = #{context.inspect}"
 		retries = 0
 		begin
