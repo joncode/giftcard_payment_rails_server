@@ -13,7 +13,7 @@ module APNS
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
 		@pem 			= "#{Rails.root}/config/certs/dbdev.pem"
-		puts "pem " + @pem
+		puts "pem = " + "#{Rails.root}/config/certs/dbdev.pem"
 	else
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
@@ -136,7 +136,7 @@ private
 
 		raise "The path to your pem file is not set. (APNS.pem = /path/to/cert.pem)" unless self.pem
 		raise "The path to your pem file does not exist!" unless File.exist?(self.pem)
-		# cert      	 = File.read(self.pem)
+		puts File.read(self.pem)
 
 		context      = OpenSSL::SSL::SSLContext.new
 		context.key  = OpenSSL::PKey::RSA.new(File.read(self.pem), self.pass)
