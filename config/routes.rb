@@ -13,6 +13,8 @@ Drinkboard::Application.routes.draw do
   match '/admin',              to: 'admin#show'        ,           via: :get
   match '/admin/test_emails',  to: 'admin#test_emails' ,           via: :get
   match '/admin/run_tests',    to: 'admin#run_tests'   ,           via: :get
+  match '/push/register',      to: 'admin#push_register' ,         via: :get
+  match '/push/notify',        to: 'admin#push_notify'   ,         via: :get
 
   match "/invite/email_confirmed"     , to: "invite#email_confirmed", via: :get
   match "/invite/error"               , to: "invite#error",           via: :get
