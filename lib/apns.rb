@@ -13,7 +13,6 @@ module APNS
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
 		@pem 			= "#{Rails.root}/config/certs/dbdev.pem"
-		puts "pem = " + "#{Rails.root}/config/certs/dbdev.pem"
 	else
 		@host 			= 'gateway.sandbox.push.apple.com'
 		@feedback_host  = 'feedback.sandbox.push.apple.com'
