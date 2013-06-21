@@ -10,13 +10,13 @@ class AdminController < ApplicationController
   	end
 
   	def push_notify
-  		msg = 'Hello from AdminController!'
+  		msg = 'Hello from AdminController! via device token'
 		notification = {
-		  :aliases => ["test-user"],
+		  :device_tokens => [DEVICE_TOKEN],
 		  :aps => {:alert => msg, :badge => 5}
 		}
 		resp = Urbanairship.push(notification)
-		flash[:notice] = msg + resp
+		flash[:notice] = msg + resp.inspect
   		render 'show'
   	end
 
