@@ -1,6 +1,7 @@
 <div class="doubleColumn">
+
   <!--
-    Users Sign In 
+    Users Sign In
   -->
   <ul>
     <li style="width:500px;padding-top:30px;">
@@ -10,7 +11,7 @@
       <%= form_for(:session, url: sessions_path) do |f| %>
       <div class="inputWrap" style="width:376px;">
         <%= f.text_field :email,        :placeholder => 'Email', :class => "miTitleForm rounded inputFieldObj formObj" %>
-        
+
         <%= f.password_field :password, :placeholder => 'Password', :class => "miTitleForm rounded inputFieldObj formObj" %>
         <%= f.submit "Sign in", class: "buttonInput buttonImageUp signInPOS", style: "margin-top: -45px;padding:4px;" %>
         <%= link_to "Forgot password?", forgot_password_path, style: "padding-left:30px;font-size:12px;" %>
@@ -20,5 +21,5 @@
  <ul>
   <%= render 'shared/flash', flash: flash %>
 
- 
+
 </div>

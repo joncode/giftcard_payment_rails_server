@@ -24,6 +24,11 @@
   <%= yield :users_link %>
   <%= yield :system_reports %>
   <%= yield :test_emails %>
+  <div style="width:500px;">
+    <h2>Push Notification Test</h2>
+    <h3><%= link_to "register my device", '/push/register'  %></h3>
+    <h4><%= link_to "send push 'Hello World App Test!'", '/push/notify'  %></h4>
+  </div>
 
   <%#= yield :merchant_tools %>
 </div>

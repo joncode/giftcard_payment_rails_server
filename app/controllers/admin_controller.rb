@@ -1,6 +1,24 @@
 class AdminController < ApplicationController
   	before_filter :signed_in_user
   	before_filter :admin_user?
+  	DEVICE_TOKEN = '8ac249f29b7d8a5ad9c334d3a915a02c9cc177322436ba7c7e854bc54e2a23b1'
+
+  	def push_register
+  		flash[:notice] = "register"
+  		Urbanairship.register_device(DEVICE_TOKEN, :alias => "test-user", :tag => ["tester"] )
+  		render 'show'
+  	end
+
+  	def push_notify
+  		msg = 'Hello from AdminController!'
+		notification = {
+		  :aliases => ["test-user"],
+		  :aps => {:alert => msg, :badge => 5}
+		}
+		resp = Urbanairship.push(notification)
+		flash[:notice] = msg + resp
+  		render 'show'
+  	end
 
 	def show
 
