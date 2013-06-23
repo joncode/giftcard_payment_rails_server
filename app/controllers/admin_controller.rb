@@ -13,14 +13,23 @@ class AdminController < ApplicationController
   	end
 
   	def push_notify
-  		msg = 'Hello from AdminController! via alias'
-  		pntoken = PnToken.find_by_pn_token(DEVICE_TOKEN)
-  		user 			= pntoken.user if pntoken
-  		ua_alias 		= user ? user.ua_alias : "test"
-		notification = {
-		  :aliases => [ua_alias],
-		  :aps => {:alert => msg, :badge => 5}
-		}
+  		type_of = params["sys"]
+  		if type_of == "alias"
+  			msg = 'Hello from AdminController! via ALIAS'
+  			pntoken = PnToken.find_by_pn_token(DEVICE_TOKEN)
+  			user 			= pntoken.user if pntoken
+  			ua_alias 		= user ? user.ua_alias : "test"
+			notification = {
+			  :aliases => [ua_alias],
+			  :aps => {:alert => msg, :badge => 5}
+			}
+		else
+  			msg = 'Hello from AdminController! via TOKEN'
+			notification = {
+			  :device_tokens => [DEVICE_TOKEN],
+			  :aps => {:alert => msg, :badge => 5}
+			}
+		end
 		resp = Urbanairship.push(notification)
 		flash[:notice] = msg + resp.inspect
   		render 'show'
