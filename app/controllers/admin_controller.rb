@@ -21,13 +21,13 @@ class AdminController < ApplicationController
   			ua_alias 		= user ? user.ua_alias : "test"
 			notification = {
 			  :aliases => [ua_alias],
-			  :aps => {:alert => msg, :badge => 5}
+			  :aps => {:alert => msg, :badge => 5, :sound => 'default'}
 			}
 		else
   			msg = 'Hello from AdminController! via TOKEN'
 			notification = {
 			  :device_tokens => [DEVICE_TOKEN],
-			  :aps => {:alert => msg, :badge => 5}
+			  :aps => {:alert => msg, :badge => 5, :sound => 'default'}
 			}
 		end
 		resp = Urbanairship.push(notification)

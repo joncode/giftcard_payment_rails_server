@@ -45,7 +45,17 @@ class Relay < ActiveRecord::Base
 		payload 	= self.format_payload(gift, receiver)
 		puts "SENDING PUSH NOTE for GIFT ID = #{gift.id}"
 		resp  		= Urbanairship.push(payload)
-		puts "APNS push sent ! #{resp}"
+		puts "APNS push sent via ALIAS! #{resp}"
+		# 4. get the user tokens from the pn_token db
+		pn_tokens = receiver.pn_token
+		puts "SENDING PUSH NOTE for GIFT ID = #{gift.id} && receiver = #{receiver.id}"
+		puts "PN_TOKENS = #{pn_tokens.to_s}"
+		if pn_tokens.count > 0
+			# send push notification HERE
+			payload = self.format_token_payload(gift,receiver, pn_tokens)
+			resp  	= Urbanairship.push(payload)
+			puts "APNS push sent via TOKEN! #{resp}"
+		end
 	end
 
 private
@@ -55,6 +65,14 @@ private
 		badge 		= gift_array.size
 		{ :aliases => [receiver.ua_alias],
 			:aps => { :alert => "#{gift.giver_name} sent you a gift!", :sound => 'default', :badge => badge }
+		}
+	end
+
+	def self.format_token_payload(gift,receiver, pn_tokens)
+		gift_array 	= Gift.get_gifts(receiver)
+		badge 		= gift_array.size
+		{ :device_tokens => pn_tokens,
+			:aps => { :alert => "#{gift.giver_name} sent you a gift :)", :sound => 'default', :badge => badge }
 		}
 	end
 end
