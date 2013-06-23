@@ -5,7 +5,7 @@ class AdminController < ApplicationController
 
   	def push_register
   		flash[:notice] 	= "register"
-  		pntoken 		= PnToken.find_by_pn_token(DEVICE_TOKEN)
+  		pntoken = PnToken.find_by_pn_token(DEVICE_TOKEN)
   		user 			= pntoken.user if pntoken
   		ua_alias 		= user ? user.ua_alias : "test"
   		Urbanairship.register_device(DEVICE_TOKEN, :alias => "#{ua_alias}", :tag => ["tester"] )
@@ -13,9 +13,12 @@ class AdminController < ApplicationController
   	end
 
   	def push_notify
-  		msg = 'Hello from AdminController! via device token'
+  		msg = 'Hello from AdminController! via alias'
+  		pntoken = PnToken.find_by_pn_token(DEVICE_TOKEN)
+  		user 			= pntoken.user if pntoken
+  		ua_alias 		= user ? user.ua_alias : "test"
 		notification = {
-		  :device_tokens => [DEVICE_TOKEN],
+		  :aliases => [ua_alias],
 		  :aps => {:alert => msg, :badge => 5}
 		}
 		resp = Urbanairship.push(notification)
