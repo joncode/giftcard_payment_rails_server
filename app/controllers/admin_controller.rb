@@ -4,8 +4,11 @@ class AdminController < ApplicationController
   	DEVICE_TOKEN = '8ac249f29b7d8a5ad9c334d3a915a02c9cc177322436ba7c7e854bc54e2a23b1'
 
   	def push_register
-  		flash[:notice] = "register"
-  		Urbanairship.register_device(DEVICE_TOKEN, :alias => "test-user", :tag => ["tester"] )
+  		flash[:notice] 	= "register"
+  		pntoken 		= PnToken.find_by_pn_token(DEVICE_TOKEN)
+  		user 			= pntoken.user if pntoken
+  		ua_alias 		= user ? user.ua_alias : "test"
+  		Urbanairship.register_device(DEVICE_TOKEN, :alias => "#{ua_alias}", :tag => ["tester"] )
   		render 'show'
   	end
 

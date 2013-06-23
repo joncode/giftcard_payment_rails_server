@@ -85,6 +85,11 @@ class User < ActiveRecord::Base
 		return usr_hash
 	end
 
+	def ua_alias
+		adj_user_id     = self.id + NUMBER_ID
+		"user-#{adj_user_id}"
+	end
+
 	def gifts
 		anon_gifts    = Gift.where(anon_id: self.id)
 		normal_gifts  = super

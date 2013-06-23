@@ -41,22 +41,11 @@ class Relay < ActiveRecord::Base
 
 	def self.send_push_notification(gift)
 			# get the user tokens from the pn_token db
-		receiver  = gift.receiver
-		pn_tokens = receiver.pn_token
+		receiver  	= gift.receiver
+		payload 	= self.format_payload(gift, receiver)
 		puts "SENDING PUSH NOTE for GIFT ID = #{gift.id}"
-			# send push notification HERE
-		if pn_tokens.count == 1
-			payload = self.format_payload(gift, receiver)
-			APNS.send_notification(pn_tokens[0], payload)
-			puts "SENT PUSH NOTE TO #{pn_tokens[0]} with #{payload}"
-		elsif pn_tokens.count > 1
-			devices = pn_tokens.map do |token|
-				payload = self.format_payload(gift, receiver)
-				puts "SENT MULTI PUSH NOTE TO #{token} with #{payload}"
-				[token, payload]
-			end
-			APNS.send_notifications(devices)
-		end
+		resp  		= Urbanairship.push(payload)
+		puts "APNS push sent ! #{resp}"
 	end
 
 private
@@ -64,11 +53,10 @@ private
 	def self.format_payload(gift, receiver)
 		gift_array 	= Gift.get_gifts(receiver)
 		badge 		= gift_array.size
-		# { :aps => { :alert => "#{gift.giver_name} sent you a gift at #{gift.provider_name}!", :badge => badge, :sound => 'default' }}
-		{ :aps => { :alert => "Hello World!", :sound => 'default' }}
-
+		{ :aliases => [receiver.ua_alias],
+			:aps => { :alert => "#{gift.giver_name} sent you a gift at #{gift.provider_name}!", :sound => 'default', :badge => badge }
+		}
 	end
-
 end
 # == Schema Information
 #
