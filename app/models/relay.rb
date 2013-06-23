@@ -54,7 +54,7 @@ private
 		gift_array 	= Gift.get_gifts(receiver)
 		badge 		= gift_array.size
 		{ :aliases => [receiver.ua_alias],
-			:aps => { :alert => "#{gift.giver_name} sent you a gift at #{gift.provider_name}!", :sound => 'default', :badge => badge }
+			:aps => { :alert => "#{gift.giver_name} sent you a gift!", :sound => 'default', :badge => badge }
 		}
 	end
 end
