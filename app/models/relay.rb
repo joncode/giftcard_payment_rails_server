@@ -64,7 +64,7 @@ private
 		gift_array 	= Gift.get_gifts(receiver)
 		badge 		= gift_array.size
 		{ :aliases => [receiver.ua_alias],
-			:aps => { :alert => "#{gift.giver_name} sent you a gift!", :sound => 'default', :badge => badge }
+			:aps => { :alert => "#{gift.giver_name} sent you a gift!", :badge => badge, :sound => 'default' }
 		}
 	end
 
@@ -72,7 +72,7 @@ private
 		gift_array 	= Gift.get_gifts(receiver)
 		badge 		= gift_array.size
 		{ :device_tokens => pn_tokens,
-			:aps => { :alert => "#{gift.giver_name} sent you a gift :)", :sound => 'default', :badge => badge }
+			:aps => { :alert => "#{gift.giver_name} sent you a gift :)", :badge => badge, :sound => 'default' }
 		}
 	end
 end
