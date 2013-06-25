@@ -18,6 +18,10 @@ class PnToken < ActiveRecord::Base
         super(converted_token)
     end
 
+    def convert_token(token)
+        token.gsub('<','').gsub('>','').gsub(' ','')
+    end
+
 private
 
     def register
@@ -26,7 +30,6 @@ private
         Urbanairship.register_device(self.pn_token, :alias => user_alias )
     end
 
-    def convert_token(token)
-        token.gsub('<','').gsub('>','').gsub(' ','')
-    end
+
+
 end
