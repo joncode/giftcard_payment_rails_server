@@ -381,10 +381,12 @@ private
 		end
 		puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
 		self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
-		if Rails.env.production?
-			# not in production for APNS YET
-		elsif Rails.env.staging?
-			Relay.send_push_notification self
+		if self.status == 'open'
+			if Rails.env.production?
+				# not in production for APNS YET
+			elsif Rails.env.staging?
+				Relay.send_push_notification self
+			end
 		end
 	end
 
