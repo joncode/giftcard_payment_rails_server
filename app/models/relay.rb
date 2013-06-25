@@ -63,8 +63,8 @@ class Relay < ActiveRecord::Base
 private
 
 	def self.format_payload(gift, receiver)
-		gift_array 	= Gift.get_gifts(receiver)
-		badge 		= gift_array.size
+		# gift_array 	= Gift.get_gifts(receiver)
+		# badge 		= gift_array.size
 		{ :aliases => [receiver.ua_alias],
 			:aps => { :alert => "#{gift.giver_name} sent you a gift at #{gift.provider_name}!", :badge => "+1", :sound => 'default' },
 			:alert_type => 1
