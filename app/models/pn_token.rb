@@ -3,7 +3,7 @@ class PnToken < ActiveRecord::Base
 
     belongs_to :user
 
-    after_create :register
+    after_save :register
 
     validates :pn_token, uniqueness: true
     validates_presence_of :user_id
