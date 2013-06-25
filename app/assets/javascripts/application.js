@@ -6,11 +6,11 @@
 
 //= require jquery
 //= require jquery_ujs
-//= require merchant
-//= require bootstrap
 //= require jquery.isotope.min
 //= require jquery.Jcrop.min
 //= require jquery.form
+//= require bootstrap
+//= require merchant
 
 
 
