@@ -22,6 +22,10 @@ class PnToken < ActiveRecord::Base
         token.gsub('<','').gsub('>','').gsub(' ','')
     end
 
+    def self.convert_token(token)
+        token.gsub('<','').gsub('>','').gsub(' ','')
+    end
+
 private
 
     def register
