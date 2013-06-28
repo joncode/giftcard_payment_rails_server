@@ -318,7 +318,8 @@ class User < ActiveRecord::Base
 		value 		= PnToken.convert_token(value)
 		if pn_token = PnToken.find_by_pn_token(value)
 			if pn_token.user_id != self.id
-				pn_token.update_attributes({user_id: self.id})
+				pn_token.user_id = self.id
+				pn_token.save
 			end
 		else
 			PnToken.create!(user_id: self.id, pn_token: value)
