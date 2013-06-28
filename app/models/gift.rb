@@ -388,6 +388,11 @@ private
 		if self.status == 'open'
 			if Rails.env.production?
 				# not in production for APNS YET
+				begin
+					Relay.send_push_notification self
+				rescue
+					puts "PUSH NOTIFICATION FAIL"
+				end
 			elsif Rails.env.staging?
 				Relay.send_push_notification self
 			end
