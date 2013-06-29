@@ -1,0 +1,31 @@
+
+<%= render 'email/blocks/salutation', salute: "Hey there" %>
+
+<table style="margin: 0pt; padding: 0pt; width: 100%;" class="list" border="0" cellpadding="0" cellspacing="0">
+<tbody>
+    <tr>
+
+      <%= render 'email/blocks/user_image_td' %>
+
+      <td style="vertical-align: top; text-align: left; padding: 0; margin: 0;">
+        <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
+        15px; line-height: 20px; color: #323A45; margin-top: 0; margin-left: 0;
+        margin-bottom: 15px; margin-right: 0; padding: 0;">
+
+    <!-- LINK to Merchant Tools -->
+            <p><%= @user.name %> invited you to be an employee of <%= @provider.name %>.</p>
+            <p>Visit this link to sign up for Drinkboard Merchant Tools Account:</p>
+            <p>
+                <a href="<%= @web_view_route %>">Get Started</a>
+            </p>
+        </p>
+      </td>
+
+    </tr>
+
+
+</tbody>
+</table>
+
+
+<%= render 'email/blocks/cheers' %>

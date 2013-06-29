@@ -42,9 +42,9 @@ class UserMailer < ActionMailer::Base
 		})
 	end
 
-	def invite_employee(user,provider,employee_email, web_route)
-		@user = user
-		@provider = provider
+	def invite_employee(user, provider, employee_email, web_route)
+		@user 			= user
+		@provider 		= provider
 		@web_view_route = web_route
 		puts "INVITE EMPLOYEE via route = #{@web_view_route}"
 		mail({
@@ -117,18 +117,18 @@ private
 	def whitelist_email(email)
 					# if email is on blacklist then send email to noreplydrinkboard@gmail.com
 					# blacklist is
-			bad_emails = ["test@test.com", "jp@jp.com", "jb@jb.com", "gj@gj.com", "fl@fl.com", "adam@adam.com", "rs@rs.com","kk@gmail.com", "bitmover1@gmail.com", "app@gmail.com", "spnoge@bob.com", "adam@gmail.com", "gifter@sos.me", "taylor@gmail.com"]
-			if bad_emails.include?(email)
-					email = "noreplydrinkboard@gmail.com"
-			else
-					email = email
-			end
-			return email
+		bad_emails = ["test@test.com", "jp@jp.com", "jb@jb.com", "gj@gj.com", "fl@fl.com", "adam@adam.com", "rs@rs.com","kk@gmail.com", "bitmover1@gmail.com", "app@gmail.com", "spnoge@bob.com", "adam@gmail.com", "gifter@sos.me", "taylor@gmail.com"]
+		if bad_emails.include?(email)
+				email = "noreplydrinkboard@gmail.com"
+		else
+				email = email
+		end
+		return email
 	end
 
 	def whitelist_user(user)
 			# if user.email is on blacklist then send email to noreplydrinkboard@gmail.com
-			return whitelist_email(user.email)
+		return whitelist_email(user.email)
 	end
 
 end

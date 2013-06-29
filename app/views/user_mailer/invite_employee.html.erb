@@ -1,8 +1,1 @@
-<p>Hey there,</p>
-<p><%= @user.name %> invited you to be an employee of <%= @provider.name %>.</p>
-<p>Visit this link to sign up for Drinkboard Merchant Tools Account:</p>
-<p>
- <a href="<%= @web_view_route %>">Get Started</a>
-</p>
-<p>Best,</p>
-<p>Drinkboard Team</p>
+<%= render 'email/invite_employee' %>

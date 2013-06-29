@@ -65,7 +65,7 @@ class AdminController < ApplicationController
 		Resque.enqueue(EmailJob, 'confirm_email', 	user.id , 	{})
 		Resque.enqueue(EmailJob, 'reset_password', 	user.id, 	{})
 		Resque.enqueue(EmailJob, 'invite_friend', 	user.id , 	{:email => email, :gift_id => gift.id})
-		Resque.enqueue(EmailJob, 'invite_employee', user.id , 	{:provider_id => provider.id,:email => email, :gift_id => gift.id})
+		Resque.enqueue(EmailJob, 'invite_employee', user.id ,  {:provider_id => provider.id, :email => data["email"], :route =>  "#{PUB_MERCH_URL}/invite?token=652a6f385262fb1104a5eadc9f4a6d9f"})
 		Resque.enqueue(EmailJob, 'notify_giver_created_user', 	user.id  , 	{:gift_id => gift.id})
 		Resque.enqueue(EmailJob, 'notify_receiver', user.id , 	{:gift_id => gift.id, :email => email})
 		Resque.enqueue(EmailJob, 'invoice_giver', 	user.id  , 	{:gift_id => gift.id})
