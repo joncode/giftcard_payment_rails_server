@@ -57,18 +57,18 @@ class AdminController < ApplicationController
 
 		if flag
 			Resque.enqueue(EmailJob, 'notify_giver_order_complete', user.id , {:gift_id => gift.id})
- 			@message = "8 email tests sent to #{email}"
+ 			@message = "7 email tests sent to #{email}"
  		else
- 			@message = "7 email tests sent to #{email}, 1 not sent 'noitfy_giver_order_complete'"
+ 			@message = "6 email tests sent to #{email}, 1 not sent 'noitfy_giver_order_complete'"
  		end
 		provider = gift.provider
-		Resque.enqueue(EmailJob, 'confirm_email', 	user.id , 	{})
-		Resque.enqueue(EmailJob, 'reset_password', 	user.id, 	{})
-		Resque.enqueue(EmailJob, 'invite_friend', 	user.id , 	{:email => email, :gift_id => gift.id})
-		Resque.enqueue(EmailJob, 'invite_employee', user.id ,  {:provider_id => provider.id, :email => data["email"], :route =>  "#{PUB_MERCH_URL}/invite?token=652a6f385262fb1104a5eadc9f4a6d9f"})
-		Resque.enqueue(EmailJob, 'notify_giver_created_user', 	user.id  , 	{:gift_id => gift.id})
-		Resque.enqueue(EmailJob, 'notify_receiver', user.id , 	{:gift_id => gift.id, :email => email})
-		Resque.enqueue(EmailJob, 'invoice_giver', 	user.id  , 	{:gift_id => gift.id})
+		#Resque.enqueue(EmailJob, 'confirm_email', 	user.id , 	{})
+		#Resque.enqueue(EmailJob, 'reset_password', 	user.id, 	{})
+		# Resque.enqueue(EmailJob, 'invite_friend', 	user.id , 	{:email => email, :gift_id => gift.id})
+		Resque.enqueue(EmailJob, 'invite_employee', user.id ,  {:provider_id => Provider.first.id, :email => email, :route =>  "#{PUB_MERCH_URL}/invite?token=652a6f385262fb1104a5eadc9f4a6d9f"})
+		#Resque.enqueue(EmailJob, 'notify_giver_created_user', 	user.id  , 	{:gift_id => gift.id})
+		#Resque.enqueue(EmailJob, 'notify_receiver', user.id , 	{:gift_id => gift.id, :email => email})
+		#Resque.enqueue(EmailJob, 'invoice_giver', 	user.id  , 	{:gift_id => gift.id})
 	end
 
 	private

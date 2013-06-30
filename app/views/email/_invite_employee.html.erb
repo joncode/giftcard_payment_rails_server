@@ -5,8 +5,6 @@
 <tbody>
     <tr>
 
-      <%= render 'email/blocks/user_image_td' %>
-
       <td style="vertical-align: top; text-align: left; padding: 0; margin: 0;">
         <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
         15px; line-height: 20px; color: #323A45; margin-top: 0; margin-left: 0;
@@ -14,9 +12,11 @@
 
     <!-- LINK to Merchant Tools -->
             <p><%= @user.name %> invited you to be an employee of <%= @provider.name %>.</p>
-            <p>Visit this link to sign up for Drinkboard Merchant Tools Account:</p>
-            <p>
-                <a href="<%= @web_view_route %>">Get Started</a>
+            <p>Visit this link to sign up for a Drinkboard Merchant Tools Account:</p>
+            <p style="font-family: 'Trebuchet MS', serif; font-weight: normal; font-size:
+            15px; line-height: 20px; color: #595959; margin-top: 10px; margin-left: 100px;
+            margin-bottom: 15px; margin-right: 0; padding: 0;">
+              <a href="<%= @mt_link %>" style="color: #fff; background-color:#00C9EE; padding: 5px 10px; margin: 10px; text-decoration: none;">Get Started &rarr;</a>
             </p>
         </p>
       </td>

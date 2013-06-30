@@ -13,23 +13,23 @@ class EmailJob
 			@user = User.find(user_id.to_i)
 			UserMailer.reset_password(@user).deliver
 
-		when "invite_friend"
-			@user = User.find(user_id.to_i)
-			puts "OPTHASH INVITE FRIEND"
-			puts opthash
-			puts opthash["email"]
-			UserMailer.invite_friend(@user, opthash["email"], opthash["gift_id"]).deliver
+		# when "invite_friend"
+		# 	@user = User.find(user_id.to_i)
+		# 	puts "OPTHASH INVITE FRIEND"
+		# 	puts opthash
+		# 	puts opthash["email"]
+		# 	UserMailer.invite_friend(@user, opthash["email"], opthash["gift_id"]).deliver
 
 		when "invite_employee"
 			puts "OPTHASH INVITE EMPLOYEE"
-			puts opthash
+			puts "Invite Employee #{opthash}"
 			if user_id.to_i > 0
 				@user = User.find(user_id.to_i)    #Person making the request
 			else
 				@user = User.new(first_name: user_id)    # user_id from merchant tools is the name
 			end
 			@provider = Provider.find(opthash["provider_id"].to_i)
-			UserMailer.invite_employee(@user,@provider,opthash["email"], opthash["route"]).deliver
+			UserMailer.invite_employee(@user, @provider, opthash["email"], opthash["route"]).deliver
 
 		when "invoice_giver"
 			puts "OPTHASH INVOICE GIVER"

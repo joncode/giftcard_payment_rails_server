@@ -31,22 +31,23 @@ class UserMailer < ActionMailer::Base
 		})
 	end
 
-	def invite_friend(user, friends_email, gift_id)
-		@user = user
-		@friends_email = friends_email
+	# def invite_friend(user, friends_email, gift_id)
+	# 	@user = user
+	# 	@friends_email = friends_email
 
-		@gift_id = gift_id
-		mail({
-			:to => "#{whitelist_email(@friends_email)}",
-			:subject => "Your friend #{@user.first_name} invited you to drinkboard. #{@friends_email}"
-		})
-	end
+	# 	@gift_id = gift_id
+	# 	mail({
+	# 		:to => "#{whitelist_email(@friends_email)}",
+	# 		:subject => "Your friend #{@user.first_name} invited you to drinkboard. #{@friends_email}"
+	# 	})
+	# end
 
 	def invite_employee(user, provider, employee_email, web_route)
 		@user 			= user
 		@provider 		= provider
 		@web_view_route = web_route
-		puts "INVITE EMPLOYEE via route = #{@web_view_route}"
+		@mt_link 		= web_route
+		puts "INVITE EMPLOYEE vias route = #{@mt_link} with #{@web_view_route}"
 		mail({
 			:to => "#{whitelist_email(employee_email)}",
 			:subject => "Drinkboard Merchant Employee Request #{employee_email}"
