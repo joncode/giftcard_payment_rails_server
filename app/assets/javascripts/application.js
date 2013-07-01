@@ -6,7 +6,6 @@
 
 //= require jquery
 //= require jquery_ujs
-//= require jquery.isotope.min
 //= require jquery.Jcrop.min
 //= require jquery.form
 //= require bootstrap
