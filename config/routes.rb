@@ -24,6 +24,8 @@ Drinkboard::Application.routes.draw do
 
   match "/confirm_email(/:email(/:user))", to: "users#confirm_email", via: :get
 
+  mount Resque::Server, :at => "/resque"
+
   resources :users do
     member do
       get  :following, :followers

@@ -5,7 +5,7 @@ gem 'rails', '3.2.11'
 gem 'carrierwave'
 gem 'cloudinary'
 gem 'httparty', '~> 0.9.0'
-gem 'resque', '~> 1.23.0'
+gem 'resque', :require => "resque/server"
 gem 'roadie'
 gem 'newrelic_rpm'
 gem 'authorize-net'

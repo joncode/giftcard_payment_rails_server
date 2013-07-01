@@ -116,13 +116,13 @@ class InviteController < ApplicationController
       @user         = User.find(params[:var1])
       @header_text  = ""
       @social       = 0
-    when 'invite_employee'
-        #  you have forgotten your password and would like to reset it
-      email_view    = "invite_employee"
-      @user         = User.first
-      @email        = params[:var1]
-      @header_text  = "Drinkboard Merchant Employee Request "
-      @social       = 0
+    # when 'invite_employee'
+    #     #  you have forgotten your password and would like to reset it
+    #   email_view    = "invite_employee"
+    #   @user         = User.first
+    #   @email        = params[:var1]
+    #   @header_text  = "Drinkboard Merchant Employee Request "
+    #   @social       = 0
     when 'invoice_giver'
         #  giver gets invoice email when gift is purchased - incomplete or open
       email_view    = "invoice_giver"
