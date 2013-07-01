@@ -161,7 +161,7 @@ class MerchantsController < JsonController
 			@user = User.new
 			@user.first_name = data["name"]
 			if Rails.env.production?
-				Resque.enqueue(EmailJob, 'invite_employee', @user, {:provider_id => provider.id, :email => data["email"], :route => web_route})
+				Resque.enqueue(EmailJob, 'invite_employee', @user.id, {:provider_id => provider.id, :email => data["email"], :route => web_route})
 			elsif Rails.env.staging?
 				UserMailer.invite_employee(@user, provider , data["email"], web_route).deliver
 			else
