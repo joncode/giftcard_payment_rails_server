@@ -5,20 +5,20 @@
   	var origPicHeight = $("#imageCanvas").height();
   	var previewWidth = $("#preview").width();
   	var previewHeight = $("#preview").height();
-	
+
   	var widthScale = origPicWidth / coords.w;
   	var heightScale = origPicHeight / coords.h;
-	
+
   	var bgSizeWidth = widthScale * previewWidth;
   	var bgSizeHeight = heightScale * previewHeight;
   	var newBgSize = bgSizeWidth+"px "+bgSizeHeight+"px";
   	$("#preview").css("backgroundSize",newBgSize);
-	
+
   	var bgPosX = coords.x * (widthScale/(origPicWidth/previewWidth));
   	var bgPosY = coords.y * (heightScale/(origPicHeight/previewHeight));
   	var newBgPos = "-"+bgPosX+"px -"+bgPosY+"px"
   	$("#preview").css("backgroundPosition",newBgPos);
-	
+
   	$("#crop_coord_x").val(coords.x);
   	$("#crop_coord_y").val(coords.y);
   	$("#crop_coord_w").val(coords.w);
@@ -40,14 +40,14 @@
       $("#cropTitle").show();
       var canvas = document.getElementById("imageCanvas");
       var ctx = canvas.getContext('2d');
-      
+
       var reader = new FileReader();
       reader.onload = function(event){
         var img = new Image();
         img.onload = function(){
           var canvasHeight = img.height;
           var canvasWidth = img.width;
-          
+
           //Test for scaling
           var dxy = 1;
           if (canvasHeight > maxHeight){
@@ -78,7 +78,7 @@
         }
         img.src = event.target.result;
       }
-      reader.readAsDataURL(e.target.files[0]);     
+      reader.readAsDataURL(e.target.files[0]);
     }
   });
 </script>
@@ -117,7 +117,7 @@
 
 
 <%= form_for(@obj_to_edit, :url => {:action => @action}, :html => { :method => :post, :id => 'uploadForm', :multipart => true }) do |f| %>
-    <div class="doubleColumn"> 
+    <div class="doubleColumn">
       <div class="ordersDisplay giftText giftTextLarge">
         <div id="upload_wrapper">
            Choose a photo file: <%= f.file_field @file_field_name %>
@@ -130,15 +130,15 @@
         <div class="profilePic">
           <div class="giftText giftTextLarge">
             <h2>Current Photo</h2>
-          </div> 
+          </div>
           <div class="imageBorder">
             <%= custom_image_tag @obj_to_edit, @obj_width, @obj_height, @file_field_name %>
           </div>
         </div>
-<!--         <div class="giftText giftTextLarge">
+        <div class="giftText giftTextLarge">
           <h2>Preview New Photo</h2>
-        </div> 
-        <div id="preview" style=""></div> -->
+        </div>
+        <div id="preview" style=""></div>
       </div>
       <br />
       <div class="giftText giftTextLarge" id="cropTitle">
