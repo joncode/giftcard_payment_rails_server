@@ -99,8 +99,8 @@ class ProvidersController < ApplicationController
 	end
 
 	def de_activate
-		@provider.active = @provider.active ? false : true
-		@provider.save
+		new_active = @provider.active ? false : true
+		@provider.update_attribute(:active, new_active)
 		respond_to do |format|
 			format.html { redirect_to action: 'edit'}
 		end

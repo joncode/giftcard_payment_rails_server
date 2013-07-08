@@ -268,3 +268,21 @@
 [07/02/13 15:28:51 -0400 Slimms-MacBook-Air.local (2359)] INFO : Installing Rails 3.1/3.2 view instrumentation
 [07/02/13 15:28:51 -0400 Slimms-MacBook-Air.local (2359)] INFO : Installing Rails3 Error instrumentation
 [07/02/13 15:28:51 -0400 Slimms-MacBook-Air.local (2359)] INFO : Finished instrumentation
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Starting the New Relic agent in "development" environment.
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Reading configuration from config/newrelic.yml
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Enabling the Request Sampler.
+[07/03/13 20:23:49 -0400 new-host.home (1248)] ERROR : No application name configured.
+[07/03/13 20:23:49 -0400 new-host.home (1248)] ERROR : The Agent cannot start without at least one. Please check your 
+[07/03/13 20:23:49 -0400 new-host.home (1248)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[07/03/13 20:23:49 -0400 new-host.home (1248)] ERROR : value set for app_name in the development 
+[07/03/13 20:23:49 -0400 new-host.home (1248)] ERROR : environment.
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Installing ActiveMerchant instrumentation
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Installing ActiveRecord instrumentation
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Installing Net instrumentation
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Installing Sinatra instrumentation
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Installing Resque instrumentation
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Installing Rails 3 Controller instrumentation
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Installing Rails3 Error instrumentation
+[07/03/13 20:23:49 -0400 new-host.home (1248)] INFO : Finished instrumentation
