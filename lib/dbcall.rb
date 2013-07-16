@@ -1,4 +1,4 @@
-module DbCall
+module Dbcall
 
     def self.create_admin_user(email, name=nil)
         user = User.new

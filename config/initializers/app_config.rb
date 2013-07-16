@@ -1,7 +1,8 @@
 require 'yaml'
 require 'myActiveRecordExtensions'
 require 'common_utils'
-require 'db_call'
+require 'dbcall'
+require 'locate'
 
 ActiveRecord::Base.send(:include, MyActiveRecordExtensions)
 
