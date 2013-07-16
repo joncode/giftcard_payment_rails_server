@@ -82,6 +82,12 @@ class Gift < ActiveRecord::Base
 		return gifts, past_gifts
 	end
 
+	def self.get_archive(user)
+		give_gifts = Gift.where(giver_id: user).order("created_at DESC")
+		rec_gifts  = Gift.where(receiver_id: user, status: 'redeemed').order("created_at DESC")
+		return give_gifts, rec_gifts
+	end
+
 	def self.get_buy_recents(user)
 		Gift.where( giver_id: user).order("created_at DESC").limit(10)
 	end

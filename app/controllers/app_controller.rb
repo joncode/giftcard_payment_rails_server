@@ -72,6 +72,28 @@ class AppController < JsonController
 	    end
  	end
 
+    def archive
+
+        response = {}
+        if user  = authenticate_app_user(params["token"])
+            # user is authenticated
+            give_gifts, rec_gifts  = Gift.get_archive(user)
+            give_array             = array_these_gifts(give_gifts, BUY_REPLY, true, true)
+            rec_array              = array_these_gifts(rec_gifts, GIFT_REPLY, true)
+            logmsg                 = "#{give_array[0]} + #{rec_array[0]}"
+            response = {"sent" => give_array, "used" => rec_array }
+        else
+            # user is not authenticated
+            response["error"] = {"user" => "could not identity app user"}
+            logmsg = "Error unauthorized user"
+        end
+
+        respond_to do |format|
+            @app_response = logmsg
+            format.json { render json: response }
+        end
+    end
+
  	def relays
 
  		response = {}

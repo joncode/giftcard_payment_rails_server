@@ -16,66 +16,66 @@ class JsonController < ActionController::Base
         index = 1
         obj.each do |g|
 
-        gift_obj = g.serializable_hash only: send_fields
+            gift_obj = g.serializable_hash only: send_fields
 
-        gift_obj.each_key do |key|
-            value = gift_obj[key]
-            gift_obj[key] = value.to_s
-        end
+            gift_obj.each_key do |key|
+                value = gift_obj[key]
+                gift_obj[key] = value.to_s
+            end
 
-        gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
+            gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
 
                 # add other person photo url
-        if receiver
-            if g.receiver
-                gift_obj["receiver_photo"]  = g.receiver.get_photo
-                gift_obj["receiver_name"]   = g.receiver.username
-                gift_obj["receiver_id"]     = g.receiver.id
-            else
-                puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
-                gift_obj["receiver_photo"]  = ""
-                if g.receiver_name
-                    gift_obj["receiver_name"] = g.receiver_name
+            if receiver
+                if g.receiver
+                    gift_obj["receiver_photo"]  = g.receiver.get_photo
+                    gift_obj["receiver_name"]   = g.receiver.username
+                    gift_obj["receiver_id"]     = g.receiver.id
                 else
-                    gift_obj["receiver_name"] = "Unregistered"
+                    puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
+                    gift_obj["receiver_photo"]  = ""
+                    if g.receiver_name
+                        gift_obj["receiver_name"] = g.receiver_name
+                    else
+                        gift_obj["receiver_name"] = "Unregistered"
+                    end
                 end
             end
-        end
-        if !order_num
-            # in MERCHANT_REPLY
-            gift_obj["giver_photo"]    = g.giver.get_photo
-            provider = g.provider
-            gift_obj["provider_photo"] = provider.get_image("photo")
-            gift_obj["provider_phone"] = provider.phone
-            gift_obj["city"]           = provider.city
-            gift_obj["sales_tax"]      = provider.sales_tax
-            gift_obj["live"]           = provider.live
+            if !order_num
+                # in MERCHANT_REPLY
+                gift_obj["giver_photo"]    = g.giver.get_photo
+                provider                   = g.provider
+                gift_obj["provider_photo"] = provider.get_image("photo")
+                gift_obj["provider_phone"] = provider.phone
+                gift_obj["city"]           = provider.city
+                gift_obj["sales_tax"]      = provider.sales_tax
+                gift_obj["live"]           = provider.live
 
-                # add the full provider address
-            if address_get
-              gift_obj["provider_address"] = provider.complete_address
-            end
-            gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
-        else
-            # change total to location total
-            gift_obj["total"]    = g.ticket_total_string
-            gift_obj["subtotal"] = g.subtotal_string
-            gift_obj["server"]   = g.order.server_code if g.order
-            if (g.updated_at > (Time.now  - 1.day))
-                gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant)
+                    # add the full provider address
+                if address_get
+                  gift_obj["provider_address"] = provider.complete_address
+                end
+                gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
             else
-                gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant_date)
+                # change total to location total
+                gift_obj["total"]    = g.ticket_total_string
+                gift_obj["subtotal"] = g.subtotal_string
+                gift_obj["server"]   = g.order.server_code if g.order
+                if (g.updated_at > (Time.now  - 1.day))
+                    gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant)
+                else
+                    gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant_date)
+                end
+                gift_obj["updated_at"] = g.updated_at
             end
-            gift_obj["updated_at"] = g.updated_at
+
+            gift_obj["gift_id"]  = g.id.to_s
+
+
+            gift_obj["redeem_code"]   = add_redeem_code(g)
+            gifts_ary << gift_obj
         end
-
-        gift_obj["gift_id"]  = g.id.to_s
-
-
-        gift_obj["redeem_code"]   = add_redeem_code(g)
-        gifts_ary << gift_obj
-      end
-      return gifts_ary
+        return gifts_ary
     end
 
     def convert_shoppingCart_for_app(shoppingCart)

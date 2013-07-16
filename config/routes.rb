@@ -116,7 +116,7 @@ Drinkboard::Application.routes.draw do
   match 'mt/finances',             to: 'merchants#finances',     via: :post
   match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
   match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
-  match 'mt/compile_menu',        to: 'merchants#compile_menu', via: :post
+  match 'mt/compile_menu',         to: 'merchants#compile_menu', via: :post
 
   # resources :microposts,    only: [:create, :destroy]
   # resources :relationships, only: [:create, :destroy]
@@ -129,7 +129,7 @@ Drinkboard::Application.routes.draw do
   match 'app/gifts',            to: 'iphone#gifts',            via: :post
   match 'app/update_user',      to: 'app#update_user',         via: :post
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
-  match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
+  match 'app/archive',          to: 'iphone#archive',          via: :post
   match 'app/brands',           to: 'app#brands',              via: :post
   match 'app/brand_merchants',  to: 'app#brand_merchants',     via: :post
   match 'app/providers',        to: 'app#providers',           via: :post
@@ -168,7 +168,7 @@ Drinkboard::Application.routes.draw do
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
-
+  match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
     ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
   match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
