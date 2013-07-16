@@ -152,6 +152,7 @@ Drinkboard::Application.routes.draw do
   match 'app/get_settings',     to: 'app#get_settings',        via: :post
   match 'app/save_settings',    to: 'app#save_settings',       via: :post
   match 'app/m_save_settings',  to: 'app#save_settings_m',     via: :post
+  match 'app/regift',           to: 'iphone#regift',           via: :post
     ## test new data methods routes
   match 'app/new_pic',          to: 'app#providers_short_ph_url', via: :post
 
@@ -165,7 +166,6 @@ Drinkboard::Application.routes.draw do
   match 'app/out',              to: 'iphone#going_out',        via: :post
   match 'app/active',           to: 'iphone#active_orders',    via: :post
   match 'app/completed',        to: 'iphone#completed_orders', via: :post
-  match 'app/regift',           to: 'iphone#regift',           via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
 
