@@ -61,7 +61,7 @@ class Gift < ActiveRecord::Base
 	end
 
 	def self.get_notifications(user)
-		Gift.where(receiver_id: user.id).where("status = :open", :open => 'open').order("created_at DESC").size
+		Gift.where(receiver_id: user.id).where(status: 'open').size
 	end
 
 	def self.get_past_gifts(user)

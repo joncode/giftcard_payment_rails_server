@@ -1,7 +1,7 @@
-require 'apns'
+# require 'apns'
 
 class Relay < ActiveRecord::Base
-	include APNS
+	# include APNS
 
 	attr_accessible :gift_id, :giver_id, :name, :provider_id, :receiver_id, :status
 
