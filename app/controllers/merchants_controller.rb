@@ -47,8 +47,8 @@ class MerchantsController < JsonController
 			gifts = if params["status"] == "new"
 				Gift.get_provider(provider)
 			elsif params["status"] == 'reports'
-				start_time = params["start_time"].to_datetime if params["start_time"]
-				end_time   = params["end_time"].to_datetime   if params["end_time"]
+				start_time = params["start_time"].to_date if params["start_time"]
+				end_time   = params["end_time"].to_date   if params["end_time"]
 				# if there are start and end times
 				Gift.get_history_provider_and_range(provider, start_time, end_time )
 			else
