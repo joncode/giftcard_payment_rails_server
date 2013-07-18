@@ -118,7 +118,9 @@ class Gift < ActiveRecord::Base
 
 	def self.get_history_provider_and_range(provider, start_date=nil, end_date=nil)
 		if start_date && end_date
-			Gift.where(provider_id: provider.id, status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date.in_time_zone, :end_date => end_date.in_time_zone ).order("updated_at DESC")
+			start_date = start_date - 4.hours
+			end_date   = end_date   - 4.hours
+			Gift.where(provider_id: provider.id, status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
 		else
 			Gift.get_history_provider(provider)
 		end
