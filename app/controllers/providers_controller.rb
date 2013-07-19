@@ -254,7 +254,7 @@ class ProvidersController < ApplicationController
 						# make the invite json string
 						notice_msg = ""
 						msg = ""
-						invite_hash = {"invite_tkn" => invite_tkn, "email" => email, "clearance" => "super", "merchant_tkn" => merchant_tkn}
+						invite_hash = {"invite_tkn" => invite_tkn, "email" => email, "rank" => "admin", "merchant_tkn" => merchant_tkn}
 						invite_json = invite_hash.to_json
 
 						route = MERCHANT_URL + "/app/invite_employee.json"
@@ -268,6 +268,15 @@ class ProvidersController < ApplicationController
 									# re-render the page with success blurb
 								msg = party_response.parsed_response["message"]
 								notice_msg = "Success! #{msg}"
+								web_route = PUB_MERCH_URL + "/invite?token=#{invite_tkn}"
+								if Rails.env.production?
+									Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
+								elsif Rails.env.staging?
+									UserMailer.invite_employee(current_user, @provider , email, web_route).deliver
+								else
+									# Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
+									UserMailer.invite_employee(current_user, @provider , email, web_route).deliver
+								end
 							else
 								# receive false
 									# re-render the show page with failure message
@@ -279,16 +288,6 @@ class ProvidersController < ApplicationController
 							puts "TRANSMISSION FAILED - invite employee account"
 							notice_msg = 'Network Failure. No email sent! please retry.'
 						end
-						web_route = PUB_MERCH_URL + "/invite?token=#{invite_tkn}"
-						if Rails.env.production?
-							Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
-						elsif Rails.env.staging?
-							UserMailer.invite_employee(current_user, @provider , email, web_route).deliver
-						else
-							# Resque.enqueue(EmailJob, 'invite_employee', current_user.id, {:provider_id => @provider.id, :email => params[:email], :route => web_route})
-							UserMailer.invite_employee(current_user, @provider , email, web_route).deliver
-						end
-
 						format.html { redirect_to staff_provider_path(@provider), notice: notice_msg }
 					end
 				end
