@@ -53,7 +53,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def merchantize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :token, :address, :city, :state, :zip]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :token, :address, :city, :state, :zip, :zinger, :description]
 		prov_hash["photo"] = self.get_image("photo")
 		return prov_hash
 	end
