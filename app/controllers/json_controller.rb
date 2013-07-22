@@ -8,8 +8,9 @@ class JsonController < ActionController::Base
 
     UPDATE_REPLY    = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]
     GIFT_REPLY      = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
-    MERCHANT_REPLY  = GIFT_REPLY + ["tax", "tip", "order_num"]
+    MERCHANT_REPLY  = GIFT_REPLY + [ "order_num"]
     ACTIVITY_REPLY  = GIFT_REPLY + [ "receiver_id", "receiver_name"]
+    BUY_REPLY       = ["total", "receiver_id", "receiver_name", "provider_id", "provider_name", "message", "created_at", "updated_at", "status", "id"]
 
     def array_these_gifts(obj, send_fields, address_get=false, receiver=false, order_num=false)
         gifts_ary = []
@@ -50,6 +51,8 @@ class JsonController < ActionController::Base
                 gift_obj["city"]           = provider.city
                 gift_obj["sales_tax"]      = provider.sales_tax
                 gift_obj["live"]           = provider.live
+                gift_obj["latitude"]       = provider.latitude
+                gift_obj["longitude"]      = provider.longitude
 
                     # add the full provider address
                 if address_get

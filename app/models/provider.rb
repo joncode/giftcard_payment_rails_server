@@ -40,7 +40,7 @@ class Provider < ActiveRecord::Base
 	after_create :make_menu_string
 
 	def serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city, :latitude, :longitude]
 		if Rails.env.production?
 			prov_hash["provider_id"]  = self.id.to_s
 		else
