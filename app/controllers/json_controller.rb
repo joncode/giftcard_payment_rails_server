@@ -58,7 +58,6 @@ class JsonController < ActionController::Base
                 if address_get
                   gift_obj["provider_address"] = provider.complete_address
                 end
-                gift_obj["updated_at"] = g.updated_at
                 gift_obj["time_ago"]   = time_ago_in_words(g.created_at.to_time)
             else
                 # change total to location total
@@ -70,11 +69,10 @@ class JsonController < ActionController::Base
                 else
                     gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant_date)
                 end
-                gift_obj["updated_at"] = g.updated_at
             end
 
             gift_obj["gift_id"]  = g.id.to_s
-
+            gift_obj["updated_at"] = g.updated_at
 
             gift_obj["redeem_code"]   = add_redeem_code(g)
             gifts_ary << gift_obj
