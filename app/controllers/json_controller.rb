@@ -58,7 +58,8 @@ class JsonController < ActionController::Base
                 if address_get
                   gift_obj["provider_address"] = provider.complete_address
                 end
-                gift_obj["time_ago"] = time_ago_in_words(g.created_at.to_time)
+                gift_obj["updated_at"] = g.updated_at
+                gift_obj["time_ago"]   = time_ago_in_words(g.created_at.to_time)
             else
                 # change total to location total
                 gift_obj["total"]    = g.ticket_total_string
