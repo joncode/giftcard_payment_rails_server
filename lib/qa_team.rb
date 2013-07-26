@@ -9,7 +9,7 @@ module QaTeam
         # loop thru each user
         users.each do |user|
             # print out user name
-            puts " #{u.name} #{u.email} "
+            puts " #{user.name} #{user.email} "
             # compare user token to admin token
             # print out if user has admin token in that system
             if admin_tokens.include? user.remember_token
