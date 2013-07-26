@@ -412,3 +412,46 @@
 [07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing Rails 3.1/3.2 view instrumentation
 [07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing Rails3 Error instrumentation
 [07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Finished instrumentation
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Starting the New Relic agent in "development" environment.
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Reading configuration from config/newrelic.yml
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Enabling the Request Sampler.
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] ERROR : No application name configured.
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] ERROR : The Agent cannot start without at least one. Please check your 
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] ERROR : value set for app_name in the development 
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] ERROR : environment.
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Installing ActiveMerchant instrumentation
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Installing ActiveRecord instrumentation
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Installing Net instrumentation
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Installing Sinatra instrumentation
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Installing Resque instrumentation
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Installing Rails 3 Controller instrumentation
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Installing Rails3 Error instrumentation
+[07/25/13 22:51:43 -0400 new-host-5.home (6542)] INFO : Finished instrumentation
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Starting the New Relic agent in "development" environment.
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Reading configuration from config/newrelic.yml
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Enabling the Request Sampler.
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] ERROR : No application name configured.
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] ERROR : The Agent cannot start without at least one. Please check your 
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] ERROR : value set for app_name in the development 
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] ERROR : environment.
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Installing ActiveMerchant instrumentation
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Installing ActiveRecord instrumentation
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Installing Net instrumentation
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Installing Sinatra instrumentation
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Installing Resque instrumentation
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Installing Rails 3 Controller instrumentation
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Installing Rails3 Error instrumentation
+[07/25/13 23:02:40 -0400 new-host-5.home (1187)] INFO : Finished instrumentation
+[07/25/13 23:46:38 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass
+[07/25/13 23:46:58 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass
+[07/25/13 23:46:58 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass
+[07/25/13 23:47:38 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass
+[07/25/13 23:47:38 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass
+[07/25/13 23:47:42 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass
+[07/25/13 23:47:42 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass

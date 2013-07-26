@@ -212,7 +212,7 @@ class AppController < JsonController
 	    user  = User.find(params["user_id"].to_i)
 	    if user
 	    	gifts 		= Gift.get_user_activity(user)
-	    	gifts_array = array_these_gifts(gifts, ACTIVITY_REPLY, true, true)
+	    	gifts_array = array_these_gifts(gifts, ADMIN_REPLY, true, true)
 	  		logmsg 		= gifts_array[0]
 	  	else
 	  		gift_hash 	= {"error" => "user was not found in database"}

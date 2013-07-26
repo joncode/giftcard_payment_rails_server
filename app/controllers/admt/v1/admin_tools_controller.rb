@@ -2,15 +2,35 @@ module Admt
     module V1
         class AdminToolsController < JsonController
 
-            before_action :authenticate_admin_tools,    except: :add_key
-            before_action :authenticate_general_token,  only:   :add_key
+            before_filter :authenticate_admin_tools,    except: :add_key
+            before_filter :authenticate_general_token,  only:   :add_key
 
             def gifts
-
-                if true
-                    success "#{merchant.name} is under review"
+                gifts = Gift.order("updated_at DESC")
+                if gifts.count > 0
+                    success array_these_gifts( gifts, ADMIN_REPLY, false , false , true )
                 else
-                    fail merchant.errors.messages
+                    fail database_error
+                end
+                respond
+            end
+
+            def users
+                users = User.order("updated_at DESC")
+                if users.count > 0
+                    success serialize_objs_in_ary users
+                else
+                    fail database_error
+                end
+                respond
+            end
+
+            def brands
+                brands = Brand.order("updated_at DESC")
+                if brands.count > 0
+                    success serialize_objs_in_ary brands
+                else
+                    fail database_error
                 end
                 respond
             end
@@ -18,7 +38,8 @@ module Admt
             def add_key
                 admin_token = params["data"]
                 # check to make sure the admin user already exists in db
-                if admin_token_obj = AdminToken.create(token: admin_token)
+                admin_token_obj = AdminToken.new(token: admin_token)
+                if admin_token_obj.save
                     success "Admin User Created"
                 else
                     fail admin_token_obj.errors.full_messages
@@ -31,7 +52,7 @@ module Admt
             def authenticate_admin_tools
                 token   = params["token"]
                 # check token to see if it is good
-                api_key = AdminToken.find_by(token: token)
+                api_key = AdminToken.find_by_token token
                 head :unauthorized unless api_key
             end
 
