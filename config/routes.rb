@@ -181,4 +181,11 @@ Drinkboard::Application.routes.draw do
   match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
   match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
 
+  ## ADMIN TOOLS routes for API
+  namespace :admt, defaults: { format: 'json' } do
+      namespace :v1 do
+        post 'add_key_app',   to: 'admin_tools#add_key'
+        post 'get_gifts',     to: 'admin_tools#gifts'
+      end
+  end
 end

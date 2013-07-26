@@ -376,3 +376,39 @@
 [07/25/13 16:40:06 -0400 new-host-5.home (1580)] INFO : Installing Rails 3.1/3.2 view instrumentation
 [07/25/13 16:40:06 -0400 new-host-5.home (1580)] INFO : Installing Rails3 Error instrumentation
 [07/25/13 16:40:06 -0400 new-host-5.home (1580)] INFO : Finished instrumentation
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Starting the New Relic agent in "development" environment.
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Reading configuration from config/newrelic.yml
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Enabling the Request Sampler.
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] ERROR : No application name configured.
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] ERROR : The Agent cannot start without at least one. Please check your 
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] ERROR : value set for app_name in the development 
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] ERROR : environment.
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Installing ActiveMerchant instrumentation
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Installing ActiveRecord instrumentation
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Installing Net instrumentation
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Installing Sinatra instrumentation
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Installing Resque instrumentation
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Installing Rails 3 Controller instrumentation
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Installing Rails3 Error instrumentation
+[07/25/13 22:25:39 -0400 new-host-5.home (6103)] INFO : Finished instrumentation
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Starting the New Relic agent in "development" environment.
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Reading configuration from config/newrelic.yml
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Enabling the Request Sampler.
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] ERROR : No application name configured.
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] ERROR : The Agent cannot start without at least one. Please check your 
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] ERROR : value set for app_name in the development 
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] ERROR : environment.
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing ActiveMerchant instrumentation
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing ActiveRecord instrumentation
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing Net instrumentation
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing Sinatra instrumentation
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing Resque instrumentation
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing Rails 3 Controller instrumentation
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Installing Rails3 Error instrumentation
+[07/25/13 22:41:06 -0400 new-host-5.home (6295)] INFO : Finished instrumentation

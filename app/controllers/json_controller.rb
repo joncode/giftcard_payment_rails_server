@@ -108,11 +108,6 @@ class JsonController < ActionController::Base
         end
     end
 
-	def cross_origin_allow_header
-		headers['Access-Control-Allow-Origin'] = "*"
-		headers['Access-Control-Request-Method'] = '*'
-	end
-
 	def authenticate_public_info(token=nil)
  		return true
 	end
@@ -162,6 +157,27 @@ class JsonController < ActionController::Base
             phone_match = phone_raw.match(VALID_PHONE_REGEX)
             phone       = phone_match[1] + phone_match[2] + phone_match[3]
         end
+    end
+
+    def respond
+        respond_to do |format|
+            format.json { render json: @app_response }
+        end
+    end
+
+    def success payload
+        @app_response = { status: 1, data: payload }
+    end
+
+    def fail payload
+        @app_response = { status: 0, data: payload }
+    end
+
+private
+
+    def cross_origin_allow_header
+        headers['Access-Control-Allow-Origin'] = "*"
+        headers['Access-Control-Request-Method'] = '*'
     end
 
 
