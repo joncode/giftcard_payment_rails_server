@@ -18,9 +18,34 @@ module Admt
             def users
                 users = User.order("updated_at DESC")
                 if users.count > 0
-                    success serialize_objs_in_ary users
+                    success users.serialize_objs :admt
                 else
                     fail database_error
+                end
+                respond
+            end
+
+            def user
+                if user = User.find(params["data"].to_i)
+                    success user.serialize
+                else
+                    fail database_error
+                end
+                respond
+            end
+
+            def user_and_gifts
+                # get the user with params["id"]
+                # get the sent adn received gifts for the user
+                if user = User.find(params["data"].to_i)
+                    gifts        = Gift.get_sent_and_received_gifts_for user
+                    gifts.each_key do |key|
+                        gifts[key] = array_these_gifts( gifts[key], ADMIN_REPLY, false , false , true )
+                    end
+                    response_hsh = {app_user: user.admt_serialize}.merge gifts
+                    success response_hsh
+                else
+                    fail user
                 end
                 respond
             end
@@ -35,6 +60,15 @@ module Admt
                 respond
             end
 
+            def brand
+                if brand = Brand.find(params["data"].to_i)
+                    success brand.serialize
+                else
+                    fail database_error
+                end
+                respond
+            end
+
             def add_key
                 admin_token = params["data"]
                 # check to make sure the admin user already exists in db
@@ -42,7 +76,7 @@ module Admt
                 if admin_token_obj.save
                     success "Admin User Created"
                 else
-                    fail admin_token_obj.errors.full_messages
+                    fail admin_token_obj
                 end
                 respond
             end

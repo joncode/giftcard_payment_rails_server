@@ -17,3 +17,16 @@ APP_CONFIG[:foursquare][:loginUrl] = "https://foursquare.com/oauth2/authenticate
                                       "?client_id="+APP_CONFIG[:foursquare][:key]+
                                       "&response_type=code"+
                                       "&redirect_uri="+APP_CONFIG[:baseUrl]+APP_CONFIG[:foursquare][:redirect]
+
+
+class Array
+
+    def serialize_objs api=nil
+        if api == :admt
+            self.map { |o| o.admt_serialize }
+        else
+            self.map { |o| o.serialize }
+        end
+    end
+
+end

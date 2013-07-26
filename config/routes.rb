@@ -187,7 +187,10 @@ Drinkboard::Application.routes.draw do
         post 'add_key_app',   to: 'admin_tools#add_key'
         post 'get_gifts',     to: 'admin_tools#gifts'
         post 'get_app_users', to: 'admin_tools#users'
+        post 'get_app_user',  to: 'admin_tools#user'
+        post 'user_and_gifts', to: 'admin_tools#user_and_gifts'
         post 'get_brands',    to: 'admin_tools#brands'
+        post 'get_brand',     to: 'admin_tools#brand'
       end
   end
 end

@@ -85,6 +85,16 @@ class User < ActiveRecord::Base
 		return usr_hash
 	end
 
+	def admt_serialize
+		usr_hash  = self.serializable_hash only: ["first_name", "last_name" ,  "zip", "birthday", "sex", "email", "phone", "created_at"]
+		usr_hash["photo"]   = self.get_photo
+		usr_hash["user_id"] = self.id.to_s
+		usr_hash["fb"]		= self.facebook_id_exists? ? "Yes" : "No"
+		usr_hash["twitter"] = self.twitter_exists? ? "Yes" : "No"
+		usr_hash.keep_if {|k, v| !v.nil? }
+		return usr_hash
+	end
+
 	def ua_alias
 		adj_user_id     = self.id + NUMBER_ID
 		"user-#{adj_user_id}"
@@ -330,6 +340,13 @@ class User < ActiveRecord::Base
 		self.pn_tokens.map {|pnt| pnt.pn_token }
 	end
 
+	def facebook_id_exists?
+		!self.facebook_id.blank?
+	end
+
+	def twitter_exists?
+		!self.twitter.blank?
+	end
 
 	###########  end settings methods    ##########
 
@@ -423,14 +440,6 @@ private
 
 	def phone_exists?
 		!self.phone.blank? && self.phone.length > 6
-	end
-
-	def facebook_id_exists?
-		!self.facebook_id.blank?
-	end
-
-	def twitter_exists?
-		!self.twitter.blank?
 	end
 
 	def check_for_server_code

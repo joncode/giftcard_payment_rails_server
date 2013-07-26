@@ -39,5 +39,4 @@ BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", 
 Time::DATE_FORMATS[:merchant] = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
 
-
 GENERAL_TOKEN = "1964f94b3e567a8a82b87f3ccbeb2174"

@@ -133,7 +133,7 @@ class JsonController < ActionController::Base
     end
 
     def database_error
-        { "Server Error"   => "Database Error" }
+        { "Server Error"          => "Database Error" }
     end
 
  	def stringify_error_messages(object)
@@ -152,8 +152,12 @@ class JsonController < ActionController::Base
  		return msgs
  	end
 
-    def serialize_objs_in_ary ary
-        ary.map { |o| o.serialize }
+    def serialize_objs_in_ary ary, api=nil
+        if api == :admt
+            ary.map { |o| o.admt_serialize }
+        else
+            ary.map { |o| o.serialize }
+        end
     end
 
     def extract_phone_digits(phone_raw)
@@ -174,6 +178,9 @@ class JsonController < ActionController::Base
     end
 
     def fail payload
+        unless payload.kind_of?(Hash) || payload.kind_of?(String)
+            payload   = payload.errors.full_messages
+        end
         @app_response = { status: 0, data: payload }
     end
 

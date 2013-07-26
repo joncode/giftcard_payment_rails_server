@@ -1,3 +1,5 @@
+FILTER_PARAMS = [:password, :password_digest, :token, :remember_token,  :uid, :credit_number, :card_number, :verification_value]
+
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
@@ -37,9 +39,8 @@ module Drinkboard
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    
-    config.filter_parameters += [:password, :password_digest, :token, :uid, :credit_number, :card_number, :verification_value]
-    
+    config.filter_parameters += FILTER_PARAMS
+
     # this stops rails from connecting the database before aset precompile which heroku will not allow
     config.assets.initialize_on_precompile = false
 

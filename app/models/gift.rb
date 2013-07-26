@@ -100,6 +100,12 @@ class Gift < ActiveRecord::Base
 		Gift.where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at DESC")
 	end
 
+	def self.get_sent_and_received_gifts_for user
+		give_gifts = Gift.where(giver_id: user).order("created_at DESC")
+		rec_gifts  = Gift.where(receiver_id: user).order("created_at DESC")
+		return { sent: give_gifts, received: rec_gifts }
+	end
+
 	def self.get_activity_at_provider(provider)
 		Gift.where(provider_id: provider.id).order("created_at ASC")
 	end
