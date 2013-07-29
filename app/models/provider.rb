@@ -33,7 +33,7 @@ class Provider < ActiveRecord::Base
 	validates_length_of :zip, 		:within => 5..10
 	validates_length_of :aba, 		:is => 9, 			:if => :aba_exists?
 	validates_length_of :routing, 	:within => 9..14,	:if => :routing_exists?
-	validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
+	# validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string

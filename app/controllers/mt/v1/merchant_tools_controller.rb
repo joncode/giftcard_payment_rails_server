@@ -6,9 +6,12 @@ module Mt
 
             def create
                 merchant_hsh = params["data"]
-                if merchant  = Provider.create(merchant_hsh)
+                merchant = Provider.new merchant_hsh
+                if merchant.save
+                    puts "Here is merchant = #{merchant.inspect}"
                     success "#{merchant.name} created"
                 else
+                    puts "Here is merchant = #{merchant.inspect}"
                     fail merchant
                 end
                 respond
