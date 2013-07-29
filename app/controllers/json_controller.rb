@@ -167,6 +167,8 @@ class JsonController < ActionController::Base
         end
     end
 
+    ### API UTILITY METHODS
+
     def respond
         respond_to do |format|
             format.json { render json: @app_response }
@@ -184,10 +186,32 @@ class JsonController < ActionController::Base
         @app_response = { status: 0, data: payload }
     end
 
+    def authenticate_admin_tools
+        token   = params["token"]
+        # check token to see if it is good
+        api_key = AdminToken.find_by_token token
+        head :unauthorized unless api_key
+    end
+
+    def authenticate_merchant_tools
+        token   = params["token"]
+        # check token to see if it is good
+        api_key = Provider.find_by_token token
+        head :unauthorized unless api_key
+    end
+
+    def authenticate_general_token
+        token   = params["token"]
+        head :unauthorized unless GENERAL_TOKEN == token
+    end
+
+
+    #######
+
 private
 
     def cross_origin_allow_header
-        headers['Access-Control-Allow-Origin'] = "*"
+        headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Request-Method'] = '*'
     end
 

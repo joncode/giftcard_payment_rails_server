@@ -69,6 +69,35 @@ module Admt
                 respond
             end
 
+            def coming_soon
+                provider = Provider.find params['id']
+                provider.sd_location_id = provider.live_bool ? nil : 1
+
+                if provider.save
+                    msg =
+                        if provider.live_bool
+                            "#{provider.name} is live"
+                        else
+                            "#{provider.name} is coming soon"
+                        end
+                    success msg
+                else
+                    fail provider
+                end
+                respond
+            end
+
+            def de_activate
+                provider    = Provider.find params['id']
+                new_active  = provider.active ? false : true
+                if provider.update_attribute(:active, new_active)
+                    success "#{provider.name} has changed to active = #{provider.active}"
+                else
+                    fail provider
+                end
+                respond
+            end
+
             def add_key
                 admin_token = params["data"]
                 # check to make sure the admin user already exists in db
@@ -79,20 +108,6 @@ module Admt
                     fail admin_token_obj
                 end
                 respond
-            end
-
-        private
-
-            def authenticate_admin_tools
-                token   = params["token"]
-                # check token to see if it is good
-                api_key = AdminToken.find_by_token token
-                head :unauthorized unless api_key
-            end
-
-            def authenticate_general_token
-                token = params["token"]
-                head :unauthorized unless GENERAL_TOKEN == token
             end
 
         end

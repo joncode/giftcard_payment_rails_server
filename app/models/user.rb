@@ -65,13 +65,13 @@ class User < ActiveRecord::Base
 	# after_update  :crop_photo
 
 	validates :first_name  , presence: true, length: { maximum: 50 }
-	validates :last_name  ,  length: { maximum: 50 }, :unless => :social_media
+	validates :last_name  ,  length: { maximum: 50 }, 	:unless => :social_media
 	validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 	validates :email , format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-	validates :password, length: { minimum: 6 },      on: :create
-	validates :password_confirmation, presence: true, on: :create
-	validates :facebook_id, uniqueness: true, :if => :facebook_id_exists?
-	validates :twitter, uniqueness: true, :if => :twitter_exists?
+	validates :password, length: { minimum: 6 },      	on: :create
+	validates :password_confirmation, presence: true, 	on: :create
+	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
+	validates :twitter, uniqueness: true, 				:if => :twitter_exists?
 	#/---------------------------------------------------------------------------------------------/
 
 	def serialize(token=false)

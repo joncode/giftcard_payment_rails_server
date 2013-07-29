@@ -193,4 +193,12 @@ Drinkboard::Application.routes.draw do
         post 'get_brand',     to: 'admin_tools#brand'
       end
   end
+
+  ## MERCHANT TOOLS routes for API
+  namespace :mt, defaults: { format: 'json' } do
+      namespace :v1 do
+        post 'create_merchant', to: 'merchant_tools#create'
+      end
+  end
+
 end

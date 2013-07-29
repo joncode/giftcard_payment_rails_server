@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130726024107) do
+ActiveRecord::Schema.define(:version => 20130729192508) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -274,6 +274,7 @@ ActiveRecord::Schema.define(:version => 20130726024107) do
     t.integer  "building_id"
     t.string   "token"
     t.boolean  "tools",                           :default => false
+    t.string   "image"
   end
 
   add_index "providers", ["city"], :name => "index_providers_on_city"

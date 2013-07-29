@@ -5,7 +5,7 @@ class Provider < ActiveRecord::Base
 	:twitter, :facebook, :website, :users, :photo, :photo_cache,
 	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
 	:account_name, :aba, :routing, :bank_account_name, :bank_address,
-	 :bank_city, :bank_state, :bank_zip, :sales_tax
+	 :bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
@@ -27,25 +27,20 @@ class Provider < ActiveRecord::Base
 	mount_uploader :box,      ProviderBoxUploader
 	mount_uploader :portrait, ProviderPortraitUploader
 
-	validates_numericality_of :sales_tax
-	validates_length_of :state , :is => 2
-	validates_length_of :zip, :within => 5..10
-	validates_length_of :aba, :is => 9, :if => :aba_exists?
-	validates_length_of :routing, :within => 9..14, :if => :routing_exists?
-	validates_presence_of :name, :city, :address, :zip , :state, :phone, :sales_tax
+	validates_presence_of :name, :city, :address, :zip , :state, :token
+	# validates_numericality_of :sales_tax
+	validates_length_of :state , 	:is => 2
+	validates_length_of :zip, 		:within => 5..10
+	validates_length_of :aba, 		:is => 9, 			:if => :aba_exists?
+	validates_length_of :routing, 	:within => 9..14,	:if => :routing_exists?
 	validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 
-	before_save :extract_phone_digits
-	before_create :create_token      # creates unique  token for provider
-	after_create :make_menu_string
+	before_save 	:extract_phone_digits
+	after_create 	:make_menu_string
 
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city, :latitude, :longitude]
-		if Rails.env.production?
-			prov_hash["provider_id"]  = self.id.to_s
-		else
-			prov_hash["provider_id"]  = self.id
-		end
+		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_image("photo")
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live
@@ -110,14 +105,6 @@ class Provider < ActiveRecord::Base
 		"#{self.city}, #{self.state} #{self.zip}"
 	end
 
-	def get_photo
-		if self.photo.blank?
-			MERCHANT_DEFAULT_IMG
-		else
-			self.photo.url
-		end
-	end
-
 	def token
 		token = super
 		if token.nil?    # lazy create & save merchant token
@@ -145,30 +132,43 @@ class Provider < ActiveRecord::Base
 		super(sales_tax)
 	end
 
+	######   PHOTO GETTERS
+
 	def get_photo_for_web
-		if self.photo.blank?
-			MERCHANT_DEFAULT_IMG
+		get_photo
+	end
+
+	def get_photo
+		if image.blank?
+			if photo.blank?
+				MERCHANT_DEFAULT_IMG
+			else
+				photo.url
+			end
 		else
-			self.photo.url
+			image
 		end
 	end
 
 	def get_image(flag)
-		case flag
-		when "logo"
-			photo = self.logo.url
-		when "portrait"
-			photo = self.portrait.url
-		when "photo"
-			photo = self.photo.url
-		else
-			photo = self.box.url
+		image_url =
+			case flag
+			when "logo"
+				logo.url
+			when "portrait"
+				portrait.url
+			when "photo"
+				get_photo
+			else
+				box.url
+			end
+		if image_url.blank?
+			image_url = MERCHANT_DEFAULT_IMG
 		end
-		if photo.blank?
-			photo = MERCHANT_DEFAULT_IMG
-		end
-		return photo
+		return image_url
 	end
+
+	#################
 
 	def get_servers
 		# this means get people who are AT work not just employed
@@ -298,10 +298,6 @@ private
 
 	def routing_exists?
 		self.routing != nil && !self.routing.empty?
-	end
-
-	def create_token
-		self.token = SecureRandom.urlsafe_base64
 	end
 
 	def make_menu_string
