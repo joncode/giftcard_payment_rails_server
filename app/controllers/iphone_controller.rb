@@ -232,8 +232,11 @@ class IphoneController < AppController
 		rescue
 			response["error"] = "User not found from remember token"
 		end
-
-		data_obj = JSON.parse params["data"]
+		if params["data"].kind_of? String
+			data_obj = JSON.parse params["data"]
+		else
+			data_obj = params["data"]
+		end
 		puts "#{data_obj}"
 
 		respond_to do |format|
