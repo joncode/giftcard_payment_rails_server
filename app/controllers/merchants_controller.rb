@@ -157,7 +157,7 @@ class MerchantsController < JsonController
 			data = JSON.parse params["data"]
 			invite_tkn = data["invite_tkn"]
 			web_route = PUB_MERCH_URL + "/invite?token=#{invite_tkn}"
-			puts "emai invite web route = #{web_route}"
+			puts "email invite web route = #{web_route}"
 			@user = User.new
 			@user.first_name = data["name"]
 			if Rails.env.production?

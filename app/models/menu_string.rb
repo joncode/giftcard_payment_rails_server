@@ -8,7 +8,9 @@ class MenuString < ActiveRecord::Base
   	after_save :update_merchant
 
   	def update_merchant
-  		self.provider.update_attribute(:menu_is_live, true)
+        unless self.menu.nil?
+  		    self.provider.update_attribute(:menu_is_live, true)
+        end
   	end
 
    	def self.get_menu_for_provider(provider_id)

@@ -69,9 +69,9 @@ module Admt
                 respond
             end
 
-            def coming_soon
-                provider = Provider.find params['id']
-                provider.sd_location_id = provider.live_bool ? nil : 1
+            def go_live
+                provider = Provider.find_by_token params['data']
+                provider.sd_location_id = 1
 
                 if provider.save
                     msg =
