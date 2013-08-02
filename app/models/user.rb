@@ -91,6 +91,7 @@ class User < ActiveRecord::Base
 		usr_hash["user_id"] = self.id.to_s
 		usr_hash["fb"]		= self.facebook_id_exists? ? "Yes" : "No"
 		usr_hash["twitter"] = self.twitter_exists? ? "Yes" : "No"
+		usr_hash["active"]  = self.active ? 1 : 0
 		usr_hash.keep_if {|k, v| !v.nil? }
 		return usr_hash
 	end

@@ -184,14 +184,17 @@ Drinkboard::Application.routes.draw do
   ## ADMIN TOOLS routes for API
   namespace :admt, defaults: { format: 'json' } do
       namespace :v1 do
-        post 'add_key_app',   to: 'admin_tools#add_key'
-        post 'get_gifts',     to: 'admin_tools#gifts'
-        post 'get_app_users', to: 'admin_tools#users'
-        post 'get_app_user',  to: 'admin_tools#user'
-        post 'user_and_gifts', to: 'admin_tools#user_and_gifts'
-        post 'get_brands',    to: 'admin_tools#brands'
-        post 'get_brand',     to: 'admin_tools#brand'
-        post 'go_live',       to: 'admin_tools#go_live'
+        post 'add_key_app',       to: 'admin_tools#add_key'
+        post 'get_gifts',         to: 'admin_tools#gifts'
+        post 'get_app_users',     to: 'admin_tools#users'
+        post 'get_app_user',      to: 'admin_tools#user'
+        post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
+        post 'get_brands',        to: 'admin_tools#brands'
+        post 'get_brand',         to: 'admin_tools#brand'
+        post 'go_live',           to: 'admin_tools#go_live'
+        post 'de_activate_user',  to: 'admin_tools#de_activate_user'
+        post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
+        post 'destroy_user',      to: 'admin_tools#destroy_user'
       end
   end
 

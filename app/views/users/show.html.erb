@@ -29,7 +29,7 @@
 </div>
 </div>
 <div class="POSfullPageWrap">
-	<% if @gifts.length > 0 %>                                         
+	<% if @gifts.length > 0 %>
 <%= render 'shared/gifts_list', gifts: @gifts, title: "User Gift Activity" %>
 	<% else %>
 <div class="bankCell POSsingleColumn">
@@ -39,19 +39,19 @@
 	<% end %>
 <div class="bankCell POSsingleColumn">
   <div class="merchantSignUpObject rounded gradient">
-	<h2><%= @user.fullname %> is : <strong><%= @active[0] %></strong></h2>
+	<h2><%= @user.name %> is : <strong><%= @active[0] %></strong></h2>
 	<h2><%= link_to @active[1] , de_activate_user_path(@user), :confirm => "#{@user.fullname} #{@active[1]} , Are you sure ?"   %></h2>
 </div></div>
 
 <div class="bankCell POSsingleColumn">
   <div class="merchantSignUpObject rounded gradient">
-		<% if @gifts.length > 0 %> 
+		<% if @gifts.length > 0 %>
 	<h2>To Destroy a User Account :</h2>
 	<h2>You must first destroy all Gifts</h2>
-	<h2><%= @user.fullname %> : <strong>Destroy All Gifts?</strong></h2>
+	<h2><%= @user.name %> : <strong>Destroy All Gifts?</strong></h2>
 	<h2><%= link_to "This is Final", destroy_gifts_user_path(@user), :confirm => "Destroy all #{@user.fullname} Gifts, Are you sure ?"   %></h2>
 		<% else %>
-	<h2><%= @user.fullname %> : <strong>Destroy Account?</strong></h2>
+	<h2><%= @user.name %> : <strong>Destroy Account?</strong></h2>
 	<h2><%= link_to "This is Final", user_path(@user), :method => :delete, :confirm => "Destroy #{@user.fullname} Account, Are you sure ?"   %></h2>
 		<% end %>
 </div></div>

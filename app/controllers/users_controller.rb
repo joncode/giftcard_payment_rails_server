@@ -104,11 +104,11 @@ class UsersController < ApplicationController
 		@user.active = @user.active ? false : true
 
 		respond_to do |format|
-				if @user.save
-						format.html { redirect_to user_path(@user), notice: "User Updated." }
-				else
-						format.html  { redirect_to user_path(@user), notice: human_readable_error_message(@user) }
-				end
+			if @user.save
+				format.html { redirect_to user_path(@user), notice: "User Updated." }
+			else
+				format.html  { redirect_to user_path(@user), notice: human_readable_error_message(@user) }
+			end
 		end
 	end
 
@@ -118,11 +118,11 @@ class UsersController < ApplicationController
 		total_gifts.each {|gift| gift.destroy}
 
 		respond_to do |format|
-				if Gift.get_user_activity(@user).count == 0
-						format.html { redirect_to user_path(@user), notice: "Gifts Destroyed." }
-				else
-						format.html  { redirect_to user_path(@user), notice: "Error in batch delete gifts" }
-				end
+			if Gift.get_user_activity(@user).count == 0
+				format.html { redirect_to user_path(@user), notice: "Gifts Destroyed." }
+			else
+				format.html  { redirect_to user_path(@user), notice: "Error in batch delete gifts" }
+			end
 		end
 	end
 

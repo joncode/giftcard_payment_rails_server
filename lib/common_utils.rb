@@ -14,6 +14,7 @@ module CommonUtils
 		x.delete('action')
 		x.delete('format')
 		@start_time_logger = Time.now
+		puts
 		puts "#{log_message_header} request: #{filter_params(x)}"
 	end
 
