@@ -116,14 +116,14 @@ module Admt
 
             def go_live
                 provider = Provider.find_by_token params['data']
-                provider.sd_location_id = 1
+                provider.sd_location_id = provider.live_bool ? nil : 1
 
                 if provider.save
                     msg =
                         if provider.live_bool
-                            "#{provider.name} is live"
+                            "#{provider.name} is Live in App"
                         else
-                            "#{provider.name} is coming soon"
+                            "#{provider.name} is Coming Soon in App"
                         end
                     success msg
                 else
