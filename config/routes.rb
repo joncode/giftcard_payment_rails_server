@@ -195,6 +195,7 @@ Drinkboard::Application.routes.draw do
         post 'de_activate_user',  to: 'admin_tools#de_activate_user'
         post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
         post 'destroy_user',      to: 'admin_tools#destroy_user'
+        post 'de_activate_merchant', to: 'admin_tools#de_activate_merchant'
       end
   end
 

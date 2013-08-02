@@ -132,11 +132,18 @@ module Admt
                 respond
             end
 
-            def de_activate
-                provider    = Provider.find params['id']
+            def de_activate_merchant
+                provider    = Provider.find_by_token params['data']
                 new_active  = provider.active ? false : true
+
                 if provider.update_attribute(:active, new_active)
-                    success "#{provider.name} has changed to active = #{provider.active}"
+                    msg =
+                        if provider.active
+                            "#{provider.name} is Active"
+                        else
+                            "#{provider.name} is de-Activated"
+                        end
+                    success msg
                 else
                     fail provider
                 end
