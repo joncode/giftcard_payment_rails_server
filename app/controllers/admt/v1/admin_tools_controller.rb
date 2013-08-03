@@ -12,7 +12,18 @@ module Admt
                 if gifts.count > 0
                     success array_these_gifts( gifts, ADMIN_REPLY, false , false , true )
                 else
-                    fail database_error
+                    fail    database_error
+                end
+                respond
+            end
+
+            def gift
+                gift = Gift.find(params["data"].to_i)
+                if gift
+                    serialized_gift = array_these_gifts( [gift], ADMIN_REPLY, false , false , true )
+                    success serialized_gift.first
+                else
+                    fail    database_error
                 end
                 respond
             end
@@ -26,6 +37,38 @@ module Admt
                     success "Gifts Destroyed."
                 else
                     fail "Error in batch delete gifts"
+                end
+                respond
+            end
+
+    #####  Gift & Sale Methods
+
+            def cancel_transaction
+                gift = Gift.find(params["data"].to_i)
+                if gift
+                    success "Gift De-Activated"
+                else
+                    fail "Error De-Activating Unpaid gift"
+                end
+                respond
+            end
+
+            def refund_close
+                gift = Gift.find(params["data"].to_i)
+                if gift
+                    success "Gift De-Activated and transaction refunded"
+                else
+                    fail "Error De-Activating and refunding Un-redeemed gift"
+                end
+                respond
+            end
+
+            def refund
+                gift = Gift.find(params["data"].to_i)
+                if gift
+                    success "Gift De-Activated and transaction refunded"
+                else
+                    fail "Error De-Activating and refunding redeemed gift"
                 end
                 respond
             end

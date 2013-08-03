@@ -186,6 +186,7 @@ Drinkboard::Application.routes.draw do
       namespace :v1 do
         post 'add_key_app',       to: 'admin_tools#add_key'
         post 'get_gifts',         to: 'admin_tools#gifts'
+        post 'get_gift',          to: 'admin_tools#gift'
         post 'get_app_users',     to: 'admin_tools#users'
         post 'get_app_user',      to: 'admin_tools#user'
         post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
@@ -196,6 +197,9 @@ Drinkboard::Application.routes.draw do
         post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
         post 'destroy_user',      to: 'admin_tools#destroy_user'
         post 'de_activate_merchant', to: 'admin_tools#de_activate_merchant'
+        post 'cancel_transaction',   to: 'admin_tools#cancel_transaction'
+        post 'refund_close',         to: 'admin_tools#refund_close'
+        post 'refund',               to: 'admin_tools#refund'
       end
   end
 
