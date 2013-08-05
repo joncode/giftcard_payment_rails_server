@@ -43,20 +43,20 @@ module Admt
 
     #####  Gift & Sale Methods
 
-            def cancel_transaction
+            def cancel
                 gift = Gift.find(params["data"].to_i)
                 if gift
-                    success "Gift De-Activated"
+                    success "Gift cancelled no credit card was charged"
                 else
                     fail "Error De-Activating Unpaid gift"
                 end
                 respond
             end
 
-            def refund_close
+            def void
                 gift = Gift.find(params["data"].to_i)
                 if gift
-                    success "Gift De-Activated and transaction refunded"
+                    success "Gift De-Activated and transaction voided and refunded"
                 else
                     fail "Error De-Activating and refunding Un-redeemed gift"
                 end
