@@ -23,9 +23,9 @@ class Array
 
     def serialize_objs api=nil
         if api == :admt
-            self.map { |o| o.admt_serialize }
+            map { |o| o.admt_serialize }
         else
-            self.map { |o| o.serialize }
+            map { |o| o.serialize }
         end
     end
 

@@ -39,19 +39,23 @@ class Gift < ActiveRecord::Base
 	after_save    :create_notification
 
 	def serialize
-		giver      = self.giver
-		merchant   = self.provider
-		response_hash                       = {}
-		response_hash["giver"]              = giver.name
-		response_hash["giver_photo"]        = giver.get_photo
-		response_hash["receiver"]           = self.receiver_name
-		response_hash["receiver_photo"]		= self.receiver.get_photo if self.receiver
-		response_hash["message"]            = self.message
-		response_hash["shoppingCart"]       = self.ary_of_shopping_cart_as_hash
-		response_hash["merchant_name"]      = merchant.name
-		response_hash["merchant_address"]   = merchant.full_address
-		response_hash["merchant_phone"]     = merchant.phone
-		return response_hash
+		sender      = giver
+		merchant    = provider
+		gift_hsh                       = {}
+		gift_hsh["giver"]              = sender.name
+		gift_hsh["giver_photo"]        = sender.get_photo
+		if receipient = receiver
+			gift_hsh["receiver"]           = receiver.name
+			gift_hsh["receiver_photo"]	   = receiver.get_photo
+		else
+			gift_hsh["receiver"]           = receiver_name
+		end
+		gift_hsh["message"]            = message
+		gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
+		gift_hsh["merchant_name"]      = merchant.name
+		gift_hsh["merchant_address"]   = merchant.full_address
+		gift_hsh["merchant_phone"]     = merchant.phone
+		gift_hsh
 	end
 
 	##########  gift creation methods
@@ -85,9 +89,9 @@ class Gift < ActiveRecord::Base
 		# if blacklist.include?(self.giver.email)
 		# 	return false
 		# else
-			return true
-		# end
 		# return true
+		# end
+		return true
 	end
 
 	def charge_card
@@ -190,18 +194,18 @@ class Gift < ActiveRecord::Base
 		x[1]   = "%02d" % x[1].to_i
 		x[1]   = x[1][0..1]
 		x[1]   = x[1].to_s
-		tot    = x.join('.')
-		return tot
+		total  = x.join('.')
+		return total
 	end
 
 	def ticket_total_string
 		ticket_total = (self.total.to_f * 100).to_i - (self.service.to_f * 100).to_i
-		tix_float = ticket_total.to_f / 100
+		tix_float 	 = ticket_total.to_f / 100
 		return format_currency_as_string(tix_float)
 	end
 
 	def subtotal_string
-		subtotal = (self.ticket_total_string.to_f * 100).to_i  - (self.tax.to_f * 100).to_i - (self.tip.to_f * 100).to_i
+		subtotal  = (self.ticket_total_string.to_f * 100).to_i  - (self.tax.to_f * 100).to_i - (self.tip.to_f * 100).to_i
 		tix_float = subtotal.to_f / 100
 		return format_currency_as_string(tix_float)
 	end
@@ -224,33 +228,33 @@ class Gift < ActiveRecord::Base
 		return new_gift
 	end
 
-	def add_receiver(receiver)
+	def add_receiver receiver
 		self.receiver_id    = receiver.id
 		self.receiver_name  = receiver.fullname
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
 		self.receiver_phone = receiver.phone ? receiver.phone : nil
 		self.receiver_email = receiver.email ? receiver.email : nil
-		self.status = 'open' if self.status == "incomplete"
+		self.status 		= 'open' if self.status == "incomplete"
 	end
 
-	def add_giver(giver)
+	def add_giver giver
 		self.giver_id   = giver.id
 		self.giver_name = giver.fullname
 	end
 
-	def add_provider(provider)
-		self.provider_id     = provider.id
-		self.provider_name   = provider.name
+	def add_provider provider
+		self.provider_id   = provider.id
+		self.provider_name = provider.name
 	end
 
-	def add_anonymous_giver(giver_id)
+	def add_anonymous_giver giver_id
 		anon_user       = User.find_by_phone('5555555555')
 		self.add_giver anon_user
 		self.anon_id    = giver_id
 	end
 
 	def ary_of_shopping_cart_as_hash
-		cart = JSON.parse self.shoppingCart
+		cart 	 = JSON.parse self.shoppingCart
 		item_ary = []
 		cart.each do |item|
 			item_ary << item
@@ -258,10 +262,10 @@ class Gift < ActiveRecord::Base
 		return item_ary
 	end
 
-	def make_gift_items(shoppingCart_array)
+	def make_gift_items shoppingCart_array
 		puts "In make gift items #{shoppingCart_array}"
 		self.gift_items = shoppingCart_array.map do |item|
-				GiftItem.initFromDictionary(item)
+			GiftItem.initFromDictionary(item)
 		end
 		puts "made it thru gift items #{self.gift_items}"
 	end

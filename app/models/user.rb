@@ -31,14 +31,6 @@ class User < ActiveRecord::Base
 	has_many :questions, :through => :answers
 	has_many :relays , foreign_key: "receiver_id"
 
-
-	# has_many :givers, through: :connections, source: "giver"
-	# has_many :connections,          foreign_key: "receiver_id", dependent: :destroy
-	# has_many :reverse_connections,  foreign_key: "giver_id",
-	#                                class_name: "Connection",
-	#                                dependent: :destroy
-	# has_many :receivers, through: :reverse_connections, source: :receiver
-	# has_many :microposts, dependent: :destroy
 	has_many :followed_users, through: :relationships, source: "followed"
 	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
 	has_many :reverse_relationships, foreign_key: "followed_id",
@@ -82,7 +74,7 @@ class User < ActiveRecord::Base
 		if !token
 			usr_hash.delete("remember_token")
 		end
-		return usr_hash
+		usr_hash
 	end
 
 	def admt_serialize
@@ -93,7 +85,7 @@ class User < ActiveRecord::Base
 		usr_hash["twitter"] = self.twitter_exists? ? "Yes" : "No"
 		usr_hash["active"]  = self.active ? 1 : 0
 		usr_hash.keep_if {|k, v| !v.nil? }
-		return usr_hash
+		usr_hash
 	end
 
 	def ua_alias

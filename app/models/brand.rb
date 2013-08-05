@@ -6,23 +6,24 @@ class Brand < ActiveRecord::Base
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
   	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
-	has_many :providers
-	has_many :employees
+	has_many   :providers
+	has_many   :employees
 	belongs_to :user
 
 	validates_presence_of :name
-	after_save :update_parent_brand
 
-  	mount_uploader :photo,    BrandPhotoUploader
+    after_save :update_parent_brand
+
+  	mount_uploader :photo, BrandPhotoUploader
 
   	def serialize
   		brand_hash 	= self.serializable_hash only: [ :name, :next_view ]
   		if Rails.env.production?
-            brand_hash["brand_id"]  = self.id.to_s
+            brand_hash["brand_id"] = self.id
         else
-            brand_hash["brand_id"]  = self.id
+            brand_hash["brand_id"] = self.id
         end
-        brand_hash["photo"] 	= self.get_image
+        brand_hash["photo"] 	   = self.get_image
   		return brand_hash
   	end
 

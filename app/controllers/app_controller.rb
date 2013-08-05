@@ -2,14 +2,10 @@ class AppController < JsonController
 
  	def authenticate_app_user(token)
  		if user = User.find_by_remember_token(token)
- 			return user
+ 			user
  		else
- 			return false
+ 			false
  		end
-	end
-
-	def authenticate_public_info(token=nil)
- 		return true
 	end
 
   	def shorten_url_for_provider_ary providers_array
@@ -41,7 +37,7 @@ class AppController < JsonController
   			new_photo_ary[2] = tag.match('png') ? 'p' : tag
   		end
 
-  		return new_photo_ary.join("|")
+  		new_photo_ary.join("|")
   	end
 
  	def update_user
@@ -220,9 +216,9 @@ class AppController < JsonController
 	  		logmsg 		= gift_hash
 	  	end
 	    respond_to do |format|
-	      # logger.debug gifts_array
-	      @app_response = "AC response[0] => #{logmsg}"
-	      format.json { render json: gifts_array }
+            # logger.debug gifts_array
+            @app_response = "AC response[0] => #{logmsg}"
+            format.json { render json: gifts_array }
 	    end
   	end
 
@@ -238,9 +234,9 @@ class AppController < JsonController
 	  		logmsg 		= gift_hash
 	  	end
 	    respond_to do |format|
-	      # logger.debug gifts_array
-	      @app_response = "AC response[0] => #{logmsg}"
-	      format.json { render json: gifts_array }
+            # logger.debug gifts_array
+            @app_response = "AC response[0] => #{logmsg}"
+            format.json { render json: gifts_array }
 	    end
   	end
 
@@ -315,7 +311,7 @@ class AppController < JsonController
 	    	else
 	    		providers = Provider.where(city: params["city"])
 	    	end
-	    	providers_array = serialize_objs_in_ary providers
+	    	providers_array = providers.serialize_objs
 	    	logmsg 			= providers_array[0]
 	  	else
 	  		providers_hash 	= {"error" => "user was not found in database"}
@@ -324,9 +320,9 @@ class AppController < JsonController
 	  	end
 
   		respond_to do |format|
-	      # logger.debug providers_array
-	      @app_response = "AppC response[0] => #{logmsg}"
-	      format.json { render json: providers_array }
+            # logger.debug providers_array
+            @app_response = "AppC response[0] => #{logmsg}"
+            format.json { render json: providers_array }
 	    end
   	end
 
@@ -337,7 +333,7 @@ class AppController < JsonController
 	    	else
 	    		providers = Provider.where(city: params["city"])
 	    	end
-	    	providers_array = serialize_objs_in_ary providers
+	    	providers_array = providers.serialize_objs
 	    	providers_array = shorten_url_for_provider_ary providers_array
 	    	logmsg 			= providers_array[0]
 	  	else
@@ -347,9 +343,9 @@ class AppController < JsonController
 	  	end
 
   		respond_to do |format|
-	      # logger.debug providers_array
-	      @app_response = "AppC response[0] => #{logmsg}"
-	      format.json { render json: providers_array }
+            # logger.debug providers_array
+            @app_response = "AppC response[0] => #{logmsg}"
+            format.json { render json: providers_array }
 	    end
   	end
 
@@ -360,7 +356,7 @@ class AppController < JsonController
 	    	else
 	    		brands = Brand.where(city: params["city"])
 	    	end
-	    	brands_array 	= serialize_objs_in_ary brands
+	    	brands_array 	= brands.serialize_objs
 	    	# brands_array  = shorten_url_for_brand_ary brands_array
 	    	logmsg 			= brands_array[0]
 	  	else
@@ -370,9 +366,9 @@ class AppController < JsonController
 	  	end
 
   		respond_to do |format|
-	      # logger.debug providers_array
-	      @app_response = "AppC response[0] => #{logmsg}"
-	      format.json { render json: brands_array }
+            # logger.debug providers_array
+            @app_response = "AppC response[0] => #{logmsg}"
+            format.json { render json: brands_array }
 	    end
   	end
 
@@ -381,7 +377,7 @@ class AppController < JsonController
 	    	brand_id = params["data"].to_i
 	    	begin
 	    		brand 			= Brand.find brand_id
-	    		providers_array = serialize_objs_in_ary brand.providers
+	    		providers_array = brand.providers.serialize_objs
 	    		# providers_array = shorten_url_for_provider_ary providers_array
 	    		logmsg 			= providers_array[0]
 	    	rescue
@@ -412,7 +408,7 @@ class AppController < JsonController
 			else
 				users    = User.where(active: true).find_all_by_city(params['city'])
 			end
-			user_array = serialize_objs_in_ary users
+			user_array = users.serialize_objs
 			logmsg 	   = user_array[0]
 		rescue
 			puts "ALERT - cannot find user from token"
@@ -490,12 +486,12 @@ class AppController < JsonController
 	  						# gift.status == "notified" if redeem exists
 	  			redeem = Redeem.find_or_create_with_gift(gift)
 	  			if redeem.redeem_code
-	  				response["success"] = redeem.redeem_code.to_s
+	  				response["success"]      = redeem.redeem_code.to_s
 	  			else
 	  				response["error_server"] = database_error_redeem
 	  			end
 	  		rescue
-	  			response["error_server"] = database_error_redeem
+	  			response["error_server"]     = database_error_redeem
 	  		end
   		else
   			response["error"] = unauthorized_user

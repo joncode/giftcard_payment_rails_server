@@ -36,7 +36,7 @@ module Admt
                 if Gift.get_user_activity(user).count == 0
                     success "Gifts Destroyed."
                 else
-                    fail "Error in batch delete gifts"
+                    fail    "Error in batch delete gifts"
                 end
                 respond
             end
@@ -48,7 +48,7 @@ module Admt
                 if gift
                     success "Gift cancelled no credit card was charged"
                 else
-                    fail "Error De-Activating Unpaid gift"
+                    fail    "Error De-Activating Unpaid gift"
                 end
                 respond
             end
@@ -58,7 +58,7 @@ module Admt
                 if gift
                     success "Gift De-Activated and transaction voided and refunded"
                 else
-                    fail "Error De-Activating and refunding Un-redeemed gift"
+                    fail    "Error De-Activating and refunding Un-redeemed gift"
                 end
                 respond
             end
@@ -68,7 +68,7 @@ module Admt
                 if gift
                     success "Gift De-Activated and transaction refunded"
                 else
-                    fail "Error De-Activating and refunding redeemed gift"
+                    fail    "Error De-Activating and refunding redeemed gift"
                 end
                 respond
             end
@@ -83,10 +83,10 @@ module Admt
                     gifts.each_key do |key|
                         gifts[key] = array_these_gifts( gifts[key], ADMIN_REPLY, false , false , true )
                     end
-                    response_hsh = {app_user: user.admt_serialize}.merge gifts
+                    response_hsh   = {app_user: user.admt_serialize}.merge gifts
                     success response_hsh
                 else
-                    fail user
+                    fail    user
                 end
                 respond
             end
@@ -96,7 +96,7 @@ module Admt
                 if users.count > 0
                     success users.serialize_objs :admt
                 else
-                    fail database_error
+                    fail    database_error
                 end
                 respond
             end
@@ -105,7 +105,7 @@ module Admt
                 if user = User.find(params["data"].to_i)
                     success user.serialize
                 else
-                    fail database_error
+                    fail    database_error
                 end
                 respond
             end
@@ -118,7 +118,7 @@ module Admt
                     stat    = user.active ? "Active" : "De-Activated"
                     success "User is now #{stat}"
                 else
-                    fail user
+                    fail    user
                 end
                 respond
             end
@@ -129,7 +129,7 @@ module Admt
                 if user.destroy
                     success "#{user.name} is destroyed."
                 else
-                    fail user
+                    fail    user
                 end
                 respond
             end
@@ -139,9 +139,9 @@ module Admt
             def brands
                 brands = Brand.order("updated_at DESC")
                 if brands.count > 0
-                    success serialize_objs_in_ary brands
+                    success brands.serialize_objs
                 else
-                    fail database_error
+                    fail    database_error
                 end
                 respond
             end
@@ -150,7 +150,7 @@ module Admt
                 if brand = Brand.find(params["data"].to_i)
                     success brand.serialize
                 else
-                    fail database_error
+                    fail    database_error
                 end
                 respond
             end
@@ -170,7 +170,7 @@ module Admt
                         end
                     success msg
                 else
-                    fail provider
+                    fail    provider
                 end
                 respond
             end
@@ -188,7 +188,7 @@ module Admt
                         end
                     success msg
                 else
-                    fail provider
+                    fail    provider
                 end
                 respond
             end
@@ -202,7 +202,7 @@ module Admt
                 if admin_token_obj.save
                     success "Admin User Created"
                 else
-                    fail admin_token_obj
+                    fail    admin_token_obj
                 end
                 respond
             end
