@@ -152,6 +152,12 @@ class JsonController < ActionController::Base
         true
     end
 
+    def authenticate_services
+        token   = params["token"]
+        api_key = User.find_by_remember_token token
+        head :unauthorized unless api_key
+    end
+
 
     #######
 

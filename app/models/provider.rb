@@ -1,4 +1,5 @@
 class Provider < ActiveRecord::Base
+	include Formatter
 
 	attr_accessible :address, :city, :description, :logo, :name,
 	:state, :user_id, :staff_id, :zip, :zinger, :phone, :email,
@@ -91,18 +92,6 @@ class Provider < ActiveRecord::Base
 	def self.allWithinBounds(bounds)
 		puts bounds
 		Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
-	end
-
-	def full_address
-		"#{self.address},  #{self.city}, #{self.state}"
-	end
-
-	def complete_address
-		"#{self.address}\n#{self.city_state_zip}"
-	end
-
-	def city_state_zip
-		"#{self.city}, #{self.state} #{self.zip}"
 	end
 
 	def token
@@ -280,17 +269,6 @@ class Provider < ActiveRecord::Base
 	end
 
 private
-
-	def extract_phone_digits
-		if phone_exists?
-			phone_match = self.phone.match(VALID_PHONE_REGEX)
-			self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
-		end
-	end
-
-	def phone_exists?
-		!self.phone.blank? && self.phone.length > 6
-	end
 
 	def aba_exists?
 		self.aba != nil && !self.aba.empty?

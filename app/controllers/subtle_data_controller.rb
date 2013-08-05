@@ -15,17 +15,17 @@ class SubtleDataController < ApplicationController
     # before_filter :have_token? # - have to have this token persist between instances
 
     def index
-        @call   ||= params[:call] 
+        @call   ||= params[:call]
         @vars     = SDRequest.new params[:vars]
         puts "HERE ARE THE VARS #{@vars}"
         @data     = nil
         @token  ||= "M1UwX0ZY"
- 
+
         @url      = "#{SD_ROOT}#{@call}"
         self.send("make_URL_for_" + @call)
         @url = @url.gsub(' ', '+')
         @response = String.new(%x(curl #{@url}))
-        
+
         puts "Here is the request #{@url}"
         puts "Here is the response #{@response}"
 
@@ -50,7 +50,7 @@ class SubtleDataController < ApplicationController
             end
         end
 
-            # app start up 
+            # app start up
         def make_URL_for_0000
             @url  += "#{PIPE}#{WEB_KEY}"
         end
@@ -67,7 +67,7 @@ class SubtleDataController < ApplicationController
         end
 
         def init_data_for_0201 item_str
-            return SDMenuItem.new item_str 
+            return SDMenuItem.new item_str
         end
 
             # menu categories for location
@@ -97,8 +97,8 @@ class SubtleDataController < ApplicationController
         end
 
         def init_data_for_1002 item_str
-            return SDEmployee.new item_str 
-        end        
+            return SDEmployee.new item_str
+        end
 
             # get clocked in employees
         def make_URL_for_1001
@@ -107,7 +107,7 @@ class SubtleDataController < ApplicationController
         end
 
         def init_data_for_1001 item_str
-            return SDEmployee.new item_str 
+            return SDEmployee.new item_str
         end
 
             # get user info
@@ -119,15 +119,19 @@ class SubtleDataController < ApplicationController
         end
 
         def init_data_for_0109 item_str
-            return SDUser.new item_str 
-        end 
+            return SDUser.new item_str
+        end
 
             # create new user
         def make_URL_for_0110
             header       = "#{@token}#{PIPE}"
-            new_user_str = current_user.sd_serialize
+            new_user_str = sd_serialize_user current_user
             puts "USeR serialized #{new_user_str}"
             @url        += "#{header}#{new_user_str}"
+        end
+
+        def sd_serialize_user user
+            "#{self.phone}#{PIPE}#{self.remember_token}#{PIPE}#{self.first_name}#{PIPE}#{PIPE}#{self.last_name}#{PIPE}#{self.birthday}#{PIPE}#{self.phone}#{PIPE}#{self.email}#{PIPE}#{PIPE}#{PIPE}#{self.remember_token}"
         end
 
         def init_data_for_0110 item_str
@@ -228,7 +232,7 @@ class SubtleDataController < ApplicationController
         end
 
         def init_data_for_0520 item_str
-            return SDTicket.new item_str 
+            return SDTicket.new item_str
         end
 
             # add credit card payment to ticket
@@ -251,7 +255,7 @@ class SubtleDataController < ApplicationController
             item_str
         end
 
-            # cancel ticket 
+            # cancel ticket
         def make_URL_for_0460
             header = "#{@token}#{PIPE}"
             @url  += "#{header}#{LOCATION_ID}#{PIPE}#{TICKET_ID}#{PIPE}0#{PIPE}0#{PIPE}#{USER_ID}"
@@ -264,7 +268,7 @@ class SubtleDataController < ApplicationController
         def parseQuery
             x = @response.split('|')
             puts "parseQuery #{@response}"
-            if x.count == 2 
+            if x.count == 2
                     # typical remove the query from the response
                 @query  = x[0]
                 @data   = x[1]
@@ -304,7 +308,7 @@ class SubtleDataController < ApplicationController
             url     = "#{SD_ROOT}0000#{PIPE}#{WEB_KEY}"
             response = String.new(%x{curl #{url}})
             query , @token = response.split('|')
-            puts "GET TOKEN #{@token}"  
+            puts "GET TOKEN #{@token}"
         end
 end
 
@@ -312,7 +316,7 @@ class SDTicket
     attr_reader :ticket_id, :pos_ticket,  :table_id, :table_name, :sd_employee_id, :sd_user_id,
                 :subtotal, :tax, :discount, :total, :remaining_balance,
                 :service_charge, :date_opened, :covers
-    
+
     def initialize(item_str)
         x = item_str.split('^')
         @sd_ticket_id = x[0]
@@ -334,7 +338,7 @@ end
 
 class SDTable
     attr_reader :table_id, :name, :identifier
-    
+
     def initialize(item_str)
         x = item_str.split('^')
         @sd_table_id = x[0]
@@ -345,7 +349,7 @@ end
 
 class SDMenuItem
     attr_reader :sd_id, :name, :price, :image_type, :image_url
-    
+
     def initialize(item_str)
         x = item_str.split('^')
         @sd_item_id = x[0]
@@ -381,9 +385,9 @@ class SDCategory
 end
 
 class SDEmployee
-    attr_reader :sd_employee_id, :user_name, :first_name, 
+    attr_reader :sd_employee_id, :user_name, :first_name,
                 :middle_name, :last_name, :birthday, :email,
-                :manager 
+                :manager
 
     def initialize item_str
         x = item_str.split('^')
@@ -400,11 +404,11 @@ end
 
 class SDUser
     include SubtleDataHelper
-    attr_reader :sd_user_id, :user_name, :first_name, 
+    attr_reader :sd_user_id, :user_name, :first_name,
                 :middle_name, :last_name, :birthday, :phone, :email,
-                :latitude, :longitude 
+                :latitude, :longitude
 
-    def initialize x 
+    def initialize x
         x = x.split('^') if x.kind_of? String
         @sd_user_id     = x[0]
         @user_name      = x[1]
@@ -415,7 +419,7 @@ class SDUser
         @phone          = x[6]
         @email          = x[7]
         @latitude       = remove_trailing_zeros x[8]
-        @longitude      = remove_trailing_zeros x[9] 
+        @longitude      = remove_trailing_zeros x[9]
     end
 end
 
@@ -425,7 +429,7 @@ class SDLocation
                 :latitude, :longitude, :phone, :website_url, :neighborhood, :cross_streets,
                 :price_rating, :user_rating, :logo_url, :photo_url, :employee_request,
                 :color_theme, :table_instr, :receipt_instr, :specials, :ordering, :cc_on, :cat_avail,
-                :fav_avail, :process_new_cc, :process_pre_auth_cc  
+                :fav_avail, :process_new_cc, :process_pre_auth_cc
 
     def initialize item_str
         x = item_str.split('^')

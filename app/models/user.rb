@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+	include Formatter
 
 	attr_accessible  :email, :password, :password_confirmation,
 	:photo, :photo_cache, :first_name, :last_name, :phone,
@@ -31,19 +32,18 @@ class User < ActiveRecord::Base
 	has_many :questions, :through => :answers
 	has_many :relays , foreign_key: "receiver_id"
 
-	has_many :followed_users, through: :relationships, source: "followed"
-	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
-	has_many :reverse_relationships, foreign_key: "followed_id",
-																	class_name: "Relationship",
-																	dependent: :destroy
-	has_many :followers, through: :reverse_relationships, source: :follower
+	# has_many :followed_users, through: :relationships, source: "followed"
+	# has_many :relationships, foreign_key: "follower_id", dependent: :destroy
+	# has_many :reverse_relationships, foreign_key: "followed_id",
+	# 																class_name: "Relationship",
+	# 																dependent: :destroy
+	# has_many :followers, through: :reverse_relationships, source: :follower
 
 	has_secure_password
 
-	# save data to db with proper cases
-	before_save { |user| user.email      = email.downcase  }
-	before_save { |user| user.first_name = first_name.capitalize if first_name}
-	before_save { |user| user.last_name  = last_name.capitalize  if last_name }
+	before_save { |user| user.email      = email.downcase }
+	before_save { |user| user.first_name = first_name.capitalize if first_name }
+	before_save { |user| user.last_name  = last_name.capitalize  if last_name  }
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
@@ -54,17 +54,16 @@ class User < ActiveRecord::Base
 	after_save    :collect_incomplete_gifts
 	after_create  :confirm_email
 
-	# after_update  :crop_photo
-
-	validates :first_name  , presence: true, length: { maximum: 50 }
-	validates :last_name  ,  length: { maximum: 50 }, 	:unless => :social_media
-	validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
-	validates :email , format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-	validates :password, length: { minimum: 6 },      	on: :create
+	validates :first_name, 	presence: true, 			length: { maximum: 50 }
+	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
+	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
+	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
+	validates :password, 	length: { minimum: 6 },     on: :create
 	validates :password_confirmation, presence: true, 	on: :create
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
-	validates :twitter, uniqueness: true, 				:if => :twitter_exists?
-	#/---------------------------------------------------------------------------------------------/
+	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
+
+#/---------------------------------------------------------------------------------------------/
 
 	def serialize(token=false)
 		usr_hash  = self.serializable_hash only: ["first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "remember_token", "email", "phone", "facebook_id", "twitter"]
@@ -93,28 +92,16 @@ class User < ActiveRecord::Base
 		"user-#{adj_user_id}"
 	end
 
-	def gifts
-		anon_gifts    = Gift.where(anon_id: self.id)
-		normal_gifts  = super
-		return anon_gifts + normal_gifts
-	end
-
 	def social_media
 		return true if self.origin == 'f'
 		return true if self.origin == 't'
 		return false
 	end
 
+####### USER GETTERS AND SETTERS
+
 	def get_credit_card(card_id)
 		self.cards.select { |c| c.id == card_id}
-	end
-
-	def display_cards
-		self.cards.select do |c|
-			c.nickname
-			c.id
-			c.last_four
-		end
 	end
 
 			# custom setters and getters for formatting date to human looking date
@@ -143,23 +130,6 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	def bill
-		total = self.gifts.sum { |gift| gift.total.to_d }
-		total > 0 ? total.to_digits : "0"
-	end
-
-	def received
-		Gift.where(receiver_id: self.id)
-	end
-
-	def all_gifts
-		Gift.where("giver_id = :user OR receiver_id = :user OR anon_id = :user", :user => self.id ).order("created_at DESC")
-	end
-
-	def feed
-		Micropost.from_users_followed_by(self)
-	end
-
 	def name
 		if self.last_name.blank?
 			"#{self.first_name}"
@@ -168,13 +138,13 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	def username
-		self.name
-	end
+	alias_method :username, :name
+	alias_method :fullname, :name
 
-	def fullname
-		self.name
-	end
+
+##################
+
+#######  PHOTO METHODS
 
 	def get_image(flag)
 		puts flag
@@ -219,33 +189,44 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	def following?(other_user)
-		relationships.find_by_followed_id(other_user.id)
+##################
+
+#######  GIFT SCOPE METHODS
+
+	# def bill 8/5/13
+	# 	total = self.gifts.sum { |gift| gift.total.to_d }
+	# 	total > 0 ? total.to_digits : "0"
+	# end
+
+	def received
+		Gift.where(receiver_id: self.id)
 	end
 
-	def follow!(other_user)
-		relationships.create!(followed_id: other_user.id)
+	def all_gifts
+		Gift.where("giver_id = :user OR receiver_id = :user OR anon_id = :user", :user => self.id ).order("created_at DESC")
 	end
 
-	def unfollow!(other_user)
-		relationships.find_by_followed_id(other_user.id).destroy
+	def gifts
+		anon_gifts    = Gift.where(anon_id: self.id)
+		normal_gifts  = super
+		return anon_gifts + normal_gifts
 	end
 
-	def full_address
-		"#{self.address},  #{self.city}, #{self.state}"
-	end
+##################
+
+#######  UTILITY  METHODS
 
 	def update_reset_token
 		self.reset_token_sent_at = Time.now
-		self.reset_token = SecureRandom.hex(16)
+		self.reset_token 		 = SecureRandom.hex(16)
 		self.save
 	end
 
 	def reset_password(password)
-		self.password = password
+		self.password 			   = password
 		self.password_confirmation = password
-		self.reset_token = nil
-		self.reset_token_sent_at = nil
+		self.reset_token 		   = nil
+		self.reset_token_sent_at   = nil
 		self.save
 	end
 
@@ -256,15 +237,10 @@ class User < ActiveRecord::Base
 		return true
 	end
 
-	def one_provider_to_iphone
-		provider = self.providers.dup.pop
-		provider.table_photo_hash
-	end
-
 	def providers_to_iphone
 			# find out how many merchants the user is connected to
 		merchants = self.providers.dup
-		response = []
+		response  = []
 		merchants.each do |m|
 			response << m.table_photo_hash
 		end
@@ -279,40 +255,6 @@ class User < ActiveRecord::Base
 					return true
 				end
 			end
-		end
-		return false
-	end
-
-	def sd_serialize
-		"#{self.phone}#{PIPE}#{self.remember_token}#{PIPE}#{self.first_name}#{PIPE}#{PIPE}#{self.last_name}#{PIPE}#{self.birthday}#{PIPE}#{self.phone}#{PIPE}#{self.email}#{PIPE}#{PIPE}#{PIPE}#{self.remember_token}"
-	end
-
-	#########   settings methods   ###########
-
-	def get_or_create_settings
-		if setting = Setting.find_by_user_id(self.id)
-			return setting
-		else
-			return Setting.new(user_id: self.id)
-		end
-	end
-
-	def remove_key_from_hash(obj_hash, key_for_removal)
-		if obj_hash.has_key? key_for_removal
-			obj_hash.delete(key_for_removal)
-		end
-	end
-
-	def get_settings
-		settings = get_or_create_settings
-		return settings.serialize
-	end
-
-	def save_settings(data)
-		settings = get_or_create_settings
-		remove_key_from_hash(data, "user_id")
-		if settings.update_attributes(data)
-			return true
 		end
 		return false
 	end
@@ -341,7 +283,33 @@ class User < ActiveRecord::Base
 		!self.twitter.blank?
 	end
 
-	###########  end settings methods    ##########
+##################
+
+#########   settings methods
+
+	def get_or_create_settings
+		if setting = Setting.find_by_user_id(self.id)
+			return setting
+		else
+			return Setting.new(user_id: self.id)
+		end
+	end
+
+	def get_settings
+		settings = get_or_create_settings
+		return settings.serialize
+	end
+
+	def save_settings(data)
+		settings = get_or_create_settings
+		remove_key_from_hash(data, "user_id")
+		if settings.update_attributes(data)
+			return true
+		end
+		return false
+	end
+
+##################
 
 private
 
@@ -421,22 +389,6 @@ private
 
 	def create_remember_token
 		self.remember_token = SecureRandom.urlsafe_base64
-	end
-
-	def extract_phone_digits
-		if phone_exists?
-			phone_raw   = self.phone
-			phone_match = phone_raw.match(VALID_PHONE_REGEX)
-			self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
-		end
-	end
-
-	def phone_exists?
-		!self.phone.blank? && self.phone.length > 6
-	end
-
-	def check_for_server_code
-		!self.server_code.blank?
 	end
 
 end

@@ -181,33 +181,38 @@ Drinkboard::Application.routes.draw do
   match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
   match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
 
+  ## SERVICES ROUTES (app . mdot)
+  namespace :app, defaults: { format: 'json' } do
+    namespace :v2 do
+      get 'regift', to: 'iphone#regifter'
+    end
+  end
+
   ## ADMIN TOOLS routes for API
   namespace :admt, defaults: { format: 'json' } do
-      namespace :v1 do
-        post 'add_key_app',       to: 'admin_tools#add_key'
-        post 'get_gifts',         to: 'admin_tools#gifts'
-        post 'get_gift',          to: 'admin_tools#gift'
-        post 'get_app_users',     to: 'admin_tools#users'
-        post 'get_app_user',      to: 'admin_tools#user'
-        post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
-        post 'get_brands',        to: 'admin_tools#brands'
-        post 'get_brand',         to: 'admin_tools#brand'
-        post 'go_live',           to: 'admin_tools#go_live'
-        post 'de_activate_user',  to: 'admin_tools#de_activate_user'
-        post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
-        post 'destroy_user',      to: 'admin_tools#destroy_user'
-        post 'de_activate_merchant', to: 'admin_tools#de_activate_merchant'
-        post 'cancel',            to: 'admin_tools#cancel'
-        post 'void',              to: 'admin_tools#void'
-        post 'refund',            to: 'admin_tools#refund'
-      end
+    namespace :v1 do
+      post 'add_key_app',       to: 'admin_tools#add_key'
+      post 'get_gifts',         to: 'admin_tools#gifts'
+      post 'get_gift',          to: 'admin_tools#gift'
+      post 'get_app_users',     to: 'admin_tools#users'
+      post 'get_app_user',      to: 'admin_tools#user'
+      post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
+      post 'get_brands',        to: 'admin_tools#brands'
+      post 'get_brand',         to: 'admin_tools#brand'
+      post 'go_live',           to: 'admin_tools#go_live'
+      post 'de_activate_user',  to: 'admin_tools#de_activate_user'
+      post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
+      post 'destroy_user',      to: 'admin_tools#destroy_user'
+      post 'de_activate_merchant', to: 'admin_tools#de_activate_merchant'
+      post 'cancel',            to: 'admin_tools#cancel'
+    end
   end
 
   ## MERCHANT TOOLS routes for API
   namespace :mt, defaults: { format: 'json' } do
-      namespace :v1 do
-        post 'create_merchant', to: 'merchant_tools#create'
-      end
+    namespace :v1 do
+      post 'create_merchant', to: 'merchant_tools#create'
+    end
   end
 
 end

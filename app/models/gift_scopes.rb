@@ -1,5 +1,13 @@
 module GiftScopes
 
+##### GIFT SCOPES
+
+    def get_activity
+        order("created_at DESC")
+    end
+
+#### USER SCOPES
+
     def get_gifts user
         where(receiver_id: user.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
     end
@@ -32,10 +40,6 @@ module GiftScopes
         where( giver_id: user).order("created_at DESC").limit(10)
     end
 
-    def get_activity
-        order("created_at DESC")
-    end
-
     def get_user_activity user
         where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at DESC")
     end
@@ -57,6 +61,8 @@ module GiftScopes
         end
         gifts
     end
+
+##### PROVIDER SCOPES
 
     def get_activity_at_provider provider
         where(provider_id: provider.id).order("created_at ASC")

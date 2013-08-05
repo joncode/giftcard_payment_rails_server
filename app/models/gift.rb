@@ -1,5 +1,6 @@
 class Gift < ActiveRecord::Base
-	extend GiftScopes
+	extend  GiftScopes
+	include Formatter
 
 	attr_accessible   :giver_id,      :giver_name, :credit_card,
 			:receiver_id, :receiver_name, :receiver_phone,
@@ -30,13 +31,10 @@ class Gift < ActiveRecord::Base
 
 	before_create :extract_phone_digits
 	before_create :add_giver_name,  :if => :no_giver_name
-	before_create :regifted,        :if => :regift_id?
+	before_create :regifted,        :if => :regift?
 	before_create :set_status
 
 	after_create  :update_shoppingCart
-	# after_create  :invoice_giver
-	# after_create  :notify_receiver
-	after_save    :create_notification
 
 	def serialize
 		sender      = giver
@@ -58,19 +56,32 @@ class Gift < ActiveRecord::Base
 		gift_hsh
 	end
 
-	##########  gift creation methods
+	def self.init(params)
+		gift = Gift.new(params[:gift])
+				# add anonymous giver feature
+		if params[:gift][:anon_id]
+			gift.add_anonymous_giver(params[:gift][:giver_id])
+		end
+		return gift
+	end
+
+	def phone
+		self.receiver_phone
+	end
+
+##########  gift credit card methods
 
 	def set_status
-		if self.card_enabled?
+		if card_enabled?
 			if Rails.env.production?
 				self.status = "unpaid"
 			elsif Rails.env.staging?
-				self.set_status_post_payment
+				set_status_post_payment
 			else
-				self.set_status_post_payment
+				set_status_post_payment
 			end
 		else
-			self.set_status_post_payment
+			set_status_post_payment
 		end
 		puts "gift SET STATUS #{self.status}"
 	end
@@ -154,7 +165,7 @@ class Gift < ActiveRecord::Base
 		when 1
 			# Approved
 			puts "setting the gift status off unpaid"
-			self.set_status_post_payment
+			set_status_post_payment
 			self.save
 		when 2
 			# Declined
@@ -179,24 +190,9 @@ class Gift < ActiveRecord::Base
 		return sale
 	end
 
-	def self.init(params)
-		gift = Gift.new(params[:gift])
-				# add anonymous giver feature
-		if params[:gift][:anon_id]
-			gift.add_anonymous_giver(params[:gift][:giver_id])
-		end
-		return gift
-	end
+###############
 
-	def format_currency_as_string(float)
-		string = float.to_s
-		x      = string.split('.')
-		x[1]   = "%02d" % x[1].to_i
-		x[1]   = x[1][0..1]
-		x[1]   = x[1].to_s
-		total  = x.join('.')
-		return total
-	end
+##########  cashier methods
 
 	def ticket_total_string
 		ticket_total = (self.total.to_f * 100).to_i - (self.service.to_f * 100).to_i
@@ -210,36 +206,45 @@ class Gift < ActiveRecord::Base
 		return format_currency_as_string(tix_float)
 	end
 
-	def regift(receiver=nil, message=nil)
+###############
+
+##########  data population methods
+
+	def regift(recipient=nil, message=nil)
 		new_gift            = self.dup
 		new_gift.regift_id  = self.id
-		new_gift.add_giver receiver
-		new_gift.message    = message
-		if receiver
-			new_gift.add_receiver receiver
+		new_gift.message    = message ? message : self.message
+		new_gift.add_giver  self.receiver
+		if recipient
+			new_gift.add_receiver recipient
 		else
-			new_gift.receiver_id          = nil
-			new_gift.receiver_name        = nil
-			new_gift.receiver_phone       = nil
-			new_gift.foursquare_id        = nil
-			new_gift.facebook_id          = nil
+			new_gift.remove_receiver
 		end
-		# new_gift.special_instructions   = nil
+		new_gift.order_num  = nil
 		return new_gift
+	end
+
+	def remove_receiver
+		self.receiver_id    = nil
+		self.receiver_name  = nil
+		self.facebook_id    = nil
+		self.receiver_phone = nil
+		self.receiver_email = nil
+		self.status 		= "unpaid"
 	end
 
 	def add_receiver receiver
 		self.receiver_id    = receiver.id
-		self.receiver_name  = receiver.fullname
+		self.receiver_name  = receiver.name
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
 		self.receiver_phone = receiver.phone ? receiver.phone : nil
 		self.receiver_email = receiver.email ? receiver.email : nil
 		self.status 		= 'open' if self.status == "incomplete"
 	end
 
-	def add_giver giver
-		self.giver_id   = giver.id
-		self.giver_name = giver.fullname
+	def add_giver sender
+		self.giver_id   = sender.id
+		self.giver_name = sender.name
 	end
 
 	def add_provider provider
@@ -253,9 +258,13 @@ class Gift < ActiveRecord::Base
 		self.anon_id    = giver_id
 	end
 
+###############
+
+##########  shopping cart methods
+
 	def ary_of_shopping_cart_as_hash
-		cart 	 = JSON.parse self.shoppingCart
-		item_ary = []
+		cart 	  = JSON.parse self.shoppingCart
+		item_ary  = []
 		cart.each do |item|
 			item_ary << item
 		end
@@ -272,51 +281,6 @@ class Gift < ActiveRecord::Base
 
 private
 
-	# def notify_receiver
-	#   if self.receiver_email
-	#     puts "emailing the gift receiver for #{self.id}"
-	#     # notify the receiver via email
-	#     user_id = self.receiver_id.nil? ?  'NID' : self.receiver_id
-	#     Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => self.id, :email => self.receiver_email})
-	#   end
-	# end
-
-	# def invoice_giver
-	#   puts "emailing the gift giver for #{self.id}"
-	#   # notify the giver via email
-	#   Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id})
-	# end
-
-	def create_notification
-		puts "the gift status is #{self.status}"
-		case self.status
-		when 'incomplete'
-			puts "Relay created for gift #{self.id}"
-			# Relay.createRelayFromGift self
-			# send no push
-		when 'open'
-			puts "Relay created for gift if there is none #{self.id}"
-			# relay = Relay.createRelayFromGift self
-			# if relay.errors.messages.has_key? :gift_id
-			# 	relay = Relay.updateRelayFromGift self
-			# end
-			# send push to receiver here via db
-
-		when 'notified'
-			puts "Relay updated to notified for gift #{self.id}"
-			# relay = Relay.updateRelayFromGift self
-			# send push to provider here
-		when 'redeemed'
-			puts "Relay updated to redeemed for gift #{self.id}"
-			# relay = Relay.updateRelayFromGift self
-			# send push to giver here
-		when 'regifted'
-			puts "Relay updated to regifted for gift #{self.id}"
-			# relay = Relay.updateRelayFromGift self
-			# do not send push to new receiver here .. sent by new re-gift
-		end
-	end
-
 	def update_shoppingCart
 		updated_shoppingCart_array = []
 		self.gift_items.each do |item|
@@ -325,13 +289,6 @@ private
 		end
 		puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
 		self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
-	end
-
-	def extract_phone_digits
-		if self.receiver_phone && !self.receiver_phone.empty?
-			phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)
-			self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
-		end
 	end
 
 	def add_giver_name
@@ -347,7 +304,7 @@ private
 		old_gift.update_attributes(status: 'regifted')
 	end
 
-	def regift_id?
+	def regift?
 		self.regift_id
 	end
 end
