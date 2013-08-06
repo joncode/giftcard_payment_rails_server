@@ -8,7 +8,7 @@ module Formatter
     end
 
     def phone_exists?
-        !self.phone_num.blank? && self.phone_num.length > 9
+        !self.phone.blank? && self.phone.length > 9
     end
 
     def format_currency_as_string(float)
