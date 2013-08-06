@@ -71,6 +71,10 @@ class Gift < ActiveRecord::Base
 		self.receiver_phone
 	end
 
+	def phone= phone_number
+		self.receiver_phone = phone_number
+	end
+
 ##########  gift credit card methods
 
 	def set_status
