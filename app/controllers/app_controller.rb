@@ -122,7 +122,7 @@ class AppController < JsonController
  			response     = MenuString.get_menu_for_provider(provider_id.to_i)
  			logmsg 	     = response
  		else
- 			response["error"] = "user was not found in database"
+ 			response["error"] = database_error
  			logmsg 	     = response.to_s
  		end
 
@@ -132,6 +132,31 @@ class AppController < JsonController
 	    	format.json { render json: response }
 	    end
  	end
+
+    def menu_v2
+
+        response = {}
+
+        if authenticate_public_info
+            provider_id  = params["data"]
+            response["success"]   = MenuString.get_menu_v2_for_provider(provider_id.to_i)
+            logmsg       = response
+            if response["success"].nil?
+                response["error"] = database_error
+                response.delete("success")
+            end
+        else
+            response["error"] = database_error
+            logmsg       = response.to_s
+        end
+
+        respond_to do |format|
+            # logger.debug response
+            @app_response = "AC response => #{logmsg}"
+            format.json { render json: response }
+        end
+    end
+
 
  	def gifts
 

@@ -7,16 +7,34 @@ class MenuString < ActiveRecord::Base
 
   	after_save :update_merchant
 
-  	def update_merchant
-        unless self.menu.nil?
-  		    self.provider.update_attribute(:menu_is_live, true)
+    def self.get_menu_v2_for_provider provider_id
+        menu_string = MenuString.find_by_provider_id(provider_id)
+        if menu_string
+            if menu_string.menu
+                return menu_string.menu
+            elsif  menu_string.data
+                # generate menu_string.menu lazy
+                menu_json        = create_new_menu_string menu_string.data
+                menu_string.menu = menu_json
+                menu_string.save
+                return menu_json
+            else
+                # source the menu from merchant tools
+                nil
+            end
+        else
+            # provider id is incorrect
+            nil
         end
-  	end
+    end
+
+#########    DEPRECATED - these will not work with menu now sourced on merchant tools
 
    	def self.get_menu_for_provider(provider_id)
+
   		menu_string = MenuString.find_by_provider_id(provider_id)
   		if !menu_string
-			menu_string = MenuString.new
+			menu_string      = MenuString.new
 			menu_string_data = menu_string.generate_new_menu_string(provider_id)
 		elsif menu_string.version == 1
   			menu_string_data = menu_string.generate_menu_string(provider_id)
@@ -27,6 +45,37 @@ class MenuString < ActiveRecord::Base
 		return menu_string_data
   	end
 
+    def self.compile_menu_to_menu_string(provider_id)
+        menu_string = MenuString.find_by_provider_id(provider_id)
+        if !menu_string
+            menu_string = MenuString.new
+            menu_string_data = menu_string.generate_new_menu_string(provider_id)
+        else
+            menu_string_data = menu_string.generate_menu_string(provider_id)
+        end
+
+        return true
+    end
+
+################
+
+private
+
+    def create_new_menu_string old_menu
+        old_menu = JSON.parse(old_menu) if old_menu.kind_of?(String)
+        old_menu.map do |s|
+            { "section" => s.keys[0] , "items" => s[s.keys[0]] }
+        end.to_json
+    end
+
+    def update_merchant
+        unless self.menu.nil?
+            self.provider.update_attribute(:menu_is_live, true)
+        end
+    end
+
+####### DEPRECATED - these will not work with menu now sourced on merchant tools
+
 			# remake menu string from menu
 	def generate_new_menu_string(provider_id)
 		self.full_address 	= Provider.find(provider_id).complete_address
@@ -36,9 +85,8 @@ class MenuString < ActiveRecord::Base
 
 	def generate_menu_string(provider_id)
 		menu_string_data = Menu.get_full_menu_array(provider_id).to_json
-
-		self.data = menu_string_data
-		puts "IN GENERATE MENU STRING"
+        puts "IN GENERATE MENU STRING - SHOULD NEVER BE HERE !!!"
+		self.data           = menu_string_data
 		self.version 		= 2
 		sections_array 		= Menu.get_sections(provider_id)
 		self.sections_json 	= sections_array.to_json
@@ -52,17 +100,8 @@ class MenuString < ActiveRecord::Base
 		return menu_string_data
 	end
 
-	def self.compile_menu_to_menu_string(provider_id)
-		menu_string = MenuString.find_by_provider_id(provider_id)
-		if !menu_string
-			menu_string = MenuString.new
-			menu_string_data = menu_string.generate_new_menu_string(provider_id)
-		else
-  			menu_string_data = menu_string.generate_menu_string(provider_id)
-  		end
+###############
 
-		return true
-	end
 end
 
 

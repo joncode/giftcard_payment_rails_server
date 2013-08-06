@@ -14,6 +14,15 @@ module App
                 respond
             end
 
+            def menu
+                if menu = MenuString.get_menu_v2_for_provider(params["data"].to_i)
+                    success menu
+                else
+                    fail    database_error
+                end
+                respond
+            end
+
         end
     end
 end

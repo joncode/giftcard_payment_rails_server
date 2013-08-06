@@ -139,6 +139,7 @@ Drinkboard::Application.routes.draw do
   match 'app/complete_order',   to: 'app#create_order_emp',    via: :post
   match 'app/order_confirm',    to: 'app#create_order',        via: :post
   match 'app/menu',             to: 'app#menu',                via: :post
+  match 'app/menu_v2',          to: 'app#menu_v2',             via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
   match 'app/others_questions', to: 'app#others_questions',    via: :post
   match 'app/transactions',     to: 'app#transactions',        via: :post
@@ -184,7 +185,8 @@ Drinkboard::Application.routes.draw do
   ## SERVICES ROUTES (app . mdot)
   namespace :app, defaults: { format: 'json' } do
     namespace :v2 do
-      get 'regift', to: 'iphone#regifter'
+      post 'regift',  to: 'iphone#regifter'
+      post 'menu',    to: 'iphone#menu'
     end
   end
 

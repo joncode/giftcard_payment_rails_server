@@ -108,8 +108,8 @@ class IphoneController < AppController
 
 	def going_out
 
-					# send the button status in params["public"]
-					# going out is YES , returning home is NO
+			# send the button status in params["public"]
+			# going out is YES , returning home is NO
 		response  = {}
 		begin
 			user  = User.find_by_remember_token(params["token"])
