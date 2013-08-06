@@ -18,14 +18,14 @@ class Gift < ActiveRecord::Base
 # "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":1,\"item_id\":920,\"item_name\":\"Fireman's Special\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":901,\"item_name\":\"Corona\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":902,\"item_name\":\"Budwesier\"}]",
 # "token"=>"LlWODlRC9M3VDbzPHuWMdA"}
 
-	has_one     :redeem, dependent: :destroy
-	has_one     :relay,  dependent: :destroy
+	has_one     :redeem, 		dependent: :destroy
+	has_one     :relay,  		dependent: :destroy
 	belongs_to  :provider
 	has_many    :sales
-	has_one     :order, dependent: :destroy
-	has_many    :gift_items, dependent: :destroy
-	belongs_to  :giver,    class_name: "User"
-	belongs_to  :receiver, class_name: "User"
+	has_one     :order, 		dependent: :destroy
+	has_many    :gift_items, 	dependent: :destroy
+	belongs_to  :giver,    		class_name: "User"
+	belongs_to  :receiver, 		class_name: "User"
 
 	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip, :credit_card
 
@@ -35,6 +35,8 @@ class Gift < ActiveRecord::Base
 	before_create :set_status
 
 	after_create  :update_shoppingCart
+
+#/---------------------------------------------------------------------------------------------/
 
 	def serialize
 		sender      = giver

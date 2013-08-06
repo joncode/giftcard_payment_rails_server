@@ -9,7 +9,7 @@ class Provider < ActiveRecord::Base
 	 :bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
+	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
 
 	has_many   :users, :through => :employees
 	has_many   :employees, dependent: :destroy
@@ -38,6 +38,9 @@ class Provider < ActiveRecord::Base
 
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
+
+
+#/---------------------------------------------------------------------------------------------/
 
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city, :latitude, :longitude]
