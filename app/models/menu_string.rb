@@ -59,7 +59,7 @@ class MenuString < ActiveRecord::Base
 
 ################
 
-private
+
 
     def create_new_menu_string old_menu
         old_menu = JSON.parse(old_menu) if old_menu.kind_of?(String)
@@ -67,6 +67,8 @@ private
             { "section" => s.keys[0] , "items" => s[s.keys[0]] }
         end.to_json
     end
+
+private
 
     def update_merchant
         unless self.menu.nil?
