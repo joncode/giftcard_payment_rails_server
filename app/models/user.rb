@@ -240,11 +240,7 @@ class User < ActiveRecord::Base
 	def providers_to_iphone
 			# find out how many merchants the user is connected to
 		merchants = self.providers.dup
-		response  = []
-		merchants.each do |m|
-			response << m.table_photo_hash
-		end
-		return response
+		merchants.map { |m| m.table_photo_hash }
 	end
 
 	def is_employee? provider

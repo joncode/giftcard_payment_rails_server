@@ -1,7 +1,7 @@
 class Card < ActiveRecord::Base
 	include ActiveMerchant::Billing::CreditCardMethods
 	include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
-	
+
 	@@CreditCardSecretKey = "Yes yes yes"
 	PASSPHRASE = "Theres no place like home"
 	attr_accessor :number, :passphrase, :iv
@@ -13,16 +13,16 @@ class Card < ActiveRecord::Base
 	validate :check_for_credit_card_validity
 	validate :month_and_year_should_be_in_future
 	validates_presence_of :passphrase
-  	
+
   	has_many   :sales
 	belongs_to :user
 	has_many   :gifts, 	through: :sales
 	has_many   :orders,	through: :sales
-		
+
 	before_validation :convert_number_to_string
 	before_save 	  :crypt_number
 	before_save 	  :save_last_four
-	
+
 	def self.create_card_from_hash cc_hash
 		x = cc_hash.kind_of? Hash
 		puts "in create_card_from_hash = #{cc_hash}, is it hash ? #{x}"
@@ -40,14 +40,19 @@ class Card < ActiveRecord::Base
 		return card
 	end
 
+	# def self.get_cards user
+	# 	cards = Card.find_all_by_user_id(user.id)
+	# 	display_cards = []
+	# 	cards.each do |card|
+	# 		card_hash = {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname}
+	# 		display_cards << card_hash
+	# 	end
+	# 	return display_cards
+	# end
+
 	def self.get_cards user
 		cards = Card.find_all_by_user_id(user.id)
-		display_cards = []
-		cards.each do |card|
-			card_hash = {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname}
-			display_cards << card_hash
-		end
-		return display_cards
+		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
 	end
 
 
@@ -80,7 +85,7 @@ class Card < ActiveRecord::Base
 	end
 
 	def number=(number)
-		@number = number	
+		@number = number
 	end
 
 	def sd_serialize
@@ -121,11 +126,11 @@ class Card < ActiveRecord::Base
 		def crypt_number
 		    c = cipher
 		    c.encrypt
-		    c.key = key 
+		    c.key = key
 		    c.iv = self.iv = generate_iv(passphrase)
 		    temp_number = c.update(@number)
 		    temp_number << c.final
-		    self.number_digest = encode_into_base64(temp_number) 
+		    self.number_digest = encode_into_base64(temp_number)
 		end
 
 		# Decrypts the credit card number
@@ -147,7 +152,7 @@ class Card < ActiveRecord::Base
 		def decode_from_base64 string
 		  Base64.decode64(string)
 		end
-		
+
 		def cipher
 			OpenSSL::Cipher::Cipher.new("aes-256-cbc")
 		end

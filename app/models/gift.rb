@@ -269,12 +269,7 @@ class Gift < ActiveRecord::Base
 ##########  shopping cart methods
 
 	def ary_of_shopping_cart_as_hash
-		cart 	  = JSON.parse self.shoppingCart
-		item_ary  = []
-		cart.each do |item|
-			item_ary << item
-		end
-		return item_ary
+		JSON.parse self.shoppingCart
 	end
 
 	def make_gift_items shoppingCart_array
@@ -288,11 +283,7 @@ class Gift < ActiveRecord::Base
 private
 
 	def update_shoppingCart
-		updated_shoppingCart_array = []
-		self.gift_items.each do |item|
-			item_hash = item.prepare_for_shoppingCart
-			updated_shoppingCart_array << item_hash
-		end
+		updated_shoppingCart_array = self.gift_items.map { |item| item.prepare_for_shoppingCart }
 		puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
 		self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
 	end

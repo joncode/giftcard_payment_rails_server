@@ -30,15 +30,11 @@ class ApplicationController < ActionController::Base
 
 
 	def create_menu_from_items(provider)
-		menu_bulk = Menu.where(provider_id: provider.id)
-		items = []
-		menu_bulk.each do |item|
-			 indi = Item.find(item.item_id)
-			 price = item.price
-			 item_array = [indi, price]
-			 items << item_array
+		menu_bulk  = Menu.where(provider_id: provider.id)
+		menu_bulk.map do |item|
+			 indi  = Item.find(item.item_id)
+			 [indi, item.price]
 		end
-		return items
 	end
 
 	def human_readable_error_message obj

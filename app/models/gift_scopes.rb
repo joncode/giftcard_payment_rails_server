@@ -56,14 +56,12 @@ module GiftScopes
 
     def transactions user
         gifts_raw = where(giver_id: user.id, status: ["open","redeemed", "notified", "incomplete"]).order("created_at DESC")
-        gifts     = []
-        gifts_raw.each do |g|
-            gift_hash = g.serializable_hash only: [ :provider_name, :total, :receiver_name]
+        gifts_raw.map do |g|
+            gift_hash               = g.serializable_hash only: [ :provider_name, :total, :receiver_name]
             gift_hash["gift_id"]    = g.id
             gift_hash["created_at"] = g.created_at.to_date.inspect
-            gifts                   << gift_hash
+            gift_hash
         end
-        gifts
     end
 
 ##### PROVIDER SCOPES
