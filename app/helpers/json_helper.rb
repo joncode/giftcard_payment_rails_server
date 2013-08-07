@@ -29,13 +29,13 @@ module JsonHelper
         msgs = object.errors.messages
         msgs.stringify_keys!
         msgs.each_key do |key|
-            value_as_ary    = msgs[key]
-            if value_as_array.kind_of? Array
-                value_as_string = value_as_ary.join(' | ')
-            else
-                value_as_string = value_as_ary
-            end
-            msgs[key]       = value_as_string
+            value_as_ary = msgs[key]
+            msgs[key] =
+                if value_as_ary.kind_of? Array
+                    value_as_ary.join(' | ')
+                else
+                    value_as_ary
+                end
         end
         msgs
     end
