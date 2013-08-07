@@ -139,12 +139,8 @@ class AppController < JsonController
 
         if authenticate_public_info
             provider_id  = params["data"]
-            response["success"]   = MenuString.get_menu_v2_for_provider(provider_id.to_i)
+            response     = MenuString.get_menu_v2_for_provider(provider_id.to_i)
             logmsg       = response
-            if response["success"].nil?
-                response["error"] = database_error
-                response.delete("success")
-            end
         else
             response["error"] = database_error
             logmsg       = response.to_s
