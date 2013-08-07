@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
 	helper :all
 	include CommonUtils
 	include SessionsHelper
+
 	# before_filter :prepare_for_mobile
 	before_filter :method_start_log_message
 	after_filter  :method_end_log_message
@@ -18,14 +19,14 @@ class ApplicationController < ActionController::Base
 	end
 
 	def populate_locals
-			id = params[:id].to_i
-			@provider       = Provider.find(id) if id > 0
-			@current_user   = current_user
+		id = params[:id].to_i
+		@provider       = Provider.find(id) if id > 0
+		@current_user   = current_user
 	end
 
 	def sanitize_filename(file_name)
-			just_filename = File.basename(file_name)
-			just_filename.sub(/[^\w\.\-]/,'_')
+		just_filename = File.basename(file_name)
+		just_filename.sub(/[^\w\.\-]/,'_')
 	end
 
 
@@ -53,50 +54,34 @@ class ApplicationController < ActionController::Base
 		return message_ary
 	end
 
-	# def method_start_log_message
-	# 	x = params.dup
-	# 	x.delete('controller')
-	# 	x.delete('action')
-	# 	x.delete('format')
-	# 	puts "#{log_message_header} request: #{x}"
-	# end
+private
 
-	# def method_end_log_message
-	# 	print "END #{log_message_header} "
-	# 	puts "response: #{@app_response}" if @app_response
-	# end
-
-	private
-
-		def mobile_device?
-			if session[:mobile]
-				session[:mobile] == "1"
-			else
-				if request.user_agent =~ /Mobile|webOS/
-					request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
-					false
-					 # ^^ remove this is you want this to work
-				else
-					false
-				end
-			end
-		end
-
-		def sniff_browser
+	def mobile_device?
+		if session[:mobile]
+			session[:mobile] == "1"
+		else
 			if request.user_agent =~ /Mobile|webOS/
 				request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
+				false
+				 # ^^ remove this is you want this to work
 			else
 				false
 			end
 		end
+	end
 
-		def prepare_for_mobile
-			session[:mobile] = params[:mobile] if params[:mobile]
-			#  request.format   = :mobile if mobile_device?
+	def sniff_browser
+		if request.user_agent =~ /Mobile|webOS/
+			request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
+		else
+			false
 		end
+	end
 
-		# def log_message_header
-	 #        "#{params["controller"].upcase} -#{params["action"].upcase}-"
-	 #    end
+	def prepare_for_mobile
+		session[:mobile] = params[:mobile] if params[:mobile]
+		#  request.format   = :mobile if mobile_device?
+	end
+
 
 end

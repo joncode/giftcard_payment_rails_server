@@ -38,14 +38,8 @@ class Menu < ActiveRecord::Base
 				sections[mi.section] = ""
 			end
 		end
+		BEVERAGE_CATEGORIES.select {|cat| sections.has_key? cat }
 
-		sections_array = []
-		BEVERAGE_CATEGORIES.each do |cat|
-			if sections.has_key? cat
-				sections_array << cat
-			end
-		end
-		return sections_array
 	end
 
 	def self.get_menu_in_section(provider_id, section_name)

@@ -40,22 +40,10 @@ class Card < ActiveRecord::Base
 		return card
 	end
 
-	# def self.get_cards user
-	# 	cards = Card.find_all_by_user_id(user.id)
-	# 	display_cards = []
-	# 	cards.each do |card|
-	# 		card_hash = {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname}
-	# 		display_cards << card_hash
-	# 	end
-	# 	return display_cards
-	# end
-
 	def self.get_cards user
 		cards = Card.find_all_by_user_id(user.id)
 		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
 	end
-
-
 
 	def verification_value?
        false
