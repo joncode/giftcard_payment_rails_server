@@ -34,11 +34,26 @@ class Sale < ActiveRecord::Base
 		return sale_obj
 	end
 
-    def void_sale
-        n = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
-        @response = n.void self.transaction_id
-        gift      = self.gift
-        # de-activate gift here
+    def void_sale gift=nil
+        gift      = self.gift if gift.nil?
+        auth_obj  = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
+        @response = auth_obj.void(self.transaction_id)
+
+        if @response.resp_code == 1
+            # sale is voided
+            # set gift to proper status
+            if gift.status = "redeemed"
+                new_status = "refund_cancel" || "cancel"
+                gift.update_attribute(:status, new_status)
+            else
+                gift.update_attribute(:status, "refund_void")
+            end
+            return gift.status
+        else
+            # gift unable to be voided
+            @response.response_reason_text
+        end
+
     end
 
 	def auth_capture

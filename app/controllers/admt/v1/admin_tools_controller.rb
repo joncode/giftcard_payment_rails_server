@@ -45,9 +45,18 @@ module Admt
 
             def cancel
                 gift = Gift.find(params["data"].to_i)
+                case gift.status
+                when "unpaid"
+                    # void the gift - no sale
+                    gift.update_attribute(:status, "void")
+                    response = gift.status
+                else
+                    sale     = gift.sale
+                    response = sale.void_sale gift
+                end
 
                 if gift
-                    success "Gift cancelled."
+                    success response
                 else
                     fail    "Error De-Activating Unpaid gift"
                 end
