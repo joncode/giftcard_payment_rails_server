@@ -8,7 +8,12 @@ module Admt
     #####  Gift Methods
 
             def gifts
-                gifts = Gift.order("updated_at DESC")
+                if params["data"]
+                    gifts = Gift.get_all_for_provider params["data"].to_i
+                else
+                    gifts = Gift.get_all
+                end
+
                 if gifts.count > 0
                     success array_these_gifts( gifts, ADMIN_REPLY, false , false , true )
                 else

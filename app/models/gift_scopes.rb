@@ -6,6 +6,10 @@ module GiftScopes
         order("created_at DESC")
     end
 
+    def get_all
+        order("updated_at DESC")
+    end
+
 #### USER SCOPES
 
     def get_gifts user
@@ -63,6 +67,10 @@ module GiftScopes
     end
 
 ##### PROVIDER SCOPES
+
+    def get_all_for_provider provider_id
+        where(provider_id: provider_id).order("updated_at DESC")
+    end
 
     def get_activity_at_provider provider
         where(provider_id: provider.id).order("created_at ASC")
