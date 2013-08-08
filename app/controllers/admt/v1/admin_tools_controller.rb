@@ -87,7 +87,7 @@ module Admt
             end
 
             def users
-                users = User.order("updated_at DESC")
+                users = User.order("last_name ASC")
                 if users.count > 0
                     success users.serialize_objs :admt
                 else
@@ -132,7 +132,7 @@ module Admt
     #####   Brand Routes
 
             def brands
-                brands = Brand.order("updated_at DESC")
+                brands = Brand.order("name ASC")
                 if brands.count > 0
                     success brands.serialize_objs
                 else
