@@ -14,7 +14,7 @@ class MenuString < ActiveRecord::Base
                 return menu_string.menu
             elsif  menu_string.data
                 # generate menu_string.menu lazy
-                menu_json        = create_new_menu_string menu_string.data
+                menu_json        = menu_string.create_new_menu_string menu_string.data
                 menu_string.menu = menu_json
                 menu_string.save
                 return menu_json
@@ -26,6 +26,13 @@ class MenuString < ActiveRecord::Base
             # provider id is incorrect
             nil
         end
+    end
+
+    def create_new_menu_string old_menu
+        old_menu = JSON.parse(old_menu) if old_menu.kind_of?(String)
+        old_menu.map do |s|
+            { "section" => s.keys[0] , "items" => s[s.keys[0]] }
+        end.to_json
     end
 
 #########    DEPRECATED - these will not work with menu now sourced on merchant tools
@@ -58,15 +65,6 @@ class MenuString < ActiveRecord::Base
     end
 
 ################
-
-
-
-    def create_new_menu_string old_menu
-        old_menu = JSON.parse(old_menu) if old_menu.kind_of?(String)
-        old_menu.map do |s|
-            { "section" => s.keys[0] , "items" => s[s.keys[0]] }
-        end.to_json
-    end
 
 private
 
