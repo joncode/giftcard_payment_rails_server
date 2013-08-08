@@ -17,8 +17,14 @@ class Question < ActiveRecord::Base
                 if answer.question_id   == question.id
                     if answer.answer    == question.left
                         qHash["answer"]  = "0"
+                            # lazy fix of answer from text to integer_string
+                        answer.update_attributes(answer: "0")
                     elsif answer.answer == question.right
                         qHash["answer"]  = "1"
+                            # lazy fix of answer from text to integer_string
+                        answer.update_attributes(answer: "1")
+                    elsif answer.answer.to_i >= 0
+                        qHash["answer"]  = answer.answer
                     end
                 end
             end
