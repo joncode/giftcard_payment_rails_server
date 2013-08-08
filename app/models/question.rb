@@ -5,28 +5,27 @@ class Question < ActiveRecord::Base
     has_many :users , :through => :answers
 
     def self.get_questions_with_answers(user)
-        total = []
-        questions = Question.all
-        answers = Answer.where(user_id: user.id) 
         puts "in questions w answers"
-        questions.each do |question|
-            qHash = question.serializable_hash only: [:left, :right]
+
+        questions = Question.all
+        answers   = Answer.where(user_id: user.id)
+
+        questions.map do |question|
+            qHash                = question.serializable_hash only: [:left, :right]
             qHash["question_id"] = question.id
-            if answers.length > 0
-                answers.each do |answer|
-                    if answer.question_id   == question.id
-                        if answer.answer    == question.left
-                            qHash["answer"]  = "0"
-                        elsif answer.answer == question.right
-                            qHash["answer"]  = "1"
-                        end  
+            answers.each do |answer|
+                if answer.question_id   == question.id
+                    if answer.answer    == question.left
+                        qHash["answer"]  = "0"
+                    elsif answer.answer == question.right
+                        qHash["answer"]  = "1"
                     end
                 end
             end
-            # puts " HERE IS THE QHASH #{qHash}"
-            total << qHash
+            puts " HERE IS THE QHASH #{qHash}"
+            qHash
         end
-        return total
+
     end
 
 
@@ -58,7 +57,7 @@ class Question < ActiveRecord::Base
             six_new_qs = Question.limit 6
         end
 
-        puts "HERE ARE NEW QUESTIONS #{six_new_qs.inspect}" 	
+        puts "HERE ARE NEW QUESTIONS #{six_new_qs.inspect}"
       	return six_new_qs
     end
 end

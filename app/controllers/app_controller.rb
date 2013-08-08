@@ -293,7 +293,7 @@ class AppController < JsonController
   		# user  = User.find_by_remember_token(params["token"])
 
   		begin
-  			other_user = User.find(params["user_id"].to_i)
+  			other_user   = User.find(params["user_id"].to_i)
 	  			# get new pack of questions
 			begin
 	  			response = Question.get_questions_with_answers(other_user)

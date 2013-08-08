@@ -4,6 +4,10 @@
 module CommonUtils
 	include ActionView::Helpers::TextHelper
 
+	def log_request_header
+		puts "HERE IS THE HEADER REQUEST #{request.headers}"
+	end
+
 	def log_message_header
 		"#{params["controller"].upcase} -#{params["action"].upcase}-"
 	end
