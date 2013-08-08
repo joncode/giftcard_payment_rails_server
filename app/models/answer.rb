@@ -12,14 +12,21 @@ class Answer < ActiveRecord::Base
   		if answer = Answer.where(user_id: user.id, question_id: a["question_id"]).pop
   			if answer.answer != a["answer"]
   				answer.update_attributes(answer: a["answer"])
-          puts "updated = answer = #{answer}"
+          puts "updated answer = #{answer.inspect}"
   			end
   		else
   			a["user_id"]= user.id
   			answer = Answer.create(a)
-        puts "created = answer = #{answer} "
+        puts "created answer = #{answer.inspect} "
       end
   	end
+  end
+
+  def self.where *args, &block
+    puts "here we go"
+    r = super
+    puts "hey => #{r.inspect}"
+    r
   end
 end
 # == Schema Information
