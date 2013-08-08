@@ -16,7 +16,7 @@ module Admt
             end
 
             def users
-                users = User.order("updated_at DESC")
+                users = User.order("name ASC")
                 if users.count > 0
                     success serialize_objs_in_ary users
                 else

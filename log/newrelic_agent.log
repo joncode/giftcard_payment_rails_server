@@ -455,3 +455,21 @@
 [07/25/13 23:47:38 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass
 [07/25/13 23:47:42 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass
 [07/25/13 23:47:42 -0400 new-host-5.home (1187)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `>' for false:FalseClass
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Starting the New Relic agent in "development" environment.
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Reading configuration from config/newrelic.yml
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Enabling the Request Sampler.
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] ERROR : No application name configured.
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] ERROR : The Agent cannot start without at least one. Please check your 
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] ERROR : value set for app_name in the development 
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] ERROR : environment.
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Installing ActiveMerchant instrumentation
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Installing ActiveRecord instrumentation
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Installing Net instrumentation
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Installing Sinatra instrumentation
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Installing Resque instrumentation
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Installing Rails 3 Controller instrumentation
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Installing Rails3 Error instrumentation
+[08/08/13 16:33:41 -0400 new-host-2.home (47810)] INFO : Finished instrumentation
