@@ -39,15 +39,15 @@ class ApplicationController < ActionController::Base
 	end
 
 	def human_readable_error_message obj
-		messages = obj.errors.messages
 		message_ary = ["Error! Data not saved"]
-		messages.each_key do |k|
+		obj.errors.messages.each_key do |k|
 			if k != :password_digest
-				values = messages[k]
-				values.each do |v|
-					human_str = "#{k.to_s} "
-					human_str += v
-					message_ary << human_str
+				messages[k].each do |v|
+					message_ary << "#{k.to_s.titleize} #{v}"
+				end
+			else
+				messages[k].each do |v|
+					message_ary << "Password #{v}"
 				end
 			end
 		end

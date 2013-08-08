@@ -39,20 +39,11 @@ class Menu < ActiveRecord::Base
 			end
 		end
 		BEVERAGE_CATEGORIES.select {|cat| sections.has_key? cat }
-
 	end
 
 	def self.get_menu_in_section(provider_id, section_name)
-		# category = BEVERAGE_CATEGORIES.index(section_name)
-		menu_items = Menu.where(provider_id: provider_id)
-		menu_section = []
-		menu_items.each do |menu|
-			if menu.section == section_name
-				menu_display = menu.display_object
-				menu_section << menu_display
-			end
-		end
-		return menu_section
+		menu_items = Menu.where(provider_id: provider_id, section: section_name)
+		menu_items.map { |menu| menu.display_object }
 	end
 
 	def self.get_full_menu_array(provider_id,sections_array=nil)

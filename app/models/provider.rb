@@ -202,21 +202,8 @@ class Provider < ActiveRecord::Base
 	end
 
 	def users_not_staff
-		employees = self.employees
-		ids       = employees.map {|e| e.user_id }
-		people    = []
-		users     = User.all
-		users.each do |user|
-			if ids.include? user.id
-				employee = Employee.where(user_id: user.id, provider_id: self.id).pop
-				if employee.active == false
-					people << user
-				end
-			else
-				people << user
-			end
-		end
-		return people
+		staff_ids = self.employees.where(active: true).map { |e| e.user_id }
+		User.all.delete_if { |user| staff_ids.include? user.id }
 	end
 
 	def employees_to_app
