@@ -5,7 +5,13 @@ module CommonUtils
 	include ActionView::Helpers::TextHelper
 
 	def log_request_header
-		puts "HERE IS THE HEADER REQUEST #{request.headers}"
+		if request.headers['app_version']
+			puts "HERE IS THE HEADER REQUEST #{request.headers['app_version']}"
+		end
+
+		if request.headers["HTTP_COOKIE"]
+			puts "HERE IS THE HEADER #{request.headers["HTTP_COOKIE"]}"
+		end
 	end
 
 	def log_message_header
