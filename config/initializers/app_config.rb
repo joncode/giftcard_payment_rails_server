@@ -22,11 +22,8 @@ APP_CONFIG = ENV["RAILS_ENV"] == "development" ? HashWithIndifferentAccess.new(y
 class Array
 
     def serialize_objs api=nil
-        if api == :admt
-            map { |o| o.admt_serialize }
-        else
-            map { |o| o.serialize }
-        end
+        serialize_type = api ? "#{api}_serialize" : "serialize"
+        map { |o| o.send serialize_type }
     end
 
 end
