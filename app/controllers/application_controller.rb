@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
 	include SessionsHelper
 
 	# before_filter :prepare_for_mobile
+	before_filter :log_request_header
 	before_filter :method_start_log_message
 	after_filter  :method_end_log_message
 	helper_method :mobile_device?

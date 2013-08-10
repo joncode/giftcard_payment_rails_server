@@ -61,7 +61,7 @@ class MerchantsController < JsonController
 		else
 			response["error_server"] = authentication_data_error
 			response["status"]	     = false
-			response["message"]      = uauthentication_data_error
+			response["message"]      = authentication_data_error
 		end
 
 		respond_to do |format|
