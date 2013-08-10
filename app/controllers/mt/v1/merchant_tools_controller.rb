@@ -35,6 +35,27 @@ module Mt
                 respond
             end
 
+            def orders
+                provider = Provider.find_by_token params["token"]
+                gifts =
+                    if params["page"]    == "new"
+                        Gift.get_provider(provider)
+                    elsif params["page"] == 'reports'
+                        start_time          = params["start_time"].to_datetime if params["start_time"]
+                        end_time            = params["end_time"].to_datetime   if params["end_time"]
+                        Gift.get_history_provider_and_range(provider, start_time, end_time )
+                    else
+                        Gift.get_history_provider(provider)
+                    end
+
+                if gifts
+                    success array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+                else
+                    fail    database_error
+                end
+                respond
+            end
+
         end
     end
 end

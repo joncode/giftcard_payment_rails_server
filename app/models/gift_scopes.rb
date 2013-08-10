@@ -75,11 +75,7 @@ module GiftScopes
     end
 
     def get_provider provider
-        where(provider_id: provider.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
-    end
-
-    def get_all_orders provider
-        where(provider_id: provider.id).where("status != :stat OR status != :other", :stat => 'incomplete', :other => 'unpaid').order("updated_at DESC")
+        where(provider_id: provider.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
     end
 
     def get_history_provider provider
@@ -96,4 +92,7 @@ module GiftScopes
         end
     end
 
+    def get_all_orders provider
+        where(provider_id: provider.id).where("status != :stat OR status != :other", :stat => 'incomplete', :other => 'unpaid').order("updated_at DESC")
+    end
 end

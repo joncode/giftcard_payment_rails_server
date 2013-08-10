@@ -39,38 +39,6 @@ class MerchantsController < JsonController
 			end
 	end
 
-	def orders
-		response = {}
-
-		if provider = authenticate_mt_request(params["merchant_token"])
-
-			gifts = if params["status"] == "new"
-				Gift.get_provider(provider)
-			elsif params["status"] == 'reports'
-				start_time = params["start_time"].to_datetime if params["start_time"]
-				end_time   = params["end_time"].to_datetime   if params["end_time"]
-				# if there are start and end times
-				Gift.get_history_provider_and_range(provider, start_time, end_time )
-			else
-				Gift.get_history_provider(provider)
-			end
-
-			response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-			response["status"]	     = true
-			response["message"]      = response["success"]
-		else
-			response["error_server"] = authentication_data_error
-			response["status"]	     = false
-			response["message"]      = authentication_data_error
-		end
-
-		respond_to do |format|
-			# logger.debug gifts_array
-			@app_response = "AC response[0] => #{response.values[0][0]}"
-			format.json { render json: response }
-		end
-	end
-
 	def menu
 		# @menu_array     = Menu.get_menu_array_for_builder @provider
 		response = {}

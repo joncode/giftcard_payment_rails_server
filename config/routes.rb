@@ -109,7 +109,6 @@ Drinkboard::Application.routes.draw do
     ## merchant tools routes
   match 'mt/user_login',           to: 'merchants#login',        via: :post
   match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
-  match 'mt/orders',               to: 'merchants#orders',       via: :post
   match 'mt/menu',                 to: 'merchants#menu',         via: :post
   match 'mt/reports',              to: 'merchants#reports',      via: :post
   match 'mt/employees',            to: 'merchants#employees',    via: :post
@@ -214,6 +213,7 @@ Drinkboard::Application.routes.draw do
   namespace :mt, defaults: { format: 'json' } do
     namespace :v1 do
       post 'create_merchant', to: 'merchant_tools#create'
+      post 'orders',          to: 'merchant_tools#orders'
     end
   end
 
