@@ -1,14 +1,15 @@
 class Provider < ActiveRecord::Base
+	include Formatter
 
 	attr_accessible :address, :city, :description, :logo, :name,
 	:state, :user_id, :staff_id, :zip, :zinger, :phone, :email,
 	:twitter, :facebook, :website, :users, :photo, :photo_cache,
 	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
 	:account_name, :aba, :routing, :bank_account_name, :bank_address,
-	 :bank_city, :bank_state, :bank_zip, :sales_tax
+	 :bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
+	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
 
 	has_many   :users, :through => :employees
 	has_many   :employees, dependent: :destroy
@@ -27,25 +28,23 @@ class Provider < ActiveRecord::Base
 	mount_uploader :box,      ProviderBoxUploader
 	mount_uploader :portrait, ProviderPortraitUploader
 
-	validates_numericality_of :sales_tax
-	validates_length_of :state , :is => 2
-	validates_length_of :zip, :within => 5..10
-	validates_length_of :aba, :is => 9, :if => :aba_exists?
-	validates_length_of :routing, :within => 9..14, :if => :routing_exists?
-	validates_presence_of :name, :city, :address, :zip , :state, :phone, :sales_tax
-	validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
+	validates_presence_of :name, :city, :address, :zip , :state, :token
+	# validates_numericality_of :sales_tax
+	validates_length_of :state , 	:is => 2
+	validates_length_of :zip, 		:within => 5..10
+	validates_length_of :aba, 		:is => 9, 			:if => :aba_exists?
+	validates_length_of :routing, 	:within => 9..14,	:if => :routing_exists?
+	# validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 
-	before_save :extract_phone_digits
-	before_create :create_token      # creates unique  token for provider
-	after_create :make_menu_string
+	before_save 	:extract_phone_digits
+	after_create 	:make_menu_string
+
+
+#/---------------------------------------------------------------------------------------------/
 
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city, :latitude, :longitude]
-		if Rails.env.production?
-			prov_hash["provider_id"]  = self.id.to_s
-		else
-			prov_hash["provider_id"]  = self.id
-		end
+		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_image("photo")
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live
@@ -98,26 +97,6 @@ class Provider < ActiveRecord::Base
 		Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
 	end
 
-	def full_address
-		"#{self.address},  #{self.city}, #{self.state}"
-	end
-
-	def complete_address
-		"#{self.address}\n#{self.city_state_zip}"
-	end
-
-	def city_state_zip
-		"#{self.city}, #{self.state} #{self.zip}"
-	end
-
-	def get_photo
-		if self.photo.blank?
-			MERCHANT_DEFAULT_IMG
-		else
-			self.photo.url
-		end
-	end
-
 	def token
 		token = super
 		if token.nil?    # lazy create & save merchant token
@@ -145,30 +124,43 @@ class Provider < ActiveRecord::Base
 		super(sales_tax)
 	end
 
+	######   PHOTO GETTERS
+
 	def get_photo_for_web
-		if self.photo.blank?
-			MERCHANT_DEFAULT_IMG
+		get_photo
+	end
+
+	def get_photo
+		if image.blank?
+			if photo.blank?
+				MERCHANT_DEFAULT_IMG
+			else
+				photo.url
+			end
 		else
-			self.photo.url
+			image
 		end
 	end
 
 	def get_image(flag)
-		case flag
-		when "logo"
-			photo = self.logo.url
-		when "portrait"
-			photo = self.portrait.url
-		when "photo"
-			photo = self.photo.url
-		else
-			photo = self.box.url
+		image_url =
+			case flag
+			when "logo"
+				logo.url
+			when "portrait"
+				portrait.url
+			when "photo"
+				get_photo
+			else
+				box.url
+			end
+		if image_url.blank?
+			image_url = MERCHANT_DEFAULT_IMG
 		end
-		if photo.blank?
-			photo = MERCHANT_DEFAULT_IMG
-		end
-		return photo
+		return image_url
 	end
+
+	#################
 
 	def get_servers
 		# this means get people who are AT work not just employed
@@ -210,21 +202,8 @@ class Provider < ActiveRecord::Base
 	end
 
 	def users_not_staff
-		employees = self.employees
-		ids       = employees.map {|e| e.user_id }
-		people    = []
-		users     = User.all
-		users.each do |user|
-			if ids.include? user.id
-				employee = Employee.where(user_id: user.id, provider_id: self.id).pop
-				if employee.active == false
-					people << user
-				end
-			else
-				people << user
-			end
-		end
-		return people
+		staff_ids = self.employees.where(active: true).map { |e| e.user_id }
+		User.all.delete_if { |user| staff_ids.include? user.id }
 	end
 
 	def employees_to_app
@@ -281,27 +260,12 @@ class Provider < ActiveRecord::Base
 
 private
 
-	def extract_phone_digits
-		if phone_exists?
-			phone_match = self.phone.match(VALID_PHONE_REGEX)
-			self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
-		end
-	end
-
-	def phone_exists?
-		!self.phone.blank? && self.phone.length > 6
-	end
-
 	def aba_exists?
 		self.aba != nil && !self.aba.empty?
 	end
 
 	def routing_exists?
 		self.routing != nil && !self.routing.empty?
-	end
-
-	def create_token
-		self.token = SecureRandom.urlsafe_base64
 	end
 
 	def make_menu_string

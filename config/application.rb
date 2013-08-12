@@ -1,3 +1,5 @@
+FILTER_PARAMS = [:password, :password_digest, :token, :remember_token, :merchant_token, :merchant_tkn, :uid, :credit_number, :card_number, :verification_value]
+
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
@@ -37,20 +39,10 @@ module Drinkboard
     config.encoding = "utf-8"
 
     # Configure sensitive parameters which will be filtered from the log file.
-    FILTER_PARAMS = [:password, :password_confirmation, :token, :merchant_tkn, :merchant_token, :remember_token, :uid, :credit_number, :card_number, :verification_value]
     config.filter_parameters += FILTER_PARAMS
 
     # this stops rails from connecting the database before aset precompile which heroku will not allow
     config.assets.initialize_on_precompile = false
-
-    # AWS::S3::Base.establish_connection!(
-    #   :access_key_id     => 'AKIAJV7FFALBNSFCZPOA',
-    #   :secret_access_key => 'r8HxDXQWyx9G8Pa4w0Vkh5MyWk3W/Wf9s9rcrpjL'
-    # )
-    # Use SQL instead of Active Record's schema dumper when creating the database.
-    # This is necessary if your schema can't be completely dumped by the schema dumper,
-    # like if you have constraints or database-specific column types
-    # config.active_record.schema_format = :sql
 
     # Enforce whitelist mode for mass assignment.
     # This will create an empty whitelist of attributes available for mass-assignment for all models

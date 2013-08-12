@@ -109,7 +109,6 @@ Drinkboard::Application.routes.draw do
     ## merchant tools routes
   match 'mt/user_login',           to: 'merchants#login',        via: :post
   match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
-  match 'mt/orders',               to: 'merchants#orders',       via: :post
   match 'mt/menu',                 to: 'merchants#menu',         via: :post
   match 'mt/reports',              to: 'merchants#reports',      via: :post
   match 'mt/employees',            to: 'merchants#employees',    via: :post
@@ -139,6 +138,7 @@ Drinkboard::Application.routes.draw do
   match 'app/complete_order',   to: 'app#create_order_emp',    via: :post
   match 'app/order_confirm',    to: 'app#create_order',        via: :post
   match 'app/menu',             to: 'app#menu',                via: :post
+  match 'app/menu_v2',          to: 'app#menu_v2',             via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
   match 'app/others_questions', to: 'app#others_questions',    via: :post
   match 'app/transactions',     to: 'app#transactions',        via: :post
@@ -181,13 +181,40 @@ Drinkboard::Application.routes.draw do
   match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
   match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
 
+  ## SERVICES ROUTES (app . mdot)
+  namespace :app, defaults: { format: 'json' } do
+    namespace :v2 do
+      post 'regift',  to: 'iphone#regifter'
+      post 'menu',    to: 'iphone#menu'
+    end
+  end
+
   ## ADMIN TOOLS routes for API
   namespace :admt, defaults: { format: 'json' } do
-      namespace :v1 do
-        post 'add_key_app',   to: 'admin_tools#add_key'
-        post 'get_gifts',     to: 'admin_tools#gifts'
-        post 'get_app_users', to: 'admin_tools#users'
-        post 'get_brands',    to: 'admin_tools#brands'
-      end
+    namespace :v1 do
+      post 'add_key_app',       to: 'admin_tools#add_key'
+      post 'get_gifts',         to: 'admin_tools#gifts'
+      post 'get_gift',          to: 'admin_tools#gift'
+      post 'get_app_users',     to: 'admin_tools#users'
+      post 'get_app_user',      to: 'admin_tools#user'
+      post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
+      post 'get_brands',        to: 'admin_tools#brands'
+      post 'get_brand',         to: 'admin_tools#brand'
+      post 'go_live',           to: 'admin_tools#go_live'
+      post 'de_activate_user',  to: 'admin_tools#de_activate_user'
+      post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
+      post 'destroy_user',      to: 'admin_tools#destroy_user'
+      post 'de_activate_merchant', to: 'admin_tools#de_activate_merchant'
+      post 'cancel',            to: 'admin_tools#cancel'
+    end
   end
+
+  ## MERCHANT TOOLS routes for API
+  namespace :mt, defaults: { format: 'json' } do
+    namespace :v1 do
+      post 'create_merchant', to: 'merchant_tools#create'
+      post 'orders',          to: 'merchant_tools#orders'
+    end
+  end
+
 end

@@ -1,4 +1,6 @@
 class Gift < ActiveRecord::Base
+	extend  GiftScopes
+	include Formatter
 
 	attr_accessible   :giver_id,      :giver_name, :credit_card,
 			:receiver_id, :receiver_name, :receiver_phone,
@@ -16,141 +18,76 @@ class Gift < ActiveRecord::Base
 # "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":1,\"item_id\":920,\"item_name\":\"Fireman's Special\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":901,\"item_name\":\"Corona\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":902,\"item_name\":\"Budwesier\"}]",
 # "token"=>"LlWODlRC9M3VDbzPHuWMdA"}
 
-	has_one     :redeem, dependent: :destroy
-	has_one     :relay,  dependent: :destroy
+	has_one     :redeem, 		dependent: :destroy
+	has_one     :relay,  		dependent: :destroy
 	belongs_to  :provider
 	has_many    :sales
-	has_one     :order, dependent: :destroy
-	has_many    :gift_items, dependent: :destroy
-	belongs_to  :giver,    class_name: "User"
-	belongs_to  :receiver, class_name: "User"
+	has_one     :order, 		dependent: :destroy
+	has_many    :gift_items, 	dependent: :destroy
+	belongs_to  :giver,    		class_name: "User"
+	belongs_to  :receiver, 		class_name: "User"
 
 	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :tip, :credit_card
 
 	before_create :extract_phone_digits
 	before_create :add_giver_name,  :if => :no_giver_name
-	before_create :regifted,        :if => :regift_id?
+	before_create :regifted,        :if => :regift?
 	before_create :set_status
 
 	after_create  :update_shoppingCart
-	# after_create  :invoice_giver
-	# after_create  :notify_receiver
-	after_save    :create_notification
+
+#/---------------------------------------------------------------------------------------------/
 
 	def serialize
-		giver      = self.giver
-		merchant   = self.provider
-		response_hash                       = {}
-		response_hash["giver"]              = giver.name
-		response_hash["giver_photo"]        = giver.get_photo
-		response_hash["receiver"]           = self.receiver_name
-		response_hash["receiver_photo"]		= self.receiver.get_photo if self.receiver
-		response_hash["message"]            = self.message
-		response_hash["shoppingCart"]       = self.ary_of_shopping_cart_as_hash
-		response_hash["merchant_name"]      = merchant.name
-		response_hash["merchant_address"]   = merchant.full_address
-		response_hash["merchant_phone"]     = merchant.phone
-		return response_hash
-	end
-
-
-	##########   database queries
-
-	def self.get_gifts(user)
-		Gift.where(receiver_id: user.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
-	end
-
-	def self.get_notifications(user)
-		Gift.where(receiver_id: user.id).where(status: 'open').size
-	end
-
-	def self.get_past_gifts(user)
-		gifts = Gift.where( receiver_id: user).where(status: 'redeemed').order("created_at DESC")
-	end
-
-	def self.get_all_gifts(user)
-		Gift.where( receiver_id: user).order("created_at DESC")
-	end
-
-	def self.get_all_gifts(user)
-		Gift.where(receiver_id: user).order("created_at DESC")
-	end
-
-	def self.get_buy_history(user)
-		gifts = Gift.where( giver_id: user).where("status = :open OR status = :notified OR status = :incom", :open => 'open', :notified => 'notified', :incom => "incomplete").order("created_at DESC")
-		past_gifts = Gift.where( giver_id: user).where(status: 'redeemed').order("created_at DESC")
-		return gifts, past_gifts
-	end
-
-	def self.get_archive(user)
-		give_gifts = Gift.where(giver_id: user).order("created_at DESC")
-		rec_gifts  = Gift.where(receiver_id: user, status: 'redeemed').order("created_at DESC")
-		return give_gifts, rec_gifts
-	end
-
-	def self.get_buy_recents(user)
-		Gift.where( giver_id: user).order("created_at DESC").limit(10)
-	end
-
-	def self.get_activity
-		Gift.order("created_at DESC")
-	end
-
-	def self.get_user_activity(user)
-		Gift.where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at DESC")
-	end
-
-	def self.get_activity_at_provider(provider)
-		Gift.where(provider_id: provider.id).order("created_at ASC")
-	end
-
-	def self.get_provider(provider)
-		Gift.where(provider_id: provider.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("created_at DESC")
-	end
-
-	def self.get_all_orders(provider)
-		Gift.where(provider_id: provider.id).where("status != :stat OR status != :other", :stat => 'incomplete', :other => 'unpaid').order("updated_at DESC")
-	end
-
-	def self.get_history_provider(provider)
-		Gift.where(provider_id: provider.id, status: 'redeemed').order("updated_at DESC")
-	end
-
-	def self.get_history_provider_and_range(provider, start_date=nil, end_date=nil)
-		if start_date && end_date
-			start_date = start_date + 4.hours
-			end_date   = end_date   + 4.hours
-			Gift.where(provider_id: provider.id, status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
+		sender      = giver
+		merchant    = provider
+		gift_hsh                       = {}
+		gift_hsh["giver"]              = sender.name
+		gift_hsh["giver_photo"]        = sender.get_photo
+		if receipient = receiver
+			gift_hsh["receiver"]           = receiver.name
+			gift_hsh["receiver_photo"]	   = receiver.get_photo
 		else
-			Gift.get_history_provider(provider)
+			gift_hsh["receiver"]           = receiver_name
 		end
+		gift_hsh["message"]            = message
+		gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
+		gift_hsh["merchant_name"]      = merchant.name
+		gift_hsh["merchant_address"]   = merchant.full_address
+		gift_hsh["merchant_phone"]     = merchant.phone
+		gift_hsh
 	end
 
-	def self.transactions(user)
-		gifts_raw = Gift.where(giver_id: user.id, status: ["open","redeemed", "notified", "incomplete"]).order("created_at DESC")
-		gifts = []
-		gifts_raw.each do |g|
-			gift_hash = g.serializable_hash only: [ :provider_name, :total, :receiver_name]
-			gift_hash["gift_id"] = g.id
-			gift_hash["created_at"] = g.created_at.to_date.inspect
-			gifts << gift_hash
+	def self.init(params)
+		gift = Gift.new(params[:gift])
+				# add anonymous giver feature
+		if params[:gift][:anon_id]
+			gift.add_anonymous_giver(params[:gift][:giver_id])
 		end
-		return gifts
+		return gift
 	end
 
-	##########  gift creation methods
+	def phone
+		self.receiver_phone
+	end
+
+	def phone= phone_number
+		self.receiver_phone = phone_number
+	end
+
+##########  gift credit card methods
 
 	def set_status
-		if self.card_enabled?
+		if card_enabled?
 			if Rails.env.production?
 				self.status = "unpaid"
 			elsif Rails.env.staging?
-				self.set_status_post_payment
+				set_status_post_payment
 			else
-				self.set_status_post_payment
+				set_status_post_payment
 			end
 		else
-			self.set_status_post_payment
+			set_status_post_payment
 		end
 		puts "gift SET STATUS #{self.status}"
 	end
@@ -169,9 +106,9 @@ class Gift < ActiveRecord::Base
 		# if blacklist.include?(self.giver.email)
 		# 	return false
 		# else
-			return true
-		# end
 		# return true
+		# end
+		return true
 	end
 
 	def charge_card
@@ -234,7 +171,7 @@ class Gift < ActiveRecord::Base
 		when 1
 			# Approved
 			puts "setting the gift status off unpaid"
-			self.set_status_post_payment
+			set_status_post_payment
 			self.save
 		when 2
 			# Declined
@@ -259,159 +196,96 @@ class Gift < ActiveRecord::Base
 		return sale
 	end
 
-	def self.init(params)
-		gift = Gift.new(params[:gift])
-				# add anonymous giver feature
-		if params[:gift][:anon_id]
-			gift.add_anonymous_giver(params[:gift][:giver_id])
-		end
-		return gift
-	end
+###############
 
-	def format_currency_as_string(float)
-		string = float.to_s
-		x      = string.split('.')
-		x[1]   = "%02d" % x[1].to_i
-		x[1]   = x[1][0..1]
-		x[1]   = x[1].to_s
-		tot    = x.join('.')
-		return tot
-	end
+##########  cashier methods
 
 	def ticket_total_string
 		ticket_total = (self.total.to_f * 100).to_i - (self.service.to_f * 100).to_i
-		tix_float = ticket_total.to_f / 100
+		tix_float 	 = ticket_total.to_f / 100
 		return format_currency_as_string(tix_float)
 	end
 
 	def subtotal_string
-		subtotal = (self.ticket_total_string.to_f * 100).to_i  - (self.tax.to_f * 100).to_i - (self.tip.to_f * 100).to_i
+		subtotal  = (self.ticket_total_string.to_f * 100).to_i  - (self.tax.to_f * 100).to_i - (self.tip.to_f * 100).to_i
 		tix_float = subtotal.to_f / 100
 		return format_currency_as_string(tix_float)
 	end
 
-	def regift(receiver=nil, message=nil)
+###############
+
+##########  data population methods
+
+	def regift(recipient=nil, message=nil)
 		new_gift            = self.dup
 		new_gift.regift_id  = self.id
-		new_gift.add_giver receiver
-		new_gift.message    = message
-		if receiver
-			new_gift.add_receiver receiver
+		new_gift.message    = message ? message : self.message
+		new_gift.add_giver  self.receiver
+		if recipient
+			new_gift.add_receiver recipient
 		else
-			new_gift.receiver_id          = nil
-			new_gift.receiver_name        = nil
-			new_gift.receiver_phone       = nil
-			new_gift.foursquare_id        = nil
-			new_gift.facebook_id          = nil
+			new_gift.remove_receiver
 		end
-		# new_gift.special_instructions   = nil
+		new_gift.order_num  = nil
 		return new_gift
 	end
 
-	def add_receiver(receiver)
+	def remove_receiver
+		self.receiver_id    = nil
+		self.receiver_name  = nil
+		self.facebook_id    = nil
+		self.receiver_phone = nil
+		self.receiver_email = nil
+		self.status 		= "unpaid"
+	end
+
+	def add_receiver receiver
 		self.receiver_id    = receiver.id
-		self.receiver_name  = receiver.fullname
+		self.receiver_name  = receiver.name
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
 		self.receiver_phone = receiver.phone ? receiver.phone : nil
 		self.receiver_email = receiver.email ? receiver.email : nil
-		self.status = 'open' if self.status == "incomplete"
+		self.status 		= 'open' if self.status == "incomplete"
 	end
 
-	def add_giver(giver)
-		self.giver_id   = giver.id
-		self.giver_name = giver.fullname
+	def add_giver sender
+		self.giver_id   = sender.id
+		self.giver_name = sender.name
 	end
 
-	def add_provider(provider)
-		self.provider_id     = provider.id
-		self.provider_name   = provider.name
+	def add_provider provider
+		self.provider_id   = provider.id
+		self.provider_name = provider.name
 	end
 
-	def add_anonymous_giver(giver_id)
+	def add_anonymous_giver giver_id
 		anon_user       = User.find_by_phone('5555555555')
 		self.add_giver anon_user
 		self.anon_id    = giver_id
 	end
 
+###############
+
+##########  shopping cart methods
+
 	def ary_of_shopping_cart_as_hash
-		cart = JSON.parse self.shoppingCart
-		item_ary = []
-		cart.each do |item|
-			item_ary << item
-		end
-		return item_ary
+		JSON.parse self.shoppingCart
 	end
 
-	def make_gift_items(shoppingCart_array)
+	def make_gift_items shoppingCart_array
 		puts "In make gift items #{shoppingCart_array}"
 		self.gift_items = shoppingCart_array.map do |item|
-				GiftItem.initFromDictionary(item)
+			GiftItem.initFromDictionary(item)
 		end
 		puts "made it thru gift items #{self.gift_items}"
 	end
 
 private
 
-	# def notify_receiver
-	#   if self.receiver_email
-	#     puts "emailing the gift receiver for #{self.id}"
-	#     # notify the receiver via email
-	#     user_id = self.receiver_id.nil? ?  'NID' : self.receiver_id
-	#     Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => self.id, :email => self.receiver_email})
-	#   end
-	# end
-
-	# def invoice_giver
-	#   puts "emailing the gift giver for #{self.id}"
-	#   # notify the giver via email
-	#   Resque.enqueue(EmailJob, 'invoice_giver', self.giver_id , {:gift_id => self.id})
-	# end
-
-	def create_notification
-		puts "the gift status is #{self.status}"
-		case self.status
-		when 'incomplete'
-			puts "Relay created for gift #{self.id}"
-			# Relay.createRelayFromGift self
-			# send no push
-		when 'open'
-			puts "Relay created for gift if there is none #{self.id}"
-			# relay = Relay.createRelayFromGift self
-			# if relay.errors.messages.has_key? :gift_id
-			# 	relay = Relay.updateRelayFromGift self
-			# end
-			# send push to receiver here via db
-
-		when 'notified'
-			puts "Relay updated to notified for gift #{self.id}"
-			# relay = Relay.updateRelayFromGift self
-			# send push to provider here
-		when 'redeemed'
-			puts "Relay updated to redeemed for gift #{self.id}"
-			# relay = Relay.updateRelayFromGift self
-			# send push to giver here
-		when 'regifted'
-			puts "Relay updated to regifted for gift #{self.id}"
-			# relay = Relay.updateRelayFromGift self
-			# do not send push to new receiver here .. sent by new re-gift
-		end
-	end
-
 	def update_shoppingCart
-		updated_shoppingCart_array = []
-		self.gift_items.each do |item|
-			item_hash = item.prepare_for_shoppingCart
-			updated_shoppingCart_array << item_hash
-		end
+		updated_shoppingCart_array = self.gift_items.map { |item| item.prepare_for_shoppingCart }
 		puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
 		self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
-	end
-
-	def extract_phone_digits
-		if self.receiver_phone && !self.receiver_phone.empty?
-			phone_match         = self.receiver_phone.match(VALID_PHONE_REGEX)
-			self.receiver_phone = phone_match[1] + phone_match[2] + phone_match[3]
-		end
 	end
 
 	def add_giver_name
@@ -427,7 +301,7 @@ private
 		old_gift.update_attributes(status: 'regifted')
 	end
 
-	def regift_id?
+	def regift?
 		self.regift_id
 	end
 end

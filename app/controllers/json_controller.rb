@@ -1,7 +1,10 @@
 class JsonController < ActionController::Base
     include ActionView::Helpers::DateHelper
     include CommonUtils
+    include JsonHelper
+
 	skip_before_filter   :verify_authenticity_token
+    before_filter        :log_request_header
 	before_filter 		 :method_start_log_message
 	after_filter 		 :cross_origin_allow_header
 	after_filter 		 :method_end_log_message
@@ -12,7 +15,7 @@ class JsonController < ActionController::Base
     ADMIN_REPLY     = GIFT_REPLY + [ "receiver_id", "receiver_name", "service", "created_at"]
     BUY_REPLY       = ["total", "receiver_id", "receiver_name", "provider_id", "provider_name", "message", "created_at", "updated_at", "status", "id"]
 
-    def array_these_gifts(obj, send_fields, address_get=false, receiver=false, order_num=false)
+    def array_these_gifts obj, send_fields, address_get=false, receiver=false, order_num=false
         gifts_ary = []
         index = 1
         obj.each do |g|
@@ -80,7 +83,7 @@ class JsonController < ActionController::Base
         return gifts_ary
     end
 
-    def convert_shoppingCart_for_app(shoppingCart)
+    def convert_shoppingCart_for_app shoppingCart
         cart_ary = JSON.parse shoppingCart
         # puts "shopping cart = #{cart_ary}"
         new_shopping_cart = []
@@ -100,7 +103,7 @@ class JsonController < ActionController::Base
         return new_shopping_cart
     end
 
-    def add_redeem_code(obj)
+    def add_redeem_code obj
         if obj.status == "notified"
             obj.redeem.redeem_code
         else
@@ -108,60 +111,7 @@ class JsonController < ActionController::Base
         end
     end
 
-	def authenticate_public_info(token=nil)
- 		return true
-	end
-
- 	def unauthorized_user
- 		{ "Failed Authentication" => "Please log out and re-log into app" }
- 	end
-
- 	def database_error_redeem
- 		{ "Data Transfer Error"   => "Please Reload Gift Center" }
- 	end
-
- 	def database_error_gift
- 		{ "Data Transfer Error"   => "Please Retry Sending Gift" }
- 	end
-
- 	def database_error_general
- 		{ "Data Transfer Error"   => "Please Reset App" }
- 	end
-
-    def authentication_data_error
-        { "Data Transfer Error"   => "Authentication Failed" }
-    end
-
-    def database_error
-        { "Server Error"   => "Database Error" }
-    end
-
- 	def stringify_error_messages(object)
- 		msgs = object.errors.messages
- 		msgs.stringify_keys!
- 		msgs.each_key do |key|
- 			value_as_array 	= msgs[key]
- 			if value_as_array.kind_of? Array
- 				value_as_string = value_as_array.join(' | ')
- 			else
- 				value_as_string = value_as_array
- 			end
- 			msgs[key] 		= value_as_string
- 		end
-
- 		return msgs
- 	end
-
-    def serialize_objs_in_ary ary
-        ary.map { |o| o.serialize }
-    end
-
-    def extract_phone_digits(phone_raw)
-        if phone_raw
-            phone_match = phone_raw.match(VALID_PHONE_REGEX)
-            phone       = phone_match[1] + phone_match[2] + phone_match[3]
-        end
-    end
+    ### API UTILITY METHODS
 
     def respond
         respond_to do |format|
@@ -174,13 +124,48 @@ class JsonController < ActionController::Base
     end
 
     def fail payload
+        unless payload.kind_of?(Hash) || payload.kind_of?(String) || payload.kind_of?(Array)
+            payload   = payload.errors.messages
+        end
         @app_response = { status: 0, data: payload }
     end
+
+    def authenticate_admin_tools
+        token   = params["token"]
+        # check token to see if it is good
+        api_key = AdminToken.find_by_token token
+        head :unauthorized unless api_key
+    end
+
+    def authenticate_merchant_tools
+        token   = params["token"]
+        # check token to see if it is good
+        api_key = Provider.find_by_token token
+        head :unauthorized unless api_key
+    end
+
+    def authenticate_general_token
+        token   = params["token"]
+        head :unauthorized unless GENERAL_TOKEN == token
+    end
+
+    def authenticate_public_info token=nil
+        true
+    end
+
+    def authenticate_services
+        token   = params["token"]
+        api_key = User.find_by_remember_token token
+        head :unauthorized unless api_key
+    end
+
+
+    #######
 
 private
 
     def cross_origin_allow_header
-        headers['Access-Control-Allow-Origin'] = "*"
+        headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Request-Method'] = '*'
     end
 

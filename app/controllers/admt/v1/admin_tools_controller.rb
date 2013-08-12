@@ -5,35 +5,192 @@ module Admt
             before_filter :authenticate_admin_tools,    except: :add_key
             before_filter :authenticate_general_token,  only:   :add_key
 
+    #####  Gift Methods
+
             def gifts
-                gifts = Gift.order("updated_at DESC")
+                data      = params["data"].to_i
+                if data > 0
+                    gifts = Gift.get_all_for_provider data
+                else
+                    gifts = Gift.get_all
+                end
+
                 if gifts.count > 0
                     success array_these_gifts( gifts, ADMIN_REPLY, false , false , true )
                 else
-                    fail database_error
+                    fail    database_error
+                end
+                respond
+            end
+
+            def gift
+                gift = Gift.find(params["data"].to_i)
+                if gift
+                    serialized_gift = array_these_gifts( [gift], ADMIN_REPLY, false , false , true )
+                    success serialized_gift.first
+                else
+                    fail    database_error
+                end
+                respond
+            end
+
+            def destroy_all_gifts
+                user        = User.find(params["data"].to_i)
+                total_gifts = Gift.get_user_activity(user)
+                total_gifts.each {|gift| gift.destroy}
+
+                if Gift.get_user_activity(user).count == 0
+                    success "Gifts Destroyed."
+                else
+                    fail    "Error in batch delete gifts"
+                end
+                respond
+            end
+
+    #####  Gift & Sale Methods
+
+            def cancel
+                gift = Gift.find(params["data"].to_i)
+                case gift.status
+                when "unpaid"
+                    # void the gift - no sale
+                    gift.update_attribute(:status, "void")
+                    response = gift.status
+                else
+                    sale     = gift.sale
+                    response = sale.void_sale gift
+                end
+
+                if gift
+                    success response
+                else
+                    fail    "Error De-Activating Unpaid gift"
+                end
+                respond
+            end
+
+    #####  User Routes
+
+            def user_and_gifts
+                # get the user with params["id"]
+                # get the sent adn received gifts for the user
+                if user = User.find(params["data"].to_i)
+                    gifts        = Gift.get_sent_and_received_gifts_for user
+                    gifts.each_key do |key|
+                        gifts[key] = array_these_gifts( gifts[key], ADMIN_REPLY, false , false , true )
+                    end
+                    response_hsh   = {app_user: user.admt_serialize}.merge gifts
+                    success response_hsh
+                else
+                    fail    user
                 end
                 respond
             end
 
             def users
-                users = User.order("name ASC")
+                users = User.order("last_name ASC")
+
                 if users.count > 0
-                    success serialize_objs_in_ary users
+                    success users.serialize_objs :admt
                 else
-                    fail database_error
+                    fail    database_error
                 end
                 respond
             end
 
-            def brands
-                brands = Brand.order("updated_at DESC")
-                if brands.count > 0
-                    success serialize_objs_in_ary brands
+            def user
+                if user = User.find(params["data"].to_i)
+                    success user.serialize
                 else
-                    fail database_error
+                    fail    database_error
                 end
                 respond
             end
+
+            def de_activate_user
+                user        = User.find(params["data"].to_i)
+                user.active = user.active ? false : true
+
+                if user.save
+                    stat    = user.active ? "Active" : "De-Activated"
+                    success "User is now #{stat}"
+                else
+                    fail    user
+                end
+                respond
+            end
+
+            def destroy_user
+                user        = User.find(params["data"].to_i)
+
+                if user.destroy
+                    success "#{user.name} is destroyed."
+                else
+                    fail    user
+                end
+                respond
+            end
+
+    #####   Brand Routes
+
+            def brands
+                brands = Brand.order("name ASC")
+                if brands.count > 0
+                    success brands.serialize_objs
+                else
+                    fail    database_error
+                end
+                respond
+            end
+
+            def brand
+                if brand = Brand.find(params["data"].to_i)
+                    success brand.serialize
+                else
+                    fail    database_error
+                end
+                respond
+            end
+
+    #####  Merchant Routes
+
+            def go_live
+                provider = Provider.find_by_token params['data']
+                provider.sd_location_id = provider.live_bool ? nil : 1
+
+                if provider.save
+                    msg =
+                        if provider.live_bool
+                            "#{provider.name} is Live in App"
+                        else
+                            "#{provider.name} is Coming Soon in App"
+                        end
+                    success msg
+                else
+                    fail    provider
+                end
+                respond
+            end
+
+            def de_activate_merchant
+                provider    = Provider.find_by_token params['data']
+                new_active  = provider.active ? false : true
+
+                if provider.update_attribute(:active, new_active)
+                    msg =
+                        if provider.active
+                            "#{provider.name} is Active"
+                        else
+                            "#{provider.name} is de-Activated"
+                        end
+                    success msg
+                else
+                    fail    provider
+                end
+                respond
+            end
+
+    ##### Utility Methods
 
             def add_key
                 admin_token = params["data"]
@@ -42,23 +199,9 @@ module Admt
                 if admin_token_obj.save
                     success "Admin User Created"
                 else
-                    fail admin_token_obj.errors.full_messages
+                    fail    admin_token_obj
                 end
                 respond
-            end
-
-        private
-
-            def authenticate_admin_tools
-                token   = params["token"]
-                # check token to see if it is good
-                api_key = AdminToken.find_by_token token
-                head :unauthorized unless api_key
-            end
-
-            def authenticate_general_token
-                token = params["token"]
-                head :unauthorized unless GENERAL_TOKEN == token
             end
 
         end

@@ -17,8 +17,8 @@ class Sale < ActiveRecord::Base
 	belongs_to :card
 
 	before_create :add_gateway_data
-  	after_create  :invoice_giver, :if => :transaction_approved
-  	after_create  :notify_receiver, :if => :transaction_approved
+  	after_create  :invoice_giver,    :if => :transaction_approved
+  	after_create  :notify_receiver,  :if => :transaction_approved
 
 ### AUTHORIZE TRANSACTION METHODS
 
@@ -33,6 +33,28 @@ class Sale < ActiveRecord::Base
 		sale_obj.total 	     = gift.total
 		return sale_obj
 	end
+
+    def void_sale gift=nil
+        gift      = self.gift if gift.nil?
+        auth_obj  = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
+        @response = auth_obj.void(self.transaction_id)
+
+        if @response.resp_code == 1
+            # sale is voided
+            # set gift to proper status
+            if gift.status = "redeemed"
+                new_status = "refund_cancel" || "cancel"
+                gift.update_attribute(:status, new_status)
+            else
+                gift.update_attribute(:status, "refund_void")
+            end
+            return gift.status
+        else
+            # gift unable to be voided
+            @response.response_reason_text
+        end
+
+    end
 
 	def auth_capture
 		puts "in auth capture in Sale.rb"

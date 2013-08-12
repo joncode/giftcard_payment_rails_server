@@ -24,12 +24,12 @@ class IphoneController < AppController
 		respond_to do |format|
 			if !data.nil? && new_user.save
 				new_user.pn_token = pn_token if pn_token
-				user_to_app = {"user_id" => new_user.id, "token" => new_user.remember_token}
-				response = { "success" => user_to_app }
+				user_to_app       = {"user_id" => new_user.id, "token" => new_user.remember_token}
+				response          = { "success" => user_to_app }
 			else
-				message += " Unable to save to database"
-				error_msg_string = stringify_error_messages new_user if new_user
-				response = { "error_server" => error_msg_string }
+				message          += " Unable to save to database"
+				error_msg_string  = stringify_error_messages new_user if new_user
+				response          = { "error_server" => error_msg_string }
 			end
 			@app_response = "iPhoneC #{response} && #{response.to_json}"
 			format.json { render json: response }
@@ -108,8 +108,8 @@ class IphoneController < AppController
 
 	def going_out
 
-					# send the button status in params["public"]
-					# going out is YES , returning home is NO
+			# send the button status in params["public"]
+			# going out is YES , returning home is NO
 		response  = {}
 		begin
 			user  = User.find_by_remember_token(params["token"])
@@ -232,8 +232,11 @@ class IphoneController < AppController
 		rescue
 			response["error"] = "User not found from remember token"
 		end
-
-		data_obj = JSON.parse params["data"]
+		if params["data"].kind_of? String
+			data_obj = JSON.parse params["data"]
+		else
+			data_obj = params["data"]
+		end
 		puts "#{data_obj}"
 
 		respond_to do |format|
