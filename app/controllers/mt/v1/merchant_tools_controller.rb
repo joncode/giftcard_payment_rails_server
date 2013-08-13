@@ -38,9 +38,9 @@ module Mt
             def orders
                 provider = Provider.find_by_token params["token"]
                 gifts =
-                    if params["page"]    == "new"
+                    if params["data"]["page"]    == "new"
                         Gift.get_provider(provider)
-                    elsif params["page"] == 'reports'
+                    elsif params["data"]["page"] == 'reports'
                         start_time          = params["start_time"].to_datetime if params["start_time"]
                         end_time            = params["end_time"].to_datetime   if params["end_time"]
                         Gift.get_history_provider_and_range(provider, start_time, end_time )
