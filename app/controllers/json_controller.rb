@@ -12,7 +12,7 @@ class JsonController < ActionController::Base
     UPDATE_REPLY    = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]
     GIFT_REPLY      = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     MERCHANT_REPLY  = GIFT_REPLY + [ "order_num"]
-    ADMIN_REPLY     = GIFT_REPLY + [ "receiver_id", "receiver_name", "service", "created_at"]
+    ADMIN_REPLY     = GIFT_REPLY + [ "receiver_id", "receiver_name", "service", "created_at", "cat"]
     BUY_REPLY       = ["total", "receiver_id", "receiver_name", "provider_id", "provider_name", "message", "created_at", "updated_at", "status", "id"]
 
     def array_these_gifts obj, send_fields, address_get=false, receiver=false, order_num=false
