@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130729192508) do
+ActiveRecord::Schema.define(:version => 20130813205938) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(:version => 20130729192508) do
     t.string   "twitter"
     t.string   "service"
     t.string   "order_num"
+    t.integer  "cat",                           :default => 0
   end
 
   add_index "gifts", ["giver_id"], :name => "index_gifts_on_giver_id"
