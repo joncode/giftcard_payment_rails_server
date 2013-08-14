@@ -535,7 +535,7 @@ class AppController < JsonController
 	  			gift  = Gift.find params["data"].to_i
 	  			order = Order.init_with_gift(gift, params["server_code"])
 	  			if order.save
-	  				response["success"] = { "order_number" => order.make_order_num,  "tax" => gift.tax, "total" => gift.total, "tip" => gift.tip, "server" => order.server_code }
+	  				response["success"] = { "order_number" => order.make_order_num,  "total" => gift.total, "server" => order.server_code }
 	  			else
 	  				response["error_server"] = stringify_error_messages order
 	  			end
