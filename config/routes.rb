@@ -206,6 +206,7 @@ Drinkboard::Application.routes.draw do
       post 'destroy_user',      to: 'admin_tools#destroy_user'
       post 'de_activate_merchant', to: 'admin_tools#de_activate_merchant'
       post 'cancel',            to: 'admin_tools#cancel'
+      post 'orders',            to: 'admin_tools#orders'
     end
   end
 

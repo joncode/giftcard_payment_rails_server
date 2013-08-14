@@ -190,6 +190,17 @@ module Admt
                 respond
             end
 
+            def orders
+                provider = Provider.find_by_token params['data']
+
+                if gifts = Gift.get_history_provider(provider)
+                    success array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+                else
+                    fail    provider
+                end
+                respond
+            end
+
     ##### Utility Methods
 
             def add_key
