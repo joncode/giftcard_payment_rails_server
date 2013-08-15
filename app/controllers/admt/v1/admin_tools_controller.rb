@@ -205,7 +205,7 @@ module Admt
 
             def unsettled
                 # get all the unsettled gifts (non-merchant specific)
-                end_date = params["end_date"].to_datetime
+                end_date = params["end_date"]
                 gifts    = Gift.get_unsettled(end_date)
 
                 if gifts.count > 0

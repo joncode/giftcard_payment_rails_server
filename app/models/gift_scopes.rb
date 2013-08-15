@@ -12,7 +12,7 @@ module GiftScopes
 
     def get_unsettled end_date
         end_date = if end_date
-            end_date + 4.hours
+            end_date.to_datetime + 4.hours
         else
             Time.now + 4.hours
         end

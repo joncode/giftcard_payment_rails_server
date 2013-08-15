@@ -63,9 +63,10 @@ class Gift < ActiveRecord::Base
 		gift_hsh                       = {}
 		gift_hsh["gift_id"]			   = self.id
 		gift_hsh["provider_id"]        = provider.id
-    	gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
-		gift_hsh["merchant_name"]      = provider.name
+    	#gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
+		gift_hsh["name"]      = provider.name
 		gift_hsh["merchant_address"]   = provider.full_address
+		gift_hsh["total"]   		   = self.total
 		gift_hsh
 	end
 
