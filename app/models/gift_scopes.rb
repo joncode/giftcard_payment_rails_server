@@ -10,6 +10,15 @@ module GiftScopes
         order("updated_at DESC")
     end
 
+    def get_unsettled end_date
+        end_date = if end_date
+            end_date.to_datetime + 4.hours
+        else
+            Time.now + 4.hours
+        end
+        where(status: "redeemed").where("updated_at <= :end_date", :end_date => end_date )
+    end
+
 #### USER SCOPES
 
     def get_gifts user

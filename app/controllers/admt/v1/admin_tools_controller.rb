@@ -18,7 +18,7 @@ module Admt
                 if gifts.count > 0
                     success array_these_gifts( gifts, ADMIN_REPLY, false , false , true )
                 else
-                    fail    database_error
+                    fail    data_not_found
                 end
                 respond
             end
@@ -29,7 +29,7 @@ module Admt
                     serialized_gift = array_these_gifts( [gift], ADMIN_REPLY, false , false , true )
                     success serialized_gift.first
                 else
-                    fail    database_error
+                    fail    data_not_found
                 end
                 respond
             end
@@ -201,7 +201,50 @@ module Admt
                 respond
             end
 
-    ##### Utility Methods
+    #####   Payment Routes
+
+            def unsettled
+                # get all the unsettled gifts (non-merchant specific)
+                end_date = params["end_date"]
+                gifts    = Gift.get_unsettled(end_date)
+
+                if gifts.count > 0
+                    success gifts.serialize_objs :admt
+                else
+                    fail    "No unsettled gifts at this time"
+                end
+                respond
+            end
+
+            def settled
+                gift_id_ary       = params["data"]
+
+                # change those gifts to settled
+                gifts             = Gift.find(gift_id_ary)
+                fail_update_gifts = []
+                try_two           = []
+                gifts.each do |gift|
+                    unless gift.update_attribute(:status, "settled")
+                        fail_update_gifts << gift
+                    end
+                end
+
+                fail_update_gifts.each do |gift|
+                    unless gift.update_attribute(:status, "settled")
+                        puts "!!! TRY TWO FAILURE !!! GIFT ID = #{gift.id}"
+                        try_two << gift
+                    end
+                end
+
+                if try_two.count == 0
+                    success "Gifts Updated to Settled"
+                else
+                    fail    try_two.serialize_objs(:admt)
+                end
+                respond
+            end
+
+    #####   Utility Methods
 
             def add_key
                 admin_token = params["data"]
