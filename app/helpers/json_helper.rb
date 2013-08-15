@@ -25,6 +25,10 @@ module JsonHelper
         { "Server Error"          => "Database Error" }
     end
 
+    def data_not_found
+        { "Database Error "       => "Data not found" }
+    end
+
     def stringify_error_messages object
         msgs = object.errors.messages
         msgs.stringify_keys!
