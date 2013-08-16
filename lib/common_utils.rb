@@ -5,9 +5,6 @@ module CommonUtils
 	include ActionView::Helpers::TextHelper
 
 	def log_request_header
-		if request.headers['app_version']
-			puts "HERE IS THE app_version HEADER REQUEST #{request.headers['app_version']}"
-		end
 
 		if request.headers['App-Version']
 			puts "HERE IS THE App-Version HEADER REQUEST #{request.headers['App-Version']}"
