@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
 
 	before_save { |user| user.email      = email.downcase }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
-	before_save { |user| user.last_name  = last_name.capitalize  if last_name  }
+	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
