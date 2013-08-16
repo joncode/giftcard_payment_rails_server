@@ -1,4 +1,5 @@
-FILTER_PARAMS = [:password, :password_confirmation, :password_digest, :token, :remember_token, :merchant_token, :merchant_tkn, :uid, :credit_number, :card_number, :verification_value]
+#FILTER_PARAMS = [:password, :password_confirmation, :password_digest, :token, :remember_token, :merchant_token, :merchant_tkn, :uid, :credit_number, :card_number, :verification_value]
+FILTER_PARAMS = [:password_digest, :token, :remember_token, :merchant_token, :merchant_tkn, :uid, :credit_number, :card_number, :verification_value]
 
 require File.expand_path('../boot', __FILE__)
 

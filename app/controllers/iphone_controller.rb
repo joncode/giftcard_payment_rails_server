@@ -360,7 +360,6 @@ class IphoneController < AppController
 			else
 				obj = data
 			end
-			puts "Here is the raw data #{data}"
 			puts "CREATE USER OBJECT parse = #{obj}"
 			# obj.symbolize_keys!
 			User.new(obj)
