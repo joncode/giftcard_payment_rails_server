@@ -9,6 +9,7 @@ class IphoneController < AppController
 
 		data     = params["data"]
 		pn_token = params["pn_token"] || nil
+		puts " Here is the PARAMS obj #{params}"
 
 		if data.nil?
 			message = "Data not received correctly. "
@@ -359,7 +360,8 @@ class IphoneController < AppController
 			else
 				obj = data
 			end
-			#puts "CREATE USER OBJECT parse = #{obj}"
+			puts "Here is the raw data #{data}"
+			puts "CREATE USER OBJECT parse = #{obj}"
 			# obj.symbolize_keys!
 			User.new(obj)
 		end
