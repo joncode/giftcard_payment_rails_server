@@ -27,6 +27,14 @@ module Formatter
         end
     end
 
+    def format_datetime datetime
+        datetime.to_formatted_s :merchant_date
+    end
+
+    def format_date datetime
+        datetime.to_formatted_s :only_date
+    end
+
     def full_address
         "#{self.address},  #{self.city}, #{self.state}"
     end

@@ -36,8 +36,9 @@ WEB_KEY     = "RlgrM1Uw"
 
 BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dinig"]
 
-Time::DATE_FORMATS[:merchant] = "%I:%M %p"
+Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
+Time::DATE_FORMATS[:only_date]       = "%b %e"
 
 GENERAL_TOKEN = "1964f94b3e567a8a82b87f3ccbeb2174"
 APP_GENERAL_TOKEN =  "0NFXbWsyP3Mj2Mroj_utsA"
