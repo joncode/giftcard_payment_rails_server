@@ -88,6 +88,7 @@ class User < ActiveRecord::Base
 	end
 
 	def inspect
+		#super
 		"User ID = #{self.id} | Name = #{name} | email = #{self.email} | last update = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)}\n"
 	end
 
