@@ -39,28 +39,39 @@ module CommonUtils
 		end
 	end
 
-	def filter_params hsh
+	def filter_params hash
+		hsh = hash
 		if hsh.kind_of? Hash
-			filter_text 	= "[FILTERED]"
-			filters 		= FILTER_PARAMS + FILTER_PARAMS.map {|fp| fp.to_s }
+			hsh = hash.dup
+			filters = FILTER_PARAMS + FILTER_PARAMS.map {|fp| fp.to_s }
+			filter_loop(hsh, filters)
+		end
+		hsh
+	end
 
-			hsh.each_key do |k|
-			    if filters.include? k
-			   		hsh[k] = filter_text
-			    else
-			    	# if value is an array
-			    	if  hsh[k].kind_of? Hash
-			    		# iterated thru the keys of that array and filter those
-			    		hsh[k].each_key do |k2|
-			    			if filters.include? k2
-			    				hsh[k][k2] = filter_text
-			    			end
-			    		end
-			    	end
-			    end
+	def filter_loop(hsh, filters)
+		hsh.each_key do |key|
+			if filters.include? key
+				hsh[key] = "[FILTERED]"
+			else
+				if hsh[key].kind_of?(Hash)
+					value = hsh[key]
+					filter_loop(value, filters)
+				end
 			end
 		end
-	    hsh
 	end
 
 end
+
+
+
+
+
+
+
+
+
+
+
+

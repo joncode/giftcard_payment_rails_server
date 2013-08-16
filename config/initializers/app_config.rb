@@ -1,7 +1,6 @@
 require 'yaml'
 require 'common_utils'
 require 'dbcall'
-# require 'qa_team'
 
 # require 'myActiveRecordExtensions'
 # ActiveRecord::Base.send(:include, MyActiveRecordExtensions)
@@ -17,5 +16,9 @@ class Array
         map { |o| o.send serialize_type }
     end
 
+end
+
+def lcon
+    load ($:[0] + "/console_libs.rb")
 end
 

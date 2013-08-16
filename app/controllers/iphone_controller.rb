@@ -29,7 +29,7 @@ class IphoneController < AppController
 				error_msg_string  = stringify_error_messages new_user if new_user
 				response          = { "error_server" => error_msg_string }
 			end
-			@app_response = "iPhoneC #{response} && #{response.to_json}"
+			@app_response = response
 			format.json { render json: response }
 		end
 	end
