@@ -117,10 +117,6 @@ module Admt
                 respond
             end
 
-            "data" => { "user_id" => 123 , "user" => <user_hash> }
-
-
-
             def de_activate_user
                 user        = User.find(params["data"].to_i)
                 user.active = user.active ? false : true
