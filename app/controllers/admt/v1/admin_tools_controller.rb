@@ -107,6 +107,20 @@ module Admt
                 respond
             end
 
+            def update_user
+                user = User.find(params["data"]["user_id"].to_i)
+                if user && user.update_attributes(params["data"]["user"])
+                    success user.serialize
+                else
+                    fail    database_error
+                end
+                respond
+            end
+
+            "data" => { "user_id" => 123 , "user" => <user_hash> }
+
+
+
             def de_activate_user
                 user        = User.find(params["data"].to_i)
                 user.active = user.active ? false : true

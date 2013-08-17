@@ -198,6 +198,7 @@ Drinkboard::Application.routes.draw do
       post 'get_app_users',     to: 'admin_tools#users'
       post 'get_app_user',      to: 'admin_tools#user'
       post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
+      post 'update_user',       to: 'admin_tools#update_user'
       post 'get_brands',        to: 'admin_tools#brands'
       post 'get_brand',         to: 'admin_tools#brand'
       post 'go_live',           to: 'admin_tools#go_live'
