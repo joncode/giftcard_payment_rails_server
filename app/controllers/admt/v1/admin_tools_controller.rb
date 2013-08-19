@@ -162,6 +162,19 @@ module Admt
                 respond
             end
 
+            def create_brand
+                puts "HERE IS THE PARAMS data = #{params["data"].inspect}"
+                brand_hsh = params["data"]
+                brand     = Brand.new brand_hsh
+                if brand.save
+                    puts    "Here is new brand ID = #{brand.id} = #{brand.inspect}"
+                    success brand.serialize
+                else
+                    fail    brand
+                end
+                respond
+            end
+
     #####  Merchant Routes
 
             def go_live
