@@ -107,11 +107,11 @@ class Menu < ActiveRecord::Base
 end
 # == Schema Information
 #
-# Table name: menu
+# Table name: menus
 #
 #  id          :integer         not null, primary key
-#  provider_id :integer         not null
-#  item_id     :integer         not null
+#  provider_id :integer
+#  item_id     :integer
 #  price       :string(20)
 #  position    :integer(8)
 #  created_at  :datetime        not null
@@ -120,5 +120,6 @@ end
 #  photo       :string(255)
 #  description :string(255)
 #  section     :string(255)
+#  active      :boolean         default(TRUE)
 #
 

@@ -19,3 +19,18 @@ end
 # 3. Invite Accepted - your invite to the app has been accepted == "email_invite"
 # 4. Redeem Gift Follow Up - next day reminding you the details of the gift and news of the platform , new items, features == "email_follow_up"
 # 5. Youve got a Gift - sent to receiver when a gift is purchased from them
+# == Schema Information
+#
+# Table name: settings
+#
+#  id                 :integer         not null, primary key
+#  user_id            :integer
+#  email_invoice      :boolean         default(TRUE)
+#  email_redeem       :boolean         default(TRUE)
+#  email_invite       :boolean         default(TRUE)
+#  email_follow_up    :boolean         default(TRUE)
+#  email_receiver_new :boolean         default(TRUE)
+#  created_at         :datetime        not null
+#  updated_at         :datetime        not null
+#
+

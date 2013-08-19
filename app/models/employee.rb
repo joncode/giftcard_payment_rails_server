@@ -74,5 +74,6 @@ end
 #  updated_at  :datetime        not null
 #  brand_id    :integer
 #  retail      :boolean         default(TRUE)
+#  token       :string(255)
 #
 

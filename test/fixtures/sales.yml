@@ -2,18 +2,20 @@
 #
 # Table name: sales
 #
-#  id              :integer         not null, primary key
-#  gift_id         :integer
-#  giver_id        :integer
-#  card_id         :integer
-#  request_string  :string(255)
-#  response_string :string(255)
-#  status          :string(255)
-#  provider_id     :integer
-#  transaction_id  :string(255)
-#  revenue         :decimal(, )
-#  created_at      :datetime        not null
-#  updated_at      :datetime        not null
+#  id             :integer         not null, primary key
+#  gift_id        :integer
+#  giver_id       :integer
+#  card_id        :integer
+#  provider_id    :integer
+#  transaction_id :string(255)
+#  revenue        :decimal(, )
+#  created_at     :datetime        not null
+#  updated_at     :datetime        not null
+#  resp_json      :text
+#  req_json       :text
+#  resp_code      :integer
+#  reason_text    :string(255)
+#  reason_code    :integer
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
