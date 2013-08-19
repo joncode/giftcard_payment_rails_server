@@ -104,6 +104,15 @@ class IphoneController < AppController
 		end
 	end
 
+	def cities
+
+		response = [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1376936674/las_vegas_fvo5gn.png"}, {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1376936685/new_york_qnyso7.png"}, {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1376936690/san_francisco_daq1tx.png"}, {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1376936679/los_angeles_ebteun.png"}]
+		respond_to do |format|
+			@app_response = "iPhoneC #{response}"
+			format.json { render json: response }
+		end
+	end
+
 	def going_out
 
 			# send the button status in params["public"]

@@ -169,6 +169,7 @@ Drinkboard::Application.routes.draw do
   match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
+  match 'app/cities_app',       to: 'iphone#cities',           via: :post
     ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
   match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
