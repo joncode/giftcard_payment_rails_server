@@ -146,7 +146,7 @@ module Admt
             def brands
                 brands = Brand.order("name ASC")
                 if brands.count > 0
-                    success brands.serialize_objs
+                    success brands.serialize_objs :admt
                 else
                     fail    database_error
                 end
@@ -155,7 +155,7 @@ module Admt
 
             def brand
                 if brand = Brand.find(params["data"].to_i)
-                    success brand.serialize
+                    success brand.admt_serialize
                 else
                     fail    database_error
                 end
@@ -168,7 +168,7 @@ module Admt
                 brand     = Brand.new brand_hsh
                 if brand.save
                     puts    "Here is new brand ID = #{brand.id} = #{brand.inspect}"
-                    success brand.serialize
+                    success brand.admt_serialize
                 else
                     fail    brand
                 end
