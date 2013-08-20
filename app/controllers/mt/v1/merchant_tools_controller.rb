@@ -35,6 +35,9 @@ module Mt
                 respond
             end
 
+
+    #####  Order Methods
+
             def orders
                 provider = Provider.find_by_token params["token"]
                 gifts =
@@ -52,6 +55,17 @@ module Mt
                     success array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
                 else
                     fail    database_error
+                end
+                respond
+            end
+
+            def order
+
+                if gift = Gift.find(params["data"].to_i)
+                    serialized_gift = array_these_gifts( [gift], MERCHANT_REPLY, false , true , true )
+                    success serialized_gift.first
+                else
+                    fail    data_not_found
                 end
                 respond
             end

@@ -221,6 +221,7 @@ Drinkboard::Application.routes.draw do
     namespace :v1 do
       post 'create_merchant', to: 'merchant_tools#create'
       post 'orders',          to: 'merchant_tools#orders'
+      post 'order',           to: 'merchant_tools#order'
     end
   end
 

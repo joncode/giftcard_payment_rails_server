@@ -49,10 +49,6 @@ module GiftScopes
         return give_gifts, rec_gifts
     end
 
-    def get_buy_recents user
-        where( giver_id: user).order("created_at DESC").limit(10)
-    end
-
     def get_user_activity user
         where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at DESC")
     end
@@ -75,20 +71,16 @@ module GiftScopes
 
 ##### PROVIDER SCOPES
 
-    def get_all_for_provider provider_id
-        where(provider_id: provider_id).order("updated_at DESC")
-    end
-
-    def get_activity_at_provider provider
-        where(provider_id: provider.id).order("created_at ASC")
+    def get_all_for_provider provider
+        where(provider_id: provider).order("updated_at DESC")
     end
 
     def get_provider provider
-        where(provider_id: provider.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
+        where(provider_id: provider).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
     end
 
     def get_history_provider provider
-        where(provider_id: provider.id, status: 'redeemed').order("updated_at DESC")
+        where(provider_id: provider, status: 'redeemed').order("updated_at DESC")
     end
 
     def get_history_provider_and_range provider, start_date=nil, end_date=nil

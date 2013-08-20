@@ -24,8 +24,8 @@ module Admt
             end
 
             def gift
-                gift = Gift.find(params["data"].to_i)
-                if gift
+
+                if gift = Gift.find(params["data"].to_i)
                     serialized_gift = array_these_gifts( [gift], ADMIN_REPLY, false , false , true )
                     success serialized_gift.first
                 else
