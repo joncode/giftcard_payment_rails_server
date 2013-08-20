@@ -146,7 +146,7 @@ module Admt
             def brands
                 brands = Brand.get_all
                 if brands.count > 0
-                    success brands.serialize_objs :admt
+                    success brands.serialize_objs(:admt)
                 else
                     fail    database_error
                 end
@@ -154,7 +154,7 @@ module Admt
             end
 
             def brand
-                if brand = Brand.find(params["data"].to_i)
+                if brand = Brand.unscoped.find(params["data"].to_i)
                     success brand.admt_serialize
                 else
                     fail    database_error
@@ -176,7 +176,7 @@ module Admt
             end
 
             def de_activate_brand
-                brand      = Brand.find_by_token params['data']
+                brand      = Brand.unscoped.find(params["data"].to_i)
                 new_active = brand.active ? false : true
 
                 if brand.update_attribute(:active, new_active)

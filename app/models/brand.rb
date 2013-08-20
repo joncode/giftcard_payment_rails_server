@@ -3,20 +3,15 @@ class Brand < ActiveRecord::Base
 	:logo, :name, :phone, :state, :user_id, :website,
 	:photo, :portrait, :next_view
 
-	# attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
- #  	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
-
 	has_many   :providers
 	has_many   :employees
 	belongs_to :user
 
 	validates_presence_of :name
 
-    default_scope where(active: false)
+    default_scope where(active: true)
 
     after_save :update_parent_brand
-
-  	# mount_uploader :photo, BrandPhotoUploader
 
     def self.get_all
         unscoped.order("name ASC")
