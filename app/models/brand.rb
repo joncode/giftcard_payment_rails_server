@@ -3,8 +3,8 @@ class Brand < ActiveRecord::Base
 	:logo, :name, :phone, :state, :user_id, :website,
 	:photo, :portrait, :next_view
 
-	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-  	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
+	# attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
+ #  	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
 	has_many   :providers
 	has_many   :employees
@@ -12,9 +12,15 @@ class Brand < ActiveRecord::Base
 
 	validates_presence_of :name
 
+    default_scope where(active: false)
+
     after_save :update_parent_brand
 
   	# mount_uploader :photo, BrandPhotoUploader
+
+    def self.get_all
+        unscoped.order("name ASC")
+    end
 
   	def serialize
   		brand_hash 	= self.serializable_hash only: [ :name, :next_view ]
@@ -27,6 +33,7 @@ class Brand < ActiveRecord::Base
         brand_hash  = self.serializable_hash only: [ :name, :description, :website ]
         brand_hash["brand_id"] = self.id
         brand_hash["photo"]    = self.get_image
+        brand_hash["active"]   = self.active ? 1 : 0
         brand_hash
     end
 
