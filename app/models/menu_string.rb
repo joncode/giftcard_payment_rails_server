@@ -132,5 +132,6 @@ end
 #  created_at    :datetime        not null
 #  updated_at    :datetime        not null
 #  sections_json :string(255)
+#  menu          :text
 #
 

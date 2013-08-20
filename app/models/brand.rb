@@ -3,44 +3,65 @@ class Brand < ActiveRecord::Base
 	:logo, :name, :phone, :state, :user_id, :website,
 	:photo, :portrait, :next_view
 
-	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-  	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
-
 	has_many   :providers
 	has_many   :employees
 	belongs_to :user
 
 	validates_presence_of :name
 
+    default_scope where(active: true)
+
     after_save :update_parent_brand
 
-  	mount_uploader :photo, BrandPhotoUploader
+    def self.get_all
+        unscoped.order("name ASC")
+    end
 
   	def serialize
   		brand_hash 	= self.serializable_hash only: [ :name, :next_view ]
-  		if Rails.env.production?
-            brand_hash["brand_id"] = self.id
-        else
-            brand_hash["brand_id"] = self.id
-        end
-        brand_hash["photo"] 	   = self.get_image
-  		return brand_hash
+        brand_hash["brand_id"] = self.id
+        brand_hash["photo"]    = self.get_image
+  		brand_hash
   	end
+
+    def admt_serialize
+        brand_hash  = self.serializable_hash only: [ :name, :description, :website ]
+        brand_hash["brand_id"] = self.id
+        brand_hash["photo"]    = self.get_image
+        brand_hash["active"]   = self.active ? 1 : 0
+        brand_hash
+    end
 
   	def next_view
   		super || "m"
   	end
 
   	def has_photo?
-  		!self.photo.file.nil?
+  		!self.photo.nil?
   	end
 
 	def get_image
-		self.photo.url
+		self.photo
 	end
 
+    def photo= photo_url
+        # remove the cloudinray base url
+        new_url = photo_url.split(CLOUDINARY_IMAGE_URL)[1]
+        # save the shortened URL in db
+        super new_url
+    end
+
+    def photo
+        short_url = super
+        if short_url
+            CLOUDINARY_IMAGE_URL + short_url
+        else
+            nil
+        end
+    end
+
 	def get_photo_for_web
-		unless image = self.photo.url
+		unless image = self.photo
 			image = MERCHANT_DEFAULT_IMG
 		end
 		return image
@@ -71,15 +92,15 @@ class Brand < ActiveRecord::Base
 	    "#{self.description}"
 	end
 
-	private
+private
 
-		def update_parent_brand
-			if self.owner_id
-				owner_brand = Brand.find(self.owner_id)
-				owner_brand.update_attribute(:child, true) unless owner_brand.child
-				puts "Updated owner brand = #{owner_brand.id}"
-			end
+	def update_parent_brand
+		if self.owner_id
+			owner_brand = Brand.find(self.owner_id)
+			owner_brand.update_attribute(:child, true) unless owner_brand.child
+			puts "Updated owner brand = #{owner_brand.id}"
 		end
+	end
 
 end
 # == Schema Information
@@ -95,10 +116,13 @@ end
 #  phone       :string(255)
 #  website     :string(255)
 #  logo        :string(255)
-#  photo      :string(255)
+#  photo       :string(255)
 #  portrait    :string(255)
 #  user_id     :integer
 #  created_at  :datetime        not null
 #  updated_at  :datetime        not null
+#  owner_id    :integer
+#  next_view   :string(255)
+#  child       :boolean         default(FALSE)
 #
 

@@ -310,5 +310,12 @@ end
 #  longitude         :float
 #  foursquare_id     :string(255)
 #  rate              :decimal(, )
+#  menu_is_live      :boolean         default(FALSE)
+#  sd_location_id    :integer
+#  brand_id          :integer
+#  building_id       :integer
+#  token             :string(255)
+#  tools             :boolean         default(FALSE)
+#  image             :string(255)
 #
 

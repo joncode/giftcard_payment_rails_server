@@ -435,5 +435,6 @@ end
 #  reset_token             :string(255)
 #  birthday                :date
 #  origin                  :string(255)
+#  confirm                 :string(255)     default("00")
 #
 

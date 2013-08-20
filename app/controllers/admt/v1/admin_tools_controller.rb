@@ -144,9 +144,9 @@ module Admt
     #####   Brand Routes
 
             def brands
-                brands = Brand.order("name ASC")
+                brands = Brand.get_all
                 if brands.count > 0
-                    success brands.serialize_objs
+                    success brands.serialize_objs(:admt)
                 else
                     fail    database_error
                 end
@@ -154,8 +154,8 @@ module Admt
             end
 
             def brand
-                if brand = Brand.find(params["data"].to_i)
-                    success brand.serialize
+                if brand = Brand.unscoped.find(params["data"].to_i)
+                    success brand.admt_serialize
                 else
                     fail    database_error
                 end
@@ -168,7 +168,24 @@ module Admt
                 brand     = Brand.new brand_hsh
                 if brand.save
                     puts    "Here is new brand ID = #{brand.id} = #{brand.inspect}"
-                    success brand.serialize
+                    success brand.admt_serialize
+                else
+                    fail    brand
+                end
+                respond
+            end
+
+            def de_activate_brand
+                brand      = Brand.unscoped.find(params["data"].to_i)
+                new_active = brand.active ? false : true
+
+                if brand.update_attribute(:active, new_active)
+                    msg = if brand.active
+                            "#{brand.name} is Active"
+                        else
+                            "#{brand.name} is de-Activated"
+                        end
+                    success msg
                 else
                     fail    brand
                 end

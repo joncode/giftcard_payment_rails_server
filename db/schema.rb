@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130813205938) do
+ActiveRecord::Schema.define(:version => 20130820001159) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(:version => 20130813205938) do
     t.integer  "owner_id"
     t.string   "next_view"
     t.boolean  "child",       :default => false
+    t.boolean  "active",      :default => true
   end
 
   create_table "brands_providers", :id => false, :force => true do |t|
