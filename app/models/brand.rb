@@ -49,13 +49,12 @@ class Brand < ActiveRecord::Base
 	end
 
     def photo= photo_url
-        # remove the cloudinray base url
+        # remove the cloudinary base url
         if photo_url
             new_url = photo_url.split(CLOUDINARY_IMAGE_URL)[1]
         else
             new_url = nil
         end
-        # save the shortened URL in db
         super new_url
     end
 
