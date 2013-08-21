@@ -41,15 +41,10 @@ class Brand < ActiveRecord::Base
   	end
 
 	def get_image
-        short_url = if self.photo.present?
-            self.photo
+        if self.photo.present?
+            CLOUDINARY_IMAGE_URL + self.photo
         else
-            self.portrait
-        end
-        if short_url
-            CLOUDINARY_IMAGE2_URL + short_url
-        else
-            nil
+            CLOUDINARY_IMAGE2_URL + self.portrait
         end
 	end
 
