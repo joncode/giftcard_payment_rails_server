@@ -41,24 +41,37 @@ class Brand < ActiveRecord::Base
   	end
 
 	def get_image
-		self.photo
-	end
-
-    def photo= photo_url
-        # remove the cloudinray base url
-        new_url = photo_url.split(CLOUDINARY_IMAGE_URL)[1]
-        # save the shortened URL in db
-        super new_url
-    end
-
-    def photo
-        short_url = super
+        short_url = if self.photo.present?
+            self.photo
+        else
+            self.portrait
+        end
         if short_url
             CLOUDINARY_IMAGE2_URL + short_url
         else
             nil
         end
+	end
+
+    def photo= photo_url
+        # remove the cloudinray base url
+        if photo_url
+            new_url = photo_url.split(CLOUDINARY_IMAGE_URL)[1]
+        else
+            new_url = nil
+        end
+        # save the shortened URL in db
+        super new_url
     end
+
+    # def photo
+    #     short_url = super
+    #     if short_url
+    #         CLOUDINARY_IMAGE2_URL + short_url
+    #     else
+    #         nil
+    #     end
+    # end
 
 	def get_photo_for_web
 		unless image = self.photo

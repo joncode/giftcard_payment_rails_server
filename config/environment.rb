@@ -11,8 +11,10 @@ CLOUDINARY_BASE_URL   = "http://res.cloudinary.com/drinkboard"
 CLOUDINARY_IMAGE_URL  = "http://res.cloudinary.com/drinkboard/image/upload/"
 if Rails.env.staging?
     CLOUDINARY_IMAGE2_URL = "http://res.cloudinary.com/hsdbwezkg/image/upload/"
-else
+elsif Rails.env.production?
     CLOUDINARY_IMAGE2_URL = "http://res.cloudinary.com/htaaxtzcv/image/upload/"
+else
+    CLOUDINARY_IMAGE2_URL = "http://res.cloudinary.com/drinkboard/image/upload/"
 end
 CLOUDINARY_SECURE_URL = "https://d3jpl91pxevbkh.cloudfront.net/drinkboard"
 CLOUDINARY_UPLOAD     = "http://api.cloudinary.com/v1_1/drinkboard/image/upload"
