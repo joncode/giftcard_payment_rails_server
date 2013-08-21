@@ -8,7 +8,7 @@ class Brand < ActiveRecord::Base
 	belongs_to :user
 
 	validates_presence_of :name
-    mount_uploader :photo, BrandPhotoUploader
+    # mount_uploader :photo, BrandPhotoUploader
     default_scope where(active: true)
 
     after_save :update_parent_brand
@@ -44,21 +44,21 @@ class Brand < ActiveRecord::Base
 		self.photo
 	end
 
-    # def photo= photo_url
-    #     # remove the cloudinray base url
-    #     new_url = photo_url.split(CLOUDINARY_IMAGE_URL)[1]
-    #     # save the shortened URL in db
-    #     super new_url
-    # end
+    def photo= photo_url
+        # remove the cloudinray base url
+        new_url = photo_url.split(CLOUDINARY_IMAGE_URL)[1]
+        # save the shortened URL in db
+        super new_url
+    end
 
-    # def photo
-    #     short_url = super
-    #     if short_url
-    #         CLOUDINARY_IMAGE_URL + short_url
-    #     else
-    #         nil
-    #     end
-    # end
+    def photo
+        short_url = super
+        if short_url
+            CLOUDINARY_IMAGE2_URL + short_url
+        else
+            nil
+        end
+    end
 
 	def get_photo_for_web
 		unless image = self.photo
