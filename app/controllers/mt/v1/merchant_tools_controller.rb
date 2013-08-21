@@ -70,6 +70,26 @@ module Mt
                 respond
             end
 
+    ######   Menu Methods
+
+            def compile_menu
+                provider = Provider.find_by_token params["token"]
+                data = params["data"]["old_menu"]           # deprecate
+                menu = params["data"]["menu"]
+                puts "Old Data = #{data}"                   # deprecate
+                puts "new Data = #{menu}"
+                menu_string = provider.menu_string
+                if !menu_string                             # deprecate
+                    menu_string = MenuString.create(provider_id: provider.id, data: "[]")
+                end
+                if menu_string.update_attributes({data: data, menu: menu, version: 3})
+                    success     "Menu Live on App"
+                else
+                    fail        menu_string
+                end
+                respond
+            end
+
         end
     end
 end

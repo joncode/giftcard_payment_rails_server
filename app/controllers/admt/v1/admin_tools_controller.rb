@@ -192,6 +192,36 @@ module Admt
                 respond
             end
 
+            def associate
+                type_of  = params["data"]["type_of"]
+                type_msg = type_of == "building_id" ? "location" : "brand"
+                begin
+                    brand    = Brand.find params["data"]["brand"].to_i
+                    merchant = Provider.find params["data"]["merchant"].to_i
+                rescue
+                    brand = nil
+                end
+                if brand && merchant && (type_of == "building_id" || type_of == "brand_id" )
+                    if merchant.send(type_of)  != brand.id
+                        merchant.send(type_of, brand.id)
+                        msg = "#{brand.name} is #{type_msg} associated with #{merchant.name}"
+                    else
+                        merchant.send(type_of, nil)
+                        msg = "#{brand.name} is no longer #{type_msg} associated with #{merchant.name}"
+                    end
+                    if merchant.save
+                        success msg
+                    else
+                        fail    merchant
+                    end
+                else
+                    # could not find brand or merchant
+                    fail    data_not_found
+                end
+
+                respond
+            end
+
     #####  Merchant Routes
 
             def go_live

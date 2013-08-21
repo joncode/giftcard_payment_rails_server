@@ -204,6 +204,7 @@ Drinkboard::Application.routes.draw do
       post 'get_brand',         to: 'admin_tools#brand'
       post 'create_brand',      to: 'admin_tools#create_brand'
       post 'de_activate_brand', to: 'admin_tools#de_activate_brand'
+      post 'associate',         to: 'admin_tools#associate'
       post 'go_live',           to: 'admin_tools#go_live'
       post 'de_activate_user',  to: 'admin_tools#de_activate_user'
       post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
@@ -222,6 +223,7 @@ Drinkboard::Application.routes.draw do
       post 'create_merchant', to: 'merchant_tools#create'
       post 'orders',          to: 'merchant_tools#orders'
       post 'order',           to: 'merchant_tools#order'
+      post 'compile_menu',    to: 'merchant_tools#compile_menu'
     end
   end
 

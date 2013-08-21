@@ -26,7 +26,7 @@ module JsonHelper
     end
 
     def data_not_found
-        { "Database Error "       => "Data not found" }
+        { "Database Error"       => "Data not found" }
     end
 
     def stringify_error_messages object
