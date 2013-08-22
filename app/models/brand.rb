@@ -8,64 +8,63 @@ class Brand < ActiveRecord::Base
 	belongs_to :user
 
 	validates_presence_of :name
-    # mount_uploader :photo, BrandPhotoUploader
-    default_scope where(active: true)
+	# mount_uploader :photo, BrandPhotoUploader
+	default_scope where(active: true)
+	after_save :update_parent_brand
 
-    after_save :update_parent_brand
-
-    def self.get_all
-        unscoped.order("name ASC")
-    end
-
-  	def serialize
-  		brand_hash 	= self.serializable_hash only: [ :name, :next_view ]
-        brand_hash["brand_id"] = self.id
-        brand_hash["photo"]    = self.get_image
-  		brand_hash
-  	end
-
-    def admt_serialize
-        brand_hash  = self.serializable_hash only: [ :name, :description, :website ]
-        brand_hash["brand_id"] = self.id
-        brand_hash["photo"]    = self.get_image
-        brand_hash["active"]   = self.active ? 1 : 0
-        brand_hash
-    end
-
-  	def next_view
-  		super || "m"
-  	end
-
-  	def has_photo?
-  		!self.photo.nil?
-  	end
-
-	def get_image
-        if self.photo.present?
-            CLOUDINARY_IMAGE_URL + self.photo
-        else
-            CLOUDINARY_IMAGE2_URL + self.portrait
-        end
+	def self.get_all
+		unscoped.order("name ASC")
 	end
 
-    def photo= photo_url
-        # remove the cloudinary base url
-        if photo_url
-            new_url = photo_url.split(CLOUDINARY_IMAGE_URL)[1]
-        else
-            new_url = nil
-        end
-        super new_url
-    end
+	def serialize
+		brand_hash  = self.serializable_hash only: [ :name, :next_view ]
+		brand_hash["brand_id"] = self.id
+		brand_hash["photo"]    = self.get_image
+		brand_hash
+	end
 
-    # def photo
-    #     short_url = super
-    #     if short_url
-    #         CLOUDINARY_IMAGE2_URL + short_url
-    #     else
-    #         nil
-    #     end
-    # end
+	def admt_serialize
+		brand_hash  = self.serializable_hash only: [ :name, :description, :website ]
+		brand_hash["brand_id"] = self.id
+		brand_hash["photo"]    = self.get_image
+		brand_hash["active"]   = self.active ? 1 : 0
+		brand_hash
+	end
+
+	def next_view
+		super || "m"
+	end
+
+	def has_photo?
+		!self.photo.nil?
+	end
+
+	def get_image
+		if self.photo.present?
+			CLOUDINARY_IMAGE_URL + self.photo
+		else
+			CLOUDINARY_IMAGE2_URL + self.portrait
+		end
+	end
+
+	def photo= photo_url
+		# remove the cloudinary base url
+		if photo_url
+			new_url = photo_url.split(CLOUDINARY_IMAGE_URL)[1]
+		else
+			new_url = nil
+		end
+		super new_url
+	end
+
+		# def photo
+		#     short_url = super
+		#     if short_url
+		#         CLOUDINARY_IMAGE2_URL + short_url
+		#     else
+		#         nil
+		#     end
+		# end
 
 	def get_photo_for_web
 		unless image = self.photo
@@ -96,7 +95,7 @@ class Brand < ActiveRecord::Base
 	end
 
 	def city_state_zip
-	    "#{self.description}"
+			"#{self.description}"
 	end
 
 private

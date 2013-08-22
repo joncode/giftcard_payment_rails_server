@@ -102,7 +102,7 @@ module Admt
                 if user = User.find(params["data"].to_i)
                     success user.serialize
                 else
-                    fail    database_error
+                    fail    data_not_found
                 end
                 respond
             end
@@ -112,7 +112,11 @@ module Admt
                 if user && user.update_attributes(params["data"]["user"])
                     success user.serialize
                 else
-                    fail    database_error
+                    if user
+                        fail user
+                    else
+                        fail data_not_found
+                    end
                 end
                 respond
             end
@@ -171,6 +175,20 @@ module Admt
                     success brand.admt_serialize
                 else
                     fail    brand
+                end
+                respond
+            end
+
+            def update_brand
+                brand = Brand.find(params["data"]["brand_id"].to_i)
+                if brand && brand.update_attributes(params["data"]["brand"])
+                    success brand.admt_serialize
+                else
+                    if brand
+                        fail brand
+                    else
+                        fail data_not_found
+                    end
                 end
                 respond
             end
