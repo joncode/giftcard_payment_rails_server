@@ -1,9 +1,5 @@
 require 'yaml'
 require 'common_utils'
-require 'dbcall'
-
-# require 'myActiveRecordExtensions'
-# ActiveRecord::Base.send(:include, MyActiveRecordExtensions)
 
 yaml_data = YAML::load(ERB.new(IO.read(File.join(Rails.root, 'config', 'application.yml'))).result)
 APP_CONFIG = ENV["RAILS_ENV"] == "development" ? HashWithIndifferentAccess.new(yaml_data)[:development] : HashWithIndifferentAccess.new(yaml_data)[:production]
@@ -20,5 +16,6 @@ end
 
 def lcon
     load ($:[0] + "/console_libs.rb")
+    puts "loading rails console scripts [lcon]"
 end
 
