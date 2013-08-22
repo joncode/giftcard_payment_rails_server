@@ -1,7 +1,9 @@
 require 'authorize_net'
 
 class Sale < ActiveRecord::Base
-		# real account
+
+
+        # real account
  	AUTHORIZE_API_LOGIN 	  = '9tp38Ga4CQ'
  	AUTHORIZE_TRANSACTION_KEY = '9EcTk32BHeE8279P'
  	GATEWAY 			      = :production

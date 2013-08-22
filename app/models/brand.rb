@@ -8,7 +8,7 @@ class Brand < ActiveRecord::Base
 	belongs_to :user
 
 	validates_presence_of :name
-	# mount_uploader :photo, BrandPhotoUploader
+
 	default_scope where(active: true)
 	after_save :update_parent_brand
 
@@ -42,8 +42,10 @@ class Brand < ActiveRecord::Base
 	def get_image
 		if self.photo.present?
 			CLOUDINARY_IMAGE_URL + self.photo
-		else
+		elsif self.portrait.present?
 			CLOUDINARY_IMAGE2_URL + self.portrait
+		else
+			nil
 		end
 	end
 
