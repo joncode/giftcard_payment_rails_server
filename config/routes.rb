@@ -203,6 +203,7 @@ Drinkboard::Application.routes.draw do
       post 'get_brands',        to: 'admin_tools#brands'
       post 'get_brand',         to: 'admin_tools#brand'
       post 'create_brand',      to: 'admin_tools#create_brand'
+      post 'update_brand',      to: 'admin_tools#update_brand'
       post 'de_activate_brand', to: 'admin_tools#de_activate_brand'
       post 'associate',         to: 'admin_tools#associate'
       post 'go_live',           to: 'admin_tools#go_live'

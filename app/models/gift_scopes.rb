@@ -12,10 +12,12 @@ module GiftScopes
 
     def get_unsettled end_date
         end_date = if end_date
-            end_date.to_datetime + 4.hours
+            # turn end_date into a the UTC time
+            end_date.to_date + 7.hours
         else
-            Time.now + 4.hours
+            Time.now.to_date + 7.hours         # most recent 2 week end period , 7 am
         end
+        puts "HEERE IS THE END DATE TO SCOPE #{end_date}"
         where(status: "redeemed").where("updated_at <= :end_date", :end_date => end_date )
     end
 

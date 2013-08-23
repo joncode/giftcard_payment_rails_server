@@ -7,7 +7,8 @@ class Brand < ActiveRecord::Base
 	has_many   :employees
 	belongs_to :user
 
-	validates_presence_of :name
+	# validates_presence_of 	:name
+	validates :name, presence: true, :uniqueness => { case_sensitive: false }
 
 	default_scope where(active: true)
 	after_save :update_parent_brand

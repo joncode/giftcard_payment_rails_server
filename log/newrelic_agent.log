@@ -220,3 +220,6 @@
 [08/22/13 12:20:47 -0400 new-host-2.home (13124)] INFO : Installing Rails3 Error instrumentation
 [08/22/13 12:20:47 -0400 new-host-2.home (13124)] INFO : Finished instrumentation
 [08/22/13 12:20:49 -0400 new-host-2.home (13124)] INFO : Doing deferred dependency-detection before Rack startup
+[08/22/13 17:57:48 -0400 new-host-2.home (13124)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Brand with id=0 [WHERE "brands"."active" = 't']
+[08/22/13 21:46:36 -0600 new-host-2.home (13124)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `month' for "2013-08-17":String
+[08/22/13 21:46:36 -0600 new-host-2.home (13124)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `month' for "2013-08-17":String
