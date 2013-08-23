@@ -12,4 +12,31 @@ module Legacy
         end
     end
 
+    def delete_dev_gifts
+
+    end
+
+    def deactive p_ary
+        p_ary.each do |p|
+            prov = Provider.find p
+            prov.update_attribute(:active, false)
+        end
+    end
+
+    def delete_gifts
+        gs = Gift.where(status: 'redeemed')
+        gs.each do |gift|
+            if gift.sales.count == 0
+                gift.destroy
+            end
+        end
+        gs = Gift.all
+        gs.each do |g|
+            p = g.provider
+            if not p.active
+                g.destroy
+            end
+        end
+    end
+
 end
