@@ -183,12 +183,12 @@ Drinkboard::Application.routes.draw do
   match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
 
   ## SERVICES ROUTES (app . mdot)
-  namespace :app, defaults: { format: 'json' } do
-    namespace :v2 do
-      post 'regift',  to: 'iphone#regifter'
-      post 'menu',    to: 'iphone#menu'
-    end
-  end
+  # namespace :app, defaults: { format: 'json' } do
+  #   namespace :v2 do
+  #     post 'regift',  to: 'iphone#regifter'
+  #     post 'menu',    to: 'iphone#menu'
+  #   end
+  # end
 
   ## ADMIN TOOLS routes for API
   namespace :admt, defaults: { format: 'json' } do
