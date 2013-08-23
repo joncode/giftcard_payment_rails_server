@@ -7,12 +7,12 @@ module App
 
             def regifter
                 # get the gift from the gift ID
-                if old_gift = Gift.find params["data"].to_i
-                # make a new gift with regifting code
+                if old_gift = Gift.find(params["data"].to_i)
+                    # make a new gift with regifting code
                     new_gift = old_gift.regift
-                # save the new gift
+                    # save the new gift
                     new_gift.save
-                # change the status of the old gift
+                    # change the status of the old gift
                     old_gift.update_attribute(:status, 'regifted')
                     success new_gift.serialize
                 else
