@@ -289,20 +289,6 @@ module Admt
                 respond
             end
 
-            def update_merchant
-                provider = Provider.find(params["data"]["merchant_id"].to_i)
-                if provider && provider.update_attributes(params["data"]["merchant"])
-                    success provider.admt_serialize
-                else
-                    if provider
-                        fail provider
-                    else
-                        fail data_not_found
-                    end
-                end
-                respond
-            end
-
     #####   Payment Routes
 
             def unsettled
