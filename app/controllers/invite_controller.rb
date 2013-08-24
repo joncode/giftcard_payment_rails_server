@@ -41,7 +41,7 @@ class InviteController < ApplicationController
     else
       response_hash = { "error" => "Incorrect Data Received"}
     end
-    puts "HERE IS THE RESPONSE = #{response_hash}"
+
     respond_to do |format|
       format.json { render json: response_hash }
     end
