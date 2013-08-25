@@ -97,19 +97,19 @@ class Provider < ActiveRecord::Base
 		Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
 	end
 
-	def token
-		token = super
-		if token.nil?    # lazy create & save merchant token
-			create_token
-			if self.save
-				token = super
-			else
-				puts "Provider lazy token FAIL #{self.id}"
-				token = self.errors.messages
-			end
-		end
-		return token
-	end
+	# def token
+	# 	token = super
+	# 	# if token.nil?    # lazy create & save merchant token
+	# 	# 	create_token
+	# 	# 	if self.save
+	# 	# 		token = super
+	# 	# 	else
+	# 	# 		puts "Provider lazy token FAIL #{self.id}"
+	# 	# 		token = self.errors.messages
+	# 	# 	end
+	# 	# end
+	# 	return token
+	# end
 
 	def sales_tax
 		tax = super

@@ -46,7 +46,7 @@ class Card < ActiveRecord::Base
 	end
 
 	def verification_value?
-       false
+       	false
     end
 
 	def decrypt!(passphrase)
@@ -134,11 +134,11 @@ class Card < ActiveRecord::Base
 
 		   # Chomping is necessary for postgresql
 		def encode_into_base64 string
-		  Base64.encode64(string).chomp
+		  	Base64.encode64(string).chomp
 		end
 
 		def decode_from_base64 string
-		  Base64.decode64(string)
+		  	Base64.decode64(string)
 		end
 
 		def cipher
