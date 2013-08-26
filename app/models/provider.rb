@@ -32,9 +32,9 @@ class Provider < ActiveRecord::Base
 	# validates_numericality_of :sales_tax
 	validates_length_of :state , 	:is => 2
 	validates_length_of :zip, 		:within => 5..10
-	validates_length_of :aba, 		:is => 9, 			:if => :aba_exists?
-	validates_length_of :routing, 	:within => 9..14,	:if => :routing_exists?
-	# validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
+	#validates_length_of :aba, 		:is => 9, 			:if => :aba_exists?
+	#validates_length_of :routing, 	:within => 9..14,	:if => :routing_exists?
+	validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
@@ -260,13 +260,13 @@ class Provider < ActiveRecord::Base
 
 private
 
-	def aba_exists?
-		self.aba != nil && !self.aba.empty?
-	end
+	# def aba_exists?
+	# 	self.aba != nil && !self.aba.empty?
+	# end
 
-	def routing_exists?
-		self.routing != nil && !self.routing.empty?
-	end
+	# def routing_exists?
+	# 	self.routing != nil && !self.routing.empty?
+	# end
 
 	def make_menu_string
 	    MenuString.create(provider_id: self.id, data: "[]")
