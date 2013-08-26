@@ -53,7 +53,7 @@ class IphoneController < AppController
 
 			if user && user.authenticate(password)
 				user.pn_token       = pn_token if pn_token
-				response["server"]  = user.providers_to_iphone
+				#response["server"]  = user.providers_to_iphone
 				response["user"]    = user.serialize(true)
 			else
 				response["error"]   = "Invalid email/password combination"
