@@ -1,6 +1,6 @@
 module Dbcall
 
-    def self.create_admin_user(email, name=nil)
+    def create_admin_user(email, name=nil)
         user = User.new
         # we check for the name
         if name
@@ -20,11 +20,11 @@ module Dbcall
         # we set admin = true
         user.admin    = true
         user.save
-        self.authorize_merchant_tools(user)
+        authorize_merchant_tools(user)
         return user
     end
 
-    def self.delete_gifts_by_order_num order_num
+    def delete_gifts_by_order_num order_num
         if order_num.kind_of? Array
             order_num.each do |o_num|
                 gift = Gift.find_by_order_num(o_num)
@@ -38,23 +38,23 @@ module Dbcall
         end
     end
 
-    def self.mt_admin_users
+    def mt_admin_users
 
         # get all users where admin:true
         users = User.where(admin: true).to_a
         # put their remeber token in an array
         users.each do |user|
-            self.authorize_merchant_tools(user)
+            authorize_merchant_tools(user)
         end
     end
 
-    def self.pattr(attribute, item_array)
+    def pattr(attribute, item_array)
         if item_array.count > 0
             item_array.map do |i|
                 if attribute.kind_of? Array
-                    puts self.string_attributes_ary(attribute, i)
+                    puts string_attributes_ary(attribute, i)
                 else
-                    puts self.string_attribute_obj(attribute, i)
+                    puts string_attribute_obj(attribute, i)
                 end
             end
         else
@@ -63,7 +63,7 @@ module Dbcall
         nil
     end
 
-    def self.call_all(obj)
+    def call_all(obj)
         methods_ary = obj.methods
         methods_ary.each do |o|
             print "#{o} --- "
@@ -76,22 +76,22 @@ module Dbcall
         nil
     end
 
-    def self.deactivate(attribute, data, obj)
+    def deactivate(attribute, data, obj)
         if data.kind_of? Array
             puts "Array received"
             data.each do |item|
-                self.deactivate_from_attr(attribute, item, obj)
+                deactivate_from_attr(attribute, item, obj)
             end
         else
             puts "#{data.class.to_s} received"
-            self.deactivate_from_attr(attribute, data, obj)
+            deactivate_from_attr(attribute, data, obj)
         end
         nil
     end
 
-    def self.deactivate_from_attr(attribute, data, obj)
+    def deactivate_from_attr(attribute, data, obj)
         if user = obj.class.where({attribute => data} ).first
-            puts self.string_attribute_obj(attribute, user) + " | #{user.name}"
+            puts string_attribute_obj(attribute, user) + " | #{user.name}"
             print "Deactivate #{user.name} ? -> (y/n) "
             response = gets.chomp.downcase
             if response == 'y'
@@ -104,11 +104,11 @@ module Dbcall
 
 private
 
-    def self.string_attribute_obj(attribute, obj)
+    def string_attribute_obj(attribute, obj)
         "#{obj.class.to_s} ID = #{obj.id} | #{attribute.to_s} = #{obj.send(attribute)}"
     end
 
-    def self.string_attributes_ary(attribute, obj)
+    def string_attributes_ary(attribute, obj)
         str = "#{obj.class.to_s} ID = #{obj.id}"
         attribute.each do |attrb|
             str << " | #{attrb.to_s} = #{obj.send(attrb)}"
@@ -116,7 +116,7 @@ private
         return str
     end
 
-    def self.authorize_merchant_tools(user)
+    def authorize_merchant_tools(user)
         # call the merchant tools database with the remember_token
         # make an httparty request with the admin token
         # we need an authentication token of some sort
