@@ -5,6 +5,8 @@ class IphoneController < AppController
 	PROVIDER_REPLY  = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "status", "redeem_id", "redeem_code", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
 	COMPLETED_REPLY = ["receiver_id", "receiver_name","giver_name", "item_id", "item_name","category", "price", "total", "tax" , "tip", "message", "updated_at", "id", "redeem_id", "redeem_code"]
 
+	before_filter :authenticate_services,     only: [:regift]
+
 	def create_account
 
 		data     = params["data"]
@@ -155,25 +157,29 @@ class IphoneController < AppController
 
 	def regift
 
-		user  = User.find_by_remember_token(params["token"])
-		gift  = Gift.find(params["gift_id"].to_i)
-		if gift.receiver == user
-			receiver_id = params["regifter_id"] || nil
-			receiver = User.find(receiver_id.to_i)
-			message  = params["message"]     || nil
-			new_gift = gift.regift(receiver, message)
-		else
-			response["error_iphone"]    =  " User cannot regift gift #{gift.id}"
-		end
-		respond_to do |format|
-			if new_gift.save
-				response["success"]       = "ReGifted - Thank you!"
-			else
-				response["error_server"]  = " ReGift unable to process to database."
-			end
-			@app_response = "iPhoneC #{response}"
-			format.json { render json: response }
-		end
+        recipient_data = params["data"]["receiver"]
+        if recipient_data["receiver_id"].to_i > 0
+            unless recipient = User.find(recipient_data["receiver_id"])
+                puts "!!! APP SUBMITTED USER ID THAT DOESNT EXIST #{recipient_data} !!!"
+                recipient = make_user_with_hash(recipient_data)
+            end
+        else
+            recipient = make_user_with_hash(recipient_data)
+        end
+
+        old_gift_id = params["data"]["regift_id"]
+        message     = params["data"]["message"]
+
+        if old_gift = Gift.find(old_gift_id.to_i)
+            new_gift = old_gift.regift(recipient, message)
+            new_gift.save
+            old_gift.update_attribute(:status, 'regifted')
+            success(new_gift.serialize)
+        else
+            fail    data_not_found
+        end
+
+        respond
 	end
 
 	def buys
