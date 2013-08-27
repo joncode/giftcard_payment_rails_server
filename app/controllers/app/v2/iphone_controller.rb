@@ -9,7 +9,7 @@ module App
 
                 recipient_data = params["data"]["receiver"]
                 if recipient_data["receiver_id"].to_i > 0
-                    if not recipient = User.find recipient_data["receiver_id"]
+                    unless recipient = User.find(recipient_data["receiver_id"])
                         puts "!!! APP SUBMITTED USER ID THAT DOESNT EXIST #{recipient_data} !!!"
                         recipient = make_user_with_hash(recipient_data)
                     end
