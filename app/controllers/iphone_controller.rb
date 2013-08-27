@@ -91,7 +91,7 @@ class IphoneController < AppController
 			end
 			if user
 				user.pn_token       = pn_token if pn_token
-				response["server"]  = user.providers_to_iphone
+				#response["server"]  = user.providers_to_iphone
 				response["user"]    = user.serialize(true)
 			else
 				response[resp_key]  = "#{msg} not in Drinkboard database "

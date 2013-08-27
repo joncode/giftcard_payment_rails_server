@@ -36,6 +36,8 @@ class Gift < ActiveRecord::Base
 
 	after_create  :update_shoppingCart
 
+	default_scope where(active: true)
+
 #/---------------------------------------------------------------------------------------------/
 
 	def serialize

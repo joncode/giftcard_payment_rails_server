@@ -67,7 +67,7 @@ class Sale < ActiveRecord::Base
         @transaction.fields[:first_name] = card.first_name
 		@transaction.fields[:last_name]  = card.last_name
 
-		month 		 = "%02d" % card.month
+		month 		 = "%02d" % card.month.to_i
 		year 		 = card.year[2..3]
 		card.decrypt! "Theres no place like home"
 		card_number  = card.number

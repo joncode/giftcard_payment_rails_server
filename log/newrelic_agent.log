@@ -223,3 +223,62 @@
 [08/22/13 17:57:48 -0400 new-host-2.home (13124)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: Couldn't find Brand with id=0 [WHERE "brands"."active" = 't']
 [08/22/13 21:46:36 -0600 new-host-2.home (13124)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `month' for "2013-08-17":String
 [08/22/13 21:46:36 -0600 new-host-2.home (13124)] WARN : The error reporting queue has reached 20. The error detail for this and subsequent errors will not be transmitted to New Relic until the queued errors have been sent: undefined method `month' for "2013-08-17":String
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Starting the New Relic agent in "development" environment.
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Reading configuration from config/newrelic.yml
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Enabling the Request Sampler.
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] ERROR : No application name configured.
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] ERROR : The Agent cannot start without at least one. Please check your 
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] ERROR : value set for app_name in the development 
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] ERROR : environment.
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Installing ActiveMerchant instrumentation
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Installing ActiveRecord instrumentation
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Installing Net instrumentation
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Installing Sinatra instrumentation
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Installing deferred Rack instrumentation
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Installing Resque instrumentation
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Installing Rails 3 Controller instrumentation
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Installing Rails3 Error instrumentation
+[08/26/13 15:08:20 -0400 new-host-2.home (2294)] INFO : Finished instrumentation
+[08/26/13 15:08:21 -0400 new-host-2.home (2294)] INFO : Doing deferred dependency-detection before Rack startup
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Starting the New Relic agent in "development" environment.
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Reading configuration from config/newrelic.yml
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Enabling the Request Sampler.
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] ERROR : No application name configured.
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] ERROR : The Agent cannot start without at least one. Please check your 
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] ERROR : value set for app_name in the development 
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] ERROR : environment.
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Installing ActiveMerchant instrumentation
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Installing ActiveRecord instrumentation
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Installing Net instrumentation
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Installing Sinatra instrumentation
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Installing deferred Rack instrumentation
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Installing Resque instrumentation
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Installing Rails 3 Controller instrumentation
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Installing Rails3 Error instrumentation
+[08/26/13 17:13:09 -0400 new-host-2.home (1332)] INFO : Finished instrumentation
+[08/26/13 17:13:11 -0400 new-host-2.home (1332)] INFO : Doing deferred dependency-detection before Rack startup
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Starting the New Relic agent in "development" environment.
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Reading configuration from config/newrelic.yml
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Enabling the Request Sampler.
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] ERROR : No application name configured.
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] ERROR : The Agent cannot start without at least one. Please check your 
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] ERROR : value set for app_name in the development 
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] ERROR : environment.
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Installing ActiveMerchant instrumentation
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Installing ActiveRecord instrumentation
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Installing Net instrumentation
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Installing Sinatra instrumentation
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Installing deferred Rack instrumentation
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Installing Resque instrumentation
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Installing Rails 3 Controller instrumentation
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Installing Rails3 Error instrumentation
+[08/27/13 11:58:23 -0400 new-host-2.home (2760)] INFO : Finished instrumentation
