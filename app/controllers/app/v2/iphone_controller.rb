@@ -1,6 +1,6 @@
 module App
     module V2
-        class IphoneController < JsonController
+        class AppleController < JsonController
 
             before_filter :authenticate_services#,     except: [:create_account, :login]
             # before_filter :authenticate_general_token,  only: [:create_account, :login]

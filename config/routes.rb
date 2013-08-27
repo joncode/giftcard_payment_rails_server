@@ -185,8 +185,8 @@ Drinkboard::Application.routes.draw do
   ## SERVICES ROUTES (app . mdot)
   namespace :app, defaults: { format: 'json' } do
     namespace :v2 do
-      post 'regift',  to: 'iphone#regift'
-      post 'menu',    to: 'iphone#menu'
+      post 'regift',  to: 'apple#regift'
+      post 'menu',    to: 'apple#menu'
     end
   end
 
