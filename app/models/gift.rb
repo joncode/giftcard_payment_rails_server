@@ -2,13 +2,13 @@ class Gift < ActiveRecord::Base
 	extend  GiftScopes
 	include Formatter
 
-	attr_accessible   :giver_id,      :giver_name, :credit_card,
+	attr_accessible   	  :giver_id, 	  :giver_name,
 			:receiver_id, :receiver_name, :receiver_phone,
 			:provider_id, :provider_name, :receiver_email,
 			:message,     :shoppingCart,
 			:tip, :tax,   :total, :service,
 			:facebook_id, :foursquare_id, :twitter,
-			:status
+			:status, :credit_card
 			# should be removed from accessible = giver_id, giver_name, shoppingCart, status
 
 			# from the app on create gift
@@ -259,7 +259,7 @@ class Gift < ActiveRecord::Base
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
 		self.receiver_phone = receiver.phone ? receiver.phone : nil
 		self.receiver_email = receiver.email ? receiver.email : nil
-		self.status 		= 'open' if self.status == "incomplete"
+		self.status 		= 'open' if receiver.id
 	end
 
 	def add_giver sender

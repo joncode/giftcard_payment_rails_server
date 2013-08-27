@@ -152,7 +152,7 @@ Drinkboard::Application.routes.draw do
   match 'app/get_settings',     to: 'app#get_settings',        via: :post
   match 'app/save_settings',    to: 'app#save_settings',       via: :post
   match 'app/m_save_settings',  to: 'app#save_settings_m',     via: :post
-  match 'app/regift',           to: 'iphone#regift',           via: :post
+  #match 'app/regift',           to: 'iphone#regift',           via: :post
     ## test new data methods routes
   match 'app/new_pic',          to: 'app#providers_short_ph_url', via: :post
 
@@ -183,12 +183,12 @@ Drinkboard::Application.routes.draw do
   match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
 
   ## SERVICES ROUTES (app . mdot)
-  # namespace :app, defaults: { format: 'json' } do
-  #   namespace :v2 do
-  #     post 'regift',  to: 'iphone#regifter'
-  #     post 'menu',    to: 'iphone#menu'
-  #   end
-  # end
+  namespace :app, defaults: { format: 'json' } do
+    namespace :v2 do
+      post 'regift',  to: 'iphone#regift'
+      post 'menu',    to: 'iphone#menu'
+    end
+  end
 
   ## ADMIN TOOLS routes for API
   namespace :admt, defaults: { format: 'json' } do
