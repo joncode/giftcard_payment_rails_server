@@ -57,7 +57,9 @@ class Provider < ActiveRecord::Base
 	end
 
 	def admt_serialize
-		serializable_hash only: [:name, :address, :state, :city, :brand_id, :building_id ]
+		prov_hash  = self.serializable_hash only: [:name, :address, :state, :city, :brand_id, :building_id ]
+		prov_hash["provider_id"]  = self.id
+		return prov_hash
 	end
 
 	def merchantize

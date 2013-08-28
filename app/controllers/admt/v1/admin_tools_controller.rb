@@ -212,10 +212,10 @@ module Admt
 
             def associate
                 type_of  = params["data"]["type_of"]
-                type_msg = type_of == "building_id" ? "location" : "brand"
+                type_msg = type_of == "building_id" ? "building" : "brand"
                 begin
-                    brand    = Brand.find params["data"]["brand"].to_i
-                    merchant = Provider.find params["data"]["merchant"].to_i
+                    brand    = Brand.find params["data"]["brand_id"].to_i
+                    merchant = Provider.find params["data"]["provider_id"].to_i
                 rescue
                     brand = nil
                 end
@@ -229,6 +229,25 @@ module Admt
                     end
                     if merchant.save
                         success msg
+                    else
+                        fail    merchant
+                    end
+                else
+                    # could not find brand or merchant
+                    fail    data_not_found
+                end
+
+                respond
+            end
+
+            def de_associate
+                provider_id = params["data"]["provider_id"].to_i
+                brand_id    = params["data"]["brand_id"].to_i
+                type_of     = params["data"]["type_of"]
+                if merchant = Provider.unscoped.find(provider_id)
+                    merchant.send("#{type_of}=", nil)
+                    if merchant.save
+                        success "De-association successfull"
                     else
                         fail    merchant
                     end
