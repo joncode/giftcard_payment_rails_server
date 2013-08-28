@@ -82,14 +82,18 @@ class User < ActiveRecord::Base
 		usr_hash["user_id"] = self.id.to_s
 		usr_hash["fb"]		= self.facebook_id_exists? ? "Yes" : "No"
 		usr_hash["twitter"] = self.twitter_exists? ? "Yes" : "No"
-		usr_hash["active"]  = self.active ? 1 : 0
+		if self.first_name == "De-activated[app]"
+			usr_hash["active"]  = 2
+		else
+			usr_hash["active"]  = self.active ? 1 : 0
+		end
 		usr_hash.keep_if {|k, v| !v.nil? }
 		usr_hash
 	end
 
 	def inspect
 		#super
-		"User ID = #{self.id} | Name = #{name} | email = #{self.email} | last update = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)}\n"
+		"User ID = #{self.id} | Name = #{name} | email = #{self.email} | phone = #{self.phone} |  last = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)} | active = #{self.active}\n"
 	end
 
 	def ua_alias
@@ -220,6 +224,17 @@ class User < ActiveRecord::Base
 ##################
 
 #######  UTILITY  METHODS
+
+	def permanently_de_activate
+		self.active 	 = false
+		self.phone  	 = "#{self.phone}" + "555"
+		self.email  	 = "#{self.email}" + "xxx"
+		self.facebook_id = "#{self.facebook_id}" + "xxx"
+		self.twitter 	 = "#{self.twitter}" + "xxx"
+		self.last_name   = self.name
+		self.first_name  = "De-activated[app]"
+		save
+	end
 
 	def update_reset_token
 		self.reset_token_sent_at = Time.now

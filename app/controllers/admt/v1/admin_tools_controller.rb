@@ -126,8 +126,8 @@ module Admt
                 user.active = user.active ? false : true
 
                 if user.save
-                    stat    = user.active ? "Active" : "De-Activated"
-                    success "User is now #{stat}"
+                    stat    = user.active ? "Live" : "Suspended"
+                    success "#{user.name} is now #{stat}"
                 else
                     fail    user
                 end
@@ -137,8 +137,8 @@ module Admt
             def destroy_user
                 user        = User.find(params["data"].to_i)
 
-                if user.destroy
-                    success "#{user.name} is destroyed."
+                if user.permanently_de_activate
+                    success "#{user.name} is Permanently De-Activated."
                 else
                     fail    user
                 end
