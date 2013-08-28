@@ -39,8 +39,13 @@ class Provider < ActiveRecord::Base
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
+	default_scope where(active: true).order("name ASC")
 
 #/---------------------------------------------------------------------------------------------/
+
+	def self.get_all
+		unscoped.order("name ASC")
+	end
 
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city, :latitude, :longitude]
@@ -49,6 +54,10 @@ class Provider < ActiveRecord::Base
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live
 		return prov_hash
+	end
+
+	def admt_serialize
+		serializable_hash only: [:name, :address, :state, :city, :brand_id, :building_id ]
 	end
 
 	def merchantize
@@ -73,20 +82,20 @@ class Provider < ActiveRecord::Base
 		end
 	end
 
-	def self.where(params={}, *args)
-		if params.kind_of?(Hash) && !params.has_key?(:active) && !params.has_key?("active")
-			params[:active] = true
-			super(params, *args)
-		elsif params.kind_of?(String)
-			super(params, *args).where(active: true)
-		else
-			super(params, *args)
-		end
-	end
+	# def self.where(params={}, *args)
+	# 	if params.kind_of?(Hash) && !params.has_key?(:active) && !params.has_key?("active")
+	# 		params[:active] = true
+	# 		super(params, *args)
+	# 	elsif params.kind_of?(String)
+	# 		super(params, *args).where(active: true)
+	# 	else
+	# 		super(params, *args)
+	# 	end
+	# end
 
-	def self.all
-		self.where({})
-	end
+	# def self.all
+	# 	self.where({})
+	# end
 
 	def get_todays_credits
 		self.orders.where("updated_at > ?", (Time.now - 1.day))

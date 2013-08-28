@@ -206,6 +206,7 @@ Drinkboard::Application.routes.draw do
       post 'update_brand',      to: 'admin_tools#update_brand'
       post 'de_activate_brand', to: 'admin_tools#de_activate_brand'
       post 'associate',         to: 'admin_tools#associate'
+      post 'providers',         to: 'admin_tools#providers'
       post 'go_live',           to: 'admin_tools#go_live'
       post 'de_activate_user',  to: 'admin_tools#de_activate_user'
       post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'

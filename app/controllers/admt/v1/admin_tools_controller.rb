@@ -242,6 +242,16 @@ module Admt
 
     #####  Merchant Routes
 
+            def providers
+                providers = Provider.get_all
+                if providers.count > 0
+                    success providers.serialize_objs(:admt)
+                else
+                    fail    database_error
+                end
+                respond
+            end
+
             def go_live
                 provider = Provider.find_by_token params['data']
                 provider.sd_location_id = provider.live_bool ? nil : 1
