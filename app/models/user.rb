@@ -227,7 +227,10 @@ class User < ActiveRecord::Base
 
 	def permanently_de_activate
 		self.active 	 = false
-		self.phone  	 = "#{self.phone}555"		if phone_exists?
+		if phone_exists?
+			self.credit_number = self.phone
+			self.phone   = nil
+		end
 		self.email  	 = "#{self.email}xxx"
 		self.facebook_id = "#{self.facebook_id}xxx" if facebook_id_exists?
 		self.twitter 	 = "#{self.twitter}xxx" 	if twitter_exists?
@@ -332,7 +335,9 @@ private
 	def confirm_email
 		if self.email
 			if self.confirm[0] == '0'
-				Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
+				if Rails.env.production?
+					Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
+				end
 			end
 		end
 	end
@@ -379,8 +384,10 @@ private
 							# mail the giver that receiver has gotten the gift
 					if g.receiver_email
 						puts "emailing the gift giver that gift has been collected for #{g.id}"
+						if Rails.env.production?
 							# notify the giver via email
-						Resque.enqueue(EmailJob, 'notify_giver_created_user', g.giver_id , {:gift_id => g.id})
+							Resque.enqueue(EmailJob, 'notify_giver_created_user', g.giver_id , {:gift_id => g.id})
+						end
 					end
 				else
 					error   += 1
