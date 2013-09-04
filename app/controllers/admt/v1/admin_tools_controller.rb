@@ -226,8 +226,8 @@ module Admt
                 type_of  = params["data"]["type_of"]
                 type_msg = type_of == "building_id" ? "building" : "brand"
                 begin
-                    brand    = Brand.unscoped.find params["data"]["brand_id"].to_i
-                    merchant = Provider.unscoped.find params["data"]["provider_id"].to_i
+                    brand    = Brand.unscoped.find(params["data"]["brand_id"].to_i)
+                    merchant = Provider.unscoped.find(params["data"]["provider_id"].to_i)
                 rescue
                     brand = nil
                 end
@@ -284,7 +284,7 @@ module Admt
             end
 
             def go_live
-                if provider = Provider.unscoped.find_by_token params['data']
+                if provider = Provider.unscoped.find_by_token(params['data'])
                     provider.sd_location_id = provider.live_bool ? nil : 1
 
                     if provider.save
@@ -305,7 +305,7 @@ module Admt
             end
 
             def de_activate_merchant
-                if provider    = Provider.unscoped.find_by_token params['data']
+                if provider    = Provider.unscoped.find_by_token(params['data'])
                     new_active = provider.active ? false : true
 
                     if provider.update_attribute(:active, new_active)
@@ -326,7 +326,7 @@ module Admt
             end
 
             def orders
-                if provider = Provider.unscoped.find_by_token params['data']
+                if provider = Provider.unscoped.find_by_token(params['data'])
 
                     if gifts = Gift.get_history_provider(provider)
                         success array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
