@@ -227,10 +227,10 @@ class User < ActiveRecord::Base
 
 	def permanently_de_activate
 		self.active 	 = false
-		self.phone  	 = "#{self.phone}" + "555"
-		self.email  	 = "#{self.email}" + "xxx"
-		self.facebook_id = "#{self.facebook_id}" + "xxx"
-		self.twitter 	 = "#{self.twitter}" + "xxx"
+		self.phone  	 = "#{self.phone}555"		if phone_exists?
+		self.email  	 = "#{self.email}xxx"
+		self.facebook_id = "#{self.facebook_id}xxx" if facebook_id_exists?
+		self.twitter 	 = "#{self.twitter}xxx" 	if twitter_exists?
 		self.last_name   = self.name
 		self.first_name  = "De-activated[app]"
 		save
