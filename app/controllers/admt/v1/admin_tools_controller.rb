@@ -25,7 +25,7 @@ module Admt
 
             def gift
 
-                if gift = Gift.find(params["data"].to_i)
+                if gift = Gift.unscoped.find(params["data"].to_i)
                     serialized_gift = array_these_gifts( [gift], ADMIN_REPLY, false , false , true )
                     success serialized_gift.first
                 else
@@ -50,7 +50,7 @@ module Admt
     #####  Gift & Sale Methods
 
             def cancel
-                gift = Gift.find(params["data"].to_i)
+                gift = Gift.unscoped.find(params["data"].to_i)
                 case gift.status
                 when "unpaid"
                     # void the gift - no sale
@@ -180,7 +180,7 @@ module Admt
             end
 
             def update_brand
-                brand = Brand.find(params["data"]["brand_id"].to_i)
+                brand = Brand.unscoped.find(params["data"]["brand_id"].to_i)
                 if brand && brand.update_attributes(params["data"]["brand"])
                     success brand.admt_serialize
                 else
@@ -215,7 +215,7 @@ module Admt
                 type_msg = type_of == "building_id" ? "building" : "brand"
                 begin
                     brand    = Brand.find params["data"]["brand_id"].to_i
-                    merchant = Provider.find params["data"]["provider_id"].to_i
+                    merchant = Provider.unscoped.find params["data"]["provider_id"].to_i
                 rescue
                     brand = nil
                 end
@@ -272,7 +272,7 @@ module Admt
             end
 
             def go_live
-                provider = Provider.find_by_token params['data']
+                provider = Provider.unscoped.find_by_token params['data']
                 provider.sd_location_id = provider.live_bool ? nil : 1
 
                 if provider.save
@@ -290,7 +290,7 @@ module Admt
             end
 
             def de_activate_merchant
-                provider    = Provider.find_by_token params['data']
+                provider    = Provider.unscoped.find_by_token params['data']
                 new_active  = provider.active ? false : true
 
                 if provider.update_attribute(:active, new_active)
@@ -308,7 +308,7 @@ module Admt
             end
 
             def orders
-                provider = Provider.find_by_token params['data']
+                provider = Provider.unscoped.find_by_token params['data']
 
                 if gifts = Gift.get_history_provider(provider)
                     success array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
