@@ -56,6 +56,15 @@ module Legacy
         end
     end
 
+    def update_all_menus_to_detail
+        ms = MenuString.all
+        ms.each do |menu_string|
+            puts "Updating MenuString ID = #{menu_string.id}"
+            update_menu_to_detail menu_string
+        end
+        nil
+    end
+
 end
 
 
