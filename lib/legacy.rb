@@ -39,4 +39,32 @@ module Legacy
         end
     end
 
+    def update_menu_to_detail menu_string
+        menu = JSON.parse menu_string.menu
+        menu.each do |section|
+            items_ary = section["item"]
+            items_ary.each do |item|
+                if item.has_key? "description"
+                    item["detail"] = item["description"]
+                    item.delete("description")
+                end
+            end
+        end
+        menu_string.menu = menu.to_json
+        if not menu_string.save
+            puts "Menu String fail #{menu_string.id}"
+        end
+    end
+
 end
+
+
+
+
+
+
+
+
+
+
+
