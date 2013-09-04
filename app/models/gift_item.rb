@@ -1,5 +1,5 @@
 class GiftItem < ActiveRecord::Base
-  attr_accessible :gift_id, :menu_id, :name, :price, :quantity
+  attr_accessible :gift_id, :menu_id, :name, :price, :quantity, :detail
 
 	belongs_to :gift
 	belongs_to :menu
@@ -18,16 +18,17 @@ class GiftItem < ActiveRecord::Base
 		giftItem.price    = menu_item_hash["price"]
 		giftItem.quantity = menu_item_hash["quantity"]
 		giftItem.name 	  = menu_item_hash["item_name"]
+		giftItem.detail   = menu_item_hash["detail"]
 
 		return giftItem
 	end
 
 	def prepare_for_shoppingCart
-		item_hash = self.serializable_hash only: [:menu_id, :price, :quantity, :name]
+		item_hash = self.serializable_hash only: [:menu_id, :price, :quantity, :name, :detail]
 			# this puts section in item when the menu item has been deleted from menu.rb
 			# fix this after db is repaired from menu delete additions now (active: false)
 		if self.menu
-			item_hash["section"]   = self.menu.section 
+			item_hash["section"]   = self.menu.section
 		else
 			mitem = Menu.find_by_item_name item_hash["name"]
 			item_hash["section"]   = mitem.section if mitem
