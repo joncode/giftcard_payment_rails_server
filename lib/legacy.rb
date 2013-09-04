@@ -42,7 +42,7 @@ module Legacy
     def update_menu_to_detail menu_string
         menu = JSON.parse menu_string.menu
         menu.each do |section|
-            items_ary = section["item"]
+            items_ary = section["items"]
             items_ary.each do |item|
                 if item.has_key? "description"
                     item["detail"] = item["description"]
@@ -60,7 +60,11 @@ module Legacy
         ms = MenuString.all
         ms.each do |menu_string|
             puts "Updating MenuString ID = #{menu_string.id}"
-            update_menu_to_detail menu_string
+            if menu_string.menu.kind_of? String
+                update_menu_to_detail menu_string
+            else
+                puts "has no menu"
+            end
         end
         nil
     end
