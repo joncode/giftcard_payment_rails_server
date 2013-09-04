@@ -106,19 +106,6 @@ Drinkboard::Application.routes.draw do
   end
 
   resources :gifts,       only: [:index, :show]
-    ## merchant tools routes
-  match 'mt/user_login',           to: 'merchants#login',        via: :post
-  match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
-  match 'mt/menu',                 to: 'merchants#menu',         via: :post
-  match 'mt/reports',              to: 'merchants#reports',      via: :post
-  match 'mt/employees',            to: 'merchants#employees',    via: :post
-  match 'mt/finances',             to: 'merchants#finances',     via: :post
-  match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
-  match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
-  match 'mt/compile_menu',         to: 'merchants#compile_menu', via: :post
-
-  # resources :microposts,    only: [:create, :destroy]
-  # resources :relationships, only: [:create, :destroy]
 
     ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
@@ -137,7 +124,6 @@ Drinkboard::Application.routes.draw do
   match 'app/redeem',           to: 'app#create_redeem',       via: :post
   match 'app/complete_order',   to: 'app#create_order_emp',    via: :post
   match 'app/order_confirm',    to: 'app#create_order',        via: :post
-  match 'app/menu',             to: 'app#menu',                via: :post
   match 'app/menu_v2',          to: 'app#menu_v2',             via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
   match 'app/others_questions', to: 'app#others_questions',    via: :post
@@ -155,12 +141,16 @@ Drinkboard::Application.routes.draw do
   match 'app/regift',           to: 'iphone#regift',           via: :post
     ## test new data methods routes
   match 'app/new_pic',          to: 'app#providers_short_ph_url', via: :post
+  match 'app/cities_app',       to: 'iphone#cities'
 
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post
   match 'app/delete_card',      to: 'app#delete_card',         via: :post
+
     ### deprecated app routes
+  match 'app/menu',             to: 'app#menu',                via: :post
+
   match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/out',              to: 'iphone#going_out',        via: :post
@@ -169,7 +159,7 @@ Drinkboard::Application.routes.draw do
   match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
-  match 'app/cities_app',       to: 'iphone#cities'
+
     ### authentication via Facebook & Foursquare
   match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
   match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
@@ -229,5 +219,16 @@ Drinkboard::Application.routes.draw do
       post 'compile_menu',    to: 'merchant_tools#compile_menu'
     end
   end
+
+    ## merchant tools routes
+  match 'mt/user_login',           to: 'merchants#login',        via: :post
+  match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
+  match 'mt/menu',                 to: 'merchants#menu',         via: :post
+  match 'mt/reports',              to: 'merchants#reports',      via: :post
+  match 'mt/employees',            to: 'merchants#employees',    via: :post
+  match 'mt/finances',             to: 'merchants#finances',     via: :post
+  match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
+  match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
+  match 'mt/compile_menu',         to: 'merchants#compile_menu', via: :post
 
 end
