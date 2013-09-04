@@ -157,7 +157,7 @@ class IphoneController < AppController
 
 	def regift
 
-        recipient_data = params["data"]["receiver"]
+        recipient_data = JSON.parse params["receiver"]
         if recipient_data["receiver_id"].to_i > 0
             unless recipient = User.find(recipient_data["receiver_id"])
                 puts "!!! APP SUBMITTED USER ID THAT DOESNT EXIST #{recipient_data} !!!"
@@ -166,9 +166,9 @@ class IphoneController < AppController
         else
             recipient = make_user_with_hash(recipient_data)
         end
-
-        old_gift_id = params["data"]["regift_id"]
-        message     = params["data"]["message"]
+        details 	= JSON.parse params["data"]
+        old_gift_id = details["regift_id"]
+        message     = details["message"]
 
         if old_gift = Gift.find(old_gift_id.to_i)
             new_gift = old_gift.regift(recipient, message)
@@ -308,76 +308,87 @@ class IphoneController < AppController
 		end
 	end
 
-	private
+private
 
-		def hash_these_users(obj, send_fields)
-			user_hash = {}
-			index = 1
-			obj.each do |g|
-				user_obj = g.serializable_hash only: send_fields
-				user_hash["#{index}"] = user_obj.each_key do |key|
-					value = user_obj[key]
-					user_obj[key] = value.to_s
-				end
-				user_obj["photo"] = g.get_photo
-				index += 1
+
+    def make_user_with_hash(user_data_hash)
+        recipient               = User.new
+        recipient.first_name    = user_data_hash["name"]
+        recipient.email         = user_data_hash["email"]
+        recipient.phone         = user_data_hash["phone"]
+        recipient.facebook_id   = user_data_hash["facebook_id"]
+        recipient.twitter       = user_data_hash["twitter"]
+        return recipient
+    end
+
+	def hash_these_users(obj, send_fields)
+		user_hash = {}
+		index = 1
+		obj.each do |g|
+			user_obj = g.serializable_hash only: send_fields
+			user_hash["#{index}"] = user_obj.each_key do |key|
+				value = user_obj[key]
+				user_obj[key] = value.to_s
 			end
-			return user_hash
+			user_obj["photo"] = g.get_photo
+			index += 1
 		end
+		return user_hash
+	end
 
-		def hash_these_gifts(obj, send_fields, address_get=false, receiver=false)
-			gift_hash = {}
-			index = 1
-			obj.each do |g|
+	def hash_these_gifts(obj, send_fields, address_get=false, receiver=false)
+		gift_hash = {}
+		index = 1
+		obj.each do |g|
 
-				if g.created_at
-					time = g.created_at.to_time
-				else
-					time = g.updated_at.to_time
-				end
-				time_string = time_ago_in_words(time)
-
-				gift_obj = g.serializable_hash only: send_fields
-				gift_hash["#{index}"] = gift_obj.each_key do |key|
-					value = gift_obj[key]
-					gift_obj[key] = value.to_s
-				end
-
-				# add other person photo url
-				if receiver
-					if g.receiver
-						gift_obj["receiver_photo"]  = g.receiver.get_photo
-					else
-						puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
-					end
-				else
-					gift_obj["giver_photo"]       = g.giver.get_photo
-				end
-
-				provider = g.provider
-				gift_obj["provider_photo"]     = provider.get_photo
-				# add the full provider address
-				if address_get
-					gift_obj["provider_address"] = provider.complete_address
-				end
-
-				gift_obj["time_ago"] = time_string
-				gift_obj["redeem_code"] = add_redeem_code(g)
-
-				index += 1
-			end
-			return gift_hash
-		end
-
-		def create_user_object(data)
-			if data.kind_of? String
-				obj = JSON.parse data
+			if g.created_at
+				time = g.created_at.to_time
 			else
-				obj = data
+				time = g.updated_at.to_time
 			end
-			puts "CREATE USER OBJECT parse = #{obj}"
-			# obj.symbolize_keys!
-			User.new(obj)
+			time_string = time_ago_in_words(time)
+
+			gift_obj = g.serializable_hash only: send_fields
+			gift_hash["#{index}"] = gift_obj.each_key do |key|
+				value = gift_obj[key]
+				gift_obj[key] = value.to_s
+			end
+
+			# add other person photo url
+			if receiver
+				if g.receiver
+					gift_obj["receiver_photo"]  = g.receiver.get_photo
+				else
+					puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
+				end
+			else
+				gift_obj["giver_photo"]       = g.giver.get_photo
+			end
+
+			provider = g.provider
+			gift_obj["provider_photo"]     = provider.get_photo
+			# add the full provider address
+			if address_get
+				gift_obj["provider_address"] = provider.complete_address
+			end
+
+			gift_obj["time_ago"] = time_string
+			gift_obj["redeem_code"] = add_redeem_code(g)
+
+			index += 1
 		end
+		return gift_hash
+	end
+
+	def create_user_object(data)
+		if data.kind_of? String
+			obj = JSON.parse data
+		else
+			obj = data
+		end
+		puts "CREATE USER OBJECT parse = #{obj}"
+		# obj.symbolize_keys!
+		User.new(obj)
+	end
 
 end
