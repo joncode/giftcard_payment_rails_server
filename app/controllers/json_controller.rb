@@ -138,10 +138,10 @@ class JsonController < ActionController::Base
     end
 
     def authenticate_merchant_tools
-        token   = params["token"]
+        token     = params["token"]
         # check token to see if it is good
-        api_key = Provider.find_by_token token
-        head :unauthorized unless api_key
+        @provider = Provider.unscoped.find_by_token(token)
+        head :unauthorized unless @provider
     end
 
     def authenticate_general_token
