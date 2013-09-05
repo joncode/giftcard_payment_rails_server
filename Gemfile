@@ -9,6 +9,7 @@ gem 'resque', :require => "resque/server"
 gem 'roadie'
 gem 'newrelic_rpm'
 gem 'authorize-net'
+gem 'mandrill-rails'
 gem 'json', '~> 1.7.7'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
