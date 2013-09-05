@@ -161,6 +161,7 @@ class IphoneController < AppController
         details 	   = JSON.parse params["data"]
         old_gift_id    = details["regift_id"]
         message        = details["message"]
+        recipient = nil
 
         if recipient_data["receiver_id"] && recipient_data["receiver_id"] > 0
             unless recipient = User.find(recipient_data["receiver_id"])
@@ -171,7 +172,7 @@ class IphoneController < AppController
             recipient = make_user_with_hash(recipient_data)
         end
 
-        if old_gift = Gift.find(old_gift_id.to_i)
+        if recipient && (old_gift = Gift.find(old_gift_id.to_i))
             new_gift = old_gift.regift(recipient, message)
             new_gift.save
             old_gift.update_attribute(:status, 'regifted')
