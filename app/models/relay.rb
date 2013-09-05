@@ -14,32 +14,6 @@ class Relay < ActiveRecord::Base
 
 	class << self
 
-		def createRelayFromGift gift
-			# relay 			  = Relay.new
-			# relay.gift_id     = gift.id
-			# relay.giver_id    = gift.giver_id
-			# relay.receiver_id = gift.receiver_id if gift.receiver_id
-			# relay.provider_id = gift.provider_id
-			# relay.status      = gift.status
-			# relay.name        = "new_gift"
-			# relay.save
-			# return relay
-		end
-
-		def updateRelayFromGift gift
-			# relay = Relay.find_by_gift_id(gift.id)
-			# if relay
-			# 	update_hash = {:status => gift.status}
-			# 	if !relay.receiver_id
-			# 		update_hash["receiver_id"] = gift.receiver_id
-			# 	end
-			# 	relay.update_attributes(update_hash)
-			# else
-			# 		#  OLD DATA
-			# 	relay = Relay.createRelayFromGift(gift)
-			# end
-		end
-
 		def send_push_notification gift
 				# get the user tokens from the pn_token db
 			receiver  	= gift.receiver
