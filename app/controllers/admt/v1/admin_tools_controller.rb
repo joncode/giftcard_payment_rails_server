@@ -9,10 +9,11 @@ module Admt
 
             def gifts
                 data      = params["data"].to_i
-                if data > 0
-                    gifts = Gift.get_all_for_provider data
+
+                gifts = if data > 0
+                    Gift.get_all_for_provider data
                 else
-                    gifts = Gift.get_all
+                    Gift.get_all
                 end
 
                 if gifts.count > 0
