@@ -11,6 +11,7 @@ gem 'newrelic_rpm'
 gem 'authorize-net'
 gem 'json', '~> 1.7.7'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
+gem 'rails_12factor'
 
 group :production do
 	gem 'pg', '0.12.2'
@@ -34,6 +35,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.2.3'
 end
+
 gem "twitter-bootstrap-rails", "~> 2.0.1.0"
 gem 'jquery-rails'
 

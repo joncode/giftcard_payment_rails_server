@@ -244,6 +244,18 @@ class Gift < ActiveRecord::Base
 		return new_gift
 	end
 
+	def regift_parent
+		if self.regift_id
+			Gift.find(self.regift_id)
+		else
+			nil
+		end
+	end
+
+	def regift_child
+		Gift.find_by_regift_id(self.id)
+	end
+
 	def remove_receiver
 		self.receiver_id    = nil
 		self.receiver_name  = nil
