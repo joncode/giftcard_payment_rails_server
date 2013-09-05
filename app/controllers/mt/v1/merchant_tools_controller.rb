@@ -4,6 +4,8 @@ module Mt
             before_filter :authenticate_merchant_tools,    except: :create
             before_filter :authenticate_general_token,     only:   :create
 
+    #####  Merchant Methods
+
             def create
                 puts "HERE IS THE PARAMS data = #{params["data"].inspect}"
                 has_menu     = params["data"]["menu"].present?
@@ -35,19 +37,30 @@ module Mt
                 respond
             end
 
+            def update_photo
+                photo_url = params["data"]
+                @provider.update_attribute(:image, photo_url)
+                if true
+                    success   "Photo Live on App"
+                else
+                    fail      @provider
+                end
+
+                respond
+            end
+
     #####  Order Methods
 
             def orders
-                provider = Provider.find_by_token params["token"]
                 gifts =
                     if params["data"]["page"]    == "new"
-                        Gift.get_provider(provider)
+                        Gift.get_provider(@provider)
                     elsif params["data"]["page"] == 'reports'
                         start_time          = params["start_time"].to_datetime if params["start_time"]
                         end_time            = params["end_time"].to_datetime   if params["end_time"]
-                        Gift.get_history_provider_and_range(provider, start_time, end_time )
+                        Gift.get_history_provider_and_range(@provider, start_time, end_time )
                     else
-                        Gift.get_history_provider(provider)
+                        Gift.get_history_provider(@provider)
                     end
 
                 if gifts
@@ -59,7 +72,6 @@ module Mt
             end
 
             def order
-
                 if gift = Gift.find(params["data"].to_i)
                     serialized_gift = array_these_gifts( [gift], MERCHANT_REPLY, false , true , true )
                     success serialized_gift.first
@@ -72,14 +84,13 @@ module Mt
     ######   Menu Methods
 
             def compile_menu
-                provider = Provider.find_by_token params["token"]
                 data = params["data"]["old_menu"]           # deprecate
                 menu = params["data"]["menu"]
                 puts "Old Data = #{data}"                   # deprecate
                 puts "new Data = #{menu}"
-                menu_string = provider.menu_string
+                menu_string = @provider.menu_string
                 if !menu_string                             # deprecate
-                    menu_string = MenuString.create(provider_id: provider.id, data: "[]")
+                    menu_string = MenuString.create(provider_id: @provider.id, data: "[]")
                 end
                 if menu_string.update_attributes({data: data, menu: menu, version: 3})
                     success     "Menu Live on App"
