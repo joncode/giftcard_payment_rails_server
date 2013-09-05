@@ -1,5 +1,6 @@
 class AppController < JsonController
     include Email
+
  	def authenticate_app_user(token)
  		if user = User.find_by_remember_token(token)
  			user
@@ -737,7 +738,8 @@ class AppController < JsonController
 			user = User.find_by_email(params[:email])
 			if user
 				user.update_reset_token
-				Resque.enqueue(EmailJob, 'reset_password', user.id, {})
+				# Resque.enqueue(EmailJob, 'reset_password', user.id, {})
+                send_reset_password_email(user)
 				response = {"success" => "Email is Sent , check your inbox"}
 			else
 				response = {"error" => "We do not have record of that email"}
