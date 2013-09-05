@@ -9,6 +9,7 @@ class JsonController < ActionController::Base
     before_filter        :method_start_log_message
     after_filter         :cross_origin_allow_header
     after_filter         :method_end_log_message
+
     UPDATE_REPLY    = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]
     GIFT_REPLY      = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     MERCHANT_REPLY  = GIFT_REPLY + [ "order_num"]
