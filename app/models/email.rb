@@ -1,5 +1,5 @@
 module Email
-    extend Emailer
+    include Emailer
 
 ######   Order
 
@@ -111,7 +111,7 @@ private
     end
 
     def call_mandrill data
-        Emailer.send(data["text"], data)
+        Emailer.send(data['text'], data)
     end
 
 end
