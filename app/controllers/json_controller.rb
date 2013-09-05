@@ -63,9 +63,8 @@ class JsonController < ActionController::Base
                 end
                 gift_obj["time_ago"]   = time_ago_in_words(g.created_at.to_time)
             else
-                # change total to location total
+
                 gift_obj["total"]    = g.total
-                #gift_obj["subtotal"] = g.subtotal_string
                 gift_obj["server"]   = g.order.server_code if g.order
                 if (g.updated_at > (Time.now  - 1.day))
                     gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant)
