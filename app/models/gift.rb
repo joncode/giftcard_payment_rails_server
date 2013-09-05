@@ -89,6 +89,11 @@ class Gift < ActiveRecord::Base
 		self.receiver_phone = phone_number
 	end
 
+	def grand_total
+		pre_round = self.total.to_f + self.service.to_f
+		pre_round.round(2).to_s
+	end
+
 ##########  gift credit card methods
 
 	def set_status
