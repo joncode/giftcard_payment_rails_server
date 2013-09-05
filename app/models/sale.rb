@@ -1,7 +1,7 @@
 require 'authorize_net'
 
 class Sale < ActiveRecord::Base
-
+    include Email
 
         # real account
  	AUTHORIZE_API_LOGIN 	  = '9tp38Ga4CQ'
@@ -103,22 +103,22 @@ class Sale < ActiveRecord::Base
 		puts "#{self.inspect}"
 	end
 
-	def notify_receiver
-		gift = self.gift
-      	if gift.receiver_email
-        	puts "emailing the gift receiver for #{gift.id}"
-        	# notify the receiver via email
-        	user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
-        	Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => gift.id, :email => gift.receiver_email})
-      	end
-    end
+	# def notify_receiver
+	# 	gift = self.gift
+ #      	if gift.receiver_email
+ #        	puts "emailing the gift receiver for #{gift.id}"
+ #        	# notify the receiver via email
+ #        	user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
+ #        	Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => gift.id, :email => gift.receiver_email})
+ #      	end
+ #    end
 
-    def invoice_giver
-    	gift = self.gift
-        puts "emailing the gift giver for #{gift.id}"
-        # notify the giver via email
-        Resque.enqueue(EmailJob, 'invoice_giver', gift.giver_id , {:gift_id => gift.id})
-    end
+ #    def invoice_giver
+ #    	gift = self.gift
+ #        puts "emailing the gift giver for #{gift.id}"
+ #        # notify the giver via email
+ #        Resque.enqueue(EmailJob, 'invoice_giver', gift.giver_id , {:gift_id => gift.id})
+ #    end
 
     def transaction_approved
     	# chek that sale transaction is approved

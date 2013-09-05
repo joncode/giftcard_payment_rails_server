@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
 	include Formatter
+	include Email
 
 	attr_accessible  :email, :password, :password_confirmation,
 	:photo, :photo_cache, :first_name, :last_name, :phone,
@@ -332,15 +333,15 @@ class User < ActiveRecord::Base
 
 private
 
-	def confirm_email
-		if self.email
-			if self.confirm[0] == '0'
-				if Rails.env.production?
-					Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
-				end
-			end
-		end
-	end
+	# def confirm_email
+	# 	if self.email
+	# 		if self.confirm[0] == '0'
+	# 			if Rails.env.production?
+	# 				Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
+	# 			end
+	# 		end
+	# 	end
+	# end
 
 	def collect_incomplete_gifts
 						# check Gift.rb for ghost gifts connected to newly created user
@@ -382,13 +383,14 @@ private
 				if g.update_attributes(gift_changes)
 					success += 1
 							# mail the giver that receiver has gotten the gift
-					if g.receiver_email
-						puts "emailing the gift giver that gift has been collected for #{g.id}"
-						if Rails.env.production?
-							# notify the giver via email
-							Resque.enqueue(EmailJob, 'notify_giver_created_user', g.giver_id , {:gift_id => g.id})
-						end
-					end
+					# if g.receiver_email
+					# 	puts "emailing the gift giver that gift has been collected for #{g.id}"
+					# 	if Rails.env.production?
+					# 		# notify the giver via email
+					# 		Resque.enqueue(EmailJob, 'notify_giver_created_user', g.giver_id , {:gift_id => g.id})
+					# 	end
+					# end
+					email_gift_collected(g)
 				else
 					error   += 1
 				end

@@ -39,6 +39,16 @@ class GiftItem < ActiveRecord::Base
         item_hash.delete("name")
         return item_hash
 	end
+
+	def self.items_for_email gift
+		sc 		   = JSON.parse gift.shoppingCart
+		output_str = "<ul>"
+		sc.each do |item|
+			output_str += "<li>#{item["quantity"]} #{item["item_name"]}</li>"
+		end
+		output_str += "</ul>"
+		return output_str
+	end
 end
 # == Schema Information
 #

@@ -89,6 +89,11 @@ class Gift < ActiveRecord::Base
 		self.receiver_phone = phone_number
 	end
 
+	def grand_total
+		pre_round = self.total.to_f + self.service.to_f
+		pre_round.round(2).to_s
+	end
+
 ##########  gift credit card methods
 
 	def set_status
@@ -208,22 +213,6 @@ class Gift < ActiveRecord::Base
 			puts "save of sale ERROR #{self.id}"
 		end
 		return sale
-	end
-
-###############
-
-##########  cashier methods
-
-	def ticket_total_string
-		ticket_total = (self.total.to_f * 100).to_i - (self.service.to_f * 100).to_i
-		tix_float 	 = ticket_total.to_f / 100
-		return format_currency_as_string(tix_float)
-	end
-
-	def subtotal_string
-		subtotal  = (self.ticket_total_string.to_f * 100).to_i  - (self.tax.to_f * 100).to_i - (self.tip.to_f * 100).to_i
-		tix_float = subtotal.to_f / 100
-		return format_currency_as_string(tix_float)
 	end
 
 ###############
