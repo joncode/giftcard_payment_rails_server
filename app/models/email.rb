@@ -27,7 +27,7 @@ module Email
             # notify the receiver via email
             user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
             #Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => gift.id, :email => gift.receiver_email})
-            data = {"text"        => 'notify_receiver',
+            data = {"text"        => 'notify_receiver_2',
                     "first_id"    => user_id,
                     "options_hsh" => {:gift_id => gift.id, :email => gift.receiver_email},
                     "gift"        => gift
@@ -111,7 +111,7 @@ private
     end
 
     def call_mandrill data
-        Emailer.send(data['text'], data)
+        self.send(data['text'], data)
     end
 
 end

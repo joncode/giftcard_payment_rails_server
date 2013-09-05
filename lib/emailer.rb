@@ -1,5 +1,4 @@
 module Emailer
-	extend ActiveSupport::Concern
 
 	def reset_password data
 		recipient		 = data["user"]
@@ -16,7 +15,7 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
 	end
 
-    def notify_receiver data
+    def notify_receiver_2 data
     	gift 			 = data["gift"]
 		template_name    = "gift-notice"
 		recipient_name   = gift.receiver_name
@@ -37,7 +36,7 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
-    def invoice_giver data
+    def invoice_giver_2 data
     	gift 			 = data["gift"]
 		template_name    = "purchase-receipt"
 		user_name        = gift.giver_name 		#user/purchaser receiving the email
