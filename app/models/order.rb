@@ -1,4 +1,6 @@
 class Order < ActiveRecord::Base
+	include Email
+
 	attr_accessible :gift_id, :redeem_code, :redeem_id, :server_code, :server_id, :provider_id, :employee_id
 
 	belongs_to  :provider
@@ -16,7 +18,7 @@ class Order < ActiveRecord::Base
 	before_validation :add_gift_id,     :if => :no_gift_id
 	before_validation :add_redeem_id,   :if => :no_redeem_id
 	before_validation :add_provider_id, :if => :no_provider_id
-	# before_validation :authenticate_via_code
+
 	after_create      :update_gift_status
 	after_create      :notify_giver_order_complete
 	after_destroy     :rewind_gift_status
@@ -57,12 +59,12 @@ private
 		return (num + 10).to_s(36).capitalize
 	end
 
-	def notify_giver_order_complete
-		puts "emailing the gift giver for #{self.id}"
-		# notify the giver via email
-		gift = self.gift
-		Resque.enqueue(EmailJob, 'notify_giver_order_complete', gift.giver_id , {:gift_id => gift.id})
-	end
+	# def notify_giver_order_complete
+	# 	puts "emailing the gift giver for #{self.id}"
+	# 	# notify the giver via email
+	# 	gift = self.gift
+	# 	Resque.enqueue(EmailJob, 'notify_giver_order_complete', gift.giver_id , {:gift_id => gift.id})
+	# end
 
 	def add_server
 		server_ary      = self.provider.get_server_from_code(self.server_code)
@@ -86,43 +88,6 @@ private
 		self.gift.update_attribute(:status, 'notified')
 		puts "UPDATE GIFT STATUS DELETED ORDER ID=#{self.id}, GiftID = #{self.gift.id} #{self.gift.status}"
 	end
-
-	# def authenticate_via_code
-	#   puts "AUTHENTICATE VIA CODE"
-	#   if self.gift.nil? || self.redeem.nil?
-	#     errors.add(:authenticate, "missing gift or redeem")
-	#     return false
-	#   end
-	#   if self.redeem_code
-	#               # authentication code for redeem_code
-	#     redeem_obj = self.redeem
-	#               # set flag for approved/denied - true/false
-	#     if self.redeem_code == redeem_obj.redeem_code
-	#       flag = true
-	#     else
-	#       flag = false
-	#       puts "CUSTOMER REDEEM CODE INCORRECT"
-	#       errors.add(:redeem_code, "Incorrect Redeem Code")
-	#     end
-	#   elsif self.server_code
-	#               # authenticate for server_code
-	#     codes = self.provider.server_codes
-	#               # set flag for approval/denied - true/false
-	#     if codes.include? self.server_code
-	#       flag = true
-	#       add_server
-	#     else
-	#       flag = false
-	#       puts "MERCHANT REDEEM CODE INCORRECT"
-	#       errors.add(:merchant_redeem_code, "Incorrect Merchant Redeem Code")
-	#     end
-	#   else
-	#               # no code provided - set flag to denied - false
-	#     errors.add(:redeem_code, "cant be blank")
-	#     flag = false
-	#   end
-	#   return flag
-	# end
 
 	def no_gift_id
 		self.gift_id.nil?
@@ -158,22 +123,6 @@ private
 		end
 	end
 
-	# def get_employee_id
-	#   if !self.employee_id
-	#     puts "SET EMPLOYEE ID"
-	#     e = Employee.where(provider_id: self.gift.provider.id, user_id:  self.server_id)
-	#     if e.kind_of? ActiveRecord::Relation
-	#       if e.size > 0
-	#         employee = e.shift
-	#         self.employee_id = employee.id
-	#       else
-	#         self.employee_id = nil
-	#       end
-	#     else
-	#       self.employee_id = e.id
-	#     end
-	#   end
-	# end
 end
 # == Schema Information
 #

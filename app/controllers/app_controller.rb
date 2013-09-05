@@ -1,5 +1,5 @@
 class AppController < JsonController
-
+    include Email
  	def authenticate_app_user(token)
  		if user = User.find_by_remember_token(token)
  			user
