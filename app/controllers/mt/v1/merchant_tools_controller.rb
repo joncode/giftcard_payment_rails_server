@@ -52,12 +52,14 @@ module Mt
     #####  Order Methods
 
             def orders
-                gifts =
-                    if params["data"]["page"]    == "new"
+                data  = params["data"]
+                gifts = if data["page"] == "new"
                         Gift.get_provider(@provider)
-                    elsif params["data"]["page"] == 'reports'
-                        start_time          = params["start_time"].to_datetime if params["start_time"]
-                        end_time            = params["end_time"].to_datetime   if params["end_time"]
+                    elsif data["page"]  == 'reports'
+
+                        start_time = data["start_time"].to_datetime if data["start_time"]
+                        end_time   = data["end_time"].to_datetime   if data["end_time"]
+                        puts "hitting the date correct #{start_time}|#{end_time}"
                         Gift.get_history_provider_and_range(@provider, start_time, end_time )
                     else
                         Gift.get_history_provider(@provider)

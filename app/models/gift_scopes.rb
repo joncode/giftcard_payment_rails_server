@@ -79,17 +79,21 @@ module GiftScopes
 
     def get_provider provider
         where(provider_id: provider).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
+        #where(provider_id: provider).order("updated_at DESC")
     end
 
     def get_history_provider provider
         where(provider_id: provider, status: 'redeemed').order("updated_at DESC")
+        #where(provider_id: provider).order("updated_at DESC")
     end
 
     def get_history_provider_and_range provider, start_date=nil, end_date=nil
         if start_date && end_date
             start_date = start_date + 4.hours
             end_date   = end_date   + 4.hours
+            puts "GETTING the gifts scoped with start time = #{start_date} and end_date = #{end_date}"
             where(provider_id: provider.id, status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
+            #where(provider_id: provider.id).where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
         else
             get_history_provider(provider)
         end
