@@ -1,5 +1,5 @@
 module Email
-    include Emailer
+    extend Emailer
 
 ######   Order
 
@@ -41,7 +41,7 @@ module Email
         gift = self.gift
         puts "emailing the gift giver for #{gift.id}"
         #Resque.enqueue(EmailJob, 'invoice_giver', gift.giver_id , {:gift_id => gift.id})
-        data = {"text"        => 'invoice_giver',
+        data = {"text"        => 'invoice_giver_2',
                 "first_id"    => gift.giver_id,
                 "options_hsh" => {:gift_id => gift.id},
                 "gift"        => gift
@@ -111,7 +111,7 @@ private
     end
 
     def call_mandrill data
-        self.send(data['text'], data)
+        Emailer.send(data['text'], data)
     end
 
 end

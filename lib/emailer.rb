@@ -1,4 +1,5 @@
 module Emailer
+	extend self
 
 	def reset_password data
 		recipient		 = data["user"]
