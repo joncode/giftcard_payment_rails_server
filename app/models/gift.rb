@@ -233,7 +233,7 @@ class Gift < ActiveRecord::Base
 		return new_gift
 	end
 
-	def regift_parent
+	def parent
 		if self.regift_id
 			Gift.find(self.regift_id)
 		else
@@ -241,7 +241,7 @@ class Gift < ActiveRecord::Base
 		end
 	end
 
-	def regift_child
+	def child
 		Gift.find_by_regift_id(self.id)
 	end
 
