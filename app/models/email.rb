@@ -111,7 +111,7 @@ private
     end
 
     def call_mandrill data
-        #Emailer.send(data['text'], data)
+        Email.send(data['text'], data)
     end
 
 end

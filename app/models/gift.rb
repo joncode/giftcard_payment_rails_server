@@ -222,7 +222,6 @@ class Gift < ActiveRecord::Base
 	def regift(recipient=nil, message=nil)
 		new_gift              = self.dup
 		new_gift.regift_id    = self.id
-		new_gift.shoppingCart = self.shoppingCart
 		new_gift.message      = message ? message : nil
 		new_gift.add_giver(self.receiver)
 		if recipient

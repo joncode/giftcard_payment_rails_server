@@ -1,5 +1,4 @@
 module Emailer
-	extend self
 
 	def reset_password data
 		recipient		 = data["user"]
@@ -16,7 +15,7 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
 	end
 
-    def notify_receiver_2 data
+    def notify_receiver data
     	gift 			 = data["gift"]
 		template_name    = "gift-notice"
 		recipient_name   = gift.receiver_name
@@ -37,7 +36,7 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
-    def invoice_giver_2 data
+    def invoice_giver data
     	gift 			 = data["gift"]
 		template_name    = "purchase-receipt"
 		user_name        = gift.giver_name 		#user/purchaser receiving the email
@@ -131,9 +130,9 @@ private
 		[{"name" => "link", "content" => link}]
 	end
 
-	def generate_invite_link invite_token
-		"#{MT_URL}invite?token=#{invite_token}"
-	end
+	# def generate_invite_link invite_token
+	# 	"#{MT_URL}invite?token=#{invite_token}"
+	# end
 
 	def request_mandrill_with_template(template_name, template_content, message)
 		puts "``````````````````````````````````````````````"
