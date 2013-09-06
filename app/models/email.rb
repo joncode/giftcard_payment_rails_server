@@ -99,10 +99,14 @@ module Email
 private
 
     def route_email_system data
-        if Rails.env.production?
-            call_resque(data)
-        else
-            call_mandrill(data)
+        begin
+            if Rails.env.production?
+                call_resque(data)
+            else
+                call_mandrill(data)
+            end
+        rescue
+            puts "No #{data['text']} email ERROR"
         end
     end
 
