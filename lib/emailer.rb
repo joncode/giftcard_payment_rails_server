@@ -140,6 +140,7 @@ private
 		require 'mandrill'
 		m = Mandrill::API.new
 		response = m.messages.send_template(template_name, template_content, message)
+
 		puts
 		puts "Response from Mandrill #{response.inspect}"
 		puts "``````````````````````````````````````````````"
