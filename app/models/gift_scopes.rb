@@ -78,7 +78,7 @@ module GiftScopes
     end
 
     def get_provider provider
-        where(provider_id: provider).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
+        where(provider_id: provider).where("status = :open OR status = :notified OR status = :incomplete", :open => 'open', :notified => 'notified', :incomplete => 'incomplete').order("updated_at DESC")
         #where(provider_id: provider).order("updated_at DESC")
     end
 
