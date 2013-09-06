@@ -9,7 +9,7 @@ module Emailer
 
 		subject          = "Reset Your Password"
 
-		link             = "#{PUBLIC_URL}/account/reset_password/#{recipient.reset_token}"
+		link             = "#{PUBLIC_URL}/account/resetpassword/#{recipient.reset_token}"
 
 		message          = message_hash(subject, email, name, link)
 		request_mandrill_with_template(template_name, template_content, message)
