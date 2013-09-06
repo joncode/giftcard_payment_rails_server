@@ -299,9 +299,11 @@ class Gift < ActiveRecord::Base
 private
 
 	def update_shoppingCart
-		updated_shoppingCart_array = self.gift_items.map { |item| item.prepare_for_shoppingCart }
-		puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
-		self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
+		if self.regift_id.nil?
+			updated_shoppingCart_array = self.gift_items.map { |item| item.prepare_for_shoppingCart }
+			puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
+			self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
+		end
 	end
 
 	def add_giver_name
