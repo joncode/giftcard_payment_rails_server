@@ -158,6 +158,8 @@ class Gift < ActiveRecord::Base
 				end
 			elsif Rails.env.staging?
 				Relay.send_push_notification self
+				sale.invoice_giver
+				sale.notify_receiver
 			end
 		end
 				# otherwise return a sale object with resp_code == 1
