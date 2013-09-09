@@ -261,12 +261,6 @@ class User < ActiveRecord::Base
 		return true
 	end
 
-	# def providers_to_iphone
-	# 		# find out how many merchants the user is connected to
-	# 	merchants = self.providers.dup
-	# 	merchants.map { |m| m.table_photo_hash }
-	# end
-
 	def is_employee? provider
 		employees = Employee.find(:all, :conditions => ["user_id = ?", self.id])
 		if !employees.nil? && employees.length > 0

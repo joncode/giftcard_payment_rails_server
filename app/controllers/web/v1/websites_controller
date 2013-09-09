@@ -1,0 +1,22 @@
+module Web
+    module V1
+        class WebsitesController < JsonController
+
+            def confirm_email
+                confirm_token = params["confirm_token"]
+
+
+
+                respond
+            end
+
+            def redo_confirm_email
+                email = params["email"]
+
+
+                respond
+            end
+
+        end
+    end
+end
