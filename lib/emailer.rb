@@ -30,7 +30,8 @@ module Emailer
 							{"name" => "gift_details", "content" => gift_details},
 							{"name" => "gift_total", "content" => gift_total}]
 		subject          = "#{giver_name} sent you a gift on Drinkboard"
-		link             = nil	#link to gift
+		adjusted_id 	 = NUMBER_ID + gift.id
+		link             = "#{PUBLIC_URL}/signup/acceptgift/#{adjusted_id}"
         bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
 		message          = message_hash(subject, email, recipient_name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
