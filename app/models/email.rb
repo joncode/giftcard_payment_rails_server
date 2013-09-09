@@ -115,6 +115,7 @@ private
     end
 
     def call_mandrill data
+        #puts "data = #{}"
         Email.send(data['text'], data)
     end
 

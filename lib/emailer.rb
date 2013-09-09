@@ -54,7 +54,7 @@ module Emailer
 							{"name" => "processing_fee", "content" => processing_fee},
 							{"name" => "grand_total", "content" => grand_total}]
 		subject          = "Your purchase is complete"
-		email            = gift.giver_email
+		email            = gift.giver.email
 		name             = gift.giver_name
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
