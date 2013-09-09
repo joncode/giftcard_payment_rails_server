@@ -163,8 +163,8 @@ Drinkboard::Application.routes.draw do
   ## PUBLIC website routes
   namespace :web, defaults: { format: 'json' } do
     namespace :v1 do
-      post 'confirm_email',      to: 'websites#confirm_email'
-      post 'redo_confirm_email', to: 'websites#redo_confirm_email'
+      post 'confirm_email/:id',      to: 'websites#confirm_email'
+      post 'redo_confirm_email/:id', to: 'websites#redo_confirm_email'
     end
   end
 

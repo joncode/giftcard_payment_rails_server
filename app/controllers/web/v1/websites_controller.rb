@@ -3,7 +3,7 @@ module Web
         class WebsitesController < JsonController
 
             def confirm_email
-                confirm_token = params["confirm_token"]
+                confirm_token = params[:id]
 
 
 
@@ -11,7 +11,7 @@ module Web
             end
 
             def redo_confirm_email
-                email = params["email"]
+                email = params[:id]
 
 
                 respond
