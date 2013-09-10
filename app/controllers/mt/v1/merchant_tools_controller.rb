@@ -103,6 +103,17 @@ module Mt
                 respond
             end
 
+    #######   Reports Methods
+
+            def summary_range
+                if range = Gift.summary_range @provider
+                    success     range
+                else
+                    fail        data_not_found
+                end
+                respond
+            end
+
         end
     end
 end

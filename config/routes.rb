@@ -218,6 +218,7 @@ Drinkboard::Application.routes.draw do
       post 'order',           to: 'merchant_tools#order'
       post 'compile_menu',    to: 'merchant_tools#compile_menu'
       post 'update_photo',    to: 'merchant_tools#update_photo'
+      post 'summary_range',   to: 'merchant_tools#summary_range'
     end
   end
 
