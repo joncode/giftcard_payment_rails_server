@@ -106,10 +106,10 @@ module Mt
     #######   Reports Methods
 
             def summary_range
-                if range = Gift.summary_range @provider
-                    success     range
+                if range = Gift.get_summary_range(@provider)
+                    success(range)
                 else
-                    fail        data_not_found
+                    fail(data_not_found)
                 end
                 respond
             end
