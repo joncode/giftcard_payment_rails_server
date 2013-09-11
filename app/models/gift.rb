@@ -44,6 +44,7 @@ class Gift < ActiveRecord::Base
 		sender      = giver
 		merchant    = provider
 		gift_hsh                       = {}
+		gift_hsh["gift_id"]			   = self.id
 		gift_hsh["giver"]              = sender.name
 		gift_hsh["giver_photo"]        = sender.get_photo
 		if receipient = receiver
