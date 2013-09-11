@@ -40,7 +40,7 @@ class Sale < ActiveRecord::Base
         gift      = self.gift if gift.nil?
         auth_obj  = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
         @response = auth_obj.void(self.transaction_id)
-        puts "HERE IS THE VOID ReSPONSE #{@response}"
+        puts "HERE IS THE VOID ReSPONSE #{@response.inspect}"
 
         if @response.resp_code == 1
             # sale is voided
