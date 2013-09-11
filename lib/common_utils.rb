@@ -40,7 +40,7 @@ module CommonUtils
 	end
 
 	def filter_params hash
-		hsh = hash
+		hsh = hash.dup
 		if hsh.kind_of? Hash
 			hsh = hash.dup
 			filters = FILTER_PARAMS + FILTER_PARAMS.map {|fp| fp.to_s }
