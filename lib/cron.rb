@@ -10,7 +10,8 @@ module Cron
         bads = get_bad_tokens
         # get each provider with a bad token
         bads.each do |provider|
-            provider.update_data
+            #provider.update_data
+        end
         # call MT for correct information
         # update the provider
     end

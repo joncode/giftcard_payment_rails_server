@@ -22,6 +22,7 @@ module CommonUtils
 
 	def method_start_log_message
 		x = params.dup
+		puts "Here is the log params.dup = #{x}"
 		x.delete('controller')
 		x.delete('action')
 		x.delete('format')
@@ -34,8 +35,12 @@ module CommonUtils
 		end_time = Time.now - @start_time_logger
 		print "END #{log_message_header} Total time = #{end_time.round(3)}s | "
 		if @app_response
-			resp = "#{filter_params(@app_response)}"
-			puts "response: #{truncate(resp ,length: 600)}"
+			log_text = @app_response.dup
+			resp 	 = "#{filter_params(log_text)}"
+			v 		 = "response: #{truncate(resp ,length: 600)}"
+			v.gsub!('&quot;', '\'')
+			v.gsub!('&gt;', '>')
+			puts v
 		end
 	end
 
