@@ -31,8 +31,8 @@ class Sale < ActiveRecord::Base
 		sale_obj.gift_id 	 = gift.id
 		sale_obj.giver_id 	 = gift.giver_id
 		sale_obj.provider_id = gift.provider_id
-		sale_obj.revenue 	 = gift.total
-		sale_obj.total 	     = gift.total
+		sale_obj.revenue 	 = BigDecimal(gift.grand_total)
+		sale_obj.total 	     = gift.grand_total
 		return sale_obj
 	end
 
@@ -73,12 +73,6 @@ class Sale < ActiveRecord::Base
 		card_number  = card.number
 		month_year 	 = "#{month}#{year}"
 
-		######### put in real credit card details when in production
-		# tots = self.total.to_f / 100
-		# x = tots.to_s.split('.')
-		# total_amount = x[0] + '.' + x[1][0..1]
-		# puts "HERE is the TOTAL = #{total_amount}"
-        #########
         total_amount = self.total
 
         @credit_card = AuthorizeNet::CreditCard.new(card_number, month_year)
