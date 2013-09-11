@@ -42,7 +42,7 @@ class Sale < ActiveRecord::Base
         @response = auth_obj.void(self.transaction_id)
         puts "HERE IS THE VOID ReSPONSE #{@response.inspect}"
 
-        if @response.response_code == 1
+        if @response.response_code == "1"
             # sale is voided
             # set gift to proper status
             if gift.status = "redeemed"
