@@ -114,6 +114,27 @@ module Mt
                 respond
             end
 
+            def summary_report
+                start_date = params["data"].to_datetime
+                end_date   = range_end start_date
+                if resp = Gift.get_summary_report(@provider, start_date.utc, end_date.utc)
+                    success resp
+                else
+                    fail    data_not_found
+                end
+                respond
+            end
+
+        private
+
+            def range_end date
+                if date.day > 15
+                    date.end_of_month
+                else
+                    (date.beginning_of_month + 14.days).end_of_day
+                end
+            end
+
         end
     end
 end

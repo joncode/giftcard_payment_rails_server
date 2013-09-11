@@ -79,6 +79,13 @@ module GiftScopes
         { "start_date" => start_date, "end_date" => end_date }
     end
 
+    def get_summary_report provider, start_date, end_date
+        redeemed = where(provider_id: provider.id, status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
+        #redeemed = where(provider_id: provider.id).where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
+        bought   = where(provider_id: provider.id).where("created_at >= :start_date AND created_at <= :end_date", :start_date => start_date, :end_date => end_date ).count
+        { "redeemed" => redeemed.serialize_objs(:report), "bought" => bought }
+    end
+
     def get_all_for_provider provider
         where(provider_id: provider).order("updated_at DESC")
     end
@@ -108,4 +115,5 @@ module GiftScopes
     def get_all_orders provider
         where(provider_id: provider.id).where("status != :stat OR status != :other", :stat => 'incomplete', :other => 'unpaid').order("updated_at DESC")
     end
+
 end
