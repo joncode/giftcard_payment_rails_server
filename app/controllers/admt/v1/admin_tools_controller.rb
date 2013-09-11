@@ -51,7 +51,7 @@ module Admt
 
             def payable_gifts
                 gift_ids = params["redeemed"]
-                if gifts = Gift.find gift_ids
+                if gifts = Gift.find(gift_ids)
                     success gifts.serialize_objs(:report)
                 else
                     fail    data_not_found
