@@ -66,9 +66,25 @@ class Gift < ActiveRecord::Base
 		gift_hsh["gift_id"]			   = self.id
 		gift_hsh["provider_id"]        = provider.id
     	#gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
-		gift_hsh["name"]      = provider.name
+		gift_hsh["name"]      		   = provider.name
 		gift_hsh["merchant_address"]   = provider.full_address
 		gift_hsh["total"]   		   = self.total
+		gift_hsh
+	end
+
+	def report_serialize
+		gift_hsh                    = {}
+		gift_hsh["order_num"]		= self.order_num
+		gift_hsh["updated_at"]		= self.updated_at
+		gift_hsh["created_at"]		= self.created_at
+		gift_hsh["shoppingCart"]  	= self.shoppingCart
+		if order = self.order
+			server = self.order.server_code
+		else
+			server = nil
+		end
+		gift_hsh["server"]			= server
+		gift_hsh["total"]			= self.total
 		gift_hsh
 	end
 
