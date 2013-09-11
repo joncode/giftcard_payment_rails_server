@@ -110,6 +110,14 @@ class Gift < ActiveRecord::Base
 		pre_round.round(2).to_s
 	end
 
+	def total
+		string_to_cents super
+	end
+
+	def service
+		string_to_cents super
+	end
+
 ##########  gift credit card methods
 
 	def set_status
