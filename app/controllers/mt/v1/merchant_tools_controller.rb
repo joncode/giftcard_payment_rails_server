@@ -28,7 +28,7 @@ module Mt
                             success({ "provider" => merchant.id , "menu_string" => menu_string.errors.messages })
                         end
                     else
-                        success({ "provider" => merchant.id , "menu_string" => "No Menu Included" })
+                        success({ "provider" => merchant.id , "menu_string" => { "Menu" => "No menu uploaded" } })
                     end
 
                 else
