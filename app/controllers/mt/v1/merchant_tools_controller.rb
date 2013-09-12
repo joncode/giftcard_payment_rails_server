@@ -7,7 +7,7 @@ module Mt
     #####  Merchant Methods
 
             def create
-                puts "HERE IS THE PARAMS data = #{params["data"].inspect}"
+                # puts "HERE IS THE PARAMS data = #{params["data"].inspect}"
                 has_menu     = params["data"]["menu"].present?
                 merchant_hsh = params["data"]["merchant"]
                 if has_menu
@@ -27,8 +27,9 @@ module Mt
                             # merchant saved but menu failed
                             success({ "provider" => merchant.id , "menu_string" => menu_string.errors.messages })
                         end
+                    else
+                        success({ "provider" => merchant.id , "menu_string" => "No Menu Included" })
                     end
-                    puts "Here is merchant = #{merchant.inspect}"
 
                 else
                     puts "Here is merchant = #{merchant.inspect}"
