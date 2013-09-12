@@ -6,16 +6,10 @@ module Web
                 confirm_token = params[:id]
                 if setting = Setting.where(confirm_email_token: confirm_token)
 
-                    if user = User.find_by_email(params[:email])
-                        if user.id == user_id
-                            confirm   = "1" + user.confirm[1]
-                            user.update_attribute(:confirm, confirm)
+                    if user = setting.user
 
-                        else
-
-                        end
                     else
-
+                        fail database_error
                     end
 
                 else

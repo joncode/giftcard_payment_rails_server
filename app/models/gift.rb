@@ -380,5 +380,6 @@ end
 #  service        :string(255)
 #  order_num      :string(255)
 #  cat            :integer         default(0)
+#  active         :boolean         default(TRUE)
 #
 
