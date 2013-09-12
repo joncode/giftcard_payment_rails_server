@@ -1,4 +1,6 @@
 class Setting < ActiveRecord::Base
+	include Utility
+
 	attr_accessible :email_follow_up, :email_invite,
 	:email_invoice, :email_redeem, :user_id , :email_receiver_new
 
@@ -7,7 +9,7 @@ class Setting < ActiveRecord::Base
 	validates_uniqueness_of :user_id
 
 	def serialize
-		setting = settingself.serializable_hash only: [:user_id, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
+		setting = self.serializable_hash only: [:user_id, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
 		setting["email_confirmed"] = self.confirm_email_flag ? 1 : 0
 		setting["phone_confirmed"] = self.confirm_phone_flag ? 1 : 0
 		setting
