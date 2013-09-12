@@ -21,7 +21,7 @@ module CommonUtils
 	end
 
 	def method_start_log_message
-		x = params.dup
+		x = Marshal.load(Marshal.dump(params))
 		x.delete('controller')
 		x.delete('action')
 		x.delete('format')
@@ -34,15 +34,18 @@ module CommonUtils
 		end_time = Time.now - @start_time_logger
 		print "END #{log_message_header} Total time = #{end_time.round(3)}s | "
 		if @app_response
-			resp = "#{filter_params(@app_response)}"
-			puts "response: #{truncate(resp ,length: 600)}"
+			log_text = Marshal.load(Marshal.dump(@app_response))
+			resp 	 = "#{filter_params(log_text)}"
+			v 		 = "response: #{truncate(resp ,length: 600)}"
+			v.gsub!('&quot;', '\'')
+			v.gsub!('&gt;', '>')
+			puts v
 		end
 	end
 
 	def filter_params hash
 		hsh = hash
 		if hsh.kind_of? Hash
-			hsh = hash.dup
 			filters = FILTER_PARAMS + FILTER_PARAMS.map {|fp| fp.to_s }
 			filter_loop(hsh, filters)
 		end
@@ -63,6 +66,8 @@ module CommonUtils
 	end
 
 end
+
+
 
 
 

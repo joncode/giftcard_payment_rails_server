@@ -228,10 +228,8 @@ class User < ActiveRecord::Base
 
 	def permanently_de_activate
 		self.active 	 = false
-		if phone_exists?
-			self.credit_number = self.phone
-			self.phone   = nil
-		end
+		self.credit_number = self.phone
+		self.phone   = nil
 		self.email  	 = "#{self.email}xxx"
 		self.facebook_id = "#{self.facebook_id}xxx" if facebook_id_exists?
 		self.twitter 	 = "#{self.twitter}xxx" 	if twitter_exists?

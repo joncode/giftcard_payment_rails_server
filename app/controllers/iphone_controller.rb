@@ -108,7 +108,7 @@ class IphoneController < AppController
 
 	def cities
 
-		response = [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1376936674/las_vegas_fvo5gn.png"}, {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1376936685/new_york_qnyso7.png"}, {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1376936690/san_francisco_daq1tx.png"}, {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1376936679/los_angeles_ebteun.png"}]
+		response = [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1378747548/las_vegas_xzqlvz.jpg"}, {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1378747548/san_francisco_hv2bsc.jpg"}, {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1378747548/san_diego_oj3a5w.jpg"}, {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1378747548/new_york_vks0yh.jpg"}]
 		respond_to do |format|
 			@app_response = "iPhoneC #{response}"
 			format.json { render json: response }

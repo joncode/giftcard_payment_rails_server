@@ -1,4 +1,3 @@
-
 if Rails.env.production?
     PAGE_NAME       = 'Drinkboard - Admin Tools'
     TEST_URL        = "http://www.drinkboardapp.com"

@@ -12,8 +12,31 @@ module Legacy
         end
     end
 
-    def delete_dev_gifts
-
+    def check_card_owners
+        cs = Card.all
+        cs.each do |card|
+            user = card.user
+            if user
+                if card.name != user.name
+                    puts "Card #{card.id} : card_name #{card.name} : user #{user.name}"
+                    print "card names do not match "
+                    print "Delete card ? -> (y/n) "
+                    response = gets.chomp.downcase
+                    if response == 'y'
+                        card.destroy
+                    end
+                end
+            else
+                # ask me for y/n to delete
+                print "Card #{card.id} has no user"
+                print " Delete card ? -> (y/n) "
+                response = gets.chomp.downcase
+                if response == 'y'
+                    card.destroy
+                end
+            end
+        end
+        nil
     end
 
     def deactive p_ary
