@@ -18,7 +18,7 @@ module GiftScopes
             Time.now.to_date + 7.hours         # most recent 2 week end period , 7 am
         end
         puts "HEERE IS THE END DATE TO SCOPE #{end_date}"
-        where(status: "redeemed").where("updated_at <= :end_date", :end_date => end_date )
+        where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').where("updated_at <= :end_date", :end_date => end_date )
     end
 
 #### USER SCOPES
@@ -32,7 +32,7 @@ module GiftScopes
     end
 
     def get_past_gifts user
-        where( receiver_id: user).where(status: 'redeemed').order("created_at DESC")
+        where( receiver_id: user).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').order("created_at DESC")
     end
 
     def get_all_gifts user
@@ -41,13 +41,13 @@ module GiftScopes
 
     def get_buy_history user
         gifts       = where( giver_id: user).where("status = :open OR status = :notified OR status = :incom", :open => 'open', :notified => 'notified', :incom => "incomplete").order("created_at DESC")
-        past_gifts  = where( giver_id: user).where(status: 'redeemed').order("created_at DESC")
+        past_gifts  = where( giver_id: user).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').order("created_at DESC")
         return gifts, past_gifts
     end
 
     def get_archive user
         give_gifts = where(giver_id: user).order("created_at DESC")
-        rec_gifts  = where(receiver_id: user, status: 'redeemed').order("created_at DESC")
+        rec_gifts  = where(receiver_id: user).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').order("created_at DESC")
         return give_gifts, rec_gifts
     end
 
