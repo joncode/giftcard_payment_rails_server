@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130904205306) do
+ActiveRecord::Schema.define(:version => 20130912213119) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -348,13 +348,21 @@ ActiveRecord::Schema.define(:version => 20130904205306) do
 
   create_table "settings", :force => true do |t|
     t.integer  "user_id"
-    t.boolean  "email_invoice",      :default => true
-    t.boolean  "email_redeem",       :default => true
-    t.boolean  "email_invite",       :default => true
-    t.boolean  "email_follow_up",    :default => true
-    t.boolean  "email_receiver_new", :default => true
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.boolean  "email_invoice",               :default => true
+    t.boolean  "email_redeem",                :default => true
+    t.boolean  "email_invite",                :default => true
+    t.boolean  "email_follow_up",             :default => true
+    t.boolean  "email_receiver_new",          :default => true
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.string   "confirm_email_token"
+    t.string   "confirm_phone_token"
+    t.string   "reset_token"
+    t.boolean  "confirm_phone_flag",          :default => false
+    t.boolean  "confirm_email_flag",          :default => false
+    t.datetime "confirm_phone_token_sent_at"
+    t.datetime "confirm_email_token_sent_at"
+    t.datetime "reset_token_sent_at"
   end
 
   create_table "tags", :force => true do |t|
