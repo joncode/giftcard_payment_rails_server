@@ -65,18 +65,15 @@ module Email
     end
 
     def confirm_email
-        # self is user
-        if self.email
-            if self.confirm[0] == '0'
-                #     Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
-                data = {"text"        => 'confirm_email',
-                        "first_id"    => self.id,
-                        "options_hsh" =>  {},
-                        "user"        => user
-                        }
-                route_email_system(data)
-            end
-        end
+        #     Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
+        data = {"text"        => 'confirm_email',
+                "first_id"    => self.id,
+                "options_hsh" =>  {},
+                "user"        => self,
+                "link"        => self.setting.generate_email_link
+                }
+        puts "Here is the data #{data.inspect}"
+        route_email_system(data)
     end
 
 ######    App Controller

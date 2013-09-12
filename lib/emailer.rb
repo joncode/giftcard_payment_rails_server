@@ -17,7 +17,7 @@ module Emailer
 
 	def confirm_email data
 		recipient		 = data["user"]
-		###---->    link             = "#{BASE_URL}confirm_email?token=333333333333333333"
+		link             = data["link"]
 		subject          = "Confirm Your Email"
 		template_name    = "confirm-email"
 		template_content = [{"name" => "recipient_name", "content" => recipient.name}]

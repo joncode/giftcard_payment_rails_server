@@ -15,6 +15,14 @@ class Setting < ActiveRecord::Base
 		setting
 	end
 
+	def app_serialize
+		self.serializable_hash only: [:user_id, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
+	end
+
+	def generate_email_link
+		"#{PUBLIC_URL}/signup/confirmemail/#{self.confirm_email_token}"
+	end
+
 end
 
 
