@@ -80,7 +80,7 @@ module GiftScopes
     end
 
     def get_summary_report provider, start_date, end_date
-        redeemed = where(provider_id: provider.id, status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
+        redeemed = where(provider_id: provider.id).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
         #redeemed = where(provider_id: provider.id).where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
         bought   = where(provider_id: provider.id).where("created_at >= :start_date AND created_at <= :end_date", :start_date => start_date, :end_date => end_date ).count
         { "redeemed" => redeemed.serialize_objs(:report), "bought" => bought }
@@ -96,7 +96,7 @@ module GiftScopes
     end
 
     def get_history_provider provider
-        where(provider_id: provider, status: 'redeemed').order("updated_at DESC")
+        where(provider_id: provider.id).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').order("updated_at DESC")
         #where(provider_id: provider).order("updated_at DESC")
     end
 
@@ -105,7 +105,7 @@ module GiftScopes
             start_date = start_date + 4.hours
             end_date   = end_date   + 4.hours
             puts "GETTING the gifts scoped with start time = #{start_date} and end_date = #{end_date}"
-            where(provider_id: provider.id, status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
+            where(provider_id: provider.id).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
             #where(provider_id: provider.id).where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
         else
             get_history_provider(provider)
