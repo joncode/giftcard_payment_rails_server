@@ -18,7 +18,7 @@ module GiftScopes
             Time.now.to_date + 7.hours         # most recent 2 week end period , 7 am
         end
         puts "HEERE IS THE END DATE TO SCOPE #{end_date}"
-        where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').where("updated_at <= :end_date", :end_date => end_date )
+        where(status: "redeemed").where("updated_at <= :end_date", :end_date => end_date )
     end
 
 #### USER SCOPES
