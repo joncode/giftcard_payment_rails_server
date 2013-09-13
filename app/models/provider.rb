@@ -66,6 +66,8 @@ class Provider < ActiveRecord::Base
 		return prov_hash
 	end
 
+#########   STATUS METHODS
+
 	def live
 		if self.sd_location_id == nil
 			return "0"
@@ -79,6 +81,30 @@ class Provider < ActiveRecord::Base
 			return false
 		else
 			return true
+		end
+	end
+
+	def status
+	    if not pause
+	        if live_bool
+	            "live"
+	        else
+	            "coming_soon"
+	        end
+	    else
+	        "paused"
+	    end
+	end
+
+	def status= status
+		if status 	   == "live"
+			self.paused = false
+			self.live   = true
+		elsif status   == "coming_soon"
+			self.paused = false
+			self.live   = false
+		elsif status   == "pause"
+			self.pause  = true
 		end
 	end
 
