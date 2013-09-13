@@ -139,9 +139,8 @@ module Admt
 
             def de_activate_user
                 if user         = User.find(params["data"].to_i)
-                    user.active = user.active ? false : true
 
-                    if user.save
+                    if user.toggle! :active
                         stat    = user.active ? "Live" : "Suspended"
                         success "#{user.name} is now #{stat}"
                     else
@@ -217,9 +216,8 @@ module Admt
 
             def de_activate_brand
                 if brand      = Brand.unscoped.find(params["data"].to_i)
-                    new_active = brand.active ? false : true
 
-                    if brand.update_attribute(:active, new_active)
+                    if brand.toggle! :active
                         msg = if brand.active
                                 "#{brand.name} is Active"
                             else
@@ -298,11 +296,10 @@ module Admt
 
             def go_live
                 if provider = Provider.unscoped.find_by_token(params['data'])
-                    provider.sd_location_id = provider.live_bool ? nil : 1
 
-                    if provider.save
+                    if provider.toggle! :live
                         msg =
-                            if provider.live_bool
+                            if provider.live
                                 "#{provider.name} is Live in App"
                             else
                                 "#{provider.name} is Coming Soon in App"
@@ -319,9 +316,8 @@ module Admt
 
             def de_activate_merchant
                 if provider    = Provider.unscoped.find_by_token(params['data'])
-                    new_active = provider.active ? false : true
 
-                    if provider.update_attribute(:active, new_active)
+                    if provider.toggle! :active
                         msg =
                             if provider.active
                                 "#{provider.name} is Active"

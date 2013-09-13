@@ -89,15 +89,6 @@ class ProvidersController < ApplicationController
 
 	###########  STATUS METHODS
 
-	def coming_soon
-		@provider.sd_location_id = @provider.live_bool ? nil : 1
-		@provider.save
-		respond_to do |format|
-			format.html { redirect_to action: 'edit'}
-		end
-
-	end
-
 	def de_activate
 		new_active = @provider.active ? false : true
 		@provider.update_attribute(:active, new_active)
@@ -354,7 +345,7 @@ class ProvidersController < ApplicationController
 	private
 
 		def set_go_live
-			@provider.live_bool ?  ["LIVE","Make Coming Soon"] : ["Coming Soon","Go LIVE"]
+			@provider.live ?  ["LIVE","Make Coming Soon"] : ["Coming Soon","Go LIVE"]
 		end
 
 		def set_active

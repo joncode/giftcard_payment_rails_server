@@ -54,7 +54,6 @@ Drinkboard::Application.routes.draw do
       get :menu_item
       get :upload_menu
       get :remove_menu_item
-      get :coming_soon
       get :de_activate
       get :create_merchant_tools
       get :members

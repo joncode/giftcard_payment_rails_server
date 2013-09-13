@@ -73,10 +73,6 @@ class Provider < ActiveRecord::Base
 		self.live ? "1" : "0"
 	end
 
-	def live_bool
-		self.live
-	end
-
 	def legacy_status
 		stat = if self.active
 			if self.sd_location_id == 1
