@@ -148,6 +148,11 @@ class JsonController < ActionController::Base
         head :unauthorized unless GENERAL_TOKEN == token
     end
 
+    def authenticate_www_token
+        token   = params["token"]
+        head :unauthorized unless WWW_TOKEN == token
+    end
+
     def authenticate_public_info token=nil
         true
     end
