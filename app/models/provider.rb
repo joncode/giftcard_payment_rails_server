@@ -58,6 +58,7 @@ class Provider < ActiveRecord::Base
 		prov_hash  = self.serializable_hash only: [:name, :address, :state, :city, :brand_id, :building_id ]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["merchant_id"]  = self.merchant_id
+		prov_hash["mode"]         = self.mode
 		return prov_hash
 	end
 
@@ -74,41 +75,42 @@ class Provider < ActiveRecord::Base
 	end
 
 	def legacy_status
-		stat = if self.active
+		if self.active
 			if self.sd_location_id == 1
-			    "live"
+			    stat = "live"
 			else
-			    "coming_soon"
+			    stat = "coming_soon"
 			end
 		else
-			"paused"
+			stat = "paused"
 		end
-		status = stat
-		save
-		puts "provider #{self.id} - Now = #{status} - Old = |#{sd_location_id} | #{self.active}"
+		self.mode = stat
+		self.save
+		puts "provider #{self.id} - Now = #{self.mode} from #{stat} - Old = |#{sd_location_id} | #{self.active}"
 	end
 
-	def status
-	    if not self.paused
-	        if live_bool
-	            "live"
-	        else
-	            "coming_soon"
-	        end
+	def mode
+	    if self.paused
+	        return "paused"
 	    else
-	        "paused"
+	    	if self.live
+	    	    return "live"
+	    	else
+	    	    return "coming_soon"
+	    	end
 	    end
 	end
 
-	def status= status
-		if status 	   == "live"
+	def mode= mode_str
+		case mode_str
+		when "live"
 			self.paused = false
 			self.live   = true
-		elsif status   == "coming_soon"
+		when "coming_soon"
 			self.paused = false
 			self.live   = false
-		elsif status   == "pause"
-			self.pause  = true
+		when "paused"
+			self.paused = true
 		end
 	end
 
