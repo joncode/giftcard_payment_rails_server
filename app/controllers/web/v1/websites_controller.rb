@@ -5,15 +5,19 @@ module Web
             def confirm_email
                 confirm_token = params[:id]
                 if setting = Setting.where(confirm_email_token: confirm_token)
-
-                    if user = setting.user
-
+                    if  setting.confirm_email_token_sent_at > (Time.now - 10.days)
+                        # update the setting to be confirmed
+                        if setting.update_attribute(:confirm_email_flag, true)
+                            # send success back
+                            success "email confirmed"
+                        else
+                            fail({"msg" => "user update failed , please retry", "error" => "database"})
+                        end
                     else
-                        fail database_error
+                        fail({"msg" => "confirm email expired", "error" => "invalid"})
                     end
-
                 else
-                    fail data_not_found
+                    fail({"msg" => "confirm email not found", "error" => "invalid"})
                 end
 
                 respond

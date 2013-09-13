@@ -20,7 +20,7 @@ class Setting < ActiveRecord::Base
 	end
 
 	def generate_email_link
-		"#{PUBLIC_URL}/signup/confirmemail/#{self.confirm_email_token}"
+		"#{PUBLIC_URL}/account/confirmemail/#{self.confirm_email_token}"
 	end
 
 end
