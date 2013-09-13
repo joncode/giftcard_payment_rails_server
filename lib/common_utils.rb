@@ -10,6 +10,10 @@ module CommonUtils
 			puts "HERE IS THE App-Version HEADER REQUEST #{request.headers['App-Version']}"
 		end
 
+		if request.headers['Mdot-Version']
+			puts "HERE IS THE Mdot-Version HEADER REQUEST #{request.headers['Mdot-Version']}"
+		end
+
 		if request.headers["HTTP_COOKIE"]
 			puts "HERE IS THE HEADER #{request.headers["HTTP_COOKIE"]}"
 		end
