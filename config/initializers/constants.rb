@@ -39,11 +39,12 @@ SD_ROOT     = "https://www.subtledata.com/API/M/1/?Q="
 WEB_KEY     = "RlgrM1Uw"
 
 
-BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dinig"]
+BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dining"]
 
 Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
 Time::DATE_FORMATS[:only_date]       = "%b %e"
 
 GENERAL_TOKEN = "1964f94b3e567a8a82b87f3ccbeb2174"
+WWW_TOKEN     = "nj3tOdJOaZa-qFx0FhCLRQ"
 APP_GENERAL_TOKEN =  "0NFXbWsyP3Mj2Mroj_utsA"

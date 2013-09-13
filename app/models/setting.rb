@@ -1,14 +1,38 @@
 class Setting < ActiveRecord::Base
-  attr_accessible :email_follow_up, :email_invite, 
-  :email_invoice, :email_redeem, :user_id , :email_receiver_new
+	include Utility
 
-  belongs_to :user
+	attr_accessible :email_follow_up, :email_invite,
+	:email_invoice, :email_redeem, :user_id , :email_receiver_new
 
-  validates_uniqueness_of :user_id
+	belongs_to :user
 
-  def serialize
-  	self.serializable_hash except: [:created_at, :updated_at, :id]
-  end
+	validates_uniqueness_of :user_id
+	validates :confirm_email_token, uniqueness: true, length: { minimum: 20 }, :if => :confirm_email_token_exists?
+
+	def serialize
+		setting = self.serializable_hash only: [:user_id, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
+		setting["email_confirmed"] = self.confirm_email_flag ? 1 : 0
+		setting["phone_confirmed"] = self.confirm_phone_flag ? 1 : 0
+		setting
+	end
+
+	def app_serialize
+		self.serializable_hash only: [:user_id, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
+	end
+
+	def generate_email_link
+		"#{PUBLIC_URL}/account/confirmemail/#{self.confirm_email_token}"
+	end
+
+private
+
+	def confirm_email_token_exists?
+		if self.confirm_email_token.nil?
+			return false
+		else
+			return true
+		end
+	end
 
 end
 
@@ -23,14 +47,22 @@ end
 #
 # Table name: settings
 #
-#  id                 :integer         not null, primary key
-#  user_id            :integer
-#  email_invoice      :boolean         default(TRUE)
-#  email_redeem       :boolean         default(TRUE)
-#  email_invite       :boolean         default(TRUE)
-#  email_follow_up    :boolean         default(TRUE)
-#  email_receiver_new :boolean         default(TRUE)
-#  created_at         :datetime        not null
-#  updated_at         :datetime        not null
+#  id                          :integer         not null, primary key
+#  user_id                     :integer
+#  email_invoice               :boolean         default(TRUE)
+#  email_redeem                :boolean         default(TRUE)
+#  email_invite                :boolean         default(TRUE)
+#  email_follow_up             :boolean         default(TRUE)
+#  email_receiver_new          :boolean         default(TRUE)
+#  created_at                  :datetime        not null
+#  updated_at                  :datetime        not null
+#  confirm_email_token         :string(255)
+#  confirm_phone_token         :string(255)
+#  reset_token                 :string(255)
+#  confirm_phone_flag          :boolean         default(FALSE)
+#  confirm_email_flag          :boolean         default(FALSE)
+#  confirm_phone_token_sent_at :datetime
+#  confirm_email_token_sent_at :datetime
+#  reset_token_sent_at         :datetime
 #
 

@@ -160,25 +160,13 @@ Drinkboard::Application.routes.draw do
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
 
-    ### authentication via Facebook & Foursquare
-  match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
-  match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
-  ###
-
-    ### Location resources
-  match '/map',               to: 'locations#map'
-  match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
-  match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
-  match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
-  match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
-
-  ## SERVICES ROUTES (app . mdot)
-  # namespace :app, defaults: { format: 'json' } do
-  #   namespace :v2 do
-  #     post 'regift',  to: 'apple#regift'
-  #     post 'menu',    to: 'apple#menu'
-  #   end
-  # end
+  ## PUBLIC website routes
+  namespace :web, defaults: { format: 'json' } do
+    namespace :v1 do
+      post 'confirm_email',      to: 'websites#confirm_email'
+      post 'redo_confirm_email', to: 'websites#redo_confirm_email'
+    end
+  end
 
   ## ADMIN TOOLS routes for API
   namespace :admt, defaults: { format: 'json' } do
@@ -234,5 +222,25 @@ Drinkboard::Application.routes.draw do
   match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
   match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
   match 'mt/compile_menu',         to: 'merchants#compile_menu', via: :post
+
+    ### authentication via Facebook & Foursquare
+  # match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
+  # match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
+  ###
+
+    ### Location resources
+  # match '/map',               to: 'locations#map'
+  # match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
+  # match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
+  # match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
+  # match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
+
+  ## SERVICES ROUTES (app . mdot)
+  # namespace :app, defaults: { format: 'json' } do
+  #   namespace :v2 do
+  #     post 'regift',  to: 'apple#regift'
+  #     post 'menu',    to: 'apple#menu'
+  #   end
+  # end
 
 end

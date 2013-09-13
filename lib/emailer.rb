@@ -15,6 +15,16 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
 	end
 
+	def confirm_email data
+		recipient		 = data["user"]
+		link             = data["link"]
+		subject          = "Confirm Your Email"
+		template_name    = "confirm-email"
+		template_content = [{"name" => "recipient_name", "content" => recipient.name}]
+		message          = message_hash(subject, recipient.email, recipient.name, link)
+		request_mandrill_with_template(template_name, template_content, message)
+	end
+
     def notify_receiver data
     	gift 			 = data["gift"]
 		template_name    = "gift-notice"
