@@ -6,7 +6,8 @@ class Provider < ActiveRecord::Base
 	:twitter, :facebook, :website, :users, :photo, :photo_cache,
 	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
 	:account_name, :aba, :routing, :bank_account_name, :bank_address,
-	 :bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image, :merchant_id
+	:bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image, :merchant_id,
+	:paused, :live
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
@@ -49,7 +50,7 @@ class Provider < ActiveRecord::Base
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_image("photo")
 		prov_hash["full_address"] = self.full_address
-		prov_hash["live"]         = self.live
+		prov_hash["live"]         = self.live_int
 		return prov_hash
 	end
 
@@ -68,24 +69,31 @@ class Provider < ActiveRecord::Base
 
 #########   STATUS METHODS
 
-	def live
-		if self.sd_location_id == nil
-			return "0"
-		else
-			return "1"
-		end
+	def live_int
+		self.live ? "1" : "0"
 	end
 
 	def live_bool
-		if self.sd_location_id == nil
-			return false
+		self.live
+	end
+
+	def legacy_status
+		stat = if self.active
+			if self.sd_location_id == 1
+			    "live"
+			else
+			    "coming_soon"
+			end
 		else
-			return true
+			"paused"
 		end
+		status = stat
+		save
+		puts "provider #{self.id} - Now = #{status} - Old = |#{sd_location_id} | #{self.active}"
 	end
 
 	def status
-	    if not pause
+	    if not self.paused
 	        if live_bool
 	            "live"
 	        else
