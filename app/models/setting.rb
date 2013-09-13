@@ -7,6 +7,7 @@ class Setting < ActiveRecord::Base
 	belongs_to :user
 
 	validates_uniqueness_of :user_id
+	validates :confirm_email_token, uniqueness: true, length: { minimum: 20 }, :if => :confirm_email_token_exists?
 
 	def serialize
 		setting = self.serializable_hash only: [:user_id, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
@@ -21,6 +22,16 @@ class Setting < ActiveRecord::Base
 
 	def generate_email_link
 		"#{PUBLIC_URL}/account/confirmemail/#{self.confirm_email_token}"
+	end
+
+private
+
+	def confirm_email_token_exists?
+		if self.confirm_email_token.nil?
+			return false
+		else
+			return true
+		end
 	end
 
 end

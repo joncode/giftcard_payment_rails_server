@@ -329,10 +329,6 @@ class User < ActiveRecord::Base
 		setting.save
 	end
 
-##################
-
-#private
-
 	def init_confirm_email
 		if self.email
 			set_confirm_email
@@ -341,6 +337,10 @@ class User < ActiveRecord::Base
 			puts "User created without EMAIL !! #{self.id}"
 		end
 	end
+
+##################
+
+private
 
 	def collect_incomplete_gifts
 						# check Gift.rb for ghost gifts connected to newly created user
