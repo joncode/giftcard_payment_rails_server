@@ -601,3 +601,42 @@
 [09/12/13 17:36:50 -0400 new-host.home (4322)] INFO : Installing Rails 3.1/3.2 view instrumentation
 [09/12/13 17:36:50 -0400 new-host.home (4322)] INFO : Installing Rails3 Error instrumentation
 [09/12/13 17:36:50 -0400 new-host.home (4322)] INFO : Finished instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Starting the New Relic agent in "development" environment.
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Reading configuration from config/newrelic.yml
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Enabling the Request Sampler.
+[09/12/13 22:06:16 -0400 new-host.home (6129)] ERROR : No application name configured.
+[09/12/13 22:06:16 -0400 new-host.home (6129)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/12/13 22:06:16 -0400 new-host.home (6129)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/12/13 22:06:16 -0400 new-host.home (6129)] ERROR : value set for app_name in the development 
+[09/12/13 22:06:16 -0400 new-host.home (6129)] ERROR : environment.
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Installing ActiveMerchant instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Installing ActiveRecord instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Installing Net instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Installing Sinatra instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Installing deferred Rack instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Installing Resque instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Installing Rails 3 Controller instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Installing Rails3 Error instrumentation
+[09/12/13 22:06:16 -0400 new-host.home (6129)] INFO : Finished instrumentation
+[09/12/13 22:06:18 -0400 new-host.home (6129)] INFO : Doing deferred dependency-detection before Rack startup
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Starting the New Relic agent in "development" environment.
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Reading configuration from config/newrelic.yml
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Enabling the Request Sampler.
+[09/12/13 22:34:44 -0400 new-host.home (6298)] ERROR : No application name configured.
+[09/12/13 22:34:44 -0400 new-host.home (6298)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/12/13 22:34:44 -0400 new-host.home (6298)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/12/13 22:34:44 -0400 new-host.home (6298)] ERROR : value set for app_name in the development 
+[09/12/13 22:34:44 -0400 new-host.home (6298)] ERROR : environment.
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing ActiveMerchant instrumentation
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing ActiveRecord instrumentation
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing Net instrumentation
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing Sinatra instrumentation
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing deferred Rack instrumentation
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing Resque instrumentation
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing Rails 3 Controller instrumentation
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing Rails3 Error instrumentation
+[09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Finished instrumentation

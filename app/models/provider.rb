@@ -6,7 +6,7 @@ class Provider < ActiveRecord::Base
 	:twitter, :facebook, :website, :users, :photo, :photo_cache,
 	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
 	:account_name, :aba, :routing, :bank_account_name, :bank_address,
-	 :bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image
+	 :bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image, :merchant_id
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
@@ -56,6 +56,7 @@ class Provider < ActiveRecord::Base
 	def admt_serialize
 		prov_hash  = self.serializable_hash only: [:name, :address, :state, :city, :brand_id, :building_id ]
 		prov_hash["provider_id"]  = self.id
+		prov_hash["merchant_id"]  = self.merchant_id
 		return prov_hash
 	end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130912213119) do
+ActiveRecord::Schema.define(:version => 20130913023446) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -277,9 +277,11 @@ ActiveRecord::Schema.define(:version => 20130912213119) do
     t.string   "token"
     t.boolean  "tools",                           :default => false
     t.string   "image"
+    t.integer  "merchant_id"
   end
 
   add_index "providers", ["city"], :name => "index_providers_on_city"
+  add_index "providers", ["merchant_id"], :name => "index_providers_on_merchant_id"
   add_index "providers", ["token"], :name => "index_providers_on_token"
 
   create_table "providers_tags", :id => false, :force => true do |t|
