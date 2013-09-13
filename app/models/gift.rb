@@ -44,6 +44,7 @@ class Gift < ActiveRecord::Base
 		sender      = giver
 		merchant    = provider
 		gift_hsh                       = {}
+		gift_hsh["gift_id"]			   = self.id
 		gift_hsh["giver"]              = sender.name
 		gift_hsh["giver_photo"]        = sender.get_photo
 		if receipient = receiver
@@ -66,9 +67,25 @@ class Gift < ActiveRecord::Base
 		gift_hsh["gift_id"]			   = self.id
 		gift_hsh["provider_id"]        = provider.id
     	#gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
-		gift_hsh["name"]      = provider.name
+		gift_hsh["name"]      		   = provider.name
 		gift_hsh["merchant_address"]   = provider.full_address
 		gift_hsh["total"]   		   = self.total
+		gift_hsh
+	end
+
+	def report_serialize
+		gift_hsh                    = {}
+		gift_hsh["order_num"]		= self.order_num
+		gift_hsh["updated_at"]		= self.updated_at
+		gift_hsh["created_at"]		= self.created_at
+		gift_hsh["shoppingCart"]  	= self.shoppingCart
+		if order = self.order
+			server = self.order.server_code
+		else
+			server = nil
+		end
+		gift_hsh["server"]			= server
+		gift_hsh["total"]			= self.total
 		gift_hsh
 	end
 
@@ -87,6 +104,19 @@ class Gift < ActiveRecord::Base
 
 	def phone= phone_number
 		self.receiver_phone = phone_number
+	end
+
+	def grand_total
+		pre_round = self.total.to_f + self.service.to_f
+		pre_round.round(2).to_s
+	end
+
+	def total
+		string_to_cents super
+	end
+
+	def service
+		string_to_cents super
 	end
 
 ##########  gift credit card methods
@@ -153,6 +183,8 @@ class Gift < ActiveRecord::Base
 				end
 			elsif Rails.env.staging?
 				Relay.send_push_notification self
+				sale.invoice_giver
+				sale.notify_receiver
 			end
 		end
 				# otherwise return a sale object with resp_code == 1
@@ -212,29 +244,13 @@ class Gift < ActiveRecord::Base
 
 ###############
 
-##########  cashier methods
-
-	def ticket_total_string
-		ticket_total = (self.total.to_f * 100).to_i - (self.service.to_f * 100).to_i
-		tix_float 	 = ticket_total.to_f / 100
-		return format_currency_as_string(tix_float)
-	end
-
-	def subtotal_string
-		subtotal  = (self.ticket_total_string.to_f * 100).to_i  - (self.tax.to_f * 100).to_i - (self.tip.to_f * 100).to_i
-		tix_float = subtotal.to_f / 100
-		return format_currency_as_string(tix_float)
-	end
-
-###############
-
 ##########  data population methods
 
 	def regift(recipient=nil, message=nil)
-		new_gift            = self.dup
-		new_gift.regift_id  = self.id
-		new_gift.message    = message ? message : nil
-		new_gift.add_giver  self.receiver
+		new_gift              = self.dup
+		new_gift.regift_id    = self.id
+		new_gift.message      = message ? message : nil
+		new_gift.add_giver(self.receiver)
 		if recipient
 			new_gift.add_receiver recipient
 		else
@@ -242,6 +258,18 @@ class Gift < ActiveRecord::Base
 		end
 		new_gift.order_num  = nil
 		return new_gift
+	end
+
+	def parent
+		if self.regift_id
+			Gift.find(self.regift_id)
+		else
+			nil
+		end
+	end
+
+	def child
+		Gift.find_by_regift_id(self.id)
 	end
 
 	def remove_receiver
@@ -297,9 +325,11 @@ class Gift < ActiveRecord::Base
 private
 
 	def update_shoppingCart
-		updated_shoppingCart_array = self.gift_items.map { |item| item.prepare_for_shoppingCart }
-		puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
-		self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
+		if self.regift_id.nil?
+			updated_shoppingCart_array = self.gift_items.map { |item| item.prepare_for_shoppingCart }
+			puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
+			self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
+		end
 	end
 
 	def add_giver_name
@@ -350,5 +380,6 @@ end
 #  service        :string(255)
 #  order_num      :string(255)
 #  cat            :integer         default(0)
+#  active         :boolean         default(TRUE)
 #
 

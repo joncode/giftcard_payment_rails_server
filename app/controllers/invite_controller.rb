@@ -1,35 +1,5 @@
 class InviteController < ApplicationController
-    layout 'user_mailer' , except: [:show, :invite, :invite_friend]
-    # INVITE W/O GIFT
-    # sender info :
-        # sender name
-        # sender photo_url
-
-    # request with
-        # invite/person/782934
-        # 782934 = <user_id + stub value>
-    # respond with
-        # { "user" : <fullname>, "photo" : <user.get_photo> }
-
-    # INVITE W GIFT
-        # sender info (see above)
-    # gift info :
-        # gift items - shopping cart
-        # merchant name
-        # merchant photo_url
-        # merchant address
-        # merchant phone
-
-    # request with
-        # invite/gift/782934
-        # 782934 = <gift_id + stub value>
-    # respond with
-        # { "user" : <fullname>,
-        #  "photo" : <user.get_photo>,
-        #  "shoppingCart" : <shopping cart as json hash> ,
-        #  "merchant_name" : <provider_name>,
-        #  "merchant_address" : <provider_full_address>,
-        #  "merchant_phone" : <provider_phone> }
+  layout 'user_mailer' , except: [:show, :invite, :invite_friend]
 
   def show
 
@@ -49,28 +19,28 @@ class InviteController < ApplicationController
 
   def invite
             # remove the permalink add-number from the id
-        id          = params[:id].to_i - NUMBER_ID
-        if id < 0
-            id = params[:id].to_i
-        end
-        @user = User.find(id)
-        if @user.nil?
-            @user = User.find_by_phone("5555555555")
-        end
-        if request.format == :json
-            response_hash                       = {}
-            response_hash["user"]               = @user.name
-            response_hash["user_photo"]         = @user.get_photo
-        end
-        respond_to do |format|
-            format.json { render json: response_hash }
-        end
+    id = params[:id].to_i - NUMBER_ID
+    if id < 0
+        id = params[:id].to_i
+    end
+    @user = User.find(id)
+    if @user.nil?
+        @user = User.find_by_phone("5555555555")
+    end
+    if request.format == :json
+        response_hash                       = {}
+        response_hash["user"]               = @user.name
+        response_hash["user_photo"]         = @user.get_photo
+    end
+    respond_to do |format|
+        format.json { render json: response_hash }
+    end
   end
 
   def invite_friend
-    if params[:email] && params[:user_id]
-      Resque.enqueue(EmailJob, 'invite_friend', params[:user_id], {:email => params[:email], :gift_id => params[:gift_id]})
-    end
+    # if params[:email] && params[:user_id]
+    #   Resque.enqueue(EmailJob, 'invite_friend', params[:user_id], {:email => params[:email], :gift_id => params[:gift_id]})
+    # end
   end
 
   def error
@@ -171,3 +141,35 @@ class InviteController < ApplicationController
   end
 
 end
+
+
+# INVITE W/O GIFT
+# sender info :
+    # sender name
+    # sender photo_url
+
+# request with
+    # invite/person/782934
+    # 782934 = <user_id + stub value>
+# respond with
+    # { "user" : <fullname>, "photo" : <user.get_photo> }
+
+# INVITE W GIFT
+    # sender info (see above)
+# gift info :
+    # gift items - shopping cart
+    # merchant name
+    # merchant photo_url
+    # merchant address
+    # merchant phone
+
+# request with
+    # invite/gift/782934
+    # 782934 = <gift_id + stub value>
+# respond with
+    # { "user" : <fullname>,
+    #  "photo" : <user.get_photo>,
+    #  "shoppingCart" : <shopping cart as json hash> ,
+    #  "merchant_name" : <provider_name>,
+    #  "merchant_address" : <provider_full_address>,
+    #  "merchant_phone" : <provider_phone> }

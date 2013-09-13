@@ -12,8 +12,31 @@ module Legacy
         end
     end
 
-    def delete_dev_gifts
-
+    def check_card_owners
+        cs = Card.all
+        cs.each do |card|
+            user = card.user
+            if user
+                if card.name != user.name
+                    puts "Card #{card.id} : card_name #{card.name} : user #{user.name}"
+                    print "card names do not match "
+                    print "Delete card ? -> (y/n) "
+                    response = gets.chomp.downcase
+                    if response == 'y'
+                        card.destroy
+                    end
+                end
+            else
+                # ask me for y/n to delete
+                print "Card #{card.id} has no user"
+                print " Delete card ? -> (y/n) "
+                response = gets.chomp.downcase
+                if response == 'y'
+                    card.destroy
+                end
+            end
+        end
+        nil
     end
 
     def deactive p_ary
@@ -39,4 +62,45 @@ module Legacy
         end
     end
 
+    def update_menu_to_detail menu_string
+        menu = JSON.parse menu_string.menu
+        menu.each do |section|
+            items_ary = section["items"]
+            items_ary.each do |item|
+                if item.has_key? "description"
+                    item["detail"] = item["description"]
+                    item.delete("description")
+                end
+            end
+        end
+        menu_string.menu = menu.to_json
+        if not menu_string.save
+            puts "Menu String fail #{menu_string.id}"
+        end
+    end
+
+    def update_all_menus_to_detail
+        ms = MenuString.all
+        ms.each do |menu_string|
+            puts "Updating MenuString ID = #{menu_string.id}"
+            if menu_string.menu.kind_of? String
+                update_menu_to_detail menu_string
+            else
+                puts "has no menu"
+            end
+        end
+        nil
+    end
+
 end
+
+
+
+
+
+
+
+
+
+
+

@@ -4,11 +4,11 @@ class JsonController < ActionController::Base
     include JsonHelper
 
 	skip_before_filter   :verify_authenticity_token
-
     before_filter        :log_request_header
     before_filter        :method_start_log_message
     after_filter         :cross_origin_allow_header
     after_filter         :method_end_log_message
+
     UPDATE_REPLY    = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]
     GIFT_REPLY      = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     MERCHANT_REPLY  = GIFT_REPLY + [ "order_num"]
@@ -63,9 +63,8 @@ class JsonController < ActionController::Base
                 end
                 gift_obj["time_ago"]   = time_ago_in_words(g.created_at.to_time)
             else
-                # change total to location total
-                gift_obj["total"]    = g.ticket_total_string
-                gift_obj["subtotal"] = g.subtotal_string
+
+                gift_obj["total"]    = g.total
                 gift_obj["server"]   = g.order.server_code if g.order
                 if (g.updated_at > (Time.now  - 1.day))
                     gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant)
@@ -86,19 +85,19 @@ class JsonController < ActionController::Base
     def convert_shoppingCart_for_app shoppingCart
         cart_ary = JSON.parse shoppingCart
         # puts "shopping cart = #{cart_ary}"
-        new_shopping_cart = []
-        if cart_ary[0].has_key? "menu_id"
-            cart_ary.each do |item_hash|
-                item_hash["item_id"]   = item_hash["menu_id"]
-                item_hash["item_name"] = item_hash["name"]
-                item_hash.delete("menu_id")
-                item_hash.delete("name")
-                new_shopping_cart << item_hash
-                puts "AppC -convert_shoppingCart_for_app- new shopping cart = #{new_shopping_cart}"
-            end
-        else
-            new_shopping_cart = cart_ary
-        end
+        # new_shopping_cart = []
+        # if cart_ary[0].has_key? "menu_id"
+        #     cart_ary.each do |item_hash|
+        #         item_hash["item_id"]   = item_hash["menu_id"]
+        #         item_hash["item_name"] = item_hash["name"]
+        #         item_hash.delete("menu_id")
+        #         item_hash.delete("name")
+        #         new_shopping_cart << item_hash
+        #         puts "AppC -convert_shoppingCart_for_app- new shopping cart = #{new_shopping_cart}"
+        #     end
+        # else
+             new_shopping_cart = cart_ary
+        # end
 
         return new_shopping_cart
     end
@@ -138,15 +137,20 @@ class JsonController < ActionController::Base
     end
 
     def authenticate_merchant_tools
-        token   = params["token"]
+        token     = params["token"]
         # check token to see if it is good
-        api_key = Provider.find_by_token token
-        head :unauthorized unless api_key
+        @provider = Provider.unscoped.find_by_token(token)
+        head :unauthorized unless @provider
     end
 
     def authenticate_general_token
         token   = params["token"]
         head :unauthorized unless GENERAL_TOKEN == token
+    end
+
+    def authenticate_www_token
+        token   = params["token"]
+        head :unauthorized unless WWW_TOKEN == token
     end
 
     def authenticate_public_info token=nil

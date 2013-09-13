@@ -2,17 +2,19 @@ module Admt
     module V1
         class AdminToolsController < JsonController
 
-            before_filter :authenticate_admin_tools,    except: :add_key
+            before_filter :authenticate_admin_tools,    except: [:add_key, :payable_gifts]
+            before_filter :authenticate_merchant_tools, only:   :payable_gifts
             before_filter :authenticate_general_token,  only:   :add_key
 
     #####  Gift Methods
 
             def gifts
                 data      = params["data"].to_i
-                if data > 0
-                    gifts = Gift.get_all_for_provider data
+
+                gifts = if data > 0
+                    Gift.get_all_for_provider data
                 else
-                    gifts = Gift.get_all
+                    Gift.get_all
                 end
 
                 if gifts.count > 0
@@ -25,7 +27,7 @@ module Admt
 
             def gift
 
-                if gift = Gift.find(params["data"].to_i)
+                if gift = Gift.unscoped.find(params["data"].to_i)
                     serialized_gift = array_these_gifts( [gift], ADMIN_REPLY, false , false , true )
                     success serialized_gift.first
                 else
@@ -47,24 +49,38 @@ module Admt
                 respond
             end
 
+
+            def payable_gifts
+                gift_ids = params["data"]
+                if gifts = Gift.find(gift_ids)
+                    success gifts.serialize_objs(:report)
+                else
+                    fail    data_not_found
+                end
+                respond
+            end
+
     #####  Gift & Sale Methods
 
             def cancel
-                gift = Gift.find(params["data"].to_i)
-                case gift.status
-                when "unpaid"
-                    # void the gift - no sale
-                    gift.update_attribute(:status, "void")
-                    response = gift.status
-                else
-                    sale     = gift.sale
-                    response = sale.void_sale gift
-                end
+                if gift = Gift.unscoped.find(params["data"].to_i)
+                    case gift.status
+                    when "unpaid"
+                        # void the gift - no sale
+                        gift.update_attribute(:status, "void")
+                        response = gift.status
+                    else
+                        sale     = gift.sale
+                        response = sale.void_sale gift
+                    end
 
-                if gift
-                    success response
+                    if gift
+                        success response
+                    else
+                        fail    "Error De-Activating Unpaid gift"
+                    end
                 else
-                    fail    "Error De-Activating Unpaid gift"
+                    fail    data_not_found
                 end
                 respond
             end
@@ -82,7 +98,7 @@ module Admt
                     response_hsh   = {app_user: user.admt_serialize}.merge gifts
                     success response_hsh
                 else
-                    fail    user
+                    fail    data_not_found
                 end
                 respond
             end
@@ -122,25 +138,31 @@ module Admt
             end
 
             def de_activate_user
-                user        = User.find(params["data"].to_i)
-                user.active = user.active ? false : true
+                if user         = User.find(params["data"].to_i)
+                    user.active = user.active ? false : true
 
-                if user.save
-                    stat    = user.active ? "Live" : "Suspended"
-                    success "#{user.name} is now #{stat}"
+                    if user.save
+                        stat    = user.active ? "Live" : "Suspended"
+                        success "#{user.name} is now #{stat}"
+                    else
+                        fail    user
+                    end
                 else
-                    fail    user
+                    fail    data_not_found
                 end
                 respond
             end
 
             def destroy_user
-                user        = User.find(params["data"].to_i)
+                if user        = User.find(params["data"].to_i)
 
-                if user.permanently_de_activate
-                    success "#{user.name} is Permanently De-Activated."
+                    if user.permanently_de_activate
+                        success "#{user.name} is Permanently De-Activated."
+                    else
+                        fail    user
+                    end
                 else
-                    fail    user
+                    fail    data_not_found
                 end
                 respond
             end
@@ -180,7 +202,7 @@ module Admt
             end
 
             def update_brand
-                brand = Brand.find(params["data"]["brand_id"].to_i)
+                brand = Brand.unscoped.find(params["data"]["brand_id"].to_i)
                 if brand && brand.update_attributes(params["data"]["brand"])
                     success brand.admt_serialize
                 else
@@ -194,18 +216,21 @@ module Admt
             end
 
             def de_activate_brand
-                brand      = Brand.unscoped.find(params["data"].to_i)
-                new_active = brand.active ? false : true
+                if brand      = Brand.unscoped.find(params["data"].to_i)
+                    new_active = brand.active ? false : true
 
-                if brand.update_attribute(:active, new_active)
-                    msg = if brand.active
-                            "#{brand.name} is Active"
-                        else
-                            "#{brand.name} is de-Activated"
-                        end
-                    success msg
+                    if brand.update_attribute(:active, new_active)
+                        msg = if brand.active
+                                "#{brand.name} is Active"
+                            else
+                                "#{brand.name} is de-Activated"
+                            end
+                        success msg
+                    else
+                        fail    brand
+                    end
                 else
-                    fail    brand
+                    fail    data_not_found
                 end
                 respond
             end
@@ -214,8 +239,8 @@ module Admt
                 type_of  = params["data"]["type_of"]
                 type_msg = type_of == "building_id" ? "building" : "brand"
                 begin
-                    brand    = Brand.find params["data"]["brand_id"].to_i
-                    merchant = Provider.find params["data"]["provider_id"].to_i
+                    brand    = Brand.unscoped.find(params["data"]["brand_id"].to_i)
+                    merchant = Provider.unscoped.find(params["data"]["provider_id"].to_i)
                 rescue
                     brand = nil
                 end
@@ -272,48 +297,57 @@ module Admt
             end
 
             def go_live
-                provider = Provider.find_by_token params['data']
-                provider.sd_location_id = provider.live_bool ? nil : 1
+                if provider = Provider.unscoped.find_by_token(params['data'])
+                    provider.sd_location_id = provider.live_bool ? nil : 1
 
-                if provider.save
-                    msg =
-                        if provider.live_bool
-                            "#{provider.name} is Live in App"
-                        else
-                            "#{provider.name} is Coming Soon in App"
-                        end
-                    success msg
+                    if provider.save
+                        msg =
+                            if provider.live_bool
+                                "#{provider.name} is Live in App"
+                            else
+                                "#{provider.name} is Coming Soon in App"
+                            end
+                        success msg
+                    else
+                        fail    provider
+                    end
                 else
-                    fail    provider
+                    fail    data_not_found
                 end
                 respond
             end
 
             def de_activate_merchant
-                provider    = Provider.find_by_token params['data']
-                new_active  = provider.active ? false : true
+                if provider    = Provider.unscoped.find_by_token(params['data'])
+                    new_active = provider.active ? false : true
 
-                if provider.update_attribute(:active, new_active)
-                    msg =
-                        if provider.active
-                            "#{provider.name} is Active"
-                        else
-                            "#{provider.name} is de-Activated"
-                        end
-                    success msg
+                    if provider.update_attribute(:active, new_active)
+                        msg =
+                            if provider.active
+                                "#{provider.name} is Active"
+                            else
+                                "#{provider.name} is de-Activated"
+                            end
+                        success msg
+                    else
+                        fail    provider
+                    end
                 else
-                    fail    provider
+                    fail    data_not_found
                 end
                 respond
             end
 
             def orders
-                provider = Provider.find_by_token params['data']
+                if provider = Provider.unscoped.find_by_token(params['data'])
 
-                if gifts = Gift.get_history_provider(provider)
-                    success array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+                    if gifts = Gift.get_history_provider(provider)
+                        success array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+                    else
+                        fail    provider
+                    end
                 else
-                    fail    provider
+                    fail    data_not_found
                 end
                 respond
             end

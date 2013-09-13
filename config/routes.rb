@@ -106,19 +106,6 @@ Drinkboard::Application.routes.draw do
   end
 
   resources :gifts,       only: [:index, :show]
-    ## merchant tools routes
-  match 'mt/user_login',           to: 'merchants#login',        via: :post
-  match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
-  match 'mt/menu',                 to: 'merchants#menu',         via: :post
-  match 'mt/reports',              to: 'merchants#reports',      via: :post
-  match 'mt/employees',            to: 'merchants#employees',    via: :post
-  match 'mt/finances',             to: 'merchants#finances',     via: :post
-  match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
-  match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
-  match 'mt/compile_menu',         to: 'merchants#compile_menu', via: :post
-
-  # resources :microposts,    only: [:create, :destroy]
-  # resources :relationships, only: [:create, :destroy]
 
     ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
@@ -137,7 +124,6 @@ Drinkboard::Application.routes.draw do
   match 'app/redeem',           to: 'app#create_redeem',       via: :post
   match 'app/complete_order',   to: 'app#create_order_emp',    via: :post
   match 'app/order_confirm',    to: 'app#create_order',        via: :post
-  match 'app/menu',             to: 'app#menu',                via: :post
   match 'app/menu_v2',          to: 'app#menu_v2',             via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
   match 'app/others_questions', to: 'app#others_questions',    via: :post
@@ -155,12 +141,16 @@ Drinkboard::Application.routes.draw do
   match 'app/regift',           to: 'iphone#regift',           via: :post
     ## test new data methods routes
   match 'app/new_pic',          to: 'app#providers_short_ph_url', via: :post
+  match 'app/cities_app',       to: 'iphone#cities'
 
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post
   match 'app/delete_card',      to: 'app#delete_card',         via: :post
+
     ### deprecated app routes
+  match 'app/menu',             to: 'app#menu',                via: :post
+
   match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/out',              to: 'iphone#going_out',        via: :post
@@ -169,26 +159,14 @@ Drinkboard::Application.routes.draw do
   match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
-  match 'app/cities_app',       to: 'iphone#cities'
-    ### authentication via Facebook & Foursquare
-  match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
-  match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
-  ###
 
-    ### Location resources
-  match '/map',               to: 'locations#map'
-  match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
-  match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
-  match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
-  match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
-
-  ## SERVICES ROUTES (app . mdot)
-  # namespace :app, defaults: { format: 'json' } do
-  #   namespace :v2 do
-  #     post 'regift',  to: 'apple#regift'
-  #     post 'menu',    to: 'apple#menu'
-  #   end
-  # end
+  ## PUBLIC website routes
+  namespace :web, defaults: { format: 'json' } do
+    namespace :v1 do
+      post 'confirm_email',      to: 'websites#confirm_email'
+      post 'redo_confirm_email', to: 'websites#redo_confirm_email'
+    end
+  end
 
   ## ADMIN TOOLS routes for API
   namespace :admt, defaults: { format: 'json' } do
@@ -196,6 +174,7 @@ Drinkboard::Application.routes.draw do
       post 'add_key_app',       to: 'admin_tools#add_key'
       post 'get_gifts',         to: 'admin_tools#gifts'
       post 'get_gift',          to: 'admin_tools#gift'
+      post "payable_gifts",     to: 'admin_tools#payable_gifts'
       post 'get_app_users',     to: 'admin_tools#users'
       post 'get_app_user',      to: 'admin_tools#user'
       post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
@@ -227,7 +206,41 @@ Drinkboard::Application.routes.draw do
       post 'orders',          to: 'merchant_tools#orders'
       post 'order',           to: 'merchant_tools#order'
       post 'compile_menu',    to: 'merchant_tools#compile_menu'
+      post 'update_photo',    to: 'merchant_tools#update_photo'
+      post 'summary_range',   to: 'merchant_tools#summary_range'
+      post 'summary_report',  to: 'merchant_tools#summary_report'
     end
   end
+
+    ## merchant tools routes
+  match 'mt/user_login',           to: 'merchants#login',        via: :post
+  match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
+  match 'mt/menu',                 to: 'merchants#menu',         via: :post
+  match 'mt/reports',              to: 'merchants#reports',      via: :post
+  match 'mt/employees',            to: 'merchants#employees',    via: :post
+  match 'mt/finances',             to: 'merchants#finances',     via: :post
+  match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
+  match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
+  match 'mt/compile_menu',         to: 'merchants#compile_menu', via: :post
+
+    ### authentication via Facebook & Foursquare
+  # match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
+  # match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
+  ###
+
+    ### Location resources
+  # match '/map',               to: 'locations#map'
+  # match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
+  # match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
+  # match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
+  # match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
+
+  ## SERVICES ROUTES (app . mdot)
+  # namespace :app, defaults: { format: 'json' } do
+  #   namespace :v2 do
+  #     post 'regift',  to: 'apple#regift'
+  #     post 'menu',    to: 'apple#menu'
+  #   end
+  # end
 
 end

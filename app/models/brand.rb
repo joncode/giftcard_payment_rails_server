@@ -132,5 +132,6 @@ end
 #  owner_id    :integer
 #  next_view   :string(255)
 #  child       :boolean         default(FALSE)
+#  active      :boolean         default(TRUE)
 #
 

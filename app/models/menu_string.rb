@@ -70,7 +70,11 @@ private
 
     def update_merchant
         unless self.menu.nil?
-            self.provider.update_attribute(:menu_is_live, true)
+            if provider = Provider.unscoped.find(self.provider_id)
+                if not provider.menu_is_live
+                    provider.update_attribute(:menu_is_live, true)
+                end
+            end
         end
     end
 
