@@ -12,6 +12,11 @@ module ServerModel
         request_server_with_route_and_params short_route , self.mode
     end
 
+    def deactivate_merchant
+        short_route = 'deactivate_merchant'
+        request_server_with_route_and_params short_route , nil
+    end
+
 private
 
     def request_server_with_route_and_params short_route, data
