@@ -72,7 +72,7 @@ module Email
                 "user"        => self,
                 "link"        => self.setting.generate_email_link
                 }
-        puts "Here is the data #{data.inspect}"
+        # puts "Here is the data #{data.inspect}"
         route_email_system(data)
     end
 
@@ -94,7 +94,7 @@ private
         begin
             if Rails.env.production?
                 call_resque(data)
-            else
+            elsif Rails.env.staging?
                 call_mandrill(data)
             end
         rescue

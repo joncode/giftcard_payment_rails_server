@@ -36,6 +36,8 @@ group :development, :test do
   gem "rspec-rails", "~> 2.13.0"
   gem "capybara",    "2.0.3"
   gem "launchy"
+  gem "factory_girl"
+  gem "yajl-ruby"
 end
 
 # Gems used only for assets and not required

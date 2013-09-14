@@ -81,6 +81,8 @@ GEM
     excon (0.25.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    factory_girl (4.2.0)
+      activesupport (>= 3.0.0)
     ffi (1.9.0)
     formatador (0.2.4)
     guard (1.8.2)
@@ -258,6 +260,7 @@ GEM
     will_paginate (3.0.4)
     xpath (1.0.0)
       nokogiri (~> 1.3)
+    yajl-ruby (1.1.0)
 
 PLATFORMS
   ruby
@@ -271,6 +274,7 @@ DEPENDENCIES
   carrierwave
   cloudinary
   coffee-rails (~> 3.2.1)
+  factory_girl
   guard
   guard-rspec
   httparty (~> 0.9.0)
@@ -294,3 +298,4 @@ DEPENDENCIES
   uglifier (>= 1.2.3)
   urbanairship
   will_paginate (> 3.0)
+  yajl-ruby
