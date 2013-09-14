@@ -5,7 +5,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe IphoneController do
 
     describe "#login" do
-        
+
         before do
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
         end
@@ -28,7 +28,7 @@ describe IphoneController do
             json["error"].should   == "Invalid email/password combination"
         end
 
-        it "should not login a deactivated user" do
+        it "should not login a paused user" do
             @user.active = false
             @user.save
             post :login, format: :json, email: "neil@gmail.com", password: "password"
