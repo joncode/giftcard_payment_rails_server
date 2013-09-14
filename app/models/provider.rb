@@ -38,7 +38,7 @@ class Provider < ActiveRecord::Base
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
-	default_scope where(active: true).order("name ASC")
+	default_scope where(active: true).where(paused: false).order("name ASC")
 
 #/---------------------------------------------------------------------------------------------/
 
