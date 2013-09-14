@@ -190,7 +190,7 @@ Drinkboard::Application.routes.draw do
       post 'de_associate',      to: 'admin_tools#de_associate'
       post 'providers',         to: 'admin_tools#providers'
       post 'go_live',           to: 'admin_tools#go_live'
-      post 'de_activate_merchant', to: 'admin_tools#de_activate_merchant'
+      post 'deactivate_merchant', to: 'admin_tools#deactivate_merchant'
       post 'update_mode',       to: 'admin_tools#update_mode'
       post 'cancel',            to: 'admin_tools#cancel'
       post 'orders',            to: 'admin_tools#orders'

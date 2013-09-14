@@ -322,7 +322,7 @@ module Admt
                         # call :mt and update the mechant
                         response = provider.update_mode
                         if response['status'] > 0
-                            success({"mode" => provider.mode})
+                            success     "#{provider.name} is #{provider.mode}"
                         else
                             # set cron job to fix out of sync data in MT
                             hsh         = {"msg" => "app is updated.  Merchant Tools was unable to update."}
@@ -339,17 +339,20 @@ module Admt
                 respond
             end
 
-            def de_activate_merchant
+            def deactivate_merchant
                 if provider    = Provider.unscoped.find_by_token(params['data'])
 
-                    if provider.toggle! :active
-                        msg =
-                            if provider.active
-                                "#{provider.name} is Active"
-                            else
-                                "#{provider.name} is de-Activated"
-                            end
-                        success msg
+                    if provider.update_attribute(:active, false)
+                        # call :mt and deactivate the merchant
+                        response = provider.deactivate_merchant
+                        if response['status'] > 0
+                            success     "#{provider.name} is de-Activated"
+                        else
+                            # set cron job to fix out of sync data in MT
+                            hsh         = {"msg" => "#{provider.name} is de-Activated.  Merchant Tools was unable to update."}
+                            total_resp  = hsh.merge(provider.admt_serialize)
+                            success     total_resp
+                        end
                     else
                         fail    provider
                     end
