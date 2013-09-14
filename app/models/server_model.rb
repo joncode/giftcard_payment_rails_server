@@ -17,7 +17,9 @@ private
     def request_server_with_route_and_params short_route, data
         route , params = generate_route_and_params(short_route, data)
         begin
+            puts "Here are the route #{route} adn the params #{params}"
             party_response = HTTParty.post(route, params)
+            puts "HERE IS PARTY #{party_response.inspect}"
             server_response(party_response)
         rescue
             { "status" => 0, "data" => 'Cannot reach server'}
@@ -53,12 +55,12 @@ private
 
     def generate_admt_route short_route
         admt_tools_api_version     = "v1/"
-        ADMIN_URL + "mt/" + admt_tools_api_version + short_route
+        ADMIN_URL + "/mt/" + admt_tools_api_version + short_route
     end
 
     def generate_mt_route short_route
         merchant_tools_api_version = "v1/"
-        MERCHANT_URL + "dba/" + merchant_tools_api_version + short_route
+        MERCHANT_URL + "/dba/" + merchant_tools_api_version + short_route
     end
 
     def generate_params data

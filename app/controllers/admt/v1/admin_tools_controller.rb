@@ -316,7 +316,7 @@ module Admt
             end
 
             def update_mode
-                if provider = Provider.unscoped.find_by_token(params['data']['merchant_token'])
+                if provider = Provider.unscoped.find_by_token(params['data']['token'])
                     provider.mode = params['data']['mode']
                     if provider.save
                         # call :mt and update the mechant
