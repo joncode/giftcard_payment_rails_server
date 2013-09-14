@@ -103,7 +103,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def mode= mode_str
-		case mode_str
+		case mode_str.downcase
 		when "live"
 			self.paused = false
 			self.live   = true

@@ -316,13 +316,13 @@ module Admt
             end
 
             def update_mode
-                if provider = Provider.unscoped.find_by_token(params['data']['token'])
+                if provider = Provider.unscoped.find_by_token(params['data']['merchant_token'])
                     provider.mode = params['data']['mode']
                     if provider.save
                         # call :mt and update the mechant
                         response = provider.update_mode
                         if response['status'] > 0
-                            success provider.admt_serialize
+                            success({"mode" => provider.mode})
                         else
                             # set cron job to fix out of sync data in MT
                             hsh         = {"msg" => "app is updated.  Merchant Tools was unable to update."}
