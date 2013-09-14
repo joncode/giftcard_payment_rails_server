@@ -112,6 +112,9 @@ class Provider < ActiveRecord::Base
 			self.live   = false
 		when "paused"
 			self.paused = true
+		else
+			# cron job to fix the broken mode_str
+			puts "#{self.name} #{self.id} was sent mode_str #{mode_str} - update mode broken"
 		end
 	end
 
