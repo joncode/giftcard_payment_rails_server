@@ -377,7 +377,7 @@ ActiveRecord::Schema.define(:version => 20130914202810) do
 
   create_table "user_socials", :force => true do |t|
     t.integer  "user_id"
-    t.string   "type"
+    t.string   "type_of"
     t.string   "identifier"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

@@ -54,6 +54,7 @@ class User < ActiveRecord::Base
 			# after_update , :if => :added_social_media TODO
 			# this after_save covers both those situations , but also runs the code unnecessarily
 	after_save    :collect_incomplete_gifts
+	after_save    :persist_social_data
 	after_create  :init_confirm_email
 
 	validates :first_name, 	presence: true, 			length: { maximum: 50 }
@@ -341,6 +342,15 @@ class User < ActiveRecord::Base
 ##################
 
 private
+
+	def persist_social_data
+
+		email_changed? and UserSocial.create(user_id: id, type_of: "email", identifier: email)
+		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
+		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
+		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)
+
+	end
 
 	def collect_incomplete_gifts
 						# check Gift.rb for ghost gifts connected to newly created user
