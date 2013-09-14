@@ -20,8 +20,18 @@ module CommonUtils
 		"#{params["controller"].upcase} -#{params["action"].upcase}-"
 	end
 
+	def marshal_copy obj
+		begin
+			dumper = Marshal.dump(obj)
+			Marshal.load(dumper)
+		rescue
+			puts "Marshal copy FAIL common utils"
+			{'controller' => obj["controller"] ,'action' => obj["action"],'format' => obj["format"] }
+		end
+	end
+
 	def method_start_log_message
-		x = Marshal.load(Marshal.dump(params))
+		x = marshal_copy(params)
 		x.delete('controller')
 		x.delete('action')
 		x.delete('format')
@@ -34,7 +44,7 @@ module CommonUtils
 		end_time = Time.now - @start_time_logger
 		print "END #{log_message_header} Total time = #{end_time.round(3)}s | "
 		if @app_response
-			log_text = Marshal.load(Marshal.dump(@app_response))
+			log_text = marshal_copy(@app_response)
 			resp 	 = "#{filter_params(log_text)}"
 			v 		 = "response: #{truncate(resp ,length: 600)}"
 			v.gsub!('&quot;', '\'')
