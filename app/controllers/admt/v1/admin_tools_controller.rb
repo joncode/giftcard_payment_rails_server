@@ -309,8 +309,33 @@ module Admt
                         fail    provider
                     end
                 else
-                    fail    data_not_found
+                        fail    data_not_found
                 end
+
+                respond
+            end
+
+            def update_mode
+                if provider = Provider.unscoped.find_by_token(params['data']['merchant_token'])
+                    provider.mode = params['data']['mode']
+                    if provider.save
+                        # call :mt and update the mechant
+                        response = provider.update_mode
+                        if response['status'] > 0
+                            success provider.admt_serialize
+                        else
+                            # set cron job to fix out of sync data in MT
+                            hsh         = {"msg" => "app is updated.  Merchant Tools was unable to update."}
+                            total_resp  = hsh.merge(provider.admt_serialize)
+                            success     total_resp
+                        end
+                    else
+                            fail        provider
+                    end
+                else
+                            fail        data_not_found
+                end
+
                 respond
             end
 

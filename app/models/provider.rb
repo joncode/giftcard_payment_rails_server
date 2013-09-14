@@ -1,5 +1,6 @@
 class Provider < ActiveRecord::Base
 	include Formatter
+	include ServerModel
 
 	attr_accessible :address, :city, :description, :logo, :name,
 	:state, :user_id, :staff_id, :zip, :zinger, :phone, :email,
@@ -114,6 +115,8 @@ class Provider < ActiveRecord::Base
 		end
 	end
 
+##################
+
 	def get_todays_credits
 		self.orders.where("updated_at > ?", (Time.now - 1.day))
 	end
@@ -136,7 +139,7 @@ class Provider < ActiveRecord::Base
 		super(sales_tax)
 	end
 
-	######   PHOTO GETTERS
+######   PHOTO GETTERS
 
 	def get_photo_for_web
 		get_photo
@@ -172,7 +175,7 @@ class Provider < ActiveRecord::Base
 		return image_url
 	end
 
-	#################
+#################
 
 	def get_servers
 		# this means get people who are AT work not just employed

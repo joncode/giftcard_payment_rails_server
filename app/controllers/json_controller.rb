@@ -110,7 +110,7 @@ class JsonController < ActionController::Base
         end
     end
 
-    ### API UTILITY METHODS
+### API UTILITY METHODS
 
     def respond
         respond_to do |format|
@@ -164,7 +164,7 @@ class JsonController < ActionController::Base
     end
 
 
-    #######
+#######
 
 private
 
