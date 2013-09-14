@@ -50,7 +50,7 @@ class IphoneController < AppController
 		if email.blank? || password.blank?
 			response["error_iphone"]     = "Data not received."
 		else
-			user = User.find_by_email(email)
+			user = User.find_by_email_and_active(email, true)
 			logger.debug "logger.debug PASSWORD - #{user.inspect} - #{params['password']} - #{password}"
 
 			if user && user.authenticate(password)
