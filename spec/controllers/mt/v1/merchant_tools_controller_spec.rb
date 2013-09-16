@@ -36,10 +36,6 @@ describe Mt::V1::MerchantToolsController do
 
     end
 
-    def make_json_merchant merchant_hsh
-        merchant_hsh.to_json
-    end
-
     def serialize provider
         provider.serializable_hash only: [:name, :address, :city, :state, :zip, :token, :zinger, :description, :phone]
     end
