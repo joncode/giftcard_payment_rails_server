@@ -15,6 +15,9 @@ FactoryGirl.define do
         zip         "11211"
         state       "NY"
         token       "token"
+        zinger      "its amazing"
+        description "get all the japanese culinary delights that are so hard to find in America"
+        phone       "4444343423"
     end
 
     factory :user_social do
