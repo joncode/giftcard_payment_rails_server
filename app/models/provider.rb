@@ -1,12 +1,14 @@
 class Provider < ActiveRecord::Base
 	include Formatter
+	include ServerModel
 
 	attr_accessible :address, :city, :description, :logo, :name,
 	:state, :user_id, :staff_id, :zip, :zinger, :phone, :email,
 	:twitter, :facebook, :website, :users, :photo, :photo_cache,
 	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
 	:account_name, :aba, :routing, :bank_account_name, :bank_address,
-	 :bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image, :merchant_id
+	:bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image, :merchant_id,
+	:paused, :live
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
@@ -36,7 +38,7 @@ class Provider < ActiveRecord::Base
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
-	default_scope where(active: true).order("name ASC")
+	default_scope where(active: true).where(paused: false).order("name ASC")
 
 #/---------------------------------------------------------------------------------------------/
 
@@ -49,7 +51,7 @@ class Provider < ActiveRecord::Base
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_image("photo")
 		prov_hash["full_address"] = self.full_address
-		prov_hash["live"]         = self.live
+		prov_hash["live"]         = self.live_int
 		return prov_hash
 	end
 
@@ -57,6 +59,7 @@ class Provider < ActiveRecord::Base
 		prov_hash  = self.serializable_hash only: [:name, :address, :state, :city, :brand_id, :building_id ]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["merchant_id"]  = self.merchant_id
+		prov_hash["mode"]         = self.mode
 		return prov_hash
 	end
 
@@ -66,21 +69,56 @@ class Provider < ActiveRecord::Base
 		return prov_hash
 	end
 
-	def live
-		if self.sd_location_id == nil
-			return "0"
+#########   STATUS METHODS
+
+	def live_int
+		self.live ? "1" : "0"
+	end
+
+	def legacy_status
+		if self.active
+			if self.sd_location_id == 1
+			    stat = "live"
+			else
+			    stat = "coming_soon"
+			end
 		else
-			return "1"
+			stat = "paused"
+		end
+		self.mode = stat
+		self.save
+		puts "provider #{self.id} - Now = #{self.mode} from #{stat} - Old = |#{sd_location_id} | #{self.active}"
+	end
+
+	def mode
+	    if self.paused
+	        return "paused"
+	    else
+	    	if self.live
+	    	    return "live"
+	    	else
+	    	    return "coming_soon"
+	    	end
+	    end
+	end
+
+	def mode= mode_str
+		case mode_str.downcase
+		when "live"
+			self.paused = false
+			self.live   = true
+		when "coming_soon"
+			self.paused = false
+			self.live   = false
+		when "paused"
+			self.paused = true
+		else
+			# cron job to fix the broken mode_str
+			puts "#{self.name} #{self.id} was sent mode_str #{mode_str} - update mode broken"
 		end
 	end
 
-	def live_bool
-		if self.sd_location_id == nil
-			return false
-		else
-			return true
-		end
-	end
+##################
 
 	def get_todays_credits
 		self.orders.where("updated_at > ?", (Time.now - 1.day))
@@ -104,7 +142,7 @@ class Provider < ActiveRecord::Base
 		super(sales_tax)
 	end
 
-	######   PHOTO GETTERS
+######   PHOTO GETTERS
 
 	def get_photo_for_web
 		get_photo
@@ -140,7 +178,7 @@ class Provider < ActiveRecord::Base
 		return image_url
 	end
 
-	#################
+#################
 
 	def get_servers
 		# this means get people who are AT work not just employed

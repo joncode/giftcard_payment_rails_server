@@ -146,16 +146,18 @@ private
 	# end
 
 	def request_mandrill_with_template(template_name, template_content, message)
-		puts "``````````````````````````````````````````````"
-		puts "Request Mandrill with #{template_name} #{template_content} #{message}"
-		require 'mandrill'
-		m = Mandrill::API.new
-		response = m.messages.send_template(template_name, template_content, message)
+		unless Rails.env.test? || Rails.env.development?
+			puts "``````````````````````````````````````````````"
+			puts "Request Mandrill with #{template_name} #{template_content} #{message}"
+			require 'mandrill'
+			m = Mandrill::API.new
+			response = m.messages.send_template(template_name, template_content, message)
 
-		puts
-		puts "Response from Mandrill #{response.inspect}"
-		puts "``````````````````````````````````````````````"
-		response
+			puts
+			puts "Response from Mandrill #{response.inspect}"
+			puts "``````````````````````````````````````````````"
+			response
+		end
 	end
 
 end
