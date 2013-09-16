@@ -19,7 +19,7 @@ FactoryGirl.define do
 
     factory :user_social do
         user_id     1
-        type        "email"
+        type_of        "email"
         identifier  "example@gmail.com"
     end
 

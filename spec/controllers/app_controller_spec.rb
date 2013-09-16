@@ -16,9 +16,8 @@ describe AppController do
             gift = FactoryGirl.create :gift, { receiver_email: "neil@gmail.com" }
             cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             post :create_gift, format: :json, gift: set_gift_as_sent(gift) , shoppingCart: cart , token: @user.remember_token
-
-            json["success"]["receiver_id"].should == @user.id
-
+            new_gift = Gift.find(json["success"]["Gift_id"])
+            new_gift.receiver_id.should == @user.id
         end
 
         # Git should valide total and service
