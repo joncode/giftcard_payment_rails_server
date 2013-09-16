@@ -11,7 +11,7 @@ FactoryGirl.define do
     factory :provider do
         name        "ichizos"
         city        "New York"
-        address        "123 happy st"
+        address     "123 happy st"
         zip         "11211"
         state       "NY"
         token       "token"

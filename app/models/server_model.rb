@@ -22,7 +22,7 @@ private
     def request_server_with_route_and_params short_route, data
         route , params = generate_route_and_params(short_route, data)
         begin
-            puts "Here are the route #{route} adn the params #{params}"
+            puts "Here are the route #{route} and the params #{params}"
             party_response = HTTParty.post(route, params)
             puts "HERE IS PARTY #{party_response.inspect}"
             server_response(party_response)

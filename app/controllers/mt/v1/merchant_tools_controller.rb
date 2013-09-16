@@ -38,10 +38,22 @@ module Mt
                 respond
             end
 
+            def update
+                merchant_hash = params["data"]
+
+                if @provider.update_attributes(merchant_hash)
+                    success   "Merchant Update Successful"
+                else
+                    fail      @provider
+                end
+
+                respond
+            end
+
             def update_photo
                 photo_url = params["data"]
-                @provider.update_attribute(:image, photo_url)
-                if true
+
+                if @provider.update_attribute(:image, photo_url)
                     success   "Photo Live on App"
                 else
                     fail      @provider
