@@ -40,7 +40,7 @@ module Mt
 
             def update
                 merchant_hash = params["data"]
-
+                merchant_hash.delete("tz")
                 if @provider.update_attributes(merchant_hash)
                     success   "Merchant Update Successful"
                 else

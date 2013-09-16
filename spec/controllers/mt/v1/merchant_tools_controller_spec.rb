@@ -24,6 +24,7 @@ describe Mt::V1::MerchantToolsController do
             it "should update #{type_of} on provider" do
                 merchant_hsh = serialize(@provider)
                 merchant_hsh[type_of] = identifier
+                merchant_hsh["tz"] = "0"
                 # post to the action with token, and merchant hash in normal json
                 post :update, format: :json , token: merchant_hsh["token"], data: (merchant_hsh)
                 # check that provider is updated with the merchant hash info
