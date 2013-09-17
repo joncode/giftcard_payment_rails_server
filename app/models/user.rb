@@ -33,6 +33,7 @@ class User < ActiveRecord::Base
 	has_many :answers
 	has_many :questions, :through => :answers
 	has_many :relays , foreign_key: "receiver_id"
+	has_many :user_socials
 
 	# has_many :followed_users, through: :relationships, source: "followed"
 	# has_many :relationships, foreign_key: "follower_id", dependent: :destroy

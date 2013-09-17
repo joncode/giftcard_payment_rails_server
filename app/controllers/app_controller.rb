@@ -566,9 +566,9 @@ class AppController < JsonController
 		    else
 		    		# add the receiver + receiver checks to the gift object
 		        puts "Lets make this gift !!!"
-		        add_receiver_by_origin(params["origin"], gift_obj, response)
+                add_receiver_object_to(gift_obj, response)
 		        gift    = Gift.new(gift_obj)
-                cart_p = params["shoppingCart"]
+                cart_p  = params["shoppingCart"]
                 begin
                     sc = JSON.parse cart_p
                 rescue
@@ -815,74 +815,37 @@ class AppController < JsonController
 
 protected
 
-	def add_receiver_by_origin(origin, gift_obj, response)
-		case origin
-	    when 'd'
-	      #drinkboard - data already received
-	      response["origin"]     = "d"
-	    when 'f'
-	      # facebook - search users for facebook_id
-	      if gift_obj["facebook_id"]
-	        if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["origin"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	          gift_obj["status"]   = "incomplete"
-	          response["error-receiver"] = "No facebook ID received"
-	      end
-	    when 't'
-	      #twitter - search users for twitter handle
-	      if gift_obj["twitter"]
-	        if receiver = User.find_by_twitter(gift_obj["twitter"].to_s)
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["origin"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	        gift_obj["status"]     = "incomplete"
-	        response["error-receiver"] = "No twitter info received"
-	      end
-	    when 'c'
-	      # contacts - search users for phone
-	      if gift_obj["receiver_phone"]
-	        phone_received = gift_obj["receiver_phone"]
-	        phone = extract_phone_digits(phone_received)
-	        if receiver = User.find_by_phone(phone)
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["origin"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	          gift_obj["status"]   = "incomplete"
-	          response["error-receiver"] = "No contact phone received"
-	      end
-	    when 'e'
-	      # email - search users for phone
-	      if gift_obj["receiver_email"]
-	        if receiver = User.find_by_email(gift_obj["receiver_email"])
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["receiver"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	          gift_obj["status"]   = "incomplete"
-	          response["error-receiver"] = "No contact email received"
-	      end
-	    else
-	        #drinkboard - no origin sent
-	        response["origin"]     = "d"
-	    end
-	end
+    def add_receiver_object_to(gift_obj, response)
+        unique_id = if gift_obj["receiver_id"]
+            nil
+        elsif gift_obj["receiver_phone"]
+            gift_obj["receiver_phone"]
+        elsif gift_obj["facebook_id"]
+            gift_obj["facebook_id"]
+        elsif gift_obj["receiver_email"]
+            gift_obj["receiver_email"]
+        elsif gift_obj["twitter"]
+            gift_obj["twitter"]
+        else
+            nil
+        end
+
+        # check all the receiver data spots
+        # loop thru the ones with data
+        find_user(unique_id, gift_obj, response) if unique_id
+        # stop when you find a user
+    end
+
+    def find_user unique_id, gift_obj, response
+        if social_data = UserSocial.find_by_identifier(unique_id)
+            receiver             = social_data.user
+            gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+            response["receiver"] = receiver_info_response(receiver)
+        else
+            gift_obj["status"]   = "incomplete"
+            response["origin"]   = "NID"
+        end
+    end
 
     def receiver_info_response(receiver)
       	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
@@ -892,6 +855,7 @@ protected
       	gift_obj["receiver_id"]    = receiver.id
       	gift_obj["receiver_name"]  = receiver.username
       	gift_obj["receiver_phone"] = receiver.phone
+        gift_obj["receiver_email"] = receiver.email
       	return gift_obj
     end
 

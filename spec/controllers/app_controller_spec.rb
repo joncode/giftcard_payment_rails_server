@@ -8,24 +8,36 @@ describe AppController do
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
         end
 
-        it "should find user account for old email" do
-            # take a user , add an email
-            @user.update_attribute(:email, "second@gmail.com")
-            # then we hit create gift
-            # with receiver email = old email
-            gift = FactoryGirl.create :gift, { receiver_email: "neil@gmail.com" }
-            cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
-            post :create_gift, format: :json, gift: set_gift_as_sent(gift) , shoppingCart: cart , token: @user.remember_token
-            new_gift = Gift.find(json["success"]["Gift_id"])
-            new_gift.receiver_id.should == @user.id
+        {
+            email: "jon@gmail.com",
+            phone: "9173706969",
+            facebook_id: "123",
+            twitter: "999"
+        }.stringify_keys.each do |type_of, identifier|
+            it "should find user account for old #{type_of}" do
+                # take a user , add an email
+                @user.update_attribute(type_of, identifier)
+                # then we hit create gift
+                # with receiver email = old email
+                if (type_of == "phone") || (type_of == "email")
+                    key = "receiver_#{type_of}"
+                else
+                    key = type_of
+                end
+                gift = FactoryGirl.create :gift, { key => identifier}
+                cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+                post :create_gift, format: :json, gift: set_gift_as_sent(gift, key) , shoppingCart: cart , token: @user.remember_token
+                new_gift = Gift.find(json["success"]["Gift_id"])
+                new_gift.receiver_id.should == @user.id
+            end
         end
 
         # Git should valide total and service
     end
 
-    def set_gift_as_sent gift
+    def set_gift_as_sent gift, key
         {
-            receiver_email: gift.receiver_email,
+            key => gift.send(key),
             total: gift.total,
             service: gift.service,
             receiver_name:  gift.receiver_name,

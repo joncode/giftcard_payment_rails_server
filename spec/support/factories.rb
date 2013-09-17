@@ -6,6 +6,20 @@ FactoryGirl.define do
         password_confirmation "specspec"
         email      "joncode@gmail.com"
         remember_token "token"
+        facebook_id "987654332"
+        twitter     "283746193"
+        phone       "6467578686"
+    end
+
+    factory :giver do
+        first_name "jon2"
+        password   "specspec2"
+        password_confirmation "specspec2"
+        email      "jonran@gmail.com"
+        remember_token "token"
+        facebook_id "98asd54332"
+        twitter     "283sdf6193"
+        phone       "6443278686"
     end
 
     factory :provider do
@@ -27,7 +41,7 @@ FactoryGirl.define do
     end
 
     factory :gift do |gift|
-        gift.giver { FactoryGirl.create(:user)}
+        gift.giver_id        13
         gift.giver_name      "henry"
         gift.receiver_name   "jon"
         gift.provider { FactoryGirl.create(:provider)}
