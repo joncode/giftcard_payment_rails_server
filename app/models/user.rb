@@ -153,7 +153,13 @@ class User < ActiveRecord::Base
 	alias_method :username, :name
 	alias_method :fullname, :name
 
-
+	def deactivate_social type_of, identifier
+		# user get user_social record with identifier
+		user_social = UserSocial.find_by_identifier identifier
+		# user compare type ofs
+		# user deactive the user_social
+		user_social.update_attribute(:active, false)
+	end
 ##################
 
 #######  PHOTO METHODS
