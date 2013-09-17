@@ -6,7 +6,7 @@ class Provider < ActiveRecord::Base
 	:twitter, :facebook, :website, :users, :photo, :photo_cache,
 	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
 	:account_name, :aba, :routing, :bank_account_name, :bank_address,
-	 :bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image
+	 :bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image, :merchant_id
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
@@ -29,11 +29,8 @@ class Provider < ActiveRecord::Base
 	mount_uploader :portrait, ProviderPortraitUploader
 
 	validates_presence_of :name, :city, :address, :zip , :state, :token
-	# validates_numericality_of :sales_tax
 	validates_length_of :state , 	:is => 2
 	validates_length_of :zip, 		:within => 5..10
-	#validates_length_of :aba, 		:is => 9, 			:if => :aba_exists?
-	#validates_length_of :routing, 	:within => 9..14,	:if => :routing_exists?
 	validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 
 	before_save 	:extract_phone_digits
@@ -59,6 +56,7 @@ class Provider < ActiveRecord::Base
 	def admt_serialize
 		prov_hash  = self.serializable_hash only: [:name, :address, :state, :city, :brand_id, :building_id ]
 		prov_hash["provider_id"]  = self.id
+		prov_hash["merchant_id"]  = self.merchant_id
 		return prov_hash
 	end
 
@@ -84,21 +82,6 @@ class Provider < ActiveRecord::Base
 		end
 	end
 
-	# def self.where(params={}, *args)
-	# 	if params.kind_of?(Hash) && !params.has_key?(:active) && !params.has_key?("active")
-	# 		params[:active] = true
-	# 		super(params, *args)
-	# 	elsif params.kind_of?(String)
-	# 		super(params, *args).where(active: true)
-	# 	else
-	# 		super(params, *args)
-	# 	end
-	# end
-
-	# def self.all
-	# 	self.where({})
-	# end
-
 	def get_todays_credits
 		self.orders.where("updated_at > ?", (Time.now - 1.day))
 	end
@@ -107,20 +90,6 @@ class Provider < ActiveRecord::Base
 		puts bounds
 		Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
 	end
-
-	# def token
-	# 	token = super
-	# 	# if token.nil?    # lazy create & save merchant token
-	# 	# 	create_token
-	# 	# 	if self.save
-	# 	# 		token = super
-	# 	# 	else
-	# 	# 		puts "Provider lazy token FAIL #{self.id}"
-	# 	# 		token = self.errors.messages
-	# 	# 	end
-	# 	# end
-	# 	return token
-	# end
 
 	def sales_tax
 		tax = super
@@ -270,14 +239,6 @@ class Provider < ActiveRecord::Base
 	end
 
 private
-
-	# def aba_exists?
-	# 	self.aba != nil && !self.aba.empty?
-	# end
-
-	# def routing_exists?
-	# 	self.routing != nil && !self.routing.empty?
-	# end
 
 	def make_menu_string
 	    MenuString.create(provider_id: self.id, data: "[]")

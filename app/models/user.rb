@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
 	include Formatter
 	include Email
+	include Utility
 
 	attr_accessible  :email, :password, :password_confirmation,
 	:photo, :photo_cache, :first_name, :last_name, :phone,
@@ -53,7 +54,7 @@ class User < ActiveRecord::Base
 			# after_update , :if => :added_social_media TODO
 			# this after_save covers both those situations , but also runs the code unnecessarily
 	after_save    :collect_incomplete_gifts
-	after_create  :confirm_email
+	after_create  :init_confirm_email
 
 	validates :first_name, 	presence: true, 			length: { maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
@@ -228,10 +229,8 @@ class User < ActiveRecord::Base
 
 	def permanently_de_activate
 		self.active 	 = false
-		if phone_exists?
-			self.credit_number = self.phone
-			self.phone   = nil
-		end
+		self.credit_number = self.phone
+		self.phone   	 = nil
 		self.email  	 = "#{self.email}xxx"
 		self.facebook_id = "#{self.facebook_id}xxx" if facebook_id_exists?
 		self.twitter 	 = "#{self.twitter}xxx" 	if twitter_exists?
@@ -260,12 +259,6 @@ class User < ActiveRecord::Base
 		return false if response.code != 200
 		return true
 	end
-
-	# def providers_to_iphone
-	# 		# find out how many merchants the user is connected to
-	# 	merchants = self.providers.dup
-	# 	merchants.map { |m| m.table_photo_hash }
-	# end
 
 	def is_employee? provider
 		employees = Employee.find(:all, :conditions => ["user_id = ?", self.id])
@@ -311,13 +304,13 @@ class User < ActiveRecord::Base
 		if setting = Setting.find_by_user_id(self.id)
 			return setting
 		else
-			return Setting.new(user_id: self.id)
+			return Setting.create(user_id: self.id)
 		end
 	end
 
 	def get_settings
 		settings = get_or_create_settings
-		return settings.serialize
+		return settings.app_serialize
 	end
 
 	def save_settings(data)
@@ -329,19 +322,25 @@ class User < ActiveRecord::Base
 		return false
 	end
 
+	def set_confirm_email
+		setting 							= get_or_create_settings
+		setting.confirm_email_token 		= create_token
+		setting.confirm_email_token_sent_at = Time.now
+		setting.save
+	end
+
+	def init_confirm_email
+		if self.email
+			set_confirm_email
+			confirm_email
+		else
+			puts "User created without EMAIL !! #{self.id}"
+		end
+	end
+
 ##################
 
 private
-
-	# def confirm_email
-	# 	if self.email
-	# 		if self.confirm[0] == '0'
-	# 			if Rails.env.production?
-	# 				Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
-	# 			end
-	# 		end
-	# 	end
-	# end
 
 	def collect_incomplete_gifts
 						# check Gift.rb for ghost gifts connected to newly created user
@@ -413,7 +412,7 @@ private
 	end
 
 	def create_remember_token
-		self.remember_token = SecureRandom.urlsafe_base64
+		self.remember_token = create_token
 	end
 
 end

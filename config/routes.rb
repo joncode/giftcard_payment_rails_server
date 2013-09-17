@@ -160,25 +160,13 @@ Drinkboard::Application.routes.draw do
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
 
-    ### authentication via Facebook & Foursquare
-  match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
-  match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
-  ###
-
-    ### Location resources
-  match '/map',               to: 'locations#map'
-  match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
-  match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
-  match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
-  match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
-
-  ## SERVICES ROUTES (app . mdot)
-  # namespace :app, defaults: { format: 'json' } do
-  #   namespace :v2 do
-  #     post 'regift',  to: 'apple#regift'
-  #     post 'menu',    to: 'apple#menu'
-  #   end
-  # end
+  ## PUBLIC website routes
+  namespace :web, defaults: { format: 'json' } do
+    namespace :v1 do
+      post 'confirm_email',      to: 'websites#confirm_email'
+      post 'redo_confirm_email', to: 'websites#redo_confirm_email'
+    end
+  end
 
   ## ADMIN TOOLS routes for API
   namespace :admt, defaults: { format: 'json' } do
@@ -186,6 +174,7 @@ Drinkboard::Application.routes.draw do
       post 'add_key_app',       to: 'admin_tools#add_key'
       post 'get_gifts',         to: 'admin_tools#gifts'
       post 'get_gift',          to: 'admin_tools#gift'
+      post "payable_gifts",     to: 'admin_tools#payable_gifts'
       post 'get_app_users',     to: 'admin_tools#users'
       post 'get_app_user',      to: 'admin_tools#user'
       post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
@@ -218,6 +207,8 @@ Drinkboard::Application.routes.draw do
       post 'order',           to: 'merchant_tools#order'
       post 'compile_menu',    to: 'merchant_tools#compile_menu'
       post 'update_photo',    to: 'merchant_tools#update_photo'
+      post 'summary_range',   to: 'merchant_tools#summary_range'
+      post 'summary_report',  to: 'merchant_tools#summary_report'
     end
   end
 
@@ -231,5 +222,25 @@ Drinkboard::Application.routes.draw do
   match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
   match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
   match 'mt/compile_menu',         to: 'merchants#compile_menu', via: :post
+
+    ### authentication via Facebook & Foursquare
+  # match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'
+  # match '/foursquare/oauth',  to: 'oAuth#loginWithFoursquare'
+  ###
+
+    ### Location resources
+  # match '/map',               to: 'locations#map'
+  # match '/map/boundary',      to: 'locations#mapForUserWithinBoundary'
+  # match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
+  # match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
+  # match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
+
+  ## SERVICES ROUTES (app . mdot)
+  # namespace :app, defaults: { format: 'json' } do
+  #   namespace :v2 do
+  #     post 'regift',  to: 'apple#regift'
+  #     post 'menu',    to: 'apple#menu'
+  #   end
+  # end
 
 end

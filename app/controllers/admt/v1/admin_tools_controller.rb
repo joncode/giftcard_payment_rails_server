@@ -2,7 +2,8 @@ module Admt
     module V1
         class AdminToolsController < JsonController
 
-            before_filter :authenticate_admin_tools,    except: :add_key
+            before_filter :authenticate_admin_tools,    except: [:add_key, :payable_gifts]
+            before_filter :authenticate_merchant_tools, only:   :payable_gifts
             before_filter :authenticate_general_token,  only:   :add_key
 
     #####  Gift Methods
@@ -44,6 +45,17 @@ module Admt
                     success "Gifts Destroyed."
                 else
                     fail    "Error in batch delete gifts"
+                end
+                respond
+            end
+
+
+            def payable_gifts
+                gift_ids = params["data"]
+                if gifts = Gift.find(gift_ids)
+                    success gifts.serialize_objs(:report)
+                else
+                    fail    data_not_found
                 end
                 respond
             end

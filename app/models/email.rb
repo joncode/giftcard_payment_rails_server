@@ -27,7 +27,7 @@ module Email
             # notify the receiver via email
             user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
             #Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => gift.id, :email => gift.receiver_email})
-            data = {"text"        => 'notify_receiver_2',
+            data = {"text"        => 'notify_receiver',
                     "first_id"    => user_id,
                     "options_hsh" => {:gift_id => gift.id, :email => gift.receiver_email},
                     "gift"        => gift
@@ -41,7 +41,7 @@ module Email
         gift = self.gift
         puts "emailing the gift giver for #{gift.id}"
         #Resque.enqueue(EmailJob, 'invoice_giver', gift.giver_id , {:gift_id => gift.id})
-        data = {"text"        => 'invoice_giver_2',
+        data = {"text"        => 'invoice_giver',
                 "first_id"    => gift.giver_id,
                 "options_hsh" => {:gift_id => gift.id},
                 "gift"        => gift
@@ -55,10 +55,7 @@ module Email
         ###---->  we have connected user to gift - not included
         if gift.receiver_email
             puts "emailing the gift giver that gift has been collected for #{gift.id}"
-            # if Rails.env.production?
-            #     # notify the giver via email
             #     Resque.enqueue(EmailJob, 'notify_giver_created_user', gift.giver_id , {:gift_id => gift.id})
-            # end
             data = {"text" => 'notify_giver_created_user',
                     "first_id" => gift.giver_id,
                     "options_hsh" =>  {:gift_id => gift.id}
@@ -68,20 +65,15 @@ module Email
     end
 
     def confirm_email
-        ###--->  Do not have this one yet
-        # self is user
-        if self.email
-            if self.confirm[0] == '0'
-                # if Rails.env.production?
-                #     Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
-                # end
-                data = {"text" => 'confirm_email',
-                        "first_id" => self.id,
-                        "options_hsh" =>  {}
-                        }
-                route_email_system(data)
-            end
-        end
+        #     Resque.enqueue(EmailJob, 'confirm_email', self.id , {})
+        data = {"text"        => 'confirm_email',
+                "first_id"    => self.id,
+                "options_hsh" =>  {},
+                "user"        => self,
+                "link"        => self.setting.generate_email_link
+                }
+        puts "Here is the data #{data.inspect}"
+        route_email_system(data)
     end
 
 ######    App Controller
@@ -115,6 +107,7 @@ private
     end
 
     def call_mandrill data
+        #puts "data = #{}"
         Email.send(data['text'], data)
     end
 

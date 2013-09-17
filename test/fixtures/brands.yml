@@ -19,6 +19,7 @@
 #  owner_id    :integer
 #  next_view   :string(255)
 #  child       :boolean         default(FALSE)
+#  active      :boolean         default(TRUE)
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html

@@ -12,10 +12,6 @@ module Legacy
         end
     end
 
-    def delete_dev_gifts
-
-    end
-
     def check_card_owners
         cs = Card.all
         cs.each do |card|

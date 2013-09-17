@@ -118,8 +118,10 @@ class Sale < ActiveRecord::Base
     def transaction_approved
     	# chek that sale transaction is approved
     	if self.resp_code == 1
+            puts "Transaction is approved - time to email invoice and notification - sale ID = #{sale.id}"
     		return true
     	else
+            puts "Transaction is NOT approved - sale ID = #{sale.id}"
     		return false
     	end
     end

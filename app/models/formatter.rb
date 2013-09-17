@@ -1,4 +1,5 @@
 module Formatter
+    include ActionView::Helpers::NumberHelper
 
     def extract_phone_digits
         if phone_exists?
@@ -11,17 +12,15 @@ module Formatter
         !self.phone.blank? && self.phone.length > 9
     end
 
-    def format_currency_as_string(float)
-        string = float.to_s
-        x      = string.split('.')
-        x[1]   = "%02d" % x[1].to_i
-        x[1]   = x[1][0..1]
-        x[1]   = x[1].to_s
-        total  = x.join('.')
-        return total
+    def float_to_cents float
+        string_to_cents float.to_s
     end
 
-    def remove_key_from_hash(obj_hash, key_for_removal)
+    def string_to_cents str
+        number_to_currency(str).gsub("$",'')
+    end
+
+    def remove_key_from_hash obj_hash, key_for_removal
         if obj_hash.has_key? key_for_removal
             obj_hash.delete(key_for_removal)
         end

@@ -9,14 +9,22 @@ end
 #
 # Table name: settings
 #
-#  id                 :integer         not null, primary key
-#  user_id            :integer
-#  email_invoice      :boolean         default(TRUE)
-#  email_redeem       :boolean         default(TRUE)
-#  email_invite       :boolean         default(TRUE)
-#  email_follow_up    :boolean         default(TRUE)
-#  email_receiver_new :boolean         default(TRUE)
-#  created_at         :datetime        not null
-#  updated_at         :datetime        not null
+#  id                          :integer         not null, primary key
+#  user_id                     :integer
+#  email_invoice               :boolean         default(TRUE)
+#  email_redeem                :boolean         default(TRUE)
+#  email_invite                :boolean         default(TRUE)
+#  email_follow_up             :boolean         default(TRUE)
+#  email_receiver_new          :boolean         default(TRUE)
+#  created_at                  :datetime        not null
+#  updated_at                  :datetime        not null
+#  confirm_email_token         :string(255)
+#  confirm_phone_token         :string(255)
+#  reset_token                 :string(255)
+#  confirm_phone_flag          :boolean         default(FALSE)
+#  confirm_email_flag          :boolean         default(FALSE)
+#  confirm_phone_token_sent_at :datetime
+#  confirm_email_token_sent_at :datetime
+#  reset_token_sent_at         :datetime
 #
 
