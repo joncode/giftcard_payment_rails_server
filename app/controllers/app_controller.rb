@@ -566,7 +566,7 @@ class AppController < JsonController
 		    else
 		    		# add the receiver + receiver checks to the gift object
 		        puts "Lets make this gift !!!"
-                add_receiver_object_to(gift_obj, response)
+                add_receiver_object_to(gift_obj, response) if gift_obj["receiver_id"].nil?
 		        gift    = Gift.new(gift_obj)
                 cart_p  = params["shoppingCart"]
                 begin
@@ -815,25 +815,16 @@ class AppController < JsonController
 
 protected
 
-    def add_receiver_object_to(gift_obj, response)
-        unique_id = if gift_obj["receiver_id"]
-            nil
-        elsif gift_obj["receiver_phone"]
-            gift_obj["receiver_phone"]
-        elsif gift_obj["facebook_id"]
-            gift_obj["facebook_id"]
-        elsif gift_obj["receiver_email"]
-            gift_obj["receiver_email"]
-        elsif gift_obj["twitter"]
-            gift_obj["twitter"]
-        else
-            nil
-        end
+    def add_receiver_object_to gift_obj, response
 
-        # check all the receiver data spots
+        unique_ids = [gift_obj["receiver_phone"], gift_obj["facebook_id"], gift_obj["receiver_email"], gift_obj["twitter"] ].compact
         # loop thru the ones with data
-        find_user(unique_id, gift_obj, response) if unique_id
-        # stop when you find a user
+        unique_ids.each do |unique_id|
+            if find_user(unique_id, gift_obj, response)
+                # stop when you find a user
+                break
+            end
+        end
     end
 
     def find_user unique_id, gift_obj, response
@@ -841,17 +832,20 @@ protected
             receiver             = social_data.user
             gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
             response["receiver"] = receiver_info_response(receiver)
+            response["origin"]   = social_data.type_of
+            return true
         else
             gift_obj["status"]   = "incomplete"
             response["origin"]   = "NID"
+            return false
         end
     end
 
-    def receiver_info_response(receiver)
+    def receiver_info_response receiver
       	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
     end
 
-    def add_receiver_to_gift_obj(receiver, gift_obj)
+    def add_receiver_to_gift_obj receiver, gift_obj
       	gift_obj["receiver_id"]    = receiver.id
       	gift_obj["receiver_name"]  = receiver.username
       	gift_obj["receiver_phone"] = receiver.phone
