@@ -3,10 +3,17 @@ require 'authorize_net'
 class Sale < ActiveRecord::Base
     include Email
 
-        # real account
- 	AUTHORIZE_API_LOGIN 	  = '9tp38Ga4CQ'
- 	AUTHORIZE_TRANSACTION_KEY = '9EcTk32BHeE8279P'
- 	GATEWAY 			      = :production
+    if Rails.env.production?
+            # real account
+     	AUTHORIZE_API_LOGIN 	  = '9tp38Ga4CQ'
+     	AUTHORIZE_TRANSACTION_KEY = '9EcTk32BHeE8279P'
+     	GATEWAY 			      = :production
+    elsif Rails.env.staging?
+            # test account
+        AUTHORIZE_API_LOGIN       = '948bLpzeE8UY'
+        AUTHORIZE_TRANSACTION_KEY = '7f7AZ66axeC386q7'
+        GATEWAY                   = :sandbox
+    end
 
  	attr_accessor :transaction, :credit_card, :response, :total
  	# NOTE - Revenue is a decimal value - gift.total is a string - converted in self.init below
@@ -97,23 +104,6 @@ class Sale < ActiveRecord::Base
 		self.reason_code		= self.response.response_reason_code.to_i
 		puts "#{self.inspect}"
 	end
-
-	# def notify_receiver
-	# 	gift = self.gift
- #      	if gift.receiver_email
- #        	puts "emailing the gift receiver for #{gift.id}"
- #        	# notify the receiver via email
- #        	user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
- #        	Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => gift.id, :email => gift.receiver_email})
- #      	end
- #    end
-
- #    def invoice_giver
- #    	gift = self.gift
- #        puts "emailing the gift giver for #{gift.id}"
- #        # notify the giver via email
- #        Resque.enqueue(EmailJob, 'invoice_giver', gift.giver_id , {:gift_id => gift.id})
- #    end
 
     def transaction_approved
     	# chek that sale transaction is approved
