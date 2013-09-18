@@ -11,7 +11,7 @@ class IphoneController < AppController
 
 		data     = params["data"]
 		pn_token = params["pn_token"] || nil
-		puts " Here is the PARAMS obj #{params}"
+		#puts " Here is the PARAMS obj #{params}"
 
 		if data.nil?
 			message = "Data not received correctly. "

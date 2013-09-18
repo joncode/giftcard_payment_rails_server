@@ -232,7 +232,7 @@ class Gift < ActiveRecord::Base
 		if sale.save
 			puts "save of sale successful"
 		else
-			puts "save of sale ERROR #{self.id}"
+			puts "save of sale ERROR gift ID = #{self.id}"
 		end
 		return sale
 	end
