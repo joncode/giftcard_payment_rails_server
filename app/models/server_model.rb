@@ -20,26 +20,29 @@ module ServerModel
 private
 
     def request_server_with_route_and_params short_route, data
+        time_start     = Time.now
+        puts "API -#{short_route}- "
         route , params = generate_route_and_params(short_route, data)
         begin
-            puts "Here are the route #{route} and the params #{params}"
             party_response = HTTParty.post(route, params)
-            puts "HERE IS PARTY #{party_response.inspect}"
-            server_response(party_response)
+            response       = server_response(party_response)
         rescue
-            { "status" => 0, "data" => 'Cannot reach server'}
+            response       = { "status" => 0, "data" => 'Cannot reach server'}
         end
+        time_end       = ((Time.now - time_start) * 1000).round(1)
+        puts "END API -#{short_route}- (#{time_end}ms)"
+        response
     end
 
     def server_response party_response
         if party_response.code    == 200
             party_response.parsed_response
         elsif party_response.code == 401
-            puts "TRANSMISSION Unauthorized - #{party_response.inspect}"
+            puts "TRANSMISSION Unauthorized - #{party_response.code}"
             { "status" => 0, "data" => 'Network Authorization Failed.[DBA]'}
         else
             # transmission failure
-            puts "TRANSMISSION FAILED - #{party_response.inspect}"
+            puts "TRANSMISSION FAILED - #{party_response.code}"
             { "status" => 0, "data" => 'Network Failure. please retry.[DBA]'}
         end
     end
