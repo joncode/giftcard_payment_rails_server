@@ -78,6 +78,7 @@ class Gift < ActiveRecord::Base
 		gift_hsh["order_num"]		= self.order_num
 		gift_hsh["updated_at"]		= self.updated_at
 		gift_hsh["created_at"]		= self.created_at
+			# current summary and payment reports use item coun NOT shopping cart ... delete when in sync
 		gift_hsh["shoppingCart"]  	= self.shoppingCart
 		if order = self.order
 			server = self.order.server_code
