@@ -4,8 +4,8 @@ require 'spec_helper'
 describe Gift do
 
     it "builds from factory" do
-        user_social = FactoryGirl.create :gift
-        user_social.should be_valid
+        gift = FactoryGirl.create :gift
+        gift.should be_valid
     end
 
     it "requires giver_id" do
@@ -36,6 +36,12 @@ describe Gift do
       gift = FactoryGirl.build(:gift, :credit_card => nil)
       gift.should_not be_valid
       gift.should have_at_least(1).error_on(:credit_card)
+    end
+
+    it "requires service" do
+      gift = FactoryGirl.build(:gift, :service => nil)
+      gift.should_not be_valid
+      gift.should have_at_least(1).error_on(:service)
     end
 
     describe "description" do
