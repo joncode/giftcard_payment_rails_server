@@ -8,6 +8,36 @@ describe Gift do
         user_social.should be_valid
     end
 
+    it "requires giver_id" do
+      gift = FactoryGirl.build(:gift, :giver_id => nil)
+      gift.should_not be_valid
+      gift.should have_at_least(1).error_on(:giver_id)
+    end
+
+    it "requires receiver_name" do
+      gift = FactoryGirl.build(:gift, :receiver_name => nil)
+      gift.should_not be_valid
+      gift.should have_at_least(1).error_on(:receiver_name)
+    end
+
+    it "requires provider_id" do
+      gift = FactoryGirl.build(:gift, :provider_id => nil)
+      gift.should_not be_valid
+      gift.should have_at_least(1).error_on(:provider_id)
+    end
+
+    it "requires total" do
+      gift = FactoryGirl.build(:gift, :total => nil)
+      gift.should_not be_valid
+      gift.should have_at_least(1).error_on(:total)
+    end
+
+    it "requires credit_card" do
+      gift = FactoryGirl.build(:gift, :credit_card => nil)
+      gift.should_not be_valid
+      gift.should have_at_least(1).error_on(:credit_card)
+    end
+
     describe "description" do
 
         it "should description" do

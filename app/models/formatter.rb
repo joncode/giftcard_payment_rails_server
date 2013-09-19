@@ -17,7 +17,7 @@ module Formatter
     end
 
     def string_to_cents str
-        number_to_currency(str).gsub("$",'')
+        number_to_currency(str,  :format => "%n")
     end
 
     def remove_key_from_hash obj_hash, key_for_removal
