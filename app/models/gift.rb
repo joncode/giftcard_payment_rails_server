@@ -78,7 +78,8 @@ class Gift < ActiveRecord::Base
 		gift_hsh["order_num"]		= self.order_num
 		gift_hsh["updated_at"]		= self.updated_at
 		gift_hsh["created_at"]		= self.created_at
-		gift_hsh["shoppingCart"]  	= self.shoppingCart
+		#gift_hsh["shoppingCart"]  	= self.shoppingCart
+		gift_hsh["items"]			= JSON.parse(self.shoppingCart).count
 		if order = self.order
 			server = self.order.server_code
 		else
