@@ -872,3 +872,102 @@
 [09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing Rails3 Error instrumentation
 [09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Finished instrumentation
 [09/18/13 12:45:24 -0400 new-host.home (39070)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Enabling the Request Sampler.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : No application name configured.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : value set for app_name in the development 
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : environment.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Net instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Resque instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Finished instrumentation
+[09/20/13 16:23:25 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Enabling the Request Sampler.
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : No application name configured.
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : value set for app_name in the development 
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : environment.
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Net instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Resque instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Finished instrumentation
+[09/20/13 16:25:05 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Enabling the Request Sampler.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : No application name configured.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : value set for app_name in the development 
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : environment.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Net instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Resque instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Finished instrumentation
+[09/20/13 16:25:43 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Enabling the Request Sampler.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : No application name configured.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : value set for app_name in the development 
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : environment.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Net instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Resque instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Finished instrumentation
+[09/20/13 16:29:23 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Enabling the Request Sampler.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : No application name configured.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : value set for app_name in the development 
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : environment.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Net instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Resque instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Finished instrumentation

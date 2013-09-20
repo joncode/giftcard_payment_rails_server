@@ -61,7 +61,20 @@ describe AppController do
         end
 
         # Git should valide total and service
-        
+
+    end
+
+    describe "#providers" do
+        it "should return all providers with no params['city']" do
+
+        end
+
+        # tests for providers route
+
+
+
+
+
     end
 
     def gift_social_id_hsh

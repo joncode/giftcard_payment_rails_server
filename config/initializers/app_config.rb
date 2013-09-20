@@ -20,3 +20,4 @@ def lcon
     puts "loading rails console scripts [lcon]"
 end
 
+ActiveRecord::Base.logger = Logger.new(STDOUT)

@@ -327,9 +327,10 @@ class AppController < JsonController
   	end
 
   	def providers
-
+         # scoped providers route
 	    if authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
+
 	    		providers = Provider.all
 	    	else
 	    		providers = Provider.where(city: params["city"])
@@ -337,7 +338,7 @@ class AppController < JsonController
 	    	providers_array = providers.serialize_objs
 	    	logmsg 			= providers_array[0]
 	  	else
-	  		providers_hash 	= {"error" => "user was not found in database"}
+	  		providers_hash 	= {"error" => "No merchants for this city were found in database"}
 	  		providers_array = providers_hash
 	  		logmsg 			= providers_hash
 	  	end
