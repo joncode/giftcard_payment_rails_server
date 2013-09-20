@@ -36,7 +36,8 @@ class Provider < ActiveRecord::Base
 	validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 
 	before_save 	:extract_phone_digits
-	after_create 	:make_menu_string
+	after_create 	:make_menu_string	
+    # after_save       :update_city_provider
 
 	default_scope where(active: true).where(paused: false).order("name ASC")
 
@@ -281,6 +282,14 @@ private
 	def make_menu_string
 	    MenuString.create(provider_id: self.id, data: "[]")
 	end
+
+	def update_city_provider
+		city = self.city
+    	new_provider_array = Provider.where(city: params["city"]).serialize_objs
+    	city_row = CityProvider.find_by_city(city)
+    	city_row.update_attribute(:provider_array, new_provider_array)
+    end
+
 end
 # == Schema Information
 #

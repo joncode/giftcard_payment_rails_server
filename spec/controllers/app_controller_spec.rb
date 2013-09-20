@@ -64,6 +64,20 @@ describe AppController do
         
     end
 
+    describe "#providers" do
+        before do
+            @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
+            @first_provider = FactoryGirl.create(:provider)
+            @first_provider = FactoryGirl.create(:provider)
+        end
+        it "should send all providers with correct scope" do
+            post :provider, format: :json, city: "New York", token: @user.remember_token
+            providers_array[0].should == @first_provider.serialize
+            providers_array[1].should == @second_provider.serialize
+        end
+    end
+
+
     def gift_social_id_hsh
         {
             receiver_email: "jon@gmail.com",
