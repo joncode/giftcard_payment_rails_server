@@ -101,8 +101,8 @@ class Mt::V1::MerchantToolsController < JsonController
     def compile_menu
         data = params["data"]["old_menu"]           # deprecate
         menu = params["data"]["menu"]
-        puts "Old Data = #{data}"                   # deprecate
-        puts "new Data = #{menu}"
+        # puts "Old Data = #{data}"                   # deprecate
+        # puts "new Data = #{menu}"
         menu_string = @provider.menu_string
         if !menu_string                             # deprecate
             menu_string = MenuString.create(provider_id: @provider.id, data: "[]")
