@@ -175,6 +175,7 @@ Drinkboard::Application.routes.draw do
       post 'get_gifts',         to: 'admin_tools#gifts'
       post 'get_gift',          to: 'admin_tools#gift'
       post "payable_gifts",     to: 'admin_tools#payable_gifts'
+      post "payable_gifts_admt", to: 'admin_tools#payable_gifts_admt'
       post 'get_app_users',     to: 'admin_tools#users'
       post 'get_app_user',      to: 'admin_tools#user'
       post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
