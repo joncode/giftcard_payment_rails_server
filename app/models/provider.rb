@@ -37,7 +37,7 @@ class Provider < ActiveRecord::Base
 
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string	
-    # after_save       :update_city_provider
+    after_save       :update_city_provider
 
 	default_scope where(active: true).where(paused: false).order("name ASC")
 
@@ -285,9 +285,12 @@ private
 
 	def update_city_provider
 		city = self.city
-    	new_provider_array = Provider.where(city: params["city"]).serialize_objs
-    	city_row = CityProvider.find_by_city(city)
-    	city_row.update_attribute(:provider_array, new_provider_array)
+    	new_providers_array = Provider.where(city: city).serialize_objs.to_json
+    	if old_city_provider = CityProvider.find_by_city(city)
+    		old_city_provider.update_attribute(:providers_array, new_providers_array)
+    	else
+    		CityProvider.create(city:city, providers_array: new_providers_array)
+    	end
     end
 
 end

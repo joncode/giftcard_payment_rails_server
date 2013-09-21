@@ -40,6 +40,11 @@ FactoryGirl.define do
         end
     end
 
+    # factory :city_provider do
+    #     city "New York"
+    #     providers_array 
+    # end
+
     factory :user_social do
         user_id     1
         type_of     "email"

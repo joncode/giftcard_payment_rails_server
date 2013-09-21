@@ -74,7 +74,6 @@ ActiveRecord::Schema.define(:version => 20130920231649) do
   add_index "cards", ["user_id"], :name => "index_cards_on_user_id"
 
   create_table "city_providers", :force => true do |t|
-    t.integer  "provider_id"
     t.string   "city"
     t.text     "providers_array"
     t.datetime "created_at",      :null => false
