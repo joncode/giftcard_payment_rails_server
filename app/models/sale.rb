@@ -19,8 +19,7 @@ class Sale < ActiveRecord::Base
 	belongs_to :card
 
 	before_create :add_gateway_data
-  	after_create  :invoice_giver,    :if => :transaction_approved
-  	after_create  :notify_receiver,  :if => :transaction_approved
+  	after_create  :send_emails,    :if => :transaction_approved
 
 ### AUTHORIZE TRANSACTION METHODS
 
@@ -98,22 +97,10 @@ class Sale < ActiveRecord::Base
 		puts "#{self.inspect}"
 	end
 
-	# def notify_receiver
-	# 	gift = self.gift
- #      	if gift.receiver_email
- #        	puts "emailing the gift receiver for #{gift.id}"
- #        	# notify the receiver via email
- #        	user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
- #        	Resque.enqueue(EmailJob, 'notify_receiver', user_id , {:gift_id => gift.id, :email => gift.receiver_email})
- #      	end
- #    end
-
- #    def invoice_giver
- #    	gift = self.gift
- #        puts "emailing the gift giver for #{gift.id}"
- #        # notify the giver via email
- #        Resque.enqueue(EmailJob, 'invoice_giver', gift.giver_id , {:gift_id => gift.id})
- #    end
+	def send_emails
+        self.notify_receiver
+        self.invoice_giver
+    end
 
     def transaction_approved
     	# chek that sale transaction is approved
