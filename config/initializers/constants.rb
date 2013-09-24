@@ -33,8 +33,12 @@ PROOF_LEVELS        = ['zero', 'lite', 'normal', 'double']
 # MANDRILL
 ENV['MANDRILL_APIKEY'] =  'oUXP1PDOtP14RMgFytxdGw'
 MAILCHIMP_APIKEY = '925c032769638d199309b7c752c31700-us7'
-MAILCHIMP_LIST_ID = 'b29e278ebe'
 
+if Rails.env.production?
+    MAILCHIMP_LIST_ID = '5e2ea5f338'
+else
+    MAILCHIMP_LIST_ID = 'b29e278ebe'
+end    
 
     # Subtle Data Constants
 PIPE        = "%7C"

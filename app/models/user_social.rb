@@ -12,9 +12,6 @@ private
     	if self.type_of == "email"
     		first_name = User.find(self.user_id).first_name
     		last_name = User.find(self.user_id).last_name
-    		puts "User name below"
-    		puts "#{first_name}"
-    		puts "User name above"
 	    	MailchimpList.subscribe(self.identifier, first_name, last_name)
     	end
     end
