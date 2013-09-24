@@ -32,6 +32,9 @@ PROOF_LEVELS        = ['zero', 'lite', 'normal', 'double']
 
 # MANDRILL
 ENV['MANDRILL_APIKEY'] =  'oUXP1PDOtP14RMgFytxdGw'
+MAILCHIMP_APIKEY = '925c032769638d199309b7c752c31700-us7'
+MAILCHIMP_LIST_ID = 'b29e278ebe'
+
 
     # Subtle Data Constants
 PIPE        = "%7C"
