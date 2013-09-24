@@ -9,6 +9,7 @@ module Legacy
             p.update_attribute(:paused, false)
             puts "After- #{p.name} - live:#{p.live} - active:#{p.active} - pause:#{p.paused}"
         end
+        nil
     end
 
     def brand_photo_fix
