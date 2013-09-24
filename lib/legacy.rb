@@ -3,10 +3,11 @@ module Legacy
     def move_active_to_live
         ps = Provider.unscoped
         ps.each do |p|
-            puts "After- #{p.name} - #{p.live} - #{p.active}"
+            puts "Before- #{p.name} - live:#{p.live} - active:#{p.active} - pause:#{p.paused}"
             p.update_attribute(:live, p.active)
             p.update_attribute(:active, true)
-            puts "After- #{p.name} - #{p.live} - #{p.active}"
+            p.update_attribute(:paused, false)
+            puts "After- #{p.name} - live:#{p.live} - active:#{p.active} - pause:#{p.paused}"
         end
     end
 
