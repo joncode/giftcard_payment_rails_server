@@ -62,4 +62,37 @@ describe Gift do
     # test that when the gift is voided that it is removed from the appropriate app lists
     # test that when the gift is refunded that it removed from the appropriate app lists
 
-end
+end# == Schema Information
+#
+# Table name: gifts
+#
+#  id             :integer         not null, primary key
+#  giver_name     :string(255)
+#  receiver_name  :string(255)
+#  provider_name  :string(255)
+#  giver_id       :integer
+#  receiver_id    :integer
+#  total          :string(20)
+#  credit_card    :string(100)
+#  provider_id    :integer
+#  message        :text
+#  status         :string(255)     default("unpaid")
+#  created_at     :datetime        not null
+#  updated_at     :datetime        not null
+#  receiver_phone :string(255)
+#  tax            :string(255)
+#  tip            :string(255)
+#  regift_id      :integer
+#  foursquare_id  :string(255)
+#  facebook_id    :string(255)
+#  anon_id        :integer
+#  sale_id        :integer
+#  receiver_email :string(255)
+#  shoppingCart   :text
+#  twitter        :string(255)
+#  service        :string(255)
+#  order_num      :string(255)
+#  cat            :integer         default(0)
+#  active         :boolean         default(TRUE)
+#
+

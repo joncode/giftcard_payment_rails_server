@@ -67,6 +67,8 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
+	#default_scope where(active: true)
+
 #/---------------------------------------------------------------------------------------------/
 
 	def serialize(token=false)

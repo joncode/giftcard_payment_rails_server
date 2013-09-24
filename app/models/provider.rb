@@ -33,7 +33,8 @@ class Provider < ActiveRecord::Base
 	validates_presence_of :name, :city, :address, :zip , :state, :token
 	validates_length_of :state , 	:is => 2
 	validates_length_of :zip, 		:within => 5..10
-	validates :phone , format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
+	validates 			:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
+	validates_uniqueness_of :token
 
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
@@ -287,46 +288,41 @@ end
 #
 # Table name: providers
 #
-#  id                :integer         not null, primary key
-#  name              :string(255)     not null
-#  zinger            :string(255)
-#  description       :text
-#  address           :string(255)
-#  address_2         :string(255)
-#  city              :string(32)
-#  state             :string(2)
-#  zip               :string(16)
-#  logo              :string(255)
-#  created_at        :datetime        not null
-#  updated_at        :datetime        not null
-#  phone             :string(255)
-#  email             :string(255)
-#  twitter           :string(255)
-#  facebook          :string(255)
-#  website           :string(255)
-#  photo             :string(255)
-#  sales_tax         :string(255)
-#  active            :boolean         default(TRUE)
-#  account_name      :string(255)
-#  aba               :string(255)
-#  routing           :string(255)
-#  bank_account_name :string(255)
-#  bank_address      :string(255)
-#  bank_city         :string(255)
-#  bank_state        :string(255)
-#  bank_zip          :string(255)
-#  portrait          :string(255)
-#  box               :string(255)
-#  latitude          :float
-#  longitude         :float
-#  foursquare_id     :string(255)
-#  rate              :decimal(, )
-#  menu_is_live      :boolean         default(FALSE)
-#  sd_location_id    :integer
-#  brand_id          :integer
-#  building_id       :integer
-#  token             :string(255)
-#  tools             :boolean         default(FALSE)
-#  image             :string(255)
+#  id             :integer         not null, primary key
+#  name           :string(255)     not null
+#  zinger         :string(255)
+#  description    :text
+#  address        :string(255)
+#  address_2      :string(255)
+#  city           :string(32)
+#  state          :string(2)
+#  zip            :string(16)
+#  logo           :string(255)
+#  created_at     :datetime        not null
+#  updated_at     :datetime        not null
+#  phone          :string(255)
+#  email          :string(255)
+#  twitter        :string(255)
+#  facebook       :string(255)
+#  website        :string(255)
+#  photo          :string(255)
+#  sales_tax      :string(255)
+#  active         :boolean         default(TRUE)
+#  portrait       :string(255)
+#  box            :string(255)
+#  latitude       :float
+#  longitude      :float
+#  foursquare_id  :string(255)
+#  rate           :decimal(, )
+#  menu_is_live   :boolean         default(FALSE)
+#  sd_location_id :integer
+#  brand_id       :integer
+#  building_id    :integer
+#  token          :string(255)
+#  tools          :boolean         default(FALSE)
+#  image          :string(255)
+#  merchant_id    :integer
+#  live           :boolean         default(FALSE)
+#  paused         :boolean         default(TRUE)
 #
 
