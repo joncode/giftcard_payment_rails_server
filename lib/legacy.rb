@@ -4,9 +4,7 @@ module Legacy
         ps = Provider.unscoped
         ps.each do |p|
             puts "Before- #{p.name} - live:#{p.live} - active:#{p.active} - pause:#{p.paused}"
-            p.update_attribute(:live, p.active)
-            p.update_attribute(:active, true)
-            p.update_attribute(:paused, false)
+            p.legacy_status
             puts "After- #{p.name} - live:#{p.live} - active:#{p.active} - pause:#{p.paused}"
         end
         nil
