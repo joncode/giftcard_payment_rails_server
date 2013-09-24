@@ -7,7 +7,7 @@ module MailchimpList
 
     def self.subscribe email, first_name=nil, last_name=nil
     	begin
-            @mc.lists.subscribe(@list_id, {'email' => email, 'fname' => first_name })
+            @mc.lists.subscribe(@list_id, {'email' => email},{'fname' => first_name, 'lname' => last_name})
 	    rescue Mailchimp::ListAlreadySubscribedError
 	        puts"#{email} is already subscribed to the list"
 	    rescue Mailchimp::ListDoesNotExistError
