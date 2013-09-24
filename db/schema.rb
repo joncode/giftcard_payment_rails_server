@@ -11,9 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
-ActiveRecord::Schema.define(:version => 20130920231649) do
-
+ActiveRecord::Schema.define(:version => 20130924014353) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -261,7 +259,7 @@ ActiveRecord::Schema.define(:version => 20130920231649) do
     t.float    "longitude"
     t.string   "foursquare_id"
     t.decimal  "rate"
-    t.boolean  "menu_is_live",                    :default => false
+    t.boolean  "menu_is_live",                 :default => false
     t.integer  "brand_id"
     t.integer  "building_id"
     t.integer  "sd_location_id"
