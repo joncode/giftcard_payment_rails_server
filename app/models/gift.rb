@@ -27,7 +27,7 @@ class Gift < ActiveRecord::Base
 	belongs_to  :giver,    		class_name: "User"
 	belongs_to  :receiver, 		class_name: "User"
 
-	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card
+	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service
 
 	before_create :extract_phone_digits
 	before_create :add_giver_name,  :if => :no_giver_name

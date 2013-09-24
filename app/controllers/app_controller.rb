@@ -586,7 +586,7 @@ class AppController < JsonController
 	  			# if gift_obj["anon_id"]
 			   #      gift.add_anonymous_giver(giver.id)
 			   #  else
-			   #    	gift.add_giver(giver)
+			    gift.add_giver(giver)
 			   #  end
 	  			puts "Here is GIFT #{gift.inspect}"
 	  			if gift.save
