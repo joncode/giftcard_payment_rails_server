@@ -60,8 +60,41 @@ describe AppController do
             end
         end
 
-        # Git should valide total and service
-        
+        # Git should valiate total and service
+
+    end
+
+    describe "#create_gift behavior" do
+
+
+        before do
+            @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+        end
+
+        it "it should not allow gift creating for de-activated users" do
+            deactivated_user = FactoryGirl.create :user, { active: false}
+            # hit create gift with a receiver_id of a deactivated user
+            gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
+            # test that create gift does not create the gift or the sale
+            post :create_gift, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart , token: deactivated_user.remember_token
+            puts "here is the response #{json["success"]}"
+            json["success"].should be_nil
+            # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
+            json["error"].should == "User is no longer in the system , please gift to them with phone, email, facebook, or twitter"
+        end
+
+
+    end
+
+    def make_gift_json gift
+        {
+            total:          gift.total,
+            service:        gift.service,
+            receiver_id:    gift.receiver_id,
+            receiver_name:  gift.receiver_name,
+            provider_id:    gift.provider.id,
+            credit_card:    gift.credit_card
+        }.to_json
     end
 
     def gift_social_id_hsh
