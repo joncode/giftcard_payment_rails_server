@@ -14,18 +14,4 @@
   <% end %>
 </div>
 </div>
-  <% if !@provider.tools %>
-<div class="bankCell POSsingleColumn">
-  <div class="merchantSignUpObject rounded gradient">
-    <p id="notice"><%= notice %></p>
-    <h2>Open <strong><%= @provider.name %></strong> Account on Merchant Tools ?</h2>
-    <h2><%= link_to "Create Merchant Tools Account", create_merchant_tools_provider_path(@provider), :confirm => "Loading Data onto Merchant Tools, Are you sure ?"   %></h2>
-</div></div>
-  <% else %>
-<div class="bankCell POSsingleColumn">
-  <div class="merchantSignUpObject rounded gradient">
-    <p id="notice"><%= notice %></p>
-    <h2>Email employee to open Merchant tools account?</h2>
-    <h2>Click on Staff tab above and choose 'invite employee'</h2>
-</div></div>
-  <% end %>
+

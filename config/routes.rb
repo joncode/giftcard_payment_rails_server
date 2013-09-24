@@ -54,7 +54,6 @@ Drinkboard::Application.routes.draw do
       get :menu_item
       get :upload_menu
       get :remove_menu_item
-      get :coming_soon
       get :de_activate
       get :create_merchant_tools
       get :members
@@ -179,6 +178,9 @@ Drinkboard::Application.routes.draw do
       post 'get_app_users',     to: 'admin_tools#users'
       post 'get_app_user',      to: 'admin_tools#user'
       post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
+      post 'de_activate_user',  to: 'admin_tools#de_activate_user'
+      post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
+      post 'destroy_user',      to: 'admin_tools#destroy_user'
       post 'update_user',       to: 'admin_tools#update_user'
       post 'get_brands',        to: 'admin_tools#brands'
       post 'get_brand',         to: 'admin_tools#brand'
@@ -189,10 +191,8 @@ Drinkboard::Application.routes.draw do
       post 'de_associate',      to: 'admin_tools#de_associate'
       post 'providers',         to: 'admin_tools#providers'
       post 'go_live',           to: 'admin_tools#go_live'
-      post 'de_activate_user',  to: 'admin_tools#de_activate_user'
-      post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
-      post 'destroy_user',      to: 'admin_tools#destroy_user'
-      post 'de_activate_merchant', to: 'admin_tools#de_activate_merchant'
+      post 'deactivate_merchant', to: 'admin_tools#deactivate_merchant'
+      post 'update_mode',       to: 'admin_tools#update_mode'
       post 'cancel',            to: 'admin_tools#cancel'
       post 'orders',            to: 'admin_tools#orders'
       post 'unsettled',         to: 'admin_tools#unsettled'

@@ -29,6 +29,15 @@ group :development do
 	gem 'sqlite3'
 end
 
+group :development, :test do
+  gem 'rb-fsevent', '~> 0.9.1'
+  gem "guard"
+  gem "guard-rspec"
+  gem "rspec-rails", "~> 2.13.0"
+  gem "capybara",    "2.0.3"
+  gem "launchy"
+end
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

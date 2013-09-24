@@ -149,9 +149,8 @@ module Admt
 
             def de_activate_user
                 if user         = User.find(params["data"].to_i)
-                    user.active = user.active ? false : true
 
-                    if user.save
+                    if user.toggle! :active
                         stat    = user.active ? "Live" : "Suspended"
                         success "#{user.name} is now #{stat}"
                     else
@@ -227,9 +226,8 @@ module Admt
 
             def de_activate_brand
                 if brand      = Brand.unscoped.find(params["data"].to_i)
-                    new_active = brand.active ? false : true
 
-                    if brand.update_attribute(:active, new_active)
+                    if brand.toggle! :active
                         msg = if brand.active
                                 "#{brand.name} is Active"
                             else
@@ -308,11 +306,10 @@ module Admt
 
             def go_live
                 if provider = Provider.unscoped.find_by_token(params['data'])
-                    provider.sd_location_id = provider.live_bool ? nil : 1
 
-                    if provider.save
+                    if provider.toggle! :live
                         msg =
-                            if provider.live_bool
+                            if provider.live
                                 "#{provider.name} is Live in App"
                             else
                                 "#{provider.name} is Coming Soon in App"
@@ -322,23 +319,50 @@ module Admt
                         fail    provider
                     end
                 else
-                    fail    data_not_found
+                        fail    data_not_found
                 end
+
                 respond
             end
 
-            def de_activate_merchant
-                if provider    = Provider.unscoped.find_by_token(params['data'])
-                    new_active = provider.active ? false : true
+            def update_mode
+                if provider = Provider.unscoped.find_by_token(params['data']['merchant_token'])
+                    provider.mode = params['data']['mode']
+                    if provider.save
+                        # call :mt and update the mechant
+                        response = provider.update_mode
+                        if response['status'] > 0
+                            success     "#{provider.name} is #{provider.mode}"
+                        else
+                            # set cron job to fix out of sync data in MT
+                            hsh         = {"msg" => "app is updated.  Merchant Tools was unable to update."}
+                            total_resp  = hsh.merge(provider.admt_serialize)
+                            success     total_resp
+                        end
+                    else
+                            fail        provider
+                    end
+                else
+                            fail        data_not_found
+                end
 
-                    if provider.update_attribute(:active, new_active)
-                        msg =
-                            if provider.active
-                                "#{provider.name} is Active"
-                            else
-                                "#{provider.name} is de-Activated"
-                            end
-                        success msg
+                respond
+            end
+
+            def deactivate_merchant
+                if provider    = Provider.unscoped.find_by_token(params['data'])
+
+                    if provider.update_attribute(:active, false)
+                        # call :mt and deactivate the merchant
+                        response = provider.deactivate_merchant
+                        if response['status'] > 0
+                            success     "#{provider.name} is de-Activated"
+                        else
+                            # set cron job to fix out of sync data in MT
+                            hsh         = {"msg" => "#{provider.name} is de-Activated.  Merchant Tools was unable to update."}
+                            total_resp  = hsh.merge(provider.admt_serialize)
+                            success     total_resp
+                        end
                     else
                         fail    provider
                     end
