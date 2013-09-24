@@ -110,7 +110,7 @@ class Gift < ActiveRecord::Base
 
 	def grand_total
 		pre_round = self.total.to_f + self.service.to_f
-		pre_round.round(2).to_s
+		number_with_precision(pre_round.round(2), precision: 2)
 	end
 
 	def total
