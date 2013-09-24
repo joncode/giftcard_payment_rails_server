@@ -72,6 +72,7 @@ describe AppController do
         end
 
         it "it should not allow gift creating for de-activated users" do
+
             deactivated_user = FactoryGirl.create :user, { active: false}
             # hit create gift with a receiver_id of a deactivated user
             gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
@@ -84,10 +85,13 @@ describe AppController do
         end
 
 
+
     end
 
     def make_gift_json gift
         {
+            giver_id:       1,
+            giver_name:     "French",
             total:          gift.total,
             service:        gift.service,
             receiver_id:    gift.receiver_id,

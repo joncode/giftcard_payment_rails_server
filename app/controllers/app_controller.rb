@@ -566,17 +566,28 @@ class AppController < JsonController
 		    else
 		    		# add the receiver + receiver checks to the gift object
 		        puts "Lets make this gift !!!"
-                add_receiver_object_to(gift_obj, response) if gift_obj["receiver_id"].nil?
+                if gift_obj["receiver_id"].nil?
+                    add_receiver_object_to(gift_obj, response)
+                else
+                    # check that the receiver_id is active
+                    if receiver = User.find(gift_obj["receiver_id"].to_i)
+                        if receiver.active == false
+                            response["error"] = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+                            gift_obj["receiver_id"] = nil
+                            gift_obj["receiver_name"] = nil
+                        end
+                    end
+
+                end
 		        gift    = Gift.new(gift_obj)
                 sc      = JSON.parse(params["shoppingCart"])
 		        gift.make_gift_items(sc)
-				puts "Made it thru original git making process"
 	  				# add the giver info to the gift object
-	  			if gift_obj["anon_id"]
-			        gift.add_anonymous_giver(giver.id)
-			    else
-			      	gift.add_giver(giver)
-			    end
+	  			# if gift_obj["anon_id"]
+			   #      gift.add_anonymous_giver(giver.id)
+			   #  else
+			   #    	gift.add_giver(giver)
+			   #  end
 	  			puts "Here is GIFT #{gift.inspect}"
 	  			if gift.save
 	  				sale = gift.charge_card
