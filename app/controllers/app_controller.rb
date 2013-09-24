@@ -46,14 +46,14 @@ class AppController < JsonController
  		response = {}
  		if user = authenticate_app_user(params["token"])
  		 			# user is authenticated
- 		 	puts "App -Update_user- data = #{params["data"]}"
+ 		 	# puts "App -Update_user- data = #{params["data"]}"
             updates =
                 if params["data"].kind_of? String
                     JSON.parse params["data"]
                 else
                     params["data"]
                 end
- 		 	puts "App -Update_user- parsed data = #{updates}"
+ 		 	# puts "App -Update_user- parsed data = #{updates}"
  		else
  			# user is not authenticated
  			response["error"] = {"user" => "could not identity app user"}
@@ -150,7 +150,7 @@ class AppController < JsonController
 
         respond_to do |format|
             # logger.debug response
-            @app_response = "AC response => #{logmsg}"
+            # @app_response = "AC response => #{logmsg}"
             format.json { render json: response }
         end
     end
@@ -346,6 +346,13 @@ class AppController < JsonController
   		respond_to do |format|
             # logger.debug providers_array
             @app_response = "AppC response[0] => #{logmsg}"
+            format.json { render json: providers_array }
+	    end
+  	end
+
+  	def providers
+        providers_array = CityProvider.find_by_city(params["city"]).providers_array
+  		respond_to do |format|
             format.json { render json: providers_array }
 	    end
   	end

@@ -37,7 +37,8 @@ class Provider < ActiveRecord::Base
 	validates_uniqueness_of :token
 
 	before_save 	:extract_phone_digits
-	after_create 	:make_menu_string
+	after_create 	:make_menu_string	
+    after_save       :update_city_provider
 
 	default_scope where(active: true).where(paused: false).order("name ASC")
 
@@ -283,6 +284,17 @@ private
 	def make_menu_string
 	    MenuString.create(provider_id: self.id, data: "[]")
 	end
+
+	def update_city_provider
+		city = self.city
+    	new_providers_array = Provider.where(city: city).serialize_objs.to_json
+    	if old_city_provider = CityProvider.find_by_city(city)
+    		old_city_provider.update_attribute(:providers_array, new_providers_array)
+    	else
+    		CityProvider.create(city:city, providers_array: new_providers_array)
+    	end
+    end
+
 end
 # == Schema Information
 #

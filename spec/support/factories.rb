@@ -31,8 +31,19 @@ FactoryGirl.define do
         token       "token"
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
-        phone       "4444343423"
+        sequence(:phone) do
+            phone = ""
+            10.times do
+              phone + (2..8).to_a.sample.to_s
+            end
+            phone
+        end
     end
+
+    # factory :city_provider do
+    #     city "New York"
+    #     providers_array 
+    # end
 
     factory :user_social do
         user_id     1
