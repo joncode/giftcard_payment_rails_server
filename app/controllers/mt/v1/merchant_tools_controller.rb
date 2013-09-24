@@ -1,6 +1,6 @@
 class Mt::V1::MerchantToolsController < JsonController
-    before_filter :authenticate_merchant_tools,    except: :create
-    before_filter :authenticate_general_token,     only:   :create
+    before_filter :authenticate_merchant_tools,    except: [:create, :reconcile_merchants]
+    before_filter :authenticate_general_token,     only:   [:create, :reconcile_merchants]
 
 #####  Merchant Methods
 
@@ -136,6 +136,47 @@ class Mt::V1::MerchantToolsController < JsonController
         end
         respond
     end
+
+
+    def reconcile_merchants
+        merchant_attributes = ["token", "name", "address", "city", "state", "zip", "phone", "zinger", "description",
+                               "email", "website", "facebook", "twitter", "sales_tax", "setup", "image", "pos", "tz",
+                               "b_aba", "b_address", "b_city", "b_state"]
+        provider_attributes = ["live", "paused"]
+
+        merchants     = params["data"]
+        provider_array_for_mt = []
+        #For each merchant sent from mt to the app...
+        merchants.each do |merchant|
+        
+        #find the provider in the app with the same token...
+            provider = Provider.find_by_token(merchant["token"])
+       
+        #and for each of its attributes...
+            provider.attributes.each do |k, v|
+
+        #if the mt and app data doesn't match, then...            
+                if v != merchant.attributes[k]
+
+        #if it's a "provider-mastered" attribute, add the key/value pair to the data to be sent back to mt...   
+                    if provider_attributes.includes? k
+                        provider_array_for_mt << { k => v}
+                    else
+        # otherwise, overwrite the app provider value with the mt merchant value.
+                        puts "The value of #{k} for Merchant #{merchant.id} was #{merchant.attributes[k]} in Merchant Tools but #{v} in the app! This attribute was overwitting to #{merchant.attributes[k]}"
+                        v = merchant.attributes[k]
+                    end
+                end
+            end
+        end
+        if provider_array_for_mt.count > 0
+            success provider_array_for_mt
+        else
+            success 
+        end
+        #need to add failure case. Should this be a rescue?
+    end
+
 
 private
 

@@ -210,6 +210,7 @@ Drinkboard::Application.routes.draw do
       post 'update_photo',    to: 'merchant_tools#update_photo'
       post 'summary_range',   to: 'merchant_tools#summary_range'
       post 'summary_report',  to: 'merchant_tools#summary_report'
+      post 'reconcile_merchants', to: 'merchant_tools#reconcile_merchants'
     end
   end
 
