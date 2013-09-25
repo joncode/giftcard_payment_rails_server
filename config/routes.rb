@@ -236,12 +236,4 @@ Drinkboard::Application.routes.draw do
   # match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
   # match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
 
-  ## SERVICES ROUTES (app . mdot)
-  # namespace :app, defaults: { format: 'json' } do
-  #   namespace :v2 do
-  #     post 'regift',  to: 'apple#regift'
-  #     post 'menu',    to: 'apple#menu'
-  #   end
-  # end
-
 end
