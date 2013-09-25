@@ -38,8 +38,8 @@ if Rails.env.production?
     MAILCHIMP_LIST_ID = '5e2ea5f338'
 else
     MAILCHIMP_LIST_ID = 'b29e278ebe'
-end    
-
+end
+    
     # Subtle Data Constants
 PIPE        = "%7C"
 SD_ROOT     = "https://www.subtledata.com/API/M/1/?Q="

@@ -6,17 +6,21 @@ class UserSocial < ActiveRecord::Base
 
     validates_presence_of :identifier, :type_of, :user_id
 
-private 
+private
 
     def add_to_mailchimp_list
-    	if self.type_of == "email"
-    		first_name = User.find(self.user_id).first_name
-    		last_name = User.find(self.user_id).last_name
-	    	MailchimpList.subscribe(self.identifier, first_name, last_name)
-    	end
+        if not Rails.env.test?
+        	if self.type_of  == "email"
+        		first_name    = User.find(self.user_id).first_name
+        		last_name     = User.find(self.user_id).last_name
+    	    	mcl           = MailchimpList.new(self.identifier, first_name, last_name)
+                mcl.subscribe
+        	end
+        end
     end
 
 end
+
 # == Schema Information
 #
 # Table name: user_socials
