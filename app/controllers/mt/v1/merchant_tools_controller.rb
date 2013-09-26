@@ -139,42 +139,53 @@ class Mt::V1::MerchantToolsController < JsonController
 
 
     def reconcile_merchants
-        merchant_attributes = ["token", "name", "address", "city", "state", "zip", "phone", "zinger", "description",
-                               "email", "website", "facebook", "twitter", "sales_tax", "setup", "image", "pos", "tz",
-                               "b_aba", "b_address", "b_city", "b_state"]
-        provider_attributes = ["live", "paused"]
+        db_attributes        = ["live", "paused"]
+        provider_hash_for_mt = {}
+        merchant_matches     = 0
 
-        merchants     = params["data"]
-        provider_array_for_mt = []
-        #For each merchant sent from mt to the app...
+        #For each merchant sent from mt to db...
+        merchants = params["data"]
         merchants.each do |merchant|
         
-        #find the provider in the app with the same token...
-            provider = Provider.find_by_token(merchant["token"])
-       
-        #and for each of its attributes...
-            provider.attributes.each do |k, v|
-
-        #if the mt and app data doesn't match, then...            
-                if v != merchant.attributes[k]
-
-        #if it's a "provider-mastered" attribute, add the key/value pair to the data to be sent back to mt...   
-                    if provider_attributes.includes? k
-                        provider_array_for_mt << { k => v}
-                    else
-        # otherwise, overwrite the app provider value with the mt merchant value.
-                        puts "The value of #{k} for Merchant #{merchant.id} was #{merchant.attributes[k]} in Merchant Tools but #{v} in the app! This attribute was overwitting to #{merchant.attributes[k]}"
-                        v = merchant.attributes[k]
+        #find the provider in db with the same token...
+            if Provider.find_by_token(merchant["token"])
+                merchant_matches += 1
+                provider = Provider.find_by_token(merchant["token"])
+        #and for each of its attributes (except for "id")...
+                provider_attributes = provider.attributes
+                provider_attributes.delete("id")
+                provider_attributes.each do |attr_name, attr_value|
+            #if the mt and db data doesn't match, then...            
+                    if attr_value.to_s != merchant[attr_name].to_s
+                # if it's present in db but not mt, log a message...
+                        if merchant[attr_name].blank?
+                            puts "The value of #{attr_name} for merchant #{merchant["merchant_id"]} is present in db, but not in mt. No changes were made."
+                #if it's a "db_attribute", add  the key/value pair to the data to be sent back to mt...   
+                        elsif db_attributes.include?(attr_name)
+                            if provider_hash_for_mt.has_key? merchant["merchant_id"]
+                                provider_hash_for_mt[merchant["merchant_id"]].merge!(attr_name => attr_value)
+                            else
+                                provider_hash_for_mt[merchant["merchant_id"]] = { attr_name => attr_value}
+                            end
+                        else
+                # otherwise, overwrite the db value with the mt value.
+                            puts "The value of #{attr_name} for merchant #{merchant["merchant_id"]} was #{merchant[attr_name]} in mt but #{attr_value} in the app! Overwriting to #{merchant[attr_name]}"
+                            provider.send("#{attr_name}=", merchant[attr_name])
+                            provider.save
+                        end
                     end
                 end
+            else
+                provider_hash_for_mt[merchant["merchant_id"]] = "no corresponding provider"
             end
         end
-        if provider_array_for_mt.count > 0
-            success provider_array_for_mt
+        if merchant_matches > 0
+            puts "#{merchant_matches} of the #{merchants.count} merchants in mt have a corresponding provider in db"
+            success provider_hash_for_mt
         else
-            success 
+            fail "no merchant-provider matches"
         end
-        #need to add failure case. Should this be a rescue?
+        respond
     end
 
 
