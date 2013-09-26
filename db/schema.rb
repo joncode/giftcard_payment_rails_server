@@ -11,9 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
-ActiveRecord::Schema.define(:version => 20130920231649) do
-
+ActiveRecord::Schema.define(:version => 20130924014353) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -81,6 +79,16 @@ ActiveRecord::Schema.define(:version => 20130920231649) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
   end
+
+  create_table "connections", :force => true do |t|
+    t.integer  "giver_id"
+    t.integer  "receiver_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "connections", ["giver_id"], :name => "index_connections_on_giver_id"
+  add_index "connections", ["receiver_id"], :name => "index_connections_on_receiver_id"
 
   create_table "employees", :force => true do |t|
     t.integer  "provider_id",                      :null => false
@@ -192,7 +200,7 @@ ActiveRecord::Schema.define(:version => 20130920231649) do
   add_index "menu_strings", ["provider_id"], :name => "index_menu_strings_on_provider_id"
 
   create_table "menus", :force => true do |t|
-    t.integer  "provider_id",                                 :null => false
+    t.integer  "provider_id"
     t.integer  "item_id"
     t.string   "price",       :limit => 20
     t.integer  "position",    :limit => 8
@@ -261,10 +269,10 @@ ActiveRecord::Schema.define(:version => 20130920231649) do
     t.float    "longitude"
     t.string   "foursquare_id"
     t.decimal  "rate"
-    t.boolean  "menu_is_live",                    :default => false
+    t.boolean  "menu_is_live",                 :default => false
+    t.integer  "sd_location_id"
     t.integer  "brand_id"
     t.integer  "building_id"
-    t.integer  "sd_location_id"
     t.string   "token"
     t.boolean  "tools",                        :default => false
     t.string   "image"
