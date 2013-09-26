@@ -3,7 +3,7 @@ class Setting < ActiveRecord::Base
 
 	attr_accessible :email_follow_up, :email_invite,
 	:email_invoice, :email_redeem, :user_id , :email_receiver_new
-	
+
 	belongs_to :user
 
 	validates_uniqueness_of :user_id
@@ -17,7 +17,7 @@ class Setting < ActiveRecord::Base
 	end
 
 	def app_serialize
-		self.serializable_hash only: [:user_id, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
+		self.serializable_hash only: [:user_id, :email_redeem, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
 	end
 
 	def generate_email_link
