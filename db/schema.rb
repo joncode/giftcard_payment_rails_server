@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130913023446) do
+ActiveRecord::Schema.define(:version => 20130927074502) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -57,6 +57,12 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
   add_index "brands_providers", ["brand_id"], :name => "index_brands_providers_on_brand_id"
   add_index "brands_providers", ["provider_id"], :name => "index_brands_providers_on_provider_id"
 
+  create_table "campaigns", :force => true do |t|
+    t.integer  "campaign_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "cards", :force => true do |t|
     t.integer  "user_id"
     t.string   "nickname"
@@ -73,6 +79,13 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
 
   add_index "cards", ["user_id"], :name => "index_cards_on_user_id"
 
+  create_table "city_providers", :force => true do |t|
+    t.string   "city"
+    t.text     "providers_array"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
     t.integer  "receiver_id"
@@ -82,6 +95,13 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
 
   add_index "connections", ["giver_id"], :name => "index_connections_on_giver_id"
   add_index "connections", ["receiver_id"], :name => "index_connections_on_receiver_id"
+
+  create_table "credit_accounts", :force => true do |t|
+    t.string   "owner"
+    t.integer  "owner_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "employees", :force => true do |t|
     t.integer  "provider_id",                      :null => false
@@ -137,6 +157,15 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
     t.string   "order_num"
     t.integer  "cat",                           :default => 0
     t.boolean  "active",                        :default => true
+    t.integer  "stat"
+    t.integer  "pay_stat"
+    t.string   "pay_type"
+    t.integer  "pay_id"
+    t.datetime "notified_at"
+    t.string   "notified_at_tz"
+    t.datetime "redeemed_at"
+    t.string   "redeemed_at_tz"
+    t.string   "server_code"
   end
 
   add_index "gifts", ["giver_id"], :name => "index_gifts_on_giver_id"
@@ -237,17 +266,17 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
   add_index "pn_tokens", ["user_id"], :name => "index_pn_tokens_on_user_id"
 
   create_table "providers", :force => true do |t|
-    t.string   "name",                                               :null => false
+    t.string   "name",                                            :null => false
     t.string   "zinger"
     t.text     "description"
     t.string   "address"
     t.string   "address_2"
-    t.string   "city",              :limit => 32
-    t.string   "state",             :limit => 2
-    t.string   "zip",               :limit => 16
+    t.string   "city",           :limit => 32
+    t.string   "state",          :limit => 2
+    t.string   "zip",            :limit => 16
     t.string   "logo"
-    t.datetime "created_at",                                         :null => false
-    t.datetime "updated_at",                                         :null => false
+    t.datetime "created_at",                                      :null => false
+    t.datetime "updated_at",                                      :null => false
     t.string   "phone"
     t.string   "email"
     t.string   "twitter"
@@ -255,31 +284,26 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
     t.string   "website"
     t.string   "photo"
     t.string   "sales_tax"
-    t.boolean  "active",                          :default => true
-    t.string   "account_name"
-    t.string   "aba"
-    t.string   "routing"
-    t.string   "bank_account_name"
-    t.string   "bank_address"
-    t.string   "bank_city"
-    t.string   "bank_state"
-    t.string   "bank_zip"
+    t.boolean  "active",                       :default => true
     t.string   "portrait"
     t.string   "box"
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
     t.decimal  "rate"
-    t.boolean  "menu_is_live",                    :default => false
+    t.boolean  "menu_is_live",                 :default => false
     t.integer  "sd_location_id"
     t.integer  "brand_id"
     t.integer  "building_id"
     t.string   "token"
-    t.boolean  "tools",                           :default => false
+    t.boolean  "tools",                        :default => false
     t.string   "image"
     t.integer  "merchant_id"
+    t.boolean  "live",                         :default => false
+    t.boolean  "paused",                       :default => true
   end
 
+  add_index "providers", ["active", "paused", "city"], :name => "index_providers_on_active_and_paused_and_city"
   add_index "providers", ["city"], :name => "index_providers_on_city"
   add_index "providers", ["merchant_id"], :name => "index_providers_on_merchant_id"
   add_index "providers", ["token"], :name => "index_providers_on_token"
@@ -371,6 +395,15 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "user_socials", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "type_of"
+    t.string   "identifier"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.boolean  "active",     :default => true
   end
 
   create_table "users", :force => true do |t|
