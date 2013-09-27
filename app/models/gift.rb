@@ -26,7 +26,7 @@ class Gift < ActiveRecord::Base
 	has_many    :gift_items, 	dependent: :destroy
 	belongs_to  :giver,    		class_name: "User"
 	belongs_to  :receiver, 		class_name: "User"
-	belongs_to  :payable, 		polymorphic: true
+	belongs_to  :payables, 		polymorphic: true
 
 	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service
 
@@ -38,6 +38,10 @@ class Gift < ActiveRecord::Base
 	after_create  :update_shoppingCart
 
 	default_scope where(active: true)
+
+#/-----------------------------------------------Status---------------------------------------/
+
+	
 
 #/---------------------------------------------------------------------------------------------/
 
