@@ -111,7 +111,6 @@ Drinkboard::Application.routes.draw do
   match 'app/login',            to: 'iphone#login',            via: :post
   match 'app/login_social',     to: 'iphone#login_social',     via: :post
   match 'app/update',           to: 'app#relays',              via: :post
-  match 'app/gifts',            to: 'iphone#gifts',            via: :post
   match 'app/update_user',      to: 'app#update_user',         via: :post
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
   match 'app/archive',          to: 'iphone#archive',          via: :post
@@ -149,12 +148,8 @@ Drinkboard::Application.routes.draw do
 
     ### deprecated app routes
   match 'app/menu',             to: 'app#menu',                via: :post
-
-  match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/out',              to: 'iphone#going_out',        via: :post
-  match 'app/active',           to: 'iphone#active_orders',    via: :post
-  match 'app/completed',        to: 'iphone#completed_orders', via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
   match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
