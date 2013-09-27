@@ -148,12 +148,14 @@ class Mt::V1::MerchantToolsController < JsonController
         merchants.each do |merchant|
         
         #find the provider in db with the same token...
-            if Provider.find_by_token(merchant["token"])
+            if Provider.unscoped.find_by_token(merchant["token"])
                 merchant_matches += 1
-                provider = Provider.find_by_token(merchant["token"])
+                provider = Provider.unscoped.find_by_token(merchant["token"])
         #and for each of its attributes (except for "id")...
                 provider_attributes = provider.attributes
                 provider_attributes.delete("id")
+                provider_attributes.delete("created_at")
+                provider_attributes.delete("updated_at")
                 provider_attributes.each do |attr_name, attr_value|
             #if the mt and db data doesn't match, then...            
                     if attr_value.to_s != merchant[attr_name].to_s
@@ -165,13 +167,20 @@ class Mt::V1::MerchantToolsController < JsonController
                             if provider_hash_for_mt.has_key? merchant["merchant_id"]
                                 provider_hash_for_mt[merchant["merchant_id"]].merge!(attr_name => attr_value)
                             else
-                                provider_hash_for_mt[merchant["merchant_id"]] = { attr_name => attr_value}
+                                provider_hash_for_mt[merchant["merchant_id"]] = { attr_name => attr_value }
                             end
                         else
                 # otherwise, overwrite the db value with the mt value.
-                            puts "The value of #{attr_name} for merchant #{merchant["merchant_id"]} was #{merchant[attr_name]} in mt but #{attr_value} in the app! Overwriting to #{merchant[attr_name]}"
                             provider.send("#{attr_name}=", merchant[attr_name])
-                            provider.save
+                            if provider.save
+                                overwrite_message = "DB UPDATE: The value of #{attr_name} for merchant #{merchant["merchant_id"]} was overwritten from #{attr_value} to #{merchant[attr_name]} in the app!"
+                                puts overwrite_message
+                                if provider_hash_for_mt.has_key? merchant["merchant_id"]
+                                    provider_hash_for_mt[merchant["merchant_id"]].merge!(attr_name => overwrite_message)
+                                else
+                                    provider_hash_for_mt[merchant["merchant_id"]] = { attr_name => overwrite_message }
+                                end
+                            end
                         end
                     end
                 end
