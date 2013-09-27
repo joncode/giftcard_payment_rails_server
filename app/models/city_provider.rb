@@ -3,6 +3,7 @@ class CityProvider < ActiveRecord::Base
 
 
   validates_presence_of :providers_array, :city
+  validates_uniqueness_of :city, case_sensitive: false
 end
 # == Schema Information
 #

@@ -108,7 +108,7 @@ describe AppController do
             @first_provider = FactoryGirl.create(:provider)
             @second_provider = FactoryGirl.create(:provider)
         end
-        it "should send all providers with correct scope" do
+        it "should send correctly serialized providers" do
             post :providers, format: :json, city: "New York", token: @user.remember_token
             providers_array = json
             providers_array[0].should == @first_provider.serialize

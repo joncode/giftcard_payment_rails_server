@@ -28,9 +28,9 @@ FactoryGirl.define do
         address     "123 happy st"
         zip         "11211"
         state       "NY"
-        token       "token"
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
+        sequence(:token) { |n| n.to_s + "token" }
         sequence(:phone) do
             phone = ""
             10.times do
