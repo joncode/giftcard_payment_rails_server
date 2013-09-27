@@ -409,7 +409,7 @@ class AppController < JsonController
 	    	begin
 	    		brand 			= Brand.find brand_id
 	    		providers_array = brand.providers.serialize_objs
-	    		# providers_array = shorten_url_for_provider_ary providers_array
+ 	    		# providers_array = shorten_url_for_provider_ary providers_array
 	    		logmsg 			= providers_array[0]
 	    	rescue
 	    		logmsg 			= { "error_server" => { "data_error" => "Cant find Brand with that ID"}}

@@ -26,8 +26,7 @@ class Sale < ActiveRecord::Base
 	belongs_to :card
 
 	before_create :add_gateway_data
-  	after_create  :invoice_giver,    :if => :transaction_approved
-  	after_create  :notify_receiver,  :if => :transaction_approved
+  	after_create  :send_emails,    :if => :transaction_approved
 
 ### AUTHORIZE TRANSACTION METHODS
 
@@ -104,6 +103,11 @@ class Sale < ActiveRecord::Base
 		self.reason_code		= self.response.response_reason_code.to_i
 		puts "#{self.inspect}"
 	end
+    
+	def send_emails
+        self.notify_receiver
+        self.invoice_giver
+    end
 
     def transaction_approved
     	# chek that sale transaction is approved
