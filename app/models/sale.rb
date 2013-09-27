@@ -21,9 +21,11 @@ class Sale < ActiveRecord::Base
 
 	belongs_to :provider
 	belongs_to :giver, class_name: "User"
-	belongs_to :gift
-	has_one    :order, through: :gift
+	#belongs_to :gift
+    has_many    :gifts,   as: :payable
+	#has_one    :order, through: :gift
 	belongs_to :card
+
 
 	before_create :add_gateway_data
   	after_create  :send_emails,    :if => :transaction_approved
@@ -103,7 +105,7 @@ class Sale < ActiveRecord::Base
 		self.reason_code		= self.response.response_reason_code.to_i
 		puts "#{self.inspect}"
 	end
-    
+
 	def send_emails
         self.notify_receiver
         self.invoice_giver

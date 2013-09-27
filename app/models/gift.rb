@@ -26,6 +26,7 @@ class Gift < ActiveRecord::Base
 	has_many    :gift_items, 	dependent: :destroy
 	belongs_to  :giver,    		class_name: "User"
 	belongs_to  :receiver, 		class_name: "User"
+	belongs_to  :payable, 		polymorphic: true
 
 	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service
 
@@ -381,5 +382,14 @@ end
 #  order_num      :string(255)
 #  cat            :integer         default(0)
 #  active         :boolean         default(TRUE)
+#  stat           :integer
+#  pay_stat       :integer
+#  pay_type       :string(255)
+#  pay_id         :integer
+#  notified_at    :datetime
+#  notified_at_tz :string(255)
+#  redeemed_at    :datetime
+#  redeemed_at_tz :string(255)
+#  server_code    :string(255)
 #
 

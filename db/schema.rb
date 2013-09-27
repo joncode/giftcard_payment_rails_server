@@ -11,11 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20130927074502) do
-=======
-ActiveRecord::Schema.define(:version => 20130924014353) do
->>>>>>> m
+ActiveRecord::Schema.define(:version => 20130927081324) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -170,6 +166,8 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.datetime "redeemed_at"
     t.string   "redeemed_at_tz"
     t.string   "server_code"
+    t.integer  "payable_id"
+    t.string   "payable_type"
   end
 
   add_index "gifts", ["giver_id"], :name => "index_gifts_on_giver_id"

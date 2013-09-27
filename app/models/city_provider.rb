@@ -4,3 +4,14 @@ class CityProvider < ActiveRecord::Base
 
   validates_presence_of :providers_array, :city
 end
+# == Schema Information
+#
+# Table name: city_providers
+#
+#  id              :integer         not null, primary key
+#  city            :string(255)
+#  providers_array :text
+#  created_at      :datetime        not null
+#  updated_at      :datetime        not null
+#
+
