@@ -8,7 +8,7 @@ class Provider < ActiveRecord::Base
 	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
 	:account_name, :aba, :routing, :bank_account_name, :bank_address,
 	:bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image, :merchant_id,
-	:paused, :live
+	:paused, :live, :mode
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
