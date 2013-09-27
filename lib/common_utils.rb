@@ -10,6 +10,10 @@ module CommonUtils
 			puts "HERE IS THE App-Version HEADER REQUEST #{request.headers['App-Version']}"
 		end
 
+		if request.headers['Mdot-Version']
+			puts "HERE IS THE Mdot-Version HEADER REQUEST #{request.headers['Mdot-Version']}"
+		end
+
 		if request.headers["HTTP_COOKIE"]
 			puts "HERE IS THE HEADER #{request.headers["HTTP_COOKIE"]}"
 		end
@@ -41,8 +45,8 @@ module CommonUtils
 	end
 
 	def method_end_log_message
-		end_time = Time.now - @start_time_logger
-		print "END #{log_message_header} Total time = #{end_time.round(3)}s | "
+		end_time = ((Time.now - @start_time_logger) * 1000).round(1)
+		print "END #{log_message_header} (#{end_time}ms) | "
 		if @app_response
 			log_text = marshal_copy(@app_response)
 			resp 	 = "#{filter_params(log_text)}"

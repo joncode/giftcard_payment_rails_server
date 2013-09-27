@@ -27,7 +27,7 @@ class Gift < ActiveRecord::Base
 	belongs_to  :giver,    		class_name: "User"
 	belongs_to  :receiver, 		class_name: "User"
 
-	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card
+	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service
 
 	before_create :extract_phone_digits
 	before_create :add_giver_name,  :if => :no_giver_name
@@ -66,10 +66,11 @@ class Gift < ActiveRecord::Base
 		gift_hsh                       = {}
 		gift_hsh["gift_id"]			   = self.id
 		gift_hsh["provider_id"]        = provider.id
-    	#gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
+		#gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
 		gift_hsh["name"]      		   = provider.name
 		gift_hsh["merchant_address"]   = provider.full_address
 		gift_hsh["total"]   		   = self.total
+		gift_hsh["updated_at"]   	   = self.updated_at
 		gift_hsh
 	end
 
@@ -78,6 +79,7 @@ class Gift < ActiveRecord::Base
 		gift_hsh["order_num"]		= self.order_num
 		gift_hsh["updated_at"]		= self.updated_at
 		gift_hsh["created_at"]		= self.created_at
+			# current summary and payment reports use item coun NOT shopping cart ... delete when in sync
 		gift_hsh["shoppingCart"]  	= self.shoppingCart
 		if order = self.order
 			server = self.order.server_code
@@ -108,7 +110,7 @@ class Gift < ActiveRecord::Base
 
 	def grand_total
 		pre_round = self.total.to_f + self.service.to_f
-		pre_round.round(2).to_s
+		float_to_cents(pre_round.round(2))
 	end
 
 	def total
@@ -123,10 +125,8 @@ class Gift < ActiveRecord::Base
 
 	def set_status
 		if card_enabled?
-			if Rails.env.production?
+			if Rails.env.production? || Rails.env.staging?
 				self.status = "unpaid"
-			elsif Rails.env.staging?
-				set_status_post_payment
 			else
 				set_status_post_payment
 			end
@@ -158,7 +158,7 @@ class Gift < ActiveRecord::Base
 	def charge_card
 				# if giver is one jb@jb.com
 				# call authorize capture on the gift and create the sale object
-		if Rails.env.production?
+		if Rails.env.production? || Rails.env.staging?
 			if true # self.card_enabled?
 				sale = self.authorize_capture
 				puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
@@ -166,22 +166,19 @@ class Gift < ActiveRecord::Base
 				sale = Sale.new
 				sale.resp_code = 1
 			end
-		elsif Rails.env.staging?
-			sale     = Sale.init self
-			sale.resp_code = 1
 		else
 			sale     = Sale.init self
 			sale.resp_code = 1
 		end
 		if sale.resp_code == 1 && self.status == 'open'
-			if Rails.env.production?
+			if Rails.env.production? || Rails.env.staging?
 				# not in production for APNS YET
 				begin
 					Relay.send_push_notification self
 				rescue
 					puts "PUSH NOTIFICATION FAIL"
 				end
-			elsif Rails.env.staging?
+			elsif Rails.env.development?
 				Relay.send_push_notification self
 				sale.invoice_giver
 				sale.notify_receiver

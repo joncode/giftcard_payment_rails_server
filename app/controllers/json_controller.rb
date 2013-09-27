@@ -53,7 +53,7 @@ class JsonController < ActionController::Base
                 gift_obj["provider_phone"] = provider.phone
                 gift_obj["city"]           = provider.city
                 gift_obj["sales_tax"]      = provider.sales_tax
-                gift_obj["live"]           = provider.live
+                gift_obj["live"]           = provider.live_int
                 gift_obj["latitude"]       = provider.latitude
                 gift_obj["longitude"]      = provider.longitude
 
@@ -110,7 +110,7 @@ class JsonController < ActionController::Base
         end
     end
 
-    ### API UTILITY METHODS
+### API UTILITY METHODS
 
     def respond
         respond_to do |format|
@@ -164,7 +164,7 @@ class JsonController < ActionController::Base
     end
 
 
-    #######
+#######
 
 private
 

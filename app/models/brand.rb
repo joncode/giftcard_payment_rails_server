@@ -49,6 +49,8 @@ class Brand < ActiveRecord::Base
 		end
 	end
 
+	alias_method :get_photo, :get_image
+
 	def photo= photo_url
 		# remove the cloudinary base url
 		if photo_url

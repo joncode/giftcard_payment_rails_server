@@ -46,14 +46,14 @@ class AppController < JsonController
  		response = {}
  		if user = authenticate_app_user(params["token"])
  		 			# user is authenticated
- 		 	puts "App -Update_user- data = #{params["data"]}"
+ 		 	# puts "App -Update_user- data = #{params["data"]}"
             updates =
                 if params["data"].kind_of? String
                     JSON.parse params["data"]
                 else
                     params["data"]
                 end
- 		 	puts "App -Update_user- parsed data = #{updates}"
+ 		 	# puts "App -Update_user- parsed data = #{updates}"
  		else
  			# user is not authenticated
  			response["error"] = {"user" => "could not identity app user"}
@@ -150,7 +150,7 @@ class AppController < JsonController
 
         respond_to do |format|
             # logger.debug response
-            @app_response = "AC response => #{logmsg}"
+            # @app_response = "AC response => #{logmsg}"
             format.json { render json: response }
         end
     end
@@ -327,9 +327,10 @@ class AppController < JsonController
   	end
 
   	def providers
-
+         # scoped providers route
 	    if authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
+
 	    		providers = Provider.all
 	    	else
 	    		providers = Provider.where(city: params["city"])
@@ -337,7 +338,7 @@ class AppController < JsonController
 	    	providers_array = providers.serialize_objs
 	    	logmsg 			= providers_array[0]
 	  	else
-	  		providers_hash 	= {"error" => "user was not found in database"}
+	  		providers_hash 	= {"error" => "No merchants for this city were found in database"}
 	  		providers_array = providers_hash
 	  		logmsg 			= providers_hash
 	  	end
@@ -345,6 +346,13 @@ class AppController < JsonController
   		respond_to do |format|
             # logger.debug providers_array
             @app_response = "AppC response[0] => #{logmsg}"
+            format.json { render json: providers_array }
+	    end
+  	end
+
+  	def providers
+        providers_array = CityProvider.find_by_city(params["city"]).providers_array
+  		respond_to do |format|
             format.json { render json: providers_array }
 	    end
   	end
@@ -566,23 +574,28 @@ class AppController < JsonController
 		    else
 		    		# add the receiver + receiver checks to the gift object
 		        puts "Lets make this gift !!!"
-		        add_receiver_by_origin(params["origin"], gift_obj, response)
-		        gift    = Gift.new(gift_obj)
-                cart_p = params["shoppingCart"]
-                begin
-                    sc = JSON.parse cart_p
-                rescue
-                        # bad JSON - app is sending item_description incorrectly
-                    sc = shoppingCartFix(cart_p)
+                if gift_obj["receiver_id"].nil?
+                    add_receiver_object_to(gift_obj, response)
+                else
+                    # check that the receiver_id is active
+                    if receiver = User.find(gift_obj["receiver_id"].to_i)
+                        if receiver.active == false
+                            response["error"] = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+                            gift_obj["receiver_id"] = nil
+                            gift_obj["receiver_name"] = nil
+                        end
+                    end
+
                 end
+		        gift    = Gift.new(gift_obj)
+                sc      = JSON.parse(params["shoppingCart"])
 		        gift.make_gift_items(sc)
-				puts "Made it thru original git making process"
 	  				# add the giver info to the gift object
-	  			if gift_obj["anon_id"]
-			        gift.add_anonymous_giver(giver.id)
-			    else
-			      	gift.add_giver(giver)
-			    end
+	  			# if gift_obj["anon_id"]
+			   #      gift.add_anonymous_giver(giver.id)
+			   #  else
+			    gift.add_giver(giver)
+			   #  end
 	  			puts "Here is GIFT #{gift.inspect}"
 	  			if gift.save
 	  				sale = gift.charge_card
@@ -815,89 +828,42 @@ class AppController < JsonController
 
 protected
 
-	def add_receiver_by_origin(origin, gift_obj, response)
-		case origin
-	    when 'd'
-	      #drinkboard - data already received
-	      response["origin"]     = "d"
-	    when 'f'
-	      # facebook - search users for facebook_id
-	      if gift_obj["facebook_id"]
-	        if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["origin"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	          gift_obj["status"]   = "incomplete"
-	          response["error-receiver"] = "No facebook ID received"
-	      end
-	    when 't'
-	      #twitter - search users for twitter handle
-	      if gift_obj["twitter"]
-	        if receiver = User.find_by_twitter(gift_obj["twitter"].to_s)
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["origin"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	        gift_obj["status"]     = "incomplete"
-	        response["error-receiver"] = "No twitter info received"
-	      end
-	    when 'c'
-	      # contacts - search users for phone
-	      if gift_obj["receiver_phone"]
-	        phone_received = gift_obj["receiver_phone"]
-	        phone = extract_phone_digits(phone_received)
-	        if receiver = User.find_by_phone(phone)
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["origin"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	          gift_obj["status"]   = "incomplete"
-	          response["error-receiver"] = "No contact phone received"
-	      end
-	    when 'e'
-	      # email - search users for phone
-	      if gift_obj["receiver_email"]
-	        if receiver = User.find_by_email(gift_obj["receiver_email"])
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["receiver"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	          gift_obj["status"]   = "incomplete"
-	          response["error-receiver"] = "No contact email received"
-	      end
-	    else
-	        #drinkboard - no origin sent
-	        response["origin"]     = "d"
-	    end
-	end
+    def add_receiver_object_to gift_obj, response
 
-    def receiver_info_response(receiver)
+        unique_ids = [gift_obj["receiver_phone"], gift_obj["facebook_id"], gift_obj["receiver_email"], gift_obj["twitter"] ].compact
+        # loop thru the ones with data
+        unique_ids.each do |unique_id|
+            if find_user(unique_id, gift_obj, response)
+                # stop when you find a user
+                break
+            end
+        end
+    end
+
+    def find_user unique_id, gift_obj, response
+        if social_data = UserSocial.find_by_identifier(unique_id)
+            receiver             = social_data.user
+            gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+            response["receiver"] = receiver_info_response(receiver)
+            response["origin"]   = social_data.type_of
+            return true
+        else
+            gift_obj["status"]   = "incomplete"
+            response["origin"]   = "NID"
+            return false
+        end
+    end
+
+    def receiver_info_response receiver
       	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
     end
 
-    def add_receiver_to_gift_obj(receiver, gift_obj)
+    def add_receiver_to_gift_obj receiver, gift_obj
       	gift_obj["receiver_id"]    = receiver.id
       	gift_obj["receiver_name"]  = receiver.username
       	gift_obj["receiver_phone"] = receiver.phone
+        gift_obj["receiver_email"] = receiver.email
       	return gift_obj
-    end
-
-    def shoppingCartFix(sc)
-        new_sc = sc.gsub(",\"item_description\":\"", '')
-        JSON.parse new_sc
     end
 
 end

@@ -33,6 +33,7 @@ class User < ActiveRecord::Base
 	has_many :answers
 	has_many :questions, :through => :answers
 	has_many :relays , foreign_key: "receiver_id"
+	has_many :user_socials
 
 	# has_many :followed_users, through: :relationships, source: "followed"
 	# has_many :relationships, foreign_key: "follower_id", dependent: :destroy
@@ -54,6 +55,7 @@ class User < ActiveRecord::Base
 			# after_update , :if => :added_social_media TODO
 			# this after_save covers both those situations , but also runs the code unnecessarily
 	after_save    :collect_incomplete_gifts
+	after_save    :persist_social_data
 	after_create  :init_confirm_email
 
 	validates :first_name, 	presence: true, 			length: { maximum: 50 }
@@ -64,6 +66,8 @@ class User < ActiveRecord::Base
 	validates :password_confirmation, presence: true, 	on: :create
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
+
+	#default_scope where(active: true)
 
 #/---------------------------------------------------------------------------------------------/
 
@@ -152,7 +156,13 @@ class User < ActiveRecord::Base
 	alias_method :username, :name
 	alias_method :fullname, :name
 
-
+	def deactivate_social type_of, identifier
+		# user get user_social record with identifier
+		user_social = UserSocial.find_by_identifier identifier
+		# user compare type ofs
+		# user deactive the user_social
+		user_social.update_attribute(:active, false)
+	end
 ##################
 
 #######  PHOTO METHODS
@@ -341,6 +351,15 @@ class User < ActiveRecord::Base
 ##################
 
 private
+
+	def persist_social_data
+
+		email_changed? and UserSocial.create(user_id: id, type_of: "email", identifier: email)
+		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
+		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
+		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)
+
+	end
 
 	def collect_incomplete_gifts
 						# check Gift.rb for ghost gifts connected to newly created user

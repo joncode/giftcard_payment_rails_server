@@ -10,6 +10,7 @@ gem 'roadie'
 gem 'newrelic_rpm'
 gem 'authorize-net'
 gem 'mandrill-api'
+gem 'mailchimp-api'
 gem 'json', '~> 1.7.7'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
@@ -27,6 +28,17 @@ end
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
 	gem 'sqlite3'
+end
+
+group :development, :test do
+  gem 'rb-fsevent', '~> 0.9.1'
+  gem "guard"
+  gem "guard-rspec"
+  gem "rspec-rails", "~> 2.13.0"
+  gem "capybara",    "2.0.3"
+  gem "launchy"
+  gem "factory_girl"
+  gem "yajl-ruby"
 end
 
 # Gems used only for assets and not required

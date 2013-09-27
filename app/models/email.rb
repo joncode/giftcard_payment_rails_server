@@ -75,7 +75,7 @@ module Email
                 "user"        => self,
                 "link"        => self.setting.generate_email_link
                 }
-        puts "Here is the data #{data.inspect}"
+        # puts "Here is the data #{data.inspect}"
         route_email_system(data)
     end
 

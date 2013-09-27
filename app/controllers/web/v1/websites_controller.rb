@@ -1,43 +1,40 @@
-module Web
-    module V1
-        class WebsitesController < JsonController
-            before_filter :authenticate_www_token
+class Web::V1::WebsitesController < JsonController
+    before_filter :authenticate_www_token
 
-            def confirm_email
-                confirm_token = params[:confirm_token]
-                if setting = Setting.where(confirm_email_token: confirm_token).first
-                    if  setting.confirm_email_token_sent_at > (Time.now - 10.days)
-                        # update the setting to be confirmed
-                        if setting.update_attribute(:confirm_email_flag, true)
-                            # send success back
-                            success "email confirmed"
-                        else
-                            fail({"msg" => "user update failed , please retry", "error" => "database"})
-                        end
-                    else
-                        fail({"msg" => "confirm email expired", "error" => "expired"})
-                    end
+    def confirm_email
+        confirm_token = params[:confirm_token]
+        if setting = Setting.where(confirm_email_token: confirm_token).first
+            if  setting.confirm_email_token_sent_at > (Time.now - 10.days)
+                # update the setting to be confirmed
+                if setting.update_attribute(:confirm_email_flag, true)
+                    # send success back
+                    success "email confirmed"
                 else
-                    fail({"msg" => "confirm email not found", "error" => "invalid"})
+                    fail({"msg" => "user update failed , please retry", "error" => "database"})
                 end
-
-                respond
+            else
+                fail({"msg" => "confirm email expired", "error" => "expired"})
             end
-
-            def redo_confirm_email
-                email = params[:email]
-                if user = User.find_by_email(email)
-                    user.init_confirm_email
-                    success email
-                else
-                    fail({"msg" => "we do not have that email account on file", "error" => email})
-                end
-                respond
-            end
-
+        else
+            fail({"msg" => "confirm email not found", "error" => "invalid"})
         end
+
+        respond
     end
+
+    def redo_confirm_email
+        email = params[:email]
+        if user = User.find_by_email(email)
+            user.init_confirm_email
+            success email
+        else
+            fail({"msg" => "we do not have that email account on file", "error" => email})
+        end
+        respond
+    end
+
 end
+
 
 # backend API call for confirm email system
 # Confirm Email

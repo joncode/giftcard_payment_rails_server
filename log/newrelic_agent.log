@@ -640,6 +640,7 @@
 [09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing Rails 3.1/3.2 view instrumentation
 [09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Installing Rails3 Error instrumentation
 [09/12/13 22:34:44 -0400 new-host.home (6298)] INFO : Finished instrumentation
+<<<<<<< HEAD
 [09/27/13 03:38:29 -0400 Slimms-MacBook-Air-2.local (4658)] INFO : Starting the New Relic agent in "development" environment.
 [09/27/13 03:38:29 -0400 Slimms-MacBook-Air-2.local (4658)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
 [09/27/13 03:38:29 -0400 Slimms-MacBook-Air-2.local (4658)] INFO : Reading configuration from config/newrelic.yml
@@ -717,3 +718,1284 @@
 [09/27/13 03:45:00 -0400 Slimms-MacBook-Air-2.local (4766)] INFO : Installing Rails 3.1/3.2 view instrumentation
 [09/27/13 03:45:00 -0400 Slimms-MacBook-Air-2.local (4766)] INFO : Installing Rails3 Error instrumentation
 [09/27/13 03:45:00 -0400 Slimms-MacBook-Air-2.local (4766)] INFO : Finished instrumentation
+=======
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Starting the New Relic agent in "development" environment.
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Reading configuration from config/newrelic.yml
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Enabling the Request Sampler.
+[09/13/13 16:26:30 -0400 new-host.home (9500)] ERROR : No application name configured.
+[09/13/13 16:26:30 -0400 new-host.home (9500)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/13/13 16:26:30 -0400 new-host.home (9500)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/13/13 16:26:30 -0400 new-host.home (9500)] ERROR : value set for app_name in the development 
+[09/13/13 16:26:30 -0400 new-host.home (9500)] ERROR : environment.
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Installing ActiveMerchant instrumentation
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Installing ActiveRecord instrumentation
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Installing Net instrumentation
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Installing Sinatra instrumentation
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Installing deferred Rack instrumentation
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Installing Resque instrumentation
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Installing Rails 3 Controller instrumentation
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Installing Rails3 Error instrumentation
+[09/13/13 16:26:30 -0400 new-host.home (9500)] INFO : Finished instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Starting the New Relic agent in "development" environment.
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Reading configuration from config/newrelic.yml
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Enabling the Request Sampler.
+[09/13/13 18:36:27 -0400 new-host.home (10056)] ERROR : No application name configured.
+[09/13/13 18:36:27 -0400 new-host.home (10056)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/13/13 18:36:27 -0400 new-host.home (10056)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/13/13 18:36:27 -0400 new-host.home (10056)] ERROR : value set for app_name in the development 
+[09/13/13 18:36:27 -0400 new-host.home (10056)] ERROR : environment.
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Installing ActiveMerchant instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Installing ActiveRecord instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Installing Net instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Installing Sinatra instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Installing deferred Rack instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Installing Resque instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Installing Rails 3 Controller instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Installing Rails3 Error instrumentation
+[09/13/13 18:36:27 -0400 new-host.home (10056)] INFO : Finished instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Starting the New Relic agent in "development" environment.
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Reading configuration from config/newrelic.yml
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Enabling the Request Sampler.
+[09/13/13 20:55:56 -0400 new-host.home (11256)] ERROR : No application name configured.
+[09/13/13 20:55:56 -0400 new-host.home (11256)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/13/13 20:55:56 -0400 new-host.home (11256)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/13/13 20:55:56 -0400 new-host.home (11256)] ERROR : value set for app_name in the development 
+[09/13/13 20:55:56 -0400 new-host.home (11256)] ERROR : environment.
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Installing ActiveMerchant instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Installing ActiveRecord instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Installing Net instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Installing Sinatra instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Installing deferred Rack instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Installing Resque instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Installing Rails 3 Controller instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Installing Rails3 Error instrumentation
+[09/13/13 20:55:56 -0400 new-host.home (11256)] INFO : Finished instrumentation
+[09/13/13 20:55:57 -0400 new-host.home (11256)] INFO : Doing deferred dependency-detection before Rack startup
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Starting the New Relic agent in "development" environment.
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Reading configuration from config/newrelic.yml
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Enabling the Request Sampler.
+[09/13/13 23:51:51 -0400 new-host.home (12405)] ERROR : No application name configured.
+[09/13/13 23:51:51 -0400 new-host.home (12405)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/13/13 23:51:51 -0400 new-host.home (12405)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/13/13 23:51:51 -0400 new-host.home (12405)] ERROR : value set for app_name in the development 
+[09/13/13 23:51:51 -0400 new-host.home (12405)] ERROR : environment.
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Installing ActiveMerchant instrumentation
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Installing ActiveRecord instrumentation
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Installing Net instrumentation
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Installing Sinatra instrumentation
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Installing deferred Rack instrumentation
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Installing Resque instrumentation
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Installing Rails 3 Controller instrumentation
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Installing Rails3 Error instrumentation
+[09/13/13 23:51:51 -0400 new-host.home (12405)] INFO : Finished instrumentation
+[09/13/13 23:51:52 -0400 new-host.home (12405)] INFO : Doing deferred dependency-detection before Rack startup
+<<<<<<< Updated upstream
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Starting the New Relic agent in "development" environment.
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Reading configuration from config/newrelic.yml
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Enabling the Request Sampler.
+[09/14/13 13:28:18 -0400 new-host.home (13315)] ERROR : No application name configured.
+[09/14/13 13:28:18 -0400 new-host.home (13315)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/14/13 13:28:18 -0400 new-host.home (13315)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/14/13 13:28:18 -0400 new-host.home (13315)] ERROR : value set for app_name in the development 
+[09/14/13 13:28:18 -0400 new-host.home (13315)] ERROR : environment.
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Installing ActiveMerchant instrumentation
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Installing ActiveRecord instrumentation
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Installing Net instrumentation
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Installing Sinatra instrumentation
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Installing deferred Rack instrumentation
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Installing Resque instrumentation
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Installing Rails 3 Controller instrumentation
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Installing Rails3 Error instrumentation
+[09/14/13 13:28:18 -0400 new-host.home (13315)] INFO : Finished instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Starting the New Relic agent in "development" environment.
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Reading configuration from config/newrelic.yml
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Enabling the Request Sampler.
+[09/14/13 16:28:08 -0400 new-host.home (17911)] ERROR : No application name configured.
+[09/14/13 16:28:08 -0400 new-host.home (17911)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/14/13 16:28:08 -0400 new-host.home (17911)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/14/13 16:28:08 -0400 new-host.home (17911)] ERROR : value set for app_name in the development 
+[09/14/13 16:28:08 -0400 new-host.home (17911)] ERROR : environment.
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Installing ActiveMerchant instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Installing ActiveRecord instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Installing Net instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Installing Sinatra instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Installing deferred Rack instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Installing Resque instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Installing Rails 3 Controller instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Installing Rails3 Error instrumentation
+[09/14/13 16:28:08 -0400 new-host.home (17911)] INFO : Finished instrumentation
+[09/14/13 16:29:33 -0400 new-host.home (17937)] INFO : Starting the New Relic agent in "development" environment.
+[09/14/13 16:29:33 -0400 new-host.home (17937)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/14/13 16:29:33 -0400 new-host.home (17937)] INFO : Reading configuration from config/newrelic.yml
+[09/14/13 16:29:33 -0400 new-host.home (17937)] INFO : Enabling the Request Sampler.
+[09/14/13 16:29:33 -0400 new-host.home (17937)] ERROR : No application name configured.
+[09/14/13 16:29:33 -0400 new-host.home (17937)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/14/13 16:29:33 -0400 new-host.home (17937)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/14/13 16:29:33 -0400 new-host.home (17937)] ERROR : value set for app_name in the development 
+[09/14/13 16:29:33 -0400 new-host.home (17937)] ERROR : environment.
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Installing ActiveMerchant instrumentation
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Installing ActiveRecord instrumentation
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Installing Net instrumentation
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Installing Sinatra instrumentation
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Installing deferred Rack instrumentation
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Installing Resque instrumentation
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Installing Rails 3 Controller instrumentation
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Installing Rails3 Error instrumentation
+[09/14/13 16:29:34 -0400 new-host.home (17937)] INFO : Finished instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Starting the New Relic agent in "development" environment.
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Reading configuration from config/newrelic.yml
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Enabling the Request Sampler.
+[09/14/13 17:04:14 -0400 new-host.home (18758)] ERROR : No application name configured.
+[09/14/13 17:04:14 -0400 new-host.home (18758)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/14/13 17:04:14 -0400 new-host.home (18758)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/14/13 17:04:14 -0400 new-host.home (18758)] ERROR : value set for app_name in the development 
+[09/14/13 17:04:14 -0400 new-host.home (18758)] ERROR : environment.
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Installing ActiveMerchant instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Installing ActiveRecord instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Installing Net instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Installing Sinatra instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Installing deferred Rack instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Installing Resque instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Installing Rails 3 Controller instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Installing Rails3 Error instrumentation
+[09/14/13 17:04:14 -0400 new-host.home (18758)] INFO : Finished instrumentation
+[09/16/13 14:28:42 -0400 new-host.home (25295)] INFO : Starting the New Relic agent in "development" environment.
+[09/16/13 14:28:42 -0400 new-host.home (25295)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/16/13 14:28:42 -0400 new-host.home (25295)] INFO : Reading configuration from config/newrelic.yml
+[09/16/13 14:28:42 -0400 new-host.home (25295)] INFO : Enabling the Request Sampler.
+[09/16/13 14:28:42 -0400 new-host.home (25295)] ERROR : No application name configured.
+[09/16/13 14:28:42 -0400 new-host.home (25295)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/16/13 14:28:42 -0400 new-host.home (25295)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/16/13 14:28:42 -0400 new-host.home (25295)] ERROR : value set for app_name in the development 
+[09/16/13 14:28:42 -0400 new-host.home (25295)] ERROR : environment.
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Installing ActiveMerchant instrumentation
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Installing ActiveRecord instrumentation
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Installing Net instrumentation
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Installing Sinatra instrumentation
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Installing deferred Rack instrumentation
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Installing Resque instrumentation
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Installing Rails 3 Controller instrumentation
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Installing Rails3 Error instrumentation
+[09/16/13 14:28:43 -0400 new-host.home (25295)] INFO : Finished instrumentation
+[09/16/13 14:28:44 -0400 new-host.home (25295)] INFO : Doing deferred dependency-detection before Rack startup
+[09/16/13 20:13:49 -0400 new-host.home (31433)] INFO : Starting the New Relic agent in "development" environment.
+[09/16/13 20:13:49 -0400 new-host.home (31433)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/16/13 20:13:49 -0400 new-host.home (31433)] INFO : Reading configuration from config/newrelic.yml
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Enabling the Request Sampler.
+[09/16/13 20:13:50 -0400 new-host.home (31433)] ERROR : No application name configured.
+[09/16/13 20:13:50 -0400 new-host.home (31433)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/16/13 20:13:50 -0400 new-host.home (31433)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/16/13 20:13:50 -0400 new-host.home (31433)] ERROR : value set for app_name in the development 
+[09/16/13 20:13:50 -0400 new-host.home (31433)] ERROR : environment.
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Installing ActiveMerchant instrumentation
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Installing ActiveRecord instrumentation
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Installing Net instrumentation
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Installing Sinatra instrumentation
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Installing deferred Rack instrumentation
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Installing Resque instrumentation
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Installing Rails 3 Controller instrumentation
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Installing Rails3 Error instrumentation
+[09/16/13 20:13:50 -0400 new-host.home (31433)] INFO : Finished instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Starting the New Relic agent in "development" environment.
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Reading configuration from config/newrelic.yml
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Enabling the Request Sampler.
+[09/16/13 20:14:26 -0400 new-host.home (31452)] ERROR : No application name configured.
+[09/16/13 20:14:26 -0400 new-host.home (31452)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/16/13 20:14:26 -0400 new-host.home (31452)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/16/13 20:14:26 -0400 new-host.home (31452)] ERROR : value set for app_name in the development 
+[09/16/13 20:14:26 -0400 new-host.home (31452)] ERROR : environment.
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Installing ActiveMerchant instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Installing ActiveRecord instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Installing Net instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Installing Sinatra instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Installing deferred Rack instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Installing Resque instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Installing Rails 3 Controller instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Installing Rails3 Error instrumentation
+[09/16/13 20:14:26 -0400 new-host.home (31452)] INFO : Finished instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Starting the New Relic agent in "development" environment.
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Reading configuration from config/newrelic.yml
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Enabling the Request Sampler.
+[09/18/13 12:45:22 -0400 new-host.home (39070)] ERROR : No application name configured.
+[09/18/13 12:45:22 -0400 new-host.home (39070)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/18/13 12:45:22 -0400 new-host.home (39070)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/18/13 12:45:22 -0400 new-host.home (39070)] ERROR : value set for app_name in the development 
+[09/18/13 12:45:22 -0400 new-host.home (39070)] ERROR : environment.
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing ActiveMerchant instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing ActiveRecord instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing Net instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing Sinatra instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing deferred Rack instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing Resque instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing Rails 3 Controller instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Installing Rails3 Error instrumentation
+[09/18/13 12:45:22 -0400 new-host.home (39070)] INFO : Finished instrumentation
+[09/18/13 12:45:24 -0400 new-host.home (39070)] INFO : Doing deferred dependency-detection before Rack startup
+<<<<<<< HEAD
+<<<<<<< HEAD
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Enabling the Request Sampler.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : No application name configured.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : value set for app_name in the development 
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] ERROR : environment.
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Net instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Resque instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:23:24 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Finished instrumentation
+[09/20/13 16:23:25 -0400 Slimms-MacBook-Air-2.local (7061)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Enabling the Request Sampler.
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : No application name configured.
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : value set for app_name in the development 
+[09/20/13 16:25:03 -0400 Slimms-MacBook-Air-2.local (7122)] ERROR : environment.
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Net instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Resque instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:25:04 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Finished instrumentation
+[09/20/13 16:25:05 -0400 Slimms-MacBook-Air-2.local (7122)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Enabling the Request Sampler.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : No application name configured.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : value set for app_name in the development 
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] ERROR : environment.
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Net instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Resque instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:25:42 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Finished instrumentation
+[09/20/13 16:25:43 -0400 Slimms-MacBook-Air-2.local (7189)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Enabling the Request Sampler.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : No application name configured.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : value set for app_name in the development 
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] ERROR : environment.
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Net instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Resque instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:29:22 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Finished instrumentation
+[09/20/13 16:29:23 -0400 Slimms-MacBook-Air-2.local (7232)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Enabling the Request Sampler.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : No application name configured.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : value set for app_name in the development 
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] ERROR : environment.
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Net instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Resque instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:34:44 -0400 Slimms-MacBook-Air-2.local (7279)] INFO : Finished instrumentation
+=======
+[09/23/13 20:02:49 -0400 new-host.home (11598)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 20:02:49 -0400 new-host.home (11598)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 20:02:49 -0400 new-host.home (11598)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 20:02:49 -0400 new-host.home (11598)] INFO : Enabling the Request Sampler.
+[09/23/13 20:02:49 -0400 new-host.home (11598)] ERROR : No application name configured.
+[09/23/13 20:02:49 -0400 new-host.home (11598)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 20:02:49 -0400 new-host.home (11598)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 20:02:49 -0400 new-host.home (11598)] ERROR : value set for app_name in the development 
+[09/23/13 20:02:49 -0400 new-host.home (11598)] ERROR : environment.
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Installing Net instrumentation
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Installing Sinatra instrumentation
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Installing deferred Rack instrumentation
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Installing Resque instrumentation
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 20:02:50 -0400 new-host.home (11598)] INFO : Finished instrumentation
+=======
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Enabling the Request Sampler.
+[09/23/13 21:37:44 -0400 new-host.home (16435)] ERROR : No application name configured.
+[09/23/13 21:37:44 -0400 new-host.home (16435)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 21:37:44 -0400 new-host.home (16435)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 21:37:44 -0400 new-host.home (16435)] ERROR : value set for app_name in the development 
+[09/23/13 21:37:44 -0400 new-host.home (16435)] ERROR : environment.
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Installing Net instrumentation
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Installing Sinatra instrumentation
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Installing deferred Rack instrumentation
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Installing Resque instrumentation
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 21:37:44 -0400 new-host.home (16435)] INFO : Finished instrumentation
+>>>>>>> Stashed changes
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Enabling the Request Sampler.
+[09/23/13 21:43:51 -0400 new-host.home (17168)] ERROR : No application name configured.
+[09/23/13 21:43:51 -0400 new-host.home (17168)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 21:43:51 -0400 new-host.home (17168)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 21:43:51 -0400 new-host.home (17168)] ERROR : value set for app_name in the development 
+[09/23/13 21:43:51 -0400 new-host.home (17168)] ERROR : environment.
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Installing Net instrumentation
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Installing Sinatra instrumentation
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Installing deferred Rack instrumentation
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Installing Resque instrumentation
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 21:43:51 -0400 new-host.home (17168)] INFO : Finished instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Enabling the Request Sampler.
+[09/23/13 21:48:18 -0400 new-host.home (17269)] ERROR : No application name configured.
+[09/23/13 21:48:18 -0400 new-host.home (17269)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 21:48:18 -0400 new-host.home (17269)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 21:48:18 -0400 new-host.home (17269)] ERROR : value set for app_name in the development 
+[09/23/13 21:48:18 -0400 new-host.home (17269)] ERROR : environment.
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Installing Net instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Installing Sinatra instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Installing deferred Rack instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Installing Resque instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 21:48:18 -0400 new-host.home (17269)] INFO : Finished instrumentation
+>>>>>>> m
+=======
+[09/19/13 19:11:47 -0400 new-host-5.home (4637)] INFO : Starting the New Relic agent in "development" environment.
+[09/19/13 19:11:47 -0400 new-host-5.home (4637)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/19/13 19:11:47 -0400 new-host-5.home (4637)] INFO : Reading configuration from config/newrelic.yml
+[09/19/13 19:11:47 -0400 new-host-5.home (4637)] INFO : Enabling the Request Sampler.
+[09/19/13 19:11:47 -0400 new-host-5.home (4637)] ERROR : No application name configured.
+[09/19/13 19:11:47 -0400 new-host-5.home (4637)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/19/13 19:11:47 -0400 new-host-5.home (4637)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/19/13 19:11:47 -0400 new-host-5.home (4637)] ERROR : value set for app_name in the development 
+[09/19/13 19:11:47 -0400 new-host-5.home (4637)] ERROR : environment.
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Installing ActiveMerchant instrumentation
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Installing ActiveRecord instrumentation
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Installing Net instrumentation
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Installing Sinatra instrumentation
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Installing deferred Rack instrumentation
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Installing Resque instrumentation
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Installing Rails 3 Controller instrumentation
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Installing Rails3 Error instrumentation
+[09/19/13 19:11:48 -0400 new-host-5.home (4637)] INFO : Finished instrumentation
+[09/19/13 19:11:49 -0400 new-host-5.home (4637)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 15:02:26 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 15:02:26 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 15:02:26 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 15:02:26 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Enabling the Request Sampler.
+[09/20/13 15:02:26 -0400 Ichizos-MacBook-Pro.local (1154)] ERROR : No application name configured.
+[09/20/13 15:02:26 -0400 Ichizos-MacBook-Pro.local (1154)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 15:02:26 -0400 Ichizos-MacBook-Pro.local (1154)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 15:02:26 -0400 Ichizos-MacBook-Pro.local (1154)] ERROR : value set for app_name in the development 
+[09/20/13 15:02:26 -0400 Ichizos-MacBook-Pro.local (1154)] ERROR : environment.
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Installing Net instrumentation
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Installing Sinatra instrumentation
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Installing deferred Rack instrumentation
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Installing Resque instrumentation
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 15:02:27 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Finished instrumentation
+[09/20/13 15:02:30 -0400 Ichizos-MacBook-Pro.local (1154)] INFO : Doing deferred dependency-detection before Rack startup
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Enabling the Request Sampler.
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] ERROR : No application name configured.
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] ERROR : value set for app_name in the development 
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] ERROR : environment.
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Installing Net instrumentation
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Installing Sinatra instrumentation
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Installing deferred Rack instrumentation
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Installing Resque instrumentation
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 16:23:49 -0400 Ichizos-MacBook-Pro.local (2329)] INFO : Finished instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Enabling the Request Sampler.
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] ERROR : No application name configured.
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] ERROR : value set for app_name in the development 
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] ERROR : environment.
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Installing Net instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Installing Sinatra instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Installing deferred Rack instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Installing Resque instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 17:55:05 -0400 Ichizos-MacBook-Pro.local (2763)] INFO : Finished instrumentation
+[09/20/13 17:55:55 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 17:55:55 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 17:55:55 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 17:55:55 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Enabling the Request Sampler.
+[09/20/13 17:55:55 -0400 Ichizos-MacBook-Pro.local (2777)] ERROR : No application name configured.
+[09/20/13 17:55:55 -0400 Ichizos-MacBook-Pro.local (2777)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 17:55:55 -0400 Ichizos-MacBook-Pro.local (2777)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 17:55:55 -0400 Ichizos-MacBook-Pro.local (2777)] ERROR : value set for app_name in the development 
+[09/20/13 17:55:55 -0400 Ichizos-MacBook-Pro.local (2777)] ERROR : environment.
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Installing Net instrumentation
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Installing Sinatra instrumentation
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Installing deferred Rack instrumentation
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Installing Resque instrumentation
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 17:55:56 -0400 Ichizos-MacBook-Pro.local (2777)] INFO : Finished instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Enabling the Request Sampler.
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] ERROR : No application name configured.
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] ERROR : value set for app_name in the development 
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] ERROR : environment.
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Installing Net instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Installing Sinatra instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Installing deferred Rack instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Installing Resque instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 17:57:02 -0400 Ichizos-MacBook-Pro.local (2787)] INFO : Finished instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Enabling the Request Sampler.
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] ERROR : No application name configured.
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] ERROR : value set for app_name in the development 
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] ERROR : environment.
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Installing Net instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Installing Sinatra instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Installing deferred Rack instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Installing Resque instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 17:58:14 -0400 Ichizos-MacBook-Pro.local (2796)] INFO : Finished instrumentation
+[09/20/13 18:00:53 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:00:53 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:00:53 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:00:53 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Enabling the Request Sampler.
+[09/20/13 18:00:53 -0400 Ichizos-MacBook-Pro.local (2808)] ERROR : No application name configured.
+[09/20/13 18:00:53 -0400 Ichizos-MacBook-Pro.local (2808)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:00:53 -0400 Ichizos-MacBook-Pro.local (2808)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:00:53 -0400 Ichizos-MacBook-Pro.local (2808)] ERROR : value set for app_name in the development 
+[09/20/13 18:00:53 -0400 Ichizos-MacBook-Pro.local (2808)] ERROR : environment.
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Installing Net instrumentation
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Installing Resque instrumentation
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:00:54 -0400 Ichizos-MacBook-Pro.local (2808)] INFO : Finished instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Enabling the Request Sampler.
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] ERROR : No application name configured.
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] ERROR : value set for app_name in the development 
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] ERROR : environment.
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Installing Net instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Installing Resque instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:05:06 -0400 Ichizos-MacBook-Pro.local (2827)] INFO : Finished instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Enabling the Request Sampler.
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] ERROR : No application name configured.
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] ERROR : value set for app_name in the development 
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] ERROR : environment.
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Installing Net instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Installing Resque instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:05:42 -0400 Ichizos-MacBook-Pro.local (2834)] INFO : Finished instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Enabling the Request Sampler.
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] ERROR : No application name configured.
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] ERROR : value set for app_name in the development 
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] ERROR : environment.
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Installing Net instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Installing Resque instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:06:30 -0400 Ichizos-MacBook-Pro.local (2842)] INFO : Finished instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Enabling the Request Sampler.
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] ERROR : No application name configured.
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] ERROR : value set for app_name in the development 
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] ERROR : environment.
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Installing Net instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Installing Resque instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:06:57 -0400 Ichizos-MacBook-Pro.local (2849)] INFO : Finished instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Enabling the Request Sampler.
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] ERROR : No application name configured.
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] ERROR : value set for app_name in the development 
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] ERROR : environment.
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Installing Net instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Installing Resque instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:07:34 -0400 Ichizos-MacBook-Pro.local (2859)] INFO : Finished instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Enabling the Request Sampler.
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] ERROR : No application name configured.
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] ERROR : value set for app_name in the development 
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] ERROR : environment.
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Installing Net instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Installing Resque instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:10:23 -0400 Ichizos-MacBook-Pro.local (2877)] INFO : Finished instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Enabling the Request Sampler.
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] ERROR : No application name configured.
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] ERROR : value set for app_name in the development 
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] ERROR : environment.
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Installing Net instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Installing Resque instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:10:36 -0400 Ichizos-MacBook-Pro.local (2884)] INFO : Finished instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Enabling the Request Sampler.
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] ERROR : No application name configured.
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] ERROR : value set for app_name in the development 
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] ERROR : environment.
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Installing Net instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Installing Resque instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:10:55 -0400 Ichizos-MacBook-Pro.local (2891)] INFO : Finished instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Enabling the Request Sampler.
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] ERROR : No application name configured.
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] ERROR : value set for app_name in the development 
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] ERROR : environment.
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Installing Net instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Installing Resque instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:12:29 -0400 Ichizos-MacBook-Pro.local (2906)] INFO : Finished instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Enabling the Request Sampler.
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] ERROR : No application name configured.
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] ERROR : value set for app_name in the development 
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] ERROR : environment.
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Installing Net instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Installing Resque instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:12:46 -0400 Ichizos-MacBook-Pro.local (2913)] INFO : Finished instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Enabling the Request Sampler.
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] ERROR : No application name configured.
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] ERROR : value set for app_name in the development 
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] ERROR : environment.
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Installing Net instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Installing Resque instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:13:37 -0400 Ichizos-MacBook-Pro.local (2921)] INFO : Finished instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Enabling the Request Sampler.
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] ERROR : No application name configured.
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] ERROR : value set for app_name in the development 
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] ERROR : environment.
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Installing Net instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Installing Resque instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:24:17 -0400 Ichizos-MacBook-Pro.local (2975)] INFO : Finished instrumentation
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Enabling the Request Sampler.
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] ERROR : No application name configured.
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] ERROR : value set for app_name in the development 
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] ERROR : environment.
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:24:46 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Installing Net instrumentation
+[09/20/13 18:24:47 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:24:47 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:24:47 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Installing Resque instrumentation
+[09/20/13 18:24:47 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:24:47 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:24:47 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:24:47 -0400 Ichizos-MacBook-Pro.local (2982)] INFO : Finished instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Enabling the Request Sampler.
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] ERROR : No application name configured.
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] ERROR : value set for app_name in the development 
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] ERROR : environment.
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Installing Net instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Installing Resque instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:25:57 -0400 Ichizos-MacBook-Pro.local (2991)] INFO : Finished instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Enabling the Request Sampler.
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] ERROR : No application name configured.
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] ERROR : value set for app_name in the development 
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] ERROR : environment.
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Installing Net instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Installing Resque instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:26:18 -0400 Ichizos-MacBook-Pro.local (2999)] INFO : Finished instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Enabling the Request Sampler.
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] ERROR : No application name configured.
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] ERROR : value set for app_name in the development 
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] ERROR : environment.
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Installing Net instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Installing Resque instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:27:57 -0400 Ichizos-MacBook-Pro.local (3008)] INFO : Finished instrumentation
+[09/20/13 18:30:21 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:30:21 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:30:21 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:30:21 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Enabling the Request Sampler.
+[09/20/13 18:30:21 -0400 Ichizos-MacBook-Pro.local (3026)] ERROR : No application name configured.
+[09/20/13 18:30:21 -0400 Ichizos-MacBook-Pro.local (3026)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:30:21 -0400 Ichizos-MacBook-Pro.local (3026)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:30:21 -0400 Ichizos-MacBook-Pro.local (3026)] ERROR : value set for app_name in the development 
+[09/20/13 18:30:21 -0400 Ichizos-MacBook-Pro.local (3026)] ERROR : environment.
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Installing Net instrumentation
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Installing Resque instrumentation
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:30:22 -0400 Ichizos-MacBook-Pro.local (3026)] INFO : Finished instrumentation
+[09/20/13 18:32:13 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:32:13 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:32:13 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:32:13 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Enabling the Request Sampler.
+[09/20/13 18:32:13 -0400 Ichizos-MacBook-Pro.local (3035)] ERROR : No application name configured.
+[09/20/13 18:32:13 -0400 Ichizos-MacBook-Pro.local (3035)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:32:13 -0400 Ichizos-MacBook-Pro.local (3035)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:32:13 -0400 Ichizos-MacBook-Pro.local (3035)] ERROR : value set for app_name in the development 
+[09/20/13 18:32:13 -0400 Ichizos-MacBook-Pro.local (3035)] ERROR : environment.
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Installing Net instrumentation
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Installing Resque instrumentation
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:32:14 -0400 Ichizos-MacBook-Pro.local (3035)] INFO : Finished instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Enabling the Request Sampler.
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] ERROR : No application name configured.
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] ERROR : value set for app_name in the development 
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] ERROR : environment.
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Installing Net instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Installing Resque instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:36:36 -0400 Ichizos-MacBook-Pro.local (3050)] INFO : Finished instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Enabling the Request Sampler.
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] ERROR : No application name configured.
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] ERROR : value set for app_name in the development 
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] ERROR : environment.
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Installing Net instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Installing Resque instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:37:08 -0400 Ichizos-MacBook-Pro.local (3058)] INFO : Finished instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Enabling the Request Sampler.
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] ERROR : No application name configured.
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] ERROR : value set for app_name in the development 
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] ERROR : environment.
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Installing Net instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Installing Sinatra instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Installing deferred Rack instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Installing Resque instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 18:56:29 -0400 Ichizos-MacBook-Pro.local (3122)] INFO : Finished instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Enabling the Request Sampler.
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] ERROR : No application name configured.
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] ERROR : value set for app_name in the development 
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] ERROR : environment.
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Installing Net instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Installing Sinatra instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Installing deferred Rack instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Installing Resque instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 19:15:59 -0400 Ichizos-MacBook-Pro.local (3209)] INFO : Finished instrumentation
+[09/20/13 19:16:47 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 19:16:47 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 19:16:47 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 19:16:47 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Enabling the Request Sampler.
+[09/20/13 19:16:47 -0400 Ichizos-MacBook-Pro.local (3218)] ERROR : No application name configured.
+[09/20/13 19:16:47 -0400 Ichizos-MacBook-Pro.local (3218)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 19:16:47 -0400 Ichizos-MacBook-Pro.local (3218)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 19:16:47 -0400 Ichizos-MacBook-Pro.local (3218)] ERROR : value set for app_name in the development 
+[09/20/13 19:16:47 -0400 Ichizos-MacBook-Pro.local (3218)] ERROR : environment.
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Installing Net instrumentation
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Installing Sinatra instrumentation
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Installing deferred Rack instrumentation
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Installing Resque instrumentation
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 19:16:48 -0400 Ichizos-MacBook-Pro.local (3218)] INFO : Finished instrumentation
+[09/20/13 19:26:33 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 19:26:33 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 19:26:33 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 19:26:33 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Enabling the Request Sampler.
+[09/20/13 19:26:33 -0400 Ichizos-MacBook-Pro.local (3263)] ERROR : No application name configured.
+[09/20/13 19:26:33 -0400 Ichizos-MacBook-Pro.local (3263)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 19:26:33 -0400 Ichizos-MacBook-Pro.local (3263)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 19:26:33 -0400 Ichizos-MacBook-Pro.local (3263)] ERROR : value set for app_name in the development 
+[09/20/13 19:26:33 -0400 Ichizos-MacBook-Pro.local (3263)] ERROR : environment.
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Installing Net instrumentation
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Installing Sinatra instrumentation
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Installing deferred Rack instrumentation
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Installing Resque instrumentation
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 19:26:34 -0400 Ichizos-MacBook-Pro.local (3263)] INFO : Finished instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Enabling the Request Sampler.
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] ERROR : No application name configured.
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] ERROR : value set for app_name in the development 
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] ERROR : environment.
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Installing Net instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Installing Sinatra instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Installing deferred Rack instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Installing Resque instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 19:29:17 -0400 Ichizos-MacBook-Pro.local (3286)] INFO : Finished instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Enabling the Request Sampler.
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] ERROR : No application name configured.
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] ERROR : value set for app_name in the development 
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] ERROR : environment.
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Installing Net instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Installing Sinatra instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Installing deferred Rack instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Installing Resque instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 19:29:52 -0400 Ichizos-MacBook-Pro.local (3294)] INFO : Finished instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Enabling the Request Sampler.
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] ERROR : No application name configured.
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] ERROR : value set for app_name in the development 
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] ERROR : environment.
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Installing Net instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Installing Sinatra instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Installing deferred Rack instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Installing Resque instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 20:46:31 -0400 Ichizos-MacBook-Pro.local (443)] INFO : Finished instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Starting the New Relic agent in "development" environment.
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Reading configuration from config/newrelic.yml
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Enabling the Request Sampler.
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] ERROR : No application name configured.
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] ERROR : value set for app_name in the development 
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] ERROR : environment.
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Installing ActiveMerchant instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Installing ActiveRecord instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Installing Net instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Installing Sinatra instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Installing deferred Rack instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Installing Resque instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Installing Rails 3 Controller instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Installing Rails3 Error instrumentation
+[09/20/13 20:49:56 -0400 Ichizos-MacBook-Pro.local (472)] INFO : Finished instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Enabling the Request Sampler.
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] ERROR : No application name configured.
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] ERROR : value set for app_name in the development 
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] ERROR : environment.
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Installing Net instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Installing Sinatra instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Installing deferred Rack instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Installing Resque instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 14:19:38 -0400 new-host-2.home (1212)] INFO : Finished instrumentation
+[09/23/13 14:19:40 -0400 new-host-2.home (1212)] INFO : Doing deferred dependency-detection before Rack startup
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Enabling the Request Sampler.
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] ERROR : No application name configured.
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] ERROR : value set for app_name in the development 
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] ERROR : environment.
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Installing Net instrumentation
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Installing Sinatra instrumentation
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Installing deferred Rack instrumentation
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Installing Resque instrumentation
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 18:07:44 -0400 new-host-2.home (3617)] INFO : Finished instrumentation
+[09/23/13 18:07:50 -0400 new-host-2.home (3617)] INFO : Doing deferred dependency-detection before Rack startup
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Enabling the Request Sampler.
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] ERROR : No application name configured.
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] ERROR : value set for app_name in the development 
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] ERROR : environment.
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Installing Net instrumentation
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Installing Sinatra instrumentation
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Installing deferred Rack instrumentation
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Installing Resque instrumentation
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 18:22:14 -0400 new-host-2.home (3698)] INFO : Finished instrumentation
+[09/23/13 18:22:16 -0400 new-host-2.home (3698)] INFO : Doing deferred dependency-detection before Rack startup
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Enabling the Request Sampler.
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] ERROR : No application name configured.
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] ERROR : value set for app_name in the development 
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] ERROR : environment.
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Installing Net instrumentation
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Installing Sinatra instrumentation
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Installing deferred Rack instrumentation
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Installing Resque instrumentation
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 18:28:37 -0400 new-host-2.home (3758)] INFO : Finished instrumentation
+[09/23/13 18:28:40 -0400 new-host-2.home (3758)] INFO : Doing deferred dependency-detection before Rack startup
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Enabling the Request Sampler.
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] ERROR : No application name configured.
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] ERROR : value set for app_name in the development 
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] ERROR : environment.
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Installing Net instrumentation
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Installing Sinatra instrumentation
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Installing deferred Rack instrumentation
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Installing Resque instrumentation
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 18:31:06 -0400 new-host-2.home (3781)] INFO : Finished instrumentation
+[09/23/13 18:31:09 -0400 new-host-2.home (3781)] INFO : Doing deferred dependency-detection before Rack startup
+[09/23/13 19:05:22 -0400 new-host-2.home (3990)] INFO : Starting the New Relic agent in "development" environment.
+[09/23/13 19:05:22 -0400 new-host-2.home (3990)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/23/13 19:05:22 -0400 new-host-2.home (3990)] INFO : Reading configuration from config/newrelic.yml
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Enabling the Request Sampler.
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] ERROR : No application name configured.
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] ERROR : value set for app_name in the development 
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] ERROR : environment.
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Installing ActiveMerchant instrumentation
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Installing ActiveRecord instrumentation
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Installing Net instrumentation
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Installing Sinatra instrumentation
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Installing deferred Rack instrumentation
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Installing Resque instrumentation
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Installing Rails 3 Controller instrumentation
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Installing Rails3 Error instrumentation
+[09/23/13 19:05:23 -0400 new-host-2.home (3990)] INFO : Finished instrumentation
+[09/23/13 19:05:25 -0400 new-host-2.home (3990)] INFO : Doing deferred dependency-detection before Rack startup
+>>>>>>> iu
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Starting the New Relic agent in "development" environment.
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Reading configuration from config/newrelic.yml
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Enabling the Request Sampler.
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] ERROR : No application name configured.
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] ERROR : value set for app_name in the development 
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] ERROR : environment.
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Installing ActiveMerchant instrumentation
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Installing ActiveRecord instrumentation
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Installing Net instrumentation
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Installing Sinatra instrumentation
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Installing deferred Rack instrumentation
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Installing Resque instrumentation
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Installing Rails 3 Controller instrumentation
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Installing Rails3 Error instrumentation
+[09/26/13 16:19:59 -0400 Slimms-MacBook-Air-2.local (30582)] INFO : Finished instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Starting the New Relic agent in "development" environment.
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Reading configuration from config/newrelic.yml
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Enabling the Request Sampler.
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] ERROR : No application name configured.
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] ERROR : value set for app_name in the development 
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] ERROR : environment.
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Installing ActiveMerchant instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Installing ActiveRecord instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Installing Net instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Installing Sinatra instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Installing deferred Rack instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Installing Resque instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Installing Rails 3 Controller instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Installing Rails3 Error instrumentation
+[09/26/13 16:22:48 -0400 Slimms-MacBook-Air-2.local (30626)] INFO : Finished instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Starting the New Relic agent in "development" environment.
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Reading configuration from config/newrelic.yml
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Enabling the Request Sampler.
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] ERROR : No application name configured.
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] ERROR : value set for app_name in the development 
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] ERROR : environment.
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Installing ActiveMerchant instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Installing ActiveRecord instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Installing Net instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Installing Sinatra instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Installing deferred Rack instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Installing Resque instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Installing Rails 3 Controller instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Installing Rails3 Error instrumentation
+[09/26/13 16:24:23 -0400 Slimms-MacBook-Air-2.local (30803)] INFO : Finished instrumentation
+>>>>>>> m
