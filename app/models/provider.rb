@@ -36,6 +36,7 @@ class Provider < ActiveRecord::Base
 	validates 			:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
 
+
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
     after_save       :update_city_provider

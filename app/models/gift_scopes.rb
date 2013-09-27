@@ -74,8 +74,10 @@ module GiftScopes
 ##### PROVIDER SCOPES
 
     def get_summary_range provider
-        start_date =  Gift.where(provider_id: provider.id).order("created_at ASC").first.created_at
-        end_date   =  Gift.where(provider_id: provider.id).order("updated_at DESC").first.updated_at
+        start_gift = Gift.where(provider_id: provider.id).order("created_at ASC").limit(1).first
+        start_date = start_gift ? start_gift.created_at : nil
+        end_date   = Gift.where(provider_id: provider.id).order("updated_at DESC").limit(1).first
+        end_date   = end_date ? end_date.updated_at : nil
         { "start_date" => start_date, "end_date" => end_date }
     end
 

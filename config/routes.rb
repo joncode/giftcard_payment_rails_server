@@ -174,6 +174,7 @@ Drinkboard::Application.routes.draw do
       post 'get_gifts',         to: 'admin_tools#gifts'
       post 'get_gift',          to: 'admin_tools#gift'
       post "payable_gifts",     to: 'admin_tools#payable_gifts'
+      post "payable_gifts_admt", to: 'admin_tools#payable_gifts_admt'
       post 'get_app_users',     to: 'admin_tools#users'
       post 'get_app_user',      to: 'admin_tools#user'
       post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
@@ -235,13 +236,5 @@ Drinkboard::Application.routes.draw do
   # match '/facebook/checkin',   to: 'locations#validateFacebookSubscription',  via: :get
   # match '/facebook/checkin',   to: 'locations#realTimeFacebookUpdate',        via: :post
   # match '/foursquare/checkin', to: 'locations#realTimeFoursquareUpdate',      via: :post
-
-  ## SERVICES ROUTES (app . mdot)
-  # namespace :app, defaults: { format: 'json' } do
-  #   namespace :v2 do
-  #     post 'regift',  to: 'apple#regift'
-  #     post 'menu',    to: 'apple#menu'
-  #   end
-  # end
 
 end

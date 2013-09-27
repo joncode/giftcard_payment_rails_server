@@ -80,7 +80,10 @@ class Gift < ActiveRecord::Base
 		gift_hsh["updated_at"]		= self.updated_at
 		gift_hsh["created_at"]		= self.created_at
 			# current summary and payment reports use item coun NOT shopping cart ... delete when in sync
-		gift_hsh["shoppingCart"]  	= self.shoppingCart
+		#gift_hsh["shoppingCart"]  	= self.shoppingCart
+		gift_hsh["receiver_name"]   = self.receiver_name
+		gift_hsh["items"]			= JSON.parse(self.shoppingCart).count
+
 		if order = self.order
 			server = self.order.server_code
 		else
