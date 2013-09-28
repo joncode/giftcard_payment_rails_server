@@ -1,110 +1,6 @@
 Drinkboard::Application.routes.draw do
 
-  root                         to: 'sessions#new'
-  resources :sessions,       only: [:new, :create, :destroy]
-  match '/signin',             to: 'sessions#new',                via: :get
-  match '/signout',            to: 'sessions#destroy'
-  match '/forgot_password',    to: 'sessions#forgot_password',    via: [:get, :post]
-  match '/reset_password',     to: 'sessions#forgot_password',    via:  :get
-  match '/enter_new_password', to: 'sessions#enter_new_password', via: [:get, :put]
-  match '/valid_token',        to: 'sessions#validate_token',     via: :get
-  match '/change_password/:id', to: 'sessions#change_password',    via: :post
-
-  match '/admin',              to: 'admin#show'        ,           via: :get
-  match '/admin/test_emails',  to: 'admin#test_emails' ,           via: :get
-  match '/admin/run_tests',    to: 'admin#run_tests'   ,           via: :get
-  match '/push/register',      to: 'admin#push_register' ,         via: :get
-  match '/push/notify',        to: 'admin#push_notify'   ,         via: :get
-
-  match "/invite/email_confirmed"     , to: "invite#email_confirmed", via: :get
-  match "/invite/error"               , to: "invite#error",           via: :get
-  match "/invite/gift/:id"            , to: "invite#show",            via: :get
-  match "/invite/person/:id"          , to: "invite#invite",          via: :get
-  match "/webview(/:template(/:var1))", to: "invite#display_email",   via: :get
-
-  match "/confirm_email(/:email(/:user))", to: "users#confirm_email", via: :get
-
   mount Resque::Server, :at => "/resque"
-
-  resources :users do
-    member do
-      get  :following, :followers
-      get  :servercode
-      get  :crop
-      get  :change_public_status
-      post :update_avatar
-      get  :de_activate
-      get  :destroy_gifts
-    end
-  end
-
-  resources :providers do
-    member do
-      get :add_photo
-      post :upload_photo
-      get :brands
-      get :brand
-      get :building
-      get :menu
-      get :staff
-      post :update_item
-      post :delete_item
-      get  :compile_menu
-      get  :add_member
-      get :menu_item
-      get :upload_menu
-      get :remove_menu_item
-      get :de_activate
-      get :create_merchant_tools
-      get :members
-      get :add_employee
-      get :remove_employee
-      get 'invite_employee'
-      post 'invite_employee'
-    end
-  end
-
-  resources :brands do
-    member do
-      get :add_photo
-      post :upload_photo
-      get :merchants
-      get :brand_merchant
-      get :building_merchant
-    end
-  end
-
-  match "/merchants/:id/employee/:eid/remove"  => "merchants#remove_employee" , via: :get
-  resources :menus
-  resources :merchants do
-    member do
-      get  :todays_credits
-      get 'past_orders'
-      get 'customers'
-      get 'orders'
-      get 'redeem'
-      get  :completed
-      get 'staff'
-      get 'edit_info'
-      get 'edit_photo'
-      get 'edit_bank'
-      get 'invite_employee'
-      post 'invite_employee'
-      get 'add_employee'
-      get  :add_member
-      get 'menu'
-      get 'photos'
-      post :update_photos
-      get 'staff_profile'
-      post :update_item
-      post :delete_item
-      get  :get_cropper
-      get  :menu_builder
-
-    end
-  end
-
-  resources :gifts,       only: [:index, :show]
 
     ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
@@ -244,5 +140,109 @@ Drinkboard::Application.routes.draw do
   #     post 'menu',    to: 'apple#menu'
   #   end
   # end
+
+  # root                         to: 'sessions#new'
+  # resources :sessions,       only: [:new, :create, :destroy]
+  # match '/signin',             to: 'sessions#new',                via: :get
+  # match '/signout',            to: 'sessions#destroy'
+  # match '/forgot_password',    to: 'sessions#forgot_password',    via: [:get, :post]
+  # match '/reset_password',     to: 'sessions#forgot_password',    via:  :get
+  # match '/enter_new_password', to: 'sessions#enter_new_password', via: [:get, :put]
+  # match '/valid_token',        to: 'sessions#validate_token',     via: :get
+  # match '/change_password/:id', to: 'sessions#change_password',    via: :post
+
+  # match '/admin',              to: 'admin#show'        ,           via: :get
+  # match '/admin/test_emails',  to: 'admin#test_emails' ,           via: :get
+  # match '/admin/run_tests',    to: 'admin#run_tests'   ,           via: :get
+  # match '/push/register',      to: 'admin#push_register' ,         via: :get
+  # match '/push/notify',        to: 'admin#push_notify'   ,         via: :get
+
+  # match "/invite/email_confirmed"     , to: "invite#email_confirmed", via: :get
+  # match "/invite/error"               , to: "invite#error",           via: :get
+  # match "/invite/gift/:id"            , to: "invite#show",            via: :get
+  # match "/invite/person/:id"          , to: "invite#invite",          via: :get
+  # match "/webview(/:template(/:var1))", to: "invite#display_email",   via: :get
+
+  # match "/confirm_email(/:email(/:user))", to: "users#confirm_email", via: :get
+
+  # resources :users do
+  #   member do
+  #     get  :following, :followers
+  #     get  :servercode
+  #     get  :crop
+  #     get  :change_public_status
+  #     post :update_avatar
+  #     get  :de_activate
+  #     get  :destroy_gifts
+  #   end
+  # end
+
+  # resources :providers do
+  #   member do
+  #     get :add_photo
+  #     post :upload_photo
+  #     get :brands
+  #     get :brand
+  #     get :building
+  #     get :menu
+  #     get :staff
+  #     post :update_item
+  #     post :delete_item
+  #     get  :compile_menu
+  #     get  :add_member
+  #     get :menu_item
+  #     get :upload_menu
+  #     get :remove_menu_item
+  #     get :de_activate
+  #     get :create_merchant_tools
+  #     get :members
+  #     get :add_employee
+  #     get :remove_employee
+  #     get 'invite_employee'
+  #     post 'invite_employee'
+  #   end
+  # end
+
+  # resources :brands do
+  #   member do
+  #     get :add_photo
+  #     post :upload_photo
+  #     get :merchants
+  #     get :brand_merchant
+  #     get :building_merchant
+  #   end
+  # end
+
+  # match "/merchants/:id/employee/:eid/remove"  => "merchants#remove_employee" , via: :get
+  # resources :menus
+  # resources :merchants do
+  #   member do
+  #     get  :todays_credits
+  #     get 'past_orders'
+  #     get 'customers'
+  #     get 'orders'
+  #     get 'redeem'
+  #     get  :completed
+  #     get 'staff'
+  #     get 'edit_info'
+  #     get 'edit_photo'
+  #     get 'edit_bank'
+  #     get 'invite_employee'
+  #     post 'invite_employee'
+  #     get 'add_employee'
+  #     get  :add_member
+  #     get 'menu'
+  #     get 'photos'
+  #     post :update_photos
+  #     get 'staff_profile'
+  #     post :update_item
+  #     post :delete_item
+  #     get  :get_cropper
+  #     get  :menu_builder
+
+  #   end
+  # end
+
+  # resources :gifts,       only: [:index, :show]
 
 end

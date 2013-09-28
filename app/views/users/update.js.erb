@@ -1,9 +1,0 @@
-$('#ajax_response').empty();
-$('#ajax_response').append('<%= j render("success") %>');
-$('#ajax_response h5').css({color:'#ffff33', padding:'3px'});
-setTimeout(function(){
-	$('#ajax_response h5').css({color:'#ffcc00', padding:'3px'});
-	setTimeout(function(){ 
-		$('#ajax_response').empty();
-	},2500);
-},2000);
