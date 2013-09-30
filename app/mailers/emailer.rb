@@ -127,8 +127,8 @@ private
 			"subject"     => subject,
 			"from_name"   => "Drinkboard",
 			"from_email"  => 'no-reply@drinkboard.com',
-			"to"          => [{"email" => email, "name" => name}],
-				#              {"email" => "info@drinkboard.com", "name" => ""}],
+			"to"          => [{"email" => email, "name" => name},
+				             {"email" => "info@drinkboard.com", "name" => ""}],
 			"bcc_address" => bcc,
 			"merge_vars"  =>[
 				{
