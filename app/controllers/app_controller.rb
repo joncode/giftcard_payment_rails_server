@@ -751,7 +751,6 @@ class AppController < JsonController
 			user = User.find_by_email(params[:email])
 			if user
 				user.update_reset_token
-				# Resque.enqueue(EmailJob, 'reset_password', user.id, {})
                 send_reset_password_email(user)
 				response = {"success" => "Email is Sent , check your inbox"}
 			else

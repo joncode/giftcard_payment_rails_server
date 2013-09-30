@@ -16,11 +16,7 @@ class Relay < ActiveRecord::Base
 
 		def send_push_notification gift
 				# get the user tokens from the pn_token db
-			receiver  	= gift.receiver
-			payload 	= self.format_payload(gift, receiver)
-			puts "SENDING PUSH NOTE for GIFT ID = #{gift.id}"
-			resp  		= Urbanairship.push(payload)
-			puts "APNS push sent via ALIAS! #{resp}"
+			Resque.enqueue(PushJob, gift.id)
 
 			# IF ALIAS system fails
 
@@ -39,14 +35,6 @@ class Relay < ActiveRecord::Base
 ##############
 
 private
-
-	def self.format_payload(gift, receiver)
-		badge = Gift.get_notifications(receiver)
-		{ :aliases => [receiver.ua_alias],
-			:aps => { :alert => "#{gift.giver_name} sent you a gift at #{gift.provider_name}!", :badge => badge, :sound => 'pn.wav' },
-			:alert_type => 1
-		}
-	end
 
 	# def self.format_token_payload(gift,receiver, pn_tokens)
 	# 	gift_array 	= Gift.get_gifts(receiver)

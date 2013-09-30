@@ -1,6 +1,5 @@
 module Email
-    extend Emailer
-
+    
 ######   Order
 
     def notify_giver_order_complete
@@ -10,9 +9,8 @@ module Email
         # order is self here
         gift = self.gift
 
-        data = {"text" => 'notify_giver_order_complete',
-                "first_id" => gift.giver_id,
-                "options_hsh" =>  {:gift_id => gift.id}
+        data = {"text"     => 'notify_giver_order_complete',
+                "gift_id"  =>  gift.id
                 }
         route_email_system(data)
     end
@@ -21,7 +19,7 @@ module Email
 
     def notify_receiver
         # self is sale
-        gift = self.gift
+        gift      = self.gift
         obj_email = gift.receiver ? gift.receiver.email : nil
         email     = gift.receiver_email || obj_email
 
@@ -31,9 +29,7 @@ module Email
             user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
 
             data = {"text"        => 'notify_receiver',
-                    "first_id"    => user_id,
-                    "options_hsh" => {:gift_id => gift.id, :email => email},
-                    "gift"        => gift
+                    "gift_id"     => gift.id
                     }
             route_email_system(data)
         end
@@ -45,9 +41,7 @@ module Email
         puts "emailing the gift giver for #{gift.id}"
 
         data = {"text"        => 'invoice_giver',
-                "first_id"    => gift.giver_id,
-                "options_hsh" => {:gift_id => gift.id},
-                "gift"        => gift
+                "gift_id"     => gift.id
                 }
         route_email_system(data)
     end
@@ -70,9 +64,7 @@ module Email
     def confirm_email
 
         data = {"text"        => 'confirm_email',
-                "first_id"    => self.id,
-                "options_hsh" =>  {},
-                "user"        => self,
+                "user_id"     => self.id,
                 "link"        => self.setting.generate_email_link
                 }
         # puts "Here is the data #{data.inspect}"
@@ -84,9 +76,7 @@ module Email
     def send_reset_password_email user
 
         data = {"text"        => 'reset_password',
-                "first_id"    => user.id,
-                "options_hsh" =>  {},
-                "user"        => user
+                "user_id"     => user.id
                 }
         route_email_system(data)
     end
@@ -94,22 +84,8 @@ module Email
 private
 
     def route_email_system data
-        begin
-            if Rails.env.production? || Rails.env.staging?
-                call_mandrill(data)
-            end
-        rescue
-            puts "No #{data['text']} email ERROR"
-        end
-    end
-
-    def call_resque data
-        Resque.enqueue(EmailJob, data["text"], data["first_id"], data["options_hsh"])
-    end
-
-    def call_mandrill data
-        #puts "data = #{}"
-        Email.send(data['text'], data)
+        puts "data in Email.rb #{data}"
+        Resque.enqueue(MailerJob, data)
     end
 
 end
