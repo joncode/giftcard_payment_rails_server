@@ -2,7 +2,7 @@ class JsonController < ActionController::Base
     include ActionView::Helpers::DateHelper
     include CommonUtils
     include JsonHelper
-
+    
 	skip_before_filter   :verify_authenticity_token
     before_filter        :log_request_header
     before_filter        :method_start_log_message
@@ -172,6 +172,5 @@ private
         headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Request-Method'] = '*'
     end
-
 
 end

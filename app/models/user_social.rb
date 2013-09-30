@@ -2,20 +2,25 @@ class UserSocial < ActiveRecord::Base
     attr_accessible :identifier, :type_of, :user_id
 
     belongs_to :user
-    after_save :add_to_mailchimp_list
+    after_save :send_to_mailchimp_list
 
     validates_presence_of :identifier, :type_of, :user_id
 
 private
 
-    def add_to_mailchimp_list
-        if not Rails.env.test?
-        	if self.type_of  == "email"
-        		first_name    = User.find(self.user_id).first_name
-        		last_name     = User.find(self.user_id).last_name
-    	    	mcl           = MailchimpList.new(self.identifier, first_name, last_name)
+    def send_to_mailchimp_list
+        if not Rails.env.test? && self.type_of == "email"
+            if self.active    == true
+                first_name    = User.find(self.user_id).first_name
+                last_name     = User.find(self.user_id).last_name.present? ? User.find(self.user_id).last_name : "" 
+                mcl           = MailchimpList.new(self.identifier, first_name, last_name)
                 mcl.subscribe
-        	end
+            elsif self.active == false
+                first_name    = User.find(self.user_id).first_name
+                last_name     = User.find(self.user_id).last_name.present? ? User.find(self.user_id).last_name : ""
+                mcl           = MailchimpList.new(self.identifier, first_name, last_name)
+                mcl.unsubscribe
+            end
         end
     end
 
