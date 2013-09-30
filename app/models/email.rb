@@ -94,7 +94,7 @@ module Email
 private
 
     def route_email_system data
-        Resque.enqueue(BackgroundJob, data["text"], "this is working")
+        Resque.enqueue(MailerJob, data["text"], "this is working")
         begin
             if Rails.env.production? || Rails.env.staging?
                 # call_mandrill(data)
