@@ -29,7 +29,17 @@ class MailchimpList
 	end
 
 	def unsubscribe
-		self.mc.lists.unsubscribe(self.list_id, {'email' => self.email})
+		begin
+    		self.mc.lists.unsubscribe(self.list_id, {'email' => self.email})
+        rescue Mailchimp::ListDoesNotExistError
+            puts "The list could not be found"
+        rescue Mailchimp::Error => ex
+            if ex.message
+                puts ex.message
+            else
+                puts "An unknown error occurred"
+            end
+        end
 	end
 
 	def member_info
