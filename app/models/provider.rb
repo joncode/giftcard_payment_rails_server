@@ -41,7 +41,7 @@ class Provider < ActiveRecord::Base
 	after_create 	:make_menu_string
     after_save       :update_city_provider
 
-	default_scope where(active: true).where(paused: false).order("name ASC")
+	#default_scope where(active: true).where(paused: false).order("name ASC")
 
 #/---------------------------------------------------------------------------------------------/
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924014353) do
+ActiveRecord::Schema.define(:version => 20130913023446) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -72,13 +72,6 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
   end
 
   add_index "cards", ["user_id"], :name => "index_cards_on_user_id"
-
-  create_table "city_providers", :force => true do |t|
-    t.string   "city"
-    t.text     "providers_array"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
 
   create_table "connections", :force => true do |t|
     t.integer  "giver_id"
@@ -154,7 +147,7 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.string  "item_name",   :limit => 50, :null => false
     t.string  "detail"
     t.text    "description"
-    t.integer "category",    :limit => 20, :null => false
+    t.integer "category",                  :null => false
     t.string  "proof"
     t.string  "type_of"
     t.string  "photo"
@@ -200,8 +193,8 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
   add_index "menu_strings", ["provider_id"], :name => "index_menu_strings_on_provider_id"
 
   create_table "menus", :force => true do |t|
-    t.integer  "provider_id"
-    t.integer  "item_id"
+    t.integer  "provider_id",                                 :null => false
+    t.integer  "item_id",                                     :null => false
     t.string   "price",       :limit => 20
     t.integer  "position",    :limit => 8
     t.datetime "created_at",                                  :null => false
@@ -244,17 +237,17 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
   add_index "pn_tokens", ["user_id"], :name => "index_pn_tokens_on_user_id"
 
   create_table "providers", :force => true do |t|
-    t.string   "name",                                            :null => false
+    t.string   "name",                                               :null => false
     t.string   "zinger"
     t.text     "description"
     t.string   "address"
     t.string   "address_2"
-    t.string   "city",           :limit => 32
-    t.string   "state",          :limit => 2
-    t.string   "zip",            :limit => 16
+    t.string   "city",              :limit => 32
+    t.string   "state",             :limit => 2
+    t.string   "zip",               :limit => 16
     t.string   "logo"
-    t.datetime "created_at",                                      :null => false
-    t.datetime "updated_at",                                      :null => false
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.string   "phone"
     t.string   "email"
     t.string   "twitter"
@@ -262,26 +255,31 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.string   "website"
     t.string   "photo"
     t.string   "sales_tax"
-    t.boolean  "active",                       :default => true
+    t.boolean  "active",                          :default => true
+    t.string   "account_name"
+    t.string   "aba"
+    t.string   "routing"
+    t.string   "bank_account_name"
+    t.string   "bank_address"
+    t.string   "bank_city"
+    t.string   "bank_state"
+    t.string   "bank_zip"
     t.string   "portrait"
     t.string   "box"
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
     t.decimal  "rate"
-    t.boolean  "menu_is_live",                 :default => false
-    t.integer  "sd_location_id"
+    t.boolean  "menu_is_live",                    :default => false
     t.integer  "brand_id"
     t.integer  "building_id"
+    t.integer  "sd_location_id"
     t.string   "token"
-    t.boolean  "tools",                        :default => false
+    t.boolean  "tools",                           :default => false
     t.string   "image"
     t.integer  "merchant_id"
-    t.boolean  "live",                         :default => false
-    t.boolean  "paused",                       :default => true
   end
 
-  add_index "providers", ["active", "paused", "city"], :name => "index_providers_on_active_and_paused_and_city"
   add_index "providers", ["city"], :name => "index_providers_on_city"
   add_index "providers", ["merchant_id"], :name => "index_providers_on_merchant_id"
   add_index "providers", ["token"], :name => "index_providers_on_token"
@@ -375,20 +373,11 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "user_socials", :force => true do |t|
-    t.integer  "user_id"
-    t.string   "type_of"
-    t.string   "identifier"
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
-    t.boolean  "active",     :default => true
-  end
-
   create_table "users", :force => true do |t|
     t.string   "email",                                                    :null => false
     t.boolean  "admin",                                 :default => false
     t.string   "photo"
-    t.string   "password_digest"
+    t.string   "password_digest",                                          :null => false
     t.string   "remember_token",                                           :null => false
     t.datetime "created_at",                                               :null => false
     t.datetime "updated_at",                                               :null => false
