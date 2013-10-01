@@ -1,7 +1,9 @@
 module Emailer
 
+	# uncomment info@db.com from message in Emailer
+
 	def reset_password data
-		recipient		 = data["user"]
+		recipient		 = User.find(data["user_id"])
 		email            = recipient.email
 		name             = recipient.name
 		template_name    = "reset-password"
@@ -16,7 +18,7 @@ module Emailer
 	end
 
 	def confirm_email data
-		recipient		 = data["user"]
+		recipient		 = User.find(data["user_id"])
 		link             = data["link"]
 		subject          = "Confirm Your Email"
 		template_name    = "confirm-email"
@@ -26,7 +28,7 @@ module Emailer
 	end
 
     def notify_receiver data
-    	gift 			 = data["gift"]
+    	gift 			 = Gift.find(data["gift_id"])
 		template_name    = "gift-notice"
 		recipient_name   = gift.receiver_name
 		giver_name       = gift.giver_name
@@ -48,16 +50,16 @@ module Emailer
     end
 
     def invoice_giver data
-    	gift 			 = data["gift"]
+    	gift 			 = Gift.find(data["gift_id"])
 		template_name    = "purchase-receipt"
-		user_name        = gift.giver_name 		#user/purchaser receiving the email
+		giver_name       = gift.giver_name 		#user/purchaser receiving the email
 		receiver_name    = gift.receiver_name	#person to whom the gift was sent
 		merchant_name    = gift.provider_name
 		gift_details     = GiftItem.items_for_email(gift)	# example string: "<ul><li>1 Budweiser</li><li>1 Shot Patron</li></ul>"
 		gift_total       = gift.total   		#monetary value. do not include dollar sign
         processing_fee   = gift.service 		#monetary value. do not include dollar sign
         grand_total      = gift.grand_total 	#monetary value. do not include dollar sign
-		template_content = [{"name" => "user_name", "content" => user_name},
+		template_content = [{"name" => "user_name", "content" => giver_name},
 							{"name" => "receiver_name", "content" => receiver_name},
 							{"name" => "merchant_name", "content" => merchant_name},
 							{"name" => "gift_details", "content" => gift_details},
@@ -66,7 +68,7 @@ module Emailer
 							{"name" => "grand_total", "content" => grand_total}]
 		subject          = "Your purchase is complete"
 		email            = gift.giver.email
-		name             = gift.giver_name
+		name             = giver_name
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
 		message          = message_hash(subject, email, name, link, bcc)
@@ -120,12 +122,13 @@ module Emailer
 private
 
 	def message_hash(subject, email, name, link=nil, bcc=nil)
+		email = whitelist_email(email)
 		message = {
 			"subject"     => subject,
 			"from_name"   => "Drinkboard",
 			"from_email"  => 'no-reply@drinkboard.com',
-			"to"          => [{"email" => email, "name" => name},
-				              {"email" => "info@drinkboard.com", "name" => ""}],
+			"to"          => [{"email" => email, "name" => name}],
+				#              {"email" => "info@drinkboard.com", "name" => ""}],
 			"bcc_address" => bcc,
 			"merge_vars"  =>[
 				{
@@ -141,10 +144,6 @@ private
 		[{"name" => "link", "content" => link}]
 	end
 
-	# def generate_invite_link invite_token
-	# 	"#{MT_URL}invite?token=#{invite_token}"
-	# end
-
 	def request_mandrill_with_template(template_name, template_content, message)
 		puts "``````````````````````````````````````````````"
 		puts "Request Mandrill with #{template_name} #{template_content} #{message}"
@@ -156,6 +155,22 @@ private
 		puts "Response from Mandrill #{response.inspect}"
 		puts "``````````````````````````````````````````````"
 		response
+	end
+
+	def whitelist_email(email)
+					# if email is on blacklist then send email to noreplydrinkboard@gmail.com
+					# blacklist is
+		bad_emails = ["test@test.com", "jp@jp.com", "jb@jb.com", "gj@gj.com", "fl@fl.com", "adam@adam.com", "rs@rs.com","kk@gmail.com", "bitmover1@gmail.com", "app@gmail.com", "spnoge@bob.com", "adam@gmail.com", "gifter@sos.me", "taylor@gmail.com"]
+		if bad_emails.include?(email)
+				email = "noreplydrinkboard@gmail.com"
+		end
+
+		return email
+	end
+
+	def whitelist_user(user)
+			# if user.email is on blacklist then send email to noreplydrinkboard@gmail.com
+		return whitelist_email(user.email)
 	end
 
 end
