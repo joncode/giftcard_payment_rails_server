@@ -4,23 +4,28 @@ FactoryGirl.define do
         first_name "jon"
         password   "specspec"
         password_confirmation "specspec"
-        email      "joncode@gmail.com"
-        remember_token "token"
-        facebook_id "987654332"
-        twitter     "283746193"
-        phone       "6467578686"
+        sequence(:email)            { |n| "ronny#{n}@gmail.com" }
+        sequence(:remember_token)   { |n| "token#{n}" }
+        sequence(:facebook_id)      { |n| "98a#{n}fd332" }
+        sequence(:twitter)          { |n| "283s#{n}f6fd3" }
+        sequence(:phone) do
+            phone = ""
+            10.times do
+              phone + (2..8).to_a.sample.to_s
+            end
+            phone
+        end
+
+        factory :giver do
+            sequence(:first_name) { |n|  "jonGifter#{n}" }
+        end
+
+        factory :receiver do
+            sequence(:first_name) { |n|  "ronReceiver#{n}" }
+        end
     end
 
-    factory :giver do
-        first_name "jon2"
-        password   "specspec2"
-        password_confirmation "specspec2"
-        email      "jonran@gmail.com"
-        remember_token "token"
-        facebook_id "98asd54332"
-        twitter     "283sdf6193"
-        phone       "6443278686"
-    end
+
 
     factory :provider do
         name        "ichizos"
@@ -28,7 +33,7 @@ FactoryGirl.define do
         address     "123 happy st"
         zip         "11211"
         state       "NY"
-        token       "token"
+        sequence(:token)   { |n| "token#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
         sequence(:phone) do
