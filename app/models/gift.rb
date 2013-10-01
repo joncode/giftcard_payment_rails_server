@@ -96,9 +96,9 @@ class Gift < ActiveRecord::Base
 	def self.init(params)
 		gift = Gift.new(params[:gift])
 				# add anonymous giver feature
-		if params[:gift][:anon_id]
-			gift.add_anonymous_giver(params[:gift][:giver_id])
-		end
+		# if params[:gift][:anon_id]
+		# 	gift.add_anonymous_giver(params[:gift][:giver_id])
+		# end
 		return gift
 	end
 
