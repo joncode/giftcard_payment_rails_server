@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 ruby '1.9.2'
 
 gem 'rails', '3.2.11'
+gem 'pg'
+gem 'thin'
 gem 'carrierwave'
 gem 'cloudinary'
 gem 'httparty', '~> 0.9.0'
@@ -15,19 +17,14 @@ gem 'json', '~> 1.7.7'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
 
-group :production do
-	gem 'pg'
-	gem 'thin'
-end
+# group :production do
+# end
 
-group :staging do
-  gem 'pg'
-  gem 'thin'
-end
+# group :staging do
+# end
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
-	gem 'pg'
 end
 
 group :development, :test do
