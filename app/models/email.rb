@@ -1,5 +1,5 @@
 module Email
-    
+
 ######   Order
 
     def notify_giver_order_complete
@@ -60,7 +60,7 @@ module Email
             route_email_system(data)
         end
     end
-
+    
     def confirm_email
 
         data = {"text"        => 'confirm_email',
