@@ -42,7 +42,7 @@ FactoryGirl.define do
 
     # factory :city_provider do
     #     city "New York"
-    #     providers_array 
+    #     providers_array
     # end
 
     factory :user_social do
@@ -52,13 +52,13 @@ FactoryGirl.define do
     end
 
     factory :gift do |gift|
-        gift.giver_id        13
-        gift.giver_name      "henry"
-        gift.receiver_name   "jon"
-        gift.provider { FactoryGirl.create(:provider)}
-        gift.total           "100"
-        gift.service         "4"
-        gift.credit_card     "4567890"
+        giver_id        13
+        giver_name      "henry"
+        receiver_name   "jon"
+        provider { FactoryGirl.create(:provider)}
+        total           "100"
+        service         "4"
+        credit_card     "4567890"
     end
 
 end

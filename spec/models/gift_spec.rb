@@ -46,9 +46,9 @@ describe Gift do
 
     describe "description" do
 
-        it "should description" do
+      it "should description" do
 
-        end
+      end
 
     end
 
@@ -62,7 +62,9 @@ describe Gift do
     # test that when the gift is voided that it is removed from the appropriate app lists
     # test that when the gift is refunded that it removed from the appropriate app lists
 
-end# == Schema Information
+end
+
+# == Schema Information
 #
 # Table name: gifts
 #
@@ -94,5 +96,14 @@ end# == Schema Information
 #  order_num      :string(255)
 #  cat            :integer         default(0)
 #  active         :boolean         default(TRUE)
+#  stat           :integer
+#  pay_stat       :integer
+#  pay_type       :string(255)
+#  pay_id         :integer
+#  notified_at    :datetime
+#  notified_at_tz :string(255)
+#  redeemed_at    :datetime
+#  redeemed_at_tz :string(255)
+#  server_code    :string(255)
 #
 
