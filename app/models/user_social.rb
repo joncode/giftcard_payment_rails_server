@@ -9,7 +9,7 @@ class UserSocial < ActiveRecord::Base
 private
 
     def add_to_mailchimp_list
-        if not Rails.env.test?
+        if not Rails.env.test? || Rails.env.development?
         	if self.type_of  == "email"
                 Resque.enqueue(SubscriptionJob, self.id)
         	end
