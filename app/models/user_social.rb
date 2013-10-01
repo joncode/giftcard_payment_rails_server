@@ -10,15 +10,12 @@ private
 
  def send_to_mailchimp_list
         if not Rails.env.test? && self.type_of == "email"
+            user = User.find(self.user_id)
             if self.active    == true
-                first_name    = User.find(self.user_id).first_name
-                last_name     = User.find(self.user_id).last_name.present? ? User.find(self.user_id).last_name : "" 
-                mcl           = MailchimpList.new(self.identifier, first_name, last_name)
+                mcl           = MailchimpList.new(self.identifier, user.first_name, user.last_name)
                 mcl.subscribe
             elsif self.active == false
-                first_name    = User.find(self.user_id).first_name
-                last_name     = User.find(self.user_id).last_name.present? ? User.find(self.user_id).last_name : ""
-                mcl           = MailchimpList.new(self.identifier, first_name, last_name)
+                mcl           = MailchimpList.new(self.identifier)
                 mcl.unsubscribe
             end
         end
