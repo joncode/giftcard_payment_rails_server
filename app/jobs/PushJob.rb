@@ -4,15 +4,14 @@ class PushJob
 
     def self.perform gift_id
 
-        if Rails.env.production? || Rails.env.staging?
-            gift        = Gift.find gift_id
-            receiver    = gift.receiver
-            badge       = Gift.get_notifications(receiver)
-            payload     = self.format_payload(gift, receiver, badge)
-            puts "SENDING PUSH NOTE for GIFT ID = #{gift_id}"
-            resp        = Urbanairship.push(payload)
-            puts "APNS push sent via ALIAS! #{resp}"
-        end
+        gift        = Gift.find gift_id
+        receiver    = gift.receiver
+        badge       = Gift.get_notifications(receiver)
+        payload     = self.format_payload(gift, receiver, badge)
+        puts "SENDING PUSH NOTE for GIFT ID = #{gift_id}"
+        resp        = Urbanairship.push(payload)
+        puts "APNS push sent via ALIAS! #{resp}"
+
     end
 
 private

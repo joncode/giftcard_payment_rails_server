@@ -4,9 +4,7 @@ class MailerJob
 
     def self.perform(data)
         begin
-            if not Rails.env.test?
-                self.call_mandrill(data)
-            end
+            self.call_mandrill(data)
         rescue
             puts "No #{data['text']} email ERROR"
         end

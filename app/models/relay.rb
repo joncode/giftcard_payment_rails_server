@@ -16,8 +16,9 @@ class Relay < ActiveRecord::Base
 
 		def send_push_notification gift
 				# get the user tokens from the pn_token db
-			Resque.enqueue(PushJob, gift.id)
-
+			if not Rails.env.test? || Rails.env.development?
+				Resque.enqueue(PushJob, gift.id)
+			end
 			# IF ALIAS system fails
 
 			# pn_tokens = receiver.pn_token
