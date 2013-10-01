@@ -11,9 +11,6 @@ class User < ActiveRecord::Base
 	:server_code, :sex, :birthday, :is_public, :confirm,
 	:iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
 
-	# can't mass assign these attributes
-	# active, created_at, facebook_auth_checkin, id, password_digest, persona, remember_token, reset_token, reset_token_sent_at, updated_at
-
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
@@ -35,13 +32,6 @@ class User < ActiveRecord::Base
 	has_many :relays , foreign_key: "receiver_id"
 	has_many :user_socials
 
-	# has_many :followed_users, through: :relationships, source: "followed"
-	# has_many :relationships, foreign_key: "follower_id", dependent: :destroy
-	# has_many :reverse_relationships, foreign_key: "followed_id",
-	# 																class_name: "Relationship",
-	# 																dependent: :destroy
-	# has_many :followers, through: :reverse_relationships, source: :follower
-
 	has_secure_password
 
 	before_save { |user| user.email      = email.downcase }
@@ -49,11 +39,7 @@ class User < ActiveRecord::Base
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
-
-			# searches gift db for ghost gifts that belong to new user
-			# after_create for new accounts
-			# after_update , :if => :added_social_media TODO
-			# this after_save covers both those situations , but also runs the code unnecessarily
+	
 	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data
 	after_create  :init_confirm_email

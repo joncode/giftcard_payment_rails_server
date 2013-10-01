@@ -1,5 +1,5 @@
 class GiftCreator
-# CreateGift    - class to make gifts
+    
     attr_reader :gift_json, :recipient_data, :message, :details
 
     def initialize params
@@ -39,7 +39,7 @@ class GiftCreator
 
         new_gift
     end
-    
+
     def promotional
 
     end

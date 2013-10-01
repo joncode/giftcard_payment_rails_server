@@ -11,13 +11,6 @@ class Gift < ActiveRecord::Base
 			:status, :credit_card
 			# should be removed from accessible = giver_id, giver_name, shoppingCart, status
 
-			# from the app on create gift
-# \"receiver_email\" \"facebook_id\"\"tax\"  \"receiver_phone\"  \"giver_name\"
-# \"receiver_id\"  \"total\"  \"provider_id\"  \"tip\"  \"service\"  \"message\"
-# \"credit_card\"  \"provider_name\"  \"receiver_name\"  \"giver_id\"  "origin"=>"d"
-# "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":1,\"item_id\":920,\"item_name\":\"Fireman's Special\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":901,\"item_name\":\"Corona\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":902,\"item_name\":\"Budwesier\"}]",
-# "token"=>"LlWODlRC9M3VDbzPHuWMdA"}
-
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :relay,  		dependent: :destroy
 	belongs_to  :provider
@@ -41,7 +34,7 @@ class Gift < ActiveRecord::Base
 
 #/-----------------------------------------------Status---------------------------------------/
 
-	
+
 
 #/---------------------------------------------------------------------------------------------/
 
