@@ -263,24 +263,24 @@ class User < ActiveRecord::Base
 		self.save
 	end
 
-	def checkin_to_foursquare(fsq_id, lat, lng)
-		requrl = "https://foursquare.com/oauth2/access_token"
-		response = HTTParty.post(url, :query => {:venueId => fsq_id, :ll => ["?,?",lat,lng], :oauth_token => self.foursquare_access_token})
-		return false if response.code != 200
-		return true
-	end
+	# def checkin_to_foursquare(fsq_id, lat, lng)
+	# 	requrl = "https://foursquare.com/oauth2/access_token"
+	# 	response = HTTParty.post(url, :query => {:venueId => fsq_id, :ll => ["?,?",lat,lng], :oauth_token => self.foursquare_access_token})
+	# 	return false if response.code != 200
+	# 	return true
+	# end
 
-	def is_employee? provider
-		employees = Employee.find(:all, :conditions => ["user_id = ?", self.id])
-		if !employees.nil? && employees.length > 0
-			employees.each do |emp|
-				if emp.provider_id == provider.id
-					return true
-				end
-			end
-		end
-		return false
-	end
+	# def is_employee? provider
+	# 	employees = Employee.find(:all, :conditions => ["user_id = ?", self.id])
+	# 	if !employees.nil? && employees.length > 0
+	# 		employees.each do |emp|
+	# 			if emp.provider_id == provider.id
+	# 				return true
+	# 			end
+	# 		end
+	# 	end
+	# 	return false
+	# end
 
 	def pn_token=(value)
 		value 		= PnToken.convert_token(value)

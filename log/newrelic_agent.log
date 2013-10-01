@@ -2379,3 +2379,78 @@
 [09/30/13 20:35:25 -0400 new-host-4.home (5630)] ERROR : environment.
 [09/30/13 20:35:25 -0400 new-host-4.home (5630)] WARN : Ignoring addition of NewRelic::Agent::Samplers::CpuSampler because it is already registered.
 [09/30/13 20:35:25 -0400 new-host-4.home (5630)] WARN : Ignoring addition of NewRelic::Agent::Samplers::MemorySampler because it is already registered.
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Starting the New Relic agent in "development" environment.
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Reading configuration from config/newrelic.yml
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Enabling the Request Sampler.
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Installing ActiveMerchant instrumentation
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Installing ActiveRecord instrumentation
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Installing Net instrumentation
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Installing Sinatra instrumentation
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Installing deferred Rack instrumentation
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Installing Resque instrumentation
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Installing Rails 3 Controller instrumentation
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Installing Rails3 Error instrumentation
+[09/30/13 20:52:14 -0400 new-host-4.home (5988)] INFO : Finished instrumentation
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] INFO : Starting the New Relic agent in "development" environment.
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] INFO : Reading configuration from config/newrelic.yml
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] INFO : Installing middleware-based Excon instrumentation
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] ERROR : No application name configured.
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] ERROR : value set for app_name in the development 
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] ERROR : environment.
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] WARN : Ignoring addition of NewRelic::Agent::Samplers::CpuSampler because it is already registered.
+[09/30/13 20:52:16 -0400 new-host-4.home (5988)] WARN : Ignoring addition of NewRelic::Agent::Samplers::MemorySampler because it is already registered.
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Starting the New Relic agent in "development" environment.
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Reading configuration from config/newrelic.yml
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Enabling the Request Sampler.
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Installing ActiveMerchant instrumentation
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Installing ActiveRecord instrumentation
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Installing Net instrumentation
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Installing Sinatra instrumentation
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Installing deferred Rack instrumentation
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Installing Resque instrumentation
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Installing Rails 3 Controller instrumentation
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Installing Rails3 Error instrumentation
+[09/30/13 20:55:00 -0400 new-host-4.home (6078)] INFO : Finished instrumentation
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] INFO : Starting the New Relic agent in "development" environment.
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] INFO : Reading configuration from config/newrelic.yml
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] INFO : Installing middleware-based Excon instrumentation
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] ERROR : No application name configured.
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] ERROR : value set for app_name in the development 
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] ERROR : environment.
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] WARN : Ignoring addition of NewRelic::Agent::Samplers::CpuSampler because it is already registered.
+[09/30/13 20:55:03 -0400 new-host-4.home (6078)] WARN : Ignoring addition of NewRelic::Agent::Samplers::MemorySampler because it is already registered.
+[09/30/13 20:57:50 -0400 new-host-4.home (6171)] INFO : Starting the New Relic agent in "development" environment.
+[09/30/13 20:57:50 -0400 new-host-4.home (6171)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/30/13 20:57:50 -0400 new-host-4.home (6171)] INFO : Reading configuration from config/newrelic.yml
+[09/30/13 20:57:50 -0400 new-host-4.home (6171)] INFO : Enabling the Request Sampler.
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Installing ActiveMerchant instrumentation
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Installing ActiveRecord instrumentation
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Installing Net instrumentation
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Installing Sinatra instrumentation
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Installing deferred Rack instrumentation
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Installing Resque instrumentation
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Installing Rails 3 Controller instrumentation
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Installing Rails3 Error instrumentation
+[09/30/13 20:57:51 -0400 new-host-4.home (6171)] INFO : Finished instrumentation
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] INFO : Starting the New Relic agent in "development" environment.
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] INFO : Reading configuration from config/newrelic.yml
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] INFO : Installing middleware-based Excon instrumentation
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] ERROR : No application name configured.
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] ERROR : The Agent cannot start without at least one. Please check your 
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] ERROR : value set for app_name in the development 
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] ERROR : environment.
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] WARN : Ignoring addition of NewRelic::Agent::Samplers::CpuSampler because it is already registered.
+[09/30/13 20:57:53 -0400 new-host-4.home (6171)] WARN : Ignoring addition of NewRelic::Agent::Samplers::MemorySampler because it is already registered.
