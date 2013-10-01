@@ -73,16 +73,6 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
 
   add_index "cards", ["user_id"], :name => "index_cards_on_user_id"
 
-  create_table "connections", :force => true do |t|
-    t.integer  "giver_id"
-    t.integer  "receiver_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  add_index "connections", ["giver_id"], :name => "index_connections_on_giver_id"
-  add_index "connections", ["receiver_id"], :name => "index_connections_on_receiver_id"
-
   create_table "employees", :force => true do |t|
     t.integer  "provider_id",                      :null => false
     t.integer  "user_id",                          :null => false
@@ -147,7 +137,7 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
     t.string  "item_name",   :limit => 50, :null => false
     t.string  "detail"
     t.text    "description"
-    t.integer "category",    :limit => 20, :null => false
+    t.integer "category",                  :null => false
     t.string  "proof"
     t.string  "type_of"
     t.string  "photo"
@@ -193,8 +183,8 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
   add_index "menu_strings", ["provider_id"], :name => "index_menu_strings_on_provider_id"
 
   create_table "menus", :force => true do |t|
-    t.integer  "provider_id"
-    t.integer  "item_id"
+    t.integer  "provider_id",                                 :null => false
+    t.integer  "item_id",                                     :null => false
     t.string   "price",       :limit => 20
     t.integer  "position",    :limit => 8
     t.datetime "created_at",                                  :null => false
@@ -271,9 +261,9 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
     t.string   "foursquare_id"
     t.decimal  "rate"
     t.boolean  "menu_is_live",                    :default => false
-    t.integer  "sd_location_id"
     t.integer  "brand_id"
     t.integer  "building_id"
+    t.integer  "sd_location_id"
     t.string   "token"
     t.boolean  "tools",                           :default => false
     t.string   "image"
@@ -377,7 +367,7 @@ ActiveRecord::Schema.define(:version => 20130913023446) do
     t.string   "email",                                                    :null => false
     t.boolean  "admin",                                 :default => false
     t.string   "photo"
-    t.string   "password_digest"
+    t.string   "password_digest",                                          :null => false
     t.string   "remember_token",                                           :null => false
     t.datetime "created_at",                                               :null => false
     t.datetime "updated_at",                                               :null => false

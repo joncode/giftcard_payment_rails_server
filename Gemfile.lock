@@ -14,17 +14,17 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.2.1)
-    active_utils (2.0.0)
+    active_utils (2.0.1)
       activesupport (>= 2.3.11)
       i18n
-    activemerchant (1.34.0)
-      active_utils (>= 1.0.2)
-      activesupport (>= 2.3.14)
-      builder (>= 2.0.0)
-      i18n
-      json (>= 1.5.1)
-      money
-      nokogiri
+    activemerchant (1.38.1)
+      active_utils (~> 2.0)
+      activesupport (>= 2.3.14, < 5.0.0)
+      builder (>= 2.1.2, < 4.0.0)
+      i18n (~> 0.5)
+      json (~> 1.7)
+      money (< 6.0.0)
+      nokogiri (~> 1.4)
     activemodel (3.2.11)
       activesupport (= 3.2.11)
       builder (~> 3.0.0)
@@ -61,15 +61,14 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
-    commonjs (0.2.6)
-    css_parser (1.3.4)
+    commonjs (0.2.7)
+    css_parser (1.3.5)
       addressable
     daemons (1.1.9)
     erubis (2.7.0)
     eventmachine (1.0.3)
-    excon (0.25.3)
-    execjs (1.4.0)
-      multi_json (~> 1.0)
+    excon (0.26.0)
+    execjs (2.0.2)
     hike (1.2.3)
     httparty (0.9.0)
       multi_json (~> 1.0)
@@ -91,21 +90,21 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    mandrill-api (1.0.44)
+    mandrill-api (1.0.47)
       excon (>= 0.16.0, < 1.0)
       json (>= 1.7.7, < 2.0)
-    mime-types (1.24)
+    mime-types (1.25)
     mini_portile (0.5.1)
     money (5.1.1)
       i18n (~> 0.6.0)
     mono_logger (1.1.0)
-    multi_json (1.7.9)
+    multi_json (1.8.0)
     multi_xml (0.5.5)
     namecase (1.1.0)
-    newrelic_rpm (3.6.6.147)
+    newrelic_rpm (3.6.7.159)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
-    pg (0.12.2)
+    pg (0.17.0)
     polyglot (0.3.3)
     rack (1.4.5)
     rack-cache (1.2)
@@ -142,7 +141,7 @@ GEM
     redis (3.0.4)
     redis-namespace (1.3.1)
       redis (~> 3.0.0)
-    resque (1.24.1)
+    resque (1.25.1)
       mono_logger (~> 1.0)
       multi_json (~> 1.0)
       redis-namespace (~> 1.2)
@@ -155,7 +154,7 @@ GEM
       css_parser (~> 1.3.4)
       nokogiri (> 1.5.0, < 1.7.0)
       sprockets
-    sass (3.2.10)
+    sass (3.2.11)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -169,7 +168,6 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sqlite3 (1.3.7)
     therubyracer (0.9.10)
       libv8 (~> 3.3.10)
     thin (1.5.1)
@@ -178,7 +176,7 @@ GEM
       rack (>= 1.0.0)
     thor (0.18.1)
     tilt (1.4.1)
-    treetop (1.4.14)
+    treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
     twitter-bootstrap-rails (2.0.1)
@@ -186,14 +184,14 @@ GEM
       less-rails (~> 2.1.5)
       railties (>= 3.1)
     tzinfo (0.3.37)
-    uglifier (2.1.2)
+    uglifier (2.2.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     urbanairship (2.3.3)
       json
     vegas (0.1.11)
       rack (>= 1.0.0)
-    will_paginate (3.0.4)
+    will_paginate (3.0.5)
 
 PLATFORMS
   ruby
@@ -212,13 +210,12 @@ DEPENDENCIES
   mandrill-api
   namecase (~> 1.1.0)
   newrelic_rpm
-  pg (= 0.12.2)
+  pg
   rails (= 3.2.11)
   rails_12factor
   resque
   roadie
   sass-rails (~> 3.2.3)
-  sqlite3
   thin
   twitter-bootstrap-rails (~> 2.0.1.0)
   uglifier (>= 1.2.3)
