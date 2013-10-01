@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CityProvider do
-  pending "add some examples to (or delete) #{__FILE__}"
+  pending "no examples yet , code not implemented"
 end
 # == Schema Information
 #
