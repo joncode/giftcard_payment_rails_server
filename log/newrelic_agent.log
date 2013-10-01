@@ -2299,3 +2299,23 @@
 [10/01/13 12:26:30 -0400 new-host-3.home (468)] INFO : Installing Rails3 Error instrumentation
 [10/01/13 12:26:30 -0400 new-host-3.home (468)] INFO : Finished instrumentation
 [10/01/13 12:26:31 -0400 new-host-3.home (468)] INFO : Doing deferred dependency-detection before Rack startup
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Starting the New Relic agent in "development" environment.
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : To prevent agent startup add a NEWRELIC_ENABLE=false environment variable or modify the "development" section of your newrelic.yml.
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Reading configuration from config/newrelic.yml
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Enabling the Request Sampler.
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] ERROR : No application name configured.
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] ERROR : The Agent cannot start without at least one. Please check your 
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] ERROR : newrelic.yml and ensure that it is valid and has at least one 
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] ERROR : value set for app_name in the development 
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] ERROR : environment.
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Installing ActiveMerchant instrumentation
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Installing ActiveRecord instrumentation
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Installing Net instrumentation
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Installing Sinatra instrumentation
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Installing deferred Rack instrumentation
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Installing Resque instrumentation
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Installing Rails 3 Controller instrumentation
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Installing Rails 3.1/3.2 view instrumentation
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Installing Rails3 Error instrumentation
+[10/01/13 18:32:01 -0400 new-host-3.home (885)] INFO : Finished instrumentation
+[10/01/13 18:32:03 -0400 new-host-3.home (885)] INFO : Doing deferred dependency-detection before Rack startup

@@ -10,7 +10,7 @@ development:
   database: dbapp_dev
   pool: 5
   username: drinkboard
-  password: drinkdrinkdrink
+  password: drinkdrink
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -21,7 +21,7 @@ test:
   database: dbapp_test
   pool: 5
   username: drinkboard
-  password: drinkdrinkdrink
+  password: drinkdrink
 
 
 staging:

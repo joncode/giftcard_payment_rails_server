@@ -144,7 +144,7 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.string  "item_name",   :limit => 50, :null => false
     t.string  "detail"
     t.text    "description"
-    t.integer "category",    :limit => 20, :null => false
+    t.integer "category",                  :null => false
     t.string  "proof"
     t.string  "type_of"
     t.string  "photo"
@@ -193,7 +193,7 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.integer  "provider_id",                                 :null => false
     t.integer  "item_id"
     t.string   "price",       :limit => 20
-    t.integer  "position",    :limit => 8
+    t.integer  "position"
     t.datetime "created_at",                                  :null => false
     t.datetime "updated_at",                                  :null => false
     t.string   "item_name"
