@@ -4,7 +4,7 @@ class PushJob
 
     def self.perform gift_id
 
-        if true || Rails.env.production? || Rails.env.staging?
+        if Rails.env.production? || Rails.env.staging?
             gift        = Gift.find gift_id
             receiver    = gift.receiver
             badge       = Gift.get_notifications(receiver)
@@ -23,5 +23,5 @@ private
             :alert_type => 1
         }
     end
-    
+
 end
