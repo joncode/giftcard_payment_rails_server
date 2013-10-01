@@ -11,10 +11,7 @@ private
     def add_to_mailchimp_list
         if not Rails.env.test?
         	if self.type_of  == "email"
-        		first_name    = User.find(self.user_id).first_name
-        		last_name     = User.find(self.user_id).last_name
-    	    	mcl           = MailchimpList.new(self.identifier, first_name, last_name)
-                mcl.subscribe
+                Resque.enqueue(SubscriptionJob, self.id)
         	end
         end
     end
