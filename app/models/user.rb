@@ -40,9 +40,9 @@ class User < ActiveRecord::Base
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
-	after_save    :collect_incomplete_gifts
-	after_save    :persist_social_data
-	after_create  :init_confirm_email
+	#after_save    :collect_incomplete_gifts
+	#after_save    :persist_social_data
+	#after_create  :init_confirm_email
 
 	validates :first_name, 	presence: true, 			length: { maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
-	default_scope where(active: true)
+	default_scope where(active: true).where(perm_deactive: false) # indexed
 
 #/---------------------------------------------------------------------------------------------/
 
@@ -141,14 +141,7 @@ class User < ActiveRecord::Base
 
 	alias_method :username, :name
 	alias_method :fullname, :name
-
-	def deactivate_social type_of, identifier
-		# user get user_social record with identifier
-		user_social = UserSocial.find_by_identifier identifier
-		# user compare type ofs
-		# user deactive the user_social
-		user_social.update_attribute(:active, false)
-	end
+	
 ##################
 
 #######  PHOTO METHODS
@@ -223,17 +216,22 @@ class User < ActiveRecord::Base
 
 #######  UTILITY  METHODS
 
-	def permanently_deactivate
-		self.active 	 = false
-		self.credit_number = self.phone
-		self.phone   	 = nil
-		self.email  	 = "#{self.email}xxx"
-		self.facebook_id = "#{self.facebook_id}xxx" if facebook_id_exists?
-		self.twitter 	 = "#{self.twitter}xxx" 	if twitter_exists?
-		self.last_name   = self.name
-		self.first_name  = "De-activated[app]"
-		save
-	end
+    def permanently_deactivate
+        self.active        = false
+        self.phone         = nil
+        self.email         = nil
+        self.facebook_id   = nil
+        self.twitter       = nil
+        self.perm_deactive = false
+        UserSocial.deactivate_all self
+        save
+    end
+
+    def deactivate_social type_of, identifier
+        # user get user_social record with identifier
+        social = self.user_socials.where(identifier: identifier)
+        social.deactivate
+    end
 
 	def update_reset_token
 		self.reset_token_sent_at = Time.now

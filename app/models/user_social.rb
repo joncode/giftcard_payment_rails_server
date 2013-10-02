@@ -2,9 +2,20 @@ class UserSocial < ActiveRecord::Base
     attr_accessible :identifier, :type_of, :user_id
 
     belongs_to :user
-    after_save :add_to_mailchimp_list
+    #after_save :add_to_mailchimp_list
 
     validates_presence_of :identifier, :type_of, :user_id
+
+    def self.deactivate_all user
+        socials = user.user_socials
+        socials.each do |social|
+            social.deactivate
+        end
+    end
+
+    def deactivate
+        self.update_attribute(:active, false)
+    end
 
 private
 
