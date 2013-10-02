@@ -39,7 +39,7 @@ class Provider < ActiveRecord::Base
 
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
-    after_save       :update_city_provider
+    #after_save      :update_city_provider
 
 	default_scope where(active: true).where(paused: false).order("name ASC")
 

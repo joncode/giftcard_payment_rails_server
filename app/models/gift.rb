@@ -11,13 +11,6 @@ class Gift < ActiveRecord::Base
 			:status, :credit_card
 			# should be removed from accessible = giver_id, giver_name, shoppingCart, status
 
-			# from the app on create gift
-# \"receiver_email\" \"facebook_id\"\"tax\"  \"receiver_phone\"  \"giver_name\"
-# \"receiver_id\"  \"total\"  \"provider_id\"  \"tip\"  \"service\"  \"message\"
-# \"credit_card\"  \"provider_name\"  \"receiver_name\"  \"giver_id\"  "origin"=>"d"
-# "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":1,\"item_id\":920,\"item_name\":\"Fireman's Special\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":901,\"item_name\":\"Corona\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":902,\"item_name\":\"Budwesier\"}]",
-# "token"=>"LlWODlRC9M3VDbzPHuWMdA"}
-
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :relay,  		dependent: :destroy
 	belongs_to  :provider
@@ -26,6 +19,7 @@ class Gift < ActiveRecord::Base
 	has_many    :gift_items, 	dependent: :destroy
 	belongs_to  :giver,    		class_name: "User"
 	belongs_to  :receiver, 		class_name: "User"
+	belongs_to  :payables, 		polymorphic: true
 
 	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service
 
@@ -37,6 +31,10 @@ class Gift < ActiveRecord::Base
 	after_create  :update_shoppingCart
 
 	default_scope where(active: true)
+
+#/-----------------------------------------------Status---------------------------------------/
+
+
 
 #/---------------------------------------------------------------------------------------------/
 
@@ -79,8 +77,9 @@ class Gift < ActiveRecord::Base
 		gift_hsh["order_num"]		= self.order_num
 		gift_hsh["updated_at"]		= self.updated_at
 		gift_hsh["created_at"]		= self.created_at
-		gift_hsh["receiver_name"]   = self.receiver_name
+			# current summary and payment reports use item coun NOT shopping cart ... delete when in sync
 		#gift_hsh["shoppingCart"]  	= self.shoppingCart
+		gift_hsh["receiver_name"]   = self.receiver_name
 		gift_hsh["items"]			= JSON.parse(self.shoppingCart).count
 
 		if order = self.order
@@ -380,5 +379,14 @@ end
 #  order_num      :string(255)
 #  cat            :integer         default(0)
 #  active         :boolean         default(TRUE)
+#  stat           :integer
+#  pay_stat       :integer
+#  pay_type       :string(255)
+#  pay_id         :integer
+#  notified_at    :datetime
+#  notified_at_tz :string(255)
+#  redeemed_at    :datetime
+#  redeemed_at_tz :string(255)
+#  server_code    :string(255)
 #
 

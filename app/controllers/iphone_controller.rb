@@ -1,10 +1,5 @@
 class IphoneController < AppController
-
-	LOGIN_REPLY     = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "remember_token", "email", "phone", "facebook_id", "twitter"]
-	BOARD_REPLY     = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "giver_id", "giver_name", "id"]
-	PROVIDER_REPLY  = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "status", "redeem_id", "redeem_code", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
-	COMPLETED_REPLY = ["receiver_id", "receiver_name","giver_name", "item_id", "item_name","category", "price", "total", "tax" , "tip", "message", "updated_at", "id", "redeem_id", "redeem_code"]
-
+	
 	before_filter :authenticate_services,     only: [:regift]
 
 	def create_account
@@ -143,18 +138,6 @@ class IphoneController < AppController
 		end
 	end
 
-	def gifts
-
-		user  = User.find_by_remember_token(params["token"])
-		gifts = Gift.get_gifts(user)
-		gift_hash = hash_these_gifts(gifts, GIFT_REPLY, true)
-
-		respond_to do |format|
-			logger.debug gift_hash
-			format.json { render text: gift_hash.to_json }
-		end
-	end
-
 	def regift
 
         recipient_data = JSON.parse params["receiver"]
@@ -212,18 +195,6 @@ class IphoneController < AppController
 		end
 	end
 
-	def activity
-
-		@user     = User.find_by_remember_token(params["token"])
-		gifts     = Gift.get_activity
-		gift_hash = hash_these_gifts(gifts, BOARD_REPLY)
-
-		respond_to do |format|
-			logger.debug gift_hash
-			format.json { render text: gift_hash.to_json }
-		end
-	end
-
 	def locations
 
 		# @user  = User.find_by_remember_token(params["token"])
@@ -275,45 +246,6 @@ class IphoneController < AppController
 		end
 	end
 
-	def active_orders
-
-		response   = {}
-		begin
-			user     = User.find_by_remember_token(params["token"])
-			provider = Provider.find(params["provider_id"].to_i)
-		rescue
-			response["error"] = "User/Provider not found from remember token/ provider id"
-		end
-					# get gifts from db that are open or notified
-		gifts = Gift.get_provider provider
-					# hash gifts into form for iphone
-					# include total , tax, tip
-		gift_hash  = hash_these_gifts(gifts, MERCHANT_REPLY, false, true)
-		respond_to do |format|
-			puts gift_hash
-			format.json { render text: gift_hash.to_json }
-		end
-	end
-
-	def completed_orders
-
-		response   = {}
-		begin
-			user     = User.find_by_remember_token(params["token"])
-			provider = Provider.find(params["provider_id"].to_i)
-		rescue
-			response["error"] = "User/Provider not found from remember token/ provider id"
-		end
-					# get gifts from db that are completed
-		completed_gifts = Gift.get_history_provider provider
-					# hash gifts into form for iphone
-					# include total , tax, tip
-		gift_hash  = hash_these_gifts(completed_gifts, COMPLETED_REPLY, false, true)
-		respond_to do |format|
-			puts gift_hash
-			format.json { render text: gift_hash.to_json }
-		end
-	end
 
 private
 
@@ -327,65 +259,6 @@ private
         recipient.twitter       = user_data_hash["twitter"]
         return recipient
     end
-
-	def hash_these_users(obj, send_fields)
-		user_hash = {}
-		index = 1
-		obj.each do |g|
-			user_obj = g.serializable_hash only: send_fields
-			user_hash["#{index}"] = user_obj.each_key do |key|
-				value = user_obj[key]
-				user_obj[key] = value.to_s
-			end
-			user_obj["photo"] = g.get_photo
-			index += 1
-		end
-		return user_hash
-	end
-
-	def hash_these_gifts(obj, send_fields, address_get=false, receiver=false)
-		gift_hash = {}
-		index = 1
-		obj.each do |g|
-
-			if g.created_at
-				time = g.created_at.to_time
-			else
-				time = g.updated_at.to_time
-			end
-			time_string = time_ago_in_words(time)
-
-			gift_obj = g.serializable_hash only: send_fields
-			gift_hash["#{index}"] = gift_obj.each_key do |key|
-				value = gift_obj[key]
-				gift_obj[key] = value.to_s
-			end
-
-			# add other person photo url
-			if receiver
-				if g.receiver
-					gift_obj["receiver_photo"]  = g.receiver.get_photo
-				else
-					puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
-				end
-			else
-				gift_obj["giver_photo"]       = g.giver.get_photo
-			end
-
-			provider = g.provider
-			gift_obj["provider_photo"]     = provider.get_photo
-			# add the full provider address
-			if address_get
-				gift_obj["provider_address"] = provider.complete_address
-			end
-
-			gift_obj["time_ago"] = time_string
-			gift_obj["redeem_code"] = add_redeem_code(g)
-
-			index += 1
-		end
-		return gift_hash
-	end
 
 	def create_user_object(data)
 		if data.kind_of? String

@@ -87,6 +87,7 @@ private
         puts "data in Email.rb #{data}"
         if not Rails.env.test? || Rails.env.development?
             Resque.enqueue(MailerJob, data)
+
         end
     end
 

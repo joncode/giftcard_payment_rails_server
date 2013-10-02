@@ -17,13 +17,13 @@ gem 'json', '~> 1.7.7'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
 
-group :production do
-    
-end
+# group :production do
 
-group :staging do
+# end
+  
+# group :staging do
 
-end
+# end
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
