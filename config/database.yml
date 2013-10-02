@@ -7,7 +7,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: dbapp_dev
+  database: drinkboard_dev
   pool: 5
   username: drinkboard
   password: drinkdrink
@@ -18,7 +18,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: dbapp_test
+  database: drinkboard_test
   pool: 5
   username: drinkboard
   password: drinkdrink

@@ -191,9 +191,9 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
 
   create_table "menus", :force => true do |t|
     t.integer  "provider_id",                                 :null => false
-    t.integer  "item_id"
+    t.integer  "item_id",                                     :null => false
     t.string   "price",       :limit => 20
-    t.integer  "position"
+    t.integer  "position",    :limit => 8
     t.datetime "created_at",                                  :null => false
     t.datetime "updated_at",                                  :null => false
     t.string   "item_name"
@@ -378,7 +378,7 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.string   "email",                                                    :null => false
     t.boolean  "admin",                                 :default => false
     t.string   "photo"
-    t.string   "password_digest"
+    t.string   "password_digest",                                          :null => false
     t.string   "remember_token",                                           :null => false
     t.datetime "created_at",                                               :null => false
     t.datetime "updated_at",                                               :null => false
