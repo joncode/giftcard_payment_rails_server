@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
     @orders = Order.all
 
     respond_to do |format|
-      format.html 
+      format.html
       format.json { render json: @orders }
     end
   end
@@ -13,7 +13,7 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
 
     respond_to do |format|
-      format.html 
+      format.html
       format.json { render json: @order }
     end
   end
@@ -22,7 +22,7 @@ class OrdersController < ApplicationController
     @gift     = Gift.find(params[:id])
     @redeem   = @gift.redeem
     @provider = @gift.provider
-    
+
     if @redeem
       @order = Order.new(redeem_id: @redeem.id, gift_id: @gift.id, server_id: current_user.id, provider_id: @provider.id)
     else

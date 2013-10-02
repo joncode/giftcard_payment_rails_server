@@ -1,5 +1,5 @@
 class GiftCreator
-    
+
     attr_reader :gift_json, :recipient_data, :message, :details
 
     def initialize params
@@ -78,7 +78,7 @@ private
 
     end
 #     creates the gift record OR returns failure to create gift OR retries
-    def create
+    def gift_create
 
     end
 
@@ -87,22 +87,31 @@ private
 
     end
 #     saves the gift record
-    def save
+    def gift_save
 
     end
 #     sends the messages
-    def messenge
-        unless new_gift.receiver_id.nil?
-            Relay.send_push_notification new_gift
-        end
-#         - new gift message to the merchant
-#         - invoice giver if SALE or CREDIT ACCOUNT
-#         - alert campaign if CAMPAIGN
-#         - send push note to receiver if db user
-#         - sends email to receiver
-#         - sends text to receiver
-#         - sends message thru fb, twitter to receiver
-#         - post to drinkboard gifts twitter
+    def messenger
+        # unless new_gift.receiver_id.nil?
+# #         - send push note to receiver if db user
+#             Relay.send_push_notification new_gift
+#         end
+# #         - new gift message to the merchant
+#             Poller.update_merchant_orders self
+# #         - invoice giver if SALE or CREDIT ACCOUNT
+#             Email.invoice_giver self
+# #         - alert campaign if CAMPAIGN
+#             Campaign.create_object_with_gift self
+
+# #         - sends email to receiver
+#             Email.notify_receiver self
+
+# #         - sends text to receiver
+#             Texter.notify_receiver self
+# #         - sends message thru fb, twitter to receiver
+#             Socializer.send_network_message self
+# #         - post to drinkboard gifts twitter
+#             Socializer.update_db_twitter self
     end
 
     def make_user_with_hash(user_data_hash)

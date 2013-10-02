@@ -105,7 +105,7 @@ class Sale < ActiveRecord::Base
 		self.reason_code		= self.response.response_reason_code.to_i
 		puts "#{self.inspect}"
 	end
-    
+
 	def send_emails
         self.notify_receiver
         self.invoice_giver

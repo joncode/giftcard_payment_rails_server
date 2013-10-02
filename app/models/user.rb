@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
-	
+
 	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data
 	after_create  :init_confirm_email
@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
-	#default_scope where(active: true)
+	default_scope where(active: true)
 
 #/---------------------------------------------------------------------------------------------/
 
