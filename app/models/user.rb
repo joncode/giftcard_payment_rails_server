@@ -223,7 +223,7 @@ class User < ActiveRecord::Base
 
 #######  UTILITY  METHODS
 
-	def permanently_de_activate
+	def permanently_deactivate
 		self.active 	 = false
 		self.credit_number = self.phone
 		self.phone   	 = nil

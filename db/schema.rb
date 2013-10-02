@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130927081324) do
+ActiveRecord::Schema.define(:version => 20131002201757) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -447,6 +447,7 @@ ActiveRecord::Schema.define(:version => 20130927081324) do
     t.string   "confirm",                               :default => "00"
   end
 
+  add_index "users", ["active"], :name => "index_users_on_active"
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
 
 end

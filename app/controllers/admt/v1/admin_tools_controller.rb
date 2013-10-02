@@ -146,7 +146,7 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def de_activate_user
+    def deactivate_user
         if user         = User.find(params["data"].to_i)
 
             if user.toggle! :active
@@ -164,7 +164,7 @@ class Admt::V1::AdminToolsController < JsonController
     def destroy_user
         if user        = User.find(params["data"].to_i)
 
-            if user.permanently_de_activate
+            if user.permanently_deactivate
                 success "#{user.name} is Permanently De-Activated."
             else
                 fail    user
@@ -223,7 +223,7 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def de_activate_brand
+    def deactivate_brand
         if brand      = Brand.unscoped.find(params["data"].to_i)
 
             if brand.toggle! :active
@@ -272,7 +272,7 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def de_associate
+    def deassociate
         provider_id = params["data"]["provider_id"].to_i
         brand_id    = params["data"]["brand_id"].to_i
         type_of     = params["data"]["type_of"]
