@@ -40,9 +40,9 @@ class User < ActiveRecord::Base
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
-	#after_save    :collect_incomplete_gifts
-	#after_save    :persist_social_data
-	#after_create  :init_confirm_email
+	after_save    :collect_incomplete_gifts
+	after_save    :persist_social_data
+	after_create  :init_confirm_email
 
 	validates :first_name, 	presence: true, 			length: { maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
