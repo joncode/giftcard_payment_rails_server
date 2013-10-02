@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131002205640) do
+ActiveRecord::Schema.define(:version => 20131002213728) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -405,6 +405,8 @@ ActiveRecord::Schema.define(:version => 20131002205640) do
     t.datetime "updated_at",                   :null => false
     t.boolean  "active",     :default => true
   end
+
+  add_index "user_socials", ["active"], :name => "index_user_socials_on_active"
 
   create_table "users", :force => true do |t|
     t.string   "email",                                                    :null => false

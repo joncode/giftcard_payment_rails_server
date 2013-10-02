@@ -141,7 +141,7 @@ class User < ActiveRecord::Base
 
 	alias_method :username, :name
 	alias_method :fullname, :name
-	
+
 ##################
 
 #######  PHOTO METHODS
@@ -219,10 +219,10 @@ class User < ActiveRecord::Base
     def permanently_deactivate
         self.active        = false
         self.phone         = nil
-        self.email         = nil
+        self.email         = "#{self.email}xxx"
         self.facebook_id   = nil
         self.twitter       = nil
-        self.perm_deactive = false
+        self.perm_deactive = true
         UserSocial.deactivate_all self
         save
     end

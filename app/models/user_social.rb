@@ -6,6 +6,8 @@ class UserSocial < ActiveRecord::Base
 
     validates_presence_of :identifier, :type_of, :user_id
 
+    default_scope where(active: true)
+
     def self.deactivate_all user
         socials = user.user_socials
         socials.each do |social|

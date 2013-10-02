@@ -4,7 +4,7 @@ module LegacyUser
 
         # make sure the MailchimpList is turned off
 
-        users = User.all
+        users = User.unscoped
         users.each do |user|
             UserSocial.create(user_id: user.id, type_of: "email", identifier: user.email) if user.email.present?
             UserSocial.create(user_id: user.id, type_of: "phone", identifier: user.phone) if user.phone.present?
@@ -38,12 +38,11 @@ module LegacyUser
 
     def check_users
 
-        pdus = User.unscoped.where(prem_deactive: true).where(active: false)
+        pdus = User.unscoped.where(perm_deactive: true).where(active: false)
         pdus.each {|u| puts u.inspect }
-        puts "Premanent Deactives #{pdus.count}"
 
         us = User.all
-        puts "Active Users = #{us.count}"
+
         us.each do |u|
             puts "user ID = #{u.id}"
             if u.email.present?
@@ -64,9 +63,10 @@ module LegacyUser
             end
         end
 
-        dus = User.unscoped.where(prem_deactive: false).where(active: true)
+        dus = User.unscoped.where(perm_deactive: false).where(active: false)
         puts "deactivated Users #{dus.count}"
-
+        puts "Premanent Deactives #{pdus.count}"
+        puts "Active Users = #{us.count}"
         total_users = User.unscoped
 
         counted_user = pdus.count + us.count + dus.count
