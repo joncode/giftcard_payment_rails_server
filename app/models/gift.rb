@@ -275,7 +275,7 @@ private
 	end
 
 	def send_notifications
-		if not Rails.env.test?
+		unless Rails.env.test?
         	self.notify_receiver
         	if self.regift_id.nil?
         		self.invoice_giver

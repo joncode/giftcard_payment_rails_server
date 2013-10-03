@@ -16,7 +16,7 @@ class Relay < ActiveRecord::Base
 
 		def send_push_notification gift
 				# get the user tokens from the pn_token db
-			if not Rails.env.development? || Rails.env.test?
+			unless Rails.env.development? || Rails.env.test?
 				if gift.status == "open"
 					Resque.enqueue(PushJob, gift.id)
 				end

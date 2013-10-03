@@ -85,9 +85,8 @@ private
 
     def route_email_system data
         puts "data in Email.rb #{data}"
-        if not Rails.env.test? || Rails.env.development?
+        if  Rails.env.production? || Rails.env.staging?
             Resque.enqueue(MailerJob, data)
-
         end
     end
 
