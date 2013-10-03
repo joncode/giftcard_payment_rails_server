@@ -30,7 +30,7 @@ class GiftCreator
                     @gift.receiver_id = nil
                     @gift.receiver_name = nil
                 else
-                    add_receiver_to_gift receiver
+                    @gift.add_receiver receiver
                 end
             end
         end
@@ -102,9 +102,6 @@ class GiftCreator
 
 #     Lifecycle :
 #     JSON string of gift info received
-    def json
-
-    end
 #     confirms info of the giver
     def giver gift_obj
         gift_obj.nil?
@@ -114,37 +111,15 @@ class GiftCreator
         s_cart.nil?
     end
 #     confirms the credit card
-    def credit_card
-
-    end
 #     checks the receiver for db_user or non
-    def receiver
-
-    end
 #     saves the gift_items off the shopping cart
-    def gift_items
-
-    end
 #     creates the payment record OR returns false payment info
 #         charges card SALE
 #         debts credit CREDITACCOUNT
 #         debts campaign CAMPAIGN
-    def payment
-
-    end
 #     creates the gift record OR returns failure to create gift OR retries
-    def gift_create
-
-    end
-
 #     sets appropriate statuses
-    def status=
-
-    end
 #     saves the gift record
-    def gift_save
-
-    end
 #     sends the messages
     def messenger
         if Rails.env.test?
@@ -169,18 +144,6 @@ class GiftCreator
 #         - sends text to receiver
 #         - sends message thru fb, twitter to receiver
 #         - post to drinkboard gifts twitter
-    end
-
-    def transaction_approved
-        # this should be a gift status method
-        true
-        # if self.resp_code == 1
-     #        puts "Transaction is approved - time to email invoice and notification - sale ID = #{self.id}"
-        #   return true
-        # else
-     #        puts "Transaction is NOT approved - sale ID = #{self.id}"
-        #   return false
-        # end
     end
 
 private
@@ -232,7 +195,7 @@ private
     def find_user type_of, unique_id
         method_is = "find_by_#{type_of}"
         if receiver = User.send(method_is, unique_id)
-            gift_obj              = add_receiver_to_gift(receiver)
+            @gift.add_receiver receiver
             @resp["receiver"] = receiver_info_resp(receiver)
             @resp["origin"]   = type_of
             return true
@@ -246,12 +209,6 @@ private
         { "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
     end
 
-    def add_receiver_to_gift receiver
-        @gift.receiver_id    = receiver.id
-        @gift.receiver_name  = receiver.username
-        @gift.receiver_phone = receiver.phone
-        @gift.receiver_email = receiver.email
-    end
 
 end
 
