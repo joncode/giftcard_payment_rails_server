@@ -159,7 +159,7 @@ class IphoneController < AppController
             new_gift = old_gift.regift(recipient, message)
             new_gift.save
             old_gift.update_attribute(:status, 'regifted')
-            new_gift.set_status_post_payment
+            new_gift.set_status
             new_gift.save
             success(new_gift.serialize)
         else

@@ -83,10 +83,10 @@ class User < ActiveRecord::Base
 		usr_hash
 	end
 
-	def inspect
-		#super
-		"User ID = #{self.id} | Name = #{name} | email = #{self.email} | phone = #{self.phone} |  last = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)} | active = #{self.active}\n"
-	end
+	# def inspect
+	# 	#super
+	# 	"User ID = #{self.id} | Name = #{name} | email = #{self.email} | phone = #{self.phone} |  last = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)} | active = #{self.active}\n"
+	# end
 
 	def ua_alias
 		adj_user_id     = self.id + NUMBER_ID

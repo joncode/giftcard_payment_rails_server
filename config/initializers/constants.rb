@@ -33,6 +33,7 @@ PROOF_LEVELS        = ['zero', 'lite', 'normal', 'double']
 # MANDRILL
 ENV['MANDRILL_APIKEY'] =  'oUXP1PDOtP14RMgFytxdGw'
 MAILCHIMP_APIKEY = '925c032769638d199309b7c752c31700-us7'
+CATCH_PHRASE = "Theres no place like home"
 
 if Rails.env.production?
     MAILCHIMP_LIST_ID = '5e2ea5f338'

@@ -97,9 +97,6 @@ describe AppController do
             # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
             json["error"].should == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
         end
-
-
-
     end
 
     def make_gift_json gift

@@ -21,5 +21,10 @@ def lcon
 end
 
 ActiveRecord::Base.logger = Logger.new(STDOUT)
+if Rails.env.test?
+    ActiveRecord::Base.logger.level = 1
+    require 'auth_response'
+    require 'auth_transaction'
+end
 
-    
+

@@ -3,7 +3,7 @@ class Card < ActiveRecord::Base
 	include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
 
 	@@CreditCardSecretKey = "Yes yes yes"
-	PASSPHRASE = "Theres no place like home"
+	PASSPHRASE = CATCH_PHRASE
 	attr_accessor :number, :passphrase, :iv
 	attr_accessible :csv, :last_four, :month, :brand, :name, :nickname,  :user_id, :year
 
@@ -24,25 +24,28 @@ class Card < ActiveRecord::Base
 	before_save 	  :save_last_four
 
 	def self.create_card_from_hash cc_hash
-		x = cc_hash.kind_of? Hash
-		puts "in create_card_from_hash = #{cc_hash}, is it hash ? #{x}"
-		card = Card.new
-		card.name = cc_hash["name"]
-		card.month = cc_hash["month"]
-		card.year = cc_hash["year"]
-		card.nickname = cc_hash["nickname"]
-		card.csv = cc_hash["csv"]
-		card.user_id = cc_hash["user_id"]
-		card.brand = cc_hash["brand"]
-		card.number = cc_hash["number"]
+		card 			= Card.new
+		card.name 		= cc_hash["name"]
+		card.month 		= cc_hash["month"]
+		card.year 		= cc_hash["year"]
+		card.nickname 	= cc_hash["nickname"]
+		card.csv 		= cc_hash["csv"]
+		card.user_id 	= cc_hash["user_id"]
+		card.brand 		= cc_hash["brand"]
+		card.number 	= cc_hash["number"]
 		card.passphrase = cc_hash["nickname"]
-		puts "making a new card = #{card.inspect}"
-		return card
+		card
 	end
 
 	def self.get_cards user
 		cards = Card.find_all_by_user_id(user.id)
 		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
+	end
+
+	def month_year
+		month 		 = "%02d" % card.month.to_i
+		year 		 = card.year[2..3]
+		"#{month}#{year}"
 	end
 
 	def verification_value?
@@ -76,91 +79,85 @@ class Card < ActiveRecord::Base
 		@number = number
 	end
 
-
-	# def sd_serialize
-	# 	self.decrypt! @@CreditCardSecretKey
-	# 	"#{PIPE}\"#{self.name}\"#{PIPE}#{self.number}#{PIPE}#{self.month.rjust(2,'0')}#{PIPE}#{self.year[2,3]}#{PIPE}#{self.user.zip}#{PIPE}\"#{self.nickname}\"#{PIPE}0#{PIPE}0#{PIPE}0#{PIPE}0#{PIPE}0"
-	# end
-
-	private
+private
 
 
-		def check_for_credit_card_validity
-			errors.add(:year, "is not a valid year") unless valid_expiry_year?(year.to_i)
-			errors.add(:month, "is not a valid month") unless valid_month?(month.to_i)
-			errors.add(:number, "is not a valid credit card number") unless valid_number?(number)
-			puts "error messages = #{errors.messages}"
-			self.brand = brand?(number)
-			errors.add(:base, "We only accept AmEx, Visa, & MasterCard.") unless (self.brand == 'master' || self.brand == 'visa' || self.brand == 'american_express')
+	def check_for_credit_card_validity
+		errors.add(:year, "is not a valid year") unless valid_expiry_year?(year.to_i)
+		errors.add(:month, "is not a valid month") unless valid_month?(month.to_i)
+		errors.add(:number, "is not a valid credit card number") unless valid_number?(number)
+		puts "error messages = #{errors.messages}"
+		self.brand = brand?(number)
+		errors.add(:base, "We only accept AmEx, Visa, & MasterCard.") unless (self.brand == 'master' || self.brand == 'visa' || self.brand == 'american_express')
+	end
+
+	def month_and_year_should_be_in_future
+		if (Date.new(year.to_i, month.to_i, 1) >> 1) < Date.today
+		 errors.add(:base,"The expiration date must be in the future.") and return false
 		end
+		rescue ArgumentError => e
+		errors.add(:base,"Date is not valid") and return false
+	end
 
-		def month_and_year_should_be_in_future
-			if (Date.new(year.to_i, month.to_i, 1) >> 1) < Date.today
-			 errors.add(:base,"The expiration date must be in the future.") and return false
-			end
-			rescue ArgumentError => e
-			errors.add(:base,"Date is not valid") and return false
-		end
-
-		def at_least_two_words_in_name
-			errors.add(:name, "must be two words long.") and return false if name and name.split.size < 2
-		end
+	def at_least_two_words_in_name
+		errors.add(:name, "must be two words long.") and return false if name and name.split.size < 2
+	end
 
 
-		def save_last_four
-			self.last_four = @number[-4..-1]
-		end
+	def save_last_four
+		self.last_four = @number[-4..-1]
+	end
 
-		# Encrypts the credit card number
-		def crypt_number
-		    c = cipher
-		    c.encrypt
-		    c.key = key
-		    c.iv = self.iv = generate_iv(passphrase)
-		    temp_number = c.update(@number)
-		    temp_number << c.final
-		    self.number_digest = encode_into_base64(temp_number)
-		end
+	# Encrypts the credit card number
+	def crypt_number
+	    c = cipher
+	    c.encrypt
+	    c.key = key
+	    c.iv = self.iv = generate_iv(passphrase)
+	    temp_number = c.update(@number)
+	    temp_number << c.final
+	    self.number_digest = encode_into_base64(temp_number)
+	end
 
-		# Decrypts the credit card number
-		def decrypt_number(passphrase)
-			@passphrase = passphrase
-			c = cipher
-			c.decrypt
-			c.key = key
-			c.iv = generate_iv(passphrase)
-			d = c.update(decode_from_base64(self.number_digest))
-			d << c.final
-		end
+	# Decrypts the credit card number
+	def decrypt_number(passphrase)
+		@passphrase = passphrase
+		c = cipher
+		c.decrypt
+		c.key = key
+		c.iv = generate_iv(passphrase)
+		d = c.update(decode_from_base64(self.number_digest))
+		d << c.final
+	end
 
-		   # Chomping is necessary for postgresql
-		def encode_into_base64 string
-		  	Base64.encode64(string).chomp
-		end
+	   # Chomping is necessary for postgresql
+	def encode_into_base64 string
+	  	Base64.encode64(string).chomp
+	end
 
-		def decode_from_base64 string
-		  	Base64.decode64(string)
-		end
+	def decode_from_base64 string
+	  	Base64.decode64(string)
+	end
 
-		def cipher
-			OpenSSL::Cipher::Cipher.new("aes-256-cbc")
-		end
+	def cipher
+		OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+	end
 
-		def key
-			Digest::SHA256.digest(@@CreditCardSecretKey)
-		end
+	def key
+		Digest::SHA256.digest(@@CreditCardSecretKey)
+	end
 
 
-		def generate_iv(passphrase)
-			passphrase = PASSPHRASE
-			raise ArgumentError.new("be sure to set the passphrase") if passphrase.blank?
-			encode_into_base64(Digest::SHA1.hexdigest(passphrase))
-		end
+	def generate_iv(passphrase)
+		passphrase = PASSPHRASE
+		raise ArgumentError.new("be sure to set the passphrase") if passphrase.blank?
+		encode_into_base64(Digest::SHA1.hexdigest(passphrase))
+	end
 
-		def convert_number_to_string
-			@passphrase = @passphrase.to_s
-	   		@number = @number.to_s
-	   	end
+	def convert_number_to_string
+		@passphrase = @passphrase.to_s
+   		@number = @number.to_s
+   	end
 end
 
 # == Schema Information

@@ -28,24 +28,17 @@ class Gift < ActiveRecord::Base
 	before_create :extract_phone_digits
 	before_create :add_giver_name,  :if => :no_giver_name
 	before_create :regifted,        :if => :regift?
-	before_create :set_status
 	before_create :build_gift_items
-
-	after_create :send_notifications, :if => :transaction_approved
+	before_create :set_statuses
 
 	default_scope where(active: true)
 
 #/---------------------------------------------------------------------------------------------/
 
 
-	def self.init(params)
-		# gift = Gift.new(params[:gift])
-				# add anonymous giver feature
-		# if params[:gift][:anon_id]
-		# 	gift.add_anonymous_giver(params[:gift][:giver_id])
-		# end
-		Gift.new(params[:gift])
-	end
+	# def self.init(params)
+	# 	Gift.new(params[:gift])
+	# end
 
 	def phone
 		self.receiver_phone
@@ -72,20 +65,17 @@ class Gift < ActiveRecord::Base
 
 #/-----------------------------------------------Status---------------------------------------/
 
-	def set_status
-		if card_enabled?
-			if Rails.env.production? || Rails.env.staging?
-				self.status = "unpaid"
-			else
-				set_status_post_payment
-			end
-		else
-			set_status_post_payment
+	def set_statuses
+		case self.pay_type
+		when "Sale"
+			set_payment_status
+			set_status
+		when "CreditAccount"
+		when "Campaign"
 		end
-		puts "gift SET STATUS #{self.status}"
 	end
 
-	def set_status_post_payment
+	def set_status
 		if self.receiver_id.nil?
 			self.status = "incomplete"
 		else
@@ -93,82 +83,42 @@ class Gift < ActiveRecord::Base
 		end
 	end
 
+	def set_payment_status
+		case self.sale.resp_code
+		when 1
+		  # Approved
+			self.pay_stat = "charged"
+		when 2
+		  # Declined
+			self.pay_stat = "declined"
+		when 3
+		  # Error
+		  # duplicate transaction response subcode = 1
+			if self.sale.response.response_subcode == 1
+				self.pay_stat = "duplicate"
+			else
+				self.pay_stat = "unpaid"
+			end
+		when 4
+		  # Held for Review
+			self.pay_stat = "unpaid"
+		else
+		  # not a listed error code
+		  	self.pay_stat = "unpaid"
+		end
+		set_status
+	end
+
 #/--------------------------------------gift credit card methods-----------------------------/
 
-	def card_enabled?
-		# whitelist = ["test@test.com", "deb@knead4health.com", "dfennell@graywolves.com", "dfennell@webteampros.com"]
-		# blacklist = ["addis006@gmail.com"]
-		# if blacklist.include?(self.giver.email)
-		# 	return false
-		# else
-		# return true
-		# end
-		return true
-	end
+    def charge_card
+    	self.pay_type = "Sale"
+    	sale      = Sale.init self  # @gift
+    	sale.auth_capture
 
-	def charge_card
-		if not Rails.env.test?
-			sale = self.authorize_capture
-			puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
-		else
-			sale     = Sale.init self
-			sale.resp_code = 1
-		end
-				# otherwise return a sale object with resp_code == 1
-		return sale
-	end
-
-	def authorize_capture
-		puts "BEGIN AUTH CAPTURE for GIFT ID #{self.id}"
-			# Authorize Transaction Method
-		# A - create a sale object that stores the record of the auth.net transaction
-		sale     = Sale.init self
-		response = sale.auth_capture
-
-		# B - authorize transaction via auth.net
-			# -- returns data --
-				# 1 success
-					# go ahead and save the gift - process complete
-				# failure
-					# credit card issues
-						# card expired
-						# insufficient funds
-						# card is blocked
-					# auth.net issues
-						# cannot connect to server
-						# no response from server
-						# transaction key is no longer good
-					# sale db issues
-						# could not save item
-		case response.response_code.to_i
-		when 1
-			# Approved
-			puts "setting the gift status off unpaid"
-			set_status_post_payment
-			self.save
-		when 2
-			# Declined
-		when 3
-			# Error
-			# duplicate transaction response subcode = 1
-		when 4
-			# Held for Review
-		else
-			# not a listed error code
-			puts "UNKNOWN ERROR CODE RECEIVED FOR AUTH.NET - CODE = #{response.response_code}"
-			puts "TEXT IS #{response.response_reason_text} for GIFT ID = #{self.id}"
-		end
-		reply = response.response_reason_text
-		puts "HERE IS THE REPLY #{reply}"
-		# C - saves the sale object into the sale db
-		if sale.save
-			puts "save of sale successful"
-		else
-			puts "save of sale ERROR gift ID = #{self.id}"
-		end
-		return sale
-	end
-
+    	self.sale = sale
+    end
+    
 #/-------------------------------------data population methods-----------------------------/
 
 	def regift(recipient=nil, message=nil)
@@ -235,7 +185,7 @@ class Gift < ActiveRecord::Base
 
 private
 
-##########  shopping cart methods
+	##########  shopping cart methods
 
 	def build_gift_items
 		make_gift_items ary_of_shopping_cart_as_hash
@@ -253,7 +203,7 @@ private
 		puts "made it thru gift items #{self.gift_items}"
 	end
 
-################  data validation methods
+	################  data validation methods
 
 	def add_giver_name
 		if giver = User.find(self.giver_id)
@@ -273,28 +223,6 @@ private
 	def regift?
 		self.regift_id
 	end
-
-	def send_notifications
-		unless Rails.env.test?
-        	self.notify_receiver
-        	if self.regift_id.nil?
-        		self.invoice_giver
-        	end
-        	Relay.send_push_notification self
-        end
-    end
-
-    def transaction_approved
-    	# this should be a gift status method
-    	true
-    	# if self.resp_code == 1
-     #        puts "Transaction is approved - time to email invoice and notification - sale ID = #{self.id}"
-    	# 	return true
-    	# else
-     #        puts "Transaction is NOT approved - sale ID = #{self.id}"
-    	# 	return false
-    	# end
-    end
 
 end
 # == Schema Information

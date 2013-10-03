@@ -1,5 +1,6 @@
 class AppController < JsonController
     include Email
+    include Photo
 
  	def authenticate_app_user(token)
  		if user = User.find_by_remember_token(token)
@@ -8,38 +9,6 @@ class AppController < JsonController
  			false
  		end
 	end
-
-  	def shorten_url_for_provider_ary providers_array
-  		providers_array.each do |prov|
-  			short_photo_url = short_photo_url prov["photo"]
-  			prov["photo"] 	= short_photo_url
-  		end
-  	end
-
-  	def shorten_url_for_brand_ary brands_array
-  		brands_array.each do |brand|
-  			short_photo_url = short_photo_url brand["photo"]
-  			brand["photo"] 	= short_photo_url
-  		end
-  	end
-
-  	def short_photo_url photo_url
-  		url_ary 		= photo_url.split('upload/')
-  		shorten_url 	= url_ary[1]
-
-  		identifier, tag = shorten_url.split('.')
-
-  		new_photo_ary 	= ['d', identifier , 'j']
-  		if photo_url.match 'htaaxtzcv'
-  			new_photo_ary[0] = 'h'
-  		end
-
-  		if !tag.match('jpg')
-  			new_photo_ary[2] = tag.match('png') ? 'p' : tag
-  		end
-
-  		new_photo_ary.join("|")
-  	end
 
  	def update_user
 
@@ -561,52 +530,23 @@ class AppController < JsonController
   		end
   	end
 
-     def create_gift
+    def create_gift
         response = {}
                     # authenticate user
-        if giver = authenticate_app_user(params["token"])
+        if @current_user = authenticate_app_user(params["token"])
 
-            gift_obj = JSON.parse params["gift"]
-            if gift_obj.nil? || params["shoppingCart"].nil?
-                        # nothing can be done without the data
-                response["error_server"] = "Data didnt arrive #{database_error_gift}"
-            else
-                    # add the receiver + receiver checks to the gift object
-                if gift_obj["receiver_id"].nil?
-                    add_receiver_object_to(gift_obj, response)
-                else
-                    # check that the receiver_id is active
-                    if receiver = User.unscoped.find(gift_obj["receiver_id"].to_i)
-                        if receiver.active == false
-                            response["error"] = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
-                            gift_obj["receiver_id"] = nil
-                            gift_obj["receiver_name"] = nil
-                        end
-                    end
-                end
-                gift = Gift.new(gift_obj)
-                gift.shoppingCart = params["shoppingCart"]
-                gift.add_giver(giver)
-                puts "Here is GIFT #{gift.inspect}"
-                if gift.save
-                    sale = gift.charge_card
-                    if sale.resp_code == 1
-                        response["success"]       = { "Gift_id" => gift.id }
-                    else
-                        response["error_server"]  = { "Credit Card" => sale.reason_text }
-                    end
-                else
-                    response["error_server"] = stringify_error_messages gift
-                end
+            gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
+            unless gift_creator.no_data?
+                gift_creator.build_gift_obj
+                gift_creator.add_receiver
+                gift_creator.charge
+                response = gift_creator.resp
             end
         else
             response["error"] = unauthorized_user
         end
 
         respond_to do |format|
-            if response.has_key? "error_server"
-                @app_response = stringify_error_messages gift
-            end
             @app_response = "AppC #{response}"
             format.json { render json: response}
         end
@@ -818,42 +758,42 @@ class AppController < JsonController
 
 protected
 
-    def add_receiver_object_to gift_obj, response
+    # def add_receiver_object_to gift_obj, response
 
-        unique_ids = [gift_obj["receiver_phone"], gift_obj["facebook_id"], gift_obj["receiver_email"], gift_obj["twitter"] ].compact
-        # loop thru the ones with data
-        unique_ids.each do |unique_id|
-            if find_user(unique_id, gift_obj, response)
-                # stop when you find a user
-                break
-            end
-        end
-    end
+    #     unique_ids = [gift_obj["receiver_phone"], gift_obj["facebook_id"], gift_obj["receiver_email"], gift_obj["twitter"] ].compact
+    #     # loop thru the ones with data
+    #     unique_ids.each do |unique_id|
+    #         if find_user(unique_id, gift_obj, response)
+    #             # stop when you find a user
+    #             break
+    #         end
+    #     end
+    # end
 
-    def find_user unique_id, gift_obj, response
-        if social_data = UserSocial.find_by_identifier(unique_id)
-            receiver             = social_data.user
-            gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-            response["receiver"] = receiver_info_response(receiver)
-            response["origin"]   = social_data.type_of
-            return true
-        else
-            gift_obj["status"]   = "incomplete"
-            response["origin"]   = "NID"
-            return false
-        end
-    end
+    # def find_user unique_id, gift_obj, response
+    #     if social_data = UserSocial.find_by_identifier(unique_id)
+    #         receiver             = social_data.user
+    #         gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
+    #         response["receiver"] = receiver_info_response(receiver)
+    #         response["origin"]   = social_data.type_of
+    #         return true
+    #     else
+    #         gift_obj["status"]   = "incomplete"
+    #         response["origin"]   = "NID"
+    #         return false
+    #     end
+    # end
 
-    def receiver_info_response receiver
-      	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
-    end
+    # def receiver_info_response receiver
+    #   	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
+    # end
 
-    def add_receiver_to_gift_obj receiver, gift_obj
-      	gift_obj["receiver_id"]    = receiver.id
-      	gift_obj["receiver_name"]  = receiver.username
-      	gift_obj["receiver_phone"] = receiver.phone
-        gift_obj["receiver_email"] = receiver.email
-      	return gift_obj
-    end
+    # def add_receiver_to_gift_obj receiver, gift_obj
+    #   	gift_obj["receiver_id"]    = receiver.id
+    #   	gift_obj["receiver_name"]  = receiver.username
+    #   	gift_obj["receiver_phone"] = receiver.phone
+    #     gift_obj["receiver_email"] = receiver.email
+    #   	return gift_obj
+    # end
 
 end
