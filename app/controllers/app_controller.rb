@@ -2,6 +2,8 @@ class AppController < JsonController
     include Email
     include Photo
 
+    before_filter :authenticate_services,     only: [:create_gift]
+
  	def authenticate_app_user(token)
  		if user = User.find_by_remember_token(token)
  			user
@@ -532,19 +534,14 @@ class AppController < JsonController
 
     def create_gift
         response = {}
-                    # authenticate user
-        if @current_user = authenticate_app_user(params["token"])
 
-            gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
-            unless gift_creator.no_data?
-                gift_creator.build_gift_obj
-                gift_creator.add_receiver
-                gift_creator.charge
-                response = gift_creator.resp
-            end
-        else
-            response["error"] = unauthorized_user
+        gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
+        unless gift_creator.no_data?
+            gift_creator.build_gift_obj
+            gift_creator.add_receiver
+            gift_creator.charge
         end
+        response = gift_creator.resp
 
         respond_to do |format|
             @app_response = "AppC #{response}"

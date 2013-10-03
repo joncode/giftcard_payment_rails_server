@@ -17,7 +17,7 @@ class GiftCreator
         @gift.add_giver(@giver)
         puts "Here is GIFT_CREATOR @GIFT  #{@gift.inspect}"
     end
-    
+
     def add_receiver
             # add the receiver + receiver checks to the gift object
         if @gift.receiver_id.nil?
@@ -160,7 +160,9 @@ class GiftCreator
             if @gift.regift_id.nil?
                 invoice_giver
             end
-            Relay.send_push_notification @gift
+            if @gift.receiver_id
+                Relay.send_push_notification @gift
+            end
         end
 #         - new gift message to the merchant
 #         - alert campaign if CAMPAIGN

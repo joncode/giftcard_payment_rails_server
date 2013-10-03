@@ -335,10 +335,10 @@ private
 			g = Gift.where("status = :stat AND facebook_id = :fb_id",    :stat => 'incomplete', :fb_id   => self.facebook_id.to_s)
 			gifts.concat g
 		end
-		if self.foursquare_id
-			g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id.to_s)
-			gifts.concat g
-		end
+		# if self.foursquare_id
+		# 	g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id.to_s)
+		# 	gifts.concat g
+		# end
 		if self.twitter
 			g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => self.twitter.to_s)
 			gifts.concat g

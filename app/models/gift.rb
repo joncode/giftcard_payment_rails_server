@@ -118,7 +118,7 @@ class Gift < ActiveRecord::Base
 
     	self.sale = sale
     end
-    
+
 #/-------------------------------------data population methods-----------------------------/
 
 	def regift(recipient=nil, message=nil)
@@ -160,6 +160,7 @@ class Gift < ActiveRecord::Base
 		self.receiver_id    = receiver.id
 		self.receiver_name  = receiver.name
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
+		sefl.twitter        = receiver.twitter ? receiver.twitter : nil
 		self.receiver_phone = receiver.phone ? receiver.phone : nil
 		self.receiver_email = receiver.email ? receiver.email : nil
 		self.status 		= 'open' if receiver.id
