@@ -28,7 +28,7 @@ FactoryGirl.define do
 
 
     factory :provider do
-        name        "ichizos"
+        sequence(:name)    { |n|    "ichizos#{n}" }
         city        "New York"
         address     "123 happy st"
         zip         "11211"
@@ -39,7 +39,7 @@ FactoryGirl.define do
         sequence(:phone) do
             phone = ""
             10.times do
-              phone + (2..8).to_a.sample.to_s
+              phone += (2..8).to_a.sample.to_s
             end
             phone
         end
@@ -56,7 +56,7 @@ FactoryGirl.define do
         identifier  "example@gmail.com"
     end
 
-    factory :gift do |gift|
+    factory :gift do
         giver_id        13
         giver_name      "henry"
         receiver_name   "jon"
@@ -64,6 +64,11 @@ FactoryGirl.define do
         total           "100"
         service         "4"
         credit_card     "4567890"
+        shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
+    end
+
+    factory :sale do
+
     end
 
 end

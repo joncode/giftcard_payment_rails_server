@@ -16,19 +16,19 @@ class Provider < ActiveRecord::Base
 	has_many   :users, :through => :employees
 	has_many   :employees, dependent: :destroy
 	has_many   :relays
-	has_many   :menus, dependent: :destroy
+	#has_many   :menus, dependent: :destroy
 	has_many   :orders
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
 	has_many   :sales
-	has_and_belongs_to_many   :tags
+	#has_and_belongs_to_many   :tags
 	belongs_to :brands
-	has_many   :servers, class_name: "Employee"
+	#has_many   :servers, class_name: "Employee"
 
-	mount_uploader :photo,    ProviderPhotoUploader
-	mount_uploader :logo,     ProviderLogoUploader
-	mount_uploader :box,      ProviderBoxUploader
-	mount_uploader :portrait, ProviderPortraitUploader
+	# mount_uploader :photo,    ProviderPhotoUploader
+	# mount_uploader :logo,     ProviderLogoUploader
+	# mount_uploader :box,      ProviderBoxUploader
+	# mount_uploader :portrait, ProviderPortraitUploader
 
 	validates_presence_of :name, :city, :address, :zip , :state, :token
 	validates_length_of :state , 	:is => 2
@@ -41,7 +41,7 @@ class Provider < ActiveRecord::Base
 	after_create 	:make_menu_string
     #after_save      :update_city_provider
 
-	default_scope where(active: true).where(paused: false).order("name ASC")
+	#default_scope where(active: true).where(paused: false).order("name ASC")
 
 #/---------------------------------------------------------------------------------------------/
 

@@ -229,8 +229,8 @@ class User < ActiveRecord::Base
 
     def deactivate_social type_of, identifier
         # user get user_social record with identifier
-        social = self.user_socials.where(identifier: identifier)
-        social.deactivate
+        socials = self.user_socials.where(identifier: identifier)
+        socials.first.deactivate
     end
 
 	def update_reset_token
@@ -246,25 +246,6 @@ class User < ActiveRecord::Base
 		self.reset_token_sent_at   = nil
 		self.save
 	end
-
-	# def checkin_to_foursquare(fsq_id, lat, lng)
-	# 	requrl = "https://foursquare.com/oauth2/access_token"
-	# 	response = HTTParty.post(url, :query => {:venueId => fsq_id, :ll => ["?,?",lat,lng], :oauth_token => self.foursquare_access_token})
-	# 	return false if response.code != 200
-	# 	return true
-	# end
-
-	# def is_employee? provider
-	# 	employees = Employee.find(:all, :conditions => ["user_id = ?", self.id])
-	# 	if !employees.nil? && employees.length > 0
-	# 		employees.each do |emp|
-	# 			if emp.provider_id == provider.id
-	# 				return true
-	# 			end
-	# 		end
-	# 	end
-	# 	return false
-	# end
 
 	def pn_token=(value)
 		value 		= PnToken.convert_token(value)
@@ -324,11 +305,13 @@ class User < ActiveRecord::Base
 	end
 
 	def init_confirm_email
-		if self.email
-			set_confirm_email
-			confirm_email
-		else
-			puts "User created without EMAIL !! #{self.id}"
+		if Rails.env.production? || Rails.env.staging?
+			if self.email
+				set_confirm_email
+				confirm_email
+			else
+				puts "User created without EMAIL !! #{self.id}"
+			end
 		end
 	end
 

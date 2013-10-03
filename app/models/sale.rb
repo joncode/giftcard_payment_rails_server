@@ -1,7 +1,6 @@
 require 'authorize_net'
 
 class Sale < ActiveRecord::Base
-    include Email
 
     if Rails.env.production?
             # real account
@@ -27,8 +26,7 @@ class Sale < ActiveRecord::Base
 	belongs_to :card
 
 
-	#before_create :add_gateway_data
-  	#after_create  :send_emails,    :if => :transaction_approved
+	before_create :add_gateway_data
 
 ### AUTHORIZE TRANSACTION METHODS
 
@@ -105,22 +103,6 @@ class Sale < ActiveRecord::Base
 		self.reason_code		= self.response.response_reason_code.to_i
 		puts "#{self.inspect}"
 	end
-
-	def send_emails
-        self.notify_receiver
-        self.invoice_giver
-    end
-
-    def transaction_approved
-    	# chek that sale transaction is approved
-    	if self.resp_code == 1
-            puts "Transaction is approved - time to email invoice and notification - sale ID = #{self.id}"
-    		return true
-    	else
-            puts "Transaction is NOT approved - sale ID = #{self.id}"
-    		return false
-    	end
-    end
 
 end
 # == Schema Information

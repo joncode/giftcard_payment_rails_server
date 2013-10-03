@@ -1,5 +1,5 @@
 class IphoneController < AppController
-	
+
 	before_filter :authenticate_services,     only: [:regift]
 
 	def create_account
@@ -161,9 +161,6 @@ class IphoneController < AppController
             old_gift.update_attribute(:status, 'regifted')
             new_gift.set_status_post_payment
             new_gift.save
-            unless new_gift.receiver_id.nil?
-            	Relay.send_push_notification new_gift
-            end
             success(new_gift.serialize)
         else
             fail    data_not_found

@@ -41,7 +41,7 @@ describe User do
             # delete or deactivate that data
             user.deactivate_social("#{type_of}", identifier)
             # check for that data on the user shoud.not ==
-            UserSocial.find_by_identifier(identifier).active.should be_false
+            UserSocial.unscoped.find_by_identifier(identifier).active.should be_false
         end
 
         it "should not create a new user social record if no new #{type_of} is submitted" do

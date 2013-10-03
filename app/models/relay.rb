@@ -16,34 +16,15 @@ class Relay < ActiveRecord::Base
 
 		def send_push_notification gift
 				# get the user tokens from the pn_token db
-			if not Rails.env.test? || Rails.env.development?
-				Resque.enqueue(PushJob, gift.id)
+			if not Rails.env.development? || Rails.env.test?
+				if gift.status == "open"
+					Resque.enqueue(PushJob, gift.id)
+				end
 			end
-			# IF ALIAS system fails
 
-			# pn_tokens = receiver.pn_token
-			# puts "SENDING PUSH NOTE for GIFT ID = #{gift.id} && receiver = #{receiver.id}"
-			# puts "PN_TOKENS = #{pn_tokens.to_s}"
-			# if pn_tokens.count > 0
-			# 	# send push notification HERE
-			# 	payload = self.format_token_payload(gift,receiver, pn_tokens)
-			# 	resp  	= Urbanairship.push(payload)
-			# 	puts "APNS push sent via TOKEN! #{resp}"
-			# end
 		end
 	end
 
-##############
-
-private
-
-	# def self.format_token_payload(gift,receiver, pn_tokens)
-	# 	gift_array 	= Gift.get_gifts(receiver)
-	# 	badge 		= gift_array.size
-	# 	{ :device_tokens => pn_tokens,
-	# 		:aps => { :alert => "#{gift.giver_name} sent you a gift at #{gift.provider_name}", :badge => badge, :sound => 'default' }
-	# 	}
-	# end
 end
 
 # == Schema Information

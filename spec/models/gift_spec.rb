@@ -44,13 +44,37 @@ describe Gift do
       gift.should have_at_least(1).error_on(:service)
     end
 
-    describe "description" do
+    it "requires shoppingCart" do
+      gift = FactoryGirl.build(:gift, :shoppingCart => nil)
+      gift.should_not be_valid
+      gift.should have_at_least(1).error_on(:shoppingCart)
+    end
 
-      it "should description" do
+    it "should save gift_items on create" do
+      gift = FactoryGirl.build(:gift)
+      gift.save
+      items = JSON.parse gift.shoppingCart
+      gift.gift_items.count.should == items.count
+      gift.gift_items.first.menu_id.should == items.first["item_id"]
+    end
 
-      end
+    it "should save sale on create" do
+      gift = FactoryGirl.build(:gift)
+      sale = FactoryGirl.build(:sale)
+      gift.sale = sale
+      gift.save
+      saved_gift = Gift.last
+      saved_gift.sale.should == Sale.last
 
     end
+
+    describe "collect incomplete gifts" do
+
+      it "should collect gifts for any UserSocial account on user"
+
+    end
+
+
 
     # test that the gift starts as unpaid
     # test that the gift without the id after paid is incomplete

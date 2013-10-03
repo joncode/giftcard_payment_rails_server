@@ -72,7 +72,7 @@ describe AppController do
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
         end
 
-        it "it should not allow gift creating for de-activated users" do
+        it "it should not allow gift creating for de-activated givers" do
 
             deactivated_user = FactoryGirl.create :user, { active: false}
             # hit create gift with a receiver_id of a deactivated user
@@ -82,7 +82,20 @@ describe AppController do
             puts "here is the response #{json["success"]}"
             json["success"].should be_nil
             # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
-            json["error"].should == "User is no longer in the system , please gift to them with phone, email, facebook, or twitter"
+            json["error"].should == {"Failed Authentication" => "Please log out and re-log into app"}
+        end
+
+        it "it should not allow gift creating for de-activated receivers" do
+            giver = FactoryGirl.create(:giver)
+            deactivated_user = FactoryGirl.create :receiver, { active: false}
+            # hit create gift with a receiver_id of a deactivated user
+            gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
+            # test that create gift does not create the gift or the sale
+            post :create_gift, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart , token: giver.remember_token
+            puts "here is the response #{json["success"]}"
+            json["success"].should be_nil
+            # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
+            json["error"].should == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
         end
 
 
@@ -104,15 +117,17 @@ describe AppController do
 
     describe "#providers" do
         before do
-            @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
-            @first_provider = FactoryGirl.create(:provider)
-            @second_provider = FactoryGirl.create(:provider)
+            @user            = FactoryGirl.create :user
+            @first_provider  = FactoryGirl.create :provider
+            @second_provider = FactoryGirl.create :provider
         end
+
         it "should send all providers with correct scope" do
             post :providers, format: :json, city: "New York", token: @user.remember_token
-            providers_array = json
-            providers_array[0].should == @first_provider.serialize
-            providers_array[1].should == @second_provider.serialize
+            puts json
+            p_ary = json
+            p_ary[0].should == @first_provider.serialize
+            p_ary[1].should == @second_provider.serialize
         end
     end
 

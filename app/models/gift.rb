@@ -1,6 +1,8 @@
 class Gift < ActiveRecord::Base
 	extend  GiftScopes
 	include Formatter
+	include Email
+	include GiftSerializers
 
 	attr_accessible   	  :giver_id, 	  :giver_name,
 			:receiver_id, :receiver_name, :receiver_phone,
@@ -29,67 +31,12 @@ class Gift < ActiveRecord::Base
 	before_create :set_status
 	before_create :build_gift_items
 
+	after_create :send_notifications, :if => :transaction_approved
+
 	default_scope where(active: true)
-
-#/-----------------------------------------------Status---------------------------------------/
-
-
 
 #/---------------------------------------------------------------------------------------------/
 
-	def serialize
-		sender      = giver
-		merchant    = provider
-		gift_hsh                       = {}
-		gift_hsh["gift_id"]			   = self.id
-		gift_hsh["giver"]              = sender.name
-		gift_hsh["giver_photo"]        = sender.get_photo
-		if receipient = receiver
-			gift_hsh["receiver"]           = receiver.name
-			gift_hsh["receiver_photo"]	   = receiver.get_photo
-		else
-			gift_hsh["receiver"]           = receiver_name
-		end
-		gift_hsh["message"]            = message
-		gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
-		gift_hsh["merchant_name"]      = merchant.name
-		gift_hsh["merchant_address"]   = merchant.full_address
-		gift_hsh["merchant_phone"]     = merchant.phone
-		gift_hsh
-	end
-
-	def admt_serialize
-		provider = self.provider
-		gift_hsh                       = {}
-		gift_hsh["gift_id"]			   = self.id
-		gift_hsh["provider_id"]        = provider.id
-		#gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
-		gift_hsh["name"]      		   = provider.name
-		gift_hsh["merchant_address"]   = provider.full_address
-		gift_hsh["total"]   		   = self.total
-		gift_hsh["updated_at"]   	   = self.updated_at
-		gift_hsh
-	end
-
-	def report_serialize
-		gift_hsh                    = {}
-		gift_hsh["order_num"]		= self.order_num
-		gift_hsh["updated_at"]		= self.updated_at
-		gift_hsh["created_at"]		= self.created_at
-			# current summary and payment reports use item coun NOT shopping cart ... delete when in sync
-		#gift_hsh["shoppingCart"]  	= self.shoppingCart
-		gift_hsh["receiver_name"]   = self.receiver_name
-		gift_hsh["items"]			= JSON.parse(self.shoppingCart).count
-
-		if order = self.order
-			server = self.order.server_code
-		else
-			server = nil
-		end
-		gift_hsh["server"]			= server
-		gift_hsh["total"]			= self.total
-		gift_hsh
-	end
 
 	def self.init(params)
 		# gift = Gift.new(params[:gift])
@@ -121,7 +68,9 @@ class Gift < ActiveRecord::Base
 		string_to_cents super
 	end
 
-##########  gift credit card methods
+
+
+#/-----------------------------------------------Status---------------------------------------/
 
 	def set_status
 		if card_enabled?
@@ -144,6 +93,8 @@ class Gift < ActiveRecord::Base
 		end
 	end
 
+#/--------------------------------------gift credit card methods-----------------------------/
+
 	def card_enabled?
 		# whitelist = ["test@test.com", "deb@knead4health.com", "dfennell@graywolves.com", "dfennell@webteampros.com"]
 		# blacklist = ["addis006@gmail.com"]
@@ -156,33 +107,12 @@ class Gift < ActiveRecord::Base
 	end
 
 	def charge_card
-				# if giver is one jb@jb.com
-				# call authorize capture on the gift and create the sale object
-		if Rails.env.production? || Rails.env.staging?
-			if true # self.card_enabled?
-				sale = self.authorize_capture
-				puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
-			else
-				sale = Sale.new
-				sale.resp_code = 1
-			end
+		if not Rails.env.test?
+			sale = self.authorize_capture
+			puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
 		else
 			sale     = Sale.init self
 			sale.resp_code = 1
-		end
-		if sale.resp_code == 1 && self.status == 'open'
-			if Rails.env.production? || Rails.env.staging?
-				# not in production for APNS YET
-				begin
-					Relay.send_push_notification self
-				rescue
-					puts "PUSH NOTIFICATION FAIL"
-				end
-			elsif Rails.env.development?
-				Relay.send_push_notification self
-				sale.invoice_giver
-				sale.notify_receiver
-			end
 		end
 				# otherwise return a sale object with resp_code == 1
 		return sale
@@ -239,9 +169,7 @@ class Gift < ActiveRecord::Base
 		return sale
 	end
 
-###############
-
-##########  data population methods
+#/-------------------------------------data population methods-----------------------------/
 
 	def regift(recipient=nil, message=nil)
 		new_gift              = self.dup
@@ -345,6 +273,29 @@ private
 	def regift?
 		self.regift_id
 	end
+
+	def send_notifications
+		if not Rails.env.test?
+        	self.notify_receiver
+        	if self.regift_id.nil?
+        		self.invoice_giver
+        	end
+        	Relay.send_push_notification self
+        end
+    end
+
+    def transaction_approved
+    	# this should be a gift status method
+    	true
+    	# if self.resp_code == 1
+     #        puts "Transaction is approved - time to email invoice and notification - sale ID = #{self.id}"
+    	# 	return true
+    	# else
+     #        puts "Transaction is NOT approved - sale ID = #{self.id}"
+    	# 	return false
+    	# end
+    end
+
 end
 # == Schema Information
 #

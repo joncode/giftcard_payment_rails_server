@@ -350,12 +350,12 @@ class AppController < JsonController
 	    end
   	end
 
-  	def providers
-        providers_array = CityProvider.find_by_city(params["city"]).providers_array
-  		respond_to do |format|
-            format.json { render json: providers_array }
-	    end
-  	end
+  	# def providers
+   #      providers_array = CityProvider.find_by_city(params["city"]).providers_array
+  	# 	respond_to do |format|
+   #          format.json { render json: providers_array }
+	  #   end
+  	# end
 
   	def providers_short_ph_url
 	    if  authenticate_public_info
@@ -561,65 +561,56 @@ class AppController < JsonController
   		end
   	end
 
-  	def create_gift
-  		response = {}
-  		gift_obj = JSON.parse params["gift"]
-  		  			# authenticate user
-  		if giver = authenticate_app_user(params["token"])
-  					# check to see that the gift has the correct data to save
-  					# check to see that the gift has a shoppingCart
-			if gift_obj.nil? || params["shoppingCart"].nil?
-						# nothing can be done without the data
-				response["error_server"] = "Data didnt arrive #{database_error_gift}"
-		    else
-		    		# add the receiver + receiver checks to the gift object
-		        puts "Lets make this gift !!!"
+     def create_gift
+        response = {}
+                    # authenticate user
+        if giver = authenticate_app_user(params["token"])
+
+            gift_obj = JSON.parse params["gift"]
+            if gift_obj.nil? || params["shoppingCart"].nil?
+                        # nothing can be done without the data
+                response["error_server"] = "Data didnt arrive #{database_error_gift}"
+            else
+                    # add the receiver + receiver checks to the gift object
                 if gift_obj["receiver_id"].nil?
                     add_receiver_object_to(gift_obj, response)
                 else
                     # check that the receiver_id is active
-                    if receiver = User.find(gift_obj["receiver_id"].to_i)
+                    if receiver = User.unscoped.find(gift_obj["receiver_id"].to_i)
                         if receiver.active == false
                             response["error"] = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
                             gift_obj["receiver_id"] = nil
                             gift_obj["receiver_name"] = nil
                         end
                     end
-
                 end
-		        gift    = Gift.new(gift_obj)
-                sc      = JSON.parse(params["shoppingCart"])
-		        gift.make_gift_items(sc)
-	  				# add the giver info to the gift object
-	  			# if gift_obj["anon_id"]
-			   #      gift.add_anonymous_giver(giver.id)
-			   #  else
-			    gift.add_giver(giver)
-			   #  end
-	  			puts "Here is GIFT #{gift.inspect}"
-	  			if gift.save
-	  				sale = gift.charge_card
-			        if sale.resp_code == 1
-			        	response["success"]       = { "Gift_id" => gift.id }
-			        else
-			        	response["error_server"]  = { "Credit Card" => sale.reason_text }
-			        end
-	  			else
-	  				response["error_server"] = stringify_error_messages gift
-	  			end
-	  		end
-	  	else
-  			response["error"] = unauthorized_user
-  		end
+                gift = Gift.new(gift_obj)
+                gift.shoppingCart = params["shoppingCart"]
+                gift.add_giver(giver)
+                puts "Here is GIFT #{gift.inspect}"
+                if gift.save
+                    sale = gift.charge_card
+                    if sale.resp_code == 1
+                        response["success"]       = { "Gift_id" => gift.id }
+                    else
+                        response["error_server"]  = { "Credit Card" => sale.reason_text }
+                    end
+                else
+                    response["error_server"] = stringify_error_messages gift
+                end
+            end
+        else
+            response["error"] = unauthorized_user
+        end
 
-  		respond_to do |format|
-  			if response.has_key? "error_server"
-  				@app_response = stringify_error_messages gift
-  			end
-  			@app_response = "AppC #{response}"
-  			format.json { render json: response}
-  		end
-  	end
+        respond_to do |format|
+            if response.has_key? "error_server"
+                @app_response = stringify_error_messages gift
+            end
+            @app_response = "AppC #{response}"
+            format.json { render json: response}
+        end
+    end
 
 	def create_order_emp
 
