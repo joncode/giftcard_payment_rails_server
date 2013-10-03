@@ -6,10 +6,12 @@ require 'qa_team'
 require 'locate'
 require 'legacy'
 require 'legacy_user'
+require 'legacy_gift'
 require 'cron'
 require 'gift_console'
 include Legacy
 include LegacyUser
+include LegacyGift
 include Cron
 include Dbcall
 include GiftConsole
