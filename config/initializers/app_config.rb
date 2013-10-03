@@ -21,3 +21,5 @@ def lcon
 end
 
 ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+    

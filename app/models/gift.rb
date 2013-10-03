@@ -14,21 +14,20 @@ class Gift < ActiveRecord::Base
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :relay,  		dependent: :destroy
 	belongs_to  :provider
-	has_many    :sales
+	has_one     :sale
 	has_one     :order, 		dependent: :destroy
 	has_many    :gift_items, 	dependent: :destroy
 	belongs_to  :giver,    		class_name: "User"
 	belongs_to  :receiver, 		class_name: "User"
-	belongs_to  :payables, 		polymorphic: true
+	#belongs_to  :payables, 		polymorphic: true
 
-	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service
+	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service, :shoppingCart
 
 	before_create :extract_phone_digits
 	before_create :add_giver_name,  :if => :no_giver_name
 	before_create :regifted,        :if => :regift?
 	before_create :set_status
-
-	after_create  :update_shoppingCart
+	before_create :build_gift_items
 
 	default_scope where(active: true)
 
@@ -93,12 +92,12 @@ class Gift < ActiveRecord::Base
 	end
 
 	def self.init(params)
-		gift = Gift.new(params[:gift])
+		# gift = Gift.new(params[:gift])
 				# add anonymous giver feature
-		if params[:gift][:anon_id]
-			gift.add_anonymous_giver(params[:gift][:giver_id])
-		end
-		return gift
+		# if params[:gift][:anon_id]
+		# 	gift.add_anonymous_giver(params[:gift][:giver_id])
+		# end
+		Gift.new(params[:gift])
 	end
 
 	def phone
@@ -306,7 +305,13 @@ class Gift < ActiveRecord::Base
 
 ###############
 
+private
+
 ##########  shopping cart methods
+
+	def build_gift_items
+		make_gift_items ary_of_shopping_cart_as_hash
+	end
 
 	def ary_of_shopping_cart_as_hash
 		JSON.parse self.shoppingCart
@@ -320,18 +325,12 @@ class Gift < ActiveRecord::Base
 		puts "made it thru gift items #{self.gift_items}"
 	end
 
-private
-
-	def update_shoppingCart
-		if self.regift_id.nil?
-			updated_shoppingCart_array = self.gift_items.map { |item| item.prepare_for_shoppingCart }
-			puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
-			self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
-		end
-	end
+################  data validation methods
 
 	def add_giver_name
-		self.giver_name = User.find(self.giver_id).username
+		if giver = User.find(self.giver_id)
+			self.giver_name = giver.username
+		end
 	end
 
 	def no_giver_name

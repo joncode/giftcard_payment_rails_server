@@ -21,14 +21,14 @@ class Sale < ActiveRecord::Base
 
 	belongs_to :provider
 	belongs_to :giver, class_name: "User"
-	#belongs_to :gift
-    has_many    :gifts,   as: :payable
+	belongs_to :gift
+    #has_one :gift,   as: :payable
 	#has_one    :order, through: :gift
 	belongs_to :card
 
 
-	before_create :add_gateway_data
-  	after_create  :send_emails,    :if => :transaction_approved
+	#before_create :add_gateway_data
+  	#after_create  :send_emails,    :if => :transaction_approved
 
 ### AUTHORIZE TRANSACTION METHODS
 
