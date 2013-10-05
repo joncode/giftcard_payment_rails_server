@@ -26,4 +26,54 @@ describe Sale do
         sale.should_not be_valid
         sale.should have_at_least(1).error_on(:resp_code)
     end
+
+    describe "#process" do
+
+        let(:gift) { FactoryGirl.build(:gift) }
+        let(:sale) { Sale.process(gift)}
+
+        it "should return a Sale instance" do
+            sale.class.should == Sale
+        end
+
+        it "build sale instance with gift data" do
+            sale.card_id.should         == gift.credit_card
+            sale.gift_id.should         == gift.id
+            sale.giver_id.should        == gift.giver_id
+            sale.provider_id.should     == gift.provider_id
+            sale.revenue.should         == BigDecimal(gift.grand_total)
+            sale.total.should           == gift.grand_total
+            puts sale.inspect
+        end
+
+        it "should create an Auth.net transaction object" do
+            sale.transaction.class.should == AuthTransaction.new.class
+        end
+
+        it "should create an Auth.net sale response object" do
+            sale.response.class.should == AuthResponse.new.class
+        end
+
+        it "should add gateway data" do
+            response = sale.response
+            sale.transaction_id.should  == response.transaction_id
+            sale.resp_json.should       == response.fields.to_json
+            sale.resp_code.should       == response.response_code.to_i
+            sale.reason_text.should     == response.response_reason_text
+            sale.reason_code.should     == response.response_reason_code.to_i
+            puts sale.inspect
+            puts response.inspect
+        end
+
+        it "should create req_json after removing the credit card number" do
+            transaction = sale.transaction
+            full_num = transaction.fields[:card_num]
+            half_num = "XXXX" + full_num[-4..-1]
+            puts half_num
+            sale.req_json.should  == sale.transaction.fields.to_json
+        end
+
+    end
+
+
 end

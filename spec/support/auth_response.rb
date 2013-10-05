@@ -10,6 +10,7 @@ class AuthResponse
     def transaction_id
         @fields["transaction_id"]
     end
+    
     def response_code
         @fields["response_code"]
     end

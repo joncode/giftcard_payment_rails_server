@@ -11,7 +11,6 @@ class Gift < ActiveRecord::Base
 			:tip, :tax,   :total, :service,
 			:facebook_id, :foursquare_id, :twitter,
 			:status, :credit_card
-			# should be removed from accessible = giver_id, giver_name, shoppingCart, status
 
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :relay,  		dependent: :destroy
@@ -113,10 +112,10 @@ class Gift < ActiveRecord::Base
 
     def charge_card
     	self.pay_type = "Sale"
-    	sale      = Sale.init self  # @gift
+    	sale      	  = Sale.init self  # @gift
     	sale.auth_capture
 
-    	self.sale = sale
+    	self.sale 	  = sale
     end
 
 #/-------------------------------------data population methods-----------------------------/

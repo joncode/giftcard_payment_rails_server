@@ -74,6 +74,10 @@ describe Gift do
 
     end
 
+    describe "#charge_card" do
+
+    end
+
 
 
     # test that the gift starts as unpaid

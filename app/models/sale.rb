@@ -27,23 +27,34 @@ class Sale < ActiveRecord::Base
 
     validates_presence_of :gift_id, :giver_id, :resp_code
 
-### AUTHORIZE TRANSACTION METHODS
+#### SALE PROCESS METHODS
 
-	def self.init gift
-		puts "in Sale.init"
-		sale_obj 		     = Sale.new
-		sale_obj.card_id 	 = gift.credit_card
-		sale_obj.gift_id 	 = gift.id
-		sale_obj.giver_id 	 = gift.giver_id
-		sale_obj.provider_id = gift.provider_id
-		sale_obj.revenue 	 = BigDecimal(gift.grand_total)
-		sale_obj.total 	     = gift.grand_total
-		return sale_obj
-	end
+    class << self
+
+        def process gift
+            sale = Sale.init gift
+            sale.auth_capture
+        end
+
+    	def init gift
+    		puts "in Sale.init"
+    		sale_obj 		     = Sale.new
+    		sale_obj.card_id 	 = gift.credit_card
+    		sale_obj.gift_id 	 = gift.id
+    		sale_obj.giver_id 	 = gift.giver_id
+    		sale_obj.provider_id = gift.provider_id
+    		sale_obj.revenue 	 = BigDecimal(gift.grand_total)
+    		sale_obj.total 	     = gift.grand_total
+    		return sale_obj
+    	end
+
+    end
+
+### AUTHORIZE TRANSACTION METHODS
 
     def void_sale gift=nil
         gift      = self.gift if gift.nil?
-        auth_obj  = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
+        auth_obj  = authorize_net_aim_transaction
         @response = auth_obj.void(self.transaction_id)
         puts "HERE IS THE VOID ReSPONSE #{@response.inspect}"
 
@@ -70,7 +81,7 @@ class Sale < ActiveRecord::Base
             @response    = AuthResponse.new
         else
             # 1 makes a transaction
-            @transaction = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
+            @transaction = authorize_net_aim_transaction
             # 2 makes a credit card
             card         = self.card
             @transaction.fields[:first_name] = card.first_name
@@ -78,7 +89,7 @@ class Sale < ActiveRecord::Base
 
     		card.decrypt! CATCH_PHRASE
 
-            @credit_card = AuthorizeNet::CreditCard.new(card.number, card.month_year)
+            @credit_card = authorize_net_aim_response(card)
 
             # 3 gets a response from auth.net
             @response 	 = @transaction.purchase(self.total, @credit_card)
@@ -98,6 +109,17 @@ class Sale < ActiveRecord::Base
         self.resp_code          = self.response.response_code.to_i
         self.reason_text        = self.response.response_reason_text
         self.reason_code        = self.response.response_reason_code.to_i
+        self
+    end
+
+private
+
+    def authorize_net_aim_transaction
+        AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
+    end
+
+    def authorize_net_aim_response card
+        AuthorizeNet::CreditCard.new(card.number, card.month_year)
     end
 
 end
