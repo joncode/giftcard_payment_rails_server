@@ -47,7 +47,7 @@ describe User do
         it "should not create a new user social record if no new #{type_of} is submitted" do
             # update a user without #{type_of} change
             running {
-                @user.update_attribute(:last_name, "replace_me")
+                @user.update_attributes({last_name: "change_me_not_id"})
             }.should_not change { UserSocial.count }
 
         end

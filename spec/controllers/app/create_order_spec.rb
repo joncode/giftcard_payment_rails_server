@@ -37,7 +37,7 @@ describe AppController do
 
     end
 
-    describe "#regift security" do
+    describe "#create_order security" do
 
         it "it should not allow order creation for de-activated users" do
             user.update_attribute(:active, false)

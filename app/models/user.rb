@@ -353,7 +353,7 @@ private
 		end
 
 						# update incomplete gifts to open gifts with receiver info
-		if gifts.count > 0
+		response   = if gifts.count > 0
 			error   = 0
 			success = 0
 
@@ -382,18 +382,17 @@ private
 			end
 							# build success & error messages for reference
 			if  error  == 0
-				response = "#{success} incomplete gift(s) updated SUCCESSfully on create of #{self.username} #{self.id}"
+				"#{success} incomplete gift(s) updated SUCCESSfully on create of #{self.username} #{self.id}"
 			else
-				response = "#{error} ERRORS updating ghost gifts for #{self.username} #{self.id}"
+				"#{error} ERRORS updating ghost gifts for #{self.username} #{self.id}"
 			end
 
 		else
 							# no incomplete gifts found
-			response   = "ZERO incomplete ghost gifts for  #{self.username} #{self.id}"
+			 "ZERO incomplete ghost gifts for  #{self.username} #{self.id}"
 		end
 
 							# log the messages output for the method
-		puts "COLLECT INCOMPLETE GIFTS"
 		puts response
 	end
 
