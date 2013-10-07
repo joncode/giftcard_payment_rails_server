@@ -22,8 +22,6 @@ class GiftRegifter < GiftUtility
         end
     end
 
-
-
 private
 
     def setup_regift(message=nil)

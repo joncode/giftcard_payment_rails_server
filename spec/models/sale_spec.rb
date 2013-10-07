@@ -43,7 +43,6 @@ describe Sale do
             sale.provider_id.should     == gift.provider_id
             sale.revenue.should         == BigDecimal(gift.grand_total)
             sale.total.should           == gift.grand_total
-            puts sale.inspect
         end
 
         it "should create an Auth.net transaction object" do
@@ -61,8 +60,6 @@ describe Sale do
             sale.resp_code.should       == response.response_code.to_i
             sale.reason_text.should     == response.response_reason_text
             sale.reason_code.should     == response.response_reason_code.to_i
-            puts sale.inspect
-            puts response.inspect
         end
 
         it "should create req_json after removing the credit card number" do

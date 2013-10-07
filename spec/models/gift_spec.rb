@@ -75,19 +75,21 @@ describe Gift do
 
     describe "collect incomplete gifts" do
 
-      it "should collect gifts for any UserSocial account on user"
+      xit "should collect gifts for any UserSocial account on user" do
+
+      end
 
     end
 
     describe "#charge_card" do
-      it "should correctly set status" do
+      xit "should correctly set status" do
 
       end
-      it "should correctly set pay_stat" do
+      xit "should correctly set pay_stat" do
 
       end
 
-      it "should correctly set pay_type" do
+      xit "should correctly set pay_type" do
 
       end
     end

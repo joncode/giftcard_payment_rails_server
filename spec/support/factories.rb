@@ -126,7 +126,6 @@ FactoryGirl.define do
 
     factory :redeem do
         gift    { FactoryGirl.create(:gift)}
-
     end
 
         # factory :city_provider do
