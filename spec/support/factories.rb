@@ -33,6 +33,17 @@ FactoryGirl.define do
         end
     end
 
+    factory :nobody, :class => 'User' do
+        first_name                  "No"
+        last_name                   "One"
+        password                    "specspec"
+        password_confirmation       "specspec"
+        sequence(:email)            { |n| "noone#{n}@gmail.com" }
+        sequence(:remember_token)   { |n| "nope#{n}" }
+        sequence(:facebook_id)      { |n| "8ssa#{n}fd332" }
+        sequence(:twitter)          { |n| "28sdd3s#{n}f6fd3" }
+    end
+
     factory :provider do
         sequence(:name)    { |n| "ichizos#{n}" }
         city        "New York"
@@ -73,6 +84,9 @@ FactoryGirl.define do
             regift.giver_name   "JOn giver"
             regift.receiver     { FactoryGirl.create(:regifter) }
             regift.receiver_name "Will Regifter"
+            regift.pay_stat     "charged"
+            regift.pay_type     "Sale"
+            regift.sale         { FactoryGirl.create(:sale) }
         end
 
     end

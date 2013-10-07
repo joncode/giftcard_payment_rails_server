@@ -72,6 +72,8 @@ class Gift < ActiveRecord::Base
 			set_status
 		when "CreditAccount"
 		when "Campaign"
+		else
+			set_status
 		end
 	end
 
@@ -145,13 +147,18 @@ class Gift < ActiveRecord::Base
 	end
 
 	def add_receiver receiver
-		self.receiver_id    = receiver.id
+		if receiver.id
+			self.status 	  = 'open'
+			self.receiver_id  = receiver.id
+		else
+		 	self.receiver_id  = nil
+		 	self.status 	  = 'incomplete'
+		end
 		self.receiver_name  = receiver.name
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
-		self.twitter        = receiver.twitter ? receiver.twitter : nil
-		self.receiver_phone = receiver.phone ? receiver.phone : nil
-		self.receiver_email = receiver.email ? receiver.email : nil
-		self.status 		= 'open' if receiver.id
+		self.twitter        = receiver.twitter ? 	 receiver.twitter : nil
+		self.receiver_phone = receiver.phone ? 		 receiver.phone : nil
+		self.receiver_email = receiver.email ? 		 receiver.email : nil
 	end
 
 	def add_giver sender

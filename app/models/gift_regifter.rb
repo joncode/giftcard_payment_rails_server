@@ -4,12 +4,10 @@ class GiftRegifter < GiftUtility
 
     def initialize(recipient_hsh , details)
         @old_gift     = Gift.includes(:receiver).find(details['regift_id'])
-        @giver        = @old_gift.receiver
-        setup_regift
+        setup_regift(details['message'])
         @resp         = {}
         recipient     = make_user_with_hash(recipient_hsh)
         add_receiver_from_hash(recipient)
-        @gift.message = details['message']
     end
 
 
@@ -28,13 +26,14 @@ class GiftRegifter < GiftUtility
 
 private
 
-    def setup_regift
+    def setup_regift(message=nil)
         @gift              = @old_gift.dup
         @gift.regift_id    = @old_gift.id
         @gift.add_giver(@old_gift.receiver)
         @gift.remove_receiver
-        @gift.message      = @message ? @message : nil
+        @gift.message      = message ? message : nil
         @gift.order_num    = nil
+        @gift.pay_type     = "Regift"
     end
 
 end

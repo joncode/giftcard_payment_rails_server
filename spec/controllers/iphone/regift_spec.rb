@@ -37,6 +37,29 @@ describe IphoneController do
             old_gift_reloaded.status.should == 'regifted'
         end
 
+        it "should set the status of new gift to open" do
+            post :regift, format: :json, receiver: rec_json, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
+            new_gift = Gift.last
+            new_gift.status.should == 'open'
+        end
+
+        it "should set the status of 'social identifier only gift' to incomplete" do
+            no_id_user     = FactoryGirl.build(:nobody, :id => nil )
+            hsh_no_id_user = regift_hash(no_id_user).to_json
+            post :regift, format: :json, receiver: hsh_no_id_user, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
+            new_gift = Gift.find_by_receiver_email(no_id_user.email)
+            puts new_gift.inspect
+            new_gift.status.should == 'incomplete'
+        end
+
+        it "should create 'social identifier only gift'" do
+            no_id_user     = FactoryGirl.build(:nobody, :id => nil )
+            hsh_no_id_user = regift_hash(no_id_user).to_json
+            post :regift, format: :json, receiver: hsh_no_id_user, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
+            new_gift = Gift.last
+            new_gift.id.should == (old_gift.id + 1)
+        end
+
         it "should add new message to new gift" do
             post :regift, format: :json, receiver: rec_json, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
             new_gift = Gift.last

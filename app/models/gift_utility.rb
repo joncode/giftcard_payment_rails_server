@@ -32,7 +32,9 @@ class GiftUtility
 
     def add_receiver_from_hash(recipient)
         if recipient.id.nil?
-            add_receiver_object
+            if add_receiver_object == false
+                @gift.add_receiver recipient
+            end
         else
             if receiver = User.unscoped.find( recipient.id )
                 if receiver.active == false
@@ -53,10 +55,11 @@ class GiftUtility
         unique_ids.each do |unique_id|
             if unique_id[1].present?
                 if find_user(unique_id[0], unique_id[1])
-                    break
+                    return true
                 end
             end
         end
+        false
     end
 
     def find_user type_of, unique_id
