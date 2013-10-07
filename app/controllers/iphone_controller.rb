@@ -145,9 +145,9 @@ class IphoneController < AppController
         gift_regifter  = GiftRegifter.new(recipient_data, details)
 
         if gift_regifter.create
-        	success gift_regifter.resp
+        	success gift_regifter.response
         else
-        	fail  	gift_regifter.resp
+        	fail  	gift_regifter.response
         end
         respond
 	end

@@ -91,9 +91,69 @@ describe IphoneController do
         it "it should not allow regift to de-activated receivers" do
             receiver.update_attribute(:active, false)
             post :regift, format: :json, receiver: rec_json, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: regifter.remember_token
-            puts "here is the response #{json["success"]}"
+            puts "here is json inspect #{json.inspect}"
             json["status"].should          == 0
-            json["data"]["error"].should   == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+            json["data"].should   == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+        end
+
+    end
+
+    describe "#regift_to_socal_network_non_users" do
+
+        before(:each) do
+            @user = FactoryGirl.create :nonetwork
+            @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+        end
+
+        {
+            email: "jon@gmail.com",
+            phone: "9173706969",
+            facebook_id: "123",
+            twitter: "999"
+        }.stringify_keys.each do |type_of, identifier|
+            it "should find user account for old #{type_of}" do
+
+                @user.update_attribute(type_of, identifier)
+                if (type_of == "phone") || (type_of == "email")
+                    key = "receiver_#{type_of}"
+                else
+                    key = type_of
+                end
+                old_gift = FactoryGirl.create :regift, { key => identifier}
+                giver    = old_gift.giver
+                recipient_data = regift_hash(@user).to_json
+                post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
+
+                puts json.inspect
+                new_gift = Gift.find(json["data"]["gift_id"])
+                new_gift.receiver_id.should == @user.id
+            end
+
+            it "should look thru multiple unique ids for a user object with #{type_of}" do
+                @user.update_attribute(type_of, identifier)
+                old_gift = FactoryGirl.create :regift, gift_social_id_hsh
+                giver    = old_gift.giver
+                recipient_data = regift_hash(@user).to_json
+                post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
+                new_gift = Gift.find(json["data"]["gift_id"])
+                new_gift.receiver_id.should == @user.id
+            end
+
+            it "should look thru not full gift of unique ids for a user object with #{type_of}" do
+                @user.update_attribute(type_of, identifier)
+                missing_hsh = gift_social_id_hsh
+                if type_of == "phone"
+                    missing_hsh["receiver_email"] = ""
+                else
+                    missing_hsh["receiver_phone"] = ""
+                end
+                old_gift  = FactoryGirl.create :regift, missing_hsh
+                giver     = old_gift.giver
+                recipient_data = regift_hash(@user).to_json
+                post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
+                new_gift = Gift.find(json["data"]["gift_id"])
+                new_gift.receiver_id.should == @user.id
+            end
         end
 
     end
@@ -107,6 +167,15 @@ describe IphoneController do
         user_data_hash["facebook_id"]   = receiver.facebook_id
         user_data_hash["twitter"]       = receiver.twitter
         user_data_hash
+    end
+
+    def gift_social_id_hsh
+        {
+            receiver_email: "jon@gmail.com",
+            receiver_phone: "9173706969",
+            facebook_id: "123",
+            twitter: "999"
+        }
     end
 
 end

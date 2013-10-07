@@ -13,12 +13,22 @@ class GiftRegifter < GiftUtility
 
     def create
         if @gift.save
-            @resp["success"]      = @gift.serialize
+            @resp["success"] = @gift.serialize
             messenger
             true
         else
             @resp["error_server"] = @gift.errors.messages
             false
+        end
+    end
+
+    def response
+        if @resp.has_key? "error"
+            return @resp["error"]
+        elsif @resp.has_key? "success"
+            return @resp["success"]
+        else
+            return @resp["error_server"]
         end
     end
 
