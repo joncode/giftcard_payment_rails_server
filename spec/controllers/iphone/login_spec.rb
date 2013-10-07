@@ -36,5 +36,4 @@ describe IphoneController do
 
     end
 
-
 end

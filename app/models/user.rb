@@ -11,25 +11,25 @@ class User < ActiveRecord::Base
 	:server_code, :sex, :birthday, :is_public, :confirm,
 	:iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
 
-	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
+	# attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
+	# attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
-	mount_uploader   :photo, UserAvatarUploader
-	mount_uploader   :secure_image, UserAvatarUploader
+	# mount_uploader   :photo, UserAvatarUploader
+	# mount_uploader   :secure_image, UserAvatarUploader
 
 	has_one  :setting
 	has_many :pn_tokens
-	has_many :employees, dependent: :destroy
+	#has_many :employees, dependent: :destroy
 	has_many :providers, :through => :employees
 	has_many :brands
 	has_many :orders,    :through => :providers
 	has_many :gifts,     foreign_key: "giver_id"
 	has_many :sales
 	has_many :cards
-	has_many :locations
+	#has_many :locations
 	has_many :answers
 	has_many :questions, :through => :answers
-	has_many :relays , foreign_key: "receiver_id"
+	#has_many :relays , foreign_key: "receiver_id"
 	has_many :user_socials
 
 	has_secure_password

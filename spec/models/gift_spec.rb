@@ -65,7 +65,12 @@ describe Gift do
       gift.save
       saved_gift = Gift.last
       saved_gift.sale.should == Sale.last
+    end
 
+    it "should get the provider name if it does not have one" do
+      gift = FactoryGirl.build(:gift, :provider_name => nil)
+      gift.save
+      gift.provider_name.should_not be_nil
     end
 
     describe "collect incomplete gifts" do
@@ -75,7 +80,16 @@ describe Gift do
     end
 
     describe "#charge_card" do
+      it "should correctly set status" do
 
+      end
+      it "should correctly set pay_stat" do
+
+      end
+
+      it "should correctly set pay_type" do
+
+      end
     end
 
 

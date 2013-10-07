@@ -507,10 +507,7 @@ class AppController < JsonController
 
   	def create_order
   		response = {}
-  		# receive {"token" => "<token>", "data" => "<gift_id>", "server_code" => <server_code> }
-  		  			# authenticate user
   		if receiver = authenticate_app_user(params["token"])
-  					# get gift from db
   			begin
 	  			gift  = Gift.find params["data"].to_i
 	  			order = Order.init_with_gift(gift, params["server_code"])
@@ -537,8 +534,7 @@ class AppController < JsonController
 
         gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
         unless gift_creator.no_data?
-            gift_creator.build_gift_obj
-            gift_creator.add_receiver
+            gift_creator.build_gift
             gift_creator.charge
         end
         response = gift_creator.resp

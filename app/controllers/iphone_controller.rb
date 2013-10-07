@@ -142,30 +142,13 @@ class IphoneController < AppController
 
         recipient_data = JSON.parse params["receiver"]
         details 	   = JSON.parse params["data"]
-        old_gift_id    = details["regift_id"]
-        message        = details["message"]
-        recipient = nil
+        gift_regifter  = GiftRegifter.new(recipient_data, details)
 
-        if recipient_data["receiver_id"] && recipient_data["receiver_id"] > 0
-            unless recipient = User.find(recipient_data["receiver_id"])
-                puts "!!! APP SUBMITTED USER ID THAT DOESNT EXIST #{recipient_data} !!!"
-                recipient = make_user_with_hash(recipient_data)
-            end
+        if gift_regifter.create
+        	success gift_regifter.resp
         else
-            recipient = make_user_with_hash(recipient_data)
+        	fail  	gift_regifter.resp
         end
-
-        if recipient && (old_gift = Gift.find(old_gift_id.to_i))
-            new_gift = old_gift.regift(recipient, message)
-            new_gift.save
-            old_gift.update_attribute(:status, 'regifted')
-            new_gift.set_status
-            new_gift.save
-            success(new_gift.serialize)
-        else
-            fail    data_not_found
-        end
-
         respond
 	end
 

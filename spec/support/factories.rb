@@ -1,34 +1,40 @@
 FactoryGirl.define do
 
     factory :user do
-        first_name "jon"
-        password   "specspec"
-        password_confirmation "specspec"
-        sequence(:email)            { |n| "ronny#{n}@gmail.com" }
+        first_name                  "Jimmy"
+        last_name                   "Basic"
+        password                    "specspec"
+        password_confirmation       "specspec"
+        sequence(:email)            { |n| "thisguy#{n}@gmail.com" }
         sequence(:remember_token)   { |n| "token#{n}" }
         sequence(:facebook_id)      { |n| "98a#{n}fd332" }
         sequence(:twitter)          { |n| "283s#{n}f6fd3" }
         sequence(:phone) do
             phone = ""
             10.times do
-              phone + (2..8).to_a.sample.to_s
+              phone += (2..8).to_a.sample.to_s
             end
             phone
         end
 
         factory :giver do
-            sequence(:first_name) { |n|  "jonGifter#{n}" }
+            first_name   "Jon"
+            last_name    "Gifter"
+        end
+
+        factory :regifter do
+            first_name   "Will"
+            last_name    "ReGifter"
         end
 
         factory :receiver do
-            sequence(:first_name) { |n|  "ronReceiver#{n}" }
+            first_name   "Ron"
+            last_name    "Receiver"
         end
     end
 
-
-
     factory :provider do
-        sequence(:name)    { |n|    "ichizos#{n}" }
+        sequence(:name)    { |n| "ichizos#{n}" }
         city        "New York"
         address     "123 happy st"
         zip         "11211"
@@ -45,33 +51,37 @@ FactoryGirl.define do
         end
     end
 
-    # factory :city_provider do
-    #     city "New York"
-    #     providers_array
-    # end
-
     factory :user_social do
         user_id     1
         type_of     "email"
         identifier  "example@gmail.com"
     end
 
-    factory :gift do
-        giver_id        13
-        giver_name      "henry"
-        receiver_name   "jon"
-        provider { FactoryGirl.create(:provider)}
-        total           "100"
-        service         "4"
-        credit_card     4567890
-        shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
+    factory :gift do |gift|
+        gift.giver_id        1
+        gift.giver_name      "henry"
+        gift.receiver_name   "jon"
+        gift.provider        { FactoryGirl.create(:provider) }
+        gift.total           "100"
+        gift.service         "4"
+        gift.credit_card     4567890
+        gift.shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
+        gift.message         "Factory Message"
+
+        factory :regift do |regift|
+            regift.giver        { FactoryGirl.create(:giver) }
+            regift.giver_name   "JOn giver"
+            regift.receiver     { FactoryGirl.create(:regifter) }
+            regift.receiver_name "Will Regifter"
+        end
+
     end
 
     factory :order_no_association_gift, class: "Gift" do
         giver_id        13
         giver_name      "henry"
         receiver_name   "jon"
-        provider { FactoryGirl.create(:provider)}
+        provider        { FactoryGirl.create(:provider)}
         total           "100"
         service         "4"
         credit_card     4567890
@@ -104,5 +114,10 @@ FactoryGirl.define do
         gift    { FactoryGirl.create(:gift)}
 
     end
+
+        # factory :city_provider do
+    #     city "New York"
+    #     providers_array
+    # end
 
 end

@@ -25,8 +25,9 @@ class Gift < ActiveRecord::Base
 	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service, :shoppingCart
 
 	before_create :extract_phone_digits
-	before_create :add_giver_name,  :if => :no_giver_name
-	before_create :regifted,        :if => :regift?
+	before_create :add_giver_name,  	:if => :no_giver_name
+	before_create :add_provider_name,  	:if => :no_provider_name
+	before_create :regifted,        	:if => :regift?
 	before_create :build_gift_items
 	before_create :set_statuses
 
@@ -118,21 +119,7 @@ class Gift < ActiveRecord::Base
     	self.sale 	  = sale
     end
 
-#/-------------------------------------data population methods-----------------------------/
-
-	def regift(recipient=nil, message=nil)
-		new_gift              = self.dup
-		new_gift.regift_id    = self.id
-		new_gift.message      = message ? message : nil
-		new_gift.add_giver(self.receiver)
-		if recipient
-			new_gift.add_receiver recipient
-		else
-			new_gift.remove_receiver
-		end
-		new_gift.order_num  = nil
-		return new_gift
-	end
+#/-------------------------------------re gift db methods-----------------------------/
 
 	def parent
 		if self.regift_id
@@ -146,13 +133,15 @@ class Gift < ActiveRecord::Base
 		Gift.find_by_regift_id(self.id)
 	end
 
+#/-------------------------------------data population methods-----------------------------/
+
 	def remove_receiver
 		self.receiver_id    = nil
 		self.receiver_name  = nil
 		self.facebook_id    = nil
 		self.receiver_phone = nil
 		self.receiver_email = nil
-		self.status 		= "unpaid"
+		self.twitter		= nil
 	end
 
 	def add_receiver receiver
@@ -166,7 +155,7 @@ class Gift < ActiveRecord::Base
 	end
 
 	def add_giver sender
-		self.giver_id   = sender.id
+		self.giver   	= sender
 		self.giver_name = sender.name
 	end
 
@@ -215,9 +204,19 @@ private
 		self.giver_name.nil?
 	end
 
+	def add_provider_name
+		if provider = self.provider
+			self.provider_name = provider.name
+		end
+	end
+
+	def no_provider_name
+		self.provider_name.nil?
+	end
+
 	def regifted
 		old_gift = Gift.find(self.regift_id)
-		old_gift.update_attributes(status: 'regifted')
+		old_gift.update_attribute(:status, 'regifted')
 	end
 
 	def regift?

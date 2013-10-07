@@ -4,7 +4,10 @@ describe AppController do
 
     describe "#create_gift" do
 
-        before do
+        before(:each) do
+            Gift.delete_all
+            User.delete_all
+            UserSocial.delete_all
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
         end
@@ -42,7 +45,7 @@ describe AppController do
                 new_gift.receiver_id.should == @user.id
             end
 
-            it "should look thru not full gift of  unique ids for a user object with #{type_of}" do
+            it "should look thru not full gift of unique ids for a user object with #{type_of}" do
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
@@ -61,14 +64,15 @@ describe AppController do
         end
 
 
-        # Git should valiate total and service
+        # Git should validate total and service
 
     end
 
-    describe "#create_gift behavior" do
-
+    describe "#create_gift security" do
 
         before do
+            Gift.delete_all
+            User.delete_all
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
         end
 
@@ -95,6 +99,7 @@ describe AppController do
             # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
             json["error"].should == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
         end
+
     end
 
     def make_gift_json gift
@@ -109,23 +114,6 @@ describe AppController do
             credit_card:    gift.credit_card
         }.to_json
     end
-
-    describe "#providers" do
-        before do
-            @user            = FactoryGirl.create :user
-            @first_provider  = FactoryGirl.create :provider
-            @second_provider = FactoryGirl.create :provider
-        end
-
-        it "should send all providers with correct scope" do
-            post :providers, format: :json, city: "New York", token: @user.remember_token
-            puts json
-            p_ary = json
-            p_ary[0].should == @first_provider.serialize
-            p_ary[1].should == @second_provider.serialize
-        end
-    end
-
 
     def gift_social_id_hsh
         {
