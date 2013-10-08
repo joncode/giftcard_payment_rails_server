@@ -25,10 +25,10 @@ class Provider < ActiveRecord::Base
 	belongs_to :brands
 	#has_many   :servers, class_name: "Employee"
 
-	# mount_uploader :photo,    ProviderPhotoUploader
-	# mount_uploader :logo,     ProviderLogoUploader
-	# mount_uploader :box,      ProviderBoxUploader
-	# mount_uploader :portrait, ProviderPortraitUploader
+	mount_uploader :photo,    ProviderPhotoUploader
+	mount_uploader :logo,     ProviderLogoUploader
+	mount_uploader :box,      ProviderBoxUploader
+	mount_uploader :portrait, ProviderPortraitUploader
 
 	validates_presence_of :name, :city, :address, :zip , :state, :token
 	validates_length_of :state , 	:is => 2
@@ -160,7 +160,7 @@ class Provider < ActiveRecord::Base
 				photo
 			end
 		else
-			"http://res.cloudinary.com/drinkboard/image/upload/" + image
+			image
 		end
 	end
 
