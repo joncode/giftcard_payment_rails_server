@@ -116,7 +116,7 @@ class IphoneController < AppController
 			# going out is YES , returning home is NO
 		response  = {}
 		begin
-			user  = User.find_by_remember_token(params["token"])
+			user  = User.app_authenticate(token)
 			if    params["public"] == "YES"
 				user.update_attributes(is_public: true) if !user.is_public
 			elsif params["public"] == "NO"
@@ -199,7 +199,7 @@ class IphoneController < AppController
 
 		response = {}
 		begin
-			user  = User.find_by_remember_token(params["token"])
+			user  = User.app_authenticate(token)
 		rescue
 			response["error"] = "User not found from remember token"
 		end
