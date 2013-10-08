@@ -81,9 +81,9 @@ FactoryGirl.define do
     end
 
     factory :gift do |gift|
-        gift.giver_id        1
-        gift.giver_name      "henry"
-        gift.receiver_name   "jon"
+        gift.giver_id        { FactoryGirl.create(:giver) }
+        gift.giver_name      "Jon giver"
+        gift.receiver_name   "Someone New"
         gift.provider        { FactoryGirl.create(:provider) }
         gift.total           "100"
         gift.service         "4"
@@ -93,7 +93,7 @@ FactoryGirl.define do
 
         factory :regift do |regift|
             regift.giver        { FactoryGirl.create(:giver) }
-            regift.giver_name   "JOn giver"
+            regift.giver_name   "Jon giver"
             regift.receiver     { FactoryGirl.create(:regifter) }
             regift.receiver_name "Will Regifter"
             regift.pay_stat     "charged"
@@ -101,17 +101,6 @@ FactoryGirl.define do
             regift.sale         { FactoryGirl.create(:sale) }
         end
 
-    end
-
-    factory :order_no_association_gift, class: "Gift" do
-        giver_id        13
-        giver_name      "henry"
-        receiver_name   "jon"
-        provider        { FactoryGirl.create(:provider)}
-        total           "100"
-        service         "4"
-        credit_card     4567890
-        shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
     end
 
     factory :sale do

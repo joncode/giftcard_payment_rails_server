@@ -78,11 +78,11 @@ class IphoneController < AppController
 			response["error_iphone"] = "Data not received."
 		else
 			if origin == 'f'
-				user = User.find_by_facebook_id(facebook_id)
+				user = User.find_by_facebook_id_and_active(facebook_id, true)
 				msg  = "Facebook Account"
 				resp_key = "facebook"
 			else
-				user = User.find_by_twitter(twitter)
+				user = User.find_by_twitter_and_active(twitter, true)
 				msg  = "Twitter Account"
 				resp_key = "twitter"
 			end
@@ -175,7 +175,7 @@ class IphoneController < AppController
 		end
 	end
 
-	
+
 	def locations
 
 		# @user  = User.find_by_remember_token(params["token"])
