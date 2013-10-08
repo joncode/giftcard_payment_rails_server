@@ -73,11 +73,11 @@ class Admt::V1::AdminToolsController < JsonController
 
     def cancel
         if gift = Gift.unscoped.find(params["data"].to_i)
-            case gift.status
-            when "unpaid"
+            case gift.pay_stat
+            when "charged"
                 # void the gift - no sale
-                gift.update_attribute(:status, "void")
-                response = gift.status
+                gift.update_attribute(:pay_stat, "void")
+                response = gift.pay_stat
             else
                 sale     = gift.sale
                 response = sale.void_sale gift
@@ -86,7 +86,7 @@ class Admt::V1::AdminToolsController < JsonController
             if gift
                 success response
             else
-                fail    "Error De-Activating Unpaid gift"
+                fail    "Error De-Activating gift"
             end
         else
             fail    data_not_found
@@ -409,13 +409,13 @@ class Admt::V1::AdminToolsController < JsonController
         try_two           = []
 
         gifts.each do |gift|
-            if not gift.update_attribute(:status, "settled")
+            if not gift.update_attribute(:pay_stat, "settled")
                 fail_update_gifts << gift
             end
         end
 
         fail_update_gifts.each do |gift|
-            if not gift.update_attribute(:status, "settled")
+            if not gift.update_attribute(:pay_stat, "settled")
                 puts "!!! TRY TWO FAILURE !!! GIFT ID = #{gift.id}"
                 try_two << gift
             end

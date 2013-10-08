@@ -18,7 +18,7 @@ module GiftScopes
             Time.now.to_date + 7.hours         # most recent 2 week end period , 7 am
         end
         puts "HEERE IS THE END DATE TO SCOPE #{end_date}"
-        where(status: "redeemed").where("updated_at <= :end_date", :end_date => end_date )
+        where(status: "redeemed").where("pay_stat != :settled", :settled => 'settled').where("updated_at <= :end_date", :end_date => end_date )
     end
 
 #### USER SCOPES
@@ -32,7 +32,7 @@ module GiftScopes
     end
 
     def get_past_gifts user
-        where( receiver_id: user).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').order("created_at DESC")
+        where( receiver_id: user).where(status: 'redeemed').order("created_at DESC")
     end
 
     def get_all_gifts user
@@ -41,13 +41,13 @@ module GiftScopes
 
     def get_buy_history user
         gifts       = where( giver_id: user).where("status = :open OR status = :notified OR status = :incom", :open => 'open', :notified => 'notified', :incom => "incomplete").order("created_at DESC")
-        past_gifts  = where( giver_id: user).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').order("created_at DESC")
+        past_gifts  = where( giver_id: user).where(status: 'redeemed').order("created_at DESC")
         return gifts, past_gifts
     end
 
     def get_archive user
         give_gifts = where(giver_id: user).order("created_at DESC")
-        rec_gifts  = where(receiver_id: user).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').order("created_at DESC")
+        rec_gifts  = where(receiver_id: user).where(status: 'redeemed').order("created_at DESC")
         return give_gifts, rec_gifts
     end
 
@@ -82,7 +82,7 @@ module GiftScopes
     end
 
     def get_summary_report provider, start_date, end_date
-        redeemed = where(provider_id: provider.id).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
+        redeemed = where(provider_id: provider.id).where(status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
         #redeemed = where(provider_id: provider.id).where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
         bought   = where(provider_id: provider.id).where("created_at >= :start_date AND created_at <= :end_date", :start_date => start_date, :end_date => end_date ).count
         { "redeemed" => redeemed.serialize_objs(:report), "bought" => bought }
@@ -107,7 +107,7 @@ module GiftScopes
             start_date = start_date + 4.hours
             end_date   = end_date   + 4.hours
             puts "GETTING the gifts scoped with start time = #{start_date} and end_date = #{end_date}"
-            where(provider_id: provider.id).where("status = :redeemed OR status = :settled", :redeemed => 'redeemed', :settled => 'settled').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
+            where(provider_id: provider.id).where(status: 'redeemed').where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
             #where(provider_id: provider.id).where("updated_at >= :start_date AND updated_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("updated_at DESC")
         else
             get_history_provider(provider)

@@ -59,17 +59,14 @@ class Sale < ActiveRecord::Base
         puts "HERE IS THE VOID ReSPONSE #{@response.inspect}"
 
         if @response.response_code == "1"
-            # sale is voided
-            # set gift to proper status
             if gift.status = "redeemed"
-                new_status = "refund_cancel" || "cancel"
-                gift.update_attribute(:status, new_status)
+
+                gift.update_attributes({pay_stat: 'refunded' })
             else
-                gift.update_attribute(:status, "refund_void")
+                gift.update_attributes({pay_stat: "void"})
             end
             return @response.response_reason_text
         else
-            # gift unable to be voided
             @response.response_reason_text
         end
 

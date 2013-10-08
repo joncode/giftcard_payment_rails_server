@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(:version => 20131002213728) do
 
   add_index "connections", ["giver_id"], :name => "index_connections_on_giver_id"
   add_index "connections", ["receiver_id"], :name => "index_connections_on_receiver_id"
-  
+
   create_table "credit_accounts", :force => true do |t|
     t.string   "owner"
     t.integer  "owner_id"
