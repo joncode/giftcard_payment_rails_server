@@ -52,7 +52,7 @@ class Provider < ActiveRecord::Base
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city, :latitude, :longitude]
 		prov_hash["provider_id"]  = self.id
-		prov_hash["photo"]        = self.get_image("photo")
+		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live_int
 		return prov_hash
@@ -157,10 +157,10 @@ class Provider < ActiveRecord::Base
 			if photo.blank?
 				MERCHANT_DEFAULT_IMG
 			else
-				photo.url
+				photo
 			end
 		else
-			image
+			"http://res.cloudinary.com/drinkboard/image/upload/" + image
 		end
 	end
 

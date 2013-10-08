@@ -80,7 +80,7 @@ class Admt::V1::AdminToolsController < JsonController
                 response = gift.pay_stat
             else
                 sale     = gift.sale
-                response = sale.void_sale gift
+                response = sale.fail_update_gifts gift
             end
 
             if gift
