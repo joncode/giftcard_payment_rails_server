@@ -43,8 +43,8 @@ class Card < ActiveRecord::Base
 	end
 
 	def month_year
-		month 		 = "%02d" % card.month.to_i
-		year 		 = card.year[2..3]
+		month 		 = "%02d" % self.month.to_i
+		year 		 = self.year[2..3]
 		"#{month}#{year}"
 	end
 
