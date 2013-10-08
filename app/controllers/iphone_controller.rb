@@ -175,6 +175,7 @@ class IphoneController < AppController
 		end
 	end
 
+	
 	def locations
 
 		# @user  = User.find_by_remember_token(params["token"])
