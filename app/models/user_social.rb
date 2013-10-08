@@ -6,10 +6,23 @@ class UserSocial < ActiveRecord::Base
 
     validates_presence_of :identifier, :type_of, :user_id
 
+    default_scope where(active: true)
+
+    def self.deactivate_all user
+        socials = user.user_socials
+        socials.each do |social|
+            social.deactivate
+        end
+    end
+
+    def deactivate
+        self.update_attribute(:active, false)
+    end
+
 private
 
     def add_to_mailchimp_list
-        if not Rails.env.test?
+        if Rails.env.production? || Rails.env.staging?
         	if self.type_of  == "email"
                 Resque.enqueue(SubscriptionJob, self.id)
         	end

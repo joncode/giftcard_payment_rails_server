@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924014353) do
+ActiveRecord::Schema.define(:version => 20131002213728) do
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"
@@ -57,6 +57,12 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
   add_index "brands_providers", ["brand_id"], :name => "index_brands_providers_on_brand_id"
   add_index "brands_providers", ["provider_id"], :name => "index_brands_providers_on_provider_id"
 
+  create_table "campaigns", :force => true do |t|
+    t.integer  "campaign_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
   create_table "cards", :force => true do |t|
     t.integer  "user_id"
     t.string   "nickname"
@@ -89,6 +95,13 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
 
   add_index "connections", ["giver_id"], :name => "index_connections_on_giver_id"
   add_index "connections", ["receiver_id"], :name => "index_connections_on_receiver_id"
+  
+  create_table "credit_accounts", :force => true do |t|
+    t.string   "owner"
+    t.integer  "owner_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "employees", :force => true do |t|
     t.integer  "provider_id",                      :null => false
@@ -144,11 +157,20 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.string   "order_num"
     t.integer  "cat",                           :default => 0
     t.boolean  "active",                        :default => true
+    t.string   "pay_stat"
+    t.string   "pay_type"
+    t.integer  "pay_id"
+    t.datetime "redeemed_at"
+    t.string   "server"
+    t.integer  "payable_id"
+    t.string   "payable_type"
   end
 
   add_index "gifts", ["giver_id"], :name => "index_gifts_on_giver_id"
+  add_index "gifts", ["pay_stat"], :name => "index_gifts_on_pay_stat"
   add_index "gifts", ["provider_id"], :name => "index_gifts_on_provider_id"
   add_index "gifts", ["receiver_id"], :name => "index_gifts_on_receiver_id"
+  add_index "gifts", ["status"], :name => "index_gifts_on_status"
 
   create_table "items", :force => true do |t|
     t.string  "item_name",   :limit => 50, :null => false
@@ -384,6 +406,8 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.boolean  "active",     :default => true
   end
 
+  add_index "user_socials", ["active"], :name => "index_user_socials_on_active"
+
   create_table "users", :force => true do |t|
     t.string   "email",                                                    :null => false
     t.boolean  "admin",                                 :default => false
@@ -423,8 +447,10 @@ ActiveRecord::Schema.define(:version => 20130924014353) do
     t.date     "birthday"
     t.string   "origin"
     t.string   "confirm",                               :default => "00"
+    t.boolean  "perm_deactive",                         :default => false
   end
 
+  add_index "users", ["active", "perm_deactive"], :name => "index_users_on_active_and_perm_deactive"
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
 
 end

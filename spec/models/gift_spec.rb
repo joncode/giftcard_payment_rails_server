@@ -44,13 +44,57 @@ describe Gift do
       gift.should have_at_least(1).error_on(:service)
     end
 
-    describe "description" do
+    it "requires shoppingCart" do
+      gift = FactoryGirl.build(:gift, :shoppingCart => nil)
+      gift.should_not be_valid
+      gift.should have_at_least(1).error_on(:shoppingCart)
+    end
 
-        it "should description" do
+    it "should save gift_items on create" do
+      gift = FactoryGirl.build(:gift)
+      gift.save
+      items = JSON.parse gift.shoppingCart
+      gift.gift_items.count.should == items.count
+      gift.gift_items.first.menu_id.should == items.first["item_id"]
+    end
 
-        end
+    it "should save sale on create" do
+      gift = FactoryGirl.build(:gift)
+      sale = FactoryGirl.build(:sale)
+      gift.sale = sale
+      gift.save
+      saved_gift = Gift.last
+      saved_gift.sale.should == Sale.last
+    end
+
+    it "should get the provider name if it does not have one" do
+      gift = FactoryGirl.build(:gift, :provider_name => nil)
+      gift.save
+      gift.provider_name.should_not be_nil
+    end
+
+    describe "collect incomplete gifts" do
+
+      xit "should collect gifts for any UserSocial account on user" do
+
+      end
 
     end
+
+    describe "#charge_card" do
+      xit "should correctly set status" do
+
+      end
+      xit "should correctly set pay_stat" do
+
+      end
+
+      xit "should correctly set pay_type" do
+
+      end
+    end
+
+
 
     # test that the gift starts as unpaid
     # test that the gift without the id after paid is incomplete
@@ -62,7 +106,9 @@ describe Gift do
     # test that when the gift is voided that it is removed from the appropriate app lists
     # test that when the gift is refunded that it removed from the appropriate app lists
 
-end# == Schema Information
+end
+
+# == Schema Information
 #
 # Table name: gifts
 #
@@ -94,5 +140,14 @@ end# == Schema Information
 #  order_num      :string(255)
 #  cat            :integer         default(0)
 #  active         :boolean         default(TRUE)
+#  stat           :integer
+#  pay_stat       :integer
+#  pay_type       :string(255)
+#  pay_id         :integer
+#  notified_at    :datetime
+#  notified_at_tz :string(255)
+#  redeemed_at    :datetime
+#  redeemed_at_tz :string(255)
+#  server_code    :string(255)
 #
 

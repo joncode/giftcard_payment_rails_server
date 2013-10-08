@@ -6,21 +6,19 @@ class Order < ActiveRecord::Base
 	belongs_to  :provider
 	belongs_to  :redeem
 	belongs_to  :gift
-	belongs_to  :employee
+	#belongs_to  :employee
 	belongs_to  :sales
 	belongs_to  :cards
-	belongs_to  :server, class_name: "User"    #  be class_name "Employee"
-
-	validates :gift_id   , presence: true, uniqueness: true
-	validates :redeem_id , presence: true, uniqueness: true
-	validates :provider_id , presence: true
+	#belongs_to  :server, class_name: "User"    #  be class_name "Employee"
 
 	before_validation :add_gift_id,     :if => :no_gift_id
 	before_validation :add_redeem_id,   :if => :no_redeem_id
 	before_validation :add_provider_id, :if => :no_provider_id
 
+	validates_presence_of 	:gift_id, :redeem_id, :provider_id
+	validates_uniqueness_of :gift_id, :redeem_id
+
 	after_create      :update_gift_status
-	after_create      :notify_giver_order_complete
 	after_destroy     :rewind_gift_status
 
 	def self.init_with_gift(gift, server_code=nil)
@@ -59,13 +57,6 @@ private
 		return (num + 10).to_s(36).capitalize
 	end
 
-	# def notify_giver_order_complete
-	# 	puts "emailing the gift giver for #{self.id}"
-	# 	# notify the giver via email
-	# 	gift = self.gift
-	# 	Resque.enqueue(EmailJob, 'notify_giver_order_complete', gift.giver_id , {:gift_id => gift.id})
-	# end
-
 	def add_server
 		server_ary      = self.provider.get_server_from_code(self.server_code)
 		server_obj      = server_ary.pop
@@ -75,8 +66,10 @@ private
 
 	def update_gift_status
 		gift = self.gift
-		gift.order_num = self.make_order_num
-		gift.status    = 'redeemed'
+		gift.order_num   = self.make_order_num
+		gift.status      = 'redeemed'
+		gift.redeemed_at = self.created_at
+		gift.server      = self.server_code
 		if gift.save
 			puts "UPDATE GIFT #{gift.order_num} STATUS #{gift.status}"
 		else
@@ -85,7 +78,7 @@ private
 	end
 
 	def rewind_gift_status
-		self.gift.update_attribute(:status, 'notified')
+		self.gift.update_attributes({status: 'notified' , redeemed_at: nil, server_code: nil, order_num: nil})
 		puts "UPDATE GIFT STATUS DELETED ORDER ID=#{self.id}, GiftID = #{self.gift.id} #{self.gift.status}"
 	end
 

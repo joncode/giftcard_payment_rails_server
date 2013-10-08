@@ -60,7 +60,7 @@ module Email
             route_email_system(data)
         end
     end
-    
+
     def confirm_email
 
         data = {"text"        => 'confirm_email',
@@ -85,7 +85,9 @@ private
 
     def route_email_system data
         puts "data in Email.rb #{data}"
-        Resque.enqueue(MailerJob, data)
+        if  Rails.env.production? || Rails.env.staging?
+            Resque.enqueue(MailerJob, data)
+        end
     end
 
 end
