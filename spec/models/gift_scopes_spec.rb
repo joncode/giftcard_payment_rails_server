@@ -2,14 +2,15 @@ require 'spec_helper'
 
 describe GiftScopes do
 
+    let(:provider) { FactoryGirl.create(:provider) }
+
     before(:each) do
-        @provider = FactoryGirl.create(:provider)
         @number = 10
         @number.times do
-            #FactoryGirl.create(:gift,   :provider => provider) # 10 incomplete  gifts
-            #FactoryGirl.create(:redeem, :provider => provider) # 10 notified gifts
-            #FactoryGirl.create(:order,  :provider => provider) # 10 redeemed gifts
-            FactoryGirl.create(:regift, :provider => @provider) # 10 open gifts
+            FactoryGirl.create(:gift,   :provider => provider) # 10 incomplete  gifts
+            FactoryGirl.create(:redeem, :provider => provider) # 10 notified gifts
+            FactoryGirl.create(:order,  :provider => provider) # 10 redeemed gifts
+            FactoryGirl.create(:regift, :provider => provider) # 10 open gifts
         end
 
     end

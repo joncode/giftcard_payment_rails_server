@@ -14,8 +14,8 @@ class User < ActiveRecord::Base
 	# attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	# attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
-	# mount_uploader   :photo, UserAvatarUploader
-	# mount_uploader   :secure_image, UserAvatarUploader
+	mount_uploader   :photo, UserAvatarUploader
+	mount_uploader   :secure_image, UserAvatarUploader
 
 	has_one  :setting
 	has_many :pn_tokens
@@ -318,7 +318,6 @@ class User < ActiveRecord::Base
 				puts "User created without EMAIL !! #{self.id}"
 			end
 		end
-		puts "init_confirm_email"
 	end
 
 ##################
@@ -331,7 +330,6 @@ private
 		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
 		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
 		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)
-		puts "in persist_social_data"
 	end
 
 	def collect_incomplete_gifts

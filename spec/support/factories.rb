@@ -81,7 +81,7 @@ FactoryGirl.define do
     end
 
     factory :gift do |gift|
-        gift.giver_id        { FactoryGirl.create(:giver) }
+        gift.giver           { FactoryGirl.create(:giver) }
         gift.giver_name      "Jon giver"
         gift.receiver_name   "Someone New"
         gift.provider        { FactoryGirl.create(:provider) }
