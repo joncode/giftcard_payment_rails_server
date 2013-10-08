@@ -159,7 +159,7 @@ class JsonController < ActionController::Base
 
     def authenticate_services
         token         = params["token"]
-        @current_user = User.find_by_remember_token token
+        @current_user = User.app_authenticate(token)
         head :unauthorized unless @current_user
     end
 

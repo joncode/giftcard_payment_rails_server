@@ -23,6 +23,7 @@ Drinkboard::Application.routes.draw do
   match 'app/transactions',     to: 'app#transactions',        via: :post
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/create_gift',      to: 'app#create_gift',         via: :post
+  match 'app/buy_gift',         to: 'app#create_gift',         via: :post
   match 'app/photo',            to: 'iphone#update_photo',     via: :post
   match 'app/reset_password',   to: 'app#reset_password',      via: :post
   match 'app/get_settings',     to: 'app#get_settings',        via: :post
@@ -43,7 +44,6 @@ Drinkboard::Application.routes.draw do
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/out',              to: 'iphone#going_out',        via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
-  match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
   match 'app/orders',           to: 'app#orders',              via: :post
   match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post

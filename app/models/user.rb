@@ -53,7 +53,12 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
-	default_scope where(active: true).where(perm_deactive: false) # indexed
+	#default_scope where(active: true).where(perm_deactive: false) # indexed
+
+	def self.app_authenticate(token)
+		User.where(active: true).where(perm_deactive: false).where(remember_token: token).first
+	end
+
 
 #/---------------------------------------------------------------------------------------------/
 

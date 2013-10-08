@@ -2,10 +2,10 @@ class AppController < JsonController
     include Email
     include Photo
 
-    before_filter :authenticate_services,     only: [:create_gift]
+    before_filter :authenticate_services, only: [:create_gift]
 
  	def authenticate_app_user(token)
- 		if user = User.find_by_remember_token(token)
+ 		if user = User.app_authenticate(token)
  			user
  		else
  			false
