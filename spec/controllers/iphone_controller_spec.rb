@@ -25,9 +25,30 @@ describe IphoneController do
             it "should accept photo key unstringified" do
 
             end
-            
+
         end
 
     end
 
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
