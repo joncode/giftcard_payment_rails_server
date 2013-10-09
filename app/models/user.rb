@@ -14,8 +14,8 @@ class User < ActiveRecord::Base
 	# attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	# attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
-	# mount_uploader   :photo, UserAvatarUploader
-	# mount_uploader   :secure_image, UserAvatarUploader
+	mount_uploader   :photo, UserAvatarUploader
+	mount_uploader   :secure_image, UserAvatarUploader
 
 	has_one  :setting
 	has_many :pn_tokens
