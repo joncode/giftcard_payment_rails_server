@@ -1,5 +1,4 @@
 class GiftUtility
-    include Email
 
     def messenger
         @gift.notify_receiver
