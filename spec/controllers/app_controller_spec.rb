@@ -54,7 +54,7 @@ describe AppController do
             post :drinkboard_users, format: :json, token: deactivated.remember_token
             response.status.should == 200
             puts "JSON --->>>  #{json}"
-            #json["error"]
+            json["error"].should == "cannot find user from token"
         end
 
     end
