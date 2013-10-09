@@ -56,9 +56,8 @@ class User < ActiveRecord::Base
 	#default_scope where(active: true).where(perm_deactive: false) # indexed
 
 	def self.app_authenticate(token)
-		User.where(active: true).where(perm_deactive: false).where(remember_token: token).first
+		where(active: true, perm_deactive: false).where(remember_token: token).first
 	end
-
 
 #/---------------------------------------------------------------------------------------------/
 

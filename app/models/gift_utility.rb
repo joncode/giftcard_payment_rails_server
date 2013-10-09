@@ -1,15 +1,9 @@
 class GiftUtility
 
     def messenger
-        if Rails.env.test?
-            puts "send notify_receiver"
-            puts "send invoice_giver"                       if @gift.regift_id.nil?
-            puts "send Relay.send_push_notification ID = #{@gift.id}"  if @gift.receiver_id
-        else
-            notify_receiver
-            invoice_giver                       if @gift.regift_id.nil?
-            Relay.send_push_notification @gift  if @gift.receiver_id
-        end
+        @gift.notify_receiver
+        @gift.invoice_giver                 if @gift.regift_id.nil?
+        Relay.send_push_notification @gift  if @gift.receiver_id
     end
 
     def add_receiver

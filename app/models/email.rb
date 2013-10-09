@@ -19,7 +19,7 @@ module Email
 
     def notify_receiver
         # self is sale
-        gift      = self.gift
+        gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil
         email     = gift.receiver_email || obj_email
 
@@ -37,7 +37,7 @@ module Email
 
     def invoice_giver
         # self is sale
-        gift = self.gift
+        gift = self
         puts "emailing the gift giver for #{gift.id}"
 
         data = {"text"        => 'invoice_giver',
