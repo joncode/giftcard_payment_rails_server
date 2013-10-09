@@ -57,6 +57,7 @@ class Provider < ActiveRecord::Base
 		prov_hash["live"]         = self.live_int
 		return prov_hash
 	end
+	
 	alias :to_hash :serialize
 
 	def admt_serialize
