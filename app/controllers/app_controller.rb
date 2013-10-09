@@ -240,7 +240,7 @@ class AppController < JsonController
 
 		  	  	# save filled out answers to db
 	  		if params["answers"]
-	        	puts "ANSWERS #{params['answers']}"
+	        	#puts "ANSWERS #{params['answers']}"
 	  			answered_questions = JSON.parse params["answers"]
 	  			Answer.save_these(answered_questions, user)
 	  		end
@@ -401,21 +401,10 @@ class AppController < JsonController
 
 	def drinkboard_users
 
-		# begin
-		# 	user = authenticate_app_user(params["token"])
-			# @users = User.find(:all, :conditions => ["id != ?", @user.id])
-			# providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
+        users    = User.where(active: true).to_a
 
-            users    = User.where(active: true).to_a
-
-			user_array = users.serialize_objs
-			logmsg 	   = user_array[0]
-		# rescue
-		# 	puts "ALERT - cannot find user from token"
-		# 	user_array = {"error" => "cannot find user from token"}
-		# 	logmsg 	   = user_array
-		# end
-
+		user_array = users.serialize_objs
+		logmsg 	   = user_array[0]
 
 		respond_to do |format|
 			# logger.debug user_array
