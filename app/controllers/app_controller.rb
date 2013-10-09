@@ -316,7 +316,7 @@ class AppController < JsonController
 
   		respond_to do |format|
             # logger.debug providers_array
-            @app_response = "#{providers_array}"
+            @app_response = "AppC response[0] => #{logmsg}"
             format.json { render json: providers_array }
 	    end
   	end
