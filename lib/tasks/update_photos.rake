@@ -36,5 +36,6 @@ namespace :db do
 			end
 			provider.photo_cache = image_url
 			provider.save
+		end
 	end
 end
