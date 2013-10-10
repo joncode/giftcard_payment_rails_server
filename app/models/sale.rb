@@ -73,6 +73,8 @@ class Sale < ActiveRecord::Base
     end
 
 	def auth_capture
+        timer = Time.now
+        puts "------- Charge Card Timer --------"
         if  Rails.env.test?
             @transaction = AuthTransaction.new
             @response    = AuthResponse.new
@@ -91,6 +93,8 @@ class Sale < ActiveRecord::Base
             # 3 gets a response from auth.net
             @response 	 = @transaction.purchase(self.total, @credit_card)
         end
+        end_time = ((Time.now - timer) * 1000).round(1)
+        puts "------ Total Time | (#{end_time}ms) ------"
         add_gateway_data
 	end
 
