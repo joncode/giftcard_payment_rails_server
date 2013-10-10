@@ -42,6 +42,10 @@ class MailchimpList
         end
 	end
 
+
+
+
+
 	def member_info
 		self.mc.lists.member_info(self.list_id, {'email' => self.email})
 	end

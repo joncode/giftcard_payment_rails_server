@@ -14,20 +14,18 @@ gem 'mailchimp-api'
 gem 'json', '~> 1.7.7'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
+gem 'pg', '0.12.2'
 
 group :production do
-	gem 'pg', '0.12.2'
 	gem 'thin'
 end
 
 group :staging do
-    gem 'pg', '0.12.2'
     gem 'thin'
 end
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
-	gem 'sqlite3'
 end
 
 group :development, :test do

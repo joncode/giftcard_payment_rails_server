@@ -8,7 +8,7 @@ class UserSocial < ActiveRecord::Base
 
 private
 
- def send_to_mailchimp_list
+def send_to_mailchimp_list
         if not Rails.env.test? && self.type_of == "email"
             user = User.find(self.user_id)
             if self.active    == true

@@ -2,6 +2,12 @@ class JsonController < ActionController::Base
     include ActionView::Helpers::DateHelper
     include CommonUtils
     include JsonHelper
+    
+    rescue_from ActionController::RoutingError, :with => :redirect_missing
+
+    def redirect_missing
+        redirect_to "http://www.drinkboard.com"
+    end
 
 	skip_before_filter   :verify_authenticity_token
     before_filter        :log_request_header
@@ -172,6 +178,5 @@ private
         headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Request-Method'] = '*'
     end
-
 
 end
