@@ -736,7 +736,7 @@ class AppController < JsonController
 	    end
 	end
 
-protected
+# protected
 
     # def add_receiver_object_to gift_obj, response
 
