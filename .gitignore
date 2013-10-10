@@ -25,6 +25,7 @@ capybara-*.html
 /doc/*
 .rvmrc
 latest.dump
+log/newrelic_agent.log
 
 /db/*.sqlite3
 /public/system/*
