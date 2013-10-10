@@ -1,6 +1,6 @@
 class Mt::V1::MerchantToolsController < JsonController
-    before_filter :authenticate_merchant_tools,    except: :create
-    before_filter :authenticate_general_token,     only:   :create
+    before_filter :authenticate_merchant_tools,    except: [:create, :reconcile_merchants]
+    before_filter :authenticate_general_token,     only:   [:create, :reconcile_merchants]
 
 #####  Merchant Methods
 
@@ -136,6 +136,67 @@ class Mt::V1::MerchantToolsController < JsonController
         end
         respond
     end
+
+
+    def reconcile_merchants
+        db_attributes        = ["live", "paused"]
+        provider_hash_for_mt = {}
+        merchant_matches     = 0
+
+        #For each merchant sent from mt to db...
+        merchants = params["data"]
+        merchants.each do |merchant|
+        
+        #find the provider in db with the same token...
+            if Provider.unscoped.find_by_token(merchant["token"])
+                merchant_matches += 1
+                provider = Provider.unscoped.find_by_token(merchant["token"])
+        #and for each of its attributes (except for "id")...
+                provider_attributes = provider.attributes
+                provider_attributes.delete("id")
+                provider_attributes.delete("created_at")
+                provider_attributes.delete("updated_at")
+                provider_attributes.each do |attr_name, attr_value|
+            #if the mt and db data doesn't match, then...            
+                    if attr_value.to_s != merchant[attr_name].to_s
+                # if it's present in db but not mt, log a message...
+                        if merchant[attr_name].blank?
+                            puts "The value of #{attr_name} for merchant #{merchant["merchant_id"]} is present in db, but not in mt. No changes were made."
+                #if it's a "db_attribute", add  the key/value pair to the data to be sent back to mt...   
+                        elsif db_attributes.include?(attr_name)
+                            if provider_hash_for_mt.has_key? merchant["merchant_id"]
+                                provider_hash_for_mt[merchant["merchant_id"]].merge!(attr_name => attr_value)
+                            else
+                                provider_hash_for_mt[merchant["merchant_id"]] = { attr_name => attr_value }
+                            end
+                        else
+                # otherwise, overwrite the db value with the mt value.
+                            provider.send("#{attr_name}=", merchant[attr_name])
+                            if provider.save
+                                overwrite_message = "DB UPDATE: The value of #{attr_name} for merchant #{merchant["merchant_id"]} was overwritten from #{attr_value} to #{merchant[attr_name]} in the app!"
+                                puts overwrite_message
+                                if provider_hash_for_mt.has_key? merchant["merchant_id"]
+                                    provider_hash_for_mt[merchant["merchant_id"]].merge!(attr_name => overwrite_message)
+                                else
+                                    provider_hash_for_mt[merchant["merchant_id"]] = { attr_name => overwrite_message }
+                                end
+                            end
+                        end
+                    end
+                end
+            else
+                provider_hash_for_mt[merchant["merchant_id"]] = "no corresponding provider"
+            end
+        end
+        if merchant_matches > 0
+            puts "#{merchant_matches} of the #{merchants.count} merchants in mt have a corresponding provider in db"
+            success provider_hash_for_mt
+        else
+            fail "no merchant-provider matches"
+        end
+        respond
+    end
+
 
 private
 

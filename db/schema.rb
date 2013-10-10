@@ -11,7 +11,9 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+  
 ActiveRecord::Schema.define(:version => 20131002213728) do
+
 
   create_table "admin_tokens", :force => true do |t|
     t.string   "token"

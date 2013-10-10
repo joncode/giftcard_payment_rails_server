@@ -1,9 +1,0 @@
-<p>Hey there,</p>
-<p>Your awesome friend <%= @user.username %> just invited you to drinkboard!</p>
-<p>Drinkboard is the best way to remotely buy drinks for your friends.</p>
-<% if @gift_id && @gift_id != "" %>
-	<p>Looks like your friend even sent you an awesome gift to redeem, sweet.</p>
-	<p><%= TEST_URL + "/invite/#{@gift_id}" %></p>
-<% else %>
-	<p>To check it out, visit us online and create an account: <%= TEST_URL + "/" %>.</p>
-<% end %>

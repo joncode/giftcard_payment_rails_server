@@ -40,9 +40,10 @@ describe AppController do
     end
 
     describe "#drinkboard_users" do
-
+        
         let(:user) { FactoryGirl.create(:user) }
         let(:deactivated) { FactoryGirl.create(:user, active: false ) }
+
 
         it "should return array of drinkboard users" do
             post :drinkboard_users, format: :json, token: user.remember_token

@@ -2,7 +2,7 @@ class UserSocial < ActiveRecord::Base
     attr_accessible :identifier, :type_of, :user_id
 
     belongs_to :user
-    after_save :add_to_mailchimp_list
+    after_save :update_mailchimp
 
     validates_presence_of :identifier, :type_of, :user_id
 
@@ -21,7 +21,7 @@ class UserSocial < ActiveRecord::Base
 
 private
 
-    def add_to_mailchimp_list
+    def update_mailchimp
         if Rails.env.production? || Rails.env.staging?
         	if self.type_of  == "email"
                 Resque.enqueue(SubscriptionJob, self.id)
