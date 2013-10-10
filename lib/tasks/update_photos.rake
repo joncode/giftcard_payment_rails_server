@@ -2,8 +2,7 @@ namespace :db do
 
     task user_image_url_to_fb_photo: :environment do
 	  	User.all.each do |user|
-	  		image_url = 
-			case user.use_photo
+	  		image_url = case user.use_photo
 			when "cw"
 				user.photo.url
 			when "ios"
@@ -24,8 +23,7 @@ namespace :db do
 
     task provider_image_url_to_photo_cache: :environment do
 	  	Provider.all.each do |provider|
-			image_url =
-			if image.blank?
+			image_url = if image.blank?
 				if photo.blank?
 					nil
 				else
