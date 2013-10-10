@@ -105,6 +105,7 @@ Drinkboard::Application.routes.draw do
     namespace :v1 do
       post 'confirm_email',      to: 'websites#confirm_email'
       post 'redo_confirm_email', to: 'websites#redo_confirm_email'
+      resources :providers, only: [:show]
     end
   end
 
