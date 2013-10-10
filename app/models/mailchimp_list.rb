@@ -14,12 +14,8 @@ class MailchimpList
 
 	def subscribe
 		begin
-<<<<<<< HEAD
 			resp = self.mc.lists.subscribe(self.list_id, {'email' => self.email}, { 'fname' => self.first_name, 'lname' => self.last_name })
 			puts "user email #{self.email} is added to subscription list - #{resp}"
-=======
-			self.mc.lists.subscribe(self.list_id, {'email' => self.email}, {'fname' => self.first_name, 'lname' => self.last_name})
->>>>>>> jg
 		rescue Mailchimp::ListAlreadySubscribedError
 			puts"#{email} is already subscribed to the list"
 		rescue Mailchimp::ListDoesNotExistError

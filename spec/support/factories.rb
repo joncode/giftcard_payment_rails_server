@@ -65,7 +65,6 @@ FactoryGirl.define do
         sequence(:token)   { |n| "token#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
-        sequence(:token) { |n| n.to_s + "token" }
         sequence(:phone) do
             phone = ""
             10.times do
