@@ -1,9 +1,9 @@
 class GiftUtility
 
     def messenger
+        Relay.send_push_notification @gift  if @gift.receiver_id
         @gift.notify_receiver
         @gift.invoice_giver                 if @gift.regift_id.nil?
-        Relay.send_push_notification @gift  if @gift.receiver_id
     end
 
     def add_receiver

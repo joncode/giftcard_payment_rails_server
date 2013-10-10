@@ -41,7 +41,7 @@ module LegacyUser
         pdus = User.unscoped.where(perm_deactive: true).where(active: false)
         pdus.each {|u| puts u.inspect }
 
-        us = User.all
+        us = User.unscoped.where(perm_deactive: false).where(active: true)
 
         us.each do |u|
             puts "user ID = #{u.id}"
