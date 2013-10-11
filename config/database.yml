@@ -16,7 +16,7 @@ test:
   database: drinkboard_test
   host: localhost
   pool: 5
-  username: jongutwillig
+  username: drinkboard
   password: drinkdrink
 
 staging:

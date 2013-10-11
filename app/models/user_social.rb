@@ -2,7 +2,7 @@ class UserSocial < ActiveRecord::Base
     attr_accessible :identifier, :type_of, :user_id
 
     belongs_to :user
-    after_save :update_mailchimp
+    # after_save :update_mailchimp
 
     validates_presence_of :identifier, :type_of, :user_id
 

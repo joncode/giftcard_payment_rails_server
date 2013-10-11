@@ -1,5 +1,7 @@
 namespace :db do
 
+
+# 1. put the photo.url in fb_photo  (- nil the default blank get_photo)
     task user_image_url_to_fb_photo: :environment do
 	  	User.all.each do |user|
 	  		image_url = case user.use_photo
@@ -21,19 +23,42 @@ namespace :db do
 	  	end
 	end
 
-    task provider_image_url_to_photo_cache: :environment do
-	  	Provider.all.each do |provider|
-			image_url = if image.blank?
-				if photo.blank?
-					nil
-				else
-					photo.url
-				end
-			else
-				image
-			end
-			provider.photo_cache = image_url
-			provider.save
+# 2. remove the uploaders and comment them out 
+
+# 3.  move fb+phtoto back to photo
+	task fb_photo_to_photo: :environment do
+		User.all.each do |user|
+			user.photo = photo.fb_photo
 		end
 	end
+
+# 4. delete fb_photo, photo_cache, secure_image (- first check that secure image is no longer used )
+  # note: User 31 is the only one with using secure_image
+  # rails g migration remove_image_columns_from_providers
+  # 
+  # def change
+  #   remove_column :providers, :fb_photo, :string
+  #   remove_column :providers, :photo_cache, :string
+  #   remove_column :providers, :secure_image, :string
+  # end
+
+# re-write get_photo
+
+	# def get_photo
+	# 	case self.use_photo
+	# 	when "cw"
+	# 		self.photo
+	# 	when "ios"
+	# 		self.iphone_photo
+	# 	when "fb"
+	# 		self.photo
+	# 	else
+	# 		if self.photo.blank?
+	# 			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+	# 		else
+	# 			self.photo
+	# 		end
+	# 	end
+	# end
+
 end
