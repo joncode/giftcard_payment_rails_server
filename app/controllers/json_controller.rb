@@ -136,19 +136,19 @@ class JsonController < ActionController::Base
     end
 
     def authenticate_admin_tools
-        token = request.headers["HTTP_TKN"] || params["token"]
+        token = request.headers["HTTP_TKN"]
         @admin_user = AdminToken.find_by_token token
         head :unauthorized unless @admin_user
     end
 
     def authenticate_merchant_tools
-        token = request.headers["HTTP_TKN"] || params["token"]
+        token = request.headers["HTTP_TKN"]
         @provider = Provider.unscoped.find_by_token(token)
         head :unauthorized unless @provider
     end
 
     def authenticate_general_token
-        token = request.headers["HTTP_TKN"] || params["token"]
+        token = request.headers["HTTP_TKN"]
         head :unauthorized unless GENERAL_TOKEN == token
     end
 

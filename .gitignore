@@ -10,6 +10,7 @@
 # Ignore all logfiles and tempfiles.
 /log/development.log
 /log/test.log
+log/newrelic_agent.log
 /tmp/*
 # /public/assets
 /app/assets/images/video/*
