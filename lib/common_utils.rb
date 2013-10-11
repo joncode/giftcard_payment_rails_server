@@ -6,8 +6,8 @@ module CommonUtils
 
 	def log_request_header
 
-		if request.headers['App-Version']
-			puts "HERE IS THE App-Version HEADER REQUEST #{request.headers['App-Version']}"
+		if request.headers['User-Agent']
+			puts "HERE IS THE User-Agent HEADER REQUEST #{request.headers['User-Agent']}"
 		end
 
 		if request.headers['Mdot-Version']
