@@ -31,6 +31,7 @@ module GiftSerializers
         gift_hsh["merchant_address"]   = provider.full_address
         gift_hsh["total"]              = self.total
         gift_hsh["updated_at"]         = self.updated_at
+        gift_hsh["pay_type"]           = self.pay_type
         gift_hsh
     end
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe WebsitesController do
+describe Web::V1::WebsitesController do
 
     describe "#merchants" do
 
@@ -21,5 +21,5 @@ describe WebsitesController do
         end
 
     end
-    
+
 end
