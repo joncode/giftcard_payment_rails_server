@@ -72,21 +72,14 @@ private
     end
 
     def generate_params data
-        # auth_params    = { "token" => self.token, "data" => data }
-        # { :body => auth_params }
-        auth_params    = { "data" => data }
-        {:headers => {"tkn" => self.token, 'Accept' => 'application/json'}, 
-         :body => auth_params}
+        {:headers => {"tkn" => self.token, 'Accept' => 'application/json'},
+         :body => { "data" => data }}
 
     end
 
     def generate_general_params data
-            # send json string to the merchant tools API
-        # auth_params    = { "token" => GENERAL_TOKEN, "data" => data }
-        # { :body => auth_params }
-        auth_params    = { "data" => data }
-        {:headers => {"tkn" => GENERAL_TOKEN, 'Accept' => 'application/json'}, 
-         :body => auth_params}
+        {:headers => {"tkn" => GENERAL_TOKEN, 'Accept' => 'application/json'},
+         :body => { "data" => data }}
 
     end
 
