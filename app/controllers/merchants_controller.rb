@@ -55,133 +55,133 @@ class MerchantsController < JsonController
 		end
 	end
 
-	def reports
-		response = {}
-		if provider = authenticate_mt_request(params["merchant_token"])
-			gifts 					 = Gift.get_history_provider(provider)
-			response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-		else
-			response["error_server"] = authentication_data_error
-		end
+	# def reports
+	# 	response = {}
+	# 	if provider = authenticate_mt_request(params["merchant_token"])
+	# 		gifts 					 = Gift.get_history_provider(provider)
+	# 		response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	# 	else
+	# 		response["error_server"] = authentication_data_error
+	# 	end
 
-		respond_to do |format|
-			# logger.debug gifts_array
-			@app_response = "AC response[0] => #{response.values[0]}"
-			format.json { render json: response }
-		end
-	end
+	# 	respond_to do |format|
+	# 		# logger.debug gifts_array
+	# 		@app_response = "AC response[0] => #{response.values[0]}"
+	# 		format.json { render json: response }
+	# 	end
+	# end
 
-	def employees
-		response = {}
-		if provider = authenticate_mt_request(params["merchant_token"])
-			response["success"] 	 = provider.employees_to_merchant_tools
-		else
-			response["error_server"] = authentication_data_error
-		end
+	# def employees
+	# 	response = {}
+	# 	if provider = authenticate_mt_request(params["merchant_token"])
+	# 		response["success"] 	 = provider.employees_to_merchant_tools
+	# 	else
+	# 		response["error_server"] = authentication_data_error
+	# 	end
 
-		respond_to do |format|
-			# logger.debug gifts_array
-			@app_response = "AC response[0] => #{response.values[0]}"
-			format.json { render json: response }
-		end
-	end
+	# 	respond_to do |format|
+	# 		# logger.debug gifts_array
+	# 		@app_response = "AC response[0] => #{response.values[0]}"
+	# 		format.json { render json: response }
+	# 	end
+	# end
 
-	def deactivate_employee
-		response = {}
-		if provider = authenticate_mt_request(params["merchant_token"])
-			employee = Employee.find(params["eid"].to_i)
-			employee.update_attribute(:active, false)
-			response["success"] 	 = provider.employees_to_merchant_tools
-		else
-			response["error_server"] = authentication_data_error
-		end
+	# def deactivate_employee
+	# 	response = {}
+	# 	if provider = authenticate_mt_request(params["merchant_token"])
+	# 		employee = Employee.find(params["eid"].to_i)
+	# 		employee.update_attribute(:active, false)
+	# 		response["success"] 	 = provider.employees_to_merchant_tools
+	# 	else
+	# 		response["error_server"] = authentication_data_error
+	# 	end
 
-		respond_to do |format|
-			# logger.debug gifts_array
-			@app_response = "AC response[0] => #{response.values[0]}"
-			format.json { render json: response }
-		end
-	end
+	# 	respond_to do |format|
+	# 		# logger.debug gifts_array
+	# 		@app_response = "AC response[0] => #{response.values[0]}"
+	# 		format.json { render json: response }
+	# 	end
+	# end
 
-	def finances
-		response = {}
-		if provider = authenticate_mt_request(params["merchant_token"])
-			gifts 					 = Gift.get_history_provider(provider)
-			response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-		else
-			response["error_server"] = authentication_data_error
-		end
+	# def finances
+	# 	response = {}
+	# 	if provider = authenticate_mt_request(params["merchant_token"])
+	# 		gifts 					 = Gift.get_history_provider(provider)
+	# 		response["success"] 	 = array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
+	# 	else
+	# 		response["error_server"] = authentication_data_error
+	# 	end
 
-		respond_to do |format|
-			# logger.debug gifts_array
-			@app_response = "AC response[0] => #{response.values[0]}"
-			format.json { render json: response }
-		end
-	end
+	# 	respond_to do |format|
+	# 		# logger.debug gifts_array
+	# 		@app_response = "AC response[0] => #{response.values[0]}"
+	# 		format.json { render json: response }
+	# 	end
+	# end
 
-	def email_invite
-		response = {}
-		if provider = authenticate_mt_request(params["merchant_token"])
-			data = JSON.parse params["data"]
-			invite_tkn = data["invite_tkn"]
-			web_route = PUB_MERCH_URL + "/invite?token=#{invite_tkn}"
-			puts "email invite web route = #{web_route}"
-			@user = User.new
-			@user.first_name = data["name"]
-			if Rails.env.production?
-				Resque.enqueue(EmailJob, 'invite_employee', @user.id, {:provider_id => provider.id, :email => data["email"], :route => web_route})
-			elsif Rails.env.staging?
-				UserMailer.invite_employee(@user, provider , data["email"], web_route).deliver
-			else
-				UserMailer.invite_employee(@user, provider , data["email"], web_route).deliver
-			end
+	# def email_invite
+	# 	response = {}
+	# 	if provider = authenticate_mt_request(params["merchant_token"])
+	# 		data = JSON.parse params["data"]
+	# 		invite_tkn = data["invite_tkn"]
+	# 		web_route = PUB_MERCH_URL + "/invite?token=#{invite_tkn}"
+	# 		puts "email invite web route = #{web_route}"
+	# 		@user = User.new
+	# 		@user.first_name = data["name"]
+	# 		if Rails.env.production?
+	# 			Resque.enqueue(EmailJob, 'invite_employee', @user.id, {:provider_id => provider.id, :email => data["email"], :route => web_route})
+	# 		elsif Rails.env.staging?
+	# 			UserMailer.invite_employee(@user, provider , data["email"], web_route).deliver
+	# 		else
+	# 			UserMailer.invite_employee(@user, provider , data["email"], web_route).deliver
+	# 		end
 
-			response["status"] 	 = true
-			response["message"]  = "Email sent"
-		else
-			response["status"] 	 = false
-			response["message"]  = 'Unable to authorize email server'
-		end
+	# 		response["status"] 	 = true
+	# 		response["message"]  = "Email sent"
+	# 	else
+	# 		response["status"] 	 = false
+	# 		response["message"]  = 'Unable to authorize email server'
+	# 	end
 
-		respond_to do |format|
-			# logger.debug gifts_array
-			@app_response = "AC response[0] => #{response.values[0]}"
-			format.json { render json: response }
-		end
-	end
+	# 	respond_to do |format|
+	# 		# logger.debug gifts_array
+	# 		@app_response = "AC response[0] => #{response.values[0]}"
+	# 		format.json { render json: response }
+	# 	end
+	# end
 
 
 
-	def compile_menu
-		response = {}
-		if provider = authenticate_mt_request(params["merchant_token"])
-			data = params["data"]
-			menu = params["menu"]
-			puts "Old Data = #{data}"
-			puts "new Data = #{menu}"
-			menu_string = provider.menu_string
-			if !menu_string 							# deprecate
-				menu_string = MenuString.create(provider_id: provider.id, data: "[]")
-			end
-			if menu_string.update_attributes({data: data, menu: menu, version: 3})
-				response["status"] 	 = true
-				response["message"]  = "Menu Live on App"
-			else
-				response["status"] 	 = false
-				response["message"]  = "Menu unable to be updated #{menu_string.errors.full_messages}"
-			end
-		else
-			response["status"] 	 = false
-			response["message"]  = authentication_data_error
-		end
+	# def compile_menu
+	# 	response = {}
+	# 	if provider = authenticate_mt_request(params["merchant_token"])
+	# 		data = params["data"]
+	# 		menu = params["menu"]
+	# 		puts "Old Data = #{data}"
+	# 		puts "new Data = #{menu}"
+	# 		menu_string = provider.menu_string
+	# 		if !menu_string 							# deprecate
+	# 			menu_string = MenuString.create(provider_id: provider.id, data: "[]")
+	# 		end
+	# 		if menu_string.update_attributes({data: data, menu: menu, version: 3})
+	# 			response["status"] 	 = true
+	# 			response["message"]  = "Menu Live on App"
+	# 		else
+	# 			response["status"] 	 = false
+	# 			response["message"]  = "Menu unable to be updated #{menu_string.errors.full_messages}"
+	# 		end
+	# 	else
+	# 		response["status"] 	 = false
+	# 		response["message"]  = authentication_data_error
+	# 	end
 
-		respond_to do |format|
-			# logger.debug gifts_array
-			puts "AC response => #{response}"
-			@app_response = "AC response => #{response}"
-			format.json { render json: response }
-		end
-	end
+	# 	respond_to do |format|
+	# 		# logger.debug gifts_array
+	# 		puts "AC response => #{response}"
+	# 		@app_response = "AC response => #{response}"
+	# 		format.json { render json: response }
+	# 	end
+	# end
 
 
 
