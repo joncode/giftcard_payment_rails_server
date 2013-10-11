@@ -2,7 +2,7 @@ class JsonController < ActionController::Base
     include ActionView::Helpers::DateHelper
     include CommonUtils
     include JsonHelper
-    
+
     rescue_from ActionController::RoutingError, :with => :redirect_missing
 
     def redirect_missing
@@ -136,33 +136,19 @@ class JsonController < ActionController::Base
     end
 
     def authenticate_admin_tools
-    if request.headers["HTTP_TKN"].present?
-            token = request.headers["HTTP_TKN"]
-        else
-            token = params["token"]
-        end
-        # check token to see if it is good
+        token = request.headers["HTTP_TKN"] || params["token"]
         @admin_user = AdminToken.find_by_token token
         head :unauthorized unless @admin_user
     end
 
     def authenticate_merchant_tools
-        if request.headers["HTTP_TKN"].present?
-            token = request.headers["HTTP_TKN"]
-        else
-            token = params["token"]
-        end
-        # check token to see if it is good
+        token = request.headers["HTTP_TKN"] || params["token"]
         @provider = Provider.unscoped.find_by_token(token)
         head :unauthorized unless @provider
     end
 
     def authenticate_general_token
-        if request.headers["HTTP_TKN"].present?
-            token = request.headers["HTTP_TKN"]
-        else
-            token = params["token"]
-        end
+        token = request.headers["HTTP_TKN"] || params["token"]
         head :unauthorized unless GENERAL_TOKEN == token
     end
 
