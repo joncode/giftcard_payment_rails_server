@@ -21,7 +21,7 @@ describe Web::V2::MerchantsController do
 
         it "should respond with correct JSON merchant" do
             get :show, id: @provider.id, format: :json
-            json["success"].class.should == Hash
+            json["data"].class.should == Hash
         end
 
     end
