@@ -217,14 +217,14 @@ Drinkboard::Application.routes.draw do
   end
 
     ## merchant OLD tools routes - confirm unused and remove
-  match 'mt/user_login',           to: 'merchants#login',        via: :post
-  match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
-  match 'mt/menu',                 to: 'merchants#menu',         via: :post
+  # match 'mt/user_login',           to: 'merchants#login',        via: :post
+  # match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
+  # match 'mt/menu',                 to: 'merchants#menu',         via: :post
   # match 'mt/reports',              to: 'merchants#reports',      via: :post
   # match 'mt/employees',            to: 'merchants#employees',    via: :post
   # match 'mt/finances',             to: 'merchants#finances',            via: :post
   # match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
-  match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
+  # match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
   # match 'mt/compile_menu',         to: 'merchants#compile_menu',        via: :post
 
 
