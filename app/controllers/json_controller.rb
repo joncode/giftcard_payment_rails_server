@@ -136,10 +136,10 @@ class JsonController < ActionController::Base
     end
 
     def authenticate_admin_tools
-        token   = params["token"]
+        token       = params["token"]
         # check token to see if it is good
-        api_key = AdminToken.find_by_token token
-        head :unauthorized unless api_key
+        @admin_user = AdminToken.find_by_token token
+        head :unauthorized unless @admin_user
     end
 
     def authenticate_merchant_tools
@@ -164,9 +164,9 @@ class JsonController < ActionController::Base
     end
 
     def authenticate_services
-        token   = params["token"]
-        api_key = User.find_by_remember_token token
-        head :unauthorized unless api_key
+        token         = params["token"]
+        @current_user = User.app_authenticate(token)
+        head :unauthorized unless @current_user
     end
 
 

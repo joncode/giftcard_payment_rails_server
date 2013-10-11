@@ -16,14 +16,14 @@ class Provider < ActiveRecord::Base
 	has_many   :users, :through => :employees
 	has_many   :employees, dependent: :destroy
 	has_many   :relays
-	has_many   :menus, dependent: :destroy
+	#has_many   :menus, dependent: :destroy
 	has_many   :orders
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
 	has_many   :sales
-	has_and_belongs_to_many   :tags
+	#has_and_belongs_to_many   :tags
 	belongs_to :brands
-	has_many   :servers, class_name: "Employee"
+	#has_many   :servers, class_name: "Employee"
 
 	mount_uploader :photo,    ProviderPhotoUploader
 	mount_uploader :logo,     ProviderLogoUploader
@@ -36,9 +36,10 @@ class Provider < ActiveRecord::Base
 	validates 			:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
 
+
 	before_save 	:extract_phone_digits
-	after_create 	:make_menu_string	
-    after_save       :update_city_provider
+	after_create 	:make_menu_string
+    #after_save      :update_city_provider
 
 	default_scope where(active: true).where(paused: false).order("name ASC")
 
@@ -51,11 +52,12 @@ class Provider < ActiveRecord::Base
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city, :latitude, :longitude]
 		prov_hash["provider_id"]  = self.id
-		prov_hash["photo"]        = self.get_image("photo")
+		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live_int
 		return prov_hash
 	end
+
 	alias :to_hash :serialize
 
 	def admt_serialize

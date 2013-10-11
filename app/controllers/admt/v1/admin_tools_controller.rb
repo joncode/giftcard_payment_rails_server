@@ -48,7 +48,6 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-
     def payable_gifts
         gift_ids = params["data"]
         if gifts = Gift.find(gift_ids)
@@ -59,24 +58,35 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
+    def payable_gifts_admt
+        gift_ids = params["data"]
+        if gifts = Gift.find(gift_ids)
+            success gifts.serialize_objs(:report)
+        else
+            fail    data_not_found
+        end
+        respond
+    end
+
+
 #####  Gift & Sale Methods
 
     def cancel
         if gift = Gift.unscoped.find(params["data"].to_i)
-            case gift.status
-            when "unpaid"
+            case gift.pay_stat
+            when "charged"
                 # void the gift - no sale
-                gift.update_attribute(:status, "void")
-                response = gift.status
+                gift.update_attribute(:pay_stat, "void")
+                response = gift.pay_stat
             else
                 sale     = gift.sale
-                response = sale.void_sale gift
+                response = sale.fail_update_gifts gift
             end
 
             if gift
                 success response
             else
-                fail    "Error De-Activating Unpaid gift"
+                fail    "Error De-Activating gift"
             end
         else
             fail    data_not_found
@@ -136,7 +146,7 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def de_activate_user
+    def deactivate_user
         if user         = User.find(params["data"].to_i)
 
             if user.toggle! :active
@@ -154,7 +164,7 @@ class Admt::V1::AdminToolsController < JsonController
     def destroy_user
         if user        = User.find(params["data"].to_i)
 
-            if user.permanently_de_activate
+            if user.permanently_deactivate
                 success "#{user.name} is Permanently De-Activated."
             else
                 fail    user
@@ -213,7 +223,7 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def de_activate_brand
+    def deactivate_brand
         if brand      = Brand.unscoped.find(params["data"].to_i)
 
             if brand.toggle! :active
@@ -262,7 +272,7 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def de_associate
+    def deassociate
         provider_id = params["data"]["provider_id"].to_i
         brand_id    = params["data"]["brand_id"].to_i
         type_of     = params["data"]["type_of"]
@@ -399,13 +409,13 @@ class Admt::V1::AdminToolsController < JsonController
         try_two           = []
 
         gifts.each do |gift|
-            if not gift.update_attribute(:status, "settled")
+            if not gift.update_attribute(:pay_stat, "settled")
                 fail_update_gifts << gift
             end
         end
 
         fail_update_gifts.each do |gift|
-            if not gift.update_attribute(:status, "settled")
+            if not gift.update_attribute(:pay_stat, "settled")
                 puts "!!! TRY TWO FAILURE !!! GIFT ID = #{gift.id}"
                 try_two << gift
             end

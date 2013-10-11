@@ -1,13 +1,13 @@
 Drinkboard::Application.routes.draw do
 
-  mount Resque::Server, :at => "/resque"
+
+#################         iOS app & Mdot V1 API                   /////////////////////////////
 
     ###  mobile app routes
   match 'app/create_account',   to: 'iphone#create_account',   via: :post
   match 'app/login',            to: 'iphone#login',            via: :post
   match 'app/login_social',     to: 'iphone#login_social',     via: :post
   match 'app/update',           to: 'app#relays',              via: :post
-  match 'app/gifts',            to: 'iphone#gifts',            via: :post
   match 'app/update_user',      to: 'app#update_user',         via: :post
   match 'app/gifts_array',      to: 'app#gifts',               via: :post
   match 'app/archive',          to: 'iphone#archive',          via: :post
@@ -15,20 +15,16 @@ Drinkboard::Application.routes.draw do
   match 'app/brand_merchants',  to: 'app#brand_merchants',     via: :post
   match 'app/providers',        to: 'app#providers',           via: :post
   match 'app/get_providers',    to: 'app#providers',           via: :get
-  match 'app/employees',        to: 'app#create_redeem_emps',  via: :post
   match 'app/redeem',           to: 'app#create_redeem',       via: :post
-  match 'app/complete_order',   to: 'app#create_order_emp',    via: :post
   match 'app/order_confirm',    to: 'app#create_order',        via: :post
   match 'app/menu_v2',          to: 'app#menu_v2',             via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
   match 'app/others_questions', to: 'app#others_questions',    via: :post
   match 'app/transactions',     to: 'app#transactions',        via: :post
-  match 'app/user_activity',    to: 'app#user_activity',       via: :post
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/create_gift',      to: 'app#create_gift',         via: :post
+  match 'app/buy_gift',         to: 'app#create_gift',         via: :post
   match 'app/photo',            to: 'iphone#update_photo',     via: :post
-  match 'app/orders',           to: 'app#orders',              via: :post
-  match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
   match 'app/reset_password',   to: 'app#reset_password',      via: :post
   match 'app/get_settings',     to: 'app#get_settings',        via: :post
   match 'app/save_settings',    to: 'app#save_settings',       via: :post
@@ -45,17 +41,66 @@ Drinkboard::Application.routes.draw do
 
     ### deprecated app routes
   match 'app/menu',             to: 'app#menu',                via: :post
-
-  match 'app/activity',         to: 'iphone#activity',         via: :post
   match 'app/locations',        to: 'iphone#locations',        via: :post
   match 'app/out',              to: 'iphone#going_out',        via: :post
-  match 'app/active',           to: 'iphone#active_orders',    via: :post
-  match 'app/completed',        to: 'iphone#completed_orders', via: :post
   match 'app/buys',             to: 'iphone#buys',             via: :post
-  match 'app/buy_gift',         to: 'iphone#create_gift',      via: :post
   match 'app/past_gifts',       to: 'app#past_gifts',          via: :post
+  match 'app/orders',           to: 'app#orders',              via: :post
+  match 'app/merchant_redeem',  to: 'app#merchant_redeem',     via: :post
+  match 'app/user_activity',    to: 'app#user_activity',       via: :post
+  match 'app/employees',        to: 'app#create_redeem_emps',  via: :post
+  match 'app/complete_order',   to: 'app#create_order_emp',    via: :post
 
-  ## PUBLIC website routes
+#################        Mdot V2 API                              /////////////////////////////
+
+  namespace :mdot, defaults: { format: 'json' } do
+    namespace :v2 do
+
+      resources :sessions,    only: [:create] do
+        post :login_social
+      end
+      resources :users,       only: [:index, :create, :update] do
+        member do
+          post :reset_password
+        end
+        resources :cards,     only: [:index, :create, :delete]
+        resources :settings,  only: [:show, :update]
+        resources :gifts,     only: [:index, :create] do
+          resources :redeems, only: [:create]
+          resources :orders,  only: [:create]
+          member do
+            post :regift
+            get  :archive
+          end
+          collection do
+            get :badge  #update or relay
+            get :transactions
+          end
+        end
+        resources :photos,     only: [:update] do
+          member do
+            get  :short_url
+          end
+        end
+        resources :questions, only: [:index, :update]
+      end
+
+      resources :providers,   only: [:show] do
+        resources :menus,     only: [:show]
+      end
+      resources :brands,      only: [:index] do
+        resources :providers, only: [:index]
+      end
+      resources :cities,      only: [:index] do
+        resources :providers, only: [:index]
+      end
+
+    end
+  end
+
+
+#################          PUBLIC website routes                  /////////////////////////////
+
   namespace :web, defaults: { format: 'json' } do
     namespace :v1 do
       post 'confirm_email',      to: 'websites#confirm_email'
@@ -63,17 +108,19 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-  ## ADMIN TOOLS routes for API
+#################          ADMIN TOOLS routes for API              /////////////////////////////
+
   namespace :admt, defaults: { format: 'json' } do
     namespace :v1 do
       post 'add_key_app',       to: 'admin_tools#add_key'
       post 'get_gifts',         to: 'admin_tools#gifts'
       post 'get_gift',          to: 'admin_tools#gift'
       post "payable_gifts",     to: 'admin_tools#payable_gifts'
+      post "payable_gifts_admt", to: 'admin_tools#payable_gifts_admt'
       post 'get_app_users',     to: 'admin_tools#users'
       post 'get_app_user',      to: 'admin_tools#user'
       post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
-      post 'de_activate_user',  to: 'admin_tools#de_activate_user'
+      post 'de_activate_user',  to: 'admin_tools#deactivate_user'
       post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
       post 'destroy_user',      to: 'admin_tools#destroy_user'
       post 'update_user',       to: 'admin_tools#update_user'
@@ -81,9 +128,9 @@ Drinkboard::Application.routes.draw do
       post 'get_brand',         to: 'admin_tools#brand'
       post 'create_brand',      to: 'admin_tools#create_brand'
       post 'update_brand',      to: 'admin_tools#update_brand'
-      post 'de_activate_brand', to: 'admin_tools#de_activate_brand'
+      post 'de_activate_brand', to: 'admin_tools#deactivate_brand'
       post 'associate',         to: 'admin_tools#associate'
-      post 'de_associate',      to: 'admin_tools#de_associate'
+      post 'de_associate',      to: 'admin_tools#deassociate'
       post 'providers',         to: 'admin_tools#providers'
       post 'go_live',           to: 'admin_tools#go_live'
       post 'deactivate_merchant', to: 'admin_tools#deactivate_merchant'
@@ -95,7 +142,66 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-  ## MERCHANT TOOLS routes for API
+  namespace :admt, defaults: { format: 'json' } do
+    namespace :v2 do
+
+      resources :admin_users, only: [:create]
+        # post 'add_key_app', to: 'admin_tools#add_key'
+      resources :gifts ,      only: [:index, :show] do
+        member do
+          post :cancel
+        end
+        collection do
+          post :destroy_all
+          post :unsettled
+          post :settled
+          post :payables
+          post :payables_admt
+        end
+      end
+      resources :orders,      only: [:index]
+      resources :users,       only: [:index, :show, :update, :delete] do
+        resources :gifts,     only: [:show] # post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
+        post :deactivate
+      end
+      resources :brands,      only: [:index, :show, :create, :update, :delete] do
+        member do
+          post :associate
+          post :disassociate
+          # delete is de-activate
+        end
+      end
+      resources :providers,   only: [:index, :update, :delete] do
+        member do
+          post :live
+          # delete is de-activate
+          # update is update_mode
+          # live should not be necessary with update mode
+        end
+      end
+
+    end
+  end
+
+#################          MERCHANT TOOLS routes for API          /////////////////////////////
+
+  namespace :mt, defaults: { format: 'json' } do
+    namespace :v2 do
+
+      resources :merchants, only: [:create, :update] do
+        resources :orders,  only: [:show, :index]
+        resources :menus,   only: [:update]
+        resources :photos,  only: [:update]
+        resources :reports, only: [:show] do
+          member do
+            get :range
+          end
+        end
+      end
+
+    end
+  end
+
   namespace :mt, defaults: { format: 'json' } do
     namespace :v1 do
       post 'create_merchant', to: 'merchant_tools#create'
@@ -110,16 +216,27 @@ Drinkboard::Application.routes.draw do
     end
   end
 
-    ## merchant tools routes
+    ## merchant OLD tools routes - confirm unused and remove
   match 'mt/user_login',           to: 'merchants#login',        via: :post
   match 'mt/merchant_login',       to: 'merchants#authorize',    via: :post
   match 'mt/menu',                 to: 'merchants#menu',         via: :post
-  match 'mt/reports',              to: 'merchants#reports',      via: :post
-  match 'mt/employees',            to: 'merchants#employees',    via: :post
-  match 'mt/finances',             to: 'merchants#finances',     via: :post
-  match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
+  # match 'mt/reports',              to: 'merchants#reports',      via: :post
+  # match 'mt/employees',            to: 'merchants#employees',    via: :post
+  # match 'mt/finances',             to: 'merchants#finances',            via: :post
+  # match 'mt/deactivate_employee',  to: 'merchants#deactivate_employee', via: :post
   match 'mt/email_invite',         to: 'merchants#email_invite',        via: :post
-  match 'mt/compile_menu',         to: 'merchants#compile_menu', via: :post
+  # match 'mt/compile_menu',         to: 'merchants#compile_menu',        via: :post
+
+
+#################          HTML routes good                       /////////////////////////////
+
+  mount Resque::Server, :at => "/resque"
+
+#################          HTML routes to deprecate               /////////////////////////////
+
+
+#################          DELETE BELOW                           /////////////////////////////
+
 
     ### authentication via Facebook & Foursquare
   # match '/facebook/oauth',    to: 'oAuth#loginWithFacebook'

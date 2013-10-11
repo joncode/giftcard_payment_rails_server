@@ -41,13 +41,13 @@ describe User do
             # delete or deactivate that data
             user.deactivate_social("#{type_of}", identifier)
             # check for that data on the user shoud.not ==
-            UserSocial.find_by_identifier(identifier).active.should be_false
+            UserSocial.unscoped.find_by_identifier(identifier).active.should be_false
         end
 
         it "should not create a new user social record if no new #{type_of} is submitted" do
             # update a user without #{type_of} change
             running {
-                @user.update_attribute(:last_name, "replace_me")
+                @user.update_attributes({last_name: "change_me_not_id"})
             }.should_not change { UserSocial.count }
 
         end

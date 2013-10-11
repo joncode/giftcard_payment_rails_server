@@ -1,6 +1,6 @@
 class Redeem < ActiveRecord::Base
   attr_accessible :gift_id, :redeem_code
-  
+
   belongs_to      :gift
   has_one         :giver,     :through => :gift
   has_one         :receiver,  :through => :gift
@@ -9,10 +9,10 @@ class Redeem < ActiveRecord::Base
 
   before_create :create_redeem_code
   after_create  :add_redeem_to_gift
-  
+
   validates :gift_id , presence: true, uniqueness: true
   # redeem must be unique for gift
-  
+
   def self.find_or_create_with_gift(gift)
     unless redeem = gift.redeem
         # redeem must be created
@@ -30,7 +30,7 @@ class Redeem < ActiveRecord::Base
     def create_redeem_code
       self.redeem_code = "%04d" % rand(10000)
     end
-    
+
     def add_redeem_to_gift
       self.gift.update_attributes({status: 'notified'})
     end

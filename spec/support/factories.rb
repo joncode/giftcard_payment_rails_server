@@ -1,49 +1,78 @@
 FactoryGirl.define do
 
     factory :user do
-        first_name "jon"
-        password   "specspec"
-        password_confirmation "specspec"
-        email      "joncode@gmail.com"
-        remember_token "token"
-        facebook_id "987654332"
-        twitter     "283746193"
-        phone       "6467578686"
+        first_name                  "Jimmy"
+        last_name                   "Basic"
+        password                    "specspec"
+        password_confirmation       "specspec"
+        sequence(:email)            { |n| "thisguy#{n}@gmail.com" }
+        sequence(:remember_token)   { |n| "token#{n}" }
+        sequence(:facebook_id)      { |n| "98a#{n}fd332" }
+        sequence(:twitter)          { |n| "283s#{n}f6fd3" }
+        sequence(:phone) do
+            phone = ""
+            10.times do
+              phone += (2..8).to_a.sample.to_s
+            end
+            phone
+        end
+
+        factory :giver do
+            first_name   "Jon"
+            last_name    "Gifter"
+        end
+
+        factory :regifter do
+            first_name   "Will"
+            last_name    "ReGifter"
+        end
+
+        factory :receiver do
+            first_name   "Ron"
+            last_name    "Receiver"
+        end
     end
 
-    factory :giver do
-        first_name "jon2"
-        password   "specspec2"
-        password_confirmation "specspec2"
-        email      "jonran@gmail.com"
-        remember_token "token"
-        facebook_id "98asd54332"
-        twitter     "283sdf6193"
-        phone       "6443278686"
+    factory :nobody, :class => 'User' do
+        first_name                  "No"
+        last_name                   "One"
+        password                    "specspec"
+        password_confirmation       "specspec"
+        sequence(:email)            { |n| "noone#{n}@gmail.com" }
+        sequence(:remember_token)   { |n| "nope#{n}" }
+        sequence(:facebook_id)      { |n| "8ssa#{n}fd332" }
+        sequence(:twitter)          { |n| "28sdd3s#{n}f6fd3" }
+    end
+
+    factory :nonetwork, :class => 'User' do
+        first_name                  "None"
+        last_name                   "Networks"
+        password                    "specspec"
+        password_confirmation       "specspec"
+        sequence(:email)            { |n| "nonetwork#{n}@gmail.com" }
+        sequence(:remember_token)   { |n| "nonet#{n}" }
+        facebook_id      nil
+        twitter          nil
+        phone            nil
     end
 
     factory :provider do
-        name        "ichizos"
+        sequence(:name)    { |n| "ichizos#{n}" }
         city        "New York"
         address     "123 happy st"
         zip         "11211"
         state       "NY"
+        sequence(:token)   { |n| "token#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
-        sequence(:token) { |n| n.to_s + "token" }
         sequence(:phone) do
             phone = ""
             10.times do
-              phone + (2..8).to_a.sample.to_s
+              phone += (2..8).to_a.sample.to_s
             end
             phone
         end
     end
-
-    # factory :city_provider do
-    #     city "New York"
-    #     providers_array 
-    # end
 
     factory :user_social do
         user_id     1
@@ -52,13 +81,57 @@ FactoryGirl.define do
     end
 
     factory :gift do |gift|
-        gift.giver_id        13
-        gift.giver_name      "henry"
-        gift.receiver_name   "jon"
-        gift.provider { FactoryGirl.create(:provider)}
+        gift.giver           { FactoryGirl.create(:giver) }
+        gift.giver_name      "Jon giver"
+        gift.receiver_name   "Someone New"
+        gift.provider        { FactoryGirl.create(:provider) }
         gift.total           "100"
         gift.service         "4"
-        gift.credit_card     "4567890"
+        gift.credit_card     4567890
+        gift.shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
+        gift.message         "Factory Message"
+
+        factory :regift do |regift|
+            regift.giver        { FactoryGirl.create(:giver) }
+            regift.giver_name   "Jon giver"
+            regift.receiver     { FactoryGirl.create(:regifter) }
+            regift.receiver_name "Will Regifter"
+            regift.pay_stat     "charged"
+            regift.pay_type     "Sale"
+            regift.sale         { FactoryGirl.create(:sale) }
+        end
+
     end
+
+    factory :sale do
+        giver_id    1
+        gift_id     1
+        resp_code   1
+        response    AuthResponse.new
+        transaction AuthTransaction.new
+    end
+
+    factory :order do |order|
+        order.redeem      { FactoryGirl.create(:redeem)}
+        order.gift        { |order| order.redeem.gift }
+        order.provider    { |order| order.redeem.gift.provider }
+        server_code "jg"
+    end
+
+    factory :order_no_associations , class: "Order" do |id|
+        gift_id    id
+        redeem_id  1
+        provider_id 1
+        server_code  "jg"
+    end
+
+    factory :redeem do
+        gift    { FactoryGirl.create(:gift)}
+    end
+
+        # factory :city_provider do
+    #     city "New York"
+    #     providers_array
+    # end
 
 end

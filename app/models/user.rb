@@ -11,36 +11,26 @@ class User < ActiveRecord::Base
 	:server_code, :sex, :birthday, :is_public, :confirm,
 	:iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
 
-	# can't mass assign these attributes
-	# active, created_at, facebook_auth_checkin, id, password_digest, persona, remember_token, reset_token, reset_token_sent_at, updated_at
-
-	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-	attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
+	# attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
+	# attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
 	mount_uploader   :photo, UserAvatarUploader
 	mount_uploader   :secure_image, UserAvatarUploader
 
 	has_one  :setting
 	has_many :pn_tokens
-	has_many :employees, dependent: :destroy
+	#has_many :employees, dependent: :destroy
 	has_many :providers, :through => :employees
 	has_many :brands
 	has_many :orders,    :through => :providers
 	has_many :gifts,     foreign_key: "giver_id"
 	has_many :sales
 	has_many :cards
-	has_many :locations
+	#has_many :locations
 	has_many :answers
 	has_many :questions, :through => :answers
-	has_many :relays , foreign_key: "receiver_id"
+	#has_many :relays , foreign_key: "receiver_id"
 	has_many :user_socials
-
-	# has_many :followed_users, through: :relationships, source: "followed"
-	# has_many :relationships, foreign_key: "follower_id", dependent: :destroy
-	# has_many :reverse_relationships, foreign_key: "followed_id",
-	# 																class_name: "Relationship",
-	# 																dependent: :destroy
-	# has_many :followers, through: :reverse_relationships, source: :follower
 
 	has_secure_password
 
@@ -50,10 +40,6 @@ class User < ActiveRecord::Base
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
-			# searches gift db for ghost gifts that belong to new user
-			# after_create for new accounts
-			# after_update , :if => :added_social_media TODO
-			# this after_save covers both those situations , but also runs the code unnecessarily
 	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data
 	after_create  :init_confirm_email
@@ -67,7 +53,11 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
-	#default_scope where(active: true)
+	#default_scope where(active: true).where(perm_deactive: false) # indexed
+
+	def self.app_authenticate(token)
+		where(active: true, perm_deactive: false).where(remember_token: token).first
+	end
 
 #/---------------------------------------------------------------------------------------------/
 
@@ -97,10 +87,10 @@ class User < ActiveRecord::Base
 		usr_hash
 	end
 
-	def inspect
-		#super
-		"User ID = #{self.id} | Name = #{name} | email = #{self.email} | phone = #{self.phone} |  last = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)} | active = #{self.active}\n"
-	end
+	# def inspect
+	# 	#super
+	# 	"User ID = #{self.id} | Name = #{name} | email = #{self.email} | phone = #{self.phone} |  last = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)} | active = #{self.active}\n"
+	# end
 
 	def ua_alias
 		adj_user_id     = self.id + NUMBER_ID
@@ -156,13 +146,6 @@ class User < ActiveRecord::Base
 	alias_method :username, :name
 	alias_method :fullname, :name
 
-	def deactivate_social type_of, identifier
-		# user get user_social record with identifier
-		user_social = UserSocial.find_by_identifier identifier
-		# user compare type ofs
-		# user deactive the user_social
-		user_social.update_attribute(:active, false)
-	end
 ##################
 
 #######  PHOTO METHODS
@@ -237,17 +220,22 @@ class User < ActiveRecord::Base
 
 #######  UTILITY  METHODS
 
-	def permanently_de_activate
-		self.active 	 = false
-		self.credit_number = self.phone
-		self.phone   	 = nil
-		self.email  	 = "#{self.email}xxx"
-		self.facebook_id = "#{self.facebook_id}xxx" if facebook_id_exists?
-		self.twitter 	 = "#{self.twitter}xxx" 	if twitter_exists?
-		self.last_name   = self.name
-		self.first_name  = "De-activated[app]"
-		save
-	end
+    def permanently_deactivate
+        self.active        = false
+        self.phone         = nil
+        self.email         = "#{self.email}xxx"
+        self.facebook_id   = nil
+        self.twitter       = nil
+        self.perm_deactive = true
+        UserSocial.deactivate_all self
+        save
+    end
+
+    def deactivate_social type_of, identifier
+        # user get user_social record with identifier
+        socials = self.user_socials.where(identifier: identifier)
+        socials.first.deactivate
+    end
 
 	def update_reset_token
 		self.reset_token_sent_at = Time.now
@@ -261,25 +249,6 @@ class User < ActiveRecord::Base
 		self.reset_token 		   = nil
 		self.reset_token_sent_at   = nil
 		self.save
-	end
-
-	def checkin_to_foursquare(fsq_id, lat, lng)
-		requrl = "https://foursquare.com/oauth2/access_token"
-		response = HTTParty.post(url, :query => {:venueId => fsq_id, :ll => ["?,?",lat,lng], :oauth_token => self.foursquare_access_token})
-		return false if response.code != 200
-		return true
-	end
-
-	def is_employee? provider
-		employees = Employee.find(:all, :conditions => ["user_id = ?", self.id])
-		if !employees.nil? && employees.length > 0
-			employees.each do |emp|
-				if emp.provider_id == provider.id
-					return true
-				end
-			end
-		end
-		return false
 	end
 
 	def pn_token=(value)
@@ -340,11 +309,13 @@ class User < ActiveRecord::Base
 	end
 
 	def init_confirm_email
-		if self.email
-			set_confirm_email
-			confirm_email
-		else
-			puts "User created without EMAIL !! #{self.id}"
+		if Rails.env.production? || Rails.env.staging?
+			if self.email
+				set_confirm_email
+				confirm_email
+			else
+				puts "User created without EMAIL !! #{self.id}"
+			end
 		end
 	end
 
@@ -358,7 +329,6 @@ private
 		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
 		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
 		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)
-
 	end
 
 	def collect_incomplete_gifts
@@ -368,10 +338,10 @@ private
 			g = Gift.where("status = :stat AND facebook_id = :fb_id",    :stat => 'incomplete', :fb_id   => self.facebook_id.to_s)
 			gifts.concat g
 		end
-		if self.foursquare_id
-			g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id.to_s)
-			gifts.concat g
-		end
+		# if self.foursquare_id
+		# 	g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id.to_s)
+		# 	gifts.concat g
+		# end
 		if self.twitter
 			g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => self.twitter.to_s)
 			gifts.concat g
@@ -386,7 +356,7 @@ private
 		end
 
 						# update incomplete gifts to open gifts with receiver info
-		if gifts.count > 0
+		response   = if gifts.count > 0
 			error   = 0
 			success = 0
 
@@ -415,18 +385,17 @@ private
 			end
 							# build success & error messages for reference
 			if  error  == 0
-				response = "#{success} incomplete gift(s) updated SUCCESSfully on create of #{self.username} #{self.id}"
+				"#{success} incomplete gift(s) updated SUCCESSfully on create of #{self.username} #{self.id}"
 			else
-				response = "#{error} ERRORS updating ghost gifts for #{self.username} #{self.id}"
+				"#{error} ERRORS updating ghost gifts for #{self.username} #{self.id}"
 			end
 
 		else
 							# no incomplete gifts found
-			response   = "ZERO incomplete ghost gifts for  #{self.username} #{self.id}"
+			 "ZERO incomplete ghost gifts for  #{self.username} #{self.id}"
 		end
 
 							# log the messages output for the method
-		puts "COLLECT INCOMPLETE GIFTS"
 		puts response
 	end
 
