@@ -74,6 +74,14 @@ class Provider < ActiveRecord::Base
 		return prov_hash
 	end
 
+	def web_serialize
+		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude]
+		prov_hash["provider_id"]  = self.id
+		prov_hash["photo"]        = self.get_photo
+		prov_hash["full_address"] = self.full_address
+		prov_hash
+	end
+
 #########   STATUS METHODS
 
 	def live_int
