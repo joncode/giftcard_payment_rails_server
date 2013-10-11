@@ -1,6 +1,6 @@
 class Web::V2::MerchantsController < JsonController
-    before_filter :authenticate_www_token
-    
+    #before_filter :authenticate_www_token
+
     def show
         merchant = Provider.find params[:id]
         if merchant

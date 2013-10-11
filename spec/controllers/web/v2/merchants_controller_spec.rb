@@ -5,6 +5,7 @@ describe Web::V2::MerchantsController do
     describe "#show" do
 
         before(:all) do
+            Provider.delete_all
             @provider = FactoryGirl.create(:provider)
         end
 

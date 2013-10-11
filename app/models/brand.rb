@@ -9,9 +9,10 @@ class Brand < ActiveRecord::Base
 
 	validates :name, presence: true, :uniqueness => { case_sensitive: false }
 
-	default_scope where(active: true)
 	after_save :update_parent_brand
 
+	default_scope where(active: true)
+	
 	def self.get_all
 		unscoped.order("name ASC")
 	end
