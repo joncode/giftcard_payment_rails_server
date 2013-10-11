@@ -2,6 +2,7 @@
 	####  MUST have FILTER_PARAMS loaded into Rails already
 
 module CommonUtils
+	
 	include ActionView::Helpers::TextHelper
 
 	def log_request_header
