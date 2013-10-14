@@ -10,6 +10,7 @@ class JsonController < ActionController::Base
     end
 
 	skip_before_filter   :verify_authenticity_token
+    #before_filter        :down_for_maintenance
     before_filter        :log_request_header
     before_filter        :method_start_log_message
     after_filter         :cross_origin_allow_header
@@ -177,4 +178,9 @@ private
         headers['Access-Control-Request-Method'] = '*'
     end
 
+    def down_for_maintenance
+        # @app_response = { "error" => "Server is down for maintenance.  Thank you for your patience. Be back shortly" }
+        # respond
+    end
+    
 end

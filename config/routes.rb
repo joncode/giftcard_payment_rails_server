@@ -109,6 +109,12 @@ Drinkboard::Application.routes.draw do
     end
   end
 
+  namespace :web, defaults: { format: 'json' } do
+    namespace :v2 do
+      resources :merchants, only: [:show]
+    end
+  end
+
 #################          ADMIN TOOLS routes for API              /////////////////////////////
 
   namespace :admt, defaults: { format: 'json' } do
