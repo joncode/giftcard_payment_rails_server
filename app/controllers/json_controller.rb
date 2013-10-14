@@ -3,12 +3,6 @@ class JsonController < ActionController::Base
     include CommonUtils
     include JsonHelper
 
-    rescue_from ActionController::RoutingError, :with => :redirect_missing
-
-    def redirect_missing
-        redirect_to "http://www.drinkboard.com"
-    end
-
 	skip_before_filter   :verify_authenticity_token
     #before_filter        :down_for_maintenance
     before_filter        :log_request_header
@@ -34,7 +28,7 @@ class JsonController < ActionController::Base
                 gift_obj[key] = value.to_s
             end
 
-            gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
+            gift_obj["shoppingCart"] = JSON.parse(g.shoppingCart)
 
                 # add other person photo url
             if receiver
@@ -87,26 +81,6 @@ class JsonController < ActionController::Base
             gifts_ary << gift_obj
         end
         return gifts_ary
-    end
-
-    def convert_shoppingCart_for_app shoppingCart
-        cart_ary = JSON.parse shoppingCart
-        # puts "shopping cart = #{cart_ary}"
-        # new_shopping_cart = []
-        # if cart_ary[0].has_key? "menu_id"
-        #     cart_ary.each do |item_hash|
-        #         item_hash["item_id"]   = item_hash["menu_id"]
-        #         item_hash["item_name"] = item_hash["name"]
-        #         item_hash.delete("menu_id")
-        #         item_hash.delete("name")
-        #         new_shopping_cart << item_hash
-        #         puts "AppC -convert_shoppingCart_for_app- new shopping cart = #{new_shopping_cart}"
-        #     end
-        # else
-             new_shopping_cart = cart_ary
-        # end
-
-        return new_shopping_cart
     end
 
     def add_redeem_code obj
@@ -182,5 +156,5 @@ private
         # @app_response = { "error" => "Server is down for maintenance.  Thank you for your patience. Be back shortly" }
         # respond
     end
-    
+
 end
