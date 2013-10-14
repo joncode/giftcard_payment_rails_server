@@ -4,10 +4,6 @@ else
     AUTH_GATEWAY = :sandbox
 end
 
-ENV['MAILCHIMP_APIKEY'] = if Rails.env.development? or Rails.env.test?
-    '925c032769638d199309b7c752c31700-us7'
-end
-
 ENV['CATCH_PHRASE'] = if Rails.env.development? or Rails.env.test?
     "Theres no place like home"
 end
@@ -22,6 +18,10 @@ end
 
 ENV['AUTHORIZE_TRANSACTION_KEY'] = if Rails.env.development?
     '7f7AZ66axeC386q7'
+end
+
+ENV['MAILCHIMP_APIKEY'] = if Rails.env.development? or Rails.env.test?
+    '925c032769638d199309b7c752c31700-us7'
 end
 
 ENV['MANDRILL_APIKEY'] = if Rails.env.development? or Rails.env.test?
