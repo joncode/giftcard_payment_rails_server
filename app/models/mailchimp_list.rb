@@ -6,7 +6,7 @@ class MailchimpList
 
 	def initialize email, first_name=nil, last_name=nil
 		@mc      	= Mailchimp::API.new(ENV['MAILCHIMP_APIKEY'])
-		@list_id 	= MAILCHIMP_LIST_ID
+		@list_id 	= ENV['MAILCHIMP_LIST_ID']
 		@email   	= email
 		@first_name = first_name
 		@last_name 	= last_name
