@@ -24,6 +24,7 @@ capybara-*.html
 .DS_Store
 /doc/*
 .rvmrc
+latest.dump
 
 /db/*.sqlite3
 /public/system/*
