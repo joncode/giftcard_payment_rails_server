@@ -4,6 +4,7 @@ class JsonController < ActionController::Base
     include JsonHelper
 
 	skip_before_filter   :verify_authenticity_token
+    before_filter        :down_for_maintenance
     before_filter        :log_request_header
     before_filter        :method_start_log_message
     after_filter         :cross_origin_allow_header
@@ -14,6 +15,11 @@ class JsonController < ActionController::Base
     MERCHANT_REPLY  = GIFT_REPLY + [ "order_num"]
     ADMIN_REPLY     = GIFT_REPLY + [ "receiver_id", "receiver_name", "service", "created_at", "cat"]
     BUY_REPLY       = ["total", "receiver_id", "receiver_name", "provider_id", "provider_name", "message", "created_at", "updated_at", "status", "id"]
+
+    def down_for_maintenance
+        @app_response = { "error" => { "Temporary" => "Down for Maintenance"}
+        respond
+    end
 
     def array_these_gifts obj, send_fields, address_get=false, receiver=false, order_num=false
         gifts_ary = []
