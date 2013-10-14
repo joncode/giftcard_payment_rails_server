@@ -2,18 +2,6 @@ require 'authorize_net'
 
 class Sale < ActiveRecord::Base
 
-    if Rails.env.production?
-            # real account
-     	AUTHORIZE_API_LOGIN 	  = '9tp38Ga4CQ'
-     	AUTHORIZE_TRANSACTION_KEY = '9EcTk32BHeE8279P'
-     	GATEWAY 			      = :production
-    elsif Rails.env.staging? || Rails.env.development?
-            # test account
-        AUTHORIZE_API_LOGIN       = '948bLpzeE8UY'
-        AUTHORIZE_TRANSACTION_KEY = '7f7AZ66axeC386q7'
-        GATEWAY                   = :sandbox
-    end
-
  	attr_accessor :transaction, :credit_card, :response, :total
  	# NOTE - Revenue is a decimal value - gift.total is a string - converted in self.init below
  	# attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string, :response_string, :revenue, :status, :transaction_id
@@ -86,7 +74,7 @@ class Sale < ActiveRecord::Base
             @transaction.fields[:first_name] = card.first_name
     		@transaction.fields[:last_name]  = card.last_name
 
-    		card.decrypt! CATCH_PHRASE
+    		card.decrypt!(ENV['CATCH_PHRASE'])
 
             @credit_card = authorize_net_aim_response(card)
 
@@ -116,7 +104,7 @@ class Sale < ActiveRecord::Base
 private
 
     def authorize_net_aim_transaction
-        AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => GATEWAY)
+        AuthorizeNet::AIM::Transaction.new(ENV['AUTHORIZE_API_LOGIN'], ENV['AUTHORIZE_TRANSACTION_KEY'], :gateway => AUTH_GATEWAY)
     end
 
     def authorize_net_aim_response card

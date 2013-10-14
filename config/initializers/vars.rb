@@ -1,6 +1,28 @@
-# MANDRILL
-MAILCHIMP_APIKEY = '925c032769638d199309b7c752c31700-us7'
-CATCH_PHRASE = "Theres no place like home"
+if Rails.env.production?
+    AUTH_GATEWAY = :production
+else
+    AUTH_GATEWAY = :sandbox
+end
+
+ENV['MAILCHIMP_APIKEY'] = if Rails.env.development? or Rails.env.test?
+    '925c032769638d199309b7c752c31700-us7'
+end
+
+ENV['CATCH_PHRASE'] = if Rails.env.development? or Rails.env.test?
+    "Theres no place like home"
+end
+
+ENV['CCS_KEY'] = if Rails.env.development? or Rails.env.test?
+    "Yes yes yes"
+end
+
+ENV['AUTHORIZE_API_LOGIN'] = if Rails.env.development?
+    '948bLpzeE8UY'
+end
+
+ENV['AUTHORIZE_TRANSACTION_KEY'] = if Rails.env.development?
+    '7f7AZ66axeC386q7'
+end
 
 ENV['MANDRILL_APIKEY'] = if Rails.env.development? or Rails.env.test?
     'oUXP1PDOtP14RMgFytxdGw'

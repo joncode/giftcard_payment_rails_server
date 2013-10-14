@@ -31,9 +31,9 @@ GIFT_STATUS         = ['open', 'notified', 'redeemed', 'regifted', 'returned', '
 PROOF_LEVELS        = ['zero', 'lite', 'normal', 'double']
 
     # Subtle Data Constants
-PIPE        = "%7C"
-SD_ROOT     = "https://www.subtledata.com/API/M/1/?Q="
-WEB_KEY     = "RlgrM1Uw"
+# PIPE        = "%7C"
+# SD_ROOT     = "https://www.subtledata.com/API/M/1/?Q="
+# WEB_KEY     = "RlgrM1Uw"
 
 
 BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", "martini", "wine", "beer", "cocktail", "dining"]
@@ -41,4 +41,4 @@ BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", 
 Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
 Time::DATE_FORMATS[:only_date]       = "%b %e"
-    
+
