@@ -30,17 +30,6 @@ BEVERAGE_CATEGORIES = ['signature', 'beer', 'wine', 'cocktail', 'shot']
 GIFT_STATUS         = ['open', 'notified', 'redeemed', 'regifted', 'returned', 'incomplete']
 PROOF_LEVELS        = ['zero', 'lite', 'normal', 'double']
 
-# MANDRILL
-ENV['MANDRILL_APIKEY'] =  'oUXP1PDOtP14RMgFytxdGw'
-MAILCHIMP_APIKEY = '925c032769638d199309b7c752c31700-us7'
-CATCH_PHRASE = "Theres no place like home"
-
-if Rails.env.production?
-    MAILCHIMP_LIST_ID = '5e2ea5f338'
-else
-    MAILCHIMP_LIST_ID = 'b29e278ebe'
-end
-
     # Subtle Data Constants
 PIPE        = "%7C"
 SD_ROOT     = "https://www.subtledata.com/API/M/1/?Q="
@@ -52,7 +41,4 @@ BUTTONS = ["burger", "openlate", "bar", "club", "signature", "brunch", "steak", 
 Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
 Time::DATE_FORMATS[:only_date]       = "%b %e"
-
-GENERAL_TOKEN = "1964f94b3e567a8a82b87f3ccbeb2174"
-WWW_TOKEN     = "nj3tOdJOaZa-qFx0FhCLRQ"
-APP_GENERAL_TOKEN =  "0NFXbWsyP3Mj2Mroj_utsA"
+    

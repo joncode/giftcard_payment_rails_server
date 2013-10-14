@@ -78,7 +78,7 @@ private
     end
 
     def generate_general_params data
-        {:headers => {"tkn" => GENERAL_TOKEN, 'Accept' => 'application/json'},
+        {:headers => {"tkn" => ENV['GENERAL_TOKEN'], 'Accept' => 'application/json'},
          :body => { "data" => data }}
 
     end
