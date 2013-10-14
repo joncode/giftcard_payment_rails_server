@@ -17,7 +17,7 @@ class JsonController < ActionController::Base
     BUY_REPLY       = ["total", "receiver_id", "receiver_name", "provider_id", "provider_name", "message", "created_at", "updated_at", "status", "id"]
 
     def down_for_maintenance
-        @app_response = { "error" => "Down for Maintenance"}
+        @app_response = { "error" => "Server is down for maintenance.  Thank you for your patience. Be back shortly"}
         respond
     end
 
