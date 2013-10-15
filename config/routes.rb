@@ -119,7 +119,6 @@ Drinkboard::Application.routes.draw do
 
   namespace :admt, defaults: { format: 'json' } do
     namespace :v1 do
-      post 'add_key_app',       to: 'admin_tools#add_key'
       post 'get_gifts',         to: 'admin_tools#gifts'
       post 'get_gift',          to: 'admin_tools#gift'
       post "payable_gifts_admt", to: 'admin_tools#payable_gifts_admt'

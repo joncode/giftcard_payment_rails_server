@@ -11,15 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131002213728) do
-
-  create_table "admin_tokens", :force => true do |t|
-    t.string   "token"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  add_index "admin_tokens", ["token"], :name => "index_admin_tokens_on_token"
+ActiveRecord::Schema.define(:version => 20131015233422) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"

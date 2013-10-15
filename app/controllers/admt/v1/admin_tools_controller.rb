@@ -419,18 +419,4 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-#####   Utility Methods
-
-    def add_key
-        admin_token = params["data"]
-        # check to make sure the admin user already exists in db
-        admin_token_obj = AdminToken.new(token: admin_token)
-        if admin_token_obj.save
-            success "Admin User Created"
-        else
-            fail    admin_token_obj
-        end
-        respond
-    end
-
 end

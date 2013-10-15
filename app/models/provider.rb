@@ -23,6 +23,7 @@ class Provider < ActiveRecord::Base
 	has_many   :sales
 	#has_and_belongs_to_many   :tags
 	belongs_to :brands
+	belongs_to :merchant
 	#has_many   :servers, class_name: "Employee"
 
 	mount_uploader :photo,    ProviderPhotoUploader

@@ -112,7 +112,7 @@ class JsonController < ActionController::Base
 
     def authenticate_admin_tools
         token = request.headers["HTTP_TKN"]
-        @admin_user = AdminToken.find_by_token token
+        @admin_user = AdminUser.find_by_token token
         head :unauthorized unless @admin_user
     end
 
