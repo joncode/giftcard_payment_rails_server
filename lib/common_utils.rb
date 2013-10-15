@@ -2,7 +2,7 @@
 	####  MUST have FILTER_PARAMS loaded into Rails already
 
 module CommonUtils
-	
+
 	include ActionView::Helpers::TextHelper
 
 	def log_request_header
@@ -19,9 +19,9 @@ module CommonUtils
 			puts "HERE IS THE HEADER TOKEN #{request.headers["HTTP_TKN"]}"
 		end
 
-		if request.headers["HTTP_COOKIE"]
-			puts "HERE IS THE HEADER #{request.headers["HTTP_COOKIE"]}"
-		end
+		# if request.headers["HTTP_COOKIE"]
+		# 	puts "HERE IS THE HEADER #{request.headers["HTTP_COOKIE"]}"
+		# end
 	end
 
 
