@@ -29,9 +29,7 @@ class PnToken < ActiveRecord::Base
 private
 
     def register
-        user_alias  = self.user.ua_alias
-            # send the pn token to urbanairship as a register
-        Urbanairship.register_device(self.pn_token, :alias => user_alias )
+        Resque(RegisterPushJob, self.id)
     end
 
 
