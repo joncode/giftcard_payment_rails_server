@@ -122,7 +122,6 @@ Drinkboard::Application.routes.draw do
       post 'add_key_app',       to: 'admin_tools#add_key'
       post 'get_gifts',         to: 'admin_tools#gifts'
       post 'get_gift',          to: 'admin_tools#gift'
-      post "payable_gifts",     to: 'admin_tools#payable_gifts'
       post "payable_gifts_admt", to: 'admin_tools#payable_gifts_admt'
       post 'get_app_users',     to: 'admin_tools#users'
       post 'get_app_user',      to: 'admin_tools#user'
@@ -213,12 +212,8 @@ Drinkboard::Application.routes.draw do
     namespace :v1 do
       post 'create_merchant', to: 'merchant_tools#create'
       post 'update_merchant', to: 'merchant_tools#update'
-      post 'orders',          to: 'merchant_tools#orders'
-      post 'order',           to: 'merchant_tools#order'
       post 'compile_menu',    to: 'merchant_tools#compile_menu'
       post 'update_photo',    to: 'merchant_tools#update_photo'
-      post 'summary_range',   to: 'merchant_tools#summary_range'
-      post 'summary_report',  to: 'merchant_tools#summary_report'
       post 'reconcile_merchants', to: 'merchant_tools#reconcile_merchants'
     end
   end
@@ -241,6 +236,7 @@ Drinkboard::Application.routes.draw do
 
 #################          HTML routes to deprecate               /////////////////////////////
 
+end
 
 #################          DELETE BELOW                           /////////////////////////////
 
@@ -369,4 +365,3 @@ Drinkboard::Application.routes.draw do
 
   # resources :gifts,       only: [:index, :show]
 
-end

@@ -48,16 +48,6 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def payable_gifts
-        gift_ids = params["data"]
-        if gifts = Gift.find(gift_ids)
-            success gifts.serialize_objs(:report)
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
     def payable_gifts_admt
         gift_ids = params["data"]
         if gifts = Gift.find(gift_ids)

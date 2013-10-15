@@ -60,42 +60,6 @@ class Mt::V1::MerchantToolsController < JsonController
         respond
     end
 
-#####  Order Methods
-
-    def orders
-        data  = params["data"]
-        if data.kind_of? Hash
-            if data["page"] == "new"
-                gifts = Gift.get_provider(@provider)
-            elsif data["page"]  == 'reports'
-
-                start_time = data["start_time"].to_datetime if data["start_time"]
-                end_time   = data["end_time"].to_datetime   if data["end_time"]
-                puts "hitting the date correct #{start_time}|#{end_time}"
-                gifts = Gift.get_history_provider_and_range(@provider, start_time, end_time )
-            end
-        else
-            gifts = Gift.get_history_provider(@provider)
-        end
-
-        if gifts
-            success array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-        else
-            fail    database_error
-        end
-        respond
-    end
-
-    def order
-        if gift = Gift.find(params["data"].to_i)
-            serialized_gift = array_these_gifts( [gift], MERCHANT_REPLY, false , true , true )
-            success serialized_gift.first
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
 ######   Menu Methods
 
     def compile_menu
@@ -115,29 +79,6 @@ class Mt::V1::MerchantToolsController < JsonController
         respond
     end
 
-#######   Reports Methods
-
-    def summary_range
-        if range = Gift.get_summary_range(@provider)
-            success(range)
-        else
-            fail(data_not_found)
-        end
-        respond
-    end
-
-    def summary_report
-        start_date = params["data"].to_datetime
-        end_date   = range_end start_date
-        if resp = Gift.get_summary_report(@provider, start_date.utc, end_date.utc)
-            success resp
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
-
     def reconcile_merchants
         db_attributes        = ["live", "paused"]
         provider_hash_for_mt = {}
@@ -146,7 +87,7 @@ class Mt::V1::MerchantToolsController < JsonController
         #For each merchant sent from mt to db...
         merchants = params["data"]
         merchants.each do |merchant|
-        
+
         #find the provider in db with the same token...
             if Provider.unscoped.find_by_token(merchant["token"])
                 merchant_matches += 1
@@ -157,12 +98,12 @@ class Mt::V1::MerchantToolsController < JsonController
                 provider_attributes.delete("created_at")
                 provider_attributes.delete("updated_at")
                 provider_attributes.each do |attr_name, attr_value|
-            #if the mt and db data doesn't match, then...            
+            #if the mt and db data doesn't match, then...
                     if attr_value.to_s != merchant[attr_name].to_s
                 # if it's present in db but not mt, log a message...
                         if merchant[attr_name].blank?
                             puts "The value of #{attr_name} for merchant #{merchant["merchant_id"]} is present in db, but not in mt. No changes were made."
-                #if it's a "db_attribute", add  the key/value pair to the data to be sent back to mt...   
+                #if it's a "db_attribute", add  the key/value pair to the data to be sent back to mt...
                         elsif db_attributes.include?(attr_name)
                             if provider_hash_for_mt.has_key? merchant["merchant_id"]
                                 provider_hash_for_mt[merchant["merchant_id"]].merge!(attr_name => attr_value)
@@ -196,16 +137,6 @@ class Mt::V1::MerchantToolsController < JsonController
         end
         respond
     end
-
-
-private
-
-    def range_end date
-        if date.day > 15
-            date.end_of_month
-        else
-            (date.beginning_of_month + 14.days).end_of_day
-        end
-    end
+    
 
 end
