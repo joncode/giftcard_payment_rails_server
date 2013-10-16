@@ -7,34 +7,6 @@ class Admt::V1::AdminToolsController < JsonController
 
 #####  Gift Methods
 
-    def gifts
-        data      = params["data"].to_i
-
-        gifts = if data > 0
-            Gift.get_all_for_provider data
-        else
-            Gift.get_all
-        end
-
-        if gifts.count > 0
-            success array_these_gifts( gifts, ADMIN_REPLY, false , false , true )
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
-    def gift
-
-        if gift = Gift.unscoped.find(params["data"].to_i)
-            serialized_gift = array_these_gifts( [gift], ADMIN_REPLY, false , false , true )
-            success serialized_gift.first
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
     def destroy_all_gifts
         user        = User.find(params["data"].to_i)
         total_gifts = Gift.get_user_activity(user)
@@ -103,25 +75,6 @@ class Admt::V1::AdminToolsController < JsonController
 
 #####   Brand Routes
 
-    def brands
-        brands = Brand.get_all
-        if brands.count > 0
-            success brands.serialize_objs(:admt)
-        else
-            fail    database_error
-        end
-        respond
-    end
-
-    def brand
-        if brand = Brand.unscoped.find(params["data"].to_i)
-            success brand.admt_serialize
-        else
-            fail    database_error
-        end
-        respond
-    end
-
     def create_brand
         puts "HERE IS THE PARAMS data = #{params["data"].inspect}"
         brand_hsh = params["data"]
@@ -167,54 +120,6 @@ class Admt::V1::AdminToolsController < JsonController
         end
         respond
     end
-
-    def update_association
-        id_type  = params["data"]["id_type"]
-        begin
-            brand    = Brand.unscoped.find(params["data"]["brand_id"].to_i)
-            merchant = Provider.unscoped.find(params["data"]["provider_id"].to_i)
-        rescue
-            brand = nil
-        end
-        if brand && merchant && (id_type == "building_id" || id_type == "brand_id" )
-            if merchant.send(id_type)  != brand.id
-                if merchant.update_attribute(id_type.to_sym, brand.id)
-                    success "#{brand.name} is #{id_type} associated with #{merchant.name}"
-                else
-                    fail merchant
-                end
-            else
-                if merchant.update_attribute(id_type.to_sym, nil)
-                    success "#{brand.name} is no longer #{id_type} associated with #{merchant.name}"
-                else
-                    fail merchant
-                end
-            end
-        else
-            fail    data_not_found
-        end
-
-        respond
-    end
-
-    # def deassociate
-    #     provider_id = params["data"]["provider_id"].to_i
-    #     brand_id    = params["data"]["brand_id"].to_i
-    #     type_of     = params["data"]["type_of"]
-    #     if merchant = Provider.unscoped.find(provider_id)
-    #         merchant.send("#{type_of}=", nil)
-    #         if merchant.save
-    #             success "De-association successfull"
-    #         else
-    #             fail    merchant
-    #         end
-    #     else
-    #         # could not find brand or merchant
-    #         fail    data_not_found
-    #     end
-
-    #     respond
-    # end
 
 #####  Merchant Routes
 
