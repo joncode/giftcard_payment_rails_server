@@ -12,7 +12,7 @@ class Brand < ActiveRecord::Base
 	after_save :update_parent_brand
 
 	default_scope where(active: true)
-	
+
 	def self.get_all
 		unscoped.order("name ASC")
 	end
@@ -100,7 +100,7 @@ class Brand < ActiveRecord::Base
 	end
 
 	def city_state_zip
-			"#{self.description}"
+		"#{self.description}"
 	end
 
 private
