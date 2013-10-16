@@ -29,7 +29,9 @@ class PnToken < ActiveRecord::Base
 private
 
     def register
-        Resque(RegisterPushJob, self.id)
+        unless Rails.env.test?
+            Resque(RegisterPushJob, self.id)
+        end
     end
 
 

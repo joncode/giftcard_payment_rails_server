@@ -1,4 +1,4 @@
-class PushJob
+class RegisterPushJob
 
     @queue = :push
 
@@ -8,5 +8,5 @@ class PushJob
         puts "registering PN Token for #{pn_token.user.name}"
         Urbanairship.register_device(self.pn_token, :alias => user_alias )
     end
-    
+
 end
