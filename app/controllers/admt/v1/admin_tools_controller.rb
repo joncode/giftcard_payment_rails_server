@@ -86,76 +86,12 @@ class Admt::V1::AdminToolsController < JsonController
 
 #####  User Routes
 
-    def user_and_gifts
-        # get the user with params["id"]
-        # get the sent adn received gifts for the user
-        if user = User.find(params["data"].to_i)
-            gifts        = Gift.get_sent_and_received_gifts_for user
-            gifts.each_key do |key|
-                gifts[key] = array_these_gifts( gifts[key], ADMIN_REPLY, false , false , true )
-            end
-            response_hsh   = {app_user: user.admt_serialize}.merge gifts
-            success response_hsh
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
-    def users
-        users = User.order("last_name ASC")
-
-        if users.count > 0
-            success users.serialize_objs :admt
-        else
-            fail    database_error
-        end
-        respond
-    end
-
-    def user
-        if user = User.find(params["data"].to_i)
-            success user.serialize
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
-    def update_user
-        user = User.find(params["data"]["user_id"].to_i)
-        if user && user.update_attributes(params["data"]["user"])
-            success user.serialize
-        else
-            if user
-                fail user
-            else
-                fail data_not_found
-            end
-        end
-        respond
-    end
-
     def deactivate_user
         if user         = User.find(params["data"].to_i)
 
             if user.toggle! :active
                 stat    = user.active ? "Live" : "Suspended"
                 success "#{user.name} is now #{stat}"
-            else
-                fail    user
-            end
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
-    def destroy_user
-        if user        = User.find(params["data"].to_i)
-
-            if user.permanently_deactivate
-                success "#{user.name} is Permanently De-Activated."
             else
                 fail    user
             end
