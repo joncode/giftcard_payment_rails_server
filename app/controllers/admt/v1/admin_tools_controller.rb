@@ -242,56 +242,65 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def associate
-        type_of  = params["data"]["type_of"]
-        type_msg = type_of == "building_id" ? "building" : "brand"
+    def update_association
+        id_type  = params["data"]["id_type"]
         begin
             brand    = Brand.unscoped.find(params["data"]["brand_id"].to_i)
             merchant = Provider.unscoped.find(params["data"]["provider_id"].to_i)
         rescue
             brand = nil
         end
-        if brand && merchant && (type_of == "building_id" || type_of == "brand_id" )
-            if merchant.send(type_of)  != brand.id
-                merchant.send(type_of, brand.id)
-                msg = "#{brand.name} is #{type_msg} associated with #{merchant.name}"
+        if brand && merchant && (id_type == "building_id" || id_type == "brand_id" )
+            if merchant.send(id_type)  != brand.id
+                if merchant.update_attribute(id_type.to_sym, brand.id)
+                    success "#{brand.name} is #{id_type} associated with #{merchant.name}"
+                else
+                    fail merchant
+                end
             else
-                merchant.send(type_of, nil)
-                msg = "#{brand.name} is no longer #{type_msg} associated with #{merchant.name}"
-            end
-            if merchant.save
-                success msg
-            else
-                fail    merchant
+                if merchant.update_attribute(id_type.to_sym, nil)
+                    success "#{brand.name} is no longer #{id_type} associated with #{merchant.name}"
+                else
+                    fail merchant
+                end
             end
         else
-            # could not find brand or merchant
             fail    data_not_found
         end
 
         respond
     end
 
-    def deassociate
-        provider_id = params["data"]["provider_id"].to_i
-        brand_id    = params["data"]["brand_id"].to_i
-        type_of     = params["data"]["type_of"]
-        if merchant = Provider.unscoped.find(provider_id)
-            merchant.send("#{type_of}=", nil)
-            if merchant.save
-                success "De-association successfull"
-            else
-                fail    merchant
-            end
-        else
-            # could not find brand or merchant
-            fail    data_not_found
-        end
+    # def deassociate
+    #     provider_id = params["data"]["provider_id"].to_i
+    #     brand_id    = params["data"]["brand_id"].to_i
+    #     type_of     = params["data"]["type_of"]
+    #     if merchant = Provider.unscoped.find(provider_id)
+    #         merchant.send("#{type_of}=", nil)
+    #         if merchant.save
+    #             success "De-association successfull"
+    #         else
+    #             fail    merchant
+    #         end
+    #     else
+    #         # could not find brand or merchant
+    #         fail    data_not_found
+    #     end
 
-        respond
-    end
+    #     respond
+    # end
 
 #####  Merchant Routes
+
+    def provider
+        provider = Provider.find_by_merchant_id(params["data"])
+        if provider.count > 0
+            success provider.admt_serialize
+        else
+            fail    database_error
+        end
+        respond
+    end
 
     def providers
         providers = Provider.get_all
