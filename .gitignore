@@ -38,3 +38,4 @@ latest.dump
 rerun.txt
 pickle-email-*.html
 
+/config/database.yml

@@ -129,14 +129,10 @@ Drinkboard::Application.routes.draw do
       post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
       post 'destroy_user',      to: 'admin_tools#destroy_user'
       post 'update_user',       to: 'admin_tools#update_user'
-      post 'get_brands',        to: 'admin_tools#brands'
-      post 'get_brand',         to: 'admin_tools#brand'
       post 'create_brand',      to: 'admin_tools#create_brand'
       post 'update_brand',      to: 'admin_tools#update_brand'
       post 'de_activate_brand', to: 'admin_tools#deactivate_brand'
-      post 'associate',         to: 'admin_tools#associate'
-      post 'de_associate',      to: 'admin_tools#deassociate'
-      post 'providers',         to: 'admin_tools#providers'
+      post 'update_association', to: 'admin_tools#update_association'
       post 'go_live',           to: 'admin_tools#go_live'
       post 'deactivate_merchant', to: 'admin_tools#deactivate_merchant'
       post 'update_mode',       to: 'admin_tools#update_mode'
@@ -144,6 +140,11 @@ Drinkboard::Application.routes.draw do
       post 'orders',            to: 'admin_tools#orders'
       post 'unsettled',         to: 'admin_tools#unsettled'
       post 'settled',           to: 'admin_tools#settled'
+      # post 'destroy_association', to: 'admin_tools#destroy_association'
+      # post 'providers',         to: 'admin_tools#providers'
+      # post 'provider',          to: 'admin_tools#provider'
+      # post 'get_brands',        to: 'admin_tools#brands'
+      # post 'get_brand',         to: 'admin_tools#brand'
     end
   end
 
