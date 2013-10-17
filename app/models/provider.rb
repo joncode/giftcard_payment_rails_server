@@ -12,7 +12,7 @@ class Provider < ActiveRecord::Base
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
-	
+
 	has_many   :orders
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
@@ -126,6 +126,17 @@ class Provider < ActiveRecord::Base
 		end
 	end
 
+	def deactivate
+		self.paused = true
+		self.live 	= false
+		self.active = false
+		if self.save
+			true
+		else
+			false
+		end
+	end
+
 ##################
 
 	def get_todays_credits
@@ -151,10 +162,6 @@ class Provider < ActiveRecord::Base
 	end
 
 ######   PHOTO GETTERS
-
-	def get_photo_for_web
-		get_photo
-	end
 
 	def get_photo
 		if image.blank?
@@ -184,104 +191,6 @@ class Provider < ActiveRecord::Base
 			image_url = MERCHANT_DEFAULT_IMG
 		end
 		return image_url
-	end
-
-#################
-
-	def get_servers
-		# this means get people who are AT work not just employed
-		# for now without location data,
-		# its just employees who  are active and retail (deal with customers)
-		self.employees.where(active: true)
-	end
-
-	def user_clearance(user)
-		if user.admin
-			return "super"
-		else
-			emp = self.employees.where(user_id: user.id).pop
-			return emp.clearance
-		end
-	end
-
-	def server_codes
-		self.employees.collect {|e| e.server_code}
-	end
-
-	def get_server_from_code(code)
-		self.employees.select {|e| e.server_code == code}
-	end
-
-	def get_server_from_code_to_iphone(code)
-		server_in_array = self.employees.select {|e| e.server_code == code}
-		server = server_in_array.pop
-		server.server_info_to_iphone if server
-	end
-
-	def server_to_iphone
-		if self.employees.count != 0
-			send_fields = [:first_name, :last_name, :server_code]
-			self.users.map { |e| e.serializable_hash only: send_fields  }
-		else
-			"no servers set up yet"
-		end
-	end
-
-	def users_not_staff
-		staff_ids = self.employees.where(active: true).map { |e| e.user_id }
-		User.all.delete_if { |user| staff_ids.include? user.id }
-	end
-
-	def employees_to_app
-		# get all the employees - put there table view info and secure image into an array
-		send_fields = [:first_name, :last_name]
-		employees_array = self.get_servers.map do |e|
-			employee_hash = {}
-			employee_hash = e.user.serializable_hash only: [:first_name, :last_name]
-			employee_hash["photo"]        = e.user.get_photo
-			employee_hash["secure_image"] = e.user.get_secure_image
-			employee_hash["employee_id"]  = "#{e.id}"
-			employee_hash
-		end
-		if employees_array.count == 0
-			employees_array = ["no employees set up yet"]
-		end
-		return employees_array
-	end
-
-	def employees_to_merchant_tools
-		# get all the employees - put there table view info and secure image into an array
-		employees_array = self.get_servers.map do |e|
-			employee_hash = {}
-			employee_hash = e.user.serializable_hash only: [:first_name, :last_name]
-			employee_hash["photo"]      = e.user.get_photo
-			employee_hash["email"]      = e.user.email
-			employee_hash["phone"]      = e.user.phone
-			employee_hash["code"]       = e.user.server_code
-			employee_hash["clearance"]  = e.clearance
-			employee_hash["eid"]        = e.id
-			employee_hash
-		end
-
-		if employees_array.count == 0
-			employees_array = ["no employees set up yet"]
-		end
-		return employees_array
-	end
-
-	def table_photo_hash
-				# return the merchant name
-				# return the table view photo url
-				# call the table view photo at 320px x 50px off cloudinary
-		response = {}
-		response["provider_name"]   = self.name
-		response["photo"]           = self.photo.url
-		response["provider_id"]     = self.id.to_s
-		response["phone"]           = self.phone.to_s
-		response["city"]            = self.city
-		response["sales_tax"]       = self.sales_tax
-		response["full_address"]    = self.full_address
-		return response
 	end
 
 private

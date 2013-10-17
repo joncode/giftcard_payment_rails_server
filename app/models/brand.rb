@@ -62,22 +62,6 @@ class Brand < ActiveRecord::Base
 		super new_url
 	end
 
-		# def photo
-		#     short_url = super
-		#     if short_url
-		#         CLOUDINARY_IMAGE2_URL + short_url
-		#     else
-		#         nil
-		#     end
-		# end
-
-	def get_photo_for_web
-		unless image = self.photo
-			image = MERCHANT_DEFAULT_IMG
-		end
-		return image
-	end
-
 	def providers
 		merchants = Provider.where("brand_id = ? OR building_id = ?", self.id, self.id)
 		if self.child

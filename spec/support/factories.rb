@@ -72,6 +72,21 @@ FactoryGirl.define do
             end
             phone
         end
+
+        factory :paused do
+            paused   true
+        end
+
+        factory :live do
+            live     true
+            paused   false
+        end
+
+        factory :coming_soon do
+            live     false
+            paused   false
+        end
+
     end
 
     factory :user_social do
@@ -127,6 +142,21 @@ FactoryGirl.define do
 
     factory :redeem do
         gift    { FactoryGirl.create(:gift)}
+    end
+
+    factory :merchant do
+        sequence(:name)    { |n| "ichizos#{n}" }
+        city        "New York"
+        address     "123 happy st"
+        zip         "11211"
+        state       "NY"
+        sequence(:token)   { |n| "token#{n}" }
+        zinger      "its amazing"
+        description "get all the japanese culinary delights that are so hard to find in America"
+    end
+
+    factory :admin_user do
+        remember_token  "Token"
     end
 
         # factory :city_provider do

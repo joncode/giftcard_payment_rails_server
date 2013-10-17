@@ -172,15 +172,6 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	def get_photo_for_web
-		photo_url = get_photo
-		if photo_url.nil?
-			photo_url = "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
-		end
-
-		return photo_url
-	end
-
 	def get_secure_image
 		if self.secure_image.blank?
 			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1362365994/rxnr2tqsee9fjydm8irz.jpg"
