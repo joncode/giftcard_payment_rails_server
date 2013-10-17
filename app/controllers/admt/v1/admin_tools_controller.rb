@@ -3,37 +3,9 @@ class Admt::V1::AdminToolsController < JsonController
 
     before_filter :authenticate_admin_tools,    except: [:add_key, :payable_gifts]
     before_filter :authenticate_merchant_tools, only:   :payable_gifts
-    before_filter :authenticate_general_token,  only:   :add_key
+    # before_filter :authenticate_general_token,  only:   :add_key
 
 #####  Gift Methods
-
-    def gifts
-        data      = params["data"].to_i
-
-        gifts = if data > 0
-            Gift.get_all_for_provider data
-        else
-            Gift.get_all
-        end
-
-        if gifts.count > 0
-            success array_these_gifts( gifts, ADMIN_REPLY, false , false , true )
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
-    def gift
-
-        if gift = Gift.unscoped.find(params["data"].to_i)
-            serialized_gift = array_these_gifts( [gift], ADMIN_REPLY, false , false , true )
-            success serialized_gift.first
-        else
-            fail    data_not_found
-        end
-        respond
-    end
 
     def destroy_all_gifts
         user        = User.find(params["data"].to_i)
@@ -86,56 +58,6 @@ class Admt::V1::AdminToolsController < JsonController
 
 #####  User Routes
 
-    def user_and_gifts
-        # get the user with params["id"]
-        # get the sent adn received gifts for the user
-        if user = User.find(params["data"].to_i)
-            gifts        = Gift.get_sent_and_received_gifts_for user
-            gifts.each_key do |key|
-                gifts[key] = array_these_gifts( gifts[key], ADMIN_REPLY, false , false , true )
-            end
-            response_hsh   = {app_user: user.admt_serialize}.merge gifts
-            success response_hsh
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
-    def users
-        users = User.order("last_name ASC")
-
-        if users.count > 0
-            success users.serialize_objs :admt
-        else
-            fail    database_error
-        end
-        respond
-    end
-
-    def user
-        if user = User.find(params["data"].to_i)
-            success user.serialize
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
-    def update_user
-        user = User.find(params["data"]["user_id"].to_i)
-        if user && user.update_attributes(params["data"]["user"])
-            success user.serialize
-        else
-            if user
-                fail user
-            else
-                fail data_not_found
-            end
-        end
-        respond
-    end
-
     def deactivate_user
         if user         = User.find(params["data"].to_i)
 
@@ -151,40 +73,7 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def destroy_user
-        if user        = User.find(params["data"].to_i)
-
-            if user.permanently_deactivate
-                success "#{user.name} is Permanently De-Activated."
-            else
-                fail    user
-            end
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
 #####   Brand Routes
-
-    def brands
-        brands = Brand.get_all
-        if brands.count > 0
-            success brands.serialize_objs(:admt)
-        else
-            fail    database_error
-        end
-        respond
-    end
-
-    def brand
-        if brand = Brand.unscoped.find(params["data"].to_i)
-            success brand.admt_serialize
-        else
-            fail    database_error
-        end
-        respond
-    end
 
     def create_brand
         puts "HERE IS THE PARAMS data = #{params["data"].inspect}"
@@ -232,75 +121,7 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def update_association
-        id_type  = params["data"]["id_type"]
-        begin
-            brand    = Brand.unscoped.find(params["data"]["brand_id"].to_i)
-            merchant = Provider.unscoped.find(params["data"]["provider_id"].to_i)
-        rescue
-            brand = nil
-        end
-        if brand && merchant && (id_type == "building_id" || id_type == "brand_id" )
-            if merchant.send(id_type)  != brand.id
-                if merchant.update_attribute(id_type.to_sym, brand.id)
-                    success "#{brand.name} is #{id_type} associated with #{merchant.name}"
-                else
-                    fail merchant
-                end
-            else
-                if merchant.update_attribute(id_type.to_sym, nil)
-                    success "#{brand.name} is no longer #{id_type} associated with #{merchant.name}"
-                else
-                    fail merchant
-                end
-            end
-        else
-            fail    data_not_found
-        end
-
-        respond
-    end
-
-    # def deassociate
-    #     provider_id = params["data"]["provider_id"].to_i
-    #     brand_id    = params["data"]["brand_id"].to_i
-    #     type_of     = params["data"]["type_of"]
-    #     if merchant = Provider.unscoped.find(provider_id)
-    #         merchant.send("#{type_of}=", nil)
-    #         if merchant.save
-    #             success "De-association successfull"
-    #         else
-    #             fail    merchant
-    #         end
-    #     else
-    #         # could not find brand or merchant
-    #         fail    data_not_found
-    #     end
-
-    #     respond
-    # end
-
 #####  Merchant Routes
-
-    def provider
-        provider = Provider.find_by_merchant_id(params["data"])
-        if provider.count > 0
-            success provider.admt_serialize
-        else
-            fail    database_error
-        end
-        respond
-    end
-
-    def providers
-        providers = Provider.get_all
-        if providers.count > 0
-            success providers.serialize_objs(:admt)
-        else
-            fail    database_error
-        end
-        respond
-    end
 
     def go_live
         if provider = Provider.unscoped.find_by_token(params['data'])

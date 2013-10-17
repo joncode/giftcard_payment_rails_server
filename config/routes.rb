@@ -119,12 +119,7 @@ Drinkboard::Application.routes.draw do
 
   namespace :admt, defaults: { format: 'json' } do
     namespace :v1 do
-      post 'get_gifts',         to: 'admin_tools#gifts'
-      post 'get_gift',          to: 'admin_tools#gift'
       post "payable_gifts_admt", to: 'admin_tools#payable_gifts_admt'
-      post 'get_app_users',     to: 'admin_tools#users'
-      post 'get_app_user',      to: 'admin_tools#user'
-      post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
       post 'de_activate_user',  to: 'admin_tools#deactivate_user'
       post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
       post 'destroy_user',      to: 'admin_tools#destroy_user'
@@ -132,7 +127,6 @@ Drinkboard::Application.routes.draw do
       post 'create_brand',      to: 'admin_tools#create_brand'
       post 'update_brand',      to: 'admin_tools#update_brand'
       post 'de_activate_brand', to: 'admin_tools#deactivate_brand'
-      post 'update_association', to: 'admin_tools#update_association'
       post 'go_live',           to: 'admin_tools#go_live'
       post 'deactivate_merchant', to: 'admin_tools#deactivate_merchant'
       post 'update_mode',       to: 'admin_tools#update_mode'
@@ -140,6 +134,12 @@ Drinkboard::Application.routes.draw do
       post 'orders',            to: 'admin_tools#orders'
       post 'unsettled',         to: 'admin_tools#unsettled'
       post 'settled',           to: 'admin_tools#settled'
+      # post 'get_gifts',         to: 'admin_tools#gifts'
+      # post 'get_gift',          to: 'admin_tools#gift'
+      # post 'get_app_users',     to: 'admin_tools#users'
+      # post 'get_app_user',      to: 'admin_tools#user'
+      # post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
+      # post 'update_association', to: 'admin_tools#update_association'
       # post 'destroy_association', to: 'admin_tools#destroy_association'
       # post 'providers',         to: 'admin_tools#providers'
       # post 'provider',          to: 'admin_tools#provider'
