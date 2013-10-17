@@ -142,12 +142,18 @@ Drinkboard::Application.routes.draw do
               post :refund                  # biz logic
               post :refund_cancel           # biz logic
             end
-            collection do
-              post :destroy_all             # biz logic
-            end
           end
 
-          resources :users,     only: [:update, :destroy]  # biz logic
+          resources :users,     only: [:update] do # biz logic
+            member do
+              post :deactivate
+            end
+            resources :gifts, only: [] do
+              collection do
+                post :deactivate
+              end          # biz logic
+            end
+          end
 
           resources :brands,    only: [:create, :update]   # biz logic
 

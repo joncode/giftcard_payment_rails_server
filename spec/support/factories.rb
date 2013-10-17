@@ -118,6 +118,18 @@ FactoryGirl.define do
 
     end
 
+    factory :gift_no_association, :class => 'Gift' do
+        giver_id           10
+        giver_name         "Plain Jane"
+        receiver_name      "Plain Receipient"
+        provider_id        10
+        total           "100"
+        service         "4"
+        credit_card     4567890
+        shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
+
+    end
+
     factory :sale do
         giver_id    1
         gift_id     1
@@ -156,7 +168,7 @@ FactoryGirl.define do
     end
 
     factory :admin_user do
-        remember_token  "Token"
+        sequence(:remember_token)    { |n|  "Token#{n}" }
     end
 
         # factory :city_provider do

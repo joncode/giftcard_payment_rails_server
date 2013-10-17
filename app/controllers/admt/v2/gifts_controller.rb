@@ -12,7 +12,7 @@ class Admt::V2::GiftsController < JsonController
 
     end
 
-    def destroy_all
+    def deactivate
 
     end
 

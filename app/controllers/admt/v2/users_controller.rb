@@ -4,7 +4,7 @@ class Admt::V2::UsersController < JsonController
 
     end
 
-    def destroy
+    def deactivate
 
     end
 
