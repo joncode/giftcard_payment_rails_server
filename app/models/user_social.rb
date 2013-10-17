@@ -2,9 +2,10 @@ class UserSocial < ActiveRecord::Base
     attr_accessible :identifier, :type_of, :user_id
 
     belongs_to :user
-    after_save :update_mailchimp
 
+    before_validation :reject_xxx_emails
     validates_presence_of :identifier, :type_of, :user_id
+    after_save :update_mailchimp
 
     default_scope where(active: true)
 
@@ -26,6 +27,14 @@ private
         	if self.type_of  == "email"
                 Resque.enqueue(SubscriptionJob, self.id)
         	end
+        end
+    end
+
+    def reject_xxx_emails
+        if self.type_of  == "email"
+            if self.identifier && self.identifier[-3..-1] == "xxx"
+                self.identifier = nil
+            end
         end
     end
 

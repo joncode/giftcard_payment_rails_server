@@ -127,7 +127,7 @@ FactoryGirl.define do
         service         "4"
         credit_card     4567890
         shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
-
+        sale            { FactoryGirl.create(:sale)}
     end
 
     factory :sale do
@@ -171,9 +171,11 @@ FactoryGirl.define do
         sequence(:remember_token)    { |n|  "Token#{n}" }
     end
 
-        # factory :city_provider do
-    #     city "New York"
-    #     providers_array
-    # end
+    factory :brand do
+        name        "Starwood"
+        website     "www.starwood.com"
+        description "AMAZING!"
+        photo       "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"
+    end
 
 end

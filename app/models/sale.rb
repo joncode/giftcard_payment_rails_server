@@ -42,18 +42,23 @@ class Sale < ActiveRecord::Base
 
     def void_sale gift=nil
         gift      = self.gift if gift.nil?
-        auth_obj  = authorize_net_aim_transaction
-        @response = auth_obj.void(self.transaction_id)
+        if  Rails.env.test?
+            auth_obj  = AuthTransaction.new
+            @response = AuthResponse.new
+        else
+            auth_obj  = authorize_net_aim_transaction
+            @response = auth_obj.void(self.transaction_id)
+        end
         puts "HERE IS THE VOID ReSPONSE #{@response.inspect}"
 
         if @response.response_code == "1"
-            if gift.status = "redeemed"
-
-                gift.update_attributes({pay_stat: 'refunded' })
+            # THIS SHOLD CHECK RESPONSE FROM AUTH>NET AND TELL U IF VOID OR REFUND
+            gift.pay_stat = 'refunded'
+            if gift.save
+                0
             else
-                gift.update_attributes({pay_stat: "void"})
+                gift.errors.full_messages
             end
-            return @response.response_reason_text
         else
             @response.response_reason_text
         end

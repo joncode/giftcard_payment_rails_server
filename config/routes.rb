@@ -118,23 +118,6 @@ Drinkboard::Application.routes.draw do
 #################          ADMIN TOOLS routes for API              /////////////////////////////
 
   namespace :admt, defaults: { format: 'json' } do
-    namespace :v1 do
-      post 'de_activate_user',  to: 'admin_tools#deactivate_user'
-      post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
-      post 'destroy_user',      to: 'admin_tools#destroy_user'
-      post 'update_user',       to: 'admin_tools#update_user'
-      post 'create_brand',      to: 'admin_tools#create_brand'
-      post 'update_brand',      to: 'admin_tools#update_brand'
-      post 'de_activate_brand', to: 'admin_tools#deactivate_brand'
-      post 'go_live',           to: 'admin_tools#go_live'
-      post 'deactivate_merchant', to: 'admin_tools#deactivate_merchant'
-      post 'update_mode',       to: 'admin_tools#update_mode'
-      post 'cancel',            to: 'admin_tools#cancel'
-      post 'settled',           to: 'admin_tools#settled'
-    end
-  end
-
-  namespace :admt, defaults: { format: 'json' } do
       namespace :v2 do
 
           resources :gifts,     only: [:update] do         # biz logic
@@ -150,8 +133,8 @@ Drinkboard::Application.routes.draw do
             end
             resources :gifts, only: [] do
               collection do
-                post :deactivate
-              end          # biz logic
+                post :deactivate_all         # biz logic
+              end
             end
           end
 
