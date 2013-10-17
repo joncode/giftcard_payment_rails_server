@@ -3,7 +3,7 @@ class Admt::V1::AdminToolsController < JsonController
 
     before_filter :authenticate_admin_tools,    except: [:add_key, :payable_gifts]
     before_filter :authenticate_merchant_tools, only:   :payable_gifts
-    before_filter :authenticate_general_token,  only:   :add_key
+    # before_filter :authenticate_general_token,  only:   :add_key
 
 #####  Gift Methods
 
@@ -122,26 +122,6 @@ class Admt::V1::AdminToolsController < JsonController
     end
 
 #####  Merchant Routes
-
-    def provider
-        provider = Provider.find_by_merchant_id(params["data"])
-        if provider.count > 0
-            success provider.admt_serialize
-        else
-            fail    database_error
-        end
-        respond
-    end
-
-    def providers
-        providers = Provider.get_all
-        if providers.count > 0
-            success providers.serialize_objs(:admt)
-        else
-            fail    database_error
-        end
-        respond
-    end
 
     def go_live
         if provider = Provider.unscoped.find_by_token(params['data'])
