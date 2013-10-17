@@ -19,17 +19,13 @@ class User < ActiveRecord::Base
 
 	has_one  :setting
 	has_many :pn_tokens
-	#has_many :employees, dependent: :destroy
-	has_many :providers, :through => :employees
 	has_many :brands
 	has_many :orders,    :through => :providers
 	has_many :gifts,     foreign_key: "giver_id"
 	has_many :sales
 	has_many :cards
-	#has_many :locations
 	has_many :answers
 	has_many :questions, :through => :answers
-	#has_many :relays , foreign_key: "receiver_id"
 	has_many :user_socials
 
 	has_secure_password

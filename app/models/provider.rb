@@ -12,19 +12,13 @@ class Provider < ActiveRecord::Base
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
-
-	has_many   :users, :through => :employees
-	has_many   :employees, dependent: :destroy
-	has_many   :relays
-	#has_many   :menus, dependent: :destroy
+	
 	has_many   :orders
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
 	has_many   :sales
-	#has_and_belongs_to_many   :tags
 	belongs_to :brands
 	belongs_to :merchant
-	#has_many   :servers, class_name: "Employee"
 
 	mount_uploader :photo,    ProviderPhotoUploader
 	mount_uploader :logo,     ProviderLogoUploader

@@ -6,10 +6,8 @@ class Order < ActiveRecord::Base
 	belongs_to  :provider
 	belongs_to  :redeem
 	belongs_to  :gift
-	#belongs_to  :employee
 	belongs_to  :sales
 	belongs_to  :cards
-	#belongs_to  :server, class_name: "User"    #  be class_name "Employee"
 
 	before_validation :add_gift_id,     :if => :no_gift_id
 	before_validation :add_redeem_id,   :if => :no_redeem_id

@@ -13,7 +13,6 @@ class Gift < ActiveRecord::Base
 			:status, :credit_card
 
 	has_one     :redeem, 		dependent: :destroy
-	has_one     :relay,  		dependent: :destroy
 	belongs_to  :provider
 	has_one     :sale
 	has_one     :order, 		dependent: :destroy

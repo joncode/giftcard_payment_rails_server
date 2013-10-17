@@ -20,17 +20,6 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def payable_gifts_admt
-        gift_ids = params["data"]
-        if gifts = Gift.find(gift_ids)
-            success gifts.serialize_objs(:report)
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
-
 #####  Gift & Sale Methods
 
     def cancel
@@ -191,34 +180,8 @@ class Admt::V1::AdminToolsController < JsonController
         respond
     end
 
-    def orders
-        if provider = Provider.unscoped.find_by_token(params['data'])
-
-            if gifts = Gift.get_history_provider(provider)
-                success array_these_gifts(gifts, MERCHANT_REPLY, false, true, true)
-            else
-                fail    provider
-            end
-        else
-            fail    data_not_found
-        end
-        respond
-    end
-
 #####   Payment Routes
 
-    def unsettled
-        # get all the unsettled gifts (non-merchant specific)
-        end_date = params["data"]
-        gifts    = Gift.get_unsettled(end_date)
-
-        if gifts.count > 0
-            success gifts.serialize_objs :admt
-        else
-            fail    "No unsettled gifts at for end date of #{end_date}"
-        end
-        respond
-    end
 
     def settled
         gift_id_ary       = params["data"]

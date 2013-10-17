@@ -119,7 +119,6 @@ Drinkboard::Application.routes.draw do
 
   namespace :admt, defaults: { format: 'json' } do
     namespace :v1 do
-      post "payable_gifts_admt", to: 'admin_tools#payable_gifts_admt'
       post 'de_activate_user',  to: 'admin_tools#deactivate_user'
       post 'destroy_all_gifts', to: 'admin_tools#destroy_all_gifts'
       post 'destroy_user',      to: 'admin_tools#destroy_user'
@@ -131,62 +130,42 @@ Drinkboard::Application.routes.draw do
       post 'deactivate_merchant', to: 'admin_tools#deactivate_merchant'
       post 'update_mode',       to: 'admin_tools#update_mode'
       post 'cancel',            to: 'admin_tools#cancel'
-      post 'orders',            to: 'admin_tools#orders'
-      post 'unsettled',         to: 'admin_tools#unsettled'
       post 'settled',           to: 'admin_tools#settled'
-      # post 'get_gifts',         to: 'admin_tools#gifts'
-      # post 'get_gift',          to: 'admin_tools#gift'
-      # post 'get_app_users',     to: 'admin_tools#users'
-      # post 'get_app_user',      to: 'admin_tools#user'
-      # post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
-      # post 'update_association', to: 'admin_tools#update_association'
-      # post 'destroy_association', to: 'admin_tools#destroy_association'
-      # post 'providers',         to: 'admin_tools#providers'
-      # post 'provider',          to: 'admin_tools#provider'
-      # post 'get_brands',        to: 'admin_tools#brands'
-      # post 'get_brand',         to: 'admin_tools#brand'
     end
   end
 
   namespace :admt, defaults: { format: 'json' } do
-    namespace :v2 do
+      namespace :v2 do
 
-      resources :admin_users, only: [:create]
-        # post 'add_key_app', to: 'admin_tools#add_key'
-      resources :gifts ,      only: [:index, :show] do
-        member do
-          post :cancel
-        end
-        collection do
-          post :destroy_all
-          post :unsettled
-          post :settled
-          post :payables
-          post :payables_admt
-        end
-      end
-      resources :orders,      only: [:index]
-      resources :users,       only: [:index, :show, :update, :delete] do
-        resources :gifts,     only: [:show] # post 'user_and_gifts',    to: 'admin_tools#user_and_gifts'
-        post :deactivate
-      end
-      resources :brands,      only: [:index, :show, :create, :update, :delete] do
-        member do
-          post :associate
-          post :disassociate
-          # delete is de-activate
-        end
-      end
-      resources :providers,   only: [:index, :update, :delete] do
-        member do
-          post :live
-          # delete is de-activate
-          # update is update_mode
-          # live should not be necessary with update mode
-        end
-      end
+          resources :gifts,     only: [] do
+            member do
+              # post :cancel                # admt only
+            end
+            collection do
+              post :destroy_all             # biz logic
+              # post :settled               # admt only
+            end
+          end
 
-    end
+          resources :users,     only: [:update, :destroy] do   # biz logic
+            # post :deactivate              # admt only
+          end
+
+          resources :brands,    only: [:create, :update] do    # biz logic
+            member do
+              # post :update_association    # admt only
+              # post :deactivate            # admt only
+            end
+          end
+
+          resources :providers, only: [] do
+            member do
+              post :update_mode             # biz logic
+              post :deactivate              # biz logic
+            end
+          end
+
+      end
   end
 
 #################          MERCHANT TOOLS routes for API          /////////////////////////////

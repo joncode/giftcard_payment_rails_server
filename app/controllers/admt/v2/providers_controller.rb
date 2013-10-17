@@ -1,18 +1,10 @@
 class Admt::V2::ProvidersController < JsonController
-
-    def index
-
-    end
-
-    def update
+    
+    def deactivate
 
     end
 
-    def delete
-
-    end
-
-    def live
+    def update_mode
 
     end
 
