@@ -151,12 +151,7 @@ Drinkboard::Application.routes.draw do
             # post :deactivate              # admt only
           end
 
-          resources :brands,    only: [:create, :update] do    # biz logic
-            member do
-              # post :update_association    # admt only
-              # post :deactivate            # admt only
-            end
-          end
+          resources :brands,    only: [:create, :update]    # biz logic
 
           resources :providers, only: [] do
             member do

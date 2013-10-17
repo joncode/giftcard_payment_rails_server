@@ -46,20 +46,9 @@ class Admt::V1::AdminToolsController < JsonController
     end
 
 #####  User Routes
-
-    def deactivate_user
-        if user         = User.find(params["data"].to_i)
-
-            if user.toggle! :active
-                stat    = user.active ? "Live" : "Suspended"
-                success "#{user.name} is now #{stat}"
-            else
-                fail    user
-            end
-        else
-            fail    data_not_found
-        end
-        respond
+    
+    def destroy_user
+        puts "THIS METHOD FOR PERMANENTLY DEACTIVATING THE USER SHOULD GO THROUGH DBAPP MODEL BUT HAS NOT YET BEEN WRITTEN"
     end
 
 #####   Brand Routes
