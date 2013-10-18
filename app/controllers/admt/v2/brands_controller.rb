@@ -1,5 +1,5 @@
 class Admt::V2::BrandsController < JsonController
-
+    
     before_filter :authenticate_admin_tools
 
     def create
