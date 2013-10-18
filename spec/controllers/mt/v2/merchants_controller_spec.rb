@@ -63,15 +63,3 @@ describe Mt::V2::MerchantsController do
     end
 
 end
-
-
-    # def app_serialize
-    #     merchant_hash = serialize
-    #     merchant_hash["merchant_id"] = self.id
-    #     merchant_hash["token"]       = self.token
-    #     merchant_hash["image"]       = self.get_photo
-    #     merchant_hash["mode"]        = self.mode
-    #     return merchant_hash
-    # end
-
-    # [:name, :address, :city, :state, :zip, :phone, :zinger, :description]
