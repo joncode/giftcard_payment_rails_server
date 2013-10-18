@@ -62,49 +62,56 @@ describe Admt::V2::ProvidersController do
         end
 
         it "should make 'paused' provider 'coming soon'" do
-            provider = FactoryGirl.create(:paused)
+            merchant  = FactoryGirl.create(:merchant)
+            provider = FactoryGirl.create(:paused, merchant_id: merchant.id )
             post :update_mode, id: provider.id, format: :json,  data: "coming_soon"
             new_provider = Provider.find(provider.id)
             new_provider.mode.should == "coming_soon"
         end
 
         it "should make 'paused' provider 'live'" do
-            provider = FactoryGirl.create(:paused)
+            merchant  = FactoryGirl.create(:merchant)
+            provider = FactoryGirl.create(:paused, merchant_id: merchant.id )
             post :update_mode, id: provider.id, format: :json, data: "live"
             new_provider = Provider.find(provider.id)
             new_provider.mode.should == "live"
         end
 
         it "should make 'live' provider 'coming soon'" do
-            provider = FactoryGirl.create(:live)
+            merchant  = FactoryGirl.create(:merchant)
+            provider = FactoryGirl.create(:live, merchant_id: merchant.id )
             post :update_mode, id: provider.id, format: :json, data: "coming_soon"
             new_provider = Provider.find(provider.id)
             new_provider.mode.should == "coming_soon"
         end
 
         it "should make 'live' provider 'paused'" do
-            provider = FactoryGirl.create(:live)
+            merchant  = FactoryGirl.create(:merchant)
+            provider = FactoryGirl.create(:live, merchant_id: merchant.id )
             post :update_mode, id: provider.id, format: :json,  data: "paused"
             new_provider = Provider.unscoped.find(provider.id)
             new_provider.mode.should == "paused"
         end
 
         it "should make 'coming soon' provider 'live'" do
-            provider = FactoryGirl.create(:coming_soon)
+            merchant  = FactoryGirl.create(:merchant)
+            provider = FactoryGirl.create(:coming_soon, merchant_id: merchant.id )
             post :update_mode, id: provider.id, format: :json,  data: "live"
             new_provider = Provider.find(provider.id)
             new_provider.mode.should == "live"
         end
 
         it "should make 'coming soon' provider 'paused'" do
-            provider = FactoryGirl.create(:coming_soon)
+            merchant  = FactoryGirl.create(:merchant)
+            provider = FactoryGirl.create(:coming_soon, merchant_id: merchant.id )
             post :update_mode, id: provider.id, format: :json,  data: "paused"
             new_provider = Provider.unscoped.find(provider.id)
             new_provider.mode.should == "paused"
         end
 
         it "should not change mode for incorrect mode and return error" do
-            provider = FactoryGirl.create(:coming_soon)
+            merchant  = FactoryGirl.create(:merchant)
+            provider = FactoryGirl.create(:coming_soon, merchant_id: merchant.id )
             post :update_mode, id: provider.id, format: :json,  data: "wrong"
             new_provider = Provider.unscoped.find(provider.id)
             new_provider.mode.should == "coming_soon"
