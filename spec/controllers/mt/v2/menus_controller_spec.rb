@@ -10,6 +10,17 @@ describe Mt::V2::MenusController do
     end
 
     describe "#update" do
+
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                request.env["HTTP_TKN"] = "No_Entrance"
+                put :update, id: 1, format: :json
+                response.response_code.should == 401
+            end
+
+        end
+
         pending "nested tests needed"
     end
 
