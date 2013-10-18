@@ -8,7 +8,11 @@ class Admt::V2::UsersController < JsonController
 
     def deactivate
         user = User.unscoped.find(params[:id])
-        user.permanently_deactivate
+        if user.permanently_deactivate
+            success   "#{user.name} is now permanently deactivated"
+        else
+            fail      user.errors.full_messages
+        end
         respond
     end
 
