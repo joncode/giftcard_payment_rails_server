@@ -1,0 +1,77 @@
+require 'spec_helper'
+
+describe Mt::V2::MerchantsController do
+
+    before(:each) do
+        request.env["HTTP_TKN"] = "1964f94b3e567a8a82b87f3ccbeb2174"
+
+        Provider.delete_all
+        #@provider = FactoryGirl.create(:provider)
+    end
+
+    describe "#create" do
+
+        it "should create new merchant" do
+            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"\"A Perfect Bite To Inspire Conversation\"", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
+            post :create, format: :json, data: new_provider_hsh
+            provider = Provider.last
+            provider.name.should        == new_provider_hsh["name"]
+            provider.description.should == new_provider_hsh["description"]
+            provider.zinger.should      == new_provider_hsh["zinger"]
+            provider.city.should        == new_provider_hsh["city"]
+            provider.state.should       == new_provider_hsh["state"]
+            provider.zip.should         == new_provider_hsh["zip"]
+            provider.address.should     == new_provider_hsh["address"]
+            provider.phone.should       == new_provider_hsh["phone"]
+            provider.token.should       == new_provider_hsh["token"]
+            provider.merchant_id.should == new_provider_hsh["merchant_id"]
+            provider.mode.should        == new_provider_hsh["mode"]
+            provider.get_photo.should   == new_provider_hsh["image"]
+            provider.active.should be_true
+        end
+
+    end
+
+    describe "#update" do
+        {
+            name: "House Bar",
+            description: "really crappy place",
+            zinger: "www.fake.com",
+            city: "San Selenas",
+            state: "JK",
+            zip: "89786",
+            address: "123 happy town",
+            phone: "6874567575",
+            mode: "live",
+            image: "happy_photo_profile.png"
+        }.stringify_keys.each do |type_of, identifier|
+
+            it "should update #{type_of}" do
+                provider = FactoryGirl.create(:provider)
+                request.env["HTTP_TKN"] = provider.token
+                new_provider_hsh = { type_of => identifier }
+                put :update, id: provider.id, format: :json, data: new_provider_hsh
+                provider = Provider.find(provider.id)
+                provider.send(type_of).should == identifier
+            end
+
+        end
+    end
+
+    describe "#reconcile" do
+
+    end
+
+end
+
+
+    # def app_serialize
+    #     merchant_hash = serialize
+    #     merchant_hash["merchant_id"] = self.id
+    #     merchant_hash["token"]       = self.token
+    #     merchant_hash["image"]       = self.get_photo
+    #     merchant_hash["mode"]        = self.mode
+    #     return merchant_hash
+    # end
+
+    # [:name, :address, :city, :state, :zip, :phone, :zinger, :description]

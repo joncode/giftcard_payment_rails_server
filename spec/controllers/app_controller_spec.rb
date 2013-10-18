@@ -40,7 +40,7 @@ describe AppController do
     end
 
     describe "#drinkboard_users" do
-        
+
         let(:user) { FactoryGirl.create(:user) }
         let(:deactivated) { FactoryGirl.create(:user, active: false ) }
 
@@ -51,11 +51,12 @@ describe AppController do
             json.class.should      == Array
         end
 
-        it "should return error from deactivated user" do
+        it "should return users from deactivated user" do
             post :drinkboard_users, format: :json, token: deactivated.remember_token
             response.status.should == 200
             puts "JSON --->>>  #{json}"
-            json["error"].should == "cannot find user from token"
+            #json["error"].should == "cannot find user from token"
+            json.class.should == Array
         end
 
     end

@@ -4,80 +4,80 @@ class Mt::V1::MerchantToolsController < JsonController
 
 #####  Merchant Methods
 
-    def create
-        # puts "HERE IS THE PARAMS data = #{params["data"].inspect}"
-        has_menu     = params["data"]["menu"].present?
-        merchant_hsh = params["data"]["merchant"]
-        if has_menu
-            menu_hsh = params["data"]["menu"]
-        end
-        merchant = Provider.new merchant_hsh
-        if merchant.save
-            if has_menu
-                menu_string         = merchant.menu_string
-                menu_string.data    = menu_hsh[0]
-                menu_string.menu    = menu_hsh[1]
-                menu_string.version = 3
-                if menu_string.save
-                    # merchant saved with menu
-                    success({ "provider" => merchant.id , "menu_string" => menu_string.id })
-                else
-                    # merchant saved but menu failed
-                    success({ "provider" => merchant.id , "menu_string" => menu_string.errors.messages })
-                end
-            else
-                success({ "provider" => merchant.id , "menu_string" => { "Menu" => "No menu uploaded" } })
-            end
+    # def create
+    #     # puts "HERE IS THE PARAMS data = #{params["data"].inspect}"
+    #     has_menu     = params["data"]["menu"].present?
+    #     merchant_hsh = params["data"]["merchant"]
+    #     if has_menu
+    #         menu_hsh = params["data"]["menu"]
+    #     end
+    #     merchant = Provider.new merchant_hsh
+    #     if merchant.save
+    #         if has_menu
+    #             menu_string         = merchant.menu_string
+    #             menu_string.data    = menu_hsh[0]
+    #             menu_string.menu    = menu_hsh[1]
+    #             menu_string.version = 3
+    #             if menu_string.save
+    #                 # merchant saved with menu
+    #                 success({ "provider" => merchant.id , "menu_string" => menu_string.id })
+    #             else
+    #                 # merchant saved but menu failed
+    #                 success({ "provider" => merchant.id , "menu_string" => menu_string.errors.messages })
+    #             end
+    #         else
+    #             success({ "provider" => merchant.id , "menu_string" => { "Menu" => "No menu uploaded" } })
+    #         end
 
-        else
-            puts "Here is merchant = #{merchant.inspect}"
-            fail merchant
-        end
-        respond
-    end
+    #     else
+    #         puts "Here is merchant = #{merchant.inspect}"
+    #         fail merchant
+    #     end
+    #     respond
+    # end
 
-    def update
-        merchant_hash = params["data"]
-        merchant_hash.delete("tz")
-        if @provider.update_attributes(merchant_hash)
-            success   "Merchant Update Successful"
-        else
-            fail      @provider
-        end
+    # def update
+    #     merchant_hash = params["data"]
+    #     merchant_hash.delete("tz")
+    #     if @provider.update_attributes(merchant_hash)
+    #         success   "Merchant Update Successful"
+    #     else
+    #         fail      @provider
+    #     end
 
-        respond
-    end
+    #     respond
+    # end
 
-    def update_photo
-        photo_url = params["data"]
+    # def update_photo
+    #     photo_url = params["data"]
 
-        if @provider.update_attribute(:image, photo_url)
-            success   "Photo Live on App"
-        else
-            fail      @provider
-        end
+    #     if @provider.update_attribute(:image, photo_url)
+    #         success   "Photo Live on App"
+    #     else
+    #         fail      @provider
+    #     end
 
-        respond
-    end
+    #     respond
+    # end
 
 ######   Menu Methods
 
-    def compile_menu
-        data = params["data"]["old_menu"]           # deprecate
-        menu = params["data"]["menu"]
-        # puts "Old Data = #{data}"                   # deprecate
-        # puts "new Data = #{menu}"
-        menu_string = @provider.menu_string
-        if !menu_string                             # deprecate
-            menu_string = MenuString.create(provider_id: @provider.id, data: "[]")
-        end
-        if menu_string.update_attributes({data: data, menu: menu, version: 3})
-            success     "Menu Live on App"
-        else
-            fail        menu_string
-        end
-        respond
-    end
+    # def compile_menu
+    #     data = params["data"]["old_menu"]           # deprecate
+    #     menu = params["data"]["menu"]
+    #     # puts "Old Data = #{data}"                   # deprecate
+    #     # puts "new Data = #{menu}"
+    #     menu_string = @provider.menu_string
+    #     if !menu_string                             # deprecate
+    #         menu_string = MenuString.create(provider_id: @provider.id, data: "[]")
+    #     end
+    #     if menu_string.update_attributes({data: data, menu: menu, version: 3})
+    #         success     "Menu Live on App"
+    #     else
+    #         fail        menu_string
+    #     end
+    #     respond
+    # end
 
     def reconcile_merchants
         db_attributes        = ["live", "paused"]
@@ -137,6 +137,6 @@ class Mt::V1::MerchantToolsController < JsonController
         end
         respond
     end
-    
+
 
 end

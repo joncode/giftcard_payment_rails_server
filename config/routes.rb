@@ -155,12 +155,14 @@ Drinkboard::Application.routes.draw do
     namespace :v2 do
 
       resources :merchants, only: [:create, :update] do
-        resources :orders,  only: [:show, :index]
-        resources :menus,   only: [:update]
-        resources :photos,  only: [:update]
+
         member do
           post :reconcile
         end
+
+        resources :menus,   only: [:update]
+        resources :photos,  only: [:update]
+
       end
 
     end
