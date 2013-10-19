@@ -37,22 +37,6 @@ class Admt::V2::GiftsController < JsonController
         respond
     end
 
-    def deactivate_all
-        user = User.find(params[:user_id])
-        total_gifts = Gift.get_user_activity(user)
-        total_gifts.each do |gift|
-            gift.active = false
-            gift.save
-        end
-
-        if Gift.get_user_activity(user).count == 0
-            success "Gifts Deactivated."
-        else
-            fail    "Error in batch delete gifts"
-        end
-        respond
-    end
-
 end
 
 

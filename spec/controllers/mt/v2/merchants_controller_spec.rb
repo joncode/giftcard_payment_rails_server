@@ -2,14 +2,15 @@ require 'spec_helper'
 
 describe Mt::V2::MerchantsController do
 
-    before(:each) do
-        request.env["HTTP_TKN"] = "1964f94b3e567a8a82b87f3ccbeb2174"
 
-        Provider.delete_all
-        #@provider = FactoryGirl.create(:provider)
-    end
+    describe :create do
 
-    describe "#create" do
+        before(:each) do
+            request.env["HTTP_TKN"] = "1964f94b3e567a8a82b87f3ccbeb2174"
+
+            Provider.delete_all
+            #@provider = FactoryGirl.create(:provider)
+        end
 
         context "authorization" do
 
@@ -43,11 +44,13 @@ describe Mt::V2::MerchantsController do
 
         it "should create new menu_string" do
             new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
+            new_provider_hsh['menu'] = "[{\"section\":\"Gift Vouchers\",\"items\":[{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"10\",\"item_id\":154,\"item_name\":\"$10\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"25\",\"item_id\":155,\"item_name\":\"$25\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"50\",\"item_id\":156,\"item_name\":\"$50\"}]}]"
             post :create, format: :json, data: new_provider_hsh
             provider                 = Provider.last
             menu_string              = MenuString.last
             response.response_code.should   == 200
-            menu_string.provider.id.should  == provider.id
+            menu_string.provider_id.should  == provider.id
+            menu_string.menu.should_not     be_nil
             menu_string.menu.should         == new_provider_hsh["menu"]
             json["status"].should == 1
             json["data"].should   == provider.id
@@ -63,7 +66,14 @@ describe Mt::V2::MerchantsController do
 
     end
 
-    describe "#update" do
+    describe :update do
+
+        before(:each) do
+            request.env["HTTP_TKN"] = "1964f94b3e567a8a82b87f3ccbeb2174"
+
+            Provider.delete_all
+            #@provider = FactoryGirl.create(:provider)
+        end
 
         context "authorization" do
 
@@ -101,7 +111,15 @@ describe Mt::V2::MerchantsController do
     end
 
 
-    describe "#menu" do
+    describe :menu do
+
+        before(:each) do
+            Provider.delete_all
+            #@provider = FactoryGirl.create(:provider)
+            @provider = FactoryGirl.create(:provider)
+            request.env["HTTP_TKN"] = @provider.token
+            FactoryGirl.create(:menu_string, provider_id: @provider.id)
+        end
 
         context "authorization" do
 
@@ -113,7 +131,43 @@ describe Mt::V2::MerchantsController do
 
         end
 
-        pending "nested tests needed"
+        it "should update menu string" do
+            menu_string = @provider.menu_string
+            menu_json = "[{\"section\":\"Gift Vouchers\",\"items\":[{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"10\",\"item_id\":154,\"item_name\":\"$10\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"25\",\"item_id\":155,\"item_name\":\"$25\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"50\",\"item_id\":156,\"item_name\":\"$50\"}]}]"
+            put :menu, id: @provider.id, format: :json, data: menu_json
+            response.response_code.should == 200
+            new_menu_string = MenuString.last
+            new_menu_string.menu.should_not be_nil
+            new_menu_string.menu.should     == menu_json
+        end
+
+        it "should return success msg if success" do
+            menu_string = @provider.menu_string
+            menu_json = "[{\"section\":\"Gift Vouchers\",\"items\":[{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"10\",\"item_id\":154,\"item_name\":\"$10\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"25\",\"item_id\":155,\"item_name\":\"$25\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"50\",\"item_id\":156,\"item_name\":\"$50\"}]}]"
+            put :menu, id: @provider.id, format: :json, data: menu_json
+            response.response_code.should == 200
+            new_menu_string = MenuString.last
+            json["status"].should  == 1
+            json["data"].should   == "Menu Update Successful"
+        end
+
+        it "should return fail msg if menu is nil" do
+            menu_string = @provider.menu_string
+            menu_json = nil
+            put :menu, id: @provider.id, format: :json, data: menu_json
+            response.response_code.should == 200
+            json["status"].should         == 0
+            json["data"].class.should     == Hash
+        end
+
+        it "should return fail msg if menu is not a json'd array" do
+            menu_string = @provider.menu_string
+            menu_json = "Menu Data"
+            put :menu, id: @provider.id, format: :json, data: menu_json
+            response.response_code.should == 200
+            json["status"].should         == 0
+            json["data"].class.should     == Hash
+        end
     end
 
     describe "#reconcile" do

@@ -3,7 +3,6 @@ class Mt::V2::MerchantsController < JsonController
     before_filter :authenticate_general_token,  only: [:create, :reconcile_merchants]
 
     def create
-
         merchant_hsh = params["data"]
         provider = Provider.new merchant_hsh
         if provider.save
@@ -27,7 +26,7 @@ class Mt::V2::MerchantsController < JsonController
 
     def menu
         menu_hsh = params["data"]
-        menu_str = MenuString.find_by_provider_id(@provider.id)
+        menu_str = @provider.menu_string
         if menu_str.update_attributes(menu: menu_hsh)
             success   "Menu Update Successful"
         else
