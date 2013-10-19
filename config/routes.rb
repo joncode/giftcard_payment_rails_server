@@ -161,20 +161,9 @@ Drinkboard::Application.routes.draw do
         end
 
         resources :menus,   only: [:update]
-        resources :photos,  only: [:update]
 
       end
 
-    end
-  end
-
-  namespace :mt, defaults: { format: 'json' } do
-    namespace :v1 do
-      post 'create_merchant', to: 'merchant_tools#create'
-      post 'update_merchant', to: 'merchant_tools#update'
-      post 'compile_menu',    to: 'merchant_tools#compile_menu'
-      post 'update_photo',    to: 'merchant_tools#update_photo'
-      post 'reconcile_merchants', to: 'merchant_tools#reconcile_merchants'
     end
   end
 
