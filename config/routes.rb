@@ -158,9 +158,8 @@ Drinkboard::Application.routes.draw do
 
         member do
           post :reconcile
+          put  :menu
         end
-
-        resources :menus,   only: [:update]
 
       end
 

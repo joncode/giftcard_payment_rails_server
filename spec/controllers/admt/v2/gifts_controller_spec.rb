@@ -14,6 +14,16 @@ describe Admt::V2::GiftsController do
 
     describe "update" do
 
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                request.env["HTTP_TKN"] = "No_Entrance"
+                put :update, id: 1, format: :json
+                response.response_code.should == 401
+            end
+
+        end
+
         it "should not allow unauthenticated access" do
             request.env["HTTP_TKN"] = "No_Entrance"
             put :update, id: 1, format: :json
@@ -26,11 +36,6 @@ describe Admt::V2::GiftsController do
             new_gift = Gift.find gift.id
 
         end
-
-    end
-
-    describe "refund" do
-
 
     end
 
@@ -88,6 +93,16 @@ describe Admt::V2::GiftsController do
     end
 
     describe "deactivate" do
+
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                request.env["HTTP_TKN"] = "No_Entrance"
+                put :deactivate, id: 1, format: :json
+                response.response_code.should == 401
+            end
+
+        end
 
         it "should route correct" do
             expect(:post => "admt/v2/users/1/gifts/deactivate_all.json").to route_to(

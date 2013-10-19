@@ -100,6 +100,22 @@ describe Mt::V2::MerchantsController do
         end
     end
 
+
+    describe "#menu" do
+
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                request.env["HTTP_TKN"] = "No_Entrance"
+                put :menu, id: 1, format: :json
+                response.response_code.should == 401
+            end
+
+        end
+
+        pending "nested tests needed"
+    end
+
     describe "#reconcile" do
 
         context "authorization" do
