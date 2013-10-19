@@ -1,6 +1,5 @@
 class Provider < ActiveRecord::Base
 	include Formatter
-	include ServerModel
 
 	attr_accessible :address, :city, :description, :logo, :name,
 	:state, :user_id, :staff_id, :zip, :zinger, :phone, :email,

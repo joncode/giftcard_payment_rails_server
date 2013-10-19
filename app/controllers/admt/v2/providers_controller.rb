@@ -26,7 +26,13 @@ class Admt::V2::ProvidersController < JsonController
             provider = Provider.unscoped.find(params[:id])
             provider.mode = params[:data]
             if provider.save
-                success   "#{provider.name} is now #{provider.mode}"
+                merchant = provider.merchant
+                merchant.mode = params[:data]
+                if merchant.save
+                    success   "#{provider.name} is now #{provider.mode}"
+                else
+                    success   "#{provider.name} is now #{provider.mode} _ Merchant tools update failed - please contact Tech team"
+                end
             else
                 fail      provider.errors.full_messages
             end

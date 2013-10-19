@@ -11,8 +11,18 @@ describe Mt::V2::MerchantsController do
 
     describe "#create" do
 
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                request.env["HTTP_TKN"] = "No_Entrance"
+                put :create, id: 1, format: :json
+                response.response_code.should == 401
+            end
+
+        end
+
         it "should create new merchant" do
-            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"\"A Perfect Bite To Inspire Conversation\"", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
+            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
             post :create, format: :json, data: new_provider_hsh
             provider = Provider.last
             provider.name.should        == new_provider_hsh["name"]
@@ -30,9 +40,41 @@ describe Mt::V2::MerchantsController do
             provider.active.should be_true
         end
 
+
+        it "should create new menu_string" do
+            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
+            post :create, format: :json, data: new_provider_hsh
+            provider                 = Provider.last
+            menu_string              = MenuString.last
+            response.response_code.should   == 200
+            menu_string.provider.id.should  == provider.id
+            menu_string.menu.should         == new_provider_hsh["menu"]
+            json["status"].should == 1
+            json["data"].should   == provider.id
+        end
+
+        it "should save latitude and longitude" do
+            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
+            post :create, format: :json, data: new_provider_hsh
+            provider = Provider.last
+            provider.latitude.should    == new_provider_hsh["latitude"]
+            provider.longitude.should   == new_provider_hsh["longitute"]
+        end
+
     end
 
     describe "#update" do
+
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                request.env["HTTP_TKN"] = "No_Entrance"
+                put :update, id: 1, format: :json
+                response.response_code.should == 401
+            end
+
+        end
+
         {
             name: "House Bar",
             description: "really crappy place",
@@ -59,6 +101,16 @@ describe Mt::V2::MerchantsController do
     end
 
     describe "#reconcile" do
+
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                request.env["HTTP_TKN"] = "No_Entrance"
+                put :reconcile, id: 1, format: :json
+                response.response_code.should == 401
+            end
+
+        end
 
     end
 
