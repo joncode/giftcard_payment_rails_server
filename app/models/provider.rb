@@ -9,8 +9,8 @@ class Provider < ActiveRecord::Base
 	:bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image, :merchant_id,
 	:paused, :live, :mode
 
-	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h
+	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h, :menu
+	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h, :menu
 
 	has_many   :orders
 	has_one    :menu_string, dependent: :destroy
@@ -24,10 +24,10 @@ class Provider < ActiveRecord::Base
 	mount_uploader :box,      ProviderBoxUploader
 	mount_uploader :portrait, ProviderPortraitUploader
 
-	validates_presence_of :name, :city, :address, :zip , :state, :token
-	validates_length_of :state , 	:is => 2
-	validates_length_of :zip, 		:within => 5..10
-	validates 			:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
+	validates_presence_of 	:name, :city, :address, :zip , :state, :token
+	validates_length_of 	:state , 	:is => 2
+	validates_length_of 	:zip, 		:within => 5..10
+	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
 
 
@@ -195,7 +195,7 @@ class Provider < ActiveRecord::Base
 private
 
 	def make_menu_string
-	    MenuString.create(provider_id: self.id, data: "[]")
+	    MenuString.create(provider_id: self.id, data: "[]", menu: self.menu)
 	end
 
 	def update_city_provider

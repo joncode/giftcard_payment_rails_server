@@ -1,24 +1,7 @@
 require 'spec_helper'
 
 describe Admt::V2::UsersController do
-
-    # describe "giftsdeactivate" do
-
-    #     it "should not allow unauthenticated access" do
-    #         request.env["HTTP_TKN"] = "No_Entrance"
-    #         post 'deactivate', format: :json
-    #         response.response_code.should == 401
-    #     end
-
-    #     it "should deactivate the gift" do
-    #         gift = FactoryGirl.create(:gift_no_association)
-    #         post :deactivate, format: :json
-    #         new_gift = Gift.find gift.id
-    #         new_gift.active.should be_false
-    #     end
-
-    # end
-
+    
     before(:each) do
         User.delete_all
 
@@ -47,6 +30,41 @@ describe Admt::V2::UsersController do
             user_socials = UserSocial.where(user_id: user.id)
             puts user_socials.inspect
             user_socials.count.should == 0
+        end
+
+    end
+
+    describe :deactivate_gifts do
+
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                request.env["HTTP_TKN"] = "No_Entrance"
+                post :deactivate_gifts, id: 10, format: :json
+                response.response_code.should == 401
+            end
+
+        end
+
+        it "should deactivate all given and received gifts for user" do
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create(:gift_no_association, :giver_id => user.id)
+            gift2 = FactoryGirl.create(:gift_no_association, :receiver_id => user.id)
+            post :deactivate_gifts, id: user.id, format: :json
+            new_gift = Gift.unscoped.find gift.id
+            new_gift.active.should be_false
+            new_gift2 = Gift.unscoped.find gift.id
+            new_gift2.active.should be_false
+        end
+
+        it "should return success msg when success" do
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create(:gift_no_association, :giver_id => user.id)
+            gift2 = FactoryGirl.create(:gift_no_association, :receiver_id => user.id)
+            post :deactivate_gifts, id: user.id, format: :json
+            response.response_code.should == 200
+            json["status"].should == 1
+            json["data"].should   == "#{user.name} all gifts deactivated"
         end
 
     end

@@ -12,7 +12,17 @@ describe Admt::V2::GiftsController do
         request.env["HTTP_TKN"] = "Token"
     end
 
-    describe "update" do
+    describe :update do
+
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                request.env["HTTP_TKN"] = "No_Entrance"
+                put :update, id: 1, format: :json
+                response.response_code.should == 401
+            end
+
+        end
 
         it "should not allow unauthenticated access" do
             request.env["HTTP_TKN"] = "No_Entrance"
@@ -29,12 +39,7 @@ describe Admt::V2::GiftsController do
 
     end
 
-    describe "refund" do
-
-
-    end
-
-    describe "refund" do
+    describe :refund do
 
         context "authorization" do
 
@@ -61,7 +66,7 @@ describe Admt::V2::GiftsController do
         end
     end
 
-    describe "refund_cancel" do
+    describe :refund_cancel do
 
         context "authorization" do
 
@@ -85,32 +90,6 @@ describe Admt::V2::GiftsController do
             end
 
         end
-    end
-
-    describe "deactivate" do
-
-        it "should route correct" do
-            expect(:post => "admt/v2/users/1/gifts/deactivate_all.json").to route_to(
-              :controller => "admt/v2/gifts",
-              :action => "deactivate_all",
-              :user_id => "1",
-              :format => "json"
-            )
-        end
-
-        # it "should not allow unauthenticated access" do
-        #     request.env["HTTP_TKN"] = "No_Entrance"
-        #     post 'deactivate', format: :json
-        #     response.response_code.should == 401
-        # end
-
-        # it "should deactivate the gift" do
-        #     gift = FactoryGirl.create(:gift_no_association)
-        #     post :deactivate, format: :json
-        #     new_gift = Gift.find gift.id
-        #     new_gift.active.should be_false
-        # end
-
     end
 
 end

@@ -130,11 +130,7 @@ Drinkboard::Application.routes.draw do
           resources :users,     only: [:update] do # biz logic
             member do
               post :deactivate
-            end
-            resources :gifts, only: [] do
-              collection do
-                post :deactivate_all         # biz logic
-              end
+              post :deactivate_gifts
             end
           end
 
@@ -158,9 +154,8 @@ Drinkboard::Application.routes.draw do
 
         member do
           post :reconcile
+          put  :menu
         end
-
-        resources :menus,   only: [:update]
 
       end
 
