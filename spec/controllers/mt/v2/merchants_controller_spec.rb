@@ -63,6 +63,12 @@ describe Mt::V2::MerchantsController do
             provider.longitude.should   == new_provider_hsh["longitute"]
         end
 
+        it "should reject no params request" do
+            put :create, format: :json
+            json["status"].should == 0
+            json["data"].should   == "No data sent"
+        end
+
     end
 
     describe :update do
@@ -115,6 +121,14 @@ describe Mt::V2::MerchantsController do
             put :update, id: provider.id, format: :json, data: new_provider_hsh
             response.response_code.should == 200
 
+        end
+
+        it "should reject no params request" do
+            provider = FactoryGirl.create(:provider)
+            request.env["HTTP_TKN"] = provider.token
+            put :update, id: provider.id, format: :json
+            json["status"].should == 0
+            json["data"].should   == "No data sent"
         end
     end
 

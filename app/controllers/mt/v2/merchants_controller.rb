@@ -4,22 +4,30 @@ class Mt::V2::MerchantsController < JsonController
 
     def create
         merchant_hsh = params["data"]
-        provider = Provider.new merchant_hsh
-        if provider.save
-            success provider.id
+        if merchant_hsh.kind_of?(Hash)
+            provider = Provider.new merchant_hsh
+            if provider.save
+                success provider.id
+            else
+                fail    provider.errors.messages
+            end
         else
-            fail    provider.errors.messages
+            fail  "No data sent"
         end
         respond
     end
 
     def update
         provider_hsh = params["data"]
-        provider_hsh.delete("tz")
-        if @provider.update_attributes(provider_hsh)
-            success   "Merchant Update Successful"
+        if provider_hsh.kind_of?(Hash)
+            provider_hsh.delete("tz")
+            if @provider.update_attributes(provider_hsh)
+                success   "Merchant Update Successful"
+            else
+                fail      @provider
+            end
         else
-            fail      @provider
+            fail  "No data sent"
         end
 
         respond
