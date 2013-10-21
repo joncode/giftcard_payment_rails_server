@@ -4,7 +4,7 @@ class Mt::V2::MerchantsController < JsonController
 
     def create
         merchant_hsh = params["data"]
-        provider = Provider.new merchant_hsh
+        provider = Provider.new merchant_hsh["merchant"]
         if provider.save
             success provider.id
         else

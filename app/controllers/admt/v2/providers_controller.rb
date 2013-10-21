@@ -2,6 +2,16 @@ class Admt::V2::ProvidersController < JsonController
 
     before_filter :authenticate_admin_tools
 
+    def create
+        provider = Provider.new(params[:data][:provider_params])
+        if provider.save
+            success   "#{provider.name} was created"
+        else
+            fail      provider.errors.full_messages
+        end
+        respond
+    end
+
     def deactivate
         provider = Provider.unscoped.find(params[:id])
 
