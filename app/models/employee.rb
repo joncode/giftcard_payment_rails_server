@@ -2,12 +2,7 @@ class Employee < ActiveRecord::Base
   attr_accessible :active, :clearance, :provider_id, :user_id, :retail
   CLEARANCE       = ['admin', 'full', 'manager', 'staff']
 
-  belongs_to :user
-  belongs_to :provider
-  has_many 	 :orders
-  belongs_to :brand
   
-  validates_presence_of :provider_id
 
   #clearance = "super", "staff"
 
@@ -32,7 +27,7 @@ class Employee < ActiveRecord::Base
   # end
 
   def server_code
-  	self.user.server_code 	
+  	self.user.server_code
   end
 
   def name

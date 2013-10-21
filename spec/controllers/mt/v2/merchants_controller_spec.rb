@@ -57,10 +57,14 @@ describe Mt::V2::MerchantsController do
 
         it "should save latitude and longitude" do
             new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
+            new_provider_hsh["latitude"] = 43.23412141
+            new_provider_hsh["longitude"] = -70.123124124
             post :create, format: :json, data: new_provider_hsh
             provider = Provider.last
+            provider.latitude.should_not   be_nil
+            provider.longitude.should_not  be_nil
             provider.latitude.should    == new_provider_hsh["latitude"]
-            provider.longitude.should   == new_provider_hsh["longitute"]
+            provider.longitude.should   == new_provider_hsh["longitude"]
         end
 
         it "should reject no params request" do

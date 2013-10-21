@@ -15,7 +15,7 @@ class Admt::V2::GiftsController < JsonController
         if  resp == 0
             success "Gift is #{gift.pay_stat}"
         else
-            fail resp
+            fail resp.reason_text
         end
         respond
     end
@@ -32,7 +32,7 @@ class Admt::V2::GiftsController < JsonController
                 success "Please contact tech support - Gift #{gift.id} is NOT Cancelled in APP ONLY"
             end
         else
-            fail resp
+            fail resp.reason_text
         end
         respond
     end

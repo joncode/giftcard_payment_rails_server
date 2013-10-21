@@ -5,9 +5,8 @@ class Provider < ActiveRecord::Base
 	:state, :user_id, :staff_id, :zip, :zinger, :phone, :email,
 	:twitter, :facebook, :website, :users, :photo, :photo_cache,
 	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
-	:account_name, :aba, :routing, :bank_account_name, :bank_address,
-	:bank_city, :bank_state, :bank_zip, :sales_tax, :token, :image, :merchant_id,
-	:paused, :live, :mode
+	:sales_tax, :token, :image, :merchant_id,
+	:paused, :live, :mode, :latitude, :longitude
 
 	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h, :menu
 	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h, :menu

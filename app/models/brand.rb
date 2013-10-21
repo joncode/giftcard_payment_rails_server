@@ -4,7 +4,6 @@ class Brand < ActiveRecord::Base
 	:photo, :portrait, :next_view
 
 	has_many   :providers
-	has_many   :employees
 	belongs_to :user
 
 	validates :name, presence: true, :uniqueness => { case_sensitive: false }
