@@ -136,7 +136,7 @@ Drinkboard::Application.routes.draw do
 
           resources :brands,    only: [:create, :update]   # biz logic
 
-          resources :providers, only: [] do
+          resources :providers, only: [:create] do
             member do
               post :update_mode             # biz logic
               post :deactivate              # biz logic
@@ -150,7 +150,7 @@ Drinkboard::Application.routes.draw do
   namespace :mt, defaults: { format: 'json' } do
     namespace :v2 do
 
-      resources :merchants, only: [:create, :update] do
+      resources :merchants, only: [:update] do
 
         member do
           post :reconcile

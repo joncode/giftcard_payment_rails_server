@@ -2,6 +2,17 @@ class Admt::V2::ProvidersController < JsonController
 
     before_filter :authenticate_admin_tools
 
+    def create
+        merchant_hsh = params["data"]
+        provider = Provider.new merchant_hsh
+        if provider.save
+            success provider.id
+        else
+            fail    provider.errors.messages
+        end
+        respond
+    end
+    
     def deactivate
         provider = Provider.unscoped.find(params[:id])
 
