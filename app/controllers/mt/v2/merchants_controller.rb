@@ -3,10 +3,10 @@ class Mt::V2::MerchantsController < JsonController
     before_filter :authenticate_general_token,  only:   [:create, :reconcile_merchants]
 
     def create
-        merchant_hsh = params["data"]
-        return nil if data_not_hash?
+        return nil  if data_not_hash?
 
-        provider = Provider.new merchant_hsh
+        merchant_hsh = params["data"]
+        provider     = Provider.new merchant_hsh
         if provider.save
             success provider.id
         else
@@ -16,16 +16,15 @@ class Mt::V2::MerchantsController < JsonController
     end
 
     def update
-        provider_hsh = params["data"]
-        return nil if data_not_hash?
+        return nil  if data_not_hash?
 
+        provider_hsh = params["data"]
         provider_hsh.delete("tz")
         if @provider.update_attributes(provider_hsh)
             success   "Merchant Update Successful"
         else
             fail      @provider
         end
-
         respond
     end
 

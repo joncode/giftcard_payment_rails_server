@@ -198,35 +198,34 @@ class IphoneController < AppController
 
 	def update_photo
 
-		response = {}
-		begin
-			user  = User.app_authenticate(token)
-		rescue
-			response["error"] = "User not found from remember token"
-		end
-		if params["data"].kind_of? String
-			data_obj = JSON.parse params["data"]
-		else
-			data_obj = params["data"]
-		end
-		puts "#{data_obj}"
+		@app_response = {}
+		user  = User.app_authenticate(params["token"])
+		if user.class == User
 
-		respond_to do |format|
-			if data_obj.nil?
-				response["error_iphone"]   = "Photo URL not received correctly from iphone. "
+			if params["data"].kind_of? String
+				data_obj = JSON.parse params["data"]
 			else
-				if user.update_attributes(iphone_photo: data_obj["iphone_photo"], use_photo: "ios" )
-					response["success"]      = "Photo Updated - Thank you!"
+				data_obj = params["data"]
+			end
+			puts "#{data_obj}"
+
+			if data_obj.nil? || data_obj["iphone_photo"].blank?
+				@app_response["error"]   = "Photo upload failed, please check your connetion and try again"
+			else
+				user.update_attributes(iphone_photo: data_obj["iphone_photo"], use_photo: "ios")
+				if user.get_photo == data_obj["iphone_photo"]
+					@app_response["success"]      = "Photo Updated - Thank you!"
 				else
-					response["error_server"] = "Photo URL unable to process to database."
+					@app_response["error_server"] = "Photo upload failed, please check your connetion and try again"
 				end
 			end
 
-			puts "IC -UpdatePhoto- response => #{response}"
-			format.json { render json: response }
+		else
+			@app_response["error"] = "Data error, please log out and log back to reset system"
 		end
-	end
 
+		respond
+	end
 
 private
 
