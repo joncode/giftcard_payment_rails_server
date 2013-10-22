@@ -124,12 +124,12 @@ class JsonController < ActionController::Base
 
     def authenticate_general_token
         token = request.headers["HTTP_TKN"]
-        head :unauthorized unless ENV['GENERAL_TOKEN'] == token
+        head :unauthorized unless GENERAL_TOKEN == token
     end
 
     def authenticate_www_token
         token   = params["token"]
-        head :unauthorized unless ENV['WWW_TOKEN'] == token
+        head :unauthorized unless WWW_TOKEN == token
     end
 
     def authenticate_public_info token=nil

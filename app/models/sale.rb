@@ -109,7 +109,7 @@ class Sale < ActiveRecord::Base
 private
 
     def authorize_net_aim_transaction
-        AuthorizeNet::AIM::Transaction.new(ENV['AUTHORIZE_API_LOGIN'], ENV['AUTHORIZE_TRANSACTION_KEY'], :gateway => AUTH_GATEWAY)
+        AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
     end
 
     def authorize_net_aim_response card

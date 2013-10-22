@@ -16,7 +16,7 @@ private
 
     def authenticate_www_token
         token = request.headers["HTTP_TKN"]
-        head :unauthorized unless ENV['WWW_TOKEN'] == token
+        head :unauthorized unless WWW_TOKEN== token
     end
 
 end

@@ -2,8 +2,8 @@ class Card < ActiveRecord::Base
 	include ActiveMerchant::Billing::CreditCardMethods
 	include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
 
-	@@CreditCardSecretKey = ENV['CCS_KEY']
-	PASSPHRASE = ENV['CATCH_PHRASE']
+	@@CreditCardSecretKey = CCS_KEY
+	PASSPHRASE = CATCH_PHRASE
 	attr_accessor :number, :passphrase, :iv
 	attr_accessible :csv, :last_four, :month, :brand, :name, :nickname,  :user_id, :year
 
