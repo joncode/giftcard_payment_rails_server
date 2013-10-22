@@ -40,7 +40,7 @@ describe Admt::V2::UsersController do
             json["data"].should   == "#{user.name} is deactivated"
         end
 
-        it "should return failure msg when error" do
+        xit "should return failure msg when error" do
             user = FactoryGirl.create(:user)
             post :deactivate, id: user.id, format: :json
             response.response_code.should == 200
@@ -48,7 +48,7 @@ describe Admt::V2::UsersController do
             json["data"].class.should   == Hash
         end
 
-        xit "should return failure msg when user not found" do
+        it "should return failure msg when user not found" do
             post :deactivate, id: 23, format: :json
             response.response_code.should == 200
             json["status"].should       == 0
