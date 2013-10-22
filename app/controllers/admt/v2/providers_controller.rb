@@ -2,6 +2,16 @@ class Admt::V2::ProvidersController < JsonController
 
     before_filter :authenticate_admin_tools
 
+    def create
+        provider = Provider.new(params[:data][:provider_params])
+        if provider.save
+            success   "#{provider.name} was created"
+        else
+            fail      provider.errors.full_messages
+        end
+        respond
+    end
+
     def deactivate
         provider = Provider.unscoped.find(params[:id])
 
@@ -29,9 +39,9 @@ class Admt::V2::ProvidersController < JsonController
                 merchant = provider.merchant
                 merchant.mode = params[:data]
                 if merchant.save
-                    success   "#{provider.name} is now #{provider.mode}"
+                    success   "#{provider.name} is now #{provider.mode.humanize}"
                 else
-                    success   "#{provider.name} is now #{provider.mode} _ Merchant tools update failed - please contact Tech team"
+                    success   "#{provider.name} is now #{provider.mode.humanize} _ Merchant tools update failed - please contact Tech team"
                 end
             else
                 fail      provider.errors.full_messages

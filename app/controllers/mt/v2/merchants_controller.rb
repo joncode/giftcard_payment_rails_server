@@ -4,30 +4,26 @@ class Mt::V2::MerchantsController < JsonController
 
     def create
         merchant_hsh = params["data"]
-        if merchant_hsh.kind_of?(Hash)
-            provider = Provider.new merchant_hsh
-            if provider.save
-                success provider.id
-            else
-                fail    provider.errors.messages
-            end
+        return nil if data_not_hash?
+
+        provider = Provider.new merchant_hsh
+        if provider.save
+            success provider.id
         else
-            fail  "No data sent"
+            fail    provider.errors.messages
         end
         respond
     end
 
     def update
         provider_hsh = params["data"]
-        if provider_hsh.kind_of?(Hash)
-            provider_hsh.delete("tz")
-            if @provider.update_attributes(provider_hsh)
-                success   "Merchant Update Successful"
-            else
-                fail      @provider
-            end
+        return nil if data_not_hash?
+
+        provider_hsh.delete("tz")
+        if @provider.update_attributes(provider_hsh)
+            success   "Merchant Update Successful"
         else
-            fail  "No data sent"
+            fail      @provider
         end
 
         respond
@@ -39,7 +35,7 @@ class Mt::V2::MerchantsController < JsonController
         if menu_str.update_attributes(menu: menu_hsh)
             success   "Menu Update Successful"
         else
-            fail      menu_str
+            fail      menu_str.errors.messages
         end
 
         respond

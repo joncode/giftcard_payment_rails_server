@@ -3,10 +3,9 @@ require 'spec_helper'
 describe Mt::V2::MerchantsController do
 
     before(:each) do
-        request.env["HTTP_TKN"] = ENV["GENERAL_TOKEN"]
+        request.env["HTTP_TKN"] = GENERAL_TOKEN
 
         Provider.delete_all
-        #@provider = FactoryGirl.create(:provider)
     end
 
     describe :create do
@@ -19,6 +18,11 @@ describe Mt::V2::MerchantsController do
                 response.response_code.should == 401
             end
 
+        end
+
+        it "should reject no params request" do
+            put :create, format: :json
+            response.response_code.should  == 400
         end
 
         it "should create new merchant" do
@@ -51,38 +55,25 @@ describe Mt::V2::MerchantsController do
             menu_string.provider_id.should  == provider.id
             menu_string.menu.should_not     be_nil
             menu_string.menu.should         == new_provider_hsh["menu"]
-            json["status"].should == 1
-            json["data"].should   == provider.id
+            json["status"].should           == 1
+            json["data"].should             == provider.id
         end
 
         it "should save latitude and longitude" do
             new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
-            new_provider_hsh["latitude"] = 43.23412141
-            new_provider_hsh["longitude"] = -70.123124124
+            new_provider_hsh["latitude"]   = 43.23412141
+            new_provider_hsh["longitude"]  = -70.123124124
             post :create, format: :json, data: new_provider_hsh
             provider = Provider.last
             provider.latitude.should_not   be_nil
             provider.longitude.should_not  be_nil
-            provider.latitude.should    == new_provider_hsh["latitude"]
-            provider.longitude.should   == new_provider_hsh["longitude"]
-        end
-
-        it "should reject no params request" do
-            put :create, format: :json
-            json["status"].should == 0
-            json["data"].should   == "No data sent"
+            provider.latitude.should       == new_provider_hsh["latitude"]
+            provider.longitude.should      == new_provider_hsh["longitude"]
         end
 
     end
 
     describe :update do
-
-        before(:each) do
-            request.env["HTTP_TKN"] = "1964f94b3e567a8a82b87f3ccbeb2174"
-
-            Provider.delete_all
-            #@provider = FactoryGirl.create(:provider)
-        end
 
         context "authorization" do
 
@@ -92,6 +83,13 @@ describe Mt::V2::MerchantsController do
                 response.response_code.should == 401
             end
 
+        end
+
+        it "should reject no params request" do
+            provider = FactoryGirl.create(:provider)
+            request.env["HTTP_TKN"] = provider.token
+            put :update, id: provider.id, format: :json
+            response.response_code.should  == 400
         end
 
         {
@@ -127,21 +125,12 @@ describe Mt::V2::MerchantsController do
 
         end
 
-        it "should reject no params request" do
-            provider = FactoryGirl.create(:provider)
-            request.env["HTTP_TKN"] = provider.token
-            put :update, id: provider.id, format: :json
-            json["status"].should == 0
-            json["data"].should   == "No data sent"
-        end
     end
 
 
     describe :menu do
 
         before(:each) do
-            Provider.delete_all
-            #@provider = FactoryGirl.create(:provider)
             @provider = FactoryGirl.create(:provider)
             request.env["HTTP_TKN"] = @provider.token
             FactoryGirl.create(:menu_string, provider_id: @provider.id)
@@ -196,7 +185,7 @@ describe Mt::V2::MerchantsController do
         end
     end
 
-    describe "#reconcile" do
+    describe :reconcile do
 
         context "authorization" do
 

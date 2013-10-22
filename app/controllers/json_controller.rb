@@ -93,6 +93,11 @@ class JsonController < ActionController::Base
 
 ### API UTILITY METHODS
 
+    def data_not_hash?(data=nil)
+        data ||= params["data"]
+        head :bad_request unless data.kind_of?(Hash)
+    end
+
     def respond
         respond_to do |format|
             format.json { render json: @app_response }
