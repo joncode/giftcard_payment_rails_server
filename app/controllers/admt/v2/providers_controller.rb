@@ -39,9 +39,9 @@ class Admt::V2::ProvidersController < JsonController
                 merchant = provider.merchant
                 merchant.mode = params[:data]
                 if merchant.save
-                    success   "#{provider.name} is now #{provider.mode}"
+                    success   "#{provider.name} is now #{provider.mode.humanize}"
                 else
-                    success   "#{provider.name} is now #{provider.mode} _ Merchant tools update failed - please contact Tech team"
+                    success   "#{provider.name} is now #{provider.mode.humanize} _ Merchant tools update failed - please contact Tech team"
                 end
             else
                 fail      provider.errors.full_messages
