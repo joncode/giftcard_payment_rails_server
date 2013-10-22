@@ -163,7 +163,23 @@ Drinkboard::Application.routes.draw do
   end
 
 #################          HTML routes good                       /////////////////////////////
+  root                         to: 'sessions#new'
+  resources :sessions,       only: [:new, :create, :destroy]
+  match '/signin',             to: 'sessions#new',                via: :get
+  match '/signout',            to: 'sessions#destroy'
+  match '/forgot_password',    to: 'sessions#forgot_password',    via: [:get, :post]
+  match '/reset_password',     to: 'sessions#forgot_password',    via:  :get
+  match '/enter_new_password', to: 'sessions#enter_new_password', via: [:get, :put]
+  match '/valid_token',        to: 'sessions#validate_token',     via: :get
+  match '/change_password/:id', to: 'sessions#change_password',    via: :post
 
+  match "/invite/email_confirmed"     , to: "invite#email_confirmed", via: :get
+  match "/invite/error"               , to: "invite#error",           via: :get
+  match "/invite/gift/:id"            , to: "invite#show",            via: :get
+  match "/invite/person/:id"          , to: "invite#invite",          via: :get
+  match "/webview(/:template(/:var1))", to: "invite#display_email",   via: :get
+
+  match "/confirm_email(/:email(/:user))", to: "users#confirm_email", via: :get
   mount Resque::Server, :at => "/resque"
 
 #################          HTML routes to deprecate               /////////////////////////////
