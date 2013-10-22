@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Admt::V2::UsersController do
-    
+
     before(:each) do
         User.delete_all
 
@@ -10,7 +10,7 @@ describe Admt::V2::UsersController do
         request.env["HTTP_TKN"] = "Token"
     end
 
-    describe "#deactivate" do
+    describe :deactivate do
 
         it "should not allow unauthenticated access" do
             request.env["HTTP_TKN"] = "No_Entrance"
@@ -30,6 +30,29 @@ describe Admt::V2::UsersController do
             user_socials = UserSocial.where(user_id: user.id)
             puts user_socials.inspect
             user_socials.count.should == 0
+        end
+
+        it "should return success msg when success" do
+            user = FactoryGirl.create(:user)
+            post :deactivate, id: user.id, format: :json
+            response.response_code.should == 200
+            json["status"].should == 1
+            json["data"].should   == "#{user.name} is deactivated"
+        end
+
+        it "should return failure msg when error" do
+            user = FactoryGirl.create(:user)
+            post :deactivate, id: user.id, format: :json
+            response.response_code.should == 200
+            json["status"].should       == 0
+            json["data"].class.should   == Hash
+        end
+
+        xit "should return failure msg when user not found" do
+            post :deactivate, id: 23, format: :json
+            response.response_code.should == 200
+            json["status"].should       == 0
+            json["data"].should   == "App user not found - 23"
         end
 
     end
@@ -63,8 +86,18 @@ describe Admt::V2::UsersController do
             gift2 = FactoryGirl.create(:gift_no_association, :receiver_id => user.id)
             post :deactivate_gifts, id: user.id, format: :json
             response.response_code.should == 200
-            json["status"].should == 1
-            json["data"].should   == "#{user.name} all gifts deactivated"
+            json["status"].should         == 1
+            json["data"].should           == "#{user.name} all gifts deactivated"
+        end
+
+        xit "should return failure msg when error" do
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create(:gift_no_association, :giver_id => user.id)
+            gift2 = FactoryGirl.create(:gift_no_association, :receiver_id => user.id)
+            post :deactivate_gifts, id: user.id, format: :json
+            response.response_code.should == 200
+            json["status"].should         == 0
+            json["data"].should           == "Error in batch deactivate gifts"
         end
 
     end

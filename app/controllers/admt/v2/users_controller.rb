@@ -7,8 +7,16 @@ class Admt::V2::UsersController < JsonController
     end
 
     def deactivate
-        user = User.unscoped.find(params[:id])
-        user.permanently_deactivate
+        begin
+            user = User.unscoped.find(params[:id])
+            if user.permanently_deactivate
+                success "#{user.name} is deactivated"
+            else
+                fail    user.errors.messages
+            end
+        rescue
+            fail    "App user not found - #{params[:id]}"
+        end
         respond
     end
 

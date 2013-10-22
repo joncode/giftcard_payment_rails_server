@@ -36,13 +36,7 @@ class InviteController < ApplicationController
         format.json { render json: response_hash }
     end
   end
-
-  def invite_friend
-    # if params[:email] && params[:user_id]
-    #   Resque.enqueue(EmailJob, 'invite_friend', params[:user_id], {:email => params[:email], :gift_id => params[:gift_id]})
-    # end
-  end
-
+  
   def error
     @email_title   = "Drinkboard Email Messenger"
     @header_text   = "We're Sorry but there was an Error"
@@ -134,7 +128,7 @@ class InviteController < ApplicationController
 
   end
 
-  private
+private
 
   def create_webview_link
     "#{TEST_URL}/webview/#{params[:template]}/#{params[:var1]}"
