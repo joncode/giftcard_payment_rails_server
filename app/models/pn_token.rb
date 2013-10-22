@@ -30,7 +30,7 @@ private
 
     def register
         unless Rails.env.test?
-            Resque(RegisterPushJob, self.id)
+            Resque.enqueue(RegisterPushJob, self.id)
         end
     end
 
