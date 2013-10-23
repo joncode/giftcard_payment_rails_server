@@ -31,7 +31,7 @@ describe IphoneController do
             @user.save
             post :login, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should == 200
-            json["error"].should   == "Invalid email/password combination"
+            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
         end
 
     end

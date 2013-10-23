@@ -33,10 +33,7 @@ class Gift < ActiveRecord::Base
 	default_scope where(active: true)
 
 #/---------------------------------------------------------------------------------------------/
-
-	# def self.init(params)
-	# 	Gift.new(params[:gift])
-	# end
+	
 
 	def phone
 		self.receiver_phone

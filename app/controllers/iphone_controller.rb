@@ -43,15 +43,16 @@ class IphoneController < AppController
 		end
 
 		if email.blank? || password.blank?
-			response["error_iphone"]     = "Data not received."
+			response["error"]     = "Data not received."
 		else
-			user = User.find_by_email_and_active(email, true)
-			logger.debug "logger.debug PASSWORD - #{user.inspect} - #{params['password']} - #{password}"
-
+			user = User.find_by_email(email)
 			if user && user.authenticate(password)
-				user.pn_token       = pn_token if pn_token
-				#response["server"]  = user.providers_to_iphone
-				response["user"]    = user.serialize(true)
+				if user.active
+					user.pn_token       = pn_token if pn_token
+					response["user"]    = user.serialize(true)
+				else
+					response["error"]   = "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+				end
 			else
 				response["error"]   = "Invalid email/password combination"
 			end

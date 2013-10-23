@@ -156,9 +156,7 @@ Drinkboard::Application.routes.draw do
           post :reconcile
           put  :menu
         end
-
       end
-
     end
   end
 

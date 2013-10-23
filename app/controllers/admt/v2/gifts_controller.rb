@@ -3,8 +3,18 @@ class Admt::V2::GiftsController < JsonController
     before_filter :authenticate_admin_tools
 
     def update
-        # we do not have the criteria for this route yet
-
+        return nil  if data_not_hash?
+        gift = Gift.where(id: params[:id]).first
+        if gift.kind_of?(Gift)
+            begin
+                gift.update_attributes(params["data"])
+                success "#{gift.id} updated"
+            rescue
+                fail    "gift #{gift.id} unable to update"
+            end
+        else
+            fail    "Gift not found - #{params[:id]}"
+        end
         respond
     end
 
