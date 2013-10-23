@@ -35,6 +35,13 @@ describe Admt::V2::BrandsController do
             brand.active.should      be_true
         end
 
+        it "should return validation errors when failed validation" do
+            new_brand_hsh = { "name" => "" , "website" => "www.starwood.com" , "description" => "AMAZING!", "photo" => "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}
+            post :create, format: :json, data: new_brand_hsh
+            json["status"].should == 0
+            json["data"].class.should == Hash
+        end
+
     end
 
 

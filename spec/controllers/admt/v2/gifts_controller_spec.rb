@@ -71,7 +71,7 @@ describe Admt::V2::GiftsController do
             end
         end
 
-        it "should not update keys that are not allowed" do
+        it "should not update attributes that are not allowed or dont exist" do
             hsh = { "house" => "chill" }
             put :update, id: gift.id, format: :json, data: hsh
             response.response_code.should == 400

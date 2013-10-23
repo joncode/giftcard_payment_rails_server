@@ -322,13 +322,9 @@ private
 						# check Gift.rb for ghost gifts connected to newly created user
 		gifts = []
 		if self.facebook_id
-			g = Gift.where("status = :stat AND facebook_id = :fb_id",    :stat => 'incomplete', :fb_id   => self.facebook_id.to_s)
+			g = Gift.where("status = :stat AND facebook_id = :fb_id", :stat => 'incomplete', :fb_id   => self.facebook_id.to_s)
 			gifts.concat g
 		end
-		# if self.foursquare_id
-		# 	g = Gift.where("status = :stat AND foursquare_id = :fsq_id", :stat => 'incomplete', :fsq_id  => self.foursquare_id.to_s)
-		# 	gifts.concat g
-		# end
 		if self.twitter
 			g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => self.twitter.to_s)
 			gifts.concat g
@@ -357,14 +353,6 @@ private
 
 				if g.update_attributes(gift_changes)
 					success += 1
-							# mail the giver that receiver has gotten the gift
-					# if g.receiver_email
-					# 	puts "emailing the gift giver that gift has been collected for #{g.id}"
-					# 	if Rails.env.production?
-					# 		# notify the giver via email
-					# 		Resque.enqueue(EmailJob, 'notify_giver_created_user', g.giver_id , {:gift_id => g.id})
-					# 	end
-					# end
 					email_gift_collected(g)
 				else
 					error   += 1

@@ -70,7 +70,7 @@ describe Admt::V2::UsersController do
             end
         end
 
-        it "should not update keys that are not allowed" do
+        it "should not update attributes that are not allowed or dont exist" do
             hsh = { "house" => "chill" }
             put :update, id: user.id, format: :json, data: hsh
             response.response_code.should == 400
@@ -171,14 +171,3 @@ describe Admt::V2::UsersController do
     end
 
 end
-
-    # def permanently_deactivate
-    #     self.active        = false
-    #     self.phone         = nil
-    #     self.email         = "#{self.email}xxx"
-    #     self.facebook_id   = nil
-    #     self.twitter       = nil
-    #     self.perm_deactive = true
-    #     UserSocial.deactivate_all self
-    #     save
-    # end

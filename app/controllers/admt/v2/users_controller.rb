@@ -6,12 +6,13 @@ class Admt::V2::UsersController < JsonController
         return nil  if data_not_hash?
         user_params = strong_param(params["data"])
         return nil  if hash_empty?(user_params)
+
         user = User.where(id: params[:id]).first
         if user.kind_of?(User)
             if user.update_attributes(user_params)
                 success "User #{user.id} updated"
             else
-                fail user.errors.messages
+                fail user
             end
         else
             fail    "App user not found - #{params[:id]}"
@@ -26,7 +27,7 @@ class Admt::V2::UsersController < JsonController
             if user.permanently_deactivate
                 success "#{user.name} is deactivated"
             else
-                fail    user.errors.messages
+                fail    user
             end
         rescue
             fail    "App user not found - #{params[:id]}"
