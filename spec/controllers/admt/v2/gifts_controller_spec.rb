@@ -4,7 +4,7 @@ describe Admt::V2::GiftsController do
 
     before(:each) do
         Gift.delete_all
-        
+
         unless admin_user = AdminUser.find_by_remember_token("Token")
             FactoryGirl.create(:admin_user, remember_token: "Token")
         end
@@ -51,18 +51,16 @@ describe Admt::V2::GiftsController do
             json["data"].should   == "#{gift.id} updated"
         end
 
-        it "should return failure msg when fail" do
-            put :update, id: gift.id, format: :json, data: { "housing" => "overvalued" }
+        it "should return validation errors" do
+            put :update, id: gift.id, format: :json, data: { "receiver_name" => "" }
             json["status"].should == 0
-            json["data"].should   == "gift #{gift.id} unable to update"
+            json["data"].class.should   == Hash
         end
 
         {
             receiver_name: "Ray Davies",
             receiver_email: "ray@davies.com",
-            receiver_phone: "587-743-7859",
-            facebook_id: "19836491823",
-            twitter: "9381492834"
+            receiver_phone: "587-743-7859"
         }.stringify_keys.each do |type_of, value|
 
             it "should update the gift information in database" do
@@ -71,6 +69,12 @@ describe Admt::V2::GiftsController do
                 new_gift.send(type_of).should == value
 
             end
+        end
+
+        it "should not update keys that are not allowed" do
+            hsh = { "house" => "chill" }
+            put :update, id: gift.id, format: :json, data: hsh
+            response.response_code.should == 400
         end
 
     end

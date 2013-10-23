@@ -99,6 +99,10 @@ class JsonController < ActionController::Base
         head :bad_request unless data.kind_of?(Hash)
     end
 
+    def hash_empty?(data)
+        head :bad_request unless data.count > 0
+    end
+
     def respond
         respond_to do |format|
             format.json { render json: @app_response }

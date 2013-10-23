@@ -3,7 +3,21 @@ class Admt::V2::UsersController < JsonController
     before_filter :authenticate_admin_tools
 
     def update
-        # we do not have the criteria for this route yet
+        return nil  if data_not_hash?
+        user_params = strong_param(params["data"])
+        return nil  if hash_empty?(user_params)
+        user = User.where(id: params[:id]).first
+        if user.kind_of?(User)
+            if user.update_attributes(user_params)
+                success "User #{user.id} updated"
+            else
+                fail user.errors.messages
+            end
+        else
+            fail    "App user not found - #{params[:id]}"
+        end
+
+        respond
     end
 
     def deactivate
@@ -36,4 +50,10 @@ class Admt::V2::UsersController < JsonController
         respond
     end
 
+private
+
+    def strong_param(data_hsh)
+        allowed = [ "first_name" , "last_name",  "phone" , "email" ]
+        data_hsh.select{ |k,v| allowed.include? k }
+    end
 end

@@ -4,13 +4,14 @@ class Admt::V2::GiftsController < JsonController
 
     def update
         return nil  if data_not_hash?
+        gift_params = strong_param(params["data"])
+        return nil  if hash_empty?(gift_params)
         gift = Gift.where(id: params[:id]).first
         if gift.kind_of?(Gift)
-            begin
-                gift.update_attributes(params["data"])
+            if gift.update_attributes(gift_params)
                 success "#{gift.id} updated"
-            rescue
-                fail    "gift #{gift.id} unable to update"
+            else
+                fail    gift.errors.messages
             end
         else
             fail    "Gift not found - #{params[:id]}"
@@ -45,6 +46,13 @@ class Admt::V2::GiftsController < JsonController
             fail resp.reason_text
         end
         respond
+    end
+
+private
+
+    def strong_param(data_hsh)
+        allowed = [ "receiver_name" , "receiver_email",  "receiver_phone" ]
+        data_hsh.select{ |k,v| allowed.include? k }
     end
 
 end
