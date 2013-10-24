@@ -124,12 +124,14 @@ class JsonController < ActionController::Base
         token = request.headers["HTTP_TKN"]
         @admin_user = AdminUser.find_by_remember_token token
         head :unauthorized unless @admin_user
+        puts @admin_user.name
     end
 
     def authenticate_merchant_tools
         token = request.headers["HTTP_TKN"]
         @provider = Provider.unscoped.find_by_token(token)
         head :unauthorized unless @provider
+        puts @provider.name
     end
 
     def authenticate_general_token
@@ -150,6 +152,7 @@ class JsonController < ActionController::Base
         token         = params["token"]
         @current_user = User.app_authenticate(token)
         head :unauthorized unless @current_user
+        puts @current_user.name
     end
 
 
