@@ -77,6 +77,19 @@ describe Admt::V2::GiftsController do
             response.response_code.should == 400
         end
 
+        it "should update from these params" do
+            g_params = {"receiver_name"=>"Addis Dev", "receiver_email"=>"ta2@ta.com", "receiver_phone"=>"205-292-0036"}
+            put :update, id: gift.id, format: :json, data: g_params
+            response.response_code == 200
+            json["status"].should == 1
+            gift.reload
+            gift.receiver_name.should == g_params["receiver_name"]
+            gift.receiver_email.should == g_params["receiver_email"]
+            gift.receiver_phone.should == g_params["receiver_phone"]
+            json["data"].should_not be_nil
+
+        end
+
     end
 
     describe :refund do
