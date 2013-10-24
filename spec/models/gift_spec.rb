@@ -73,6 +73,17 @@ describe Gift do
       gift.provider_name.should_not be_nil
     end
 
+    describe :update do
+
+      it "should extract phone digits" do
+        gift = FactoryGirl.create(:gift)
+        gift.update_attributes({ "receiver_phone" => "262-554-3628" })
+        gift.reload
+        gift.receiver_phone.should == "2625543628"
+      end
+
+    end
+
     describe "collect incomplete gifts" do
 
       xit "should collect gifts for any UserSocial account on user" do

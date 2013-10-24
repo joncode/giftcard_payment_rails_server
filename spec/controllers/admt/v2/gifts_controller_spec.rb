@@ -60,7 +60,7 @@ describe Admt::V2::GiftsController do
         {
             receiver_name: "Ray Davies",
             receiver_email: "ray@davies.com",
-            receiver_phone: "587-743-7859"
+            receiver_phone: "5877437859"
         }.stringify_keys.each do |type_of, value|
 
             it "should update the gift information in database" do
@@ -78,7 +78,7 @@ describe Admt::V2::GiftsController do
         end
 
         it "should update from these params" do
-            g_params = {"receiver_name"=>"Addis Dev", "receiver_email"=>"ta2@ta.com", "receiver_phone"=>"205-292-0036"}
+            g_params = {"receiver_name"=>"Addis Dev", "receiver_email"=>"ta2@ta.com", "receiver_phone"=>"2052920036"}
             put :update, id: gift.id, format: :json, data: g_params
             response.response_code == 200
             json["status"].should == 1

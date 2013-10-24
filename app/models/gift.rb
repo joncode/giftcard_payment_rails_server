@@ -23,7 +23,7 @@ class Gift < ActiveRecord::Base
 
 	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service, :shoppingCart
 
-	before_create :extract_phone_digits
+	before_save   :extract_phone_digits
 	before_create :add_giver_name,  	:if => :no_giver_name
 	before_create :add_provider_name,  	:if => :no_provider_name
 	before_create :regifted,        	:if => :regift?
@@ -33,7 +33,7 @@ class Gift < ActiveRecord::Base
 	default_scope where(active: true)
 
 #/---------------------------------------------------------------------------------------------/
-	
+
 
 	def phone
 		self.receiver_phone

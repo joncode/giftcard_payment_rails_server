@@ -10,9 +10,9 @@ class Admt::V2::GiftsController < JsonController
         gift = Gift.where(id: params[:id]).first
         if gift.kind_of?(Gift)
             if gift.update_attributes(gift_params)
-                success "#{gift.id} updated"
+                success("#{gift.id} updated")
             else
-                fail    gift
+                fail(gift)
             end
         else
             fail    "Gift not found - #{params[:id]}"
