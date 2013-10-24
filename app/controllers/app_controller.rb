@@ -14,31 +14,31 @@ class AppController < JsonController
 
  	def update_user
 
- 		response = {}
- 		if user = authenticate_app_user(params["token"])
- 		 			# user is authenticated
- 		 	# puts "App -Update_user- data = #{params["data"]}"
-            updates =
-                if params["data"].kind_of? String
-                    JSON.parse params["data"]
+ 		@app_response = {}
+        updates = if params["data"].kind_of? String
+                    begin
+                        JSON.parse params["data"]
+                    rescue
+                        nil
+                    end
                 else
                     params["data"]
                 end
- 		 	# puts "App -Update_user- parsed data = #{updates}"
+        unless updates.kind_of?(Hash)
+            @app_response["error"] = "App needs to be reset. Please log out and log back in."
+        end
+        if (user = authenticate_app_user(params["token"])) && (@app_response["error"].nil?)
+
+            if user.update_attributes(strong_user_param(updates))
+                @app_response["success"]      = user.serializable_hash only: UPDATE_REPLY
+            else
+                @app_response["error_server"] = stringify_error_messages user
+            end
  		else
- 			# user is not authenticated
- 			response["error"] = {"user" => "could not identity app user"}
+ 			@app_response["error"] = "App needs to be reset. Please log out and log back in."
  		end
 
- 		respond_to do |format|
- 			if user.update_attributes(updates)
-	          response["success"]      = user.serializable_hash only: UPDATE_REPLY
-	        else
-	          response["error_server"] = stringify_error_messages user
-	        end
-	    	@app_response = "AppC #{response}"
-	    	format.json { render json: response }
-	    end
+        respond
  	end
 
     def archive
@@ -736,44 +736,11 @@ class AppController < JsonController
 	    end
 	end
 
-# protected
+private
 
-    # def add_receiver_object_to gift_obj, response
-
-    #     unique_ids = [gift_obj["receiver_phone"], gift_obj["facebook_id"], gift_obj["receiver_email"], gift_obj["twitter"] ].compact
-    #     # loop thru the ones with data
-    #     unique_ids.each do |unique_id|
-    #         if find_user(unique_id, gift_obj, response)
-    #             # stop when you find a user
-    #             break
-    #         end
-    #     end
-    # end
-
-    # def find_user unique_id, gift_obj, response
-    #     if social_data = UserSocial.find_by_identifier(unique_id)
-    #         receiver             = social_data.user
-    #         gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-    #         response["receiver"] = receiver_info_response(receiver)
-    #         response["origin"]   = social_data.type_of
-    #         return true
-    #     else
-    #         gift_obj["status"]   = "incomplete"
-    #         response["origin"]   = "NID"
-    #         return false
-    #     end
-    # end
-
-    # def receiver_info_response receiver
-    #   	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
-    # end
-
-    # def add_receiver_to_gift_obj receiver, gift_obj
-    #   	gift_obj["receiver_id"]    = receiver.id
-    #   	gift_obj["receiver_name"]  = receiver.username
-    #   	gift_obj["receiver_phone"] = receiver.phone
-    #     gift_obj["receiver_email"] = receiver.email
-    #   	return gift_obj
-    # end
+    def strong_user_param(data_hsh)
+        allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip" ]
+        data_hsh.select{ |k,v| allowed.include? k }
+    end
 
 end

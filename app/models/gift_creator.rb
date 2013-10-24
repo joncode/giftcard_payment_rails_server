@@ -15,7 +15,6 @@ class GiftCreator < GiftUtility
         @gift              = Gift.new(@gift_hsh)
         @gift.shoppingCart = @shoppingCart_str
         @gift.add_giver(@giver)
-        puts "Here is GIFT_CREATOR @GIFT  #{@gift.inspect}"
         add_receiver
     end
 
