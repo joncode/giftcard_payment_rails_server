@@ -15,13 +15,12 @@ module CommonUtils
 			puts "HERE IS THE Mdot-Version HEADER REQUEST #{request.headers['Mdot-Version']}"
 		end
 
-		if request.headers["HTTP_TKN"]
-			puts "HERE IS THE HEADER TOKEN #{request.headers["HTTP_TKN"]}"
+		unless Rails.env.production?
+			if request.headers["HTTP_TKN"]
+				puts "HERE IS THE HEADER TOKEN #{request.headers["HTTP_TKN"]}"
+			end
 		end
-
-		# if request.headers["HTTP_COOKIE"]
-		# 	puts "HERE IS THE HEADER #{request.headers["HTTP_COOKIE"]}"
-		# end
+		
 	end
 
 
