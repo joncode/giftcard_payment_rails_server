@@ -1,7 +1,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: drinkboard_dev
+  database: drinkboard_dev_2
   host: localhost
   pool: 5
   username: drinkboard
@@ -10,7 +10,7 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: drinkboard_test
+  database: drinkboard_2_test
   host: localhost
   pool: 5
   username: jongutwillig
@@ -37,7 +37,7 @@ admt_test:
 mt_development:
   adapter: postgresql
   encoding: unicode
-  database: merchanttools_dev
+  database: merchanttools_2_dev
   host: localhost
   pool: 5
   username: drinkboard
@@ -46,7 +46,7 @@ mt_development:
 mt_test:
   adapter: postgresql
   encoding: unicode
-  database: merchanttools_test
+  database: merchanttools_2_test
   host: localhost
   pool: 5
   username: jongutwillig
