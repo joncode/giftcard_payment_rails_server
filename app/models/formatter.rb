@@ -17,7 +17,7 @@ module Formatter
     end
 
     def string_to_cents str
-        number_to_currency(str).gsub("$",'')
+        number_to_currency(str,  :format => "%n")
     end
 
     def remove_key_from_hash obj_hash, key_for_removal
@@ -44,6 +44,17 @@ module Formatter
 
     def city_state_zip
         "#{self.city}, #{self.state} #{self.zip}"
+    end
+
+    def split_name name
+        name_ary    = name.split(' ')
+        last_name   = name_ary.pop
+        first_name  = if name_ary.kind_of? String
+            name_ary
+        else
+            name_ary.join(' ')
+        end
+        return first_name, last_name
     end
 
 end

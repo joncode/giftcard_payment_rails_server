@@ -1,73 +1,44 @@
 class AppController < JsonController
     include Email
+    include Photo
+
+    before_filter :authenticate_services, only: [:create_gift]
 
  	def authenticate_app_user(token)
- 		if user = User.find_by_remember_token(token)
+ 		if user = User.app_authenticate(token)
  			user
  		else
  			false
  		end
 	end
 
-  	def shorten_url_for_provider_ary providers_array
-  		providers_array.each do |prov|
-  			short_photo_url = short_photo_url prov["photo"]
-  			prov["photo"] 	= short_photo_url
-  		end
-  	end
-
-  	def shorten_url_for_brand_ary brands_array
-  		brands_array.each do |brand|
-  			short_photo_url = short_photo_url brand["photo"]
-  			brand["photo"] 	= short_photo_url
-  		end
-  	end
-
-  	def short_photo_url photo_url
-  		url_ary 		= photo_url.split('upload/')
-  		shorten_url 	= url_ary[1]
-
-  		identifier, tag = shorten_url.split('.')
-
-  		new_photo_ary 	= ['d', identifier , 'j']
-  		if photo_url.match 'htaaxtzcv'
-  			new_photo_ary[0] = 'h'
-  		end
-
-  		if !tag.match('jpg')
-  			new_photo_ary[2] = tag.match('png') ? 'p' : tag
-  		end
-
-  		new_photo_ary.join("|")
-  	end
-
  	def update_user
 
- 		response = {}
- 		if user = authenticate_app_user(params["token"])
- 		 			# user is authenticated
- 		 	puts "App -Update_user- data = #{params["data"]}"
-            updates =
-                if params["data"].kind_of? String
-                    JSON.parse params["data"]
+ 		@app_response = {}
+        updates = if params["data"].kind_of? String
+                    begin
+                        JSON.parse params["data"]
+                    rescue
+                        nil
+                    end
                 else
                     params["data"]
                 end
- 		 	puts "App -Update_user- parsed data = #{updates}"
+        unless updates.kind_of?(Hash)
+            @app_response["error"] = "App needs to be reset. Please log out and log back in."
+        end
+        if (user = authenticate_app_user(params["token"])) && (@app_response["error"].nil?)
+
+            if user.update_attributes(strong_user_param(updates))
+                @app_response["success"]      = user.serializable_hash only: UPDATE_REPLY
+            else
+                @app_response["error_server"] = stringify_error_messages user
+            end
  		else
- 			# user is not authenticated
- 			response["error"] = {"user" => "could not identity app user"}
+ 			@app_response["error"] = "App needs to be reset. Please log out and log back in."
  		end
 
- 		respond_to do |format|
- 			if user.update_attributes(updates)
-	          response["success"]      = user.serializable_hash only: UPDATE_REPLY
-	        else
-	          response["error_server"] = stringify_error_messages user
-	        end
-	    	@app_response = "AppC #{response}"
-	    	format.json { render json: response }
-	    end
+        respond
  	end
 
     def archive
@@ -150,7 +121,7 @@ class AppController < JsonController
 
         respond_to do |format|
             # logger.debug response
-            @app_response = "AC response => #{logmsg}"
+            # @app_response = "AC response => #{logmsg}"
             format.json { render json: response }
         end
     end
@@ -269,7 +240,7 @@ class AppController < JsonController
 
 		  	  	# save filled out answers to db
 	  		if params["answers"]
-	        	puts "ANSWERS #{params['answers']}"
+	        	#puts "ANSWERS #{params['answers']}"
 	  			answered_questions = JSON.parse params["answers"]
 	  			Answer.save_these(answered_questions, user)
 	  		end
@@ -327,9 +298,10 @@ class AppController < JsonController
   	end
 
   	def providers
-
+         # scoped providers route
 	    if authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
+
 	    		providers = Provider.all
 	    	else
 	    		providers = Provider.where(city: params["city"])
@@ -337,7 +309,7 @@ class AppController < JsonController
 	    	providers_array = providers.serialize_objs
 	    	logmsg 			= providers_array[0]
 	  	else
-	  		providers_hash 	= {"error" => "user was not found in database"}
+	  		providers_hash 	= {"error" => "No merchants for this city were found in database"}
 	  		providers_array = providers_hash
 	  		logmsg 			= providers_hash
 	  	end
@@ -348,6 +320,13 @@ class AppController < JsonController
             format.json { render json: providers_array }
 	    end
   	end
+
+  	# def providers
+   #      providers_array = CityProvider.find_by_city(params["city"]).providers_array
+  	# 	respond_to do |format|
+   #          format.json { render json: providers_array }
+	  #   end
+  	# end
 
   	def providers_short_ph_url
 	    if  authenticate_public_info
@@ -422,23 +401,10 @@ class AppController < JsonController
 
 	def drinkboard_users
 
-		begin
-			user = authenticate_app_user(params["token"])
-			# @users = User.find(:all, :conditions => ["id != ?", @user.id])
-			# providers = Provider.find(:all, :conditions => ["staff_id != ?", nil])
-			if !params['city'] || params['city'] == 'all'
-				users    = User.where(active: true).to_a
-			else
-				users    = User.where(active: true).find_all_by_city(params['city'])
-			end
-			user_array = users.serialize_objs
-			logmsg 	   = user_array[0]
-		rescue
-			puts "ALERT - cannot find user from token"
-			user_array = {"error" => "cannot find user from token"}
-			logmsg 	   = user_array
-		end
+        users    = User.where(active: true).to_a
 
+		user_array = users.serialize_objs
+		logmsg 	   = user_array[0]
 
 		respond_to do |format|
 			# logger.debug user_array
@@ -528,10 +494,7 @@ class AppController < JsonController
 
   	def create_order
   		response = {}
-  		# receive {"token" => "<token>", "data" => "<gift_id>", "server_code" => <server_code> }
-  		  			# authenticate user
   		if receiver = authenticate_app_user(params["token"])
-  					# get gift from db
   			begin
 	  			gift  = Gift.find params["data"].to_i
 	  			order = Order.init_with_gift(gift, params["server_code"])
@@ -553,60 +516,21 @@ class AppController < JsonController
   		end
   	end
 
-  	def create_gift
-  		response = {}
-  		gift_obj = JSON.parse params["gift"]
-  		  			# authenticate user
-  		if giver = authenticate_app_user(params["token"])
-  					# check to see that the gift has the correct data to save
-  					# check to see that the gift has a shoppingCart
-			if gift_obj.nil? || params["shoppingCart"].nil?
-						# nothing can be done without the data
-				response["error_server"] = "Data didnt arrive #{database_error_gift}"
-		    else
-		    		# add the receiver + receiver checks to the gift object
-		        puts "Lets make this gift !!!"
-		        add_receiver_by_origin(params["origin"], gift_obj, response)
-		        gift    = Gift.new(gift_obj)
-                cart_p = params["shoppingCart"]
-                begin
-                    sc = JSON.parse cart_p
-                rescue
-                        # bad JSON - app is sending item_description incorrectly
-                    sc = shoppingCartFix(cart_p)
-                end
-		        gift.make_gift_items(sc)
-				puts "Made it thru original git making process"
-	  				# add the giver info to the gift object
-	  			if gift_obj["anon_id"]
-			        gift.add_anonymous_giver(giver.id)
-			    else
-			      	gift.add_giver(giver)
-			    end
-	  			puts "Here is GIFT #{gift.inspect}"
-	  			if gift.save
-	  				sale = gift.charge_card
-			        if sale.resp_code == 1
-			        	response["success"]       = { "Gift_id" => gift.id }
-			        else
-			        	response["error_server"]  = { "Credit Card" => sale.reason_text }
-			        end
-	  			else
-	  				response["error_server"] = stringify_error_messages gift
-	  			end
-	  		end
-	  	else
-  			response["error"] = unauthorized_user
-  		end
+    def create_gift
+        response = {}
 
-  		respond_to do |format|
-  			if response.has_key? "error_server"
-  				@app_response = stringify_error_messages gift
-  			end
-  			@app_response = "AppC #{response}"
-  			format.json { render json: response}
-  		end
-  	end
+        gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
+        unless gift_creator.no_data?
+            gift_creator.build_gift
+            gift_creator.charge
+        end
+        response = gift_creator.resp
+
+        respond_to do |format|
+            @app_response = "AppC #{response}"
+            format.json { render json: response}
+        end
+    end
 
 	def create_order_emp
 
@@ -812,91 +736,11 @@ class AppController < JsonController
 	    end
 	end
 
-protected
+private
 
-	def add_receiver_by_origin(origin, gift_obj, response)
-		case origin
-	    when 'd'
-	      #drinkboard - data already received
-	      response["origin"]     = "d"
-	    when 'f'
-	      # facebook - search users for facebook_id
-	      if gift_obj["facebook_id"]
-	        if receiver = User.find_by_facebook_id(gift_obj["facebook_id"])
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["origin"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	          gift_obj["status"]   = "incomplete"
-	          response["error-receiver"] = "No facebook ID received"
-	      end
-	    when 't'
-	      #twitter - search users for twitter handle
-	      if gift_obj["twitter"]
-	        if receiver = User.find_by_twitter(gift_obj["twitter"].to_s)
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["origin"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	        gift_obj["status"]     = "incomplete"
-	        response["error-receiver"] = "No twitter info received"
-	      end
-	    when 'c'
-	      # contacts - search users for phone
-	      if gift_obj["receiver_phone"]
-	        phone_received = gift_obj["receiver_phone"]
-	        phone = extract_phone_digits(phone_received)
-	        if receiver = User.find_by_phone(phone)
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["origin"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	          gift_obj["status"]   = "incomplete"
-	          response["error-receiver"] = "No contact phone received"
-	      end
-	    when 'e'
-	      # email - search users for phone
-	      if gift_obj["receiver_email"]
-	        if receiver = User.find_by_email(gift_obj["receiver_email"])
-	          gift_obj             = add_receiver_to_gift_obj(receiver, gift_obj)
-	          response["receiver"] = receiver_info_response(receiver)
-	        else
-	          gift_obj["status"]   = "incomplete"
-	          response["origin"] = "NID"
-	        end
-	      else
-	          gift_obj["status"]   = "incomplete"
-	          response["error-receiver"] = "No contact email received"
-	      end
-	    else
-	        #drinkboard - no origin sent
-	        response["origin"]     = "d"
-	    end
-	end
-
-    def receiver_info_response(receiver)
-      	{ "receiver_id" => receiver.id.to_s, "receiver_name" => receiver.username, "receiver_phone" => receiver.phone }
-    end
-
-    def add_receiver_to_gift_obj(receiver, gift_obj)
-      	gift_obj["receiver_id"]    = receiver.id
-      	gift_obj["receiver_name"]  = receiver.username
-      	gift_obj["receiver_phone"] = receiver.phone
-      	return gift_obj
-    end
-
-    def shoppingCartFix(sc)
-        new_sc = sc.gsub(",\"item_description\":\"", '')
-        JSON.parse new_sc
+    def strong_user_param(data_hsh)
+        allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip" ]
+        data_hsh.select{ |k,v| allowed.include? k }
     end
 
 end

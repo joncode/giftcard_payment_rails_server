@@ -13,7 +13,7 @@ class JsonController < ActionController::Base
     UPDATE_REPLY    = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "email", "phone", "birthday", "sex", "twitter", "facebook_id"]
     GIFT_REPLY      = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     MERCHANT_REPLY  = GIFT_REPLY + [ "order_num"]
-    ADMIN_REPLY     = GIFT_REPLY + [ "receiver_id", "receiver_name", "service", "created_at", "cat"]
+    ADMIN_REPLY     = GIFT_REPLY + [ "receiver_id", "receiver_name", "service"]
     BUY_REPLY       = ["total", "receiver_id", "receiver_name", "provider_id", "provider_name", "message", "created_at", "updated_at", "status", "id"]
 
     def array_these_gifts obj, send_fields, address_get=false, receiver=false, order_num=false
@@ -28,7 +28,7 @@ class JsonController < ActionController::Base
                 gift_obj[key] = value.to_s
             end
 
-            gift_obj["shoppingCart"] = convert_shoppingCart_for_app(g.shoppingCart)
+            gift_obj["shoppingCart"] = JSON.parse(g.shoppingCart)
 
                 # add other person photo url
             if receiver
@@ -54,7 +54,7 @@ class JsonController < ActionController::Base
                 gift_obj["provider_phone"] = provider.phone
                 gift_obj["city"]           = provider.city
                 gift_obj["sales_tax"]      = provider.sales_tax
-                gift_obj["live"]           = provider.live
+                gift_obj["live"]           = provider.live_int
                 gift_obj["latitude"]       = provider.latitude
                 gift_obj["longitude"]      = provider.longitude
 
@@ -74,33 +74,14 @@ class JsonController < ActionController::Base
                 end
             end
 
-            gift_obj["gift_id"]  = g.id.to_s
+            gift_obj["gift_id"]    = g.id.to_s
             gift_obj["updated_at"] = g.updated_at
+            gift_obj["created_at"] = g.created_at
 
             gift_obj["redeem_code"]   = add_redeem_code(g)
             gifts_ary << gift_obj
         end
         return gifts_ary
-    end
-
-    def convert_shoppingCart_for_app shoppingCart
-        cart_ary = JSON.parse shoppingCart
-        # puts "shopping cart = #{cart_ary}"
-        # new_shopping_cart = []
-        # if cart_ary[0].has_key? "menu_id"
-        #     cart_ary.each do |item_hash|
-        #         item_hash["item_id"]   = item_hash["menu_id"]
-        #         item_hash["item_name"] = item_hash["name"]
-        #         item_hash.delete("menu_id")
-        #         item_hash.delete("name")
-        #         new_shopping_cart << item_hash
-        #         puts "AppC -convert_shoppingCart_for_app- new shopping cart = #{new_shopping_cart}"
-        #     end
-        # else
-             new_shopping_cart = cart_ary
-        # end
-
-        return new_shopping_cart
     end
 
     def add_redeem_code obj
@@ -111,7 +92,16 @@ class JsonController < ActionController::Base
         end
     end
 
-    ### API UTILITY METHODS
+### API UTILITY METHODS
+
+    def data_not_hash?(data=nil)
+        data ||= params["data"]
+        head :bad_request unless data.kind_of?(Hash)
+    end
+
+    def hash_empty?(data)
+        head :bad_request unless data.count > 0
+    end
 
     def respond
         respond_to do |format|
@@ -131,21 +121,27 @@ class JsonController < ActionController::Base
     end
 
     def authenticate_admin_tools
-        token   = params["token"]
-        # check token to see if it is good
-        api_key = AdminToken.find_by_token token
-        head :unauthorized unless api_key
+        token = request.headers["HTTP_TKN"]
+        @admin_user = AdminUser.find_by_remember_token token
+        if @admin_user
+            puts @admin_user.name
+        else
+            head :unauthorized
+        end
     end
 
     def authenticate_merchant_tools
-        token     = params["token"]
-        # check token to see if it is good
+        token = request.headers["HTTP_TKN"]
         @provider = Provider.unscoped.find_by_token(token)
-        head :unauthorized unless @provider
+        if @provider
+            puts @provider.name
+        else
+            head :unauthorized
+        end
     end
 
     def authenticate_general_token
-        token   = params["token"]
+        token = request.headers["HTTP_TKN"]
         head :unauthorized unless GENERAL_TOKEN == token
     end
 
@@ -159,13 +155,17 @@ class JsonController < ActionController::Base
     end
 
     def authenticate_services
-        token   = params["token"]
-        api_key = User.find_by_remember_token token
-        head :unauthorized unless api_key
+        token         = params["token"]
+        @current_user = User.app_authenticate(token)
+        if @current_user
+            puts @current_user.name
+        else
+            head :unauthorized
+        end
     end
 
 
-    #######
+#######
 
 private
 

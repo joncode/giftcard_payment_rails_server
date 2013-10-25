@@ -1,5 +1,5 @@
 module Legacy
-
+    
     def brand_photo_fix
         b_all = Brand.all
         b_all.each do |brand|

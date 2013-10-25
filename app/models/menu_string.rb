@@ -4,6 +4,8 @@ class MenuString < ActiveRecord::Base
   	belongs_to :provider
 
   	validates_uniqueness_of :provider_id
+    validates_presence_of   :menu
+    validates_with JsonArrayValidator
 
   	after_save :update_merchant
 

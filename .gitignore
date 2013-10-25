@@ -10,6 +10,7 @@
 # Ignore all logfiles and tempfiles.
 /log/development.log
 /log/test.log
+log/newrelic_agent.log
 /tmp/*
 # /public/assets
 /app/assets/images/video/*
@@ -25,6 +26,9 @@ capybara-*.html
 /doc/*
 .rvmrc
 latest.dump
+/log/newrelic_agent.log
+/config/database.yml
+
 
 /db/*.sqlite3
 /public/system/*
@@ -35,3 +39,4 @@ latest.dump
 rerun.txt
 pickle-email-*.html
 
+/config/database.yml

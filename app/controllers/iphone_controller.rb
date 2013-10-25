@@ -1,10 +1,5 @@
 class IphoneController < AppController
 
-	LOGIN_REPLY     = ["id", "first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "remember_token", "email", "phone", "facebook_id", "twitter"]
-	BOARD_REPLY     = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "message", "created_at", "status", "giver_id", "giver_name", "id"]
-	PROVIDER_REPLY  = ["receiver_id", "receiver_name", "item_id", "item_name", "provider_id", "provider_name", "category",  "status", "redeem_id", "redeem_code", "created_at", "giver_id", "price", "total",  "giver_name", "id"]
-	COMPLETED_REPLY = ["receiver_id", "receiver_name","giver_name", "item_id", "item_name","category", "price", "total", "tax" , "tip", "message", "updated_at", "id", "redeem_id", "redeem_code"]
-
 	before_filter :authenticate_services,     only: [:regift]
 
 	def create_account
@@ -48,15 +43,16 @@ class IphoneController < AppController
 		end
 
 		if email.blank? || password.blank?
-			response["error_iphone"]     = "Data not received."
+			response["error"]     = "Data not received."
 		else
 			user = User.find_by_email(email)
-			logger.debug "logger.debug PASSWORD - #{user.inspect} - #{params['password']} - #{password}"
-
 			if user && user.authenticate(password)
-				user.pn_token       = pn_token if pn_token
-				#response["server"]  = user.providers_to_iphone
-				response["user"]    = user.serialize(true)
+				if user.active
+					user.pn_token       = pn_token if pn_token
+					response["user"]    = user.serialize(true)
+				else
+					response["error"]   = "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+				end
 			else
 				response["error"]   = "Invalid email/password combination"
 			end
@@ -83,11 +79,11 @@ class IphoneController < AppController
 			response["error_iphone"] = "Data not received."
 		else
 			if origin == 'f'
-				user = User.find_by_facebook_id(facebook_id)
+				user = User.find_by_facebook_id_and_active(facebook_id, true)
 				msg  = "Facebook Account"
 				resp_key = "facebook"
 			else
-				user = User.find_by_twitter(twitter)
+				user = User.find_by_twitter_and_active(twitter, true)
 				msg  = "Twitter Account"
 				resp_key = "twitter"
 			end
@@ -121,7 +117,7 @@ class IphoneController < AppController
 			# going out is YES , returning home is NO
 		response  = {}
 		begin
-			user  = User.find_by_remember_token(params["token"])
+			user  = User.app_authenticate(token)
 			if    params["public"] == "YES"
 				user.update_attributes(is_public: true) if !user.is_public
 			elsif params["public"] == "NO"
@@ -143,49 +139,17 @@ class IphoneController < AppController
 		end
 	end
 
-	def gifts
-
-		user  = User.find_by_remember_token(params["token"])
-		gifts = Gift.get_gifts(user)
-		gift_hash = hash_these_gifts(gifts, GIFT_REPLY, true)
-
-		respond_to do |format|
-			logger.debug gift_hash
-			format.json { render text: gift_hash.to_json }
-		end
-	end
-
 	def regift
 
         recipient_data = JSON.parse params["receiver"]
         details 	   = JSON.parse params["data"]
-        old_gift_id    = details["regift_id"]
-        message        = details["message"]
-        recipient = nil
+        gift_regifter  = GiftRegifter.new(recipient_data, details)
 
-        if recipient_data["receiver_id"] && recipient_data["receiver_id"] > 0
-            unless recipient = User.find(recipient_data["receiver_id"])
-                puts "!!! APP SUBMITTED USER ID THAT DOESNT EXIST #{recipient_data} !!!"
-                recipient = make_user_with_hash(recipient_data)
-            end
+        if gift_regifter.create
+        	success gift_regifter.response
         else
-            recipient = make_user_with_hash(recipient_data)
+        	fail  	gift_regifter.response
         end
-
-        if recipient && (old_gift = Gift.find(old_gift_id.to_i))
-            new_gift = old_gift.regift(recipient, message)
-            new_gift.save
-            old_gift.update_attribute(:status, 'regifted')
-            new_gift.set_status_post_payment
-            new_gift.save
-            unless new_gift.receiver_id.nil?
-            	Relay.send_push_notification new_gift
-            end
-            success(new_gift.serialize)
-        else
-            fail    data_not_found
-        end
-
         respond
 	end
 
@@ -212,17 +176,6 @@ class IphoneController < AppController
 		end
 	end
 
-	def activity
-
-		@user     = User.find_by_remember_token(params["token"])
-		gifts     = Gift.get_activity
-		gift_hash = hash_these_gifts(gifts, BOARD_REPLY)
-
-		respond_to do |format|
-			logger.debug gift_hash
-			format.json { render text: gift_hash.to_json }
-		end
-	end
 
 	def locations
 
@@ -246,73 +199,33 @@ class IphoneController < AppController
 
 	def update_photo
 
-		response = {}
-		begin
-			user  = User.find_by_remember_token(params["token"])
-		rescue
-			response["error"] = "User not found from remember token"
-		end
-		if params["data"].kind_of? String
-			data_obj = JSON.parse params["data"]
-		else
-			data_obj = params["data"]
-		end
-		puts "#{data_obj}"
+		@app_response = {}
+		user  = User.app_authenticate(params["token"])
+		if user.class == User
 
-		respond_to do |format|
-			if data_obj.nil?
-				response["error_iphone"]   = "Photo URL not received correctly from iphone. "
+			if params["data"].kind_of? String
+				data_obj = JSON.parse params["data"]
 			else
-				if user.update_attributes(iphone_photo: data_obj["iphone_photo"], use_photo: "ios" )
-					response["success"]      = "Photo Updated - Thank you!"
+				data_obj = params["data"]
+			end
+			puts "#{data_obj}"
+
+			if data_obj.nil? || data_obj["iphone_photo"].blank?
+				@app_response["error"]   = "Photo upload failed, please check your connetion and try again"
+			else
+				user.update_attributes(iphone_photo: data_obj["iphone_photo"], use_photo: "ios")
+				if user.get_photo == data_obj["iphone_photo"]
+					@app_response["success"]      = "Photo Updated - Thank you!"
 				else
-					response["error_server"] = "Photo URL unable to process to database."
+					@app_response["error_server"] = "Photo upload failed, please check your connetion and try again"
 				end
 			end
 
-			puts "IC -UpdatePhoto- response => #{response}"
-			format.json { render json: response }
+		else
+			@app_response["error"] = "Data error, please log out and log back to reset system"
 		end
-	end
 
-	def active_orders
-
-		response   = {}
-		begin
-			user     = User.find_by_remember_token(params["token"])
-			provider = Provider.find(params["provider_id"].to_i)
-		rescue
-			response["error"] = "User/Provider not found from remember token/ provider id"
-		end
-					# get gifts from db that are open or notified
-		gifts = Gift.get_provider provider
-					# hash gifts into form for iphone
-					# include total , tax, tip
-		gift_hash  = hash_these_gifts(gifts, MERCHANT_REPLY, false, true)
-		respond_to do |format|
-			puts gift_hash
-			format.json { render text: gift_hash.to_json }
-		end
-	end
-
-	def completed_orders
-
-		response   = {}
-		begin
-			user     = User.find_by_remember_token(params["token"])
-			provider = Provider.find(params["provider_id"].to_i)
-		rescue
-			response["error"] = "User/Provider not found from remember token/ provider id"
-		end
-					# get gifts from db that are completed
-		completed_gifts = Gift.get_history_provider provider
-					# hash gifts into form for iphone
-					# include total , tax, tip
-		gift_hash  = hash_these_gifts(completed_gifts, COMPLETED_REPLY, false, true)
-		respond_to do |format|
-			puts gift_hash
-			format.json { render text: gift_hash.to_json }
-		end
+		respond
 	end
 
 private
@@ -327,65 +240,6 @@ private
         recipient.twitter       = user_data_hash["twitter"]
         return recipient
     end
-
-	def hash_these_users(obj, send_fields)
-		user_hash = {}
-		index = 1
-		obj.each do |g|
-			user_obj = g.serializable_hash only: send_fields
-			user_hash["#{index}"] = user_obj.each_key do |key|
-				value = user_obj[key]
-				user_obj[key] = value.to_s
-			end
-			user_obj["photo"] = g.get_photo
-			index += 1
-		end
-		return user_hash
-	end
-
-	def hash_these_gifts(obj, send_fields, address_get=false, receiver=false)
-		gift_hash = {}
-		index = 1
-		obj.each do |g|
-
-			if g.created_at
-				time = g.created_at.to_time
-			else
-				time = g.updated_at.to_time
-			end
-			time_string = time_ago_in_words(time)
-
-			gift_obj = g.serializable_hash only: send_fields
-			gift_hash["#{index}"] = gift_obj.each_key do |key|
-				value = gift_obj[key]
-				gift_obj[key] = value.to_s
-			end
-
-			# add other person photo url
-			if receiver
-				if g.receiver
-					gift_obj["receiver_photo"]  = g.receiver.get_photo
-				else
-					puts "#Gift ID = #{g.id} -- SAVE FAIL No gift.receiver"
-				end
-			else
-				gift_obj["giver_photo"]       = g.giver.get_photo
-			end
-
-			provider = g.provider
-			gift_obj["provider_photo"]     = provider.get_photo
-			# add the full provider address
-			if address_get
-				gift_obj["provider_address"] = provider.complete_address
-			end
-
-			gift_obj["time_ago"] = time_string
-			gift_obj["redeem_code"] = add_redeem_code(g)
-
-			index += 1
-		end
-		return gift_hash
-	end
 
 	def create_user_object(data)
 		if data.kind_of? String

@@ -4,13 +4,13 @@ class Brand < ActiveRecord::Base
 	:photo, :portrait, :next_view
 
 	has_many   :providers
-	has_many   :employees
 	belongs_to :user
 
 	validates :name, presence: true, :uniqueness => { case_sensitive: false }
 
-	default_scope where(active: true)
 	after_save :update_parent_brand
+
+	default_scope where(active: true)
 
 	def self.get_all
 		unscoped.order("name ASC")
@@ -49,6 +49,8 @@ class Brand < ActiveRecord::Base
 		end
 	end
 
+	alias_method :get_photo, :get_image
+
 	def photo= photo_url
 		# remove the cloudinary base url
 		if photo_url
@@ -57,22 +59,6 @@ class Brand < ActiveRecord::Base
 			new_url = nil
 		end
 		super new_url
-	end
-
-		# def photo
-		#     short_url = super
-		#     if short_url
-		#         CLOUDINARY_IMAGE2_URL + short_url
-		#     else
-		#         nil
-		#     end
-		# end
-
-	def get_photo_for_web
-		unless image = self.photo
-			image = MERCHANT_DEFAULT_IMG
-		end
-		return image
 	end
 
 	def providers
@@ -97,7 +83,7 @@ class Brand < ActiveRecord::Base
 	end
 
 	def city_state_zip
-			"#{self.description}"
+		"#{self.description}"
 	end
 
 private

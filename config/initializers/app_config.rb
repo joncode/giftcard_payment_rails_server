@@ -20,3 +20,14 @@ def lcon
     puts "loading rails console scripts [lcon]"
 end
 
+if Rails.env.production?
+    ActiveRecord::Base.logger = Logger.new(STDOUT)
+end
+    
+if Rails.env.test?
+    ActiveRecord::Base.logger.level = 1
+    require 'auth_response'
+    require 'auth_transaction'
+end
+
+

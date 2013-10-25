@@ -2,17 +2,25 @@
 	####  MUST have FILTER_PARAMS loaded into Rails already
 
 module CommonUtils
+
 	include ActionView::Helpers::TextHelper
 
 	def log_request_header
 
-		if request.headers['App-Version']
-			puts "HERE IS THE App-Version HEADER REQUEST #{request.headers['App-Version']}"
+		if request.headers['User-Agent']
+			puts "HERE IS THE User-Agent HEADER REQUEST #{request.headers['User-Agent']}"
 		end
 
-		if request.headers["HTTP_COOKIE"]
-			puts "HERE IS THE HEADER #{request.headers["HTTP_COOKIE"]}"
+		if request.headers['Mdot-Version']
+			puts "HERE IS THE Mdot-Version HEADER REQUEST #{request.headers['Mdot-Version']}"
 		end
+
+		unless Rails.env.production?
+			if request.headers["HTTP_TKN"]
+				puts "HERE IS THE HEADER TOKEN #{request.headers["HTTP_TKN"]}"
+			end
+		end
+		
 	end
 
 
@@ -41,8 +49,8 @@ module CommonUtils
 	end
 
 	def method_end_log_message
-		end_time = Time.now - @start_time_logger
-		print "END #{log_message_header} Total time = #{end_time.round(3)}s | "
+		end_time = ((Time.now - @start_time_logger) * 1000).round(1)
+		print "END #{log_message_header} (#{end_time}ms) | "
 		if @app_response
 			log_text = marshal_copy(@app_response)
 			resp 	 = "#{filter_params(log_text)}"

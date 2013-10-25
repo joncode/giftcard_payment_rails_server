@@ -1,6 +1,8 @@
 class Gift < ActiveRecord::Base
 	extend  GiftScopes
 	include Formatter
+	include Email
+	include GiftSerializers
 
 	attr_accessible   	  :giver_id, 	  :giver_name,
 			:receiver_id, :receiver_name, :receiver_phone,
@@ -9,94 +11,29 @@ class Gift < ActiveRecord::Base
 			:tip, :tax,   :total, :service,
 			:facebook_id, :foursquare_id, :twitter,
 			:status, :credit_card
-			# should be removed from accessible = giver_id, giver_name, shoppingCart, status
-
-			# from the app on create gift
-# \"receiver_email\" \"facebook_id\"\"tax\"  \"receiver_phone\"  \"giver_name\"
-# \"receiver_id\"  \"total\"  \"provider_id\"  \"tip\"  \"service\"  \"message\"
-# \"credit_card\"  \"provider_name\"  \"receiver_name\"  \"giver_id\"  "origin"=>"d"
-# "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":1,\"item_id\":920,\"item_name\":\"Fireman's Special\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":901,\"item_name\":\"Corona\"},{\"price\":\"10\",\"quantity\":1,\"item_id\":902,\"item_name\":\"Budwesier\"}]",
-# "token"=>"LlWODlRC9M3VDbzPHuWMdA"}
 
 	has_one     :redeem, 		dependent: :destroy
-	has_one     :relay,  		dependent: :destroy
 	belongs_to  :provider
-	has_many    :sales
+	has_one     :sale
 	has_one     :order, 		dependent: :destroy
 	has_many    :gift_items, 	dependent: :destroy
 	belongs_to  :giver,    		class_name: "User"
 	belongs_to  :receiver, 		class_name: "User"
+	#belongs_to  :payables, 		polymorphic: true
 
-	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card
+	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service, :shoppingCart
 
-	before_create :extract_phone_digits
-	before_create :add_giver_name,  :if => :no_giver_name
-	before_create :regifted,        :if => :regift?
-	before_create :set_status
-
-	after_create  :update_shoppingCart
+	before_save   :extract_phone_digits
+	before_create :add_giver_name,  	:if => :no_giver_name
+	before_create :add_provider_name,  	:if => :no_provider_name
+	before_create :regifted,        	:if => :regift?
+	before_create :build_gift_items
+	before_create :set_statuses
 
 	default_scope where(active: true)
 
 #/---------------------------------------------------------------------------------------------/
 
-	def serialize
-		sender      = giver
-		merchant    = provider
-		gift_hsh                       = {}
-		gift_hsh["gift_id"]			   = self.id
-		gift_hsh["giver"]              = sender.name
-		gift_hsh["giver_photo"]        = sender.get_photo
-		if receipient = receiver
-			gift_hsh["receiver"]           = receiver.name
-			gift_hsh["receiver_photo"]	   = receiver.get_photo
-		else
-			gift_hsh["receiver"]           = receiver_name
-		end
-		gift_hsh["message"]            = message
-		gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
-		gift_hsh["merchant_name"]      = merchant.name
-		gift_hsh["merchant_address"]   = merchant.full_address
-		gift_hsh["merchant_phone"]     = merchant.phone
-		gift_hsh
-	end
-
-	def admt_serialize
-		provider = self.provider
-		gift_hsh                       = {}
-		gift_hsh["gift_id"]			   = self.id
-		gift_hsh["provider_id"]        = provider.id
-    	#gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
-		gift_hsh["name"]      		   = provider.name
-		gift_hsh["merchant_address"]   = provider.full_address
-		gift_hsh["total"]   		   = self.total
-		gift_hsh
-	end
-
-	def report_serialize
-		gift_hsh                    = {}
-		gift_hsh["order_num"]		= self.order_num
-		gift_hsh["updated_at"]		= self.updated_at
-		gift_hsh["created_at"]		= self.created_at
-		gift_hsh["shoppingCart"]  	= self.shoppingCart
-		if order = self.order
-			server = self.order.server_code
-		else
-			server = nil
-		end
-		gift_hsh["server"]			= server
-		gift_hsh["total"]			= self.total
-		gift_hsh
-	end
-
-	def self.init(params)
-		gift = Gift.new(params[:gift])
-				# add anonymous giver feature
-		if params[:gift][:anon_id]
-			gift.add_anonymous_giver(params[:gift][:giver_id])
-		end
-		return gift
-	end
 
 	def phone
 		self.receiver_phone
@@ -108,7 +45,7 @@ class Gift < ActiveRecord::Base
 
 	def grand_total
 		pre_round = self.total.to_f + self.service.to_f
-		pre_round.round(2).to_s
+		float_to_cents(pre_round.round(2))
 	end
 
 	def total
@@ -119,24 +56,23 @@ class Gift < ActiveRecord::Base
 		string_to_cents super
 	end
 
-##########  gift credit card methods
 
-	def set_status
-		if card_enabled?
-			if Rails.env.production?
-				self.status = "unpaid"
-			elsif Rails.env.staging?
-				set_status_post_payment
-			else
-				set_status_post_payment
-			end
+
+#/-----------------------------------------------Status---------------------------------------/
+
+	def set_statuses
+		case self.pay_type
+		when "Sale"
+			set_payment_status
+			set_status
+		when "CreditAccount"
+		when "Campaign"
 		else
-			set_status_post_payment
+			set_status
 		end
-		puts "gift SET STATUS #{self.status}"
 	end
 
-	def set_status_post_payment
+	def set_status
 		if self.receiver_id.nil?
 			self.status = "incomplete"
 		else
@@ -144,121 +80,43 @@ class Gift < ActiveRecord::Base
 		end
 	end
 
-	def card_enabled?
-		# whitelist = ["test@test.com", "deb@knead4health.com", "dfennell@graywolves.com", "dfennell@webteampros.com"]
-		# blacklist = ["addis006@gmail.com"]
-		# if blacklist.include?(self.giver.email)
-		# 	return false
-		# else
-		# return true
-		# end
-		return true
-	end
-
-	def charge_card
-				# if giver is one jb@jb.com
-				# call authorize capture on the gift and create the sale object
-		if Rails.env.production?
-			if true # self.card_enabled?
-				sale = self.authorize_capture
-				puts "SALE ! #{sale.req_json} #{sale.transaction_id} #{sale.revenue.to_f} == #{self.total}"
-			else
-				sale = Sale.new
-				sale.resp_code = 1
-			end
-		elsif Rails.env.staging?
-			sale     = Sale.init self
-			sale.resp_code = 1
-		else
-			sale     = Sale.init self
-			sale.resp_code = 1
-		end
-		if sale.resp_code == 1 && self.status == 'open'
-			if Rails.env.production?
-				# not in production for APNS YET
-				begin
-					Relay.send_push_notification self
-				rescue
-					puts "PUSH NOTIFICATION FAIL"
-				end
-			elsif Rails.env.staging?
-				Relay.send_push_notification self
-				sale.invoice_giver
-				sale.notify_receiver
-			end
-		end
-				# otherwise return a sale object with resp_code == 1
-		return sale
-	end
-
-	def authorize_capture
-		puts "BEGIN AUTH CAPTURE for GIFT ID #{self.id}"
-			# Authorize Transaction Method
-		# A - create a sale object that stores the record of the auth.net transaction
-		sale     = Sale.init self
-		response = sale.auth_capture
-
-		# B - authorize transaction via auth.net
-			# -- returns data --
-				# 1 success
-					# go ahead and save the gift - process complete
-				# failure
-					# credit card issues
-						# card expired
-						# insufficient funds
-						# card is blocked
-					# auth.net issues
-						# cannot connect to server
-						# no response from server
-						# transaction key is no longer good
-					# sale db issues
-						# could not save item
-		case response.response_code.to_i
+	def set_payment_status
+		case self.sale.resp_code
 		when 1
-			# Approved
-			puts "setting the gift status off unpaid"
-			set_status_post_payment
-			self.save
+		  # Approved
+			self.pay_stat = "charged"
 		when 2
-			# Declined
+		  # Declined
+			self.pay_stat = "declined"
 		when 3
-			# Error
-			# duplicate transaction response subcode = 1
+		  # Error
+		  # duplicate transaction response subcode = 1
+			if self.sale.response.response_subcode == 1
+				self.pay_stat = "duplicate"
+			else
+				self.pay_stat = "unpaid"
+			end
 		when 4
-			# Held for Review
+		  # Held for Review
+			self.pay_stat = "unpaid"
 		else
-			# not a listed error code
-			puts "UNKNOWN ERROR CODE RECEIVED FOR AUTH.NET - CODE = #{response.response_code}"
-			puts "TEXT IS #{response.response_reason_text} for GIFT ID = #{self.id}"
+		  # not a listed error code
+		  	self.pay_stat = "unpaid"
 		end
-		reply = response.response_reason_text
-		puts "HERE IS THE REPLY #{reply}"
-		# C - saves the sale object into the sale db
-		if sale.save
-			puts "save of sale successful"
-		else
-			puts "save of sale ERROR gift ID = #{self.id}"
-		end
-		return sale
+		set_status
 	end
 
-###############
+#/--------------------------------------gift credit card methods-----------------------------/
 
-##########  data population methods
+    def charge_card
+    	self.pay_type = "Sale"
+    	sale      	  = Sale.init self  # @gift
+    	sale.auth_capture
 
-	def regift(recipient=nil, message=nil)
-		new_gift              = self.dup
-		new_gift.regift_id    = self.id
-		new_gift.message      = message ? message : nil
-		new_gift.add_giver(self.receiver)
-		if recipient
-			new_gift.add_receiver recipient
-		else
-			new_gift.remove_receiver
-		end
-		new_gift.order_num  = nil
-		return new_gift
-	end
+    	self.sale 	  = sale
+    end
+
+#/-------------------------------------re gift db methods-----------------------------/
 
 	def parent
 		if self.regift_id
@@ -272,26 +130,34 @@ class Gift < ActiveRecord::Base
 		Gift.find_by_regift_id(self.id)
 	end
 
+#/-------------------------------------data population methods-----------------------------/
+
 	def remove_receiver
 		self.receiver_id    = nil
 		self.receiver_name  = nil
 		self.facebook_id    = nil
 		self.receiver_phone = nil
 		self.receiver_email = nil
-		self.status 		= "unpaid"
+		self.twitter		= nil
 	end
 
 	def add_receiver receiver
-		self.receiver_id    = receiver.id
+		if receiver.id
+			self.status 	  = 'open'
+			self.receiver_id  = receiver.id
+		else
+		 	self.receiver_id  = nil
+		 	self.status 	  = 'incomplete'
+		end
 		self.receiver_name  = receiver.name
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
-		self.receiver_phone = receiver.phone ? receiver.phone : nil
-		self.receiver_email = receiver.email ? receiver.email : nil
-		self.status 		= 'open' if receiver.id
+		self.twitter        = receiver.twitter ? 	 receiver.twitter : nil
+		self.receiver_phone = receiver.phone ? 		 receiver.phone : nil
+		self.receiver_email = receiver.email ? 		 receiver.email : nil
 	end
 
 	def add_giver sender
-		self.giver_id   = sender.id
+		self.giver   	= sender
 		self.giver_name = sender.name
 	end
 
@@ -308,7 +174,13 @@ class Gift < ActiveRecord::Base
 
 ###############
 
-##########  shopping cart methods
+private
+
+	##########  shopping cart methods
+
+	def build_gift_items
+		make_gift_items ary_of_shopping_cart_as_hash
+	end
 
 	def ary_of_shopping_cart_as_hash
 		JSON.parse self.shoppingCart
@@ -322,32 +194,37 @@ class Gift < ActiveRecord::Base
 		puts "made it thru gift items #{self.gift_items}"
 	end
 
-private
-
-	def update_shoppingCart
-		if self.regift_id.nil?
-			updated_shoppingCart_array = self.gift_items.map { |item| item.prepare_for_shoppingCart }
-			puts "GIFT AFTER SAVE UPDATING SHOPPNG CART = #{updated_shoppingCart_array}"
-			self.update_attribute(:shoppingCart, updated_shoppingCart_array.to_json)
-		end
-	end
+	################  data validation methods
 
 	def add_giver_name
-		self.giver_name = User.find(self.giver_id).username
+		if giver = User.find(self.giver_id)
+			self.giver_name = giver.username
+		end
 	end
 
 	def no_giver_name
 		self.giver_name.nil?
 	end
 
+	def add_provider_name
+		if provider = self.provider
+			self.provider_name = provider.name
+		end
+	end
+
+	def no_provider_name
+		self.provider_name.nil?
+	end
+
 	def regifted
 		old_gift = Gift.find(self.regift_id)
-		old_gift.update_attributes(status: 'regifted')
+		old_gift.update_attribute(:status, 'regifted')
 	end
 
 	def regift?
 		self.regift_id
 	end
+
 end
 # == Schema Information
 #
@@ -381,5 +258,14 @@ end
 #  order_num      :string(255)
 #  cat            :integer         default(0)
 #  active         :boolean         default(TRUE)
+#  stat           :integer
+#  pay_stat       :integer
+#  pay_type       :string(255)
+#  pay_id         :integer
+#  notified_at    :datetime
+#  notified_at_tz :string(255)
+#  redeemed_at    :datetime
+#  redeemed_at_tz :string(255)
+#  server_code    :string(255)
 #
 

@@ -19,7 +19,7 @@ module Email
 
     def notify_receiver
         # self is sale
-        gift      = self.gift
+        gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil
         email     = gift.receiver_email || obj_email
 
@@ -37,7 +37,7 @@ module Email
 
     def invoice_giver
         # self is sale
-        gift = self.gift
+        gift = self
         puts "emailing the gift giver for #{gift.id}"
 
         data = {"text"        => 'invoice_giver',
@@ -60,14 +60,14 @@ module Email
             route_email_system(data)
         end
     end
-    
+
     def confirm_email
 
         data = {"text"        => 'confirm_email',
                 "user_id"     => self.id,
                 "link"        => self.setting.generate_email_link
                 }
-        puts "Here is the data #{data.inspect}"
+        # puts "Here is the data #{data.inspect}"
         route_email_system(data)
     end
 
@@ -85,7 +85,9 @@ private
 
     def route_email_system data
         puts "data in Email.rb #{data}"
-        Resque.enqueue(MailerJob, data)
+        if  Rails.env.production? || Rails.env.staging?
+            Resque.enqueue(MailerJob, data)
+        end
     end
 
 end

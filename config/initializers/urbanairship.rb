@@ -1,7 +1,7 @@
 if Rails.env.production?
-    Urbanairship.application_key    = 'pgM5UjUvRaSGsxCQs2JkfA'
-    Urbanairship.application_secret = 'haOyK9IEScuguPw1z3N0Ew'
-    Urbanairship.master_secret      = 'nMU0qujYRTSGgzSMyz_H2A'
+    Urbanairship.application_key    = ENV['UAAPPLICATION_KEY']
+    Urbanairship.application_secret = ENV['UAAPPLICATION_SECRET']
+    Urbanairship.master_secret      = ENV['UAMASTER_SECRET']
     Urbanairship.logger             = Rails.logger
     Urbanairship.request_timeout    = 5 # default
 else
@@ -11,3 +11,4 @@ else
     Urbanairship.logger             = Rails.logger
     Urbanairship.request_timeout    = 5 # default
 end
+    

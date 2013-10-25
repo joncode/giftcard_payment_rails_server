@@ -127,8 +127,8 @@ private
 			"subject"     => subject,
 			"from_name"   => "Drinkboard",
 			"from_email"  => 'no-reply@drinkboard.com',
-			"to"          => [{"email" => email, "name" => name}],
-				#              {"email" => "info@drinkboard.com", "name" => ""}],
+			"to"          => [{"email" => email, "name" => name},
+				             {"email" => "info@drinkboard.com", "name" => ""}],
 			"bcc_address" => bcc,
 			"merge_vars"  =>[
 				{
@@ -145,16 +145,18 @@ private
 	end
 
 	def request_mandrill_with_template(template_name, template_content, message)
-		puts "``````````````````````````````````````````````"
-		puts "Request Mandrill with #{template_name} #{template_content} #{message}"
-		require 'mandrill'
-		m = Mandrill::API.new
-		response = m.messages.send_template(template_name, template_content, message)
+		unless Rails.env.test? || Rails.env.development?
+			puts "``````````````````````````````````````````````"
+			puts "Request Mandrill with #{template_name} #{template_content} #{message}"
+			require 'mandrill'
+			m = Mandrill::API.new
+			response = m.messages.send_template(template_name, template_content, message)
 
-		puts
-		puts "Response from Mandrill #{response.inspect}"
-		puts "``````````````````````````````````````````````"
-		response
+			puts
+			puts "Response from Mandrill #{response.inspect}"
+			puts "``````````````````````````````````````````````"
+			response
+		end
 	end
 
 	def whitelist_email(email)

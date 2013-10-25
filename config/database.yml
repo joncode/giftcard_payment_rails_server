@@ -1,31 +1,53 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
 development:
-  adapter: sqlite3
-  database: db/development.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: drinkboard_dev
+  host: localhost
   pool: 5
-  timeout: 5000
+  username: drinkboard
+  password: drinkdrink
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
 test:
-  adapter: sqlite3
-  database: db/test.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: drinkboard_test
+  host: localhost
   pool: 5
-  timeout: 5000
+  username: jongutwillig
+  password: drinkdrink
 
-staging:
-  adapter: sqlite3
-  database: db/staging.sqlite3
+admt_development:
+  adapter: postgresql
+  encoding: unicode
+  database: admintools_dev
+  host: localhost
   pool: 5
-  timeout: 5000
+  username: drinkboard
+  password: drinkdrink
 
-production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+admt_test:
+  adapter: postgresql
+  encoding: unicode
+  database: admintools_test
+  host: localhost
   pool: 5
-  timeout: 5000
+  username: jongutwillig
+  password: drinkdrink
+
+mt_development:
+  adapter: postgresql
+  encoding: unicode
+  database: merchanttools_dev
+  host: localhost
+  pool: 5
+  username: drinkboard
+  password: drinkdrink
+
+mt_test:
+  adapter: postgresql
+  encoding: unicode
+  database: merchanttools_test
+  host: localhost
+  pool: 5
+  username: jongutwillig
+  password: drinkdrink
