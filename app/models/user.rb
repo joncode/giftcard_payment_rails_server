@@ -353,7 +353,7 @@ private
 
 				if g.update_attributes(gift_changes)
 					success += 1
-					email_gift_collected(g)
+					# email_gift_collected(g)
 				else
 					error   += 1
 				end
