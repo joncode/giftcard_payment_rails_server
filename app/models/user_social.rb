@@ -3,9 +3,9 @@ class UserSocial < ActiveRecord::Base
 
     belongs_to :user
 
-    before_validation :reject_xxx_emails
+    #before_validation :reject_xxx_emails
     validates_presence_of :identifier, :type_of, :user_id
-    after_save :update_mailchimp
+    #after_save :update_mailchimp
 
     default_scope where(active: true)
 

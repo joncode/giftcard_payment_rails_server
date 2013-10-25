@@ -34,7 +34,7 @@ class Provider < ActiveRecord::Base
 	after_create 	:make_menu_string
     #after_save      :update_city_provider
 
-	default_scope where(active: true).where(paused: false).order("name ASC")
+	#default_scope where(active: true).where(paused: false).order("name ASC")
 
 #/---------------------------------------------------------------------------------------------/
 
@@ -79,21 +79,6 @@ class Provider < ActiveRecord::Base
 
 	def live_int
 		self.live ? "1" : "0"
-	end
-
-	def legacy_status
-		if self.active
-			if self.sd_location_id == 1
-			    stat = "live"
-			else
-			    stat = "coming_soon"
-			end
-		else
-			stat = "paused"
-		end
-		self.mode = stat
-		self.save
-		puts "provider #{self.id} - Now = #{self.mode} from #{stat} - Old = |#{sd_location_id} | #{self.active}"
 	end
 
 	def mode

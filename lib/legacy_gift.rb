@@ -3,11 +3,11 @@ module LegacyGift
     def add_pay_stat
         gifts = Gift.unscoped
 
-        gifts.each do |gift|
+        new_gifts = gifts.each do |gift|
             set_legacy_gift_status gift
             gift.save
         end
-        pattr [:status, :pay_stat, :pay_type, :redeemed_at, :server], gifts
+        pattr [:status, :pay_stat, :pay_type, :redeemed_at, :server], new_gifts
         nil
     end
 

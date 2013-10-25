@@ -1,15 +1,5 @@
 module Legacy
-
-    def move_active_to_live
-        ps = Provider.unscoped
-        ps.each do |p|
-            puts "Before- #{p.name} - live:#{p.live} - active:#{p.active} - pause:#{p.paused}"
-            p.legacy_status
-            puts "After- #{p.name} - live:#{p.live} - active:#{p.active} - pause:#{p.paused}"
-        end
-        nil
-    end
-
+    
     def brand_photo_fix
         b_all = Brand.all
         b_all.each do |brand|

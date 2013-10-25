@@ -1,43 +1,8 @@
 module LegacyUser
 
-    def user_social_from_legacy
-
-        # make sure the MailchimpList is turned off
-
-        users = User.unscoped
-        users.each do |user|
-            UserSocial.create(user_id: user.id, type_of: "email", identifier: user.email) if user.email.present?
-            UserSocial.create(user_id: user.id, type_of: "phone", identifier: user.phone) if user.phone.present?
-            UserSocial.create(user_id: user.id, type_of: "facebook_id", identifier: user.facebook_id) if user.facebook_id.present?
-            UserSocial.create(user_id: user.id, type_of: "twitter", identifier: user.twitter) if user.twitter.present?
-        end
-    end
-
-    def correct_deactivated_users
-        # get users with first_name "De-activated[app]"
-        permanently_deactivated_users = User.unscoped.where(active: false).where(first_name: "De-activated[app]")
-        # delete fields
-        permanently_deactivated_users.each do |pdu|
-            pdu.first_name, pdu.last_name  = split_name(pdu.last_name)
-            pdu.permanently_deactivate
-            puts pdu.inspect
-        end
-        nil
-    end
-
-    def split_name name
-        name_ary    = name.split(' ')
-        last_name   = name_ary.pop
-        first_name  = if name_ary.kind_of? String
-            name_ary
-        else
-            name_ary.join(' ')
-        end
-        return first_name, last_name
-    end
 
     def check_users
-
+        total = 0
         pdus = User.unscoped.where(perm_deactive: true).where(active: false)
         pdus.each {|u| puts u.inspect }
 
@@ -48,25 +13,32 @@ module LegacyUser
             if u.email.present?
                 "email"
                 confirm_social_save u.email
+                total += 1
             end
             if u.phone.present?
                 "phone"
-                confirm_social_save u.email
+                confirm_social_save u.phone
+                total += 1
             end
             if u.twitter.present?
                 "twitter"
-                confirm_social_save u.email
+                confirm_social_save u.twitter
+                total += 1
             end
             if u.facebook_id.present?
                 "facebook_id"
-                confirm_social_save u.email
+                confirm_social_save u.facebook_id
+                total += 1
             end
         end
 
         dus = User.unscoped.where(perm_deactive: false).where(active: false)
+        totalUs = UserSocial.where(active: true).count
+        totalUs = totalUs - count_users(dus)
         puts "deactivated Users #{dus.count}"
         puts "Premanent Deactives #{pdus.count}"
         puts "Active Users = #{us.count}"
+        puts "User Socials needed = #{total} | saved #{totalUs}"
         total_users = User.unscoped
 
         counted_user = pdus.count + us.count + dus.count
@@ -77,10 +49,32 @@ module LegacyUser
         if uss = UserSocial.find_by_identifier(identifier)
             puts "true"
         else
-            puts "false"
+            puts "false--------------------------------------------------------------------------"
         end
     end
 
-
+    def count_users(us)
+        total = 0
+        us.each do |u|
+            puts "user ID = #{u.id}"
+            if u.email.present?
+                "email"
+                total += 1
+            end
+            if u.phone.present?
+                "phone"
+                total += 1
+            end
+            if u.twitter.present?
+                "twitter"
+                total += 1
+            end
+            if u.facebook_id.present?
+                "facebook_id"
+                total += 1
+            end
+        end
+        total
+    end
 
 end
