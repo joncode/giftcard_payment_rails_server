@@ -27,7 +27,7 @@ class Admt::V2::GiftsController < JsonController
         if  resp == 0
             success "Gift is #{gift.pay_stat}"
         else
-            fail resp.reason_text
+            fail resp
         end
         respond
     end
