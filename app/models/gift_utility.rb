@@ -35,7 +35,7 @@ class GiftUtility
                     @resp["error"]      = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
                     @gift.remove_receiver
                 else
-                    puts "\n Found an acitve user #{receiver.id} \n"
+                    puts "\n Found an active user #{receiver.id} \n"
                     @gift.add_receiver receiver
                 end
             end

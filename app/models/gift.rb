@@ -91,7 +91,8 @@ class Gift < ActiveRecord::Base
 		when 3
 		  # Error
 		  # duplicate transaction response subcode = 1
-			if self.sale.response.response_subcode == 1
+		  	response = JSON.parse(self.sale.resp_json)
+			if response["response_subcode"] == 1
 				self.pay_stat = "duplicate"
 			else
 				self.pay_stat = "unpaid"
