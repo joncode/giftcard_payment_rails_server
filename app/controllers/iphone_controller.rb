@@ -12,7 +12,6 @@ class IphoneController < AppController
 			message = "Data not received correctly. "
 		else
 			new_user = create_user_object(data)
-			puts "HERE IS NEW USER DATA #{new_user.inspect}"
 			message = ""
 		end
 
