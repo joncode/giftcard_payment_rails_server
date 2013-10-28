@@ -522,7 +522,10 @@ class AppController < JsonController
         gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
         unless gift_creator.no_data?
             gift_creator.build_gift
-            gift_creator.charge
+            puts "Here is the resp ---------------- > #{gift_creator.resp}"
+            if gift_creator.resp["error"].nil?
+                gift_creator.charge
+            end
         end
         response = gift_creator.resp
 

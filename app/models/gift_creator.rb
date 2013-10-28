@@ -1,7 +1,7 @@
 class GiftCreator < GiftUtility
 
     attr_reader   :gift_hsh, :shoppingCart_str, :shoppingCart_hsh, :giver
-    attr_accessor :gift,     :resp
+    attr_accessor :gift, :resp
 
     def initialize giver, params_gift, params_shoppingCart
         @giver            = giver
