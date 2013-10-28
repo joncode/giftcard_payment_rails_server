@@ -111,13 +111,13 @@ FactoryGirl.define do
         gift.credit_card     4567890
         gift.shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
         gift.message         "Factory Message"
+        gift.pay_stat       "charged"
 
         factory :regift do |regift|
             regift.giver        { FactoryGirl.create(:giver) }
             regift.giver_name   "Jon giver"
             regift.receiver     { FactoryGirl.create(:regifter) }
             regift.receiver_name "Will Regifter"
-            regift.pay_stat     "charged"
             regift.pay_type     "Sale"
             regift.sale         { FactoryGirl.create(:sale) }
         end

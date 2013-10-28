@@ -53,7 +53,7 @@ class Sale < ActiveRecord::Base
 
         if @response.response_code == "1"
             # THIS SHOLD CHECK RESPONSE FROM AUTH>NET AND TELL U IF VOID OR REFUND
-            gift.udate_attribute(:pay_stat , 'refunded')
+            gift.update_attribute(:pay_stat , 'refunded')
             if gift.save
                 0
             else
