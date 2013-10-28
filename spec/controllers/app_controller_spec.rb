@@ -2,12 +2,18 @@ require 'spec_helper'
 
 describe AppController do
 
+    before(:all) do
+        User.delete_all
+        Gift.delete_all
+    end
+
     describe "#relays" do
 
         let(:giver)     { FactoryGirl.create(:giver) }
         let(:receiver)  { FactoryGirl.create(:receiver) }
 
         before(:each) do
+
             @number = 10
             @number.times do |n|
                 gift =  FactoryGirl.build(:gift)
@@ -35,6 +41,27 @@ describe AppController do
             post :relays, format: :json, token: receiver.remember_token
             #puts json.inspect + "   <----  JSON  <----"
             json["error"].should == {"user"=>"could not identity app user"}
+        end
+
+        it "should not return gifts that are unpaid" do
+            gs = Gift.all
+            total_changed = 0
+            skip_first = false
+            skip_second = false
+            gs.each do |gift|
+                if gift.id.even? && skip_first && skip_second
+                    gift.update_attribute(:pay_stat, "unpaid")
+                    total_changed += 1
+                else
+                    gift.update_attribute(:pay_stat, "charged")
+                    if skip_first
+                        skip_second = true
+                    end
+                    skip_first = true
+                end
+            end
+            post :relays, format: :json, token: receiver.remember_token
+            json["success"]["badge"].should == (@number - total_changed)
         end
 
     end

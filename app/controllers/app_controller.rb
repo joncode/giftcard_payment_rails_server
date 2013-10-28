@@ -634,7 +634,6 @@ class AppController < JsonController
       		end
       		puts "card data post JSON = #{card_data}"
       		cCard = Card.create_card_from_hash card_data
-      		puts "the new card object is = #{cCard.inspect}"
     	else
      	  	message += "Couldn't identify app user. "
      	  	cCard = nil;

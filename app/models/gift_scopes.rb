@@ -24,7 +24,7 @@ module GiftScopes
 #### USER SCOPES
 
     def get_gifts user
-        where(receiver_id: user.id).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
+        where(receiver_id: user.id).where("pay_stat not in (?)", ['unpaid']).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
     end
 
     def get_notifications user
