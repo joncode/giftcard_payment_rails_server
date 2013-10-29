@@ -28,6 +28,7 @@ group :development, :test do
   gem "launchy"
   gem "factory_girl"
   gem "yajl-ruby"
+  gem 'resque_spec'
 end
 
 # Gems used only for assets and not required
