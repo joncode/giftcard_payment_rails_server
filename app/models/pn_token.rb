@@ -8,11 +8,6 @@ class PnToken < ActiveRecord::Base
     validates :pn_token, uniqueness: true
     validates_presence_of :user_id, :pn_token
 
-    def pn_token
-        token = super
-        convert_token(token)
-    end
-
     def pn_token=(token)
         converted_token = convert_token(token)
         super(converted_token)
@@ -22,8 +17,10 @@ class PnToken < ActiveRecord::Base
         token.gsub('<','').gsub('>','').gsub(' ','')
     end
 
-    def self.convert_token(token)
-        token.gsub('<','').gsub('>','').gsub(' ','')
+    def ua_alias
+            # move this to pn_token.rb
+        adj_user_id = self.user_id + NUMBER_ID
+        "user-#{adj_user_id}"
     end
 
 private
@@ -31,7 +28,7 @@ private
     def register
         Resque.enqueue(RegisterPushJob, self.id)
     end
-    
+
 end
 # == Schema Information
 #
