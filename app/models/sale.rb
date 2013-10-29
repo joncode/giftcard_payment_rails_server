@@ -53,7 +53,7 @@ class Sale < ActiveRecord::Base
 
         if @response.response_code == "1"
             # THIS SHOLD CHECK RESPONSE FROM AUTH>NET AND TELL U IF VOID OR REFUND
-            gift.pay_stat = 'refunded'
+            gift.update_attribute(:pay_stat , 'refunded')
             if gift.save
                 0
             else
@@ -109,11 +109,15 @@ class Sale < ActiveRecord::Base
 private
 
     def authorize_net_aim_transaction
-        AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
+        t = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
+        puts "HERE IS THE AIM transaction #{t.inspect}"
+        t
     end
 
     def authorize_net_aim_response card
-        AuthorizeNet::CreditCard.new(card.number, card.month_year)
+        r = AuthorizeNet::CreditCard.new(card.number, card.month_year)
+        puts "HERE IS THE AIM ReSPONSE #{r.inspect}"
+        r
     end
 
 end

@@ -7,15 +7,11 @@ class Admt::V2::GiftsController < JsonController
         gift_params = strong_param(params["data"])
         return nil  if hash_empty?(gift_params)
 
-        gift = Gift.where(id: params[:id]).first
-        if gift.kind_of?(Gift)
-            if gift.update_attributes(gift_params)
-                success("#{gift.id} updated")
-            else
-                fail(gift)
-            end
+        gift = Gift.find(params[:id])
+        if gift.update_attributes(gift_params)
+            success("#{gift.id} updated")
         else
-            fail    "Gift not found - #{params[:id]}"
+            fail(gift)
         end
         respond
     end
@@ -27,7 +23,7 @@ class Admt::V2::GiftsController < JsonController
         if  resp == 0
             success "Gift is #{gift.pay_stat}"
         else
-            fail resp.reason_text
+            fail resp
         end
         respond
     end

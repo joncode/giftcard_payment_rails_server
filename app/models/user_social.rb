@@ -5,7 +5,8 @@ class UserSocial < ActiveRecord::Base
 
     before_validation :reject_xxx_emails
     validates_presence_of :identifier, :type_of, :user_id
-    after_save :update_mailchimp
+    after_create :subscribe_mailchimp
+    after_save   :unsubscribe_mailchimp
 
     default_scope where(active: true)
 
@@ -22,11 +23,19 @@ class UserSocial < ActiveRecord::Base
 
 private
 
-    def update_mailchimp
+    def subscribe_mailchimp
         if Rails.env.production? || Rails.env.staging?
         	if self.type_of  == "email"
                 Resque.enqueue(SubscriptionJob, self.id)
         	end
+        end
+    end
+
+    def unsubscribe_mailchimp
+        if Rails.env.production? || Rails.env.staging?
+            if self.type_of  == "email" && !self.active
+                Resque.enqueue(SubscriptionJob, self.id)
+            end
         end
     end
 
@@ -51,5 +60,5 @@ end
 #  created_at :datetime        not null
 #  updated_at :datetime        not null
 #  active     :boolean         default(TRUE)
-#
+#  subscribed :boolean default false
 

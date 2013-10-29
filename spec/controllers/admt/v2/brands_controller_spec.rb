@@ -14,15 +14,7 @@ describe Admt::V2::BrandsController do
 
     describe "#create" do
 
-        context "authorization" do
-
-            it "should not allow unauthenticated access" do
-                request.env["HTTP_TKN"] = "No_Entrance"
-                put :create, id: 1, format: :json
-                response.response_code.should == 401
-            end
-
-        end
+        it_should_behave_like("token authenticated", :post, :create, id: 1)
 
         it "should create new brand" do
             new_brand_hsh = { "name" => "Starwood" , "website" => "www.starwood.com" , "description" => "AMAZING!", "photo" => "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}
@@ -47,15 +39,8 @@ describe Admt::V2::BrandsController do
 
     describe "#update" do
 
-        context "authorization" do
+        it_should_behave_like("token authenticated", :put, :update, id: 1)
 
-            it "should not allow unauthenticated access" do
-                request.env["HTTP_TKN"] = "No_Entrance"
-                put :update, id: 1, format: :json
-                response.response_code.should == 401
-            end
-
-        end
 
         {
             name: "House Bar",

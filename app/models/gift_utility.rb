@@ -14,7 +14,7 @@ class GiftUtility
             # check that the receiver_id is active
             if receiver = User.unscoped.find( @gift.receiver_id )
                 if receiver.active == false
-                    @resp["error"]      = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+                    @resp["error"] = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
                     @gift.remove_receiver
                 else
                     puts "\n Found an acitve user #{receiver.id} \n"
@@ -32,10 +32,10 @@ class GiftUtility
         else
             if receiver = User.unscoped.find( recipient.id )
                 if receiver.active == false
-                    @resp["error"]      = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+                    @resp["error"] = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
                     @gift.remove_receiver
                 else
-                    puts "\n Found an acitve user #{receiver.id} \n"
+                    puts "\n Found an active user #{receiver.id} \n"
                     @gift.add_receiver receiver
                 end
             end

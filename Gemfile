@@ -24,10 +24,15 @@ group :development, :test do
   gem "guard"
   gem "guard-rspec"
   gem "rspec-rails", "~> 2.13.0"
-  gem "capybara",    "2.0.3"
-  gem "launchy"
   gem "factory_girl"
   gem "yajl-ruby"
+end
+
+group :test do
+  gem "capybara",    "2.0.3"
+  gem "launchy"
+  gem 'webmock'
+  gem 'resque_spec'
 end
 
 # Gems used only for assets and not required

@@ -522,7 +522,10 @@ class AppController < JsonController
         gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
         unless gift_creator.no_data?
             gift_creator.build_gift
-            gift_creator.charge
+            puts "Here is the resp ---------------- > #{gift_creator.resp}"
+            if gift_creator.resp["error"].nil?
+                gift_creator.charge
+            end
         end
         response = gift_creator.resp
 
@@ -634,7 +637,6 @@ class AppController < JsonController
       		end
       		puts "card data post JSON = #{card_data}"
       		cCard = Card.create_card_from_hash card_data
-      		puts "the new card object is = #{cCard.inspect}"
     	else
      	  	message += "Couldn't identify app user. "
      	  	cCard = nil;

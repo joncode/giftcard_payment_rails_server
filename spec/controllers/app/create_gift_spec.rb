@@ -120,6 +120,17 @@ describe AppController do
             json["error"].should == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
         end
 
+        it "should not charge the card when gift receiver is deactivated" do
+            giver = FactoryGirl.create(:giver)
+            deactivated_user = FactoryGirl.create :receiver, { active: false}
+            gift = FactoryGirl.build :gift, { receiver_id: deactivated_user.id }
+            post :create_gift, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart , token: giver.remember_token
+            new_gift = Gift.find_by_receiver_id(deactivated_user.id)
+            new_gift.should be_nil
+            last = Gift.last
+            last.should be_nil
+        end
+
     end
 
     def make_gift_json gift

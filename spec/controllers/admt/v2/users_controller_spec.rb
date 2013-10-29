@@ -12,15 +12,7 @@ describe Admt::V2::UsersController do
 
     describe :update do
 
-        context "authorization" do
-
-            it "should not allow unauthenticated access" do
-                request.env["HTTP_TKN"] = "No_Entrance"
-                put :update, id: 1, format: :json
-                response.response_code.should == 401
-            end
-
-        end
+        it_should_behave_like("token authenticated", :put, :update, id: 1)
 
         let(:user) { FactoryGirl.create(:user) }
 
@@ -28,9 +20,7 @@ describe Admt::V2::UsersController do
             destroy_id = user.id
             user.destroy
             put :update, id: destroy_id, format: :json, data: { "first_name" => "JonBoy"}
-            response.response_code.should  == 200
-            json["status"].should == 0
-            json["data"].should   == "App user not found - #{destroy_id}"
+            response.response_code.should  == 404
         end
 
         it "should require a update hash" do
@@ -42,6 +32,12 @@ describe Admt::V2::UsersController do
             response.response_code.should == 400
             put :update, id: user.id, format: :json, data: { "first_name" => "Steve"}
             response.response_code.should == 200
+        end
+
+        it "should not update attributes that are not allowed or dont exist" do
+            hsh = { "house" => "chill" }
+            put :update, id: user.id, format: :json, data: hsh
+            response.response_code.should == 400
         end
 
         it "should return success msg when success" do
@@ -69,22 +65,11 @@ describe Admt::V2::UsersController do
                 new_user.send(type_of).should == value
             end
         end
-
-        it "should not update attributes that are not allowed or dont exist" do
-            hsh = { "house" => "chill" }
-            put :update, id: user.id, format: :json, data: hsh
-            response.response_code.should == 400
-        end
-
     end
 
     describe :deactivate do
 
-        it "should not allow unauthenticated access" do
-            request.env["HTTP_TKN"] = "No_Entrance"
-            put :deactivate, id: 1, format: :json
-            response.response_code.should == 401
-        end
+        it_should_behave_like("token authenticated", :post, :deactivate, id: 1)
 
         it "should permanent deactivate user " do
             user = FactoryGirl.create(:user)
@@ -127,15 +112,7 @@ describe Admt::V2::UsersController do
 
     describe :deactivate_gifts do
 
-        context "authorization" do
-
-            it "should not allow unauthenticated access" do
-                request.env["HTTP_TKN"] = "No_Entrance"
-                post :deactivate_gifts, id: 10, format: :json
-                response.response_code.should == 401
-            end
-
-        end
+        it_should_behave_like("token authenticated", :post, :deactivate_gifts, id: 1)
 
         it "should deactivate all given and received gifts for user" do
             user = FactoryGirl.create(:user)

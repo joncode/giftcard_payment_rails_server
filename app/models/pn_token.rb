@@ -3,15 +3,10 @@ class PnToken < ActiveRecord::Base
 
     belongs_to :user
 
-    after_save :register
+    after_create :register
 
     validates :pn_token, uniqueness: true
-    validates_presence_of :user_id
-
-    def pn_token
-        token = super
-        convert_token(token)
-    end
+    validates_presence_of :user_id, :pn_token
 
     def pn_token=(token)
         converted_token = convert_token(token)
@@ -22,19 +17,17 @@ class PnToken < ActiveRecord::Base
         token.gsub('<','').gsub('>','').gsub(' ','')
     end
 
-    def self.convert_token(token)
-        token.gsub('<','').gsub('>','').gsub(' ','')
+    def ua_alias
+            # move this to pn_token.rb
+        adj_user_id = self.user_id + NUMBER_ID
+        "user-#{adj_user_id}"
     end
 
 private
 
     def register
-        unless Rails.env.test?
-            Resque.enqueue(RegisterPushJob, self.id)
-        end
+        Resque.enqueue(RegisterPushJob, self.id)
     end
-
-
 
 end
 # == Schema Information

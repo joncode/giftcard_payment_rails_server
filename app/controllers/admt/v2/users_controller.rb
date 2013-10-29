@@ -7,15 +7,11 @@ class Admt::V2::UsersController < JsonController
         user_params = strong_param(params["data"])
         return nil  if hash_empty?(user_params)
 
-        user = User.where(id: params[:id]).first
-        if user.kind_of?(User)
-            if user.update_attributes(user_params)
-                success "User #{user.id} updated"
-            else
-                fail user
-            end
+        user = User.find(params[:id])
+        if user.update_attributes(user_params)
+            success "User #{user.id} updated"
         else
-            fail    "App user not found - #{params[:id]}"
+            fail user
         end
 
         respond

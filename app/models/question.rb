@@ -5,7 +5,7 @@ class Question < ActiveRecord::Base
     has_many :users , :through => :answers
 
     def self.get_questions_with_answers(user)
-        puts "in questions w answers"
+        #puts "in questions w answers"
 
         questions = Question.all
         answers   = Answer.where(user_id: user.id)
@@ -28,7 +28,6 @@ class Question < ActiveRecord::Base
                     end
                 end
             end
-            puts " HERE IS THE QHASH #{qHash}"
             qHash
         end
 
