@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+    
 describe IphoneController do
 
     describe :update_photo do
@@ -74,7 +74,7 @@ describe IphoneController do
             Urbanairship.should_receive(:register_device).with( pn_token, { :alias => ua_alias})
             user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: pn_token
-            ResqueSpec.perform_all(:push)
+            run_delayed_jobs # ResqueSpec.perform_all(:push)
         end
 
     end
