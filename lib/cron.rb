@@ -1,7 +1,7 @@
 module Cron
 
     def send_pn_tokens
-        us = User.where("created_at > ?",  1.month.ago)
+        us = User.where("created_at > ?",  1.week.ago)
 
         us.each do |user|
             pnts = user.pn_tokens
