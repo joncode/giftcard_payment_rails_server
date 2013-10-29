@@ -19,6 +19,7 @@ module Cron
                     send_to_UA(pnt)
                 end
             elsif pnts.count == 1
+                puts "update #{user.id} | #{user.name}'s pn token"
                 send_to_UA(pnts.first)
             end
         end
@@ -36,11 +37,7 @@ module Cron
                 count += 1
                 puts "match #{count}"
             else
-                print " Send new to UA ? -> (y/n) "
-                response = gets.chomp.downcase
-                if response == 'y'
-                    send_to_UA(pnt)
-                end
+                send_to_UA(pnt)
                 incorrect += 1
             end
         end
@@ -66,10 +63,7 @@ module Cron
                         puts "match #{count}"
                     else
                         incorrect += 1
-                            # ask me for y/n to delete
-                        print "PnToken #{pnt.id} is #{ua_alias} -- should be #{pnt_alias} "
-                        print " Delete & Send new to UA ? -> (y/n) "
-                        #response = gets.chomp.downcase
+                        puts "PnToken #{pnt.id} is #{ua_alias} -- should be #{pnt_alias} "
                         if true || response == 'y'
                             Urbanairship.unregister_device(pnt.pn_token)
                             send_to_UA(pnt)
@@ -83,6 +77,7 @@ module Cron
         puts "Incorrect tokens are  = #{incorrect}"
     end
 
+private
 
     def get_and_sort_ua_tokens
         ua_response = ua_device_tokens
@@ -95,8 +90,6 @@ module Cron
         end
         ua_key_hsh
     end
-
-private
 
     def send_to_UA pnt
         resp = Urbanairship.register_device(pnt.pn_token, :alias => pnt.ua_alias )
