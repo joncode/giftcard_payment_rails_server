@@ -127,7 +127,7 @@ Drinkboard::Application.routes.draw do
             end
           end
 
-          resources :users,     only: [:update] do # biz logic
+          resources :users,     only: [:update] do         # biz logic
             member do
               post :deactivate
               post :deactivate_gifts

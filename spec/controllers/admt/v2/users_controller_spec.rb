@@ -28,9 +28,7 @@ describe Admt::V2::UsersController do
             destroy_id = user.id
             user.destroy
             put :update, id: destroy_id, format: :json, data: { "first_name" => "JonBoy"}
-            response.response_code.should  == 200
-            json["status"].should == 0
-            json["data"].should   == "App user not found - #{destroy_id}"
+            response.response_code.should  == 404
         end
 
         it "should require a update hash" do

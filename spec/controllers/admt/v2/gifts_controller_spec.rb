@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Admt::V2::GiftsController do
 
     before(:each) do
-        Gift.delete_all
+        #Gift.delete_all
 
         unless admin_user = AdminUser.find_by_remember_token("Token")
             FactoryGirl.create(:admin_user, remember_token: "Token")

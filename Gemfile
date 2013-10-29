@@ -29,6 +29,7 @@ group :development, :test do
   gem "factory_girl"
   gem "yajl-ruby"
   gem 'resque_spec'
+  gem 'webmock'
 end
 
 # Gems used only for assets and not required

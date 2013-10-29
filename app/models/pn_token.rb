@@ -6,7 +6,7 @@ class PnToken < ActiveRecord::Base
     after_create :register
 
     validates :pn_token, uniqueness: true
-    validates_presence_of :user_id
+    validates_presence_of :user_id, :pn_token
 
     def pn_token
         token = super
@@ -29,9 +29,7 @@ class PnToken < ActiveRecord::Base
 private
 
     def register
-        #unless Rails.env.test?
-            Resque.enqueue(RegisterPushJob, self.id)
-        #end
+        Resque.enqueue(RegisterPushJob, self.id)
     end
 
 

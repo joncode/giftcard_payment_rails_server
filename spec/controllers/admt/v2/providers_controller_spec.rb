@@ -3,13 +3,13 @@ require 'spec_helper'
 describe Admt::V2::ProvidersController do
 
     before(:each) do
-        Provider.delete_all
+        #Provider.delete_all
 
          # should require valid admin credentials in every spec
         FactoryGirl.create(:admin_user, remember_token: "Token")
         request.env["HTTP_TKN"] = "Token"
     end
-    
+
     describe "#deactivate" do
 
         it "should not allow unauthenticated access" do
