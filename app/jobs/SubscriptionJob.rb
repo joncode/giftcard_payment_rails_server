@@ -16,12 +16,18 @@ private
     def add_to_mailchimp user_social
         user = user_social.user
         mcl = MailchimpList.new(user_social.identifier, user.first_name, user.last_name)
-        mcl.subscribe
+        response = mcl.subscribe
+        if response["email"].present?
+            UserSocial.find(user_social.id).update_attributes(subscribed_bool: true, subscribed_resp: response)
+        end
     end
 
     def remove_from_mailchimp user_social
         mcl = MailchimpList.new(user_social.identifier)
-        mcl.unsubscribe
+        response = mcl.unsubscribe
+        if response["complete"].present? && response["complete"] == true
+            UserSocial.find(user_social.id).update_attribute(:subscribed, false)
+        end
     end
 
 end
