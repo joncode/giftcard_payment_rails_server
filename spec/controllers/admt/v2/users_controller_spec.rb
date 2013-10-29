@@ -34,6 +34,12 @@ describe Admt::V2::UsersController do
             response.response_code.should == 200
         end
 
+        it "should not update attributes that are not allowed or dont exist" do
+            hsh = { "house" => "chill" }
+            put :update, id: user.id, format: :json, data: hsh
+            response.response_code.should == 400
+        end
+
         it "should return success msg when success" do
             put :update, id: user.id, format: :json, data: { "first_name" => "Steve"}
             json["status"].should == 1
@@ -59,18 +65,11 @@ describe Admt::V2::UsersController do
                 new_user.send(type_of).should == value
             end
         end
-
-        it "should not update attributes that are not allowed or dont exist" do
-            hsh = { "house" => "chill" }
-            put :update, id: user.id, format: :json, data: hsh
-            response.response_code.should == 400
-        end
-
     end
 
     describe :deactivate do
 
-        it_should_behave_like("token authenticated", :put, :deactivate, id: 1)
+        it_should_behave_like("token authenticated", :post, :deactivate, id: 1)
 
         it "should permanent deactivate user " do
             user = FactoryGirl.create(:user)

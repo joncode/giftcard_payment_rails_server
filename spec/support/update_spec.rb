@@ -1,23 +1,10 @@
-shared_examples_for "update route" do
+shared_examples_for "sanitize update" do |verb, route, params|
 
-    describe :update do | hsh |
-
-        context "authorization" do
-
-          it "should not allow unauthenticated access" do
-              request.env["HTTP_TKN"] = "No_Entrance"
-              put :update, id: 1, format: :json
-              response.response_code.should == 401
-          end
-
-        end
-
-        let(:user) { FactoryGirl.create(:user) }
-
-        it "should require a valid user_id" do
+        it "should require a valid id" do
             destroy_id = user.id
             user.destroy
             put :update, id: destroy_id, format: :json, data: { "first_name" => "JonBoy"}
+            send(verb, route)
             response.response_code.should  == 404
         end
 
@@ -30,32 +17,6 @@ shared_examples_for "update route" do
             response.response_code.should == 400
             put :update, id: user.id, format: :json, data: { "first_name" => "Steve"}
             response.response_code.should == 200
-        end
-
-        it "should return success msg when success" do
-            put :update, id: user.id, format: :json, data: { "first_name" => "Steve"}
-            json["status"].should == 1
-            json["data"].should   == "User #{user.id} updated"
-        end
-
-        it "should return validation errors" do
-            put :update, id: user.id, format: :json, data: { "email" => "" }
-            json["status"].should == 0
-            json["data"].class.should   == Hash
-        end
-
-        {
-            first_name: "Ray",
-            last_name:  "Davies",
-            email: "ray@davies.com",
-            phone: "5877437859"
-        }.stringify_keys.each do |type_of, value|
-
-            it "should update the user #{type_of} in database" do
-                put :update, id: user.id, format: :json, data: { type_of => value }
-                new_user = User.last
-                new_user.send(type_of).should == value
-            end
         end
 
         it "should not update attributes that are not allowed or dont exist" do
