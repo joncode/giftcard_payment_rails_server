@@ -31,9 +31,7 @@ private
     def register
         Resque.enqueue(RegisterPushJob, self.id)
     end
-
-
-
+    
 end
 # == Schema Information
 #
