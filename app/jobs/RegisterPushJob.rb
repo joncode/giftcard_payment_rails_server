@@ -6,7 +6,7 @@ class RegisterPushJob
         pn_token    = PnToken.find pn_token_id
         user_alias  = pn_token.user.ua_alias
         puts "registering PN Token for #{pn_token.user.name}"
-        Urbanairship.register_device(pn_token, :alias => user_alias )
+        Urbanairship.register_device(pn_token.pn_token, :alias => user_alias )
     end
 
 end
