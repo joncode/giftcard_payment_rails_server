@@ -12,12 +12,8 @@ describe Admt::V2::ProvidersController do
 
     describe "#deactivate" do
 
-        it "should not allow unauthenticated access" do
-            request.env["HTTP_TKN"] = "No_Entrance"
-            put :deactivate, id: 1, format: :json
-            response.response_code.should == 401
-        end
-
+        it_should_behave_like("token authenticated", :put, :deactivate, id: 1)
+        
         it "should deactivate 'live' provider" do
             merchant  = FactoryGirl.create(:merchant)
             provider = FactoryGirl.create(:live, merchant_id: merchant.id )
@@ -55,11 +51,7 @@ describe Admt::V2::ProvidersController do
 
     describe "#update_mode" do
 
-        it "should not allow unauthenticated access" do
-            request.env["HTTP_TKN"] = "No_Entrance"
-            put :update_mode, id: 1, format: :json
-            response.response_code.should == 401
-        end
+        it_should_behave_like("token authenticated", :put, :update_mode, id: 1)
 
         it "should make 'paused' provider 'coming soon'" do
             merchant  = FactoryGirl.create(:merchant)
