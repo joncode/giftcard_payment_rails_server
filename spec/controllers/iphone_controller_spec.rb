@@ -57,9 +57,24 @@ describe IphoneController do
 
         it "should send fail msgs when error" do
             params_data = "{\"iphone_photo\" : null }"
-            post :update_photo, data: params_data,format: :json, token: user.remember_token
+            post :update_photo, data: params_data, format: :json, token: user.remember_token
             response.response_code.should == 200
             json["error"].should   == "Photo upload failed, please check your connetion and try again"
+        end
+
+    end
+
+    describe :create_account do
+
+        it "should hit urban airship endpoint with corect token and alias" do
+            User.any_instance.stub(:ua_alias).and_return("fake_ua")
+            User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKEN")
+            pn_token = "FAKE_PN_TOKEN"
+            ua_alias = "fake_ua"
+            Urbanairship.should_receive(:register_device).with( pn_token, { :alias => ua_alias})
+            user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+            post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: pn_token
+            ResqueSpec.perform_all(:push)
         end
 
     end

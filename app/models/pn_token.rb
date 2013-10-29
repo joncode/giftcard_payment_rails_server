@@ -3,7 +3,7 @@ class PnToken < ActiveRecord::Base
 
     belongs_to :user
 
-    after_save :register
+    after_create :register
 
     validates :pn_token, uniqueness: true
     validates_presence_of :user_id
@@ -29,9 +29,9 @@ class PnToken < ActiveRecord::Base
 private
 
     def register
-        unless Rails.env.test?
+        #unless Rails.env.test?
             Resque.enqueue(RegisterPushJob, self.id)
-        end
+        #end
     end
 
 
