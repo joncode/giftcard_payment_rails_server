@@ -17,6 +17,10 @@ class PnToken < ActiveRecord::Base
         token.gsub('<','').gsub('>','').gsub(' ','')
     end
 
+    def self.convert_token(token)
+        token.gsub('<','').gsub('>','').gsub(' ','')
+    end
+
     def ua_alias
             # move this to pn_token.rb
         adj_user_id = self.user_id + NUMBER_ID
