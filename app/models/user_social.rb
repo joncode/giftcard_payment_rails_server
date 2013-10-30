@@ -1,5 +1,5 @@
 class UserSocial < ActiveRecord::Base
-    attr_accessible :identifier, :type_of, :user_id, :subscribed_bool, :subscribed_resp
+    attr_accessible :identifier, :type_of, :user_id, :subscribed
 
     belongs_to :user
 
@@ -24,7 +24,7 @@ class UserSocial < ActiveRecord::Base
 private
 
     def subscribe_mailchimp
-        if Rails.env.production? || Rails.env.staging?
+        unless Rails.env.development?
         	if self.type_of  == "email"
                 Resque.enqueue(SubscriptionJob, self.id)
         	end
@@ -32,7 +32,7 @@ private
     end
 
     def unsubscribe_mailchimp
-        if Rails.env.production? || Rails.env.staging?
+        unless Rails.env.development?
             if self.type_of  == "email" && !self.active
                 Resque.enqueue(SubscriptionJob, self.id)
             end

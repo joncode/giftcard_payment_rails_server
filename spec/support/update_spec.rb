@@ -25,6 +25,5 @@ shared_examples_for "sanitize update" do |verb, route, params|
             response.response_code.should == 400
         end
 
-    end
 
 end

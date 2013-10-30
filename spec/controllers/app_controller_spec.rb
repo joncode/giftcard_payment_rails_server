@@ -154,6 +154,19 @@ describe AppController do
             json["success"].class.should  == Hash
         end
 
+
+        it "should hit mailchimp with the correct email" do
+            puts user.email
+            MailchimpList.any_instance.stub(:subscribe).and_return({"email" => "ray@davies.com"})
+            run_delayed_jobs
+            MailchimpList.should_receive(:new).with("ray@davies.com", "Jimmy", "Basic")
+            post :update_user, format: :json, token: user.remember_token, data: { "email" => "ray@davies.com" }
+            new_user = user.reload
+            new_user.email.should == "ray@davies.com"
+        end        
+
+
+
     end
 
 end
