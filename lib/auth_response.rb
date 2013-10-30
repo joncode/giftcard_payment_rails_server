@@ -3,15 +3,20 @@ class AuthResponse
     attr_reader :fields
 
     def initialize resp_json=nil
-        resp_json = fake_resp_json if resp_json.nil?
+        resp_json ||= fake_resp_json
         @fields = JSON.parse resp_json
     end
 
     def transaction_id
         @fields["transaction_id"]
     end
+
     def response_code
         @fields["response_code"]
+    end
+
+    def response_subcode
+         @fields["response_subcode"]
     end
 
     def response_reason_text

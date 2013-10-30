@@ -40,7 +40,7 @@ class Admt::V2::GiftsController < JsonController
                 success "Please contact tech support - Gift #{gift.id} is NOT Cancelled in APP ONLY"
             end
         else
-            fail resp.reason_text
+            fail resp
         end
         respond
     end

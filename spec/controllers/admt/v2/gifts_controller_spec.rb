@@ -92,10 +92,19 @@ describe Admt::V2::GiftsController do
 
 
             it "should set the gift 'pay_stat' to 'refunded' and not change the gift status" do
+                 AuthorizeNet::AIM::Transaction.any_instance.stub(:void).and_return(AuthResponse.new)
                 post :refund, id: gift.id, format: :json
                 new_gift = Gift.find gift.id
                 new_gift.pay_stat.should == "refunded"
                 new_gift.status.should   == gift.status
+            end
+
+            it "should not 500 when sending back 'reason text' for 'A valid referenced transaction ID is required.'" do
+                auth_response_json = "{\"response_code\":\"3\",\"response_subcode\":\"2\",\"response_reason_code\":\"33\",\"response_reason_text\":\"A valid referenced transaction ID is required.\",\"authorization_code\":\"\",\"avs_response\":\"P\",\"transaction_id\":\"0\",\"invoice_number\":\"\",\"description\":\"\",\"amount\":0.0,\"method\":\"CC\",\"transaction_type\":\"void\",\"customer_id\":\"\",\"first_name\":\"\",\"last_name\":\"\",\"company\":\"\",\"address\":\"\",\"city\":\"\",\"state\":\"\",\"zip_code\":\"\",\"country\":\"\",\"phone\":\"\",\"fax\":\"\",\"email_address\":\"\",\"ship_to_first_name\":\"\",\"ship_to_last_name\":\"\",\"ship_to_company\":\"\",\"ship_to_address\":\"\",\"ship_to_city\":\"\",\"ship_to_state\":\"\",\"ship_to_zip_code\":\"\",\"ship_to_country\":\"\",\"tax\":0.0,\"duty\":0.0,\"freight\":0.0,\"tax_exempt\":\"\",\"purchase_order_number\":\"\",\"md5_hash\":\"87C72AD0D50F84E05E8E833C16D41192\"}"
+                AuthorizeNet::AIM::Transaction.any_instance.stub(:void).and_return(AuthResponse.new(auth_response_json))
+                post :refund, id: gift.id, format: :json
+                json["status"].should == 0
+                json["data"].should   == "A valid referenced transaction ID is required."
             end
 
         end
@@ -110,16 +119,27 @@ describe Admt::V2::GiftsController do
             let(:gift) { FactoryGirl.create(:gift_no_association, pay_stat: 'charged', status: 'open') }
 
             it "should set the gift 'pay_stat' to 'refunded' " do
+                AuthorizeNet::AIM::Transaction.any_instance.stub(:void).and_return(AuthResponse.new)
                 post :refund_cancel, id: gift.id, format: :json
                 new_gift = Gift.find gift.id
                 new_gift.pay_stat.should == "refunded"
                 new_gift.status.should   == 'cancel'
             end
 
+            it "should not 500 when sending back 'reason text' for 'A valid referenced transaction ID is required.'" do
+                auth_response_json = "{\"response_code\":\"3\",\"response_subcode\":\"2\",\"response_reason_code\":\"33\",\"response_reason_text\":\"A valid referenced transaction ID is required.\",\"authorization_code\":\"\",\"avs_response\":\"P\",\"transaction_id\":\"0\",\"invoice_number\":\"\",\"description\":\"\",\"amount\":0.0,\"method\":\"CC\",\"transaction_type\":\"void\",\"customer_id\":\"\",\"first_name\":\"\",\"last_name\":\"\",\"company\":\"\",\"address\":\"\",\"city\":\"\",\"state\":\"\",\"zip_code\":\"\",\"country\":\"\",\"phone\":\"\",\"fax\":\"\",\"email_address\":\"\",\"ship_to_first_name\":\"\",\"ship_to_last_name\":\"\",\"ship_to_company\":\"\",\"ship_to_address\":\"\",\"ship_to_city\":\"\",\"ship_to_state\":\"\",\"ship_to_zip_code\":\"\",\"ship_to_country\":\"\",\"tax\":0.0,\"duty\":0.0,\"freight\":0.0,\"tax_exempt\":\"\",\"purchase_order_number\":\"\",\"md5_hash\":\"87C72AD0D50F84E05E8E833C16D41192\"}"
+                AuthorizeNet::AIM::Transaction.any_instance.stub(:void).and_return(AuthResponse.new(auth_response_json))
+                post :refund_cancel, id: gift.id, format: :json
+                json["status"].should == 0
+                json["data"].should   == "A valid referenced transaction ID is required."
+            end
+
         end
     end
 
 end
+
+
 
 
 

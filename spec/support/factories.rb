@@ -134,6 +134,23 @@ FactoryGirl.define do
         credit_card     4567890
         shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
         sale            { FactoryGirl.create(:sale)}
+
+        factory :gift_no_association_wtih_card do
+            credit_card { FactoryGirl.create(:card)}
+        end
+    end
+
+    factory :card do
+        csv   "4343"
+        last_four "6771"
+        month "02"
+        brand "visa"
+        name   "Plain Joseph"
+        nickname "Biz"
+        user_id   1
+        year  "2017"
+        number "4388575294006771"
+        passphrase  "Oh yeah"
     end
 
     factory :sale do

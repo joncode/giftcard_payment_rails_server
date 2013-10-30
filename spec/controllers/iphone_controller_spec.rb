@@ -1,5 +1,5 @@
 require 'spec_helper'
-    
+
 describe IphoneController do
 
     describe :update_photo do
@@ -66,12 +66,22 @@ describe IphoneController do
 
     describe :create_account do
 
+        context "authorization" do
+
+            it "should not allow unauthenticated access" do
+                post :update_photo, format: :json, token: "No Way Entrance"
+                response.response_code.should == 200
+                json["error"].should  == "Data error, please log out and log back to reset system"
+            end
+
+        end
+
         it "should hit urban airship endpoint with corect token and alias" do
             User.any_instance.stub(:ua_alias).and_return("fake_ua")
             User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKEN")
             pn_token = "FAKE_PN_TOKEN"
             ua_alias = "fake_ua"
-            Urbanairship.should_receive(:register_device).with( pn_token, { :alias => ua_alias})
+            Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias})
             user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: pn_token
             run_delayed_jobs # ResqueSpec.perform_all(:push)
