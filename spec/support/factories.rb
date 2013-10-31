@@ -62,7 +62,7 @@ FactoryGirl.define do
         address     "123 happy st"
         zip         "11211"
         state       "NY"
-        sequence(:token)   { |n| "token#{n}" }
+        sequence(:token)   { |n| "tokens#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
         sequence(:phone) do
