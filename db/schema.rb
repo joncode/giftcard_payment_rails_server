@@ -241,18 +241,6 @@ ActiveRecord::Schema.define(:version => 20131031205228) do
   add_index "invites", ["invite_tkn"], :name => "index_invites_on_invite_tkn"
   add_index "invites", ["merchant_id"], :name => "index_invites_on_merchant_id"
 
-  create_table "items", :force => true do |t|
-    t.string  "item_name",   :limit => 50, :null => false
-    t.string  "detail"
-    t.text    "description"
-    t.integer "category",                  :null => false
-    t.string  "proof"
-    t.string  "type_of"
-    t.string  "photo"
-    t.integer "brand_id"
-    t.integer "supplier_id"
-  end
-
   create_table "items_menus", :id => false, :force => true do |t|
     t.integer "item_id"
     t.integer "menu_id"

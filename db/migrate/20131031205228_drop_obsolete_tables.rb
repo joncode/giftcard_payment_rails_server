@@ -2,6 +2,7 @@ class DropObsoleteTables < ActiveRecord::Migration
   def up
   	drop_table :locations
   	drop_table :menus
+  	drop_table :items
   end
 
   def down
@@ -37,5 +38,17 @@ class DropObsoleteTables < ActiveRecord::Migration
 	    t.string   "section"
 	    t.boolean  "active",                    :default => true
 	  end
+
+	create_table "items", :force => true do |t|
+	    t.string  "item_name",   :limit => 50, :null => false
+	    t.string  "detail"
+	    t.text    "description"
+	    t.integer "category",                  :null => false
+	    t.string  "proof"
+	    t.string  "type_of"
+	    t.string  "photo"
+	    t.integer "brand_id"
+	    t.integer "supplier_id"
+	end
   end
 end
