@@ -1,6 +1,7 @@
 class DropObsoleteTables < ActiveRecord::Migration
   def up
   	drop_table :locations
+  	drop_table :menus
   end
 
   def down
@@ -21,6 +22,20 @@ class DropObsoleteTables < ActiveRecord::Migration
 	    t.string   "zip"
 	    t.string   "checkin_id"
 	    t.string   "message"
+	  end
+
+	create_table "menus", :force => true do |t|
+	    t.integer  "provider_id",                                 :null => false
+	    t.integer  "item_id",                                     :null => false
+	    t.string   "price",       :limit => 20
+	    t.integer  "position",    :limit => 8
+	    t.datetime "created_at",                                  :null => false
+	    t.datetime "updated_at",                                  :null => false
+	    t.string   "item_name"
+	    t.string   "photo"
+	    t.string   "description"
+	    t.string   "section"
+	    t.boolean  "active",                    :default => true
 	  end
   end
 end
