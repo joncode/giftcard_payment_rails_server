@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131029201939) do
+ActiveRecord::Schema.define(:version => 20131031205228) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -256,25 +256,6 @@ ActiveRecord::Schema.define(:version => 20131029201939) do
   create_table "items_menus", :id => false, :force => true do |t|
     t.integer "item_id"
     t.integer "menu_id"
-  end
-
-  create_table "locations", :force => true do |t|
-    t.float    "latitude"
-    t.float    "longitude"
-    t.integer  "provider_id"
-    t.integer  "user_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.string   "vendor_id"
-    t.string   "vendor_type"
-    t.string   "name"
-    t.string   "street"
-    t.string   "city"
-    t.string   "state"
-    t.string   "country"
-    t.string   "zip"
-    t.string   "checkin_id"
-    t.string   "message"
   end
 
   create_table "menu_items", :force => true do |t|
