@@ -20,7 +20,7 @@ module CommonUtils
 				puts "HERE IS THE HEADER TOKEN #{request.headers["HTTP_TKN"]}"
 			end
 		end
-		
+
 	end
 
 
@@ -54,7 +54,7 @@ module CommonUtils
 		if @app_response
 			log_text = marshal_copy(@app_response)
 			resp 	 = "#{filter_params(log_text)}"
-			v 		 = "response: #{truncate(resp ,length: 600)}"
+			v 		 = "\nresponse: #{truncate(resp ,length: 600)}\n"
 			v.gsub!('&quot;', '\'')
 			v.gsub!('&gt;', '>')
 			puts v
