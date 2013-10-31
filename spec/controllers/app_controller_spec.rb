@@ -153,20 +153,28 @@ describe AppController do
             post :update_user, format: :json, token: user.remember_token, data: hsh
             json["success"].class.should  == Hash
         end
+    end
 
 
-        it "should hit mailchimp with the correct email" do
-            puts user.email
-            MailchimpList.any_instance.stub(:subscribe).and_return({"email" => "ray@davies.com"})
+    describe "mailchimp resque" do
+
+        before do
+            ResqueSpec.reset!
+            @user = FactoryGirl.create :user, {first_name:"Bob", last_name:"Barker", email:"first@email.com"}
+            MailchimpList.any_instance.stub(:subscribe).and_return({"email" => @user.email})
             run_delayed_jobs
-            MailchimpList.should_receive(:new).with("ray@davies.com", "Jimmy", "Basic")
-            post :update_user, format: :json, token: user.remember_token, data: { "email" => "ray@davies.com" }
-            new_user = user.reload
-            new_user.email.should == "ray@davies.com"
+        end
+
+        it "should hit subscription job with correct user social id" do
+            last_us_id = UserSocial.last.id
+            SubscriptionJob.should_receive(:perform).with(last_us_id + 1)
+            post :update_user, format: :json, token: @user.remember_token, data: { "email" => "second@email.com" }
+            run_delayed_jobs
         end        
 
-
-
+        describe "should send email correctly" do
+            it "see subscription_job_spec"
+        end
     end
 
 end

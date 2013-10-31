@@ -15,7 +15,6 @@ private
 
     def self.add_to_mailchimp user_social
         user = user_social.user
-        # binding.pry
         mcl = MailchimpList.new(user_social.identifier, user.first_name, user.last_name)
         response = mcl.subscribe
         if response["email"].present?

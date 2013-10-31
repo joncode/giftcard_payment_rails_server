@@ -22,7 +22,6 @@ class MailchimpList
 		rescue Mailchimp::ListDoesNotExistError
 			return "The list could not be found"
 		rescue Mailchimp::Error => ex
-			puts "in Mailchimp::Error"
 			if ex.message
 				return ex.message
 			else
