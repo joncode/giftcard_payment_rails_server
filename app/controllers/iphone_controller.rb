@@ -91,7 +91,7 @@ class IphoneController < AppController
 				#response["server"]  = user.providers_to_iphone
 				response["user"]    = user.serialize(true)
 			else
-				response[resp_key]  = "#{msg} not in Drinkboard database "
+				response[resp_key]  = "#{msg} not in Drinkboard database"
 			end
 		end
 
