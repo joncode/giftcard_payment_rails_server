@@ -3,6 +3,7 @@ class DropObsoleteTables < ActiveRecord::Migration
   	drop_table :locations
   	drop_table :menus
   	drop_table :items
+  	drop_table :microposts
   end
 
   def down
@@ -50,5 +51,13 @@ class DropObsoleteTables < ActiveRecord::Migration
 	    t.integer "brand_id"
 	    t.integer "supplier_id"
 	end
+
+	create_table "microposts", :force => true do |t|
+	    t.string   "content",    :null => false
+	    t.integer  "user_id",    :null => false
+	    t.datetime "created_at", :null => false
+	    t.datetime "updated_at", :null => false
+	end
+
   end
 end

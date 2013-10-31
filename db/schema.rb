@@ -318,13 +318,6 @@ ActiveRecord::Schema.define(:version => 20131031205228) do
 
   add_index "merchants", ["token"], :name => "index_merchants_on_token"
 
-  create_table "microposts", :force => true do |t|
-    t.string   "content",    :null => false
-    t.integer  "user_id",    :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "mock_payables", :force => true do |t|
     t.decimal  "amount"
     t.integer  "status",            :default => 0
