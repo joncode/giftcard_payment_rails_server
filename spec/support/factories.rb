@@ -124,6 +124,13 @@ FactoryGirl.define do
 
     end
 
+    factory :gift_item do |gi|
+        gi.menu_id    1
+        gi.price      "10"
+        gi.quantity   1
+        gi.name       "Beer"
+    end
+
     factory :gift_no_association, :class => 'Gift' do
         giver_id           10
         giver_name         "Plain Jane"

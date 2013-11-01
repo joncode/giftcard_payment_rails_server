@@ -66,7 +66,7 @@ module Emailer
 							{"name" => "gift_total", "content" => gift_total},
 							{"name" => "processing_fee", "content" => processing_fee},
 							{"name" => "grand_total", "content" => grand_total}]
-		subject          = "Your purchase is complete"
+		subject          = "Your gift purchase is complete"
 		email            = gift.giver.email
 		name             = giver_name
 		link             = nil
@@ -145,7 +145,7 @@ private
 	end
 
 	def request_mandrill_with_template(template_name, template_content, message)
-		unless Rails.env.test? || Rails.env.development?
+		unless Rails.env.development?
 			puts "``````````````````````````````````````````````"
 			puts "Request Mandrill with #{template_name} #{template_content} #{message}"
 			require 'mandrill'
