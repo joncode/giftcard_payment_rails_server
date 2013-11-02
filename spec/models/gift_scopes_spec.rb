@@ -29,19 +29,27 @@ describe GiftScopes do
         end
     end
 
-    it "should get all incomplete / open / notified gifts for a provider" do
-        gifts = Gift.get_provider(@provider)
-        incomplete  = Gift.where(status: 'incomplete')
-        open        = Gift.where(status: 'open')
-        notified    = Gift.where(status: 'notified')
-        total       = incomplete + open + notified
-        gifts.count.should == total.count
+    describe :get_provider do
+
+        it "should get all incomplete / open / notified gifts for a provider" do
+            gifts = Gift.get_provider(@provider)
+            incomplete  = Gift.where(status: 'incomplete')
+            open        = Gift.where(status: 'open')
+            notified    = Gift.where(status: 'notified')
+            total       = incomplete + open + notified
+            gifts.count.should == total.count
+        end
+
     end
 
-    it "should get all redeemed gifts for a provider" do
-        gifts    = Gift.get_history_provider(@provider)
-        redeemed = Order.all
-        gifts.count.should == redeemed.count
+    describe :get_history_provider do
+
+        it "should get all redeemed gifts for a provider" do
+            gifts    = Gift.get_history_provider(@provider)
+            redeemed = Order.all
+            gifts.count.should == redeemed.count
+        end
+
     end
 
     # it "should get all redeemed gifts for a provider given a date range" do

@@ -42,14 +42,11 @@ class Sale < ActiveRecord::Base
 
     def void_sale gift=nil
         gift      = self.gift if gift.nil?
-        if  Rails.env.test?
-            auth_obj  = AuthTransaction.new
-            @response = AuthResponse.new
-        else
-            auth_obj  = authorize_net_aim_transaction
-            @response = auth_obj.void(self.transaction_id)
-        end
-        puts "HERE IS THE VOID ReSPONSE #{@response.inspect}"
+
+        auth_obj  = authorize_net_aim_transaction
+        @response = auth_obj.void(self.transaction_id)
+        
+        puts ":void_sale :HERE IS THE VOID ReSPONSE #{@response.inspect}"
 
         if @response.response_code == "1"
             # THIS SHOLD CHECK RESPONSE FROM AUTH>NET AND TELL U IF VOID OR REFUND
