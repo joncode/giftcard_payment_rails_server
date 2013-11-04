@@ -173,6 +173,7 @@ class JsonController < ActionController::Base
 
     def authenticate_customer
         token         = request.headers["HTTP_TKN"]
+        puts "Here is the token received ----> #{token}"
         @current_user = User.app_authenticate(token)
         if @current_user
             puts @current_user.name
