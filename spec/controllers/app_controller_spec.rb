@@ -5,6 +5,7 @@ describe AppController do
     before(:all) do
         User.delete_all
         Gift.delete_all
+        Provider.delete_all
     end
 
     describe "#relays" do
@@ -62,6 +63,43 @@ describe AppController do
             end
             post :relays, format: :json, token: receiver.remember_token
             json["success"]["badge"].should == (@number - total_changed)
+        end
+
+        context "scope out unpaid gifts" do
+
+            it "should not return :pay_stat => 'declined' gifts" do
+                gifts = Gift.all
+                gifts.each do |gift|
+                    gift.update_attribute(:pay_stat ,"declined" )
+                end
+                last_gift = gifts.last
+                last_gift.update_attribute(:pay_stat, 'charged')
+                post :relays, format: :json, token: receiver.remember_token
+                json["success"]["badge"].should == 1
+            end
+
+            it "should not return :pay_stat => 'unpaid' gifts" do
+                gifts = Gift.all
+                gifts.each do |gift|
+                    gift.update_attribute(:pay_stat ,"unpaid" )
+                end
+                last_gift = gifts.last
+                last_gift.update_attribute(:pay_stat, 'charged')
+                post :relays, format: :json, token: receiver.remember_token
+                json["success"]["badge"].should == 1
+            end
+
+            it "should not return :pay_stat => 'duplicate' gifts" do
+                gifts = Gift.all
+                gifts.each do |gift|
+                    gift.update_attribute(:pay_stat ,"duplicate" )
+                end
+                last_gift = gifts.last
+                last_gift.update_attribute(:pay_stat, 'charged')
+                post :relays, format: :json, token: receiver.remember_token
+                json["success"]["badge"].should == 1
+            end
+
         end
 
     end

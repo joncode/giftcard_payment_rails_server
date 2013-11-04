@@ -3,11 +3,15 @@ class SubscriptionJob
     @queue = :subscription
 
     def self.perform(user_social_id)
-        user_social    = UserSocial.find user_social_id
-        if user_social.active
-            self.add_to_mailchimp user_social
+        user_social = UserSocial.where(id: user_social_id)
+        if  user_social
+            if user_social.active
+                self.add_to_mailchimp user_social
+            else
+                self.remove_from_mailchimp user_social
+            end
         else
-            self.remove_from_mailchimp user_social
+            puts "Unable to find user social in subscription job via ID = #{user_social_id}"
         end
     end
 
