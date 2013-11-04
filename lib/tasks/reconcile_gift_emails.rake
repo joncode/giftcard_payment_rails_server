@@ -29,7 +29,7 @@ namespace :email do
 
 		puts "----------------------------------------------------------------------------------"
 		puts "----------------------------------------------------------------------------------"
-		puts "------------------------ RAKE EMAIL:GIFT_EMAILS_COUNT ---------------------------"
+		puts "---------- RAKE EMAIL:GIFT_EMAILS_COUNT SINCE #{start_date} ----------"
 		puts "----------------------------------------------------------------------------------"
 		created_gifts.all.each do |g|
 			unless notify_emails.include? g.receiver_email
