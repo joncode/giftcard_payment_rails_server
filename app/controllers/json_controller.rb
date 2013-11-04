@@ -171,6 +171,15 @@ class JsonController < ActionController::Base
         end
     end
 
+    def authenticate_customer
+        token         = request.headers["HTTP_TKN"]
+        @current_user = User.app_authenticate(token)
+        if @current_user
+            puts @current_user.name
+        else
+            head :unauthorized
+        end
+    end
 
 #######
 

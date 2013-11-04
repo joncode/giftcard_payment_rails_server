@@ -1,5 +1,6 @@
 class Mdot::V2::GiftsController < JsonController
-
+    before_filter :authenticate_customer
+    
     def index
         respond
     end
