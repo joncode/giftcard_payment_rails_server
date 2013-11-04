@@ -11,7 +11,7 @@ class MailchimpList
 		@first_name = first_name
 		@last_name 	= last_name
 	end
-    
+
 	def subscribe
 		begin
 			resp = self.mc.lists.subscribe(self.list_id, {'email' => self.email}, { 'fname' => self.first_name, 'lname' => self.last_name })
@@ -43,11 +43,7 @@ class MailchimpList
             end
         end
 	end
-
-
-
-
-
+    
 	def member_info
 		self.mc.lists.member_info(self.list_id, {'email' => self.email})
 	end
