@@ -14,7 +14,7 @@ describe Admt::V2::BrandsController do
 
     describe "#create" do
 
-        it_should_behave_like("token authenticated", :post, :create, id: 1)
+        it_should_behave_like("token authenticated", :post, :create)
 
         it "should create new brand" do
             new_brand_hsh = { "name" => "Starwood" , "website" => "www.starwood.com" , "description" => "AMAZING!", "photo" => "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}

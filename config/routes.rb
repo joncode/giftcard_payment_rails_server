@@ -56,43 +56,40 @@ Drinkboard::Application.routes.draw do
   namespace :mdot, defaults: { format: 'json' } do
     namespace :v2 do
 
-      resources :sessions,    only: [:create] do
-        post :login_social
+      resources :sessions,  only: [:create] do
+        collection do
+          post :login_social
+        end
       end
-      resources :users,       only: [:index, :create, :update] do
-        member do
-          post :reset_password
+      resources :users,     only: [:index, :create, :update] do
+        collection do
+          put :reset_password
         end
-        resources :cards,     only: [:index, :create, :delete]
-        resources :settings,  only: [:show, :update]
-        resources :gifts,     only: [:index, :create] do
-          resources :redeems, only: [:create]
-          resources :orders,  only: [:create]
-          member do
-            post :regift
-            get  :archive
-          end
-          collection do
-            get :badge  #update or relay
-            get :transactions
-          end
-        end
-        resources :photos,     only: [:update] do
-          member do
-            get  :short_url
-          end
-        end
-        resources :questions, only: [:index, :update]
       end
+      resources :brands,     only: [:index]
+      resources :cities,     only: [:index]
+      resources :cards,     only: [:index, :create, :destroy]
 
-      resources :providers,   only: [:show] do
-        resources :menus,     only: [:show]
+      resources :settings,  only: [:index, :update]
+      resources :gifts,     only: [:index, :create] do
+        member do
+          post :regift
+          post :open
+          post :redeem
+        end
+        collection do
+          get :archive
+          get :badge  #update or relay
+          get :transactions
+        end
       end
-      resources :brands,      only: [:index] do
-        resources :providers, only: [:index]
-      end
-      resources :cities,      only: [:index] do
-        resources :providers, only: [:index]
+      resources :photos,     only: [:update]
+      resources :questions,  only: [:index, :update]
+
+      resources :providers,  only: [:show, :index] do
+        member do
+          get :menu
+        end
       end
 
     end
