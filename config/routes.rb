@@ -66,8 +66,16 @@ Drinkboard::Application.routes.draw do
           put :reset_password
         end
       end
-      resources :brands,     only: [:index]
-      resources :cities,     only: [:index]
+      resources :brands,     only: [:index] do
+        member do
+          get :merchants
+        end
+      end
+      resources :cities,     only: [:index] do
+        member do
+          get :merchants
+        end
+      end
       resources :cards,     only: [:index, :create, :destroy]
 
       resources :settings,  only: [:index, :update]
@@ -86,7 +94,7 @@ Drinkboard::Application.routes.draw do
       resources :photos,     only: [:update]
       resources :questions,  only: [:index, :update]
 
-      resources :providers,  only: [:show, :index] do
+      resources :providers,  only: [:show] do
         member do
           get :menu
         end

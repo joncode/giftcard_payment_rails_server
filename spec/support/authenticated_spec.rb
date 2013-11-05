@@ -9,14 +9,5 @@ shared_examples_for "token authenticated" do |verb, route, params|
 
 end
 
-shared_examples_for "correct token allowed" do |verb, route, params, token|
-
-  it "should allow authenticated access via header token" do
-      request.env["HTTP_TKN"] = token
-      puts "----------- #{verb} | #{route} | #{params} | #{token} ------------"
-      send(verb,route, params, format: :json)
-      response.response_code.should  == 200
-  end
-
-end
+  
 

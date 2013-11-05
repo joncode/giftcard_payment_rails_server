@@ -12,14 +12,12 @@ describe Mdot::V2::SettingsController do
 
     describe :index do
         it_should_behave_like("token authenticated", :get, :index)
-        it_should_behave_like("correct token allowed", :get, :index, nil, "TokenGood")
 
     end
 
     describe :update do
         it_should_behave_like("token authenticated", :put, :update, id: 1)
-        it_should_behave_like("correct token allowed", :put, :update, {id: 1}, "TokenGood")
-
+        
     end
 
 

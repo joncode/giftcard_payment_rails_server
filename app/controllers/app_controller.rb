@@ -321,13 +321,6 @@ class AppController < JsonController
 	    end
   	end
 
-  	# def providers
-   #      providers_array = CityProvider.find_by_city(params["city"]).providers_array
-  	# 	respond_to do |format|
-   #          format.json { render json: providers_array }
-	  #   end
-  	# end
-
   	def providers_short_ph_url
 	    if  authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"

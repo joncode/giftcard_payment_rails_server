@@ -12,14 +12,12 @@ describe Mdot::V2::SessionsController do
 
     describe :create do
         it_should_behave_like("token authenticated", :post, :create)
-        it_should_behave_like("correct token allowed", :post, :create, nil, "TokenGood")
 
     end
 
     describe :login_social do
         it_should_behave_like("token authenticated", :post, :login_social)
-        it_should_behave_like("correct token allowed", :post, :login_social, nil, "TokenGood")
-
+        
     end
 
 

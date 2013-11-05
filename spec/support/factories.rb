@@ -141,15 +141,15 @@ FactoryGirl.define do
     end
 
     factory :card do
-        csv   "4343"
-        last_four "6771"
+        csv   "434"
+        last_four "6772"
         month "02"
         brand "visa"
         name   "Plain Joseph"
         nickname "Biz"
         user_id   1
         year  "2017"
-        number "4388575294006771"
+        number "4341575294006772"
         passphrase  "Oh yeah"
     end
 
@@ -195,10 +195,11 @@ FactoryGirl.define do
     end
 
     factory :brand do
-        name        "Starwood"
+        sequence(:name)    { |n| "Starwoodz#{n}" }
         website     "www.starwood.com"
         description "AMAZING!"
         photo       "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"
+        next_view   "m"
     end
 
 end

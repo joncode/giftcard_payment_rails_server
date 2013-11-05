@@ -6,9 +6,12 @@ describe AppController do
         User.delete_all
         Gift.delete_all
         Provider.delete_all
+        Brand.delete_all
     end
 
-    describe "#relays" do
+    let(:user) { FactoryGirl.create(:user) }
+
+    describe :relays do
 
         let(:giver)     { FactoryGirl.create(:giver) }
         let(:receiver)  { FactoryGirl.create(:receiver) }
@@ -104,7 +107,7 @@ describe AppController do
 
     end
 
-    describe "#drinkboard_users" do
+    describe :drinkboard_users do
 
         let(:user) { FactoryGirl.create(:user) }
         let(:deactivated) { FactoryGirl.create(:user, active: false ) }
@@ -194,4 +197,134 @@ describe AppController do
 
     end
 
+    describe :brands do
+
+        before(:all) do
+            Brand.delete_all
+            20.times do |index|
+                FactoryGirl.create(:brand, name: "Chicagos#{index}")
+            end
+            brand = Brand.first
+            brand.update_attribute(:active, false)
+        end
+
+        let(:user) { FactoryGirl.create(:user) }
+
+        it "should return a list of all active brands serialized when success" do
+            post :brands, format: :json, token: user.remember_token
+            response.response_code.should == 200
+            ary = json
+            ary.class.should == Array
+            ary.count.should == 19
+            hsh = ary.first
+            hsh.has_key?("name").should be_true
+            hsh.has_key?("next_view").should be_true
+            hsh.has_key?("brand_id").should be_true
+            hsh.has_key?("photo").should be_true
+        end
+
+    end
+
+    describe :brand_merchants do
+
+        before(:each) do
+            Brand.delete_all
+            @brand = FactoryGirl.create(:brand, name: "Green Bay Packers")
+            20.times do |index|
+                if index.even?
+                    FactoryGirl.create(:provider, brand_id: @brand.id)
+                else
+                    FactoryGirl.create(:provider, building_id: @brand.id)
+                end
+            end
+            provider = Provider.last
+            provider.update_attribute(:active, false)
+        end
+
+        it "should return a list of providers" do
+            amount  = Provider.where(active: true).count
+            keys    =  ["city", "latitude", "longitude", "name", "phone", "sales_tax", "provider_id", "photo", "full_address", "live"]
+            post :brand_merchants, format: :json, data: @brand.id, token: user.remember_token
+            response.response_code.should == 200
+            ary = json
+            ary.class.should == Array
+            ary.count.should == amount
+            hsh = ary.first
+            keys.each do |key|
+                hsh.has_key?(key).should be_true
+            end
+        end
+    end
+
+    describe :providers do
+
+        it "should return a list of all active providers serialized when success" do
+            20.times do
+                FactoryGirl.create(:provider)
+            end
+            Provider.last.update_attribute(:active, false)
+            post :providers, format: :json, token: user.remember_token
+            keys    =  ["city", "latitude", "longitude", "name", "phone", "sales_tax", "provider_id", "photo", "full_address", "live"]
+            response.response_code.should == 200
+            ary = json
+            ary.class.should == Array
+            ary.count.should == 19
+            hsh = ary.first
+            keys.each do |key|
+                hsh.has_key?(key).should be_true
+            end
+        end
+
+    end
+
+    describe :get_cards do
+
+        it "should return a list of cards for the user" do
+            4.times do
+                FactoryGirl.create(:card, user_id: user.id)
+            end
+
+            post :get_cards, format: :json, token: user.remember_token
+            response.response_code.should == 200
+            json["success"].class.should  == Array
+            json["success"].count.should  == 4
+        end
+
+        it " should return an empty array if user has no cards" do
+
+        end
+
+
+
+    end
+
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
