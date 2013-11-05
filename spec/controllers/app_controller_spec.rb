@@ -257,7 +257,6 @@ describe AppController do
     end
 
     describe :providers do
-
         it "should return a list of all active providers serialized when success" do
             20.times do
                 FactoryGirl.create(:provider)
@@ -274,7 +273,19 @@ describe AppController do
                 hsh.has_key?(key).should be_true
             end
         end
+    end
 
+    describe :get_settings do
+        it "should get the users settings and return json" do
+            post :get_settings, format: :json, token: user.remember_token
+            keys    =  ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id"]
+            response.response_code.should == 200
+            hsh = json["success"]
+            hsh.class.should == Hash
+            keys.each do |key|
+                hsh.has_key?(key).should be_true
+            end
+        end
     end
 
     describe :get_cards do
