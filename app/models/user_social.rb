@@ -32,7 +32,7 @@ private
     end
 
     def unsubscribe_mailchimp
-        if Rails.env.production? || Rails.env.staging?
+        unless Rails.env.development?
             if self.type_of  == "email" && !self.active
                 Resque.enqueue(SubscriptionJob, self.id)
             end

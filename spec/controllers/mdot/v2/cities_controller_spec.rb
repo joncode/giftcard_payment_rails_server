@@ -37,8 +37,7 @@ describe Mdot::V2::CitiesController do
     describe :merchants do
 
         it_should_behave_like("token authenticated", :get, :merchants, id: 1)
-
-
+        
         it "should return a list of all active providers serialized when success" do
             Provider.delete_all
             20.times do

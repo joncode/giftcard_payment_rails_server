@@ -144,7 +144,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return receiver serialized gifts" do
-            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at"]
+            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at"]
             request.env["HTTP_TKN"] = "TokenGood"
             get :badge, format: :json
             json_gifts = json["data"]["gifts"]
@@ -157,8 +157,6 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "TokenGood"
             get :badge, format: :json
             gifts_ary = json["data"]["gifts"]
-            #gifts_ary[0]["shoppingCart"].class.should == Array
-            #gifts_ary[0]["shoppingCart"][0].class.should == Hash
             gifts_ary[0]["shoppingCart"].class.should == String
         end
 

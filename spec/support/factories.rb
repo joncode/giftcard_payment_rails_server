@@ -44,6 +44,13 @@ FactoryGirl.define do
         sequence(:twitter)          { |n| "28sdd3s#{n}f6fd3" }
     end
 
+    factory :simple_user, :class => 'User' do
+        first_name                  "Simple"
+        last_name                   "User"
+        password                    "specspec"
+        password_confirmation       "specspec"
+    end
+
     factory :nonetwork, :class => 'User' do
         first_name                  "None"
         last_name                   "Networks"
