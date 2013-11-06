@@ -81,10 +81,9 @@ class User < ActiveRecord::Base
 		usr_hash
 	end
 
-	# def inspect
-	# 	#super
-	# 	"User ID = #{self.id} | Name = #{name} | email = #{self.email} | phone = #{self.phone} |  last = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)} | active = #{self.active}\n"
-	# end
+	def not_suspended?
+		self.active && !self.perm_deactive
+	end
 
 	def ua_alias
 		adj_user_id     = self.id + NUMBER_ID
@@ -216,6 +215,12 @@ class User < ActiveRecord::Base
         save
     end
 
+    def suspend
+    	self.active = false
+    	UserSocial.deactivate_all self
+    	save
+    end
+
     def deactivate_social type_of, identifier
         # user get user_social record with identifier
         socials = self.user_socials.where(identifier: identifier)
@@ -310,7 +315,9 @@ private
 
 	def persist_social_data
 
-		email_changed? and UserSocial.create(user_id: id, type_of: "email", identifier: email)
+		if email_changed? && (email[-3..-1] != "xxx")
+			UserSocial.create(user_id: id, type_of: "email", identifier: email)
+		end
 		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
 		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
 		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)

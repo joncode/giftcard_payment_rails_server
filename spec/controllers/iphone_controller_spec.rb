@@ -78,8 +78,8 @@ describe IphoneController do
 
         it "should hit urban airship endpoint with corect token and alias" do
             User.any_instance.stub(:ua_alias).and_return("fake_ua")
-            User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKEN")
-            pn_token = "FAKE_PN_TOKEN"
+            User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
+            pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             ua_alias = "fake_ua"
             Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias})
             user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}

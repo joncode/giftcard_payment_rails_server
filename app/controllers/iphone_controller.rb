@@ -78,18 +78,21 @@ class IphoneController < AppController
 			response["error_iphone"] = "Data not received."
 		else
 			if origin == 'f'
-				user = User.find_by_facebook_id_and_active(facebook_id, true)
+				user = User.find_by_facebook_id(facebook_id)
 				msg  = "Facebook Account"
 				resp_key = "facebook"
 			else
-				user = User.find_by_twitter_and_active(twitter, true)
+				user = User.find_by_twitter(twitter)
 				msg  = "Twitter Account"
 				resp_key = "twitter"
 			end
 			if user
-				user.pn_token       = pn_token if pn_token
-				#response["server"]  = user.providers_to_iphone
-				response["user"]    = user.serialize(true)
+				if user.not_suspended?
+					user.pn_token       = pn_token if pn_token
+					response["user"]    = user.serialize(true)
+				else
+					response["error"] = "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+				end
 			else
 				response[resp_key]  = "#{msg} not in Drinkboard database"
 			end

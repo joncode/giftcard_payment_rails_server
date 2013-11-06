@@ -9,6 +9,7 @@ class SubscriptionJob
                 puts "add to mailchimp"
             else
                 self.remove_from_mailchimp user_social
+                puts "remove from mailchimp"
             end
         else
             puts "Unable to find user social in subscription job via ID = #{user_social_id}"
