@@ -36,4 +36,44 @@ describe IphoneController do
 
     end
 
+    describe :login_social do
+
+        before do
+            @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password",
+                                                facebook_id: "faceface", twitter: "tweettweet" }
+        end
+
+        it "is successful with correct facebook" do
+            post :login_social, format: :json, origin: "f", facebook_id: "faceface", twitter: nil 
+            response.status.should         == 200
+            json["user"]["user_id"].should == @user.id.to_s
+        end
+
+        it "is successful with correct twitter" do
+            post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: "tweettweet" 
+            response.status.should         == 200
+            json["user"]["user_id"].should == @user.id.to_s
+        end
+
+        it "returns not in db with incorrect facebook" do
+            post :login_social, format: :json, origin: "f", facebook_id: "face", twitter: nil 
+            response.status.should         == 200
+            json["facebook"].should == "Facebook Account not in Drinkboard database"
+        end
+
+        it "returns not in db with incorrect twitter" do
+            post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: "tweet" 
+            response.status.should         == 200
+            json["twitter"].should == "Twitter Account not in Drinkboard database"
+        end
+
+        it "returns invalid error if facebook and twitter are blank" do
+            post :login_social, format: :json, origin: "f", facebook_id: nil, twitter: nil 
+            response.status.should         == 200
+            json["error_iphone"].should   == "Data not received."
+        end
+
+    end
+
+
 end

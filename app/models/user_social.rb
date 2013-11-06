@@ -1,12 +1,12 @@
 class UserSocial < ActiveRecord::Base
-    attr_accessible :identifier, :type_of, :user_id
+    attr_accessible :identifier, :type_of, :user_id, :subscribed
 
     belongs_to :user
 
     before_validation :reject_xxx_emails
     validates_presence_of :identifier, :type_of, :user_id
     after_create :subscribe_mailchimp
-    after_save   :unsubscribe_mailchimp
+    # after_save   :unsubscribe_mailchimp
 
     default_scope where(active: true)
 
@@ -24,8 +24,8 @@ class UserSocial < ActiveRecord::Base
 private
 
     def subscribe_mailchimp
-        if Rails.env.production? || Rails.env.staging?
-        	if self.type_of  == "email"
+    	if self.type_of  == "email"
+            unless Rails.env.development?
                 Resque.enqueue(SubscriptionJob, self.id)
         	end
         end
