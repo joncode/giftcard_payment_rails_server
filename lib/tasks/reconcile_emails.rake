@@ -21,7 +21,7 @@ namespace :email do
     task gift_emails_count: :environment do
 		require 'mandrill'
 
-    	start_date  = 5.days.ago.beginning_of_day
+    	start_date  = 10.days.ago.beginning_of_day
 
     	created_gifts = Gift.where("created_at > ?", start_date)
 		m = Mandrill::API.new(MANDRILL_APIKEY)
@@ -36,7 +36,7 @@ namespace :email do
 				info_emails << r
 			elsif r["subject"].include? "sent you a gift on Drinkboard"
 				notify_emails << r["email"]
-			elsif r["subject"] == "Your purchase is complete"
+			elsif r["subject"] == "Your gift purchase is complete"
 				invoice_emails << r["email"]
 			else
 				other_emails << r
@@ -47,13 +47,22 @@ namespace :email do
 		puts "----------------------------------------------------------------------------------"
 		puts "---------- RAKE EMAIL:GIFT_EMAILS_COUNT SINCE #{start_date} ----------"
 		puts "----------------------------------------------------------------------------------"
-		created_gifts.all.each do |g|
+		created_gifts.each do |g|
+
 			unless notify_emails.include? g.receiver_email
 				puts "   notify_receiver email not sent - gift #{g.id} - #{g.receiver_email}"
+				# unless Rails.env.development?
+				# 	puts "   resending to notify_receiver queue"
+				# 	g.notify_receiver
+				# end
 			end
 			giver_email = g.giver.email
 			unless invoice_emails.include? giver_email
 				puts "   invoice_giver email not sent   - gift #{g.id} - #{giver_email}"
+				# unless Rails.env.development?
+				# 	puts "    resending to invoice_giver queue"
+				# 	g.invoice_giver
+				# end
 			end
 		end
 		puts "----------------------------------------------------------------------------------"
