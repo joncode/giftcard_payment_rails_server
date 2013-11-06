@@ -22,9 +22,7 @@ describe Mdot::V2::CitiesController do
             ary.class.should == Array
             ary.count.should == 4
             hsh = ary.first
-            keys.each do |key|
-                hsh.has_key?(key).should be_true
-            end
+            compare_keys(hsh, keys)
         end
 
         xit "should return 302 not modified on 2nd request" do
@@ -55,9 +53,7 @@ describe Mdot::V2::CitiesController do
             ary.class.should == Array
             ary.count.should == 19
             hsh = ary.first
-            keys.each do |key|
-                hsh.has_key?(key).should be_true
-            end
+            compare_keys(hsh, keys)
         end
 
         xit "should return 302 not modified on 2nd request" do

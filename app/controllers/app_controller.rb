@@ -49,7 +49,7 @@ class AppController < JsonController
             give_gifts, rec_gifts  = Gift.get_archive(user)
             give_array             = array_these_gifts(give_gifts, BUY_REPLY, true, true)
             rec_array              = array_these_gifts(rec_gifts, GIFT_REPLY, true)
-            logmsg                 = "#{give_array[0]} + #{rec_array[0]}"
+            logmsg                 = "\n#{give_array[0]} \n #{rec_array[0]}\n"
             response = {"sent" => give_array, "used" => rec_array }
         else
             # user is not authenticated

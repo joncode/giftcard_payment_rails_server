@@ -32,10 +32,7 @@ describe Mdot::V2::UsersController do
             ary.class.should == Array
             ary.count.should == amount
             hsh = ary.first
-            hsh.keys.count.should == keys.count
-            keys.each do |key|
-                hsh.has_key?(key).should be_true
-            end
+            compare_keys(hsh, keys)
         end
     end
 
@@ -65,10 +62,7 @@ describe Mdot::V2::UsersController do
             response = json["data"]
             response.class.should  == Hash
             keys = ["user_id", "first_name", "last_name" ,"zip", "email", "phone", "photo", "birthday", "sex", "twitter", "facebook_id"]
-            keys.each do |key|
-                response.has_key?(key).should be_true
-            end
-            response.keys.count.should == keys.count
+            compare_keys(response, keys)
         end
 
         it "should return validation errors" do

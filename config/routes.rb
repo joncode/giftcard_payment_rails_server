@@ -9,8 +9,7 @@ Drinkboard::Application.routes.draw do
   match 'app/login_social',     to: 'iphone#login_social',     via: :post
   match 'app/update',           to: 'app#relays',              via: :post
   match 'app/update_user',      to: 'app#update_user',         via: :post
-  match 'app/gifts_array',      to: 'app#gifts',               via: :post
-  match 'app/archive',          to: 'iphone#archive',          via: :post
+  match 'app/archive',          to: 'app#archive',             via: :post
   match 'app/brands',           to: 'app#brands',              via: :post
   match 'app/brand_merchants',  to: 'app#brand_merchants',     via: :post
   match 'app/providers',        to: 'app#providers',           via: :post
@@ -20,7 +19,6 @@ Drinkboard::Application.routes.draw do
   match 'app/menu_v2',          to: 'app#menu_v2',             via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
   match 'app/others_questions', to: 'app#others_questions',    via: :post
-  match 'app/transactions',     to: 'app#transactions',        via: :post
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/create_gift',      to: 'app#create_gift',         via: :post
   match 'app/buy_gift',         to: 'app#create_gift',         via: :post
@@ -30,14 +28,15 @@ Drinkboard::Application.routes.draw do
   match 'app/save_settings',    to: 'app#save_settings',       via: :post
   match 'app/m_save_settings',  to: 'app#save_settings_m',     via: :post
   match 'app/regift',           to: 'iphone#regift',           via: :post
-    ## test new data methods routes
-  match 'app/new_pic',          to: 'app#providers_short_ph_url', via: :post
-  match 'app/cities_app',       to: 'iphone#cities'
 
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post
   match 'app/delete_card',      to: 'app#delete_card',         via: :post
+
+    ## test new data methods routes
+  match 'app/new_pic',          to: 'app#providers_short_ph_url', via: :post
+  match 'app/cities_app',       to: 'iphone#cities'
 
     ### deprecated app routes
   match 'app/menu',             to: 'app#menu',                via: :post
@@ -50,6 +49,8 @@ Drinkboard::Application.routes.draw do
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
   match 'app/employees',        to: 'app#create_redeem_emps',  via: :post
   match 'app/complete_order',   to: 'app#create_order_emp',    via: :post
+  match 'app/gifts_array',      to: 'app#gifts',               via: :post
+  match 'app/transactions',     to: 'app#transactions',        via: :post
 
 #################        Mdot V2 API                              /////////////////////////////
 
@@ -81,7 +82,7 @@ Drinkboard::Application.routes.draw do
       resources :cards,     only: [:index, :create, :destroy]
 
       resources :settings,  only: [:index, :update]
-      resources :gifts,     only: [:index, :create] do
+      resources :gifts,     only: [:create] do
         member do
           post :regift
           post :open
@@ -90,10 +91,9 @@ Drinkboard::Application.routes.draw do
         collection do
           get :archive
           get :badge  #update or relay
-          get :transactions
         end
       end
-      resources :photos,     only: [:update]
+      resources :photos,     only: [:create]
       resources :questions,  only: [:index, :update]
 
       resources :providers,  only: [:show] do

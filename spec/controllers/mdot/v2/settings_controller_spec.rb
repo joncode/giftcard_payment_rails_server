@@ -19,9 +19,7 @@ describe Mdot::V2::SettingsController do
             response.response_code.should == 200
             hsh = json["data"]
             hsh.class.should == Hash
-            keys.each do |key|
-                hsh.has_key?(key).should be_true
-            end
+            compare_keys(hsh, keys)
         end
     end
 

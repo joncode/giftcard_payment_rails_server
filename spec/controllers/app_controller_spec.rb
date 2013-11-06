@@ -29,21 +29,18 @@ describe AppController do
 
         it "should return a correct badge count" do
             post :relays, format: :json, token: receiver.remember_token
-            #puts json.inspect + "   <----  JSON  <----"
             json["success"]["badge"].should == @number
         end
 
         it "should return gifts with deactivated givers" do
             giver.update_attribute(:active, false)
             post :relays, format: :json, token: receiver.remember_token
-            #puts json.inspect + "   <----  JSON  <----"
             json["success"]["badge"].should == @number
         end
 
         it "should not return gifts with deactivated receivers" do
             receiver.update_attribute(:active, false)
             post :relays, format: :json, token: receiver.remember_token
-            #puts json.inspect + "   <----  JSON  <----"
             json["error"].should == {"user"=>"could not identity app user"}
         end
 
@@ -224,10 +221,8 @@ describe AppController do
             ary.class.should == Array
             ary.count.should == 19
             hsh = ary.first
-            hsh.has_key?("name").should be_true
-            hsh.has_key?("next_view").should be_true
-            hsh.has_key?("brand_id").should be_true
-            hsh.has_key?("photo").should be_true
+            keys = ["name", "next_view", "brand_id", "photo"]
+            compare_keys(hsh, keys)
         end
 
     end
@@ -257,9 +252,7 @@ describe AppController do
             ary.class.should == Array
             ary.count.should == amount
             hsh = ary.first
-            keys.each do |key|
-                hsh.has_key?(key).should be_true
-            end
+            compare_keys(hsh, keys)
         end
     end
 
@@ -276,9 +269,7 @@ describe AppController do
             ary.class.should == Array
             ary.count.should == 19
             hsh = ary.first
-            keys.each do |key|
-                hsh.has_key?(key).should be_true
-            end
+            compare_keys(hsh, keys)
         end
     end
 
@@ -289,9 +280,7 @@ describe AppController do
             response.response_code.should == 200
             hsh = json["success"]
             hsh.class.should == Hash
-            keys.each do |key|
-                hsh.has_key?(key).should be_true
-            end
+            compare_keys(hsh, keys)
         end
     end
 
@@ -399,24 +388,82 @@ describe AppController do
             json["error_server"].should == {"Data Transfer Error"=>"Please Reload Gift Center"}
         end
     end
+
+    describe :archive do
+
+        let(:giver)     { FactoryGirl.create(:giver) }
+        let(:receiver)  { FactoryGirl.create(:receiver) }
+
+        before(:each) do
+
+            @number_received = 9
+            @number_received.times do |n|
+                gift =  FactoryGirl.build(:gift)
+                gift.add_giver(giver)
+                gift.add_receiver(receiver)
+                gift.save
+            end
+
+            @number_sent = 12
+            @number_sent.times do |n|
+                gift =  FactoryGirl.build(:gift)
+                gift.add_giver(receiver)
+                gift.add_receiver(giver)
+                gift.save
+            end
+        end
+
+        it "should send a list of sent gifts" do
+            post :archive, format: :json, token: receiver.remember_token
+            json["sent"].class.should == Array
+            json["sent"].count.should == @number_sent
+        end
+
+        it "should send sent gifts (purchaser) with giver keys" do
+            keys = ["created_at", "id", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "total", "updated_at", "shoppingCart", "receiver_photo", "giver_photo", "provider_photo", "provider_phone", "city", "sales_tax", "live", "latitude", "longitude", "provider_address", "time_ago", "gift_id", "redeem_code"]
+            post :archive, format: :json, token: receiver.remember_token
+            gift_hsh = json["sent"][0]
+            compare_keys(gift_hsh, keys)
+        end
+
+        it "should send a list of used gifts" do
+            gs = Gift.where(receiver_id: receiver.id)
+            gs.each do |gift|
+                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.reload
+                order  = Order.init_with_gift(gift, "xyz")
+                order.save
+            end
+            post :archive, format: :json, token: receiver.remember_token
+            json["used"].class.should == Array
+            json["used"].count.should == @number_received
+        end
+
+        it "should send used gifts with receiver keys" do
+            gs = Gift.where(receiver_id: receiver.id)
+            gs.each do |gift|
+                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.reload
+                order  = Order.init_with_gift(gift, "xyz")
+                order.save
+            end
+            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "sales_tax", "live", "latitude", "longitude", "provider_address", "time_ago", "gift_id", "updated_at", "created_at", "redeem_code"]
+            post :archive, format: :json, token: receiver.remember_token
+            gift_hsh = json["used"][0]
+            compare_keys(gift_hsh, keys)
+        end
+
+        it "should send empty arrays when no gifts" do
+            Gift.delete_all
+            post :archive, format: :json, token: receiver.remember_token
+            json["sent"].class.should == Array
+            json["sent"].count.should == 0
+            json["used"].class.should == Array
+            json["used"].count.should == 0
+        end
+
+    end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

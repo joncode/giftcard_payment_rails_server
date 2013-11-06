@@ -2,23 +2,90 @@ require 'spec_helper'
 
 describe Mdot::V2::GiftsController do
 
-    describe :index do
-        it_should_behave_like("token authenticated", :get, :index)
-
-    end
-
-    describe :create do
-        it_should_behave_like("token authenticated", :post, :create)
-
-    end
-
-    describe :regift do
-        it_should_behave_like("token authenticated", :post, :regift, id: 1)
-
-    end
-
     describe :archive do
         it_should_behave_like("token authenticated", :get, :archive)
+
+        before(:each) do
+            UserSocial.delete_all
+            User.delete_all
+            Provider.delete_all
+            @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
+            @user.update_attribute(:remember_token, "TokenGood")
+            @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
+
+            @number_received = 9
+            @number_received.times do |n|
+                gift =  FactoryGirl.build(:gift)
+                gift.add_giver(@giver)
+                gift.add_receiver(@user)
+                gift.save
+            end
+
+            @number_sent = 12
+            @number_sent.times do |n|
+                gift =  FactoryGirl.build(:gift)
+                gift.add_giver(@user)
+                gift.add_receiver(@giver)
+                gift.save
+            end
+        end
+
+        it "should send a list of sent gifts" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            get :archive, format: :json
+            json["status"].should == 1
+            json["data"]["sent"].class.should == Array
+            json["data"]["sent"].count.should == @number_sent
+        end
+
+        it "should send sent gifts (purchaser) with giver keys" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "total", "updated_at", "shoppingCart", "receiver_photo", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id"]
+            post :archive, format: :json
+            gift_hsh = json["data"]["sent"][0]
+            compare_keys(gift_hsh, keys)
+        end
+
+        it "should send a list of used gifts" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            gs = Gift.where(receiver_id: @user.id)
+            gs.each do |gift|
+                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.reload
+                order  = Order.init_with_gift(gift, "xyz")
+                order.save
+            end
+            get :archive, format: :json
+            json["status"].should == 1
+            json["data"]["used"].class.should == Array
+            json["data"]["used"].count.should == @number_received
+        end
+
+        it "should send used gifts with receiver keys" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            gs = Gift.where(receiver_id: @user.id)
+            gs.each do |gift|
+                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.reload
+                order  = Order.init_with_gift(gift, "xyz")
+                order.save
+            end
+            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at"]
+            post :archive, format: :json
+            gift_hsh = json["data"]["used"][0]
+            compare_keys(gift_hsh, keys)
+        end
+
+        it "should send empty arrays when no gifts" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            Gift.delete_all
+            get :archive, format: :json
+            json["status"].should == 1
+            json["data"]["sent"].class.should == Array
+            json["data"]["sent"].count.should == 0
+            json["data"]["used"].class.should == Array
+            json["data"]["used"].count.should == 0
+        end
 
     end
 
@@ -83,10 +150,7 @@ describe Mdot::V2::GiftsController do
             json_gifts = json["data"]["gifts"]
             json_gifts.class.should == Array
             serialized_gift = json_gifts[0]
-            serialized_gift.keys.count.should == keys.count
-            keys.each do |key|
-                serialized_gift.has_key?(key).should be_true
-            end
+            compare_keys(serialized_gift, keys)
         end
 
         it "should return shopping cart as a json string" do
@@ -137,11 +201,6 @@ describe Mdot::V2::GiftsController do
             end
 
         end
-
-    end
-
-    describe :transactions do
-        it_should_behave_like("token authenticated", :get, :transactions)
 
     end
 
@@ -261,6 +320,14 @@ describe Mdot::V2::GiftsController do
         end
     end
 
+    describe :create do
+        it_should_behave_like("token authenticated", :post, :create)
 
+    end
+
+    describe :regift do
+        it_should_behave_like("token authenticated", :post, :regift, id: 1)
+
+    end
 
 end

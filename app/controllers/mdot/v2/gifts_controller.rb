@@ -1,15 +1,11 @@
 class Mdot::V2::GiftsController < JsonController
     before_filter :authenticate_customer
 
-    def index
-        respond
-    end
-
-    def transactions
-        respond
-    end
-
     def archive
+        give_gifts, rec_gifts  = Gift.get_archive(@current_user)
+        give_ary = give_gifts.serialize_objs(:giver)
+        rec_ary  = rec_gifts.serialize_objs(:receiver)
+        success({"sent" => give_ary, "used" => rec_ary })
         respond
     end
 

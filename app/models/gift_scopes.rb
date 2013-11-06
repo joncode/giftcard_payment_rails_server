@@ -38,8 +38,8 @@ module GiftScopes
     end
 
     def get_archive user
-        give_gifts = where(giver_id: user).order("created_at DESC")
-        rec_gifts  = where(receiver_id: user).where(status: 'redeemed').order("redeemed_at DESC")
+        give_gifts = includes(:provider).includes(:receiver).where(giver_id: user).order("created_at DESC")
+        rec_gifts  = includes(:provider).includes(:giver).where(receiver_id: user).where(status: 'redeemed').order("redeemed_at DESC")
         return give_gifts, rec_gifts
     end
 

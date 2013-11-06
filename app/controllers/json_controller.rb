@@ -110,6 +110,16 @@ class JsonController < ActionController::Base
         head :bad_request unless data.count > 0
     end
 
+    def data_blank?(data=nil)
+        data ||= params["data"]
+        head :bad_request if data.blank?
+    end
+
+    def data_not_string?(data=nil)
+        data ||= params["data"]
+        head :bad_request unless data.kind_of?(String)
+    end
+
     def respond
         respond_to do |format|
             format.json { render json: @app_response }

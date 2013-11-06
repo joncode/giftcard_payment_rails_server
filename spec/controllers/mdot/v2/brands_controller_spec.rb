@@ -32,9 +32,7 @@ describe Mdot::V2::BrandsController do
             ary.class.should == Array
             ary.count.should == amount
             hsh = ary.first
-            keys.each do |key|
-                hsh.has_key?(key).should be_true
-            end
+            compare_keys(hsh, keys)
         end
 
     end
@@ -68,9 +66,7 @@ describe Mdot::V2::BrandsController do
             ary.class.should == Array
             ary.count.should == amount
             hsh = ary.first
-            keys.each do |key|
-                hsh.has_key?(key).should be_true
-            end
+            compare_keys(hsh, keys)
         end
 
         it "should return 404 when brand not found via ID" do

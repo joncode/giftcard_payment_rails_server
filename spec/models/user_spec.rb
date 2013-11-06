@@ -12,8 +12,9 @@ describe User do
   # if user updates email, phone, twitter or facebook the data is saved in userSocial
   describe "user_social de-normalization" do
 
-    before do
+    before(:each) do
         User.delete_all
+        UserSocial.delete_all
         @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: nil }
     end
 
@@ -35,13 +36,8 @@ describe User do
         end
 
         it "should remove #{type_of} when user deletes #{type_of}" do
-            user = FactoryGirl.create :user, { "#{type_of}" => identifier}
-            # user submits data via delete route
-
-            # find that data connected to user
-            # delete or deactivate that data
+            user = FactoryGirl.create :user, { "#{type_of}" => identifier }
             user.deactivate_social("#{type_of}", identifier)
-            # check for that data on the user shoud.not ==
             UserSocial.unscoped.find_by_identifier(identifier).active.should be_false
         end
 
