@@ -65,7 +65,7 @@ class Gift < ActiveRecord::Base
 	end
 
 	def giver_status
-
+		self.status
 	end
 
 	def set_statuses
