@@ -3,25 +3,16 @@ namespace :email do
 
 	task mc_subscriptions: :environment do
 		start_date = 5.days.ago.beginning_of_day
-		created_us = UserSocial.where("type_of = ? AND created_at > ?", "email", start_date)
-		not_subscribed_count = 0
+		created_us = UserSocial.where(active: true, subscribed:false).where("type_of = ? AND created_at > ?", "email", start_date)
 
 		puts "----------------------------------------------------------------------------------"
 		puts "----------------------------------------------------------------------------------"
 		puts "---------- RAKE EMAIL:MC_SUBSCRIPTIONS SINCE #{start_date} ----------"
 		puts "----------------------------------------------------------------------------------"
-		created_us.all.each do |u|
-			if u.subscribed == false
-				puts "   email not subscribed           - UserSocial #{u.id} - User #{u.user_id} - email #{u.identifier}"
-				not_subscribed_count += 1
-			end
+		created_us.each do |u|
+            Resque.enqueue(SubscriptionJob, u.id)
+			puts "   Sent unsubscribed email to Queue           - UserSocial #{u.id} - User #{u.user_id} - email #{u.identifier}"
 		end
-
-		puts "----------------------------------------------------------------------------------"
-		puts "   Total UserSocials Created      - #{created_us.count} email addresses"
-		puts "" 
-		puts "   UserSocials not subscribed     - #{not_subscribed_count} email addresses"
-		puts "----------------------------------------------------------------------------------"
 		puts "----------------------------------------------------------------------------------"
 
 	end
@@ -44,9 +35,9 @@ namespace :email do
 			if r["email"] == "info@drinkboard.com"
 				info_emails << r
 			elsif r["subject"].include? "sent you a gift on Drinkboard"
-				notify_emails << r
+				notify_emails << r["email"]
 			elsif r["subject"] == "Your purchase is complete"
-				invoice_emails << r
+				invoice_emails << r["email"]
 			else
 				other_emails << r
 			end

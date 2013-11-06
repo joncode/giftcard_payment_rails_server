@@ -18,7 +18,7 @@ private
         mcl = MailchimpList.new(user_social.identifier, user.first_name, user.last_name)
         response = mcl.subscribe
         if response["email"].present?
-            UserSocial.find(user_social.id).update_attribute(:subscribed, true)
+            user_social.update_attribute(:subscribed, true)
         end
     end
 
@@ -26,7 +26,7 @@ private
         mcl = MailchimpList.new(user_social.identifier)
         response = mcl.unsubscribe
         if response["complete"].present? && response["complete"] == true
-            UserSocial.find(user_social.id).update_attribute(:subscribed, false)
+            user_social.update_attribute(:subscribed, false)
         end
     end
 
