@@ -131,6 +131,7 @@ FactoryGirl.define do
         provider_id        10
         total           "100"
         service         "4"
+        pay_stat        "charged"
         credit_card     4567890
         shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
         sale            { FactoryGirl.create(:sale)}
@@ -149,7 +150,7 @@ FactoryGirl.define do
         nickname "Biz"
         user_id   1
         year  "2017"
-        number "4341575294006772"
+        number "4222222222222222"
         passphrase  "Oh yeah"
     end
 

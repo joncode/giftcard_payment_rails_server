@@ -10,6 +10,7 @@ describe Mdot::V2::CitiesController do
     end
 
     describe :index do
+
         it_should_behave_like("token authenticated", :get, :index)
 
         it "should return a list of all active providers serialized when success" do
@@ -36,6 +37,7 @@ describe Mdot::V2::CitiesController do
     end
 
     describe :merchants do
+
         it_should_behave_like("token authenticated", :get, :merchants, id: 1)
 
 

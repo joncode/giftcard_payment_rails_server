@@ -60,6 +60,10 @@ class Gift < ActiveRecord::Base
 
 #/-----------------------------------------------Status---------------------------------------/
 
+	def receiver_status
+		self.status
+	end
+
 	def set_statuses
 		case self.pay_type
 		when "Sale"

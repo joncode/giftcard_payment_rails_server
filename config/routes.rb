@@ -76,6 +76,7 @@ Drinkboard::Application.routes.draw do
           get :merchants
         end
       end
+      
       resources :cards,     only: [:index, :create, :destroy]
 
       resources :settings,  only: [:index, :update]

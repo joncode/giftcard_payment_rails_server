@@ -64,7 +64,6 @@ class AppController < JsonController
     end
 
  	def relays
-
  		response = {}
  		if user  = authenticate_app_user(params["token"])
  			# user is authenticated
@@ -73,6 +72,7 @@ class AppController < JsonController
  			if badge > 0
  				gift_array_to_app   = array_these_gifts(gift_array, GIFT_REPLY, true)
 	 			response["success"] = { "badge" => badge, "gifts" => gift_array_to_app }
+                binding.pry
 	 		else
 	 			response["success"] = { "badge" => 0 }
 	 		end

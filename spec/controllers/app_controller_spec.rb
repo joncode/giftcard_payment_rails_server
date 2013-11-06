@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe AppController do
 
-    before(:all) do
+    before(:each) do
         User.delete_all
         Gift.delete_all
         Provider.delete_all
@@ -68,6 +68,13 @@ describe AppController do
             json["success"]["badge"].should == (@number - total_changed)
         end
 
+        it "should return shopping cart as an array not a json string" do
+            post :relays, format: :json, token: receiver.remember_token
+            gifts_ary = json["success"]["gifts"]
+            gifts_ary[0]["shoppingCart"].class.should == Array
+            gifts_ary[0]["shoppingCart"][0].class.should == Hash
+        end
+
         context "scope out unpaid gifts" do
 
             it "should not return :pay_stat => 'declined' gifts" do
@@ -109,7 +116,7 @@ describe AppController do
 
     describe :drinkboard_users do
 
-        let(:user) { FactoryGirl.create(:user) }
+        #let(:user) { FactoryGirl.create(:user) }
         let(:deactivated) { FactoryGirl.create(:user, active: false ) }
 
 
@@ -131,7 +138,7 @@ describe AppController do
 
     describe :update_user do
 
-        let(:user) { FactoryGirl.create(:user) }
+        #let(:user) { FactoryGirl.create(:user) }
 
         context "authorization" do
 
@@ -199,16 +206,16 @@ describe AppController do
 
     describe :brands do
 
-        before(:all) do
-            Brand.delete_all
+        before(:each) do
+
             20.times do |index|
-                FactoryGirl.create(:brand, name: "Chicagos#{index}")
+                name = "Chicag#{index}"
+                FactoryGirl.create(:brand, name: name)
             end
             brand = Brand.first
             brand.update_attribute(:active, false)
+            @user =  FactoryGirl.create(:user)
         end
-
-        let(:user) { FactoryGirl.create(:user) }
 
         it "should return a list of all active brands serialized when success" do
             post :brands, format: :json, token: user.remember_token
