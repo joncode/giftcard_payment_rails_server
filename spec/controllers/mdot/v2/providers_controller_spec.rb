@@ -7,7 +7,6 @@ describe Mdot::V2::ProvidersController do
             user = FactoryGirl.create(:user)
             user.update_attribute(:remember_token, "TokenGood")
         end
-        puts "---> user = #{user.inspect}"
     end
 
     # describe :index do

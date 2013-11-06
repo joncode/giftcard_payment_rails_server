@@ -311,11 +311,94 @@ describe AppController do
         it " should return an empty array if user has no cards" do
 
         end
-
-
-
     end
 
+    describe :create_redeem do
+
+        let(:giver)     { FactoryGirl.create(:giver) }
+        let(:receiver)  { FactoryGirl.create(:receiver) }
+
+        it "should create a redeem for the gift" do
+            gift =  FactoryGirl.build(:gift, status: 'open')
+            gift.add_giver(giver)
+            gift.add_receiver(receiver)
+            gift.save
+            post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
+            gift.redeem.class.should == Redeem
+        end
+
+        it "should return the redeem code on success" do
+            gift =  FactoryGirl.build(:gift, status: 'open')
+            gift.add_giver(giver)
+            gift.add_receiver(receiver)
+            gift.save
+            post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
+            json["success"].should == gift.redeem.redeem_code
+        end
+    end
+
+    describe :create_order do
+
+        let(:giver)     { FactoryGirl.create(:giver) }
+        let(:receiver)  { FactoryGirl.create(:receiver) }
+
+        it "should create an order for the gift" do
+            gift =  FactoryGirl.build(:gift, status: 'open')
+            gift.add_giver(giver)
+            gift.add_receiver(receiver)
+            gift.save
+            redeem = Redeem.find_or_create_with_gift(gift)
+            post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
+            gift.order.class.should == Order
+            gift.order.server_code.should == "test"
+        end
+
+        it "should return order_number, server, and total on success" do
+            gift =  FactoryGirl.build(:gift, status: 'open')
+            gift.add_giver(giver)
+            gift.add_receiver(receiver)
+            gift.save
+            redeem = Redeem.find_or_create_with_gift(gift)
+            post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
+            order = gift.order
+            json["success"]["order_number"].should == order.make_order_num
+            json["success"]["total"].should        == gift.total
+            json["success"]["server"].should       == "test"
+        end
+
+        it "should update gift server_code, redeemed_at" do
+            gift =  FactoryGirl.build(:gift, status: 'open')
+            gift.add_giver(giver)
+            gift.add_receiver(receiver)
+            gift.save
+            redeem = Redeem.find_or_create_with_gift(gift)
+            time = Time.now
+            gift.redeemed_at.should be_nil
+            post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
+            gift.reload
+            gift.status.should == 'redeemed'
+            gift.server.should == "test"
+            gift.redeemed_at.day.should == time.day
+        end
+
+        it "should return validation errors on bad gift" do
+            gift =  FactoryGirl.build(:gift, status: 'notified')
+            gift.add_giver(giver)
+            gift.add_receiver(receiver)
+            gift.save
+            post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
+            json["error_server"].should == {"gift_id"=>"can't be blank", "redeem_id"=>"can't be blank", "provider_id"=>"can't be blank"}
+        end
+
+        it "should return data transfer error if gift not found" do
+            gift =  FactoryGirl.build(:gift, status: 'notified')
+            gift.add_giver(giver)
+            gift.add_receiver(receiver)
+            gift.save
+            post :create_order, format: :json, token: receiver.remember_token, data: 0, server_code: "test"
+            json["error_server"].should == {"Data Transfer Error"=>"Please Reload Gift Center"}
+        end
+    end
 end
 
 

@@ -13,7 +13,8 @@ describe User do
   describe "user_social de-normalization" do
 
     before do
-        @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
+        User.delete_all
+        @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: nil }
     end
 
     {

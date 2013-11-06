@@ -7,7 +7,6 @@ describe Mdot::V2::SessionsController do
             user = FactoryGirl.create(:user)
             user.update_attribute(:remember_token, "TokenGood")
         end
-        puts "---> user = #{user.inspect}"
     end
 
     describe :create do
@@ -17,7 +16,7 @@ describe Mdot::V2::SessionsController do
 
     describe :login_social do
         it_should_behave_like("token authenticated", :post, :login_social)
-        
+
     end
 
 

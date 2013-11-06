@@ -83,6 +83,7 @@ describe Mdot::V2::GiftsController do
             json_gifts = json["data"]["gifts"]
             json_gifts.class.should == Array
             serialized_gift = json_gifts[0]
+            serialized_gift.keys.count.should == keys.count
             keys.each do |key|
                 serialized_gift.has_key?(key).should be_true
             end
@@ -147,16 +148,52 @@ describe Mdot::V2::GiftsController do
     describe :open do
         it_should_behave_like("token authenticated", :post, :open, id: 1)
 
+        before(:each) do
+            UserSocial.delete_all
+            User.delete_all
+            Provider.delete_all
+            @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
+            @user.update_attribute(:remember_token, "TokenGood")
+            @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(@user)
+            @gift.save
+        end
+
         it "should create a redeem for the gift" do
-
+            request.env["HTTP_TKN"] = "TokenGood"
+            post :open, format: :json, id: @gift.id
+            response.response_code.should == 200
+            redeem = @gift.redeem
+            redeem.class.should == Redeem
         end
 
-        it "should change the gift status to notified" do
-
+        it "should return the redeem code on success" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            post :open, format: :json, id: @gift.id
+            response.response_code.should == 200
+            json["status"].should == 1
+            json["data"].should == @gift.redeem.redeem_code
         end
 
-        it "should return " do
+        it "should change the gift status to 'notified'" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            post :open, format: :json, id: @gift.id
+            @gift.reload
+            response.response_code.should == 200
+            @gift.status.should == 'notified'
+        end
 
+        xit "should return validation errors if validation fail" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            json["status"].should == 0
+        end
+
+        it "should return 404 if gift id not found" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            post :open, format: :json, id: 0
+            response.response_code.should == 404
         end
 
     end
@@ -164,6 +201,64 @@ describe Mdot::V2::GiftsController do
     describe :redeem do
         it_should_behave_like("token authenticated", :post, :redeem, id: 1)
 
+        before(:each) do
+            UserSocial.delete_all
+            User.delete_all
+            Provider.delete_all
+            @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
+            @user.update_attribute(:remember_token, "TokenGood")
+            @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(@user)
+            @gift.save
+            redeem = Redeem.find_or_create_with_gift(@gift)
+        end
+
+        it "should create an order for the gift" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            post :redeem, format: :json, id: @gift.id, server: "test"
+            @gift.order.class.should == Order
+            @gift.order.server_code.should == "test"
+        end
+
+        it "should return order_number, server, and total on success" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            post :redeem, format: :json, id: @gift.id, server: "test"
+            order = @gift.order
+            response.response_code.should == 200
+            json["status"].should == 1
+            json["data"]["order_number"].should == order.make_order_num
+            json["data"]["total"].should        == @gift.total
+            json["data"]["server"].should       == "test"
+        end
+
+        it "should update gift server, redeemed_at" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            time = Time.now
+            @gift.redeemed_at.should be_nil
+            post :redeem, format: :json, id: @gift.id, server: "test"
+            @gift.reload
+            @gift.status.should == 'redeemed'
+            @gift.server.should == "test"
+            @gift.redeemed_at.day.should == time.day
+        end
+
+        it "should return validation errors on bad gift" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            redeem = Redeem.find_by_gift_id(@gift.id)
+            redeem.destroy
+            post :redeem, format: :json, id: @gift.id, server: "test"
+            response.response_code.should == 200
+            json["status"].should == 0
+            json["data"].should   == {"gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"]}
+        end
+
+        it "should return data transfer error if @gift not found" do
+            request.env["HTTP_TKN"] = "TokenGood"
+            post :redeem, format: :json, id: 0, server: "test"
+            response.response_code.should == 404
+        end
     end
 
 

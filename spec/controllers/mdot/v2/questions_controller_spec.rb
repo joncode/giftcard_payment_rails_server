@@ -7,7 +7,6 @@ describe Mdot::V2::QuestionsController do
             user = FactoryGirl.create(:user)
             user.update_attribute(:remember_token, "TokenGood")
         end
-        puts "---> user = #{user.inspect}"
     end
 
     describe :index do
@@ -17,7 +16,7 @@ describe Mdot::V2::QuestionsController do
 
     describe :update do
         it_should_behave_like("token authenticated", :put, :update, id: 1)
-        
+
     end
 
 

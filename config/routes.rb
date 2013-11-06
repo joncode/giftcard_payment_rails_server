@@ -61,8 +61,9 @@ Drinkboard::Application.routes.draw do
           post :login_social
         end
       end
-      resources :users,     only: [:index, :create, :update] do
+      resources :users,     only: [:index, :create] do
         collection do
+          put :update
           put :reset_password
         end
       end
@@ -76,7 +77,7 @@ Drinkboard::Application.routes.draw do
           get :merchants
         end
       end
-      
+
       resources :cards,     only: [:index, :create, :destroy]
 
       resources :settings,  only: [:index, :update]

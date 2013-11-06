@@ -23,10 +23,6 @@ describe Mdot::V2::SettingsController do
                 hsh.has_key?(key).should be_true
             end
         end
-
-        it "should return 404 not found for no settings " do
-
-        end
     end
 
     describe :update do

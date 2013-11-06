@@ -44,6 +44,7 @@ describe Mdot::V2::BrandsController do
 
         before(:each) do
             Brand.delete_all
+            Provider.delete_all
             @brand = FactoryGirl.create(:brand, name: "newbie")
             20.times do |index|
                 if index.even?
