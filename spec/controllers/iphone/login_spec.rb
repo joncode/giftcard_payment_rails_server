@@ -34,46 +34,74 @@ describe IphoneController do
             json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
         end
 
+        it "should record user's pn token" do
+            token = "912834198qweasdasdfasdfarqwerqwe3439487123"
+            post :login, format: :json, email: "neil@gmail.com", password: "password", pn_token: token
+            response.status.should         == 200
+            pn_token = PnToken.where(pn_token: token).first
+            pn_token.pn_token.should == token
+            pn_token.class.should    == PnToken
+            pn_token.user_id.should  == @user.id
+        end
+
     end
 
     describe :login_social do
 
         before do
-            @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password",
-                                                facebook_id: "faceface", twitter: "tweettweet" }
+            @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: "faceface", twitter: "tweettweet" }
         end
 
         it "is successful with correct facebook" do
-            post :login_social, format: :json, origin: "f", facebook_id: "faceface", twitter: nil 
+            post :login_social, format: :json, origin: "f", facebook_id: @user.facebook_id, twitter: nil
             response.status.should         == 200
             json["user"]["user_id"].should == @user.id.to_s
         end
 
         it "is successful with correct twitter" do
-            post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: "tweettweet" 
+            post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: @user.twitter
             response.status.should         == 200
             json["user"]["user_id"].should == @user.id.to_s
         end
 
         it "returns not in db with incorrect facebook" do
-            post :login_social, format: :json, origin: "f", facebook_id: "face", twitter: nil 
+            post :login_social, format: :json, origin: "f", facebook_id: "face", twitter: nil
             response.status.should         == 200
             json["facebook"].should == "Facebook Account not in Drinkboard database"
         end
 
         it "returns not in db with incorrect twitter" do
-            post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: "tweet" 
+            post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: "tweet"
             response.status.should         == 200
             json["twitter"].should == "Twitter Account not in Drinkboard database"
         end
 
         it "returns invalid error if facebook and twitter are blank" do
-            post :login_social, format: :json, origin: "f", facebook_id: nil, twitter: nil 
+            post :login_social, format: :json, origin: "f", facebook_id: nil, twitter: nil
             response.status.should         == 200
             json["error_iphone"].should   == "Data not received."
         end
 
+        it "should record user's pn token" do
+            token = "91283419asdfasdfadadsfasdfasdf83439487123"
+            post :login_social, format: :json, origin: "f", facebook_id: @user.facebook_id, pn_token: token
+            response.status.should         == 200
+            pn_token = PnToken.where(pn_token: token).first
+            pn_token.pn_token.should == token
+            pn_token.class.should    == PnToken
+            pn_token.user_id.should  == @user.id
+        end
+
+        it "should not login a paused user" do
+            @user.update_attribute(:active,false)
+
+            post :login_social, format: :json, origin: "f", facebook_id: @user.facebook_id, twitter: nil
+            response.status.should == 200
+            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+
+            post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: @user.twitter
+            response.status.should == 200
+            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+        end
     end
-
-
 end
