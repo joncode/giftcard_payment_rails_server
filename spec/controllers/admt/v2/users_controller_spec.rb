@@ -110,6 +110,52 @@ describe Admt::V2::UsersController do
 
     end
 
+    describe :suspend do
+
+        it_should_behave_like("token authenticated", :post, :suspend, id: 1)
+
+        it "should suspend user " do
+            user = FactoryGirl.create(:user)
+            post :suspend, id: user.id, format: :json
+            suspended_user = User.unscoped.find(user.id)
+            suspended_user.active.should          be_false
+            suspended_user.perm_deactive.should   be_false
+            user.user_socials.each do |social|
+                social.active.should be_false
+            end
+        end
+
+        it "should suspend active users" do
+            user = FactoryGirl.create(:user)
+            user.active.should == true
+            post :suspend, id: user.id, format: :json
+            response.response_code.should == 200
+            json["status"].should == 1
+            json["data"].should   == "#{user.name} is now suspended"
+            user.reload
+            user.active.should == false
+        end
+
+        it "should unsuspend inactive users" do
+            user = FactoryGirl.create :user, { active: false }
+            user.active.should == false
+            post :suspend, id: user.id, format: :json
+            response.response_code.should == 200
+            json["status"].should == 1
+            json["data"].should   == "#{user.name} is now unsuspended"
+            user.reload
+            user.active.should == true
+        end
+
+        it "should return failure msg when user not found" do
+            post :suspend, id: 23, format: :json
+            response.response_code.should == 200
+            json["status"].should       == 0
+            json["data"].should   == "App user not found - 23"
+        end
+
+    end
+
     describe :deactivate_gifts do
 
         it_should_behave_like("token authenticated", :post, :deactivate_gifts, id: 1)

@@ -31,6 +31,24 @@ class Admt::V2::UsersController < JsonController
         respond
     end
 
+    def suspend
+        begin
+            user = User.unscoped.find(params[:id])
+            if user.suspend
+                if user.active == true
+                    success "#{user.name} is now unsuspended"
+                else
+                    success "#{user.name} is now suspended"
+                end
+            else
+                fail    user
+            end
+        rescue
+            fail    "App user not found - #{params[:id]}"
+        end
+        respond
+    end
+
     def deactivate_gifts
         user = User.unscoped.find(params[:id])
         total_gifts = Gift.get_user_activity(user)

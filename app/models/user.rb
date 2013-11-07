@@ -216,9 +216,12 @@ class User < ActiveRecord::Base
     end
 
     def suspend
-    	self.active = false
-    	UserSocial.deactivate_all self
-    	save
+    	self.toggle! :active
+    	if self.active == false
+			UserSocial.deactivate_all self
+		else
+			UserSocial.activate_all self
+		end			
     end
 
     def deactivate_social type_of, identifier

@@ -6,15 +6,27 @@ class UserSocial < ActiveRecord::Base
     #before_validation :reject_xxx_emails
     validates_presence_of :identifier, :type_of, :user_id
     after_create :subscribe_mailchimp
-    # after_save   :unsubscribe_mailchimp
+    after_save   :unsubscribe_mailchimp
 
     default_scope where(active: true)
+
+
+    def self.activate_all user
+        socials = user.user_socials
+        socials.each do |social|
+            social.activate
+        end
+    end
 
     def self.deactivate_all user
         socials = user.user_socials
         socials.each do |social|
             social.deactivate
         end
+    end
+
+    def activate
+        self.update_attribute(:active, true)
     end
 
     def deactivate
