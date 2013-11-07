@@ -29,7 +29,7 @@ module JsonHelper
       over_keys = json_hsh.keys - expected_keys
       puts "Too many keys !!! #{over_keys}"
     elsif json_hsh.keys.count < expected_keys.count
-      over_keys = expected_keys = json_hsh.keys
+      over_keys = expected_keys - json_hsh.keys
       puts "Missing these keys !!! #{over_keys}"
     end
     json_hsh.keys.count.should == expected_keys.count

@@ -23,6 +23,10 @@ class JsonController < ActionController::Base
         head 404
     end
 
+    def bad_request
+        head 400
+    end
+
     def array_these_gifts obj, send_fields, address_get=false, receiver=false, order_num=false
         gifts_ary = []
         index = 1
@@ -104,6 +108,11 @@ class JsonController < ActionController::Base
     def data_not_hash?(data=nil)
         data ||= params["data"]
         head :bad_request unless data.kind_of?(Hash)
+    end
+
+    def data_not_array?(data=nil)
+        data ||= params["data"]
+        head :bad_request unless data.kind_of?(Array)
     end
 
     def hash_empty?(data)

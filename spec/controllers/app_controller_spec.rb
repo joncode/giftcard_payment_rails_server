@@ -215,7 +215,7 @@ describe AppController do
             SubscriptionJob.should_receive(:perform).with(last_us_id + 1)
             post :update_user, format: :json, token: @user.remember_token, data: { "email" => "second@email.com" }
             run_delayed_jobs
-        end        
+        end
 
         describe "should send email correctly" do
             it "see subscription_job_spec"
@@ -302,6 +302,21 @@ describe AppController do
             hsh = json["success"]
             hsh.class.should == Hash
             compare_keys(hsh, keys)
+        end
+    end
+
+    describe :save_settings do
+
+        it "should receive json'd settings and update the record" do
+            post :save_settings, format: :json, token: user.remember_token, data: "{  \"email_receiver_new\" : \"false\",  \"email_invite\" : \"false\",  \"email_redeem\" : \"false\",  \"email_invoice\" : \"false\",  \"email_follow_up\" : \"false\"}"
+            response.response_code.should == 200
+            json["success"].should        == "Settings saved"
+            setting = user.setting
+            setting.email_invoice.should be_false
+            setting.email_redeem.should be_false
+            setting.email_invite.should be_false
+            setting.email_follow_up.should be_false
+            setting.email_receiver_new.should be_false
         end
     end
 
@@ -483,6 +498,69 @@ describe AppController do
             json["used"].count.should == 0
         end
 
+    end
+
+    describe :others_questions do
+
+        before(:each) do
+            qs = [["Day Drinking", "Night Drinking"], ["Red Wine", "White Wine"], ["White Liqours", "Brown Liqours"], ["Straw", "No straw"], ["Light Beer", "Dark Beer"], ["Mimosa", "Bloody Mary"], ["Rare", "Well Done"], ["City Vacation", "Beach Vacation"], ["Shaken", "Stirred"], ["Rocks", "Neat"], ["Sweet", "Sour"], ["Steak", "Fish"]]
+            qs.each do |q|
+                Question.create(left: q[0], right: q[1])
+            end
+        end
+
+        let(:receiver)  { FactoryGirl.create(:receiver) }
+
+        it "should get the app users questions" do
+            post :others_questions, format: :json, token: receiver.remember_token, user_id: receiver.id
+            response.response_code.should == 200
+            json.class.should == Array
+            question = json.first
+            keys = ["left", "right", "question_id"]
+            # ANSWER KEY IS LEFT OFF CAUSE ITS OPTIONAL
+            compare_keys(question, keys)
+        end
+    end
+
+    describe :questions do
+
+        before(:each) do
+            qs = [["Day Drinking", "Night Drinking"], ["Red Wine", "White Wine"], ["White Liqours", "Brown Liqours"], ["Straw", "No straw"], ["Light Beer", "Dark Beer"], ["Mimosa", "Bloody Mary"], ["Rare", "Well Done"], ["City Vacation", "Beach Vacation"], ["Shaken", "Stirred"], ["Rocks", "Neat"], ["Sweet", "Sour"], ["Steak", "Fish"]]
+            qs.each do |q|
+                Question.create(left: q[0], right: q[1])
+            end
+        end
+
+        let(:receiver)  { FactoryGirl.create(:receiver) }
+
+        it "should get the app users questions" do
+            post :questions, format: :json, token: receiver.remember_token
+            response.response_code.should == 200
+            json.class.should == Array
+            question = json.first
+            keys = ["left", "right", "question_id"]
+            # ANSWER KEY IS LEFT OFF CAUSE ITS OPTIONAL
+            compare_keys(question, keys)
+        end
+
+        it "should update requests with answers" do
+            q1 = Question.find_by_left("Day Drinking")
+            q2 = Question.find_by_left("Red Wine")
+            q3 = Question.find_by_left("White Liqours")
+            q4 = Question.find_by_left("Straw")
+            q5 = Question.find_by_left("Light Beer")
+            q6 = Question.find_by_left("Mimosa")
+            q7 = Question.find_by_left("Rare")
+
+            params = "[  {    \"question_id\" : #{q1.id},    \"left\" : \"Day Drinking\",    \"answer\" : \"0\",    \"right\" : \"Night Drinking\"  },  {    \"question_id\" : #{q2.id},    \"left\" : \"Red Wine\",    \"answer\" : \"1\",    \"right\" : \"White Wine\"  },  {    \"question_id\" : #{q3.id},    \"left\" : \"White Liqours\",    \"answer\" : \"0\",    \"right\" : \"Brown Liqours\"  },  {    \"question_id\" : #{q4.id},    \"left\" : \"Straw\",    \"answer\" : \"0\",    \"right\" : \"No straw\"  },  {    \"question_id\" : #{q5.id},    \"left\" : \"Light Beer\",    \"answer\" : \"0\",    \"right\" : \"Dark Beer\"  },  {    \"question_id\" : #{q6.id},    \"left\" : \"Mimosa\",    \"answer\" : \"0\",    \"right\" : \"Bloody Mary\"  },  {    \"question_id\" : #{q7.id},    \"left\" : \"Rare\",    \"answer\" : \"1\",    \"right\" : \"Well Done\"  }]"
+
+            post :questions, format: :json, token: receiver.remember_token, answers: params
+            response.response_code.should == 200
+            json.class.should == Array
+            question = json.first
+            keys = ["left", "right", "question_id", "answer"]
+            compare_keys(question, keys)
+        end
     end
 end
 

@@ -237,9 +237,7 @@ class AppController < JsonController
 
   		if user = authenticate_app_user(params["token"])
 
-		  	  	# save filled out answers to db
 	  		if params["answers"]
-	        	#puts "ANSWERS #{params['answers']}"
 	  			answered_questions = JSON.parse params["answers"]
 	  			Answer.save_these(answered_questions, user)
 	  		end
