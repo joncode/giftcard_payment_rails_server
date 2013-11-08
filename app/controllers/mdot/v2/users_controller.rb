@@ -22,6 +22,7 @@ class Mdot::V2::UsersController < JsonController
         return nil  if data_not_hash?(data)
         user_params = create_strong_param(data)
         return nil  if hash_empty?(user_params)
+
         user = User.new(data)
         if user.save
             user.pn_token = pn_token if pn_token
@@ -48,6 +49,14 @@ class Mdot::V2::UsersController < JsonController
     end
 
     def reset_password
+        return nil if data_not_string?
+        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).first
+            user = user_social.user
+            user.update_reset_token
+            success "Email is Sent , check your inbox"
+        else
+            fail    "#{PAGE_NAME} does not have record of that email"
+        end
         respond
     end
 

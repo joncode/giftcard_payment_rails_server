@@ -117,7 +117,7 @@ class AppController < JsonController
             response["error"] = database_error
             logmsg       = response.to_s
         end
-
+        
         respond_to do |format|
             # logger.debug response
             # @app_response = "AC response => #{logmsg}"

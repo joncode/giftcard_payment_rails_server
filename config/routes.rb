@@ -104,7 +104,7 @@ Drinkboard::Application.routes.draw do
         end
       end
 
-      resources :providers,  only: [:show] do
+      resources :providers,  only: [] do
         member do
           get :menu
         end

@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Mdot::V2::CardsController do
 
     before(:all) do
-        unless user = User.find_by_remember_token("TokenGood")
+        unless user = User.find_by_remember_token("USER_TOKEN")
             user = FactoryGirl.create(:user)
-            user.update_attribute(:remember_token, "TokenGood")
+            user.update_attribute(:remember_token, "USER_TOKEN")
         end
     end
 

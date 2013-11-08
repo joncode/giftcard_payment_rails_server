@@ -6,9 +6,9 @@ describe Mdot::V2::QuestionsController do
         User.delete_all
         Question.delete_all
         Answer.delete_all
-        unless @user = User.find_by_remember_token("TokenGood")
+        unless @user = User.find_by_remember_token("USER_TOKEN")
             @user = FactoryGirl.create(:user)
-            @user.update_attribute(:remember_token, "TokenGood")
+            @user.update_attribute(:remember_token, "USER_TOKEN")
         end
         qs = [["Day Drinking", "Night Drinking"], ["Red Wine", "White Wine"], ["White Liqours", "Brown Liqours"], ["Straw", "No straw"], ["Light Beer", "Dark Beer"], ["Mimosa", "Bloody Mary"], ["Rare", "Well Done"], ["City Vacation", "Beach Vacation"], ["Shaken", "Stirred"], ["Rocks", "Neat"], ["Sweet", "Sour"], ["Steak", "Fish"]]
         qs.each do |q|
@@ -20,7 +20,7 @@ describe Mdot::V2::QuestionsController do
         it_should_behave_like("token authenticated", :get, :index)
 
         it "should get the app users questions" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             post :index, format: :json
             response.response_code.should == 200
             json["status"].should == 1
@@ -44,7 +44,7 @@ describe Mdot::V2::QuestionsController do
         let(:q7) {Question.find_by_left("Rare")}
 
         it "should update requests with json'd answers" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             params = "[  {    \"question_id\" : #{q1.id},    \"left\" : \"Day Drinking\",    \"answer\" : \"0\",    \"right\" : \"Night Drinking\"  },  {    \"question_id\" : #{q2.id},    \"left\" : \"Red Wine\",    \"answer\" : \"0\",    \"right\" : \"White Wine\"  },  {    \"question_id\" : #{q3.id},    \"left\" : \"White Liqours\",    \"answer\" : \"0\",    \"right\" : \"Brown Liqours\"  },  {    \"question_id\" : #{q4.id},    \"left\" : \"Straw\",    \"answer\" : \"0\",    \"right\" : \"No straw\"  },  {    \"question_id\" : #{q5.id},    \"left\" : \"Light Beer\",    \"answer\" : \"0\",    \"right\" : \"Dark Beer\"  },  {    \"question_id\" : #{q6.id},    \"left\" : \"Mimosa\",    \"answer\" : \"0\",    \"right\" : \"Bloody Mary\"  },  {    \"question_id\" : #{q7.id},    \"left\" : \"Rare\",    \"answer\" : \"0\",    \"right\" : \"Well Done\"  }]"
             #params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}].to_json
             put :update, format: :json, data: params
@@ -62,7 +62,7 @@ describe Mdot::V2::QuestionsController do
         end
 
         it "should update requests with hash answers" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}].to_json
 
             put :update, format: :json, data: params
@@ -80,7 +80,7 @@ describe Mdot::V2::QuestionsController do
         end
 
         it "should ignore bad keys" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}].to_json
 
             put :update, format: :json, data: params
@@ -93,7 +93,7 @@ describe Mdot::V2::QuestionsController do
         end
 
         it "should reject bad requests" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             put :update, format: :json, data: "total garbage"
             response.response_code.should == 400
             put :update, format: :json, data: {"doest" => "bs", "take" => "bs", "arrays" => "bs"}

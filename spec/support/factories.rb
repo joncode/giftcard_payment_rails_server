@@ -157,15 +157,13 @@ FactoryGirl.define do
 
     factory :card do
         csv   "434"
-        last_four "6772"
         month "02"
         brand "visa"
         name   "Plain Joseph"
         nickname "Biz"
         user_id   1
         year  "2017"
-        number "4222222222222222"
-        passphrase  "Oh yeah"
+        number "4417121029961508"
     end
 
     factory :sale do

@@ -284,8 +284,8 @@ describe AppController do
             end
             Provider.last.update_attribute(:active, false)
             post :providers, format: :json, token: user.remember_token
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
-            response.response_code.should == 200
+            keys =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
+            rrc(200)
             ary = json
             ary.class.should == Array
             ary.count.should == 19
@@ -294,11 +294,30 @@ describe AppController do
         end
     end
 
+    describe :menu_v2 do
+
+        before(:each) do
+            @provider = FactoryGirl.create(:provider)
+            FactoryGirl.create(:menu_string, provider_id: @provider.id)
+        end
+
+        it "should return the provider menu in version 2 format only" do
+            post :menu_v2, format: :json, token: user.remember_token, data: @provider.id
+            rrc(200)
+            menu_json = json
+            menu_json.class.should == Array
+            # menu = JSON.parse menu_json
+            # keys = ["section", "items"]
+            # menu.class.should == Array
+            # compare_keys(menu[0], keys)
+        end
+    end
+
     describe :get_settings do
         it "should get the users settings and return json" do
             post :get_settings, format: :json, token: user.remember_token
             keys    =  ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id"]
-            response.response_code.should == 200
+            rrc(200)
             hsh = json["success"]
             hsh.class.should == Hash
             compare_keys(hsh, keys)
@@ -333,8 +352,11 @@ describe AppController do
             json["success"].count.should  == 4
         end
 
-        it " should return an empty array if user has no cards" do
-
+        it "should return an empty array if user has no cards" do
+            post :get_cards, format: :json, token: user.remember_token
+            response.response_code.should == 200
+            json["success"].class.should  == Array
+            json["success"].count.should  == 0
         end
     end
 
