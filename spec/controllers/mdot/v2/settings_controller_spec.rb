@@ -18,7 +18,7 @@ describe Mdot::V2::SettingsController do
             request.env["HTTP_TKN"] = "TokenGood"
             get :index, format: :json
             keys    =  ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id"]
-            response.response_code.should == 200
+            rrc(200)
             hsh = json["data"]
             hsh.class.should == Hash
             compare_keys(hsh, keys)
@@ -31,7 +31,7 @@ describe Mdot::V2::SettingsController do
         it "should receive json'd settings and update the record" do
             request.env["HTTP_TKN"] = "TokenGood"
             put :update, format: :json, data: "{  \"email_receiver_new\" : \"false\",  \"email_invite\" : \"false\",  \"email_redeem\" : \"false\",  \"email_invoice\" : \"false\",  \"email_follow_up\" : \"false\"}"
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].should        == "Settings saved"
             setting = @user.setting
@@ -42,7 +42,7 @@ describe Mdot::V2::SettingsController do
             setting.email_follow_up.should be_false
             setting.email_receiver_new.should be_false
             put :update, format: :json, data: "{  \"email_receiver_new\" : \"true\",  \"email_invite\" : \"true\",  \"email_redeem\" : \"true\",  \"email_invoice\" : \"true\",  \"email_follow_up\" : \"true\"}"
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].should        == "Settings saved"
             setting.reload
@@ -57,7 +57,7 @@ describe Mdot::V2::SettingsController do
             request.env["HTTP_TKN"] = "TokenGood"
             params = {"email_receiver_new"=>false, "email_invite"=>false, "email_redeem"=>false, "email_invoice"=>false, "email_follow_up"=>false}
             put :update, format: :json, data: params
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].should   == "Settings saved"
             setting = @user.setting
@@ -69,7 +69,7 @@ describe Mdot::V2::SettingsController do
             setting.email_receiver_new.should be_false
             params = {"email_receiver_new"=>true, "email_invite"=>true, "email_redeem"=>true, "email_invoice"=>true, "email_follow_up"=>true}
             put :update, format: :json, data: params
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].should        == "Settings saved"
             setting.reload
@@ -84,7 +84,7 @@ describe Mdot::V2::SettingsController do
             request.env["HTTP_TKN"] = "TokenGood"
             params = {"email_receisdf"=>false, "email_invite"=>false, "email_rsadfedeem"=>false, "ads"=>false, "sdf"=>true}
             put :update, format: :json, data: params
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].should   == "Settings saved"
             setting = @user.setting
@@ -95,17 +95,17 @@ describe Mdot::V2::SettingsController do
             request.env["HTTP_TKN"] = "TokenGood"
             params =  {created_at: "happy", updated_at: "happy", confirm_email_token: "happy", confirm_phone_token: "happy", reset_token: "happy", confirm_phone_flag: "happy", confirm_email_flag: "happy", confirm_phone_token_sent_at: "happy", confirm_email_token_sent_at: "happy", reset_token_sent_at: "happy"}
             put :update, format: :json, data: params
-            response.response_code.should == 400
+            rrc(400)
         end
 
         it "should reject non hashes and non JSON hashes" do
             request.env["HTTP_TKN"] = "TokenGood"
             params =  ["happy", "happy"]
             put :update, format: :json, data: params
-            response.response_code.should == 400
+            rrc(400)
             params =  "Hey Dude fake "
             put :update, format: :json, data: params
-            response.response_code.should == 400
+            rrc(400)
         end
 
     end

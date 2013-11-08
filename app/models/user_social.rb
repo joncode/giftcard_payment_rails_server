@@ -3,10 +3,12 @@ class UserSocial < ActiveRecord::Base
 
     belongs_to :user
 
-    #before_validation :reject_xxx_emails
+    before_validation     :reject_xxx_emails
+
     validates_presence_of :identifier, :type_of, :user_id
-    after_create :subscribe_mailchimp
-    # after_save   :unsubscribe_mailchimp
+
+    after_create          :subscribe_mailchimp
+    after_save            :unsubscribe_mailchimp
 
     default_scope where(active: true)
 
@@ -43,6 +45,7 @@ private
         if self.type_of  == "email"
             if self.identifier && self.identifier[-3..-1] == "xxx"
                 self.identifier = nil
+                self.user_id    = nil
             end
         end
     end

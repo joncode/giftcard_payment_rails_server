@@ -2,60 +2,71 @@ require 'spec_helper'
 
 describe User do
 
-  it "should downcase email" do
-    user = FactoryGirl.create :user, { email: "KJOOIcode@yahoo.com" }
-    user.email.should == "kjooicode@yahoo.com"
-    puts user.inspect
-  end
-  # if user social methods are called on user , it gets the data from user social
+	it "should downcase email" do
+		user = FactoryGirl.create :user, { email: "KJOOIcode@yahoo.com" }
+		user.email.should == "kjooicode@yahoo.com"
+		puts user.inspect
+	end
+	# if user social methods are called on user , it gets the data from user social
 
-  # if user updates email, phone, twitter or facebook the data is saved in userSocial
-  describe "user_social de-normalization" do
+	it "should accept integers for phone, twitter, facebook _id" do
+		user = FactoryGirl.build :user, { twitter: 832742384, facebook_id: 318341934192, phone: 9876787657 }
+		user.save
+		new_user = User.find_by_twitter("832742384")
+		new_user.phone.should == "9876787657"
+		new_user.facebook_id.should == "318341934192"
+	end
 
-    before(:each) do
-        User.delete_all
-        UserSocial.delete_all
-        @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: nil }
-    end
 
-    {
-        email: "jon@gmail.com",
-        phone: "9173706969",
-        facebook_id: "123",
-        twitter: "999"
-    }.stringify_keys.each do |type_of, identifier|
 
-        it "should update when user saves new #{type_of} to user_social.rb" do
-            running {
-                @user.update_attribute("#{type_of}", identifier)
-            }.should change { UserSocial.count }.by(1)
-            user_social = UserSocial.last
-            user_social.identifier.should == identifier
-            user_social.type_of.should    == type_of
-            user_social.user_id.should    == @user.id
-        end
 
-        it "should remove #{type_of} when user deletes #{type_of}" do
-            user = FactoryGirl.create :user, { "#{type_of}" => identifier }
-            user.deactivate_social("#{type_of}", identifier)
-            UserSocial.unscoped.find_by_identifier(identifier).active.should be_false
-        end
+	# if user updates email, phone, twitter or facebook the data is saved in userSocial
+	describe "user_social de-normalization" do
 
-        it "should not create a new user social record if no new #{type_of} is submitted" do
-            # update a user without #{type_of} change
-            running {
-                @user.update_attributes({last_name: "change_me_not_id"})
-            }.should_not change { UserSocial.count }
+		before(:each) do
+				User.delete_all
+				UserSocial.delete_all
+				@user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: nil }
+		end
 
-        end
-    end
+		{
+				email: "jon@gmail.com",
+				phone: "9173706969",
+				facebook_id: "123",
+				twitter: "999"
+		}.stringify_keys.each do |type_of, identifier|
 
-    # test that user_social save condensed phone numbers
-    # test that user social runs email downcase and regex
-    # test that user can give a primary phone number
-    # test that user can give a primary email address
+				it "should update when user saves new #{type_of} to user_social.rb" do
+						running {
+								@user.update_attribute("#{type_of}", identifier)
+						}.should change { UserSocial.count }.by(1)
+						user_social = UserSocial.last
+						user_social.identifier.should == identifier
+						user_social.type_of.should    == type_of
+						user_social.user_id.should    == @user.id
+				end
 
-  end
+				it "should remove #{type_of} when user deletes #{type_of}" do
+						user = FactoryGirl.create :user, { "#{type_of}" => identifier }
+						user.deactivate_social("#{type_of}", identifier)
+						UserSocial.unscoped.find_by_identifier(identifier).active.should be_false
+				end
+
+				it "should not create a new user social record if no new #{type_of} is submitted" do
+						# update a user without #{type_of} change
+						running {
+								@user.update_attributes({last_name: "change_me_not_id"})
+						}.should_not change { UserSocial.count }
+
+				end
+		end
+
+		# test that user_social save condensed phone numbers
+		# test that user social runs email downcase and regex
+		# test that user can give a primary phone number
+		# test that user can give a primary email address
+
+	end
 
 
 

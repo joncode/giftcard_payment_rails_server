@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
 	after_save    :persist_social_data
 	after_create  :init_confirm_email
 
-	validates :first_name, 	presence: true, 			length: { maximum: 50 }
+	validates :first_name, 	presence: true, length: {  maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
 	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
@@ -299,7 +299,7 @@ class User < ActiveRecord::Base
 	end
 
 	def init_confirm_email
-		if Rails.env.production? || Rails.env.staging?
+		unless Rails.env.development?
 			if self.email
 				set_confirm_email
 				confirm_email

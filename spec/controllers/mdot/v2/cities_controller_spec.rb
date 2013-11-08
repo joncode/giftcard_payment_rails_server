@@ -37,7 +37,7 @@ describe Mdot::V2::CitiesController do
     describe :merchants do
 
         it_should_behave_like("token authenticated", :get, :merchants, id: 1)
-        
+
         it "should return a list of all active providers serialized when success" do
             Provider.delete_all
             20.times do
@@ -46,7 +46,7 @@ describe Mdot::V2::CitiesController do
             Provider.last.update_attribute(:active, false)
             request.env["HTTP_TKN"] = "TokenGood"
             get :merchants, format: :json, id: "New York"
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "sales_tax", "provider_id", "photo", "full_address", "live"]
+            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
             response.response_code.should == 200
             ary = json
             ary.class.should == Array

@@ -266,7 +266,7 @@ describe AppController do
 
         it "should return a list of providers" do
             amount  = Provider.where(active: true).count
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "sales_tax", "provider_id", "photo", "full_address", "live"]
+            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
             post :brand_merchants, format: :json, data: @brand.id, token: user.remember_token
             response.response_code.should == 200
             ary = json
@@ -284,7 +284,7 @@ describe AppController do
             end
             Provider.last.update_attribute(:active, false)
             post :providers, format: :json, token: user.remember_token
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "sales_tax", "provider_id", "photo", "full_address", "live"]
+            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
             response.response_code.should == 200
             ary = json
             ary.class.should == Array
@@ -560,6 +560,31 @@ describe AppController do
             question = json.first
             keys = ["left", "right", "question_id", "answer"]
             compare_keys(question, keys)
+        end
+    end
+
+    describe :reset_password do
+
+        let(:receiver)  { FactoryGirl.create(:receiver, email: "findme@gmail.com") }
+
+        it "should send success response for screen" do
+            post :reset_password, format: :json, email: receiver.email
+            response.response_code.should == 200
+            json["success"].should == "Email is Sent , check your inbox"
+        end
+
+        it "should update the user reset password token and expiration" do
+            post :reset_password, format: :json, email: receiver.email
+            response.response_code.should == 200
+            receiver.reload
+            receiver.reset_token.should_not be_nil
+            receiver.reset_token_sent_at.hour.should == Time.now.hour
+        end
+
+        it "should return error message if email doesn not exist" do
+            post :reset_password, format: :json, email: "non-existant@yahoo.com"
+            response.response_code.should == 200
+            json["error"].should == "We do not have record of that email"
         end
     end
 end
