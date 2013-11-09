@@ -4,8 +4,6 @@ class DropItemsmenusEmployeesConnectionsRelays < ActiveRecord::Migration
   	drop_table :employees
   	drop_table :connections
   	drop_table :relays
-  	drop_table :approvals
-
   end
 
   def down
@@ -44,17 +42,6 @@ class DropItemsmenusEmployeesConnectionsRelays < ActiveRecord::Migration
 		t.datetime "created_at", :null => false
 		t.datetime "updated_at", :null => false
 	end
-
-    create_table "approvals", :force => true do |t|
-      t.text     "request_str"
-      t.string   "unique_id"
-      t.datetime "created_at"
-      t.datetime "updated_at"
-      t.integer  "merchant_id"
-      t.integer  "status",      :default => 0
-      t.string   "email"
-    end
-
 
   end
 end
