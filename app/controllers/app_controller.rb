@@ -237,9 +237,7 @@ class AppController < JsonController
 
   		if user = authenticate_app_user(params["token"])
 
-		  	  	# save filled out answers to db
 	  		if params["answers"]
-	        	#puts "ANSWERS #{params['answers']}"
 	  			answered_questions = JSON.parse params["answers"]
 	  			Answer.save_these(answered_questions, user)
 	  		end
@@ -597,12 +595,7 @@ class AppController < JsonController
 		response  = {}
 
       	if user = authenticate_app_user(params["token"])
-      		display_cards = Card.get_cards user
-      		if display_cards.empty?
-      			response["success"] = []
-      		else
-      			response["success"] = display_cards
-      		end
+            response["success"] = Card.get_cards(user)
     	else
       		message += "Couldn't identify app user. "
       		response["error"] = message

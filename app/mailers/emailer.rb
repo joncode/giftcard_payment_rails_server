@@ -41,7 +41,7 @@ module Emailer
 		message          = message_hash(subject, email, recipient_name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
-    	
+
     def invoice_giver data
     	gift 			 = Gift.find(data["gift_id"])
 		template_name    = "purchase-receipt"
@@ -49,7 +49,7 @@ module Emailer
 		email            = gift.giver.email
 		name             = gift.giver_name
 		link             = nil
-        bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.		
+        bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
 		template_content = generate_template_content(gift, template_name)
 		message          = message_hash(subject, email, name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)

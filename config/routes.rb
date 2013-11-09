@@ -81,7 +81,11 @@ Drinkboard::Application.routes.draw do
 
       resources :cards,     only: [:index, :create, :destroy]
 
-      resources :settings,  only: [:index, :update]
+      resources :settings,  only: [:index] do
+        collection do
+          put :update
+        end
+      end
       resources :gifts,     only: [:create] do
         member do
           post :regift
@@ -94,9 +98,13 @@ Drinkboard::Application.routes.draw do
         end
       end
       resources :photos,     only: [:create]
-      resources :questions,  only: [:index, :update]
+      resources :questions,  only: [:index] do
+        collection do
+          put :update
+        end
+      end
 
-      resources :providers,  only: [:show] do
+      resources :providers,  only: [] do
         member do
           get :menu
         end

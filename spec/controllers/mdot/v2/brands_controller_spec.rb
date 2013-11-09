@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Mdot::V2::BrandsController do
 
     before(:all) do
-        unless User.find_by_remember_token("TokenGood")
+        unless User.find_by_remember_token("USER_TOKEN")
             user = FactoryGirl.create(:user)
-            user.update_attribute(:remember_token, "TokenGood")
+            user.update_attribute(:remember_token, "USER_TOKEN")
         end
 
     end
@@ -23,7 +23,7 @@ describe Mdot::V2::BrandsController do
         end
 
         it "should return a list of brands" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             amount  = Brand.where(active: true).count
             keys    = ["name","next_view","brand_id","photo"]
             get :index, format: :json
@@ -56,7 +56,7 @@ describe Mdot::V2::BrandsController do
         end
 
         it "should return a list of providers" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             amount  = Provider.where(active: true).count
             keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
             route   = :merchants
@@ -70,7 +70,7 @@ describe Mdot::V2::BrandsController do
         end
 
         it "should return 404 when brand not found via ID" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: 100000
             response.response_code.should == 404
         end

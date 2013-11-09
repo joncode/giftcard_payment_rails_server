@@ -36,12 +36,12 @@ module GiftSerializers
         gift_hsh["gift_id"]            = self.id
         gift_hsh
     end
-    
+
     def giver_serialize
         gift_hsh = self.serializable_hash only: ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "total", "updated_at", "shoppingCart", "receiver_photo"]
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.giver_status
-        gift_hsh["giver_photo"]        = giver.get_photo
+        gift_hsh["receiver_photo"]     = receiver.get_photo
         gift_hsh["provider_photo"]     = provider.get_photo
         gift_hsh["provider_phone"]     = provider.phone
         gift_hsh["city"]               = provider.city

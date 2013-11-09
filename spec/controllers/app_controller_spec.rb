@@ -201,26 +201,26 @@ describe AppController do
     end
 
 
-    describe "mailchimp resque" do
+    # describe "mailchimp resque" do
 
-        before do
-            ResqueSpec.reset!
-            @user = FactoryGirl.create :user, {first_name:"Bob", last_name:"Barker", email:"first@email.com"}
-            MailchimpList.any_instance.stub(:subscribe).and_return({"email" => @user.email})
-            run_delayed_jobs
-        end
+    #     before do
+    #         ResqueSpec.reset!
+    #         @user = FactoryGirl.create :user, {first_name:"Bob", last_name:"Barker", email:"first@email.com"}
+    #         MailchimpList.any_instance.stub(:subscribe).and_return({"email" => @user.email})
+    #         run_delayed_jobs
+    #     end
 
-        it "should hit subscription job with correct user social id" do
-            last_us_id = UserSocial.last.id
-            SubscriptionJob.should_receive(:perform).with(last_us_id + 1)
-            post :update_user, format: :json, token: @user.remember_token, data: { "email" => "second@email.com" }
-            run_delayed_jobs
-        end        
+    #     it "should hit subscription job with correct user social id" do
+    #         last_us_id = UserSocial.last.id
+    #         SubscriptionJob.should_receive(:perform).with(last_us_id + 1)
+    #         post :update_user, format: :json, token: @user.remember_token, data: { "email" => "second@email.com" }
+    #         run_delayed_jobs
+    #     end
 
-        describe "should send email correctly" do
-            it "see subscription_job_spec"
-        end
-    end
+    #     describe "should send email correctly" do
+    #         it "see subscription_job_spec"
+    #     end
+    # end
 
     describe :brands do
 
@@ -266,7 +266,7 @@ describe AppController do
 
         it "should return a list of providers" do
             amount  = Provider.where(active: true).count
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "sales_tax", "provider_id", "photo", "full_address", "live"]
+            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
             post :brand_merchants, format: :json, data: @brand.id, token: user.remember_token
             response.response_code.should == 200
             ary = json
@@ -284,8 +284,8 @@ describe AppController do
             end
             Provider.last.update_attribute(:active, false)
             post :providers, format: :json, token: user.remember_token
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "sales_tax", "provider_id", "photo", "full_address", "live"]
-            response.response_code.should == 200
+            keys =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
+            rrc(200)
             ary = json
             ary.class.should == Array
             ary.count.should == 19
@@ -294,23 +294,59 @@ describe AppController do
         end
     end
 
+    describe :menu_v2 do
+
+        before(:each) do
+            @provider = FactoryGirl.create(:provider)
+            FactoryGirl.create(:menu_string, provider_id: @provider.id)
+        end
+
+        it "should return the provider menu in version 2 format only" do
+            post :menu_v2, format: :json, token: user.remember_token, data: @provider.id
+            rrc(200)
+            menu_json = json
+            menu_json.class.should == Array
+            # menu = JSON.parse menu_json
+            # keys = ["section", "items"]
+            # menu.class.should == Array
+            # compare_keys(menu[0], keys)
+        end
+    end
+
     describe :get_settings do
         it "should get the users settings and return json" do
             post :get_settings, format: :json, token: user.remember_token
             keys    =  ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id"]
-            response.response_code.should == 200
+            rrc(200)
             hsh = json["success"]
             hsh.class.should == Hash
             compare_keys(hsh, keys)
         end
     end
 
+    describe :save_settings do
+
+        it "should receive json'd settings and update the record" do
+            post :save_settings, format: :json, token: user.remember_token, data: "{  \"email_receiver_new\" : \"false\",  \"email_invite\" : \"false\",  \"email_redeem\" : \"false\",  \"email_invoice\" : \"false\",  \"email_follow_up\" : \"false\"}"
+            response.response_code.should == 200
+            json["success"].should        == "Settings saved"
+            setting = user.setting
+            setting.reload
+            setting.email_invoice.should be_false
+            setting.email_redeem.should be_false
+            setting.email_invite.should be_false
+            setting.email_follow_up.should be_false
+            setting.email_receiver_new.should be_false
+        end
+    end
+
     describe :get_cards do
 
         it "should return a list of cards for the user" do
-            4.times do
-                FactoryGirl.create(:card, user_id: user.id)
-            end
+            FactoryGirl.create(:card, user_id: user.id)
+            FactoryGirl.create(:amex, user_id: user.id)
+            FactoryGirl.create(:visa, user_id: user.id)
+            FactoryGirl.create(:mastercard, user_id: user.id)
 
             post :get_cards, format: :json, token: user.remember_token
             response.response_code.should == 200
@@ -318,9 +354,61 @@ describe AppController do
             json["success"].count.should  == 4
         end
 
-        it " should return an empty array if user has no cards" do
-
+        it "should return an empty array if user has no cards" do
+            post :get_cards, format: :json, token: user.remember_token
+            response.response_code.should == 200
+            json["success"].class.should  == Array
+            json["success"].count.should  == 0
         end
+    end
+
+    describe :add_card do
+
+        it "should accept json'd hash of require fields and return 'add' with card ID" do
+            params = "{\"month\":\"02\",\"number\":\"4417121029961508\",\"user_id\":772,\"name\":\"Hiromi Tsuboi\",\"year\":\"2016\",\"csv\":\"910\",\"nickname\":\"Dango\"}"
+
+            post :add_card, format: :json, token: user.remember_token, data: params
+
+            card = Card.find_by_user_id(772)
+            json["add"].should == card.id
+        end
+
+        it "should not save incomplete card info" do
+            params = "{\"number\":\"4417121029961508\",\"user_id\":772,\"name\":\"Hiromi Tsuboi\",\"year\":\"2016\",\"csv\":\"910\",\"nickname\":\"Dango\"}"
+
+            post :add_card, format: :json, token: user.remember_token, data: params
+
+            card = Card.find_by_user_id(772)
+            json["error_server"].class.should == Hash
+            json["error_server"].has_key?('month').should be_true
+        end
+    end
+
+    describe :delete_card do
+
+        it "should return card id in delete key on success" do
+            card = FactoryGirl.create(:card, user_id: user.id)
+            post :delete_card, format: :json, token: user.remember_token, data: card.id
+            rrc(200)
+            json["delete"].should == card.id.to_s
+        end
+
+        it "should delete the card from the database" do
+            card = FactoryGirl.create(:card, user_id: user.id)
+            post :delete_card, format: :json, token: user.remember_token, data: card.id
+            card = Card.where(user_id: user.id).count
+            card.should == 0
+        end
+
+        it "should return 404 with no ID or wrong ID" do
+            card = FactoryGirl.create(:card, user_id: user.id)
+            post :delete_card, format: :json, token: user.remember_token
+            rrc(404)
+            card = FactoryGirl.create(:card, user_id: user.id)
+            post :delete_card, format: :json, token: user.remember_token, data: 928312
+            rrc(404)
+        end
+
     end
 
     describe :create_redeem do
@@ -483,6 +571,94 @@ describe AppController do
             json["used"].count.should == 0
         end
 
+    end
+
+    describe :others_questions do
+
+        before(:each) do
+            qs = [["Day Drinking", "Night Drinking"], ["Red Wine", "White Wine"], ["White Liqours", "Brown Liqours"], ["Straw", "No straw"], ["Light Beer", "Dark Beer"], ["Mimosa", "Bloody Mary"], ["Rare", "Well Done"], ["City Vacation", "Beach Vacation"], ["Shaken", "Stirred"], ["Rocks", "Neat"], ["Sweet", "Sour"], ["Steak", "Fish"]]
+            qs.each do |q|
+                Question.create(left: q[0], right: q[1])
+            end
+        end
+
+        let(:receiver)  { FactoryGirl.create(:receiver) }
+
+        it "should get the app users questions" do
+            post :others_questions, format: :json, token: receiver.remember_token, user_id: receiver.id
+            response.response_code.should == 200
+            json.class.should == Array
+            question = json.first
+            keys = ["left", "right", "question_id"]
+            # ANSWER KEY IS LEFT OFF CAUSE ITS OPTIONAL
+            compare_keys(question, keys)
+        end
+    end
+
+    describe :questions do
+
+        before(:each) do
+            qs = [["Day Drinking", "Night Drinking"], ["Red Wine", "White Wine"], ["White Liqours", "Brown Liqours"], ["Straw", "No straw"], ["Light Beer", "Dark Beer"], ["Mimosa", "Bloody Mary"], ["Rare", "Well Done"], ["City Vacation", "Beach Vacation"], ["Shaken", "Stirred"], ["Rocks", "Neat"], ["Sweet", "Sour"], ["Steak", "Fish"]]
+            qs.each do |q|
+                Question.create(left: q[0], right: q[1])
+            end
+        end
+
+        let(:receiver)  { FactoryGirl.create(:receiver) }
+
+        it "should get the app users questions" do
+            post :questions, format: :json, token: receiver.remember_token
+            response.response_code.should == 200
+            json.class.should == Array
+            question = json.first
+            keys = ["left", "right", "question_id"]
+            # ANSWER KEY IS LEFT OFF CAUSE ITS OPTIONAL
+            compare_keys(question, keys)
+        end
+
+        it "should update requests with answers" do
+            q1 = Question.find_by_left("Day Drinking")
+            q2 = Question.find_by_left("Red Wine")
+            q3 = Question.find_by_left("White Liqours")
+            q4 = Question.find_by_left("Straw")
+            q5 = Question.find_by_left("Light Beer")
+            q6 = Question.find_by_left("Mimosa")
+            q7 = Question.find_by_left("Rare")
+
+            params = "[  {    \"question_id\" : #{q1.id},    \"left\" : \"Day Drinking\",    \"answer\" : \"0\",    \"right\" : \"Night Drinking\"  },  {    \"question_id\" : #{q2.id},    \"left\" : \"Red Wine\",    \"answer\" : \"1\",    \"right\" : \"White Wine\"  },  {    \"question_id\" : #{q3.id},    \"left\" : \"White Liqours\",    \"answer\" : \"0\",    \"right\" : \"Brown Liqours\"  },  {    \"question_id\" : #{q4.id},    \"left\" : \"Straw\",    \"answer\" : \"0\",    \"right\" : \"No straw\"  },  {    \"question_id\" : #{q5.id},    \"left\" : \"Light Beer\",    \"answer\" : \"0\",    \"right\" : \"Dark Beer\"  },  {    \"question_id\" : #{q6.id},    \"left\" : \"Mimosa\",    \"answer\" : \"0\",    \"right\" : \"Bloody Mary\"  },  {    \"question_id\" : #{q7.id},    \"left\" : \"Rare\",    \"answer\" : \"1\",    \"right\" : \"Well Done\"  }]"
+
+            post :questions, format: :json, token: receiver.remember_token, answers: params
+            response.response_code.should == 200
+            json.class.should == Array
+            question = json.first
+            keys = ["left", "right", "question_id", "answer"]
+            compare_keys(question, keys)
+        end
+    end
+
+    describe :reset_password do
+
+        let(:receiver)  { FactoryGirl.create(:receiver, email: "findme@gmail.com") }
+
+        it "should send success response for screen" do
+            post :reset_password, format: :json, email: receiver.email
+            response.response_code.should == 200
+            json["success"].should == "Email is Sent , check your inbox"
+        end
+
+        it "should update the user reset password token and expiration" do
+            post :reset_password, format: :json, email: receiver.email
+            response.response_code.should == 200
+            receiver.reload
+            receiver.reset_token.should_not be_nil
+            receiver.reset_token_sent_at.hour.should == Time.now.hour
+        end
+
+        it "should return error message if email doesn not exist" do
+            post :reset_password, format: :json, email: "non-existant@yahoo.com"
+            response.response_code.should == 200
+            json["error"].should == "We do not have record of that email"
+        end
     end
 end
 

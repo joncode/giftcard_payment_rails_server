@@ -10,7 +10,7 @@ describe Mdot::V2::GiftsController do
             User.delete_all
             Provider.delete_all
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "TokenGood")
+            @user.update_attribute(:remember_token, "USER_TOKEN"       )
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
 
             @number_received = 9
@@ -31,7 +31,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should send a list of sent gifts" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             get :archive, format: :json
             json["status"].should == 1
             json["data"]["sent"].class.should == Array
@@ -39,15 +39,15 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should send sent gifts (purchaser) with giver keys" do
-            request.env["HTTP_TKN"] = "TokenGood"
-            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "total", "updated_at", "shoppingCart", "receiver_photo", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id"]
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "total", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id"]
             post :archive, format: :json
             gift_hsh = json["data"]["sent"][0]
             compare_keys(gift_hsh, keys)
         end
 
         it "should send a list of used gifts" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             gs = Gift.where(receiver_id: @user.id)
             gs.each do |gift|
                 redeem = Redeem.find_or_create_with_gift(gift)
@@ -62,7 +62,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should send used gifts with receiver keys" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             gs = Gift.where(receiver_id: @user.id)
             gs.each do |gift|
                 redeem = Redeem.find_or_create_with_gift(gift)
@@ -77,7 +77,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should send empty arrays when no gifts" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             Gift.delete_all
             get :archive, format: :json
             json["status"].should == 1
@@ -97,7 +97,7 @@ describe Mdot::V2::GiftsController do
             User.delete_all
             Provider.delete_all
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "TokenGood")
+            @user.update_attribute(:remember_token, "USER_TOKEN"       )
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @number = 10
             @number.times do |n|
@@ -109,14 +109,14 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return a correct badge count" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
             json["status"].should == 1
             json["data"]["badge"].should  == @number
         end
 
         it "should return gifts with deactivated givers" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             @giver.update_attribute(:active, false)
             get :badge, format: :json
             json["status"].should == 1
@@ -124,14 +124,14 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should not return gifts with deactivated receivers" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             @user.update_attribute(:active, false)
             get :badge, format: :json
             response.response_code.should == 401
         end
 
         it "should not return gifts that are unpaid" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             gs = Gift.where(receiver_id: @user.id)
             total_changed = 2
             gift1 = gs[0]
@@ -145,7 +145,7 @@ describe Mdot::V2::GiftsController do
 
         it "should return receiver serialized gifts" do
             keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at"]
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
             json_gifts = json["data"]["gifts"]
             json_gifts.class.should == Array
@@ -154,7 +154,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return shopping cart as a json string" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
             gifts_ary = json["data"]["gifts"]
             gifts_ary[0]["shoppingCart"].class.should == String
@@ -163,7 +163,7 @@ describe Mdot::V2::GiftsController do
         context "scope out unpaid gifts" do
 
             it "should not return :pay_stat => 'declined' gifts" do
-                request.env["HTTP_TKN"] = "TokenGood"
+                request.env["HTTP_TKN"] = "USER_TOKEN"
                 gifts = Gift.where(receiver_id: @user.id)
                 gifts.each do |gift|
                     gift.update_attribute(:pay_stat ,"declined" )
@@ -175,7 +175,7 @@ describe Mdot::V2::GiftsController do
             end
 
             it "should not return :pay_stat => 'unpaid' gifts" do
-                request.env["HTTP_TKN"] = "TokenGood"
+                request.env["HTTP_TKN"] = "USER_TOKEN"
                 gifts = Gift.where(receiver_id: @user.id)
                 gifts.each do |gift|
                     gift.update_attribute(:pay_stat ,"unpaid" )
@@ -187,7 +187,7 @@ describe Mdot::V2::GiftsController do
             end
 
             it "should not return :pay_stat => 'duplicate' gifts" do
-                request.env["HTTP_TKN"] = "TokenGood"
+                request.env["HTTP_TKN"] = "USER_TOKEN"
                 gifts = Gift.where(receiver_id: @user.id)
                 gifts.each do |gift|
                     gift.update_attribute(:pay_stat ,"duplicate" )
@@ -210,7 +210,7 @@ describe Mdot::V2::GiftsController do
             User.delete_all
             Provider.delete_all
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "TokenGood")
+            @user.update_attribute(:remember_token, "USER_TOKEN")
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @gift =  FactoryGirl.build(:gift, status: 'open')
             @gift.add_giver(@giver)
@@ -219,7 +219,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should create a redeem for the gift" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
             response.response_code.should == 200
             redeem = @gift.redeem
@@ -227,7 +227,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return the redeem code on success" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
             response.response_code.should == 200
             json["status"].should == 1
@@ -235,7 +235,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should change the gift status to 'notified'" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
             @gift.reload
             response.response_code.should == 200
@@ -243,12 +243,12 @@ describe Mdot::V2::GiftsController do
         end
 
         xit "should return validation errors if validation fail" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             json["status"].should == 0
         end
 
         it "should return 404 if gift id not found" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: 0
             response.response_code.should == 404
         end
@@ -263,7 +263,7 @@ describe Mdot::V2::GiftsController do
             User.delete_all
             Provider.delete_all
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "TokenGood")
+            @user.update_attribute(:remember_token, "USER_TOKEN")
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @gift =  FactoryGirl.build(:gift, status: 'open')
             @gift.add_giver(@giver)
@@ -273,14 +273,14 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should create an order for the gift" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: "test"
             @gift.order.class.should == Order
             @gift.order.server_code.should == "test"
         end
 
         it "should return order_number, server, and total on success" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: "test"
             order = @gift.order
             response.response_code.should == 200
@@ -291,7 +291,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should update gift server, redeemed_at" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             time = Time.now
             @gift.redeemed_at.should be_nil
             post :redeem, format: :json, id: @gift.id, server: "test"
@@ -302,7 +302,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return validation errors on bad gift" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             redeem = Redeem.find_by_gift_id(@gift.id)
             redeem.destroy
             post :redeem, format: :json, id: @gift.id, server: "test"
@@ -312,20 +312,423 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return data transfer error if @gift not found" do
-            request.env["HTTP_TKN"] = "TokenGood"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: 0, server: "test"
             response.response_code.should == 404
+        end
+    end
+
+    describe :regift do
+        it_should_behave_like("token authenticated", :post, :regift, id: 1)
+
+        before(:each) do
+            Gift.delete_all
+            User.delete_all
+            UserSocial.delete_all
+            @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
+            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
+            @gift =  FactoryGirl.build(:gift, status: 'open', active: true)
+            @gift.add_giver(@giver)
+            @gift.add_receiver(@user)
+            @gift.save
+
+        end
+
+        let(:cart) { "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]" }
+
+        describe "#regift" do
+
+            let(:old_gift)  { @gift }
+            let(:giver)     { @giver }
+            let(:regifter)  { @user }
+            let(:receiver)  { FactoryGirl.create(:receiver) }
+            let(:rec_hsh)  { regift_hash(receiver).to_json }
+
+            it "should create a new gift" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: rec_hsh }
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.find(old_gift.id + 1)
+                new_gift.status.should == 'open'
+                new_gift.regift_id.should == old_gift.id
+            end
+
+            it "should create a new gift with correct giver" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: rec_hsh }
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.last
+                new_gift.giver_name.should == regifter.name
+                new_gift.giver_id.should   == regifter.id
+            end
+
+            it "should set the status of the old gift to regifted" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: rec_hsh }
+                post :regift, format: :json, id: old_gift.id, data: params
+                old_gift_reloaded = Gift.find(old_gift.id)
+                old_gift_reloaded.status.should == 'regifted'
+            end
+
+            it "should set the status of new gift to open" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: rec_hsh }
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.last
+                new_gift.status.should == 'open'
+            end
+
+            it "should set the status of 'social identifier only gift' to incomplete" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                no_id_user     = FactoryGirl.build(:nobody, :id => nil )
+                hsh_no_id_user = regift_hash(no_id_user).to_json
+                params = { message: "New Regift Message", receiver: hsh_no_id_user }
+
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.find_by_receiver_email(no_id_user.email)
+                puts new_gift.inspect
+                new_gift.status.should == 'incomplete'
+            end
+
+            it "should create 'social identifier only gift'" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                no_id_user     = FactoryGirl.build(:nobody, :id => nil )
+                hsh_no_id_user = regift_hash(no_id_user).to_json
+                params = { message: "New Regift Message", receiver: hsh_no_id_user }
+
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.last
+                new_gift.id.should == (old_gift.id + 1)
+            end
+
+            it "should add new message to new gift" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: rec_hsh }
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.last
+                new_gift.message.should == "New Regift Message"
+            end
+
+            it "should copy the shopping cart to new gift" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: rec_hsh }
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.last
+                new_gift.shoppingCart.should == "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
+            end
+
+        end
+
+        describe "#regift security" do
+
+            let(:old_gift)  { @gift }
+            let(:giver)     { @giver }
+            let(:regifter)  { @user }
+            let(:receiver)  { FactoryGirl.create(:receiver) }
+            let(:rec_hsh)  { regift_hash(receiver).to_json }
+
+            it "it should not allow regift for de-activated reGifters" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: rec_hsh }
+
+                regifter.update_attribute(:active, false)
+                post :regift, format: :json, id: old_gift.id, data: params
+                rrc(401)
+            end
+
+            it "it should not allow regift to de-activated receivers" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: rec_hsh }
+                receiver.update_attribute(:active, false)
+                post :regift, format: :json, id: old_gift.id, data: params
+                puts "here is json inspect #{json.inspect}"
+                json["status"].should == 0
+                json["data"].should   == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+            end
+
+        end
+
+        describe "#regift_to_socal_network_non_users" do
+
+            before(:each) do
+                @user = FactoryGirl.create :nonetwork
+                @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            end
+
+            {
+                email: "jon@gmail.com",
+                phone: "9173706969",
+                facebook_id: "123",
+                twitter: "999"
+            }.stringify_keys.each do |type_of, identifier|
+                it "should find user account for old #{type_of}" do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+
+                    @user.update_attribute(type_of, identifier)
+                    if (type_of == "phone") || (type_of == "email")
+                        key = "receiver_#{type_of}"
+                    else
+                        key = type_of
+                    end
+                    old_gift = FactoryGirl.create :regift, { key => identifier}
+                    giver    = old_gift.giver
+                    recipient_data = regift_hash(@user)
+                    params = { message: "New Regift Message", receiver: recipient_data }
+                    post :regift, format: :json, id: old_gift.id, data: params
+
+                    puts json.inspect
+                    new_gift = Gift.find(json["data"]["gift_id"])
+                    new_gift.receiver_id.should == @user.id
+                end
+
+                it "should look thru multiple unique ids for a user object with #{type_of}" do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    @user.update_attribute(type_of, identifier)
+                    old_gift = FactoryGirl.create :regift, gift_social_id_hsh
+                    giver    = old_gift.giver
+                    recipient_data = regift_hash(@user)
+                    params = { message: "New Regift Message", receiver: recipient_data }
+                    post :regift, format: :json, id: old_gift.id, data: params
+                    new_gift = Gift.find(json["data"]["gift_id"])
+                    new_gift.receiver_id.should == @user.id
+                end
+
+                it "should look thru not full gift of unique ids for a user object with #{type_of}" do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    @user.update_attribute(type_of, identifier)
+                    missing_hsh = gift_social_id_hsh
+                    if type_of == "phone"
+                        missing_hsh["receiver_email"] = ""
+                    else
+                        missing_hsh["receiver_phone"] = ""
+                    end
+                    old_gift  = FactoryGirl.create :regift, missing_hsh
+                    giver     = old_gift.giver
+                    recipient_data = regift_hash(@user)
+                    params = { message: "New Regift Message", receiver: recipient_data }
+                    post :regift, format: :json, id: old_gift.id, data: params
+                    new_gift = Gift.find(json["data"]["gift_id"])
+                    new_gift.receiver_id.should == @user.id
+                end
+            end
+
+        end
+
+        def regift_hash receiver
+            user_data_hash = {}
+            user_data_hash["receiver_id"]   = receiver.id
+            user_data_hash["name"]          = receiver.name
+            user_data_hash["email"]         = receiver.email
+            user_data_hash["phone"]         = receiver.phone
+            user_data_hash["facebook_id"]   = receiver.facebook_id
+            user_data_hash["twitter"]       = receiver.twitter
+            user_data_hash
+        end
+
+        def gift_social_id_hsh
+            {
+                receiver_email: "jon@gmail.com",
+                receiver_phone: "9173706969",
+                facebook_id: "123",
+                twitter: "999"
+            }
         end
     end
 
     describe :create do
         it_should_behave_like("token authenticated", :post, :create)
 
+        describe "#create" do
+
+            before(:each) do
+                Gift.delete_all
+                User.delete_all
+                UserSocial.delete_all
+                @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
+                @user.update_attribute(:remember_token, "USER_TOKEN")
+                @receiver = FactoryGirl.create(:receiver)
+            end
+
+            it "should not send nil to add_giver" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params_hsh  = {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : #{@receiver.id},  \"message\" : \"\",  \"credit_card\" : 77,  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}","origin"=>"d","shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]","token"=> @token}
+                post :create, format: :json, gift: params_hsh["gift"] , shoppingCart: params_hsh["shoppingCart"]
+                gift = Gift.last
+                gift.giver_name.should == "Jimmy Basic"
+            end
+
+        end
+
+        describe "#create" do
+
+            before(:each) do
+                Gift.delete_all
+                User.delete_all
+                UserSocial.delete_all
+                @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
+                @user.update_attribute(:remember_token, "USER_TOKEN")
+                @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            end
+
+            {
+                email: "jon@gmail.com",
+                phone: "9173706969",
+                facebook_id: "123",
+                twitter: "999"
+            }.stringify_keys.each do |type_of, identifier|
+                it "should find user account for old #{type_of}" do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    # take a user , add an email
+                    @user.update_attribute(type_of, identifier)
+                    # then we hit create gift
+                    # with receiver email = old email
+                    if (type_of == "phone") || (type_of == "email")
+                        key = "receiver_#{type_of}"
+                    else
+                        key = type_of
+                    end
+                    gift = FactoryGirl.create :gift, { key => identifier}
+                    post :create, format: :json, gift: set_gift_as_sent(gift, key) , shoppingCart: @cart
+                    rrc(200)
+                    json["status"].should == 1
+                    json["data"].has_key?('Gift_id').should be_true
+                    new_gift = Gift.find(json["data"]["Gift_id"])
+                    new_gift.receiver_id.should == @user.id
+                end
+
+                it "should look thru multiple unique ids for a user object with #{type_of}" do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    # add one unique id to the user record
+                    @user.update_attribute(type_of, identifier)
+                    # create a gift with multiple new social ids
+                    gift = FactoryGirl.create :gift, gift_social_id_hsh
+                    post :create, format: :json, gift: create_multiple_unique_gift(gift) , shoppingCart: @cart
+                    rrc(200)
+                    json["status"].should == 1
+                    json["data"].has_key?('Gift_id').should be_true
+                    # check that the :action assign the user_id to receiver_id and saves the gift
+                    new_gift = Gift.find(json["data"]["Gift_id"])
+                    new_gift.receiver_id.should == @user.id
+                end
+
+                it "should look thru not full gift of unique ids for a user object with #{type_of}" do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    # add one unique id to the user record
+                    @user.update_attribute(type_of, identifier)
+                    # create a gift with multiple new social ids
+                    missing_hsh = gift_social_id_hsh
+                    if type_of == "phone"
+                        missing_hsh["receiver_email"] = ""
+                    else
+                        missing_hsh["receiver_phone"] = ""
+                    end
+                    gift = FactoryGirl.create :gift, missing_hsh
+                    post :create, format: :json, gift: create_multiple_unique_gift(gift, missing_hsh) , shoppingCart: @cart
+                    rrc(200)
+                    json["status"].should == 1
+                    json["data"].has_key?('Gift_id').should be_true
+                    # check that the :action assign the user_id to receiver_id and saves the gift
+                    new_gift = Gift.find(json["data"]["Gift_id"])
+                    new_gift.receiver_id.should == @user.id
+                end
+            end
+
+
+            # Git should validate total and service
+
+        end
+
+        describe "#create security" do
+
+            before do
+                Gift.delete_all
+                User.delete_all
+                @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            end
+
+            it "it should not allow gift creating for de-activated givers" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+
+                deactivated_user = FactoryGirl.create :user, { active: false, remember_token: "USER_TOKEN"}
+                # hit create gift with a receiver_id of a deactivated user
+                gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
+                # test that create gift does not create the gift or the sale
+                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+                rrc(401)
+            end
+
+            it "it should not allow gift creating for de-activated receivers" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                giver = FactoryGirl.create(:giver)
+                giver.update_attribute(:remember_token,"USER_TOKEN" )
+                deactivated_user = FactoryGirl.create :receiver, { active: false}
+                # hit create gift with a receiver_id of a deactivated user
+                gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
+                # test that create gift does not create the gift or the sale
+                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+
+                json["status"].should == 0
+                # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
+                json["data"].should == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+            end
+
+            it "should not charge the card when gift receiver is deactivated" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                giver = FactoryGirl.create(:giver)
+                deactivated_user = FactoryGirl.create :receiver, { active: false}
+                gift = FactoryGirl.build :gift, { receiver_id: deactivated_user.id }
+                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+                new_gift = Gift.find_by_receiver_id(deactivated_user.id)
+                new_gift.should be_nil
+                last = Gift.last
+                last.should be_nil
+            end
+
+        end
+
+        def make_gift_json gift
+            {
+                giver_id:       1,
+                giver_name:     "French",
+                total:          gift.total,
+                service:        gift.service,
+                receiver_id:    gift.receiver_id,
+                receiver_name:  gift.receiver_name,
+                provider_id:    gift.provider.id,
+                credit_card:    gift.credit_card
+            }.to_json
+        end
+
+        def gift_social_id_hsh
+            {
+                receiver_email: "jon@gmail.com",
+                receiver_phone: "9173706969",
+                facebook_id: "123",
+                twitter: "999"
+            }
+        end
+
+        def create_multiple_unique_gift gift, missing_hsh=nil
+            missing_hsh ||= gift_social_id_hsh
+            {
+                total:          gift.total,
+                service:        gift.service,
+                receiver_name:  gift.receiver_name,
+                provider_id:    gift.provider.id,
+                credit_card:    gift.credit_card
+            }.merge(missing_hsh).to_json
+        end
+
+        def set_gift_as_sent gift, key
+            {
+                key => gift.send(key),
+                total: gift.total,
+                service: gift.service,
+                receiver_name:  gift.receiver_name,
+                provider_id:    gift.provider.id,
+                credit_card:    gift.credit_card
+            }.to_json
+        end
     end
-
-    describe :regift do
-        it_should_behave_like("token authenticated", :post, :regift, id: 1)
-
-    end
-
 end

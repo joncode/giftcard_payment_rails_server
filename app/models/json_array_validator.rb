@@ -14,6 +14,4 @@ class JsonArrayValidator < ActiveModel::Validator
             record.errors["menu"] << "cannot be nil"
         end
     end
-
-
 end

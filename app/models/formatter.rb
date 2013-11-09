@@ -3,13 +3,14 @@ module Formatter
 
     def extract_phone_digits
         if phone_exists?
-            phone_match = self.phone.match(VALID_PHONE_REGEX)
+            phone_match = self.phone.to_s.match(VALID_PHONE_REGEX)
             self.phone  = phone_match[1] + phone_match[2] + phone_match[3]
         end
     end
 
     def phone_exists?
-        !self.phone.blank? && self.phone.length > 9
+
+        !self.phone.blank? && self.phone.to_s.length > 9
     end
 
     def float_to_cents float

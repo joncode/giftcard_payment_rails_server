@@ -45,7 +45,7 @@ class Sale < ActiveRecord::Base
 
         auth_obj  = authorize_net_aim_transaction
         @response = auth_obj.void(self.transaction_id)
-        
+
         puts ":void_sale :HERE IS THE VOID ReSPONSE #{@response.inspect}"
 
         if @response.response_code == "1"
