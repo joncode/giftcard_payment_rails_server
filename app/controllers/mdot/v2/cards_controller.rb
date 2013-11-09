@@ -7,7 +7,7 @@ class Mdot::V2::CardsController < JsonController
     end
 
     def create
-        convert_if_json
+        data = convert_if_json
 
         return nil  if data_not_hash?(data)
         card_params = strong_params(data)

@@ -87,6 +87,7 @@ describe Mdot::V2::SettingsController do
             rrc(200)
             json["status"].should == 1
             json["data"].should   == "Settings saved"
+            @user.reload
             setting = @user.setting
             setting.email_invite.should be_false
         end
