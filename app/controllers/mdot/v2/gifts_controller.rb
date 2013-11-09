@@ -9,14 +9,6 @@ class Mdot::V2::GiftsController < JsonController
         respond
     end
 
-    def create
-        respond
-    end
-
-    def regift
-        respond
-    end
-
     def badge
         gift_array  = Gift.get_gifts(@current_user)
         badge       = gift_array.size
@@ -46,4 +38,39 @@ class Mdot::V2::GiftsController < JsonController
         respond
     end
 
+    def regift
+        new_gift_hsh = convert_if_json(params["data"]["receiver"])
+        new_gift_hsh["message"] = params["data"]["message"]
+        new_gift_hsh["regift_id"] = params[:id]
+
+        gift_regifter  = GiftRegifter2.new(new_gift_hsh)
+        if gift_regifter.create
+            success gift_regifter.response
+        else
+            fail    gift_regifter.response
+        end
+        respond
+    end
+
+
+    def create
+        gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
+        unless gift_creator.no_data?
+            gift_creator.build_gift
+            if gift_creator.resp["error"].nil?
+                gift_creator.charge
+            end
+        end
+        response = gift_creator.resp
+        if response["success"]
+            success response["success"]
+        elsif response["error"]
+            fail response["error"]
+        elsif response["error_server"]
+            fail response["error_server"]
+        else
+            fail reesponse
+        end
+        respond
+    end
 end

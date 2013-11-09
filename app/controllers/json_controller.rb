@@ -105,6 +105,15 @@ class JsonController < ActionController::Base
 
 ### API UTILITY METHODS
 
+    def convert_if_json(data=nil)
+        data ||= params["data"]
+        if data.kind_of?(String)
+            JSON.parse(data)
+        else
+            data
+        end
+    end
+
     def data_not_hash?(data=nil)
         data ||= params["data"]
         head :bad_request unless data.kind_of?(Hash)
