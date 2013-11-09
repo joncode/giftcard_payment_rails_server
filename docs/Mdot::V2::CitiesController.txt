@@ -1,0 +1,78 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+
+
+Route: /mdot/v2/cities 
+
+HTTP Method: GET 
+
+Authorization: ['HTTP_TKN'] = TokenGood 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+[
+  {
+    "name": "Las Vegas",
+    "state": "Nevada",
+    "city_id": 1,
+    "photo": "d|v1378747548/las_vegas_xzqlvz.jpg"
+  },
+  {
+    "name": "San Francisco",
+    "state": "California",
+    "city_id": 4,
+    "photo": "d|v1378747548/san_francisco_hv2bsc.jpg"
+  }
+] 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+
+
+Route: /mdot/v2/cities/New%20York/merchants 
+
+HTTP Method: GET 
+
+Authorization: ['HTTP_TKN'] = TokenGood 
+
+Request Parameters: New York 
+
+Response Code: 200 
+
+Response Body: 
+
+[
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos61",
+    "phone": "8528885773",
+    "provider_id": 5288,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  },
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos62",
+    "phone": "2225754732",
+    "provider_id": 5289,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  }
+] 
+
+---------------------------------------------------------------- 

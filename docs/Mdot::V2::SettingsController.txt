@@ -1,0 +1,31 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+
+
+Route: /mdot/v2/settings 
+
+HTTP Method: GET 
+
+Authorization: ['HTTP_TKN'] = TokenGood 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email_follow_up": true,
+    "email_invite": true,
+    "email_invoice": true,
+    "email_receiver_new": true,
+    "email_redeem": true,
+    "user_id": 3782
+  }
+} 
+
+---------------------------------------------------------------- 
