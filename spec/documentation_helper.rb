@@ -2,6 +2,7 @@ RSpec.configure do |config|
 
 	config.after(:each, type: :controller) do
     	if response
+
       	    example_group = example.metadata[:example_group]
     	    example_groups = []
     
@@ -9,14 +10,16 @@ RSpec.configure do |config|
 	    	    example_groups << example_group
 	    	    example_group = example_group[:example_group]
 	    	end
-	    
+
 	    	file_name = example_groups[-1][:description_args].first
-	    
 	    	File.open(File.join(Rails.root, "/docs/#{file_name}.txt"), 'a') do |f|
+
 	    	    f.write "---------------------------------------------------------------- \n\n"
-	    		f.write "LAST UPDATED: #{Time.now.strftime("%F")} \n\n\n\n"
+	    		f.write "LAST UPDATED: #{Time.now.strftime("%F")} \n\n"
 	    	    f.write "Route: #{request.env['PATH_INFO']} \n\n"
 	    		f.write "HTTP Method: #{request.env['REQUEST_METHOD']} \n\n"
+	    		f.write "Format: #{request.env['action_dispatch.request.formats']} \n\n"
+		  	    
 	  	        if request.env['HTTP_TKN']
 	  	        	if request.env['HTTP_TKN'].to_s == GENERAL_TOKEN
 	  	        		request_token = "GENERAL_TOKEN"
@@ -26,7 +29,11 @@ RSpec.configure do |config|
 	    	        f.write "Authorization: ['HTTP_TKN'] = #{request_token} \n\n"
 	    	    end
 	    
-	  	        request_parameters = request.env["action_dispatch.request.parameters"]["id"]		
+	  	        request_parameters = request.env["action_dispatch.request.parameters"]
+	  	        ["format", "controller", "action"].each do |key|
+	  	        	request_parameters.delete(key)
+	  	        end
+
 	          	f.write "Request Parameters: #{request_parameters.present? ? request_parameters : "no parameters"} \n\n"
 	    	    
 	    	    f.write "Response Code: #{response.status} \n\n"
@@ -38,7 +45,7 @@ RSpec.configure do |config|
 	    	        f.write "#{JSON.pretty_generate(parsed_response)} \n\n"
 	    	    end
 	    	    f.write "---------------------------------------------------------------- \n"
-    		end unless response.status == 401 || response.status == 403 || response.status == 301
+    		end
    		end
 	end
 
