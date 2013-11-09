@@ -117,7 +117,7 @@ class AppController < JsonController
             response["error"] = database_error
             logmsg       = response.to_s
         end
-        
+
         respond_to do |format|
             # logger.debug response
             # @app_response = "AC response => #{logmsg}"
@@ -595,12 +595,7 @@ class AppController < JsonController
 		response  = {}
 
       	if user = authenticate_app_user(params["token"])
-      		display_cards = Card.get_cards user
-      		if display_cards.empty?
-      			response["success"] = []
-      		else
-      			response["success"] = display_cards
-      		end
+            response["success"] = Card.get_cards(user)
     	else
       		message += "Couldn't identify app user. "
       		response["error"] = message

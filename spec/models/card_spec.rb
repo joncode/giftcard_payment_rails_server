@@ -167,12 +167,14 @@ describe Card do
         end
 
         it "should save number encrypted and not save number" do
-            card = FactoryGirl.create(:card)
-            card_id = card.id
-            new_card = Card.find card_id
-            new_card.number.should be_nil
-            new_card.number_digest.class.should  == String
-            new_card.number_digest.length.should > 23
+            [:card, :amex, :mastercard, :visa].each do |factory_card|
+                card = FactoryGirl.create(factory_card)
+                card_id = card.id
+                new_card = Card.find card_id
+                new_card.number.should be_nil
+                new_card.number_digest.class.should  == String
+                new_card.number_digest.length.should > 23
+            end
         end
 
     end

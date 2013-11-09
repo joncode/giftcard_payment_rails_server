@@ -342,9 +342,10 @@ describe AppController do
     describe :get_cards do
 
         it "should return a list of cards for the user" do
-            4.times do
-                FactoryGirl.create(:card, user_id: user.id)
-            end
+            FactoryGirl.create(:card, user_id: user.id)
+            FactoryGirl.create(:amex, user_id: user.id)
+            FactoryGirl.create(:visa, user_id: user.id)
+            FactoryGirl.create(:mastercard, user_id: user.id)
 
             post :get_cards, format: :json, token: user.remember_token
             response.response_code.should == 200
@@ -358,6 +359,55 @@ describe AppController do
             json["success"].class.should  == Array
             json["success"].count.should  == 0
         end
+    end
+
+    describe :add_card do
+
+        it "should accept json'd hash of require fields and return 'add' with card ID" do
+            params = "{\"month\":\"02\",\"number\":\"4417121029961508\",\"user_id\":772,\"name\":\"Hiromi Tsuboi\",\"year\":\"2016\",\"csv\":\"910\",\"nickname\":\"Dango\"}"
+
+            post :add_card, format: :json, token: user.remember_token, data: params
+
+            card = Card.find_by_user_id(772)
+            json["add"].should == card.id
+        end
+
+        it "should not save incomplete card info" do
+            params = "{\"number\":\"4417121029961508\",\"user_id\":772,\"name\":\"Hiromi Tsuboi\",\"year\":\"2016\",\"csv\":\"910\",\"nickname\":\"Dango\"}"
+
+            post :add_card, format: :json, token: user.remember_token, data: params
+
+            card = Card.find_by_user_id(772)
+            json["error_server"].class.should == Hash
+            json["error_server"].has_key?('month').should be_true
+        end
+    end
+
+    describe :delete_card do
+
+        it "should return card id in delete key on success" do
+            card = FactoryGirl.create(:card, user_id: user.id)
+            post :delete_card, format: :json, token: user.remember_token, data: card.id
+            rrc(200)
+            json["delete"].should == card.id.to_s
+        end
+
+        it "should delete the card from the database" do
+            card = FactoryGirl.create(:card, user_id: user.id)
+            post :delete_card, format: :json, token: user.remember_token, data: card.id
+            card = Card.where(user_id: user.id).count
+            card.should == 0
+        end
+
+        it "should return 404 with no ID or wrong ID" do
+            card = FactoryGirl.create(:card, user_id: user.id)
+            post :delete_card, format: :json, token: user.remember_token
+            rrc(404)
+            card = FactoryGirl.create(:card, user_id: user.id)
+            post :delete_card, format: :json, token: user.remember_token, data: 928312
+            rrc(404)
+        end
+
     end
 
     describe :create_redeem do

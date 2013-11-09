@@ -158,12 +158,41 @@ FactoryGirl.define do
     factory :card do
         csv   "434"
         month "02"
-        brand "visa"
         name   "Plain Joseph"
         nickname "Biz"
         user_id   1
         year  "2017"
         number "4417121029961508"
+
+        factory :visa do
+            csv       "323"
+            month       "04"
+            name       "Ryter Treft"
+            nickname    "visa sauce"
+            user_id       521
+            year       "2018"
+            number       "4833160028519277"
+        end
+
+        factory :mastercard do
+            csv       "641"
+            month       "11"
+            name       "Rick Makrause"
+            nickname    "mastercard sauce"
+            user_id       247
+            year       "2017"
+            number       "5581588784751042"
+        end
+
+        factory :amex do
+            csv       "8042"
+            month       "02"
+            name       "Mak Odard"
+            nickname    "amex sauce"
+            user_id       612
+            year       "2016"
+            number       "371538495534000"
+        end
     end
 
     factory :sale do
