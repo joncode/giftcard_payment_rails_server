@@ -1,0 +1,995 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": [
+    {
+      "email": "thisguy240@gmail.com",
+      "facebook_id": "98a253fd332",
+      "first_name": "Jimmy",
+      "last_name": "Basic",
+      "phone": "3862256263",
+      "twitter": "283s253f6fd3",
+      "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+      "user_id": "6086"
+    },
+    {
+      "email": "thisguy241@gmail.com",
+      "facebook_id": "98a254fd332",
+      "first_name": "Newbiee0",
+      "last_name": "Basic",
+      "phone": "6868434382",
+      "twitter": "283s254f6fd3",
+      "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+      "user_id": "6087"
+    }
+  ]
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: GET 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"zip"=>"89475", "sex"=>"male", "birthday"=>"03/13/1975"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "birthday": "3/13/1975",
+    "email": "thisguy240@gmail.com",
+    "facebook_id": "98a253fd332",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3862256263",
+    "sex": "male",
+    "twitter": "283s253f6fd3",
+    "zip": "89475",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>""}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": {
+    "email": [
+      "is invalid"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"first_name"=>"Ray"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "thisguy240@gmail.com",
+    "facebook_id": "98a253fd332",
+    "first_name": "Ray",
+    "last_name": "Basic",
+    "phone": "3862256263",
+    "twitter": "283s253f6fd3",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"last_name"=>"Davies"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "thisguy240@gmail.com",
+    "facebook_id": "98a253fd332",
+    "first_name": "Jimmy",
+    "last_name": "Davies",
+    "phone": "3862256263",
+    "twitter": "283s253f6fd3",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"ray@davies.com"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "ray@davies.com",
+    "facebook_id": "98a253fd332",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3862256263",
+    "twitter": "283s253f6fd3",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"phone"=>"(702) 410-9605"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "thisguy240@gmail.com",
+    "facebook_id": "98a253fd332",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "7024109605",
+    "twitter": "283s253f6fd3",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"birthday"=>"10/10/1971"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "birthday": "10/10/1971",
+    "email": "thisguy240@gmail.com",
+    "facebook_id": "98a253fd332",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3862256263",
+    "twitter": "283s253f6fd3",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"sex"=>"female"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "thisguy240@gmail.com",
+    "facebook_id": "98a253fd332",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3862256263",
+    "sex": "female",
+    "twitter": "283s253f6fd3",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"zip"=>"85733"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "thisguy240@gmail.com",
+    "facebook_id": "98a253fd332",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3862256263",
+    "twitter": "283s253f6fd3",
+    "zip": "85733",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"twitter"=>"65787323"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "thisguy240@gmail.com",
+    "facebook_id": "98a253fd332",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3862256263",
+    "twitter": "65787323",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"facebook_id"=>"98136459814"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "thisguy240@gmail.com",
+    "facebook_id": "98136459814",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3862256263",
+    "twitter": "283s253f6fd3",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6086"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"house"=>"chill"}} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"password"=>"doNOTallow", "remember_token"=>"DO_NOT_ALLOW"}} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users/reset_password 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>"findme@gmail.com"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Email is Sent , check your inbox"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users/reset_password 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>"findme@gmail.com"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Email is Sent , check your inbox"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users/reset_password 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>"findme@gmail.com"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Email is Sent , check your inbox"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users/reset_password 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>"findme@gmail.com"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Email is Sent , check your inbox"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users/reset_password 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>"non-existant@yahoo.com"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "Dev Drinkboard (local) does not have record of that email"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users/reset_password 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"non-existant@yahoo.com"}} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users/reset_password 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route:  
+
+HTTP Method: GET 
+
+Format:  
+
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"neil@gmail.com", "password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6131,
+    "token": "ASc5usbtlyFYIxMVXRARSw"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"first_name"=>"Kevin", "use_photo"=>"ios", "password"=>"kevinn", "last_name"=>"Novak", "phone"=>"7343950489", "email"=>"kevin@uber.com", "origin"=>"d", "iphone_photo"=>"http://graph.facebook.com/28700910/picture?type=large", "password_confirmation"=>"kevinn", "facebook_id"=>"28700910"}, "pn_token"=>"8c5c69870825e3255bc750395f9b0680b54f458e93322109853567c85d17d48b"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6142,
+    "token": "G-baI9MrDpQm9rgxt3W8BQ"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"neil@gmail.com", "password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6143,
+    "token": "exHoFX8jKfqFatBtXlyM3A"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": {
+    "email": [
+      "is invalid"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"neil@gmail.com", "password"=>"", "password_confirmation"=>"password", "first_name"=>"Neil"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": {
+    "password": [
+      "doesn't match confirmation",
+      "is too short (minimum is 6 characters)"
+    ],
+    "password_digest": [
+      "can't be blank"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"neil@gmail.com", "password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}, "pn_token"=>"9128341983439487123"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6144,
+    "token": "qj2nDnbkStSYw1EpGAfV9Q"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"neil@gmail.com", "password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}, "pn_token"=>"91283419asdfasdfasdfasdfasdfa83439487123"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6145,
+    "token": "pAstRQqt_xy6zvB138OPdw"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"neil@gmail.com", "password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6146,
+    "token": "x7J3rcF8mpUZafcdPUtoLw"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"neil@gmail.com", "password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6147,
+    "token": "_ROVgaKCZ2tg-cmsT9Jqbw"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"neil@gmail.com", "password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}, "pn_token"=>"FAKE_PN_TOKENFAKE_PN_TOKEN"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6148,
+    "token": "3XYvcvi2zd1BRBoZikKiTg"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/users 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>{"email"=>"neil@gmail.com", "password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}, "pn_token"=>"FAKE_PN_TOKENFAKE_PN_TOKEN"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6149,
+    "token": "myO7byHhTbgqQ6l5Cr_Q-w"
+  }
+} 
+
+---------------------------------------------------------------- 

@@ -1,0 +1,197 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/questions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": [
+    {
+      "left": "Day Drinking",
+      "right": "Night Drinking",
+      "question_id": 1
+    },
+    {
+      "left": "Red Wine",
+      "right": "White Wine",
+      "question_id": 2
+    }
+  ]
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/questions 
+
+HTTP Method: GET 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/questions 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>"[  {    \"question_id\" : 25,    \"left\" : \"Day Drinking\",    \"answer\" : \"0\",    \"right\" : \"Night Drinking\"  },  {    \"question_id\" : 26,    \"left\" : \"Red Wine\",    \"answer\" : \"0\",    \"right\" : \"White Wine\"  },  {    \"question_id\" : 27,    \"left\" : \"White Liqours\",    \"answer\" : \"0\",    \"right\" : \"Brown Liqours\"  },  {    \"question_id\" : 28,    \"left\" : \"Straw\",    \"answer\" : \"0\",    \"right\" : \"No straw\"  },  {    \"question_id\" : 29,    \"left\" : \"Light Beer\",    \"answer\" : \"0\",    \"right\" : \"Dark Beer\"  },  {    \"question_id\" : 30,    \"left\" : \"Mimosa\",    \"answer\" : \"0\",    \"right\" : \"Bloody Mary\"  },  {    \"question_id\" : 31,    \"left\" : \"Rare\",    \"answer\" : \"0\",    \"right\" : \"Well Done\"  }]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": [
+    {
+      "left": "Day Drinking",
+      "right": "Night Drinking",
+      "question_id": 25,
+      "answer": "0"
+    },
+    {
+      "left": "Red Wine",
+      "right": "White Wine",
+      "question_id": 26,
+      "answer": "0"
+    }
+  ]
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/questions 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>"[{\"question_id\":37,\"answer\":0},{\"question_id\":38,\"answer\":0},{\"question_id\":39,\"answer\":0},{\"question_id\":40,\"answer\":0},{\"question_id\":41,\"answer\":0},{\"question_id\":42,\"answer\":0},{\"question_id\":43,\"answer\":0}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": [
+    {
+      "left": "Day Drinking",
+      "right": "Night Drinking",
+      "question_id": 37,
+      "answer": "0"
+    },
+    {
+      "left": "Red Wine",
+      "right": "White Wine",
+      "question_id": 38,
+      "answer": "0"
+    }
+  ]
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/questions 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>"[{\"question_id\":49,\"answer\":0},{\"question_id\":50,\"answer\":0},{\"question_id\":51,\"answer\":0},{\"question_id\":52,\"answer\":0},{\"question_id\":53,\"answer\":0},{\"question_id\":54,\"answer\":0},{\"question_id\":55,\"answer\":0}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": [
+    {
+      "left": "Day Drinking",
+      "right": "Night Drinking",
+      "question_id": 49,
+      "answer": "0"
+    },
+    {
+      "left": "Red Wine",
+      "right": "White Wine",
+      "question_id": 50,
+      "answer": "0"
+    }
+  ]
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/questions 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"doest"=>"bs", "take"=>"bs", "arrays"=>"bs"}} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/questions 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 

@@ -1,0 +1,586 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil@gmail.com", "password"=>"password"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "6623255878",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6057",
+    "remember_token": "DlU1PiHPH-LPkYPqKyodwg"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil@gmail.com", "password"=>"password"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "twofold@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "2268232837",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6058",
+    "remember_token": "GA-kR60CfAFOtBxvCg3jPg"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil@gmail.com", "password"=>"password"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "2452272688",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6059",
+    "remember_token": "aeNgSjkQfRXjMiTtLcf5Cw"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil@gmail.com", "password"=>"passwo121rd"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "Invalid email/password combination"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil@gmail.com", "password"=>""} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil12@gmail.com", "password"=>"password"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "Invalid email/password combination"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil@gmail.com", "password"=>"password"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil@gmail.com", "password"=>"password", "pn_token"=>"9128341983439487123"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "8263477543",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6064",
+    "remember_token": "-VvBLKvbhdtP9CRFfN7mJw"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil@gmail.com", "password"=>"password", "pn_token"=>"91283419asdfasdfasdfasdfasdfa83439487123"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "5335728468",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6065",
+    "remember_token": "Y2u3hbFod-dPNrP8glziaQ"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"facebook_id"=>"faceface"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "5442885726",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6067",
+    "remember_token": "LpHt3iy8og2UB4-WQ9zc6Q"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"twitter"=>"tweettweet"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "7276757632",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6068",
+    "remember_token": "0lN-eIJ8jyN9Qrp8vPhAyg"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"facebook_id"=>"faceface"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "823472938429",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "6848555377",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6069",
+    "remember_token": "3djHMtA9aj639qG9_xI1iw"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"twitter"=>"tweettweet"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3265256678",
+    "twitter": "127653723",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6070",
+    "remember_token": "VcNWmXtsN4793034U__gXQ"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"facebook_id"=>"face"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "Account not in Drinkboard database"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"twitter"=>"tweet"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "Account not in Drinkboard database"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"twitter"=>""} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"email"=>"neil@gmail.com", "password"=>"password", "pn_token"=>"9128341983439487123"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "5264525652",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6074",
+    "remember_token": "7fFXOW4Hj1zEIHlBqHKK2A"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"facebook_id"=>"faceface", "pn_token"=>"91283419asdfasdfasdfasdfasdfa83439487123"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "5783662583",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6075",
+    "remember_token": "60aTEgYqMyhXKbglz4xqig"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"twitter"=>"tweettweet"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/sessions/login_social 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 

@@ -1,0 +1,129 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/brands 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+[
+  {
+    "name": "Newbiee0",
+    "next_view": "m",
+    "brand_id": 2808,
+    "photo": null
+  },
+  {
+    "name": "Newbiee1",
+    "next_view": "m",
+    "brand_id": 2809,
+    "photo": null
+  }
+] 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/brands 
+
+HTTP Method: GET 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/brands/2848/merchants 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"2848"} 
+
+Response Code: 200 
+
+Response Body: 
+
+[
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos1",
+    "phone": "7462455346",
+    "provider_id": 7405,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  },
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos10",
+    "phone": "2625878378",
+    "provider_id": 7414,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  }
+] 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/brands/100000/merchants 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"100000"} 
+
+Response Code: 404 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/brands/1/merchants 
+
+HTTP Method: GET 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 

@@ -1,0 +1,112 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/cities 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+[
+  {
+    "name": "Las Vegas",
+    "state": "Nevada",
+    "city_id": 1,
+    "photo": "d|v1378747548/las_vegas_xzqlvz.jpg"
+  },
+  {
+    "name": "San Francisco",
+    "state": "California",
+    "city_id": 4,
+    "photo": "d|v1378747548/san_francisco_hv2bsc.jpg"
+  }
+] 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/cities 
+
+HTTP Method: GET 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/cities/New%20York/merchants 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"New York"} 
+
+Response Code: 200 
+
+Response Body: 
+
+[
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos61",
+    "phone": "6723486826",
+    "provider_id": 7465,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  },
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos62",
+    "phone": "6354643628",
+    "provider_id": 7466,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  }
+] 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/cities/1/merchants 
+
+HTTP Method: GET 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 

@@ -1,0 +1,171 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/settings 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email_follow_up": true,
+    "email_invite": true,
+    "email_invoice": true,
+    "email_receiver_new": true,
+    "email_redeem": true,
+    "user_id": 6078
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/settings 
+
+HTTP Method: GET 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/settings 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>"{  \"email_receiver_new\" : \"true\",  \"email_invite\" : \"true\",  \"email_redeem\" : \"true\",  \"email_invoice\" : \"true\",  \"email_follow_up\" : \"true\"}"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Settings saved"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/settings 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"email_receiver_new"=>true, "email_invite"=>true, "email_redeem"=>true, "email_invoice"=>true, "email_follow_up"=>true}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Settings saved"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/settings 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"email_receisdf"=>false, "email_invite"=>false, "email_rsadfedeem"=>false, "ads"=>false, "sdf"=>true}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Settings saved"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/settings 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"created_at"=>"happy", "updated_at"=>"happy", "confirm_email_token"=>"happy", "confirm_phone_token"=>"happy", "reset_token"=>"happy", "confirm_phone_flag"=>"happy", "confirm_email_flag"=>"happy", "confirm_phone_token_sent_at"=>"happy", "confirm_email_token_sent_at"=>"happy", "reset_token_sent_at"=>"happy"}} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/settings 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>"Hey Dude fake "} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /mdot/v2/settings 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
