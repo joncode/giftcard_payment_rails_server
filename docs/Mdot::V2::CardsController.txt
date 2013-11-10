@@ -1,6 +1,156 @@
+----------------------------------------------------------------
+
+LAST UPDATED: 2013-11-08
+
+Route: /mdot/v2/cards
+
+HTTP Method: GET
+
+Format: [application/json]
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN
+
+Request Parameters: no parameters
+
+Response Code: 200
+
+Response Body:
+
+{
+  "status": 1,
+  "data": [
+    {
+      "card_id": 13,
+      "last_four": "1042",
+      "nickname": "mastercard sauce"
+    },
+    {
+      "card_id": 12,
+      "last_four": "9277",
+      "nickname": "visa sauce"
+    }
+  ]
+}
+
+----------------------------------------------------------------
+Response Code: 401
+----------------------------------------------------------------
+
+LAST UPDATED: 2013-11-08
+
+Route: /mdot/v2/cards
+
+HTTP Method: POST
+
+Format: [application/json]
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN
+
+Request Parameters: {"data"=>"{\"month\":\"02\",\"number\":\"<Number>\",\"name\":\"Hiromi Tsuboi\",\"year\":\"2016\",\"csv\":\"910\",\"nickname\":\"Dango\"}"}
+
+Response Code: 200
+
+Response Body:
+
+{
+  "status": 1,
+  "data": <card_id>
+}
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+Response Code: 400, 401
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+LAST UPDATED: 2013-11-08
+
+Route: /mdot/v2/cards/16
+
+HTTP Method: DELETE
+
+Format: [application/json]
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN
+
+Request Parameters: {"id"=>"16"}
+
+Response Code: 200
+
+Response Body:
+
+{
+  "status": 1,
+  "data": "16"
+}
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+LAST UPDATED: 2013-11-08
+
+Route: /mdot/v2/cards/17
+
+HTTP Method: DELETE
+
+Format: [application/json]
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN
+
+Request Parameters: { "id" : <to_delete_card_id> }
+
+Response Code: 200
+
+Response Body:
+
+{
+  "status": 1,
+  "data": <to_delete_card_id>
+}
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+LAST UPDATED: 2013-11-08
+
+Route: /mdot/v2/cards/928312
+
+HTTP Method: DELETE
+
+Format: [application/json]
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN
+
+Request Parameters: {"id"=>"928312"}
+
+Response Code: 404
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+LAST UPDATED: 2013-11-08
+
+Route: /mdot/v2/cards/1
+
+HTTP Method: DELETE
+
+Format: [text/html]
+
+Authorization: ['HTTP_TKN'] = No_Entrance
+
+Request Parameters: {"id"=>"1"}
+
+Response Code: 401
+
+----------------------------------------------------------------
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards 
 
@@ -20,12 +170,12 @@ Response Body:
   "status": 1,
   "data": [
     {
-      "card_id": 160,
+      "card_id": 54,
       "last_four": "1042",
       "nickname": "mastercard sauce"
     },
     {
-      "card_id": 159,
+      "card_id": 53,
       "last_four": "9277",
       "nickname": "visa sauce"
     }
@@ -35,7 +185,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards 
 
@@ -61,7 +211,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards 
 
@@ -78,7 +228,7 @@ Response Code: 401
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards 
 
@@ -96,13 +246,13 @@ Response Body:
 
 {
   "status": 1,
-  "data": 161
+  "data": 55
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards 
 
@@ -120,13 +270,13 @@ Response Body:
 
 {
   "status": 1,
-  "data": 162
+  "data": 56
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards 
 
@@ -143,7 +293,7 @@ Response Code: 400
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards 
 
@@ -160,7 +310,7 @@ Response Code: 400
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards 
 
@@ -177,33 +327,9 @@ Response Code: 401
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
-Route: /mdot/v2/cards/163 
-
-HTTP Method: DELETE 
-
-Format: [application/json] 
-
-Authorization: ['HTTP_TKN'] = USER_TOKEN 
-
-Request Parameters: {"id"=>"163"} 
-
-Response Code: 200 
-
-Response Body: 
-
-{
-  "status": 1,
-  "data": "163"
-} 
-
----------------------------------------------------------------- 
----------------------------------------------------------------- 
-
-LAST UPDATED: 2013-11-08 
-
-Route: /mdot/v2/cards/164 
+Route: /mdot/v2/cards/57 
 
 HTTP Method: DELETE 
 
@@ -211,7 +337,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"id"=>"164"} 
+Request Parameters: {"id"=>"57"} 
 
 Response Code: 200 
 
@@ -219,13 +345,37 @@ Response Body:
 
 {
   "status": 1,
-  "data": "164"
+  "data": "57"
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/cards/58 
+
+HTTP Method: DELETE 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"58"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "58"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards/928312 
 
@@ -242,7 +392,7 @@ Response Code: 404
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/cards/1 
 

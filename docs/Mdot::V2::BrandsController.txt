@@ -1,6 +1,95 @@
+----------------------------------------------------------------
+
+LAST UPDATED: 2013-11-08
+
+Route: /mdot/v2/brands
+
+HTTP Method: GET
+
+Format: [application/json]
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN
+
+Request Parameters: no parameters
+
+Response Code: 200
+
+Response Body:
+
+[
+  {
+    "name": "Newbiee0",
+    "next_view": "m",
+    "brand_id": 27,
+    "photo": null
+  },
+  {
+    "name": "Newbiee1",
+    "next_view": "m",
+    "brand_id": 28,
+    "photo": null
+  }
+]
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+Response Code: 401
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+LAST UPDATED: 2013-11-08
+
+Route: /mdot/v2/brands/67/merchants
+
+HTTP Method: GET
+
+Format: [application/json]
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN
+
+Request Parameters: {"id"=>"67"}
+
+Response Code: 200
+
+Response Body:
+
+[
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos290",
+    "phone": "2583573856",
+    "provider_id": 290,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  },
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos291",
+    "phone": "8734463543",
+    "provider_id": 291,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  }
+]
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+Response Code: 401, 404
+
+
+
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/brands 
 
@@ -20,13 +109,13 @@ Response Body:
   {
     "name": "Newbiee0",
     "next_view": "m",
-    "brand_id": 2808,
+    "brand_id": 96,
     "photo": null
   },
   {
     "name": "Newbiee1",
     "next_view": "m",
-    "brand_id": 2809,
+    "brand_id": 97,
     "photo": null
   }
 ] 
@@ -34,7 +123,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/brands 
 
@@ -51,9 +140,9 @@ Response Code: 401
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
-Route: /mdot/v2/brands/2848/merchants 
+Route: /mdot/v2/brands/136/merchants 
 
 HTTP Method: GET 
 
@@ -61,7 +150,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"id"=>"2848"} 
+Request Parameters: {"id"=>"136"} 
 
 Response Code: 200 
 
@@ -72,9 +161,9 @@ Response Body:
     "city": "New York",
     "latitude": null,
     "longitude": null,
-    "name": "ichizos1",
-    "phone": "7462455346",
-    "provider_id": 7405,
+    "name": "ichizos290",
+    "phone": "3478552565",
+    "provider_id": 942,
     "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
     "full_address": "123 happy st,  New York, NY",
     "live": "0"
@@ -83,9 +172,9 @@ Response Body:
     "city": "New York",
     "latitude": null,
     "longitude": null,
-    "name": "ichizos10",
-    "phone": "2625878378",
-    "provider_id": 7414,
+    "name": "ichizos291",
+    "phone": "6363327337",
+    "provider_id": 943,
     "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
     "full_address": "123 happy st,  New York, NY",
     "live": "0"
@@ -95,7 +184,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/brands/100000/merchants 
 
@@ -112,7 +201,7 @@ Response Code: 404
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-09 
 
 Route: /mdot/v2/brands/1/merchants 
 

@@ -21,20 +21,20 @@ Response Body:
   "data": {
     "sent": [
       {
-        "created_at": "2013-11-08T22:15:37-05:00",
+        "created_at": "2013-11-08T22:26:06-05:00",
         "message": "Factory Message",
-        "provider_id": 7505,
-        "provider_name": "ichizos101",
-        "receiver_id": 5721,
+        "provider_id": 390,
+        "provider_name": "ichizos390",
+        "receiver_id": 425,
         "receiver_name": "Jon Gifter",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "total": "100.00",
-        "updated_at": "2013-11-08T22:15:37-05:00",
-        "gift_id": 4284,
+        "updated_at": "2013-11-08T22:26:06-05:00",
+        "gift_id": 303,
         "status": "open",
         "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "3553838632",
+        "provider_phone": "5478423476",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -42,20 +42,20 @@ Response Body:
         "provider_address": "123 happy st, New York, NY 11211"
       },
       {
-        "created_at": "2013-11-08T22:15:37-05:00",
+        "created_at": "2013-11-08T22:26:05-05:00",
         "message": "Factory Message",
-        "provider_id": 7504,
-        "provider_name": "ichizos100",
-        "receiver_id": 5721,
+        "provider_id": 389,
+        "provider_name": "ichizos389",
+        "receiver_id": 425,
         "receiver_name": "Jon Gifter",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "total": "100.00",
-        "updated_at": "2013-11-08T22:15:37-05:00",
-        "gift_id": 4283,
+        "updated_at": "2013-11-08T22:26:05-05:00",
+        "gift_id": 302,
         "status": "open",
         "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "8754452348",
+        "provider_phone": "7374528325",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -93,20 +93,20 @@ Response Body:
   "data": {
     "sent": [
       {
-        "created_at": "2013-11-08T22:15:40-05:00",
+        "created_at": "2013-11-08T22:26:08-05:00",
         "message": "Factory Message",
-        "provider_id": 7526,
-        "provider_name": "ichizos122",
-        "receiver_id": 5744,
+        "provider_id": 411,
+        "provider_name": "ichizos411",
+        "receiver_id": 448,
         "receiver_name": "Jon Gifter",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "total": "100.00",
-        "updated_at": "2013-11-08T22:15:40-05:00",
-        "gift_id": 4305,
+        "updated_at": "2013-11-08T22:26:08-05:00",
+        "gift_id": 324,
         "status": "open",
         "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "2468635357",
+        "provider_phone": "2467772552",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -114,20 +114,20 @@ Response Body:
         "provider_address": "123 happy st, New York, NY 11211"
       },
       {
-        "created_at": "2013-11-08T22:15:40-05:00",
+        "created_at": "2013-11-08T22:26:08-05:00",
         "message": "Factory Message",
-        "provider_id": 7525,
-        "provider_name": "ichizos121",
-        "receiver_id": 5744,
+        "provider_id": 410,
+        "provider_name": "ichizos410",
+        "receiver_id": 448,
         "receiver_name": "Jon Gifter",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "total": "100.00",
-        "updated_at": "2013-11-08T22:15:40-05:00",
-        "gift_id": 4304,
+        "updated_at": "2013-11-08T22:26:08-05:00",
+        "gift_id": 323,
         "status": "open",
         "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "8258546523",
+        "provider_phone": "5647242585",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -165,20 +165,20 @@ Response Body:
   "data": {
     "sent": [
       {
-        "created_at": "2013-11-08T22:15:42-05:00",
+        "created_at": "2013-11-08T22:26:11-05:00",
         "message": "Factory Message",
-        "provider_id": 7547,
-        "provider_name": "ichizos143",
-        "receiver_id": 5767,
+        "provider_id": 432,
+        "provider_name": "ichizos432",
+        "receiver_id": 471,
         "receiver_name": "Jon Gifter",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "total": "100.00",
-        "updated_at": "2013-11-08T22:15:42-05:00",
-        "gift_id": 4326,
+        "updated_at": "2013-11-08T22:26:11-05:00",
+        "gift_id": 345,
         "status": "open",
         "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "8564483727",
+        "provider_phone": "5654765848",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -186,20 +186,20 @@ Response Body:
         "provider_address": "123 happy st, New York, NY 11211"
       },
       {
-        "created_at": "2013-11-08T22:15:42-05:00",
+        "created_at": "2013-11-08T22:26:11-05:00",
         "message": "Factory Message",
-        "provider_id": 7546,
-        "provider_name": "ichizos142",
-        "receiver_id": 5767,
+        "provider_id": 431,
+        "provider_name": "ichizos431",
+        "receiver_id": 471,
         "receiver_name": "Jon Gifter",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "total": "100.00",
-        "updated_at": "2013-11-08T22:15:42-05:00",
-        "gift_id": 4325,
+        "updated_at": "2013-11-08T22:26:11-05:00",
+        "gift_id": 344,
         "status": "open",
         "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "2534766233",
+        "provider_phone": "7445478523",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -209,19 +209,19 @@ Response Body:
     ],
     "used": [
       {
-        "created_at": "2013-11-08T22:15:40-05:00",
-        "giver_id": 5767,
+        "created_at": "2013-11-08T22:26:10-05:00",
+        "giver_id": 471,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7527,
-        "provider_name": "ichizos123",
+        "provider_id": 420,
+        "provider_name": "ichizos420",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
-        "updated_at": "2013-11-08T22:15:42-05:00",
-        "gift_id": 4306,
+        "updated_at": "2013-11-08T22:26:11-05:00",
+        "gift_id": 333,
         "status": "redeemed",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "6328457564",
+        "provider_phone": "3454464672",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -229,19 +229,19 @@ Response Body:
         "provider_address": "123 happy st, New York, NY 11211"
       },
       {
-        "created_at": "2013-11-08T22:15:40-05:00",
-        "giver_id": 5767,
+        "created_at": "2013-11-08T22:26:10-05:00",
+        "giver_id": 471,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7528,
-        "provider_name": "ichizos124",
+        "provider_id": 419,
+        "provider_name": "ichizos419",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
-        "updated_at": "2013-11-08T22:15:42-05:00",
-        "gift_id": 4307,
+        "updated_at": "2013-11-08T22:26:11-05:00",
+        "gift_id": 332,
         "status": "redeemed",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "3454264557",
+        "provider_phone": "3854647427",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -276,20 +276,20 @@ Response Body:
   "data": {
     "sent": [
       {
-        "created_at": "2013-11-08T22:15:45-05:00",
+        "created_at": "2013-11-08T22:26:14-05:00",
         "message": "Factory Message",
-        "provider_id": 7568,
-        "provider_name": "ichizos164",
-        "receiver_id": 5790,
+        "provider_id": 453,
+        "provider_name": "ichizos453",
+        "receiver_id": 494,
         "receiver_name": "Jon Gifter",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "total": "100.00",
-        "updated_at": "2013-11-08T22:15:45-05:00",
-        "gift_id": 4347,
+        "updated_at": "2013-11-08T22:26:14-05:00",
+        "gift_id": 366,
         "status": "open",
         "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "6733572443",
+        "provider_phone": "4548424866",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -297,20 +297,20 @@ Response Body:
         "provider_address": "123 happy st, New York, NY 11211"
       },
       {
-        "created_at": "2013-11-08T22:15:45-05:00",
+        "created_at": "2013-11-08T22:26:14-05:00",
         "message": "Factory Message",
-        "provider_id": 7567,
-        "provider_name": "ichizos163",
-        "receiver_id": 5790,
+        "provider_id": 452,
+        "provider_name": "ichizos452",
+        "receiver_id": 494,
         "receiver_name": "Jon Gifter",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "total": "100.00",
-        "updated_at": "2013-11-08T22:15:45-05:00",
-        "gift_id": 4346,
+        "updated_at": "2013-11-08T22:26:14-05:00",
+        "gift_id": 365,
         "status": "open",
         "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "7735542584",
+        "provider_phone": "4723756666",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -320,19 +320,19 @@ Response Body:
     ],
     "used": [
       {
-        "created_at": "2013-11-08T22:15:43-05:00",
-        "giver_id": 5790,
+        "created_at": "2013-11-08T22:26:12-05:00",
+        "giver_id": 494,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7548,
-        "provider_name": "ichizos144",
+        "provider_id": 433,
+        "provider_name": "ichizos433",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
-        "updated_at": "2013-11-08T22:15:45-05:00",
-        "gift_id": 4327,
+        "updated_at": "2013-11-08T22:26:14-05:00",
+        "gift_id": 346,
         "status": "redeemed",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "6685385652",
+        "provider_phone": "2776532327",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -340,19 +340,19 @@ Response Body:
         "provider_address": "123 happy st, New York, NY 11211"
       },
       {
-        "created_at": "2013-11-08T22:15:43-05:00",
-        "giver_id": 5790,
+        "created_at": "2013-11-08T22:26:12-05:00",
+        "giver_id": 494,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7549,
-        "provider_name": "ichizos145",
+        "provider_id": 434,
+        "provider_name": "ichizos434",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
-        "updated_at": "2013-11-08T22:15:45-05:00",
-        "gift_id": 4328,
+        "updated_at": "2013-11-08T22:26:14-05:00",
+        "gift_id": 347,
         "status": "redeemed",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "4832287562",
+        "provider_phone": "3678526457",
         "city": "New York",
         "latitude": null,
         "longitude": null,
@@ -436,44 +436,44 @@ Response Body:
     "badge": 10,
     "gifts": [
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:22-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7620,
-        "provider_name": "ichizos216",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 505,
+        "provider_name": "ichizos505",
+        "updated_at": "2013-11-08T22:26:22-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "6264854854",
+        "provider_phone": "5254282742",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4399
+        "gift_id": 418
       },
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:21-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7619,
-        "provider_name": "ichizos215",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 504,
+        "provider_name": "ichizos504",
+        "updated_at": "2013-11-08T22:26:21-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "4866483554",
+        "provider_phone": "8844545426",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4398
+        "gift_id": 417
       }
     ]
   }
@@ -504,44 +504,44 @@ Response Body:
     "badge": 10,
     "gifts": [
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:22-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7620,
-        "provider_name": "ichizos216",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 505,
+        "provider_name": "ichizos505",
+        "updated_at": "2013-11-08T22:26:22-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "6264854854",
+        "provider_phone": "5254282742",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4399
+        "gift_id": 418
       },
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:21-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7619,
-        "provider_name": "ichizos215",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 504,
+        "provider_name": "ichizos504",
+        "updated_at": "2013-11-08T22:26:21-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "4866483554",
+        "provider_phone": "8844545426",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4398
+        "gift_id": 417
       }
     ]
   }
@@ -589,44 +589,44 @@ Response Body:
     "badge": 8,
     "gifts": [
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:21-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7618,
-        "provider_name": "ichizos214",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 503,
+        "provider_name": "ichizos503",
+        "updated_at": "2013-11-08T22:26:21-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "4766552626",
+        "provider_phone": "8888752722",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4397
+        "gift_id": 416
       },
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:21-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7617,
-        "provider_name": "ichizos213",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 502,
+        "provider_name": "ichizos502",
+        "updated_at": "2013-11-08T22:26:21-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "4647633524",
+        "provider_phone": "4825766384",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4396
+        "gift_id": 415
       }
     ]
   }
@@ -657,44 +657,44 @@ Response Body:
     "badge": 10,
     "gifts": [
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:22-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7620,
-        "provider_name": "ichizos216",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 505,
+        "provider_name": "ichizos505",
+        "updated_at": "2013-11-08T22:26:22-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "6264854854",
+        "provider_phone": "5254282742",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4399
+        "gift_id": 418
       },
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:21-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7619,
-        "provider_name": "ichizos215",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 504,
+        "provider_name": "ichizos504",
+        "updated_at": "2013-11-08T22:26:21-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "4866483554",
+        "provider_phone": "8844545426",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4398
+        "gift_id": 417
       }
     ]
   }
@@ -725,44 +725,44 @@ Response Body:
     "badge": 10,
     "gifts": [
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:22-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7620,
-        "provider_name": "ichizos216",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 505,
+        "provider_name": "ichizos505",
+        "updated_at": "2013-11-08T22:26:22-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "6264854854",
+        "provider_phone": "5254282742",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4399
+        "gift_id": 418
       },
       {
-        "created_at": "2013-11-08T22:15:52-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:21-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7619,
-        "provider_name": "ichizos215",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 504,
+        "provider_name": "ichizos504",
+        "updated_at": "2013-11-08T22:26:21-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "4866483554",
+        "provider_phone": "8844545426",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4398
+        "gift_id": 417
       }
     ]
   }
@@ -810,24 +810,24 @@ Response Body:
     "badge": 1,
     "gifts": [
       {
-        "created_at": "2013-11-08T22:15:51-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:20-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7611,
-        "provider_name": "ichizos207",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 496,
+        "provider_name": "ichizos496",
+        "updated_at": "2013-11-08T22:26:22-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "8324544284",
+        "provider_phone": "3728574254",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4390
+        "gift_id": 409
       }
     ]
   }
@@ -858,24 +858,24 @@ Response Body:
     "badge": 1,
     "gifts": [
       {
-        "created_at": "2013-11-08T22:15:51-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:20-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7611,
-        "provider_name": "ichizos207",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 496,
+        "provider_name": "ichizos496",
+        "updated_at": "2013-11-08T22:26:22-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "8324544284",
+        "provider_phone": "3728574254",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4390
+        "gift_id": 409
       }
     ]
   }
@@ -906,24 +906,24 @@ Response Body:
     "badge": 1,
     "gifts": [
       {
-        "created_at": "2013-11-08T22:15:51-05:00",
-        "giver_id": 5859,
+        "created_at": "2013-11-08T22:26:20-05:00",
+        "giver_id": 563,
         "giver_name": "Jon Gifter",
         "message": "Factory Message",
-        "provider_id": 7611,
-        "provider_name": "ichizos207",
-        "updated_at": "2013-11-08T22:15:52-05:00",
+        "provider_id": 496,
+        "provider_name": "ichizos496",
+        "updated_at": "2013-11-08T22:26:22-05:00",
         "status": "open",
         "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
-        "provider_phone": "8324544284",
+        "provider_phone": "3728574254",
         "city": "New York",
         "latitude": null,
         "longitude": null,
         "live": "0",
         "provider_address": "123 happy st, New York, NY 11211",
-        "gift_id": 4390
+        "gift_id": 409
       }
     ]
   }
@@ -934,7 +934,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4400/open 
+Route: /mdot/v2/gifts/419/open 
 
 HTTP Method: POST 
 
@@ -942,7 +942,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"id"=>"4400"} 
+Request Parameters: {"id"=>"419"} 
 
 Response Code: 200 
 
@@ -950,7 +950,7 @@ Response Body:
 
 {
   "status": 1,
-  "data": "5395"
+  "data": "2638"
 } 
 
 ---------------------------------------------------------------- 
@@ -958,7 +958,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4401/open 
+Route: /mdot/v2/gifts/420/open 
 
 HTTP Method: POST 
 
@@ -966,7 +966,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"id"=>"4401"} 
+Request Parameters: {"id"=>"420"} 
 
 Response Code: 200 
 
@@ -974,7 +974,7 @@ Response Body:
 
 {
   "status": 1,
-  "data": "9456"
+  "data": "4475"
 } 
 
 ---------------------------------------------------------------- 
@@ -982,7 +982,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4402/open 
+Route: /mdot/v2/gifts/421/open 
 
 HTTP Method: POST 
 
@@ -990,7 +990,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"id"=>"4402"} 
+Request Parameters: {"id"=>"421"} 
 
 Response Code: 200 
 
@@ -998,7 +998,7 @@ Response Body:
 
 {
   "status": 1,
-  "data": "3558"
+  "data": "3094"
 } 
 
 ---------------------------------------------------------------- 
@@ -1040,7 +1040,7 @@ Response Code: 401
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4405/redeem 
+Route: /mdot/v2/gifts/424/redeem 
 
 HTTP Method: POST 
 
@@ -1048,7 +1048,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"server"=>"test", "id"=>"4405"} 
+Request Parameters: {"server"=>"test", "id"=>"424"} 
 
 Response Code: 200 
 
@@ -1057,7 +1057,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "order_number": "AD-00-20",
+    "order_number": "AR-10-00",
     "total": "100.00",
     "server": "test"
   }
@@ -1068,7 +1068,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4406/redeem 
+Route: /mdot/v2/gifts/425/redeem 
 
 HTTP Method: POST 
 
@@ -1076,7 +1076,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"server"=>"test", "id"=>"4406"} 
+Request Parameters: {"server"=>"test", "id"=>"425"} 
 
 Response Code: 200 
 
@@ -1085,7 +1085,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "order_number": "AE-00-20",
+    "order_number": "AS-10-00",
     "total": "100.00",
     "server": "test"
   }
@@ -1096,7 +1096,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4407/redeem 
+Route: /mdot/v2/gifts/426/redeem 
 
 HTTP Method: POST 
 
@@ -1104,7 +1104,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"server"=>"test", "id"=>"4407"} 
+Request Parameters: {"server"=>"test", "id"=>"426"} 
 
 Response Code: 200 
 
@@ -1113,7 +1113,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "order_number": "AF-00-20",
+    "order_number": "AT-10-00",
     "total": "100.00",
     "server": "test"
   }
@@ -1124,7 +1124,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4408/redeem 
+Route: /mdot/v2/gifts/427/redeem 
 
 HTTP Method: POST 
 
@@ -1132,7 +1132,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"server"=>"test", "id"=>"4408"} 
+Request Parameters: {"server"=>"test", "id"=>"427"} 
 
 Response Code: 200 
 
@@ -1209,7 +1209,7 @@ Response Code: 401
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4412/regift 
+Route: /mdot/v2/gifts/431/regift 
 
 HTTP Method: POST 
 
@@ -1217,7 +1217,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":5909,\"name\":\"Ron Receiver\",\"email\":\"thisguy151@gmail.com\",\"phone\":\"2428686552\",\"facebook_id\":\"98a151fd332\",\"twitter\":\"283s151f6fd3\"}"}, "id"=>"4412"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":613,\"name\":\"Ron Receiver\",\"email\":\"thisguy517@gmail.com\",\"phone\":\"4428627572\",\"facebook_id\":\"98a537fd332\",\"twitter\":\"283s537f6fd3\"}"}, "id"=>"431"} 
 
 Response Code: 200 
 
@@ -1226,7 +1226,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4413,
+    "gift_id": 432,
     "giver": "Jimmy Basic",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "Ron Receiver",
@@ -1241,9 +1241,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos229",
+    "merchant_name": "ichizos518",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "7562775824"
+    "merchant_phone": "2866444775"
   }
 } 
 
@@ -1252,7 +1252,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4414/regift 
+Route: /mdot/v2/gifts/433/regift 
 
 HTTP Method: POST 
 
@@ -1260,7 +1260,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":5913,\"name\":\"Ron Receiver\",\"email\":\"thisguy153@gmail.com\",\"phone\":\"4336846543\",\"facebook_id\":\"98a153fd332\",\"twitter\":\"283s153f6fd3\"}"}, "id"=>"4414"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":617,\"name\":\"Ron Receiver\",\"email\":\"thisguy519@gmail.com\",\"phone\":\"7524534767\",\"facebook_id\":\"98a539fd332\",\"twitter\":\"283s539f6fd3\"}"}, "id"=>"433"} 
 
 Response Code: 200 
 
@@ -1269,7 +1269,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4415,
+    "gift_id": 434,
     "giver": "Jimmy Basic",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "Ron Receiver",
@@ -1284,9 +1284,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos230",
+    "merchant_name": "ichizos519",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "7255884365"
+    "merchant_phone": "4738746546"
   }
 } 
 
@@ -1295,7 +1295,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4416/regift 
+Route: /mdot/v2/gifts/435/regift 
 
 HTTP Method: POST 
 
@@ -1303,7 +1303,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":5917,\"name\":\"Ron Receiver\",\"email\":\"thisguy155@gmail.com\",\"phone\":\"7342728544\",\"facebook_id\":\"98a155fd332\",\"twitter\":\"283s155f6fd3\"}"}, "id"=>"4416"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":621,\"name\":\"Ron Receiver\",\"email\":\"thisguy521@gmail.com\",\"phone\":\"2334652662\",\"facebook_id\":\"98a541fd332\",\"twitter\":\"283s541f6fd3\"}"}, "id"=>"435"} 
 
 Response Code: 200 
 
@@ -1312,7 +1312,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4417,
+    "gift_id": 436,
     "giver": "Jimmy Basic",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "Ron Receiver",
@@ -1327,9 +1327,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos231",
+    "merchant_name": "ichizos520",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "8234753578"
+    "merchant_phone": "7226873334"
   }
 } 
 
@@ -1338,7 +1338,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4418/regift 
+Route: /mdot/v2/gifts/437/regift 
 
 HTTP Method: POST 
 
@@ -1346,7 +1346,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":5921,\"name\":\"Ron Receiver\",\"email\":\"thisguy157@gmail.com\",\"phone\":\"5787443342\",\"facebook_id\":\"98a157fd332\",\"twitter\":\"283s157f6fd3\"}"}, "id"=>"4418"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":625,\"name\":\"Ron Receiver\",\"email\":\"thisguy523@gmail.com\",\"phone\":\"7532388637\",\"facebook_id\":\"98a543fd332\",\"twitter\":\"283s543f6fd3\"}"}, "id"=>"437"} 
 
 Response Code: 200 
 
@@ -1355,7 +1355,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4419,
+    "gift_id": 438,
     "giver": "Jimmy Basic",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "Ron Receiver",
@@ -1370,9 +1370,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos232",
+    "merchant_name": "ichizos521",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "2287336748"
+    "merchant_phone": "5378474632"
   }
 } 
 
@@ -1381,7 +1381,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4420/regift 
+Route: /mdot/v2/gifts/439/regift 
 
 HTTP Method: POST 
 
@@ -1389,7 +1389,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":null,\"name\":\"No One\",\"email\":\"noone1@gmail.com\",\"phone\":null,\"facebook_id\":\"8ssa1fd332\",\"twitter\":\"28sdd3s1f6fd3\"}"}, "id"=>"4420"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":null,\"name\":\"No One\",\"email\":\"noone3@gmail.com\",\"phone\":null,\"facebook_id\":\"8ssa3fd332\",\"twitter\":\"28sdd3s3f6fd3\"}"}, "id"=>"439"} 
 
 Response Code: 200 
 
@@ -1398,7 +1398,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4421,
+    "gift_id": 440,
     "giver": "Jimmy Basic",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "No One",
@@ -1412,9 +1412,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos233",
+    "merchant_name": "ichizos522",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "6565682622"
+    "merchant_phone": "2747758365"
   }
 } 
 
@@ -1423,7 +1423,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4422/regift 
+Route: /mdot/v2/gifts/441/regift 
 
 HTTP Method: POST 
 
@@ -1431,7 +1431,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":null,\"name\":\"No One\",\"email\":\"noone2@gmail.com\",\"phone\":null,\"facebook_id\":\"8ssa2fd332\",\"twitter\":\"28sdd3s2f6fd3\"}"}, "id"=>"4422"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":null,\"name\":\"No One\",\"email\":\"noone4@gmail.com\",\"phone\":null,\"facebook_id\":\"8ssa4fd332\",\"twitter\":\"28sdd3s4f6fd3\"}"}, "id"=>"441"} 
 
 Response Code: 200 
 
@@ -1440,7 +1440,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4423,
+    "gift_id": 442,
     "giver": "Jimmy Basic",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "No One",
@@ -1454,9 +1454,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos234",
+    "merchant_name": "ichizos523",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "2853458827"
+    "merchant_phone": "6768423435"
   }
 } 
 
@@ -1465,7 +1465,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4424/regift 
+Route: /mdot/v2/gifts/443/regift 
 
 HTTP Method: POST 
 
@@ -1473,7 +1473,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":5931,\"name\":\"Ron Receiver\",\"email\":\"thisguy161@gmail.com\",\"phone\":\"5854646623\",\"facebook_id\":\"98a161fd332\",\"twitter\":\"283s161f6fd3\"}"}, "id"=>"4424"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":635,\"name\":\"Ron Receiver\",\"email\":\"thisguy527@gmail.com\",\"phone\":\"2884727544\",\"facebook_id\":\"98a547fd332\",\"twitter\":\"283s547f6fd3\"}"}, "id"=>"443"} 
 
 Response Code: 200 
 
@@ -1482,7 +1482,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4425,
+    "gift_id": 444,
     "giver": "Jimmy Basic",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "Ron Receiver",
@@ -1497,9 +1497,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos235",
+    "merchant_name": "ichizos524",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "8587726522"
+    "merchant_phone": "5845583735"
   }
 } 
 
@@ -1508,7 +1508,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4426/regift 
+Route: /mdot/v2/gifts/445/regift 
 
 HTTP Method: POST 
 
@@ -1516,7 +1516,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":5935,\"name\":\"Ron Receiver\",\"email\":\"thisguy163@gmail.com\",\"phone\":\"8265483438\",\"facebook_id\":\"98a163fd332\",\"twitter\":\"283s163f6fd3\"}"}, "id"=>"4426"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":639,\"name\":\"Ron Receiver\",\"email\":\"thisguy529@gmail.com\",\"phone\":\"8274225333\",\"facebook_id\":\"98a549fd332\",\"twitter\":\"283s549f6fd3\"}"}, "id"=>"445"} 
 
 Response Code: 200 
 
@@ -1525,7 +1525,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4427,
+    "gift_id": 446,
     "giver": "Jimmy Basic",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "Ron Receiver",
@@ -1540,9 +1540,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos236",
+    "merchant_name": "ichizos525",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "3457237452"
+    "merchant_phone": "6543446448"
   }
 } 
 
@@ -1551,7 +1551,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4428/regift 
+Route: /mdot/v2/gifts/447/regift 
 
 HTTP Method: POST 
 
@@ -1559,7 +1559,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":5939,\"name\":\"Ron Receiver\",\"email\":\"thisguy165@gmail.com\",\"phone\":\"7548885466\",\"facebook_id\":\"98a165fd332\",\"twitter\":\"283s165f6fd3\"}"}, "id"=>"4428"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":643,\"name\":\"Ron Receiver\",\"email\":\"thisguy531@gmail.com\",\"phone\":\"7235884332\",\"facebook_id\":\"98a551fd332\",\"twitter\":\"283s551f6fd3\"}"}, "id"=>"447"} 
 
 Response Code: 401 
 
@@ -1568,7 +1568,7 @@ Response Code: 401
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4429/regift 
+Route: /mdot/v2/gifts/448/regift 
 
 HTTP Method: POST 
 
@@ -1576,7 +1576,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":5943,\"name\":\"Ron Receiver\",\"email\":\"thisguy167@gmail.com\",\"phone\":\"8327234678\",\"facebook_id\":\"98a167fd332\",\"twitter\":\"283s167f6fd3\"}"}, "id"=>"4429"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":647,\"name\":\"Ron Receiver\",\"email\":\"thisguy533@gmail.com\",\"phone\":\"6333268238\",\"facebook_id\":\"98a553fd332\",\"twitter\":\"283s553f6fd3\"}"}, "id"=>"448"} 
 
 Response Code: 200 
 
@@ -1592,7 +1592,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4431/regift 
+Route: /mdot/v2/gifts/450/regift 
 
 HTTP Method: POST 
 
@@ -1600,7 +1600,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>5947, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4431"}}, "id"=>"4431"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>651, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"450"}}, "id"=>"450"} 
 
 Response Code: 200 
 
@@ -1609,7 +1609,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4432,
+    "gift_id": 451,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -1624,9 +1624,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos240",
+    "merchant_name": "ichizos529",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "4234645333"
+    "merchant_phone": "7837275244"
   }
 } 
 
@@ -1635,7 +1635,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4434/regift 
+Route: /mdot/v2/gifts/453/regift 
 
 HTTP Method: POST 
 
@@ -1643,7 +1643,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>5953, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4434"}}, "id"=>"4434"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>657, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"453"}}, "id"=>"453"} 
 
 Response Code: 200 
 
@@ -1652,7 +1652,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4435,
+    "gift_id": 454,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -1667,9 +1667,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos242",
+    "merchant_name": "ichizos531",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "2346754533"
+    "merchant_phone": "5837443727"
   }
 } 
 
@@ -1678,7 +1678,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4437/regift 
+Route: /mdot/v2/gifts/456/regift 
 
 HTTP Method: POST 
 
@@ -1686,7 +1686,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>5959, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4437"}}, "id"=>"4437"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>663, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"456"}}, "id"=>"456"} 
 
 Response Code: 200 
 
@@ -1695,7 +1695,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4438,
+    "gift_id": 457,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -1710,9 +1710,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos244",
+    "merchant_name": "ichizos533",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "2845872323"
+    "merchant_phone": "7336368768"
   }
 } 
 
@@ -1721,7 +1721,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4440/regift 
+Route: /mdot/v2/gifts/459/regift 
 
 HTTP Method: POST 
 
@@ -1729,7 +1729,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>5965, "name"=>"None Networks", "email"=>"nonetwork4@gmail.com", "phone"=>"9173706969", "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4440"}}, "id"=>"4440"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>669, "name"=>"None Networks", "email"=>"nonetwork16@gmail.com", "phone"=>"9173706969", "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"459"}}, "id"=>"459"} 
 
 Response Code: 200 
 
@@ -1738,7 +1738,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4441,
+    "gift_id": 460,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -1753,9 +1753,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos246",
+    "merchant_name": "ichizos535",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "6735226323"
+    "merchant_phone": "3533237644"
   }
 } 
 
@@ -1764,7 +1764,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4443/regift 
+Route: /mdot/v2/gifts/462/regift 
 
 HTTP Method: POST 
 
@@ -1772,7 +1772,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>5971, "name"=>"None Networks", "email"=>"nonetwork5@gmail.com", "phone"=>"9173706969", "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4443"}}, "id"=>"4443"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>675, "name"=>"None Networks", "email"=>"nonetwork17@gmail.com", "phone"=>"9173706969", "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"462"}}, "id"=>"462"} 
 
 Response Code: 200 
 
@@ -1781,7 +1781,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4444,
+    "gift_id": 463,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -1796,9 +1796,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos248",
+    "merchant_name": "ichizos537",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "2278274674"
+    "merchant_phone": "7373538253"
   }
 } 
 
@@ -1807,7 +1807,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4446/regift 
+Route: /mdot/v2/gifts/465/regift 
 
 HTTP Method: POST 
 
@@ -1815,7 +1815,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>5977, "name"=>"None Networks", "email"=>"nonetwork6@gmail.com", "phone"=>"9173706969", "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4446"}}, "id"=>"4446"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>681, "name"=>"None Networks", "email"=>"nonetwork18@gmail.com", "phone"=>"9173706969", "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"465"}}, "id"=>"465"} 
 
 Response Code: 200 
 
@@ -1824,7 +1824,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4447,
+    "gift_id": 466,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -1839,9 +1839,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos250",
+    "merchant_name": "ichizos539",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "3754442448"
+    "merchant_phone": "8885374375"
   }
 } 
 
@@ -1850,7 +1850,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4449/regift 
+Route: /mdot/v2/gifts/468/regift 
 
 HTTP Method: POST 
 
@@ -1858,7 +1858,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>5983, "name"=>"None Networks", "email"=>"nonetwork7@gmail.com", "phone"=>nil, "facebook_id"=>"123", "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4449"}}, "id"=>"4449"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>687, "name"=>"None Networks", "email"=>"nonetwork19@gmail.com", "phone"=>nil, "facebook_id"=>"123", "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"468"}}, "id"=>"468"} 
 
 Response Code: 200 
 
@@ -1867,7 +1867,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4450,
+    "gift_id": 469,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -1882,9 +1882,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos252",
+    "merchant_name": "ichizos541",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "4868265345"
+    "merchant_phone": "6287662248"
   }
 } 
 
@@ -1893,7 +1893,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4452/regift 
+Route: /mdot/v2/gifts/471/regift 
 
 HTTP Method: POST 
 
@@ -1901,7 +1901,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>5989, "name"=>"None Networks", "email"=>"nonetwork8@gmail.com", "phone"=>nil, "facebook_id"=>"123", "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4452"}}, "id"=>"4452"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>693, "name"=>"None Networks", "email"=>"nonetwork20@gmail.com", "phone"=>nil, "facebook_id"=>"123", "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"471"}}, "id"=>"471"} 
 
 Response Code: 200 
 
@@ -1910,7 +1910,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4453,
+    "gift_id": 472,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -1925,9 +1925,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos254",
+    "merchant_name": "ichizos543",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "8354237235"
+    "merchant_phone": "3825634435"
   }
 } 
 
@@ -1936,7 +1936,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4455/regift 
+Route: /mdot/v2/gifts/474/regift 
 
 HTTP Method: POST 
 
@@ -1944,7 +1944,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>5995, "name"=>"None Networks", "email"=>"nonetwork9@gmail.com", "phone"=>nil, "facebook_id"=>"123", "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4455"}}, "id"=>"4455"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>699, "name"=>"None Networks", "email"=>"nonetwork21@gmail.com", "phone"=>nil, "facebook_id"=>"123", "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"474"}}, "id"=>"474"} 
 
 Response Code: 200 
 
@@ -1953,7 +1953,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4456,
+    "gift_id": 475,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -1968,9 +1968,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos256",
+    "merchant_name": "ichizos545",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "3665458644"
+    "merchant_phone": "7523384252"
   }
 } 
 
@@ -1979,7 +1979,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4458/regift 
+Route: /mdot/v2/gifts/477/regift 
 
 HTTP Method: POST 
 
@@ -1987,7 +1987,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>6001, "name"=>"None Networks", "email"=>"nonetwork10@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>"999", "message"=>"New Regift Message", "regift_id"=>"4458"}}, "id"=>"4458"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>705, "name"=>"None Networks", "email"=>"nonetwork22@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>"999", "message"=>"New Regift Message", "regift_id"=>"477"}}, "id"=>"477"} 
 
 Response Code: 200 
 
@@ -1996,7 +1996,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4459,
+    "gift_id": 478,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -2011,9 +2011,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos258",
+    "merchant_name": "ichizos547",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "5433234353"
+    "merchant_phone": "3355565342"
   }
 } 
 
@@ -2022,7 +2022,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4461/regift 
+Route: /mdot/v2/gifts/480/regift 
 
 HTTP Method: POST 
 
@@ -2030,7 +2030,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>6007, "name"=>"None Networks", "email"=>"nonetwork11@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>"999", "message"=>"New Regift Message", "regift_id"=>"4461"}}, "id"=>"4461"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>711, "name"=>"None Networks", "email"=>"nonetwork23@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>"999", "message"=>"New Regift Message", "regift_id"=>"480"}}, "id"=>"480"} 
 
 Response Code: 200 
 
@@ -2039,7 +2039,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4462,
+    "gift_id": 481,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -2054,9 +2054,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos260",
+    "merchant_name": "ichizos549",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "5528682275"
+    "merchant_phone": "8472566352"
   }
 } 
 
@@ -2065,7 +2065,7 @@ Response Body:
 
 LAST UPDATED: 2013-11-08 
 
-Route: /mdot/v2/gifts/4464/regift 
+Route: /mdot/v2/gifts/483/regift 
 
 HTTP Method: POST 
 
@@ -2073,7 +2073,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>6013, "name"=>"None Networks", "email"=>"nonetwork12@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>"999", "message"=>"New Regift Message", "regift_id"=>"4464"}}, "id"=>"4464"} 
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>717, "name"=>"None Networks", "email"=>"nonetwork24@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>"999", "message"=>"New Regift Message", "regift_id"=>"483"}}, "id"=>"483"} 
 
 Response Code: 200 
 
@@ -2082,7 +2082,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "gift_id": 4465,
+    "gift_id": 484,
     "giver": "Will Regifter",
     "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
     "receiver": "None Networks",
@@ -2097,9 +2097,9 @@ Response Body:
         "item_name": "Original Margarita "
       }
     ],
-    "merchant_name": "ichizos262",
+    "merchant_name": "ichizos551",
     "merchant_address": "123 happy st,  New York, NY",
-    "merchant_phone": "3543275864"
+    "merchant_phone": "6356742734"
   }
 } 
 
@@ -2133,7 +2133,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : 6017,  \"message\" : \"\",  \"credit_card\" : 77,  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}", "shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]"} 
+Request Parameters: {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : 721,  \"message\" : \"\",  \"credit_card\" : 77,  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}", "shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]"} 
 
 Response Code: 200 
 
@@ -2142,7 +2142,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4466
+    "Gift_id": 485
   }
 } 
 
@@ -2159,7 +2159,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"receiver_email\":\"jon@gmail.com\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7667,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"receiver_email\":\"jon@gmail.com\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":552,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2168,7 +2168,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4468
+    "Gift_id": 487
   }
 } 
 
@@ -2185,7 +2185,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7668,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":553,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2194,7 +2194,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4470
+    "Gift_id": 489
   }
 } 
 
@@ -2211,7 +2211,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7669,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":554,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2220,7 +2220,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4472
+    "Gift_id": 491
   }
 } 
 
@@ -2237,7 +2237,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"receiver_phone\":\"9173706969\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7670,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"receiver_phone\":\"9173706969\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":555,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2246,7 +2246,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4474
+    "Gift_id": 493
   }
 } 
 
@@ -2263,7 +2263,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7671,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":556,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2272,7 +2272,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4476
+    "Gift_id": 495
   }
 } 
 
@@ -2289,7 +2289,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7672,\"credit_card\":4567890,\"receiver_email\":\"\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":557,\"credit_card\":4567890,\"receiver_email\":\"\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2298,7 +2298,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4478
+    "Gift_id": 497
   }
 } 
 
@@ -2315,7 +2315,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"facebook_id\":\"123\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7673,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"facebook_id\":\"123\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":558,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2324,7 +2324,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4480
+    "Gift_id": 499
   }
 } 
 
@@ -2341,7 +2341,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7674,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":559,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2350,7 +2350,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4482
+    "Gift_id": 501
   }
 } 
 
@@ -2367,7 +2367,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7675,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":560,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2376,7 +2376,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4484
+    "Gift_id": 503
   }
 } 
 
@@ -2393,7 +2393,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"twitter\":\"999\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7676,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"twitter\":\"999\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":561,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2402,7 +2402,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4486
+    "Gift_id": 505
   }
 } 
 
@@ -2419,7 +2419,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7677,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":562,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2428,7 +2428,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4488
+    "Gift_id": 507
   }
 } 
 
@@ -2445,7 +2445,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":7678,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":563,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2454,7 +2454,7 @@ Response Body:
 {
   "status": 1,
   "data": {
-    "Gift_id": 4490
+    "Gift_id": 509
   }
 } 
 
@@ -2471,7 +2471,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"giver_id\":1,\"giver_name\":\"French\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_id\":6042,\"receiver_name\":\"Someone New\",\"provider_id\":7679,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"giver_id\":1,\"giver_name\":\"French\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_id\":746,\"receiver_name\":\"Someone New\",\"provider_id\":564,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 401 
 
@@ -2488,7 +2488,7 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"giver_id\":1,\"giver_name\":\"French\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_id\":6045,\"receiver_name\":\"Someone New\",\"provider_id\":7680,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"giver_id\":1,\"giver_name\":\"French\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_id\":749,\"receiver_name\":\"Someone New\",\"provider_id\":565,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 200 
 
@@ -2512,7 +2512,2526 @@ Format: [application/json]
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{\"giver_id\":1,\"giver_name\":\"French\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_id\":6048,\"receiver_name\":\"Someone New\",\"provider_id\":7681,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+Request Parameters: {"gift"=>"{\"giver_id\":1,\"giver_name\":\"French\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_id\":752,\"receiver_name\":\"Someone New\",\"provider_id\":566,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/archive 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "sent": [
+      {
+        "created_at": "2013-11-09T15:48:35-05:00",
+        "message": "Factory Message",
+        "provider_id": 1042,
+        "provider_name": "ichizos390",
+        "receiver_id": 1395,
+        "receiver_name": "Jon Gifter",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "total": "100.00",
+        "updated_at": "2013-11-09T15:48:35-05:00",
+        "gift_id": 882,
+        "status": "open",
+        "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "3834838483",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      },
+      {
+        "created_at": "2013-11-09T15:48:35-05:00",
+        "message": "Factory Message",
+        "provider_id": 1041,
+        "provider_name": "ichizos389",
+        "receiver_id": 1395,
+        "receiver_name": "Jon Gifter",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "total": "100.00",
+        "updated_at": "2013-11-09T15:48:35-05:00",
+        "gift_id": 881,
+        "status": "open",
+        "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "8775852737",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      }
+    ],
+    "used": [
+
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/archive 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "sent": [
+      {
+        "created_at": "2013-11-09T15:48:38-05:00",
+        "message": "Factory Message",
+        "provider_id": 1063,
+        "provider_name": "ichizos411",
+        "receiver_id": 1418,
+        "receiver_name": "Jon Gifter",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "total": "100.00",
+        "updated_at": "2013-11-09T15:48:38-05:00",
+        "gift_id": 903,
+        "status": "open",
+        "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "2476348626",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      },
+      {
+        "created_at": "2013-11-09T15:48:38-05:00",
+        "message": "Factory Message",
+        "provider_id": 1062,
+        "provider_name": "ichizos410",
+        "receiver_id": 1418,
+        "receiver_name": "Jon Gifter",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "total": "100.00",
+        "updated_at": "2013-11-09T15:48:38-05:00",
+        "gift_id": 902,
+        "status": "open",
+        "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "4357266383",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      }
+    ],
+    "used": [
+
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/archive 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "sent": [
+      {
+        "created_at": "2013-11-09T15:48:41-05:00",
+        "message": "Factory Message",
+        "provider_id": 1084,
+        "provider_name": "ichizos432",
+        "receiver_id": 1441,
+        "receiver_name": "Jon Gifter",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "total": "100.00",
+        "updated_at": "2013-11-09T15:48:41-05:00",
+        "gift_id": 924,
+        "status": "open",
+        "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "5488452826",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      },
+      {
+        "created_at": "2013-11-09T15:48:41-05:00",
+        "message": "Factory Message",
+        "provider_id": 1083,
+        "provider_name": "ichizos431",
+        "receiver_id": 1441,
+        "receiver_name": "Jon Gifter",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "total": "100.00",
+        "updated_at": "2013-11-09T15:48:41-05:00",
+        "gift_id": 923,
+        "status": "open",
+        "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "7854273535",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      }
+    ],
+    "used": [
+      {
+        "created_at": "2013-11-09T15:48:38-05:00",
+        "giver_id": 1441,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1064,
+        "provider_name": "ichizos412",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "updated_at": "2013-11-09T15:48:41-05:00",
+        "gift_id": 904,
+        "status": "redeemed",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "8388752744",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      },
+      {
+        "created_at": "2013-11-09T15:48:38-05:00",
+        "giver_id": 1441,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1065,
+        "provider_name": "ichizos413",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "updated_at": "2013-11-09T15:48:41-05:00",
+        "gift_id": 905,
+        "status": "redeemed",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "3763452644",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/archive 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "sent": [
+      {
+        "created_at": "2013-11-09T15:48:44-05:00",
+        "message": "Factory Message",
+        "provider_id": 1105,
+        "provider_name": "ichizos453",
+        "receiver_id": 1464,
+        "receiver_name": "Jon Gifter",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "total": "100.00",
+        "updated_at": "2013-11-09T15:48:44-05:00",
+        "gift_id": 945,
+        "status": "open",
+        "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "7226888885",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      },
+      {
+        "created_at": "2013-11-09T15:48:43-05:00",
+        "message": "Factory Message",
+        "provider_id": 1104,
+        "provider_name": "ichizos452",
+        "receiver_id": 1464,
+        "receiver_name": "Jon Gifter",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "total": "100.00",
+        "updated_at": "2013-11-09T15:48:43-05:00",
+        "gift_id": 944,
+        "status": "open",
+        "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "8388334882",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      }
+    ],
+    "used": [
+      {
+        "created_at": "2013-11-09T15:48:41-05:00",
+        "giver_id": 1464,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1085,
+        "provider_name": "ichizos433",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "updated_at": "2013-11-09T15:48:44-05:00",
+        "gift_id": 925,
+        "status": "redeemed",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "5553684544",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      },
+      {
+        "created_at": "2013-11-09T15:48:41-05:00",
+        "giver_id": 1464,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1086,
+        "provider_name": "ichizos434",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "updated_at": "2013-11-09T15:48:44-05:00",
+        "gift_id": 926,
+        "status": "redeemed",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "8824487684",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/archive 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "sent": [
+
+    ],
+    "used": [
+
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/archive 
+
+HTTP Method: GET 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "badge": 10,
+    "gifts": [
+      {
+        "created_at": "2013-11-09T15:48:51-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1157,
+        "provider_name": "ichizos505",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "7773833337",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 997
+      },
+      {
+        "created_at": "2013-11-09T15:48:51-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1156,
+        "provider_name": "ichizos504",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "2436455654",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 996
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "badge": 10,
+    "gifts": [
+      {
+        "created_at": "2013-11-09T15:48:51-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1157,
+        "provider_name": "ichizos505",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "7773833337",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 997
+      },
+      {
+        "created_at": "2013-11-09T15:48:51-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1156,
+        "provider_name": "ichizos504",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "2436455654",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 996
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "badge": 8,
+    "gifts": [
+      {
+        "created_at": "2013-11-09T15:48:51-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1155,
+        "provider_name": "ichizos503",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "4846334474",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 995
+      },
+      {
+        "created_at": "2013-11-09T15:48:50-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1154,
+        "provider_name": "ichizos502",
+        "updated_at": "2013-11-09T15:48:50-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "7268654636",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 994
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "badge": 10,
+    "gifts": [
+      {
+        "created_at": "2013-11-09T15:48:51-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1157,
+        "provider_name": "ichizos505",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "7773833337",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 997
+      },
+      {
+        "created_at": "2013-11-09T15:48:51-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1156,
+        "provider_name": "ichizos504",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "2436455654",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 996
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "badge": 10,
+    "gifts": [
+      {
+        "created_at": "2013-11-09T15:48:51-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1157,
+        "provider_name": "ichizos505",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "7773833337",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 997
+      },
+      {
+        "created_at": "2013-11-09T15:48:51-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1156,
+        "provider_name": "ichizos504",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "2436455654",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 996
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "badge": 1,
+    "gifts": [
+      {
+        "created_at": "2013-11-09T15:48:50-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1148,
+        "provider_name": "ichizos496",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "5854247224",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 988
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "badge": 1,
+    "gifts": [
+      {
+        "created_at": "2013-11-09T15:48:50-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1148,
+        "provider_name": "ichizos496",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "5854247224",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 988
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/badge 
+
+HTTP Method: GET 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "badge": 1,
+    "gifts": [
+      {
+        "created_at": "2013-11-09T15:48:50-05:00",
+        "giver_id": 1533,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 1148,
+        "provider_name": "ichizos496",
+        "updated_at": "2013-11-09T15:48:51-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "5854247224",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 988
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/998/open 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"998"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "1656"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/999/open 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"999"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "3376"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1000/open 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"1000"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "0603"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/0/open 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"0"} 
+
+Response Code: 404 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1/open 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1003/redeem 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"server"=>"test", "id"=>"1003"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "order_number": "AE-40-00",
+    "total": "100.00",
+    "server": "test"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1004/redeem 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"server"=>"test", "id"=>"1004"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "order_number": "AF-40-00",
+    "total": "100.00",
+    "server": "test"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1005/redeem 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"server"=>"test", "id"=>"1005"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "order_number": "AG-40-00",
+    "total": "100.00",
+    "server": "test"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1006/redeem 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"server"=>"test", "id"=>"1006"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": {
+    "gift_id": [
+      "can't be blank"
+    ],
+    "redeem_id": [
+      "can't be blank"
+    ],
+    "provider_id": [
+      "can't be blank"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/0/redeem 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"server"=>"test", "id"=>"0"} 
+
+Response Code: 404 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1/redeem 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1/regift 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1010/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":1583,\"name\":\"Ron Receiver\",\"email\":\"thisguy517@gmail.com\",\"phone\":\"5833564642\",\"facebook_id\":\"98a537fd332\",\"twitter\":\"283s537f6fd3\"}"}, "id"=>"1010"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1011,
+    "giver": "Jimmy Basic",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "Ron Receiver",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos518",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "7866786487"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1012/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":1587,\"name\":\"Ron Receiver\",\"email\":\"thisguy519@gmail.com\",\"phone\":\"5776546888\",\"facebook_id\":\"98a539fd332\",\"twitter\":\"283s539f6fd3\"}"}, "id"=>"1012"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1013,
+    "giver": "Jimmy Basic",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "Ron Receiver",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos519",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "5652867656"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1014/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":1591,\"name\":\"Ron Receiver\",\"email\":\"thisguy521@gmail.com\",\"phone\":\"8537653626\",\"facebook_id\":\"98a541fd332\",\"twitter\":\"283s541f6fd3\"}"}, "id"=>"1014"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1015,
+    "giver": "Jimmy Basic",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "Ron Receiver",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos520",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "4852288785"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1016/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":1595,\"name\":\"Ron Receiver\",\"email\":\"thisguy523@gmail.com\",\"phone\":\"4722674235\",\"facebook_id\":\"98a543fd332\",\"twitter\":\"283s543f6fd3\"}"}, "id"=>"1016"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1017,
+    "giver": "Jimmy Basic",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "Ron Receiver",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos521",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "5223388285"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1018/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":null,\"name\":\"No One\",\"email\":\"noone3@gmail.com\",\"phone\":null,\"facebook_id\":\"8ssa3fd332\",\"twitter\":\"28sdd3s3f6fd3\"}"}, "id"=>"1018"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1019,
+    "giver": "Jimmy Basic",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "No One",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos522",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "7285422356"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1020/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":null,\"name\":\"No One\",\"email\":\"noone4@gmail.com\",\"phone\":null,\"facebook_id\":\"8ssa4fd332\",\"twitter\":\"28sdd3s4f6fd3\"}"}, "id"=>"1020"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1021,
+    "giver": "Jimmy Basic",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "No One",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos523",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "5235246784"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1022/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":1605,\"name\":\"Ron Receiver\",\"email\":\"thisguy527@gmail.com\",\"phone\":\"3587827486\",\"facebook_id\":\"98a547fd332\",\"twitter\":\"283s547f6fd3\"}"}, "id"=>"1022"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1023,
+    "giver": "Jimmy Basic",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "Ron Receiver",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos524",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "7855427228"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1024/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":1609,\"name\":\"Ron Receiver\",\"email\":\"thisguy529@gmail.com\",\"phone\":\"4377224556\",\"facebook_id\":\"98a549fd332\",\"twitter\":\"283s549f6fd3\"}"}, "id"=>"1024"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1025,
+    "giver": "Jimmy Basic",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "Ron Receiver",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos525",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "3824537636"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1026/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":1613,\"name\":\"Ron Receiver\",\"email\":\"thisguy531@gmail.com\",\"phone\":\"8265534528\",\"facebook_id\":\"98a551fd332\",\"twitter\":\"283s551f6fd3\"}"}, "id"=>"1026"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1027/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":1617,\"name\":\"Ron Receiver\",\"email\":\"thisguy533@gmail.com\",\"phone\":\"5744364742\",\"facebook_id\":\"98a553fd332\",\"twitter\":\"283s553f6fd3\"}"}, "id"=>"1027"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "User is no longer in the system , please gift to them with phone, email, facebook, or twitter"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1029/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1621, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"1029"}}, "id"=>"1029"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1030,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos529",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "8324737826"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1032/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1627, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"1032"}}, "id"=>"1032"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1033,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos531",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "3827444485"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1035/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1633, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"1035"}}, "id"=>"1035"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1036,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos533",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "5846552777"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1038/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1639, "name"=>"None Networks", "email"=>"nonetwork16@gmail.com", "phone"=>"9173706969", "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"1038"}}, "id"=>"1038"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1039,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos535",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "5684477632"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1041/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1645, "name"=>"None Networks", "email"=>"nonetwork17@gmail.com", "phone"=>"9173706969", "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"1041"}}, "id"=>"1041"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1042,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos537",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "5443836437"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1044/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1651, "name"=>"None Networks", "email"=>"nonetwork18@gmail.com", "phone"=>"9173706969", "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"1044"}}, "id"=>"1044"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1045,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos539",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "7683834573"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1047/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1657, "name"=>"None Networks", "email"=>"nonetwork19@gmail.com", "phone"=>nil, "facebook_id"=>"123", "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"1047"}}, "id"=>"1047"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1048,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos541",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "8434886368"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1050/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1663, "name"=>"None Networks", "email"=>"nonetwork20@gmail.com", "phone"=>nil, "facebook_id"=>"123", "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"1050"}}, "id"=>"1050"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1051,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos543",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "6663875884"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1053/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1669, "name"=>"None Networks", "email"=>"nonetwork21@gmail.com", "phone"=>nil, "facebook_id"=>"123", "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"1053"}}, "id"=>"1053"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1054,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos545",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "7683772347"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1056/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1675, "name"=>"None Networks", "email"=>"nonetwork22@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>"999", "message"=>"New Regift Message", "regift_id"=>"1056"}}, "id"=>"1056"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1057,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos547",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "4525875347"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1059/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1681, "name"=>"None Networks", "email"=>"nonetwork23@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>"999", "message"=>"New Regift Message", "regift_id"=>"1059"}}, "id"=>"1059"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1060,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos549",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "6735464872"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts/1062/regift 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>1687, "name"=>"None Networks", "email"=>"nonetwork24@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>"999", "message"=>"New Regift Message", "regift_id"=>"1062"}}, "id"=>"1062"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 1063,
+    "giver": "Will Regifter",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "None Networks",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": 13,
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos551",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "6683852626"
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : 1691,  \"message\" : \"\",  \"credit_card\" : 77,  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}", "shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1064
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"receiver_email\":\"jon@gmail.com\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1204,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1066
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1205,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1068
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1206,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1070
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"receiver_phone\":\"9173706969\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1207,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1072
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1208,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1074
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1209,\"credit_card\":4567890,\"receiver_email\":\"\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1076
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"facebook_id\":\"123\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1210,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1078
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1211,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1080
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1212,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1082
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"twitter\":\"999\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1213,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1084
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1214,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"9173706969\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1086
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_name\":\"Someone New\",\"provider_id\":1215,\"credit_card\":4567890,\"receiver_email\":\"jon@gmail.com\",\"receiver_phone\":\"\",\"facebook_id\":\"123\",\"twitter\":\"999\"}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 1088
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"giver_id\":1,\"giver_name\":\"French\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_id\":1716,\"receiver_name\":\"Someone New\",\"provider_id\":1216,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"giver_id\":1,\"giver_name\":\"French\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_id\":1719,\"receiver_name\":\"Someone New\",\"provider_id\":1217,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "User is no longer in the system , please gift to them with phone, email, facebook, or twitter"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /mdot/v2/gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"gift"=>"{\"giver_id\":1,\"giver_name\":\"French\",\"total\":\"100.00\",\"service\":\"4.00\",\"receiver_id\":1722,\"receiver_name\":\"Someone New\",\"provider_id\":1218,\"credit_card\":4567890}", "shoppingCart"=>"[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"} 
 
 Response Code: 401 
 
