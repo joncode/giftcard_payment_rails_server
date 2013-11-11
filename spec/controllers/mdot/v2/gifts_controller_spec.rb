@@ -87,7 +87,7 @@ describe Mdot::V2::GiftsController do
             json["data"]["used"].count.should == 0
         end
 
-        it "should send redeemed and regifted drinks for 'used'" do
+        xit "should send redeemed and regifted drinks for 'used'" do
 
         end
 
