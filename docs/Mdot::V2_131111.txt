@@ -218,7 +218,12 @@ POST     /mdot/v2/gifts
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : 6447,  \"message\" : \"\",  \"credit_card\" : 77,  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}", "shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]"} 
+    validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service, :shoppingCart
+
+Request Parameters(minimum required): {"gift"=>"{ \"service\" : "0.5",  \"total\" : "10",  \"provider_id\" : 58, \"credit_card\" : 77, \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}", "shoppingCart"=>"[{\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]"} 
+
+Request Parameters(with additional parameters): {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : '0.5",  \"total\" : "10",  \"provider_id\" : 58,  \"receiver_id\" : 6447,  \"message\" : \"\",  \"credit_card\" : 77,  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}", "shoppingCart"=>"[{\"detail\":\"\",\"price\":"10",\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]"} 
+
 
 Response Body: 
 
@@ -250,7 +255,7 @@ Response Body:
         "provider_name": "ichizos63",
         "receiver_id": 6197,
         "receiver_name": "Jon Gifter",
-        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "shoppingCart": "[{\"detail\":null,\"price\":"13",\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "total": "100.00",
         "updated_at": "2013-11-11T12:33:44-05:00",
         "gift_id": 4555,
@@ -273,7 +278,7 @@ Response Body:
         "message": "Factory Message",
         "provider_id": 7867,
         "provider_name": "ichizos43",
-        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "shoppingCart": "[{\"detail\":null,\"price\":"13",\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "updated_at": "2013-11-11T12:33:44-05:00",
         "gift_id": 4535,
         "status": "redeemed",
@@ -292,7 +297,7 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route:GET     /mdot/v2/gifts/badge 
+GET     /mdot/v2/gifts/badge 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -314,7 +319,7 @@ Response Body:
         "provider_name": "ichizos136",
         "updated_at": "2013-11-11T12:33:53-05:00",
         "status": "open",
-        "shoppingCart": "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "shoppingCart": "[{\"detail\":null,\"price\":"13",\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
         "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
         "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
         "provider_phone": "8832757454",
@@ -404,7 +409,7 @@ Response Body:
     "shoppingCart": [
       {
         "detail": null,
-        "price": 13,
+        "price": "13",
         "quantity": 1,
         "item_id": 82,
         "item_name": "Original Margarita "
