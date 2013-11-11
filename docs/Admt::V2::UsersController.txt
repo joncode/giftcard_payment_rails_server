@@ -1,0 +1,980 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/1 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"first_name"=>"JonBoy"}, "id"=>"1"} 
+
+Response Code: 404 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/2 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"first_name"=>"Steve"}, "id"=>"2"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 2 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/3 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"house"=>"chill"}, "id"=>"3"} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/4 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"first_name"=>"Steve"}, "id"=>"4"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 4 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/5 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"email"=>""}, "id"=>"5"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": {
+    "email": [
+      "is invalid"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/6 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"first_name"=>"Ray"}, "id"=>"6"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 6 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/7 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"last_name"=>"Davies"}, "id"=>"7"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 7 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/8 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"email"=>"ray@davies.com"}, "id"=>"8"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 8 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/9 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"phone"=>"5877437859"}, "id"=>"9"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 9 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/1 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/10/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"10"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/11/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"11"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/23/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"23"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "App user not found - 23"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/1/deactivate 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/12/suspend 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"12"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is now suspended"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/13/suspend 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"13"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is now suspended"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/14/suspend 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"14"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is now unsuspended"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/23/suspend 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"23"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "App user not found - 23"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/1/suspend 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/15/deactivate_gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"15"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic all gifts deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/16/deactivate_gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"16"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic all gifts deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/users/1/deactivate_gifts 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/971 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"first_name"=>"JonBoy"}, "id"=>"971"} 
+
+Response Code: 404 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/972 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"first_name"=>"Steve"}, "id"=>"972"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 972 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/973 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"house"=>"chill"}, "id"=>"973"} 
+
+Response Code: 400 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/974 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"first_name"=>"Steve"}, "id"=>"974"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 974 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/975 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"email"=>""}, "id"=>"975"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": {
+    "email": [
+      "is invalid"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/976 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"first_name"=>"Ray"}, "id"=>"976"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 976 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/977 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"last_name"=>"Davies"}, "id"=>"977"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 977 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/978 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"email"=>"ray@davies.com"}, "id"=>"978"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 978 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/979 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"phone"=>"5877437859"}, "id"=>"979"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "User 979 updated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/1 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/980/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"980"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/981/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"981"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/23/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"23"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "App user not found - 23"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/1/deactivate 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/982/suspend 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"982"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is now suspended"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/983/suspend 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"983"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is now suspended"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/984/suspend 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"984"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic is now unsuspended"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/23/suspend 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"23"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "App user not found - 23"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/1/suspend 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/985/deactivate_gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"985"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic all gifts deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/986/deactivate_gifts 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"id"=>"986"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Jimmy Basic all gifts deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/users/1/deactivate_gifts 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 

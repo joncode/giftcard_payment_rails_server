@@ -1,0 +1,434 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/brands 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"name"=>"Starwood", "website"=>"www.starwood.com", "description"=>"AMAZING!", "photo"=>"res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "AMAZING!",
+    "name": "Starwood",
+    "website": "www.starwood.com",
+    "brand_id": 1,
+    "photo": null,
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/brands 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"name"=>"", "website"=>"www.starwood.com", "description"=>"AMAZING!", "photo"=>"res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": {
+    "name": [
+      "can't be blank"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/brands 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/brands/2 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"name"=>"House Bar"}, "id"=>"2"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "AMAZING!",
+    "name": "House Bar",
+    "website": "www.starwood.com",
+    "brand_id": 2,
+    "photo": null,
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/brands/3 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"description"=>"really crappy place"}, "id"=>"3"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "really crappy place",
+    "name": "Starwoodz2",
+    "website": "www.starwood.com",
+    "brand_id": 3,
+    "photo": null,
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/brands/4 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"website"=>"www.fake.com"}, "id"=>"4"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "AMAZING!",
+    "name": "Starwoodz3",
+    "website": "www.fake.com",
+    "brand_id": 4,
+    "photo": null,
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/brands/5 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"photo"=>"http://res.cloudinary.com/drinkboard/image/upload/asdfhjaieroifhaw.jpeg"}, "id"=>"5"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "AMAZING!",
+    "name": "Starwoodz4",
+    "website": "www.starwood.com",
+    "brand_id": 5,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/asdfhjaieroifhaw.jpeg",
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/brands/1 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/brands 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"name"=>"Starwood", "website"=>"www.starwood.com", "description"=>"AMAZING!", "photo"=>"res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "AMAZING!",
+    "name": "Starwood",
+    "website": "www.starwood.com",
+    "brand_id": 70,
+    "photo": null,
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/brands 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"name"=>"", "website"=>"www.starwood.com", "description"=>"AMAZING!", "photo"=>"res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": {
+    "name": [
+      "can't be blank"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/brands 
+
+HTTP Method: POST 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: no parameters 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/brands/71 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"name"=>"House Bar"}, "id"=>"71"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "AMAZING!",
+    "name": "House Bar",
+    "website": "www.starwood.com",
+    "brand_id": 71,
+    "photo": null,
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/brands/72 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"description"=>"really crappy place"}, "id"=>"72"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "really crappy place",
+    "name": "Starwoodz2",
+    "website": "www.starwood.com",
+    "brand_id": 72,
+    "photo": null,
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/brands/73 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"website"=>"www.fake.com"}, "id"=>"73"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "AMAZING!",
+    "name": "Starwoodz3",
+    "website": "www.fake.com",
+    "brand_id": 73,
+    "photo": null,
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/brands/74 
+
+HTTP Method: PUT 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>{"photo"=>"http://res.cloudinary.com/drinkboard/image/upload/asdfhjaieroifhaw.jpeg"}, "id"=>"74"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "description": "AMAZING!",
+    "name": "Starwoodz4",
+    "website": "www.starwood.com",
+    "brand_id": 74,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/asdfhjaieroifhaw.jpeg",
+    "active": 1
+  }
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/brands/1 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
