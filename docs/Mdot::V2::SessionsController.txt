@@ -1,6 +1,6 @@
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -23,18 +23,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "6623255878",
+    "phone": "5778266224",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6057",
-    "remember_token": "DlU1PiHPH-LPkYPqKyodwg"
+    "user_id": "6494",
+    "remember_token": "SfOnL-cxXpVvIsrIDdqCvQ"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -57,18 +57,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "2268232837",
+    "phone": "8465626367",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6058",
-    "remember_token": "GA-kR60CfAFOtBxvCg3jPg"
+    "user_id": "6495",
+    "remember_token": "EsbNw5n-lGCrX9iFg47DXQ"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -91,18 +91,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "2452272688",
+    "phone": "4885852722",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6059",
-    "remember_token": "aeNgSjkQfRXjMiTtLcf5Cw"
+    "user_id": "6496",
+    "remember_token": "hA_z771PMur54-7rJoDsKQ"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -126,7 +126,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -143,7 +143,7 @@ Response Code: 400
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -167,7 +167,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -191,7 +191,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -214,18 +214,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "8263477543",
+    "phone": "4578886466",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6064",
-    "remember_token": "-VvBLKvbhdtP9CRFfN7mJw"
+    "user_id": "6501",
+    "remember_token": "diAkxtBD2DTFDSI21rU8Pw"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -248,18 +248,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "5335728468",
+    "phone": "4858852333",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6065",
-    "remember_token": "Y2u3hbFod-dPNrP8glziaQ"
+    "user_id": "6502",
+    "remember_token": "h23bRRUbutLO0UFhIz4lBA"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -276,7 +276,7 @@ Response Code: 401
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 
@@ -299,18 +299,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "5442885726",
+    "phone": "3626285853",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6067",
-    "remember_token": "LpHt3iy8og2UB4-WQ9zc6Q"
+    "user_id": "6504",
+    "remember_token": "xrCot40aydomNFeI3qISUw"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 
@@ -333,18 +333,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "7276757632",
+    "phone": "6337572225",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6068",
-    "remember_token": "0lN-eIJ8jyN9Qrp8vPhAyg"
+    "user_id": "6505",
+    "remember_token": "XW8dz0Sf1s8IqTpt_NEBHQ"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 
@@ -367,18 +367,18 @@ Response Body:
     "facebook_id": "823472938429",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "6848555377",
+    "phone": "4267448484",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6069",
-    "remember_token": "3djHMtA9aj639qG9_xI1iw"
+    "user_id": "6506",
+    "remember_token": "qvFBZJ7Jaguo29Ms5rsXHQ"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 
@@ -401,18 +401,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "3265256678",
+    "phone": "5236467254",
     "twitter": "127653723",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6070",
-    "remember_token": "VcNWmXtsN4793034U__gXQ"
+    "user_id": "6507",
+    "remember_token": "ET871WzmxakXVMp6FBZp7g"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 
@@ -436,7 +436,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 
@@ -460,7 +460,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 
@@ -477,7 +477,7 @@ Response Code: 400
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions 
 
@@ -500,18 +500,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "5264525652",
+    "phone": "7447224457",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6074",
-    "remember_token": "7fFXOW4Hj1zEIHlBqHKK2A"
+    "user_id": "6511",
+    "remember_token": "uOwcp3_o-xrXfTEVQqVEdw"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 
@@ -534,18 +534,18 @@ Response Body:
     "facebook_id": "faceface",
     "first_name": "Jimmy",
     "last_name": "Basic",
-    "phone": "5783662583",
+    "phone": "2663866582",
     "twitter": "tweettweet",
     "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
-    "user_id": "6075",
-    "remember_token": "60aTEgYqMyhXKbglz4xqig"
+    "user_id": "6512",
+    "remember_token": "t9Xae858au5CXwKJ_VQbsQ"
   }
 } 
 
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 
@@ -569,7 +569,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/sessions/login_social 
 

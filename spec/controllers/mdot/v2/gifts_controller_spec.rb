@@ -41,7 +41,7 @@ describe Mdot::V2::GiftsController do
         it "should send sent gifts (purchaser) with giver keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "total", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id"]
-            post :archive, format: :json
+            get :archive, format: :json
             gift_hsh = json["data"]["sent"][0]
             compare_keys(gift_hsh, keys)
         end

@@ -1,6 +1,6 @@
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/cities 
 
@@ -34,7 +34,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/cities 
 
@@ -51,7 +51,7 @@ Response Code: 401
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/cities/New%20York/merchants 
 
@@ -72,9 +72,9 @@ Response Body:
     "city": "New York",
     "latitude": null,
     "longitude": null,
-    "name": "ichizos61",
-    "phone": "6723486826",
-    "provider_id": 7465,
+    "name": "ichizos1",
+    "phone": "3287384744",
+    "provider_id": 7805,
     "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
     "full_address": "123 happy st,  New York, NY",
     "live": "0"
@@ -83,9 +83,9 @@ Response Body:
     "city": "New York",
     "latitude": null,
     "longitude": null,
-    "name": "ichizos62",
-    "phone": "6354643628",
-    "provider_id": 7466,
+    "name": "ichizos10",
+    "phone": "6782248533",
+    "provider_id": 7814,
     "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
     "full_address": "123 happy st,  New York, NY",
     "live": "0"
@@ -95,7 +95,7 @@ Response Body:
 ---------------------------------------------------------------- 
 ---------------------------------------------------------------- 
 
-LAST UPDATED: 2013-11-08 
+LAST UPDATED: 2013-11-11 
 
 Route: /mdot/v2/cities/1/merchants 
 
