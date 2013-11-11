@@ -169,7 +169,9 @@ describe AppController do
             birthday: "10/10/1971",
             sex: "female",
             zip: "85733",
-            phone: "(702) 410-9605"
+            phone: "(702) 410-9605",
+            twitter: "300231203",
+            facebook_id: "92734034901"
         }.stringify_keys.each do |type_of, value|
 
             it "should update the user #{type_of} in database" do
