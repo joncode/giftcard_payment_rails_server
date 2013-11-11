@@ -28,7 +28,7 @@ class Mdot::V2::CardsController < JsonController
         card = @current_user.cards.where(id: params[:id]).first
         if card
             card.destroy
-            success(card.id.to_s)
+            success(card.id)
         else
             head 404
             return nil

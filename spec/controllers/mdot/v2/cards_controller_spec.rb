@@ -92,7 +92,7 @@ describe Mdot::V2::CardsController do
             delete :destroy, format: :json, id: card.id
             rrc(200)
             json["status"].should == 1
-            json["data"].should == card.id.to_s
+            json["data"].should == card.id
         end
 
         it "should delete the card from the database" do
