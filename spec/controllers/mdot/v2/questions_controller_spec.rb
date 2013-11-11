@@ -21,7 +21,7 @@ describe Mdot::V2::QuestionsController do
 
         it "should get the app users questions" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            post :index, format: :json
+            get :index, format: :json
             response.response_code.should == 200
             json["status"].should == 1
             json["data"].class.should == Array

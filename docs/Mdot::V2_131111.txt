@@ -1,0 +1,756 @@
+LAST UPDATED: 2013-11-11 
+
+MDOT::V2 API DOCUMENTATION
+
+FORMAT
+[application/json] 
+
+
+ROUTES (GET, POST, PUT, DELETE)
+API is not entirely restful because we do not need app user id to get their resources 
+For most routes, params are sent in dictionary with key "data"
+
+GET      /mdot/v2/brands
+GET      /mdot/v2/brands/:id/merchants   
+GET      /mdot/v2/cards                  
+POST     /mdot/v2/cards                  
+DELETE   /mdot/v2/cards/:id              
+GET      /mdot/v2/cities
+GET      /mdot/v2/cities/:id/merchants   
+POST     /mdot/v2/gifts         
+GET      /mdot/v2/gifts/archive          
+GET      /mdot/v2/gifts/badge            
+POST     /mdot/v2/gifts/:id/open         
+POST     /mdot/v2/gifts/:id/redeem       
+POST     /mdot/v2/gifts/:id/regift       
+POST     /mdot/v2/photos                 
+GET      /mdot/v2/providers/:id/menu     
+GET      /mdot/v2/questions              
+PUT      /mdot/v2/questions              
+POST     /mdot/v2/sessions               
+POST     /mdot/v2/sessions/login_social  
+GET      /mdot/v2/settings               
+PUT      /mdot/v2/settings               
+GET      /mdot/v2/users                  
+POST     /mdot/v2/users
+PUT      /mdot/v2/users                  
+PUT      /mdot/v2/users/reset_password   
+
+RESPONSES
+
+200 OK           => Connection to requested route successful. (requested data may or may not have been found in database, but connection was successful)
+304 Not Modified => (to be implemented) 
+400 Bad Request  => You have not sent any worthwhile data to server 
+401 Unauthorized => Issue was found with authorization token
+404 Not Found    => Resource/route not found
+500 Internal Server Error 
+
+Response payload
+{ "status" : 1 or 0  , "data" :  <response> }
+
+status = 0 -- data not found
+status = 1 -- OK 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+BRANDS
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+GET    /mdot/v2/brands 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Body: 
+
+[
+  {
+    "name": "Newbiee0",
+    "next_view": "m",
+    "brand_id": 2851,
+    "photo": null
+  }
+] 
+
+---------------------------------------------------------------- 
+
+GET    /mdot/v2/brands/2891/merchants 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"2891"} 
+
+Response Body: 
+
+[
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos1",
+    "phone": "3577865888",
+    "provider_id": 7685,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  }
+] 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+CARDS
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+GET     /mdot/v2/cards 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": [
+    {
+      "card_id": 168,
+      "last_four": "1042",
+      "nickname": "mastercard sauce"
+    }
+  ]
+} 
+
+---------------------------------------------------------------- 
+
+POST     /mdot/v2/cards 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters(type 1): {"data"=>"{\"month\":\"02\",\"number\":\"4417121029961508\",\"name\":\"Hiromi Tsuboi\",\"year\":\"2016\",\"csv\":\"910\",\"nickname\":\"Dango\"}"} 
+
+Request Parameters(type 2): {"data"=>{"month"=>"02", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}} 
+
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": 169
+} 
+
+---------------------------------------------------------------- 
+
+DELETE     /mdot/v2/cards/171 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"171"} 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "171"
+} 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+CITIES
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+GET     /mdot/v2/cities 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Body: 
+
+[
+  {
+    "name": "Las Vegas",
+    "state": "Nevada",
+    "city_id": 1,
+    "photo": "d|v1378747548/las_vegas_xzqlvz.jpg"
+  }
+] 
+
+---------------------------------------------------------------- 
+
+GET     /mdot/v2/cities/New%20York/merchants 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters(type 1): {"id"=>"New York"} 
+Request Parameters(type 2): {"id"=>"1"} 
+
+Response Body: 
+
+[
+  {
+    "city": "New York",
+    "latitude": null,
+    "longitude": null,
+    "name": "ichizos1",
+    "phone": "3287384744",
+    "provider_id": 7805,
+    "photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+    "full_address": "123 happy st,  New York, NY",
+    "live": "0"
+  }
+] 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+GIFTS
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+POST     /mdot/v2/gifts 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+    validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service, :shoppingCart
+
+Request Parameters(minimum required): {"gift"=>"{ \"service\" : "0.5",  \"total\" : "10",  \"provider_id\" : 58, \"credit_card\" : 77, \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}", "shoppingCart"=>"[{\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]"} 
+
+Request Parameters(with additional parameters): {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : '0.5",  \"total\" : "10",  \"provider_id\" : 58,  \"receiver_id\" : 6447,  \"message\" : \"\",  \"credit_card\" : 77,  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}", "shoppingCart"=>"[{\"detail\":\"\",\"price\":"10",\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]"} 
+
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "Gift_id": 4695
+  }
+} 
+
+---------------------------------------------------------------- 
+
+GET    /mdot/v2/gifts/archive 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "sent": [
+      {
+        "created_at": "2013-11-11T12:33:44-05:00",
+        "message": "Factory Message",
+        "provider_id": 7887,
+        "provider_name": "ichizos63",
+        "receiver_id": 6197,
+        "receiver_name": "Jon Gifter",
+        "shoppingCart": "[{\"detail\":null,\"price\":"13",\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "total": "100.00",
+        "updated_at": "2013-11-11T12:33:44-05:00",
+        "gift_id": 4555,
+        "status": "open",
+        "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "7637666867",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      }
+    ],
+    "used": [
+      {
+        "created_at": "2013-11-11T12:33:42-05:00",
+        "giver_id": 6197,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 7867,
+        "provider_name": "ichizos43",
+        "shoppingCart": "[{\"detail\":null,\"price\":"13",\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "updated_at": "2013-11-11T12:33:44-05:00",
+        "gift_id": 4535,
+        "status": "redeemed",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "2343884424",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211"
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+
+GET     /mdot/v2/gifts/badge 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "badge": 10,
+    "gifts": [
+      {
+        "created_at": "2013-11-11T12:33:53-05:00",
+        "giver_id": 6289,
+        "giver_name": "Jon Gifter",
+        "message": "Factory Message",
+        "provider_id": 7960,
+        "provider_name": "ichizos136",
+        "updated_at": "2013-11-11T12:33:53-05:00",
+        "status": "open",
+        "shoppingCart": "[{\"detail\":null,\"price\":"13",\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]",
+        "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+        "provider_photo": "http://res.cloudinary.com/drinkboard/image/upload/v1349150293/upqygknnlerbevz4jpnw.png",
+        "provider_phone": "8832757454",
+        "city": "New York",
+        "latitude": null,
+        "longitude": null,
+        "live": "0",
+        "provider_address": "123 happy st, New York, NY 11211",
+        "gift_id": 4628
+      }
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+
+POST     /mdot/v2/gifts/4629/open 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"4629"} 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "3325"
+} 
+
+---------------------------------------------------------------- 
+
+POST     /mdot/v2/gifts/4634/redeem 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"server"=>"test", "id"=>"4634"} 
+
+Response Body (200 success): 
+
+{
+  "status": 1,
+  "data": {
+    "order_number": "AY-00-20",
+    "total": "100.00",
+    "server": "test"
+  }
+} 
+
+Response Body (200 fail): 
+
+{
+  "status": 0,
+  "data": {
+    "gift_id": [
+      "can't be blank"
+    ],
+    "redeem_id": [
+      "can't be blank"
+    ],
+    "provider_id": [
+      "can't be blank"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+
+POST     /mdot/v2/gifts/4641/regift 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters(type 1): {"data"=>{"message"=>"New Regift Message", "receiver"=>"{\"receiver_id\":6339,\"name\":\"Ron Receiver\",\"email\":\"thisguy150@gmail.com\",\"phone\":\"4738684224\",\"facebook_id\":\"98a150fd332\",\"twitter\":\"283s150f6fd3\"}"}, "id"=>"4641"} 
+
+Request Parameters(type 2): {"data"=>{"message"=>"New Regift Message", "receiver"=>{"receiver_id"=>6383, "name"=>"None Networks", "email"=>"jon@gmail.com", "phone"=>nil, "facebook_id"=>nil, "twitter"=>nil, "message"=>"New Regift Message", "regift_id"=>"4663"}}, "id"=>"4663"} 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "gift_id": 4642,
+    "giver": "Jimmy Basic",
+    "giver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "receiver": "Ron Receiver",
+    "receiver_photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "message": "New Regift Message",
+    "shoppingCart": [
+      {
+        "detail": null,
+        "price": "13",
+        "quantity": 1,
+        "item_id": 82,
+        "item_name": "Original Margarita "
+      }
+    ],
+    "merchant_name": "ichizos149",
+    "merchant_address": "123 happy st,  New York, NY",
+    "merchant_phone": "2874246444"
+  }
+} 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+PHOTOS
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+POST     /mdot/v2/photos 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>"http://res.cloudinary.com/drinkboard/image/upload/v1382464405/myg7nfaccypfaybffljo.jpg"} 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Photo Updated - Thank you!"
+} 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+PROVIDERS
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+GET     /mdot/v2/providers/8022/menu 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"id"=>"8022"} 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "[{\"section\":\"Signature\",\"items\":[{\"detail\":\"PATRON CITRONGE, MUDDLED JALAPENOS\",\"price\":\"15\",\"item_id\":73,\"item_name\":\"JALAPENO MARGARITA\"},{\"detail\":\"AKVINTA VODKA, REGATTA GINGER BEER, LIME JUICE, SUGAR\",\"price\":\"15\",\"item_id\":72,\"item_name\":\"Moscow Mule \"}]},{\"section\":\"Beer\",\"items\":[{\"detail\":\"\",\"price\":\"8.00\",\"item_id\":98,\"item_name\":\"Corona\"},{\"detail\":\"\",\"price\":\"7.00\",\"item_id\":97,\"item_name\":\"Bud Light\"},{\"detail\":\"\",\"price\":\"8.00\",\"item_id\":99,\"item_name\":\"Stella\"},{\"detail\":\"\",\"price\":\"8.00\",\"item_id\":100,\"item_name\":\"Beck's\"}]},{\"section\":\"Cocktail\",\"items\":[{\"detail\":\"ABSOLUT ORIENT APPLE, GINGER BEER, GINGER ALE, LEMON WEDGE\",\"price\":\"15\",\"item_id\":74,\"item_name\":\"GINGER ROGERS\"},{\"detail\":\"KETEL ONE VODKA, SODA, LIME JUICE, SIMPLE SYRUP, LIME WEDGE\",\"price\":\"15\",\"item_id\":75,\"item_name\":\"KETEL ONE FIZZ\"},{\"detail\":\"CIROC PEACH, MUDDLED RASPBERRIES FRESH LIME JUICE, SOUR \\u0026 CRANBERRY JUICE\",\"price\":\"15\",\"item_id\":76,\"item_name\":\"PINK STARBURST\"}]}]"
+} 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+QUESTIONS
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+GET    /mdot/v2/questions 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": [
+    {
+      "left": "Day Drinking",
+      "right": "Night Drinking",
+      "question_id": 169
+    }
+  ]
+} 
+
+---------------------------------------------------------------- 
+
+PUT    /mdot/v2/questions 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>"[  {    \"question_id\" : 193,    \"left\" : \"Day Drinking\",    \"answer\" : \"0\",    \"right\" : \"Night Drinking\"  },  {    \"question_id\" : 194,    \"left\" : \"Red Wine\",    \"answer\" : \"0\",    \"right\" : \"White Wine\"  },  {    \"question_id\" : 195,    \"left\" : \"White Liqours\",    \"answer\" : \"0\",    \"right\" : \"Brown Liqours\"  },  {    \"question_id\" : 196,    \"left\" : \"Straw\",    \"answer\" : \"0\",    \"right\" : \"No straw\"  },  {    \"question_id\" : 197,    \"left\" : \"Light Beer\",    \"answer\" : \"0\",    \"right\" : \"Dark Beer\"  },  {    \"question_id\" : 198,    \"left\" : \"Mimosa\",    \"answer\" : \"0\",    \"right\" : \"Bloody Mary\"  },  {    \"question_id\" : 199,    \"left\" : \"Rare\",    \"answer\" : \"0\",    \"right\" : \"Well Done\"  }]"} 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": [
+    {
+      "left": "Day Drinking",
+      "right": "Night Drinking",
+      "question_id": 193,
+      "answer": "0"
+    }
+  ]
+} 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+SESSIONS
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+POST     /mdot/v2/sessions 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters(required): {"email"=>"neil@gmail.com", "password"=>"password"} 
+
+Request Parameters(optional): {"email"=>"neil@gmail.com", "password"=>"password", "pn_token"=>"9128341983439487123"} 
+
+Response Body(200 success): 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "5778266224",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6494",
+    "remember_token": "SfOnL-cxXpVvIsrIDdqCvQ"
+  }
+}
+
+Response Body(200 invalid): 
+
+{
+  "status": 0,
+  "data": "Invalid email/password combination"
+} 
+
+Response Body(200 suspended): 
+
+{
+  "status": 0,
+  "data": "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+} 
+
+---------------------------------------------------------------- 
+
+POST     /mdot/v2/sessions/login_social 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters(facebook): {"facebook_id"=>"faceface"} 
+
+Request Parameters(twitter): {"twitter"=>"tweettweet"} 
+
+Response Body(200 success): 
+
+{
+  "status": 1,
+  "data": {
+    "email": "neil@gmail.com",
+    "facebook_id": "faceface",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3626285853",
+    "twitter": "tweettweet",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6504",
+    "remember_token": "xrCot40aydomNFeI3qISUw"
+  }
+} 
+
+Response Body(200 not found): 
+
+{
+  "status": 0,
+  "data": "Account not in Drinkboard database"
+} 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+SETTINGS
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+GET     /mdot/v2/settings 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": {
+    "email_follow_up": true,
+    "email_invite": true,
+    "email_invoice": true,
+    "email_receiver_new": true,
+    "email_redeem": true,
+    "user_id": 6515
+  }
+} 
+
+---------------------------------------------------------------- 
+
+PUT     /mdot/v2/settings 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: {"data"=>"{  \"email_receiver_new\" : \"true\",  \"email_invite\" : \"true\",  \"email_redeem\" : \"true\",  \"email_invoice\" : \"true\",  \"email_follow_up\" : \"true\"}"} 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "Settings saved"
+} 
+
+
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+USERS
+---------------------------------------------------------------------
+---------------------------------------------------------------------
+
+GET     /mdot/v2/users 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters: no parameters 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": [
+    {
+      "email": "thisguy1@gmail.com",
+      "facebook_id": "98a1fd332",
+      "first_name": "Jimmy",
+      "last_name": "Basic",
+      "phone": "3537448843",
+      "twitter": "283s1f6fd3",
+      "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+      "user_id": "6523"
+    }
+  ]
+} 
+
+---------------------------------------------------------------- 
+
+POST    /mdot/v2/users 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters(required fields): {"data"=>{"email"=>"neil@gmail.com", "password"=>"password", "password_confirmation"=>"password", "first_name"=>"Neil"}} 
+
+Request Parameters(including optional fields): {"data"=>{"first_name"=>"Kevin", "use_photo"=>"ios", "password"=>"kevinn", "last_name"=>"Novak", "phone"=>"7343950489", "email"=>"kevin@uber.com", "origin"=>"d", "iphone_photo"=>"http://graph.facebook.com/28700910/picture?type=large", "password_confirmation"=>"kevinn", "facebook_id"=>"28700910"}, "pn_token"=>"8c5c69870825e3255bc750395f9b0680b54f458e93322109853567c85d17d48b"} 
+
+Response Body(200 success): 
+
+{
+  "status": 1,
+  "data": {
+    "user_id": 6568,
+    "token": "6jSfOPdNNJdDpfuFjWeFvQ"
+  }
+} 
+
+Response Body(200 invalid): 
+
+{
+  "status": 0,
+  "data": {
+    "email": [
+      "is invalid"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+
+PUT     /mdot/v2/users 
+
+Authorization: ['HTTP_TKN'] = USER_TOKEN 
+
+Request Parameters(at least one of the following): 
+{"data"=>{"first_name"=>"Ray", "last_name"=>"Davies", "email"=>"ray@davies.com", "phone"=>"(702) 410-9605", "birthday"=>"10/10/1971", "zip"=>"89475", "sex"=>"male", "birthday"=>"03/13/1975", "twitter"=>"65787323", "facebook_id"=>"98136459814"}} 
+
+Response Body(200 success): 
+
+{
+  "status": 1,
+  "data": {
+    "birthday": "3/13/1975",
+    "email": "thisguy1@gmail.com",
+    "facebook_id": "98a1fd332",
+    "first_name": "Jimmy",
+    "last_name": "Basic",
+    "phone": "3537448843",
+    "sex": "male",
+    "twitter": "283s1f6fd3",
+    "zip": "89475",
+    "photo": "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg",
+    "user_id": "6523"
+  }
+} 
+
+Response Body(200 invalid): 
+
+{
+  "status": 0,
+  "data": {
+    "email": [
+      "is invalid"
+    ]
+  }
+} 
+
+---------------------------------------------------------------- 
+
+PUT     /mdot/v2/users/reset_password 
+
+Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
+
+Request Parameters: {"data"=>"findme@gmail.com"} 
+
+Response Body(200 success): 
+
+{
+  "status": 1,
+  "data": "Email is Sent , check your inbox"
+} 
+Response Body(200 success): 
+
+Response Body(200 no record): 
+
+{
+  "status": 0,
+  "data": "Dev Drinkboard (local) does not have record of that email"
+} 
