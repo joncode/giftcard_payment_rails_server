@@ -49,6 +49,7 @@ FactoryGirl.define do
         last_name                   "User"
         password                    "specspec"
         password_confirmation       "specspec"
+        sequence(:email)            { |n| "simple#{n}@gmail.com" }
     end
 
     factory :nonetwork, :class => 'User' do

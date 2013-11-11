@@ -572,7 +572,6 @@ describe AppController do
             json["used"].class.should == Array
             json["used"].count.should == 0
         end
-
     end
 
     describe :others_questions do
