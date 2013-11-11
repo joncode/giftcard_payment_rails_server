@@ -10,31 +10,31 @@ ROUTES (GET, POST, PUT, DELETE)
 API is not entirely restful because we do not need app user id to get their resources 
 For most routes, params are sent in dictionary with key "data"
 
-GET      /mdot/v2/brands/:id/merchants(.:format)   
-GET      /mdot/v2/brands(.:format)                 
-GET      /mdot/v2/cards(.:format)                  
-POST     /mdot/v2/cards(.:format)                  
-DELETE   /mdot/v2/cards/:id(.:format)              
-GET      /mdot/v2/cities/:id/merchants(.:format)   
-GET      /mdot/v2/cities(.:format)
-POST     /mdot/v2/gifts/:id/regift(.:format)       
-POST     /mdot/v2/gifts/:id/open(.:format)         
-POST     /mdot/v2/gifts/:id/redeem(.:format)       
-GET      /mdot/v2/gifts/archive(.:format)          
-GET      /mdot/v2/gifts/badge(.:format)            
-POST     /mdot/v2/gifts(.:format)         
-POST     /mdot/v2/photos(.:format)                 
-GET      /mdot/v2/providers/:id/menu(.:format)     
-PUT      /mdot/v2/questions(.:format)              
-GET      /mdot/v2/questions(.:format)              
-POST     /mdot/v2/sessions/login_social(.:format)  
-POST     /mdot/v2/sessions(.:format)               
-PUT      /mdot/v2/settings(.:format)               
-GET      /mdot/v2/settings(.:format)               
-PUT      /mdot/v2/users(.:format)                  
-PUT      /mdot/v2/users/reset_password(.:format)   
-GET      /mdot/v2/users(.:format)                  
-POST     /mdot/v2/users(.:format)
+GET      /mdot/v2/brands
+GET      /mdot/v2/brands/:id/merchants   
+GET      /mdot/v2/cards                  
+POST     /mdot/v2/cards                  
+DELETE   /mdot/v2/cards/:id              
+GET      /mdot/v2/cities
+GET      /mdot/v2/cities/:id/merchants   
+POST     /mdot/v2/gifts         
+GET      /mdot/v2/gifts/archive          
+GET      /mdot/v2/gifts/badge            
+POST     /mdot/v2/gifts/:id/open         
+POST     /mdot/v2/gifts/:id/redeem       
+POST     /mdot/v2/gifts/:id/regift       
+POST     /mdot/v2/photos                 
+GET      /mdot/v2/providers/:id/menu     
+GET      /mdot/v2/questions              
+PUT      /mdot/v2/questions              
+POST     /mdot/v2/sessions               
+POST     /mdot/v2/sessions/login_social  
+GET      /mdot/v2/settings               
+PUT      /mdot/v2/settings               
+GET      /mdot/v2/users                  
+POST     /mdot/v2/users
+PUT      /mdot/v2/users                  
+PUT      /mdot/v2/users/reset_password   
 
 RESPONSES
 
@@ -58,7 +58,7 @@ BRANDS
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: GET    /mdot/v2/brands 
+GET    /mdot/v2/brands 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -77,7 +77,7 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: GET    /mdot/v2/brands/2891/merchants 
+GET    /mdot/v2/brands/2891/merchants 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -106,7 +106,7 @@ CARDS
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: GET     /mdot/v2/cards 
+GET     /mdot/v2/cards 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -127,11 +127,14 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: POST     /mdot/v2/cards 
+POST     /mdot/v2/cards 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>"{\"month\":\"02\",\"number\":\"4417121029961508\",\"name\":\"Hiromi Tsuboi\",\"year\":\"2016\",\"csv\":\"910\",\"nickname\":\"Dango\"}"} 
+Request Parameters(type 1): {"data"=>"{\"month\":\"02\",\"number\":\"4417121029961508\",\"name\":\"Hiromi Tsuboi\",\"year\":\"2016\",\"csv\":\"910\",\"nickname\":\"Dango\"}"} 
+
+Request Parameters(type 2): {"data"=>{"month"=>"02", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}} 
+
 
 Response Body: 
 
@@ -142,13 +145,11 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: DELETE     /mdot/v2/cards/171 
+DELETE     /mdot/v2/cards/171 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
 Request Parameters: {"id"=>"171"} 
-
-Response Code: 200, 401, 404
 
 Response Body: 
 
@@ -164,7 +165,7 @@ CITIES
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: GET     /mdot/v2/cities 
+GET     /mdot/v2/cities 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -183,12 +184,12 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: GET     /mdot/v2/cities/New%20York/merchants 
+GET     /mdot/v2/cities/New%20York/merchants 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"id"=>"New York"} 
-Request Parameters (alternative format): {"id"=>"1"} 
+Request Parameters(type 1): {"id"=>"New York"} 
+Request Parameters(type 2): {"id"=>"1"} 
 
 Response Body: 
 
@@ -213,7 +214,7 @@ GIFTS
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: POST     /mdot/v2/gifts 
+POST     /mdot/v2/gifts 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -230,7 +231,7 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: GET    /mdot/v2/gifts/archive 
+GET    /mdot/v2/gifts/archive 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -330,7 +331,7 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: POST     /mdot/v2/gifts/4629/open 
+POST     /mdot/v2/gifts/4629/open 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -345,7 +346,7 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: POST     /mdot/v2/gifts/4634/redeem 
+POST     /mdot/v2/gifts/4634/redeem 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -381,7 +382,7 @@ Response Body (200 fail):
 
 ---------------------------------------------------------------- 
 
-Route: POST     /mdot/v2/gifts/4641/regift 
+POST     /mdot/v2/gifts/4641/regift 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -422,7 +423,7 @@ PHOTOS
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: POST     /mdot/v2/photos 
+POST     /mdot/v2/photos 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -442,7 +443,7 @@ PROVIDERS
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: GET     /mdot/v2/providers/8022/menu 
+GET     /mdot/v2/providers/8022/menu 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -462,7 +463,7 @@ QUESTIONS
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: GET    /mdot/v2/questions 
+GET    /mdot/v2/questions 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -483,7 +484,7 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: PUT    /mdot/v2/questions 
+PUT    /mdot/v2/questions 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -510,7 +511,7 @@ SESSIONS
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: POST     /mdot/v2/sessions 
+POST     /mdot/v2/sessions 
 
 Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
 
@@ -551,11 +552,13 @@ Response Body(200 suspended):
 
 ---------------------------------------------------------------- 
 
-Route: POST     /mdot/v2/sessions/login_social 
+POST     /mdot/v2/sessions/login_social 
 
 Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
 
-Request Parameters: {"facebook_id"=>"faceface"} 
+Request Parameters(facebook): {"facebook_id"=>"faceface"} 
+
+Request Parameters(twitter): {"twitter"=>"tweettweet"} 
 
 Response Body(200 success): 
 
@@ -588,7 +591,7 @@ SETTINGS
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: GET     /mdot/v2/settings 
+GET     /mdot/v2/settings 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -610,7 +613,7 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: PUT     /mdot/v2/settings 
+PUT     /mdot/v2/settings 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -630,7 +633,7 @@ USERS
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-Route: GET     /mdot/v2/users 
+GET     /mdot/v2/users 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
@@ -656,7 +659,7 @@ Response Body:
 
 ---------------------------------------------------------------- 
 
-Route: POST    /mdot/v2/users 
+POST    /mdot/v2/users 
 
 Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
 
@@ -687,11 +690,12 @@ Response Body(200 invalid):
 
 ---------------------------------------------------------------- 
 
-Route: PUT     /mdot/v2/users 
+PUT     /mdot/v2/users 
 
 Authorization: ['HTTP_TKN'] = USER_TOKEN 
 
-Request Parameters: {"data"=>{"zip"=>"89475", "sex"=>"male", "birthday"=>"03/13/1975"}} 
+Request Parameters(at least one of the following): 
+{"data"=>{"first_name"=>"Ray", "last_name"=>"Davies", "email"=>"ray@davies.com", "phone"=>"(702) 410-9605", "birthday"=>"10/10/1971", "zip"=>"89475", "sex"=>"male", "birthday"=>"03/13/1975", "twitter"=>"65787323", "facebook_id"=>"98136459814"}} 
 
 Response Body(200 success): 
 
@@ -725,7 +729,7 @@ Response Body(200 invalid):
 
 ---------------------------------------------------------------- 
 
-Route: PUT     /mdot/v2/users/reset_password 
+PUT     /mdot/v2/users/reset_password 
 
 Authorization: ['HTTP_TKN'] = GENERAL_TOKEN 
 
