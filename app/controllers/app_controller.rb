@@ -726,7 +726,7 @@ class AppController < JsonController
 private
 
     def strong_user_param(data_hsh)
-        allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip" ]
+        allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip", "facebook_id", "twitter" ]
         data_hsh.select{ |k,v| allowed.include? k }
     end
 
