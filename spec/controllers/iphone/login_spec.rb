@@ -7,7 +7,7 @@ describe IphoneController do
         before do
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
         end
-
+        
         it "is successful" do
             post :login, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should         == 200
