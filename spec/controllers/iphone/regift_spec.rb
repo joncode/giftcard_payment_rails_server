@@ -122,11 +122,13 @@ describe IphoneController do
                 old_gift = FactoryGirl.create :regift, { key => identifier}
                 giver    = old_gift.giver
                 recipient_data = regift_hash(@user).to_json
-                post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
+                 post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
 
                 puts json.inspect
                 new_gift = Gift.find(json["data"]["gift_id"])
+                #binding.pry
                 new_gift.receiver_id.should == @user.id
+                new_gift.send(key).should_not == identifier
             end
 
             it "should look thru multiple unique ids for a user object with #{type_of}" do
