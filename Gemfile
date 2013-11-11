@@ -4,6 +4,7 @@ ruby '1.9.2'
 gem 'rails', '3.2.11'
 gem 'pg'
 gem 'unicorn'
+gem "rack-timeout"
 gem 'httparty', '~> 0.9.0'
 gem 'resque', :require => "resque/server"
 gem 'newrelic_rpm'
@@ -34,7 +35,7 @@ group :test do
   gem 'webmock'
   gem 'resque_spec'
 end
-  
+
 # To use ActiveModel has_secure_password
 gem 'bcrypt-ruby', '~> 3.0.0'
 
