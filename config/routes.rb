@@ -9,8 +9,7 @@ Drinkboard::Application.routes.draw do
   match 'app/login_social',     to: 'iphone#login_social',     via: :post
   match 'app/update',           to: 'app#relays',              via: :post
   match 'app/update_user',      to: 'app#update_user',         via: :post
-  match 'app/gifts_array',      to: 'app#gifts',               via: :post
-  match 'app/archive',          to: 'iphone#archive',          via: :post
+  match 'app/archive',          to: 'app#archive',             via: :post
   match 'app/brands',           to: 'app#brands',              via: :post
   match 'app/brand_merchants',  to: 'app#brand_merchants',     via: :post
   match 'app/providers',        to: 'app#providers',           via: :post
@@ -20,7 +19,6 @@ Drinkboard::Application.routes.draw do
   match 'app/menu_v2',          to: 'app#menu_v2',             via: :post
   match 'app/questions',        to: 'app#questions',           via: :post
   match 'app/others_questions', to: 'app#others_questions',    via: :post
-  match 'app/transactions',     to: 'app#transactions',        via: :post
   match 'app/users_array',      to: 'app#drinkboard_users',    via: :post
   match 'app/create_gift',      to: 'app#create_gift',         via: :post
   match 'app/buy_gift',         to: 'app#create_gift',         via: :post
@@ -30,14 +28,15 @@ Drinkboard::Application.routes.draw do
   match 'app/save_settings',    to: 'app#save_settings',       via: :post
   match 'app/m_save_settings',  to: 'app#save_settings_m',     via: :post
   match 'app/regift',           to: 'iphone#regift',           via: :post
-    ## test new data methods routes
-  match 'app/new_pic',          to: 'app#providers_short_ph_url', via: :post
-  match 'app/cities_app',       to: 'iphone#cities'
 
     ## credit card routes
   match 'app/cards',            to: 'app#get_cards',           via: :post
   match 'app/add_card',         to: 'app#add_card',            via: :post
   match 'app/delete_card',      to: 'app#delete_card',         via: :post
+
+    ## test new data methods routes
+  match 'app/new_pic',          to: 'app#providers_short_ph_url', via: :post
+  match 'app/cities_app',       to: 'iphone#cities'
 
     ### deprecated app routes
   match 'app/menu',             to: 'app#menu',                via: :post
@@ -50,49 +49,65 @@ Drinkboard::Application.routes.draw do
   match 'app/user_activity',    to: 'app#user_activity',       via: :post
   match 'app/employees',        to: 'app#create_redeem_emps',  via: :post
   match 'app/complete_order',   to: 'app#create_order_emp',    via: :post
+  match 'app/gifts_array',      to: 'app#gifts',               via: :post
+  match 'app/transactions',     to: 'app#transactions',        via: :post
 
 #################        Mdot V2 API                              /////////////////////////////
 
   namespace :mdot, defaults: { format: 'json' } do
     namespace :v2 do
 
-      resources :sessions,    only: [:create] do
-        post :login_social
+      resources :sessions,  only: [:create] do
+        collection do
+          post :login_social
+        end
       end
-      resources :users,       only: [:index, :create, :update] do
+      resources :users,     only: [:index, :create] do
+        collection do
+          put :update
+          put :reset_password
+        end
+      end
+      resources :brands,     only: [:index] do
         member do
-          post :reset_password
+          get :merchants
         end
-        resources :cards,     only: [:index, :create, :delete]
-        resources :settings,  only: [:show, :update]
-        resources :gifts,     only: [:index, :create] do
-          resources :redeems, only: [:create]
-          resources :orders,  only: [:create]
-          member do
-            post :regift
-            get  :archive
-          end
-          collection do
-            get :badge  #update or relay
-            get :transactions
-          end
+      end
+      resources :cities,     only: [:index] do
+        member do
+          get :merchants
         end
-        resources :photos,     only: [:update] do
-          member do
-            get  :short_url
-          end
-        end
-        resources :questions, only: [:index, :update]
       end
 
-      resources :providers,   only: [:show] do
-        resources :menus,     only: [:show]
+      resources :cards,     only: [:index, :create, :destroy]
+
+      resources :settings,  only: [:index] do
+        collection do
+          put :update
+        end
       end
-      resources :brands,      only: [:index] do
-        resources :providers, only: [:index]
+      resources :gifts,     only: [:create] do
+        member do
+          post :regift
+          post :open
+          post :redeem
+        end
+        collection do
+          get :archive
+          get :badge  #update or relay
+        end
       end
-      resources :cities,      only: [:index] do
-        resources :providers, only: [:index]
+      resources :photos,     only: [:create]
+      resources :questions,  only: [:index] do
+        collection do
+          put :update
+        end
+      end
+
+      resources :providers,  only: [] do
+        member do
+          get :menu
+        end
       end
 
     end
@@ -130,6 +145,7 @@ Drinkboard::Application.routes.draw do
           resources :users,     only: [:update] do         # biz logic
             member do
               post :deactivate
+              post :suspend
               post :deactivate_gifts
             end
           end

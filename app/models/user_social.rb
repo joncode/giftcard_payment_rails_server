@@ -1,20 +1,34 @@
 class UserSocial < ActiveRecord::Base
-    attr_accessible :identifier, :type_of, :user_id
+    attr_accessible :identifier, :type_of, :user_id, :subscribed
 
     belongs_to :user
 
-    before_validation :reject_xxx_emails
+    before_validation     :reject_xxx_emails
+
     validates_presence_of :identifier, :type_of, :user_id
-    after_create :subscribe_mailchimp
-    after_save   :unsubscribe_mailchimp
+
+    after_create          :subscribe_mailchimp
+    after_save            :unsubscribe_mailchimp
 
     default_scope where(active: true)
+
+
+    def self.activate_all user
+        socials = user.user_socials
+        socials.each do |social|
+            social.activate
+        end
+    end
 
     def self.deactivate_all user
         socials = user.user_socials
         socials.each do |social|
             social.deactivate
         end
+    end
+
+    def activate
+        self.update_attribute(:active, true)
     end
 
     def deactivate
@@ -24,15 +38,15 @@ class UserSocial < ActiveRecord::Base
 private
 
     def subscribe_mailchimp
-        if Rails.env.production? || Rails.env.staging?
-        	if self.type_of  == "email"
+    	if self.type_of  == "email"
+            unless Rails.env.development?
                 Resque.enqueue(SubscriptionJob, self.id)
         	end
         end
     end
 
     def unsubscribe_mailchimp
-        if Rails.env.production? || Rails.env.staging?
+        unless Rails.env.development?
             if self.type_of  == "email" && !self.active
                 Resque.enqueue(SubscriptionJob, self.id)
             end
@@ -43,6 +57,7 @@ private
         if self.type_of  == "email"
             if self.identifier && self.identifier[-3..-1] == "xxx"
                 self.identifier = nil
+                self.user_id    = nil
             end
         end
     end

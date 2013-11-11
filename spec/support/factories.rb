@@ -44,6 +44,13 @@ FactoryGirl.define do
         sequence(:twitter)          { |n| "28sdd3s#{n}f6fd3" }
     end
 
+    factory :simple_user, :class => 'User' do
+        first_name                  "Simple"
+        last_name                   "User"
+        password                    "specspec"
+        password_confirmation       "specspec"
+    end
+
     factory :nonetwork, :class => 'User' do
         first_name                  "None"
         last_name                   "Networks"
@@ -62,7 +69,7 @@ FactoryGirl.define do
         address     "123 happy st"
         zip         "11211"
         state       "NY"
-        sequence(:token)   { |n| "token#{n}" }
+        sequence(:token)   { |n| "tokens#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
         sequence(:phone) do
@@ -124,6 +131,13 @@ FactoryGirl.define do
 
     end
 
+    factory :gift_item do |gi|
+        gi.menu_id    1
+        gi.price      "10"
+        gi.quantity   1
+        gi.name       "Beer"
+    end
+
     factory :gift_no_association, :class => 'Gift' do
         giver_id           10
         giver_name         "Plain Jane"
@@ -131,6 +145,7 @@ FactoryGirl.define do
         provider_id        10
         total           "100"
         service         "4"
+        pay_stat        "charged"
         credit_card     4567890
         shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
         sale            { FactoryGirl.create(:sale)}
@@ -141,16 +156,43 @@ FactoryGirl.define do
     end
 
     factory :card do
-        csv   "4343"
-        last_four "6771"
+        csv   "434"
         month "02"
-        brand "visa"
         name   "Plain Joseph"
         nickname "Biz"
         user_id   1
         year  "2017"
-        number "4388575294006771"
-        passphrase  "Oh yeah"
+        number "4417121029961508"
+
+        factory :visa do
+            csv       "323"
+            month       "04"
+            name       "Ryter Treft"
+            nickname    "visa sauce"
+            user_id       521
+            year       "2018"
+            number       "4833160028519277"
+        end
+
+        factory :mastercard do
+            csv       "641"
+            month       "11"
+            name       "Rick Makrause"
+            nickname    "mastercard sauce"
+            user_id       247
+            year       "2017"
+            number       "5581588784751042"
+        end
+
+        factory :amex do
+            csv       "8042"
+            month       "02"
+            name       "Mak Odard"
+            nickname    "amex sauce"
+            user_id       612
+            year       "2016"
+            number       "371538495534000"
+        end
     end
 
     factory :sale do
@@ -195,10 +237,11 @@ FactoryGirl.define do
     end
 
     factory :brand do
-        name        "Starwood"
+        sequence(:name)    { |n| "Starwoodz#{n}" }
         website     "www.starwood.com"
         description "AMAZING!"
         photo       "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"
+        next_view   "m"
     end
 
 end

@@ -62,12 +62,16 @@ module CommonUtils
 	end
 
 	def filter_params hash
-		hsh = hash
-		if hsh.kind_of? Hash
-			filters = FILTER_PARAMS + FILTER_PARAMS.map {|fp| fp.to_s }
-			filter_loop(hsh, filters)
+		if Rails.env.production?
+			hsh = hash
+			if hsh.kind_of? Hash
+				filters = FILTER_PARAMS + FILTER_PARAMS.map {|fp| fp.to_s }
+				filter_loop(hsh, filters)
+			end
+			hsh
+		else
+			hash
 		end
-		hsh
 	end
 
 	def filter_loop(hsh, filters)

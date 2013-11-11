@@ -32,19 +32,12 @@ module Emailer
 		template_name    = "gift-notice"
 		recipient_name   = gift.receiver_name
 		giver_name       = gift.giver_name
-		merchant_name    = gift.provider_name
 		email            = gift.receiver_email
-		gift_details     = GiftItem.items_for_email(gift)	# example string: "<ul><li>1 Budweiser</li><li>1 Shot Patron</li></ul>"
-		gift_total       = gift.total 						# monetary value. do not include dollar sign
-		template_content = [{"name" => "receiver_name", "content" => recipient_name},
-							{"name" => "giver_name", "content" => giver_name},
-							{"name" => "merchant_name", "content" => merchant_name},
-							{"name" => "gift_details", "content" => gift_details},
-							{"name" => "gift_total", "content" => gift_total}]
 		subject          = "#{giver_name} sent you a gift on Drinkboard"
 		adjusted_id 	 = NUMBER_ID + gift.id
 		link             = "#{PUBLIC_URL}/signup/acceptgift/#{adjusted_id}"
         bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
+        template_content = generate_template_content(gift, template_name)
 		message          = message_hash(subject, email, recipient_name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
@@ -52,25 +45,12 @@ module Emailer
     def invoice_giver data
     	gift 			 = Gift.find(data["gift_id"])
 		template_name    = "purchase-receipt"
-		giver_name       = gift.giver_name 		#user/purchaser receiving the email
-		receiver_name    = gift.receiver_name	#person to whom the gift was sent
-		merchant_name    = gift.provider_name
-		gift_details     = GiftItem.items_for_email(gift)	# example string: "<ul><li>1 Budweiser</li><li>1 Shot Patron</li></ul>"
-		gift_total       = gift.total   		#monetary value. do not include dollar sign
-        processing_fee   = gift.service 		#monetary value. do not include dollar sign
-        grand_total      = gift.grand_total 	#monetary value. do not include dollar sign
-		template_content = [{"name" => "user_name", "content" => giver_name},
-							{"name" => "receiver_name", "content" => receiver_name},
-							{"name" => "merchant_name", "content" => merchant_name},
-							{"name" => "gift_details", "content" => gift_details},
-							{"name" => "gift_total", "content" => gift_total},
-							{"name" => "processing_fee", "content" => processing_fee},
-							{"name" => "grand_total", "content" => grand_total}]
-		subject          = "Your purchase is complete"
+		subject          = "Your gift purchase is complete"
 		email            = gift.giver.email
-		name             = giver_name
+		name             = gift.giver_name
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
+		template_content = generate_template_content(gift, template_name)
 		message          = message_hash(subject, email, name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
@@ -144,8 +124,27 @@ private
 		[{"name" => "link", "content" => link}]
 	end
 
+    def generate_template_content gift, template_name
+    	recipient_name   = gift.receiver_name
+    	giver_name       = gift.giver_name
+    	merchant_name    = gift.provider_name
+    	gift_details     = GiftItem.items_for_email(gift)
+    	gift_total       = gift.total
+		template_content = [{"name" => "receiver_name", "content" => recipient_name},
+							{"name" => "merchant_name", "content" => merchant_name},
+							{"name" => "gift_details", "content" => gift_details},
+							{"name" => "gift_total", "content" => gift_total}]
+		if template_name == "gift-notice"
+			template_content + [{"name" => "giver_name", "content" => giver_name}]
+		elsif template_name == "purchase-receipt"
+			template_content + [{"name" => "user_name", "content" => giver_name},
+				                {"name" => "processing_fee", "content" => gift.service},
+				                {"name" => "grand_total", "content" => gift.grand_total}]
+		end
+    end
+
 	def request_mandrill_with_template(template_name, template_content, message)
-		unless Rails.env.test? || Rails.env.development?
+		unless Rails.env.development?
 			puts "``````````````````````````````````````````````"
 			puts "Request Mandrill with #{template_name} #{template_content} #{message}"
 			require 'mandrill'

@@ -60,6 +60,14 @@ class Gift < ActiveRecord::Base
 
 #/-----------------------------------------------Status---------------------------------------/
 
+	def receiver_status
+		self.status
+	end
+
+	def giver_status
+		self.status
+	end
+
 	def set_statuses
 		case self.pay_type
 		when "Sale"
@@ -188,11 +196,9 @@ private
 	end
 
 	def make_gift_items shoppingCart_array
-		puts "In make gift items #{shoppingCart_array}"
 		self.gift_items = shoppingCart_array.map do |item|
 			GiftItem.initFromDictionary(item)
 		end
-		puts "made it thru gift items #{self.gift_items}"
 	end
 
 	################  data validation methods

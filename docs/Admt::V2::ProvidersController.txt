@@ -1,0 +1,596 @@
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/1/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"deactivate", "id"=>"1"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos1 is now deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/2/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"deactivate", "id"=>"2"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos2 is now deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/3/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"deactivate", "id"=>"3"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos3 is now deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/4/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"deactivate", "id"=>"4"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos4 is now deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/1/deactivate 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/5/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"coming_soon", "id"=>"5"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos5 is now Coming soon"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/6/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"live", "id"=>"6"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos6 is now Live"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/7/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"coming_soon", "id"=>"7"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos7 is now Coming soon"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/8/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"paused", "id"=>"8"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos8 is now Paused"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/9/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"live", "id"=>"9"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos9 is now Live"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/10/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"paused", "id"=>"10"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos10 is now Paused"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/11/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"wrong", "id"=>"11"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "Incorrect merchant mode sent - < wrong >"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-08 
+
+Route: /admt/v2/providers/1/update_mode 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/653/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"deactivate", "id"=>"653"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos1 is now deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/654/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"deactivate", "id"=>"654"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos2 is now deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/655/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"deactivate", "id"=>"655"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos3 is now deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/656/deactivate 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"deactivate", "id"=>"656"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos4 is now deactivated"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/1/deactivate 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/657/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"coming_soon", "id"=>"657"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos5 is now Coming soon"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/658/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"live", "id"=>"658"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos6 is now Live"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/659/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"coming_soon", "id"=>"659"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos7 is now Coming soon"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/660/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"paused", "id"=>"660"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos8 is now Paused"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/661/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"live", "id"=>"661"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos9 is now Live"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/662/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"paused", "id"=>"662"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 1,
+  "data": "ichizos10 is now Paused"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/663/update_mode 
+
+HTTP Method: POST 
+
+Format: [application/json] 
+
+Authorization: ['HTTP_TKN'] = Token 
+
+Request Parameters: {"data"=>"wrong", "id"=>"663"} 
+
+Response Code: 200 
+
+Response Body: 
+
+{
+  "status": 0,
+  "data": "Incorrect merchant mode sent - < wrong >"
+} 
+
+---------------------------------------------------------------- 
+---------------------------------------------------------------- 
+
+LAST UPDATED: 2013-11-09 
+
+Route: /admt/v2/providers/1/update_mode 
+
+HTTP Method: PUT 
+
+Format: [text/html] 
+
+Authorization: ['HTTP_TKN'] = No_Entrance 
+
+Request Parameters: {"id"=>"1"} 
+
+Response Code: 401 
+
+---------------------------------------------------------------- 

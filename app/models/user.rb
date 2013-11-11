@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
 	has_many :cards
 	has_many :answers
 	has_many :questions, :through => :answers
-	has_many :user_socials
+	has_many :user_socials, 	dependent: :destroy
 
 	has_secure_password
 
@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
 	after_save    :persist_social_data
 	after_create  :init_confirm_email
 
-	validates :first_name, 	presence: true, 			length: { maximum: 50 }
+	validates :first_name, 	presence: true, length: {  maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
 	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
@@ -58,13 +58,11 @@ class User < ActiveRecord::Base
 #/---------------------------------------------------------------------------------------------/
 
 	def serialize(token=false)
-		usr_hash  = self.serializable_hash only: ["first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "remember_token", "email", "phone", "facebook_id", "twitter"]
+		usr_hash  = self.serializable_hash only: ["first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "email", "phone", "facebook_id", "twitter"]
 		usr_hash["photo"]   = self.get_photo
 		usr_hash["user_id"] = self.id.to_s
 		usr_hash.keep_if {|k, v| !v.nil? }
-		if !token
-			usr_hash.delete("remember_token")
-		end
+		usr_hash["remember_token"] = self.remember_token if token
 		usr_hash
 	end
 
@@ -83,10 +81,9 @@ class User < ActiveRecord::Base
 		usr_hash
 	end
 
-	# def inspect
-	# 	#super
-	# 	"User ID = #{self.id} | Name = #{name} | email = #{self.email} | phone = #{self.phone} |  last = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)} | active = #{self.active}\n"
-	# end
+	def not_suspended?
+		self.active && !self.perm_deactive
+	end
 
 	def ua_alias
 		adj_user_id     = self.id + NUMBER_ID
@@ -218,6 +215,15 @@ class User < ActiveRecord::Base
         save
     end
 
+    def suspend
+    	self.toggle! :active
+    	if self.active == false
+			UserSocial.deactivate_all self
+		else
+			UserSocial.activate_all self
+		end			
+    end
+
     def deactivate_social type_of, identifier
         # user get user_social record with identifier
         socials = self.user_socials.where(identifier: identifier)
@@ -296,7 +302,7 @@ class User < ActiveRecord::Base
 	end
 
 	def init_confirm_email
-		if Rails.env.production? || Rails.env.staging?
+		unless Rails.env.development?
 			if self.email
 				set_confirm_email
 				confirm_email
@@ -312,7 +318,9 @@ private
 
 	def persist_social_data
 
-		email_changed? and UserSocial.create(user_id: id, type_of: "email", identifier: email)
+		if email_changed? && (email[-3..-1] != "xxx")
+			UserSocial.create(user_id: id, type_of: "email", identifier: email)
+		end
 		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
 		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
 		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)

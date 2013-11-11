@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131015233422) do
+ActiveRecord::Schema.define(:version => 20131106193751) do
 
   create_table "answers", :force => true do |t|
     t.string   "answer"
@@ -78,37 +78,12 @@ ActiveRecord::Schema.define(:version => 20131015233422) do
     t.datetime "updated_at",      :null => false
   end
 
-  create_table "connections", :force => true do |t|
-    t.integer  "giver_id"
-    t.integer  "receiver_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  add_index "connections", ["giver_id"], :name => "index_connections_on_giver_id"
-  add_index "connections", ["receiver_id"], :name => "index_connections_on_receiver_id"
-
   create_table "credit_accounts", :force => true do |t|
     t.string   "owner"
     t.integer  "owner_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
-
-  create_table "employees", :force => true do |t|
-    t.integer  "provider_id",                      :null => false
-    t.integer  "user_id",                          :null => false
-    t.string   "clearance",   :default => "staff"
-    t.boolean  "active",      :default => true
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.integer  "brand_id"
-    t.boolean  "retail",      :default => true
-    t.string   "token"
-  end
-
-  add_index "employees", ["provider_id"], :name => "index_employees_on_provider_id"
-  add_index "employees", ["token"], :name => "index_employees_on_token"
 
   create_table "gift_items", :force => true do |t|
     t.integer "gift_id"
@@ -164,42 +139,6 @@ ActiveRecord::Schema.define(:version => 20131015233422) do
   add_index "gifts", ["receiver_id"], :name => "index_gifts_on_receiver_id"
   add_index "gifts", ["status"], :name => "index_gifts_on_status"
 
-  create_table "items", :force => true do |t|
-    t.string  "item_name",   :limit => 50, :null => false
-    t.string  "detail"
-    t.text    "description"
-    t.integer "category",                  :null => false
-    t.string  "proof"
-    t.string  "type_of"
-    t.string  "photo"
-    t.integer "brand_id"
-    t.integer "supplier_id"
-  end
-
-  create_table "items_menus", :id => false, :force => true do |t|
-    t.integer "item_id"
-    t.integer "menu_id"
-  end
-
-  create_table "locations", :force => true do |t|
-    t.float    "latitude"
-    t.float    "longitude"
-    t.integer  "provider_id"
-    t.integer  "user_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.string   "vendor_id"
-    t.string   "vendor_type"
-    t.string   "name"
-    t.string   "street"
-    t.string   "city"
-    t.string   "state"
-    t.string   "country"
-    t.string   "zip"
-    t.string   "checkin_id"
-    t.string   "message"
-  end
-
   create_table "menu_strings", :force => true do |t|
     t.integer  "version"
     t.integer  "provider_id",   :null => false
@@ -212,29 +151,6 @@ ActiveRecord::Schema.define(:version => 20131015233422) do
   end
 
   add_index "menu_strings", ["provider_id"], :name => "index_menu_strings_on_provider_id"
-
-  create_table "menus", :force => true do |t|
-    t.integer  "provider_id",                                 :null => false
-    t.integer  "item_id",                                     :null => false
-    t.string   "price",       :limit => 20
-    t.integer  "position",    :limit => 8
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
-    t.string   "item_name"
-    t.string   "photo"
-    t.string   "description"
-    t.string   "section"
-    t.boolean  "active",                    :default => true
-  end
-
-  add_index "menus", ["provider_id"], :name => "index_menus_on_provider_id"
-
-  create_table "microposts", :force => true do |t|
-    t.string   "content",    :null => false
-    t.integer  "user_id",    :null => false
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
 
   create_table "orders", :force => true do |t|
     t.integer  "redeem_id"
@@ -331,21 +247,6 @@ ActiveRecord::Schema.define(:version => 20131015233422) do
   add_index "relationships", ["follower_id", "followed_id"], :name => "index_relationships_on_follower_id_and_followed_id", :unique => true
   add_index "relationships", ["follower_id"], :name => "index_relationships_on_follower_id"
 
-  create_table "relays", :force => true do |t|
-    t.integer  "gift_id"
-    t.integer  "giver_id"
-    t.integer  "provider_id"
-    t.integer  "receiver_id"
-    t.string   "status"
-    t.string   "name"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  add_index "relays", ["gift_id"], :name => "index_relays_on_gift_id"
-  add_index "relays", ["provider_id"], :name => "index_relays_on_provider_id"
-  add_index "relays", ["receiver_id"], :name => "index_relays_on_receiver_id"
-
   create_table "sales", :force => true do |t|
     t.integer  "gift_id"
     t.integer  "giver_id"
@@ -393,9 +294,10 @@ ActiveRecord::Schema.define(:version => 20131015233422) do
     t.integer  "user_id"
     t.string   "type_of"
     t.string   "identifier"
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.boolean  "active",     :default => true
+    t.boolean  "subscribed", :default => false
   end
 
   add_index "user_socials", ["active"], :name => "index_user_socials_on_active"

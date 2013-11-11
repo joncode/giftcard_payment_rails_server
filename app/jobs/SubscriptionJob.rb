@@ -3,11 +3,16 @@ class SubscriptionJob
     @queue = :subscription
 
     def self.perform(user_social_id)
-        user_social    = UserSocial.find user_social_id
-        if user_social.active
-            self.add_to_mailchimp user_social
+        if user_social = UserSocial.unscoped.find(user_social_id)
+            if user_social.active
+                self.add_to_mailchimp user_social
+                puts "add to mailchimp"
+            else
+                self.remove_from_mailchimp user_social
+                puts "remove from mailchimp"
+            end
         else
-            self.remove_from_mailchimp user_social
+            puts "Unable to find user social in subscription job via ID = #{user_social_id}"
         end
     end
 
@@ -16,12 +21,18 @@ private
     def self.add_to_mailchimp user_social
         user = user_social.user
         mcl = MailchimpList.new(user_social.identifier, user.first_name, user.last_name)
-        mcl.subscribe
+        response = mcl.subscribe
+        if response["email"].present?
+            user_social.update_attribute(:subscribed, true)
+        end
     end
 
     def self.remove_from_mailchimp user_social
         mcl = MailchimpList.new(user_social.identifier)
-        mcl.unsubscribe
+        response = mcl.unsubscribe
+        if response["complete"].present? && response["complete"] == true
+            user_social.update_attribute(:subscribed, false)
+        end
     end
 
 end

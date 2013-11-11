@@ -49,7 +49,7 @@ class AppController < JsonController
             give_gifts, rec_gifts  = Gift.get_archive(user)
             give_array             = array_these_gifts(give_gifts, BUY_REPLY, true, true)
             rec_array              = array_these_gifts(rec_gifts, GIFT_REPLY, true)
-            logmsg                 = "#{give_array[0]} + #{rec_array[0]}"
+            logmsg                 = "\n#{give_array[0]} \n #{rec_array[0]}\n"
             response = {"sent" => give_array, "used" => rec_array }
         else
             # user is not authenticated
@@ -64,7 +64,6 @@ class AppController < JsonController
     end
 
  	def relays
-
  		response = {}
  		if user  = authenticate_app_user(params["token"])
  			# user is authenticated
@@ -238,9 +237,7 @@ class AppController < JsonController
 
   		if user = authenticate_app_user(params["token"])
 
-		  	  	# save filled out answers to db
 	  		if params["answers"]
-	        	#puts "ANSWERS #{params['answers']}"
 	  			answered_questions = JSON.parse params["answers"]
 	  			Answer.save_these(answered_questions, user)
 	  		end
@@ -320,13 +317,6 @@ class AppController < JsonController
             format.json { render json: providers_array }
 	    end
   	end
-
-  	# def providers
-   #      providers_array = CityProvider.find_by_city(params["city"]).providers_array
-  	# 	respond_to do |format|
-   #          format.json { render json: providers_array }
-	  #   end
-  	# end
 
   	def providers_short_ph_url
 	    if  authenticate_public_info
@@ -605,12 +595,7 @@ class AppController < JsonController
 		response  = {}
 
       	if user = authenticate_app_user(params["token"])
-      		display_cards = Card.get_cards user
-      		if display_cards.empty?
-      			response["success"] = []
-      		else
-      			response["success"] = display_cards
-      		end
+            response["success"] = Card.get_cards(user)
     	else
       		message += "Couldn't identify app user. "
       		response["error"] = message
@@ -741,7 +726,7 @@ class AppController < JsonController
 private
 
     def strong_user_param(data_hsh)
-        allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip" ]
+        allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip", "facebook_id", "twitter" ]
         data_hsh.select{ |k,v| allowed.include? k }
     end
 

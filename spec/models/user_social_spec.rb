@@ -28,7 +28,14 @@ describe UserSocial do
       user_social.should have_at_least(1).error_on(:type_of)
     end
 
-end# == Schema Information
+    it "should update user_social.subscribed if subscribe is successful" do
+      Resque.should_receive(:enqueue).with(SubscriptionJob, anything)
+      user_social = FactoryGirl.create(:user_social, type_of: "email", identifier:"test@email.com")
+    end
+
+end
+
+# == Schema Information
 #
 # Table name: user_socials
 #

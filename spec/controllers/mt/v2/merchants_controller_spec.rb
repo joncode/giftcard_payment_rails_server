@@ -10,15 +10,7 @@ describe Mt::V2::MerchantsController do
 
     describe :create do
 
-        context "authorization" do
-
-            it "should not allow unauthenticated access" do
-                request.env["HTTP_TKN"] = "No_Entrance"
-                put :create, id: 1, format: :json
-                response.response_code.should == 401
-            end
-
-        end
+        it_should_behave_like("token authenticated", :post, :create, id: 1)
 
         it "should reject no params request" do
             put :create, format: :json
@@ -75,15 +67,7 @@ describe Mt::V2::MerchantsController do
 
     describe :update do
 
-        context "authorization" do
-
-            it "should not allow unauthenticated access" do
-                request.env["HTTP_TKN"] = "No_Entrance"
-                put :update, id: 1, format: :json
-                response.response_code.should == 401
-            end
-
-        end
+        it_should_behave_like("token authenticated", :put, :update, id: 1)
 
         it "should reject no params request" do
             provider = FactoryGirl.create(:provider)
@@ -136,15 +120,7 @@ describe Mt::V2::MerchantsController do
             FactoryGirl.create(:menu_string, provider_id: @provider.id)
         end
 
-        context "authorization" do
-
-            it "should not allow unauthenticated access" do
-                request.env["HTTP_TKN"] = "No_Entrance"
-                put :menu, id: 1, format: :json
-                response.response_code.should == 401
-            end
-
-        end
+        it_should_behave_like("token authenticated", :put, :menu, id: 1)
 
         it "should update menu string" do
             menu_string = @provider.menu_string
@@ -187,15 +163,7 @@ describe Mt::V2::MerchantsController do
 
     describe :reconcile do
 
-        context "authorization" do
-
-            it "should not allow unauthenticated access" do
-                request.env["HTTP_TKN"] = "No_Entrance"
-                put :reconcile, id: 1, format: :json
-                response.response_code.should == 401
-            end
-
-        end
+        it_should_behave_like("token authenticated", :put, :reconcile, id: 1)
 
     end
 

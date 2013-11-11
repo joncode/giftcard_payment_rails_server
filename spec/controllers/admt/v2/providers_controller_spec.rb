@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Admt::V2::ProvidersController do
 
     before(:each) do
-        #Provider.delete_all
+        Provider.delete_all
 
          # should require valid admin credentials in every spec
         FactoryGirl.create(:admin_user, remember_token: "Token")
@@ -13,7 +13,7 @@ describe Admt::V2::ProvidersController do
     describe "#deactivate" do
 
         it_should_behave_like("token authenticated", :put, :deactivate, id: 1)
-        
+
         it "should deactivate 'live' provider" do
             merchant  = FactoryGirl.create(:merchant)
             provider = FactoryGirl.create(:live, merchant_id: merchant.id )

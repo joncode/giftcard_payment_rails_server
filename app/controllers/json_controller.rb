@@ -23,6 +23,10 @@ class JsonController < ActionController::Base
         head 404
     end
 
+    def bad_request
+        head 400
+    end
+
     def array_these_gifts obj, send_fields, address_get=false, receiver=false, order_num=false
         gifts_ary = []
         index = 1
@@ -101,13 +105,37 @@ class JsonController < ActionController::Base
 
 ### API UTILITY METHODS
 
+    def convert_if_json(data=nil)
+        data ||= params["data"]
+        if data.kind_of?(String)
+            JSON.parse(data)
+        else
+            data
+        end
+    end
+
     def data_not_hash?(data=nil)
         data ||= params["data"]
         head :bad_request unless data.kind_of?(Hash)
     end
 
+    def data_not_array?(data=nil)
+        data ||= params["data"]
+        head :bad_request unless data.kind_of?(Array)
+    end
+
     def hash_empty?(data)
         head :bad_request unless data.count > 0
+    end
+
+    def data_blank?(data=nil)
+        data ||= params["data"]
+        head :bad_request if data.blank?
+    end
+
+    def data_not_string?(data=nil)
+        data ||= params["data"]
+        head :bad_request unless data.kind_of?(String)
     end
 
     def respond
@@ -171,6 +199,16 @@ class JsonController < ActionController::Base
         end
     end
 
+    def authenticate_customer
+        token         = request.headers["HTTP_TKN"]
+        puts "Here is the token received ----> #{token}"
+        @current_user = User.app_authenticate(token)
+        if @current_user
+            puts @current_user.name
+        else
+            head :unauthorized
+        end
+    end
 
 #######
 
