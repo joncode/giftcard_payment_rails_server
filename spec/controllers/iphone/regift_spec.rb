@@ -47,7 +47,7 @@ describe IphoneController do
             no_id_user     = FactoryGirl.build(:nobody, :id => nil )
             hsh_no_id_user = regift_hash(no_id_user).to_json
             post :regift, format: :json, receiver: hsh_no_id_user, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
-            new_gift = Gift.find_by_receiver_email(no_id_user.email)
+            new_gift = Gift.find_by(receiver_email: no_id_user.email)
             puts new_gift.inspect
             new_gift.status.should == 'incomplete'
         end

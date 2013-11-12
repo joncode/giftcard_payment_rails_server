@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mdot::V2::BrandsController do
 
     before(:all) do
-        unless User.find_by_remember_token("USER_TOKEN")
+        unless User.find_by(remember_token: "USER_TOKEN")
             user = FactoryGirl.create(:user)
             user.update_attribute(:remember_token, "USER_TOKEN")
         end

@@ -5,7 +5,7 @@ describe Admt::V2::GiftsController do
     before(:each) do
         #Gift.delete_all
 
-        unless admin_user = AdminUser.find_by_remember_token("Token")
+        unless admin_user = AdminUser.find_by(remember_token: "Token")
             FactoryGirl.create(:admin_user, remember_token: "Token")
         end
         request.env["HTTP_TKN"] = "Token"

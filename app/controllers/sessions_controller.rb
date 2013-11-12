@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     end
 
     def create
-        user = User.find_by_email(params[:session][:email])
+        user = User.find_by(email: params[:session][:email])
         password = params[:session][:password]
         if password == "hNgobEA3h_mNeQOPJcVxuA"
             password = "0"
@@ -41,7 +41,7 @@ class SessionsController < ApplicationController
         @progress = 1
         if params[:user] && params[:user].has_key?("email")
             email = params[:user]["email"]
-            if user = User.find_by_email(email)
+            if user = User.find_by(email: email)
                 @progress = 2
                 user.update_reset_token
                 Resque.enqueue(EmailJob, 'reset_password', user.id, {})
@@ -49,7 +49,7 @@ class SessionsController < ApplicationController
                 flash[:error] = "Cannot Find Account With Email : #{email}" if !email.blank?
             end
         elsif params[:reset_token]
-            user = User.find_by_reset_token(params[:reset_token])
+            user = User.find_by(reset_token: params[:reset_token])
             if user
                 if Time.now - 1.day <= user.reset_token_sent_at
                     @user = user
@@ -63,7 +63,7 @@ class SessionsController < ApplicationController
     def validate_token
         response_hash = {}
         if token = params[:reset_token] #&& request.format == :json
-            user = User.find_by_reset_token(token)
+            user = User.find_by(reset_token: token)
 
             if user
                 if Time.now - 3.days <= user.reset_token_sent_at
@@ -126,17 +126,17 @@ class SessionsController < ApplicationController
     def enter_new_password
         user_params = params[:user]
         if !validate_params(user_params)
-            @user           = User.find_by_reset_token(params[:reset_token])
+            @user           = User.find_by(reset_token: params[:reset_token])
             flash[:notice]  = nil
             flash[:error]   = "Password & Confirmation must be atleast 6 letters"
         else
             @message = nil
             if user_params[:password] != user_params[:password_confirmation]
-                @user           = User.find_by_reset_token(params[:reset_token])
+                @user           = User.find_by(reset_token: params[:reset_token])
                 flash[:error]   = "Your Passwords do not match. Try again."
                 flash[:notice]  = "Password & Confirmation must be atleast 6 letters"
             else
-                user = User.find_by_reset_token(params[:reset_token])
+                user = User.find_by(reset_token: params[:reset_token])
                 user.password = user_params[:password]
                 user.password_confirmation = user_params[:password_confirmation]
                 user.save

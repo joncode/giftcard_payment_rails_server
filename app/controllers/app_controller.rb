@@ -259,7 +259,7 @@ class AppController < JsonController
   	end
 
  	def others_questions
-  		# user  = User.find_by_remember_token(params["token"])
+  		# user  = User.find_by(remember_token: params["token"])
 
   		begin
   			other_user   = User.find(params["user_id"].to_i)
@@ -415,7 +415,7 @@ class AppController < JsonController
       		redeem  = Redeem.new
     	else
        		# receiving a gift_id from the iPhone here
-     		if redeem = Redeem.find_by_gift_id(gift_id)
+     		if redeem = Redeem.find_by(gift_id: gift_id)
      			puts "FOUND GIFT REDEEM #{gift_id}"
      			process = true
      		else
@@ -544,7 +544,7 @@ class AppController < JsonController
 			message += "Couldn't identify app user. "
 		end
 		begin
-			redeem   = Redeem.find_by_gift_id(gift_id)
+			redeem   = Redeem.find_by(gift_id: gift_id)
 			# putting redeem code in order from redeem altho likely not necessary
 			order.redeem_code = redeem.redeem_code
 		rescue
@@ -646,7 +646,7 @@ class AppController < JsonController
 	def reset_password
 
 		if params[:email]
-			user = User.find_by_email(params[:email])
+			user = User.find_by(email: params[:email])
 			if user
 				user.update_reset_token
                 send_reset_password_email(user)

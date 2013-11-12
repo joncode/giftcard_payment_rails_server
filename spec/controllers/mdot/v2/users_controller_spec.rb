@@ -5,7 +5,7 @@ describe Mdot::V2::UsersController do
 
     before(:all) do
         User.delete_all
-        unless @user = User.find_by_remember_token("USER_TOKEN")
+        unless @user = User.find_by(remember_token: "USER_TOKEN")
             @user = FactoryGirl.create(:user)
             @user.update_attribute(:remember_token, "USER_TOKEN")
         end
@@ -194,7 +194,7 @@ describe Mdot::V2::UsersController do
                 post :create, format: :json, data: user_hsh
                 run_delayed_jobs
 
-                user = UserSocial.find_by_identifier("neil@gmail.com")
+                user = UserSocial.find_by(identifier: "neil@gmail.com")
                 user.subscribed.should be_true
             end
 

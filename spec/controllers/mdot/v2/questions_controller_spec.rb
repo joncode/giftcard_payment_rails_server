@@ -6,7 +6,7 @@ describe Mdot::V2::QuestionsController do
         User.delete_all
         Question.delete_all
         Answer.delete_all
-        unless @user = User.find_by_remember_token("USER_TOKEN")
+        unless @user = User.find_by(remember_token: "USER_TOKEN")
             @user = FactoryGirl.create(:user)
             @user.update_attribute(:remember_token, "USER_TOKEN")
         end
@@ -35,13 +35,13 @@ describe Mdot::V2::QuestionsController do
     describe :update do
         it_should_behave_like("token authenticated", :put, :update, id: 1)
 
-        let(:q1) {Question.find_by_left("Day Drinking")}
-        let(:q2) {Question.find_by_left("Red Wine")}
-        let(:q3) {Question.find_by_left("White Liqours")}
-        let(:q4) {Question.find_by_left("Straw")}
-        let(:q5) {Question.find_by_left("Light Beer")}
-        let(:q6) {Question.find_by_left("Mimosa")}
-        let(:q7) {Question.find_by_left("Rare")}
+        let(:q1) {Question.find_by(left: "Day Drinking")}
+        let(:q2) {Question.find_by(left: "Red Wine")}
+        let(:q3) {Question.find_by(left: "White Liqours")}
+        let(:q4) {Question.find_by(left: "Straw")}
+        let(:q5) {Question.find_by(left: "Light Beer")}
+        let(:q6) {Question.find_by(left: "Mimosa")}
+        let(:q7) {Question.find_by(left: "Rare")}
 
         it "should update requests with json'd answers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"

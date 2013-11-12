@@ -246,7 +246,7 @@ class User < ActiveRecord::Base
 
 	def pn_token=(value)
 		value 		= PnToken.convert_token(value)
-		if pn_token = PnToken.find_by_pn_token(value)
+		if pn_token = PnToken.find_by(pn_token: value)
 			if pn_token.user_id != self.id
 				pn_token.user_id = self.id
 				pn_token.save
@@ -273,7 +273,7 @@ class User < ActiveRecord::Base
 #########   settings methods
 
 	def get_or_create_settings
-		if setting = Setting.find_by_user_id(self.id)
+		if setting = Setting.find_by(user_id: self.id)
 			return setting
 		else
 			return Setting.create(user_id: self.id)

@@ -2,15 +2,12 @@ class GiftRegifter < GiftUtility
 
     attr_accessor :old_gift, :gift, :resp
 
-    def initialize(recipient_hsh , details)
+    def initialize(recipient_hsh, details)
         @old_gift     = Gift.includes(:receiver).find(details['regift_id'])
         setup_regift(details['message'])
         @resp         = {}
-
-
         recipient     = make_user_with_hash(recipient_hsh)
         add_receiver_from_hash(recipient)
-        
     end
 
 

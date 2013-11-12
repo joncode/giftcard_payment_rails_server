@@ -25,7 +25,7 @@ if Rails.env.production?
 end
 
 if Rails.env.test?
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
+    #ActiveRecord::Base.logger = Logger.new(STDOUT)
     require 'auth_response'
     require 'auth_transaction'
 end

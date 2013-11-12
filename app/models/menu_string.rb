@@ -10,7 +10,7 @@ class MenuString < ActiveRecord::Base
   	after_save :update_merchant
 
     def self.get_menu_v2_for_provider provider_id
-        menu_string = MenuString.find_by_provider_id(provider_id)
+        menu_string = MenuString.find_by(provider_id: provider_id)
         if menu_string
             if menu_string.menu
                 return menu_string.menu
@@ -41,7 +41,7 @@ class MenuString < ActiveRecord::Base
 
    	def self.get_menu_for_provider(provider_id)
 
-  		menu_string = MenuString.find_by_provider_id(provider_id)
+  		menu_string = MenuString.find_by(provider_id: provider_id)
   		if !menu_string
 			menu_string      = MenuString.new
 			menu_string_data = menu_string.generate_new_menu_string(provider_id)
@@ -55,7 +55,7 @@ class MenuString < ActiveRecord::Base
   	end
 
     def self.compile_menu_to_menu_string(provider_id)
-        menu_string = MenuString.find_by_provider_id(provider_id)
+        menu_string = MenuString.find_by(provider_id: provider_id)
         if !menu_string
             menu_string = MenuString.new
             menu_string_data = menu_string.generate_new_menu_string(provider_id)

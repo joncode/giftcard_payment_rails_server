@@ -185,7 +185,7 @@ private
 	def update_city_provider
 		city = self.city
     	new_providers_array = Provider.where(city: city).serialize_objs.to_json
-    	if old_city_provider = CityProvider.find_by_city(city)
+    	if old_city_provider = CityProvider.find_by(city: city)
     		old_city_provider.update_attribute(:providers_array, new_providers_array)
     	else
     		CityProvider.create(city:city, providers_array: new_providers_array)

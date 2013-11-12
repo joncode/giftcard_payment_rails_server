@@ -307,7 +307,7 @@ describe Mdot::V2::GiftsController do
 
         it "should return validation errors on bad gift" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            redeem = Redeem.find_by_gift_id(@gift.id)
+            redeem = Redeem.find_by(gift_id: @gift.id)
             redeem.destroy
             post :redeem, format: :json, id: @gift.id, server: "test"
             response.response_code.should == 200
@@ -390,7 +390,7 @@ describe Mdot::V2::GiftsController do
                 params = { message: "New Regift Message", receiver: hsh_no_id_user }
 
                 post :regift, format: :json, id: old_gift.id, data: params
-                new_gift = Gift.find_by_receiver_email(no_id_user.email)
+                new_gift = Gift.find_by(receiver_email: no_id_user.email)
                 puts new_gift.inspect
                 new_gift.status.should == 'incomplete'
             end
@@ -683,7 +683,7 @@ describe Mdot::V2::GiftsController do
                 deactivated_user = FactoryGirl.create :receiver, { active: false}
                 gift = FactoryGirl.build :gift, { receiver_id: deactivated_user.id }
                 post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
-                new_gift = Gift.find_by_receiver_id(deactivated_user.id)
+                new_gift = Gift.find_by(receiver_id: deactivated_user.id)
                 new_gift.should be_nil
                 last = Gift.last
                 last.should be_nil

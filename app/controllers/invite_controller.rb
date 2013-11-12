@@ -25,7 +25,7 @@ class InviteController < ApplicationController
     end
     @user = User.find(id)
     if @user.nil?
-        @user = User.find_by_phone("5555555555")
+        @user = User.find_by(phone: "5555555555")
     end
     if request.format == :json
         response_hash                       = {}
@@ -36,7 +36,7 @@ class InviteController < ApplicationController
         format.json { render json: response_hash }
     end
   end
-  
+
   def error
     @email_title   = "Drinkboard Email Messenger"
     @header_text   = "We're Sorry but there was an Error"

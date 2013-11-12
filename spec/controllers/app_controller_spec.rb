@@ -371,7 +371,7 @@ describe AppController do
 
             post :add_card, format: :json, token: user.remember_token, data: params
 
-            card = Card.find_by_user_id(772)
+            card = Card.find_by(user_id: 772)
             json["add"].should == card.id
         end
 
@@ -380,7 +380,7 @@ describe AppController do
 
             post :add_card, format: :json, token: user.remember_token, data: params
 
-            card = Card.find_by_user_id(772)
+            card = Card.find_by(user_id: 772)
             json["error_server"].class.should == Hash
             json["error_server"].has_key?('month').should be_true
         end
@@ -618,13 +618,13 @@ describe AppController do
         end
 
         it "should update requests with answers" do
-            q1 = Question.find_by_left("Day Drinking")
-            q2 = Question.find_by_left("Red Wine")
-            q3 = Question.find_by_left("White Liqours")
-            q4 = Question.find_by_left("Straw")
-            q5 = Question.find_by_left("Light Beer")
-            q6 = Question.find_by_left("Mimosa")
-            q7 = Question.find_by_left("Rare")
+            q1 = Question.find_by(left: "Day Drinking")
+            q2 = Question.find_by(left: "Red Wine")
+            q3 = Question.find_by(left: "White Liqours")
+            q4 = Question.find_by(left: "Straw")
+            q5 = Question.find_by(left: "Light Beer")
+            q6 = Question.find_by(left: "Mimosa")
+            q7 = Question.find_by(left: "Rare")
 
             params = "[  {    \"question_id\" : #{q1.id},    \"left\" : \"Day Drinking\",    \"answer\" : \"0\",    \"right\" : \"Night Drinking\"  },  {    \"question_id\" : #{q2.id},    \"left\" : \"Red Wine\",    \"answer\" : \"1\",    \"right\" : \"White Wine\"  },  {    \"question_id\" : #{q3.id},    \"left\" : \"White Liqours\",    \"answer\" : \"0\",    \"right\" : \"Brown Liqours\"  },  {    \"question_id\" : #{q4.id},    \"left\" : \"Straw\",    \"answer\" : \"0\",    \"right\" : \"No straw\"  },  {    \"question_id\" : #{q5.id},    \"left\" : \"Light Beer\",    \"answer\" : \"0\",    \"right\" : \"Dark Beer\"  },  {    \"question_id\" : #{q6.id},    \"left\" : \"Mimosa\",    \"answer\" : \"0\",    \"right\" : \"Bloody Mary\"  },  {    \"question_id\" : #{q7.id},    \"left\" : \"Rare\",    \"answer\" : \"1\",    \"right\" : \"Well Done\"  }]"
 

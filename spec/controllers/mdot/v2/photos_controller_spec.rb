@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mdot::V2::PhotosController do
 
     before(:all) do
-        unless user = User.find_by_remember_token("USER_TOKEN")
+        unless user = User.find_by(remember_token: "USER_TOKEN")
             user = FactoryGirl.create(:user)
             user.update_attribute(:remember_token, "USER_TOKEN")
         end
@@ -23,7 +23,7 @@ describe Mdot::V2::PhotosController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params_data = "http://res.cloudinary.com/drinkboard/image/upload/v1382464405/myg7nfaccypfaybffljo.jpg"
             post :create, data: params_data, format: :json
-            user_new = User.find_by_remember_token("USER_TOKEN"       )
+            user_new = User.find_by(remember_token: "USER_TOKEN"       )
             user_new.use_photo.should    == 'ios'
             user_new.iphone_photo.should == params_data
             user_new.get_photo.should    == params_data

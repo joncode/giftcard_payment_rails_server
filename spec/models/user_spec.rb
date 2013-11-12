@@ -12,7 +12,7 @@ describe User do
 	it "should accept integers for phone, twitter, facebook _id" do
 		user = FactoryGirl.build :user, { twitter: 832742384, facebook_id: 318341934192, phone: 9876787657 }
 		user.save
-		new_user = User.find_by_twitter("832742384")
+		new_user = User.find_by(twitter:  "832742384")
 		new_user.phone.should == "9876787657"
 		new_user.facebook_id.should == "318341934192"
 	end
@@ -49,7 +49,7 @@ describe User do
 				it "should remove #{type_of} when user deletes #{type_of}" do
 						user = FactoryGirl.create :user, { "#{type_of}" => identifier }
 						user.deactivate_social("#{type_of}", identifier)
-						UserSocial.unscoped.find_by_identifier(identifier).active.should be_false
+						UserSocial.unscoped.find_by(identifier: identifier).active.should be_false
 				end
 
 				it "should not create a new user social record if no new #{type_of} is submitted" do

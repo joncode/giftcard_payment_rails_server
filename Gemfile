@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.0.0'
 
-gem 'rails', '4.0.0'
+gem 'rails', '4.0.1'
 gem 'pg'
 gem 'unicorn'
 gem "rack-timeout"
@@ -15,8 +15,7 @@ gem 'json', '~> 1.7.7'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
 
-gem 'protected_attributes'
-
+gem 'protected_attributes', "~> 1.0.5"
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
@@ -49,8 +48,8 @@ gem 'urbanairship'
 # deprecated gems
 # gem 'will_paginate', '> 3.0'
 # gem 'roadie'
-# gem 'carrierwave'
-# gem 'cloudinary'
+gem 'carrierwave'
+gem 'cloudinary'
 
 # can remove twitter bootstrap etc
 # group :assets do

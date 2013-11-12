@@ -46,7 +46,7 @@ module LegacyUser
     end
 
     def confirm_social_save identifier
-        if uss = UserSocial.find_by_identifier(identifier)
+        if uss = UserSocial.find_by(identifier: identifier)
             puts "true"
         else
             puts "false--------------------------------------------------------------------------"

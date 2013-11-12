@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mdot::V2::CardsController do
 
     before(:all) do
-        unless @user = User.find_by_remember_token("USER_TOKEN")
+        unless @user = User.find_by(remember_token: "USER_TOKEN")
             @user = FactoryGirl.create(:user)
             @user.update_attribute(:remember_token, "USER_TOKEN")
         end
@@ -45,7 +45,7 @@ describe Mdot::V2::CardsController do
 
             post :create, format: :json, data: params
 
-            card = Card.find_by_user_id(@user.id)
+            card = Card.find_by(user_id: @user.id)
             rrc(200)
             json["status"].should == 1
             json["data"].should == card.id
@@ -57,7 +57,7 @@ describe Mdot::V2::CardsController do
 
             post :create, format: :json, data: params
 
-            card = Card.find_by_user_id(@user.id)
+            card = Card.find_by(user_id: @user.id)
             rrc(200)
             json["status"].should == 1
             json["data"].should == card.id

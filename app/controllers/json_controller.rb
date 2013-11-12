@@ -157,7 +157,7 @@ class JsonController < ActionController::Base
 
     def authenticate_admin_tools
         token = request.headers["HTTP_TKN"]
-        @admin_user = AdminUser.find_by_remember_token token
+        @admin_user = AdminUser.find_by(remember_token: token)
         if @admin_user
             puts @admin_user.name
         else
@@ -167,7 +167,7 @@ class JsonController < ActionController::Base
 
     def authenticate_merchant_tools
         token = request.headers["HTTP_TKN"]
-        @provider = Provider.unscoped.find_by_token(token)
+        @provider = Provider.unscoped.find_by(token: token)
         if @provider
             puts @provider.name
         else

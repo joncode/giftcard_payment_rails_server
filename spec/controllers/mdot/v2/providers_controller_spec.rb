@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mdot::V2::ProvidersController do
 
     before(:all) do
-        unless user = User.find_by_remember_token("USER_TOKEN")
+        unless user = User.find_by(remember_token: "USER_TOKEN")
             user = FactoryGirl.create(:user)
             user.update_attribute(:remember_token, "USER_TOKEN")
         end

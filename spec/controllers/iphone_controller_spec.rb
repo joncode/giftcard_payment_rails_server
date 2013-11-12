@@ -92,7 +92,7 @@ describe IphoneController do
                 post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
                 run_delayed_jobs
 
-                user = UserSocial.find_by_identifier("neil@gmail.com")
+                user = UserSocial.find_by(identifier: "neil@gmail.com")
                 user.subscribed.should be_true
             end
 

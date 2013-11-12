@@ -44,7 +44,7 @@ class IphoneController < AppController
 		if email.blank? || password.blank?
 			response["error"]     = "Data not received."
 		else
-			user = User.find_by_email(email)
+			user = User.find_by(email: email)
 			if user && user.authenticate(password)
 				if user.active
 					user.pn_token       = pn_token if pn_token
@@ -78,11 +78,11 @@ class IphoneController < AppController
 			response["error_iphone"] = "Data not received."
 		else
 			if origin == 'f'
-				user = User.find_by_facebook_id(facebook_id)
+				user = User.find_by(facebook_id: facebook_id)
 				msg  = "Facebook Account"
 				resp_key = "facebook"
 			else
-				user = User.find_by_twitter(twitter)
+				user = User.find_by(twitter: twitter)
 				msg  = "Twitter Account"
 				resp_key = "twitter"
 			end
@@ -180,8 +180,7 @@ class IphoneController < AppController
 
 
 	def locations
-
-		# @user  = User.find_by_remember_token(params["token"])
+		
 		providers = Provider.all
 		menus     = {}
 		providers.each do |p|
