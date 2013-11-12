@@ -18,6 +18,16 @@ class Array
 
 end
 
+class ActiveSupport::TimeWithZone
+
+    def xmlschema(fraction_digits = 0)
+
+        "#{time.strftime("%Y-%m-%dT%H:%M:%S")}#{formatted_offset(true, 'Z')}"
+    end
+
+end
+
+
 def lcon
     load ($:[0] + "/console_libs.rb")
     puts "loading rails console scripts [lcon]"
