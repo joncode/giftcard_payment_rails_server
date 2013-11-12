@@ -10,7 +10,7 @@ class Brand < ActiveRecord::Base
 
 	after_save :update_parent_brand
 
-	default_scope where(active: true)
+	default_scope -> { where(active: true) }
 
 	def self.get_all
 		unscoped.order("name ASC")

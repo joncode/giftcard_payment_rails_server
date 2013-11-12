@@ -30,7 +30,7 @@ class Gift < ActiveRecord::Base
 	before_create :build_gift_items
 	before_create :set_statuses
 
-	default_scope where(active: true)
+	default_scope -> { where(active: true) }
 
 #/---------------------------------------------------------------------------------------------/
 

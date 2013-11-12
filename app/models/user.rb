@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
-	#default_scope where(active: true).where(perm_deactive: false) # indexed
+	#default_scope -> { where(active: true).where(perm_deactive: false) } # indexed
 
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false).where(remember_token: token).first
@@ -221,7 +221,7 @@ class User < ActiveRecord::Base
 			UserSocial.deactivate_all self
 		else
 			UserSocial.activate_all self
-		end			
+		end
     end
 
     def deactivate_social type_of, identifier
