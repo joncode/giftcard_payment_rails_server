@@ -57,7 +57,7 @@ class GiftUtility
     end
 
     def find_user type_of, unique_id
-        if receiver = User.find_by(type_of, unique_id)
+        if receiver = User.find_by(type_of => unique_id)
             puts "\n Found a user from the network details \n"
             @gift.add_receiver receiver
             @resp["receiver"] = receiver_info_resp(receiver)

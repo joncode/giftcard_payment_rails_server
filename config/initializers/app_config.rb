@@ -1,6 +1,9 @@
 require 'yaml'
 require 'common_utils'
 require 'emailer'
+require 'gift_utility'
+require 'gift_regifter'
+require 'gift_regifter_2'
 
 yaml_data = YAML::load(ERB.new(IO.read(File.join(Rails.root, 'config', 'application.yml'))).result)
 APP_CONFIG = ENV["RAILS_ENV"] == "development" ? HashWithIndifferentAccess.new(yaml_data)[:development] : HashWithIndifferentAccess.new(yaml_data)[:production]
@@ -25,7 +28,8 @@ if Rails.env.production?
 end
 
 if Rails.env.test?
-    #ActiveRecord::Base.logger = Logger.new(STDOUT)
+    ActiveRecord::Base.logger = nil #Logger.new(STDOUT)
+
     require 'auth_response'
     require 'auth_transaction'
 end
