@@ -28,8 +28,7 @@ describe Mdot::V2::BrandsController do
             keys    = ["name","next_view","brand_id","photo"]
             get :index, format: :json
             rrc(200)
-            ary = json
-            ary.class.should == Array
+            ary = json["data"]
             ary.count.should == amount
             hsh = ary.first
             compare_keys(hsh, keys)
@@ -62,7 +61,7 @@ describe Mdot::V2::BrandsController do
             route   = :merchants
             get route, format: :json, id: @brand.id
             rrc(200)
-            ary = json
+            ary = json["data"]
             ary.class.should == Array
             ary.count.should == amount
             hsh = ary.first
