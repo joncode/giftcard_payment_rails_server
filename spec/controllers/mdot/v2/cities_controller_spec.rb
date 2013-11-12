@@ -17,7 +17,7 @@ describe Mdot::V2::CitiesController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
             keys    =  ["name", "state", "city_id", "photo"]
-            response.response_code.should == 200
+            rrc(200)
             ary = json
             ary.class.should == Array
             ary.count.should == 4
@@ -47,7 +47,7 @@ describe Mdot::V2::CitiesController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: "New York"
             keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
-            response.response_code.should == 200
+            rrc(200)
             ary = json
             ary.class.should == Array
             ary.count.should == 19

@@ -22,7 +22,7 @@ describe Mdot::V2::QuestionsController do
         it "should get the app users questions" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].class.should == Array
             question = json["data"].first
@@ -48,7 +48,7 @@ describe Mdot::V2::QuestionsController do
             params = "[  {    \"question_id\" : #{q1.id},    \"left\" : \"Day Drinking\",    \"answer\" : \"0\",    \"right\" : \"Night Drinking\"  },  {    \"question_id\" : #{q2.id},    \"left\" : \"Red Wine\",    \"answer\" : \"0\",    \"right\" : \"White Wine\"  },  {    \"question_id\" : #{q3.id},    \"left\" : \"White Liqours\",    \"answer\" : \"0\",    \"right\" : \"Brown Liqours\"  },  {    \"question_id\" : #{q4.id},    \"left\" : \"Straw\",    \"answer\" : \"0\",    \"right\" : \"No straw\"  },  {    \"question_id\" : #{q5.id},    \"left\" : \"Light Beer\",    \"answer\" : \"0\",    \"right\" : \"Dark Beer\"  },  {    \"question_id\" : #{q6.id},    \"left\" : \"Mimosa\",    \"answer\" : \"0\",    \"right\" : \"Bloody Mary\"  },  {    \"question_id\" : #{q7.id},    \"left\" : \"Rare\",    \"answer\" : \"0\",    \"right\" : \"Well Done\"  }]"
             #params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}].to_json
             put :update, format: :json, data: params
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].class.should == Array
             question          = json["data"].first
@@ -66,7 +66,7 @@ describe Mdot::V2::QuestionsController do
             params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}].to_json
 
             put :update, format: :json, data: params
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].class.should == Array
             question          = json["data"].first
@@ -84,7 +84,7 @@ describe Mdot::V2::QuestionsController do
             params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}].to_json
 
             put :update, format: :json, data: params
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].class.should == Array
             question          = json["data"].first

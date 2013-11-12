@@ -39,7 +39,7 @@ module CrudHelper
     #         put :update, id: user.id, format: :json
     #         response.response_code.should == 400
     #         put :update, id: user.id, format: :json, data: { "first_name" => "Steve"}
-    #         response.response_code.should == 200
+    #         rrc(200)
     #     end
 
     #     it "should return success msg when success" do

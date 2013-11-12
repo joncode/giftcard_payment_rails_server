@@ -225,7 +225,7 @@ describe Mdot::V2::GiftsController do
         it "should create a redeem for the gift" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
-            response.response_code.should == 200
+            rrc(200)
             redeem = @gift.redeem
             redeem.class.should == Redeem
         end
@@ -233,7 +233,7 @@ describe Mdot::V2::GiftsController do
         it "should return the redeem code on success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].should == @gift.redeem.redeem_code
         end
@@ -242,7 +242,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
             @gift.reload
-            response.response_code.should == 200
+            rrc(200)
             @gift.status.should == 'notified'
         end
 
@@ -287,7 +287,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: "test"
             order = @gift.order
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"]["order_number"].should == order.make_order_num
             json["data"]["total"].should        == @gift.total
@@ -310,7 +310,7 @@ describe Mdot::V2::GiftsController do
             redeem = Redeem.find_by(gift_id: @gift.id)
             redeem.destroy
             post :redeem, format: :json, id: @gift.id, server: "test"
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 0
             json["data"].should   == {"gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"]}
         end
@@ -572,6 +572,7 @@ describe Mdot::V2::GiftsController do
                 UserSocial.delete_all
                 @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
                 @user.update_attribute(:remember_token, "USER_TOKEN")
+                @card = FactoryGirl.create(:visa, id: 4567890)
                 @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             end
 
@@ -583,10 +584,7 @@ describe Mdot::V2::GiftsController do
             }.stringify_keys.each do |type_of, identifier|
                 it "should find user account for old #{type_of}" do
                     request.env["HTTP_TKN"] = "USER_TOKEN"
-                    # take a user , add an email
                     @user.update_attribute(type_of, identifier)
-                    # then we hit create gift
-                    # with receiver email = old email
                     if (type_of == "phone") || (type_of == "email")
                         key = "receiver_#{type_of}"
                     else
@@ -641,20 +639,11 @@ describe Mdot::V2::GiftsController do
 
             # Git should validate total and service
 
-        end
-
-        describe "#create security" do
-
-            before do
-                Gift.delete_all
-                User.delete_all
-                @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
-            end
-
             it "it should not allow gift creating for de-activated givers" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
 
-                deactivated_user = FactoryGirl.create :user, { active: false, remember_token: "USER_TOKEN"}
+                deactivated_user = FactoryGirl.create :user, { active: true}
+                @user.update_attribute(:active, false)
                 # hit create gift with a receiver_id of a deactivated user
                 gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
                 # test that create gift does not create the gift or the sale
@@ -689,19 +678,56 @@ describe Mdot::V2::GiftsController do
                 last.should be_nil
             end
 
+            it "should return 'that credit_card does not exist' when cant find credit card" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                giver = FactoryGirl.create(:giver)
+                receiver = FactoryGirl.create(:receiver)
+                gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
+                gift.add_receiver receiver
+                gift.credit_card = "999999"
+                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+                rrc(200)
+                json["status"].should == 0
+                json["data"].should   == "We do not have that credit card on record.  Please choose a different card."
+            end
+
+            it "should accept stringified JSON'd 'gift" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                giver = FactoryGirl.create(:giver)
+                receiver = FactoryGirl.create(:receiver)
+                gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
+                gift.add_receiver receiver
+                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+                rrc(200)
+            end
+
+            it "should accept non-stringified JSON gift" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                giver = FactoryGirl.create(:giver)
+                receiver = FactoryGirl.create(:receiver)
+                gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
+                gift.add_receiver receiver
+                post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: @cart
+                rrc(200)
+            end
+
         end
 
         def make_gift_json gift
+            make_gift_hsh(gift).to_json
+        end
+
+        def make_gift_hsh gift
             {
-                giver_id:       1,
-                giver_name:     "French",
+                giver_id:       @user.id,
+                giver_name:     @user.name,
                 total:          gift.total,
                 service:        gift.service,
                 receiver_id:    gift.receiver_id,
                 receiver_name:  gift.receiver_name,
                 provider_id:    gift.provider.id,
                 credit_card:    gift.credit_card
-            }.to_json
+            }
         end
 
         def gift_social_id_hsh

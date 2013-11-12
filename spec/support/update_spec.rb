@@ -16,9 +16,9 @@ shared_examples_for "sanitize update" do |verb, route, params|
         put :update, id: user.id, format: :json
         response.response_code.should == 400
         put :update, id: user.id, format: :json, data: { "first_name" => "Steve"}
-        response.response_code.should == 200
+        rrc(200)
     end
-    
+
     it "should not update attributes that are not allowed or dont exist" do
         hsh = { "house" => "chill" }
         put :update, id: user.id, format: :json, data: hsh

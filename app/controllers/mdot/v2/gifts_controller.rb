@@ -40,7 +40,7 @@ class Mdot::V2::GiftsController < JsonController
 
     def regift
         new_gift_hsh = convert_if_json(params["data"]["receiver"])
-        new_gift_hsh["message"] = params["data"]["message"]
+        new_gift_hsh["message"]   = params["data"]["message"]
         new_gift_hsh["regift_id"] = params[:id]
 
         gift_regifter  = GiftRegifter2.new(new_gift_hsh)
@@ -54,22 +54,29 @@ class Mdot::V2::GiftsController < JsonController
 
 
     def create
-        gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
-        unless gift_creator.no_data?
-            gift_creator.build_gift
-            if gift_creator.resp["error"].nil?
-                gift_creator.charge
+        gift = convert_if_json(params["gift"])
+        shoppingCart = convert_if_json(params["shoppingCart"])
+
+        if card = Card.where(id: gift["credit_card"]).count > 0
+            gift_creator = GiftCreator.new(@current_user, gift, shoppingCart)
+            unless gift_creator.no_data?
+                gift_creator.build_gift
+                if gift_creator.resp["error"].nil?
+                    gift_creator.charge
+                end
             end
-        end
-        response = gift_creator.resp
-        if response["success"]
-            success response["success"]
-        elsif response["error"]
-            fail response["error"]
-        elsif response["error_server"]
-            fail response["error_server"]
+            response = gift_creator.resp
+            if response["success"]
+                success response["success"]
+            elsif response["error"]
+                fail response["error"]
+            elsif response["error_server"]
+                fail response["error_server"]
+            else
+                fail response
+            end
         else
-            fail reesponse
+            fail "We do not have that credit card on record.  Please choose a different card."
         end
         respond
     end

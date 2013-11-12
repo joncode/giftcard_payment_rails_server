@@ -33,7 +33,7 @@ describe Mdot::V2::PhotosController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params_data = "http://res.cloudinary.com/drinkboard/image/upload/v1382464405/myg7nfaccypfaybffljo.jpg"
             post :create, data: params_data, format: :json
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].should   == "Photo Updated - Thank you!"
 

@@ -32,7 +32,7 @@ describe Admt::V2::GiftsController do
             put :update, id: gift.id, format: :json
             response.response_code.should == 400
             put :update, id: gift.id, format: :json, data: { "receiver_name" => "Jon Goodness"}
-            response.response_code.should == 200
+            rrc(200)
         end
 
         it "should return success msg when success" do

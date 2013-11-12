@@ -27,7 +27,7 @@ describe Mdot::V2::UsersController do
             amount  = User.where(active: true).count
             keys    = ["email", "facebook_id", "first_name", "last_name", "phone", "twitter", "photo", "user_id"]
             get :index, format: :json
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             ary = json["data"]
             ary.class.should == Array
@@ -53,7 +53,7 @@ describe Mdot::V2::UsersController do
         it "should return user hash when success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             put :update, format: :json, data: { zip: "89475", sex: "male", birthday: "03/13/1975"}
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             response = json["data"]
             response.class.should  == Hash
@@ -120,7 +120,7 @@ describe Mdot::V2::UsersController do
         it "should send success response for screen for primary email" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             put :reset_password, format: :json, data: receiver.email
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should  == 1
             json["data"].should == "Email is Sent , check your inbox"
         end
@@ -128,7 +128,7 @@ describe Mdot::V2::UsersController do
         it "should update the user reset password token and expiration for primary email" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             put :reset_password, format: :json, data: receiver.email
-            response.response_code.should == 200
+            rrc(200)
             receiver.reload
             receiver.reset_token.should_not be_nil
             receiver.reset_token_sent_at.hour.should == Time.now.hour
@@ -139,7 +139,7 @@ describe Mdot::V2::UsersController do
             receiver.email = "new_email@email.com"
             receiver.save
             put :reset_password, format: :json, data: "findme@gmail.com"
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should  == 1
             json["data"].should == "Email is Sent , check your inbox"
         end
@@ -149,7 +149,7 @@ describe Mdot::V2::UsersController do
             receiver.email = "new_email@email.com"
             receiver.save
             put :reset_password, format: :json, data: "findme@gmail.com"
-            response.response_code.should == 200
+            rrc(200)
             receiver.reload
             receiver.reset_token.should_not be_nil
             receiver.reset_token_sent_at.hour.should == Time.now.hour
@@ -158,7 +158,7 @@ describe Mdot::V2::UsersController do
         it "should return error message if email doesn not exist" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             put :reset_password, format: :json, data: "non-existant@yahoo.com"
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should  == 0
             json["data"].should == "#{PAGE_NAME} does not have record of that email"
         end
