@@ -28,7 +28,7 @@ describe Mdot::V2::BrandsController do
             keys    = ["name","next_view","brand_id","photo"]
             get :index, format: :json
             rrc(200)
-            ary = json
+            ary = json["data"]
             ary.class.should == Array
             ary.count.should == amount
             hsh = ary.first
@@ -62,7 +62,7 @@ describe Mdot::V2::BrandsController do
             route   = :merchants
             get route, format: :json, id: @brand.id
             rrc(200)
-            ary = json
+            ary = json["data"]
             ary.class.should == Array
             ary.count.should == amount
             hsh = ary.first
@@ -72,7 +72,7 @@ describe Mdot::V2::BrandsController do
         it "should return 404 when brand not found via ID" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: 100000
-            response.response_code.should == 404
+            rrc(404)
         end
     end
 

@@ -43,11 +43,11 @@ describe Mdot::V2::UsersController do
         it "should require a update_user hash" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             put :update, format: :json, data: "updated data"
-            response.response_code.should == 400
+            rrc(400)
             put :update, format: :json, data: nil
-            response.response_code.should == 400
+            rrc(400)
             put :update, format: :json
-            response.response_code.should == 400
+            rrc(400)
         end
 
         it "should return user hash when success" do
@@ -95,14 +95,14 @@ describe Mdot::V2::UsersController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             hsh = { "house" => "chill" }
             put :update, format: :json, data: hsh
-            response.response_code.should == 400
+            rrc(400)
         end
 
         it "should not update attributes that are not allowed and still succeed" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             hsh = { "password" => "doNOTallow", "remember_token" => "DO_NOT_ALLOW" }
             put :update, format: :json, data: hsh
-            response.response_code.should == 400
+            rrc(400)
         end
     end
 

@@ -131,7 +131,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             @user.update_attribute(:active, false)
             get :badge, format: :json
-            response.response_code.should == 401
+            rrc(401)
         end
 
         it "should not return gifts that are unpaid" do
@@ -254,7 +254,7 @@ describe Mdot::V2::GiftsController do
         it "should return 404 if gift id not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: 0
-            response.response_code.should == 404
+            rrc(404)
         end
 
     end
@@ -318,7 +318,7 @@ describe Mdot::V2::GiftsController do
         it "should return data transfer error if @gift not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: 0, server: "test"
-            response.response_code.should == 404
+            rrc(404)
         end
     end
 
@@ -543,174 +543,175 @@ describe Mdot::V2::GiftsController do
     describe :create do
         it_should_behave_like("token authenticated", :post, :create)
 
-        describe "#create" do
 
-            before(:each) do
-                Gift.delete_all
-                User.delete_all
-                UserSocial.delete_all
-                @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
-                @user.update_attribute(:remember_token, "USER_TOKEN")
-                @receiver = FactoryGirl.create(:receiver)
-            end
-
-            it "should not send nil to add_giver" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                params_hsh  = {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : #{@receiver.id},  \"message\" : \"\",  \"credit_card\" : 77,  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}","origin"=>"d","shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]","token"=> @token}
-                post :create, format: :json, gift: params_hsh["gift"] , shoppingCart: params_hsh["shoppingCart"]
-                gift = Gift.last
-                gift.giver_name.should == "Jimmy Basic"
-            end
-
+        before(:each) do
+            Gift.delete_all
+            User.delete_all
+            UserSocial.delete_all
+            @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
+            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @card = FactoryGirl.create(:visa, id: 4567890)
+            @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
         end
 
-        describe "#create" do
-
-            before(:each) do
-                Gift.delete_all
-                User.delete_all
-                UserSocial.delete_all
-                @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
-                @user.update_attribute(:remember_token, "USER_TOKEN")
-                @card = FactoryGirl.create(:visa, id: 4567890)
-                @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
-            end
-
-            {
-                email: "jon@gmail.com",
-                phone: "9173706969",
-                facebook_id: "123",
-                twitter: "999"
-            }.stringify_keys.each do |type_of, identifier|
-                it "should find user account for old #{type_of}" do
-                    request.env["HTTP_TKN"] = "USER_TOKEN"
-                    @user.update_attribute(type_of, identifier)
-                    if (type_of == "phone") || (type_of == "email")
-                        key = "receiver_#{type_of}"
-                    else
-                        key = type_of
-                    end
-                    gift = FactoryGirl.create :gift, { key => identifier}
-                    post :create, format: :json, gift: set_gift_as_sent(gift, key) , shoppingCart: @cart
-                    rrc(200)
-                    json["status"].should == 1
-                    json["data"].has_key?('Gift_id').should be_true
-                    new_gift = Gift.find(json["data"]["Gift_id"])
-                    new_gift.receiver_id.should == @user.id
+        {
+            email: "jon@gmail.com",
+            phone: "9173706969",
+            facebook_id: "123",
+            twitter: "999"
+        }.stringify_keys.each do |type_of, identifier|
+            it "should find user account for old #{type_of}" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                @user.update_attribute(type_of, identifier)
+                if (type_of == "phone") || (type_of == "email")
+                    key = "receiver_#{type_of}"
+                else
+                    key = type_of
                 end
+                gift = FactoryGirl.create :gift, { key => identifier}
+                post :create, format: :json, gift: set_gift_as_sent(gift, key) , shoppingCart: @cart
+                rrc(200)
+                json["status"].should == 1
+                json["data"].has_key?('Gift_id').should be_true
+                new_gift = Gift.find(json["data"]["Gift_id"])
+                new_gift.receiver_id.should == @user.id
+            end
 
-                it "should look thru multiple unique ids for a user object with #{type_of}" do
-                    request.env["HTTP_TKN"] = "USER_TOKEN"
-                    # add one unique id to the user record
-                    @user.update_attribute(type_of, identifier)
-                    # create a gift with multiple new social ids
-                    gift = FactoryGirl.create :gift, gift_social_id_hsh
-                    post :create, format: :json, gift: create_multiple_unique_gift(gift) , shoppingCart: @cart
-                    rrc(200)
-                    json["status"].should == 1
-                    json["data"].has_key?('Gift_id').should be_true
-                    # check that the :action assign the user_id to receiver_id and saves the gift
-                    new_gift = Gift.find(json["data"]["Gift_id"])
-                    new_gift.receiver_id.should == @user.id
+
+
+            it "should look thru multiple unique ids for a user object with #{type_of}" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                # add one unique id to the user record
+                @user.update_attribute(type_of, identifier)
+                # create a gift with multiple new social ids
+                gift = FactoryGirl.create :gift, gift_social_id_hsh
+                post :create, format: :json, gift: create_multiple_unique_gift(gift) , shoppingCart: @cart
+                rrc(200)
+                json["status"].should == 1
+                json["data"].has_key?('Gift_id').should be_true
+                # check that the :action assign the user_id to receiver_id and saves the gift
+                new_gift = Gift.find(json["data"]["Gift_id"])
+                new_gift.receiver_id.should == @user.id
+            end
+
+            it "should look thru not full gift of unique ids for a user object with #{type_of}" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                # add one unique id to the user record
+                @user.update_attribute(type_of, identifier)
+                # create a gift with multiple new social ids
+                missing_hsh = gift_social_id_hsh
+                if type_of == "phone"
+                    missing_hsh["receiver_email"] = ""
+                else
+                    missing_hsh["receiver_phone"] = ""
                 end
-
-                it "should look thru not full gift of unique ids for a user object with #{type_of}" do
-                    request.env["HTTP_TKN"] = "USER_TOKEN"
-                    # add one unique id to the user record
-                    @user.update_attribute(type_of, identifier)
-                    # create a gift with multiple new social ids
-                    missing_hsh = gift_social_id_hsh
-                    if type_of == "phone"
-                        missing_hsh["receiver_email"] = ""
-                    else
-                        missing_hsh["receiver_phone"] = ""
-                    end
-                    gift = FactoryGirl.create :gift, missing_hsh
-                    post :create, format: :json, gift: create_multiple_unique_gift(gift, missing_hsh) , shoppingCart: @cart
-                    rrc(200)
-                    json["status"].should == 1
-                    json["data"].has_key?('Gift_id').should be_true
-                    # check that the :action assign the user_id to receiver_id and saves the gift
-                    new_gift = Gift.find(json["data"]["Gift_id"])
-                    new_gift.receiver_id.should == @user.id
-                end
-            end
-
-
-            # Git should validate total and service
-
-            it "it should not allow gift creating for de-activated givers" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-
-                deactivated_user = FactoryGirl.create :user, { active: true}
-                @user.update_attribute(:active, false)
-                # hit create gift with a receiver_id of a deactivated user
-                gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
-                # test that create gift does not create the gift or the sale
-                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
-                rrc(401)
-            end
-
-            it "it should not allow gift creating for de-activated receivers" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                giver = FactoryGirl.create(:giver)
-                giver.update_attribute(:remember_token,"USER_TOKEN" )
-                deactivated_user = FactoryGirl.create :receiver, { active: false}
-                # hit create gift with a receiver_id of a deactivated user
-                gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
-                # test that create gift does not create the gift or the sale
-                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
-
-                json["status"].should == 0
-                # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
-                json["data"].should == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
-            end
-
-            it "should not charge the card when gift receiver is deactivated" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                giver = FactoryGirl.create(:giver)
-                deactivated_user = FactoryGirl.create :receiver, { active: false}
-                gift = FactoryGirl.build :gift, { receiver_id: deactivated_user.id }
-                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
-                new_gift = Gift.find_by(receiver_id: deactivated_user.id)
-                new_gift.should be_nil
-                last = Gift.last
-                last.should be_nil
-            end
-
-            it "should return 'that credit_card does not exist' when cant find credit card" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                giver = FactoryGirl.create(:giver)
-                receiver = FactoryGirl.create(:receiver)
-                gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
-                gift.add_receiver receiver
-                gift.credit_card = "999999"
-                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+                gift = FactoryGirl.create :gift, missing_hsh
+                post :create, format: :json, gift: create_multiple_unique_gift(gift, missing_hsh) , shoppingCart: @cart
                 rrc(200)
-                json["status"].should == 0
-                json["data"].should   == "We do not have that credit card on record.  Please choose a different card."
+                json["status"].should == 1
+                json["data"].has_key?('Gift_id').should be_true
+                # check that the :action assign the user_id to receiver_id and saves the gift
+                new_gift = Gift.find(json["data"]["Gift_id"])
+                new_gift.receiver_id.should == @user.id
             end
+        end
 
-            it "should accept stringified JSON'd 'gift" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                giver = FactoryGirl.create(:giver)
-                receiver = FactoryGirl.create(:receiver)
-                gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
-                gift.add_receiver receiver
-                post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
-                rrc(200)
-            end
+        # Git should validate total and service
 
-            it "should accept non-stringified JSON gift" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                giver = FactoryGirl.create(:giver)
-                receiver = FactoryGirl.create(:receiver)
-                gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
-                gift.add_receiver receiver
-                post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: @cart
-                rrc(200)
-            end
+        it "it should not allow gift creating for de-activated givers" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
 
+            deactivated_user = FactoryGirl.create :user, { active: true}
+            @user.update_attribute(:active, false)
+            # hit create gift with a receiver_id of a deactivated user
+            gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
+            # test that create gift does not create the gift or the sale
+            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            rrc(401)
+        end
+
+        it "it should not allow gift creating for de-activated receivers" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            giver = FactoryGirl.create(:giver)
+            giver.update_attribute(:remember_token,"USER_TOKEN" )
+            deactivated_user = FactoryGirl.create :receiver, { active: false}
+            # hit create gift with a receiver_id of a deactivated user
+            gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
+            # test that create gift does not create the gift or the sale
+            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+
+            json["status"].should == 0
+            # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
+            json["data"].should == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+        end
+
+        it "should not charge the card when gift receiver is deactivated" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            giver = FactoryGirl.create(:giver)
+            deactivated_user = FactoryGirl.create :receiver, { active: false}
+            gift = FactoryGirl.build :gift, { receiver_id: deactivated_user.id }
+            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            new_gift = Gift.find_by(receiver_id: deactivated_user.id)
+            new_gift.should be_nil
+            last = Gift.last
+            last.should be_nil
+        end
+
+        it "should return 'that credit_card does not exist' when cant find credit card" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            giver = FactoryGirl.create(:giver)
+            receiver = FactoryGirl.create(:receiver)
+            gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
+            gift.add_receiver receiver
+            gift.credit_card = "999999"
+            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            rrc(200)
+            json["status"].should == 0
+            json["data"].should   == "We do not have that credit card on record.  Please choose a different card."
+        end
+
+        it "should accept stringified JSON'd 'gift" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            giver = FactoryGirl.create(:giver)
+            receiver = FactoryGirl.create(:receiver)
+            gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
+            gift.add_receiver receiver
+            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            rrc(200)
+        end
+
+        it "should accept non-stringified JSON gift" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            giver = FactoryGirl.create(:giver)
+            receiver = FactoryGirl.create(:receiver)
+            gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
+            gift.add_receiver receiver
+            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: @cart
+            rrc(200)
+        end
+
+        it "should return 400 if gift and shoppingCart are not hash - stringified and non-stringified" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            giver    = FactoryGirl.create(:giver)
+            receiver = FactoryGirl.create(:receiver)
+            gift     = FactoryGirl.build :gift, { receiver_id: receiver.id }
+            gift.add_receiver receiver
+            post :create, format: :json, gift: "this is not a hash" , shoppingCart: @cart
+            rrc(400)
+            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: "this is not a hash"
+            rrc(400)
+            post :create, format: :json, gift: [make_gift_hsh(gift)] , shoppingCart: @cart
+            rrc(400)
+            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: { "item_name" => "no good"}
+            rrc(400)
+            post :create, format: :json, gift: nil , shoppingCart: @cart
+            rrc(400)
+            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: nil
+            rrc(400)
+            post :create, format: :json, shoppingCart: @cart
+            rrc(400)
+            post :create, format: :json, gift: make_gift_hsh(gift)
+            rrc(400)
         end
 
         def make_gift_json gift

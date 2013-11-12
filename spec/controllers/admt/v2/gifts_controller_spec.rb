@@ -26,11 +26,11 @@ describe Admt::V2::GiftsController do
 
         it "should require a update hash" do
             put :update, id: gift.id, format: :json, data: "updated data"
-            response.response_code.should == 400
+            rrc(400)
             put :update, id: gift.id, format: :json, data: nil
-            response.response_code.should == 400
+            rrc(400)
             put :update, id: gift.id, format: :json
-            response.response_code.should == 400
+            rrc(400)
             put :update, id: gift.id, format: :json, data: { "receiver_name" => "Jon Goodness"}
             rrc(200)
         end
@@ -64,7 +64,7 @@ describe Admt::V2::GiftsController do
         it "should not update attributes that are not allowed or dont exist" do
             hsh = { "house" => "chill" }
             put :update, id: gift.id, format: :json, data: hsh
-            response.response_code.should == 400
+            rrc(400)
         end
 
         it "should update from these params" do

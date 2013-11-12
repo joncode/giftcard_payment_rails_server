@@ -17,7 +17,7 @@ module CrudHelper
     #         it "should not allow unauthenticated access" do
     #             request.env["HTTP_TKN"] = "No_Entrance"
     #             put :update, id: 1, format: :json
-    #             response.response_code.should == 401
+    #             rrc(401)
     #         end
 
     #     end
@@ -33,11 +33,11 @@ module CrudHelper
 
     #     it "should require a update hash" do
     #         put :update, id: user.id, format: :json, data: "updated data"
-    #         response.response_code.should == 400
+    #         rrc(400)
     #         put :update, id: user.id, format: :json, data: nil
-    #         response.response_code.should == 400
+    #         rrc(400)
     #         put :update, id: user.id, format: :json
-    #         response.response_code.should == 400
+    #         rrc(400)
     #         put :update, id: user.id, format: :json, data: { "first_name" => "Steve"}
     #         rrc(200)
     #     end
@@ -71,7 +71,7 @@ module CrudHelper
     #     it "should not update attributes that are not allowed or dont exist" do
     #         hsh = { "house" => "chill" }
     #         put :update, id: user.id, format: :json, data: hsh
-    #         response.response_code.should == 400
+    #         rrc(400)
     #     end
 
     # end

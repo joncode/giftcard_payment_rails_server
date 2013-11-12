@@ -16,7 +16,7 @@ describe Mdot::V2::PhotosController do
         it "should require an 'data' key" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :create, format: :json
-            response.response_code.should == 400
+            rrc(400)
         end
 
         it "should update 'iphone_photo' and 'user_photo'" do
@@ -43,13 +43,13 @@ describe Mdot::V2::PhotosController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params_data = ""
             post :create, data: params_data, format: :json
-            response.response_code.should == 400
+            rrc(400)
             params_data = nil
             post :create, data: params_data, format: :json
-            response.response_code.should == 400
+            rrc(400)
             params_data = { "iphone_photo" => "djafhweiufhoawe"}
             post :create, data: params_data, format: :json
-            response.response_code.should == 400
+            rrc(400)
         end
     end
 

@@ -114,6 +114,11 @@ class JsonController < ActionController::Base
         end
     end
 
+    def nil_key_or_value(data=nil)
+        data ||= params["data"]
+        head :bad_request if data.nil?
+    end
+
     def data_not_hash?(data=nil)
         data ||= params["data"]
         head :bad_request unless data.kind_of?(Hash)

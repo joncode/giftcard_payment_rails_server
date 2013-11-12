@@ -67,7 +67,7 @@ describe Mdot::V2::ProvidersController do
     #         get :index, format: :json
     #         request.env["HTTP_TKN"] = "USER_TOKEN"
     #         get :index, format: :json
-    #         response.response_code.should == 302
+    #         rrc(302)
     #     end
     # end
 

@@ -95,9 +95,9 @@ describe Mdot::V2::QuestionsController do
         it "should reject bad requests" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             put :update, format: :json, data: "total garbage"
-            response.response_code.should == 400
+            rrc(400)
             put :update, format: :json, data: {"doest" => "bs", "take" => "bs", "arrays" => "bs"}
-            response.response_code.should == 400
+            rrc(400)
         end
     end
 end

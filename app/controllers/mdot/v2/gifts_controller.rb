@@ -1,6 +1,8 @@
 class Mdot::V2::GiftsController < JsonController
     before_filter :authenticate_customer
 
+    rescue_from JSON::ParserError, :with => :bad_request
+
     def archive
         give_gifts, rec_gifts  = Gift.get_archive(@current_user)
         give_ary = give_gifts.serialize_objs(:giver)
@@ -54,11 +56,15 @@ class Mdot::V2::GiftsController < JsonController
 
 
     def create
-        gift = convert_if_json(params["gift"])
+        return nil if nil_key_or_value(params["gift"])
+        return nil if nil_key_or_value(params["shoppingCart"])
+        gift_hsh     = convert_if_json(params["gift"])
         shoppingCart = convert_if_json(params["shoppingCart"])
+        return nil if data_not_hash?(gift_hsh)
+        return nil if data_not_array?(shoppingCart)
 
-        if card = Card.where(id: gift["credit_card"]).count > 0
-            gift_creator = GiftCreator.new(@current_user, gift, shoppingCart)
+        if card = Card.where(id: gift_hsh["credit_card"]).count > 0
+            gift_creator = GiftCreator.new(@current_user, gift_hsh, shoppingCart)
             unless gift_creator.no_data?
                 gift_creator.build_gift
                 if gift_creator.resp["error"].nil?

@@ -4,7 +4,7 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Drinkboard::Application.config.secret_token = if Rails.env.development? or Rails.env.test?
+Drinkboard::Application.config.secret_key_base = if Rails.env.development? or Rails.env.test?
     '80cb854c626de01bc9fce3ffdbb7c83961ca54311520874da313b8bb98eeeb3e343843187d0b743604ff43963bb43d0f62f4e13265d3776a9cae2912eb1a2687'
 else
     ENV['SECRET_TOKEN']

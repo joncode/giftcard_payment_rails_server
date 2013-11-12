@@ -13,7 +13,8 @@ describe IphoneController do
 
             it "should not allow unauthenticated access" do
                 post :update_photo, format: :json, token: "No Way Entrance"
-                rrc(200)
+                rrc_old(200)
+
                 json["error"].should  == "Data error, please log out and log back to reset system"
             end
 
@@ -24,7 +25,7 @@ describe IphoneController do
         it "should not run method when user is not found" do
             params_data = "{\"iphone_photo\" : \"http:\\/\\/res.cloudinary.com\\/drinkboard\\/image\\/upload\\/v1382464405\\/myg7nfaccypfaybffljo.jpg\"}"
             post :update_photo, data: params_data, format: :json
-            rrc(200)
+            rrc_old(200)
             json["error"].should   == "Data error, please log out and log back to reset system"
             json.keys.count.should == 1
         end
@@ -32,7 +33,7 @@ describe IphoneController do
         it "should require an 'iphone_photo' key" do
             params_data = "{\"phoo\" : \"http:\\/\\/res.cloudinary.com\\/drinkboard\\/image\\/upload\\/v1382464405\\/myg7nfaccypfaybffljo.jpg\"}"
             post :update_photo, data: params_data, format: :json, token: user.remember_token
-            rrc(200)
+            rrc_old(200)
             json["error"].should   == "Photo upload failed, please check your connetion and try again"
 
         end
@@ -50,7 +51,7 @@ describe IphoneController do
         it "should return success msg when success" do
             params_data = "{\"iphone_photo\" : \"http:\\/\\/res.cloudinary.com\\/drinkboard\\/image\\/upload\\/v1382464405\\/myg7nfaccypfaybffljo.jpg\"}"
             post :update_photo, data: params_data, format: :json, token: user.remember_token
-            rrc(200)
+            rrc_old(200)
             json["success"].should   == "Photo Updated - Thank you!"
 
         end
@@ -58,7 +59,7 @@ describe IphoneController do
         it "should send fail msgs when error" do
             params_data = "{\"iphone_photo\" : null }"
             post :update_photo, data: params_data, format: :json, token: user.remember_token
-            rrc(200)
+            rrc_old(200)
             json["error"].should   == "Photo upload failed, please check your connetion and try again"
         end
 
@@ -70,7 +71,7 @@ describe IphoneController do
 
             xit "should not allow unauthenticated access" do
                 post :create_account, format: :json, token: "No Way Entrance"
-                rrc(200)
+                rrc_old(200)
                 json["error"].should  == "Data error, please log out and log back to reset system"
             end
 
@@ -144,7 +145,7 @@ describe IphoneController do
             email = "neil@gmail.com"
             user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             user = User.where(email: email).first
             user.first_name.should == "Neil"
         end
@@ -164,7 +165,7 @@ describe IphoneController do
             {"first_name"=>"Kevin", "use_photo"=>"ios", "password"=>"kevinn", "last_name"=>"Novak", "phone"=>"7343950489", "email"=>"kevin@uber.com", "origin"=>"d", "iphone_photo"=>"http://graph.facebook.com/28700910/picture?type=large", "password_confirmation"=>"kevinn", "facebook_id"=>"28700910"}]
             requests.each do |req_hsh|
                 post :create_account, format: :json, token: GENERAL_TOKEN, data: req_hsh, pn_token: "8c5c69870825e3255bc750395f9b0680b54f458e93322109853567c85d17d48b"
-                rrc(200)
+                rrc_old(200)
                 json_resp = JSON.parse(response.body)
                 user_id = json_resp["success"]["user_id"]
                 user = User.find(user_id)
@@ -183,7 +184,7 @@ describe IphoneController do
             email = "neil@gmail.com"
             user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             keys = ["user_id", "token"]
             hsh  = json["success"]
             compare_keys(hsh, keys)
@@ -195,72 +196,72 @@ describe IphoneController do
         it "should not accept missing / invalid required fields" do
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "password", first_name: ""}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "password", first_name: nil}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "password" }
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "passasdfword", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: nil, first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password: "passasdfword" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password: "" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password: nil , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "neimail.com", password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  "", password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { "email" =>  nil, password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
             user_hsh = { password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-            rrc(200)
+            rrc_old(200)
             json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
         end
@@ -268,7 +269,7 @@ describe IphoneController do
         it "should not accept requests without user_hash" do
             user_hsh = { password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN
-            rrc(200)
+            rrc_old(200)
             #json.has_key?("error_server").should be_true
             json.has_key?("success").should be_false
         end

@@ -18,7 +18,7 @@ describe Mdot::V2::CitiesController do
             get :index, format: :json
             keys    =  ["name", "state", "city_id", "photo"]
             rrc(200)
-            ary = json
+            ary = json["data"]
             ary.class.should == Array
             ary.count.should == 4
             hsh = ary.first
@@ -30,7 +30,7 @@ describe Mdot::V2::CitiesController do
             get :index, format: :json
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
-            response.response_code.should == 302
+            rrc(302)
         end
     end
 
@@ -48,7 +48,7 @@ describe Mdot::V2::CitiesController do
             get :merchants, format: :json, id: "New York"
             keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
             rrc(200)
-            ary = json
+            ary = json["data"]
             ary.class.should == Array
             ary.count.should == 19
             hsh = ary.first
@@ -60,7 +60,7 @@ describe Mdot::V2::CitiesController do
             get :merchants, format: :json, id: "New York"
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: "New York"
-            response.response_code.should == 302
+            rrc(302)
         end
     end
 
