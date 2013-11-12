@@ -32,6 +32,12 @@ module JsonHelper
     end
   end
 
+  def rrc_old(status_code)
+    response.response_code.should == status_code
+    puts response.response_code
+  end
+
+
 end
 
 RSpec::Rails::ControllerExampleGroup.send(:include, JsonHelper)

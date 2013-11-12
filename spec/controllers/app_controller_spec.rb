@@ -141,7 +141,7 @@ describe AppController do
 
             it "should not allow unauthenticated access" do
                 post :update_user, format: :json, token: "No_Entrance"
-                rrc(200)
+                rrc_old(200)
                 json["error"].should   == "App needs to be reset. Please log out and log back in."
             end
 
@@ -158,7 +158,7 @@ describe AppController do
 
         it "should return user hash when success" do
             post :update_user, format: :json, token: user.remember_token, data: { "first_name" => "Steve"}
-            rrc(200)
+            rrc_old(200)
             json["success"].class.should  == Hash
         end
 
@@ -239,7 +239,7 @@ describe AppController do
 
         it "should return a list of all active brands serialized when success" do
             post :brands, format: :json, token: user.remember_token
-            rrc(200)
+            rrc_old(200)
             ary = json
             ary.class.should == Array
             ary.count.should == 19
@@ -270,7 +270,7 @@ describe AppController do
             amount  = Provider.where(active: true).count
             keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
             post :brand_merchants, format: :json, data: @brand.id, token: user.remember_token
-            rrc(200)
+            rrc_old(200)
             ary = json
             ary.class.should == Array
             ary.count.should == amount
@@ -287,7 +287,7 @@ describe AppController do
             Provider.last.update_attribute(:active, false)
             post :providers, format: :json, token: user.remember_token
             keys =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
-            rrc(200)
+            rrc_old(200)
             ary = json
             ary.class.should == Array
             ary.count.should == 19
@@ -305,7 +305,7 @@ describe AppController do
 
         it "should return the provider menu in version 2 format only" do
             post :menu_v2, format: :json, token: user.remember_token, data: @provider.id
-            rrc(200)
+            rrc_old(200)
             menu_json = json
             menu_json.class.should == Array
             # menu = JSON.parse menu_json
@@ -319,7 +319,7 @@ describe AppController do
         it "should get the users settings and return json" do
             post :get_settings, format: :json, token: user.remember_token
             keys    =  ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id"]
-            rrc(200)
+            rrc_old(200)
             hsh = json["success"]
             hsh.class.should == Hash
             compare_keys(hsh, keys)
@@ -330,7 +330,7 @@ describe AppController do
 
         it "should receive json'd settings and update the record" do
             post :save_settings, format: :json, token: user.remember_token, data: "{  \"email_receiver_new\" : \"false\",  \"email_invite\" : \"false\",  \"email_redeem\" : \"false\",  \"email_invoice\" : \"false\",  \"email_follow_up\" : \"false\"}"
-            rrc(200)
+            rrc_old(200)
             json["success"].should        == "Settings saved"
             setting = user.setting
             setting.reload
@@ -351,14 +351,14 @@ describe AppController do
             FactoryGirl.create(:mastercard, user_id: user.id)
 
             post :get_cards, format: :json, token: user.remember_token
-            rrc(200)
+            rrc_old(200)
             json["success"].class.should  == Array
             json["success"].count.should  == 4
         end
 
         it "should return an empty array if user has no cards" do
             post :get_cards, format: :json, token: user.remember_token
-            rrc(200)
+            rrc_old(200)
             json["success"].class.should  == Array
             json["success"].count.should  == 0
         end
@@ -391,7 +391,7 @@ describe AppController do
         it "should return card id in delete key on success" do
             card = FactoryGirl.create(:card, user_id: user.id)
             post :delete_card, format: :json, token: user.remember_token, data: card.id
-            rrc(200)
+            rrc_old(200)
             json["delete"].should == card.id.to_s
         end
 
@@ -405,10 +405,10 @@ describe AppController do
         it "should return 404 with no ID or wrong ID" do
             card = FactoryGirl.create(:card, user_id: user.id)
             post :delete_card, format: :json, token: user.remember_token
-            rrc(404)
+            rrc_old(404)
             card = FactoryGirl.create(:card, user_id: user.id)
             post :delete_card, format: :json, token: user.remember_token, data: 928312
-            rrc(404)
+            rrc_old(404)
         end
 
     end
@@ -587,7 +587,7 @@ describe AppController do
 
         it "should get the app users questions" do
             post :others_questions, format: :json, token: receiver.remember_token, user_id: receiver.id
-            rrc(200)
+            rrc_old(200)
             json.class.should == Array
             question = json.first
             keys = ["left", "right", "question_id"]
@@ -609,7 +609,7 @@ describe AppController do
 
         it "should get the app users questions" do
             post :questions, format: :json, token: receiver.remember_token
-            rrc(200)
+            rrc_old(200)
             json.class.should == Array
             question = json.first
             keys = ["left", "right", "question_id"]
@@ -629,7 +629,7 @@ describe AppController do
             params = "[  {    \"question_id\" : #{q1.id},    \"left\" : \"Day Drinking\",    \"answer\" : \"0\",    \"right\" : \"Night Drinking\"  },  {    \"question_id\" : #{q2.id},    \"left\" : \"Red Wine\",    \"answer\" : \"1\",    \"right\" : \"White Wine\"  },  {    \"question_id\" : #{q3.id},    \"left\" : \"White Liqours\",    \"answer\" : \"0\",    \"right\" : \"Brown Liqours\"  },  {    \"question_id\" : #{q4.id},    \"left\" : \"Straw\",    \"answer\" : \"0\",    \"right\" : \"No straw\"  },  {    \"question_id\" : #{q5.id},    \"left\" : \"Light Beer\",    \"answer\" : \"0\",    \"right\" : \"Dark Beer\"  },  {    \"question_id\" : #{q6.id},    \"left\" : \"Mimosa\",    \"answer\" : \"0\",    \"right\" : \"Bloody Mary\"  },  {    \"question_id\" : #{q7.id},    \"left\" : \"Rare\",    \"answer\" : \"1\",    \"right\" : \"Well Done\"  }]"
 
             post :questions, format: :json, token: receiver.remember_token, answers: params
-            rrc(200)
+            rrc_old(200)
             json.class.should == Array
             question = json.first
             keys = ["left", "right", "question_id", "answer"]
@@ -643,13 +643,13 @@ describe AppController do
 
         it "should send success response for screen" do
             post :reset_password, format: :json, email: receiver.email
-            rrc(200)
+            rrc_old(200)
             json["success"].should == "Email is Sent , check your inbox"
         end
 
         it "should update the user reset password token and expiration" do
             post :reset_password, format: :json, email: receiver.email
-            rrc(200)
+            rrc_old(200)
             receiver.reload
             receiver.reset_token.should_not be_nil
             receiver.reset_token_sent_at.hour.should == Time.now.hour
@@ -657,7 +657,7 @@ describe AppController do
 
         it "should return error message if email doesn not exist" do
             post :reset_password, format: :json, email: "non-existant@yahoo.com"
-            rrc(200)
+            rrc_old(200)
             json["error"].should == "We do not have record of that email"
         end
     end
