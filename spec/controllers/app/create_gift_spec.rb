@@ -103,8 +103,7 @@ describe AppController do
             gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
             # test that create gift does not create the gift or the sale
             post :create_gift, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart , token: deactivated_user.remember_token
-            puts "401 - LEARN TO HEADER TEST "
-            #json["success"].should be_nil
+            rrc(401)
         end
 
         it "it should not allow gift creating for de-activated receivers" do

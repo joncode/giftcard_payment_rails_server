@@ -630,7 +630,7 @@ describe Mdot::V2::GiftsController do
             rrc(401)
         end
 
-        it "it should not allow gift creating for de-activated receivers" do
+        it "should not allow gift creating for de-activated receivers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
             giver.update_attribute(:remember_token,"USER_TOKEN" )
