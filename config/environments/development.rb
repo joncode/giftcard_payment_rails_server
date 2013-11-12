@@ -7,6 +7,7 @@ Drinkboard::Application.configure do
   config.cache_classes = false
   # config.force_ssl = true
 
+  config.eager_load = false
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true

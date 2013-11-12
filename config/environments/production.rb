@@ -22,6 +22,7 @@ Drinkboard::Application.configure do
   # Generate digests for assets URLs
   config.assets.digest = true
 
+  config.eager_load = true
   # Defaults to Rails.root.join("public/assets")
   # config.assets.manifest = YOUR_PATH
 
@@ -32,7 +33,7 @@ Drinkboard::Application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = false
 
-  # protect against mass-assignment 
+  # protect against mass-assignment
   # config.active_record.whitelist_attributes = true
 
   # See everything in the log (default is :info)
