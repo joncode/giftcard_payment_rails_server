@@ -26,6 +26,10 @@ module JsonHelper
 
   def rrc(status_code)
     response.response_code.should == status_code
+    puts response.response_code
+    if response.response_code == 200
+      json.keys.should include("status", "data")
+    end
   end
 
 end

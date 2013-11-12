@@ -52,7 +52,7 @@ describe Mdot::V2::ProvidersController do
     #         request.env["HTTP_TKN"] = "USER_TOKEN"
     #         get :index, format: :json, data: "New York"
     #         keys    =  ["city", "latitude", "longitude", "name", "phone", "sales_tax", "provider_id", "photo", "full_address", "live"]
-    #         response.response_code.should == 200
+    #         rrc(200)
     #         ary = json
     #         ary.class.should == Array
     #         ary.count.should == 19
@@ -67,7 +67,7 @@ describe Mdot::V2::ProvidersController do
     #         get :index, format: :json
     #         request.env["HTTP_TKN"] = "USER_TOKEN"
     #         get :index, format: :json
-    #         response.response_code.should == 302
+    #         rrc(302)
     #     end
     # end
 

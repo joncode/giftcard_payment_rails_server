@@ -20,7 +20,7 @@ describe Mdot::V2::CardsController do
             FactoryGirl.create(:mastercard, user_id: @user.id)
 
             get :index, format: :json
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].class.should  == Array
             json["data"].count.should  == 4
@@ -29,7 +29,7 @@ describe Mdot::V2::CardsController do
         it "should return an empty array if user has no cards" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].class.should  == Array
             json["data"].count.should  == 0

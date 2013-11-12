@@ -131,7 +131,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             @user.update_attribute(:active, false)
             get :badge, format: :json
-            response.response_code.should == 401
+            rrc(401)
         end
 
         it "should not return gifts that are unpaid" do
@@ -225,7 +225,7 @@ describe Mdot::V2::GiftsController do
         it "should create a redeem for the gift" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
-            response.response_code.should == 200
+            rrc(200)
             redeem = @gift.redeem
             redeem.class.should == Redeem
         end
@@ -233,7 +233,7 @@ describe Mdot::V2::GiftsController do
         it "should return the redeem code on success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].should == @gift.redeem.redeem_code
         end
@@ -242,7 +242,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
             @gift.reload
-            response.response_code.should == 200
+            rrc(200)
             @gift.status.should == 'notified'
         end
 
@@ -254,7 +254,7 @@ describe Mdot::V2::GiftsController do
         it "should return 404 if gift id not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: 0
-            response.response_code.should == 404
+            rrc(404)
         end
 
     end
@@ -287,7 +287,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: "test"
             order = @gift.order
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"]["order_number"].should == order.make_order_num
             json["data"]["total"].should        == @gift.total
@@ -310,7 +310,7 @@ describe Mdot::V2::GiftsController do
             redeem = Redeem.find_by(gift_id: @gift.id)
             redeem.destroy
             post :redeem, format: :json, id: @gift.id, server: "test"
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 0
             json["data"].should   == {"gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"]}
         end
@@ -318,7 +318,7 @@ describe Mdot::V2::GiftsController do
         it "should return data transfer error if @gift not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: 0, server: "test"
-            response.response_code.should == 404
+            rrc(404)
         end
     end
 
