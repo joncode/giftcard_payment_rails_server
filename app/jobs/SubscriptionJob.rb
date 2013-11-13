@@ -3,7 +3,7 @@ class SubscriptionJob
     @queue = :subscription
 
     def self.perform(user_social_id)
-        user_social = UserSocial.where(id: user_social_id).first
+        user_social = UserSocial.unscoped.where(id: user_social_id).first
         if  user_social
             if user_social.active
                 self.add_to_mailchimp user_social
