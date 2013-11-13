@@ -41,13 +41,10 @@ Drinkboard::Application.routes.draw do
     ### deprecated app routes
   post 'app/menu',             to: 'app#menu'
   post 'app/locations',        to: 'iphone#locations'
-  post 'app/out',              to: 'iphone#going_out'
   post 'app/buys',             to: 'iphone#buys'
   post 'app/past_gifts',       to: 'app#past_gifts'
   post 'app/orders',           to: 'app#orders'
-  post 'app/merchant_redeem',  to: 'app#merchant_redeem'
   post 'app/user_activity',    to: 'app#user_activity'
-  post 'app/employees',        to: 'app#create_redeem_emps'
   post 'app/complete_order',   to: 'app#create_order_emp'
   post 'app/gifts_array',      to: 'app#gifts'
   post 'app/transactions',     to: 'app#transactions'

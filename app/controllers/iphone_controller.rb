@@ -113,34 +113,6 @@ class IphoneController < AppController
 		end
 	end
 
-	def going_out
-
-			# send the button status in params["public"]
-			# going out is YES , returning home is NO
-		response  = {}
-		begin
-			user  = User.app_authenticate(token)
-			if    params["public"] == "YES"
-				user.update_attributes(is_public: true) if !user.is_public
-			elsif params["public"] == "NO"
-				user.update_attributes(is_public: false) if user.is_public
-			else
-				response["error_public"] = "did not receiver public params correctly"
-			end
-					# return the updated user.is_public value
-					# if params["public"] is not sent, is_public is not changed
-			response["public"] = user.is_public
-		rescue
-			response["error"] = "could not find user in database"
-		end
-
-		respond_to do |format|
-			logger.debug response
-			@app_response = "iPhoneC #{response}"
-			format.json { render json: response }
-		end
-	end
-
 	def regift
 
         recipient_data = JSON.parse params["receiver"]
@@ -180,7 +152,7 @@ class IphoneController < AppController
 
 
 	def locations
-		
+
 		providers = Provider.all
 		menus     = {}
 		providers.each do |p|
