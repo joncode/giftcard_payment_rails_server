@@ -141,33 +141,12 @@ class Provider < ActiveRecord::Base
 ######   PHOTO GETTERS
 
 	def get_photo
-		if image.blank?
-			if photo.blank?
-				MERCHANT_DEFAULT_IMG
-			else
-				photo.url
-			end
-		else
-			image
-		end
+		return MERCHANT_DEFAULT_IMG if image.blank?
+		image
 	end
 
 	def get_image(flag)
-		image_url =
-			case flag
-			when "logo"
-				logo.url
-			when "portrait"
-				portrait.url
-			when "photo"
-				get_photo
-			else
-				box.url
-			end
-		if image_url.blank?
-			image_url = MERCHANT_DEFAULT_IMG
-		end
-		return image_url
+		self.gt_photo
 	end
 
 private
