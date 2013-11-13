@@ -45,7 +45,7 @@ class GiftUtility
     end
 
     def add_receiver_object
-        search_gift = @old_gift || @gift
+        search_gift = @gift
         unique_ids = [ ["phone", search_gift.receiver_phone], ["facebook_id", search_gift.facebook_id],["email", search_gift.receiver_email], ["twitter", search_gift.twitter ] ]
         unique_ids.each do |unique_id|
             if unique_id[1].present?

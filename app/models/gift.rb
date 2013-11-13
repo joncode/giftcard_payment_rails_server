@@ -142,6 +142,7 @@ class Gift < ActiveRecord::Base
 #/-------------------------------------data population methods-----------------------------/
 
 	def remove_receiver
+		self.status         = 'incomplete'
 		self.receiver_id    = nil
 		self.receiver_name  = nil
 		self.facebook_id    = nil

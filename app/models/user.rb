@@ -4,18 +4,19 @@ class User < ActiveRecord::Base
 	include Utility
 
 	attr_accessible  :email, :password, :password_confirmation,
-	:photo, :photo_cache, :first_name, :last_name, :phone,
+	:first_name, :last_name, :phone,
 	:address, :address_2, :city, :state, :zip, :credit_number,
 	:admin, :facebook_id, :facebook_access_token, :facebook_expiry,
 	:foursquare_id, :foursquare_access_token, :provider_id, :handle,
 	:server_code, :sex, :birthday, :is_public, :confirm,
-	:iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
+	:iphone_photo, :origin, :twitter
 
+	attr_accessible :use_photo
 	# attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 	# attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
-	mount_uploader   :photo, UserAvatarUploader
-	mount_uploader   :secure_image, UserAvatarUploader
+	# mount_uploader   :photo, UserAvatarUploader
+	# mount_uploader   :secure_image, UserAvatarUploader
 
 	has_one  :setting
 	has_many :pn_tokens
@@ -144,36 +145,14 @@ class User < ActiveRecord::Base
 #######  PHOTO METHODS
 
 	def get_image(flag)
-		puts flag
-		if flag == 'secure_image'
-			self.get_secure_image
-		else
-			self.get_photo
-		end
+		self.get_photo
 	end
 
 	def get_photo
-		case self.use_photo
-		when "cw"
-			self.photo.url
-		when "ios"
+		if self.iphone_photo && self.iphone_photo.length > 14
 			self.iphone_photo
-		when "fb"
-			self.fb_photo
 		else
-			if self.photo.blank?
-				"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
-			else
-				self.photo.url
-			end
-		end
-	end
-
-	def get_secure_image
-		if self.secure_image.blank?
-			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1362365994/rxnr2tqsee9fjydm8irz.jpg"
-		else
-			self.secure_image.url
+			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
 		end
 	end
 
@@ -394,7 +373,7 @@ end
 #  id                      :integer         not null, primary key
 #  email                   :string(255)     not null
 #  admin                   :boolean         default(FALSE)
-#  photo                   :string(255)
+	#  photo                   :string(255)
 #  password_digest         :string(255)
 #  remember_token          :string(255)     not null
 #  created_at              :datetime        not null
@@ -421,10 +400,10 @@ end
 #  sex                     :string(255)
 #  is_public               :boolean
 #  facebook_auth_checkin   :boolean
-#  iphone_photo            :string(255)
-#  fb_photo                :string(255)
-#  use_photo               :string(255)
-#  secure_image            :string(255)
+	#  iphone_photo            :string(255)
+	#  fb_photo                :string(255)
+	#  use_photo               :string(255)
+	#  secure_image            :string(255)
 #  reset_token_sent_at     :datetime
 #  reset_token             :string(255)
 #  birthday                :date

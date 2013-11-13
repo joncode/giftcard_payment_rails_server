@@ -4,7 +4,7 @@ class Mdot::V2::PhotosController < JsonController
     def create
         return nil if data_blank?
         return nil if data_not_string?
-        if @current_user.update_attributes(iphone_photo: params["data"], use_photo: "ios")
+        if @current_user.update_attributes(iphone_photo: params["data"])
             success "Photo Updated - Thank you!"
         else
             fail    @current_user

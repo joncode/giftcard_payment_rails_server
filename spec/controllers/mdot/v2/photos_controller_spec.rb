@@ -19,12 +19,11 @@ describe Mdot::V2::PhotosController do
             rrc(400)
         end
 
-        it "should update 'iphone_photo' and 'user_photo'" do
+        it "should update user photo" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params_data = "http://res.cloudinary.com/drinkboard/image/upload/v1382464405/myg7nfaccypfaybffljo.jpg"
             post :create, data: params_data, format: :json
-            user_new = User.find_by(remember_token: "USER_TOKEN"       )
-            user_new.use_photo.should    == 'ios'
+            user_new = User.find_by(remember_token: "USER_TOKEN")
             user_new.iphone_photo.should == params_data
             user_new.get_photo.should    == params_data
         end

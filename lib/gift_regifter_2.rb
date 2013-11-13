@@ -6,8 +6,7 @@ class GiftRegifter2 < GiftUtility
         @old_gift     = Gift.includes(:receiver).find(new_gift_hsh['regift_id'])
         setup_regift(new_gift_hsh['message'])
         @resp         = {}
-        recipient     = make_user_with_hash(new_gift_hsh)
-        add_receiver_from_hash(recipient)
+        add_receiver_from_hash(new_gift_hsh)
     end
 
 
@@ -36,12 +35,13 @@ private
 
     def setup_regift(message=nil)
         @gift              = @old_gift.dup
+        @gift.remove_receiver
         @gift.regift_id    = @old_gift.id
         @gift.add_giver(@old_gift.receiver)
-        @gift.remove_receiver
         @gift.message      = message ? message : nil
         @gift.order_num    = nil
         @gift.pay_type     = "Regift"
+
     end
 
 end
