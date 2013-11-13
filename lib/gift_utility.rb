@@ -24,7 +24,8 @@ class GiftUtility
         end
     end
 
-    def add_receiver_from_hash(recipient)
+    def add_receiver_from_hash(recipient_hsh)
+        recipient = make_user_with_hash(recipient_hsh)
         if recipient.id.nil?
             if add_receiver_object == false
                 @gift.add_receiver recipient
@@ -44,8 +45,8 @@ class GiftUtility
     end
 
     def add_receiver_object
-
-        unique_ids = [ ["phone", @gift.receiver_phone], ["facebook_id", @gift.facebook_id],["email", @gift.receiver_email], ["twitter", @gift.twitter ] ]
+        search_gift = @old_gift || @gift
+        unique_ids = [ ["phone", search_gift.receiver_phone], ["facebook_id", search_gift.facebook_id],["email", search_gift.receiver_email], ["twitter", search_gift.twitter ] ]
         unique_ids.each do |unique_id|
             if unique_id[1].present?
                 if find_user(unique_id[0], unique_id[1])
