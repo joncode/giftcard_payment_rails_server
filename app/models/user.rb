@@ -100,7 +100,7 @@ class User < ActiveRecord::Base
 ####### USER GETTERS AND SETTERS
 
 	def get_credit_card(card_id)
-		self.cards.select { |c| c.id == card_id}
+		self.cards.select { |c| c.id == card_id }
 	end
 
 			# custom setters and getters for formatting date to human looking date
@@ -159,11 +159,6 @@ class User < ActiveRecord::Base
 ##################
 
 #######  GIFT SCOPE METHODS
-
-	# def bill 8/5/13
-	# 	total = self.gifts.sum { |gift| gift.total.to_d }
-	# 	total > 0 ? total.to_digits : "0"
-	# end
 
 	def received
 		Gift.where(receiver_id: self.id)

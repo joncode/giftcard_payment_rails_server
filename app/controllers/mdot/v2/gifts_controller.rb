@@ -23,14 +23,16 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def open
-        gift   = Gift.find(params[:id])
+        gift   = @current_user.received.where(id: params[:id]).first
+        return nil if data_not_found?(gift)
         redeem = Redeem.find_or_create_with_gift(gift)
         success(redeem.redeem_code)
         respond
     end
 
     def redeem
-        gift = Gift.find(params[:id])
+        gift   = @current_user.received.where(id: params[:id]).first
+        return nil if data_not_found?(gift)
         order = Order.init_with_gift(gift, params["server"])
         if order.save
             success({ "order_number" => order.make_order_num , "total" => gift.total,  "server" => order.server_code })

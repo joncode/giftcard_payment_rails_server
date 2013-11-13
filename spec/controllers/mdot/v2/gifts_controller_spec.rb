@@ -257,6 +257,8 @@ describe Mdot::V2::GiftsController do
             rrc(404)
         end
 
+        xit "should not allow opening gifts that user does not receive"
+
     end
 
     describe :redeem do

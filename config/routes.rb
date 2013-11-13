@@ -91,7 +91,7 @@ Drinkboard::Application.routes.draw do
         end
         collection do
           get :archive
-          get :badge  #update or relay
+          get :badge         # old method names -> update or relay
         end
       end
       resources :photos,     only: [:create]

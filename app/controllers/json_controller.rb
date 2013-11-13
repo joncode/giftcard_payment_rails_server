@@ -119,6 +119,11 @@ class JsonController < ActionController::Base
         head :bad_request if data.nil?
     end
 
+    def data_not_found?(data= nil)
+        data ||= params["data"]
+        head :not_found if data.nil?
+    end
+
     def data_not_hash?(data=nil)
         data ||= params["data"]
         head :bad_request unless data.kind_of?(Hash)
@@ -206,7 +211,7 @@ class JsonController < ActionController::Base
 
     def authenticate_customer
         token         = request.headers["HTTP_TKN"]
-        puts "Here is the token received ----> #{token}"
+        puts "Here is the token received ----> #{token}" unless Rails.env.production?
         @current_user = User.app_authenticate(token)
         if @current_user
             puts @current_user.name
