@@ -113,7 +113,7 @@ describe IphoneController do
         }.stringify_keys.each do |type_of, identifier|
             it "should find user account for old #{type_of}" do
 
-                @user.update_attribute(type_of, identifier)
+                @user.update_attribute(type_of, "specials")
                 if (type_of == "phone") || (type_of == "email")
                     key = "receiver_#{type_of}"
                 else
@@ -122,7 +122,7 @@ describe IphoneController do
                 old_gift = FactoryGirl.create :regift, { key => identifier}
                 giver    = old_gift.giver
                 recipient_data = regift_hash(@user).to_json
-                 post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
+                post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
 
                 puts json.inspect
                 new_gift = Gift.find(json["data"]["gift_id"])
@@ -173,10 +173,10 @@ describe IphoneController do
 
     def gift_social_id_hsh
         {
-            receiver_email: "jon@gmail.com",
-            receiver_phone: "9173706969",
-            facebook_id: "123",
-            twitter: "999"
+            receiver_email: "hsh@gmail.com",
+            receiver_phone: "9173123969",
+            facebook_id: "4444123",
+            twitter: "444"
         }
     end
 
