@@ -57,7 +57,7 @@ class Provider < ActiveRecord::Base
 
 	def merchantize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :token, :address, :city, :state, :zip, :zinger, :description]
-		prov_hash["photo"] = self.get_image("photo")
+		prov_hash["photo"] = self.get_photo
 		return prov_hash
 	end
 
@@ -143,10 +143,6 @@ class Provider < ActiveRecord::Base
 	def get_photo
 		return MERCHANT_DEFAULT_IMG if image.blank?
 		image
-	end
-
-	def get_image(flag)
-		self.gt_photo
 	end
 
 private

@@ -435,6 +435,16 @@ describe AppController do
             post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
             json["success"].should == gift.redeem.redeem_code
         end
+
+        it "should not allow redeems created for  gifts where user is not receiver" do
+            other = FactoryGirl.create(:user)
+            gift =  FactoryGirl.build(:gift, status: 'open')
+            gift.add_giver(giver)
+            gift.add_receiver(other)
+            gift.save
+            post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
+            json['error_server'].should == {'Data Transfer Error'=>'Please Reload Gift Center'}
+        end
     end
 
     describe :create_order do
@@ -497,6 +507,17 @@ describe AppController do
             gift.save
             post :create_order, format: :json, token: receiver.remember_token, data: 0, server_code: "test"
             json["error_server"].should == {"Data Transfer Error"=>"Please Reload Gift Center"}
+        end
+
+        it "should not allow creating orders for gifts where user is not reciepient" do
+            other = FactoryGirl.create(:user)
+            gift =  FactoryGirl.build(:gift, status: 'open')
+            gift.add_giver(giver)
+            gift.add_receiver(other)
+            gift.save
+            redeem = Redeem.find_or_create_with_gift(gift)
+            post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
+            json['error_server'].should == {'Data Transfer Error'=>'Please Reload Gift Center'}
         end
     end
 

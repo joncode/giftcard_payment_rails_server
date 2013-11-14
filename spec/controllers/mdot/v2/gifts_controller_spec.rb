@@ -257,7 +257,17 @@ describe Mdot::V2::GiftsController do
             rrc(404)
         end
 
-        xit "should not allow opening gifts that user does not receive"
+        it "should not allow opening gifts that user does not receive" do
+            other = FactoryGirl.create(:receiver)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(other)
+            @gift.save
+
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :open, format: :json, id: @gift.id
+            rrc(404)
+        end
 
     end
 
@@ -320,6 +330,18 @@ describe Mdot::V2::GiftsController do
         it "should return data transfer error if @gift not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: 0, server: "test"
+            rrc(404)
+        end
+
+        it "should not allow redeeming gifts that user does not receive" do
+            other = FactoryGirl.create(:receiver)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(other)
+            @gift.save
+            redeem = Redeem.find_or_create_with_gift(@gift)
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :redeem, format: :json, id: @gift.id, server: "test"
             rrc(404)
         end
     end

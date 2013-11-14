@@ -377,7 +377,7 @@ class AppController < JsonController
 			format.json { render json: user_array }
 		end
 	end
-    
+
   	def create_redeem
   		response = {}
   		# receive {"token" => "<token>", "data" => "<gift_id>" }
@@ -385,10 +385,8 @@ class AppController < JsonController
   		if receiver = authenticate_app_user(params["token"])
   					# get gift from db
   			begin
-	  			gift = Gift.find params["data"].to_i
-	  					# find or create redeem for gift
-	  						# if redeem exists app should not call server
-	  						# gift.status == "notified" if redeem exists
+                gift   = receiver.received.where(id: params["data"].to_i).first
+
 	  			redeem = Redeem.find_or_create_with_gift(gift)
 	  			if redeem.redeem_code
 	  				response["success"]      = redeem.redeem_code.to_s
@@ -412,7 +410,7 @@ class AppController < JsonController
   		response = {}
   		if receiver = authenticate_app_user(params["token"])
   			begin
-	  			gift  = Gift.find params["data"].to_i
+                gift   = receiver.received.where(id: params["data"].to_i).first
 	  			order = Order.init_with_gift(gift, params["server_code"])
 	  			if order.save
 	  				response["success"] = { "order_number" => order.make_order_num,  "total" => gift.total, "server" => order.server_code }

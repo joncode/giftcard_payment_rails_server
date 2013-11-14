@@ -144,10 +144,6 @@ class User < ActiveRecord::Base
 
 #######  PHOTO METHODS
 
-	def get_image(flag)
-		self.get_photo
-	end
-
 	def get_photo
 		if self.iphone_photo && self.iphone_photo.length > 14
 			self.iphone_photo
