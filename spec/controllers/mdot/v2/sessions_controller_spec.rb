@@ -9,6 +9,14 @@ describe Mdot::V2::SessionsController do
     describe :create do
         it_should_behave_like("token authenticated", :post, :create)
 
+        it "should accept ANDROID token for authentication" do
+            request.env["HTTP_TKN"] = ANDROID_TOKEN
+            post :create, format: :json, email: "neil@gmail.com", password: "password"
+            response.status.should == 200
+            json["status"].should  == 1
+            json["data"]["user_id"].should    == @user.id.to_s
+        end
+
         it "is successful" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, email: "neil@gmail.com", password: "password"
@@ -101,6 +109,14 @@ describe Mdot::V2::SessionsController do
 
     describe :login_social do
         it_should_behave_like("token authenticated", :post, :login_social)
+
+        it "should accept ANDROID token for authentication" do
+            request.env["HTTP_TKN"] = ANDROID_TOKEN
+            post :login_social, format: :json, facebook_id: @user.facebook_id
+            response.status.should         == 200
+            json["status"].should          == 1
+            json["data"]["user_id"].should == @user.id.to_s
+        end
 
         it "is successful with primary facebook" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN

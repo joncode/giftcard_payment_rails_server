@@ -117,6 +117,14 @@ describe Mdot::V2::UsersController do
             end
         end
 
+        it "should accept Android Token" do
+            request.env["HTTP_TKN"] = ANDROID_TOKEN
+            put :reset_password, format: :json, data: receiver.email
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+        end
+
         it "should send success response for screen for primary email" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             put :reset_password, format: :json, data: receiver.email
@@ -248,6 +256,17 @@ describe Mdot::V2::UsersController do
 
         it "should create user with required fields" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
+            email = "neil@gmail.com"
+            user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil"}
+
+            post :create, format: :json, data: user_hsh
+            rrc(200)
+            user = User.where(email: email).first
+            user.first_name.should == "Neil"
+        end
+
+        it "should create user with ANDROID_TOKEN" do
+            request.env["HTTP_TKN"] = ANDROID_TOKEN
             email = "neil@gmail.com"
             user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil"}
 

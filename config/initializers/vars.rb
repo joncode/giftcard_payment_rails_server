@@ -63,3 +63,11 @@ APP_GENERAL_TOKEN = if Rails.env.development? or Rails.env.test?
 else
     ENV['APP_GENERAL_TOKEN']
 end
+
+ANDROID_TOKEN = if Rails.env.development? or Rails.env.test?
+     "e7f122d463e7ca786a150a33e21216a1"
+else
+    ENV['ANDROID_TOKEN']
+end
+
+
