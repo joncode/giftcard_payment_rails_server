@@ -19,6 +19,10 @@ module CommonUtils
 			if request.headers["HTTP_TKN"]
 				puts "HERE IS THE HEADER TOKEN #{request.headers["HTTP_TKN"]}"
 			end
+
+			puts "\n--------------------------------------------------------\n"
+			puts request.headers.inspect
+			puts "\n--------------------------------------------------------\n"
 		end
 
 	end
