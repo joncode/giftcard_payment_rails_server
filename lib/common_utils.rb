@@ -21,7 +21,7 @@ module CommonUtils
 			end
 
 			puts "\n--------------------------------------------------------\n"
-			puts request.headers.inspect
+			puts request.headers.env.keys.inspec
 			puts "\n--------------------------------------------------------\n"
 		end
 
