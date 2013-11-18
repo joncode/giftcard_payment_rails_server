@@ -26,7 +26,7 @@ class Mdot::V2::UsersController < JsonController
         user = User.new(data)
         if user.save
             user.pn_token = pn_token if pn_token
-            success({"user_id" => user.id, "token" => user.remember_token})
+            success({"user_id" => user.id, "user" => user.serialize})
         else
             fail    user
         end
@@ -40,7 +40,7 @@ class Mdot::V2::UsersController < JsonController
         return nil  if hash_empty?(user_params)
 
         if @current_user.update_attributes(user_params)
-            success(@current_user.serialize)
+            success {"user_id" => @current_user.id, "user" => @current_user.serialize}
         else
             fail    @current_user
         end
@@ -53,7 +53,7 @@ class Mdot::V2::UsersController < JsonController
         if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).first
             user = user_social.user
             user.update_reset_token
-            success "Email is Sent , check your inbox"
+            success {"user_id" => user.id, "user" => user.serialize}
         else
             fail    "#{PAGE_NAME} does not have record of that email"
         end

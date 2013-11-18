@@ -17,7 +17,7 @@ class Mdot::V2::CardsController < JsonController
         card = Card.create_card_from_hash card_params
 
         if card.save
-            success card.id
+            success { "card_id" => card.id, "card" => card.serialize_public }
         else
             fail card
         end

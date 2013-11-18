@@ -27,6 +27,10 @@ class Card < ActiveRecord::Base
 	
 #	-------------
 
+	def serialize_public
+		card_hash = self.serializable_hash only: ["id" "nickname", "last_four"]
+	end
+
 	def number
 		@number
 	end
