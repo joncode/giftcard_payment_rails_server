@@ -4,7 +4,7 @@ class Mdot::V2::UsersController < JsonController
 
     def index
         users = User.where(active: true)
-        success users.serialize_objs
+        success users.serialize_objs(:basic)
         respond
     end
 

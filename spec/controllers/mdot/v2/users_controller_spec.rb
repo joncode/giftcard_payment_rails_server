@@ -25,7 +25,7 @@ describe Mdot::V2::UsersController do
         it "should return a list of active users" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             amount  = User.where(active: true).count
-            keys    = ["email", "facebook_id", "first_name", "last_name", "phone", "twitter", "photo", "user_id"]
+            keys    = ["first_name", "last_name", "user_id", "photo"]
             get :index, format: :json
             response.response_code.should == 200
             json["status"].should == 1

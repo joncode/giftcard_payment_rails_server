@@ -66,6 +66,13 @@ class User < ActiveRecord::Base
 		usr_hash
 	end
 
+	def basic_serialize
+		usr_hash  = self.serializable_hash only: ["first_name", "last_name"]
+		usr_hash["photo"]   = self.get_photo
+		usr_hash["user_id"] = self.id.to_s
+		usr_hash		
+	end
+
 	def admt_serialize
 		usr_hash  = self.serializable_hash only: ["first_name", "last_name" ,  "zip", "birthday", "sex", "email", "phone", "created_at"]
 		usr_hash["photo"]   = self.get_photo
