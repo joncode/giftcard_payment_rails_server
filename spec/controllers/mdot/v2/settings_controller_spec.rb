@@ -9,6 +9,7 @@ describe Mdot::V2::SettingsController do
             @user = FactoryGirl.create(:user)
             @user.update_attribute(:remember_token, "USER_TOKEN")
         end
+        @keys = ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id"]
     end
 
     describe :index do
@@ -17,11 +18,10 @@ describe Mdot::V2::SettingsController do
         it "should get the users settings and return json" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
-            keys    =  ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id"]
             rrc(200)
             hsh = json["data"]
             hsh.class.should == Hash
-            compare_keys(hsh, keys)
+            compare_keys(hsh, @keys)
         end
     end
 
@@ -34,8 +34,7 @@ describe Mdot::V2::SettingsController do
             rrc(200)
             json["status"].should == 1
             response = json["data"]
-            keys = ["user_id", "email_invoice", "email_redeem", "email_invite", "email_follow_up", "email_receiver_new", "email_confirmed", "phone_confirmed"]
-            compare_keys(response, keys)
+            compare_keys(response, @keys)
             setting = @user.setting
             setting.reload
             setting.email_invoice.should be_false
@@ -46,7 +45,7 @@ describe Mdot::V2::SettingsController do
             put :update, format: :json, data: "{  \"email_receiver_new\" : \"true\",  \"email_invite\" : \"true\",  \"email_redeem\" : \"true\",  \"email_invoice\" : \"true\",  \"email_follow_up\" : \"true\"}"
             rrc(200)
             json["status"].should == 1
-            compare_keys(response, keys)
+            compare_keys(response, @keys)
             setting.reload
             setting.email_invoice.should be_true
             setting.email_redeem.should be_true
@@ -62,8 +61,7 @@ describe Mdot::V2::SettingsController do
             rrc(200)
             json["status"].should == 1
             response = json["data"]
-            keys = ["user_id", "email_invoice", "email_redeem", "email_invite", "email_follow_up", "email_receiver_new", "email_confirmed", "phone_confirmed"]
-            compare_keys(response, keys)
+            compare_keys(response, @keys)
             setting = @user.setting
             setting.reload
             setting.email_invoice.should be_false
@@ -76,8 +74,7 @@ describe Mdot::V2::SettingsController do
             rrc(200)
             json["status"].should == 1
             response = json["data"]
-            keys = ["user_id", "email_invoice", "email_redeem", "email_invite", "email_follow_up", "email_receiver_new", "email_confirmed", "phone_confirmed"]
-            compare_keys(response, keys)
+            compare_keys(response, @keys)
             setting.reload
             setting.email_invoice.should be_true
             setting.email_redeem.should be_true
@@ -91,10 +88,9 @@ describe Mdot::V2::SettingsController do
             params = {"email_receisdf"=>false, "email_invite"=>false, "email_rsadfedeem"=>false, "ads"=>false, "sdf"=>true}
             put :update, format: :json, data: params
             rrc(200)
-            json["status"].should == 1 
+            json["status"].should == 1
             response = json["data"]
-            keys = ["user_id", "email_invoice", "email_redeem", "email_invite", "email_follow_up", "email_receiver_new", "email_confirmed", "phone_confirmed"]
-            compare_keys(response, keys)
+            compare_keys(response, @keys)
             @user.reload
             setting = @user.setting
             setting.email_invite.should be_false

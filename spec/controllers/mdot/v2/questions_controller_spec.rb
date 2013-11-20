@@ -82,7 +82,7 @@ describe Mdot::V2::QuestionsController do
         it "should ignore bad keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}].to_json
-
+            
             put :update, format: :json, data: params
             rrc(200)
             json["status"].should == 1

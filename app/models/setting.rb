@@ -9,13 +9,6 @@ class Setting < ActiveRecord::Base
 	validates_uniqueness_of :user_id
 	validates :confirm_email_token, uniqueness: true, length: { minimum: 20 }, :if => :confirm_email_token_exists?
 
-	def serialize
-		setting = self.serializable_hash only: [:user_id, :email_invoice, :email_redeem, :email_invite, :email_follow_up, :email_receiver_new]
-		setting["email_confirmed"] = self.confirm_email_flag ? 1 : 0
-		setting["phone_confirmed"] = self.confirm_phone_flag ? 1 : 0
-		setting
-	end
-
 	def app_serialize
 		self.serializable_hash only: [:user_id, :email_redeem, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
 	end

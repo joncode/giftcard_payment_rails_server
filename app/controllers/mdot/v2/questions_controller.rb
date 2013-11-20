@@ -24,8 +24,9 @@ class Mdot::V2::QuestionsController < JsonController
             success(Question.get_questions_with_answers(@current_user))
         else
             fail database_error_general
+            status = :bad_request
         end
-        respond
+        respond(status)
     end
 
 private

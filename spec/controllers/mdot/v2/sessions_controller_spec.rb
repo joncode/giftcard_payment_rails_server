@@ -14,7 +14,7 @@ describe Mdot::V2::SessionsController do
             post :create, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should == 200
             json["status"].should  == 1
-            json["data"]["user_id"].should    == @user.id.to_s
+            json["data"]["user_id"].should    == @user.id
         end
 
         it "is successful" do
@@ -22,7 +22,7 @@ describe Mdot::V2::SessionsController do
             post :create, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should == 200
             json["status"].should  == 1
-            json["data"]["user_id"].should    == @user.id.to_s
+            json["data"]["user_id"].should    == @user.id
         end
 
         it "should find secondary email and login successful" do
@@ -31,14 +31,14 @@ describe Mdot::V2::SessionsController do
             post :create, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should == 200
             json["status"].should  == 1
-            json["data"]["user_id"].should    == @user.id.to_s
+            json["data"]["user_id"].should    == @user.id
         end
 
         it "should return serialized user when success" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should == 200
-            keys = ["email", "facebook_id", "first_name", "last_name", "phone", "twitter", "photo", "user_id", "remember_token"]
+            keys = ["email", "facebook_id", "first_name", "last_name", "phone", 'zip', "birthday", "twitter", "photo", "user_id", "token"]
             hsh  = json["data"]
             compare_keys(hsh, keys)
         end
@@ -98,7 +98,7 @@ describe Mdot::V2::SessionsController do
             post :create, format: :json, email: "neil@gmail.com", password: "password", pn_token: token
             response.response_code.should   == 200
             json["status"].should  == 1
-            json["data"]["user_id"].should  == @user.id.to_s
+            json["data"]["user_id"].should  == @user.id
         end
 
         it "should record user's pn token" do
@@ -121,7 +121,7 @@ describe Mdot::V2::SessionsController do
             post :login_social, format: :json, facebook_id: @user.facebook_id
             response.status.should         == 200
             json["status"].should          == 1
-            json["data"]["user_id"].should == @user.id.to_s
+            json["data"]["user_id"].should == @user.id
         end
 
         it "is successful with primary facebook" do
@@ -129,14 +129,14 @@ describe Mdot::V2::SessionsController do
             post :login_social, format: :json, facebook_id: @user.facebook_id
             response.status.should         == 200
             json["status"].should          == 1
-            json["data"]["user_id"].should == @user.id.to_s
+            json["data"]["user_id"].should == @user.id
         end
 
         it "is successful with primary twitter" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :login_social, format: :json, twitter: @user.twitter
             response.status.should         == 200
-            json["data"]["user_id"].should == @user.id.to_s
+            json["data"]["user_id"].should == @user.id
         end
 
         it "is successful with secondary facebook" do
@@ -145,7 +145,7 @@ describe Mdot::V2::SessionsController do
             post :login_social, format: :json, facebook_id: "faceface"
             response.status.should         == 200
             json["status"].should          == 1
-            json["data"]["user_id"].should == @user.id.to_s
+            json["data"]["user_id"].should == @user.id
         end
 
         it "is successful with secondary twitter" do
@@ -153,7 +153,7 @@ describe Mdot::V2::SessionsController do
             @user.update_attributes({twitter: "127653723"})
             post :login_social, format: :json, twitter: "tweettweet"
             response.status.should         == 200
-            json["data"]["user_id"].should == @user.id.to_s
+            json["data"]["user_id"].should == @user.id
         end
 
         it "returns not in db with incorrect facebook" do
@@ -190,7 +190,7 @@ describe Mdot::V2::SessionsController do
             post :create, format: :json, email: "neil@gmail.com", password: "password", pn_token: token
             response.response_code.should   == 200
             json["status"].should  == 1
-            json["data"]["user_id"].should  == @user.id.to_s
+            json["data"]["user_id"].should  == @user.id
         end
 
         it "should record user's pn token" do

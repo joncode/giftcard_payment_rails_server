@@ -14,7 +14,7 @@ class Mdot::V2::SessionsController < JsonController
             if @user.not_suspended?
                 if @user.authenticate(params['password'])
                     @user.pn_token = params['pn_token'] if params['pn_token']
-                    success @user.serialize(true)
+                    success @user.create_serialize
                 else
                     fail "Invalid email/password combination"
                     status = :not_found
@@ -48,7 +48,7 @@ class Mdot::V2::SessionsController < JsonController
         if @user
             if @user.not_suspended?
                 @user.pn_token = params['pn_token'] if params['pn_token']
-                success @user.serialize(true)
+                success @user.create_serialize
             else
                 fail "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
                 status = :unauthorized
@@ -63,7 +63,7 @@ class Mdot::V2::SessionsController < JsonController
 private
 
     def handle_rescue
-        success @user.serialize(true)
+        success @user.create_serialize
         respond
         method_end_log_message
     end

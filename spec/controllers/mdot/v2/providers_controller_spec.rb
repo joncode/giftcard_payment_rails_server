@@ -23,7 +23,7 @@ describe Mdot::V2::ProvidersController do
             rrc(200)
             json["status"].should == 1
             provider_id = json["data"]["provider_id"]
-            provider_id.to_i.should == @provider.id
+            provider_id.should == @provider.id
             menu_json = json["data"]["menu"]
             menu_json.class.should == String
             menu = JSON.parse menu_json

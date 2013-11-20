@@ -57,7 +57,7 @@ describe Mdot::V2::UsersController do
             json["status"].should == 1
             response = json["data"]
             response.class.should  == Hash
-            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "birthday", "zip", "sex", "twitter", "facebook_id"]
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "birthday", "zip", "twitter", "facebook_id"]
             compare_keys(response, keys)
         end
 
@@ -315,7 +315,7 @@ describe Mdot::V2::UsersController do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
             rrc(200)
-            keys = ["first_name", "last_name", "birthday", "sex", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id", "token"]
+            keys = ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id", "token"]
             hsh  = json["data"]
             compare_keys(hsh, keys)
             user = User.where(email: email).first
@@ -443,7 +443,7 @@ describe Mdot::V2::UsersController do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             token = "9128341983439487123"
             post :create, format: :json, data: user_hsh, pn_token: token
-            keys = ["first_name", "last_name", "birthday", "sex", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id", "token"]
+            keys = ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id", "token"]
             hsh  = json["data"]
             compare_keys(hsh, keys)
             user = User.where(email: "neil@gmail.com").first
