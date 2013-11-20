@@ -117,7 +117,7 @@ class InviteController < ApplicationController
       @cart         = @gift.ary_of_shopping_cart_as_hash
       @merchant     = @gift.provider
     else
-        #  join drinkboard email
+        #  join its on me email
       email_view    = "display_email"
       @web_view_route = "#{TEST_URL}/webview/display_email"
     end

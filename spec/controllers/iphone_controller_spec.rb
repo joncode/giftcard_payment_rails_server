@@ -102,7 +102,7 @@ describe IphoneController do
                 RegisterPushJob.stub(:perform).and_return(true)
                 SubscriptionJob.stub(:perform).and_return(true)
                 Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
-                Mandrill::API.should_receive(:send_template).with("confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}], {"subject"=>"Confirm Your Email", "from_name"=>"Drinkboard", "from_email"=>"no-reply@drinkboard.com", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"info@drinkboard.com", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
+                Mandrill::API.should_receive(:send_template).with("confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"no-reply@itson.me", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"info@itson.me", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
 
 
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
@@ -117,7 +117,7 @@ describe IphoneController do
                 SubscriptionJob.stub(:perform).and_return(true)
                 RegisterPushJob.stub(:perform).and_return(true)
                 Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
-                Mandrill::API.should_receive(:send_template).with("confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}], {"subject"=>"Confirm Your Email", "from_name"=>"Drinkboard", "from_email"=>"no-reply@drinkboard.com", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"info@drinkboard.com", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
+                Mandrill::API.should_receive(:send_template).with("confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"no-reply@itson.me", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"info@itson.me", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
 
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: "FAKE_PN_TOKENFAKE_PN_TOKEN"

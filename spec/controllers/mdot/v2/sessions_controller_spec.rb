@@ -89,7 +89,7 @@ describe Mdot::V2::SessionsController do
             post :create, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should == 401
             json["status"].should  == 0
-            json["data"].should    == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+            json["data"].should    == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
         end
 
         it "should not save bad pn token but allow login" do
@@ -160,14 +160,14 @@ describe Mdot::V2::SessionsController do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :login_social, format: :json, facebook_id: "face"
             response.status.should  == 404
-            json["data"].should == "Account not in Drinkboard database"
+            json["data"].should == "Account not in #{SERVICE_NAME} database"
         end
 
         it "returns not in db with incorrect twitter" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :login_social, format: :json, twitter: "tweet"
             response.status.should == 404
-            json["data"].should == "Account not in Drinkboard database"
+            json["data"].should == "Account not in #{SERVICE_NAME} database"
         end
 
         it "returns invalid error if facebook and twitter are blank" do
@@ -211,12 +211,12 @@ describe Mdot::V2::SessionsController do
             post :login_social, format: :json, facebook_id: @user.facebook_id
             response.status.should == 401
             json["status"].should == 0
-            json["data"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+            json["data"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
 
             post :login_social, format: :json, twitter: @user.twitter
             response.status.should == 401
             json["status"].should == 0
-            json["data"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+            json["data"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
         end
 
     end

@@ -50,7 +50,7 @@ class IphoneController < AppController
 					user.pn_token       = pn_token if pn_token
 					response["user"]    = user.serialize(true)
 				else
-					response["error"]   = "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+					response["error"]   = "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
 				end
 			else
 				response["error"]   = "Invalid email/password combination"
@@ -91,7 +91,7 @@ class IphoneController < AppController
 					user.pn_token       = pn_token if pn_token
 					response["user"]    = user.serialize(true)
 				else
-					response["error"] = "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+					response["error"] = "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
 				end
 			else
 				response[resp_key]  = "#{msg} not in #{SERVICE_NAME} database"

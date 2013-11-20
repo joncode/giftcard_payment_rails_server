@@ -20,7 +20,7 @@ class Mdot::V2::SessionsController < JsonController
                     status = :not_found
                 end
             else
-                fail "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+                fail "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
                 status = :unauthorized
             end
         else
@@ -50,7 +50,7 @@ class Mdot::V2::SessionsController < JsonController
                 @user.pn_token = params['pn_token'] if params['pn_token']
                 success @user.create_serialize
             else
-                fail "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+                fail "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
                 status = :unauthorized
             end
         else

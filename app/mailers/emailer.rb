@@ -109,9 +109,9 @@ private
 		message = {
 			"subject"     => subject,
 			"from_name"   => "#{SERVICE_NAME}",
-			"from_email"  => 'no-reply@drinkboard.com',
+			"from_email"  => 'no-reply@itson.me',
 			"to"          => [{"email" => email, "name" => name},
-				             {"email" => "info@drinkboard.com", "name" => ""}],
+				             {"email" => "info@itson.me", "name" => ""}],
 			"bcc_address" => bcc,
 			"merge_vars"  =>[
 				{

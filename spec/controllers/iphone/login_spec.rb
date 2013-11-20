@@ -31,7 +31,7 @@ describe IphoneController do
             @user.save
             post :login, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should == 200
-            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
         end
 
         it "should record user's pn token" do
@@ -67,13 +67,13 @@ describe IphoneController do
         it "returns not in db with incorrect facebook" do
             post :login_social, format: :json, origin: "f", facebook_id: "face", twitter: nil
             response.status.should         == 200
-            json["facebook"].should == "Facebook Account not in Drinkboard database"
+            json["facebook"].should == "Facebook Account not in #{SERVICE_NAME} database"
         end
 
         it "returns not in db with incorrect twitter" do
             post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: "tweet"
             response.status.should         == 200
-            json["twitter"].should == "Twitter Account not in Drinkboard database"
+            json["twitter"].should == "Twitter Account not in #{SERVICE_NAME} database"
         end
 
         it "returns invalid error if facebook and twitter are blank" do
@@ -97,11 +97,11 @@ describe IphoneController do
 
             post :login_social, format: :json, origin: "f", facebook_id: @user.facebook_id, twitter: nil
             response.status.should == 200
-            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
 
             post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: @user.twitter
             response.status.should == 200
-            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
         end
     end
 end
