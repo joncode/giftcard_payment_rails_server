@@ -25,7 +25,7 @@ describe Mdot::V2::UsersController do
         it "should return a list of active users" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             amount  = User.where(active: true).count
-            keys    = ["email", "facebook_id", "first_name", "last_name", "phone", "twitter", "photo", "user_id"]
+            keys    = ["first_name", "last_name", "user_id", "photo"]
             get :index, format: :json
             rrc(200)
             json["status"].should == 1
@@ -57,7 +57,7 @@ describe Mdot::V2::UsersController do
             json["status"].should == 1
             response = json["data"]
             response.class.should  == Hash
-            keys = ["user_id", "first_name", "last_name" ,"zip", "email", "phone", "photo", "birthday", "sex", "twitter", "facebook_id"]
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "birthday", "zip", "sex", "twitter", "facebook_id"]
             compare_keys(response, keys)
         end
 
@@ -309,19 +309,18 @@ describe Mdot::V2::UsersController do
             end
         end
 
-        it "should return 'user_id' and 'token' on success" do
+        it "should return correct keys on success" do
             email = "neil@gmail.com"
             user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
             rrc(200)
-            keys = ["user_id", "token"]
+            keys = ["first_name", "last_name", "birthday", "sex", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id", "token"]
             hsh  = json["data"]
             compare_keys(hsh, keys)
             user = User.where(email: email).first
             json["status"].should == 1
-            json["data"]["user_id"].should == user.id
-            json["data"]["token"].should   == user.remember_token
+            json["data"].should   == user.create_serialize
         end
 
         it "should not accept missing / invalid required fields" do
@@ -444,13 +443,11 @@ describe Mdot::V2::UsersController do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             token = "9128341983439487123"
             post :create, format: :json, data: user_hsh, pn_token: token
-            keys = ["user_id", "token"]
+            keys = ["first_name", "last_name", "birthday", "sex", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id", "token"]
             hsh  = json["data"]
             compare_keys(hsh, keys)
             user = User.where(email: "neil@gmail.com").first
             json["status"].should == 1
-            json["data"]["user_id"].should == user.id
-            json["data"]["token"].should   == user.remember_token
         end
 
         it "should record user's pn token" do
