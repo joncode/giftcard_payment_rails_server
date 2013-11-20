@@ -26,7 +26,7 @@ class Mdot::V2::SettingsController < JsonController
 
         if @current_user.save_settings(settings_params)
             setting = @current_user.setting
-            success { "setting_id" => setting.id, "setting" => setting.serialize }
+            success setting.serialize
         else
             fail @current_user.setting
         end

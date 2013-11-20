@@ -35,8 +35,9 @@ describe Mdot::V2::PhotosController do
             post :create, data: params_data, format: :json
             rrc(200)
             json["status"].should == 1
-            json["data"].should   == "Photo Updated - Thank you!"
-
+            response = json["data"]
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "birthday", "zip", "sex", "twitter", "facebook_id"]
+            compare_keys(response, keys)
         end
 
         it "should send fail msgs when empty string or nil or hash" do
