@@ -48,7 +48,7 @@ describe Mdot::V2::CardsController do
             card = Card.find_by(user_id: @user.id)
             rrc(200)
             json["status"].should == 1
-            json["data"].should == card.id
+            json["data"].should == {"id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four}
         end
 
         it "should accept hash of require fields and return card ID" do
@@ -60,7 +60,7 @@ describe Mdot::V2::CardsController do
             card = Card.find_by(user_id: @user.id)
             rrc(200)
             json["status"].should == 1
-            json["data"].should == card.id
+            json["data"].should == {"id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four}
         end
 
         it "should not save json'd incomplete card info" do

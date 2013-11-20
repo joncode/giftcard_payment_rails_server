@@ -4,7 +4,7 @@ class Mdot::V2::UsersController < JsonController
 
     def index
         users = User.where(active: true)
-        success users.serialize_objs
+        success users.serialize_objs(:get)
         respond
     end
 
@@ -26,7 +26,7 @@ class Mdot::V2::UsersController < JsonController
         user = User.new(data)
         if user.save
             user.pn_token = pn_token if pn_token
-            success({"user_id" => user.id, "token" => user.remember_token})
+            success user.create_serialize
         else
             fail    user
         end
@@ -40,7 +40,7 @@ class Mdot::V2::UsersController < JsonController
         return nil  if hash_empty?(user_params)
 
         if @current_user.update_attributes(user_params)
-            success(@current_user.serialize)
+            success @current_user.update_serialize
         else
             fail    @current_user
         end

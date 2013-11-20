@@ -22,7 +22,9 @@ describe Mdot::V2::ProvidersController do
             get :menu, id: @provider.id, format: :json
             rrc(200)
             json["status"].should == 1
-            menu_json = json["data"]
+            provider_id = json["data"]["provider_id"]
+            provider_id.to_i.should == @provider.id
+            menu_json = json["data"]["menu"]
             menu_json.class.should == String
             menu = JSON.parse menu_json
             keys = ["section", "items"]

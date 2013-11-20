@@ -25,7 +25,8 @@ class Mdot::V2::SettingsController < JsonController
         return nil  if hash_empty?(settings_params)
 
         if @current_user.save_settings(settings_params)
-            success "Settings saved"
+            setting = @current_user.setting
+            success setting.serialize
         else
             fail @current_user.setting
         end
