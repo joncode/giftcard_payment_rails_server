@@ -1,19 +1,19 @@
-SERVICE_NAME = "its on me"
+SERVICE_NAME = "Its On Me"
 
 if Rails.env.production?
-    PAGE_NAME       = 'Drinkboard'
+    PAGE_NAME       = 'Its On Me'
     TEST_URL        = "http://www.drinkboardapp.com"
     MERCHANT_URL    = "http://merchtools.herokuapp.com"
     PUB_MERCH_URL   = "http://merchant.drinkboard.com"
     PUBLIC_URL      = "http://www.drinkboard.com"
 elsif Rails.env.staging?
-    PAGE_NAME       = 'QA Drinkboard (staging)'
+    PAGE_NAME       = 'QA Its On Me (staging)'
     TEST_URL        = "http://qa.drinkboardapp.com"
     MERCHANT_URL    = "http://merchtoolsdev.herokuapp.com"
     PUB_MERCH_URL   = "http://qamerchant.drinkboard.com"
     PUBLIC_URL      = "http://qa.drinkboard.com"
 else
-    PAGE_NAME       = 'Dev Drinkboard (local)'
+    PAGE_NAME       = 'Dev Its On Me (local)'
     TEST_URL        = "http://0.0.0.0:3001"
     MERCHANT_URL    = "http://0.0.0.0:3000"
     PUB_MERCH_URL   = "http://0.0.0.0:3000"
