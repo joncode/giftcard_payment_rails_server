@@ -29,9 +29,10 @@ class Mdot::V2::UsersController < JsonController
             success({"user_id" => user.id, "token" => user.remember_token})
         else
             fail    user
+            status = :bad_request
         end
 
-        respond
+        respond(status)
     end
 
     def update
@@ -43,21 +44,24 @@ class Mdot::V2::UsersController < JsonController
             success(@current_user.serialize)
         else
             fail    @current_user
+            status = :bad_request
         end
 
-        respond
+        respond(status)
     end
 
     def reset_password
         return nil if data_not_string?
-        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).first
+        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).references(:users).first
             user = user_social.user
             user.update_reset_token
             success "Email is Sent , check your inbox"
         else
             fail    "#{PAGE_NAME} does not have record of that email"
+            status = :not_found
         end
-        respond
+
+        respond(status)
     end
 
 private

@@ -251,6 +251,13 @@ describe Mdot::V2::GiftsController do
             json["status"].should == 0
         end
 
+        it "should reject request if params are attached" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            fake_params = { "fake" => "FAKE" }
+            post :open, format: :json, id: @gift.id, faker: fake_params
+            rrc(400)
+        end
+
         it "should return 404 if gift id not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: 0
@@ -322,9 +329,15 @@ describe Mdot::V2::GiftsController do
             redeem = Redeem.find_by(gift_id: @gift.id)
             redeem.destroy
             post :redeem, format: :json, id: @gift.id, server: "test"
-            rrc(200)
+            rrc(400)
             json["status"].should == 0
             json["data"].should   == {"gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"]}
+        end
+
+        it "should reject request if request is malformed" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :redeem, format: :json, id: @gift.id, server: "test", faker: "FAKE"
+            rrc(400)
         end
 
         it "should return data transfer error if @gift not found" do
@@ -428,6 +441,13 @@ describe Mdot::V2::GiftsController do
                 post :regift, format: :json, id: old_gift.id, data: params
                 new_gift = Gift.last
                 new_gift.id.should == (old_gift.id + 1)
+            end
+
+            it "should reject requests with malformed data" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: rec_hsh }
+                post :regift, format: :json, id: old_gift.id, data: params, faker: "FAKE"
+                rrc 400
             end
 
             it "should add new message to new gift" do
@@ -654,6 +674,13 @@ describe Mdot::V2::GiftsController do
             rrc(401)
         end
 
+        it "should reject requests with extra keys" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            gift = FactoryGirl.create :gift, { receiver_id: @user.id }
+            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart, faker: "FAKE"
+            rrc(400)
+        end
+
         it "should not allow gift creating for de-activated receivers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
@@ -689,7 +716,7 @@ describe Mdot::V2::GiftsController do
             gift.add_receiver receiver
             gift.credit_card = "999999"
             post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
-            rrc(200)
+            rrc(404)
             json["status"].should == 0
             json["data"].should   == "We do not have that credit card on record.  Please choose a different card."
         end

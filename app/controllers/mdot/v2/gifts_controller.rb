@@ -24,6 +24,7 @@ class Mdot::V2::GiftsController < JsonController
 
     def open
         gift   = @current_user.received.where(id: params[:id]).first
+        return nil if params_bad_request
         return nil if data_not_found?(gift)
         redeem = Redeem.find_or_create_with_gift(gift)
         success(redeem.redeem_code)
@@ -31,18 +32,22 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def redeem
+        return nil if params_bad_request(["server"])
+        server_code = redeem_params
         gift   = @current_user.received.where(id: params[:id]).first
         return nil if data_not_found?(gift)
-        order = Order.init_with_gift(gift, params["server"])
+        order = Order.init_with_gift(gift, server_code)
         if order.save
             success({ "order_number" => order.make_order_num , "total" => gift.total,  "server" => order.server_code })
         else
             fail order
+            status = :bad_request
         end
-        respond
+        respond(status)
     end
 
     def regift
+        return nil if params_bad_request
         new_gift_hsh = convert_if_json(params["data"]["receiver"])
         new_gift_hsh["message"]   = params["data"]["message"]
         new_gift_hsh["regift_id"] = params[:id]
@@ -52,12 +57,14 @@ class Mdot::V2::GiftsController < JsonController
             success gift_regifter.response
         else
             fail    gift_regifter.response
+            status = :bad_request
         end
-        respond
+        respond(status)
     end
 
 
     def create
+        return nil if params_bad_request(["gift", "shoppingCart"])
         return nil if nil_key_or_value(params["gift"])
         return nil if nil_key_or_value(params["shoppingCart"])
         gift_hsh     = convert_if_json(params["gift"])
@@ -78,14 +85,25 @@ class Mdot::V2::GiftsController < JsonController
                 success response["success"]
             elsif response["error"]
                 fail response["error"]
+                status = :bad_request
             elsif response["error_server"]
                 fail response["error_server"]
+                status = :bad_request
             else
                 fail response
+                status = :bad_request
             end
         else
             fail "We do not have that credit card on record.  Please choose a different card."
+            status = :not_found
         end
-        respond
+        respond(status)
     end
+
+private
+
+    def redeem_params
+        params.require(:server)
+    end
+    
 end

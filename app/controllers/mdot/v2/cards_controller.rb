@@ -20,8 +20,9 @@ class Mdot::V2::CardsController < JsonController
             success card.id
         else
             fail card
+            status = :bad_request
         end
-        respond
+        respond(status)
     end
 
     def destroy
@@ -30,11 +31,10 @@ class Mdot::V2::CardsController < JsonController
             card.destroy
             success(card.id)
         else
-            head 404
-            return nil
+            status = :not_found
         end
 
-        respond
+        respond(status)
     end
 
 private

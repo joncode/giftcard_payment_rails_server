@@ -25,12 +25,12 @@ describe Mdot::V2::CitiesController do
             compare_keys(hsh, keys)
         end
 
-        xit "should return 302 not modified on 2nd request" do
+        xit "should return 304 not modified on 2nd request" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
-            rrc(302)
+            rrc(304)
         end
     end
 
@@ -55,12 +55,12 @@ describe Mdot::V2::CitiesController do
             compare_keys(hsh, keys)
         end
 
-        xit "should return 302 not modified on 2nd request" do
+        xit "should return 304 not modified on 2nd request" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: "New York"
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: "New York"
-            rrc(302)
+            rrc(304)
         end
     end
 

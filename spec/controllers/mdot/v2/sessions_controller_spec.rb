@@ -46,7 +46,7 @@ describe Mdot::V2::SessionsController do
         it "returns invalid error if password is incorrect" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, email: "neil@gmail.com", password: "passwo121rd"
-            response.status.should == 200
+            response.status.should == 404
             json["status"].should  == 0
             json["data"].should    == "Invalid email/password combination"
         end
@@ -68,10 +68,16 @@ describe Mdot::V2::SessionsController do
             response.status.should == 400
         end
 
+        it "should reject any request with extra keys" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            post :create, format: :json, email: "neil@gmail.com", password: "password", faker: "FAKE"
+            rrc 400
+        end
+
         it "returns invalid error if email is incorrect" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, email: "neil12@gmail.com", password: "password"
-            response.status.should == 200
+            response.status.should == 404
             json["status"].should  == 0
             json["data"].should    == "Invalid email/password combination"
         end
@@ -81,7 +87,7 @@ describe Mdot::V2::SessionsController do
             @user.active = false
             @user.save
             post :create, format: :json, email: "neil@gmail.com", password: "password"
-            response.status.should == 200
+            response.status.should == 401
             json["status"].should  == 0
             json["data"].should    == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
         end
@@ -153,14 +159,14 @@ describe Mdot::V2::SessionsController do
         it "returns not in db with incorrect facebook" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :login_social, format: :json, facebook_id: "face"
-            response.status.should  == 200
+            response.status.should  == 404
             json["data"].should == "Account not in Drinkboard database"
         end
 
         it "returns not in db with incorrect twitter" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :login_social, format: :json, twitter: "tweet"
-            response.status.should == 200
+            response.status.should == 404
             json["data"].should == "Account not in Drinkboard database"
         end
 
@@ -203,12 +209,12 @@ describe Mdot::V2::SessionsController do
             @user.update_attribute(:active,false)
 
             post :login_social, format: :json, facebook_id: @user.facebook_id
-            response.status.should == 200
+            response.status.should == 401
             json["status"].should == 0
             json["data"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
 
             post :login_social, format: :json, twitter: @user.twitter
-            response.status.should == 200
+            response.status.should == 401
             json["status"].should == 0
             json["data"].should   == "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
         end

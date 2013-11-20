@@ -4,11 +4,12 @@ class Mdot::V2::SessionsController < JsonController
     rescue_from ActiveRecord::RecordInvalid, :with => :handle_rescue
 
     def create
+        return nil if params_bad_request(["email", 'password', 'pn_token'])
         [params['email'], params['password']].each do |input|
             return nil if data_not_string?(input)
             return nil if data_blank?(input)
         end
-        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params['email']).first
+        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params['email']).references(:users).first
             @user = user_social.user
             if @user.not_suspended?
                 if @user.authenticate(params['password'])
@@ -16,14 +17,17 @@ class Mdot::V2::SessionsController < JsonController
                     success @user.serialize(true)
                 else
                     fail "Invalid email/password combination"
+                    status = :not_found
                 end
             else
                 fail "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+                status = :unauthorized
             end
         else
             fail "Invalid email/password combination"
+            status = :not_found
         end
-        respond
+        respond(status)
     end
 
     def login_social
@@ -47,15 +51,17 @@ class Mdot::V2::SessionsController < JsonController
                 success @user.serialize(true)
             else
                 fail "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+                status = :unauthorized
             end
         else
             fail "Account not in Drinkboard database"
+            status = :not_found
         end
-        respond
+        respond(status)
     end
 
 private
-    
+
     def handle_rescue
         success @user.serialize(true)
         respond

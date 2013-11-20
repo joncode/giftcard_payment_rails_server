@@ -9,8 +9,10 @@ class Mdot::V2::SettingsController < JsonController
             success settings
         else
             fail    data_not_found
+            status = :not_found
         end
-        respond
+
+        respond(status)
     end
 
     def update
@@ -28,8 +30,10 @@ class Mdot::V2::SettingsController < JsonController
             success "Settings saved"
         else
             fail @current_user.setting
+            status = :bad_request
         end
-        respond
+
+        respond(status)
     end
 
 private

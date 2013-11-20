@@ -148,9 +148,16 @@ class JsonController < ActionController::Base
         head :bad_request unless data.kind_of?(String)
     end
 
-    def respond
+    def params_bad_request(new_key=nil)
+        key = new_key || ["data"]
+        good_params = [ "id", "controller", "action", "format"] + key
+        head :bad_request unless (params.keys - good_params).count == 0
+    end
+
+    def respond(status=nil)
+        response_code = status || :ok
         respond_to do |format|
-            format.json { render json: @app_response }
+            format.json { render json: @app_response, status: response_code }
         end
     end
 

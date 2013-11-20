@@ -16,7 +16,7 @@ describe Mdot::V2::PhotosController do
         it "should require an 'data' key" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :create, format: :json
-            rrc(400)
+            rrc 400
         end
 
         it "should update user photo" do
@@ -35,20 +35,26 @@ describe Mdot::V2::PhotosController do
             rrc(200)
             json["status"].should == 1
             json["data"].should   == "Photo Updated - Thank you!"
+        end
 
+        it "should reject request if extra param keys" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params_data = "http://res.cloudinary.com/drinkboard/image/upload/v1382464405/myg7nfaccypfaybffljo.jpg"
+            post :create, data: params_data, format: :json, faker: "FAKE"
+            rrc 400
         end
 
         it "should send fail msgs when empty string or nil or hash" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params_data = ""
             post :create, data: params_data, format: :json
-            rrc(400)
+            rrc 400
             params_data = nil
             post :create, data: params_data, format: :json
-            rrc(400)
+            rrc 400
             params_data = { "iphone_photo" => "djafhweiufhoawe"}
             post :create, data: params_data, format: :json
-            rrc(400)
+            rrc 400
         end
     end
 

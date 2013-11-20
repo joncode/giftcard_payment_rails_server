@@ -80,6 +80,27 @@ describe Mdot::V2::CardsController do
             rrc(400)
         end
 
+        it "should reject hash with fields not accept" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params = {"month"=>"02", "number"=>"4417121029961508", "fake" => "FAKE", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+
+            post :create, format: :json, data: params
+
+            rrc(400)
+        end
+
+        it "should return validation errors with 400 code when bad data" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params = {"month"=>"0212312", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+
+            post :create, format: :json, data: params
+
+            card = Card.find_by(user_id: @user.id)
+            rrc(400)
+            json["status"].should == 0
+            json["data"].keys.include?("month").should be_true
+        end
+
     end
 
     describe :destroy do
