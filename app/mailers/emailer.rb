@@ -33,7 +33,7 @@ module Emailer
 		recipient_name   = gift.receiver_name
 		giver_name       = gift.giver_name
 		email            = gift.receiver_email
-		subject          = "#{giver_name} sent you a gift on Drinkboard"
+		subject          = "#{giver_name} sent you a gift on #{SERVICE_NAME}"
 		adjusted_id 	 = NUMBER_ID + gift.id
 		link             = "#{PUBLIC_URL}/signup/acceptgift/#{adjusted_id}"
         bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
@@ -105,7 +105,7 @@ private
 		email = whitelist_email(email)
 		message = {
 			"subject"     => subject,
-			"from_name"   => "Drinkboard",
+			"from_name"   => "#{SERVICE_NAME}",
 			"from_email"  => 'no-reply@drinkboard.com',
 			"to"          => [{"email" => email, "name" => name},
 				             {"email" => "info@drinkboard.com", "name" => ""}],

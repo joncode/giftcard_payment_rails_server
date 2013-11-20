@@ -1,3 +1,5 @@
+SERVICE_NAME = "its on me"
+
 if Rails.env.production?
     PAGE_NAME       = 'Drinkboard'
     TEST_URL        = "http://www.drinkboardapp.com"

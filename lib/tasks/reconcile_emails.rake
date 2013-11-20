@@ -34,7 +34,7 @@ namespace :email do
 		response.each do |r|
 			if r["email"] == "info@drinkboard.com"
 				info_emails << r
-			elsif r["subject"].include? "sent you a gift on Drinkboard"
+			elsif r["subject"].include? "sent you a gift on #{SERVICE_NAME}"
 				notify_emails << r["email"]
 			elsif r["subject"] == "Your gift purchase is complete"
 				invoice_emails << r["email"]

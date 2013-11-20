@@ -94,7 +94,7 @@ class IphoneController < AppController
 					response["error"] = "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
 				end
 			else
-				response[resp_key]  = "#{msg} not in Drinkboard database"
+				response[resp_key]  = "#{msg} not in #{SERVICE_NAME} database"
 			end
 		end
 

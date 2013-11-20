@@ -54,7 +54,7 @@ class Mdot::V2::SessionsController < JsonController
                 status = :unauthorized
             end
         else
-            fail "Account not in Drinkboard database"
+            fail "Account not in #{SERVICE_NAME} database"
             status = :not_found
         end
         respond(status)
