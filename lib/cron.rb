@@ -35,7 +35,7 @@ module Cron
         pnts.each do |pnt|
             if ua_key_hsh.keys.include? pnt.pn_token
                 count += 1
-                puts "match #{count}"
+                #puts "match #{count}"
             else
                 send_to_UA(pnt)
                 incorrect += 1
@@ -60,14 +60,12 @@ module Cron
                     pnt_alias = pnt.ua_alias
                     if pnt_alias == ua_alias
                         count += 1
-                        puts "match #{count}"
+                        #puts "match #{count}"
                     else
                         incorrect += 1
                         puts "PnToken #{pnt.id} is #{ua_alias} -- should be #{pnt_alias} "
-                        if true || response == 'y'
-                            Urbanairship.unregister_device(pnt.pn_token)
-                            send_to_UA(pnt)
-                        end
+                        Urbanairship.unregister_device(pnt.pn_token)
+                        send_to_UA(pnt)
                     end
                 end
             end

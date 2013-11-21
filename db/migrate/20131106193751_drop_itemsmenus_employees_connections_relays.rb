@@ -2,7 +2,7 @@ class DropItemsmenusEmployeesConnectionsRelays < ActiveRecord::Migration
   def up
   	drop_table :items_menus
   	drop_table :employees
-  	drop_table :connections
+  	# drop_table :connections
   	drop_table :relays
   end
 
@@ -25,12 +25,12 @@ class DropItemsmenusEmployeesConnectionsRelays < ActiveRecord::Migration
 		t.string "token"
 	end
 
-	create_table "connections", :force => true do |t|
-		t.integer "giver_id"
-		t.integer "receiver_id"
-		t.datetime "created_at", :null => false
-		t.datetime "updated_at", :null => false
-	end
+	# create_table "connections", :force => true do |t|
+	# 	t.integer "giver_id"
+	# 	t.integer "receiver_id"
+	# 	t.datetime "created_at", :null => false
+	# 	t.datetime "updated_at", :null => false
+	# end
 
 	create_table "relays", :force => true do |t|
 		t.integer "gift_id"
