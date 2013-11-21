@@ -131,7 +131,7 @@ class JsonController < ActionController::Base
         token = request.headers["HTTP_TKN"]
         @admin_user = AdminUser.find_by_remember_token token
         if @admin_user
-            puts @admin_user.name
+            puts "ADMT  -------------   #{@admin_user.name}   -----------------------"
         else
             head :unauthorized
         end
@@ -141,7 +141,7 @@ class JsonController < ActionController::Base
         token = request.headers["HTTP_TKN"]
         @provider = Provider.unscoped.find_by_token(token)
         if @provider
-            puts @provider.name
+            puts "MT  -------------   #{@provider.name}   -----------------------"
         else
             head :unauthorized
         end
@@ -165,7 +165,7 @@ class JsonController < ActionController::Base
         token         = params["token"]
         @current_user = User.app_authenticate(token)
         if @current_user
-            puts @current_user.name
+            puts "APP  -------------   #{@current_user.name}   -----------------------"
         else
             head :unauthorized
         end
