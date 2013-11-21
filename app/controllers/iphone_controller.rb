@@ -186,7 +186,7 @@ class IphoneController < AppController
 			if data_obj.nil? || data_obj["iphone_photo"].blank?
 				@app_response["error"]   = "Photo upload failed, please check your connetion and try again"
 			else
-				user.update_attributes(iphone_photo: data_obj["iphone_photo"], use_photo: "ios")
+				user.update_attributes(iphone_photo: data_obj["iphone_photo"])
 				if user.get_photo == data_obj["iphone_photo"]
 					@app_response["success"]      = "Photo Updated - Thank you!"
 				else
