@@ -31,10 +31,13 @@ describe IphoneController do
             new_gift.giver_id.should   == regifter.id
         end
 
-        it "should create a new gift with correct receiver" do
-
+        it "should create a new gift with correct receiver bug fix" do
+            giver.phone = "5556778899"
+            giver.save
+            old_gift.phone = "5556778899"
+            old_gift.save
             post :regift, format: :json, receiver: rec_json, "data"=>"{\"message\":\"Love you\",\"regift_id\":#{old_gift.id}}", "receiver"=>"{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}", "token"=> giver.remember_token
-            new_gift = Gift.last
+            new_gift = Gift.where(regift_id: old_gift.id).first
             new_gift.receiver_name.should == "Lauren Chavez"
             new_gift.facebook_id.should   == "690550062"
         end

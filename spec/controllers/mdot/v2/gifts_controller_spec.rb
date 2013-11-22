@@ -404,6 +404,20 @@ describe Mdot::V2::GiftsController do
                 new_gift.giver_id.should   == regifter.id
             end
 
+            it "should create a new gift with correct receiver bug fix" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                giver.phone = "5556778899"
+                giver.save
+                old_gift.phone = "5556778899"
+                old_gift.save
+                params = { message: "Love you", receiver: "{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}" }
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.where(regift_id: old_gift.id).first
+                new_gift.receiver_name.should == "Lauren Chavez"
+                new_gift.facebook_id.should   == "690550062"
+                new_gift.phone.should_not     == old_gift.phone
+            end
+
             it "should set the status of the old gift to regifted" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 params = { message: "New Regift Message", receiver: rec_hsh }
