@@ -89,7 +89,7 @@ describe Mdot::V2::SessionsController do
             post :create, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should == 401
             json["status"].should  == 0
-            json["data"].should    == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
+            json["data"].should    == "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
         end
 
         it "should not save bad pn token but allow login" do
@@ -211,12 +211,12 @@ describe Mdot::V2::SessionsController do
             post :login_social, format: :json, facebook_id: @user.facebook_id
             response.status.should == 401
             json["status"].should == 0
-            json["data"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
+            json["data"].should   == "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
 
             post :login_social, format: :json, twitter: @user.twitter
             response.status.should == 401
             json["status"].should == 0
-            json["data"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
+            json["data"].should   == "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
         end
 
     end

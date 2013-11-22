@@ -589,7 +589,7 @@ Response Body(200 suspended):
 
 {
   "status": 0,
-  "data": "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
+  "data": "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
 }
 
 ----------------------------------------------------------------
@@ -630,7 +630,7 @@ Response Body(200 suspended):
 
 {
   "status": 0,
-  "data": "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
+  "data": "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
 }
 
 ---------------------------------------------------------------------

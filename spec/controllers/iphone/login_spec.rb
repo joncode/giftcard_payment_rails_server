@@ -31,7 +31,7 @@ describe IphoneController do
             @user.save
             post :login, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should == 200
-            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
+            json["error"].should   == "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
         end
 
         it "should record user's pn token" do
@@ -97,11 +97,11 @@ describe IphoneController do
 
             post :login_social, format: :json, origin: "f", facebook_id: @user.facebook_id, twitter: nil
             response.status.should == 200
-            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
+            json["error"].should   == "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
 
             post :login_social, format: :json, origin: "t", facebook_id: nil, twitter: @user.twitter
             response.status.should == 200
-            json["error"].should   == "We're sorry, this account has been suspended.  Please contact support@itson.me for details"
+            json["error"].should   == "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
         end
     end
 end

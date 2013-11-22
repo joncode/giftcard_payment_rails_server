@@ -32,7 +32,7 @@ namespace :email do
 		invoice_emails = []
 		other_emails   = []
 		response.each do |r|
-			if r["email"] == "info@itson.me"
+			if r["email"] == INFO_EMAIL
 				info_emails << r
 			elsif r["subject"].include? "sent you a gift on #{SERVICE_NAME}"
 				notify_emails << r["email"]
@@ -71,7 +71,7 @@ namespace :email do
 		puts "   Invoice Giver emails           - #{invoice_emails.count} emails"
 		puts "   Notify Receiver emails         - #{notify_emails.count} emails"
 		puts "   Other emails                   - #{other_emails.count} emails"
-		puts "   info@itson.me emails     - #{info_emails.count} emails"
+		puts "   #{INFO_EMAIL} emails     - #{info_emails.count} emails"
 		puts "   TOTAL                          - #{response.count} total emails"
 		puts "----------------------------------------------------------------------------------"
 		puts "----------------------------------------------------------------------------------"

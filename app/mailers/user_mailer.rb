@@ -1,6 +1,6 @@
 class UserMailer < ActionMailer::Base
 
-# 	prod      = "no-reply@itson.me"
+# 	prod      = "no-reply@drinkboard.com"
 # 	# EMAIL_TO  = "noreplydrinkboard@gmail.com"
 # 	default :css => 'email/email', :from => prod
 

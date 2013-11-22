@@ -109,9 +109,9 @@ private
 		message = {
 			"subject"     => subject,
 			"from_name"   => "#{SERVICE_NAME}",
-			"from_email"  => 'no-reply@itson.me',
+			"from_email"  => "#{NO_REPLY_EMAIL}",
 			"to"          => [{"email" => email, "name" => name},
-				             {"email" => "info@itson.me", "name" => ""}],
+				             {"email" => "#{SUPPORT_EMAIL}", "name" => ""}],
 			"bcc_address" => bcc,
 			"merge_vars"  =>[
 				{
