@@ -126,8 +126,6 @@ describe IphoneController do
             it "should hit urban airship endpoint with correct token and alias" do
                 User.any_instance.stub(:ua_alias).and_return("fake_ua")
                 User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
-                User.any_instance.stub(:persist_social_data).and_return(true)
-                User.any_instance.stub(:init_confirm_email).and_return(true)
                 SubscriptionJob.stub(:perform).and_return(true)
                 MailerJob.stub(:call_mandrill).and_return(true)
                 pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
