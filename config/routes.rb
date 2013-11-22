@@ -1,7 +1,9 @@
 Drinkboard::Application.routes.draw do
 
+  match '/facebook/checkin', to: "invite#facebook_checkin", via: :post
 
 #################         iOS app & Mdot V1 API                   /////////////////////////////
+
 
     ###  mobile app routes
   post 'app/create_account',   to: 'iphone#create_account'
