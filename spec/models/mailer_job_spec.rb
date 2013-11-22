@@ -31,7 +31,7 @@ describe MailerJob do
         it "should call mandrill with send_template" do
             MailerJob.stub(:message_hash).and_return("stubbed_message_hash")
             MailerJob.stub(:generate_template_content).and_return("stubbed_template_content")
-            Mandrill::API.should_receive(:send_template).with('gift-notice', "stubbed_template_content", "stubbed_message_hash")
+            Mandrill::API.should_receive(:send_template).with('iom-gift-notify-receiver', "stubbed_template_content", "stubbed_message_hash")
 
             data = {"text"     => 'notify_receiver',
                     "gift_id"  =>  @gift.id}
@@ -45,7 +45,7 @@ describe MailerJob do
         it "should call mandrill with send_template" do
             MailerJob.stub(:message_hash).and_return("stubbed_message_hash")
             MailerJob.stub(:generate_template_content).and_return("stubbed_template_content")
-            Mandrill::API.should_receive(:send_template).with('purchase-receipt', "stubbed_template_content", "stubbed_message_hash")
+            Mandrill::API.should_receive(:send_template).with('iom-gift-receipt', "stubbed_template_content", "stubbed_message_hash")
 
             data = {"text"     => 'invoice_giver',
                     "gift_id"  =>  @gift.id}

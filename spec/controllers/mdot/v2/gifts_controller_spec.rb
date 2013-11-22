@@ -331,7 +331,7 @@ describe Mdot::V2::GiftsController do
             post :redeem, format: :json, id: @gift.id, server: "test"
             rrc(400)
             json["status"].should == 0
-            json["data"].should   == {"gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"]}
+            json["data"].should   == { "error" => { "gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"] } }
         end
 
         it "should reject request if request is malformed" do

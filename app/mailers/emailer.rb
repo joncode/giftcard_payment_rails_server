@@ -111,7 +111,7 @@ private
 			"from_name"   => "#{SERVICE_NAME}",
 			"from_email"  => "#{NO_REPLY_EMAIL}",
 			"to"          => [{"email" => email, "name" => name},
-				             {"email" => "#{SUPPORT_EMAIL}", "name" => ""}],
+				             {"email" => "#{INFO_EMAIL}", "name" => ""}],
 			"bcc_address" => bcc,
 			"merge_vars"  =>[
 				{

@@ -98,7 +98,7 @@ describe Mdot::V2::CardsController do
             card = Card.find_by(user_id: @user.id)
             rrc(400)
             json["status"].should == 0
-            json["data"].keys.include?("month").should be_true
+            json["data"]["error"].keys.include?("month").should be_true
         end
 
     end
