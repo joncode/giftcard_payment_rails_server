@@ -31,6 +31,14 @@ describe IphoneController do
             new_gift.giver_id.should   == regifter.id
         end
 
+        it "should create a new gift with correct receiver" do
+
+            post :regift, format: :json, receiver: rec_json, "data"=>"{\"message\":\"Love you\",\"regift_id\":#{old_gift.id}}", "receiver"=>"{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}", "token"=> giver.remember_token
+            new_gift = Gift.last
+            new_gift.receiver_name.should == "Lauren Chavez"
+            new_gift.facebook_id.should   == "690550062"
+        end
+
         it "should set the status of the old gift to regifted" do
             post :regift, format: :json, receiver: rec_json, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
             old_gift_reloaded = Gift.find(old_gift.id)
