@@ -1,5 +1,14 @@
 class InviteController < ApplicationController
   layout 'user_mailer' , except: [:show, :invite, :invite_friend]
+  layout 'html_good', only: [ :facebook_checkin]
+
+  def facebook_checkin
+    puts " *************    FACEBOOK CHECKIN   ********"
+    puts params.inspect
+    if request.headers['Authorization']
+      puts "HERE IS the Authorization #{request.headers['Authorization']}"
+    end
+  end
 
   def show
 

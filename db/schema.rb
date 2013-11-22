@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131113013019) do
+ActiveRecord::Schema.define(version: 20131113021518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -80,6 +80,16 @@ ActiveRecord::Schema.define(version: 20131113013019) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
+
+  create_table "connections", force: true do |t|
+    t.integer  "giver_id"
+    t.integer  "receiver_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "connections", ["giver_id"], name: "index_connections_on_giver_id", using: :btree
+  add_index "connections", ["receiver_id"], name: "index_connections_on_receiver_id", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
@@ -208,10 +218,6 @@ ActiveRecord::Schema.define(version: 20131113013019) do
     t.integer  "merchant_id"
     t.boolean  "live",                      default: false
     t.boolean  "paused",                    default: true
-    t.string   "photo"
-    t.string   "box"
-    t.string   "logo"
-    t.string   "portrait"
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree

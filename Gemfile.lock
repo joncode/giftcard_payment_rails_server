@@ -156,7 +156,7 @@ GEM
       redis-namespace (~> 1.2)
       sinatra (>= 0.9.2)
       vegas (~> 0.1.2)
-    resque_spec (0.14.3)
+    resque_spec (0.14.4)
       resque (>= 1.19.0)
       rspec-core (>= 2.5.0)
       rspec-expectations (>= 2.5.0)
