@@ -31,6 +31,7 @@ class Mdot::V2::SessionsController < JsonController
     end
 
     def login_social
+        return nil if params_bad_request(["facebook_id", 'twitter', 'pn_token'])
         if params['facebook_id']
             return nil if data_not_string?(params['facebook_id'])
             return nil if data_blank?(params['facebook_id'])

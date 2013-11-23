@@ -179,15 +179,25 @@ describe Mdot::V2::SessionsController do
         it "returns invalid error if facebook and twitter are blank" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :login_social, format: :json
-            response.status.should        == 400
+            rrc 400
             post :login_social, format: :json, facebook_id: nil
-            response.status.should        == 400
+            rrc 400
             post :login_social, format: :json, twitter: nil
-            response.status.should        == 400
+            rrc 400
             post :login_social, format: :json, facebook_id: ""
-            response.status.should        == 400
+            rrc 400
             post :login_social, format: :json, twitter: ""
-            response.status.should        == 400
+            rrc 400
+        end
+
+        it "should return 400 if anything other then facebook_id or twitter are sent" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            post :login_social, format: :json, session:  {"facebook_id"=>"1617770036", "session"=>{"facebook_id"=>"1617770036"}}
+            rrc 400
+            post :login_social, format: :json, facebook_id: "1617770036", session: {"facebook_id"=>"1617770036"}
+            rrc 400
+            post :login_social, format: :json, twitter: "76234237", session: {"twitter"=>"1617770036"}
+            rrc 400
         end
 
         it "should not save bad pn token but allow login" do
