@@ -17,6 +17,12 @@ describe Mdot::V2::SessionsController do
             json["data"]["user_id"].should    == @user.id
         end
 
+        it "should log in joe meeks bug fix" do
+            request.env["HTTP_TKN"] = ANDROID_TOKEN
+            post :create, format: :json, "email"=>"joe.meeks@sos.me", "password"=>"joem420", "session"=>{"email"=>"joe.meeks@sos.me", "password"=>"joem420"}
+            rrc 400
+        end
+
         it "is successful" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, email: "neil@gmail.com", password: "password"
