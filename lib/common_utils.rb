@@ -14,9 +14,12 @@ module CommonUtils
 		if request.headers['Mdot-Version']
 			puts "HERE IS THE Mdot-Version HEADER REQUEST #{request.headers['Mdot-Version']}"
 		end
-		puts "...................................................................................."
-		puts request.headers.inspect
-		puts "...................................................................................."
+		if request.headers['Andriod-Version']
+			puts "HERE IS THE Andriod-Version HEADER REQUEST #{request.headers['Andriod-Version']}"
+		end
+		# puts "...................................................................................."
+		# puts request.headers.inspect
+		# puts "...................................................................................."
 		unless Rails.env.production?
 			if request.headers["HTTP_TKN"]
 				puts "HERE IS THE HEADER TOKEN #{request.headers["HTTP_TKN"]}"
