@@ -15,7 +15,7 @@ module CommonUtils
 			puts "HERE IS THE Mdot-Version HEADER REQUEST #{request.headers['Mdot-Version']}"
 		end
 		puts "...................................................................................."
-		puts request.header.inspect
+		puts request.headers.inspect
 		puts "...................................................................................."
 		unless Rails.env.production?
 			if request.headers["HTTP_TKN"]
