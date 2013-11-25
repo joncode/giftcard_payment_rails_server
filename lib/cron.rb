@@ -12,7 +12,7 @@ module Urbanairship
 
             time = (time * 1000).to_i
             http_method = request.class.to_s.split('::')[-1]
-            new_body = response.body.html_safe.inspect
+            new_body = response.body.inspect
             short_body = truncate(new_body ,length: 600).gsub('&quot;', "\'")
             logger.info "Urbanairship (#{time}ms): [#{http_method} #{request.path}, #{request.body}], [#{response.code}, #{short_body}]"
             logger.flush if logger.respond_to?(:flush)

@@ -194,7 +194,7 @@ class JsonController < ActionController::Base
 
     def authenticate_general_token
         token = request.headers["HTTP_TKN"]
-        head :unauthorized unless [GENERAL_TOKEN, ANDROID_TOKEN].include?(token)
+        head :unauthorized unless [APP_GENERAL_TOKEN, GENERAL_TOKEN, ANDROID_TOKEN].include?(token)
     end
 
     def authenticate_www_token
