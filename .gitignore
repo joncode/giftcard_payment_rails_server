@@ -24,6 +24,7 @@ capybara-*.html
 /vendor/bundle
 .DS_Store
 /doc/*
+/docs/*
 .rvmrc
 latest.dump
 /log/newrelic_agent.log

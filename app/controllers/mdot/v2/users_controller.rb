@@ -4,7 +4,7 @@ class Mdot::V2::UsersController < JsonController
 
     def index
         users = User.where(active: true)
-        success users.serialize_objs
+        success users.serialize_objs(:get)
         respond
     end
 
@@ -26,12 +26,13 @@ class Mdot::V2::UsersController < JsonController
         user = User.new(data)
         if user.save
             user.pn_token = pn_token if pn_token
-            success({"user_id" => user.id, "token" => user.remember_token})
+            success user.create_serialize
         else
             fail    user
+            status = :bad_request
         end
 
-        respond
+        respond(status)
     end
 
     def update
@@ -40,24 +41,27 @@ class Mdot::V2::UsersController < JsonController
         return nil  if hash_empty?(user_params)
 
         if @current_user.update_attributes(user_params)
-            success(@current_user.serialize)
+            success @current_user.update_serialize
         else
             fail    @current_user
+            status = :bad_request
         end
 
-        respond
+        respond(status)
     end
 
     def reset_password
         return nil if data_not_string?
-        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).first
+        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).references(:users).first
             user = user_social.user
             user.update_reset_token
             success "Email is Sent , check your inbox"
         else
             fail    "#{PAGE_NAME} does not have record of that email"
+            status = :not_found
         end
-        respond
+
+        respond(status)
     end
 
 private

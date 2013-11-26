@@ -19,7 +19,7 @@ class AddMerchantIdToProviders < ActiveRecord::Migration
         bad     = 0
         Provider.unscoped.each do |provider|
             total += 1
-            if merchant = Merchant.unscoped.find_by_token(provider.token)
+            if merchant = Merchant.unscoped.find_by(token: provider.token)
                 puts "CPORRECT #{provider.name}|#{provider.id} - adding merchant_id = #{merchant.id}"
                 provider.update_attribute(:merchant_id, merchant.id)
                 correct += 1

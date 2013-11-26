@@ -6,11 +6,7 @@ class GiftRegifter < GiftUtility
         @old_gift     = Gift.includes(:receiver).find(details['regift_id'])
         setup_regift(details['message'])
         @resp         = {}
-
-
-        recipient     = make_user_with_hash(recipient_hsh)
-        add_receiver_from_hash(recipient)
-        
+        add_receiver_from_hash(recipient_hsh)
     end
 
 

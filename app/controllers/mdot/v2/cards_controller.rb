@@ -17,24 +17,24 @@ class Mdot::V2::CardsController < JsonController
         card = Card.create_card_from_hash card_params
 
         if card.save
-            success card.id
+            success card.create_serialize
         else
             fail card
+            status = :bad_request
         end
-        respond
+        respond(status)
     end
 
     def destroy
         card = @current_user.cards.where(id: params[:id]).first
         if card
             card.destroy
-            success(card.id.to_s)
+            success(card.id)
         else
-            head 404
-            return nil
+            status = :not_found
         end
 
-        respond
+        respond(status)
     end
 
 private

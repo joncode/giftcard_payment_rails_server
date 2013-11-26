@@ -171,31 +171,6 @@ class AppController < JsonController
 	    end
   	end
 
- 	def merchant_redeem
- 			# send orders to the app for a provider
-	    response = {}
-	    if user = authenticate_app_user(params["token"])
-	    	data 				= JSON.parse params["data"]
-    		employee 			= Employee.where(user_id: user.id, provider_id: data["provider_id"])[0]
-	    	data["employee_id"] = employee.id if employee
-	    	order  				= Order.new(data)
-	    	puts "order = #{order.inspect}"
-	  	else
-	  		response["error"] = "user was not found in database"
-	  		order 		= Order.new
-	  	end
-	    respond_to do |format|
-	    	if order.save
-	    		#success
-	    		response["success"] = "Order for Gift-#{order.gift_id} Completed!"
-	    	else
-	    		response["error_server"] = stringify_error_messages order
-	    	end
-	      	@app_response = "AppC #{response}"
-	      	format.json { render json: response }
-	    end
-  	end
-
   	def user_activity
 
 	    user  = User.find(params["user_id"].to_i)
@@ -259,7 +234,7 @@ class AppController < JsonController
   	end
 
  	def others_questions
-  		# user  = User.find_by_remember_token(params["token"])
+  		# user  = User.find_by(remember_token: params["token"])
 
   		begin
   			other_user   = User.find(params["user_id"].to_i)
@@ -403,55 +378,6 @@ class AppController < JsonController
 		end
 	end
 
-	def create_redeem_emps
-
-    	message  = ""
-    	response = {}
-    	process  = false
-    	gift_id  = params["data"].to_i
-
-    	if gift_id == 0
-      		message = "data did not transfer. "
-      		redeem  = Redeem.new
-    	else
-       		# receiving a gift_id from the iPhone here
-     		if redeem = Redeem.find_by_gift_id(gift_id)
-     			puts "FOUND GIFT REDEEM #{gift_id}"
-     			process = true
-     		else
- 				if redeem  = Redeem.create(gift_id: gift_id)
- 					process = true
- 					puts "CREATED GIFT REDEEM #{gift_id}"
- 				else
- 					puts "FAILED TO CREATE GIFT REDEEM #{gift_id}"
- 				end
-     		end
-    	end
-    	begin
-      		receiver = authenticate_app_user(params["token"])
-    	rescue
-      		message += "Couldn't identify app user. "
-    	end
-
-    	response = { "error" => message } if message != ""
-    	if redeem.provider.nil?
-    		process = false
-    		message += "Gift is missing a provider - GIFT ID = #{redeem.gift.id}"
-    	end
-		respond_to do |format|
-			if process
-				employees_ary = redeem.provider.employees_to_app
-				redeem_code   = redeem.redeem_code.to_s
-				response = [redeem_code, employees_ary]
-			else
-				message += " Gift unable to process to database. Please retry later."
-				response["error_server"] = message
-			end
-			@app_response = "AppC #{response}"
-			format.json { render json: response }
-		end
-  	end
-
   	def create_redeem
   		response = {}
   		# receive {"token" => "<token>", "data" => "<gift_id>" }
@@ -459,10 +385,8 @@ class AppController < JsonController
   		if receiver = authenticate_app_user(params["token"])
   					# get gift from db
   			begin
-	  			gift = Gift.find params["data"].to_i
-	  					# find or create redeem for gift
-	  						# if redeem exists app should not call server
-	  						# gift.status == "notified" if redeem exists
+                gift   = receiver.received.where(id: params["data"].to_i).first
+
 	  			redeem = Redeem.find_or_create_with_gift(gift)
 	  			if redeem.redeem_code
 	  				response["success"]      = redeem.redeem_code.to_s
@@ -486,7 +410,7 @@ class AppController < JsonController
   		response = {}
   		if receiver = authenticate_app_user(params["token"])
   			begin
-	  			gift  = Gift.find params["data"].to_i
+                gift   = receiver.received.where(id: params["data"].to_i).first
 	  			order = Order.init_with_gift(gift, params["server_code"])
 	  			if order.save
 	  				response["success"] = { "order_number" => order.make_order_num,  "total" => gift.total, "server" => order.server_code }
@@ -544,7 +468,7 @@ class AppController < JsonController
 			message += "Couldn't identify app user. "
 		end
 		begin
-			redeem   = Redeem.find_by_gift_id(gift_id)
+			redeem   = Redeem.find_by(gift_id: gift_id)
 			# putting redeem code in order from redeem altho likely not necessary
 			order.redeem_code = redeem.redeem_code
 		rescue
@@ -646,7 +570,7 @@ class AppController < JsonController
 	def reset_password
 
 		if params[:email]
-			user = User.find_by_email(params[:email])
+			user = User.find_by(email: params[:email])
 			if user
 				user.update_reset_token
                 send_reset_password_email(user)

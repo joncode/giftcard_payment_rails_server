@@ -1,7 +1,21 @@
+require 'json'
+
 module Urbanairship
     module ClassMethods
+
         def device_tokens
             do_request(:get, "/api/device_tokens/", :authenticate_with => :master_secret)
+        end
+
+        def log_request_and_response(request, response, time)
+            return if logger.nil?
+
+            time = (time * 1000).to_i
+            http_method = request.class.to_s.split('::')[-1]
+            new_body = response.body.inspect
+            short_body = truncate(new_body ,length: 600).gsub('&quot;', "\'")
+            logger.info "Urbanairship (#{time}ms): [#{http_method} #{request.path}, #{request.body}], [#{response.code}, #{short_body}]"
+            logger.flush if logger.respond_to?(:flush)
         end
     end
 end
@@ -35,7 +49,7 @@ module Cron
         pnts.each do |pnt|
             if ua_key_hsh.keys.include? pnt.pn_token
                 count += 1
-                puts "match #{count}"
+                #puts "match #{count}"
             else
                 send_to_UA(pnt)
                 incorrect += 1
@@ -60,14 +74,12 @@ module Cron
                     pnt_alias = pnt.ua_alias
                     if pnt_alias == ua_alias
                         count += 1
-                        puts "match #{count}"
+                        #puts "match #{count}"
                     else
                         incorrect += 1
                         puts "PnToken #{pnt.id} is #{ua_alias} -- should be #{pnt_alias} "
-                        if true || response == 'y'
-                            Urbanairship.unregister_device(pnt.pn_token)
-                            send_to_UA(pnt)
-                        end
+                        Urbanairship.unregister_device(pnt.pn_token)
+                        send_to_UA(pnt)
                     end
                 end
             end
@@ -75,6 +87,11 @@ module Cron
         puts "Here is the total pn tokens = #{total}"
         puts "UA has correct tokens = #{count}"
         puts "Incorrect tokens are  = #{incorrect}"
+    end
+
+    def test_ua
+        get_and_sort_ua_tokens
+        nil
     end
 
 private

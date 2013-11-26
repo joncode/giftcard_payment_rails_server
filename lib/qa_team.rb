@@ -4,7 +4,7 @@ module QaTeam
         # have an array of merchant tools admin tokens
         admin_tokens = ["3Yo6C8EtHxAFqT0aACnfhg", "0OUzZks-fC6yT0hEBR1fJg", "FdwgC5gATvuP-oRODEsl0g", "FdwgC5gATvuP-oRODEsl0g", "3Yo6C8EtHxAFqT0aACnfhg", "f0eNS804bPgcKEGqMPrrOw", "PCartgKMRox7TPj6JQkO9g", "0OUzZks-fC6yT0hEBR1fJg", "2FQsCBCNjAqIMmGgtcFv_A", "Fc6AS9gHbwXlg7RpXVmwZA", "AetvlQ5Bb8xBs-28vHDZlQ", "JEUPZ5cIMcTMkaoHYh7k7g", "2C1uuKVMToNX95J81MPWYA"]
         # get the database of users
-        puts "my administrator account (support@drinkboard.com) which was never used for testing, and Deb Fennell's account (qa@drinkboard.com).  All of my other accounts which were deleted (cmcaulay71@yahoo.com and cmmca71@gmail.com) were used for testing, so I can re-create those accounts during my next QA session."
+        puts "my administrator account (#{SUPPORT_EMAIL}) which was never used for testing, and Deb Fennell's account (qa#{AT_EMAIL}).  All of my other accounts which were deleted (cmcaulay71@yahoo.com and cmmca71@gmail.com) were used for testing, so I can re-create those accounts during my next QA session."
         users = User.all.to_a
         deleted_users = []
         # loop thru each user

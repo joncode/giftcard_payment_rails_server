@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mdot::V2::CardsController do
 
     before(:all) do
-        unless @user = User.find_by_remember_token("USER_TOKEN")
+        unless @user = User.find_by(remember_token: "USER_TOKEN")
             @user = FactoryGirl.create(:user)
             @user.update_attribute(:remember_token, "USER_TOKEN")
         end
@@ -20,7 +20,7 @@ describe Mdot::V2::CardsController do
             FactoryGirl.create(:mastercard, user_id: @user.id)
 
             get :index, format: :json
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].class.should  == Array
             json["data"].count.should  == 4
@@ -29,7 +29,7 @@ describe Mdot::V2::CardsController do
         it "should return an empty array if user has no cards" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should == 1
             json["data"].class.should  == Array
             json["data"].count.should  == 0
@@ -45,10 +45,10 @@ describe Mdot::V2::CardsController do
 
             post :create, format: :json, data: params
 
-            card = Card.find_by_user_id(@user.id)
+            card = Card.find_by(user_id: @user.id)
             rrc(200)
             json["status"].should == 1
-            json["data"].should == card.id
+            json["data"].should == {"id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four}
         end
 
         it "should accept hash of require fields and return card ID" do
@@ -57,10 +57,10 @@ describe Mdot::V2::CardsController do
 
             post :create, format: :json, data: params
 
-            card = Card.find_by_user_id(@user.id)
+            card = Card.find_by(user_id: @user.id)
             rrc(200)
             json["status"].should == 1
-            json["data"].should == card.id
+            json["data"].should == {"id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four}
         end
 
         it "should not save json'd incomplete card info" do
@@ -80,6 +80,27 @@ describe Mdot::V2::CardsController do
             rrc(400)
         end
 
+        it "should reject hash with fields not accept" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params = {"month"=>"02", "number"=>"4417121029961508", "fake" => "FAKE", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+
+            post :create, format: :json, data: params
+
+            rrc(400)
+        end
+
+        it "should return validation errors with 400 code when bad data" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params = {"month"=>"0212312", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+
+            post :create, format: :json, data: params
+
+            card = Card.find_by(user_id: @user.id)
+            rrc(400)
+            json["status"].should == 0
+            json["data"]["error"].keys.include?("month").should be_true
+        end
+
     end
 
     describe :destroy do
@@ -92,7 +113,7 @@ describe Mdot::V2::CardsController do
             delete :destroy, format: :json, id: card.id
             rrc(200)
             json["status"].should == 1
-            json["data"].should == card.id.to_s
+            json["data"].should == card.id
         end
 
         it "should delete the card from the database" do

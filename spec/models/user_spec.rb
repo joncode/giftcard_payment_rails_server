@@ -2,6 +2,11 @@ require 'spec_helper'
 
 describe User do
 
+	before(:each) do
+			User.delete_all
+			UserSocial.delete_all
+	end
+
 	it "should downcase email" do
 		user = FactoryGirl.create :user, { email: "KJOOIcode@yahoo.com" }
 		user.email.should == "kjooicode@yahoo.com"
@@ -12,11 +17,19 @@ describe User do
 	it "should accept integers for phone, twitter, facebook _id" do
 		user = FactoryGirl.build :user, { twitter: 832742384, facebook_id: 318341934192, phone: 9876787657 }
 		user.save
-		new_user = User.find_by_twitter("832742384")
+		new_user = User.find_by(twitter:  "832742384")
 		new_user.phone.should == "9876787657"
 		new_user.facebook_id.should == "318341934192"
 	end
 
+	it "should get photo defaut or real" do
+		user  = FactoryGirl.create(:user, :iphone_photo => "test_photo")
+		user.get_photo.should_not == "test_photo"
+		user.get_photo.should == "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+		user.iphone_photo = "http://res.cloudinary.com/test_photo.jpg"
+		user.save
+		user.get_photo.should == "http://res.cloudinary.com/test_photo.jpg"
+	end
 
 
 
@@ -24,9 +37,7 @@ describe User do
 	describe "user_social de-normalization" do
 
 		before(:each) do
-				User.delete_all
-				UserSocial.delete_all
-				@user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: nil }
+			@user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: nil }
 		end
 
 		{
@@ -49,7 +60,7 @@ describe User do
 				it "should remove #{type_of} when user deletes #{type_of}" do
 						user = FactoryGirl.create :user, { "#{type_of}" => identifier }
 						user.deactivate_social("#{type_of}", identifier)
-						UserSocial.unscoped.find_by_identifier(identifier).active.should be_false
+						UserSocial.unscoped.find_by(identifier: identifier).active.should be_false
 				end
 
 				it "should not create a new user social record if no new #{type_of} is submitted" do
@@ -67,8 +78,6 @@ describe User do
 		# test that user can give a primary email address
 
 	end
-
-
 
 end# == Schema Information
 #

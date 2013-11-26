@@ -30,7 +30,7 @@ class Gift < ActiveRecord::Base
 	before_create :build_gift_items
 	before_create :set_statuses
 
-	default_scope where(active: true)
+	default_scope -> { where(active: true) }
 
 #/---------------------------------------------------------------------------------------------/
 
@@ -136,12 +136,13 @@ class Gift < ActiveRecord::Base
 	end
 
 	def child
-		Gift.find_by_regift_id(self.id)
+		Gift.find_by(regift_id: self.id)
 	end
 
 #/-------------------------------------data population methods-----------------------------/
 
 	def remove_receiver
+		self.status         = 'incomplete'
 		self.receiver_id    = nil
 		self.receiver_name  = nil
 		self.facebook_id    = nil
@@ -176,7 +177,7 @@ class Gift < ActiveRecord::Base
 	end
 
 	def add_anonymous_giver giver_id
-		anon_user       = User.find_by_phone('5555555555')
+		anon_user       = User.find_by(phone:  '5555555555')
 		self.add_giver anon_user
 		self.anon_id    = giver_id
 	end

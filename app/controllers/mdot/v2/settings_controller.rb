@@ -9,8 +9,10 @@ class Mdot::V2::SettingsController < JsonController
             success settings
         else
             fail    data_not_found
+            status = :not_found
         end
-        respond
+
+        respond(status)
     end
 
     def update
@@ -25,11 +27,13 @@ class Mdot::V2::SettingsController < JsonController
         return nil  if hash_empty?(settings_params)
 
         if @current_user.save_settings(settings_params)
-            success "Settings saved"
+            success @current_user.setting.app_serialize
         else
             fail @current_user.setting
+            status = :bad_request
         end
-        respond
+
+        respond(status)
     end
 
 private

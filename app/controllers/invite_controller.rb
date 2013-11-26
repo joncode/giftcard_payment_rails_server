@@ -1,5 +1,14 @@
 class InviteController < ApplicationController
   layout 'user_mailer' , except: [:show, :invite, :invite_friend]
+  layout 'html_good', only: [ :facebook_checkin]
+
+  def facebook_checkin
+    puts " *************    FACEBOOK CHECKIN   ********"
+    puts params.inspect
+    if request.headers['Authorization']
+      puts "HERE IS the Authorization #{request.headers['Authorization']}"
+    end
+  end
 
   def show
 
@@ -25,7 +34,7 @@ class InviteController < ApplicationController
     end
     @user = User.find(id)
     if @user.nil?
-        @user = User.find_by_phone("5555555555")
+        @user = User.find_by(phone: "5555555555")
     end
     if request.format == :json
         response_hash                       = {}
@@ -36,9 +45,9 @@ class InviteController < ApplicationController
         format.json { render json: response_hash }
     end
   end
-  
+
   def error
-    @email_title   = "Drinkboard Email Messenger"
+    @email_title   = "#{SERVICE_NAME} Email Messenger"
     @header_text   = "We're Sorry but there was an Error"
     @social = 1
     @web_view_route = "#{TEST_URL}/invite/error"
@@ -49,7 +58,7 @@ class InviteController < ApplicationController
   end
 
   def email_confirmed
-    @email_title   = "Drinkboard Email Messenger"
+    @email_title   = "#{SERVICE_NAME} Email Messenger"
 
     @header_text   = "Thank You, Your Email is Confirmed"
     @social = 1
@@ -61,7 +70,7 @@ class InviteController < ApplicationController
   end
 
   def display_email
-    @email_title   = "Drinkboard Email Messenger"
+    @email_title   = "#{SERVICE_NAME} Email Messenger"
     @header_text   = "#MobileGifting"
     @social = 1
     @web_view_route = create_webview_link
@@ -86,7 +95,7 @@ class InviteController < ApplicationController
     #   email_view    = "invite_employee"
     #   @user         = User.first
     #   @email        = params[:var1]
-    #   @header_text  = "Drinkboard Merchant Employee Request "
+    #   @header_text  = "#{SERVICE_NAME} Merchant Employee Request "
     #   @social       = 0
     when 'invoice_giver'
         #  giver gets invoice email when gift is purchased - incomplete or open
@@ -117,7 +126,7 @@ class InviteController < ApplicationController
       @cart         = @gift.ary_of_shopping_cart_as_hash
       @merchant     = @gift.provider
     else
-        #  join drinkboard email
+        #  join its on me email
       email_view    = "display_email"
       @web_view_route = "#{TEST_URL}/webview/display_email"
     end

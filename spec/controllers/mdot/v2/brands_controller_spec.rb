@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mdot::V2::BrandsController do
 
     before(:all) do
-        unless User.find_by_remember_token("USER_TOKEN")
+        unless User.find_by(remember_token: "USER_TOKEN")
             user = FactoryGirl.create(:user)
             user.update_attribute(:remember_token, "USER_TOKEN")
         end
@@ -27,8 +27,8 @@ describe Mdot::V2::BrandsController do
             amount  = Brand.where(active: true).count
             keys    = ["name","next_view","brand_id","photo"]
             get :index, format: :json
-            response.response_code.should == 200
-            ary = json
+            rrc(200)
+            ary = json["data"]
             ary.class.should == Array
             ary.count.should == amount
             hsh = ary.first
@@ -61,8 +61,8 @@ describe Mdot::V2::BrandsController do
             keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
             route   = :merchants
             get route, format: :json, id: @brand.id
-            response.response_code.should == 200
-            ary = json
+            rrc(200)
+            ary = json["data"]
             ary.class.should == Array
             ary.count.should == amount
             hsh = ary.first
@@ -72,7 +72,7 @@ describe Mdot::V2::BrandsController do
         it "should return 404 when brand not found via ID" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: 100000
-            response.response_code.should == 404
+            rrc(404)
         end
     end
 

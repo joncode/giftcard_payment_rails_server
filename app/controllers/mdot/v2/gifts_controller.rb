@@ -1,6 +1,8 @@
 class Mdot::V2::GiftsController < JsonController
     before_filter :authenticate_customer
 
+    rescue_from JSON::ParserError, :with => :bad_request
+
     def archive
         give_gifts, rec_gifts  = Gift.get_archive(@current_user)
         give_ary = give_gifts.serialize_objs(:giver)
@@ -21,26 +23,33 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def open
-        gift   = Gift.find(params[:id])
+        gift   = @current_user.received.where(id: params[:id]).first
+        return nil if params_bad_request
+        return nil if data_not_found?(gift)
         redeem = Redeem.find_or_create_with_gift(gift)
         success(redeem.redeem_code)
         respond
     end
 
     def redeem
-        gift = Gift.find(params[:id])
-        order = Order.init_with_gift(gift, params["server"])
+        return nil if params_bad_request(["server"])
+        server_code = redeem_params
+        gift   = @current_user.received.where(id: params[:id]).first
+        return nil if data_not_found?(gift)
+        order = Order.init_with_gift(gift, server_code)
         if order.save
             success({ "order_number" => order.make_order_num , "total" => gift.total,  "server" => order.server_code })
         else
             fail order
+            status = :bad_request
         end
-        respond
+        respond(status)
     end
 
     def regift
+        return nil if params_bad_request
         new_gift_hsh = convert_if_json(params["data"]["receiver"])
-        new_gift_hsh["message"] = params["data"]["message"]
+        new_gift_hsh["message"]   = params["data"]["message"]
         new_gift_hsh["regift_id"] = params[:id]
 
         gift_regifter  = GiftRegifter2.new(new_gift_hsh)
@@ -48,29 +57,53 @@ class Mdot::V2::GiftsController < JsonController
             success gift_regifter.response
         else
             fail    gift_regifter.response
+            status = :bad_request
         end
-        respond
+        respond(status)
     end
 
 
     def create
-        gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
-        unless gift_creator.no_data?
-            gift_creator.build_gift
-            if gift_creator.resp["error"].nil?
-                gift_creator.charge
+        return nil if params_bad_request(["gift", "shoppingCart"])
+        return nil if nil_key_or_value(params["gift"])
+        return nil if nil_key_or_value(params["shoppingCart"])
+        gift_hsh     = convert_if_json(params["gift"])
+        shoppingCart = convert_if_json(params["shoppingCart"])
+        return nil if data_not_hash?(gift_hsh)
+        return nil if data_not_array?(shoppingCart)
+
+        if card = Card.where(id: gift_hsh["credit_card"]).count > 0
+            gift_creator = GiftCreator.new(@current_user, gift_hsh, shoppingCart)
+            unless gift_creator.no_data?
+                gift_creator.build_gift
+                if gift_creator.resp["error"].nil?
+                    gift_creator.charge
+                end
             end
-        end
-        response = gift_creator.resp
-        if response["success"]
-            success response["success"]
-        elsif response["error"]
-            fail response["error"]
-        elsif response["error_server"]
-            fail response["error_server"]
+            response = gift_creator.resp
+            if response["success"]
+                success response["success"]
+            elsif response["error"]
+                fail response["error"]
+                status = :bad_request
+            elsif response["error_server"]
+                fail response["error_server"]
+                status = :bad_request
+            else
+                fail response
+                status = :bad_request
+            end
         else
-            fail reesponse
+            fail "We do not have that credit card on record.  Please choose a different card."
+            status = :not_found
         end
-        respond
+        respond(status)
     end
+
+private
+
+    def redeem_params
+        params.require(:server)
+    end
+    
 end

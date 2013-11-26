@@ -24,8 +24,12 @@ class Card < ActiveRecord::Base
 	validates_presence_of :csv, :last_four, :month, :year, :brand, :nickname,  :user_id, :name
 
 	before_save :crypt_number
-	
+
 #	-------------
+
+	def create_serialize
+		card_hash = self.serializable_hash only: [ "id", "nickname", "last_four" ]
+	end
 
 	def number
 		@number

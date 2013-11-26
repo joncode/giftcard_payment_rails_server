@@ -54,7 +54,7 @@ describe Mt::V2::MerchantsController do
         it "should save latitude and longitude" do
             new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
             new_provider_hsh["latitude"]   = 43.23412141
-            new_provider_hsh["longitude"]  = -70.123124124
+            new_provider_hsh["longitude"]  = -72.123124124
             post :create, format: :json, data: new_provider_hsh
             provider = Provider.last
             provider.latitude.should_not   be_nil
@@ -105,7 +105,7 @@ describe Mt::V2::MerchantsController do
             request.env["HTTP_TKN"] = provider.token
             new_provider_hsh = { "tz" => "0-700" }
             put :update, id: provider.id, format: :json, data: new_provider_hsh
-            response.response_code.should == 200
+            rrc(200)
 
         end
 
@@ -126,7 +126,7 @@ describe Mt::V2::MerchantsController do
             menu_string = @provider.menu_string
             menu_json = "[{\"section\":\"Gift Vouchers\",\"items\":[{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"10\",\"item_id\":154,\"item_name\":\"$10\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"25\",\"item_id\":155,\"item_name\":\"$25\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"50\",\"item_id\":156,\"item_name\":\"$50\"}]}]"
             put :menu, id: @provider.id, format: :json, data: menu_json
-            response.response_code.should == 200
+            rrc(200)
             new_menu_string = MenuString.last
             new_menu_string.menu.should_not be_nil
             new_menu_string.menu.should     == menu_json
@@ -136,7 +136,7 @@ describe Mt::V2::MerchantsController do
             menu_string = @provider.menu_string
             menu_json = "[{\"section\":\"Gift Vouchers\",\"items\":[{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"10\",\"item_id\":154,\"item_name\":\"$10\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"25\",\"item_id\":155,\"item_name\":\"$25\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"50\",\"item_id\":156,\"item_name\":\"$50\"}]}]"
             put :menu, id: @provider.id, format: :json, data: menu_json
-            response.response_code.should == 200
+            rrc(200)
             new_menu_string = MenuString.last
             json["status"].should  == 1
             json["data"].should   == "Menu Update Successful"
@@ -146,7 +146,7 @@ describe Mt::V2::MerchantsController do
             menu_string = @provider.menu_string
             menu_json = nil
             put :menu, id: @provider.id, format: :json, data: menu_json
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should         == 0
             json["data"].class.should     == Hash
         end
@@ -155,7 +155,7 @@ describe Mt::V2::MerchantsController do
             menu_string = @provider.menu_string
             menu_json = "Menu Data"
             put :menu, id: @provider.id, format: :json, data: menu_json
-            response.response_code.should == 200
+            rrc(200)
             json["status"].should         == 0
             json["data"].class.should     == Hash
         end

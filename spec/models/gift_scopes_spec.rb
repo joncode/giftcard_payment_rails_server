@@ -2,63 +2,102 @@ require 'spec_helper'
 
 describe GiftScopes do
 
-    before(:all) do
-        Provider.delete_all
-        User.delete_all
-        Gift.delete_all
-        Order.delete_all
-        Redeem.delete_all
-        @provider = FactoryGirl.create(:provider)
-        @number = 10
-        @number.times do
-            FactoryGirl.create(:gift,   {:provider => nil, :provider_id => @provider.id, :provider_name => @provider.name }) # 10 incomplete  gifts
-            FactoryGirl.create(:redeem) # 10 notified gifts
-            FactoryGirl.create(:order) # 10 redeemed gifts
-            FactoryGirl.create(:regift, {:provider => nil, :provider_id => @provider.id, :provider_name => @provider.name }) # 10 open gifts
+    context "provider scopes" do
+
+        before(:all) do
+            Provider.delete_all
+            User.delete_all
+            Gift.delete_all
+            Order.delete_all
+            Redeem.delete_all
+            @provider = FactoryGirl.create(:provider)
+            @number = 10
+            @number.times do
+                FactoryGirl.create(:gift,   {:provider => nil, :provider_id => @provider.id, :provider_name => @provider.name }) # 10 incomplete  gifts
+                FactoryGirl.create(:redeem) # 10 notified gifts
+                FactoryGirl.create(:order) # 10 redeemed gifts
+                FactoryGirl.create(:regift, {:provider => nil, :provider_id => @provider.id, :provider_name => @provider.name }) # 10 open gifts
+            end
+            gs = Gift.all
+            gs.each do |g|
+                g.provider_name = @provider.name
+                g.provider_id   = @provider.id
+                g.save
+            end
+            os = Order.all
+            os.each do |o|
+                o.provider_id = @provider.id
+                o.save
+            end
         end
-        gs = Gift.all
-        gs.each do |g|
-            g.provider_name = @provider.name
-            g.provider_id   = @provider.id
-            g.save
+
+        describe :get_provider do
+
+            it "should get all incomplete / open / notified gifts for a provider" do
+                gifts = Gift.get_provider(@provider)
+                incomplete  = Gift.where(status: 'incomplete')
+                open        = Gift.where(status: 'open')
+                notified    = Gift.where(status: 'notified')
+                total       = incomplete + open + notified
+                gifts.count.should == total.count
+            end
+
         end
-        os = Order.all
-        os.each do |o|
-            o.provider_id = @provider.id
-            o.save
+
+        describe :get_history_provider do
+
+            it "should get all redeemed gifts for a provider" do
+                gifts    = Gift.get_history_provider(@provider)
+                redeemed = Order.all
+                gifts.count.should == redeemed.count
+            end
+
         end
+
     end
 
-    describe :get_provider do
+    context "user scopes" do
 
-        it "should get all incomplete / open / notified gifts for a provider" do
-            gifts = Gift.get_provider(@provider)
-            incomplete  = Gift.where(status: 'incomplete')
-            open        = Gift.where(status: 'open')
-            notified    = Gift.where(status: 'notified')
-            total       = incomplete + open + notified
-            gifts.count.should == total.count
+        describe :get_archive do
+
+            it "should return and array = [ given gifts , received gifts ] " do
+                user = FactoryGirl.create(:simple_user)
+
+                FactoryGirl.create(:gift, :giver => user, :giver_name => user.name)
+                gift = FactoryGirl.build(:gift)
+                gift.add_receiver user
+                gift.save
+                gift.reload
+                gift.update_attribute(:status, 'redeemed')
+
+                response = Gift.get_archive user
+                response.class.should == Array
+                response[0][0].giver_id.should == user.id
+                response[1][0].receiver_id.should == user.id
+            end
+
+            it "should return regifted and redeemed gifts with received gifts" do
+                user = FactoryGirl.create(:simple_user)
+
+                13.times do |index|
+                    if index.even?
+                        status = 'redeemed'
+                    else
+                        status = 'regifted'
+                    end
+                    gift = FactoryGirl.build(:gift)
+                    gift.add_receiver user
+                    gift.save
+                    gift.reload
+                    gift.update_attribute(:status, status)
+                end
+                response = Gift.get_archive user
+                response[1].count.should == 13
+            end
+
         end
 
     end
-
-    describe :get_history_provider do
-
-        it "should get all redeemed gifts for a provider" do
-            gifts    = Gift.get_history_provider(@provider)
-            redeemed = Order.all
-            gifts.count.should == redeemed.count
-        end
-
-    end
-
-    # it "should get all redeemed gifts for a provider given a date range" do
-    #      # go into the db and add different start times and redeemed at times
-    #     gifts = Gift.get_history_provider_and_range(provider, start_time, end_time )
-    #     gifts.count.should == 10
-    # end
-
-
 
 
 

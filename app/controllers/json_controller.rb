@@ -61,7 +61,7 @@ class JsonController < ActionController::Base
                 # in MERCHANT_REPLY
                 gift_obj["giver_photo"]    = g.giver.get_photo
                 provider                   = g.provider
-                gift_obj["provider_photo"] = provider.get_image("photo")
+                gift_obj["provider_photo"] = provider.get_photo
                 gift_obj["provider_phone"] = provider.phone
                 gift_obj["city"]           = provider.city
                 gift_obj["sales_tax"]      = provider.sales_tax
@@ -114,6 +114,16 @@ class JsonController < ActionController::Base
         end
     end
 
+    def nil_key_or_value(data=nil)
+        data ||= params["data"]
+        head :bad_request if data.nil?
+    end
+
+    def data_not_found?(data= nil)
+        data ||= params["data"]
+        head :not_found if data.nil?
+    end
+
     def data_not_hash?(data=nil)
         data ||= params["data"]
         head :bad_request unless data.kind_of?(Hash)
@@ -138,9 +148,16 @@ class JsonController < ActionController::Base
         head :bad_request unless data.kind_of?(String)
     end
 
-    def respond
+    def params_bad_request(new_key=nil)
+        key = new_key || ["data"]
+        good_params = [ "id", "controller", "action", "format"] + key
+        head :bad_request unless (params.keys - good_params).count == 0
+    end
+
+    def respond(status=nil)
+        response_code = status || :ok
         respond_to do |format|
-            format.json { render json: @app_response }
+            format.json { render json: @app_response, status: response_code }
         end
     end
 
@@ -150,16 +167,16 @@ class JsonController < ActionController::Base
 
     def fail payload
         unless payload.kind_of?(Hash) || payload.kind_of?(String) || payload.kind_of?(Array)
-            payload   = payload.errors.messages
+            payload   = { "error" => payload.errors.messages }
         end
         @app_response = { status: 0, data: payload }
     end
 
     def authenticate_admin_tools
         token = request.headers["HTTP_TKN"]
-        @admin_user = AdminUser.find_by_remember_token token
+        @admin_user = AdminUser.find_by(remember_token: token)
         if @admin_user
-            puts @admin_user.name
+            puts "ADMT  -------------   #{@admin_user.name}   -----------------------"
         else
             head :unauthorized
         end
@@ -167,9 +184,9 @@ class JsonController < ActionController::Base
 
     def authenticate_merchant_tools
         token = request.headers["HTTP_TKN"]
-        @provider = Provider.unscoped.find_by_token(token)
+        @provider = Provider.unscoped.find_by(token: token)
         if @provider
-            puts @provider.name
+            puts "MT  -------------   #{@provider.name}   -----------------------"
         else
             head :unauthorized
         end
@@ -177,7 +194,7 @@ class JsonController < ActionController::Base
 
     def authenticate_general_token
         token = request.headers["HTTP_TKN"]
-        head :unauthorized unless GENERAL_TOKEN == token
+        head :unauthorized unless [APP_GENERAL_TOKEN, GENERAL_TOKEN, ANDROID_TOKEN].include?(token)
     end
 
     def authenticate_www_token
@@ -193,7 +210,7 @@ class JsonController < ActionController::Base
         token         = params["token"]
         @current_user = User.app_authenticate(token)
         if @current_user
-            puts @current_user.name
+            puts "APP  -------------   #{@current_user.name}   -----------------------"
         else
             head :unauthorized
         end
@@ -201,7 +218,7 @@ class JsonController < ActionController::Base
 
     def authenticate_customer
         token         = request.headers["HTTP_TKN"]
-        puts "Here is the token received ----> #{token}"
+        puts "Here is the token received ----> #{token}" unless Rails.env.production?
         @current_user = User.app_authenticate(token)
         if @current_user
             puts @current_user.name
@@ -218,7 +235,7 @@ private
         headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Allow-Methods']  = 'POST, PUT, DELETE, GET, OPTIONS'
         headers['Access-Control-Request-Method'] = '*'
-        headers['Access-Control-Allow-Headers']  = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+        headers['Access-Control-Allow-Headers']  = 'Origin, X-Requested-With, Content-Type, Accept, TKN, Mdot-Version, Android-Version'
     end
 
     def down_for_maintenance

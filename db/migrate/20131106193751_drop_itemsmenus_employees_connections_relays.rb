@@ -4,7 +4,6 @@ class DropItemsmenusEmployeesConnectionsRelays < ActiveRecord::Migration
   	drop_table :employees
   	drop_table :connections
   	drop_table :relays
-
   end
 
   def down
@@ -43,7 +42,5 @@ class DropItemsmenusEmployeesConnectionsRelays < ActiveRecord::Migration
 		t.datetime "created_at", :null => false
 		t.datetime "updated_at", :null => false
 	end
-
-
   end
 end

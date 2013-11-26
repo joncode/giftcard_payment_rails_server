@@ -44,13 +44,13 @@ class IphoneController < AppController
 		if email.blank? || password.blank?
 			response["error"]     = "Data not received."
 		else
-			user = User.find_by_email(email)
+			user = User.find_by(email: email)
 			if user && user.authenticate(password)
 				if user.active
 					user.pn_token       = pn_token if pn_token
 					response["user"]    = user.serialize(true)
 				else
-					response["error"]   = "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+					response["error"]   = "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
 				end
 			else
 				response["error"]   = "Invalid email/password combination"
@@ -78,11 +78,11 @@ class IphoneController < AppController
 			response["error_iphone"] = "Data not received."
 		else
 			if origin == 'f'
-				user = User.find_by_facebook_id(facebook_id)
+				user = User.find_by(facebook_id: facebook_id)
 				msg  = "Facebook Account"
 				resp_key = "facebook"
 			else
-				user = User.find_by_twitter(twitter)
+				user = User.find_by(twitter: twitter)
 				msg  = "Twitter Account"
 				resp_key = "twitter"
 			end
@@ -91,10 +91,10 @@ class IphoneController < AppController
 					user.pn_token       = pn_token if pn_token
 					response["user"]    = user.serialize(true)
 				else
-					response["error"] = "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+					response["error"] = "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
 				end
 			else
-				response[resp_key]  = "#{msg} not in Drinkboard database"
+				response[resp_key]  = "#{msg} not in #{SERVICE_NAME} database"
 			end
 		end
 
@@ -108,34 +108,6 @@ class IphoneController < AppController
 
 		response = [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1378747548/las_vegas_xzqlvz.jpg"}, {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1378747548/san_francisco_hv2bsc.jpg"}, {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1378747548/san_diego_oj3a5w.jpg"}, {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1378747548/new_york_vks0yh.jpg"}]
 		respond_to do |format|
-			@app_response = "iPhoneC #{response}"
-			format.json { render json: response }
-		end
-	end
-
-	def going_out
-
-			# send the button status in params["public"]
-			# going out is YES , returning home is NO
-		response  = {}
-		begin
-			user  = User.app_authenticate(token)
-			if    params["public"] == "YES"
-				user.update_attributes(is_public: true) if !user.is_public
-			elsif params["public"] == "NO"
-				user.update_attributes(is_public: false) if user.is_public
-			else
-				response["error_public"] = "did not receiver public params correctly"
-			end
-					# return the updated user.is_public value
-					# if params["public"] is not sent, is_public is not changed
-			response["public"] = user.is_public
-		rescue
-			response["error"] = "could not find user in database"
-		end
-
-		respond_to do |format|
-			logger.debug response
 			@app_response = "iPhoneC #{response}"
 			format.json { render json: response }
 		end
@@ -181,7 +153,6 @@ class IphoneController < AppController
 
 	def locations
 
-		# @user  = User.find_by_remember_token(params["token"])
 		providers = Provider.all
 		menus     = {}
 		providers.each do |p|
@@ -215,7 +186,7 @@ class IphoneController < AppController
 			if data_obj.nil? || data_obj["iphone_photo"].blank?
 				@app_response["error"]   = "Photo upload failed, please check your connetion and try again"
 			else
-				user.update_attributes(iphone_photo: data_obj["iphone_photo"], use_photo: "ios")
+				user.update_attributes(iphone_photo: data_obj["iphone_photo"])
 				if user.get_photo == data_obj["iphone_photo"]
 					@app_response["success"]      = "Photo Updated - Thank you!"
 				else

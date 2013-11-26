@@ -18,9 +18,9 @@ module GiftScopes
     end
 
 #### USER SCOPES
-
+    
     def get_gifts user
-        includes(:provider).includes(:giver).where(receiver_id: user.id).where("pay_stat not in (?)", ['unpaid', 'duplicate', 'declined']).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
+        includes(:provider).includes(:redeem).includes(:giver).where(receiver_id: user.id).where("pay_stat not in (?)", ['unpaid', 'duplicate', 'declined']).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
     end
 
     def get_notifications user
@@ -39,7 +39,7 @@ module GiftScopes
 
     def get_archive user
         give_gifts = includes(:provider).includes(:receiver).where(giver_id: user).order("created_at DESC")
-        rec_gifts  = includes(:provider).includes(:giver).where(receiver_id: user).where(status: 'redeemed').order("redeemed_at DESC")
+        rec_gifts  = includes(:provider).includes(:giver).where(receiver_id: user).where(status: ['regifted','redeemed']).order("redeemed_at DESC")
         return give_gifts, rec_gifts
     end
 

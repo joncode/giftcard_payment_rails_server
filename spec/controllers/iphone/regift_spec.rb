@@ -31,6 +31,17 @@ describe IphoneController do
             new_gift.giver_id.should   == regifter.id
         end
 
+        it "should create a new gift with correct receiver bug fix" do
+            giver.phone = "5556778899"
+            giver.save
+            old_gift.phone = "5556778899"
+            old_gift.save
+            post :regift, format: :json, receiver: rec_json, "data"=>"{\"message\":\"Love you\",\"regift_id\":#{old_gift.id}}", "receiver"=>"{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}", "token"=> giver.remember_token
+            new_gift = Gift.where(regift_id: old_gift.id).first
+            new_gift.receiver_name.should == "Lauren Chavez"
+            new_gift.facebook_id.should   == "690550062"
+        end
+
         it "should set the status of the old gift to regifted" do
             post :regift, format: :json, receiver: rec_json, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
             old_gift_reloaded = Gift.find(old_gift.id)
@@ -47,7 +58,7 @@ describe IphoneController do
             no_id_user     = FactoryGirl.build(:nobody, :id => nil )
             hsh_no_id_user = regift_hash(no_id_user).to_json
             post :regift, format: :json, receiver: hsh_no_id_user, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
-            new_gift = Gift.find_by_receiver_email(no_id_user.email)
+            new_gift = Gift.find_by(receiver_email: no_id_user.email)
             puts new_gift.inspect
             new_gift.status.should == 'incomplete'
         end
@@ -113,7 +124,7 @@ describe IphoneController do
         }.stringify_keys.each do |type_of, identifier|
             it "should find user account for old #{type_of}" do
 
-                @user.update_attribute(type_of, identifier)
+                @user.update_attribute(type_of, "specials")
                 if (type_of == "phone") || (type_of == "email")
                     key = "receiver_#{type_of}"
                 else
@@ -126,7 +137,9 @@ describe IphoneController do
 
                 puts json.inspect
                 new_gift = Gift.find(json["data"]["gift_id"])
+                #binding.pry
                 new_gift.receiver_id.should == @user.id
+                new_gift.send(key).should_not == identifier
             end
 
             it "should look thru multiple unique ids for a user object with #{type_of}" do
@@ -171,10 +184,10 @@ describe IphoneController do
 
     def gift_social_id_hsh
         {
-            receiver_email: "jon@gmail.com",
-            receiver_phone: "9173706969",
-            facebook_id: "123",
-            twitter: "999"
+            receiver_email: "hsh@gmail.com",
+            receiver_phone: "9173123969",
+            facebook_id: "4444123",
+            twitter: "444"
         }
     end
 

@@ -1,0 +1,49 @@
+module UserSerializers
+
+    def serialize(token=false)
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "email", "phone", "facebook_id", "twitter"]
+        usr_hash["photo"]   = self.get_photo
+        usr_hash["user_id"] = self.id.to_s
+        usr_hash.keep_if {|k, v| !v.nil? }
+        usr_hash["remember_token"] = self.remember_token if token
+        usr_hash
+    end
+
+    def get_serialize
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name"]
+        usr_hash["photo"]   = self.get_photo
+        usr_hash["user_id"] = self.id
+        usr_hash
+    end
+
+    def create_serialize
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter"]
+        usr_hash["photo"]   = self.get_photo
+        usr_hash["user_id"] = self.id
+        usr_hash["token"] = self.remember_token
+        usr_hash
+
+    end
+
+    def update_serialize
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter"]
+        usr_hash["photo"]   = self.get_photo
+        usr_hash["user_id"] = self.id
+        usr_hash
+    end
+
+    def admt_serialize
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name" ,  "zip", "birthday", "email", "phone", "created_at"]
+        usr_hash["photo"]   = self.get_photo
+        usr_hash["user_id"] = self.id
+        usr_hash["fb"]      = self.facebook_id_exists? ? "Yes" : "No"
+        usr_hash["twitter"] = self.twitter_exists? ? "Yes" : "No"
+        if self.first_name == "De-activated[app]"
+            usr_hash["active"]  = 2
+        else
+            usr_hash["active"]  = self.active ? 1 : 0
+        end
+        usr_hash.keep_if {|k, v| !v.nil? }
+        usr_hash
+    end
+end

@@ -4,7 +4,7 @@ ActionMailer::Base.smtp_settings = {
   :port                 => 587,
   :domain               => "drinkboard.com",
   :authentication       => "plain",
-  :user_name            => "no-reply@drinkboard.com",
+  :user_name            => "#{NO_REPLY_EMAIL}",
   :password             => "CherryOnTop",
   :enable_starttls_auto => true
 }

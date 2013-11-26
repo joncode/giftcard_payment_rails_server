@@ -1,15 +1,14 @@
 class Provider < ActiveRecord::Base
 	include Formatter
 
-	attr_accessible :address, :city, :description, :logo, :name,
-	:state, :user_id, :staff_id, :zip, :zinger, :phone, :email,
-	:twitter, :facebook, :website, :users, :photo, :photo_cache,
-	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
+	attr_accessible :address, :city, :description, :name,
+	:state, :user_id, :zip, :zinger, :phone, :email,
+	:twitter, :facebook, :website, :users,
 	:sales_tax, :token, :image, :merchant_id,
 	:paused, :live, :mode, :latitude, :longitude
 
-	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h, :menu
-	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h, :menu
+	attr_accessible :menu
+	attr_accessor 	:menu
 
 	has_many   :orders
 	has_one    :menu_string, dependent: :destroy
@@ -17,11 +16,6 @@ class Provider < ActiveRecord::Base
 	has_many   :sales
 	belongs_to :brands
 	belongs_to :merchant
-
-	mount_uploader :photo,    ProviderPhotoUploader
-	mount_uploader :logo,     ProviderLogoUploader
-	mount_uploader :box,      ProviderBoxUploader
-	mount_uploader :portrait, ProviderPortraitUploader
 
 	validates_presence_of 	:name, :city, :address, :zip , :state, :token
 	validates_length_of 	:state , 	:is => 2
@@ -34,7 +28,7 @@ class Provider < ActiveRecord::Base
 	after_create 	:make_menu_string
     #after_save      :update_city_provider
 
-	default_scope where(active: true).where(paused: false).order("name ASC")
+	default_scope -> { where(active: true).where(paused: false).order("name ASC") }
 
 #/---------------------------------------------------------------------------------------------/
 
@@ -63,7 +57,7 @@ class Provider < ActiveRecord::Base
 
 	def merchantize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :token, :address, :city, :state, :zip, :zinger, :description]
-		prov_hash["photo"] = self.get_image("photo")
+		prov_hash["photo"] = self.get_photo
 		return prov_hash
 	end
 
@@ -147,33 +141,8 @@ class Provider < ActiveRecord::Base
 ######   PHOTO GETTERS
 
 	def get_photo
-		if image.blank?
-			if photo.blank?
-				MERCHANT_DEFAULT_IMG
-			else
-				photo.url
-			end
-		else
-			image
-		end
-	end
-
-	def get_image(flag)
-		image_url =
-			case flag
-			when "logo"
-				logo.url
-			when "portrait"
-				portrait.url
-			when "photo"
-				get_photo
-			else
-				box.url
-			end
-		if image_url.blank?
-			image_url = MERCHANT_DEFAULT_IMG
-		end
-		return image_url
+		return MERCHANT_DEFAULT_IMG if image.blank?
+		image
 	end
 
 private
@@ -185,7 +154,7 @@ private
 	def update_city_provider
 		city = self.city
     	new_providers_array = Provider.where(city: city).serialize_objs.to_json
-    	if old_city_provider = CityProvider.find_by_city(city)
+    	if old_city_provider = CityProvider.find_by(city: city)
     		old_city_provider.update_attribute(:providers_array, new_providers_array)
     	else
     		CityProvider.create(city:city, providers_array: new_providers_array)

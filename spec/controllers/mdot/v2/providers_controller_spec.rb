@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Mdot::V2::ProvidersController do
 
     before(:all) do
-        unless user = User.find_by_remember_token("USER_TOKEN")
+        unless user = User.find_by(remember_token: "USER_TOKEN")
             user = FactoryGirl.create(:user)
             user.update_attribute(:remember_token, "USER_TOKEN")
         end
@@ -22,7 +22,9 @@ describe Mdot::V2::ProvidersController do
             get :menu, id: @provider.id, format: :json
             rrc(200)
             json["status"].should == 1
-            menu_json = json["data"]
+            provider_id = json["data"]["provider_id"]
+            provider_id.should == @provider.id
+            menu_json = json["data"]["menu"]
             menu_json.class.should == String
             menu = JSON.parse menu_json
             keys = ["section", "items"]
@@ -52,7 +54,7 @@ describe Mdot::V2::ProvidersController do
     #         request.env["HTTP_TKN"] = "USER_TOKEN"
     #         get :index, format: :json, data: "New York"
     #         keys    =  ["city", "latitude", "longitude", "name", "phone", "sales_tax", "provider_id", "photo", "full_address", "live"]
-    #         response.response_code.should == 200
+    #         rrc(200)
     #         ary = json
     #         ary.class.should == Array
     #         ary.count.should == 19
@@ -67,7 +69,7 @@ describe Mdot::V2::ProvidersController do
     #         get :index, format: :json
     #         request.env["HTTP_TKN"] = "USER_TOKEN"
     #         get :index, format: :json
-    #         response.response_code.should == 302
+    #         rrc(302)
     #     end
     # end
 
