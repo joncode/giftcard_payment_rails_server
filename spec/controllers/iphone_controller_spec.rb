@@ -149,7 +149,7 @@ describe IphoneController do
 
         it "should process optional fields" do
             optional = [ "last_name" ,"phone", "twitter", "facebook_id", "origin", "iphone_photo", "handle"]
-            requests = [{"first_name"=>"Rushit",  "password"=>"hotmail007", "last_name"=>"Patel", "phone"=>"5107543267", "email"=>"rdpatel007@gmail.com", "origin"=>"d", "iphone_photo"=>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/1076106_637557363_1453430141_n.jpg", "password_confirmation"=>"hotmail007", "facebook_id"=>637557363},
+            requests = [{"first_name"=>"Rushit", "use_photo" => "ios", "password"=>"hotmail007", "last_name"=>"Patel", "phone"=>"5107543267", "email"=>"rdpatel007@gmail.com", "origin"=>"d", "iphone_photo"=>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/1076106_637557363_1453430141_n.jpg", "password_confirmation"=>"hotmail007", "facebook_id"=>637557363},
             {"first_name"=>"Kathryn",  "password"=>"Emachines4", "last_name"=>"Sell", "phone"=>"9517959756", "email"=>"Caligirlkaty@gmail.com", "origin"=>"d", "iphone_photo"=>"http://graph.facebook.com/100004277051506/picture?type=large", "password_confirmation"=>"Emachines4", "facebook_id"=>"100004277051506"},
             {"first_name"=>"Alicia",  "password"=>"clippers50", "last_name"=>"Rivera", "phone"=>"7149288304", "email"=>"shashas79@yahoo.com", "origin"=>"d", "iphone_photo"=>"http://graph.facebook.com/1045433036/picture?type=large", "password_confirmation"=>"clippers50", "facebook_id"=>"1045433036"},
             {"first_name"=>"Austen",  "password"=>"Tokujiro3", "last_name"=>"Debord", "phone"=>"3607736866", "email"=>"Austen.debord@gmail.com", "origin"=>"d", "iphone_photo"=>"http://graph.facebook.com/818275441/picture?type=large", "password_confirmation"=>"Tokujiro3", "facebook_id"=>"818275441"},
@@ -168,6 +168,7 @@ describe IphoneController do
                 user = User.find(user_id)
                 user.class.should == User
                 req_hsh['email'] = req_hsh['email'].downcase
+                req_hsh.delete('use_photo')
                 req_hsh.each_key do |key|
                     if (key != "password") && (key != "password_confirmation")
                         user.send(key).should == req_hsh[key].to_s

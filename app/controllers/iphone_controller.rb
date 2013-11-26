@@ -220,6 +220,7 @@ private
 		else
 			obj = data
 		end
+		obj.delete("use_photo")
 		puts "CREATE USER OBJECT parse = #{obj}"
 		# obj.symbolize_keys!
 		User.new(obj)
