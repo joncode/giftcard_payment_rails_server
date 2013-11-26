@@ -48,7 +48,7 @@ class GiftFactory
     end
 
     def purchasor_archive?
-       false
+        false
     end
 
     def merchant_orders?
@@ -63,7 +63,7 @@ class GiftFactory
         true
     end
 
-    def  controller_response
+    def controller_response
         nil
     end
 
