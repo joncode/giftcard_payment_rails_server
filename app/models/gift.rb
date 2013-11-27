@@ -4,8 +4,6 @@ class Gift < ActiveRecord::Base
 	include Email
 	include GiftSerializers
 
-    has_one     :sale
-
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :order, 		dependent: :destroy
 	has_many    :gift_items, 	dependent: :destroy
@@ -65,9 +63,9 @@ class Gift < ActiveRecord::Base
 		string_to_cents super
 	end
 
-    # def total
-    #     string_to_cents self.value
-    # end
+    def total
+        string_to_cents self.value
+    end
 
     def total= amount
         self.value = amount
