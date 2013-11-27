@@ -15,7 +15,7 @@ class Gift < ActiveRecord::Base
 	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
 
 	before_save   :extract_phone_digits
-	before_create :add_giver_name,  	:if => :no_giver_name
+	before_create :add_giver_name,  	:if => :no_giver_name?
     before_create :add_provider_name,   :if => :no_provider_name?
 	before_create :regifted,        	:if => :regift?
 	before_create :build_gift_items
@@ -231,12 +231,14 @@ private
 		end
 	end
 
-	def no_giver_name
+	def no_giver_name?
 		self.giver_name.nil?
 	end
 
     def add_provider_name
-        self.provider = Provider.find(self.provider_id)
+        if provider = Provider.find(self.provider_id)
+            self.provider = provider
+        end
     end
 
     def no_provider_name?

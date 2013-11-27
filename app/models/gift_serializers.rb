@@ -38,7 +38,7 @@ module GiftSerializers
     end
 
     def giver_serialize
-        gift_hsh = self.serializable_hash only: ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "total", "updated_at", "shoppingCart", "receiver_photo"]
+        gift_hsh = self.serializable_hash only: ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "total", "updated_at", "shoppingCart"]
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.giver_status
         gift_hsh["receiver_photo"]     = receiver.get_photo
@@ -92,7 +92,7 @@ module GiftSerializers
         gift_hsh["items"]           = JSON.parse(self.shoppingCart).count
 
         if order = self.order
-            server = self.order.server_code
+            server = order.server_code
         else
             server = nil
         end
