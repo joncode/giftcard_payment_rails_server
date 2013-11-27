@@ -46,13 +46,13 @@ describe Gift do
       gift.gift_items.first.menu_id.should == items.first["item_id"]
     end
 
-    it "should save sale on create" do
+    it "should save sale as payable on create" do
       gift = FactoryGirl.build(:gift)
       sale = FactoryGirl.build(:sale)
-      gift.sale = sale
+      gift.payable = sale
       gift.save
       saved_gift = Gift.last
-      saved_gift.sale.should == Sale.last
+      saved_gift.payable.should == Sale.last
     end
 
     it "should get the provider name if it does not have one" do

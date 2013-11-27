@@ -4,19 +4,10 @@ class Gift < ActiveRecord::Base
 	include Email
 	include GiftSerializers
 
-	# attr_accessible   	  :giver_id, 	  :giver_name,
-	# 		:receiver_id, :receiver_name, :receiver_phone,
-	# 		:provider_id, :provider_name, :receiver_email,
-	# 		:message,     :shoppingCart,
-	# 		:tip, :tax,   :total, :service,
-	# 		:facebook_id, :foursquare_id, :twitter,
-	# 		:status, :credit_card, :value
-
 	has_one     :redeem, 		dependent: :destroy
-	belongs_to  :provider
-	has_one     :sale
 	has_one     :order, 		dependent: :destroy
 	has_many    :gift_items, 	dependent: :destroy
+    belongs_to  :provider
     belongs_to  :giver,    polymorphic: :true
     belongs_to  :receiver, class_name: User
     belongs_to  :payable,  polymorphic: :true
