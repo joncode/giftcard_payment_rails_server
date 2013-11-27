@@ -4,7 +4,7 @@ describe GiftScopes do
 
     context "provider scopes" do
 
-        before(:all) do
+        before(:each) do
             Provider.delete_all
             User.delete_all
             Gift.delete_all

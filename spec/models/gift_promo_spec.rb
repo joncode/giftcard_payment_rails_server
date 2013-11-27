@@ -3,6 +3,7 @@ require 'spec_helper'
 describe GiftPromo do
 
     before(:each) do
+        Provider.delete_all
         @provider = FactoryGirl.create(:provider)
         @gift_hsh = {}
         @gift_hsh["message"]        = "here is the promo gift"

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Mdot::V2::PhotosController do
 
-    before(:all) do
+    before(:each) do
         unless user = User.find_by(remember_token: "USER_TOKEN")
             user = FactoryGirl.create(:user)
             user.update_attribute(:remember_token, "USER_TOKEN")

@@ -1,5 +1,7 @@
 class GiftSale < Gift
 
+private
+    
     def pre_init args={}
         total = args["value"].to_f + args["service"].to_f
         giver = args["giver"]

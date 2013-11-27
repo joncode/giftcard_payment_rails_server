@@ -96,7 +96,7 @@ describe Mdot::V2::GiftsController do
     describe :badge do
         it_should_behave_like("token authenticated", :get, :badge)
 
-        before(:all) do
+        before(:each) do
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all

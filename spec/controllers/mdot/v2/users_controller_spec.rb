@@ -3,7 +3,7 @@ require 'mandrill'
 
 describe Mdot::V2::UsersController do
 
-    before(:all) do
+    before(:each) do
         User.delete_all
         unless @user = User.find_by(remember_token: "USER_TOKEN")
             @user = FactoryGirl.create(:user)
