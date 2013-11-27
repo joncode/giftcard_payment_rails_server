@@ -17,10 +17,7 @@ class PushJob
 private
 
     def self.format_payload(gift, receiver, badge)
-        { :aliases => [receiver.ua_alias],
-            :aps => { :alert => "#{gift.giver_name} sent you a gift at #{gift.provider_name}!", :badge => badge, :sound => 'pn.wav' },
-            :alert_type => 1
-        }
+        { :aliases => [receiver.ua_alias],:aps => { :alert => "#{gift.giver_name} sent you a gift at #{gift.provider_name}!", :badge => badge, :sound => 'pn.wav' },:alert_type => 1}
     end
 
 end
