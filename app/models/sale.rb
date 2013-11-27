@@ -7,6 +7,7 @@ class Sale < ActiveRecord::Base
 	belongs_to :provider
 	belongs_to :giver, class_name: "User"
 	belongs_to :card
+    belongs_to :gift
 
     has_one :gift, as: :payable
 
