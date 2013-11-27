@@ -18,13 +18,13 @@ module GiftScopes
     end
 
 #### USER SCOPES
-    
+
     def get_gifts user
         includes(:provider).includes(:redeem).includes(:giver).where(receiver_id: user.id).where("pay_stat not in (?)", ['unpaid', 'duplicate', 'declined']).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
     end
 
     def get_notifications user
-        where(receiver_id: user.id).where(status: 'open').size
+        where(receiver_id: user.id).where("pay_stat not in (?)", ['unpaid', 'duplicate', 'declined']).where(status: 'open').size
     end
 
     def get_past_gifts user

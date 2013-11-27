@@ -97,6 +97,41 @@ describe GiftScopes do
 
         end
 
+        describe :get_notifications do
+
+            it "should return 'open' && not pay_stat = invalid gifts" do
+                User.delete_all
+                Provider.delete_all
+                @user     = FactoryGirl.create(:user)
+                2.times do
+                    gift = FactoryGirl.create(:gift, receiver: @user, provider_name: "Redeemed", status: 'redeemed')
+                    redeem = Redeem.create(gift_id: gift.id)
+                    Order.create(gift_id: gift.id, redeem_id: redeem.id)
+                end
+                FactoryGirl.create(:gift, receiver: @user)
+                FactoryGirl.create(:gift, receiver: @user)
+                FactoryGirl.create(:gift, receiver: @user)
+                2.times do
+                    gift = FactoryGirl.create(:gift, receiver: @user,pay_stat: 'unpaid', status: 'open')
+                end
+                2.times do
+                    gift = FactoryGirl.create(:gift, receiver: @user,pay_stat: 'duplicate', status: 'open')
+                end
+                2.times do
+                    gift = FactoryGirl.create(:gift, receiver: @user,pay_stat: 'declined', status: 'open')
+                end
+                3.times do
+                    gift = FactoryGirl.create(:gift, receiver: @user, pay_stat: 'charged')
+                    Redeem.create(gift_id: gift.id)
+                end
+                # 14 gifts total
+
+                gift_count = Gift.get_notifications @user
+                gift_count.should     == 3
+            end
+
+        end
+
     end
 
 
