@@ -246,4 +246,9 @@ FactoryGirl.define do
         next_view   "m"
     end
 
+    factory :debt do
+        owner { FactoryGirl.create(:provider).biz_user}
+
+    end
+
 end

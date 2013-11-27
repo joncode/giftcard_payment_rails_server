@@ -8,10 +8,9 @@ class Sale < ActiveRecord::Base
 
 	belongs_to :provider
 	belongs_to :giver, class_name: "User"
-	belongs_to :gift
-    #has_one :gift,   as: :payable
-	#has_one    :order, through: :gift
 	belongs_to :card
+
+    has_one :gift, as: :payable
 
     validates_presence_of :gift_id, :giver_id, :resp_code
 

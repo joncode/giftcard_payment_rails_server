@@ -84,38 +84,79 @@ describe Gift do
 
     end
 
-    describe "collect incomplete gifts" do
+    it "should associate with a user as giver" do
+        user = FactoryGirl.create(:user)
+        gift = FactoryGirl.create(:gift, giver: user)
 
-      xit "should collect gifts for any UserSocial account on user" do
-
-      end
-
+        gift.reload
+        gift.giver.id.should    == user.id
+        gift.giver.name.should  == user.name
+        gift.giver_name.should  == user.name
+        gift.giver_id.should    == user.id
+        gift.giver.class.should == User
     end
 
-    describe "#charge_card" do
-      xit "should correctly set status" do
+    it "should associate with a BizUser as giver" do
+        biz_user = FactoryGirl.create(:provider).biz_user
 
-      end
-      xit "should correctly set pay_stat" do
+        gift = FactoryGirl.create(:gift, giver: biz_user)
 
-      end
-
-      xit "should correctly set pay_type" do
-
-      end
+        gift.reload
+        gift.giver.id.should    == biz_user.id
+        gift.giver.name.should  == biz_user.name
+        gift.giver.class.should == BizUser
     end
 
+    it "should associate with a user as receiver" do
+        user = FactoryGirl.create(:user)
+        gift = FactoryGirl.create(:gift, receiver: user)
 
+        gift.reload
+        gift.receiver.id.should    == user.id
+        gift.receiver.name.should  == user.name
+        gift.receiver_name.should  == user.name
+        gift.receiver_id.should    == user.id
+        gift.receiver.class.should == User
+    end
 
-    # test that the gift starts as unpaid
-    # test that the gift without the id after paid is incomplete
-    # test that the gift with receiver id is open
-    # test that when gift redeem is created that the gift status is notified
-    # test that when the gift order is created that the gift is redeemed
-    # test that the redeemed gift redeemed_at is the order time
-    # test that when the gift is settled that the redeemed_at time is available
-    # test that when the gift is voided that it is removed from the appropriate app lists
-    # test that when the gift is refunded that it removed from the appropriate app lists
+    it "should associate with provider" do
+        provider = FactoryGirl.create(:provider)
+        gift = FactoryGirl.create(:gift, provider: provider)
+
+        gift.reload
+        gift.provider.id.should    == provider.id
+        gift.provider.name.should  == provider.name
+        gift.provider_id.should    == provider.id
+        gift.provider_name.should  == provider.name
+        gift.provider.class.should == Provider
+    end
+
+    it "should associate with a Sale as payment" do
+        sale = FactoryGirl.create(:sale)
+
+        gift = FactoryGirl.create(:gift, payable: sale)
+
+        gift.reload
+        gift.payable.id.should       == sale.id
+        gift.payable.class.should    == Sale
+        gift.payable.response.should == sale.response
+    end
+
+    it "should associate with a Debt as payment" do
+        debt = FactoryGirl.create(:debt)
+
+        gift = FactoryGirl.create(:gift, payable: debt)
+
+        gift.reload
+        gift.payable.id.should      == debt.id
+        gift.payable.class.should   == Debt
+    end
+
+    it "should save the total as string" do
+        gift = FactoryGirl.create(:gift, value: "100.00")
+        gift.value.should == "100.00"
+        gift.total.should == "100.00"
+    end
 
 end
 

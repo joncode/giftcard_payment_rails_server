@@ -13,22 +13,20 @@ class User < ActiveRecord::Base
 	:iphone_photo, :origin, :twitter
 
 	attr_accessible :use_photo
-	# attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-	# attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
-
-	# mount_uploader   :photo, UserAvatarUploader
-	# mount_uploader   :secure_image, UserAvatarUploader
 
 	has_one  :setting
 	has_many :pn_tokens
 	has_many :brands
 	has_many :orders,    :through => :providers
-	has_many :gifts,     foreign_key: "giver_id"
+
 	has_many :sales
 	has_many :cards
 	has_many :answers
 	has_many :questions, :through => :answers
 	has_many :user_socials, 	dependent: :destroy
+	#has_many :gifts,     foreign_key: "giver_id"
+    has_many :sent,       as: :giver,  class_name: Gift
+    has_many :received,   foreign_key: :receiver_id, class_name: Gift
 
 	has_secure_password
 
@@ -50,8 +48,6 @@ class User < ActiveRecord::Base
 	validates :password_confirmation, presence: true, 	on: :create
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
-
-	#default_scope -> { where(active: true).where(perm_deactive: false) } # indexed
 
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false).where(remember_token: token).first

@@ -17,15 +17,15 @@ class Gift < ActiveRecord::Base
 	has_one     :sale
 	has_one     :order, 		dependent: :destroy
 	has_many    :gift_items, 	dependent: :destroy
-	belongs_to  :giver,    		class_name: "User"
-	belongs_to  :receiver, 		class_name: "User"
-	#belongs_to  :payables, 		polymorphic: true
+    belongs_to  :giver,    polymorphic: :true
+    belongs_to  :receiver, class_name: User
+    belongs_to  :payable,  polymorphic: :true
 
 	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service, :shoppingCart
 
 	before_save   :extract_phone_digits
 	before_create :add_giver_name,  	:if => :no_giver_name
-	before_create :add_provider_name,  	:if => :no_provider_name
+    before_create :add_provider_name,   :if => :no_provider_name?
 	before_create :regifted,        	:if => :regift?
 	before_create :build_gift_items
 	before_create :set_statuses
@@ -34,6 +34,26 @@ class Gift < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
+    def initialize args={}
+        pre_init(args)
+        super
+        post_init(args)
+    end
+
+    def receiver= user_obj
+        self.receiver_name = user_obj.name
+        super
+    end
+
+    def giver= giver_obj
+        self.giver_name = giver_obj.name
+        super
+    end
+
+    def provider= provider_obj
+        self.provider_name = provider_obj.name
+        super
+    end
 
 	def phone
 		self.receiver_phone
@@ -44,19 +64,21 @@ class Gift < ActiveRecord::Base
 	end
 
 	def grand_total
-		pre_round = self.total.to_f + self.service.to_f
+		pre_round = self.value.to_f + self.service.to_f
 		float_to_cents(pre_round.round(2))
-	end
-
-	def total
-		string_to_cents super
 	end
 
 	def service
 		string_to_cents super
 	end
 
+    def total
+        string_to_cents self.value
+    end
 
+    def total= amount
+        self.value = amount
+    end
 
 #/-----------------------------------------------Status---------------------------------------/
 
@@ -186,6 +208,14 @@ class Gift < ActiveRecord::Base
 
 private
 
+    def pre_init args={}
+        nil
+    end
+
+    def post_init args
+        nil
+    end
+
 	##########  shopping cart methods
 
 	def build_gift_items
@@ -214,15 +244,13 @@ private
 		self.giver_name.nil?
 	end
 
-	def add_provider_name
-		if provider = self.provider
-			self.provider_name = provider.name
-		end
-	end
+    def add_provider_name
+        self.provider = Provider.find(self.provider_id)
+    end
 
-	def no_provider_name
-		self.provider_name.nil?
-	end
+    def no_provider_name?
+        !self.provider_name.present?
+    end
 
 	def regifted
 		old_gift = Gift.find(self.regift_id)

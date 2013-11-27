@@ -27,6 +27,29 @@ describe Sale do
         sale.should have_at_least(1).error_on(:resp_code)
     end
 
+    it "should associate with Gifts" do
+        sale = FactoryGirl.create(:sale)
+
+        gift = FactoryGirl.create(:gift, payable: sale)
+
+        sale.reload
+        sale.gift.id.should   == gift.id
+        sale.gift.class.should == Gift
+    end
+
+    it "should associate with Cards" do
+        card = FactoryGirl.create(:card)
+        sale = FactoryGirl.create(:sale, card: card)
+        sale.card.id.should   == card.id
+        sale.card.class.should == Card
+    end
+
+    it "should save the amount as a decimal" do
+        sale = FactoryGirl.create(:sale, revenue: "100")
+        sale.reload
+        sale.revenue.should == BigDecimal("100")
+    end
+
     describe "#process" do
 
         let(:gift) { FactoryGirl.build(:gift) }

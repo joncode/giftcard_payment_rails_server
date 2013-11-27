@@ -71,13 +71,38 @@ describe User do
 
 				end
 		end
-
-		# test that user_social save condensed phone numbers
-		# test that user social runs email downcase and regex
-		# test that user can give a primary phone number
-		# test that user can give a primary email address
-
 	end
+	
+    it "builds from factory" do
+        user = FactoryGirl.create :user
+        user.should be_valid
+    end
+
+    it "should associate gift as giver" do
+        user = FactoryGirl.create(:user)
+        gift = FactoryGirl.create(:gift, giver: user)
+
+        user.reload
+        user.sent.first.id.should          == gift.id
+        user.sent.first.class.should       == Gift
+    end
+
+    it "should associate gift as receiver" do
+        user = FactoryGirl.create(:user)
+        gift = FactoryGirl.create(:gift, receiver: user)
+
+        user.reload
+        user.received.first.id.should             == gift.id
+        user.received.first.class.should          == Gift
+    end
+
+    it "should associate card as user" do
+        user = FactoryGirl.create(:user)
+        card = FactoryGirl.create(:card, user: user)
+
+        user.cards.first.id.should == card.id
+        user.cards.first.user_id.should == user.id
+    end
 
 end# == Schema Information
 #

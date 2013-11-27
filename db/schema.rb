@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131113021518) do
+ActiveRecord::Schema.define(version: 20131127033139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,16 @@ ActiveRecord::Schema.define(version: 20131113021518) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "debts", force: true do |t|
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.decimal  "amount",     precision: 8, scale: 2
+    t.decimal  "total",      precision: 8, scale: 2
+    t.string   "detail"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "gift_items", force: true do |t|
     t.integer "gift_id"
     t.integer "menu_id"
@@ -144,6 +154,8 @@ ActiveRecord::Schema.define(version: 20131113021518) do
     t.string   "server"
     t.integer  "payable_id"
     t.string   "payable_type"
+    t.string   "giver_type"
+    t.string   "value"
   end
 
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree

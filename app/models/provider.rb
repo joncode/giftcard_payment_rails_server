@@ -30,6 +30,9 @@ class Provider < ActiveRecord::Base
 
 	default_scope -> { where(active: true).where(paused: false).order("name ASC") }
 
+    def biz_user
+        BizUser.find(self.id)
+    end
 #/---------------------------------------------------------------------------------------------/
 
 	def self.get_all

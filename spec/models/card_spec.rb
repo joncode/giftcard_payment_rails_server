@@ -178,8 +178,22 @@ describe Card do
         end
 
     end
+    
 
+    it "should have_many Sales" do
+        card = FactoryGirl.create(:card)
+        sale = FactoryGirl.create(:sale, card: card)
+        card.sales.first.class.should == Sale
+        card.sales.first.id.should    == sale.id
+    end
 
+    it "should build a Sale via charge" do
+        card = FactoryGirl.create :card
+        sale = card.charge("212.00")
+        sale.class.should == Sale
+        sale.amount.should == BigDecimal("212.00")
+        sale.new_record?.should be_true
+    end
 
     # it "requires number" do
     #   card = FactoryGirl.build(:card,  number => nil)

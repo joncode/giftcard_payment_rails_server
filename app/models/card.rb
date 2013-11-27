@@ -27,6 +27,11 @@ class Card < ActiveRecord::Base
 
 #	-------------
 
+    def charge amount
+        puts "CHARGING CARD\n"
+        Sale.new(amount: amount, card: self, user_id: self.user_id)
+    end
+    
 	def create_serialize
 		card_hash = self.serializable_hash only: [ "id", "nickname", "last_four" ]
 	end
