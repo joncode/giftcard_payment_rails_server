@@ -39,6 +39,7 @@ group :test do
   gem "launchy"
   gem 'webmock'
   gem 'resque_spec'
+  gem 'database_cleaner'
 end
 
 

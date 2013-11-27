@@ -23,18 +23,19 @@ describe PushJob do
             user_alias = @pnt.ua_alias
 
             prov_name = "Push Testers"
-            good_push_hsh = {"aliases" =>["#{user_alias}"],"aps" =>{"alert" => "#{@user.name} sent you a gift at #{prov_name}!","badge"=>1,"sound"=>"pn.wav"},"alert_type"=>1}
 
             6.times do
-                gift = FactoryGirl.create(:gift, receiver: @user, provider_name: "Redeemed", status: 'redeemed')
+                    # these shold not go to push badge count
+                gift = FactoryGirl.create(:gift, receiver: @user, provider_name: "Notified")
                 redeem = Redeem.create(gift_id: gift.id)
-                Order.create(gift_id: gift.id, redeem_id: redeem.id)
             end
             @gift     = FactoryGirl.create(:gift, receiver: @user, provider_name: prov_name)
+            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.giver_name} sent you a gift at #{prov_name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+
             run_delayed_jobs
             @gift.reload.receiver.should == @user
-            PushJob.should_receive(:format_payload).with(@gift, @user, 1)
-            #Urbanairship.should_receive(:push).with(good_push_hsh)
+
+            Urbanairship.should_receive(:push).with(good_push_hsh)
 
             Relay.send_push_notification @gift
             run_delayed_jobs

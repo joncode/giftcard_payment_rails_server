@@ -3,12 +3,11 @@ class PushJob
     @queue = :push
 
     def self.perform gift_id
-
         gift        = Gift.find gift_id
         receiver    = gift.receiver
         badge       = Gift.get_notifications(receiver)
         payload     = self.format_payload(gift, receiver, badge)
-        puts "SENDING PUSH NOTE for GIFT ID = #{gift_id}"
+        puts "SENDING PUSH NOTE for GIFT ID = #{gift_id} | #{payload}"
         resp        = Urbanairship.push(payload)
         puts "APNS push sent via ALIAS! #{resp}"
 

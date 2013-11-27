@@ -46,7 +46,7 @@ describe AppController do
         json["success"]["badge"].should == 1
 
         user_alias = pnt.ua_alias
-        good_push_hsh = {"aliases" =>["#{user_alias}"],"aps" =>{"alert" => "#{user.name} sent you a gift at #{provider.name}!","badge"=>1,"sound"=>"pn.wav"}}
+        good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{gift.giver_name} sent you a gift at #{provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
         Urbanairship.should_receive(:push).with(good_push_hsh)
         run_delayed_jobs
     end
