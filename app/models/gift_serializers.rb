@@ -75,9 +75,9 @@ module GiftSerializers
         #gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
         gift_hsh["name"]               = provider.name
         gift_hsh["merchant_address"]   = provider.full_address
-        gift_hsh["total"]              = self.total
+        gift_hsh["total"]              = self.value
         gift_hsh["updated_at"]         = self.updated_at
-        gift_hsh["pay_type"]           = self.pay_type
+        gift_hsh["pay_type"]           = self.payable_type
         gift_hsh
     end
 
@@ -97,7 +97,7 @@ module GiftSerializers
             server = nil
         end
         gift_hsh["server"]          = server
-        gift_hsh["total"]           = self.total
+        gift_hsh["total"]           = self.value
         gift_hsh
     end
 

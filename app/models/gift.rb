@@ -4,13 +4,13 @@ class Gift < ActiveRecord::Base
 	include Email
 	include GiftSerializers
 
-	attr_accessible   	  :giver_id, 	  :giver_name,
-			:receiver_id, :receiver_name, :receiver_phone,
-			:provider_id, :provider_name, :receiver_email,
-			:message,     :shoppingCart,
-			:tip, :tax,   :total, :service,
-			:facebook_id, :foursquare_id, :twitter,
-			:status, :credit_card
+	# attr_accessible   	  :giver_id, 	  :giver_name,
+	# 		:receiver_id, :receiver_name, :receiver_phone,
+	# 		:provider_id, :provider_name, :receiver_email,
+	# 		:message,     :shoppingCart,
+	# 		:tip, :tax,   :total, :service,
+	# 		:facebook_id, :foursquare_id, :twitter,
+	# 		:status, :credit_card, :value
 
 	has_one     :redeem, 		dependent: :destroy
 	belongs_to  :provider
@@ -21,7 +21,7 @@ class Gift < ActiveRecord::Base
     belongs_to  :receiver, class_name: User
     belongs_to  :payable,  polymorphic: :true
 
-	validates_presence_of :giver_id, :receiver_name, :provider_id, :total, :credit_card, :service, :shoppingCart
+	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
 
 	before_save   :extract_phone_digits
 	before_create :add_giver_name,  	:if => :no_giver_name
@@ -41,17 +41,17 @@ class Gift < ActiveRecord::Base
     end
 
     def receiver= user_obj
-        self.receiver_name = user_obj.name
+        self.receiver_name = user_obj.name if user_obj
         super
     end
 
     def giver= giver_obj
-        self.giver_name = giver_obj.name
+        self.giver_name = giver_obj.name if giver_obj
         super
     end
 
     def provider= provider_obj
-        self.provider_name = provider_obj.name
+        self.provider_name = provider_obj.name if provider_obj
         super
     end
 
@@ -111,7 +111,7 @@ class Gift < ActiveRecord::Base
 	end
 
 	def set_payment_status
-		case self.sale.resp_code
+		case self.payable.resp_code
 		when 1
 		  # Approved
 			self.pay_stat = "charged"
@@ -144,7 +144,7 @@ class Gift < ActiveRecord::Base
     	sale      	  = Sale.init self  # @gift
     	sale.auth_capture
 
-    	self.sale 	  = sale
+    	self.payable  = sale
     end
 
 #/-------------------------------------re gift db methods-----------------------------/

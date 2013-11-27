@@ -5,8 +5,7 @@ class Mt::V2::MerchantsController < JsonController
     def create
         return nil  if data_not_hash?
 
-        merchant_hsh = params["data"]
-        provider     = Provider.new merchant_hsh
+        provider     = Provider.new merchant_params
         if provider.save
             success provider.id
         else
@@ -18,9 +17,7 @@ class Mt::V2::MerchantsController < JsonController
     def update
         return nil  if data_not_hash?
 
-        provider_hsh = params["data"]
-        provider_hsh.delete("tz")
-        if @provider.update_attributes(provider_hsh)
+        if @provider.update_attributes(merchant_params)
             success   "Merchant Update Successful"
         else
             fail      @provider
@@ -42,6 +39,13 @@ class Mt::V2::MerchantsController < JsonController
 
     def reconcile
 
+    end
+
+private
+
+    def merchant_params
+        allowed = [:menu, :latitude, :longitude, "name", "zinger", "description", "address", "city", "state", "zip", "phone", "merchant_id", "token", "image", "mode"]
+        params.require(:data).permit(allowed)
     end
 
 end

@@ -1,7 +1,7 @@
 class Brand < ActiveRecord::Base
-	attr_accessible :address, :city, :description,
-	:logo, :name, :phone, :state, :user_id, :website,
-	:photo, :portrait, :next_view
+	# attr_accessible :address, :city, :description,
+	# :logo, :name, :phone, :state, :user_id, :website,
+	# :photo, :portrait, :next_view
 
 	has_many   :providers
 	belongs_to :user
@@ -48,7 +48,7 @@ class Brand < ActiveRecord::Base
 			nil
 		end
 	end
-	
+
 	def photo= photo_url
 		# remove the cloudinary base url
 		if photo_url

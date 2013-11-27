@@ -223,7 +223,11 @@ private
 		obj.delete("use_photo")
 		puts "CREATE USER OBJECT parse = #{obj}"
 		# obj.symbolize_keys!
-		User.new(obj)
+		User.new(user_params)
+	end
+
+	def user_params
+		params.require(:data).permit(:first_name, :password, :last_name, :phone, :email, :origin, :iphone_photo, :password_confirmation,:facebook_id, :twitter, :handle)
 	end
 
 end

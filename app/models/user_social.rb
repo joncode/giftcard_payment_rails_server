@@ -1,5 +1,5 @@
 class UserSocial < ActiveRecord::Base
-    attr_accessible :identifier, :type_of, :user_id, :subscribed
+    #attr_accessible :identifier, :type_of, :user_id, :subscribed
 
     belongs_to :user
 

@@ -6,7 +6,7 @@ describe GiftSale do
 
         before(:each) do
             @user     = FactoryGirl.create(:user)
-            @receiver = FactoryGirl.create(:user, name: "Sarah Receiver")
+            @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
             @card     = FactoryGirl.create(:card, user: @user)
             @provider = FactoryGirl.create(:provider)
             @gift_hsh = {}
@@ -18,11 +18,13 @@ describe GiftSale do
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
             @gift_hsh["card_id"]        = @card.id
+            @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             @gift_hsh
         end
 
         it "should create a gift" do
             gift = GiftSale.create @gift_hsh
+            gift.reload
             gift.message.should         == @gift_hsh["message"]
             gift.receiver_name.should   == @gift_hsh["receiver_name"]
             gift.receiver_id.should     == @gift_hsh["receiver_id"]
@@ -35,10 +37,11 @@ describe GiftSale do
 
         it "should create a Sale for the total amount" do
             gift = GiftSale.create @gift_hsh
-            gift.payable.class.should   == Sale
-            gift.payable.amount.should  == BigDecimal("47.25")
-            gift.payable.card_id.should == @card.id
-            gift.payable.user_id.should == @user.id
+            gift.reload
+            gift.payable.class.should    == Sale
+            gift.payable.revenue.should  == BigDecimal("47.25")
+            gift.payable.card_id.should  == @card.id
+            gift.payable.giver_id.should == @user.id
         end
 
     end
@@ -47,7 +50,7 @@ describe GiftSale do
 
         before(:each) do
             @user     = FactoryGirl.create(:user)
-            @receiver = FactoryGirl.create(:user, name: "Sarah Receiver")
+            @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
             @card     = FactoryGirl.create(:card, user: @user)
             @provider = FactoryGirl.create(:provider)
             @gift_hsh = {}
@@ -59,11 +62,13 @@ describe GiftSale do
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
             @gift_hsh["card_id"]        = @card.id
+            @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             @gift_hsh
         end
 
         it "should create a gift" do
             gift = GiftSale.create @gift_hsh
+            gift.reload
             gift.message.should         == @gift_hsh["message"]
             gift.receiver_name.should   == @gift_hsh["receiver_name"]
             gift.receiver_email.should  == @gift_hsh["receiver_email"]
@@ -74,12 +79,13 @@ describe GiftSale do
             gift.provider.should        == @provider
         end
 
-        it "should create a Sale for the total amount" do
+        it "should create a Sale for the total revenue" do
             gift = GiftSale.create @gift_hsh
-            gift.payable.class.should   == Sale
-            gift.payable.amount.should  == BigDecimal("47.25")
-            gift.payable.card_id.should == @card.id
-            gift.payable.user_id.should == @user.id
+            gift.reload
+            gift.payable.class.should    == Sale
+            gift.payable.revenue.should  == BigDecimal("47.25")
+            gift.payable.card_id.should  == @card.id
+            gift.payable.giver_id.should == @user.id
         end
 
     end

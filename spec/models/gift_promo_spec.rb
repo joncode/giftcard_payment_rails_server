@@ -11,11 +11,12 @@ describe GiftPromo do
         @gift_hsh["provider_id"]    = @provider.id
         @gift_hsh["provider_name"]  = @provider.name
         @gift_hsh["value"]          = "100.00"
+        @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
     end
 
     it "should create gift" do
 
-        gift_promo = GiftPromo.create @gift_hsh
+        gift_promo = GiftPromo.create(@gift_hsh)
         gift_promo.class.should    == GiftPromo
         gift_promo.message.should        == @gift_hsh["message"]
         gift_promo.receiver_name.should  == "Customer Name"
@@ -45,6 +46,7 @@ describe GiftPromo do
     it "should set the giver info to the BizUser" do
         biz_user = BizUser.find(@provider.id)
         gift = GiftPromo.create @gift_hsh
+        gift.reload
         gift.giver_id.should   == biz_user.id
         gift.giver_name.should == biz_user.name
         gift.giver.should      == biz_user

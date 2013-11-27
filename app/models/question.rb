@@ -1,5 +1,5 @@
 class Question < ActiveRecord::Base
-    attr_accessible :answer, :left, :right
+    #attr_accessible :answer, :left, :right
 
     has_many :answers
     has_many :users , :through => :answers

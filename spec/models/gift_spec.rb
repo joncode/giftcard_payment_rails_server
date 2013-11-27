@@ -8,10 +8,10 @@ describe Gift do
         gift.should be_valid
     end
 
-    it "requires giver_id" do
-      gift = FactoryGirl.build(:gift, :giver_id => nil)
+    it "requires giver" do
+      gift = FactoryGirl.build(:gift, :giver => nil)
       gift.should_not be_valid
-      gift.should have_at_least(1).error_on(:giver_id)
+      gift.should have_at_least(1).error_on(:giver)
     end
 
     it "requires receiver_name" do
@@ -27,21 +27,9 @@ describe Gift do
     end
 
     it "requires total" do
-      gift = FactoryGirl.build(:gift, :total => nil)
+      gift = FactoryGirl.build(:gift, :value => nil)
       gift.should_not be_valid
-      gift.should have_at_least(1).error_on(:total)
-    end
-
-    it "requires credit_card" do
-      gift = FactoryGirl.build(:gift, :credit_card => nil)
-      gift.should_not be_valid
-      gift.should have_at_least(1).error_on(:credit_card)
-    end
-
-    it "requires service" do
-      gift = FactoryGirl.build(:gift, :service => nil)
-      gift.should_not be_valid
-      gift.should have_at_least(1).error_on(:service)
+      gift.should have_at_least(1).error_on(:value)
     end
 
     it "requires shoppingCart" do
@@ -86,9 +74,9 @@ describe Gift do
 
     it "should associate with a user as giver" do
         user = FactoryGirl.create(:user)
-        gift = FactoryGirl.create(:gift, giver: user)
-
-        gift.reload
+        gift = FactoryGirl.build(:gift)
+        gift.giver = user
+        gift.save
         gift.giver.id.should    == user.id
         gift.giver.name.should  == user.name
         gift.giver_name.should  == user.name
@@ -134,9 +122,10 @@ describe Gift do
     it "should associate with a Sale as payment" do
         sale = FactoryGirl.create(:sale)
 
-        gift = FactoryGirl.create(:gift, payable: sale)
+        gift = FactoryGirl.build(:gift)
+        gift.payable = sale
+        gift.save
 
-        gift.reload
         gift.payable.id.should       == sale.id
         gift.payable.class.should    == Sale
         gift.payable.response.should == sale.response

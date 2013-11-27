@@ -158,12 +158,14 @@ describe Admt::V2::UsersController do
 
     describe :deactivate_gifts do
 
+        let(:provider) { FactoryGirl.create(:provider) }
+
         it_should_behave_like("token authenticated", :post, :deactivate_gifts, id: 1)
 
         it "should deactivate all given and received gifts for user" do
             user = FactoryGirl.create(:user)
-            gift = FactoryGirl.create(:gift_no_association, :giver_id => user.id)
-            gift2 = FactoryGirl.create(:gift_no_association, :receiver_id => user.id)
+            gift = FactoryGirl.create(:gift_no_association, :giver => user, :provider => provider)
+            gift2 = FactoryGirl.create(:gift_no_association, :giver => user, :receiver => user, :provider => provider)
             post :deactivate_gifts, id: user.id, format: :json
             new_gift = Gift.unscoped.find gift.id
             new_gift.active.should be_false
@@ -173,8 +175,8 @@ describe Admt::V2::UsersController do
 
         it "should return success msg when success" do
             user = FactoryGirl.create(:user)
-            gift = FactoryGirl.create(:gift_no_association, :giver_id => user.id)
-            gift2 = FactoryGirl.create(:gift_no_association, :receiver_id => user.id)
+            gift = FactoryGirl.create(:gift_no_association, :giver => user, :provider => provider)
+            gift2 = FactoryGirl.create(:gift_no_association, :giver => user, :receiver => user, :provider => provider)
             post :deactivate_gifts, id: user.id, format: :json
             rrc(200)
             json["status"].should         == 1
@@ -183,8 +185,8 @@ describe Admt::V2::UsersController do
 
         xit "should return failure msg when error" do
             user = FactoryGirl.create(:user)
-            gift = FactoryGirl.create(:gift_no_association, :giver_id => user.id)
-            gift2 = FactoryGirl.create(:gift_no_association, :receiver_id => user.id)
+            gift = FactoryGirl.create(:gift_no_association, :giver => user, :provider => provider)
+            gift2 = FactoryGirl.create(:gift_no_association, :giver => user, :receiver => user, :provider => provider)
             post :deactivate_gifts, id: user.id, format: :json
             rrc(200)
             json["status"].should         == 0

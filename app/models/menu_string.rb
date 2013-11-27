@@ -1,5 +1,5 @@
 class MenuString < ActiveRecord::Base
-  	attr_accessible :full_address, :data, :provider_id, :version, :sections_json, :menu
+ # 	attr_accessible :full_address, :data, :provider_id, :version, :sections_json, :menu
 
   	belongs_to :provider
 

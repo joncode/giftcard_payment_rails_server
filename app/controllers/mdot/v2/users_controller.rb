@@ -20,10 +20,10 @@ class Mdot::V2::UsersController < JsonController
         end
 
         return nil  if data_not_hash?(data)
-        user_params = create_strong_param(data)
-        return nil  if hash_empty?(user_params)
+        user_param = create_strong_param(data)
+        return nil  if hash_empty?(user_param)
 
-        user = User.new(data)
+        user = User.new(create_user_params)
         if user.save
             user.pn_token = pn_token if pn_token
             success user.create_serialize
@@ -71,9 +71,19 @@ private
         data_hsh.select{ |k,v| allowed.include? k }
     end
 
+    def update_user_params
+        allowed = [ "first_name" , "last_name",  "phone" , "email" , "sex" , "zip", "birthday", "twitter", "facebook_id"]
+        params.require(:data).permit(allowed)
+    end
+
     def create_strong_param(data_hsh)
         allowed = [ "first_name" , "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "origin", "iphone_photo", "use_photo", "handle"]
         data_hsh.select{ |k,v| allowed.include? k }
+    end
+
+    def create_user_params
+        allowed = [ "first_name" , "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle"]
+        params.require(:data).permit(allowed)
     end
 
 end

@@ -21,7 +21,7 @@ class GiftCreator < GiftUtility
     def charge
         @gift.charge_card
         if @gift.save
-            if @gift.sale.resp_code == 1
+            if @gift.payable.resp_code == 1
                 @resp["success"]       = { "Gift_id" => @gift.id }
                 messenger
             else

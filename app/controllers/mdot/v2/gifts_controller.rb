@@ -73,7 +73,7 @@ class Mdot::V2::GiftsController < JsonController
         return nil if data_not_array?(shoppingCart)
 
         if card = Card.where(id: gift_hsh["credit_card"]).count > 0
-            gift_creator = GiftCreator.new(@current_user, gift_hsh, shoppingCart)
+            gift_creator = GiftCreator.new(@current_user, gift_params, shoppingCart)
             unless gift_creator.no_data?
                 gift_creator.build_gift
                 if gift_creator.resp["error"].nil?
@@ -105,5 +105,13 @@ private
     def redeem_params
         params.require(:server)
     end
-    
+
+    def gift_params
+        if params.require(:gift).kind_of?(String)
+            pg = JSON.parse(params.require(:gift))
+        else
+            params.require(:gift).permit( :giver_id,:giver_name,:total,:service,:receiver_id,:receiver_name,:provider_id,:credit_card)
+        end
+    end
+
 end

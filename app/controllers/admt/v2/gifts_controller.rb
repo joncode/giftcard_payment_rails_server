@@ -4,8 +4,8 @@ class Admt::V2::GiftsController < JsonController
 
     def update
         return nil  if data_not_hash?
-        gift_params = strong_param(params["data"])
-        return nil  if hash_empty?(gift_params)
+        gift_param = strong_param(params["data"])
+        return nil  if hash_empty?(gift_param)
 
         gift = Gift.find(params[:id])
         if gift.update_attributes(gift_params)
@@ -17,8 +17,8 @@ class Admt::V2::GiftsController < JsonController
     end
 
     def refund
-        gift = Gift.includes(:sale).find params[:id]
-        sale = gift.sale
+        gift = Gift.includes(:payable).find params[:id]
+        sale = gift.payable
         resp = sale.void_sale
         if  resp == 0
             success "Gift is #{gift.pay_stat}"
@@ -29,8 +29,8 @@ class Admt::V2::GiftsController < JsonController
     end
 
     def refund_cancel
-        gift = Gift.includes(:sale).find params[:id]
-        sale = gift.sale
+        gift = Gift.includes(:payable).find params[:id]
+        sale = gift.payable
         resp = sale.void_sale
         if  resp == 0
             gift.status = 'cancel'
@@ -50,6 +50,11 @@ private
     def strong_param(data_hsh)
         allowed = [ "receiver_name" , "receiver_email",  "receiver_phone" ]
         data_hsh.select{ |k,v| allowed.include? k }
+    end
+
+    def gift_params
+        allowed = [ "receiver_name" , "receiver_email",  "receiver_phone" ]
+        params.require(:data).permit(allowed)
     end
 
 end

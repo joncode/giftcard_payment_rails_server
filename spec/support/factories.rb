@@ -121,14 +121,14 @@ FactoryGirl.define do
         gift.shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
         gift.message         "Factory Message"
         gift.pay_stat       "charged"
-
+        gift.payable       { FactoryGirl.create(:sale)}
+        
         factory :regift do |regift|
             regift.giver        { FactoryGirl.create(:giver) }
             regift.giver_name   "Jon giver"
             regift.receiver     { FactoryGirl.create(:regifter) }
             regift.receiver_name "Will Regifter"
-            regift.pay_type     "Sale"
-            regift.sale         { FactoryGirl.create(:sale) }
+
         end
 
     end
@@ -150,7 +150,7 @@ FactoryGirl.define do
         pay_stat        "charged"
         credit_card     4567890
         shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
-        sale            { FactoryGirl.create(:sale)}
+        payable           { FactoryGirl.create(:sale)}
 
         factory :gift_no_association_wtih_card do
             credit_card { FactoryGirl.create(:card)}
@@ -199,10 +199,10 @@ FactoryGirl.define do
 
     factory :sale do
         giver_id    1
-        gift_id     1
         resp_code   1
         response    AuthResponse.new
         transaction AuthTransaction.new
+        card_id    { FactoryGirl.create(:visa).id }
     end
 
     factory :order do |order|

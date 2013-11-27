@@ -19,7 +19,7 @@ gem 'bcrypt-ruby', '~> 3.1.2'
 gem 'activemerchant'
 gem 'urbanairship'
 
-gem 'protected_attributes', "~> 1.0.5"
+#gem 'protected_attributes', "~> 1.0.5"
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'

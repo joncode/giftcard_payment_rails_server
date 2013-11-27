@@ -101,6 +101,15 @@ describe Mdot::V2::CardsController do
             json["data"]["error"].keys.include?("month").should be_true
         end
 
+        it "should reject invalid cc numbers" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params = {"name"=>"Joe Meeks", "nickname"=>"junk", "number"=>"4222222222222222", "month"=>"10", "year"=>"2022", "csv"=>"123"}
+            post :create, format: :json, data: params
+            rrc(400)
+            json["status"].should == 0
+            json["data"]["error"].keys.include?("number").should be_true
+        end
+
     end
 
     describe :destroy do

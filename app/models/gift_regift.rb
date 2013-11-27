@@ -6,6 +6,7 @@ class GiftRegift < Gift
         args["giver"]    = old_gift.receiver
         args["provider"] = old_gift.provider
         args["value"]    = old_gift.value
+
     end
 
     def post_init args={}

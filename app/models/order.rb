@@ -1,7 +1,7 @@
 class Order < ActiveRecord::Base
 	include Email
 
-	attr_accessible :gift_id, :redeem_code, :redeem_id, :server_code, :server_id, :provider_id, :employee_id
+	#attr_accessible :gift_id, :redeem_code, :redeem_id, :server_code, :server_id, :provider_id, :employee_id
 
 	belongs_to  :provider
 	belongs_to  :redeem

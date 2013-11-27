@@ -17,7 +17,9 @@ describe BizUser do
     it "should associate with a biz_user as giver" do
         provider = FactoryGirl.create(:provider)
         biz_user = BizUser.find(provider.id)
-        gift     = FactoryGirl.create(:gift, giver: biz_user)
+        gift     = FactoryGirl.build(:gift)
+        gift.giver = biz_user
+        gift.save
 
         biz_user.sent.first.id.should          == gift.id
         biz_user.sent.first.class.should       == Gift

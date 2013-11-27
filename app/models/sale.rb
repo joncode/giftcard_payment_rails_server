@@ -3,8 +3,6 @@ require 'authorize_net'
 class Sale < ActiveRecord::Base
 
  	attr_accessor :transaction, :credit_card, :response, :total
- 	# NOTE - Revenue is a decimal value - gift.total is a string - converted in self.init below
- 	# attr_accessible :card_id, :gift_id, :giver_id, :provider_id, :request_string, :response_string, :revenue, :status, :transaction_id
 
 	belongs_to :provider
 	belongs_to :giver, class_name: "User"
@@ -12,7 +10,7 @@ class Sale < ActiveRecord::Base
 
     has_one :gift, as: :payable
 
-    validates_presence_of :gift_id, :giver_id, :resp_code
+    validates_presence_of :giver_id, :card_id, :resp_code
 
 #### SALE PROCESS METHODS
 
@@ -65,8 +63,8 @@ class Sale < ActiveRecord::Base
         timer = Time.now
         puts "------- Charge Card Timer --------"
         if  Rails.env.test?
-            @transaction = AuthTransaction.new
-            @response    = AuthResponse.new
+            self.transaction = AuthTransaction.new
+            self.response    = AuthResponse.new
         else
             # 1 makes a transaction
             @transaction = authorize_net_aim_transaction

@@ -1,13 +1,13 @@
 class Provider < ActiveRecord::Base
 	include Formatter
 
-	attr_accessible :address, :city, :description, :name,
-	:state, :user_id, :zip, :zinger, :phone, :email,
-	:twitter, :facebook, :website, :users,
-	:sales_tax, :token, :image, :merchant_id,
-	:paused, :live, :mode, :latitude, :longitude
+	# attr_accessible :address, :city, :description, :name,
+	# :state, :user_id, :zip, :zinger, :phone, :email,
+	# :twitter, :facebook, :website, :users,
+	# :sales_tax, :token, :image, :merchant_id,
+	# :paused, :live, :mode, :latitude, :longitude
 
-	attr_accessible :menu
+	#attr_accessible :menu
 	attr_accessor 	:menu
 
 	has_many   :orders

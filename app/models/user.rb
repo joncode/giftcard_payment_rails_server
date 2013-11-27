@@ -4,15 +4,15 @@ class User < ActiveRecord::Base
 	include Email
 	include Utility
 
-	attr_accessible  :email, :password, :password_confirmation,
-	:first_name, :last_name, :phone,
-	:address, :address_2, :city, :state, :zip, :credit_number,
-	:admin, :facebook_id, :facebook_access_token, :facebook_expiry,
-	:foursquare_id, :foursquare_access_token, :provider_id, :handle,
-	:server_code, :sex, :birthday, :is_public, :confirm,
-	:iphone_photo, :origin, :twitter
+	# attr_accessible  :email, :password, :password_confirmation,
+	# :first_name, :last_name, :phone,
+	# :address, :address_2, :city, :state, :zip, :credit_number,
+	# :admin, :facebook_id, :facebook_access_token, :facebook_expiry,
+	# :foursquare_id, :foursquare_access_token, :provider_id, :handle,
+	# :server_code, :sex, :birthday, :is_public, :confirm,
+	# :iphone_photo, :origin, :twitter
 
-	attr_accessible :use_photo
+	# attr_accessible :use_photo
 
 	has_one  :setting
 	has_many :pn_tokens
