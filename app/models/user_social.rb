@@ -10,7 +10,7 @@ class UserSocial < ActiveRecord::Base
     after_create          :subscribe_mailchimp
     after_save            :unsubscribe_mailchimp
 
-    default_scope -> { where(active: true) }
+    default_scope -> { where(active: true) }  # indexed
 
 
     def self.activate_all user

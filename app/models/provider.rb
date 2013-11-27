@@ -1,19 +1,13 @@
 class Provider < ActiveRecord::Base
 	include Formatter
 
-	# attr_accessible :address, :city, :description, :name,
-	# :state, :user_id, :zip, :zinger, :phone, :email,
-	# :twitter, :facebook, :website, :users,
-	# :sales_tax, :token, :image, :merchant_id,
-	# :paused, :live, :mode, :latitude, :longitude
-
-	#attr_accessible :menu
 	attr_accessor 	:menu
 
-	has_many   :orders
+
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
 	has_many   :sales
+	has_many   :orders
 	belongs_to :brands
 	belongs_to :merchant
 
@@ -26,9 +20,8 @@ class Provider < ActiveRecord::Base
 
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
-    #after_save      :update_city_provider
 
-	default_scope -> { where(active: true).where(paused: false).order("name ASC") }
+	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
     def biz_user
         BizUser.find(self.id)

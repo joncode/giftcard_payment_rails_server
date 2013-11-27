@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131127151235) do
+ActiveRecord::Schema.define(version: 20131127151703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,6 +43,8 @@ ActiveRecord::Schema.define(version: 20131127151235) do
     t.boolean  "child",       default: false
     t.boolean  "active",      default: true
   end
+
+  add_index "brands", ["active"], name: "index_brands_on_active", using: :btree
 
   create_table "brands_providers", id: false, force: true do |t|
     t.integer "provider_id"
