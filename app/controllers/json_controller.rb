@@ -218,10 +218,9 @@ class JsonController < ActionController::Base
 
     def authenticate_customer
         token         = request.headers["HTTP_TKN"]
-        puts "Here is the token received ----> #{token}" unless Rails.env.production?
         @current_user = User.app_authenticate(token)
         if @current_user
-            puts @current_user.name
+            puts "APP  -------------   #{@current_user.name}   -----------------------"
         else
             head :unauthorized
         end

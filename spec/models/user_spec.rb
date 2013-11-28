@@ -3,8 +3,8 @@ require 'spec_helper'
 describe User do
 
 	before(:each) do
-			User.delete_all
-			UserSocial.delete_all
+		User.delete_all
+		UserSocial.delete_all
 	end
 
 	it "should downcase email" do
@@ -30,8 +30,6 @@ describe User do
 		user.save
 		user.get_photo.should == "http://res.cloudinary.com/test_photo.jpg"
 	end
-
-
 
 	# if user updates email, phone, twitter or facebook the data is saved in userSocial
 	describe "user_social de-normalization" do
@@ -72,37 +70,72 @@ describe User do
 				end
 		end
 	end
-	
-    it "builds from factory" do
-        user = FactoryGirl.create :user
-        user.should be_valid
+
+    context "model associations and validations" do
+
+        it "builds from factory" do
+            user = FactoryGirl.create :user
+            user.should be_valid
+        end
+
+        it "should associate gift as giver" do
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create(:gift, giver: user)
+
+            user.reload
+            user.sent.first.id.should          == gift.id
+            user.sent.first.class.should       == Gift
+        end
+
+        it "should associate gift as receiver" do
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create(:gift, receiver: user)
+
+            user.reload
+            user.received.first.id.should             == gift.id
+            user.received.first.class.should          == Gift
+        end
+
+        it "should associate card as user" do
+            user = FactoryGirl.create(:user)
+            card = FactoryGirl.create(:card, user: user)
+
+            user.cards.first.id.should == card.id
+            user.cards.first.user_id.should == user.id
+        end
+
     end
 
-    it "should associate gift as giver" do
-        user = FactoryGirl.create(:user)
-        gift = FactoryGirl.create(:gift, giver: user)
+    context "pn_token management" do
 
-        user.reload
-        user.sent.first.id.should          == gift.id
-        user.sent.first.class.should       == Gift
+        it "should hit urban airship endpoint when token created or updated" do
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
+            pnt  = "162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76"
+            user1 = FactoryGirl.create :user, { first_name: "Squatter", email: "KJOOIcode@yahoo.com" }
+            user2 = FactoryGirl.create :user, { first_name: "Real", email: "updated@gmail.com" }
+
+            user1.pn_token = pnt
+            user1.pn_token.should == [pnt]
+
+            user_1_alias = user1.pn_tokens.first.ua_alias
+            puts "User 1 alias = #{user_1_alias}"
+            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_1_alias})
+
+            run_delayed_jobs
+
+            user2.pn_token = pnt
+            user2.pn_token.should == [pnt]
+
+            user_2_alias = user2.pn_tokens.first.ua_alias
+            puts "User 2 alias = #{user_2_alias}"
+            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_2_alias})
+
+            run_delayed_jobs
+
+        end
     end
 
-    it "should associate gift as receiver" do
-        user = FactoryGirl.create(:user)
-        gift = FactoryGirl.create(:gift, receiver: user)
-
-        user.reload
-        user.received.first.id.should             == gift.id
-        user.received.first.class.should          == Gift
-    end
-
-    it "should associate card as user" do
-        user = FactoryGirl.create(:user)
-        card = FactoryGirl.create(:card, user: user)
-
-        user.cards.first.id.should == card.id
-        user.cards.first.user_id.should == user.id
-    end
 
 end# == Schema Information
 #

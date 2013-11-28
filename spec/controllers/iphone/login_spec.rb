@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe IphoneController do
 
-    describe "#login" do
+    describe :login do
 
-        before do
+        before(:each) do
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
         end
-        
+
         it "is successful" do
             post :login, format: :json, email: "neil@gmail.com", password: "password"
             response.status.should         == 200
@@ -42,6 +42,22 @@ describe IphoneController do
             pn_token.pn_token.should == token
             pn_token.class.should    == PnToken
             pn_token.user_id.should  == @user.id
+        end
+
+        it "should hit urban airship endpoint with correct token and alias" do
+
+            PnToken.any_instance.stub(:ua_alias).and_return("fake_ua")
+            User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
+            SubscriptionJob.stub(:perform).and_return(true)
+            MailerJob.stub(:call_mandrill).and_return(true)
+            run_delayed_jobs
+            pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
+            ua_alias = "fake_ua"
+
+            Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias})
+
+            post :login, format: :json, email: "neil@gmail.com", password: "password", pn_token: pn_token
+            run_delayed_jobs # ResqueSpec.perform_all(:push)
         end
 
     end
@@ -103,5 +119,21 @@ describe IphoneController do
             response.status.should == 200
             json["error"].should   == "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
         end
+
+        it "should hit urban airship endpoint with correct token and alias" do
+            PnToken.any_instance.stub(:ua_alias).and_return("fake_ua")
+            User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
+            SubscriptionJob.stub(:perform).and_return(true)
+            MailerJob.stub(:call_mandrill).and_return(true)
+            pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
+            ua_alias = "fake_ua"
+            
+            Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias})
+
+            post :login_social, format: :json, origin: "f", facebook_id: @user.facebook_id, pn_token: pn_token
+            run_delayed_jobs # ResqueSpec.perform_all(:push)
+        end
+
+
     end
 end

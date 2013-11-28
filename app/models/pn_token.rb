@@ -7,7 +7,7 @@ class PnToken < ActiveRecord::Base
     validates_presence_of :user_id
 
 
-    after_create :register
+    after_save :register
 
     def pn_token=(token)
         converted_token = convert_token(token)

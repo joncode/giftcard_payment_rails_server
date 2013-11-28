@@ -24,12 +24,12 @@ describe "reconcile_emails rake tasks" do
 	        user = FactoryGirl.create :user, {first_name: "bob", last_name:"barker"}
 	    end
 
-        it "should description" do
+        xit "should description" do
         	require 'mandrill'
             Mandrill::API.stub_chain(:new, :messages, :search){ [{"email" => "#{INFO_EMAIL}", "subject" => "Bob sent you a gift on #{SERVICE_NAME}"},
             													 {"email" => "bob@email.com", "subject" => "Bob sent you a gift on #{SERVICE_NAME}"}] }
             Resque.should_receive(:enqueue)
-	        Rake::Task["email:gift_emails_count"].invoke            
+	        Rake::Task["email:gift_emails_count"].invoke
         end
     end
 
