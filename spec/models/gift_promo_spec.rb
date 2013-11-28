@@ -11,7 +11,6 @@ describe GiftPromo do
         @gift_hsh["receiver_email"] = "customer@gmail.com"
         @gift_hsh["provider_id"]    = @provider.id
         @gift_hsh["provider_name"]  = @provider.name
-        @gift_hsh["value"]          = "100.00"
         @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
     end
 
@@ -57,9 +56,18 @@ describe GiftPromo do
     it "should create a Debt for the BizUser and associate" do
         gift = GiftPromo.create @gift_hsh
         gift.reload
-        gift.value.should           == "100.00"
+        gift.value.should           == "30"
         gift.payable.owner.should   == @provider.biz_user
-        gift.payable.amount.should  == BigDecimal("15.00")
+        gift.payable.amount.should  == BigDecimal("4.50")
+    end
+
+    it "should calculate the correct value from the shoppingCart" do
+        @gift_hsh.delete("value")
+        gift = GiftPromo.create @gift_hsh
+        gift.reload
+        gift.value.should           == "30"
+        gift.payable.owner.should   == @provider.biz_user
+        gift.payable.amount.should  == BigDecimal("4.50")
     end
 
 end

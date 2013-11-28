@@ -8,11 +8,9 @@ module GiftSerializers
         gift_hsh["giver"]              = sender.name
         gift_hsh["giver_photo"]        = sender.get_photo
         if receipient = receiver
-            gift_hsh["receiver"]           = receiver.name
             gift_hsh["receiver_photo"]     = receiver.get_photo
-        else
-            gift_hsh["receiver"]           = receiver_name
         end
+        gift_hsh["receiver"]           = receiver_name
         gift_hsh["message"]            = message
         gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
         gift_hsh["merchant_name"]      = merchant.name
@@ -98,6 +96,22 @@ module GiftSerializers
         end
         gift_hsh["server"]          = server
         gift_hsh["total"]           = self.value
+        gift_hsh
+    end
+
+    def promo_serialize
+        gift_hsh                    = {}
+        gift_hsh["updated_at"]      = self.updated_at
+        gift_hsh["created_at"]      = self.created_at
+        gift_hsh["receiver_name"]   = self.receiver_name
+        gift_hsh["receiver_email"]  = self.receiver_email
+        if receipient = receiver
+            gift_hsh["receiver_photo"]     = receiver.get_photo
+        end
+        gift_hsh["items"]           = JSON.parse(self.shoppingCart).count
+        gift_hsh["shoppingCart"]    = self.shoppingCart
+        gift_hsh["value"]           = self.value
+        gift_hsh["status"]          = self.giver_status
         gift_hsh
     end
 

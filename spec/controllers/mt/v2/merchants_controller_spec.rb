@@ -10,7 +10,7 @@ describe Mt::V2::MerchantsController do
 
     describe :create do
 
-        it_should_behave_like("token authenticated", :post, :create, id: 1)
+        it_should_behave_like("token authenticated", :post, :create)
 
         it "should reject no params request" do
             put :create, format: :json

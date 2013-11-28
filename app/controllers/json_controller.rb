@@ -105,6 +105,15 @@ class JsonController < ActionController::Base
 
 ### API UTILITY METHODS
 
+    def reject_if_not_exactly(allowed, data_hsh=nil)
+        data_hsh ||= params["data"]
+        check_ary = allowed - data_hsh.keys
+        if check_ary.count == 0
+            check_ary = data_hsh.keys - allowed
+        end
+        head :bad_request if check_ary.count != 0
+    end
+
     def convert_if_json(data=nil)
         data ||= params["data"]
         if data.kind_of?(String)
@@ -151,6 +160,12 @@ class JsonController < ActionController::Base
     def params_bad_request(new_key=nil)
         key = new_key || ["data"]
         good_params = [ "id", "controller", "action", "format"] + key
+        head :bad_request unless (params.keys - good_params).count == 0
+    end
+
+    def collection_bad_request(new_key=nil)
+        key = new_key || ["data"]
+        good_params = [ "controller", "action", "format"] + key
         head :bad_request unless (params.keys - good_params).count == 0
     end
 

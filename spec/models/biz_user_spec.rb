@@ -8,6 +8,13 @@ describe BizUser do
         biz_user.should be_valid
     end
 
+    it "should repond to get_photo with provider photo" do
+        provider = FactoryGirl.create(:provider)
+        biz_user = BizUser.find(provider.id)
+        photo = provider.get_photo
+        biz_user.get_photo.should == photo
+    end
+
     it "should get adjusted provider name for name" do
         provider = FactoryGirl.create(:provider)
         biz_user = BizUser.find(provider.id)

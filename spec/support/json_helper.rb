@@ -28,7 +28,9 @@ module JsonHelper
     response.response_code.should == status_code
     puts response.response_code
     if response.response_code == 200
-      json.keys.should include("status", "data")
+      ["status", "data"].each do |key|
+        json.keys.include?(key).should be_true
+      end
     end
   end
 

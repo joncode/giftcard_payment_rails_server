@@ -65,6 +65,13 @@ describe GiftSerializers do
             compare_keys hsh, keys
 
         end
+
+        it "should promo_serialize" do
+            keys = ["value", "receiver_name", "receiver_email", "shoppingCart", "status", "updated_at", "created_at", "items"]
+            keys << "receiver_photo" if gift.receiver
+            hsh  = gift.promo_serialize
+            compare_keys hsh, keys
+        end
     end
 end
 
