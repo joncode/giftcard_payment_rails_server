@@ -113,8 +113,19 @@ describe Mdot::V2::UsersController do
 
         context "external services" do
 
-            it "should hit mandrill endpoint with correct email and template" do
-                "Mandrill endpoint test".should == "doesn't exist"
+            it "should hit mandrill endpoint with correct email for confirm email w/ pn_token" do
+                Urbanairship.stub(:register_device).and_return("pn_token", { :alias => "ua_alias"})
+                User.any_instance.stub(:persist_social_data).and_return(true)
+                SubscriptionJob.stub(:perform).and_return(true)
+                RegisterPushJob.stub(:perform).and_return(true)
+                MailerJob.should_receive(:request_mandrill_with_template)
+                Mandrill::API.stub(:new) { Mandrill::API }
+                #Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
+                Mandrill::API.any_instance.stub(:messages).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
+                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                request.env["HTTP_TKN"] = GENERAL_TOKEN
+                put :reset_password, format: :json, data: { "email" => "non-existant@yahoo.com"}
+                run_delayed_jobs
             end
         end
 
@@ -180,6 +191,7 @@ describe Mdot::V2::UsersController do
             put :reset_password, format: :json, data: { "email" => "non-existant@yahoo.com"}
             rrc(400)
         end
+
     end
 
     describe :create do
@@ -190,6 +202,7 @@ describe Mdot::V2::UsersController do
 
             it "should hit mailchimp endpoint with correct email for subscription" do
                 ResqueSpec.reset!
+
                 RegisterPushJob.stub(:perform).and_return(true)
                 MailerJob.stub(:call_mandrill).and_return(true)
                 User.any_instance.stub(:init_confirm_email).and_return(true)
@@ -208,12 +221,14 @@ describe Mdot::V2::UsersController do
             end
 
             it "should hit mandrill endpoint with correct email for confirm email w/o pn_token" do
+
                 User.any_instance.stub(:persist_social_data).and_return(true)
                 RegisterPushJob.stub(:perform).and_return(true)
                 SubscriptionJob.stub(:perform).and_return(true)
-                Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
-                Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
-
+                MailerJob.should_receive(:request_mandrill_with_template).twice
+                Mandrill::API.stub(:new) { Mandrill::API }
+                #Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
+                Mandrill::API.any_instance.stub(:messages).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
 
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
@@ -227,9 +242,10 @@ describe Mdot::V2::UsersController do
                 User.any_instance.stub(:persist_social_data).and_return(true)
                 SubscriptionJob.stub(:perform).and_return(true)
                 RegisterPushJob.stub(:perform).and_return(true)
-                Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
-                Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
-
+                MailerJob.should_receive(:request_mandrill_with_template).twice
+                Mandrill::API.stub(:new) { Mandrill::API }
+                #Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
+                Mandrill::API.any_instance.stub(:messages).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
                 post :create, format: :json, data: user_hsh, pn_token: "FAKE_PN_TOKENFAKE_PN_TOKEN"
