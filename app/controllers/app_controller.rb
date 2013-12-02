@@ -432,8 +432,10 @@ class AppController < JsonController
 
     def create_gift
         response = {}
-
-        gift_creator = GiftCreator.new(@current_user, params["gift"], params["shoppingCart"])
+        if params["gift"].kind_of?(String)
+            params["gift"] = JSON.parse params["gift"]
+        end
+        gift_creator = GiftCreator.new(@current_user, create_gift_params, create_shoppingCart_params)
         unless gift_creator.no_data?
             gift_creator.build_gift
             puts "Here is the resp ---------------- > #{gift_creator.resp}"
@@ -648,6 +650,21 @@ class AppController < JsonController
 	end
 
 private
+
+    def create_gift_params
+        # params.permit!
+        #params.require(:gift)
+        params.require(:gift).permit(:giver_id, :giver_name, :provider_id, :provider_name, :receiver_id, :receiver_name, :receiver_email, :facebook_id, :twitter, :total, :service, :credit_card, :message, :receiver_phone)
+
+    end
+
+    def create_shoppingCart_params
+        params.require(:shoppingCart)
+    end
+
+    def permit_data_params
+        params.require(:data)
+    end
 
     def strong_user_param(data_hsh)
         allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip", "facebook_id", "twitter" ]

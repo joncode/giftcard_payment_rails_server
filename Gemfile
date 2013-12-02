@@ -19,13 +19,12 @@ gem 'bcrypt-ruby', '~> 3.1.2'
 gem 'activemerchant'
 gem 'urbanairship'
 
-#gem 'protected_attributes', "~> 1.0.5"
-
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
 end
 
 group :development, :test do
+  gem "capybara",    "1.1.2"
   gem 'rb-fsevent', '~> 0.9.1'
   gem "guard"
   gem "guard-rspec"
@@ -35,11 +34,11 @@ group :development, :test do
 end
 
 group :test do
-  gem "capybara",    "2.0.3"
   gem "launchy"
   gem 'webmock'
   gem 'resque_spec'
   gem 'database_cleaner'
+  gem 'rest-client'
 end
 
 

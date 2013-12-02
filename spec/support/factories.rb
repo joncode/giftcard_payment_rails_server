@@ -122,7 +122,7 @@ FactoryGirl.define do
         gift.message         "Factory Message"
         gift.pay_stat       "charged"
         gift.payable       { FactoryGirl.create(:sale)}
-        
+
         factory :regift do |regift|
             regift.giver        { FactoryGirl.create(:giver) }
             regift.giver_name   "Jon giver"
@@ -236,6 +236,7 @@ FactoryGirl.define do
 
     factory :admin_user do
         sequence(:remember_token)    { |n|  "Token#{n}" }
+        sequence(:email)            { |n|  "tester#{n}@gmail.com" }
     end
 
     factory :brand do

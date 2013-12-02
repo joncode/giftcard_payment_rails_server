@@ -152,7 +152,7 @@ private
 			puts "``````````````````````````````````````````````"
 			puts "Request Mandrill with #{template_name} #{template_content} #{message}"
 			require 'mandrill'
-			m = Mandrill::API.new
+			m = Mandrill::API.new(MANDRILL_APIKEY)
 			response = m.messages.send_template(template_name, template_content, message)
 
 			puts

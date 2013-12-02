@@ -8,6 +8,7 @@ describe AppController do
 # user then goes into app and gets the correct badge level
 
     it "should create gift for self using old API - should send push notification to UrbanAirship with correct badge - should send badge update to phone with correct badge - should send the push notification first - receiver email second - giver invoice third" do
+        run_delayed_jobs
         Provider.delete_all
         User.delete_all
 

@@ -4,6 +4,8 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'resque_spec'
+require 'capybara/rails'
+require 'capybara/rspec'
 require 'webmock/rspec'
 #require 'documentation_helper'
 
@@ -16,4 +18,8 @@ alias running proc
 
 RSpec.configure do |config|
     config.use_transactional_fixtures = false
+
+    WebMock.disable_net_connect!(allow_localhost: true)
+    config.include Capybara::DSL
+    config.include Capybara::RSpecMatchers
 end

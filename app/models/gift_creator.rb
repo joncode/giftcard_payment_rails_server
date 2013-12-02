@@ -40,7 +40,7 @@ class GiftCreator < GiftUtility
         if @gift_hsh.kind_of?(Hash) && @shoppingCart_hsh.kind_of?(Array)
             return false
         else
-            @resp["error_server"] = database_error_gift
+            @resp["error_server"] = { "Data Transfer Error"   => "Please Retry Sending Gift" }
             return true
         end
     end
