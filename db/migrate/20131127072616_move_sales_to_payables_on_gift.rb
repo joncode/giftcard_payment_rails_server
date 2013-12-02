@@ -6,15 +6,15 @@ class MoveSalesToPayablesOnGift < ActiveRecord::Migration
 
         gs = Gift.unscoped
         gs.each do |gift|
+            user_id    = gift.giver_id
+            user       = User.find(user_id)
+            gift.giver = user
+            gift.value = gift.total
             sale = gift.sale
             if sale
                 gift.payable = sale
-                user_id = gift.giver_id
-                user = User.find(user_id)
-                gift.giver = user
-                gift.value = gift.total
-                gift.save
             end
+            gift.save
         end
 
     end
@@ -25,9 +25,9 @@ class MoveSalesToPayablesOnGift < ActiveRecord::Migration
             sale = gift.payable
             if sale
                 gift.sale = sale
-                gift.total = gift.value
-                gift.save
             end
+            gift.total = gift.value
+            gift.save
         end
     end
 end
