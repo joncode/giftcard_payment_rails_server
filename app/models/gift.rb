@@ -6,6 +6,7 @@ class Gift < ActiveRecord::Base
 
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :order, 		dependent: :destroy
+    
 	has_many    :gift_items, 	dependent: :destroy
     belongs_to  :provider
     belongs_to  :giver,    polymorphic: :true
