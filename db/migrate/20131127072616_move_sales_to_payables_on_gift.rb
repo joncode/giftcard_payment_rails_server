@@ -2,7 +2,11 @@ class MoveSalesToPayablesOnGift < ActiveRecord::Migration
 
     def up
         puts "-------------------------  if Gift.rb total is set to value \n"
-        puts " this WILL NOT WORK @!!!!!!!!!!!!!!!!!   comment out Gift.any_instance.#total"
+        puts " this WILL NOT WORK @!!!!!!!!!!!!!!!!!  in gift.rb ->  comment out  -> def total; blah; end"
+        puts " all giver_types must be set to User after this is done"
+        puts " all gift.value must equal the shoppingCart total "
+        puts " all gifts witha sale must have gift.payable set to Sale"
+
 
         gs = Gift.unscoped
         gs.each do |gift|
