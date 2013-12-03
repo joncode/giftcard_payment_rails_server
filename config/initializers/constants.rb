@@ -4,14 +4,14 @@ if Rails.env.production?
     PAGE_NAME       = SERVICE_NAME
     TEST_URL        = "http://www.drinkboardapp.com"
     MERCHANT_URL    = "http://merchtools.herokuapp.com"
-    PUB_MERCH_URL   = "http://merchant.drinkboard.com"
-    PUBLIC_URL      = "http://www.drinkboard.com"
+    PUB_MERCH_URL   = "http://merchant.itson.me"
+    PUBLIC_URL      = "http://www.itson.me"
 elsif Rails.env.staging?
     PAGE_NAME       = "#{SERVICE_NAME} (staging)"
     TEST_URL        = "http://qa.drinkboardapp.com"
     MERCHANT_URL    = "http://merchtoolsdev.herokuapp.com"
-    PUB_MERCH_URL   = "http://qamerchant.drinkboard.com"
-    PUBLIC_URL      = "http://qa.drinkboard.com"
+    PUB_MERCH_URL   = "http://qamerchant.itson.me"
+    PUBLIC_URL      = "http://qa.itson.me"
 else
     PAGE_NAME       = "Dev #{SERVICE_NAME} (local)"
     TEST_URL        = "http://0.0.0.0:3001"
