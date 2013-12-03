@@ -51,7 +51,6 @@ class Mdot::V2::GiftsController < JsonController
         new_gift_hsh = convert_if_json(params["data"]["receiver"])
         new_gift_hsh["message"]   = params["data"]["message"]
         new_gift_hsh["regift_id"] = params[:id]
-
         gift_regifter  = GiftRegifter2.new(new_gift_hsh)
         if gift_regifter.create
             success gift_regifter.response
@@ -61,8 +60,7 @@ class Mdot::V2::GiftsController < JsonController
         end
         respond(status)
     end
-
-
+    
     def create
         return nil if params_bad_request(["gift", "shoppingCart"])
         return nil if nil_key_or_value(params["gift"])

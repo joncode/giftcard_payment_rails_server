@@ -1,5 +1,8 @@
 require 'spec_helper'
 
+approved = "#<AuthorizeNet::AIM::Response:0x007fe7a9d958d0 @version='3.1', @raw_response=#<Net::HTTPOK 200 OK readbody=true>, @fields={:response_code=>'1', :response_subcode=>'1', :response_reason_code=>'1', :response_reason_text=>'This transaction has been approved.', :authorization_code=>'JVT36N', :avs_response=>'Y', :transaction_id=>'2202633834', :invoice_number=>'', :description=>'', :amount=>#<BigDecimal:7fe7a9d9ed68,'0.1E3',9(18)>, :method=>'CC', :transaction_type=>'auth_capture', :customer_id=>'', :first_name=>'Jimbo', :last_name=>'Snake', :company=>'', :address=>'', :city=>'', :state=>'', :zip_code=>'', :country=>'', :phone=>'', :fax=>'', :email_address=>'', :ship_to_first_name=>'', :ship_to_last_name=>'', :ship_to_company=>'', :ship_to_address=>'', :ship_to_city=>'', :ship_to_state=>'', :ship_to_zip_code=>'', :ship_to_country=>'', :tax=>#<BigDecimal:7fe7a9d9df08,'0.0',9(9)>, :duty=>#<BigDecimal:7fe7a9d9dd28,'0.0',9(9)>, :freight=>#<BigDecimal:7fe7a9d9da30,'0.0',9(9)>, :tax_exempt=>'', :purchase_order_number=>'AD-23-40', :md5_hash=>'8EF9AB71098AE0B08C197AC7203B6DB4', :card_code_response=>'', :cardholder_authentication_verification_response=>'2', :account_number=>'XXXX0002', :card_type=>'American Express'}, @transaction=#<AuthorizeNet::AIM::Transaction:0x007fe7a9cd7a38 @fields={:first_name=>'Jimbo', :last_name=>'Snake', :po_num=>'AD-23-40', :method=>'CC', :card_num=>370000000000002, :exp_date=>'1215', :amount=>'100.00'}, @custom_fields={}, @test_mode=false, @version='3.1', @api_login_id='948bLpzeE8UY', @api_transaction_key='7f7AZ66axeC386q7', @response=#<AuthorizeNet::AIM::Response:0x007fe7a9d958d0 ...>, @delimiter='', @type='AUTH_CAPTURE', @cp_version=nil, @gateway='https://test.authorize.net/gateway/transact.dll', @allow_split_transaction=false, @encapsulation_character=nil, @verify_ssl=false, @market_type=2, @device_type=1>, @custom_fields={}>"
+
+
 describe AppController do
 
     describe "#create_gift" do
@@ -17,7 +20,7 @@ describe AppController do
         it "should not send nil to add_giver" do
             Card.any_instance.stub(:decrypt!).and_return("4111000011110000")
             Card.any_instance.stub(:number).and_return("4111000011110000")
-            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => "", :headers => {})
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => approved, :headers => {})
             params_hsh  = {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : #{@receiver.id},  \"message\" : \"\",  \"credit_card\" : #{@card.id},  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}","origin"=>"d","shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]","token"=> @token}
             post :create_gift, format: :json, gift: params_hsh["gift"] , shoppingCart: params_hsh["shoppingCart"], token: params_hsh["token"]
             gift = Gift.last
@@ -34,7 +37,7 @@ describe AppController do
             UserSocial.delete_all
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
-            @card = FactoryGirl.create(:card)
+            @card = FactoryGirl.create(:card, :name => @user.name, :user_id => @user.id)
         end
 
         {
@@ -44,10 +47,8 @@ describe AppController do
             twitter: "999"
         }.stringify_keys.each do |type_of, identifier|
             it "should find user account for old #{type_of}" do
-                Card.any_instance.stub(:decrypt!).and_return("4833160028519277")
-                Card.any_instance.stub(:number).and_return("4833160028519277")
-                stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => "", :headers => {})
-
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
                 # take a user , add an email
                 @user.update_attribute(type_of, identifier)
                 # then we hit create gift
@@ -64,10 +65,15 @@ describe AppController do
             end
 
             it "should look thru multiple unique ids for a user object with #{type_of}" do
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
+                gift_social_id_hsh["credit_card"] = @card.id
                 gift = FactoryGirl.create :gift, gift_social_id_hsh
+                @card.user_id = gift.giver_id
+                @card.save
                 post :create_gift, format: :json, gift: create_multiple_unique_gift(gift) , shoppingCart: @cart , token: @user.remember_token
                 # check that the :action assign the user_id to receiver_id and saves the gift
                 new_gift = Gift.find(json["success"]["Gift_id"])
@@ -75,9 +81,12 @@ describe AppController do
             end
 
             it "should look thru not full gift of unique ids for a user object with #{type_of}" do
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
+                gift_social_id_hsh["credit_card"] = @card.id
                 missing_hsh = gift_social_id_hsh
                 if type_of == "phone"
                     missing_hsh["receiver_email"] = ""

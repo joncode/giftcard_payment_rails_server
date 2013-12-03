@@ -619,6 +619,8 @@ describe Mdot::V2::GiftsController do
             twitter: "999"
         }.stringify_keys.each do |type_of, identifier|
             it "should find user account for old #{type_of}" do
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 @user.update_attribute(type_of, identifier)
                 if (type_of == "phone") || (type_of == "email")
@@ -638,6 +640,8 @@ describe Mdot::V2::GiftsController do
 
 
             it "should look thru multiple unique ids for a user object with #{type_of}" do
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
@@ -653,6 +657,8 @@ describe Mdot::V2::GiftsController do
             end
 
             it "should look thru not full gift of unique ids for a user object with #{type_of}" do
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
@@ -736,6 +742,8 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should accept stringified JSON'd 'gift" do
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
@@ -746,6 +754,9 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should accept non-stringified JSON gift" do
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
+            
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)

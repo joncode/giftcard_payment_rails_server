@@ -170,6 +170,7 @@ describe IphoneController do
                 user.class.should == User
                 req_hsh['email'] = req_hsh['email'].downcase
                 req_hsh.delete('use_photo')
+                req_hsh.delete('origin')
                 req_hsh.each_key do |key|
                     if (key != "password") && (key != "password_confirmation")
                         user.send(key).should == req_hsh[key].to_s
@@ -268,9 +269,7 @@ describe IphoneController do
         it "should not accept requests without user_hash" do
             user_hsh = { password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN
-            rrc_old(200)
-            #json.has_key?("error_server").should be_true
-            json.has_key?("success").should be_false
+            rrc_old(400)
         end
 
         it "should not return 'password digest' on validation fail" do

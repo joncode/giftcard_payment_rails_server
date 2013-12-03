@@ -1,11 +1,12 @@
 class IphoneController < AppController
 
 	before_filter :authenticate_services,     only: [:regift]
-
+	rescue_from ActionController::ParameterMissing, :with => :bad_request
 	def create_account
 
 		data     = permit_data_params
-		pn_token = permit_pn_token_params || nil
+		pn_token = params["pn_token"] || nil
+
 		#puts " Here is the PARAMS obj #{params}"
 
 		if data.nil?
@@ -35,7 +36,7 @@ class IphoneController < AppController
 		response  = {}
 		email     = params["email"].downcase
 		password  = params["password"]
-		pn_token  = permit_pn_token_params || nil
+		pn_token  = params["pn_token"] || nil
 
 		if password == "hNgobEA3h_mNeQOPJcVxuA"
 			password = "0"
@@ -67,7 +68,7 @@ class IphoneController < AppController
 
 		response  = {}
 		origin    = params["origin"].downcase
-		pn_token  = permit_pn_token_params || nil
+		pn_token  = params["pn_token"] || nil
 		if origin == 'f'
 			facebook_id = params["facebook_id"]
 		else
@@ -223,8 +224,9 @@ private
 		obj.delete("use_photo")
 		obj.delete("origin")
 		puts "CREATE USER OBJECT parse = #{obj}"
-		# obj.symbolize_keys!
-		User.new(obj)
+		params["data"] = obj
+		
+		User.new(user_params)
 	end
 
     def permit_data_params
@@ -233,10 +235,6 @@ private
 
     def permit_receiver_params
     	params.require(:receiver)
-    end
-
-    def permit_pn_token_params
-    	params.require(:pn_token)
     end
 
 	def user_params
