@@ -267,9 +267,7 @@ describe IphoneController do
         it "should not accept requests without user_hash" do
             user_hsh = { password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN
-            rrc_old(200)
-            #json.has_key?("error_server").should be_true
-            json.has_key?("success").should be_false
+            rrc_old(400)
         end
 
         it "should not return 'password digest' validation fail" do
