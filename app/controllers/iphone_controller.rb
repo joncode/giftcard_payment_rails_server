@@ -4,8 +4,8 @@ class IphoneController < AppController
 
 	def create_account
 
-		data     = params["data"]
-		pn_token = params["pn_token"] || nil
+		data     = permit_data_params
+		pn_token = permit_pn_token_params || nil
 		#puts " Here is the PARAMS obj #{params}"
 
 		if data.nil?
@@ -35,7 +35,7 @@ class IphoneController < AppController
 		response  = {}
 		email     = params["email"].downcase
 		password  = params["password"]
-		pn_token  = params["pn_token"] || nil
+		pn_token  = permit_pn_token_params || nil
 
 		if password == "hNgobEA3h_mNeQOPJcVxuA"
 			password = "0"
@@ -67,7 +67,7 @@ class IphoneController < AppController
 
 		response  = {}
 		origin    = params["origin"].downcase
-		pn_token  = params["pn_token"] || nil
+		pn_token  = permit_pn_token_params || nil
 		if origin == 'f'
 			facebook_id = params["facebook_id"]
 		else
@@ -115,8 +115,8 @@ class IphoneController < AppController
 
 	def regift
 
-        recipient_data = JSON.parse params["receiver"]
-        details 	   = JSON.parse params["data"]
+        recipient_data = JSON.parse permit_receiver_params
+        details 	   = JSON.parse permit_data_params
         gift_regifter  = GiftRegifter.new(recipient_data, details)
 
         if gift_regifter.create
@@ -176,10 +176,10 @@ class IphoneController < AppController
 		user  = User.app_authenticate(params["token"])
 		if user.class == User
 
-			if params["data"].kind_of? String
-				data_obj = JSON.parse params["data"]
+			if permit_data_params.kind_of? String
+				data_obj = JSON.parse permit_data_params
 			else
-				data_obj = params["data"]
+				data_obj = permit_data_params
 			end
 			puts "#{data_obj}"
 
@@ -221,10 +221,23 @@ private
 			obj = data
 		end
 		obj.delete("use_photo")
+		obj.delete("origin")
 		puts "CREATE USER OBJECT parse = #{obj}"
 		# obj.symbolize_keys!
-		User.new(user_params)
+		User.new(obj)
 	end
+
+    def permit_data_params
+        params.require(:data)
+    end
+
+    def permit_receiver_params
+    	params.require(:receiver)
+    end
+
+    def permit_pn_token_params
+    	params.require(:pn_token)
+    end
 
 	def user_params
 		params.require(:data).permit(:first_name, :password, :last_name, :phone, :email, :origin, :iphone_photo, :password_confirmation,:facebook_id, :twitter, :handle)

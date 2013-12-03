@@ -11,10 +11,14 @@ describe AppController do
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
             @token = @user.remember_token
             @receiver = FactoryGirl.create(:receiver)
+            @card = FactoryGirl.create(:card)
         end
 
         it "should not send nil to add_giver" do
-            params_hsh  = {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : #{@receiver.id},  \"message\" : \"\",  \"credit_card\" : 77,  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}","origin"=>"d","shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]","token"=> @token}
+            Card.any_instance.stub(:decrypt!).and_return("4111000011110000")
+            Card.any_instance.stub(:number).and_return("4111000011110000")
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => "", :headers => {})
+            params_hsh  = {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : #{@receiver.id},  \"message\" : \"\",  \"credit_card\" : #{@card.id},  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}","origin"=>"d","shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]","token"=> @token}
             post :create_gift, format: :json, gift: params_hsh["gift"] , shoppingCart: params_hsh["shoppingCart"], token: params_hsh["token"]
             gift = Gift.last
             gift.giver_name.should == "Jimmy Basic"
@@ -30,6 +34,7 @@ describe AppController do
             UserSocial.delete_all
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            @card = FactoryGirl.create(:card)
         end
 
         {
@@ -39,6 +44,10 @@ describe AppController do
             twitter: "999"
         }.stringify_keys.each do |type_of, identifier|
             it "should find user account for old #{type_of}" do
+                Card.any_instance.stub(:decrypt!).and_return("4833160028519277")
+                Card.any_instance.stub(:number).and_return("4833160028519277")
+                stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => "", :headers => {})
+
                 # take a user , add an email
                 @user.update_attribute(type_of, identifier)
                 # then we hit create gift
@@ -48,7 +57,7 @@ describe AppController do
                 else
                     key = type_of
                 end
-                gift = FactoryGirl.create :gift, { key => identifier}
+                gift = FactoryGirl.create :gift, { key => identifier, "credit_card" => @card.id}
                 post :create_gift, format: :json, gift: set_gift_as_sent(gift, key) , shoppingCart: @cart , token: @user.remember_token
                 new_gift = Gift.find(json["success"]["Gift_id"])
                 new_gift.receiver_id.should == @user.id

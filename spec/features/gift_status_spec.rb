@@ -33,6 +33,8 @@ describe "Sale" do
         #         Sale    - :admt has paid merchant
         #     unpaid_unpaid_unpaid
         #         Sale    - card charge not successful
+        #     charge_regifted_regifted
+        #         gift has been regifted
 
     describe "failed credit card" do
         #     cancel_nil_nil & unpaid_unpaid_unpaid
@@ -173,6 +175,7 @@ describe "Regift" do
         #         Regift  - a sold gift is original parent in regift chain
         #     charge_settled_settled
         #         Regift  - :admt has paid merchant
+        #
 
     describe "normal path" do
         #     incomplete_nil_live  && charge_unpaid_settled

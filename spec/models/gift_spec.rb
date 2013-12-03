@@ -142,18 +142,89 @@ describe Gift do
 	end
 
 	it "should associate with another Gift as payable" do
-		gift = FactoryGirl.create(:gift)
+		gift  = FactoryGirl.create(:gift)
 		gift2 = FactoryGirl.create(:gift, payable: gift)
 
 		gift2.reload
-		gift2.payable.id.should      == gift.id
-		gift2.payable.class.should   == Gift
+		gift2.payable.id.should     == gift.id
+		gift2.payable.class.should  == Gift
+	end
+
+	it "should set the status of parent Gift to regifted" do
+		gift  = FactoryGirl.create(:gift)
+		gift2 = FactoryGirl.create(:gift, payable: gift)
+        gift.reload
+        gift.status.should   == "complete_regifted_nil"
+        gift.pay_stat.should == "charge_regifted_regifted"
 	end
 
 	it "should save the total as string" do
 		gift = FactoryGirl.create(:gift, value: "100.00")
 		gift.value.should == "100.00"
 		gift.total.should == "100.00"
+	end
+
+	context "receiver Information" do
+
+		let(:giver) { FactoryGirl.create(:user, first_name: "Howard", last_name: "Stern", email: "howard@stern.com")}
+		let(:provider) { FactoryGirl.create(:provider) }
+
+		it "should find a receiver via email & secondary email and add to gift" do
+			user = FactoryGirl.create(:user, first_name: "Tommy", last_name: "Trash", email: "tony@email.com")
+			gift = FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: user.name, receiver_email: user.email)
+			gift.reload
+			gift.receiver_id.should == user.id
+
+			user.email = "second@tony.com"
+			user.save
+			gift = FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: user.name, receiver_email: "tony@email.com")
+			gift.reload
+			gift.receiver_id.should == user.id
+		end
+
+		it "should find a receiver via facebook_id & secondary facebook_id  and add to gift" do
+			user = FactoryGirl.create(:user, first_name: "Tommy", last_name: "Trash", facebook_id: "123456789")
+			gift = FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: user.name, facebook_id: user.facebook_id)
+			gift.reload
+			gift.receiver_id.should == user.id
+			user.facebook_id = "456876234"
+			user.save
+			gift = FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: user.name, facebook_id: "123456789")
+			gift.reload
+			gift.receiver_id.should == user.id
+		end
+
+		it "should find a receiver via phone & secondary phone  and add to gift" do
+			user = FactoryGirl.create(:user, first_name: "Tommy", last_name: "Trash", phone: "2154007586")
+			gift = FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: user.name, receiver_phone: user.phone)
+			gift.reload
+			gift.receiver_id.should == user.id
+			user.phone = "4568762342"
+			user.save
+			gift = FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: user.name, receiver_phone: "2154007586")
+			gift.reload
+			gift.receiver_id.should == user.id
+		end
+
+		it "should find a receiver via twitter & secondary twitter  and add to gift" do
+			user = FactoryGirl.create(:user, first_name: "Tommy", last_name: "Trash", twitter: "987654765")
+			gift = FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: user.name, twitter: user.twitter)
+			gift.reload
+			gift.receiver_id.should == user.id
+			user.twitter = "777777777"
+			user.save
+			gift = FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: user.name, twitter: "987654765")
+			gift.reload
+			gift.receiver_id.should == user.id
+		end
+
+		it "should not look for a receiver when it already has an ID" do
+			user  = FactoryGirl.create(:user, first_name: "Tommy", last_name: "Trash", twitter: "987654765")
+			user2 = FactoryGirl.create(:user, first_name: "Keepr", last_name: "McGee", twitter: "676767676" )
+			gift  = FactoryGirl.create(:gift_no_association, giver: giver, receiver_id: user2.id, provider: provider, receiver_name: user2.name, twitter: user.twitter)
+			gift.reload
+			gift.receiver_id.should == user2.id
+		end
 	end
 
 end
