@@ -289,7 +289,7 @@ private
 
     def regift
         old_gift = self.payable
-        old_gift.update(status: 'complete_regifted_nil', pay_stat: "charge_regifted_regifted")
+        old_gift.update(status: 'regifted', pay_stat: "charge_regifted_regifted")
     end
 
     def regift?
