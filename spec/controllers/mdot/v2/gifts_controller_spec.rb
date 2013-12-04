@@ -612,6 +612,32 @@ describe Mdot::V2::GiftsController do
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
         end
 
+        it "should successfully create gift and return giver_serialized obj + 200 OK" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            # test that create gift does not create the gift or the sale
+            gift = FactoryGirl.build :gift, { receiver_id: @user.id }
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
+            rrc(200)
+            json["status"].should == 1
+            json["data"].class.should == Hash
+
+            gift_response = json["data"]
+            db_gift = Gift.last
+            db_gift_hsh = db_gift.giver_serialize
+            db_gift_hsh.each do |key, value|
+                times = ["created_at", "updated_at", "redeemed_at"]
+                if times.include? key
+                    gift_response[key].to_datetime.month.should  == value.to_datetime.month
+                    gift_response[key].to_datetime.day.should    == value.to_datetime.day
+                    gift_response[key].to_datetime.hour.should   == value.to_datetime.hour
+                    gift_response[key].to_datetime.minute.should == value.to_datetime.minute
+                else
+                    gift_response[key].should == value
+                end
+            end
+
+        end
+
         {
             email: "jon@gmail.com",
             phone: "9173706969",
@@ -627,11 +653,11 @@ describe Mdot::V2::GiftsController do
                     key = type_of
                 end
                 gift = FactoryGirl.create :gift, { key => identifier}
-                post :create, format: :json, gift: set_gift_as_sent(gift, key) , shoppingCart: @cart
+                post :create, format: :json, data: set_gift_as_sent(gift, key) , shoppingCart: @cart
                 rrc(200)
                 json["status"].should == 1
-                json["data"].has_key?('Gift_id').should be_true
-                new_gift = Gift.find(json["data"]["Gift_id"])
+                json["data"].has_key?('gift_id').should be_true
+                new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
 
@@ -643,12 +669,12 @@ describe Mdot::V2::GiftsController do
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
                 gift = FactoryGirl.create :gift, gift_social_id_hsh
-                post :create, format: :json, gift: create_multiple_unique_gift(gift) , shoppingCart: @cart
+                post :create, format: :json, data: create_multiple_unique_gift(gift) , shoppingCart: @cart
                 rrc(200)
                 json["status"].should == 1
-                json["data"].has_key?('Gift_id').should be_true
+                json["data"].has_key?('gift_id').should be_true
                 # check that the :action assign the user_id to receiver_id and saves the gift
-                new_gift = Gift.find(json["data"]["Gift_id"])
+                new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
 
@@ -664,12 +690,12 @@ describe Mdot::V2::GiftsController do
                     missing_hsh["receiver_phone"] = ""
                 end
                 gift = FactoryGirl.create :gift, missing_hsh
-                post :create, format: :json, gift: create_multiple_unique_gift(gift, missing_hsh) , shoppingCart: @cart
+                post :create, format: :json, data: create_multiple_unique_gift(gift, missing_hsh) , shoppingCart: @cart
                 rrc(200)
                 json["status"].should == 1
-                json["data"].has_key?('Gift_id').should be_true
+                json["data"].has_key?('gift_id').should be_true
                 # check that the :action assign the user_id to receiver_id and saves the gift
-                new_gift = Gift.find(json["data"]["Gift_id"])
+                new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
         end
@@ -684,14 +710,14 @@ describe Mdot::V2::GiftsController do
             # hit create gift with a receiver_id of a deactivated user
             gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
             # test that create gift does not create the gift or the sale
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             rrc(401)
         end
 
         it "should reject requests with extra keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gift = FactoryGirl.create :gift, { receiver_id: @user.id }
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart, faker: "FAKE"
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart, faker: "FAKE"
             rrc(400)
         end
 
@@ -703,7 +729,7 @@ describe Mdot::V2::GiftsController do
             # hit create gift with a receiver_id of a deactivated user
             gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
             # test that create gift does not create the gift or the sale
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
 
             json["status"].should == 0
             # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
@@ -715,7 +741,7 @@ describe Mdot::V2::GiftsController do
             giver = FactoryGirl.create(:giver)
             deactivated_user = FactoryGirl.create :receiver, { active: false}
             gift = FactoryGirl.build :gift, { receiver_id: deactivated_user.id }
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             new_gift = Gift.find_by(receiver_id: deactivated_user.id)
             new_gift.should be_nil
             last = Gift.last
@@ -729,7 +755,7 @@ describe Mdot::V2::GiftsController do
             gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
             gift.add_receiver receiver
             gift.credit_card = "999999"
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             rrc(404)
             json["status"].should == 0
             json["data"].should   == "We do not have that credit card on record.  Please choose a different card."
@@ -741,7 +767,7 @@ describe Mdot::V2::GiftsController do
             receiver = FactoryGirl.create(:receiver)
             gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
             gift.add_receiver receiver
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             rrc(200)
         end
 
@@ -751,7 +777,7 @@ describe Mdot::V2::GiftsController do
             receiver = FactoryGirl.create(:receiver)
             gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
             gift.add_receiver receiver
-            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(200)
         end
 
@@ -761,21 +787,21 @@ describe Mdot::V2::GiftsController do
             receiver = FactoryGirl.create(:receiver)
             gift     = FactoryGirl.build :gift, { receiver_id: receiver.id }
             gift.add_receiver receiver
-            post :create, format: :json, gift: "this is not a hash" , shoppingCart: @cart
+            post :create, format: :json, data: "this is not a hash" , shoppingCart: @cart
             rrc(400)
-            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: "this is not a hash"
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: "this is not a hash"
             rrc(400)
-            post :create, format: :json, gift: [make_gift_hsh(gift)] , shoppingCart: @cart
+            post :create, format: :json, data: [make_gift_hsh(gift)] , shoppingCart: @cart
             rrc(400)
-            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: { "item_name" => "no good"}
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: { "item_name" => "no good"}
             rrc(400)
-            post :create, format: :json, gift: nil , shoppingCart: @cart
+            post :create, format: :json, data: nil , shoppingCart: @cart
             rrc(400)
-            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: nil
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: nil
             rrc(400)
             post :create, format: :json, shoppingCart: @cart
             rrc(400)
-            post :create, format: :json, gift: make_gift_hsh(gift)
+            post :create, format: :json, data: make_gift_hsh(gift)
             rrc(400)
         end
 
