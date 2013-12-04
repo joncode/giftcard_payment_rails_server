@@ -20,7 +20,7 @@ describe Mdot::V2::GiftsController do
                 gift.add_receiver(@user)
                 gift.save
             end
-
+            
             @number_sent = 12
             @number_sent.times do |n|
                 gift =  FactoryGirl.build(:gift)
@@ -756,7 +756,7 @@ describe Mdot::V2::GiftsController do
         it "should accept non-stringified JSON gift" do
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
-            
+
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
