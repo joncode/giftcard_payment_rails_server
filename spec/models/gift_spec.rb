@@ -154,8 +154,8 @@ describe Gift do
 		gift  = FactoryGirl.create(:gift)
 		gift2 = FactoryGirl.create(:gift, payable: gift)
         gift.reload
-        gift.status.should   == "complete_regifted_nil"
-        gift.pay_stat.should == "charge_regifted_regifted"
+        gift.status.should   == "regifted"
+        gift.pay_stat.should == "charge_regifted"
 	end
 
 	it "should save the total as string" do

@@ -60,7 +60,21 @@ class Mdot::V2::GiftsController < JsonController
         end
         respond(status)
     end
-    
+
+    def regift
+        return nil if params_bad_request
+        new_gift_hsh = convert_if_json(params["data"]["receiver"])
+        new_gift_hsh["message"]     = params["data"]["message"]
+        new_gift_hsh["old_gift_id"] = params[:id]
+        if gift = GiftRegift.create(new_gift_hsh)
+            success gift
+        else
+            fail    gift
+            status = :bad_request
+        end
+        respond(status)
+    end
+
     def create
         return nil if params_bad_request(["data", "shoppingCart"])
         return nil if nil_key_or_value(params["data"])
@@ -95,6 +109,11 @@ class Mdot::V2::GiftsController < JsonController
             fail "We do not have that credit card on record.  Please choose a different card."
             status = :not_found
         end
+        respond(status)
+    end
+
+    def create
+        success({})
         respond(status)
     end
 

@@ -1,4 +1,4 @@
-require 'spec_helper'
+krequire 'spec_helper'
 
 describe AppController do
 
