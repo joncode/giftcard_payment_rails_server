@@ -20,7 +20,7 @@ describe Mdot::V2::GiftsController do
                 gift.add_receiver(@user)
                 gift.save
             end
-            
+
             @number_sent = 12
             @number_sent.times do |n|
                 gift =  FactoryGirl.build(:gift)
@@ -384,15 +384,41 @@ describe Mdot::V2::GiftsController do
             let(:giver)     { @giver }
             let(:regifter)  { @user }
             let(:receiver)  { FactoryGirl.create(:receiver) }
-            let(:rec_hsh)  { regift_hash(receiver).to_json }
+            let(:rec_hsh)  { regift_hash(receiver) }
 
-            it "should create a new gift" do
+            it "should create a new gift w JSON receiver hash" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
-                params = { message: "New Regift Message", receiver: rec_hsh }
+                params = { message: "New Regift Message", receiver: regift_hash(receiver) }
                 post :regift, format: :json, id: old_gift.id, data: params
                 new_gift = Gift.find(old_gift.id + 1)
                 new_gift.status.should == 'open'
-                new_gift.regift_id.should == old_gift.id
+                new_gift.payable_id.should == old_gift.id
+            end
+
+            it "should get back 200 + giver_serialized gift" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: regift_hash(receiver) }
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.find(old_gift.id + 1)
+
+                rrc 200
+                json["status"].should == 1
+                json["data"].class.should == Hash
+
+                gift_response = json["data"]
+                db_gift = new_gift
+                db_gift_hsh = db_gift.giver_serialize
+                db_gift_hsh.each do |key, value|
+                    times = ["created_at", "updated_at", "redeemed_at"]
+                    if times.include? key
+                        gift_response[key].to_datetime.month.should  == value.to_datetime.month
+                        gift_response[key].to_datetime.day.should    == value.to_datetime.day
+                        gift_response[key].to_datetime.hour.should   == value.to_datetime.hour
+                        gift_response[key].to_datetime.minute.should == value.to_datetime.minute
+                    else
+                        gift_response[key].should == value
+                    end
+                end
             end
 
             it "should create a new gift with correct giver" do
@@ -410,9 +436,10 @@ describe Mdot::V2::GiftsController do
                 giver.save
                 old_gift.phone = "5556778899"
                 old_gift.save
-                params = { message: "Love you", receiver: "{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}" }
+                rec_hsh = JSON.parse("{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}")
+                params = { message: "Love you", receiver: rec_hsh }
                 post :regift, format: :json, id: old_gift.id, data: params
-                new_gift = Gift.where(regift_id: old_gift.id).first
+                new_gift = Gift.where(message: "Love you").first
                 new_gift.receiver_name.should == "Lauren Chavez"
                 new_gift.facebook_id.should   == "690550062"
                 new_gift.phone.should_not     == old_gift.phone
@@ -437,7 +464,7 @@ describe Mdot::V2::GiftsController do
             it "should set the status of 'social identifier only gift' to incomplete" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 no_id_user     = FactoryGirl.build(:nobody, :id => nil )
-                hsh_no_id_user = regift_hash(no_id_user).to_json
+                hsh_no_id_user = regift_hash(no_id_user)
                 params = { message: "New Regift Message", receiver: hsh_no_id_user }
 
                 post :regift, format: :json, id: old_gift.id, data: params
@@ -449,7 +476,7 @@ describe Mdot::V2::GiftsController do
             it "should create 'social identifier only gift'" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 no_id_user     = FactoryGirl.build(:nobody, :id => nil )
-                hsh_no_id_user = regift_hash(no_id_user).to_json
+                hsh_no_id_user = regift_hash(no_id_user)
                 params = { message: "New Regift Message", receiver: hsh_no_id_user }
 
                 post :regift, format: :json, id: old_gift.id, data: params
@@ -488,7 +515,7 @@ describe Mdot::V2::GiftsController do
             let(:giver)     { @giver }
             let(:regifter)  { @user }
             let(:receiver)  { FactoryGirl.create(:receiver) }
-            let(:rec_hsh)  { regift_hash(receiver).to_json }
+            let(:rec_hsh)  { regift_hash(receiver)}
 
             it "it should not allow regift for de-activated reGifters" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
