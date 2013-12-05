@@ -25,7 +25,7 @@ class GiftCreator < GiftUtility
                 @resp["success"]       = { "Gift_id" => @gift.id }
                 messenger
             else
-                @resp["error_server"]  = { "Credit Card" => @gift.sale.reason_text }
+                @resp["error_server"]  = { "Credit Card" => @gift.payable.reason_text }
             end
         else
             @resp["error_server"] = @gift.errors.messages

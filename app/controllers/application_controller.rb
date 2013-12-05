@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
 
 	protect_from_forgery
-	
+
 	# helper :all
 	# include CommonUtils
 	# include SessionsHelper
@@ -56,34 +56,34 @@ class ApplicationController < ActionController::Base
 	# 	return message_ary
 	# end
 
-private
+# private
 
-	def mobile_device?
-		if session[:mobile]
-			session[:mobile] == "1"
-		else
-			if request.user_agent =~ /Mobile|webOS/
-				request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
-				false
-				 # ^^ remove this is you want this to work
-			else
-				false
-			end
-		end
-	end
+# 	def mobile_device?
+# 		if session[:mobile]
+# 			session[:mobile] == "1"
+# 		else
+# 			if request.user_agent =~ /Mobile|webOS/
+# 				request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
+# 				false
+# 				 # ^^ remove this is you want this to work
+# 			else
+# 				false
+# 			end
+# 		end
+# 	end
 
-	def sniff_browser
-		if request.user_agent =~ /Mobile|webOS/
-			request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
-		else
-			false
-		end
-	end
+# 	def sniff_browser
+# 		if request.user_agent =~ /Mobile|webOS/
+# 			request.user_agent =~ /iPad|tablet|GT-P1000/ ? false : true
+# 		else
+# 			false
+# 		end
+# 	end
 
-	def prepare_for_mobile
-		session[:mobile] = params[:mobile] if params[:mobile]
-		#  request.format   = :mobile if mobile_device?
-	end
+# 	def prepare_for_mobile
+# 		session[:mobile] = params[:mobile] if params[:mobile]
+# 		#  request.format   = :mobile if mobile_device?
+# 	end
 
 
 end

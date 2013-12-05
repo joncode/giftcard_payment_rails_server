@@ -90,5 +90,15 @@ describe GiftSale do
 
     end
 
+    context "status behavoir" do
+
+        it "should set the pay stat to charge_unpaid" do
+
+        end
+
+        
+
+    end
+
 
 end

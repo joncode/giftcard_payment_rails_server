@@ -2,7 +2,7 @@ require 'authorize_net'
 
 class Sale < ActiveRecord::Base
 
- 	attr_accessor :transaction, :credit_card, :response, :total
+ 	attr_accessor :transaction, :credit_card, :response, :total, :receiver_name
 
 	belongs_to :provider
 	belongs_to :giver, class_name: "User"
@@ -30,6 +30,7 @@ class Sale < ActiveRecord::Base
     		sale_obj.provider_id = gift.provider_id
     		sale_obj.revenue 	 = BigDecimal(gift.grand_total)
     		sale_obj.total 	     = gift.grand_total
+            sale_obj.receiver_name = gift.receiver_name
     		return sale_obj
     	end
 
@@ -62,24 +63,20 @@ class Sale < ActiveRecord::Base
 	def auth_capture
         timer = Time.now
         puts "------- Charge Card Timer --------"
-        if  Rails.env.test?
-            self.transaction = AuthTransaction.new
-            self.response    = AuthResponse.new
-        else
-            # 1 makes a transaction
-            @transaction = authorize_net_aim_transaction
-            # 2 makes a credit card
-            card         = self.card
-            @transaction.fields[:first_name] = card.first_name
-    		@transaction.fields[:last_name]  = card.last_name
+        # 1 makes a transaction
+        @transaction = authorize_net_aim_transaction
+        # 2 makes a credit card
+        card         = self.card
+        @transaction.fields[:first_name] = card.first_name
+		@transaction.fields[:last_name]  = card.last_name
+        @transaction.fields[:po_num]     = "#{self.receiver_name}_#{self.provider_id}".gsub(' ','_')
 
-    		card.decrypt!(ENV['CATCH_PHRASE'])
+		card.decrypt!(ENV['CATCH_PHRASE'])
+        @credit_card = authorize_net_credit_card(card)
 
-            @credit_card = authorize_net_aim_response(card)
-
-            # 3 gets a response from auth.net
-            @response 	 = @transaction.purchase(self.total, @credit_card)
-        end
+        # 3 gets a response from auth.net
+        @response 	 = @transaction.purchase(self.total, @credit_card)
+        # end
         end_time = ((Time.now - timer) * 1000).round(1)
         puts "------ Total Time | (#{end_time}ms) ------"
         add_gateway_data
@@ -108,10 +105,8 @@ private
         t
     end
 
-    def authorize_net_aim_response card
-        r = AuthorizeNet::CreditCard.new(card.number, card.month_year)
-        puts "HERE IS THE AIM ReSPONSE #{r.inspect}"
-        r
+    def authorize_net_credit_card card
+        AuthorizeNet::CreditCard.new(card.number, card.month_year)
     end
 
 end

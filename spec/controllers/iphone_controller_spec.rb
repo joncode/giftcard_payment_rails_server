@@ -69,7 +69,8 @@ describe IphoneController do
         context "authorization" do
 
             xit "should not allow unauthenticated access" do
-                post :create_account, format: :json, token: "No Way Entrance"
+                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                post :create_account, format: :json, token: "No Way Entrance", data: user_hsh
                 rrc_old(200)
                 json["error"].should  == "Data error, please log out and log back to reset system"
             end
@@ -169,6 +170,7 @@ describe IphoneController do
                 user.class.should == User
                 req_hsh['email'] = req_hsh['email'].downcase
                 req_hsh.delete('use_photo')
+                req_hsh.delete('origin')
                 req_hsh.each_key do |key|
                     if (key != "password") && (key != "password_confirmation")
                         user.send(key).should == req_hsh[key].to_s
@@ -267,12 +269,10 @@ describe IphoneController do
         it "should not accept requests without user_hash" do
             user_hsh = { password: "password" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN
-            rrc_old(200)
-            #json.has_key?("error_server").should be_true
-            json.has_key?("success").should be_false
+            rrc_old(400)
         end
 
-        xit "should not return 'password digest' validation fail" do
+        it "should not return 'password digest' on validation fail" do
            user_hsh = { "email" =>  "neil@gmail.com", password: "" , password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
             json["error_server"].has_key?("password_digest").should be_false
@@ -282,6 +282,13 @@ describe IphoneController do
             user_hsh = { "email" =>  "neil@gmail.com", password_confirmation: "password", first_name: "Neil"}
             post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
             json["error_server"].has_key?("password_digest").should be_false
+        end
+
+        it "should accept stringified JSON in request" do
+            req = {"data"=>"{  \"first_name\" : \"Stewart\",  \"use_photo\" : \"ios\",  \"password\" : \"m0nkeytoes\",  \"last_name\" : \"Teattest\",  \"email\" : \"Stewtest@test.com\",  \"origin\" : \"d\",  \"iphone_photo\" : \"http:\\/\\/res.cloudinary.com\\/htaaxtzcv\\/image\\/upload\\/v1361898825\\/ezsucdxfcc7iwrztkags.jpg\",  \"password_confirmation\" : \"m0nkeytoes\"}", "pn_token"=>"57c3035779570e307963bf22b3a9028e1c7b125ec94826b75020e965475ccba4", "token"=>"0NFXbWsyP3Mj2Mroj_utsA"}
+            post :create_account, format: :json, token: req["token"], data: req["data"], pn_token: req["pn_token"]
+            rrc_old 200
+            json.has_key?("success").should be_true
         end
     end
 

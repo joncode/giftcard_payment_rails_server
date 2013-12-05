@@ -51,7 +51,6 @@ class Mdot::V2::GiftsController < JsonController
         new_gift_hsh = convert_if_json(params["data"]["receiver"])
         new_gift_hsh["message"]   = params["data"]["message"]
         new_gift_hsh["regift_id"] = params[:id]
-
         gift_regifter  = GiftRegifter2.new(new_gift_hsh)
         if gift_regifter.create
             success gift_regifter.response
@@ -62,12 +61,26 @@ class Mdot::V2::GiftsController < JsonController
         respond(status)
     end
 
+    def regift
+        return nil if params_bad_request
+        data = regift_params
+        new_gift_hsh = convert_if_json(data["receiver"])
+        new_gift_hsh["message"]     = data["message"]
+        new_gift_hsh["old_gift_id"] = params[:id]
+        if gift = GiftRegift.create(new_gift_hsh)
+            success gift.giver_serialize
+        else
+            fail    gift
+            status = :bad_request
+        end
+        respond(status)
+    end
 
     def create
-        return nil if params_bad_request(["gift", "shoppingCart"])
-        return nil if nil_key_or_value(params["gift"])
+        return nil if params_bad_request(["data", "shoppingCart"])
+        return nil if nil_key_or_value(params["data"])
         return nil if nil_key_or_value(params["shoppingCart"])
-        gift_hsh     = convert_if_json(params["gift"])
+        gift_hsh     = convert_if_json(params["data"])
         shoppingCart = convert_if_json(params["shoppingCart"])
         return nil if data_not_hash?(gift_hsh)
         return nil if data_not_array?(shoppingCart)
@@ -82,7 +95,7 @@ class Mdot::V2::GiftsController < JsonController
             end
             response = gift_creator.resp
             if response["success"]
-                success response["success"]
+                success gift_creator.gift.giver_serialize
             elsif response["error"]
                 fail response["error"]
                 status = :bad_request
@@ -100,17 +113,26 @@ class Mdot::V2::GiftsController < JsonController
         respond(status)
     end
 
+    def create
+        success({})
+        respond(status)
+    end
+
 private
 
     def redeem_params
         params.require(:server)
     end
 
+    def regift_params
+        params.require(:data).permit(:message, receiver: [:name, :receiver_id, :email, :phone, :facebook_id, :twitter])
+    end
+
     def gift_params
-        if params.require(:gift).kind_of?(String)
-            pg = JSON.parse(params.require(:gift))
+        if params.require(:data).kind_of?(String)
+            pg = JSON.parse(params.require(:data))
         else
-            params.require(:gift).permit( :giver_id,:giver_name,:total,:service,:receiver_id,:receiver_name,:provider_id,:credit_card)
+            params.require(:data).permit( :giver_id,:giver_name,:total,:service,:receiver_id,:receiver_name,:provider_id,:credit_card)
         end
     end
 

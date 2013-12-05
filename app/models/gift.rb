@@ -4,8 +4,15 @@ class Gift < ActiveRecord::Base
 	include Email
 	include GiftSerializers
 
+    TEXT_STATUS_OLD = { "incomplete" => 10, "open" => 20, "notified" => 30, "redeemed" => 40, "regifted" => 50, "expired" => 60, "cancel" => 70 }
+    GIVER_STATUS    = { 10 => "incomplete" , 20 => "notified", 30 => "notified", 40 => "complete", 50 => "complete", 60 => "expired", 70 => "cancel" }
+    RECEIVER_STATUS = { 10 => "incomplete" , 20 => "notified", 30 => "open",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
+    BAR_STATUS      = { 10 => "live" ,       20 => "live",     30 => "live",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
+
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :order, 		dependent: :destroy
+	has_one     :sale #remove after migration
+
 	has_many    :gift_items, 	dependent: :destroy
     belongs_to  :provider
     belongs_to  :giver,    polymorphic: :true
@@ -15,9 +22,11 @@ class Gift < ActiveRecord::Base
 	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
 
 	before_save   :extract_phone_digits
+    before_create :find_receiver
 	before_create :add_giver_name,  	:if => :no_giver_name?
     before_create :add_provider_name,   :if => :no_provider_name?
-	before_create :regifted,        	:if => :regift?
+	before_create :regifted,        	:if => :regifted?
+    before_create :regift,              :if => :regift?
 	before_create :build_gift_items
 	before_create :set_statuses
 
@@ -73,20 +82,28 @@ class Gift < ActiveRecord::Base
 
 #/-----------------------------------------------Status---------------------------------------/
 
+    def stat_int
+        TEXT_STATUS_OLD[self.status]
+    end
+
 	def receiver_status
-		self.status
+		RECEIVER_STATUS[stat_int]
 	end
 
 	def giver_status
-		self.status
+		GIVER_STATUS[stat_int]
 	end
+
+    def bar_status
+        BAR_STATUS[stat_int]
+    end
 
 	def set_statuses
 		case self.pay_type
 		when "Sale"
 			set_payment_status
 			set_status
-		when "CreditAccount"
+		when "Debt"
 		when "Campaign"
 		else
 			set_status
@@ -127,6 +144,10 @@ class Gift < ActiveRecord::Base
 		end
 		set_status
 	end
+
+    def promo?
+        self.giver_type == "BizUser" && self.payable_type == "Debt"
+    end
 
 #/--------------------------------------gift credit card methods-----------------------------/
 
@@ -232,7 +253,7 @@ private
 	end
 
 	def no_giver_name?
-		self.giver_name.nil?
+		!self.giver_name.present?
 	end
 
     def add_provider_name
@@ -245,15 +266,36 @@ private
         !self.provider_name.present?
     end
 
+    def find_receiver
+        if self.receiver_id.nil?
+            user = PeopleFinder.find receiver_hsh
+            if user
+                self.receiver = user
+            end
+        end
+    end
+
+    def receiver_hsh
+        { "receiver_phone" => self.receiver_phone, "receiver_email" => self.receiver_email, "facebook_id" => self.facebook_id, "twitter" => self.twitter }
+    end
+
 	def regifted
 		old_gift = Gift.find(self.regift_id)
 		old_gift.update_attribute(:status, 'regifted')
 	end
 
-	def regift?
+	def regifted?
 		self.regift_id
 	end
 
+    def regift
+        old_gift = self.payable
+        old_gift.update(status: 'regifted', pay_stat: "charge_regifted")
+    end
+
+    def regift?
+        self.payable.class == Gift
+    end
 end
 # == Schema Information
 #

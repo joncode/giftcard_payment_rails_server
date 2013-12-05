@@ -73,5 +73,124 @@ describe GiftSerializers do
             compare_keys hsh, keys
         end
     end
+
+    context "status" do
+
+        let(:giver) { FactoryGirl.create(:user, first_name: "Howard", last_name: "Stern", email: "howard@stern.com")}
+        let(:provider) { FactoryGirl.create(:provider) }
+        let(:gift) { FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: "George Washington", receiver_phone: "8326457787") }
+
+        it "should correctly rep incomplete" do
+            gift.receiver_id.should be_nil
+            gift.status.should              == 'incomplete'
+            gift.giver_status.should        == 'incomplete'
+            gift.receiver_status.should     == 'incomplete'
+            gift.bar_status.should          == 'live'
+            gift.serialize["status"].should           be_nil
+            gift.badge_serialize["status"].should     == "incomplete"
+            gift.giver_serialize["status"].should     == "incomplete"
+            gift.receiver_serialize["status"].should  == "incomplete"
+            gift.admt_serialize["status"].should      be_nil
+            gift.report_serialize["status"].should    be_nil
+            gift.promo_serialize["status"].should     == "incomplete"
+        end
+
+        it "should correctly rep open" do
+            gift.receiver_id = giver.id
+            gift.receiver    = giver
+            gift.status = 'open'
+            gift.save
+            gift.status.should              == 'open'
+            gift.giver_status.should        == 'notified'
+            gift.receiver_status.should     == 'notified'
+            gift.bar_status.should          == 'live'
+            gift.serialize["status"].should           be_nil
+            gift.badge_serialize["status"].should     == "notified"
+            gift.giver_serialize["status"].should     == "notified"
+            gift.receiver_serialize["status"].should  == "notified"
+            gift.admt_serialize["status"].should      be_nil
+            gift.report_serialize["status"].should    be_nil
+            gift.promo_serialize["status"].should     == "notified"
+        end
+
+        it "should correctly rep notified" do
+            gift.receiver_id == giver.id
+            gift.update(status: 'notified')
+            gift.status.should              == 'notified'
+            gift.giver_status.should        == 'notified'
+            gift.receiver_status.should     == 'open'
+            gift.bar_status.should          == 'live'
+            gift.serialize["status"].should           be_nil
+            gift.badge_serialize["status"].should     == "open"
+            gift.giver_serialize["status"].should     == "notified"
+            gift.receiver_serialize["status"].should  == "open"
+            gift.admt_serialize["status"].should      be_nil
+            gift.report_serialize["status"].should    be_nil
+            gift.promo_serialize["status"].should     == "notified"
+        end
+
+        it "should correctly rep redeemed" do
+            gift.receiver_id == giver.id
+            gift.update(status: 'redeemed')
+            gift.status.should              == 'redeemed'
+            gift.giver_status.should        == 'complete'
+            gift.receiver_status.should     == 'redeemed'
+            gift.bar_status.should          == 'redeemed'
+            gift.serialize["status"].should           be_nil
+            gift.badge_serialize["status"].should     == "redeemed"
+            gift.giver_serialize["status"].should     == "complete"
+            gift.receiver_serialize["status"].should  == "redeemed"
+            gift.admt_serialize["status"].should      be_nil
+            gift.report_serialize["status"].should    be_nil
+            gift.promo_serialize["status"].should     == "complete"
+        end
+
+        it "should correctly rep regifted" do
+            gift.receiver_id == giver.id
+            gift.update(status: 'regifted')
+            gift.status.should              == 'regifted'
+            gift.giver_status.should        == 'complete'
+            gift.receiver_status.should     == 'regifted'
+            gift.bar_status.should          == 'regifted'
+            gift.serialize["status"].should           be_nil
+            gift.badge_serialize["status"].should     == "regifted"
+            gift.giver_serialize["status"].should     == "complete"
+            gift.receiver_serialize["status"].should  == "regifted"
+            gift.admt_serialize["status"].should      be_nil
+            gift.report_serialize["status"].should    be_nil
+            gift.promo_serialize["status"].should     == "complete"
+        end
+
+        it "should correctly rep cancel" do
+            gift.update(status: 'cancel')
+            gift.status.should              == 'cancel'
+            gift.giver_status.should        == 'cancel'
+            gift.receiver_status.should     == 'cancel'
+            gift.bar_status.should          == 'cancel'
+            gift.serialize["status"].should           be_nil
+            gift.badge_serialize["status"].should     == "cancel"
+            gift.giver_serialize["status"].should     == "cancel"
+            gift.receiver_serialize["status"].should  == "cancel"
+            gift.admt_serialize["status"].should      be_nil
+            gift.report_serialize["status"].should    be_nil
+            gift.promo_serialize["status"].should     == "cancel"
+        end
+
+        it "should correctly rep expired" do
+            gift.update(status: 'expired')
+            gift.status.should              == 'expired'
+            gift.giver_status.should        == 'expired'
+            gift.receiver_status.should     == 'expired'
+            gift.bar_status.should          == 'expired'
+            gift.serialize["status"].should           be_nil
+            gift.badge_serialize["status"].should     == "expired"
+            gift.giver_serialize["status"].should     == "expired"
+            gift.receiver_serialize["status"].should  == "expired"
+            gift.admt_serialize["status"].should      be_nil
+            gift.report_serialize["status"].should    be_nil
+            gift.promo_serialize["status"].should     == "expired"
+        end
+
+    end
 end
 

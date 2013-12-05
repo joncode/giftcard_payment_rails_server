@@ -8,6 +8,7 @@ describe Admt::V2::GiftsController do
         unless @admin_user = AdminUser.find_by(remember_token: "Token")
             @admin_user = FactoryGirl.create(:admin_user, remember_token: "Token")
         end
+        @user = FactoryGirl.create(:user)
         request.env["HTTP_TKN"] = "Token"
     end
 
@@ -15,7 +16,7 @@ describe Admt::V2::GiftsController do
 
         it_should_behave_like("token authenticated", :put, :update, id: 1)
 
-        let(:gift) { FactoryGirl.create(:gift_no_association, giver: @admin_user, provider: @provider) }
+        let(:gift) { FactoryGirl.create(:gift_no_association, giver: @user, giver_id: @user.id, provider: @provider) }
 
         it "should require a valid gift_id" do
             destroy_id = gift.id
@@ -88,7 +89,7 @@ describe Admt::V2::GiftsController do
 
         context "behavior" do
 
-            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @admin_user, pay_stat: 'charged', status: 'open') }
+            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open') }
 
 
             it "should set the gift 'pay_stat' to 'refunded' and not change the gift status" do
@@ -116,7 +117,7 @@ describe Admt::V2::GiftsController do
 
         context "behavior" do
 
-            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @admin_user, pay_stat: 'charged', status: 'open') }
+            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open') }
 
             it "should set the gift 'pay_stat' to 'refunded' " do
                 AuthorizeNet::AIM::Transaction.any_instance.stub(:void).and_return(AuthResponse.new)

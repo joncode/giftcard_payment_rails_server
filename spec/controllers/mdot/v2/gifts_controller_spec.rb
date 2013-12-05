@@ -384,15 +384,41 @@ describe Mdot::V2::GiftsController do
             let(:giver)     { @giver }
             let(:regifter)  { @user }
             let(:receiver)  { FactoryGirl.create(:receiver) }
-            let(:rec_hsh)  { regift_hash(receiver).to_json }
+            let(:rec_hsh)  { regift_hash(receiver) }
 
-            it "should create a new gift" do
+            it "should create a new gift w JSON receiver hash" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
-                params = { message: "New Regift Message", receiver: rec_hsh }
+                params = { message: "New Regift Message", receiver: regift_hash(receiver) }
                 post :regift, format: :json, id: old_gift.id, data: params
                 new_gift = Gift.find(old_gift.id + 1)
                 new_gift.status.should == 'open'
-                new_gift.regift_id.should == old_gift.id
+                new_gift.payable_id.should == old_gift.id
+            end
+
+            it "should get back 200 + giver_serialized gift" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: regift_hash(receiver) }
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = Gift.find(old_gift.id + 1)
+
+                rrc 200
+                json["status"].should == 1
+                json["data"].class.should == Hash
+
+                gift_response = json["data"]
+                db_gift = new_gift
+                db_gift_hsh = db_gift.giver_serialize
+                db_gift_hsh.each do |key, value|
+                    times = ["created_at", "updated_at", "redeemed_at"]
+                    if times.include? key
+                        gift_response[key].to_datetime.month.should  == value.to_datetime.month
+                        gift_response[key].to_datetime.day.should    == value.to_datetime.day
+                        gift_response[key].to_datetime.hour.should   == value.to_datetime.hour
+                        gift_response[key].to_datetime.minute.should == value.to_datetime.minute
+                    else
+                        gift_response[key].should == value
+                    end
+                end
             end
 
             it "should create a new gift with correct giver" do
@@ -410,9 +436,10 @@ describe Mdot::V2::GiftsController do
                 giver.save
                 old_gift.phone = "5556778899"
                 old_gift.save
-                params = { message: "Love you", receiver: "{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}" }
+                rec_hsh = JSON.parse("{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}")
+                params = { message: "Love you", receiver: rec_hsh }
                 post :regift, format: :json, id: old_gift.id, data: params
-                new_gift = Gift.where(regift_id: old_gift.id).first
+                new_gift = Gift.where(message: "Love you").first
                 new_gift.receiver_name.should == "Lauren Chavez"
                 new_gift.facebook_id.should   == "690550062"
                 new_gift.phone.should_not     == old_gift.phone
@@ -437,7 +464,7 @@ describe Mdot::V2::GiftsController do
             it "should set the status of 'social identifier only gift' to incomplete" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 no_id_user     = FactoryGirl.build(:nobody, :id => nil )
-                hsh_no_id_user = regift_hash(no_id_user).to_json
+                hsh_no_id_user = regift_hash(no_id_user)
                 params = { message: "New Regift Message", receiver: hsh_no_id_user }
 
                 post :regift, format: :json, id: old_gift.id, data: params
@@ -449,7 +476,7 @@ describe Mdot::V2::GiftsController do
             it "should create 'social identifier only gift'" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 no_id_user     = FactoryGirl.build(:nobody, :id => nil )
-                hsh_no_id_user = regift_hash(no_id_user).to_json
+                hsh_no_id_user = regift_hash(no_id_user)
                 params = { message: "New Regift Message", receiver: hsh_no_id_user }
 
                 post :regift, format: :json, id: old_gift.id, data: params
@@ -488,7 +515,7 @@ describe Mdot::V2::GiftsController do
             let(:giver)     { @giver }
             let(:regifter)  { @user }
             let(:receiver)  { FactoryGirl.create(:receiver) }
-            let(:rec_hsh)  { regift_hash(receiver).to_json }
+            let(:rec_hsh)  { regift_hash(receiver)}
 
             it "it should not allow regift for de-activated reGifters" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
@@ -612,6 +639,32 @@ describe Mdot::V2::GiftsController do
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
         end
 
+        it "should successfully create gift and return giver_serialized obj + 200 OK" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            # test that create gift does not create the gift or the sale
+            gift = FactoryGirl.build :gift, { receiver_id: @user.id }
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
+            rrc(200)
+            json["status"].should == 1
+            json["data"].class.should == Hash
+
+            gift_response = json["data"]
+            db_gift = Gift.last
+            db_gift_hsh = db_gift.giver_serialize
+            db_gift_hsh.each do |key, value|
+                times = ["created_at", "updated_at", "redeemed_at"]
+                if times.include? key
+                    gift_response[key].to_datetime.month.should  == value.to_datetime.month
+                    gift_response[key].to_datetime.day.should    == value.to_datetime.day
+                    gift_response[key].to_datetime.hour.should   == value.to_datetime.hour
+                    gift_response[key].to_datetime.minute.should == value.to_datetime.minute
+                else
+                    gift_response[key].should == value
+                end
+            end
+
+        end
+
         {
             email: "jon@gmail.com",
             phone: "9173706969",
@@ -619,6 +672,8 @@ describe Mdot::V2::GiftsController do
             twitter: "999"
         }.stringify_keys.each do |type_of, identifier|
             it "should find user account for old #{type_of}" do
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 @user.update_attribute(type_of, identifier)
                 if (type_of == "phone") || (type_of == "email")
@@ -627,32 +682,36 @@ describe Mdot::V2::GiftsController do
                     key = type_of
                 end
                 gift = FactoryGirl.create :gift, { key => identifier}
-                post :create, format: :json, gift: set_gift_as_sent(gift, key) , shoppingCart: @cart
+                post :create, format: :json, data: set_gift_as_sent(gift, key) , shoppingCart: @cart
                 rrc(200)
                 json["status"].should == 1
-                json["data"].has_key?('Gift_id').should be_true
-                new_gift = Gift.find(json["data"]["Gift_id"])
+                json["data"].has_key?('gift_id').should be_true
+                new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
 
 
 
             it "should look thru multiple unique ids for a user object with #{type_of}" do
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
                 gift = FactoryGirl.create :gift, gift_social_id_hsh
-                post :create, format: :json, gift: create_multiple_unique_gift(gift) , shoppingCart: @cart
+                post :create, format: :json, data: create_multiple_unique_gift(gift) , shoppingCart: @cart
                 rrc(200)
                 json["status"].should == 1
-                json["data"].has_key?('Gift_id').should be_true
+                json["data"].has_key?('gift_id').should be_true
                 # check that the :action assign the user_id to receiver_id and saves the gift
-                new_gift = Gift.find(json["data"]["Gift_id"])
+                new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
 
             it "should look thru not full gift of unique ids for a user object with #{type_of}" do
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
@@ -664,12 +723,12 @@ describe Mdot::V2::GiftsController do
                     missing_hsh["receiver_phone"] = ""
                 end
                 gift = FactoryGirl.create :gift, missing_hsh
-                post :create, format: :json, gift: create_multiple_unique_gift(gift, missing_hsh) , shoppingCart: @cart
+                post :create, format: :json, data: create_multiple_unique_gift(gift, missing_hsh) , shoppingCart: @cart
                 rrc(200)
                 json["status"].should == 1
-                json["data"].has_key?('Gift_id').should be_true
+                json["data"].has_key?('gift_id').should be_true
                 # check that the :action assign the user_id to receiver_id and saves the gift
-                new_gift = Gift.find(json["data"]["Gift_id"])
+                new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
         end
@@ -684,14 +743,14 @@ describe Mdot::V2::GiftsController do
             # hit create gift with a receiver_id of a deactivated user
             gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
             # test that create gift does not create the gift or the sale
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             rrc(401)
         end
 
         it "should reject requests with extra keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gift = FactoryGirl.create :gift, { receiver_id: @user.id }
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart, faker: "FAKE"
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart, faker: "FAKE"
             rrc(400)
         end
 
@@ -703,7 +762,7 @@ describe Mdot::V2::GiftsController do
             # hit create gift with a receiver_id of a deactivated user
             gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
             # test that create gift does not create the gift or the sale
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
 
             json["status"].should == 0
             # test that a message returns that says the user is no longer in the system , please gift to them with a non-drinkboard identifier
@@ -715,7 +774,7 @@ describe Mdot::V2::GiftsController do
             giver = FactoryGirl.create(:giver)
             deactivated_user = FactoryGirl.create :receiver, { active: false}
             gift = FactoryGirl.build :gift, { receiver_id: deactivated_user.id }
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             new_gift = Gift.find_by(receiver_id: deactivated_user.id)
             new_gift.should be_nil
             last = Gift.last
@@ -729,29 +788,34 @@ describe Mdot::V2::GiftsController do
             gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
             gift.add_receiver receiver
             gift.credit_card = "999999"
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             rrc(404)
             json["status"].should == 0
             json["data"].should   == "We do not have that credit card on record.  Please choose a different card."
         end
 
         it "should accept stringified JSON'd 'gift" do
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
             gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
             gift.add_receiver receiver
-            post :create, format: :json, gift: make_gift_json(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             rrc(200)
         end
 
         it "should accept non-stringified JSON gift" do
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
+
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
             gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
             gift.add_receiver receiver
-            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: @cart
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(200)
         end
 
@@ -761,21 +825,21 @@ describe Mdot::V2::GiftsController do
             receiver = FactoryGirl.create(:receiver)
             gift     = FactoryGirl.build :gift, { receiver_id: receiver.id }
             gift.add_receiver receiver
-            post :create, format: :json, gift: "this is not a hash" , shoppingCart: @cart
+            post :create, format: :json, data: "this is not a hash" , shoppingCart: @cart
             rrc(400)
-            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: "this is not a hash"
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: "this is not a hash"
             rrc(400)
-            post :create, format: :json, gift: [make_gift_hsh(gift)] , shoppingCart: @cart
+            post :create, format: :json, data: [make_gift_hsh(gift)] , shoppingCart: @cart
             rrc(400)
-            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: { "item_name" => "no good"}
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: { "item_name" => "no good"}
             rrc(400)
-            post :create, format: :json, gift: nil , shoppingCart: @cart
+            post :create, format: :json, data: nil , shoppingCart: @cart
             rrc(400)
-            post :create, format: :json, gift: make_gift_hsh(gift) , shoppingCart: nil
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: nil
             rrc(400)
             post :create, format: :json, shoppingCart: @cart
             rrc(400)
-            post :create, format: :json, gift: make_gift_hsh(gift)
+            post :create, format: :json, data: make_gift_hsh(gift)
             rrc(400)
         end
 
