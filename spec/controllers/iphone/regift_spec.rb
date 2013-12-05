@@ -37,7 +37,7 @@ describe IphoneController do
             old_gift.phone = "5556778899"
             old_gift.save
             post :regift, format: :json, receiver: rec_json, "data"=>"{\"message\":\"Love you\",\"regift_id\":#{old_gift.id}}", "receiver"=>"{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}", "token"=> giver.remember_token
-            new_gift = Gift.where(regift_id: old_gift.id).first
+            new_gift = Gift.where(message: "Love you").first
             new_gift.receiver_name.should == "Lauren Chavez"
             new_gift.facebook_id.should   == "690550062"
         end
@@ -52,6 +52,7 @@ describe IphoneController do
             post :regift, format: :json, receiver: rec_json, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
             new_gift = Gift.last
             new_gift.status.should == 'open'
+            new_gift.payable.should == old_gift
         end
 
         it "should set the status of 'social identifier only gift' to incomplete" do
