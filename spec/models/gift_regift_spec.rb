@@ -63,6 +63,12 @@ describe GiftRegift do
             gift.reload
             gift.status.should   == "open"
         end
+
+        it "should not allow regifting to deactivated receivers" do
+            @receiver.update(active: false)
+            gift        = GiftRegift.create @gift_hsh
+            gift.should == "User is no longer in the system , please gift to them with phone, email, facebook, or twitter"
+        end
     end
 
     context "without receiver ID" do

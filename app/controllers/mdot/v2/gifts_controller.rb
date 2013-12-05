@@ -2,6 +2,7 @@ class Mdot::V2::GiftsController < JsonController
     before_filter :authenticate_customer
 
     rescue_from JSON::ParserError, :with => :bad_request
+    rescue_from ActiveModel::ForbiddenAttributesError, :with => :bad_request
 
     def archive
         give_gifts, rec_gifts  = Gift.get_archive(@current_user)
@@ -48,27 +49,19 @@ class Mdot::V2::GiftsController < JsonController
 
     def regift
         return nil if params_bad_request
-        new_gift_hsh = convert_if_json(params["data"]["receiver"])
-        new_gift_hsh["message"]   = params["data"]["message"]
-        new_gift_hsh["regift_id"] = params[:id]
-        gift_regifter  = GiftRegifter2.new(new_gift_hsh)
-        if gift_regifter.create
-            success gift_regifter.response
-        else
-            fail    gift_regifter.response
-            status = :bad_request
-        end
-        respond(status)
-    end
-
-    def regift
-        return nil if params_bad_request
         data = regift_params
-        new_gift_hsh = convert_if_json(data["receiver"])
+        new_gift_hsh = data["receiver"]
+        return nil if data_not_hash?(new_gift_hsh)
+        return nil if params_required(new_gift_hsh)
         new_gift_hsh["message"]     = data["message"]
         new_gift_hsh["old_gift_id"] = params[:id]
-        if gift = GiftRegift.create(new_gift_hsh)
-            success gift.giver_serialize
+        if gift_response = GiftRegift.create(new_gift_hsh)
+            if gift_response.kind_of?(Gift)
+                success gift_response.giver_serialize
+            else
+                fail gift_response
+                status = :forbidden
+            end
         else
             fail    gift
             status = :bad_request

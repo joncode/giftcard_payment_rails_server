@@ -421,6 +421,40 @@ describe Mdot::V2::GiftsController do
                 end
             end
 
+            it "should return 404 if old gift not found" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = { message: "New Regift Message", receiver: regift_hash(receiver) }
+                post :regift, format: :json, id: 1978347, data: params
+
+                rrc 404
+            end
+
+            context "bad request situations" do
+
+                it "should not accept stringified receiver hash" do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    params = { message: "New Regift Message", receiver: regift_hash(receiver).to_json }
+                    post :regift, format: :json, id: old_gift.id, data: params
+
+                    rrc 400
+                end
+
+                it "should not accept a request without a receiver hash" do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    post :regift, format: :json, id: old_gift.id, data: {message: "New Regift Message"}
+
+                    rrc 400
+                end
+
+                it "should not accept a request with receiver only :name" do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    params = { message: "Bad request", receiver: {"name" => "Dont Accept"}}
+                    post :regift, format: :json, id: old_gift.id, data: params
+
+                    rrc 400
+                end
+            end
+
             it "should create a new gift with correct giver" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 params = { message: "New Regift Message", receiver: rec_hsh }
@@ -532,6 +566,7 @@ describe Mdot::V2::GiftsController do
                 receiver.update_attribute(:active, false)
                 post :regift, format: :json, id: old_gift.id, data: params
                 puts "here is json inspect #{json.inspect}"
+                rrc 403
                 json["status"].should == 0
                 json["data"].should   == 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
             end
