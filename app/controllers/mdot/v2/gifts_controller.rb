@@ -107,7 +107,26 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def create
-        success({})
+        return nil if params_bad_request(["data", "shoppingCart"])
+        return nil if nil_key_or_value(params["data"])
+        return nil if nil_key_or_value(params["shoppingCart"])
+        gift_hsh     = convert_if_json(params["data"])
+        shoppingCart = convert_if_json(params["shoppingCart"])
+        return nil if data_not_hash?(gift_hsh)
+        return nil if data_not_array?(shoppingCart)
+        gift_hsh["shoppingCart"] = shoppingCart
+        gift_hsh["giver"]        = @current_user
+        if gift_response = GiftSale.create(gift_hsh)
+            if gift_response.kind_of?(Gift)
+                success gift_response.giver_serialize
+            else
+                fail gift_response
+                status = :not_found
+            end
+        else
+            fail    gift_response
+            status = :bad_request
+        end
         respond(status)
     end
 

@@ -670,15 +670,30 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
             @user.update_attribute(:remember_token, "USER_TOKEN")
-            @card = FactoryGirl.create(:visa, id: 4567890)
+            @card = FactoryGirl.create(:visa, user_id: @user.id)
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+        end
+
+        it "should return 404 + 'credit card not on file' msg when card not found" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            # test that create gift does not create the gift or the sale
+            gift = FactoryGirl.build :gift, { receiver_id: @user.id }
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
+            rrc(404)
+            json["status"].should == 0
+            json["data"].class.should == String
+
+            json["data"].should == 'We do not have that credit card on record.  Please choose a different card.'
         end
 
         it "should successfully create gift and return giver_serialized obj + 200 OK" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
             # test that create gift does not create the gift or the sale
             gift = FactoryGirl.build :gift, { receiver_id: @user.id }
-            post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
+            gift.credit_card = @card.id
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(200)
             json["status"].should == 1
             json["data"].class.should == Hash
@@ -829,7 +844,7 @@ describe Mdot::V2::GiftsController do
             json["data"].should   == "We do not have that credit card on record.  Please choose a different card."
         end
 
-        it "should accept stringified JSON'd 'gift" do
+        it "should not accept stringified JSON'd 'gift" do
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             request.env["HTTP_TKN"] = "USER_TOKEN"
@@ -838,7 +853,7 @@ describe Mdot::V2::GiftsController do
             gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
             gift.add_receiver receiver
             post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
-            rrc(200)
+            rrc(400)
         end
 
         it "should accept non-stringified JSON gift" do
@@ -848,7 +863,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
-            gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
+            gift = FactoryGirl.build(:gift, credit_card: @card.id)
             gift.add_receiver receiver
             post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(200)

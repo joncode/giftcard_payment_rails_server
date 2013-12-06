@@ -117,4 +117,49 @@ module GiftSerializers
         gift_hsh
     end
 
+    # def json_cart_serial
+    #     gift_hsh                    = {}
+    #     gift_hsh["updated_at"]      = self.updated_at
+    #     gift_hsh["created_at"]      = self.created_at
+    #     gift_hsh["receiver_name"]   = self.receiver_name
+    #     gift_hsh["receiver_email"]  = self.receiver_email
+    #     gift_hsh["shoppingCart_json"]    = JSON.parse(self.shoppingCart)
+    #     gift_hsh["value"]           = self.value
+    #     gift_hsh["status"]          = self.giver_status
+    #     gift_hsh
+    # end
+
+    # def str_cart_serial
+    #     gift_hsh                    = {}
+    #     gift_hsh["updated_at"]      = self.updated_at
+    #     gift_hsh["created_at"]      = self.created_at
+    #     gift_hsh["receiver_name"]   = self.receiver_name
+    #     gift_hsh["receiver_email"]  = self.receiver_email
+    #     gift_hsh["shoppingCart_str"]    = self.shoppingCart
+    #     gift_hsh["value"]           = self.value
+    #     gift_hsh["status"]          = self.giver_status
+    #     gift_hsh
+    # end
+
+# def race
+#     gs = Gift.order("created_at DESC").limit(20)
+#     puts "THE RACE IS BETWEEN #{gs.count} gifts !!"
+#     json_times = []
+#     str_times  = []
+#     5.times do
+#         gs.each { |g| g.json_cart_serial }
+
+#         t = Time.now
+#         gs.each { |g| g.json_cart_serial }
+#         json_times << (Time.now - t) * 1000
+#         t2 = Time.now
+#         gs.each { |g| g.str_cart_serial }
+#         str_times << (Time.now - t2) * 1000
+#     end
+#     [0,1,2,3,4].each do |ind|
+#         diff = json_times[ind] - str_times[ind]
+#         puts "Diff #{ind+1} = #{diff}ms"
+#     end
+# end
+
 end

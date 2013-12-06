@@ -16,9 +16,9 @@ class Gift < ActiveRecord::Base
     belongs_to  :provider
     belongs_to  :giver,    polymorphic: :true
     belongs_to  :receiver, class_name: User
-    belongs_to  :payable,  polymorphic: :true
+    belongs_to  :payable,  polymorphic: :true, autosave: :true
 
-	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
+	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :payable
 
 	before_save   :extract_phone_digits
     before_create :find_receiver
@@ -72,11 +72,16 @@ class Gift < ActiveRecord::Base
 	end
 
     def total
-        string_to_cents self.value
+        amount = self.value || super
+        string_to_cents amount
     end
 
     def total= amount
         self.value = amount
+    end
+
+    def unique_cc_id
+        "#{self.receiver_name}_#{self.provider_id}".gsub(' ','_')
     end
 
 #/-----------------------------------------------Status---------------------------------------/
@@ -98,12 +103,12 @@ class Gift < ActiveRecord::Base
     end
 
 	def set_statuses
-		case self.pay_type
+		case self.payable_type
 		when "Sale"
 			set_payment_status
-			set_status
 		when "Debt"
-		when "Campaign"
+		when "Gift"
+            set_status
 		else
 			set_status
 		end
@@ -121,27 +126,29 @@ class Gift < ActiveRecord::Base
 		case self.payable.resp_code
 		when 1
 		  # Approved
-			self.pay_stat = "charged"
+			self.pay_stat = "charge_unpaid"
+            set_status
 		when 2
 		  # Declined
-			self.pay_stat = "declined"
+			self.pay_stat = "payment_error"
+            self.status = "cancel"
 		when 3
 		  # Error
-		  # duplicate transaction response subcode = 1
-		  	response = JSON.parse(self.sale.resp_json)
-			if response["response_subcode"] == 1
-				self.pay_stat = "duplicate"
+			if self.payable.reason_code == 11
+				self.pay_stat = "payment_error"
 			else
-				self.pay_stat = "unpaid"
+				self.pay_stat = "payment_error"
 			end
+            self.status = "cancel"
 		when 4
 		  # Held for Review
-			self.pay_stat = "unpaid"
+			self.pay_stat = "payment_error"
+            self.status = "cancel"
 		else
 		  # not a listed error code
-		  	self.pay_stat = "unpaid"
+		  	self.pay_stat = "payment_error"
+            self.status = "cancel"
 		end
-		set_status
 	end
 
     def promo?

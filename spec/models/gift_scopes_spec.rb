@@ -100,6 +100,7 @@ describe GiftScopes do
         describe :badge do
 
             it "should return correct badges for in-app and for springboard" do
+
                 User.delete_all
                 Provider.delete_all
                 @user     = FactoryGirl.create(:user)
@@ -116,35 +117,41 @@ describe GiftScopes do
 
                     # do not count these
                 2.times do
-                    gift = FactoryGirl.create(:gift, receiver: @user,pay_stat: 'unpaid', status: 'open')
+                    Sale.any_instance.stub(:resp_code).and_return(2)
+                    gift = FactoryGirl.create(:gift, receiver: @user)
                 end
                 2.times do
-                    gift = FactoryGirl.create(:gift, receiver: @user,pay_stat: 'duplicate', status: 'open')
+                    Sale.any_instance.stub(:resp_code).and_return(2)
+                    gift = FactoryGirl.create(:gift, receiver: @user)
                 end
                 2.times do
-                    gift = FactoryGirl.create(:gift, receiver: @user,pay_stat: 'declined', status: 'open')
+                    Sale.any_instance.stub(:resp_code).and_return(2)
+                    gift = FactoryGirl.create(:gift, receiver: @user)
                 end
 
                     # these are for the badge in-app only - not the springboard
                 3.times do
-                    gift = FactoryGirl.create(:gift, receiver: @user, pay_stat: 'charged')
+                    Sale.any_instance.stub(:resp_code).and_return(1)
+                    gift = FactoryGirl.create(:gift, receiver: @user)
                     Redeem.create(gift_id: gift.id)
                 end
 
                     # do not count these
                 2.times do
-                    gift = FactoryGirl.create(:gift, receiver: @user,pay_stat: 'unpaid', status: 'open')
+                    Sale.any_instance.stub(:resp_code).and_return(2)
+                    gift = FactoryGirl.create(:gift, receiver: @user)
                     Redeem.create(gift_id: gift.id)
                 end
                 2.times do
-                    gift = FactoryGirl.create(:gift, receiver: @user,pay_stat: 'duplicate', status: 'open')
+                    Sale.any_instance.stub(:resp_code).and_return(2)
+                    gift = FactoryGirl.create(:gift, receiver: @user)
                     Redeem.create(gift_id: gift.id)
                 end
                 2.times do
-                    gift = FactoryGirl.create(:gift, receiver: @user,pay_stat: 'declined', status: 'open')
+                    Sale.any_instance.stub(:resp_code).and_return(2)
+                    gift = FactoryGirl.create(:gift, receiver: @user)
                     Redeem.create(gift_id: gift.id)
                 end
-
                 gift_count = Gift.get_notifications @user
                 gift_count.should  == 3
 

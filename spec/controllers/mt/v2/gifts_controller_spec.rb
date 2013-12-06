@@ -68,7 +68,7 @@ describe Mt::V2::GiftsController do
            compare_keys(json["data"], keys)
         end
 
-        it "should return 400 plus validations message when validations are dont pass" do
+        it "should return 400 plus validations message when validations dont pass" do
             create_hsh = { "receiver_name" => "", "receiver_email" => "test", "shoppingCart" => @cart, "message" => "test" }
             post :create, format: :json, data: create_hsh
             rrc 400

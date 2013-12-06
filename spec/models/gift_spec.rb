@@ -61,6 +61,44 @@ describe Gift do
 	  gift.provider_name.should_not be_nil
 	end
 
+	context "save with sale" do
+
+	    it "should save the giver and the provider from the gift when saved via Gift" do
+	            # required => [ giver_id, provider_id, card_id, number, month_year, first_name, last_name, amount ]
+	            # optional => unique_id
+	        user = FactoryGirl.create(:user)
+	        card = FactoryGirl.create(:visa, :name => user.name, :user_id => user.id)
+
+	        auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,157.00,CC,auth_capture,,#{card.first_name},#{card.last_name},,,,,,,,,,,,,,,,,"
+	        stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+	        provider = FactoryGirl.create(:provider)
+
+	        args = {}
+	        args["giver_id"]    = user.id
+	        args["provider_id"] = provider.id
+	        args["card_id"]     = card.id
+	        args["number"]      = card.number
+	        args["month_year"]  = card.month_year
+	        args["first_name"]  = card.first_name
+	        args["last_name"]   = card.last_name
+	        args["amount"]      = "157.00"
+	        args["unique_id"]   = "UNIQUE_GIFT_ID"
+	        sale = Sale.charge_card args
+	        gift = FactoryGirl.build(:gift, giver: user, provider: provider)
+	        gift.payable = sale
+	        gift.save
+	        
+	        sale.reload
+	        sale.gift.should     == gift
+	        sale.giver_id.should == gift.giver_id
+
+	        sale.giver.should    == gift.giver
+
+	        sale.provider_id.should == gift.provider_id
+	    end
+	end
+
 	describe :update do
 
 	  it "should extract phone digits" do
@@ -128,7 +166,7 @@ describe Gift do
 
 		gift.payable.id.should       == sale.id
 		gift.payable.class.should    == Sale
-		gift.payable.response.should == sale.response
+		gift.payable.resp_code.should == sale.resp_code
 	end
 
 	it "should associate with a Debt as payment" do

@@ -1,13 +1,13 @@
 class GiftRegift < Gift
 
     def self.create args={}
-        args["payable"] = Gift.includes(:provider).includes(:receiver).find(args["old_gift_id"])
         if args["receiver_id"]
             receiver = User.unscoped.find(args["receiver_id"])
             if receiver.active == false
                 return 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
             end
         end
+        args["payable"] = Gift.includes(:provider).includes(:receiver).find(args["old_gift_id"])
         if args["payable"].promo?
             "You cannot regift a promotional gift"
         else

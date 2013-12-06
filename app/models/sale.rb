@@ -1,115 +1,35 @@
-require 'authorize_net'
-
 class Sale < ActiveRecord::Base
 
- 	attr_accessor :transaction, :credit_card, :response, :total, :receiver_name
-
-	belongs_to :provider
-	belongs_to :giver, class_name: "User"
-	belongs_to :card
+    belongs_to :provider
+    belongs_to :giver, class_name: "User"
+    belongs_to :card
 
     has_one :gift, as: :payable
 
     validates_presence_of :giver_id, :card_id, :resp_code
 
-#### SALE PROCESS METHODS
-
-    class << self
-
-        def process gift
-            sale = Sale.init gift
-            sale.auth_capture
+    def self.charge_card cc_hsh
+            # pull off and charge the credit card
+            
+        payment_hsh = {}
+        credit_card_data_keys = ["number", "month_year", "first_name", "last_name", "amount"]
+        credit_card_data_keys << "unique_id" if cc_hsh["unique_id"]
+        credit_card_data_keys.each do |cc_data|
+            payment_hsh[cc_data] = cc_hsh[cc_data]
+            cc_hsh.delete(cc_data)
         end
-
-    	def init gift
-    		puts "in Sale.init"
-    		sale_obj 		     = Sale.new
-    		sale_obj.card_id 	 = gift.credit_card
-    		sale_obj.gift_id 	 = gift.id
-    		sale_obj.giver_id 	 = gift.giver_id
-    		sale_obj.provider_id = gift.provider_id
-    		sale_obj.revenue 	 = BigDecimal(gift.grand_total)
-    		sale_obj.total 	     = gift.grand_total
-            sale_obj.receiver_name = gift.receiver_name
-    		return sale_obj
-    	end
-
-    end
-
-### AUTHORIZE TRANSACTION METHODS
-
-    def void_sale gift=nil
-        gift      = self.gift if gift.nil?
-
-        auth_obj  = authorize_net_aim_transaction
-        @response = auth_obj.void(self.transaction_id)
-
-        puts ":void_sale :HERE IS THE VOID ReSPONSE #{@response.inspect}"
-
-        if @response.response_code == "1"
-            # THIS SHOLD CHECK RESPONSE FROM AUTH>NET AND TELL U IF VOID OR REFUND
-            gift.update_attribute(:pay_stat , 'refunded')
-            if gift.save
-                0
-            else
-                gift.errors.full_messages
-            end
-        else
-            @response.response_reason_text
-        end
-
-    end
-
-	def auth_capture
-        timer = Time.now
-        puts "------- Charge Card Timer --------"
-        # 1 makes a transaction
-        @transaction = authorize_net_aim_transaction
-        # 2 makes a credit card
-        card         = self.card
-        @transaction.fields[:first_name] = card.first_name
-		@transaction.fields[:last_name]  = card.last_name
-        @transaction.fields[:po_num]     = "#{self.receiver_name}_#{self.provider_id}".gsub(' ','_')
-
-		card.decrypt!(ENV['CATCH_PHRASE'])
-        @credit_card = authorize_net_credit_card(card)
-
-        # 3 gets a response from auth.net
-        @response 	 = @transaction.purchase(self.total, @credit_card)
-        # end
-        end_time = ((Time.now - timer) * 1000).round(1)
-        puts "------ Total Time | (#{end_time}ms) ------"
-        add_gateway_data
-	end
-
-    def add_gateway_data
-        puts "in add gateway data"
-        self.transaction_id     = self.response.transaction_id
-        self.resp_json          = self.response.fields.to_json
-        raw_request             = self.transaction.fields
-        card_num                = raw_request[:card_num]
-        last_four               = "XXXX" + card_num[12..15]
-        raw_request[:card_num]  = last_four
-        self.req_json           = raw_request.to_json
-        self.resp_code          = self.response.response_code.to_i
-        self.reason_text        = self.response.response_reason_text
-        self.reason_code        = self.response.response_reason_code.to_i
-        self
-    end
-
-private
-
-    def authorize_net_aim_transaction
-        t = AuthorizeNet::AIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
-        puts "HERE IS THE AIM transaction #{t.inspect}"
-        t
-    end
-
-    def authorize_net_credit_card card
-        AuthorizeNet::CreditCard.new(card.number, card.month_year)
+        payment  = PaymentGateway.new(payment_hsh)
+        resp_hsh = payment.charge
+        cc_hsh.merge!(resp_hsh)
+        Sale.new cc_hsh
     end
 
 end
+
+
+    # required => [ giver_id, provider_id, card_id, number, month_year, first_name, last_name, amount ]
+    # optional => unique_id
+
 # == Schema Information
 #
 # Table name: sales
@@ -129,4 +49,3 @@ end
 #  reason_text    :string(255)
 #  reason_code    :integer
 #
-
