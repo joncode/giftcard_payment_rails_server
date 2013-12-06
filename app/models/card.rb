@@ -27,22 +27,6 @@ class Card < ActiveRecord::Base
 
 #	-------------
 
-    def charge amount
-        puts "CHARGING CARD\n"
-        sale      	  = Sale.init self  # @gift
-        sale.revenue  = amount
-        sale.card     = self
-        sale.giver_id = self.user_id
-        sale
-    end
-
-    def charge_card
-    	sale      	  = Sale.init self  # @gift
-    	sale.auth_capture
-
-    	self.payable  = sale
-    end
-
     def create_card_hsh args
     	self.decrypt!(PASSPHRASE)
     	hsh = {}

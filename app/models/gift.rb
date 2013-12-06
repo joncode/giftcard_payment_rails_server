@@ -24,7 +24,6 @@ class Gift < ActiveRecord::Base
     before_create :find_receiver
 	before_create :add_giver_name,  	:if => :no_giver_name?
     before_create :add_provider_name,   :if => :no_provider_name?
-	before_create :regifted,        	:if => :regifted?
     before_create :regift,              :if => :regift?
 	before_create :build_gift_items
 	before_create :set_statuses
@@ -155,28 +154,14 @@ class Gift < ActiveRecord::Base
         self.giver_type == "BizUser" && self.payable_type == "Debt"
     end
 
-#/--------------------------------------gift credit card methods-----------------------------/
-
-    def charge_card
-    	self.pay_type = "Sale"
-    	sale      	  = Sale.init self  # @gift
-    	sale.auth_capture
-
-    	self.payable  = sale
-    end
-
 #/-------------------------------------re gift db methods-----------------------------/
 
 	def parent
-		if self.regift_id
-			Gift.find(self.regift_id)
-		else
-			nil
-		end
+        self.payable
 	end
 
 	def child
-		Gift.find_by(regift_id: self.id)
+        Gift.find_by(payable_id: self.id)
 	end
 
 #/-------------------------------------data population methods-----------------------------/
@@ -286,15 +271,6 @@ private
     def receiver_hsh
         { "receiver_phone" => self.receiver_phone, "receiver_email" => self.receiver_email, "facebook_id" => self.facebook_id, "twitter" => self.twitter }
     end
-
-	def regifted
-		old_gift = Gift.find(self.regift_id)
-		old_gift.update_attribute(:status, 'regifted')
-	end
-
-	def regifted?
-		self.regift_id
-	end
 
     def regift
         old_gift = self.payable

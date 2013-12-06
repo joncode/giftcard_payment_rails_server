@@ -74,35 +74,13 @@ describe AppController do
 
         context "scope out unpaid gifts" do
 
-            it "should not return :pay_stat => 'declined' gifts" do
+            it "should not return :pay_stat => 'payment_error' gifts" do
                 gifts = Gift.all
+                last_gift = gift.pop
                 gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"declined" )
+                    gift.update_attribute(:pay_stat ,"payment_error" )
                 end
-                last_gift = gifts.last
-                last_gift.update_attribute(:pay_stat, 'charged')
-                post :relays, format: :json, token: receiver.remember_token
-                json["success"]["badge"].should == 1
-            end
-
-            it "should not return :pay_stat => 'unpaid' gifts" do
-                gifts = Gift.all
-                gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"unpaid" )
-                end
-                last_gift = gifts.last
-                last_gift.update_attribute(:pay_stat, 'charged')
-                post :relays, format: :json, token: receiver.remember_token
-                json["success"]["badge"].should == 1
-            end
-
-            it "should not return :pay_stat => 'duplicate' gifts" do
-                gifts = Gift.all
-                gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"duplicate" )
-                end
-                last_gift = gifts.last
-                last_gift.update_attribute(:pay_stat, 'charged')
+                
                 post :relays, format: :json, token: receiver.remember_token
                 json["success"]["badge"].should == 1
             end
