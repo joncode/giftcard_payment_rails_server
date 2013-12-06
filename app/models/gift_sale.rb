@@ -32,7 +32,7 @@ private
         args.delete("unique_id")
         args.delete("card")
         args.delete("amount")
-
+        
     end
 
     def post_init args={}

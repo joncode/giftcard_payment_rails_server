@@ -40,7 +40,7 @@ describe Mdot::V2::GiftsController do
 
         it "should send sent gifts (purchaser) with giver keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "total", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id"]
+            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id"]
             get :archive, format: :json
             gift_hsh = json["data"]["sent"][0]
             compare_keys(gift_hsh, keys)
@@ -166,42 +166,20 @@ describe Mdot::V2::GiftsController do
 
         context "scope out unpaid gifts" do
 
-            it "should not return :pay_stat => 'declined' gifts" do
+            it "should not return :pay_stat => 'payment_error' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 gifts = Gift.where(receiver_id: @user.id)
+                last_gift = gifts.pop
                 gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"declined" )
+                    gift.update_attribute(:pay_stat ,"payment_error" )
                 end
-                last_gift = gifts.last
-                last_gift.update_attribute(:pay_stat, 'charged')
+
                 get :badge, format: :json
                 json["data"]["badge"].should == 1
-            end
+                gift = json["data"]["gifts"].pop
 
-            it "should not return :pay_stat => 'unpaid' gifts" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                gifts = Gift.where(receiver_id: @user.id)
-                gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"unpaid" )
-                end
-                last_gift = gifts.last
-                last_gift.update_attribute(:pay_stat, 'charged')
-                get :badge, format: :json
-                json["data"]["badge"].should == 1
+                gift["gift_id"].should == last_gift.id
             end
-
-            it "should not return :pay_stat => 'duplicate' gifts" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                gifts = Gift.where(receiver_id: @user.id)
-                gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"duplicate" )
-                end
-                last_gift = gifts.last
-                last_gift.update_attribute(:pay_stat, 'charged')
-                get :badge, format: :json
-                json["data"]["badge"].should == 1
-            end
-
         end
 
     end
@@ -308,8 +286,9 @@ describe Mdot::V2::GiftsController do
             order = @gift.order
             rrc(200)
             json["status"].should == 1
+
             json["data"]["order_number"].should == order.make_order_num
-            json["data"]["total"].should        == @gift.total
+            json["data"]["total"].should        == @gift.value + ".00"
             json["data"]["server"].should       == "test"
         end
 
@@ -670,14 +649,17 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
             @user.update_attribute(:remember_token, "USER_TOKEN")
-            @card = FactoryGirl.create(:visa, user_id: @user.id)
+            @card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
         end
 
         it "should return 404 + 'credit card not on file' msg when card not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             # test that create gift does not create the gift or the sale
-            gift = FactoryGirl.build :gift, { receiver_id: @user.id }
+            gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: @card
             post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(404)
             json["status"].should == 0
@@ -691,8 +673,9 @@ describe Mdot::V2::GiftsController do
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             # test that create gift does not create the gift or the sale
-            gift = FactoryGirl.build :gift, { receiver_id: @user.id }
+            gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: @card
             gift.credit_card = @card.id
+            gift.value = "31.50"
             post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(200)
             json["status"].should == 1
@@ -731,7 +714,9 @@ describe Mdot::V2::GiftsController do
                 else
                     key = type_of
                 end
-                gift = FactoryGirl.create :gift, { key => identifier}
+                gift = FactoryGirl.build :gift, { key => identifier}
+                gift.credit_card = @card.id
+                gift.value = "31.50"
                 post :create, format: :json, data: set_gift_as_sent(gift, key) , shoppingCart: @cart
                 rrc(200)
                 json["status"].should == 1
@@ -749,7 +734,10 @@ describe Mdot::V2::GiftsController do
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
-                gift = FactoryGirl.create :gift, gift_social_id_hsh
+
+                gift = FactoryGirl.build :gift, gift_social_id_hsh
+                gift.credit_card = @card.id
+                gift.value = "31.50"
                 post :create, format: :json, data: create_multiple_unique_gift(gift) , shoppingCart: @cart
                 rrc(200)
                 json["status"].should == 1
@@ -772,7 +760,10 @@ describe Mdot::V2::GiftsController do
                 else
                     missing_hsh["receiver_phone"] = ""
                 end
-                gift = FactoryGirl.create :gift, missing_hsh
+
+                gift = FactoryGirl.build :gift, missing_hsh
+                gift.credit_card = @card.id
+                gift.value = "31.50"
                 post :create, format: :json, data: create_multiple_unique_gift(gift, missing_hsh) , shoppingCart: @cart
                 rrc(200)
                 json["status"].should == 1
@@ -844,16 +835,19 @@ describe Mdot::V2::GiftsController do
             json["data"].should   == "We do not have that credit card on record.  Please choose a different card."
         end
 
-        it "should not accept stringified JSON'd 'gift" do
+        it "should accept stringified JSON'd 'gift" do
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
-            gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
+            gift = FactoryGirl.build :gift
+            gift.credit_card = @card.id
+            gift.value = "31.50"
             gift.add_receiver receiver
             post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
-            rrc(400)
+            rrc(200)
+            json["status"].should == 1
         end
 
         it "should accept non-stringified JSON gift" do
@@ -901,7 +895,7 @@ describe Mdot::V2::GiftsController do
             {
                 giver_id:       @user.id,
                 giver_name:     @user.name,
-                total:          gift.total,
+                value:          gift.value,
                 service:        gift.service,
                 receiver_id:    gift.receiver_id,
                 receiver_name:  gift.receiver_name,
@@ -922,7 +916,7 @@ describe Mdot::V2::GiftsController do
         def create_multiple_unique_gift gift, missing_hsh=nil
             missing_hsh ||= gift_social_id_hsh
             {
-                total:          gift.total,
+                value:          gift.value,
                 service:        gift.service,
                 receiver_name:  gift.receiver_name,
                 provider_id:    gift.provider.id,
@@ -933,8 +927,8 @@ describe Mdot::V2::GiftsController do
         def set_gift_as_sent gift, key
             {
                 key => gift.send(key),
-                total: gift.total,
-                service: gift.service,
+                value:          gift.value,
+                service:        gift.service,
                 receiver_name:  gift.receiver_name,
                 provider_id:    gift.provider.id,
                 credit_card:    gift.credit_card

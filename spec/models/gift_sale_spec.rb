@@ -66,6 +66,14 @@ describe GiftSale do
             gift.should == "User is no longer in the system , please gift to them with phone, email, facebook, or twitter"
         end
 
+        it "should create gift for request bug fix" do
+            req = {"giver_id"=>1, "giver_name"=>"Jimmy Basic", "value"=>"100.00", "service"=>"4.00", "receiver_id"=>1, "receiver_name"=>"Someone New", "provider_id"=>1, "credit_card"=>1}
+            req["shoppingCart"] = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            gift        = GiftSale.create @gift_hsh
+            gift.reload
+            gift.giver_name.should == "Jimmy Basic"
+        end
+
     end
 
     context "without Receiver ID" do

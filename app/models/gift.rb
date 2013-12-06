@@ -241,7 +241,9 @@ private
 	end
 
 	def ary_of_shopping_cart_as_hash
-		JSON.parse self.shoppingCart
+        if self.shoppingCart.kind_of?(String)
+		  JSON.parse self.shoppingCart
+        end
 	end
 
 	def make_gift_items shoppingCart_array
