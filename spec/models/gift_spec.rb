@@ -88,7 +88,7 @@ describe Gift do
 	        gift = FactoryGirl.build(:gift, giver: user, provider: provider)
 	        gift.payable = sale
 	        gift.save
-	        
+
 	        sale.reload
 	        sale.gift.should     == gift
 	        sale.giver_id.should == gift.giver_id
