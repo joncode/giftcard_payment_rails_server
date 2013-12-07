@@ -1,6 +1,7 @@
 class GiftSale < Gift
 
     def self.create args={}
+        
         if args["receiver_id"]
             receiver = User.unscoped.find(args["receiver_id"])
             if receiver.active == false
@@ -9,10 +10,12 @@ class GiftSale < Gift
                 args["receiver"] = receiver
             end
         end
+
         args["card"]  = args["giver"].cards.where(id: args["credit_card"]).first
         if args["card"].nil?
             return "We do not have that credit card on record.  Please choose a different card."
         end
+
         super
     end
 
@@ -32,7 +35,7 @@ private
         args.delete("unique_id")
         args.delete("card")
         args.delete("amount")
-        
+
     end
 
     def post_init args={}

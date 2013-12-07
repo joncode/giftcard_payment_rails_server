@@ -51,14 +51,9 @@ describe AppController do
             skip_second = false
             gs.each do |gift|
                 if gift.id.even? && skip_first && skip_second
-                    gift.update_attribute(:pay_stat, "unpaid")
+                    gift.update(pay_stat: "payment_error")
                     total_changed += 1
-                else
-                    gift.update_attribute(:pay_stat, "charged")
-                    if skip_first
-                        skip_second = true
-                    end
-                    skip_first = true
+
                 end
             end
             post :relays, format: :json, token: receiver.remember_token
@@ -76,11 +71,11 @@ describe AppController do
 
             it "should not return :pay_stat => 'payment_error' gifts" do
                 gifts = Gift.all
-                last_gift = gift.pop
+                last_gift = gifts.pop
                 gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"payment_error" )
+                    gift.update(pay_stat: "payment_error" )
                 end
-                
+
                 post :relays, format: :json, token: receiver.remember_token
                 json["success"]["badge"].should == 1
             end

@@ -45,9 +45,13 @@ describe "Happy Path" do
         total = price.to_i * 3
         service = total * 0.05
 
-        shoppingCart = [item].to_json
 
-        json = post_form_data '/app/buy_gift', gift: { total: total, service: service, receiver_name: "Neil Sarkar", receiver_email: "neil@gmail.com", provider_id: provider_id}, shoppingCart: shoppingCart, token: r_token
+        shoppingCart = [item].to_json
+        @card = FactoryGirl.create(:visa, name: "Neil Sarkar", user_id: user_id )
+        auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+        stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+        json = post_form_data '/app/buy_gift', gift: { total: total, service: service, credit_card: @card.id,receiver_name: "Neil Sarkar", receiver_email: "neil@gmail.com", provider_id: provider_id}, shoppingCart: shoppingCart, token: r_token
         puts json.inspect
         gift_id = json["success"]["Gift_id"]
         gift_id.should_not be_blank
@@ -88,9 +92,5 @@ describe "Happy Path" do
         json["success"]["order_number"].should_not be_blank
 
     end
-
-
-
-
-
+    
 end

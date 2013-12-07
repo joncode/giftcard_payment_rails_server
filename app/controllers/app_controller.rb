@@ -432,15 +432,16 @@ class AppController < JsonController
 
     def create_gift
         response = {}
-        if params["gift"].kind_of?(String)
-            gift_hsh = gift_params
-        end
+
+        gift_hsh = gift_params
+        
         gift_hsh["shoppingCart"] = params["shoppingCart"]
         gift_hsh["value"] = gift_hsh["total"]
         gift_hsh["giver"] = @current_user
         gift_hsh.delete("total")
 
         gift_response = GiftSale.create(gift_hsh)
+
         if gift_response.kind_of?(Gift)
             if gift_response.id
                 response['success'] =  { "Gift_id" => gift_response.id }
@@ -683,7 +684,7 @@ private
         if params.require(:gift).kind_of?(String)
             pg = JSON.parse(params.require(:gift))
         else
-            params.require(:gift).permit( :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_name,:provider_id,:credit_card)
+            params.require(:gift).permit( :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_email, :receiver_phone,:twitter, :facebook_id, :receiver_name,:provider_id,:credit_card, :total)
         end
     end
 end
