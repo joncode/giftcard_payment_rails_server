@@ -5,10 +5,7 @@ class PeopleFinder
         self.search_ids new_hsh
     end
 
-private
-
     def self.sanitize hsh
-        type_ofs = hsh.keys
         new_hsh = {}
         hsh.each do |key, value|
             type_of = key.to_s
@@ -18,6 +15,8 @@ private
         end
         return new_hsh
     end
+
+private
 
     def self.search_ids new_hsh
         type_of_ary = [ "facebook_id", "email", "phone", "twitter"]

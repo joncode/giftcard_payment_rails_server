@@ -138,6 +138,49 @@ describe Admt::V2::GiftsController do
         end
     end
 
+    describe :add_receiver do
+
+        it_should_behave_like("token authenticated", :post, :add_receiver, id: 1)
+
+        it "should associate user_id with receiver id and gift-uniques info with user_socials" do
+            gift = FactoryGirl.create(:gift, :facebook_id => "100005220484939")
+            user = FactoryGirl.create(:user, :email => "christie.parker@gmail.com", phone: "7025237365")
+            post :add_receiver, id: gift.id, data: user.id, format: :json
+            json["status"].should == 1
+            rrc 200
+
+            gift.reload
+            gift.receiver_id.should == user.id
+            user = User.find_by(email: "christie.parker@gmail.com")
+            user.phone.should       == "7025237365"
+            user.facebook_id.should == "100005220484939"
+
+            gift = FactoryGirl.create(:gift, :twitter => "100005220484939")
+            user = FactoryGirl.create(:user, :email => "christie.parker2@gmail.com", phone: "7035237365")
+            post :add_receiver, id: gift.id, data: user.id, format: :json
+            json["status"].should == 1
+            rrc 200
+
+            gift.reload
+            gift.receiver_id.should == user.id
+            user = User.find_by(email: "christie.parker2@gmail.com")
+            user.phone.should       == "7035237365"
+            user.twitter.should == "100005220484939"
+
+            gift = FactoryGirl.create(:gift, :receiver_email => "new@gmail.com")
+            user = FactoryGirl.create(:user, :email => "christie.parker4@gmail.com", phone: "7045237365")
+            post :add_receiver, id: gift.id, data: user.id, format: :json
+            json["status"].should == 1
+            rrc 200
+
+            gift.reload
+            gift.receiver_id.should == user.id
+            user = User.find_by(phone: "7045237365")
+            user.email.should == "new@gmail.com"
+        end
+
+    end
+
 end
 
 
