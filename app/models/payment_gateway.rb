@@ -71,3 +71,101 @@ private
     end
 
 end
+
+
+#!/usr/bin/env ruby
+
+# require 'rubygems'
+# require 'active_merchant'
+
+# Since this is a sample, use a hard-coded sandbox setup -
+# you'll need to plug in your sandbox credentials.
+# ActiveMerchant::Billing::Base.mode = :test
+# SampleGateway = ActiveMerchant::Billing::AuthorizeNetGateway.new(
+#   :login    => 'YOUR_SANDBOX_LOGIN_ID',
+#   :password => 'YOUR_SANDBOX_TRANSACTION_KEY'
+# )
+
+# Our unified refund operation would likely go onto some kind of
+# "model" or biz object that represents a purchase in your system.
+# Since this is a sample, we'll just mock it up as a struct with the
+# bare minimum required info.
+# class Transaction < Struct.new( :transaction_id, :amount_charged, :cc_last_four )
+
+#   # We'll raise this exception in the case of an unsettled credit.
+#   class UnsettledCreditError < RuntimeError
+#     UNSETTLED_CREDIT_RESPONSE_REASON_CODE = '54'
+
+#     def self.match?( response )
+#       response.params['response_reason_code'] == UNSETTLED_CREDIT_RESPONSE_REASON_CODE
+#     end
+#   end
+
+#   def initialize( transaction_id, amount_charged, cc_last_four )
+#     self.transaction_id = transaction_id
+#     self.amount_charged = amount_charged
+#     self.cc_last_four   = cc_last_four
+#   end
+
+#   def refund( amount )
+#     if amount != self.amount_charged
+#       # Different amounts: only a CREDIT will do
+#       response = SampleGateway.credit(
+#         amount,
+#         self.transaction_id,
+#         :card_number => self.cc_last_four
+#       )
+#       if UnsettledCreditError.match?( response )
+#         raise UnsettledCreditError
+#       end
+#     else
+#       # Same amount: try a VOID first, falling back to CREDIT if that fails
+#       response = SampleGateway.void( self.transaction_id )
+
+#       if !response.success?
+#         response = SampleGateway.credit(
+#           amount,
+#           self.transaction_id,
+#           :card_number => self.cc_last_four
+#         )
+#       end
+#     end
+
+#     response
+#   end
+
+# end
+
+# # Let's include a little bit of code to exercise our new operation; if
+# # you actually want to be able to do the CREDIT, you'll need to run a
+# # transaction and wait for it to settle, then modify the code to have
+# # that transaction id. Since we're just working with a purchase that
+# # was made moments ago, it won't have settled, and we'll always end up
+# # failing the partial refunding and doing the full refund with a VOID.
+# credit_card = ActiveMerchant::Billing::CreditCard.new(
+#   :number     => '4111111111111111',
+#   :month      => 1,
+#   :year       => 2015,
+# )
+# charge_amount = rand(1000) + 10 # Random amount to avoid dupe detection
+
+# response = SampleGateway.purchase( charge_amount, credit_card )
+# puts "Initial purchase: #{response.message}"
+# exit 1 unless response.success?
+
+# transaction_biz_object = Transaction.new(
+#   response.params['transaction_id'],
+#   charge_amount,
+#   credit_card.number[-4..-1]
+# )
+
+# partial_refund_amount = charge_amount - 9
+# begin
+#   response = transaction_biz_object.refund( partial_refund_amount )
+#   puts "Partial refund: #{response.message}"
+# rescue Transaction::UnsettledCreditError
+#   puts "Partial refund: Must do full refund then rerun for the correct amount."
+# end
+
+# response = transaction_biz_object.refund( charge_amount )
+# puts "Full refund: #{response.message}"
