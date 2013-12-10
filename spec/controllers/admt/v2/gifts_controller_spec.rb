@@ -142,41 +142,62 @@ describe Admt::V2::GiftsController do
 
         it_should_behave_like("token authenticated", :post, :add_receiver, id: 1)
 
-        it "should associate user_id with receiver id and gift-uniques info with user_socials" do
-            gift = FactoryGirl.create(:gift, :facebook_id => "100005220484939")
-            user = FactoryGirl.create(:user, :email => "christie.parker@gmail.com", phone: "7025237365")
-            post :add_receiver, id: gift.id, data: user.id, format: :json
-            json["status"].should == 1
-            rrc 200
+        context "gift has no receiver ID but unique receiver info" do
 
-            gift.reload
-            gift.receiver_id.should == user.id
-            user = User.find_by(email: "christie.parker@gmail.com")
-            user.phone.should       == "7025237365"
-            user.facebook_id.should == "100005220484939"
+            it "should merge user_id with receiver id and gift-uniques info with user_socials" do
+                gift = FactoryGirl.create(:gift, :facebook_id => "100005220484939")
+                user = FactoryGirl.create(:user, :email => "christie.parker@gmail.com", phone: "7025237365")
+                post :add_receiver, id: gift.id, data: user.id, format: :json
+                json["status"].should == 1
+                rrc 200
 
-            gift = FactoryGirl.create(:gift, :twitter => "100005220484939")
-            user = FactoryGirl.create(:user, :email => "christie.parker2@gmail.com", phone: "7035237365")
-            post :add_receiver, id: gift.id, data: user.id, format: :json
-            json["status"].should == 1
-            rrc 200
+                gift.reload
+                gift.receiver_id.should == user.id
+                user = User.find_by(email: "christie.parker@gmail.com")
+                user.phone.should       == "7025237365"
+                user.facebook_id.should == "100005220484939"
 
-            gift.reload
-            gift.receiver_id.should == user.id
-            user = User.find_by(email: "christie.parker2@gmail.com")
-            user.phone.should       == "7035237365"
-            user.twitter.should == "100005220484939"
+                gift = FactoryGirl.create(:gift, :twitter => "100005220484939")
+                user = FactoryGirl.create(:user, :email => "christie.parker2@gmail.com", phone: "7035237365")
+                post :add_receiver, id: gift.id, data: user.id, format: :json
+                json["status"].should == 1
+                rrc 200
 
-            gift = FactoryGirl.create(:gift, :receiver_email => "new@gmail.com")
-            user = FactoryGirl.create(:user, :email => "christie.parker4@gmail.com", phone: "7045237365")
-            post :add_receiver, id: gift.id, data: user.id, format: :json
-            json["status"].should == 1
-            rrc 200
+                gift.reload
+                gift.receiver_id.should == user.id
+                user = User.find_by(email: "christie.parker2@gmail.com")
+                user.phone.should       == "7035237365"
+                user.twitter.should == "100005220484939"
 
-            gift.reload
-            gift.receiver_id.should == user.id
-            user = User.find_by(phone: "7045237365")
-            user.email.should == "new@gmail.com"
+                gift = FactoryGirl.create(:gift, :receiver_email => "new@gmail.com")
+                user = FactoryGirl.create(:user, :email => "christie.parker4@gmail.com", phone: "7045237365")
+                post :add_receiver, id: gift.id, data: user.id, format: :json
+                json["status"].should == 1
+                rrc 200
+
+                gift.reload
+                gift.receiver_id.should == user.id
+                user = User.find_by(phone: "7045237365")
+                user.email.should == "new@gmail.com"
+            end
+        end
+
+        context "gift has the wrong receiver - changing receivers" do
+
+            it "should remove old receiver info and add new receiver info and NOT merge socials" do
+                bad_rec  = FactoryGirl.create(:user, email: "bad@receiver.com")
+                good_rec = FactoryGirl.create(:user, email: "christie.parker@gmail.com", phone: "7025237365")
+                gift = FactoryGirl.create(:gift)
+                gift.remove_receiver
+                gift.add_receiver(bad_rec)
+                gift.save
+
+                post :add_receiver, id: gift.id, data: good_rec.id, format: :json
+                good_rec.reload
+                good_rec.email.should_not == "bad@receiver.com"
+            end
+
+
         end
 
     end
