@@ -142,7 +142,7 @@ describe Admt::V2::GiftsController do
 
         it_should_behave_like("token authenticated", :post, :add_receiver, id: 1)
 
-        context "gift has no receiver ID but unique receiver info" do
+        context "gift has no receiver ID but unique receiver info - merge" do
 
             it "should merge user_id with receiver id and gift-uniques info with user_socials" do
                 gift = FactoryGirl.create(:gift, :facebook_id => "100005220484939")
