@@ -246,9 +246,63 @@ describe GiftSale do
 
     context "messaging" do
 
-        xit "should email invoice to the sender" do
-            run_delayed_jobs
+        before(:each) do
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+
+            @user     = FactoryGirl.create(:user)
+            @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
+            @card     = FactoryGirl.create(:card, name: @user.name, user_id: @user.id)
+            @provider = FactoryGirl.create(:provider)
+            @gift_hsh = {}
+            @gift_hsh["message"]        = "I just Bought a Gift!"
+            @gift_hsh["receiver_name"]  = @receiver.name
+            @gift_hsh["receiver_id"]    = @receiver.id
+            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["giver"]          = @user
+            @gift_hsh["value"]          = "45.00"
+            @gift_hsh["service"]        = "2.25"
+            @gift_hsh["credit_card"]    = @card.id
+            @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            run_delayed_jobs
+            WebMock.reset!
+        end
+
+        it "should email invoice to the sender" do
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            response = GiftSale.create @gift_hsh
+            
+            run_delayed_jobs
+            abs_gift_id = response.id + NUMBER_ID
+
+            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
+                puts req.body;
+                b = JSON.parse(req.body);
+                if b["template_name"] == "iom-gift-gift-receipt"
+                    link = b["message"]["merge_vars"].first["vars"].first["content"];
+                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
+                else
+                    true
+                end
+
+            }.twice
+        end
+
+        it "should email notify the recipient" do
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+
+            response = GiftSale.create @gift_hsh
+            run_delayed_jobs
+            abs_gift_id = response.id + NUMBER_ID
             WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
                 puts req.body;
                 b = JSON.parse(req.body);
@@ -258,32 +312,30 @@ describe GiftSale do
                 else
                     true
                 end
-
-            }.once
+            }.twice
         end
 
-        xit "should email notify the recipient" do
+        it "should push notify to app-user recipients" do
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            Urbanairship.should_receive(:push).with(good_push_hsh)
+            response = GiftSale.create @gift_hsh
             run_delayed_jobs
-            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
-                puts req.body;
-                b = JSON.parse(req.body);
-                if b["template_name"] == "iom-gift-notify-receiver"
-                    link = b["message"]["merge_vars"].first["vars"].first["content"];
-                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
-                else
-                    true
-                end
-
-            }.once
         end
 
-        xit "should push notify to app-user recipients" do
+        it "should not message users when payment_error" do
+            auth_response = "3,2,33,This transaction has been declined.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-        end
-
-        xit "should not message users when payment_error" do
-
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            Urbanairship.should_not_receive(:push).with(good_push_hsh)
+            GiftSale.create @gift_hsh
+            run_delayed_jobs
         end
 
     end

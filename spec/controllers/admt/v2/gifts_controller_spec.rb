@@ -89,23 +89,25 @@ describe Admt::V2::GiftsController do
 
         context "behavior" do
 
-            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open') }
+            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open', value: "134.00") }
 
 
-            it "should set the gift 'pay_stat' to 'refunded' and not change the gift status" do
-                AuthorizeNet::AIM::Transaction.any_instance.stub(:void).and_return(AuthResponse.new)
+            it "should set the gift 'pay_stat' to 'refund_comp' and not change the gift status" do
+                auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,345783945,,,#{gift.value},CC,credit,,#{@user.first_name},#{@user.last_name},,,,,,,,,,,,,,,,,"
+                stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
                 post :refund, id: gift.id, format: :json
                 new_gift = Gift.find gift.id
-                new_gift.pay_stat.should == "refunded"
-                new_gift.status.should   == gift.status
+                new_gift.pay_stat.should    == "refund_comp"
+                new_gift.status.should_not  == 'cancel'
             end
 
             it "should not 500 when sending back 'reason text' for 'A valid referenced transaction ID is required.'" do
-                auth_response_json = "{\"response_code\":\"3\",\"response_subcode\":\"2\",\"response_reason_code\":\"33\",\"response_reason_text\":\"A valid referenced transaction ID is required.\",\"authorization_code\":\"\",\"avs_response\":\"P\",\"transaction_id\":\"0\",\"invoice_number\":\"\",\"description\":\"\",\"amount\":0.0,\"method\":\"CC\",\"transaction_type\":\"void\",\"customer_id\":\"\",\"first_name\":\"\",\"last_name\":\"\",\"company\":\"\",\"address\":\"\",\"city\":\"\",\"state\":\"\",\"zip_code\":\"\",\"country\":\"\",\"phone\":\"\",\"fax\":\"\",\"email_address\":\"\",\"ship_to_first_name\":\"\",\"ship_to_last_name\":\"\",\"ship_to_company\":\"\",\"ship_to_address\":\"\",\"ship_to_city\":\"\",\"ship_to_state\":\"\",\"ship_to_zip_code\":\"\",\"ship_to_country\":\"\",\"tax\":0.0,\"duty\":0.0,\"freight\":0.0,\"tax_exempt\":\"\",\"purchase_order_number\":\"\",\"md5_hash\":\"87C72AD0D50F84E05E8E833C16D41192\"}"
-                AuthorizeNet::AIM::Transaction.any_instance.stub(:void).and_return(AuthResponse.new(auth_response_json))
+                auth_response = "3,2,33,A valid referenced transaction ID is required.,JVT36N,Y,345783945,,,#{gift.value},CC,credit,,#{@user.first_name},#{@user.last_name},,,,,,,,,,,,,,,,,"
+                stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
                 post :refund, id: gift.id, format: :json
                 json["status"].should == 0
-                json["data"].should   == "A valid referenced transaction ID is required."
+                json["data"].should   == "A valid referenced transaction ID is required. ID = #{gift.id}."
             end
 
         end
@@ -117,22 +119,23 @@ describe Admt::V2::GiftsController do
 
         context "behavior" do
 
-            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open') }
+            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open', value: "134.00") }
 
-            it "should set the gift 'pay_stat' to 'refunded' " do
-                AuthorizeNet::AIM::Transaction.any_instance.stub(:void).and_return(AuthResponse.new)
+            it "should set the gift 'pay_stat' to 'refund_cancel' and gift status to 'cancel' " do
+                auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,345783945,,,#{gift.value},CC,credit,,#{@user.first_name},#{@user.last_name},,,,,,,,,,,,,,,,,"
+                stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
                 post :refund_cancel, id: gift.id, format: :json
                 new_gift = Gift.find gift.id
-                new_gift.pay_stat.should == "refunded"
+                new_gift.pay_stat.should == "refund_cancel"
                 new_gift.status.should   == 'cancel'
             end
 
             it "should not 500 when sending back 'reason text' for 'A valid referenced transaction ID is required.'" do
-                auth_response_json = "{\"response_code\":\"3\",\"response_subcode\":\"2\",\"response_reason_code\":\"33\",\"response_reason_text\":\"A valid referenced transaction ID is required.\",\"authorization_code\":\"\",\"avs_response\":\"P\",\"transaction_id\":\"0\",\"invoice_number\":\"\",\"description\":\"\",\"amount\":0.0,\"method\":\"CC\",\"transaction_type\":\"void\",\"customer_id\":\"\",\"first_name\":\"\",\"last_name\":\"\",\"company\":\"\",\"address\":\"\",\"city\":\"\",\"state\":\"\",\"zip_code\":\"\",\"country\":\"\",\"phone\":\"\",\"fax\":\"\",\"email_address\":\"\",\"ship_to_first_name\":\"\",\"ship_to_last_name\":\"\",\"ship_to_company\":\"\",\"ship_to_address\":\"\",\"ship_to_city\":\"\",\"ship_to_state\":\"\",\"ship_to_zip_code\":\"\",\"ship_to_country\":\"\",\"tax\":0.0,\"duty\":0.0,\"freight\":0.0,\"tax_exempt\":\"\",\"purchase_order_number\":\"\",\"md5_hash\":\"87C72AD0D50F84E05E8E833C16D41192\"}"
-                AuthorizeNet::AIM::Transaction.any_instance.stub(:void).and_return(AuthResponse.new(auth_response_json))
+                auth_response = "3,2,33,A valid referenced transaction ID is required.,JVT36N,Y,345783945,,,#{gift.value},CC,credit,,#{@user.first_name},#{@user.last_name},,,,,,,,,,,,,,,,,"
+                stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
                 post :refund_cancel, id: gift.id, format: :json
                 json["status"].should == 0
-                json["data"].should   == "A valid referenced transaction ID is required."
+                json["data"].should   == "A valid referenced transaction ID is required. ID = #{gift.id}."
             end
 
         end

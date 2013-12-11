@@ -3,7 +3,7 @@ require 'authorize_net'
 class PaymentGateway
 
     attr_accessor :transaction, :credit_card, :response
-    attr_reader   :first_name,  :last_name,   :unique_id, :number, :month_year, :amount, :transaction_id
+    attr_reader   :first_name,  :last_name,   :unique_id, :number, :month_year, :amount, :transaction_id, :cc_last_four
 
     def initialize(args={})
         @first_name     = args["first_name"]
@@ -13,6 +13,7 @@ class PaymentGateway
         @amount         = args["amount"]
         @unique_id      = args["unique_id"]
         @transaction_id = args["transaction_id"]
+        @cc_last_four   = args["last_four"]
     end
 
     def charge
@@ -34,12 +35,18 @@ class PaymentGateway
         gateway_hash_response
     end
 
-    def void
+    def refund
             # 1 makes a transaction
-        # @transaction = authorize_net_aim_transaction
+        @transaction = authorize_net_aim_transaction
 
         #     # 2 gets a response from auth.net
-        # @response = @transaction.void(transaction_id)
+        @response = @transaction.void(self.transaction_id)
+
+        unless @response.success?
+            @transaction = authorize_net_aim_transaction
+            @response = @transaction.refund( self.amount, self.transaction_id, self.cc_last_four )
+        end
+        gateway_refund_hsh_response
     end
 
 private
@@ -53,6 +60,18 @@ private
         last_four              = "XXXX" + card_num[12..15]
         raw_request[:card_num] = last_four
         hsh["req_json"]        = raw_request.to_json
+        hsh["resp_code"]       = self.response.response_code.to_i
+        hsh["reason_text"]     = self.response.response_reason_text
+        hsh["reason_code"]     = self.response.response_reason_code.to_i
+        hsh["revenue"]         = self.response.fields[:amount]
+        hsh
+    end
+
+    def gateway_refund_hsh_response
+        hsh = {}
+        hsh["transaction_id"]  = self.response.transaction_id
+        hsh["resp_json"]       = self.response.fields.to_json
+        hsh["req_json"]        = self.transaction.fields.to_json
         hsh["resp_code"]       = self.response.response_code.to_i
         hsh["reason_text"]     = self.response.response_reason_text
         hsh["reason_code"]     = self.response.response_reason_code.to_i

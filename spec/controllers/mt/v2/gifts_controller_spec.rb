@@ -75,6 +75,46 @@ describe Mt::V2::GiftsController do
             json["status"].should == 0
             json["data"].keys.should == ["error"]
         end
+
+        it "should send an email to the receiver_email" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!"}
+            post :create, format: :json, data: create_hsh
+            rrc 200
+            gift = Gift.find_by(receiver_email: "fred@barry.com")
+            abs_gift_id = gift.id + NUMBER_ID
+            run_delayed_jobs
+            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
+                b = JSON.parse(req.body);
+                if b["template_name"] == "iom-gift-notify-receiver"
+                    link = b["message"]["merge_vars"].first["vars"].first["content"];
+                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
+                else
+                    true
+                end
+            }.once
+        end
+
+        it "should send in-network receivers a push notification" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            @receiver = FactoryGirl.create(:user, first_name: "Fred", last_name: "Barry", email: "fred@barry.com")
+            @user = @provider.biz_user
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!"}
+            post :create, format: :json, data: create_hsh
+            rrc 200
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift at #{@provider.name}!",:badge=>0,:sound=>"pn.wav"},:alert_type=>1}
+            Urbanairship.should_receive(:push).with(good_push_hsh)
+            run_delayed_jobs
+        end
     end
 
 end
+
+
+
+
+
+
+

@@ -42,29 +42,22 @@ class Admt::V2::GiftsController < JsonController
 
     def refund
         gift = Gift.includes(:payable).find params[:id]
-        sale = gift.payable
-        resp = sale.void_sale
-        if  resp == 0
+        resp_hsh = gift.void_refund_live
+        if  resp_hsh["status"] > 0
             success "Gift is #{gift.pay_stat}"
         else
-            fail resp
+            fail resp_hsh["msg"]
         end
         respond
     end
 
     def refund_cancel
         gift = Gift.includes(:payable).find params[:id]
-        sale = gift.payable
-        resp = sale.void_sale
-        if  resp == 0
-            gift.status = 'cancel'
-            if gift.save
-                success "Gift is #{gift.pay_stat} and cancelled"
-            else
-                success "Please contact tech support - Gift #{gift.id} is NOT Cancelled in APP ONLY"
-            end
+        resp_hsh = gift.void_refund_cancel
+        if  resp_hsh["status"] > 0
+            success "Gift is #{gift.pay_stat} and cancelled"
         else
-            fail resp
+            fail resp_hsh["msg"]
         end
         respond
     end

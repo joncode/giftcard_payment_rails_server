@@ -23,6 +23,7 @@ describe AppController do
         provider_hsh = { name: "Artifice", token: "Specialpushtoken" }
         provider = FactoryGirl.create(:provider, provider_hsh)
         user = FactoryGirl.create(:user, user_hsh)
+        @user = user
         pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
         pnt      = PnToken.create(user_id: user.id, pn_token: pn_token)
         user.phone.should == "2052920036"
@@ -38,6 +39,9 @@ describe AppController do
         run_delayed_jobs
         params = "{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 1,  \"total\" : 20,  \"provider_id\" : #{provider.id},  \"receiver_id\" : #{user.id},  \"message\" : \"\",  \"credit_card\" : #{card.id},  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : #{user.id}}"
         cart   = "[{\"detail\":\"Draft\",\"price\":7,\"item_name\":\"Dogfish Head 60 Minute\",\"item_id\":240,\"quantity\":2},{\"detail\":\"Draft\",\"price\":6,\"item_name\":\"Downtown Brown\",\"item_id\":241,\"quantity\":1}]"
+        auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,345783945,,,20.00,CC,credit,,#{@user.first_name},#{@user.last_name},,,,,,,,,,,,,,,,,"
+        stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
         post :create_gift, format: :json, gift: params , origin: "d", shoppingCart: cart , token: user.remember_token
 
         gift = user.sent.where(provider_id: provider.id ).first

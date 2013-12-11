@@ -13,6 +13,8 @@ class Mt::V2::GiftsController < JsonController
 
         gift = GiftPromo.new(gift_hsh)
         if gift.save
+            Relay.send_push_notification(gift)
+            gift.notify_receiver
             success gift.promo_serialize
         else
             status = :bad_request

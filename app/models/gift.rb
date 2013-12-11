@@ -17,6 +17,7 @@ class Gift < ActiveRecord::Base
     belongs_to  :giver,    polymorphic: :true
     belongs_to  :receiver, class_name: User
     belongs_to  :payable,  polymorphic: :true, autosave: :true
+    belongs_to  :refund,   polymorphic: :true
 
 	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :payable
 
@@ -32,10 +33,13 @@ class Gift < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
+    def sale
+        Sale.find_by(gift_id: self.id)
+    end
+
     def initialize args={}
         pre_init(args)
         super
-        post_init(args)
     end
 
     def receiver= user_obj
@@ -153,6 +157,42 @@ class Gift < ActiveRecord::Base
     def promo?
         self.giver_type == "BizUser" && self.payable_type == "Debt"
     end
+#/----------------------------------payable ducktype refund -----------------------------/
+
+    def void_refund_cancel
+        payment_ducktype = self.payable
+        self.refund      = payment_ducktype.void_refund(self.giver_id)
+
+        resp_hsh = {}
+        if self.refund.success?
+            self.status     = 'cancel'
+            self.pay_stat   = "refund_cancel"
+            resp_hsh["msg"] = refund.reason_text
+            resp_hsh["status"] = 1
+        else
+            resp_hsh["msg"] = "#{refund.reason_text} ID = #{self.id}."
+            resp_hsh["status"] = 0
+        end
+        self.save
+        resp_hsh
+    end
+
+    def void_refund_live
+        payment_ducktype = self.payable
+        self.refund      = payment_ducktype.void_refund(self.giver_id)
+        resp_hsh = {}
+        if self.refund.success?
+            self.pay_stat   = "refund_comp"
+            resp_hsh["msg"] = refund.reason_text
+            resp_hsh["status"] = 1
+        else
+            resp_hsh["msg"] = "#{refund.reason_text} ID = #{self.id}."
+            resp_hsh["status"] = 0
+        end
+        self.save
+        resp_hsh
+    end
+
 
 #/-------------------------------------re gift db methods-----------------------------/
 

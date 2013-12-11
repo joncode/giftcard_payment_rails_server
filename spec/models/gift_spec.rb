@@ -101,13 +101,28 @@ describe Gift do
 
 	describe :update do
 
-	  it "should extract phone digits" do
-		gift = FactoryGirl.create(:gift)
-		gift.update_attributes({ "receiver_phone" => "262-554-3628" })
-		gift.reload
-		gift.receiver_phone.should == "2625543628"
-	  end
+		it "should extract phone digits" do
+			gift = FactoryGirl.create(:gift)
+			gift.update_attributes({ "receiver_phone" => "262-554-3628" })
+			gift.reload
+			gift.receiver_phone.should == "2625543628"
+		end
 
+		it "should save sale as refund on update" do
+			gift = FactoryGirl.build(:gift)
+			sale = FactoryGirl.build(:sale)
+			gift.payable = sale
+			gift.save
+			sale.reload
+			saved_gift = Gift.find_by(payable_id: sale.id)
+			refund = FactoryGirl.create(:sale)
+			saved_gift.update(refund: refund)
+			saved_gift.reload
+			refund.reload
+			saved_gift.refund_id.should == refund.id
+			saved_gift.refund_type.should == refund.class.to_s
+			refund.refunded.should == saved_gift
+		end
 	end
 
 	it "should associate with a user as giver" do
@@ -334,6 +349,164 @@ describe Gift do
 
 	end
 
+	context "void_refund_cancel" do
+
+		before do
+			@user = FactoryGirl.create(:user)
+			@card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
+			@gift = FactoryGirl.build(:gift, giver_id: @user.id, giver_name: @user.name)
+			revenue = BigDecimal(@gift.value)
+			@sale = FactoryGirl.build(:sale, revenue: revenue, giver_id: @user.id)
+			@gift.payable = @sale
+			@gift.giver = @user
+			@gift.save
+		end
+
+		context "success" do
+
+			it "should save refund to gift , set status to cancel and set pay_stat to refund_cancel on success" do
+        		auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,345783945,,,#{@sale.revenue},CC,credit,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+        		stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+				@gift.void_refund_cancel
+				@gift.reload
+
+				refund = @gift.refund
+
+				@gift.status.should 				== 'cancel'
+				@gift.pay_stat.should 				== 'refund_cancel'
+				@gift.payable_id.should 			== @sale.id
+
+				refund.class.should 				== Sale
+				refund.id.should_not 				== @sale.id
+				refund.transaction_id.should_not 	== @sale.transaction_id
+				refund.revenue.should 				== @sale.revenue
+				refund.giver_id.should 				== @gift.giver_id
+			end
+
+			it "should return response reason text and status = 1 on success" do
+        		auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,345783945,,,#{@sale.revenue},CC,credit,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+        		stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+				resp_hsh = @gift.void_refund_cancel
+				resp_hsh["msg"].should 	== "This transaction has been approved."
+				resp_hsh["status"].should 		== 1
+			end
+		end
+
+		context "fail" do
+
+			it "should save gift_id on the refund , but not change status or pay_stat" do
+				auth_response = "2,2,2,You have exceeded the credit available for this transaction.,JVT36N,Y,345783945,,,#{@sale.revenue},CC,credit,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+				stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+				@gift.void_refund_cancel
+				@gift.reload
+
+				refund = @gift.refund
+
+				@gift.status.should_not 			== 'cancel'
+				@gift.pay_stat.should_not 			== 'refund_cancel'
+				@gift.payable_id.should 			== @sale.id
+
+				refund.class.should 				== Sale
+				refund.id.should_not 				== @sale.id
+				refund.transaction_id.should_not 	== @sale.transaction_id
+				refund.revenue.should 				== @sale.revenue
+				refund.giver_id.should 				== @gift.giver_id
+			end
+
+			it "should return response reason text and status = 0 on failed" do
+				auth_response = "2,2,2,You have exceeded the credit available for this transaction.,JVT36N,Y,345783945,,,#{@sale.revenue},CC,credit,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+				stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+				resp_hsh = @gift.void_refund_cancel
+				resp_hsh["msg"].should 	== "You have exceeded the credit available for this transaction. ID = #{@gift.id}."
+				resp_hsh["status"].should 		== 0
+			end
+		end
+
+	end
+
+	context "void_refund_live" do
+
+		before do
+			@user = FactoryGirl.create(:user)
+			@card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
+			@gift = FactoryGirl.build(:gift, giver_id: @user.id, giver_name: @user.name)
+			revenue = BigDecimal(@gift.value)
+			@sale = FactoryGirl.build(:sale, revenue: revenue, giver_id: @user.id)
+			@gift.payable = @sale
+			@gift.giver = @user
+			@gift.save
+			@status = @gift.status
+
+		end
+
+		context "success" do
+
+			it "should save refund to gift ,  set pay_stat to refund_comp on success" do
+        		auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,345783945,,,#{@sale.revenue},CC,credit,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+        		stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+				@gift.void_refund_live
+				@gift.reload
+
+				refund = @gift.refund
+
+				@gift.status.should 				== @status
+				@gift.pay_stat.should 				== 'refund_comp'
+				@gift.payable_id.should 			== @sale.id
+				refund.class.should 				== Sale
+				refund.id.should_not 				== @sale.id
+				refund.transaction_id.should_not 	== @sale.transaction_id
+				refund.revenue.should 				== @sale.revenue
+				refund.giver_id.should 				== @gift.giver_id
+			end
+
+			it "should return response reason text and status = 1 on success" do
+        		auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,345783945,,,#{@sale.revenue},CC,credit,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+        		stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+				resp_hsh = @gift.void_refund_live
+				resp_hsh["msg"].should 	== "This transaction has been approved."
+				resp_hsh["status"].should 		== 1
+			end
+		end
+
+		context "fail" do
+
+			it "should save gift_id on the refund , but not change status or pay_stat" do
+				auth_response = "3,2,33,A valid referenced transaction ID is required.,JVT36N,Y,345783945,,,#{@sale.revenue},CC,credit,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+				stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+				@gift.void_refund_live
+				@gift.reload
+
+				refund = @gift.refund
+
+				@gift.status.should 	 			== @status
+				@gift.pay_stat.should_not			== 'refund_comp'
+				@gift.payable_id.should 			== @sale.id
+				refund.class.should 				== Sale
+				refund.id.should_not 				== @sale.id
+				refund.transaction_id.should_not 	== @sale.transaction_id
+				refund.revenue.should 				== @sale.revenue
+				refund.giver_id.should 				== @gift.giver_id
+			end
+
+			it "should return response reason text and status = 0 on failed" do
+				auth_response = "2,2,2,You have exceeded the credit available for this transaction.,JVT36N,Y,345783945,,,#{@sale.revenue},CC,credit,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+				stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+				resp_hsh = @gift.void_refund_live
+				resp_hsh["msg"].should 	== "You have exceeded the credit available for this transaction. ID = #{@gift.id}."
+				resp_hsh["status"].should 		== 0
+			end
+		end
+
+
+	end
 end
 
 # == Schema Information

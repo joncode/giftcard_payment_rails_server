@@ -35,6 +35,13 @@ describe Debt do
         debt.amount.should == BigDecimal("10.00")
     end
 
+    it "should respond to #success?" do
+
+        debt = FactoryGirl.create(:debt)
+        debt.respond_to?(:success?).should be_true
+    end
+
+
 end
 
 

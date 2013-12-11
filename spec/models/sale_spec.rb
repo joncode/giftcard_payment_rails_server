@@ -90,6 +90,32 @@ describe Sale do
         sale.resp_code.should       == 1
     end
 
+    it "should receive giver_id on sale instance and process refund" do
+        user = FactoryGirl.create(:user)
+        card = FactoryGirl.create(:visa, :name => user.name, :user_id => user.id)
+        revenue = BigDecimal("121.00")
+        sale = FactoryGirl.create(:sale, transaction_id: "9823429834", revenue: revenue)
+        gift = FactoryGirl.create(:gift, value: "121.00")
+        auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,345783945,,,121.00,CC,credit,,#{card.first_name},#{card.last_name},,,,,,,,,,,,,,,,,"
+        stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+        gift.payable = sale
+        gift.save
+        refund_sale = sale.void_refund(gift.giver_id)
+        refund_sale.class.should     == Sale
+        refund_sale.card_id.should   == sale.card.id
+        refund_sale.giver_id.should  == gift.giver_id
+        refund_sale.resp_code.should == 1
+        refund_sale.revenue.should   == revenue
+        refund_sale.transaction_id.should  == "345783945"
+    end
+
+    it "should respond to #success?" do
+        revenue = BigDecimal("121.00")
+        sale = FactoryGirl.create(:sale, transaction_id: "9823429834", revenue: revenue)
+        sale.respond_to?(:success?).should == true
+        sale.success?.should be_true
+    end
+
 end
 
 
