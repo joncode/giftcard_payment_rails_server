@@ -11,21 +11,19 @@ class Gift < ActiveRecord::Base
 
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :order, 		dependent: :destroy
-	has_one     :sale #remove after migration
 
 	has_many    :gift_items, 	dependent: :destroy
     belongs_to  :provider
     belongs_to  :giver,    polymorphic: :true
     belongs_to  :receiver, class_name: User
-    belongs_to  :payable,  polymorphic: :true
+    belongs_to  :payable,  polymorphic: :true, autosave: :true
 
-	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
+	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :payable
 
 	before_save   :extract_phone_digits
     before_create :find_receiver
 	before_create :add_giver_name,  	:if => :no_giver_name?
     before_create :add_provider_name,   :if => :no_provider_name?
-	before_create :regifted,        	:if => :regifted?
     before_create :regift,              :if => :regift?
 	before_create :build_gift_items
 	before_create :set_statuses
@@ -73,11 +71,16 @@ class Gift < ActiveRecord::Base
 	end
 
     def total
-        string_to_cents self.value
+        amount = self.value || super
+        string_to_cents amount
     end
 
     def total= amount
         self.value = amount
+    end
+
+    def unique_cc_id
+        "#{self.receiver_name}_#{self.provider_id}".gsub(' ','_')
     end
 
 #/-----------------------------------------------Status---------------------------------------/
@@ -99,12 +102,12 @@ class Gift < ActiveRecord::Base
     end
 
 	def set_statuses
-		case self.pay_type
+		case self.payable_type
 		when "Sale"
 			set_payment_status
-			set_status
 		when "Debt"
-		when "Campaign"
+		when "Gift"
+            set_status
 		else
 			set_status
 		end
@@ -122,55 +125,43 @@ class Gift < ActiveRecord::Base
 		case self.payable.resp_code
 		when 1
 		  # Approved
-			self.pay_stat = "charged"
+			self.pay_stat = "charge_unpaid"
+            set_status
 		when 2
 		  # Declined
-			self.pay_stat = "declined"
+			self.pay_stat = "payment_error"
+            self.status = "cancel"
 		when 3
 		  # Error
-		  # duplicate transaction response subcode = 1
-		  	response = JSON.parse(self.sale.resp_json)
-			if response["response_subcode"] == 1
-				self.pay_stat = "duplicate"
+			if self.payable.reason_code == 11
+				self.pay_stat = "payment_error"
 			else
-				self.pay_stat = "unpaid"
+				self.pay_stat = "payment_error"
 			end
+            self.status = "cancel"
 		when 4
 		  # Held for Review
-			self.pay_stat = "unpaid"
+			self.pay_stat = "payment_error"
+            self.status = "cancel"
 		else
 		  # not a listed error code
-		  	self.pay_stat = "unpaid"
+		  	self.pay_stat = "payment_error"
+            self.status = "cancel"
 		end
-		set_status
 	end
 
     def promo?
         self.giver_type == "BizUser" && self.payable_type == "Debt"
     end
 
-#/--------------------------------------gift credit card methods-----------------------------/
-
-    def charge_card
-    	self.pay_type = "Sale"
-    	sale      	  = Sale.init self  # @gift
-    	sale.auth_capture
-
-    	self.payable  = sale
-    end
-
 #/-------------------------------------re gift db methods-----------------------------/
 
 	def parent
-		if self.regift_id
-			Gift.find(self.regift_id)
-		else
-			nil
-		end
+        self.payable
 	end
 
 	def child
-		Gift.find_by(regift_id: self.id)
+        Gift.find_by(payable_id: self.id)
 	end
 
 #/-------------------------------------data population methods-----------------------------/
@@ -216,6 +207,16 @@ class Gift < ActiveRecord::Base
 		self.anon_id    = giver_id
 	end
 
+    def receiver_info_as_hsh
+        rec_hsh = {}
+        rec_hsh["receiver_id"]      = self.receiver_id if self.receiver_id
+        rec_hsh["receiver_email"]   = self.receiver_email if self.receiver_email
+        rec_hsh["receiver_phone"]   = self.receiver_phone if self.receiver_phone
+        rec_hsh["facebook_id"]      = self.facebook_id if self.facebook_id
+        rec_hsh["twitter"]          = self.twitter if self.twitter
+        rec_hsh
+    end
+
 ###############
 
 private
@@ -235,7 +236,9 @@ private
 	end
 
 	def ary_of_shopping_cart_as_hash
-		JSON.parse self.shoppingCart
+        if self.shoppingCart.kind_of?(String)
+		  JSON.parse self.shoppingCart
+        end
 	end
 
 	def make_gift_items shoppingCart_array
@@ -278,15 +281,6 @@ private
     def receiver_hsh
         { "receiver_phone" => self.receiver_phone, "receiver_email" => self.receiver_email, "facebook_id" => self.facebook_id, "twitter" => self.twitter }
     end
-
-	def regifted
-		old_gift = Gift.find(self.regift_id)
-		old_gift.update_attribute(:status, 'regifted')
-	end
-
-	def regifted?
-		self.regift_id
-	end
 
     def regift
         old_gift = self.payable

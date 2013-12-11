@@ -14,17 +14,18 @@ describe AppController do
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
             @token = @user.remember_token
             @receiver = FactoryGirl.create(:receiver)
-            @card = FactoryGirl.create(:card)
+            @card = FactoryGirl.create(:card, name: @user.name, user_id: @user.id)
         end
 
         it "should not send nil to add_giver" do
             Card.any_instance.stub(:decrypt!).and_return("4111000011110000")
             Card.any_instance.stub(:number).and_return("4111000011110000")
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => approved, :headers => {})
-            params_hsh  = {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : #{@receiver.id},  \"message\" : \"\",  \"credit_card\" : #{@card.id},  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : 115}","origin"=>"d","shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]","token"=> @token}
+            params_hsh  = {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : #{@receiver.id},  \"message\" : \"\",  \"credit_card\" : #{@card.id},  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : #{@user.id}}","origin"=>"d","shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]","token"=> @token}
             post :create_gift, format: :json, gift: params_hsh["gift"] , shoppingCart: params_hsh["shoppingCart"], token: params_hsh["token"]
-            gift = Gift.last
-            gift.giver_name.should == "Jimmy Basic"
+            g_id = json["success"]["Gift_id"]
+            gift = Gift.find g_id
+            gift.giver_name.should == @user.name
         end
 
     end
@@ -38,6 +39,8 @@ describe AppController do
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             @card = FactoryGirl.create(:card, :name => @user.name, :user_id => @user.id)
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
         end
 
         {
@@ -46,9 +49,7 @@ describe AppController do
             facebook_id: "123",
             twitter: "999"
         }.stringify_keys.each do |type_of, identifier|
-            it "should find user account for old #{type_of}" do
-                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
-                Sale.any_instance.stub(:resp_code).and_return(1)
+            it "should find user account for old #{type_of}" do                
                 # take a user , add an email
                 @user.update_attribute(type_of, identifier)
                 # then we hit create gift
@@ -58,22 +59,19 @@ describe AppController do
                 else
                     key = type_of
                 end
-                gift = FactoryGirl.create :gift, { key => identifier, "credit_card" => @card.id}
+                gift = FactoryGirl.build :gift, { key => identifier, "credit_card" => @card.id}
                 post :create_gift, format: :json, gift: set_gift_as_sent(gift, key) , shoppingCart: @cart , token: @user.remember_token
                 new_gift = Gift.find(json["success"]["Gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
 
             it "should look thru multiple unique ids for a user object with #{type_of}" do
-                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
-                Sale.any_instance.stub(:resp_code).and_return(1)
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
                 gift_social_id_hsh["credit_card"] = @card.id
-                gift = FactoryGirl.create :gift, gift_social_id_hsh
-                @card.user_id = gift.giver_id
-                @card.save
+                gift = FactoryGirl.build :gift, gift_social_id_hsh
+                gift.credit_card = @card.id
                 post :create_gift, format: :json, gift: create_multiple_unique_gift(gift) , shoppingCart: @cart , token: @user.remember_token
                 # check that the :action assign the user_id to receiver_id and saves the gift
                 new_gift = Gift.find(json["success"]["Gift_id"])
@@ -81,8 +79,6 @@ describe AppController do
             end
 
             it "should look thru not full gift of unique ids for a user object with #{type_of}" do
-                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
-                Sale.any_instance.stub(:resp_code).and_return(1)
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
@@ -93,7 +89,8 @@ describe AppController do
                 else
                     missing_hsh["receiver_phone"] = ""
                 end
-                gift = FactoryGirl.create :gift, missing_hsh
+                gift = FactoryGirl.build :gift, missing_hsh
+                gift.credit_card = @card.id
                 post :create_gift, format: :json, gift: create_multiple_unique_gift(gift, missing_hsh) , shoppingCart: @cart , token: @user.remember_token
                 # check that the :action assign the user_id to receiver_id and saves the gift
                 new_gift = Gift.find(json["success"]["Gift_id"])
@@ -112,6 +109,7 @@ describe AppController do
             Gift.delete_all
             User.delete_all
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+
         end
 
         it "it should not allow gift creating for de-activated givers" do

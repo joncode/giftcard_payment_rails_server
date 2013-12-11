@@ -118,12 +118,18 @@ class IphoneController < AppController
 
         recipient_data = JSON.parse permit_receiver_params
         details 	   = JSON.parse permit_data_params
-        gift_regifter  = GiftRegifter.new(recipient_data, details)
+        new_gift_hsh   = recipient_data.merge(details)
+        new_gift_hsh["old_gift_id"] = details["regift_id"]
+        new_gift_hsh.delete("regift_id")
 
-        if gift_regifter.create
-        	success gift_regifter.response
+        if gift_response = GiftRegift.create(new_gift_hsh)
+	        if gift_response.kind_of?(Gift)
+	            success gift_response.giver_serialize
+	        else
+	            fail gift_response
+	        end
         else
-        	fail  	gift_regifter.response
+        	fail  	gift_response.response
         end
         respond
 	end
@@ -225,7 +231,6 @@ private
 		obj.delete("origin")
 		puts "CREATE USER OBJECT parse = #{obj}"
 		params["data"] = obj
-		
 		User.new(user_params)
 	end
 

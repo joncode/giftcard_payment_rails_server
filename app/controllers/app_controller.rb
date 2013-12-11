@@ -432,18 +432,27 @@ class AppController < JsonController
 
     def create_gift
         response = {}
-        if params["gift"].kind_of?(String)
-            params["gift"] = JSON.parse params["gift"]
-        end
-        gift_creator = GiftCreator.new(@current_user, create_gift_params, create_shoppingCart_params)
-        unless gift_creator.no_data?
-            gift_creator.build_gift
-            puts "Here is the resp ---------------- > #{gift_creator.resp}"
-            if gift_creator.resp["error"].nil?
-                gift_creator.charge
+
+        gift_hsh = gift_params
+        
+        gift_hsh["shoppingCart"] = params["shoppingCart"]
+        gift_hsh["value"] = gift_hsh["total"]
+        gift_hsh["giver"] = @current_user
+        gift_hsh.delete("total")
+
+        gift_response = GiftSale.create(gift_hsh)
+
+        if gift_response.kind_of?(Gift)
+            if gift_response.id
+                response['success'] =  { "Gift_id" => gift_response.id }
+            else
+                response['error_server'] = gift_response.errors.messages
+
             end
+        else
+            response["error"] = gift_response
+
         end
-        response = gift_creator.resp
 
         respond_to do |format|
             @app_response = "AppC #{response}"
@@ -671,4 +680,11 @@ private
         data_hsh.select{ |k,v| allowed.include? k }
     end
 
+    def gift_params
+        if params.require(:gift).kind_of?(String)
+            pg = JSON.parse(params.require(:gift))
+        else
+            params.require(:gift).permit( :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_email, :receiver_phone,:twitter, :facebook_id, :receiver_name,:provider_id,:credit_card, :total)
+        end
+    end
 end

@@ -20,11 +20,11 @@ else
     PUBLIC_URL      = "http://0.0.0.0:3001"
 end
 
-
-SUPPORT_EMAIL  = "support@drinkboard.com"
-INFO_EMAIL     = "info@drinkboard.com"
-NO_REPLY_EMAIL = "no-reply@drinkboard.com"
-AT_EMAIL       = "@drinkboard.com"
+AT_EMAIL       = "@itson.me"
+SUPPORT_EMAIL  = "support#{AT_EMAIL}"
+INFO_EMAIL     = "info#{AT_EMAIL}"
+NO_REPLY_EMAIL = "no-reply#{AT_EMAIL}"
+FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 

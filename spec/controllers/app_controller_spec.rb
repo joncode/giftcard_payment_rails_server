@@ -51,14 +51,9 @@ describe AppController do
             skip_second = false
             gs.each do |gift|
                 if gift.id.even? && skip_first && skip_second
-                    gift.update_attribute(:pay_stat, "unpaid")
+                    gift.update(pay_stat: "payment_error")
                     total_changed += 1
-                else
-                    gift.update_attribute(:pay_stat, "charged")
-                    if skip_first
-                        skip_second = true
-                    end
-                    skip_first = true
+
                 end
             end
             post :relays, format: :json, token: receiver.remember_token
@@ -74,35 +69,13 @@ describe AppController do
 
         context "scope out unpaid gifts" do
 
-            it "should not return :pay_stat => 'declined' gifts" do
+            it "should not return :pay_stat => 'payment_error' gifts" do
                 gifts = Gift.all
+                last_gift = gifts.pop
                 gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"declined" )
+                    gift.update(pay_stat: "payment_error" )
                 end
-                last_gift = gifts.last
-                last_gift.update_attribute(:pay_stat, 'charged')
-                post :relays, format: :json, token: receiver.remember_token
-                json["success"]["badge"].should == 1
-            end
 
-            it "should not return :pay_stat => 'unpaid' gifts" do
-                gifts = Gift.all
-                gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"unpaid" )
-                end
-                last_gift = gifts.last
-                last_gift.update_attribute(:pay_stat, 'charged')
-                post :relays, format: :json, token: receiver.remember_token
-                json["success"]["badge"].should == 1
-            end
-
-            it "should not return :pay_stat => 'duplicate' gifts" do
-                gifts = Gift.all
-                gifts.each do |gift|
-                    gift.update_attribute(:pay_stat ,"duplicate" )
-                end
-                last_gift = gifts.last
-                last_gift.update_attribute(:pay_stat, 'charged')
                 post :relays, format: :json, token: receiver.remember_token
                 json["success"]["badge"].should == 1
             end

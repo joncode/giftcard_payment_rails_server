@@ -138,6 +138,34 @@ describe Card do
             compare_keys hsh, keys
         end
 
+        it "should build credit card for sale hash" do
+            giver   = FactoryGirl.create(:user)
+            cc_hsh  = {"month"=>"02", "number"=>"4417121029961508", "user_id"=>giver.id, "name"=>giver.name, "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+            card    = Card.create_card_from_hash cc_hsh
+            card.save
+            card_id = card.id
+            card    = nil
+            card    = Card.find card_id
+
+            args  = {}
+            args["giver"]       = giver
+            args["provider_id"] = FactoryGirl.create(:provider)
+            args["card"]        = card
+            args["amount"]      = "157.00"
+            args["unique_id"]   = "UNIQUE_GIFT_ID"
+            args["receiver_name"] = "Sarah Receiver"
+            args["shoppingCart"] = "SHOPPINGCART"
+            args["credit_card"]  = 1241223
+            args["value"]        = "150.00"
+            args["service"]      = "7.00"
+            args["message"]      = "here is the message"
+            sale_hsh = card.create_card_hsh args
+            keys = ["number", "month_year", "first_name", "last_name", "amount", "unique_id", "card_id"]
+            sale_hsh["number"].should     == "4417121029961508"
+            sale_hsh["month_year"].should == "0216"
+            compare_keys(sale_hsh, keys)
+        end
+
     end
 
     context "create" do
@@ -186,27 +214,5 @@ describe Card do
         card.sales.first.class.should == Sale
         card.sales.first.id.should    == sale.id
     end
-
-    it "should build a Sale via charge" do
-        card = FactoryGirl.create :card
-        sale = card.charge("212.00")
-        sale.class.should == Sale
-        sale.revenue.should == BigDecimal("212.00")
-        sale.new_record?.should be_true
-    end
-
-    # it "requires number" do
-    #   card = FactoryGirl.build(:card,  number => nil)
-    #   card.should_not be_valid
-    #   card.should have_at_least(1).error_on( number)
-    # end
-
-    # it "requires passphrase" do
-    #   card = FactoryGirl.build(:card, :passphrase => nil)
-    #   card.should_not be_valid
-    #   card.should have_at_least(1).error_on(:passphrase)
-    # end
-
-
 
 end

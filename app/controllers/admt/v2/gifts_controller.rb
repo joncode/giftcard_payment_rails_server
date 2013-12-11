@@ -16,6 +16,27 @@ class Admt::V2::GiftsController < JsonController
         respond
     end
 
+    def add_receiver
+        gift = Gift.find(params[:id])
+
+        rec_hsh = gift.receiver_info_as_hsh
+
+        user_hsh = PeopleFinder.sanitize rec_hsh
+
+        user = User.find(params[:data])
+        user.new_socials(user_hsh)
+        user.save
+
+        gift.add_receiver(user)
+
+        if gift.save
+            success gift.admt_serialize
+        else
+            fail gift
+        end
+        respond
+    end
+
     def refund
         gift = Gift.includes(:payable).find params[:id]
         sale = gift.payable

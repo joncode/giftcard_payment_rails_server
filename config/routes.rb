@@ -138,6 +138,7 @@ Drinkboard::Application.routes.draw do
             member do
               post :refund                  # biz logic
               post :refund_cancel           # biz logic
+              post :add_receiver
             end
           end
 
@@ -166,7 +167,7 @@ Drinkboard::Application.routes.draw do
     namespace :v2 do
 
       resources :gifts,     only: [:create]
-      
+
       resources :merchants, only: [:create, :update] do
 
         member do

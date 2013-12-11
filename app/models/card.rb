@@ -27,14 +27,17 @@ class Card < ActiveRecord::Base
 
 #	-------------
 
-    def charge amount
-        puts "CHARGING CARD\n"
-        sale = Sale.new
-        sale.revenue  = amount
-        sale.card     = self
-        sale.giver_id = self.user_id
-        sale.resp_code = 1
-        sale
+    def create_card_hsh args
+    	self.decrypt!(PASSPHRASE)
+    	hsh = {}
+        hsh["card_id"]      = self.id
+    	hsh["number"]  		= self.number
+    	hsh["month_year"] 	= self.month_year
+    	hsh["first_name"]   = self.first_name
+    	hsh["last_name"] 	= self.last_name
+    	hsh["amount"] 		= args["amount"]
+    	hsh["unique_id"]	= args["unique_id"] if args["unique_id"]
+    	hsh
     end
 
 	def create_serialize

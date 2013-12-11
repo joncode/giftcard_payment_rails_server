@@ -103,6 +103,14 @@ class User < ActiveRecord::Base
 	alias_method :username, :name
 	alias_method :fullname, :name
 
+	def new_socials(user_hsh)
+		user_hsh.each do |key, value|
+			setter = "#{key}="
+			self.send(setter, value)
+		end
+		self
+	end
+
 ##################
 
 #######  PHOTO METHODS

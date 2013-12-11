@@ -2,6 +2,7 @@ class Mdot::V2::GiftsController < JsonController
     before_filter :authenticate_customer
 
     rescue_from JSON::ParserError, :with => :bad_request
+    rescue_from ActiveModel::ForbiddenAttributesError, :with => :bad_request
 
     def archive
         give_gifts, rec_gifts  = Gift.get_archive(@current_user)
@@ -48,27 +49,19 @@ class Mdot::V2::GiftsController < JsonController
 
     def regift
         return nil if params_bad_request
-        new_gift_hsh = convert_if_json(params["data"]["receiver"])
-        new_gift_hsh["message"]   = params["data"]["message"]
-        new_gift_hsh["regift_id"] = params[:id]
-        gift_regifter  = GiftRegifter2.new(new_gift_hsh)
-        if gift_regifter.create
-            success gift_regifter.response
-        else
-            fail    gift_regifter.response
-            status = :bad_request
-        end
-        respond(status)
-    end
-
-    def regift
-        return nil if params_bad_request
         data = regift_params
-        new_gift_hsh = convert_if_json(data["receiver"])
+        new_gift_hsh = data["receiver"]
+        return nil if data_not_hash?(new_gift_hsh)
+        return nil if params_required(new_gift_hsh)
         new_gift_hsh["message"]     = data["message"]
         new_gift_hsh["old_gift_id"] = params[:id]
-        if gift = GiftRegift.create(new_gift_hsh)
-            success gift.giver_serialize
+        if gift_response = GiftRegift.create(new_gift_hsh)
+            if gift_response.kind_of?(Gift)
+                success gift_response.giver_serialize
+            else
+                fail gift_response
+                status = :forbidden
+            end
         else
             fail    gift
             status = :bad_request
@@ -85,31 +78,23 @@ class Mdot::V2::GiftsController < JsonController
         return nil if data_not_hash?(gift_hsh)
         return nil if data_not_array?(shoppingCart)
 
-        if card = Card.where(id: gift_hsh["credit_card"]).count > 0
-            gift_creator = GiftCreator.new(@current_user, gift_params, shoppingCart)
-            unless gift_creator.no_data?
-                gift_creator.build_gift
-                if gift_creator.resp["error"].nil?
-                    gift_creator.charge
-                end
-            end
-            response = gift_creator.resp
-            if response["success"]
-                success gift_creator.gift.giver_serialize
-            elsif response["error"]
-                fail response["error"]
-                status = :bad_request
-            elsif response["error_server"]
-                fail response["error_server"]
-                status = :bad_request
+        gift_hsh = gift_params
+        gift_hsh["shoppingCart"] = params["shoppingCart"]
+        gift_hsh["giver"]        = @current_user
+        gift_response = GiftSale.create(gift_hsh)
+
+        if gift_response.kind_of?(Gift)
+            if gift_response.id
+                success gift_response.giver_serialize
             else
-                fail response
+                fail    gift_response
                 status = :bad_request
             end
         else
-            fail "We do not have that credit card on record.  Please choose a different card."
+            fail gift_response
             status = :not_found
         end
+
         respond(status)
     end
 
@@ -132,7 +117,7 @@ private
         if params.require(:data).kind_of?(String)
             pg = JSON.parse(params.require(:data))
         else
-            params.require(:data).permit( :giver_id,:giver_name,:total,:service,:receiver_id,:receiver_name,:provider_id,:credit_card)
+            params.require(:data).permit( :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_name,:provider_id,:credit_card)
         end
     end
 
