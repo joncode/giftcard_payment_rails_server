@@ -61,6 +61,17 @@ describe Gift do
 	  gift.provider_name.should_not be_nil
 	end
 
+    it "should downcase an capitalized receiver_email" do
+        gift = FactoryGirl.create(:gift, receiver_email: "JONMERCHANT@GMAIL.COM")
+        gift.receiver_email.should == "JONMERCHANT@GMAIL.COM".downcase
+    end
+
+    it "should validate email" do
+        gift = FactoryGirl.build(:gift, receiver_email: "JONMERCHANT")
+        gift.should_not be_valid
+        gift.should have_at_least(1).error_on(:receiver_email)
+    end
+
 	context "save with sale" do
 
 	    it "should save the giver and the provider from the gift when saved via Gift" do

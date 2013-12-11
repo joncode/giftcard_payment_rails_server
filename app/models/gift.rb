@@ -20,7 +20,9 @@ class Gift < ActiveRecord::Base
     belongs_to  :refund,   polymorphic: :true
 
 	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :payable
+    validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
 
+    before_save { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
 	before_save   :extract_phone_digits
     before_create :find_receiver
 	before_create :add_giver_name,  	:if => :no_giver_name?
