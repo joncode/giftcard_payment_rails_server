@@ -1,4 +1,4 @@
-class AddExpirationDatesAndRefundsToGifts < ActiveRecord::Migration
+class AddExpiresAtAndRefundsToGifts < ActiveRecord::Migration
   def up
     add_column :gifts, :refund_id,  :integer
     add_column :gifts, :refund_type, :string
