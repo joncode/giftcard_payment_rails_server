@@ -107,6 +107,7 @@ module GiftSerializers
         gift_hsh["created_at"]      = self.created_at
         gift_hsh["receiver_name"]   = self.receiver_name
         gift_hsh["receiver_email"]  = self.receiver_email
+        gift_hsh["expires_at"]      = self.expires_at
         if receipient = receiver
             gift_hsh["receiver_photo"]     = receiver.get_photo
         end

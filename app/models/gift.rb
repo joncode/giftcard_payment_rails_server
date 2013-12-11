@@ -110,6 +110,8 @@ class Gift < ActiveRecord::Base
 		when "Sale"
 			set_payment_status
 		when "Debt"
+            set_status
+            self.pay_stat = "charge_unpaid"
 		when "Gift"
             set_status
 		else
