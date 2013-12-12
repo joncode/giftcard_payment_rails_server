@@ -209,7 +209,7 @@ class Gift < ActiveRecord::Base
 
     def receiver_info_as_hsh
         rec_hsh = {}
-        rec_hsh["receiver_id"]      = self.receiver_id if self.receiver_id
+        # rec_hsh["receiver_id"]      = self.receiver_id if self.receiver_id
         rec_hsh["receiver_email"]   = self.receiver_email if self.receiver_email
         rec_hsh["receiver_phone"]   = self.receiver_phone if self.receiver_phone
         rec_hsh["facebook_id"]      = self.facebook_id if self.facebook_id
