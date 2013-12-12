@@ -182,6 +182,15 @@ describe Mdot::V2::GiftsController do
             end
         end
 
+        it "should send gifts when providers are paused / not live / deactivated" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            gift = Gift.find_by(giver_id: @giver)
+            provider = gift.provider
+            provider.deactivate
+
+            get :badge, format: :json
+            json["data"]["badge"].should == @number
+        end
     end
 
     describe :open do

@@ -82,6 +82,15 @@ describe AppController do
 
         end
 
+        it "should send gifts when providers are paused / not live / deactivated" do
+            gift = Gift.find_by(giver_id: giver)
+            provider = gift.provider
+            provider.deactivate
+            
+            post :relays, format: :json, token: receiver.remember_token
+            json["success"]["badge"].should == @number
+        end
+
     end
 
     describe :drinkboard_users do

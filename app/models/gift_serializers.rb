@@ -24,6 +24,10 @@ module GiftSerializers
         gift_hsh["status"]             = self.receiver_status
         gift_hsh["shoppingCart"]       = self.shoppingCart #ary_of_shopping_cart_as_hash
         gift_hsh["giver_photo"]        = giver.get_photo
+        
+        unless provider = provider = self.provider
+            provider = Provider.unscoped.find(self.provider_id)
+        end
         gift_hsh["provider_photo"]     = provider.get_photo
         gift_hsh["provider_phone"]     = provider.phone
         gift_hsh["city"]               = provider.city
@@ -42,6 +46,9 @@ module GiftSerializers
         if receipient = receiver
             gift_hsh["receiver_photo"]     = receiver.get_photo
         end
+        unless provider = self.provider
+            provider = Provider.unscoped.find(self.provider_id)
+        end
         gift_hsh["provider_photo"]     = provider.get_photo
         gift_hsh["provider_phone"]     = provider.phone
         gift_hsh["city"]               = provider.city
@@ -57,6 +64,9 @@ module GiftSerializers
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.receiver_status
         gift_hsh["giver_photo"]        = giver.get_photo
+        unless provider = self.provider
+            provider = Provider.unscoped.find(self.provider_id)
+        end
         gift_hsh["provider_photo"]     = provider.get_photo
         gift_hsh["provider_phone"]     = provider.phone
         gift_hsh["city"]               = provider.city
@@ -68,11 +78,13 @@ module GiftSerializers
     end
 
     def admt_serialize
-        provider = self.provider
         gift_hsh                       = {}
         gift_hsh["gift_id"]            = self.id
         gift_hsh["provider_id"]        = provider.id
         #gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
+        unless provider = self.provider
+            provider = Provider.unscoped.find(self.provider_id)
+        end
         gift_hsh["name"]               = provider.name
         gift_hsh["merchant_address"]   = provider.full_address
         gift_hsh["value"]              = self.value
