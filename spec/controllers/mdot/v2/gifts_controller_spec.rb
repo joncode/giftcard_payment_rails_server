@@ -91,6 +91,7 @@ describe Mdot::V2::GiftsController do
 
         end
 
+
     end
 
     describe :badge do
@@ -669,7 +670,7 @@ describe Mdot::V2::GiftsController do
             User.delete_all
             UserSocial.delete_all
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
-            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @user.update(:remember_token => "USER_TOKEN")
             @card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
@@ -906,6 +907,18 @@ describe Mdot::V2::GiftsController do
             rrc(400)
             post :create, format: :json, data: make_gift_hsh(gift)
             rrc(400)
+        end
+
+        it "should accept joe meek's JSON" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            Gift.delete_all
+            @provider = Provider.last || FactoryGirl.create(:provider)
+            req_json= {"gift"=>{"receiver_name"=>"Jon Guty", "twitter" => "23874628734",  "value"=>"20.00", "service"=>"1.00", "message"=>"4 ass juices. Shopping cart total changed to value", "credit_card"=> @card.id, "provider_id"=> @provider.id , "provider_name"=>"Double Down Saloon"}, "shoppingCart"=>[{"item_id"=>257, "item_name"=>"Ass Juice", "price"=>"5", "quantity"=>4}]}
+            data = req_json["gift"]
+            sc = req_json["shoppingCart"]
+            post :create, format: :json, data: data , shoppingCart: sc
+            rrc(200)
+            json["status"].should == 1
         end
 
         def make_gift_json gift

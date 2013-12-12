@@ -1,5 +1,5 @@
 class GiftSale < Gift
-    
+
     def self.create args={}
 
         if args["receiver_id"]
@@ -15,8 +15,8 @@ class GiftSale < Gift
         if args["card"].nil?
             return "We do not have that credit card on record.  Please choose a different card."
         end
-
         gift = super
+
         gift.messenger
 
         gift

@@ -28,7 +28,7 @@ AT_EMAIL       = "@drinkboard.com"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.1.0"
+VERSION_NUMBER  = "1.1.1"
 VERSION_UPDATED = "12/11/13"
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
