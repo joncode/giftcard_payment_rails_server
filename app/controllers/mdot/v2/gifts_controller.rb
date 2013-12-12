@@ -27,8 +27,14 @@ class Mdot::V2::GiftsController < JsonController
         gift   = @current_user.received.where(id: params[:id]).first
         return nil if params_bad_request
         return nil if data_not_found?(gift)
+        
         redeem = Redeem.find_or_create_with_gift(gift)
-        success(redeem.redeem_code)
+        if redeem
+            Relay.send_push_thank_you gift
+            success(redeem.redeem_code)
+        else
+            fail redeem
+        end
         respond
     end
 

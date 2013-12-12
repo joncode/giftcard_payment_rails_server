@@ -1,5 +1,4 @@
 class Redeem < ActiveRecord::Base
-  #attr_accessible :gift_id, :redeem_code
 
   belongs_to      :gift
   has_one         :giver,     :through => :gift

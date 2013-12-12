@@ -1,7 +1,7 @@
 class GiftSale < Gift
 
     def self.create args={}
-        
+
         if args["receiver_id"]
             receiver = User.unscoped.find(args["receiver_id"])
             if receiver.active == false
@@ -15,8 +15,22 @@ class GiftSale < Gift
         if args["card"].nil?
             return "We do not have that credit card on record.  Please choose a different card."
         end
+        gift = super
 
-        super
+        gift.messenger
+
+        gift
+    end
+
+    def messenger
+        if self.payable.success?
+            puts "GiftSale -post_init- \nNotify Receiver via Push #{self.receiver}"
+            Relay.send_push_notification(self)
+            puts "GiftSale -post_init- \nNotify Receiver via email #{self.receiver}"
+            notify_receiver
+            puts "GiftSale -post_init- \nInvoice the giver via email #{self.giver}"
+            invoice_giver
+        end
     end
 
 private
@@ -38,14 +52,7 @@ private
 
     end
 
-    def post_init args={}
-        if self.pay_stat == "charge_unpaid"
-            puts "GiftSale -post_init- \nNotify Receiver via Push #{self.receiver}"
-            puts "GiftSale -post_init- \nNotify Receiver via email #{self.receiver}"
 
-            puts "GiftSale -post_init- \nInvoice the giver via email #{self.giver}"
-        end
-    end
 
     def unique_id receiver_name, provider_id
         "#{receiver_name}_#{provider_id}".gsub(' ','_')

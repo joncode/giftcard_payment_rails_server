@@ -18,17 +18,20 @@ class Admt::V2::GiftsController < JsonController
 
     def add_receiver
         gift = Gift.find(params[:id])
-
-        rec_hsh = gift.receiver_info_as_hsh
-
-        user_hsh = PeopleFinder.sanitize rec_hsh
-
         user = User.find(params[:data])
-        user.new_socials(user_hsh)
-        user.save
+
+        if gift.receiver_id
+                # change the receiver obj
+            gift.remove_receiver
+        else
+                # merge a user with the gift receiver data and add receiver obj
+            rec_hsh  = gift.receiver_info_as_hsh
+            user_hsh = PeopleFinder.sanitize rec_hsh
+            user.new_socials(user_hsh)
+            user.save
+        end
 
         gift.add_receiver(user)
-
         if gift.save
             success gift.admt_serialize
         else
@@ -39,29 +42,22 @@ class Admt::V2::GiftsController < JsonController
 
     def refund
         gift = Gift.includes(:payable).find params[:id]
-        sale = gift.payable
-        resp = sale.void_sale
-        if  resp == 0
+        resp_hsh = gift.void_refund_live
+        if  resp_hsh["status"] > 0
             success "Gift is #{gift.pay_stat}"
         else
-            fail resp
+            fail resp_hsh["msg"]
         end
         respond
     end
 
     def refund_cancel
         gift = Gift.includes(:payable).find params[:id]
-        sale = gift.payable
-        resp = sale.void_sale
-        if  resp == 0
-            gift.status = 'cancel'
-            if gift.save
-                success "Gift is #{gift.pay_stat} and cancelled"
-            else
-                success "Please contact tech support - Gift #{gift.id} is NOT Cancelled in APP ONLY"
-            end
+        resp_hsh = gift.void_refund_cancel
+        if  resp_hsh["status"] > 0
+            success "Gift is #{gift.pay_stat} and cancelled"
         else
-            fail resp
+            fail resp_hsh["msg"]
         end
         respond
     end

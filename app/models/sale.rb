@@ -5,12 +5,17 @@ class Sale < ActiveRecord::Base
     belongs_to :card
 
     has_one :gift, as: :payable
+    has_one :refunded, class_name: "Gift", as: :refund
 
     validates_presence_of :giver_id, :card_id, :resp_code
 
+    def success?
+        self.resp_code == 1
+    end
+
     def self.charge_card cc_hsh
             # pull off and charge the credit card
-            
+
         payment_hsh = {}
         credit_card_data_keys = ["number", "month_year", "first_name", "last_name", "amount"]
         credit_card_data_keys << "unique_id" if cc_hsh["unique_id"]
@@ -23,6 +28,20 @@ class Sale < ActiveRecord::Base
         cc_hsh.merge!(resp_hsh)
         Sale.new cc_hsh
     end
+
+    def void_refund giver_id
+        payment_hsh = {}
+        payment_hsh["trans_id"]  = self.transaction_id
+        payment_hsh["last_four"] = self.card.last_four
+        payment_hsh["amount"]    = self.revenue
+        payment  = PaymentGateway.new(payment_hsh)
+        resp_hsh = payment.refund
+        resp_hsh["card_id"]  = self.card.id
+        resp_hsh["giver_id"] = giver_id
+        
+        Sale.new resp_hsh
+    end
+
 end
 
 

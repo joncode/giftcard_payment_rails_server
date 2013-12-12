@@ -17,9 +17,14 @@ class Gift < ActiveRecord::Base
     belongs_to  :giver,    polymorphic: :true
     belongs_to  :receiver, class_name: User
     belongs_to  :payable,  polymorphic: :true, autosave: :true
+    belongs_to  :refund,   polymorphic: :true
+
+    before_validation :prepare_email
 
 	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :payable
+    validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
 
+    before_save { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
 	before_save   :extract_phone_digits
     before_create :find_receiver
 	before_create :add_giver_name,  	:if => :no_giver_name?
@@ -32,10 +37,13 @@ class Gift < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
+    def sale
+        Sale.find_by(gift_id: self.id)
+    end
+
     def initialize args={}
         pre_init(args)
         super
-        post_init(args)
     end
 
     def receiver= user_obj
@@ -106,6 +114,8 @@ class Gift < ActiveRecord::Base
 		when "Sale"
 			set_payment_status
 		when "Debt"
+            set_status
+            self.pay_stat = "charge_unpaid"
 		when "Gift"
             set_status
 		else
@@ -153,15 +163,53 @@ class Gift < ActiveRecord::Base
     def promo?
         self.giver_type == "BizUser" && self.payable_type == "Debt"
     end
+#/----------------------------------payable ducktype refund -----------------------------/
+
+    def void_refund_cancel
+        payment_ducktype = self.payable
+        self.refund      = payment_ducktype.void_refund(self.giver_id)
+
+        resp_hsh = {}
+        if self.refund.success?
+            self.status     = 'cancel'
+            self.pay_stat   = "refund_cancel"
+            resp_hsh["msg"] = refund.reason_text
+            resp_hsh["status"] = 1
+        else
+            resp_hsh["msg"] = "#{refund.reason_text} ID = #{self.id}."
+            resp_hsh["status"] = 0
+        end
+        self.save
+        resp_hsh
+    end
+
+    def void_refund_live
+        payment_ducktype = self.payable
+        self.refund      = payment_ducktype.void_refund(self.giver_id)
+        resp_hsh = {}
+        if self.refund.success?
+            self.pay_stat   = "refund_comp"
+            resp_hsh["msg"] = refund.reason_text
+            resp_hsh["status"] = 1
+        else
+            resp_hsh["msg"] = "#{refund.reason_text} ID = #{self.id}."
+            resp_hsh["status"] = 0
+        end
+        self.save
+        resp_hsh
+    end
+
 
 #/-------------------------------------re gift db methods-----------------------------/
 
 	def parent
-        self.payable
+        #self.payable
+        Gift.find(self.regift_id)
 	end
 
 	def child
-        Gift.find_by(payable_id: self.id)
+        #Gift.find_by(payable_id: self.id)
+        Gift.find_by(regift_id: self.id)
 	end
 
 #/-------------------------------------data population methods-----------------------------/
@@ -209,11 +257,10 @@ class Gift < ActiveRecord::Base
 
     def receiver_info_as_hsh
         rec_hsh = {}
-        # rec_hsh["receiver_id"]      = self.receiver_id if self.receiver_id
         rec_hsh["receiver_email"]   = self.receiver_email if self.receiver_email
         rec_hsh["receiver_phone"]   = self.receiver_phone if self.receiver_phone
-        rec_hsh["facebook_id"]      = self.facebook_id if self.facebook_id
-        rec_hsh["twitter"]          = self.twitter if self.twitter
+        rec_hsh["facebook_id"]      = self.facebook_id    if self.facebook_id
+        rec_hsh["twitter"]          = self.twitter        if self.twitter
         rec_hsh
     end
 
@@ -232,12 +279,16 @@ private
 	##########  shopping cart methods
 
 	def build_gift_items
-		make_gift_items ary_of_shopping_cart_as_hash
+        make_gift_items ary_of_shopping_cart_as_hash
 	end
 
 	def ary_of_shopping_cart_as_hash
         if self.shoppingCart.kind_of?(String)
-		  JSON.parse self.shoppingCart
+            JSON.parse self.shoppingCart
+        else
+            sc = self.shoppingCart
+            self.shoppingCart = self.shoppingCart.to_json
+            sc
         end
 	end
 
@@ -248,6 +299,10 @@ private
 	end
 
 	################  data validation methods
+
+    def prepare_email
+        self.receiver_email = nil if self.receiver_id
+    end
 
 	def add_giver_name
 		if giver = User.find(self.giver_id)
@@ -271,15 +326,11 @@ private
 
     def find_receiver
         if self.receiver_id.nil?
-            user = PeopleFinder.find receiver_hsh
+            user = PeopleFinder.find receiver_info_as_hsh
             if user
                 self.receiver = user
             end
         end
-    end
-
-    def receiver_hsh
-        { "receiver_phone" => self.receiver_phone, "receiver_email" => self.receiver_email, "facebook_id" => self.facebook_id, "twitter" => self.twitter }
     end
 
     def regift

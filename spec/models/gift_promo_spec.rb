@@ -70,4 +70,8 @@ describe GiftPromo do
         gift.payable.amount.should  == BigDecimal("4.50")
     end
 
+    it "should set the expiration date" do
+        
+    end
+
 end

@@ -138,7 +138,7 @@ Drinkboard::Application.routes.draw do
             member do
               post :refund                  # biz logic
               post :refund_cancel           # biz logic
-              put :add_receiver
+              put  :add_receiver
             end
           end
 

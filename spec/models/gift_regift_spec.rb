@@ -15,7 +15,6 @@ describe GiftRegift do
             @gift_hsh["receiver_id"]   = @receiver.id
             @gift_hsh["giver"]         = @regifter
             @gift_hsh["old_gift_id"]   = @old_gift.id
-            @gift_hsh
         end
 
         it "should create gift with old_gift provider" do
@@ -69,6 +68,13 @@ describe GiftRegift do
             gift        = GiftRegift.create @gift_hsh
             gift.should == "User is no longer in the system , please gift to them with phone, email, facebook, or twitter"
         end
+
+        it "should NOT validate email" do
+            @gift_hsh['email'] =  "JONMERCHANT"
+            gift        = GiftRegift.create @gift_hsh
+            gift.should be_valid
+            gift.should have_at_most(0).error_on(:receiver_email)
+        end
     end
 
     context "without receiver ID" do
@@ -83,7 +89,6 @@ describe GiftRegift do
             @gift_hsh["email"]          = "weatherby.rochester@gmail.com"
             @gift_hsh["giver"]          = @regifter
             @gift_hsh["old_gift_id"]    = @old_gift.id
-            @gift_hsh
         end
 
         it "should create gift with phone" do
@@ -93,6 +98,16 @@ describe GiftRegift do
             gift.reload
             gift.receiver_name.should  == "Weatherby Rochester"
             gift.receiver_phone.should == "6757846764"
+            gift.receiver_id.should    == nil
+        end
+
+        it "should create gift with 'receiver_email'" do
+            @gift_hsh.delete('email')
+            @gift_hsh['receiver_email'] =  "JONMERCHANT@GMAIL.COM"
+            gift = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.receiver_name.should  == "Weatherby Rochester"
+            gift.receiver_email.should == "JONMERCHANT@GMAIL.COM".downcase
             gift.receiver_id.should    == nil
         end
 
@@ -130,6 +145,20 @@ describe GiftRegift do
             gift.reload
             gift.status.should   == "incomplete"
         end
+
+        it "should downcase an capitalized receiver_email" do
+            @gift_hsh['email'] =  "JONMERCHANT@GMAIL.COM"
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.receiver_email.should == "JONMERCHANT@GMAIL.COM".downcase
+        end
+
+        it "should validate email" do
+            @gift_hsh['email'] =  "JONMERCHANT"
+            gift        = GiftRegift.create @gift_hsh
+            gift.should_not be_valid
+            gift.should have_at_least(1).error_on(:receiver_email)
+        end
     end
 
     context "status behavior" do
@@ -146,7 +175,6 @@ describe GiftRegift do
             @gift_hsh["giver"]          = @regifter
             @gift_hsh["old_gift_id"]    = @old_gift.id
             @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
-            @gift_hsh
         end
 
         it "should take the pay stat of the parent gift" do
@@ -190,9 +218,61 @@ describe GiftRegift do
 
     context "messaging" do
 
-        xit "should email notify the recipient" do
-            run_delayed_jobs
+        before(:each) do
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+
+            @user     = FactoryGirl.create(:user)
+            @regifter = FactoryGirl.create(:user, first_name: "Jon", last_name: "Regifter")
+            @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
+            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", service: '10.05')
+            @gift_hsh = {}
+            @gift_hsh["message"]        = "I just REGIFTED!"
+            @gift_hsh["receiver_name"]  = @receiver.name
+            @gift_hsh["receiver_id"]    = @receiver.id
+            @gift_hsh["giver"]          = @regifter
+            @gift_hsh["old_gift_id"]    = @old_gift.id
+            @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            run_delayed_jobs
+            WebMock.reset!
+        end
+
+        it "should NOT email invoice to the sender" do
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@regifter.first_name},#{@regifter.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            response = GiftRegift.create @gift_hsh
+
+            run_delayed_jobs
+            abs_gift_id = response.id + NUMBER_ID
+
+            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
+                puts req.body;
+                b = JSON.parse(req.body);
+                if b["template_name"] == "iom-gift-gift-receipt"
+                    link = b["message"]["merge_vars"].first["vars"].first["content"];
+                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
+                    false
+                else
+                    true
+                end
+
+            }.once
+        end
+
+        it "should email notify the recipient" do
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@regifter.first_name},#{@regifter.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+
+            response = GiftRegift.create @gift_hsh
+            run_delayed_jobs
+            abs_gift_id = response.id + NUMBER_ID
             WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
                 puts req.body;
                 b = JSON.parse(req.body);
@@ -202,12 +282,30 @@ describe GiftRegift do
                 else
                     true
                 end
-
             }.once
         end
 
-        xit "should push notify to app-user recipients" do
+        it "should push notify to app-user recipients" do
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@regifter.first_name},#{@regifter.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@regifter.name} sent you a gift at #{@old_gift.provider_name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            Urbanairship.should_receive(:push).with(good_push_hsh)
+            response = GiftRegift.create @gift_hsh
+            run_delayed_jobs
+        end
+
+        it "should not message users when payment_error" do
+            auth_response = "3,2,33,This transaction has been declined.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@regifter.first_name},#{@regifter.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift at #{@old_gift.provider_name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            Urbanairship.should_not_receive(:push).with(good_push_hsh)
+            GiftRegift.create @gift_hsh
+            run_delayed_jobs
         end
 
     end

@@ -11,8 +11,17 @@ class GiftRegift < Gift
         if args["payable"].promo?
             "You cannot regift a promotional gift"
         else
-            super
+            gift = super
+            gift.messenger
+            gift
         end
+    end
+
+    def messenger
+        puts "REGIFT-post_init -- Notify new Receiver #{self.receiver}"
+        puts "REGIFT-post_init -- Invoice the regifter via email #{self.giver}"
+        Relay.send_push_notification(self)
+        notify_receiver
     end
 
 private
@@ -26,11 +35,6 @@ private
         args["shoppingCart"] = @old_gift.shoppingCart
         args["pay_stat"] = @old_gift.pay_stat
         user_to_gift_key_names args
-    end
-
-    def post_init args={}
-        puts "REGIFT-post_init -- Notify new Receiver #{self.receiver}"
-        puts "REGIFT-post_init -- Invoice the regifter via email #{self.giver}"
     end
 
     def user_to_gift_key_names args

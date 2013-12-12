@@ -389,6 +389,7 @@ class AppController < JsonController
 
 	  			redeem = Redeem.find_or_create_with_gift(gift)
 	  			if redeem.redeem_code
+                    Relay.send_push_thank_you gift
 	  				response["success"]      = redeem.redeem_code.to_s
 	  			else
 	  				response["error_server"] = database_error_redeem
@@ -434,7 +435,7 @@ class AppController < JsonController
         response = {}
 
         gift_hsh = gift_params
-        
+
         gift_hsh["shoppingCart"] = params["shoppingCart"]
         gift_hsh["value"] = gift_hsh["total"]
         gift_hsh["giver"] = @current_user

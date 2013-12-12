@@ -82,6 +82,15 @@ describe AppController do
 
         end
 
+        it "should send gifts when providers are paused / not live / deactivated" do
+            gift = Gift.find_by(giver_id: giver)
+            provider = gift.provider
+            provider.deactivate
+            
+            post :relays, format: :json, token: receiver.remember_token
+            json["success"]["badge"].should == @number
+        end
+
     end
 
     describe :drinkboard_users do
@@ -417,6 +426,25 @@ describe AppController do
             gift.save
             post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
             json['error_server'].should == {'Data Transfer Error'=>'Please Reload Gift Center'}
+        end
+
+        it "should send a 'your gift is opened' push to the gift giver" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            run_delayed_jobs
+            gift =  FactoryGirl.build(:gift, status: 'open')
+            gift.add_giver(giver)
+            gift.add_receiver(receiver)
+            gift.save
+            @gift = gift
+            badge = Gift.get_notifications(@gift.giver)
+            user_alias = @gift.giver.ua_alias
+            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2}
+            run_delayed_jobs
+            Urbanairship.should_receive(:push).with(good_push_hsh)
+
+            post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
+            run_delayed_jobs
         end
     end
 
