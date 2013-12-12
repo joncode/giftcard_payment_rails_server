@@ -259,8 +259,8 @@ class Gift < ActiveRecord::Base
         rec_hsh = {}
         rec_hsh["receiver_email"]   = self.receiver_email if self.receiver_email
         rec_hsh["receiver_phone"]   = self.receiver_phone if self.receiver_phone
-        rec_hsh["facebook_id"]      = self.facebook_id if self.facebook_id
-        rec_hsh["twitter"]          = self.twitter if self.twitter
+        rec_hsh["facebook_id"]      = self.facebook_id    if self.facebook_id
+        rec_hsh["twitter"]          = self.twitter        if self.twitter
         rec_hsh
     end
 
