@@ -287,7 +287,7 @@ private
             JSON.parse self.shoppingCart
         else
             self.shoppingCart = self.shoppingCart.to_json
-            JSON.parse self.shoppingCart
+            self.shoppingCart
         end
 	end
 
