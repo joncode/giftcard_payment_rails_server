@@ -68,6 +68,13 @@ describe GiftRegift do
             gift        = GiftRegift.create @gift_hsh
             gift.should == "User is no longer in the system , please gift to them with phone, email, facebook, or twitter"
         end
+
+        it "should NOT validate email" do
+            @gift_hsh['email'] =  "JONMERCHANT"
+            gift        = GiftRegift.create @gift_hsh
+            gift.should be_valid
+            gift.should have_at_most(0).error_on(:receiver_email)
+        end
     end
 
     context "without receiver ID" do
@@ -91,6 +98,16 @@ describe GiftRegift do
             gift.reload
             gift.receiver_name.should  == "Weatherby Rochester"
             gift.receiver_phone.should == "6757846764"
+            gift.receiver_id.should    == nil
+        end
+
+        it "should create gift with 'receiver_email'" do
+            @gift_hsh.delete('email')
+            @gift_hsh['receiver_email'] =  "JONMERCHANT@GMAIL.COM"
+            gift = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.receiver_name.should  == "Weatherby Rochester"
+            gift.receiver_email.should == "JONMERCHANT@GMAIL.COM".downcase
             gift.receiver_id.should    == nil
         end
 
@@ -127,6 +144,20 @@ describe GiftRegift do
             gift        = GiftRegift.create @gift_hsh
             gift.reload
             gift.status.should   == "incomplete"
+        end
+
+        it "should downcase an capitalized receiver_email" do
+            @gift_hsh['email'] =  "JONMERCHANT@GMAIL.COM"
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.receiver_email.should == "JONMERCHANT@GMAIL.COM".downcase
+        end
+
+        it "should validate email" do
+            @gift_hsh['email'] =  "JONMERCHANT"
+            gift        = GiftRegift.create @gift_hsh
+            gift.should_not be_valid
+            gift.should have_at_least(1).error_on(:receiver_email)
         end
     end
 

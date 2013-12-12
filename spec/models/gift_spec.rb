@@ -72,6 +72,12 @@ describe Gift do
         gift.should have_at_least(1).error_on(:receiver_email)
     end
 
+    it "should not validate email when a receiver_id is present" do
+        gift = FactoryGirl.build(:gift, receiver_id: 2, receiver_email: "JONMERCHANT")
+        gift.should be_valid
+        gift.should have_at_most(0).error_on(:receiver_email)
+    end
+
 	context "save with sale" do
 
 	    it "should save the giver and the provider from the gift when saved via Gift" do

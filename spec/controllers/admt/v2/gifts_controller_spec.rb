@@ -143,14 +143,14 @@ describe Admt::V2::GiftsController do
 
     describe :add_receiver do
 
-        it_should_behave_like("token authenticated", :post, :add_receiver, id: 1)
+        it_should_behave_like("token authenticated", :put, :add_receiver, id: 1)
 
         context "gift has no receiver ID but unique receiver info - merge" do
 
             it "should merge user_id with receiver id and gift-uniques info with user_socials" do
                 gift = FactoryGirl.create(:gift, :facebook_id => "100005220484939")
                 user = FactoryGirl.create(:user, :email => "christie.parker@gmail.com", phone: "7025237365")
-                post :add_receiver, id: gift.id, data: user.id, format: :json
+                put :add_receiver, id: gift.id, data: user.id, format: :json
                 json["status"].should == 1
                 rrc 200
 
@@ -162,7 +162,7 @@ describe Admt::V2::GiftsController do
 
                 gift = FactoryGirl.create(:gift, :twitter => "100005220484939")
                 user = FactoryGirl.create(:user, :email => "christie.parker2@gmail.com", phone: "7035237365")
-                post :add_receiver, id: gift.id, data: user.id, format: :json
+                put :add_receiver, id: gift.id, data: user.id, format: :json
                 json["status"].should == 1
                 rrc 200
 
@@ -174,7 +174,7 @@ describe Admt::V2::GiftsController do
 
                 gift = FactoryGirl.create(:gift, :receiver_email => "new@gmail.com")
                 user = FactoryGirl.create(:user, :email => "christie.parker4@gmail.com", phone: "7045237365")
-                post :add_receiver, id: gift.id, data: user.id, format: :json
+                put :add_receiver, id: gift.id, data: user.id, format: :json
                 json["status"].should == 1
                 rrc 200
 
@@ -195,7 +195,7 @@ describe Admt::V2::GiftsController do
                 gift.add_receiver(bad_rec)
                 gift.save
 
-                post :add_receiver, id: gift.id, data: good_rec.id, format: :json
+                put :add_receiver, id: gift.id, data: good_rec.id, format: :json
                 good_rec.reload
                 good_rec.email.should_not == "bad@receiver.com"
             end

@@ -19,6 +19,8 @@ class Gift < ActiveRecord::Base
     belongs_to  :payable,  polymorphic: :true, autosave: :true
     belongs_to  :refund,   polymorphic: :true
 
+    before_validation :prepare_email
+
 	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :payable
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
 
@@ -295,6 +297,10 @@ private
 
 	################  data validation methods
 
+    def prepare_email
+        self.receiver_email = nil if self.receiver_id
+    end
+
 	def add_giver_name
 		if giver = User.find(self.giver_id)
 			self.giver_name = giver.username
@@ -317,15 +323,11 @@ private
 
     def find_receiver
         if self.receiver_id.nil?
-            user = PeopleFinder.find receiver_hsh
+            user = PeopleFinder.find receiver_info_as_hsh
             if user
                 self.receiver = user
             end
         end
-    end
-
-    def receiver_hsh
-        { "receiver_phone" => self.receiver_phone, "receiver_email" => self.receiver_email, "facebook_id" => self.facebook_id, "twitter" => self.twitter }
     end
 
     def regift
