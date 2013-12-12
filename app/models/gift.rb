@@ -286,8 +286,9 @@ private
         if self.shoppingCart.kind_of?(String)
             JSON.parse self.shoppingCart
         else
+            sc = self.shoppingCart
             self.shoppingCart = self.shoppingCart.to_json
-            self.shoppingCart
+            sc
         end
 	end
 
