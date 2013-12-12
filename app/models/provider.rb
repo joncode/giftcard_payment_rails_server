@@ -62,6 +62,7 @@ class Provider < ActiveRecord::Base
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
+		prov_hash["menu"]   	  = JSON.parse(self.menu_string.data)
 		prov_hash
 	end
 

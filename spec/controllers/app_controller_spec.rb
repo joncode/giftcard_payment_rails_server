@@ -1,4 +1,4 @@
-krequire 'spec_helper'
+require 'spec_helper'
 
 describe AppController do
 
@@ -86,7 +86,7 @@ describe AppController do
             gift = Gift.find_by(giver_id: giver)
             provider = gift.provider
             provider.deactivate
-            
+
             post :relays, format: :json, token: receiver.remember_token
             json["success"]["badge"].should == @number
         end

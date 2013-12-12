@@ -22,9 +22,23 @@ describe Provider do
         provider.biz_user.should == biz_user
     end
 
+    it "should web serialize with menu in json" do
+        provider = FactoryGirl.create(:provider)
+        FactoryGirl.create(:menu_string, provider_id: provider.id)
+        p_hsh = provider.web_serialize
+        p_hsh["name"].should        == provider.name
+        p_hsh["city"].should        == provider.city
+        p_hsh["phone"].should       == provider.phone
+        p_hsh["latitude"].should    == provider.latitude
+        p_hsh["longitude"].should   == provider.longitude
+        p_hsh["provider_id"].should == provider.id
+        p_hsh["photo"].should       == provider.get_photo
+        p_hsh["full_address"].should == provider.full_address
+        p_hsh["menu"].should         == JSON.parse(provider.menu_string.data)
+
+    end
+
 end
-
-
 
 # == Schema Information
 #
