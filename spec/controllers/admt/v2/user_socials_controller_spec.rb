@@ -44,13 +44,26 @@ describe Admt::V2::UserSocialsController do
             json["data"].class.should   == Hash
         end
 
-
         it "should create the user social in database" do
             post :create, format: :json, data: {"user_id" => user.id, "type_of" => "email", "identifier" => "newemail@email.com"}
             new_user_social = UserSocial.last
             new_user_social.user_id.should == user.id
             new_user_social.type_of.should == "email"
             new_user_social.identifier.should == "newemail@email.com"
+        end
+
+        it "should not create the user social in database if email already exists" do
+            existing_email = FactoryGirl.create(:user_social, type_of: "email", identifier: "legacy@email.com", active: true )
+            post :create, format: :json, data: {"user_id" => user.id, "type_of" => "email", "identifier" => "legacy@email.com"}
+            json["status"].should == 0
+            json["data"].class.should   == Hash
+        end
+
+        it "should not create the user social in database if phone already exists" do
+            existing_email = FactoryGirl.create(:user_social, type_of: "phone", identifier: "2222222222", active: true )
+            post :create, format: :json, data: {"user_id" => user.id, "type_of" => "phone", "identifier" => "2222222222"}
+            json["status"].should == 0
+            json["data"].class.should   == Hash
         end
     end
 
