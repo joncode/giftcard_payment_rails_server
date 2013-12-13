@@ -723,7 +723,8 @@ describe Mdot::V2::GiftsController do
         it "should successfully create gift and return giver_serialized obj + 200 OK" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             # test that create gift does not create the gift or the sale
-            gift = FactoryGirl.build :gift, { receiver_id: @user.id }
+            gift = FactoryGirl.build :gift, { receiver_id: @user.id, credit_card: @card.id }
+            
             post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             rrc(200)
             json["status"].should == 1

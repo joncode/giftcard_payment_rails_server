@@ -117,6 +117,10 @@ class IphoneController < AppController
 	def regift
 
         recipient_data = JSON.parse permit_receiver_params
+		unless recipient_data["twitter_id"].blank?
+			recipient_data["twitter"] = recipient_data["twitter_id"]
+			recipient_data.delete("twitter_id")
+		end
         details 	   = JSON.parse permit_data_params
         new_gift_hsh   = recipient_data.merge(details)
         new_gift_hsh["old_gift_id"] = details["regift_id"]
@@ -243,7 +247,7 @@ private
     end
 
 	def user_params
-		params.require(:data).permit(:first_name, :password, :last_name, :phone, :email, :origin, :iphone_photo, :password_confirmation,:facebook_id, :twitter, :handle)
+		params.require(:data).permit(:first_name, :password, :last_name, :phone, :email, :origin, :iphone_photo, :password_confirmation,:facebook_id, :twitter, :twitter_id, :handle)
 	end
 
 end

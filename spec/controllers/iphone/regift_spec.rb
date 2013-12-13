@@ -42,6 +42,17 @@ describe IphoneController do
             new_gift.facebook_id.should   == "690550062"
         end
 
+        it "should accept the 'twitter_id' key and change to twitter" do
+            giver.phone = "5556778899"
+            giver.save
+            old_gift.phone = "5556778899"
+            old_gift.save
+            post :regift, format: :json, receiver: rec_json, "data"=>"{\"message\":\"Love you\",\"regift_id\":#{old_gift.id}}", "receiver"=>"{\"twitter_id\":\"690550062\",\"name\":\"Lauren Chavez\"}", "token"=> giver.remember_token
+            new_gift = Gift.where(message: "Love you").first
+            new_gift.receiver_name.should == "Lauren Chavez"
+            new_gift.twitter.should   == "690550062"
+        end
+
         it "should set the status of the old gift to regifted" do
             post :regift, format: :json, receiver: rec_json, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
             old_gift_reloaded = Gift.find(old_gift.id)
@@ -141,7 +152,7 @@ describe IphoneController do
                 post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
 
                 puts json.inspect
-                
+
                 new_gift = Gift.find(json["data"]["gift_id"])
 
                 new_gift.receiver_id.should == @user.id
