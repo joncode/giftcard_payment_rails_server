@@ -28,8 +28,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.1.1"
-VERSION_UPDATED = "12/11/13"
+VERSION_NUMBER  = "1.1.2"
+VERSION_UPDATED = "12/12/13"
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 VALID_PHONE_REGEX = /1?\s*\W?\s*([2-9][0-8][0-9])\s*\W?\s*([2-9][0-9]{2})\s*\W?\s*([0-9]{4})(\se?x?t?(\d*))?/
