@@ -149,6 +149,8 @@ Drinkboard::Application.routes.draw do
               post :deactivate_gifts
             end
           end
+    
+          resources :user_socials, only: [:create, :update]
 
           resources :brands,    only: [:create, :update]   # biz logic
 
