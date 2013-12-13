@@ -7,6 +7,8 @@ class UserSocial < ActiveRecord::Base
 
     validates_presence_of :identifier, :type_of, :user_id
 
+    validates_with TypeIdValidator
+
     after_create          :subscribe_mailchimp
     after_save            :unsubscribe_mailchimp
 
