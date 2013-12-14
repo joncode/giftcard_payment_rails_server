@@ -56,6 +56,14 @@ describe Mdot::V2::SessionsController do
             json["data"]["user_id"].should    == @user.id
         end
 
+        it "should log in when email is sent with trailing whitespace" do
+            request.env["HTTP_TKN"] = APP_GENERAL_TOKEN
+            post :create, format: :json, email: "neil@gmail.com   ", password: "password"
+            response.status.should == 200
+            json["status"].should  == 1
+            json["data"]["user_id"].should    == @user.id
+        end
+
         it "should return serialized user when success" do
             request.env["HTTP_TKN"] = APP_GENERAL_TOKEN
             post :create, format: :json, email: "neil@gmail.com", password: "password"
