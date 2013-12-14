@@ -21,7 +21,7 @@ module Email
         gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil
         email     = gift.receiver_email || obj_email
-
+        
         if !email.blank?
             puts "emailing the gift receiver for #{gift.id}"
             # notify the receiver via email
@@ -36,7 +36,7 @@ module Email
 
     def invoice_giver
         gift = self
-        
+
         puts "emailing the gift giver for #{gift.id}"
 
         data = {"text"        => 'invoice_giver',

@@ -32,7 +32,14 @@ module Emailer
 		template_name    = "iom-gift-notify-receiver"
 		recipient_name   = gift.receiver_name
 		giver_name       = gift.giver_name
-		email            = gift.receiver_email
+		if gift.receiver_email
+			email         = gift.receiver_email
+		elsif gift.receiver
+			email 		  = gift.receiver.email
+		else
+			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
+			return nil
+		end
 		subject          = "#{giver_name} sent you a gift on #{SERVICE_NAME}"
 		adjusted_id 	 = NUMBER_ID + gift.id
 		link             = "#{PUBLIC_URL}/signup/acceptgift/#{adjusted_id}"
