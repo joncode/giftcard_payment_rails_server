@@ -6,6 +6,7 @@ describe IphoneController do
 
         before(:each) do
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
+             ResqueSpec.reset!
         end
 
         it "is successful" do
@@ -51,7 +52,7 @@ describe IphoneController do
             User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
             SubscriptionJob.stub(:perform).and_return(true)
             MailerJob.stub(:call_mandrill).and_return(true)
-            run_delayed_jobs
+
             pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             ua_alias = "fake_ua"
 
@@ -66,6 +67,7 @@ describe IphoneController do
     describe :login_social do
 
         before do
+             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: "faceface", twitter: "tweettweet" }
@@ -130,7 +132,7 @@ describe IphoneController do
             User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
             SubscriptionJob.stub(:perform).and_return(true)
             MailerJob.stub(:call_mandrill).and_return(true)
-            run_delayed_jobs
+
             pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             ua_alias = "fake_ua"
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 
-describe "connections" do
+describe "Connections Feature" do
 
     before do
         Capybara.current_driver = :selenium

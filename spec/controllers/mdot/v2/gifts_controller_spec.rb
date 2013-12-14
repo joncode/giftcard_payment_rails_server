@@ -198,6 +198,7 @@ describe Mdot::V2::GiftsController do
         it_should_behave_like("token authenticated", :post, :open, id: 1)
 
         before(:each) do
+            ResqueSpec.reset!
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
@@ -270,7 +271,6 @@ describe Mdot::V2::GiftsController do
             badge = Gift.get_notifications(@gift.giver)
             user_alias = @gift.giver.ua_alias
             good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2}
-            run_delayed_jobs
             Urbanairship.should_receive(:push).with(good_push_hsh)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
@@ -678,6 +678,22 @@ describe Mdot::V2::GiftsController do
 
         end
 
+        it "should correctly create and save gift to databse" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
+            # test that create gift does not create the gift or the sale
+            gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: @card, message: "Dont forget about me"
+            gift.credit_card = @card.id
+            gift.value = "31.50"
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
+            rrc(200)
+            json["status"].should == 1
+            json["data"].class.should == Hash
+            saved_gift = Gift.find_by(value: "31.50")
+            saved_gift.message.should ==  "Dont forget about me"
+        end
+
         it "should return 404 + 'credit card not on file' msg when card not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             # test that create gift does not create the gift or the sale
@@ -723,7 +739,8 @@ describe Mdot::V2::GiftsController do
         it "should successfully create gift and return giver_serialized obj + 200 OK" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             # test that create gift does not create the gift or the sale
-            gift = FactoryGirl.build :gift, { receiver_id: @user.id }
+            gift = FactoryGirl.build :gift, { receiver_id: @user.id, credit_card: @card.id }
+
             post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             rrc(200)
             json["status"].should == 1
@@ -959,6 +976,7 @@ describe Mdot::V2::GiftsController do
                 service:        gift.service,
                 receiver_id:    gift.receiver_id,
                 receiver_name:  gift.receiver_name,
+                message:        gift.message,
                 provider_id:    gift.provider.id,
                 credit_card:    gift.credit_card
             }

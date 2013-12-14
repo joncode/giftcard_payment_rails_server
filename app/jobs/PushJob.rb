@@ -6,6 +6,7 @@ class PushJob
         gift        = Gift.find gift_id
         if thank_you
             push_receiver = gift.giver
+            return nil unless push_receiver.respond_to?(:ua_alias)
             badge         = Gift.get_notifications(push_receiver)
             payload       = self.format_thank_you_payload(gift, push_receiver, badge)
         else

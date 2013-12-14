@@ -24,11 +24,11 @@ class GiftSale < Gift
 
     def messenger
         if self.payable.success?
-            puts "GiftSale -post_init- \nNotify Receiver via Push #{self.receiver}"
+            puts "GiftSale -messenger- \nNotify Receiver via Push #{self.receiver_name}"
             Relay.send_push_notification(self)
-            puts "GiftSale -post_init- \nNotify Receiver via email #{self.receiver}"
+            puts "GiftSale -messenger- \nNotify Receiver via email #{self.receiver_name}"
             notify_receiver
-            puts "GiftSale -post_init- \nInvoice the giver via email #{self.giver}"
+            puts "GiftSale -messenger- \nInvoice the giver via email #{self.giver_name}"
             invoice_giver
         end
     end

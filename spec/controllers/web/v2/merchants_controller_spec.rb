@@ -14,8 +14,12 @@ describe Web::V2::MerchantsController do
         it_should_behave_like("token authenticated", :get, :show, id: 1)
 
         it "should respond with correct JSON merchant" do
-            get :show, id: @provider.id, format: :json
+            FactoryGirl.create(:menu_string, provider_id: @provider.id)
+            @provider.merchant_id = 10
+            @provider.save
+            get :show, id: 10, format: :json
             json["data"].class.should == Hash
+
         end
 
     end

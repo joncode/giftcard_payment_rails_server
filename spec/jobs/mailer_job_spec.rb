@@ -4,23 +4,24 @@ require "mandrill"
 describe MailerJob do
 
     before do
-        @gift = FactoryGirl.create :gift
-        @gift_item = FactoryGirl.create :gift_item, { gift_id: @gift.id }
+        @gift = FactoryGirl.create :gift, receiver_email: "email.me@gmail.com"
+        @gift_item = FactoryGirl.create :gift_item, { gift_id: @gift.id}
         @user = FactoryGirl.create :user, {first_name: "bob", last_name:"barker"}
+        ResqueSpec.reset!
     end
- 
+
     describe :perform do
         it "should call notify receiver" do
             MailerJob.should_receive(:notify_receiver)
- 
+
             data = {"text"     => 'notify_receiver',
                     "gift_id"  =>  @gift.id}
             MailerJob.perform(data)
         end
- 
+
         it "should call invoice giver" do
             MailerJob.should_receive(:invoice_giver)
- 
+
             data = {"text"     => 'invoice_giver',
                     "gift_id"  =>  @gift.id}
             MailerJob.perform(data)
@@ -29,10 +30,10 @@ describe MailerJob do
 
     describe :notify_receiver do
         it "should call mandrill with send_template" do
+
             MailerJob.stub(:message_hash).and_return("stubbed_message_hash")
             MailerJob.stub(:generate_template_content).and_return("stubbed_template_content")
             Mandrill::API.should_receive(:send_template).with('iom-gift-notify-receiver', "stubbed_template_content", "stubbed_message_hash")
-
             data = {"text"     => 'notify_receiver',
                     "gift_id"  =>  @gift.id}
 

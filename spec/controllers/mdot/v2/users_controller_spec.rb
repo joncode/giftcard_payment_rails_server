@@ -109,29 +109,15 @@ describe Mdot::V2::UsersController do
 
     describe :reset_passord do
         it_should_behave_like("token authenticated", :put, :reset_password)
-        let(:receiver)  { FactoryGirl.create(:receiver, email: "findme@gmail.com") }
 
-        context "external services" do
-
-            it "should hit mandrill endpoint with correct email for confirm email w/ pn_token" do
-                Urbanairship.stub(:register_device).and_return("pn_token", { :alias => "ua_alias"})
-                User.any_instance.stub(:persist_social_data).and_return(true)
-                SubscriptionJob.stub(:perform).and_return(true)
-                RegisterPushJob.stub(:perform).and_return(true)
-                MailerJob.should_receive(:request_mandrill_with_template)
-                Mandrill::API.stub(:new) { Mandrill::API }
-                #Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
-                Mandrill::API.any_instance.stub(:messages).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
-                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
-                request.env["HTTP_TKN"] = GENERAL_TOKEN
-                put :reset_password, format: :json, data: { "email" => "non-existant@yahoo.com"}
-                run_delayed_jobs
-            end
+        before do
+            @receiver = FactoryGirl.create(:receiver, email: "findme@gmail.com")
+            ResqueSpec.reset!
         end
 
         it "should accept Android Token" do
             request.env["HTTP_TKN"] = ANDROID_TOKEN
-            put :reset_password, format: :json, data: receiver.email
+            put :reset_password, format: :json, data: @receiver.email
             rrc(200)
             json["status"].should  == 1
             json["data"].should == "Email is Sent , check your inbox"
@@ -139,7 +125,7 @@ describe Mdot::V2::UsersController do
 
         it "should send success response for screen for primary email" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
-            put :reset_password, format: :json, data: receiver.email
+            put :reset_password, format: :json, data: @receiver.email
             rrc(200)
             json["status"].should  == 1
             json["data"].should == "Email is Sent , check your inbox"
@@ -147,17 +133,17 @@ describe Mdot::V2::UsersController do
 
         it "should update the user reset password token and expiration for primary email" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
-            put :reset_password, format: :json, data: receiver.email
+            put :reset_password, format: :json, data: @receiver.email
             rrc(200)
-            receiver.reload
-            receiver.reset_token.should_not be_nil
-            receiver.reset_token_sent_at.hour.should == Time.now.hour
+            @receiver.reload
+            @receiver.reset_token.should_not be_nil
+            @receiver.reset_token_sent_at.hour.should == Time.now.hour
         end
 
         it "should send success response for screen for secondary email" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
-            receiver.email = "new_email@email.com"
-            receiver.save
+            @receiver.email = "new_email@email.com"
+            @receiver.save
             put :reset_password, format: :json, data: "findme@gmail.com"
             rrc(200)
             json["status"].should  == 1
@@ -166,13 +152,13 @@ describe Mdot::V2::UsersController do
 
         it "should update the user reset password token and expiration for secondary email" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
-            receiver.email = "new_email@email.com"
-            receiver.save
+            @receiver.email = "new_email@email.com"
+            @receiver.save
             put :reset_password, format: :json, data: "findme@gmail.com"
             rrc(200)
-            receiver.reload
-            receiver.reset_token.should_not be_nil
-            receiver.reset_token_sent_at.hour.should == Time.now.hour
+            @receiver.reload
+            @receiver.reset_token.should_not be_nil
+            @receiver.reset_token_sent_at.hour.should == Time.now.hour
         end
 
         it "should return error message if email doesn not exist" do
@@ -192,6 +178,28 @@ describe Mdot::V2::UsersController do
             rrc(400)
         end
 
+        it "should send the reset password email" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            put :reset_password, format: :json, data: @receiver.email
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+
+            run_delayed_jobs
+            email_link = "#{PUBLIC_URL}/account/resetpassword/#{@receiver.reset_token}"
+            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
+                puts req.body;
+                b = JSON.parse(req.body);
+                if b["template_name"] == "iom-reset-password"
+                    link = b["message"]["merge_vars"].first["vars"].first["content"];
+                    link.match(/#{email_link}/)
+                else
+                    true
+                end
+
+            }.once
+        end
     end
 
     describe :create do
@@ -206,9 +214,7 @@ describe Mdot::V2::UsersController do
                 RegisterPushJob.stub(:perform).and_return(true)
                 MailerJob.stub(:call_mandrill).and_return(true)
                 User.any_instance.stub(:init_confirm_email).and_return(true)
-                #Resque.should_receive(:enqueue).with(SubscriptionJob, anything)
-                #SubscriptionJob.should_receive(:perform).with(anything)
-                #MailchimpList.stub(:new) { MailchimpList }
+
                 MailchimpList.any_instance.should_receive(:subscribe).and_return({"email" => "neil@gmail.com" })
 
                 request.env["HTTP_TKN"] = GENERAL_TOKEN

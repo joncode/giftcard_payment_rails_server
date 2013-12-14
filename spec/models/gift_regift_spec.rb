@@ -234,7 +234,7 @@ describe GiftRegift do
             @gift_hsh["giver"]          = @regifter
             @gift_hsh["old_gift_id"]    = @old_gift.id
             @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
-            run_delayed_jobs
+            ResqueSpec.reset!
             WebMock.reset!
         end
 

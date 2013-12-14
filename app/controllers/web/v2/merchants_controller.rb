@@ -3,8 +3,8 @@ class Web::V2::MerchantsController < JsonController
 
     def show
 
-        if merchant = Provider.where(merchant_id: params[:id]).first
-            success merchant.web_serialize
+        if provider = Provider.includes(:menu_string).where(merchant_id: params[:id]).first
+            success provider.web_serialize
         else
             fail    data_not_found
         end

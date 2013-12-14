@@ -6,6 +6,7 @@ describe RegisterPushJob do
     describe :perform do
 
         before(:each) do
+             ResqueSpec.reset!
             @user     = FactoryGirl.create(:user)
             @pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             @pnt      = PnToken.create(user_id: @user.id, pn_token: @pn_token)

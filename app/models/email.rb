@@ -36,7 +36,7 @@ module Email
 
     def invoice_giver
         gift = self
-        
+
         puts "emailing the gift giver for #{gift.id}"
 
         data = {"text"        => 'invoice_giver',
@@ -73,7 +73,6 @@ module Email
 ######    App Controller
 
     def send_reset_password_email user
-
         data = {"text"        => 'reset_password',
                 "user_id"     => user.id
                 }

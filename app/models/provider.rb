@@ -16,8 +16,7 @@ class Provider < ActiveRecord::Base
 	validates_length_of 	:zip, 		:within => 5..10
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
-
-
+	
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
@@ -62,6 +61,7 @@ class Provider < ActiveRecord::Base
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
+		prov_hash["menu"]   	  = JSON.parse(self.menu_string.data)
 		prov_hash
 	end
 

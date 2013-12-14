@@ -117,7 +117,7 @@ FactoryGirl.define do
         gift.provider        { FactoryGirl.create(:provider) }
         gift.value           "100"
         gift.service         "4"
-        gift.credit_card     4567890
+        gift.credit_card     { FactoryGirl.create(:visa).id }
         gift.shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
         gift.message         "Factory Message"
         gift.pay_stat       "charged"
