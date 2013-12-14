@@ -1,4 +1,5 @@
 class Mdot::V2::UsersController < JsonController
+    include Email
     before_filter :authenticate_customer, only: [:index, :update]
     before_filter :authenticate_general_token, only: [:create, :reset_password]
 
@@ -55,6 +56,7 @@ class Mdot::V2::UsersController < JsonController
         if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).references(:users).first
             user = user_social.user
             user.update_reset_token
+            send_reset_password_email(user)
             success "Email is Sent , check your inbox"
         else
             fail    "#{PAGE_NAME} does not have record of that email"

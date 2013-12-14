@@ -21,7 +21,7 @@ module Email
         gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil
         email     = gift.receiver_email || obj_email
-        
+
         if !email.blank?
             puts "emailing the gift receiver for #{gift.id}"
             # notify the receiver via email
@@ -73,7 +73,6 @@ module Email
 ######    App Controller
 
     def send_reset_password_email user
-
         data = {"text"        => 'reset_password',
                 "user_id"     => user.id
                 }

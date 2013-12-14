@@ -440,7 +440,7 @@ describe AppController do
             badge = Gift.get_notifications(@gift.giver)
             user_alias = @gift.giver.ua_alias
             good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2}
-            
+
             Urbanairship.should_receive(:push).with(good_push_hsh)
 
             post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
@@ -661,26 +661,50 @@ describe AppController do
 
     describe :reset_password do
 
-        let(:receiver)  { FactoryGirl.create(:receiver, email: "findme@gmail.com") }
+        before do
+            @receiver = FactoryGirl.create(:receiver, email: "findme@gmail.com")
+            ResqueSpec.reset!
+        end
+
+
 
         it "should send success response for screen" do
-            post :reset_password, format: :json, email: receiver.email
+            post :reset_password, format: :json, email: @receiver.email
             rrc_old(200)
             json["success"].should == "Email is Sent , check your inbox"
         end
 
         it "should update the user reset password token and expiration" do
-            post :reset_password, format: :json, email: receiver.email
+            post :reset_password, format: :json, email: @receiver.email
             rrc_old(200)
-            receiver.reload
-            receiver.reset_token.should_not be_nil
-            receiver.reset_token_sent_at.hour.should == Time.now.hour
+            @receiver.reload
+            @receiver.reset_token.should_not be_nil
+            @receiver.reset_token_sent_at.hour.should == Time.now.hour
         end
 
         it "should return error message if email doesn not exist" do
             post :reset_password, format: :json, email: "non-existant@yahoo.com"
             rrc_old(200)
             json["error"].should == "We do not have record of that email"
+        end
+
+        it "should send the reset password email" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+
+            post :reset_password, format: :json, email: @receiver.email
+            run_delayed_jobs
+            email_link = "#{PUBLIC_URL}/account/resetpassword/#{@receiver.reset_token}"
+            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
+                puts req.body;
+                b = JSON.parse(req.body);
+                if b["template_name"] == "iom-reset-password"
+                    link = b["message"]["merge_vars"].first["vars"].first["content"];
+                    link.match(/#{email_link}/)
+                else
+                    true
+                end
+
+            }.once
         end
     end
 end
