@@ -63,6 +63,25 @@ describe PushJob do
             end
         end
 
+        context "BizUser gift" do
+
+            it "should not send a push to biz users" do
+                prov_name = "Pusher's"
+                receiver = FactoryGirl.create(:receiver)
+                provider = FactoryGirl.create(:provider)
+                biz_user = provider.biz_user
+                @gift     = FactoryGirl.create(:gift, giver: biz_user, receiver: receiver, provider_name: prov_name)
+                3.times do
+                    gifts = FactoryGirl.create(:gift, receiver: @user)
+                end
+                user_alias = @pnt.ua_alias
+                good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{prov_name}!",:badge=>3,:sound=>"pn.wav"},:alert_type=>2}
+
+                Urbanairship.should_not_receive(:push).with(good_push_hsh)
+                PushJob.perform(@gift.id, true)
+            end
+        end
+
     end
 
 end
