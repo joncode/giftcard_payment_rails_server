@@ -68,7 +68,7 @@ class Admt::V2::UsersController < JsonController
 private
 
     def strong_param(data_hsh)
-        allowed = [ "first_name" , "last_name",  "phone" , "email" ]
+        allowed = [ "first_name" , "last_name",  "phone" , "email", "zip" ]
         data_hsh.select{ |k,v| allowed.include? k }
     end
 end
