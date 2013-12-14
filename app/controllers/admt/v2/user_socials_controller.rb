@@ -16,11 +16,12 @@ class Admt::V2::UserSocialsController < JsonController
 
     def update
         user_social = UserSocial.find(params[:id])
-        if user_social && user_social.update_attribute(:active, false)
+
+        if user_social && user_social.update(active: false)
             success user_social.serializable_hash
         else
             if user_social
-                fail user_social.serializable_hash
+                fail user_social.errors.full_messages
             else
                 fail data_not_found
             end

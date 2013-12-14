@@ -20,6 +20,16 @@ class User < ActiveRecord::Base
 
 	has_secure_password
 
+    validates_with UserSocialValidator
+	validates :first_name, 	presence: true, length: {  maximum: 50 }
+	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
+	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
+	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
+	validates :password, 	length: { minimum: 6 },     on: :create
+	validates :password_confirmation, presence: true, 	on: :create
+	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
+	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
+
 	before_save { |user| user.email      = email.downcase }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
@@ -29,15 +39,6 @@ class User < ActiveRecord::Base
 	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data
 	after_create  :init_confirm_email
-
-	validates :first_name, 	presence: true, length: {  maximum: 50 }
-	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
-	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
-	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-	validates :password, 	length: { minimum: 6 },     on: :create
-	validates :password_confirmation, presence: true, 	on: :create
-	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
-	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false).where(remember_token: token).first

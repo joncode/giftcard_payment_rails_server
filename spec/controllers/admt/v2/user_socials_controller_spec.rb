@@ -79,16 +79,14 @@ describe Admt::V2::UserSocialsController do
         it "should deactivate user social" do
             updated_user_social = UserSocial.unscoped.find_by(user_id: @user.id)
             updated_user_social.active.should   be_true
-            put :update, id: @user.id, format: :json
-            puts "--- token is #{request.env["HTTP_TKN"]}"
+            put :update, id: updated_user_social.id, format: :json
             updated_user_social.reload
             updated_user_social.active.should   be_false
         end
 
         it "should return success msg when success" do
             updated_user_social = UserSocial.unscoped.find_by(user_id: @user.id)
-            put :update, id: @user.id, format: :json
-            puts "--- token is #{request.env["HTTP_TKN"]}"
+            put :update, id: updated_user_social.id, format: :json
             rrc(200)
             json["status"].should == 1
             json["data"].should include({"identifier" => updated_user_social.identifier})

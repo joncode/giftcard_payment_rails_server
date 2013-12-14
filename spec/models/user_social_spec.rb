@@ -6,7 +6,7 @@ describe UserSocial do
     # accepts email , phone , facebook_id, twitter_id
 
     it "builds from factory" do
-      user_social = FactoryGirl.create :user_social
+      user_social = FactoryGirl.build :user_social
       user_social.should be_valid
     end
 
@@ -34,7 +34,7 @@ describe UserSocial do
     end
 
     describe "uniqueness validation" do
-        context "with existing data" do
+
             before do
                 User.delete_all
                 UserSocial.delete_all
@@ -42,7 +42,7 @@ describe UserSocial do
                 @legacy_phone = @legacy_user.user_socials.where(type_of: "phone")[0]
                 @legacy_email = @legacy_user.user_socials.where(type_of: "email")[0]
             end
-            context "unique identifier" do          
+            context "unique identifier" do
                 it "should save and make active on" do
 
                     new_phone = UserSocial.create(type_of: "phone", identifier: "3333333333", user_id: @legacy_user.id)
@@ -51,6 +51,13 @@ describe UserSocial do
                     new_email = UserSocial.create(type_of: "email", identifier: "bob@email.com", user_id: @legacy_user.id)
                     new_email.id.should_not be_nil
                     new_email.active.should == true
+                end
+
+                it "should allow de-activating" do
+                    @legacy_phone.update(active: false)
+                    @legacy_phone.should have_at_most(0).errors
+                    @legacy_email.update(active: false)
+                    @legacy_email.should have_at_most(0).errors
                 end
             end
             context "identical active identifier already exists" do
@@ -66,7 +73,7 @@ describe UserSocial do
                 context "and its a different user" do
                     it "should not create a new UserSocial" do
 
-                        new_user = FactoryGirl.create(:user, first_name: "bob", email: "bob@email.com")                            
+                        new_user = FactoryGirl.create(:user, first_name: "bob", email: "bob@email.com")
                         new_phone = UserSocial.create(type_of: "phone", identifier: "2222222222", user_id: @legacy_user.id, active: true)
                         new_email = UserSocial.create(type_of: "email", identifier: "ace@email.com", user_id: @legacy_user.id, active: true)
                         new_phone.id.should be_nil
@@ -81,7 +88,7 @@ describe UserSocial do
                     @legacy_phone.toggle!(:active)
                     @legacy_email.toggle!(:active)
                 end
-                context "and its the same user" do       
+                context "and its the same user" do
                     it "should activate the existing user social" do
                         new_phone = UserSocial.create(type_of: "phone", identifier: "2222222222", user_id: @legacy_user.id)
                         new_email = UserSocial.create(type_of: "email", identifier: "ace@email.com", user_id: @legacy_user.id)
@@ -93,7 +100,7 @@ describe UserSocial do
                         @legacy_email.active.should == false
                     end
                 end
-                context "different user" do                  
+                context "different user" do
                     it "should create a new user social" do
                         new_phone = UserSocial.create(type_of: "phone", identifier: "2222222222", user_id: @legacy_user.id)
                         new_email = UserSocial.create(type_of: "email", identifier: "ace@email.com", user_id: @legacy_user.id)
@@ -106,7 +113,7 @@ describe UserSocial do
                     end
                 end
             end
-        end
+
     end
 end
 

@@ -107,7 +107,7 @@ FactoryGirl.define do
     factory :user_social do
         user_id     1
         type_of     "email"
-        identifier  "example@gmail.com"
+        sequence(:identifier)  { |n| "noone#{n}@gmail.com" }
     end
 
     factory :gift do |gift|
