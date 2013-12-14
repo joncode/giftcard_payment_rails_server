@@ -265,7 +265,7 @@ describe GiftSale do
             @gift_hsh["service"]        = "2.25"
             @gift_hsh["credit_card"]    = @card.id
             @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
-            run_delayed_jobs
+            ResqueSpec.reset!
             WebMock.reset!
         end
 
@@ -276,7 +276,7 @@ describe GiftSale do
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             response = GiftSale.create @gift_hsh
-            
+
             run_delayed_jobs
             abs_gift_id = response.id + NUMBER_ID
 

@@ -3,6 +3,10 @@ require 'mandrill'
 
 describe SubscriptionJob do
 
+    before do
+         ResqueSpec.reset!
+    end
+
     it "should find suspended user socials and remove from mailchimp" do
         User.any_instance.stub(:init_confirm_email)
         user = FactoryGirl.create(:simple_user, email: "toBe_deactivated@deactive.com")

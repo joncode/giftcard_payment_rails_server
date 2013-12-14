@@ -198,6 +198,7 @@ describe Mdot::V2::GiftsController do
         it_should_behave_like("token authenticated", :post, :open, id: 1)
 
         before(:each) do
+            ResqueSpec.reset!
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
@@ -270,7 +271,6 @@ describe Mdot::V2::GiftsController do
             badge = Gift.get_notifications(@gift.giver)
             user_alias = @gift.giver.ua_alias
             good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2}
-            run_delayed_jobs
             Urbanairship.should_receive(:push).with(good_push_hsh)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
@@ -724,7 +724,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             # test that create gift does not create the gift or the sale
             gift = FactoryGirl.build :gift, { receiver_id: @user.id, credit_card: @card.id }
-            
+
             post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart
             rrc(200)
             json["status"].should == 1

@@ -98,6 +98,7 @@ describe Mt::V2::GiftsController do
         end
 
         it "should send in-network receivers a push notification" do
+            ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             @receiver = FactoryGirl.create(:user, first_name: "Fred", last_name: "Barry", email: "fred@barry.com")

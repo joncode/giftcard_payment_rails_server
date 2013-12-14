@@ -114,6 +114,7 @@ describe Mdot::V2::UsersController do
         context "external services" do
 
             it "should hit mandrill endpoint with correct email for confirm email w/ pn_token" do
+                ResqueSpec.reset!
                 Urbanairship.stub(:register_device).and_return("pn_token", { :alias => "ua_alias"})
                 User.any_instance.stub(:persist_social_data).and_return(true)
                 SubscriptionJob.stub(:perform).and_return(true)
@@ -206,9 +207,7 @@ describe Mdot::V2::UsersController do
                 RegisterPushJob.stub(:perform).and_return(true)
                 MailerJob.stub(:call_mandrill).and_return(true)
                 User.any_instance.stub(:init_confirm_email).and_return(true)
-                #Resque.should_receive(:enqueue).with(SubscriptionJob, anything)
-                #SubscriptionJob.should_receive(:perform).with(anything)
-                #MailchimpList.stub(:new) { MailchimpList }
+                
                 MailchimpList.any_instance.should_receive(:subscribe).and_return({"email" => "neil@gmail.com" })
 
                 request.env["HTTP_TKN"] = GENERAL_TOKEN

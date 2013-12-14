@@ -109,6 +109,7 @@ describe User do
     context "pn_token management" do
 
         it "should hit urban airship endpoint when token created or updated" do
+             ResqueSpec.reset!
             MailerJob.stub(:perform).and_return(true)
             SubscriptionJob.stub(:perform).and_return(true)
             pnt  = "162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76"

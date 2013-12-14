@@ -92,5 +92,5 @@ describe "Happy Path" do
         json["success"]["order_number"].should_not be_blank
 
     end
-    
+
 end
