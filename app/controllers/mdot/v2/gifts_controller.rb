@@ -116,9 +116,9 @@ private
 
     def gift_params
         if params.require(:data).kind_of?(String)
-            pg = JSON.parse(params.require(:data))
+            JSON.parse(params.require(:data))
         else
-            params.require(:data).permit( :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_name,:provider_id,:credit_card)
+            params.require(:data).permit(:message, :giver_id, :giver_name, :value, :service, :receiver_id, :receiver_name, :provider_id, :credit_card)
         end
     end
 
