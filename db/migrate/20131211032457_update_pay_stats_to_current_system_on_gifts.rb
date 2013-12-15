@@ -34,8 +34,6 @@ class UpdatePayStatsToCurrentSystemOnGifts < ActiveRecord::Migration
                 puts "#{gift.pay_stat}"
                 puts "--------------------------------------------"
                 puts "--------------------------------------------"
-                puts "--------------------------------------------"
-                puts "--------------------------------------------"
             end
 
         end
@@ -66,8 +64,6 @@ class UpdatePayStatsToCurrentSystemOnGifts < ActiveRecord::Migration
                 puts "--------------------------------------------"
                 puts "INKNOWN PAY STAT  !!!!!"
                 puts "#{gift.pay_stat}"
-                puts "--------------------------------------------"
-                puts "--------------------------------------------"
                 puts "--------------------------------------------"
                 puts "--------------------------------------------"
             end
