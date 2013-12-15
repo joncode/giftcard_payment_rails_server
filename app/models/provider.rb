@@ -16,7 +16,7 @@ class Provider < ActiveRecord::Base
 	validates_length_of 	:zip, 		:within => 5..10
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
-	
+
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
@@ -141,7 +141,17 @@ class Provider < ActiveRecord::Base
 		image
 	end
 
-private
+	def get_photo_old
+		if image.blank?
+			if photo.blank?
+				MERCHANT_DEFAULT_IMG
+			else
+				photo.url
+			end
+		else
+			image
+		end
+	endprivate
 
 	def make_menu_string
 	    MenuString.create(provider_id: self.id, data: "[]", menu: self.menu)
