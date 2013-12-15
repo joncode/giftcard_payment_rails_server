@@ -30,6 +30,9 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
+	mount_uploader   :photo, UserAvatarUploader
+	mount_uploader   :secure_image, UserAvatarUploader
+	
 	before_save { |user| user.email      = email.downcase }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
