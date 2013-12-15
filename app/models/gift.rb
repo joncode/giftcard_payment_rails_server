@@ -79,8 +79,12 @@ class Gift < ActiveRecord::Base
 	end
 
     def total
-        amount = self.value || super
-        string_to_cents amount
+        if self.respond_to?(:value)
+            amount = self.value || super
+            string_to_cents amount
+        else
+            string_to_cents super
+        end
     end
 
     def total= amount

@@ -12,7 +12,9 @@ class MoveSalesToPayablesOnGift < ActiveRecord::Migration
             if payable
                 gift.payable = payable
             end
-            gift.save
+            unless gift.save
+                puts "SALE FAIL --------- SALE FAIL --------- gift ID #{gift.id} ------------- SALE FAIL -------------- SALE FAIL"
+            end
         end
 
     end
