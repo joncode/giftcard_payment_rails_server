@@ -124,6 +124,23 @@ class User < ActiveRecord::Base
 		end
 	end
 
+	def get_photo_old
+		case self.use_photo
+		when "cw"
+			self.photo.url
+		when "ios"
+			self.iphone_photo
+		when "fb"
+			self.fb_photo
+		else
+			if self.photo.blank?
+				"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+			else
+				self.photo.url
+			end
+		end
+	end
+
 ##################
 
 #######  GIFT SCOPE METHODS

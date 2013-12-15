@@ -3,7 +3,7 @@ class RemovePhotoColumnsFromUsers < ActiveRecord::Migration
         # MOVE PHOTO TO :iphone_photo
     us = User.unscoped
     us.each do |user|
-        pic = user.get_photo
+        pic = user.get_photo_old
         if pic ==  "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
             user.iphone_photo = nil
         else
