@@ -4,7 +4,7 @@ class RemovePhotosFromProviders < ActiveRecord::Migration
             # move photo_url to :image
         ps = Provider.unscoped
         ps.each do |provider|
-            provider.image = provider.get_photo
+            provider.image = provider.get_photo_old
             provider.save
         end
         remove_column :providers, :photo
