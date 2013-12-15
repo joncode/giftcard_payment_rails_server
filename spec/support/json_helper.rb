@@ -24,6 +24,22 @@ module JsonHelper
     end
   end
 
+  def rrc(status_code)
+    response.response_code.should == status_code
+    puts response.response_code
+    if response.response_code == 200
+      ["status", "data"].each do |key|
+        json.keys.include?(key).should be_true
+      end
+    end
+  end
+
+  def rrc_old(status_code)
+    response.response_code.should == status_code
+    puts response.response_code
+  end
+
+
 end
 
 RSpec::Rails::ControllerExampleGroup.send(:include, JsonHelper)

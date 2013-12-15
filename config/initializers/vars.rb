@@ -16,13 +16,13 @@ else
     ENV['CCS_KEY']
 end
 
-AUTHORIZE_API_LOGIN = if Rails.env.development?
+AUTHORIZE_API_LOGIN = if Rails.env.development? or Rails.env.test?
     '948bLpzeE8UY'
 else
     ENV['AUTHORIZE_API_LOGIN']
 end
 
-AUTHORIZE_TRANSACTION_KEY = if Rails.env.development?
+AUTHORIZE_TRANSACTION_KEY = if Rails.env.development? or Rails.env.test?
     '7f7AZ66axeC386q7'
 else
     ENV['AUTHORIZE_TRANSACTION_KEY']
@@ -63,3 +63,11 @@ APP_GENERAL_TOKEN = if Rails.env.development? or Rails.env.test?
 else
     ENV['APP_GENERAL_TOKEN']
 end
+
+ANDROID_TOKEN = if Rails.env.development? or Rails.env.test?
+     "e7f122d463e7ca786a150a33e21216a1"
+else
+    ENV['ANDROID_TOKEN']
+end
+
+

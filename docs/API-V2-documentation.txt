@@ -623,7 +623,7 @@ Response Body(200 not found):
 
 {
   "status": 0,
-  "data": "Account not in Drinkboard database"
+  "data": "Account not in Its On Me database"
 }
 
 Response Body(200 suspended):
@@ -801,5 +801,5 @@ Response Body(200 no record):
 
 {
   "status": 0,
-  "data": "Dev Drinkboard (local) does not have record of that email"
+  "data": "Dev Its On Me (local) does not have record of that email"
 }

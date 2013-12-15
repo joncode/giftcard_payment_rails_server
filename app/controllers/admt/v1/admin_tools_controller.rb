@@ -46,7 +46,7 @@ class Admt::V1::AdminToolsController < JsonController
     end
 
 #####  User Routes
-    
+
     def destroy_user
         puts "THIS METHOD FOR PERMANENTLY DEACTIVATING THE USER SHOULD GO THROUGH DBAPP MODEL BUT HAS NOT YET BEEN WRITTEN"
     end
@@ -102,7 +102,7 @@ class Admt::V1::AdminToolsController < JsonController
 #####  Merchant Routes
 
     def go_live
-        if provider = Provider.unscoped.find_by_token(params['data'])
+        if provider = Provider.unscoped.find_by(token: params['data'])
 
             if provider.toggle! :live
                 msg =
@@ -123,7 +123,7 @@ class Admt::V1::AdminToolsController < JsonController
     end
 
     def update_mode
-        if provider = Provider.unscoped.find_by_token(params['data']['merchant_token'])
+        if provider = Provider.unscoped.find_by(token: params['data']['merchant_token'])
             provider.mode = params['data']['mode']
             if provider.save
                 # call :mt and update the mechant
@@ -147,7 +147,7 @@ class Admt::V1::AdminToolsController < JsonController
     end
 
     def deactivate_merchant
-        if provider    = Provider.unscoped.find_by_token(params['data'])
+        if provider    = Provider.unscoped.find_by(token: params['data'])
 
             if provider.update_attribute(:active, false)
                 # call :mt and deactivate the merchant

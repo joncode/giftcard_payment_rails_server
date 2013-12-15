@@ -5,7 +5,7 @@ class Admt::V2::BrandsController < JsonController
     def create
         brand_hsh = params["data"]
         puts brand_hsh
-        brand     = Brand.new brand_hsh
+        brand     = Brand.new brand_params
         if brand.save
             puts    "Here is new brand ID = #{brand.id} = #{brand.inspect}"
             success brand.admt_serialize
@@ -17,7 +17,7 @@ class Admt::V2::BrandsController < JsonController
 
     def update
         brand = Brand.unscoped.find(params[:id])
-        if brand && brand.update_attributes(params["data"])
+        if brand && brand.update_attributes(brand_params)
             success brand.admt_serialize
         else
             if brand
@@ -27,6 +27,12 @@ class Admt::V2::BrandsController < JsonController
             end
         end
         respond
+    end
+
+private
+
+    def brand_params
+        params.require(:data).permit(:name, :website, :photo, :description)
     end
 
 end

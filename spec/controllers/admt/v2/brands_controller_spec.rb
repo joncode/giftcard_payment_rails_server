@@ -6,7 +6,7 @@ describe Admt::V2::BrandsController do
         Brand.delete_all
 
          # should require valid admin credentials in every spec
-        unless admin_user = AdminUser.find_by_remember_token("Token")
+        unless admin_user = AdminUser.find_by(remember_token: "Token")
             FactoryGirl.create(:admin_user, remember_token: "Token")
         end
         request.env["HTTP_TKN"] = "Token"
@@ -14,7 +14,7 @@ describe Admt::V2::BrandsController do
 
     describe "#create" do
 
-        it_should_behave_like("token authenticated", :post, :create, id: 1)
+        it_should_behave_like("token authenticated", :post, :create)
 
         it "should create new brand" do
             new_brand_hsh = { "name" => "Starwood" , "website" => "www.starwood.com" , "description" => "AMAZING!", "photo" => "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"}

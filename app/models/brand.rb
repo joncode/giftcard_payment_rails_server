@@ -1,7 +1,7 @@
 class Brand < ActiveRecord::Base
-	attr_accessible :address, :city, :description,
-	:logo, :name, :phone, :state, :user_id, :website,
-	:photo, :portrait, :next_view
+	# attr_accessible :address, :city, :description,
+	# :logo, :name, :phone, :state, :user_id, :website,
+	# :photo, :portrait, :next_view
 
 	has_many   :providers
 	belongs_to :user
@@ -10,7 +10,7 @@ class Brand < ActiveRecord::Base
 
 	after_save :update_parent_brand
 
-	default_scope where(active: true)
+	default_scope -> { where(active: true) }  # indexed
 
 	def self.get_all
 		unscoped.order("name ASC")
@@ -19,14 +19,14 @@ class Brand < ActiveRecord::Base
 	def serialize
 		brand_hash  = self.serializable_hash only: [ :name, :next_view ]
 		brand_hash["brand_id"] = self.id
-		brand_hash["photo"]    = self.get_image
+		brand_hash["photo"]    = self.get_photo
 		brand_hash
 	end
 
 	def admt_serialize
 		brand_hash  = self.serializable_hash only: [ :name, :description, :website ]
 		brand_hash["brand_id"] = self.id
-		brand_hash["photo"]    = self.get_image
+		brand_hash["photo"]    = self.get_photo
 		brand_hash["active"]   = self.active ? 1 : 0
 		brand_hash
 	end
@@ -39,7 +39,7 @@ class Brand < ActiveRecord::Base
 		!self.photo.nil?
 	end
 
-	def get_image
+	def get_photo
 		if self.photo.present?
 			CLOUDINARY_IMAGE_URL + self.photo
 		elsif self.portrait.present?
@@ -48,8 +48,6 @@ class Brand < ActiveRecord::Base
 			nil
 		end
 	end
-
-	alias_method :get_photo, :get_image
 
 	def photo= photo_url
 		# remove the cloudinary base url

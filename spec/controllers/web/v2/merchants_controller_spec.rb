@@ -11,15 +11,15 @@ describe Web::V2::MerchantsController do
 
     describe "#show" do
 
-        it "should not allow unauthenticated access" do
-            request.env["HTTP_TKN"] = "No_Entrance"
-            get :show, id: 1, format: :json
-            response.response_code.should == 401
-        end
+        it_should_behave_like("token authenticated", :get, :show, id: 1)
 
         it "should respond with correct JSON merchant" do
-            get :show, id: @provider.id, format: :json
+            FactoryGirl.create(:menu_string, provider_id: @provider.id)
+            @provider.merchant_id = 10
+            @provider.save
+            get :show, id: 10, format: :json
             json["data"].class.should == Hash
+
         end
 
     end

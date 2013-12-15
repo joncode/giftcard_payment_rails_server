@@ -23,6 +23,10 @@ class JsonController < ActionController::Base
         head 404
     end
 
+    def bad_request
+        head 400
+    end
+
     def array_these_gifts obj, send_fields, address_get=false, receiver=false, order_num=false
         gifts_ary = []
         index = 1
@@ -57,7 +61,10 @@ class JsonController < ActionController::Base
                 # in MERCHANT_REPLY
                 gift_obj["giver_photo"]    = g.giver.get_photo
                 provider                   = g.provider
-                gift_obj["provider_photo"] = provider.get_image("photo")
+                unless provider
+                    provider = Provider.unscoped.find(g.provider_id)
+                end
+                gift_obj["provider_photo"] = provider.get_photo
                 gift_obj["provider_phone"] = provider.phone
                 gift_obj["city"]           = provider.city
                 gift_obj["sales_tax"]      = provider.sales_tax
@@ -101,18 +108,85 @@ class JsonController < ActionController::Base
 
 ### API UTILITY METHODS
 
+    def reject_if_not_exactly(allowed, data_hsh=nil)
+        data_hsh ||= params["data"]
+        check_ary = allowed - data_hsh.keys
+        if check_ary.count == 0
+            check_ary = data_hsh.keys - allowed
+        end
+        head :bad_request if check_ary.count != 0
+    end
+
+    def convert_if_json(data=nil)
+        data ||= params["data"]
+        if data.kind_of?(String)
+            JSON.parse(data)
+        else
+            data
+        end
+    end
+
+    def params_required(new_gift_hsh)
+        got_unique_id = false
+        if new_gift_hsh.kind_of? Hash
+            got_unique_id = true if new_gift_hsh.include?("email")
+            got_unique_id = true if new_gift_hsh.include?("phone")
+            got_unique_id = true if new_gift_hsh.include?("facebook_id")
+            got_unique_id = true if new_gift_hsh.include?("twitter")
+        end
+        head :bad_request unless got_unique_id
+    end
+
+    def nil_key_or_value(data=nil)
+        data ||= params["data"]
+        head :bad_request if data.nil?
+    end
+
+    def data_not_found?(data= nil)
+        data ||= params["data"]
+        head :not_found if data.nil?
+    end
+
     def data_not_hash?(data=nil)
         data ||= params["data"]
         head :bad_request unless data.kind_of?(Hash)
+    end
+
+    def data_not_array?(data=nil)
+        data ||= params["data"]
+        head :bad_request unless data.kind_of?(Array)
     end
 
     def hash_empty?(data)
         head :bad_request unless data.count > 0
     end
 
-    def respond
+    def data_blank?(data=nil)
+        data ||= params["data"]
+        head :bad_request if data.blank?
+    end
+
+    def data_not_string?(data=nil)
+        data ||= params["data"]
+        head :bad_request unless data.kind_of?(String)
+    end
+
+    def params_bad_request(new_key=nil)
+        key = new_key || ["data"]
+        good_params = [ "id", "controller", "action", "format"] + key
+        head :bad_request unless (params.keys - good_params).count == 0
+    end
+
+    def collection_bad_request(new_key=nil)
+        key = new_key || ["data"]
+        good_params = [ "controller", "action", "format"] + key
+        head :bad_request unless (params.keys - good_params).count == 0
+    end
+
+    def respond(status=nil)
+        response_code = status || :ok
         respond_to do |format|
-            format.json { render json: @app_response }
+            format.json { render json: @app_response, status: response_code }
         end
     end
 
@@ -122,14 +196,14 @@ class JsonController < ActionController::Base
 
     def fail payload
         unless payload.kind_of?(Hash) || payload.kind_of?(String) || payload.kind_of?(Array)
-            payload   = payload.errors.messages
+            payload   = { "error" => payload.errors.messages }
         end
         @app_response = { status: 0, data: payload }
     end
 
     def authenticate_admin_tools
         token = request.headers["HTTP_TKN"]
-        @admin_user = AdminUser.find_by_remember_token token
+        @admin_user = AdminUser.find_by(remember_token: token)
         if @admin_user
             puts "ADMT  -------------   #{@admin_user.name}   -----------------------"
         else
@@ -139,7 +213,7 @@ class JsonController < ActionController::Base
 
     def authenticate_merchant_tools
         token = request.headers["HTTP_TKN"]
-        @provider = Provider.unscoped.find_by_token(token)
+        @provider = Provider.unscoped.find_by(token: token)
         if @provider
             puts "MT  -------------   #{@provider.name}   -----------------------"
         else
@@ -149,7 +223,7 @@ class JsonController < ActionController::Base
 
     def authenticate_general_token
         token = request.headers["HTTP_TKN"]
-        head :unauthorized unless GENERAL_TOKEN == token
+        head :unauthorized unless [APP_GENERAL_TOKEN, GENERAL_TOKEN, ANDROID_TOKEN].include?(token)
     end
 
     def authenticate_www_token
@@ -171,6 +245,15 @@ class JsonController < ActionController::Base
         end
     end
 
+    def authenticate_customer
+        token         = request.headers["HTTP_TKN"]
+        @current_user = User.app_authenticate(token)
+        if @current_user
+            puts "APP  -------------   #{@current_user.name}   -----------------------"
+        else
+            head :unauthorized
+        end
+    end
 
 #######
 
@@ -180,7 +263,7 @@ private
         headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Allow-Methods']  = 'POST, PUT, DELETE, GET, OPTIONS'
         headers['Access-Control-Request-Method'] = '*'
-        headers['Access-Control-Allow-Headers']  = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+        headers['Access-Control-Allow-Headers']  = 'Origin, X-Requested-With, Content-Type, Accept, TKN, Mdot-Version, Android-Version'
     end
 
     def down_for_maintenance

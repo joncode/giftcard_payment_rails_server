@@ -6,11 +6,10 @@ module Emailer
 		recipient		 = User.find(data["user_id"])
 		email            = recipient.email
 		name             = recipient.name
-		template_name    = "reset-password"
-		template_content = [{"name" => "recipient_name", "content" => name}]
-
+		template_name    = "iom-reset-password"
+		template_content = [{"name" => "recipient_name", "content" => name},
+		                    {"name" => "service_name", "content" => SERVICE_NAME}]
 		subject          = "Reset Your Password"
-
 		link             = "#{PUBLIC_URL}/account/resetpassword/#{recipient.reset_token}"
 
 		message          = message_hash(subject, email, name, link)
@@ -21,67 +20,56 @@ module Emailer
 		recipient		 = User.find(data["user_id"])
 		link             = data["link"]
 		subject          = "Confirm Your Email"
-		template_name    = "confirm-email"
-		template_content = [{"name" => "recipient_name", "content" => recipient.name}]
+		template_name    = "iom-confirm-email"
+		template_content = [{"name" => "recipient_name", "content" => recipient.name},
+		                    {"name" => "service_name", "content" => SERVICE_NAME}]
 		message          = message_hash(subject, recipient.email, recipient.name, link)
 		request_mandrill_with_template(template_name, template_content, message)
 	end
 
     def notify_receiver data
     	gift 			 = Gift.find(data["gift_id"])
-		template_name    = "gift-notice"
+		template_name    = "iom-gift-notify-receiver"
 		recipient_name   = gift.receiver_name
 		giver_name       = gift.giver_name
-		merchant_name    = gift.provider_name
-		email            = gift.receiver_email
-		gift_details     = GiftItem.items_for_email(gift)	# example string: "<ul><li>1 Budweiser</li><li>1 Shot Patron</li></ul>"
-		gift_total       = gift.total 						# monetary value. do not include dollar sign
-		template_content = [{"name" => "receiver_name", "content" => recipient_name},
-							{"name" => "giver_name", "content" => giver_name},
-							{"name" => "merchant_name", "content" => merchant_name},
-							{"name" => "gift_details", "content" => gift_details},
-							{"name" => "gift_total", "content" => gift_total}]
-		subject          = "#{giver_name} sent you a gift on Drinkboard"
+		if gift.receiver_email
+			email         = gift.receiver_email
+		elsif gift.receiver
+			email 		  = gift.receiver.email
+		else
+			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
+			return nil
+		end
+		subject          = "#{giver_name} sent you a gift on #{SERVICE_NAME}"
 		adjusted_id 	 = NUMBER_ID + gift.id
 		link             = "#{PUBLIC_URL}/signup/acceptgift/#{adjusted_id}"
         bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
+        template_content = generate_template_content(gift, template_name)
 		message          = message_hash(subject, email, recipient_name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
     def invoice_giver data
     	gift 			 = Gift.find(data["gift_id"])
-		template_name    = "purchase-receipt"
-		giver_name       = gift.giver_name 		#user/purchaser receiving the email
-		receiver_name    = gift.receiver_name	#person to whom the gift was sent
-		merchant_name    = gift.provider_name
-		gift_details     = GiftItem.items_for_email(gift)	# example string: "<ul><li>1 Budweiser</li><li>1 Shot Patron</li></ul>"
-		gift_total       = gift.total   		#monetary value. do not include dollar sign
-        processing_fee   = gift.service 		#monetary value. do not include dollar sign
-        grand_total      = gift.grand_total 	#monetary value. do not include dollar sign
-		template_content = [{"name" => "user_name", "content" => giver_name},
-							{"name" => "receiver_name", "content" => receiver_name},
-							{"name" => "merchant_name", "content" => merchant_name},
-							{"name" => "gift_details", "content" => gift_details},
-							{"name" => "gift_total", "content" => gift_total},
-							{"name" => "processing_fee", "content" => processing_fee},
-							{"name" => "grand_total", "content" => grand_total}]
-		subject          = "Your purchase is complete"
+		template_name    = "iom-gift-receipt"
+		subject          = "Your gift purchase is complete"
 		email            = gift.giver.email
-		name             = giver_name
+		name             = gift.giver_name
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
+		template_content = generate_template_content(gift, template_name)
 		message          = message_hash(subject, email, name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
     def send_recipient_gift_unopened recipient, receiver_name
     	###----> remind giver to remind recipient, after one month , cron job
-		template_name    = "recipient-gift-unopened"
+		template_name    = "iom-gift-unopened-giver"
 		user_name        = recipient.name #user/purchaser receiving the email
 		receiver_name    = #person to whom the gift was sent
 		template_content = [{"name" => "user_name", "content" => user_name},
-							{"name" => "receiver_name", "content" => receiver_name}]
+							          {"name" => "receiver_name", "content" => receiver_name},
+		                    {"name" => "service_name", "content" => SERVICE_NAME}]
 		subject          = "#{receiver_name} hasn't opened your gift"
 		email            = recipient.email
 		name             = recipient.name
@@ -93,9 +81,10 @@ module Emailer
 
     def send_reminder_hasnt_gifted recipient
     	###----> after month , user hasnt gifted , send this via cron
-		template_name    = "reminder-hasnt-gifted"
+		template_name    = "iom-gift-hasnt-gifted"
 		user_name        = recipient.name #user/purchaser receiving the email
-		template_content = [{"name" => "user_name", "content" => user_name}]
+		template_content = [{"name" => "user_name", "content" => user_name},
+		                    {"name" => "service_name", "content" => SERVICE_NAME}]
 		subject          = "Ready to take that first step?"
 		email            = recipient.email
 		name             = recipient.name
@@ -107,9 +96,10 @@ module Emailer
 
     def send_reminder_unused_gift recipient
     	###----> after a month , you have a gift you havent used , use it or re-gift it
-		template_name    = "reminder-unused-gift"
+		template_name    = "iom-gift-unopened-receiver"
 		user_name        = recipient.name #user/purchaser receiving the email
-		template_content = [{"name" => "user_name", "content" => user_name}]
+		template_content = [{"name" => "user_name", "content" => user_name},
+		                    {"name" => "service_name", "content" => SERVICE_NAME}]
 		subject          = "You have gifts waiting for you!"
 		email            = recipient.email
 		name             = recipient.name
@@ -125,10 +115,10 @@ private
 		email = whitelist_email(email)
 		message = {
 			"subject"     => subject,
-			"from_name"   => "Drinkboard",
-			"from_email"  => 'no-reply@drinkboard.com',
+			"from_name"   => "#{SERVICE_NAME}",
+			"from_email"  => "#{NO_REPLY_EMAIL}",
 			"to"          => [{"email" => email, "name" => name},
-				             {"email" => "info@drinkboard.com", "name" => ""}],
+				             {"email" => "#{INFO_EMAIL}", "name" => ""}],
 			"bcc_address" => bcc,
 			"merge_vars"  =>[
 				{
@@ -144,12 +134,32 @@ private
 		[{"name" => "link", "content" => link}]
 	end
 
+    def generate_template_content gift, template_name
+    	recipient_name   = gift.receiver_name
+    	giver_name       = gift.giver_name
+    	merchant_name    = gift.provider_name
+    	gift_details     = GiftItem.items_for_email(gift)
+    	gift_total       = gift.total
+		template_content = [{"name" => "receiver_name", "content" => recipient_name},
+							{"name" => "merchant_name", "content" => merchant_name},
+							{"name" => "gift_details", "content" => gift_details},
+							{"name" => "gift_total", "content" => gift_total},
+							{"name" => "service_name", "content" => SERVICE_NAME}]
+		if template_name == "iom-gift-notify-receiver"
+			template_content + [{"name" => "giver_name", "content" => giver_name}]
+		elsif template_name == "iom-gift-receipt"
+			template_content + [{"name" => "user_name", "content" => giver_name},
+				                {"name" => "processing_fee", "content" => gift.service},
+				                {"name" => "grand_total", "content" => gift.grand_total}]
+		end
+    end
+
 	def request_mandrill_with_template(template_name, template_content, message)
-		unless Rails.env.test? || Rails.env.development?
+		unless Rails.env.development?
 			puts "``````````````````````````````````````````````"
 			puts "Request Mandrill with #{template_name} #{template_content} #{message}"
 			require 'mandrill'
-			m = Mandrill::API.new
+			m = Mandrill::API.new(MANDRILL_APIKEY)
 			response = m.messages.send_template(template_name, template_content, message)
 
 			puts

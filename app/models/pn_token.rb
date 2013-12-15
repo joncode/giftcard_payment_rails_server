@@ -1,12 +1,13 @@
 class PnToken < ActiveRecord::Base
-    attr_accessible :pn_token, :user_id
+    #attr_accessible :pn_token, :user_id
 
     belongs_to :user
 
-    after_create :register
+    validates :pn_token, uniqueness: true, length: { minimum: 23 }
+    validates_presence_of :user_id
 
-    validates :pn_token, uniqueness: true
-    validates_presence_of :user_id, :pn_token
+
+    after_save :register
 
     def pn_token=(token)
         converted_token = convert_token(token)

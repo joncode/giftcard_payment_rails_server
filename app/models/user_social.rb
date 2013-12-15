@@ -1,13 +1,35 @@
 class UserSocial < ActiveRecord::Base
-    attr_accessible :identifier, :type_of, :user_id
+    #attr_accessible :identifier, :type_of, :user_id, :subscribed
 
     belongs_to :user
 
-    before_validation :reject_xxx_emails
-    validates_presence_of :identifier, :type_of, :user_id
-    after_save :update_mailchimp
+    before_validation     :reject_xxx_emails
 
-    default_scope where(active: true)
+    validates_presence_of :identifier, :type_of, :user_id
+
+    validates_with TypeIdValidator
+    validates :identifier , format: { with: VALID_PHONE_REGEX }, if: :is_phone
+    validates :identifier , format: { with: VALID_EMAIL_REGEX }, if: :is_email
+
+    after_create          :subscribe_mailchimp
+    after_save            :unsubscribe_mailchimp
+
+    default_scope -> { where(active: true) }  # indexed
+
+    def is_email
+        self.type_of == "email"
+    end
+
+    def is_phone
+        self.type_of == "phone"
+    end
+
+    def self.activate_all user
+        socials = user.user_socials
+        socials.each do |social|
+            social.activate
+        end
+    end
 
     def self.deactivate_all user
         socials = user.user_socials
@@ -16,17 +38,29 @@ class UserSocial < ActiveRecord::Base
         end
     end
 
+    def activate
+        self.update_attribute(:active, true)
+    end
+
     def deactivate
         self.update_attribute(:active, false)
     end
 
 private
 
-    def update_mailchimp
-        if Rails.env.production? || Rails.env.staging?
-        	if self.type_of  == "email"
+    def subscribe_mailchimp
+    	if self.type_of  == "email"
+            unless Rails.env.development?
                 Resque.enqueue(SubscriptionJob, self.id)
         	end
+        end
+    end
+
+    def unsubscribe_mailchimp
+        unless Rails.env.development?
+            if self.type_of  == "email" && !self.active
+                Resque.enqueue(SubscriptionJob, self.id)
+            end
         end
     end
 
@@ -34,6 +68,7 @@ private
         if self.type_of  == "email"
             if self.identifier && self.identifier[-3..-1] == "xxx"
                 self.identifier = nil
+                self.user_id    = nil
             end
         end
     end
@@ -51,5 +86,5 @@ end
 #  created_at :datetime        not null
 #  updated_at :datetime        not null
 #  active     :boolean         default(TRUE)
-#
+#  subscribed :boolean default false
 

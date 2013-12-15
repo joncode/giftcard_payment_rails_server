@@ -1,11 +1,12 @@
 class IphoneController < AppController
 
 	before_filter :authenticate_services,     only: [:regift]
-
+	rescue_from ActionController::ParameterMissing, :with => :bad_request
 	def create_account
 
-		data     = params["data"]
+		data     = permit_data_params
 		pn_token = params["pn_token"] || nil
+
 		#puts " Here is the PARAMS obj #{params}"
 
 		if data.nil?
@@ -44,13 +45,13 @@ class IphoneController < AppController
 		if email.blank? || password.blank?
 			response["error"]     = "Data not received."
 		else
-			user = User.find_by_email(email)
+			user = User.find_by(email: email)
 			if user && user.authenticate(password)
 				if user.active
 					user.pn_token       = pn_token if pn_token
 					response["user"]    = user.serialize(true)
 				else
-					response["error"]   = "We're sorry, this account has been suspended.  Please contact support@drinkboard.com for details"
+					response["error"]   = "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
 				end
 			else
 				response["error"]   = "Invalid email/password combination"
@@ -78,20 +79,23 @@ class IphoneController < AppController
 			response["error_iphone"] = "Data not received."
 		else
 			if origin == 'f'
-				user = User.find_by_facebook_id_and_active(facebook_id, true)
+				user = User.find_by(facebook_id: facebook_id)
 				msg  = "Facebook Account"
 				resp_key = "facebook"
 			else
-				user = User.find_by_twitter_and_active(twitter, true)
+				user = User.find_by(twitter: twitter)
 				msg  = "Twitter Account"
 				resp_key = "twitter"
 			end
 			if user
-				user.pn_token       = pn_token if pn_token
-				#response["server"]  = user.providers_to_iphone
-				response["user"]    = user.serialize(true)
+				if user.not_suspended?
+					user.pn_token       = pn_token if pn_token
+					response["user"]    = user.serialize(true)
+				else
+					response["error"] = "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
+				end
 			else
-				response[resp_key]  = "#{msg} not in Drinkboard database "
+				response[resp_key]  = "#{msg} not in #{SERVICE_NAME} database"
 			end
 		end
 
@@ -110,44 +114,26 @@ class IphoneController < AppController
 		end
 	end
 
-	def going_out
-
-			# send the button status in params["public"]
-			# going out is YES , returning home is NO
-		response  = {}
-		begin
-			user  = User.app_authenticate(token)
-			if    params["public"] == "YES"
-				user.update_attributes(is_public: true) if !user.is_public
-			elsif params["public"] == "NO"
-				user.update_attributes(is_public: false) if user.is_public
-			else
-				response["error_public"] = "did not receiver public params correctly"
-			end
-					# return the updated user.is_public value
-					# if params["public"] is not sent, is_public is not changed
-			response["public"] = user.is_public
-		rescue
-			response["error"] = "could not find user in database"
-		end
-
-		respond_to do |format|
-			logger.debug response
-			@app_response = "iPhoneC #{response}"
-			format.json { render json: response }
-		end
-	end
-
 	def regift
 
-        recipient_data = JSON.parse params["receiver"]
-        details 	   = JSON.parse params["data"]
-        gift_regifter  = GiftRegifter.new(recipient_data, details)
+        recipient_data = JSON.parse permit_receiver_params
+		unless recipient_data["twitter_id"].blank?
+			recipient_data["twitter"] = recipient_data["twitter_id"]
+			recipient_data.delete("twitter_id")
+		end
+        details 	   = JSON.parse permit_data_params
+        new_gift_hsh   = recipient_data.merge(details)
+        new_gift_hsh["old_gift_id"] = details["regift_id"]
+        new_gift_hsh.delete("regift_id")
 
-        if gift_regifter.create
-        	success gift_regifter.response
+        if gift_response = GiftRegift.create(new_gift_hsh)
+	        if gift_response.kind_of?(Gift)
+	            success gift_response.giver_serialize
+	        else
+	            fail gift_response
+	        end
         else
-        	fail  	gift_regifter.response
+        	fail  	gift_response.response
         end
         respond
 	end
@@ -178,7 +164,6 @@ class IphoneController < AppController
 
 	def locations
 
-		# @user  = User.find_by_remember_token(params["token"])
 		providers = Provider.all
 		menus     = {}
 		providers.each do |p|
@@ -202,17 +187,17 @@ class IphoneController < AppController
 		user  = User.app_authenticate(params["token"])
 		if user.class == User
 
-			if params["data"].kind_of? String
-				data_obj = JSON.parse params["data"]
+			if permit_data_params.kind_of? String
+				data_obj = JSON.parse permit_data_params
 			else
-				data_obj = params["data"]
+				data_obj = permit_data_params
 			end
 			puts "#{data_obj}"
 
 			if data_obj.nil? || data_obj["iphone_photo"].blank?
 				@app_response["error"]   = "Photo upload failed, please check your connetion and try again"
 			else
-				user.update_attributes(iphone_photo: data_obj["iphone_photo"], use_photo: "ios")
+				user.update_attributes(iphone_photo: data_obj["iphone_photo"])
 				if user.get_photo == data_obj["iphone_photo"]
 					@app_response["success"]      = "Photo Updated - Thank you!"
 				else
@@ -246,9 +231,23 @@ private
 		else
 			obj = data
 		end
+		obj.delete("use_photo")
+		obj.delete("origin")
 		puts "CREATE USER OBJECT parse = #{obj}"
-		# obj.symbolize_keys!
-		User.new(obj)
+		params["data"] = obj
+		User.new(user_params)
+	end
+
+    def permit_data_params
+        params.require(:data)
+    end
+
+    def permit_receiver_params
+    	params.require(:receiver)
+    end
+
+	def user_params
+		params.require(:data).permit(:first_name, :password, :last_name, :phone, :email, :origin, :iphone_photo, :password_confirmation,:facebook_id, :twitter, :twitter_id, :handle)
 	end
 
 end

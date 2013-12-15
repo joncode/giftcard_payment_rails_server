@@ -14,13 +14,18 @@ module CommonUtils
 		if request.headers['Mdot-Version']
 			puts "HERE IS THE Mdot-Version HEADER REQUEST #{request.headers['Mdot-Version']}"
 		end
-
+		if request.headers['Andriod-Version']
+			puts "HERE IS THE Andriod-Version HEADER REQUEST #{request.headers['Andriod-Version']}"
+		end
+		# puts "...................................................................................."
+		# puts request.headers.inspect
+		# puts "...................................................................................."
 		unless Rails.env.production?
 			if request.headers["HTTP_TKN"]
 				puts "HERE IS THE HEADER TOKEN #{request.headers["HTTP_TKN"]}"
 			end
 		end
-		
+
 	end
 
 
@@ -54,7 +59,7 @@ module CommonUtils
 		if @app_response
 			log_text = marshal_copy(@app_response)
 			resp 	 = "#{filter_params(log_text)}"
-			v 		 = "response: #{truncate(resp ,length: 600)}"
+			v 		 = "\nresponse: #{truncate(resp ,length: 600)}\n"
 			v.gsub!('&quot;', '\'')
 			v.gsub!('&gt;', '>')
 			puts v
@@ -62,12 +67,16 @@ module CommonUtils
 	end
 
 	def filter_params hash
-		hsh = hash
-		if hsh.kind_of? Hash
-			filters = FILTER_PARAMS + FILTER_PARAMS.map {|fp| fp.to_s }
-			filter_loop(hsh, filters)
+		if Rails.env.production?
+			hsh = hash
+			if hsh.kind_of? Hash
+				filters = FILTER_PARAMS + FILTER_PARAMS.map {|fp| fp.to_s }
+				filter_loop(hsh, filters)
+			end
+			hsh
+		else
+			hash
 		end
-		hsh
 	end
 
 	def filter_loop(hsh, filters)

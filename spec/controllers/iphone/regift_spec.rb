@@ -37,9 +37,20 @@ describe IphoneController do
             old_gift.phone = "5556778899"
             old_gift.save
             post :regift, format: :json, receiver: rec_json, "data"=>"{\"message\":\"Love you\",\"regift_id\":#{old_gift.id}}", "receiver"=>"{\"facebook_id\":\"690550062\",\"name\":\"Lauren Chavez\"}", "token"=> giver.remember_token
-            new_gift = Gift.where(regift_id: old_gift.id).first
+            new_gift = Gift.where(message: "Love you").first
             new_gift.receiver_name.should == "Lauren Chavez"
             new_gift.facebook_id.should   == "690550062"
+        end
+
+        it "should accept the 'twitter_id' key and change to twitter" do
+            giver.phone = "5556778899"
+            giver.save
+            old_gift.phone = "5556778899"
+            old_gift.save
+            post :regift, format: :json, receiver: rec_json, "data"=>"{\"message\":\"Love you\",\"regift_id\":#{old_gift.id}}", "receiver"=>"{\"twitter_id\":\"690550062\",\"name\":\"Lauren Chavez\"}", "token"=> giver.remember_token
+            new_gift = Gift.where(message: "Love you").first
+            new_gift.receiver_name.should == "Lauren Chavez"
+            new_gift.twitter.should   == "690550062"
         end
 
         it "should set the status of the old gift to regifted" do
@@ -52,13 +63,14 @@ describe IphoneController do
             post :regift, format: :json, receiver: rec_json, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
             new_gift = Gift.last
             new_gift.status.should == 'open'
+            new_gift.payable.should == old_gift
         end
 
         it "should set the status of 'social identifier only gift' to incomplete" do
             no_id_user     = FactoryGirl.build(:nobody, :id => nil )
             hsh_no_id_user = regift_hash(no_id_user).to_json
             post :regift, format: :json, receiver: hsh_no_id_user, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
-            new_gift = Gift.find_by_receiver_email(no_id_user.email)
+            new_gift = Gift.find_by(receiver_email: no_id_user.email)
             puts new_gift.inspect
             new_gift.status.should == 'incomplete'
         end
@@ -117,43 +129,49 @@ describe IphoneController do
         end
 
         {
-            email: "jon@gmail.com",
-            phone: "9173706969",
-            facebook_id: "123",
-            twitter: "999"
+            email: "jon@gmail.com"
+            # phone: "9173706969",
+            # facebook_id: "123",
+            # twitter: "999"
         }.stringify_keys.each do |type_of, identifier|
             it "should find user account for old #{type_of}" do
 
-                @user.update_attribute(type_of, "specials")
+                new_identifer = "5647873645"
                 if (type_of == "phone") || (type_of == "email")
                     key = "receiver_#{type_of}"
+                    if type_of == "email"
+                       new_identifer = "jbone@gmail.com"
+                    end
                 else
                     key = type_of
                 end
+                @user.update(type_of => new_identifer)
                 old_gift = FactoryGirl.create :regift, { key => identifier}
                 giver    = old_gift.giver
                 recipient_data = regift_hash(@user).to_json
                 post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
 
                 puts json.inspect
+
                 new_gift = Gift.find(json["data"]["gift_id"])
-                #binding.pry
+
                 new_gift.receiver_id.should == @user.id
                 new_gift.send(key).should_not == identifier
             end
 
             it "should look thru multiple unique ids for a user object with #{type_of}" do
-                @user.update_attribute(type_of, identifier)
+                @user.update(type_of => identifier)
                 old_gift = FactoryGirl.create :regift, gift_social_id_hsh
                 giver    = old_gift.giver
                 recipient_data = regift_hash(@user).to_json
                 post :regift, format: :json, receiver: recipient_data, data: { regift_id: old_gift.id, message: "New Regift Message" }.to_json , token: giver.remember_token
+
                 new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
 
             it "should look thru not full gift of unique ids for a user object with #{type_of}" do
-                @user.update_attribute(type_of, identifier)
+                @user.update(type_of => identifier)
                 missing_hsh = gift_social_id_hsh
                 if type_of == "phone"
                     missing_hsh["receiver_email"] = ""

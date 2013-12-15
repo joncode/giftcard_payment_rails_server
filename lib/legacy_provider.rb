@@ -10,7 +10,7 @@ module LegacyProvider
         live_ps     = 0
         ps.each do |p|
             if p.token
-                if merchant = Merchant.find_by_token(p.token)
+                if merchant = Merchant.find_by(token: p.token)
                     correct += 1
                     puts "provider #{log_obj(p)} correct | active = #{p.active} | live = `#{p.sd_location_id}`"
                 else
@@ -45,7 +45,7 @@ module LegacyProvider
         bad     = 0
         Provider.unscoped.each do |provider|
             total += 1
-            if merchant = Merchant.unscoped.find_by_token(provider.token)
+            if merchant = Merchant.unscoped.find_by(token: provider.token)
                 puts "CPORRECT #{provider.name}|#{provider.id} - adding merchant_id = #{merchant.id}"
                 provider.update_attribute(:merchant_id, merchant.id)
                 correct += 1

@@ -1,5 +1,6 @@
 FactoryGirl.define do
 
+
     factory :user do
         first_name                  "Jimmy"
         last_name                   "Basic"
@@ -42,6 +43,14 @@ FactoryGirl.define do
         sequence(:remember_token)   { |n| "nope#{n}" }
         sequence(:facebook_id)      { |n| "8ssa#{n}fd332" }
         sequence(:twitter)          { |n| "28sdd3s#{n}f6fd3" }
+    end
+
+    factory :simple_user, :class => 'User' do
+        first_name                  "Simple"
+        last_name                   "User"
+        password                    "specspec"
+        password_confirmation       "specspec"
+        sequence(:email)            { |n| "simple#{n}@gmail.com" }
     end
 
     factory :nonetwork, :class => 'User' do
@@ -98,7 +107,7 @@ FactoryGirl.define do
     factory :user_social do
         user_id     1
         type_of     "email"
-        identifier  "example@gmail.com"
+        sequence(:identifier)  { |n| "noone#{n}@gmail.com" }
     end
 
     factory :gift do |gift|
@@ -106,22 +115,29 @@ FactoryGirl.define do
         gift.giver_name      "Jon giver"
         gift.receiver_name   "Someone New"
         gift.provider        { FactoryGirl.create(:provider) }
-        gift.total           "100"
+        gift.value           "100"
         gift.service         "4"
-        gift.credit_card     4567890
+        gift.credit_card     { FactoryGirl.create(:visa).id }
         gift.shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
         gift.message         "Factory Message"
         gift.pay_stat       "charged"
+        gift.payable       { FactoryGirl.create(:sale)}
 
         factory :regift do |regift|
             regift.giver        { FactoryGirl.create(:giver) }
             regift.giver_name   "Jon giver"
             regift.receiver     { FactoryGirl.create(:regifter) }
             regift.receiver_name "Will Regifter"
-            regift.pay_type     "Sale"
-            regift.sale         { FactoryGirl.create(:sale) }
+
         end
 
+    end
+
+    factory :gift_item do |gi|
+        gi.menu_id    1
+        gi.price      "10"
+        gi.quantity   1
+        gi.name       "Beer"
     end
 
     factory :gift_no_association, :class => 'Gift' do
@@ -131,17 +147,62 @@ FactoryGirl.define do
         provider_id        10
         total           "100"
         service         "4"
+        pay_stat        "charged"
         credit_card     4567890
         shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
-        sale            { FactoryGirl.create(:sale)}
+        payable           { FactoryGirl.create(:sale)}
+
+        factory :gift_no_association_wtih_card do
+            credit_card { FactoryGirl.create(:card)}
+        end
+    end
+
+    factory :card do
+        csv   "434"
+        month "02"
+        name   "Plain Joseph"
+        nickname "Biz"
+        user_id   1
+        year  "2017"
+        number "4417121029961508"
+
+        factory :visa do
+            csv       "323"
+            month       "04"
+            name       "Ryter Treft"
+            nickname    "visa sauce"
+            user_id       521
+            year       "2018"
+            number       "4833160028519277"
+        end
+
+        factory :mastercard do
+            csv       "641"
+            month       "11"
+            name       "Rick Makrause"
+            nickname    "mastercard sauce"
+            user_id       247
+            year       "2017"
+            number       "5581588784751042"
+        end
+
+        factory :amex do
+            csv       "8042"
+            month       "02"
+            name       "Mak Odard"
+            nickname    "amex sauce"
+            user_id       612
+            year       "2016"
+            number       "371538495534000"
+        end
     end
 
     factory :sale do
         giver_id    1
-        gift_id     1
         resp_code   1
-        response    AuthResponse.new
-        transaction AuthTransaction.new
+        #response    AuthResponse.new
+        #transaction AuthTransaction.new
+        card_id    { FactoryGirl.create(:visa).id }
     end
 
     factory :order do |order|
@@ -175,13 +236,20 @@ FactoryGirl.define do
 
     factory :admin_user do
         sequence(:remember_token)    { |n|  "Token#{n}" }
+        sequence(:email)            { |n|  "tester#{n}@gmail.com" }
     end
 
     factory :brand do
-        name        "Starwood"
+        sequence(:name)    { |n| "Starwoodz#{n}" }
         website     "www.starwood.com"
         description "AMAZING!"
         photo       "res.cloudinary.com/drinkboard/images/kasdhfiaoewhfas.png"
+        next_view   "m"
+    end
+
+    factory :debt do
+        owner { FactoryGirl.create(:provider).biz_user}
+
     end
 
 end

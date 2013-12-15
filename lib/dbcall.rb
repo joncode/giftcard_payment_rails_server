@@ -7,7 +7,7 @@ module Dbcall
             # we split on ' ', # set first to first last to last
             user.first_name, user.last_name  = name.split(' ')
         else
-            # we assume its a drinkboard first.last@db email address
+            # we assume its a its on me first.last@db email address
             # we split on '@'
             name_part, email_part            = email.split('@')
             # then we split first half on '.' # set that equal to first name, last name
@@ -27,11 +27,11 @@ module Dbcall
     def delete_gifts_by_order_num order_num
         if order_num.kind_of? Array
             order_num.each do |o_num|
-                gift = Gift.find_by_order_num(o_num)
+                gift = Gift.find_by(order_num: o_num)
                 gift.destroy
             end
         elsif order_num.kind_of? String
-            gift = Gift.find_by_order_num(order_num)
+            gift = Gift.find_by(order_num: order_num)
             gift.destroy
         else
             "Sorry I cannot yet handle objects of type #{order_num.class}"

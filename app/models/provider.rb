@@ -1,41 +1,30 @@
 class Provider < ActiveRecord::Base
 	include Formatter
 
-	attr_accessible :address, :city, :description, :logo, :name,
-	:state, :user_id, :staff_id, :zip, :zinger, :phone, :email,
-	:twitter, :facebook, :website, :users, :photo, :photo_cache,
-	:logo_cache, :box, :box_cache, :portrait, :portrait_cache,
-	:sales_tax, :token, :image, :merchant_id,
-	:paused, :live, :mode, :latitude, :longitude
+	attr_accessor 	:menu
 
-	attr_accessible :crop_x, :crop_y, :crop_w, :crop_h, :menu
-	attr_accessor 	:crop_x, :crop_y, :crop_w, :crop_h, :menu
 
-	has_many   :orders
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
 	has_many   :sales
+	has_many   :orders
 	belongs_to :brands
 	belongs_to :merchant
-
-	mount_uploader :photo,    ProviderPhotoUploader
-	mount_uploader :logo,     ProviderLogoUploader
-	mount_uploader :box,      ProviderBoxUploader
-	mount_uploader :portrait, ProviderPortraitUploader
 
 	validates_presence_of 	:name, :city, :address, :zip , :state, :token
 	validates_length_of 	:state , 	:is => 2
 	validates_length_of 	:zip, 		:within => 5..10
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
-
-
+	
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
-    #after_save      :update_city_provider
 
-	default_scope where(active: true).where(paused: false).order("name ASC")
+	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
+    def biz_user
+        BizUser.find(self.id)
+    end
 #/---------------------------------------------------------------------------------------------/
 
 	def self.get_all
@@ -43,7 +32,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :city, :latitude, :longitude]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
@@ -63,7 +52,7 @@ class Provider < ActiveRecord::Base
 
 	def merchantize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :token, :address, :city, :state, :zip, :zinger, :description]
-		prov_hash["photo"] = self.get_image("photo")
+		prov_hash["photo"] = self.get_photo
 		return prov_hash
 	end
 
@@ -72,6 +61,7 @@ class Provider < ActiveRecord::Base
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
+		prov_hash["menu"]   	  = JSON.parse(self.menu_string.data)
 		prov_hash
 	end
 
@@ -147,33 +137,8 @@ class Provider < ActiveRecord::Base
 ######   PHOTO GETTERS
 
 	def get_photo
-		if image.blank?
-			if photo.blank?
-				MERCHANT_DEFAULT_IMG
-			else
-				photo.url
-			end
-		else
-			image
-		end
-	end
-
-	def get_image(flag)
-		image_url =
-			case flag
-			when "logo"
-				logo.url
-			when "portrait"
-				portrait.url
-			when "photo"
-				get_photo
-			else
-				box.url
-			end
-		if image_url.blank?
-			image_url = MERCHANT_DEFAULT_IMG
-		end
-		return image_url
+		return MERCHANT_DEFAULT_IMG if image.blank?
+		image
 	end
 
 private
@@ -185,7 +150,7 @@ private
 	def update_city_provider
 		city = self.city
     	new_providers_array = Provider.where(city: city).serialize_objs.to_json
-    	if old_city_provider = CityProvider.find_by_city(city)
+    	if old_city_provider = CityProvider.find_by(city: city)
     		old_city_provider.update_attribute(:providers_array, new_providers_array)
     	else
     		CityProvider.create(city:city, providers_array: new_providers_array)

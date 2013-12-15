@@ -1,0 +1,122 @@
+class GiftUtility
+
+    def messenger
+        Relay.send_push_notification @gift  if @gift.receiver_id
+        @gift.notify_receiver
+        @gift.invoice_giver                 if @gift.regift_id.nil?
+    end
+
+    def add_receiver
+            # add the receiver + receiver checks to the gift object
+        if @gift.receiver_id.nil?
+            add_receiver_object
+        else
+            # check that the receiver_id is active
+            if receiver = User.unscoped.find( @gift.receiver_id )
+                if receiver.active == false
+                    @resp["error"] = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+                    @gift.remove_receiver
+                else
+                    puts "\n Found an acitve user #{receiver.id} \n"
+                    @gift.add_receiver receiver
+                end
+            end
+        end
+    end
+
+    def add_receiver_from_hash(recipient_hsh)
+        recipient = make_user_with_hash(recipient_hsh)
+        if recipient.id.nil?
+            if not find_user_from_network_ids(recipient)
+                @gift.add_receiver recipient
+            end
+        else
+            if receiver = User.unscoped.find( recipient.id )
+                if receiver.active == false
+                    @resp["error"] = 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+                    @gift.remove_receiver
+                else
+                    puts "\n Found an active user #{receiver.id} \n"
+                    @gift.add_receiver receiver
+                end
+            end
+        end
+
+    end
+
+    def find_user_from_network_ids user_obj
+        unique_ids = [ ["phone", user_obj.phone], ["facebook_id", user_obj.facebook_id],["email", user_obj.email], ["twitter", user_obj.twitter ] ]
+        unique_ids.each do |unique_id|
+            if unique_id[1].present?
+                if find_user(unique_id[0], unique_id[1])
+                    return true
+                end
+            end
+        end
+        false
+    end
+
+    def add_receiver_object
+        search_gift = @gift
+        unique_ids = [ ["phone", search_gift.receiver_phone], ["facebook_id", search_gift.facebook_id],["email", search_gift.receiver_email], ["twitter", search_gift.twitter ] ]
+        unique_ids.each do |unique_id|
+            if unique_id[1].present?
+                if find_user(unique_id[0], unique_id[1])
+                    return true
+                end
+            end
+        end
+        false
+    end
+
+    def find_user type_of, unique_id
+        if receiver = User.find_by(type_of => unique_id)
+            puts "\n Found a user from the network details \n"
+            @gift.add_receiver receiver
+            @resp["receiver"] = receiver_info_resp(receiver)
+            @resp["origin"]   = type_of
+            return true
+        else
+            @resp["origin"]   = "NID"
+            return false
+        end
+    end
+
+    def make_user_with_hash(user_data_hash)
+        recipient               = User.new
+        recipient.id            = user_data_hash["receiver_id"]
+        recipient.first_name    = user_data_hash["name"]
+        recipient.email         = user_data_hash["email"]
+        recipient.phone         = user_data_hash["phone"]
+        recipient.facebook_id   = user_data_hash["facebook_id"]
+        recipient.twitter       = user_data_hash["twitter"]
+        return recipient
+    end
+
+    def convert_if_json params
+        if params.kind_of?(String)
+            JSON.parse(params)
+        elsif params.kind_of?(Hash) || params.kind_of?(Array)
+            params
+        else
+            nil
+        end
+    end
+
+    def stringify_if_ary_or_hsh params
+        if params.kind_of?(String)
+            params
+        elsif params.kind_of?(Hash) || params.kind_of?(Array)
+            params.to_json
+        else
+            nil
+        end
+    end
+
+    def receiver_info_resp receiver
+        { "receiver_id" => receiver.id, "receiver_name" => receiver.name, "receiver_phone" => receiver.phone }
+    end
+
+
+
+end

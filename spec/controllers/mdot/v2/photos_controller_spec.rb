@@ -1,0 +1,64 @@
+require 'spec_helper'
+
+describe Mdot::V2::PhotosController do
+
+    before(:each) do
+        unless user = User.find_by(remember_token: "USER_TOKEN")
+            user = FactoryGirl.create(:user)
+            user.update_attribute(:remember_token, "USER_TOKEN")
+        end
+        puts "---> user = #{user.inspect}"
+    end
+
+    describe :create do
+        it_should_behave_like("token authenticated", :post, :create)
+
+        it "should require an 'data' key" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :create, format: :json
+            rrc 400
+        end
+
+        it "should update user photo" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params_data = "http://res.cloudinary.com/drinkboard/image/upload/v1382464405/myg7nfaccypfaybffljo.jpg"
+            post :create, data: params_data, format: :json
+            user_new = User.find_by(remember_token: "USER_TOKEN")
+            user_new.iphone_photo.should == params_data
+            user_new.get_photo.should    == params_data
+        end
+
+        it "should return success msg when success" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params_data = "http://res.cloudinary.com/drinkboard/image/upload/v1382464405/myg7nfaccypfaybffljo.jpg"
+            post :create, data: params_data, format: :json
+            rrc(200)
+            json["status"].should == 1
+            response = json["data"]
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "birthday", "zip", "twitter", "facebook_id"]
+            compare_keys(response, keys)
+        end
+
+        it "should reject request if extra param keys" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params_data = "http://res.cloudinary.com/drinkboard/image/upload/v1382464405/myg7nfaccypfaybffljo.jpg"
+            post :create, data: params_data, format: :json, faker: "FAKE"
+            rrc 400
+        end
+
+        it "should send fail msgs when empty string or nil or hash" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params_data = ""
+            post :create, data: params_data, format: :json
+            rrc 400
+            params_data = nil
+            post :create, data: params_data, format: :json
+            rrc 400
+            params_data = { "iphone_photo" => "djafhweiufhoawe"}
+            post :create, data: params_data, format: :json
+            rrc 400
+        end
+    end
+
+end
+

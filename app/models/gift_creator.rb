@@ -21,11 +21,11 @@ class GiftCreator < GiftUtility
     def charge
         @gift.charge_card
         if @gift.save
-            if @gift.sale.resp_code == 1
+            if @gift.payable.resp_code == 1
                 @resp["success"]       = { "Gift_id" => @gift.id }
                 messenger
             else
-                @resp["error_server"]  = { "Credit Card" => @gift.sale.reason_text }
+                @resp["error_server"]  = { "Credit Card" => @gift.payable.reason_text }
             end
         else
             @resp["error_server"] = @gift.errors.messages
@@ -40,7 +40,7 @@ class GiftCreator < GiftUtility
         if @gift_hsh.kind_of?(Hash) && @shoppingCart_hsh.kind_of?(Array)
             return false
         else
-            @resp["error_server"] = database_error_gift
+            @resp["error_server"] = { "Data Transfer Error"   => "Please Retry Sending Gift" }
             return true
         end
     end

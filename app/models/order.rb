@@ -1,8 +1,6 @@
 class Order < ActiveRecord::Base
 	include Email
 
-	attr_accessible :gift_id, :redeem_code, :redeem_id, :server_code, :server_id, :provider_id, :employee_id
-
 	belongs_to  :provider
 	belongs_to  :redeem
 	belongs_to  :gift
@@ -76,7 +74,7 @@ private
 	end
 
 	def rewind_gift_status
-		self.gift.update_attributes({status: 'notified' , redeemed_at: nil, server_code: nil, order_num: nil})
+		self.gift.update_attributes({status: 'notified' , redeemed_at: nil, order_num: nil})
 		puts "UPDATE GIFT STATUS DELETED ORDER ID=#{self.id}, GiftID = #{self.gift.id} #{self.gift.status}"
 	end
 

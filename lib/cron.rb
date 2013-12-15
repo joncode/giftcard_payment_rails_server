@@ -1,7 +1,21 @@
+require 'json'
+
 module Urbanairship
     module ClassMethods
+
         def device_tokens
             do_request(:get, "/api/device_tokens/", :authenticate_with => :master_secret)
+        end
+
+        def log_request_and_response(request, response, time)
+            return if logger.nil?
+
+            time = (time * 1000).to_i
+            http_method = request.class.to_s.split('::')[-1]
+            new_body = response.body.inspect
+            short_body = truncate(new_body ,length: 600).gsub('&quot;', "\'")
+            logger.info "Urbanairship (#{time}ms): [#{http_method} #{request.path}, #{request.body}], [#{response.code}, #{short_body}]"
+            logger.flush if logger.respond_to?(:flush)
         end
     end
 end
@@ -19,6 +33,7 @@ module Cron
                     send_to_UA(pnt)
                 end
             elsif pnts.count == 1
+                puts "update #{user.id} | #{user.name}'s pn token"
                 send_to_UA(pnts.first)
             end
         end
@@ -34,13 +49,9 @@ module Cron
         pnts.each do |pnt|
             if ua_key_hsh.keys.include? pnt.pn_token
                 count += 1
-                puts "match #{count}"
+                #puts "match #{count}"
             else
-                print " Send new to UA ? -> (y/n) "
-                response = gets.chomp.downcase
-                if response == 'y'
-                    send_to_UA(pnt)
-                end
+                send_to_UA(pnt)
                 incorrect += 1
             end
         end
@@ -63,17 +74,12 @@ module Cron
                     pnt_alias = pnt.ua_alias
                     if pnt_alias == ua_alias
                         count += 1
-                        puts "match #{count}"
+                        #puts "match #{count}"
                     else
                         incorrect += 1
-                            # ask me for y/n to delete
-                        print "PnToken #{pnt.id} is #{ua_alias} -- should be #{pnt_alias} "
-                        print " Delete & Send new to UA ? -> (y/n) "
-                        #response = gets.chomp.downcase
-                        if true || response == 'y'
-                            Urbanairship.unregister_device(pnt.pn_token)
-                            send_to_UA(pnt)
-                        end
+                        puts "PnToken #{pnt.id} is #{ua_alias} -- should be #{pnt_alias} "
+                        Urbanairship.unregister_device(pnt.pn_token)
+                        send_to_UA(pnt)
                     end
                 end
             end
@@ -83,6 +89,12 @@ module Cron
         puts "Incorrect tokens are  = #{incorrect}"
     end
 
+    def test_ua
+        get_and_sort_ua_tokens
+        nil
+    end
+
+private
 
     def get_and_sort_ua_tokens
         ua_response = ua_device_tokens
@@ -95,8 +107,6 @@ module Cron
         end
         ua_key_hsh
     end
-
-private
 
     def send_to_UA pnt
         resp = Urbanairship.register_device(pnt.pn_token, :alias => pnt.ua_alias )

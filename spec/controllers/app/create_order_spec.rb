@@ -8,7 +8,7 @@ describe AppController do
 
     before(:each) do
         @gift = gift
-        @gift.add_giver(user)
+        @gift.add_receiver(user)
         @gift.save
     end
 

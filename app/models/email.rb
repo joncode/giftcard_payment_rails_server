@@ -18,7 +18,6 @@ module Email
 #######   Sale
 
     def notify_receiver
-        # self is sale
         gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil
         email     = gift.receiver_email || obj_email
@@ -36,8 +35,8 @@ module Email
     end
 
     def invoice_giver
-        # self is sale
         gift = self
+
         puts "emailing the gift giver for #{gift.id}"
 
         data = {"text"        => 'invoice_giver',
@@ -74,7 +73,6 @@ module Email
 ######    App Controller
 
     def send_reset_password_email user
-
         data = {"text"        => 'reset_password',
                 "user_id"     => user.id
                 }
@@ -85,7 +83,7 @@ private
 
     def route_email_system data
         puts "data in Email.rb #{data}"
-        if  Rails.env.production? || Rails.env.staging?
+        unless  Rails.env.development?
             Resque.enqueue(MailerJob, data)
         end
     end

@@ -24,7 +24,7 @@ class Web::V1::WebsitesController < JsonController
 
     def redo_confirm_email
         email = params[:email]
-        if user = User.find_by_email(email)
+        if user = User.find_by(email: email)
             user.init_confirm_email
             success email
         else

@@ -1,34 +1,34 @@
 class User < ActiveRecord::Base
+	include UserSerializers
 	include Formatter
 	include Email
 	include Utility
-
-	attr_accessible  :email, :password, :password_confirmation,
-	:photo, :photo_cache, :first_name, :last_name, :phone,
-	:address, :address_2, :city, :state, :zip, :credit_number,
-	:admin, :facebook_id, :facebook_access_token, :facebook_expiry,
-	:foursquare_id, :foursquare_access_token, :provider_id, :handle,
-	:server_code, :sex, :birthday, :is_public, :confirm,
-	:iphone_photo, :fb_photo, :use_photo, :secure_image, :origin, :twitter
-
-	# attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-	# attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
-
-	mount_uploader   :photo, UserAvatarUploader
-	mount_uploader   :secure_image, UserAvatarUploader
 
 	has_one  :setting
 	has_many :pn_tokens
 	has_many :brands
 	has_many :orders,    :through => :providers
-	has_many :gifts,     foreign_key: "giver_id"
+
 	has_many :sales
 	has_many :cards
 	has_many :answers
 	has_many :questions, :through => :answers
-	has_many :user_socials
+	has_many :user_socials, 	dependent: :destroy
+	#has_many :gifts,     foreign_key: "giver_id"
+    has_many :sent,       as: :giver,  class_name: Gift
+    has_many :received,   foreign_key: :receiver_id, class_name: Gift
 
 	has_secure_password
+
+    validates_with UserSocialValidator
+	validates :first_name, 	presence: true, length: {  maximum: 50 }
+	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
+	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
+	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
+	validates :password, 	length: { minimum: 6 },     on: :create
+	validates :password_confirmation, presence: true, 	on: :create
+	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
+	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
 	before_save { |user| user.email      = email.downcase }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
@@ -40,53 +40,15 @@ class User < ActiveRecord::Base
 	after_save    :persist_social_data
 	after_create  :init_confirm_email
 
-	validates :first_name, 	presence: true, 			length: { maximum: 50 }
-	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
-	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
-	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-	validates :password, 	length: { minimum: 6 },     on: :create
-	validates :password_confirmation, presence: true, 	on: :create
-	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
-	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
-
-	#default_scope where(active: true).where(perm_deactive: false) # indexed
-
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false).where(remember_token: token).first
 	end
 
 #/---------------------------------------------------------------------------------------------/
 
-	def serialize(token=false)
-		usr_hash  = self.serializable_hash only: ["first_name", "last_name" , "address" , "city" , "state" , "zip", "birthday", "sex", "remember_token", "email", "phone", "facebook_id", "twitter"]
-		usr_hash["photo"]   = self.get_photo
-		usr_hash["user_id"] = self.id.to_s
-		usr_hash.keep_if {|k, v| !v.nil? }
-		if !token
-			usr_hash.delete("remember_token")
-		end
-		usr_hash
+	def not_suspended?
+		self.active && !self.perm_deactive
 	end
-
-	def admt_serialize
-		usr_hash  = self.serializable_hash only: ["first_name", "last_name" ,  "zip", "birthday", "sex", "email", "phone", "created_at"]
-		usr_hash["photo"]   = self.get_photo
-		usr_hash["user_id"] = self.id.to_s
-		usr_hash["fb"]		= self.facebook_id_exists? ? "Yes" : "No"
-		usr_hash["twitter"] = self.twitter_exists? ? "Yes" : "No"
-		if self.first_name == "De-activated[app]"
-			usr_hash["active"]  = 2
-		else
-			usr_hash["active"]  = self.active ? 1 : 0
-		end
-		usr_hash.keep_if {|k, v| !v.nil? }
-		usr_hash
-	end
-
-	# def inspect
-	# 	#super
-	# 	"User ID = #{self.id} | Name = #{name} | email = #{self.email} | phone = #{self.phone} |  last = #{format_datetime(self.updated_at)} | since = #{format_date(self.created_at)} | active = #{self.active}\n"
-	# end
 
 	def ua_alias
 		adj_user_id     = self.id + NUMBER_ID
@@ -102,7 +64,7 @@ class User < ActiveRecord::Base
 ####### USER GETTERS AND SETTERS
 
 	def get_credit_card(card_id)
-		self.cards.select { |c| c.id == card_id}
+		self.cards.select { |c| c.id == card_id }
 	end
 
 			# custom setters and getters for formatting date to human looking date
@@ -142,52 +104,29 @@ class User < ActiveRecord::Base
 	alias_method :username, :name
 	alias_method :fullname, :name
 
+	def new_socials(user_hsh)
+		user_hsh.each do |key, value|
+			setter = "#{key}="
+			self.send(setter, value)
+		end
+		self
+	end
+
 ##################
 
 #######  PHOTO METHODS
 
-	def get_image(flag)
-		puts flag
-		if flag == 'secure_image'
-			self.get_secure_image
-		else
-			self.get_photo
-		end
-	end
-
 	def get_photo
-		case self.use_photo
-		when "cw"
-			self.photo.url
-		when "ios"
+		if self.iphone_photo && self.iphone_photo.length > 14
 			self.iphone_photo
-		when "fb"
-			self.fb_photo
 		else
-			if self.photo.blank?
-				"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
-			else
-				self.photo.url
-			end
-		end
-	end
-
-	def get_secure_image
-		if self.secure_image.blank?
-			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1362365994/rxnr2tqsee9fjydm8irz.jpg"
-		else
-			self.secure_image.url
+			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
 		end
 	end
 
 ##################
 
 #######  GIFT SCOPE METHODS
-
-	# def bill 8/5/13
-	# 	total = self.gifts.sum { |gift| gift.total.to_d }
-	# 	total > 0 ? total.to_digits : "0"
-	# end
 
 	def received
 		Gift.where(receiver_id: self.id)
@@ -218,6 +157,15 @@ class User < ActiveRecord::Base
         save
     end
 
+    def suspend
+    	self.toggle! :active
+    	if self.active == false
+			UserSocial.deactivate_all self
+		else
+			UserSocial.activate_all self
+		end
+    end
+
     def deactivate_social type_of, identifier
         # user get user_social record with identifier
         socials = self.user_socials.where(identifier: identifier)
@@ -240,7 +188,7 @@ class User < ActiveRecord::Base
 
 	def pn_token=(value)
 		value 		= PnToken.convert_token(value)
-		if pn_token = PnToken.find_by_pn_token(value)
+		if pn_token = PnToken.find_by(pn_token: value)
 			if pn_token.user_id != self.id
 				pn_token.user_id = self.id
 				pn_token.save
@@ -267,7 +215,7 @@ class User < ActiveRecord::Base
 #########   settings methods
 
 	def get_or_create_settings
-		if setting = Setting.find_by_user_id(self.id)
+		if setting = Setting.find_by(user_id: self.id)
 			return setting
 		else
 			return Setting.create(user_id: self.id)
@@ -296,7 +244,7 @@ class User < ActiveRecord::Base
 	end
 
 	def init_confirm_email
-		if Rails.env.production? || Rails.env.staging?
+		unless Rails.env.development?
 			if self.email
 				set_confirm_email
 				confirm_email
@@ -312,7 +260,9 @@ private
 
 	def persist_social_data
 
-		email_changed? and UserSocial.create(user_id: id, type_of: "email", identifier: email)
+		if email_changed? && (email[-3..-1] != "xxx")
+			UserSocial.create(user_id: id, type_of: "email", identifier: email)
+		end
 		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
 		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
 		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)
@@ -386,7 +336,7 @@ end
 #  id                      :integer         not null, primary key
 #  email                   :string(255)     not null
 #  admin                   :boolean         default(FALSE)
-#  photo                   :string(255)
+	#  photo                   :string(255)
 #  password_digest         :string(255)
 #  remember_token          :string(255)     not null
 #  created_at              :datetime        not null
@@ -413,10 +363,10 @@ end
 #  sex                     :string(255)
 #  is_public               :boolean
 #  facebook_auth_checkin   :boolean
-#  iphone_photo            :string(255)
-#  fb_photo                :string(255)
-#  use_photo               :string(255)
-#  secure_image            :string(255)
+	#  iphone_photo            :string(255)
+	#  fb_photo                :string(255)
+	#  use_photo               :string(255)
+	#  secure_image            :string(255)
 #  reset_token_sent_at     :datetime
 #  reset_token             :string(255)
 #  birthday                :date
