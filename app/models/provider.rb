@@ -21,7 +21,7 @@ class Provider < ActiveRecord::Base
 	mount_uploader :logo,     ProviderLogoUploader
 	mount_uploader :box,      ProviderBoxUploader
 	mount_uploader :portrait, ProviderPortraitUploader
-	
+
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
@@ -156,7 +156,8 @@ class Provider < ActiveRecord::Base
 		else
 			image
 		end
-	endprivate
+	end
+private
 
 	def make_menu_string
 	    MenuString.create(provider_id: self.id, data: "[]", menu: self.menu)
