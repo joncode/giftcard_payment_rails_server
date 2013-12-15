@@ -17,6 +17,11 @@ class Provider < ActiveRecord::Base
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
 
+	mount_uploader :photo,    ProviderPhotoUploader
+	mount_uploader :logo,     ProviderLogoUploader
+	mount_uploader :box,      ProviderBoxUploader
+	mount_uploader :portrait, ProviderPortraitUploader
+	
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
