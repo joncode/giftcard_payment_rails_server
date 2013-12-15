@@ -1,17 +1,14 @@
 class MoveRegiftDataToPayableOnGifts < ActiveRecord::Migration
   def up
-    # find all gifts that have been regifted
-    # gs = Gift.where(status: 'regifted')
-    # gs.each do |gift|
-    # # find all their children
-    #   child = gift.child
-    # # make the old gift the payable of the child
-    #   child.payable = gift
-    # set the old gift status - "complete_regifted"
-    # set any integer status
-    # set the old gift pay_stat - "charge_regifted"
-    # set any integer pay_stat
-    # confirm the pay stat of new gift is atleast pay stat of old gift
+      # moving the old gift onto the payable of the new gift
+    regifts = Gift.unscoped.where(status: "regifted")
+    regifts.each do |old_gift|
+        new_gift = Gift.find(old_gift.regift_id)
+        new_gift.payable = old_gift
+        unless new_gift.save
+            puts  "NEW GIFT FAIL --------- NEW GIFT FAIL --------- gift ID #{new_gift.id} ------------- NEW GIFT FAIL -------------- NEW GIFT FAIL\n"
+        end
+    end
   end
 
   def down

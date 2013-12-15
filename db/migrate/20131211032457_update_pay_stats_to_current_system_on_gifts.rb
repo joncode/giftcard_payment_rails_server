@@ -11,8 +11,7 @@ class UpdatePayStatsToCurrentSystemOnGifts < ActiveRecord::Migration
                 end
                 gift.save
             when "settled"
-                gift.pay_stat = "charge_settled"
-                gift.save
+
             when "unpaid"
 
             when "refunded"
