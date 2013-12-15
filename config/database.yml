@@ -1,7 +1,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: drinkboard_dev
+  database: drinkboard_dev_prod
   host: localhost
   pool: 5
   username: drinkboard
