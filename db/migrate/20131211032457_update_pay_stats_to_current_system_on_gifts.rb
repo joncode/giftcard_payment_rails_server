@@ -1,73 +1,73 @@
 class UpdatePayStatsToCurrentSystemOnGifts < ActiveRecord::Migration
     def up
-        gs = Gift.unscoped
-        gs.each do |gift|
-            case gift.pay_stat
-            when "charged"
-                if gift.status == 'regifted'
-                    gift.pay_stat = 'charge_regifted'
-                else
-                    gift.pay_stat = 'charge_unpaid'
-                end
-                gift.save
-            when "settled"
+        # gs = Gift.unscoped
+        # gs.each do |gift|
+        #     case gift.pay_stat
+        #     when "charged"
+        #         if gift.status == 'regifted'
+        #             gift.pay_stat = 'charge_regifted'
+        #         else
+        #             gift.pay_stat = 'charge_unpaid'
+        #         end
+        #         gift.save
+        #     when "settled"
 
-            when "unpaid"
+        #     when "unpaid"
 
-            when "refunded"
-                if gift.status == 'cancel'
-                    gift.pay_stat = 'refund_cancel'
-                else
-                    gift.pay_stat = 'refund_comp'
-                end
-                gift.save
-            when "void"
-                if gift.status == 'cancel'
-                    gift.pay_stat = 'refund_cancel'
-                else
-                    gift.pay_stat = 'refund_comp'
-                end
-                gift.save
-            else
-                puts "--------------------------------------------"
-                puts "INKNOWN PAY STAT  !!!!!"
-                puts "#{gift.pay_stat}"
-                puts "--------------------------------------------"
-                puts "--------------------------------------------"
-            end
+        #     when "refunded"
+        #         if gift.status == 'cancel'
+        #             gift.pay_stat = 'refund_cancel'
+        #         else
+        #             gift.pay_stat = 'refund_comp'
+        #         end
+        #         gift.save
+        #     when "void"
+        #         if gift.status == 'cancel'
+        #             gift.pay_stat = 'refund_cancel'
+        #         else
+        #             gift.pay_stat = 'refund_comp'
+        #         end
+        #         gift.save
+        #     else
+        #         puts "--------------------------------------------"
+        #         puts "INKNOWN PAY STAT  !!!!!"
+        #         puts "#{gift.pay_stat}"
+        #         puts "--------------------------------------------"
+        #         puts "--------------------------------------------"
+        #     end
 
-        end
+        # end
     end
 
     def down
-        gs = Gift.unscoped
-        gs.each do |gift|
-            case gift.pay_stat
-            when 'charge_regifted'
-                gift.pay_stat = 'charged'
-                gift.save
-            when "charge_unpaid"
-                gift.pay_stat = 'charged'
-                gift.save
-            when "charge_settled"
-                gift.pay_stat = "settled"
-                gift.save
-            when "unpaid"
+        # gs = Gift.unscoped
+        # gs.each do |gift|
+        #     case gift.pay_stat
+        #     when 'charge_regifted'
+        #         gift.pay_stat = 'charged'
+        #         gift.save
+        #     when "charge_unpaid"
+        #         gift.pay_stat = 'charged'
+        #         gift.save
+        #     when "charge_settled"
+        #         gift.pay_stat = "settled"
+        #         gift.save
+        #     when "unpaid"
 
-            when "refund_comp"
-                gift.pay_stat = 'refund'
-                gift.save
-            when "refund_cancel"
-                gift.pay_stat = 'refund'
-                gift.save
-            else
-                puts "--------------------------------------------"
-                puts "INKNOWN PAY STAT  !!!!!"
-                puts "#{gift.pay_stat}"
-                puts "--------------------------------------------"
-                puts "--------------------------------------------"
-            end
-        end
+        #     when "refund_comp"
+        #         gift.pay_stat = 'refund'
+        #         gift.save
+        #     when "refund_cancel"
+        #         gift.pay_stat = 'refund'
+        #         gift.save
+        #     else
+        #         puts "--------------------------------------------"
+        #         puts "INKNOWN PAY STAT  !!!!!"
+        #         puts "#{gift.pay_stat}"
+        #         puts "--------------------------------------------"
+        #         puts "--------------------------------------------"
+        #     end
+        # end
     end
 end
 

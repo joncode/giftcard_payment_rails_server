@@ -21,7 +21,7 @@ class Gift < ActiveRecord::Base
 
     before_validation :prepare_email
 
-	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :payable
+	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
 
     before_save { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
