@@ -127,6 +127,14 @@ class User < ActiveRecord::Base
 		end
 	end
 
+	def photo_changed?
+		false
+	end
+
+	def secure_image_changed?
+		false
+	end
+
 	def get_photo_old
 		case self.use_photo
 		when "cw"
