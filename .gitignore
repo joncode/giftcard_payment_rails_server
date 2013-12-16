@@ -27,6 +27,8 @@ capybara-*.html
 /docs/*
 .rvmrc
 latest.dump
+latest_prod_db.dump
+latest_staging_db.dump
 /log/newrelic_agent.log
 /config/database.yml
 
