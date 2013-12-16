@@ -5,6 +5,7 @@ module ProductionDbUpdate
         update_gifts
         regift_payables
         change_pay_stats
+        add_payment_error
         nil
     end
 
@@ -13,8 +14,19 @@ module ProductionDbUpdate
         nil
     end
 
-private
 
+
+    def add_payment_error
+        gs = Gift.unscoped
+        gs.each do |gift|
+            if ["unpaid", "declined", "duplicate"].include?(gift.status)
+                gift.status = "payment_error"
+                gift.save
+            end
+        end
+    end
+
+private
     def update_gifts
         gs = Gift.unscoped
         total = gs.count
