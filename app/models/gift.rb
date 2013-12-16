@@ -21,7 +21,7 @@ class Gift < ActiveRecord::Base
 
     before_validation :prepare_email
 
-	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :payable
+	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
 
     before_save { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
@@ -79,8 +79,12 @@ class Gift < ActiveRecord::Base
 	end
 
     def total
-        amount = self.value || super
-        string_to_cents amount
+        if self.respond_to?(:value)
+            amount = self.value || super
+            string_to_cents amount
+        else
+            string_to_cents super
+        end
     end
 
     def total= amount

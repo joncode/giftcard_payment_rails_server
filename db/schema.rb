@@ -24,40 +24,6 @@ ActiveRecord::Schema.define(version: 20131211041818) do
     t.datetime "updated_at",  null: false
   end
 
-  create_table "attachinary_files", force: true do |t|
-    t.integer  "attachinariable_id"
-    t.string   "attachinariable_type"
-    t.string   "scope"
-    t.string   "public_id"
-    t.string   "version"
-    t.integer  "width"
-    t.integer  "height"
-    t.string   "format"
-    t.string   "resource_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "attachinary_files", ["attachinariable_type", "attachinariable_id", "scope"], name: "by_scoped_parent", using: :btree
-
-  create_table "banks", force: true do |t|
-    t.integer  "merchant_id"
-    t.string   "aba"
-    t.string   "account_number"
-    t.string   "name"
-    t.string   "address"
-    t.string   "city",                  limit: 50
-    t.string   "state",                 limit: 2
-    t.string   "zip",                   limit: 16
-    t.string   "account_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "acct_type"
-    t.string   "country",                          default: "USA"
-    t.string   "public_account_number"
-    t.string   "public_aba"
-  end
-
   create_table "brands", force: true do |t|
     t.string   "name"
     t.string   "description"
@@ -116,21 +82,6 @@ ActiveRecord::Schema.define(version: 20131211041818) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
-
-  create_table "contacts", force: true do |t|
-    t.integer  "brand_id"
-    t.string   "address"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zip"
-    t.string   "name"
-    t.string   "email"
-    t.string   "phone"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "contacts", ["brand_id"], name: "index_contacts_on_brand_id", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
@@ -209,40 +160,6 @@ ActiveRecord::Schema.define(version: 20131211041818) do
   add_index "gifts", ["receiver_id"], name: "index_gifts_on_receiver_id", using: :btree
   add_index "gifts", ["status"], name: "index_gifts_on_status", using: :btree
 
-  create_table "invites", force: true do |t|
-    t.string   "invite_tkn"
-    t.string   "merchant_tkn"
-    t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "merchant_id"
-    t.string   "clearance",    default: "staff"
-    t.boolean  "active",       default: true
-    t.string   "code"
-    t.integer  "user_id"
-    t.integer  "rank",         default: 0
-    t.boolean  "general",      default: false
-  end
-
-  add_index "invites", ["invite_tkn"], name: "index_invites_on_invite_tkn", using: :btree
-  add_index "invites", ["merchant_id"], name: "index_invites_on_merchant_id", using: :btree
-
-  create_table "menu_items", force: true do |t|
-    t.string   "name"
-    t.integer  "section_id"
-    t.integer  "menu_id"
-    t.text     "detail"
-    t.string   "price"
-    t.string   "photo"
-    t.integer  "position"
-    t.boolean  "active",     default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "menu_items", ["menu_id"], name: "index_menu_items_on_menu_id", using: :btree
-  add_index "menu_items", ["section_id"], name: "index_menu_items_on_section_id", using: :btree
-
   create_table "menu_strings", force: true do |t|
     t.integer  "version"
     t.integer  "provider_id",   null: false
@@ -255,82 +172,6 @@ ActiveRecord::Schema.define(version: 20131211041818) do
   end
 
   add_index "menu_strings", ["provider_id"], name: "index_menu_strings_on_provider_id", using: :btree
-
-  create_table "merchant_tools", force: true do |t|
-    t.string   "token"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "merchant_tools", ["token"], name: "index_merchant_tools_on_token", using: :btree
-
-  create_table "merchants", force: true do |t|
-    t.string   "name"
-    t.string   "token"
-    t.string   "zinger"
-    t.text     "description"
-    t.boolean  "active",                                         default: true
-    t.string   "address"
-    t.string   "address_2"
-    t.string   "city",        limit: 50
-    t.string   "state",       limit: 2
-    t.string   "zip",         limit: 16
-    t.string   "phone",       limit: 20
-    t.string   "email"
-    t.string   "website"
-    t.string   "facebook"
-    t.string   "twitter"
-    t.string   "photo"
-    t.string   "logo"
-    t.decimal  "rate",                   precision: 8, scale: 3
-    t.decimal  "sales_tax",              precision: 8, scale: 3
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "setup",                                          default: "000010"
-    t.string   "image"
-    t.boolean  "pos",                                            default: false
-    t.boolean  "tou",                                            default: false
-    t.integer  "tz",                                             default: 0
-    t.boolean  "live",                                           default: false
-    t.boolean  "paused",                                         default: true
-    t.float    "latitude"
-    t.float    "longitude"
-  end
-
-  add_index "merchants", ["token"], name: "index_merchants_on_token", using: :btree
-
-  create_table "mock_payables", force: true do |t|
-    t.decimal  "amount"
-    t.integer  "status",            default: 0
-    t.integer  "merchant_id"
-    t.integer  "provider_id"
-    t.string   "name"
-    t.string   "address"
-    t.integer  "user_id"
-    t.string   "last_payment"
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.text     "json_ary_gift_ids"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mock_payables", ["merchant_id"], name: "index_mock_payables_on_merchant_id", using: :btree
-
-  create_table "operations", force: true do |t|
-    t.integer  "obj_id"
-    t.integer  "user_id"
-    t.integer  "status"
-    t.text     "note"
-    t.text     "response"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "type_of"
-    t.string   "model"
-  end
-
-  add_index "operations", ["obj_id"], name: "index_operations_on_obj_id", using: :btree
-  add_index "operations", ["user_id"], name: "index_operations_on_user_id", using: :btree
 
   create_table "orders", force: true do |t|
     t.integer  "redeem_id"
@@ -346,44 +187,12 @@ ActiveRecord::Schema.define(version: 20131211041818) do
 
   add_index "orders", ["gift_id"], name: "index_orders_on_gift_id", using: :btree
 
-  create_table "payables", force: true do |t|
-    t.decimal  "amount"
-    t.integer  "status",            default: 0
-    t.integer  "merchant_id"
-    t.integer  "provider_id"
-    t.string   "name"
-    t.string   "address"
-    t.integer  "user_id"
-    t.string   "last_payment"
-    t.datetime "start_date"
-    t.string   "payment_date"
-    t.datetime "end_date"
-    t.text     "json_ary_gift_ids"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "payables", ["merchant_id"], name: "index_payables_on_merchant_id", using: :btree
-  add_index "payables", ["status"], name: "index_payables_on_status", using: :btree
-
   create_table "pn_tokens", force: true do |t|
     t.integer "user_id"
     t.string  "pn_token"
   end
 
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
-
-  create_table "progresses", force: true do |t|
-    t.integer  "merchant_id"
-    t.integer  "profile",     default: 1
-    t.integer  "bank",        default: 0
-    t.integer  "photo",       default: 0
-    t.integer  "menu",        default: 0
-    t.integer  "staff",       default: 0
-    t.integer  "approval",    default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "providers", force: true do |t|
     t.string   "name",                                      null: false
@@ -472,16 +281,6 @@ ActiveRecord::Schema.define(version: 20131211041818) do
   end
 
   add_index "sales", ["provider_id"], name: "index_sales_on_provider_id", using: :btree
-
-  create_table "sections", force: true do |t|
-    t.string   "name"
-    t.integer  "position"
-    t.integer  "menu_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "sections", ["menu_id"], name: "index_sections_on_menu_id", using: :btree
 
   create_table "settings", force: true do |t|
     t.integer  "user_id"

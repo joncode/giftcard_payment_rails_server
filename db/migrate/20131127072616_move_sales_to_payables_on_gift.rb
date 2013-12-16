@@ -1,37 +1,41 @@
 class MoveSalesToPayablesOnGift < ActiveRecord::Migration
 
     def up
-        puts "-------------------------  if Gift.rb total is set to value \n"
-        puts " this WILL NOT WORK @!!!!!!!!!!!!!!!!!  in gift.rb ->  comment out  -> def total; blah; end"
-        puts " all giver_types must be set to User after this is done"
-        puts " all gift.value must equal the shoppingCart total "
-        puts " all gifts witha sale must have gift.payable set to Sale"
-
-
-        gs = Gift.unscoped
-        gs.each do |gift|
-            user_id    = gift.giver_id
-            user       = User.find(user_id)
-            gift.giver = user
-            gift.value = gift.total
-            sale = gift.sale
-            if sale
-                gift.payable = sale
-            end
-            gift.save
-        end
-
+        # gs = Gift.unscoped
+        # total = gs.count
+        # good = 0
+        # bad = 0
+        # save = 0
+        # gs.each do |gift|
+        #     gift.giver = User.unscoped.find(gift.giver_id)
+        #     gift.value = gift.total
+        #     puts "HERE IS VALUE ___________________ #{gift.value}"
+        #     payable = gift.sale
+        #     if payable
+        #       good += 1
+        #       gift.payable = payable
+        #     end
+        #     if  gift.save
+        #         puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        #         puts "#{gift.id} / #{gift.value} / #{gift.total} / #{gift.giver_type}"
+        #         save += 1
+        #     else
+        #       bad += 1
+        #         puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        #         puts "FAIL --------- FAIL --------- gift ID #{gift.id} #{gift.errors.full_messages} #{gift.status}------------- FAIL -------------- FAIL"
+        #         puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        #     end
+        # end
+        # puts "MOVE Giver type and value / make payable a sale"
+        # puts "Updated = #{good}"
+        # puts "Saved = #{save}"
+        # puts "Total = #{total}"
+        # puts "No Saves = #{bad}"
+        # tot = good + bad
+        # puts "Counted = #{tot}"
     end
 
     def down
-        gs = Gift.unscoped
-        gs.each do |gift|
-            sale = gift.payable
-            if sale
-                gift.sale = sale
-            end
-            gift.total = gift.value
-            gift.save
-        end
+        # nothing
     end
 end
