@@ -152,7 +152,7 @@ Drinkboard::Application.routes.draw do
 
           resources :brands,    only: [:create, :update]   # biz logic
 
-          resources :providers, only: [] do
+          resources :providers, only: [:create, :update] do
             member do
               post :update_mode             # biz logic
               post :deactivate              # biz logic
