@@ -42,7 +42,6 @@ GEM
     atomic (1.1.14)
     authorize-net (1.5.2)
       nokogiri (~> 1.4)
-    aws_cf_signer (0.1.2)
     bcrypt-ruby (3.1.2)
     builder (3.1.4)
     capybara (1.1.2)
@@ -52,17 +51,10 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
-    carrierwave (0.9.0)
-      activemodel (>= 3.2.0)
-      activesupport (>= 3.2.0)
-      json (>= 1.7)
     celluloid (0.15.2)
       timers (~> 1.1.0)
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
-    cloudinary (1.0.65)
-      aws_cf_signer
-      rest-client
     coderay (1.1.0)
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
@@ -240,8 +232,6 @@ DEPENDENCIES
   authorize-net
   bcrypt-ruby (~> 3.1.2)
   capybara (= 1.1.2)
-  carrierwave
-  cloudinary
   database_cleaner
   factory_girl
   guard
