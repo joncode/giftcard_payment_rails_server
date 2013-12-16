@@ -763,12 +763,30 @@ describe Mdot::V2::GiftsController do
 
         end
 
+        it "should create incomplete gift with phone BUG FIX" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            geep = FactoryGirl.create(:gift)
+            data         = {"receiver_name"=>"Stewart Christensen", "value"=>"7.00", "service"=>"0.35", "message"=>"Testing contact", "credit_card"=> @card.id, "provider_name"=>-1, "provider_id"=>geep.provider_id, "receiver_phone"=>"(702) 672-8462", "receiver_email"=>"stewart.christensen2@facebook.com"}
+            shoppingCart = [{"item_id"=>240, "item_name"=>"Dogfish Head 60 Minute", "price"=>"7", "quantity"=>1}]
+            post :create, format: :json, data: data, shoppingCart: shoppingCart
+            rrc(200)
+            json["status"].should == 1
+            json["data"].class.should == Hash
+            gift_id = json["data"]["gift_id"]
+            gift = Gift.find(gift_id)
+            gift.receiver_phone.should == "7026728462"
+            gift.receiver_name.should  == "Stewart Christensen"
+            gift.receiver_email.should == "stewart.christensen2@facebook.com"
+            gift.status.should == 'incomplete'
+            gift.pay_stat.should == 'charge_unpaid'
+        end
+
         {
             email: "jon@gmail.com",
             phone: "9173706969",
             facebook_id: "123",
             twitter: "999"
-        }.stringify_keys.each do |type_of, identifier|
+         }.stringify_keys.each do |type_of, identifier|
             it "should find user account for old #{type_of}" do
                 Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
                 Sale.any_instance.stub(:resp_code).and_return(1)
@@ -789,8 +807,6 @@ describe Mdot::V2::GiftsController do
                 new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
-
-
 
             it "should look thru multiple unique ids for a user object with #{type_of}" do
                 Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
