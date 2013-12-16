@@ -5,6 +5,7 @@ class Relay
 		def send_push_notification gift
 
 			if gift.receiver_id
+                puts "\nNotify Receiver via Push #{gift.receiver_name}"
 				Resque.enqueue(PushJob, gift.id)
 			end
 

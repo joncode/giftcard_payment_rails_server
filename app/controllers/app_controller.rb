@@ -685,7 +685,7 @@ private
         if params.require(:gift).kind_of?(String)
             pg = JSON.parse(params.require(:gift))
         else
-            params.require(:gift).permit( :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_email, :receiver_phone,:twitter, :facebook_id, :receiver_name,:provider_id,:credit_card, :total)
+            params.require(:gift).permit(:message, :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_email, :receiver_phone,:twitter, :facebook_id, :receiver_name, :provider_name, :provider_id,:credit_card, :total)
         end
     end
 end

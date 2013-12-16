@@ -118,7 +118,7 @@ private
         if params.require(:data).kind_of?(String)
             JSON.parse(params.require(:data))
         else
-            params.require(:data).permit(:message, :giver_id, :giver_name, :value, :service, :receiver_id, :receiver_name, :provider_id, :credit_card)
+            params.require(:data).permit(:message, :giver_id, :giver_name, :value, :service, :receiver_id, :receiver_email, :facebook_id, :twitter, :receiver_phone, :provider_name, :receiver_name, :provider_id, :credit_card)
         end
     end
 

@@ -24,7 +24,7 @@ module GiftSerializers
         gift_hsh["status"]             = self.receiver_status
         gift_hsh["shoppingCart"]       = self.shoppingCart #ary_of_shopping_cart_as_hash
         gift_hsh["giver_photo"]        = giver.get_photo
-        
+
         unless provider = provider = self.provider
             provider = Provider.unscoped.find(self.provider_id)
         end
@@ -47,7 +47,7 @@ module GiftSerializers
             gift_hsh["receiver_photo"]     = receiver.get_photo
         end
         unless provider = self.provider
-            provider = Provider.unscoped.find(self.provider_id)
+            provider = Provider.unscoped.where(id: self.provider_id).first
         end
         gift_hsh["provider_photo"]     = provider.get_photo
         gift_hsh["provider_phone"]     = provider.phone
