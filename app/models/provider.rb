@@ -27,6 +27,18 @@ class Provider < ActiveRecord::Base
 
 	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
+	def photo_changed?
+		false
+	end
+	def logo_changed?
+		false
+	end
+	def box_changed?
+		false
+	end
+	def portrait_changed?
+		false
+	end
     def biz_user
         BizUser.find(self.id)
     end
