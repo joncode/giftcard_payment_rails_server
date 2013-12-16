@@ -30,8 +30,8 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
-	mount_uploader   :photo, UserAvatarUploader
-	mount_uploader   :secure_image, UserAvatarUploader
+	# mount_uploader   :photo, UserAvatarUploader
+	# mount_uploader   :secure_image, UserAvatarUploader
 
 	before_save { |user| user.email      = email.downcase }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
@@ -127,30 +127,30 @@ class User < ActiveRecord::Base
 		end
 	end
 
-	def photo_changed?
-		false
-	end
+	# def photo_changed?
+	# 	false
+	# end
 
-	def secure_image_changed?
-		false
-	end
+	# def secure_image_changed?
+	# 	false
+	# end
 
-	def get_photo_old
-		case self.use_photo
-		when "cw"
-			self.photo.url
-		when "ios"
-			self.iphone_photo
-		when "fb"
-			self.fb_photo
-		else
-			if self.photo.blank?
-				"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
-			else
-				self.photo.url
-			end
-		end
-	end
+	# def get_photo_old
+	# 	case self.use_photo
+	# 	when "cw"
+	# 		self.photo.url
+	# 	when "ios"
+	# 		self.iphone_photo
+	# 	when "fb"
+	# 		self.fb_photo
+	# 	else
+	# 		if self.photo.blank?
+	# 			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+	# 		else
+	# 			self.photo.url
+	# 		end
+	# 	end
+	# end
 
 ##################
 
