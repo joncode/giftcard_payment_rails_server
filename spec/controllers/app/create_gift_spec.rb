@@ -21,8 +21,12 @@ describe AppController do
             Card.any_instance.stub(:decrypt!).and_return("4111000011110000")
             Card.any_instance.stub(:number).and_return("4111000011110000")
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => approved, :headers => {})
+            Sale.any_instance.stub(:resp_code).and_return(1)
+            Sale.any_instance.stub(:reason_code).and_return(1)
+            Sale.any_instance.stub(:reason_text).and_return("Transaction approved")
             params_hsh  = {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : #{@receiver.id},  \"message\" : \"\",  \"credit_card\" : #{@card.id},  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : #{@user.id}}","origin"=>"d","shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]","token"=> @token}
             post :create_gift, format: :json, gift: params_hsh["gift"] , shoppingCart: params_hsh["shoppingCart"], token: params_hsh["token"]
+            
             g_id = json["success"]["Gift_id"]
             gift = Gift.find g_id
             gift.giver_name.should == @user.name
@@ -49,7 +53,7 @@ describe AppController do
             facebook_id: "123",
             twitter: "999"
         }.stringify_keys.each do |type_of, identifier|
-            it "should find user account for old #{type_of}" do                
+            it "should find user account for old #{type_of}" do
                 # take a user , add an email
                 @user.update_attribute(type_of, identifier)
                 # then we hit create gift

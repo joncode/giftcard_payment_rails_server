@@ -16,10 +16,12 @@ class GiftSale < Gift
             return "We do not have that credit card on record.  Please choose a different card."
         end
         gift = super
-
-        gift.messenger
-
-        gift
+        if gift.pay_stat == "payment_error"
+            gift.payable.reason_text
+        else
+            gift.messenger
+            gift
+        end
     end
 
     def messenger

@@ -6,7 +6,35 @@ class Debt < ActiveRecord::Base
     validates :owner, presence: :true
 
     def success?
-        true
+        if self.id
+            true
+        else
+            false
+        end
+    end
+
+    def resp_code
+        if self.id
+            1
+        else
+            2
+        end
+    end
+
+    def reason_text
+        if self.id
+            "Transaction approved."
+        else
+            self.errors.full_messages
+        end
+    end
+
+    def reason_code
+        if self.id
+            1
+        else
+            2
+        end
     end
 
 end
