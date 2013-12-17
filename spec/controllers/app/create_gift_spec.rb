@@ -26,7 +26,7 @@ describe AppController do
             Sale.any_instance.stub(:reason_text).and_return("Transaction approved")
             params_hsh  = {"gift"=>"{  \"twitter\" : \"875818226\",  \"receiver_email\" : \"ta@ta.com\",  \"receiver_phone\" : \"2052920036\",  \"giver_name\" : \"Addis Dev\",  \"service\" : 0.5,  \"total\" : 10,  \"provider_id\" : 58,  \"receiver_id\" : #{@receiver.id},  \"message\" : \"\",  \"credit_card\" : #{@card.id},  \"provider_name\" : \"Artifice\",  \"receiver_name\" : \"Addis Dev\",  \"giver_id\" : #{@user.id}}","origin"=>"d","shoppingCart"=>"[{\"detail\":\"\",\"price\":10,\"item_name\":\"The Warhol\",\"item_id\":32,\"quantity\":1}]","token"=> @token}
             post :create_gift, format: :json, gift: params_hsh["gift"] , shoppingCart: params_hsh["shoppingCart"], token: params_hsh["token"]
-            
+
             g_id = json["success"]["Gift_id"]
             gift = Gift.find g_id
             gift.giver_name.should == @user.name
@@ -101,8 +101,7 @@ describe AppController do
                 new_gift.receiver_id.should == @user.id
             end
         end
-
-
+        
         # Git should validate total and service
 
     end
