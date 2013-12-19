@@ -45,29 +45,60 @@ describe User do
 				twitter: "999"
 		}.stringify_keys.each do |type_of, identifier|
 
-				it "should update when user saves new #{type_of} to user_social.rb" do
-						running {
-								@user.update_attribute("#{type_of}", identifier)
-						}.should change { UserSocial.count }.by(1)
-						user_social = UserSocial.last
-						user_social.identifier.should == identifier
-						user_social.type_of.should    == type_of
-						user_social.user_id.should    == @user.id
-				end
+			it "should update when user saves new #{type_of} to user_social.rb" do
+				running {
+						@user.update_attribute("#{type_of}", identifier)
+				}.should change { UserSocial.count }.by(1)
+				user_social = UserSocial.last
+				user_social.identifier.should == identifier
+				user_social.type_of.should    == type_of
+				user_social.user_id.should    == @user.id
+			end
 
-				it "should remove #{type_of} when user deletes #{type_of}" do
-						user = FactoryGirl.create :user, { "#{type_of}" => identifier }
-						user.deactivate_social("#{type_of}", identifier)
-						UserSocial.unscoped.find_by(identifier: identifier).active.should be_false
-				end
+			it "should remove #{type_of} when user deletes #{type_of}" do
+				user = FactoryGirl.create :user, { "#{type_of}" => identifier }
+				user.deactivate_social("#{type_of}", identifier)
+				UserSocial.unscoped.find_by(identifier: identifier).active.should be_false
+			end
 
-				it "should not create a new user social record if no new #{type_of} is submitted" do
-						# update a user without #{type_of} change
-						running {
-								@user.update_attributes({last_name: "change_me_not_id"})
-						}.should_not change { UserSocial.count }
+			it "should not create a new user social record if no new #{type_of} is submitted" do
+				# update a user without #{type_of} change
+				running {
+						@user.update_attributes({last_name: "change_me_not_id"})
+				}.should_not change { UserSocial.count }
 
-				end
+			end
+
+            it "should not allow saving a record that already exists for another user primary" do
+                other_user = FactoryGirl.create(:user, type_of => identifier)
+                @user.update( type_of => identifier)
+                @user.should have_at_least(1).error_on(type_of)
+                @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "you already have an account with that id, please use that to log in"]
+            end
+
+            it "should not allow saving a record that already exists for another user secondary" do
+                other_user = FactoryGirl.create(:user, type_of => identifier)
+                new_primary = "4568759687"
+                new_primary = "newprimary@gmail.com" if type_of == "email"
+                other_user.update(type_of => new_primary)
+                @user.update( type_of => identifier)
+
+                @user.should have_at_least(1).error_on(type_of)
+                @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error"]
+            end
+
+            it "should allow saving a record that already exists for another user secondary but deactivated" do
+                other_user = FactoryGirl.create(:user, type_of => identifier)
+                new_primary = "4568759687"
+                new_primary = "newprimary@gmail.com" if type_of == "email"
+                other_user.update(type_of => new_primary)
+                us = UserSocial.where( type_of: type_of, identifier: identifier).first
+                us.update(active: false)
+                @user.update( type_of => identifier)
+                @user.should have_at_least(0).error_on(type_of)
+                newus = UserSocial.where( type_of: type_of, identifier: identifier, active: true).first
+                newus.user_id.should == @user.id
+            end
 		end
 	end
 
@@ -109,7 +140,7 @@ describe User do
     context "pn_token management" do
 
         it "should hit urban airship endpoint when token created or updated" do
-             ResqueSpec.reset!
+            ResqueSpec.reset!
             MailerJob.stub(:perform).and_return(true)
             SubscriptionJob.stub(:perform).and_return(true)
             pnt  = "162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76"

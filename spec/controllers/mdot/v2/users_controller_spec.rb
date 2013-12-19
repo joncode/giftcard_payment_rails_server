@@ -70,6 +70,16 @@ describe Mdot::V2::UsersController do
             json["data"]["error"]["email"].should == ["is invalid"]
         end
 
+        it "should return duplicate user_social error when active user_socials already exist" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            other_user = FactoryGirl.create(:user, facebook_id: "keeper_other")
+            put :update, format: :json, data: { "facebook_id" => "keeper_other" }
+            rrc 400
+            json["status"].should == 0
+            json["data"].class.should    == Hash
+            json["data"]["error"]["facebook_id"].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "you already have an account with that id, please use that to log in"]
+        end
+
         {
             first_name: "Ray",
             last_name:  "Davies",

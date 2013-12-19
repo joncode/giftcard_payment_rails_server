@@ -24,6 +24,16 @@ ActiveRecord::Schema.define(version: 20131211041818) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "approvals", force: true do |t|
+    t.text     "request_str"
+    t.string   "unique_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "merchant_id"
+    t.integer  "status",      default: 0
+    t.string   "email"
+  end
+
   create_table "attachinary_files", force: true do |t|
     t.integer  "attachinariable_id"
     t.string   "attachinariable_type"
@@ -213,13 +223,12 @@ ActiveRecord::Schema.define(version: 20131211041818) do
     t.string   "invite_tkn"
     t.string   "merchant_tkn"
     t.string   "email"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "merchant_id"
-    t.string   "clearance",    default: "staff"
     t.boolean  "active",       default: true
     t.string   "code"
-    t.integer  "user_id"
     t.integer  "rank",         default: 0
     t.boolean  "general",      default: false
   end
@@ -255,6 +264,19 @@ ActiveRecord::Schema.define(version: 20131211041818) do
   end
 
   add_index "menu_strings", ["provider_id"], name: "index_menu_strings_on_provider_id", using: :btree
+
+  create_table "menus", force: true do |t|
+    t.string   "merchant_token"
+    t.text     "json"
+    t.integer  "merchant_id"
+    t.integer  "sys"
+    t.boolean  "edited"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "menus", ["merchant_id"], name: "index_menus_on_merchant_id", using: :btree
+  add_index "menus", ["merchant_token"], name: "index_menus_on_merchant_token", using: :btree
 
   create_table "merchant_tools", force: true do |t|
     t.string   "token"
@@ -348,7 +370,7 @@ ActiveRecord::Schema.define(version: 20131211041818) do
 
   create_table "payables", force: true do |t|
     t.decimal  "amount"
-    t.integer  "status",            default: 0
+    t.integer  "status",              default: 0
     t.integer  "merchant_id"
     t.integer  "provider_id"
     t.string   "name"
@@ -361,6 +383,7 @@ ActiveRecord::Schema.define(version: 20131211041818) do
     t.text     "json_ary_gift_ids"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "confirmation_number"
   end
 
   add_index "payables", ["merchant_id"], name: "index_payables_on_merchant_id", using: :btree

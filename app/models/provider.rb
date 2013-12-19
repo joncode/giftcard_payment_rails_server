@@ -16,12 +16,29 @@ class Provider < ActiveRecord::Base
 	validates_length_of 	:zip, 		:within => 5..10
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
-	
+
+	mount_uploader :photo,    ProviderPhotoUploader
+	mount_uploader :logo,     ProviderLogoUploader
+	mount_uploader :box,      ProviderBoxUploader
+	mount_uploader :portrait, ProviderPortraitUploader
+
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
 	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
+	def photo_changed?
+		false
+	end
+	def logo_changed?
+		false
+	end
+	def box_changed?
+		false
+	end
+	def portrait_changed?
+		false
+	end
     def biz_user
         BizUser.find(self.id)
     end
@@ -141,6 +158,17 @@ class Provider < ActiveRecord::Base
 		image
 	end
 
+	def get_photo_old
+		if image.blank?
+			if photo.blank?
+				MERCHANT_DEFAULT_IMG
+			else
+				photo.url
+			end
+		else
+			image
+		end
+	end
 private
 
 	def make_menu_string

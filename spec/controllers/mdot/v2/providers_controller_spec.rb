@@ -24,9 +24,8 @@ describe Mdot::V2::ProvidersController do
             json["status"].should == 1
             provider_id = json["data"]["provider_id"]
             provider_id.should == @provider.id
-            menu_json = json["data"]["menu"]
-            menu_json.class.should == String
-            menu = JSON.parse menu_json
+            menu = json["data"]["menu"]
+            menu.class.should == Array
             keys = ["section", "items"]
             menu.class.should == Array
             compare_keys(menu[0], keys)
