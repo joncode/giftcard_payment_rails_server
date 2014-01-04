@@ -85,7 +85,7 @@ module Emailer
 		user_name        = recipient.name #user/purchaser receiving the email
 		template_content = [{"name" => "user_name", "content" => user_name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		subject          = "Ready to take that first step?"
+		subject          = "ItsOnMe Is Ready to Fulfill Your Mobile Gifting Needs!"
 		email            = recipient.email
 		name             = recipient.name
 		link             = nil
