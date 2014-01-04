@@ -4,7 +4,7 @@ development:
   database: drinkboard_dev
   host: localhost
   pool: 5
-  username: jongutwillig
+  username: drinkboard
   password: drinkdrink
 
 test:
@@ -13,7 +13,7 @@ test:
   database: drinkboard_test
   host: localhost
   pool: 5
-  username: jongutwillig
+  username: drinkboard
   password: drinkdrink
 
 admt_development:
@@ -31,7 +31,7 @@ admt_test:
   database: admintools_test
   host: localhost
   pool: 5
-  username: jongutwillig
+  username: drinkboard
   password: drinkdrink
 
 mt_development:
@@ -49,5 +49,5 @@ mt_test:
   database: merchanttools_test
   host: localhost
   pool: 5
-  username: jongutwillig
+  username: drinkboard
   password: drinkdrink

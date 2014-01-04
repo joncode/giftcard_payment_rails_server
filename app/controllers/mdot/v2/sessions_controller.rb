@@ -9,7 +9,7 @@ class Mdot::V2::SessionsController < JsonController
             return nil if data_not_string?(input)
             return nil if data_blank?(input)
         end
-        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params['email']).references(:users).first
+        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params['email'].strip.downcase).references(:users).first
             @user = user_social.user
             if @user.not_suspended?
                 if @user.authenticate(params['password'])

@@ -46,8 +46,41 @@ describe Admt::V2::ProvidersController do
             merchant = new_provider.merchant
             merchant.active.should be_false
         end
-
     end
+
+    describe :update do
+        before do
+            @provider = FactoryGirl.create(:provider, name:"old_name", 
+                                                      address:"old address",
+                                                      city: "old city",
+                                                      state: "NY",
+                                                      zip: "22222", 
+                                                      phone: "2222222222",
+                                                      zinger: "old zinger",
+                                                      description: "old description")    
+        end
+      it "should update name" do
+        put :update, id: @provider.id, format: :json, data: {name: "new_name"}
+        @provider.reload
+        @provider.name.should == "new_name"
+      end
+      it "should update address" do
+        put :update, id: @provider.id, format: :json, data: {address: "new address"}
+        @provider.reload
+        @provider.address.should == "new address"
+      end
+      it "should update phone" do
+        put :update, id: @provider.id, format: :json, data: {phone: "3333333333"}
+        @provider.reload
+        @provider.phone.should == "3333333333"
+      end
+      it "should no update unacceptable attributes" do
+        put :update, id: @provider.id, format: :json, data: {live: true}
+        @provider.reload
+        @provider.live.should_not == true
+      end
+    end
+
 
     describe "#update_mode" do
 
