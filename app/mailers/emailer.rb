@@ -27,6 +27,18 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
 	end
 
+	def welcome data
+		user      = User.find(data["user_id"])
+		email     = user.id
+		user_name = user.name
+
+		template_name    = "iom-user-welcome"
+		subject          = "Welcome to ItsOnMe!"
+		template_content = [{"name" => "user_name", "content" => user_name}]
+		message          = message_hash(subject, email, user_name)
+		request_mandrill_with_template(template_name, template_content, message)
+	end
+
     def notify_receiver data
     	gift 			 = Gift.find(data["gift_id"])
 		template_name    = "iom-gift-notify-receiver"
