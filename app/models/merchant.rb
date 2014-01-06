@@ -19,4 +19,41 @@ class Merchant < Mtmodel
     end
 
 
-end
+end# == Schema Information
+#
+# Table name: merchants
+#
+#  id          :integer         not null, primary key
+#  name        :string(255)
+#  token       :string(255)
+#  zinger      :string(255)
+#  description :text
+#  active      :boolean         default(TRUE)
+#  address     :string(255)
+#  address_2   :string(255)
+#  city        :string(50)
+#  state       :string(2)
+#  zip         :string(16)
+#  phone       :string(20)
+#  email       :string(255)
+#  website     :string(255)
+#  facebook    :string(255)
+#  twitter     :string(255)
+#  photo       :string(255)
+#  logo        :string(255)
+#  rate        :decimal(8, 3)
+#  sales_tax   :decimal(8, 3)
+#  created_at  :datetime
+#  updated_at  :datetime
+#  setup       :string(255)     default("000010")
+#  image       :string(255)
+#  pos         :boolean         default(FALSE)
+#  tou         :boolean         default(FALSE)
+#  tz          :integer         default(0)
+#  live        :boolean         default(FALSE)
+#  paused      :boolean         default(TRUE)
+#  latitude    :float
+#  longitude   :float
+#  ein         :string(255)
+#
+

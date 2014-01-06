@@ -378,14 +378,17 @@ end
 #  order_num      :string(255)
 #  cat            :integer         default(0)
 #  active         :boolean         default(TRUE)
-#  stat           :integer
-#  pay_stat       :integer
+#  pay_stat       :string(255)
 #  pay_type       :string(255)
 #  pay_id         :integer
-#  notified_at    :datetime
-#  notified_at_tz :string(255)
 #  redeemed_at    :datetime
-#  redeemed_at_tz :string(255)
-#  server_code    :string(255)
+#  server         :string(255)
+#  payable_id     :integer
+#  payable_type   :string(255)
+#  giver_type     :string(255)
+#  value          :string(255)
+#  expires_at     :datetime
+#  refund_id      :integer
+#  refund_type    :string(255)
 #
 

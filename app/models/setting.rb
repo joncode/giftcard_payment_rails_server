@@ -57,5 +57,7 @@ end
 #  confirm_phone_token_sent_at :datetime
 #  confirm_email_token_sent_at :datetime
 #  reset_token_sent_at         :datetime
+#  gift_reminder               :boolean
+#  gift_not_received           :boolean
 #
 
