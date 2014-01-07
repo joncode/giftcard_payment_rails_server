@@ -14,11 +14,11 @@ class Reminder
 
 		users_with_received_gifts.each do |uid|
 			user = User.find(uid)
-			MailerJob.send_reminder_unused_gift(user) if user.setting.gift_reminder == true
+			MailerJob.reminder_gift_receiver(user) if user.setting.email_reminder_gift_receiver == true
 		end
 		users_with_sent_gifts.each do |uid|
 			user = User.find(uid)
-			MailerJob.send_reminder_gift_unopened(user) if user.setting.gift_not_received == true
+			MailerJob.reminder_gift_giver(user) if user.setting.email_reminder_gift_giver == true
 		end
 	end
 

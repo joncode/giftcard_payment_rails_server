@@ -21,10 +21,10 @@ describe Reminder do
 	end
 
     it "should send correct emails" do
-    	MailerJob.should_receive(:send_reminder_gift_unopened).with(@abe).and_return(true)
-    	MailerJob.should_receive(:send_reminder_gift_unopened).with(@bob).and_return(true)
-    	MailerJob.should_receive(:send_reminder_unused_gift).with(@bob).and_return(true)
-    	MailerJob.should_receive(:send_reminder_unused_gift).with(@cam).and_return(true)
+    	MailerJob.should_receive(:reminder_gift_giver).with(@abe).and_return(true)
+    	MailerJob.should_receive(:reminder_gift_giver).with(@bob).and_return(true)
+    	MailerJob.should_receive(:reminder_gift_receiver).with(@bob).and_return(true)
+    	MailerJob.should_receive(:reminder_gift_receiver).with(@cam).and_return(true)
     	Reminder.gift_reminder
     end
 

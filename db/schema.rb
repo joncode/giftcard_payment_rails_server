@@ -508,23 +508,23 @@ ActiveRecord::Schema.define(version: 20140106175250) do
 
   create_table "settings", force: true do |t|
     t.integer  "user_id"
-    t.boolean  "email_invoice",               default: true
-    t.boolean  "email_redeem",                default: true
-    t.boolean  "email_invite",                default: true
-    t.boolean  "email_follow_up",             default: true
-    t.boolean  "email_receiver_new",          default: true
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.boolean  "email_invoice",                default: true
+    t.boolean  "email_redeem",                 default: true
+    t.boolean  "email_invite",                 default: true
+    t.boolean  "email_follow_up",              default: true
+    t.boolean  "email_receiver_new",           default: true
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.string   "confirm_email_token"
     t.string   "confirm_phone_token"
     t.string   "reset_token"
-    t.boolean  "confirm_phone_flag",          default: false
-    t.boolean  "confirm_email_flag",          default: false
+    t.boolean  "confirm_phone_flag",           default: false
+    t.boolean  "confirm_email_flag",           default: false
     t.datetime "confirm_phone_token_sent_at"
     t.datetime "confirm_email_token_sent_at"
     t.datetime "reset_token_sent_at"
-    t.boolean  "gift_reminder",               default: true
-    t.boolean  "gift_not_received",           default: true
+    t.boolean  "email_reminder_gift_receiver", default: true
+    t.boolean  "email_reminder_gift_giver",    default: true
   end
 
   create_table "tags", force: true do |t|
