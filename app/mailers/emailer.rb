@@ -74,7 +74,7 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
-    def send_recipient_gift_unopened recipient, receiver_name
+    def reminder_gift_giver recipient, receiver_name
     	###----> remind giver to remind recipient, after one month , cron job
 		template_name    = "iom-gift-unopened-giver"
 		user_name        = recipient.name #user/purchaser receiving the email
@@ -91,7 +91,7 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
-    def send_reminder_hasnt_gifted recipient
+    def reminder_hasnt_gifted recipient
     	###----> after month , user hasnt gifted , send this via cron
 		template_name    = "iom-gift-hasnt-gifted"
 		user_name        = recipient.name #user/purchaser receiving the email
@@ -106,7 +106,7 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
-    def send_reminder_unused_gift recipient
+    def reminder_gift_receiver recipient
     	###----> after a month , you have a gift you havent used , use it or re-gift it
 		template_name    = "iom-gift-unopened-receiver"
 		user_name        = recipient.name #user/purchaser receiving the email

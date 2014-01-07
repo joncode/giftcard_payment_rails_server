@@ -300,7 +300,7 @@ describe AppController do
     describe :get_settings do
         it "should get the users settings and return json" do
             post :get_settings, format: :json, token: user.remember_token
-            keys    =  ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id"]
+            keys    =  ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id", "email_reminder_gift_receiver", "email_reminder_gift_giver"]
             rrc_old(200)
             hsh = json["success"]
             hsh.class.should == Hash

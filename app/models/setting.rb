@@ -10,7 +10,7 @@ class Setting < ActiveRecord::Base
 	validates :confirm_email_token, uniqueness: true, length: { minimum: 20 }, :if => :confirm_email_token_exists?
 
 	def app_serialize
-		self.serializable_hash only: [:user_id, :email_redeem, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new, :gift_reminder, :gift_not_received]
+		self.serializable_hash only: [:user_id, :email_redeem, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new, :email_reminder_gift_receiver, :email_reminder_gift_giver]
 	end
 
 	def generate_email_link
@@ -40,24 +40,24 @@ end
 #
 # Table name: settings
 #
-#  id                          :integer         not null, primary key
-#  user_id                     :integer
-#  email_invoice               :boolean         default(TRUE)
-#  email_redeem                :boolean         default(TRUE)
-#  email_invite                :boolean         default(TRUE)
-#  email_follow_up             :boolean         default(TRUE)
-#  email_receiver_new          :boolean         default(TRUE)
-#  created_at                  :datetime        not null
-#  updated_at                  :datetime        not null
-#  confirm_email_token         :string(255)
-#  confirm_phone_token         :string(255)
-#  reset_token                 :string(255)
-#  confirm_phone_flag          :boolean         default(FALSE)
-#  confirm_email_flag          :boolean         default(FALSE)
-#  confirm_phone_token_sent_at :datetime
-#  confirm_email_token_sent_at :datetime
-#  reset_token_sent_at         :datetime
-#  gift_reminder               :boolean
-#  gift_not_received           :boolean
+#  id                           :integer         not null, primary key
+#  user_id                      :integer
+#  email_invoice                :boolean         default(TRUE)
+#  email_redeem                 :boolean         default(TRUE)
+#  email_invite                 :boolean         default(TRUE)
+#  email_follow_up              :boolean         default(TRUE)
+#  email_receiver_new           :boolean         default(TRUE)
+#  created_at                   :datetime        not null
+#  updated_at                   :datetime        not null
+#  confirm_email_token          :string(255)
+#  confirm_phone_token          :string(255)
+#  reset_token                  :string(255)
+#  confirm_phone_flag           :boolean         default(FALSE)
+#  confirm_email_flag           :boolean         default(FALSE)
+#  confirm_phone_token_sent_at  :datetime
+#  confirm_email_token_sent_at  :datetime
+#  reset_token_sent_at          :datetime
+#  email_reminder_gift_receiver :boolean         default(TRUE)
+#  email_reminder_gift_giver    :boolean         default(TRUE)
 #
 
