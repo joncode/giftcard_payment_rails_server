@@ -39,7 +39,7 @@ class Mdot::V2::SettingsController < JsonController
 private
 
     def strong_param data_hsh
-        allowed = ["email_receiver_new","email_invite","email_redeem","email_invoice","email_follow_up"]
+        allowed = ["email_receiver_new", "email_invite", "email_redeem", "email_invoice", "email_follow_up", "gift_reminder", "gift_not_received"]
         data_hsh.select{ |k,v| allowed.include? k }
     end
 

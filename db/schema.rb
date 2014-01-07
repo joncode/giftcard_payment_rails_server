@@ -523,8 +523,8 @@ ActiveRecord::Schema.define(version: 20140106175250) do
     t.datetime "confirm_phone_token_sent_at"
     t.datetime "confirm_email_token_sent_at"
     t.datetime "reset_token_sent_at"
-    t.boolean  "gift_reminder"
-    t.boolean  "gift_not_received"
+    t.boolean  "gift_reminder",               default: true
+    t.boolean  "gift_not_received",           default: true
   end
 
   create_table "tags", force: true do |t|

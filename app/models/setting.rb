@@ -10,7 +10,7 @@ class Setting < ActiveRecord::Base
 	validates :confirm_email_token, uniqueness: true, length: { minimum: 20 }, :if => :confirm_email_token_exists?
 
 	def app_serialize
-		self.serializable_hash only: [:user_id, :email_redeem, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new]
+		self.serializable_hash only: [:user_id, :email_redeem, :email_invoice, :email_invite, :email_follow_up, :email_receiver_new, :gift_reminder, :gift_not_received]
 	end
 
 	def generate_email_link

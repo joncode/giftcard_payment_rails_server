@@ -9,7 +9,7 @@ describe Mdot::V2::SettingsController do
             @user = FactoryGirl.create(:user)
             @user.update_attribute(:remember_token, "USER_TOKEN")
         end
-        @keys = ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id"]
+        @keys = ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id", "gift_reminder", "gift_not_received"]
     end
 
     describe :index do
@@ -54,6 +54,26 @@ describe Mdot::V2::SettingsController do
             setting.email_receiver_new.should be_true
         end
 
+        it "should receive json'd gift email settings and update the record" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :update, format: :json, data: "{  \"gift_reminder\" : \"false\",  \"gift_not_received\" : \"false\"}"
+            rrc(200)
+            json["status"].should == 1
+            response = json["data"]
+            compare_keys(response, @keys)
+            setting = @user.setting
+            setting.reload
+            setting.gift_reminder.should be_false
+            setting.gift_not_received.should be_false
+            put :update, format: :json, data: "{  \"gift_reminder\" : \"true\",  \"gift_not_received\" : \"true\"}"
+            rrc(200)
+            json["status"].should == 1
+            compare_keys(response, @keys)
+            setting.reload
+            setting.gift_reminder.should be_true
+            setting.gift_not_received.should be_true
+        end
+
         it "should receive non-json'd settings and update the record" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params = {"email_receiver_new"=>false, "email_invite"=>false, "email_redeem"=>false, "email_invoice"=>false, "email_follow_up"=>false}
@@ -81,6 +101,29 @@ describe Mdot::V2::SettingsController do
             setting.email_invite.should be_true
             setting.email_follow_up.should be_true
             setting.email_receiver_new.should be_true
+        end
+
+        it "should receive non-json'd gift email settings and update the record" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params = { "gift_reminder" => false, "gift_not_received" => false }
+            put :update, format: :json, data: params
+            rrc(200)
+            json["status"].should == 1
+            response = json["data"]
+            compare_keys(response, @keys)
+            setting = @user.setting
+            setting.reload
+            setting.gift_reminder.should be_false
+            setting.gift_not_received.should be_false
+            params = { "gift_reminder" => true, "gift_not_received" => true }
+            put :update, format: :json, data: params
+            rrc(200)
+            json["status"].should == 1
+            response = json["data"]
+            compare_keys(response, @keys)
+            setting.reload
+            setting.gift_reminder.should be_true
+            setting.gift_not_received.should be_true
         end
 
         it "should not accept false keys and succeed silently" do
