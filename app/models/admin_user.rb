@@ -9,7 +9,12 @@ class AdminUser < Admtmodel
         end
     end
 
-end# == Schema Information
+    def giver
+        AdminGiver.find(self.id)
+    end
+end
+
+# == Schema Information
 #
 # Table name: users
 #

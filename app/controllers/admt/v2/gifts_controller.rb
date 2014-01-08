@@ -62,11 +62,36 @@ class Admt::V2::GiftsController < JsonController
         respond
     end
 
+    def create
+        return nil if collection_bad_request
+        return nil if data_not_hash?(params["data"])
+        allowed = ["receiver_name", "receiver_email", "shoppingCart", "message", "expires_at", "provider_id", "provider_name"]
+        return nil if reject_if_not_exactly(allowed)
+        convert_if_json(params["data"]["shoppingCart"])
+        gift_hsh = gift_create_params(allowed)
+        gift_hsh["giver"] = @admin_user.giver
+        gift = GiftAdmin.new(gift_hsh)
+        if gift.save
+            Relay.send_push_notification(gift)
+            gift.notify_receiver
+            success gift.promo_serialize
+        else
+            status = :bad_request
+            fail gift
+        end
+
+        respond(status)
+    end
+
 private
 
     def strong_param(data_hsh)
         allowed = [ "receiver_name" , "receiver_email",  "receiver_phone" ]
         data_hsh.select{ |k,v| allowed.include? k }
+    end
+
+    def gift_create_params allowed
+        params.require(:data).permit(allowed)
     end
 
     def gift_params
