@@ -20,11 +20,7 @@ class Admt::V2::UserSocialsController < JsonController
         if user_social && user_social.update(active: false)
             success user_social.serializable_hash
         else
-            if user_social
-                fail user_social.errors.full_messages
-            else
-                fail data_not_found
-            end
+            fail(user_social ? user_social : data_not_found)
         end
         respond
     end

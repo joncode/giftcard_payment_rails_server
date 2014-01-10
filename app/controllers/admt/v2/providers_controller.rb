@@ -7,7 +7,7 @@ class Admt::V2::ProvidersController < JsonController
         if provider.save
             success   "#{provider.name} was created"
         else
-            fail      provider.errors.full_messages
+            fail      provider
         end
         respond
     end
@@ -24,7 +24,7 @@ class Admt::V2::ProvidersController < JsonController
                 success   "#{provider.name} is now deactivated - Merchant tools site still active - please comtact Tech team"
             end
         else
-            fail      provider.errors.full_messages
+            fail      provider
         end
 
         respond
@@ -35,7 +35,7 @@ class Admt::V2::ProvidersController < JsonController
         if provider.update(provider_params)
             success   "#{provider.name} updated"
         else
-            fail      provider.errors.full_messages
+            fail      provider
         end
         respond        
     end
@@ -54,7 +54,7 @@ class Admt::V2::ProvidersController < JsonController
                     success   "#{provider.name} is now #{provider.mode.humanize} _ Merchant tools update failed - please contact Tech team"
                 end
             else
-                fail      provider.errors.full_messages
+                fail      provider
             end
         else
             fail "Incorrect merchant mode sent - < #{params[:data]} >"
