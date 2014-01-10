@@ -1,7 +1,7 @@
 class Mdot::V2::UsersController < JsonController
     include Email
-    before_filter :authenticate_customer, only: [:index, :update]
-    before_filter :authenticate_general_token, only: [:create, :reset_password]
+    before_action :authenticate_customer, only: [:index, :update]
+    before_action :authenticate_general_token, only: [:create, :reset_password]
 
     def index
         users = User.where(active: true)

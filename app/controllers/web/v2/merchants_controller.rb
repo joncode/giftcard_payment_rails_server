@@ -1,5 +1,5 @@
 class Web::V2::MerchantsController < JsonController
-    before_filter :authenticate_www_token
+    before_action :authenticate_www_token
 
     def show
 

@@ -1,6 +1,6 @@
 class Admt::V2::BrandsController < JsonController
 
-    before_filter :authenticate_admin_tools
+    before_action :authenticate_admin_tools
 
     def create
         brand_hsh = params["data"]

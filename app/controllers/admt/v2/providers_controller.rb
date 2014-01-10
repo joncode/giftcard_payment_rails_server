@@ -1,6 +1,6 @@
 class Admt::V2::ProvidersController < JsonController
 
-    before_filter :authenticate_admin_tools
+    before_action :authenticate_admin_tools
 
     def create
         provider = Provider.new(params[:data][:provider_params])

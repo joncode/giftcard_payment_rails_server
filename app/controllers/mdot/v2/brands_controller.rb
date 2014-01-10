@@ -1,5 +1,5 @@
 class Mdot::V2::BrandsController < JsonController
-    before_filter :authenticate_customer
+    before_action :authenticate_customer
 
     def index
         success(Brand.all.serialize_objs)

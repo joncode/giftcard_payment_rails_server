@@ -1,5 +1,5 @@
 class Mdot::V2::SessionsController < JsonController
-    before_filter :authenticate_general_token
+    before_action :authenticate_general_token
 
     rescue_from ActiveRecord::RecordInvalid, :with => :handle_rescue
 

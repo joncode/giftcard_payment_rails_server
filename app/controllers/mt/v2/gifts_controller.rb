@@ -1,5 +1,5 @@
 class Mt::V2::GiftsController < JsonController
-    before_filter :authenticate_merchant_tools
+    before_action :authenticate_merchant_tools
     rescue_from JSON::ParserError, :with => :bad_request
 
     def create
