@@ -83,6 +83,16 @@ ActiveRecord::Schema.define(version: 20140106175250) do
     t.datetime "updated_at",      null: false
   end
 
+  create_table "connections", force: true do |t|
+    t.integer  "giver_id"
+    t.integer  "receiver_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "connections", ["giver_id"], name: "index_connections_on_giver_id", using: :btree
+  add_index "connections", ["receiver_id"], name: "index_connections_on_receiver_id", using: :btree
+
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
     t.integer  "owner_id"
