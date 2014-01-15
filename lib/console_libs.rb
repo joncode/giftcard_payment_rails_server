@@ -10,6 +10,7 @@ require 'legacy_gift'
 require 'legacy_provider'
 require 'cron'
 require 'gift_console'
+require 'expiration'
 include Legacy
 include LegacyUser
 include LegacyGift
