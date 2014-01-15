@@ -8,7 +8,7 @@ class AdminGiver < Admtmodel
     end
 
     def get_photo
-        nil
+        "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
     end
 
     def incur_debt amount
