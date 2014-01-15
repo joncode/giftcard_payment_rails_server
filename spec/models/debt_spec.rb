@@ -52,6 +52,9 @@ end
 #  id         :integer         not null, primary key
 #  owner_id   :integer
 #  owner_type :string(255)
+#  amount     :decimal(8, 2)
+#  total      :decimal(8, 2)
+#  detail     :string(255)
 #  created_at :datetime
 #  updated_at :datetime
 #

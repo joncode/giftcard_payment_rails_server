@@ -134,7 +134,7 @@ Drinkboard::Application.routes.draw do
   namespace :admt, defaults: { format: 'json' } do
       namespace :v2 do
 
-          resources :gifts,     only: [:update] do         # biz logic
+          resources :gifts,     only: [:update, :create] do         # biz logic
             member do
               post :refund                  # biz logic
               post :refund_cancel           # biz logic
@@ -149,12 +149,12 @@ Drinkboard::Application.routes.draw do
               post :deactivate_gifts
             end
           end
-    
+
           resources :user_socials, only: [:create, :update]
 
           resources :brands,    only: [:create, :update]   # biz logic
 
-          resources :providers, only: [] do
+          resources :providers, only: [:create, :update] do
             member do
               post :update_mode             # biz logic
               post :deactivate              # biz logic

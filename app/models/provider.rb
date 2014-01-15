@@ -199,7 +199,6 @@ end
 #  city           :string(32)
 #  state          :string(2)
 #  zip            :string(16)
-#  logo           :string(255)
 #  created_at     :datetime        not null
 #  updated_at     :datetime        not null
 #  phone          :string(255)
@@ -207,19 +206,16 @@ end
 #  twitter        :string(255)
 #  facebook       :string(255)
 #  website        :string(255)
-#  photo          :string(255)
 #  sales_tax      :string(255)
 #  active         :boolean         default(TRUE)
-#  portrait       :string(255)
-#  box            :string(255)
 #  latitude       :float
 #  longitude      :float
 #  foursquare_id  :string(255)
 #  rate           :decimal(, )
 #  menu_is_live   :boolean         default(FALSE)
-#  sd_location_id :integer
 #  brand_id       :integer
 #  building_id    :integer
+#  sd_location_id :integer
 #  token          :string(255)
 #  tools          :boolean         default(FALSE)
 #  image          :string(255)

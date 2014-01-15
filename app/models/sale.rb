@@ -67,3 +67,4 @@ end
 #  reason_text    :string(255)
 #  reason_code    :integer
 #
+

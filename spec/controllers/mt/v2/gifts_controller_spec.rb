@@ -78,6 +78,7 @@ describe Mt::V2::GiftsController do
         end
 
         it "should send an email to the receiver_email" do
+            ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
 
             create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "expires_at"=>"2014-06-12 06:59:59 UTC"}
@@ -106,7 +107,7 @@ describe Mt::V2::GiftsController do
             create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "expires_at"=>"2014-06-12 06:59:59 UTC"}
             post :create, format: :json, data: create_hsh
             rrc 200
-            
+
             good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             run_delayed_jobs

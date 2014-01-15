@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131211041818) do
+ActiveRecord::Schema.define(version: 20140106175250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,16 @@ ActiveRecord::Schema.define(version: 20131211041818) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
+
+  create_table "connections", force: true do |t|
+    t.integer  "giver_id"
+    t.integer  "receiver_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "connections", ["giver_id"], name: "index_connections_on_giver_id", using: :btree
+  add_index "connections", ["receiver_id"], name: "index_connections_on_receiver_id", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
@@ -284,21 +294,23 @@ ActiveRecord::Schema.define(version: 20131211041818) do
 
   create_table "settings", force: true do |t|
     t.integer  "user_id"
-    t.boolean  "email_invoice",               default: true
-    t.boolean  "email_redeem",                default: true
-    t.boolean  "email_invite",                default: true
-    t.boolean  "email_follow_up",             default: true
-    t.boolean  "email_receiver_new",          default: true
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.boolean  "email_invoice",                default: true
+    t.boolean  "email_redeem",                 default: true
+    t.boolean  "email_invite",                 default: true
+    t.boolean  "email_follow_up",              default: true
+    t.boolean  "email_receiver_new",           default: true
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.string   "confirm_email_token"
     t.string   "confirm_phone_token"
     t.string   "reset_token"
-    t.boolean  "confirm_phone_flag",          default: false
-    t.boolean  "confirm_email_flag",          default: false
+    t.boolean  "confirm_phone_flag",           default: false
+    t.boolean  "confirm_email_flag",           default: false
     t.datetime "confirm_phone_token_sent_at"
     t.datetime "confirm_email_token_sent_at"
     t.datetime "reset_token_sent_at"
+    t.boolean  "email_reminder_gift_receiver", default: true
+    t.boolean  "email_reminder_gift_giver",    default: true
   end
 
   create_table "tags", force: true do |t|

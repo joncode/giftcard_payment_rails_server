@@ -1,12 +1,15 @@
 require 'spec_helper'
 
-describe GiftPromo do
+describe GiftAdmin do
 
     before(:each) do
         Provider.delete_all
         @provider = FactoryGirl.create(:provider)
+        @admin    = FactoryGirl.create(:admin_user)
+        @giver    = @admin.giver
         @gift_hsh = {}
-        @gift_hsh["message"]        = "here is the promo gift"
+        @gift_hsh["giver"]          = @giver
+        @gift_hsh["message"]        = "here is the admin gift"
         @gift_hsh["receiver_name"]  = "Customer Name"
         @gift_hsh["receiver_email"] = "customer@gmail.com"
         @gift_hsh["provider_id"]    = @provider.id
@@ -16,14 +19,14 @@ describe GiftPromo do
 
     it "should create gift" do
 
-        gift_promo = GiftPromo.create(@gift_hsh)
-        gift_promo.class.should    == GiftPromo
-        gift_promo.message.should        == @gift_hsh["message"]
-        gift_promo.receiver_name.should  == "Customer Name"
-        gift_promo.receiver_email.should == "customer@gmail.com"
-        gift_promo.provider_id.should    == @provider.id
-        gift_promo.provider_name.should  == @provider.name
-        gift = Gift.find(gift_promo.id)
+        gift_admin = GiftAdmin.create(@gift_hsh)
+        gift_admin.class.should    == GiftAdmin
+        gift_admin.message.should        == @gift_hsh["message"]
+        gift_admin.receiver_name.should  == "Customer Name"
+        gift_admin.receiver_email.should == "customer@gmail.com"
+        gift_admin.provider_id.should    == @provider.id
+        gift_admin.provider_name.should  == @provider.name
+        gift = Gift.find(gift_admin.id)
         gift.class.should          == Gift
         gift.message.should        == @gift_hsh["message"]
         gift.receiver_name.should  == "Customer Name"
@@ -32,42 +35,29 @@ describe GiftPromo do
         gift.provider_name.should  == @provider.name
     end
 
-    it "should not run add provider if it has provider ID and name" do
-        Gift.any_instance.should_not_receive(:add_provider_name)
-        gift_promo = GiftPromo.create @gift_hsh
-    end
-
-    it "should add the provider name to the gift" do
-        @gift_hsh.delete("provider_name")
-        Gift.any_instance.should_receive(:add_provider_name)
-        gift_promo = GiftPromo.create @gift_hsh
-    end
-
-    it "should set the giver info to the BizUser" do
-        biz_user = BizUser.find(@provider.id)
-        gift = GiftPromo.create @gift_hsh
+    it "should set the giver to 'ItsOnMe Staff' giver" do
+        gift = GiftAdmin.create @gift_hsh
         gift.reload
-        gift.giver_id.should   == biz_user.id
-        gift.giver_name.should == biz_user.name
-        gift.giver.should      == biz_user
-        gift.giver_type.should == biz_user.class.to_s
+        gift.giver_id.should   == @admin.id
+        gift.giver_name.should == @giver.name
+        gift.giver.should      == @giver
+        gift.giver_type.should == @giver.class.to_s
     end
 
-    it "should create a Debt for the BizUser and associate" do
-        gift = GiftPromo.create @gift_hsh
+    it "should create a Debt for the AdminUser and associate" do
+        gift = GiftAdmin.create @gift_hsh
         gift.reload
         gift.value.should           == "30"
-        gift.payable.owner.should   == @provider.biz_user
-        gift.payable.amount.should  == BigDecimal("4.50")
+        gift.payable.owner.should   == @giver
+        gift.payable.amount.should  == BigDecimal("30")
     end
 
     it "should calculate the correct value from the shoppingCart" do
         @gift_hsh.delete("value")
-        gift = GiftPromo.create @gift_hsh
+        gift = GiftAdmin.create @gift_hsh
         gift.reload
         gift.value.should           == "30"
-        gift.payable.owner.should   == @provider.biz_user
-        gift.payable.amount.should  == BigDecimal("4.50")
+        gift.payable.amount.should  == BigDecimal("30")
     end
 
     xit "should set the expiration date" do

@@ -27,6 +27,18 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
 	end
 
+	def welcome data
+		user      = User.find(data["user_id"])
+		email     = user.id
+		user_name = user.name
+
+		template_name    = "iom-user-welcome"
+		subject          = "Welcome to ItsOnMe!"
+		template_content = [{"name" => "user_name", "content" => user_name}]
+		message          = message_hash(subject, email, user_name)
+		request_mandrill_with_template(template_name, template_content, message)
+	end
+
     def notify_receiver data
     	gift 			 = Gift.find(data["gift_id"])
 		template_name    = "iom-gift-notify-receiver"
@@ -62,7 +74,7 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
-    def send_recipient_gift_unopened recipient, receiver_name
+    def reminder_gift_giver recipient, receiver_name
     	###----> remind giver to remind recipient, after one month , cron job
 		template_name    = "iom-gift-unopened-giver"
 		user_name        = recipient.name #user/purchaser receiving the email
@@ -79,13 +91,13 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
-    def send_reminder_hasnt_gifted recipient
+    def reminder_hasnt_gifted recipient
     	###----> after month , user hasnt gifted , send this via cron
 		template_name    = "iom-gift-hasnt-gifted"
 		user_name        = recipient.name #user/purchaser receiving the email
 		template_content = [{"name" => "user_name", "content" => user_name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		subject          = "Ready to take that first step?"
+		subject          = "ItsOnMe Is Ready to Fulfill Your Mobile Gifting Needs!"
 		email            = recipient.email
 		name             = recipient.name
 		link             = nil
@@ -94,7 +106,7 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
-    def send_reminder_unused_gift recipient
+    def reminder_gift_receiver recipient
     	###----> after a month , you have a gift you havent used , use it or re-gift it
 		template_name    = "iom-gift-unopened-receiver"
 		user_name        = recipient.name #user/purchaser receiving the email

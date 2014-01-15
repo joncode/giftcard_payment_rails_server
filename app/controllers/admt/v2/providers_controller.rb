@@ -30,6 +30,16 @@ class Admt::V2::ProvidersController < JsonController
         respond
     end
 
+    def update
+        provider = Provider.unscoped.find(params[:id])
+        if provider.update(provider_params)
+            success   "#{provider.name} updated"
+        else
+            fail      provider.errors.full_messages
+        end
+        respond        
+    end
+
     def update_mode
         mode = ["live", "coming_soon", "paused"]
         if mode.include?(params[:data])
@@ -51,5 +61,12 @@ class Admt::V2::ProvidersController < JsonController
         end
         respond
     end
+
+    private
+
+    def provider_params
+        params.require(:data).permit(:name, :address, :city, :state, :zip, :phone, :zinger, :description)
+    end
+
 
 end

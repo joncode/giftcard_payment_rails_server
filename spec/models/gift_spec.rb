@@ -9,57 +9,62 @@ describe Gift do
 	end
 
 	it "requires giver" do
-	  gift = FactoryGirl.build(:gift, :giver => nil)
-	  gift.should_not be_valid
-	  gift.should have_at_least(1).error_on(:giver)
+		gift = FactoryGirl.build(:gift, :giver => nil)
+		gift.should_not be_valid
+		gift.should have_at_least(1).error_on(:giver)
 	end
 
 	it "requires receiver_name" do
-	  gift = FactoryGirl.build(:gift, :receiver_name => nil)
-	  gift.should_not be_valid
-	  gift.should have_at_least(1).error_on(:receiver_name)
+		gift = FactoryGirl.build(:gift, :receiver_name => nil)
+		gift.should_not be_valid
+		gift.should have_at_least(1).error_on(:receiver_name)
 	end
 
 	it "requires provider_id" do
-	  gift = FactoryGirl.build(:gift, :provider_id => nil)
-	  gift.should_not be_valid
-	  gift.should have_at_least(1).error_on(:provider_id)
+		gift = FactoryGirl.build(:gift, :provider_id => nil)
+		gift.should_not be_valid
+		gift.should have_at_least(1).error_on(:provider_id)
 	end
 
 	it "requires total" do
-	  gift = FactoryGirl.build(:gift, :value => nil)
-	  gift.should_not be_valid
-	  gift.should have_at_least(1).error_on(:value)
+		gift = FactoryGirl.build(:gift, :value => nil)
+		gift.should_not be_valid
+		gift.should have_at_least(1).error_on(:value)
 	end
 
 	it "requires shoppingCart" do
-	  gift = FactoryGirl.build(:gift, :shoppingCart => nil)
-	  gift.should_not be_valid
-	  gift.should have_at_least(1).error_on(:shoppingCart)
+		gift = FactoryGirl.build(:gift, :shoppingCart => nil)
+		gift.should_not be_valid
+		gift.should have_at_least(1).error_on(:shoppingCart)
 	end
 
 	it "should save gift_items on create" do
-	  gift = FactoryGirl.build(:gift)
-	  gift.save
-	  items = JSON.parse gift.shoppingCart
-	  gift.gift_items.count.should == items.count
-	  gift.gift_items.first.menu_id.should == items.first["item_id"]
+		gift = FactoryGirl.build(:gift)
+		gift.save
+		items = JSON.parse gift.shoppingCart
+		gift.gift_items.count.should == items.count
+		gift.gift_items.first.menu_id.should == items.first["item_id"]
 	end
 
 	it "should save sale as payable on create" do
-	  gift = FactoryGirl.build(:gift)
-	  sale = FactoryGirl.build(:sale)
-	  gift.payable = sale
-	  gift.save
-	  saved_gift = Gift.last
-	  saved_gift.payable.should == Sale.last
+		gift = FactoryGirl.build(:gift)
+		sale = FactoryGirl.build(:sale)
+		gift.payable = sale
+		gift.save
+		saved_gift = Gift.last
+		saved_gift.payable.should == Sale.last
 	end
 
 	it "should get the provider name if it does not have one" do
-	  gift = FactoryGirl.build(:gift, :provider_name => nil)
-	  gift.save
-	  gift.provider_name.should_not be_nil
+		gift = FactoryGirl.build(:gift, :provider_name => nil)
+		gift.save
+		gift.provider_name.should_not be_nil
 	end
+
+    it "should not run add provider if it has provider ID and name" do
+        Gift.any_instance.should_not_receive(:add_provider_name)
+        gift = FactoryGirl.create(:gift, :provider_name => "Jelly Donut")
+    end
 
     it "should downcase an capitalized receiver_email" do
         gift = FactoryGirl.create(:gift, receiver_email: "JONMERCHANT@GMAIL.COM")
@@ -558,14 +563,17 @@ end
 #  order_num      :string(255)
 #  cat            :integer         default(0)
 #  active         :boolean         default(TRUE)
-#  stat           :integer
-#  pay_stat       :integer
+#  pay_stat       :string(255)
 #  pay_type       :string(255)
 #  pay_id         :integer
-#  notified_at    :datetime
-#  notified_at_tz :string(255)
 #  redeemed_at    :datetime
-#  redeemed_at_tz :string(255)
-#  server_code    :string(255)
+#  server         :string(255)
+#  payable_id     :integer
+#  payable_type   :string(255)
+#  giver_type     :string(255)
+#  value          :string(255)
+#  expires_at     :datetime
+#  refund_id      :integer
+#  refund_type    :string(255)
 #
 

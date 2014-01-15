@@ -104,3 +104,19 @@ end
 
 	# validates :gift_id   , presence: true, uniqueness: true
 	# validates :redeem_id , presence: true, uniqueness: true
+# == Schema Information
+#
+# Table name: orders
+#
+#  id          :integer         not null, primary key
+#  redeem_id   :integer
+#  gift_id     :integer
+#  redeem_code :string(255)
+#  created_at  :datetime        not null
+#  updated_at  :datetime        not null
+#  server_code :string(255)
+#  server_id   :integer
+#  provider_id :integer
+#  employee_id :integer
+#
+
