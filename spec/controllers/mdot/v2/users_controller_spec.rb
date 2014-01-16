@@ -147,7 +147,7 @@ describe Mdot::V2::UsersController do
             rrc(200)
             @receiver.reload
             @receiver.reset_token.should_not be_nil
-            @receiver.reset_token_sent_at.hour.should == Time.now.hour
+            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
         end
 
         it "should send success response for screen for secondary email" do
@@ -168,7 +168,7 @@ describe Mdot::V2::UsersController do
             rrc(200)
             @receiver.reload
             @receiver.reset_token.should_not be_nil
-            @receiver.reset_token_sent_at.hour.should == Time.now.hour
+            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
         end
 
         it "should return error message if email doesn not exist" do
