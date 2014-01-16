@@ -63,6 +63,22 @@ describe PushJob do
             end
         end
 
+        context "notify gift giver when incomplete gift gets connected" do
+
+            it "should notify the giver when an incomplete gift is connected" do
+                prov_name = "Pusher's"
+                receiver  = FactoryGirl.build(:receiver)
+                @gift     = FactoryGirl.create(:gift, giver: @user, receiver_name: receiver.name, receiver_email: receiver.email, provider_name: prov_name)
+                @gift.status.should == 'incomplete'
+                user_alias = @pnt.ua_alias
+                good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "Thank You! #{@gift.receiver_name} got the app and your gift!",:badge=>0,:sound=>"pn.wav"},:alert_type=>2}
+
+                Urbanairship.should_receive(:push).with(good_push_hsh)
+                PushJob.perform(@gift.id, true, true)
+            end
+
+        end
+
         context "BizUser gift" do
 
             it "should not send a push to biz users" do

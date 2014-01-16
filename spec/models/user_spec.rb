@@ -164,98 +164,59 @@ describe User do
             Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_2_alias})
 
             run_delayed_jobs
+        end
 
+        it "should send push to gift giver when this user is the receiver of an incomplete gift" do
+            ResqueSpec.reset!
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
+            gift = FactoryGirl.create(:gift, receiver_id: nil, receiver_email: "new_push@tarantino.com")
+            gift.status.should == 'incomplete'
+            pnt2  = "AWESOMEFUKINTOKENSAWESOMEFUCKINTOKENS"
+            giver = gift.giver
+            giver.pn_token = pnt2
+            giver.pn_token.should == [pnt2]
+
+            ResqueSpec.reset!
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
+            stub_request(:put, "https://q_NVI6G1RRaOU49kKTOZMQ:yQEhRtd1QcCgu5nXWj-2zA@go.urbanairship.com/api/device_tokens/162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76").to_return(:status => 200, :body => "", :headers => {})
+            pnt  = "162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76"
+            receiver = FactoryGirl.create :user, { first_name: "Quentin", email: "new_push@tarantino.com" }
+            receiver.pn_token = pnt
+            receiver.pn_token.should == [pnt]
+            ua_alias_thing = giver.pn_tokens.first.ua_alias
+            Urbanairship.should_receive(:push).with({:aliases=>[ua_alias_thing], :aps=>{:alert=>"Thank You! Quentin Basic got the app and your gift!", :badge=>0, :sound=>"pn.wav"}, :alert_type=>2})
+            run_delayed_jobs
+        end
+
+        it "should not send push to gift giver when giver is not a user is the receiver of an incomplete gift" do
+            ResqueSpec.reset!
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
+            gift = FactoryGirl.build(:gift, receiver_id: nil, receiver_email: "new_push@tarantino.com")
+            provider = FactoryGirl.create(:provider)
+            biz_user = provider.biz_user
+            gift.giver = biz_user
+            gift.save
+            gift.status.should == 'incomplete'
+
+            ResqueSpec.reset!
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
+            stub_request(:put, "https://q_NVI6G1RRaOU49kKTOZMQ:yQEhRtd1QcCgu5nXWj-2zA@go.urbanairship.com/api/device_tokens/162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76").to_return(:status => 200, :body => "", :headers => {})
+            pnt  = "162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76"
+            receiver = FactoryGirl.create :user, { first_name: "Quentin", email: "new_push@tarantino.com" }
+            receiver.pn_token = pnt
+            receiver.pn_token.should == [pnt]
+
+            Urbanairship.should_not_receive(:push).with({:aliases=>["user-649388"], :aps=>{:alert=>"Thank You! Quentin Basic got the app and your gift!", :badge=>0, :sound=>"pn.wav"}, :alert_type=>2})
+            run_delayed_jobs
         end
     end
 
 
-end# == Schema Information
-#
-# Table name: users
-#
-#  id                      :integer         not null, primary key
-#  email                   :string(255)     not null
-#  admin                   :boolean         default(FALSE)
-#  photo                   :string(255)
-#  password_digest         :string(255)
-#  remember_token          :string(255)     not null
-#  created_at              :datetime        not null
-#  updated_at              :datetime        not null
-#  address                 :string(255)
-#  address_2               :string(255)
-#  city                    :string(20)
-#  state                   :string(2)
-#  zip                     :string(16)
-#  credit_number           :string(255)
-#  phone                   :string(255)
-#  first_name              :string(255)
-#  last_name               :string(255)
-#  facebook_id             :string(255)
-#  handle                  :string(255)
-#  server_code             :string(255)
-#  twitter                 :string(255)
-#  active                  :boolean         default(TRUE)
-#  persona                 :string(255)     default("")
-#  foursquare_id           :string(255)
-#  facebook_access_token   :string(255)
-#  facebook_expiry         :datetime
-#  foursquare_access_token :string(255)
-#  sex                     :string(255)
-#  is_public               :boolean
-#  facebook_auth_checkin   :boolean
-#  iphone_photo            :string(255)
-#  fb_photo                :string(255)
-#  use_photo               :string(255)
-#  secure_image            :string(255)
-#  reset_token_sent_at     :datetime
-#  reset_token             :string(255)
-#  birthday                :date
-#  origin                  :string(255)
-#  confirm                 :string(255)     default("00")
-#
-
-# == Schema Information
-#
-# Table name: users
-#
-#  id                      :integer         not null, primary key
-#  email                   :string(255)     not null
-#  admin                   :boolean         default(FALSE)
-#  password_digest         :string(255)     not null
-#  remember_token          :string(255)     not null
-#  created_at              :datetime        not null
-#  updated_at              :datetime        not null
-#  address                 :string(255)
-#  address_2               :string(255)
-#  city                    :string(20)
-#  state                   :string(2)
-#  zip                     :string(16)
-#  credit_number           :string(255)
-#  phone                   :string(255)
-#  first_name              :string(255)
-#  last_name               :string(255)
-#  facebook_id             :string(255)
-#  handle                  :string(255)
-#  server_code             :string(255)
-#  twitter                 :string(255)
-#  active                  :boolean         default(TRUE)
-#  persona                 :string(255)     default("")
-#  foursquare_id           :string(255)
-#  facebook_access_token   :string(255)
-#  facebook_expiry         :datetime
-#  foursquare_access_token :string(255)
-#  sex                     :string(255)
-#  is_public               :boolean
-#  facebook_auth_checkin   :boolean
-#  iphone_photo            :string(255)
-#  reset_token_sent_at     :datetime
-#  reset_token             :string(255)
-#  birthday                :date
-#  origin                  :string(255)
-#  confirm                 :string(255)     default("00")
-#  perm_deactive           :boolean         default(FALSE)
-#
-
+end
 # == Schema Information
 #
 # Table name: users

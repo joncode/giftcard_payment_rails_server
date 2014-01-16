@@ -2,17 +2,24 @@ class PushJob
 
     @queue = :push
 
-    def self.perform gift_id, thank_you=false
+    def self.perform gift_id, thank_you=false, incomplete=false
         gift        = Gift.find gift_id
-        if thank_you
+        if !incomplete
+            if thank_you
+                push_receiver = gift.giver
+                return nil unless push_receiver.respond_to?(:ua_alias)
+                badge         = Gift.get_notifications(push_receiver)
+                payload       = self.format_thank_you_payload(gift, push_receiver, badge)
+            else
+                receiver    = gift.receiver
+                badge       = Gift.get_notifications(receiver)
+                payload     = self.format_payload(gift, receiver, badge)
+            end
+        else
             push_receiver = gift.giver
             return nil unless push_receiver.respond_to?(:ua_alias)
             badge         = Gift.get_notifications(push_receiver)
-            payload       = self.format_thank_you_payload(gift, push_receiver, badge)
-        else
-            receiver    = gift.receiver
-            badge       = Gift.get_notifications(receiver)
-            payload     = self.format_payload(gift, receiver, badge)
+            payload       = self.format_incomplete_payload(gift, push_receiver, badge)
         end
         puts "SENDING PUSH NOTE for GIFT ID = #{gift_id} | #{payload}"
         resp        = Urbanairship.push(payload)
@@ -28,6 +35,10 @@ private
 
     def self.format_thank_you_payload(gift, push_receiver, badge)
         { :aliases => [push_receiver.ua_alias],:aps => { :alert => "#{gift.receiver_name} opened your gift at #{gift.provider_name}!", :badge => badge, :sound => 'pn.wav' },:alert_type => 2}
+    end
+
+    def self.format_incomplete_payload(gift, push_receiver, badge)
+        { :aliases => [push_receiver.ua_alias],:aps => { :alert => "Thank You! #{gift.receiver_name} got the app and your gift!", :badge => badge, :sound => 'pn.wav' },:alert_type => 2}
     end
 
 end
