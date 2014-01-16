@@ -85,10 +85,14 @@ class Mdot::V2::GiftsController < JsonController
         return nil if data_not_array?(shoppingCart)
 
         gift_hsh = gift_params
-        gift_hsh["shoppingCart"] = params["shoppingCart"]
-        gift_hsh["giver"]        = @current_user
-        gift_response = GiftSale.create(gift_hsh)
-
+        if promotional_gift_params? gift_hsh
+            gift_response = "You cannot gift to the #{gift_hsh["receiver_name"]} account"
+        else
+            gift_hsh["shoppingCart"] = params["shoppingCart"]
+            gift_hsh["giver"]        = @current_user
+            gift_response = GiftSale.create(gift_hsh)
+        end
+        
         if gift_response.kind_of?(Gift)
             if gift_response.id
                 success gift_response.giver_serialize
@@ -105,6 +109,27 @@ class Mdot::V2::GiftsController < JsonController
     end
 
 private
+
+    def promotional_gift_params? params_hsh
+        if params_hsh["receiver_id"].nil?
+            false
+        else
+            if params_hsh["receiver_name"].match(" Staff")
+                begin
+                    user = User.find(params_hsh["receiver_id"])
+                    if user.last_name == "Staff"
+                        false
+                    else
+                        true
+                    end
+                rescue
+                    true
+                end
+            else
+                false
+            end
+        end
+    end
 
     def redeem_params
         params.require(:server)

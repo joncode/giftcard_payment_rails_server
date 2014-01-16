@@ -435,7 +435,7 @@ class AppController < JsonController
         response = {}
 
         gift_hsh = gift_params
-        if gift_hsh["receiver_name"].match(" Staff")
+        if promotional_gift_params? gift_hsh
             gift_response = "You cannot gift to the #{gift_hsh["receiver_name"]} account"
         else
             gift_hsh["shoppingCart"] = params["shoppingCart"]
@@ -663,6 +663,27 @@ class AppController < JsonController
 	end
 
 private
+
+    def promotional_gift_params? params_hsh
+        if params_hsh["receiver_id"].nil?
+            false
+        else
+            if params_hsh["receiver_name"].match(" Staff")
+                begin
+                    user = User.find(params_hsh["receiver_id"])
+                    if user.last_name == "Staff"
+                        false
+                    else
+                        true
+                    end
+                rescue
+                    true
+                end
+            else
+                false
+            end
+        end
+    end
 
     def create_gift_params
         # params.permit!

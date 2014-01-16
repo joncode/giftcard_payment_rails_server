@@ -10,7 +10,7 @@ describe Mdot::V2::GiftsController do
             User.delete_all
             Provider.delete_all
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN"       )
+            @user.update(remember_token: "USER_TOKEN")
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
 
             @number_received = 9
@@ -861,7 +861,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
 
             deactivated_user = FactoryGirl.create :user, { active: true}
-            @user.update_attribute(:active, false)
+            @user.update(active: false)
             # hit create gift with a receiver_id of a deactivated user
             gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
             # test that create gift does not create the gift or the sale
@@ -879,7 +879,7 @@ describe Mdot::V2::GiftsController do
         it "should not allow gift creating for de-activated receivers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             giver = FactoryGirl.create(:giver)
-            giver.update_attribute(:remember_token,"USER_TOKEN" )
+            giver.update(remember_token: "USER_TOKEN" )
             deactivated_user = FactoryGirl.create :receiver, { active: false}
             # hit create gift with a receiver_id of a deactivated user
             gift = FactoryGirl.create :gift, { receiver_id: deactivated_user.id }
@@ -901,6 +901,62 @@ describe Mdot::V2::GiftsController do
             new_gift.should be_nil
             last = Gift.last
             last.should be_nil
+        end
+
+        it "should not allow gift creation for non-app users -- AdminGiver" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            giver       = FactoryGirl.create(:giver)
+            admin_user  = FactoryGirl.create(:admin_user)
+            receiver    = admin_user.giver
+            gift        = FactoryGirl.build :gift
+            gift_hsh    = make_gift_hsh(gift)
+            gift_hsh["receiver_id"]   = receiver.id
+            gift_hsh["receiver_name"] = receiver.name
+            post :create, format: :json, data: gift_hsh , shoppingCart: @cart
+            new_gift = Gift.find_by(giver_id: giver.id)
+            new_gift.should be_nil
+            json["status"].should == 0
+            json["data"].should == "You cannot gift to the ItsOnMe Staff account"
+        end
+
+        it "should not allow gift creation for non-app users -- BizUser" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            giver    = FactoryGirl.create(:giver)
+            provider = FactoryGirl.create(:provider)
+            receiver = provider.biz_user
+            gift     = FactoryGirl.build :gift
+            gift_hsh = make_gift_hsh(gift)
+
+            gift_hsh["receiver_id"]   = receiver.id
+            gift_hsh["receiver_name"] = receiver.name
+            post :create, format: :json, data: gift_hsh , shoppingCart: @cart
+            new_gift = Gift.find_by(giver_id: giver.id)
+            new_gift.should be_nil
+            json["status"].should == 0
+            json["data"].should == "You cannot gift to the #{provider.biz_user.name} account"
+        end
+
+        it "should create gift for user with last name 'Staff'" do
+            request.env["HTTP_TKN"] = "OTHERTOKEN"
+            giver = FactoryGirl.create(:giver)
+            @user = giver
+            giver.update(remember_token: "OTHERTOKEN")
+            @card = FactoryGirl.create(:card, :name => @user.name, :user_id => @user.id)
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+            receiver = FactoryGirl.create(:receiver, last_name: "Staff")
+            gift     = FactoryGirl.build :gift
+            gift.credit_card = @card.id
+            gift.value = "31.50"
+            gift_hsh = make_gift_hsh(gift)
+            gift_hsh["receiver_id"]   = receiver.id
+            gift_hsh["receiver_name"] = receiver.name
+
+            post :create, format: :json, data: gift_hsh , shoppingCart: @cart
+            new_gift = Gift.find_by(giver_id: giver.id)
+            new_gift.receiver.should == receiver
+            json["status"].should == 1
         end
 
         it "should return 'that credit_card does not exist' when cant find credit card" do

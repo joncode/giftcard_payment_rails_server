@@ -12,6 +12,7 @@ class GiftSale < Gift
         end
 
         args["card"]  = args["giver"].cards.where(id: args["credit_card"]).first
+        
         if args["card"].nil?
             return "We do not have that credit card on record.  Please choose a different card."
         end
