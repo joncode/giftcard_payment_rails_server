@@ -435,13 +435,16 @@ class AppController < JsonController
         response = {}
 
         gift_hsh = gift_params
+        if gift_hsh["receiver_name"].match(" Staff")
+            gift_response = "You cannot gift to the #{gift_hsh["receiver_name"]} account"
+        else
+            gift_hsh["shoppingCart"] = params["shoppingCart"]
+            gift_hsh["value"] = gift_hsh["total"]
+            gift_hsh["giver"] = @current_user
+            gift_hsh.delete("total")
 
-        gift_hsh["shoppingCart"] = params["shoppingCart"]
-        gift_hsh["value"] = gift_hsh["total"]
-        gift_hsh["giver"] = @current_user
-        gift_hsh.delete("total")
-
-        gift_response = GiftSale.create(gift_hsh)
+            gift_response = GiftSale.create(gift_hsh)
+        end
 
         if gift_response.kind_of?(Gift)
             if gift_response.id

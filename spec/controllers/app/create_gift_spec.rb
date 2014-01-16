@@ -101,7 +101,7 @@ describe AppController do
                 new_gift.receiver_id.should == @user.id
             end
         end
-        
+
         # Git should validate total and service
 
     end
@@ -147,6 +147,36 @@ describe AppController do
             new_gift.should be_nil
             last = Gift.last
             last.should be_nil
+        end
+
+        it "should not allow gift creation for non-app users -- AdminGiver" do
+            giver = FactoryGirl.create(:giver)
+            admin_user = FactoryGirl.create(:admin_user)
+            receiver = admin_user.giver
+            gift  = FactoryGirl.build :gift
+            gift_hsh = JSON.parse(make_gift_json(gift))
+            gift_hsh["receiver_id"]   = receiver.id
+            gift_hsh["receiver_name"] = receiver.name
+            post :create_gift, format: :json, gift: gift_hsh.to_json , shoppingCart: @cart , token: giver.remember_token
+            new_gift = Gift.find_by(giver_id: giver.id)
+            new_gift.should be_nil
+            json["success"].should be_nil
+            json["error"].should == "You cannot gift to the ItsOnMe Staff account"
+        end
+
+        it "should not allow gift creation for non-app users -- BizUser" do
+            giver = FactoryGirl.create(:giver)
+            provider = FactoryGirl.create(:provider)
+            receiver = provider.biz_user
+            gift  = FactoryGirl.build :gift
+            gift_hsh = JSON.parse(make_gift_json(gift))
+            gift_hsh["receiver_id"]   = receiver.id
+            gift_hsh["receiver_name"] = receiver.name
+            post :create_gift, format: :json, gift: gift_hsh.to_json , shoppingCart: @cart , token: giver.remember_token
+            new_gift = Gift.find_by(giver_id: giver.id)
+            new_gift.should be_nil
+            json["success"].should be_nil
+            json["error"].should == "You cannot gift to the #{provider.biz_user.name} account"
         end
 
     end
