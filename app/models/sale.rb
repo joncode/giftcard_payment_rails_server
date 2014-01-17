@@ -32,16 +32,27 @@ class Sale < ActiveRecord::Base
     def void_refund giver_id
         payment_hsh = {}
         payment_hsh["trans_id"]  = self.transaction_id
-        payment_hsh["last_four"] = self.card.last_four
+        payment_hsh["last_four"] = sale_card_last_four
         payment_hsh["amount"]    = self.revenue
         payment  = PaymentGateway.new(payment_hsh)
         resp_hsh = payment.refund
-        resp_hsh["card_id"]  = self.card.id
+        resp_hsh["card_id"]  = self.card_id
         resp_hsh["giver_id"] = giver_id
-        
+
         Sale.new resp_hsh
     end
 
+private
+
+    def sale_card_last_four
+
+        if self.card
+            self.card.last_four
+        else
+            req = JSON.parse self.req_json
+            req["card_num"][4..7]
+        end
+    end
 end
 
 
