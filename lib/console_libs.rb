@@ -11,8 +11,6 @@ require 'legacy_provider'
 require 'cron'
 require 'gift_console'
 require 'expiration'
-require 'legacy_user_socials'
-include LegacyUserSocials
 include Legacy
 include LegacyUser
 include LegacyGift
