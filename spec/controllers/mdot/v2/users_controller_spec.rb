@@ -60,13 +60,19 @@ describe Mdot::V2::UsersController do
             compare_keys json["data"], keys
         end
 
-        xit "should return nested user socials" do
+        it "should return nested user socials" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            @user.email = "new_email#@gmail.com"
+            @user.email = "new_email@gmail.com"
             @user.phone = "7568459384"
+            @user.facebook_id = "1111111111"
+            @user.twitter = "342342342"
             @user.save
             get :show, format: :json, id: @user.id
             rrc 200
+            json["data"]["email"].count.should == 2
+            json["data"]["phone"].count.should == 2
+            json["data"]["facebook_id"].count.should == 2
+            json["data"]["twitter"].count.should == 2
         end
 
         it "should return 404 if ID does not match a record in DB" do

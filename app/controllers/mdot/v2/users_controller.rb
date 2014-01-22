@@ -12,7 +12,7 @@ class Mdot::V2::UsersController < JsonController
     def show
         if @current_user.id == params[:id].to_i
             # do app user serialize
-            success @current_user.update_serialize
+            success @current_user.profile_serialize
         else
             other_user = User.find params[:id]
             # do other user serialize
