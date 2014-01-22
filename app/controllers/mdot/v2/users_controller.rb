@@ -1,11 +1,24 @@
 class Mdot::V2::UsersController < JsonController
     include Email
-    before_action :authenticate_customer, only: [:index, :update]
+    before_action :authenticate_customer,      only: [:index, :update, :show]
     before_action :authenticate_general_token, only: [:create, :reset_password]
 
     def index
         users = User.where(active: true)
         success users.serialize_objs(:get)
+        respond
+    end
+
+    def show
+        if @current_user.id == params[:id].to_i
+            # do app user serialize
+            success @current_user.profile_serialize
+        else
+            other_user = User.find params[:id]
+            # do other user serialize
+            success other_user.get_other_serialize
+        end
+
         respond
     end
 

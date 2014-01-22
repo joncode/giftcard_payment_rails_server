@@ -331,6 +331,7 @@ private
 
 				if g.update_attributes(gift_changes)
 					success += 1
+					Relay.send_push_incomplete(g) if g.giver_type == "User"
 					# email_gift_collected(g)
 				else
 					error   += 1

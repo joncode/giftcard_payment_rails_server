@@ -1,4 +1,4 @@
-
+    
 class Admt::V1::AdminToolsController < JsonController
 
     before_action :authenticate_admin_tools,    except: [:add_key, :payable_gifts]

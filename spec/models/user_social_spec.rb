@@ -33,6 +33,42 @@ describe UserSocial do
       user_social = FactoryGirl.create(:user_social, type_of: "email", identifier:"test@email.com")
     end
 
+    describe :deactivate do
+
+        it "should remove social data from user record and replace with other active data" do
+            user = FactoryGirl.create(:user, first_name: "ace", email: "ace@email.com", phone: "2222222222")
+            user.email = "newemail@gmail.com"
+            user.save
+            user.reload
+            user.email.should == "newemail@gmail.com"
+            user_social = UserSocial.where(identifier: "newemail@gmail.com").first
+            user_social.deactivate
+            user.email.should == "ace@email.com"
+        end
+
+        it "should remove social data from user record and replace with other active data" do
+            user = FactoryGirl.create(:user, first_name: "ace", email: "ace@email.com", phone: "2222222222")
+            user.phone = "3333333333"
+            user.save
+            user.reload
+            user.phone.should == "3333333333"
+            user_social = UserSocial.where(identifier: "3333333333").first
+            user_social.deactivate
+            user.phone.should == "2222222222"
+        end
+
+        it "should remove social data and replace with nil when no other data exists" do
+            user = FactoryGirl.create(:user, first_name: "ace", email: "ace@email.com", phone: "2222222222")
+            user.reload
+            user.phone.should == "2222222222"
+            user_social = UserSocial.where(identifier: "2222222222").first
+            user_social.deactivate
+            user.reload
+            user.phone.should be_nil
+        end
+
+    end
+
     describe "uniqueness validation" do
 
             before do
@@ -42,6 +78,7 @@ describe UserSocial do
                 @legacy_phone = @legacy_user.user_socials.where(type_of: "phone")[0]
                 @legacy_email = @legacy_user.user_socials.where(type_of: "email")[0]
             end
+
             context "unique identifier" do
                 it "should save and make active on" do
 

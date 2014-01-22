@@ -1,6 +1,5 @@
 class UserSocial < ActiveRecord::Base
-    #attr_accessible :identifier, :type_of, :user_id, :subscribed
-
+    
     belongs_to :user
 
     before_validation     :reject_xxx_emails
@@ -39,11 +38,22 @@ class UserSocial < ActiveRecord::Base
     end
 
     def activate
-        self.update_attribute(:active, true)
+        self.update(active: true)
     end
 
     def deactivate
-        self.update_attribute(:active, false)
+        self.update(active: false)
+        # check the user record and removes/replaces socials from pre-compiled
+        user = self.user
+        if user.send(self.type_of) == self.identifier
+            # if another user social exists move that data to user or use nil
+            new_data = nil
+            if new_user_social = UserSocial.where(user_id: self.user_id, type_of: self.type_of).first
+                new_data = new_user_social.identifier
+            end
+            user.send("#{self.type_of}=" , new_data)
+            user.save
+        end
     end
 
 private

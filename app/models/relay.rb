@@ -14,6 +14,10 @@ class Relay
         def send_push_thank_you gift
             Resque.enqueue(PushJob, gift.id, true)
         end
+
+        def send_push_incomplete gift
+            Resque.enqueue(PushJob, gift.id, true, true)
+        end
 	end
 
 end

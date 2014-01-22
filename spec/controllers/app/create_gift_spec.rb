@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 approved = "#<AuthorizeNet::AIM::Response:0x007fe7a9d958d0 @version='3.1', @raw_response=#<Net::HTTPOK 200 OK readbody=true>, @fields={:response_code=>'1', :response_subcode=>'1', :response_reason_code=>'1', :response_reason_text=>'This transaction has been approved.', :authorization_code=>'JVT36N', :avs_response=>'Y', :transaction_id=>'2202633834', :invoice_number=>'', :description=>'', :amount=>#<BigDecimal:7fe7a9d9ed68,'0.1E3',9(18)>, :method=>'CC', :transaction_type=>'auth_capture', :customer_id=>'', :first_name=>'Jimbo', :last_name=>'Snake', :company=>'', :address=>'', :city=>'', :state=>'', :zip_code=>'', :country=>'', :phone=>'', :fax=>'', :email_address=>'', :ship_to_first_name=>'', :ship_to_last_name=>'', :ship_to_company=>'', :ship_to_address=>'', :ship_to_city=>'', :ship_to_state=>'', :ship_to_zip_code=>'', :ship_to_country=>'', :tax=>#<BigDecimal:7fe7a9d9df08,'0.0',9(9)>, :duty=>#<BigDecimal:7fe7a9d9dd28,'0.0',9(9)>, :freight=>#<BigDecimal:7fe7a9d9da30,'0.0',9(9)>, :tax_exempt=>'', :purchase_order_number=>'AD-23-40', :md5_hash=>'8EF9AB71098AE0B08C197AC7203B6DB4', :card_code_response=>'', :cardholder_authentication_verification_response=>'2', :account_number=>'XXXX0002', :card_type=>'American Express'}, @transaction=#<AuthorizeNet::AIM::Transaction:0x007fe7a9cd7a38 @fields={:first_name=>'Jimbo', :last_name=>'Snake', :po_num=>'AD-23-40', :method=>'CC', :card_num=>370000000000002, :exp_date=>'1215', :amount=>'100.00'}, @custom_fields={}, @test_mode=false, @version='3.1', @api_login_id='948bLpzeE8UY', @api_transaction_key='7f7AZ66axeC386q7', @response=#<AuthorizeNet::AIM::Response:0x007fe7a9d958d0 ...>, @delimiter='', @type='AUTH_CAPTURE', @cp_version=nil, @gateway='https://test.authorize.net/gateway/transact.dll', @allow_split_transaction=false, @encapsulation_character=nil, @verify_ssl=false, @market_type=2, @device_type=1>, @custom_fields={}>"
-
-
+    
 describe AppController do
 
     describe "#create_gift" do
@@ -101,7 +100,7 @@ describe AppController do
                 new_gift.receiver_id.should == @user.id
             end
         end
-        
+
         # Git should validate total and service
 
     end
@@ -149,6 +148,54 @@ describe AppController do
             last.should be_nil
         end
 
+        it "should not allow gift creation for non-app users -- AdminGiver" do
+            giver = FactoryGirl.create(:giver)
+            admin_user = FactoryGirl.create(:admin_user)
+            receiver = admin_user.giver
+            gift  = FactoryGirl.build :gift
+            gift_hsh = JSON.parse(make_gift_json(gift))
+            gift_hsh["receiver_id"]   = receiver.id
+            gift_hsh["receiver_name"] = receiver.name
+            post :create_gift, format: :json, gift: gift_hsh.to_json , shoppingCart: @cart , token: giver.remember_token
+            new_gift = Gift.find_by(giver_id: giver.id)
+            new_gift.should be_nil
+            json["success"].should be_nil
+            json["error"].should == "You cannot gift to the ItsOnMe Staff account"
+        end
+
+        it "should not allow gift creation for non-app users -- BizUser" do
+            giver = FactoryGirl.create(:giver)
+            provider = FactoryGirl.create(:provider)
+            receiver = provider.biz_user
+            gift  = FactoryGirl.build :gift
+            gift_hsh = JSON.parse(make_gift_json(gift))
+            gift_hsh["receiver_id"]   = receiver.id
+            gift_hsh["receiver_name"] = receiver.name
+            post :create_gift, format: :json, gift: gift_hsh.to_json , shoppingCart: @cart , token: giver.remember_token
+            new_gift = Gift.find_by(giver_id: giver.id)
+            new_gift.should be_nil
+            json["success"].should be_nil
+            json["error"].should == "You cannot gift to the #{provider.biz_user.name} account"
+        end
+
+        it "should create gift for user with last name 'Staff'" do
+            giver = FactoryGirl.create(:giver)
+            @user = giver
+            @card = FactoryGirl.create(:card, :name => @user.name, :user_id => @user.id)
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+
+            receiver = FactoryGirl.create(:receiver, last_name: "Staff")
+            gift  = FactoryGirl.build :gift
+            gift_hsh = JSON.parse(make_gift_json(gift))
+            gift_hsh["receiver_id"]   = receiver.id
+            gift_hsh["receiver_name"] = receiver.name
+            gift_hsh["credit_card"]   = @card.id
+            post :create_gift, format: :json, gift: gift_hsh.to_json , shoppingCart: @cart , token: giver.remember_token
+            new_gift = Gift.find_by(giver_id: giver.id)
+            new_gift.receiver.should == receiver
+            json["error"].should be_nil
+        end
     end
 
     def make_gift_json gift

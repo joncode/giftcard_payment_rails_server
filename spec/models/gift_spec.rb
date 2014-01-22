@@ -380,7 +380,7 @@ describe Gift do
 			revenue = BigDecimal(@gift.value)
 			@sale = FactoryGirl.build(:sale, revenue: revenue, giver_id: @user.id)
 			@gift.payable = @sale
-			@gift.giver = @user
+			@gift.giver   = @user
 			@gift.save
 		end
 

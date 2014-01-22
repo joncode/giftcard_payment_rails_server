@@ -37,6 +37,51 @@ describe Mdot::V2::UsersController do
         end
     end
 
+    describe :show do
+        it_should_behave_like("token authenticated", :get, :show, id: 1)
+
+        before(:each) do
+            @other = FactoryGirl.create(:user, first_name: "Oldie", last_name: "Quickins", email: "OTher@other.com", phone: "6567478484")
+        end
+
+        it "should return other user profile if ID does not match token" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            keys    = ["first_name", "last_name", "user_id", "photo", "city", "zip", "state"]
+            get :show, format: :json, id: @other.id
+            rrc 200
+            compare_keys json["data"], keys
+        end
+
+        it "should return user profile if ID does match token" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            keys    = ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id"]
+            get :show, format: :json, id: @user.id
+            rrc 200
+            compare_keys json["data"], keys
+        end
+
+        it "should return nested user socials" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            @user.email = "new_email@gmail.com"
+            @user.phone = "7568459384"
+            @user.facebook_id = "1111111111"
+            @user.twitter = "342342342"
+            @user.save
+            get :show, format: :json, id: @user.id
+            rrc 200
+            json["data"]["email"].count.should == 2
+            json["data"]["phone"].count.should == 2
+            json["data"]["facebook_id"].count.should == 2
+            json["data"]["twitter"].count.should == 2
+        end
+
+        it "should return 404 if ID does not match a record in DB" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            get :show, format: :json, id: (@other.id + 400)
+            rrc(404)
+        end
+    end
+
     describe :update do
         it_should_behave_like("token authenticated", :put, :update)
 
@@ -147,7 +192,7 @@ describe Mdot::V2::UsersController do
             rrc(200)
             @receiver.reload
             @receiver.reset_token.should_not be_nil
-            @receiver.reset_token_sent_at.hour.should == Time.now.hour
+            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
         end
 
         it "should send success response for screen for secondary email" do
@@ -168,7 +213,7 @@ describe Mdot::V2::UsersController do
             rrc(200)
             @receiver.reload
             @receiver.reset_token.should_not be_nil
-            @receiver.reset_token_sent_at.hour.should == Time.now.hour
+            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
         end
 
         it "should return error message if email doesn not exist" do

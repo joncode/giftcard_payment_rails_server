@@ -37,7 +37,7 @@ class Admt::V2::ProvidersController < JsonController
         else
             fail      provider
         end
-        respond        
+        respond
     end
 
     def update_mode
