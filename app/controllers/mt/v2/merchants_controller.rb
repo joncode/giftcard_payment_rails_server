@@ -1,6 +1,6 @@
 class Mt::V2::MerchantsController < JsonController
-    before_filter :authenticate_merchant_tools, except: [:create, :reconcile_merchants]
-    before_filter :authenticate_general_token,  only:   [:create, :reconcile_merchants]
+    before_action :authenticate_merchant_tools, except: [:create, :reconcile_merchants]
+    before_action :authenticate_general_token,  only:   [:create, :reconcile_merchants]
 
     def create
         return nil  if data_not_hash?

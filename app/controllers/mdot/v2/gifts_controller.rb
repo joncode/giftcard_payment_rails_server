@@ -1,5 +1,5 @@
 class Mdot::V2::GiftsController < JsonController
-    before_filter :authenticate_customer
+    before_action :authenticate_customer
 
     rescue_from JSON::ParserError, :with => :bad_request
     rescue_from ActiveModel::ForbiddenAttributesError, :with => :bad_request
@@ -92,7 +92,7 @@ class Mdot::V2::GiftsController < JsonController
             gift_hsh["giver"]        = @current_user
             gift_response = GiftSale.create(gift_hsh)
         end
-        
+
         if gift_response.kind_of?(Gift)
             if gift_response.id
                 success gift_response.giver_serialize

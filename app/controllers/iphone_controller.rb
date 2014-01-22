@@ -1,6 +1,6 @@
 class IphoneController < AppController
 
-	before_filter :authenticate_services,     only: [:regift]
+	before_action :authenticate_services,     only: [:regift]
 	rescue_from ActionController::ParameterMissing, :with => :bad_request
 	def create_account
 

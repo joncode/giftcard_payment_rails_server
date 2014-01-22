@@ -1,6 +1,6 @@
 class Admt::V2::UserSocialsController < JsonController
 
-    before_filter :authenticate_admin_tools
+    before_action :authenticate_admin_tools
 
     def create
         return nil if data_not_hash?

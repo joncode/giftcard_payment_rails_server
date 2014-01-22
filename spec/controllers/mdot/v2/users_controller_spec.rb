@@ -37,6 +37,45 @@ describe Mdot::V2::UsersController do
         end
     end
 
+    describe :show do
+        it_should_behave_like("token authenticated", :get, :show, id: 1)
+
+        before(:each) do
+            @other = FactoryGirl.create(:user, first_name: "Oldie", last_name: "Quickins", email: "OTher@other.com", phone: "6567478484")
+        end
+
+        it "should return other user profile if ID does not match token" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            keys    = ["first_name", "last_name", "user_id", "photo", "city", "zip", "state"]
+            get :show, format: :json, id: @other.id
+            rrc 200
+            compare_keys json["data"], keys
+        end
+
+        it "should return user profile if ID does match token" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            keys    = ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id"]
+            get :show, format: :json, id: @user.id
+            rrc 200
+            compare_keys json["data"], keys
+        end
+
+        xit "should return nested user socials" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            @user.email = "new_email#@gmail.com"
+            @user.phone = "7568459384"
+            @user.save
+            get :show, format: :json, id: @user.id
+            rrc 200
+        end
+
+        it "should return 404 if ID does not match a record in DB" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            get :show, format: :json, id: (@other.id + 400)
+            rrc(404)
+        end
+    end
+
     describe :update do
         it_should_behave_like("token authenticated", :put, :update)
 

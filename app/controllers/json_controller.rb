@@ -3,10 +3,10 @@ class JsonController < ActionController::Base
     include CommonUtils
     include JsonHelper
 
-	skip_before_filter   :verify_authenticity_token
-    #before_filter        :down_for_maintenance
-    before_filter        :log_request_header
-    before_filter        :method_start_log_message
+	skip_before_action   :verify_authenticity_token
+    #before_action        :down_for_maintenance
+    before_action        :log_request_header
+    before_action        :method_start_log_message
     after_filter         :cross_origin_allow_header
     after_filter         :method_end_log_message
 

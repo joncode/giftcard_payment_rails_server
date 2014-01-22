@@ -16,6 +16,13 @@ module UserSerializers
         usr_hash
     end
 
+    def get_other_serialize
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "city", "state", "zip"]
+        usr_hash["photo"]   = self.get_photo
+        usr_hash["user_id"] = self.id
+        usr_hash
+    end
+
     def create_serialize
         usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter"]
         usr_hash["photo"]   = self.get_photo
