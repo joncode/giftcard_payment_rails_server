@@ -41,5 +41,3 @@ latest_staging_db.dump
 **.orig
 rerun.txt
 pickle-email-*.html
-
-/config/database.yml
