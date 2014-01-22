@@ -38,6 +38,7 @@ describe LegacyUserSocials do
             twitter = uss.where(identifier: "836528342")
             twitter.count.should == 1
         end
+        
     end
 
 
