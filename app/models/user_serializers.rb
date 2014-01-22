@@ -35,7 +35,6 @@ module UserSerializers
                     usr_hash[id] << social.identifier
                 end
             end
-            usr_hash[id] = usr_hash[id].pop if usr_hash[id].count == 1
         end
         usr_hash
     end

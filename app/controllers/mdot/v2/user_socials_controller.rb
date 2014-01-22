@@ -4,7 +4,7 @@ class Mdot::V2::UserSocialsController < JsonController
     def destroy
         user_social = @current_user.user_socials.where(identifier: params["identifier"], type_of: params["type"]).first
         if user_social
-            user_social.update(active: false)
+            user_social.deactivate
             success(@current_user.id)
         else
             status = :not_found

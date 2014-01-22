@@ -1,6 +1,6 @@
 class Mdot::V2::UsersController < JsonController
     include Email
-    before_action :authenticate_customer, only: [:index, :update, :detail, :show]
+    before_action :authenticate_customer,      only: [:index, :update, :show]
     before_action :authenticate_general_token, only: [:create, :reset_password]
 
     def index
