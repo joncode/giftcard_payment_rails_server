@@ -38,7 +38,7 @@ describe Mdot::V2::CitiesController do
 
         it_should_behave_like("token authenticated", :get, :merchants, id: 1)
 
-        it "should return a list of all active providers serialized when success" do
+        it "should return a list of all active providers in city with id = <name> serialized when success" do
             Provider.delete_all
             20.times do
                 FactoryGirl.create(:provider)
@@ -46,6 +46,23 @@ describe Mdot::V2::CitiesController do
             Provider.last.update_attribute(:active, false)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: "New York"
+            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
+            rrc(200)
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == 19
+            hsh = ary.first
+            compare_keys(hsh, keys)
+        end
+
+        it "should return a list of all active providers in city with id = <integer> serialized when success" do
+            Provider.delete_all
+            20.times do
+                FactoryGirl.create(:provider)
+            end
+            Provider.last.update_attribute(:active, false)
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            get :merchants, format: :json, id: 2
             keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
             rrc(200)
             ary = json["data"]
