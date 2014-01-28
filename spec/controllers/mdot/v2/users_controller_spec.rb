@@ -162,6 +162,55 @@ describe Mdot::V2::UsersController do
         end
     end
 
+    describe :deactivate_user_social do
+        it_should_behave_like("token authenticated", :put, :deactivate_user_social)
+
+        it "should return user ID on success" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should   == @user.id
+            put :deactivate_user_social, format: :json, identifier: @user.phone, type: "phone"
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should   == @user.id
+            put :deactivate_user_social, format: :json, identifier: @user.facebook_id, type: "facebook_id"
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should   == @user.id
+            put :deactivate_user_social, format: :json, identifier: @user.twitter, type: "twitter"
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should   == @user.id
+        end
+
+        it "should deActivate the user social in the database" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
+            rrc(200)
+            UserSocial.unscoped.where(identifier: @user.email).first.active.should be_false
+            put :deactivate_user_social, format: :json, identifier: @user.phone, type: "phone"
+            rrc(200)
+            UserSocial.unscoped.where(identifier: @user.phone).first.active.should be_false
+            put :deactivate_user_social, format: :json, identifier: @user.facebook_id, type: "facebook_id"
+            rrc(200)
+            UserSocial.unscoped.where(identifier: @user.facebook_id).first.active.should be_false
+            put :deactivate_user_social, format: :json, identifier: @user.twitter, type: "twitter"
+            rrc(200)
+            UserSocial.unscoped.where(identifier: @user.twitter).first.active.should be_false
+        end
+
+        it "should return 404 with no ID or wrong ID" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            user2 = FactoryGirl.create(:user, email: "notthis@no.com", phone: "9879887878")
+            put :deactivate_user_social, format: :json, identifier: user2.email, type: "email"
+            rrc(404)
+            put :deactivate_user_social, format: :json, identifier: user2.phone, type: "phone"
+            rrc(404)
+        end
+    end
+
     describe :reset_passord do
         it_should_behave_like("token authenticated", :put, :reset_password)
 

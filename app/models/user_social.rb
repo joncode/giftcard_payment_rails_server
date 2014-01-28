@@ -51,8 +51,7 @@ class UserSocial < ActiveRecord::Base
             if new_user_social = UserSocial.where(user_id: self.user_id, type_of: self.type_of).first
                 new_data = new_user_social.identifier
             end
-            user.send("#{self.type_of}=" , new_data)
-            user.save
+            user.update_attribute(self.type_of.to_sym, new_data)
         end
     end
 

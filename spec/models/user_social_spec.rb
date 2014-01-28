@@ -41,8 +41,9 @@ describe UserSocial do
             user.save
             user.reload
             user.email.should == "newemail@gmail.com"
-            user_social = UserSocial.where(identifier: "newemail@gmail.com").first
+            user_social = UserSocial.where(identifier: "newemail@gmail.com", user_id: user.id).first
             user_social.deactivate
+            user.reload
             user.email.should == "ace@email.com"
         end
 
@@ -54,6 +55,7 @@ describe UserSocial do
             user.phone.should == "3333333333"
             user_social = UserSocial.where(identifier: "3333333333").first
             user_social.deactivate
+            user.reload
             user.phone.should == "2222222222"
         end
 
