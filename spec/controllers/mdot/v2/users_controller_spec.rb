@@ -163,10 +163,16 @@ describe Mdot::V2::UsersController do
     end
 
     describe :deactivate_user_social do
-        before { FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com" }
+        it "should return 400 if last email" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
+            rrc(400)
+        end
+
         it_should_behave_like("token authenticated", :put, :deactivate_user_social)
 
         it "should return user ID on success" do
+            FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com"
             request.env["HTTP_TKN"] = "USER_TOKEN"
             put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
             rrc(200)
@@ -187,6 +193,7 @@ describe Mdot::V2::UsersController do
         end
 
         it "should deActivate the user social in the database" do
+            FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com"
             request.env["HTTP_TKN"] = "USER_TOKEN"
             put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
             rrc(200)
@@ -203,6 +210,7 @@ describe Mdot::V2::UsersController do
         end
 
         it "should return 404 with no ID or wrong ID" do
+            FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com"
             request.env["HTTP_TKN"] = "USER_TOKEN"
             user2 = FactoryGirl.create(:user, email: "notthis@no.com", phone: "9879887878")
             put :deactivate_user_social, format: :json, identifier: user2.email, type: "email"
