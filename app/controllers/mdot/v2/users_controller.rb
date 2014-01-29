@@ -69,6 +69,7 @@ class Mdot::V2::UsersController < JsonController
             @current_user.deactivate_social(params["type"], params["identifier"])
             success(@current_user.id)
         else
+            fail "couldn't find #{params["type"]} #{params["identifier"]}"
             status = :not_found
         end
         respond(status)
