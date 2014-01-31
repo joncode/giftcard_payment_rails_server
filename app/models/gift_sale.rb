@@ -12,7 +12,7 @@ class GiftSale < Gift
         end
 
         args["card"]  = args["giver"].cards.where(id: args["credit_card"]).first
-        
+
         if args["card"].nil?
             return "We do not have that credit card on record.  Please choose a different card."
         end
@@ -29,9 +29,9 @@ class GiftSale < Gift
         if self.payable.success?
 
             Relay.send_push_notification(self)
-            puts "GiftSale -messenger- \nNotify Receiver via email #{self.receiver_name}"
+            puts "GiftSale -messenger- Notify Receiver via email #{self.receiver_name}"
             notify_receiver
-            puts "GiftSale -messenger- \nInvoice the giver via email #{self.giver_name}"
+            puts "GiftSale -messenger- Invoice the giver via email #{self.giver_name}"
             invoice_giver
         end
     end
