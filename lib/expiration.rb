@@ -9,6 +9,7 @@ module Expiration
             time = Time.now
             if (time - gift.expires_at) > 0
                 gift.update(status: "expired")
+                "-------------  Expired gift ID = #{gift.id}  -------------"
                 expired_gifts << gift
             end
         end
