@@ -2,37 +2,43 @@ class Reminder
 	include Emailer
 
     def self.gift_reminder
-    	gifts = Gift.where('status = :status1 OR status = :status2', { status1: "open", status2: "notified" }).where('created_at < ?', 30.days.ago)
-    	users_with_received_gifts = []
-    	users_with_sent_gifts = []
-    	gifts.each do |gift|
-    		if unused_gift? gift
-    			users_with_received_gifts << gift.receiver_id unless users_with_received_gifts.include? gift.receiver_id
-    			users_with_sent_gifts     << gift.giver_id    unless users_with_sent_gifts.include? gift.giver_id
-			end
-		end
+    	today = Time.now.beginning_of_day
+    	gifts = Gift.where(status: ["incomplete", "open", "notified"]).where('created_at > ?', today - 31.days)
 
-		users_with_received_gifts.each do |uid|
-			user = User.find(uid)
-			MailerJob.reminder_gift_receiver(user) if user.setting.email_reminder_gift_receiver == true
-		end
-		users_with_sent_gifts.each do |uid|
-			user = User.find(uid)
-			MailerJob.reminder_gift_giver(user) if user.setting.email_reminder_gift_giver == true
-		end
-	end
+    	thirtydaygifts = gifts.where(status:["open", "notified"]).where("created_at < ?", today - 29.days)
+    	thirtydaygifts.each do |gift|
+    		if provider_active_and_live? gift
+	    		user = User.find(gift.receiver_id)
+	    		MailerJob.reminder_gift_receiver(user) if user.setting.email_reminder_gift_receiver == true
+	    	end
+    	end
+
+    	tendaygifts = gifts.where(status:["incomplete"]).where("created_at < ?", today - 10.days).where("created_at > ?", today - 11.days)
+    	tendaygifts.each do |gift|
+    		if provider_active_and_live? gift
+	    		user = User.find(gift.giver_id)
+	    		MailerJob.reminder_gift_giver(user) if user.setting.email_reminder_gift_giver == true
+	    	end
+    	end
+
+    	threedaygifts = gifts.where(status:["open", "notified"]).where("created_at < ?", today - 3.days).where("created_at > ?", today - 4.days)
+    	threedaygifts.each do |gift|
+    		if provider_active_and_live? gift
+	    		user = User.find(gift.receiver_id)
+    			MailerJob.reminder_gift_receiver(user) if user.setting.email_reminder_gift_receiver == true
+    		end
+    	end
+    end
 
 
 private
 
-	def self.unused_gift? gift
-    	provider = Provider.find(gift.provider_id)
-    	if provider.active == true && provider.mode == "live" && (gift.status == "open" || gift.status == "notified")
-    		true
-    	else
-    		false
-    	end
+	def self.provider_active_and_live? gift
+		provider = gift.provider
+		if provider.active == true && provider.mode == "live"
+			true
+		else
+			false
+		end
 	end
-
-
 end
