@@ -58,7 +58,7 @@ describe Mt::V2::GiftsController do
             gift.shoppingCart.should == @cart
             gift.message.should == "Check out Our Promotions!"
             gift.value.should   == "30"
-            gift.cost.should    == "21"
+            gift.cost.should    == "0.0"
         end
 
         it "should return 200 and a basic serialized gift" do
