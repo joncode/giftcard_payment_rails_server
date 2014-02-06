@@ -6,7 +6,8 @@ private
     def pre_init args={}
         giver           = BizUser.find(args["provider_id"])
         args["giver"]   = giver
-        args["value"]   = calculate_value(args["shoppingCart"])
+        args["value"]   = calculate_value(args["shoppingCart"], "price")
+        args["cost"]   = calculate_value(args["shoppingCart"], "price_promo")
         args["payable"] = giver.new_debt(args["value"])
     end
 
@@ -15,9 +16,9 @@ private
         #  alert merchant tools wbesite
     end
 
-    def calculate_value shoppingCart_string
+    def calculate_value shoppingCart_string, price_type
         sc = JSON.parse shoppingCart_string
-        sc.sum {|z| z["price"].to_i * z["quantity"].to_i }
+        sc.sum {|z| z[price_type].to_i * z["quantity"].to_i }
     end
 
 end# == Schema Information
