@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140106175250) do
+ActiveRecord::Schema.define(version: 20140207043314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,16 +82,6 @@ ActiveRecord::Schema.define(version: 20140106175250) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
-
-  create_table "connections", force: true do |t|
-    t.integer  "giver_id"
-    t.integer  "receiver_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
-  add_index "connections", ["giver_id"], name: "index_connections_on_giver_id", using: :btree
-  add_index "connections", ["receiver_id"], name: "index_connections_on_receiver_id", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
@@ -182,6 +172,19 @@ ActiveRecord::Schema.define(version: 20140106175250) do
   end
 
   add_index "menu_strings", ["provider_id"], name: "index_menu_strings_on_provider_id", using: :btree
+
+  create_table "oauths", force: true do |t|
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "token"
+    t.string   "secret"
+    t.string   "network"
+    t.string   "network_id"
+    t.string   "handle"
+    t.string   "photo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "orders", force: true do |t|
     t.integer  "redeem_id"

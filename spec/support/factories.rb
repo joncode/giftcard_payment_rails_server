@@ -252,4 +252,15 @@ FactoryGirl.define do
 
     end
 
+    factory :oauth do
+        owner_id    1
+        owner_type  Gift
+        token       "9q3562341341"
+        secret      "92384619834"
+        network     "twitter"
+        network_id  "9865465748"
+        handle      "razorback"
+        photo       "cdn.akai.twitter/791823401974.png"
+    end
+
 end
