@@ -40,7 +40,7 @@ describe Mdot::V2::GiftsController do
 
         it "should send sent gifts (purchaser) with giver keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id"]
+            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id"]
             get :archive, format: :json
             gift_hsh = json["data"]["sent"][0]
             compare_keys(gift_hsh, keys)
@@ -1034,6 +1034,20 @@ describe Mdot::V2::GiftsController do
             post :create, format: :json, data: data , shoppingCart: sc
             rrc(200)
             json["status"].should == 1
+        end
+
+        it "gifts should have correct values/costs" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
+            gift = FactoryGirl.build :gift, receiver_id: @user.id, value: "100", service: "5"
+            gift.credit_card = @card.id
+            post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
+            rrc(200)
+            gift = Gift.last
+            gift.service.should == "5.00"
+            gift.value.should == "100"
+            gift.cost.should  == "85.0"
         end
 
         def make_gift_json gift

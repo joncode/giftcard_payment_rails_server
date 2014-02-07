@@ -1,6 +1,6 @@
 class Mdot::V2::UsersController < JsonController
     include Email
-    before_action :authenticate_customer,      only: [:index, :update, :show]
+    before_action :authenticate_customer,      only: [:index, :update, :show, :deactivate_user_social]
     before_action :authenticate_general_token, only: [:create, :reset_password]
 
     def index
@@ -61,6 +61,21 @@ class Mdot::V2::UsersController < JsonController
             status = :bad_request
         end
 
+        respond(status)
+    end
+
+    def deactivate_user_social
+        user_socials = UserSocial.where(user_id: @current_user.id, active: true)        
+        if params["type"] == "email" && user_socials.where(type_of: "email").count < 2
+            fail "cannot deactivate last email on account"
+            status = :bad_request
+        elsif user_socials.where(user_id: @current_user.id, type_of: params["type"], identifier: params["identifier"]).present?    
+            @current_user.deactivate_social(params["type"], params["identifier"])
+            success(@current_user.id)
+        else
+            fail "couldn't find #{params["type"]} #{params["identifier"]}"
+            status = :not_found
+        end
         respond(status)
     end
 

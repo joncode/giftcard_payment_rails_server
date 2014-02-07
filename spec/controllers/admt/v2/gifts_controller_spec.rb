@@ -10,7 +10,7 @@ describe Admt::V2::GiftsController do
         end
         @user = FactoryGirl.create(:user)
         request.env["HTTP_TKN"] = "Token"
-        @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+        @cart = "[{\"price\":\"10\",\"price_promo\":\"7\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
     end
 
     describe :update do
@@ -255,6 +255,7 @@ describe Admt::V2::GiftsController do
             gift.shoppingCart.should  == @cart
             gift.message.should       == "Check out Our Promotions!"
             gift.value.should         == "30"
+            gift.cost.should          == "21"
         end
 
         it "should return 200 and a basic serialized gift" do
@@ -262,7 +263,7 @@ describe Admt::V2::GiftsController do
             post :create, format: :json, data: create_hsh
             rrc 200
             json["status"].should == 1
-            keys = ["value", "receiver_name", "receiver_email", "shoppingCart", "status", "updated_at", "created_at", "items", "expires_at"]
+            keys = ["value", "cost", "receiver_name", "receiver_email", "shoppingCart", "status", "updated_at", "created_at", "items", "expires_at"]
             compare_keys(json["data"], keys)
         end
 
