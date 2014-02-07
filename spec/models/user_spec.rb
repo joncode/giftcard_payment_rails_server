@@ -31,6 +31,14 @@ describe User do
 		user.get_photo.should == "http://res.cloudinary.com/test_photo.jpg"
 	end
 
+    it "should not create user with first name (null) BUG FIX" do
+        user = FactoryGirl.build(:user, first_name: "(null)")
+        user.save
+        user.id.should be_nil
+        user.should have_at_least(1).error_on(:first_name)
+        user.errors.messages[:first_name].should == ["Account creation was not successful. Please go back one screen, re-enter your first name and re-submit. Thanks."]
+    end
+
 	# if user updates email, phone, twitter or facebook the data is saved in userSocial
 	describe "user_social de-normalization" do
 

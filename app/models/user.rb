@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
 	has_secure_password
 
     validates_with UserSocialValidator
+    validates_with UserFirstNameValidator
 	validates :first_name, 	presence: true, length: {  maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
 	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
