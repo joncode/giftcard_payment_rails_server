@@ -4,6 +4,8 @@ class Gift < ActiveRecord::Base
 	include Email
 	include GiftSerializers
 
+    attr_accessor :oauth
+
     TEXT_STATUS_OLD = { "incomplete" => 10, "open" => 20, "notified" => 30, "redeemed" => 40, "regifted" => 50, "expired" => 60, "cancel" => 70 }
     GIVER_STATUS    = { 10 => "incomplete" , 20 => "notified", 30 => "notified", 40 => "complete", 50 => "complete", 60 => "expired", 70 => "cancel" }
     RECEIVER_STATUS = { 10 => "incomplete" , 20 => "notified", 30 => "open",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
@@ -11,6 +13,7 @@ class Gift < ActiveRecord::Base
 
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :order, 		dependent: :destroy
+    has_one     :oauth,         as: :owner
 
 	has_many    :gift_items, 	dependent: :destroy
     belongs_to  :provider

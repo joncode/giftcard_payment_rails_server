@@ -201,6 +201,17 @@ describe Gift do
 		gift.total.should == "100.00"
 	end
 
+	context	"save with oauth credentials only" do
+
+		it "should accept create gift with oauth key and save data to oauth.db" do
+			oauth = FactoryGirl.build(:oauth)
+			gift  = FactoryGirl.create(:gift, oauth: oauth)
+			gift.id.should_not be_nil
+			oauth.reload.id.should_not be_nil
+		end
+		# when you save the gift with an oauth flag , the oauth should save automatically
+	end
+
 	context "save with sale" do
 
 	    it "should save the giver and the provider from the gift when saved via Gift" do
@@ -238,7 +249,7 @@ describe Gift do
 	        sale.provider_id.should == gift.provider_id
 	    end
 	end
-	
+
 	context "receiver Information" do
 
 		let(:giver) { FactoryGirl.create(:user, first_name: "Howard", last_name: "Stern", email: "howard@stern.com")}
@@ -526,8 +537,6 @@ describe Gift do
 				resp_hsh["status"].should 		== 0
 			end
 		end
-
-
 	end
 end
 
