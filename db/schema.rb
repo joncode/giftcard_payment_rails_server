@@ -174,6 +174,19 @@ ActiveRecord::Schema.define(version: 20140206010233) do
 
   add_index "menu_strings", ["provider_id"], name: "index_menu_strings_on_provider_id", using: :btree
 
+  create_table "oauths", force: true do |t|
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.string   "token"
+    t.string   "secret"
+    t.string   "network"
+    t.string   "network_id"
+    t.string   "handle"
+    t.string   "photo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "orders", force: true do |t|
     t.integer  "redeem_id"
     t.integer  "gift_id"
