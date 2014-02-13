@@ -1,4 +1,5 @@
 module LegacyGift
+    include ActionView::Helpers::NumberHelper
 
     def add_pay_stat
         gifts = Gift.unscoped
@@ -69,7 +70,26 @@ module LegacyGift
         nil
     end
 
+    def self.add_cost
+        gs = Gift.unscoped
+        gs.each do |g|
+            if g.cost.blank?
+                case g.giver_type
+                when  "BizUser"
+                    cost = "0.0"
+                when "AdminGiver"
+                    cart = JSON.parse(g.shoppingCart)
+                    cost = (cart.sum {|x| x["price_promo"].to_f * x["quantity"].to_i })
+                when "User"
+                    cost = (g.value.to_f * 0.85).round(2)
+                end
 
+                g.cost = number_to_currency(cost.to_s, format: "%n")
+                g.save
+            end
+        end
+        nil
+    end
 end
 
 

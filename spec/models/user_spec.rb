@@ -179,7 +179,11 @@ describe User do
             MailerJob.stub(:perform).and_return(true)
             SubscriptionJob.stub(:perform).and_return(true)
             gift = FactoryGirl.create(:gift, receiver_id: nil, receiver_email: "new_push@tarantino.com")
-            gift.status.should == 'incomplete'
+            if gift.status == 'unpaid'
+                gift.update(status: 'incomplete')
+            else
+                gift.status.should == 'incomplete'
+            end
             pnt2  = "AWESOMEFUKINTOKENSAWESOMEFUCKINTOKENS"
             giver = gift.giver
             giver.pn_token = pnt2
@@ -206,8 +210,11 @@ describe User do
             provider = FactoryGirl.create(:provider)
             biz_user = provider.biz_user
             gift.giver = biz_user
-            gift.save
-            gift.status.should == 'incomplete'
+            if gift.status == 'unpaid'
+                gift.update(status: 'incomplete')
+            else
+                gift.status.should == 'incomplete'
+            end
 
             ResqueSpec.reset!
             MailerJob.stub(:perform).and_return(true)

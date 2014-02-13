@@ -65,6 +65,7 @@ Drinkboard::Application.routes.draw do
         collection do
           put :update
           put :reset_password
+          put :deactivate_user_social
         end
       end
 

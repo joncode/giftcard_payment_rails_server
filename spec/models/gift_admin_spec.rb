@@ -60,6 +60,20 @@ describe GiftAdmin do
         gift.payable.amount.should  == BigDecimal("30")
     end
 
+    it "should set the price correctly" do
+        @gift_hsh["shoppingCart"] = [{"price"=>"4", "price_promo"=>"1.23", "quantity"=>2, "section"=>"Beer", "item_id"=>543, "item_name"=>"Corona"}].to_json
+        gift = GiftAdmin.create @gift_hsh
+        gift.reload
+        gift.value.should           == "8"
+    end
+
+    it "should set the cost based of the promo prices correctly" do
+        @gift_hsh["shoppingCart"] = [{"price"=>"4", "price_promo"=>"1.23", "quantity"=>2, "section"=>"Beer", "item_id"=>543, "item_name"=>"Corona"}].to_json
+        gift = GiftAdmin.create @gift_hsh
+        gift.reload
+        gift.cost.should            == "2.46"
+    end
+
     xit "should set the expiration date" do
 
     end

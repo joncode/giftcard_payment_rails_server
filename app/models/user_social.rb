@@ -46,13 +46,14 @@ class UserSocial < ActiveRecord::Base
         # check the user record and removes/replaces socials from pre-compiled
         user = self.user
         if user.send(self.type_of) == self.identifier
-            # if another user social exists move that data to user or use nil
-            new_data = nil
-            if new_user_social = UserSocial.where(user_id: self.user_id, type_of: self.type_of).first
-                new_data = new_user_social.identifier
+            unless self.type_of == "email" && UserSocial.where(user_id: self.user_id, type_of: self.type_of, active: true).blank?
+                # if another user social exists move that data to user or use nil
+                new_data = nil
+                if new_user_social = UserSocial.where(user_id: self.user_id, type_of: self.type_of).first
+                    new_data = new_user_social.identifier
+                end
+                user.update_column(self.type_of.to_sym, new_data)
             end
-            user.send("#{self.type_of}=" , new_data)
-            user.save
         end
     end
 

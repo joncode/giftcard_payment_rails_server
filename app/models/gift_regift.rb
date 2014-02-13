@@ -32,6 +32,7 @@ private
         args["giver"]    = @old_gift.receiver
         args["provider"] = @old_gift.provider
         args["value"]    = @old_gift.value
+        args["cost"]     = @old_gift.cost if @old_gift.cost
         args["shoppingCart"] = @old_gift.shoppingCart
         args["pay_stat"] = @old_gift.pay_stat
         user_to_gift_key_names args

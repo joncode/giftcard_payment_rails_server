@@ -10,7 +10,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
+  
 ActiveRecord::Schema.define(version: 20140207043314) do
 
   # These are extensions that must be enabled in order to support this database
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(version: 20140207043314) do
     t.datetime "expires_at"
     t.integer  "refund_id"
     t.string   "refund_type"
+    t.string   "cost"
   end
 
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree

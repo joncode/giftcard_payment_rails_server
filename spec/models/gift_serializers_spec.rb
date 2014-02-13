@@ -39,7 +39,7 @@ describe GiftSerializers do
         end
 
         it "should giver_serialize" do
-            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "updated_at", "shoppingCart", "gift_id", "status", "receiver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address"]
+            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "cost", "updated_at", "shoppingCart", "gift_id", "status", "receiver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address"]
             hsh  = gift.giver_serialize
             compare_keys hsh, keys
 
@@ -53,21 +53,21 @@ describe GiftSerializers do
         end
 
         it "should admt_serialize" do
-            keys = ["gift_id", "provider_id", "name", "merchant_address", "value", "updated_at", "pay_type"]
+            keys = ["gift_id", "provider_id", "name", "merchant_address", "value", "cost", "updated_at", "pay_type"]
             hsh  = gift.admt_serialize
             compare_keys hsh, keys
 
         end
 
         it "should report_serialize" do
-            keys = ["order_num","updated_at","created_at","receiver_name","items","server","value"]
+            keys = ["order_num","updated_at","created_at","receiver_name","items","server","value", "cost"]
             hsh  = gift.report_serialize
             compare_keys hsh, keys
 
         end
 
         it "should promo_serialize" do
-            keys = ["value", "receiver_name", "receiver_email", "shoppingCart", "status", "updated_at", "created_at", "items", "expires_at"]
+            keys = ["value", "cost", "receiver_name", "receiver_email", "shoppingCart", "status", "updated_at", "created_at", "items", "expires_at"]
             keys << "receiver_photo" if gift.receiver
             hsh  = gift.promo_serialize
             compare_keys hsh, keys

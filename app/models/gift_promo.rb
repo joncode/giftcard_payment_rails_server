@@ -7,6 +7,7 @@ private
         giver           = BizUser.find(args["provider_id"])
         args["giver"]   = giver
         args["value"]   = calculate_value(args["shoppingCart"])
+        args["cost"]    = "0.0"
         args["payable"] = giver.new_debt(args["value"])
     end
 

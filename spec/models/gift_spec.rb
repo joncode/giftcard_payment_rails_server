@@ -4,7 +4,8 @@ require 'spec_helper'
 describe Gift do
 
 	it "builds from factory" do
-		gift = FactoryGirl.create :gift
+		gift = FactoryGirl.build :gift
+		gift.save
 		gift.should be_valid
 	end
 
@@ -26,7 +27,7 @@ describe Gift do
 		gift.should have_at_least(1).error_on(:provider_id)
 	end
 
-	it "requires total" do
+	it "requires value" do
 		gift = FactoryGirl.build(:gift, :value => nil)
 		gift.should_not be_valid
 		gift.should have_at_least(1).error_on(:value)
@@ -310,6 +311,13 @@ describe Gift do
 			gift  = FactoryGirl.create(:gift_no_association, giver: giver, receiver_id: user2.id, provider: provider, receiver_name: user2.name, twitter: user.twitter)
 			gift.reload
 			gift.receiver_id.should == user2.id
+		end
+
+		it "should not save a gift when no unique receiver info is provided" do
+			gift = FactoryGirl.build(:gift_no_association, giver: giver, provider: provider, receiver_name: "No Uniques", receiver_email: nil)
+			gift.save
+			gift.should have_at_least(1).error_on(:receiver)
+			gift.errors.messages[:receiver].should == ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]
 		end
 	end
 

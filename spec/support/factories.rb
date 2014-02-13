@@ -114,6 +114,7 @@ FactoryGirl.define do
         gift.giver           { FactoryGirl.create(:giver) }
         gift.giver_name      "Jon giver"
         gift.receiver_name   "Someone New"
+        gift.receiver_email   "somebody@gmail.com"
         gift.provider        { FactoryGirl.create(:provider) }
         gift.value           "100"
         gift.service         "4"
@@ -144,6 +145,7 @@ FactoryGirl.define do
         giver_id           10
         giver_name         "Plain Jane"
         receiver_name      "Plain Receipient"
+        receiver_email     "plain@jaone.com"
         provider_id        10
         total           "100"
         service         "4"
