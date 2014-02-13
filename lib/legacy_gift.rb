@@ -78,7 +78,7 @@ module LegacyGift
                     g.cost = "0.0"
                 when "AdminGiver"
                     cart = JSON.parse(g.shoppingCart)
-                    g.cost = (cart.sum {|x| x["price_promo"].to_i * x["quantity"].to_i }).to_s
+                    g.cost = (cart.sum {|x| x["price_promo"].to_f * x["quantity"].to_i }).to_s
                 when "User"
                     g.cost = (g.value.to_f * 0.85).to_s
                 end
