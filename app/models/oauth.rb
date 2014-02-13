@@ -4,6 +4,17 @@ class Oauth < ActiveRecord::Base
     validates_presence_of :gift_id, :network, :token
     validates :secret, presence: true, :if => :twitter?
 
+    def self.initFromDictionary hsh
+        oauth = Oauth.new
+        oauth.token      = hsh["token"]
+        oauth.secret     = hsh["secret"]
+        oauth.network    = hsh["network"]
+        oauth.network_id = hsh["network_id"]
+        oauth.handle     = hsh["handle"]
+        oauth.photo      = hsh["photo"]
+        oauth
+    end
+
 private
 
     def twitter?

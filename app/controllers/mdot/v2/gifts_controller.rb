@@ -90,6 +90,7 @@ class Mdot::V2::GiftsController < JsonController
         else
             gift_hsh["shoppingCart"] = params["shoppingCart"]
             gift_hsh["giver"]        = @current_user
+            gift_hsh["receiver_oauth"] = params['data']["receiver_oauth"]
             gift_response = GiftSale.create(gift_hsh)
         end
 

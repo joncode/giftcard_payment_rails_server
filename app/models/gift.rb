@@ -4,6 +4,8 @@ class Gift < ActiveRecord::Base
 	include Email
 	include GiftSerializers
 
+    attr_accessor :receiver_oauth
+
     TEXT_STATUS_OLD = { "incomplete" => 10, "open" => 20, "notified" => 30, "redeemed" => 40, "regifted" => 50, "expired" => 60, "cancel" => 70 }
     GIVER_STATUS    = { 10 => "incomplete" , 20 => "notified", 30 => "notified", 40 => "complete", 50 => "complete", 60 => "expired", 70 => "cancel" }
     RECEIVER_STATUS = { 10 => "incomplete" , 20 => "notified", 30 => "open",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
@@ -21,6 +23,7 @@ class Gift < ActiveRecord::Base
     belongs_to  :refund,   polymorphic: :true
 
     before_validation :prepare_email
+    before_validation :build_oauth
 
 	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
@@ -33,6 +36,8 @@ class Gift < ActiveRecord::Base
     before_create :add_provider_name,   :if => :no_provider_name?
     before_create :regift,              :if => :regift?
 	before_create :build_gift_items
+
+
 	before_create :set_statuses
 
 	default_scope -> { where(active: true) } # indexed
@@ -280,6 +285,25 @@ private
 
     def post_init args
         nil
+    end
+
+    ##########  oauth callback
+
+    def build_oauth
+        if self.receiver_oauth.present?
+            puts "xx--xx-x-x-x---x-x-x-xx-------------x-x-x-x-x"
+            self.oauth = Oauth.initFromDictionary self.receiver_oauth
+            add_network_to_gift
+        end
+    end
+
+    def add_network_to_gift
+        case self.oauth.network
+        when "twitter"
+            self.twitter = self.oauth.network_id
+        when "facebook"
+            self.facebook_id = self.oauth.network_id
+        end
     end
 
 	##########  shopping cart methods

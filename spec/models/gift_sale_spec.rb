@@ -154,6 +154,22 @@ describe GiftSale do
             gift.reload
             gift.pay_stat.should == "charge_unpaid"
         end
+
+        context "oauth credentials" do
+
+            it "should create a gift with oauth credentials" do
+                @gift_hsh.delete('receiver_email')
+                hsh =  {"token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}
+                @gift_hsh["receiver_oauth"] = hsh
+                gift = GiftSale.create @gift_hsh
+                gift.reload
+                gift.oauth.network_id.should == gift.twitter
+                gift.message.should          == @gift_hsh["message"]
+                gift.receiver_name.should    == @gift_hsh["receiver_name"]
+                gift.oauth.should == Oauth.last
+            end
+
+        end
     end
 
     context "payment error credit card situations" do

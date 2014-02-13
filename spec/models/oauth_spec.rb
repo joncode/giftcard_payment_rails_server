@@ -41,7 +41,18 @@ describe Oauth do
         oauth.gift_id.should           == gift.id
         gift.oauth.should       == oauth
     end
-    
+
+    it "should initialize from hash" do
+        hsh =  {"token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}
+        oauth = Oauth.initFromDictionary hsh
+        oauth.token.should      == "9q3562341341"
+        oauth.secret.should     == "92384619834"
+        oauth.network.should    == "twitter"
+        oauth.network_id.should == "9865465748"
+        oauth.handle.should     == "razorback"
+        oauth.photo.should      == "cdn.akai.twitter/791823401974.png"
+    end
+
 end# == Schema Information
 #
 # Table name: oauths

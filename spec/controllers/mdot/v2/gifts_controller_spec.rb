@@ -869,6 +869,32 @@ describe Mdot::V2::GiftsController do
             end
         end
 
+        context "oauth credentials" do
+
+            it "should make incomplete gift with new network ID oauth credentials" do
+                Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+                Sale.any_instance.stub(:resp_code).and_return(1)
+                provider = FactoryGirl.create :provider
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                gift_hsh = {}
+                gift_hsh["message"]        = "I just Bought a Gift!"
+                gift_hsh["receiver_name"]  = "Oauth Friend"
+                gift_hsh["provider_id"]    = provider.id
+                gift_hsh["giver_id"]       = @user.id
+                gift_hsh["value"]          = "45.00"
+                gift_hsh["service"]        = "2.25"
+                gift_hsh["credit_card"]    = @card.id
+
+                hsh =  {"token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}
+                gift_hsh["receiver_oauth"] = hsh
+
+                post :create, format: :json, data: gift_hsh , shoppingCart: @cart
+                rrc(200)
+                json["status"].should == 1
+                json["data"].has_key?('gift_id').should be_true
+            end
+        end
+
         # Git should validate total and service
 
         it "it should not allow gift creating for de-activated givers" do

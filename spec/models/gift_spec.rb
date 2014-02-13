@@ -223,6 +223,29 @@ describe Gift do
 	        oauth.gift_id.should    == gift.id
 	    end
 
+		it "should accept hash of oauth data and autosave" do
+            hsh  =  {"token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}
+	        gift = FactoryGirl.build(:gift)
+	       	gift.receiver_oauth = hsh
+	        gift.save
+	        oauth = gift.oauth
+	        oauth.id.should_not be_nil
+	        gift.oauth.should       == oauth
+	        oauth.gift_id.should    == gift.id
+		end
+
+		it "should find the receiver with oauth data and auto associate" do
+            user = FactoryGirl.create(:user, twitter: "9865465748")
+            hsh  =  {"token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}
+	        gift = FactoryGirl.build(:gift)
+	       	gift.receiver_oauth = hsh
+	        gift.save
+	        gift.reload
+			gift.receiver_id.should == user.id
+			receiver = gift.receiver
+			receiver.twitter.should == gift.twitter
+		end
+
 		it "should save gift when no oauth is present" do
 			gift  = FactoryGirl.create(:gift, oauth: nil)
 			no_oauth = Oauth.find_by(gift_id: gift.id)
