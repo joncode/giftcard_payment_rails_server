@@ -85,6 +85,7 @@ module LegacyGift
                 g.save
             end
         end
+        nil
     end
 end
 
