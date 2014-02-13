@@ -31,7 +31,6 @@ describe "Expiration" do
 
         it "should ignore gifts with nil expiration dates " do
             10.times do
-                previous = Time.now - 3.days
                 FactoryGirl.create(:gift, expires_at: nil)
             end
             Expiration::expire_gifts

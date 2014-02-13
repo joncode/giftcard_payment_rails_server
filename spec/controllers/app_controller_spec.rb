@@ -67,7 +67,7 @@ describe AppController do
             gifts_ary[0]["shoppingCart"][0].class.should == Hash
         end
 
-        context "scope out unpaid gifts" do
+        context "scope out unpaid gifts / expired gifts" do
 
             it "should not return :pay_stat => 'payment_error' gifts" do
                 gifts = Gift.all
@@ -80,6 +80,16 @@ describe AppController do
                 json["success"]["badge"].should == 1
             end
 
+            it "should not return :status => 'expired' gifts" do
+                gifts = Gift.all
+                last_gift = gifts.pop
+                last_gift = gifts.pop
+                gifts.each do |gift|
+                    gift.update(status: "expired")
+                end
+                post :relays, format: :json, token: receiver.remember_token
+                json["success"]["badge"].should == 2
+            end
         end
 
         it "should send gifts when providers are paused / not live / deactivated" do
