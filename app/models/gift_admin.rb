@@ -4,7 +4,9 @@ class GiftAdmin < Gift
 private
 
     def pre_init args={}
-        args["value"]   = calculate_value(args["shoppingCart"])
+        shoppingCart = JSON.parse args["shoppingCart"]
+        args["value"]   = calculate_value(shoppingCart)
+        args["cost"]    = calculate_cost(shoppingCart)
         giver = args["giver"]
         args["payable"] = giver.new_debt(args["value"])
     end
@@ -13,9 +15,11 @@ private
         puts "NOTIFY RECEIVER VIA #{self.receiver_email}"
     end
 
-    def calculate_value shoppingCart_string
-        sc = JSON.parse shoppingCart_string
-        sc.sum {|z| z["price"].to_i * z["quantity"].to_i }
+    def calculate_value shoppingCart
+        shoppingCart.sum {|z| z["price"].to_i * z["quantity"].to_i }
     end
 
+    def calculate_cost shoppingCart
+        shoppingCart.sum {|z| z["price_promo"].to_f * z["quantity"].to_i }
+    end
 end

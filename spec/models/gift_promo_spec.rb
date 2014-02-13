@@ -70,6 +70,13 @@ describe GiftPromo do
         gift.payable.amount.should  == BigDecimal("4.50")
     end
 
+    it "should set the cost correctly" do
+        gift = GiftPromo.create @gift_hsh
+        gift.reload
+        gift.value.should           == "30"
+        gift.cost.should            == "0.0"
+    end
+
     xit "should set the expiration date" do
 
     end

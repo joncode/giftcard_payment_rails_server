@@ -69,7 +69,23 @@ module LegacyGift
         nil
     end
 
-
+    def self.add_cost
+        gs = Gift.unscoped
+        gs.each do |g|
+            if g.cost.blank?
+                case g.giver_type
+                when  "BizUser"
+                    g.cost = "0.0"
+                when "AdminGiver"
+                    cart = JSON.parse(g.shoppingCart)
+                    g.cost = (cart.sum {|x| x["price_promo"].to_f * x["quantity"].to_i }).to_s
+                when "User"
+                    g.cost = (g.value.to_f * 0.85).to_s
+                end
+                g.save
+            end
+        end
+    end
 end
 
 
