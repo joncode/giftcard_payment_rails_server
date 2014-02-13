@@ -209,8 +209,25 @@ describe Gift do
 			gift  = FactoryGirl.create(:gift, oauth: oauth)
 			gift.id.should_not be_nil
 			oauth.reload.id.should_not be_nil
+			oauth.gift_id.should == gift.id
 		end
-		# when you save the gift with an oauth flag , the oauth should save automatically
+
+	    it "should save automatically with gift" do
+	        gift  = FactoryGirl.build(:gift)
+	        oauth = FactoryGirl.build(:oauth, gift_id: nil)
+	        gift.oauth = oauth
+	        gift.save
+	        oauth.reload
+	        oauth.id.should_not be_nil
+	        gift.oauth.should       == oauth
+	        oauth.gift_id.should    == gift.id
+	    end
+
+		it "should save gift when no oauth is present" do
+			gift  = FactoryGirl.create(:gift, oauth: nil)
+			no_oauth = Oauth.find_by(gift_id: gift.id)
+			no_oauth.should be_nil
+		end
 	end
 
 	context "save with sale" do
@@ -592,5 +609,6 @@ end
 #  expires_at     :datetime
 #  refund_id      :integer
 #  refund_type    :string(255)
+#  cost           :string(255)
 #
 

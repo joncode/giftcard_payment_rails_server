@@ -1,5 +1,4 @@
 class GiftItem < ActiveRecord::Base
-    # attr_accessible :gift_id, :menu_id, :name, :price, :quantity, :detail
 
 	belongs_to :gift
 

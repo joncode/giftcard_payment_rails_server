@@ -4,8 +4,6 @@ class Gift < ActiveRecord::Base
 	include Email
 	include GiftSerializers
 
-    attr_accessor :oauth
-
     TEXT_STATUS_OLD = { "incomplete" => 10, "open" => 20, "notified" => 30, "redeemed" => 40, "regifted" => 50, "expired" => 60, "cancel" => 70 }
     GIVER_STATUS    = { 10 => "incomplete" , 20 => "notified", 30 => "notified", 40 => "complete", 50 => "complete", 60 => "expired", 70 => "cancel" }
     RECEIVER_STATUS = { 10 => "incomplete" , 20 => "notified", 30 => "open",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
@@ -13,7 +11,7 @@ class Gift < ActiveRecord::Base
 
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :order, 		dependent: :destroy
-    has_one     :oauth,         as: :owner
+    has_one     :oauth,         dependent: :destroy
 
 	has_many    :gift_items, 	dependent: :destroy
     belongs_to  :provider
@@ -27,7 +25,7 @@ class Gift < ActiveRecord::Base
 	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
     validates_with GiftReceiverInfoValidator
-    
+
     before_save { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
 	before_save   :extract_phone_digits
     before_create :find_receiver
@@ -394,5 +392,6 @@ end
 #  expires_at     :datetime
 #  refund_id      :integer
 #  refund_type    :string(255)
+#  cost           :string(255)
 #
 

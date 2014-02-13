@@ -10,7 +10,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-  
+
 ActiveRecord::Schema.define(version: 20140207043314) do
 
   # These are extensions that must be enabled in order to support this database
@@ -175,8 +175,7 @@ ActiveRecord::Schema.define(version: 20140207043314) do
   add_index "menu_strings", ["provider_id"], name: "index_menu_strings_on_provider_id", using: :btree
 
   create_table "oauths", force: true do |t|
-    t.integer  "owner_id"
-    t.string   "owner_type"
+    t.integer  "gift_id"
     t.string   "token"
     t.string   "secret"
     t.string   "network"

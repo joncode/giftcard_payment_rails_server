@@ -1,8 +1,7 @@
 class CreateOauths < ActiveRecord::Migration
   def change
     create_table :oauths do |t|
-      t.integer  :owner_id
-      t.string   :owner_type
+      t.integer  :gift_id
       t.string   :token
       t.string   :secret
       t.string   :network

@@ -255,8 +255,7 @@ FactoryGirl.define do
     end
 
     factory :oauth do
-        owner_id    1
-        owner_type  Gift
+        gift_id     100
         token       "9q3562341341"
         secret      "92384619834"
         network     "twitter"

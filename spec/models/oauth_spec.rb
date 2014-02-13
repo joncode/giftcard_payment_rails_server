@@ -8,13 +8,10 @@ describe Oauth do
         oauth.should be_valid
     end
 
-    it "requires owner_id and owner_type" do
-        oauth = FactoryGirl.build(:oauth, :owner_id => nil)
+    it "requires gift_id" do
+        oauth = FactoryGirl.build(:oauth, :gift_id => nil)
         oauth.should_not be_valid
-        oauth.should have_at_least(1).error_on(:owner_id)
-        oauth = FactoryGirl.build(:oauth, :owner_type => nil)
-        oauth.should_not be_valid
-        oauth.should have_at_least(1).error_on(:owner_type)
+        oauth.should have_at_least(1).error_on(:gift_id)
     end
 
     it "requires network" do
@@ -35,18 +32,29 @@ describe Oauth do
         oauth.should have_at_least(1).error_on(:secret)
     end
 
-    context "owner polymorphic" do
-
-        it "associates with a gift as owner" do
-            gift  = FactoryGirl.create(:gift)
-            oauth = FactoryGirl.build(:oauth, owner_type: "Gift", owner_id: gift.id)
-            oauth.save
-            oauth.owner.id.should           == gift.id
-            oauth.owner.class.to_s.should   == "Gift"
-            oauth.owner_id.should           == gift.id
-            oauth.owner_type.should         == "Gift"
-        end
+    it "associates with a gift" do
+        gift  = FactoryGirl.create(:gift)
+        oauth = FactoryGirl.build(:oauth, gift: gift)
+        oauth.save
+        oauth.gift.id.should           == gift.id
+        oauth.gift.class.to_s.should   == "Gift"
+        oauth.gift_id.should           == gift.id
+        gift.oauth.should       == oauth
     end
+    
+end# == Schema Information
+#
+# Table name: oauths
+#
+#  id         :integer         not null, primary key
+#  gift_id    :integer
+#  token      :string(255)
+#  secret     :string(255)
+#  network    :string(255)
+#  network_id :string(255)
+#  handle     :string(255)
+#  photo      :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
 
-
-end

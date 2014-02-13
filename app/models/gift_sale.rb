@@ -121,5 +121,6 @@ end
 #  expires_at     :datetime
 #  refund_id      :integer
 #  refund_type    :string(255)
+#  cost           :string(255)
 #
 
