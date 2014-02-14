@@ -15,7 +15,7 @@ describe Reminder do
 	end
 
 	context "3 day old gifts" do
-	    
+
 	    it "should send email if more than 3 and less than 4 days old" do
 			today = Time.now.beginning_of_day
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 3.1.days
@@ -55,7 +55,7 @@ describe Reminder do
 	end
 
 	context "10 day old gifts" do
-	    
+
 	    it "should send email if more than 3 and less than 4 days old" do
 			today = Time.now.beginning_of_day
 			Gift.skip_callback(:create, :before, :set_statuses)
@@ -99,7 +99,7 @@ describe Reminder do
 	end
 
 	context "30 day old gifts" do
-	    
+
 	    it "should send email if more than 30 and less than 31 days old" do
 			today = Time.now.beginning_of_day
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 30.1.days, status: "open"
@@ -137,6 +137,5 @@ describe Reminder do
 	    	Reminder.gift_reminder
 	    end
 	end
-
-
+	
 end

@@ -29,8 +29,7 @@ class Reminder
     		end
     	end
     end
-
-
+    
 private
 
 	def self.provider_active_and_live? gift
