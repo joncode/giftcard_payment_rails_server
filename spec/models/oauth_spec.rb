@@ -8,12 +8,6 @@ describe Oauth do
         oauth.should be_valid
     end
 
-    it "requires gift_id" do
-        oauth = FactoryGirl.build(:oauth, :gift_id => nil)
-        oauth.should_not be_valid
-        oauth.should have_at_least(1).error_on(:gift_id)
-    end
-
     it "requires network" do
         oauth = FactoryGirl.build(:oauth, :network => nil)
         oauth.should_not be_valid

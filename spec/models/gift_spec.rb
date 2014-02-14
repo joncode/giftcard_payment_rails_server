@@ -234,6 +234,30 @@ describe Gift do
 	        oauth.gift_id.should    == gift.id
 		end
 
+		it "should reject hash and gift save when oauth data network id is missing" do
+            hsh  =  { "secret"=>"92384619834", "network"=>"twitter", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}
+	        gift = FactoryGirl.build(:gift, receiver_email: nil)
+	       	gift.receiver_oauth = hsh
+	        gift.save
+	        oauth = gift.oauth
+	        oauth.id.should be_nil
+	        gift.oauth.should   == oauth
+	        oauth.gift_id.should   be_nil
+	        gift.id.should be_nil
+		end
+
+		it "should reject hash and gift save when oauth data is not complete" do
+            hsh  =  { "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}
+	        gift = FactoryGirl.build(:gift, receiver_email: nil)
+	       	gift.receiver_oauth = hsh
+	        gift.save
+	        oauth = gift.oauth
+	        oauth.id.should be_nil
+	        gift.oauth.should   == oauth
+	        oauth.gift_id.should   be_nil
+	        gift.id.should be_nil
+		end
+
 		it "should find the receiver with oauth data and auto associate" do
             user = FactoryGirl.create(:user, twitter: "9865465748")
             hsh  =  {"token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}

@@ -13,7 +13,7 @@ class Gift < ActiveRecord::Base
 
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :order, 		dependent: :destroy
-    has_one     :oauth,         dependent: :destroy
+    has_one     :oauth, validate: true, dependent: :destroy
 
 	has_many    :gift_items, 	dependent: :destroy
     belongs_to  :provider
@@ -36,7 +36,6 @@ class Gift < ActiveRecord::Base
     before_create :add_provider_name,   :if => :no_provider_name?
     before_create :regift,              :if => :regift?
 	before_create :build_gift_items
-
 
 	before_create :set_statuses
 

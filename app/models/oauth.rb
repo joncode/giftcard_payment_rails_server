@@ -1,7 +1,7 @@
 class Oauth < ActiveRecord::Base
     belongs_to :gift
 
-    validates_presence_of :gift_id, :network, :token
+    validates_presence_of  :network, :token
     validates :secret, presence: true, :if => :twitter?
 
     def self.initFromDictionary hsh
