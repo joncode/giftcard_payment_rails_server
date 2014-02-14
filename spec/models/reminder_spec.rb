@@ -56,28 +56,28 @@ describe Reminder do
 
 	context "10 day old gifts" do
 
-	    it "should send email if more than 3 and less than 4 days old" do
+	    it "should send email if 10.1 days old" do
 			today = Time.now.beginning_of_day
 			Gift.skip_callback(:create, :before, :set_statuses)
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 10.1.days, status: "incomplete"
-	    	MailerJob.should_receive(:reminder_gift_giver).with(@abe).and_return(true)
+	    	MailerJob.should_receive(:reminder_gift_giver).with(@abe, @bob.name).and_return(true)
 	    	Reminder.gift_reminder
 	    end
 
-	    it "should send email if more than 3 and less than 4 days old" do
+	    it "should send email if 10.9 days old" do
 			today = Time.now.beginning_of_day
 			Gift.skip_callback(:create, :before, :set_statuses)
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 10.9.days, status: "incomplete"
-	    	MailerJob.should_receive(:reminder_gift_giver).with(@abe).and_return(true)
+	    	MailerJob.should_receive(:reminder_gift_giver).with(@abe, @bob.name).and_return(true)
 	    	Reminder.gift_reminder
 	    end
 
-	    it "should not send email if less than 3 or more than 4 days old" do
+	    it "should not send email 9 - 11 days old" do
 			today = Time.now.beginning_of_day
 			Gift.skip_callback(:create, :before, :set_statuses)
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 9.days, status: "incomplete"
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 11.days, status: "incomplete"
-	    	MailerJob.should_not_receive(:reminder_gift_giver).with(@abe).and_return(true)
+	    	MailerJob.should_not_receive(:reminder_gift_giver).with(@abe, @bob.name).and_return(true)
 	    	Reminder.gift_reminder
 	    end
 
@@ -137,5 +137,5 @@ describe Reminder do
 	    	Reminder.gift_reminder
 	    end
 	end
-	
+
 end

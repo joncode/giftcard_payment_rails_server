@@ -55,4 +55,33 @@ describe MailerJob do
             MailerJob.invoice_giver(data)
         end
     end
+
+    describe :reminder_gift_receiver do
+        it "should call mandrill with send_template" do
+            MailerJob.stub(:message_hash).and_return("stubbed_message_hash")
+            MailerJob.stub(:generate_template_content).and_return("stubbed_template_content")
+            Mandrill::API.should_receive(:send_template).with("iom-gift-unopened-receiver", [{"name"=>"user_name", "content"=>"Jimmy Basic"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], "stubbed_message_hash")
+
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create(:gift, receiver_id: user.id)
+
+            Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
+            MailerJob.reminder_gift_receiver(user)
+        end
+    end
+
+    describe :reminder_gift_giver do
+        it "should call mandrill with send_template" do
+            MailerJob.stub(:message_hash).and_return("stubbed_message_hash")
+            MailerJob.stub(:generate_template_content).and_return("stubbed_template_content")
+            Mandrill::API.should_receive(:send_template).with("iom-gift-unopened-giver", [{"name"=>"user_name", "content"=>"Jimmy Basic"}, {"name"=>"receiver_name", "content"=>"Someone New"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], "stubbed_message_hash")
+
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create(:gift, giver: user)
+
+
+            Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
+            MailerJob.reminder_gift_giver(user, gift.receiver_name)
+        end
+    end
 end
