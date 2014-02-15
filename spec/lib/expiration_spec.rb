@@ -7,7 +7,7 @@ describe "Expiration" do
 
         it "should expire gifts that are past expiration" do
             10.times do
-                previous = Time.now - 3.days
+                previous = Time.now - 1.days
                 FactoryGirl.create(:gift, expires_at: previous)
             end
             Expiration::expire_gifts
@@ -19,7 +19,7 @@ describe "Expiration" do
 
         it "should not expire gifts that are before expiration" do
             10.times do
-                previous = Time.now + 3.days
+                previous = Time.now + 1.days
                 FactoryGirl.create(:gift, expires_at: previous)
             end
             Expiration::expire_gifts

@@ -2,7 +2,6 @@ require 'json'
 
 module Urbanairship
     module ClassMethods
-
         def device_tokens
             do_request(:get, "/api/device_tokens/", :authenticate_with => :master_secret)
         end
@@ -14,6 +13,7 @@ module Urbanairship
             http_method = request.class.to_s.split('::')[-1]
             new_body = response.body.inspect
             short_body = truncate(new_body ,length: 600).gsub('&quot;', "\'")
+            #short_body = new_body
             logger.info "Urbanairship (#{time}ms): [#{http_method} #{request.path}, #{request.body}], [#{response.code}, #{short_body}]"
             logger.flush if logger.respond_to?(:flush)
         end
@@ -55,9 +55,10 @@ module Cron
                 incorrect += 1
             end
         end
-        puts "Here is the total pn tokens = #{total}"
-        puts "UA has correct tokens = #{count}"
-        puts "Incorrect tokens are  = #{incorrect}"
+        puts "Register missing PnTokens"
+        puts "Here is total pn tokens = #{total}"
+        puts "UA has correct tokens   = #{count}"
+        puts "missing tokens are      = #{incorrect}"
     end
 
     def check_update_aliases
@@ -84,9 +85,10 @@ module Cron
                 end
             end
         end
-        puts "Here is the total pn tokens = #{total}"
-        puts "UA has correct tokens = #{count}"
-        puts "Incorrect tokens are  = #{incorrect}"
+        puts "check and update Aliases"
+        puts "Here is total pn tokens = #{total}"
+        puts "UA has correct tokens   = #{count}"
+        puts "Incorrect aliases are   = #{incorrect}"
     end
 
     def test_ua
