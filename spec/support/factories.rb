@@ -264,4 +264,15 @@ FactoryGirl.define do
         photo       "cdn.akai.twitter/791823401974.png"
     end
 
+    factory :campaign do
+        type_of          "SMS"
+        name             "Special Promotion"
+        live_date        Time.now.to_date
+        close_date       (Time.now + 1.month).to_date
+        purchaser_id     1
+        purchaser_type   "ItsOnMe"
+        budget           100     
+        status           "Live"
+    end
+
 end
