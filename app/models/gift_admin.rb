@@ -1,5 +1,6 @@
 class GiftAdmin < Gift
 
+    
 
 private
 
