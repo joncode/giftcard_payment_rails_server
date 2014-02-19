@@ -7,6 +7,11 @@ class BizUser < ActiveRecord::Base
         "#{super} Staff"
     end
 
+    def get_photo
+        return MERCHANT_DEFAULT_IMG if image.blank?
+        image
+    end
+    
     def incur_debt amount
         debt = new_debt(amount)
         debt.save
@@ -19,10 +24,7 @@ class BizUser < ActiveRecord::Base
         Debt.new(owner: self, amount: service_fee)
     end
 
-    def get_photo
-        return MERCHANT_DEFAULT_IMG if image.blank?
-        image
-    end
+
 
 end
 # == Schema Information
