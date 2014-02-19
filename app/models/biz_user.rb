@@ -3,6 +3,7 @@ class BizUser < ActiveRecord::Base
     has_many :sent,  as: :giver,  class_name: Gift
     has_many :debts, as: :owner
 
+        ####### Gift Giver Ducktype
     def name
         "#{super} Staff"
     end
@@ -11,7 +12,12 @@ class BizUser < ActiveRecord::Base
         return MERCHANT_DEFAULT_IMG if image.blank?
         image
     end
-    
+
+    # hidden giver ducktype methods
+        # biz_user_obj.id    as giver_id   - provider_id
+        # biz_user_obj.class as giver_type - BizUser class
+
+        ####### Debt Ducktype as Owner
     def incur_debt amount
         debt = new_debt(amount)
         debt.save
@@ -23,8 +29,6 @@ class BizUser < ActiveRecord::Base
         service_fee    = decimal_amount * 0.15
         Debt.new(owner: self, amount: service_fee)
     end
-
-
 
 end
 # == Schema Information
