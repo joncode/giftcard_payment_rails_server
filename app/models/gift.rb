@@ -3,6 +3,7 @@ class Gift < ActiveRecord::Base
 	include Formatter
 	include Email
 	include GiftSerializers
+    #include DbRemoval
 
     attr_accessor :receiver_oauth
 
