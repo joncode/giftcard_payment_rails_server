@@ -78,12 +78,12 @@ describe GiftCampaign do
 
     end
 
-        # check that the campaign has gifts to give
         # associate the gift with the campaign
         # set the giver based on the campaign
         # create a payable that associates with the campaign
         # set the receiver name if the receiver is not in our database
         #     setting the receiver name to campaign name and then letting PeopleFinder in gift model overwrite receiver_name
+        # check that the campaign has gifts to give
 
 end# == Schema Information
 #
