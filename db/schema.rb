@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140207043314) do
+ActiveRecord::Schema.define(version: 20140219024119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,13 +125,8 @@ ActiveRecord::Schema.define(version: 20140207043314) do
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
     t.string   "receiver_phone"
-    t.string   "tax"
-    t.string   "tip"
-    t.integer  "regift_id"
-    t.string   "foursquare_id"
     t.string   "facebook_id"
     t.integer  "anon_id"
-    t.integer  "sale_id"
     t.string   "receiver_email"
     t.text     "shoppingCart"
     t.string   "twitter"
@@ -140,8 +135,6 @@ ActiveRecord::Schema.define(version: 20140207043314) do
     t.integer  "cat",                        default: 0
     t.boolean  "active",                     default: true
     t.string   "pay_stat"
-    t.string   "pay_type"
-    t.integer  "pay_id"
     t.datetime "redeemed_at"
     t.string   "server"
     t.integer  "payable_id"
