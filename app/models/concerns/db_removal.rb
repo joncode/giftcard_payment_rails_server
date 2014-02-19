@@ -5,10 +5,6 @@ module DbRemoval
         raise NotImplementedError
     end
 
-    # def credit_card
-    #     raise NotImplementedError
-    # end
-
     def tax
         raise NotImplementedError
     end
@@ -29,10 +25,6 @@ module DbRemoval
         raise NotImplementedError
     end
 
-    # def pay_stat
-    #     raise NotImplementedError
-    # end
-
     def pay_type
         raise NotImplementedError
     end
@@ -48,10 +40,6 @@ module DbRemoval
     def total= amount
         raise NotImplementedError
     end
-
-    # def credit_card= amount
-    #     raise NotImplementedError
-    # end
 
     def tax= amount
         raise NotImplementedError
@@ -72,10 +60,6 @@ module DbRemoval
     def sale_id= amount
         raise NotImplementedError
     end
-
-    # def pay_stat= amount
-    #     raise NotImplementedError
-    # end
 
     def pay_type= amount
         raise NotImplementedError
