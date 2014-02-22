@@ -2,6 +2,7 @@ class AdminGiver < Admtmodel
     self.table_name = "users"
     has_many :sent,  as: :giver,  class_name: Gift
     has_many :debts, as: :owner
+    has_many :campaigns_items, as: :owner
 
         ####### Gift Giver Ducktype
     def name

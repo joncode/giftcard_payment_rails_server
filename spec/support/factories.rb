@@ -275,4 +275,14 @@ FactoryGirl.define do
         status           "Live"
     end
 
+    factory :campaign_item do
+        campaign_id     1
+        provider_id     1
+        budget          100
+        reserve         100
+        expires_at      Time.now.to_date
+        expires_in     (Time.now + 1.month).to_date
+        sms_shortcode   "11111"
+        contract        true
+    end
 end
