@@ -265,6 +265,12 @@ class User < ActiveRecord::Base
 		return false
 	end
 
+	def setting
+		get_or_create_settings
+
+		# remove this and make setting creation eager
+	end
+
 	def set_confirm_email
 		setting 							= get_or_create_settings
 		setting.confirm_email_token 		= create_token
