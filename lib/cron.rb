@@ -13,7 +13,6 @@ module Urbanairship
             http_method = request.class.to_s.split('::')[-1]
             new_body = response.body.inspect
             short_body = truncate(new_body ,length: 600).gsub('&quot;', "\'")
-            #short_body = new_body
             logger.info "Urbanairship (#{time}ms): [#{http_method} #{request.path}, #{request.body}], [#{response.code}, #{short_body}]"
             logger.flush if logger.respond_to?(:flush)
         end
@@ -56,7 +55,8 @@ module Cron
             end
         end
         puts "Register missing PnTokens"
-        puts "Here is total pn tokens = #{total}"
+        puts "Total UA pn_tokens      = #{ua_key_hsh.keys.count}"
+        puts "Total db pn_tokens      = #{total}"
         puts "UA has correct tokens   = #{count}"
         puts "missing tokens are      = #{incorrect}"
     end
@@ -86,7 +86,8 @@ module Cron
             end
         end
         puts "check and update Aliases"
-        puts "Here is total pn tokens = #{total}"
+        puts "Total UA pn_tokens      = #{ua_key_hsh.keys.count}"
+        puts "Total db pn_tokens      = #{total}"
         puts "UA has correct tokens   = #{count}"
         puts "Incorrect aliases are   = #{incorrect}"
     end
