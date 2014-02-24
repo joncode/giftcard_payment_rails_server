@@ -13,8 +13,7 @@ module Urbanairship
                 puts "UA limiting call - GET - #{response['next_page']}"
                 next_path     = response["next_page"].split('.com')[1]
                 response      = do_request(:get, next_path, :authenticate_with => :master_secret)
-                puts "UA resp = #{response}"
-                dts          << response["device_tokens"]
+                dts = dts + response["device_tokens"]
             end
             puts "Total tokens received = #{dts.count} -----------------"
             dts
