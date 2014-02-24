@@ -111,9 +111,8 @@ module Cron
 private
 
     def get_and_sort_ua_tokens
-        ua_response = ua_device_tokens
-        ua_tokens   = ua_response["device_tokens"]
-        
+        ua_tokens   = ua_device_tokens
+
         ua_key_hsh = {}
         ua_tokens.each do |uat|
             key = uat["device_token"].downcase
