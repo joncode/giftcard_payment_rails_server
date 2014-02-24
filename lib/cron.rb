@@ -6,6 +6,17 @@ module Urbanairship
             do_request(:get, "/api/device_tokens/", :authenticate_with => :master_secret)
         end
 
+        def device_tokens_with_limiting
+            response = do_request(:get, "/api/device_tokens/", :authenticate_with => :master_secret)
+            dts      = response["device_tokens"]
+            while response["next_page"].present?
+                next_path     = response["next_page"].split('.com')
+                response      = do_request(:get, next_path, :authenticate_with => :master_secret)
+                dts          << response["device_tokens"]
+            end
+            dts
+        end
+
         def log_request_and_response(request, response, time)
             return if logger.nil?
 
@@ -102,7 +113,7 @@ private
     def get_and_sort_ua_tokens
         ua_response = ua_device_tokens
         ua_tokens   = ua_response["device_tokens"]
-
+        
         ua_key_hsh = {}
         ua_tokens.each do |uat|
             key = uat["device_token"].downcase
@@ -117,7 +128,7 @@ private
     end
 
     def ua_device_tokens
-        Urbanairship.device_tokens
+        Urbanairship.device_tokens_with_limiting
     end
 
 end
