@@ -264,6 +264,10 @@ class User < ActiveRecord::Base
 		end
 		return false
 	end
+	
+	def setting
+		get_or_create_settings
+	end
 
 	def set_confirm_email
 		setting 							= get_or_create_settings
