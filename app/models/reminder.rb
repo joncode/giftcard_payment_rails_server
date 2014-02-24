@@ -9,7 +9,7 @@ class Reminder
     	thirtydaygifts = gifts.where(status:["open", "notified"]).where("created_at < ?", today - 29.days)
     	thirtydaygifts.each do |gift|
 
-            puts "here is 30 day for gift = #{gift.id}"
+            puts "reminder 30 day for gift = #{gift.id}"
     	    self.reminder_email_to_gift_user(gift)
 
     	end
@@ -17,7 +17,7 @@ class Reminder
     	tendaygifts = gifts.where(status:["incomplete"]).where("created_at < ?", today - 10.days).where("created_at > ?", today - 11.days)
     	tendaygifts.each do |gift|
 
-            puts "here is 10 day for gift = #{gift.id}"
+            puts "reminder 10 day for gift = #{gift.id}"
             self.reminder_email_to_gift_user(gift, false)
 
     	end
@@ -25,7 +25,7 @@ class Reminder
     	threedaygifts = gifts.where(status:["open", "notified"]).where("created_at < ?", today - 3.days).where("created_at > ?", today - 4.days)
     	threedaygifts.each do |gift|
 
-            puts "here is 3 day for gift = #{gift.id}"
+            puts "reminder 3 day for gift = #{gift.id}"
             self.reminder_email_to_gift_user(gift)
 
     	end
