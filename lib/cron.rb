@@ -8,6 +8,7 @@ module Urbanairship
 
         def device_tokens_with_limiting
             response = do_request(:get, "/api/device_tokens/", :authenticate_with => :master_secret)
+            ua_count_of_total_tokens = response['device_tokens_count']
             dts      = response["device_tokens"]
             while response["next_page"].present?
                 puts "UA limiting call - GET - #{response['next_page']}"
@@ -16,6 +17,7 @@ module Urbanairship
                 dts = dts + response["device_tokens"]
             end
             puts "Total tokens received = #{dts.count} -----------------"
+            puts "Total tokens with Urbanairship ======  #{ua_count_of_total_tokens}"
             dts
         end
 
