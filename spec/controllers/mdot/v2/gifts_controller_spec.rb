@@ -158,14 +158,14 @@ describe Mdot::V2::GiftsController do
             compare_keys(serialized_gift, keys)
         end
 
-        it "should return shopping cart as a json string" do
+        it "should return shopping cart as a json Array" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
             gifts_ary = json["data"]["gifts"]
-            gifts_ary[0]["shoppingCart"].class.should == String
+            gifts_ary[0]["shoppingCart"].class.should == Array
         end
 
-        context "scope out unpaid gifts" do
+        context "scope out unpaid / expired gifts" do
 
             it "should not return :pay_stat => 'payment_error' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
@@ -185,7 +185,7 @@ describe Mdot::V2::GiftsController do
             it "should not return :status => 'expired' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 gifts = Gift.where(receiver_id: @user.id)
-                last_gift = gifts.pop
+                last_gift       = gifts.pop
                 other_last_gift = gifts.pop
                 gifts.each do |gift|
                     gift.update(status: "expired")
@@ -193,7 +193,7 @@ describe Mdot::V2::GiftsController do
                 get :badge, format: :json
                 json["data"]["badge"].should == 2
                 gift = json["data"]["gifts"].pop
-                gift["gift_id"].should == last_gift.id
+                gift["gift_id"].should       == last_gift.id
             end
         end
 
