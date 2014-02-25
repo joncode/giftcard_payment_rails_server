@@ -6,6 +6,21 @@ module Urbanairship
             do_request(:get, "/api/device_tokens/", :authenticate_with => :master_secret)
         end
 
+        def device_tokens_with_limiting
+            response = do_request(:get, "/api/device_tokens/", :authenticate_with => :master_secret)
+            ua_count_of_total_tokens = response['device_tokens_count']
+            dts      = response["device_tokens"]
+            while response["next_page"].present?
+                puts "UA limiting call - GET - #{response['next_page']}"
+                next_path     = response["next_page"].split('.com')[1]
+                response      = do_request(:get, next_path, :authenticate_with => :master_secret)
+                dts = dts + response["device_tokens"]
+            end
+            puts "Total tokens received = #{dts.count} -----------------"
+            puts "Total tokens with Urbanairship ======  #{ua_count_of_total_tokens}"
+            dts
+        end
+
         def log_request_and_response(request, response, time)
             return if logger.nil?
 
@@ -13,7 +28,6 @@ module Urbanairship
             http_method = request.class.to_s.split('::')[-1]
             new_body = response.body.inspect
             short_body = truncate(new_body ,length: 600).gsub('&quot;', "\'")
-            #short_body = new_body
             logger.info "Urbanairship (#{time}ms): [#{http_method} #{request.path}, #{request.body}], [#{response.code}, #{short_body}]"
             logger.flush if logger.respond_to?(:flush)
         end
@@ -56,7 +70,8 @@ module Cron
             end
         end
         puts "Register missing PnTokens"
-        puts "Here is total pn tokens = #{total}"
+        puts "Total UA pn_tokens      = #{ua_key_hsh.keys.count}"
+        puts "Total db pn_tokens      = #{total}"
         puts "UA has correct tokens   = #{count}"
         puts "missing tokens are      = #{incorrect}"
     end
@@ -86,7 +101,8 @@ module Cron
             end
         end
         puts "check and update Aliases"
-        puts "Here is total pn tokens = #{total}"
+        puts "Total UA pn_tokens      = #{ua_key_hsh.keys.count}"
+        puts "Total db pn_tokens      = #{total}"
         puts "UA has correct tokens   = #{count}"
         puts "Incorrect aliases are   = #{incorrect}"
     end
@@ -99,8 +115,7 @@ module Cron
 private
 
     def get_and_sort_ua_tokens
-        ua_response = ua_device_tokens
-        ua_tokens   = ua_response["device_tokens"]
+        ua_tokens   = ua_device_tokens
 
         ua_key_hsh = {}
         ua_tokens.each do |uat|
@@ -116,7 +131,7 @@ private
     end
 
     def ua_device_tokens
-        Urbanairship.device_tokens
+        Urbanairship.device_tokens_with_limiting
     end
 
 end

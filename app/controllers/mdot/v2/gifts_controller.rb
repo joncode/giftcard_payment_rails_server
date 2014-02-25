@@ -133,7 +133,11 @@ private
     end
 
     def redeem_params
-        params.require(:server)
+        if params["server"].blank?
+            nil
+        else
+            params.require(:server)
+        end
     end
 
     def regift_params
