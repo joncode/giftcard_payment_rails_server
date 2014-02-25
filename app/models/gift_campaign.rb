@@ -1,7 +1,6 @@
 class GiftCampaign < Gift
 
-
-
+    
 
 private
 
@@ -24,5 +23,5 @@ private
     def calculate_cost shoppingCart
         shoppingCart.sum {|z| z["price_promo"].to_f * z["quantity"].to_i }
     end
-    
+
 end
