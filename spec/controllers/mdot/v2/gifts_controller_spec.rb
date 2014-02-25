@@ -328,9 +328,21 @@ describe Mdot::V2::GiftsController do
             json["data"]["server"].should       == "test"
         end
 
-        it "should return order_number, server, and total on success when no server is included" do
+        it "should return order_number, server, and total on success when no server value is included" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: ""
+            order = @gift.order
+            rrc(200)
+            json["status"].should == 1
+
+            json["data"]["order_number"].should == order.make_order_num
+            json["data"]["total"].should        == @gift.value + ".00"
+            json["data"]["server"].should       == ""
+        end
+
+        it "should return order_number, server, and total on success when no server key" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :redeem, format: :json, id: @gift.id
             order = @gift.order
             rrc(200)
             json["status"].should == 1
