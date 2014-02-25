@@ -33,7 +33,17 @@ describe Oauth do
         oauth.gift.id.should           == gift.id
         oauth.gift.class.to_s.should   == "Gift"
         oauth.gift_id.should           == gift.id
-        gift.oauth.should       == oauth
+        gift.oauth.should              == oauth
+    end
+
+    it "associates with a user" do
+        user  = FactoryGirl.create(:user)
+        oauth = FactoryGirl.build(:oauth, user: user)
+        oauth.save
+        oauth.user.id.should           == user.id
+        oauth.user.class.to_s.should   == "User"
+        oauth.user_id.should           == user.id
+        user.oauths.first.should       == oauth
     end
 
     it "should initialize from hash" do

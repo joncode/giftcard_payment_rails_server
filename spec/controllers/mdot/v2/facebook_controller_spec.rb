@@ -16,16 +16,14 @@ describe Mdot::V2::FacebookController do
         it_should_behave_like("token authenticated", :get, :index)
 
         it "should return a facebook friends array when success" do
-            "birthday"  : "10/05/1987",
-            "network_id": "27428352",
-            "network"   : "facebook",
-            "name"      : "Taylor Addison",
-            "photo"     : "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"
+            fb _hsh = {"birthday" => "10/05/1987", "network_id" => "27428352", "network" => "facebook", "name" => "Taylor Addison", "photo" => "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"}
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
             rrc(200)
             json["status"].should     == 1
             json["data"].class.should == Array
+            resp_hsh = json["data"].first
+            compare_keys(fb_hsh.keys, resp_hsh.keys)
         end
 
         it "should optionally accept oauth keys and save/update them" do

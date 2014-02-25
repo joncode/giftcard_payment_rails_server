@@ -1,5 +1,6 @@
 class Oauth < ActiveRecord::Base
     belongs_to :gift
+    belongs_to :user
 
     validates_presence_of  :network, :token
     validates :secret, presence: true, :if => :twitter?
