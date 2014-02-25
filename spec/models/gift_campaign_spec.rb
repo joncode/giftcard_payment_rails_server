@@ -35,8 +35,8 @@ describe GiftCampaign do
             gift_campaign.receiver_email.should == "customer@gmail.com"
             gift_campaign.provider_id.should    == @provider.id
             gift_campaign.provider_name.should  == @provider.name
-            gift_campaign.giver_type.should     == "AdminGiver"
-            gift_campaign.giver_id.should       == @admin.id
+            gift_campaign.giver_type.should     == "Campaign"
+            gift_campaign.giver_id.should       == @campaign.id
             gift_campaign.giver_name.should     == "ItsOnMe Promotional Staff"
             gift_campaign.value.should          == "30"
         end
@@ -107,8 +107,8 @@ describe GiftCampaign do
             gift_campaign.receiver_email.should == "customer@gmail.com"
             gift_campaign.provider_id.should    == @location.id
             gift_campaign.provider_name.should  == "LocationBar"
-            gift_campaign.giver_type.should     == "BizUser"
-            gift_campaign.giver_id.should       == @giver.id
+            gift_campaign.giver_type.should     == "Campaign"
+            gift_campaign.giver_id.should       == @campaign.id
             gift_campaign.giver_name.should     == "Giver Promotion Staff"
             gift_campaign.value.should          == "30"
         end

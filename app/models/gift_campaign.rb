@@ -14,8 +14,8 @@ private
         args["payable_id"]    = campaign_item.id
         args["payable_type"]  = "CampaignItem"
         args["value"]         = campaign_item.value
-        args["giver_type"]    = campaign.purchaser_type
-        args["giver_id"]      = campaign.purchaser_id
+        args["giver_type"]    = "Campaign"
+        args["giver_id"]      = campaign.id
         args["giver_name"]    = campaign.giver_name
         args["message"]       = campaign_item.message
     end
