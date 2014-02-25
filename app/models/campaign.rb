@@ -20,6 +20,7 @@ class Campaign < Admtmodel
     #     # campaign_giver.id    as giver_id   - campaign_id in ADMT
     #     # campaign_giver.class as giver_type - Campaign class
     has_one :gift, :as => :payable
+    has_many :campaigns_items
 
     def success?
         if self.id

@@ -271,6 +271,7 @@ FactoryGirl.define do
         close_date       (Time.now + 1.month).to_date
         purchaser_id     1
         purchaser_type   "ItsOnMe"
+        giver_name       "Vodka Special Campaign"
         budget           100     
         status           "Live"
     end
