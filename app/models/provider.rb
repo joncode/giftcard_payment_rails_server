@@ -8,6 +8,7 @@ class Provider < ActiveRecord::Base
 	has_many   :gifts
 	has_many   :sales
 	has_many   :orders
+	has_many   :campaign_items
 	belongs_to :brands
 	belongs_to :merchant
 

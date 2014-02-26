@@ -1,28 +1,54 @@
 class GiftCampaign < Gift
 
-
-
+    validate :is_giftable
 
 private
 
     def pre_init args={}
-        shoppingCart = JSON.parse args["shoppingCart"]
-        args["value"]   = calculate_value(shoppingCart)
-        args["cost"]    = calculate_cost(shoppingCart)
-        giver = args["giver"]
-        args["payable"] = giver.new_debt(args["value"])
+        campaign_item         = CampaignItem.includes(:campaign).includes(:provider).where(id: args["payable_id"]).first
+        campaign              = campaign_item.campaign
+        provider              = campaign_item.provider
+        args["shoppingCart"]  = JSON.parse campaign_item.shoppingCart
+        args["provider_id"]   = provider.id
+        args["provider_name"] = provider.name
+        args["payable_id"]    = campaign_item.id
+        args["payable_type"]  = "CampaignItem"
+        args["value"]         = campaign_item.value
+        args["giver_type"]    = "Campaign"
+        args["giver_id"]      = campaign.id
+        args["giver_name"]    = campaign.giver_name
+        args["message"]       = campaign_item.message
+        args["expires_at"]    = expires_at_calc(campaign_item.expires_at, campaign_item.expires_in)
+    end
+
+    def expires_at_calc expires_at, expires_in
+        if expires_at.present?
+            expires_at
+        elsif expires_in.present?
+            Time.now + expires_in.days
+        end
     end
 
     def post_init args={}
         puts "NOTIFY RECEIVER VIA #{self.receiver_email}"
     end
-
-    def calculate_value shoppingCart
-        shoppingCart.sum {|z| z["price"].to_i * z["quantity"].to_i }
+   
+    def is_giftable
+        campaign_item = CampaignItem.includes(:campaign).where(id: payable_id).first
+        campaign_is_live campaign_item.campaign
+        campaign_item_has_reserve campaign_item
     end
 
-    def calculate_cost shoppingCart
-        shoppingCart.sum {|z| z["price_promo"].to_f * z["quantity"].to_i }
+    def campaign_is_live campaign
+        today = Time.now.to_date
+        unless campaign.live_date < today && campaign.close_date > today
+            errors.add(:payable_id, "Campaign is not live. No gifts can be created.")
+        end
     end
-    
+
+    def campaign_item_has_reserve campaign_item
+        unless campaign_item.reserve > 0
+            errors.add(:payable_id, "Campaign Item reserve is empty. No more gifts can be created under this campaign item.")
+        end
+    end    
 end
