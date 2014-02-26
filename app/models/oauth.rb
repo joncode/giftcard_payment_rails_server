@@ -16,6 +16,16 @@ class Oauth < ActiveRecord::Base
         oauth
     end
 
+    def to_proxy
+        hsh = {}
+        hsh["token"]        = self.token
+        hsh["secret"]       = self.secret if self.secret
+        hsh["network"]      = self.network
+        hsh["network_id"]   = self.network_id
+        hsh["handle"]       = self.handle if self.handle
+        hsh
+    end
+
 private
 
     def twitter?

@@ -264,4 +264,12 @@ FactoryGirl.define do
         photo       "cdn.akai.twitter/791823401974.png"
     end
 
+    factory :oauth_fb, :class => "Oauth" do
+        user_id     100
+        token       "9q3562341341"
+        network     "facebook"
+        network_id  "9865465748"
+        photo       "cdn.akai.twitter/791823401974.png"
+    end
+
 end

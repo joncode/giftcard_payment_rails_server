@@ -1,7 +1,7 @@
-class Mdot::V2::FacebookController < JsonController
+class Mdot::V2::TwitterController < JsonController
 
     before_action :authenticate_customer
-    before_action :get_current_user_fb_oauth
+    before_action :get_current_user_tw_oauth
 
     def friends
 
@@ -49,4 +49,5 @@ class Mdot::V2::FacebookController < JsonController
             respond(status)
         end
     end
+
 end

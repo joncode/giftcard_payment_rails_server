@@ -57,6 +57,18 @@ describe Oauth do
         oauth.photo.should      == "cdn.akai.twitter/791823401974.png"
     end
 
+    it "should create correct hash via :to_proxy" do
+        tw_hsh =  {"token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}
+        oauth = Oauth.initFromDictionary tw_hsh
+        oauth_hsh = oauth.to_proxy
+        oauth_hsh.should == { "token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback"}
+
+        fb_hsh =  {"token"=>"9q3562341341", "network"=>"facebook", "network_id"=>"11237128471823", "photo"=>"cdn.akai.twitter/791823401974.png"}
+        oauth = Oauth.initFromDictionary fb_hsh
+        oauth_hsh = oauth.to_proxy
+        oauth_hsh.should ==  {"token"=>"9q3562341341", "network"=>"facebook", "network_id"=>"11237128471823"}
+    end
+
 end# == Schema Information
 #
 # Table name: oauths
