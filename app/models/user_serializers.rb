@@ -17,14 +17,14 @@ module UserSerializers
     end
 
     def get_other_serialize
-        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "city", "state", "zip"]
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "city", "state", "zip", "sex"]
         usr_hash["photo"]   = self.get_photo
         usr_hash["user_id"] = self.id
         usr_hash
     end
 
     def profile_serialize
-        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "zip"]
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "zip", "sex"]
         usr_hash["photo"]   = self.get_photo
         usr_hash["user_id"] = self.id
         ids = ["email", "phone", "facebook_id", "twitter"].each do |id|
@@ -49,7 +49,7 @@ module UserSerializers
     end
 
     def update_serialize
-        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter"]
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter", "sex"]
         usr_hash["photo"]   = self.get_photo
         usr_hash["user_id"] = self.id
         usr_hash
