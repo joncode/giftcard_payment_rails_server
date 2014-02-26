@@ -1,6 +1,7 @@
 class GiftCampaign < Gift
 
     validate :is_giftable
+    after_save :update_campaign_expire_date
 
 private
 
@@ -27,6 +28,14 @@ private
         elsif expires_in.present?
             Time.now + expires_in.days
         end
+    end
+
+    def update_campaign_expire_date
+        campaign = self.giver
+        if self.expires_at.to_date > campaign.expire_date
+            campaign.expire_date = self.expires_at.to_date
+        end
+        campaign.save
     end
 
     def post_init args={}

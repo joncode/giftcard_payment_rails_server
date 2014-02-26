@@ -14,6 +14,7 @@ describe GiftCampaign do
                                                            giver_name: "ItsOnMe Promotional Staff",
                                                            live_date: (Time.now - 1.week).to_date,
                                                            close_date: (Time.now + 1.week).to_date,
+                                                           expire_date: (Time.now + 1.week).to_date, 
                                                            budget: 100)
             @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @provider.id,
                                                                 campaign_id: @campaign.id,
@@ -63,6 +64,11 @@ describe GiftCampaign do
             gift_campaign.expires_at.round.should == (Time.now + 30.days).in_time_zone.round
         end
 
+        it "should correctly  expiration date from expires_at" do
+            gift_campaign = GiftCampaign.create @gift_hsh
+            gift_campaign.giver.expire_date.should == @expiration
+        end
+
         it "should not create gift if there is no reserve" do
             @campaign_item.update(reserve: 0)
             gift = GiftCampaign.create @gift_hsh
@@ -97,6 +103,7 @@ describe GiftCampaign do
                                                            giver_name: "Giver Promotion Staff",
                                                            live_date: (Time.now - 1.week).to_date,
                                                            close_date: (Time.now + 1.week).to_date,
+                                                           expire_date: (Time.now + 1.week).to_date,
                                                            budget: 100)
             @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @location.id,
                                                                 campaign_id: @campaign.id,
