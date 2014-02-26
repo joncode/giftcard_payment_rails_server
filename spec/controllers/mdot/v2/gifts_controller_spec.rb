@@ -426,6 +426,15 @@ describe Mdot::V2::GiftsController do
             let(:receiver)  { FactoryGirl.create(:receiver) }
             let(:rec_hsh)  { regift_hash(receiver) }
 
+            it "should accept the params from ios BUG FIX" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                params = {"message"=>"Test regift", "receiver"=>{"receiver_id"=>receiver.id, "name"=> receiver.name}}
+                post :regift, format: :json, id: old_gift.id, data: params
+                new_gift = old_gift.child
+                new_gift.status.should     == 'open'
+                new_gift.payable_id.should == old_gift.id
+            end
+
             it "should create a new gift w JSON receiver hash" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 params = { message: "New Regift Message", receiver: regift_hash(receiver) }

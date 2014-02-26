@@ -214,13 +214,13 @@ class Gift < ActiveRecord::Base
 #/-------------------------------------re gift db methods-----------------------------/
 
 	def parent
-        #self.payable
-        Gift.find(self.regift_id)
+        self.payable
+        #Gift.find(self.regift_id)
 	end
 
 	def child
-        #Gift.find_by(payable_id: self.id)
-        Gift.find_by(regift_id: self.id)
+        Gift.find_by(payable_id: self.id)
+        #Gift.find_by(regift_id: self.id)
 	end
 
 #/-------------------------------------data population methods-----------------------------/

@@ -126,17 +126,6 @@ class JsonController < ActionController::Base
         end
     end
 
-    def params_required(new_gift_hsh)
-        got_unique_id = false
-        if new_gift_hsh.kind_of? Hash
-            got_unique_id = true if new_gift_hsh.include?("email")
-            got_unique_id = true if new_gift_hsh.include?("phone")
-            got_unique_id = true if new_gift_hsh.include?("facebook_id")
-            got_unique_id = true if new_gift_hsh.include?("twitter")
-        end
-        head :bad_request unless got_unique_id
-    end
-
     def nil_key_or_value(data=nil)
         data ||= params["data"]
         head :bad_request if data.nil?

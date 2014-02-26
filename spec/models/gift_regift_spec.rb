@@ -159,6 +159,12 @@ describe GiftRegift do
             gift.should_not be_valid
             gift.should have_at_least(1).error_on(:receiver_email)
         end
+
+        it "should reject a gift when no unique ID is present" do
+            @gift_hsh.delete('email')
+            gift = GiftRegift.create @gift_hsh
+            gift.errors.messages[:receiver].should == ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]
+        end
     end
 
     context "status behavior" do
