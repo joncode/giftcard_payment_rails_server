@@ -42,14 +42,25 @@ describe GiftCampaign do
         end
 
         it "should associate the CampaignItem as the payable" do
-            gift = GiftCampaign.create @gift_hsh
-            payable = gift.payable
+            gift_campaign = GiftCampaign.create @gift_hsh
+            payable = gift_campaign.payable
             payable.class.name.should       == "CampaignItem"
             payable.owner.class.name.should == "Campaign"
             payable.success?.should    == true
             payable.resp_code.should   == 1
             payable.reason_text.should == "Transaction approved."
             payable.reason_code.should == 1
+        end
+
+        it "should correctly  expiration date from expires_at" do
+            gift_campaign = GiftCampaign.create @gift_hsh
+            gift_campaign.expires_at.should == @expiration.beginning_of_day.in_time_zone
+        end
+
+        it "should correctly  expiration date from expires_in" do
+            @campaign_item.update(expires_in: 30, expires_at: nil)
+            gift_campaign = GiftCampaign.create @gift_hsh
+            gift_campaign.expires_at.round.should == (Time.now + 30.days).in_time_zone.round
         end
 
         it "should not create gift if there is no reserve" do

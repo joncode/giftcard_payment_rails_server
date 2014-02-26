@@ -18,6 +18,15 @@ private
         args["giver_id"]      = campaign.id
         args["giver_name"]    = campaign.giver_name
         args["message"]       = campaign_item.message
+        args["expires_at"]    = expires_at_calc(campaign_item.expires_at, campaign_item.expires_in)
+    end
+
+    def expires_at_calc expires_at, expires_in
+        if expires_at.present?
+            expires_at
+        elsif expires_in.present?
+            Time.now + expires_in.days
+        end
     end
 
     def post_init args={}
