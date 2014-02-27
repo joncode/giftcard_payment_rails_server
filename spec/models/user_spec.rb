@@ -69,7 +69,7 @@ describe User do
 				UserSocial.unscoped.find_by(identifier: identifier).active.should be_false
 			end
 
-			it "should not create a new user social record if no new #{type_of} is submitted" do
+			it "should not create a new user social record if no new #{type_of} is submitted #{type_of}" do
 				# update a user without #{type_of} change
 				running {
 						@user.update_attributes({last_name: "change_me_not_id"})
@@ -77,14 +77,19 @@ describe User do
 
 			end
 
-            it "should not allow saving a record that already exists for another user primary" do
+            it "should not allow saving a record that already exists for another user primary #{type_of}" do
                 other_user = FactoryGirl.create(:user, type_of => identifier)
                 @user.update( type_of => identifier)
                 @user.should have_at_least(1).error_on(type_of)
-                @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "you already have an account with that id, please use that to log in"]
+                if type_of == "phone"
+                    resp_ary = ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount."]
+                else
+                    resp_ary = ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount, please use that to log in"]
+                end
+                @user.errors[type_of].should == resp_ary
             end
 
-            it "should not allow saving a record that already exists for another user secondary" do
+            it "should not allow saving a record that already exists for another user secondary #{type_of}" do
                 other_user = FactoryGirl.create(:user, type_of => identifier)
                 new_primary = "4568759687"
                 new_primary = "newprimary@gmail.com" if type_of == "email"
@@ -95,7 +100,7 @@ describe User do
                 @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error"]
             end
 
-            it "should allow saving a record that already exists for another user secondary but deactivated" do
+            it "should allow saving a record that already exists for another user secondary but deactivated #{type_of}" do
                 other_user = FactoryGirl.create(:user, type_of => identifier)
                 new_primary = "4568759687"
                 new_primary = "newprimary@gmail.com" if type_of == "email"

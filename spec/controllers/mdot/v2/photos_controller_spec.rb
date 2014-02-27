@@ -35,7 +35,7 @@ describe Mdot::V2::PhotosController do
             rrc(200)
             json["status"].should == 1
             response = json["data"]
-            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "birthday", "zip", "twitter", "facebook_id"]
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "sex", "birthday", "zip", "twitter", "facebook_id"]
             compare_keys(response, keys)
         end
 

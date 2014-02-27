@@ -11,7 +11,7 @@ describe UserSerializers do
         user.save
         json_str = user.profile_serialize
 
-        keys = ["first_name", "last_name", "birthday", "zip", "email", "phone", "facebook_id", "twitter", "user_id", "photo"]
+        keys = ["first_name", "last_name", "birthday", "zip", "email", "sex", "phone", "facebook_id", "twitter", "user_id", "photo"]
         compare_keys json_str, keys
 
         emails = json_str["email"]
@@ -29,7 +29,7 @@ describe UserSerializers do
         user.save
         json_str = user.profile_serialize
 
-        keys = ["first_name", "last_name", "birthday", "zip", "email", "phone", "facebook_id", "twitter", "user_id", "photo"]
+        keys = ["first_name", "last_name", "birthday", "zip", "email", "sex", "phone", "facebook_id", "twitter", "user_id", "photo"]
         compare_keys json_str, keys
         emails = json_str["email"]
         emails.class.should == Array
