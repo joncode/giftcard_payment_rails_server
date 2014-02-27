@@ -298,11 +298,13 @@ private
     end
 
     def add_network_to_gift
-        case self.oauth.network
-        when "twitter"
-            self.twitter = self.oauth.network_id
-        when "facebook"
-            self.facebook_id = self.oauth.network_id
+        if self.oauth.network_id.present?
+            case self.oauth.network
+            when "twitter"
+                self.twitter     = self.oauth.network_id
+            when "facebook"
+                self.facebook_id = self.oauth.network_id
+            end
         end
     end
 

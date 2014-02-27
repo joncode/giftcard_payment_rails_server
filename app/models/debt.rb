@@ -17,7 +17,7 @@ class Debt < ActiveRecord::Base
         if self.id
             1
         else
-            2
+            3
         end
     end
 

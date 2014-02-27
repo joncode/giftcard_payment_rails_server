@@ -6,18 +6,21 @@ if Rails.env.production?
     MERCHANT_URL    = "http://merchtools.herokuapp.com"
     PUB_MERCH_URL   = "http://merchant.itson.me"
     PUBLIC_URL      = "http://www.itson.me"
+    SOCIAL_PROXY_URL = "http://m.itson.me/api"
 elsif Rails.env.staging?
     PAGE_NAME       = "#{SERVICE_NAME} (staging)"
     TEST_URL        = "http://qa.drinkboardapp.com"
     MERCHANT_URL    = "http://merchtoolsdev.herokuapp.com"
     PUB_MERCH_URL   = "http://qamerchant.itson.me"
     PUBLIC_URL      = "http://qa.itson.me"
+    SOCIAL_PROXY_URL = "http://qam.itson.me/api"
 else
     PAGE_NAME       = "Dev #{SERVICE_NAME} (local)"
     TEST_URL        = "http://0.0.0.0:3001"
     MERCHANT_URL    = "http://0.0.0.0:3000"
     PUB_MERCH_URL   = "http://0.0.0.0:3000"
     PUBLIC_URL      = "http://0.0.0.0:3001"
+    SOCIAL_PROXY_URL = "http://qam.itson.me/api"
 end
 
 AT_EMAIL       = "@itson.me"

@@ -70,4 +70,10 @@ else
     ENV['ANDROID_TOKEN']
 end
 
+SOCIAL_PROXY_TOKEN = if Rails.env.development? or Rails.env.test?
+    "OYDvisC4qke6y5KPytkIBg"
+else
+    ENV['SOCIAL_PROXY_TOKEN']
+end
+
 

@@ -1,6 +1,57 @@
-class Campaign < ActiveRecord::Base
-  # attr_accessible :title, :body
-  has_many :gifts, as: :payable
+class Campaign < Admtmodel
+    self.table_name = "campaigns"
+    # has_many :sent,  as: :giver,  class_name: Gift
+    # has_many :debts, as: :owner
+
+
+    #       ####### Gift Giver Ducktype
+    # def name
+    #     # giver_name attribute in campaign db
+    #     self.giver_name
+    # end
+
+    # def get_photo
+    #     # wrapped photo attribute in campaign db
+    #     self.giver_photo
+    # end
+
+
+    # # hidden giver ducktype methods
+    #     # campaign_giver.id    as giver_id   - campaign_id in ADMT
+    #     # campaign_giver.class as giver_type - Campaign class
+    has_one :gift, :as => :payable
+
+    def success?
+        if self.id
+            true
+        else
+            false
+        end
+    end
+
+    def resp_code
+        if self.id
+            1
+        else
+            3
+        end
+    end
+
+    def reason_text
+        if self.id
+            "Transaction approved."
+        else
+            self.errors.full_messages
+        end
+    end
+
+    def reason_code
+        if self.id
+            1
+        else
+            2
+        end
+    end
 end
 # == Schema Information
 #

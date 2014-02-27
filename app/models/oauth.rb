@@ -1,5 +1,6 @@
 class Oauth < ActiveRecord::Base
     belongs_to :gift
+    belongs_to :user
 
     validates_presence_of  :network, :token
     validates :secret, presence: true, :if => :twitter?
@@ -13,6 +14,16 @@ class Oauth < ActiveRecord::Base
         oauth.handle     = hsh["handle"]
         oauth.photo      = hsh["photo"]
         oauth
+    end
+
+    def to_proxy
+        hsh = {}
+        hsh["token"]        = self.token
+        hsh["secret"]       = self.secret if self.secret
+        hsh["network"]      = self.network
+        hsh["network_id"]   = self.network_id
+        hsh["handle"]       = self.handle if self.handle
+        hsh
     end
 
 private

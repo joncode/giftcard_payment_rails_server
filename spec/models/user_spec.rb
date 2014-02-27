@@ -143,6 +143,13 @@ describe User do
             user.cards.first.user_id.should == user.id
         end
 
+        it "should associate oauths as user" do
+            user = FactoryGirl.create(:user)
+            oauth = FactoryGirl.create(:oauth, user: user)
+
+            user.oauths.first.id.should == oauth.id
+            user.oauths.first.user_id.should == user.id
+        end
     end
 
     context "pn_token management" do

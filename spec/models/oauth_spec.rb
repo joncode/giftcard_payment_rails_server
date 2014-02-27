@@ -33,7 +33,17 @@ describe Oauth do
         oauth.gift.id.should           == gift.id
         oauth.gift.class.to_s.should   == "Gift"
         oauth.gift_id.should           == gift.id
-        gift.oauth.should       == oauth
+        gift.oauth.should              == oauth
+    end
+
+    it "associates with a user" do
+        user  = FactoryGirl.create(:user)
+        oauth = FactoryGirl.build(:oauth, user: user)
+        oauth.save
+        oauth.user.id.should           == user.id
+        oauth.user.class.to_s.should   == "User"
+        oauth.user_id.should           == user.id
+        user.oauths.first.should       == oauth
     end
 
     it "should initialize from hash" do
@@ -45,6 +55,18 @@ describe Oauth do
         oauth.network_id.should == "9865465748"
         oauth.handle.should     == "razorback"
         oauth.photo.should      == "cdn.akai.twitter/791823401974.png"
+    end
+
+    it "should create correct hash via :to_proxy" do
+        tw_hsh =  {"token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "photo"=>"cdn.akai.twitter/791823401974.png"}
+        oauth = Oauth.initFromDictionary tw_hsh
+        oauth_hsh = oauth.to_proxy
+        oauth_hsh.should == { "token"=>"9q3562341341", "secret"=>"92384619834", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback"}
+
+        fb_hsh =  {"token"=>"9q3562341341", "network"=>"facebook", "network_id"=>"11237128471823", "photo"=>"cdn.akai.twitter/791823401974.png"}
+        oauth = Oauth.initFromDictionary fb_hsh
+        oauth_hsh = oauth.to_proxy
+        oauth_hsh.should ==  {"token"=>"9q3562341341", "network"=>"facebook", "network_id"=>"11237128471823"}
     end
 
 end# == Schema Information
