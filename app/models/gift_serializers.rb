@@ -40,7 +40,7 @@ module GiftSerializers
     end
 
     def giver_serialize
-        gift_hsh = self.serializable_hash only: ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "cost", "updated_at", "shoppingCart"]
+        gift_hsh = self.serializable_hash only: ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "cost", "updated_at"]
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.giver_status
         if receipient = receiver
@@ -56,11 +56,12 @@ module GiftSerializers
         gift_hsh["longitude"]          = provider.longitude
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
+        gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
         gift_hsh
     end
 
     def receiver_serialize
-        gift_hsh = self.serializable_hash only: ["giver_id", "giver_name", "message", "provider_id", "provider_name", "shoppingCart", "updated_at", "created_at"]
+        gift_hsh = self.serializable_hash only: ["giver_id", "giver_name", "message", "provider_id", "provider_name", "updated_at", "created_at"]
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.receiver_status
         gift_hsh["giver_photo"]        = giver.get_photo
@@ -74,6 +75,7 @@ module GiftSerializers
         gift_hsh["longitude"]          = provider.longitude
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
+        gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
         gift_hsh
     end
 
