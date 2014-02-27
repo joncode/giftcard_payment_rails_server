@@ -1,6 +1,5 @@
 FactoryGirl.define do
-
-
+    
     factory :user do
         first_name                  "Jimmy"
         last_name                   "Basic"
@@ -270,6 +269,30 @@ FactoryGirl.define do
         network     "facebook"
         network_id  "9865465748"
         photo       "cdn.akai.twitter/791823401974.png"
+    end
+
+    factory :campaign do
+        type_of          "SMS"
+        name             "Special Promotion"
+        live_date        Time.now.to_date
+        close_date       (Time.now + 1.month).to_date
+        expire_date      (Time.now + 1.month).to_date
+        purchaser_id     1
+        purchaser_type   "ItsOnMe"
+        giver_name       "Vodka Special Campaign"
+        budget           100
+        status           "Live"
+    end
+
+    factory :campaign_item do
+        campaign_id     1
+        provider_id     1
+        budget          100
+        reserve         100
+        expires_at      Time.now.to_date
+        expires_in     (Time.now + 1.month).to_date
+        sms_shortcode   "11111"
+        contract        true
     end
 
 end
