@@ -16,11 +16,11 @@ describe Mdot::V2::FacebookController do
         it_should_behave_like("token authenticated", :get, :index)
 
         it "should return a facebook friends array when success" do
-            "birthday"  : "10/05/1987",
-            "network_id": "27428352",
-            "network"   : "facebook",
-            "name"      : "Taylor Addison",
-            "photo"     : "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"
+            {"birthday"  => "10/05/1987",
+            "network_id"=> "27428352",
+            "network"   => "facebook",
+            "name"      => "Taylor Addison",
+            "photo"     => "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg" }
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
             rrc(200)
