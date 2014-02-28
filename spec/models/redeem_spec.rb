@@ -22,6 +22,20 @@ describe Redeem do
       #order.errors.full_messages.should include("Validation msg about gift id")
     end
 
+    it "should not change already redeemed gifts" do
+      user = FactoryGirl.create(:user)
+      gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name)
+      redeem = Redeem.find_or_create_with_gift(gift)
+      redeem2 = Redeem.find_or_create_with_gift(gift)
+      redeem.should == redeem2
+      order = Order.init_with_gift(gift)
+      order.save
+      gift.reload
+      gift.status.should == 'redeemed'
+      redeem3 = Redeem.find_or_create_with_gift(gift)
+      redeem3.should == redeem
+    end
+
 end
 
 

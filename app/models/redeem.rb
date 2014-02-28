@@ -13,7 +13,7 @@ class Redeem < ActiveRecord::Base
   # redeem must be unique for gift
 
   def self.find_or_create_with_gift(gift)
-    unless redeem = gift.redeem
+    unless redeem = Redeem.find_by(gift_id: gift.id)
         # redeem must be created
       redeem = Redeem.init_with_gift(gift)
     end
@@ -31,7 +31,7 @@ class Redeem < ActiveRecord::Base
     end
 
     def add_redeem_to_gift
-      self.gift.update_attributes({status: 'notified'})
+      self.gift.update(status: 'notified')
     end
 end
 # == Schema Information
