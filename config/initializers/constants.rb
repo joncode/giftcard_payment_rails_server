@@ -39,3 +39,5 @@ Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
 Time::DATE_FORMATS[:only_date]       = "%b %e"
 
+GIFT_CAT = { 0 => "User", 100 => "Regift", 200 => "Promo-Merchant", 210 => "Promo-Admin", 300 => "Campaign" }
+
