@@ -14,6 +14,12 @@ describe Oauth do
         oauth.should have_at_least(1).error_on(:network)
     end
 
+    it "requires network_id" do
+        oauth = FactoryGirl.build(:oauth, :network_id => nil)
+        oauth.should_not be_valid
+        oauth.should have_at_least(1).error_on(:network_id)
+    end
+
     it "requires 'token'" do
         oauth = FactoryGirl.build(:oauth, :token => nil)
         oauth.should_not be_valid
@@ -24,6 +30,12 @@ describe Oauth do
         oauth = FactoryGirl.build(:oauth, :secret => nil, :network => "twitter")
         oauth.should_not be_valid
         oauth.should have_at_least(1).error_on(:secret)
+    end
+
+    it "requires 'handle' when network is twitter" do
+        oauth = FactoryGirl.build(:oauth, :handle => nil, :network => "twitter")
+        oauth.should_not be_valid
+        oauth.should have_at_least(1).error_on(:handle)
     end
 
     it "associates with a gift" do
@@ -67,6 +79,47 @@ describe Oauth do
         oauth = Oauth.initFromDictionary fb_hsh
         oauth_hsh = oauth.to_proxy
         oauth_hsh.should ==  {"token"=>"9q3562341341", "network"=>"facebook", "network_id"=>"11237128471823"}
+    end
+
+    context "multi-network uniqueness constraints" do
+
+        it "should overwrite an existing oauth record for that network on :create" do
+            user  = FactoryGirl.create(:user)
+            oauth = FactoryGirl.build(:oauth, user: user)
+            oauth.save
+            new_tw_oauth = { "token"=>"new_token", "secret"=>"new_secret", "network"=>"twitter", "network_id"=>oauth.network_id, "handle"=>"razorback", "user_id" => user.id}
+            Oauth.create(new_tw_oauth)
+            oauth.reload
+            oauth.token.should      == "new_token"
+        end
+
+        it "should overwrite an existing oauth record for that network on :create" do
+            user  = FactoryGirl.create(:user)
+            oauth = FactoryGirl.build(:oauth_fb, user: user)
+            oauth.save
+            new_tw_oauth = { "token"=>"new_token", "network"=>"facebook", "network_id"=>oauth.network_id, "user_id" => user.id}
+            new_oauth    = Oauth.create(new_tw_oauth)
+            new_oauth.id.should     == oauth.id
+            new_oauth.token.should  == "new_token"
+            oauth.reload
+            oauth.token.should      == "new_token"
+        end
+
+        it "should create a new oauth record for that network on :create" do
+            user  = FactoryGirl.create(:user)
+            new_tw_oauth = { "token"=>"new_token", "secret"=>"new_secret", "network"=>"twitter", "network_id"=>"9865465748", "handle"=>"razorback", "user_id" => user.id}
+            new_oauth    = Oauth.create(new_tw_oauth)
+            new_oauth.token.should  == "new_token"
+
+        end
+
+        it "should create a new oauth record for that network on :create" do
+            user  = FactoryGirl.create(:user)
+            new_tw_oauth = { "token"=>"new_token", "network"=>"facebook", "network_id"=>"9865465748", "user_id" => user.id}
+            new_oauth    = Oauth.create(new_tw_oauth)
+            new_oauth.token.should  == "new_token"
+
+        end
     end
 
 end# == Schema Information

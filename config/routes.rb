@@ -70,14 +70,16 @@ Drinkboard::Application.routes.draw do
       end
       resources :facebook,     only: [:create] do
         collection do
-          get :friends
-          get :profile
+          get   :friends
+          get   :profile
+          post  :oauth
         end
       end
       resources :twitter,     only: [:create] do
         collection do
-          get :friends
-          get :profile
+          get   :friends
+          get   :profile
+          post  :oauth
         end
       end
       resources :user_socials, only: [] do

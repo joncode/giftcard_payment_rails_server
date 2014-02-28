@@ -10,7 +10,6 @@ class Redeem < ActiveRecord::Base
 	after_create  :add_redeem_to_gift
 
 	validates :gift_id , presence: true, uniqueness: true
-	# redeem must be unique for gift
 
 	def self.find_or_create_with_gift(gift)
 		unless redeem = Redeem.find_by(gift_id: gift.id)
@@ -23,7 +22,7 @@ class Redeem < ActiveRecord::Base
 	def self.init_with_gift(gift)
 		Redeem.create(gift_id: gift.id)
 	end
-	
+
 private
 
 	def create_redeem_code

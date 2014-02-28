@@ -268,10 +268,6 @@ class User < ActiveRecord::Base
 
 	def setting
 		get_or_create_settings
-	end
-
-	def setting
-		get_or_create_settings
 
 		# remove this and make setting creation eager
 	end

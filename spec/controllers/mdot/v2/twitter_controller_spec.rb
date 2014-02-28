@@ -91,4 +91,81 @@ describe Mdot::V2::TwitterController do
         end
     end
 
+    describe :oauth do
+
+        it_should_behave_like("token authenticated", :post, :oauth)
+
+        it "should not require oauth tokens in database" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            oauth = @user.oauths.first
+            oauth.destroy
+            oauth_hsh = { "token" => "new_token", "network_id" => "987654321", "secret" => "new_secret", "handle" => "razorback"}
+            post :oauth, format: :json, data: oauth_hsh
+            rrc(200)
+        end
+
+        it "should accept oauth hash and save in db with network == twitter" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            oauth = @user.oauths.first
+            oauth.destroy
+            @user.oauths.count.should == 0
+            oauth_hsh = { "token" => "new_token", "network_id" => "987654321", "secret" => "new_secret", "handle" => "razorback"}
+            post :oauth, format: :json, data: oauth_hsh
+            rrc(200)
+
+            oauth = @user.oauths.first
+            oauth.should_not be_nil
+            oauth.token.should      == oauth_hsh["token"]
+            oauth.network.should    == "twitter"
+            oauth.network_id.should == oauth_hsh["network_id"]
+        end
+
+        it "should update oauth for network if already exists" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            oauth     = @user.oauths.first
+            oauth_id  = oauth.id
+            oauth.should_not be_nil
+            oauth_hsh = { "token" => "new_token", "network_id" => oauth.network_id, "secret" => "new_secret", "handle" => "razorback"}
+            post :oauth, format: :json, data: oauth_hsh
+            rrc(200)
+
+            oauth = @user.oauths.first
+            oauth.should_not be_nil
+            oauth.token.should      == oauth_hsh["token"]
+            oauth.network.should    == "twitter"
+            oauth.network_id.should == oauth_hsh["network_id"]
+            oauth.id.should         == oauth_id
+        end
+
+        it "should require :token , :network_id or reply :bad_request" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            bad_oauth_hsh1 = { "network_id" => "987654321", "token" => "987654321", "handle" => "razorback"}
+            post :oauth, format: :json, data: bad_oauth_hsh1
+            rrc(400)
+            bad_oauth_hsh2 = { "token" => "987654321",  "secret" => "987654321", "handle" => "razorback"}
+            post :oauth, format: :json, data: bad_oauth_hsh2
+            rrc(400)
+            bad_oauth_hsh3 = { "secret" => "34716234", "network_id" => "987654321", "handle" => "razorback"}
+            post :oauth, format: :json, data: bad_oauth_hsh3
+            rrc(400)
+            bad_oauth_hsh4 = { "secret" => "34716234", "network_id" => "987654321"}
+            post :oauth, format: :json, data: bad_oauth_hsh4
+            rrc(400)
+        end
+
+    end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
