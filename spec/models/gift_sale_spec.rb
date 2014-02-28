@@ -51,13 +51,19 @@ describe GiftSale do
         it "should set the status of the new gift to 'notified'" do
             gift        = GiftSale.create @gift_hsh
             gift.reload
-            gift.status.should   == "open"
+            gift.status.should  == "open"
         end
 
         it "should set the pay_stat to 'charge_unpaid'" do
             gift        = GiftSale.create @gift_hsh
             gift.reload
             gift.pay_stat.should == "charge_unpaid"
+        end
+
+        it "should set the cat to 0" do
+            gift        = GiftSale.create @gift_hsh
+            gift.reload
+            gift.cat.should     == 0
         end
 
         it "should not allow regifting to deactivated receivers" do

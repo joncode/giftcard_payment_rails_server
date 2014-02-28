@@ -8,6 +8,7 @@ class GiftRegift < Gift
             end
         end
         args["payable"] = Gift.includes(:provider).includes(:receiver).find(args["old_gift_id"])
+        args["cat"] = 100
         if args["payable"].promo?
             "You cannot regift a promotional gift"
         else

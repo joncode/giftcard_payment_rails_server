@@ -14,7 +14,7 @@ describe GiftCampaign do
                                                            giver_name: "ItsOnMe Promotional Staff",
                                                            live_date: (Time.now - 1.week).to_date,
                                                            close_date: (Time.now + 1.week).to_date,
-                                                           expire_date: (Time.now + 1.week).to_date, 
+                                                           expire_date: (Time.now + 1.week).to_date,
                                                            budget: 100)
             @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @provider.id,
                                                                 campaign_id: @campaign.id,
@@ -57,6 +57,11 @@ describe GiftCampaign do
         it "should correctly set expiration date from expires_at" do
             gift_campaign = GiftCampaign.create @gift_hsh
             gift_campaign.expires_at.should == @expiration.beginning_of_day.in_time_zone
+        end
+
+        it "should set cat to 300" do
+            gift_campaign = GiftCampaign.create @gift_hsh
+            gift_campaign.cat.should == 300
         end
 
         it "should correctly set expiration date from expires_in" do

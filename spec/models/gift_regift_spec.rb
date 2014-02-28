@@ -57,6 +57,12 @@ describe GiftRegift do
             gift.service.should      == nil
         end
 
+        it "should set the gift cat to 100" do
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 100
+        end
+
         it "should set the status of the new gift to 'notified'" do
             gift        = GiftRegift.create @gift_hsh
             gift.reload
