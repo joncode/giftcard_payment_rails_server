@@ -22,7 +22,7 @@ module GiftSerializers
     def badge_serialize
         gift_hsh = self.serializable_hash only: [:giver_id, :giver_name, :provider_id, :provider_name, :message, :updated_at, :created_at]
         gift_hsh["status"]             = self.receiver_status
-        gift_hsh["shoppingCart"]       = self.shoppingCart #ary_of_shopping_cart_as_hash
+        gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
         gift_hsh["giver_photo"]        = giver.get_photo
 
         unless provider = provider = self.provider
@@ -40,7 +40,7 @@ module GiftSerializers
     end
 
     def giver_serialize
-        gift_hsh = self.serializable_hash only: ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "cost", "updated_at", "shoppingCart"]
+        gift_hsh = self.serializable_hash only: ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "cost", "updated_at"]
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.giver_status
         if receipient = receiver
@@ -56,11 +56,12 @@ module GiftSerializers
         gift_hsh["longitude"]          = provider.longitude
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
+        gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
         gift_hsh
     end
 
     def receiver_serialize
-        gift_hsh = self.serializable_hash only: ["giver_id", "giver_name", "message", "provider_id", "provider_name", "shoppingCart", "updated_at", "created_at"]
+        gift_hsh = self.serializable_hash only: ["giver_id", "giver_name", "message", "provider_id", "provider_name", "updated_at", "created_at"]
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.receiver_status
         gift_hsh["giver_photo"]        = giver.get_photo
@@ -74,6 +75,7 @@ module GiftSerializers
         gift_hsh["longitude"]          = provider.longitude
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
+        gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
         gift_hsh
     end
 
@@ -102,7 +104,7 @@ module GiftSerializers
             # current summary and payment reports use item coun NOT shopping cart ... delete when in sync
         #gift_hsh["shoppingCart"]   = self.shoppingCart
         gift_hsh["receiver_name"]   = self.receiver_name
-        gift_hsh["items"]           = JSON.parse(self.shoppingCart).count
+        gift_hsh["items"]           = ary_of_shopping_cart_as_hash.count
 
         if order = self.order
             server = order.server_code
@@ -125,57 +127,12 @@ module GiftSerializers
         if receipient = receiver
             gift_hsh["receiver_photo"]     = receiver.get_photo
         end
-        gift_hsh["items"]           = JSON.parse(self.shoppingCart).count
+        gift_hsh["items"]           = ary_of_shopping_cart_as_hash.count
         gift_hsh["shoppingCart"]    = self.shoppingCart
         gift_hsh["value"]           = self.value
         gift_hsh["cost"]            = self.cost
         gift_hsh["status"]          = self.giver_status
         gift_hsh
     end
-
-    # def json_cart_serial
-    #     gift_hsh                    = {}
-    #     gift_hsh["updated_at"]      = self.updated_at
-    #     gift_hsh["created_at"]      = self.created_at
-    #     gift_hsh["receiver_name"]   = self.receiver_name
-    #     gift_hsh["receiver_email"]  = self.receiver_email
-    #     gift_hsh["shoppingCart_json"]    = JSON.parse(self.shoppingCart)
-    #     gift_hsh["value"]           = self.value
-    #     gift_hsh["status"]          = self.giver_status
-    #     gift_hsh
-    # end
-
-    # def str_cart_serial
-    #     gift_hsh                    = {}
-    #     gift_hsh["updated_at"]      = self.updated_at
-    #     gift_hsh["created_at"]      = self.created_at
-    #     gift_hsh["receiver_name"]   = self.receiver_name
-    #     gift_hsh["receiver_email"]  = self.receiver_email
-    #     gift_hsh["shoppingCart_str"]    = self.shoppingCart
-    #     gift_hsh["value"]           = self.value
-    #     gift_hsh["status"]          = self.giver_status
-    #     gift_hsh
-    # end
-
-# def race
-#     gs = Gift.order("created_at DESC").limit(20)
-#     puts "THE RACE IS BETWEEN #{gs.count} gifts !!"
-#     json_times = []
-#     str_times  = []
-#     5.times do
-#         gs.each { |g| g.json_cart_serial }
-
-#         t = Time.now
-#         gs.each { |g| g.json_cart_serial }
-#         json_times << (Time.now - t) * 1000
-#         t2 = Time.now
-#         gs.each { |g| g.str_cart_serial }
-#         str_times << (Time.now - t2) * 1000
-#     end
-#     [0,1,2,3,4].each do |ind|
-#         diff = json_times[ind] - str_times[ind]
-#         puts "Diff #{ind+1} = #{diff}ms"
-#     end
-# end
 
 end

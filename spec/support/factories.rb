@@ -1,6 +1,5 @@
 FactoryGirl.define do
 
-
     factory :user do
         first_name                  "Jimmy"
         last_name                   "Basic"
@@ -264,6 +263,14 @@ FactoryGirl.define do
         photo       "cdn.akai.twitter/791823401974.png"
     end
 
+    factory :oauth_fb, :class => "Oauth" do
+        user_id     100
+        token       "9q3562341341"
+        network     "facebook"
+        network_id  "9865465748"
+        photo       "cdn.akai.twitter/791823401974.png"
+    end
+
     factory :campaign do
         type_of          "SMS"
         name             "Special Promotion"
@@ -273,7 +280,7 @@ FactoryGirl.define do
         purchaser_id     1
         purchaser_type   "ItsOnMe"
         giver_name       "Vodka Special Campaign"
-        budget           100     
+        budget           100
         status           "Live"
     end
 
@@ -287,4 +294,5 @@ FactoryGirl.define do
         sms_shortcode   "11111"
         contract        true
     end
+
 end

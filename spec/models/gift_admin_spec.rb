@@ -74,6 +74,13 @@ describe GiftAdmin do
         gift.cost.should            == "2.46"
     end
 
+    it "should set the cat to 210" do
+        @gift_hsh["shoppingCart"] = [{"price"=>"4", "price_promo"=>"1.23", "quantity"=>2, "section"=>"Beer", "item_id"=>543, "item_name"=>"Corona"}].to_json
+        gift = GiftAdmin.create @gift_hsh
+        gift.reload
+        gift.cat.should            == 210
+    end
+
     xit "should set the expiration date" do
 
     end

@@ -20,7 +20,7 @@ describe Mdot::V2::CitiesController do
             rrc(200)
             ary = json["data"]
             ary.class.should == Array
-            ary.count.should == 4
+            ary.count.should == 5
             hsh = ary.first
             compare_keys(hsh, keys)
         end

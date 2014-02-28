@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
 	has_many :pn_tokens
 	has_many :brands
 	has_many :orders,    :through => :providers
+	has_many :oauths
 
 	has_many :sales
 	has_many :cards
@@ -263,6 +264,12 @@ class User < ActiveRecord::Base
 			return true
 		end
 		return false
+	end
+
+	def setting
+		get_or_create_settings
+
+		# remove this and make setting creation eager
 	end
 
 	def set_confirm_email

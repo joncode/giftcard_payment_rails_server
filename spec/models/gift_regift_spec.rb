@@ -57,6 +57,12 @@ describe GiftRegift do
             gift.service.should      == nil
         end
 
+        it "should set the gift cat to 100" do
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 100
+        end
+
         it "should set the status of the new gift to 'notified'" do
             gift        = GiftRegift.create @gift_hsh
             gift.reload
@@ -158,6 +164,12 @@ describe GiftRegift do
             gift        = GiftRegift.create @gift_hsh
             gift.should_not be_valid
             gift.should have_at_least(1).error_on(:receiver_email)
+        end
+
+        it "should reject a gift when no unique ID is present" do
+            @gift_hsh.delete('email')
+            gift = GiftRegift.create @gift_hsh
+            gift.errors.messages[:receiver].should == ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]
         end
     end
 

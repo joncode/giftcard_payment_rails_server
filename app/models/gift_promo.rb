@@ -1,5 +1,9 @@
 class GiftPromo < Gift
-    
+
+    def self.create args={}
+        args["cat"] = 200
+        super
+    end
 
 private
 

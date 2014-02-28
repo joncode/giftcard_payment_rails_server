@@ -4,6 +4,11 @@ class GiftCampaign < Gift
     after_save :update_campaign_expire_date
     after_save :decrement_campaign_item_reserve
 
+    def self.create args={}
+        args["cat"] = 300
+        super
+    end
+
 private
 
     def pre_init args={}
@@ -42,7 +47,7 @@ private
     def post_init args={}
         puts "NOTIFY RECEIVER VIA #{self.receiver_email}"
     end
-   
+
     def is_giftable
         campaign_item = CampaignItem.includes(:campaign).where(id: payable_id).first
         campaign_is_live campaign_item.campaign
@@ -60,7 +65,7 @@ private
         unless campaign_item.reserve > 0
             errors.add(:payable_id, "Campaign Item reserve is empty. No more gifts can be created under this campaign item.")
         end
-    end    
+    end
 
     def decrement_campaign_item_reserve
         self.payable.reserve -= 1

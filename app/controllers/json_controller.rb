@@ -126,17 +126,6 @@ class JsonController < ActionController::Base
         end
     end
 
-    def params_required(new_gift_hsh)
-        got_unique_id = false
-        if new_gift_hsh.kind_of? Hash
-            got_unique_id = true if new_gift_hsh.include?("email")
-            got_unique_id = true if new_gift_hsh.include?("phone")
-            got_unique_id = true if new_gift_hsh.include?("facebook_id")
-            got_unique_id = true if new_gift_hsh.include?("twitter")
-        end
-        head :bad_request unless got_unique_id
-    end
-
     def nil_key_or_value(data=nil)
         data ||= params["data"]
         head :bad_request if data.nil?
@@ -253,6 +242,30 @@ class JsonController < ActionController::Base
         else
             head :unauthorized
         end
+    end
+
+    def get_current_user_fb_oauth
+        @user_oauth = @current_user.oauths.where(network: "facebook").first
+        unless @user_oauth
+            set_app_response_for_407
+        end
+    end
+
+    def get_current_user_tw_oauth
+        @user_oauth = @current_user.oauths.where(network: "twitter").first
+        unless @user_oauth
+            set_app_response_for_407
+        end
+    end
+
+#######
+
+protected
+
+    def set_app_response_for_407
+        fail "-1001"
+        @app_response["msg"] = "Proxy Authentication Required"
+        respond(407)
     end
 
 #######

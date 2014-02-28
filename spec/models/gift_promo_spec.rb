@@ -77,6 +77,12 @@ describe GiftPromo do
         gift.cost.should            == "0.0"
     end
 
+    it "should set the cat to 200" do
+        gift = GiftPromo.create @gift_hsh
+        gift.reload
+        gift.cat.should           == 200
+    end
+
     xit "should set the expiration date" do
 
     end

@@ -19,7 +19,7 @@ class Order < ActiveRecord::Base
 
 	def self.init_with_gift(gift, server_code=nil)
 		order = Order.new
-		if redeem = gift.redeem
+		if redeem = Redeem.find_by(gift_id: gift.id)
 			order.gift_id     = gift.id
 			order.provider_id = gift.provider_id
 			order.redeem_id   = redeem.id

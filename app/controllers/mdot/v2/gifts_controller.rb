@@ -56,21 +56,27 @@ class Mdot::V2::GiftsController < JsonController
     def regift
         return nil if params_bad_request
         data = regift_params
-        new_gift_hsh = data["receiver"]
-        return nil if data_not_hash?(new_gift_hsh)
-        return nil if params_required(new_gift_hsh)
+
+        if data["receiver"].nil? || data["receiver"].kind_of?(String)
+            bad_request
+            return nil
+        else
+            new_gift_hsh = data["receiver"]
+        end
         new_gift_hsh["message"]     = data["message"]
         new_gift_hsh["old_gift_id"] = params[:id]
-        if gift_response = GiftRegift.create(new_gift_hsh)
-            if gift_response.kind_of?(Gift)
-                success gift_response.giver_serialize
+        gift_response = GiftRegift.create(new_gift_hsh)
+
+        if gift_response.kind_of?(Gift)
+            if gift_response.id.nil?
+                fail    gift_response
+                status = :bad_request
             else
-                fail gift_response
-                status = :forbidden
+                success gift_response.giver_serialize
             end
         else
-            fail    gift
-            status = :bad_request
+            fail gift_response
+            status = :forbidden
         end
         respond(status)
     end
@@ -133,7 +139,11 @@ private
     end
 
     def redeem_params
-        params.require(:server)
+        if params["server"].blank?
+            nil
+        else
+            params.require(:server)
+        end
     end
 
     def regift_params

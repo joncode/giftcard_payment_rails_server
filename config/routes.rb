@@ -68,7 +68,20 @@ Drinkboard::Application.routes.draw do
           put :deactivate_user_social
         end
       end
-
+      resources :facebook,     only: [:create] do
+        collection do
+          get   :friends
+          get   :profile
+          post  :oauth
+        end
+      end
+      resources :twitter,     only: [:create] do
+        collection do
+          get   :friends
+          get   :profile
+          post  :oauth
+        end
+      end
       resources :user_socials, only: [] do
         collection do
           delete :destroy

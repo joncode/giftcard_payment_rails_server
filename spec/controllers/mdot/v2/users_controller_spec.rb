@@ -46,7 +46,7 @@ describe Mdot::V2::UsersController do
 
         it "should return other user profile if ID does not match token" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            keys    = ["first_name", "last_name", "user_id", "photo", "city", "zip", "state"]
+            keys    = ["first_name", "last_name", "user_id", "sex", "photo", "city", "zip", "state"]
             get :show, format: :json, id: @other.id
             rrc 200
             compare_keys json["data"], keys
@@ -54,7 +54,7 @@ describe Mdot::V2::UsersController do
 
         it "should return user profile if ID does match token" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            keys    = ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id"]
+            keys    = ["first_name", "last_name", "birthday", "email", "sex", "zip", "phone", "facebook_id", "twitter", "photo", "user_id"]
             get :show, format: :json, id: @user.id
             rrc 200
             compare_keys json["data"], keys
@@ -102,7 +102,7 @@ describe Mdot::V2::UsersController do
             json["status"].should == 1
             response = json["data"]
             response.class.should  == Hash
-            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "birthday", "zip", "twitter", "facebook_id"]
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "sex", "birthday", "zip", "twitter", "facebook_id"]
             compare_keys(response, keys)
         end
 
@@ -122,7 +122,7 @@ describe Mdot::V2::UsersController do
             rrc 400
             json["status"].should == 0
             json["data"].class.should    == Hash
-            json["data"]["error"]["facebook_id"].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "you already have an account with that id, please use that to log in"]
+            json["data"]["error"]["facebook_id"].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount, please use that to log in"]
         end
 
         {
