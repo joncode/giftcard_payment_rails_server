@@ -1,27 +1,19 @@
 class UserSocial < ActiveRecord::Base
-    
+
     belongs_to :user
 
     before_validation     :reject_xxx_emails
 
     validates_presence_of :identifier, :type_of, :user_id
 
-    validates_with TypeIdValidator
-    validates :identifier , format: { with: VALID_PHONE_REGEX }, if: :is_phone
-    validates :identifier , format: { with: VALID_EMAIL_REGEX }, if: :is_email
+    validates_with MultiTypeUniquenessValidator
+    validates :identifier , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
+    validates :identifier , format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
 
     after_create          :subscribe_mailchimp
     after_save            :unsubscribe_mailchimp
 
     default_scope -> { where(active: true) }  # indexed
-
-    def is_email
-        self.type_of == "email"
-    end
-
-    def is_phone
-        self.type_of == "phone"
-    end
 
     def self.activate_all user
         socials = user.user_socials
@@ -84,6 +76,13 @@ private
         end
     end
 
+    def is_email?
+        self.type_of == "email"
+    end
+
+    def is_phone?
+        self.type_of == "phone"
+    end
 end
 
 # == Schema Information

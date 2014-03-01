@@ -2,9 +2,6 @@ require 'spec_helper'
 
 describe UserSocial do
 
-    # require a user_id, type_of, identifier
-    # accepts email , phone , facebook_id, twitter_id
-
     it "builds from factory" do
       user_social = FactoryGirl.build :user_social
       user_social.should be_valid
