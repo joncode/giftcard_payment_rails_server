@@ -50,8 +50,8 @@ private
 
     def is_giftable
         campaign_item = CampaignItem.includes(:campaign).where(id: payable_id).first
-        campaign_is_live campaign_item.campaign
-        campaign_item_has_reserve campaign_item
+        campaign_is_live(campaign_item.campaign)
+        campaign_item_has_reserve(campaign_item)
     end
 
     def campaign_is_live campaign

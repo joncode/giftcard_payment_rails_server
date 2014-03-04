@@ -6,7 +6,7 @@ class UserSocial < ActiveRecord::Base
 
     validates_presence_of :identifier, :type_of, :user_id
 
-    validates_with MultiTypeUniquenessValidator
+    validates_with MultiTypeIdentifierUniqueValidator
     validates :identifier , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
     validates :identifier , format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
 
