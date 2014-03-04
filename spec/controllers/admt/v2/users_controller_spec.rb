@@ -67,6 +67,69 @@ describe Admt::V2::UsersController do
         end
     end
 
+    describe :create_user_social do
+        it_should_behave_like("token authenticated", :put, :create_user_social, id: 1)
+
+        let(:user) { FactoryGirl.create :user, email: "email@email.com", facebook_id: nil, twitter: nil, phone: nil }
+
+        it "should require a valid user_id" do
+            destroy_id = user.id
+            user.destroy
+            put :create_user_social, id: destroy_id, format: :json, data: { "facebook_id" => "1"}
+            response.response_code.should  == 404
+        end
+
+        it "should require a update hash" do
+            put :create_user_social, id: user.id, format: :json, data: "create_user_social data"
+            rrc(400)
+            put :create_user_social, id: user.id, format: :json, data: {"house" => "chill"}
+            rrc(400)
+            put :create_user_social, id: user.id, format: :json, data: nil
+            rrc(400)
+            put :create_user_social, id: user.id, format: :json
+            rrc(400)
+            put :create_user_social, id: user.id, format: :json, data: { "facebook_id" => "1"}
+            rrc(200)
+        end
+
+        it "should return success msg when success" do
+            put :create_user_social, id: user.id, format: :json, data: { "facebook_id" => "1"}
+            json["status"].should == 1
+            json["data"].should   == "User #{user.id} updated"
+        end
+
+        it "should return validation errors" do
+            put :create_user_social, id: user.id, format: :json, data: { "email" => "" }
+            json["status"].should == 0
+            json["data"].class.should   == Hash
+        end
+
+        context "should add to user profile, if profile slot is open" do
+            it "should add facebook to user profile" do
+                put :create_user_social, id: user.id, format: :json, data: { "facebook_id" => "12345"}
+                user.reload
+                user.facebook_id.should == "12345"
+            end
+            it "should add twitter to user profile" do
+                put :create_user_social, id: user.id, format: :json, data: { "twitter" => "54321"}
+                user.reload
+                user.twitter.should == "54321"
+            end
+            it "should add phone to user profile" do
+                put :create_user_social, id: user.id, format: :json, data: { "phone" => "2342342345"}
+                user.reload
+                user.phone.should == "2342342345"
+            end
+            it "should not add email to user profile" do
+                put :create_user_social, id: user.id, format: :json, data: { "email" => "newemail@email.com"}
+                user.reload
+                user.email.should_not == "newemail@email.com"
+                user.email.should == "email@email.com"
+            end
+        end
+
+    end
+
     describe :deactivate do
 
         it_should_behave_like("token authenticated", :post, :deactivate, id: 1)
