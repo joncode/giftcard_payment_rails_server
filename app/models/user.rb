@@ -18,6 +18,13 @@ class User < ActiveRecord::Base
     has_many :sent,       as: :giver,  class_name: Gift
     has_many :received,   foreign_key: :receiver_id, class_name: Gift
 
+	has_many :followed_users, through: :relationships, source: "followed"
+	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
+	has_many :reverse_relationships, foreign_key: "followed_id",
+	                              class_name: "Relationship",
+	                              dependent: :destroy
+	has_many :followers, through: :reverse_relationships, source: :follower
+
 	has_secure_password
 
     validates_with UserSocialValidator
@@ -30,6 +37,7 @@ class User < ActiveRecord::Base
 	validates :password_confirmation, presence: true, 	on: :create
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
+
 
 	before_save { |user| user.email      = email.downcase }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
