@@ -15,7 +15,6 @@ class User < ActiveRecord::Base
 	has_many :answers
 	has_many :questions, :through => :answers
 	has_many :user_socials, 	dependent: :destroy
-	#has_many :gifts,     foreign_key: "giver_id"
     has_many :sent,       as: :giver,  class_name: Gift
     has_many :received,   foreign_key: :receiver_id, class_name: Gift
 
@@ -31,9 +30,6 @@ class User < ActiveRecord::Base
 	validates :password_confirmation, presence: true, 	on: :create
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
-
-	# mount_uploader   :photo, UserAvatarUploader
-	# mount_uploader   :secure_image, UserAvatarUploader
 
 	before_save { |user| user.email      = email.downcase }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
@@ -128,31 +124,6 @@ class User < ActiveRecord::Base
 			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
 		end
 	end
-
-	# def photo_changed?
-	# 	false
-	# end
-
-	# def secure_image_changed?
-	# 	false
-	# end
-
-	# def get_photo_old
-	# 	case self.use_photo
-	# 	when "cw"
-	# 		self.photo.url
-	# 	when "ios"
-	# 		self.iphone_photo
-	# 	when "fb"
-	# 		self.fb_photo
-	# 	else
-	# 		if self.photo.blank?
-	# 			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
-	# 		else
-	# 			self.photo.url
-	# 		end
-	# 	end
-	# end
 
 ##################
 

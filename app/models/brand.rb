@@ -1,7 +1,4 @@
 class Brand < ActiveRecord::Base
-	# attr_accessible :address, :city, :description,
-	# :logo, :name, :phone, :state, :user_id, :website,
-	# :photo, :portrait, :next_view
 
 	has_many   :providers
 	belongs_to :user
