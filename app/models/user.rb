@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
 	validates :first_name, 	presence: true, length: {  maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
 	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
-	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
+	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :unless => :is_perm_deactive?
 	validates :password, 	length: { minimum: 6 },     on: :create
 	validates :password_confirmation, presence: true, 	on: :create
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
@@ -51,6 +51,26 @@ class User < ActiveRecord::Base
 	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data
 	after_create  :init_confirm_email
+
+	def is_perm_deactive?
+		self.perm_deactive == true ? true : false
+	end
+
+	def update args
+		if args.has_key?(:email) || args.has_key?(:phone)
+			type_of = :email if args.has_key? :email
+			type_of = :phone if args.has_key? :phone
+			if args.has_key? :primary
+				self.send("#{type_of}=", args[type_of])
+				if self.user_socials.where(type_of: type_of.to_s, identifier: args[type_of]).count == 0
+					UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+				end			
+			else
+				UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+			end
+		end
+		super args.except!(:email, :phone, :primary)
+	end
 
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false).where(remember_token: token).first
@@ -183,9 +203,25 @@ class User < ActiveRecord::Base
     end
 
     def deactivate_social type_of, identifier
-        # user get user_social record with identifier
-        socials = self.user_socials.where(identifier: identifier)
-        socials.first.deactivate
+	    user_social = self.user_socials.where(identifier: identifier).first
+        if [:email, :phone, :facebook_id, :twitter].include?(type_of) && self.send(type_of) == identifier
+        	if [:phone, :facebook_id, :twitter].include?(type_of)
+	        	user_social.deactivate
+	        	user_socials = self.user_socials.where(type_of: type_of).where.not(identifier:identifier)
+        		if user_socials.count > 0
+        			secondary_user_social = user_socials.first.identifier
+	        		self.update(type_of.to_sym => secondary_user_social, primary: true)
+	        	else
+	        		self.send("#{type_of}=", nil)
+	        		self.save
+	        	end
+        	elsif secondary_email = self.user_socials.where(type_of:"email").where.not(identifier:identifier).first
+	        	user_social.deactivate
+	        	self.update(email: secondary_email.identifier, primary: true)
+	        end
+        else
+        	user_social.deactivate
+        end
     end
 
 	def update_reset_token
