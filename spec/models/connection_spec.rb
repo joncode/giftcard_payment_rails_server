@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Connection do
 
-     before(:each) do
+    before(:each) do
         @ted   = FactoryGirl.create(:user, first_name: "Ted")
         @random_social = FactoryGirl.create(:user_social, user_id: nil)
 
@@ -22,14 +22,14 @@ describe Connection do
 
     it "should associate user with user_social" do
         Connection.create(friend_id: @ted.id, contact_id: @random_social.id)
-        @ted.friends.pop.should  == @random_social
-        @random_social.friends.pop.should     == @ted
+        @ted.friends.pop.should           == @random_social
+        @random_social.friends.pop.should == @ted
     end
 
     it "should associate the user via build" do
         @ted.connections.create(contact_id: @random_social.id)
-        @ted.friends.pop.should  == @random_social
-        @random_social.friends.pop.should     == @ted
+        @ted.friends.pop.should           == @random_social
+        @random_social.friends.pop.should == @ted
     end
-    
+
 end
