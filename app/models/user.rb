@@ -73,6 +73,10 @@ class User < ActiveRecord::Base
 		return false
 	end
 
+	def friends
+		super.unscoped
+	end
+
 ####### USER GETTERS AND SETTERS
 
 	def get_credit_card(card_id)

@@ -7,6 +7,48 @@ describe User do
 		UserSocial.delete_all
 	end
 
+    context "model associations and validations" do
+
+        it "builds from factory" do
+            user = FactoryGirl.create :user
+            user.should be_valid
+        end
+
+        it "should associate gift as giver" do
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create(:gift, giver: user)
+
+            user.reload
+            user.sent.first.id.should          == gift.id
+            user.sent.first.class.should       == Gift
+        end
+
+        it "should associate gift as receiver" do
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create(:gift, receiver: user)
+
+            user.reload
+            user.received.first.id.should             == gift.id
+            user.received.first.class.should          == Gift
+        end
+
+        it "should associate card as user" do
+            user = FactoryGirl.create(:user)
+            card = FactoryGirl.create(:card, user: user)
+
+            user.cards.first.id.should == card.id
+            user.cards.first.user_id.should == user.id
+        end
+
+        it "should associate oauths as user" do
+            user = FactoryGirl.create(:user)
+            oauth = FactoryGirl.create(:oauth, user: user)
+
+            user.oauths.first.id.should == oauth.id
+            user.oauths.first.user_id.should == user.id
+        end
+    end
+
 	it "should downcase email" do
 		user = FactoryGirl.create :user, { email: "KJOOIcode@yahoo.com" }
 		user.email.should == "kjooicode@yahoo.com"
@@ -72,7 +114,7 @@ describe User do
 			it "should not create a new user social record if no new #{type_of} is submitted #{type_of}" do
 				# update a user without #{type_of} change
 				running {
-						@user.update_attributes({last_name: "change_me_not_id"})
+						@user.update(last_name: "change_me_not_id")
 				}.should_not change { UserSocial.count }
 
 			end
@@ -114,48 +156,6 @@ describe User do
             end
 		end
 	end
-
-    context "model associations and validations" do
-
-        it "builds from factory" do
-            user = FactoryGirl.create :user
-            user.should be_valid
-        end
-
-        it "should associate gift as giver" do
-            user = FactoryGirl.create(:user)
-            gift = FactoryGirl.create(:gift, giver: user)
-
-            user.reload
-            user.sent.first.id.should          == gift.id
-            user.sent.first.class.should       == Gift
-        end
-
-        it "should associate gift as receiver" do
-            user = FactoryGirl.create(:user)
-            gift = FactoryGirl.create(:gift, receiver: user)
-
-            user.reload
-            user.received.first.id.should             == gift.id
-            user.received.first.class.should          == Gift
-        end
-
-        it "should associate card as user" do
-            user = FactoryGirl.create(:user)
-            card = FactoryGirl.create(:card, user: user)
-
-            user.cards.first.id.should == card.id
-            user.cards.first.user_id.should == user.id
-        end
-
-        it "should associate oauths as user" do
-            user = FactoryGirl.create(:user)
-            oauth = FactoryGirl.create(:oauth, user: user)
-
-            user.oauths.first.id.should == oauth.id
-            user.oauths.first.user_id.should == user.id
-        end
-    end
 
     context "pn_token management" do
 
@@ -242,7 +242,232 @@ describe User do
         end
     end
 
+    context "user has contacts ducktype tests" do
 
+        context "custom_validation" do
+
+            it "validates uniqueness / presence of primary email on user record" do
+                user = FactoryGirl.build(:user, :email => nil)
+                user.should_not be_valid
+                user.should have_at_least(1).error_on(:email)
+            end
+
+            it "accepts nil as email for a deactivated user record save" do
+                user = FactoryGirl.build(:user, :email => nil, perm_deactive: true)
+                user.should be_valid
+                user.should_not have_at_least(1).error_on(:email)
+            end
+        end
+
+        context "user status" do
+
+            it "can suspend a user" do
+                user = FactoryGirl.create(:user)
+                user.suspend
+                #test for suspension
+            end
+
+            it "can unsuspend a user" do
+
+            end
+
+            it "can deactivate a user account" do
+                # has all deactivated user_socials
+                # has no primary contact info on deactiavted record
+            end
+
+            it "cannot re-activate a deactivated user account" do
+
+            end
+
+        end
+
+        context :email do
+
+            it "can add an secondary email" do
+                user = FactoryGirl.create(:user)
+                primary_email = user.email
+                primary_email.should_not be_nil
+
+                user.update(email: "new_email@gmail.com")
+                user.email.should == primary_email
+                new_email = user.user_socials.where(type_of: "email", identifier: "new_email@gmail.com").first
+                new_email.identifier.should == "new_email@gmail.com"
+            end
+
+            it "cannot deactivate primary email" do
+                user = FactoryGirl.create(:user)
+                primary_email = user.email
+                primary_email.should_not be_nil
+                user.user_socials.where(type_of: "email").count.should == 1
+                user.deactivate_social(:email,  primary_email)
+                contact = UserSocial.unscoped.find_by(identifier: primary_email)
+                contact.active.should be_true
+            end
+
+            it "can deactivate while promoting an active secondary to primary" do
+                user = FactoryGirl.create(:user)
+                primary_email = user.email
+                primary_email.should_not be_nil
+                user.update(email: "new_email@gmail.com")
+                user.user_socials.where(type_of: "email").count.should == 2
+                user.deactivate_social(:email,  primary_email)
+                contact = UserSocial.find_by(identifier: "new_email@gmail.com")
+                contact.active.should be_true
+                contact = UserSocial.unscoped.find_by(identifier: primary_email)
+                contact.active.should be_false
+                user.email.should == "new_email@gmail.com"
+            end
+
+            it "can deactivate all email acounts except primary" do
+                user = FactoryGirl.create(:user)
+                primary_email = user.email
+                primary_email.should_not be_nil
+                user.update(email: "new_email@gmail.com")
+                user.update(email: "third_email@gmail.com")
+                user.user_socials.where(type_of: "email").count.should == 3
+                user.deactivate_social(:email,  "new_email@gmail.com")
+                contact = UserSocial.unscoped.find_by(identifier: "new_email@gmail.com")
+                contact.active.should be_false
+                user.deactivate_social(:email,  "third_email@gmail.com")
+                contact = UserSocial.unscoped.find_by(identifier: "third_email@gmail.com")
+                contact.active.should be_false
+                user.deactivate_social(:email,  primary_email)
+                contact = UserSocial.unscoped.find_by(identifier: primary_email)
+                contact.active.should be_true
+            end
+
+            it "allows you to change primary email with user social that already exists" do
+                user = FactoryGirl.create(:user)
+                primary_email = user.email
+                primary_email.should_not be_nil
+                user.update(email: "new_email@gmail.com")
+                user.user_socials.where(type_of: "email").count.should == 2
+
+                user.update(email: "new_email@gmail.com", primary: true)
+                user.email.should == "new_email@gmail.com"
+            end
+
+            it "allow you to change primary email with user social that doesnt already exist" do
+                user = FactoryGirl.create(:user)
+                primary_email = user.email
+                primary_email.should_not be_nil
+                user.user_socials.where(type_of: "email").count.should == 1
+
+                user.update(email: "new_email@gmail.com", primary: true)
+                user.email.should == "new_email@gmail.com"
+            end
+        end
+
+        context :phone do
+
+            it "can add a secondary phone" do
+                user = FactoryGirl.create(:user)
+                primary_phone = user.phone
+                primary_phone.should_not be_nil
+
+                user.update(phone: "6568489843")
+                user.phone.should == primary_phone
+                new_phone = user.user_socials.where(type_of: "phone", identifier: "6568489843").first
+                new_phone.identifier.should == "6568489843"
+            end
+
+            it "can deactivate primary phone - secondary phone becomes primary" do
+                user = FactoryGirl.create(:user)
+                primary_phone = user.phone
+                primary_phone.should_not be_nil
+                user.update(phone: "6467578686")
+                user.user_socials.where(type_of: "phone").count.should == 2
+                user.deactivate_social(:phone,  primary_phone)
+                contact = UserSocial.find_by(identifier: "6467578686")
+                contact.active.should be_true
+                contact = UserSocial.unscoped.find_by(identifier: primary_phone)
+                contact.active.should be_false
+                user.phone.should == "6467578686"
+            end
+
+            it "can deactivate all phone acounts including primary and set user primary to nil" do
+                user = FactoryGirl.create(:user)
+                primary_phone = user.phone
+                primary_phone.should_not be_nil
+                user.update(phone: "6467578686")
+                user.update(phone: "2123536747")
+                user.user_socials.where(type_of: "phone").count.should == 3
+                user.deactivate_social(:phone,  "6467578686")
+                contact = UserSocial.unscoped.find_by(identifier: "6467578686")
+                contact.active.should be_false
+                user.deactivate_social(:phone,  "2123536747")
+                contact = UserSocial.unscoped.find_by(identifier: "2123536747")
+                contact.active.should be_false
+                user.deactivate_social(:phone,  primary_phone)
+                contact = UserSocial.unscoped.find_by(identifier: primary_phone)
+                contact.active.should be_false
+                user.phone.should be_nil
+            end
+
+            it "allows you to change primary phone with user social that already exists" do
+                user = FactoryGirl.create(:user)
+                primary_phone = user.phone
+                primary_phone.should_not be_nil
+                user.update(phone: "6467578686")
+                user.user_socials.where(type_of: "phone").count.should == 2
+
+                user.update(phone: "6467578686", primary: true)
+                user.phone.should == "6467578686"
+            end
+
+            it "allow you to change primary phone with user social that doesnt already exist" do
+                user = FactoryGirl.create(:user)
+                primary_phone = user.phone
+                primary_phone.should_not be_nil
+                user.user_socials.where(type_of: "phone").count.should == 1
+
+                user.update(phone: "6467578686", primary: true)
+                user.phone.should == "6467578686"
+            end
+
+        end
+
+        context :twitter do
+
+            it "can add a twitter account" do
+
+            end
+
+            it "can deactivate primary twitter accounts - secondary twitter accounts becomes primary" do
+
+            end
+
+            it "can deactivate all  twitter accounts including primary" do
+
+            end
+
+            it "allows you to change primary twitter account" do
+
+            end
+
+        end
+
+        context :facebook do
+
+            it "can add a facebook account" do
+
+            end
+
+            it "can deactivate primary facebook accounts - secondary facebook accounts becomes primary" do
+
+            end
+
+            it "can deactivate all facebook accounts including primary" do
+
+            end
+
+            it "allows you to change primary facebook account" do
+
+            end
+
+        end
+    end
 end
 # == Schema Information
 #
