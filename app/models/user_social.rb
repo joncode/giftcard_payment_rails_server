@@ -1,10 +1,12 @@
 class UserSocial < ActiveRecord::Base
 
     belongs_to :user
+    has_many :connections, foreign_key: "contact_id", dependent: :destroy
+    has_many :friends, through: :connections, source: :friend
 
     before_validation     :reject_xxx_emails
 
-    validates_presence_of :identifier, :type_of, :user_id
+    validates_presence_of :identifier, :type_of
 
     validates_with MultiTypeIdentifierUniqueValidator
     validates :identifier , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?

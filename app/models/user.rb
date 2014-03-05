@@ -18,6 +18,9 @@ class User < ActiveRecord::Base
     has_many :sent,       as: :giver,  class_name: Gift
     has_many :received,   foreign_key: :receiver_id, class_name: Gift
 
+    has_many :friends, through: :connections, source: :contact
+    has_many :connections, foreign_key: "friend_id", dependent: :destroy
+
 	has_many :followed_users, through: :relationships, source: "followed"
 	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
 	has_many :reverse_relationships, foreign_key: "followed_id",
