@@ -23,7 +23,7 @@ describe ContactUpload do
         uss = cu.socials
         uss.first.should == us
         uss.last.identifier.should == "email2@yahoo.com"
-        uss.last.id.should be_nil
+        uss.last.id.should_not be_nil
         uss.last.type_of.should == "email"
         uss.count.should == 2
     end
@@ -41,6 +41,9 @@ describe ContactUpload do
         connection.friend_id.should  == @current_user.id
         us2 = UserSocial.unscoped.where(identifier: "email2@yahoo.com").first
         connection.contact_id.should == us2.id
+        connsaved = Connection.all
+        connsaved.count.should == 1
+        us2.friends.pop.should == @current_user
     end
 
     it "should connect contacts without user_ids in relationships" do
@@ -53,6 +56,9 @@ describe ContactUpload do
         relationship = relationships.first
         relationship.follower_id.should  == @current_user.id
         relationship.followed_id.should  == us.user_id
+        realtionsaved = Relationship.all
+        realtionsaved.count.should == 1
+        user.followers.pop.should == @current_user
     end
 
 end

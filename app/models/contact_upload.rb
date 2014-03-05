@@ -10,7 +10,7 @@ class ContactUpload
 
     def user_socials
         ary.map do |contact|
-            UserSocial.where(type_of: contact[:type_of], identifier: contact[:identifier]).first_or_initialize
+            UserSocial.where(type_of: contact[:type_of], identifier: contact[:identifier]).first_or_create
         end
     end
 
@@ -18,7 +18,7 @@ class ContactUpload
         uss = socials
         contacts = uss.select { |us| us.user_id == nil }
         contacts.map do |contact|
-            Connection.new(friend_id: @user.id, contact_id: contact.id)
+            Connection.create(friend_id: @user.id, contact_id: contact.id)
         end
     end
 
@@ -26,7 +26,7 @@ class ContactUpload
         uss = socials
         contacts = uss.select { |us| us.user_id != nil }
         contacts.map do |contact|
-            Relationship.new(follower_id: @user.id, followed_id: contact.user_id)
+            Relationship.create(follower_id: @user.id, followed_id: contact.user_id)
         end
     end
 
