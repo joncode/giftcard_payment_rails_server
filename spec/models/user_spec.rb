@@ -19,8 +19,8 @@ describe User do
             gift = FactoryGirl.create(:gift, giver: user)
 
             user.reload
-            user.sent.first.id.should          == gift.id
-            user.sent.first.class.should       == Gift
+            user.sent.first.id.should    == gift.id
+            user.sent.first.class.should == Gift
         end
 
         it "should associate gift as receiver" do
@@ -28,8 +28,8 @@ describe User do
             gift = FactoryGirl.create(:gift, receiver: user)
 
             user.reload
-            user.received.first.id.should             == gift.id
-            user.received.first.class.should          == Gift
+            user.received.first.id.should    == gift.id
+            user.received.first.class.should == Gift
         end
 
         it "should associate card as user" do
