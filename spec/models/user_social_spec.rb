@@ -2,9 +2,6 @@ require 'spec_helper'
 
 describe UserSocial do
 
-    # require a user_id, type_of, identifier
-    # accepts email , phone , facebook_id, twitter_id
-
     it "builds from factory" do
       user_social = FactoryGirl.build :user_social
       user_social.should be_valid
@@ -16,11 +13,11 @@ describe UserSocial do
       user_social.should have_at_least(1).error_on(:identifier)
     end
 
-    it "requires user_id" do
-      user_social = FactoryGirl.build(:user_social, :user_id => nil)
-      user_social.should_not be_valid
-      user_social.should have_at_least(1).error_on(:user_id)
-    end
+    # it "requires user_id" do
+    #   user_social = FactoryGirl.build(:user_social, :user_id => nil)
+    #   user_social.should_not be_valid
+    #   user_social.should have_at_least(1).error_on(:user_id)
+    # end
 
     it "requires type_of" do
       user_social = FactoryGirl.build(:user_social, :type_of => nil)

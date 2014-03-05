@@ -2,8 +2,7 @@ class Provider < ActiveRecord::Base
 	include Formatter
 
 	attr_accessor 	:menu
-
-
+	
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
 	has_many   :sales
@@ -18,28 +17,11 @@ class Provider < ActiveRecord::Base
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
 
-	# mount_uploader :photo,    ProviderPhotoUploader
-	# mount_uploader :logo,     ProviderLogoUploader
-	# mount_uploader :box,      ProviderBoxUploader
-	# mount_uploader :portrait, ProviderPortraitUploader
-
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
 	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
-	# def photo_changed?
-	# 	false
-	# end
-	# def logo_changed?
-	# 	false
-	# end
-	# def box_changed?
-	# 	false
-	# end
-	# def portrait_changed?
-	# 	false
-	# end
     def biz_user
         BizUser.find(self.id)
     end
