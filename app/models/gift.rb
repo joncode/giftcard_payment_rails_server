@@ -102,6 +102,10 @@ class Gift < ActiveRecord::Base
         "#{self.receiver_name}_#{self.provider_id}".gsub(' ','_')
     end
 
+    def redeem_time
+        self.redeemed_at || self.created_at
+    end
+
 #/-----------------------------------------------Status---------------------------------------/
 
     def stat_int

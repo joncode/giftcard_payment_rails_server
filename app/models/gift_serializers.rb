@@ -1,5 +1,5 @@
 module GiftSerializers
-
+    include ActionView::Helpers::DateHelper
     def serialize
         sender      = giver
         merchant    = provider
@@ -36,6 +36,7 @@ module GiftSerializers
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
         gift_hsh["gift_id"]            = self.id
+        gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
         gift_hsh
     end
 
@@ -57,6 +58,7 @@ module GiftSerializers
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
         gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
+        gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
         gift_hsh
     end
 
@@ -76,6 +78,7 @@ module GiftSerializers
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
         gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
+        gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
         gift_hsh
     end
 

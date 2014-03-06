@@ -81,10 +81,10 @@ class JsonController < ActionController::Base
 
                 gift_obj["total"]    = g.total
                 gift_obj["server"]   = g.order.server_code if g.order
-                if (g.updated_at > (Time.now  - 1.day))
-                    gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant)
+                if (g.redeem_time > (Time.now  - 1.day))
+                    gift_obj["time_ago"] = g.redeem_time.to_formatted_s(:merchant)
                 else
-                    gift_obj["time_ago"] = g.updated_at.to_formatted_s(:merchant_date)
+                    gift_obj["time_ago"] = g.redeem_time.to_formatted_s(:merchant_date)
                 end
             end
 
