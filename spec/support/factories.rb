@@ -291,7 +291,7 @@ FactoryGirl.define do
         reserve         100
         expires_at      Time.now.to_date
         expires_in     (Time.now + 1.month).to_date
-        sms_shortcode   "11111"
+        textword       "11111"
         contract        true
     end
 

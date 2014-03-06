@@ -2,6 +2,11 @@ module HttpModel
     extend ActiveSupport::Concern
 
 
+        def get(token: token, route: route)
+            return fail_hsh unless (token && route)
+            server_request(token, route, nil, "get")
+        end
+
         def post(token: token, route: route, params: nil)
             return fail_hsh unless (token && route)
             server_request(token, route, params, "post")
