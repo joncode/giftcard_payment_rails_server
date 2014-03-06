@@ -49,6 +49,13 @@ class Admt::V2::UsersController < JsonController
         respond
     end
 
+    def deactivate_social
+        user_id    = params["data"]["user_id"]
+        type_of    = params["data"]["type_of"]
+        identifier = params["data"]["identifier"]
+        User.find(user_id).deactivate_social(type_of, identifier)
+    end
+
     def deactivate_gifts
         user = User.unscoped.find(params[:id])
         total_gifts = Gift.get_user_activity(user)
