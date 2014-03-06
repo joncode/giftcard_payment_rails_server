@@ -42,19 +42,16 @@ class User < ActiveRecord::Base
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
 
-	before_save { |user| user.email      = email.downcase }
+	before_save { |user| user.email      = email.downcase unless is_perm_deactive? }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
 	after_save    :collect_incomplete_gifts
-	after_save    :persist_social_data
+	after_save    :persist_social_data, :unless => :is_perm_deactive?
 	after_create  :init_confirm_email
 
-	def is_perm_deactive?
-		self.perm_deactive == true ? true : false
-	end
 
 	def update args
 		if args.has_key?(:email) || args.has_key?(:phone)
@@ -77,6 +74,10 @@ class User < ActiveRecord::Base
 	end
 
 #/---------------------------------------------------------------------------------------------/
+
+	def is_perm_deactive?
+		self.perm_deactive == true ? true : false
+	end
 
 	def not_suspended?
 		self.active && !self.perm_deactive
@@ -184,43 +185,56 @@ class User < ActiveRecord::Base
 
     def permanently_deactivate
         self.active        = false
+        self.perm_deactive = true
         self.phone         = nil
-        self.email         = "#{self.email}xxx"
         self.facebook_id   = nil
         self.twitter       = nil
-        self.perm_deactive = true
-        UserSocial.deactivate_all self
+        self.email         = nil
+        self.deactivate_all_socials
         save
     end
 
     def suspend
     	self.toggle! :active
     	if self.active == false
-			UserSocial.deactivate_all self
+    		self.deactivate_all_socials
 		else
-			UserSocial.activate_all self
+			self.activate_all_socials
 		end
     end
 
+    def activate_all_socials
+    	self.user_socials.unscoped.each do |us|
+    		us.update(active: true)
+    	end
+    end
+
+    def deactivate_all_socials
+    	self.user_socials.each do |us|
+    		us.user.deactivate_social(us.type_of.to_sym, us.identifier)
+    	end
+    end
+
     def deactivate_social type_of, identifier
-	    user_social = self.user_socials.where(identifier: identifier).first
+	    user_social            = self.user_socials.where(identifier: identifier).first
+	    secondary_user_socials = self.user_socials.where(type_of: type_of).where.not(identifier:identifier)
+	    
         if [:email, :phone, :facebook_id, :twitter].include?(type_of) && self.send(type_of) == identifier
-        	if [:phone, :facebook_id, :twitter].include?(type_of)
-	        	user_social.deactivate
-	        	user_socials = self.user_socials.where(type_of: type_of).where.not(identifier:identifier)
-        		if user_socials.count > 0
-        			secondary_user_social = user_socials.first.identifier
-	        		self.update(type_of.to_sym => secondary_user_social, primary: true)
-	        	else
-	        		self.send("#{type_of}=", nil)
-	        		self.save
-	        	end
-        	elsif secondary_email = self.user_socials.where(type_of:"email").where.not(identifier:identifier).first
-	        	user_social.deactivate
-	        	self.update(email: secondary_email.identifier, primary: true)
-	        end
+        	if secondary_user_socials.count > 0
+        		user_social.update(active: false)
+        		secondary_identifier = secondary_user_socials.first.identifier
+        		self.update(type_of.to_sym => secondary_identifier, primary: true)
+        	elsif [:phone, :facebook_id, :twitter].include?(type_of)
+        		user_social.update(active: false)
+	        	self.send("#{type_of}=", nil)
+	        	self.save
+			elsif [:email].include?(type_of) && self.active == false
+				user_social.update(active: false)
+			else
+				puts "cannot deactivate primary email for user that is active"
+			end        			
         else
-        	user_social.deactivate
+        	user_social.update(active: false)
         end
     end
 

@@ -51,8 +51,7 @@ describe User do
 
 	it "should downcase email" do
 		user = FactoryGirl.create :user, { email: "KJOOIcode@yahoo.com" }
-		user.email.should == "kjooicode@yahoo.com"
-		puts user.inspect
+        user.email.should == "kjooicode@yahoo.com"
 	end
 	# if user social methods are called on user , it gets the data from user social
 
@@ -261,25 +260,83 @@ describe User do
 
         context "user status" do
 
-            it "can suspend a user" do
-                user = FactoryGirl.create(:user)
-                user.suspend
-                #test for suspension
+            context "suspended user" do
+                before do
+                    @user = FactoryGirl.create(:user, email: "primary@email.com", phone: "2222222222", facebook_id: "111111111", twitter: "111a1a1aa1")
+                    FactoryGirl.create(:user_social, type_of: "email", identifier: "new_email@email.com", user_id: @user.id)
+                    FactoryGirl.create(:user_social, type_of: "phone", identifier: "3333333333", user_id: @user.id)
+                    FactoryGirl.create(:user_social, type_of: "facebook_id", identifier: "2222222222", user_id: @user.id)
+                    FactoryGirl.create(:user_social, type_of: "twitter", identifier: "222b2b2bb2", user_id: @user.id)
+                    @user.suspend
+                end
+                                
+                it "can suspend a user" do
+                    @user.active == false
+                    @user.perm_deactive == false
+                    @user.email.should == "primary@email.com"
+                    @user.phone.should == "2222222222"
+                    @user.facebook_id.should == "111111111"
+                    @user.twitter.should == "111a1a1aa1"
+                    UserSocial.unscoped.count.should == 8
+                    UserSocial.unscoped.where(active: false).count.should == 8
+                end
+
+                it "can unsuspend a user" do
+                    @user.active == false
+                    @user.perm_deactive == false
+                    UserSocial.unscoped.where(active: false).count.should == 8
+                    @user.suspend
+
+                    @user.active == true
+                    @user.perm_deactive == false
+                    @user.email.should == "primary@email.com"
+                    @user.phone.should == "2222222222"
+                    @user.facebook_id.should == "111111111"
+                    @user.twitter.should == "111a1a1aa1"
+                    UserSocial.unscoped.count.should == 8
+                    UserSocial.unscoped.where(active: false).count.should == 0
+                    UserSocial.unscoped.where(active: true).count.should == 8
+                end
             end
 
-            it "can unsuspend a user" do
+            context "perm-deactivated user" do
+                before do
+                    @user = FactoryGirl.create(:user, email: "primary@email.com", phone: "2222222222", facebook_id: "111111111", twitter: "111a1a1aa1")
+                    FactoryGirl.create(:user_social, type_of: "email", identifier: "new_email@email.com", user_id: @user.id)
+                    FactoryGirl.create(:user_social, type_of: "phone", identifier: "3333333333", user_id: @user.id)
+                    FactoryGirl.create(:user_social, type_of: "facebook_id", identifier: "2222222222", user_id: @user.id)
+                    FactoryGirl.create(:user_social, type_of: "twitter", identifier: "222b2b2bb2", user_id: @user.id)
+                    @user.permanently_deactivate
+                end
+                                
+                it "can perm-deactivate a user" do
+                    @user.active == false
+                    @user.perm_deactive == true
+                    @user.email.should == nil
+                    @user.phone.should == nil
+                    @user.facebook_id.should == nil
+                    @user.twitter.should == nil
+                    UserSocial.unscoped.count.should == 8
+                    UserSocial.unscoped.where(active: false).count.should == 8
+                end
 
+                it "can un-perm-deactivate a user" do
+                    @user.active == false
+                    @user.perm_deactive == true
+                    UserSocial.unscoped.where(active: false).count.should == 8
+                    @user.update(perm_deactive: false)
+
+                    @user.active == false
+                    @user.perm_deactive == true
+                    @user.email.should == nil
+                    @user.phone.should == nil
+                    @user.facebook_id.should == nil
+                    @user.twitter.should == nil
+                    UserSocial.unscoped.count.should == 8
+                    UserSocial.unscoped.where(active: false).count.should == 8
+                    UserSocial.unscoped.where(active: true).count.should == 0
+                end
             end
-
-            it "can deactivate a user account" do
-                # has all deactivated user_socials
-                # has no primary contact info on deactiavted record
-            end
-
-            it "cannot re-activate a deactivated user account" do
-
-            end
-
         end
 
         context :email do
