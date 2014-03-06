@@ -8,7 +8,7 @@ class MoveRegiftDataToPayableOnGifts < ActiveRecord::Migration
     # no_gift = 0
     # regifts.each do |old_gift|
     #    puts "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-    #     new_gift = old_gift.child
+    #     new_gift = Gift.find_by(regift_id: old_gift.id)
     #     if new_gift
     #       new_gift.payable = old_gift
     #       if new_gift.save
