@@ -1,5 +1,8 @@
 class AllowNullEmailOnUser < ActiveRecord::Migration
-  def change
-  	    change_column :users, :email, :string, :null => true
+  def up
+  	change_column :users, :email, :string, :null => true
+  end
+  def down
+  	change_column :users, :email, :string, :null => false
   end
 end
