@@ -32,6 +32,14 @@ describe Connection do
         @random_social.friends.pop.should == @ted
     end
 
+    it "should autosave when user is updated" do
+        @ted.friends.count.should == 0
+        @ted.friends << @random_social
+        @ted.save
+        @ted.friends.count.should == 1
+        @ted.friends.first.should == @random_social
+    end
+
 end
 # == Schema Information
 #

@@ -42,6 +42,30 @@ describe Relationship do
         @ted.followers.pop.should        == @bryan
         @bryan.followed_users.pop.should == @ted
     end
+
+    it "should autosave follower with user :save" do
+        user       = FactoryGirl.create(:user)
+        other_user = FactoryGirl.create(:user, first_name: "follower")
+        user.followers.count.should == 0
+        user.followers << other_user
+        user.save
+        user.followers.count.should == 1
+        user.followers.first.should == other_user
+        other_user.followed_users.first.should == user
+        other_user.followers.count.should == 0
+    end
+
+    it "should autosave follower with user :save" do
+        user       = FactoryGirl.create(:user)
+        other_user = FactoryGirl.create(:user, first_name: "follower")
+        user.followed_users.count.should == 0
+        user.followed_users << other_user
+        user.save
+        user.followed_users.count.should == 1
+        user.followed_users.first.should == other_user
+        other_user.followers.first.should == user
+        user.followers.count.should == 0
+    end
 end# == Schema Information
 #
 # Table name: relationships

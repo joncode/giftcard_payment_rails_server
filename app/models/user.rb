@@ -73,9 +73,12 @@ class User < ActiveRecord::Base
 		return false
 	end
 
-	def friends
-		super.unscoped
-	end
+	# def friends
+	# 	conns = Connection.where(friend_id: self.id)
+	# 	binding.pry
+	# 	ids   = conns.map { |c| c.contact_id }
+	# 	UserSocial.unscoped.where(id: ids)
+	# end
 
 ####### USER GETTERS AND SETTERS
 
