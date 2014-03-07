@@ -6,3 +6,14 @@ class Connection < ActiveRecord::Base
     validates :friend_id, presence: true
     validates :contact_id, presence: true
 end
+# == Schema Information
+#
+# Table name: connections
+#
+#  id         :integer         not null, primary key
+#  friend_id  :integer
+#  contact_id :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+

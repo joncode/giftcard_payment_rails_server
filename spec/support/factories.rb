@@ -274,7 +274,7 @@ FactoryGirl.define do
     factory :campaign do
         type_of          "SMS"
         name             "Special Promotion"
-        live_date        Time.now.to_date
+        live_date        (Time.now.to_date - 5.day).to_date
         close_date       (Time.now + 1.month).to_date
         expire_date      (Time.now + 1.month).to_date
         purchaser_id     1
@@ -289,10 +289,21 @@ FactoryGirl.define do
         provider_id     1
         budget          100
         reserve         100
+        value           "13"
         expires_at      Time.now.to_date
         expires_in     (Time.now + 1.month).to_date
-        sms_shortcode   "11111"
+        textword       "11111"
         contract        true
+        shoppingCart    "[{\"detail\":\"The best margherita\",\"price\":13,\"price_promo\":1,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita\"}]"
+    end
+
+    factory :sms_contact do
+        service      "slicktext"
+        service_id   "1001"
+        textword     "itsonme"
+        subscribed_date  "2013-02-04 21:12:45".to_datetime
+        phone        "646475758686"
+        gift_id      nil
     end
 
 end
