@@ -1,7 +1,6 @@
 require 'yaml'
 require 'common_utils'
 require 'emailer'
-require 'sms_collector'
 # require 'gift_utility'
 # require 'production_db_update'
 # include ProductionDbUpdate
