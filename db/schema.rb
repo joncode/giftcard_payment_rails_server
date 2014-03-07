@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140305171623) do
+ActiveRecord::Schema.define(version: 20140306225704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,8 +274,8 @@ ActiveRecord::Schema.define(version: 20140305171623) do
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
@@ -320,6 +320,20 @@ ActiveRecord::Schema.define(version: 20140305171623) do
     t.boolean  "email_reminder_gift_receiver", default: true
     t.boolean  "email_reminder_gift_giver",    default: true
   end
+
+  create_table "sms_contacts", force: true do |t|
+    t.integer  "gift_id"
+    t.datetime "subscribed_date"
+    t.string   "phone"
+    t.integer  "service_id"
+    t.string   "service"
+    t.string   "textword"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sms_contacts", ["gift_id"], name: "index_sms_contacts_on_gift_id", using: :btree
+  add_index "sms_contacts", ["subscribed_date"], name: "index_sms_contacts_on_subscribed_date", using: :btree
 
   create_table "tags", force: true do |t|
     t.string   "name"

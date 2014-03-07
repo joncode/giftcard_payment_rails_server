@@ -7,6 +7,7 @@ if Rails.env.production?
     PUB_MERCH_URL   = "http://merchant.itson.me"
     PUBLIC_URL      = "http://www.itson.me"
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
+    SLICKTEXT_URL   = "https://api.slicktext.com/v1/textwords"
 elsif Rails.env.staging?
     PAGE_NAME       = "#{SERVICE_NAME} (staging)"
     TEST_URL        = "http://qa.drinkboardapp.com"
@@ -14,6 +15,7 @@ elsif Rails.env.staging?
     PUB_MERCH_URL   = "http://qamerchant.itson.me"
     PUBLIC_URL      = "http://qa.itson.me"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
+    SLICKTEXT_URL   = "https://api.slicktext.com/v1/textwords"
 else
     PAGE_NAME       = "Dev #{SERVICE_NAME} (local)"
     TEST_URL        = "http://0.0.0.0:3001"
@@ -21,6 +23,7 @@ else
     PUB_MERCH_URL   = "http://0.0.0.0:3000"
     PUBLIC_URL      = "http://0.0.0.0:3001"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
+    SLICKTEXT_URL   = "https://api.slicktext.com/v1/textwords"
 end
 
 AT_EMAIL       = "@itson.me"
@@ -41,4 +44,6 @@ VALID_PHONE_REGEX = /1?\s*\W?\s*([2-9][0-8][0-9])\s*\W?\s*([2-9][0-9]{2})\s*\W?\
 Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
 Time::DATE_FORMATS[:only_date]       = "%b %e"
+
+GIFT_CAT = { 0 => "User", 100 => "Regift", 200 => "Promo-Merchant", 210 => "Promo-Admin", 300 => "Campaign" }
 

@@ -76,4 +76,9 @@ else
     ENV['SOCIAL_PROXY_TOKEN']
 end
 
+SLICKTEXT_API_KEY = if Rails.env.development? or Rails.env.test?
+    "OYDvisC4qke6y5KPytkIBg"
+else
+    ENV['SLICKTEXT_API_KEY']
+end
 

@@ -33,3 +33,14 @@ describe Connection do
     end
 
 end
+# == Schema Information
+#
+# Table name: connections
+#
+#  id         :integer         not null, primary key
+#  friend_id  :integer
+#  contact_id :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+

@@ -17,6 +17,30 @@ class Admt::V2::UsersController < JsonController
         respond
     end
 
+    def create_user_social
+        return nil  if data_not_hash?
+        user_social_params = user_social_params(params["data"])
+        return nil  if hash_empty?(user_social_params)
+
+        us_type = user_social_params.keys[0]
+        user = User.find(params[:id])
+        if user.send(us_type).blank?
+            if user.update_attributes(user_social_params)
+                success "User #{user.id} updated"
+            else
+                fail user
+            end
+        else
+            user_social = UserSocial.new(user_id: params[:id], type_of: user_social_params.keys[0], identifier: user_social_params.values[0])
+            if user_social.save
+                success "User #{user.id} updated"
+            else
+                fail user
+            end
+        end
+        respond        
+    end
+
     def deactivate
         begin
             user = User.unscoped.find(params[:id])
@@ -71,4 +95,10 @@ private
         allowed = [ "first_name" , "last_name",  "phone" , "email", "zip" ]
         data_hsh.select{ |k,v| allowed.include? k }
     end
+
+    def user_social_params data_hsh
+        allowed = ["email", "phone", "facebook_id", "twitter", "phone"]
+        data_hsh.select{ |k,v| (allowed.include?(k)) }
+    end
+
 end
