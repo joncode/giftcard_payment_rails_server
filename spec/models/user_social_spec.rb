@@ -165,5 +165,8 @@ end
 #  updated_at :datetime        not null
 #  active     :boolean         default(TRUE)
 #  subscribed :boolean         default(FALSE)
+#  name       :string(255)
+#  birthday   :date
+#  handle     :string(255)
 #
 
