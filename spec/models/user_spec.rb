@@ -138,14 +138,18 @@ describe User do
                 @user.update( type_of => identifier)
 
                 @user.should have_at_least(1).error_on(type_of)
-                @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error"]
+                if type_of == "phone"
+                    @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount."]
+                else
+                    @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount, please use that to log in"]
+                end           
             end
 
             it "should allow saving a record that already exists for another user secondary but deactivated #{type_of}" do
                 other_user = FactoryGirl.create(:user, type_of => identifier)
                 new_primary = "4568759687"
                 new_primary = "newprimary@gmail.com" if type_of == "email"
-                other_user.update(type_of => new_primary)
+                other_user.update(type_of => new_primary, "primary" => true)
                 us = UserSocial.where( type_of: type_of, identifier: identifier).first
                 us.update(active: false)
                 @user.update( type_of => identifier)

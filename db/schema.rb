@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140306225704) do
+ActiveRecord::Schema.define(version: 20140307194720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,8 +274,8 @@ ActiveRecord::Schema.define(version: 20140306225704) do
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
@@ -321,6 +321,17 @@ ActiveRecord::Schema.define(version: 20140306225704) do
     t.boolean  "email_reminder_gift_giver",    default: true
   end
 
+  create_table "sms", force: true do |t|
+    t.integer  "gift_id"
+    t.datetime "subscribed_date"
+    t.string   "phone"
+    t.integer  "service_id"
+    t.string   "service_type"
+    t.string   "textword"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "sms_contacts", force: true do |t|
     t.integer  "gift_id"
     t.datetime "subscribed_date"
@@ -357,7 +368,7 @@ ActiveRecord::Schema.define(version: 20140306225704) do
   add_index "user_socials", ["active"], name: "index_user_socials_on_active", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "email",                                              null: false
+    t.string   "email"
     t.boolean  "admin",                              default: false
     t.string   "password_digest",                                    null: false
     t.string   "remember_token",                                     null: false

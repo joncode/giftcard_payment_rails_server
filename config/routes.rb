@@ -172,7 +172,7 @@ Drinkboard::Application.routes.draw do
             end
           end
 
-          resources :user_socials, only: [:create, :update]
+          # resources :user_socials, only: [:create, :update]
 
           resources :brands,    only: [:create, :update]   # biz logic
 

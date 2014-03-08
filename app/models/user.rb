@@ -54,19 +54,36 @@ class User < ActiveRecord::Base
 
 
 	def update args
-		if args.has_key?(:email) || args.has_key?(:phone)
-			type_of = :email if args.has_key? :email
-			type_of = :phone if args.has_key? :phone
-			if args.has_key? :primary
+		args = args.stringify_keys
+		us_keys = ["email", "phone", "facebook_id", "twitter"]
+		if us_keys.any? { |k| args.has_key? k }
+			type_of = "email" if args.has_key? "email"
+			type_of = "phone" if args.has_key? "phone"
+			type_of = "facebook_id" if args.has_key? "facebook_id"
+			type_of = "twitter" if args.has_key? "twitter"
+			if args.has_key?("primary")
 				self.send("#{type_of}=", args[type_of])
-				if self.user_socials.where(type_of: type_of.to_s, identifier: args[type_of]).count == 0
-					UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
-				end			
+				if self.valid?
+					self.save
+					unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+						user_social.errors
+					end
+				else
+					self.errors
+				end
 			else
-				UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+				self.send("#{type_of}=", args[type_of])
+				if self.valid?
+					self.reload
+					unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+						user_social.errors
+					end
+				else
+					self.errors
+				end
 			end
 		end
-		super args.except!(:email, :phone, :primary)
+		super(args.except!("email", "phone", "facebook_id", "twitter", "primary"))
 	end
 
 	def self.app_authenticate(token)
