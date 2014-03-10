@@ -207,8 +207,8 @@ class User < ActiveRecord::Base
         self.facebook_id   = nil
         self.twitter       = nil
         self.email         = nil
-        self.deactivate_all_socials
         save
+        self.deactivate_all_socials
     end
 
     def suspend
