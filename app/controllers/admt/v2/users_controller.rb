@@ -8,37 +8,13 @@ class Admt::V2::UsersController < JsonController
         return nil  if hash_empty?(user_params)
 
         user = User.find(params[:id])
-        if user.update_attributes(user_params)
+        if user.update(user_params)
             success "User #{user.id} updated"
         else
             fail user
         end
 
         respond
-    end
-
-    def create_user_social
-        return nil  if data_not_hash?
-        user_social_params = user_social_params(params["data"])
-        return nil  if hash_empty?(user_social_params)
-
-        us_type = user_social_params.keys[0]
-        user = User.find(params[:id])
-        if user.send(us_type).blank?
-            if user.update_attributes(user_social_params)
-                success "User #{user.id} updated"
-            else
-                fail user
-            end
-        else
-            user_social = UserSocial.new(user_id: params[:id], type_of: user_social_params.keys[0], identifier: user_social_params.values[0])
-            if user_social.save
-                success "User #{user.id} updated"
-            else
-                fail user
-            end
-        end
-        respond        
     end
 
     def deactivate
@@ -73,6 +49,20 @@ class Admt::V2::UsersController < JsonController
         respond
     end
 
+    def deactivate_social
+        user = User.find(params[:id])
+        user_id    = params["id"]
+        type_of    = params["data"]["type_of"]
+        identifier = params["data"]["identifier"]
+        user.deactivate_social(type_of, identifier)
+        if UserSocial.unscoped.where(identifier: identifier).first.active == false
+            success "#{identifier} has been deactivated"
+        else
+            fail "unable to deactivate #{identifier}"
+        end
+        respond
+    end
+
     def deactivate_gifts
         user = User.unscoped.find(params[:id])
         total_gifts = Gift.get_user_activity(user)
@@ -92,7 +82,7 @@ class Admt::V2::UsersController < JsonController
 private
 
     def strong_param(data_hsh)
-        allowed = [ "first_name" , "last_name",  "phone" , "email", "zip" ]
+        allowed = [ "first_name" , "last_name",  "phone" , "email", "zip", "primary" ]
         data_hsh.select{ |k,v| allowed.include? k }
     end
 

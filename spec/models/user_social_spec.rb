@@ -13,12 +13,6 @@ describe UserSocial do
       user_social.should have_at_least(1).error_on(:identifier)
     end
 
-    # it "requires user_id" do
-    #   user_social = FactoryGirl.build(:user_social, :user_id => nil)
-    #   user_social.should_not be_valid
-    #   user_social.should have_at_least(1).error_on(:user_id)
-    # end
-
     it "requires type_of" do
       user_social = FactoryGirl.build(:user_social, :type_of => nil)
       user_social.should_not be_valid
@@ -28,44 +22,6 @@ describe UserSocial do
     it "should update user_social.subscribed if subscribe is successful" do
       Resque.should_receive(:enqueue).with(SubscriptionJob, anything)
       user_social = FactoryGirl.create(:user_social, type_of: "email", identifier:"test@email.com")
-    end
-
-    describe :deactivate do
-
-        it "should remove social data from user record and replace with other active data" do
-            user = FactoryGirl.create(:user, first_name: "ace", email: "ace@email.com", phone: "2222222222")
-            user.email = "newemail@gmail.com"
-            user.save
-            user.reload
-            user.email.should == "newemail@gmail.com"
-            user_social = UserSocial.where(identifier: "newemail@gmail.com", user_id: user.id).first
-            user_social.deactivate
-            user.reload
-            user.email.should == "ace@email.com"
-        end
-
-        it "should remove social data from user record and replace with other active data" do
-            user = FactoryGirl.create(:user, first_name: "ace", email: "ace@email.com", phone: "2222222222")
-            user.phone = "3333333333"
-            user.save
-            user.reload
-            user.phone.should == "3333333333"
-            user_social = UserSocial.where(identifier: "3333333333").first
-            user_social.deactivate
-            user.reload
-            user.phone.should == "2222222222"
-        end
-
-        it "should remove social data and replace with nil when no other data exists" do
-            user = FactoryGirl.create(:user, first_name: "ace", email: "ace@email.com", phone: "2222222222")
-            user.reload
-            user.phone.should == "2222222222"
-            user_social = UserSocial.where(identifier: "2222222222").first
-            user_social.deactivate
-            user.reload
-            user.phone.should be_nil
-        end
-
     end
 
     describe "uniqueness validation" do
