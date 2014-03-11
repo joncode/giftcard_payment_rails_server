@@ -60,7 +60,6 @@ describe ContactUpload do
         realtionsaved.count.should == 1
         user.followers.pop.should == @current_user
     end
-
 end
 
 
