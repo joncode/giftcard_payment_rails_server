@@ -66,7 +66,7 @@ describe Mt::V2::GiftsController do
             post :create, format: :json, data: create_hsh
             rrc 200
             json["status"].should == 1
-            keys = ["value", "cost", "receiver_name", "receiver_email", "shoppingCart", "status", "updated_at", "created_at", "items", "expires_at"]
+            keys = ["value", "cost", "receiver_name", "receiver_email", "shoppingCart", "status", "updated_at", "created_at", "items", "expires_at", "cat"]
             compare_keys(json["data"], keys)
         end
 
