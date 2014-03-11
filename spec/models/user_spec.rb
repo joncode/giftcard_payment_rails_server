@@ -104,11 +104,17 @@ describe User do
 				user_social.user_id.should    == @user.id
 			end
 
-			it "should remove #{type_of} when user deletes #{type_of}" do
-				user = FactoryGirl.create :user, { "#{type_of}" => identifier }
-				user.deactivate_social("#{type_of}", identifier)
-				UserSocial.unscoped.find_by(identifier: identifier).active.should be_false
-			end
+            it "should remove phone from user" do
+                user = FactoryGirl.create :user, { "phone" => "2222222222" }
+                user.deactivate_social("phone", "2222222222")
+                UserSocial.unscoped.find_by(identifier: "2222222222").active.should be_false
+            end
+
+            it "should not remove email when from user unless perm-deactive" do
+                user = FactoryGirl.create :user, { "email" => "jon@gmail.com" }
+                user.deactivate_social("email", "jon@gmail.com")
+                UserSocial.unscoped.find_by(identifier: "jon@gmail.com").active.should be_true
+            end
 
 			it "should not create a new user social record if no new #{type_of} is submitted #{type_of}" do
 				# update a user without #{type_of} change

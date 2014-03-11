@@ -221,7 +221,7 @@ class User < ActiveRecord::Base
     end
 
     def activate_all_socials
-    	self.user_socials.unscoped.each do |us|
+    	UserSocial.unscoped.where(user_id: self.id).each do |us|
     		us.update(active: true)
     	end
     end
@@ -233,19 +233,19 @@ class User < ActiveRecord::Base
     end
 
     def deactivate_social type_of, identifier
+    	type_of = type_of.to_s
 	    user_social            = self.user_socials.where(identifier: identifier).first
 	    secondary_user_socials = self.user_socials.where(type_of: type_of).where.not(identifier:identifier)
-	    
-        if [:email, :phone, :facebook_id, :twitter].include?(type_of) && self.send(type_of) == identifier
+	    if ["email", "phone", "facebook_id", "twitter"].include?(type_of) && self.send(type_of) == identifier
         	if secondary_user_socials.count > 0
         		user_social.update(active: false)
         		secondary_identifier = secondary_user_socials.first.identifier
-        		self.update(type_of.to_sym => secondary_identifier, primary: true)
-        	elsif [:phone, :facebook_id, :twitter].include?(type_of)
+        		self.update_column(type_of.to_sym, secondary_identifier)
+        	elsif ["phone", "facebook_id", "twitter"].include?(type_of)
         		user_social.update(active: false)
 	        	self.send("#{type_of}=", nil)
 	        	self.save
-			elsif [:email].include?(type_of) && self.active == false
+			elsif ["email"].include?(type_of) && self.active == false
 				user_social.update(active: false)
 			else
 				puts "cannot deactivate primary email for user that is active"
