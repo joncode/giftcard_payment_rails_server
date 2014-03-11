@@ -245,7 +245,7 @@ DEPENDENCIES
   newrelic_rpm
   pg
   rack-timeout
-  rails (= 4.0.1)
+  rails (~> 4.0.1)
   rails_12factor
   rb-fsevent (~> 0.9.1)
   resque

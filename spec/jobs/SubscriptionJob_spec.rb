@@ -4,6 +4,7 @@ require 'mandrill'
 describe SubscriptionJob do
 
     before do
+        UserSocial.delete_all
         ResqueSpec.reset!
     end
 

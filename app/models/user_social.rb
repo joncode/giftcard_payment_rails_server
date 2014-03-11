@@ -1,61 +1,21 @@
 class UserSocial < ActiveRecord::Base
-    
+
     belongs_to :user
+    has_many :connections, foreign_key: "contact_id", dependent: :destroy
+    has_many :friends, through: :connections, source: :friend
 
     before_validation     :reject_xxx_emails
 
-    validates_presence_of :identifier, :type_of, :user_id
+    validates_presence_of :identifier, :type_of
 
-    validates_with TypeIdValidator
-    validates :identifier , format: { with: VALID_PHONE_REGEX }, if: :is_phone
-    validates :identifier , format: { with: VALID_EMAIL_REGEX }, if: :is_email
+    validates_with MultiTypeIdentifierUniqueValidator
+    validates :identifier , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
+    validates :identifier , format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
 
     after_create          :subscribe_mailchimp
     after_save            :unsubscribe_mailchimp
 
-    default_scope -> { where(active: true) }  # indexed
-
-    def is_email
-        self.type_of == "email"
-    end
-
-    def is_phone
-        self.type_of == "phone"
-    end
-
-    def self.activate_all user
-        socials = user.user_socials
-        socials.each do |social|
-            social.activate
-        end
-    end
-
-    def self.deactivate_all user
-        socials = user.user_socials
-        socials.each do |social|
-            social.deactivate
-        end
-    end
-
-    def activate
-        self.update(active: true)
-    end
-
-    def deactivate
-        self.update(active: false)
-        # check the user record and removes/replaces socials from pre-compiled
-        user = self.user
-        if user.send(self.type_of) == self.identifier
-            unless self.type_of == "email" && UserSocial.where(user_id: self.user_id, type_of: self.type_of, active: true).blank?
-                # if another user social exists move that data to user or use nil
-                new_data = nil
-                if new_user_social = UserSocial.where(user_id: self.user_id, type_of: self.type_of).first
-                    new_data = new_user_social.identifier
-                end
-                user.update_column(self.type_of.to_sym, new_data)
-            end
-        end
-    end
+    default_scope -> { where(active: true).where.not(user_id: nil) }  # indexed
 
 private
 
@@ -84,6 +44,13 @@ private
         end
     end
 
+    def is_email?
+        self.type_of == "email"
+    end
+
+    def is_phone?
+        self.type_of == "phone"
+    end
 end
 
 # == Schema Information
@@ -97,5 +64,9 @@ end
 #  created_at :datetime        not null
 #  updated_at :datetime        not null
 #  active     :boolean         default(TRUE)
-#  subscribed :boolean default false
+#  subscribed :boolean         default(FALSE)
+#  name       :string(255)
+#  birthday   :date
+#  handle     :string(255)
+#
 

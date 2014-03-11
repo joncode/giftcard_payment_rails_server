@@ -14,7 +14,7 @@ describe Admt::V2::UsersController do
 
         it_should_behave_like("token authenticated", :put, :update, id: 1)
 
-        let(:user) { FactoryGirl.create(:user) }
+        let(:user) { FactoryGirl.create(:user, first_name: "abe", last_name: "anderson", email: "abe@email.com", phone: "2222222222") }
 
         it "should require a valid user_id" do
             destroy_id = user.id
@@ -46,24 +46,52 @@ describe Admt::V2::UsersController do
             json["data"].should   == "User #{user.id} updated"
         end
 
-        it "should return validation errors" do
+        it "should return validation errors for first_name" do
+            put :update, id: user.id, format: :json, data: { "first_name" => "" }
+            json["status"].should == 0
+            json["data"].class.should   == Hash
+        end
+
+        it "should return validation errors for email" do
             put :update, id: user.id, format: :json, data: { "email" => "" }
             json["status"].should == 0
             json["data"].class.should   == Hash
         end
 
-        {
-            first_name: "Ray",
-            last_name:  "Davies",
-            email: "ray@davies.com",
-            phone: "5877437859"
-        }.stringify_keys.each do |type_of, value|
+        it "should replace first_name and last_name as primary contacts" do
+            put :update, id: user.id, format: :json, data: { first_name: "bob", last_name: "barker" }
+            updated_user = user.reload
+            updated_user.first_name.should == "Bob"
+            updated_user.last_name.should == "Barker"
+        end
 
-            it "should update the user #{type_of} in database" do
-                put :update, id: user.id, format: :json, data: { type_of => value }
-                new_user = User.last
-                new_user.send(type_of).should == value
-            end
+        it "should not replace email as primary contacts if theres not primary param" do
+            put :update, id: user.id, format: :json, data: { email: "bob@email.com" }
+            updated_user = user.reload
+            updated_user.user_socials.where(identifier: "bob@email.com").should be_present
+            updated_user.email.should_not == "bob@email.com"
+            updated_user.email.should == "abe@email.com"
+        end
+        it "should not replace phone as primary contacts if theres not primary param" do
+            put :update, id: user.id, format: :json, data: { phone: "3333333333" }
+            updated_user = user.reload
+            updated_user.user_socials.where(identifier: "3333333333").should be_present
+            updated_user.phone.should_not == "3333333333"
+            updated_user.phone.should == "2222222222"
+        end
+        it "should replace email as primary contacts if theres is a primary param" do
+            put :update, id: user.id, format: :json, data: { email: "bob@email.com", primary: true }
+            updated_user = user.reload
+            updated_user.user_socials.where(identifier: "bob@email.com").should be_present
+            updated_user.email.should == "bob@email.com"
+            updated_user.email.should_not == "abe@email.com"
+        end
+        it "should replace phone as primary contacts if theres is a primary param" do
+            put :update, id: user.id, format: :json, data: { phone: "3333333333", primary: true }
+            updated_user = user.reload
+            updated_user.user_socials.where(identifier: "3333333333").should be_present
+            updated_user.phone.should == "3333333333"
+            updated_user.phone.should_not == "2222222222"
         end
     end
 
@@ -73,6 +101,7 @@ describe Admt::V2::UsersController do
 
         it "should permanent deactivate user " do
             user = FactoryGirl.create(:user)
+            UserSocial.unscoped.where(user_id: user.id).count.should == 4
             post :deactivate, id: user.id, format: :json
             deactivated_user = User.unscoped.find(user.id)
             deactivated_user.active.should          be_false
@@ -80,9 +109,7 @@ describe Admt::V2::UsersController do
             deactivated_user.phone.should           be_nil
             deactivated_user.facebook_id.should     be_nil
             deactivated_user.twitter.should         be_nil
-            user_socials = UserSocial.where(user_id: user.id)
-            puts user_socials.inspect
-            user_socials.count.should == 0
+            UserSocial.unscoped.where(user_id: user.id).count.should == 4
         end
 
         it "should return success msg when success" do

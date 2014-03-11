@@ -1,5 +1,4 @@
 class CreditAccount < ActiveRecord::Base
-  # attr_accessible :owner, :owner_id
 
   has_many :gifts, as: :payable
 end

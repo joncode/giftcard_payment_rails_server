@@ -8,7 +8,7 @@ class Admt::V2::UsersController < JsonController
         return nil  if hash_empty?(user_params)
 
         user = User.find(params[:id])
-        if user.update_attributes(user_params)
+        if user.update(user_params)
             success "User #{user.id} updated"
         else
             fail user
@@ -49,6 +49,20 @@ class Admt::V2::UsersController < JsonController
         respond
     end
 
+    def deactivate_social
+        user = User.find(params[:id])
+        user_id    = params["id"]
+        type_of    = params["data"]["type_of"]
+        identifier = params["data"]["identifier"]
+        user.deactivate_social(type_of, identifier)
+        if UserSocial.unscoped.where(identifier: identifier).first.active == false
+            success "#{identifier} has been deactivated"
+        else
+            fail "unable to deactivate #{identifier}"
+        end
+        respond
+    end
+
     def deactivate_gifts
         user = User.unscoped.find(params[:id])
         total_gifts = Gift.get_user_activity(user)
@@ -68,7 +82,13 @@ class Admt::V2::UsersController < JsonController
 private
 
     def strong_param(data_hsh)
-        allowed = [ "first_name" , "last_name",  "phone" , "email", "zip" ]
+        allowed = [ "first_name" , "last_name",  "phone" , "email", "zip", "primary" ]
         data_hsh.select{ |k,v| allowed.include? k }
     end
+
+    def user_social_params data_hsh
+        allowed = ["email", "phone", "facebook_id", "twitter", "phone"]
+        data_hsh.select{ |k,v| (allowed.include?(k)) }
+    end
+
 end

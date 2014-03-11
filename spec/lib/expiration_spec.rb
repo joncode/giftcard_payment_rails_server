@@ -4,6 +4,8 @@ require 'expiration'
 describe "Expiration" do
 
     describe :expire_gifts do
+        before { Gift.delete_all }
+
 
         it "should expire gifts that are past expiration" do
             10.times do

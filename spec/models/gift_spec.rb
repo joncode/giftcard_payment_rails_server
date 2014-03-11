@@ -630,13 +630,8 @@ end
 #  created_at     :datetime        not null
 #  updated_at     :datetime        not null
 #  receiver_phone :string(255)
-#  tax            :string(255)
-#  tip            :string(255)
-#  regift_id      :integer
-#  foursquare_id  :string(255)
 #  facebook_id    :string(255)
 #  anon_id        :integer
-#  sale_id        :integer
 #  receiver_email :string(255)
 #  shoppingCart   :text
 #  twitter        :string(255)
@@ -645,8 +640,6 @@ end
 #  cat            :integer         default(0)
 #  active         :boolean         default(TRUE)
 #  pay_stat       :string(255)
-#  pay_type       :string(255)
-#  pay_id         :integer
 #  redeemed_at    :datetime
 #  server         :string(255)
 #  payable_id     :integer
