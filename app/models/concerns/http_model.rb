@@ -62,7 +62,7 @@ private
         end
 
         def generate_message token, params=nil
-            {:headers => {"authorization" => token, 'Accept' => 'application/json'}, :body => { "data" => params }}
+            {:headers => {"authorization" => token, 'Accept' => 'application/json'}, :body => params }
         end
 
 
