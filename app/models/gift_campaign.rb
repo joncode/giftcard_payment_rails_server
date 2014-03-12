@@ -6,7 +6,18 @@ class GiftCampaign < Gift
 
     def self.create args={}
         args["cat"] = 300
-        super
+        gift = super
+        gift.messenger
+        binding.pry
+        gift
+    end
+
+    def messenger
+        if self.payable.success?
+            Relay.send_push_notification(self)
+            puts "GiftCampaign -messenger- Notify Receiver via email #{self.receiver_name}"
+            notify_receiver
+        end
     end
 
 private
@@ -29,17 +40,9 @@ private
         args["expires_at"]    = expires_at_calc(campaign_item.expires_at, campaign_item.expires_in)
     end
 
-    def post_init args={}
-        messenger
-    end
-
-    def messenger
-        if self.payable.success?
-            Relay.send_push_notification(self)
-            puts "GiftSale -messenger- Notify Receiver via email #{self.receiver_name}"
-            notify_receiver
-        end
-    end
+    # def post_init args={}
+    #     messenger
+    # end
 
     def expires_at_calc expires_at, expires_in
         if expires_at.present?
