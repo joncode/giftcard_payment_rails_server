@@ -78,7 +78,7 @@ describe SocialProxy do
             let(:route) { "http://qam.itson.me/api/twitter/friends" }
 
             it "should reply 401 - cannot reach server when auth fails" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 401, :body => "", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 401, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.friends
@@ -88,7 +88,7 @@ describe SocialProxy do
             end
 
             it "should respond 407 when oauth keys are expired" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.friends
@@ -99,7 +99,7 @@ describe SocialProxy do
             end
 
             it "should set status to 200 when successful" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_friends}", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_friends}", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.friends
@@ -110,7 +110,7 @@ describe SocialProxy do
             end
 
             it "should get array of facebook friends from HTTP" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_friends}", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_friends}", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.friends
@@ -180,7 +180,7 @@ describe SocialProxy do
             let(:route) { "http://qam.itson.me/api/twitter/mention" }
 
             it "should reply 401 - cannot reach server when auth fails" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 401, :body => "", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 401, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.create_post
@@ -190,7 +190,7 @@ describe SocialProxy do
             end
 
             it "should respond 407 when oauth keys are expired" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.create_post
@@ -201,7 +201,7 @@ describe SocialProxy do
             end
 
             it "should set status to 200 when successful" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.create_post
@@ -212,7 +212,7 @@ describe SocialProxy do
             end
 
             it "should get array of facebook friends from HTTP" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.create_post
@@ -281,7 +281,7 @@ describe SocialProxy do
             let(:route) { "http://qam.itson.me/api/twitter/account" }
 
             it "should reply 401 - cannot reach server when auth fails" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 401, :body => "", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 401, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.profile
@@ -291,7 +291,7 @@ describe SocialProxy do
             end
 
             it "should respond 407 when oauth keys are expired" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.profile
@@ -302,7 +302,7 @@ describe SocialProxy do
             end
 
             it "should set status to 200 when successful" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.profile
@@ -313,7 +313,7 @@ describe SocialProxy do
             end
 
             it "should get json hash of twitter user profile info" do
-                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
+                stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
                 social_proxy.profile

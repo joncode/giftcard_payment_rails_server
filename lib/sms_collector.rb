@@ -5,7 +5,7 @@ module SmsCollector
 			# gets data from slicktext
 		campaign_item = CampaignItem.includes(:campaign).find_by(textword: textword.to_s)
 		if campaign_item.present?
-			if campaign_item.campaign.live_date < Time.now && campaign.close_date > Time.now
+			if (campaign_item.campaign.live_date < Time.now) && (campaign_item.campaign.close_date > Time.now)
 				sms_obj = Slicktext.new(textword, 1000)
 				sms_obj.sms
 				contacts = sms_obj.contacts
@@ -36,7 +36,7 @@ module SmsCollector
 				end
 			else
 				word = "not started yet" if campaign_item.campaign.live_date > Time.now
-				word = "finished" if campaign.close_date < Time.now
+				word = "finished" if campaign_item.campaign.close_date < Time.now
 				puts "Campaign has #{word}"
 			end
 		else
