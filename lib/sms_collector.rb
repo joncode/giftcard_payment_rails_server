@@ -2,7 +2,7 @@ module SmsCollector
 
 	def self.sms_promo textword
 		puts "------------- SMS Promo for #{textword} -----------------"
-			# gets data from slicktext
+		
 		campaign_item = CampaignItem.includes(:campaign).find_by(textword: textword.to_s)
 		if campaign_item.present?
 			if (campaign_item.campaign.live_date < Time.now) && (campaign_item.campaign.close_date > Time.now)
@@ -10,15 +10,13 @@ module SmsCollector
 				sms_obj.sms
 				contacts = sms_obj.contacts
 				puts "total contacts = #{sms_obj.count}"
-				# puts "resp = #{sms_obj.resp}"
-					# saves that data in sms_contact db
+
 				if contacts.kind_of?(Array)
 					if contacts.first.kind_of?(Hash)
 						puts "HERE IS THE SAVE CONTACT"
 						SmsContact.bulk_create(contacts)
 					end
 				end
-				# generates a gift_campaign per phone number saved
 
 				sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
 				puts "here is the sms contacts back from db == #{sms_contacts.count}"

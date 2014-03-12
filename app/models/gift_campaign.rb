@@ -29,6 +29,18 @@ private
         args["expires_at"]    = expires_at_calc(campaign_item.expires_at, campaign_item.expires_in)
     end
 
+    def post_init args={}
+        messenger
+    end
+
+    def messenger
+        if self.payable.success?
+            Relay.send_push_notification(self)
+            puts "GiftSale -messenger- Notify Receiver via email #{self.receiver_name}"
+            notify_receiver
+        end
+    end
+
     def expires_at_calc expires_at, expires_in
         if expires_at.present?
             expires_at
@@ -43,10 +55,6 @@ private
             campaign.expire_date = self.expires_at.to_date
         end
         campaign.save
-    end
-
-    def post_init args={}
-        puts "NOTIFY RECEIVER VIA #{self.receiver_email}"
     end
 
     def is_giftable
