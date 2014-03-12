@@ -10,10 +10,9 @@ class Campaign < Admtmodel
     #     self.giver_name
     # end
 
-    # def get_photo
-    #     # wrapped photo attribute in campaign db
-    #     self.giver_photo
-    # end
+    def get_photo
+        "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
+    end
 
 
     # # hidden giver ducktype methods
