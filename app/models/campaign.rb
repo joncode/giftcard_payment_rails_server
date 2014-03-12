@@ -11,9 +11,12 @@ class Campaign < Admtmodel
     end
 
     def get_photo
-        "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
+        if self.photo_path.present?
+            self.photo_path 
+        else
+            "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
+        end
     end
-
 
     # # hidden giver ducktype methods
     #     # campaign_giver.id    as giver_id   - campaign_id in ADMT
