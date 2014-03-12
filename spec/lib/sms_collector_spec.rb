@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'sms_collector'
-
+SLICKTEXT_URL = 'api.slicktext.com'
 describe SmsCollector do
 
     before(:each) do
@@ -34,8 +34,8 @@ describe SmsCollector do
         provider = FactoryGirl.create(:provider)
         campaign = FactoryGirl.create(:campaign)
         cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id)
-        route = SLICKTEXT_URL + "/#{textword}/contacts?limit=1000"
-        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SLICKTEXT_API_KEY}"}).to_return(:status => 200, :body => @sample_response )
+        route = SLICKTEXT_URL + "/v1/contacts?limit=1000&textword=#{textword}"
+        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"Basic #{SLICKTEXT_PUBLIC}"}).to_return(:status => 200, :body => @sample_response )
         SmsCollector::sms_promo_run
         WebMock.should have_requested(:get, route).times(1)
     end
@@ -45,8 +45,8 @@ describe SmsCollector do
         provider = FactoryGirl.create(:provider)
         campaign = FactoryGirl.create(:campaign)
         cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id)
-        route = SLICKTEXT_URL + "/#{textword}/contacts?limit=1000"
-        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SLICKTEXT_API_KEY}"}).to_return(:status => 200, :body => @sample_response )
+        route = SLICKTEXT_URL + "/v1/contacts?limit=1000&textword=#{textword}"
+        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"Basic #{SLICKTEXT_PUBLIC}"}).to_return(:status => 200, :body => @sample_response )
         SmsCollector::sms_promo_run
         sms_contacts = SmsContact.all
         sms_contacts.count.should == 20
@@ -58,8 +58,8 @@ describe SmsCollector do
         campaign = FactoryGirl.create(:campaign)
         cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id)
 
-        route = SLICKTEXT_URL + "/#{textword}/contacts?limit=1000"
-        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SLICKTEXT_API_KEY}"}).to_return(:status => 200, :body => @sample_response )
+        route = SLICKTEXT_URL + "/v1/contacts?limit=1000&textword=#{textword}"
+        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"Basic #{SLICKTEXT_PUBLIC}"}).to_return(:status => 200, :body => @sample_response )
         SmsCollector::sms_promo("itsonme")
         gifts = Gift.where(cat: 300)
         gifts.count.should == 20
@@ -73,8 +73,8 @@ describe SmsCollector do
         campaign = FactoryGirl.create(:campaign)
         cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id)
 
-        route = SLICKTEXT_URL + "/#{textword}/contacts?limit=1000"
-        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SLICKTEXT_API_KEY}"}).to_return(:status => 200, :body => @sample_response )
+        route = SLICKTEXT_URL + "/v1/contacts?limit=1000&textword=#{textword}"
+        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"Basic #{SLICKTEXT_PUBLIC}"}).to_return(:status => 200, :body => @sample_response )
         SmsCollector::sms_promo_run
         SmsContact.where.not(gift_id: nil).count.should == 20
         SmsContact.where(gift_id: nil).count.should == 0
@@ -87,8 +87,8 @@ describe SmsCollector do
         campaign = FactoryGirl.create(:campaign)
         cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id)
 
-        route = SLICKTEXT_URL + "/#{textword}/contacts?limit=1000"
-        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SLICKTEXT_API_KEY}"}).to_return(:status => 200, :body => @sample_response )
+        route = SLICKTEXT_URL + "/v1/contacts?limit=1000&textword=#{textword}"
+        stub_request(:get, route).with(:body => "data=", :headers => {'Accept'=>'application/json', 'Authorization'=>"Basic #{SLICKTEXT_PUBLIC}"}).to_return(:status => 200, :body => @sample_response )
         SmsCollector::sms_promo_run
 
         gift = Gift.where(receiver_phone: "5555555555").first

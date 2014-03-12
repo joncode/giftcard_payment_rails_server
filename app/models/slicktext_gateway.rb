@@ -16,23 +16,33 @@ class SlicktextGateway
         failsafe = 10
         begin
             resp  = get(token: get_token, route: route)
-            data  = JSON.parse resp["data"]
+            data  = resp["data"]
             self.status   = resp["status"]
-            @rec_contacts << data["contacts"]
+            puts "#{resp}"
             failsafe -= 1
-        end until (data["contacts"].count != self.limit) || (failsafe == 0)
+            if data["contacts"].kind_of?(Array)
+                @rec_contacts << data["contacts"]
+                total_count = data["contacts"].count
+            else
+                total_count = 0
+            end
+        end until (total_count != self.limit) || (failsafe == 0)
 
         puts "^^^^^^^^^^^^^^^^^^^^^^^^^^  SLICKTEXT FAILSAFE HIT   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" if failsafe == 0
 
-        @rec_contacts.flatten.map do |contact|
-            convert_data(contact)
+        if self.status.to_i == 200
+            @rec_contacts.flatten.map do |contact|
+                convert_data(contact)
+            end
         end
 	end
 
 private
 
 	def get_token
-		SLICKTEXT_API_KEY
+		# SLICKTEXT_API_KEY
+        # SLICKTEXT_PUBLIC
+        "Basic #{SLICKTEXT_PRIVATE}"
 	end
 
 	def convert_data contact

@@ -1,5 +1,6 @@
 SERVICE_NAME = "ItsOnMe"
 
+
 if Rails.env.production?
     PAGE_NAME       = SERVICE_NAME
     TEST_URL        = "http://www.drinkboardapp.com"
@@ -7,7 +8,6 @@ if Rails.env.production?
     PUB_MERCH_URL   = "http://merchant.itson.me"
     PUBLIC_URL      = "http://www.itson.me"
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
-    SLICKTEXT_URL   = "https://api.slicktext.com/v1/textwords"
 elsif Rails.env.staging?
     PAGE_NAME       = "#{SERVICE_NAME} (staging)"
     TEST_URL        = "http://qa.drinkboardapp.com"
@@ -15,7 +15,6 @@ elsif Rails.env.staging?
     PUB_MERCH_URL   = "http://qamerchant.itson.me"
     PUBLIC_URL      = "http://qa.itson.me"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
-    SLICKTEXT_URL   = "https://api.slicktext.com/v1/textwords"
 else
     PAGE_NAME       = "Dev #{SERVICE_NAME} (local)"
     TEST_URL        = "http://0.0.0.0:3001"
@@ -23,8 +22,13 @@ else
     PUB_MERCH_URL   = "http://0.0.0.0:3000"
     PUBLIC_URL      = "http://0.0.0.0:3001"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
-    SLICKTEXT_URL   = "https://api.slicktext.com/v1/textwords"
 end
+
+
+SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"
+SLICKTEXT_PRIVATE =  "0cc8841e131a2ecdc690a4d2e7b5a676255e26a8"
+
+
 
 AT_EMAIL       = "@itson.me"
 SUPPORT_EMAIL  = "support#{AT_EMAIL}"

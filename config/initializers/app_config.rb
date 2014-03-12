@@ -27,6 +27,10 @@ class ActiveSupport::TimeWithZone
 
 end
 
+def smss
+    require 'sms_collector'
+    SmsCollector::sms_promo_run
+end
 
 def lcon
     load ($:[0] + "/console_libs.rb")
