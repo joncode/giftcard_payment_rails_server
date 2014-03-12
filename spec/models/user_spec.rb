@@ -47,6 +47,17 @@ describe User do
             user.oauths.first.id.should == oauth.id
             user.oauths.first.user_id.should == user.id
         end
+
+        it "has_many app_contacts" do
+            user = FactoryGirl.create(:user)
+            user.app_contacts.count.should == 0
+            app_contact1 = FactoryGirl.create(:app_contact, user: user)
+            app_contact2 = FactoryGirl.build(:app_contact, user: user)
+            app_contact2.network = "phone"
+            app_contact2.network_id = "5456468756"
+            app_contact2.save
+            user.app_contacts.count.should == 2
+        end
     end
 
 	it "should downcase email" do
@@ -148,7 +159,7 @@ describe User do
                     @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount."]
                 else
                     @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount, please use that to log in"]
-                end           
+                end
             end
 
             it "should allow saving a record that already exists for another user secondary but deactivated #{type_of}" do
@@ -279,7 +290,7 @@ describe User do
                     FactoryGirl.create(:user_social, type_of: "twitter", identifier: "222b2b2bb2", user_id: @user.id)
                     @user.suspend
                 end
-                                
+
                 it "can suspend a user" do
                     @user.active == false
                     @user.perm_deactive == false
@@ -318,7 +329,7 @@ describe User do
                     FactoryGirl.create(:user_social, type_of: "twitter", identifier: "222b2b2bb2", user_id: @user.id)
                     @user.permanently_deactivate
                 end
-                                
+
                 it "can perm-deactivate a user" do
                     @user.active == false
                     @user.perm_deactive == true
@@ -354,7 +365,7 @@ describe User do
             it "can add a secondary email" do
                 user = FactoryGirl.create(:user, email: "primary_email@email.com")
                 user.update(email: "new_email@gmail.com")
-                
+
                 user.email.should == "primary_email@email.com"
                 user_emails = user.user_socials.where(type_of: "email")
                 user_emails.count.should == 2

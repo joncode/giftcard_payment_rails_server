@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 	has_many :brands
 	has_many :orders,    :through => :providers
 	has_many :oauths
-
+	has_many :app_contacts
 	has_many :sales
 	has_many :cards
 	has_many :answers
@@ -252,7 +252,7 @@ class User < ActiveRecord::Base
 				user_social.update(active: false)
 			else
 				puts "cannot deactivate primary email for user that is active"
-			end        			
+			end
         else
         	user_social.update(active: false)
         end

@@ -7,11 +7,11 @@ describe ContactUpload do
         @ary = [{ "672342" => { "first_name" => "tommy" ,"last_name" => "hilfigure", "email" => [ "email1@gmail.com", "email2@yahoo.com"], "phone" => [ "3102974545", "6467586473"], "twitter" => [ "2i134o1234123"], "facebook" => [ "23g2381d103dy1"] }}, { "22" => { "first_name" => "Jenifer" ,"last_name" => "Bowie", "email" => [ "jenny@facebook.com"], "phone" => ["7824657878"]}}]
     end
 
-    it "should accept ary of contacts separated by ID and make array of contact hashes" do
+    it "should accept ary of contacts separated by ID and make array of app_contacts" do
         cu = ContactUpload.new(@ary, @current_user)
         cu.ary.count.should == 8
-        cu.ary.first[:type_of].should    == "email"
-        cu.ary.first[:identifier].should == "email1@gmail.com"
+        cu.ary.first[:network].should    == "email"
+        cu.ary.first[:network_id].should == "email1@gmail.com"
         cu.ary.first[:name].should       == "tommy hilfigure"
     end
 
