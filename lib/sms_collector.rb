@@ -31,7 +31,7 @@ module SmsCollector
 	end
 
 	def self.sms_promo_run
-		["15894", "15893", "15892", "17429"].each do |word|
+		["itsonme", "drinkboard", "its on me", "no kid hungry"].each do |word|
 			self.sms_promo word
 		end
 	end
