@@ -6,7 +6,7 @@ module SmsCollector
 		sms_obj = Slicktext.new(textword, 1000)
 		sms_obj.sms
 		contacts = sms_obj.contacts
-		puts "resp = #{sms_obj.resp}"
+		# puts "resp = #{sms_obj.resp}"
 			# saves that data in sms_contact db
 		if contacts.kind_of?(Array)
 			if contacts.first.kind_of?(Hash)
