@@ -29,7 +29,7 @@ class Slicktext
         @textwords_list = self.resp["textwords"]
     end
 
-    def word_id textword
+    def word_id_for textword
         if self.textwords_list.nil?
             textwords
         end
