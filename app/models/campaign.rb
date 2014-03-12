@@ -2,7 +2,8 @@ class Campaign < Admtmodel
     self.table_name = "campaigns"
     # has_many :sent,  as: :giver,  class_name: Gift
     # has_many :debts, as: :owner
-
+    has_many :gifts, :as => :payable
+    has_many :campaigns_items
 
     #       ####### Gift Giver Ducktype
     def name
@@ -12,7 +13,7 @@ class Campaign < Admtmodel
 
     def get_photo
         if self.photo_path.present?
-            self.photo_path 
+            self.photo_path
         else
             "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
         end
@@ -21,8 +22,7 @@ class Campaign < Admtmodel
     # # hidden giver ducktype methods
     #     # campaign_giver.id    as giver_id   - campaign_id in ADMT
     #     # campaign_giver.class as giver_type - Campaign class
-    has_many :gifts, :as => :payable
-    has_many :campaigns_items
+
 
     def success?
         if self.id
