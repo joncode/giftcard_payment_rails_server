@@ -20,7 +20,7 @@ module HttpModel
 private
 
         def server_request(token, route, params, action)
-            puts "API -#{route}- "
+            puts "API route-#{route}- params=#{params} - token = #{token} - action = #{action}"
             time_start = Time.now
             message = generate_message(token, params)
                 begin
