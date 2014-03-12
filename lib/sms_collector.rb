@@ -1,7 +1,7 @@
 module SmsCollector
 
 	def self.sms_promo textword
-		puts "------------- SMS Promo -----------------"
+		puts "------------- SMS Promo for #{textword} -----------------"
 			# gets data from slicktext
 		sms_obj = Slicktext.new(textword, 1000)
 		sms_obj.sms
