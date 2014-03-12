@@ -75,7 +75,7 @@ class Slicktext
         hsh = {}
         hsh["service_id"]      = contact["id"]
         hsh["service"]         = "slicktext"
-        hsh["textword"]        = contact["textword"]
+        hsh["textword"]        = self.textword
         hsh["subscribed_date"] = contact["subscribedDate"].to_datetime
         hsh["phone"]           = convert_phone_number(contact["number"])
         hsh
