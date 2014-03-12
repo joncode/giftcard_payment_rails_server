@@ -2,19 +2,20 @@ class Slicktext
     include HTTParty
     base_uri 'api.slicktext.com'
 
-    attr_reader   :textword, :limit, :textwords_list
+    attr_reader   :textword, :word_id, :limit, :textwords_list
     attr_accessor :resp
 
     def initialize textword="itsonme", limit=1000
         @auth = {:username => SLICKTEXT_PUBLIC, :password => SLICKTEXT_PRIVATE}
         word_hsh = {"itsonme" => "15893", "its on me" => "15892", "drinkboard" => "15894", "no kid hungry" => "17429"}
-        @textword = word_hsh[textword]
+        @textword = textword
+        @word_id = word_hsh[textword]
         @limit = 1000
     end
 
     def sms  options={}
         options.merge!({:basic_auth => @auth})
-        self.resp = self.class.get("/v1/contacts?limit=#{self.limit}&textword=#{self.textword}", options)
+        self.resp = self.class.get("/v1/contacts?limit=#{self.limit}&textword=#{self.word_id}", options)
     end
 
     def get_all options={}
