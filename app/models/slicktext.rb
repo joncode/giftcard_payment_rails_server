@@ -7,8 +7,8 @@ class Slicktext
 
     def initialize textword="itsonme", limit=1000
         @auth = {:username => SLICKTEXT_PUBLIC, :password => SLICKTEXT_PRIVATE}
-        word_hsh = ["itsonme" => "15893", "its on me" => "15892", "drinkboard" => "15894", "no kid hungry" => "17429"]
-        @textword = word_hsh["textword"]
+        word_hsh = {"itsonme" => "15893", "its on me" => "15892", "drinkboard" => "15894", "no kid hungry" => "17429"}
+        @textword = word_hsh[textword]
         @limit = 1000
     end
 
