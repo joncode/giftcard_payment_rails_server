@@ -20,9 +20,18 @@ module SmsCollector
 			# generates a gift_campaign per phone number saved
 
 			sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
+			puts "here is the sms contacts back from db == #{sms_contacts.count}"
 
 			sms_contacts.each do |sms_contact|
+
 				gift = self.create_gift(campaign_item, sms_contact)
+				puts "creating a gift for #{sms_contact.inspect}"
+
+				if gift.id.nil?
+					puts "Errors = #{gift.errors.messages}"
+				else
+					puts "gift ID = #{gift.id}"
+				end
 			end
 		else
 			puts "no campaign item for #{textword.to_s}"
