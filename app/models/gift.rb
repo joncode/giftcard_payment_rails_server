@@ -132,6 +132,9 @@ class Gift < ActiveRecord::Base
             self.pay_stat = "charge_unpaid"
 		when "Gift"
             set_status
+        when "CampaignItem"
+            set_status
+            self.pay_stat = "charge_unpaid"
 		else
 			set_status
 		end
