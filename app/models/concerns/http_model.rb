@@ -39,10 +39,10 @@ private
             puts "HERE IS THE RESPONSE \n #{party_response.code} - #{party_response.parsed_response}"
             if party_response.code == 200
                 { "status" => party_response.code, "data" => party_response.parsed_response}
+            elsif party_response.code == 400
+                { "status" => party_response.code, "msg" => "Bad Request", "data" => party_response.parsed_response}
             elsif party_response.code == 401
                 { "status" => party_response.code, "msg" => "Unauthorized"}
-            elsif party_response.code == 400
-                { "status" => party_response.code, "msg" => 'Request failed. Data unrecognized by server. 400'}
             elsif party_response.code == 403
                 { "status" => party_response.code, "msg" => 'Forbidden'}
             elsif party_response.code == 404
@@ -50,7 +50,7 @@ private
             elsif party_response.code == 407
                 { "status" => party_response.code, "msg" => "Proxy Authentication Required", "data" => -1001 }
             elsif party_response.code == 500
-                { "status" => party_response.code, "msg" => 'Server Error'}
+                { "status" => party_response.code, "msg" => "Server Error.", "data" => party_response.parsed_response }
             else
                 puts "TRANSMISSION FAILED - #{party_response.code}"
                 { "status" => party_response.code, "data" => "Network Failure. please retry. #{party_response.code}"}
