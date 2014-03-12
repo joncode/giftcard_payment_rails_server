@@ -8,7 +8,6 @@ class GiftCampaign < Gift
         args["cat"] = 300
         gift = super
         gift.messenger
-        binding.pry
         gift
     end
 
