@@ -74,6 +74,7 @@ private
 
     def get_key_params
         hsh = {}
+        hsh["network_id"]   = self.network_id
         hsh["token"]        = self.token
         hsh["secret"]       = self.secret if self.secret
         hsh
