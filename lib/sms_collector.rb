@@ -25,7 +25,7 @@ module SmsCollector
 	end
 
 	def self.sms_promo_run
-		["itsonme", 15892].each do |word|
+		["itsonme"].each do |word|
 			self.sms_promo word
 		end
 	end
