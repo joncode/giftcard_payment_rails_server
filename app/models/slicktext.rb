@@ -2,7 +2,7 @@ class Slicktext
     include HTTParty
     base_uri 'api.slicktext.com'
 
-    attr_reader   :textword, :limit
+    attr_reader   :textword, :limit, :textwords_list
     attr_accessor :resp
 
     def initialize textword="itsonme", limit=1000
@@ -14,6 +14,37 @@ class Slicktext
     def sms  options={}
         options.merge!({:basic_auth => @auth})
         self.resp = self.class.get("/v1/contacts?limit=#{self.limit}&textword=#{self.textword}", options)
+    end
+
+    def get_all options={}
+        options.merge!({:basic_auth => @auth})
+        self.resp = self.class.get("/v1/contacts?limit=#{self.limit}", options)
+    end
+
+    def textwords options={}
+        options.merge!({:basic_auth => @auth})
+        self.resp = self.class.get("/v1/textwords?limit=#{self.limit}", options)
+        @textwords_list = self.resp["textwords"]
+    end
+
+    def word_id textword
+        if self.textwords_list.nil?
+            textwords
+        end
+        if self.textwords_list.present?
+            t_word = self.textwords_list.select {|t| t["word"] == textword }
+            t_word[0]["id"]
+        end
+    end
+
+    def textword_for word_id
+        if self.textwords_list.nil?
+            textwords
+        end
+        if self.textwords_list.present?
+            t_word = self.textwords_list.select {|t| t["id"] == word_id }
+            t_word[0]["word"]
+        end
     end
 
     def raw_contacts
