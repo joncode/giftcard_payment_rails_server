@@ -5,10 +5,10 @@ class Campaign < Admtmodel
 
 
     #       ####### Gift Giver Ducktype
-    # def name
-    #     # giver_name attribute in campaign db
-    #     self.giver_name
-    # end
+    def name
+        # giver_name attribute in campaign db
+        self.giver_name
+    end
 
     def get_photo
         "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
