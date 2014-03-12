@@ -11,7 +11,11 @@ class Campaign < Admtmodel
     end
 
     def get_photo
-        self.photo_path if self.photo_path.present?
+        if self.photo_path.present?
+            self.photo_path 
+        else
+            "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
+        end
     end
 
     # # hidden giver ducktype methods
