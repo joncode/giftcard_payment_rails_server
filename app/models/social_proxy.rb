@@ -27,9 +27,9 @@ class SocialProxy
     end
 
     def friends
-        # route  = SOCIAL_PROXY_URL + "/#{self.network}/friends"
-        # resp   = post(token: get_token, params: get_key_params, route: route)
-        resp = ProxyRequest.new(get_key_params, get_token)
+        route  = SOCIAL_PROXY_URL + "/#{self.network}/friends"
+        resp   = post(token: get_token, params: get_key_params, route: route)
+        # resp = ProxyRequest.new(get_key_params, get_token)
         self.status = resp["status"]
         self.msg    = resp["msg"]
         if resp["data"].class == String
