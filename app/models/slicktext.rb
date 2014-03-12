@@ -80,7 +80,12 @@ class Slicktext
     end
 
     def convert_phone_number contact_number
-        contact_number.gsub(/[^0-9]/i, '')
+        converted_number = contact_number.gsub(/[^0-9]/i, '')
+        if converted_number[0] == "1"
+            converted_number[1..converted_number.length]
+        else
+            converted_number
+        end
     end
 end
 
