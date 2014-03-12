@@ -3,8 +3,8 @@ module SmsCollector
 	def self.sms_promo textword
 		puts "------------- SMS Promo for #{textword} -----------------"
 			# gets data from slicktext
-		campaign_item = CampaignItem.find_by(textword: textword.to_s)
-		if campaign_item.present?
+		campaign_item = CampaignItem.includes(:campaign).find_by(textword: textword.to_s)
+		if campaign_item.present? && campaign_item.campaign.live_date < Time.now && campaign.close_date > Time.now
 			sms_obj = Slicktext.new(textword, 1000)
 			sms_obj.sms
 			contacts = sms_obj.contacts
