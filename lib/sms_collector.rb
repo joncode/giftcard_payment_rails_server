@@ -17,10 +17,14 @@ module SmsCollector
 		end
 			# generates a gift_campaign per phone number saved
 		campaign_item = CampaignItem.find_by(textword: textword.to_s)
-		sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
+		if campaing_item.present?
+			sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
 
-		sms_contacts.each do |sms_contact|
-			gift = self.create_gift(campaign_item, sms_contact)
+			sms_contacts.each do |sms_contact|
+				gift = self.create_gift(campaign_item, sms_contact)
+			end
+		else
+			puts "no campaign item for #{textword.to_s}"
 		end
 
 	end
