@@ -4,34 +4,40 @@ module SmsCollector
 		puts "------------- SMS Promo for #{textword} -----------------"
 			# gets data from slicktext
 		campaign_item = CampaignItem.includes(:campaign).find_by(textword: textword.to_s)
-		if campaign_item.present? && campaign_item.campaign.live_date < Time.now && campaign.close_date > Time.now
-			sms_obj = Slicktext.new(textword, 1000)
-			sms_obj.sms
-			contacts = sms_obj.contacts
-			puts "total contacts = #{sms_obj.count}"
-			# puts "resp = #{sms_obj.resp}"
-				# saves that data in sms_contact db
-			if contacts.kind_of?(Array)
-				if contacts.first.kind_of?(Hash)
-					puts "HERE IS THE SAVE CONTACT"
-					SmsContact.bulk_create(contacts)
+		if campaign_item.present?
+			if campaign_item.campaign.live_date < Time.now && campaign.close_date > Time.now
+				sms_obj = Slicktext.new(textword, 1000)
+				sms_obj.sms
+				contacts = sms_obj.contacts
+				puts "total contacts = #{sms_obj.count}"
+				# puts "resp = #{sms_obj.resp}"
+					# saves that data in sms_contact db
+				if contacts.kind_of?(Array)
+					if contacts.first.kind_of?(Hash)
+						puts "HERE IS THE SAVE CONTACT"
+						SmsContact.bulk_create(contacts)
+					end
 				end
-			end
-			# generates a gift_campaign per phone number saved
+				# generates a gift_campaign per phone number saved
 
-			sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
-			puts "here is the sms contacts back from db == #{sms_contacts.count}"
+				sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
+				puts "here is the sms contacts back from db == #{sms_contacts.count}"
 
-			sms_contacts.each do |sms_contact|
+				sms_contacts.each do |sms_contact|
 
-				gift = self.create_gift(campaign_item, sms_contact)
-				puts "creating a gift for #{sms_contact.inspect}"
+					gift = self.create_gift(campaign_item, sms_contact)
+					puts "creating a gift for #{sms_contact.inspect}"
 
-				if gift.id.nil?
-					puts "Errors = #{gift.errors.messages}"
-				else
-					puts "gift ID = #{gift.id}"
+					if gift.id.nil?
+						puts "Errors = #{gift.errors.messages}"
+					else
+						puts "gift ID = #{gift.id}"
+					end
 				end
+			else
+				word = "not started yet" if campaign_item.campaign.live_date > Time.now
+				word = "finished" if campaign.close_date < Time.now
+				puts "Campaign has #{word}"
 			end
 		else
 			puts "no campaign item for #{textword.to_s}"
