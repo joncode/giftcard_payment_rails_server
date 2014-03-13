@@ -24,8 +24,10 @@ class Slicktext
     end
 
     def self.textwords
+        options = {}
         options.merge!({:basic_auth => KEYS})
-        self.class.get("/v1/textwords?limit=#{self.limit}", options)
+        resp = self.get("/v1/textwords?limit=#{1000}", options)
+        resp["textwords"]
     end
 
     def textwords options={}
