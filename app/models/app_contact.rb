@@ -20,7 +20,7 @@ class AppContact < ActiveRecord::Base
         puts "BULK UPLOAD TIME = #{end_time}ms | contacts = #{inserts} | rate = #{velocity} ms/insert"
         contact_objs
     end
-    
+
 private
 
     def self.generate_ary contact_ary

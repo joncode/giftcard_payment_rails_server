@@ -1,10 +1,20 @@
 class Relationship < ActiveRecord::Base
-    
-  belongs_to :follower, class_name: "User"
-  belongs_to :followed, class_name: "User"
 
-  validates :follower_id, presence: true
-  validates :followed_id, presence: true
+	belongs_to :follower, class_name: "User"
+	belongs_to :followed, class_name: "User"
+
+	validates :follower_id, presence: true
+	validates :followed_id, presence: true
+
+	def save args={}
+		# if relationship exists just return that
+		existing = Relationship.where(followed_id: self.followed_id, follower_id: self.follower_id).first
+		if existing.nil?
+			super
+		else
+			return existing
+		end
+	end
 end
 # == Schema Information
 #

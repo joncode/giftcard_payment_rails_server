@@ -66,6 +66,15 @@ describe Relationship do
         other_user.followers.first.should == user
         user.followers.count.should == 0
     end
+
+    it "should return existing relationship when Relationship already exists" do
+        r = Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
+        r.class.should == Relationship
+        @ted.followed_users.pop.should  == @bryan
+        @bryan.followers.pop.should     == @ted
+        Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
+        Relationship.all.count.should == 1
+    end
 end# == Schema Information
 #
 # Table name: relationships
