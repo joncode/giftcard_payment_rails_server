@@ -20,7 +20,8 @@ describe Mdot::V2::TwitterController do
         it_should_behave_like("proxy_auth_required", :get, :friends)
 
         it "should return a twitter friends array when success" do
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_friends}", :headers => {})
+            #stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{tw_friends}", :headers => {})
+            stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{tw_friends}", :headers => {})
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :friends, format: :json
             rrc(200)
@@ -32,7 +33,7 @@ describe Mdot::V2::TwitterController do
         end
 
         it "should return 407 Proxy Authentication Required when Oauth keys have expired" do
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
+            stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :friends, format: :json
             rrc(407)
@@ -53,7 +54,7 @@ describe Mdot::V2::TwitterController do
 
         it "should return a json hsh of user info when success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
+            stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
             get :profile, format: :json
 
             rrc(200)
@@ -63,7 +64,7 @@ describe Mdot::V2::TwitterController do
         end
 
         it "should return 407 Proxy Authentication Required when Oauth keys have expired" do
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
+            stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :profile, format: :json
             rrc(407)
@@ -81,7 +82,7 @@ describe Mdot::V2::TwitterController do
         it_should_behave_like("proxy_auth_required", :post, :create)
 
         it "should return 407 Proxy Authentication Required when Oauth keys have expired" do
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_tw["token"]}&data[secret]=#{@oauth_hsh_tw["secret"]}&data[network_id]=#{@oauth_hsh_tw["network_id"]}&data[handle]=#{@oauth_hsh_tw["handle"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
+            stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\",\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"handle\":\"#{@oauth_hsh_tw["handle"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :create, format: :json
             rrc(407)

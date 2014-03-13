@@ -2,7 +2,7 @@ class Provider < ActiveRecord::Base
 	include Formatter
 
 	attr_accessor 	:menu
-	
+
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
 	has_many   :sales
@@ -157,16 +157,6 @@ private
 	def make_menu_string
 	    MenuString.create(provider_id: self.id, data: "[]", menu: self.menu)
 	end
-
-	def update_city_provider
-		city = self.city
-    	new_providers_array = Provider.where(city: city).serialize_objs.to_json
-    	if old_city_provider = CityProvider.find_by(city: city)
-    		old_city_provider.update_attribute(:providers_array, new_providers_array)
-    	else
-    		CityProvider.create(city:city, providers_array: new_providers_array)
-    	end
-    end
 
 end
 # == Schema Information

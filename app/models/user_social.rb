@@ -1,12 +1,10 @@
 class UserSocial < ActiveRecord::Base
 
     belongs_to :user
-    has_many :connections, foreign_key: "contact_id", dependent: :destroy
-    has_many :friends, through: :connections, source: :friend
 
     before_validation     :reject_xxx_emails
 
-    validates_presence_of :identifier, :type_of
+    validates_presence_of :identifier, :type_of, :user_id
 
     validates_with MultiTypeIdentifierUniqueValidator
     validates :identifier , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
@@ -15,7 +13,7 @@ class UserSocial < ActiveRecord::Base
     after_create          :subscribe_mailchimp
     after_save            :unsubscribe_mailchimp
 
-    default_scope -> { where(active: true).where.not(user_id: nil) }  # indexed
+    default_scope -> { where(active: true) }  # indexed
 
 private
 
