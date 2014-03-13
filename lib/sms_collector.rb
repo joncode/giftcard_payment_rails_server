@@ -2,7 +2,6 @@ module SmsCollector
 
 	def self.sms_promo word_hsh
 		textword = word_hsh["word"]
-		puts "------------- SMS Promo for #{textword} -----------------"
 
 		campaign_item = CampaignItem.includes(:campaign).find_by(textword: textword.to_s)
 		if campaign_item.present?
@@ -45,6 +44,7 @@ module SmsCollector
 	end
 
 	def self.sms_promo_run
+		puts "------------- Slicktext SMS Promo  -----------------"
 		textword_hshs = Slicktext.textwords
 		textword_hshs.each do |word_hsh|
 			self.sms_promo word_hsh
