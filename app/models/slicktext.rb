@@ -2,7 +2,7 @@ class Slicktext
     include HTTParty
     base_uri 'api.slicktext.com'
 
-    attr_reader   :textword, :word_id, :limit, :textwords_list
+    attr_reader   :textword, :word_id, :limit
     attr_accessor :resp
 
     KEYS = {:username => SLICKTEXT_PUBLIC, :password => SLICKTEXT_PRIVATE}
@@ -32,26 +32,6 @@ class Slicktext
         options.merge!({:basic_auth => KEYS})
         self.resp = self.class.get("/v1/textwords?limit=#{self.limit}", options)
         self.resp["textwords"]
-    end
-
-    def word_id_for textword
-        if self.textwords_list.nil?
-            textwords
-        end
-        if self.textwords_list.present?
-            t_word = self.textwords_list.select {|t| t["word"] == textword }
-            t_word[0]["id"]
-        end
-    end
-
-    def textword_for word_id
-        if self.textwords_list.nil?
-            textwords
-        end
-        if self.textwords_list.present?
-            t_word = self.textwords_list.select {|t| t["id"] == word_id }
-            t_word[0]["word"]
-        end
     end
 
     def raw_contacts
