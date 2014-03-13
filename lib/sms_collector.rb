@@ -1,12 +1,13 @@
 module SmsCollector
 
-	def self.sms_promo textword
+	def self.sms_promo word_hsh
+		textword = word_hsh["word"]
 		puts "------------- SMS Promo for #{textword} -----------------"
-		
+
 		campaign_item = CampaignItem.includes(:campaign).find_by(textword: textword.to_s)
 		if campaign_item.present?
 			if (campaign_item.campaign.live_date < Time.now) && (campaign_item.campaign.close_date > Time.now)
-				sms_obj = Slicktext.new(textword, 1000)
+				sms_obj = Slicktext.new(word_hsh)
 				sms_obj.sms
 				contacts = sms_obj.contacts
 				puts "total contacts = #{sms_obj.count}"
@@ -44,8 +45,9 @@ module SmsCollector
 	end
 
 	def self.sms_promo_run
-		["itsonme", "drinkboard", "its on me", "no kid hungry"].each do |word|
-			self.sms_promo word
+		textword_hshs = Slicktext.textwords
+		textword_hshs.each do |word_hsh|
+			self.sms_promo word_hsh
 		end
 	end
 
@@ -57,22 +59,5 @@ private
 		gift = GiftCampaign.create(gift_hash)
 	end
 
-	def what_does_it_do
-		sms_data = SlicktextGateway.new(textword: textword, limit: 1000)
-		contact_params_array = sms_data.contacts
-		if sms_data.status == 200
-
-			campaign_items = CampaignItem.all
-			SmsContact.where(gift_id:nil).each do |sms|
-				campaign_item = campaign_items.where(textword: sms.textword).first
-				gift_hash = {receiver_name: "#{campaign.name} gift", receiver_phone: sms.phone, payable_id: campaign_item.id}
-				GiftCampaign.create(gift_hash)
-			end
-			success "#{contact_params_array.count} new contacts added to SMS database"
-		else
-			fail "connection with sms gateway failed."
-		end
-
-	end
 
 end
