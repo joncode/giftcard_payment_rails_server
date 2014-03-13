@@ -8,31 +8,30 @@ class Slicktext
     KEYS = {:username => SLICKTEXT_PUBLIC, :password => SLICKTEXT_PRIVATE}
 
     def initialize word_hsh, limit=1000
-        @auth = KEYS
         @textword = word_hsh["word"]
         @word_id  = word_hsh["id"]
         @limit    = limit
     end
 
     def sms  options={}
-        options.merge!({:basic_auth => @auth})
+        options.merge!({:basic_auth => KEYS})
         self.resp = self.class.get("/v1/contacts?limit=#{self.limit}&textword=#{self.word_id}", options)
     end
 
     def get_all options={}
-        options.merge!({:basic_auth => @auth})
+        options.merge!({:basic_auth => KEYS})
         self.resp = self.class.get("/v1/contacts?limit=#{self.limit}", options)
     end
 
     def self.textwords
-        options.merge!({:basic_auth => @auth})
+        options.merge!({:basic_auth => KEYS})
         self.class.get("/v1/textwords?limit=#{self.limit}", options)
     end
 
     def textwords options={}
         options.merge!({:basic_auth => KEYS})
         self.resp = self.class.get("/v1/textwords?limit=#{self.limit}", options)
-        @textwords_list = self.resp["textwords"]
+        self.resp["textwords"]
     end
 
     def word_id_for textword
