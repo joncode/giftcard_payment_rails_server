@@ -85,6 +85,13 @@ describe Relationship do
         r1.reload.pushed.should be_true
         r2.reload.pushed.should be_true
     end
+
+    it "should get new relationships only for contact upload" do
+        r1 = Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
+        r2 = Relationship.create(follower_id: @bryan.id, followed_id: @ted.id)
+        rs = Relationship.new_contacts(@ted.id)
+        rs[0].should == r2
+    end
 end# == Schema Information
 #
 # Table name: relationships

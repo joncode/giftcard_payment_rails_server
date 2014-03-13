@@ -10,7 +10,7 @@ class FriendPushJob
             self.loop_contact_friend r_to_pushes
         else
             FriendMaker.contact_create(user_id)
-            r_to_pushes = Relationship.where(pushed: false, followed_id: user_id)
+            r_to_pushes = Relationship.new_contacts(user_id)
             self.loop_user_friends r_to_pushes
         end
     end
@@ -54,6 +54,6 @@ private
     end
 
     def self.format_payload_user_friend(user, badge, count)
-        { :aliases => [user.ua_alias],:aps => { :alert => "You have #{count} friends on ItsOnMe", :badge => badge, :sound => 'pn.wav' },:alert_type => 5 }
+        { :aliases => [user.ua_alias],:aps => { :alert => "#{count} new friends can buy you a drink", :badge => badge, :sound => 'pn.wav' },:alert_type => 5 }
     end
 end
