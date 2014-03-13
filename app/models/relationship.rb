@@ -7,7 +7,6 @@ class Relationship < ActiveRecord::Base
 	validates :followed_id, presence: true
 
 	def save args={}
-		# if relationship exists just return that
 		existing = Relationship.where(followed_id: self.followed_id, follower_id: self.follower_id).first
 		if existing.nil?
 			super
@@ -15,6 +14,14 @@ class Relationship < ActiveRecord::Base
 			return existing
 		end
 	end
+
+	def self.pushed ary
+		ary.each do |r_push|
+			r_push.update_column(:pushed, true)
+		end
+	end
+
+
 end
 # == Schema Information
 #
