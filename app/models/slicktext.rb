@@ -5,12 +5,11 @@ class Slicktext
     attr_reader   :textword, :word_id, :limit, :textwords_list
     attr_accessor :resp
 
-    def initialize textword="itsonme", limit=1000
+    def initialize word_hsh, limit=1000
         @auth = {:username => SLICKTEXT_PUBLIC, :password => SLICKTEXT_PRIVATE}
-        word_hsh = {"itsonme" => 15893, "its on me" => 15892, "drinkboard" => 15894, "no kid hungry" => 17429}
-        @textword = textword
-        @word_id = word_hsh[textword]
-        @limit = 1000
+        @textword = word_hsh["word"]
+        @word_id  = word_hsh["id"]
+        @limit    = limit
     end
 
     def sms  options={}
@@ -21,6 +20,11 @@ class Slicktext
     def get_all options={}
         options.merge!({:basic_auth => @auth})
         self.resp = self.class.get("/v1/contacts?limit=#{self.limit}", options)
+    end
+
+    def self.textwords
+        options.merge!({:basic_auth => @auth})
+        self.class.get("/v1/textwords?limit=#{self.limit}", options)
     end
 
     def textwords options={}
