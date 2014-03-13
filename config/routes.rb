@@ -87,7 +87,11 @@ Drinkboard::Application.routes.draw do
           delete :destroy
         end
       end
-
+      resources :contacts, only: [] do
+        collection do
+          post :upload
+        end
+      end
       resources :brands,     only: [:index] do
         member do
           get :merchants
