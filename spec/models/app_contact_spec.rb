@@ -25,6 +25,7 @@ describe AppContact do
             contact.network.should == "email"
             contact.network_id.should == "email1@gmail.com"
             contact.name.should       == "tommy hilfigure"
+            contact.user.should == @current_user
         end
     end
 

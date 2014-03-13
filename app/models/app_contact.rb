@@ -5,12 +5,22 @@ class AppContact < ActiveRecord::Base
     validates_presence_of :network, :network_id, :user_id
 
     def self.upload(contacts: contacts, user: user)
-        contact_ary = generate_ary(contacts)
-        contact_ary.map do |contact|
-            AppContact.create(network: contact[:network], network_id: contact[:network_id], name: contact[:name], user_id: user.id)
+        start_time_logger = Time.now
+        current_user_id = user.id
+        contact_ary     = generate_ary(contacts)
+        contact_objs = []
+        ActiveRecord::Base.transaction do
+            contact_objs = contact_ary.map do |contact|
+                AppContact.create(network: contact[:network], network_id: contact[:network_id], name: contact[:name], user_id: current_user_id)
+            end
         end
+        end_time = ((Time.now - start_time_logger) * 1000).round(1)
+        inserts  = contact_objs.count
+        velocity = end_time / inserts
+        puts "BULK UPLOAD TIME = #{end_time}ms | contacts = #{inserts} | rate = #{velocity} ms/insert"
+        contact_objs
     end
-
+    
 private
 
     def self.generate_ary contact_ary
