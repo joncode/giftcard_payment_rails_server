@@ -6,6 +6,13 @@ class Slicktext
     attr_accessor :resp
 
     KEYS = {:username => SLICKTEXT_PUBLIC, :password => SLICKTEXT_PRIVATE}
+    
+    def self.textwords
+        options = {}
+        options.merge!({:basic_auth => KEYS})
+        resp = self.get("/v1/textwords?limit=#{1000}", options)
+        resp["textwords"]
+    end
 
     def initialize word_hsh, limit=1000
         @textword = word_hsh["word"]
@@ -21,13 +28,6 @@ class Slicktext
     def get_all options={}
         options.merge!({:basic_auth => KEYS})
         self.resp = self.class.get("/v1/contacts?limit=#{self.limit}", options)
-    end
-
-    def self.textwords
-        options = {}
-        options.merge!({:basic_auth => KEYS})
-        resp = self.get("/v1/textwords?limit=#{1000}", options)
-        resp["textwords"]
     end
 
     def textwords options={}
