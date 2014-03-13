@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
 	include Email
 	include Utility
 
+	attr_reader :changes
+
 	has_one  :setting
 	has_many :pn_tokens
 	has_many :brands
@@ -42,45 +44,83 @@ class User < ActiveRecord::Base
 	before_save { |user| user.email      = email.downcase unless is_perm_deactive? }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
+	before_save   :save_social_changed
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
 	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data, :unless => :is_perm_deactive?
+	after_save    :make_friends
 	after_create  :init_confirm_email
 
 
-	def update args
-		args = args.stringify_keys
-		us_keys = ["email", "phone", "facebook_id", "twitter"]
-		if us_keys.any? { |k| args.has_key? k }
-			type_of = "email" if args.has_key? "email"
-			type_of = "phone" if args.has_key? "phone"
-			type_of = "facebook_id" if args.has_key? "facebook_id"
-			type_of = "twitter" if args.has_key? "twitter"
-			if args.has_key?("primary")
-				self.send("#{type_of}=", args[type_of])
-				if self.valid?
-					self.save
-					unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
-						user_social.errors
-					end
-				else
-					self.errors
-				end
-			else
-				self.send("#{type_of}=", args[type_of])
-				if self.valid?
-					self.reload
-					unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
-						user_social.errors
-					end
-				else
-					self.errors
-				end
-			end
-		end
-		super(args.except!("email", "phone", "facebook_id", "twitter", "primary"))
+
+	# def update args
+	# 	args = args.stringify_keys
+	# 	us_keys = ["email", "phone", "facebook_id", "twitter"]
+	# 	if us_keys.any? { |k| args.has_key? k }
+	# 		type_of = "email" if args.has_key? "email"
+	# 		type_of = "phone" if args.has_key? "phone"
+	# 		type_of = "facebook_id" if args.has_key? "facebook_id"
+	# 		type_of = "twitter" if args.has_key? "twitter"
+	# 		if args.has_key?("primary")
+	# 			self.send("#{type_of}=", args[type_of])
+	# 			if self.valid?
+	# 				self.save
+	# 				unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+	# 					user_social.errors
+	# 				end
+	# 			else
+	# 				self.errors
+	# 			end
+	# 		else
+	# 			self.send("#{type_of}=", args[type_of])
+	# 			if self.valid?
+	# 				self.reload
+	# 				unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+	# 					user_social.errors
+	# 				end
+	# 			else
+	# 				self.errors
+	# 			end
+	# 		end
+	# 	end
+	# 	super(args.except!("email", "phone", "facebook_id", "twitter", "primary"))
+	# end
+
+	# def update args={}
+	# 	resp = true
+	# 	args.stringify_keys!
+	# 	primary = args.delete("primary")
+	# 	user_socials = ["email", "phone", "facebook_id", "twitter"].map do |type_of|
+	# 		if args[type_of].present?
+	# 			identifier = args[type_of]
+	# 			if primary.nil?
+	# 				args.delete(type_of)
+	# 			end
+	# 			UserSocial.new(type_of: type_of, identifier: identifier, user_id: self.id)
+	# 		end
+	# 	end
+
+	# 	valid_socials = user_socials.compact.select do |us|
+	# 		if us.valid?
+	# 			true
+	# 		else
+	# 			self.errors.messages[us.type_of.to_sym] = us.errors.messages[us.type_of.to_sym]
+	# 			resp = false
+	# 			false
+	# 		end
+	# 	end
+	# 	unless args.keys.count == 0
+	# 		super_resp = super
+	# 	end
+	# 	association_resp = self.user_socials << valid_socials if valid_socials.count > 0
+	# 	resp && super_resp && association_resp
+	# end
+
+	def update args={}
+		primary = args.delete("primary")
+		super
 	end
 
 	def self.app_authenticate(token)
@@ -340,8 +380,32 @@ class User < ActiveRecord::Base
 
 private
 
-	def persist_social_data
+	def save_social_changed
+		@changes = {}
+		if email_changed?
+			@changes["email"] = self.email
+		end
+		if phone_changed?
+			@changes["phone"] = self.phone
+		end
+		if facebook_id_changed?
+			@changes["facebook_id"] = self.facebook_id
+		end
+		if twitter_changed?
+			@changes["twitter"] = self.twitter
+		end
+		if @changes.keys.count == 0
+			@changes = nil
+		end
+	end
 
+	def make_friends
+		unless @changes.nil?
+			Resque.enqueue(FriendPushJob, self.id, 1)
+		end
+	end
+
+	def persist_social_data
 		if email_changed? && (email[-3..-1] != "xxx")
 			UserSocial.create(user_id: id, type_of: "email", identifier: email)
 		end
