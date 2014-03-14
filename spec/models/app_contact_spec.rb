@@ -59,13 +59,6 @@ describe AppContact do
         ac.user.should == user
     end
 
-    it "should valide phone number to be a usable format" do
-        ac = FactoryGirl.build(:app_contact, network: "phone", network_id: "invalid")
-        ac.should_not be_valid
-        ac.save
-        ac.should have_at_least(1).error_on(:phone)
-    end
-
 end
 
   # create_table "app_contacts", force: true do |t|
