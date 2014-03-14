@@ -9,6 +9,9 @@ class Mdot::V2::TwitterController < JsonController
         sproxy.friends
 
         if sproxy.status == 200
+            if sproxy.data.count > 0
+                AppContact.upload(proxy_contacts: sproxy.data, user: @current_user)
+            end
             success sproxy.data
             respond(status)
         else

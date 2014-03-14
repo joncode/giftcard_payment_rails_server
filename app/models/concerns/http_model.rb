@@ -36,7 +36,7 @@ private
 
         def server_response party_response
             puts "#{party_response}"
-            puts "HERE IS THE RESPONSE \n #{party_response.code} - #{party_response.parsed_response}"
+            #puts "HERE IS THE RESPONSE \n #{party_response.code} - #{party_response.parsed_response}"
             if party_response.code == 200
                 { "status" => party_response.code, "data" => party_response.parsed_response}
             elsif party_response.code == 400

@@ -70,6 +70,7 @@ describe SocialProxy do
                 fb_keys = ["network_id", "network", "name", "photo", "birthday"]
                 compare_keys(hsh, fb_keys)
             end
+            
         end
 
         context "twitter" do

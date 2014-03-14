@@ -17,6 +17,8 @@ class FriendPushJob
 
 private
 
+    ###########    user social upload push to contact owners
+
     def self.loop_contact_friend r_to_pushes
         if r_to_pushes.count > 0
             user_id = r_to_pushes[0].follower_id
@@ -38,6 +40,8 @@ private
     def self.format_payload_contact_friend(user, badge, receiver)
         { :aliases => [receiver.ua_alias],:aps => { :alert => "#{user.username} can now send you a drink", :badge => badge, :sound => 'pn.wav' },:alert_type => 4 }
     end
+
+    ############   contact upload push to contact owner
 
     def self.loop_user_friends r_to_pushes
         if r_to_pushes.count > 0

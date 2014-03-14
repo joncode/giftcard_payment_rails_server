@@ -22,10 +22,10 @@ class Relationship < ActiveRecord::Base
 	end
 
 	def self.new_contacts(user_id)
-		t = Time.now - 2.hours
+		t = Time.now - 1.hour
 		where(followed_id: user_id).where('created_at > ?', t)
 	end
-	
+
 
 end
 # == Schema Information
