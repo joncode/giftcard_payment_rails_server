@@ -39,7 +39,7 @@ module SmsCollector
 			else
 				word = "not started yet" if campaign_item.campaign.live_date > Time.now
 				word = "finished" if campaign_item.campaign.close_date < Time.now
-				puts "Campaign has #{word}"
+				puts "Campaign #{textword.to_s} has #{word}"
 			end
 		else
 			puts "no campaign item for #{textword.to_s}"

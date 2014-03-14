@@ -19,6 +19,12 @@ describe UserSocial do
       user_social.should have_at_least(1).error_on(:type_of)
     end
 
+    it "requires user_id" do
+      user_social = FactoryGirl.build(:user_social, :user_id => nil)
+      user_social.should_not be_valid
+      user_social.should have_at_least(1).error_on(:user_id)
+    end
+
     it "should update user_social.subscribed if subscribe is successful" do
       Resque.should_receive(:enqueue).with(SubscriptionJob, anything)
       user_social = FactoryGirl.create(:user_social, type_of: "email", identifier:"test@email.com")

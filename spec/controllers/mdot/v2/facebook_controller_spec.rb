@@ -20,7 +20,7 @@ describe Mdot::V2::FacebookController do
         it_should_behave_like("proxy_auth_required", :get, :friends)
 
         it "should return a facebook friends array when success" do
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_fb["token"]}&data[network_id]=#{@oauth_hsh_fb["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{fb_friends}", :headers => {})
+            stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\",\"token\":\"#{@oauth_hsh_fb["token"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{fb_friends}", :headers => {})
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :friends, format: :json
             rrc(200)
@@ -32,7 +32,7 @@ describe Mdot::V2::FacebookController do
         end
 
         it "should return 407 Proxy Authentication Required when Oauth keys have expired" do
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_fb["token"]}&data[network_id]=#{@oauth_hsh_fb["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
+            stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\",\"token\":\"#{@oauth_hsh_fb["token"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :friends, format: :json
             rrc(407)
@@ -52,7 +52,7 @@ describe Mdot::V2::FacebookController do
 
         it "should return a json hsh of user info when success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_fb["token"]}&data[network_id]=#{@oauth_hsh_fb["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 200, :body => "#{fb_resp}", :headers => {})
+            stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\",\"token\":\"#{@oauth_hsh_fb["token"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{fb_resp}", :headers => {})
             get :profile, format: :json
             rrc(200)
             json["status"].should     == 1
@@ -61,7 +61,7 @@ describe Mdot::V2::FacebookController do
         end
 
         it "should return 407 Proxy Authentication Required when Oauth keys have expired" do
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_fb["token"]}&data[network_id]=#{@oauth_hsh_fb["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
+            stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\",\"token\":\"#{@oauth_hsh_fb["token"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :profile, format: :json
             rrc(407)
@@ -79,7 +79,7 @@ describe Mdot::V2::FacebookController do
         it_should_behave_like("proxy_auth_required", :post, :create)
 
         it "should return 407 Proxy Authentication Required when Oauth keys have expired" do
-            stub_request(:post, route).with(:body => "data[token]=#{@oauth_hsh_fb["token"]}&data[network_id]=#{@oauth_hsh_fb["network_id"]}", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}"}).to_return(:status => 407, :body => "", :headers => {})
+            stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_fb["token"]}\",\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :create, format: :json
             rrc(407)

@@ -41,7 +41,7 @@ describe HttpModel do
             end
 
             it "should return success message if succeeds with params" do
-                stub_request(verb, route).with(:body => "data[token]=9q3562341341&data[network]=facebook&data[network_id]=9865465748", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{token}"}).to_return(:status => 200, :body => "#{fb_friends}", :headers => {})
+                stub_request(verb, route).with(:body => "{\"token\":\"9q3562341341\",\"network\":\"facebook\",\"network_id\":\"9865465748\"}",:headers => {'Accept'=>'text/json', 'Authorization'=>"#{token}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{fb_friends}", :headers => {})
                 hmt  = HttpModelTester.new
                 oauth = FactoryGirl.create(:oauth_fb)
                 params = oauth.to_proxy
@@ -50,7 +50,7 @@ describe HttpModel do
             end
 
             it "should return 407 proxy authentication required" do
-                stub_request(verb, route).with(:body => "data[token]=9q3562341341&data[network]=facebook&data[network_id]=9865465748", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{token}"}).to_return(:status => 407, :body => "", :headers => {})
+                stub_request(verb, route).with(:body => "{\"token\":\"9q3562341341\",\"network\":\"facebook\",\"network_id\":\"9865465748\"}",:headers => {'Accept'=>'text/json', 'Authorization'=>"#{token}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
                 hmt  = HttpModelTester.new
                 oauth = FactoryGirl.create(:oauth_fb)
                 params = oauth.to_proxy
@@ -60,7 +60,7 @@ describe HttpModel do
 
 
             it "should return 401 unauthoritzed" do
-                stub_request(verb, route).with(:body => "data[token]=9q3562341341&data[network]=facebook&data[network_id]=9865465748", :headers => {'Accept'=>'application/json', 'Authorization'=>"#{token}"}).to_return(:status => 401, :body => "", :headers => {})
+                stub_request(verb, route).with(:body => "{\"token\":\"9q3562341341\",\"network\":\"facebook\",\"network_id\":\"9865465748\"}",:headers => {'Accept'=>'text/json', 'Authorization'=>"#{token}", 'Content-Type'=>'application/json'}).to_return(:status => 401, :body => "", :headers => {})
                 hmt  = HttpModelTester.new
                 oauth = FactoryGirl.create(:oauth_fb)
                 params = oauth.to_proxy
