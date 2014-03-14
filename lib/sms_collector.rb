@@ -20,6 +20,7 @@ module SmsCollector
 					end
 
 					sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
+					
 					puts "here is the sms contacts back from db == #{sms_contacts.count}"
 
 					sms_contacts.each do |sms_contact|
