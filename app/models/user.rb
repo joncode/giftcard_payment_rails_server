@@ -4,8 +4,6 @@ class User < ActiveRecord::Base
 	include Email
 	include Utility
 
-	attr_reader :changes
-
 	has_one  :setting
 	has_many :pn_tokens
 	has_many :brands
@@ -44,15 +42,14 @@ class User < ActiveRecord::Base
 	before_save { |user| user.email      = email.downcase unless is_perm_deactive? }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
-	before_save   :save_social_changed
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
 	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data, :unless => :is_perm_deactive?
-	after_save    :make_friends
 	after_create  :init_confirm_email
-	
+	after_save    :make_friends
+
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false).where(remember_token: token).first
 	end
@@ -357,29 +354,8 @@ private
 		old_args
 	end
 
-	def save_social_changed
-		@changes = {}
-		if email_changed?
-			@changes["email"] = self.email
-		end
-		if phone_changed?
-			@changes["phone"] = self.phone
-		end
-		if facebook_id_changed?
-			@changes["facebook_id"] = self.facebook_id
-		end
-		if twitter_changed?
-			@changes["twitter"] = self.twitter
-		end
-		if @changes.keys.count == 0
-			@changes = nil
-		end
-	end
-
 	def make_friends
-		unless @changes.nil?
-			Resque.enqueue(FriendPushJob, self.id, 1)
-		end
+		Resque.enqueue(FriendPushJob, self.id, 1)
 	end
 
 	def persist_social_data
@@ -453,50 +429,6 @@ private
 	end
 
 end
-# == Schema Information
-#
-# Table name: users
-#
-#  id                      :integer         not null, primary key
-#  email                   :string(255)     not null
-#  admin                   :boolean         default(FALSE)
-	#  photo                   :string(255)
-#  password_digest         :string(255)
-#  remember_token          :string(255)     not null
-#  created_at              :datetime        not null
-#  updated_at              :datetime        not null
-#  address                 :string(255)
-#  address_2               :string(255)
-#  city                    :string(20)
-#  state                   :string(2)
-#  zip                     :string(16)
-#  credit_number           :string(255)
-#  phone                   :string(255)
-#  first_name              :string(255)
-#  last_name               :string(255)
-#  facebook_id             :string(255)
-#  handle                  :string(255)
-#  server_code             :string(255)
-#  twitter                 :string(255)
-#  active                  :boolean         default(TRUE)
-#  persona                 :string(255)     default("")
-#  foursquare_id           :string(255)
-#  facebook_access_token   :string(255)
-#  facebook_expiry         :datetime
-#  foursquare_access_token :string(255)
-#  sex                     :string(255)
-#  is_public               :boolean
-#  facebook_auth_checkin   :boolean
-	#  iphone_photo            :string(255)
-	#  fb_photo                :string(255)
-	#  use_photo               :string(255)
-	#  secure_image            :string(255)
-#  reset_token_sent_at     :datetime
-#  reset_token             :string(255)
-#  birthday                :date
-#  origin                  :string(255)
-#  confirm                 :string(255)     default("00")
-#
 
 # == Schema Information
 #
