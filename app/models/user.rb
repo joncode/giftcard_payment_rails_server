@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
 	include Email
 	include Utility
 
+	attr_reader :changes
+
 	has_one  :setting
 	has_many :pn_tokens
 	has_many :brands
@@ -42,14 +44,15 @@ class User < ActiveRecord::Base
 	before_save { |user| user.email      = email.downcase unless is_perm_deactive? }
 	before_save { |user| user.first_name = first_name.capitalize if first_name }
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
+	before_save   :save_social_changed
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
 	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data, :unless => :is_perm_deactive?
+	after_save    :make_friends
 	after_create  :init_confirm_email
-
-
+	
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false).where(remember_token: token).first
 	end
@@ -330,7 +333,7 @@ class User < ActiveRecord::Base
 	end
 
 private
-	
+
 	def set_user_socials type_ofs, args
 		type_ofs.each do |type_of|
 			unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
@@ -354,8 +357,32 @@ private
 		old_args
 	end
 
-	def persist_social_data
+	def save_social_changed
+		@changes = {}
+		if email_changed?
+			@changes["email"] = self.email
+		end
+		if phone_changed?
+			@changes["phone"] = self.phone
+		end
+		if facebook_id_changed?
+			@changes["facebook_id"] = self.facebook_id
+		end
+		if twitter_changed?
+			@changes["twitter"] = self.twitter
+		end
+		if @changes.keys.count == 0
+			@changes = nil
+		end
+	end
 
+	def make_friends
+		unless @changes.nil?
+			Resque.enqueue(FriendPushJob, self.id, 1)
+		end
+	end
+
+	def persist_social_data
 		if email_changed? && (email[-3..-1] != "xxx")
 			UserSocial.create(user_id: id, type_of: "email", identifier: email)
 		end

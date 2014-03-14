@@ -47,7 +47,7 @@ class FriendMaker
             end
         end
         new_app_socials.flatten!
-        
+
         new_app_socials.each do |social|
             Relationship.create(follower_id: social.user_id, followed_id: user.id)
         end
