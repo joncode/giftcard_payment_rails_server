@@ -6,11 +6,11 @@ describe AppContact do
 
         before(:each)do
             @current_user = FactoryGirl.create(:user)
-            @ary = [{ "672342" => { "first_name" => "tommy" ,"last_name" => "hilfigure", "email" => [ "email1@gmail.com", "email2@yahoo.com"], "phone" => [ "3102974545", "6467586473"], "twitter" => [ "2i134o1234123"], "facebook" => [ "23g2381d103dy1"] }}, { "22" => { "first_name" => "Jenifer" ,"last_name" => "Bowie", "email" => [ "jenny@facebook.com"], "phone" => ["7824657878"]}}]
+            @hsh = { "672342" => { "first_name" => "tommy" ,"last_name" => "hilfigure", "email" => [ "email1@gmail.com", "email2@yahoo.com"], "phone" => [ "3102974545", "6467586473"], "twitter" => [ "2i134o1234123"], "facebook" => [ "23g2381d103dy1"] }, "22" => { "first_name" => "Jenifer" ,"last_name" => "Bowie", "email" => [ "jenny@facebook.com"], "phone" => ["7824657878"]}}
         end
 
         it "should accept ary of contacts separated by ID and make array of app_contacts" do
-            ac = AppContact.upload(contacts: @ary, user: @current_user)
+            ac = AppContact.upload(contacts: @hsh, user: @current_user)
             ac.count.should == 8
             ac.first.network.should    == "email"
             ac.first.network_id.should == "email1@gmail.com"
@@ -18,7 +18,7 @@ describe AppContact do
         end
 
         it "should save all the app_contacts in the database" do
-            AppContact.upload(contacts: @ary, user: @current_user)
+            AppContact.upload(contacts: @hsh, user: @current_user)
             contacts = AppContact.all
             contacts.count.should == 8
             contact = contacts.first

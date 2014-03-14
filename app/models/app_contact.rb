@@ -20,22 +20,21 @@ class AppContact < ActiveRecord::Base
         puts "BULK UPLOAD TIME = #{end_time}ms | contacts = #{inserts} | rate = #{velocity} ms/insert"
         contact_objs
     end
-    
+
 private
 
-    def self.generate_ary contact_ary
+    def self.generate_ary contact_hsh
         contacts = []
-        each_contact_ary = []
-        contact_ary.each do |contact|
-            contact_id = contact.keys.first
-            info_hsh   = contact[contact_id]
+        each_contact_hsh = []
+        contact_hsh.keys.each do |contact_id|
+            info_hsh   = contact_hsh[contact_id]
             name       = fullname(info_hsh)
             pre_concat_contacts = ["email", "phone", "twitter", "facebook"].map do |type_of|
                 get_identifiers(contact_id, name, info_hsh, type_of)
             end
-            each_contact_ary << pre_concat_contacts.flatten
+            each_contact_hsh << pre_concat_contacts.flatten
         end
-        contacts = each_contact_ary.flatten
+        contacts = each_contact_hsh.flatten
     end
 
     def self.get_identifiers contact_id, name, info_hsh, type_of
