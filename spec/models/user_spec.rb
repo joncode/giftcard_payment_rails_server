@@ -619,7 +619,16 @@ describe User do
                 user.update(facebook_id: "222222222", primary: true)
                 user.facebook_id.should == "222222222"
             end
+        end
 
+        it "should update multi-socials at the same time" do
+            user = FactoryGirl.create(:user, facebook_id: "111111111")
+            us_count = user.user_socials.count
+
+            user.update(facebook_id: "33333234134", email: "new_email@yahoo.com", phone: "6467334231", primary: true)
+
+            us_count_2 = user.user_socials.count
+            us_count_2.should == us_count + 3
         end
     end
 end

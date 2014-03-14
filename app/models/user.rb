@@ -50,39 +50,6 @@ class User < ActiveRecord::Base
 	after_create  :init_confirm_email
 
 
-	def update args
-		args = args.stringify_keys
-		us_keys = ["email", "phone", "facebook_id", "twitter"]
-		if us_keys.any? { |k| args.has_key? k }
-			type_of = "email" if args.has_key? "email"
-			type_of = "phone" if args.has_key? "phone"
-			type_of = "facebook_id" if args.has_key? "facebook_id"
-			type_of = "twitter" if args.has_key? "twitter"
-			if args.has_key?("primary")
-				self.send("#{type_of}=", args[type_of])
-				if self.valid?
-					self.save
-					unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
-						user_social.errors
-					end
-				else
-					self.errors
-				end
-			else
-				self.send("#{type_of}=", args[type_of])
-				if self.valid?
-					self.reload
-					unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
-						user_social.errors
-					end
-				else
-					self.errors
-				end
-			end
-		end
-		super(args.except!("email", "phone", "facebook_id", "twitter", "primary"))
-	end
-
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false).where(remember_token: token).first
 	end
@@ -338,7 +305,54 @@ class User < ActiveRecord::Base
 
 ##################
 
+	def update args
+		args = args.stringify_keys
+		primary = args.delete("primary")
+		us_ary = ["email", "phone", "facebook_id", "twitter"]
+
+		if us_ary.any? { |k| args.has_key? k }
+			type_ofs = us_ary.select { |us|  args.has_key? us }
+			reload_args = set_type_ofs type_ofs, args
+			if self.valid?
+				if primary
+					self.user_socials << init_user_socials(type_ofs, args)
+				else
+					set_type_ofs type_ofs, reload_args
+					set_user_socials type_ofs, args
+					args.except!("email", "phone", "facebook_id", "twitter")
+				end
+
+			else
+				self.errors
+			end
+		end
+		super
+	end
+
 private
+	
+	def set_user_socials type_ofs, args
+		type_ofs.each do |type_of|
+			unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+				user_social.errors
+			end
+		end
+	end
+
+	def init_user_socials type_ofs, args
+		type_ofs.map do |type_of|
+			UserSocial.new(type_of: type_of.to_s, identifier: args[type_of])
+		end
+	end
+
+	def set_type_ofs type_ofs, args
+		old_args = {}
+		type_ofs.each do |type_of|
+			old_args[type_of] = self.send("#{type_of}")
+			self.send("#{type_of}=", args[type_of])
+		end
+		old_args
+	end
 
 	def persist_social_data
 
