@@ -6,31 +6,35 @@ module SmsCollector
 		campaign_item = CampaignItem.includes(:campaign).find_by(textword: textword.to_s)
 		if campaign_item.present?
 			if (campaign_item.campaign.live_date < Time.now) && (campaign_item.campaign.close_date > Time.now)
-				sms_obj = Slicktext.new(word_hsh)
-				sms_obj.sms
-				contacts = sms_obj.contacts
-				puts "total contacts = #{sms_obj.count}"
+				if campaign_item.reserve > 0
+					sms_obj = Slicktext.new(word_hsh)
+					sms_obj.sms
+					contacts = sms_obj.contacts
+					puts "total contacts = #{sms_obj.count}"
 
-				if contacts.kind_of?(Array)
-					if contacts.first.kind_of?(Hash)
-						puts "HERE IS THE SAVE CONTACT"
-						SmsContact.bulk_create(contacts)
+					if contacts.kind_of?(Array)
+						if contacts.first.kind_of?(Hash)
+							puts "HERE IS THE SAVE CONTACT"
+							SmsContact.bulk_create(contacts)
+						end
 					end
-				end
 
-				sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
-				puts "here is the sms contacts back from db == #{sms_contacts.count}"
+					sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
+					puts "here is the sms contacts back from db == #{sms_contacts.count}"
 
-				sms_contacts.each do |sms_contact|
+					sms_contacts.each do |sms_contact|
 
-					gift = self.create_gift(campaign_item, sms_contact)
-					puts "creating a gift for #{sms_contact.inspect}"
+						gift = self.create_gift(campaign_item, sms_contact)
+						puts "creating a gift for #{sms_contact.inspect}"
 
-					if gift.id.nil?
-						puts "Errors = #{gift.errors.messages}"
-					else
-						puts "gift ID = #{gift.id}"
+						if gift.id.nil?
+							puts "Errors = #{gift.errors.messages}"
+						else
+							puts "gift ID = #{gift.id}"
+						end
 					end
+				else
+					puts "campaign #{word} reserve is empty"
 				end
 			else
 				word = "not started yet" if campaign_item.campaign.live_date > Time.now
