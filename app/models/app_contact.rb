@@ -20,7 +20,6 @@ class AppContact < ActiveRecord::Base
             end
         end
 
-
         contact_objs = []
         ActiveRecord::Base.transaction do
             contact_objs = contact_ary.map do |contact|
@@ -55,7 +54,6 @@ private
     # end
 
     def self.generate_ary contact_hsh
-
         contacts = []
         each_contact_hsh = []
         contact_hsh.keys.each do |contact_id|

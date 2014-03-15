@@ -90,8 +90,6 @@ describe Mdot::V2::GiftsController do
         xit "should send redeemed and regifted drinks for 'used'" do
 
         end
-
-
     end
 
     describe :badge do
