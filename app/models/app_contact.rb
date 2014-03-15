@@ -2,8 +2,8 @@ class AppContact < ActiveRecord::Base
 
     belongs_to :user
 
-    before_save :downcase_emails
-    before_save :extract_phone_digits
+    # before_save :downcase_emails
+    # before_save :extract_phone_digits
 
     validates :network, presence: true
     validates :network_id, presence: true
@@ -41,18 +41,18 @@ class AppContact < ActiveRecord::Base
 
 private
 
-    def extract_phone_digits
-        if self.network == 'phone'
-            phone_match = self.network_id.to_s.match(VALID_PHONE_REGEX)
-            self.network_id  = phone_match[1] + phone_match[2] + phone_match[3]
-        end
-    end
+    # def extract_phone_digits
+    #     if self.network == 'phone'
+    #         phone_match = self.network_id.to_s.match(VALID_PHONE_REGEX)
+    #         self.network_id  = phone_match[1] + phone_match[2] + phone_match[3]
+    #     end
+    # end
 
-    def downcase_emails
-        if self.network == 'email'
-            self.network_id = self.network_id.downcase
-        end
-    end
+    # def downcase_emails
+    #     if self.network == 'email'
+    #         self.network_id = self.network_id.downcase
+    #     end
+    # end
 
     def self.generate_ary contact_hsh
 

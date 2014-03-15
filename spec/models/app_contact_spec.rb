@@ -86,17 +86,17 @@ describe AppContact do
         ac.user.should == user
     end
 
-    it "should reduce phone to digits only" do
-        ac = AppContact.new(network: 'phone', network_id: '(718) 232- 7584', user_id: 1)
-        ac.save
-        ac.network_id.should == "7182327584"
-    end
+    # it "should reduce phone to digits only" do
+    #     ac = AppContact.new(network: 'phone', network_id: '(718) 232- 7584', user_id: 1)
+    #     ac.save
+    #     ac.network_id.should == "7182327584"
+    # end
 
-    it "should downcase emails" do
-        ac = AppContact.new(network: 'email', network_id: 'JONG@gmAIL.cOM', user_id: 1)
-        ac.save
-        ac.network_id.should == "jong@gmail.com"
-    end
+    # it "should downcase emails" do
+    #     ac = AppContact.new(network: 'email', network_id: 'JONG@gmAIL.cOM', user_id: 1)
+    #     ac.save
+    #     ac.network_id.should == "jong@gmail.com"
+    # end
 
 end
 
