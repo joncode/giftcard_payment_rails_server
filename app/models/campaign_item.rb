@@ -5,6 +5,14 @@ class CampaignItem < Admtmodel
     belongs_to :campaign
     belongs_to :provider
 
+    def is_giftable?
+        if self.campaign.is_live? && self.reserve > 0
+            true
+        else
+            false
+        end
+    end
+
     def owner
     	self.campaign
     end

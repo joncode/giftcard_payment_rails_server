@@ -3,6 +3,17 @@ class Campaign < Admtmodel
     # has_many :sent,  as: :giver,  class_name: Gift
     # has_many :debts, as: :owner
 
+    def status
+        if self.is_new?
+            "new"
+        elsif self.is_live?
+            "live"
+        elsif self.is_closed?
+            "closed"
+        elsif self.is_expired?
+            "expired"
+        end
+    end
 
     #       ####### Gift Giver Ducktype
     def name
@@ -55,6 +66,47 @@ class Campaign < Admtmodel
             2
         end
     end
+
+
+    def is_new?
+        today = Time.now.to_date
+        if self.live_date.present? && self.live_date > today &&
+           self.close_date.present? && self.close_date > today
+            true
+        else
+            false
+        end 
+    end
+
+    def is_live?
+        today = Time.now.to_date
+        if self.live_date.present?  && self.live_date  <= today &&
+           self.close_date.present? && self.close_date >  today
+            true
+        else
+            false
+        end 
+    end
+
+    def is_closed?
+        today = Time.now.to_date
+        if self.close_date.present?  && self.close_date  <= today &&
+           self.expire_date.present? && self.expire_date >  today
+            true
+        else
+            false
+        end 
+    end
+
+    def is_expired?
+        today = Time.now.to_date
+        if self.expire_date.present? && self.expire_date <= today
+            true
+        else
+            false
+        end
+    end
+
 end
 # == Schema Information
 #
