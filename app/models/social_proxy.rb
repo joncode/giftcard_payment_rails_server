@@ -51,12 +51,16 @@ class SocialProxy
     end
 
     def create_post args={}
+        keys = ["merchant","title","url","image","share"]
+        post_params = get_params
+        keys.each { |k| post_params[k] = args[k] if args[k].present? }
+
         route  = if self.network == "twitter"
             SOCIAL_PROXY_URL + "/#{self.network}/mention"
         else
             SOCIAL_PROXY_URL + "/#{self.network}/story"
         end
-        resp   = post(token: get_token, params: get_params, route: route)
+        resp   = post(token: get_token, params: post_params, route: route)
         set_instance resp
     end
 
