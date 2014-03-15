@@ -297,7 +297,7 @@ private
 
     def build_oauth
         if self.receiver_oauth.present?
-            puts "xx--xx-x-x-x---x-x-x-xx-------------x-x-x-x-x"
+            puts "-----------  Receiver Oauth is present ---------------"
             self.oauth = Oauth.initFromDictionary self.receiver_oauth
             add_network_to_gift
         end

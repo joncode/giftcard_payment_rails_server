@@ -27,7 +27,6 @@ class GiftSale < Gift
 
     def messenger
         if self.payable.success?
-
             Relay.send_push_notification(self)
             puts "GiftSale -messenger- Notify Receiver via email #{self.receiver_name}"
             notify_receiver
@@ -52,10 +51,7 @@ private
         args.delete("unique_id")
         args.delete("card")
         args.delete("amount")
-
     end
-
-
 
     def unique_id receiver_name, provider_id
         "#{receiver_name}_#{provider_id}".gsub(' ','_')
