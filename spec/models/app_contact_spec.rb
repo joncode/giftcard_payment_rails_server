@@ -17,6 +17,23 @@ describe AppContact do
             ac.first.name.should       == "tommy hilfigure"
         end
 
+        it "should accept social proxy normalized contacts" do
+            proxy = [{"network_id"=>"27428352", "handle"=>"razorback", "network" => "twitter", "name"=>"Taylor Addison", "photo"=>  "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"}]
+            ac = AppContact.upload(proxy_contacts: proxy, user: @current_user)
+            ac.count.should == 1
+            ac.first.network.should    == "twitter"
+            ac.first.network_id.should == "27428352"
+            ac.first.name.should       == "Taylor Addison"
+            ac.first.handle.should     == "razorback"
+            contacts = AppContact.all
+            contacts.count.should == 1
+            contact = contacts[0]
+            contact.network.should    == "twitter"
+            contact.network_id.should == "27428352"
+            contact.name.should       == "Taylor Addison"
+            contact.handle.should     == "razorback"
+        end
+
         it "should save all the app_contacts in the database" do
             AppContact.upload(contacts: @hsh, user: @current_user)
             contacts = AppContact.all
@@ -26,6 +43,16 @@ describe AppContact do
             contact.network_id.should == "email1@gmail.com"
             contact.name.should       == "tommy hilfigure"
             contact.user.should == @current_user
+        end
+
+        it "should call FriendPushJob with 2" do
+            ResqueSpec.reset!
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
+            Urbanairship.stub(:push).and_return(true)
+            AppContact.upload(contacts: @hsh, user: @current_user)
+            FriendPushJob.should_receive(:perform).with(@current_user.id, 2)
+            run_delayed_jobs
         end
     end
 
@@ -57,6 +84,18 @@ describe AppContact do
         ac = FactoryGirl.create(:app_contact, user: user)
         ac.reload
         ac.user.should == user
+    end
+
+    it "should reduce phone to digits only" do
+        ac = AppContact.new(network: 'phone', network_id: '(718) 232- 7584', user_id: 1)
+        ac.save
+        ac.network_id.should == "7182327584"
+    end
+
+    it "should downcase emails" do
+        ac = AppContact.new(network: 'email', network_id: 'JONG@gmAIL.cOM', user_id: 1)
+        ac.save
+        ac.network_id.should == "jong@gmail.com"
     end
 
 end

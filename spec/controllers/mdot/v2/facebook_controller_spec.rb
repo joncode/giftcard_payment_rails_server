@@ -14,7 +14,7 @@ describe Mdot::V2::FacebookController do
     describe :friends do
 
         let(:route) { "http://qam.itson.me/api/facebook/friends" }
-        let(:fb_friends) { [{"network_id"=>"27428352","network"=>"facebook","name"=>"Taylor Addison","photo"=>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg","birthday"=>"10/05/1987"}].to_json}
+        let(:fb_friends) { [{"network_id"=>"27428352", "handle" => "joe.meeks.com", "network"=>"facebook","name"=>"Taylor Addison","photo"=>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg","birthday"=>"10/05/1987"}].to_json}
 
         it_should_behave_like("token authenticated", :get, :friends)
         it_should_behave_like("proxy_auth_required", :get, :friends)
@@ -29,6 +29,25 @@ describe Mdot::V2::FacebookController do
             resp_hsh = json["data"].first
             fb_hsh = JSON.parse fb_friends
             compare_keys(resp_hsh, fb_hsh.first.keys)
+        end
+
+        it "should bulk save the contacts" do
+            ResqueSpec.reset!
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
+            stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\",\"token\":\"#{@oauth_hsh_fb["token"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{fb_friends}", :headers => {})
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            get :friends, format: :json
+            contacts = AppContact.all
+            contacts.count.should == 1
+            contact = contacts[0]
+            contact.network.should    == "facebook"
+            contact.network_id.should == "27428352"
+            contact.name.should       == "Taylor Addison"
+            contact.handle.should     == "joe.meeks.com"
+            contact.birthday.should   == "10/05/1987".to_date
+            FriendPushJob.should_receive(:perform)
+            run_delayed_jobs
         end
 
         it "should return 407 Proxy Authentication Required when Oauth keys have expired" do

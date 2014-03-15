@@ -75,6 +75,23 @@ describe Relationship do
         Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
         Relationship.all.count.should == 1
     end
+
+    it "should update relationships.pushed to true" do
+        r1 = Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
+        r2 = Relationship.create(follower_id: @bryan.id, followed_id: @ted.id)
+        r1.reload.pushed.should be_false
+        r2.reload.pushed.should be_false
+        Relationship.pushed([r1, r2])
+        r1.reload.pushed.should be_true
+        r2.reload.pushed.should be_true
+    end
+
+    it "should get new relationships only for contact upload" do
+        r1 = Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
+        r2 = Relationship.create(follower_id: @bryan.id, followed_id: @ted.id)
+        rs = Relationship.new_contacts(@ted.id)
+        rs[0].should == r2
+    end
 end# == Schema Information
 #
 # Table name: relationships
