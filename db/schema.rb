@@ -261,8 +261,8 @@ ActiveRecord::Schema.define(version: 20140313213823) do
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.boolean  "pushed",      default: false
   end
 
@@ -307,6 +307,17 @@ ActiveRecord::Schema.define(version: 20140313213823) do
     t.datetime "reset_token_sent_at"
     t.boolean  "email_reminder_gift_receiver", default: true
     t.boolean  "email_reminder_gift_giver",    default: true
+  end
+
+  create_table "sms", force: true do |t|
+    t.integer  "gift_id"
+    t.datetime "subscribed_date"
+    t.string   "phone"
+    t.integer  "service_id"
+    t.string   "service_type"
+    t.string   "textword"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "sms_contacts", force: true do |t|
