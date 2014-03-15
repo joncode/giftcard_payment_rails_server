@@ -2,51 +2,38 @@ class Slicktext
     include HTTParty
     base_uri 'api.slicktext.com'
 
-    attr_reader   :textword, :word_id, :limit, :textwords_list
+    attr_reader   :textword, :word_id, :limit
     attr_accessor :resp
 
-    def initialize textword="itsonme", limit=1000
-        @auth = {:username => SLICKTEXT_PUBLIC, :password => SLICKTEXT_PRIVATE}
-        word_hsh = {"itsonme" => 15893, "its on me" => 15892, "drinkboard" => 15894, "no kid hungry" => 17429}
-        @textword = textword
-        @word_id = word_hsh[textword]
-        @limit = 1000
+    KEYS = {:username => SLICKTEXT_PUBLIC, :password => SLICKTEXT_PRIVATE}
+
+    def self.textwords
+        options = {}
+        options.merge!({:basic_auth => KEYS})
+        resp = self.get("/v1/textwords?limit=#{1000}", options)
+        resp["textwords"]
+    end
+
+    def initialize word_hsh={}, limit=1000
+        @textword = word_hsh["word"]
+        @word_id  = word_hsh["id"]
+        @limit    = limit
     end
 
     def sms  options={}
-        options.merge!({:basic_auth => @auth})
+        options.merge!({:basic_auth => KEYS})
         self.resp = self.class.get("/v1/contacts?limit=#{self.limit}&textword=#{self.word_id}", options)
     end
 
     def get_all options={}
-        options.merge!({:basic_auth => @auth})
+        options.merge!({:basic_auth => KEYS})
         self.resp = self.class.get("/v1/contacts?limit=#{self.limit}", options)
     end
 
     def textwords options={}
-        options.merge!({:basic_auth => @auth})
+        options.merge!({:basic_auth => KEYS})
         self.resp = self.class.get("/v1/textwords?limit=#{self.limit}", options)
-        @textwords_list = self.resp["textwords"]
-    end
-
-    def word_id_for textword
-        if self.textwords_list.nil?
-            textwords
-        end
-        if self.textwords_list.present?
-            t_word = self.textwords_list.select {|t| t["word"] == textword }
-            t_word[0]["id"]
-        end
-    end
-
-    def textword_for word_id
-        if self.textwords_list.nil?
-            textwords
-        end
-        if self.textwords_list.present?
-            t_word = self.textwords_list.select {|t| t["id"] == word_id }
-            t_word[0]["word"]
-        end
+        self.resp["textwords"]
     end
 
     def raw_contacts
@@ -71,6 +58,8 @@ class Slicktext
         end
     end
 
+private
+
     def convert_data contact
         hsh = {}
         hsh["service_id"]      = contact["id"]
@@ -90,4 +79,3 @@ class Slicktext
         end
     end
 end
-

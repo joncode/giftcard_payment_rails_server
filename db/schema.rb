@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140307194720) do
+ActiveRecord::Schema.define(version: 20140313213823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,17 @@ ActiveRecord::Schema.define(version: 20140307194720) do
     t.integer  "question_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "app_contacts", force: true do |t|
+    t.integer  "user_id"
+    t.string   "network"
+    t.string   "network_id"
+    t.string   "name"
+    t.date     "birthday"
+    t.string   "handle"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "brands", force: true do |t|
@@ -54,12 +65,6 @@ ActiveRecord::Schema.define(version: 20140307194720) do
   add_index "brands_providers", ["brand_id"], name: "index_brands_providers_on_brand_id", using: :btree
   add_index "brands_providers", ["provider_id"], name: "index_brands_providers_on_provider_id", using: :btree
 
-  create_table "campaigns", force: true do |t|
-    t.integer  "campaign_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
   create_table "cards", force: true do |t|
     t.integer  "user_id"
     t.string   "nickname"
@@ -75,24 +80,6 @@ ActiveRecord::Schema.define(version: 20140307194720) do
   end
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
-
-  create_table "city_providers", force: true do |t|
-    t.string   "city"
-    t.text     "providers_array"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-  end
-
-  create_table "connections", force: true do |t|
-    t.integer  "friend_id"
-    t.integer  "contact_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "connections", ["contact_id"], name: "index_connections_on_contact_id", using: :btree
-  add_index "connections", ["friend_id", "contact_id"], name: "index_connections_on_friend_id_and_contact_id", unique: true, using: :btree
-  add_index "connections", ["friend_id"], name: "index_connections_on_friend_id", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
@@ -274,8 +261,9 @@ ActiveRecord::Schema.define(version: 20140307194720) do
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "pushed",      default: false
   end
 
   add_index "relationships", ["followed_id"], name: "index_relationships_on_followed_id", using: :btree
@@ -319,6 +307,17 @@ ActiveRecord::Schema.define(version: 20140307194720) do
     t.datetime "reset_token_sent_at"
     t.boolean  "email_reminder_gift_receiver", default: true
     t.boolean  "email_reminder_gift_giver",    default: true
+  end
+
+  create_table "sms", force: true do |t|
+    t.integer  "gift_id"
+    t.datetime "subscribed_date"
+    t.string   "phone"
+    t.integer  "service_id"
+    t.string   "service_type"
+    t.string   "textword"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "sms_contacts", force: true do |t|

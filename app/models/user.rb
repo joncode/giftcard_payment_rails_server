@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 	has_many :brands
 	has_many :orders,    :through => :providers
 	has_many :oauths
-
+	has_many :app_contacts
 	has_many :sales
 	has_many :cards
 	has_many :answers
@@ -17,9 +17,6 @@ class User < ActiveRecord::Base
 	has_many :user_socials, 	dependent: :destroy
     has_many :sent,       as: :giver,  class_name: Gift
     has_many :received,   foreign_key: :receiver_id, class_name: Gift
-
-    has_many :friends, through: :connections, source: :contact
-    has_many :connections, foreign_key: "friend_id", dependent: :destroy
 
 	has_many :followed_users, through: :relationships, source: "followed"
 	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
@@ -51,40 +48,7 @@ class User < ActiveRecord::Base
 	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data, :unless => :is_perm_deactive?
 	after_create  :init_confirm_email
-
-
-	def update args
-		args = args.stringify_keys
-		us_keys = ["email", "phone", "facebook_id", "twitter"]
-		if us_keys.any? { |k| args.has_key? k }
-			type_of = "email" if args.has_key? "email"
-			type_of = "phone" if args.has_key? "phone"
-			type_of = "facebook_id" if args.has_key? "facebook_id"
-			type_of = "twitter" if args.has_key? "twitter"
-			if args.has_key?("primary")
-				self.send("#{type_of}=", args[type_of])
-				if self.valid?
-					self.save
-					unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
-						user_social.errors
-					end
-				else
-					self.errors
-				end
-			else
-				self.send("#{type_of}=", args[type_of])
-				if self.valid?
-					self.reload
-					unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
-						user_social.errors
-					end
-				else
-					self.errors
-				end
-			end
-		end
-		super(args.except!("email", "phone", "facebook_id", "twitter", "primary"))
-	end
+	after_save    :make_friends
 
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false).where(remember_token: token).first
@@ -110,13 +74,6 @@ class User < ActiveRecord::Base
 		return true if self.origin == 't'
 		return false
 	end
-
-	# def friends
-	# 	conns = Connection.where(friend_id: self.id)
-	# 	binding.pry
-	# 	ids   = conns.map { |c| c.contact_id }
-	# 	UserSocial.unscoped.where(id: ids)
-	# end
 
 ####### USER GETTERS AND SETTERS
 
@@ -252,7 +209,7 @@ class User < ActiveRecord::Base
 				user_social.update(active: false)
 			else
 				puts "cannot deactivate primary email for user that is active"
-			end        			
+			end
         else
         	user_social.update(active: false)
         end
@@ -348,10 +305,60 @@ class User < ActiveRecord::Base
 
 ##################
 
+	def update args
+		args = args.stringify_keys
+		primary = args.delete("primary")
+		us_ary = ["email", "phone", "facebook_id", "twitter"]
+
+		if us_ary.any? { |k| args.has_key? k }
+			type_ofs = us_ary.select { |us|  args.has_key? us }
+			reload_args = set_type_ofs type_ofs, args
+			if self.valid?
+				if primary
+					self.user_socials << init_user_socials(type_ofs, args)
+				else
+					set_type_ofs type_ofs, reload_args
+					set_user_socials type_ofs, args
+					args.except!("email", "phone", "facebook_id", "twitter")
+				end
+
+			else
+				self.errors
+			end
+		end
+		super
+	end
+
 private
 
-	def persist_social_data
+	def set_user_socials type_ofs, args
+		type_ofs.each do |type_of|
+			unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+				user_social.errors
+			end
+		end
+	end
 
+	def init_user_socials type_ofs, args
+		type_ofs.map do |type_of|
+			UserSocial.new(type_of: type_of.to_s, identifier: args[type_of])
+		end
+	end
+
+	def set_type_ofs type_ofs, args
+		old_args = {}
+		type_ofs.each do |type_of|
+			old_args[type_of] = self.send("#{type_of}")
+			self.send("#{type_of}=", args[type_of])
+		end
+		old_args
+	end
+
+	def make_friends
+		Resque.enqueue(FriendPushJob, self.id, 1)
+	end
+
+	def persist_social_data
 		if email_changed? && (email[-3..-1] != "xxx")
 			UserSocial.create(user_id: id, type_of: "email", identifier: email)
 		end
@@ -422,50 +429,6 @@ private
 	end
 
 end
-# == Schema Information
-#
-# Table name: users
-#
-#  id                      :integer         not null, primary key
-#  email                   :string(255)     not null
-#  admin                   :boolean         default(FALSE)
-	#  photo                   :string(255)
-#  password_digest         :string(255)
-#  remember_token          :string(255)     not null
-#  created_at              :datetime        not null
-#  updated_at              :datetime        not null
-#  address                 :string(255)
-#  address_2               :string(255)
-#  city                    :string(20)
-#  state                   :string(2)
-#  zip                     :string(16)
-#  credit_number           :string(255)
-#  phone                   :string(255)
-#  first_name              :string(255)
-#  last_name               :string(255)
-#  facebook_id             :string(255)
-#  handle                  :string(255)
-#  server_code             :string(255)
-#  twitter                 :string(255)
-#  active                  :boolean         default(TRUE)
-#  persona                 :string(255)     default("")
-#  foursquare_id           :string(255)
-#  facebook_access_token   :string(255)
-#  facebook_expiry         :datetime
-#  foursquare_access_token :string(255)
-#  sex                     :string(255)
-#  is_public               :boolean
-#  facebook_auth_checkin   :boolean
-	#  iphone_photo            :string(255)
-	#  fb_photo                :string(255)
-	#  use_photo               :string(255)
-	#  secure_image            :string(255)
-#  reset_token_sent_at     :datetime
-#  reset_token             :string(255)
-#  birthday                :date
-#  origin                  :string(255)
-#  confirm                 :string(255)     default("00")
-#
 
 # == Schema Information
 #

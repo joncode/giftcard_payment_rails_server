@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe User do
 
-	before(:each) do
-		User.delete_all
-		UserSocial.delete_all
-	end
+    before(:each) do
+        User.delete_all
+        UserSocial.delete_all
+    end
 
     context "model associations and validations" do
 
@@ -47,30 +47,41 @@ describe User do
             user.oauths.first.id.should == oauth.id
             user.oauths.first.user_id.should == user.id
         end
+
+        it "has_many app_contacts" do
+            user = FactoryGirl.create(:user)
+            user.app_contacts.count.should == 0
+            app_contact1 = FactoryGirl.create(:app_contact, user: user)
+            app_contact2 = FactoryGirl.build(:app_contact, user: user)
+            app_contact2.network = "phone"
+            app_contact2.network_id = "5456468756"
+            app_contact2.save
+            user.app_contacts.count.should == 2
+        end
     end
 
-	it "should downcase email" do
-		user = FactoryGirl.create :user, { email: "KJOOIcode@yahoo.com" }
+    it "should downcase email" do
+        user = FactoryGirl.create :user, { email: "KJOOIcode@yahoo.com" }
         user.email.should == "kjooicode@yahoo.com"
-	end
-	# if user social methods are called on user , it gets the data from user social
+    end
+    # if user social methods are called on user , it gets the data from user social
 
-	it "should accept integers for phone, twitter, facebook _id" do
-		user = FactoryGirl.build :user, { twitter: 832742384, facebook_id: 318341934192, phone: 9876787657 }
-		user.save
-		new_user = User.find_by(twitter:  "832742384")
-		new_user.phone.should == "9876787657"
-		new_user.facebook_id.should == "318341934192"
-	end
+    it "should accept integers for phone, twitter, facebook _id" do
+        user = FactoryGirl.build :user, { twitter: 832742384, facebook_id: 318341934192, phone: 9876787657 }
+        user.save
+        new_user = User.find_by(twitter:  "832742384")
+        new_user.phone.should == "9876787657"
+        new_user.facebook_id.should == "318341934192"
+    end
 
-	it "should get photo defaut or real" do
-		user  = FactoryGirl.create(:user, :iphone_photo => "test_photo")
-		user.get_photo.should_not == "test_photo"
-		user.get_photo.should == "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
-		user.iphone_photo = "http://res.cloudinary.com/test_photo.jpg"
-		user.save
-		user.get_photo.should == "http://res.cloudinary.com/test_photo.jpg"
-	end
+    it "should get photo defaut or real" do
+        user  = FactoryGirl.create(:user, :iphone_photo => "test_photo")
+        user.get_photo.should_not == "test_photo"
+        user.get_photo.should == "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+        user.iphone_photo = "http://res.cloudinary.com/test_photo.jpg"
+        user.save
+        user.get_photo.should == "http://res.cloudinary.com/test_photo.jpg"
+    end
 
     it "should not create user with first name (null) BUG FIX" do
         user = FactoryGirl.build(:user, first_name: "(null)")
@@ -80,29 +91,39 @@ describe User do
         user.errors.messages[:first_name].should == ["Account creation was not successful. Please go back one screen, re-enter your first name and re-submit. Thanks."]
     end
 
-	# if user updates email, phone, twitter or facebook the data is saved in userSocial
-	describe "user_social de-normalization" do
+    it "should update multi-socials at the same time" do
+        user = FactoryGirl.create(:user, facebook_id: "111111111")
+        us_count = user.user_socials.count
 
-		before(:each) do
-			@user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: nil }
-		end
+        user.update(facebook_id: "33333234134", email: "new_email@yahoo.com", phone: "6467334231", primary: true)
 
-		{
-				email: "jon@gmail.com",
-				phone: "9173706969",
-				facebook_id: "123",
-				twitter: "999"
-		}.stringify_keys.each do |type_of, identifier|
+        us_count_2 = user.user_socials.count
+        us_count_2.should == us_count + 3
+    end
 
-			it "should update when user saves new #{type_of} to user_social.rb" do
-				running {
-						@user.update_attribute("#{type_of}", identifier)
-				}.should change { UserSocial.count }.by(1)
-				user_social = UserSocial.last
-				user_social.identifier.should == identifier
-				user_social.type_of.should    == type_of
-				user_social.user_id.should    == @user.id
-			end
+    # if user updates email, phone, twitter or facebook the data is saved in userSocial
+    describe "user_social de-normalization" do
+
+        before(:each) do
+            @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: nil }
+        end
+
+        {
+                email: "jon@gmail.com",
+                phone: "9173706969",
+                facebook_id: "123",
+                twitter: "999"
+        }.stringify_keys.each do |type_of, identifier|
+
+            it "should update when user saves new #{type_of} to user_social.rb" do
+                running {
+                        @user.update_attribute("#{type_of}", identifier)
+                }.should change { UserSocial.count }.by(1)
+                user_social = UserSocial.last
+                user_social.identifier.should == identifier
+                user_social.type_of.should    == type_of
+                user_social.user_id.should    == @user.id
+            end
 
             it "should remove phone from user" do
                 user = FactoryGirl.create :user, { "phone" => "2222222222" }
@@ -116,13 +137,13 @@ describe User do
                 UserSocial.unscoped.find_by(identifier: "jon@gmail.com").active.should be_true
             end
 
-			it "should not create a new user social record if no new #{type_of} is submitted #{type_of}" do
-				# update a user without #{type_of} change
-				running {
-						@user.update(last_name: "change_me_not_id")
-				}.should_not change { UserSocial.count }
+            it "should not create a new user social record if no new #{type_of} is submitted #{type_of}" do
+                # update a user without #{type_of} change
+                running {
+                        @user.update(last_name: "change_me_not_id")
+                }.should_not change { UserSocial.count }
 
-			end
+            end
 
             it "should not allow saving a record that already exists for another user primary #{type_of}" do
                 other_user = FactoryGirl.create(:user, type_of => identifier)
@@ -148,7 +169,7 @@ describe User do
                     @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount."]
                 else
                     @user.errors[type_of].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount, please use that to log in"]
-                end           
+                end
             end
 
             it "should allow saving a record that already exists for another user secondary but deactivated #{type_of}" do
@@ -163,8 +184,8 @@ describe User do
                 newus = UserSocial.where( type_of: type_of, identifier: identifier, active: true).first
                 newus.user_id.should == @user.id
             end
-		end
-	end
+        end
+    end
 
     context "pn_token management" do
 
@@ -279,7 +300,7 @@ describe User do
                     FactoryGirl.create(:user_social, type_of: "twitter", identifier: "222b2b2bb2", user_id: @user.id)
                     @user.suspend
                 end
-                                
+
                 it "can suspend a user" do
                     @user.active == false
                     @user.perm_deactive == false
@@ -318,7 +339,7 @@ describe User do
                     FactoryGirl.create(:user_social, type_of: "twitter", identifier: "222b2b2bb2", user_id: @user.id)
                     @user.permanently_deactivate
                 end
-                                
+
                 it "can perm-deactivate a user" do
                     @user.active == false
                     @user.perm_deactive == true
@@ -354,7 +375,7 @@ describe User do
             it "can add a secondary email" do
                 user = FactoryGirl.create(:user, email: "primary_email@email.com")
                 user.update(email: "new_email@gmail.com")
-                
+
                 user.email.should == "primary_email@email.com"
                 user_emails = user.user_socials.where(type_of: "email")
                 user_emails.count.should == 2
@@ -608,7 +629,65 @@ describe User do
                 user.update(facebook_id: "222222222", primary: true)
                 user.facebook_id.should == "222222222"
             end
+        end
+    end
 
+    context "friend maker" do
+
+        before(:each) do
+            ResqueSpec.reset!
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
+            Urbanairship.stub(:push).and_return(true)
+        end
+
+        it "should call relationships when user is created" do
+            # create a user with user socials
+            user = FactoryGirl.create(:user)
+            #FriendPushJob.should_receive(:perform).with(user.id, 1)
+            FriendMaker.should_receive(:user_create).with(user.id)
+            run_delayed_jobs
+        end
+
+        it "should call relationships when user socials are updated" do
+            # create a user with user socials
+            user = FactoryGirl.create(:user)
+            run_delayed_jobs
+
+            user.update(email: "newforpush@friend.com")
+            FriendMaker.should_receive(:user_create).with(user.id)
+            run_delayed_jobs
+
+            user.update(email: "newforpush@friend.com")
+            FriendMaker.should_receive(:user_create, primary: true).with(user.id)
+            run_delayed_jobs
+
+            user.update(phone: "7876567432")
+            FriendMaker.should_receive(:user_create).with(user.id)
+            run_delayed_jobs
+
+            user.update(twitter: "987654321")
+            FriendMaker.should_receive(:user_create).with(user.id)
+            run_delayed_jobs
+
+            FriendMaker.should_receive(:user_create).with(user.id)
+            user.update(facebook_id: "75847539845", primary: true)
+            run_delayed_jobs
+
+            FriendMaker.should_receive(:user_create).with(user.id)
+            user.update(facebook_id: "75847529245")
+            run_delayed_jobs
+        end
+
+        xit "should not call relationships when user socials are not updated" do
+            # create a user with user socials
+            user = FactoryGirl.create(:user)
+            run_delayed_jobs
+
+            user.update(last_name: "nofriendpush")
+            #FriendPushJob.should_not_receive(:perform).with(user.id, 1)
+            FriendMaker.should_not_receive(:user_create).with(user.id)
+            run_delayed_jobs
         end
     end
 end
@@ -653,4 +732,5 @@ end
 #  confirm                 :string(255)     default("00")
 #  perm_deactive           :boolean         default(FALSE)
 #
+
 
