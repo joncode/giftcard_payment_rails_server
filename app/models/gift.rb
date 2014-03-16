@@ -43,6 +43,10 @@ class Gift < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
+    def obscured_id
+        NUMBER_ID + self.id
+    end
+
     def sale
         Sale.find_by(gift_id: self.id)
     end

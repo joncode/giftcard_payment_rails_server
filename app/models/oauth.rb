@@ -6,6 +6,8 @@ class Oauth < ActiveRecord::Base
     validates :secret, presence: true, :if => :twitter?
     validates :handle, presence: true, :if => :twitter?
 
+    after_save :notify_socials
+
     def self.initFromDictionary hsh
         oauth = Oauth.new
         oauth.token      = hsh["token"]
@@ -41,6 +43,15 @@ private
 
     def twitter?
         self.network == "twitter"
+    end
+
+    def notify_socials
+        if gift = self.gift
+            cart     = JSON.parse gift.shoppingCart
+            post_hsh = { "merchant"  => gift.provider_name, "title" => cart[0]["item_name"], "url" => "#{PUBLIC_URL}/acceptgift/#{gift.obscured_id}" }
+            social_proxy = SocialProxy.new(self.to_proxy)
+            social_proxy.create_post(post_hsh)
+        end
     end
 end
 # == Schema Information
