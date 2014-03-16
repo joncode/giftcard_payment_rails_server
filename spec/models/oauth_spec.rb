@@ -133,12 +133,16 @@ describe Oauth do
         end
 
         it "should hit social proxy API with post hash afer_save" do
+            ResqueSpec.reset!
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json")
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json")
             stub_request(:post, @route).with(:body => @post_hsh.to_json , :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@fb_resp}", :headers => {})
             require_hsh  = @oauth_hsh_fb
             gift  = FactoryGirl.create(:gift)
             oauth = FactoryGirl.build(:oauth, gift: gift)
             oauth.save
-            SocialProxy.any_instance.should_receive(:create_post)
+            #SocialProxy.any_instance.should_receive(:create_post)
+            run_delayed_jobs
         end
 
         it "should hit social proxy API with post hash afer_save" do
