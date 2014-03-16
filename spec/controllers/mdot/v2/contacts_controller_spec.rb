@@ -22,6 +22,17 @@ describe Mdot::V2::ContactsController do
             json["status"].should == 1
         end
 
+        it "should accept a hash of contacts and save to app_contact db" do
+            @hsh.each_key do |k|
+                @hsh[k].delete('last_name')
+            end
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :upload, format: :json, data: @hsh
+            ac = AppContact.where(user_id: @user.id)
+            ac.count.should == 8
+            rrc(200)
+            json["status"].should == 1
+        end
     end
 
 end

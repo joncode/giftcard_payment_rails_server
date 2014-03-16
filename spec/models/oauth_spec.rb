@@ -141,6 +141,14 @@ describe Oauth do
             SocialProxy.any_instance.should_receive(:create_post)
         end
 
+        it "should hit social proxy API with post hash afer_save" do
+            stub_request(:post, @route).with(:body => @post_hsh.to_json , :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@fb_resp}", :headers => {})
+            require_hsh  = @oauth_hsh_fb
+            user  = FactoryGirl.create(:user)
+            oauth = FactoryGirl.build(:oauth, user: user, gift_id: nil)
+            oauth.save
+            SocialProxy.any_instance.should_not_receive(:create_post)
+        end
     end
 
 end# == Schema Information
