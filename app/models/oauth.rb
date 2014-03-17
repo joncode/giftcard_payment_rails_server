@@ -30,7 +30,7 @@ class Oauth < ActiveRecord::Base
     end
 
     def self.create args={}
-        oauth = self.where(user_id: args["user_id"], network: args["network"], network_id: args["network_id"]).first
+        oauth = self.where(gift_id: nil, user_id: args["user_id"], network: args["network"], network_id: args["network_id"]).first
         if oauth.nil?
             super
         else
@@ -46,12 +46,6 @@ private
     end
 
     def notify_socials
-        # if gift = self.gift
-        #     cart     = JSON.parse gift.shoppingCart
-        #     post_hsh = { "merchant"  => gift.provider_name, "title" => cart[0]["item_name"], "url" => "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}" }
-        #     social_proxy = SocialProxy.new(self.to_proxy)
-        #     social_proxy.create_post(post_hsh)
-        # end
         if self.gift_id.present?
             Resque.enqueue(CreateGiftNotifySocial, self.gift_id)
         end

@@ -85,7 +85,7 @@ describe Oauth do
 
         it "should overwrite an existing oauth record for that network on :create" do
             user  = FactoryGirl.create(:user)
-            oauth = FactoryGirl.build(:oauth, user: user)
+            oauth = FactoryGirl.build(:oauth, user: user, gift_id: nil)
             oauth.save
             new_tw_oauth = { "token"=>"new_token", "secret"=>"new_secret", "network"=>"twitter", "network_id"=>oauth.network_id, "handle"=>"razorback", "user_id" => user.id}
             Oauth.create(new_tw_oauth)
@@ -95,7 +95,7 @@ describe Oauth do
 
         it "should overwrite an existing oauth record for that network on :create" do
             user  = FactoryGirl.create(:user)
-            oauth = FactoryGirl.build(:oauth_fb, user: user)
+            oauth = FactoryGirl.build(:oauth_fb, user: user, gift_id: nil)
             oauth.save
             new_tw_oauth = { "token"=>"new_token", "network"=>"facebook", "network_id"=>oauth.network_id, "user_id" => user.id}
             new_oauth    = Oauth.create(new_tw_oauth)
