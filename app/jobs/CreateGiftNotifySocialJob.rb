@@ -4,7 +4,7 @@ class CreateGiftNotifySocial
 
     def self.perform gift_id
         puts " -------------   Notify Social Create Gift --------------------"
-        if gift = Gift.find gift_id
+        if gift = Gift.find(gift_id)
             oauth = gift.oauth
             cart     = JSON.parse gift.shoppingCart
             post_hsh = { "merchant"  => gift.provider_name, "title" => cart[0]["item_name"], "url" => "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}" }
