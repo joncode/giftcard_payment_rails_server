@@ -2,7 +2,7 @@ class CreateGiftNotifySocial
 
     @queue = :social
 
-    def perform gift_id
+    def self.perform gift_id
         puts " -------------   Notify Social Create Gift --------------------"
         if gift = self.gift
             cart     = JSON.parse gift.shoppingCart
