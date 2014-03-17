@@ -9,23 +9,6 @@ class AppContact < ActiveRecord::Base
     validates :network, presence: true
     validates :network_id, presence: true
 
-    def self.upload(data: data, user_id: user_id)
-        start_time_logger = Time.now
-
-        # bulk save app contacts
-
-        end_time = ((Time.now - start_time_logger) * 1000).round(1)
-        inserts  = contact_objs.count
-        velocity = end_time / inserts
-        puts "BULK UPLOAD TIME = #{end_time}ms | contacts = #{inserts} | rate = #{velocity} ms/insert"
-
-            # is this in the correct place ??
-        if contact_objs.count > 0
-            Resque.enqueue(FriendPushJob, user.id, 2)
-        end
-        contact_objs
-    end
-
 private
 
     def extract_phone_digits

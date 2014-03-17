@@ -15,16 +15,22 @@ class BulkContactProcessor
         remaining_contacts = []
         new_app_socials = contacts.map do |contact|
             user_social = if contact["network"] == "facebook"
-                UserSocial.where(type_of: "facebook_id", identifier: contact["network_id"]).where.not(user_id: ids)
+                UserSocial.where(type_of: "facebook_id", identifier: contact["network_id"]).first
             else
-                UserSocial.where(type_of: contact["network"], identifier: contact["network_id"]).where.not(user_id: ids)
+                UserSocial.where(type_of: contact["network"], identifier: contact["network_id"]).first
             end
-            if user_social.first.nil?
+            if user_social.nil?
                 remaining_contacts << contact
+                nil
+            else
+                if [ids].include?(user_social.user_id)
+                    nil
+                else
+                    user_social
+                end
             end
-            user_social
         end
-        new_app_socials.flatten!
+        new_app_socials.compact!
 
         new_app_socials.each do |social|
             Relationship.create(follower_id: social.user_id, followed_id: user.id)
@@ -35,6 +41,15 @@ class BulkContactProcessor
                                     # yes  # do nothing
                                     # no # create friendship
                             # no  # create app contact & friendship
+        friend_ids = user.app_contacts.map(&:id)
+        remaining_contacts.each do |contact|
+            app_contact = AppContact.find_or_create_by(network: contact["network"], network_id: contact["network_id"]) do |app_c|
+                app_c.name     = contact["name"]
+                app_c.birthday = contact["birthday"]
+                app_c.handle   = contact["handle"]
+            end
+            Friendship.create(user_id: user.id, app_contact_id: app_contact.id)
+        end
         log_end_time start_time_logger, new_app_socials
     end
 
