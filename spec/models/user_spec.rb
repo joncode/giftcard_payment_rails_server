@@ -51,12 +51,16 @@ describe User do
         it "has_many app_contacts" do
             user = FactoryGirl.create(:user)
             user.app_contacts.count.should == 0
-            app_contact1 = FactoryGirl.create(:app_contact, user: user)
-            app_contact2 = FactoryGirl.build(:app_contact, user: user)
+            app_contact1 = FactoryGirl.create(:app_contact)
+            app_contact2 = FactoryGirl.build(:app_contact)
             app_contact2.network = "phone"
             app_contact2.network_id = "5456468756"
             app_contact2.save
+            Friendship.create(user_id: user.id, app_contact_id: app_contact1.id)
+            Friendship.create(user_id: user.id, app_contact_id: app_contact2.id)
             user.app_contacts.count.should == 2
+            user.app_contacts[0].should == app_contact1
+            user.app_contacts[1].should == app_contact2
         end
     end
 

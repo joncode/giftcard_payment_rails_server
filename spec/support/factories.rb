@@ -307,7 +307,6 @@ FactoryGirl.define do
     end
 
     factory :app_contact do
-        user_id     100
         network     "email"
         network_id  "test@gmail.com"
     end

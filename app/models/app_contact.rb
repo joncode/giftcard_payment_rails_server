@@ -1,13 +1,13 @@
 class AppContact < ActiveRecord::Base
 
-    belongs_to :user
+    has_many :friendships, dependent: :destroy
+    has_many :users, through: :friendships
 
     before_save :downcase_emails
     before_save :extract_phone_digits
 
     validates :network, presence: true
     validates :network_id, presence: true
-    validates :user_id, presence: true
 
     def self.upload(data: data, user_id: user_id)
         start_time_logger = Time.now

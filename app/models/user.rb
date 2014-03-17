@@ -25,6 +25,9 @@ class User < ActiveRecord::Base
 	                              dependent: :destroy
 	has_many :followers, through: :reverse_relationships, source: :follower
 
+	has_many :friendships, dependent: :destroy
+	has_many :app_contacts, through: :friendships
+
 	has_secure_password
 
     validates_with UserSocialValidator

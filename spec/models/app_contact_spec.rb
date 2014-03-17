@@ -68,17 +68,19 @@ describe AppContact do
         app_contact.should have_at_least(1).error_on(:network_id)
     end
 
-    it "require user_id" do
-        app_contact = FactoryGirl.build(:app_contact, :user_id => nil)
-        app_contact.should_not be_valid
-        app_contact.should have_at_least(1).error_on(:user_id)
-    end
-
-    it "belongs to user" do
+    it "has_many :users :through :users" do
         user = FactoryGirl.create(:user)
-        ac = FactoryGirl.create(:app_contact, user: user)
+        user2 = FactoryGirl.create(:user)
+        user3 = FactoryGirl.create(:user)
+        ac = FactoryGirl.create(:app_contact)
+        Friendship.create(user_id: user.id, app_contact_id: ac.id)
+        Friendship.create(user_id: user2.id, app_contact_id: ac.id)
+        Friendship.create(user_id: user3.id, app_contact_id: ac.id)
         ac.reload
-        ac.user.should == user
+        ac.users.count.should == 3
+        ac.users[0].should == user
+        ac.users[1].should == user2
+        ac.users[2].should == user3
     end
 
     it "should reduce phone to digits only" do
