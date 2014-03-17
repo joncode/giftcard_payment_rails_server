@@ -2,9 +2,9 @@ class Mdot::V2::ContactsController < JsonController
     before_action :authenticate_customer
 
     def upload
-        contacts = AppContact.upload(contacts: params["data"], user: @current_user)
-        if contacts.first.class == AppContact
-            success contacts.count
+        contacts = BulkContact.upload(data: params["data"], user_id: @current_user.id)
+        if contacts.class == BulkContact
+            success "ok"
         else
             status = 501
             fail   "Bulk Upload failed"
