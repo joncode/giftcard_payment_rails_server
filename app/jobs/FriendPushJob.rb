@@ -58,6 +58,7 @@ private
     end
 
     def self.format_payload_user_friend(user, badge, count)
-        { :aliases => [user.ua_alias],:aps => { :alert => "#{count} new friends can buy you a drink", :badge => badge, :sound => 'pn.wav' },:alert_type => 5 }
+        plural = count == 1 ? "" : "s"
+        { :aliases => [user.ua_alias],:aps => { :alert => "#{count} new friend#{plural} can buy you a drink", :badge => badge, :sound => 'pn.wav' },:alert_type => 5 }
     end
 end
