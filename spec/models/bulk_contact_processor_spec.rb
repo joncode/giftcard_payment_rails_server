@@ -2,6 +2,29 @@ require 'spec_helper'
 
 describe BulkContactProcessor do
 
+    it "should return true if relationships were made" do
+        user        = FactoryGirl.create(:user)
+        user_social = FactoryGirl.create(:user_social, user: user)
+        other_user  = FactoryGirl.create(:user, first_name: "other", last_name: "user")
+        other_user.followers.first.should_not == user
+        bc_ary      = [{ "name" => other_user.name, "network" => user_social.type_of, "network_id" => user_social.identifier}]
+        bulk_contact = FactoryGirl.create(:bulk_contact, data: bc_ary.to_json, user_id: other_user.id)
+        response = BulkContactProcessor.process(contacts: bulk_contact.normalized_data, user_id: bulk_contact.user_id)
+        response.should be_true
+    end
+
+    it "should return false if no relationships were made" do
+        user        = FactoryGirl.create(:user)
+        user_social = FactoryGirl.create(:user_social, user: user)
+        other_user  = FactoryGirl.create(:user, first_name: "other", last_name: "user")
+        Relationship.create(follower_id: user.id, followed_id: other_user.id)
+        other_user.followers.first.should == user
+        bc_ary      = [{ "name" => other_user.name, "network" => user_social.type_of, "network_id" => user_social.identifier}]
+        bulk_contact = FactoryGirl.create(:bulk_contact, data: bc_ary.to_json, user_id: other_user.id)
+        response = BulkContactProcessor.process(contacts: bulk_contact.normalized_data, user_id: bulk_contact.user_id)
+        response.should be_false
+    end
+
     it "should handle all situations at once and not make duplicates" do
         user         = FactoryGirl.create(:user)
 
@@ -27,25 +50,25 @@ describe BulkContactProcessor do
         # put nothing in db
 
             # user uploads his contact book to BulkContacts
-        bc_ary = [{network: "facebook", network_id: "7283548152", name: "Jameson Kieler", birthday: "10/12/77"},
-            {network: "twitter", network_id: "12315247612", name: "Boy George",  handle: "@razorface"},
-            { network: "email", network_id: "friended@gmail.com", name: "Chan Khan", birthday: "1/4/81"},
-            { network: "phone", network_id: "6467578990", name: "Jameson Kieler"},
-            { network: "facebook", network_id: "98a3fd332", name: "Jameson Kieler", birthday: "10/12/77"},
-            {network: "twitter", network_id: "283s3f6fd3", name: "Evil Canivel",  handle: "@razorface"},
-            { network: "email", network_id: "thisguy3@gmail.com", name: "Kill Switch", birthday: "1/4/81"},
+        bc_ary = [{network: "facebook", network_id: not_friends2.network_id, name: "Jameson Kieler", birthday: "10/12/77"},
+            {network: "twitter", network_id: not_friends.network_id, name: "Boy George",  handle: "@razorface"},
+            { network: "email", network_id: friended.network_id, name: "Chan Khan", birthday: "1/4/81"},
+            { network: "phone", network_id: friended2.network_id, name: "Jameson Kieler"},
+            { network: "facebook", network_id:  non_follower.facebook_id, name: "Jameson Kieler", birthday: "10/12/77"},
+            {network: "twitter", network_id:  non_follower.twitter, name: "Evil Canivel",  handle: "@razorface"},
+            { network: "email", network_id: non_follower.email, name: "Kill Switch", birthday: "1/4/81"},
             { network: "email", network_id: "unknown@gmail.com", name: "Unknown Person"},
-            { network: "facebook", network_id: "98a2fd332", name: "Jameson Kieler", birthday: "10/12/77"},
-            {network: "twitter", network_id: "283s2f6fd3", name: "Evil Canivel",  handle: "@razorface"},
-            { network: "email", network_id: "thisguy2@gmail.com", name: "Kill Switch", birthday: "1/4/81"},
+            { network: "facebook", network_id:  follower.facebook_id, name: "Jameson Kieler", birthday: "10/12/77"},
+            {network: "twitter", network_id: follower.twitter, name: "Evil Canivel",  handle: "@razorface"},
+            { network: "email", network_id: follower.email, name: "Kill Switch", birthday: "1/4/81"},
             { network: "facebook", network_id: "41268248386", name: "Unknown Contact"},
-            { network: "facebook", network_id: "98a1fd332", name: "Myself", birthday: "10/12/77"},
-            {network: "twitter", network_id: "283s1f6fd3", name: "Evil Canivel",  handle: "@razorface"},
-            { network: "email", network_id: "thisguy1@gmail.com", name: "Myself", birthday: "1/4/81"},
+            { network: "facebook", network_id: user.facebook_id, name: "Myself", birthday: "10/12/77"},
+            {network: "twitter", network_id:  user.twitter, name: "Evil Canivel",  handle: "@razorface"},
+            { network: "email", network_id: user.email, name: "Myself", birthday: "1/4/81"},
             { network: "phone", network_id: "5784426858", name: "Unknown Contact"}]
         bulk_contact = FactoryGirl.create(:bulk_contact, data: bc_ary.to_json, user_id: user.id)
         BulkContactProcessor.process(contacts: bulk_contact.normalized_data, user_id: bulk_contact.user_id)
-
+        
             # tests
         # user has two followers - follower & non_follower
         user.followers.count.should == 3

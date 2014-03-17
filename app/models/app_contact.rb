@@ -8,6 +8,7 @@ class AppContact < ActiveRecord::Base
 
     validates :network, presence: true
     validates :network_id, presence: true
+    validates_with UniqueNetworkValidator
 
 private
 

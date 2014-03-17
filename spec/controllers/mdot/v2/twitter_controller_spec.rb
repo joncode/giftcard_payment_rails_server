@@ -7,7 +7,7 @@ describe Mdot::V2::TwitterController do
             @user = FactoryGirl.create(:user)
             @user.update(remember_token: "USER_TOKEN")
         end
-        @oauth = FactoryGirl.create(:oauth, user: @user)
+        @oauth = FactoryGirl.create(:oauth, user: @user, gift_id: nil)
         @oauth_hsh_tw = @oauth.to_proxy
     end
 
@@ -149,7 +149,7 @@ describe Mdot::V2::TwitterController do
             oauth_hsh = { "token" => "new_token", "network_id" => oauth.network_id, "secret" => "new_secret", "handle" => "razorback"}
             post :oauth, format: :json, data: oauth_hsh
             rrc(200)
-
+            
             oauth = @user.oauths.first
             oauth.should_not be_nil
             oauth.token.should      == oauth_hsh["token"]

@@ -2,6 +2,7 @@ class BulkContactProcessor
 
     def self.process(contacts: contacts, user_id: user_id)
         start_time_logger = Time.now
+        new_relationship = false
         # receive the normalized data
            # is there a user_social
         begin
@@ -10,8 +11,8 @@ class BulkContactProcessor
             return { "user" => "is invalid"}
         end
         ids = user.followers.map {|u| u.id }
-                # is there a relationship # yes
-                    # yes # do nothing  # no # create relationship
+                # is there a user_social # yes
+                    # relationship ? yes # do nothing  # no # create relationship
         remaining_contacts = []
         new_app_socials = contacts.map do |contact|
             user_social = if contact["network"] == "facebook"
@@ -33,9 +34,13 @@ class BulkContactProcessor
         new_app_socials.compact!
 
         new_app_socials.each do |social|
-            Relationship.create(follower_id: social.user_id, followed_id: user.id)
+            r = Relationship.create(follower_id: social.user_id, followed_id: user.id)
+            puts "generating a relationship ? #{r.id}"
+            if r.id.present?
+                new_relationship = true
+            end
         end
-                # is there a relationship  # no
+                # is there a user_social  # no
                         # if there another app_contact
                             # yes # is there a friendship
                                     # yes  # do nothing
@@ -51,6 +56,7 @@ class BulkContactProcessor
             Friendship.create(user_id: user.id, app_contact_id: app_contact.id)
         end
         log_end_time start_time_logger, new_app_socials
+        return new_relationship
     end
 
 private

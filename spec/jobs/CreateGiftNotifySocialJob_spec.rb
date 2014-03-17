@@ -12,13 +12,14 @@ require 'spec_helper'
         end
 
         it "should find gift and call social proxy" do
-
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json")
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json")
             require_hsh  = @oauth_hsh_fb
             gift  = FactoryGirl.create(:gift)
             oauth = FactoryGirl.build(:oauth, gift: gift)
-            @post_hsh   =   {"token"=>"9q3562341341", "secret"=>"92384619834", "network_id"=>"9865465748", "handle"=>"razorback", "merchant"=>"ichizos1", "title"=>"Original Margarita ", "url"=>"http://0.0.0.0:3001/signup/acceptgift/#{gift.obscured_id}"}
+            @post_hsh   =   {"token"=>"9q3562341341", "secret"=>"92384619834", "network_id"=>"9865465748", "handle"=>"razorback", "merchant"=>gift.provider_name, "title"=>"Original Margarita ", "url"=>"http://0.0.0.0:3001/signup/acceptgift/#{gift.obscured_id}"}
             stub_request(:post, @route).with(:body => @post_hsh.to_json , :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@fb_resp}", :headers => {})
 
             ResqueSpec.reset!
