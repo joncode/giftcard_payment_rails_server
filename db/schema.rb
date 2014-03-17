@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140313213823) do
+ActiveRecord::Schema.define(version: 20140317060728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,13 @@ ActiveRecord::Schema.define(version: 20140313213823) do
 
   add_index "brands_providers", ["brand_id"], name: "index_brands_providers_on_brand_id", using: :btree
   add_index "brands_providers", ["provider_id"], name: "index_brands_providers_on_provider_id", using: :btree
+
+  create_table "bulk_contacts", force: true do |t|
+    t.integer  "user_id"
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "cards", force: true do |t|
     t.integer  "user_id"
@@ -261,8 +268,8 @@ ActiveRecord::Schema.define(version: 20140313213823) do
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.boolean  "pushed",      default: false
   end
 
