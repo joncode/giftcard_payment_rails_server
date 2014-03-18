@@ -1,5 +1,6 @@
 module GiftSerializers
     include ActionView::Helpers::DateHelper
+
     def serialize
         sender      = giver
         merchant    = provider
@@ -27,7 +28,7 @@ module GiftSerializers
         gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
         gift_hsh["giver_photo"]        = giver.get_photo
 
-        unless provider = provider = self.provider
+        unless provider = self.provider
             provider = Provider.unscoped.find(self.provider_id)
         end
         gift_hsh["provider_photo"]     = provider.get_photo
@@ -69,6 +70,7 @@ module GiftSerializers
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.receiver_status
         gift_hsh["giver_photo"]        = giver.get_photo
+        binding.pry
         unless provider = self.provider
             provider = Provider.unscoped.find(self.provider_id)
         end
