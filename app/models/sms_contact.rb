@@ -8,7 +8,8 @@ class SmsContact < ActiveRecord::Base
     def self.bulk_create contacts_hsh
         puts "Bulk saving to SmsContact"
         contacts_hsh.map do |contact_hsh|
-            r = SmsContact.create(contact_hsh)
+            r = SmsContact.new(contact_hsh)
+            r.save if r.valid?
             if r.id.nil?
                 puts r.inspect
                 puts r.errors.messages
