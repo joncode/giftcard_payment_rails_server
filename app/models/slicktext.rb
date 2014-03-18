@@ -64,18 +64,22 @@ private
         hsh = {}
         hsh["service_id"]      = contact["id"]
         hsh["service"]         = "slicktext"
-        hsh["textword"]        = self.textword
+        hsh["textword"]        = contact["textword"]
         hsh["subscribed_date"] = contact["subscribedDate"].to_datetime
         hsh["phone"]           = convert_phone_number(contact["number"])
         hsh
     end
 
     def convert_phone_number contact_number
-        converted_number = contact_number.gsub(/[^0-9]/i, '')
-        if converted_number[0] == "1"
-            converted_number[1..converted_number.length]
+        if contact_number.present?
+            converted_number = contact_number.gsub(/[^0-9]/i, '')
+            if converted_number[0] == "1"
+                converted_number[1..converted_number.length]
+            else
+                converted_number
+            end
         else
-            converted_number
+            puts " ---------- SLICKTEXT ERROR NO PHONE NUMBER"
         end
     end
 end

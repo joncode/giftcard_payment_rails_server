@@ -6,8 +6,13 @@ class SmsContact < ActiveRecord::Base
     validates :phone, format: { with: VALID_PHONE_REGEX }
 
     def self.bulk_create contacts_hsh
+        puts "Bulk saving to SmsContact"
         contacts_hsh.map do |contact_hsh|
-            SmsContact.create(contact_hsh)
+            r = SmsContact.create(contact_hsh)
+            if r.id.nil?
+                puts r.inspect
+                puts r.errors.messages
+            end
         end
     end
 
