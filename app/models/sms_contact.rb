@@ -13,6 +13,7 @@ class SmsContact < ActiveRecord::Base
                 puts r.inspect
                 puts r.errors.messages
             end
+            r
         end
     end
 
