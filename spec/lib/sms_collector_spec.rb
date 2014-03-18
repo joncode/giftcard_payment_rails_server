@@ -9,17 +9,33 @@ TEXTWORDS = [{"id"=>"15892", "word"=>"its on me", "autoReply"=>"Welcome to It's 
 CONTACTS_RESPONSE = [{"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345839"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345323"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345589"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345109"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345722"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345752"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345844"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345178"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345385"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345978"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345378"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345912"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345453"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345266"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345644"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345637"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345309"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345790"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345349"}, {"service_id"=>"11111", "service"=>"slicktext", "textword"=>"itsonme", "subscribed_date"=>"Mon, 04 Feb 2013 21:12:45 +0000", "phone"=>"3234345595"}]
 
 describe SmsCollector do
-    
+
     before(:each) do
-         @contacts_route = SLICKTEXT_URL + "/v1/contacts?limit=1000&textword=15893"
+        CampaignItem.delete_all
+        Campaign.delete_all
+        SmsContact.delete_all
+        @contacts_route = SLICKTEXT_URL + "/v1/contacts?limit=1000&textword=15893"
+    end
+
+    context "bug fixes" do
+
+        it "should not break on :count" do
+            textword = "itsonme"
+            provider = FactoryGirl.create(:provider)
+            campaign = FactoryGirl.create(:campaign)
+            cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id)
+
+            Slicktext.stub(:textwords).and_return(TEXTWORDS)
+            Slicktext.any_instance.stub(:sms)
+            Slicktext.any_instance.should_receive(:contacts).and_return([])
+            SmsCollector::sms_promo_run
+        end
+
     end
 
     context :sms_promo_run do
 
         before(:each) do
-            CampaignItem.delete_all
-            Campaign.delete_all
-            SmsContact.delete_all
             textword = "itsonme"
             provider = FactoryGirl.create(:provider)
             campaign = FactoryGirl.create(:campaign)
@@ -41,7 +57,6 @@ describe SmsCollector do
             sms_contacts = SmsContact.all
             sms_contacts.count.should == 20
         end
-
 
         it "should create gift_campaign objs - one for each phone number" do
             sms_contacts = SmsContact.all

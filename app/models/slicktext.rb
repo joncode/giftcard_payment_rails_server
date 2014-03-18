@@ -46,7 +46,7 @@ class Slicktext
                 convert_data c
             end
         else
-            nil
+            []
         end
     end
 
@@ -54,7 +54,7 @@ class Slicktext
         if self.resp.present? && self.resp["contacts"].present?
             self.resp["contacts"].count
         else
-            nil
+            0
         end
     end
 

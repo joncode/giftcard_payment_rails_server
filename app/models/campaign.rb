@@ -32,8 +32,7 @@ class Campaign < Admtmodel
     end
 
 ####### Gift Giver Ducktype
-
-
+    
     def name
         self.giver_name
     end
