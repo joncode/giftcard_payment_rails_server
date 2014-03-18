@@ -5,7 +5,7 @@ module Expiration
         expired_gifts = []
         gs = Gift.where(status: ["incomplete", "open", "notified"]).where.not(expires_at: nil)
         gs.each do |gift|
-            date = Time.now.to_date
+            date = Time.now.utc.to_date
 
             if (date > gift.expires_at.to_date)
                 gift.update(status: "expired")

@@ -499,7 +499,7 @@ describe AppController do
             gift.reload
             gift.status.should == 'redeemed'
             gift.server.should == "test"
-            gift.redeemed_at.day.should == time.day
+            gift.redeemed_at.day.should == time.utc.day
         end
 
         it "should return validation errors on bad gift" do
