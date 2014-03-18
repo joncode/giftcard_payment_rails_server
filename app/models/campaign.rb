@@ -1,9 +1,12 @@
 class Campaign < Admtmodel
     self.table_name = "campaigns"
-    # has_many :sent,  as: :giver,  class_name: Gift
-    # has_many :debts, as: :owner
-    has_many :gifts, :as => :payable
-    has_many :campaigns_items
+
+    #has_many :gifts, :as => :payable
+    has_many :campaign_items
+
+    def is_live?
+        self.live_date < today && self.close_date > today
+    end
 
     #       ####### Gift Giver Ducktype
     def name
@@ -19,10 +22,6 @@ class Campaign < Admtmodel
         end
     end
 
-    # # hidden giver ducktype methods
-    #     # campaign_giver.id    as giver_id   - campaign_id in ADMT
-    #     # campaign_giver.class as giver_type - Campaign class
-    
     def success?
         if self.id
             true
@@ -54,14 +53,12 @@ class Campaign < Admtmodel
             2
         end
     end
+
+private
+
+    def today
+        Time.now.to_date
+    end
 end
-# == Schema Information
-#
-# Table name: campaigns
-#
-#  id          :integer         not null, primary key
-#  campaign_id :integer
-#  created_at  :datetime        not null
-#  updated_at  :datetime        not null
-#
+
 
