@@ -83,6 +83,15 @@ describe SmsContact do
             contacts = SmsContact.all
             contacts.count.should == 2
         end
+
+        it "should not return un-saved records" do
+            contact_hsh = [{ "service_id" => 1001,"service" => "slicktext", "phone" => "2129886575", "subscribed_date" => "2013-02-04 21:10:45".to_datetime, "textword" => "itsonme" },{ "service_id" => 1002,"service" => "slicktext", "phone" => "2129884545", "subscribed_date" => "2013-02-04 21:11:45".to_datetime, "textword" => "itsonme" }]
+            contacts = SmsContact.bulk_create(contact_hsh)
+            contacts.count.should == 2
+            contact_hsh = [{ "service_id" => 1001,"service" => "slicktext", "phone" => "2129886575", "subscribed_date" => "2013-02-04 21:10:45".to_datetime, "textword" => "itsonme" },{ "service_id" => 1002,"service" => "slicktext", "phone" => "2129884545", "subscribed_date" => "2013-02-04 21:11:45".to_datetime, "textword" => "itsonme" }]
+            contacts = SmsContact.bulk_create(contact_hsh)
+            contacts.count.should == 0
+        end
     end
 
 end

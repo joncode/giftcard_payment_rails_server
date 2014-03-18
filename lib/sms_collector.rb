@@ -10,12 +10,13 @@ module SmsCollector
 				sms_obj.sms
 				contacts = sms_obj.contacts
 				puts "#{textword} - total contacts = #{contacts.count}"
-
+				return_contacts = []
 				if contacts.kind_of?(Array) && contacts.first.kind_of?(Hash)
-					SmsContact.bulk_create(contacts)
+					return_contacts = SmsContact.bulk_create(contacts)
 				end
 				sms_contacts  = SmsContact.where(gift_id: nil, textword: textword.to_s)
-				puts "#{textword} - sms contacts from db to gift = #{sms_contacts.count}"
+
+				puts "#{textword} - sms contacts from db to gift = #{sms_contacts.count} | vs | return contacts = #{return_contacts.count}"
 				sms_contacts.each do |sms_contact|
 					puts "#{textword} - creating a gift for #{sms_contact.inspect}"
 					gift = self.create_gift(campaign_item, sms_contact)
