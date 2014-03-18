@@ -22,23 +22,15 @@ class CampaignItem < Admtmodel
     end
 
     def owner
-    	self.campaign
+    	campaign
     end
 
     def success?
-        if self.id
-            true
-        else
-            false
-        end
+        self.id.present?
     end
 
     def resp_code
-        if self.id
-            1
-        else
-            3
-        end
+        self.id ? 1 : 3
     end
 
     def reason_text
@@ -50,16 +42,12 @@ class CampaignItem < Admtmodel
     end
 
     def reason_code
-        if self.id
-            1
-        else
-            2
-        end
+        self.id ? 1 : 2
     end
 
 private
 
     def today
-        Time.now.to_date
+        Time.now.utc.to_date
     end
 end
