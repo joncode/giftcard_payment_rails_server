@@ -50,13 +50,19 @@ private
 
     def is_giftable
         campaign_item = CampaignItem.includes(:campaign).where(id: payable_id).first
-        campaign_is_live(campaign_item.campaign)
-        campaign_item_has_reserve(campaign_item)
+        unless campaign_item.is_giftable?
+            campaign_is_live(campaign_item.campaign)
+            campaign_item_has_reserve(campaign_item)
+        end
     end
 
     def campaign_is_live campaign
         unless campaign.is_live?
+<<<<<<< HEAD
+            errors.add(:payable_id, "Campaign is not live. No gifts can be created.")
+=======
             errors.add(:campaign, "is not live. No gifts can be created.")
+>>>>>>> jg
         end
     end
 
