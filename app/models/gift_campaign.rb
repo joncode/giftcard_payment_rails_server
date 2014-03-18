@@ -1,7 +1,7 @@
 class GiftCampaign < Gift
 
     validate   :is_giftable
-    
+
     after_save :update_campaign_expire_date
     after_save :decrement_campaign_item_reserve
 
@@ -48,29 +48,7 @@ private
         end
     end
 
-    def is_giftable
-        campaign_item = CampaignItem.includes(:campaign).where(id: payable_id).first
-        unless campaign_item.is_giftable?
-            campaign_is_live(campaign_item.campaign)
-            campaign_item_has_reserve(campaign_item)
-        end
-    end
-
-    def campaign_is_live campaign
-        unless campaign.is_live?
-<<<<<<< HEAD
-            errors.add(:payable_id, "Campaign is not live. No gifts can be created.")
-=======
-            errors.add(:campaign, "is not live. No gifts can be created.")
->>>>>>> jg
-        end
-    end
-
-    def campaign_item_has_reserve campaign_item
-        unless campaign_item.has_reserve?
-            errors.add(:campaign_item, "reserve is empty. No more gifts can be created under this campaign item.")
-        end
-    end
+#################  AFTER SAVE CALLBACKS
 
     def decrement_campaign_item_reserve
         payable.reserve -= 1
@@ -78,9 +56,19 @@ private
     end
 
     def update_campaign_expire_date
-        campaign = giver
-        if expires_at.to_date > campaign.expire_date
-            campaign.update(expire_date: expires_at.to_date)
+        if expires_at.to_date > giver.expire_date
+            giver.update(expire_date: expires_at.to_date)
+        end
+    end
+
+#################  VALIDATIONS
+
+    def is_giftable
+        unless giver.is_live?
+            errors.add(:campaign, "is not live. No gifts can be created.")
+        end
+        unless payable.has_reserve?
+            errors.add(:campaign_item, "reserve is empty. No more gifts can be created under this campaign item.")
         end
     end
 end

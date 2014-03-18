@@ -2,26 +2,45 @@ require 'spec_helper'
 
 describe Campaign do
 
-    context "gift_campaign messages" do
+    describe "status booleans" do
 
-        context :is_live? do
+        it "should be live when today in between start and close" do
+            campaign = FactoryGirl.build(:campaign)
+            campaign.is_new?.should be_false
+            campaign.is_live?.should be_true
+            campaign.is_closed?.should be_false
+            campaign.is_expired?.should be_false
+            campaign.status.should == "live"
+        end
 
-            it "should be true when today in between start and close" do
-                campaign = FactoryGirl.build(:campaign)
-                campaign.is_live?.should be_true
-            end
+        it "should be new when today is before start" do
+            start_date = Time.now.utc + 1.day
+            campaign = FactoryGirl.build(:campaign, live_date:  start_date)
+            campaign.is_new?.should be_true
+            campaign.is_live?.should be_false
+            campaign.is_closed?.should be_false
+            campaign.is_expired?.should be_false
+            campaign.status.should == "new"
+        end
 
-            it "should have false when today is before start" do
-                start_date = Time.now + 1.day
-                campaign = FactoryGirl.build(:campaign, live_date:  start_date)
-                campaign.is_live?.should be_false
-            end
+        it "should be closed when today is after close" do
+            end_date = Time.now.utc - 2.days
+            campaign = FactoryGirl.build(:campaign, close_date: end_date)
+            campaign.is_new?.should be_false
+            campaign.is_live?.should be_false
+            campaign.is_closed?.should be_true
+            campaign.is_expired?.should be_false
+            campaign.status.should == "closed"
+        end
 
-            it "should have false when today is after close" do
-                end_date = Time.now - 1.day
-                campaign = FactoryGirl.build(:campaign, close_date: end_date)
-                campaign.is_live?.should be_false
-            end
+        it "should be expired when today is after expiration" do
+            end_date = Time.now.utc - 1.day
+            campaign = FactoryGirl.build(:campaign, expire_date: end_date, close_date: end_date)
+            campaign.is_new?.should be_false
+            campaign.is_live?.should be_false
+            campaign.is_closed?.should be_true
+            campaign.is_expired?.should be_true
+            campaign.status.should == "expired"
         end
     end
 

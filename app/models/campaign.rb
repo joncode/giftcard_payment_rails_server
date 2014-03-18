@@ -1,28 +1,40 @@
 class Campaign < Admtmodel
     self.table_name = "campaigns"
 
-    #has_many :gifts, :as => :payable
     has_many :campaign_items
 
-    def is_live?
-        self.live_date < today && self.close_date > today
-    end
-
     def status
-        if self.is_new?
-            "new"
-        elsif self.is_live?
-            "live"
-        elsif self.is_closed?
-            "closed"
-        elsif self.is_expired?
+        if is_expired?
             "expired"
+        elsif is_closed?
+            "closed"
+        elsif is_new?
+            "new"
+        elsif is_live?
+            "live"
         end
     end
 
-    #       ####### Gift Giver Ducktype
+    def is_new?
+        live_date.present? && live_date > today
+    end
+
+    def is_live?
+        live_date.present?  && live_date  <= today && close_date.present? && close_date >  today
+    end
+
+    def is_closed?
+        close_date.present?  && close_date  <= today
+    end
+
+    def is_expired?
+        expire_date.present? && expire_date <= today
+    end
+
+####### Gift Giver Ducktype
+
+
     def name
-        # giver_name attribute in campaign db
         self.giver_name
     end
 
@@ -34,86 +46,43 @@ class Campaign < Admtmodel
         end
     end
 
-    def success?
-        if self.id
-            true
-        else
-            false
-        end
-    end
+    # def success?
+    #     if self.id
+    #         true
+    #     else
+    #         false
+    #     end
+    # end
 
-    def resp_code
-        if self.id
-            1
-        else
-            3
-        end
-    end
+    # def resp_code
+    #     if self.id
+    #         1
+    #     else
+    #         3
+    #     end
+    # end
 
-    def reason_text
-        if self.id
-            "Transaction approved."
-        else
-            self.errors.full_messages
-        end
-    end
+    # def reason_text
+    #     if self.id
+    #         "Transaction approved."
+    #     else
+    #         self.errors.full_messages
+    #     end
+    # end
 
-    def reason_code
-        if self.id
-            1
-        else
-            2
-        end
-    end
+    # def reason_code
+    #     if self.id
+    #         1
+    #     else
+    #         2
+    #     end
+    # end
 
-<<<<<<< HEAD
-
-    def is_new?
-        today = Time.now.to_date
-        if self.live_date.present? && self.live_date > today &&
-           self.close_date.present? && self.close_date > today
-            true
-        else
-            false
-        end 
-    end
-
-    def is_live?
-        today = Time.now.to_date
-        if self.live_date.present?  && self.live_date  <= today &&
-           self.close_date.present? && self.close_date >  today
-            true
-        else
-            false
-        end 
-    end
-
-    def is_closed?
-        today = Time.now.to_date
-        if self.close_date.present?  && self.close_date  <= today &&
-           self.expire_date.present? && self.expire_date >  today
-            true
-        else
-            false
-        end 
-    end
-
-    def is_expired?
-        today = Time.now.to_date
-        if self.expire_date.present? && self.expire_date <= today
-            true
-        else
-            false
-        end
-    end
-
-=======
 private
 
     def today
-        Time.now.to_date
+        Time.now.utc.to_date
     end
->>>>>>> jg
 end
 
 

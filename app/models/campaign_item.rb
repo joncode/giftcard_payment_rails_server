@@ -5,14 +5,6 @@ class CampaignItem < Admtmodel
     belongs_to :campaign
     belongs_to :provider
 
-<<<<<<< HEAD
-    def is_giftable?
-        if self.campaign.is_live? && self.reserve > 0
-            true
-        else
-            false
-        end
-=======
     def has_reserve?
         self.reserve > 0
     end
@@ -27,7 +19,6 @@ class CampaignItem < Admtmodel
         return (str + "reserve is empty")    if !has_reserve?
         return (str + "has not started yet") if (today < campaign.live_date)
         return (str + "is finished")         if (today > campaign.close_date)
->>>>>>> jg
     end
 
     def owner
