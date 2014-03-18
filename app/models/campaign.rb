@@ -22,8 +22,7 @@ class Campaign < Admtmodel
     # # hidden giver ducktype methods
     #     # campaign_giver.id    as giver_id   - campaign_id in ADMT
     #     # campaign_giver.class as giver_type - Campaign class
-
-
+    
     def success?
         if self.id
             true
