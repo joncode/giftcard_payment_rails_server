@@ -4,8 +4,7 @@ class PnToken < ActiveRecord::Base
 
     validates :pn_token, uniqueness: true, length: { minimum: 23 }
     validates_presence_of :user_id
-
-
+    
     after_save :register
 
     def pn_token=(token)
@@ -34,6 +33,11 @@ private
     end
 
 end
+
+# Mar 17 01:39:37 dbappdev app/web.1:  MDOT/V2/SESSIONS -CREATE- request: {"email"=>"joe.meeks@sos.me", "password"=>"joem420", "pn_token"=>"APA91bEYOma7M6bqiBz8TGdjke420-fpYHx29NZKSVX-S2_kI1gpYbTP1sSCgSBZR8o42YZh5KrkQgEXUCI4d6DgXAs1m1tY36D-VPZvzLOx9rePwaDmGRfYmKaL3IQc1T6FEp0JEphK"}
+# Mar 17 01:39:41 dbappdev app/worker.1:  registering PN Token for Joe Meeks
+# Mar 17 01:39:42 dbappdev app/worker.1:  Urbanairship (81ms): [Put /api/device_tokens/APA91bEYOma7M6bqiBz8TGdjke420-fpYHx29NZKSVX-S2_kI1gpYbTP1sSCgSBZR8o42YZh5KrkQgEXUCI4d6DgXAs1m1tY36D-VPZvzLOx9rePwaDmGRfYmKaL3IQc1T6FEp0JEphK, {"alias":"user-649452"}], [400, {"error_code":40001,"details":{"device_token":["device_token contains an invalid device token: APA91bEYOma7M6bqiBz8TGdjke420-fpYHx29NZKSVX-S2_kI1gpYbTP1sSCgSBZR8o42YZh5KrkQgEXUCI4d6DgXAs1m1tY36D-VPZvzLOx9rePwaDmGRfYmKaL3IQc1T6FEp0JEphK"]},"error":"Data validation error"}]
+# Mar 17 01:39:42 dbappdev app/worker.1:  UA response --- >  {"error_code"=>40001, "details"=>{"device_token"=>["device_token contains an invalid device token: APA91bEYOma7M6bqiBz8TGdjke420-fpYHx29NZKSVX-S2_kI1gpYbTP1sSCgSBZR8o42YZh5KrkQgEXUCI4d6DgXAs1m1tY36D-VPZvzLOx9rePwaDmGRfYmKaL3IQc1T6FEp0JEphK"]}, "error"=>"Data validation error"}
 # == Schema Information
 #
 # Table name: pn_tokens

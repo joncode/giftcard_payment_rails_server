@@ -9,7 +9,7 @@ class Mdot::V2::FacebookController < JsonController
 
         if sproxy.status == 200
             if sproxy.data.count > 0
-                AppContact.upload(proxy_contacts: sproxy.data, user: @current_user)
+                BulkContact.upload(data: sproxy.data, user_id: @current_user.id)
             end
             success sproxy.data
             respond(status)

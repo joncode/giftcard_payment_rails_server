@@ -307,9 +307,13 @@ FactoryGirl.define do
     end
 
     factory :app_contact do
+        network        "email"
+        sequence(:network_id)    { |n| "frienders#{n}@hotmail.com" }
+    end
+
+    factory :bulk_contact do
         user_id     100
-        network     "email"
-        network_id  "test@gmail.com"
+        data        "{\"672342\":{\"first_name\":\"tommy\",\"last_name\":\"hilfigure\",\"email\":[\"email1@gmail.com\",\"email2@yahoo.com\"],\"phone\":[\"3102974545\",\"6467586473\"],\"twitter\":[\"2i134o1234123\"],\"facebook\":[\"23g2381d103dy1\"]},\"22\":{\"first_name\":\"Jenifer\",\"last_name\":\"Bowie\",\"email\":[\"jenny@facebook.com\"],\"phone\":[\"7824657878\"]}}"
     end
 
 end

@@ -40,6 +40,7 @@ describe FriendPushJob do
             Urbanairship.should_receive(:push).exactly(1).times
             FriendPushJob.perform(@current.id, 2)
         end
+        
     end
 
 end

@@ -43,7 +43,7 @@ describe Relationship do
         @bryan.followed_users.pop.should == @ted
     end
 
-    it "should autosave follower with user :save" do
+    it "should autosave follower with :save" do
         user       = FactoryGirl.create(:user)
         other_user = FactoryGirl.create(:user, first_name: "follower")
         user.followers.count.should == 0
@@ -55,7 +55,7 @@ describe Relationship do
         other_user.followers.count.should == 0
     end
 
-    it "should autosave follower with user :save" do
+    it "should autosave followed users with :save" do
         user       = FactoryGirl.create(:user)
         other_user = FactoryGirl.create(:user, first_name: "follower")
         user.followed_users.count.should == 0
@@ -72,8 +72,9 @@ describe Relationship do
         r.class.should == Relationship
         @ted.followed_users.pop.should  == @bryan
         @bryan.followers.pop.should     == @ted
-        Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
+        r2 = Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
         Relationship.all.count.should == 1
+        r2.should be_true
     end
 
     it "should update relationships.pushed to true" do

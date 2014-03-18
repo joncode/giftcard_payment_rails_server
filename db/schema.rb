@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140313213823) do
+ActiveRecord::Schema.define(version: 20140317173506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,6 @@ ActiveRecord::Schema.define(version: 20140313213823) do
   end
 
   create_table "app_contacts", force: true do |t|
-    t.integer  "user_id"
     t.string   "network"
     t.string   "network_id"
     t.string   "name"
@@ -65,6 +64,13 @@ ActiveRecord::Schema.define(version: 20140313213823) do
   add_index "brands_providers", ["brand_id"], name: "index_brands_providers_on_brand_id", using: :btree
   add_index "brands_providers", ["provider_id"], name: "index_brands_providers_on_provider_id", using: :btree
 
+  create_table "bulk_contacts", force: true do |t|
+    t.integer  "user_id"
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "cards", force: true do |t|
     t.integer  "user_id"
     t.string   "nickname"
@@ -97,6 +103,17 @@ ActiveRecord::Schema.define(version: 20140313213823) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "friendships", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "app_contact_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "friendships", ["app_contact_id"], name: "index_friendships_on_app_contact_id", using: :btree
+  add_index "friendships", ["user_id", "app_contact_id"], name: "index_friendships_on_user_id_and_app_contact_id", unique: true, using: :btree
+  add_index "friendships", ["user_id"], name: "index_friendships_on_user_id", using: :btree
 
   create_table "gift_items", force: true do |t|
     t.integer "gift_id"

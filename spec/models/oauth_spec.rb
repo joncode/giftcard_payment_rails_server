@@ -85,7 +85,7 @@ describe Oauth do
 
         it "should overwrite an existing oauth record for that network on :create" do
             user  = FactoryGirl.create(:user)
-            oauth = FactoryGirl.build(:oauth, user: user)
+            oauth = FactoryGirl.build(:oauth, user: user, gift_id: nil)
             oauth.save
             new_tw_oauth = { "token"=>"new_token", "secret"=>"new_secret", "network"=>"twitter", "network_id"=>oauth.network_id, "handle"=>"razorback", "user_id" => user.id}
             Oauth.create(new_tw_oauth)
@@ -95,7 +95,7 @@ describe Oauth do
 
         it "should overwrite an existing oauth record for that network on :create" do
             user  = FactoryGirl.create(:user)
-            oauth = FactoryGirl.build(:oauth_fb, user: user)
+            oauth = FactoryGirl.build(:oauth_fb, user: user, gift_id: nil)
             oauth.save
             new_tw_oauth = { "token"=>"new_token", "network"=>"facebook", "network_id"=>oauth.network_id, "user_id" => user.id}
             new_oauth    = Oauth.create(new_tw_oauth)
@@ -119,6 +119,41 @@ describe Oauth do
             new_oauth    = Oauth.create(new_tw_oauth)
             new_oauth.token.should  == "new_token"
 
+        end
+    end
+
+    context "notification hooks" do
+
+        before(:each) do
+            @oauth_hsh_fb = {}
+            @fb_resp    =  [{ "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"},{ "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"}].to_json
+            @route      = "http://qam.itson.me/api/twitter/mention"
+            @post_hsh   =   {"token"=>"9q3562341341", "secret"=>"92384619834", "network_id"=>"9865465748", "handle"=>"razorback", "merchant"=>"ichizos1", "title"=>"Original Margarita ", "url"=>"http://0.0.0.0:3001/acceptgift/649388"}
+            #@request    = {"token"=> @oauth_hsh_fb["token"], "network_id"=> @oauth_hsh_fb["network_id"]}.merge!(@post_hsh)
+        end
+
+        it "should hit social proxy API with post hash after_save" do
+            ResqueSpec.reset!
+            MailerJob.stub(:perform).and_return(true)
+            SubscriptionJob.stub(:perform).and_return(true)
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json")
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json")
+            stub_request(:post, @route).with(:body => @post_hsh.to_json , :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@fb_resp}", :headers => {})
+            require_hsh  = @oauth_hsh_fb
+            gift  = FactoryGirl.create(:gift)
+            oauth = FactoryGirl.build(:oauth, gift: gift)
+            oauth.save
+            SocialProxy.any_instance.should_receive(:create_post)
+            run_delayed_jobs
+        end
+
+        it "should hit social proxy API with post hash afer_save" do
+            stub_request(:post, @route).with(:body => @post_hsh.to_json , :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@fb_resp}", :headers => {})
+            require_hsh  = @oauth_hsh_fb
+            user  = FactoryGirl.create(:user)
+            oauth = FactoryGirl.build(:oauth, user: user, gift_id: nil)
+            oauth.save
+            SocialProxy.any_instance.should_not_receive(:create_post)
         end
     end
 

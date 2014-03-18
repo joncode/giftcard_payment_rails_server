@@ -6,6 +6,8 @@ class Oauth < ActiveRecord::Base
     validates :secret, presence: true, :if => :twitter?
     validates :handle, presence: true, :if => :twitter?
 
+    after_save :notify_socials
+
     def self.initFromDictionary hsh
         oauth = Oauth.new
         oauth.token      = hsh["token"]
@@ -28,7 +30,7 @@ class Oauth < ActiveRecord::Base
     end
 
     def self.create args={}
-        oauth = self.where(user_id: args["user_id"], network: args["network"], network_id: args["network_id"]).first
+        oauth = self.where(gift_id: nil, user_id: args["user_id"], network: args["network"], network_id: args["network_id"]).first
         if oauth.nil?
             super
         else
@@ -41,6 +43,12 @@ private
 
     def twitter?
         self.network == "twitter"
+    end
+
+    def notify_socials
+        if self.gift_id.present?
+            Resque.enqueue(CreateGiftNotifySocial, self.gift_id)
+        end
     end
 end
 # == Schema Information

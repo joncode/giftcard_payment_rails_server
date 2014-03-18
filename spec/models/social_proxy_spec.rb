@@ -70,7 +70,7 @@ describe SocialProxy do
                 fb_keys = ["network_id", "network", "name", "photo", "birthday"]
                 compare_keys(hsh, fb_keys)
             end
-            
+
         end
 
         context "twitter" do
@@ -127,24 +127,29 @@ describe SocialProxy do
     context "create_post" do
 
         context "facebook" do
-            let(:fb_resp) { [{ "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"},{ "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"}].to_json }
-            let(:route) { "http://qam.itson.me/api/facebook/story" }
+
+            before(:each) do
+                @fb_resp    =  [{ "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"},{ "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"}].to_json
+                @route      = "http://qam.itson.me/api/facebook/story"
+                @post_hsh   =  {"merchant"=>"merchantmerchant", "title"=>"titletitle", "url"=>"urlurl", "image"=>"imageimage", "share"=>"shareshare"}
+                @request    = {"token"=> @oauth_hsh_fb["token"], "network_id"=> @oauth_hsh_fb["network_id"]}.merge!(@post_hsh)
+            end
 
             it "should reply 401 - cannot reach server when auth fails" do
-                stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_fb["token"]}\",\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 401, :body => "", :headers => {})
+                stub_request(:post, @route).with(:body => @request.to_json, :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 401, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_fb
                 social_proxy = SocialProxy.new(require_hsh)
-                social_proxy.create_post
+                social_proxy.create_post(@post_hsh)
                 social_proxy.status.should == 401
                 social_proxy.data.should   == nil
                 social_proxy.msg.should    == "Unauthorized"
             end
 
             it "should respond 407 when oauth keys are expired" do
-                stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_fb["token"]}\",\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
+                stub_request(:post, @route).with(:body => @request.to_json, :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_fb
                 social_proxy = SocialProxy.new(require_hsh)
-                social_proxy.create_post
+                social_proxy.create_post(@post_hsh)
                 social_proxy.status.should == 407
                 social_proxy.data.should   == -1001
                 social_proxy.msg.should    == "Proxy Authentication Required"
@@ -152,21 +157,21 @@ describe SocialProxy do
             end
 
             it "should set status to 200 when successful" do
-                stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_fb["token"]}\",\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{fb_resp}", :headers => {})
+                stub_request(:post, @route).with(:body => @request.to_json, :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@fb_resp}", :headers => {})
                 require_hsh  = @oauth_hsh_fb
                 social_proxy = SocialProxy.new(require_hsh)
-                social_proxy.create_post
+                social_proxy.create_post(@post_hsh)
                 social_proxy.status.should == 200
-                social_proxy.data.should   == fb_resp
+                social_proxy.data.should   == @fb_resp
                 social_proxy.msg.should    == nil
 
             end
 
             it "should get array of facebook friends from HTTP" do
-                stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_fb["token"]}\",\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{fb_resp}", :headers => {})
+                stub_request(:post, @route).with(:body => @request.to_json, :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@fb_resp}", :headers => {})
                 require_hsh  = @oauth_hsh_fb
                 social_proxy = SocialProxy.new(require_hsh)
-                social_proxy.create_post
+                social_proxy.create_post(@post_hsh)
                 data = JSON.parse social_proxy.data
                 data.class.should   == Array
                 hsh = data.first
@@ -174,27 +179,40 @@ describe SocialProxy do
                 fb_keys = ["network_id",  "name", "photo", "birthday"]
                 compare_keys(hsh, fb_keys)
             end
+
+            it "should send required params for create_gift post" do
+                stub_request(:post, @route).with(:body => @request.to_json , :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@fb_resp}", :headers => {})
+                require_hsh  = @oauth_hsh_fb
+
+                social_proxy = SocialProxy.new(require_hsh)
+                social_proxy.create_post(@post_hsh)
+            end
         end
 
         context "twitter" do
-            let(:tw_resp) { [{"network_id"=> "112745132", "name"=> "stewart christensen", "handle"=> "stewart_ch", "photo"=> "http://pbs.twimg.com/profile_images/1798349717/2_normal.jpg" },{"network_id"=> "112745132", "name"=> "stewart christensen", "handle"=> "stewart_ch", "photo"=> "http://pbs.twimg.com/profile_images/1798349717/2_normal.jpg" }].to_json }
-            let(:route) { "http://qam.itson.me/api/twitter/mention" }
+
+            before(:each) do
+                @tw_resp    =  [{"network_id"=> "112745132", "name"=> "stewart christensen", "handle"=> "stewart_ch", "photo"=> "http://pbs.twimg.com/profile_images/1798349717/2_normal.jpg" },{"network_id"=> "112745132", "name"=> "stewart christensen", "handle"=> "stewart_ch", "photo"=> "http://pbs.twimg.com/profile_images/1798349717/2_normal.jpg" }].to_json
+                @route      =  "http://qam.itson.me/api/twitter/mention"
+                @post_hsh   =  {"merchant"=>"merchantmerchant", "title"=>"titletitle", "url"=>"urlurl"}
+                @request    = {"token"=> @oauth_hsh_tw["token"], "secret" => @oauth_hsh_tw["secret"], "network_id"=> @oauth_hsh_tw["network_id"], "handle" => @oauth_hsh_tw["handle"]}.merge!(@post_hsh)
+            end
 
             it "should reply 401 - cannot reach server when auth fails" do
-                stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\",\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"handle\":\"#{@oauth_hsh_tw["handle"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 401, :body => "", :headers => {})
+                stub_request(:post, @route).with(:body => @request.to_json, :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 401, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
-                social_proxy.create_post
+                social_proxy.create_post(@post_hsh)
                 social_proxy.status.should == 401
                 social_proxy.data.should   == nil
                 social_proxy.msg.should    == "Unauthorized"
             end
 
             it "should respond 407 when oauth keys are expired" do
-                stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\",\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"handle\":\"#{@oauth_hsh_tw["handle"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
+                stub_request(:post, @route).with(:body => @request.to_json, :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 407, :body => "", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
-                social_proxy.create_post
+                social_proxy.create_post(@post_hsh)
                 social_proxy.status.should == 407
                 social_proxy.data.should   == -1001
                 social_proxy.msg.should    == "Proxy Authentication Required"
@@ -202,21 +220,21 @@ describe SocialProxy do
             end
 
             it "should set status to 200 when successful" do
-                stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\",\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"handle\":\"#{@oauth_hsh_tw["handle"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
+                stub_request(:post, @route).with(:body => @request.to_json, :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@tw_resp}", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
-                social_proxy.create_post
+                social_proxy.create_post(@post_hsh)
                 social_proxy.status.should == 200
-                social_proxy.data.should   == tw_resp
+                social_proxy.data.should   == @tw_resp
                 social_proxy.msg.should    == nil
 
             end
 
             it "should get array of facebook friends from HTTP" do
-                stub_request(:post, route).with(:body => "{\"token\":\"#{@oauth_hsh_tw["token"]}\",\"secret\":\"#{@oauth_hsh_tw["secret"]}\",\"network_id\":\"#{@oauth_hsh_tw["network_id"]}\",\"handle\":\"#{@oauth_hsh_tw["handle"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{tw_resp}", :headers => {})
+                stub_request(:post, @route).with(:body => @request.to_json, :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@tw_resp}", :headers => {})
                 require_hsh  = @oauth_hsh_tw
                 social_proxy = SocialProxy.new(require_hsh)
-                social_proxy.create_post
+                social_proxy.create_post(@post_hsh)
                 data = JSON.parse social_proxy.data
                 data.class.should   == Array
                 hsh = data.first
@@ -278,6 +296,7 @@ describe SocialProxy do
         end
 
         context "twitter" do
+
             let(:tw_resp) { {"network_id"=> "112745132", "name"=> "stewart christensen", "handle"=> "stewart_ch", "photo"=> "http://pbs.twimg.com/profile_images/1798349717/2_normal.jpg" }.to_json }
             let(:route) { "http://qam.itson.me/api/twitter/account" }
 
@@ -326,3 +345,14 @@ describe SocialProxy do
         end
     end
 end
+
+# Facebook create post request params
+# {
+# "token": "[useraccesstoken]", //giver's oauth token
+# "network_id": "[gift recipient's facebook id for friend in mention tagging]",
+# "merchant": "[merchant name]",
+# "title": "Pomegranate Mojito",
+# "url": "[http://www.itson.me/signup/acceptgift/[abstractor + gift_id]",
+# "image": "[gift image url]," // optional and will be populated with the IOM Facebook logo url if not included in the request
+# "share" [true|false] // whether or not to explicitly share on timeline
+# }

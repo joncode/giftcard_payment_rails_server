@@ -11,7 +11,7 @@ class Relationship < ActiveRecord::Base
 		if existing.nil?
 			super
 		else
-			return existing
+			true
 		end
 	end
 

@@ -14,8 +14,9 @@ module CommonUtils
 		if request.headers['Mdot-Version']
 			puts "HERE IS THE Mdot-Version HEADER REQUEST #{request.headers['Mdot-Version']}"
 		end
-		if request.headers['Andriod-Version']
-			puts "HERE IS THE Andriod-Version HEADER REQUEST #{request.headers['Andriod-Version']}"
+
+		if request.headers['Android-Version']
+			puts "HERE IS THE Android-Version HEADER REQUEST #{request.headers['Android-Version']}"
 		end
 		# puts "...................................................................................."
 		# puts request.headers.inspect
