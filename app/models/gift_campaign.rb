@@ -1,6 +1,7 @@
 class GiftCampaign < Gift
 
-    validate :is_giftable
+    validate   :is_giftable
+    
     after_save :update_campaign_expire_date
     after_save :decrement_campaign_item_reserve
 
@@ -34,14 +35,10 @@ private
         args["value"]         = campaign_item.value
         args["giver_type"]    = "Campaign"
         args["giver_id"]      = campaign.id
-        args["giver_name"]    = campaign.giver_name
+        args["giver_name"]    = campaign.name
         args["message"]       = campaign_item.message
         args["expires_at"]    = expires_at_calc(campaign_item.expires_at, campaign_item.expires_in)
     end
-
-    # def post_init args={}
-    #     messenger
-    # end
 
     def expires_at_calc expires_at, expires_in
         if expires_at.present?
@@ -49,14 +46,6 @@ private
         elsif expires_in.present?
             Time.now + expires_in.days
         end
-    end
-
-    def update_campaign_expire_date
-        campaign = self.giver
-        if self.expires_at.to_date > campaign.expire_date
-            campaign.expire_date = self.expires_at.to_date
-        end
-        campaign.save
     end
 
     def is_giftable
@@ -69,22 +58,35 @@ private
 
     def campaign_is_live campaign
         unless campaign.is_live?
+<<<<<<< HEAD
             errors.add(:payable_id, "Campaign is not live. No gifts can be created.")
+=======
+            errors.add(:campaign, "is not live. No gifts can be created.")
+>>>>>>> jg
         end
     end
 
     def campaign_item_has_reserve campaign_item
-        unless campaign_item.reserve > 0
-            errors.add(:payable_id, "Campaign Item reserve is empty. No more gifts can be created under this campaign item.")
+        unless campaign_item.has_reserve?
+            errors.add(:campaign_item, "reserve is empty. No more gifts can be created under this campaign item.")
         end
     end
 
     def decrement_campaign_item_reserve
-        self.payable.reserve -= 1
-        self.payable.save
+        payable.reserve -= 1
+        payable.save
     end
 
-end# == Schema Information
+    def update_campaign_expire_date
+        campaign = giver
+        if expires_at.to_date > campaign.expire_date
+            campaign.update(expire_date: expires_at.to_date)
+        end
+    end
+end
+
+
+# == Schema Information
 #
 # Table name: gifts
 #

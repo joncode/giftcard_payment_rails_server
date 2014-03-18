@@ -5,32 +5,41 @@ class CampaignItem < Admtmodel
     belongs_to :campaign
     belongs_to :provider
 
+<<<<<<< HEAD
     def is_giftable?
         if self.campaign.is_live? && self.reserve > 0
             true
         else
             false
         end
+=======
+    def has_reserve?
+        self.reserve > 0
+    end
+
+    def live?
+        has_reserve? && campaign.is_live?
+    end
+
+    def status_text
+        str = "#{campaign.name} #{self.textword} "
+        return (str + "is live")             if live?
+        return (str + "reserve is empty")    if !has_reserve?
+        return (str + "has not started yet") if (today < campaign.live_date)
+        return (str + "is finished")         if (today > campaign.close_date)
+>>>>>>> jg
     end
 
     def owner
-    	self.campaign
+    	campaign
     end
 
     def success?
-        if self.id
-            true
-        else
-            false
-        end
+        self.id.present?
     end
 
     def resp_code
-        if self.id
-            1
-        else
-            3
-        end
+        self.id ? 1 : 3
     end
 
     def reason_text
@@ -42,10 +51,12 @@ class CampaignItem < Admtmodel
     end
 
     def reason_code
-        if self.id
-            1
-        else
-            2
-        end
+        self.id ? 1 : 2
+    end
+
+private
+
+    def today
+        Time.now.utc.to_date
     end
 end

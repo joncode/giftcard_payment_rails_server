@@ -80,25 +80,31 @@ describe GiftCampaign do
             gift_campaign.payable.reserve.should == 99
         end
 
+        it "should not decrement campaign item reserve if gift save fails" do
+            @gift_hsh.delete('receiver_email')
+            gift_campaign = GiftCampaign.create(@gift_hsh)
+            gift_campaign.payable.reserve.should == 100
+        end
+
         it "should not create gift if there is no reserve" do
             @campaign_item.update(reserve: 0)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should            == 1
-            gift.errors.full_messages[0].should == "Payable Campaign Item reserve is empty. No more gifts can be created under this campaign item."
+            gift.errors.full_messages[0].should == "Campaign item reserve is empty. No more gifts can be created under this campaign item."
         end
 
         it "should not create gift if the campaign is not yet live" do
             @campaign.update(live_date: (Time.now + 1.day).to_date)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should == 1
-            gift.errors.full_messages[0].should == "Payable Campaign is not live. No gifts can be created."
+            gift.errors.full_messages[0].should == "Campaign is not live. No gifts can be created."
         end
 
         it "should not create gift if the campaign is closed" do
             @campaign.update(close_date: (Time.now - 1.day).to_date)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should == 1
-            gift.errors.full_messages[0].should == "Payable Campaign is not live. No gifts can be created."
+            gift.errors.full_messages[0].should == "Campaign is not live. No gifts can be created."
         end
     end
 

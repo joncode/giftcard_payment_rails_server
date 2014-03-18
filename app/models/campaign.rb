@@ -1,9 +1,12 @@
 class Campaign < Admtmodel
     self.table_name = "campaigns"
-    # has_many :sent,  as: :giver,  class_name: Gift
-    # has_many :debts, as: :owner
-    has_many :gifts, :as => :payable
-    has_many :campaigns_items
+
+    #has_many :gifts, :as => :payable
+    has_many :campaign_items
+
+    def is_live?
+        self.live_date < today && self.close_date > today
+    end
 
     def status
         if self.is_new?
@@ -30,11 +33,6 @@ class Campaign < Admtmodel
             "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
         end
     end
-
-    # # hidden giver ducktype methods
-    #     # campaign_giver.id    as giver_id   - campaign_id in ADMT
-    #     # campaign_giver.class as giver_type - Campaign class
-
 
     def success?
         if self.id
@@ -68,6 +66,7 @@ class Campaign < Admtmodel
         end
     end
 
+<<<<<<< HEAD
 
     def is_new?
         today = Time.now.to_date
@@ -108,14 +107,13 @@ class Campaign < Admtmodel
         end
     end
 
+=======
+private
+
+    def today
+        Time.now.to_date
+    end
+>>>>>>> jg
 end
-# == Schema Information
-#
-# Table name: campaigns
-#
-#  id          :integer         not null, primary key
-#  campaign_id :integer
-#  created_at  :datetime        not null
-#  updated_at  :datetime        not null
-#
+
 
