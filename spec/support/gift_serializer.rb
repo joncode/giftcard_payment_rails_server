@@ -14,7 +14,7 @@ shared_examples_for "gift serializer" do
     end
 
     it "should giver_serialize" do
-        keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "cost", "updated_at", "shoppingCart", "gift_id", "status", "receiver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "time_ago", "expires_at", "cat" ]
+        keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "cost", "updated_at", "shoppingCart", "gift_id", "status", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "time_ago", "expires_at", "cat" ]
         keys << "receiver_photo" if gift.receiver
         hsh  = gift.giver_serialize
         compare_keys hsh, keys

@@ -3,6 +3,10 @@ require 'spec_helper'
 
 describe Gift do
 
+    it_should_behave_like "payable ducktype" do
+        let(:object) { FactoryGirl.build(:gift) }
+    end
+
 	it "builds from factory" do
 		gift = FactoryGirl.build :gift
 		gift.save

@@ -1,6 +1,6 @@
 class GiftPromo < Gift
 
-    def self.create args={}
+    def initialize args={}
         args["cat"] = 200
         super
     end

@@ -289,10 +289,10 @@ class User < ActiveRecord::Base
 	end
 
 	def set_confirm_email
-		setting 							= get_or_create_settings
-		setting.confirm_email_token 		= create_token
-		setting.confirm_email_token_sent_at = Time.now
-		setting.save
+		settingss 							= get_or_create_settings
+		settingss.confirm_email_token 		= create_token
+		settingss.confirm_email_token_sent_at = Time.now
+		settingss.save
 	end
 
 	def init_confirm_email

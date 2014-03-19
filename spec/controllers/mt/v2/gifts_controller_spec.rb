@@ -59,6 +59,7 @@ describe Mt::V2::GiftsController do
             gift.message.should == "Check out Our Promotions!"
             gift.value.should   == "30"
             gift.cost.should    == "0.0"
+            gift.cat.should     == 200
         end
 
         it "should return 200 and a basic serialized gift" do

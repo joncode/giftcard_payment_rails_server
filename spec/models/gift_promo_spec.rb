@@ -34,6 +34,7 @@ describe GiftPromo do
         gift.receiver_email.should == "customer@gmail.com"
         gift.provider_id.should    == @provider.id
         gift.provider_name.should  == @provider.name
+        gift.cat.should            == 200
     end
 
     it "should not run add provider if it has provider ID and name" do
