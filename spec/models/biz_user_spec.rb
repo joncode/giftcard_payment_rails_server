@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe BizUser do
 
+    it_should_behave_like "giver ducktype" do
+        let(:giver) { FactoryGirl.create(:provider).biz_user }
+    end
+
     it "builds from factory" do
         provider = FactoryGirl.create :provider
         biz_user = provider.biz_user
@@ -22,7 +26,7 @@ describe BizUser do
         biz_user = BizUser.find(provider.id)
         biz_user.name.should == "#{provider.name} Staff"
     end
-    
+
     it "should respond to get_photo with provider photo" do
         provider = FactoryGirl.create(:provider)
         biz_user = BizUser.find(provider.id)

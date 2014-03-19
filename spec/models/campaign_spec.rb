@@ -2,6 +2,39 @@ require 'spec_helper'
 
 describe Campaign do
 
+    before(:each) do
+        @provider      = FactoryGirl.create(:provider)
+        @admin         = FactoryGirl.create(:admin_user)
+        @admin_giver   = AdminGiver.find(@admin.id)
+        @expiration    = (Time.now + 1.month).to_date
+        @campaign      = FactoryGirl.create(:campaign, purchaser_type: "AdminGiver",
+                                                       purchaser_id: @admin.id,
+                                                       giver_name: "ItsOnMe Promotional Staff",
+                                                       live_date: (Time.now - 1.week).to_date,
+                                                       close_date: (Time.now + 1.week).to_date,
+                                                       expire_date: (Time.now + 1.week).to_date,
+                                                       budget: 100)
+        @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @provider.id,
+                                                            campaign_id: @campaign.id,
+                                                            message: "Enjoy this special gift on us!",
+                                                            expires_at: @expiration,
+                                                            shoppingCart: "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]",
+                                                            budget: 100,
+                                                            value: "30")
+        @gift_hsh = {}
+        @gift_hsh["receiver_name"]  = "Customer Name"
+        @gift_hsh["receiver_email"] = "customer@gmail.com"
+        @gift_hsh["payable_id"]     = @campaign_item.id
+    end
+
+    it_should_behave_like "gift serializer" do
+        let(:gift) { GiftCampaign.create(@gift_hsh) }
+    end
+
+    it_should_behave_like "giver ducktype" do
+        let(:giver) { FactoryGirl.create(:campaign) }
+    end
+
     describe "status booleans" do
 
         it "should be live when today in between start and close" do
@@ -58,28 +91,6 @@ describe Campaign do
             ci1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id)
             ci2 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id)
             campaign.campaign_items.count.should == 2
-        end
-
-        context "giver ducktype" do
-
-            let(:object)  { campaign }
-
-            it "should have a name" do
-                object.name.class.should == String
-            end
-
-            it "should have a photo_url at :get_photo" do
-                object.get_photo.class.should == String
-            end
-
-            it "should have a unique ID" do
-                object.id.class.should == Fixnum
-            end
-
-            it "should have a class" do
-                object.class.should == Campaign
-            end
-
         end
 
     end

@@ -17,6 +17,10 @@ describe GiftAdmin do
         @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
     end
 
+    it_should_behave_like "gift serializer" do
+        let(:gift) { GiftAdmin.create(@gift_hsh) }
+    end
+
     it "should create gift" do
 
         gift_admin = GiftAdmin.create(@gift_hsh)

@@ -17,6 +17,10 @@ describe GiftRegift do
             @gift_hsh["old_gift_id"]   = @old_gift.id
         end
 
+        it_should_behave_like "gift serializer" do
+            let(:gift) { GiftRegift.create(@gift_hsh) }
+        end
+
         it "should create gift with old_gift provider" do
             gift        = GiftRegift.create @gift_hsh
             gift.reload

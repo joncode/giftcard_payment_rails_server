@@ -8,9 +8,7 @@ module GiftSerializers
         gift_hsh["gift_id"]            = self.id
         gift_hsh["giver"]              = sender.name
         gift_hsh["giver_photo"]        = sender.get_photo
-        if receipient = receiver
-            gift_hsh["receiver_photo"]     = receiver.get_photo
-        end
+        gift_hsh["receiver_photo"]  = receiver.get_photo if receiver
         gift_hsh["receiver"]           = receiver_name
         gift_hsh["message"]            = message
         gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
@@ -47,9 +45,7 @@ module GiftSerializers
         gift_hsh = self.serializable_hash only: [ "cat", "created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "cost", "updated_at", "expires_at"]
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.giver_status
-        if receipient = receiver
-            gift_hsh["receiver_photo"]     = receiver.get_photo
-        end
+        gift_hsh["receiver_photo"]     = receiver.get_photo if receiver
         unless provider = self.provider
             provider = Provider.unscoped.where(id: self.provider_id).first
         end
@@ -70,7 +66,7 @@ module GiftSerializers
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.receiver_status
         gift_hsh["giver_photo"]        = giver.get_photo
-        binding.pry
+
         unless provider = self.provider
             provider = Provider.unscoped.find(self.provider_id)
         end
@@ -89,12 +85,11 @@ module GiftSerializers
     def admt_serialize
         gift_hsh                       = {}
         gift_hsh["gift_id"]            = self.id
-        gift_hsh["provider_id"]        = provider.id
-        #gift_hsh["merchant_id"]        = provider.merchant_id if provider.merchant_id
+        gift_hsh["provider_id"]        = self.provider_id
         unless provider = self.provider
             provider = Provider.unscoped.find(self.provider_id)
         end
-        gift_hsh["name"]               = provider.name
+        gift_hsh["name"]               = provider_name
         gift_hsh["merchant_address"]   = provider.full_address
         gift_hsh["value"]              = self.value
         gift_hsh["cost"]               = self.cost
@@ -110,8 +105,6 @@ module GiftSerializers
         gift_hsh["order_num"]       = self.order_num
         gift_hsh["updated_at"]      = self.updated_at
         gift_hsh["created_at"]      = self.created_at
-            # current summary and payment reports use item coun NOT shopping cart ... delete when in sync
-        #gift_hsh["shoppingCart"]   = self.shoppingCart
         gift_hsh["receiver_name"]   = self.receiver_name
         gift_hsh["items"]           = ary_of_shopping_cart_as_hash.count
 
@@ -135,9 +128,7 @@ module GiftSerializers
         gift_hsh["receiver_name"]   = self.receiver_name
         gift_hsh["receiver_email"]  = self.receiver_email
         gift_hsh["expires_at"]      = self.expires_at
-        if receipient = receiver
-            gift_hsh["receiver_photo"]     = receiver.get_photo
-        end
+        gift_hsh["receiver_photo"]  = receiver.get_photo if receiver
         gift_hsh["items"]           = ary_of_shopping_cart_as_hash.count
         gift_hsh["shoppingCart"]    = self.shoppingCart
         gift_hsh["value"]           = self.value

@@ -11,10 +11,6 @@ class AdminGiver < Admtmodel
     def get_photo
         "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
     end
-    
-    # hidden giver ducktype methods
-        # admin_giver.id    as giver_id   - user_id in ADMT users
-        # admin_giver.class as giver_type - AdminGiver class
 
         ####### Debt Ducktype as Owner
     def incur_debt amount

@@ -7,6 +7,10 @@ describe User do
         UserSocial.delete_all
     end
 
+    it_should_behave_like "giver ducktype" do
+        let(:giver) { FactoryGirl.create(:user) }
+    end
+
     context "model associations and validations" do
 
         it "builds from factory" do
