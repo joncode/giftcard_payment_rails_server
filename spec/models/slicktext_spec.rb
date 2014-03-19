@@ -32,6 +32,23 @@ describe Slicktext do
 
     end
 
+    describe :contacts do
+
+        it "should create hash with textword not word id" do
+            sltxt_obj = Slicktext.new(word_hsh[1], 20)
+            sltxt_obj.limit.should    == 20
+            sltxt_obj.textword.should == "itsonme"
+            sltxt_obj.word_id.should  == "15893"
+            sltxt_obj.resp = {"meta"=>{"limit"=>50, "offset"=>0, "total"=>2}, "links"=>{"self"=>"http://api.slicktext.com/v1/contacts/limit=50&textword=15893"}, "contacts"=>[{"id"=>"508833", "number"=>"+17026728462", "city"=>"LAS VEGAS", "state"=>"NV", "zipCode"=>"89120", "country"=>"US", "textword"=>"15893", "subscribedDate"=>"2014-03-18 14:32:02", "firstName"=>nil, "lastName"=>nil, "birthDate"=>nil}, {"id"=>"509992", "number"=>"+18056740958", "city"=>"PASO ROBLES", "state"=>"CA", "zipCode"=>"93451", "country"=>"US", "textword"=>"15893", "subscribedDate"=>"2014-03-18 20:44:49", "firstName"=>nil, "lastName"=>nil, "birthDate"=>nil}]}
+            data = sltxt_obj.contacts
+            data[0]["service_id"].should      == sltxt_obj.resp["contacts"][0]["id"]
+            data[0]["service"].should         == "slicktext"
+            data[0]["textword"].should        == "itsonme"
+            data[0]["subscribed_date"].should == sltxt_obj.resp["contacts"][0]["subscribedDate"].to_datetime
+            data[0]["phone"].should           == sltxt_obj.resp["contacts"][0]["number"].gsub('+1','')
+        end
+    end
+
     describe :count do
 
         it "should return 0 when no contacts exist" do
