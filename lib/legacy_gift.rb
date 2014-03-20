@@ -71,25 +71,58 @@ module LegacyGift
 
     def self.add_cost
         gs = Gift.unscoped
-        gs.each do |g|
+        gs.map do |g|
             if g.cost.blank?
                 case g.giver_type
                 when  "BizUser"
-                    cost = "0.0"
+                    cost = "0"
                 when "AdminGiver"
                     cart = JSON.parse(g.shoppingCart)
                     cost = (cart.sum {|x| x["price_promo"].to_f * x["quantity"].to_i }).to_s
                 when "User"
+                    unless g.value
+                        g.value = g.total
+                    end
                     cost = (g.value.to_f * 0.85).round(2).to_s
                 when "Campaign"
                     cost = g.payable.cost
+                else
+                    cost = self.set_giver_type(g)
                 end
 
                 g.cost = cost.to_s
-                g.save
+                if g.save
+                    nil
+                else
+                    puts "gift broken = #{g.errors.messages}"
+                    g
+                end
             end
         end
-        nil
+    end
+
+    def self.set_giver_type(g)
+        case g.cat
+        when 0
+            g.giver_type = "User"
+            unless g.value
+                g.value = g.total
+            end
+            (g.value.to_f * 0.85).round(2).to_s
+        when 100
+            g.giver_type = "Gift"
+            (g.value.to_f * 0.85).round(2).to_s
+        when 200
+            g.giver_type = "BizUser"
+            "0"
+        when 210
+            g.giver_type = "AdminGiver"
+            cart = JSON.parse(g.shoppingCart)
+            (cart.sum {|x| x["price_promo"].to_f * x["quantity"].to_i }).to_s
+        when 300
+            g.giver_type = "Campaign"
+            cost = g.payable.cost
+        end
     end
 end
 
