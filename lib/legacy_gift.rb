@@ -72,7 +72,7 @@ module LegacyGift
     def self.add_cost
         gs = Gift.unscoped
         gs.map do |g|
-            if g.cost.blank?
+            if g.cost.blank? || g.cost == "0"
                 case g.giver_type
                 when  "BizUser"
                     cost = "0"
