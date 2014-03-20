@@ -8,7 +8,7 @@ class GiftRegift < Gift
             end
         end
         args["payable"] = Gift.includes(:provider).includes(:receiver).find(args["old_gift_id"])
-        args["cat"] = 100
+
         if args["payable"].promo?
             "You cannot regift a promotional gift"
         else
@@ -29,13 +29,14 @@ private
 
     def pre_init args={}
         args.delete("old_gift_id")
-        @old_gift = args["payable"]
-        args["giver"]    = @old_gift.receiver
-        args["provider"] = @old_gift.provider
-        args["value"]    = @old_gift.value
-        args["cost"]     = @old_gift.cost if @old_gift.cost
-        args["shoppingCart"] = @old_gift.shoppingCart
-        args["pay_stat"] = @old_gift.pay_stat
+        old_gift         = args["payable"]
+        args["cat"]      = 100
+        args["giver"]    = old_gift.receiver
+        args["provider"] = old_gift.provider
+        args["value"]    = old_gift.value
+        args["cost"]     = old_gift.cost if old_gift.cost
+        args["shoppingCart"] = old_gift.shoppingCart
+        args["pay_stat"] = old_gift.pay_stat
         user_to_gift_key_names args
     end
 

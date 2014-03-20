@@ -56,7 +56,7 @@ describe GiftRegift do
             gift        = GiftRegift.create @gift_hsh
             gift.reload
 
-            gift.value.should        == "201.00"
+            gift.value.should        == "201"
             gift.shoppingCart.should == @old_gift.shoppingCart
             gift.service.should      == nil
         end

@@ -13,19 +13,21 @@ class Gift < ActiveRecord::Base
 
 	has_one     :redeem, 		dependent: :destroy
 	has_one     :order, 		dependent: :destroy
-    has_one     :oauth, validate: true, dependent: :destroy
-    has_one     :sms_contact, autosave: true
+    has_one     :oauth,         validate: true,     dependent: :destroy
+    has_one     :sms_contact,   autosave: true
 	has_many    :gift_items, 	dependent: :destroy
     belongs_to  :provider
-    belongs_to  :giver,    polymorphic: :true
-    belongs_to  :receiver, class_name: User
-    belongs_to  :payable,  polymorphic: :true, autosave: :true
-    belongs_to  :refund,   polymorphic: :true
+    belongs_to  :giver,         polymorphic: :true
+    belongs_to  :receiver,      class_name: User
+    belongs_to  :payable,       polymorphic: :true, autosave: :true
+    belongs_to  :refund,        polymorphic: :true
 
     before_validation :prepare_email
     before_validation :build_oauth
+    before_validation :format_value
+    before_validation :format_cost
 
-	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart
+	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :cat
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
     validates_with GiftReceiverInfoValidator
 
@@ -382,6 +384,18 @@ private
 
     def regift?
         self.payable.class == Gift
+    end
+
+    def format_value
+        self.value = string_to_cents(self.value)
+    end
+
+    def format_cost
+        self.cost = if self.cost.present?
+            string_to_cents(self.cost)
+        else
+            "0"
+        end
     end
 end
 # == Schema Information

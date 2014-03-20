@@ -1,7 +1,6 @@
 class GiftPromo < Gift
 
     def initialize args={}
-        args["cat"] = 200
         super
     end
 
@@ -9,6 +8,7 @@ private
 
     def pre_init args={}
         giver           = BizUser.find(args["provider_id"])
+        args["cat"]     = 200
         args["giver"]   = giver
         args["value"]   = calculate_value(args["shoppingCart"])
         args["cost"]    = "0.0"

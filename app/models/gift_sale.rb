@@ -39,10 +39,9 @@ private
 
     def pre_init args={}
         args["unique_id"] = unique_id(args["receiver_name"], args["provider_id"])
-
-        card    = args["card"]
-        args["amount"] = (args["value"].to_f + args["service"].to_f).to_s
-        args["cost"] = (args["value"].to_f * 0.85).to_s
+        card                           = args["card"]
+        args["amount"]                 = (args["value"].to_f + args["service"].to_f).to_s
+        args["cost"]                   = (args["value"].to_f * 0.85).to_s
         credit_card_hsh                = card.create_card_hsh args
         credit_card_hsh["giver_id"]    = card.user.id
         credit_card_hsh["provider_id"] = args["provider_id"]

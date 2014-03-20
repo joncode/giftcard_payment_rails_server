@@ -34,7 +34,8 @@ describe GiftSale do
             gift.receiver_name.should   == @gift_hsh["receiver_name"]
             gift.receiver.should        == @receiver
             gift.giver.should           == @user
-            gift.value.should           == @gift_hsh["value"]
+            gift.value.should           == "45"
+            gift.cost.should            == (@gift_hsh["value"].to_f * 0.85).to_s
             gift.service.should         == @gift_hsh["service"]
             gift.provider.should        == @provider
             gift.shoppingCart.should    == @gift_hsh["shoppingCart"]
@@ -51,7 +52,7 @@ describe GiftSale do
             gift.credit_card.should      == @card.id.to_s
         end
 
-        it "should set the status of the new gift to 'notified'" do
+        it "should set the status of the new gift to 'open'" do
             gift        = GiftSale.create @gift_hsh
             gift.reload
             gift.status.should  == "open"
@@ -114,7 +115,7 @@ describe GiftSale do
             gift.receiver_email.should  == @gift_hsh["receiver_email"]
             gift.receiver_id.should     == nil
             gift.giver.should           == @user
-            gift.value.should           == @gift_hsh["value"]
+            gift.value.should           == "45"
             gift.service.should         == @gift_hsh["service"]
             gift.provider.should        == @provider
         end

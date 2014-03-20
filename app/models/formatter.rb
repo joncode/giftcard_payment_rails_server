@@ -18,7 +18,11 @@ module Formatter
     end
 
     def string_to_cents str
-        number_to_currency(str,  :format => "%n")
+        new_str = number_to_currency(str,  :format => "%n")
+        if new_str && new_str[-3..-1] == ".00"
+            new_str[-3..-1] = ""
+        end
+        new_str
     end
 
     def remove_key_from_hash obj_hash, key_for_removal

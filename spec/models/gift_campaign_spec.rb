@@ -3,6 +3,7 @@ require 'spec_helper'
 describe GiftCampaign do
 
     context "ItsOnMe Campaign" do
+
         before(:each) do
             Provider.delete_all
             @provider      = FactoryGirl.create(:provider)
@@ -20,9 +21,10 @@ describe GiftCampaign do
                                                                 campaign_id: @campaign.id,
                                                                 message: "Enjoy this special gift on us!",
                                                                 expires_at: @expiration,
-                                                                shoppingCart: "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]",
+                                                                shoppingCart: "[{\"price\":\"10\",\"price_promo\":\"1\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]",
                                                                 budget: 100,
-                                                                value: "30")
+                                                                value: "30",
+                                                                cost: "3")
             @gift_hsh = {}
             @gift_hsh["receiver_name"]  = "Customer Name"
             @gift_hsh["receiver_email"] = "customer@gmail.com"
@@ -45,6 +47,8 @@ describe GiftCampaign do
             gift_campaign.giver_id.should       == @campaign.id
             gift_campaign.giver_name.should     == "ItsOnMe Promotional Staff"
             gift_campaign.value.should          == "30"
+            gift_campaign.cat.should            == 300
+            gift_campaign.cost.should           == "3"
         end
 
         it "should associate the CampaignItem as the payable" do
@@ -113,6 +117,7 @@ describe GiftCampaign do
     end
 
     context "Merchant Campaign" do
+
         before(:each) do
             Provider.delete_all
             @location      = FactoryGirl.create(:provider, name: "LocationBar")
@@ -130,8 +135,10 @@ describe GiftCampaign do
                                                                 campaign_id: @campaign.id,
                                                                 message: "Enjoy this special gift on us!",
                                                                 expires_at: @expiration,
-                                                                shoppingCart: "[{\"price\":\"10\",\"price\":\"8\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]",
-                                                                value: "30")
+                                                                shoppingCart: "[{\"price\":\"10\",\"price_promo\":\"8\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]",
+                                                                value: "30",
+                                                                budget: 100,
+                                                                cost:  "0")
             @gift_hsh = {}
             @gift_hsh["receiver_name"]  = "Customer Name"
             @gift_hsh["receiver_email"] = "customer@gmail.com"
@@ -150,6 +157,8 @@ describe GiftCampaign do
             gift_campaign.giver_id.should       == @campaign.id
             gift_campaign.giver_name.should     == "Giver Promotion Staff"
             gift_campaign.value.should          == "30"
+            gift_campaign.cat.should            == 300
+            gift_campaign.cost.should           == "0"
         end
 
         it "should associate the CampaignItem as the payable" do

@@ -12,7 +12,6 @@ module LegacyGift
         nil
     end
 
-
     def set_legacy_gift_status gift
         case gift.status
         when "unpaid"
@@ -79,12 +78,14 @@ module LegacyGift
                     cost = "0.0"
                 when "AdminGiver"
                     cart = JSON.parse(g.shoppingCart)
-                    cost = (cart.sum {|x| x["price_promo"].to_f * x["quantity"].to_i })
+                    cost = (cart.sum {|x| x["price_promo"].to_f * x["quantity"].to_i }).to_s
                 when "User"
-                    cost = (g.value.to_f * 0.85).round(2)
+                    cost = (g.value.to_f * 0.85).round(2).to_s
+                when "Campaign"
+                    cost = g.payable.cost
                 end
 
-                g.cost = number_to_currency(cost.to_s, format: "%n")
+                g.cost = cost.to_s
                 g.save
             end
         end

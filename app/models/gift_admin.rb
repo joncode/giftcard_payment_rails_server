@@ -1,7 +1,6 @@
 class GiftAdmin < Gift
 
     def self.create args={}
-        args["cat"] = 210
         super
     end
 
@@ -9,6 +8,7 @@ private
 
     def pre_init args={}
         shoppingCart = JSON.parse args["shoppingCart"]
+        args["cat"]     = 210
         args["value"]   = calculate_value(shoppingCart)
         args["cost"]    = calculate_cost(shoppingCart)
         giver = args["giver"]

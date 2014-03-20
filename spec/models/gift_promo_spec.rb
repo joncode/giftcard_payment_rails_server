@@ -34,7 +34,6 @@ describe GiftPromo do
         gift.receiver_email.should == "customer@gmail.com"
         gift.provider_id.should    == @provider.id
         gift.provider_name.should  == @provider.name
-        gift.cat.should            == 200
     end
 
     it "should not run add provider if it has provider ID and name" do
@@ -79,7 +78,7 @@ describe GiftPromo do
         gift = GiftPromo.create @gift_hsh
         gift.reload
         gift.value.should           == "30"
-        gift.cost.should            == "0.0"
+        gift.cost.should            == "0"
     end
 
     it "should set the cat to 200" do

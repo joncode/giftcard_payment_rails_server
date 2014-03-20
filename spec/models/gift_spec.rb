@@ -37,6 +37,12 @@ describe Gift do
 		gift.should have_at_least(1).error_on(:value)
 	end
 
+	it "requires cat" do
+		gift = FactoryGirl.build(:gift, :cat => nil)
+		gift.should_not be_valid
+		gift.should have_at_least(1).error_on(:cat)
+	end
+
 	it "requires shoppingCart" do
 		gift = FactoryGirl.build(:gift, :shoppingCart => nil)
 		gift.should_not be_valid
@@ -86,6 +92,31 @@ describe Gift do
         gift = FactoryGirl.build(:gift, receiver_id: 2, receiver_email: "JONMERCHANT")
         gift.should be_valid
         gift.should have_at_most(0).error_on(:receiver_email)
+    end
+
+    it "should format cost to be money string" do
+        gift = FactoryGirl.create(:gift, receiver_email: "jonmerchat@gmail.com", cost: "31.049999999")
+        gift.cost.should == "31.05"
+    end
+
+    it "should format nil cost to be money string" do
+        gift = FactoryGirl.create(:gift, receiver_email: "jonmerchat@gmail.com", cost: nil)
+        gift.cost.should == "0"
+    end
+
+    it "should format value to be money string" do
+        gift = FactoryGirl.create(:gift, receiver_email: "jonmerchat@gmail.com", value: "36.49999999")
+        gift.value.should == "36.50"
+    end
+
+    it "should resave legacy gift with currency formats" do
+        gift = FactoryGirl.create(:gift, receiver_email: "jonmerchat@gmail.com")
+        gift.update_columns(cost: "31.049999999", value: "36.49999999" )
+        gift.cost.should  == "31.049999999"
+        gift.value.should == "36.49999999"
+        gift.save
+        gift.cost.should  == "31.05"
+        gift.value.should == "36.50"
     end
 
 	describe :update do
@@ -202,8 +233,8 @@ describe Gift do
 
 	it "should save the total as string" do
 		gift = FactoryGirl.create(:gift, value: "100.00")
-		gift.value.should == "100.00"
-		gift.total.should == "100.00"
+		gift.value.should == "100"
+		gift.total.should == "100"
 	end
 
 	context	"save with oauth credentials only" do

@@ -322,7 +322,7 @@ describe Mdot::V2::GiftsController do
             json["status"].should == 1
 
             json["data"]["order_number"].should == order.make_order_num
-            json["data"]["total"].should        == @gift.value + ".00"
+            json["data"]["total"].should        == @gift.value
             json["data"]["server"].should       == "test"
         end
 
@@ -334,7 +334,7 @@ describe Mdot::V2::GiftsController do
             json["status"].should == 1
 
             json["data"]["order_number"].should == order.make_order_num
-            json["data"]["total"].should        == @gift.value + ".00"
+            json["data"]["total"].should        == @gift.value
             json["data"]["server"].should       == ""
         end
 
@@ -346,7 +346,7 @@ describe Mdot::V2::GiftsController do
             json["status"].should == 1
 
             json["data"]["order_number"].should == order.make_order_num
-            json["data"]["total"].should        == @gift.value + ".00"
+            json["data"]["total"].should        == @gift.value
             json["data"]["server"].should       == ""
         end
 
@@ -1117,9 +1117,9 @@ describe Mdot::V2::GiftsController do
             post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(200)
             gift = Gift.last
-            gift.service.should == "5.00"
+            gift.service.should == "5"
             gift.value.should == "100"
-            gift.cost.should  == "85.0"
+            gift.cost.should  == "85"
         end
 
         def make_gift_json gift

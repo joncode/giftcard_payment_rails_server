@@ -6,7 +6,6 @@ class GiftCampaign < Gift
     after_save :decrement_campaign_item_reserve
 
     def self.create args={}
-        args["cat"] = 300
         gift = super
         gift.messenger
         gift
@@ -26,6 +25,7 @@ private
         campaign_item         = CampaignItem.includes(:campaign).includes(:provider).where(id: args["payable_id"]).first
         campaign              = campaign_item.campaign
         provider              = campaign_item.provider
+        args["cat"]           = 300
         args["shoppingCart"]  = JSON.parse campaign_item.shoppingCart
         args["receiver_name"] = campaign.name if args["receiver_name"].nil?
         args["provider_id"]   = provider.id
@@ -33,6 +33,7 @@ private
         args["payable_id"]    = campaign_item.id
         args["payable_type"]  = "CampaignItem"
         args["value"]         = campaign_item.value
+        args["cost"]          = campaign_item.cost
         args["giver_type"]    = "Campaign"
         args["giver_id"]      = campaign.id
         args["giver_name"]    = campaign.name
