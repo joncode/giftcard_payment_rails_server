@@ -37,8 +37,8 @@ NO_REPLY_EMAIL = "no-reply#{AT_EMAIL}"
 FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
-
-VERSION_NUMBER  = "1.2.2"
+    
+VERSION_NUMBER  = "1.2.3"
 VERSION_UPDATED = "3/20/14"
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
