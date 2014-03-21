@@ -9,8 +9,8 @@ describe Gift do
 
 	it "builds from factory" do
 		gift = FactoryGirl.build :gift
-		gift.save
 		gift.should be_valid
+		gift.save
 	end
 
 	it "requires giver" do
