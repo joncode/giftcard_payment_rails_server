@@ -1,5 +1,5 @@
 module Legacy
-    
+
     def brand_photo_fix
         b_all = Brand.all
         b_all.each do |brand|
@@ -101,44 +101,49 @@ module Legacy
                                      "email_reminder_gift_receiver",
                                      "email_reminder_gift_giver"]
 
+        bo = []
         Setting.where(email_invoice: nil).each do |setting|
-            set_all_nil_attributes_to_true(setting, relevant_attributes_array)
+            bo << set_all_nil_attributes_to_true(setting, relevant_attributes_array)
         end
         Setting.where(email_redeem: nil).each do |setting|
-            set_all_nil_attributes_to_true(setting, relevant_attributes_array)
+            bo << set_all_nil_attributes_to_true(setting, relevant_attributes_array)
         end
         Setting.where(email_invite: nil).each do |setting|
-            set_all_nil_attributes_to_true(setting, relevant_attributes_array)
+            bo << set_all_nil_attributes_to_true(setting, relevant_attributes_array)
         end
         Setting.where(email_follow_up: nil).each do |setting|
-            set_all_nil_attributes_to_true(setting, relevant_attributes_array)
+            bo << set_all_nil_attributes_to_true(setting, relevant_attributes_array)
         end
         Setting.where(email_receiver_new: nil).each do |setting|
-            set_all_nil_attributes_to_true(setting, relevant_attributes_array)
+            bo << set_all_nil_attributes_to_true(setting, relevant_attributes_array)
         end
         Setting.where(email_reminder_gift_receiver: nil).each do |setting|
-            set_all_nil_attributes_to_true(setting, relevant_attributes_array)
+            bo << set_all_nil_attributes_to_true(setting, relevant_attributes_array)
         end
         Setting.where(email_reminder_gift_giver: nil).each do |setting|
-            set_all_nil_attributes_to_true(setting, relevant_attributes_array)
+            bo << set_all_nil_attributes_to_true(setting, relevant_attributes_array)
         end
-        
-        unfixed_count = Setting.where("settings.email_invoice IS NULL OR settings.email_redeem IS NULL OR settings.email_invite IS NULL OR settings.email_follow_up IS NULL OR settings.email_receiver_new IS NULL OR settings.email_reminder_gift_receiver IS NULL OR settings.email_reminder_gift_giver IS NULL").count 
-        puts "================================================"
-        puts "===== #{unfixed_count} nil settings remaining===="
-        puts "==============================================="
-    end
-    
-    def set_all_nil_attributes_to_true object, relevant_attributes_array
-        object.attributes.each do |a|
-            if relevant_attributes_array.include?(a[0]) && a[1] == nil
-                object.send("#{a[0]}=", true)
-                object.save
-                puts "======= updated Setting #{object.id}'s #{a[0]} to true"
-            end
-        end            
+        bo.flatten.uniq
     end
 
+private
+
+    def set_all_nil_attributes_to_true object, relevant_attributes_array
+        relevant_attributes_array.each do |attrib|
+            if object.send(attrib).nil?
+                setter = "#{attrib}="
+                object.send(setter, true)
+            end
+        end
+        bad_objects = if object.save
+            nil
+        else
+            puts "Error saving nil settings object - #{object.id}"
+            puts object.errors.messages
+            object
+        end
+        bad_object.compact
+    end
 end
 
 
