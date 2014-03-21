@@ -18,7 +18,7 @@ describe GiftAdmin do
     end
 
     it_should_behave_like "gift serializer" do
-        let(:gift) { GiftAdmin.create(@gift_hsh) }
+        let(:object) { GiftAdmin.create(@gift_hsh) }
     end
 
     it "should create gift" do

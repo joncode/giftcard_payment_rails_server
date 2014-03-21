@@ -24,7 +24,7 @@ describe GiftSale do
         end
 
         it_should_behave_like "gift serializer" do
-            let(:gift) { GiftSale.create(@gift_hsh) }
+            let(:object) { GiftSale.create(@gift_hsh) }
         end
 
         it "should create a gift" do
@@ -105,6 +105,10 @@ describe GiftSale do
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
 
+        end
+
+        it_should_behave_like "gift serializer" do
+            let(:object) { GiftSale.create(@gift_hsh) }
         end
 
         it "should create a gift via email" do
@@ -202,6 +206,11 @@ describe GiftSale do
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
 
         end
+
+
+        # it_should_behave_like "gift serializer" do
+        #     let(:object) { GiftSale.create(@gift_hsh) }
+        # end
 
         it "should return message when credit card is not found" do
             @gift_hsh["credit_card"]    = 1029318723

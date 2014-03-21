@@ -32,7 +32,7 @@ describe GiftCampaign do
         end
 
         it_should_behave_like "gift serializer" do
-            let(:gift) { GiftCampaign.create(@gift_hsh) }
+            let(:object) { GiftCampaign.create(@gift_hsh) }
         end
 
         it "should create gift" do
@@ -145,6 +145,10 @@ describe GiftCampaign do
             @gift_hsh["payable_id"]     = @campaign_item.id
         end
 
+        it_should_behave_like "gift serializer" do
+            let(:object) { GiftCampaign.create(@gift_hsh) }
+        end
+        
         it "should create gift" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
             gift_campaign.class.should          == GiftCampaign

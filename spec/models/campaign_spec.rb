@@ -28,11 +28,11 @@ describe Campaign do
     end
 
     it_should_behave_like "gift serializer" do
-        let(:gift) { GiftCampaign.create(@gift_hsh) }
+        let(:object) { GiftCampaign.create(@gift_hsh) }
     end
 
     it_should_behave_like "giver ducktype" do
-        let(:giver) { FactoryGirl.create(:campaign) }
+        let(:object) { FactoryGirl.create(:campaign) }
     end
 
     describe "status booleans" do

@@ -10,6 +10,7 @@ module DataHelper
         end
         json_hsh.keys.count.should == expected_keys.count
         expected_keys.each do |key|
+            #puts "Key = #{key}"
             json_hsh.has_key?(key).should be_true
         end
     end

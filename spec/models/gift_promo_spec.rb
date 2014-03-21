@@ -15,7 +15,7 @@ describe GiftPromo do
     end
 
     it_should_behave_like "gift serializer" do
-        let(:gift) { GiftPromo.create(@gift_hsh) }
+        let(:object) { GiftPromo.create(@gift_hsh) }
     end
 
     it "should create gift" do
