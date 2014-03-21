@@ -1,9 +1,21 @@
 class GiftAdmin < Gift
 
     def self.create args={}
-        super
+        resp = super
+        if resp
+            messenger(resp)
+        end
+        resp
     end
 
+    def self.messenger(resp)
+        if resp.payable.success?
+            Relay.send_push_notification(resp)
+            puts "GiftAdmin -messenger- Notify Receiver via email #{resp.receiver_name}"
+            resp.notify_receiver
+        end
+    end
+    
 private
 
     def pre_init args={}

@@ -32,7 +32,7 @@ class Campaign < Admtmodel
     end
 
 ####### Gift Giver Ducktype
-    
+
     def name
         self.giver_name
     end
@@ -44,38 +44,6 @@ class Campaign < Admtmodel
             "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
         end
     end
-
-    # def success?
-    #     if self.id
-    #         true
-    #     else
-    #         false
-    #     end
-    # end
-
-    # def resp_code
-    #     if self.id
-    #         1
-    #     else
-    #         3
-    #     end
-    # end
-
-    # def reason_text
-    #     if self.id
-    #         "Transaction approved."
-    #     else
-    #         self.errors.full_messages
-    #     end
-    # end
-
-    # def reason_code
-    #     if self.id
-    #         1
-    #     else
-    #         2
-    #     end
-    # end
 
 private
 
