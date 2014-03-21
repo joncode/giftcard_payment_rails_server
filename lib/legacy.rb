@@ -142,7 +142,7 @@ private
             puts object.errors.messages
             object
         end
-        bad_object.compact
+        bad_objects.compact
     end
 end
 
