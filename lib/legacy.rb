@@ -123,7 +123,7 @@ module Legacy
         Setting.where(email_reminder_gift_giver: nil).each do |setting|
             bo << set_all_nil_attributes_to_true(setting, relevant_attributes_array)
         end
-        bo.flatten.uniq
+        bo
     end
 
 private
@@ -135,14 +135,14 @@ private
                 object.send(setter, true)
             end
         end
-        bad_objects = if object.save
+        bad_object = if object.save
             nil
         else
             puts "Error saving nil settings object - #{object.id}"
             puts object.errors.messages
             object
         end
-        bad_objects.compact
+        bad_object
     end
 end
 
