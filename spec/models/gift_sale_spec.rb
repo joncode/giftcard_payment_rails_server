@@ -204,12 +204,19 @@ describe GiftSale do
             @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
-
         end
 
+        # context "display" do
 
-        # it_should_behave_like "gift serializer" do
-        #     let(:object) { GiftSale.create(@gift_hsh) }
+        #     before(:each) do
+        #         GiftSale.create(@gift_hsh)
+        #         @payment_error_gift = Gift.where(pay_stat: "payment_error", value: "45").first
+        #     end
+
+        
+        #     it_should_behave_like "gift serializer" do
+        #         let(:object) { @payment_error_gift }
+        #     end
         # end
 
         it "should return message when credit card is not found" do
