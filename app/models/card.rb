@@ -42,6 +42,8 @@ class Card < ActiveRecord::Base
 
 	def create_serialize
 		card_hash = self.serializable_hash only: [ "id", "nickname", "last_four" ]
+		card_hash["card_id"] = self.id
+		card_hash
 	end
 
 	def number
