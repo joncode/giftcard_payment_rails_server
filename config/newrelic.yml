@@ -125,6 +125,7 @@ common: &default_settings
   # transactions and sends this to the service once a
   # minute. Included in the transaction is the exact call sequence of
   # the transactions including any SQL statements issued.
+  transaction_tracer.explain_enabled: false
   transaction_tracer:
 
     # Transaction tracer is enabled by default. Set this to false to
