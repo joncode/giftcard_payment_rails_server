@@ -231,7 +231,7 @@ class Gift < ActiveRecord::Base
 	end
 
 	def child
-        Gift.find_by(payable_id: self.id)
+        Gift.where(payable_id: self.id, payable_type: "Gift").first
         #Gift.find_by(regift_id: self.id)
 	end
 

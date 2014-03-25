@@ -1,5 +1,15 @@
 module SmsCollector
 
+	def self.sms_promo_run
+		puts "------------- Slicktext SMS Promo  -----------------"
+		textword_hshs = Slicktext.textwords
+		textword_hshs.each do |word_hsh|
+			self.sms_promo word_hsh
+		end
+	end
+
+private
+
 	def self.sms_promo word_hsh
 		textword = word_hsh["word"]
 
@@ -13,18 +23,7 @@ module SmsCollector
 			puts "No live campaign Items for #{textword}"
 		end
 	end
-
-
-	def self.sms_promo_run
-		puts "------------- Slicktext SMS Promo  -----------------"
-		textword_hshs = Slicktext.textwords
-		textword_hshs.each do |word_hsh|
-			self.sms_promo word_hsh
-		end
-	end
-
-private
-
+	
 	def self.create_gift_for_multiple_items reservable_items, word_hsh
 		# go to slicktext and get the phones
 		sms_contacts = self.slicktext_to_sms_contacts(word_hsh)
@@ -88,7 +87,6 @@ private
 		puts "#{textword} - sms contacts from db to gift = #{sms_contacts.count} | vs | return contacts = #{return_contacts.count}"
 		return sms_contacts
 	end
-
 end
 
 # process

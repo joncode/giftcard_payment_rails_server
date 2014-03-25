@@ -48,7 +48,7 @@ class Mdot::V2::GiftsController < JsonController
             success({ "order_number" => order.make_order_num , "total" => gift.total,  "server" => order.server_code })
         else
             fail order
-            status = :bad_request
+            #status = :bad_request
         end
         respond(status)
     end
@@ -63,6 +63,7 @@ class Mdot::V2::GiftsController < JsonController
         else
             new_gift_hsh = data["receiver"]
         end
+
         new_gift_hsh["message"]     = data["message"]
         new_gift_hsh["old_gift_id"] = params[:id]
         gift_response = GiftRegift.create(new_gift_hsh)
@@ -70,7 +71,9 @@ class Mdot::V2::GiftsController < JsonController
         if gift_response.kind_of?(Gift)
             if gift_response.id.nil?
                 fail    gift_response
-                status = :bad_request
+                if gift_response.errors.messages == {:receiver=> ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]}
+                    status = :bad_request
+                end
             else
                 success gift_response.giver_serialize
             end
@@ -105,7 +108,7 @@ class Mdot::V2::GiftsController < JsonController
                 success gift_response.giver_serialize
             else
                 fail    gift_response
-                status = :bad_request
+                #status = :bad_request
             end
         else
             fail gift_response

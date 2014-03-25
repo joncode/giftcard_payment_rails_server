@@ -30,7 +30,10 @@ describe SmsCollector do
             Slicktext.any_instance.should_receive(:contacts).and_return([])
             SmsCollector::sms_promo_run
         end
+    end
 
+    context "multiple campaign_items sharing a textword" do
+        
         it "should allow campaign items to share textwords and pick random item" do
             SmsContact.delete_all
             textword  = "itsonme"

@@ -43,7 +43,7 @@ class Mdot::V2::UsersController < JsonController
             success user.create_serialize
         else
             fail    user
-            status = :bad_request
+            #status = :bad_request
         end
 
         respond(status)
@@ -58,7 +58,7 @@ class Mdot::V2::UsersController < JsonController
             success @current_user.update_serialize
         else
             fail    @current_user
-            status = :bad_request
+            #status = :bad_request
         end
 
         respond(status)
@@ -68,7 +68,7 @@ class Mdot::V2::UsersController < JsonController
         user_socials = UserSocial.where(user_id: @current_user.id, active: true)
         if params["type"] == "email" && user_socials.where(type_of: "email").count < 2
             fail "cannot deactivate last email on account"
-            status = :bad_request
+            #status = :bad_request
         elsif user_socials.where(user_id: @current_user.id, type_of: params["type"], identifier: params["identifier"]).present?
             @current_user.deactivate_social(params["type"], params["identifier"])
             success(@current_user.id)

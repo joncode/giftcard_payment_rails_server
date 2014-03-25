@@ -109,7 +109,7 @@ describe Mdot::V2::UsersController do
         it "should return validation errors" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             put :update, format: :json, data: { "email" => "" }
-            rrc 400
+            rrc 200
             json["status"].should == 0
             json["data"].class.should    == Hash
             json["data"]["error"]["email"].should == ["is invalid"]
@@ -119,7 +119,7 @@ describe Mdot::V2::UsersController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             other_user = FactoryGirl.create(:user, facebook_id: "keeper_other")
             put :update, format: :json, data: { "facebook_id" => "keeper_other" }
-            rrc 400
+            rrc 200
             json["status"].should == 0
             json["data"].class.should    == Hash
             json["data"]["error"]["facebook_id"].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount, please use that to log in"]
@@ -175,10 +175,11 @@ describe Mdot::V2::UsersController do
     end
 
     describe :deactivate_user_social do
+
         it "should return 400 if last email" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
-            rrc(400)
+            rrc(200)
         end
 
         it_should_behave_like("token authenticated", :put, :deactivate_user_social)
@@ -472,87 +473,100 @@ describe Mdot::V2::UsersController do
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "password", first_name: ""}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
             json['status'].should == 0
             json["data"]["error"]["first_name"].should == ["can't be blank"]
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "password", first_name: nil}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
             json["data"]["error"]["first_name"].should == ["can't be blank"]
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "password" }
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
             json["data"]["error"]["first_name"].should == ["can't be blank"]
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "passasdfword", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"password_confirmation"=>["doesn't match Password"]}
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"password_confirmation"=>["doesn't match Password", "can't be blank"]}
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: nil, first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"password_confirmation"=>["can't be blank"]}
             user_hsh = { "email" =>  "neil@gmail.com", password: "passasdfword" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"password_confirmation"=>["doesn't match Password"]}
             user_hsh = { "email" =>  "neil@gmail.com", password: "" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"password"=>["can't be blank", "is too short (minimum is 6 characters)"]}
             user_hsh = { "email" =>  "neil@gmail.com", password: nil , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"password"=>["can't be blank", "is too short (minimum is 6 characters)"]}
             user_hsh = { "email" =>  "neil@gmail.com", password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"password"=>["can't be blank", "is too short (minimum is 6 characters)"]}
             user_hsh = { "email" =>  "neimail.com", password: "password" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"email"=>["is invalid"]}
             user_hsh = { "email" =>  "", password: "password" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"email"=>["is invalid"]}
             user_hsh = { "email" =>  nil, password: "password" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"email"=>["is invalid"]}
             user_hsh = { password: "password" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
+            json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"first_name"=>["can't be blank"]}
+            json["data"]["error"].should == {"email"=>["is invalid"]}
         end
 
         it "should not accept requests without user_hash" do
@@ -566,19 +580,19 @@ describe Mdot::V2::UsersController do
             user_hsh = { "email" =>  "neil@gmail.com", password: "" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
             json["status"].should == 0
             json["data"].has_key?("password_digest").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password: nil , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
             json["status"].should == 0
             json["data"].has_key?("password_digest").should be_false
             user_hsh = { "email" =>  "neil@gmail.com", password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh
-            rrc 400
+            rrc 200
             json["status"].should == 0
             json["data"].has_key?("password_digest").should be_false
         end

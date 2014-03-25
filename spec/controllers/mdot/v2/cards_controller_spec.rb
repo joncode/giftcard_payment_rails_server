@@ -48,7 +48,7 @@ describe Mdot::V2::CardsController do
             card = Card.find_by(user_id: @user.id)
             rrc(200)
             json["status"].should == 1
-            json["data"].should == {"id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four}
+            json["data"].should == {"id" => card.id, "card_id" => card.id,"nickname" => card.nickname, "last_four" => card.last_four}
         end
 
         it "should accept hash of require fields and return card ID" do
@@ -60,7 +60,7 @@ describe Mdot::V2::CardsController do
             card = Card.find_by(user_id: @user.id)
             rrc(200)
             json["status"].should == 1
-            json["data"].should == {"id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four}
+            json["data"].should == {"id" => card.id, "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four}
         end
 
         it "should not save json'd incomplete card info" do
@@ -89,14 +89,14 @@ describe Mdot::V2::CardsController do
             rrc(400)
         end
 
-        it "should return validation errors with 400 code when bad data" do
+        it "should return validation errors with 200 code when failed validations" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params = {"month"=>"0212312", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
 
             post :create, format: :json, data: params
 
             card = Card.find_by(user_id: @user.id)
-            rrc(400)
+            rrc(200)
             json["status"].should == 0
             json["data"]["error"].keys.include?("month").should be_true
         end
@@ -105,7 +105,7 @@ describe Mdot::V2::CardsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params = {"name"=>"Joe Meeks", "nickname"=>"junk", "number"=>"4222222222222222", "month"=>"10", "year"=>"2022", "csv"=>"123"}
             post :create, format: :json, data: params
-            rrc(400)
+            rrc(200)
             json["status"].should == 0
             json["data"]["error"].keys.include?("number").should be_true
         end
