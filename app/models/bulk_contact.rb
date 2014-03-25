@@ -5,7 +5,9 @@ class BulkContact < ActiveRecord::Base
     def self.upload(data: data, user_id: user_id)
         start_time_logger = Time.now
         hsh_str = data.to_json
-        output = create(data: hsh_str, user_id: user_id)
+        unless Rails.env.production?
+            output = create(data: hsh_str, user_id: user_id)
+        end
         end_time = ((Time.now - start_time_logger) * 1000).round(1)
         puts "BULK DUMP TIME = #{end_time}ms"
         output
