@@ -12,8 +12,6 @@ module SmsCollector
 		else
 			puts "No live campaign Items for #{textword}"
 		end
-
-
 	end
 
 
