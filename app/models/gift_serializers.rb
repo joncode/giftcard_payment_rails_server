@@ -11,7 +11,8 @@ module GiftSerializers
         gift_hsh["receiver_photo"]  = receiver.get_photo if receiver
         gift_hsh["receiver"]           = receiver_name
         gift_hsh["message"]            = message
-        gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
+        gift_hsh["shoppingCart"]       = self.shoppingCart
+        gift_hsh["items"]              = ary_of_shopping_cart_as_hash
         gift_hsh["merchant_name"]      = merchant.name
         gift_hsh["merchant_address"]   = merchant.full_address
         gift_hsh["merchant_phone"]     = merchant.phone
@@ -23,7 +24,8 @@ module GiftSerializers
     def badge_serialize
         gift_hsh = self.serializable_hash only: [ :cat, :giver_id, :giver_name, :provider_id, :provider_name, :message, :updated_at, :created_at]
         gift_hsh["status"]             = self.receiver_status
-        gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
+        gift_hsh["shoppingCart"]       = self.shoppingCart
+        gift_hsh["items"]              = ary_of_shopping_cart_as_hash
         gift_hsh["giver_photo"]        = giver.get_photo
 
         unless provider = self.provider
@@ -57,7 +59,8 @@ module GiftSerializers
         gift_hsh["longitude"]          = provider.longitude
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
-        gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
+        gift_hsh["shoppingCart"]       = self.shoppingCart
+        gift_hsh["items"]              = ary_of_shopping_cart_as_hash
         gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
         gift_hsh["completed_at"]       = self.redeemed_at if self.redeemed_at
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
@@ -80,7 +83,8 @@ module GiftSerializers
         gift_hsh["longitude"]          = provider.longitude
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
-        gift_hsh["shoppingCart"]       = ary_of_shopping_cart_as_hash
+        gift_hsh["shoppingCart"]       = self.shoppingCart
+        gift_hsh["items"]              = ary_of_shopping_cart_as_hash
         gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
         gift_hsh["completed_at"]       = self.redeemed_at if self.redeemed_at
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
