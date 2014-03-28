@@ -37,7 +37,6 @@ class User < ActiveRecord::Base
 	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :unless => :is_perm_deactive?
 	validates :password, 	length: { minimum: 6 },     on: :create
-	validates :password_confirmation, presence: true, 	on: :create
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 

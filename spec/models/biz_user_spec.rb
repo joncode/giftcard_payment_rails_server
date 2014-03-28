@@ -3,7 +3,7 @@ require 'spec_helper'
 describe BizUser do
 
     it_should_behave_like "giver ducktype" do
-        let(:giver) { FactoryGirl.create(:provider).biz_user }
+        let(:object) { FactoryGirl.create(:provider).biz_user }
     end
 
     it "builds from factory" do

@@ -8,7 +8,7 @@ describe User do
     end
 
     it_should_behave_like "giver ducktype" do
-        let(:giver) { FactoryGirl.create(:user) }
+        let(:object) { FactoryGirl.create(:user) }
     end
 
     context "model associations and validations" do

@@ -4,6 +4,22 @@ class GiftPromo < Gift
         super
     end
 
+    def save
+        resp = super
+        if resp
+            self.messenger
+        end
+        resp
+    end
+
+    def messenger
+        if self.payable.success?
+            Relay.send_push_notification(self)
+            puts "GiftPromo -messenger- Notify Receiver via email #{self.receiver_name}"
+            notify_receiver
+        end
+    end
+
 private
 
     def pre_init args={}
@@ -11,14 +27,14 @@ private
         args["cat"]     = 200
         args["giver"]   = giver
         args["value"]   = calculate_value(args["shoppingCart"])
-        args["cost"]    = "0.0"
+        args["cost"]    = "0"
         args["payable"] = giver.new_debt(args["value"])
     end
 
-    def post_init args={}
-        puts "NOTIFY RECEIVER VIA #{self.receiver_email}"
-        #  alert merchant tools wbesite
-    end
+    # def post_init args={}
+    #     puts "NOTIFY RECEIVER VIA #{self.receiver_email}"
+    #     #  alert merchant tools wbesite
+    # end
 
     def calculate_value shoppingCart_string
         sc = JSON.parse shoppingCart_string

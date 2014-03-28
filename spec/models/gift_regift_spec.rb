@@ -18,7 +18,7 @@ describe GiftRegift do
         end
 
         it_should_behave_like "gift serializer" do
-            let(:gift) { GiftRegift.create(@gift_hsh) }
+            let(:object) { GiftRegift.create(@gift_hsh) }
         end
 
         it "should create gift with old_gift provider" do

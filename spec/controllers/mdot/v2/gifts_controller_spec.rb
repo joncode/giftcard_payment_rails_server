@@ -40,7 +40,7 @@ describe Mdot::V2::GiftsController do
 
         it "should send sent gifts (purchaser) with giver keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "expires_at" , "cat", "time_ago"]
+            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "cat", "time_ago"]
             get :archive, format: :json
             gift_hsh = json["data"]["sent"][0]
             compare_keys(gift_hsh, keys)
@@ -70,7 +70,7 @@ describe Mdot::V2::GiftsController do
                 order  = Order.init_with_gift(gift, "xyz")
                 order.save
             end
-            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at", "expires_at" , "cat", "time_ago"]
+            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at", "completed_at", "cat", "time_ago"]
             post :archive, format: :json
             gift_hsh = json["data"]["used"][0]
             compare_keys(gift_hsh, keys)
@@ -147,7 +147,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return receiver serialized gifts" do
-            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "expires_at" , "cat", "time_ago"]
+            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago"]
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
             json_gifts = json["data"]["gifts"]
@@ -366,7 +366,7 @@ describe Mdot::V2::GiftsController do
             redeem = Redeem.find_by(gift_id: @gift.id)
             redeem.destroy
             post :redeem, format: :json, id: @gift.id, server: "test"
-            rrc(400)
+            rrc(200)
             json["status"].should == 0
             json["data"].should   == { "error" => { "gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"] } }
         end
@@ -429,6 +429,7 @@ describe Mdot::V2::GiftsController do
                 params = {"message"=>"Test regift", "receiver"=>{"receiver_id"=>receiver.id, "name"=> receiver.name}}
                 post :regift, format: :json, id: old_gift.id, data: params
                 new_gift = old_gift.child
+                
                 new_gift.status.should     == 'open'
                 new_gift.payable_id.should == old_gift.id
             end

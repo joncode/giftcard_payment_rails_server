@@ -30,7 +30,82 @@ describe SmsCollector do
             Slicktext.any_instance.should_receive(:contacts).and_return([])
             SmsCollector::sms_promo_run
         end
+    end
 
+    context "multiple campaign_items sharing a textword" do
+        
+        it "should allow campaign items to share textwords and pick random item" do
+            SmsContact.delete_all
+            textword  = "itsonme"
+            provider1 = FactoryGirl.create(:provider, name: "First one")
+            provider2 = FactoryGirl.create(:provider, name: "Second one")
+            provider3 = FactoryGirl.create(:provider, name: "Third one")
+            campaign  = FactoryGirl.create(:campaign)
+            cam_item1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider1.id, updated_at: (Time.now - 60.minutes))
+            cam_item2 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider2.id, updated_at: (Time.now - 50.minutes))
+            cam_item3 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider3.id, updated_at: (Time.now - 40.minutes))
+
+            ary_of_ids = [cam_item1.id, cam_item2.id, cam_item3.id]
+
+            Slicktext.stub(:textwords).and_return(TEXTWORDS)
+            Slicktext.any_instance.stub(:sms)
+            stub_request(:get, @contacts_route)
+            Slicktext.any_instance.should_receive(:contacts).and_return(CONTACTS_RESPONSE)
+            SmsCollector::sms_promo_run
+            gifts = Gift.all
+            gifts.count.should == 20
+            gifts.each do |gift|
+                ary_of_ids.include?(gift.payable.id).should be_true
+            end
+        end
+
+        it "should not make any gifts for campaign item if the campaign is not live" do
+            SmsContact.delete_all
+            textword  = "itsonme"
+            provider1 = FactoryGirl.create(:provider, name: "First one")
+            provider2 = FactoryGirl.create(:provider, name: "Second one")
+            provider3 = FactoryGirl.create(:provider, name: "Third one")
+            campaign  = FactoryGirl.create(:campaign)
+            campaign2  = FactoryGirl.create(:campaign, close_date: (Time.now - 2.days))
+            cam_item1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider1.id, updated_at: (Time.now - 60.minutes))
+            cam_item2 = FactoryGirl.create(:campaign_item, campaign_id: campaign2.id, textword: textword, provider_id: provider2.id, updated_at: (Time.now - 50.minutes))
+            cam_item3 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider3.id, updated_at: (Time.now - 40.minutes))
+
+            ary_of_ids = [cam_item1.id, cam_item2.id, cam_item3.id]
+
+            Slicktext.stub(:textwords).and_return(TEXTWORDS)
+            Slicktext.any_instance.stub(:sms)
+            stub_request(:get, @contacts_route)
+            Slicktext.any_instance.should_receive(:contacts).and_return(CONTACTS_RESPONSE)
+            SmsCollector::sms_promo_run
+            gifts = Gift.all
+            gifts.count.should == 20
+            gifts.each do |gift|
+                gift.payable.should_not == cam_item2
+           end
+        end
+
+        it "should not make any gifts or call slicktext/contacts if the campaign is not live" do
+            SmsContact.delete_all
+            textword  = "itsonme"
+            provider1 = FactoryGirl.create(:provider, name: "First one")
+            provider2 = FactoryGirl.create(:provider, name: "Second one")
+            provider3 = FactoryGirl.create(:provider, name: "Third one")
+            campaign  = FactoryGirl.create(:campaign, close_date: (Time.now - 2.days))
+            cam_item1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider1.id, updated_at: (Time.now - 60.minutes))
+            cam_item2 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider2.id, updated_at: (Time.now - 50.minutes))
+            cam_item3 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider3.id, updated_at: (Time.now - 40.minutes))
+
+            ary_of_ids = [cam_item1.id, cam_item2.id, cam_item3.id]
+
+            Slicktext.stub(:textwords).and_return(TEXTWORDS)
+            Slicktext.any_instance.stub(:sms)
+            stub_request(:get, @contacts_route)
+            Slicktext.any_instance.should_not_receive(:contacts).and_return(CONTACTS_RESPONSE)
+            SmsCollector::sms_promo_run
+            gifts = Gift.all
+            gifts.count.should == 0
+        end
     end
 
     context :sms_promo_run do

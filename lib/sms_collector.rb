@@ -1,32 +1,5 @@
 module SmsCollector
 
-	def self.sms_promo word_hsh
-		textword = word_hsh["word"]
-
-		campaign_item = CampaignItem.includes(:campaign).find_by(textword: textword.to_s)
-		if campaign_item.present?
-			if campaign_item.live?
-				sms_obj = Slicktext.new(word_hsh)
-				sms_obj.sms
-				contacts = sms_obj.contacts
-
-				puts "#{textword} - total contacts = #{contacts.count}"
-
-				return_contacts = SmsContact.bulk_create(contacts)
-				sms_contacts    = SmsContact.where(gift_id: nil, textword: textword.to_s)
-
-				puts "#{textword} - sms contacts from db to gift = #{sms_contacts.count} | vs | return contacts = #{return_contacts.count}"
-
-				sms_contacts.each do |sms_contact|
-					puts "#{textword} - creating a gift for #{sms_contact.inspect}"
-					gift = self.create_gift(campaign_item, sms_contact)
-				end
-			else
-				puts campaign_item.status_text
-			end
-		end
-	end
-
 	def self.sms_promo_run
 		puts "------------- Slicktext SMS Promo  -----------------"
 		textword_hshs = Slicktext.textwords
@@ -36,6 +9,51 @@ module SmsCollector
 	end
 
 private
+
+	def self.sms_promo word_hsh
+		textword = word_hsh["word"]
+
+		campaign_items   = CampaignItem.includes(:campaign).where(textword: textword.to_s)
+
+		reservable_items = self.keep_live_items_only(campaign_items)
+
+		if (reservable_items.count > 0)
+			self.create_gift_for_multiple_items(reservable_items, word_hsh)
+		else
+			puts "No live campaign Items for #{textword}"
+		end
+	end
+	
+	def self.create_gift_for_multiple_items reservable_items, word_hsh
+		# go to slicktext and get the phones
+		sms_contacts = self.slicktext_to_sms_contacts(word_hsh)
+			# if there are live contacts
+		sms_contacts.each do |contact|
+			# loop create_gift with campaign items
+			choice_index  = rand(reservable_items.length)
+			campaign_item = reservable_items.slice!(choice_index)
+			if campaign_item
+				self.create_gift(campaign_item, contact)
+			else
+				puts "No more campaign Items for #{textword}"
+			end
+		end
+	end
+
+	def self.make_reservable_items live_items
+		reservable_items = []
+		live_items.each do |item|
+			item.reserve.times do
+				reservable_items << item
+			end
+		end
+		reservable_items
+	end
+
+	def self.keep_live_items_only campaign_items
+		live_items = campaign_items.select { |ci| ci.live? }
+		self.make_reservable_items(live_items)
+	end
 
 	def self.create_gift campaign_item, sms_contact
 			# associate the sms_contact with the gift
@@ -47,7 +65,28 @@ private
 			puts "gift ID = #{gift.id}"
 		end
 	end
-	
+
+	def self.bulk_create_gifts(sms_contacts, campaign_item)
+		sms_contacts.each do |sms_contact|
+			puts "#{campaign_item.textword} - creating a gift for #{sms_contact.inspect}"
+			gift = self.create_gift(campaign_item, sms_contact)
+		end
+	end
+
+	def self.slicktext_to_sms_contacts(word_hsh)
+		textword = word_hsh["word"]
+		sms_obj = Slicktext.new(word_hsh)
+		sms_obj.sms
+		contacts = sms_obj.contacts
+
+		puts "#{textword} - total contacts = #{contacts.count}"
+
+		return_contacts = SmsContact.bulk_create(contacts)
+		sms_contacts    = SmsContact.where(gift_id: nil, textword: textword.to_s)
+
+		puts "#{textword} - sms contacts from db to gift = #{sms_contacts.count} | vs | return contacts = #{return_contacts.count}"
+		return sms_contacts
+	end
 end
 
 # process

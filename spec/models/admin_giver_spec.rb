@@ -3,7 +3,7 @@ require 'spec_helper'
 describe AdminGiver do
 
     it_should_behave_like "giver ducktype" do
-        let(:giver) { FactoryGirl.create(:admin_user).giver }
+        let(:object) { FactoryGirl.create(:admin_user).giver }
     end
 
     it "builds from factory" do

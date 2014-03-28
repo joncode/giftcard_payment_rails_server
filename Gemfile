@@ -7,7 +7,7 @@ gem 'unicorn'
 gem "rack-timeout"
 gem 'httparty', '~> 0.9.0'
 gem 'resque', :require => "resque/server"
-gem 'newrelic_rpm'
+#gem 'newrelic_rpm'
 gem 'authorize-net'
 gem 'mandrill-api', "~> 1.0.35"
 gem 'mailchimp-api'

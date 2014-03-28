@@ -24,7 +24,7 @@ describe GiftSale do
         end
 
         it_should_behave_like "gift serializer" do
-            let(:gift) { GiftSale.create(@gift_hsh) }
+            let(:object) { GiftSale.create(@gift_hsh) }
         end
 
         it "should create a gift" do
@@ -105,6 +105,10 @@ describe GiftSale do
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
 
+        end
+
+        it_should_behave_like "gift serializer" do
+            let(:object) { GiftSale.create(@gift_hsh) }
         end
 
         it "should create a gift via email" do
@@ -200,8 +204,20 @@ describe GiftSale do
             @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
-
         end
+
+        # context "display" do
+
+        #     before(:each) do
+        #         GiftSale.create(@gift_hsh)
+        #         @payment_error_gift = Gift.where(pay_stat: "payment_error", value: "45").first
+        #     end
+
+
+        #     it_should_behave_like "gift serializer" do
+        #         let(:object) { @payment_error_gift }
+        #     end
+        # end
 
         it "should return message when credit card is not found" do
             @gift_hsh["credit_card"]    = 1029318723
@@ -214,7 +230,7 @@ describe GiftSale do
             Sale.any_instance.stub(:resp_code).and_return(3)
             Sale.any_instance.stub(:reason_code).and_return(11)
             @gift_hsh["credit_card"]    = @card.id
-            gift = GiftSale.create @gift_hsh
+            GiftSale.create @gift_hsh
             gift = Gift.where(credit_card: @card.id.to_s).first
             gift.status.should   == "cancel"
             gift.pay_stat.should == "payment_error"
@@ -224,7 +240,7 @@ describe GiftSale do
             Sale.any_instance.stub(:resp_code).and_return(3)
             Sale.any_instance.stub(:reason_code).and_return(8)
             @gift_hsh["credit_card"]    = @card.id
-            gift = GiftSale.create @gift_hsh
+            GiftSale.create @gift_hsh
             gift = Gift.where(credit_card: @card.id.to_s).first
             gift.status.should   == "cancel"
             gift.pay_stat.should == "payment_error"
@@ -235,7 +251,7 @@ describe GiftSale do
             Sale.any_instance.stub(:resp_code).and_return(2)
             Sale.any_instance.stub(:reason_code).and_return(200)
             @gift_hsh["credit_card"]    = @card.id
-            gift = GiftSale.create @gift_hsh
+            GiftSale.create @gift_hsh
             gift = Gift.where(credit_card: @card.id.to_s).first
             gift.status.should   == "cancel"
             gift.pay_stat.should == "payment_error"
@@ -246,7 +262,7 @@ describe GiftSale do
             Sale.any_instance.stub(:resp_code).and_return(2)
             Sale.any_instance.stub(:reason_code).and_return(201)
             @gift_hsh["credit_card"]    = @card.id
-            gift = GiftSale.create @gift_hsh
+            GiftSale.create @gift_hsh
             gift = Gift.where(credit_card: @card.id.to_s).first
             gift.status.should   == "cancel"
             gift.pay_stat.should == "payment_error"
@@ -256,7 +272,7 @@ describe GiftSale do
             Sale.any_instance.stub(:resp_code).and_return(2)
             Sale.any_instance.stub(:reason_code).and_return(2)
             @gift_hsh["credit_card"]    = @card.id
-            gift = GiftSale.create @gift_hsh
+            GiftSale.create @gift_hsh
             gift = Gift.where(credit_card: @card.id.to_s).first
             gift.status.should   == "cancel"
             gift.pay_stat.should == "payment_error"

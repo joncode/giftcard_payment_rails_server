@@ -9,8 +9,8 @@ describe Gift do
 
 	it "builds from factory" do
 		gift = FactoryGirl.build :gift
-		gift.save
 		gift.should be_valid
+		gift.save
 	end
 
 	it "requires giver" do
@@ -426,67 +426,134 @@ describe Gift do
 		let(:provider) { FactoryGirl.create(:provider) }
 		let(:gift) { FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: "George Washington", receiver_phone: "8326457787") }
 
-	  	it "should correctly rep incomplete" do
-	  		gift.receiver_id.should be_nil
-	  		gift.status.should 				== 'incomplete'
-	  		gift.giver_status.should 		== 'incomplete'
-	  		gift.receiver_status.should 	== 'incomplete'
-	  		gift.bar_status.should 			== 'live'
-	  	end
+		context	"incomplete" do
 
-	  	it "should correctly rep open" do
-	  		gift.receiver_id = giver.id
-	  		gift.status = 'open'
-	  		gift.save
-	  		gift.status.should 				== 'open'
-	  		gift.giver_status.should 		== 'notified'
-	  		gift.receiver_status.should 	== 'notified'
-	  		gift.bar_status.should 			== 'live'
-	  	end
+		  	it "should correctly rep incomplete" do
+		  		gift.receiver_id.should be_nil
+		  		gift.status.should 				== 'incomplete'
+		  		gift.giver_status.should 		== 'incomplete'
+		  		gift.receiver_status.should 	== 'incomplete'
+		  		gift.bar_status.should 			== 'live'
+		  	end
 
-	  	it "should correctly rep notified" do
-	  		gift.receiver_id = giver.id
-	  		gift.update(status: 'notified')
-	  		gift.status.should 				== 'notified'
-	  		gift.giver_status.should 		== 'notified'
-	  		gift.receiver_status.should 	== 'open'
-	  		gift.bar_status.should 			== 'live'
-	  	end
+	        it_should_behave_like "gift serializer" do
+	            let(:object) { gift }
+	        end
+		end
 
-	  	it "should correctly rep redeemed" do
-	  		gift.receiver_id = giver.id
-	  		gift.update(status: 'redeemed')
-	  		gift.status.should 				== 'redeemed'
-	  		gift.giver_status.should 		== 'complete'
-	  		gift.receiver_status.should 	== 'redeemed'
-	  		gift.bar_status.should 			== 'redeemed'
-	  	end
+		context	"open" do
 
-	  	it "should correctly rep regifted" do
-	  		gift.receiver_id = giver.id
-	  		gift.update(status: 'regifted')
-	  		gift.status.should 				== 'regifted'
-	  		gift.giver_status.should 		== 'complete'
-	  		gift.receiver_status.should 	== 'regifted'
-	  		gift.bar_status.should 			== 'regifted'
-	  	end
+			before(:each) do
+				gift.receiver_id = giver.id
+		  		gift.status = 'open'
+			end
 
-	  	it "should correctly rep cancel" do
-	  		gift.update(status: 'cancel')
-	  		gift.status.should 				== 'cancel'
-	  		gift.giver_status.should 		== 'cancel'
-	  		gift.receiver_status.should 	== 'cancel'
-	  		gift.bar_status.should 			== 'cancel'
-	  	end
+		  	it "should correctly rep open" do
+		  		gift.save
+		  		gift.status.should 				== 'open'
+		  		gift.giver_status.should 		== 'notified'
+		  		gift.receiver_status.should 	== 'notified'
+		  		gift.bar_status.should 			== 'live'
+		  	end
 
-	  	it "should correctly rep expired" do
-	  		gift.update(status: 'expired')
-	  		gift.status.should 				== 'expired'
-	  		gift.giver_status.should 		== 'expired'
-	  		gift.receiver_status.should 	== 'expired'
-	  		gift.bar_status.should 			== 'expired'
-	  	end
+	        it_should_behave_like "gift serializer" do
+	            let(:object) { gift }
+	        end
+		end
 
+		context	"notified" do
+
+			before(:each) do
+				gift.receiver_id = giver.id
+		  		gift.update(status: 'notified')
+			end
+
+		  	it "should correctly rep notified" do
+		  		gift.status.should 				== 'notified'
+		  		gift.giver_status.should 		== 'notified'
+		  		gift.receiver_status.should 	== 'open'
+		  		gift.bar_status.should 			== 'live'
+		  	end
+
+	        it_should_behave_like "gift serializer" do
+	            let(:object) { gift }
+	        end
+		end
+
+		context	"redeemed" do
+
+			before(:each) do
+		  		gift.receiver_id = giver.id
+		  		gift.update(status: 'redeemed', redeemed_at: Time.now)
+			end
+
+		  	it "should correctly rep redeemed" do
+		  		gift.status.should 				== 'redeemed'
+		  		gift.giver_status.should 		== 'complete'
+		  		gift.receiver_status.should 	== 'redeemed'
+		  		gift.bar_status.should 			== 'redeemed'
+		  	end
+
+	        it_should_behave_like "gift serializer" do
+	            let(:object) { gift }
+	        end
+		end
+
+		context	"regifted" do
+
+			before(:each) do
+		  		gift.receiver_id = giver.id
+		  		gift.update(status: 'regifted')
+		  		gift.update(status: 'regifted', redeemed_at: Time.now)
+			end
+
+		  	it "should correctly rep regifted" do
+		  		gift.status.should 				== 'regifted'
+		  		gift.giver_status.should 		== 'complete'
+		  		gift.receiver_status.should 	== 'regifted'
+		  		gift.bar_status.should 			== 'regifted'
+		  	end
+
+	        it_should_behave_like "gift serializer" do
+	            let(:object) { gift }
+	        end
+		end
+
+		context	"cancel" do
+
+			before(:each) do
+		  		gift.update(status: 'cancel')
+			end
+
+		  	it "should correctly rep cancel" do
+		  		gift.status.should 				== 'cancel'
+		  		gift.giver_status.should 		== 'cancel'
+		  		gift.receiver_status.should 	== 'cancel'
+		  		gift.bar_status.should 			== 'cancel'
+		  	end
+
+	        it_should_behave_like "gift serializer" do
+	            let(:object) { gift }
+	        end
+		end
+
+		context	"expired" do
+
+			before(:each) do
+		  		gift.update(status: 'expired', expires_at: Time.now)
+			end
+
+		  	it "should correctly rep expired" do
+		  		gift.status.should 				== 'expired'
+		  		gift.giver_status.should 		== 'expired'
+		  		gift.receiver_status.should 	== 'expired'
+		  		gift.bar_status.should 			== 'expired'
+		  	end
+
+	        it_should_behave_like "gift serializer" do
+	            let(:object) { gift }
+	        end
+	  	end
 	end
 
 	context "void_refund_cancel" do
