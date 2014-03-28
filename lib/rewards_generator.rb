@@ -30,7 +30,7 @@ private
     def self.campaign_items_ary
         ci1 = CampaignItem.where(textword: 'a').first
         ci2 = CampaignItem.where(textword: 'b').first
-        return [ci1, ci2].uniq
+        return [ci1, ci2].compact
     end
 
     def self.get_users
