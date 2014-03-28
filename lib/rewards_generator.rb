@@ -23,6 +23,7 @@ private
                 end
             else
                 puts "finished campaign items"
+                break
             end
         end
     end
