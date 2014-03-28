@@ -22,10 +22,9 @@ private
                     puts "gift ID = #{gift.id}"
                 end
             else
-                puts "finished users"
+                puts "finished campaign items"
             end
         end
-
     end
 
     def self.campaign_items_ary
@@ -52,10 +51,4 @@ private
 
 end
 
-
-
-# get all the users
-# choose the users that get the gifts
-    # users who give a lot
-    # users who havent received a campaign gift
 
