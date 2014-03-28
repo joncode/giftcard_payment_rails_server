@@ -29,8 +29,8 @@ private
     end
 
     def self.campaign_items_ary
-        ci1 = CampaignItem.where(textword: 'a').first
-        ci2 = CampaignItem.where(textword: 'b').first
+        ci1 = CampaignItem.where(textword: 'a').last
+        ci2 = CampaignItem.where(textword: 'b').last
         return [ci1, ci2].compact
     end
 
