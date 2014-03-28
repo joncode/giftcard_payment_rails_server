@@ -366,7 +366,7 @@ describe Mdot::V2::GiftsController do
             redeem = Redeem.find_by(gift_id: @gift.id)
             redeem.destroy
             post :redeem, format: :json, id: @gift.id, server: "test"
-            rrc(400)
+            rrc(200)
             json["status"].should == 0
             json["data"].should   == { "error" => { "gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"] } }
         end
@@ -429,6 +429,7 @@ describe Mdot::V2::GiftsController do
                 params = {"message"=>"Test regift", "receiver"=>{"receiver_id"=>receiver.id, "name"=> receiver.name}}
                 post :regift, format: :json, id: old_gift.id, data: params
                 new_gift = old_gift.child
+                
                 new_gift.status.should     == 'open'
                 new_gift.payable_id.should == old_gift.id
             end

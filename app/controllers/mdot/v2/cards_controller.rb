@@ -21,7 +21,7 @@ class Mdot::V2::CardsController < JsonController
             success card.create_serialize
         else
             fail card
-            status = :bad_request
+            #status = :bad_request
         end
         respond(status)
     end
