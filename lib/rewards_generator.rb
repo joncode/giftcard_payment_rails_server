@@ -4,7 +4,6 @@ module RewardsGenerator
         items = self.campaign_items_ary
         users = self.get_users
         self.create_gifts(items, users)
-
     end
 
 private

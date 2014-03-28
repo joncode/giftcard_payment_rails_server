@@ -15,9 +15,9 @@ describe RewardsGenerator do
         user4 = FactoryGirl.create(:user, first_name: "Fourth", last_name: "Laszt")
 
         campaign = FactoryGirl.create(:campaign, budget: 4)
-        ci1 = FactoryGirl.create(:campaign_item, textword: 'a', budget: 2, reserve: 2, campaign_id: campaign.id, provider_id: provider1.id)
+        ci1 = FactoryGirl.create(:campaign_item, textword: 'a', budget: 2, reserve: 2, campaign_id: campaign.id, provider_id: provider1.id, cost: "1")
         ci1.update(reserve: 2)
-        ci2 = FactoryGirl.create(:campaign_item, textword: 'b', budget: 2, reserve: 2, campaign_id: campaign.id, provider_id: provider2.id)
+        ci2 = FactoryGirl.create(:campaign_item, textword: 'b', budget: 2, reserve: 2, campaign_id: campaign.id, provider_id: provider2.id, cost: "1")
         ci2.update(reserve: 2)
 
         RewardsGenerator::make_gifts
