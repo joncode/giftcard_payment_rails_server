@@ -20,7 +20,7 @@ class Campaign < Admtmodel
     end
 
     def is_live?
-        live_date.present?  && live_date  <= today && close_date.present? && close_date >  today
+        live_date.present?  && live_date  <= today && close_date.present? && close_date > today
     end
 
     def is_closed?

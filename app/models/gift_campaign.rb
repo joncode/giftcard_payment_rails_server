@@ -66,7 +66,8 @@ private
 
     def is_giftable
         unless giver.is_live?
-            errors.add(:campaign, "is not live. No gifts can be created.")
+            text = payable.status_text
+            errors.add(:campaign, "#{text}. No gifts can be created.")
         end
         unless payable.has_reserve?
             errors.add(:campaign_item, "reserve is empty. No more gifts can be created under this campaign item.")
