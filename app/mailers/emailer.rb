@@ -78,7 +78,6 @@ module Emailer
     	###----> remind giver to remind recipient, after one month , cron job
 		template_name    = "iom-gift-unopened-giver"
 		user_name        = recipient.name #user/purchaser receiving the email
-		receiver_name    = #person to whom the gift was sent
 		template_content = [{"name" => "user_name", "content" => user_name},
 							          {"name" => "receiver_name", "content" => receiver_name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
