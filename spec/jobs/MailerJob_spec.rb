@@ -4,10 +4,7 @@ require "mandrill"
 describe MailerJob do
 
     before(:each) do
-        # Provider.delete_all
-        # User.delete_all
-        # Gift.delete_all
-        # GiftItem.delete_all
+        ResqueSpec.reset!
         @provider = FactoryGirl.create :provider, name: "Merchies"
         @giver = FactoryGirl.create :user, first_name: "Givie", last_name: "Giverson", email: "givie@email.com"
         @receiver = FactoryGirl.create :user, first_name: "Receivy", last_name: "Receiverson", email: "receivy@email.com"
@@ -19,15 +16,6 @@ describe MailerJob do
                                           giver_name: @giver.name
         @gift_item = FactoryGirl.create :gift_item, { gift_id: @gift.id}
     end
-    before(:each) do
-        ResqueSpec.reset!
-    end
-    # after(:all) do
-    #     Provider.delete_all
-    #     User.delete_all
-    #     Gift.delete_all
-    #     GiftItem.delete_all
-    # end
 
     describe :perform do
         it "should call notify receiver" do
