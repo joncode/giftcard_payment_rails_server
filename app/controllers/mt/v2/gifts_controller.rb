@@ -2,21 +2,31 @@ class Mt::V2::GiftsController < JsonController
     before_action :authenticate_merchant_tools
     rescue_from JSON::ParserError, :with => :bad_request
 
-    def create
+    def bulk_create
         return nil if collection_bad_request
         return nil if data_not_hash?(params["data"])
-        allowed = ["receiver_name", "receiver_email", "shoppingCart", "message", "expires_at"]
+        allowed = ["gift_promo_mock_id"]
         return nil if reject_if_not_exactly(allowed)
-        convert_if_json(params["data"]["shoppingCart"])
-        gift_hsh = gift_params
-        gift_hsh["provider_id"] = @provider.id
+        gp_mock_id = gift_params["gift_promo_mock_id"]
+        if gp_mock = GiftPromoMock.find(gift_params["gift_promo_mock_id"])
+            gift_hsh = gp_mock.gift_hsh
+            gift_hsh["provider_id"] = @provider.id
 
-        gift = GiftPromo.new(gift_hsh)
-        if gift.save
-            success gift.promo_serialize
+            if gp_mock.socials.count > 1
+                gp_mock.emails.each do |email|
+                    gift_hsh["receiver_email"] = email
+                    create gift_hsh
+                end
+            elsif gp_mock.socials.count == 1
+
+                gift_hsh["receiver_email"] = gp_mock.emails.first
+                create gift_hsh
+            elsif gp_mock.socials.count < 1
+                status = :bad_request
+                fail gp_mock
+            end
         else
-            status = :bad_request
-            fail gift
+            status = :not_found
         end
 
         respond(status)
@@ -24,8 +34,43 @@ class Mt::V2::GiftsController < JsonController
 
 private
 
+    def create gift_hsh
+        gift = GiftPromo.new(gift_hsh)
+        if gift.save
+            success gift.promo_serialize
+        else
+            status = :bad_request
+            fail gift
+        end
+    end
+
+
+    # def create
+    #     return nil if collection_bad_request
+    #     return nil if data_not_hash?(params["data"])
+    #     allowed = ["receiver_name", "receiver_email", "shoppingCart", "message", "expires_at"]
+    #     return nil if reject_if_not_exactly(allowed)
+    #     convert_if_json(params["data"]["shoppingCart"])
+    #     gift_hsh = gift_params
+    #     gift_hsh["provider_id"] = @provider.id
+
+    #     gift = GiftPromo.new(gift_hsh)
+    #     if gift.save
+    #         Relay.send_push_notification(gift)
+    #         gift.notify_receiver
+    #         success gift.promo_serialize
+    #     else
+    #         status = :bad_request
+    #         fail gift
+    #     end
+
+    #     respond(status)
+    # end
+
+private
+
     def gift_params
-        allowed = ["receiver_name", "receiver_email", "shoppingCart", "message", "expires_at"]
+        allowed = ["gift_promo_mock_id"]
         params.require(:data).permit(allowed)
     end
 
