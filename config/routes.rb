@@ -194,7 +194,11 @@ Drinkboard::Application.routes.draw do
   namespace :mt, defaults: { format: 'json' } do
     namespace :v2 do
 
-      resources :gifts,     only: [:create]
+      resources :gifts, only: [] do
+        collection do
+          post :bulk_create
+        end
+      end
 
       resources :merchants, only: [:create, :update] do
 

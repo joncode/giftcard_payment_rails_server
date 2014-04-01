@@ -29,7 +29,7 @@ module Emailer
 
 	def welcome data
 		user      = User.find(data["user_id"])
-		email     = user.id
+		email     = user.email
 		user_name = user.name
 
 		template_name    = "iom-user-welcome"
