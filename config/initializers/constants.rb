@@ -23,12 +23,9 @@ else
     PUBLIC_URL      = "http://0.0.0.0:3001"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
 end
-
-
+    
 SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"
 SLICKTEXT_PRIVATE =  "0cc8841e131a2ecdc690a4d2e7b5a676255e26a8"
-
-
 
 AT_EMAIL       = "@itson.me"
 SUPPORT_EMAIL  = "support#{AT_EMAIL}"
