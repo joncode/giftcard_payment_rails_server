@@ -37,7 +37,7 @@ describe Mt::V2::GiftsController do
             rrc 400
         end
 
-        it "should create a promo gift and populate the provider with the token" do
+        it "should create a promo gift and find the provider via the token" do
             create_hsh = { "gift_promo_mock_id" => @gp_mock.id }
             post :bulk_create, format: :json, data: create_hsh
             rrc 200
