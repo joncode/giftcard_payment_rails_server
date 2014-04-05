@@ -23,7 +23,7 @@ else
     PUBLIC_URL      = "http://0.0.0.0:3001"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
 end
-    
+
 SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"
 SLICKTEXT_PRIVATE =  "0cc8841e131a2ecdc690a4d2e7b5a676255e26a8"
 
@@ -35,8 +35,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.2.3.2"
-VERSION_UPDATED = "4/1/14"
+VERSION_NUMBER  = "1.2.3.3"
+VERSION_UPDATED = "4/4/14"
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 VALID_PHONE_REGEX = /1?\s*\W?\s*([2-9][0-8][0-9])\s*\W?\s*([2-9][0-9]{2})\s*\W?\s*([0-9]{4})(\se?x?t?(\d*))?/
