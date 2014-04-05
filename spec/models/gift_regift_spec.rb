@@ -326,6 +326,36 @@ describe GiftRegift do
 
     end
 
+
+    context "Regifting Campaign Gift" do
+
+        before(:each) do
+            @user     = FactoryGirl.create(:user)
+            @regifter = FactoryGirl.create(:user, first_name: "Jon", last_name: "Regifter")
+            @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
+            @expires_at = Time.now + 1.month
+            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", service: '10.05', expires_at: @expires_at)
+            @gift_hsh = {}
+            @gift_hsh["message"]       = "I just REGIFTED!"
+            @gift_hsh["name"]          = @receiver.name
+            @gift_hsh["receiver_id"]   = @receiver.id
+            @gift_hsh["giver"]         = @regifter
+            @gift_hsh["old_gift_id"]   = @old_gift.id
+        end
+
+        it "should create gift with old_gift provider" do
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.message.should       == "I just REGIFTED!"
+            gift.receiver_name.should == @receiver.name
+            gift.receiver.should      == @receiver
+            gift.provider.should      == @old_gift.provider
+            gift.provider_name.should == @old_gift.provider_name
+            gift.expires_at           == @expires_at
+        end
+    end
+
+
 end# == Schema Information
 #
 # Table name: gifts
