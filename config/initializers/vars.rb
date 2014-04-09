@@ -75,7 +75,13 @@ SOCIAL_PROXY_TOKEN = if Rails.env.development? or Rails.env.test?
 else
     ENV['SOCIAL_PROXY_TOKEN']
 end
-    
+
+SLICKTEXT_PRIVATE =  if Rails.env.development? or Rails.env.test?
+    "0cc8841e131a2ecdc690a4d2e7b5a676255e26a8"
+else
+    ENV['SLICKTEXT_PRIVATE']
+end
+
 
 
 
