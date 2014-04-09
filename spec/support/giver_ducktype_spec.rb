@@ -8,10 +8,6 @@ shared_examples_for "giver ducktype" do
         object.get_photo.class.should == String
     end
 
-    it "should have a photo_url at :get_photo" do
-        object.get_photo.class.should == String
-    end
-
     it "should have a unique ID" do
         object.id.class.should == Fixnum
     end
@@ -20,5 +16,5 @@ shared_examples_for "giver ducktype" do
         ary = [Campaign, BizUser, AdminGiver, User]
         ary.include?(object.class).should be_true
     end
-
+    
 end

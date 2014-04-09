@@ -7,6 +7,7 @@ describe "Gift Costs" do
         @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
         @provider = FactoryGirl.create(:provider)
 	end
+
 	after(:all) do
 		Gift.delete_all
 	end
@@ -194,6 +195,7 @@ describe "Gift Costs" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
             gift_campaign.cost.should           == "12"
         end
+        
         it "should transfer GiftCampaign cost to ReGift" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
             regift_hsh = {}
