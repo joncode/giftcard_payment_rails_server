@@ -71,7 +71,7 @@ describe AppController do
 
             it "should not return :pay_stat => 'payment_error' gifts" do
                 gifts = Gift.all
-                last_gift = gifts.pop
+                last_gift = gifts.last
                 gifts.each do |gift|
                     gift.update(pay_stat: "payment_error" )
                 end
@@ -82,8 +82,8 @@ describe AppController do
 
             it "should not return :status => 'expired' gifts" do
                 gifts = Gift.all
-                last_gift = gifts.pop
-                last_gift = gifts.pop
+                last_gift = gifts.last
+                last_gift = gifts.last
                 gifts.each do |gift|
                     gift.update(status: "expired")
                 end

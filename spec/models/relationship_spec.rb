@@ -21,26 +21,26 @@ describe Relationship do
 
     it "should associate user with user" do
         Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
-        @ted.followed_users.pop.should  == @bryan
-        @bryan.followers.pop.should     == @ted
+        @ted.followed_users.last.should  == @bryan
+        @bryan.followers.last.should     == @ted
     end
 
     it "should associate the user via build" do
         @ted.relationships.create(followed_id: @bryan.id)
-        @ted.followed_users.pop.should  == @bryan
-        @bryan.followers.pop.should     == @ted
+        @ted.followed_users.last.should  == @bryan
+        @bryan.followers.last.should     == @ted
     end
 
     it "should associate the user via build" do
         @ted.reverse_relationships.create(follower_id: @bryan.id)
-        @ted.followers.pop.should        == @bryan
-        @bryan.followed_users.pop.should == @ted
+        @ted.followers.last.should        == @bryan
+        @bryan.followed_users.last.should == @ted
     end
 
     it "should associate user with user" do
         Relationship.create(followed_id: @ted.id, follower_id: @bryan.id)
-        @ted.followers.pop.should        == @bryan
-        @bryan.followed_users.pop.should == @ted
+        @ted.followers.last.should        == @bryan
+        @bryan.followed_users.last.should == @ted
     end
 
     it "should autosave follower with :save" do
@@ -70,8 +70,8 @@ describe Relationship do
     it "should return existing relationship when Relationship already exists" do
         r = Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
         r.class.should == Relationship
-        @ted.followed_users.pop.should  == @bryan
-        @bryan.followers.pop.should     == @ted
+        @ted.followed_users.last.should  == @bryan
+        @bryan.followers.last.should     == @ted
         r2 = Relationship.create(follower_id: @ted.id, followed_id: @bryan.id)
         Relationship.all.count.should == 1
         r2.should be_true
