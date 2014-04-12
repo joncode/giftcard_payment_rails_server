@@ -38,6 +38,7 @@ group :test do
   gem 'resque_spec'
   gem 'database_cleaner'
   gem 'rest-client'
+  gem 'minitest'
 end
 
 

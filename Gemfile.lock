@@ -250,6 +250,7 @@ DEPENDENCIES
   launchy
   mailchimp-api
   mandrill-api (~> 1.0.35)
+  minitest
   namecase (~> 1.1.0)
   pg
   rack-timeout
