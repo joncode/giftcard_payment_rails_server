@@ -53,7 +53,7 @@ module Formatter
 
     def split_name name
         name_ary    = name.split(' ')
-        last_name   = name_ary.pop
+        last_name   = name_ary.last
         first_name  = if name_ary.kind_of? String
             name_ary
         else

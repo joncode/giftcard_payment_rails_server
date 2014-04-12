@@ -55,7 +55,7 @@ private
 
 	def add_server
 		server_ary      = self.provider.get_server_from_code(self.server_code)
-		server_obj      = server_ary.pop
+		server_obj      = server_ary.last
 		self.server_id  = server_obj.user.id
 		puts "found server #{server_obj.name} #{server_obj.id}"
 	end

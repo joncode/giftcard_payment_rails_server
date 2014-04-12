@@ -126,19 +126,6 @@ describe Mdot::V2::SettingsController do
             setting.email_reminder_gift_giver.should be_true
         end
 
-        it "should not accept false keys and succeed silently" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = {"email_receisdf"=>false, "email_invite"=>false, "email_rsadfedeem"=>false, "ads"=>false, "sdf"=>true}
-            put :update, format: :json, data: params
-            rrc(200)
-            json["status"].should == 1
-            response = json["data"]
-            compare_keys(response, @keys)
-            @user.reload
-            setting = @user.setting
-            setting.email_invite.should be_false
-        end
-
         it "should not update record keys that are not accesible" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params =  {created_at: "happy", updated_at: "happy", confirm_email_token: "happy", confirm_phone_token: "happy", reset_token: "happy", confirm_phone_flag: "happy", confirm_email_flag: "happy", confirm_phone_token_sent_at: "happy", confirm_email_token_sent_at: "happy", reset_token_sent_at: "happy"}

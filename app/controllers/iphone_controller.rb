@@ -169,7 +169,7 @@ class IphoneController < AppController
 		providers.each do |p|
 			if p.menu_string
 				obj   = ActiveSupport::JSON.decode p.menu_string.data
-				x     = obj.keys.pop
+				x     = obj.keys.last
 				value = obj[x]
 				value["sales_tax"]  = p.sales_tax || "7.25"
 				menus.merge!(obj)

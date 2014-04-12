@@ -8,7 +8,7 @@ class Answer < ActiveRecord::Base
 	def self.save_these(answered_questions, user)
 
 		answered_questions.each do |a|
-			if answer = Answer.where(user_id: user.id, question_id: a["question_id"].to_i).pop
+			if answer = Answer.where(user_id: user.id, question_id: a["question_id"].to_i).last
 				if answer.answer != a["answer"]
 					answer.update_attributes(answer: a["answer"])
 				end

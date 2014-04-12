@@ -68,7 +68,7 @@ class Card < ActiveRecord::Base
 	end
 
 	def self.get_cards user
-		cards = Card.find_all_by_user_id(user.id)
+		cards = Card.where(user_id: user.id)
 		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
 	end
 
