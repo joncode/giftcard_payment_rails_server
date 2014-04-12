@@ -168,14 +168,14 @@ describe Mdot::V2::GiftsController do
             it "should not return :pay_stat => 'payment_error' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 gifts = Gift.where(receiver_id: @user.id)
-                last_gift = gifts.pop
+                last_gift = gifts.last
                 gifts.each do |gift|
                     gift.update(pay_stat: "payment_error" )
                 end
 
                 get :badge, format: :json
                 json["data"]["badge"].should == 1
-                gift = json["data"]["gifts"].pop
+                gift = json["data"]["gifts"].last
 
                 gift["gift_id"].should == last_gift.id
             end
@@ -183,14 +183,14 @@ describe Mdot::V2::GiftsController do
             it "should not return :status => 'expired' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 gifts = Gift.where(receiver_id: @user.id)
-                last_gift       = gifts.pop
-                other_last_gift = gifts.pop
+                last_gift       = gifts.last
+                other_last_gift = gifts.last
                 gifts.each do |gift|
                     gift.update(status: "expired")
                 end
                 get :badge, format: :json
                 json["data"]["badge"].should == 2
-                gift = json["data"]["gifts"].pop
+                gift = json["data"]["gifts"].last
                 gift["gift_id"].should       == last_gift.id
             end
         end
