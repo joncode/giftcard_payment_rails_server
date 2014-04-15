@@ -2,6 +2,7 @@ class Mdot::V2::SessionsController < JsonController
     before_action :authenticate_general_token
 
     rescue_from ActiveRecord::RecordInvalid, :with => :handle_rescue
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def create
         return nil if params_bad_request(["email", 'password', 'pn_token'])

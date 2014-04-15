@@ -150,7 +150,7 @@ describe "Gift Costs" do
 
         it "should calculate GiftCampaign cost from campaign item cost" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
-            gift_campaign.cost.should           == "3"
+            gift_campaign.cost.should == "3"
         end
 
         it "should transfer GiftCampaign cost to ReGift" do
@@ -184,7 +184,7 @@ describe "Gift Costs" do
                                                                 shoppingCart: "[{\"price\":\"10\",\"price_promo\":\"4\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]",
                                                                 budget: 100,
                                                                 value: "30",
-                                                                cost: "12")
+                                                                cost: "0")
             @gift_hsh = {}
             @gift_hsh["receiver_name"]  = "Customer Name"
             @gift_hsh["receiver_email"] = "customer@gmail.com"
@@ -193,7 +193,7 @@ describe "Gift Costs" do
 
         it "should calculate GiftCampaign cost from campaign item cost" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
-            gift_campaign.cost.should           == "12"
+            gift_campaign.cost.should == "0"
         end
         
         it "should transfer GiftCampaign cost to ReGift" do
@@ -204,7 +204,7 @@ describe "Gift Costs" do
             regift_hsh["email"]       = "bob@email.com"
         	regift_hsh["old_gift_id"] = gift_campaign.id
             gift_regift = GiftRegift.create regift_hsh
-            gift_regift.cost.should == "12"
+            gift_regift.cost.should == "0"
         end
     end
 

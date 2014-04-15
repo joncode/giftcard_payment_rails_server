@@ -2,6 +2,7 @@ class Mdot::V2::TwitterController < JsonController
 
     before_action :authenticate_customer
     before_action :get_current_user_tw_oauth, except: :oauth
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def friends
 

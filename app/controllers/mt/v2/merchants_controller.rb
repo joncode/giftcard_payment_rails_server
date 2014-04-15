@@ -1,6 +1,7 @@
 class Mt::V2::MerchantsController < JsonController
     before_action :authenticate_merchant_tools, except: [:create, :reconcile_merchants]
     before_action :authenticate_general_token,  only:   [:create, :reconcile_merchants]
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def create
         return nil  if data_not_hash?

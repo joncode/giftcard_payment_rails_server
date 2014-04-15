@@ -37,7 +37,7 @@ private
     def self.reminder_email_to_gift_user(gift, receiver=true)
         if provider_active_and_live? gift
             user_id = receiver ? gift.receiver.id : gift.giver_id
-            user = User.where(id: user_id).pop
+            user = User.where(id: user_id).last
             if user && user.not_suspended?
                 if receiver
                     MailerJob.reminder_gift_receiver(user) if user.setting.email_reminder_gift_receiver == true

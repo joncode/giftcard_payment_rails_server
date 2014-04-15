@@ -157,7 +157,8 @@ private
         if params.require(:data).kind_of?(String)
             JSON.parse(params.require(:data))
         else
-            params.require(:data).permit(:message, :giver_id, :giver_name, :value, :service, :receiver_id, :receiver_email, :facebook_id, :twitter, :receiver_phone, :provider_name, :receiver_name, :provider_id, :credit_card)
+            params.require(:data).permit(:message, :giver_id, :giver_name, :value, :service, :receiver_id, :receiver_email, :facebook_id, :twitter, :receiver_phone, :provider_name, :receiver_name, :provider_id, :credit_card,
+                                         receiver_oauth: [:token, :secret, :network, :network_id, :handle, :photo])
         end
     end
 

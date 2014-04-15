@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
 	include Email
 	include Utility
 
+	attr_accessor :api_v1
+
 	has_one  :setting
 	has_many :pn_tokens
 	has_many :brands
@@ -18,7 +20,7 @@ class User < ActiveRecord::Base
     has_many :sent,       as: :giver,  class_name: Gift
     has_many :received,   foreign_key: :receiver_id, class_name: Gift
 
-	has_many :followed_users, through: :relationships, source: "followed"
+	has_many :followed_users, through: :relationships, source: :followed
 	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
 	has_many :reverse_relationships, foreign_key: "followed_id",
 	                              class_name: "Relationship",
@@ -37,6 +39,7 @@ class User < ActiveRecord::Base
 	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
 	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :unless => :is_perm_deactive?
 	validates :password, 	length: { minimum: 6 },     on: :create
+	validates :password_confirmation, presence: true,   on: :create
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 

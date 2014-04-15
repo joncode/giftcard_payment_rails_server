@@ -5,7 +5,7 @@ class Admtmodel < ActiveRecord::Base
             ENV['ADMT_DATABASE_URL']
         )
     else
-        establish_connection "admt_#{Rails.env}"
+        establish_connection "admt_#{Rails.env}".to_sym
     end
 
 end
