@@ -2,6 +2,7 @@ class Mdot::V2::UsersController < JsonController
     include Email
     before_action :authenticate_customer,      only: [:index, :update, :show, :deactivate_user_social]
     before_action :authenticate_general_token, only: [:create, :reset_password]
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def index
         users = User.where(active: true)

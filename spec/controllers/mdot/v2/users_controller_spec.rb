@@ -514,7 +514,7 @@ describe Mdot::V2::UsersController do
             rrc 200
             json =  JSON.parse(response.body)
             json['status'].should == 0
-            json["data"]["error"].should == {"password_confirmation"=>["doesn't match Password"]}
+            json["data"]["error"].should == {"password_confirmation"=>["doesn't match Password", "can't be blank"]}
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: nil, first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             post :create, format: :json, data: user_hsh

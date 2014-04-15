@@ -105,8 +105,7 @@ describe Mt::V2::MerchantsController do
             request.env["HTTP_TKN"] = provider.token
             new_provider_hsh = { "tz" => "0-700" }
             put :update, id: provider.id, format: :json, data: new_provider_hsh
-            rrc(200)
-
+            rrc(400)
         end
 
     end

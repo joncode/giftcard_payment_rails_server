@@ -1,6 +1,7 @@
 class Admt::V2::UsersController < JsonController
 
     before_action :authenticate_admin_tools
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def update
         return nil  if data_not_hash?
