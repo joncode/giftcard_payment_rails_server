@@ -105,17 +105,17 @@ describe GiftCampaign do
             @campaign.update(live_date: (Time.now + 1.day).to_date)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should == 1
-            gift.errors.full_messages[0].should == "Campaign is not live. No gifts can be created."
+            gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 has not started yet. No gifts can be created."
         end
 
         it "should not create gift if the campaign is closed" do
             @campaign.update(close_date: (Time.now - 1.day).to_date)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should == 1
-            gift.errors.full_messages[0].should == "Campaign is not live. No gifts can be created."
+            gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 has not started yet. No gifts can be created."
         end
     end
-
+    
     context "Merchant Campaign" do
 
         before(:each) do
