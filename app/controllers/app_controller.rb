@@ -26,6 +26,7 @@ class AppController < JsonController
         unless params["data"].kind_of?(Hash)
             @app_response["error"] = "App needs to be reset. Please log out and log back in."
         end
+        params["data"]["api_v1"] = true if params["data"].present?
         if (user = authenticate_app_user(params["token"])) && (@app_response["error"].nil?)
 
             if user.update_attributes(user_params)
@@ -700,7 +701,7 @@ private
     # end
 
     def user_params
-    	params.require(:data).permit(:first_name, :last_name,  :phone, :email, :birthday, :sex, :zip, :facebook_id, :twitter)
+    	params.require(:data).permit(:first_name, :last_name,  :phone, :email, :birthday, :sex, :zip, :facebook_id, :twitter, :api_v1)
     end
 
     # def strong_user_param(data_hsh)
@@ -712,7 +713,7 @@ private
         if params.require(:gift).kind_of?(String)
             pg = JSON.parse(params.require(:gift))
         else
-            params.require(:gift).permit(:message, :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_email, :receiver_phone,:twitter, :facebook_id, :receiver_name, :provider_name, :provider_id,:credit_card, :total)
+            params.require(:gift).permit(:message, :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_email, :receiver_phone,:twitter, :facebook_id, :receiver_name, :provider_name, :provider_id,:credit_card, :total, :api_v1)
         end
     end
 end

@@ -14,7 +14,7 @@ gem 'mailchimp-api'
 gem 'json', '~> 1.7.7'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
-gem 'bcrypt-ruby', '~> 3.1.2'
+gem 'bcrypt-ruby'
 gem 'activemerchant'
 gem 'urbanairship'
 

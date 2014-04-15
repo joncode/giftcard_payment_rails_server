@@ -1,5 +1,6 @@
 class Mdot::V2::PhotosController < JsonController
     before_action :authenticate_customer
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def create
         return nil if params_bad_request

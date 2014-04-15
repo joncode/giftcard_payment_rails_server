@@ -167,30 +167,30 @@ describe Mdot::V2::GiftsController do
 
             it "should not return :pay_stat => 'payment_error' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
-                gifts = Gift.where(receiver_id: @user.id)
-                last_gift = gifts.last
+                gifts = Gift.where(receiver_id: @user.id).to_a
+                last_gift = gifts.pop
                 gifts.each do |gift|
                     gift.update(pay_stat: "payment_error" )
                 end
 
                 get :badge, format: :json
                 json["data"]["badge"].should == 1
-                gift = json["data"]["gifts"].last
+                gift = json["data"]["gifts"].pop
 
                 gift["gift_id"].should == last_gift.id
             end
 
             it "should not return :status => 'expired' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
-                gifts = Gift.where(receiver_id: @user.id)
-                last_gift       = gifts.last
-                other_last_gift = gifts.last
+                gifts = Gift.where(receiver_id: @user.id).to_a
+                last_gift       = gifts.pop
+                other_last_gift = gifts.pop
                 gifts.each do |gift|
                     gift.update(status: "expired")
                 end
                 get :badge, format: :json
                 json["data"]["badge"].should == 2
-                gift = json["data"]["gifts"].last
+                gift = json["data"]["gifts"].pop
                 gift["gift_id"].should       == last_gift.id
             end
         end
@@ -744,7 +744,7 @@ describe Mdot::V2::GiftsController do
         it "should return 404 + 'credit card not on file' msg when card not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             # test that create gift does not create the gift or the sale
-            gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: @card
+            gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: 99999999999999999999999
             post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(404)
             json["status"].should == 0

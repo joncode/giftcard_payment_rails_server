@@ -70,8 +70,8 @@ describe AppController do
         context "scope out unpaid gifts / expired gifts" do
 
             it "should not return :pay_stat => 'payment_error' gifts" do
-                gifts = Gift.all
-                last_gift = gifts.last
+                gifts = Gift.all.to_a
+                last_gift = gifts.pop
                 gifts.each do |gift|
                     gift.update(pay_stat: "payment_error" )
                 end
@@ -81,9 +81,9 @@ describe AppController do
             end
 
             it "should not return :status => 'expired' gifts" do
-                gifts = Gift.all
-                last_gift = gifts.last
-                last_gift = gifts.last
+                gifts = Gift.all.to_a
+                last_gift = gifts.pop
+                last_gift = gifts.pop
                 gifts.each do |gift|
                     gift.update(status: "expired")
                 end
@@ -499,7 +499,7 @@ describe AppController do
             gift.reload
             gift.status.should == 'redeemed'
             gift.server.should == "test"
-            gift.redeemed_at.day.should == time.utc.day
+            gift.redeemed_at.utc.day.should == time.utc.day
         end
 
         it "should return validation errors on bad gift" do

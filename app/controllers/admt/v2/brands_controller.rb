@@ -1,6 +1,7 @@
 class Admt::V2::BrandsController < JsonController
 
     before_action :authenticate_admin_tools
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def create
         brand_hsh = params["data"]
