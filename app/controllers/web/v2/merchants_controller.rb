@@ -1,5 +1,6 @@
 class Web::V2::MerchantsController < JsonController
     before_action :authenticate_www_token
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def show
 

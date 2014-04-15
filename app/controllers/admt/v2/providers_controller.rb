@@ -1,6 +1,7 @@
 class Admt::V2::ProvidersController < JsonController
 
     before_action :authenticate_admin_tools
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def create
         provider = Provider.new(params[:data][:provider_params])
