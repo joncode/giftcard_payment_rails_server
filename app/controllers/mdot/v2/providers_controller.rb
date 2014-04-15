@@ -1,5 +1,5 @@
 class Mdot::V2::ProvidersController < JsonController
-    before_action :authenticate_customer
+    #before_action :authenticate_customer
 
     def menu
         menu = MenuString.get_menu_v2_for_provider(params[:id])
