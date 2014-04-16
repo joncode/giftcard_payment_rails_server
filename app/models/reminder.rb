@@ -1,37 +1,6 @@
 class Reminder
 	include Emailer
 
-    # def self.gift_reminder
-    #     puts "----------------------Reminder Cron --------------------------"
-    # 	today = Time.now.beginning_of_day
-    # 	gifts = Gift.where(status: ["incomplete", "open", "notified"]).where('created_at > ?', today - 31.days)
-
-    # 	thirtydaygifts = gifts.where(status:["open", "notified"]).where("created_at < ?", today - 29.days)
-    # 	thirtydaygifts.each do |gift|
-
-    #         puts "reminder 30 day for gift = #{gift.id}"
-    # 	    self.reminder_email_to_gift_user(gift)
-
-    # 	end
-
-    # 	tendaygifts = gifts.where(status:["incomplete"]).where("created_at < ?", today - 10.days).where("created_at > ?", today - 11.days)
-    # 	tendaygifts.each do |gift|
-
-    #         puts "reminder 10 day for gift = #{gift.id}"
-    #         self.reminder_email_to_gift_user(gift, false)
-
-    # 	end
-
-    # 	threedaygifts = gifts.where(status:["open", "notified"]).where("created_at < ?", today - 3.days).where("created_at > ?", today - 4.days)
-    # 	threedaygifts.each do |gift|
-
-    #         puts "reminder 3 day for gift = #{gift.id}"
-    #         self.reminder_email_to_gift_user(gift)
-
-    # 	end
-    #     puts "---------------------- end reminders ---------------------------"
-    # end
-
     def self.gift_reminder
         puts "----------------------Reminder Cron --------------------------"
         today = Time.now.beginning_of_day
@@ -40,14 +9,14 @@ class Reminder
         receivers_array = []
         thirtydaygifts = gifts.where(status:["open", "notified"]).where("created_at < ?", today - 29.days)
         thirtydaygifts.each do |gift|
-            puts "reminder 30 day for gift = #{gift.id}"
+            print "reminder 30 day for gift = #{gift.id}"
             unless receivers_array.include? gift.receiver_id
                 receivers_array << gift.receiver_id if provider_active_and_live? gift
             end
         end
         threedaygifts = gifts.where(status:["open", "notified"]).where("created_at < ?", today - 3.days).where("created_at > ?", today - 4.days)
         threedaygifts.each do |gift|
-            puts "reminder 3 day for gift = #{gift.id}"
+            print "reminder 3 day for gift = #{gift.id}"
             unless receivers_array.include? gift.receiver_id
                 receivers_array << gift.receiver_id if provider_active_and_live? gift
             end
@@ -60,7 +29,7 @@ class Reminder
 
         tendaygifts = gifts.where(status:["incomplete"]).where("created_at < ?", today - 10.days).where("created_at > ?", today - 11.days)
         tendaygifts.each do |gift|
-            puts "reminder 10 day for gift = #{gift.id}"
+            print "reminder 10 day for gift = #{gift.id}"
             self.reminder_email_to_gift_user(gift, false)
         end
 
@@ -75,8 +44,10 @@ private
             user = User.where(id: user_id).last
             if user && user.not_suspended?
                 if receiver
+                    puts " - sent receiver reminder"
                     MailerJob.reminder_gift_receiver(user) if user.setting.email_reminder_gift_receiver == true
                 else
+                    puts " - sent giver reminder"
                     MailerJob.reminder_gift_giver(user, gift.receiver_name) if user.setting.email_reminder_gift_giver == true
                 end
             end

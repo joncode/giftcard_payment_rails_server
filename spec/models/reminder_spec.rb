@@ -9,10 +9,13 @@ describe Reminder do
 		@provider = FactoryGirl.create :provider, active: true, mode: "live"
 		@bad_provider = FactoryGirl.create :provider, mode: "Not Live"
 	end
+
 	after(:all) do
 		User.delete_all
 		Provider.delete_all
 	end
+
+
 
 	context "3 day old gifts" do
 
