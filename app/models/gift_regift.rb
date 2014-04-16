@@ -30,7 +30,7 @@ private
     def pre_init args={}
         args.delete("old_gift_id")
         old_gift         = args["payable"]
-        args["cat"]      = 100
+        args["cat"]      = set_cat(old_gift)
         args["giver"]    = old_gift.receiver
         args["provider"] = old_gift.provider
         args["value"]    = old_gift.value
@@ -50,6 +50,10 @@ private
             args["receiver_#{key}"] = args[key]
             args.delete(key)
         end
+    end
+
+    def set_cat old_gift
+        old_gift.cat + 1 if old_gift.cat.present?
     end
 
 end# == Schema Information

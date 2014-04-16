@@ -24,7 +24,7 @@ private
 
     def pre_init args={}
         giver           = BizUser.find(args["provider_id"])
-        args["cat"]     = 200
+        args["cat"]     = set_cat(args)
         args["giver"]   = giver
         args["value"]   = calculate_value(args["shoppingCart"])
         args["cost"]    = "0"
@@ -39,6 +39,14 @@ private
     def calculate_value shoppingCart_string
         sc = JSON.parse shoppingCart_string
         sc.sum {|z| z["price"].to_i * z["quantity"].to_i }
+    end
+
+    def set_cat args
+        if args["cat"] && args["cat"].class == Fixnum
+            args["cat"]
+        else
+            200
+        end
     end
 
 end

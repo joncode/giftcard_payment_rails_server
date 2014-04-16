@@ -86,6 +86,14 @@ describe GiftPromo do
         gift.cat.should           == 200
     end
 
+    it "should set cat to different number if included in params" do
+        @gift_hsh["cat"] = 500
+        gift        = GiftPromo.create @gift_hsh
+        gift.reload
+        gift.cat.should == 500
+    end
+
+
     xit "should set the expiration date" do
 
     end

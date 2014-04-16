@@ -8,7 +8,7 @@ describe GiftRegift do
             @user     = FactoryGirl.create(:user)
             @regifter = FactoryGirl.create(:user, first_name: "Jon", last_name: "Regifter")
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
-            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", service: '10.05')
+            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", service: '10.05', cat: 300)
             @gift_hsh = {}
             @gift_hsh["message"]       = "I just REGIFTED!"
             @gift_hsh["name"]          = @receiver.name
@@ -61,10 +61,42 @@ describe GiftRegift do
             gift.service.should      == nil
         end
 
-        it "should set the gift cat to 100" do
+        it "should set cat for regift of GiftSale to 301" do
             gift        = GiftRegift.create @gift_hsh
             gift.reload
-            gift.cat.should        == 100
+            gift.cat.should        == 301
+        end
+
+        it "should set cat for regift of Admin Gift to 101" do
+            @old_gift.update(cat: 100)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 101
+        end
+
+        it "should set cat for regift of Campaign Admin Gift to 151" do
+            @old_gift.update(cat: 150)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 151
+        end
+
+        it "should set cat for regift of Merchant Gift to 201" do
+            @old_gift.update(cat: 200)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 201
+        end
+
+        it "should set cat for regift of Campaign Merchant Gift to 251" do
+            @old_gift.update(cat: 250)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 251
         end
 
         it "should set the status of the new gift to 'notified'" do

@@ -45,5 +45,6 @@ Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
 Time::DATE_FORMATS[:only_date]       = "%b %e"
 
-GIFT_CAT = { 0 => "User", 100 => "Regift", 200 => "Promo-Merchant", 210 => "Promo-Admin", 300 => "Campaign" }
-
+GIFT_CAT = { 0 => "NULL", 100 => "Admin", 101 => "AdminRegift", 150 => "AdminCampaign", 151 => "AdminCampaignRegift",
+                          200 => "Merchant", 201 => "MerchantRegift", 250 => "MerchantCampaign", 251 => "MerchantCampaignRegift",
+                          300 => "Standard", 301 => "StandardRegift" }

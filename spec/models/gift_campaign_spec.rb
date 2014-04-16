@@ -47,7 +47,7 @@ describe GiftCampaign do
             gift_campaign.giver_id.should       == @campaign.id
             gift_campaign.giver_name.should     == "ItsOnMe Promotional Staff"
             gift_campaign.value.should          == "30"
-            gift_campaign.cat.should            == 300
+            gift_campaign.cat.should            == 150
             gift_campaign.cost.should           == "3"
         end
 
@@ -67,9 +67,15 @@ describe GiftCampaign do
             gift_campaign.expires_at.should == @expiration.beginning_of_day.in_time_zone
         end
 
-        it "should set cat to 300" do
+        it "should set admin campaign gift cat to 150" do
             gift_campaign = GiftCampaign.create @gift_hsh
-            gift_campaign.cat.should == 300
+            gift_campaign.cat.should == 150
+        end
+
+        it "should set merchant campaign gift cat to 250" do
+            @campaign.update(purchaser_type: "BizUser", purchaser_id: @provider.id)
+            gift_campaign = GiftCampaign.create @gift_hsh
+            gift_campaign.cat.should == 250
         end
 
         it "should correctly set expiration date from expires_in" do
@@ -161,7 +167,7 @@ describe GiftCampaign do
             gift_campaign.giver_id.should       == @campaign.id
             gift_campaign.giver_name.should     == "Giver Promotion Staff"
             gift_campaign.value.should          == "30"
-            gift_campaign.cat.should            == 300
+            gift_campaign.cat.should            == 250
             gift_campaign.cost.should           == "0"
         end
 

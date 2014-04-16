@@ -20,7 +20,7 @@ private
 
     def pre_init args={}
         shoppingCart = JSON.parse args["shoppingCart"]
-        args["cat"]     = 210
+        args["cat"]     = set_cat(args)
         args["value"]   = calculate_value(shoppingCart)
         args["cost"]    = calculate_cost(shoppingCart)
         giver = args["giver"]
@@ -38,6 +38,15 @@ private
     def calculate_cost shoppingCart
         shoppingCart.sum {|z| z["price_promo"].to_f * z["quantity"].to_i }
     end
+
+    def set_cat args
+        if args["cat"] && args["cat"].class == Fixnum
+            args["cat"]
+        else
+            100
+        end
+    end
+
 end# == Schema Information
 #
 # Table name: gifts

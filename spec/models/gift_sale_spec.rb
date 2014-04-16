@@ -64,10 +64,17 @@ describe GiftSale do
             gift.pay_stat.should == "charge_unpaid"
         end
 
-        it "should set the cat to 0" do
+        it "should set cat to 300 by default" do
             gift        = GiftSale.create @gift_hsh
             gift.reload
-            gift.cat.should     == 0
+            gift.cat.should == 300
+        end
+
+        it "should set cat to different number if included in params" do
+            @gift_hsh["cat"] = 500
+            gift        = GiftSale.create @gift_hsh
+            gift.reload
+            gift.cat.should == 500
         end
 
         it "should not allow regifting to deactivated receivers" do
