@@ -31,7 +31,7 @@ class Campaign < Admtmodel
         expire_date.present? && expire_date <= today
     end
 
-    def cat
+    def gift_cat
         case self.purchaser_type
         when "AdminGiver"; 150
         when "BizUser"; 250

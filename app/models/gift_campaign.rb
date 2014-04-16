@@ -50,7 +50,7 @@ private
     end
 
     def set_cat campaign
-        campaign.cat
+        campaign.gift_cat
     end
 
 #################  AFTER SAVE CALLBACKS
