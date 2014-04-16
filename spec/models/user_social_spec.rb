@@ -30,6 +30,14 @@ describe UserSocial do
       user_social = FactoryGirl.create(:user_social, type_of: "email", identifier:"test@email.com")
     end
 
+    it "should extract phone digits from dashed phone string" do
+        UserSocial.delete_all
+        user_social = FactoryGirl.build(:user_social, type_of: "phone", identifier: "222-333-4567")
+        user_social.save
+        user_social.identifier.should_not == "222-333-4567"
+        user_social.identifier.should == "2223334567"
+    end
+
     describe "uniqueness validation" do
 
         before do

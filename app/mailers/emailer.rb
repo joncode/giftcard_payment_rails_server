@@ -9,21 +9,19 @@ module Emailer
 		template_name    = "iom-reset-password"
 		template_content = [{"name" => "recipient_name", "content" => name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		subject          = "Reset Your Password"
 		link             = "#{PUBLIC_URL}/account/resetpassword/#{recipient.reset_token}"
 
-		message          = message_hash(subject, email, name, link)
+		message          = message_hash(subject(template_name), email, name, link)
 		request_mandrill_with_template(template_name, template_content, message)
 	end
 
 	def confirm_email data
 		recipient		 = User.find(data["user_id"])
 		link             = data["link"]
-		subject          = "Confirm Your Email"
 		template_name    = "iom-confirm-email"
 		template_content = [{"name" => "recipient_name", "content" => recipient.name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		message          = message_hash(subject, recipient.email, recipient.name, link)
+		message          = message_hash(subject(template_name), recipient.email, recipient.name, link)
 		request_mandrill_with_template(template_name, template_content, message)
 	end
 
@@ -33,9 +31,8 @@ module Emailer
 		user_name = user.name
 
 		template_name    = "iom-user-welcome"
-		subject          = "Welcome to ItsOnMe!"
 		template_content = [{"name" => "user_name", "content" => user_name}]
-		message          = message_hash(subject, email, user_name)
+		message          = message_hash(subject(template_name), email, user_name)
 		request_mandrill_with_template(template_name, template_content, message)
 	end
 
@@ -52,25 +49,23 @@ module Emailer
 			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
 			return nil
 		end
-		subject          = "#{giver_name} sent you a gift on #{SERVICE_NAME}"
 		adjusted_id 	 = NUMBER_ID + gift.id
 		link             = "#{PUBLIC_URL}/signup/acceptgift/#{adjusted_id}"
         bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
         template_content = generate_template_content(gift, template_name)
-		message          = message_hash(subject, email, recipient_name, link, bcc)
+		message          = message_hash(subject(template_name, options = {giver_name: giver_name}), email, recipient_name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
     def invoice_giver data
     	gift 			 = Gift.find(data["gift_id"])
 		template_name    = "iom-gift-receipt"
-		subject          = "Your gift purchase is complete"
 		email            = gift.giver.email
 		name             = gift.giver_name
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
 		template_content = generate_template_content(gift, template_name)
-		message          = message_hash(subject, email, name, link, bcc)
+		message          = message_hash(subject(template_name), email, name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
@@ -81,12 +76,11 @@ module Emailer
 		template_content = [{"name" => "user_name", "content" => user_name},
 							          {"name" => "receiver_name", "content" => receiver_name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		subject          = "#{receiver_name} hasn't opened your gift"
 		email            = recipient.email
 		name             = recipient.name
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
-		message          = message_hash(subject, email, name, link, bcc)
+		message          = message_hash(subject(template_name, options = {receiver_name: receiver_name}), email, name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
@@ -96,12 +90,11 @@ module Emailer
 		user_name        = recipient.name #user/purchaser receiving the email
 		template_content = [{"name" => "user_name", "content" => user_name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		subject          = "ItsOnMe Is Ready to Fulfill Your Mobile Gifting Needs!"
 		email            = recipient.email
 		name             = recipient.name
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
-		message          = message_hash(subject, email, name, link, bcc)
+		message          = message_hash(subject(template_name), email, name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
@@ -111,16 +104,33 @@ module Emailer
 		user_name        = recipient.name #user/purchaser receiving the email
 		template_content = [{"name" => "user_name", "content" => user_name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		subject          = "You have gifts waiting for you!"
 		email            = recipient.email
 		name             = recipient.name
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
-		message          = message_hash(subject, email, name, link, bcc)
+		message          = message_hash(subject(template_name), email, name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
 
 private
+
+	def subject template_name, options=nil
+		subject_content =
+			case template_name
+			when "iom-confirm-email";          then "Confirm Your Email"
+			when "iom-gift-hasnt-gifted";      then "ItsOnMe Is Ready to Fulfill Your Mobile Gifting Needs!"
+			when "iom-gift-notify-receiver";   then "#{options[:giver_name]} sent you a gift on ItsOnMe"
+			when "iom-gift-receipt";           then "Your gift purchase is complete"
+			when "iom-gift-unopened-giver";    then "#{options[:receiver_name]} hasn't opened your gift"
+			when "iom-gift-unopened-receiver"; then "You have gifts waiting for you!"
+			when "iom-reset-password";         then "Reset Your Password"
+			when "iom-user-welcome";           then "Welcome to ItsOnMe!"
+			end
+		if Rails.env.development? || Rails.env.staging?
+			subject_content = subject_content.insert(0, "==QA TEST EMAIL==")
+		end
+		subject_content
+	end
 
 	def message_hash(subject, email, name, link=nil, bcc=nil)
 		email = whitelist_email(email)
