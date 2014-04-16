@@ -10,12 +10,20 @@ class UserSocial < ActiveRecord::Base
     validates :identifier , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
     validates :identifier , format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
 
+    before_save :extract_phone_digits
     after_create          :subscribe_mailchimp
     after_save            :unsubscribe_mailchimp
 
     default_scope -> { where(active: true) }  # indexed
 
 private
+
+    def extract_phone_digits
+        if self.type_of == 'phone'
+            phone_match = self.identifier.to_s.match(VALID_PHONE_REGEX)
+            self.identifier  = phone_match[1] + phone_match[2] + phone_match[3]
+        end
+    end
 
     def subscribe_mailchimp
     	if self.type_of  == "email"
