@@ -288,11 +288,15 @@ class Gift < ActiveRecord::Base
     end
 
     def get_first_regifting_parent
-        parent = Gift.unscoped.find(self.payable_id)
-        if parent.payable_type == "Gift"
-            self.get_first_regifting_parent parent
+        if self.payable_type == "Gift"
+            parent = self.payable
+            if parent.payable_type == "Gift"
+                parent.get_first_regifting_parent
+            else
+                parent
+            end
         else
-            parent
+            nil
         end
     end
 
