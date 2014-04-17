@@ -27,7 +27,7 @@ module CatSetter
 
 private
 
-    def get_gifts
+    def self.get_gifts
         gifts = Gift.unscoped.all
         puts "Total gifts to start is #{gifts.count}"
         gift
