@@ -58,16 +58,28 @@ private
         hash = {}
         gifts = self.get_gifts
         hash[:no_cat]                   = gifts.where(cat: [0, nil])
+        x = hash[:no_cat].count
         hash[:gift_admin]               = gifts.where(cat: 100)
+        x += hash[:gift_admin].count
         hash[:gift_merchant]            = gifts.where(cat: 200)
+        x += hash[:gift_merchant].count
         hash[:gift_user]                = gifts.where(cat: 300)
+        x += hash[:gift_user].count
         hash[:gift_campaign_admin]      = gifts.where(cat: 150)
+        x += hash[:gift_campaign_admin].count
         hash[:gift_campaign_merchant]   = gifts.where(cat: 250)
+        x += hash[:gift_campaign_merchant].count
         hash[:regift_admin]             = gifts.where(cat: 101)
+        x += hash[:regift_admin].count
         hash[:regift_merchant]          = gifts.where(cat: 201)
+        x += hash[:regift_merchant].count
         hash[:regift_user]              = gifts.where(cat: 301)
+        x += hash[:regift_user].count
         hash[:regift_campaign_admin]    = gifts.where(cat: 151)
+        x += hash[:regift_campaign_admin].count
         hash[:regift_campaign_merchant] = gifts.where(cat: 251)
+        x += hash[:regift_campaign_merchant].count
+        puts "----------   TOTAL GIFTS COUNTED = #{x}"
         hash
     end
 
@@ -112,18 +124,17 @@ private
 
     def self.sort_gifts gifts, regift=false
         hash = {}
-        hash[:admin] = {}
-        hash[:merchant] = {}
-        hash[:user] = {}
-        hash[:campaign_admin] = {}
-        hash[:campaign_merchant] = {}
+        hash[:admin] = []
+        hash[:merchant] = []
+        hash[:user] = []
+        hash[:campaign_admin] = []
+        hash[:campaign_merchant] = []
         gifts.each do |gift|
             if regift
                 type_of = get_type_of(gift.get_first_regifting_parent)
             else
                 type_of = get_type_of(gift)
             end
-            hash[type_of] = [] unless hash[type_of].present?
             hash[type_of] << gift
         end
         hash

@@ -93,6 +93,10 @@ describe Campaign do
             campaign.campaign_items.count.should == 2
         end
 
+        it "should know its gift_cat" do
+            @campaign.gift_cat.should == 150
+        end
+
     end
 
 end
