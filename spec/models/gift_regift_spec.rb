@@ -99,6 +99,23 @@ describe GiftRegift do
             gift.cat.should        == 251
         end
 
+        it "should set cat for regift of Campaign Merchant Gift to 251" do
+            @old_gift.update(cat: 251)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            re_gift1        = GiftRegift.create @gift_hsh
+            re_gift1.reload
+            re_gift1.cat.should        == 251
+            re_gift_hsh = {}
+            re_gift_hsh["message"]        = "I just REGIFTED AGAIN!"
+            re_gift_hsh["name"]           = "Hot Potato"
+            re_gift_hsh["receiver_email"] = "hot@potato.com"
+            re_gift_hsh["giver"]          = re_gift1.receiver
+            re_gift_hsh["old_gift_id"]    = re_gift1.id
+            re_gift2 = GiftRegift.create re_gift_hsh
+            re_gift2.reload
+            re_gift2.cat.should == 251
+        end
+
         it "should set the status of the new gift to 'notified'" do
             gift        = GiftRegift.create @gift_hsh
             gift.reload
