@@ -30,7 +30,7 @@ private
     def self.get_gifts
         gifts = Gift.unscoped.all
         puts "Total gifts to start is #{gifts.count}"
-        gift
+        gifts
     end
 
     def self.sorted_gifts_hash_old
