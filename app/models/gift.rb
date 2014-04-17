@@ -287,6 +287,16 @@ class Gift < ActiveRecord::Base
         rec_hsh
     end
 
+    def get_first_regifting_parent
+        parent = Gift.unscoped.find(self.payable_id)
+        if parent.payable_type == "Gift"
+            Gift.get_first_regifting_parent parent
+        else
+            parent
+        end
+    end
+
+
 ###############
 
 private
