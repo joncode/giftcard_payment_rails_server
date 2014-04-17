@@ -53,10 +53,16 @@ private
     end
 
     def set_cat old_gift
-        old_gift.cat + 1 if old_gift.cat.present?
+        if old_gift.cat.present?
+            str = old_gift.cat.to_s
+            str[2] == "0" ?  old_gift.cat + 1 : old_gift.cat
+        else
+            001
+        end
     end
 
-end# == Schema Information
+end
+# == Schema Information
 #
 # Table name: gifts
 #

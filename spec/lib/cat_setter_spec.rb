@@ -1,8 +1,6 @@
 require 'spec_helper'
 require 'cat_setter'
 
-require 'spec_helper'
-
 def make_all_gifts
         # this creates status agnostic tons
     @start_date = Time.now - 1.month
@@ -15,25 +13,25 @@ def make_all_gifts
     campaign_merchant = FactoryGirl.create :campaign, purchaser_type: "BizUser"
     campaign_item_merchant = FactoryGirl.create :campaign_item, campaign_id: campaign_merchant.id
 
-    @admin                              = FactoryGirl.create :gift, giver_type: "AdminGiver", giver_id: @admin_giver.id, payable_type: "Debt", status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week
-    @admin_regifting_parent              = FactoryGirl.create :gift, giver_type: "AdminGiver", giver_id: @admin_giver.id, payable_type: "Debt", status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week
-    @admin_regifted_child               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @admin_regifting_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks
+    @admin                              = FactoryGirl.create :gift, giver_type: "AdminGiver", giver_id: @admin_giver.id, payable_type: "Debt", status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 210
+    @admin_regifting_parent              = FactoryGirl.create :gift, giver_type: "AdminGiver", giver_id: @admin_giver.id, payable_type: "Debt", status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 100
+    @admin_regifted_child               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @admin_regifting_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 100
 
-    @merchant                           = FactoryGirl.create :gift, giver_type: "BizUser", giver_id: @biz_user.id, payable_type: "Debt", status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week
-    @merchant_regifting_parent           = FactoryGirl.create :gift, giver_type: "BizUser", giver_id: @biz_user.id, payable_type: "Debt", status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week
-    @merchant_regifted_child            = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @merchant_regifting_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks
+    @merchant                           = FactoryGirl.create :gift, giver_type: "BizUser", giver_id: @biz_user.id, payable_type: "Debt", status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 200
+    @merchant_regifting_parent           = FactoryGirl.create :gift, giver_type: "BizUser", giver_id: @biz_user.id, payable_type: "Debt", status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 100
+    @merchant_regifted_child            = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @merchant_regifting_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 100
 
     @sale                               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Sale", status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week
-    @sale_regifting_parent               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Sale", status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week
-    @sale_regifted_child                = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @sale_regifting_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks
+    @sale_regifting_parent               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Sale", status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 100
+    @sale_regifted_child                = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @sale_regifting_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 100
 
-    @campaign_admin                     = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_admin.id, payable_type: "CampaignItem", payable_id: campaign_item_admin.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week
-    @campaign_admin_regifting_parent     = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_admin.id, payable_type: "CampaignItem", payable_id: campaign_item_admin.id, status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week
+    @campaign_admin                     = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_admin.id, payable_type: "CampaignItem", payable_id: campaign_item_admin.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 300
+    @campaign_admin_regifting_parent     = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_admin.id, payable_type: "CampaignItem", payable_id: campaign_item_admin.id, status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 100
     @campaign_admin_regifted_child      = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @campaign_admin_regifting_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks
 
-    @campaign_merchant                  = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_merchant.id, payable_type: "CampaignItem", payable_id: campaign_item_merchant.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week
-    @campaign_merchant_regifting_parent  = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_merchant.id, payable_type: "CampaignItem", payable_id: campaign_item_merchant.id, status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week
-    @campaign_merchant_regifted_child   = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @campaign_merchant_regifting_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks
+    @campaign_merchant                  = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_merchant.id, payable_type: "CampaignItem", payable_id: campaign_item_merchant.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 300
+    @campaign_merchant_regifting_parent  = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_merchant.id, payable_type: "CampaignItem", payable_id: campaign_item_merchant.id, status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 100
+    @campaign_merchant_regifted_child   = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @campaign_merchant_regifting_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 100
 
 end
 
@@ -41,7 +39,7 @@ describe "CatSetter" do
 
     before do
         make_all_gifts
-    end    
+    end
 
     it "should update the cats for all gifts" do
         CatSetter::perform
