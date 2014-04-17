@@ -8,7 +8,7 @@ module CatSetter
 
         puts "================== CatSetter::Perform - Updating Gifts ==================="
         gifts_hash.each do |type_of, gifts|
-            gift_ids = []    
+            gift_ids = []
             gifts.each do |gift|
                 update_cats(type_of, gift)
                 gift_ids << gift.id
@@ -27,9 +27,15 @@ module CatSetter
 
 private
 
+    def get_gifts
+        gifts = Gift.unscoped.all
+        puts "Total gifts to start is #{gifts.count}"
+        gift
+    end
+
     def self.sorted_gifts_hash_old
         hash = {}
-        gifts = Gift.unscoped.all
+        gifts = self.get_gifts
         non_regifts                   = gifts.where.not(payable_type: "Gift")
         sorted_gifts                  = sort_gifts(non_regifts)
         hash[:gift_admin]             = sorted_gifts[:admin]
@@ -37,12 +43,12 @@ private
         hash[:gift_user]              = sorted_gifts[:user]
         hash[:gift_campaign_admin]    = sorted_gifts[:campaign_admin]
         hash[:gift_campaign_merchant] = sorted_gifts[:campaign_merchant]
-        
+
         regifts                         = gifts.where(payable_type: "Gift")
         sorted_regifts                  = sort_gifts(regifts, regift: true)
         hash[:regift_admin]             = sorted_regifts[:admin]
         hash[:regift_merchant]          = sorted_regifts[:merchant]
-        hash[:regift_user]              = sorted_regifts[:user]                
+        hash[:regift_user]              = sorted_regifts[:user]
         hash[:regift_campaign_admin]    = sorted_regifts[:campaign_admin]
         hash[:regift_campaign_merchant] = sorted_regifts[:campaign_merchant]
         hash
@@ -50,7 +56,7 @@ private
 
     def self.sorted_gifts_hash_cat
         hash = {}
-        gifts = Gift.unscoped.all
+        gifts = self.get_gifts
         hash[:no_cat]                   = gifts.where(cat: [0, nil])
         hash[:gift_admin]               = gifts.where(cat: 100)
         hash[:gift_merchant]            = gifts.where(cat: 200)
@@ -108,7 +114,7 @@ private
         hash = {}
         hash[:admin] = {}
         hash[:merchant] = {}
-        hash[:user] = {} 
+        hash[:user] = {}
         hash[:campaign_admin] = {}
         hash[:campaign_merchant] = {}
         gifts.each do |gift|
@@ -137,7 +143,7 @@ private
                 :campaign_admin
             when "BizUser"
                 :campaign_merchant
-            end 
+            end
         end
     end
 
