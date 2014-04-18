@@ -38,9 +38,7 @@ describe Gift do
 	end
 
 	it "requires cat" do
-		user = FactoryGirl.create :user
-		provider = FactoryGirl.create :provider
-		gift = Gift.create(giver: user, receiver_name: user.name, receiver_email: user.email, provider_id: provider.id, value: "100", shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]")
+		gift = FactoryGirl.build(:gift, :cat => nil)
 		gift.should_not be_valid
 		gift.should have_at_least(1).error_on(:cat)
 	end
