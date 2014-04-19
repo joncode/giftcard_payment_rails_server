@@ -1,6 +1,6 @@
 class Redeem < ActiveRecord::Base
 
-	belongs_to      :gift
+	belongs_to      :gift , autosave: true
 	has_one         :giver,     :through => :gift
 	has_one         :receiver,  :through => :gift
 	has_one         :provider,  :through => :gift
@@ -12,7 +12,7 @@ class Redeem < ActiveRecord::Base
 	validates :redeem_code, :uniqueness => { scope: :pos_merchant_id }, :if => :pos_merchant_id?
 
 	before_create :create_redeem_code
-	after_create  :add_redeem_to_gift
+	after_create :add_redeem_to_gift
 
 	def self.find_or_create_with_gift(gift)
 		unless redeem = Redeem.find_by(gift_id: gift.id)

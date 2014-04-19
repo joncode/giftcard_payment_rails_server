@@ -68,6 +68,14 @@ describe Redeem do
 		redeem3 = Redeem.find_or_create_with_gift(gift)
 		redeem3.should == redeem
 	end
+
+	it "should save the gift with the redeem and change the status to notified" do
+		user = FactoryGirl.create(:user)
+		gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name)
+		redeem = Redeem.find_or_create_with_gift(gift)
+		gift.reload
+		gift.status.should == 'notified'
+	end
 end
 
 

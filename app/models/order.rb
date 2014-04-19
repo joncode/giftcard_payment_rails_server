@@ -2,7 +2,7 @@ class Order < ActiveRecord::Base
 	include Email
 
 	belongs_to  :provider
-	belongs_to  :redeem, autosave: :true
+	belongs_to  :redeem, autosave: true
 	belongs_to  :gift
 	belongs_to  :sales
 	belongs_to  :cards
@@ -13,14 +13,16 @@ class Order < ActiveRecord::Base
 
 	validates_presence_of 	:gift_id, :redeem_id, :provider_id
 	validates_uniqueness_of :gift_id, :redeem_id
+    validate   :is_redeemable
 
 	after_create      :update_gift_status
 	after_destroy     :rewind_gift_status
 
-	def self.init_with_pos(gift, pos_params)
+	def self.init_with_pos(pos_params)
 		raise if pos_params.nil?
+		redeem = Redeem.includes(:gift).where(pos_merchant_id: pos_params['pos_merchant_id'], redeem_code: pos_params['redeem_code']).first
 		order = Order.new(pos_params)
-		order.send(:add_gift_info, gift)
+		order.send(:add_gift_info, redeem.gift, redeem)
 		return order
 	end
 
@@ -53,8 +55,12 @@ class Order < ActiveRecord::Base
 
 private
 
-	def add_gift_info(gift)
-		if redeem = Redeem.find_by(gift_id: gift.id)
+	def add_gift_info(gift, redeem=nil)
+		if redeem.nil?
+			redeem = Redeem.find_by(gift_id: gift.id)
+		end
+
+		if redeem
 			self.gift_id     = gift.id
 			self.provider_id = gift.provider_id
 			self.redeem_code = redeem.redeem_code
@@ -64,21 +70,13 @@ private
 		self
 	end
 
-	def make_numbers(div)
-		num = "%04d" % (div % 10000)
-		"-#{num[3]}#{num[0]}-#{num[2]}#{num[1]}"
-	end
-
-	def number_to_letter(num)
-		return (num + 10).to_s(36).capitalize
-	end
-
 	def update_gift_status
 		gift = self.gift
 		gift.order_num   = self.make_order_num
 		gift.status      = 'redeemed'
 		gift.redeemed_at = self.created_at
 		gift.server      = self.server_code
+		puts "-----------------------------------------------"
 		if gift.save
 			puts "UPDATE GIFT #{gift.order_num} STATUS #{gift.status}"
 		else
@@ -118,6 +116,33 @@ private
 		self.provider_id = self.gift.provider_id if self.gift
 	end
 
+	def make_numbers(div)
+		num = "%04d" % (div % 10000)
+		"-#{num[3]}#{num[0]}-#{num[2]}#{num[1]}"
+	end
+
+	def number_to_letter(num)
+		return (num + 10).to_s(36).capitalize
+	end
+#################  VALIDATIONS
+
+    def is_redeemable
+        case self.gift.status
+        when 'redeemed'
+        	nil
+        #     errors.add(:gift, "Error - Redeem code is not valid. The gift has already been redeemed.")
+        when 'expired'
+            errors.add(:gift, "Error - Redeem code is not valid. The gift has expired.")
+        when 'incomplete'
+        	errors.add(:gift, "Error - Gift has not ben registered with a recipient.")
+        when 'open'
+        	nil
+        when 'notified'
+        	nil
+        else
+        	errors.add(:gift, "Error - Gift is not valid.")
+        end
+    end
 end
 # == Schema Information
 #

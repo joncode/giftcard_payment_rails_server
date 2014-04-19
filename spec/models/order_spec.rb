@@ -6,32 +6,62 @@ describe Order do
 
 		before(:each) do
       		user = FactoryGirl.create(:user)
-      		@gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name)
+      		@gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name, status: 'open')
       		@redeem = Redeem.find_or_create_with_gift(@gift)
 			@pos_params = { "pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @redeem.redeem_code, "server_code" => "john" }
 		end
 
-		it "should save with pos params" do
-			order = Order.init_with_pos(@gift, @pos_params)
+        xit "should not create an order if gift.status is redeemed" do
+        		#this really should never happen because the redeem code is removed from the gift on save
+			order = Order.init_with_pos(@gift, @redeem, @pos_params)
 			order.save
+        	@gift.reload
+        	@gift.status.should == 'redeemed'
+			order = Order.init_with_pos(@gift, @redeem, @pos_params)
+			order.save
+			order.id.should be_nil
+			order.should have_at_least(1).error_on(:gift)
+        end
+
+        it "should not create order if gift.status is expired" do
+        	@gift.update(status: 'expired')
+        	order = Order.init_with_pos(@gift, @redeem, @pos_params)
+			order.save
+			order.id.should be_nil
+			order.should have_at_least(1).error_on(:gift)
+        end
+
+        it "should create order if gift is notified" do
+        	@gift.reload
+       		order = Order.init_with_pos(@gift, @redeem, @pos_params)
+			order.save
+			order.id.should_not be_nil
+			expect(order).to have_at_most(0).error_on(:gift)
+        end
+
+		it "should save with pos params" do
+			rc = @redeem.redeem_code
+			order = Order.init_with_pos(@gift, @redeem, @pos_params)
+			order.save
+
 			order.server_code.should 	 == "john"
-			order.redeem_code.should 	 == @redeem.redeem_code
+			order.redeem_code.should 	 == rc
 			order.ticket_value.should 	 == "13.99"
 			order.pos_merchant_id.should == 1233
 		end
 
 		it "should return the order object" do
-			order = Order.init_with_pos(@gift, @pos_params)
+			order = Order.init_with_pos(@gift, @redeem, @pos_params)
 			order.class.should == Order
 		end
 
 		it "should raise error if no pos_params" do
-			expect { Order.init_with_pos(@gift, nil) }.to raise_error
+			expect { Order.init_with_pos(@gift, @redeem, nil) }.to raise_error
 		end
 
 		it "should auto convert ticket_item_ids array of ints" do
 			@pos_params["ticket_item_ids"] = [ 1245, 17235, 1234 ]
-			order = Order.init_with_pos(@gift, @pos_params)
+			order = Order.init_with_pos(@gift, @redeem, @pos_params)
 			order.save
 			order.ticket_item_ids.should == [ 1245, 17235, 1234 ]
 		end
@@ -46,7 +76,7 @@ describe Order do
       		redeem = Redeem.find_or_create_with_gift(gift)
       		rc = redeem.redeem_code
 			pos_params = { "pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => rc, "server_code" => "john" }
-			order = Order.init_with_pos(gift, pos_params)
+			order = Order.init_with_pos(gift, redeem, pos_params)
 			order.save
 			order.reload
 			order.redeem_code.should == rc
@@ -103,6 +133,7 @@ describe Order do
 			order = FactoryGirl.build(:order)
 			order.save
 			gift = Order.last.gift
+			gift.reload
 			gift.status.should  		== 'redeemed'
 			gift.redeemed_at.should 	== order.created_at
 			gift.server.should  		== order.server_code
@@ -113,7 +144,8 @@ describe Order do
 	context "validations & associations" do
 
 		it "builds from factory with associations" do
-			order = FactoryGirl.create :order
+			gift = FactoryGirl.create(:gift, status: 'notified', receiver_id: 1)
+			order = FactoryGirl.create :order, gift_id: gift.id
 			order.should be_valid
 			order.should_not be_a_new_record
 		end
