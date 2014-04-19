@@ -82,6 +82,17 @@ else
     ENV['SLICKTEXT_PRIVATE']
 end
 
+NEXT_GEN_USER = if Rails.env.development? or Rails.env.test?
+    'jfwwejfkslopwe'
+else
+    ENV['NEXT_GEN_USER']
+end
+
+NEXT_GEN_PASS = if Rails.env.development? or Rails.env.test?
+    'hY9ek8Kkawpo2qQ8hE52l_qe8I'
+else
+    ENV['NEXT_GEN_PASS']
+end
 
 
 

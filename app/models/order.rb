@@ -73,13 +73,6 @@ private
 		return (num + 10).to_s(36).capitalize
 	end
 
-	def add_server
-		server_ary      = self.provider.get_server_from_code(self.server_code)
-		server_obj      = server_ary.last
-		self.server_id  = server_obj.user.id
-		puts "found server #{server_obj.name} #{server_obj.id}"
-	end
-
 	def update_gift_status
 		gift = self.gift
 		gift.order_num   = self.make_order_num
@@ -123,13 +116,6 @@ private
 	def add_provider_id
 		puts "ADD PROVIDER ID"
 		self.provider_id = self.gift.provider_id if self.gift
-	end
-
-	def get_server_id
-		if !self.server_id
-			puts "SET SERVER ID"
-			self.server_id = self.employee.user.id
-		end
 	end
 
 end
