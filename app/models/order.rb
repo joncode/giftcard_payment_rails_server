@@ -22,7 +22,9 @@ class Order < ActiveRecord::Base
 		raise if pos_params.nil?
 		redeem = Redeem.includes(:gift).where(pos_merchant_id: pos_params['pos_merchant_id'], redeem_code: pos_params['redeem_code']).first
 		order = Order.new(pos_params)
+		raise ActiveRecord::NotFound if redeem.nil?
 		order.send(:add_gift_info, redeem.gift, redeem)
+
 		return order
 	end
 
