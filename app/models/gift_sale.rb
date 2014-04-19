@@ -45,7 +45,7 @@ private
         credit_card_hsh                = card.create_card_hsh args
         credit_card_hsh["giver_id"]    = card.user.id
         credit_card_hsh["provider_id"] = args["provider_id"]
-
+        args["cat"]                    = set_cat(args)
         args["payable"] = Sale.charge_card credit_card_hsh
         args.delete("unique_id")
         args.delete("card")
@@ -54,6 +54,14 @@ private
 
     def unique_id receiver_name, provider_id
         "#{receiver_name}_#{provider_id}".gsub(' ','_')
+    end
+
+    def set_cat args
+        if args["cat"] && args["cat"].class == Fixnum
+            args["cat"]
+        else
+            300
+        end
     end
 
 end

@@ -34,8 +34,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.2.3.6"
-VERSION_UPDATED = "4/15/14"
+VERSION_NUMBER  = "1.2.3.8"
+VERSION_UPDATED = "4/18/14"
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 VALID_PHONE_REGEX = /1?\s*\W?\s*([2-9][0-8][0-9])\s*\W?\s*([2-9][0-9]{2})\s*\W?\s*([0-9]{4})(\se?x?t?(\d*))?/
@@ -45,5 +45,4 @@ Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
 Time::DATE_FORMATS[:only_date]       = "%b %e"
 
-GIFT_CAT = { 0 => "User", 100 => "Regift", 200 => "Promo-Merchant", 210 => "Promo-Admin", 300 => "Campaign" }
-
+GIFT_CAT = { 0 => "NULL", 100 => "Admin", 101 => "AdminRegift", 150 => "AdminCampaign", 151 => "AdminCampaignRegift", 200 => "Merchant", 201 => "MerchantRegift", 250 => "MerchantCampaign", 251 => "MerchantCampaignRegift", 300 => "Standard", 301 => "StandardRegift" }

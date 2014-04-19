@@ -25,7 +25,7 @@ private
         campaign_item         = CampaignItem.includes(:campaign).includes(:provider).where(id: args["payable_id"]).first
         campaign              = campaign_item.campaign
         provider              = campaign_item.provider
-        args["cat"]           = 300
+        args["cat"]           = set_cat(campaign)
         args["shoppingCart"]  = JSON.parse campaign_item.shoppingCart
         args["receiver_name"] = campaign.name if args["receiver_name"].nil?
         args["provider_id"]   = provider.id
@@ -47,6 +47,10 @@ private
         elsif expires_in.present?
             Time.now + expires_in.days
         end
+    end
+
+    def set_cat campaign
+        campaign.gift_cat
     end
 
 #################  AFTER SAVE CALLBACKS
