@@ -2,7 +2,7 @@ class Order < ActiveRecord::Base
 	include Email
 
 	belongs_to  :provider
-	belongs_to  :redeem
+	belongs_to  :redeem, autosave: :true
 	belongs_to  :gift
 	belongs_to  :sales
 	belongs_to  :cards
@@ -17,18 +17,27 @@ class Order < ActiveRecord::Base
 	after_create      :update_gift_status
 	after_destroy     :rewind_gift_status
 
-	def self.init_with_gift(gift, server_code=nil)
-		order = Order.new
-		if redeem = Redeem.find_by(gift_id: gift.id)
-			order.gift_id     = gift.id
-			order.provider_id = gift.provider_id
-			order.redeem_id   = redeem.id
-			order.redeem_code = redeem.redeem_code
-			order.server_code = server_code.to_s
-		else
-			return order
-		end
+	def self.init_with_pos(gift, pos_params)
+		raise if pos_params.nil?
+		order = Order.new(pos_params)
+		order.send(:add_gift_info, gift)
 		return order
+	end
+
+	def self.init_with_gift(gift, server_code=nil)
+		server_code = server_code || ""
+		order = Order.new(server_code: server_code)
+		order.send(:add_gift_info, gift)
+		return order
+	end
+
+	def ticket_item_ids
+		str_json = super
+		JSON.parse str_json
+	end
+
+	def ticket_item_ids= ary_of_ids
+		super(ary_of_ids.to_json)
 	end
 
 	def make_order_num
@@ -43,6 +52,17 @@ class Order < ActiveRecord::Base
 	end
 
 private
+
+	def add_gift_info(gift)
+		if redeem = Redeem.find_by(gift_id: gift.id)
+			self.gift_id     = gift.id
+			self.provider_id = gift.provider_id
+			self.redeem_code = redeem.redeem_code
+			self.redeem 	 = redeem
+			redeem.redeem_code = nil
+		end
+		self
+	end
 
 	def make_numbers(div)
 		num = "%04d" % (div % 10000)

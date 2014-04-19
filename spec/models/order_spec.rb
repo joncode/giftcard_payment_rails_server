@@ -1,49 +1,60 @@
 require 'spec_helper'
 
-
 describe Order do
 
-	it "builds from factory with associations" do
-		order = FactoryGirl.create :order
-		order.should be_valid
-		order.should_not be_a_new_record
+	describe "pos integration" do
+
+		before(:each) do
+      		user = FactoryGirl.create(:user)
+      		@gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name)
+      		@redeem = Redeem.find_or_create_with_gift(@gift)
+			@pos_params = { "pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @redeem.redeem_code, "server_code" => "john" }
+		end
+
+		it "should save with pos params" do
+			order = Order.init_with_pos(@gift, @pos_params)
+			order.save
+			order.server_code.should 	 == "john"
+			order.redeem_code.should 	 == @redeem.redeem_code
+			order.ticket_value.should 	 == "13.99"
+			order.pos_merchant_id.should == 1233
+		end
+
+		it "should return the order object" do
+			order = Order.init_with_pos(@gift, @pos_params)
+			order.class.should == Order
+		end
+
+		it "should raise error if no pos_params" do
+			expect { Order.init_with_pos(@gift, nil) }.to raise_error
+		end
+
+		it "should auto convert ticket_item_ids array of ints" do
+			@pos_params["ticket_item_ids"] = [ 1245, 17235, 1234 ]
+			order = Order.init_with_pos(@gift, @pos_params)
+			order.save
+			order.ticket_item_ids.should == [ 1245, 17235, 1234 ]
+		end
+
 	end
 
-	it "adds gift_id if missing" do
-		order = FactoryGirl.build(:order)
-		order.gift = nil
-		order.should be_valid
-		# order.should have_at_least(1).error_on(:gift_id)
-	end
+	describe "Redeem code validation" do
 
-	it "adds redeem_id if missing" do
-		order = FactoryGirl.build(:order)
-		order.redeem = nil
-		order.should be_valid
-		# order.should have_at_least(1).error_on(:redeem_id)
-	end
+		it "should remove redeem code from redeem" do
+      		user = FactoryGirl.create(:user)
+      		gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name)
+      		redeem = Redeem.find_or_create_with_gift(gift)
+      		rc = redeem.redeem_code
+			pos_params = { "pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => rc, "server_code" => "john" }
+			order = Order.init_with_pos(gift, pos_params)
+			order.save
+			order.reload
+			order.redeem_code.should == rc
+			order.redeem.should == redeem
+			order.redeem.redeem_code.should == nil
+			redeem.reload.redeem_code.should == nil
+		end
 
-	it "adds provider_id if missing" do
-		order = FactoryGirl.build(:order)
-		order.provider = nil
-		order.should be_valid
-		# order.should have_at_least(1).error_on(:provider_id)
-	end
-
-	it "validates uniqueness of gift_id" do
-		previous = FactoryGirl.create(:order)
-		order    = FactoryGirl.build(:order,  :gift_id => previous.gift_id)
-		order.should_not be_valid
-		order.should have_at_least(1).error_on(:gift_id)
-		#order.errors.full_messages.should include("Validation msg about gift id")
-	end
-
-	it "validates uniqueness of redeem_id" do
-		previous = FactoryGirl.create(:order)
-		order = FactoryGirl.build(:order, :redeem_id => previous.redeem_id)
-		order.should_not be_valid
-		order.should have_at_least(1).error_on(:redeem_id)
-		#order.errors.full_messages.should include("Validation msg about redeem id")
 	end
 
 	describe "#save" do
@@ -98,12 +109,86 @@ describe Order do
 			gift.order_num.should 		== order.make_order_num
 		end
 	end
+
+	context "validations & associations" do
+
+		it "builds from factory with associations" do
+			order = FactoryGirl.create :order
+			order.should be_valid
+			order.should_not be_a_new_record
+		end
+
+		it "adds gift_id if missing" do
+			order = FactoryGirl.build(:order)
+			order.gift = nil
+			order.should be_valid
+			# order.should have_at_least(1).error_on(:gift_id)
+		end
+
+		it "adds redeem_id if missing" do
+			order = FactoryGirl.build(:order)
+			order.redeem = nil
+			order.should be_valid
+			# order.should have_at_least(1).error_on(:redeem_id)
+		end
+
+		it "adds provider_id if missing" do
+			order = FactoryGirl.build(:order)
+			order.provider = nil
+			order.should be_valid
+			# order.should have_at_least(1).error_on(:provider_id)
+		end
+
+		it "validates uniqueness of gift_id" do
+			previous = FactoryGirl.create(:order)
+			order    = FactoryGirl.build(:order,  :gift_id => previous.gift_id)
+			order.should_not be_valid
+			order.should have_at_least(1).error_on(:gift_id)
+			#order.errors.full_messages.should include("Validation msg about gift id")
+		end
+
+		it "validates uniqueness of redeem_id" do
+			previous = FactoryGirl.create(:order)
+			order = FactoryGirl.build(:order, :redeem_id => previous.redeem_id)
+			order.should_not be_valid
+			order.should have_at_least(1).error_on(:redeem_id)
+			#order.errors.full_messages.should include("Validation msg about redeem id")
+		end
+	end
 end
 
 
 
-	# validates :gift_id   , presence: true, uniqueness: true
-	# validates :redeem_id , presence: true, uniqueness: true
+# adding pos_merchant_id to provider.rb
+# adding pos_merchant_id to redeem.rb
+# + index on [pos_merchant_id , redeem_code]
+# + index on redeem_code
+# adding pos_params to order.rb
+# pos_mechant_id must be stored on the redeem :on_create
+# redeem code uniqueness validation per provider_id
+
+# wrap the ticket_item_ids in stringified getter/setter or HStore
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # == Schema Information
 #
 # Table name: orders
