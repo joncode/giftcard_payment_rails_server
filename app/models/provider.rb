@@ -31,6 +31,10 @@ class Provider < ActiveRecord::Base
 		unscoped.order("name ASC")
 	end
 
+	def pos_merchant_id
+		"fake_id"
+	end
+
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude]
 		prov_hash["provider_id"]  = self.id
