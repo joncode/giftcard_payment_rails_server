@@ -8,7 +8,7 @@ describe GiftRegift do
             @user     = FactoryGirl.create(:user)
             @regifter = FactoryGirl.create(:user, first_name: "Jon", last_name: "Regifter")
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
-            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", service: '10.05', cat: 300)
+            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", cost: "187.32", service: '10.05', cat: 300)
             @gift_hsh = {}
             @gift_hsh["message"]       = "I just REGIFTED!"
             @gift_hsh["name"]          = @receiver.name
@@ -19,6 +19,13 @@ describe GiftRegift do
 
         it_should_behave_like "gift serializer" do
             let(:object) { GiftRegift.create(@gift_hsh) }
+        end
+
+        it "should correctly transfer cost including decimals" do
+            gift        = GiftRegift.create @gift_hsh
+            gift.should be_valid
+            gift.value.should == "201"
+            gift.cost.should == "187.32"
         end
 
         it "should create gift with old_gift provider" do
