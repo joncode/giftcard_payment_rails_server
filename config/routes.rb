@@ -51,6 +51,16 @@ Drinkboard::Application.routes.draw do
   post 'app/gifts_array',      to: 'app#gifts'
   post 'app/transactions',     to: 'app#transactions'
 
+#################          POS V1 routes for API                  /////////////////////////////
+
+  namespace :pos, defaults: { format: 'json' } do
+    namespace :v1 do
+
+      resources :orders, only: [:create]
+
+    end
+  end
+
 #################        Mdot V2 API                              /////////////////////////////
 
   namespace :mdot, defaults: { format: 'json' } do
@@ -141,14 +151,13 @@ Drinkboard::Application.routes.draw do
 #################          PUBLIC website routes                  /////////////////////////////
 
   namespace :web, defaults: { format: 'json' } do
+
     namespace :v1 do
       post 'confirm_email',      to: 'websites#confirm_email'
       post 'redo_confirm_email', to: 'websites#redo_confirm_email'
       resources :providers, only: [:show]
     end
-  end
 
-  namespace :web, defaults: { format: 'json' } do
     namespace :v2 do
       resources :merchants, only: [:show]
     end
@@ -211,6 +220,7 @@ Drinkboard::Application.routes.draw do
   end
 
 #################          HTML routes good                       /////////////////////////////
+  
   root                         to: 'sessions#new'
   resources :sessions,       only: [:new, :create, :destroy]
   get '/signin',             to: 'sessions#new'
