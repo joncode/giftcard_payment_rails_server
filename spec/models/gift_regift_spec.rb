@@ -390,7 +390,7 @@ describe GiftRegift do
             @regifter = FactoryGirl.create(:user, first_name: "Jon", last_name: "Regifter")
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
             @expires_at = Time.now + 1.month
-            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", service: '10.05', expires_at: @expires_at)
+            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", cost: "187.32", service: '10.05', expires_at: @expires_at)
             @gift_hsh = {}
             @gift_hsh["message"]       = "I just REGIFTED!"
             @gift_hsh["name"]          = @receiver.name
@@ -407,7 +407,8 @@ describe GiftRegift do
             gift.receiver.should      == @receiver
             gift.provider.should      == @old_gift.provider
             gift.provider_name.should == @old_gift.provider_name
-            gift.expires_at           == @expires_at
+            gift.expires_at.should    == @expires_at
+            gift.cost.should          == "187.32"
         end
     end
 
