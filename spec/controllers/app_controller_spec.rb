@@ -508,7 +508,7 @@ describe AppController do
             gift.add_receiver(receiver)
             gift.save
             post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
-            json["error_server"].should == {"gift_id"=>"can't be blank", "redeem_id"=>"can't be blank", "provider_id"=>"can't be blank"}
+            json["error_server"].should == {"Data Transfer Error"=>"Please Reload Gift Center"}
         end
 
         it "should return data transfer error if gift not found" do

@@ -60,7 +60,6 @@ describe Redeem do
 		gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name)
 		redeem  = Redeem.find_or_create_with_gift(gift)
 		redeem2 = Redeem.find_or_create_with_gift(gift)
-		#binding.pry
 		redeem.should == gift.reload.redeem
 		order = Order.init_with_gift(gift)
 		order.save

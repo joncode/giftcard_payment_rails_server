@@ -47,7 +47,7 @@ class Mdot::V2::GiftsController < JsonController
         if order.save
             success({ "order_number" => order.make_order_num , "total" => gift.total,  "server" => order.server_code })
         else
-            fail order
+            fail database_error_redeem
             #status = :bad_request
         end
         respond(status)

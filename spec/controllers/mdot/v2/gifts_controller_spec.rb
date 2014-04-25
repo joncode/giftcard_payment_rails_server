@@ -47,6 +47,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should send a list of used gifts" do
+            Redeem.delete_all
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gs = Gift.where(receiver_id: @user.id)
             gs.each do |gift|
@@ -182,16 +183,20 @@ describe Mdot::V2::GiftsController do
 
             it "should not return :status => 'expired' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
-                gifts = Gift.where(receiver_id: @user.id).to_a
-                last_gift       = gifts.pop
-                other_last_gift = gifts.pop
-                gifts.each do |gift|
-                    gift.update(status: "expired")
+                gifts = Gift.where(receiver_id: @user.id)
+                count = gifts.count
+                iterate = count - 2
+                iterate.times do |index|
+                    gifts[index].update(status: "expired")
                 end
                 get :badge, format: :json
                 json["data"]["badge"].should == 2
-                gift = json["data"]["gifts"].pop
-                gift["gift_id"].should       == last_gift.id
+                gifts_json = json["data"]["gifts"]
+                non_expired = gifts.where.not(status: 'expired')
+                non_expired_ary_of_ids = non_expired.map(&:id)
+                gifts_json.each do |g_j|
+                    expect { non_expired_ary_of_ids.include?(g_j["gift_id"]) }.to be_true
+                end
             end
         end
 
@@ -361,14 +366,14 @@ describe Mdot::V2::GiftsController do
             @gift.redeemed_at.day.should == time.day
         end
 
-        it "should return validation errors on bad gift" do
+        it "should return reload app error on bad gift" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             redeem = Redeem.find_by(gift_id: @gift.id)
             redeem.destroy
             post :redeem, format: :json, id: @gift.id, server: "test"
             rrc(200)
             json["status"].should == 0
-            json["data"].should   == { "error" => { "gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"] } }
+            json["data"].should   == {"Data Transfer Error"=>"Please Reload Gift Center"}
         end
 
         it "should reject request if request is malformed" do
