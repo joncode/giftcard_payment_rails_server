@@ -5,7 +5,7 @@ class BulkContact < ActiveRecord::Base
     def self.upload(data: data, user_id: user_id)
         start_time_logger = Time.now
         hsh_str = data.to_json
-        unless Rails.env.production?
+        if !Rails.env.production?
             output = create(data: hsh_str, user_id: user_id)
         end
         end_time = ((Time.now - start_time_logger) * 1000).round(1)
