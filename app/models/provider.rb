@@ -32,7 +32,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def pos_merchant_id
-		"fake_id"
+		11111
 	end
 
 	def serialize

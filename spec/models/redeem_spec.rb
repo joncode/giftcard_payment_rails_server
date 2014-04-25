@@ -30,7 +30,7 @@ describe Redeem do
 	end
 
 	it "should auto store the pos_merchant_id when provider has one" do
-		provider = FactoryGirl.create(:provider, pos_merchant_id: 56456)
+		provider = FactoryGirl.create(:provider, pos_merchant_id: 11111)
 		gift     = FactoryGirl.create(:gift, provider_id: provider.id)
 		redeem   = Redeem.find_or_create_with_gift(gift)
 		redeem.pos_merchant_id.should == provider.pos_merchant_id
@@ -58,9 +58,10 @@ describe Redeem do
 	it "should not change already redeemed gifts" do
 		user = FactoryGirl.create(:user)
 		gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name)
-		redeem = Redeem.find_or_create_with_gift(gift)
+		redeem  = Redeem.find_or_create_with_gift(gift)
 		redeem2 = Redeem.find_or_create_with_gift(gift)
-		redeem.should == redeem2
+		#binding.pry
+		redeem.should == gift.reload.redeem
 		order = Order.init_with_gift(gift)
 		order.save
 		gift.reload

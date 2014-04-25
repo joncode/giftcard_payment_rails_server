@@ -127,6 +127,7 @@ private
 	def number_to_letter(num)
 		return (num + 10).to_s(36).capitalize
 	end
+	
 #################  VALIDATIONS
 
     def is_redeemable

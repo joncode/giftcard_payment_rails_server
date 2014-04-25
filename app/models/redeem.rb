@@ -6,8 +6,6 @@ class Redeem < ActiveRecord::Base
 	has_one         :provider,  :through => :gift
 	has_one         :order
 
-	before_validation :add_pos_merchant_id
-
 	validates :gift_id , presence: true, uniqueness: true
 	validates :redeem_code, :uniqueness => { scope: :pos_merchant_id }, :if => :pos_merchant_id?
 
@@ -15,7 +13,7 @@ class Redeem < ActiveRecord::Base
 	after_create :add_redeem_to_gift
 
 	def self.find_or_create_with_gift(gift)
-		unless redeem = Redeem.find_by(gift_id: gift.id)
+		unless redeem = gift.redeem
 				# redeem must be created
 			redeem = Redeem.init_with_gift(gift)
 		end
@@ -23,19 +21,22 @@ class Redeem < ActiveRecord::Base
 	end
 
 	def self.init_with_gift(gift)
-		Redeem.create(gift_id: gift.id)
+		pos_merchant_id = gift.provider.pos_merchant_id
+		Redeem.create(gift_id: gift.id, pos_merchant_id: pos_merchant_id)
 	end
 
 private
 
 	def add_pos_merchant_id
-		if self.pos_merchant_id.nil? && self.provider
-			self.pos_merchant_id = self.provider.pos_merchant_id
+		if !self.pos_merchant_id?
+			if gift_provider = Provider.find(self.gift.provider_id)
+				gift_provider.pos_merchant_id
+			end
 		end
 	end
 
 	def self.pos_merchant_id?
-		pos_merchant_id?
+		self.pos_merchant_id.present? || (self.pos_merchant_id != 0)
 	end
 
 	def create_redeem_code
