@@ -36,7 +36,13 @@ private
     end
 
     def calculate_cost shoppingCart
-        shoppingCart.sum {|z| z["price_promo"].to_f * z["quantity"].to_i }
+        shoppingCart.sum do |z|
+            if z["price_promo"].present?
+                z["price_promo"].to_f * z["quantity"].to_i
+            else
+                z["price"].to_f * 0.85 * z["quantity"].to_i
+            end
+        end
     end
 
     def set_cat args

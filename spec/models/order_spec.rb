@@ -14,11 +14,11 @@ describe Order do
 
         xit "should not create an order if gift.status is redeemed" do
         		#this really should never happen because the redeem code is removed from the gift on save
-			order = Order.init_with_pos(@pos_params)
+			order = Order.init_with_pos(@pos_params, @redeem)
 			order.save
         	@gift.reload
         	@gift.status.should == 'redeemed'
-			order = Order.init_with_pos(@pos_params)
+			order = Order.init_with_pos(@pos_params, @redeem)
 			order.save
 			order.id.should be_nil
 			order.should have_at_least(1).error_on(:gift)
@@ -26,7 +26,7 @@ describe Order do
 
         xit "should not create order if gift.status is expired" do
         	@gift.update(status: 'expired')
-        	order = Order.init_with_pos(@pos_params)
+        	order = Order.init_with_pos(@pos_params, @redeem)
 			order.save
 			order.id.should be_nil
 			order.should have_at_least(1).error_on(:gift)
@@ -34,7 +34,7 @@ describe Order do
 
         xit "should create order if gift is notified" do
         	@gift.reload
-       		order = Order.init_with_pos(@pos_params)
+       		order = Order.init_with_pos(@pos_params, @redeem)
 			order.save
 			order.id.should_not be_nil
 			expect(order).to have_at_most(0).error_on(:gift)
@@ -42,7 +42,7 @@ describe Order do
 
 		it "should save with pos params" do
 			rc = @redeem.redeem_code
-			order = Order.init_with_pos(@pos_params)
+			order = Order.init_with_pos(@pos_params, @redeem)
 			order.save
 
 			order.server_code.should 	 == "john"
@@ -52,7 +52,7 @@ describe Order do
 		end
 
 		it "should return the order object" do
-			order = Order.init_with_pos(@pos_params)
+			order = Order.init_with_pos(@pos_params, @redeem)
 			order.class.should == Order
 		end
 
@@ -62,7 +62,7 @@ describe Order do
 
 		it "should auto convert ticket_item_ids array of ints" do
 			@pos_params["ticket_item_ids"] = [ 1245, 17235, 1234 ]
-			order = Order.init_with_pos(@pos_params)
+			order = Order.init_with_pos(@pos_params, @redeem)
 			order.save
 			order.ticket_item_ids.should == [ 1245, 17235, 1234 ]
 		end
@@ -78,7 +78,7 @@ describe Order do
       		redeem 	= Redeem.find_or_create_with_gift(gift)
       		rc     	= redeem.redeem_code
 			pos_params = { "pos_merchant_id" => 11111, "ticket_value" => "13.99", "redeem_code" => rc, "server_code" => "john" }
-			order = Order.init_with_pos(pos_params)
+			order = Order.init_with_pos(pos_params, redeem)
 			order.save
 			order.reload
 			order.redeem_code.should == rc

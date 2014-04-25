@@ -18,23 +18,32 @@ class Order < ActiveRecord::Base
 	after_create      :update_gift_status
 	after_destroy     :rewind_gift_status
 
-	def self.init_with_pos(pos_params)
+	def self.init_with_pos(pos_params, redeem)
 		raise if pos_params.nil?
-		redeem = Redeem.includes(:gift).where(pos_merchant_id: pos_params['pos_merchant_id'], redeem_code: pos_params['redeem_code']).first
 		order = Order.new(pos_params)
-		#binding.pry
-		if redeem.present?
-			order.send(:add_gift_info, redeem.gift, redeem)
-		end
-
-		return order
+		order.send(:add_gift_info, redeem.gift, redeem)
 	end
 
 	def self.init_with_gift(gift, server_code=nil)
 		server_code = server_code || ""
-		order = Order.new(server_code: server_code)
-		order.send(:add_gift_info, gift)
+		order = Order.new(server_code: server_code, gift: gift)
+		order.add_gift_info(gift)
 		return order
+	end
+
+	def add_gift_info(gift, redeem=nil)
+		if redeem.nil?
+			redeem = Redeem.find_by(gift_id: gift.id)
+		end
+
+		if redeem
+			self.gift_id     = gift.id
+			self.provider_id = gift.provider_id
+			self.redeem_code = redeem.redeem_code
+			self.redeem 	 = redeem
+			redeem.redeem_code = nil
+		end
+		self
 	end
 
 	def ticket_item_ids
@@ -58,21 +67,6 @@ class Order < ActiveRecord::Base
 	end
 
 private
-
-	def add_gift_info(gift, redeem=nil)
-		if redeem.nil?
-			redeem = Redeem.find_by(gift_id: gift.id)
-		end
-
-		if redeem
-			self.gift_id     = gift.id
-			self.provider_id = gift.provider_id
-			self.redeem_code = redeem.redeem_code
-			self.redeem 	 = redeem
-			redeem.redeem_code = nil
-		end
-		self
-	end
 
 	def update_gift_status
 		gift = self.gift
@@ -108,7 +102,7 @@ private
 
 	def add_redeem_id
 		puts "ADD REDEEM ID"
-		self.redeem_id = self.gift.redeem.id if self.gift
+		self.redeem_id = self.gift.redeem.id if (self.gift && self.gift.redeem)
 	end
 
 	def no_provider_id

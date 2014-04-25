@@ -416,7 +416,7 @@ class AppController < JsonController
 	  			if order.save
 	  				response["success"] = { "order_number" => order.make_order_num,  "total" => gift.total, "server" => order.server_code }
 	  			else
-	  				response["error_server"] = stringify_error_messages order
+	  				response["error_server"] = database_error_redeem
 	  			end
 	  		rescue
 	  			response["error_server"] = database_error_redeem
