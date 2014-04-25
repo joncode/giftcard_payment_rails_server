@@ -13,7 +13,7 @@ class Order < ActiveRecord::Base
 
 	validates_presence_of 	:gift_id, :redeem_id, :provider_id
 	validates_uniqueness_of :gift_id, :redeem_id
-    validate   :is_redeemable
+    # validate   :is_redeemable
 
 	after_create      :update_gift_status
 	after_destroy     :rewind_gift_status
@@ -22,7 +22,7 @@ class Order < ActiveRecord::Base
 		raise if pos_params.nil?
 		redeem = Redeem.includes(:gift).where(pos_merchant_id: pos_params['pos_merchant_id'], redeem_code: pos_params['redeem_code']).first
 		order = Order.new(pos_params)
-		
+		#binding.pry
 		if redeem.present?
 			order.send(:add_gift_info, redeem.gift, redeem)
 		end
@@ -131,23 +131,24 @@ private
 
 #################  VALIDATIONS
 
-    def is_redeemable
-        case self.gift.status
-        when 'redeemed'
-        	nil
-        #     errors.add(:gift, "Error - Redeem code is not valid. The gift has already been redeemed.")
-        when 'expired'
-            errors.add(:gift, "Error - Redeem code is not valid. The gift has expired.")
-        when 'incomplete'
-        	errors.add(:gift, "Error - Gift has not ben registered with a recipient.")
-        when 'open'
-        	nil
-        when 'notified'
-        	nil
-        else
-        	errors.add(:gift, "Error - Gift is not valid.")
-        end
-    end
+    # def is_redeemable
+    # 	status = Gift.find(self.gift_id)
+    #     case status
+    #     when 'redeemed'
+    #     	nil
+    #     #     errors.add(:gift, "Error - Redeem code is not valid. The gift has already been redeemed.")
+    #     when 'expired'
+    #         errors.add(:gift, "Error - Redeem code is not valid. The gift has expired.")
+    #     when 'incomplete'
+    #     	errors.add(:gift, "Error - Gift has not ben registered with a recipient.")
+    #     when 'open'
+    #     	nil
+    #     when 'notified'
+    #     	nil
+    #     else
+    #     	errors.add(:gift, "Error - Gift is not valid.")
+    #     end
+    # end
 end
 # == Schema Information
 #
