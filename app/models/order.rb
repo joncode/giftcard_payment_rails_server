@@ -18,16 +18,10 @@ class Order < ActiveRecord::Base
 	after_create      :update_gift_status
 	after_destroy     :rewind_gift_status
 
-	def self.init_with_pos(pos_params)
+	def self.init_with_pos(pos_params, redeem)
 		raise if pos_params.nil?
-		redeem = Redeem.includes(:gift).where(pos_merchant_id: pos_params['pos_merchant_id'], redeem_code: pos_params['redeem_code']).first
 		order = Order.new(pos_params)
-		#binding.pry
-		if redeem.present?
-			order.send(:add_gift_info, redeem.gift, redeem)
-		end
-
-		return order
+		order.send(:add_gift_info, redeem.gift, redeem)
 	end
 
 	def self.init_with_gift(gift, server_code=nil)

@@ -34,19 +34,18 @@ describe Pos::V1::OrdersController do
         context :bad_request do
 
             it "reject no data key " do
+                post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => 11111}
+                rrc(200)
                 post :create, format: :json, data: {}
                 rrc(400)
-                post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @redeem.redeem_code, "server_code" => "john"}
+                post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => nil, "wrong" => "params"}
                 rrc(400)
-                post :create, format: :json, data: { "ticket_value" => "13.99", "redeem_code" => @redeem.redeem_code, "ticket_item_ids" => [ 1245, 17235, 1234 ], "server_code" => "john"}
-                rrc(400)
-                post :create, format: :json, data: {"pos_merchant_id" => 1233,"redeem_code" => @redeem.redeem_code, "ticket_item_ids" => [ 1245, 17235, 1234 ], "server_code" => "john"}
-                rrc(400)
-                post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "ticket_item_ids" => [ 1245, 17235, 1234 ], "server_code" => "john"}
-                rrc(400)
-                post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @redeem.redeem_code, "ticket_item_ids" => [ 1245, 17235, 1234 ]}
-                rrc(400)
-
+                # post :create, format: :json, data: {"pos_merchant_id" => 1233,"redeem_code" => @redeem.redeem_code, "ticket_item_ids" => [ 1245, 17235, 1234 ], "server_code" => "john"}
+                # rrc(400)
+                # post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "ticket_item_ids" => [ 1245, 17235, 1234 ], "server_code" => "john"}
+                # rrc(400)
+                # post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @redeem.redeem_code, "ticket_item_ids" => [ 1245, 17235, 1234 ]}
+                # rrc(400)
             end
 
         end
