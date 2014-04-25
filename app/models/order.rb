@@ -22,6 +22,7 @@ class Order < ActiveRecord::Base
 		raise if pos_params.nil?
 		redeem = Redeem.includes(:gift).where(pos_merchant_id: pos_params['pos_merchant_id'], redeem_code: pos_params['redeem_code']).first
 		order = Order.new(pos_params)
+		
 		if redeem.present?
 			order.send(:add_gift_info, redeem.gift, redeem)
 		end
@@ -127,7 +128,7 @@ private
 	def number_to_letter(num)
 		return (num + 10).to_s(36).capitalize
 	end
-	
+
 #################  VALIDATIONS
 
     def is_redeemable
