@@ -68,6 +68,13 @@ describe User do
         end
     end
 
+    it "should have iphone_photo of 'nil' if they haven't uploaded one" do
+        user = FactoryGirl.create :user, iphone_photo: nil
+        user.should be_valid
+        user.iphone_photo.should == nil
+        user.get_photo.should    == "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"        
+    end
+
     it "should downcase email" do
         user = FactoryGirl.create :user, { email: "KJOOIcode@yahoo.com" }
         user.email.should == "kjooicode@yahoo.com"
