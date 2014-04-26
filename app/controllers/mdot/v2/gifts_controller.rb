@@ -150,7 +150,7 @@ private
     end
 
     def regift_params
-        params.require(:data).permit(:message, receiver: [:name, :receiver_id, :email, :phone, :facebook_id, :twitter])
+        params.require(:data).permit(:message, receiver: [:name, :receiver_id, :email, :phone, :facebook_id, :twitter, :receiver_email, :receiver_phone])
     end
 
     def gift_params

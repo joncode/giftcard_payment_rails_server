@@ -2,6 +2,48 @@ require 'spec_helper'
 
 describe GiftRegift do
 
+    it "should allow regifting to receiver_phone BUG FIX" do
+
+
+        gift_hsh = {"id"=>5038, "giver_name"=>"Brooklyn Bowl Las Vegas",
+            "receiver_name"=>"Jbar Russian", "provider_name"=>"Brooklyn Bowl Las Vegas",
+            "giver_id"=>16, "receiver_id"=>58, "total"=>"120", "credit_card"=>nil,
+            "provider_id"=>153, "message"=>"Thank you for joining the party! To redeem your tickets please bring a photo ID to the Brooklyn Bowl box office and show them this pass. Must be 21 and over. This prize is non-transferable. \r\n\r\nYou've received two tickets to both the O.A.R and Gogol Bordelo Shows. The tickets are good for either the Friday or Saturday show. \r\nDoors: 5:30 PM \r\nShow: 7:30 PM",
+            "status"=>"notified", "created_at"=>"Thu, 24 Apr 2014 22:51:48 EDT -04:00",
+            "updated_at"=>"Sat, 26 Apr 2014 00:35:27 EDT -04:00", "receiver_phone"=>"2152000475",
+            "facebook_id"=>nil, "anon_id"=>nil, "receiver_email"=>nil,
+            "shoppingCart"=>"[{\"price\":\"30\",\"price_promo\":\"0\",\"quantity\":2,\"section\":\"Show Tickets\",\"item_id\":886,\"item_name\":\"Gogol Bordello\"},{\"price\":\"30\",\"price_promo\":\"0\",\"quantity\":2,\"section\":\"Show Tickets\",\"item_id\":882,\"item_name\":\"O.A.R\"}]",
+            "twitter"=>nil, "service"=>nil, "order_num"=>nil, "cat"=>300, "active"=>true,
+            "pay_stat"=>"charge_unpaid", "redeemed_at"=>nil, "server"=>nil, "payable_id"=>24,
+            "payable_type"=>"CampaignItem", "giver_type"=>"Campaign", "value"=>"120",
+            "expires_at"=>"Mon, 28 Apr 2014 00:00:00 EDT -04:00", "refund_id"=>nil,
+            "refund_type"=>nil, "cost"=>"0"}
+        user = FactoryGirl.create(:user, first_name: 'Jbar', last_name: 'Russian', id: 58)
+        gift = Gift.new gift_hsh
+        binding.pry
+
+    end
+
+# Processing by Mdot::V2::GiftsController#regift as JSON
+# HERE IS THE User-Agent HEADER REQUEST drinkboard/1.3 (iPhone; iOS 7.1; Scale/2.00)
+# MDOT/V2/GIFTS -REGIFT- request: {"data"=>{"message"=>"Do you or anyone u know in Vegas want free tickets to the bowl this weekend ? ", "receiver"=>{"name"=>"Anu Veluchamy", "receiver_phone"=>"6302488421"}}, "id"=>"5038"}
+# D, [2014-04-26T04:37:07.407546 #5] DEBUG -- :   User Load (2.6ms)  SELECT "users".* FROM "users" WHERE "users"."active" = 't' AND "users"."perm_deactive" = 'f' AND "users"."remember_token" = 'LwRbbJ-qIU1NHXqoI7bCaQ' ORDER BY "users"."id" ASC LIMIT 1
+# D, [2014-04-26T04:37:07.411748 #5] DEBUG -- :   Gift Load (2.2ms)  SELECT "gifts".* FROM "gifts" WHERE "gifts"."active" = 't' AND "gifts"."id" = $1 LIMIT 1  [["id", "5038"]]
+# Started POST "/mdot/v2/gifts/5038/regift.json" for 198.228.199.241 at 2014-04-26 04:37:07 +0000
+#   Parameters: {"data"=>{"message"=>"Do you or anyone u know in Vegas want free tickets to the bowl this weekend ? ", "receiver"=>{"name"=>"Anu Veluchamy", "receiver_phone"=>"6302488421"}}, "id"=>"5038"}
+# APP  -------------   Jbar Russian   -----------------------
+# D, [2014-04-26T04:37:07.416472 #5] DEBUG -- :   Provider Load (2.8ms)  SELECT "providers".* FROM "providers" WHERE "providers"."active" = 't' AND "providers"."paused" = 'f' AND "providers"."id" IN (153) ORDER BY name ASC
+# D, [2014-04-26T04:37:07.424345 #5] DEBUG -- :    (1.8ms)  BEGIN
+# REGIFT-post_init -- Notify new Receiver
+# REGIFT-post_init -- Invoice the regifter via email #<User:0x007fdc4dc982f0>
+# END MDOT/V2/GIFTS -REGIFT- (26.2ms) |
+# D, [2014-04-26T04:37:07.419522 #5] DEBUG -- :   User Load (2.2ms)  SELECT "users".* FROM "users" WHERE "users"."id" IN (58)
+# D, [2014-04-26T04:37:07.428574 #5] DEBUG -- :    (1.8ms)  ROLLBACK
+# response: {:status=>0, :data=>{'error'=>{:receiver=>['No unique receiver data. Cannot process gift. Please re-log in if this is an error.']}}}
+# Completed 400 Bad Request in 27ms (Views: 0.3ms | ActiveRecord: 13.5ms)
+
+
+
     context "Full Tests + With Receiver ID" do
 
         before(:each) do
