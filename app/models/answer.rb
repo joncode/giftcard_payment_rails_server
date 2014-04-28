@@ -6,19 +6,17 @@ class Answer < ActiveRecord::Base
 	validates_presence_of :user_id, :answer, :question_id
 
 	def self.save_these(answered_questions, user)
-
 		answered_questions.each do |a|
 			if answer = Answer.where(user_id: user.id, question_id: a["question_id"].to_i).last
 				if answer.answer != a["answer"]
-					answer.update_attributes(answer: a["answer"])
+					answer.update(answer: a["answer"])
 				end
 			else
-				a["user_id"] = user.id
-				a.delete_if {|k| ["left", "right"].include? k }
-				answer 		 = Answer.create(a)
+				answer_hsh = { :user_id => user.id , :question_id => a["question_id"].to_i, :answer => a["answer"]}
+				answer 	   = Answer.create(answer_hsh)
 			end
 		end
-
+		
 	end
 
 end
