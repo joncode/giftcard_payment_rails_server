@@ -61,9 +61,23 @@ describe Mdot::V2::QuestionsController do
             end
         end
 
+
+        it "should create databse answer records with hash answers- BUG FIX " do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params =  [{"answer"=>"0", "left"=>"Day Drinking", "right"=>"Night Drinking", "question_id"=>"1"}, {"answer"=>"1", "left"=>"Red Wine", "right"=>"White Wine", "question_id"=>"2"}, {"answer"=>"0", "left"=>"White Liqours", "right"=>"Brown Liqours", "question_id"=>"3"}, {"answer"=>"0", "left"=>"Straw", "right"=>"No straw", "question_id"=>"4"}]
+
+            put :update, format: :json, data: params
+            rrc(200)
+            answers = @user.answers
+            params.each do |q|
+                a = answers.where(question_id: q["question_id"]).first
+                a.answer.should == q["answer"]
+            end
+        end
+
         it "should update requests with hash answers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}].to_json
+            params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}]
 
             put :update, format: :json, data: params
             rrc(200)
@@ -82,7 +96,7 @@ describe Mdot::V2::QuestionsController do
         it "should ignore bad keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params = [{ "question_id" => q1.id, "answer" => 0},{ "question_id" => q2.id, "answer" => 0},{ "question_id" => q3.id, "answer" => 0},{ "question_id" => q4.id, "answer" => 0},{ "question_id" => q5.id, "answer" => 0},{ "question_id" => q6.id, "answer" => 0},{ "question_id" => q7.id, "answer" => 0}].to_json
-            
+
             put :update, format: :json, data: params
             rrc(200)
             json["status"].should == 1
