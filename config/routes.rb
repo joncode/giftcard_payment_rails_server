@@ -176,6 +176,8 @@ Drinkboard::Application.routes.draw do
             end
           end
 
+          resources :gift_campaigns, only: [:create]
+
           resources :users,     only: [:update] do         # biz logic
             member do
               post :deactivate
