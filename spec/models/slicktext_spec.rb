@@ -28,6 +28,7 @@ describe Slicktext do
             Slicktext.stub(:get).and_return(slicktext_response)
             word_hsh = Slicktext.textwords
             word_hsh.should == word_hsh
+            puts "Need to know how to return an HTTParty object and not a hash here"
         end
 
     end

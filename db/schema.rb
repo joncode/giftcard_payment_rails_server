@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140317173506) do
+ActiveRecord::Schema.define(version: 20140419162403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -199,12 +199,15 @@ ActiveRecord::Schema.define(version: 20140317173506) do
     t.integer  "redeem_id"
     t.integer  "gift_id"
     t.string   "redeem_code"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "server_code"
     t.integer  "server_id"
     t.integer  "provider_id"
     t.integer  "employee_id"
+    t.integer  "pos_merchant_id"
+    t.string   "ticket_value"
+    t.string   "ticket_item_ids"
   end
 
   add_index "orders", ["gift_id"], name: "index_orders_on_gift_id", using: :btree
@@ -217,42 +220,44 @@ ActiveRecord::Schema.define(version: 20140317173506) do
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
 
   create_table "providers", force: true do |t|
-    t.string   "name",                                      null: false
+    t.string   "name",                                       null: false
     t.string   "zinger"
     t.text     "description"
     t.string   "address"
     t.string   "address_2"
-    t.string   "city",           limit: 32
-    t.string   "state",          limit: 2
-    t.string   "zip",            limit: 16
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.string   "city",            limit: 32
+    t.string   "state",           limit: 2
+    t.string   "zip",             limit: 16
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
     t.string   "phone"
     t.string   "email"
     t.string   "twitter"
     t.string   "facebook"
     t.string   "website"
     t.string   "sales_tax"
-    t.boolean  "active",                    default: true
+    t.boolean  "active",                     default: true
     t.float    "latitude"
     t.float    "longitude"
     t.string   "foursquare_id"
     t.decimal  "rate"
-    t.boolean  "menu_is_live",              default: false
+    t.boolean  "menu_is_live",               default: false
     t.integer  "brand_id"
     t.integer  "building_id"
     t.integer  "sd_location_id"
     t.string   "token"
-    t.boolean  "tools",                     default: false
+    t.boolean  "tools",                      default: false
     t.string   "image"
     t.integer  "merchant_id"
-    t.boolean  "live",                      default: false
-    t.boolean  "paused",                    default: true
+    t.boolean  "live",                       default: false
+    t.boolean  "paused",                     default: true
+    t.integer  "pos_merchant_id"
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree
   add_index "providers", ["city"], name: "index_providers_on_city", using: :btree
   add_index "providers", ["merchant_id"], name: "index_providers_on_merchant_id", using: :btree
+  add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
 
   create_table "providers_tags", id: false, force: true do |t|
@@ -271,9 +276,12 @@ ActiveRecord::Schema.define(version: 20140317173506) do
   create_table "redeems", force: true do |t|
     t.integer  "gift_id"
     t.string   "redeem_code"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "pos_merchant_id"
   end
+
+  add_index "redeems", ["gift_id"], name: "index_redeems_on_gift_id", using: :btree
 
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
@@ -324,17 +332,6 @@ ActiveRecord::Schema.define(version: 20140317173506) do
     t.datetime "reset_token_sent_at"
     t.boolean  "email_reminder_gift_receiver", default: true
     t.boolean  "email_reminder_gift_giver",    default: true
-  end
-
-  create_table "sms", force: true do |t|
-    t.integer  "gift_id"
-    t.datetime "subscribed_date"
-    t.string   "phone"
-    t.integer  "service_id"
-    t.string   "service_type"
-    t.string   "textword"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "sms_contacts", force: true do |t|

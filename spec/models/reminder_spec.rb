@@ -9,21 +9,24 @@ describe Reminder do
 		@provider = FactoryGirl.create :provider, active: true, mode: "live"
 		@bad_provider = FactoryGirl.create :provider, mode: "Not Live"
 	end
+
 	after(:all) do
 		User.delete_all
 		Provider.delete_all
 	end
 
+
+
 	context "3 day old gifts" do
 
-	    it "should send email if more than 3 and less than 4 days old" do
+	    it "should send email if just over 3 days old" do
 			today = Time.now.beginning_of_day
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 3.1.days
 	    	MailerJob.should_receive(:reminder_gift_receiver).with(@bob).and_return(true)
 	    	Reminder.gift_reminder
 	    end
 
-	    it "should send email if more than 3 and less than 4 days old" do
+	    it "should send email if just under 4 days old" do
 			today = Time.now.beginning_of_day
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 3.9.days
 	    	MailerJob.should_receive(:reminder_gift_receiver).with(@bob).and_return(true)
@@ -37,6 +40,14 @@ describe Reminder do
 	    	MailerJob.should_not_receive(:reminder_gift_receiver).with(@bob).and_return(true)
 	    	Reminder.gift_reminder
 	    end
+
+	    it "should send one email a person with multiple 3 day old gifts" do
+			today = Time.now.beginning_of_day
+			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 3.5.days
+			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 3.5.days
+	    	MailerJob.should_receive(:reminder_gift_receiver).once.and_return(true)
+	    	Reminder.gift_reminder
+		end
 
 	    it "should not send email if not open notified or incomplete " do
 			today = Time.now.beginning_of_day
@@ -100,14 +111,14 @@ describe Reminder do
 
 	context "30 day old gifts" do
 
-	    it "should send email if more than 30 and less than 31 days old" do
+	    it "should send email if just over 30 days old" do
 			today = Time.now.beginning_of_day
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 30.1.days, status: "open"
 	    	MailerJob.should_receive(:reminder_gift_receiver).with(@bob).and_return(true)
 	    	Reminder.gift_reminder
 	    end
 
-	    it "should send email if more than 30 and less than 31 days old" do
+	    it "should send email if just under 31 days old" do
 			today = Time.now.beginning_of_day
 			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 30.9.days, status: "open"
 	    	MailerJob.should_receive(:reminder_gift_receiver).with(@bob).and_return(true)
@@ -121,6 +132,22 @@ describe Reminder do
 	    	MailerJob.should_not_receive(:reminder_gift_receiver).with(@bob).and_return(true)
 	    	Reminder.gift_reminder
 	    end
+
+	    it "should send one email to person with multiple 30 day old gifts" do
+			today = Time.now.beginning_of_day
+			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 30.5.days, status: "open"
+			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 30.5.days, status: "open"
+	    	MailerJob.should_receive(:reminder_gift_receiver).once.and_return(true)
+	    	Reminder.gift_reminder
+		end
+
+	    it "should send one email to person with both 3 and 30 day old gifts" do
+			today = Time.now.beginning_of_day
+			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 3.5.days, status: "open"
+			FactoryGirl.create :gift, giver: @abe, receiver: @bob, provider_id: @provider.id, created_at: today - 30.5.days, status: "open"
+	    	MailerJob.should_receive(:reminder_gift_receiver).once.and_return(true)
+	    	Reminder.gift_reminder
+		end
 
 	    it "should not send email if not open notified or incomplete " do
 			today = Time.now.beginning_of_day

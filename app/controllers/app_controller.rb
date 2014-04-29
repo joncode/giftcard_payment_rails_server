@@ -13,9 +13,8 @@ class AppController < JsonController
 	end
 
  	def update_user
-
  		@app_response = {}
-        updates = if params["data"].kind_of? String
+        params["data"] = if params["data"].kind_of? String
                     begin
                         JSON.parse params["data"]
                     rescue
@@ -24,12 +23,13 @@ class AppController < JsonController
                 else
                     params["data"]
                 end
-        unless updates.kind_of?(Hash)
+        unless params["data"].kind_of?(Hash)
             @app_response["error"] = "App needs to be reset. Please log out and log back in."
         end
+        params["data"]["api_v1"] = true if params["data"].present?
         if (user = authenticate_app_user(params["token"])) && (@app_response["error"].nil?)
 
-            if user.update_attributes(strong_user_param(updates))
+            if user.update_attributes(user_params)
                 @app_response["success"]      = user.serializable_hash only: UPDATE_REPLY
             else
                 @app_response["error_server"] = stringify_error_messages user
@@ -416,7 +416,7 @@ class AppController < JsonController
 	  			if order.save
 	  				response["success"] = { "order_number" => order.make_order_num,  "total" => gift.total, "server" => order.server_code }
 	  			else
-	  				response["error_server"] = stringify_error_messages order
+	  				response["error_server"] = database_error_redeem
 	  			end
 	  		rescue
 	  			response["error_server"] = database_error_redeem
@@ -685,31 +685,35 @@ private
         end
     end
 
-    def create_gift_params
-        # params.permit!
-        #params.require(:gift)
-        params.require(:gift).permit(:giver_id, :giver_name, :provider_id, :provider_name, :receiver_id, :receiver_name, :receiver_email, :facebook_id, :twitter, :total, :service, :credit_card, :message, :receiver_phone)
+    # def create_gift_params
+    #     # params.permit!
+    #     #params.require(:gift)
+    #     params.require(:gift).permit(:giver_id, :giver_name, :provider_id, :provider_name, :receiver_id, :receiver_name, :receiver_email, :facebook_id, :twitter, :total, :service, :credit_card, :message, :receiver_phone)
 
+    # end
+
+    # def create_shoppingCart_params
+    #     params.require(:shoppingCart)
+    # end
+
+    # def permit_data_params
+    #     params.require(:data)
+    # end
+
+    def user_params
+    	params.require(:data).permit(:first_name, :last_name,  :phone, :email, :birthday, :sex, :zip, :facebook_id, :twitter, :api_v1)
     end
 
-    def create_shoppingCart_params
-        params.require(:shoppingCart)
-    end
-
-    def permit_data_params
-        params.require(:data)
-    end
-
-    def strong_user_param(data_hsh)
-        allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip", "facebook_id", "twitter" ]
-        data_hsh.select{ |k,v| allowed.include? k }
-    end
+    # def strong_user_param(data_hsh)
+    #     allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip", "facebook_id", "twitter" ]
+    #     data_hsh.select{ |k,v| allowed.include? k }
+    # end
 
     def gift_params
         if params.require(:gift).kind_of?(String)
             pg = JSON.parse(params.require(:gift))
         else
-            params.require(:gift).permit(:message, :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_email, :receiver_phone,:twitter, :facebook_id, :receiver_name, :provider_name, :provider_id,:credit_card, :total)
+            params.require(:gift).permit(:message, :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_email, :receiver_phone,:twitter, :facebook_id, :receiver_name, :provider_name, :provider_id,:credit_card, :total, :api_v1)
         end
     end
 end

@@ -1,6 +1,7 @@
 module RewardsGenerator
 
     def self.make_gifts
+        puts "------------- Promo Rewards Generator  -----------------"
         items = self.campaign_items_ary
         users = self.get_users
         self.create_gifts(items, users)
@@ -35,7 +36,7 @@ private
     end
 
     def self.get_users
-        User.order('created_at DESC')
+        User.where(active: true).order('created_at DESC')
     end
 
     def self.make_reservable_items live_items
@@ -47,8 +48,6 @@ private
         end
         reservable_items
     end
-
-
 
 end
 

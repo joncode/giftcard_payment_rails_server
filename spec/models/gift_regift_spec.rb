@@ -50,7 +50,7 @@ describe GiftRegift do
             @user     = FactoryGirl.create(:user)
             @regifter = FactoryGirl.create(:user, first_name: "Jon", last_name: "Regifter")
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
-            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", service: '10.05')
+            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", cost: "187.32", service: '10.05', cat: 300)
             @gift_hsh = {}
             @gift_hsh["message"]       = "I just REGIFTED!"
             @gift_hsh["name"]          = @receiver.name
@@ -61,6 +61,13 @@ describe GiftRegift do
 
         it_should_behave_like "gift serializer" do
             let(:object) { GiftRegift.create(@gift_hsh) }
+        end
+
+        it "should correctly transfer cost including decimals" do
+            gift        = GiftRegift.create @gift_hsh
+            gift.should be_valid
+            gift.value.should == "201"
+            gift.cost.should == "187.32"
         end
 
         it "should create gift with old_gift provider" do
@@ -103,10 +110,59 @@ describe GiftRegift do
             gift.service.should      == nil
         end
 
-        it "should set the gift cat to 100" do
+        it "should set cat for regift of GiftSale to 301" do
             gift        = GiftRegift.create @gift_hsh
             gift.reload
-            gift.cat.should        == 100
+            gift.cat.should        == 301
+        end
+
+        it "should set cat for regift of Admin Gift to 101" do
+            @old_gift.update(cat: 100)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 101
+        end
+
+        it "should set cat for regift of Campaign Admin Gift to 151" do
+            @old_gift.update(cat: 150)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 151
+        end
+
+        it "should set cat for regift of Merchant Gift to 201" do
+            @old_gift.update(cat: 200)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 201
+        end
+
+        it "should set cat for regift of Campaign Merchant Gift to 251" do
+            @old_gift.update(cat: 250)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.cat.should        == 251
+        end
+
+        it "should set cat for regift of Campaign Merchant Gift to 251" do
+            @old_gift.update(cat: 251)
+            @gift_hsh["old_gift_id"] = @old_gift.id
+            re_gift1        = GiftRegift.create @gift_hsh
+            re_gift1.reload
+            re_gift1.cat.should        == 251
+            re_gift_hsh = {}
+            re_gift_hsh["message"]        = "I just REGIFTED AGAIN!"
+            re_gift_hsh["name"]           = "Hot Potato"
+            re_gift_hsh["receiver_email"] = "hot@potato.com"
+            re_gift_hsh["giver"]          = re_gift1.receiver
+            re_gift_hsh["old_gift_id"]    = re_gift1.id
+            re_gift2 = GiftRegift.create re_gift_hsh
+            re_gift2.reload
+            re_gift2.cat.should == 251
         end
 
         it "should set the status of the new gift to 'notified'" do
@@ -367,6 +423,37 @@ describe GiftRegift do
         end
 
     end
+
+
+    context "Regifting Campaign Gift" do
+
+        before(:each) do
+            @user     = FactoryGirl.create(:user)
+            @regifter = FactoryGirl.create(:user, first_name: "Jon", last_name: "Regifter")
+            @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
+            @expires_at = Time.now + 1.month
+            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver: @regifter, message: "DO NOT REGIFT!", value: "201.00", cost: "187.32", service: '10.05', expires_at: @expires_at)
+            @gift_hsh = {}
+            @gift_hsh["message"]       = "I just REGIFTED!"
+            @gift_hsh["name"]          = @receiver.name
+            @gift_hsh["receiver_id"]   = @receiver.id
+            @gift_hsh["giver"]         = @regifter
+            @gift_hsh["old_gift_id"]   = @old_gift.id
+        end
+
+        it "should create gift with old_gift provider" do
+            gift        = GiftRegift.create @gift_hsh
+            gift.reload
+            gift.message.should       == "I just REGIFTED!"
+            gift.receiver_name.should == @receiver.name
+            gift.receiver.should      == @receiver
+            gift.provider.should      == @old_gift.provider
+            gift.provider_name.should == @old_gift.provider_name
+            gift.expires_at.should    == @expires_at
+            gift.cost.should          == "187.32"
+        end
+    end
+
 
 end# == Schema Information
 #

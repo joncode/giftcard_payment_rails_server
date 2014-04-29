@@ -1,11 +1,12 @@
 class Admt::V2::UsersController < JsonController
 
     before_action :authenticate_admin_tools
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def update
         return nil  if data_not_hash?
-        user_params = strong_param(params["data"])
-        return nil  if hash_empty?(user_params)
+        # user_params = strong_param(params["data"])
+        return nil  if hash_empty?(params["data"])
 
         user = User.find(params[:id])
         if user.update(user_params)
@@ -81,14 +82,18 @@ class Admt::V2::UsersController < JsonController
 
 private
 
-    def strong_param(data_hsh)
-        allowed = [ "first_name" , "last_name",  "phone" , "email", "zip", "primary" ]
-        data_hsh.select{ |k,v| allowed.include? k }
+    def user_params
+        params.require(:data).permit(:first_name, :last_name,  :phone, :email, :zip, :primary)
     end
 
-    def user_social_params data_hsh
-        allowed = ["email", "phone", "facebook_id", "twitter", "phone"]
-        data_hsh.select{ |k,v| (allowed.include?(k)) }
-    end
+    # def strong_param(data_hsh)
+    #     allowed = [ "first_name" , "last_name",  "phone" , "email", "zip", "primary" ]
+    #     data_hsh.select{ |k,v| allowed.include? k }
+    # end
+
+    # def user_social_params data_hsh
+    #     allowed = ["email", "phone", "facebook_id", "twitter", "phone"]
+    #     data_hsh.select{ |k,v| (allowed.include?(k)) }
+    # end
 
 end

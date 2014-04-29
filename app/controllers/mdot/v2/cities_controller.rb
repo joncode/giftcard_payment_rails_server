@@ -1,5 +1,6 @@
 class Mdot::V2::CitiesController < JsonController
     before_action :authenticate_customer
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def index
         @app_response = city_list

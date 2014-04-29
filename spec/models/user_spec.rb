@@ -513,6 +513,13 @@ describe User do
                 user.phone.should == "6467578686"
             end
 
+            it "should extract phone digits from dashed number on update" do
+                user = FactoryGirl.create(:user)
+                user.update(phone: "555-333-4567")
+                UserSocial.where(identifier: "555-333-4567").should_not be_present
+                UserSocial.where(identifier: "5553334567").should be_present
+            end
+
         end
 
         context :twitter do

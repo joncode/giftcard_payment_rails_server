@@ -5,7 +5,7 @@ class Mtmodel < ActiveRecord::Base
             ENV['MT_DATABASE_URL']
         )
     else
-        establish_connection "mt_#{Rails.env}"
+        establish_connection "mt_#{Rails.env}".to_sym
     end
 
 end

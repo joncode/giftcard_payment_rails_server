@@ -12,5 +12,6 @@ else
 	Resque.redis = Redis.new(:host => "localhost", :port => 6379)
 end
 
-Resque.after_fork = Proc.new { ActiveRecord::Base.establish_connection }
+#-- Commented out 4/17/14 -- connection is reestablished in unicorn.rb
+# Resque.after_fork = Proc.new { ActiveRecord::Base.establish_connection }
 

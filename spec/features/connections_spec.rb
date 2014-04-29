@@ -1,5 +1,5 @@
 require 'spec_helper'
-    
+
 describe "Connections Feature" do
 
     before do

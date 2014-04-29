@@ -69,6 +69,7 @@ describe Mdot::V2::UsersController do
             @user.save
             get :show, format: :json, id: @user.id
             rrc 200
+            puts json["data"]
             json["data"]["email"].count.should == 2
             json["data"]["phone"].count.should == 2
             json["data"]["facebook_id"].count.should == 2
@@ -79,6 +80,16 @@ describe Mdot::V2::UsersController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :show, format: :json, id: (@other.id + 400)
             rrc(404)
+        end
+
+        it "should return the token user if url id = 'me'" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            keys    = ["first_name", "last_name", "birthday", "email", "sex", "zip", "phone", "facebook_id", "twitter", "photo", "user_id"]
+            get :show, format: :json, id: 'me'
+            rrc 200
+            compare_keys json["data"], keys
+            json["data"]["first_name"].should == @user.first_name
+            json["data"]["last_name"].should  == @user.last_name
         end
     end
 

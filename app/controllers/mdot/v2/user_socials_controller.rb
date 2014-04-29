@@ -1,5 +1,6 @@
 class Mdot::V2::UserSocialsController < JsonController
     before_action :authenticate_customer
+    rescue_from JSON::ParserError, :with => :bad_request
 
     def destroy
         # user_social = @current_user.user_socials.where(identifier: params["identifier"], type_of: params["type"]).first

@@ -78,17 +78,33 @@ describe GiftAdmin do
         gift.cost.should            == "2.46"
     end
 
-    it "should set the cat to 210" do
+    it "should set the cost at 85% of price if promo prices is missing" do
+        @gift_hsh["shoppingCart"] = [{"price"=>"4", "quantity"=>2, "section"=>"Beer", "item_id"=>543, "item_name"=>"Corona"}].to_json
+        gift = GiftAdmin.create @gift_hsh
+        gift.reload
+        gift.cost.should            == "6.80"
+    end
+
+    it "should set the cat to 100" do
         @gift_hsh["shoppingCart"] = [{"price"=>"4", "price_promo"=>"1.23", "quantity"=>2, "section"=>"Beer", "item_id"=>543, "item_name"=>"Corona"}].to_json
         gift = GiftAdmin.create @gift_hsh
         gift.reload
-        gift.cat.should            == 210
+        gift.cat.should            == 100
     end
+
+    it "should set cat to different number if included in params" do
+        @gift_hsh["shoppingCart"] = [{"price"=>"4", "price_promo"=>"1.23", "quantity"=>2, "section"=>"Beer", "item_id"=>543, "item_name"=>"Corona"}].to_json
+        @gift_hsh["cat"] = 500
+        gift        = GiftAdmin.create @gift_hsh
+        gift.reload
+        gift.cat.should == 500
+    end
+
 
     xit "should set the expiration date" do
 
     end
-    
+
     context "messaging" do
 
         before(:each) do

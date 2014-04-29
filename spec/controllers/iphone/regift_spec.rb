@@ -1,14 +1,35 @@
 require 'spec_helper'
 
+
+def regift_hash receiver
+    user_data_hash = {}
+    user_data_hash["receiver_id"]   = receiver.id
+    user_data_hash["name"]          = receiver.name
+    user_data_hash["email"]         = receiver.email
+    user_data_hash["phone"]         = receiver.phone
+    user_data_hash["facebook_id"]   = receiver.facebook_id
+    user_data_hash["twitter"]       = receiver.twitter
+    user_data_hash
+end
+
+def gift_social_id_hsh
+    {
+        receiver_email: "hsh@gmail.com",
+        receiver_phone: "9173123969",
+        facebook_id: "4444123",
+        twitter: "444"
+    }
+end
+
 describe IphoneController do
+
+    let(:cart)     { "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]" }
 
     before(:each) do
         Gift.delete_all
         User.delete_all
         UserSocial.delete_all
     end
-
-    let(:cart)     { "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]" }
 
     describe "#regift" do
 
@@ -187,26 +208,6 @@ describe IphoneController do
             end
         end
 
-    end
-
-    def regift_hash receiver
-        user_data_hash = {}
-        user_data_hash["receiver_id"]   = receiver.id
-        user_data_hash["name"]          = receiver.name
-        user_data_hash["email"]         = receiver.email
-        user_data_hash["phone"]         = receiver.phone
-        user_data_hash["facebook_id"]   = receiver.facebook_id
-        user_data_hash["twitter"]       = receiver.twitter
-        user_data_hash
-    end
-
-    def gift_social_id_hsh
-        {
-            receiver_email: "hsh@gmail.com",
-            receiver_phone: "9173123969",
-            facebook_id: "4444123",
-            twitter: "444"
-        }
     end
 
 end

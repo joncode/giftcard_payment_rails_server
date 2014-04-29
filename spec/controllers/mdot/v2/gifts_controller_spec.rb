@@ -40,13 +40,14 @@ describe Mdot::V2::GiftsController do
 
         it "should send sent gifts (purchaser) with giver keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "cat", "time_ago"]
+            keys = ["created_at", "message", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "cat", "time_ago", "items"]
             get :archive, format: :json
             gift_hsh = json["data"]["sent"][0]
             compare_keys(gift_hsh, keys)
         end
 
         it "should send a list of used gifts" do
+            Redeem.delete_all
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gs = Gift.where(receiver_id: @user.id)
             gs.each do |gift|
@@ -70,7 +71,7 @@ describe Mdot::V2::GiftsController do
                 order  = Order.init_with_gift(gift, "xyz")
                 order.save
             end
-            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at", "completed_at", "cat", "time_ago"]
+            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at", "completed_at", "cat", "time_ago", "items"]
             post :archive, format: :json
             gift_hsh = json["data"]["used"][0]
             compare_keys(gift_hsh, keys)
@@ -147,7 +148,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return receiver serialized gifts" do
-            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago"]
+            keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
             json_gifts = json["data"]["gifts"]
@@ -156,18 +157,18 @@ describe Mdot::V2::GiftsController do
             compare_keys(serialized_gift, keys)
         end
 
-        it "should return shopping cart as a json Array" do
+        it "should return shopping cart as a json Array :items" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
             gifts_ary = json["data"]["gifts"]
-            gifts_ary[0]["shoppingCart"].class.should == Array
+            gifts_ary[0]["items"].class.should == Array
         end
 
         context "scope out unpaid / expired gifts" do
 
             it "should not return :pay_stat => 'payment_error' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
-                gifts = Gift.where(receiver_id: @user.id)
+                gifts = Gift.where(receiver_id: @user.id).to_a
                 last_gift = gifts.pop
                 gifts.each do |gift|
                     gift.update(pay_stat: "payment_error" )
@@ -183,15 +184,19 @@ describe Mdot::V2::GiftsController do
             it "should not return :status => 'expired' gifts" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 gifts = Gift.where(receiver_id: @user.id)
-                last_gift       = gifts.pop
-                other_last_gift = gifts.pop
-                gifts.each do |gift|
-                    gift.update(status: "expired")
+                count = gifts.count
+                iterate = count - 2
+                iterate.times do |index|
+                    gifts[index].update(status: "expired")
                 end
                 get :badge, format: :json
                 json["data"]["badge"].should == 2
-                gift = json["data"]["gifts"].pop
-                gift["gift_id"].should       == last_gift.id
+                gifts_json = json["data"]["gifts"]
+                non_expired = gifts.where.not(status: 'expired')
+                non_expired_ary_of_ids = non_expired.map(&:id)
+                gifts_json.each do |g_j|
+                    expect { non_expired_ary_of_ids.include?(g_j["gift_id"]) }.to be_true
+                end
             end
         end
 
@@ -361,14 +366,14 @@ describe Mdot::V2::GiftsController do
             @gift.redeemed_at.day.should == time.day
         end
 
-        it "should return validation errors on bad gift" do
+        it "should return reload app error on bad gift" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             redeem = Redeem.find_by(gift_id: @gift.id)
             redeem.destroy
             post :redeem, format: :json, id: @gift.id, server: "test"
             rrc(200)
             json["status"].should == 0
-            json["data"].should   == { "error" => { "gift_id"=>["can't be blank"], "redeem_id"=>["can't be blank"], "provider_id"=>["can't be blank"] } }
+            json["data"].should   == {"Data Transfer Error"=>"Please Reload Gift Center"}
         end
 
         it "should reject request if request is malformed" do
@@ -429,7 +434,7 @@ describe Mdot::V2::GiftsController do
                 params = {"message"=>"Test regift", "receiver"=>{"receiver_id"=>receiver.id, "name"=> receiver.name}}
                 post :regift, format: :json, id: old_gift.id, data: params
                 new_gift = old_gift.child
-                
+
                 new_gift.status.should     == 'open'
                 new_gift.payable_id.should == old_gift.id
             end
@@ -744,7 +749,7 @@ describe Mdot::V2::GiftsController do
         it "should return 404 + 'credit card not on file' msg when card not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             # test that create gift does not create the gift or the sale
-            gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: @card
+            gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: 99999999999999999999999
             post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(404)
             json["status"].should == 0

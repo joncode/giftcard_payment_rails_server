@@ -69,7 +69,6 @@ describe "Happy Path" do
             else
                 true
             end
-
         }.twice
 
         json = post_form_data '/app/create_account.json', :data => { :email => "neil@gmail.com", first_name: "Neil", password: 'secret', password_confirmation: 'secret' }
@@ -87,7 +86,7 @@ describe "Happy Path" do
 
         json = post_form_data '/app/order_confirm', token: r_token, data: gift["gift_id"], server_code: "jjjj"
 
-        json["success"]["total"].should == total.to_s + ".00"
+        json["success"]["total"].should == total.to_s
         json["success"]["server"].should == "jjjj"
         json["success"]["order_number"].should_not be_blank
 
