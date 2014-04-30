@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140419162403) do
+ActiveRecord::Schema.define(version: 20140429211857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -252,6 +252,7 @@ ActiveRecord::Schema.define(version: 20140419162403) do
     t.boolean  "live",                       default: false
     t.boolean  "paused",                     default: true
     t.integer  "pos_merchant_id"
+    t.integer  "region_id"
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree
