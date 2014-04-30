@@ -110,6 +110,23 @@ describe Mdot::V2::CardsController do
             json["data"]["error"].keys.include?("number").should be_true
         end
 
+        it "should accept user id and brand BUG FIX" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params = {"month"=>"1", "number"=>"4417121029961508", "user_id"=>1468, "brand"=>"Visa", "name"=>"Bobby Bobberson", "year"=>"2015", "csv"=>"999", "nickname"=>"Visa"}
+            post :create, format: :json, data: params
+            rrc(200)
+            json["status"].should == 1
+            card = Card.last
+            card.month.should       == "1"
+            card.user_id.should_not == 1468 #because it's overwritten in the controller
+            card.user_id.should     == User.last.id #current user
+            card.brand.should       == "visa"
+            card.name.should        == "Bobby Bobberson"
+            card.year.should        == "2015"
+            card.csv.should         == "999"
+            card.nickname.should    == "Visa"
+        end
+
     end
 
     describe :destroy do
