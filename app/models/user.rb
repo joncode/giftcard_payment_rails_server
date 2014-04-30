@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
 		if self.iphone_photo && self.iphone_photo.length > 14
 			self.iphone_photo
 		else
-			"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+			"http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
 		end
 	end
 

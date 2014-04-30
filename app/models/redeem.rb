@@ -7,7 +7,7 @@ class Redeem < ActiveRecord::Base
 	has_one         :order
 
 	validates :gift_id , presence: true, uniqueness: true
-	validates :redeem_code, :uniqueness => { scope: :pos_merchant_id }, :if => :pos_merchant_id?
+	validates :redeem_code, :uniqueness => { scope: :pos_merchant_id }, allow_blank: true, :if => :pos_merchant_id?
 
 	before_create :create_redeem_code
 	after_create :add_redeem_to_gift

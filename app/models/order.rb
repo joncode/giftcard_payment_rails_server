@@ -26,9 +26,24 @@ class Order < ActiveRecord::Base
 
 	def self.init_with_gift(gift, server_code=nil)
 		server_code = server_code || ""
-		order = Order.new(server_code: server_code)
-		order.send(:add_gift_info, gift)
+		order = Order.new(server_code: server_code, gift: gift)
+		order.add_gift_info(gift)
 		return order
+	end
+
+	def add_gift_info(gift, redeem=nil)
+		if redeem.nil?
+			redeem = Redeem.find_by(gift_id: gift.id)
+		end
+
+		if redeem
+			self.gift_id     = gift.id
+			self.provider_id = gift.provider_id
+			self.redeem_code = redeem.redeem_code
+			self.redeem 	 = redeem
+			redeem.redeem_code = nil
+		end
+		self
 	end
 
 	def ticket_item_ids
@@ -52,21 +67,6 @@ class Order < ActiveRecord::Base
 	end
 
 private
-
-	def add_gift_info(gift, redeem=nil)
-		if redeem.nil?
-			redeem = Redeem.find_by(gift_id: gift.id)
-		end
-
-		if redeem
-			self.gift_id     = gift.id
-			self.provider_id = gift.provider_id
-			self.redeem_code = redeem.redeem_code
-			self.redeem 	 = redeem
-			redeem.redeem_code = nil
-		end
-		self
-	end
 
 	def update_gift_status
 		gift = self.gift
@@ -102,7 +102,7 @@ private
 
 	def add_redeem_id
 		puts "ADD REDEEM ID"
-		self.redeem_id = self.gift.redeem.id if self.gift
+		self.redeem_id = self.gift.redeem.id if (self.gift && self.gift.redeem)
 	end
 
 	def no_provider_id
