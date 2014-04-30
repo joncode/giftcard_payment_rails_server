@@ -259,6 +259,7 @@ ActiveRecord::Schema.define(version: 20140429211857) do
   add_index "providers", ["city"], name: "index_providers_on_city", using: :btree
   add_index "providers", ["merchant_id"], name: "index_providers_on_merchant_id", using: :btree
   add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
+  add_index "providers", ["region_id"], name: "index_providers_on_region_id", using: :btree
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
 
   create_table "providers_tags", id: false, force: true do |t|
@@ -333,17 +334,6 @@ ActiveRecord::Schema.define(version: 20140429211857) do
     t.datetime "reset_token_sent_at"
     t.boolean  "email_reminder_gift_receiver", default: true
     t.boolean  "email_reminder_gift_giver",    default: true
-  end
-
-  create_table "sms", force: true do |t|
-    t.integer  "gift_id"
-    t.datetime "subscribed_date"
-    t.string   "phone"
-    t.integer  "service_id"
-    t.string   "service_type"
-    t.string   "textword"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "sms_contacts", force: true do |t|
