@@ -52,7 +52,7 @@ private
     end
 
     def card_params
-        allowed = ["month", "number", "year", "csv", "nickname", "name"]
+        allowed = ["month", "number", "year", "csv", "nickname", "name", "user_id", "brand"]
         if params.require(:data).kind_of?(String)
             JSON.parse(params.require(:data))
         else
