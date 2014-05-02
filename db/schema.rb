@@ -259,6 +259,7 @@ ActiveRecord::Schema.define(version: 20140429211857) do
   add_index "providers", ["city"], name: "index_providers_on_city", using: :btree
   add_index "providers", ["merchant_id"], name: "index_providers_on_merchant_id", using: :btree
   add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
+  add_index "providers", ["region_id"], name: "index_providers_on_region_id", using: :btree
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
 
   create_table "providers_tags", id: false, force: true do |t|

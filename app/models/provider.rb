@@ -11,7 +11,7 @@ class Provider < ActiveRecord::Base
 	belongs_to :brands
 	belongs_to :merchant
 
-	validates_presence_of 	:name, :city, :address, :zip , :state, :token
+	validates_presence_of 	:name, :city, :address, :zip, :region_id, :state, :token
 	validates_length_of 	:state , 	:is => 2
 	validates_length_of 	:zip, 		:within => 5..10
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
