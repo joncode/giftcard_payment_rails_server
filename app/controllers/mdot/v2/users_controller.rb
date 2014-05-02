@@ -22,10 +22,18 @@ class Mdot::V2::UsersController < JsonController
         updates = socials_user_params
 
         if updates["social"].present?
-            @current_user = current_user.update_user_socials(updates)
+            ids = updates["social"].map do |social|
+                social["_id"]
+            end
+            user_socials  = UserSocial.where(id: ids)
+            updates["social"].each do |social|
+                us = user_socials.where(id: social["_id"]).first
+                us.update(identifier: social["value"])
+            end
+            updates.delete("social")
         end
 
-        if @current_user.update(socials_user_params)
+        if @current_user.update(updates)
             success @current_user.profile_with_ids_serialize
         else
             fail    @current_user

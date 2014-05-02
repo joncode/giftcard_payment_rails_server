@@ -577,13 +577,32 @@ describe Mdot::V2::UsersController do
         it "should iterate thru entire put hash and update user record and user_social records" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             @user.update(email: "new_social@gmail.com", phone: "6469876543")
-            social1  = UserSocial.where(type_of: "email", identifier: "new_social@gmail.com").first
-            social2  = UserSocial.where(type_of: "phone", identifier: "6469876543").first
+            social2  = UserSocial.where(type_of: "email", identifier: "new_social@gmail.com").first
+            social1  = UserSocial.where(type_of: "phone", identifier: "6469876543").first
 
             hsh = { "first_name" => "Newfirstname", "last_name" => "Newlastname", "birthday" => "3/12/89", "zip" => "15364", "sex" => "male", "social" => [ { "_id" => social1.id, "value" => "2154647839"}, { "_id" => social2.id, "value" => "new@gmail.com"} ] }
             put :socials, format: :json, data: hsh
             json["status"].should == 1
-            json["data"].should   == { "first_name" => "Newfirstname", "last_name" => "Newlastname", "birthday" => "3/12/89", "zip" => "15364", "sex" => "male", "social" => [ { "_id" => social1.id, "value" => "2154647839"}, { "_id" => social2.id, "value" => "new@gmail.com"} ] }
+            json["data"].should   ==  @user.reload.profile_with_ids_serialize
+            # test that the user socials are updated
+            us1 = UserSocial.find(social2.id)
+            us1.identifier.should == "new@gmail.com"
+            us1.type_of.should    == 'email'
+            us2 = UserSocial.find(social1.id)
+            us2.identifier.should == "2154647839"
+            us2.type_of.should    == 'phone'
+        end
+
+        it "should iterate thru entire put hash and update user record but NO user_social records" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            @user.update(email: "new_social@gmail.com", phone: "6469876543")
+            social1  = UserSocial.where(type_of: "email", identifier: "new_social@gmail.com").first
+            social2  = UserSocial.where(type_of: "phone", identifier: "6469876543").first
+
+            hsh = { "first_name" => "Newfirstname", "last_name" => "Newlastname", "birthday" => "3/12/89", "zip" => "15364", "sex" => "male" }
+            put :socials, format: :json, data: hsh
+            json["status"].should == 1
+            json["data"].should   == @user.reload.profile_with_ids_serialize
         end
 
         it "should not update attributes that dont exist and fail" do
