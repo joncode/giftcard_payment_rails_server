@@ -41,4 +41,22 @@ describe UserSerializers do
         twitter.class.should == Array
     end
 
+    it "should profile_with_ids_serialize and include the user_social ids for phone , email , facebook_id, twitter" do
+        user = FactoryGirl.create(:user)
+        user.save
+        json_str = user.profile_with_ids_serialize
+        keys = ["first_name", "last_name", "birthday", "zip", "email", "sex", "phone", "facebook_id", "twitter", "user_id", "photo"]
+        compare_keys json_str, keys
+        examples = [json_str["email"].first]
+        examples << json_str["phone"].first
+        examples << json_str["facebook_id"].first
+        examples << json_str["twitter"].first
+        examples.each do |ex|
+            ex["_id"].should_not be_nil
+            ex["_id"].class.should == Fixnum
+            ex["value"].should_not be_nil
+            ex["value"].class.should == String
+        end
+    end
+
 end

@@ -7,7 +7,7 @@ describe Mdot::V2::UsersController do
         User.delete_all
         unless @user = User.find_by(remember_token: "USER_TOKEN")
             @user = FactoryGirl.create(:user)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @user.update(remember_token: "USER_TOKEN")
         end
     end
 
@@ -44,12 +44,14 @@ describe Mdot::V2::UsersController do
             @other = FactoryGirl.create(:user, first_name: "Oldie", last_name: "Quickins", email: "OTher@other.com", phone: "6567478484")
         end
 
-        it "should return other user profile if ID does not match token" do
+        it "should return the token user if url id = 'me'" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            keys    = ["first_name", "last_name", "user_id", "sex", "photo", "city", "zip", "state"]
-            get :show, format: :json, id: @other.id
+            keys    = ["first_name", "last_name", "birthday", "email", "sex", "zip", "phone", "facebook_id", "twitter", "photo", "user_id"]
+            get :show, format: :json, id: 'me'
             rrc 200
             compare_keys json["data"], keys
+            json["data"]["first_name"].should == @user.first_name
+            json["data"]["last_name"].should  == @user.last_name
         end
 
         it "should return user profile if ID does match token" do
@@ -58,6 +60,20 @@ describe Mdot::V2::UsersController do
             get :show, format: :json, id: @user.id
             rrc 200
             compare_keys json["data"], keys
+        end
+
+        it "should return other user profile if ID does not match token" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            keys    = ["first_name", "last_name", "user_id", "sex", "photo", "city", "zip", "state"]
+            get :show, format: :json, id: @other.id
+            rrc 200
+            compare_keys json["data"], keys
+        end
+
+        it "should return 404 if ID does not match a record in DB" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            get :show, format: :json, id: (@other.id + 400)
+            rrc(404)
         end
 
         it "should return nested user socials" do
@@ -75,267 +91,54 @@ describe Mdot::V2::UsersController do
             json["data"]["facebook_id"].count.should == 2
             json["data"]["twitter"].count.should == 2
         end
+    end
 
-        it "should return 404 if ID does not match a record in DB" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            get :show, format: :json, id: (@other.id + 400)
-            rrc(404)
-        end
+    describe :profile do
+        it_should_behave_like("token authenticated", :get, :profile)
 
-        it "should return the token user if url id = 'me'" do
+        it "should return user profile for token" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             keys    = ["first_name", "last_name", "birthday", "email", "sex", "zip", "phone", "facebook_id", "twitter", "photo", "user_id"]
-            get :show, format: :json, id: 'me'
+            get :profile, format: :json
             rrc 200
             compare_keys json["data"], keys
-            json["data"]["first_name"].should == @user.first_name
-            json["data"]["last_name"].should  == @user.last_name
-        end
-    end
-
-    describe :update do
-        it_should_behave_like("token authenticated", :put, :update)
-
-        it "should require a update_user hash" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            put :update, format: :json, data: "updated data"
-            rrc(400)
-            put :update, format: :json, data: nil
-            rrc(400)
-            put :update, format: :json
-            rrc(400)
         end
 
-        it "should return user hash when success" do
+        it "should return nested user socials" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            put :update, format: :json, data: { zip: "89475", sex: "male", birthday: "03/13/1975"}
-            rrc(200)
-            json["status"].should == 1
-            response = json["data"]
-            response.class.should  == Hash
-            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "sex", "birthday", "zip", "twitter", "facebook_id"]
-            compare_keys(response, keys)
-        end
-
-        it "should return validation errors" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            put :update, format: :json, data: { "email" => "" }
+            @user.email = "new_email@gmail.com"
+            @user.phone = "7568459384"
+            @user.facebook_id = "1111111111"
+            @user.twitter = "342342342"
+            @user.save
+            get :profile, format: :json
             rrc 200
-            json["status"].should == 0
-            json["data"].class.should    == Hash
-            json["data"]["error"]["email"].should == ["is invalid"]
+            puts json["data"]
+            json["data"]["email"].count.should == 2
+            json["data"]["phone"].count.should == 2
+            json["data"]["facebook_id"].count.should == 2
+            json["data"]["twitter"].count.should == 2
         end
 
-        it "should return duplicate user_social error when active user_socials already exist" do
+        it "should include user_social_ids with phone, email, facebook_id, twitter" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            other_user = FactoryGirl.create(:user, facebook_id: "keeper_other")
-            put :update, format: :json, data: { "facebook_id" => "keeper_other" }
+            get :profile, format: :json
             rrc 200
-            json["status"].should == 0
-            json["data"].class.should    == Hash
-            json["data"]["error"]["facebook_id"].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount, please use that to log in"]
-        end
-
-        {
-            first_name: "Ray",
-            last_name:  "Davies",
-            email: "ray@davies.com",
-            phone: "5877437859",
-            birthday: "10/10/1971",
-            sex: "female",
-            zip: "85733",
-            phone: "(702) 410-9605",
-            twitter: "65787323",
-            facebook_id: "98136459814"
-        }.stringify_keys.each do |type_of, value|
-
-            it "should update the user #{type_of} in database for non-socials" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                put :update, format: :json, data: { type_of => value }
-                new_user = @user.reload
-                value = "7024109605" if value == "(702) 410-9605"
-                unless ["email", "phone", "twitter", "facebook_id"].include?(type_of)
-                    new_user.send(type_of).should == value
-                end
+            json["data"]["email"].first.class.should == Hash
+            json["data"]["phone"].first.class.should == Hash
+            json["data"]["facebook_id"].first.class.should == Hash
+            json["data"]["twitter"].first.class.should == Hash
+            json_str = json["data"]
+            examples = [json_str["email"].first]
+            examples << json_str["phone"].first
+            examples << json_str["facebook_id"].first
+            examples << json_str["twitter"].first
+            examples.each do |ex|
+                ex["_id"].should_not be_nil
+                ex["_id"].class.should == Fixnum
+                ex["value"].should_not be_nil
+                ex["value"].class.should == String
             end
-
-            it "should NOT update the user #{type_of} in database for user-socials" do
-                request.env["HTTP_TKN"] = "USER_TOKEN"
-                put :update, format: :json, data: { type_of => value }
-                new_user = @user.reload
-                value = "7024109605" if value == "(702) 410-9605"
-                if ["email", "phone", "twitter", "facebook_id"].include?(type_of)
-                    new_user.send(type_of).should_not == value
-                end
-            end
-        end
-
-        it "should not update attributes that dont exist and succeed" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            hsh = { "house" => "chill" }
-            put :update, format: :json, data: hsh
-            rrc(400)
-        end
-
-        it "should not update attributes that are not allowed and still succeed" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            hsh = { "password" => "doNOTallow", "remember_token" => "DO_NOT_ALLOW" }
-            put :update, format: :json, data: hsh
-            rrc(400)
-        end
-    end
-
-    describe :deactivate_user_social do
-
-        it "should return 400 if last email" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
-            rrc(200)
-        end
-
-        it_should_behave_like("token authenticated", :put, :deactivate_user_social)
-
-        it "should return user ID on success" do
-            FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com"
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
-            rrc(200)
-            json["status"].should == 1
-            json["data"].should   == @user.id
-            put :deactivate_user_social, format: :json, identifier: @user.phone, type: "phone"
-            rrc(200)
-            json["status"].should == 1
-            json["data"].should   == @user.id
-            put :deactivate_user_social, format: :json, identifier: @user.facebook_id, type: "facebook_id"
-            rrc(200)
-            json["status"].should == 1
-            json["data"].should   == @user.id
-            put :deactivate_user_social, format: :json, identifier: @user.twitter, type: "twitter"
-            rrc(200)
-            json["status"].should == 1
-            json["data"].should   == @user.id
-        end
-
-        it "should deActivate the user social in the database" do
-            FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com"
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
-            rrc(200)
-            UserSocial.unscoped.where(identifier: @user.email).first.active.should be_false
-            put :deactivate_user_social, format: :json, identifier: @user.phone, type: "phone"
-            rrc(200)
-            UserSocial.unscoped.where(identifier: @user.phone).first.active.should be_false
-            put :deactivate_user_social, format: :json, identifier: @user.facebook_id, type: "facebook_id"
-            rrc(200)
-            UserSocial.unscoped.where(identifier: @user.facebook_id).first.active.should be_false
-            put :deactivate_user_social, format: :json, identifier: @user.twitter, type: "twitter"
-            rrc(200)
-            UserSocial.unscoped.where(identifier: @user.twitter).first.active.should be_false
-        end
-
-        it "should return 404 with no ID or wrong ID" do
-            FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com"
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            user2 = FactoryGirl.create(:user, email: "notthis@no.com", phone: "9879887878")
-            put :deactivate_user_social, format: :json, identifier: user2.email, type: "email"
-            rrc(404)
-            put :deactivate_user_social, format: :json, identifier: user2.phone, type: "phone"
-            rrc(404)
-        end
-    end
-
-    describe :reset_passord do
-        it_should_behave_like("token authenticated", :put, :reset_password)
-
-        before do
-            @receiver = FactoryGirl.create(:receiver, email: "findme@gmail.com")
-            ResqueSpec.reset!
-        end
-
-        it "should accept Android Token" do
-            request.env["HTTP_TKN"] = ANDROID_TOKEN
-            put :reset_password, format: :json, data: @receiver.email
-            rrc(200)
-            json["status"].should  == 1
-            json["data"].should == "Email is Sent , check your inbox"
-        end
-
-        it "should send success response for screen for primary email" do
-            request.env["HTTP_TKN"] = GENERAL_TOKEN
-            put :reset_password, format: :json, data: @receiver.email
-            rrc(200)
-            json["status"].should  == 1
-            json["data"].should == "Email is Sent , check your inbox"
-        end
-
-        it "should update the user reset password token and expiration for primary email" do
-            request.env["HTTP_TKN"] = GENERAL_TOKEN
-            put :reset_password, format: :json, data: @receiver.email
-            rrc(200)
-            @receiver.reload
-            @receiver.reset_token.should_not be_nil
-            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
-        end
-
-        it "should send success response for screen for secondary email" do
-            request.env["HTTP_TKN"] = GENERAL_TOKEN
-            @receiver.email = "new_email@email.com"
-            @receiver.save
-            put :reset_password, format: :json, data: "findme@gmail.com"
-            rrc(200)
-            json["status"].should  == 1
-            json["data"].should == "Email is Sent , check your inbox"
-        end
-
-        it "should update the user reset password token and expiration for secondary email" do
-            request.env["HTTP_TKN"] = GENERAL_TOKEN
-            @receiver.email = "new_email@email.com"
-            @receiver.save
-            put :reset_password, format: :json, data: "findme@gmail.com"
-            rrc(200)
-            @receiver.reload
-            @receiver.reset_token.should_not be_nil
-            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
-        end
-
-        it "should return error message if email doesn not exist" do
-            request.env["HTTP_TKN"] = GENERAL_TOKEN
-            put :reset_password, format: :json, data: "non-existant@yahoo.com"
-            rrc(404)
-            json["status"].should  == 0
-            json["data"].should == "#{PAGE_NAME} does not have record of that email"
-        end
-
-        it "should only accept email string" do
-            request.env["HTTP_TKN"] = GENERAL_TOKEN
-            put :reset_password, format: :json, data: ["non-existant@yahoo.com"]
-            rrc(400)
-            request.env["HTTP_TKN"] = GENERAL_TOKEN
-            put :reset_password, format: :json, data: { "email" => "non-existant@yahoo.com"}
-            rrc(400)
-        end
-
-        it "should send the reset password email" do
-            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            request.env["HTTP_TKN"] = GENERAL_TOKEN
-            put :reset_password, format: :json, data: @receiver.email
-            rrc(200)
-            json["status"].should  == 1
-            json["data"].should == "Email is Sent , check your inbox"
-
-            run_delayed_jobs
-            email_link = "#{PUBLIC_URL}/account/resetpassword/#{@receiver.reset_token}"
-            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
-                puts req.body;
-                b = JSON.parse(req.body);
-                if b["template_name"] == "iom-reset-password"
-                    link = b["message"]["merge_vars"].first["vars"].first["content"];
-                    link.match(/#{email_link}/)
-                else
-                    true
-                end
-
-            }.once
         end
     end
 
@@ -631,6 +434,325 @@ describe Mdot::V2::UsersController do
             pn_token.pn_token.should == token
             pn_token.class.should    == PnToken
             pn_token.user_id.should  == user.id
+        end
+    end
+
+    describe :update do
+        it_should_behave_like("token authenticated", :put, :update)
+
+        it "should require a update_user hash" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :update, format: :json, data: "updated data"
+            rrc(400)
+            put :update, format: :json, data: nil
+            rrc(400)
+            put :update, format: :json
+            rrc(400)
+        end
+
+        it "should return user hash when success" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :update, format: :json, data: { zip: "89475", sex: "male", birthday: "03/13/1975"}
+            rrc(200)
+            json["status"].should == 1
+            response = json["data"]
+            response.class.should  == Hash
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "sex", "birthday", "zip", "twitter", "facebook_id"]
+            compare_keys(response, keys)
+        end
+
+        it "should return validation errors" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :update, format: :json, data: { "email" => "" }
+            rrc 200
+            json["status"].should == 0
+            json["data"].class.should    == Hash
+            json["data"]["error"]["email"].should == ["is invalid"]
+        end
+
+        it "should return duplicate user_social error when active user_socials already exist" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            other_user = FactoryGirl.create(:user, facebook_id: "keeper_other")
+            put :update, format: :json, data: { "facebook_id" => "keeper_other" }
+            rrc 200
+            json["status"].should == 0
+            json["data"].class.should    == Hash
+            json["data"]["error"]["facebook_id"].should == ["is already in use. Please email support@itson.me for assistance if this is in error", "is already on an acount, please use that to log in"]
+        end
+
+        {
+            first_name: "Ray",
+            last_name:  "Davies",
+            email: "ray@davies.com",
+            phone: "5877437859",
+            birthday: "10/10/1971",
+            sex: "female",
+            zip: "85733",
+            phone: "(702) 410-9605",
+            twitter: "65787323",
+            facebook_id: "98136459814"
+        }.stringify_keys.each do |type_of, value|
+
+            it "should update the user #{type_of} in database for non-socials" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                put :update, format: :json, data: { type_of => value }
+                new_user = @user.reload
+                value = "7024109605" if value == "(702) 410-9605"
+                unless ["email", "phone", "twitter", "facebook_id"].include?(type_of)
+                    new_user.send(type_of).should == value
+                end
+            end
+
+            it "should NOT update the user #{type_of} in database for user-socials" do
+                request.env["HTTP_TKN"] = "USER_TOKEN"
+                put :update, format: :json, data: { type_of => value }
+                new_user = @user.reload
+                value = "7024109605" if value == "(702) 410-9605"
+                if ["email", "phone", "twitter", "facebook_id"].include?(type_of)
+                    new_user.send(type_of).should_not == value
+                end
+            end
+        end
+
+        it "should not update attributes that dont exist and fail" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            hsh = { "house" => "chill" }
+            put :update, format: :json, data: hsh
+            rrc(400)
+        end
+
+        it "should not update attributes that are not allowed and fail" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            hsh = { "password" => "doNOTallow", "remember_token" => "DO_NOT_ALLOW" }
+            put :update, format: :json, data: hsh
+            rrc(400)
+        end
+    end
+
+    describe :socials do
+        it_should_behave_like("token authenticated", :put, :socials)
+
+        it "should require a update_user hash" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :socials, format: :json, data: "updated data"
+            rrc(400)
+            put :socials, format: :json, data: nil
+            rrc(400)
+            put :socials, format: :json
+            rrc(400)
+        end
+
+        it "should return user hash when success" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :socials, format: :json, data: { zip: "89475", sex: "male", birthday: "03/13/1975"}
+            rrc(200)
+            json["status"].should == 1
+            response = json["data"]
+            response.class.should  == Hash
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "sex", "birthday", "zip", "twitter", "facebook_id"]
+            compare_keys(response, keys)
+        end
+
+        it "should update user socials via id" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :socials, format: :json, data: { zip: "89475", sex: "male", birthday: "03/13/1975"}
+            rrc(200)
+        end
+
+        it "should return profile_with_ids" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :socials, format: :json, data: { zip: "89475", sex: "male", birthday: "03/13/1975"}
+            rrc(200)
+            json["data"].should == @user.reload.profile_with_ids_serialize
+        end
+
+        xit "should return profile_with_ids + error validations when some updates fail" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :socials, format: :json, data: { zip: "89475", sex: "male", birthday: "03/13/2115"}
+            rrc(200)
+            json["data"].should  == @user.reload.profile_with_ids_serialize
+            json["error"].should == [{ "sex" => "Please retry"}, { "birthday" => "Birthdate cannot be in the future"}]
+        end
+
+        it "should iterate thru entire put hash and update user record and user_social records" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            @user.update(email: "new_social@gmail.com", phone: "6469876543")
+            social1  = UserSocial.where(type_of: "email", identifier: "new_social@gmail.com").first
+            social2  = UserSocial.where(type_of: "phone", identifier: "6469876543").first
+
+            hsh = { "first_name" => "Newfirstname", "last_name" => "Newlastname", "birthday" => "3/12/89", "zip" => "15364", "sex" => "male", "social" => [ { "_id" => social1.id, "value" => "2154647839"}, { "_id" => social2.id, "value" => "new@gmail.com"} ] }
+            put :socials, format: :json, data: hsh
+            json["status"].should == 1
+            json["data"].should   == { "first_name" => "Newfirstname", "last_name" => "Newlastname", "birthday" => "3/12/89", "zip" => "15364", "sex" => "male", "social" => [ { "_id" => social1.id, "value" => "2154647839"}, { "_id" => social2.id, "value" => "new@gmail.com"} ] }
+        end
+
+        it "should not update attributes that dont exist and fail" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            hsh = { "house" => "chill" }
+            put :socials, format: :json, data: hsh
+            rrc(400)
+        end
+
+        it "should not update attributes that are not allowed and fail" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            hsh = { "password" => "doNOTallow", "remember_token" => "DO_NOT_ALLOW" }
+            put :socials, format: :json, data: hsh
+            rrc(400)
+        end
+
+    end
+
+    describe :deactivate_user_social do
+
+        it "should return 400 if last email" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
+            rrc(200)
+        end
+
+        it_should_behave_like("token authenticated", :put, :deactivate_user_social)
+
+        it "should return user ID on success" do
+            FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should   == @user.id
+            put :deactivate_user_social, format: :json, identifier: @user.phone, type: "phone"
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should   == @user.id
+            put :deactivate_user_social, format: :json, identifier: @user.facebook_id, type: "facebook_id"
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should   == @user.id
+            put :deactivate_user_social, format: :json, identifier: @user.twitter, type: "twitter"
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should   == @user.id
+        end
+
+        it "should deActivate the user social in the database" do
+            FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :deactivate_user_social, format: :json, identifier: @user.email, type: "email"
+            rrc(200)
+            UserSocial.unscoped.where(identifier: @user.email).first.active.should be_false
+            put :deactivate_user_social, format: :json, identifier: @user.phone, type: "phone"
+            rrc(200)
+            UserSocial.unscoped.where(identifier: @user.phone).first.active.should be_false
+            put :deactivate_user_social, format: :json, identifier: @user.facebook_id, type: "facebook_id"
+            rrc(200)
+            UserSocial.unscoped.where(identifier: @user.facebook_id).first.active.should be_false
+            put :deactivate_user_social, format: :json, identifier: @user.twitter, type: "twitter"
+            rrc(200)
+            UserSocial.unscoped.where(identifier: @user.twitter).first.active.should be_false
+        end
+
+        it "should return 404 with no ID or wrong ID" do
+            FactoryGirl.create :user_social, user_id: @user.id, type_of: "email", identifier: "secondemail@email.com"
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            user2 = FactoryGirl.create(:user, email: "notthis@no.com", phone: "9879887878")
+            put :deactivate_user_social, format: :json, identifier: user2.email, type: "email"
+            rrc(404)
+            put :deactivate_user_social, format: :json, identifier: user2.phone, type: "phone"
+            rrc(404)
+        end
+    end
+
+    describe :reset_passord do
+        it_should_behave_like("token authenticated", :put, :reset_password)
+
+        before do
+            @receiver = FactoryGirl.create(:receiver, email: "findme@gmail.com")
+            ResqueSpec.reset!
+        end
+
+        it "should accept Android Token" do
+            request.env["HTTP_TKN"] = ANDROID_TOKEN
+            put :reset_password, format: :json, data: @receiver.email
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+        end
+
+        it "should send success response for screen for primary email" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            put :reset_password, format: :json, data: @receiver.email
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+        end
+
+        it "should update the user reset password token and expiration for primary email" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            put :reset_password, format: :json, data: @receiver.email
+            rrc(200)
+            @receiver.reload
+            @receiver.reset_token.should_not be_nil
+            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
+        end
+
+        it "should send success response for screen for secondary email" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            @receiver.email = "new_email@email.com"
+            @receiver.save
+            put :reset_password, format: :json, data: "findme@gmail.com"
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+        end
+
+        it "should update the user reset password token and expiration for secondary email" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            @receiver.email = "new_email@email.com"
+            @receiver.save
+            put :reset_password, format: :json, data: "findme@gmail.com"
+            rrc(200)
+            @receiver.reload
+            @receiver.reset_token.should_not be_nil
+            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
+        end
+
+        it "should return error message if email doesn not exist" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            put :reset_password, format: :json, data: "non-existant@yahoo.com"
+            rrc(404)
+            json["status"].should  == 0
+            json["data"].should == "#{PAGE_NAME} does not have record of that email"
+        end
+
+        it "should only accept email string" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            put :reset_password, format: :json, data: ["non-existant@yahoo.com"]
+            rrc(400)
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            put :reset_password, format: :json, data: { "email" => "non-existant@yahoo.com"}
+            rrc(400)
+        end
+
+        it "should send the reset password email" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            put :reset_password, format: :json, data: @receiver.email
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+
+            run_delayed_jobs
+            email_link = "#{PUBLIC_URL}/account/resetpassword/#{@receiver.reset_token}"
+            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
+                puts req.body;
+                b = JSON.parse(req.body);
+                if b["template_name"] == "iom-reset-password"
+                    link = b["message"]["merge_vars"].first["vars"].first["content"];
+                    link.match(/#{email_link}/)
+                else
+                    true
+                end
+
+            }.once
         end
     end
 

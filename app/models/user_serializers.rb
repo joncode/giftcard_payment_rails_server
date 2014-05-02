@@ -39,6 +39,22 @@ module UserSerializers
         usr_hash
     end
 
+    def profile_with_ids_serialize
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "zip", "sex"]
+        usr_hash["photo"]   = self.get_photo
+        usr_hash["user_id"] = self.id
+        ids = ["email", "phone", "facebook_id", "twitter"].each do |id|
+            us = self.user_socials.where(type_of: id)
+            if us.count > 0
+                usr_hash[id] = []
+                us.each do |social|
+                    usr_hash[id] << { "_id" => social.id, "value" => social.identifier }
+                end
+            end
+        end
+        usr_hash
+    end
+
     def create_serialize
         usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter"]
         usr_hash["photo"]   = self.get_photo

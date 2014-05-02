@@ -76,6 +76,8 @@ Drinkboard::Application.routes.draw do
           put :update
           put :reset_password
           put :deactivate_user_social
+          get :profile
+          put :socials
         end
       end
       resources :facebook,     only: [:create] do
@@ -222,7 +224,7 @@ Drinkboard::Application.routes.draw do
   end
 
 #################          HTML routes good                       /////////////////////////////
-  
+
   root                         to: 'sessions#new'
   resources :sessions,       only: [:new, :create, :destroy]
   get '/signin',             to: 'sessions#new'
