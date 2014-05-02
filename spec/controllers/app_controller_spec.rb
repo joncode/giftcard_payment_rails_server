@@ -286,6 +286,36 @@ describe AppController do
             hsh = ary.first
             compare_keys(hsh, keys)
         end
+
+        context "should return a list of active providers outside city but in region" do
+            it "using region id" do
+                FactoryGirl.create(:provider, name: "Abe's", city: "San Diego", region_id: 3)
+                FactoryGirl.create(:provider, name: "Bob's", city: "La Jolla", region_id: 3)
+                FactoryGirl.create(:provider, name: "Cam's", city: "New York", region_id: 2)
+                post :providers, format: :json, token: user.remember_token, city: "3"
+                rrc_old(200)
+                ary = json
+                ary.class.should == Array
+                ary.count.should == 2
+                ary[0]["name"].should == ("Abe's")
+                ary[1]["name"].should == ("Bob's")
+            end
+
+            it "using region name" do
+                FactoryGirl.create(:provider, name: "Abe's", city: "San Diego", region_id: 3)
+                FactoryGirl.create(:provider, name: "Bob's", city: "La Jolla", region_id: 3)
+                FactoryGirl.create(:provider, name: "Cam's", city: "New York", region_id: 2)
+                post :providers, format: :json, token: user.remember_token, city: "San Diego"
+                rrc_old(200)
+                ary = json
+                ary.class.should == Array
+                ary.count.should == 2
+                ary[0]["name"].should == ("Abe's")
+                ary[1]["name"].should == ("Bob's")
+            end
+        end
+
+
     end
 
     describe :menu_v2 do
@@ -718,15 +748,3 @@ describe AppController do
         end
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-

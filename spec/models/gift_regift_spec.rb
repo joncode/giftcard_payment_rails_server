@@ -20,7 +20,6 @@ describe GiftRegift do
             "refund_type"=>nil, "cost"=>"0"}
         user = FactoryGirl.create(:user, first_name: 'Jbar', last_name: 'Russian', id: 58)
         gift = Gift.new gift_hsh
-        binding.pry
 
     end
 

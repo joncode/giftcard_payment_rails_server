@@ -273,10 +273,11 @@ class AppController < JsonController
          # scoped providers route
 	    if authenticate_public_info
 	    	if  !params["city"] || params["city"] == "all"
-
 	    		providers = Provider.all
+	    	elsif params["city"].to_i == 0
+	    		providers = Provider.where(region_id: region_id_from_name(params["city"]))
 	    	else
-	    		providers = Provider.where(city: params["city"])
+	    		providers = Provider.where(region_id: params["city"])
 	    	end
 	    	providers_array = providers.serialize_objs
 	    	logmsg 			= providers_array[0]
@@ -716,4 +717,10 @@ private
             params.require(:gift).permit(:message, :giver_id,:giver_name,:value,:service,:receiver_id,:receiver_email, :receiver_phone,:twitter, :facebook_id, :receiver_name, :provider_name, :provider_id,:credit_card, :total, :api_v1)
         end
     end
+
+    def region_id_from_name name
+        region_hash = CITY_LIST.select { |region_h| region_h["name"] == name }
+        region_hash[0]["city_id"].to_i
+    end
+
 end
