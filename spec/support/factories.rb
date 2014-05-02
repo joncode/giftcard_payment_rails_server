@@ -70,6 +70,7 @@ FactoryGirl.define do
         address     "123 happy st"
         zip         "11211"
         state       "NY"
+        region_id   2
         sequence(:token)   { |n| "tokens#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
@@ -241,6 +242,7 @@ FactoryGirl.define do
         address     "123 happy st"
         zip         "11211"
         state       "NY"
+        region_id   2
         sequence(:token)   { |n| "token#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
