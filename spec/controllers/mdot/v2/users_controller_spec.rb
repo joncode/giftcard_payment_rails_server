@@ -527,6 +527,26 @@ describe Mdot::V2::UsersController do
             put :update, format: :json, data: hsh
             rrc(400)
         end
+
+        it "should return the correct error message for bad email" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            hsh = { "email" => "aslkd;fj" }
+            put :update, format: :json, data: hsh
+            rrc(200)
+            json["status"].should == 0
+            json["data"].class.should    == Hash
+            json["data"]["error"]["email"].should == ["is invalid"]
+        end
+
+        it "should return the correct error message for bad phone" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            hsh = { "phone" => "39827" }
+            put :update, format: :json, data: hsh
+            rrc(200)
+            json["status"].should == 0
+            json["data"].class.should    == Hash
+            json["data"]["error"]["phone"].should == ["is invalid"]
+        end
     end
 
     describe :socials do

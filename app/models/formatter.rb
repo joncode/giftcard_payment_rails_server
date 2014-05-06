@@ -13,6 +13,10 @@ module Formatter
         !self.phone.blank? && self.phone.to_s.length > 9
     end
 
+    def phone_present?
+        phone.present?
+    end
+
     def float_to_cents float
         string_to_cents float.to_s
     end
