@@ -36,7 +36,9 @@ class BulkContact < ActiveRecord::Base
 private
 
     def process_bulk_contacts
-        Resque.enqueue(BulkContactJob)
+        if !Rails.env.production?
+            Resque.enqueue(BulkContactJob)
+        end
     end
 
     def generate_ary contact_hsh
