@@ -3,15 +3,15 @@ class Admt::V2::ProvidersController < JsonController
     before_action :authenticate_admin_tools
     rescue_from JSON::ParserError, :with => :bad_request
 
-    def create
-        provider = Provider.new(params[:data][:provider_params])
-        if provider.save
-            success   "#{provider.name} was created"
-        else
-            fail      provider
-        end
-        respond
-    end
+    # def create
+    #     provider = Provider.new(provider_params)
+    #     if provider.save
+    #         success   "#{provider.name} was created"
+    #     else
+    #         fail      provider
+    #     end
+    #     respond
+    # end
 
     def deactivate
         provider = Provider.unscoped.find(params[:id])
@@ -66,7 +66,7 @@ class Admt::V2::ProvidersController < JsonController
     private
 
     def provider_params
-        params.require(:data).permit(:name, :address, :city, :state, :zip, :phone, :zinger, :description)
+        params.require(:data).permit(:name, :address, :city, :state, :zip, :region_id, :phone, :zinger, :description)
     end
 
 
