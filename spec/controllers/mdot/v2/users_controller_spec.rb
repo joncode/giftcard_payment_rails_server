@@ -435,6 +435,18 @@ describe Mdot::V2::UsersController do
             pn_token.class.should    == PnToken
             pn_token.user_id.should  == user.id
         end
+
+        it "should create two with twitter if requests are immediately back to back - BUG FIX - this will be prevented on the client" do
+            user_hsh = {"twitter"=>"42802561", "handle"=>"@bffmike", "first_name"=>"Mike", "phone"=>"2063512119", "password"=>"[FILTERED]", "last_name"=>"Manzano", "email"=>"leftspin@me.com", "iphone_photo"=>"http://graph.facebook.com/624902237/picture?type=large", "password_confirmation"=>"[FILTERED]", "facebook_id"=>"624902237"}
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            token = "91283419asdfasdfasdfasdfasdfa83439487123"
+            post :create, format: :json, data: user_hsh, pn_token: token
+            post :create, format: :json, data: user_hsh, pn_token: token
+            rrc(200)
+            User.where(twitter: "42802561").count.should == 2
+        end
+
+
     end
 
     describe :update do
