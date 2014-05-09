@@ -60,7 +60,7 @@ describe Admt::V2::GiftCampaignsController do
             post :create, format: :json, data: create_hsh
             rrc 200
             json["status"].should == 1            
-            keys = ["updated_at", "created_at", "receiver_name", "receiver_email", "receiver_photo", "items", "shoppingCart", "value", "cost", "status", "expires_at", "cat"]
+            keys = ["updated_at", "created_at", "receiver_name", "receiver_email", "receiver_photo", "items", "shoppingCart", "value", "cost", "status", "expires_at", "cat", "detail"]
             compare_keys(json["data"], keys)
         end
 

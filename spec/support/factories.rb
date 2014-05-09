@@ -308,6 +308,7 @@ FactoryGirl.define do
         textword       "11111"
         contract        true
         shoppingCart    "[{\"detail\":\"The best margherita\",\"price\":13,\"price_promo\":1,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita\"}]"
+        detail          "Good from 6PM to midnight."
     end
 
     factory :sms_contact do

@@ -47,9 +47,14 @@ private
         credit_card_hsh["provider_id"] = args["provider_id"]
         args["cat"]                    = set_cat(args)
         args["payable"] = Sale.charge_card credit_card_hsh
+        args["detail"]                 = gift_sale_detail
         args.delete("unique_id")
         args.delete("card")
         args.delete("amount")
+    end
+
+    def gift_sale_detail
+        nil
     end
 
     def unique_id receiver_name, provider_id

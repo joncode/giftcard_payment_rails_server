@@ -7,6 +7,7 @@ class GiftPromoMock < Mtmodel
 		gift_hsh["shoppingCart"]  = self.shoppingCart
 		gift_hsh["receiver_name"] = self.receiver_name
 		gift_hsh["message"]       = self.message
+		gift_hsh["detail"]        = self.detail
 		gift_hsh["expires_at"]    = self.expires_at
 		gift_hsh
 	end

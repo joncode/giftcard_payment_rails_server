@@ -20,6 +20,7 @@ describe GiftCampaign do
             @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @provider.id,
                                                                 campaign_id: @campaign.id,
                                                                 message: "Enjoy this special gift on us!",
+                                                                detail: "This gift is good until midnight.",
                                                                 expires_at: @expiration,
                                                                 shoppingCart: "[{\"price\":\"10\",\"price_promo\":\"1\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]",
                                                                 budget: 100,
@@ -81,7 +82,7 @@ describe GiftCampaign do
         it "should correctly set expiration date from expires_in" do
             @campaign_item.update(expires_in: 30, expires_at: nil)
             gift_campaign = GiftCampaign.create @gift_hsh
-            gift_campaign.expires_at.round.should == (Time.now + 30.days).in_time_zone.round
+            gift_campaign.expires_at.round.should == (@campaign_item.updated_at + 30.days).in_time_zone.round
         end
 
         it "should correctly set campaign expire_date from expires_at" do
@@ -118,7 +119,7 @@ describe GiftCampaign do
             @campaign.update(close_date: (Time.now - 1.day).to_date)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should == 1
-            gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 has not started yet. No gifts can be created."
+            gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 is closed. No gifts can be created."
         end
     end
     

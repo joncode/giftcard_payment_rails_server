@@ -38,6 +38,7 @@ private
         args["giver_id"]      = campaign.id
         args["giver_name"]    = campaign.name
         args["message"]       = campaign_item.message
+        args["detail"]        = campaign_item.detail
         args["expires_at"]    = expires_at_calc(campaign_item.expires_at, campaign_item.expires_in)
     end
 
