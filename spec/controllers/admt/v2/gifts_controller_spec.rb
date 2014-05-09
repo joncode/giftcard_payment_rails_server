@@ -259,7 +259,7 @@ describe Admt::V2::GiftsController do
         end
 
         it "should create an admin gift" do
-            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
             post :create, format: :json, data: create_hsh
             rrc 200
             gift = Gift.find_by(receiver_email: "fred@barry.com")
@@ -278,7 +278,7 @@ describe Admt::V2::GiftsController do
         end
 
         it "should return 200 and a basic serialized gift" do
-            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
             post :create, format: :json, data: create_hsh
             rrc 200
             json["status"].should == 1
@@ -287,7 +287,7 @@ describe Admt::V2::GiftsController do
         end
 
         it "should return 400 plus validations message when validations dont pass" do
-            create_hsh = { "receiver_name" => "", "receiver_email" => "test", "shoppingCart" => @cart, "message" => "test", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name }
+            create_hsh = { "receiver_name" => "", "receiver_email" => "test", "shoppingCart" => @cart, "message" => "test", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name }
             post :create, format: :json, data: create_hsh
             rrc 400
             json["status"].should == 0
@@ -298,7 +298,7 @@ describe Admt::V2::GiftsController do
             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
 
-            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
             post :create, format: :json, data: create_hsh
             rrc 200
             gift = Gift.find_by(receiver_email: "fred@barry.com")
@@ -321,7 +321,7 @@ describe Admt::V2::GiftsController do
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             @receiver  = FactoryGirl.create(:user, first_name: "Fred", last_name: "Barry", email: "fred@barry.com")
             giver      = @admin_user.giver
-            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
             post :create, format: :json, data: create_hsh
             rrc 200
 
