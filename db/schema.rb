@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140429211857) do
+ActiveRecord::Schema.define(version: 20140509184334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 20140429211857) do
     t.integer  "refund_id"
     t.string   "refund_type"
     t.string   "cost"
+    t.text     "detail"
   end
 
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
