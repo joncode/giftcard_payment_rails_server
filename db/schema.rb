@@ -336,17 +336,6 @@ ActiveRecord::Schema.define(version: 20140429211857) do
     t.boolean  "email_reminder_gift_giver",    default: true
   end
 
-  create_table "sms", force: true do |t|
-    t.integer  "gift_id"
-    t.datetime "subscribed_date"
-    t.string   "phone"
-    t.integer  "service_id"
-    t.string   "service_type"
-    t.string   "textword"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "sms_contacts", force: true do |t|
     t.integer  "gift_id"
     t.datetime "subscribed_date"

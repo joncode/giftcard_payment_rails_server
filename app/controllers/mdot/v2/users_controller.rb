@@ -70,6 +70,10 @@ class Mdot::V2::UsersController < JsonController
         # user_param = create_strong_param(data)
         return nil  if hash_empty?(params["data"])
 
+        if params["data"]["iphone_photo"] == "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+            params["data"]["iphone_photo"] = nil
+        end
+
         user = User.new(create_user_params)
         if user.save
             user.pn_token = pn_token if pn_token
