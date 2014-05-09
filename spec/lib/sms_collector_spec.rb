@@ -33,7 +33,7 @@ describe SmsCollector do
     end
 
     context "multiple campaign_items sharing a textword" do
-        
+
         it "should allow campaign items to share textwords and pick random item" do
             SmsContact.delete_all
             textword  = "itsonme"
@@ -164,7 +164,7 @@ describe SmsCollector do
             textword = "itsonme"
             provider = FactoryGirl.create(:provider)
             campaign = FactoryGirl.create(:campaign)
-            cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id)
+            cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id )
             Slicktext.stub(:textwords).and_return(TEXTWORDS)
             stub_request(:get, @contacts_route)
             Slicktext.any_instance.stub(:contacts).and_return(CONTACTS_RESPONSE)

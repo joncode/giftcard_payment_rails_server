@@ -1,6 +1,6 @@
 class Mdot::V2::UsersController < JsonController
     include Email
-    before_action :authenticate_customer,      only: [:index, :update, :show, :deactivate_user_social]
+    before_action :authenticate_customer,      only: [:index, :update, :show, :deactivate_user_social, :profile, :socials]
     before_action :authenticate_general_token, only: [:create, :reset_password]
     rescue_from JSON::ParserError, :with => :bad_request
 
@@ -8,6 +8,38 @@ class Mdot::V2::UsersController < JsonController
         users = User.where(active: true)
         success users.serialize_objs(:get)
         respond
+    end
+
+    def profile
+        success @current_user.profile_with_ids_serialize
+        respond
+    end
+
+    def socials
+        return nil  if data_not_hash?
+        return nil  if hash_empty?(params["data"])
+
+        updates = socials_user_params
+
+        if updates["social"].present?
+            ids = updates["social"].map do |social|
+                social["_id"]
+            end
+            user_socials  = UserSocial.where(id: ids)
+            updates["social"].each do |social|
+                us = user_socials.where(id: social["_id"]).first
+                us.update(identifier: social["value"])
+            end
+            updates.delete("social")
+        end
+
+        if @current_user.update(updates)
+            success @current_user.profile_with_ids_serialize
+        else
+            fail    @current_user
+        end
+
+        respond(status)
     end
 
     def show
@@ -37,6 +69,10 @@ class Mdot::V2::UsersController < JsonController
         return nil  if data_not_hash?(params["data"])
         # user_param = create_strong_param(data)
         return nil  if hash_empty?(params["data"])
+
+        if params["data"]["iphone_photo"] == "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+            params["data"]["iphone_photo"] = nil
+        end
 
         user = User.new(create_user_params)
         if user.save
@@ -97,24 +133,16 @@ class Mdot::V2::UsersController < JsonController
 
 private
 
-    # def update_strong_param(data_hsh)
-    #     allowed = [ "first_name" , "last_name",  "phone" , "email" , "sex" , "zip", "birthday", "twitter", "facebook_id"]
-    #     data_hsh.select{ |k,v| allowed.include? k }
-    # end
-
-    def update_user_params
-        allowed = [ "first_name" , "last_name",  "phone" , "email" , "sex" , "zip", "birthday", "twitter", "facebook_id"]
-        params.require(:data).permit(allowed)
+    def socials_user_params
+        params.require(:data).permit( :first_name , :last_name, :sex , :zip, :birthday, social: [ :_id, :value ] )
     end
 
-    # def create_strong_param(data_hsh)
-    #     allowed = [ "first_name" , "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "origin", "iphone_photo", "use_photo", "handle"]
-    #     data_hsh.select{ |k,v| allowed.include? k }
-    # end
+    def update_user_params
+        params.require(:data).permit([ "first_name" , "last_name",  "phone" , "email" , "sex" , "zip", "birthday", "twitter", "facebook_id"])
+    end
 
     def create_user_params
-        allowed = [ "first_name" , "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle"]
-        params.require(:data).permit(allowed)
+        params.require(:data).permit([ "first_name" , "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle"])
     end
 
 end

@@ -70,6 +70,7 @@ FactoryGirl.define do
         address     "123 happy st"
         zip         "11211"
         state       "NY"
+        region_id   2
         sequence(:token)   { |n| "tokens#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
@@ -241,6 +242,7 @@ FactoryGirl.define do
         address     "123 happy st"
         zip         "11211"
         state       "NY"
+        region_id   2
         sequence(:token)   { |n| "token#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
@@ -289,7 +291,7 @@ FactoryGirl.define do
         close_date       (Time.now + 1.month).to_date
         expire_date      (Time.now + 1.month).to_date
         purchaser_id     1
-        purchaser_type   "ItsOnMe"
+        purchaser_type   "AdminGiver"
         giver_name       "Vodka Special Campaign"
         budget           100
         status           "Live"

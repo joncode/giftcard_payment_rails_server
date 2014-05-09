@@ -36,7 +36,7 @@ class User < ActiveRecord::Base
     validates_with UserFirstNameValidator
 	validates :first_name, 	presence: true, length: {  maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
-	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, :if => :phone_exists?
+	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, allow_blank: true
 	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :unless => :is_perm_deactive?
 	validates :password, 	length: { minimum: 6 },     on: :create
 	validates :password_confirmation, presence: true,   on: :create
@@ -61,26 +61,85 @@ class User < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
-	def is_perm_deactive?
-		self.perm_deactive == true ? true : false
+	def update args
+		args = args.stringify_keys
+		primary = args.delete("primary")
+		us_ary = ["email", "phone", "facebook_id", "twitter"]
+
+		if us_ary.any? { |k| args.has_key? k }
+			type_ofs = us_ary.select { |us|  args.has_key? us }
+			reload_args = set_type_ofs type_ofs, args
+			if self.valid?
+				if primary
+					self.user_socials << init_user_socials(type_ofs, args)
+				else
+					set_type_ofs type_ofs, reload_args
+					set_user_socials type_ofs, args
+					args.except!("email", "phone", "facebook_id", "twitter")
+				end
+
+			else
+				self.errors
+			end
+		end
+		super
 	end
 
-	def not_suspended?
-		self.active && !self.perm_deactive
+########   USER SOCIAL METHODS
+
+	def new_socials(user_hsh)
+			# used by Admt::V2::GiftsController to add receiver info to a gift with the add receiver button
+		user_hsh.each do |key, value|
+			setter = "#{key}="
+			self.send(setter, value)
+		end
+		self
 	end
 
-	def ua_alias
-		adj_user_id     = self.id + NUMBER_ID
-		"user-#{adj_user_id}"
-	end
+    def activate_all_socials
+    	UserSocial.unscoped.where(user_id: self.id).each do |us|
+    		us.update(active: true)
+    	end
+    end
 
-	def social_media
-		return true if self.origin == 'f'
-		return true if self.origin == 't'
-		return false
-	end
+    def deactivate_all_socials
+    	self.user_socials.each do |us|
+    		us.user.deactivate_social(us.type_of.to_sym, us.identifier)
+    	end
+    end
+
+    def deactivate_social type_of, identifier
+    	type_of = type_of.to_s
+	    user_social            = self.user_socials.where(identifier: identifier).first
+	    secondary_user_socials = self.user_socials.where(type_of: type_of).where.not(identifier:identifier)
+	    if ["email", "phone", "facebook_id", "twitter"].include?(type_of) && self.send(type_of) == identifier
+        	if secondary_user_socials.count > 0
+        		user_social.update(active: false)
+        		secondary_identifier = secondary_user_socials.first.identifier
+        		self.update_column(type_of.to_sym, secondary_identifier)
+        	elsif ["phone", "facebook_id", "twitter"].include?(type_of)
+        		user_social.update(active: false)
+	        	self.send("#{type_of}=", nil)
+	        	self.save
+			elsif ["email"].include?(type_of) && self.active == false
+				user_social.update(active: false)
+			else
+				puts "cannot deactivate primary email for user that is active"
+			end
+        else
+        	user_social.update(active: false)
+        end
+    end
 
 ####### USER GETTERS AND SETTERS
+
+	def get_photo
+		if self.iphone_photo && self.iphone_photo.length > 14
+			self.iphone_photo
+		else
+			"http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
+		end
+	end
 
 	def get_credit_card(card_id)
 		self.cards.select { |c| c.id == card_id }
@@ -123,28 +182,6 @@ class User < ActiveRecord::Base
 	alias_method :username, :name
 	alias_method :fullname, :name
 
-	def new_socials(user_hsh)
-		user_hsh.each do |key, value|
-			setter = "#{key}="
-			self.send(setter, value)
-		end
-		self
-	end
-
-##################
-
-#######  PHOTO METHODS
-
-	def get_photo
-		if self.iphone_photo && self.iphone_photo.length > 14
-			self.iphone_photo
-		else
-			"http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
-		end
-	end
-
-##################
-
 #######  GIFT SCOPE METHODS
 
 	def received
@@ -160,8 +197,6 @@ class User < ActiveRecord::Base
 		normal_gifts  = super
 		return anon_gifts + normal_gifts
 	end
-
-##################
 
 #######  UTILITY  METHODS
 
@@ -185,40 +220,15 @@ class User < ActiveRecord::Base
 		end
     end
 
-    def activate_all_socials
-    	UserSocial.unscoped.where(user_id: self.id).each do |us|
-    		us.update(active: true)
-    	end
-    end
+	def is_perm_deactive?
+		self.perm_deactive == true ? true : false
+	end
 
-    def deactivate_all_socials
-    	self.user_socials.each do |us|
-    		us.user.deactivate_social(us.type_of.to_sym, us.identifier)
-    	end
-    end
+	def not_suspended?
+		self.active && !self.perm_deactive
+	end
 
-    def deactivate_social type_of, identifier
-    	type_of = type_of.to_s
-	    user_social            = self.user_socials.where(identifier: identifier).first
-	    secondary_user_socials = self.user_socials.where(type_of: type_of).where.not(identifier:identifier)
-	    if ["email", "phone", "facebook_id", "twitter"].include?(type_of) && self.send(type_of) == identifier
-        	if secondary_user_socials.count > 0
-        		user_social.update(active: false)
-        		secondary_identifier = secondary_user_socials.first.identifier
-        		self.update_column(type_of.to_sym, secondary_identifier)
-        	elsif ["phone", "facebook_id", "twitter"].include?(type_of)
-        		user_social.update(active: false)
-	        	self.send("#{type_of}=", nil)
-	        	self.save
-			elsif ["email"].include?(type_of) && self.active == false
-				user_social.update(active: false)
-			else
-				puts "cannot deactivate primary email for user that is active"
-			end
-        else
-        	user_social.update(active: false)
-        end
-    end
+##########   PASSWORD & EMAIL METHODS
 
 	def update_reset_token
 		self.reset_token_sent_at = Time.now
@@ -232,6 +242,31 @@ class User < ActiveRecord::Base
 		self.reset_token 		   = nil
 		self.reset_token_sent_at   = nil
 		self.save
+	end
+
+	def set_confirm_email
+		settingss 							= get_or_create_settings
+		settingss.confirm_email_token 		= create_token
+		settingss.confirm_email_token_sent_at = Time.now
+		settingss.save
+	end
+
+	def init_confirm_email
+		unless Rails.env.development?
+			if self.email
+				set_confirm_email
+				confirm_email
+			else
+				puts "User created without EMAIL !! #{self.id}"
+			end
+		end
+	end
+
+##########   PN TOKEN METHODS
+
+	def ua_alias
+		adj_user_id     = self.id + NUMBER_ID
+		"user-#{adj_user_id}"
 	end
 
 	def pn_token=(value)
@@ -249,16 +284,6 @@ class User < ActiveRecord::Base
 	def pn_token
 		self.pn_tokens.map {|pnt| pnt.pn_token }
 	end
-
-	def facebook_id_exists?
-		!self.facebook_id.blank?
-	end
-
-	def twitter_exists?
-		!self.twitter.blank?
-	end
-
-##################
 
 #########   settings methods
 
@@ -286,52 +311,7 @@ class User < ActiveRecord::Base
 
 	def setting
 		get_or_create_settings
-
 		# remove this and make setting creation eager
-	end
-
-	def set_confirm_email
-		settingss 							= get_or_create_settings
-		settingss.confirm_email_token 		= create_token
-		settingss.confirm_email_token_sent_at = Time.now
-		settingss.save
-	end
-
-	def init_confirm_email
-		unless Rails.env.development?
-			if self.email
-				set_confirm_email
-				confirm_email
-			else
-				puts "User created without EMAIL !! #{self.id}"
-			end
-		end
-	end
-
-##################
-
-	def update args
-		args = args.stringify_keys
-		primary = args.delete("primary")
-		us_ary = ["email", "phone", "facebook_id", "twitter"]
-
-		if us_ary.any? { |k| args.has_key? k }
-			type_ofs = us_ary.select { |us|  args.has_key? us }
-			reload_args = set_type_ofs type_ofs, args
-			if self.valid?
-				if primary
-					self.user_socials << init_user_socials(type_ofs, args)
-				else
-					set_type_ofs type_ofs, reload_args
-					set_user_socials type_ofs, args
-					args.except!("email", "phone", "facebook_id", "twitter")
-				end
-
-			else
-				self.errors
-			end
-		end
-		super
 	end
 
 private
@@ -360,7 +340,9 @@ private
 	end
 
 	def make_friends
-		Resque.enqueue(FriendPushJob, self.id, 1)
+		unless Rails.env.production?
+			Resque.enqueue(FriendPushJob, self.id, 1)
+		end
 	end
 
 	def persist_social_data
@@ -370,6 +352,20 @@ private
 		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
 		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
 		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)
+	end
+
+	def facebook_id_exists?
+		!self.facebook_id.blank?
+	end
+
+	def twitter_exists?
+		!self.twitter.blank?
+	end
+
+	def social_media
+		return true if self.origin == 'f'
+		return true if self.origin == 't'
+		return false
 	end
 
 	def collect_incomplete_gifts

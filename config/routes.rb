@@ -15,7 +15,7 @@ Drinkboard::Application.routes.draw do
   post 'app/brands',           to: 'app#brands'
   post 'app/brand_merchants',  to: 'app#brand_merchants'
   post 'app/providers',        to: 'app#providers'
-  get 'app/get_providers',    to: 'app#providers'
+  get  'app/get_providers',    to: 'app#providers'
   post 'app/redeem',           to: 'app#create_redeem'
   post 'app/order_confirm',    to: 'app#create_order'
   post 'app/menu_v2',          to: 'app#menu_v2'
@@ -76,6 +76,8 @@ Drinkboard::Application.routes.draw do
           put :update
           put :reset_password
           put :deactivate_user_social
+          get :profile
+          put :socials
         end
       end
       resources :facebook,     only: [:create] do
@@ -222,7 +224,7 @@ Drinkboard::Application.routes.draw do
   end
 
 #################          HTML routes good                       /////////////////////////////
-  
+
   root                         to: 'sessions#new'
   resources :sessions,       only: [:new, :create, :destroy]
   get '/signin',             to: 'sessions#new'

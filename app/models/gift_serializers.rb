@@ -3,7 +3,9 @@ module GiftSerializers
 
     def serialize
         sender      = giver
-        merchant    = provider
+        unless merchant = self.provider
+            merchant = Provider.unscoped.find(self.provider_id)
+        end
         gift_hsh                       = {}
         gift_hsh["gift_id"]            = self.id
         gift_hsh["giver"]              = sender.name
