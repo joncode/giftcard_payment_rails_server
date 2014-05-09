@@ -262,7 +262,7 @@ describe Mdot::V2::UsersController do
                 req_hsh['email'] = req_hsh['email'].downcase
                 req_hsh.each_key do |key|
                     if (key != "password") && (key != "password_confirmation")
-                        user.send(key).should == req_hsh[key].to_s
+                        user.send(key).should == req_hsh[key].to_s unless (req_hsh[key].to_s == "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg")
 
                     end
                 end
@@ -443,9 +443,17 @@ describe Mdot::V2::UsersController do
             post :create, format: :json, data: user_hsh, pn_token: token
             post :create, format: :json, data: user_hsh, pn_token: token
             rrc(200)
-            User.where(twitter: "42802561").count.should == 2
+            User.where(twitter: "42802561").count.should == 1
         end
 
+        it "it should save when a client uploads the default broken photo URL - BUG FIX" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            user_hsh = {"first_name"=>"Zoe", "phone"=>"9196368282", "password"=>"passwordtest", "last_name"=>"Gan", "email"=>"nageoz@gmail.com", "iphone_photo"=>"http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg", "password_confirmation"=>"passwordtest"}
+            post :create, format: :json, data: user_hsh
+            rrc(200)
+            user = User.where(first_name: "Zoe").first
+            user.get_photo.should_not == "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
+        end
 
     end
 

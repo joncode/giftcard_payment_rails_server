@@ -686,29 +686,9 @@ private
         end
     end
 
-    # def create_gift_params
-    #     # params.permit!
-    #     #params.require(:gift)
-    #     params.require(:gift).permit(:giver_id, :giver_name, :provider_id, :provider_name, :receiver_id, :receiver_name, :receiver_email, :facebook_id, :twitter, :total, :service, :credit_card, :message, :receiver_phone)
-
-    # end
-
-    # def create_shoppingCart_params
-    #     params.require(:shoppingCart)
-    # end
-
-    # def permit_data_params
-    #     params.require(:data)
-    # end
-
     def user_params
     	params.require(:data).permit(:first_name, :last_name,  :phone, :email, :birthday, :sex, :zip, :facebook_id, :twitter, :api_v1)
     end
-
-    # def strong_user_param(data_hsh)
-    #     allowed = [ "first_name" , "last_name",  "phone" , "email", "birthday", "sex", "zip", "facebook_id", "twitter" ]
-    #     data_hsh.select{ |k,v| allowed.include? k }
-    # end
 
     def gift_params
         if params.require(:gift).kind_of?(String)

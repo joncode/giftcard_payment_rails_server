@@ -297,13 +297,16 @@ describe GiftRegift do
             gift.pay_stat.should == "refund_comp"
         end
 
-        it "should reject promo gift regifting" do
+        it "should NOT reject promo gift regifting" do
             debt        = FactoryGirl.create(:debt)
             biz_user    = FactoryGirl.create(:provider).biz_user
-            promo       = FactoryGirl.create(:gift, payable_type: "Debt", giver_type: "BizUser", payable_id: debt.id, giver_id: biz_user.id )
+            promo       = FactoryGirl.create(:gift, payable_type: "Debt", giver_type: "BizUser", payable_id: debt.id,  giver_id: biz_user.id, receiver: @receiver )
             @gift_hsh["old_gift_id"] = promo.id
             resp        = GiftRegift.create @gift_hsh
-            resp.should == "You cannot regift a promotional gift"
+            
+            #resp.should == "You cannot regift a promotional gift"
+            resp.class.should == GiftRegift
+            resp.id.should_not be_nil
         end
 
         it "should set the parent gift as the payable" do
