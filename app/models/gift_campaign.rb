@@ -7,7 +7,9 @@ class GiftCampaign < Gift
 
     def self.create args={}
         gift = super
-        gift.messenger
+        if gift.id.present?
+            gift.messenger
+        end
         gift
     end
 
