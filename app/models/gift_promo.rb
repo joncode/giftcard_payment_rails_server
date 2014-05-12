@@ -5,11 +5,11 @@ class GiftPromo < Gift
     end
 
     def save
-        resp = super
-        if resp
+        gift = super
+        if gift.persisted?
             self.messenger
         end
-        resp
+        gift
     end
 
     def messenger
