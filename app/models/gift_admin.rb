@@ -1,11 +1,11 @@
 class GiftAdmin < Gift
 
     def self.create args={}
-        resp = super
-        if resp
-            messenger(resp)
+        gift = super
+        if gift.id.present?
+            messenger(gift)
         end
-        resp
+        gift
     end
 
     def self.messenger(resp)
@@ -15,7 +15,7 @@ class GiftAdmin < Gift
             resp.notify_receiver
         end
     end
-    
+
 private
 
     def pre_init args={}

@@ -7,7 +7,7 @@ class Admt::V2::GiftCampaignsController < JsonController
         return nil if collection_bad_request
         return nil if data_not_hash?(gift_params)
 
-        if CampaignItem.where(id: gift_params[:payable_id]).count > 0
+        if CampaignItem.exists?(gift_params[:payable_id])
             gift = GiftCampaign.create(gift_params)
             if gift.id.present?
                 success gift.promo_serialize
