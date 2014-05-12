@@ -127,7 +127,7 @@ private
 			when "iom-user-welcome";           then "Welcome to ItsOnMe!"
 			end
 		if Rails.env.development? || Rails.env.staging?
-			subject_content = subject_content.insert(0, "==QA TEST EMAIL==")
+			subject_content = subject_content.insert(0, "QA- ")
 		end
 		subject_content
 	end
