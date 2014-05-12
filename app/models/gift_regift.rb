@@ -10,7 +10,9 @@ class GiftRegift < Gift
         args["payable"] = Gift.includes(:provider).includes(:receiver).find(args["old_gift_id"])
 
         gift = super
-        gift.messenger
+        if gift.persisted?
+            gift.messenger
+        end
         gift
     end
 

@@ -6,7 +6,7 @@ class GiftPromo < Gift
 
     def save
         gift = super
-        if gift.id.present?
+        if gift.persisted?
             self.messenger
         end
         gift

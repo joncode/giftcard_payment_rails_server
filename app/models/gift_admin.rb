@@ -2,7 +2,7 @@ class GiftAdmin < Gift
 
     def self.create args={}
         gift = super
-        if gift.id.present?
+        if gift.persisted?
             messenger(gift)
         end
         gift
