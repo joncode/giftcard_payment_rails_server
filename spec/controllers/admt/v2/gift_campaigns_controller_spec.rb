@@ -34,7 +34,7 @@ describe Admt::V2::GiftCampaignsController do
 
         end
 
-        it "should create an campaign gift" do
+        it "should create an campaign gift with phone" do
             create_hsh = { "receiver_phone" => "2222222222", "payable_id" => @campaign_item.id  }
             post :create, format: :json, data: create_hsh
             rrc 200
@@ -49,6 +49,27 @@ describe Admt::V2::GiftCampaignsController do
             # gift.expires_at.should     == @campaign_item.expires_at.to_datetime
             gift.receiver_name.should  == @user.name
             gift.receiver_phone.should == "2222222222"
+            gift.shoppingCart.should   == @campaign_item.shoppingCart
+            gift.message.should        == @campaign_item.message
+            gift.value.should          == @campaign_item.value
+            gift.cost.should           == @campaign_item.cost
+        end
+
+        it "should create an campaign gift with email" do
+            create_hsh = { "receiver_email" => "bob@bob.com", "payable_id" => @campaign_item.id  }
+            post :create, format: :json, data: create_hsh
+            rrc 200
+
+            gift        = Gift.find_by(receiver_email: "bob@bob.com")
+
+            gift.provider.should      == @provider
+            gift.provider_name.should == @provider.name
+
+            gift.giver_type.should     == "Campaign" 
+            gift.giver_id.should       == @campaign.id
+            # gift.expires_at.should     == @campaign_item.expires_at.to_datetime
+            gift.receiver_name.should  == @user.name
+            gift.receiver_email.should == "bob@bob.com"
             gift.shoppingCart.should   == @campaign_item.shoppingCart
             gift.message.should        == @campaign_item.message
             gift.value.should          == @campaign_item.value
