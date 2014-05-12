@@ -76,16 +76,16 @@ describe "Gift Costs" do
         #     gift_regift.cost.should == "0"
         end
 
-        it "should not allow ReGift of a GiftPromo" do
-            @gift_promo   = GiftPromo.create @gift_hsh
-            regift_hsh = {}
-            regift_hsh["message"]     = "I just REGIFTED!"
-            regift_hsh["name"]        = "Bob"
-            regift_hsh["email"]       = "bob@email.com"
-        	regift_hsh["old_gift_id"] = @gift_promo.id
-            gift_regift = GiftRegift.create regift_hsh
-            gift_regift.should == "You cannot regift a promotional gift"
-        end
+        # it "should not allow ReGift of a GiftPromo" do
+        #     @gift_promo   = GiftPromo.create @gift_hsh
+        #     regift_hsh = {}
+        #     regift_hsh["message"]     = "I just REGIFTED!"
+        #     regift_hsh["name"]        = "Bob"
+        #     regift_hsh["email"]       = "bob@email.com"
+        # 	regift_hsh["old_gift_id"] = @gift_promo.id
+        #     gift_regift = GiftRegift.create regift_hsh
+        #     gift_regift.should == "You cannot regift a promotional gift"
+        # end
     end
 
 	context "GiftAdmin / GiftAdminRegift" do

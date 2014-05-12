@@ -57,6 +57,7 @@ describe CampaignItem do
             it "should respond with 'is closed' when today is the close date BUG FIX" do
                 campaign = FactoryGirl.create(:campaign, close_date: Time.now.utc)
                 cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id)
+                
                 cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} is closed"
             end
 

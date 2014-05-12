@@ -412,11 +412,11 @@ describe Gift do
 			gift.receiver_id.should == user2.id
 		end
 
-		it "should not save a gift when no unique receiver info is provided" do
+		it "should not save a gift when at least one network_id is not provided" do
 			gift = FactoryGirl.build(:gift_no_association, giver: giver, provider: provider, receiver_name: "No Uniques", receiver_email: nil)
 			gift.save
 			gift.should have_at_least(1).error_on(:receiver)
-			gift.errors.messages[:receiver].should == ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]
+			gift.errors.messages[:receiver].should == ["No network_id receiver data. Cannot process gift. Please re-log in if this is an error."]
 		end
 	end
 

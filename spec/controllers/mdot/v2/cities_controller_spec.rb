@@ -13,14 +13,14 @@ describe Mdot::V2::CitiesController do
 
         it_should_behave_like("token authenticated", :get, :index)
 
-        it "should return a list of all active providers serialized when success" do
+        it "should return a list of all active cities serialized when success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
             keys    =  ["name", "state", "city_id", "photo"]
             rrc(200)
             ary = json["data"]
             ary.class.should == Array
-            ary.count.should == 5
+            ary.count.should == 6
             hsh = ary.first
             compare_keys(hsh, keys)
         end
