@@ -340,7 +340,9 @@ private
 	end
 
 	def make_friends
-		Resque.enqueue(FriendPushJob, self.id, 1)
+		unless Rails.env.production?
+			Resque.enqueue(FriendPushJob, self.id, 1)
+		end
 	end
 
 	def persist_social_data

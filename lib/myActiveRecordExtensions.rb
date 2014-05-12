@@ -7,13 +7,13 @@ module MyActiveRecordExtensions
 	end
 
   	def next
-		record = self.class.where("id > ?", id).limit(1).shift
+		record = self.class.where("id > ?", id).limit(1).first
 		record = self.class.first if record.nil?
 		return record
 	end
 
 	def previous
-		record = self.class.previous(self).shift
+		record = self.class.previous(self).first
 		record = self.class.last if record.nil?
 		return record
 	end

@@ -267,10 +267,10 @@ describe GiftRegift do
             gift.should have_at_least(1).error_on(:receiver_email)
         end
 
-        it "should reject a gift when no unique ID is present" do
+        it "should reject a gift when at least one network_id is not present" do
             @gift_hsh.delete('email')
             gift = GiftRegift.create @gift_hsh
-            gift.errors.messages[:receiver].should == ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]
+            gift.errors.messages[:receiver].should == ["No network_id receiver data. Cannot process gift. Please re-log in if this is an error."]
         end
     end
 

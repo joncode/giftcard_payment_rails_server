@@ -17,8 +17,8 @@ class CampaignItem < Admtmodel
         str = "#{campaign.name} #{self.textword} "
         return (str + "is live")             if live?
         return (str + "reserve is empty")    if !has_reserve?
-        return (str + "has not started yet") if (today < campaign.live_date)
-        return (str + "is closed")           if (today >= campaign.close_date)
+        return (str + "has not started yet") if campaign.is_new?
+        return (str + "is closed")           if campaign.is_closed?
     end
 
     def owner

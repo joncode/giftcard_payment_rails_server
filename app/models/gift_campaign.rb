@@ -7,7 +7,9 @@ class GiftCampaign < Gift
 
     def self.create args={}
         gift = super
-        gift.messenger
+        if gift.persisted?
+            gift.messenger
+        end
         gift
     end
 
@@ -18,7 +20,7 @@ class GiftCampaign < Gift
             notify_receiver
         end
     end
-
+    
 private
 
     def pre_init args={}
