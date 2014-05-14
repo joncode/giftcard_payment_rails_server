@@ -259,6 +259,15 @@ describe Mdot::V2::SessionsController do
             json["data"].should   == "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
         end
 
+        it "should allow the ios app to log in with facebook BUG FIX" do
+            #END MDOT/V2/SESSIONS -LOGIN_SOCIAL- (0.2ms) | Completed 400 Bad Request in 1ms (ActiveRecord: 0.0ms)
+            #"/mdot/v2/sessions/login_social.json"
+            @user.update(facebook_id: "100005169276525")
+            request.env["HTTP_TKN"] =  "0NFXbWsyP3Mj2Mroj_utsA"
+            params = {"facebook_id"=>100005169276525, "pn_token"=>"5afc778282c48f99cad2c1b791ac51ab3c14063bee3320e090e637636c82293a"}
+            post :login_social, format: :json, facebook_id: params["facebook_id"], pn_token: params["pn_token"]
+            rrc(200)
+        end
     end
 
 
