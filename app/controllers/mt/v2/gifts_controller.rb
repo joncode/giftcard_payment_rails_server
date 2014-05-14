@@ -11,16 +11,13 @@ class Mt::V2::GiftsController < JsonController
         if gp_mock = GiftPromoMock.find(gift_params["gift_promo_mock_id"])
             gift_hsh = gp_mock.gift_hsh
             gift_hsh["provider_id"] = @provider.id
-
-            if gp_mock.socials.count > 1
-                gp_mock.emails.each do |email|
-                    gift_hsh["receiver_email"] = email
-                    create gift_hsh
+            if gp_mock.socials.count >= 1
+                ActiveRecord::Base.transaction do
+                    gp_mock.emails.each do |email|
+                        gift_hsh["receiver_email"] = email
+                        create gift_hsh
+                    end
                 end
-            elsif gp_mock.socials.count == 1
-
-                gift_hsh["receiver_email"] = gp_mock.emails.first
-                create gift_hsh
             elsif gp_mock.socials.count < 1
                 status = :bad_request
                 fail gp_mock
