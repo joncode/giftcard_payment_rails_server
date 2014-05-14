@@ -9,7 +9,6 @@ require 'legacy_gift'
 require 'legacy_provider'
 require 'cron'
 require 'expiration'
-require 'cat_setter'
 include Legacy
 include LegacyUser
 include LegacyGift
