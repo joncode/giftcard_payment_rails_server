@@ -62,6 +62,8 @@ Drinkboard::Application.routes.draw do
         end
       end
 
+      resources :merchants
+
     end
   end
 

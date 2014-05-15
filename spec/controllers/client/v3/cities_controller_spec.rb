@@ -19,4 +19,9 @@ describe Client::V3::CitiesController do
         Provider.last.update(active: false)
         get :merchants, format: :json, id: 2
     end
+
+    it "should return the provider menu in version 2 format only" do
+        get :menu, id: @provider.id, format: :json
+        rrc(200)
+    end
 end
