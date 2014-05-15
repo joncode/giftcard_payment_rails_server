@@ -56,7 +56,11 @@ Drinkboard::Application.routes.draw do
   namespace :client, defaults: { format: 'json' } do
     namespace :v3 do
 
-      get 'cities', to: 'clients#cities'
+      resources :cities,     only: [:index] do
+        member do
+          get :merchants
+        end
+      end
 
     end
   end
