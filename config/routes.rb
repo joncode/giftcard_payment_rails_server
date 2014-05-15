@@ -51,6 +51,16 @@ Drinkboard::Application.routes.draw do
   post 'app/gifts_array',      to: 'app#gifts'
   post 'app/transactions',     to: 'app#transactions'
 
+#################          Client V3 routes for API                  /////////////////////////////
+
+  namespace :client, defaults: { format: 'json' } do
+    namespace :v3 do
+
+      get 'cities', to: 'clients#cities'
+
+    end
+  end
+
 #################          POS V1 routes for API                  /////////////////////////////
 
   namespace :pos, defaults: { format: 'json' } do
