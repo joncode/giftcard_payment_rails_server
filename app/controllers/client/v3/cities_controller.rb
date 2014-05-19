@@ -1,4 +1,4 @@
-class Client::V3::CitiesController < JsonController
+class Client::V3::CitiesController < MetalController
 
 
 
