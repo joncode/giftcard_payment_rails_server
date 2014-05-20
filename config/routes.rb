@@ -13,7 +13,11 @@ Drinkboard::Application.routes.draw do
         end
       end
 
-      resources :merchants,     only: [:show]
+      resources :merchants,     only: [:show] do
+        member do
+          get :menu
+        end
+      end
 
     end
   end
@@ -213,7 +217,7 @@ Drinkboard::Application.routes.draw do
   get "/confirm_email(/:email(/:user))", to: "users#confirm_email"
   mount Resque::Server, :at => "/resque"
 
-  
+
 #################         iOS app & Mdot V1 API                   /////////////////////////////
 
 
