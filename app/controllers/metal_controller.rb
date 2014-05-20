@@ -13,6 +13,11 @@ class MetalController < ActionController::Base
 
     # include Rails.application.routes.url_helpers
     include CommonUtils
+
+    before_action        :log_request_header
+    before_action        :method_start_log_message
+    after_action         :method_end_log_message
+    
     def respond(status=nil)
         response_code = status || :ok
         respond_to do |format|
