@@ -18,7 +18,10 @@ describe Client::V3::MerchantsController do
         menu_string = FactoryGirl.create(:menu_string, provider_id: provider.id)
         get :menu, id: provider.id, format: :json
         rrc(200)
+        
         json["status"].should == 1
-        json["data"].should   == menu_string.menu
+        json["data"].class.should_not == String
+        json["data"].should   == menu_string.menu_json
+
     end
 end
