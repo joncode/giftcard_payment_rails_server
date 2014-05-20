@@ -9,7 +9,7 @@ class Client::V3::CitiesController < MetalController
 
     def merchants
         providers = Provider.where(region_id: params[:id])
-        success provider.client_serialize
+        success providers.serialize_objs(:client)
         respond
     end
 
