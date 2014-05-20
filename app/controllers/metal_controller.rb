@@ -12,7 +12,7 @@ class MetalController < ActionController::Base
     # include ActionController::Instrumentation
 
     # include Rails.application.routes.url_helpers
-
+    include CommonUtils
     def respond(status=nil)
         response_code = status || :ok
         respond_to do |format|
