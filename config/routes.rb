@@ -20,7 +20,7 @@ Drinkboard::Application.routes.draw do
       end
 
       resources :users, only: [:index]
-
+      resources :gifts, only: [:index]
     end
   end
 

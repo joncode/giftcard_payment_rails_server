@@ -47,7 +47,7 @@ class Provider < ActiveRecord::Base
 	def client_serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :region_id]
 		prov_hash["provider_id"]  = self.id
-		prov_hash["photo"]        = shorten_photo_url(image)
+		prov_hash["photo"]        = self.short_image_url
 		prov_hash["address"]      = self.complete_address
 		prov_hash["live"]         = self.live_int.to_i
 		return remove_nils(prov_hash)
@@ -80,6 +80,10 @@ class Provider < ActiveRecord::Base
 
 #########   STATUS METHODS
 
+	def short_image_url
+		shorten_photo_url(image)
+	end
+	
 	def live_int
 		self.live ? "1" : "0"
 	end

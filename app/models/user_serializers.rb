@@ -25,7 +25,7 @@ module UserSerializers
 
     def client_serialize
         usr_hash  = self.serializable_hash only: ["first_name", "last_name"]
-        usr_hash["photo"]   = shorten_photo_url(self.iphone_photo)
+        usr_hash["photo"]   = self.short_image_url
         usr_hash["user_id"] = self.id
         remove_nils(usr_hash)
     end
