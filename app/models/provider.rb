@@ -44,6 +44,15 @@ class Provider < ActiveRecord::Base
 		return prov_hash
 	end
 
+	def client_serialize
+		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :region_id]
+		prov_hash["provider_id"]  = self.id
+		prov_hash["photo"]        = shorten_photo_url(image)
+		prov_hash["address"]      = self.complete_address
+		prov_hash["live"]         = self.live_int.to_i
+		return remove_nils(prov_hash)
+	end
+
 	alias :to_hash :serialize
 
 	def admt_serialize
