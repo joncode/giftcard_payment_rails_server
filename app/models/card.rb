@@ -66,7 +66,7 @@ class Card < ActiveRecord::Base
 		card.number 	= cc_hash["number"]
 		card
 	end
-
+	
 	def self.get_cards user
 		cards = Card.where(user_id: user.id)
 		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }

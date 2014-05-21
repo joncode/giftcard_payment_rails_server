@@ -21,6 +21,7 @@ Drinkboard::Application.routes.draw do
 
       resources :users, only: [:index]
       resources :gifts, only: [:index]
+      resources :cards, only: [:index]
     end
   end
 
