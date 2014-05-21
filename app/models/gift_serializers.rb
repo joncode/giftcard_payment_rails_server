@@ -154,7 +154,7 @@ module GiftSerializers
         gift_hsh["detail"]          = self.detail
         gift_hsh
     end
-
+    
     def client_serialize
         gift_hsh                  = {}
         gift_hsh["created_at"]    = self.created_at
@@ -173,11 +173,13 @@ module GiftSerializers
         gift_hsh["completed_at"]  = self.redeemed_at
         gift_hsh["detail"]        = self.detail
         gift_hsh["msg"]           = self.message
-        gift_hsh["loc_id"]        = self.provider.id
-        gift_hsh["loc_photo"]     = self.provider.short_image_url
-        gift_hsh["loc_name"]      = self.provider.name
-        gift_hsh["loc_phone"]     = self.provider.phone
-        gift_hsh["loc_address"]   = self.provider.complete_address
+        gift_hsh["loc_id"]        = self.provider_id
+        gift_hsh["loc_name"]      = self.provider_name
+        if self.provider
+            gift_hsh["loc_phone"]     = self.provider.phone
+            gift_hsh["loc_address"]   = self.provider.complete_address
+            gift_hsh["loc_photo"]     = self.provider.short_image_url
+        end
         gift_hsh["gift_id"]       = self.id
         remove_nils(gift_hsh)
     end
