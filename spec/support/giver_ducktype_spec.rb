@@ -18,7 +18,7 @@ shared_examples_for "giver ducktype" do
     end
 
     it "should have :shorten_image_url" do
-        object.respond_to?(:shorten_image_url).should be_true
+        object.respond_to?(:short_image_url).should be_true
     end
 
 end

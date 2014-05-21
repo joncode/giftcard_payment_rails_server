@@ -14,7 +14,7 @@ class AdminGiver < Admtmodel
         "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
     end
 
-    def shorten_image_url
+    def short_image_url
         shorten_photo_url self.get_photo
     end
         ####### Debt Ducktype as Owner

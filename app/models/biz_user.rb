@@ -14,10 +14,10 @@ class BizUser < ActiveRecord::Base
         image
     end
 
-    def shorten_image_url
+    def short_image_url
         shorten_photo_url self.get_photo
     end
-    
+
     # hidden giver ducktype methods
         # biz_user_obj.id    as giver_id   - provider_id
         # biz_user_obj.class as giver_type - BizUser class

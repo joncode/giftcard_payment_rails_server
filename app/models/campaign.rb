@@ -53,7 +53,7 @@ class Campaign < Admtmodel
         end
     end
 
-    def shorten_image_url
+    def short_image_url
         shorten_photo_url self.get_photo
     end
 
