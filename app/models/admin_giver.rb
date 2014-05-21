@@ -1,5 +1,7 @@
 class AdminGiver < Admtmodel
+    include Formatter
     self.table_name = "users"
+
     has_many :sent,  as: :giver,  class_name: Gift
     has_many :debts, as: :owner
 
@@ -12,6 +14,9 @@ class AdminGiver < Admtmodel
         "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
     end
 
+    def shorten_image_url
+        shorten_photo_url self.get_photo
+    end
         ####### Debt Ducktype as Owner
     def incur_debt amount
         debt = new_debt(amount)

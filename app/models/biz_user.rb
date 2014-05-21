@@ -1,4 +1,5 @@
 class BizUser < ActiveRecord::Base
+    include Formatter
     self.table_name = 'providers'
     has_many :sent,  as: :giver,  class_name: Gift
     has_many :debts, as: :owner
@@ -13,6 +14,10 @@ class BizUser < ActiveRecord::Base
         image
     end
 
+    def shorten_image_url
+        shorten_photo_url self.get_photo
+    end
+    
     # hidden giver ducktype methods
         # biz_user_obj.id    as giver_id   - provider_id
         # biz_user_obj.class as giver_type - BizUser class

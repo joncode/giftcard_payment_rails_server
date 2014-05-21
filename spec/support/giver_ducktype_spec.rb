@@ -16,5 +16,9 @@ shared_examples_for "giver ducktype" do
         ary = [Campaign, BizUser, AdminGiver, User]
         ary.include?(object.class).should be_true
     end
-    
+
+    it "should have :shorten_image_url" do
+        object.respond_to?(:shorten_image_url).should be_true
+    end
+
 end
