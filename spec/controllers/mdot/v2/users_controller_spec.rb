@@ -523,13 +523,13 @@ describe Mdot::V2::UsersController do
                 end
             end
 
-            it "should NOT update the user #{type_of} in database for user-socials" do
+            it "should update the user #{type_of} in database for user-socials" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 put :update, format: :json, data: { type_of => value }
                 new_user = @user.reload
                 value = "7024109605" if value == "(702) 410-9605"
                 if ["email", "phone", "twitter", "facebook_id"].include?(type_of)
-                    new_user.send(type_of).should_not == value
+                    new_user.send(type_of).should == value
                 end
             end
         end
