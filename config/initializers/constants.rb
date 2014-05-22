@@ -34,8 +34,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.2.5-3"
-VERSION_UPDATED = "5/12/14"
+VERSION_NUMBER  = "1.2.5-4"
+VERSION_UPDATED = "5/22/14"
 
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
