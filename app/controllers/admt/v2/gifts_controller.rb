@@ -71,10 +71,8 @@ class Admt::V2::GiftsController < JsonController
         convert_if_json(params["data"]["shoppingCart"])
         gift_hsh = gift_create_params(allowed)
         gift_hsh["giver"] = @admin_user.giver
-        gift = GiftAdmin.new(gift_hsh)
-        if gift.save
-            Relay.send_push_notification(gift)
-            gift.notify_receiver
+        gift = GiftAdmin.create(gift_hsh)
+        if gift.persisted?
             success gift.promo_serialize
         else
             status = :bad_request

@@ -3,16 +3,16 @@ class GiftAdmin < Gift
     def self.create args={}
         gift = super
         if gift.persisted?
-            messenger(gift)
+            gift.messenger(gift)
         end
         gift
     end
 
-    def self.messenger(resp)
-        if resp.payable.success?
-            Relay.send_push_notification(resp)
-            puts "GiftAdmin -messenger- Notify Receiver via email #{resp.receiver_name}"
-            resp.notify_receiver
+    def messenger
+        if self.payable.success?
+            Relay.send_push_notification(self)
+            puts "GiftAdmin -messenger- Notify Receiver via email #{self.receiver_name}"
+            notify_receiver
         end
     end
 
