@@ -1,8 +1,8 @@
 module RewardsGenerator
 
-    def self.make_gifts
+    def self.make_gifts campaign_items_ary
         puts "------------- Promo Rewards Generator  -----------------"
-        items = self.campaign_items_ary
+        items = campaign_items_ary
         users = self.get_users
         self.create_gifts(items, users)
     end
@@ -27,12 +27,6 @@ private
                 break
             end
         end
-    end
-
-    def self.campaign_items_ary
-        ci1 = CampaignItem.where(textword: 'a').last
-        ci2 = CampaignItem.where(textword: 'b').last
-        return [ci1, ci2].compact
     end
 
     def self.get_users

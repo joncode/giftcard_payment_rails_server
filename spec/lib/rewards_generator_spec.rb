@@ -20,7 +20,7 @@ describe RewardsGenerator do
         ci2 = FactoryGirl.create(:campaign_item, textword: 'b', budget: 2, reserve: 2, campaign_id: campaign.id, provider_id: provider2.id, cost: "1")
         ci2.update(reserve: 2)
 
-        RewardsGenerator::make_gifts
+        RewardsGenerator::make_gifts([ci1, ci2])
         gifts = Gift.order('created_at DESC')
         gifts.each do |gift|
             ["First Laszt", "Second Laszt", "Third Laszt", "Fourth Laszt"].include?(gift.receiver_name).should be_true
