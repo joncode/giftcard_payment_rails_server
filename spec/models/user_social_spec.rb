@@ -38,6 +38,14 @@ describe UserSocial do
         user_social.identifier.should == "2223334567"
     end
 
+    it "should extract phone digits from dashed spaced and parenthesis phone string" do
+        UserSocial.delete_all
+        user_social = FactoryGirl.build(:user_social, type_of: "phone", identifier: "(312) 404-1512")
+        user_social.save
+        user_social.identifier.should_not == "(312) 404-1512"
+        user_social.identifier.should == "3124041512"
+    end
+
     describe "uniqueness validation" do
 
         before do
