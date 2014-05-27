@@ -57,6 +57,59 @@ describe Mt::V2::GiftsController do
             gift.cat.should     == 200
         end
 
+        it "should create a multple promo gifts and find the provider via the token" do
+            GiftPromoSocial.create(gift_promo_mock_id: @gp_mock.id, network: "email", network_id: "greg@barry.com")
+            GiftPromoSocial.create(gift_promo_mock_id: @gp_mock.id, network: "email", network_id: "harry@barry.com")
+            create_hsh = { "gift_promo_mock_id" => @gp_mock.id }
+            post :bulk_create, format: :json, data: create_hsh
+            rrc 200
+            Gift.count.should == 3
+            gift = Gift.find_by(receiver_email: "fred@barry.com")
+            biz_user = @provider.biz_user
+            gift.provider.should      == @provider
+            gift.provider_name.should == @provider.name
+            gift.giver.should         == biz_user
+            gift.giver_name.should    == biz_user.name
+            gift.expires_at.should    == @expires_at
+            gift.receiver_name.should == "Fred Barry"
+            gift.receiver_email.should == "fred@barry.com"
+            gift.shoppingCart.should == @cart
+            gift.message.should == "Check out Our Promotions!"
+            gift.value.should   == "30"
+            gift.cost.should    == "0"
+            gift.cat.should     == 200
+            
+            gift = Gift.find_by(receiver_email: "greg@barry.com")
+            biz_user = @provider.biz_user
+            gift.provider.should      == @provider
+            gift.provider_name.should == @provider.name
+            gift.giver.should         == biz_user
+            gift.giver_name.should    == biz_user.name
+            gift.expires_at.should    == @expires_at
+            gift.receiver_name.should == "Fred Barry"
+            gift.receiver_email.should == "greg@barry.com"
+            gift.shoppingCart.should == @cart
+            gift.message.should == "Check out Our Promotions!"
+            gift.value.should   == "30"
+            gift.cost.should    == "0"
+            gift.cat.should     == 200
+
+            gift = Gift.find_by(receiver_email: "harry@barry.com")
+            biz_user = @provider.biz_user
+            gift.provider.should      == @provider
+            gift.provider_name.should == @provider.name
+            gift.giver.should         == biz_user
+            gift.giver_name.should    == biz_user.name
+            gift.expires_at.should    == @expires_at
+            gift.receiver_name.should == "Fred Barry"
+            gift.receiver_email.should == "harry@barry.com"
+            gift.shoppingCart.should == @cart
+            gift.message.should == "Check out Our Promotions!"
+            gift.value.should   == "30"
+            gift.cost.should    == "0"
+            gift.cat.should     == 200
+        end
+
         it "should return 200 and a basic serialized gift" do
             create_hsh = { "gift_promo_mock_id" => @gp_mock.id }
             post :bulk_create, format: :json, data: create_hsh

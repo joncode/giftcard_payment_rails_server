@@ -503,8 +503,7 @@ describe Mdot::V2::GiftsController do
                     request.env["HTTP_TKN"] = "USER_TOKEN"
                     params = { message: "Bad request", receiver: {"name" => "Dont Accept"}}
                     post :regift, format: :json, id: old_gift.id, data: params
-
-                    rrc 400
+                    rrc 200
                 end
             end
 
