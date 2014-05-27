@@ -20,7 +20,7 @@ class Mdot::V2::UsersController < JsonController
         return nil  if hash_empty?(params["data"])
 
         updates = socials_user_params
-
+        updates["primary"] = true
         if updates["social"].present?
             ids = updates["social"].map do |social|
                 social["_id"]
@@ -90,8 +90,9 @@ class Mdot::V2::UsersController < JsonController
         return nil  if data_not_hash?
         # user_params = update_strong_param(params["data"])
         return nil  if hash_empty?(params["data"])
-
-        if @current_user.update(update_user_params)
+        update_hsh = update_user_params
+        update_hsh["primary"] = true
+        if @current_user.update(update_hsh)
             success @current_user.update_serialize
         else
             fail    @current_user

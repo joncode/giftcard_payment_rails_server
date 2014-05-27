@@ -1,4 +1,5 @@
 class BizUser < ActiveRecord::Base
+    include Formatter
     self.table_name = 'providers'
     has_many :sent,  as: :giver,  class_name: Gift
     has_many :debts, as: :owner
@@ -11,6 +12,10 @@ class BizUser < ActiveRecord::Base
     def get_photo
         return MERCHANT_DEFAULT_IMG if image.blank?
         image
+    end
+
+    def short_image_url
+        shorten_photo_url self.get_photo
     end
 
     # hidden giver ducktype methods

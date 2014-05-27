@@ -1,6 +1,7 @@
 class GiftRegift < Gift
 
     def self.create args={}
+        args["receiver_name"] = args["receiver_name"].gsub(/[^0-9a-z ]/i, '') if args["receiver_name"]
         if args["receiver_id"]
             receiver = User.unscoped.find(args["receiver_id"])
             if receiver.active == false

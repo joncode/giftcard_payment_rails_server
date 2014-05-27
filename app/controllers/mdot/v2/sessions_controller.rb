@@ -34,12 +34,14 @@ class Mdot::V2::SessionsController < JsonController
     def login_social
         return nil if params_bad_request(["facebook_id", 'twitter', 'pn_token'])
         if params['facebook_id']
-            return nil if data_not_string?(params['facebook_id'])
+            # return nil if data_not_string?(params['facebook_id'])
+            params['facebook_id'] = params['facebook_id'].to_s
             return nil if data_blank?(params['facebook_id'])
             user_social = UserSocial.includes(:user).where(type_of: 'facebook_id', identifier: params['facebook_id']).first
             @user = user_social ? user_social.user : nil
         elsif params['twitter']
-            return nil if data_not_string?(params['twitter'])
+            # return nil if data_not_string?(params['twitter'])
+            params['twitter'] = params['twitter'].to_s
             return nil if data_blank?(params['twitter'])
             user_social = UserSocial.includes(:user).where(type_of: 'twitter', identifier: params['twitter']).first
             @user = user_social ? user_social.user : nil

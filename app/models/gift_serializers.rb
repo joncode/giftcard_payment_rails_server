@@ -154,5 +154,34 @@ module GiftSerializers
         gift_hsh["detail"]          = self.detail
         gift_hsh
     end
+    
+    def client_serialize
+        gift_hsh                  = {}
+        gift_hsh["created_at"]    = self.created_at
+        gift_hsh["giv_name"]      = self.giver_name
+        gift_hsh["giv_photo"]     = self.giver.short_image_url
+        gift_hsh["giv_id"]        = self.giver_id
+        gift_hsh["giv_type"]      = self.giver_type
+        gift_hsh["rec_id"]        = self.receiver_id
+        gift_hsh["rec_name"]      = self.receiver_name
+        gift_hsh["rec_photo"]     = self.receiver.short_image_url if receiver
+        gift_hsh["items"]         = ary_of_shopping_cart_as_hash
+        gift_hsh["value"]         = self.value
+        gift_hsh["status"]        = self.status
+        gift_hsh["expires_at"]    = self.expires_at
+        gift_hsh["cat"]           = self.cat
+        gift_hsh["completed_at"]  = self.redeemed_at
+        gift_hsh["detail"]        = self.detail
+        gift_hsh["msg"]           = self.message
+        gift_hsh["loc_id"]        = self.provider_id
+        gift_hsh["loc_name"]      = self.provider_name
+        if self.provider
+            gift_hsh["loc_phone"]     = self.provider.phone
+            gift_hsh["loc_address"]   = self.provider.complete_address
+            gift_hsh["loc_photo"]     = self.provider.short_image_url
+        end
+        gift_hsh["gift_id"]       = self.id
+        remove_nils(gift_hsh)
+    end
 
 end

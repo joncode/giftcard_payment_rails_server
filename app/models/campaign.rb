@@ -1,4 +1,5 @@
 class Campaign < Admtmodel
+    include Formatter
     self.table_name = "campaigns"
 
     has_many :campaign_items
@@ -50,6 +51,10 @@ class Campaign < Admtmodel
         else
             "http://res.cloudinary.com/drinkboard/image/upload/v1389818563/IOM-icon_round_bzokjj.png"
         end
+    end
+
+    def short_image_url
+        shorten_photo_url self.get_photo
     end
 
 private

@@ -8,6 +8,10 @@ class MenuString < ActiveRecord::Base
 
   	after_save :update_merchant
 
+    def menu_json
+        JSON.parse self.menu
+    end
+
     def self.get_menu_v2_for_provider provider_id
         menu_string = MenuString.find_by(provider_id: provider_id)
         if menu_string

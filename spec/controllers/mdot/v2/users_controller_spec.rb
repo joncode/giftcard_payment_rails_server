@@ -481,6 +481,28 @@ describe Mdot::V2::UsersController do
             compare_keys(response, keys)
         end
 
+        it "should return user hash when success" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :update, format: :json, data: {"first_name"=>"Phillip", "last_name"=>"Park", "phone"=>"(312) 408-1518", "email"=>"phillark79@gmail.com", "facebook_id"=>"1056958975"}
+            rrc(200)
+            json["status"].should == 1
+            response = json["data"]
+            response.class.should  == Hash
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "sex", "birthday", "zip", "twitter", "facebook_id"]
+            compare_keys(response, keys)
+        end
+
+        it "should return user hash when success" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :update, format: :json, data: {"first_name"=>"William", "last_name"=>"Miller", "phone"=>"(703) 830-0070", "email"=>"will.llanes.migrer@gmail.com", "facebook_id"=>"100000320758243", "twitter"=>"4129d972"}
+            rrc(200)
+            json["status"].should == 1
+            response = json["data"]
+            response.class.should  == Hash
+            keys = ["user_id", "photo", "first_name", "last_name", "phone", "email", "sex", "birthday", "zip", "twitter", "facebook_id"]
+            compare_keys(response, keys)
+        end
+
         it "should return validation errors" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             put :update, format: :json, data: { "email" => "" }
@@ -523,13 +545,13 @@ describe Mdot::V2::UsersController do
                 end
             end
 
-            it "should NOT update the user #{type_of} in database for user-socials" do
+            it "should update the user #{type_of} in database for user-socials" do
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 put :update, format: :json, data: { type_of => value }
                 new_user = @user.reload
                 value = "7024109605" if value == "(702) 410-9605"
                 if ["email", "phone", "twitter", "facebook_id"].include?(type_of)
-                    new_user.send(type_of).should_not == value
+                    new_user.send(type_of).should == value
                 end
             end
         end

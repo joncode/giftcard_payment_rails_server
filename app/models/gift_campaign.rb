@@ -20,7 +20,7 @@ class GiftCampaign < Gift
             notify_receiver
         end
     end
-    
+
 private
 
     def pre_init args={}

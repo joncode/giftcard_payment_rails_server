@@ -132,6 +132,9 @@ class User < ActiveRecord::Base
     end
 
 ####### USER GETTERS AND SETTERS
+	def short_image_url
+		shorten_photo_url(self.iphone_photo)
+	end
 
 	def get_photo
 		if self.iphone_photo && self.iphone_photo.length > 14
