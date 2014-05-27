@@ -107,4 +107,95 @@ describe Admt::V2::GiftCampaignsController do
             run_delayed_jobs
         end
     end
+
+    describe :bulk_create do
+        before do
+            @user_2 = FactoryGirl.create :user, first_name: "Dos", last_name: "Equis"
+            @user_3 = FactoryGirl.create :user, first_name: "Trey", last_name: "Parker"
+        end
+
+        it_should_behave_like("token authenticated", :post, :create)
+
+        it "should 400 when extra or bad keys" do
+
+            just_right = { "payable_id" => @campaign_item.id  }
+            post :bulk_create, format: :json, data: just_right
+            rrc 200
+
+            too_many = { "payable_id" => @campaign_item.id, "bob" => "funny" }
+            post :bulk_create, format: :json, data: too_many
+            rrc 400
+
+            wrong_keys = { "phone_number" => "2222222222", "payable_id" => @campaign_item.id }
+            post :bulk_create, format: :json, data: wrong_keys
+            rrc 400
+
+        end
+
+        it "should create an campaign gift" do
+            create_hsh = { "payable_id" => @campaign_item.id  }
+            post :bulk_create, format: :json, data: create_hsh
+            rrc 200
+            gift = Gift.find_by(receiver_id: @user_2.id)
+            gift.provider.should      == @provider
+            gift.provider_name.should == @provider.name
+            gift.giver_type.should     == "Campaign" 
+            gift.giver_id.should       == @campaign.id
+            gift.receiver_name.should  == "Dos Equis"
+            gift.shoppingCart.should   == @campaign_item.shoppingCart
+            gift.message.should        == @campaign_item.message
+            gift.value.should          == @campaign_item.value
+            gift.cost.should           == @campaign_item.cost
+        end
+
+        it "should return 200 and a success message" do
+            create_hsh = { "payable_id" => @campaign_item.id  }
+            post :bulk_create, format: :json, data: create_hsh
+            rrc 200
+            json["status"].should == 1            
+            json["data"].should == "Created gifts for Campaign Item #{@campaign_item.id}"
+        end
+
+        it "should return 404 when campaign item cannot be found" do
+            create_hsh = { "payable_id" => "99999"}
+            post :bulk_create, format: :json, data: create_hsh
+            rrc 404
+            json["status"].should == 0
+            json["data"].should == "Campaign Item 99999 could not be found"
+
+        end
+
+        it "should send an email to the receiver_email" do
+            ResqueSpec.reset!
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            create_hsh = { "payable_id" => @campaign_item.id  }
+            post :bulk_create, format: :json, data: create_hsh
+            rrc 200
+            gift = Gift.find_by(receiver_id: @user_2.id)
+            abs_gift_id = gift.id + NUMBER_ID
+            run_delayed_jobs
+            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
+                b = JSON.parse(req.body);
+                if b["template_name"] == "iom-gift-notify-receiver"
+                    link = b["message"]["merge_vars"].first["vars"].first["content"];
+                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
+                else
+                    true
+                end
+            }.once
+        end
+
+        it "should send in-network receivers a push notification" do
+            ResqueSpec.reset!
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            create_hsh = { "payable_id" => @campaign_item.id  }
+            post :bulk_create, format: :json, data: create_hsh
+            rrc 200
+
+            Urbanairship.should_receive(:push).exactly(3).times
+            run_delayed_jobs
+        end
+    end
 end

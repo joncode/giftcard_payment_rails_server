@@ -178,7 +178,9 @@ Drinkboard::Application.routes.draw do
             end
           end
 
-          resources :gift_campaigns, only: [:create]
+          resources :gift_campaigns, only: [:create] do
+            collection { post :bulk_create }
+          end
 
           resources :users,     only: [:update] do         # biz logic
             member do
