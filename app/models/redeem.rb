@@ -21,7 +21,8 @@ class Redeem < ActiveRecord::Base
 	end
 
 	def self.init_with_gift(gift)
-		pos_merchant_id = gift.provider.pos_merchant_id
+		provider 		= Provider.unscoped.find(gift.provider_id)
+		pos_merchant_id = provider.pos_merchant_id
 		Redeem.create(gift_id: gift.id, pos_merchant_id: pos_merchant_id)
 	end
 
