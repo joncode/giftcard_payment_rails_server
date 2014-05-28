@@ -21,13 +21,16 @@ private
                 hsh = { "receiver_id" => user.id, "receiver_name" => user.name, "payable_id" => campaign_item.id }
                 gift = GiftCampaign.create(hsh)
                 if gift.id.nil?
-                    puts "Errors = #{gift.errors.messages}"
+                    fail_message = "#{gift.errors.full_messages}"
+                    puts fail_message
+                    status = fail_message
+                    break
                 else
                     puts "gift ID = #{gift.id}"
                     created_gifts_count += 1
                 end
             else
-            	fail_message = "Campaign items reserve was used up"
+                fail_message = "Campaign items reserve was used up"
                 puts fail_message
                 status = fail_message
                 break
