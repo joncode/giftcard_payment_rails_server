@@ -28,9 +28,12 @@ class Mdot::V2::GiftsController < JsonController
         return nil if params_bad_request
         return nil if data_not_found?(gift)
 
+        time = Time.now 
         redeem = Redeem.find_or_create_with_gift(gift)
         if redeem
-            Relay.send_push_thank_you gift
+            if redeem.created_at >= time 
+                Relay.send_push_thank_you gift
+            end
             success(redeem.redeem_code)
         else
             fail redeem

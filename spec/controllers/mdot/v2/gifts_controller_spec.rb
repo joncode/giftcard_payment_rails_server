@@ -236,6 +236,18 @@ describe Mdot::V2::GiftsController do
             redeem.class.should == Redeem
         end
 
+
+        it "should return a redeem code when gift is already notified" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :open, format: :json, id: @gift.id
+            rrc(200)
+            redeem = @gift.redeem
+            redeem.class.should == Redeem
+            post :open, format: :json, id: @gift.id
+            json["status"].should == 1
+            json["data"].should == redeem.redeem_code
+        end
+
         it "should return the redeem code on success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
