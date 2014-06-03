@@ -30,6 +30,14 @@ module UserSerializers
         remove_nils(usr_hash)
     end
 
+    def login_client_serialize
+        usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter"]
+        usr_hash["photo"]   = self.short_image_url
+        usr_hash["user_id"] = self.id
+        usr_hash["token"]   = self.remember_token
+        usr_hash
+    end
+
     def profile_serialize
         usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "zip", "sex"]
         usr_hash["photo"]   = self.get_photo
