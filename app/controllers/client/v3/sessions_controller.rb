@@ -2,7 +2,7 @@ class Client::V3::SessionsController < MetalController
 
     def create
     	login = params["data"]
-    	email = login["email"]
+    	email = login["username"]
     	password = login["password"]
     	pn_token = login["pn_token"]
         if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: email.strip.downcase).references(:users).first
