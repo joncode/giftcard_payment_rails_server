@@ -5,10 +5,25 @@ class Client::V3::SessionsController < MetalController
     	email = login["email"]
     	password = login["password"]
     	pn_token = login["pn_token"]
-    	user = User.find_by(email: email)
-    	user.authenticate(password)
-    	success user.login_client_serialize 
-    	respond
+        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: email.strip.downcase).references(:users).first
+            @user = user_social.user
+            if @user.not_suspended?
+                if @user.authenticate(password)
+                    @user.pn_token = pn_token if pn_token
+                    success @user.login_client_serialize
+                else
+                    fail "Invalid email/password combination"
+                    status = :not_found
+                end
+            else
+                fail "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
+                status = :unauthorized
+            end
+        else
+            fail "Invalid email/password combination"
+            status = :not_found
+        end
+        respond(status)
     end
 
 end
