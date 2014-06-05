@@ -29,7 +29,9 @@ private
         provider              = campaign_item.provider
         args["cat"]           = campaign.gift_cat
         args["giver"]         = campaign
+        args["giver_name"]    = campaign.name
         args["provider"]      = provider
+        args["provider_name"] = provider.name
         args["payable"]       = campaign_item
         args["receiver_name"] = campaign.name if args["receiver_name"].nil?
         args["message"]       = campaign_item.message
