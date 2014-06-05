@@ -49,6 +49,7 @@ module GiftSerializers
 
     def giver_serialize
         gift_hsh = self.serializable_hash only: [ "cat", "created_at", "message", "detail", "provider_id", "provider_name", "receiver_id", "receiver_name", "value", "cost", "updated_at"]
+        gift_hsh["completed_at"]       = self.redeemed_at if self.redeemed_at
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.giver_status
         gift_hsh["receiver_photo"]     = receiver.get_photo if receiver
@@ -65,13 +66,13 @@ module GiftSerializers
         gift_hsh["shoppingCart"]       = self.shoppingCart
         gift_hsh["items"]              = ary_of_shopping_cart_as_hash
         gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
-        gift_hsh["completed_at"]       = self.redeemed_at if self.redeemed_at
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
         gift_hsh
     end
 
     def receiver_serialize
         gift_hsh = self.serializable_hash only: ["cat", "giver_id", "giver_name", "message", "detail", "provider_id", "provider_name", "updated_at", "created_at"]
+        gift_hsh["completed_at"]       = self.redeemed_at if self.redeemed_at
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.receiver_status
         gift_hsh["giver_photo"]        = giver.get_photo
@@ -89,7 +90,6 @@ module GiftSerializers
         gift_hsh["shoppingCart"]       = self.shoppingCart
         gift_hsh["items"]              = ary_of_shopping_cart_as_hash
         gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
-        gift_hsh["completed_at"]       = self.redeemed_at if self.redeemed_at
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
         gift_hsh
     end

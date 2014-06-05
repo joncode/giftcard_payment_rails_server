@@ -44,7 +44,7 @@ describe Admt::V2::GiftCampaignsController do
             gift.provider.should      == @provider
             gift.provider_name.should == @provider.name
 
-            gift.giver_type.should     == "Campaign" 
+            gift.giver_type.should     == "Campaign"
             gift.giver_id.should       == @campaign.id
             # gift.expires_at.should     == @campaign_item.expires_at.to_datetime
             gift.receiver_name.should  == @user.name
@@ -65,7 +65,7 @@ describe Admt::V2::GiftCampaignsController do
             gift.provider.should      == @provider
             gift.provider_name.should == @provider.name
 
-            gift.giver_type.should     == "Campaign" 
+            gift.giver_type.should     == "Campaign"
             gift.giver_id.should       == @campaign.id
             # gift.expires_at.should     == @campaign_item.expires_at.to_datetime
             gift.receiver_name.should  == @user.name
@@ -80,7 +80,7 @@ describe Admt::V2::GiftCampaignsController do
             create_hsh = { "receiver_phone" => "2222222222", "payable_id" => @campaign_item.id  }
             post :create, format: :json, data: create_hsh
             rrc 200
-            json["status"].should == 1            
+            json["status"].should == 1
             keys = ["updated_at", "created_at", "receiver_name", "receiver_email", "receiver_photo", "items", "shoppingCart", "value", "cost", "status", "expires_at", "cat", "detail"]
             compare_keys(json["data"], keys)
         end
@@ -160,7 +160,7 @@ describe Admt::V2::GiftCampaignsController do
             gift = Gift.find_by(receiver_id: @user_2.id)
             gift.provider.should      == @provider
             gift.provider_name.should == @provider.name
-            gift.giver_type.should     == "Campaign" 
+            gift.giver_type.should     == "Campaign"
             gift.giver_id.should       == @campaign.id
             gift.receiver_name.should  == "Dos Equis"
             gift.shoppingCart.should   == @campaign_item.shoppingCart
@@ -173,7 +173,7 @@ describe Admt::V2::GiftCampaignsController do
             create_hsh = { "payable_id" => @campaign_item.id  }
             post :bulk_create, format: :json, data: create_hsh
             rrc 200
-            json["status"].should == 1            
+            json["status"].should == 1
             json["data"].should == "Created gifts for Campaign Item #{@campaign_item.id}"
         end
 

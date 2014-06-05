@@ -7,6 +7,8 @@ Drinkboard::Application.routes.draw do
   namespace :client, defaults: { format: 'json' } do
     namespace :v3 do
 
+      resources :sessions,  only: [:create]
+
       resources :cities,     only: [:index] do
         member do
           get :merchants

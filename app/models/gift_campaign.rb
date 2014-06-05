@@ -27,21 +27,19 @@ private
         campaign_item         = CampaignItem.includes(:campaign).includes(:provider).where(id: args["payable_id"]).first
         campaign              = campaign_item.campaign
         provider              = campaign_item.provider
-        args["cat"]           = set_cat(campaign)
-        args["shoppingCart"]  = JSON.parse campaign_item.shoppingCart
-        args["receiver_name"] = campaign.name if args["receiver_name"].nil?
-        args["provider_id"]   = provider.id
-        args["provider_name"] = provider.name
-        args["payable_id"]    = campaign_item.id
-        args["payable_type"]  = "CampaignItem"
-        args["value"]         = campaign_item.value
-        args["cost"]          = campaign_item.cost
-        args["giver_type"]    = "Campaign"
-        args["giver_id"]      = campaign.id
+        args["cat"]           = campaign.gift_cat
+        args["giver"]         = campaign
         args["giver_name"]    = campaign.name
+        args["provider"]      = provider
+        args["provider_name"] = provider.name
+        args["payable"]       = campaign_item
+        args["receiver_name"] = campaign.name if args["receiver_name"].nil?
         args["message"]       = campaign_item.message
         args["detail"]        = campaign_item.detail
         args["expires_at"]    = expires_at_calc(campaign_item.expires_at, campaign_item.expires_in)
+        args["shoppingCart"]  = JSON.parse campaign_item.shoppingCart
+        args["value"]         = campaign_item.value
+        args["cost"]          = campaign_item.cost
     end
 
     def expires_at_calc expires_at, expires_in
@@ -50,10 +48,6 @@ private
         elsif expires_in.present?
             Time.now + expires_in.days
         end
-    end
-
-    def set_cat campaign
-        campaign.gift_cat
     end
 
 #################  AFTER SAVE CALLBACKS

@@ -83,7 +83,7 @@ private
 	end
 
 	def rewind_gift_status
-		self.gift.update_attributes({status: 'notified' , redeemed_at: nil, order_num: nil})
+		self.gift.update(status: 'notified' , redeemed_at: nil, order_num: nil)
 		puts "UPDATE GIFT STATUS DELETED ORDER ID=#{self.id}, GiftID = #{self.gift.id} #{self.gift.status}"
 	end
 
