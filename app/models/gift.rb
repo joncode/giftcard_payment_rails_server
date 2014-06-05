@@ -195,9 +195,10 @@ class Gift < ActiveRecord::Base
 
         resp_hsh = {}
         if self.refund.success?
-            self.status     = 'cancel'
-            self.pay_stat   = "refund_cancel"
-            resp_hsh["msg"] = refund.reason_text
+            self.status      = 'cancel'
+            self.pay_stat    = "refund_cancel"
+            self.redeemed_at = Time.now
+            resp_hsh["msg"]  = refund.reason_text
             resp_hsh["status"] = 1
         else
             resp_hsh["msg"] = "#{refund.reason_text} ID = #{self.id}."
@@ -394,7 +395,7 @@ private
 
     def regift
         old_gift = self.payable
-        old_gift.update(status: 'regifted', pay_stat: "charge_regifted")
+        old_gift.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: Time.now)
     end
 
     def regift?
