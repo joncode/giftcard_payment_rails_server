@@ -17,7 +17,7 @@ describe RewardsGenerator do
 
         response = RewardsGenerator.make_gifts [campaign_item.id]
         response.should == { status: "Gift Creation Successful", created_gifts_count: 4}
-        
+
         gifts = Gift.order('created_at DESC')
         gifts.each do |gift|
             ["First Laszt", "Second Laszt", "Third Laszt", "Fourth Laszt"].include?(gift.receiver_name).should be_true

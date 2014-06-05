@@ -23,28 +23,28 @@ private
 			puts "No live campaign Items for #{textword}"
 		end
 	end
-	
-	def self.create_gift_for_multiple_items reservable_items, word_hsh
+
+	def self.create_gift_for_multiple_items items, word_hsh
 		# go to slicktext and get the phones
 		sms_contacts = self.slicktext_to_sms_contacts(word_hsh)
 			# if there are live contacts
 		sms_contacts.each do |contact|
 			# loop create_gift with campaign items
-			choice_index  = rand(reservable_items.length)
-			campaign_item = reservable_items.slice!(choice_index)
-			if campaign_item
-				self.create_gift(campaign_item, contact)
+			choice_index  	 = rand(items.length)
+			campaign_item_id = items.slice!(choice_index)
+			if campaign_item_id
+				self.create_gift(campaign_item_id, contact)
 			else
 				puts "No more campaign Items for #{textword}"
 			end
 		end
 	end
 
-	def self.make_reservable_items live_items
+	def self.make_reservable_item_ids live_items
 		reservable_items = []
 		live_items.each do |item|
 			item.reserve.times do
-				reservable_items << item
+				reservable_items << item.id
 			end
 		end
 		reservable_items
@@ -52,12 +52,12 @@ private
 
 	def self.keep_live_items_only campaign_items
 		live_items = campaign_items.select { |ci| ci.live? }
-		self.make_reservable_items(live_items)
+		self.make_reservable_item_ids(live_items)
 	end
 
-	def self.create_gift campaign_item, sms_contact
+	def self.create_gift campaign_item_id, sms_contact
 			# associate the sms_contact with the gift
-		gift_hash = { "receiver_phone" => sms_contact.phone, "payable_id" => campaign_item.id, "sms_contact" => sms_contact }
+		gift_hash = { "receiver_phone" => sms_contact.phone, "payable_id" => campaign_item_id, "sms_contact" => sms_contact }
 		gift = GiftCampaign.create(gift_hash)
 		if gift.id.nil?
 			puts "Errors = #{gift.errors.messages}"

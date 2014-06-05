@@ -3,7 +3,7 @@ module RewardsGenerator
     def self.make_gifts item_ids_ary
         puts "------------- Promo Rewards Generator  -----------------"
         items = CampaignItem.find(item_ids_ary)
-        users = self.get_users
+        user_array = self.get_user_array
         status_hash = self.create_gifts(items, users)
         return status_hash
     end
@@ -12,22 +12,22 @@ private
 
     def self.create_gifts(items, users)
     	created_gifts_count = 0
-    	status =  "Gift Creation Successful"
-        ary = self.make_reservable_items(items)
+    	status  =  "Gift Creation Successful"
+        ary     = self.make_reservable_item_ids(items)
         users.each do |user|
             choice_index  = rand(ary.length)
             campaign_item = ary.slice!(choice_index)
             if campaign_item
-                hsh = { "receiver_id" => user.id, "receiver_name" => user.name, "payable_id" => campaign_item.id }
+                hsh  = { "receiver_id" => user[0], "receiver_name" => self.name(user[1], user[2]), "payable_id" => campaign_item }
                 gift = GiftCampaign.create(hsh)
                 if gift.id.nil?
-                    puts "Errors = #{gift.errors.messages}"
+                    puts "RewardsGenerator - Errors = #{gift.errors.messages}"
                 else
-                    puts "gift ID = #{gift.id}"
+                    puts "RewardsGenerator - gift ID = #{gift.id}"
                     created_gifts_count += 1
                 end
             else
-            	fail_message = "Campaign items reserve was used up"
+            	fail_message = "RewardsGenerator - Campaign items reserve was used up"
                 puts fail_message
                 status = fail_message
                 break
@@ -36,24 +36,26 @@ private
         return { status: status, created_gifts_count: created_gifts_count }
     end
 
-    def self.campaign_items_ary
-        ci1 = CampaignItem.where(textword: 'a').last
-        ci2 = CampaignItem.where(textword: 'b').last
-        return [ci1, ci2].compact
+    def self.get_user_array
+       User.where(active: true).pluck(:id, :first_name, :last_name)
     end
 
-    def self.get_users
-        User.where(active: true).order('created_at DESC')
-    end
-
-    def self.make_reservable_items live_items
+    def self.make_reservable_item_ids live_items
         reservable_items = []
         live_items.each do |item|
             item.reserve.times do
-                reservable_items << item
+                reservable_items << item.id
             end
         end
         reservable_items
+    end
+
+    def self.name(first_name, last_name)
+        if last_name.blank?
+            "#{first_name}"
+        else
+            "#{first_name} #{last_name}"
+        end
     end
 
 end
