@@ -33,6 +33,8 @@ FactoryGirl.define do
         end
     end
 
+    factory :boomerang_giver
+
     factory :nobody, :class => 'User' do
         first_name                  "No"
         last_name                   "One"
