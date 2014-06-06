@@ -332,7 +332,7 @@ private
 
 	def init_user_socials type_ofs, args
 		type_ofs.map do |type_of|
-			us = UserSocial.new(type_of: type_of.to_s, identifier: args[type_of])
+			us = UserSocial.new(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
 			puts "init_user_socials - Here is the user social #{us.inspect}"
 			us
 		end

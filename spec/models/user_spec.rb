@@ -13,6 +13,15 @@ describe User do
 
     context "model associations and validations" do
 
+        it "should accept twitter from app" do
+            user = FactoryGirl.create(:user, twitter: "123121231")
+            old_us = UserSocial.where(identifier: "294473465").first
+            old_us.destroy if old_us
+            us = user.update({"twitter"=> "294473465"})
+            us = UserSocial.find_by(identifier: "294473465")
+            us.type_of.should == "twitter"
+        end
+
         it "builds from factory" do
             user = FactoryGirl.create :user
             user.should be_valid
