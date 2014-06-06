@@ -4,7 +4,7 @@ module RewardsGenerator
         puts "------------- Promo Rewards Generator  -----------------"
         items = CampaignItem.find(item_ids_ary)
         user_array = self.get_user_array
-        status_hash = self.create_gifts(items, users)
+        status_hash = self.create_gifts(items, user_array)
         return status_hash
     end
 
