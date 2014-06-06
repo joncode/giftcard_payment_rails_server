@@ -11,6 +11,10 @@ class Relay
 
 		end
 
+        def send_boomerang_push_notification(gift)
+            Resque.enqueue(BoomerangPushJob, gift.id)
+        end
+
         def send_push_thank_you gift
             Resque.enqueue(PushJob, gift.id, true)
         end

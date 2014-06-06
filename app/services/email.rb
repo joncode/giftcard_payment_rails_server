@@ -17,6 +17,10 @@ module Email
 
 #######   Sale
 
+    def notify_receiver_boomerang
+        notify_receiver
+    end
+
     def notify_receiver
         gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil

@@ -3,4 +3,5 @@ class CreateBoomerangGiver < ActiveRecord::Migration
     create_table :boomerang_givers do |t|
     end
   end
+
 end

@@ -3,6 +3,7 @@ require 'spec_helper'
 describe GiftBoomerang do
 
     before(:each) do
+        boom = FactoryGirl.create(:boomerang_giver)
         @user     = FactoryGirl.create(:user)
         @old_gift = FactoryGirl.create(:gift, giver: @user, receiver_phone: "2152667474", receiver_name: "No Existo", message: "Hey Join this app!", value: "201.00", cost: "187.3", service: '10.05', cat: 300)
         @gift_hsh = {}
@@ -28,9 +29,9 @@ describe GiftBoomerang do
         it "should create gift with old_gift provider" do
             gift        = GiftBoomerang.create @gift_hsh
             gift.reload
-            gift.message.should       == "I just REGIFTED!"
-            gift.receiver_name.should == @receiver.name
-            gift.receiver.should      == @receiver
+            gift.message.should       == "Your friend never created an account so we’re returning this gift. Use Regift to try your friend again, send it to a new friend, use the gift yourself!"
+            gift.receiver_name.should == @user.name
+            gift.receiver.should      == @user
             gift.provider.should      == @old_gift.provider
             gift.provider_name.should == @old_gift.provider_name
         end
@@ -40,7 +41,7 @@ describe GiftBoomerang do
             gift.reload
             gift.message.should_not   == "DO NOT REGIFT!"
             gift.giver_name.should    == "Boomerang"
-            gift.giver.should         == "Boomerang"
+            gift.giver.class.should   == BoomerangGiver
         end
 
         it "should add the boomerang message" do
@@ -75,12 +76,12 @@ describe GiftBoomerang do
     end
 
     context "status behavior" do
-        before(:each) do
-            @user     = FactoryGirl.create(:user)
-            @old_gift = FactoryGirl.create(:gift, giver: @user, receiver_phone: "2152667474", receiver_name: "No Existo", message: "Hey Join this app!", value: "201.00", cost: "187.3", service: '10.05', cat: 300)
-            @gift_hsh = {}
-            @gift_hsh["old_gift_id"]   = @old_gift.id
-        end
+        # before(:each) do
+        #     @user     = FactoryGirl.create(:user)
+        #     @old_gift = FactoryGirl.create(:gift, giver: @user, receiver_phone: "2152667474", receiver_name: "No Existo", message: "Hey Join this app!", value: "201.00", cost: "187.3", service: '10.05', cat: 300)
+        #     @gift_hsh = {}
+        #     @gift_hsh["old_gift_id"]   = @old_gift.id
+        # end
 
         it "should set the parent gift as the payable" do
             @old_gift.update(pay_stat: "refund_comp")
@@ -108,11 +109,10 @@ describe GiftBoomerang do
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             ResqueSpec.reset!
             WebMock.reset!
-            @regifter = @user
         end
 
         it "should NOT email invoice to the sender" do
-            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@regifter.first_name},#{@regifter.last_name},,,,,,,,,,,,,,,,,"
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@user.first_name},#{@user.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
@@ -138,7 +138,7 @@ describe GiftBoomerang do
 
         it "should email notify the recipient" do
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
-            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@regifter.first_name},#{@regifter.last_name},,,,,,,,,,,,,,,,,"
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@user.first_name},#{@user.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
@@ -160,24 +160,13 @@ describe GiftBoomerang do
 
         it "should push notify to app-user recipients" do
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
-            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@regifter.first_name},#{@regifter.last_name},,,,,,,,,,,,,,,,,"
+            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@user.first_name},#{@user.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@regifter.name} sent you a gift at #{@old_gift.provider_name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            good_push_hsh = {:aliases =>["#{@user.ua_alias}"],:aps =>{:alert => "Boomerang! We are returning this gift to you because your friend never created an account",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             response = GiftBoomerang.create @gift_hsh
-            run_delayed_jobs
-        end
-
-        it "should not message users when payment_error" do
-            auth_response = "3,2,33,This transaction has been declined.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@regifter.first_name},#{@regifter.last_name},,,,,,,,,,,,,,,,,"
-            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
-            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
-            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift at #{@old_gift.provider_name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
-            Urbanairship.should_not_receive(:push).with(good_push_hsh)
-            GiftBoomerang.create @gift_hsh
             run_delayed_jobs
         end
 

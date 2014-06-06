@@ -1,7 +1,7 @@
 class BoomerangGiver < ActiveRecord::Base
 	include Formatter
 
-    has_many :sent,  as: :giver,  class_name: Gift
+    has_many :gifts,  as: :giver,  class_name: Gift
 
 	def name
 		"Boomerang"
@@ -14,5 +14,13 @@ class BoomerangGiver < ActiveRecord::Base
 	def short_image_url
 		shorten_photo_url self.get_photo
 	end
+
+	def message
+        "Your friend never created an account so we’re returning this gift. Use Regift to try your friend again, send it to a new friend, use the gift yourself!"
+    end
+
+    def self.giver
+    	BoomerangGiver.first
+    end
 
 end

@@ -18,33 +18,25 @@ class GiftBoomerang < Gift
 
     def messenger
         puts "GiftBoomerang-post_init -- Notify new Receiver #{self.receiver}"
-        Relay.send_boomerange_push_notification(self)
+        Relay.send_boomerang_push_notification(self)
         puts "GiftBoomerang -messenger- Notify Receiver via email #{self.receiver_name}"
         notify_receiver_boomerang
     end
 
 private
 
-    def boomerang_giver
-        "Boomerang"
-    end
-
-    def boomerang_message
-        "Your friend never created an account so we’re returning this gift. Use Regift to try your friend again, send it to a new friend, use the gift yourself!"
-    end
-
     def pre_init args={}
+        boom = BoomerangGiver.giver
         old_gift         = args["payable"]
         args["cat"]      = boomerang_cat(old_gift.cat)
-        args["giver_name"] = boomerang_giver
-        args["giver_type"] = "AdminGiver"
-        args["giver_id"] = 7
-        args["message"]  = boomerang_message
+        args["giver_name"] = boom.name
+        args["giver"]    = boom
+        args["message"]  = boom.message
+        args["detail"]   = old_gift.detail
         args["provider"] = old_gift.provider
         args["value"]    = old_gift.value
         args["service"]  = old_gift.service
         args["cost"]     = old_gift.cost if old_gift.cost
-        args["detail"]   = old_gift.detail
         args["shoppingCart"] = old_gift.shoppingCart
         args["pay_stat"]     = old_gift.pay_stat
         remove_receiver_data_and_add_old_gift_giver_as_receiver(args)
