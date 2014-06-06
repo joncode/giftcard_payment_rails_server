@@ -75,10 +75,11 @@ class User < ActiveRecord::Base
 				else
 					set_type_ofs type_ofs, reload_args
 					set_user_socials type_ofs, args
+					puts "user.update valid - #{args.inspect}"
 					args.except!("email", "phone", "facebook_id", "twitter")
 				end
-
 			else
+				puts "user.update errors - #{self.errors}"
 				self.errors
 			end
 		end
@@ -322,6 +323,7 @@ private
 	def set_user_socials type_ofs, args
 		type_ofs.each do |type_of|
 			unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
+				puts "set_user_socials  - #{user_social.errors}"
 				user_social.errors
 			end
 		end
