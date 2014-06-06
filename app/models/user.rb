@@ -67,8 +67,9 @@ class User < ActiveRecord::Base
 		us_ary = ["email", "phone", "facebook_id", "twitter"]
 
 		if us_ary.any? { |k| args.has_key? k }
-			type_ofs = us_ary.select { |us|  args.has_key? us }
+			type_ofs 	= us_ary.select { |us|  args.has_key? us }
 			reload_args = set_type_ofs type_ofs, args
+			puts "\nuser.update - here is the args #{args.inspect}"
 			if self.valid?
 				if primary
 					self.user_socials << init_user_socials(type_ofs, args)
@@ -331,7 +332,9 @@ private
 
 	def init_user_socials type_ofs, args
 		type_ofs.map do |type_of|
-			UserSocial.new(type_of: type_of.to_s, identifier: args[type_of])
+			us = UserSocial.new(type_of: type_of.to_s, identifier: args[type_of])
+			puts "init_user_socials - Here is the user social #{us.inspect}"
+			us
 		end
 	end
 
