@@ -2,7 +2,7 @@ namespace :gifts do
 
     desc "expire gifts"
     task expire: :environment do
-        lcon
+        require 'expiration'
         Expiration::expire_gifts
     end
 

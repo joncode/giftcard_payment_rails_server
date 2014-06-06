@@ -9,6 +9,7 @@ require 'legacy_gift'
 require 'legacy_provider'
 require 'cron'
 require 'expiration'
+require 'boomerang_cron'
 include Legacy
 include LegacyUser
 include LegacyGift
