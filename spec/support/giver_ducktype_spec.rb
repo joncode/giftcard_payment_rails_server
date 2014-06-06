@@ -13,7 +13,7 @@ shared_examples_for "giver ducktype" do
     end
 
     it "should have a class" do
-        ary = [Campaign, BizUser, AdminGiver, User]
+        ary = [Campaign, BizUser, AdminGiver, User, BoomerangGiver]
         ary.include?(object.class).should be_true
     end
 
