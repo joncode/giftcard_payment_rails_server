@@ -1,4 +1,4 @@
-class BoomerangGiver < ActiveRecord::Base
+class Boomerang < ActiveRecord::Base
 	include Formatter
 
     has_many :gifts,  as: :giver,  class_name: Gift
@@ -12,7 +12,7 @@ class BoomerangGiver < ActiveRecord::Base
 	end
 
 	def short_image_url
-		shorten_photo_url self.get_photo
+		shorten_photo_url get_photo
 	end
 
 	def message
@@ -20,7 +20,7 @@ class BoomerangGiver < ActiveRecord::Base
     end
 
     def self.giver
-    	BoomerangGiver.first
+    	Boomerang.first
     end
 
 end

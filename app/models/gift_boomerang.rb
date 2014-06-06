@@ -26,7 +26,7 @@ class GiftBoomerang < Gift
 private
 
     def pre_init args={}
-        boom = BoomerangGiver.giver
+        boom = Boomerang.giver
         old_gift         = args["payable"]
         args["cat"]      = boomerang_cat(old_gift.cat)
         args["giver_name"] = boom.name

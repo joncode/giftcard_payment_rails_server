@@ -8,7 +8,7 @@ describe "BoomerangCron" do
         before(:each) do
             @user = FactoryGirl.create(:user)
             @merchant = FactoryGirl.create(:provider)
-            boom = FactoryGirl.create(:boomerang_giver)
+            boom = FactoryGirl.create(:boomerang)
         end
 
         it "should boomerang gifts that are incomplete and older than 7 days" do

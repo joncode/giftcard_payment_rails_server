@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20140606002135) do
     t.datetime "updated_at"
   end
 
-  create_table "boomerang_givers", force: true do |t|
+  create_table "boomerangs", force: true do |t|
   end
 
   create_table "brands", force: true do |t|

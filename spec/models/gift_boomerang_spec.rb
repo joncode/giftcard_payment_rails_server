@@ -3,7 +3,7 @@ require 'spec_helper'
 describe GiftBoomerang do
 
     before(:each) do
-        boom = FactoryGirl.create(:boomerang_giver)
+        boom = FactoryGirl.create(:boomerang)
         @user     = FactoryGirl.create(:user)
         @old_gift = FactoryGirl.create(:gift, giver: @user, receiver_phone: "2152667474", receiver_name: "No Existo", message: "Hey Join this app!", value: "201.00", cost: "187.3", service: '10.05', cat: 300)
         @gift_hsh = {}
@@ -41,7 +41,7 @@ describe GiftBoomerang do
             gift.reload
             gift.message.should_not   == "DO NOT REGIFT!"
             gift.giver_name.should    == "Boomerang"
-            gift.giver.class.should   == BoomerangGiver
+            gift.giver.class.should   == Boomerang
         end
 
         it "should add the boomerang message" do
