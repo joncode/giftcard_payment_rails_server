@@ -38,11 +38,11 @@ class Gift < ActiveRecord::Base
 	before_create :add_giver_name,  	:if => :no_giver_name?
     before_create :add_provider_name,   :if => :no_provider_name?
     before_create :regift,              :if => :regift?
-	before_create :build_gift_items
+    before_create :build_gift_items
 
-	before_create :set_statuses
+    before_create :set_statuses
 
-	default_scope -> { where(active: true) } # indexed
+    default_scope -> { where(active: true) } # indexed
 
 #/---------------------------------------------------------------------------------------------/
 
@@ -50,9 +50,13 @@ class Gift < ActiveRecord::Base
         NUMBER_ID + self.id
     end
 
-    def sale
-        Sale.find_by(gift_id: self.id)
-    end
+    # def sale
+    #     Sale.find_by(gift_id: self.id)
+    # end
+
+    # def promo?
+    #     self.giver_type == "BizUser" && self.payable_type == "Debt"
+    # end
 
     def initialize args={}
         pre_init(args)
@@ -74,22 +78,22 @@ class Gift < ActiveRecord::Base
         super
     end
 
-	def phone
-		self.receiver_phone
-	end
+    def phone
+        self.receiver_phone
+    end
 
-	def phone= phone_number
-		self.receiver_phone = phone_number
-	end
+    def phone= phone_number
+        self.receiver_phone = phone_number
+    end
 
-	def grand_total
-		pre_round = self.value.to_f + self.service.to_f
-		float_to_cents(pre_round.round(2))
-	end
+    def grand_total
+        pre_round = self.value.to_f + self.service.to_f
+        float_to_cents(pre_round.round(2))
+    end
 
-	def service
-		string_to_cents super
-	end
+    def service
+        string_to_cents super
+    end
 
     def total
         if self.respond_to?(:value)
@@ -118,75 +122,72 @@ class Gift < ActiveRecord::Base
         TEXT_STATUS_OLD[self.status]
     end
 
-	def receiver_status
-		RECEIVER_STATUS[stat_int]
-	end
+    def receiver_status
+        RECEIVER_STATUS[stat_int]
+    end
 
-	def giver_status
-		GIVER_STATUS[stat_int]
-	end
+    def giver_status
+        GIVER_STATUS[stat_int]
+    end
 
     def bar_status
         BAR_STATUS[stat_int]
     end
 
-	def set_statuses
-		case self.payable_type
-		when "Sale"
-			set_payment_status
-		when "Debt"
+    def set_statuses
+        case self.payable_type
+        when "Sale"
+            set_payment_status
+        when "Debt"
             set_status
             self.pay_stat = "charge_unpaid"
-		when "Gift"
+        when "Gift"
             set_status
         when "CampaignItem"
             set_status
             self.pay_stat = "charge_unpaid"
-		else
-			set_status
-		end
-	end
-
-	def set_status
-		if self.receiver_id.nil?
-			self.status = "incomplete"
-		else
-			self.status = 'open'
-		end
-	end
-
-	def set_payment_status
-		case self.payable.resp_code
-		when 1
-		  # Approved
-			self.pay_stat = "charge_unpaid"
+        else
             set_status
-		when 2
-		  # Declined
-			self.pay_stat = "payment_error"
-            self.status = "cancel"
-		when 3
-		  # Error
-			if self.payable.reason_code == 11
-				self.pay_stat = "payment_error"
-			else
-				self.pay_stat = "payment_error"
-			end
-            self.status = "cancel"
-		when 4
-		  # Held for Review
-			self.pay_stat = "payment_error"
-            self.status = "cancel"
-		else
-		  # not a listed error code
-		  	self.pay_stat = "payment_error"
-            self.status = "cancel"
-		end
-	end
-
-    def promo?
-        self.giver_type == "BizUser" && self.payable_type == "Debt"
+        end
     end
+
+    def set_status
+        if self.receiver_id.nil?
+            self.status = "incomplete"
+        else
+            self.status = 'open'
+        end
+    end
+
+    def set_payment_status
+        case self.payable.resp_code
+        when 1
+          # Approved
+            self.pay_stat = "charge_unpaid"
+            set_status
+        when 2
+          # Declined
+            self.pay_stat = "payment_error"
+            self.status = "cancel"
+        when 3
+          # Error
+            if self.payable.reason_code == 11
+                self.pay_stat = "payment_error"
+            else
+                self.pay_stat = "payment_error"
+            end
+            self.status = "cancel"
+        when 4
+          # Held for Review
+            self.pay_stat = "payment_error"
+            self.status = "cancel"
+        else
+          # not a listed error code
+            self.pay_stat = "payment_error"
+            self.status = "cancel"
+        end
+    end
+
 #/----------------------------------payable ducktype refund -----------------------------/
 
     def void_refund_cancel

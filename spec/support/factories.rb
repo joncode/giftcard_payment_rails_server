@@ -33,7 +33,7 @@ FactoryGirl.define do
         end
     end
 
-    factory :boomerang_giver
+    factory :boomerang
 
     factory :nobody, :class => 'User' do
         first_name                  "No"
@@ -154,7 +154,7 @@ FactoryGirl.define do
         shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
         payable           { FactoryGirl.create(:sale)}
 
-        factory :gift_no_association_wtih_card do
+        factory :gift_no_association_with_card do
             credit_card { FactoryGirl.create(:card)}
         end
     end

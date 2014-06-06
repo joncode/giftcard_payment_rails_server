@@ -2,6 +2,7 @@ Drinkboard::Application.routes.draw do
 
   match '/facebook/checkin', to: "invite#facebook_checkin", via: :post
 
+if !Rails.env.production?
 #################          Client V3 routes for API                  /////////////////////////////
 
   namespace :client, defaults: { format: 'json' } do
@@ -26,6 +27,7 @@ Drinkboard::Application.routes.draw do
       resources :cards, only: [:index]
     end
   end
+end
 
 #################          POS V1 routes for API                  /////////////////////////////
 

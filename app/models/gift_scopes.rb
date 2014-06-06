@@ -17,6 +17,11 @@ module GiftScopes
         where(status: "redeemed").where("pay_stat != :settled", :settled => 'settled').where("updated_at <= :end_date", :end_date => end_date )
     end
 
+    def boomerangable
+        boom_time  = Time.now.utc.to_date - 7.days
+        Gift.where(status: 'incomplete', giver_type: "User").where('created_at < ?', boom_time)
+    end
+
 #### USER SCOPES
 
     def get_gifts user
