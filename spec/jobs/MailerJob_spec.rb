@@ -1,5 +1,6 @@
 require 'spec_helper'
 require "mandrill"
+include EmailHelper
 
 describe MailerJob do
 
@@ -93,7 +94,7 @@ describe MailerJob do
             template_name = "iom-gift-notify-receiver"
             template_content = [{ "name" => "receiver_name", "content" => "Receivy Receiverson" },
                                 { "name" => "merchant_name", "content" => "Merchies" },
-                                { "name" => "gift_details", "content" => "<ul><li>1 Original Margarita </li></ul>" },
+                                { "name" => "gift_details", "content" => "<ul style='list-style-type:none;><li>1 Original Margarita </li></ul>" },
                                 { "name" => "gift_total", "content" => "100" },
                                 { "name" => "service_name", "content" => "ItsOnMe" },
                                 { "name" => "giver_name", "content" => "Givie Giverson" }]
@@ -110,12 +111,32 @@ describe MailerJob do
         end
     end
 
+    describe :notify_receiver_boomerang do
+        it "should call mandrill with send_template" do
+            template_name = "iom-boomerang-notice"
+            items_content = items_text(@gift)
+            template_content = [{ "name" => "user_name", "content" => "Receivy Receiverson" },
+                                { "name" => "items_text", "content" => items_content }]
+            message_hash = { "subject" => "A gift has been boomeranged back to you",
+                             "from_name" => "ItsOnMe",
+                             "from_email" => "no-reply@itson.me",
+                             "to" => [{"email"=>"receivy@email.com", "name"=>"Receivy Receiverson"}, {"email"=>"info@itson.me", "name"=>""}],
+                             "bcc_address" => nil,
+                             "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/download"}]}] }
+            data = { "text" => 'notify_receiver_boomerang', "gift_id" => @gift.id }
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
+            MailerJob.notify_receiver_boomerang(data)
+        end
+    end
+
+
     describe :invoice_giver do
         it "should call mandrill with send_template" do
             template_name = "iom-gift-receipt"
             template_content = [{ "name" => "receiver_name", "content" => "Receivy Receiverson" },
                                 { "name" => "merchant_name", "content" => "Merchies" },
-                                { "name" => "gift_details", "content" => "<ul><li>1 Original Margarita </li></ul>" },
+                                { "name" => "gift_details", "content" => "<ul style='list-style-type:none;><li>1 Original Margarita </li></ul>" },
                                 { "name" => "gift_total", "content" => "100" },
                                 { "name" => "service_name", "content" => "ItsOnMe" },
                                 { "name" => "user_name", "content" => "Givie Giverson"},
@@ -174,7 +195,7 @@ describe MailerJob do
             template_name = "iom-gift-unopened-receiver"
             template_content = [{ "name" => "user_name", "content" => "Receivy Receiverson" },
                                 { "name" => "service_name", "content" => "ItsOnMe" }]
-            message_hash = { "subject" => "You have gifts waiting for you!", 
+            message_hash = { "subject" => "You have gifts waiting for you!",
                              "from_name" => "ItsOnMe",
                              "from_email" => "no-reply@itson.me",
                              "to" => [{"email"=>"receivy@email.com", "name"=>"Receivy Receiverson"}, {"email"=>"info@itson.me", "name"=>""}],

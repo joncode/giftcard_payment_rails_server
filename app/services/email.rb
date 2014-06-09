@@ -18,7 +18,20 @@ module Email
 #######   Sale
 
     def notify_receiver_boomerang
-        notify_receiver
+        gift = self
+        obj_email = gift.receiver ? gift.receiver.email : nil
+        email     = gift.receiver_email || obj_email
+
+        if !email.blank?
+            puts "emailing boomerang notice to the gift receiver for #{gift.id}"
+            # notify the receiver via email
+            user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
+
+            data = {"text"        => 'notify_receiver_boomerang',
+                    "gift_id"     => gift.id
+                    }
+            route_email_system(data)
+        end
     end
 
     def notify_receiver
