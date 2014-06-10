@@ -18,7 +18,11 @@ module GiftScopes
     end
 
     def boomerangable
-        boom_time  = Time.now.utc.to_date - 7.days
+        boom_time = 7.days
+        if !Rails.env.production?
+            boom_time = 1.days
+        end
+        boom_time  = Time.now.utc.to_date - boom_time
         Gift.where(status: 'incomplete', giver_type: "User").where('created_at < ?', boom_time)
     end
 

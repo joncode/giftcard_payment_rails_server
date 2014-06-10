@@ -5,7 +5,7 @@ module BoomerangCron
         boom_gifts = []
         gs         = Gift.boomerangable
         count = gs.count
-
+        puts "\n #{count}  boomerangable gifts\n"
         gs.each do |gift|
             new_gift    = GiftBoomerang.create({"old_gift_id" => gift.id})
             if new_gift.class == GiftBoomerang && new_gift.id.present?

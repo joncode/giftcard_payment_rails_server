@@ -17,7 +17,7 @@ class GiftBoomerang < Gift
     end
 
     def messenger
-        puts "GiftBoomerang-post_init -- Notify new Receiver #{self.receiver}"
+        puts "GiftBoomerang-post_init -- Notify new Receiver #{self.receiver_name} #{self.receiver_id}"
         Relay.send_boomerang_push_notification(self)
         puts "GiftBoomerang -messenger- Notify Receiver via email #{self.receiver_name}"
         notify_receiver_boomerang
