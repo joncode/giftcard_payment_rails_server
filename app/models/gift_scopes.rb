@@ -70,12 +70,10 @@ module GiftScopes
 
     def get_provider provider
         where(provider_id: provider).where("pay_stat not in (?)", ['unpaid']).where("status = :open OR status = :notified OR status = :incomplete", :open => 'open', :notified => 'notified', :incomplete => 'incomplete').order("updated_at DESC")
-        #where(provider_id: provider).order("updated_at DESC")
     end
 
     def get_history_provider provider
         where(provider_id: provider.id, status: "redeemed").order("redeemed_at DESC")
-        #where(provider_id: provider).order("updated_at DESC")
     end
 
     def get_history_provider_and_range provider, start_date=nil, end_date=nil
