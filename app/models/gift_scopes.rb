@@ -19,7 +19,7 @@ module GiftScopes
 
     def boomerangable
         boom_time = 7.days
-        if !Rails.env.production?
+        if Rails.env.staging?
             boom_time = 1.days
         end
         boom_time  = Time.now.utc.to_date - boom_time
