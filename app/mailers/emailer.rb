@@ -1,4 +1,5 @@
 module Emailer
+	include EmailHelper
 
 	# uncomment info@db.com from message in Emailer
 
@@ -56,6 +57,30 @@ module Emailer
 		message          = message_hash(subject(template_name, options = {giver_name: giver_name}), email, recipient_name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message)
     end
+
+    def notify_receiver_boomerang data
+    	gift 			 = Gift.find(data["gift_id"])
+		template_name    = "iom-boomerang-notice"
+		recipient_name   = gift.receiver_name
+		if gift.receiver_email
+			email         = gift.receiver_email
+		elsif gift.receiver
+			email 		  = gift.receiver.email
+		else
+			puts "NOTIFY RECEIVER BOOMERANG CALLED WITHOUT RECEIVER EMAIL"
+			return nil
+		end
+
+    	items_text       = items_text(gift)
+		adjusted_id 	 = NUMBER_ID + gift.id
+		link             = "#{PUBLIC_URL}/download"
+        bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
+        template_content = [{"name" => "user_name", "content" => recipient_name},
+		                    {"name" => "items_text", "content" => items_text}]
+		message          = message_hash(subject(template_name), email, recipient_name, link, bcc)
+		request_mandrill_with_template(template_name, template_content, message)
+    end
+
 
     def invoice_giver data
     	gift 			 = Gift.find(data["gift_id"])
@@ -125,6 +150,7 @@ private
 			when "iom-gift-unopened-receiver"; then "You have gifts waiting for you!"
 			when "iom-reset-password";         then "Reset Your Password"
 			when "iom-user-welcome";           then "Welcome to ItsOnMe!"
+			when "iom-boomerang-notice";       then "Boomerang! We're returning this gift to you."
 			end
 		if Rails.env.development? || Rails.env.staging?
 			subject_content = subject_content.insert(0, "QA- ")
