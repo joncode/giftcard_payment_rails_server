@@ -67,11 +67,12 @@ class User < ActiveRecord::Base
 		us_ary = ["email", "phone", "facebook_id", "twitter"]
 
 		if us_ary.any? { |k| args.has_key? k }
-			type_ofs = us_ary.select { |us|  args.has_key? us }
+			type_ofs 	= us_ary.select { |us|  args.has_key? us }
 			reload_args = set_type_ofs type_ofs, args
+			puts "\nuser.update - here is the args #{args.inspect}"
 			if self.valid?
 				if primary
-					self.user_socials << init_user_socials(type_ofs, args)
+					init_user_socials(type_ofs, args)
 				else
 					set_type_ofs type_ofs, reload_args
 					set_user_socials type_ofs, args
@@ -325,13 +326,21 @@ private
 			unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
 				puts "set_user_socials  - #{user_social.errors}"
 				user_social.errors
+				if us.errors.messages.keys.count > 0
+					puts "here are the errors - #{us.errors.inspect}"
+				end
 			end
 		end
 	end
 
 	def init_user_socials type_ofs, args
 		type_ofs.map do |type_of|
-			UserSocial.new(type_of: type_of.to_s, identifier: args[type_of])
+			us = UserSocial.find_or_create_by(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id, active: true)
+			puts "init_user_socials - Here is the user social #{us.inspect}"
+			if us.errors.messages.keys.count > 0
+				puts "here are the errors - #{us.errors.inspect}"
+			end
+			us
 		end
 	end
 

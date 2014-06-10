@@ -10,7 +10,7 @@ class UserSocial < ActiveRecord::Base
     validates :identifier , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
     validates :identifier , format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
 
-    before_save :extract_phone_digits
+    before_save           :extract_phone_digits
     after_create          :subscribe_mailchimp
     after_save            :unsubscribe_mailchimp
 
