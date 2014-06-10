@@ -45,7 +45,11 @@ private
 
     def boomerang_cat(cat)
         cat_s   = cat.to_s
-        new_cat = cat_s[0..1] + "7"
+        if cat_s[-1] == "1"
+            new_cat = cat_s
+        else
+            new_cat = cat_s[0..1] + "1"
+        end
         new_cat.to_i
     end
 

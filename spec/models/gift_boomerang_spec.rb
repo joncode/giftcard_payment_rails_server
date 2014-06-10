@@ -56,11 +56,84 @@ describe GiftBoomerang do
             gift_regift = GiftBoomerang.create @gift_hsh
         end
 
-        it "should set cat for regift of GiftSale to 350" do
-            gift        = GiftBoomerang.create @gift_hsh
-            gift.reload
-            gift.cat.should      == 307
+        context "Cat Setter" do
+            it "should set cat for regift of GiftSale to 301" do
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 301
+            end
+
+            it "should set cat for regift of 100 to 101" do
+                @old_gift.update(cat: 100)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 101
+            end
+
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 101)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 101
+            end
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 150)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 151
+            end
+
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 151)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 151
+            end
+
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 200)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 201
+            end
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 201)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 201
+            end
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 250)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 251
+            end
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 251)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 251
+            end
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 301)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 301
+            end
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 350)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 351
+            end
+            it "should set cat for regift of 101 to 101" do
+                @old_gift.update(cat: 351)
+                gift        = GiftBoomerang.create @gift_hsh
+                gift.reload
+                gift.cat.should      == 351
+            end
         end
+
 
         it "should set the status of the new gift to 'open'" do
             gift        = GiftBoomerang.create @gift_hsh
