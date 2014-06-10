@@ -272,7 +272,7 @@ class AppController < JsonController
   	def providers
          # scoped providers route
 	    if authenticate_public_info
-	    	if  !params["city"] || params["city"] == "all"
+	    	if  !params["city"] || params["city"] == "all" || params["city"] == "Near Me"
 	    		providers = Provider.all
 	    	elsif params["city"].to_i == 0
 	    		providers = Provider.where(region_id: region_id_from_name(params["city"]))

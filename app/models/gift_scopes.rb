@@ -18,7 +18,11 @@ module GiftScopes
     end
 
     def boomerangable
-        boom_time  = Time.now.utc.to_date - 7.days
+        boom_time = 7.days
+        if Rails.env.staging?
+            boom_time = 1.days
+        end
+        boom_time  = Time.now.utc.to_date - boom_time
         Gift.where(status: 'incomplete', giver_type: "User").where('created_at < ?', boom_time)
     end
 
@@ -66,12 +70,10 @@ module GiftScopes
 
     def get_provider provider
         where(provider_id: provider).where("pay_stat not in (?)", ['unpaid']).where("status = :open OR status = :notified OR status = :incomplete", :open => 'open', :notified => 'notified', :incomplete => 'incomplete').order("updated_at DESC")
-        #where(provider_id: provider).order("updated_at DESC")
     end
 
     def get_history_provider provider
         where(provider_id: provider.id, status: "redeemed").order("redeemed_at DESC")
-        #where(provider_id: provider).order("updated_at DESC")
     end
 
     def get_history_provider_and_range provider, start_date=nil, end_date=nil
