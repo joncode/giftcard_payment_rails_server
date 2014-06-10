@@ -150,7 +150,7 @@ private
 			when "iom-gift-unopened-receiver"; then "You have gifts waiting for you!"
 			when "iom-reset-password";         then "Reset Your Password"
 			when "iom-user-welcome";           then "Welcome to ItsOnMe!"
-			when "iom-boomerang-notice";       then "A gift has been boomeranged back to you"
+			when "iom-boomerang-notice";       then "Boomerang! We're returning this gift to you."
 			end
 		if Rails.env.development? || Rails.env.staging?
 			subject_content = subject_content.insert(0, "QA- ")

@@ -117,7 +117,7 @@ describe MailerJob do
             items_content = items_text(@gift)
             template_content = [{ "name" => "user_name", "content" => "Receivy Receiverson" },
                                 { "name" => "items_text", "content" => items_content }]
-            message_hash = { "subject" => "A gift has been boomeranged back to you",
+            message_hash = { "subject" => "Boomerang! We're returning this gift to you.",
                              "from_name" => "ItsOnMe",
                              "from_email" => "no-reply@itson.me",
                              "to" => [{"email"=>"receivy@email.com", "name"=>"Receivy Receiverson"}, {"email"=>"info@itson.me", "name"=>""}],
