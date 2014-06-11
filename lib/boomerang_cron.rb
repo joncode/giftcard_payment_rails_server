@@ -24,3 +24,4 @@ module BoomerangCron
 
     end
 end
+
