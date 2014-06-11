@@ -1,4 +1,4 @@
-SERVICE_NAME = "ItsOnMe"
+  SERVICE_NAME = "ItsOnMe"
 
 
 if Rails.env.production?
@@ -35,9 +35,10 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 NUMBER_ID = 649387
 
 
-VERSION_NUMBER  = "1.2.6.1"
-VERSION_UPDATED = "6/10/14"
+VERSION_NUMBER  = "1.2.5.10-2"
+VERSION_UPDATED = "6/9/14"
 
+BLANK_AVATAR_URL = "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
 
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
