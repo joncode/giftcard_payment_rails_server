@@ -63,6 +63,11 @@ class User < ActiveRecord::Base
 
 	def update args
 		args = args.stringify_keys
+		["facebook_id", "twitter"].each do |network|
+			if args[network]
+				args[network] = args[network].to_s
+			end
+		end
 		primary = args.delete("primary")
 		us_ary = ["email", "phone", "facebook_id", "twitter"]
 
