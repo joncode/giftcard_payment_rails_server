@@ -5,8 +5,14 @@ class Mdot::V2::UsersController < JsonController
     rescue_from JSON::ParserError, :with => :bad_request
 
     def index
-        users = User.where(active: true)
-        success users.serialize_objs(:get)
+        users = User.where(active: true).pluck(:id, :first_name, :last_name, :iphone_photo)
+        serialized_users = users.map do |u|
+            if u[3].nil?
+                u[3] = BLANK_AVATAR_URL
+            end
+            { "user_id" => u[0] , "photo" => u[3] , "first_name" => u[1] , "last_name" => u[2]  }
+        end
+        success serialized_users
         respond
     end
 
