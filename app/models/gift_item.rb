@@ -23,7 +23,7 @@ class GiftItem < ActiveRecord::Base
 
 	def self.items_for_email gift
 		sc 		   = JSON.parse gift.shoppingCart
-		output_str = "<ul style='list-style-type:none;>"
+		output_str = "<ul style='list-style-type:none;'>"
 		sc.each do |item|
 			if gift.provider.name == "Electric Factory"
 				gift_details = "<li>#{item["quantity"]} tickets - #{item["item_name"]}</li>"
