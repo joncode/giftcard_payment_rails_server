@@ -22,7 +22,7 @@ module GiftScopes
         if Rails.env.staging?
             boom_time = 1.days
         end
-        boom_time  = Time.now.utc.to_date - boom_time
+        boom_time  = Time.now.utc - boom_time
         Gift.where(status: 'incomplete', giver_type: "User").where('created_at < ?', boom_time)
     end
 
