@@ -1,0 +1,36 @@
+
+
+
+Expiration Cron
+
+	Every day at 	14:30 UTC
+					10:30 EST
+					 9:30 EDT
+					 7:30 PST
+					 6:30 PDT
+
+	EDT is 4 hours behind UTC - summer
+	PDT is 7 hours behind UTC - summer
+
+	EST is 5 hours behind UTC - winter
+	PST is 8 hours behind UTC - winter
+
+Expiration time in the method is
+
+	date = Time.now.utc.to_date
+
+	Time.now     		 = 2014-06-12 14:30:07 +0000
+	Time.now.utc 		 = 2014-06-12 14:30:30 UTC
+	Time.now.utc.to_date = Thu, 12 Jun 2014 00:00:00 +0000
+
+
+
+How does one SET the expiration date
+
+
+	MT gift creator
+	Campaign Item expiration
+	ADMT gift creator
+
+
+

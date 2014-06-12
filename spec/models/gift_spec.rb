@@ -484,7 +484,7 @@ describe Gift do
 
 			before(:each) do
 		  		gift.receiver_id = giver.id
-		  		gift.update(status: 'redeemed', redeemed_at: Time.now)
+		  		gift.update(status: 'redeemed', redeemed_at: Time.now.utc)
 			end
 
 		  	it "should correctly rep redeemed" do
@@ -504,7 +504,7 @@ describe Gift do
 			before(:each) do
 		  		gift.receiver_id = giver.id
 		  		gift.update(status: 'regifted')
-		  		gift.update(status: 'regifted', redeemed_at: Time.now)
+		  		gift.update(status: 'regifted', redeemed_at: Time.now.utc)
 			end
 
 		  	it "should correctly rep regifted" do
