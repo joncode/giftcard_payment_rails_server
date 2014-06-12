@@ -26,7 +26,7 @@ describe Client::V3::GiftsController do
             rrc(200)
             json["status"].should == 1
             gift_hsh = json["data"].first
-            keys = ["created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"expires_at"  ,"cat"         ,"completed_at","detail"      ,"msg"         ,"loc_id"      ,"loc_photo"   ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
+            keys = ["created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
             compare_keys(gift_hsh, keys)
         end
 
@@ -45,16 +45,6 @@ describe Client::V3::GiftsController do
             json["data"].count.should  == 13
         end
 
-        it "should order the gifts by created_at ASC" do
-            get :index, format: :json, user_id: @user.id
-            rrc(200)
-            gifts = json["data"]
-            index = gifts.count
-            ordered = Gift.where("giver_id = :user OR receiver_id = :user", :user => @user.id).order(created_at: :asc).to_a
-            index.times do |num|
-                gifts[num]["gift_id"].should == ordered[num].id
-            end
-        end
     end
 
 

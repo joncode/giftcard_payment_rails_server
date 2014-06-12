@@ -16,21 +16,4 @@ class Client::V3::CitiesController < MetalController
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 end

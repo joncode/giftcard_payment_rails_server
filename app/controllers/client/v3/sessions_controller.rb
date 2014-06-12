@@ -1,11 +1,11 @@
 class Client::V3::SessionsController < MetalController
 
     def create
-    	login = params["data"]
-    	email = login["username"]
-    	password = login["password"]
+        login    = params["data"]
+        email    = login["username"].strip.downcase
+        password = login["password"]
     	pn_token = login["pn_token"]
-        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: email.strip.downcase).references(:users).first
+        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: email).references(:users).first
             @user = user_social.user
             if @user.not_suspended?
                 if @user.authenticate(password)

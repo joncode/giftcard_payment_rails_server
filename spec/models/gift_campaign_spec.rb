@@ -53,14 +53,14 @@ describe GiftCampaign do
         end
 
         it "should associate the CampaignItem as the payable" do
-            gift_campaign = GiftCampaign.create @gift_hsh
-            payable = gift_campaign.payable
+            gift_campaign                   = GiftCampaign.create @gift_hsh
+            payable                         = gift_campaign.payable
             payable.class.name.should       == "CampaignItem"
             payable.owner.class.name.should == "Campaign"
-            payable.success?.should    == true
-            payable.resp_code.should   == 1
-            payable.reason_text.should == "Transaction approved."
-            payable.reason_code.should == 1
+            payable.success?.should         == true
+            payable.resp_code.should        == 1
+            payable.reason_text.should      == "Transaction approved."
+            payable.reason_code.should      == 1
         end
 
         it "should correctly set expiration date from expires_at" do
@@ -81,8 +81,12 @@ describe GiftCampaign do
 
         it "should correctly set expiration date from expires_in" do
             @campaign_item.update(expires_in: 30, expires_at: nil)
-            gift_campaign = GiftCampaign.create @gift_hsh
-            gift_campaign.expires_at.round.should == (@campaign_item.updated_at + 30.days).in_time_zone.round
+            gift_campaign                         = GiftCampaign.create @gift_hsh
+            gift_campaign.expires_at.round.should == (@campaign_item.created_at.to_date + 30.days)
+
+            @campaign_item.update(expires_in: 30)
+            gift_campaign                         = GiftCampaign.create @gift_hsh
+            gift_campaign.expires_at.round.should == (@campaign_item.created_at.to_date + 30.days)
         end
 
         it "should correctly set campaign expire_date from expires_at" do
@@ -122,7 +126,7 @@ describe GiftCampaign do
             gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 is closed. No gifts can be created."
         end
     end
-    
+
     context "Merchant Campaign" do
 
         before(:each) do
@@ -173,14 +177,14 @@ describe GiftCampaign do
         end
 
         it "should associate the CampaignItem as the payable" do
-            gift = GiftCampaign.create @gift_hsh
-            payable = gift.payable
+            gift                            = GiftCampaign.create @gift_hsh
+            payable                         = gift.payable
             payable.class.name.should       == "CampaignItem"
             payable.owner.class.name.should == "Campaign"
-            payable.success?.should    == true
-            payable.resp_code.should   == 1
-            payable.reason_text.should == "Transaction approved."
-            payable.reason_code.should == 1
+            payable.success?.should         == true
+            payable.resp_code.should        == 1
+            payable.reason_text.should      == "Transaction approved."
+            payable.reason_code.should      == 1
         end
 
         context "messaging" do

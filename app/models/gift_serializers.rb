@@ -154,7 +154,7 @@ module GiftSerializers
         gift_hsh["detail"]          = self.detail
         gift_hsh
     end
-    
+
     def client_serialize
         gift_hsh                  = {}
         gift_hsh["created_at"]    = self.created_at
