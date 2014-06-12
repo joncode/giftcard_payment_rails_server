@@ -46,7 +46,7 @@ private
         if expires_at.present?
             expires_at
         elsif expires_in.present?
-            Time.now + expires_in.days
+            Time.now.utc.to_date + expires_in.days
         end
     end
 

@@ -45,9 +45,4 @@ class CampaignItem < Admtmodel
         self.id ? 1 : 2
     end
 
-private
-
-    def today
-        Time.now.utc.to_date
-    end
 end
