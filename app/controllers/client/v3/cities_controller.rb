@@ -3,7 +3,7 @@ class Client::V3::CitiesController < MetalController
 
 
     def index
-    	puts "\n #{request.headers} \n"
+    	puts "\n #{request.headers.inspect} \n"
         success CITY_LIST
         respond
     end
