@@ -3,7 +3,6 @@ class Client::V3::CitiesController < MetalController
 
 
     def index
-    	puts "\n FAEK TOEK = #{request.headers["HTTP_X_AUTH_TOKEN"]} \n"
         success CITY_LIST
         respond
     end
