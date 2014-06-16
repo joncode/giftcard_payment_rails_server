@@ -23,7 +23,11 @@ if !Rails.env.production?
       end
 
       resources :users, only: [:index]
-      resources :gifts, only: [:index]
+      resources :gifts, only: [:index] do
+        member do
+          put :open
+        end
+      end
       resources :cards, only: [:index]
     end
   end
