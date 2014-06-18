@@ -6,6 +6,7 @@ describe GiftPromo do
         Provider.delete_all
         @provider = FactoryGirl.create(:provider)
         @gift_hsh = {}
+        @gift_hsh["detail"]         = "this is good through 9PM"
         @gift_hsh["message"]        = "here is the promo gift"
         @gift_hsh["receiver_name"]  = "Customer Name"
         @gift_hsh["receiver_email"] = "customer@gmail.com"
@@ -21,6 +22,7 @@ describe GiftPromo do
     it "should create gift" do
         gift_promo = GiftPromo.create(@gift_hsh)
         gift_promo.class.should    == GiftPromo
+        gift_promo.detail.should         == "this is good through 9PM"
         gift_promo.message.should        == @gift_hsh["message"]
         gift_promo.receiver_name.should  == "Customer Name"
         gift_promo.receiver_email.should == "customer@gmail.com"

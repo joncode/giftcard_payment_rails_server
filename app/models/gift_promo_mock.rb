@@ -6,6 +6,7 @@ class GiftPromoMock < Mtmodel
 		gift_hsh = {}
 		gift_hsh["shoppingCart"]  = self.shoppingCart
 		gift_hsh["receiver_name"] = self.receiver_name
+		gift_hsh["detail"]        = self.detail
 		gift_hsh["message"]       = self.message
 		gift_hsh["detail"]        = self.detail
 		gift_hsh["expires_at"]    = self.expires_at
@@ -19,5 +20,5 @@ class GiftPromoMock < Mtmodel
 	def emails
 		gp_socials = self.socials.where(network: "email")
 		gp_socials.map { |gp_social| gp_social.network_id }
-	end	
+	end
 end
