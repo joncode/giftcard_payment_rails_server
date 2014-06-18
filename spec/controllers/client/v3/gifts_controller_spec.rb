@@ -19,6 +19,7 @@ describe Client::V3::GiftsController do
             11.times do
                 FactoryGirl.create(:gift,giver: other_user, receiver_id: user.id + 2, receiver_name: "antoher person")
             end
+            request.env["HTTP_X_AUTH_TOKEN"] = user.remember_token
         end
 
         it "should serialize the gifts with defined keys" do
@@ -43,6 +44,42 @@ describe Client::V3::GiftsController do
             get :index, format: :json, user_id: @user.id
             rrc(200)
             json["data"].count.should  == 13
+        end
+
+    end
+
+    describe :open do
+
+        before(:each) do
+            @user = FactoryGirl.create(:user, iphone_photo: "http://photo_urlimportante.com")
+            @rec  = FactoryGirl.create(:user, iphone_photo: "http://photo_urlimportante.com")
+            request.env["HTTP_X_AUTH_TOKEN"] = @rec.remember_token
+        end
+
+        it "should change a gift from open to notified" do
+            gift = FactoryGirl.create(:gift, giver_type: "User", cat: 300, receiver_id: @rec.id,  giver_id: @user.id, giver_name: @user.name, expires_at: Time.now, message: "here is messag", detail: "here is detail")
+            gift.update(status: 'open')
+            put :open, format: :json, id: gift.id
+            json["status"].should == 1
+            gift.reload.status.should == 'notified'
+        end
+
+        it "should return the new gift dictionary" do
+            gift = FactoryGirl.create(:gift, giver_type: "User", cat: 300, giver_id: @user.id, receiver_id: @rec.id, giver_name: @user.name, expires_at: Time.now, message: "here is messag", detail: "here is detail")
+            gift.update(status: 'open')
+            put :open, format: :json, id: gift.id
+            json["status"].should == 1
+            gift_hsh = json["data"]
+            gift_hsh["status"].should == 'notified'
+            keys = ["expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
+            compare_keys(gift_hsh, keys)
+        end
+
+        it "should not change a gift that is not open" do
+            gift = FactoryGirl.create(:gift, giver_type: "User", cat: 300, giver_id: @user.id, giver_name: @user.name, expires_at: Time.now, redeemed_at: Time.now, message: "here is messag", detail: "here is detail")
+            gift.update(status: 'redeemed')
+            put :open, format: :json, id: gift.id
+            gift.status.should == 'redeemed'
         end
 
     end

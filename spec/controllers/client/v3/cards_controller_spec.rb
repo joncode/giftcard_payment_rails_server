@@ -7,6 +7,7 @@ describe Client::V3::CardsController do
 
         it "should get all cards for user with GET params :user_id" do
             @user = FactoryGirl.create(:user, iphone_photo: "http://photo_urlimportante.com")
+            request.env["HTTP_X_AUTH_TOKEN"] = @user.remember_token
             visa  = FactoryGirl.create(:visa, user_id: @user.id)
             amex  = FactoryGirl.create(:amex, user_id: @user.id)
             mastercard  = FactoryGirl.create(:mastercard, user_id: @user.id)
