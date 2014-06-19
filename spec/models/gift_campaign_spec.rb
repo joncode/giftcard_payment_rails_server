@@ -125,6 +125,14 @@ describe GiftCampaign do
             gift.errors.count.should == 1
             gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 is closed. No gifts can be created."
         end
+
+        it "should be able to handle no receiver name" do
+            @gift_hsh[:receiver_name] = nil
+            gift = GiftCampaign.create @gift_hsh
+            gift.should be_valid
+            gift.receiver_name.should == nil
+        end
+
     end
 
     context "Merchant Campaign" do
