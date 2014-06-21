@@ -589,6 +589,15 @@ describe Mdot::V2::UsersController do
             json["data"].class.should    == Hash
             json["data"]["error"]["phone"].should == ["is invalid"]
         end
+
+        it "should be able to handle fb id sent as integer" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            hsh = { "facebook_id" => 39827 }
+            put :update, format: :json, data: hsh
+            rrc(200)
+            json["status"].should == 1
+            json["data"]["facebook_id"].should == "39827"
+        end
     end
 
     describe :socials do
