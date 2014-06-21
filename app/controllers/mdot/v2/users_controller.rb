@@ -97,6 +97,7 @@ class Mdot::V2::UsersController < JsonController
         # user_params = update_strong_param(params["data"])
         return nil  if hash_empty?(params["data"])
         update_hsh = update_user_params
+        update_hsh["facebook_id"] = update_hsh["facebook_id"].to_s
         update_hsh["primary"] = true
         if @current_user.update(update_hsh)
             success @current_user.update_serialize
