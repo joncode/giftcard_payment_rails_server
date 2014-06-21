@@ -26,8 +26,8 @@ describe BulkContactJob do
 
     it "should send many friends push notification to bulk_contact.user" do
         bc2 = FactoryGirl.create(:bulk_contact, data: @ary.to_json, user_id: @current_user.id)
-        BulkContactJob.perform
         FriendPushJob.should_receive(:perform).with(@current_user.id, 2)
+        BulkContactJob.perform
     end
 
 end

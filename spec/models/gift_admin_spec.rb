@@ -180,14 +180,14 @@ describe GiftAdmin do
             run_delayed_jobs
         end
 
-        it "should not message users when payment_error" do
-            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
-            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@giver.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
-            Urbanairship.should_not_receive(:push).with(good_push_hsh)
-            GiftAdmin.create @gift_hsh
-            run_delayed_jobs
-        end
+        # it "should not message users when payment_error" do
+        #     stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+        #     stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+        #     good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@giver.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+        #     Urbanairship.should_not_receive(:push).with(good_push_hsh)
+        #     GiftAdmin.create @gift_hsh
+        #     run_delayed_jobs
+        # end
     end
 end# == Schema Information
 #

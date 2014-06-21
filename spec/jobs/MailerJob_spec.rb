@@ -92,9 +92,9 @@ describe MailerJob do
     describe :notify_receiver do
         it "should call mandrill with send_template" do
             template_name = "iom-gift-notify-receiver"
-            template_content = [{ "name" => "receiver_name", "content" => "Receivy Receiverson" },
+            template_content = [{ "name" => "receiver_name", "content" => "Hi Receivy Receiverson" },
                                 { "name" => "merchant_name", "content" => "Merchies" },
-                                { "name" => "gift_details", "content" => "<ul style='list-style-type:none;><li>1 Original Margarita </li></ul>" },
+                                { "name" => "gift_details", "content" => "<ul style='list-style-type:none;'><li>1 Original Margarita </li></ul>" },
                                 { "name" => "gift_total", "content" => "100" },
                                 { "name" => "service_name", "content" => "ItsOnMe" },
                                 { "name" => "giver_name", "content" => "Givie Giverson" }]
@@ -134,9 +134,9 @@ describe MailerJob do
     describe :invoice_giver do
         it "should call mandrill with send_template" do
             template_name = "iom-gift-receipt"
-            template_content = [{ "name" => "receiver_name", "content" => "Receivy Receiverson" },
+            template_content = [{ "name" => "receiver_name", "content" => "Hi Receivy Receiverson" },
                                 { "name" => "merchant_name", "content" => "Merchies" },
-                                { "name" => "gift_details", "content" => "<ul style='list-style-type:none;><li>1 Original Margarita </li></ul>" },
+                                { "name" => "gift_details", "content" => "<ul style='list-style-type:none;'><li>1 Original Margarita </li></ul>" },
                                 { "name" => "gift_total", "content" => "100" },
                                 { "name" => "service_name", "content" => "ItsOnMe" },
                                 { "name" => "user_name", "content" => "Givie Giverson"},

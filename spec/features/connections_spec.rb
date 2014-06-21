@@ -2,48 +2,48 @@ require 'spec_helper'
 
 describe "Connections Feature" do
 
-    before do
-        Capybara.current_driver = :selenium
-    end
+    # before do
+    #     Capybara.current_driver = :selenium
+    # end
 
-    it "should allow admin tools to reconcile missed gift <-> new user connection via facebook" do
-        # set up the giver account
+    # it "should allow admin tools to reconcile missed gift <-> new user connection via facebook" do
+    #     # set up the giver account
 
-        giver = FactoryGirl.create(:user, first_name: "Brittany", last_name: "Houston")
-        giver_id = giver.id
-        r_token = giver.remember_token
-        @card = FactoryGirl.create(:visa, user_id: giver_id)
-            auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
-            stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+    #     giver = FactoryGirl.create(:user, first_name: "Brittany", last_name: "Houston")
+    #     giver_id = giver.id
+    #     r_token = giver.remember_token
+    #     @card = FactoryGirl.create(:visa, user_id: giver_id)
+    #         auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+    #         stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
 
 
 
-        # gift sent to receiver via facebook
-        gift = "{  \"giver_name\" : \"Brittany Houston \",  \"message\" : \"Hey CP! Download this app, we can send eachother drinks! Here's a beer for next time were at Artifice. Xo\",  \"provider_name\" : \"Artifice\",  \"giver_id\" : #{giver_id},  \"total\" : 7,  \"service\" : 0.35,  \"credit_card\" : #{@card.id},  \"provider_id\" : 106,  \"receiver_name\" : \"Christie Parker\",  \"facebook_id\" : \"100005220484939\"}"
-        origin = "f"
-        shoppingCart = "[{\"detail\":\"Draft\",\"price\":7,\"item_name\":\"Dogfish Head 60 Minute\",\"item_id\":124,\"quantity\":1}]"
-        json = post_form_data '/app/buy_gift', gift: gift, origin: origin, shoppingCart: shoppingCart, token: r_token
+    #     # gift sent to receiver via facebook
+    #     gift = "{  \"giver_name\" : \"Brittany Houston \",  \"message\" : \"Hey CP! Download this app, we can send eachother drinks! Here's a beer for next time were at Artifice. Xo\",  \"provider_name\" : \"Artifice\",  \"giver_id\" : #{giver_id},  \"total\" : 7,  \"service\" : 0.35,  \"credit_card\" : #{@card.id},  \"provider_id\" : 106,  \"receiver_name\" : \"Christie Parker\",  \"facebook_id\" : \"100005220484939\"}"
+    #     origin = "f"
+    #     shoppingCart = "[{\"detail\":\"Draft\",\"price\":7,\"item_name\":\"Dogfish Head 60 Minute\",\"item_id\":124,\"quantity\":1}]"
+    #     json = post_form_data '/app/buy_gift', gift: gift, origin: origin, shoppingCart: shoppingCart, token: r_token
 
-        gift = Gift.find_by(giver_id: giver.id)
-        gift.facebook_id.should == "100005220484939"
+    #     gift = Gift.find_by(giver_id: giver.id)
+    #     gift.facebook_id.should == "100005220484939"
 
-        # receiver creates account without facebook id
-        data = "{  \"first_name\" : \"Christie\",  \"use_photo\" : \"ios\",  \"password\" : \"password\",  \"last_name\" : \"Parker\",  \"phone\" : \"7025237365\",  \"email\" : \"Christie.parker@gmail.com\",  \"origin\" : \"d\",  \"iphone_photo\" : \"http:\\/\\/res.cloudinary.com\\/htaaxtzcv\\/image\\/upload\\/v1361898825\\/ezsucdxfcc7iwrztkags.jpg\",  \"password_confirmation\" : \"password\"}"
-        pnt  = "d6d0b8e325f6bf692699d83cebecf8d313d73d2cf738f9c482820a4bab47c7f7"
-        json = post_form_data '/app/create_account.json', :data => data, :pn_token => pnt, token: GENERAL_TOKEN
+    #     # receiver creates account without facebook id
+    #     data = "{  \"first_name\" : \"Christie\",  \"use_photo\" : \"ios\",  \"password\" : \"password\",  \"last_name\" : \"Parker\",  \"phone\" : \"7025237365\",  \"email\" : \"Christie.parker@gmail.com\",  \"origin\" : \"d\",  \"iphone_photo\" : \"http:\\/\\/res.cloudinary.com\\/htaaxtzcv\\/image\\/upload\\/v1361898825\\/ezsucdxfcc7iwrztkags.jpg\",  \"password_confirmation\" : \"password\"}"
+    #     pnt  = "d6d0b8e325f6bf692699d83cebecf8d313d73d2cf738f9c482820a4bab47c7f7"
+    #     json = post_form_data '/app/create_account.json', :data => data, :pn_token => pnt, token: GENERAL_TOKEN
 
-        user = User.find_by(email: "christie.parker@gmail.com")
-        user.first_name.should == "Christie"
-        puts "------------------------------------"
-        # admin tools to add missing user data (from gift) to user account
-        # admin tools associates gift with user account
-        json = post_form_data "/admt/v2/gifts/#{gift.id}/add_receiver", :data => user.id
-        puts json.inspect
-        user.reload
-        gift.reload
-        #user.facebook_id.should == "100005220484939"
-        gift.receiver_id.should == user.id
-    end
+    #     user = User.find_by(email: "christie.parker@gmail.com")
+    #     user.first_name.should == "Christie"
+    #     puts "------------------------------------"
+    #     # admin tools to add missing user data (from gift) to user account
+    #     # admin tools associates gift with user account
+    #     json = post_form_data "/admt/v2/gifts/#{gift.id}/add_receiver", :data => user.id
+    #     puts json.inspect
+    #     user.reload
+    #     gift.reload
+    #     #user.facebook_id.should == "100005220484939"
+    #     gift.receiver_id.should == user.id
+    # end
 
 end
 
