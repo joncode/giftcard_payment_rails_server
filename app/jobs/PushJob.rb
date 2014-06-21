@@ -30,7 +30,7 @@ class PushJob
 private
 
     def self.format_payload(gift, receiver, badge)
-        if gift.giver_type = "BizUser"
+        if gift.giver_type == "BizUser"
             alert = "#{gift.giver_name} sent you a gift"
         else
             alert = "#{gift.giver_name} sent you a gift at #{gift.provider_name}!"

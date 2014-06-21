@@ -13,7 +13,7 @@ class FriendPushJob
             self.loop_user_friends r_to_pushes
         end
     end
-    
+
 private
 
     ###########    user social upload push to contact owners

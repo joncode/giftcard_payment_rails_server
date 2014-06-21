@@ -182,7 +182,7 @@ private
 	end
 
     def generate_template_content gift, template_name
-    	recipient_name   = gift.receiver_name
+    	recipient_name   = (gift.receiver_name == GENERIC_RECEIVER_NAME) ? "" : gift.receiver_name
     	giver_name       = gift.giver_name
     	merchant_name    = gift.provider_name
     	gift_details     = GiftItem.items_for_email(gift)

@@ -45,8 +45,8 @@ describe Admt::V2::GiftsController do
 
         it "should return validation errors" do
             put :update, id: gift.id, format: :json, data: { "receiver_name" => "" }
-            json["status"].should == 0
-            json["data"].class.should   == Hash
+            json["status"].should     == 0
+            json["data"].class.should == Hash
         end
 
         {

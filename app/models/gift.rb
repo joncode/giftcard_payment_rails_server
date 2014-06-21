@@ -27,7 +27,7 @@ class Gift < ActiveRecord::Base
     before_validation :format_value
     before_validation :format_cost
 
-	validates_presence_of :giver, :provider_id, :value, :shoppingCart, :cat
+	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :cat
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
     validates :receiver_phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
     validates_with GiftReceiverInfoValidator

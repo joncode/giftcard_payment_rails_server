@@ -78,7 +78,7 @@ describe Mt::V2::GiftsController do
             gift.value.should   == "30"
             gift.cost.should    == "0"
             gift.cat.should     == 200
-            
+
             gift = Gift.find_by(receiver_email: "greg@barry.com")
             biz_user = @provider.biz_user
             gift.provider.should      == @provider
@@ -156,7 +156,7 @@ describe Mt::V2::GiftsController do
             post :bulk_create, format: :json, data: create_hsh
             rrc 200
 
-            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             run_delayed_jobs
         end

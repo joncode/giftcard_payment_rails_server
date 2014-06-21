@@ -8,14 +8,14 @@ describe "reconcile_emails rake tasks" do
 		Rake::Task.define_task(:environment)
 	end
 
-    describe "mc_subscriptions" do
-        it "should send unsubscribed new user socials to queue" do
-	        user_social = FactoryGirl.create :user_social
-	        user_social.subscribed.should == false
-	        Resque.should_receive(:enqueue)
-	        Rake::Task["email:mc_subscriptions"].invoke
-        end
-    end
+    # describe "mc_subscriptions" do
+    #     it "should send unsubscribed new user socials to queue" do
+	   #      user_social = FactoryGirl.create :user_social
+	   #      user_social.subscribed.should == false
+	   #      Resque.should_receive(:enqueue)
+	   #      Rake::Task["email:mc_subscriptions"].invoke
+    #     end
+    # end
 
     describe "gift_emails_count" do
 	    before do

@@ -126,13 +126,6 @@ describe GiftCampaign do
             gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 is closed. No gifts can be created."
         end
 
-        it "should be able to handle no receiver name" do
-            @gift_hsh[:receiver_name] = nil
-            gift = GiftCampaign.create @gift_hsh
-            gift.should be_valid
-            gift.receiver_name.should == nil
-        end
-
     end
 
     context "Merchant Campaign" do
@@ -255,15 +248,15 @@ describe GiftCampaign do
                 run_delayed_jobs
             end
 
-            it "should not message users when payment_error" do
-                @receiver = FactoryGirl.create(:user, email: "customer@gmail.com")
-                stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
-                stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-                good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@campaign.name} sent you a gift at #{@location.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
-                Urbanairship.should_not_receive(:push).with(good_push_hsh)
-                GiftCampaign.create @gift_hsh
-                run_delayed_jobs
-            end
+            # it "should not message users when payment_error" do
+            #     @receiver = FactoryGirl.create(:user, email: "customer@gmail.com")
+            #     stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            #     stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            #     good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@campaign.name} sent you a gift at #{@location.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            #     Urbanairship.should_not_receive(:push).with(good_push_hsh)
+            #     GiftCampaign.create @gift_hsh
+            #     run_delayed_jobs
+            # end
         end
     end
 end# == Schema Information
