@@ -359,9 +359,12 @@ private
 	end
 
 	def make_friends
-		unless Rails.env.production?
-			Resque.enqueue(FriendPushJob, self.id, 1)
-		end
+		puts "------------------------------------------------------------------------------"
+		puts "--- 'make_friends' after save callback on User model commented out 6/23/14 ---"
+		puts "------------------------------------------------------------------------------"
+		# unless Rails.env.production?
+		# 	Resque.enqueue(FriendPushJob, self.id, 1)
+		# end
 	end
 
 	def persist_social_data
