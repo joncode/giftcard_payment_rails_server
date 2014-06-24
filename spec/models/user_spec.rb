@@ -682,43 +682,43 @@ describe User do
             Urbanairship.stub(:push).and_return(true)
         end
 
-        it "should call relationships when user is created" do
-            # create a user with user socials
-            user = FactoryGirl.create(:user)
-            #FriendPushJob.should_receive(:perform).with(user.id, 1)
-            FriendMaker.should_receive(:user_create).with(user.id)
-            run_delayed_jobs
-        end
+        # it "should call relationships when user is created" do
+        #     # create a user with user socials
+        #     user = FactoryGirl.create(:user)
+        #     #FriendPushJob.should_receive(:perform).with(user.id, 1)
+        #     FriendMaker.should_receive(:user_create).with(user.id)
+        #     run_delayed_jobs
+        # end
 
-        it "should call relationships when user socials are updated" do
-            # create a user with user socials
-            user = FactoryGirl.create(:user)
-            run_delayed_jobs
+        # it "should call relationships when user socials are updated" do
+        #     # create a user with user socials
+        #     user = FactoryGirl.create(:user)
+        #     run_delayed_jobs
 
-            user.update(email: "newforpush@friend.com")
-            FriendMaker.should_receive(:user_create).with(user.id)
-            run_delayed_jobs
+        #     user.update(email: "newforpush@friend.com")
+        #     FriendMaker.should_receive(:user_create).with(user.id)
+        #     run_delayed_jobs
 
-            user.update(email: "newforpush@friend.com")
-            FriendMaker.should_receive(:user_create, primary: true).with(user.id)
-            run_delayed_jobs
+        #     user.update(email: "newforpush@friend.com")
+        #     FriendMaker.should_receive(:user_create, primary: true).with(user.id)
+        #     run_delayed_jobs
 
-            user.update(phone: "7876567432")
-            FriendMaker.should_receive(:user_create).with(user.id)
-            run_delayed_jobs
+        #     user.update(phone: "7876567432")
+        #     FriendMaker.should_receive(:user_create).with(user.id)
+        #     run_delayed_jobs
 
-            user.update(twitter: "987654321")
-            FriendMaker.should_receive(:user_create).with(user.id)
-            run_delayed_jobs
+        #     user.update(twitter: "987654321")
+        #     FriendMaker.should_receive(:user_create).with(user.id)
+        #     run_delayed_jobs
 
-            FriendMaker.should_receive(:user_create).with(user.id)
-            user.update(facebook_id: "75847539845", primary: true)
-            run_delayed_jobs
+        #     FriendMaker.should_receive(:user_create).with(user.id)
+        #     user.update(facebook_id: "75847539845", primary: true)
+        #     run_delayed_jobs
 
-            FriendMaker.should_receive(:user_create).with(user.id)
-            user.update(facebook_id: "75847529245")
-            run_delayed_jobs
-        end
+        #     FriendMaker.should_receive(:user_create).with(user.id)
+        #     user.update(facebook_id: "75847529245")
+        #     run_delayed_jobs
+        # end
 
         xit "should not call relationships when user socials are not updated" do
             # create a user with user socials

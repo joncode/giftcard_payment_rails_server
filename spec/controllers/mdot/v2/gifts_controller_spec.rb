@@ -369,7 +369,7 @@ describe Mdot::V2::GiftsController do
 
         it "should update gift server, redeemed_at" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            time = Time.now
+            time = Time.now.utc
             @gift.redeemed_at.should be_nil
             post :redeem, format: :json, id: @gift.id, server: "test"
             @gift.reload
