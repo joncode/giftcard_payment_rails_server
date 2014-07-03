@@ -125,6 +125,7 @@ FactoryGirl.define do
         gift.message         "Factory Message"
         gift.pay_stat       "charged"
         gift.payable       { FactoryGirl.create(:sale)}
+        gift.expires_at      (Time.now + 1.month)
 
         factory :regift do |regift|
             regift.giver        { FactoryGirl.create(:giver) }

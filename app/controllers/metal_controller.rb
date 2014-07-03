@@ -23,4 +23,17 @@ class MetalController < ActionController::Base
         end
         @app_response = { status: 0, data: payload }
     end
+
+protected
+
+    def authenticate_user
+        token         = request.headers["HTTP_X_AUTH_TOKEN"]
+        @current_user = User.app_authenticate(token)
+        if @current_user
+            puts "APP  -------------   #{@current_user.name}   -----------------------"
+        else
+            head :unauthorized
+        end
+    end
+
 end
