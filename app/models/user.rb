@@ -359,9 +359,7 @@ private
 	end
 
 	def make_friends
-		puts "------------------------------------------------------------------------------"
-		puts "--- 'make_friends' after save callback on User model commented out 6/23/14 ---"
-		puts "------------------------------------------------------------------------------"
+		log_bars "'make_friends' after save callback on User model commented out 6/23/14"
 		# unless Rails.env.production?
 		# 	Resque.enqueue(FriendPushJob, self.id, 1)
 		# end
