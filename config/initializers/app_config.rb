@@ -48,4 +48,10 @@ if Rails.env.test?
     require 'auth_transaction'
 end
 
+def log_bars text
+    puts "===================================================="
+    puts "========== #{text} ==========="
+    puts "===================================================="
+end
+
 
