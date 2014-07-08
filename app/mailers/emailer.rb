@@ -206,12 +206,14 @@ private
 			puts "``````````````````````````````````````````````"
 			puts "Request Mandrill with #{template_name} #{template_content} #{message}"
 			require 'mandrill'
+			# create new Relay object
 			m = Mandrill::API.new(MANDRILL_APIKEY)
 			response = m.messages.send_template(template_name, template_content, message)
 
 			puts
 			puts "Response from Mandrill #{response.inspect}"
 			puts "``````````````````````````````````````````````"
+			# update the Relay object with the response
 			response
 		end
 	end
