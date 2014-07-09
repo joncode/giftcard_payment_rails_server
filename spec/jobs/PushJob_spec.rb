@@ -37,10 +37,16 @@ describe PushJob do
                 run_delayed_jobs
                 @gift.reload.receiver.should == @user
 
-                Urbanairship.should_receive(:push).with(good_push_hsh)
+                Urbanairship.should_receive(:push).with(good_push_hsh).and_return({"push_id"=>"39f42812-0665-11e4-bc49-90e2ba272c68"})
 
                 Relay.send_push_notification @gift
                 run_delayed_jobs
+                d                     = Ditto.last
+                d.notable_id.should   == @gift.id
+                d.notable_type.should == 'Gift'
+                d.status.should       == 200
+                d.cat.should          == 110
+
 
             end
 
@@ -58,8 +64,13 @@ describe PushJob do
                 user_alias = @pnt.ua_alias
                 good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{prov_name}!",:badge=>3,:sound=>"pn.wav"},:alert_type=>2}
 
-                Urbanairship.should_receive(:push).with(good_push_hsh)
+                Urbanairship.should_receive(:push).with(good_push_hsh).and_return({"push_id"=>"39f42812-0665-11e4-bc49-90e2ba272c68"})
                 PushJob.perform(@gift.id, true)
+                d                     = Ditto.last
+                d.notable_id.should   == @gift.id
+                d.notable_type.should == 'Gift'
+                d.status.should       == 200
+                d.cat.should          == 110
             end
         end
 

@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140606024353) do
+ActiveRecord::Schema.define(version: 20140708193523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
 
   create_table "answers", force: true do |t|
     t.string   "answer"
@@ -107,6 +106,18 @@ ActiveRecord::Schema.define(version: 20140606024353) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "dittos", force: true do |t|
+    t.text     "response_json"
+    t.integer  "status"
+    t.integer  "cat"
+    t.integer  "notable_id"
+    t.string   "notable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "dittos", ["notable_id", "notable_type"], name: "index_dittos_on_notable_id_and_notable_type", using: :btree
 
   create_table "friendships", force: true do |t|
     t.integer  "user_id"
@@ -339,17 +350,6 @@ ActiveRecord::Schema.define(version: 20140606024353) do
     t.datetime "reset_token_sent_at"
     t.boolean  "email_reminder_gift_receiver", default: true
     t.boolean  "email_reminder_gift_giver",    default: true
-  end
-
-  create_table "sms", force: true do |t|
-    t.integer  "gift_id"
-    t.datetime "subscribed_date"
-    t.string   "phone"
-    t.integer  "service_id"
-    t.string   "service_type"
-    t.string   "textword"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "sms_contacts", force: true do |t|

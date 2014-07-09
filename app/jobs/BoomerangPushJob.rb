@@ -1,4 +1,5 @@
 class BoomerangPushJob
+    extend UrbanAirshipWrap
 
     @queue = :push
 
@@ -10,8 +11,7 @@ class BoomerangPushJob
         payload     = self.format_payload(gift, receiver, badge)
 
         puts "SENDING BoomerangPushJob NOTE for GIFT ID = #{gift_id} | #{payload}"
-        resp        = Urbanairship.push(payload)
-        puts "APNS push sent via ALIAS! #{resp}"
+        self.ua_push(payload, gift_id)
 
     end
 

@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
 
 	attr_accessor :api_v1
 
+	has_many :dittos, as: :notable
 	has_one  :setting
 	has_many :pn_tokens
 	has_many :brands

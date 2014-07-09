@@ -34,6 +34,12 @@ describe UserSocial do
       user_social.should have_at_least(1).error_on(:user_id)
     end
 
+    it "should associate with dittos" do
+        user  = FactoryGirl.create(:user_social)
+        ditto = FactoryGirl.create :ditto, notable_id: user.id, notable_type: user.class.to_s
+        user.dittos.first.should == ditto
+    end
+
     it "should update user_social.subscribed if subscribe is successful" do
       Resque.should_receive(:enqueue).with(SubscriptionJob, anything)
       user_social = FactoryGirl.create(:user_social, type_of: "email", identifier:"test@email.com")

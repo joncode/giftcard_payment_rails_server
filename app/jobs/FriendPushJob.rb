@@ -1,4 +1,5 @@
 class FriendPushJob
+    extend UrbanAirshipWrap
 
     @queue = :push
 
@@ -21,7 +22,7 @@ private
     def self.loop_contact_friend r_to_pushes
         if r_to_pushes.count > 0
             user_id = r_to_pushes[0].follower_id
-            user = User.find user_id
+            user    = User.find user_id
             r_to_pushes.each do |r_push|
                 receiver = User.find(r_push.followed_id)
                 self.send_push_contact_friend(user, receiver)
@@ -31,9 +32,9 @@ private
     end
 
     def self.send_push_contact_friend(user, receiver)
-        badge = Gift.get_notifications(receiver)
+        badge   = Gift.get_notifications(receiver)
         payload = self.format_payload_contact_friend(user, badge, receiver)
-        Urbanairship.push(payload)
+        self.ua_push(payload, user.id, "User")
     end
 
     def self.format_payload_contact_friend(user, badge, receiver)
@@ -45,15 +46,15 @@ private
     def self.loop_user_friends r_to_pushes
         if r_to_pushes.count > 0
             user_id = r_to_pushes[0].followed_id
-            user = User.find user_id
+            user    = User.find user_id
             self.send_push_user_friend(user, r_to_pushes.count)
         end
     end
 
     def self.send_push_user_friend(user, count)
-        badge = Gift.get_notifications(user)
+        badge   = Gift.get_notifications(user)
         payload = self.format_payload_user_friend(user, badge, count)
-        Urbanairship.push(payload)
+        self.ua_push(payload, user.id, "User")
     end
 
     def self.format_payload_user_friend(user, badge, count)

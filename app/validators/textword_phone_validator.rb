@@ -4,7 +4,7 @@ class TextwordPhoneValidator < ActiveModel::Validator
 
         found = SmsContact.where(textword: record.textword, phone: record.phone)
         if found.count > 0
-            return record.errors["textword"] << "already has saved this phone number. "
+            return record.errors["textword"] << "already has saved this phone number."
         end
 
     end
