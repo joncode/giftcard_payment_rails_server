@@ -75,6 +75,7 @@ end
 
 # 500 - No response
 # 422 - bad request - data value is incorrect
+# 304 - external service already has object
 # 200 - ok
 
 
