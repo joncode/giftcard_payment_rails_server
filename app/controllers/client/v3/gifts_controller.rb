@@ -26,4 +26,12 @@ class Client::V3::GiftsController < MetalController
     	respond
     end
 
+    def redeem
+        gift = Gift.find(params[:id])
+        if gift.receiver_id == @current_user.id && gift.status == 'notified'
+            gift.update(status: 'redeem')
+        end
+        success(gift.client_serialize)
+        respond
+    end
 end
