@@ -6,6 +6,9 @@ class User < ActiveRecord::Base
 
 	attr_accessor :api_v1
 
+	has_many :proto_joins, as: :receivable
+	has_many :protos, through: :proto_joins
+
 	has_many :dittos, as: :notable
 	has_one  :setting
 	has_many :pn_tokens

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140708193523) do
+ActiveRecord::Schema.define(version: 20140709022755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,15 @@ ActiveRecord::Schema.define(version: 20140708193523) do
   end
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
+
+  create_table "contacts", force: true do |t|
+    t.string   "network_id"
+    t.string   "network"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contacts", ["network_id", "network"], name: "index_contacts_on_network_id_and_network", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
@@ -234,6 +243,27 @@ ActiveRecord::Schema.define(version: 20140708193523) do
   end
 
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
+
+  create_table "proto_joins", force: true do |t|
+    t.integer  "proto_id"
+    t.integer  "receivable_id"
+    t.string   "receivable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "proto_joins", ["receivable_id", "receivable_type"], name: "index_proto_joins_on_receivable_id_and_receivable_type", using: :btree
+
+  create_table "protos", force: true do |t|
+    t.text     "message"
+    t.text     "detail"
+    t.text     "shoppingCart"
+    t.string   "value"
+    t.string   "cost"
+    t.datetime "expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "providers", force: true do |t|
     t.string   "name",                                       null: false
