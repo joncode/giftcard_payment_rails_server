@@ -8,7 +8,7 @@ class Ditto < ActiveRecord::Base
 			create(response_json: response.to_json, cat: 100, status: status, notable_id: user_id, notable_type: 'User')
 		end
 
-		def send_push_create(response, obj_id, obj_type)
+		def send_push_create(response, obj_id, obj_type="Gift")
 			status = parse_ua_response(response)
 			create(response_json: response.to_json, cat: 110, status: status, notable_id: obj_id, notable_type: obj_type)
 		end
