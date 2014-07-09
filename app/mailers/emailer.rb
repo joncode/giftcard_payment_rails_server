@@ -13,7 +13,7 @@ module Emailer
 		link             = "#{PUBLIC_URL}/account/resetpassword/#{recipient.reset_token}"
 
 		message          = message_hash(subject(template_name), email, name, link)
-		request_mandrill_with_template(template_name, template_content, message)
+		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], "User"])
 	end
 
 	def confirm_email data
@@ -23,7 +23,7 @@ module Emailer
 		template_content = [{"name" => "recipient_name", "content" => recipient.name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
 		message          = message_hash(subject(template_name), recipient.email, recipient.name, link)
-		request_mandrill_with_template(template_name, template_content, message)
+		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], "User"])
 	end
 
 	def welcome data
@@ -34,7 +34,7 @@ module Emailer
 		template_name    = "iom-user-welcome"
 		template_content = [{"name" => "user_name", "content" => user_name}]
 		message          = message_hash(subject(template_name), email, user_name)
-		request_mandrill_with_template(template_name, template_content, message)
+		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], "User"])
 	end
 
     def notify_receiver data
@@ -55,7 +55,7 @@ module Emailer
         bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
         template_content = generate_template_content(gift, template_name)
 		message          = message_hash(subject(template_name, options = {giver_name: giver_name}), email, recipient_name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message)
+		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
     end
 
     def notify_receiver_boomerang data
@@ -78,7 +78,7 @@ module Emailer
         template_content = [{"name" => "user_name", "content" => recipient_name},
 		                    {"name" => "items_text", "content" => items_text}]
 		message          = message_hash(subject(template_name), email, recipient_name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message)
+		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
     end
 
 
@@ -91,7 +91,7 @@ module Emailer
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
 		template_content = generate_template_content(gift, template_name)
 		message          = message_hash(subject(template_name), email, name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message)
+		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
     end
 
     def reminder_gift_giver recipient, receiver_name
@@ -106,7 +106,7 @@ module Emailer
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
 		message          = message_hash(subject(template_name, options = {receiver_name: receiver_name}), email, name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message)
+		request_mandrill_with_template(template_name, template_content, message, [recipient.id, "User"])
     end
 
     def reminder_hasnt_gifted recipient
@@ -120,7 +120,7 @@ module Emailer
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
 		message          = message_hash(subject(template_name), email, name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message)
+		request_mandrill_with_template(template_name, template_content, message, [recipient.id, "User"])
     end
 
     def reminder_gift_receiver recipient
@@ -134,7 +134,7 @@ module Emailer
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
 		message          = message_hash(subject(template_name), email, name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message)
+		request_mandrill_with_template(template_name, template_content, message, [recipient.id, "User"])
     end
 
 private
@@ -201,19 +201,18 @@ private
 		end
     end
 
-	def request_mandrill_with_template(template_name, template_content, message)
+	def request_mandrill_with_template(template_name, template_content, message, ditto_ary)
 		unless Rails.env.development?
 			puts "``````````````````````````````````````````````"
 			puts "Request Mandrill with #{template_name} #{template_content} #{message}"
 			require 'mandrill'
-			# create new Relay object
 			m = Mandrill::API.new(MANDRILL_APIKEY)
 			response = m.messages.send_template(template_name, template_content, message)
 
 			puts
 			puts "Response from Mandrill #{response.inspect}"
 			puts "``````````````````````````````````````````````"
-			# update the Relay object with the response
+			Ditto.send_email_create(response, ditto_ary[0], ditto_ary[1])
 			response
 		end
 	end

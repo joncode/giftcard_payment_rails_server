@@ -69,6 +69,12 @@ describe User do
             user.oauths.first.user_id.should == user.id
         end
 
+        it "should associate with dittos" do
+            user  = FactoryGirl.create(:user)
+            ditto = FactoryGirl.create :ditto, notable_id: user.id, notable_type: user.class.to_s
+            user.dittos.first.should == ditto
+        end
+
         it "has_many app_contacts" do
             user = FactoryGirl.create(:user)
             user.app_contacts.count.should == 0

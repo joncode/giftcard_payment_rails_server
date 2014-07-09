@@ -49,6 +49,12 @@ describe Gift do
 		gift.should have_at_least(1).error_on(:shoppingCart)
 	end
 
+	it "should associate with ditto" do
+		gift  = FactoryGirl.create(:gift)
+		ditto = FactoryGirl.create :ditto, notable_id: gift.id, notable_type: gift.class.to_s
+		gift.dittos.first.should == ditto
+	end
+
 	it "should save gift_items on create" do
 		gift = FactoryGirl.build(:gift)
 		gift.save

@@ -1,4 +1,5 @@
 class PushJob
+    extend UrbanAirshipWrap
 
     @queue = :push
 
@@ -22,8 +23,7 @@ class PushJob
             payload       = self.format_incomplete_payload(gift, push_receiver, badge)
         end
         puts "SENDING PUSH NOTE for GIFT ID = #{gift_id} | #{payload}"
-        resp        = Urbanairship.push(payload)
-        puts "APNS push sent via ALIAS! #{resp}"
+        self.ua_push(payload, gift_id)
 
     end
 

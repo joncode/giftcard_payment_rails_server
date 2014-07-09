@@ -35,6 +35,14 @@ FactoryGirl.define do
 
     factory :boomerang
 
+    factory :ditto do
+        notable_id  1
+        notable_type "Gift"
+        cat 1
+        status 1
+        response_json   "[{\"email\":\"robertn@yahoo.com\",\"status\":\"sent\",\"_id\":\"5606dc2b9e9b46ad967a0bf38fdda61b\",\"reject_reason\":null},{\"email\":\"info@itson.me\",\"status\":\"sent\",\"_id\":\"1d17c18a68d345b7a1021902f053d7be\",\"reject_reason\":null}]"
+    end
+
     factory :nobody, :class => 'User' do
         first_name                  "No"
         last_name                   "One"

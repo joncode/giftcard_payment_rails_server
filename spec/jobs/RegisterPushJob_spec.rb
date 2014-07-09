@@ -13,12 +13,24 @@ describe RegisterPushJob do
         end
 
         it "should send PnToken & correct alias to Urban Airship" do
-            adj_user_id = @user.id + NUMBER_ID
+            adj_user_id   = @user.id + NUMBER_ID
             correct_alias = "user-#{adj_user_id}"
             Urbanairship.should_receive(:register_device).with(@pn_token, :alias => correct_alias)
             SubscriptionJob.stub(:perform).and_return(true)
             MailerJob.stub(:call_mandrill).and_return(true)
             run_delayed_jobs
+        end
+
+        it "should create a ditto for register device" do
+            adj_user_id   = @user.id + NUMBER_ID
+            correct_alias = "user-#{adj_user_id}"
+            Urbanairship.should_receive(:register_device).with(@pn_token, :alias => correct_alias).and_return( {"error_code"=>40001, "details"=>{"device_token"=>["device_token contains an invalid device token: A7D14290-FD57-41F0-B1A4-DB36F6E9B79B"]}, "error"=>"Data validation error"})
+            SubscriptionJob.stub(:perform).and_return(true)
+            MailerJob.stub(:call_mandrill).and_return(true)
+            run_delayed_jobs
+            d = Ditto.last
+            d.notable_type.should == "User"
+            d.notable_id.should   == @user.id
         end
 
     end

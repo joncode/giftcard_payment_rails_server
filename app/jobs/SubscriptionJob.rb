@@ -22,6 +22,7 @@ private
         user = user_social.user
         mcl = MailchimpList.new(user_social.identifier, user.first_name, user.last_name)
         response = mcl.subscribe
+        Ditto.subscription_email_create(response, user_social.id)
         puts "add_to_mailchimp Response -> \n #{response.inspect} \n"
         if response["email"].present?
             user_social.update_attribute(:subscribed, true)
@@ -31,6 +32,7 @@ private
     def self.remove_from_mailchimp user_social
         mcl = MailchimpList.new(user_social.identifier)
         response = mcl.unsubscribe
+        Ditto.subscription_email_create(response, user_social.id)
         puts "remove_from_mailchimp Response -> \n #{response.inspect} \n"
         if response["complete"].present? && response["complete"] == true
             user_social.update_attribute(:subscribed, false)

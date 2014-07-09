@@ -16,6 +16,7 @@ class Gift < ActiveRecord::Base
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :sms_contact,   autosave: true
 	has_many    :gift_items, 	dependent: :destroy
+    has_many    :dittos,        as: :notable
     belongs_to  :provider
     belongs_to  :giver,         polymorphic: :true
     belongs_to  :receiver,      class_name: User
