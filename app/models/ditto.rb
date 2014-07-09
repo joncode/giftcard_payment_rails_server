@@ -1,6 +1,10 @@
 class Ditto < ActiveRecord::Base
 	belongs_to :notable, polymorphic: true
 
+	def response
+		JSON.parse self.response_json
+	end
+
 	class << self
 
 		def register_push_create(response, user_id)

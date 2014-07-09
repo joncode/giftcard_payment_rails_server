@@ -30,6 +30,15 @@ describe Ditto do
 
 	end
 
+	context "Behavoir" do
+
+		it "should have response not as JSON" do
+			user  = FactoryGirl.create(:user)
+			ditto = FactoryGirl.create :ditto, notable_id: user.id, notable_type: user.class.to_s
+			ditto.response.class.should_not == String
+		end
+	end
+
 	context "Class Methods" do
 
 		before(:each) do
