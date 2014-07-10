@@ -3,7 +3,9 @@ class JsonController < ActionController::Base
     include CommonUtils
     include JsonHelper
 
-	skip_before_action   :verify_authenticity_token
+    rescue_from ActiveRecord::RecordNotFound, :with => :not_found
+
+    skip_before_action   :verify_authenticity_token
     #before_action        :down_for_maintenance
     before_action        :log_request_header
     before_action        :method_start_log_message
@@ -15,9 +17,6 @@ class JsonController < ActionController::Base
     MERCHANT_REPLY  = GIFT_REPLY + [ "order_num"]
     ADMIN_REPLY     = GIFT_REPLY + [ "receiver_id", "receiver_name", "service"]
     BUY_REPLY       = ["total", "receiver_id", "receiver_name", "provider_id", "provider_name", "message", "created_at", "updated_at", "status", "id"]
-
-
-    rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
     def not_found
         head 404

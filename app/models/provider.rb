@@ -10,6 +10,7 @@ class Provider < ActiveRecord::Base
 	has_many   :campaign_items
 	belongs_to :brands
 	belongs_to :merchant
+	has_many   :protos
 
 	validates_presence_of 	:name, :city, :address, :zip, :region_id, :state, :token
 	validates_length_of 	:state , 	:is => 2

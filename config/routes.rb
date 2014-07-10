@@ -197,7 +197,11 @@ end
           post :bulk_create
         end
       end
-
+      resources :protos,  only: [] do
+        member  do
+          post :gifts
+        end
+      end
       resources :merchants, only: [:create, :update] do
 
         member do

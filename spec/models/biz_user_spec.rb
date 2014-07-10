@@ -46,6 +46,19 @@ describe BizUser do
         biz_user.sent.first.giver_name.should  == "#{provider.name} Staff"
     end
 
+    it "should associate with proto as giver" do
+        provider    = FactoryGirl.create(:provider)
+        biz_user = BizUser.find(provider.id)
+        proto        = FactoryGirl.build(:proto)
+        proto.giver  = biz_user
+        proto.giver_name = biz_user.name
+        proto.save
+
+        biz_user.protos.first.id.should          == proto.id
+        biz_user.protos.first.class.should       == Proto
+        biz_user.protos.first.giver_name.should  == "#{provider.name} Staff"
+    end
+
     it "should associate with Debts" do
         provider = FactoryGirl.create(:provider)
         biz_user = provider.biz_user

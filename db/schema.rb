@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710162802) do
+ActiveRecord::Schema.define(version: 20140710213937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,8 +253,10 @@ ActiveRecord::Schema.define(version: 20140710162802) do
     t.string   "receivable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "gift_id"
   end
 
+  add_index "proto_joins", ["gift_id"], name: "index_proto_joins_on_gift_id", using: :btree
   add_index "proto_joins", ["receivable_id", "receivable_type"], name: "index_proto_joins_on_receivable_id_and_receivable_type", using: :btree
 
   create_table "protos", force: true do |t|
@@ -266,6 +268,12 @@ ActiveRecord::Schema.define(version: 20140710162802) do
     t.datetime "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "giver_id"
+    t.string   "giver_type"
+    t.string   "giver_name"
+    t.integer  "provider_id"
+    t.string   "provider_name"
+    t.integer  "cat"
   end
 
   create_table "providers", force: true do |t|
@@ -398,6 +406,15 @@ ActiveRecord::Schema.define(version: 20140710162802) do
 
   add_index "sms_contacts", ["gift_id"], name: "index_sms_contacts_on_gift_id", using: :btree
   add_index "sms_contacts", ["subscribed_date"], name: "index_sms_contacts_on_subscribed_date", using: :btree
+
+  create_table "socials", force: true do |t|
+    t.string   "network_id"
+    t.string   "network"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "socials", ["network_id", "network"], name: "index_socials_on_network_id_and_network", using: :btree
 
   create_table "tags", force: true do |t|
     t.string   "name"
