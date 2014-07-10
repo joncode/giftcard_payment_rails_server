@@ -82,6 +82,18 @@ describe Pos::V1::OrdersController do
             end
         end
 
+        context "gift has already been redeemed" do
+            before do
+                post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => 1233}
+            end
+            it "can't find redeem from redeem_code" do
+                post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => 1233}
+                rrc(404)
+                json["status"].should == 0
+                json["data"].should == "Error - Gift Conﬁrmation No. is not valid."
+            end
+        end
+
 
 
         it "gets the redeem / gift with the pos_merchant_id & redeem_code" do
