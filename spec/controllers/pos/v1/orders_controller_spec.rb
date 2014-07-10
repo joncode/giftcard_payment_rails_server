@@ -32,12 +32,17 @@ describe Pos::V1::OrdersController do
         end
 
         context :bad_request do
+            it "should be successful" do
+                post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => 1233}
+                rrc(200)
+            end
 
             it "reject no data key " do
-                post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => 11111}
-                rrc(200)
                 post :create, format: :json, data: {}
                 rrc(400)
+            end
+
+            it "reject wrong key " do
                 post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => nil, "wrong" => "params"}
                 rrc(400)
                 # post :create, format: :json, data: {"pos_merchant_id" => 1233,"redeem_code" => @redeem.redeem_code, "ticket_item_ids" => [ 1245, 17235, 1234 ], "server_code" => "john"}
@@ -48,6 +53,27 @@ describe Pos::V1::OrdersController do
                 # rrc(400)
             end
 
+        end
+
+        context :data_not_found do
+            it "should be successful" do
+                post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => 1233}
+                rrc(200)
+                json["status"].should == 1
+                json["data"].should == { "voucher_value" => @redeem.gift.value }
+            end
+            it "can't find redeem from redeem_code" do
+                post :create, format: :json, data: {"redeem_code" => "12345", "pos_merchant_id" => 1233}
+                rrc(404)
+                json["status"].should == 0
+                json["data"].should == "Error - Gift Conﬁrmation No. is not valid."
+            end
+            it "can't find redeem from redeem_code" do
+                post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => 0000}
+                rrc(404)
+                json["status"].should == 0
+                json["data"].should == "Error - Gift Conﬁrmation No. is not valid."
+            end
         end
 
 
