@@ -53,5 +53,19 @@ describe Proto do
 			proto.proto_joins.count.should == 2
 			proto.receivables.count.should  == 2
 		end
+
+		it "should associate with gifts as payable and autosave" do
+			social                         = FactoryGirl.create(:social)
+			proto                          = FactoryGirl.build(:proto)
+			proto.socials << social
+			proto.id.should be_nil
+			gift         = FactoryGirl.build(:gift)
+			gift.payable = proto
+			gift.save
+			gift.reload
+			gift.payable_id.should   == proto.id
+			gift.payable_type.should == proto.class.to_s
+			gift.payable.should      == proto
+		end
 	end
 end
