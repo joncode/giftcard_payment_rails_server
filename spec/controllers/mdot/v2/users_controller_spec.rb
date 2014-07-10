@@ -217,13 +217,25 @@ describe Mdot::V2::UsersController do
 
         it "should create user with required fields" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
-            email = "neil@gmail.com"
+            email    = "neil@gmail.com"
             user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil"}
 
             post :create, format: :json, data: user_hsh
             rrc(200)
             user = User.where(email: email).first
             user.first_name.should == "Neil"
+        end
+
+        it "should create user with optional pn_token and save pn_token" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            email    = "neil@gmail.com"
+            user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil", pn_token: "f850c136-b74d-4fd9-a727-9912841e0a1a"}
+
+            post :create, format: :json, data: user_hsh
+            rrc(200)
+            user = User.where(email: email).first
+            user.first_name.should == "Neil"
+            user.pn_tokens.first.pn_token.should == "f850c136-b74d-4fd9-a727-9912841e0a1a"
         end
 
         it "should create user with ANDROID_TOKEN" do
