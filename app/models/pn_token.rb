@@ -4,7 +4,7 @@ class PnToken < ActiveRecord::Base
 
     validates :pn_token, uniqueness: true, length: { minimum: 23 }
     validates_presence_of :user_id
-    
+
     after_save :register
 
     def pn_token=(token)

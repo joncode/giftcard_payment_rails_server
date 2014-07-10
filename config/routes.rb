@@ -26,6 +26,7 @@ if !Rails.env.production?
       resources :gifts, only: [:index] do
         member do
           put :open
+          put :redeem
         end
       end
       resources :cards, only: [:index]

@@ -35,6 +35,20 @@ FactoryGirl.define do
 
     factory :boomerang
 
+    factory :proto do
+        message         "Test proto message"
+        detail          "Test detail page"
+        shoppingCart    "[{\"detail\":\"The best margherita\",\"price\":13,\"price_promo\":1,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita\"}]"
+        value           "13"
+        cost            "3"
+        expires_at      (Time.now + 1.month)
+    end
+
+    factory :contact do
+        network_id   "teser345@gmail.com"
+        network      "Email"
+    end
+
     factory :ditto do
         notable_id  1
         notable_type "Gift"

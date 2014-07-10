@@ -97,6 +97,43 @@ describe Client::V3::GiftsController do
 
     end
 
+    describe :redeem do
+
+        before(:each) do
+            @user = FactoryGirl.create(:user, iphone_photo: "http://photo_urlimportante.com")
+            @rec  = FactoryGirl.create(:user, iphone_photo: "http://photo_urlimportante.com")
+            request.env["HTTP_X_AUTH_TOKEN"] = @rec.remember_token
+        end
+
+        it_should_behave_like("client-token authenticated", :put, :redeem, id: 100)
+
+        it "should change a gift from notified to redeemed" do
+            gift = FactoryGirl.create(:gift, giver_type: "User", cat: 300, receiver_id: @rec.id,  giver_id: @user.id, giver_name: @user.name, expires_at: Time.now, message: "here is messag", detail: "here is detail")
+            gift.update(status: 'redeemed')
+            put :redeem, format: :json, id: gift.id
+            json["status"].should     == 1
+            gift.reload.status.should == 'redeemed'
+        end
+
+        it "should return the new gift dictionary" do
+            gift = FactoryGirl.create(:gift, giver_type: "User", cat: 300, giver_id: @user.id, receiver_id: @rec.id, giver_name: @user.name, expires_at: Time.now, message: "here is messag", detail: "here is detail")
+            gift.update(status: 'redeemed')
+            put :redeem, format: :json, id: gift.id
+            json["status"].should     == 1
+            gift_hsh                  = json["data"]
+            gift_hsh["status"].should == 'redeemed'
+            keys = ["expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
+            compare_keys(gift_hsh, keys)
+        end
+
+        it "should not change a gift that is not notified" do
+            gift = FactoryGirl.create(:gift, giver_type: "User", cat: 300, giver_id: @user.id, giver_name: @user.name, expires_at: Time.now, redeemed_at: Time.now, message: "here is messag", detail: "here is detail")
+            gift.update(status: 'expired')
+            put :redeem, format: :json, id: gift.id
+            gift.status.should == 'expired'
+        end
+
+    end
 
 end
 

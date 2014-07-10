@@ -235,7 +235,7 @@ describe User do
             user1 = FactoryGirl.create :user, { first_name: "Squatter", email: "KJOOIcode@yahoo.com" }
             user2 = FactoryGirl.create :user, { first_name: "Real", email: "updated@gmail.com" }
 
-            user1.pn_token = pnt
+            user1.pn_token = [pnt, "android"]
             user1.pn_token.should == [pnt]
 
             user_1_alias = user1.pn_tokens.first.ua_alias

@@ -5,7 +5,7 @@ class Mdot::V2::SessionsController < JsonController
     rescue_from JSON::ParserError, :with => :bad_request
 
     def create
-        return nil if params_bad_request(["email", 'password', 'pn_token'])
+        return nil if params_bad_request(["email", 'password', 'pn_token', 'platform'])
         [params['email'], params['password']].each do |input|
             return nil if data_not_string?(input)
             return nil if data_blank?(input)
@@ -14,7 +14,9 @@ class Mdot::V2::SessionsController < JsonController
             @user = user_social.user
             if @user.not_suspended?
                 if @user.authenticate(params['password'])
-                    @user.pn_token = params['pn_token'] if params['pn_token']
+                    if params['pn_token']
+                        @user.pn_token = [params['pn_token'], params['platform']]
+                    end
                     success @user.create_serialize
                 else
                     fail "Invalid email/password combination"
@@ -32,26 +34,26 @@ class Mdot::V2::SessionsController < JsonController
     end
 
     def login_social
-        return nil if params_bad_request(["facebook_id", 'twitter', 'pn_token'])
+        return nil if params_bad_request(["facebook_id", 'twitter', 'pn_token', 'platform'])
         if params['facebook_id']
-            # return nil if data_not_string?(params['facebook_id'])
-            params['facebook_id'] = params['facebook_id'].to_s
             return nil if data_blank?(params['facebook_id'])
+            params['facebook_id'] = params['facebook_id'].to_s
             user_social = UserSocial.includes(:user).where(type_of: 'facebook_id', identifier: params['facebook_id']).first
-            @user = user_social ? user_social.user : nil
+            @user       = user_social ? user_social.user : nil
         elsif params['twitter']
-            # return nil if data_not_string?(params['twitter'])
-            params['twitter'] = params['twitter'].to_s
             return nil if data_blank?(params['twitter'])
-            user_social = UserSocial.includes(:user).where(type_of: 'twitter', identifier: params['twitter']).first
-            @user = user_social ? user_social.user : nil
+            params['twitter'] = params['twitter'].to_s
+            user_social       = UserSocial.includes(:user).where(type_of: 'twitter', identifier: params['twitter']).first
+            @user             = user_social ? user_social.user : nil
         else
             head :bad_request
             return nil
         end
         if @user
             if @user.not_suspended?
-                @user.pn_token = params['pn_token'] if params['pn_token']
+                if params['pn_token']
+                    @user.pn_token = [params['pn_token'], params['platform']]
+                end
                 success @user.create_serialize
             else
                 fail "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"

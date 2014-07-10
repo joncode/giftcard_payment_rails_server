@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140708193523) do
+ActiveRecord::Schema.define(version: 20140710012040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -174,19 +174,13 @@ ActiveRecord::Schema.define(version: 20140708193523) do
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
 
   create_table "contacts", force: true do |t|
-    t.integer  "brand_id"
-    t.string   "address"
-    t.string   "city"
-    t.string   "state"
-    t.string   "zip"
-    t.string   "name"
-    t.string   "email"
-    t.string   "phone"
+    t.string   "network_id"
+    t.string   "network"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "contacts", ["brand_id"], name: "index_contacts_on_brand_id", using: :btree
+  add_index "contacts", ["network_id", "network"], name: "index_contacts_on_network_id_and_network", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
@@ -473,20 +467,32 @@ ActiveRecord::Schema.define(version: 20140708193523) do
   add_index "payables", ["status"], name: "index_payables_on_status", using: :btree
 
   create_table "pn_tokens", force: true do |t|
-    t.integer "user_id"
-    t.string  "pn_token"
+    t.integer  "user_id"
+    t.string   "pn_token"
+    t.string   "platform",   default: "ios"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
 
-  create_table "progresses", force: true do |t|
-    t.integer  "merchant_id"
-    t.integer  "profile",     default: 1
-    t.integer  "bank",        default: 0
-    t.integer  "photo",       default: 0
-    t.integer  "menu",        default: 0
-    t.integer  "staff",       default: 0
-    t.integer  "approval",    default: 0
+  create_table "proto_joins", force: true do |t|
+    t.integer  "proto_id"
+    t.integer  "receivable_id"
+    t.string   "receivable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "proto_joins", ["receivable_id", "receivable_type"], name: "index_proto_joins_on_receivable_id_and_receivable_type", using: :btree
+
+  create_table "protos", force: true do |t|
+    t.text     "message"
+    t.text     "detail"
+    t.text     "shoppingCart"
+    t.string   "value"
+    t.string   "cost"
+    t.datetime "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
