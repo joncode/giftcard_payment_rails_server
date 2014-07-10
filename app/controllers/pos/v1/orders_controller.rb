@@ -6,7 +6,7 @@ class Pos::V1::OrdersController < JsonController
     def create
         redeem_code     = create_params["redeem_code"]
         pos_merchant_id = create_params["pos_merchant_id"]
-        redeem = Redeem.includes(:gift).where(redeem_code: redeem_code).first
+        redeem = Redeem.includes(:gift).where(redeem_code: redeem_code.to_s).first
         if redeem && redeem.gift.provider.pos_merchant_id == pos_merchant_id.to_i
             order = Order.init_with_pos(create_params, redeem)
             if order.save

@@ -16,6 +16,12 @@ describe Pos::V1::OrdersController do
 
         it "should have a create route" do
             post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @redeem.redeem_code, "server_code" => "john"}
+            rrc(200)
+        end
+
+        it "should accept redeem code as int" do
+            post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @redeem.redeem_code.to_i, "server_code" => "john"}
+            rrc(200)
         end
 
         it "requires http basic authentication" do
