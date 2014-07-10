@@ -77,6 +77,9 @@ class Mdot::V2::UsersController < JsonController
         if params['data']["pn_token"]
             pn_token = params['data'].delete('pn_token')
         end
+        if params["pn_token"]
+            pn_token = params['pn_token']
+        end
 
         user = User.new(create_user_params)
         if user.save

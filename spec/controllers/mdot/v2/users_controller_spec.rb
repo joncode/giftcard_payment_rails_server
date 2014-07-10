@@ -426,7 +426,7 @@ describe Mdot::V2::UsersController do
         it "should not save bad pn token but allow login" do
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
-            token = "9128341983439487123"
+            token = "9128341983439adsfasd487123"
             post :create, format: :json, data: user_hsh, pn_token: token
             keys = ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id", "token"]
             hsh  = json["data"]
