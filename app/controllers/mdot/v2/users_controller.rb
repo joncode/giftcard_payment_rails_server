@@ -80,10 +80,13 @@ class Mdot::V2::UsersController < JsonController
         if params["pn_token"]
             pn_token = params['pn_token']
         end
+        if params['data']["platform"]
+            platform = params['data'].delete('platform')
+        end
 
         user = User.new(create_user_params)
         if user.save
-            user.pn_token = pn_token if pn_token
+            user.pn_token = [pn_token, platform] if pn_token
             success user.create_serialize
         else
             fail    user

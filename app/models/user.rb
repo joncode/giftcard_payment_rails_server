@@ -283,7 +283,14 @@ class User < ActiveRecord::Base
 		"user-#{adj_user_id}"
 	end
 
-	def pn_token=(value)
+	def pn_token=(value_ary)
+		if value_ary.kind_of? Array
+			value    = value_ary[0]
+			platform = value_ary[1] || 'ios'
+		else
+			value    = value_ary
+			platform = 'ios'
+		end
 		value 		= PnToken.convert_token(value)
 		if pn_token = PnToken.find_by(pn_token: value)
 			if pn_token.user_id != self.id
@@ -291,7 +298,7 @@ class User < ActiveRecord::Base
 				pn_token.save
 			end
 		else
-			PnToken.create!(user_id: self.id, pn_token: value)
+			PnToken.create!(user_id: self.id, pn_token: value, platform: platform)
 		end
 	end
 
