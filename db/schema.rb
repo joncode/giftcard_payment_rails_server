@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140709022755) do
+ActiveRecord::Schema.define(version: 20140710012040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,8 +238,11 @@ ActiveRecord::Schema.define(version: 20140709022755) do
   add_index "orders", ["gift_id"], name: "index_orders_on_gift_id", using: :btree
 
   create_table "pn_tokens", force: true do |t|
-    t.integer "user_id"
-    t.string  "pn_token"
+    t.integer  "user_id"
+    t.string   "pn_token"
+    t.string   "platform",   default: "ios"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
