@@ -31,10 +31,6 @@ class Provider < ActiveRecord::Base
 		unscoped.order("name ASC")
 	end
 
-	def pos_merchant_id
-		11111
-	end
-
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude]
 		prov_hash["provider_id"]  = self.id
@@ -83,7 +79,7 @@ class Provider < ActiveRecord::Base
 	def short_image_url
 		shorten_photo_url(image)
 	end
-	
+
 	def live_int
 		self.live ? "1" : "0"
 	end

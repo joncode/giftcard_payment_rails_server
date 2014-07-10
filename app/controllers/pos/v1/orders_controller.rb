@@ -16,6 +16,7 @@ class Pos::V1::OrdersController < JsonController
             end
         else
             fail "Error - Gift Conﬁrmation No. is not valid."
+            status = :not_found
         end
         respond(status)
     end
