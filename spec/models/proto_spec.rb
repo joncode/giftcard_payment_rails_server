@@ -16,42 +16,42 @@ describe Proto do
 			proto.users << user
 			reload_proto       = Proto.last
 			proto.users.should == [user]
-			proto.receivable.count.should  == 1
+			proto.receivables.count.should  == 1
 		end
 
-		it "should associate with contacts" do
-			contact               = FactoryGirl.create(:contact)
-			proto                 = FactoryGirl.create(:proto)
-			proto.contacts << contact
-			reload_proto          = Proto.last
-			proto.contacts.should == [contact]
-			proto.receivable.count.should  == 1
+		it "should associate with socials" do
+			social                        = FactoryGirl.create(:social)
+			proto                         = FactoryGirl.create(:proto)
+			proto.socials << social
+			reload_proto                  = Proto.last
+			proto.socials.should          == [social]
+			proto.receivables.count.should == 1
 		end
 
-		it "should associate with both users and contacts" do
-			user                  = FactoryGirl.create(:user)
-			contact               = FactoryGirl.create(:contact)
-			proto                 = FactoryGirl.create(:proto)
-			proto.contacts << contact
+		it "should associate with both users and socials" do
+			user                           = FactoryGirl.create(:user)
+			social                         = FactoryGirl.create(:social)
+			proto                          = FactoryGirl.create(:proto)
+			proto.socials << social
 			proto.users    << user
-			reload_proto          = Proto.last
-			proto.contacts.should == [contact]
-			proto.users.should    == [user]
+			reload_proto                   = Proto.last
+			proto.socials.should           == [social]
+			proto.users.should             == [user]
 			proto.proto_joins.count.should == 2
-			proto.receivable.count.should  == 2
+			proto.receivables.count.should  == 2
 		end
 
-		it "should associate with both users and contacts" do
-			user                  = FactoryGirl.create(:user)
-			contact               = FactoryGirl.create(:contact)
-			proto                 = FactoryGirl.create(:proto)
-			proto.contacts << contact
+		it "should associate with both users and socials" do
+			user                           = FactoryGirl.create(:user)
+			social                         = FactoryGirl.create(:social)
+			proto                          = FactoryGirl.create(:proto)
+			proto.socials << social
 			proto.users    << user
-			reload_proto          = Proto.last
-			proto.contacts.should == [contact]
-			proto.users.should    == [user]
+			reload_proto                   = Proto.last
+			proto.socials.should           == [social]
+			proto.users.should             == [user]
 			proto.proto_joins.count.should == 2
-			proto.receivable.count.should  == 2
+			proto.receivables.count.should  == 2
 		end
 	end
 end

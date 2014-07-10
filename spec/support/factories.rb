@@ -44,9 +44,9 @@ FactoryGirl.define do
         expires_at      (Time.now + 1.month)
     end
 
-    factory :contact do
+    factory :social do
         network_id   "teser345@gmail.com"
-        network      "Email"
+        network      "email"
     end
 
     factory :ditto do
