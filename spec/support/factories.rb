@@ -41,11 +41,17 @@ FactoryGirl.define do
         shoppingCart    "[{\"detail\":\"The best margherita\",\"price\":13,\"price_promo\":1,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita\"}]"
         value           "13"
         cost            "3"
+        cat             250
+        giver_id        100
+        giver_type       "BizUser"
+        giver_name       "Factory Provider Staff"
+        provider_id     100
+        provider_name   "Factory Provider"
         expires_at      (Time.now + 1.month)
     end
 
     factory :social do
-        network_id   "teser345@gmail.com"
+        sequence(:network_id)    { |n| "socializer#{n}@gmail.com" }
         network      "email"
     end
 
