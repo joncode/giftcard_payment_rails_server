@@ -95,6 +95,31 @@ describe Pos::V1::OrdersController do
         end
 
 
+        context "pos request should create ditto" do
+            it "should create ditto with successful request" do
+                post :create, format: :json, data: {"redeem_code" => @redeem.redeem_code, "pos_merchant_id" => 1233}
+                rrc(200)
+                ditto = Ditto.last
+                ditto.response_json.should == { 'request'  => { 'redeem_code' => @redeem.redeem_code, 'pos_merchant_id' => 1233 },
+                                                'response' => { :status => 1, :data => { 'voucher_value'=>'100' } } }.to_json
+                ditto.status.should        == 200
+                ditto.cat.should           == 1000
+                ditto.notable_id.should    == @redeem.id
+                ditto.notable_type.should  == "Redeem"
+            end
+            it "should create ditto with bad request (that has passed authentication)" do
+                post :create, format: :json, data: {"redeem_code" => "abcde", "pos_merchant_id" => 1233}
+                rrc(404)
+                ditto = Ditto.last
+                ditto.response_json.should == { 'request' => { 'redeem_code' => 'abcde', 'pos_merchant_id' => 1233 },
+                                                'response' => { :status => 0, :data => 'Error - Gift Conﬁrmation No. is not valid.' }}.to_json
+                ditto.status.should        == 404
+                ditto.cat.should           == 1000
+                ditto.notable_id.should    == nil
+                ditto.notable_type.should  == "Redeem"
+            end
+
+        end
 
         it "gets the redeem / gift with the pos_merchant_id & redeem_code" do
             # redeem.include(:gift).where(pos_merchant_id: 1233, redeem_code: 1234)

@@ -122,6 +122,27 @@ describe Ditto do
 				d.notable_type.should  == "Gift"
 			end
 		end
+
+		describe :receive_pos_create do
+			it "should create with success" do
+				request = {
+					pos_merchant_id: 12345,
+					ticket_value: "120.00",
+					redeem_code: "1111",
+					server_code: "bob"
+				}
+				response = {
+					:status => 1, :data => { 'voucher_value'=>'100' }
+				}
+
+				d = Ditto.receive_pos_create(request, response, 1, :ok)
+				d.response_json.should == { request: request, response: response }.to_json
+				d.status.should        == 200
+				d.cat.should           == 1000
+				d.notable_id.should    == 1
+				d.notable_type.should  == "Redeem"
+			end
+		end
 	end
 
 

@@ -31,6 +31,12 @@ class Ditto < ActiveRecord::Base
 			create(response_json: response.to_json, cat: 400, status: status, notable_id: obj_id, notable_type: 'UserSocial')
 		end
 
+		def receive_pos_create(request, response, redeem_id, status)
+			request_response_hash = { request: request, response: response }
+			create(response_json: request_response_hash.to_json, cat: 1000, status: parse_pos_status(status), notable_id: redeem_id, notable_type: 'Redeem')
+		end
+
+
 	private
 
 		def parse_mailchimp_response(response)
@@ -65,6 +71,16 @@ class Ditto < ActiveRecord::Base
 			200
 		end
 
+		def parse_pos_status(status)
+			if status == :ok
+				return 200
+			elsif status == :bad_request
+				return 400
+			elsif status == :not_found
+				return 404
+			end
+		end
+
 	end
 end
 
@@ -73,11 +89,11 @@ end
 
 # CATEGORIES
 
-# 100 - Register Push Pn Token
-# 110 - send push pn token
-# 310 - send transactional email
-# 400 - Register subscribe email to mailchimp
-
+#  100 - Register Push Pn Token
+#  110 - send push pn token
+#  310 - send transactional email
+#  400 - Register subscribe email to mailchimp
+# 1000 - Receive POS request
 
 # Statuses
 
