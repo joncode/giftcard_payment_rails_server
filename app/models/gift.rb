@@ -148,7 +148,7 @@ class Gift < ActiveRecord::Base
             set_status
             self.pay_stat = "charge_unpaid"
         else
-            set_status
+            set_payment_status
         end
     end
 
