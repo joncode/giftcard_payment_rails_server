@@ -18,7 +18,7 @@ describe Mt::V2::MerchantsController do
         end
 
         it "should create new merchant" do
-            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "region_id" => 1, "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
+            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "region_id" => 1, "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon", "pos_merchant_id" => 12345}
             post :create, format: :json, data: new_provider_hsh
             provider = Provider.last
             provider.name.should        == new_provider_hsh["name"]
@@ -33,6 +33,7 @@ describe Mt::V2::MerchantsController do
             provider.merchant_id.should == new_provider_hsh["merchant_id"]
             provider.mode.should        == new_provider_hsh["mode"]
             provider.get_photo.should   == new_provider_hsh["image"]
+            provider.pos_merchant_id.should == 12345
             provider.active.should be_true
         end
 
@@ -86,7 +87,8 @@ describe Mt::V2::MerchantsController do
             address: "123 happy town",
             phone: "6874567575",
             mode: "live",
-            image: "happy_photo_profile.png"
+            image: "happy_photo_profile.png",
+            pos_merchant_id: 54321
         }.stringify_keys.each do |type_of, identifier|
 
             it "should update #{type_of}" do
