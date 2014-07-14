@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710213937) do
+ActiveRecord::Schema.define(version: 20140711181135) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,15 +90,6 @@ ActiveRecord::Schema.define(version: 20140710213937) do
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
 
-  create_table "contacts", force: true do |t|
-    t.string   "network_id"
-    t.string   "network"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "contacts", ["network_id", "network"], name: "index_contacts_on_network_id_and_network", using: :btree
-
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
     t.integer  "owner_id"
@@ -127,6 +118,7 @@ ActiveRecord::Schema.define(version: 20140710213937) do
   end
 
   add_index "dittos", ["notable_id", "notable_type"], name: "index_dittos_on_notable_id_and_notable_type", using: :btree
+  add_index "dittos", ["status"], name: "index_dittos_on_status", using: :btree
 
   create_table "friendships", force: true do |t|
     t.integer  "user_id"

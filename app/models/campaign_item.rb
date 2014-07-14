@@ -1,6 +1,8 @@
 class CampaignItem < Admtmodel
     self.table_name = "campaign_items"
 
+    include GenericPayableDucktype
+
     has_many :gifts, as: :payable
     belongs_to :campaign
     belongs_to :provider
@@ -22,27 +24,6 @@ class CampaignItem < Admtmodel
     end
 
     def owner
-    	campaign
+       campaign
     end
-
-    def success?
-        self.id.present?
-    end
-
-    def resp_code
-        self.id ? 1 : 3
-    end
-
-    def reason_text
-        if self.id
-            "Transaction approved."
-        else
-            self.errors.full_messages
-        end
-    end
-
-    def reason_code
-        self.id ? 1 : 2
-    end
-
 end
