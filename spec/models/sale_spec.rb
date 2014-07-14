@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Sale do
 
-    it_should_behave_like "payable ducktype" do
-        let(:object) { FactoryGirl.build(:sale) }
-    end
+    # it_should_behave_like "payable ducktype" do
+    #     let(:object) { FactoryGirl.build(:sale) }
+    # end
 
     it 'builds from factory' do
         sale = FactoryGirl.create :sale

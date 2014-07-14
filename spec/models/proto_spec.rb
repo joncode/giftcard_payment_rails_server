@@ -8,6 +8,10 @@ describe Proto do
 		proto.save
 	end
 
+    it_should_behave_like "payable ducktype" do
+        let(:object) { FactoryGirl.build(:proto) }
+    end
+
 	context "Validations" do
 
 		it "requires cat" do
