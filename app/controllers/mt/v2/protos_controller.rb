@@ -2,8 +2,7 @@ class Mt::V2::ProtosController < JsonController
     before_action :authenticate_merchant_tools
 
     def gifts
-
-        proto = Proto.find params[:id]
+        proto  = Proto.find params[:id]
         number = proto.giftables.count
         if number == 0
         	success "All gifts have already been created for gift prototype #{params[:id]}"

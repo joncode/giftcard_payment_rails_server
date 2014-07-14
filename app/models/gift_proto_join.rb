@@ -1,5 +1,15 @@
 class GiftProtoJoin < Gift
 
+    def messenger
+        if self.payable.success?
+            Relay.send_push_notification(self)
+            puts "GiftProtoJoin -messenger- Notify Receiver via email #{self.receiver_name}"
+            notify_receiver
+        end
+    end
+
+#####    CLASS METHODS
+
     def self.create args={}
     	proto, proto_join = self.process_input args
     	args = self.pre_init(proto, proto_join)
@@ -11,13 +21,6 @@ class GiftProtoJoin < Gift
         gift
     end
 
-    def messenger
-        if self.payable.success?
-            Relay.send_push_notification(self)
-            puts "GiftProtoJoin -messenger- Notify Receiver via email #{self.receiver_name}"
-            notify_receiver
-        end
-    end
 
 private
 

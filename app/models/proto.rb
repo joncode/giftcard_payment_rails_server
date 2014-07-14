@@ -12,10 +12,13 @@ class Proto < ActiveRecord::Base
 	validates_presence_of :cat, :shoppingCart, :expires_at, :giver_id, :giver_type, :giver_name, :provider_id, :provider_name
 
 	def receivables
+			# returns receivables (Users or Socials)
 		self.users + self.socials
+		ProtoJoin.where(proto_id: self.id).map{|obj| obj.receivable }
 	end
 
 	def giftables
+			# returns proto_join objects
 		ProtoJoin.where(proto_id: self.id, gift_id: nil)
 	end
 
