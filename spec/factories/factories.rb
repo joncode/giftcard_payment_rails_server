@@ -94,6 +94,12 @@ FactoryGirl.define do
         phone            nil
     end
 
+    factory :pn_token do
+        user_id 1
+        pn_token "11111111117d8a5ad9c334d31111111111c177322436ba7c7e854b1111111111"
+        platform "ios"
+    end
+
     factory :provider do
         sequence(:name)    { |n| "ichizos#{n}" }
         city        "New York"
