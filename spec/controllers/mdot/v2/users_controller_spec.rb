@@ -207,7 +207,7 @@ describe Mdot::V2::UsersController do
                 pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
                 ua_alias = "fake_ua"
 
-                Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias})
+                Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias, :provider => :ios })
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
                 post :create, format: :json, data: user_hsh, pn_token: pn_token

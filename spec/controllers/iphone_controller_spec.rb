@@ -132,7 +132,7 @@ describe IphoneController do
                 pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
                 ua_alias = "fake_ua"
 
-                Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias})
+                Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias, :provider => :ios})
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: pn_token
                 run_delayed_jobs # ResqueSpec.perform_all(:push)

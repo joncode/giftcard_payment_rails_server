@@ -240,7 +240,7 @@ describe User do
 
             user_1_alias = user1.pn_tokens.first.ua_alias
             puts "User 1 alias = #{user_1_alias}"
-            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_1_alias})
+            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_1_alias, :provider => :android })
 
             run_delayed_jobs
 
@@ -249,7 +249,7 @@ describe User do
 
             user_2_alias = user2.pn_tokens.first.ua_alias
             puts "User 2 alias = #{user_2_alias}"
-            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_2_alias})
+            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_2_alias, :provider => :android})
 
             run_delayed_jobs
         end
