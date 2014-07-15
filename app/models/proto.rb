@@ -14,7 +14,6 @@ class Proto < ActiveRecord::Base
 	def receivables
 			# returns receivables (Users or Socials)
 		self.users + self.socials
-		ProtoJoin.where(proto_id: self.id).map{|obj| obj.receivable }
 	end
 
 	def giftables
