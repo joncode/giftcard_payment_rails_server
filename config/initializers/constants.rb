@@ -37,6 +37,9 @@ NUMBER_ID = 649387
 VERSION_NUMBER  = "1.2.7.4"
 VERSION_UPDATED = "7/14/14"
 
+# 1.2.8 production to do list
+    # delete the contact migrations
+
 
 BLANK_AVATAR_URL = "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
 GENERIC_RECEIVER_NAME = "ItsOnMe User"
