@@ -34,8 +34,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.2.7.5"
-VERSION_UPDATED = "7/14/14"
+VERSION_NUMBER  = "1.2.7.7"
+VERSION_UPDATED = "7/16/14"
 
 # 1.2.8 production to do list
     # delete the contact migrations
