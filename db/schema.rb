@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140711181135) do
+ActiveRecord::Schema.define(version: 20140715232010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -246,6 +246,7 @@ ActiveRecord::Schema.define(version: 20140711181135) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "gift_id"
+    t.string   "rec_name"
   end
 
   add_index "proto_joins", ["gift_id"], name: "index_proto_joins_on_gift_id", using: :btree
@@ -310,6 +311,13 @@ ActiveRecord::Schema.define(version: 20140711181135) do
   add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
   add_index "providers", ["region_id"], name: "index_providers_on_region_id", using: :btree
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
+
+  create_table "providers_socials", id: false, force: true do |t|
+    t.integer "provider_id", null: false
+    t.integer "social_id",   null: false
+  end
+
+  add_index "providers_socials", ["provider_id"], name: "index_providers_socials_on_provider_id", using: :btree
 
   create_table "providers_tags", id: false, force: true do |t|
     t.integer "provider_id"
@@ -404,6 +412,7 @@ ActiveRecord::Schema.define(version: 20140711181135) do
     t.string   "network"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
   end
 
   add_index "socials", ["network_id", "network"], name: "index_socials_on_network_id_and_network", using: :btree
