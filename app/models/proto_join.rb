@@ -3,6 +3,7 @@ class ProtoJoin < ActiveRecord::Base
 	belongs_to :receivable, polymorphic: true
 	belongs_to :proto
 
+	validates :proto_id, :uniqueness => { scope: [:receivable_id, :receivable_type, :gift_id] }
 	validates_uniqueness_of :gift_id, allow_nil: true
 
 	def convert_to_gift_receiver(args)
