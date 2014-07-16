@@ -306,6 +306,10 @@ class User < ActiveRecord::Base
 		self.pn_tokens.map {|pnt| pnt.pn_token }
 	end
 
+	def apids
+		self.pn_tokens.where(platform: "android").map(&:pn_token)
+	end
+
 #########   settings methods
 
 	def get_or_create_settings

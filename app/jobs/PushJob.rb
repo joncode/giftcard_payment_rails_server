@@ -35,15 +35,47 @@ private
         else
             alert = "#{gift.giver_name} sent you a gift at #{gift.provider_name}!"
         end
-        { :aliases => [receiver.ua_alias],:aps => { :alert => alert, :badge => badge, :sound => 'pn.wav' },:alert_type => 1}
+        {
+            :aliases => [receiver.ua_alias],
+            :aps => {
+                :alert => alert,
+                :badge => badge,
+                :sound => 'pn.wav' },
+            :andrdoid => {
+                :alert => alert
+            },
+            :alert_type => 1
+        }
     end
 
     def self.format_thank_you_payload(gift, push_receiver, badge)
-        { :aliases => [push_receiver.ua_alias],:aps => { :alert => "#{gift.receiver_name} opened your gift at #{gift.provider_name}!", :badge => badge, :sound => 'pn.wav' },:alert_type => 2}
+        alert = "#{gift.receiver_name} opened your gift at #{gift.provider_name}!"
+        {
+            :aliases => [push_receiver.ua_alias],
+            :aps => {
+                :alert => alert,
+                :badge => badge,
+                :sound => 'pn.wav' },
+            :andrdoid => {
+                :alert => alert
+            },
+            :alert_type => 2
+        }
     end
 
     def self.format_incomplete_payload(gift, push_receiver, badge)
-        { :aliases => [push_receiver.ua_alias],:aps => { :alert => "Thank You! #{gift.receiver_name} got the app and your gift!", :badge => badge, :sound => 'pn.wav' },:alert_type => 2}
+        alert = "Thank You! #{gift.receiver_name} got the app and your gift!"
+        {
+            :aliases => [push_receiver.ua_alias],
+            :aps => {
+                :alert => alert,
+                :badge => badge,
+                :sound => 'pn.wav' },
+            :andrdoid => {
+                :alert => alert
+            },
+            :alert_type => 2
+        }
     end
 
 end
