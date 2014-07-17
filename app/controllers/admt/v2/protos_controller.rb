@@ -1,9 +1,9 @@
-class Admt::V2::GiftProtoJoinsController < JsonController
+class Admt::V2::ProtosController < JsonController
 
 	before_action :authenticate_admin_tools
 	rescue_from JSON::ParserError, :with => :bad_request
 
-	def create
+	def gifts
 		proto = Proto.find params[:id]
 		number = proto.giftables.count
         if number == 0

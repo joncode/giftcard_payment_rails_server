@@ -165,6 +165,12 @@ end
             collection { post :bulk_create }
           end
 
+          resources :protos,  only: [] do
+            member  do
+              post :gifts
+            end
+          end
+
           resources :users,     only: [:update] do         # biz logic
             member do
               post :deactivate
