@@ -23,6 +23,9 @@ class ProtoGifterJob
 		proto.giftables.find_in_batches(batch_size: batch) do |group_ary|
 			group_ary.each do |proto_join|
 				gift = GiftProtoJoin.create({ "proto_join" => proto_join, "proto" => proto})
+				if gift.errors.messages.count > 0
+					puts "Gift Error = #{gift.errors.messages} for #{gift.inspect}"
+				end
 				sleep wait_time
 			end
 		end
