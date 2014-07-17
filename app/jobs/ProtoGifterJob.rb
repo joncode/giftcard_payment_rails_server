@@ -15,18 +15,15 @@ class ProtoGifterJob
 			wait_time = 0.1
 		end
 
-		# proto.giftables.find_each(batch_size: batch) do |proto_join|
-		# 	gift = GiftProtoJoin.create({ "proto_join" => proto_join, "proto" => proto})
-		# 	sleep wait_time
-		# end
-
 		proto.giftables.find_in_batches(batch_size: batch) do |group_ary|
 			group_ary.each do |proto_join|
 				gift = GiftProtoJoin.create({ "proto_join" => proto_join, "proto" => proto})
+				puts "\n proto has created gift ... "
 				if gift.errors.messages.count > 0
 					puts "Gift Error = #{gift.errors.messages} for #{gift.inspect}"
 				end
 				sleep wait_time
+				puts "\n proto wait is finished looping to make another ..."
 			end
 		end
 
