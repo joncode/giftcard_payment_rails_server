@@ -1,4 +1,5 @@
 class GiftPromo < Gift
+    include ShoppingCartHelper
 
     def initialize args={}
         super
@@ -35,11 +36,6 @@ private
     #     puts "NOTIFY RECEIVER VIA #{self.receiver_email}"
     #     #  alert merchant tools wbesite
     # end
-
-    def calculate_value shoppingCart_string
-        sc = JSON.parse shoppingCart_string
-        sc.sum {|z| z["price"].to_i * z["quantity"].to_i }
-    end
 
     def set_cat args
         if args["cat"] && args["cat"].class == Fixnum

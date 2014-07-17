@@ -2,14 +2,26 @@ require 'spec_helper'
 
 describe Proto do
 
-	it "builds from factory" do
-		proto = FactoryGirl.build :proto
-		proto.should be_valid
-		proto.save
-	end
-
     it_should_behave_like "payable ducktype" do
         let(:object) { FactoryGirl.build(:proto) }
+    end
+
+    context "Callbacks" do
+
+    	it "should set the value from the shoppingCart" do
+    		proto = FactoryGirl.create(:proto, value: nil, shoppingCart: nil)
+    		proto.update(shoppingCart:"[{\"detail\":\"The best margherita\",\"price\":13,\"price_promo\":1,\"quantity\":2,\"item_id\":82,\"item_name\":\"Original Margarita\"}]")
+    		proto.value.should == "26"
+    	end
+
+    	it "should set the cost" do
+    		proto = FactoryGirl.create(:proto, cost: nil)
+    		proto.update(shoppingCart:"[{\"detail\":\"The best margherita\",\"price\":13,\"price_promo\":1,\"quantity\":2,\"item_id\":82,\"item_name\":\"Original Margarita\"}]")
+    		proto.cost.should == "0"
+    		proto = FactoryGirl.create(:proto)
+    		proto.cost.should == "3"
+    	end
+
     end
 
 	context "Validations" do
@@ -18,12 +30,6 @@ describe Proto do
 			proto = FactoryGirl.build(:proto, :cat => nil)
 			proto.should_not be_valid
 			proto.should have_at_least(1).error_on(:cat)
-		end
-
-		it "requires shoppingCart" do
-			proto = FactoryGirl.build(:proto, :shoppingCart => nil)
-			proto.should_not be_valid
-			proto.should have_at_least(1).error_on(:shoppingCart)
 		end
 
 		it "requires expires_at" do
@@ -124,6 +130,19 @@ describe Proto do
 			gift.payable.should      == proto
 		end
 
+		it "should associate with gifts as proto.gifts" do
+			social                   = FactoryGirl.create(:social)
+			proto                    = FactoryGirl.build(:proto)
+			proto.socials << social
+			proto.id.should be_nil
+			gift                     = FactoryGirl.build(:gift)
+			gift.payable             = proto
+			gift.save
+			pj = proto.proto_joins.first
+			pj.update(gift_id: gift.id)
+			proto.gifts.first.should == gift
+		end
+
 		it "should associate with giver" do
 			social                  = FactoryGirl.create(:social)
 			proto                   = FactoryGirl.create(:proto)
@@ -149,5 +168,11 @@ describe Proto do
 			proto.provider.should == provider
 		end
 
+	end
+
+	it "builds from factory" do
+		proto = FactoryGirl.build :proto
+		proto.should be_valid
+		proto.save
 	end
 end
