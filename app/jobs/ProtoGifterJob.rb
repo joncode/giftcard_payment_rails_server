@@ -9,7 +9,7 @@ class ProtoGifterJob
 
 		if Rails.env.production? || Rails.env.staging?
 			batch 	  = 200
-			wait_time = 1
+			wait_time = 3
 		else
 			batch 	  = 1
 			wait_time = 0.1
@@ -22,9 +22,9 @@ class ProtoGifterJob
 				if gift.errors.messages.count > 0
 					puts "Gift Error = #{gift.errors.messages} for #{gift.inspect}"
 				end
-				sleep wait_time
-				puts "\n proto wait is finished looping to make another ..."
 			end
+			sleep wait_time
+			puts "\n proto wait is finished looping to make another ..."
 		end
 
 	end
