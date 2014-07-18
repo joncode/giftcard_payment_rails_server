@@ -8,7 +8,11 @@ class Mt::V2::ProtosController < JsonController
         	success "All gifts have already been created for gift prototype #{params[:id]}"
         	status = 201
         else
-			Resque.enqueue(ProtoGifterJob, proto.id)
+            if thread_on?
+                Resque.enqueue(ProtoGifterJob, proto.id)
+            else
+                ProtoGifterJob.perform(proto.id)
+            end
         	success "Request for #{number} gifts from #{proto.giver_name} received."
         	status = 202
         end

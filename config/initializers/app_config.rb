@@ -55,3 +55,17 @@ def log_bars text
 end
 
 
+
+def thread_on?
+
+    if Rails.env.development?
+        false
+    else
+        true
+    end
+
+end
+
+
+
+

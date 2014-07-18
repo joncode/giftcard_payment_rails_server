@@ -1,21 +1,6 @@
 module Email
 
-######   Order
-
-    def notify_giver_order_complete
-        ####--->  this is not included in new emailers
-        puts "emailing the gift giver for #{self.id}"
-        # notify the giver via email
-        # order is self here
-        gift = self.gift
-
-        data = {"text"     => 'notify_giver_order_complete',
-                "gift_id"  =>  gift.id
-                }
-        route_email_system(data)
-    end
-
-#######   Sale
+#######   Gifts
 
     def notify_receiver_boomerang
         gift = self
@@ -24,7 +9,6 @@ module Email
 
         if !email.blank?
             puts "emailing boomerang notice to the gift receiver for #{gift.id}"
-            # notify the receiver via email
             user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
 
             data = {"text"        => 'notify_receiver_boomerang',
@@ -41,7 +25,6 @@ module Email
 
         if !email.blank?
             puts "emailing the gift receiver for #{gift.id}"
-            # notify the receiver via email
             user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
 
             data = {"text"        => 'notify_receiver',
@@ -64,19 +47,6 @@ module Email
 
 #######   User
 
-    def email_gift_collected gift
-        ###---->  we have connected user to gift - not included
-        if gift.receiver_email
-            puts "emailing the gift giver that gift has been collected for #{gift.id}"
-
-            data = {"text" => 'notify_giver_created_user',
-                    "first_id" => gift.giver_id,
-                    "options_hsh" =>  {:gift_id => gift.id}
-                    }
-            route_email_system(data)
-        end
-    end
-
     def confirm_email
 
         data = {"text"        => 'confirm_email',
@@ -86,8 +56,6 @@ module Email
         # puts "Here is the data #{data.inspect}"
         route_email_system(data)
     end
-
-######    App Controller
 
     def send_reset_password_email user
         data = {"text"        => 'reset_password',

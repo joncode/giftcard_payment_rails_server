@@ -1,5 +1,4 @@
 class Proto < ActiveRecord::Base
-	include GenericPayableDucktype
     include ShoppingCartHelper
 
 	has_many   :proto_joins
