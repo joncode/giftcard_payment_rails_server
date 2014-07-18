@@ -1,4 +1,4 @@
-require 'spec_helper'
+    require 'spec_helper'
 
 describe PushJob do
 
@@ -39,9 +39,6 @@ describe PushJob do
                         :alert => alert,
                         :badge => 1,
                         :sound => 'pn.wav' },
-                    :andrdoid => {
-                        :alert => alert
-                    },
                     :alert_type => 1
                 }
 
@@ -78,9 +75,6 @@ describe PushJob do
                         :alert => alert,
                         :badge => 3,
                         :sound => 'pn.wav' },
-                    :andrdoid => {
-                        :alert => alert
-                    },
                     :alert_type => 2
                 }
 
@@ -111,9 +105,6 @@ describe PushJob do
                         :alert => alert,
                         :badge => 0,
                         :sound => 'pn.wav' },
-                    :andrdoid => {
-                        :alert => alert
-                    },
                     :alert_type => 2
                 }
 
@@ -141,9 +132,6 @@ describe PushJob do
                         :alert => alert,
                         :badge => 3,
                         :sound => 'pn.wav' },
-                    :andrdoid => {
-                        :alert => alert
-                    },
                     :alert_type => 2
                 }
 
@@ -168,15 +156,10 @@ describe PushJob do
             badge     = Gift.get_notifications(user)
             alert     = "#{gift.giver_name} sent you a gift at #{gift.provider_name}!"
             payload   = {
-                :aliases => [user.ua_alias],
-                :aps => {
-                    :alert => alert,
-                    :badge => badge,
-                    :sound => 'pn.wav' },
+                :apids => ["DROIDPN_TOKENFAKE_PN_TOKEN"],
                 :andrdoid => {
                     :alert => alert
-                },
-                :alert_type => 1
+                }
             }
             Urbanairship.should_receive(:push).with(payload)
             PushJob.perform(gift.id)
@@ -189,18 +172,22 @@ describe PushJob do
             gift      = FactoryGirl.create :gift, receiver: user
             badge     = Gift.get_notifications(user)
             alert     = "#{gift.giver_name} sent you a gift at #{gift.provider_name}!"
-            payload   = {
+            ios_payload   = {
                 :aliases => [user.ua_alias],
                 :aps => {
                     :alert => alert,
                     :badge => badge,
                     :sound => 'pn.wav' },
-                :andrdoid => {
-                    :alert => alert
-                },
                 :alert_type => 1
             }
-            Urbanairship.should_receive(:push).with(payload)
+            android_payload   = {
+                :apids => ["DROIDPN_TOKENFAKE_PN_TOKEN"],
+                :andrdoid => {
+                    :alert => alert
+                }
+            }
+            Urbanairship.should_receive(:push).with(ios_payload)
+            Urbanairship.should_receive(:push).with(android_payload)
             PushJob.perform(gift.id)
         end
 
