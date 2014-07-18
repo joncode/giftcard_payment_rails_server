@@ -3,6 +3,7 @@ class Gift < ActiveRecord::Base
 	include Formatter
 	include Email
 	include GiftSerializers
+    include GenericPayableDucktype
 
     attr_accessor :receiver_oauth
 
@@ -50,14 +51,6 @@ class Gift < ActiveRecord::Base
     def obscured_id
         NUMBER_ID + self.id
     end
-
-    # def sale
-    #     Sale.find_by(gift_id: self.id)
-    # end
-
-    # def promo?
-    #     self.giver_type == "BizUser" && self.payable_type == "Debt"
-    # end
 
     def initialize args={}
         pre_init(args)
@@ -109,10 +102,6 @@ class Gift < ActiveRecord::Base
         self.value = amount
     end
 
-    def unique_cc_id
-        "#{self.receiver_name}_#{self.provider_id}".gsub(' ','_')
-    end
-
     def redeem_time
         self.redeemed_at || self.created_at
     end
@@ -161,7 +150,7 @@ class Gift < ActiveRecord::Base
     end
 
     def set_payment_status
-        case self.payable.resp_code
+        case self.resp_code
         when 1
           # Approved
             self.pay_stat = "charge_unpaid"
@@ -172,7 +161,7 @@ class Gift < ActiveRecord::Base
             self.status = "cancel"
         when 3
           # Error
-            if self.payable.reason_code == 11
+            if self.reason_code == 11
                 self.pay_stat = "payment_error"
             else
                 self.pay_stat = "payment_error"

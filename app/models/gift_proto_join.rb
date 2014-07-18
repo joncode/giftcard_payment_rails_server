@@ -1,12 +1,5 @@
 class GiftProtoJoin < Gift
-
-    def messenger
-        if self.payable.success?
-            Relay.send_push_notification(self)
-            puts "GiftProtoJoin -messenger- Notify Receiver via email #{self.receiver_name}"
-            notify_receiver
-        end
-    end
+    include GiftMessenger
 
 #####    CLASS METHODS
 

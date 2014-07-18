@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe Proto do
 
-    it_should_behave_like "payable ducktype" do
-        let(:object) { FactoryGirl.build(:proto) }
-    end
-
     context "Callbacks" do
 
     	it "should set the value from the shoppingCart" do

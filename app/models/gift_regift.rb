@@ -1,4 +1,5 @@
 class GiftRegift < Gift
+    include GiftMessenger
 
     def self.create args={}
         args["receiver_name"] = args["receiver_name"].gsub(/[^0-9a-z ]/i, '') if args["receiver_name"]
@@ -15,14 +16,6 @@ class GiftRegift < Gift
             gift.messenger
         end
         gift
-    end
-
-    def messenger
-        puts "REGIFT-post_init -- Notify new Receiver #{self.receiver}"
-        puts "REGIFT-post_init -- Invoice the regifter via email #{self.giver}"
-        Relay.send_push_notification(self)
-        puts "GiftRegift -messenger- Notify Receiver via email #{self.receiver_name}"
-        notify_receiver
     end
 
 private

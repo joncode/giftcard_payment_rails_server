@@ -1,8 +1,6 @@
 class CampaignItem < Admtmodel
     self.table_name = "campaign_items"
 
-    include GenericPayableDucktype
-
     has_many :gifts, as: :payable
     belongs_to :campaign
     belongs_to :provider

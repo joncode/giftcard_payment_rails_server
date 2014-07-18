@@ -1,5 +1,4 @@
 class Order < ActiveRecord::Base
-	include Email
 
 	belongs_to  :provider
 	belongs_to  :redeem, autosave: true

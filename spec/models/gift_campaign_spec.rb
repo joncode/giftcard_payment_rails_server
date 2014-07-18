@@ -57,10 +57,10 @@ describe GiftCampaign do
             payable                         = gift_campaign.payable
             payable.class.name.should       == "CampaignItem"
             payable.owner.class.name.should == "Campaign"
-            payable.success?.should         == true
-            payable.resp_code.should        == 1
-            payable.reason_text.should      == "Transaction approved."
-            payable.reason_code.should      == 1
+            gift_campaign.success?.should         == true
+            gift_campaign.resp_code.should        == 1
+            gift_campaign.reason_text.should      == "Transaction approved."
+            gift_campaign.reason_code.should      == 1
         end
 
         it "should correctly set expiration date from expires_at" do
@@ -182,10 +182,10 @@ describe GiftCampaign do
             payable                         = gift.payable
             payable.class.name.should       == "CampaignItem"
             payable.owner.class.name.should == "Campaign"
-            payable.success?.should         == true
-            payable.resp_code.should        == 1
-            payable.reason_text.should      == "Transaction approved."
-            payable.reason_code.should      == 1
+            gift.success?.should         == true
+            gift.resp_code.should        == 1
+            gift.reason_text.should      == "Transaction approved."
+            gift.reason_code.should      == 1
         end
 
         context "messaging" do

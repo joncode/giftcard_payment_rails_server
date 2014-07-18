@@ -1,4 +1,5 @@
 class GiftSale < Gift
+    include GiftMessenger
 
     def self.create args={}
         args["receiver_name"] = args["receiver_name"].gsub(/[^0-9a-z ]/i, '') if args["receiver_name"]
@@ -20,25 +21,15 @@ class GiftSale < Gift
         if gift.pay_stat == "payment_error"
             gift.payable.reason_text
         else
-            gift.messenger
+            gift.messenger(:invoice_giver)
             gift
-        end
-    end
-
-    def messenger
-        if self.payable.success?
-            Relay.send_push_notification(self)
-            puts "GiftSale -messenger- Notify Receiver via email #{self.receiver_name}"
-            notify_receiver
-            puts "GiftSale -messenger- Invoice the giver via email #{self.giver_name}"
-            invoice_giver
         end
     end
 
 private
 
     def pre_init args={}
-        args["unique_id"] = unique_id(args["receiver_name"], args["provider_id"])
+        args["unique_id"] = unique_cc_id(args["receiver_name"], args["provider_id"])
         card                           = args["card"]
         args["amount"]                 = (args["value"].to_f + args["service"].to_f).to_s
         args["cost"]                   = (args["value"].to_f * 0.85).to_s
@@ -52,7 +43,7 @@ private
         args.delete("amount")
     end
 
-    def unique_id receiver_name, provider_id
+    def unique_cc_id receiver_name, provider_id
         "#{receiver_name}_#{provider_id}".gsub(' ','_')
     end
 

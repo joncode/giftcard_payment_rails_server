@@ -2,25 +2,39 @@ module GenericPayableDucktype
     extend ActiveSupport::Concern
 
     def success?
-        resp_code == 1
+        if self.payable_type == 'Sale'
+            self.payable.success?
+        else
+            resp_code == 1
+        end
     end
 
     def resp_code
-        self.id ? 1 : 3
+        if self.payable_type == 'Sale'
+            self.payable.resp_code
+        else
+            self.id ? 1 : 3
+        end
     end
 
     def reason_text
-        if self.id
-            "Transaction approved."
+        if self.payable_type == 'Sale'
+            self.payable.reason_text
         else
-            self.errors.full_messages
+            if self.id
+                "Transaction approved."
+            else
+                self.errors.full_messages
+            end
         end
     end
 
     def reason_code
-        self.id ? 1 : 2
+        if self.payable_type == 'Sale'
+            self.payable.reason_code
+        else
+            self.id ? 1 : 2
+        end
     end
-
-
 
 end

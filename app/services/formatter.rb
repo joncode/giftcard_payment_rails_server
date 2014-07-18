@@ -25,12 +25,6 @@ module Formatter
         new_str
     end
 
-    def remove_key_from_hash obj_hash, key_for_removal
-        if obj_hash.has_key? key_for_removal
-            obj_hash.delete(key_for_removal)
-        end
-    end
-
     def format_datetime datetime
         datetime and datetime.to_formatted_s :merchant_date
     end
@@ -60,6 +54,12 @@ module Formatter
 
     def remove_nils(hsh)
         hsh.delete_if { |k, v| v.nil? }
+    end
+
+    def remove_key_from_hash obj_hash, key_for_removal
+        if obj_hash.has_key? key_for_removal
+            obj_hash.delete(key_for_removal)
+        end
     end
 
     def split_name name

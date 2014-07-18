@@ -2,11 +2,6 @@ require 'spec_helper'
 
 describe CampaignItem do
 
-
-    it_should_behave_like "payable ducktype" do
-        let(:object) { FactoryGirl.build(:campaign_item) }
-    end
-
     context "associations and validations" do
 
         context "gift_campaign messages" do
