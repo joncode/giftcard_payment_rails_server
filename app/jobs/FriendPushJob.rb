@@ -38,7 +38,18 @@ private
     end
 
     def self.format_payload_contact_friend(user, badge, receiver)
-        { :aliases => [receiver.ua_alias],:aps => { :alert => "#{user.username} can now send you a drink", :badge => badge, :sound => 'pn.wav' },:alert_type => 4 }
+        {
+            :aliases => [receiver.ua_alias],
+            :aps => {
+                :alert => "#{user.username} can now send you a drink",
+                :badge => badge,
+                :sound => 'pn.wav'
+            },
+            :alert_type => 4,
+            :android => {
+                :alert => "#{user.username} can now send you a drink"
+            }
+        }
     end
 
     ############   contact upload push to contact owner
@@ -59,6 +70,17 @@ private
 
     def self.format_payload_user_friend(user, badge, count)
         plural = count == 1 ? "" : "s"
-        { :aliases => [user.ua_alias],:aps => { :alert => "#{count} new friend#{plural} can buy you a drink", :badge => badge, :sound => 'pn.wav' },:alert_type => 5 }
+        {
+            :aliases => [user.ua_alias],
+            :aps => {
+                :alert => "#{count} new friend#{plural} can buy you a drink",
+                :badge => badge,
+                :sound => 'pn.wav'
+            },
+            :alert_type => 5,
+            :android => {
+                :alert => "#{count} new friend#{plural} can buy you a drink"
+            }
+        }
     end
 end

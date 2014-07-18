@@ -278,7 +278,7 @@ describe User do
             receiver.pn_token = pnt
             receiver.pn_token.should == [pnt]
             ua_alias_thing = giver.pn_tokens.first.ua_alias
-            Urbanairship.should_receive(:push).with({:aliases=>[ua_alias_thing], :aps=>{:alert=>"Thank You! Quentin Basic got the app and your gift!", :badge=>0, :sound=>"pn.wav"}, :alert_type=>2})
+            Urbanairship.should_receive(:push).with({:aliases=>[ua_alias_thing], :aps=>{:alert=>"Thank You! Quentin Basic got the app and your gift!", :badge=>0, :sound=>"pn.wav"}, :alert_type=>2,:android=>{:alert=>"Thank You! Quentin Basic got the app and your gift!"}})
             run_delayed_jobs
         end
 

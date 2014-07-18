@@ -14,16 +14,7 @@ class PushJob
             else
                 receiver        = gift.receiver
                 badge           = Gift.get_notifications(receiver)
-
                 payload         = self.format_payload(gift, receiver, badge)
-                # tokens          = receiver.pn_tokens
-                # if tokens.where.not(platform: "android").present?
-                #     payload     = self.format_payload(gift, receiver, badge)
-                # end
-                # if tokens.where(platform: "android").present?
-                #     android_tokens = tokens.where(platform: "android").map(&:pn_token)
-                #     android_payload = self.format_payload(gift, receiver, badge, android_tokens)
-                # end
             end
         else
             receiver = gift.giver
@@ -31,18 +22,8 @@ class PushJob
             badge         = Gift.get_notifications(receiver)
             payload       = self.format_incomplete_payload(gift, receiver, badge)
         end
-
-        puts "SENDING PUSH NOTE for GIFT ID = #{gift_id} | USER ID = #{receiver.id} | #{payload}"
+        puts "SENDING PUSH NOTE for GIFT ID = #{gift_id} | RECEIVER ID = #{receiver.id} | #{payload}"
         self.ua_push(payload, gift_id)
-        # if payload.present?
-        #     puts "SENDING IOS PUSH NOTE for GIFT ID = #{gift_id} | USER ID = #{receiver.id} | #{payload}"
-        #     self.ua_push(payload, gift_id)
-        # end
-
-        # if android_payload.present?
-        #     puts "SENDING ANDROID PUSH NOTE for GIFT ID = #{gift_id} | USER ID = #{receiver.id} | #{android_payload}"
-        #     self.ua_push(android_payload, gift_id)
-        # end
     end
 
 private
@@ -53,43 +34,18 @@ private
         else
             alert = "#{gift.giver_name} sent you a gift at #{gift.provider_name}!"
         end
-
-###############################################
-    #Master
-    #     { :aliases => [receiver.ua_alias],:aps => { :alert => alert, :badge => badge, :sound => 'pn.wav' },:alert_type => 1}
-
-    #QA Wednesday
         {
             :aliases => [receiver.ua_alias],
             :aps => {
                 :alert => alert,
                 :badge => badge,
-                :sound => 'pn.wav' },
+                :sound => 'pn.wav'
+            },
+            :alert_type => 1,
             :android => {
                 :alert => alert
-            },
-            :alert_type => 1
+            }
         }
-
-        # if android_tokens.present?
-        #     {
-        #         :apids => android_tokens,
-        #         :android => {
-        #             :alert => alert
-        #         }
-        #     }
-        # else
-        #     {
-        #         :aliases => [receiver.ua_alias],
-        #         :aps => {
-        #             :alert => alert,
-        #             :badge => badge,
-        #             :sound => 'pn.wav'
-        #         },
-        #         :alert_type => 1
-        #     }
-        # end
-###############################################
     end
 
     def self.format_thank_you_payload(gift, push_receiver, badge)
@@ -99,8 +55,12 @@ private
             :aps => {
                 :alert => alert,
                 :badge => badge,
-                :sound => 'pn.wav' },
-            :alert_type => 2
+                :sound => 'pn.wav'
+            },
+            :alert_type => 2,
+            :android => {
+                :alert => alert
+            }
         }
     end
 
@@ -111,8 +71,12 @@ private
             :aps => {
                 :alert => alert,
                 :badge => badge,
-                :sound => 'pn.wav' },
-            :alert_type => 2
+                :sound => 'pn.wav'
+            },
+            :alert_type => 2,
+            :android => {
+                :alert => alert
+            }
         }
     end
 

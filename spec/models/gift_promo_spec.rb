@@ -168,7 +168,7 @@ describe GiftPromo do
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@biz_user.name} sent you a gift",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@biz_user.name} sent you a gift",:badge=>1,:sound=>"pn.wav"},:alert_type=>1,:android =>{:alert => "#{@biz_user.name} sent you a gift"}}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             response = GiftPromo.create @gift_hsh
             run_delayed_jobs

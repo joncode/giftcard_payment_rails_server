@@ -18,7 +18,18 @@ class BoomerangPushJob
 private
 
     def self.format_payload(gift, receiver, badge)
-        { :aliases => [receiver.ua_alias], :aps => { :alert => "Boomerang! We are returning this gift to you because your friend never created an account", :badge => badge, :sound => 'pn.wav' }, :alert_type => 1}
+        {
+            :aliases => [receiver.ua_alias],
+            :aps => {
+                :alert => "Boomerang! We are returning this gift to you because your friend never created an account",
+                :badge => badge,
+                :sound => 'pn.wav'
+            },
+            :alert_type => 1,
+            :android => {
+                :alert => "Boomerang! We are returning this gift to you because your friend never created an account",
+            }
+        }
     end
 
 

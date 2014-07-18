@@ -38,8 +38,12 @@ describe PushJob do
                     :aps => {
                         :alert => alert,
                         :badge => 1,
-                        :sound => 'pn.wav' },
-                    :alert_type => 1
+                        :sound => 'pn.wav'
+                    },
+                    :alert_type => 1,
+                    :android => {
+                        :alert => alert
+                    }
                 }
 
                 run_delayed_jobs
@@ -74,8 +78,12 @@ describe PushJob do
                     :aps => {
                         :alert => alert,
                         :badge => 3,
-                        :sound => 'pn.wav' },
-                    :alert_type => 2
+                        :sound => 'pn.wav'
+                    },
+                    :alert_type => 2,
+                    :android => {
+                        :alert => alert
+                    }
                 }
 
                 Urbanairship.should_receive(:push).with(good_push_hsh).and_return({"push_id"=>"39f42812-0665-11e4-bc49-90e2ba272c68"})
@@ -98,14 +106,17 @@ describe PushJob do
                 user_alias = @pnt.ua_alias
                 alert = "Thank You! #{@gift.receiver_name} got the app and your gift!"
 
-
                 good_push_hsh   = {
                     :aliases => [@pnt.ua_alias],
                     :aps => {
                         :alert => alert,
                         :badge => 0,
-                        :sound => 'pn.wav' },
-                    :alert_type => 2
+                        :sound => 'pn.wav'
+                    },
+                    :alert_type => 2,
+                    :android => {
+                        :alert => alert
+                    }
                 }
 
                 Urbanairship.should_receive(:push).with(good_push_hsh)
@@ -131,8 +142,12 @@ describe PushJob do
                     :aps => {
                         :alert => alert,
                         :badge => 3,
-                        :sound => 'pn.wav' },
-                    :alert_type => 2
+                        :sound => 'pn.wav'
+                    },
+                    :alert_type => 2,
+                    :android => {
+                        :alert => alert
+                    }
                 }
 
                 Urbanairship.should_not_receive(:push).with(good_push_hsh)
@@ -156,7 +171,13 @@ describe PushJob do
             badge     = Gift.get_notifications(user)
             alert     = "#{gift.giver_name} sent you a gift at #{gift.provider_name}!"
             payload   = {
-                :apids => ["DROIDPN_TOKENFAKE_PN_TOKEN"],
+                :aliases => [user.ua_alias],
+                :aps => {
+                    :alert => alert,
+                    :badge => badge,
+                    :sound => 'pn.wav'
+                },
+                :alert_type => 1,
                 :android => {
                     :alert => alert
                 }
@@ -172,22 +193,19 @@ describe PushJob do
             gift      = FactoryGirl.create :gift, receiver: user
             badge     = Gift.get_notifications(user)
             alert     = "#{gift.giver_name} sent you a gift at #{gift.provider_name}!"
-            ios_payload   = {
+            payload   = {
                 :aliases => [user.ua_alias],
                 :aps => {
                     :alert => alert,
                     :badge => badge,
-                    :sound => 'pn.wav' },
-                :alert_type => 1
-            }
-            android_payload   = {
-                :apids => ["DROIDPN_TOKENFAKE_PN_TOKEN"],
+                    :sound => 'pn.wav'
+                },
+                :alert_type => 1,
                 :android => {
                     :alert => alert
                 }
             }
-            Urbanairship.should_receive(:push).with(ios_payload)
-            Urbanairship.should_receive(:push).with(android_payload)
+            Urbanairship.should_receive(:push).with(payload)
             PushJob.perform(gift.id)
         end
 
@@ -202,11 +220,12 @@ describe PushJob do
                 :aps => {
                     :alert => alert,
                     :badge => badge,
-                    :sound => 'pn.wav' },
+                    :sound => 'pn.wav'
+                },
+                :alert_type => 2,
                 :android => {
                     :alert => alert
-                },
-                :alert_type => 2
+                }
             }
             Urbanairship.should_receive(:push).with(payload)
             PushJob.perform(gift.id, true)
@@ -223,11 +242,12 @@ describe PushJob do
                 :aps => {
                     :alert => alert,
                     :badge => badge,
-                    :sound => 'pn.wav' },
+                    :sound => 'pn.wav'
+                },
+                :alert_type => 2,
                 :android => {
                     :alert => alert
-                },
-                :alert_type => 2
+                }
             }
             Urbanairship.should_receive(:push).with(payload)
             PushJob.perform(gift.id, true, true)

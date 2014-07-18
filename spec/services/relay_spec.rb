@@ -16,7 +16,7 @@ describe Relay do
         gift.set_statuses
         gift.status.should == 'incomplete'
         user_alias    = pnt.ua_alias
-        good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "Thank You! #{gift.receiver_name} got the app and your gift!",:badge=>0,:sound=>"pn.wav"},:alert_type=>2}
+        good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "Thank You! #{gift.receiver_name} got the app and your gift!",:badge=>0,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "Thank You! #{gift.receiver_name} got the app and your gift!"}}
 
         Urbanairship.should_receive(:push).with(good_push_hsh)
         Relay.send_push_incomplete gift
