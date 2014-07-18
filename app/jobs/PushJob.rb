@@ -30,7 +30,7 @@ private
 
     def self.format_payload(gift, receiver, badge, android_tokens=[])
         if gift.giver_type == "BizUser"
-            alert = "#{gift.giver_name} sent you a gift"
+            alert = "#{gift.giver_name} sent you a gift!"
         else
             alert = "#{gift.giver_name} sent you a gift at #{gift.provider_name}!"
         end
