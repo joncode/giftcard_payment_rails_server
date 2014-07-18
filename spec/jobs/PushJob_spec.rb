@@ -157,7 +157,7 @@ describe PushJob do
             alert     = "#{gift.giver_name} sent you a gift at #{gift.provider_name}!"
             payload   = {
                 :apids => ["DROIDPN_TOKENFAKE_PN_TOKEN"],
-                :andrdoid => {
+                :android => {
                     :alert => alert
                 }
             }
@@ -182,7 +182,7 @@ describe PushJob do
             }
             android_payload   = {
                 :apids => ["DROIDPN_TOKENFAKE_PN_TOKEN"],
-                :andrdoid => {
+                :android => {
                     :alert => alert
                 }
             }
@@ -203,7 +203,7 @@ describe PushJob do
                     :alert => alert,
                     :badge => badge,
                     :sound => 'pn.wav' },
-                :andrdoid => {
+                :android => {
                     :alert => alert
                 },
                 :alert_type => 2
@@ -224,7 +224,7 @@ describe PushJob do
                     :alert => alert,
                     :badge => badge,
                     :sound => 'pn.wav' },
-                :andrdoid => {
+                :android => {
                     :alert => alert
                 },
                 :alert_type => 2

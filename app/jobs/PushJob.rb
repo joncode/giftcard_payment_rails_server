@@ -10,37 +10,39 @@ class PushJob
                 receiver = gift.giver
                 return nil unless receiver.respond_to?(:ua_alias)
                 badge         = Gift.get_notifications(receiver)
-                ios_payload       = self.format_thank_you_payload(gift, receiver, badge)
+                payload       = self.format_thank_you_payload(gift, receiver, badge)
             else
                 receiver        = gift.receiver
-                tokens          = receiver.pn_tokens
-
                 badge           = Gift.get_notifications(receiver)
 
-                if tokens.where.not(platform: "android").present?
-                    ios_payload     = self.format_payload(gift, receiver, badge)
-                end
-                if tokens.where(platform: "android").present?
-                    android_tokens = tokens.where(platform: "android").map(&:pn_token)
-                    android_payload = self.format_payload(gift, receiver, badge, android_tokens)
-                end
+                payload         = self.format_payload(gift, receiver, badge)
+                # tokens          = receiver.pn_tokens
+                # if tokens.where.not(platform: "android").present?
+                #     payload     = self.format_payload(gift, receiver, badge)
+                # end
+                # if tokens.where(platform: "android").present?
+                #     android_tokens = tokens.where(platform: "android").map(&:pn_token)
+                #     android_payload = self.format_payload(gift, receiver, badge, android_tokens)
+                # end
             end
         else
             receiver = gift.giver
             return nil unless receiver.respond_to?(:ua_alias)
             badge         = Gift.get_notifications(receiver)
-            ios_payload       = self.format_incomplete_payload(gift, receiver, badge)
+            payload       = self.format_incomplete_payload(gift, receiver, badge)
         end
 
-        if ios_payload.present?
-            puts "SENDING IOS PUSH NOTE for GIFT ID = #{gift_id} | USER ID = #{receiver.id} | #{ios_payload}"
-            self.ua_push(ios_payload, gift_id)
-        end
+        puts "SENDING PUSH NOTE for GIFT ID = #{gift_id} | USER ID = #{receiver.id} | #{payload}"
+        self.ua_push(payload, gift_id)
+        # if payload.present?
+        #     puts "SENDING IOS PUSH NOTE for GIFT ID = #{gift_id} | USER ID = #{receiver.id} | #{payload}"
+        #     self.ua_push(payload, gift_id)
+        # end
 
-        if android_payload.present?
-            puts "SENDING ANDROID PUSH NOTE for GIFT ID = #{gift_id} | USER ID = #{receiver.id} | #{android_payload}"
-            self.ua_push(android_payload, gift_id)
-        end
+        # if android_payload.present?
+        #     puts "SENDING ANDROID PUSH NOTE for GIFT ID = #{gift_id} | USER ID = #{receiver.id} | #{android_payload}"
+        #     self.ua_push(android_payload, gift_id)
+        # end
     end
 
 private
@@ -57,36 +59,36 @@ private
     #     { :aliases => [receiver.ua_alias],:aps => { :alert => alert, :badge => badge, :sound => 'pn.wav' },:alert_type => 1}
 
     #QA Wednesday
-    #     {
-    #         :aliases => [receiver.ua_alias],
-    #         :aps => {
-    #             :alert => alert,
-    #             :badge => badge,
-    #             :sound => 'pn.wav' },
-    #         :andrdoid => {
-    #             :alert => alert
-    #         },
-    #         :alert_type => 1
-    #     }
+        {
+            :aliases => [receiver.ua_alias],
+            :aps => {
+                :alert => alert,
+                :badge => badge,
+                :sound => 'pn.wav' },
+            :android => {
+                :alert => alert
+            },
+            :alert_type => 1
+        }
 
-        if android_tokens.present?
-            {
-                :apids => android_tokens,
-                :andrdoid => {
-                    :alert => alert
-                }
-            }
-        else
-            {
-                :aliases => [receiver.ua_alias],
-                :aps => {
-                    :alert => alert,
-                    :badge => badge,
-                    :sound => 'pn.wav'
-                },
-                :alert_type => 1
-            }
-        end
+        # if android_tokens.present?
+        #     {
+        #         :apids => android_tokens,
+        #         :android => {
+        #             :alert => alert
+        #         }
+        #     }
+        # else
+        #     {
+        #         :aliases => [receiver.ua_alias],
+        #         :aps => {
+        #             :alert => alert,
+        #             :badge => badge,
+        #             :sound => 'pn.wav'
+        #         },
+        #         :alert_type => 1
+        #     }
+        # end
 ###############################################
     end
 
