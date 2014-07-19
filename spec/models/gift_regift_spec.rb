@@ -62,6 +62,11 @@ describe GiftRegift do
             let(:object) { GiftRegift.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftRegift.create(@gift_hsh) }
+            let(:cat) { 301 }
+        end
+
         it "should correctly transfer cost including decimals" do
             gift        = GiftRegift.create @gift_hsh
             gift.should be_valid

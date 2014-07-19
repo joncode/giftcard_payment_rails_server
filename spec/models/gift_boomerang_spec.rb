@@ -17,6 +17,11 @@ describe GiftBoomerang do
             let(:object) { GiftBoomerang.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftBoomerang.create(@gift_hsh) }
+            let(:cat)    { 307 }
+        end
+
         it "should correctly transfer value/cost/service including decimals" do
             gift        = GiftBoomerang.create @gift_hsh
             gift.should be_valid

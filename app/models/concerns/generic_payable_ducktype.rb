@@ -13,7 +13,7 @@ module GenericPayableDucktype
         if self.payable_type == 'Sale'
             self.payable.resp_code
         else
-            self.id ? 1 : 3
+            1
         end
     end
 
@@ -21,11 +21,7 @@ module GenericPayableDucktype
         if self.payable_type == 'Sale'
             self.payable.reason_text
         else
-            if self.id
-                "Transaction approved."
-            else
-                self.errors.full_messages
-            end
+            "This transaction has been approved."
         end
     end
 
@@ -33,7 +29,7 @@ module GenericPayableDucktype
         if self.payable_type == 'Sale'
             self.payable.reason_code
         else
-            self.id ? 1 : 2
+            1
         end
     end
 

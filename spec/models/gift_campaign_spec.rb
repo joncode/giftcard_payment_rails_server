@@ -36,6 +36,11 @@ describe GiftCampaign do
             let(:object) { GiftCampaign.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftCampaign.create(@gift_hsh) }
+            let(:cat)    { 150 }
+        end
+
         it "should create gift" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
             gift_campaign.class.should          == GiftCampaign
@@ -59,7 +64,7 @@ describe GiftCampaign do
             payable.owner.class.name.should == "Campaign"
             gift_campaign.success?.should         == true
             gift_campaign.resp_code.should        == 1
-            gift_campaign.reason_text.should      == "Transaction approved."
+            gift_campaign.reason_text.should      == "This transaction has been approved."
             gift_campaign.reason_code.should      == 1
         end
 
@@ -161,6 +166,11 @@ describe GiftCampaign do
             let(:object) { GiftCampaign.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftCampaign.create(@gift_hsh) }
+            let(:cat)    { 250 }
+        end
+
         it "should create gift" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
             gift_campaign.class.should          == GiftCampaign
@@ -184,7 +194,7 @@ describe GiftCampaign do
             payable.owner.class.name.should == "Campaign"
             gift.success?.should         == true
             gift.resp_code.should        == 1
-            gift.reason_text.should      == "Transaction approved."
+            gift.reason_text.should      == "This transaction has been approved."
             gift.reason_code.should      == 1
         end
 

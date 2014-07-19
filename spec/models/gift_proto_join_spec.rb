@@ -16,6 +16,11 @@ describe GiftProtoJoin do
             let(:object) { GiftProtoJoin.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftProtoJoin.create(@gift_hsh) }
+            let(:cat)    { @pj.proto.cat }
+        end
+
         it "should accept a proto or/and proto join" do
             expect {GiftProtoJoin.create({ 'proto_join' => @pj }) }.to_not raise_error
             proto = Proto.first

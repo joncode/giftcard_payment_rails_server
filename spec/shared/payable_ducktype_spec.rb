@@ -20,9 +20,9 @@ shared_examples_for "payable ducktype" do
     end
 
     it "should respond to :reason_text" do
-#        object.reason_text.should == []
+        # [[], nil].should include(object.reason_text)
         object.save
-#        object.reason_text.should == "Transaction approved."
+        # object.reason_text.should == "This transaction has been approved."
         object.reason_text.class.should == String
     end
 

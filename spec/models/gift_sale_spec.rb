@@ -27,6 +27,11 @@ describe GiftSale do
             let(:object) { GiftSale.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftSale.create(@gift_hsh) }
+            let(:cat)    { 300 }
+        end
+
         it "should create a gift" do
             gift = GiftSale.create @gift_hsh
             gift.reload

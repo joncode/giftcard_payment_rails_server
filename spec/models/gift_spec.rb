@@ -7,6 +7,11 @@ describe Gift do
         let(:object) { FactoryGirl.build(:gift) }
     end
 
+    it_should_behave_like "gift status" do
+        let(:object) { FactoryGirl.create(:gift) }
+        let(:cat)    { 0 }
+    end
+
 	it "builds from factory" do
 		gift = FactoryGirl.build :gift
 		gift.should be_valid

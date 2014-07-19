@@ -13,7 +13,7 @@ describe Relay do
         receiver  = FactoryGirl.build(:receiver)
         gift      = FactoryGirl.create(:gift, giver: user, receiver_name: receiver.name, receiver_email: receiver.email, provider_name: prov_name)
 
-        gift.set_statuses
+        gift.set_status_and_pay_stat
         gift.status.should == 'incomplete'
         user_alias    = pnt.ua_alias
         good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "Thank You! #{gift.receiver_name} got the app and your gift!",:badge=>0,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "Thank You! #{gift.receiver_name} got the app and your gift!"}}

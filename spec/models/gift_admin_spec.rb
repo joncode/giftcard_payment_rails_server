@@ -21,6 +21,11 @@ describe GiftAdmin do
         let(:object) { GiftAdmin.create(@gift_hsh) }
     end
 
+    it_should_behave_like "gift status" do
+        let(:object) { GiftAdmin.create(@gift_hsh) }
+        let(:cat)    { 100 }
+    end
+
     it "should create gift" do
 
         gift_admin = GiftAdmin.create(@gift_hsh)

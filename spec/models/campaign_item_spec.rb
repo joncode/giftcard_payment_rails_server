@@ -58,42 +58,6 @@ describe CampaignItem do
 
         end
 
-        context "payable ducktype" do
-
-            it "should respond to :success?" do
-                cam_item = FactoryGirl.build :campaign_item
-                cam_item.success?.should be_false
-                cam_item.save
-                cam_item.success?.should be_true
-            end
-
-            it "should respond to :resp_code" do
-                cam_item = FactoryGirl.build :campaign_item
-                cam_item.resp_code.should == 3
-                cam_item.save
-                cam_item.resp_code.should == 1
-            end
-
-            it "should respond to :reason_text" do
-                cam_item = FactoryGirl.build :campaign_item
-                cam_item.reason_text.should == []
-                cam_item.save
-                cam_item.reason_text.should == "Transaction approved."
-            end
-
-            it "should respond to :reason_code" do
-                cam_item = FactoryGirl.build :campaign_item
-                cam_item.reason_code.should == 2
-                cam_item.save
-                cam_item.reason_code.should == 1
-            end
-        end
-
-        it "should build from factory" do
-            cam_item = FactoryGirl.build :campaign_item
-            cam_item.should be_valid
-        end
-
         it "should belongs_to a campaign" do
             campaign = FactoryGirl.create(:campaign)
             cam_item = FactoryGirl.create(:campaign_item, campaign: campaign)
@@ -111,6 +75,11 @@ describe CampaignItem do
             cam_item = FactoryGirl.build :campaign_item
             cam_item.respond_to?(:shoppingCart).should be_true
             cam_item.shoppingCart.should_not be_nil
+        end
+
+        it "should build from factory" do
+            cam_item = FactoryGirl.build :campaign_item
+            cam_item.should be_valid
         end
     end
 

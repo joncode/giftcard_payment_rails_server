@@ -42,7 +42,7 @@ class Gift < ActiveRecord::Base
     before_create :regift,              :if => :regift?
     before_create :build_gift_items
 
-    before_create :set_statuses
+    before_create :set_status_and_pay_stat
 
     default_scope -> { where(active: true) } # indexed
 
@@ -124,36 +124,13 @@ class Gift < ActiveRecord::Base
         BAR_STATUS[stat_int]
     end
 
-    def set_statuses
-        case self.payable_type
-        when "Sale"
-            set_payment_status
-        when "Debt"
-            set_status
-            self.pay_stat = "charge_unpaid"
-        when "Gift"
-            set_status
-        when "CampaignItem"
-            set_status
-            self.pay_stat = "charge_unpaid"
-        else
-            set_payment_status
-        end
-    end
-
-    def set_status
-        if self.receiver_id.nil?
-            self.status = "incomplete"
-        else
-            self.status = 'open'
-        end
-    end
-
-    def set_payment_status
+    def set_status_and_pay_stat
         case self.resp_code
         when 1
           # Approved
-            self.pay_stat = "charge_unpaid"
+            if self.pay_stat != 'refund_comp'
+                self.pay_stat = "charge_unpaid"
+            end
             set_status
         when 2
           # Declined
@@ -350,6 +327,14 @@ private
 	end
 
 	################  data validation methods
+
+    def set_status
+        if self.receiver_id.nil?
+            self.status = "incomplete"
+        else
+            self.status = 'open'
+        end
+    end
 
     def prepare_email
         self.receiver_email = nil if self.receiver_id
