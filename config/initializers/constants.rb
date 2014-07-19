@@ -34,7 +34,7 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.2.7.7-5"
+VERSION_NUMBER  = "1.2.7.8"
 VERSION_UPDATED = "7/18/14"
 
 # 1.2.8 production to do list
