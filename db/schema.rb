@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140715232010) do
+ActiveRecord::Schema.define(version: 20140721195838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -72,6 +72,44 @@ ActiveRecord::Schema.define(version: 20140715232010) do
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "campaign_items", force: true do |t|
+    t.integer  "campaign_id"
+    t.integer  "provider_id"
+    t.integer  "giver_id"
+    t.string   "giver_name"
+    t.integer  "budget"
+    t.integer  "reserve"
+    t.text     "message"
+    t.text     "shoppingCart"
+    t.string   "value"
+    t.string   "cost"
+    t.date     "expires_at"
+    t.integer  "expires_in"
+    t.string   "textword"
+    t.boolean  "contract"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "detail"
+  end
+
+  create_table "campaigns", force: true do |t|
+    t.string   "type_of"
+    t.string   "status"
+    t.string   "name"
+    t.text     "notes"
+    t.date     "live_date"
+    t.date     "close_date"
+    t.date     "expire_date"
+    t.integer  "purchaser_id"
+    t.string   "purchaser_type"
+    t.string   "giver_name"
+    t.string   "photo"
+    t.integer  "budget"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "photo_path"
   end
 
   create_table "cards", force: true do |t|
