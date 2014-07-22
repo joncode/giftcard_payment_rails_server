@@ -3,6 +3,7 @@ class Gift < ActiveRecord::Base
 	include Formatter
 	include Email
 	include GiftSerializers
+    include GenericPayableDucktype
 
     attr_accessor :receiver_oauth
 
@@ -41,7 +42,7 @@ class Gift < ActiveRecord::Base
     before_create :regift,              :if => :regift?
     before_create :build_gift_items
 
-    before_create :set_statuses
+    before_create :set_status_and_pay_stat
 
     default_scope -> { where(active: true) } # indexed
 
@@ -50,14 +51,6 @@ class Gift < ActiveRecord::Base
     def obscured_id
         NUMBER_ID + self.id
     end
-
-    # def sale
-    #     Sale.find_by(gift_id: self.id)
-    # end
-
-    # def promo?
-    #     self.giver_type == "BizUser" && self.payable_type == "Debt"
-    # end
 
     def initialize args={}
         pre_init(args)
@@ -109,10 +102,6 @@ class Gift < ActiveRecord::Base
         self.value = amount
     end
 
-    def unique_cc_id
-        "#{self.receiver_name}_#{self.provider_id}".gsub(' ','_')
-    end
-
     def redeem_time
         self.redeemed_at || self.created_at
     end
@@ -135,36 +124,13 @@ class Gift < ActiveRecord::Base
         BAR_STATUS[stat_int]
     end
 
-    def set_statuses
-        case self.payable_type
-        when "Sale"
-            set_payment_status
-        when "Debt"
-            set_status
-            self.pay_stat = "charge_unpaid"
-        when "Gift"
-            set_status
-        when "CampaignItem"
-            set_status
-            self.pay_stat = "charge_unpaid"
-        else
-            set_payment_status
-        end
-    end
-
-    def set_status
-        if self.receiver_id.nil?
-            self.status = "incomplete"
-        else
-            self.status = 'open'
-        end
-    end
-
-    def set_payment_status
-        case self.payable.resp_code
+    def set_status_and_pay_stat
+        case self.resp_code
         when 1
           # Approved
-            self.pay_stat = "charge_unpaid"
+            if self.pay_stat != 'refund_comp'
+                self.pay_stat = "charge_unpaid"
+            end
             set_status
         when 2
           # Declined
@@ -172,7 +138,7 @@ class Gift < ActiveRecord::Base
             self.status = "cancel"
         when 3
           # Error
-            if self.payable.reason_code == 11
+            if self.reason_code == 11
                 self.pay_stat = "payment_error"
             else
                 self.pay_stat = "payment_error"
@@ -361,6 +327,14 @@ private
 	end
 
 	################  data validation methods
+
+    def set_status
+        if self.receiver_id.nil?
+            self.status = "incomplete"
+        else
+            self.status = 'open'
+        end
+    end
 
     def prepare_email
         self.receiver_email = nil if self.receiver_id

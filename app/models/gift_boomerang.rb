@@ -1,4 +1,5 @@
 class GiftBoomerang < Gift
+    include GiftMessenger
 
     def self.create args={}
 
@@ -11,16 +12,9 @@ class GiftBoomerang < Gift
 
         gift = super
         if gift.persisted?
-            gift.messenger
+            gift.messenger_boomerang
         end
         gift
-    end
-
-    def messenger
-        puts "GiftBoomerang-post_init -- Notify new Receiver #{self.receiver_name} #{self.receiver_id}"
-        Relay.send_boomerang_push_notification(self)
-        puts "GiftBoomerang -messenger- Notify Receiver via email #{self.receiver_name}"
-        notify_receiver_boomerang
     end
 
 private

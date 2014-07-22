@@ -1,4 +1,5 @@
 class GiftPromo < Gift
+    include GiftMessenger
     include ShoppingCartHelper
 
     def initialize args={}
@@ -6,19 +7,10 @@ class GiftPromo < Gift
     end
 
     def save
-        response = super
-        if response
+        if response = super
             self.messenger
         end
         response
-    end
-
-    def messenger
-        if self.payable.success?
-            Relay.send_push_notification(self)
-            puts "GiftPromo -messenger- Notify Receiver via email #{self.receiver_name}"
-            notify_receiver
-        end
     end
 
 private

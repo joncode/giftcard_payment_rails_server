@@ -23,7 +23,7 @@ class Debt < ActiveRecord::Base
 
     def reason_text
         if self.id
-            "Transaction approved."
+            "This transaction has been approved."
         else
             self.errors.full_messages
         end

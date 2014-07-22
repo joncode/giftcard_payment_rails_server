@@ -3,9 +3,8 @@ require 'spec_helper'
 describe "Broken Tests" do
 
 	before do
-		@last_update = "7/3/14"
+		@last_update = "7/18/14"
 		@broken_tests = [
-"spec/support/payable_ducktype_spec.rb",
 "spec/features/connections_spec.rb",
 "spec/features/end_to_end_spec.rb",
 "spec/lib/tasks/reconcile_emails_spec.rb",

@@ -250,10 +250,13 @@ FactoryGirl.define do
     factory :sale do
         giver_id    1
         resp_code   1
+        reason_text "This transaction has been approved."
+        reason_code 1
         #response    AuthResponse.new
         #transaction AuthTransaction.new
         card_id    { FactoryGirl.create(:visa).id }
     end
+
     # t.integer  "gift_id"
     # t.integer  "giver_id"
     # t.integer  "card_id"
