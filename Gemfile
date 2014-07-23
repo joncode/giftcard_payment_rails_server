@@ -17,6 +17,7 @@ gem 'rails_12factor'
 gem 'bcrypt-ruby'
 gem 'activemerchant'
 gem 'urbanairship'
+gem 'roo'
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'

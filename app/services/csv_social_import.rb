@@ -36,6 +36,7 @@ class CsvSocialImport
             puts "\n csv social import success #{@status}"
         	true
         else
+            puts "\n csv social failed #{@status}"
         	false
         end
     end
