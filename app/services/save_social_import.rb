@@ -1,6 +1,6 @@
 class SaveSocialImport
 
-	def self.process email, provider_id, proto_id
+	def self.perform email, provider_id, proto_id
         puts "\n\n in save social import :process #{Time.now}"
         social = Social.find_or_create_by(network: "email", network_id: email)
 
