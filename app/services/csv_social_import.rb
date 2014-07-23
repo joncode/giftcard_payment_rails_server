@@ -3,10 +3,9 @@ class CsvSocialImport
     extend  ActiveModel::Naming
     include ActiveModel::Model
 
-    attr_accessor :file, :status
+    attr_accessor :file, :status, :provider_id, :proto_id
 
     def initialize args={}
-
         if args["provider_id"].nil? || args["provider_id"].to_i == 0
             raise 'Csv Import Requires a :provider_id'
         end
