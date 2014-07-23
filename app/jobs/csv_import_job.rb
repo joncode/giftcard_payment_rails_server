@@ -4,10 +4,10 @@ class CsvImportJob
 
 
     def self.perform data
-    	log_bars data.inspect
+    	log_bars "input #{data.inspect}"
     	csv_import = CsvSocialImport.new(data)
     	resp = csv_import.save
-    	log_bars resp.inspect
+    	log_bars "response #{resp.inspect}"
     end
 
 private
