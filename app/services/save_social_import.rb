@@ -1,7 +1,7 @@
 class SaveSocialImport
 
 	def self.perform email, provider_id, proto_id
-        puts "\n\n in save social import :process #{Time.now}"
+        puts "\n\n in save social import :process #{Time.now} #{email}"
         social = Social.find_or_create_by(network: "email", network_id: email)
 
         if social.errors.messages.count > 0
