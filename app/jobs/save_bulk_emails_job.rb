@@ -11,7 +11,7 @@ class SaveBulkEmailsJob
     			if email.kind_of?(Array)
     				email = email[0]
     			end
-		    	social = SaveSocialImport.perform(email, data["provider_id"], data["proto_id"])
+		    	social = SaveSocialImport.perform(email, be_obj.provider_id, be_obj.proto_id)
     		end
     		be_obj.update(processed: true)
     	rescue
