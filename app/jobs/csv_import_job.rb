@@ -1,13 +1,13 @@
 class CsvImportJob
 
-	@queue :database
+    @queue = :database
 
 
     def self.perform data
-
+    	log_bars data.inspect
     	csv_import = CsvSocialImport.new(data)
     	resp = csv_import.save
-
+    	log_bars resp.inspect
     end
 
 private
