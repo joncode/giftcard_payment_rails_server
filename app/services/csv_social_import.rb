@@ -11,7 +11,7 @@ class CsvSocialImport
         end
     	@provider_id = args["provider_id"]
 		@file        = args["file"]  	|| nil
-		@proto_id    = args["proto_id"] || nil
+		@proto_id    = args["proto_id"].to_i || nil
 		@status      = ""
 		@number_good = 0
     end
@@ -29,9 +29,11 @@ class CsvSocialImport
     end
 
     def save
+        puts "\n in csv social import save"
         convert_import_emails_to_socials
         if @number_good > 0
         	@status += "#{@number_good} emails were uploaded"
+            puts "\n csv social import success #{@status}"
         	true
         else
         	false

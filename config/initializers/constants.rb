@@ -40,6 +40,11 @@ VERSION_UPDATED = "7/22/14"
 # 1.2.8 production to do list
     # delete the contact migrations
 
+if Rails.env.test?
+    CSV_LIMIT   = 10
+else
+    CSV_LIMIT   = 500
+end
 
 BLANK_AVATAR_URL = "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
 GENERIC_RECEIVER_NAME = "ItsOnMe User"
