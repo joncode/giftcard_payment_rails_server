@@ -34,11 +34,12 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.2.7.9"
-VERSION_UPDATED = "7/22/14"
+VERSION_NUMBER  = "1.2.8"
+VERSION_UPDATED = "7/23/14"
 
 # 1.2.8 production to do list
     # run migrations
+    # move the campaign and campaign item databases
     # delete the contact migrations
     # delete csv_social_import
     # delete save_social_import_job, csv_import_job, resque_tester
