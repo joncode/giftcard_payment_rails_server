@@ -6,6 +6,10 @@ class User < ActiveRecord::Base
 
 	attr_accessor :api_v1
 
+	has_many :proto_joins, as: :receivable
+	has_many :protos, through: :proto_joins
+
+	has_many :dittos, as: :notable
 	has_one  :setting
 	has_many :pn_tokens
 	has_many :brands
@@ -279,7 +283,14 @@ class User < ActiveRecord::Base
 		"user-#{adj_user_id}"
 	end
 
-	def pn_token=(value)
+	def pn_token=(value_ary)
+		if value_ary.kind_of? Array
+			value    = value_ary[0]
+			platform = value_ary[1] || 'ios'
+		else
+			value    = value_ary
+			platform = 'ios'
+		end
 		value 		= PnToken.convert_token(value)
 		if pn_token = PnToken.find_by(pn_token: value)
 			if pn_token.user_id != self.id
@@ -287,12 +298,16 @@ class User < ActiveRecord::Base
 				pn_token.save
 			end
 		else
-			PnToken.create!(user_id: self.id, pn_token: value)
+			PnToken.create!(user_id: self.id, pn_token: value, platform: platform)
 		end
 	end
 
 	def pn_token
 		self.pn_tokens.map {|pnt| pnt.pn_token }
+	end
+
+	def apids
+		self.pn_tokens.where(platform: "android").map(&:pn_token)
 	end
 
 #########   settings methods
@@ -359,9 +374,7 @@ private
 	end
 
 	def make_friends
-		puts "------------------------------------------------------------------------------"
-		puts "--- 'make_friends' after save callback on User model commented out 6/23/14 ---"
-		puts "------------------------------------------------------------------------------"
+		log_bars "'make_friends' after save callback on User model commented out 6/23/14"
 		# unless Rails.env.production?
 		# 	Resque.enqueue(FriendPushJob, self.id, 1)
 		# end
@@ -425,8 +438,7 @@ private
 
 				if g.update_attributes(gift_changes)
 					success += 1
-					Relay.send_push_incomplete(g) if g.giver_type == "User"
-					# email_gift_collected(g)
+					Relay.send_push_incomplete(g)
 				else
 					error   += 1
 				end

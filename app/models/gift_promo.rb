@@ -1,23 +1,16 @@
 class GiftPromo < Gift
+    include GiftMessenger
+    include ShoppingCartHelper
 
     def initialize args={}
         super
     end
 
     def save
-        response = super
-        if response
+        if response = super
             self.messenger
         end
         response
-    end
-
-    def messenger
-        if self.payable.success?
-            Relay.send_push_notification(self)
-            puts "GiftPromo -messenger- Notify Receiver via email #{self.receiver_name}"
-            notify_receiver
-        end
     end
 
 private
@@ -35,11 +28,6 @@ private
     #     puts "NOTIFY RECEIVER VIA #{self.receiver_email}"
     #     #  alert merchant tools wbesite
     # end
-
-    def calculate_value shoppingCart_string
-        sc = JSON.parse shoppingCart_string
-        sc.sum {|z| z["price"].to_i * z["quantity"].to_i }
-    end
 
     def set_cat args
         if args["cat"] && args["cat"].class == Fixnum

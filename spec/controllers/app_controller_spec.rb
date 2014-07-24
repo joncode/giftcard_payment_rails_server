@@ -457,7 +457,7 @@ describe AppController do
             @gift = gift
             badge = Gift.get_notifications(@gift.giver)
             user_alias = @gift.giver.ua_alias
-            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2}
+            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!"}}
 
             Urbanairship.should_receive(:push).with(good_push_hsh)
 

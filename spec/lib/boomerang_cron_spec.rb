@@ -9,6 +9,7 @@ describe "BoomerangCron" do
             @user = FactoryGirl.create(:user)
             @merchant = FactoryGirl.create(:provider)
             boom = FactoryGirl.create(:boomerang)
+            Gift.delete_all
         end
 
         it "should boomerang gifts that are incomplete and older than 7 days" do

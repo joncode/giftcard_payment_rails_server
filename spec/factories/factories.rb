@@ -35,6 +35,42 @@ FactoryGirl.define do
 
     factory :boomerang
 
+    factory :proto do
+        message         "Test proto message"
+        detail          "Test detail page"
+        shoppingCart    "[{\"detail\":\"The best margherita\",\"price\":13,\"price_promo\":1,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita\"}]"
+        value           "13"
+        cost            "3"
+        cat             250
+        giver_id        100
+        giver_type       "BizUser"
+        giver_name       "Factory Provider Staff"
+        provider_id     100
+        provider_name   "Factory Provider"
+        expires_at      (Time.now + 1.month)
+    end
+
+    factory :proto_join do
+        proto_id        1
+        receivable_id   1
+        receivable_type "Social"
+        gift_id         nil
+        rec_name        "Bob"
+    end
+
+    factory :social do
+        sequence(:network_id)    { |n| "socializer#{n}@gmail.com" }
+        network      "email"
+    end
+
+    factory :ditto do
+        notable_id  1
+        notable_type "Gift"
+        cat 1
+        status 1
+        response_json   "[{\"email\":\"robertn@yahoo.com\",\"status\":\"sent\",\"_id\":\"5606dc2b9e9b46ad967a0bf38fdda61b\",\"reject_reason\":null},{\"email\":\"info@itson.me\",\"status\":\"sent\",\"_id\":\"1d17c18a68d345b7a1021902f053d7be\",\"reject_reason\":null}]"
+    end
+
     factory :nobody, :class => 'User' do
         first_name                  "No"
         last_name                   "One"
@@ -64,6 +100,12 @@ FactoryGirl.define do
         facebook_id      nil
         twitter          nil
         phone            nil
+    end
+
+    factory :pn_token do
+        user_id 1
+        pn_token "11111111117d8a5ad9c334d31111111111c177322436ba7c7e854b1111111111"
+        platform "ios"
     end
 
     factory :provider do
@@ -125,6 +167,7 @@ FactoryGirl.define do
         gift.message         "Factory Message"
         gift.pay_stat       "charged"
         gift.payable       { FactoryGirl.create(:sale)}
+        gift.expires_at      (Time.now + 1.month)
 
         factory :regift do |regift|
             regift.giver        { FactoryGirl.create(:giver) }
@@ -215,10 +258,26 @@ FactoryGirl.define do
     factory :sale do
         giver_id    1
         resp_code   1
+        reason_text "This transaction has been approved."
+        reason_code 1
         #response    AuthResponse.new
         #transaction AuthTransaction.new
         card_id    { FactoryGirl.create(:visa).id }
     end
+
+    # t.integer  "gift_id"
+    # t.integer  "giver_id"
+    # t.integer  "card_id"
+    # t.integer  "provider_id"
+    # t.string   "transaction_id"
+    # t.decimal  "revenue"
+    # t.datetime "created_at",     null: false
+    # t.datetime "updated_at",     null: false
+    # t.text     "resp_json"
+    # t.text     "req_json"
+    # t.integer  "resp_code"
+    # t.string   "reason_text"
+    # t.integer  "reason_code"
 
     factory :order do |order|
         order.redeem      { FactoryGirl.create(:redeem)}

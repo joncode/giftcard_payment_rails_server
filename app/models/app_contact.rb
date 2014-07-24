@@ -3,8 +3,8 @@ class AppContact < ActiveRecord::Base
     has_many :friendships, dependent: :destroy
     has_many :users, through: :friendships
 
-    before_save :downcase_emails
-    before_save :extract_phone_digits
+    before_validation :downcase_emails
+    before_validation :extract_phone_digits
 
     validates :network, presence: true
     validates :network_id, presence: true
@@ -20,8 +20,8 @@ private
     end
 
     def downcase_emails
-        if self.network == 'email'
-            self.network_id = self.network_id.downcase
+        if self.network == 'email' && self.network_id.kind_of?(String)
+            self.network_id = self.network_id.downcase.strip
         end
     end
 

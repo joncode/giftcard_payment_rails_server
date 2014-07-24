@@ -1,9 +1,16 @@
 class Client::V3::GiftsController < MetalController
 
+    before_action :authenticate_user
+
     def index
-    	token = request.headers["HTTP_X_AUTH_TOKEN"]
-    	puts "\n User Token = #{token} \n"
-        user = User.find_by(remember_token: token)
+        user_id = params[:user_id].to_i
+
+        if user_id && user_id != @current_user.id
+            user = User.find(user_id)
+        else
+            user = @current_user
+        end
+
         gifts = user.sent + user.received
         gifts.uniq!
         success(gifts.serialize_objs(:client))
@@ -11,16 +18,20 @@ class Client::V3::GiftsController < MetalController
     end
 
     def open
-        token = request.headers["HTTP_X_AUTH_TOKEN"]
-    	puts "\n User Token = #{token} \n"
-        user = User.find_by(remember_token: token)
     	gift = Gift.find(params[:id])
-    	if gift.receiver_id == user.id && gift.status == 'open'
+    	if gift.receiver_id == @current_user.id && gift.status == 'open'
     		gift.update(status: 'notified')
     	end
     	success(gift.client_serialize)
     	respond
     end
 
-
+    def redeem
+        gift = Gift.find(params[:id])
+        if gift.receiver_id == @current_user.id && gift.status == 'notified'
+            gift.update(status: 'redeem')
+        end
+        success(gift.client_serialize)
+        respond
+    end
 end

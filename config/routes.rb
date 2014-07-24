@@ -26,6 +26,7 @@ if !Rails.env.production?
       resources :gifts, only: [:index] do
         member do
           put :open
+          put :redeem
         end
       end
       resources :cards, only: [:index]
@@ -164,6 +165,12 @@ end
             collection { post :bulk_create }
           end
 
+          resources :protos,  only: [] do
+            member  do
+              post :gifts
+            end
+          end
+
           resources :users,     only: [:update] do         # biz logic
             member do
               post :deactivate
@@ -196,7 +203,11 @@ end
           post :bulk_create
         end
       end
-
+      resources :protos,  only: [] do
+        member  do
+          post :gifts
+        end
+      end
       resources :merchants, only: [:create, :update] do
 
         member do

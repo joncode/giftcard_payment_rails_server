@@ -69,6 +69,12 @@ describe User do
             user.oauths.first.user_id.should == user.id
         end
 
+        it "should associate with dittos" do
+            user  = FactoryGirl.create(:user)
+            ditto = FactoryGirl.create :ditto, notable_id: user.id, notable_type: user.class.to_s
+            user.dittos.first.should == ditto
+        end
+
         it "has_many app_contacts" do
             user = FactoryGirl.create(:user)
             user.app_contacts.count.should == 0
@@ -229,12 +235,12 @@ describe User do
             user1 = FactoryGirl.create :user, { first_name: "Squatter", email: "KJOOIcode@yahoo.com" }
             user2 = FactoryGirl.create :user, { first_name: "Real", email: "updated@gmail.com" }
 
-            user1.pn_token = pnt
+            user1.pn_token = [pnt, "android"]
             user1.pn_token.should == [pnt]
 
             user_1_alias = user1.pn_tokens.first.ua_alias
             puts "User 1 alias = #{user_1_alias}"
-            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_1_alias})
+            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_1_alias, :provider => :android })
 
             run_delayed_jobs
 
@@ -243,7 +249,7 @@ describe User do
 
             user_2_alias = user2.pn_tokens.first.ua_alias
             puts "User 2 alias = #{user_2_alias}"
-            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_2_alias})
+            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_2_alias, :provider => :android})
 
             run_delayed_jobs
         end
@@ -272,7 +278,7 @@ describe User do
             receiver.pn_token = pnt
             receiver.pn_token.should == [pnt]
             ua_alias_thing = giver.pn_tokens.first.ua_alias
-            Urbanairship.should_receive(:push).with({:aliases=>[ua_alias_thing], :aps=>{:alert=>"Thank You! Quentin Basic got the app and your gift!", :badge=>0, :sound=>"pn.wav"}, :alert_type=>2})
+            Urbanairship.should_receive(:push).with({:aliases=>[ua_alias_thing], :aps=>{:alert=>"Thank You! Quentin Basic got the app and your gift!", :badge=>0, :sound=>"pn.wav"}, :alert_type=>2,:android=>{:alert=>"Thank You! Quentin Basic got the app and your gift!"}})
             run_delayed_jobs
         end
 

@@ -62,6 +62,11 @@ describe GiftRegift do
             let(:object) { GiftRegift.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftRegift.create(@gift_hsh) }
+            let(:cat) { 301 }
+        end
+
         it "should correctly transfer cost including decimals" do
             gift        = GiftRegift.create @gift_hsh
             gift.should be_valid
@@ -303,7 +308,7 @@ describe GiftRegift do
             promo       = FactoryGirl.create(:gift, payable_type: "Debt", giver_type: "BizUser", payable_id: debt.id,  giver_id: biz_user.id, receiver: @receiver )
             @gift_hsh["old_gift_id"] = promo.id
             resp        = GiftRegift.create @gift_hsh
-            
+
             #resp.should == "You cannot regift a promotional gift"
             resp.class.should == GiftRegift
             resp.id.should_not be_nil
@@ -407,7 +412,7 @@ describe GiftRegift do
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@regifter.name} sent you a gift at #{@old_gift.provider_name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@regifter.name} sent you a gift at #{@old_gift.provider_name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1,:android =>{:alert => "#{@regifter.name} sent you a gift at #{@old_gift.provider_name}!"}}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             response = GiftRegift.create @gift_hsh
             run_delayed_jobs

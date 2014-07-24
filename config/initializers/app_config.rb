@@ -48,4 +48,24 @@ if Rails.env.test?
     require 'auth_transaction'
 end
 
+def log_bars text
+    puts "===================================================="
+    puts "========== #{text} ==========="
+    puts "===================================================="
+end
+
+
+
+def thread_on?
+
+    if Rails.env.development?
+        false
+    else
+        true
+    end
+
+end
+
+
+
 

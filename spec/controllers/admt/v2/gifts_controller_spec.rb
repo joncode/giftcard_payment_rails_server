@@ -325,7 +325,18 @@ describe Admt::V2::GiftsController do
             post :create, format: :json, data: create_hsh
             rrc 200
 
-            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{giver.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            good_push_hsh = {
+                :aliases => ["#{@receiver.ua_alias}"],
+                :aps => {
+                    :alert => "#{giver.name} sent you a gift at #{@provider.name}!",
+                    :badge => 1,
+                    :sound => "pn.wav"
+                },
+                :alert_type => 1,
+                :android => {
+                    :alert => "#{giver.name} sent you a gift at #{@provider.name}!",
+                }
+            }
             Urbanairship.should_receive(:push).with(good_push_hsh)
             run_delayed_jobs
         end

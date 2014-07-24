@@ -1,4 +1,6 @@
 class GiftAdmin < Gift
+    include GiftMessenger
+    include ShoppingCartHelper
 
     def self.create args={}
         gift = super
@@ -8,41 +10,18 @@ class GiftAdmin < Gift
         gift
     end
 
-    def messenger
-        if self.payable.success?
-            Relay.send_push_notification(self)
-            puts "GiftAdmin -messenger- Notify Receiver via email #{self.receiver_name}"
-            notify_receiver
-        end
-    end
-
 private
 
     def pre_init args={}
-        shoppingCart = JSON.parse args["shoppingCart"]
         args["cat"]     = set_cat(args)
-        args["value"]   = calculate_value(shoppingCart)
-        args["cost"]    = calculate_cost(shoppingCart)
+        args["value"]   = calculate_value(args["shoppingCart"])
+        args["cost"]    = calculate_cost(args["shoppingCart"])
         giver = args["giver"]
         args["payable"] = giver.new_debt(args["value"])
     end
 
     def post_init args={}
         puts "NOTIFY RECEIVER VIA #{self.receiver_email}"
-    end
-
-    def calculate_value shoppingCart
-        shoppingCart.sum {|z| z["price"].to_i * z["quantity"].to_i }
-    end
-
-    def calculate_cost shoppingCart
-        shoppingCart.sum do |z|
-            if z["price_promo"].present?
-                z["price_promo"].to_f * z["quantity"].to_i
-            else
-                z["price"].to_f * 0.85 * z["quantity"].to_i
-            end
-        end
     end
 
     def set_cat args

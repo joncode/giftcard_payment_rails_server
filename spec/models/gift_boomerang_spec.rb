@@ -17,6 +17,11 @@ describe GiftBoomerang do
             let(:object) { GiftBoomerang.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftBoomerang.create(@gift_hsh) }
+            let(:cat)    { 307 }
+        end
+
         it "should correctly transfer value/cost/service including decimals" do
             gift        = GiftBoomerang.create @gift_hsh
             gift.should be_valid
@@ -164,7 +169,7 @@ describe GiftBoomerang do
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            good_push_hsh = {:aliases =>["#{@user.ua_alias}"],:aps =>{:alert => "Boomerang! We are returning this gift to you because your friend never created an account",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            good_push_hsh = {:aliases =>["#{@user.ua_alias}"],:aps =>{:alert => "Boomerang! We are returning this gift to you because your friend never created an account",:badge=>1,:sound=>"pn.wav"},:alert_type=>1,:android =>{:alert => "Boomerang! We are returning this gift to you because your friend never created an account"}}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             response = GiftBoomerang.create @gift_hsh
             run_delayed_jobs

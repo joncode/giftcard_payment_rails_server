@@ -56,7 +56,7 @@ describe IphoneController do
             pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             ua_alias = "fake_ua"
 
-            Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias})
+            Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias, :provider => :ios})
 
             post :login, format: :json, email: "neil@gmail.com", password: "password", pn_token: pn_token
             run_delayed_jobs # ResqueSpec.perform_all(:push)
@@ -136,7 +136,7 @@ describe IphoneController do
             pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             ua_alias = "fake_ua"
 
-            Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias})
+            Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias, :provider => :ios })
 
             post :login_social, format: :json, origin: "f", facebook_id: @user.facebook_id, pn_token: pn_token
             run_delayed_jobs # ResqueSpec.perform_all(:push)

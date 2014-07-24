@@ -5,6 +5,8 @@ describe Client::V3::CardsController do
 
     describe :index do
 
+        it_should_behave_like("client-token authenticated", :get, :index)
+
         it "should get all cards for user with GET params :user_id" do
             @user = FactoryGirl.create(:user, iphone_photo: "http://photo_urlimportante.com")
             request.env["HTTP_X_AUTH_TOKEN"] = @user.remember_token

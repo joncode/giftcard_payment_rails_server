@@ -1,5 +1,7 @@
 class Client::V3::CardsController < MetalController
 
+    before_action :authenticate_user
+
     def index
     	token = request.headers["HTTP_X_AUTH_TOKEN"]
     	puts "\n User Token = #{token} \n"

@@ -48,9 +48,15 @@ describe MailerJob do
                              "bcc_address" => nil,
                              "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/account/resetpassword/"}]}] }
             data = { "text" => 'reset_password', "user_id" => @receiver.id }
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
             MailerJob.reset_password(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @receiver.id
+            d.notable_type.should == 'User'
+            d.status.should       == 200
+            d.cat.should          == 310
+
         end
     end
 
@@ -66,9 +72,14 @@ describe MailerJob do
                              "bcc_address" => nil,
                              "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>nil}]}] }
             data = { "text" => 'confirm_email', "user_id" => @receiver.id }
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
             MailerJob.confirm_email(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @receiver.id
+            d.notable_type.should == 'User'
+            d.status.should       == 200
+            d.cat.should          == 310
         end
     end
 
@@ -83,9 +94,14 @@ describe MailerJob do
                              "bcc_address" => nil,
                              "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>nil}]}] }
             data = { "text" => 'welcome', "user_id" => @receiver.id }
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
             MailerJob.welcome(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @receiver.id
+            d.notable_type.should == 'User'
+            d.status.should       == 200
+            d.cat.should          == 310
         end
     end
 
@@ -105,9 +121,14 @@ describe MailerJob do
                              "bcc_address" => nil,
                              "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/signup/acceptgift/#{NUMBER_ID + @gift.id}"}]}] }
             data = { "text" => 'notify_receiver', "gift_id" => @gift.id }
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
             MailerJob.notify_receiver(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @gift.id
+            d.notable_type.should == 'Gift'
+            d.status.should       == 200
+            d.cat.should          == 310
         end
     end
 
@@ -124,9 +145,14 @@ describe MailerJob do
                              "bcc_address" => nil,
                              "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/download"}]}] }
             data = { "text" => 'notify_receiver_boomerang', "gift_id" => @gift.id }
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
             MailerJob.notify_receiver_boomerang(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @gift.id
+            d.notable_type.should == 'Gift'
+            d.status.should       == 200
+            d.cat.should          == 310
         end
     end
 
@@ -149,9 +175,14 @@ describe MailerJob do
                              "bcc_address" => nil,
                              "merge_vars" => [{"rcpt"=>"givie@email.com", "vars"=>[{"name"=>"link", "content"=>nil}]}] }
             data = { "text" => 'invoice_giver', "gift_id" => @gift.id }
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
             MailerJob.invoice_giver(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @gift.id
+            d.notable_type.should == 'Gift'
+            d.status.should       == 200
+            d.cat.should          == 310
         end
     end
 
@@ -167,9 +198,14 @@ describe MailerJob do
                              "to" => [{"email"=>"givie@email.com", "name"=>"Givie Giverson"}, {"email"=>"info@itson.me", "name"=>""}],
                              "bcc_address" => nil,
                              "merge_vars" => [{"rcpt"=>"givie@email.com", "vars"=>[{"name"=>"link", "content"=>nil}]}]}
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
             MailerJob.reminder_gift_giver(@giver, @gift.receiver_name)
+            d                     = Ditto.last
+            d.notable_id.should   == @giver.id
+            d.notable_type.should == 'User'
+            d.status.should       == 200
+            d.cat.should          == 310
         end
     end
 
@@ -184,9 +220,14 @@ describe MailerJob do
                              "to" => [{"email"=>"givie@email.com", "name"=>"Givie Giverson"}, {"email"=>"info@itson.me", "name"=>""}],
                              "bcc_address" => nil,
                              "merge_vars" => [{"rcpt"=>"givie@email.com", "vars"=>[{"name"=>"link", "content"=>nil}]}] }
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
             MailerJob.reminder_hasnt_gifted(@giver)
+            d                     = Ditto.last
+            d.notable_id.should   == @giver.id
+            d.notable_type.should == 'User'
+            d.status.should       == 200
+            d.cat.should          == 310
         end
     end
 
@@ -201,9 +242,14 @@ describe MailerJob do
                              "to" => [{"email"=>"receivy@email.com", "name"=>"Receivy Receiverson"}, {"email"=>"info@itson.me", "name"=>""}],
                              "bcc_address" => nil,
                              "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>nil}]}]}
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash)
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
             MailerJob.reminder_gift_receiver(@receiver)
+            d                     = Ditto.last
+            d.notable_id.should   == @receiver.id
+            d.notable_type.should == 'User'
+            d.status.should       == 200
+            d.cat.should          == 310
         end
     end
 end

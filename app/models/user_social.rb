@@ -1,6 +1,7 @@
 class UserSocial < ActiveRecord::Base
 
     belongs_to :user
+    has_many :dittos, as: :notable
 
     before_validation     :reject_xxx_emails
 

@@ -207,7 +207,7 @@ describe Mdot::V2::UsersController do
                 pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
                 ua_alias = "fake_ua"
 
-                Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias})
+                Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias, :provider => :ios })
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
                 post :create, format: :json, data: user_hsh, pn_token: pn_token
@@ -217,13 +217,25 @@ describe Mdot::V2::UsersController do
 
         it "should create user with required fields" do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
-            email = "neil@gmail.com"
+            email    = "neil@gmail.com"
             user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil"}
 
             post :create, format: :json, data: user_hsh
             rrc(200)
             user = User.where(email: email).first
             user.first_name.should == "Neil"
+        end
+
+        it "should create user with optional pn_token and save pn_token" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            email    = "neil@gmail.com"
+            user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil", pn_token: "f850c136-b74d-4fd9-a727-9912841e0a1a"}
+
+            post :create, format: :json, data: user_hsh
+            rrc(200)
+            user = User.where(email: email).first
+            user.first_name.should == "Neil"
+            user.pn_tokens.first.pn_token.should == "f850c136-b74d-4fd9-a727-9912841e0a1a"
         end
 
         it "should create user with ANDROID_TOKEN" do
@@ -414,7 +426,7 @@ describe Mdot::V2::UsersController do
         it "should not save bad pn token but allow login" do
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
-            token = "9128341983439487123"
+            token = "9128341983439adsfasd487123"
             post :create, format: :json, data: user_hsh, pn_token: token
             keys = ["first_name", "last_name", "birthday", "email", "zip", "phone", "facebook_id", "twitter", "photo", "user_id", "token"]
             hsh  = json["data"]

@@ -43,6 +43,20 @@ describe AdminGiver do
         admin_giver.sent.first.giver_name.should  == "#{SERVICE_NAME} Staff"
     end
 
+    it "should associate with proto as giver" do
+        provider    = FactoryGirl.create(:provider)
+        admin_user  = FactoryGirl.create :admin_user
+        admin_giver = admin_user.giver
+        proto        = FactoryGirl.build(:proto)
+        proto.giver  = admin_giver
+        proto.giver_name = admin_giver.name
+        proto.save
+
+        admin_giver.protos.first.id.should          == proto.id
+        admin_giver.protos.first.class.should       == Proto
+        admin_giver.protos.first.giver_name.should  == "#{SERVICE_NAME} Staff"
+    end
+
     it "should associate with Debts" do
         admin_user  = FactoryGirl.create :admin_user
         admin_giver = admin_user.giver

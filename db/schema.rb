@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140606024353) do
+ActiveRecord::Schema.define(version: 20140723225810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_stat_statements"
 
   create_table "answers", force: true do |t|
     t.string   "answer"
@@ -75,6 +74,53 @@ ActiveRecord::Schema.define(version: 20140606024353) do
     t.datetime "updated_at"
   end
 
+  create_table "bulk_emails", force: true do |t|
+    t.text     "data"
+    t.boolean  "processed",   default: false
+    t.integer  "proto_id"
+    t.integer  "provider_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "campaign_items", force: true do |t|
+    t.integer  "campaign_id"
+    t.integer  "provider_id"
+    t.integer  "giver_id"
+    t.string   "giver_name"
+    t.integer  "budget"
+    t.integer  "reserve"
+    t.text     "message"
+    t.text     "shoppingCart"
+    t.string   "value"
+    t.string   "cost"
+    t.date     "expires_at"
+    t.integer  "expires_in"
+    t.string   "textword"
+    t.boolean  "contract"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "detail"
+  end
+
+  create_table "campaigns", force: true do |t|
+    t.string   "type_of"
+    t.string   "status"
+    t.string   "name"
+    t.text     "notes"
+    t.date     "live_date"
+    t.date     "close_date"
+    t.date     "expire_date"
+    t.integer  "purchaser_id"
+    t.string   "purchaser_type"
+    t.string   "giver_name"
+    t.string   "photo"
+    t.integer  "budget"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "photo_path"
+  end
+
   create_table "cards", force: true do |t|
     t.integer  "user_id"
     t.string   "nickname"
@@ -107,6 +153,19 @@ ActiveRecord::Schema.define(version: 20140606024353) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "dittos", force: true do |t|
+    t.text     "response_json"
+    t.integer  "status"
+    t.integer  "cat"
+    t.integer  "notable_id"
+    t.string   "notable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "dittos", ["notable_id", "notable_type"], name: "index_dittos_on_notable_id_and_notable_type", using: :btree
+  add_index "dittos", ["status"], name: "index_dittos_on_status", using: :btree
 
   create_table "friendships", force: true do |t|
     t.integer  "user_id"
@@ -218,11 +277,45 @@ ActiveRecord::Schema.define(version: 20140606024353) do
   add_index "orders", ["gift_id"], name: "index_orders_on_gift_id", using: :btree
 
   create_table "pn_tokens", force: true do |t|
-    t.integer "user_id"
-    t.string  "pn_token"
+    t.integer  "user_id"
+    t.string   "pn_token"
+    t.string   "platform",   default: "ios"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
+
+  create_table "proto_joins", force: true do |t|
+    t.integer  "proto_id"
+    t.integer  "receivable_id"
+    t.string   "receivable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "gift_id"
+    t.string   "rec_name"
+  end
+
+  add_index "proto_joins", ["gift_id"], name: "index_proto_joins_on_gift_id", using: :btree
+  add_index "proto_joins", ["receivable_id", "proto_id"], name: "index_proto_joins_on_receivable_id_and_proto_id", using: :btree
+  add_index "proto_joins", ["receivable_id", "receivable_type"], name: "index_proto_joins_on_receivable_id_and_receivable_type", using: :btree
+
+  create_table "protos", force: true do |t|
+    t.text     "message"
+    t.text     "detail"
+    t.text     "shoppingCart"
+    t.string   "value"
+    t.string   "cost"
+    t.datetime "expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "giver_id"
+    t.string   "giver_type"
+    t.string   "giver_name"
+    t.integer  "provider_id"
+    t.string   "provider_name"
+    t.integer  "cat"
+  end
 
   create_table "providers", force: true do |t|
     t.string   "name",                                       null: false
@@ -266,6 +359,14 @@ ActiveRecord::Schema.define(version: 20140606024353) do
   add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
   add_index "providers", ["region_id"], name: "index_providers_on_region_id", using: :btree
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
+
+  create_table "providers_socials", id: false, force: true do |t|
+    t.integer "provider_id", null: false
+    t.integer "social_id",   null: false
+  end
+
+  add_index "providers_socials", ["provider_id", "social_id"], name: "index_providers_socials_on_provider_id_and_social_id", unique: true, using: :btree
+  add_index "providers_socials", ["provider_id"], name: "index_providers_socials_on_provider_id", using: :btree
 
   create_table "providers_tags", id: false, force: true do |t|
     t.integer "provider_id"
@@ -341,17 +442,6 @@ ActiveRecord::Schema.define(version: 20140606024353) do
     t.boolean  "email_reminder_gift_giver",    default: true
   end
 
-  create_table "sms", force: true do |t|
-    t.integer  "gift_id"
-    t.datetime "subscribed_date"
-    t.string   "phone"
-    t.integer  "service_id"
-    t.string   "service_type"
-    t.string   "textword"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "sms_contacts", force: true do |t|
     t.integer  "gift_id"
     t.datetime "subscribed_date"
@@ -365,6 +455,16 @@ ActiveRecord::Schema.define(version: 20140606024353) do
 
   add_index "sms_contacts", ["gift_id"], name: "index_sms_contacts_on_gift_id", using: :btree
   add_index "sms_contacts", ["subscribed_date"], name: "index_sms_contacts_on_subscribed_date", using: :btree
+
+  create_table "socials", force: true do |t|
+    t.string   "network_id"
+    t.string   "network"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+  end
+
+  add_index "socials", ["network_id", "network"], name: "index_socials_on_network_id_and_network", using: :btree
 
   create_table "tags", force: true do |t|
     t.string   "name"

@@ -5,11 +5,11 @@ describe Admt::V2::GiftCampaignsController do
     before(:each) do
         #Gift.delete_all
         AdminUser.delete_all
-        @provider = FactoryGirl.create :provider
-        @campaign = FactoryGirl.create(:campaign, purchaser_type: "AdminGiver", name: "Cinco de Mayo Party!")
+        @provider      = FactoryGirl.create :provider
+        @campaign      = FactoryGirl.create(:campaign, purchaser_type: "AdminGiver", name: "Cinco de Mayo Party!")
         @campaign_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, expires_at: Time.now.to_date, provider_id: @provider.id, value: "10", cost: "8")
-        @admin_user = FactoryGirl.create(:admin_user, remember_token: "Token")
-        @user = FactoryGirl.create(:user, email: "bob@bob.com", phone: "2222222222")
+        @admin_user    = FactoryGirl.create(:admin_user, remember_token: "Token")
+        @user          = FactoryGirl.create(:user, email: "bob@bob.com", phone: "2222222222")
         request.env["HTTP_TKN"] = "Token"
     end
 
@@ -35,7 +35,7 @@ describe Admt::V2::GiftCampaignsController do
         end
 
         it "should create an campaign gift with phone" do
-            create_hsh = { "receiver_phone" => "2222222222", "payable_id" => @campaign_item.id  }
+            create_hsh = { "receiver_phone" => "2222222222", "payable_id" => @campaign_item.id.to_s  }
             post :create, format: :json, data: create_hsh
             rrc 200
 
@@ -123,7 +123,18 @@ describe Admt::V2::GiftCampaignsController do
             post :create, format: :json, data: create_hsh
             rrc 200
 
-            good_push_hsh = {:aliases =>["#{@user.ua_alias}"],:aps =>{:alert => "#{@campaign.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            good_push_hsh = {
+                :aliases => ["#{@user.ua_alias}"],
+                :aps => {
+                    :alert => "#{@campaign.name} sent you a gift at #{@provider.name}!",
+                    :badge => 1,
+                    :sound =>"pn.wav"
+                },
+                :alert_type=>1,
+                :android => {
+                    :alert => "#{@campaign.name} sent you a gift at #{@provider.name}!",
+                }
+            }
             Urbanairship.should_receive(:push).with(good_push_hsh)
             run_delayed_jobs
         end

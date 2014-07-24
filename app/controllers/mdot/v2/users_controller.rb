@@ -62,27 +62,31 @@ class Mdot::V2::UsersController < JsonController
     end
 
     def create
+        return nil  if data_not_hash?(params["data"])
+        return nil  if hash_empty?(params["data"])
         params["data"] = if params["data"].kind_of?(String)
             JSON.parse(params["data"])
         else
             params["data"]
         end
 
-        if params["pn_token"] && params["pn_token"].kind_of?(String) && params["pn_token"].length > 23
-            pn_token = params['pn_token']
-        end
-
-        return nil  if data_not_hash?(params["data"])
-        # user_param = create_strong_param(data)
-        return nil  if hash_empty?(params["data"])
-
         if params["data"]["iphone_photo"] == "http://res.cloudinary.com/htaaxtzcv/image/upload/v1361898825/ezsucdxfcc7iwrztkags.jpg"
             params["data"]["iphone_photo"] = nil
         end
 
+        if params['data']["pn_token"]
+            pn_token = params['data'].delete('pn_token')
+        end
+        if params["pn_token"]
+            pn_token = params['pn_token']
+        end
+        if params['data']["platform"]
+            platform = params['data'].delete('platform')
+        end
+
         user = User.new(create_user_params)
         if user.save
-            user.pn_token = pn_token if pn_token
+            user.pn_token = [pn_token, platform] if pn_token
             success user.create_serialize
         else
             fail    user
@@ -150,7 +154,7 @@ private
     end
 
     def create_user_params
-        params.require(:data).permit([ "first_name" , "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle"])
+        params.require(:data).permit([ "first_name" , "pn_token", "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle"])
     end
 
 end

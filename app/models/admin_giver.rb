@@ -4,6 +4,7 @@ class AdminGiver < Admtmodel
 
     has_many :sent,  as: :giver,  class_name: Gift
     has_many :debts, as: :owner
+    has_many :protos, as: :giver, class_name: Proto
 
         ####### Gift Giver Ducktype
     def name

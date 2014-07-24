@@ -20,7 +20,10 @@ class Relay
         end
 
         def send_push_incomplete gift
-            Resque.enqueue(PushJob, gift.id, true, true)
+            if gift.giver_type == "User"
+                Resque.enqueue(PushJob, gift.id, true, true)
+                # email_gift_collected(g)
+            end
         end
 	end
 

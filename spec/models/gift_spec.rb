@@ -7,6 +7,11 @@ describe Gift do
         let(:object) { FactoryGirl.build(:gift) }
     end
 
+    it_should_behave_like "gift status" do
+        let(:object) { FactoryGirl.create(:gift) }
+        let(:cat)    { 0 }
+    end
+
 	it "builds from factory" do
 		gift = FactoryGirl.build :gift
 		gift.should be_valid
@@ -47,6 +52,12 @@ describe Gift do
 		gift = FactoryGirl.build(:gift, :shoppingCart => nil)
 		gift.should_not be_valid
 		gift.should have_at_least(1).error_on(:shoppingCart)
+	end
+
+	it "should associate with ditto" do
+		gift  = FactoryGirl.create(:gift)
+		ditto = FactoryGirl.create :ditto, notable_id: gift.id, notable_type: gift.class.to_s
+		gift.dittos.first.should == ditto
 	end
 
 	it "should save gift_items on create" do

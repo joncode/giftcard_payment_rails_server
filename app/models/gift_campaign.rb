@@ -1,4 +1,5 @@
 class GiftCampaign < Gift
+    include GiftMessenger
 
     validate   :is_giftable
 
@@ -11,14 +12,6 @@ class GiftCampaign < Gift
             gift.messenger
         end
         gift
-    end
-
-    def messenger
-        if self.payable.success?
-            Relay.send_push_notification(self)
-            puts "GiftCampaign -messenger- Notify Receiver via email #{self.receiver_name}"
-            notify_receiver
-        end
     end
 
 private

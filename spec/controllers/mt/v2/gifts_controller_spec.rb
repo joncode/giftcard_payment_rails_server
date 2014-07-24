@@ -156,7 +156,7 @@ describe Mt::V2::GiftsController do
             post :bulk_create, format: :json, data: create_hsh
             rrc 200
 
-            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1,:android =>{:alert => "#{@user.name} sent you a gift!"}}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             run_delayed_jobs
         end

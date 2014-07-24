@@ -6,17 +6,22 @@ class Pos::V1::OrdersController < JsonController
     def create
         redeem_code     = create_params["redeem_code"]
         pos_merchant_id = create_params["pos_merchant_id"]
-        redeem = Redeem.includes(:gift).where(redeem_code: redeem_code).first
+        redeem = Redeem.includes(:gift).where(redeem_code: redeem_code.to_s).first
         if redeem && redeem.gift.provider.pos_merchant_id == pos_merchant_id.to_i
             order = Order.init_with_pos(create_params, redeem)
             if order.save
-                success({"voucher_value" => order.gift.value} )
+                status = :ok
+                response_message = success({"voucher_value" => order.gift.value} )
             else
-                fail order
+                status = :bad_request
+                response_message = fail(order)
             end
         else
-            fail "Error - Gift Conﬁrmation No. is not valid."
+            status = :not_found
+            response_message = fail("Error - Gift Conﬁrmation No. is not valid.")
         end
+        redeem_id              = redeem.id if redeem.present?
+        Ditto.receive_pos_create(params[:data], response_message, redeem_id, status)
         respond(status)
     end
 

@@ -50,14 +50,15 @@ describe Admt::V2::ProvidersController do
 
     describe :update do
         before do
-            @provider = FactoryGirl.create(:provider, name:"old_name", 
+            @provider = FactoryGirl.create(:provider, name:"old_name",
                                                       address:"old address",
                                                       city: "old city",
                                                       state: "NY",
-                                                      zip: "22222", 
+                                                      zip: "22222",
                                                       phone: "2222222222",
+                                                      pos_merchant_id: 11111,
                                                       zinger: "old zinger",
-                                                      description: "old description")    
+                                                      description: "old description")
         end
       it "should update name" do
         put :update, id: @provider.id, format: :json, data: {name: "new_name"}
@@ -73,6 +74,11 @@ describe Admt::V2::ProvidersController do
         put :update, id: @provider.id, format: :json, data: {phone: "3333333333"}
         @provider.reload
         @provider.phone.should == "3333333333"
+      end
+      it "should update pos_merchant_id" do
+        put :update, id: @provider.id, format: :json, data: { pos_merchant_id: 33333 }
+        @provider.reload
+        @provider.pos_merchant_id.should == 33333
       end
       it "should no update unacceptable attributes" do
         put :update, id: @provider.id, format: :json, data: {live: true}

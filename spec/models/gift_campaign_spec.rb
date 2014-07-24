@@ -36,6 +36,11 @@ describe GiftCampaign do
             let(:object) { GiftCampaign.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftCampaign.create(@gift_hsh) }
+            let(:cat)    { 150 }
+        end
+
         it "should create gift" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
             gift_campaign.class.should          == GiftCampaign
@@ -57,10 +62,10 @@ describe GiftCampaign do
             payable                         = gift_campaign.payable
             payable.class.name.should       == "CampaignItem"
             payable.owner.class.name.should == "Campaign"
-            payable.success?.should         == true
-            payable.resp_code.should        == 1
-            payable.reason_text.should      == "Transaction approved."
-            payable.reason_code.should      == 1
+            gift_campaign.success?.should         == true
+            gift_campaign.resp_code.should        == 1
+            gift_campaign.reason_text.should      == "This transaction has been approved."
+            gift_campaign.reason_code.should      == 1
         end
 
         it "should correctly set expiration date from expires_at" do
@@ -161,6 +166,11 @@ describe GiftCampaign do
             let(:object) { GiftCampaign.create(@gift_hsh) }
         end
 
+        it_should_behave_like "gift status" do
+            let(:object) { GiftCampaign.create(@gift_hsh) }
+            let(:cat)    { 250 }
+        end
+
         it "should create gift" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
             gift_campaign.class.should          == GiftCampaign
@@ -182,10 +192,10 @@ describe GiftCampaign do
             payable                         = gift.payable
             payable.class.name.should       == "CampaignItem"
             payable.owner.class.name.should == "Campaign"
-            payable.success?.should         == true
-            payable.resp_code.should        == 1
-            payable.reason_text.should      == "Transaction approved."
-            payable.reason_code.should      == 1
+            gift.success?.should         == true
+            gift.resp_code.should        == 1
+            gift.reason_text.should      == "This transaction has been approved."
+            gift.reason_code.should      == 1
         end
 
         context "messaging" do
@@ -242,7 +252,7 @@ describe GiftCampaign do
                 stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
                 stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
                 stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-                good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@campaign.name} sent you a gift at #{@location.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+                good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@campaign.name} sent you a gift at #{@location.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1,:android =>{:alert => "#{@campaign.name} sent you a gift at #{@location.name}!"}}
                 Urbanairship.should_receive(:push).with(good_push_hsh)
                 response = GiftCampaign.create @gift_hsh
                 run_delayed_jobs

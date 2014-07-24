@@ -40,7 +40,9 @@ describe Mdot::V2::GiftsController do
 
         it "should send sent gifts (purchaser) with giver keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            keys = ["created_at", "message", "detail", "provider_id", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "cat", "time_ago", "items"]
+
+            keys = ["created_at", "message", "detail", "provider_id", "expires_at", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "cat", "time_ago", "items"]
+
             get :archive, format: :json
             gift_hsh = json["data"]["sent"][0]
             compare_keys(gift_hsh, keys)
@@ -71,7 +73,9 @@ describe Mdot::V2::GiftsController do
                 order  = Order.init_with_gift(gift, "xyz")
                 order.save
             end
-            keys = ["giver_id", "giver_name", "message", "detail", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at", "completed_at", "cat", "time_ago", "items"]
+
+            keys = ["giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at", "completed_at", "cat", "time_ago", "items"]
+
             post :archive, format: :json
             gift_hsh = json["data"]["used"][0]
             compare_keys(gift_hsh, keys)
@@ -148,7 +152,9 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return receiver serialized gifts" do
-            keys = ["giver_id", "giver_name", "message", "detail", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
+
+            keys = ["giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
+
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
             json_gifts = json["data"]["gifts"]
@@ -299,7 +305,7 @@ describe Mdot::V2::GiftsController do
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             badge = Gift.get_notifications(@gift.giver)
             user_alias = @gift.giver.ua_alias
-            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2}
+            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!"}}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
@@ -474,7 +480,7 @@ describe Mdot::V2::GiftsController do
                 db_gift = new_gift
                 db_gift_hsh = db_gift.giver_serialize
                 db_gift_hsh.each do |key, value|
-                    times = ["created_at", "updated_at", "redeemed_at"]
+                    times = ["created_at", "updated_at", "redeemed_at", "expires_at"]
                     if times.include? key
                         gift_response[key].to_datetime.month.should  == value.to_datetime.month
                         gift_response[key].to_datetime.day.should    == value.to_datetime.day

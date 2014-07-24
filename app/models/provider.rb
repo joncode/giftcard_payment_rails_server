@@ -10,6 +10,7 @@ class Provider < ActiveRecord::Base
 	has_many   :campaign_items
 	belongs_to :brands
 	belongs_to :merchant
+	has_many   :protos
 
 	validates_presence_of 	:name, :city, :address, :zip, :region_id, :state, :token
 	validates_length_of 	:state , 	:is => 2
@@ -29,10 +30,6 @@ class Provider < ActiveRecord::Base
 
 	def self.get_all
 		unscoped.order("name ASC")
-	end
-
-	def pos_merchant_id
-		11111
 	end
 
 	def serialize
@@ -83,7 +80,7 @@ class Provider < ActiveRecord::Base
 	def short_image_url
 		shorten_photo_url(image)
 	end
-	
+
 	def live_int
 		self.live ? "1" : "0"
 	end
