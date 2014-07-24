@@ -38,7 +38,10 @@ VERSION_NUMBER  = "1.2.7.9"
 VERSION_UPDATED = "7/22/14"
 
 # 1.2.8 production to do list
+    # run migrations
     # delete the contact migrations
+    # delete csv_social_import
+    # delete save_social_import_job, csv_import_job, resque_tester
 
 if Rails.env.test?
     CSV_LIMIT   = 10
