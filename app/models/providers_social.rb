@@ -1,4 +1,4 @@
-class Connection  < ActiveRecord::Base
+class ProvidersSocial  < ActiveRecord::Base
     self.table_name = "providers_socials"
 
     belongs_to :provider

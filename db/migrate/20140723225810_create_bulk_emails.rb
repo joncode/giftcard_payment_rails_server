@@ -1,4 +1,4 @@
-class CreateBulkEmails < ActiveRecord::Migration
+class CreateBulkEmail < ActiveRecord::Migration
   def change
     create_table :bulk_emails do |t|
       t.text 	:data
