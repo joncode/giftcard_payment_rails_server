@@ -3,8 +3,8 @@ class AppContact < ActiveRecord::Base
     has_many :friendships, dependent: :destroy
     has_many :users, through: :friendships
 
-    before_validate :downcase_emails
-    before_validate :extract_phone_digits
+    before_validation :downcase_emails
+    before_validation :extract_phone_digits
 
     validates :network, presence: true
     validates :network_id, presence: true
