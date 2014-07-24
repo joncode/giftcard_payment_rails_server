@@ -40,7 +40,7 @@ VERSION_UPDATED = "7/24/14"
 if Rails.env.test?
     CSV_LIMIT   = 10
 else
-    CSV_LIMIT   = 500
+    CSV_LIMIT   = 5000
 end
 
 BLANK_AVATAR_URL = "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
