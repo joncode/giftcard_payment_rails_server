@@ -27,4 +27,8 @@ end
 
 #Jul 23 23:33:24 dbappdev heroku/web.1:  State changed from starting to up
 
+# 15,000
 # in save social import :process 2014-07-24 21:49:15 +0000 7test@itson.me
+#  "2014-07-24 22:01:38.927004"
+# 12:23
+# 20.5 contacts per second / 48 milliseconds per contact

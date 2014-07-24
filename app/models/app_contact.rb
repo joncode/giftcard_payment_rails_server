@@ -1,29 +1,16 @@
 class AppContact < ActiveRecord::Base
+    include ModelValidationHelper
 
     has_many :friendships, dependent: :destroy
     has_many :users, through: :friendships
 
-    before_validation :downcase_emails
-    before_validation :extract_phone_digits
+    before_validation { |social| social.network_id = strip_and_downcase(network_id)   if is_email? }
+    before_validation { |social| social.network_id = extract_phone_digits(network_id) if is_phone? }
 
     validates :network, presence: true
     validates :network_id, presence: true
     validates_with UniqueNetworkValidator
 
-private
-
-    def extract_phone_digits
-        if self.network == 'phone'
-            phone_match = self.network_id.to_s.match(VALID_PHONE_REGEX)
-            self.network_id  = phone_match[1] + phone_match[2] + phone_match[3]
-        end
-    end
-
-    def downcase_emails
-        if self.network == 'email' && self.network_id.kind_of?(String)
-            self.network_id = self.network_id.downcase.strip
-        end
-    end
 
 end
 

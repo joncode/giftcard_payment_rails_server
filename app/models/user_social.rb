@@ -1,36 +1,36 @@
 class UserSocial < ActiveRecord::Base
+    include ModelValidationHelper
 
     belongs_to :user
     has_many :dittos, as: :notable
 
     before_validation     :reject_xxx_emails
 
+    before_validation { |social| social.identifier = strip_and_downcase(identifier)   if is_email? }
+    before_validation { |social| social.identifier = extract_phone_digits(identifier) if is_phone? }
+
     validates_presence_of :identifier, :type_of, :user_id
 
-    validates_with MultiTypeIdentifierUniqueValidator
     validates :identifier , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
     validates :identifier , format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
+    validates_with MultiTypeIdentifierUniqueValidator
 
-    before_save           :extract_phone_digits
     after_create          :subscribe_mailchimp
     after_save            :unsubscribe_mailchimp
 
     default_scope -> { where(active: true) }  # indexed
 
-private
-
-    def extract_phone_digits
-        if self.type_of == 'phone'
-            phone_match = self.identifier.to_s.match(VALID_PHONE_REGEX)
-            self.identifier  = phone_match[1] + phone_match[2] + phone_match[3]
-        end
+    def network
+        type_of
     end
 
+private
+
     def subscribe_mailchimp
-    	if self.type_of  == "email"
+        if self.type_of  == "email"
             unless Rails.env.development?
                 Resque.enqueue(SubscriptionJob, self.id)
-        	end
+            end
         end
     end
 
@@ -51,13 +51,6 @@ private
         end
     end
 
-    def is_email?
-        self.type_of == "email"
-    end
-
-    def is_phone?
-        self.type_of == "phone"
-    end
 end
 
 # == Schema Information

@@ -1,3 +1,5 @@
+require 'resque/errors'
+
 class ProtoGifterJob
 
 	@queue = :gifting
@@ -37,6 +39,26 @@ class ProtoGifterJob
 
 		end
 
+	rescue Resque::TermException
+		restart(proto_id, "TermException")
+	rescue Resque::DirtyExit
+		restart(proto_id, "DirtyExit")
+	rescue Exception => e
+	    if e.message =~ SIGTERM
+	    	restart(proto_id, e.inspect)
+	    else
+	    	raise
+	    end
+	  end
+	end
+
+private
+
+	def restart(object_id, exception_type)
+
+		puts log_bars "Hit the RESQUE #{exception_type} - restarting in 20 seconds"
+		sleep 20
+	    Resque.enqueue(ProtoGifterJob, proto_id)
 	end
 
 end

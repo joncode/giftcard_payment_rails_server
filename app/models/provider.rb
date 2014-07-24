@@ -14,7 +14,7 @@ class Provider < ActiveRecord::Base
 
 	validates_presence_of 	:name, :city, :address, :zip, :region_id, :state, :token
 	validates_length_of 	:state , 	:is => 2
-	validates_length_of 	:zip, 		:within => 5..10
+	validates_length_of 	:zip, 		:within => 5..11
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
 
@@ -166,6 +166,7 @@ class Provider < ActiveRecord::Base
 			image
 		end
 	end
+
 private
 
 	def make_menu_string
