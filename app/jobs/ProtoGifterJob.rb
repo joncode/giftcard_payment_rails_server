@@ -7,9 +7,12 @@ class ProtoGifterJob
 		puts "\nIn ProtoGifterJob for proto #{proto_id}\n"
 		proto = Proto.find(proto_id)
 
-		if Rails.env.production? || Rails.env.staging?
+		if Rails.env.production?
 			batch 	  = 200
 			wait_time = 1
+		elsif Rails.env.staging?
+			batch 	  = 200
+			wait_time = 0
 		else
 			batch 	  = 1
 			wait_time = 0.1
