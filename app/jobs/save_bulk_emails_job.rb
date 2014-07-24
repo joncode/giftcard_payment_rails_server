@@ -26,3 +26,5 @@ end
 # Resque.enqueue(SaveBulkEmailsJob, bulk_emails_id)
 
 #Jul 23 23:33:24 dbappdev heroku/web.1:  State changed from starting to up
+
+# in save social import :process 2014-07-24 21:49:15 +0000 7test@itson.me
