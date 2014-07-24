@@ -50,6 +50,14 @@ FactoryGirl.define do
         expires_at      (Time.now + 1.month)
     end
 
+    factory :proto_join do
+        proto_id        1
+        receivable_id   1
+        receivable_type "Social"
+        gift_id         nil
+        rec_name        "Bob"
+    end
+
     factory :social do
         sequence(:network_id)    { |n| "socializer#{n}@gmail.com" }
         network      "email"
