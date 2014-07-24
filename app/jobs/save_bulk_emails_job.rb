@@ -4,7 +4,7 @@ class SaveBulkEmailsJob
 
     def self.perform bulk_emails_id
 		puts "\n SaveBulkEmailsJob\n"
-    	be_obj = BulkEmails.find(bulk_emails_id)
+    	be_obj = BulkEmail.find(bulk_emails_id)
 		begin
     		emails = JSON.parse(be_obj.data)
     		emails.each do |email|
