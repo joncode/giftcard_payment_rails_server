@@ -14,7 +14,6 @@ class GiftProtoJoin < Gift
         gift
     end
 
-
 private
 
 	def self.pre_init proto, proto_join
