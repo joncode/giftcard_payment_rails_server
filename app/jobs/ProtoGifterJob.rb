@@ -49,7 +49,6 @@ class ProtoGifterJob
 	    else
 	    	raise
 	    end
-	  end
 	end
 
 private
