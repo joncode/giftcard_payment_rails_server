@@ -2,9 +2,9 @@ class SaveBulkEmailsJob
 
     @queue = :database
 
-    def self.perform data
+    def self.perform bulk_emails_id
 		puts "\n SaveBulkEmailsJob\n"
-    	be_obj = BulkEmails.find(data)
+    	be_obj = BulkEmails.find(bulk_emails_id)
 		begin
     		emails = JSON.parse(be_obj.data)
     		emails.each do |email|
@@ -23,4 +23,6 @@ end
 
 
 
-# Resque.enqueue(SaveBulkEmailsJob, { "provider_id" => @provider_id, "proto_id" => @proto_id, processed: false})
+# Resque.enqueue(SaveBulkEmailsJob, bulk_emails_id)
+
+#Jul 23 23:33:24 dbappdev heroku/web.1:  State changed from starting to up
