@@ -15,6 +15,7 @@ describe SmsCollector do
         Campaign.delete_all
         SmsContact.delete_all
         @contacts_route = SLICKTEXT_URL + "/v1/contacts?limit=1000&textword=15893"
+        Gift.delete_all
     end
 
     context "bug fixes" do
