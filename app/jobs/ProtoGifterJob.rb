@@ -52,7 +52,7 @@ class ProtoGifterJob
 	rescue Resque::DirtyExit
 		restart(proto, "RESQUE DirtyExit", re_run_amount)
 	rescue Exception => e
-	    if e.message =~ SIGTERM
+	    if e.message =~ /SIGTERM/
 	    	restart(proto, "RESQUE e.inspect", re_run_amount)
 	    else
 	    	raise

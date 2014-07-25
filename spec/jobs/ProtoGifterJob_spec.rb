@@ -25,6 +25,10 @@ describe ProtoGifterJob do
 	    	(gs[0].created_at - gs[1].created_at).should > 0.1.second
     	end
 
+    	# it "should re_run the job when contacts are added after" do
+    	# 	@proto.update(contacts: 10)
+    	# end
+
     end
 
 end
