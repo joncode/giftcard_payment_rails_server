@@ -43,17 +43,17 @@ class ProtoGifterJob
 			# re-run
 			left_over = proto.contacts - proto.processed
 			unless left_over == re_run_amount
-				restart(proto_id, "Contacts Exceed Processed", left_over)
+				restart(proto, "Contacts Exceed Processed", left_over)
 			end
 		end
 
 	rescue Resque::TermException
-		restart(proto_id, "RESQUE TermException")
+		restart(proto, "RESQUE TermException", re_run_amount)
 	rescue Resque::DirtyExit
-		restart(proto_id, "RESQUE DirtyExit")
+		restart(proto, "RESQUE DirtyExit", re_run_amount)
 	rescue Exception => e
 	    if e.message =~ SIGTERM
-	    	restart(proto_id, "RESQUE e.inspect")
+	    	restart(proto, "RESQUE e.inspect", re_run_amount)
 	    else
 	    	raise
 	    end
@@ -61,11 +61,11 @@ class ProtoGifterJob
 
 private
 
-	def restart(object_id, exception_type)
+	def restart(object, exception_type, left_over=0)
 
-		puts log_bars "Hit the #{exception_type} - restarting in 20 seconds"
+		log_bars "Hit the #{exception_type} - restarting in 20 seconds"
 		sleep 20
-	    Resque.enqueue(ProtoGifterJob, proto_id)
+	    Resque.enqueue(ProtoGifterJob, object.id, left_over)
 	end
 
 end
