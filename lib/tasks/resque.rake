@@ -4,7 +4,7 @@ task "resque:setup" => :environment do
 	if Rails.env.production?
   		ENV['QUEUE'] = '*'
   	else
-  		ENV['QUEUE'] = (%w(database gifting social push email subscription test *))
+  		ENV['QUEUE'] = "database gifting social push email subscription test *"
   	end
 end
 
