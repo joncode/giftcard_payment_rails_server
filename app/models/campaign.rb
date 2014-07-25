@@ -1,4 +1,4 @@
-class Campaign < ActiveRecord::Base
+class Campaign < Admtmodel
     include Formatter
     self.table_name = "campaigns"
 
