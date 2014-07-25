@@ -93,6 +93,7 @@ end
 #  110 - send push pn token
 #  310 - send transactional email
 #  400 - Register subscribe email to mailchimp
+#  500 - SocialProxy
 # 1000 - Receive POS request
 
 # Statuses
