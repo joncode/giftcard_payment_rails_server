@@ -15,6 +15,16 @@ class Proto < ActiveRecord::Base
 	before_save :set_value
 	before_save :set_cost
 
+	def update_contacts new_amount
+        total_count = self.contacts + new_amount
+        self.update(contacts: total_count)
+	end
+
+	def update_processed new_amount
+        total_processed = self.processed + new_amount
+        self.update(processed: total_processed)
+	end
+
 	def receivables
 			# returns receivables (Users or Socials)
 		self.users + self.socials

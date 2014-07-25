@@ -4,7 +4,7 @@ class ProtoGifterJob
 
 	@queue = :gifting
 
-	def self.perform(proto_id)
+	def self.perform(proto_id, re_run_amount=0)
 
 		puts "\nIn ProtoGifterJob for proto #{proto_id}\n"
 		proto = Proto.find(proto_id)
@@ -25,7 +25,7 @@ class ProtoGifterJob
 			group_ary.each do |proto_join|
 
 				gift = GiftProtoJoin.create({ "proto_join" => proto_join, "proto" => proto})
-
+				proto.update_processed(1)
 				puts "\n proto has created gift ... "
 
 				if gift.errors.messages.count > 0
@@ -39,13 +39,21 @@ class ProtoGifterJob
 
 		end
 
+		if proto.contacts > proto.processed
+			# re-run
+			left_over = proto.contacts - proto.processed
+			unless left_over == re_run_amount
+				restart(proto_id, "Contacts Exceed Processed", left_over)
+			end
+		end
+
 	rescue Resque::TermException
-		restart(proto_id, "TermException")
+		restart(proto_id, "RESQUE TermException")
 	rescue Resque::DirtyExit
-		restart(proto_id, "DirtyExit")
+		restart(proto_id, "RESQUE DirtyExit")
 	rescue Exception => e
 	    if e.message =~ SIGTERM
-	    	restart(proto_id, e.inspect)
+	    	restart(proto_id, "RESQUE e.inspect")
 	    else
 	    	raise
 	    end
@@ -55,7 +63,7 @@ private
 
 	def restart(object_id, exception_type)
 
-		puts log_bars "Hit the RESQUE #{exception_type} - restarting in 20 seconds"
+		puts log_bars "Hit the #{exception_type} - restarting in 20 seconds"
 		sleep 20
 	    Resque.enqueue(ProtoGifterJob, proto_id)
 	end
