@@ -249,6 +249,20 @@ describe Mdot::V2::UsersController do
             user.first_name.should == "Neil"
         end
 
+        it "should create with blank phone string BUG FIX" do
+            request.env["HTTP_TKN"] = ANDROID_TOKEN
+            req_hsh = {"data"=>{"first_name"=>"Drink", "last_name"=>"Board", "email"=>"cmmca71@gmail.com", "phone"=>"", "password"=>"passwordtest", "password_confirmation"=>"passwordtest", "facebook_id"=>"110005810227565", "pn_token"=>"ec938243-f0af-4238-ab1b-b1a1d3ad59cd", "platform"=>"android"}}
+
+            post :create, format: :json, data: req_hsh["data"]
+            rrc(200)
+            user = User.where(email: email).first
+            user.first_name.should == "Drink"
+            user.email.should == "cmmca71@gmail.com"
+            user.phone.should be_nil
+            user.user_socials.count.should == 2
+
+        end
+
         it "should process optional fields" do
             optional = [ "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle"]
             requests = [{"first_name"=>"Rushit",  "password"=>"hotmail007", "last_name"=>"Patel", "phone"=>"5107543267", "email"=>"rdpatel007@gmail.com",  "iphone_photo"=>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/1076106_637557363_1453430141_n.jpg", "password_confirmation"=>"hotmail007", "facebook_id"=>637557363},

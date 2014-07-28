@@ -2,7 +2,7 @@ module ModelValidationHelper
     extend ActiveSupport::Concern
 
     def extract_phone_digits phone_raw
-        if phone_raw.blank?
+        unless phone_raw.blank?
             phone_match = phone_raw.match(VALID_PHONE_REGEX)
             phone_match[1] + phone_match[2] + phone_match[3]
         end
