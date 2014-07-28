@@ -1,6 +1,6 @@
 class MailerJob
     extend Emailer
-    @queue = :email
+    @queue = :r_email
 
     def self.perform(data)
         begin
