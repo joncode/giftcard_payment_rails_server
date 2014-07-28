@@ -2,9 +2,11 @@ module ModelValidationHelper
     extend ActiveSupport::Concern
 
     def extract_phone_digits phone_raw
-        unless phone_raw.blank?
+        if !phone_raw.blank? && phone_raw.to_s.length > 9
             phone_match = phone_raw.match(VALID_PHONE_REGEX)
             phone_match[1] + phone_match[2] + phone_match[3]
+        else
+            nil
         end
     end
 
