@@ -1,4 +1,4 @@
-class CampaignItem < Admtmodel
+class CampaignItem < ActiveRecord::Base
     self.table_name = "campaign_items"
 
     has_many :gifts, as: :payable

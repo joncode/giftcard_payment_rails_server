@@ -1,4 +1,4 @@
-class CampaignItemNew < ActiveRecord::Base
+class CampaignItemAt < Admtmodel
     self.table_name = "campaign_items"
 
     include GenericPayableDucktype
