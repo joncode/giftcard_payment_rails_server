@@ -187,7 +187,7 @@ private
     	merchant_name    = gift.provider_name
     	gift_details     = GiftItem.items_for_email(gift)
     	gift_total       = gift.total
-		template_content = [{"name" => "receiver_name", "content" => "Hi #{recipient_name}"},
+		template_content = [{"name" => "receiver_name", "content" => "#{recipient_name}"},
 							{"name" => "merchant_name", "content" => merchant_name},
 							{"name" => "gift_details", "content" => gift_details},
 							{"name" => "gift_total", "content" => gift_total},
