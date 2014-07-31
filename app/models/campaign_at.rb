@@ -1,4 +1,4 @@
-class CampaignOld < Admtmodel
+class CampaignAt < Admtmodel
     include Formatter
     self.table_name = "campaigns"
 
