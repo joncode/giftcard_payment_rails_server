@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'destroy_duplicate_gifts'
+require 'cancel_duplicate_gifts'
 
 
-describe "Should destroy duplicates" do
+describe "Should cancel duplicates" do
 	before do
 		@provider1 = FactoryGirl.create :provider
 		provider2 = FactoryGirl.create :provider
@@ -28,8 +28,12 @@ describe "Should destroy duplicates" do
 		FactoryGirl.create :gift, receiver_email: "dan@email.com", provider_id: @provider1.id, receiver_id: nil
 	end
 
+	it "should find the duplicate gifts" do
+		CancelDuplicateGifts.find_duplicates(@provider1.id, 1.day.ago)
+	end
+
 	it "should update the correct gifts" do
-		DestroyDuplicateGifts.perform(@provider1.id, 1.day.ago)
+		CancelDuplicateGifts.perform(@provider1.id, 1.day.ago)
 		Gift.count.should == 91
 		scoped_gifts = Gift.where(provider_id: @provider1.id, receiver_id: nil).where("created_at > ?", 1.week.ago)
 		scoped_gifts.count.should == 46

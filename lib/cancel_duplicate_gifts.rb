@@ -1,7 +1,7 @@
-module DestroyDuplicateGifts
+module CancelDuplicateGifts
 
-    def self.perform provider_id=nil, created_after=nil
-        puts "------------- DESTROY DUPLICATE GIFTS CRON -----------------"
+    def self.perform provider_id, created_after
+        puts "------------- CANCEL DUPLICATE GIFTS CRON -----------------"
     	gifts = Gift.where(provider_id: provider_id, receiver_id: nil).where("created_at > ?", created_after)
 	    duplicates_hsh = gifts.select(:receiver_email).group(:receiver_email).having("count(*) > 1").count
 	    duplicates_hsh.each do |receiver_email, count|
@@ -16,6 +16,15 @@ module DestroyDuplicateGifts
         puts "**------------- END #{receiver_email} LOOP. -----------------"
 	    end
         puts "------------- END DUPLICATE GIFTS CRON -----------------"
+    end
+
+
+    def self.find_duplicates provider_id, created_after
+        puts "------------- START FINDING DUPLICATE GIFTS -----------------"
+        gifts = Gift.where(provider_id: provider_id, receiver_id: nil).where("created_at > ?", created_after)
+        duplicates_hsh = gifts.select(:receiver_email).group(:receiver_email).having("count(*) > 1").count
+        puts duplicates_hsh
+        puts "------------- END FINDING DUPLICATE GIFTS -----------------"
     end
 
 end
