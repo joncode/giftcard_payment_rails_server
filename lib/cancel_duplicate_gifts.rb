@@ -24,6 +24,7 @@ module CancelDuplicateGifts
         gifts = Gift.where(provider_id: provider_id, receiver_id: nil).where("created_at > ?", created_after)
         duplicates_hsh = gifts.select(:receiver_email).group(:receiver_email).having("count(*) > 1").count
         puts duplicates_hsh
+        puts "======== #{duplicates_hsh.count} total emails with duplicates."
         puts "------------- END FINDING DUPLICATE GIFTS -----------------"
     end
 
