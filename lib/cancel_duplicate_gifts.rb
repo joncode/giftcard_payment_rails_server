@@ -2,7 +2,7 @@ module CancelDuplicateGifts
 
     def self.perform provider_id, created_after
         puts "------------- CANCEL DUPLICATE GIFTS CRON -----------------"
-    	gifts = Gift.where(provider_id: provider_id, receiver_id: nil).where("created_at > ?", created_after)
+    	gifts = Gift.where(provider_id: provider_id, receiver_id: nil).where.not(status: 'cancel').where("created_at > ?", created_after)
 	    duplicates_hsh = gifts.select(:receiver_email).group(:receiver_email).having("count(*) > 1").count
 	    duplicates_hsh.each do |receiver_email, count|
 
@@ -16,6 +16,20 @@ module CancelDuplicateGifts
         puts "**------------- END #{receiver_email} LOOP. -----------------"
 	    end
         puts "------------- END DUPLICATE GIFTS CRON -----------------"
+    end
+
+    def self.undo_dual_cancels provider_id, created_after
+        puts "------------- START UNDO DUAL CANCELS CRON -----------------"
+        gifts = Gift.where(provider_id: provider_id, receiver_id: nil).where(status: 'cancel').where("created_at > ?", created_after)
+        duplicates_hsh = gifts.select(:receiver_email).group(:receiver_email).having("count(*) > 1").count
+        puts "-------- duplicates hash #{gifts.count}"
+        puts "-------- duplicates hash #{duplicates_hsh}"
+        duplicates_hsh.each do |receiver_email, count|
+            duplicate_gift = gifts.where(receiver_email: receiver_email).first
+            duplicate_gift.update(status: 'incomplete', pay_stat: 'charge_unpaid')
+        puts "**------------- INSIDE #{receiver_email} updated -----------------"
+        end
+        puts "------------- END UNDO DUAL CANCELS CRON -----------------"
     end
 
 

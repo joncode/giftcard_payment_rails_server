@@ -44,3 +44,26 @@ describe "Should cancel duplicates" do
 		scoped_gifts.where(receiver_email: "dan@email.com").where.not(status: "cancel").count.should == 1
 	end
 end
+
+describe "undo all cancels" do
+
+	it "should undo dual cancelled gifts" do
+		@provider1 = FactoryGirl.create :provider
+		10.times do
+			gift = FactoryGirl.create :gift, receiver_email: "ann@email.com", provider_id: @provider1.id, receiver_id: nil
+			gift.update(status: "cancel")
+		end
+		10.times do
+			FactoryGirl.create :gift, receiver_email: "bob@email.com", provider_id: @provider1.id, receiver_id: nil, status: "incomplete"
+		end
+		10.times do
+			gift = FactoryGirl.create :gift, receiver_email: "cam@email.com", provider_id: @provider1.id, receiver_id: nil
+			gift.update(status: "cancel")
+		end
+		CancelDuplicateGifts.undo_dual_cancels(@provider1.id, 1.day.ago)
+		Gift.count.should == 30
+		Gift.where(status: "incomplete").count.should == 12
+
+	end
+
+end
