@@ -34,8 +34,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.2.8-9"
-VERSION_UPDATED = "7/29/14"
+VERSION_NUMBER  = "1.2.8-10"
+VERSION_UPDATED = "7/31/14"
 
 
 BLANK_AVATAR_URL = "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
