@@ -11,7 +11,7 @@ class ProtoGifterJob
 
 		if Rails.env.production?
 			batch 	  = 200
-			wait_time = 1
+			wait_time = 0.5
 		elsif Rails.env.staging?
 			batch 	  = 200
 			wait_time = 0
@@ -43,17 +43,17 @@ class ProtoGifterJob
 			# re-run
 			left_over = proto.contacts - proto.processed
 			unless left_over == re_run_amount
-				restart(proto, "Contacts Exceed Processed", left_over)
+				self.restart(proto, "Contacts Exceed Processed", left_over)
 			end
 		end
 
 	rescue Resque::TermException
-		restart(proto, "RESQUE TermException", re_run_amount)
+		self.restart(proto, "RESQUE TermException", re_run_amount)
 	rescue Resque::DirtyExit
-		restart(proto, "RESQUE DirtyExit", re_run_amount)
+		self.restart(proto, "RESQUE DirtyExit", re_run_amount)
 	rescue Exception => e
 	    if e.message =~ /SIGTERM/
-	    	restart(proto, "RESQUE e.inspect", re_run_amount)
+	    	self.restart(proto, "RESQUE e.inspect", re_run_amount)
 	    else
 	    	raise
 	    end
@@ -61,7 +61,7 @@ class ProtoGifterJob
 
 private
 
-	def restart(object, exception_type, left_over=0)
+	def self.restart(object, exception_type, left_over=0)
 
 		log_bars "Hit the #{exception_type} - restarting in 20 seconds"
 		sleep 20

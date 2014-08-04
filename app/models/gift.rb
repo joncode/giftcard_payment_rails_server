@@ -29,13 +29,13 @@ class Gift < ActiveRecord::Base
     before_validation :format_value
     before_validation :format_cost
 
-	validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :cat
+    validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :cat
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
     validates :receiver_phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
     validates_with GiftReceiverInfoValidator
 
     before_save { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
-	before_save   :extract_phone_digits
+    before_save   :extract_phone_digits
     before_create :find_receiver
     before_create :add_giver_name,      :if => :no_giver_name?
     before_create :add_provider_name,   :if => :no_provider_name?
