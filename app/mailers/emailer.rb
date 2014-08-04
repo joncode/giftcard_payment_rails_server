@@ -61,8 +61,10 @@ module Emailer
     end
 
     def notify_receiver_boomerang data
-    	gift 			 = Gift.find(data["gift_id"])
-		template_name    = "iom-boomerang-notice"
+    	gift 			  = GiftBoomerang.find(data["gift_id"])
+		original_receiver = gift.original_receiver_social
+
+		template_name    = "iom-boomerang-notice-2"
 		recipient_name   = gift.receiver_name
 		if gift.receiver_email
 			email         = gift.receiver_email
@@ -77,8 +79,9 @@ module Emailer
 		adjusted_id 	 = NUMBER_ID + gift.id
 		link             = "#{PUBLIC_URL}/download"
         bcc              = "info@itson.me"
-        template_content = [{"name" => "user_name", "content" => recipient_name},
-		                    {"name" => "items_text", "content" => items_text}]
+        template_content = [
+        	{ "name" => "items_text", "content" => items_text },
+        	{ "name" => "original_receiver", "content" => original_receiver}]
 		message          = message_hash(subject(template_name), email, recipient_name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
     end
@@ -153,6 +156,7 @@ private
 			when "iom-reset-password";         then "Reset Your Password"
 			when "iom-user-welcome";           then "Welcome to ItsOnMe!"
 			when "iom-boomerang-notice";       then "Boomerang! We're returning this gift to you."
+			when "iom-boomerang-notice-2";       then "Boomerang! We're returning this gift to you."
 			end
 		if Rails.env.development? || Rails.env.staging?
 			subject_content = subject_content.insert(0, "QA- ")
