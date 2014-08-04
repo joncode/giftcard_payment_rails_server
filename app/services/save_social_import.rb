@@ -1,8 +1,10 @@
 class SaveSocialImport
+    extend ModelValidationHelper
 
 	def self.perform email, provider_id, proto_id
-        puts "\n\n in save social import :process #{Time.now} #{email}"
-        social = Social.find_or_create_by(network: "email", network_id: email)
+        downcased_email = strip_and_downcase(email)
+        puts "\n\n in save social import :process #{Time.now} #{downcased_email}"
+        social = Social.find_or_create_by(network: "email", network_id: downcased_email)
 
         if social.errors.messages.count > 0
             #errors.add :email, "Row #{index+1}: #{social.network_id} is not a valid email"

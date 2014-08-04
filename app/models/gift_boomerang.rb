@@ -17,6 +17,20 @@ class GiftBoomerang < Gift
         gift
     end
 
+    def original_receiver_social
+        if original_receiver = self.payable.receiver
+            if original_receiver.email.present?
+                original_receiver.email
+            elsif original_receiver.phone.present?
+                original_receiver.phone
+            elsif original_receiver.facebook_id.present?
+                "your Facebook friend"
+            elsif original_receiver.twitter.present?
+                "your Twitter friend"
+            end
+        end
+    end
+
 private
 
     def pre_init args={}

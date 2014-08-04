@@ -11,7 +11,7 @@ class ProtoGifterJob
 
 		if Rails.env.production?
 			batch 	  = 200
-			wait_time = 1
+			wait_time = 0.5
 		elsif Rails.env.staging?
 			batch 	  = 200
 			wait_time = 0
