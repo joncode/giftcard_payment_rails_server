@@ -11,10 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140724233226) do
+ActiveRecord::Schema.define(version: 20140728151935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "admin_users_socials", force: true do |t|
+    t.integer  "admin_user_id"
+    t.integer  "social_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "answers", force: true do |t|
     t.string   "answer"
@@ -277,8 +284,11 @@ ActiveRecord::Schema.define(version: 20140724233226) do
   add_index "orders", ["gift_id"], name: "index_orders_on_gift_id", using: :btree
 
   create_table "pn_tokens", force: true do |t|
-    t.integer "user_id"
-    t.string  "pn_token"
+    t.integer  "user_id"
+    t.string   "pn_token"
+    t.string   "platform",   default: "ios"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
@@ -356,7 +366,6 @@ ActiveRecord::Schema.define(version: 20140724233226) do
   add_index "providers", ["city"], name: "index_providers_on_city", using: :btree
   add_index "providers", ["merchant_id"], name: "index_providers_on_merchant_id", using: :btree
   add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
-  add_index "providers", ["region_id"], name: "index_providers_on_region_id", using: :btree
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
 
   create_table "providers_socials", id: false, force: true do |t|

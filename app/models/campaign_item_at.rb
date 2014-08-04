@@ -1,4 +1,4 @@
-class CampaignItemOld < Admtmodel
+class CampaignItemAt < Admtmodel
     self.table_name = "campaign_items"
 
     include GenericPayableDucktype

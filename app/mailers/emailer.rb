@@ -22,7 +22,8 @@ module Emailer
 		template_name    = "iom-confirm-email"
 		template_content = [{"name" => "recipient_name", "content" => recipient.name},
 		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		message          = message_hash(subject(template_name), recipient.email, recipient.name, link)
+        bcc              = "info@itson.me"
+		message          = message_hash(subject(template_name), recipient.email, recipient.name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], "User"])
 	end
 
@@ -33,7 +34,8 @@ module Emailer
 
 		template_name    = "iom-user-welcome"
 		template_content = [{"name" => "user_name", "content" => user_name}]
-		message          = message_hash(subject(template_name), email, user_name)
+        bcc              = "info@itson.me"
+		message          = message_hash(subject(template_name), email, user_name, nil, bcc)
 		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], "User"])
 	end
 
@@ -59,8 +61,10 @@ module Emailer
     end
 
     def notify_receiver_boomerang data
-    	gift 			 = Gift.find(data["gift_id"])
-		template_name    = "iom-boomerang-notice"
+    	gift 			  = GiftBoomerang.find(data["gift_id"])
+		original_receiver = gift.original_receiver_social
+
+		template_name    = "iom-boomerang-notice-2"
 		recipient_name   = gift.receiver_name
 		if gift.receiver_email
 			email         = gift.receiver_email
@@ -74,9 +78,10 @@ module Emailer
     	items_text       = items_text(gift)
 		adjusted_id 	 = NUMBER_ID + gift.id
 		link             = "#{PUBLIC_URL}/download"
-        bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
-        template_content = [{"name" => "user_name", "content" => recipient_name},
-		                    {"name" => "items_text", "content" => items_text}]
+        bcc              = "info@itson.me"
+        template_content = [
+        	{ "name" => "items_text", "content" => items_text },
+        	{ "name" => "original_receiver", "content" => original_receiver}]
 		message          = message_hash(subject(template_name), email, recipient_name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
     end
@@ -88,7 +93,7 @@ module Emailer
 		email            = gift.giver.email
 		name             = gift.giver_name
 		link             = nil
-        bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
+        bcc              = "info@itson.me"
 		template_content = generate_template_content(gift, template_name)
 		message          = message_hash(subject(template_name), email, name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
@@ -151,6 +156,7 @@ private
 			when "iom-reset-password";         then "Reset Your Password"
 			when "iom-user-welcome";           then "Welcome to ItsOnMe!"
 			when "iom-boomerang-notice";       then "Boomerang! We're returning this gift to you."
+			when "iom-boomerang-notice-2";       then "Boomerang! We're returning this gift to you."
 			end
 		if Rails.env.development? || Rails.env.staging?
 			subject_content = subject_content.insert(0, "QA- ")
@@ -164,8 +170,7 @@ private
 			"subject"     => subject,
 			"from_name"   => "#{SERVICE_NAME}",
 			"from_email"  => "#{NO_REPLY_EMAIL}",
-			"to"          => [{"email" => email, "name" => name},
-				             {"email" => "#{INFO_EMAIL}", "name" => ""}],
+			"to"          => [{ "email" => email, "name" => name }],
 			"bcc_address" => bcc,
 			"merge_vars"  =>[
 				{
@@ -187,7 +192,7 @@ private
     	merchant_name    = gift.provider_name
     	gift_details     = GiftItem.items_for_email(gift)
     	gift_total       = gift.total
-		template_content = [{"name" => "receiver_name", "content" => "Hi #{recipient_name}"},
+		template_content = [{"name" => "receiver_name", "content" => "#{recipient_name}"},
 							{"name" => "merchant_name", "content" => merchant_name},
 							{"name" => "gift_details", "content" => gift_details},
 							{"name" => "gift_total", "content" => gift_total},
