@@ -39,6 +39,8 @@ class ProtoGifterJob
 
 		end
 
+		puts "\nProtoGifterJob COMPLETE #{proto_id}\n"
+
 		if proto.contacts > proto.processed
 			# re-run
 			left_over = proto.contacts - proto.processed
