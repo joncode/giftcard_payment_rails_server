@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
 	after_save    :make_friends
 
 	def self.app_authenticate(token)
-		where(active: true, perm_deactive: false).where(remember_token: token).first
+		where(active: true, perm_deactive: false, remember_token: token).first
 	end
 
 #/---------------------------------------------------------------------------------------------/

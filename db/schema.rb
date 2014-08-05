@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140805195744) do
+ActiveRecord::Schema.define(version: 20140805202843) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -452,6 +452,8 @@ ActiveRecord::Schema.define(version: 20140805195744) do
     t.boolean  "email_reminder_gift_giver",    default: true
   end
 
+  add_index "settings", ["user_id"], name: "index_settings_on_user_id", using: :btree
+
   create_table "sms_contacts", force: true do |t|
     t.integer  "gift_id"
     t.datetime "subscribed_date"
@@ -496,6 +498,8 @@ ActiveRecord::Schema.define(version: 20140805195744) do
   end
 
   add_index "user_socials", ["active"], name: "index_user_socials_on_active", using: :btree
+  add_index "user_socials", ["type_of", "identifier"], name: "index_user_socials_on_type_of_and_identifier", using: :btree
+  add_index "user_socials", ["user_id"], name: "index_user_socials_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email"
@@ -535,6 +539,7 @@ ActiveRecord::Schema.define(version: 20140805195744) do
     t.boolean  "perm_deactive",                      default: false
   end
 
+  add_index "users", ["active", "perm_deactive", "remember_token"], name: "index_users_on_active_and_perm_deactive_and_remember_token", using: :btree
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
