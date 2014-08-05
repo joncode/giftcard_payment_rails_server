@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-include MockAndStubs
+include MockAndStubs   # gives the :relay_stubs method - email and push stubs
 
 describe Relay do
 
