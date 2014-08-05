@@ -404,61 +404,7 @@ private
 	end
 
 	def collect_incomplete_gifts
-
 		Resque.enqueue(CollectIncompleteGiftsJob, self.id)
-						# check Gift.rb for ghost gifts connected to newly created user
-		# gifts = []
-		# if self.facebook_id
-		# 	g = Gift.where("status = :stat AND facebook_id = :fb_id", :stat => 'incomplete', :fb_id   => self.facebook_id.to_s)
-		# 	gifts.concat g
-		# end
-		# if self.twitter
-		# 	g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => self.twitter.to_s)
-		# 	gifts.concat g
-		# end
-		# if self.email
-		# 	g = Gift.where("status = :stat AND receiver_email = :em", :stat => 'incomplete', :em  => self.email)
-		# 	gifts.concat g
-		# end
-		# if self.phone
-		# 	g = Gift.where("status = :stat AND receiver_phone = :phone", :stat => 'incomplete', :phone   => self.phone.to_s)
-		# 	gifts.concat g
-		# end
-
-		# 				# update incomplete gifts to open gifts with receiver info
-		# response   = if gifts.count > 0
-		# 	error   = 0
-		# 	success = 0
-
-		# 	gifts.each do |g|
-		# 		gift_changes                  = {}
-		# 		gift_changes[:status]         = "open"
-		# 		gift_changes[:receiver_phone] = self.phone if self.phone
-		# 		gift_changes[:receiver_email] = self.email if self.email
-		# 		gift_changes[:receiver_id]    = self.id
-		# 		gift_changes[:receiver_name]  = self.username
-
-		# 		if g.update_attributes(gift_changes)
-		# 			success += 1
-		# 			Relay.send_push_incomplete(g)
-		# 		else
-		# 			error   += 1
-		# 		end
-		# 	end
-		# 					# build success & error messages for reference
-		# 	if  error  == 0
-		# 		"#{success} incomplete gift(s) updated SUCCESSfully on create of #{self.username} #{self.id}"
-		# 	else
-		# 		"#{error} ERRORS updating ghost gifts for #{self.username} #{self.id}"
-		# 	end
-
-		# else
-		# 					# no incomplete gifts found
-		# 	 "ZERO incomplete ghost gifts for  #{self.username} #{self.id}"
-		# end
-
-		# 					# log the messages output for the method
-		# puts response
 	end
 
 	def create_remember_token

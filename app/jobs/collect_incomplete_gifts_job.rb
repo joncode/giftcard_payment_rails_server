@@ -6,25 +6,20 @@ class CollectIncompleteGiftsJob
     	raise "Method Argument must be an integer" if user_id.to_i == 0
 
     	user = User.find(user_id)
-
 		gifts = []
-		if user.facebook_id
-			g = Gift.where("status = :stat AND facebook_id = :fb_id", :stat => 'incomplete', :fb_id   => user.facebook_id.to_s)
-			gifts.concat g
-		end
-		if user.twitter
-			g = Gift.where("status = :stat AND twitter = :tw", :stat => 'incomplete', :tw  => user.twitter.to_s)
-			gifts.concat g
-		end
-		if user.email
-			g = Gift.where("status = :stat AND receiver_email = :em", :stat => 'incomplete', :em  => user.email)
-			gifts.concat g
-		end
-		if user.phone
-			g = Gift.where("status = :stat AND receiver_phone = :phone", :stat => 'incomplete', :phone   => user.phone.to_s)
-			gifts.concat g
-		end
+		Gift.where(status: 'incomplete').find_each do |gift|
 
+			if gift.facebook_id == user.facebook_id.to_s
+				gifts << gift
+			elsif gift.receiver_email == user.email
+				gifts << gift
+			elsif gift.receiver_phone == user.phone
+				gifts << gift
+			elsif gift.twitter == user.twitter.to_s
+				gifts << gift
+			end
+
+		end
 						# update incomplete gifts to open gifts with receiver info
 		response   = if gifts.count > 0
 			error   = 0
