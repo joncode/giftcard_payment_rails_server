@@ -14,8 +14,6 @@ class SmsContact < ActiveRecord::Base
                 r.save
                 r
             else
-                puts "#{r.phone} - #{r.textword}"
-                puts r.errors.messages
                 nil
             end
         end
