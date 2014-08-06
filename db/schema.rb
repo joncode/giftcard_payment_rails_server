@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140806152608) do
+ActiveRecord::Schema.define(version: 20140806162647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -309,6 +309,7 @@ ActiveRecord::Schema.define(version: 20140806152608) do
   end
 
   add_index "proto_joins", ["gift_id"], name: "index_proto_joins_on_gift_id", using: :btree
+  add_index "proto_joins", ["proto_id"], name: "index_proto_joins_on_proto_id", using: :btree
   add_index "proto_joins", ["receivable_id", "proto_id"], name: "index_proto_joins_on_receivable_id_and_proto_id", using: :btree
   add_index "proto_joins", ["receivable_id", "receivable_type"], name: "index_proto_joins_on_receivable_id_and_receivable_type", using: :btree
 
