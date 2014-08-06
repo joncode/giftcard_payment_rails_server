@@ -28,8 +28,7 @@ ActiveRecord::Schema.define(version: 20140806022550) do
     t.string   "network"
     t.string   "network_id"
     t.string   "name"
-    t.date     "birthday"
-    t.string   "handle"
+    t.date     "birthday"    t.string   "handle"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -239,6 +238,7 @@ ActiveRecord::Schema.define(version: 20140806022550) do
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree
   add_index "gifts", ["pay_stat"], name: "index_gifts_on_pay_stat", using: :btree
+  add_index "gifts", ["provider_id", "status"], name: "index_gifts_on_provider_id_and_status", using: :btree
   add_index "gifts", ["provider_id"], name: "index_gifts_on_provider_id", using: :btree
   add_index "gifts", ["receiver_id"], name: "index_gifts_on_receiver_id", using: :btree
   add_index "gifts", ["status"], name: "index_gifts_on_status", using: :btree
@@ -329,6 +329,8 @@ ActiveRecord::Schema.define(version: 20140806022550) do
     t.integer  "processed",     default: 0
   end
 
+  add_index "protos", ["provider_id"], name: "index_protos_on_provider_id", using: :btree
+
   create_table "providers", force: true do |t|
     t.string   "name",                                       null: false
     t.string   "zinger"
@@ -369,6 +371,7 @@ ActiveRecord::Schema.define(version: 20140806022550) do
   add_index "providers", ["city"], name: "index_providers_on_city", using: :btree
   add_index "providers", ["merchant_id"], name: "index_providers_on_merchant_id", using: :btree
   add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
+  add_index "providers", ["region_id"], name: "index_providers_on_region_id", using: :btree
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
 
   create_table "providers_socials", id: false, force: true do |t|
@@ -453,6 +456,8 @@ ActiveRecord::Schema.define(version: 20140806022550) do
     t.boolean  "email_reminder_gift_giver",    default: true
   end
 
+  add_index "settings", ["user_id"], name: "index_settings_on_user_id", using: :btree
+
   create_table "sms_contacts", force: true do |t|
     t.integer  "gift_id"
     t.datetime "subscribed_date"
@@ -497,6 +502,8 @@ ActiveRecord::Schema.define(version: 20140806022550) do
   end
 
   add_index "user_socials", ["active"], name: "index_user_socials_on_active", using: :btree
+  add_index "user_socials", ["type_of", "identifier"], name: "index_user_socials_on_type_of_and_identifier", using: :btree
+  add_index "user_socials", ["user_id"], name: "index_user_socials_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email"
@@ -536,6 +543,7 @@ ActiveRecord::Schema.define(version: 20140806022550) do
     t.boolean  "perm_deactive",                      default: false
   end
 
+  add_index "users", ["active", "perm_deactive", "remember_token"], name: "index_users_on_active_and_perm_deactive_and_remember_token", using: :btree
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 

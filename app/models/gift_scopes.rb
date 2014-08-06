@@ -68,11 +68,11 @@ module GiftScopes
 
 ##### PROVIDER SCOPES
 
-    def get_provider provider
+    def get_provider provider  #indexed
         where(provider_id: provider).where("pay_stat not in (?)", ['unpaid']).where("status = :open OR status = :notified OR status = :incomplete", :open => 'open', :notified => 'notified', :incomplete => 'incomplete').order("updated_at DESC")
     end
 
-    def get_history_provider provider
+    def get_history_provider provider #indexed
         where(provider_id: provider.id, status: "redeemed").order("redeemed_at DESC")
     end
 
