@@ -8,9 +8,11 @@ class Provider < ActiveRecord::Base
 	has_many   :sales
 	has_many   :orders
 	has_many   :campaign_items
+	has_many   :protos
+	has_many   :providers_socials
+	has_many   :socials, through: :providers_socials
 	belongs_to :brands
 	belongs_to :merchant
-	has_many   :protos
 
 	validates_presence_of 	:name, :city, :address, :zip, :region_id, :state, :token
 	validates_length_of 	:state , 	:is => 2

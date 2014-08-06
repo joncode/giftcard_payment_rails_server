@@ -1,5 +1,20 @@
 FactoryGirl.define do
 
+    factory :admin_user do
+        sequence(:remember_token)    { |n|  "Token#{n}" }
+        sequence(:email)            { |n|  "tester#{n}@gmail.com" }
+    end
+
+    factory :at_user do
+        sequence(:remember_token)    { |n|  "Token#{n}" }
+        sequence(:email)            { |n|  "tester#{n}@gmail.com" }
+    end
+
+    factory :at_users_social do
+        at_user_id 1
+        social_id  1
+    end
+
     factory :user do
         first_name                  "Jimmy"
         last_name                   "Basic"
@@ -56,6 +71,11 @@ FactoryGirl.define do
         receivable_type "Social"
         gift_id         nil
         rec_name        "Bob"
+    end
+
+    factory :providers_social do
+        provider_id 1
+        social_id   1
     end
 
     factory :social do
@@ -307,11 +327,6 @@ FactoryGirl.define do
         sequence(:token)   { |n| "token#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
-    end
-
-    factory :admin_user do
-        sequence(:remember_token)    { |n|  "Token#{n}" }
-        sequence(:email)            { |n|  "tester#{n}@gmail.com" }
     end
 
     factory :brand do

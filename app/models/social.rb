@@ -3,6 +3,8 @@ class Social < ActiveRecord::Base
 
 	has_many :proto_joins, as: :receivable
 	has_many :protos, through: :proto_joins
+	has_many :providers_socials
+	has_many :providers, through: :providers_socials
 	has_many :at_users_socials
 	has_many :at_users, through: :at_users_socials
 
