@@ -19,7 +19,7 @@ class SaveBulkEmailsAtJob
     	end
     end
 
-	def save_social_import(email, provider_id, proto_id)
+	def save_social_import(email, at_user_id, proto_id)
         downcased_email = strip_and_downcase(email)
         puts "\n\n in save social import :process #{Time.now} #{downcased_email}"
         social = Social.find_or_create_by(network: "email", network_id: downcased_email)
@@ -29,7 +29,7 @@ class SaveBulkEmailsAtJob
             puts "#{social.network_id} is not a valid email - #{social.errors.full_messages}"
         else
 
-            AtUsersSocial.create(at_user_id: be_obj.provider_id, social_id: social.id)
+            AtUsersSocial.create(at_user_id: at_user_id, social_id: social.id)
         	if be_obj.proto_id > 0
         		ProtoJoin.find_or_create_by(receivable_type: "Social", receivable_id: social.id, gift_id: nil, proto_id: be_obj.proto_id)
         	end
