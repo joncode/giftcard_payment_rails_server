@@ -28,7 +28,8 @@ ActiveRecord::Schema.define(version: 20140806022550) do
     t.string   "network"
     t.string   "network_id"
     t.string   "name"
-    t.date     "birthday"    t.string   "handle"
+    t.date     "birthday"
+    t.string   "handle"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -371,7 +372,6 @@ ActiveRecord::Schema.define(version: 20140806022550) do
   add_index "providers", ["city"], name: "index_providers_on_city", using: :btree
   add_index "providers", ["merchant_id"], name: "index_providers_on_merchant_id", using: :btree
   add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
-  add_index "providers", ["region_id"], name: "index_providers_on_region_id", using: :btree
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
 
   create_table "providers_socials", id: false, force: true do |t|
