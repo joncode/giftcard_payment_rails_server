@@ -391,4 +391,11 @@ FactoryGirl.define do
         data        "{\"672342\":{\"first_name\":\"tommy\",\"last_name\":\"hilfigure\",\"email\":[\"email1@gmail.com\",\"email2@yahoo.com\"],\"phone\":[\"3102974545\",\"6467586473\"],\"twitter\":[\"2i134o1234123\"],\"facebook\":[\"23g2381d103dy1\"]},\"22\":{\"first_name\":\"Jenifer\",\"last_name\":\"Bowie\",\"email\":[\"jenny@facebook.com\"],\"phone\":[\"7824657878\"]}}"
     end
 
+    factory :bulk_email do
+        data        "[\"ann@email.com\",\"bob@email.com\",\"cam@email.com\"]"
+        processed   false
+        proto_id    1
+        provider_id 1
+        at_user_id  nil 
+    end
 end
