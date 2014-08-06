@@ -16,13 +16,6 @@ ActiveRecord::Schema.define(version: 20140806152608) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "admin_users_socials", force: true do |t|
-    t.integer  "admin_user_id"
-    t.integer  "social_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "answers", force: true do |t|
     t.string   "answer"
     t.integer  "user_id"
@@ -37,6 +30,13 @@ ActiveRecord::Schema.define(version: 20140806152608) do
     t.string   "name"
     t.date     "birthday"
     t.string   "handle"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "at_users_socials", force: true do |t|
+    t.integer  "at_user_id"
+    t.integer  "social_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -88,7 +88,10 @@ ActiveRecord::Schema.define(version: 20140806152608) do
     t.integer  "provider_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "at_user_id"
   end
+
+  add_index "bulk_emails", ["at_user_id"], name: "index_bulk_emails_on_at_user_id", using: :btree
 
   create_table "campaign_items", force: true do |t|
     t.integer  "campaign_id"

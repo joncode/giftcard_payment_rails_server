@@ -23,10 +23,8 @@ class GiftBoomerang < Gift
                 original_receiver.email
             elsif original_receiver.phone.present?
                 original_receiver.phone
-            elsif original_receiver.facebook_id.present?
-                "your Facebook friend"
-            elsif original_receiver.twitter.present?
-                "your Twitter friend"
+            elsif 
+                self.payable.receiver_name
             end
         end
     end
