@@ -19,6 +19,7 @@ gem 'bcrypt-ruby'
 gem 'activemerchant'
 gem 'urbanairship'
 gem 'roo'
+gem 'resque-heroku-autoscaler', '~> 0.2.3'
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
