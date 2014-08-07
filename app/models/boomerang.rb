@@ -15,10 +15,6 @@ class Boomerang < ActiveRecord::Base
 		shorten_photo_url get_photo
 	end
 
-	def message
-        "Your friend never created an account so we’re returning this gift. Use Regift to try your friend again, send it to a new friend, use the gift yourself!"
-    end
-
     def self.giver
     	Boomerang.first
     end

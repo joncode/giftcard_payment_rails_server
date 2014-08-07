@@ -1,5 +1,20 @@
 FactoryGirl.define do
 
+    factory :admin_user do
+        sequence(:remember_token)    { |n|  "Token#{n}" }
+        sequence(:email)            { |n|  "tester#{n}@gmail.com" }
+    end
+
+    factory :at_user do
+        sequence(:remember_token)    { |n|  "Token#{n}" }
+        sequence(:email)            { |n|  "tester#{n}@gmail.com" }
+    end
+
+    factory :at_users_social do
+        at_user_id 1
+        social_id  1
+    end
+
     factory :user do
         first_name                  "Jimmy"
         last_name                   "Basic"
@@ -56,6 +71,11 @@ FactoryGirl.define do
         receivable_type "Social"
         gift_id         nil
         rec_name        "Bob"
+    end
+
+    factory :providers_social do
+        provider_id 1
+        social_id   1
     end
 
     factory :social do
@@ -309,11 +329,6 @@ FactoryGirl.define do
         description "get all the japanese culinary delights that are so hard to find in America"
     end
 
-    factory :admin_user do
-        sequence(:remember_token)    { |n|  "Token#{n}" }
-        sequence(:email)            { |n|  "tester#{n}@gmail.com" }
-    end
-
     factory :brand do
         sequence(:name)    { |n| "Starwoodz#{n}" }
         website     "www.starwood.com"
@@ -391,4 +406,11 @@ FactoryGirl.define do
         data        "{\"672342\":{\"first_name\":\"tommy\",\"last_name\":\"hilfigure\",\"email\":[\"email1@gmail.com\",\"email2@yahoo.com\"],\"phone\":[\"3102974545\",\"6467586473\"],\"twitter\":[\"2i134o1234123\"],\"facebook\":[\"23g2381d103dy1\"]},\"22\":{\"first_name\":\"Jenifer\",\"last_name\":\"Bowie\",\"email\":[\"jenny@facebook.com\"],\"phone\":[\"7824657878\"]}}"
     end
 
+    factory :bulk_email do
+        data        "[\"ann@email.com\",\"bob@email.com\",\"cam@email.com\"]"
+        processed   false
+        proto_id    1
+        provider_id 1
+        at_user_id  nil 
+    end
 end

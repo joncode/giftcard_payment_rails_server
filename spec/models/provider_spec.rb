@@ -50,6 +50,19 @@ describe Provider do
             provider.region_id.should == 15
         end
     end
+
+    context "socials associations" do
+        it "should have many providers_socials" do
+            provider = FactoryGirl.create :provider
+            social1  = FactoryGirl.create :social
+            social2  = FactoryGirl.create :social
+            ps1      = FactoryGirl.create :providers_social, provider_id: provider.id, social_id: social1.id
+            ps2      = FactoryGirl.create :providers_social, provider_id: provider.id, social_id: social2.id
+            provider.providers_socials.count.should == 2
+            provider.socials.count.should == 2
+        end
+    end
+
 end
 
 # == Schema Information

@@ -5,7 +5,8 @@ describe GiftBoomerang do
     before(:each) do
         boom = FactoryGirl.create(:boomerang)
         @user     = FactoryGirl.create(:user)
-        @old_gift = FactoryGirl.create(:gift, giver: @user, receiver_phone: "2152667474", receiver_name: "No Existo", message: "Hey Join this app!", value: "201.00", cost: "187.3", service: '10.05', cat: 300)
+        @receiver = FactoryGirl.create(:user)
+        @old_gift = FactoryGirl.create(:gift, giver: @user, receiver_phone: "2152667474", receiver_name: "No Existo", receiver_id: @receiver.id, message: "Hey Join this app!", value: "201.00", cost: "187.3", service: '10.05', cat: 300)
         @gift_hsh = {}
         @gift_hsh["old_gift_id"]   = @old_gift.id
     end
@@ -34,7 +35,7 @@ describe GiftBoomerang do
         it "should create gift with old_gift provider" do
             gift        = GiftBoomerang.create @gift_hsh
             gift.reload
-            gift.message.should       == "Your friend never created an account so we’re returning this gift. Use Regift to try your friend again, send it to a new friend, use the gift yourself!"
+            gift.message.should       == "Here is the gift you sent to 215-266-7474. They never created an account, so we’re returning this gift to you. Use Regift to try your friend again, send it to a new friend, or use the gift yourself!"
             gift.receiver_name.should == @user.name
             gift.receiver.should      == @user
             gift.provider.should      == @old_gift.provider
@@ -53,7 +54,7 @@ describe GiftBoomerang do
             @gift_hsh.delete('message')
             gift        = GiftBoomerang.create @gift_hsh
             gift.reload
-            gift.message.should_not   == "DO NOT REGIFT!"
+            gift.message.should == "Here is the gift you sent to 215-266-7474. They never created an account, so we’re returning this gift to you. Use Regift to try your friend again, send it to a new friend, or use the gift yourself!"
         end
 
         it "should not run add provider" do
