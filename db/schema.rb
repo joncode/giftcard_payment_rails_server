@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140806195222) do
+ActiveRecord::Schema.define(version: 20140807000520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,9 @@ ActiveRecord::Schema.define(version: 20140806195222) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
+  add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
 
   create_table "app_contacts", force: true do |t|
     t.string   "network"
@@ -113,6 +116,8 @@ ActiveRecord::Schema.define(version: 20140806195222) do
     t.datetime "updated_at"
     t.text     "detail"
   end
+
+  add_index "campaign_items", ["campaign_id"], name: "index_campaign_items_on_campaign_id", using: :btree
 
   create_table "campaigns", force: true do |t|
     t.string   "type_of"
