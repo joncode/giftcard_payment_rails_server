@@ -1,10 +1,10 @@
 GIT
   remote: https://github.com/joncode/resque-heroku-autoscaler.git
-  revision: aec9bbd7beaa9efc84086c7c47edfbe971e8dc8d
+  revision: 3382c6b6092cc043c9aef166be48d9e8b2a6a439
   specs:
-    resque-heroku-autoscaler (0.3.1.1)
+    resque-heroku-autoscaler (0.3.1.2)
       activesupport
-      heroku-api
+      platform-api
       resque (>= 1.8)
 
 GEM
@@ -96,9 +96,6 @@ GEM
       moneta
       multi_json (>= 1.9.2)
       netrc
-    heroku-api (0.3.18)
-      excon (~> 0.27)
-      multi_json (~> 1.8)
     hike (1.2.3)
     httparty (0.9.0)
       multi_json (~> 1.0)
