@@ -6,3 +6,8 @@ end
 
 desc "Alias for resque:work (To run workers on Heroku)"
 task "jobs:work" => "resque:work"
+
+
+
+
+#rake resque:work QUEUES=high,app_b_default,medium,resquebus_incoming,low
