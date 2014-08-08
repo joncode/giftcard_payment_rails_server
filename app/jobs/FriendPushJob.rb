@@ -2,7 +2,7 @@ require 'resque/plugins/resque_heroku_autoscaler'
 
 class FriendPushJob
     extend UrbanAirshipWrap
-    #extend Resque::Plugins::HerokuAutoscaler
+    extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :push
 

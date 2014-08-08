@@ -1,7 +1,7 @@
 require 'resque/plugins/resque_heroku_autoscaler'
 
 class CreateGiftNotifySocial
-    #extend Resque::Plugins::HerokuAutoscaler
+    extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :social
 

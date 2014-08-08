@@ -2,7 +2,7 @@ require 'resque/plugins/resque_heroku_autoscaler'
 
 class SaveBulkEmailsAtJob
     extend ModelValidationHelper
-    #extend Resque::Plugins::HerokuAutoscaler
+    extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :database_at
 
