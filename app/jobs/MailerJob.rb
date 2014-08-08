@@ -1,7 +1,7 @@
 require 'resque/plugins/resque_heroku_autoscaler'
 
 class MailerJob
-    extend Resque::Plugins::HerokuAutoscaler
+    #extend Resque::Plugins::HerokuAutoscaler
 
     extend Emailer
     @queue = :r_email
