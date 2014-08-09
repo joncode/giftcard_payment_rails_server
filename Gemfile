@@ -20,7 +20,7 @@ gem 'activemerchant'
 gem 'urbanairship'
 gem 'roo'
 gem 'resque-heroku-autoscaler', "~> 0.3.1.9", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
-gem 'platform-api'
+
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'

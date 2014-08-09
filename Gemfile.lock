@@ -289,7 +289,6 @@ DEPENDENCIES
   minitest
   namecase (~> 1.1.0)
   pg
-  platform-api
   rack-timeout
   rails
   rails_12factor
