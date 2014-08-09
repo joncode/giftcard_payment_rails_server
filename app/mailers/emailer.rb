@@ -86,6 +86,27 @@ module Emailer
 		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
     end
 
+    def notify_receiver_proto_join data
+    	gift 			 = Gift.find(data["gift_id"])
+		template_name    = "v2-0"
+		giver_name       = gift.giver_name
+		receiver_name    = gift.receiver_name
+		if gift.receiver_email
+			email         = gift.receiver_email
+		elsif gift.receiver
+			email 		  = gift.receiver.email
+		else
+			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
+			return nil
+		end
+		subject_text          = "#{giver_name} has sent you a gift on It's On Me!"
+        template_content = [
+        	{ "name" => "subject", "content" => subject_text },
+        	{ "name" => "body", "content" => text_for_gift_proto(gift) }
+        ]
+		message          = message_hash(subject_text, email, receiver_name)
+		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
+    end
 
     def invoice_giver data
     	gift 			 = Gift.find(data["gift_id"])

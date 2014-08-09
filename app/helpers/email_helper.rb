@@ -15,32 +15,45 @@ module EmailHelper
 		</table>".html_safe
 	end
 
-	# def ticket_with_text title, item_quantity_hash, value, link
-	# 	"<table>
-	# 		<tr>
-	# 			<td width='400' height='235' background='http://gallery.mailchimp.com/d7952b3f9c7215024f55709cf/images/cecd5f31-75f9-4d56-9149-86c91f6e52ca.png' style='text-align: center'>
-	# 				<table style='padding-top:0;'>
-	# 					<tr><h1>#{title}</h1></tr>
-	# 					<tr style='height: 100px;'>
-	# 						<td width='40px'></td>
-	# 						<td width='320px' style='text-align: center; font-size: 20px;'>
-	# 							#{items_list(item_quantity_hash)}
-	# 						</td>
-	# 						<td width='40px' style='vertical-align: text-top; padding-top: 20px;'>
-	# 							<b >$#{value}</b>
-	# 						</td>
-	# 					</tr>
-	# 					<tr>
-	# 						<td></td>
-	# 						<td style='text-align: center;'>
-	# 							<a href=#{link} style='text-decoration:underline; color:gray;'>See Gift</a>
-	# 						</td>
-	# 						<td></td>
-	# 					</tr>
-	# 				</table>
-	# 			</td>
-	# 		</tr>
-	# 	</table>".html_safe
-	# end
+	def button_to_html url, text
+		"<div>                                
+			<div style='display:block; width: 200px; margin: auto;''>
+				<a href='#{url}' style='color:white; text-decoration:none;background-color:#42C2E8; display: block; padding: 10px 0; text-align:center; border-bottom:2px solid #2B99BB; border-radius: 3px;''>
+				#{text}
+				</a>
+			</div>
+		</div>".html_safe
+	end
 
+	def text_for_gift_proto gift
+		image_url      = gift.provider.image
+		button_url    = "#{PUBLIC_URL}/signup/acceptgift/#{NUMBER_ID + gift.id}"
+		button_text   = "Claim My Gift"
+		giver_name    = "Craig McAulay" 
+		provider_name = gift.provider_name
+		expires_at    = gift.expires_at
+		details       = gift.detail
+		"<div style='padding: 50px 100px;'>
+			<div>
+				<img src='#{image_url}' style='width: 400px;'>
+			</div>
+			#{items_text(gift)}
+            #{button_to_html(button_url, button_text)}
+		</div>
+		<div style='background-color:#E2E2E2; padding: 20px;'>
+			<table>
+				<tr>
+					<td style='width:20%''>
+					</td>
+					<td style='width:80%; color:#3F3F3F;'>
+						<div style='color:#8E8D8D'>Craig McAulay, GM at Artifice</div>
+						<div>Thank you for being a loyal customer. On your next visit please enjoy your first round on us.</div><br>
+						<div style='color:#8E8D8D'>Details</div>
+						<div>This gift expires on #{expires_at}.</div>
+						<div>#{details}</div>
+					</td>
+				</tr>
+			</table>
+		</div>".html_safe
+	end
 end

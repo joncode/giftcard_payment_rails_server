@@ -2,6 +2,22 @@ module Email
 
 #######   Gifts
 
+    def notify_receiver
+        gift = self
+        obj_email = gift.receiver ? gift.receiver.email : nil
+        email     = gift.receiver_email || obj_email
+
+        if !email.blank?
+            puts "emailing the gift receiver for #{gift.id}"
+            user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
+
+            data = {"text"        => 'notify_receiver',
+                    "gift_id"     => gift.id
+                    }
+            route_email_system(data)
+        end
+    end
+
     def notify_receiver_boomerang
         gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil
@@ -18,7 +34,7 @@ module Email
         end
     end
 
-    def notify_receiver
+    def notify_receiver_proto_join
         gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil
         email     = gift.receiver_email || obj_email
@@ -27,9 +43,9 @@ module Email
             puts "emailing the gift receiver for #{gift.id}"
             user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
 
-            data = {"text"        => 'notify_receiver',
-                    "gift_id"     => gift.id
-                    }
+            data = {
+                "text"    => 'notify_receiver_proto_join',
+                "gift_id" => gift.id }
             route_email_system(data)
         end
     end
@@ -74,10 +90,3 @@ private
     end
 
 end
-
-
-
-
-
-
-
