@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/joncode/resque-heroku-autoscaler.git
-  revision: f1c896b747263d2d515d8f6cc23dd1d42efb6d8b
+  revision: 51f2ea5e0db455cc11309ad5f93163d3561fc45d
   specs:
-    resque-heroku-autoscaler (0.3.1.9)
+    resque-heroku-autoscaler (0.3.1.10)
       activesupport
       platform-api
       resque (>= 1.8)
@@ -294,7 +294,7 @@ DEPENDENCIES
   rails_12factor
   rb-fsevent (~> 0.9.1)
   resque
-  resque-heroku-autoscaler (~> 0.3.1.9)!
+  resque-heroku-autoscaler (~> 0.3.1.10)!
   resque-retry
   resque_spec
   rest-client
