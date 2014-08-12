@@ -1,6 +1,9 @@
+require 'resque/plugins/resque_heroku_autoscaler'
+
 require 'resque/errors'
 
 class ProtoGifterJob
+    extend Resque::Plugins::HerokuAutoscaler
 
 	@queue = :gifting
 

@@ -1,5 +1,8 @@
+require 'resque/plugins/resque_heroku_autoscaler'
+
 class RegisterPushJob
     extend UrbanAirshipWrap
+    extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :push
 
