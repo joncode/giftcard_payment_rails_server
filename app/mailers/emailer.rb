@@ -53,7 +53,7 @@ module Emailer
 			return nil
 		end
 		adjusted_id 	 = NUMBER_ID + gift.id
-		link             = "#{PUBLIC_URL}/signup/acceptgift/#{adjusted_id}"
+		link             = "#{PUBLIC_URL}/signup/acceptgift?id=#{adjusted_id}"
         bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
         template_content = generate_template_content(gift, template_name)
 		message          = message_hash(subject(template_name, options = {giver_name: giver_name}), email, recipient_name, link, bcc)
@@ -77,7 +77,7 @@ module Emailer
 
     	items_text       = items_text(gift)
 		adjusted_id 	 = NUMBER_ID + gift.id
-		link             = "#{PUBLIC_URL}/download"
+		link             = "#{PUBLIC_URL}/signup/acceptgift?id=#{adjusted_id}"
         bcc              = "info@itson.me"
         template_content = [
         	{ "name" => "items_text", "content" => items_text },
@@ -87,24 +87,37 @@ module Emailer
     end
 
     def notify_receiver_proto_join data
-    	gift 			 = Gift.find(data["gift_id"])
-		template_name    = "v2-0"
-		giver_name       = gift.giver_name
-		receiver_name    = gift.receiver_name
+    	gift = Gift.find(data["gift_id"])
+		template_name = "v2-0"
+		receiver_name = gift.receiver_name
+		merchant_name = gift.provider_name
 		if gift.receiver_email
-			email         = gift.receiver_email
+			email     = whitelist_email(gift.receiver_email)
 		elsif gift.receiver
-			email 		  = gift.receiver.email
+			email 	  = whitelist_email(gift.receiver.email)
 		else
 			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
 			return nil
 		end
-		subject_text          = "#{giver_name} has sent you a gift on It's On Me!"
         template_content = [
-        	{ "name" => "subject", "content" => subject_text },
+        	{ "name" => "merchant_name", "content" => merchant_name },
         	{ "name" => "body", "content" => text_for_gift_proto(gift) }
         ]
-		message          = message_hash(subject_text, email, receiver_name)
+		message = {
+			"subject" => "The staff at #{merchant_name} sent you a gift",
+			"to" => [{
+				"email" => email,
+				"name" => receiver_name 
+			}],
+			"merge_vars" => [{
+				"rcpt" => email,
+				"vars" => [
+					{ "name" => "merchant_name", "content" => merchant_name },
+					{ "name" => "body", "content" => text_for_gift_proto(gift) }
+				]
+			}],
+			"tags" => [ merchant_name ]
+		}
 		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
     end
 

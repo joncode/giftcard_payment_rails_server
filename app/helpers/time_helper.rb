@@ -14,6 +14,12 @@ module TimeHelper
         end
     end
 
+    def make_ordinalized_date_with_day date
+        # "Sunday, Aug 3rd"
+        if date.respond_to? :strftime
+            date.strftime("%A, %b #{date.day.ordinalize}")
+        end
+    end
 #################################
 
 
