@@ -19,7 +19,7 @@ gem 'bcrypt-ruby'
 gem 'activemerchant'
 gem 'urbanairship'
 gem 'roo'
-gem 'resque-heroku-autoscaler', "~> 0.3.1.10", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
+gem 'resque-heroku-autoscaler', "~> 0.3.1.11", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
 
 
 group :development do
