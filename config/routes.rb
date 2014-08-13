@@ -184,6 +184,10 @@ end
 
           resources :brands,    only: [:create, :update]   # biz logic
 
+          resources :emailers, only: [] do
+            collection { post :call_notify_receiver_proto_join }
+          end
+
           resources :providers, only: [:create, :update] do
             member do
               post :update_mode             # biz logic
@@ -290,5 +294,7 @@ end
   post 'app/complete_order',   to: 'app#create_order_emp'
   post 'app/gifts_array',      to: 'app#gifts'
   post 'app/transactions',     to: 'app#transactions'
+
+  get 'emails/template', to: 'emails#template'
 
 end

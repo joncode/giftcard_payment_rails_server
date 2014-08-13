@@ -22,6 +22,7 @@ gem 'roo'
 gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
 
 
+
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
 end

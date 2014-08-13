@@ -35,10 +35,11 @@ else
 end
 
 MANDRILL_APIKEY = if Rails.env.development? or Rails.env.test?
-    'pOqNDraZxOFoF44X0pbR-Q'
+    'pOqNDraZxOFoF44X0pbR-Q' #mandrill_apikey_test
+    # 'oUXP1PDOtP14RMgFytxdGw' #nmandrill_apikey
 elsif Rails.env.staging?
-    ENV['MANDRILL_APIKEY_TEST']
-    #ENV['MANDRILL_APIKEY']
+    #ENV['MANDRILL_APIKEY_TEST']
+    ENV['MANDRILL_APIKEY']
 else
     ENV['MANDRILL_APIKEY']
 end
