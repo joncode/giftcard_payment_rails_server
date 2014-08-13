@@ -99,10 +99,10 @@ module Emailer
 			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
 			return nil
 		end
-        template_content = [
-        	{ "name" => "merchant_name", "content" => merchant_name },
-        	{ "name" => "body", "content" => text_for_gift_proto(gift) }
-        ]
+		template_content = [
+			{ "name" => "merchant_name", "content" => merchant_name },
+			{ "name" => "body", "content" => text_for_gift_proto(gift) }
+		]
 		message = {
 			"subject" => "The staff at #{merchant_name} sent you a gift",
 			"to" => [{
