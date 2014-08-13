@@ -42,7 +42,7 @@ after_fork do |server, worker|
   # end
 
   defined?(Redis) and
-    $redis = Redis.current = Redis.new( url: ENV['REDIS_URI'] )
+    $redis = Redis.current = Redis.new( url: ENV['REDISTOGO_URL'] )
 
 
 end
