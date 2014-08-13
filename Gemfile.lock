@@ -294,11 +294,7 @@ DEPENDENCIES
   rails_12factor
   rb-fsevent (~> 0.9.1)
   resque
-<<<<<<< HEAD
   resque-heroku-autoscaler (~> 0.3.1.15)!
-=======
-  resque-heroku-autoscaler (~> 0.3.1.13)!
->>>>>>> cb2fe7fad0d48181a8b96caa3c02238cfffcb38b
   resque-retry
   resque_spec
   rest-client
