@@ -6,16 +6,19 @@ if Rails.env.production?
 	host = uri.host
 	port = uri.port
 	password = uri.password
+	Resque.redis = Redis.new(:host => host, :port => port, :password => password)
 elsif Rails.env.staging?
 	ENV["REDISTOGO_URL"] ||= "redis://redistogo:7a26911511c6ef1c1b2f32fad240ae0a@squawfish.redistogo.com:9819/"
 	uri = URI.parse(ENV["REDISTOGO_URL"])
 	host = uri.host
 	port = uri.port
 	password = uri.password
+	Resque.redis = Redis.new(:host => host, :port => port, :password => password)
 else
 	host = "localhost"
 	port = 6379
 	password = nil
+	Resque.redis = Redis.new(:host => host, :port => port, :password => password)
 end
 
 
