@@ -3,6 +3,7 @@ timeout 19
 preload_app true
 
 before_fork do |server, worker|
+  puts "Before Fork - #{server.inspect} #{worker.inspect}"
 
   Signal.trap 'TERM' do
     puts 'Unicorn master intercepting TERM and sending myself QUIT instead'
@@ -17,12 +18,13 @@ before_fork do |server, worker|
   #   Resque.redis.quit
   #   Rails.logger.info('Disconnected from Redis')
   # end
-  defined?(Redis) and
-    Redis.current.quit
+  # defined?(Redis) and
+  #   Redis.current.quit
 
 end
 
 after_fork do |server, worker|
+  puts "After Fork - #{server.inspect} #{worker.inspect}"
 
   Signal.trap 'TERM' do
     puts 'Unicorn worker intercepting TERM and doing nothing. Wait for master to sent QUIT'
@@ -41,8 +43,8 @@ after_fork do |server, worker|
   #   Rails.logger.info('Connected to Redis')
   # end
 
-  defined?(Redis) and
-    $redis = Redis.current = Redis.new( url: ENV['REDISTOGO_URL'] )
+  # defined?(Redis) and
+  #   $redis = Redis.current = Redis.new( url: ENV['REDISTOGO_URL'] )
 
 
 end
