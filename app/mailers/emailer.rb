@@ -243,7 +243,7 @@ private
 	def request_mandrill_with_template(template_name, template_content, message, ditto_ary)
 		unless Rails.env.development?
 			puts "``````````````````````````````````````````````"
-			puts "Request Mandrill with #{template_name} #{template_content}"
+			puts "Request Mandrill with #{template_name} #{message}"
 			require 'mandrill'
 			m = Mandrill::API.new(MANDRILL_APIKEY)
 			response = m.messages.send_template(template_name, template_content, message)
