@@ -45,7 +45,7 @@ class CollectIncompleteGiftsJob
 			end
 							# build success & error messages for reference
 			if  error  == 0
-				"#{success} incomplete gift(s) updated SUCCESSfully on create of #{user.username} #{user.id}"
+				"#{success} incomplete ghost gift(s) updated SUCCESSfully on create of #{user.username} #{user.id}"
 			else
 				"#{error} ERRORS updating ghost gifts for #{user.username} #{user.id}"
 			end
