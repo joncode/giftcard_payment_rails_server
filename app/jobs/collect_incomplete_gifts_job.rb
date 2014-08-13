@@ -12,13 +12,13 @@ class CollectIncompleteGiftsJob
 		gifts = []
 		Gift.where(status: 'incomplete').find_each do |gift|
 
-			if gift.facebook_id == user.facebook_id.to_s
+			if !gift.facebook_id.blank? && gift.facebook_id == user.facebook_id.to_s
 				gifts << gift
-			elsif gift.receiver_email == user.email
+			elsif !gift.receiver_email.blank? && gift.receiver_email == user.email
 				gifts << gift
-			elsif gift.receiver_phone == user.phone
+			elsif !gift.receiver_phone.blank? && gift.receiver_phone == user.phone
 				gifts << gift
-			elsif gift.twitter == user.twitter.to_s
+			elsif !gift.twitter.blank? && gift.twitter == user.twitter.to_s
 				gifts << gift
 			end
 
