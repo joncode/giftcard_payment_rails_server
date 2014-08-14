@@ -5,6 +5,7 @@ class CollectIncompleteGiftsV2Job
 
     @queue = :after_save
 
+<<<<<<< HEAD:app/jobs/collect_incomplete_gifts_v2_job.rb
     def self.perform user_social_id
     	raise "Method Argument must be an integer" if user_social_id.to_i == 0
 
@@ -20,6 +21,24 @@ class CollectIncompleteGiftsV2Job
     	when 'twitter'
     		gifts = Gift.where(status: 'incomplete', twitter: user_social.identifier)
     	end
+=======
+    def self.perform user_id
+    	raise "Method Argument must be an integer" if user_id.to_i == 0
+
+    	user = User.find(user_id)
+		gifts = []
+		Gift.where(status: 'incomplete').find_each do |gift|
+
+			if !gift.facebook_id.blank? && gift.facebook_id == user.facebook_id.to_s
+				gifts << gift
+			elsif !gift.receiver_email.blank? && gift.receiver_email == user.email
+				gifts << gift
+			elsif !gift.receiver_phone.blank? && gift.receiver_phone == user.phone
+				gifts << gift
+			elsif !gift.twitter.blank? && gift.twitter == user.twitter.to_s
+				gifts << gift
+			end
+>>>>>>> master:app/jobs/collect_incomplete_gifts_job.rb
 
 						# update incomplete gifts to open gifts with receiver info
 		response   = if gifts.count > 0
@@ -44,7 +63,7 @@ class CollectIncompleteGiftsV2Job
 			end
 							# build success & error messages for reference
 			if  error  == 0
-				"#{success} incomplete gift(s) updated SUCCESSfully on create of #{user.username} #{user.id}"
+				"#{success} incomplete ghost gift(s) updated SUCCESSfully on create of #{user.username} #{user.id}"
 			else
 				"#{error} ERRORS updating ghost gifts for #{user.username} #{user.id}"
 			end

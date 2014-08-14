@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140807000520) do
+ActiveRecord::Schema.define(version: 20140814013148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,6 +137,8 @@ ActiveRecord::Schema.define(version: 20140807000520) do
     t.string   "photo_path"
   end
 
+  add_index "campaigns", ["close_date"], name: "index_campaigns_on_close_date", using: :btree
+
   create_table "cards", force: true do |t|
     t.integer  "user_id"
     t.string   "nickname"
@@ -245,6 +247,7 @@ ActiveRecord::Schema.define(version: 20140807000520) do
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree
   add_index "gifts", ["pay_stat"], name: "index_gifts_on_pay_stat", using: :btree
+  add_index "gifts", ["payable_id", "payable_type"], name: "index_gifts_on_payable_id_and_payable_type", using: :btree
   add_index "gifts", ["provider_id", "created_at"], name: "index_gifts_on_provider_id_and_created_at", using: :btree
   add_index "gifts", ["provider_id", "status"], name: "index_gifts_on_provider_id_and_status", using: :btree
   add_index "gifts", ["provider_id"], name: "index_gifts_on_provider_id", using: :btree
