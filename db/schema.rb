@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140807000520) do
+ActiveRecord::Schema.define(version: 20140814013009) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,8 @@ ActiveRecord::Schema.define(version: 20140807000520) do
     t.datetime "updated_at"
     t.string   "photo_path"
   end
+
+  add_index "campaigns", ["close_date"], name: "index_campaigns_on_close_date", using: :btree
 
   create_table "cards", force: true do |t|
     t.integer  "user_id"
