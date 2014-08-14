@@ -67,6 +67,14 @@ def thread_on?
 
 end
 
+class Object
+
+    def mets
+        self.methods - Object.methods
+    end
+
+end
+
 
 
 

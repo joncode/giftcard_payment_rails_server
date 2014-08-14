@@ -54,7 +54,6 @@ class User < ActiveRecord::Base
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 	before_create :create_remember_token      # creates unique remember token for user
 
-	after_save    :collect_incomplete_gifts
 	after_save    :persist_social_data, :unless => :is_perm_deactive?
 	after_create  :init_confirm_email
 	after_save    :make_friends
@@ -401,10 +400,6 @@ private
 		return true if self.origin == 'f'
 		return true if self.origin == 't'
 		return false
-	end
-
-	def collect_incomplete_gifts
-		Resque.enqueue(CollectIncompleteGiftsJob, self.id)
 	end
 
 	def create_remember_token
