@@ -3,7 +3,7 @@ timeout 19
 preload_app true
 
 before_fork do |server, worker|
-  puts "Before Fork - #{server.inspect} #{worker.inspect}"
+  puts "Before Fork - #{server.inspect}\n #{worker.inspect}"
 
   Signal.trap 'TERM' do
     puts 'Unicorn master intercepting TERM and sending myself QUIT instead'
@@ -23,7 +23,7 @@ before_fork do |server, worker|
 end
 
 after_fork do |server, worker|
-  puts "After Fork - #{server.inspect} #{worker.inspect}"
+  puts "After Fork - #{server.inspect} \n#{worker.inspect}"
 
   Signal.trap 'TERM' do
     puts 'Unicorn worker intercepting TERM and doing nothing. Wait for master to sent QUIT'
