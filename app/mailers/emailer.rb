@@ -107,7 +107,7 @@ module Emailer
 			"subject" => "The staff at #{merchant_name} sent you a gift",
 			"to" => [{
 				"email" => email,
-				"name" => receiver_name 
+				"name" => receiver_name
 			}],
 			"merge_vars" => [{
 				"rcpt" => email,
@@ -243,7 +243,7 @@ private
 	def request_mandrill_with_template(template_name, template_content, message, ditto_ary)
 		unless Rails.env.development?
 			puts "``````````````````````````````````````````````"
-			puts "Request Mandrill with #{template_name} #{template_content} #{message}"
+			puts "Request Mandrill with #{template_name} #{message}"
 			require 'mandrill'
 			m = Mandrill::API.new(MANDRILL_APIKEY)
 			response = m.messages.send_template(template_name, template_content, message)

@@ -37,6 +37,7 @@ module EmailHelper
 		button_text   = "Claim My Gift"
 		provider_name = gift.provider_name
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
+		message       = gift.message
 		details       = gift.detail
 		"<div style='padding: 0 100px 20px 100px;'>
 			<div>
@@ -44,7 +45,7 @@ module EmailHelper
 			</div>
 			#{items_text(gift)}
 			<div style='padding-bottom:20px; font-size:16px;'>
-				#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. To claim this gift simply click the button and download the app. Use this email address at sign-up to receiver your gift.
+				#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. To claim this gift simply click the button and download the app. Use this email address at sign-up to receive your gift.
 			</div>
             #{button_to_html(button_url, button_text)}
 		</div>
@@ -53,8 +54,8 @@ module EmailHelper
 				<tr>
 					<td style='width:15%;'></td>
 					<td style='width:70%; color:#3F3F3F;'>
-						<div style='color:#8E8D8D'>The staff at Artifice</div>
-						<div>Thank you for being a loyal customer. On your next visit please enjoy your first round on us.</div><br>
+						<div style='color:#8E8D8D'>The staff at #{provider_name}</div>
+						<div>#{message}</div><br>
 					</td>
 					<td style='width:15%;'></td>
 				</tr>
