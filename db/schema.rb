@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140814215748) do
+ActiveRecord::Schema.define(version: 20140814013148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -252,7 +252,6 @@ ActiveRecord::Schema.define(version: 20140814215748) do
   add_index "gifts", ["provider_id", "status"], name: "index_gifts_on_provider_id_and_status", using: :btree
   add_index "gifts", ["provider_id"], name: "index_gifts_on_provider_id", using: :btree
   add_index "gifts", ["receiver_id"], name: "index_gifts_on_receiver_id", using: :btree
-  add_index "gifts", ["redeemed_at", "pay_stat"], name: "index_gifts_on_redeemed_at_and_pay_stat", using: :btree
   add_index "gifts", ["status"], name: "index_gifts_on_status", using: :btree
 
   create_table "menu_strings", force: true do |t|
