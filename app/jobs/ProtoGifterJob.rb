@@ -17,16 +17,14 @@ class ProtoGifterJob
 			wait_time = 0.4
 		elsif Rails.env.staging?
 			batch 	  = 200
-			wait_time = 0
+			wait_time = 0.1
 		else
 			batch 	  = 1
 			wait_time = 0.1
 		end
 
 		proto.giftables.find_in_batches(batch_size: batch) do |group_ary|
-
 			group_ary.each do |proto_join|
-
 				gift = GiftProtoJoin.create({ "proto_join" => proto_join, "proto" => proto})
 				proto.update_processed(1)
 				puts "\n proto has created gift ... "
