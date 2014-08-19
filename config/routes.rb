@@ -148,7 +148,7 @@ end
     end
 
     namespace :v3 do
-      resources :gifts, only: [:index]
+      resources :gifts, only: [:index, :create]
 
       resources :merchants, only: [:index] do
         member { get :menu }

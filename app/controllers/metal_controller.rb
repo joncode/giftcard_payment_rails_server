@@ -62,7 +62,12 @@ class MetalController < ActionController::Base
                 msg: "User could not be created",
                 data: error_data
             }
-
+        when "not_created_gift"
+            {
+                err: "INVALID_INPUT",
+                msg: "Gift could not be created",
+                data: error_data
+            }
         end 
     end
 

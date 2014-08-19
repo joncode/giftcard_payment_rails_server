@@ -4,7 +4,6 @@ class Web::V3::SessionsController < MetalController
 
     def create
         login    = params["data"]
-    	pn_token = login["pn_token"]
 
         if login["password"]
             user, password = normal_login login
@@ -16,7 +15,6 @@ class Web::V3::SessionsController < MetalController
             if user.not_suspended?
                 if login["password"]
                     if user.authenticate(password)
-                        user.pn_token = pn_token if pn_token
                         success user.login_web_serialize
                     else
                     	payload = fail_web_payload("invalid_email")
@@ -24,7 +22,6 @@ class Web::V3::SessionsController < MetalController
                         status = :not_found
                     end
                 else
-                    user.pn_token = pn_token if pn_token
                     success user.login_web_serialize
                 end
             else
