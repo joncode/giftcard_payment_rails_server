@@ -7,7 +7,7 @@ describe Web::V3::RegionsController do
     end
 
     it "should return the cities" do
-        get :index, format: :json
+        get :index, format: :json, token: WWW_TOKEN
         keys    =  ["name", "state", "city_id", "token", "photo"]
         rrc(200)
         city = json["data"][0]
@@ -19,7 +19,7 @@ describe Web::V3::RegionsController do
             FactoryGirl.create(:provider, region_id: 2)
         end
         Provider.last.update(active: false)
-        get :merchants, format: :json, id: 2
+        get :merchants, format: :json, id: 2, token: WWW_TOKEN
         rrc(200)
 
     end

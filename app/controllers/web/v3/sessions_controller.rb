@@ -1,5 +1,7 @@
 class Web::V3::SessionsController < MetalController
 
+    before_action :authenticate_web_general
+
     def create
         login    = params["data"]
     	pn_token = login["pn_token"]
