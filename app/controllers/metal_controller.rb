@@ -24,6 +24,21 @@ class MetalController < ActionController::Base
         @app_response = { status: 0, data: payload }
     end
 
+    def fail_web fail_hash
+        data_array = []
+        if fail_hash[:errors_hash].present?
+            fail_hash[:errors_hash].each do |k, v|
+                data_array << { name: k, msg: v }
+            end
+        end
+        @app_response = {
+            status: 0,
+            err:    fail_hash[:error_type],
+            msg:    fail_hash[:error_description],
+            data:   data_array
+        }
+    end
+
 protected
 
     def authenticate_user

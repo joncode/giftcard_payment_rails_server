@@ -146,6 +146,14 @@ end
     namespace :v2 do
       resources :merchants, only: [:show]
     end
+
+    namespace :v3 do
+      resources :regions,   only: [:index] do
+        member { get :merchants }
+      end
+      resources :sessions,  only: [:create]
+    end
+
   end
 
 #################          ADMIN TOOLS routes for API              /////////////////////////////

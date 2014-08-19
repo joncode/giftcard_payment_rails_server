@@ -18,6 +18,13 @@ class Merchant < Mtmodel
         end
     end
 
+    def get_logo
+        if logo
+            logo.fullpath
+        else
+            "http://res.cloudinary.com/drinkboard/image/upload/v1408401050/blank_logo_njwzxk.png"
+        end
+    end
 
 end# == Schema Information
 #
