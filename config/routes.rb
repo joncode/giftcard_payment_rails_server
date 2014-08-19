@@ -148,10 +148,19 @@ end
     end
 
     namespace :v3 do
+      resources :gifts, only: [:index]
+
+      resources :merchants, only: [:index] do
+        member { get :menu }
+      end
+
       resources :regions,   only: [:index] do
         member { get :merchants }
       end
+      
       resources :sessions,  only: [:create]
+
+      resources :users, only: [:create]
     end
 
   end

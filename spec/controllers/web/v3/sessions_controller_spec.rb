@@ -4,7 +4,7 @@ describe Web::V3::SessionsController do
 
     describe :create do
     	before do
-			request.headers["TKN"] = WWW_TOKEN
+			request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
     	end
 
         it "should return basic contacts" do
@@ -33,7 +33,7 @@ describe Web::V3::SessionsController do
 	            post :create, format: :json, data: request_hsh
 	            rrc(404)
 	            json["status"].should     == 0
-	            json["err"].should == "INVALID_CREDENTIALS"
+	            json["err"].should == "INVALID_INPUT"
 	            json["msg"].should == "We don't recognize that email and password combination"
 	            json["data"].should == []
 	        end
@@ -43,7 +43,7 @@ describe Web::V3::SessionsController do
 	            post :create, format: :json, data: request_hsh
 	            rrc(404)
 	            json["status"].should == 0
-	            json["err"].should    == "INVALID_CREDENTIALS"
+	            json["err"].should    == "INVALID_INPUT"
 	            json["msg"].should    == "We don't recognize that facebook account"
 	            json["data"].should   == []
 	        end
@@ -54,7 +54,7 @@ describe Web::V3::SessionsController do
 	            post :create, format: :json, data: request_hsh
 	            rrc(401)
 	            json["status"].should     == 0
-	            json["err"].should == "UNAUTHORIZED_CREDENTIALS"
+	            json["err"].should == "INACTIVE_USER"
 	            json["msg"].should == "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
 	            json["data"].should == []
 	        end

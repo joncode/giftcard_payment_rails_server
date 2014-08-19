@@ -4,7 +4,7 @@ describe Web::V3::RegionsController do
 
     before(:each) do
         @provider = FactoryGirl.create(:provider, region_id: 2)
-        request.headers["TKN"] = WWW_TOKEN
+        request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
     end
 
     it "should return the cities" do

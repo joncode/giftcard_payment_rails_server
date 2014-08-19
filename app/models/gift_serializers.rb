@@ -184,4 +184,8 @@ module GiftSerializers
         remove_nils(gift_hsh)
     end
 
+    def web_serialize
+        client_serialize
+    end
+
 end

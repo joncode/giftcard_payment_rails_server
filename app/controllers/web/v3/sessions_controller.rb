@@ -19,11 +19,8 @@ class Web::V3::SessionsController < MetalController
                         user.pn_token = pn_token if pn_token
                         success user.login_web_serialize
                     else
-                    	fail_hash = {
-                    		error_type: "INVALID_CREDENTIALS",
-                    		error_description: "We don't recognize that email and password combination"
-                    	}
-                        fail_web fail_hash
+                    	payload = fail_web_payload("invalid_email")
+                        fail_web payload
                         status = :not_found
                     end
                 else
@@ -31,26 +28,17 @@ class Web::V3::SessionsController < MetalController
                     success user.login_web_serialize
                 end
             else
-            	fail_hash = {
-            		error_type: "UNAUTHORIZED_CREDENTIALS",
-            		error_description: "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
-            	}
-                fail_web fail_hash
+                payload = fail_web_payload("suspended_user")
+                fail_web payload
                 status = :unauthorized
             end
         else
             if login["password"]
-            	fail_hash = {
-            		error_type: "INVALID_CREDENTIALS",
-            		error_description: "We don't recognize that email and password combination"
-            	}
+                payload = fail_web_payload("invalid_email")
             else
-            	fail_hash = {
-            		error_type: "INVALID_CREDENTIALS",
-            		error_description: "We don't recognize that facebook account"
-            	}
+                payload = fail_web_payload("invalid_facebook")
             end
-			fail_web fail_hash
+			fail_web payload
             status = :not_found
         end
         respond(status)
