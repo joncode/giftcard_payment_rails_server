@@ -52,7 +52,7 @@ protected
     end
 
     def authenticate_web_user
-        token         = request.headers["HTTP_X_AUTH_TOKEN"]
+        token         = request.headers["TKN"]
         @current_user = User.app_authenticate(token)
         if @current_user
             puts "Web  -------------   #{@current_user.name}   -----------------------"
@@ -62,10 +62,9 @@ protected
     end
 
     def authenticate_web_general
-        general_token = params["token"]
-        user_token    = request.headers["HTTP_X_AUTH_TOKEN"]
-        @current_user = User.app_authenticate(user_token)
-        if @current_user || (WWW_TOKEN == general_token)
+        token    = request.headers["TKN"]
+        @current_user = User.app_authenticate(token)
+        if (WWW_TOKEN == token) || @current_user
             puts "Web  -------------   #{@current_user ? @current_user.name : "General Token"}   -----------------------"
         else
             head :unauthorized
