@@ -33,7 +33,7 @@ module EmailHelper
 
 	def text_for_gift_proto gift
 		image_url      = gift.provider.image
-		button_url    = "http://www.itson.me/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
+		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
 		button_text   = "Claim My Gift"
 		provider_name = gift.provider_name
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
