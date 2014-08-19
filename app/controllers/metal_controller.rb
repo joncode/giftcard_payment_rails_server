@@ -51,6 +51,11 @@ class MetalController < ActionController::Base
                 err: "INVALID_INPUT",
                 msg: "We don't recognize that facebook account"
             }
+        when "invalid_twitter"
+            {
+                err: "INVALID_INPUT",
+                msg: "We don't recognize that twitter account"
+            }
         when "suspended_user"
             {
                 err: "INACTIVE_USER",
