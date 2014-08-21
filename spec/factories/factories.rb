@@ -275,6 +275,17 @@ FactoryGirl.define do
         end
     end
 
+    factory :card_token do
+        nickname                    "bobs visa"
+        profile_id         "1111"
+        payment_profile_id "1111"
+        month                       "02"
+        year                        "2016"
+        name                        "Bob Barker"
+        brand                       "visa"
+        user_id                     612
+    end
+    
     factory :sale do
         giver_id    1
         resp_code   1
@@ -284,20 +295,6 @@ FactoryGirl.define do
         #transaction AuthTransaction.new
         card_id    { FactoryGirl.create(:visa).id }
     end
-
-    # t.integer  "gift_id"
-    # t.integer  "giver_id"
-    # t.integer  "card_id"
-    # t.integer  "provider_id"
-    # t.string   "transaction_id"
-    # t.decimal  "revenue"
-    # t.datetime "created_at",     null: false
-    # t.datetime "updated_at",     null: false
-    # t.text     "resp_json"
-    # t.text     "req_json"
-    # t.integer  "resp_code"
-    # t.string   "reason_text"
-    # t.integer  "reason_code"
 
     factory :order do |order|
         order.redeem      { FactoryGirl.create(:redeem)}

@@ -68,18 +68,19 @@ describe Sale do
         args = {}
         args["giver_id"]    = user.id
         args["provider_id"] = provider.id
-        args["card"]     = card
+        args["card_id"]     = card.id
         args["number"]      = card.number
         args["month_year"]  = card.month_year
         args["first_name"]  = card.first_name
         args["last_name"]   = card.last_name
         args["amount"]      = "157.00"
         args["unique_id"]   = "UNIQUE_GIFT_ID"
+        
+        Resque.should_receive(:enqueue).with(CardTokenizerJob, card.id).and_return(true)
         sale = Sale.charge_card args
         gift = FactoryGirl.build(:gift, giver: user, provider: provider)
         gift.payable = sale
         gift.save
-
         sale.reload
         sale.giver.should           == user
         sale.gift.id.should         == gift.id
@@ -93,6 +94,43 @@ describe Sale do
         sale.reason_code.should     == 1
         sale.resp_code.should       == 1
     end
+
+    it "should receive required fields and save gift WITH CARD TOKEN" do
+        user       = FactoryGirl.create(:user)
+        card_token = FactoryGirl.create(:card_token)
+
+        auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,157.00,CC,auth_capture,,,,,,,,,,,,,,,,,,,"
+        stub_request(:post, "https://apitest.authorize.net/xml/v1/request.api").to_return(:status => 200, :body => auth_response, :headers => {})
+
+        provider = FactoryGirl.create(:provider)
+
+        args = {}
+        args["giver_id"]    = user.id
+        args["provider_id"] = provider.id
+        args["card"]        = card_token
+        args["amount"]      = "157.00"
+        args["profile_id"]  = card_token.profile_id
+        args["payment_profile_id"]   = card_token.payment_profile_id
+        args["unique_id"]   = "UNIQUE_GIFT_ID"
+        sale = Sale.charge_card args
+        gift = FactoryGirl.build(:gift, giver: user, provider: provider)
+        gift.payable = sale
+        gift.save
+
+        sale.reload
+        # sale.giver.should           == user
+        sale.gift.id.should         == gift.id
+        sale.provider.should        == provider
+        sale.card.should            == card_token
+        sale.revenue.to_s.should    == "157.0"
+        sale.transaction_id.should  == "2202633834"
+        JSON.parse(sale.resp_json).should == {"response_code"=>"1", "response_subcode"=>"1", "response_reason_code"=>"1", "response_reason_text"=>"This transaction has been approved.", "authorization_code"=>"JVT36N", "avs_response"=>"Y", "transaction_id"=>"2202633834", "invoice_number"=>"", "description"=>"", "amount"=>"157.0", "method"=>"CC", "transaction_type"=>"auth_capture", "customer_id"=>"", "first_name"=>"Jimmy", "last_name"=>"Basic"}
+        JSON.parse(sale.req_json).should  == {"first_name"=>"Jimmy", "last_name"=>"Basic", "po_num"=>"UNIQUE_GIFT_ID", "method"=>"CC", "card_num"=>"XXXX9277", "exp_date"=>"0418", "amount"=>"157.00"}
+        sale.reason_text.should     == "This transaction has been approved."
+        sale.reason_code.should     == 1
+        sale.resp_code.should       == 1
+    end
+
 
     it "should receive giver_id on sale instance and process refund" do
         user = FactoryGirl.create(:user)
