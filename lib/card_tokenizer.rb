@@ -15,12 +15,14 @@ module CardTokenizer
 
     def self.tokenize card_id
     	card = Card.find(card_id)
-    	user = card.user
-    	if user.cim_token.present?
-    		CardTokenizer.add_payment_profile(card_id, user.cim_token)
-    	else
-    		CardTokenizer.create_profile_and_payment_profile(card_id)
-	    end
+    	if card.cim_token.present? && card.cim_token.length > 3
+	    	user = card.user
+	    	if user.cim_token.present?
+	    		CardTokenizer.add_payment_profile(card_id, user.cim_token)
+	    	else
+	    		CardTokenizer.create_profile_and_payment_profile(card_id)
+		    end
+		end
     end
 
     def self.create_profile_and_payment_profile card_id
@@ -58,7 +60,7 @@ module CardTokenizer
 		auth_net_card   = AuthorizeNet::CreditCard.new(card_number, card.month_year)
 		payment_profile = AuthorizeNet::CIM::PaymentProfile.new(payment_method: auth_net_card)
 
-    	gateway = AuthorizeNet::CIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)	
+    	gateway = AuthorizeNet::CIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
     	response = gateway.create_payment_profile(payment_profile, user_cim_token)
 		if response.success?
 			puts "------ Saving Payment Profile ID: #{response.payment_profile_id}--------------"

@@ -3,7 +3,7 @@ require 'resque/plugins/resque_heroku_autoscaler'
 class CreateGiftNotifySocial
     #extend Resque::Plugins::HerokuAutoscaler
 
-    @queue = :social
+    @queue = :push
 
     def self.perform gift_id
         puts " -------------   Notify Social Create Gift --------------------"
