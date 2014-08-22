@@ -35,11 +35,12 @@ class Provider < ActiveRecord::Base
 	end
 
 	def serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :zinger]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live_int
+		prov_hash["desc"]		  = self.description
 		return prov_hash
 	end
 
