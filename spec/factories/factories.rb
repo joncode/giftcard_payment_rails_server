@@ -274,17 +274,6 @@ FactoryGirl.define do
             number       "371538495534000"
         end
     end
-
-    factory :card_token do
-        nickname                    "bobs visa"
-        profile_id         "1111"
-        payment_profile_id "1111"
-        month                       "02"
-        year                        "2016"
-        name                        "Bob Barker"
-        brand                       "visa"
-        user_id                     612
-    end
     
     factory :sale do
         giver_id    1

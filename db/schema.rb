@@ -149,10 +149,9 @@ ActiveRecord::Schema.define(version: 20140820220237) do
     t.string   "year"
     t.string   "csv"
     t.string   "brand"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.string   "profile_id"
-    t.string   "payment_profile_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "cim_token"
   end
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
@@ -555,6 +554,7 @@ ActiveRecord::Schema.define(version: 20140820220237) do
     t.string   "origin"
     t.string   "confirm",                            default: "00"
     t.boolean  "perm_deactive",                      default: false
+    t.string   "cim_token"
   end
 
   add_index "users", ["active", "perm_deactive", "remember_token"], name: "index_users_on_active_and_perm_deactive_and_remember_token", using: :btree

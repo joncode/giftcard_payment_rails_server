@@ -36,8 +36,34 @@ class Ditto < ActiveRecord::Base
 			create(response_json: request_response_hash.to_json, cat: 1000, status: parse_pos_status(status), notable_id: redeem_id, notable_type: 'Redeem')
 		end
 
+		def tokenize_card(response, card_id)
+			status        = parse_authorize_net_response(response)
+			response_json = PaymentGatewayCim.response_json(response)
+			create(response_json: response_json, cat: 600, status: status, notable_id: card_id, notable_type: "Card")
+		end
 
 	private
+
+		def parse_authorize_net_response(response)
+			if !response.kind_of? AuthorizeNet::CIM::Response
+				return 500
+			else
+				if response.success?
+					if response.profile_id && response.payment_profile_ids
+						return 200
+					else
+						return 400 #transaction successful, but expected values not returned
+					end
+				else
+					if response.message_code == "E0039"
+						return 304 #A duplicate record already exists
+					elsif response.message_code == "E0040"
+						return 404 # The record cannot be found
+					end
+				end
+			end
+			400
+		end
 
 		def parse_mailchimp_response(response)
 			return 500 if response.nil?
@@ -94,7 +120,9 @@ end
 #  310 - send transactional email
 #  400 - Register subscribe email to mailchimp
 #  500 - SocialProxy
+#  600 - Auth.net - tokenize
 # 1000 - Receive POS request
+
 
 # Statuses
 
