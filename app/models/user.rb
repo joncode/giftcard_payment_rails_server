@@ -278,8 +278,11 @@ class User < ActiveRecord::Base
 ##########   PN TOKEN METHODS
 
 	def ua_alias
-		adj_user_id     = self.id + NUMBER_ID
-		"user-#{adj_user_id}"
+		"user-#{self.obscured_id}"
+	end
+
+	def obscured_id
+		self.id + NUMBER_ID
 	end
 
 	def pn_token=(value_ary)

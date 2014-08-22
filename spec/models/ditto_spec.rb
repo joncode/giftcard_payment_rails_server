@@ -143,6 +143,23 @@ describe Ditto do
 				d.notable_type.should  == "Redeem"
 			end
 		end
+
+		describe :tokenize_card do
+			it "shoudl create with sucess" do
+				card = FactoryGirl.create :card
+				response = AuthorizeNet::CIM::Response.new("11111", "11111")
+				d = Ditto.tokenize_card(response, card.id)
+				JSON.parse(d.response_json).should == {
+					"message_code" => response.message_code,
+					"message_text" => response.message_text,
+					"profile" => response.profile
+				}
+				d.cat.should           == 600
+				d.notable_id.should    == card.id
+				d.notable_type.should  == "Card"
+			end
+		end
+
 	end
 
 

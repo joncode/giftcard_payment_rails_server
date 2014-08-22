@@ -370,12 +370,14 @@ describe GiftSale do
             response = GiftSale.create @gift_hsh
             run_delayed_jobs
             abs_gift_id = response.id + NUMBER_ID
-            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
+            WebMock.should have_requested(
+                :post, "https://mandrillapp.com/api/1.0/messages/send-template.json"
+            ).with { |req|
                 puts req.body;
                 b = JSON.parse(req.body);
                 if b["template_name"] == "iom-gift-notify-receiver"
                     link = b["message"]["merge_vars"].first["vars"].first["content"];
-                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
+                    link.match(/signup\/acceptgift\?id=#{abs_gift_id}/)
                 else
                     true
                 end

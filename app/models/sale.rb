@@ -14,19 +14,11 @@ class Sale < ActiveRecord::Base
     end
 
     def self.charge_card cc_hsh
-            # pull off and charge the credit card
-
-        payment_hsh = {}
-        credit_card_data_keys = ["number", "month_year", "first_name", "last_name", "amount"]
-        credit_card_data_keys << "unique_id" if cc_hsh["unique_id"]
-        credit_card_data_keys.each do |cc_data|
-            payment_hsh[cc_data] = cc_hsh[cc_data]
-            cc_hsh.delete(cc_data)
+        if cc_hsh["profile_id"].present? && cc_hsh["payment_profile_id"].present?
+            self.charge_token cc_hsh
+        else
+            self.charge_number_then_tokenize cc_hsh
         end
-        payment  = PaymentGateway.new(payment_hsh)
-        resp_hsh = payment.charge
-        cc_hsh.merge!(resp_hsh)
-        Sale.new cc_hsh
     end
 
     def void_refund giver_id
@@ -43,6 +35,38 @@ class Sale < ActiveRecord::Base
     end
 
 private
+
+    def self.charge_number_then_tokenize cc_hsh
+        payment_hsh = {}
+        credit_card_data_keys = ["number", "month_year", "first_name", "last_name", "amount"]
+        credit_card_data_keys << "unique_id" if cc_hsh["unique_id"]
+        credit_card_data_keys.each do |cc_data|
+            payment_hsh[cc_data] = cc_hsh[cc_data]
+            cc_hsh.delete(cc_data)
+        end
+        payment  = PaymentGateway.new(payment_hsh)
+        resp_hsh = payment.charge
+        cc_hsh.merge!(resp_hsh)
+        card_id = cc_hsh["card_id"]
+        unless Rails.env.test?
+            Resque.enqueue(CardTokenizerJob, card_id)
+        end
+        Sale.new cc_hsh
+    end
+
+    def self.charge_token cc_hsh
+        payment_hsh = { }
+        credit_card_data_keys = ["amount", "profile_id", "payment_profile_id"]
+        credit_card_data_keys << "unique_id" if cc_hsh["unique_id"]
+        credit_card_data_keys.each do |cc_data|
+            payment_hsh[cc_data] = cc_hsh[cc_data]
+            cc_hsh.delete(cc_data)
+        end
+        payment  = PaymentGatewayCim.new(payment_hsh)
+        resp_hsh = payment.charge
+        cc_hsh.merge!(resp_hsh)
+        Sale.new cc_hsh
+    end
 
     def sale_card_last_four
 
