@@ -16,7 +16,7 @@ class UserSocial < ActiveRecord::Base
     validates_with MultiTypeIdentifierUniqueValidator
 
     after_create  :subscribe_mailchimp
-    after_save    :collect_incomplete_gifts
+    after_create  :collect_incomplete_gifts
     after_save    :unsubscribe_mailchimp
 
     default_scope -> { where(active: true) }  # indexed
