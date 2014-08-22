@@ -8,7 +8,8 @@ class CardTokenizerJob
 
     def self.perform card_id
         puts "==== Starting CardTokenizerJob for Card #{card_id} ===="
-		CardTokenizer.tokenize card_id
+		card = Card.find(card_id)
+		card.tokenize
         puts "==== Ending Tokenizing Card #{card_id} ===="
     end
 

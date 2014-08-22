@@ -94,7 +94,7 @@ describe Sale do
     end
 
     it "should receive required fields and save gift WITH CARD TOKEN" do
-        user = FactoryGirl.create(:user, cim_token: "11111")
+        user = FactoryGirl.create(:user, cim_profile: "11111")
         card = FactoryGirl.create(:card, cim_token: "22222")
 
         auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,157.00,CC,auth_capture,,,,,,,,,,,,,,,,,,,"
@@ -107,7 +107,7 @@ describe Sale do
         args["provider_id"] = provider.id
         args["card_id"]     = card.id
         args["amount"]      = "157.00"
-        args["profile_id"]  = user.cim_token
+        args["profile_id"]  = user.cim_profile
         args["payment_profile_id"] = card.cim_token
         args["unique_id"]   = "UNIQUE_GIFT_ID"
         sale = Sale.charge_card args

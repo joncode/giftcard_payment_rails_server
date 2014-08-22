@@ -554,7 +554,7 @@ ActiveRecord::Schema.define(version: 20140820220237) do
     t.string   "origin"
     t.string   "confirm",                            default: "00"
     t.boolean  "perm_deactive",                      default: false
-    t.string   "cim_token"
+    t.string   "cim_profile"
   end
 
   add_index "users", ["active", "perm_deactive", "remember_token"], name: "index_users_on_active_and_perm_deactive_and_remember_token", using: :btree

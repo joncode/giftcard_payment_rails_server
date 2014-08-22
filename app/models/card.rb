@@ -1,4 +1,5 @@
 class Card < ActiveRecord::Base
+	include CardTokenizer
  	include ActiveMerchant::Billing::CreditCardMethods
 	include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
 

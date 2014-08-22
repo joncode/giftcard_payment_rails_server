@@ -12,7 +12,7 @@ describe CardTokenizerJob do
 
         context "notify gift receiver on create" do
             it "should receive correct push message" do
-                CardTokenizer.should_receive(:tokenize).with(@card.id).and_return(true)
+                Card.any_instance.should_receive(:tokenize).and_return(true)
                 CardTokenizerJob.perform @card.id
             end
         end
