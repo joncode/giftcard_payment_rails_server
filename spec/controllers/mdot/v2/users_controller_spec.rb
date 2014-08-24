@@ -36,7 +36,19 @@ describe Mdot::V2::UsersController do
             compare_keys(hsh, keys)
         end
 
-        it "should return users whose first_name matches a seach string" do
+        it "should return list of active users if :find is empty string" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string = ""
+            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should == 1
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == amount
+        end
+
+        it "should return users whose first_name matches a :find string" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "n"
             amount  = User.where('first_name ilike ?',"%#{search_string}%").count
@@ -48,7 +60,19 @@ describe Mdot::V2::UsersController do
             ary.count.should == amount
         end
 
-        it "should NOT return users whose first_name doesnt match a seach string" do
+        it "should return users whose first_name matches a :find string even in middle of first_name" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string = "bie"
+            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should == 1
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == amount
+        end
+
+        it "should NOT return users whose first_name doesnt match a :find string" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "z"
             amount  = User.where('first_name ilike ?',"%#{search_string}%").count
@@ -60,7 +84,7 @@ describe Mdot::V2::UsersController do
             ary.count.should == 0
         end
 
-        it "should return users whose last_name matches a seach string" do
+        it "should return users whose last_name matches a :find string" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "b"
 
@@ -73,7 +97,7 @@ describe Mdot::V2::UsersController do
             ary.count.should == amount
         end
 
-        it "should NOT return users whose last_name doesnt match a seach string" do
+        it "should NOT return users whose last_name doesnt match a :find string" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "z"
             amount  = User.where('last_name ilike ?',"%#{search_string}%").count
