@@ -9,8 +9,8 @@ class PaymentGatewayCim
         @amount             = args["amount"]
         @unique_id          = args["unique_id"]
         @transaction_id     = args["transaction_id"]
-        @profile_id         = args["profile_id"]
-        @payment_profile_id = args["payment_profile_id"]
+        @profile_id         = args["cim_profile"]
+        @payment_profile_id = args["cim_token"]
     end
 
     def charge

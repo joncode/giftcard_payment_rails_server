@@ -311,6 +311,38 @@ describe GiftSale do
         end
     end
 
+    context "charge card with token" do
+        before(:each) do
+            @user     = FactoryGirl.create(:user, cim_profile: "11111")
+            @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
+            @card     = FactoryGirl.create(:card, user: @user, cim_token: "22222")
+            @provider = FactoryGirl.create(:provider)
+            @gift_hsh = {}
+            @gift_hsh["message"]        = "I just Bought a Gift!"
+            @gift_hsh["receiver_name"]  = @receiver.name
+            @gift_hsh["receiver_id"]    = @receiver.id
+            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["giver"]          = @user
+            @gift_hsh["value"]          = "45.00"
+            @gift_hsh["service"]        = "2.25"
+            @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            stub_request(
+                :post, "https://apitest.authorize.net/xml/v1/request.api"
+            ).to_return(
+                :status => 200,
+                :body => "1,1,1,This transaction has been approved.,000000,Y,2000000001,INV000001,description of transaction,10.95,CC,auth_capture,custId123,John,Doe,,123 Main St.,Bellevue,WA,98004,USA,000-000-0000,,mark@example.com,John,Doe,,123 Main St.,Bellevue,WA,98004,USA,1.00,0.00,2.00,FALSE,PONUM000001,D18EB6B211FE0BBF556B271FDA6F92EE,M,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,",
+                :headers => {}
+            )
+        end
+
+         it "should charge to cim gateway if cim profile and cim token are present" do
+            PaymentGatewayCim.any_instance.should_receive(:charge).and_return({ "transaction_id" => "11111"})
+            @gift_hsh["credit_card"]    = @card.id
+            GiftSale.create @gift_hsh
+        end
+
+    end
+
     context "messaging" do
 
         before(:each) do

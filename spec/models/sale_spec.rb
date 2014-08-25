@@ -107,8 +107,8 @@ describe Sale do
         args["provider_id"] = provider.id
         args["card_id"]     = card.id
         args["amount"]      = "157.00"
-        args["profile_id"]  = user.cim_profile
-        args["payment_profile_id"] = card.cim_token
+        args["cim_profile"]  = user.cim_profile
+        args["cim_token"] = card.cim_token
         args["unique_id"]   = "UNIQUE_GIFT_ID"
         sale = Sale.charge_card args
         gift = FactoryGirl.build(:gift, giver: user, provider: provider)
