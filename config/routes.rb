@@ -146,6 +146,23 @@ end
     namespace :v2 do
       resources :merchants, only: [:show]
     end
+
+    namespace :v3 do
+      resources :gifts, only: [:index, :create]
+
+      resources :merchants, only: [:index] do
+        member { get :menu }
+      end
+
+      resources :regions,   only: [:index] do
+        member { get :merchants }
+      end
+      
+      resources :sessions,  only: [:create]
+
+      resources :users, only: [:create]
+    end
+
   end
 
 #################          ADMIN TOOLS routes for API              /////////////////////////////
@@ -183,6 +200,10 @@ end
           # resources :user_socials, only: [:create, :update]
 
           resources :brands,    only: [:create, :update]   # biz logic
+
+          resources :emailers, only: [] do
+            collection { post :call_notify_receiver_proto_join }
+          end
 
           resources :providers, only: [:create, :update] do
             member do
@@ -290,5 +311,7 @@ end
   post 'app/complete_order',   to: 'app#create_order_emp'
   post 'app/gifts_array',      to: 'app#gifts'
   post 'app/transactions',     to: 'app#transactions'
+
+  get 'emails/template', to: 'emails#template'
 
 end

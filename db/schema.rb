@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140728151935) do
+ActiveRecord::Schema.define(version: 20140820220237) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,9 @@ ActiveRecord::Schema.define(version: 20140728151935) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
+  add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
 
   create_table "app_contacts", force: true do |t|
     t.string   "network"
@@ -88,7 +91,11 @@ ActiveRecord::Schema.define(version: 20140728151935) do
     t.integer  "provider_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "at_user_id"
   end
+
+  add_index "bulk_emails", ["at_user_id"], name: "index_bulk_emails_on_at_user_id", using: :btree
+  add_index "bulk_emails", ["proto_id"], name: "index_bulk_emails_on_proto_id", using: :btree
 
   create_table "campaign_items", force: true do |t|
     t.integer  "campaign_id"
@@ -110,6 +117,8 @@ ActiveRecord::Schema.define(version: 20140728151935) do
     t.text     "detail"
   end
 
+  add_index "campaign_items", ["campaign_id"], name: "index_campaign_items_on_campaign_id", using: :btree
+
   create_table "campaigns", force: true do |t|
     t.string   "type_of"
     t.string   "status"
@@ -128,6 +137,8 @@ ActiveRecord::Schema.define(version: 20140728151935) do
     t.string   "photo_path"
   end
 
+  add_index "campaigns", ["close_date"], name: "index_campaigns_on_close_date", using: :btree
+
   create_table "cards", force: true do |t|
     t.integer  "user_id"
     t.string   "nickname"
@@ -140,6 +151,7 @@ ActiveRecord::Schema.define(version: 20140728151935) do
     t.string   "brand"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.string   "cim_token"
   end
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
@@ -236,6 +248,9 @@ ActiveRecord::Schema.define(version: 20140728151935) do
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree
   add_index "gifts", ["pay_stat"], name: "index_gifts_on_pay_stat", using: :btree
+  add_index "gifts", ["payable_id", "payable_type"], name: "index_gifts_on_payable_id_and_payable_type", using: :btree
+  add_index "gifts", ["provider_id", "created_at"], name: "index_gifts_on_provider_id_and_created_at", using: :btree
+  add_index "gifts", ["provider_id", "status"], name: "index_gifts_on_provider_id_and_status", using: :btree
   add_index "gifts", ["provider_id"], name: "index_gifts_on_provider_id", using: :btree
   add_index "gifts", ["receiver_id"], name: "index_gifts_on_receiver_id", using: :btree
   add_index "gifts", ["status"], name: "index_gifts_on_status", using: :btree
@@ -304,6 +319,7 @@ ActiveRecord::Schema.define(version: 20140728151935) do
   end
 
   add_index "proto_joins", ["gift_id"], name: "index_proto_joins_on_gift_id", using: :btree
+  add_index "proto_joins", ["proto_id"], name: "index_proto_joins_on_proto_id", using: :btree
   add_index "proto_joins", ["receivable_id", "proto_id"], name: "index_proto_joins_on_receivable_id_and_proto_id", using: :btree
   add_index "proto_joins", ["receivable_id", "receivable_type"], name: "index_proto_joins_on_receivable_id_and_receivable_type", using: :btree
 
@@ -325,6 +341,8 @@ ActiveRecord::Schema.define(version: 20140728151935) do
     t.integer  "contacts",      default: 0
     t.integer  "processed",     default: 0
   end
+
+  add_index "protos", ["provider_id"], name: "index_protos_on_provider_id", using: :btree
 
   create_table "providers", force: true do |t|
     t.string   "name",                                       null: false
@@ -451,6 +469,8 @@ ActiveRecord::Schema.define(version: 20140728151935) do
     t.boolean  "email_reminder_gift_giver",    default: true
   end
 
+  add_index "settings", ["user_id"], name: "index_settings_on_user_id", using: :btree
+
   create_table "sms_contacts", force: true do |t|
     t.integer  "gift_id"
     t.datetime "subscribed_date"
@@ -495,6 +515,8 @@ ActiveRecord::Schema.define(version: 20140728151935) do
   end
 
   add_index "user_socials", ["active"], name: "index_user_socials_on_active", using: :btree
+  add_index "user_socials", ["type_of", "identifier"], name: "index_user_socials_on_type_of_and_identifier", using: :btree
+  add_index "user_socials", ["user_id"], name: "index_user_socials_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email"
@@ -532,8 +554,10 @@ ActiveRecord::Schema.define(version: 20140728151935) do
     t.string   "origin"
     t.string   "confirm",                            default: "00"
     t.boolean  "perm_deactive",                      default: false
+    t.string   "cim_profile"
   end
 
+  add_index "users", ["active", "perm_deactive", "remember_token"], name: "index_users_on_active_and_perm_deactive_and_remember_token", using: :btree
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 

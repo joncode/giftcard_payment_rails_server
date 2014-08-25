@@ -24,6 +24,59 @@ class MetalController < ActionController::Base
         @app_response = { status: 0, data: payload }
     end
 
+    def fail_web payload
+        data_array = []
+        if payload[:data].present?
+            payload[:data].each do |k, v|
+                data_array << { name: k, msg: v }
+            end
+        end
+        @app_response = {
+            status: 0,
+            err:    payload[:err],
+            msg:    payload[:msg],
+            data:   data_array
+        }
+    end
+
+    def fail_web_payload error_name, error_data=nil
+        case error_name
+        when "invalid_email"
+            {
+                err: "INVALID_INPUT",
+                msg: "We don't recognize that email and password combination"
+            }
+        when "invalid_facebook"
+            {
+                err: "INVALID_INPUT",
+                msg: "We don't recognize that facebook account"
+            }
+        when "invalid_twitter"
+            {
+                err: "INVALID_INPUT",
+                msg: "We don't recognize that twitter account"
+            }
+        when "suspended_user"
+            {
+                err: "INACTIVE_USER",
+                msg: "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
+            }
+        when "not_created_user"
+            {
+                err: "INVALID_INPUT",
+                msg: "User could not be created",
+                data: error_data
+            }
+        when "not_created_gift"
+            {
+                err: "INVALID_INPUT",
+                msg: "Gift could not be created",
+                data: error_data
+            }
+        end 
+    end
+
+
 protected
 
     def authenticate_user
@@ -31,6 +84,26 @@ protected
         @current_user = User.app_authenticate(token)
         if @current_user
             puts "APP  -------------   #{@current_user.name}   -----------------------"
+        else
+            head :unauthorized
+        end
+    end
+
+    def authenticate_web_user
+        token         = request.headers["HTTP_X_AUTH_TOKEN"]
+        @current_user = User.app_authenticate(token)
+        if @current_user
+            puts "Web  -------------   #{@current_user.name}   -----------------------"
+        else
+            head :unauthorized
+        end
+    end
+
+    def authenticate_web_general
+        token    = request.headers["HTTP_X_AUTH_TOKEN"]
+        @current_user = User.app_authenticate(token)
+        if (WWW_TOKEN == token) || @current_user
+            puts "Web  -------------   #{@current_user ? @current_user.name : "General Token"}   -----------------------"
         else
             head :unauthorized
         end

@@ -17,6 +17,10 @@ class GiftBoomerang < Gift
         gift
     end
 
+    def original_receiver_social
+        receiver_social_from_gift(self)
+    end
+
 private
 
     def pre_init args={}
@@ -25,7 +29,7 @@ private
         args["cat"]      = boomerang_cat(old_gift.cat)
         args["giver_name"] = boom.name
         args["giver"]    = boom
-        args["message"]  = boom.message
+        args["message"]  = boomerang_message(old_gift)
         args["detail"]   = old_gift.detail
         args["provider"] = old_gift.provider
         args["value"]    = old_gift.value
@@ -41,6 +45,20 @@ private
         cat_s   = cat.to_s
         new_cat = cat_s[0..1] + "7"
         new_cat.to_i
+    end
+
+    def boomerang_message gift
+        "Here is the gift you sent to #{receiver_social_from_gift(gift)}. They never created an account, so we’re returning this gift to you. Use Regift to try your friend again, send it to a new friend, or use the gift yourself!"
+    end
+
+    def receiver_social_from_gift gift
+        if gift.receiver_email.present?
+            gift.receiver_email
+        elsif gift.receiver_phone.present?
+            number_to_phone(gift.receiver_phone)
+        else
+            gift.receiver_name
+        end
     end
 
     def remove_receiver_data_and_add_old_gift_giver_as_receiver(args)

@@ -1,8 +1,9 @@
 worker_processes 3
-timeout 20
+timeout 19
 preload_app true
 
 before_fork do |server, worker|
+  puts "Before Fork" # - #{server.inspect}\n #{worker.inspect}"
 
   Signal.trap 'TERM' do
     puts 'Unicorn master intercepting TERM and sending myself QUIT instead'
@@ -14,12 +15,15 @@ before_fork do |server, worker|
     Rails.logger.info('Disconnected from Redis')
   end
 
+  # defined?(Redis) and
+  #   Redis.current.quit
   if defined?(ActiveRecord::Base)
     ActiveRecord::Base.connection.disconnect!
   end
 end
 
 after_fork do |server, worker|
+  puts "After Fork" # - #{server.inspect} \n#{worker.inspect}"
 
   Signal.trap 'TERM' do
     puts 'Unicorn worker intercepting TERM and doing nothing. Wait for master to sent QUIT'
@@ -30,16 +34,16 @@ after_fork do |server, worker|
     Rails.logger.info('Connected to Redis')
   end
 
-  #-- Updated 4/17/14 -- adds DB_POOl and DB_REAP_FREQ
-  #-- https://devcenter.heroku.com/articles/concurrency-and-database-connections
   if defined?(ActiveRecord::Base)
     config = ActiveRecord::Base.configurations[Rails.env] ||
                 Rails.application.config.database_configuration[Rails.env]
     config['reaping_frequency'] = ENV['DB_REAP_FREQ'] || 10 # seconds
-    config['pool']            =   ENV['DB_POOL'] || 2
+    config['pool']              = ENV['DB_POOL'] || 2
     ActiveRecord::Base.establish_connection(config)
   end
 
-  # defined?(ActiveRecord::Base) and
-  #   ActiveRecord::Base.establish_connection
+  # defined?(Redis) and
+  #   $redis = Redis.current = Redis.new( url: ENV['REDISTOGO_URL'] )
+
+
 end

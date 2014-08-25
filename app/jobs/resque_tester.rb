@@ -1,4 +1,7 @@
+require 'resque/plugins/resque_heroku_autoscaler'
+
 class ResqueTester
+    #extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :test
 

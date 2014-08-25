@@ -7,6 +7,7 @@ gem 'unicorn'
 gem "rack-timeout"
 gem 'httparty', '~> 0.9.0'
 gem 'resque', :require => "resque/server"
+gem "resque-retry"
 #gem 'newrelic_rpm'
 gem 'authorize-net'
 gem 'mandrill-api', "~> 1.0.35"
@@ -18,6 +19,9 @@ gem 'bcrypt-ruby'
 gem 'activemerchant'
 gem 'urbanairship'
 gem 'roo'
+gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
+
+
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'

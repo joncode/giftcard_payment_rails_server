@@ -8,9 +8,11 @@ class Provider < ActiveRecord::Base
 	has_many   :sales
 	has_many   :orders
 	has_many   :campaign_items
+	has_many   :protos
+	has_many   :providers_socials
+	has_many   :socials, through: :providers_socials
 	belongs_to :brands
 	belongs_to :merchant
-	has_many   :protos
 
 	validates_presence_of 	:name, :city, :address, :zip, :region_id, :state, :token
 	validates_length_of 	:state , 	:is => 2
@@ -33,11 +35,12 @@ class Provider < ActiveRecord::Base
 	end
 
 	def serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :zinger]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live_int
+		prov_hash["desc"]		  = self.description
 		return prov_hash
 	end
 
@@ -67,11 +70,17 @@ class Provider < ActiveRecord::Base
 	end
 
 	def web_serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude]
-		prov_hash["provider_id"]  = self.id
-		prov_hash["photo"]        = self.get_photo
-		prov_hash["full_address"] = self.full_address
-		prov_hash["menu"]   	  = JSON.parse(self.menu_string.data)
+		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude]
+		prov_hash["region_id"]      = self.region_id
+		prov_hash["loc_id"]			= self.id
+		prov_hash["photo"]          = self.get_photo
+		prov_hash["logo"]			= self.get_logo
+		prov_hash["address"]        = self.full_address
+		prov_hash["address_street"] = self.address
+		prov_hash["address_city"]   = self.city
+		prov_hash["address_state"]  = self.state
+		prov_hash["address_zip"]    = self.zip
+		prov_hash["live"]           = self.live
 		prov_hash
 	end
 
@@ -153,6 +162,14 @@ class Provider < ActiveRecord::Base
 	def get_photo
 		return MERCHANT_DEFAULT_IMG if image.blank?
 		image
+	end
+
+	def get_logo
+		if self.merchant
+			self.merchant.get_logo
+		else
+			nil
+		end
 	end
 
 	def get_photo_old

@@ -1,4 +1,5 @@
 class Card < ActiveRecord::Base
+	include CardTokenizer
  	include ActiveMerchant::Billing::CreditCardMethods
 	include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
 
@@ -35,6 +36,8 @@ class Card < ActiveRecord::Base
     	hsh["month_year"] 	= self.month_year
     	hsh["first_name"]   = self.first_name
     	hsh["last_name"] 	= self.last_name
+    	hsh["cim_token"]    = self.cim_token
+    	hsh["cim_profile"]  = self.user.cim_profile
     	hsh["amount"] 		= args["amount"]
     	hsh["unique_id"]	= args["unique_id"] if args["unique_id"]
     	hsh

@@ -16,6 +16,3 @@ include LegacyGift
 include LegacyProvider
 include Cron
 include Dbcall
-
-# require 'myActiveRecordExtensions'
-# ActiveRecord::Base.send(:include, MyActiveRecordExtensions)

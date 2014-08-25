@@ -8,7 +8,7 @@ class GiftProtoJoin < Gift
     	args = self.pre_init(proto, proto_join)
         gift = super
         if gift.persisted?
-            gift.messenger
+            gift.messenger_proto_join
             proto_join.update(gift_id: gift.id)
         end
         gift

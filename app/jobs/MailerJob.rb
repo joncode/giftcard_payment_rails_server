@@ -1,6 +1,10 @@
+require 'resque/plugins/resque_heroku_autoscaler'
+
 class MailerJob
+    #extend Resque::Plugins::HerokuAutoscaler
+
     extend Emailer
-    @queue = :email
+    @queue = :r_email
 
     def self.perform(data)
         begin

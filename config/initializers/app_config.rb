@@ -1,6 +1,7 @@
 require 'yaml'
 require 'common_utils'
 require 'emailer'
+require 'active_record_extensions'
 # require 'gift_utility'
 # require 'production_db_update'
 # include ProductionDbUpdate
@@ -62,6 +63,14 @@ def thread_on?
         false
     else
         true
+    end
+
+end
+
+class Object
+
+    def mets
+        self.methods - Object.methods
     end
 
 end

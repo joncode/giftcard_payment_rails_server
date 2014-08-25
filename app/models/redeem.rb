@@ -26,6 +26,10 @@ class Redeem < ActiveRecord::Base
 		Redeem.create(gift_id: gift.id, pos_merchant_id: pos_merchant_id)
 	end
 
+	def create_redeem_code
+		self.redeem_code = "%04d" % rand(10000)
+	end
+
 private
 
 	def add_pos_merchant_id
@@ -38,10 +42,6 @@ private
 
 	def self.pos_merchant_id?
 		self.pos_merchant_id.present? || (self.pos_merchant_id != 0)
-	end
-
-	def create_redeem_code
-		self.redeem_code = "%04d" % rand(10000)
 	end
 
 	def add_redeem_to_gift

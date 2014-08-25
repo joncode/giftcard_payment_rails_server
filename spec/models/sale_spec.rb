@@ -68,7 +68,7 @@ describe Sale do
         args = {}
         args["giver_id"]    = user.id
         args["provider_id"] = provider.id
-        args["card"]     = card
+        args["card_id"]     = card.id
         args["number"]      = card.number
         args["month_year"]  = card.month_year
         args["first_name"]  = card.first_name
@@ -79,7 +79,6 @@ describe Sale do
         gift = FactoryGirl.build(:gift, giver: user, provider: provider)
         gift.payable = sale
         gift.save
-
         sale.reload
         sale.giver.should           == user
         sale.gift.id.should         == gift.id
@@ -93,6 +92,43 @@ describe Sale do
         sale.reason_code.should     == 1
         sale.resp_code.should       == 1
     end
+
+    it "should receive required fields and save gift WITH CARD TOKEN" do
+        user = FactoryGirl.create(:user, cim_profile: "11111")
+        card = FactoryGirl.create(:card, cim_token: "22222")
+
+        auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,157.00,CC,auth_capture,,,,,,,,,,,,,,,,,,,"
+        stub_request(:post, "https://apitest.authorize.net/xml/v1/request.api").to_return(:status => 200, :body => auth_response, :headers => {})
+
+        provider = FactoryGirl.create(:provider)
+
+        args = {}
+        args["giver_id"]    = user.id
+        args["provider_id"] = provider.id
+        args["card_id"]     = card.id
+        args["amount"]      = "157.00"
+        args["cim_profile"]  = user.cim_profile
+        args["cim_token"] = card.cim_token
+        args["unique_id"]   = "UNIQUE_GIFT_ID"
+        sale = Sale.charge_card args
+        gift = FactoryGirl.build(:gift, giver: user, provider: provider)
+        gift.payable = sale
+        gift.save
+
+        sale.reload
+        sale.giver.should           == user
+        sale.gift.id.should         == gift.id
+        sale.provider.should        == provider
+        sale.card.should            == card
+        sale.revenue.to_s.should    == "157.0"
+        sale.transaction_id.should  == nil
+        JSON.parse(sale.req_json).should  == {"customer_profile_id"=>"11111", "customer_payment_profile_id"=>"22222", "amount"=>"157.00"}
+        JSON.parse(sale.resp_json).should == {"message_code"=>nil, "message_text"=>nil, "profile"=>nil}
+        sale.reason_text.should     == nil
+        sale.reason_code.should     == 0
+        sale.resp_code.should       == 0
+    end
+
 
     it "should receive giver_id on sale instance and process refund" do
         user = FactoryGirl.create(:user)

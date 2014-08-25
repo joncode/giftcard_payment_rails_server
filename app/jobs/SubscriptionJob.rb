@@ -1,4 +1,7 @@
+require 'resque/plugins/resque_heroku_autoscaler'
+
 class SubscriptionJob
+    #extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :subscription
 

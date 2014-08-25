@@ -15,8 +15,9 @@ class UserSocial < ActiveRecord::Base
     validates :identifier , format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
     validates_with MultiTypeIdentifierUniqueValidator
 
-    after_create          :subscribe_mailchimp
-    after_save            :unsubscribe_mailchimp
+    after_create  :subscribe_mailchimp
+    after_create  :collect_incomplete_gifts
+    after_save    :unsubscribe_mailchimp
 
     default_scope -> { where(active: true) }  # indexed
 
@@ -25,6 +26,11 @@ class UserSocial < ActiveRecord::Base
     end
 
 private
+
+
+    def collect_incomplete_gifts
+        Resque.enqueue(CollectIncompleteGiftsV2Job, self.id)
+    end
 
     def subscribe_mailchimp
         if self.type_of  == "email"

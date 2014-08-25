@@ -4,10 +4,10 @@ class Mt::V2::ProtosController < JsonController
     def gifts
         proto  = Proto.find params[:id]
         number = proto.giftables.count
-        if number == 0
-        	success "All gifts have already been created for gift prototype #{params[:id]}"
-        	status = 201
-        else
+        # if number == 0
+        # 	success "Processing Contacts Currently -   #{params[:id]}"
+        # 	status = 201
+        # else
             if thread_on?
                 Resque.enqueue(ProtoGifterJob, proto.id)
             else
@@ -15,7 +15,7 @@ class Mt::V2::ProtosController < JsonController
             end
         	success "Request for #{number} gifts from #{proto.giver_name} received."
         	status = 202
-        end
+        # end
     	respond(status)
     end
 

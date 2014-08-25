@@ -35,6 +35,79 @@ describe Mdot::V2::UsersController do
             hsh = ary.first
             compare_keys(hsh, keys)
         end
+
+        it "should return list of active users if :find is empty string" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string = ""
+            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should == 1
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == amount
+        end
+
+        it "should return users whose first_name matches a :find string" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string = "n"
+            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should == 1
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == amount
+        end
+
+        it "should return users whose first_name matches a :find string even in middle of first_name" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string = "bie"
+            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should == 1
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == amount
+        end
+
+        it "should NOT return users whose first_name doesnt match a :find string" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string = "z"
+            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should == 1
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == 0
+        end
+
+        it "should return users whose last_name matches a :find string" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string = "b"
+
+            amount  = User.where('last_name ilike ?',"%#{search_string}%").count
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should == 1
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == amount
+        end
+
+        it "should NOT return users whose last_name doesnt match a :find string" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string = "z"
+            amount  = User.where('last_name ilike ?',"%#{search_string}%").count
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should == 1
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == 0
+        end
     end
 
     describe :show do
@@ -247,6 +320,20 @@ describe Mdot::V2::UsersController do
             rrc(200)
             user = User.where(email: email).first
             user.first_name.should == "Neil"
+        end
+
+        it "should create with blank phone string BUG FIX" do
+            request.env["HTTP_TKN"] = ANDROID_TOKEN
+            req_hsh = {"data"=>{"first_name"=>"Drink", "last_name"=>"Board", "email"=>"cmmca71@gmail.com", "phone"=>"", "password"=>"passwordtest", "password_confirmation"=>"passwordtest", "facebook_id"=>"110005810227565", "pn_token"=>"ec938243-f0af-4238-ab1b-b1a1d3ad59cd", "platform"=>"android"}}
+
+            post :create, format: :json, data: req_hsh["data"]
+            rrc(200)
+            user = User.last
+            user.first_name.should == "Drink"
+            user.email.should == "cmmca71@gmail.com"
+            user.user_socials.count.should == 2
+            #user.phone.should be_nil
+
         end
 
         it "should process optional fields" do
