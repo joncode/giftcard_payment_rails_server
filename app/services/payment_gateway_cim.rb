@@ -51,12 +51,12 @@ private
     def gateway_hash_response
         hsh = {}
         hsh["transaction_id"]  = self.transaction_id
-        raw_request            = self.transaction.fields
         hsh["resp_json"]       = PaymentGatewayCim.response_json(self.response)
-        hsh["req_json"]        = raw_request.to_json
-        hsh["resp_code"]       = self.response.response_code.to_i
-        hsh["reason_text"]     = self.response.response_reason_text
-        hsh["reason_code"]     = self.response.response_reason_code.to_i
+        hsh["req_json"]        = self.transaction.fields.to_json
+        message_code           = self.response.message_code
+        hsh["resp_code"]       = message_code_to_resp_code(message_code)
+        hsh["reason_text"]     = self.response.message_text
+        hsh["reason_code"]     = 1
         hsh["revenue"]         = self.amount
         hsh
     end
@@ -66,5 +66,17 @@ private
         puts "HERE IS THE CIM transaction #{t.inspect}"
         t
     end
+
+    def message_code_to_resp_code message_code
+        case message_code
+        when "I00001"
+            1
+        when "E00027" #The transaction was unsuccessful
+            2
+        else
+            3
+        end
+    end
+
 
 end
