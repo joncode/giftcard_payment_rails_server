@@ -69,11 +69,11 @@ private
 
     def message_code_to_resp_code message_code
         case message_code
-        when "I00001"
+        when "I00001" #Successful
             1
         when "E00027" #The transaction was unsuccessful
             2
-        else
+        else          #Error/Failure
             3
         end
     end
