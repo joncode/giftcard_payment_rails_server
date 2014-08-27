@@ -16,7 +16,9 @@ class ReminderInternal
 		reminder_deadline = today + 2.days
 		live_campaigns = Campaign.where("live_date <= ?", today).where("close_date >= ?", today)
 		live_campaigns.each do |campaign|
+puts "---- A"
 			if campaign.close_date <= reminder_deadline
+puts "---- B"
 				data = {
 					subject: "Campaign Expiration Notice",
 					text: "Campaign #{campaign.id} is expiring within 2 days",
@@ -24,6 +26,7 @@ class ReminderInternal
 				}
 				self.route_email_system(data)
 			else
+puts "---- C"
 				campaign.campaign_items.each do |ci|
 					if ci.expires_at.present? && ci.expires_at <= reminder_deadline
 						data = {
@@ -35,6 +38,7 @@ class ReminderInternal
 					end
 				end
 			end
+puts "---- D"
 		end
 	end
 
