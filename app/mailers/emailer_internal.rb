@@ -15,7 +15,6 @@ puts "---3"
 		end
 puts "---4 #{subject_content}"
         message = {
-puts "---5"
         	subject: subject_content,
         	from_name: "IOM Database",
         	text: text,
@@ -25,14 +24,14 @@ puts "---5"
         	}],
         	from_email: NO_REPLY_EMAIL
         }
-puts "---6 #{message}"
+puts "---5 #{message}"
         request_mandrill_with_message(message).first
     end
 
 private
 
     def request_mandrill_with_message message
-puts "---7"
+puts "---6"
 		if Rails.env.staging? || Rails.env.production?
 	        puts "``````````````````````````````````````````````"
 	        puts "Request Mandrill with #{message}"
