@@ -14,7 +14,7 @@ class ReminderInternal
 			email = "rachel.wenman@itson.me"
 		end
 		reminder_deadline = today + 2.days
-		live_campaigns = Campaign.where("live_date <= ?", today).where("close_date >= ?", today) 
+		live_campaigns = Campaign.where("live_date <= ?", today).where("close_date >= ?", today)
 		live_campaigns.each do |campaign|
 			if campaign.close_date <= reminder_deadline
 				data = {
