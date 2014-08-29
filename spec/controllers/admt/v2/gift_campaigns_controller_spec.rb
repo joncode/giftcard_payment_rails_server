@@ -97,7 +97,7 @@ describe Admt::V2::GiftCampaignsController do
         it "should send an email to the receiver_email" do
             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-			stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             create_hsh = { "receiver_phone" => "2222222222", "payable_id" => @campaign_item.id  }
             post :create, format: :json, data: create_hsh
             rrc 200
@@ -108,12 +108,11 @@ describe Admt::V2::GiftCampaignsController do
                 b = JSON.parse(req.body);
                 if b["template_name"] == "iom-gift-notify-receiver"
                     link = b["message"]["merge_vars"].first["vars"].first["content"];
-                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
+                    link.match(/signup\/acceptgift\?id=#{abs_gift_id}/)
                 else
                     true
                 end
-            }.once
-        end
+            }.once        end
 
         it "should send in-network receivers a push notification" do
             ResqueSpec.reset!
@@ -211,12 +210,11 @@ describe Admt::V2::GiftCampaignsController do
                 b = JSON.parse(req.body);
                 if b["template_name"] == "iom-gift-notify-receiver"
                     link = b["message"]["merge_vars"].first["vars"].first["content"];
-                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
+                    link.match(/signup\/acceptgift\?id=#{abs_gift_id}/)
                 else
                     true
                 end
-            }.once
-        end
+            }.once        end
 
         it "should send in-network receivers a push notification" do
             ResqueSpec.reset!

@@ -133,7 +133,7 @@ describe GiftBoomerang do
                 b = JSON.parse(req.body);
                 if b["template_name"] == "iom-gift-gift-receipt"
                     link = b["message"]["merge_vars"].first["vars"].first["content"];
-                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
+                    link.match(/signup\/acceptgift\?id=#{abs_gift_id}/)
                     false
                 else
                     true
@@ -157,7 +157,7 @@ describe GiftBoomerang do
                 b = JSON.parse(req.body);
                 if b["template_name"] == "iom-gift-notify-receiver"
                     link = b["message"]["merge_vars"].first["vars"].first["content"];
-                    link.match(/signup\/acceptgift\/#{abs_gift_id}/)
+                    link.match(/signup\/acceptgift\?id=#{abs_gift_id}/)
                 else
                     true
                 end
