@@ -1,4 +1,5 @@
 require 'json'
+require 'urban_airship_wrap'
 
 module Urbanairship
     module ClassMethods
@@ -35,6 +36,7 @@ module Urbanairship
 end
 
 module Cron
+    include UrbanAirshipWrap
 
     def register_all_pn_tokens time_ago=nil
         time_ago ||= 1.week.ago
@@ -92,9 +94,10 @@ module Cron
                         count += 1
                         #puts "match #{count}"
                     else
+ # binding.pry
                         incorrect += 1
                         puts "PnToken #{pnt.id} is #{ua_alias} -- should be #{pnt_alias} "
-                        Urbanairship.unregister_device(pnt.pn_token)
+                        ua_unregister(pnt.pn_token, pnt.user_id)
                         send_to_UA(pnt)
                     end
                 end
@@ -126,12 +129,7 @@ private
     end
 
     def send_to_UA pnt
-        resp = Urbanairship.register_device(pnt.pn_token, :alias => pnt.ua_alias )
-        puts "Registered UA --- > #{resp}"
-    end
-
-    def ua_device_tokens
-        Urbanairship.device_tokens_with_limiting
+        ua_register(pnt.pn_token, pnt.ua_alias, pnt.user_id, pnt.platform)
     end
 
 end

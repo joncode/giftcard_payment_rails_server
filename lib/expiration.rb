@@ -15,4 +15,16 @@ module Expiration
         puts "------------- #{expired_gifts} expired gifts -----------------"
     end
 
+    def self.destroy_sms_contacts
+        puts "------------- DESTROY SMS CONTACTS CRON -----------------"
+        destroyed_sms_contacts = 0
+        SmsContact.where(gift_id: nil).where("created_at < ?", 1.day.ago).find_each do |contact|
+            campaign_item = CampaignItem.where(textword: contact.textword).first
+            contact.destroy unless campaign_item.live?
+            puts "-------- Destroyed SMS Contact #{contact.id} --------"
+            destroyed_sms_contacts += 1
+        end
+        puts "------------- #{destroyed_sms_contacts} SMS CONTACTS DESTROYED -----------------"
+    end
+
 end

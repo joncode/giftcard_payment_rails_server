@@ -2,9 +2,9 @@ module EmailerInternal
 	extend ActiveSupport::Concern
 
     def send_notice data
-    	subject = data[:subject]
-    	text    = data[:text]
-    	email   = data[:email]
+    	subject = data["subject"]
+    	text    = data["text"]
+    	email   = data["email"]
 		if Rails.env.development? || Rails.env.staging?
 			subject_content = subject.insert(0, "QA- ")
 		else

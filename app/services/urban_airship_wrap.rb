@@ -13,4 +13,17 @@ module UrbanAirshipWrap
         Ditto.register_push_create(resp, user_id)
     end
 
+    def ua_unregister pn_token, user_id
+        resp = Urbanairship.unregister_device(pn_token)
+        puts "UA response --- >  #{resp}"
+        Ditto.unregister_push_create(resp, user_id)
+    end
+
+    def ua_device_tokens
+        tokens = Urbanairship.device_tokens_with_limiting
+        puts "UA response --- >  #{tokens}"
+        Ditto.tokens_push_create(tokens)
+        return tokens
+    end
+
 end

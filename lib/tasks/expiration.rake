@@ -4,6 +4,7 @@ namespace :gifts do
     task expire: :environment do
         require 'expiration'
         Expiration::expire_gifts
+        Expiration::destroy_sms_contacts
     end
 
 end
