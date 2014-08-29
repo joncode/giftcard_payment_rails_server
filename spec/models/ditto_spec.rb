@@ -109,6 +109,20 @@ describe Ditto do
 
 		end
 
+		describe :unregister_push_create do
+
+			it "should create with error" do
+				resp = {"error_code"=>40001, "details"=>{"device_token"=>["device_token contains an invalid device token: A7D14290-FD57-41F0-B1A4-DB36F6E9B79B"]}, "error"=>"Data validation error"}
+				d    = Ditto.unregister_push_create(resp, @user.id)
+				d.response_json.should == resp.to_json
+				d.status.should        == 422
+				d.cat.should           == 101
+				d.notable_id.should    == @user.id
+				d.notable_type.should  == "User"
+			end
+
+		end
+
 		describe :send_push_create do
 
 			it "should create with success" do
@@ -120,6 +134,18 @@ describe Ditto do
 				d.cat.should           == 110
 				d.notable_id.should    == gift.id
 				d.notable_type.should  == "Gift"
+			end
+		end
+
+		describe :tokens_push_create do
+
+			it "should create with success" do
+				gift = FactoryGirl.create(:gift, receiver: @user)
+				resp = {"push_id"=>"f8fb691e-0543-11e4-9d68-90e2ba025308"}
+				d    = Ditto.tokens_push_create(resp)
+				d.response_json.should == resp.to_json
+				d.status.should        == 200
+				d.cat.should           == 120
 			end
 		end
 
