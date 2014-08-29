@@ -186,6 +186,50 @@ describe Ditto do
 			end
 		end
 
+		describe "Social Proxy" do
+		  	it "should create ditto for friends" do
+            	fb_resp = { "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"}.to_json
+		  		response = { status: 200, data: "#{fb_resp}" }
+		  		d = Ditto.friends_social_proxy_create(response)
+		  		JSON.parse(d.response_json).should == {
+		  			"status" => 200,
+		  			"data" => {
+			  			"birthday" => "10/05/1987",
+			  			"network_id" => "27428352",
+			  			"name" => "Taylor Addison",
+			  			"photo" => "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"
+			  		}.to_json
+		  		}
+				d.cat.should           == 500
+				d.notable_type.should  == "SocialProxy"
+		  	end
+
+		  	it "should create ditto for profile" do
+            	fb_resp = { "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"}.to_json
+		  		response = { status: 200, data: "#{fb_resp}" }
+		  		d = Ditto.profile_social_proxy_create(response)
+		  		JSON.parse(d.response_json).should == {
+		  			"status" => 200,
+		  			"data" => fb_resp
+		  		}
+				d.cat.should           == 510
+				d.notable_type.should  == "SocialProxy"
+		  	end
+
+		  	it "should create ditto for post" do
+		  		fb_resp = [{ "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"},{ "birthday"  =>"10/05/1987", "network_id"=>"27428352", "name" =>"Taylor Addison", "photo" =>"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/t5/1119714_27428352_13343146_q.jpg"}].to_json
+		  		response = { status: 200, data: "#{fb_resp}" }
+		  		d = Ditto.post_social_proxy_create(response)
+		  		JSON.parse(d.response_json).should == {
+		  			"status" => 200,
+		  			"data" => fb_resp
+		  		}
+				d.cat.should           == 520
+				d.notable_type.should  == "SocialProxy"
+		  	end
+		end
+
+
 	end
 
 

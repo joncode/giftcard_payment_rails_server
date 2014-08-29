@@ -52,6 +52,18 @@ class Ditto < ActiveRecord::Base
 			create(response_json: response_json, cat: 600, status: status, notable_id: card_id, notable_type: "Card")
 		end
 
+		def friends_social_proxy_create response
+			create(response_json: response.to_json, cat: 500, status: response["status"], notable_type: "SocialProxy"  )
+		end
+
+		def profile_social_proxy_create response
+			create(response_json: response.to_json, cat: 510, status: response["status"], notable_type: "SocialProxy"  )
+		end
+
+		def post_social_proxy_create response
+			create(response_json: response.to_json, cat: 520, status: response["status"], notable_type: "SocialProxy"  )
+		end
+
 	private
 
 		def parse_authorize_net_response(response)
@@ -131,7 +143,9 @@ end
 #  120 - get device tokens
 #  310 - send transactional email
 #  400 - Register subscribe email to mailchimp
-#  500 - SocialProxy
+#  500 - SocialProxy - friends
+#  510 - SocialProxy - profile
+#  520 - SocialProxy - create_post
 #  600 - Auth.net - tokenize
 # 1000 - Receive POS request
 
