@@ -2,7 +2,7 @@ shared_examples_for "token authenticated" do |verb, route, params|
 
     it "should not allow unauthenticated access" do
         request.env["HTTP_TKN"] = "No_Entrance"
-        puts "-----------#{verb} | #{route} | #{params} ------------"
+        puts "----------- #{verb.upcase} | :#{route} | #{params} ------------"
         send(verb,route, params, format: :json)
         response.response_code.should  == 401
     end
@@ -13,7 +13,7 @@ shared_examples_for "client-token authenticated" do |verb, route, params|
 
     it "should not allow unauthenticated access" do
         request.env["HTTP_X_AUTH_TOKEN"] = "No_Entrance"
-        puts "-----------#{verb} | #{route} | #{params} ------------"
+        puts "----------- #{verb} | :#{route} | #{params} ------------"
         send(verb,route, params, format: :json)
         response.response_code.should  == 401
     end
@@ -26,7 +26,7 @@ shared_examples_for "proxy_auth_required" do |verb, route|
         user = FactoryGirl.create(:user)
         user.update(remember_token: "OAUTH_TOKEN")
         request.env["HTTP_TKN"] = "OAUTH_TOKEN"
-        puts "-----------#{verb} | #{route}  ------------"
+        puts "-----------#{verb.upcase} | :#{route}  ------------"
         send(verb,route, format: :json)
         response.response_code.should  == 407
         json["status"].should == 0

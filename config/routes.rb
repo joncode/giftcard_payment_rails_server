@@ -98,7 +98,11 @@ end
         end
       end
 
-      resources :cards,     only: [:index, :create, :destroy]
+      resources :cards,     only: [:index, :create, :destroy] do
+        collection do
+          get :tokenize
+        end
+      end
 
       resources :settings,  only: [:index] do
         collection do
@@ -157,7 +161,7 @@ end
       resources :regions,   only: [:index] do
         member { get :merchants }
       end
-      
+
       resources :sessions,  only: [:create]
 
       resources :users, only: [:create]

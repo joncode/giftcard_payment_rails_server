@@ -7,6 +7,12 @@ class Mdot::V2::CardsController < JsonController
         respond
     end
 
+    def tokenize
+        json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY }
+        success(json)
+        respond
+    end
+
     def create
         data = convert_if_json
 

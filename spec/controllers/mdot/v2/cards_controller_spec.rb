@@ -36,6 +36,20 @@ describe Mdot::V2::CardsController do
         end
     end
 
+    describe :tokenize do
+        it_should_behave_like("token authenticated", :get, :tokenize)
+
+        it "should return auth.net key and token" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            get :tokenize, format: :json
+            rrc(200)
+            json["status"].should        == 1
+            json["data"].class.should    == Hash
+            json["data"]["key"].should   == AUTHORIZE_API_LOGIN
+            json["data"]["token"].should == AUTHORIZE_TRANSACTION_KEY
+        end
+    end
+
     describe :create do
         it_should_behave_like("token authenticated", :post, :create)
 
