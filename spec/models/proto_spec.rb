@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Proto do
 
+
     context "Callbacks" do
 
     	it "should set the value from the shoppingCart" do
