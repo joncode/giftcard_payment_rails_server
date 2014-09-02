@@ -119,7 +119,7 @@ describe MailerJob do
                              "from_email" => "no-reply@itson.me",
                              "to" => [{"email"=>"receivy@email.com", "name"=>"Receivy Receiverson"}],
                              "bcc_address" => nil,
-                             "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/signup/acceptgift/#{NUMBER_ID + @gift.id}"}]}] }
+                             "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/signup/acceptgift?id=#{NUMBER_ID + @gift.id}"}]}] }
             data = { "text" => 'notify_receiver', "gift_id" => @gift.id }
             Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -139,14 +139,14 @@ describe MailerJob do
             items_content = items_text(@gift)
             template_content = [
                 { "name" => "items_text", "content" => items_content },
-                { "name" => "original_receiver", "content" => "receivy@email.com"}]
+                { "name" => "original_receiver", "content" => "giver@email.com"}]
             message_hash = {
                 "subject" => "Boomerang! We're returning this gift to you.",
                 "from_name" => "ItsOnMe",
                 "from_email" => "no-reply@itson.me",
                 "to" => [{"email"=>"giver@email.com", "name"=>"Original Giver"}],
                 "bcc_address" => "info@itson.me",
-                "merge_vars" => [{"rcpt"=>"giver@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/download"}]}] }
+                "merge_vars" => [{"rcpt"=>"giver@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/signup/acceptgift?id=#{NUMBER_ID + boomgift.id}"}]}] }
             data = { "text" => 'notify_receiver_boomerang', "gift_id" => boomgift.id }
             Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }

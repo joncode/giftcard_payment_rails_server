@@ -30,6 +30,7 @@ class SocialProxy
         route  = SOCIAL_PROXY_URL + "/#{self.network}/friends"
         resp   = post(token: get_token, params: get_key_params, route: route)
         # resp = ProxyRequest.new(get_key_params, get_token)
+        Ditto.friends_social_proxy_create(resp)
         self.status = resp["status"]
         self.msg    = resp["msg"]
         if resp["data"].class == String
@@ -47,6 +48,7 @@ class SocialProxy
             SOCIAL_PROXY_URL + "/#{self.network}/profile"
         end
         resp   = post(token: get_token, params: get_key_params, route: route)
+        Ditto.profile_social_proxy_create(resp)
         set_instance resp
     end
 
@@ -61,6 +63,7 @@ class SocialProxy
             SOCIAL_PROXY_URL + "/#{self.network}/story"
         end
         resp   = post(token: get_token, params: post_params, route: route)
+        Ditto.post_social_proxy_create(resp)
         set_instance resp
     end
 

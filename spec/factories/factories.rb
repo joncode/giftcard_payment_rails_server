@@ -274,7 +274,7 @@ FactoryGirl.define do
             number       "371538495534000"
         end
     end
-    
+
     factory :sale do
         giver_id    1
         resp_code   1
@@ -378,7 +378,7 @@ FactoryGirl.define do
         service_id   "1001"
         textword     "itsonme"
         subscribed_date  "2013-02-04 21:12:45".to_datetime
-        phone        "646475758686"
+        sequence(:phone) { |n| "64647#{n}758686" }
         gift_id      nil
     end
 
@@ -397,6 +397,6 @@ FactoryGirl.define do
         processed   false
         proto_id    1
         provider_id 1
-        at_user_id  nil 
+        at_user_id  nil
     end
 end

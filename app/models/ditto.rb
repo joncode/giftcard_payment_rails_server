@@ -16,9 +16,19 @@ class Ditto < ActiveRecord::Base
 			create(response_json: response.to_json, cat: 100, status: status, notable_id: user_id, notable_type: 'User')
 		end
 
+		def unregister_push_create(response, user_id)
+			status = parse_ua_response(response)
+			create(response_json: response.to_json, cat: 101, status: status, notable_id: user_id, notable_type: 'User')
+		end
+
 		def send_push_create(response, obj_id, obj_type="Gift")
 			status = parse_ua_response(response)
 			create(response_json: response.to_json, cat: 110, status: status, notable_id: obj_id, notable_type: obj_type)
+		end
+
+		def tokens_push_create(response)
+			status = parse_ua_response(response)
+			create(response_json: response.to_json, cat: 120, status: status)
 		end
 
 		def send_email_create(response, obj_id, obj_type)
@@ -40,6 +50,18 @@ class Ditto < ActiveRecord::Base
 			status        = parse_authorize_net_response(response)
 			response_json = PaymentGatewayCim.response_json(response)
 			create(response_json: response_json, cat: 600, status: status, notable_id: card_id, notable_type: "Card")
+		end
+
+		def friends_social_proxy_create response
+			create(response_json: response.to_json, cat: 500, status: response["status"], notable_type: "SocialProxy"  )
+		end
+
+		def profile_social_proxy_create response
+			create(response_json: response.to_json, cat: 510, status: response["status"], notable_type: "SocialProxy"  )
+		end
+
+		def post_social_proxy_create response
+			create(response_json: response.to_json, cat: 520, status: response["status"], notable_type: "SocialProxy"  )
 		end
 
 	private
@@ -116,10 +138,14 @@ end
 # CATEGORIES
 
 #  100 - Register Push Pn Token
+#  101 - Unregister Push Pn Token
 #  110 - send push pn token
+#  120 - get device tokens
 #  310 - send transactional email
 #  400 - Register subscribe email to mailchimp
-#  500 - SocialProxy
+#  500 - SocialProxy - friends
+#  510 - SocialProxy - profile
+#  520 - SocialProxy - create_post
 #  600 - Auth.net - tokenize
 # 1000 - Receive POS request
 

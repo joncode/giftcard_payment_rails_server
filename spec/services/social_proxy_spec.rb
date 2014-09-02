@@ -71,6 +71,19 @@ describe SocialProxy do
                 compare_keys(hsh, fb_keys)
             end
 
+            it "should create Ditto" do
+                stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\",\"token\":\"#{@oauth_hsh_fb["token"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{fb_friends}", :headers => {})
+                require_hsh  = @oauth_hsh_fb
+                Ditto.count.should == 0
+                social_proxy = SocialProxy.new(require_hsh)
+                social_proxy.friends
+                Ditto.count.should == 1
+                ditto = Ditto.last
+                ditto.response_json.should == { status: 200, data: "#{fb_friends}" }.to_json
+                ditto.cat.should           == 500
+                ditto.status.should        == 200
+                ditto.notable_type.should  == "SocialProxy"
+            end
         end
 
         context "twitter" do
@@ -178,6 +191,20 @@ describe SocialProxy do
                 data.count.should == 2
                 fb_keys = ["network_id",  "name", "photo", "birthday"]
                 compare_keys(hsh, fb_keys)
+            end
+
+            it "should create Ditto" do
+                stub_request(:post, @route).with(:body => @request.to_json, :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{@fb_resp}", :headers => {})
+                require_hsh  = @oauth_hsh_fb
+                social_proxy = SocialProxy.new(require_hsh)
+                Ditto.count.should == 0
+                social_proxy.create_post(@post_hsh)
+                Ditto.count.should == 1
+                ditto = Ditto.last
+                ditto.response_json.should == { status: 200, data: "#{@fb_resp}" }.to_json
+                ditto.cat.should           == 520
+                ditto.status.should        == 200
+                ditto.notable_type.should  == "SocialProxy"
             end
 
             it "should send required params for create_gift post" do
@@ -292,6 +319,18 @@ describe SocialProxy do
                 data.class.should   == Hash
                 fb_keys = ["network_id", "name", "photo", "birthday"]
                 compare_keys(data, fb_keys)
+            end
+
+            it "should get json hash of facebook user profile info" do
+                stub_request(:post, route).with(:body => "{\"network_id\":\"#{@oauth_hsh_fb["network_id"]}\",\"token\":\"#{@oauth_hsh_fb["token"]}\"}", :headers => {'Accept'=>'text/json', 'Authorization'=>"#{SOCIAL_PROXY_TOKEN}", 'Content-Type'=>'application/json'}).to_return(:status => 200, :body => "#{fb_resp}", :headers => {})
+                require_hsh  = @oauth_hsh_fb
+                social_proxy = SocialProxy.new(require_hsh)
+                social_proxy.profile
+                ditto = Ditto.last
+                ditto.response_json.should == { status: 200, data: "#{fb_resp}" }.to_json
+                ditto.cat.should           == 510
+                ditto.status.should        == 200
+                ditto.notable_type.should  == "SocialProxy"
             end
         end
 

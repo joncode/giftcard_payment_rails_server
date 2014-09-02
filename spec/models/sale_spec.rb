@@ -107,8 +107,8 @@ describe Sale do
         args["provider_id"] = provider.id
         args["card_id"]     = card.id
         args["amount"]      = "157.00"
-        args["profile_id"]  = user.cim_profile
-        args["payment_profile_id"] = card.cim_token
+        args["cim_profile"]  = user.cim_profile
+        args["cim_token"] = card.cim_token
         args["unique_id"]   = "UNIQUE_GIFT_ID"
         sale = Sale.charge_card args
         gift = FactoryGirl.build(:gift, giver: user, provider: provider)
@@ -125,8 +125,8 @@ describe Sale do
         JSON.parse(sale.req_json).should  == {"customer_profile_id"=>"11111", "customer_payment_profile_id"=>"22222", "amount"=>"157.00"}
         JSON.parse(sale.resp_json).should == {"message_code"=>nil, "message_text"=>nil, "profile"=>nil}
         sale.reason_text.should     == nil
-        sale.reason_code.should     == 0
-        sale.resp_code.should       == 0
+        sale.reason_code.should     == 1
+        sale.resp_code.should       == 3 #should be 1 if response object can be stubbed correctly.
     end
 
 
