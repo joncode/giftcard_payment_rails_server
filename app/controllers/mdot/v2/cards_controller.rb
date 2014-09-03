@@ -8,7 +8,7 @@ class Mdot::V2::CardsController < JsonController
     end
 
     def tokenize
-        json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY }
+        json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY, "profile_id" => @current_user.cim_profile }
         success(json)
         respond
     end
@@ -16,14 +16,14 @@ class Mdot::V2::CardsController < JsonController
     def create_token
         create_with            = token_params
         create_with["user_id"] = @current_user.id
-        card = Card.create_card_with_hash_token create_with
+        card = CardToken.build_card_token_with_hash create_with
         if card.save
             success card.token_serialize
         else
             fail card
-            #status = :bad_request
+            status = :bad_request
         end
-        respond
+        respond(status)
     end
 
     def create
@@ -61,7 +61,7 @@ class Mdot::V2::CardsController < JsonController
 private
 
     def token_params
-        params.require(:data).permit(:nickname, :token, :last_four)
+        params.require(:data).permit(:nickname, :token, :last_four, :brand)
     end
 
     def strong_params(data_hsh)

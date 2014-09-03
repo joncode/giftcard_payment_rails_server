@@ -3,7 +3,8 @@ class CardToken < ActiveRecord::Base
 
 #	-------------
 
-    validates_presence_of  :last_four, :brand, :nickname,  :user_id, :cim_token
+    validates_presence_of  :last_four, :brand, :nickname,  :user_id
+    validates_presence_of  :cim_token, message: "Secure Token must be present"
 
 #	-------------
 
@@ -17,6 +18,13 @@ class CardToken < ActiveRecord::Base
 		card
 	end
 
+
+	def token_serialize
+		card_hash = self.serializable_hash only: [ "nickname", "last_four", "brand" ]
+		card_hash["card_id"] = self.id
+		card_hash
+	end
+
 	def token= token
 		self.cim_token = token
 	end
@@ -26,7 +34,7 @@ class CardToken < ActiveRecord::Base
 	end
 
 	def brand= brand_str
-		return  if brand_str.nil?
+		return nil if brand_str.nil?
 		brand = if brand_str == "Amex"
 			"american_express"
 		elsif brand_str == "MasterCard"
