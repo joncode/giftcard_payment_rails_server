@@ -13,6 +13,19 @@ class Mdot::V2::CardsController < JsonController
         respond
     end
 
+    def create_token
+        create_with = token_params
+        create_with["user_id"] = @current_user.id
+        card = Card.create_card_with_hash_token create_with
+
+        if card.save
+            success card.token_serialize
+        else
+            fail card
+        end
+        respond
+    end
+
     def create
         data = convert_if_json
 
@@ -46,6 +59,10 @@ class Mdot::V2::CardsController < JsonController
     end
 
 private
+
+    def token_params
+        params.require(:data).permit(:nickname, :token, :last_four)
+    end
 
     def strong_params(data_hsh)
         allowed = ["month", "number", "year", "csv", "nickname", "name"]
