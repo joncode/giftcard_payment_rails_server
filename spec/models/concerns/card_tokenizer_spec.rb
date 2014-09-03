@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe :tokenize do
+
 	it "should create profile and payment profile" do
 		user = FactoryGirl.create :user
 		card = FactoryGirl.create :card, user_id: user.id
@@ -33,4 +34,5 @@ describe :tokenize do
 		user.cim_profile.should == "11111"
 		card.cim_token.should == "22222"
 	end
+
 end

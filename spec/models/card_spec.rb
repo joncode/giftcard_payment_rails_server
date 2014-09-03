@@ -92,16 +92,23 @@ describe Card do
             card.respond_to?(:user).should be_true
         end
 
-        it "should have many sales" do
-            card.respond_to?(:sales).should be_true
-        end
-
         it "should have many orders" do
             card.respond_to?(:orders).should be_true
         end
 
         it "should have many gifts" do
             card.respond_to?(:gifts).should be_true
+        end
+
+        it "should have many sales" do
+            card.respond_to?(:sales).should be_true
+        end
+
+        it "should have_many Sales" do
+            card = FactoryGirl.create(:card)
+            sale = FactoryGirl.create(:sale, card: card)
+            card.sales.first.class.should == Sale
+            card.sales.first.id.should    == sale.id
         end
     end
 
@@ -160,7 +167,7 @@ describe Card do
             args["service"]      = "7.00"
             args["message"]      = "here is the message"
             sale_hsh = card.create_card_hsh args
-            keys = ["number", "month_year", "first_name", "last_name", "amount", "unique_id", "card_id"]
+            keys = ["number", "month_year", "first_name", "last_name", "amount", "unique_id", "card_id", "cim_token", "cim_profile"]
             sale_hsh["number"].should     == "4417121029961508"
             sale_hsh["month_year"].should == "0216"
             compare_keys(sale_hsh, keys)
@@ -177,7 +184,6 @@ describe Card do
             card.errors.count.should == 0
             puts card.errors
             card.class.should == Card
-            keys = ["month", "user_id", "brand", "name", "year", "csv", "nickname"]
             card.month.should    == cc_hsh["month"]
             card.user_id.should  == cc_hsh["user_id"]
             card.brand.should    == 'visa'
@@ -206,31 +212,26 @@ describe Card do
         end
 
         it "should save cid_token nickname and last_four" do
-            cc_hsh = { "user_id"=>772, "cim_token" => "72342934", "nickname"=>"Dango"}
-            card = Card.create_card_from_hash cc_hsh
+            cc_hsh = { "user_id"=>772, "cim_token" => "72342934", "nickname"=>"Dango", "brand" => "Visa"}
+            card = Card.create_card_token_with_hash cc_hsh
             card.save
             card.errors.count.should == 0
             puts card.errors
-            card.class.should == Card
-            keys = ["month", "user_id", "brand", "name", "year", "csv", "nickname"]
-            card.month.should    == cc_hsh["month"]
+            card.class.should    == Card
             card.user_id.should  == cc_hsh["user_id"]
             card.brand.should    == 'visa'
-            card.name.should     == cc_hsh["name"]
-            card.year.should     == cc_hsh["year"]
-            card.csv.should      == cc_hsh["csv"]
-            card.nickname.should == cc_hsh["nickname"]
+            card.month.should    be_nil
+            card.name.should     be_nil
+            card.year.should     be_nil
+            card.csv.should      be_nil
+            card.nickname.should be_nil
+            card.cim_token.should == "72342934"
         end
 
     end
 
 
-    it "should have_many Sales" do
-        card = FactoryGirl.create(:card)
-        sale = FactoryGirl.create(:sale, card: card)
-        card.sales.first.class.should == Sale
-        card.sales.first.id.should    == sale.id
-    end
+
 
 end# == Schema Information
 #
