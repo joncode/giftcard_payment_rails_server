@@ -205,6 +205,23 @@ describe Card do
             end
         end
 
+        it "should save cid_token nickname and last_four" do
+            cc_hsh = { "user_id"=>772, "cim_token" => "72342934", "nickname"=>"Dango"}
+            card = Card.create_card_from_hash cc_hsh
+            card.save
+            card.errors.count.should == 0
+            puts card.errors
+            card.class.should == Card
+            keys = ["month", "user_id", "brand", "name", "year", "csv", "nickname"]
+            card.month.should    == cc_hsh["month"]
+            card.user_id.should  == cc_hsh["user_id"]
+            card.brand.should    == 'visa'
+            card.name.should     == cc_hsh["name"]
+            card.year.should     == cc_hsh["year"]
+            card.csv.should      == cc_hsh["csv"]
+            card.nickname.should == cc_hsh["nickname"]
+        end
+
     end
 
 
