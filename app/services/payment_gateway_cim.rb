@@ -20,9 +20,9 @@ class PaymentGatewayCim
     end
 
     def self.response_json response
-        { 
-            "message_code" => response.message_code, 
-            "message_text" => response.message_text, 
+        {
+            "message_code" => response.message_code,
+            "message_text" => response.message_text,
             "profile" => response.profile
         }.to_json
     end

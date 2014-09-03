@@ -39,7 +39,7 @@ describe Mdot::V2::CardsController do
     describe :tokenize do
         it_should_behave_like("token authenticated", :get, :tokenize)
 
-        it "should return auth.net key and token" do
+        it "should return auth.net key and token and profile_id" do
             @user.update("cim_profile" => "826735482")
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :tokenize, format: :json
@@ -49,6 +49,17 @@ describe Mdot::V2::CardsController do
             json["data"]["key"].should   == AUTHORIZE_API_LOGIN
             json["data"]["token"].should == AUTHORIZE_TRANSACTION_KEY
             json["data"]["profile_id"].should == "826735482"
+        end
+
+        it "should return auth.net key and token and profile_id if profile_id is not made yet" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            get :tokenize, format: :json
+            rrc(200)
+            json["status"].should        == 1
+            json["data"].class.should    == Hash
+            json["data"]["key"].should   == AUTHORIZE_API_LOGIN
+            json["data"]["token"].should == AUTHORIZE_TRANSACTION_KEY
+            json["data"]["profile_id"].should == ""
         end
     end
 

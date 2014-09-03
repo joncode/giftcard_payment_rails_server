@@ -8,7 +8,8 @@ class Mdot::V2::CardsController < JsonController
     end
 
     def tokenize
-        json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY, "profile_id" => @current_user.cim_profile }
+        profile_id = @current_user.cim_profile ? @current_user.cim_profile : ""
+        json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY, "profile_id" => profile_id }
         success(json)
         respond
     end
