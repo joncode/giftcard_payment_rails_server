@@ -50,6 +50,34 @@ describe Mdot::V2::CardsController do
         end
     end
 
+    describe :create_token do
+        it_should_behave_like("token authenticated", :post, :create_token)
+
+        it "should not save incomplete card info" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params = {"token"=>"25162732", "nickname"=>"Dango"}
+            post :create_token, format: :json, data: params
+            rrc(400)
+            params = {"token"=>"25162732", "last_four"=>"7483"}
+            post :create_token, format: :json, data: params
+            rrc(400)
+            params = {"nickname"=>"Dango", "last_four"=>"7483"}
+            post :create_token, format: :json, data: params
+            rrc(400)
+        end
+
+        it "should accept hash of require fields and return card ID" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483"}
+            post :create_token, format: :json, data: params
+            card = Card.find_by(user_id: @user.id)
+
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should   == { "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four }
+        end
+    end
+
     describe :create do
         it_should_behave_like("token authenticated", :post, :create)
 

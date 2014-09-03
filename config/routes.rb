@@ -101,6 +101,7 @@ end
       resources :cards,     only: [:index, :create, :destroy] do
         collection do
           get :tokenize
+          post :create_token
         end
       end
 

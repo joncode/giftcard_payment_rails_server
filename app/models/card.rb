@@ -49,12 +49,26 @@ class Card < ActiveRecord::Base
 		card_hash
 	end
 
+	def token_serialize
+		card_hash = self.serializable_hash only: [ "nickname", "last_four" ]
+		card_hash["card_id"] = self.id
+		card_hash
+	end
+
 	def number
 		@number
 	end
 
 	def number=(number)
 		@number = number
+	end
+
+	def self.create_card_with_hash_token cc_token_hsh
+		card = Card.new
+		card.nickname 	= cc_token_hsh["nickname"]
+		card.user_id 	= cc_token_hsh["user_id"]
+		card.last_four  = cc_token_hsh["last_four"]
+		card
 	end
 
 	def self.create_card_from_hash cc_hash
@@ -69,7 +83,7 @@ class Card < ActiveRecord::Base
 		card.number 	= cc_hash["number"]
 		card
 	end
-	
+
 	def self.get_cards user
 		cards = Card.where(user_id: user.id)
 		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
