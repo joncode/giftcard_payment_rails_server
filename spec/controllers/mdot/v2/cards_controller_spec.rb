@@ -56,20 +56,20 @@ describe Mdot::V2::CardsController do
         it "should not save incomplete card info" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params = {"token"=>"25162732", "nickname"=>"Dango"}
-            post :create, format: :json, data: params
+            post :create_token, format: :json, data: params
             rrc(400)
             params = {"token"=>"25162732", "last_four"=>"7483"}
-            post :create, format: :json, data: params
+            post :create_token, format: :json, data: params
             rrc(400)
             params = {"nickname"=>"Dango", "last_four"=>"7483"}
-            post :create, format: :json, data: params
+            post :create_token, format: :json, data: params
             rrc(400)
         end
 
         it "should accept hash of require fields and return card ID" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483"}
-            post :create, format: :json, data: params
+            post :create_token, format: :json, data: params
             card = Card.find_by(user_id: @user.id)
 
             rrc(200)

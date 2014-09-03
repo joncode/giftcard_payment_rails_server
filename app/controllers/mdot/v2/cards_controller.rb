@@ -14,14 +14,14 @@ class Mdot::V2::CardsController < JsonController
     end
 
     def create_token
-        create_with = token_params
+        create_with            = token_params
         create_with["user_id"] = @current_user.id
         card = Card.create_card_with_hash_token create_with
-
         if card.save
             success card.token_serialize
         else
             fail card
+            #status = :bad_request
         end
         respond
     end

@@ -63,7 +63,7 @@ class Card < ActiveRecord::Base
 		@number = number
 	end
 
-	def create_card_with_hash_token cc_token_hsh
+	def self.create_card_with_hash_token cc_token_hsh
 		card = Card.new
 		card.nickname 	= cc_token_hsh["nickname"]
 		card.user_id 	= cc_token_hsh["user_id"]
