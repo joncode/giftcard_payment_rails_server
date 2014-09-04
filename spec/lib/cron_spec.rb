@@ -10,7 +10,7 @@ describe "Cron" do
             pn_token = FactoryGirl.create :pn_token, user_id: user.id, pn_token: "thisisthetokenandshouldbeverylong", platform: "ios"
             ua_tokens = [{ "device_token" => "11111" }]
             Urbanairship.should_receive(:device_tokens_with_limiting).and_return(ua_tokens)
-            Ditto.should_receive(:tokens_push_create).with(ua_tokens).and_return(true)
+            # Ditto.should_receive(:tokens_push_create).and_return(true)
             Urbanairship.should_receive(:register_device).and_return("ua_register_response")
             Ditto.should_receive(:register_push_create).with("ua_register_response", user.id).and_return(true)
             register_missing_pn_tokens
@@ -23,7 +23,7 @@ describe "Cron" do
 	    	pn_token = FactoryGirl.create :pn_token, user_id: user.id, pn_token: "thisisthetokenandshouldbeverylong", platform: "ios"
             ua_tokens = [{ "device_token" => "11111" }]
 	    	Urbanairship.should_receive(:device_tokens_with_limiting).and_return(ua_tokens)
-            Ditto.should_receive(:tokens_push_create).with(ua_tokens).and_return(true)
+            # Ditto.should_receive(:tokens_push_create).with(ua_tokens).and_return(true)
 	    	check_update_aliases
 	    end
 
@@ -35,7 +35,7 @@ describe "Cron" do
                 "alias" => "wrongalias"
             }]
             Urbanairship.should_receive(:device_tokens_with_limiting).and_return(ua_tokens)
-            Ditto.should_receive(:tokens_push_create).with(ua_tokens).and_return(true)
+            # Ditto.should_receive(:tokens_push_create).with(ua_tokens).and_return(true)
 
             Urbanairship.should_receive(:unregister_device).and_return("ua_register_response")
             Ditto.should_receive(:unregister_push_create).with("ua_register_response", user.id).and_return(true)
@@ -54,7 +54,7 @@ describe "Cron" do
                 "alias" => "user-#{user.id + NUMBER_ID}"
             }]
             Urbanairship.should_receive(:device_tokens_with_limiting).and_return(ua_tokens)
-            Ditto.should_receive(:tokens_push_create).with(ua_tokens).and_return(true)
+            # Ditto.should_receive(:tokens_push_create).with(ua_tokens).and_return(true)
 
             Urbanairship.should_not_receive(:unregister_device)
             Urbanairship.should_not_receive(:register_device)

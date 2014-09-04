@@ -9,6 +9,7 @@ module Urbanairship
 
         def device_tokens_with_limiting
             response = do_request(:get, "/api/device_tokens/", :authenticate_with => :master_secret)
+            Ditto.tokens_push_create(response)
             ua_count_of_total_tokens = response['device_tokens_count']
             dts      = response["device_tokens"]
             while response["next_page"].present?
@@ -65,7 +66,6 @@ module Cron
         pnts.each do |pnt|
             if ua_key_hsh.keys.include? pnt.pn_token
                 count += 1
-                #puts "match #{count}"
             else
                 send_to_UA(pnt)
                 incorrect += 1
@@ -92,9 +92,7 @@ module Cron
                     pnt_alias = pnt.ua_alias
                     if pnt_alias == ua_alias
                         count += 1
-                        #puts "match #{count}"
                     else
- # binding.pry
                         incorrect += 1
                         puts "PnToken #{pnt.id} is #{ua_alias} -- should be #{pnt_alias} "
                         ua_unregister(pnt.pn_token, pnt.user_id)

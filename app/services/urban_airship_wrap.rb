@@ -22,7 +22,6 @@ module UrbanAirshipWrap
     def ua_device_tokens
         tokens = Urbanairship.device_tokens_with_limiting
         puts "UA response --- >  #{tokens}"
-        Ditto.tokens_push_create(tokens)
         return tokens
     end
 
