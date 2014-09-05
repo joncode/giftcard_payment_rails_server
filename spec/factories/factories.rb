@@ -235,6 +235,14 @@ FactoryGirl.define do
         network_id         "bob@email.com"
     end
 
+    factory :card_token do
+        nickname    "Factory Joe"
+        cim_token   "52873451"
+        user_id     521
+        brand       "Visa"
+        last_four   "4657"
+    end
+
     factory :card do
         csv   "434"
         month "02"

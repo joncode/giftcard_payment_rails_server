@@ -29,22 +29,31 @@ class Card < ActiveRecord::Base
 #	-------------
 
     def create_card_hsh args
-    	self.decrypt!(PASSPHRASE)
-    	hsh = {}
-        hsh["card_id"]      = self.id
-    	hsh["number"]  		= self.number
-    	hsh["month_year"] 	= self.month_year
-    	hsh["first_name"]   = self.first_name
-    	hsh["last_name"] 	= self.last_name
-    	hsh["cim_token"]    = self.cim_token
-    	hsh["cim_profile"]  = self.user.cim_profile
-    	hsh["amount"] 		= args["amount"]
-    	hsh["unique_id"]	= args["unique_id"] if args["unique_id"]
-    	hsh
+	    hsh = {}
+	    hsh["amount"] 		= args["amount"]
+	    hsh["unique_id"]	= args["unique_id"] if args["unique_id"]
+	    hsh["card_id"]      = self.id
+    	if self.cim_token
+	    	hsh["cim_token"]    = self.cim_token
+	    	hsh["cim_profile"]  = self.user.cim_profile
+    	else
+	    	self.decrypt!(PASSPHRASE)
+	    	hsh["number"]  		= self.number
+	    	hsh["month_year"] 	= self.month_year
+	    	hsh["first_name"]   = self.first_name
+	    	hsh["last_name"] 	= self.last_name
+    	end
+	    hsh
     end
 
 	def create_serialize
 		card_hash = self.serializable_hash only: [ "id", "nickname", "last_four" ]
+		card_hash["card_id"] = self.id
+		card_hash
+	end
+
+	def token_serialize
+		card_hash = self.serializable_hash only: [ "nickname", "last_four" ]
 		card_hash["card_id"] = self.id
 		card_hash
 	end
@@ -69,7 +78,7 @@ class Card < ActiveRecord::Base
 		card.number 	= cc_hash["number"]
 		card
 	end
-	
+
 	def self.get_cards user
 		cards = Card.where(user_id: user.id)
 		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }

@@ -26,10 +26,10 @@ module Urbanairship
         def log_request_and_response(request, response, time)
             return if logger.nil?
 
-            time = (time * 1000).to_i
+            time        = (time * 1000).to_i
             http_method = request.class.to_s.split('::')[-1]
-            new_body = response.body.inspect
-            short_body = truncate(new_body ,length: 600).gsub('&quot;', "\'")
+            new_body    = response.body.inspect
+            short_body  = truncate(new_body ,length: 600).gsub('&quot;', "\'")
             logger.info "Urbanairship (#{time}ms): [#{http_method} #{request.path}, #{request.body}], [#{response.code}, #{short_body}]"
             logger.flush if logger.respond_to?(:flush)
         end
