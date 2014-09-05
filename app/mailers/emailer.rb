@@ -17,13 +17,24 @@ module Emailer
 	end
 
 	def confirm_email data
-		recipient		 = User.find(data["user_id"])
+		user		     = User.find(data["user_id"])
 		link             = data["link"]
-		template_name    = "iom-confirm-email"
-		template_content = [{"name" => "recipient_name", "content" => recipient.name},
-		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-        bcc              = "info@itson.me"
-		message          = message_hash(subject(template_name), recipient.email, recipient.name, link, bcc)
+		template_name    = "user"
+		template_content = [{ "name" => "body", "content" => text_for_user_confirm_email(user, link) }]
+		message          = {
+			"subject" => "Confirm you email address",
+			"from_name"   => "It's On Me",
+			"from_email"  => "no-reply@itson.me",
+			"to" => [{
+				"email" => user.email,
+				"name" => user.name
+			}],
+			"bcc_address" => "info@itson.me",
+			"merge_vars" => [{
+				"rcpt" => user.email,
+				"vars" => template_content
+			}]
+		}
 		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], "User"])
 	end
 
@@ -41,8 +52,8 @@ module Emailer
 
     def notify_receiver data
     	gift 			 = Gift.find(data["gift_id"])
-		template_name    = "iom-gift-notify-receiver"
-		recipient_name   = gift.receiver_name
+		template_name    = "gift"
+		receiver_name   = gift.receiver_name
 		giver_name       = gift.giver_name
 		if gift.receiver_email
 			email         = gift.receiver_email
@@ -52,11 +63,20 @@ module Emailer
 			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
 			return nil
 		end
-		adjusted_id 	 = NUMBER_ID + gift.id
-		link             = "#{PUBLIC_URL}/signup/acceptgift?id=#{adjusted_id}"
-        bcc              = nil 	# add email if necessary. Currently, info@db.com is the only automatic default cc.
-        template_content = generate_template_content(gift, template_name)
-		message          = message_hash(subject(template_name, options = {giver_name: giver_name}), email, recipient_name, link, bcc)
+		template_content = [{ "name" => "body", "content" => text_for_gift_sale(gift) }]
+		message          = {
+			"subject" => "#{giver_name} sent you a gift",
+			"from_name"   => "It's On Me",
+			"from_email"  => "no-reply@itson.me",
+			"to" => [{
+				"email" => email,
+				"name" => receiver_name
+			}],
+			"merge_vars" => [{
+				"rcpt" => email,
+				"vars" => template_content
+			}]
+		}
 		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
     end
 
@@ -88,7 +108,7 @@ module Emailer
 
     def notify_receiver_proto_join data
     	gift = Gift.find(data["gift_id"])
-		template_name = "v2-0"
+		template_name = "gift"
 		receiver_name = gift.receiver_name
 		merchant_name = gift.provider_name
 		if gift.receiver_email
@@ -99,22 +119,18 @@ module Emailer
 			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
 			return nil
 		end
-		template_content = [
-			{ "name" => "merchant_name", "content" => merchant_name },
-			{ "name" => "body", "content" => text_for_gift_proto(gift) }
-		]
-		message = {
+		template_content = [{ "name" => "body", "content" => text_for_gift_proto(gift) }]
+		message          = {
 			"subject" => "The staff at #{merchant_name} sent you a gift",
+			"from_name"   => "It's On Me",
+			"from_email"  => "no-reply@itson.me",
 			"to" => [{
 				"email" => email,
 				"name" => receiver_name
 			}],
 			"merge_vars" => [{
 				"rcpt" => email,
-				"vars" => [
-					{ "name" => "merchant_name", "content" => merchant_name },
-					{ "name" => "body", "content" => text_for_gift_proto(gift) }
-				]
+				"vars" => template_content
 			}],
 			"tags" => [ merchant_name ]
 		}
@@ -123,47 +139,29 @@ module Emailer
 
     def invoice_giver data
     	gift 			 = Gift.find(data["gift_id"])
-		template_name    = "iom-gift-receipt"
 		email            = gift.giver.email
 		name             = gift.giver_name
-		link             = nil
-        bcc              = "info@itson.me"
-		template_content = generate_template_content(gift, template_name)
-		message          = message_hash(subject(template_name), email, name, link, bcc)
+		template_name    = "user"
+		template_content = [{ "name" => "body", "content" => text_for_user_receipt(gift) }]
+		message          = {
+			"subject" => "Gift purchase receipt",
+			"from_name"   => "It's On Me",
+			"from_email"  => "no-reply@itson.me",
+			"to" => [{
+				"email" => email,
+				"name" => name
+			}],
+			"merge_vars" => [{
+				"rcpt" => email,
+				"vars" => template_content
+			}]
+		}
 		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
     end
 
-    def reminder_gift_giver recipient, receiver_name
-    	###----> remind giver to remind recipient, after one month , cron job
-		template_name    = "iom-gift-unopened-giver"
-		user_name        = recipient.name #user/purchaser receiving the email
-		template_content = [{"name" => "user_name", "content" => user_name},
-							          {"name" => "receiver_name", "content" => receiver_name},
-		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		email            = recipient.email
-		name             = recipient.name
-		link             = nil
-        bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
-		message          = message_hash(subject(template_name, options = {receiver_name: receiver_name}), email, name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message, [recipient.id, "User"])
-    end
-
-    def reminder_hasnt_gifted recipient
-    	###----> after month , user hasnt gifted , send this via cron
-		template_name    = "iom-gift-hasnt-gifted"
-		user_name        = recipient.name #user/purchaser receiving the email
-		template_content = [{"name" => "user_name", "content" => user_name},
-		                    {"name" => "service_name", "content" => SERVICE_NAME}]
-		email            = recipient.email
-		name             = recipient.name
-		link             = nil
-        bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
-		message          = message_hash(subject(template_name), email, name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message, [recipient.id, "User"])
-    end
-
-    def reminder_gift_receiver recipient
+    def reminder_gift_receiver data
     	###----> after a month , you have a gift you havent used , use it or re-gift it
+    	recipient        = User.find(data["user_id"])
 		template_name    = "iom-gift-unopened-receiver"
 		user_name        = recipient.name #user/purchaser receiving the email
 		template_content = [{"name" => "user_name", "content" => user_name},
@@ -175,6 +173,36 @@ module Emailer
 		message          = message_hash(subject(template_name), email, name, link, bcc)
 		request_mandrill_with_template(template_name, template_content, message, [recipient.id, "User"])
     end
+
+  #   def reminder_gift_giver recipient, receiver_name
+  #   	###----> remind giver to remind recipient, after one month , cron job
+		# template_name    = "iom-gift-unopened-giver"
+		# user_name        = recipient.name #user/purchaser receiving the email
+		# template_content = [{"name" => "user_name", "content" => user_name},
+		# 					          {"name" => "receiver_name", "content" => receiver_name},
+		#                     {"name" => "service_name", "content" => SERVICE_NAME}]
+		# email            = recipient.email
+		# name             = recipient.name
+		# link             = nil
+  #       bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
+		# message          = message_hash(subject(template_name, options = {receiver_name: receiver_name}), email, name, link, bcc)
+		# request_mandrill_with_template(template_name, template_content, message, [recipient.id, "User"])
+  #   end
+
+  #   def reminder_hasnt_gifted data
+  #   	###----> after month , user hasnt gifted , send this via cron
+		# recipient        = User.find(data["user_id"])
+		# template_name    = "iom-gift-hasnt-gifted"
+		# user_name        = recipient.name #user/purchaser receiving the email
+		# template_content = [{"name" => "user_name", "content" => user_name},
+		#                     {"name" => "service_name", "content" => SERVICE_NAME}]
+		# email            = recipient.email
+		# name             = recipient.name
+		# link             = nil
+  #       bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
+		# message          = message_hash(subject(template_name), email, name, link, bcc)
+		# request_mandrill_with_template(template_name, template_content, message, [recipient.id, "User"])
+  #   end
 
 private
 
@@ -241,7 +269,7 @@ private
     end
 
 	def request_mandrill_with_template(template_name, template_content, message, ditto_ary)
-		unless Rails.env.development?
+		# unless Rails.env.development?
 			puts "``````````````````````````````````````````````"
 			puts "Request Mandrill with #{template_name} #{message}"
 			require 'mandrill'
@@ -253,7 +281,7 @@ private
 			puts "``````````````````````````````````````````````"
 			Ditto.send_email_create(response, ditto_ary[0], ditto_ary[1])
 			response
-		end
+		# end
 	end
 
 	def whitelist_email(email)

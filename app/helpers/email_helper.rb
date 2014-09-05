@@ -1,33 +1,184 @@
 module EmailHelper
 	include TimeHelper
+	include ActionView::Helpers::NumberHelper
 
-	def items_text gift
-		"<table style='padding-top:0;'>
-			<tr>
-				<td width='320px' style='text-align:left'>
-					<div style='font-size:25px; padding-top:10px;'>$#{gift.value} Gift at #{gift.provider_name}</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div style='font-size:15px; color:#8E8D8D;'>Gift Expires: #{make_date_s(gift.expires_at)}</div>
-				</td>
-			</tr>
-			<tr style='height: 100px;'>
-				<td style='text-align: left; font-size: 20px;'>
-					#{GiftItem.items_for_email(gift)}
-				</td>
-			</tr>
-		</table>".html_safe
+	def text_for_plain_welcome user
+		"<div>
+			<div style='font-weight:bold; font-size:20px;'>
+				Hi #{ user.name },
+			</div><br/>
+			<div>
+				Welcome! I'm the CEO of It's On Me and wanted to welcome you and thank you for joining. It's On Me is the easiest way to say, 'Thank you, this roud is on me.'
+			</div><br/>
+			<div>
+			If you have any feedback on what you like/dislike or want to change, please let us know.
+			</div><br/>
+			<div>
+				You can find us on
+				<a href='http://twitter.com/itsonme' target='_blank'>Twitter</a>,
+				<a href='http://www.facebook.com/itsonme' target='_blank'>Facebook</a>, or email us at
+				<a href='mailto:feedback@itson.me' target='_blank'>feedback@itson.me</a>.
+			</div><br/>
+			<div>Cheers,</div>
+			<div>David Leibner</div>
+		</div>".html_safe
 	end
 
-	def button_to_html url, text
-		"<div>                                
-			<div style='display:block; width: 200px; margin:auto;'>
-				<a href='#{url}' style='color:white; text-decoration:none;background-color:#42C2E8; display: block; padding: 10px 0; text-align:center; border-bottom:2px solid #2B99BB; border-radius: 3px; font-size:20px;'>
-				#{text}
-				</a>
+	def text_for_user_confirm_email user, link
+		user_first_name = user.first_name
+		button_url      = link
+		button_text     = "Confirm Email"
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>Confirm Email</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px;'>
+			<div style='padding-bottom:20px; font-size:16px;'>
+				Welcome to It's On Me #{user_first_name}! Please click the link to confirm your email address.
 			</div>
+            #{button_to_html(button_url, button_text)}
+		</div>".html_safe
+	end
+
+	def text_for_user_reset_password user
+		user_first_name = user.first_name
+		button_url      = "#{PUBLIC_URL}reset_password?token=#{user.reset_token}"
+		button_text     = "Reset Password"
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>Reset Password</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 20px 80px;'>
+			<div style='padding-bottom:20px; font-size:16px;'>
+				Forgot your password? Let's get you a new one.
+			</div>
+		</div>
+        #{ button_to_html(button_url, button_text) }
+		<div style='padding: 30px; font-size:14px;'>
+			<div style='padding-bottom:20px;'>
+				Help! I didn't request this.
+			</div>            
+			<div style='padding-bottom:20px;'>
+				If you were not trying to reset your password, just ignore this email. Your account is still secure. Most likely, someone mistyped their email address while trying to reset their own password. If you have concerns, contact us at <a href='mailto:support@itson.me' target='_blank'>support@itson.me</a>
+			</div>            
+		</div>".html_safe		
+	end
+
+	def text_for_user_hasnt_gifted user
+		user_first_name = user.first_name
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:30px; font-weight:lighter; padding-top:20px;''>
+				<span><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/gold_celebrate_icon_hi074a.png'></span>
+				<span>Celebrate</span>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px;'>
+			<div style='padding-bottom:20px; font-size:16px;'>
+				<div>Hi #{user_first_name},</div><br/>
+				<div>It's a good day to make someone happy. Use It's On Me to send a gift and say you're awesome, congrats, or thank you.</div>
+			</div>
+		</div>
+		<div style='padding-bottom:50px;'>
+			<table style='width: 100%;'>
+				<tr>
+					<td style='text-align:center; width:33%;'>
+						<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/gold_heart_zzd8mq.png'></div><br/>
+							<div>Find something new to love</div>
+					</td>
+					<td style='text-align:center; width:33%;'>
+						<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_gift_baocpx.png'></div><br/>
+							<div>Make someone's day</div>
+					</td>
+					<td style='text-align:center; width:33%;'>
+						<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/gold_cup_jbaj66.png'></div><br/>
+							<div>Enjoy time with friends</div>
+					</td>
+				</tr>
+			</table>
+		</div><br/>
+		<div style='text-align:center;'>
+			#{ app_download_buttons_to_html }
+		</div>".html_safe	
+	end
+
+	def text_for_user_receipt gift
+		if gift.receiver_name
+			receiver_info = gift.receiver_name
+		elsif gift.receiver_email
+			receiver_info = gift.receiver_name
+		elsif gift.receiver_phone
+			receiver_info = gift.receiver_name
+		else
+			receiver_info = gift.receiver_name
+		end
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:30px; font-weight:lighter;'>
+				<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946711/receipt-header_hnqrpi.png'></div><br/>
+				<div>Makin' it rain.</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px;'>
+			<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
+				Your gift is being delivered to #{receiver_info}
+			</div>
+			<table style='width: 100%;'>
+				<tr>
+					<td style='text-align:right; padding: 0 10px;'>Location</td>
+					<td style='text-align:left;'>#{gift.provider.name}</td>
+				</tr>
+				<tr>
+					<td style='text-align:right; padding: 0 10px;'>Gift value</td>
+					<td style='text-align:left;'>#{number_to_currency(gift.total)}</td>
+				</tr>
+				<tr>
+					<td style='text-align:right; padding: 0 10px;'>Processing fee</td>
+					<td style='text-align:left;'>#{number_to_currency(gift.service)}</td>
+				</tr>
+				<tr style='font-weight:bold;'>
+					<td style='text-align:right; padding: 0 10px;'>Total</td>
+					<td style='text-align:left;'>#{number_to_currency(gift.grand_total)}</td>
+				</tr>
+			</table>
+		</div>".html_safe	
+	end
+
+	def text_for_gift_sale gift
+		image_url      = gift.provider.image
+		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
+		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
+		button_text   = "Claim My Gift"
+		giver_name    = gift.giver_name
+		giver_image   = image_tag(gift.giver.iphone_photo, width: "50", height: "50")
+		provider_name = gift.provider_name
+		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
+		details       = gift.detail
+		"<div style='padding: 0 100px 20px 100px;'>
+			<div>
+				<img src='#{image_url}' style='width: 400px;'>
+			</div>
+			#{items_text(gift)}
+			<div style='padding-bottom:20px; font-size:16px;'>
+				#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. To claim this gift simply click the button and download the app. Use this email address at sign-up to receiver your gift.
+			</div>
+            #{button_to_html(button_url, button_text)}
+		</div>
+		<div style='background-color:#E2E2E2; padding: 10px;'>
+			<table>
+				<tr>
+					<td style='width:15%; padding:10px;'>#{ giver_image }</td>
+					<td style='width:70%;'>
+						<div style='color:#8E8D8D'>#{ giver_name }</div>
+						<div style='color:#3F3F3F;'>#{ gift.message }</div><br>
+					</td>
+					<td style='width:15%;'></td>
+				</tr>
+			</table>
 		</div>".html_safe
 	end
 
@@ -70,4 +221,48 @@ module EmailHelper
 			</table>
 		</div>".html_safe
 	end
+
+	def items_text gift
+		"<table style='padding-top:0;'>
+			<tr>
+				<td width='320px' style='text-align:left'>
+					<div style='font-size:25px; padding-top:10px;'>$#{gift.value} Gift at #{gift.provider_name}</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div style='font-size:15px; color:#8E8D8D;'>Gift Expires: #{make_date_s(gift.expires_at)}</div>
+				</td>
+			</tr>
+			<tr style='height: 100px;'>
+				<td style='text-align: left; font-size: 20px;'>
+					#{GiftItem.items_for_email(gift)}
+				</td>
+			</tr>
+		</table>".html_safe
+	end
+
+private
+
+	def button_to_html url, text
+		"<div>                                
+			<div style='display:block; width: 200px; margin:auto;'>
+				<a href='#{url}' style='color:white; text-decoration:none;background-color:#42C2E8; display: block; padding: 10px 0; text-align:center; border-bottom:2px solid #2B99BB; border-radius: 3px; font-size:20px;'>
+				#{text}
+				</a>
+			</div>
+		</div>".html_safe
+	end
+
+	def app_download_buttons_to_html
+		"<div>
+			<a href='https://itunes.apple.com/us/app/drinkboard-mobile-gifting/id659661295' target='_blank'>
+				<img src='http://gallery.mailchimp.com/d7952b3f9c7215024f55709cf/images/0ef011d7-25b6-4a92-894d-a42376893dcf.png'>
+			</a>
+			<a href='https://play.google.com/store/apps/details?id=com.fbg.drinkboard&hl=en' target='_blank'>
+				<img src='http://gallery.mailchimp.com/d7952b3f9c7215024f55709cf/images/f4936d42-c3b7-49f8-adf1-cdf48166a3ed.png'>
+			</a>
+		</div>".html_safe
+	end
+
 end

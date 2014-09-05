@@ -207,7 +207,9 @@ end
           resources :brands,    only: [:create, :update]   # biz logic
 
           resources :emailers, only: [] do
-            collection { post :call_notify_receiver_proto_join }
+            collection do
+              post :call_emailer
+            end
           end
 
           resources :providers, only: [:create, :update] do
