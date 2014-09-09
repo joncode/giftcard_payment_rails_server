@@ -24,7 +24,7 @@ describe Mdot::V2::UsersController do
 
         it "should return a list of active users" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            amount  = User.where(active: true).count
+            amount  = User.where(active: true).where(active: true).count
             keys    = ["first_name", "last_name", "user_id", "photo"]
             get :index, format: :json
             rrc(200)
@@ -39,7 +39,7 @@ describe Mdot::V2::UsersController do
         it "should return list of active users if :find is empty string" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = ""
-            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            amount  = User.where(active: true).where('first_name ilike ?',"%#{search_string}%").count
             get :index, format: :json, find: search_string
             rrc(200)
             json["status"].should == 1
@@ -51,7 +51,7 @@ describe Mdot::V2::UsersController do
         it "should return users whose first_name matches a :find string" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "n"
-            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            amount  = User.where(active: true).where('first_name ilike ?',"%#{search_string}%").count
             get :index, format: :json, find: search_string
             rrc(200)
             json["status"].should == 1
@@ -63,7 +63,7 @@ describe Mdot::V2::UsersController do
         it "should return users whose first_name matches a :find string even in middle of first_name" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "bie"
-            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            amount  = User.where(active: true).where('first_name ilike ?',"%#{search_string}%").count
             get :index, format: :json, find: search_string
             rrc(200)
             json["status"].should == 1
@@ -75,7 +75,7 @@ describe Mdot::V2::UsersController do
         it "should NOT return users whose first_name doesnt match a :find string" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "z"
-            amount  = User.where('first_name ilike ?',"%#{search_string}%").count
+            amount  = User.where(active: true).where('first_name ilike ?',"%#{search_string}%").count
             get :index, format: :json, find: search_string
             rrc(200)
             json["status"].should == 1
@@ -88,7 +88,7 @@ describe Mdot::V2::UsersController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "b"
 
-            amount  = User.where('last_name ilike ?',"%#{search_string}%").count
+            amount  = User.where(active: true).where('last_name ilike ?',"%#{search_string}%").count
             get :index, format: :json, find: search_string
             rrc(200)
             json["status"].should == 1
@@ -100,13 +100,28 @@ describe Mdot::V2::UsersController do
         it "should NOT return users whose last_name doesnt match a :find string" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "z"
-            amount  = User.where('last_name ilike ?',"%#{search_string}%").count
+            amount  = User.where(active: true).where('last_name ilike ?',"%#{search_string}%").count
             get :index, format: :json, find: search_string
             rrc(200)
             json["status"].should == 1
             ary = json["data"]
             ary.class.should == Array
             ary.count.should == 0
+        end
+
+        it "should NOT return users whose last_name does match a :find string but they are deactivated" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string = "b"
+
+            users  = User.where('last_name ilike ?',"%#{search_string}%")
+            users.each {|u| u.update(active: false) unless u == @user}
+
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should == 1
+            ary = json["data"]
+            ary.class.should == Array
+            ary.count.should == 1
         end
     end
 

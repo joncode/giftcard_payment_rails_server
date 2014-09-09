@@ -6,7 +6,7 @@ class Mdot::V2::UsersController < JsonController
 
     def index
         users_scope = if params[:find]
-            User.where('first_name ilike ? OR last_name ilike ?',"%#{params[:find]}%", "%#{params[:find]}%")
+            User.where(active: true).where('first_name ilike ? OR last_name ilike ?',"%#{params[:find]}%", "%#{params[:find]}%")
         else
             User.where(active: true)
         end
