@@ -20,7 +20,7 @@ private
     	user        = card.user
 		customer_id = user.obscured_id
 
-		response, ditto = PaymentGatewayCim.create_profile(card, card_number, customer_id)
+		response, ditto = PaymentGatewayCim.create_profile_with_payment_profile(card, card_number, customer_id)
 		if response.success?
 			if card.update(cim_token: response.payment_profile_ids[0]) && user.update(cim_profile: response.profile_id)
 				puts "==== card updated successfully with Profile ID: #{response.profile_id}, Payment Profile ID: #{response.payment_profile_ids[0]} ==="

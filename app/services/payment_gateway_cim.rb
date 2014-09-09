@@ -27,7 +27,15 @@ class PaymentGatewayCim
         }.to_json
     end
 
-    def self.create_profile card, card_number, customer_id
+    def self.create_customer_profile customer_id
+        profile  = AuthorizeNet::CIM::CustomerProfile.new(id: customer_id)
+        gateway  = AuthorizeNet::CIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
+        response = gateway.create_profile(profile)
+        # ditto    = Ditto.tokenize_card(response, card.id)
+        return response
+    end
+
+    def self.create_profile_with_payment_profile card, card_number, customer_id
         auth_net_card   = AuthorizeNet::CreditCard.new(card_number, card.month_year)
         payment_profile = AuthorizeNet::CIM::PaymentProfile.new(payment_method: auth_net_card)
         profile         = AuthorizeNet::CIM::CustomerProfile.new(id: customer_id, payment_profiles: [payment_profile])

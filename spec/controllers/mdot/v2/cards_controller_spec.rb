@@ -53,6 +53,7 @@ describe Mdot::V2::CardsController do
 
         it "should return auth.net key and token and profile_id if profile_id is not made yet" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
+            Mdot::V2::CardsController.any_instance.stub(:get_cim_profile).and_return("")
             get :tokenize, format: :json
             rrc(200)
             json["status"].should        == 1

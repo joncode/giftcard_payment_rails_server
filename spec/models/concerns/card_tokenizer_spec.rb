@@ -36,3 +36,23 @@ describe :tokenize do
 	end
 
 end
+
+ # POST https://apitest.authorize.net/xml/v1/request.api with body '<?xml version="1.0" encoding="utf-8"?>
+ #       <createCustomerPaymentProfileRequest xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd">
+ #         <merchantAuthentication>
+ #           <name>948bLpzeE8UY</name>
+ #           <transactionKey>7f7AZ66axeC386q7</transactionKey>
+ #         </merchantAuthentication>
+ #         <customerProfileId>11111</customerProfileId>
+ #         <paymentProfile>
+ #           <payment>
+ #             <creditCard>
+ #               <cardNumber>4417121029961508</cardNumber>
+ #               <expirationDate>2017-02</expirationDate>
+ #             </creditCard>
+ #           </payment>
+ #         </paymentProfile>
+ #         <validationMode>none</validationMode>
+ #       </createCustomerPaymentProfileRequest>
+ #       ' with headers {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'text/xml', 'User-Agent'=>'Ruby'}
+

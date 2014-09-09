@@ -1,4 +1,6 @@
 class Mdot::V2::CardsController < JsonController
+    include CimProfile
+
     before_action :authenticate_customer
     rescue_from JSON::ParserError, :with => :bad_request
 
@@ -8,7 +10,7 @@ class Mdot::V2::CardsController < JsonController
     end
 
     def tokenize
-        profile_id = @current_user.cim_profile ? @current_user.cim_profile : ""
+        profile_id = get_cim_profile(@current_user)
         json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY, "profile_id" => profile_id }
         success(json)
         respond
