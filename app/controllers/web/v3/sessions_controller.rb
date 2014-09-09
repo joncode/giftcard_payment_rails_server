@@ -3,34 +3,30 @@ class Web::V3::SessionsController < MetalController
     before_action :authenticate_web_general
 
     def create
-        login    = params["data"]
+        login_params    = params["data"]
 
-        if login["password"]
-            user, password = normal_login login
+        if login_params["password"]
+            user = normal_login login_params
         else
-            user = facebook_login login
+            user = facebook_login login_params
         end
 
         if user
             if user.not_suspended?
-                if login["password"]
-                    if user.authenticate(password)
-                        success user.login_web_serialize
-                    else
-                    	payload = fail_web_payload("invalid_email")
-                        fail_web payload
-                        status = :not_found
-                    end
-                else
+
+                if user.authenticate(login_params["password"])
                     success user.login_web_serialize
+                else
+                    fail_web fail_web_payload("invalid_email")
+                    status = :not_found
                 end
+
             else
-                payload = fail_web_payload("suspended_user")
-                fail_web payload
+                fail_web fail_web_payload("suspended_user")
                 status = :unauthorized
             end
         else
-            if login["password"]
+            if login_params["password"]
                 payload = fail_web_payload("invalid_email")
             else
                 payload = fail_web_payload("invalid_facebook")
@@ -43,9 +39,9 @@ class Web::V3::SessionsController < MetalController
 
 private
 
-    def facebook_login login
-        facebook_id    = login["fb_user_id"]
-        facebook_token = login["fb_token"]
+    def facebook_login login_params
+        facebook_id    = login_params["fb_user_id"]
+        facebook_token = login_params["fb_token"]
         user_social    = UserSocial.includes(:user).where(type_of: 'facebook_id', identifier: facebook_id).references(:users).first
         if user_social
             return user_social.user
@@ -54,12 +50,11 @@ private
         end
     end
 
-    def normal_login login
-        email       = login["username"].strip.downcase
-        password    = login["password"]
+    def normal_login login_params
+        email       = login_params["username"].strip.downcase
         user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: email).references(:users).first
         if user_social
-            return user_social.user, password
+            return user_social.user
         else
             return nil
         end

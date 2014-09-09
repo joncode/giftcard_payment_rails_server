@@ -53,8 +53,7 @@ class Web::V3::GiftsController < MetalController
         if gift.id
             success gift.giver_serialize
         else
-            payload = fail_web_payload("not_created_gift", gift.errors)
-            fail_web payload
+            fail_web fail_web_payload("not_created_gift", gift.errors)
         end
         respond
     end

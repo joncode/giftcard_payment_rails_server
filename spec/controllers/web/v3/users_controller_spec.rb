@@ -8,7 +8,7 @@ describe Web::V3::UsersController do
     	end
 
         it "should create user" do
-            request_hsh = { 
+            request_hsh = {
             	first_name: "abe",
             	last_name: "anderson",
             	email: "abe@email.com",
@@ -22,7 +22,7 @@ describe Web::V3::UsersController do
         end
 
         it "should return correct error" do
-            request_hsh = { 
+            request_hsh = {
             	first_name: "abe",
             	last_name: "anderson",
             	email: "abe@email.com",
@@ -32,7 +32,7 @@ describe Web::V3::UsersController do
             post :create, format: :json, data: request_hsh
             rrc(200)
             json["status"].should == 0
-            json["err"].should    == "INVALID_INPUT" 
+            json["err"].should    == "INVALID_INPUT"
             json["msg"].should    == "User could not be created"
             json["data"].should   == [{ "name" => "password_confirmation", "msg" => "doesn't match Password" }]
         end

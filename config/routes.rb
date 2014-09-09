@@ -166,6 +166,13 @@ end
       resources :sessions,  only: [:create]
 
       resources :users, only: [:create]
+
+      resources :cards, only: [:create, :index, :destroy] do
+        collection do
+          get :credentials
+        end
+      end
+
     end
 
   end

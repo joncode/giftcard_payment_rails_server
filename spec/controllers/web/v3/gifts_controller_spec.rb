@@ -12,14 +12,20 @@ describe Web::V3::GiftsController do
     	3.times { FactoryGirl.create :gift, giver: other1, receiver_name: other2.name, receiver_id: other2.id, provider: @provider}
     end
 
-    it "should return the correct gifts for the user" do
-        request.headers["HTTP_X_AUTH_TOKEN"] = @user.remember_token
-        get :index, format: :json
-        rrc(200)
-        json["data"].count.should == 6
+    describe :index do
+        it_should_behave_like("client-token authenticated", :post, :create)
+
+        it "should return the correct gifts for the user" do
+            request.headers["HTTP_X_AUTH_TOKEN"] = @user.remember_token
+            get :index, format: :json
+            rrc(200)
+            json["data"].count.should == 6
+        end
+
     end
 
-    context :create do
+    describe :create do
+        it_should_behave_like("client-token authenticated", :post, :create)
         before do
             @user.update(:remember_token => "USER_TOKEN")
             @card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)

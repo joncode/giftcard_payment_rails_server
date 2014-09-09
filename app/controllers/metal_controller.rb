@@ -73,7 +73,12 @@ class MetalController < ActionController::Base
                 msg: "Gift could not be created",
                 data: error_data
             }
-        end 
+        when "incomplete_info"
+            {
+                err: "INCOMPLETE_INPUT",
+                msg: "Missing Card Data"
+            }
+        end
     end
 
 
@@ -101,12 +106,37 @@ protected
 
     def authenticate_web_general
         token    = request.headers["HTTP_X_AUTH_TOKEN"]
-        @current_user = User.app_authenticate(token)
-        if (WWW_TOKEN == token) || @current_user
-            puts "Web  -------------   #{@current_user ? @current_user.name : "General Token"}   -----------------------"
+        if (WWW_TOKEN == token)
+            puts "Web  -------------    General Token   -----------------------"
         else
-            head :unauthorized
+            @current_user = User.app_authenticate(token)
+            if @current_user
+                puts "Web  -------------   #{ @current_user.name }   -----------------------"
+            else
+                head :unauthorized
+            end
         end
     end
 
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
