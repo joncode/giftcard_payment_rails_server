@@ -24,7 +24,7 @@ module Emailer
 			}]
 		}
 		add_qa_text_to_subject(message)
-		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], "MtUser"])
+		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], user.class.name])
 	end
 
 	def confirm_email data
@@ -212,7 +212,31 @@ module Emailer
 				"vars" => template_content
 			}]
 		}
-		request_mandrill_with_template(template_name, template_content, message)
+		add_qa_text_to_subject(message)
+		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
+	end
+
+	def merchant_staff_invite data
+		email = data["email"]
+		invitor_name = data["invitor_name"]
+		merchant = Merchant.find(data["merchant_id"])
+		invite_token = data["token"]
+		body             = text_for_merchant_staff_invite(merchant, invitor_name, invite_token)
+		template_name    = "merchant"
+		template_content = [{ "name" => "body", "content" => body }]
+		message          = {
+			"subject"     => "Welcome to It's On Me",
+			"from_name"   => "It's On Me",
+			"from_email"  => "no-reply@itson.me",
+			"to"          => [{ "email" => email, "name" => "#{ merchant.name } Staff" }],
+			"bcc_address" => "rachel.wenman@itson.me",
+			"merge_vars"  => [{
+				"rcpt" => email,
+				"vars" => template_content
+			}]
+		}
+		add_qa_text_to_subject(message)
+		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
 	end
 
 	def merchant_pending data
@@ -232,10 +256,11 @@ module Emailer
 				"vars" => template_content
 			}]
 		}
-		request_mandrill_with_template(template_name, template_content, message)
+		add_qa_text_to_subject(message)
+		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
 	end
 
-	def send_merchant_approved data
+	def merchant_approved data
 		email            = data["email"]
 		merchant         = Merchant.find(data["merchant_id"])
 		body             = text_for_merchant_approved(merchant)
@@ -252,10 +277,11 @@ module Emailer
 				"vars" => template_content
 			}]
 		}
-		request_mandrill_with_template(template_name, template_content, message)
+		add_qa_text_to_subject(message)
+		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
 	end
 
-	def send_merchant_live data
+	def merchant_live data
 		email            = data["email"]
 		merchant         = Merchant.find(data["merchant_id"])
 		body             = text_for_merchant_live(merchant)
@@ -272,29 +298,8 @@ module Emailer
 				"vars" => template_content
 			}]
 		}
-		request_mandrill_with_template(template_name, template_content, message)
-	end
-
-	def merchant_staff_invite data
-		email = data["email"]
-		invitor_name = data["invitor_name"]
-		merchant = Merchant.find(data["merchant_id"])
-		invite_token = data["token"]
-		body             = text_for_merchant_staff_invite(merchant, invitor_name, invite_token)
-		template_name    = "merchant"
-		template_content = [{ "name" => "body", "content" => body }]
-		message          = {
-			"subject"     => "Welcome to It's On Me",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to"          => [{ "email" => email, "name" => "#{ merchant.name } Staff" }],
-			"merge_vars"  => [{
-				"rcpt" => email,
-				"vars" => template_content
-			}]
-		}
 		add_qa_text_to_subject(message)
-		request_mandrill_with_template(template_name, template_content, message, [email, "MtInvite"])
+		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
 	end
 
 private

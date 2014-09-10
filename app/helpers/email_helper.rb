@@ -222,29 +222,6 @@ module EmailHelper
 		</div>".html_safe
 	end
 
-	def text_for_mercant_staff_invite merchant, invitor_name, invite_token
-		button_url = generate_invite_link(invite_token)
-		button_text = "Get Started"
-		"<div style='width:100%; text-align:center;'>
-        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-				<div>Welcome to It's On Me</div>
-        	</div>
-    	</div>
-		<hr style='border-bottom:1px solid #99A0AA;'>
-		<div style='padding: 0 80px 20px 80px; font-size:16px;'>
-			<div style='padding-bottom:20px;'>
-				#{invitor_name} added you as a user to #{merchant.name}'s It's On Me account.
-			</div><br/>
-			<div>
-				Visit the link to create your account.
-			</div><br>
-		</div>
-		<div>#{ button_to_html(button_url, button_text) }</div><br/>
-		<div style='padding-top:30px;'>
-			#{ merchant_values }
-		</div>".html_safe
-	end
-
 	def text_for_merchant_invite merchant, invite_token
 		button_url = generate_invite_link(invite_token)
 		button_text = "Get Started"
@@ -257,6 +234,29 @@ module EmailHelper
 		<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 			<div style='padding-bottom:20px;'>
 				#{merchant.name} added you as a user to #{merchant.name}'s It's On Me account.
+			</div><br/>
+			<div>
+				Visit the link to create your account.
+			</div><br>
+		</div>
+		<div>#{ button_to_html(button_url, button_text) }</div><br/>
+		<div style='padding-top:30px;'>
+			#{ merchant_values }
+		</div>".html_safe
+	end
+
+	def text_for_merchant_staff_invite merchant, invitor_name, invite_token
+		button_url = generate_invite_link(invite_token)
+		button_text = "Get Started"
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>Welcome to It's On Me</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px; font-size:16px;'>
+			<div style='padding-bottom:20px;'>
+				#{invitor_name} added you as a user to #{merchant.name}'s It's On Me account.
 			</div><br/>
 			<div>
 				Visit the link to create your account.

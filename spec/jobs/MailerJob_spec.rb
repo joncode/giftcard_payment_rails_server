@@ -6,7 +6,8 @@ describe MailerJob do
 
     before(:each) do
         ResqueSpec.reset!
-        @provider = FactoryGirl.create :provider, name: "Merchies"
+        @merchant = FactoryGirl.create :merchant
+        @provider = FactoryGirl.create :provider, name: "Merchies", merchant_id: @merchant
         @giver = FactoryGirl.create :user, first_name: "Givie", last_name: "Giverson", email: "givie@email.com"
         @receiver = FactoryGirl.create :user, first_name: "Receivy", last_name: "Receiverson", email: "receivy@email.com"
         @gift = FactoryGirl.create :gift, receiver_email: @receiver.email,
@@ -38,18 +39,25 @@ describe MailerJob do
 
     describe :reset_password do
         it "should call mandrill with send_template" do
-            template_name = "iom-reset-password"
-            template_content = [{ "name" => "recipient_name", "content" => "Receivy Receiverson"},
-                                { "name" => "service_name", "content" => "ItsOnMe" }]
-            message_hash = { "subject" => "Reset Your Password",
-                             "from_name" => "ItsOnMe",
-                             "from_email" => "no-reply@itson.me",
-                             "to" => [{"email"=>"receivy@email.com", "name"=>"Receivy Receiverson"}],
-                             "bcc_address" => nil,
-                             "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/account/resetpassword/"}]}] }
-            data = { "text" => 'reset_password', "user_id" => @receiver.id }
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
+            body             = text_for_user_reset_password(@receiver)
+            template_name    = "user"
+            template_content = [{ "name" => "body", "content" => body }]
+            message          = {
+                "subject"     => "QA - Reset password request",
+                "from_name"   => "It's On Me",
+                "from_email"  => "no-reply@itson.me",
+                "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],
+                "merge_vars"  => [{
+                    "rcpt" => @receiver.email,
+                    "vars" => template_content
+                }]
+            }
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
+            data = {
+                "text" => "reset_password",
+                "user_id" => @receiver.id
+            }
             MailerJob.reset_password(data)
             d                     = Ditto.last
             d.notable_id.should   == @receiver.id
@@ -83,20 +91,23 @@ describe MailerJob do
         end
     end
 
-    describe :welcome do
-        it "should call mandrill with send_template" do
-            template_name = "iom-user-welcome"
-            template_content = [{"name" => "user_name", "content" => "Receivy Receiverson"}]
-            message_hash = { "subject" => "Welcome to ItsOnMe!",
-                             "from_name" => "ItsOnMe",
-                             "from_email" => "no-reply@itson.me",
-                             "to" => [{"email"=>"receivy@email.com", "name"=>"Receivy Receiverson"}],
-                             "bcc_address" => "info@itson.me",
-                             "merge_vars" => [{"rcpt"=>"receivy@email.com", "vars"=>[{"name"=>"link", "content"=>nil}]}] }
-            data = { "text" => 'welcome', "user_id" => @receiver.id }
-            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
+    describe :welcome_from_dave do
+        it "should call mandrill without template" do
+            text = text_for_welcome_from_dave(@receiver)
+            message = {
+                "subject"     => "Please share your feedback",
+                "from_name"   => "David Leibner",
+                "from_email"  => "david.leibner@itson.me",
+                "text"        => text,
+                "to"          => [{
+                    "email" => @receiver.email,
+                    "name"  => @receiver.name
+                }]
+            }
+            Mandrill::API.should_receive(:send).with(message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
-            MailerJob.welcome(data)
+            data = { "text" => 'welcome', "user_id" => @receiver.id }
+            MailerJob.welcome_from_dave(data)
             d                     = Ditto.last
             d.notable_id.should   == @receiver.id
             d.notable_type.should == 'User'
@@ -255,4 +266,172 @@ describe MailerJob do
             d.cat.should          == 310
         end
     end
+
+    describe :merchant_pending do
+        it "should call mandrill with send_template" do
+            email            = "abe@email.com"
+            body             = text_for_merchant_pending(@merchant)
+            template_name    = "merchant"
+            template_content = [{ "name" => "body", "content" => body }]
+            message          = {
+                "subject"     => "QA - Your It's On Me account is pending approval",
+                "from_name"   => "It's On Me",
+                "from_email"  => "no-reply@itson.me",
+                "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
+                "bcc_address" => "rachel.wenman@itson.me",
+                "merge_vars"  => [{
+                    "rcpt" => email,
+                    "vars" => template_content
+                }]
+            }
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
+            Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
+            data = {
+                "text"        => "merchant_pending",
+                "email"       => "abe@email.com",
+                "merchant_id" => @merchant.id
+            }
+            MailerJob.merchant_pending(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @merchant.id
+            d.notable_type.should == 'Merchant'
+            d.status.should       == 200
+            d.cat.should          == 310
+        end
+    end
+
+    describe :merchant_invite do
+        it "should call mandrill with send_template" do
+            email            = "abe@email.com"
+            body             = text_for_merchant_invite(@merchant, "thetoken")
+            template_name    = "merchant"
+            template_content = [{ "name" => "body", "content" => body }]
+            message          = {
+                "subject"     => "QA - Welcome to It's On Me",
+                "from_name"   => "It's On Me",
+                "from_email"  => "no-reply@itson.me",
+                "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
+                "bcc_address" => "rachel.wenman@itson.me",
+                "merge_vars"  => [{
+                    "rcpt" => email,
+                    "vars" => template_content
+                }]
+            }
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
+            Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
+            data = {
+                "text"        => "merchant_invite",
+                "email"       => "abe@email.com",
+                "merchant_id" => @merchant.id,
+                "token"       => "thetoken"
+            }
+            MailerJob.merchant_invite(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @merchant.id
+            d.notable_type.should == 'Merchant'
+            d.status.should       == 200
+            d.cat.should          == 310
+        end
+    end
+
+    describe :merchant_staff_invite do
+        it "should call mandrill with send_template" do
+            email            = "abe@email.com"
+            body             = text_for_merchant_staff_invite(@merchant, "Abe", "thetoken")
+            template_name    = "merchant"
+            template_content = [{ "name" => "body", "content" => body }]
+            message          = {
+                "subject"     => "QA - Welcome to It's On Me",
+                "from_name"   => "It's On Me",
+                "from_email"  => "no-reply@itson.me",
+                "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
+                "bcc_address" => "rachel.wenman@itson.me",
+                "merge_vars"  => [{
+                    "rcpt" => email,
+                    "vars" => template_content
+                }]
+            }
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
+            Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
+            data = {
+                "text"        => "merchant_staff_invite",
+                "email"       => "abe@email.com",
+                "merchant_id" => @merchant.id,
+                "token"       => "thetoken",
+                "invitor_name" => "Abe"
+            }
+            MailerJob.merchant_staff_invite(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @merchant.id
+            d.notable_type.should == 'Merchant'
+            d.status.should       == 200
+            d.cat.should          == 310
+        end
+    end
+
+    describe :merchant_approved do
+        it "should call mandrill with send_template" do
+            email            = "abe@email.com"
+            body             = text_for_merchant_approved(@merchant)
+            template_name    = "merchant"
+            template_content = [{ "name" => "body", "content" => body }]
+            message          = {
+                "subject"     => "QA - You have been Approved!",
+                "from_name"   => "It's On Me",
+                "from_email"  => "no-reply@itson.me",
+                "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
+                "bcc_address" => "rachel.wenman@itson.me",
+                "merge_vars"  => [{
+                    "rcpt" => email,
+                    "vars" => template_content
+                }]
+            }
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
+            Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
+            data = {
+                "text"        => "merchant_approved",
+                "email"       => "abe@email.com",
+                "merchant_id" => @merchant.id
+            }
+            MailerJob.merchant_approved(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @merchant.id
+            d.notable_type.should == 'Merchant'
+            d.status.should       == 200
+            d.cat.should          == 310
+        end
+    end
+
+    describe :merchant_live do
+        it "should call mandrill with send_template" do
+            email            = "abe@email.com"
+            body             = text_for_merchant_live(@merchant)
+            template_name    = "merchant"
+            template_content = [{ "name" => "body", "content" => body }]
+            message          = {
+                "subject"     => "QA - Your location is now live",
+                "from_name"   => "It's On Me",
+                "from_email"  => "no-reply@itson.me",
+                "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
+                "bcc_address" => "rachel.wenman@itson.me",
+                "merge_vars"  => [{
+                    "rcpt" => email,
+                    "vars" => template_content
+                }]
+            }
+            Mandrill::API.should_receive(:send_template).with(template_name, template_content, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
+            Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
+            data = {
+                "text"        => "merchant_live",
+                "email"       => "abe@email.com",
+                "merchant_id" => @merchant.id
+            }
+            MailerJob.merchant_live(data)
+            d                     = Ditto.last
+            d.notable_id.should   == @merchant.id
+            d.notable_type.should == 'Merchant'
+            d.status.should       == 200
+            d.cat.should          == 310
+        end
+    end    
 end
