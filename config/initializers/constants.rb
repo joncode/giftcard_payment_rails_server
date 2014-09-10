@@ -2,25 +2,28 @@
 
 
 if Rails.env.production?
-    PAGE_NAME       = SERVICE_NAME
-    TEST_URL        = "http://www.drinkboardapp.com"
-    MERCHANT_URL    = "http://merchtools.herokuapp.com"
-    PUB_MERCH_URL   = "http://merchant.itson.me"
-    PUBLIC_URL      = "http://www.itson.me"
+    PAGE_NAME        = SERVICE_NAME
+    TEST_URL         = "http://www.drinkboardapp.com"
+    MERCHANT_URL     = "http://merchtools.herokuapp.com"
+    PUBLIC_URL       = "http://www.itson.me"
+    PUBLIC_URL_AT    = "http://admin.itson.me"
+    PUBLIC_URL_MT    = "http://merchant.itson.me"
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
 elsif Rails.env.staging?
-    PAGE_NAME       = "#{SERVICE_NAME} (staging)"
-    TEST_URL        = "http://qa.drinkboardapp.com"
-    MERCHANT_URL    = "http://merchtoolsdev.herokuapp.com"
-    PUB_MERCH_URL   = "http://qamerchant.itson.me"
-    PUBLIC_URL      = "http://qa.itson.me"
+    PAGE_NAME        = "#{SERVICE_NAME} (staging)"
+    TEST_URL         = "http://qa.drinkboardapp.com"
+    MERCHANT_URL     = "http://merchtoolsdev.herokuapp.com"
+    PUBLIC_URL       = "http://qa.itson.me"
+    PUBLIC_URL_AT    = "http://qaadmin.itson.me"
+    PUBLIC_URL_MT    = "http://qamerchant.itson.me"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
 else
-    PAGE_NAME       = "Dev #{SERVICE_NAME} (local)"
-    TEST_URL        = "http://0.0.0.0:3001"
-    MERCHANT_URL    = "http://0.0.0.0:3000"
-    PUB_MERCH_URL   = "http://0.0.0.0:3000"
-    PUBLIC_URL      = "http://0.0.0.0:3001"
+    PAGE_NAME        = "Dev #{SERVICE_NAME} (local)"
+    TEST_URL         = "http://0.0.0.0:3001"
+    MERCHANT_URL     = "http://0.0.0.0:3000"
+    PUBLIC_URL       = "http://0.0.0.0:3001"
+    PUBLIC_URL_AT    = "http://0.0.0.0:3002"
+    PUBLIC_URL_MT    = "http://0.0.0.0:3000"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
 end
 

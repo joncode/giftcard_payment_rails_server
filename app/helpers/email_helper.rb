@@ -2,26 +2,20 @@ module EmailHelper
 	include TimeHelper
 	include ActionView::Helpers::NumberHelper
 
-	def text_for_plain_welcome user
-		"<div>
-			<div style='font-weight:bold; font-size:20px;'>
-				Hi #{ user.name },
-			</div><br/>
-			<div>
-				Welcome! I'm the CEO of It's On Me and wanted to welcome you and thank you for joining. It's On Me is the easiest way to say, 'Thank you, this roud is on me.'
-			</div><br/>
-			<div>
-			If you have any feedback on what you like/dislike or want to change, please let us know.
-			</div><br/>
-			<div>
-				You can find us on
-				<a href='http://twitter.com/itsonme' target='_blank'>Twitter</a>,
-				<a href='http://www.facebook.com/itsonme' target='_blank'>Facebook</a>, or email us at
-				<a href='mailto:feedback@itson.me' target='_blank'>feedback@itson.me</a>.
-			</div><br/>
-			<div>Cheers,</div>
-			<div>David Leibner</div>
-		</div>".html_safe
+	def text_for_welcome_from_dave user
+		string = "Hi #{ user.name },\n\n"
+		string += "Welcome! I'm the CEO of It's On Me and wanted to welcome\n"
+		string += "you and thank you for joining.\n"
+		string += "It's On Me is the easiest way to say, 'Thank you, this\n"
+		string += " round is on me.'\n\n"
+		string += "If you have any feedback on what you like/dislike or want\n"
+		string += "to change, please let us know.\n\n"
+		string += "You can find us on Twitter(http://twitter.com/itsonme),\n"
+		string += "Facebook(http://www.facebook.com/itsonme), or email us at\n"
+		string += "feedback@itson.me\n\n"
+		string += "Cheers,\n\n"
+		string += "David Leibner\n"
+		string
 	end
 
 	def text_for_user_confirm_email user, link
@@ -44,7 +38,13 @@ module EmailHelper
 
 	def text_for_user_reset_password user
 		user_first_name = user.first_name
-		button_url      = "#{PUBLIC_URL}reset_password?token=#{user.reset_token}"
+		if user.class == MtUser
+			button_url  = "#{PUBLIC_URL_MT}/reset_password?token=#{user.reset_token}"
+		elsif user.class == AtUser
+			button_url  = "#{PUBLIC_URL_AT}/reset_password?token=#{user.reset_token}"
+		else
+			button_url  = "#{PUBLIC_URL}/account/resetpassword/#{user.reset_token}"
+		end
 		button_text     = "Reset Password"
 		"<div style='width:100%; text-align:center;'>
         	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
@@ -222,6 +222,195 @@ module EmailHelper
 		</div>".html_safe
 	end
 
+	def text_for_mercant_staff_invite merchant, invitor_name, invite_token
+		button_url = generate_invite_link(invite_token)
+		button_text = "Get Started"
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>Welcome to It's On Me</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px; font-size:16px;'>
+			<div style='padding-bottom:20px;'>
+				#{invitor_name} added you as a user to #{merchant.name}'s It's On Me account.
+			</div><br/>
+			<div>
+				Visit the link to create your account.
+			</div><br>
+		</div>
+		<div>#{ button_to_html(button_url, button_text) }</div><br/>
+		<div style='padding-top:30px;'>
+			#{ merchant_values }
+		</div>".html_safe
+	end
+
+	def text_for_merchant_invite merchant, invite_token
+		button_url = generate_invite_link(invite_token)
+		button_text = "Get Started"
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>Welcome to It's On Me</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px; font-size:16px;'>
+			<div style='padding-bottom:20px;'>
+				#{merchant.name} added you as a user to #{merchant.name}'s It's On Me account.
+			</div><br/>
+			<div>
+				Visit the link to create your account.
+			</div><br>
+		</div>
+		<div>#{ button_to_html(button_url, button_text) }</div><br/>
+		<div style='padding-top:30px;'>
+			#{ merchant_values }
+		</div>".html_safe
+	end
+
+	def text_for_merchant_welcome merchant
+		button_url = "http://merchant.itson.me"
+		button_text = "Get Started"
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>Welcome to It's On Me</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px;'>
+			<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
+				<div>This is your first step to going live.</div>
+				<div>Visit this link to create your merchant account.</div>
+			</div>
+		</div>
+		<div style='padding-bottom: 50px;'>
+			#{ button_to_html(button_url, button_text) }
+		</div>
+		<div>
+			#{ merchant_values }
+		</div>".html_safe	
+	end
+
+	def text_for_merchant_pending merchant
+		button_url = "http://merchant.itson.me"
+		button_text = "Login"
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>Pending Approval</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px;'>
+			<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
+				Thank you for completing your merchant account set-up
+			</div>
+			<div style='font-weight:bold; font-size:20px; text-align:center;'>
+				What's Next?
+			</div><br/>
+			<table>
+				<tr>
+					<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_check_icon_drn49s.png'></td>
+					<td>Your account rep will review your information and contact you within 48 hours.</td>
+				</tr>
+			</table><br/>
+			<table>
+				<tr>
+					<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_X_icon_nstleh.png'></td>
+					<td>Your rep will inform you if there is any missing account information that must be completed before going live.</td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			#{ button_to_html(button_url, button_text) }
+		</div>".html_safe	
+	end
+
+	def text_for_merchant_approved merchant
+		button_url = "http://merchant.itson.me"
+		button_text = "Login"
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div style='font-weight:bold;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_location_icon_vnmf3j.png'></div><br/>
+				<div style='font-weight:bold;'>Welcome</div>
+				<div style='padding-top:5px;'>to the It's On Me family</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px;'>
+			<div style='font-weight:bold; font-size:20px; text-align:center;'>
+				What's Next?
+			</div><br/>
+			<table>
+				<tr>
+					<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_docs_icon_nuauo9.png'></td>
+					<td><div>Train  your staff using the following materials. (Feel free to contact us if you have questions)</div></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<ul>
+							<li>
+								<a href='https://www.dropbox.com/s/93tldku5puw3qno/training%20video1st%20draft.mov' target='_blank'>
+									Merchant Staff Training Video
+								</a>
+							</li>
+							<li>
+								<a href='http://www.itson.me/redemption' target='_blank'>
+									Staff Redemption One Sheets
+								</a> (Print out and hand out)
+							</li>x
+							<li>
+								<a href='http://www.itson.me/preshift' target='_blank'>
+									Pre-Shift Document
+								</a> (You can read off and hand out)
+							</li>
+							<li>
+								<a href='http://screencast.com/t/GkAcdwWwn5FS' target='_blank'>
+									Merchant Tools Tour!
+								</a> Check Orders and Send Gifts
+							</li>
+						</ul>
+					</td>
+				</tr>
+			</table><br/>
+			<table>
+				<tr>
+					<td style='width:60px;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_clock_icon_cyewpv.png'></td>
+					<td>Your account rep will contact you shortly to set your go-live date.</td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			#{ button_to_html(button_url, button_text) }
+		</div>".html_safe	
+	end
+
+	def text_for_merchant_live merchant
+		button_url = "http://merchant.itson.me"
+		button_text = "Login"
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>#{ merchant.name } is live!</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 80px 20px 80px;'>
+			<div style='padding-bottom:20px; font-size:16px;'>
+				#{merchant.name} is live on It's On Me. Login to your merchant center to accept digital gift cards, reward loyal customers, and drive new revenue.
+			</div>
+			<div>
+				Need help? Email us at
+				<a href='mailto:merchant@itson.me' target='_blank' style='color:#3F3F3F; text-decoration:underline;'>
+					merchant@itson.me
+				</a><br>
+			</div><br>
+		</div>
+		<div>#{ button_to_html(button_url, button_text) }</div><br/>
+		<div style='padding-top:30px;'>
+			#{ merchant_values }
+		</div>".html_safe
+	end
+
 	def items_text gift
 		"<table style='padding-top:0;'>
 			<tr>
@@ -263,6 +452,29 @@ private
 				<img src='http://gallery.mailchimp.com/d7952b3f9c7215024f55709cf/images/f4936d42-c3b7-49f8-adf1-cdf48166a3ed.png'>
 			</a>
 		</div>".html_safe
+	end
+
+	def merchant_values
+		"<table style='width: 100%;'>
+			<tr>
+				<td style='text-align:center; width:33%;'>
+					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_check_icon_jgf7qu.png'></div><br/>
+					<div>Track gift redemptions</div>
+				</td>
+				<td style='text-align:center; width:33%;'>
+					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_gift_baocpx.png'></div><br/>
+					<div>Drive customers</div>
+				</td>
+				<td style='text-align:center; width:33%;'>
+					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_money_q1mott.png'></div><br/>
+					<div>Increase revenue</div>
+				</td>
+			</tr>
+		</table>"
+	end
+
+	def generate_invite_link invite_token
+		"#{PUBLIC_URL}invite?token=#{invite_token}"
 	end
 
 end
