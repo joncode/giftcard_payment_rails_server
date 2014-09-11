@@ -34,9 +34,11 @@ else
     ENV['MAILCHIMP_APIKEY']
 end
 
-MANDRILL_APIKEY = if Rails.env.development? or Rails.env.test?
-    'pOqNDraZxOFoF44X0pbR-Q' #mandrill_apikey_test
-    # 'oUXP1PDOtP14RMgFytxdGw' #nmandrill_apikey
+MANDRILL_APIKEY = if Rails.env.test?
+    'pOqNDraZxOFoF44X0pbR-Q'
+elsif Rails.env.development?
+    # 'pOqNDraZxOFoF44X0pbR-Q' #mandrill_apikey_test
+    'oUXP1PDOtP14RMgFytxdGw' #nmandrill_apikey
 elsif Rails.env.staging?
     #ENV['MANDRILL_APIKEY_TEST']
     ENV['MANDRILL_APIKEY']

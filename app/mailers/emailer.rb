@@ -10,43 +10,23 @@ module Emailer
 		else
 			user = User.find(data["user_id"])
 		end
-		body             = text_for_user_reset_password(user)
-		template_name    = "user"
-		template_content = [{ "name" => "body", "content" => body }]
-		message          = {
-			"subject"     => "Reset password request",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to"          => [{ "email" => user.email, "name" => user.name }],
-			"merge_vars"  => [{
-				"rcpt" => user.email,
-				"vars" => template_content
-			}]
-		}
-		add_qa_text_to_subject(message)
-		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], user.class.name])
+		subject  = "Reset password request"
+		body     = text_for_user_reset_password(user)
+
+		template_name = "user"
+		message       = message_hash(subject, user.email, user.name, body)
+		request_mandrill_with_template(template_name, message, [data["user_id"], user.class.name])
 	end
 
 	def confirm_email data
-		user		     = User.find(data["user_id"])
-		link             = data["link"]
-		template_name    = "user"
-		template_content = [{ "name" => "body", "content" => text_for_user_confirm_email(user, link) }]
-		message          = {
-			"subject" => "Confirm you email address",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to" => [{
-				"email" => user.email,
-				"name" => user.name
-			}],
-			"bcc_address" => "info@itson.me",
-			"merge_vars" => [{
-				"rcpt" => user.email,
-				"vars" => template_content
-			}]
-		}
-		request_mandrill_with_template(template_name, template_content, message, [data["user_id"], "User"])
+		user    = User.find(data["user_id"])
+		subject = "Confirm your email address"
+		body    = text_for_user_confirm_email(user, data["link"])
+		bcc     = "info@itson.me"
+
+		template_name = "user"
+		message       = message_hash(subject, user.email, user.name, body, bcc)
+		request_mandrill_with_template(template_name, message, [data["user_id"], "User"])
 	end
 
 	def welcome_from_dave data
@@ -68,34 +48,140 @@ module Emailer
 ####### Gift Emails
 
     def notify_receiver data
-    	gift 			 = Gift.find(data["gift_id"])
-		template_name    = "gift"
-		receiver_name   = gift.receiver_name
-		giver_name       = gift.giver_name
+    	gift          = Gift.find(data["gift_id"])
+		receiver_name = gift.receiver_name
+		giver_name    = gift.giver_name
 		if gift.receiver_email
-			email         = gift.receiver_email
+			email     = gift.receiver_email
 		elsif gift.receiver
-			email 		  = gift.receiver.email
+			email     = gift.receiver.email
 		else
 			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
 			return nil
 		end
-		template_content = [{ "name" => "body", "content" => text_for_gift_sale(gift) }]
-		message          = {
-			"subject" => "#{giver_name} sent you a gift",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to" => [{
-				"email" => email,
-				"name" => receiver_name
-			}],
-			"merge_vars" => [{
-				"rcpt" => email,
-				"vars" => template_content
-			}]
-		}
-		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
+		subject       = "#{giver_name} sent you a gift"
+		body          = text_for_notify_receiver(gift)
+
+		template_name = "gift"
+		message       = message_hash(subject, email, receiver_name, body)
+		request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
     end
+
+    def notify_receiver_proto_join data
+    	gift          = Gift.find(data["gift_id"])
+		receiver_name = gift.receiver_name
+		merchant_name = gift.provider_name
+		if gift.receiver_email
+			email     = whitelist_email(gift.receiver_email)
+		elsif gift.receiver
+			email 	  = whitelist_email(gift.receiver.email)
+		else
+			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
+			return nil
+		end
+		subject  = "The staff at #{merchant_name} sent you a gift"
+		body     = text_for_notify_receiver_proto_join(gift)
+
+		template_name   = "gift"
+		message         = message_hash(subject, email, receiver_name, body)
+		message["tags"] = [ merchant_name ]
+		request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
+    end
+
+    def invoice_giver data
+    	gift    = Gift.find(data["gift_id"])
+		subject = "Gift purchase receipt"
+		email   = gift.giver.email
+		name    = gift.giver_name
+		body    = text_for_invoice_giver(gift)
+
+		template_name = "user"
+		message       = message_hash(subject, email, name, body)
+		request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
+    end
+
+    def reminder_hasnt_gifted data
+    	user    = User.find(data["user_id"])
+		subject = "Make someone's day"
+    	email   = user.email
+    	name    = user.name
+		body    = text_for_reminder_hasnt_gifted(user)
+
+		template_name = "user"
+		message       = message_hash(subject, email, name, body)
+		request_mandrill_with_template(template_name, message, [user.id, "User"])
+    end
+
+##### Merchant Tools
+
+	def merchant_invite data
+		merchant = Merchant.find(data["merchant_id"])
+		subject  = "Welcome to It's On Me"
+		email    = data["email"]
+		name     = "#{merchant.name} Staff"
+		body     = text_for_merchant_invite(merchant, data["token"])
+		bcc      = "rachel.wenman@itson.me"
+
+		template_name = "merchant"
+		message       = message_hash(subject, email, name, body, bcc)
+		request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
+	end
+
+	def merchant_staff_invite data
+		merchant     = Merchant.find(data["merchant_id"])
+		invitor_name = data["invitor_name"]
+		invite_token = data["token"]
+		subject      = "Welcome to It's On Me"
+		email        = data["email"]
+		name         = "#{merchant.name} Staff"
+		body         = text_for_merchant_staff_invite(merchant, invitor_name, invite_token)
+		bcc          = "rachel.wenman@itson.me"
+
+		template_name = "merchant"
+		message       = message_hash(subject, email, name, body, bcc)
+		request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
+	end
+
+	def merchant_pending data
+		merchant = Merchant.find(data["merchant_id"])
+		subject  = "Your It's On Me account is pending approval"
+		email    = data["email"]
+		name     = "#{merchant.name} Staff"
+		body     = text_for_merchant_pending(merchant)
+		bcc      = "rachel.wenman@itson.me"
+
+		template_name = "merchant"
+		message       = message_hash(subject, email, name, body, bcc)
+		request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
+	end
+
+	def merchant_approved data
+		merchant = Merchant.find(data["merchant_id"])
+		subject  = "You have been Approved!"
+		email    = data["email"]
+		name     = "#{merchant.name} Staff"
+		body     = text_for_merchant_approved(merchant)
+		bcc      = "rachel.wenman@itson.me"
+
+		template_name = "merchant"
+		message       = message_hash(subject, email, name, body, bcc)
+		request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
+	end
+
+	def merchant_live data
+		merchant = Merchant.find(data["merchant_id"])
+		subject  = "Your location is now live"
+		email    = data["email"]
+		name     = "#{merchant.name} Staff"
+		body     = text_for_merchant_live(merchant)
+		bcc      = "rachel.wenman@itson.me"
+
+		template_name    = "merchant"
+		message       = message_hash(subject, email, name, body, bcc)
+		request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
+	end
+
+##### OLD EMAILERS
 
     def notify_receiver_boomerang data
     	gift 			  = GiftBoomerang.find(data["gift_id"])
@@ -119,61 +205,23 @@ module Emailer
         template_content = [
         	{ "name" => "items_text", "content" => items_text },
         	{ "name" => "original_receiver", "content" => original_receiver}]
-		message          = message_hash(subject(template_name), email, recipient_name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
+		message          = message_hash_old(subject(template_name), email, recipient_name, link, bcc)
+		request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"], template_content)
     end
 
-    def notify_receiver_proto_join data
-    	gift = Gift.find(data["gift_id"])
-		template_name = "gift"
-		receiver_name = gift.receiver_name
-		merchant_name = gift.provider_name
-		if gift.receiver_email
-			email     = whitelist_email(gift.receiver_email)
-		elsif gift.receiver
-			email 	  = whitelist_email(gift.receiver.email)
-		else
-			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
-			return nil
-		end
-		template_content = [{ "name" => "body", "content" => text_for_gift_proto(gift) }]
-		message          = {
-			"subject" => "The staff at #{merchant_name} sent you a gift",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to" => [{
-				"email" => email,
-				"name" => receiver_name
-			}],
-			"merge_vars" => [{
-				"rcpt" => email,
-				"vars" => template_content
-			}],
-			"tags" => [ merchant_name ]
-		}
-		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
-    end
-
-    def invoice_giver data
-    	gift 			 = Gift.find(data["gift_id"])
-		email            = gift.giver.email
-		name             = gift.giver_name
-		template_name    = "user"
-		template_content = [{ "name" => "body", "content" => text_for_user_receipt(gift) }]
-		message          = {
-			"subject" => "Gift purchase receipt",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to" => [{
-				"email" => email,
-				"name" => name
-			}],
-			"merge_vars" => [{
-				"rcpt" => email,
-				"vars" => template_content
-			}]
-		}
-		request_mandrill_with_template(template_name, template_content, message, [data["gift_id"], "Gift"])
+	def reminder_gift_giver recipient, receiver_name
+    	###----> remind giver to remind recipient, after one month , cron job
+		template_name    = "iom-gift-unopened-giver"
+		user_name        = recipient.name #user/purchaser receiving the email
+		template_content = [{"name" => "user_name", "content" => user_name},
+							          {"name" => "receiver_name", "content" => receiver_name},
+		                    {"name" => "service_name", "content" => SERVICE_NAME}]
+		email            = recipient.email
+		name             = recipient.name
+		link             = nil
+        bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
+		message          = message_hash_old(subject(template_name, options = {receiver_name: receiver_name}), email, name, link, bcc)
+		request_mandrill_with_template(template_name, message, [recipient.id, "User"], template_content)
     end
 
     def reminder_gift_receiver data
@@ -187,165 +235,17 @@ module Emailer
 		name             = recipient.name
 		link             = nil
         bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
-		message          = message_hash(subject(template_name), email, name, link, bcc)
-		request_mandrill_with_template(template_name, template_content, message, [recipient.id, "User"])
+		message          = message_hash_old(subject(template_name), email, name, link, bcc)
+		request_mandrill_with_template(template_name, message, [recipient.id, "User"], template_content)
     end
-
-##### Merchant Tools
-
-	def merchant_invite data
-		email            = data["email"]
-		merchant         = Merchant.find(data["merchant_id"])
-		token            = data["token"]
-
-		body             = text_for_merchant_invite(merchant, token)
-		template_name    = "merchant"
-		template_content = [{ "name" => "body", "content" => body }]
-		message          = {
-			"subject"     => "Welcome to It's On Me",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to"          => [{ "email" => email, "name" => "#{merchant.name} Staff" }],
-			"bcc_address" => "rachel.wenman@itson.me",
-			"merge_vars"  => [{
-				"rcpt" => email,
-				"vars" => template_content
-			}]
-		}
-		add_qa_text_to_subject(message)
-		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
-	end
-
-	def merchant_staff_invite data
-		email = data["email"]
-		invitor_name = data["invitor_name"]
-		merchant = Merchant.find(data["merchant_id"])
-		invite_token = data["token"]
-		body             = text_for_merchant_staff_invite(merchant, invitor_name, invite_token)
-		template_name    = "merchant"
-		template_content = [{ "name" => "body", "content" => body }]
-		message          = {
-			"subject"     => "Welcome to It's On Me",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to"          => [{ "email" => email, "name" => "#{ merchant.name } Staff" }],
-			"bcc_address" => "rachel.wenman@itson.me",
-			"merge_vars"  => [{
-				"rcpt" => email,
-				"vars" => template_content
-			}]
-		}
-		add_qa_text_to_subject(message)
-		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
-	end
-
-	def merchant_pending data
-		email            = data["email"]
-		merchant         = Merchant.find(data["merchant_id"])
-		body             = text_for_merchant_pending(merchant)
-		template_name    = "merchant"
-		template_content = [{ "name" => "body", "content" => body }]
-		message          = {
-			"subject"     => "Your It's On Me account is pending approval",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to"          => [{ "email" => email, "name" => "#{merchant.name} Staff" }],
-			"bcc_address" => "rachel.wenman@itson.me",
-			"merge_vars"  => [{
-				"rcpt" => email,
-				"vars" => template_content
-			}]
-		}
-		add_qa_text_to_subject(message)
-		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
-	end
-
-	def merchant_approved data
-		email            = data["email"]
-		merchant         = Merchant.find(data["merchant_id"])
-		body             = text_for_merchant_approved(merchant)
-		template_name    = "merchant"
-		template_content = [{ "name" => "body", "content" => body }]
-		message          = {
-			"subject"     => "You have been Approved!",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to"          => [{ "email" => email, "name" => "#{merchant.name} Staff" }],
-			"bcc_address" => "rachel.wenman@itson.me",
-			"merge_vars"  => [{
-				"rcpt" => email,
-				"vars" => template_content
-			}]
-		}
-		add_qa_text_to_subject(message)
-		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
-	end
-
-	def merchant_live data
-		email            = data["email"]
-		merchant         = Merchant.find(data["merchant_id"])
-		body             = text_for_merchant_live(merchant)
-		template_name    = "merchant"
-		template_content = [{ "name" => "body", "content" => body }]
-		message          = {
-			"subject"     => "Your location is now live",
-			"from_name"   => "It's On Me",
-			"from_email"  => "no-reply@itson.me",
-			"to"          => [{ "email" => email, "name" => "#{merchant.name} Staff" }],
-			"bcc_address" => "rachel.wenman@itson.me",
-			"merge_vars"  => [{
-				"rcpt" => email,
-				"vars" => template_content
-			}]
-		}
-		add_qa_text_to_subject(message)
-		request_mandrill_with_template(template_name, template_content, message, [merchant.id, "Merchant"])
-	end
 
 private
 
-	def subject template_name, options=nil
-		subject_content =
-			case template_name
-			when "iom-confirm-email";          then "Confirm Your Email"
-			when "iom-gift-hasnt-gifted";      then "ItsOnMe Is Ready to Fulfill Your Mobile Gifting Needs!"
-			when "iom-gift-notify-receiver";   then "#{options[:giver_name]} sent you a gift on ItsOnMe"
-			when "iom-gift-receipt";           then "Your gift purchase is complete"
-			when "iom-gift-unopened-giver";    then "#{options[:receiver_name]} hasn't opened your gift"
-			when "iom-gift-unopened-receiver"; then "You have gifts waiting for you!"
-			when "iom-reset-password";         then "Reset Your Password"
-			when "iom-user-welcome";           then "Welcome to ItsOnMe!"
-			when "iom-boomerang-notice";       then "Boomerang! We're returning this gift to you."
-			when "iom-boomerang-notice-2";       then "Boomerang! We're returning this gift to you."
-			end
-		if Rails.env.development? || Rails.env.staging?
-			subject_content = subject_content.insert(0, "QA- ")
-		end
-		subject_content
-	end
-
-	def message_hash(subject, email, name, link=nil, bcc=nil)
-		email = whitelist_email(email)
-		message = {
-			"subject"     => subject,
-			"from_name"   => "#{SERVICE_NAME}",
-			"from_email"  => "#{NO_REPLY_EMAIL}",
-			"to"          => [{ "email" => email, "name" => name }],
-			"bcc_address" => bcc,
-			"merge_vars"  =>[
-				{
-					"rcpt" => email,
-					"vars" => [{"name" => "link", "content" => link}]
-				}
-			]
-		}
-		message
-	end
-
-	def request_mandrill_with_template(template_name, template_content, message, ditto_ary)
-		unless Rails.env.development?
+	def request_mandrill_with_template(template_name, message, ditto_ary, template_content=nil)
+		# unless Rails.env.development?
 			puts "``````````````````````````````````````````````"
 			puts "Request Mandrill with #{template_name} #{message}"
+			add_qa_text_to_subject(message)
 			require 'mandrill'
 			m = Mandrill::API.new(MANDRILL_APIKEY)
 			response = m.messages.send_template(template_name, template_content, message)
@@ -355,12 +255,13 @@ private
 			puts "``````````````````````````````````````````````"
 			Ditto.send_email_create(response, ditto_ary[0], ditto_ary[1])
 			response
-		end
+		# end
 	end
 
     def request_mandrill_with_message message, ditto_ary
         puts "``````````````````````````````````````````````"
         puts "Request Mandrill with #{message}"
+		add_qa_text_to_subject(message)
         require 'mandrill'
         m        = Mandrill::API.new(MANDRILL_APIKEY)
         response = m.messages.send message
@@ -382,6 +283,22 @@ private
 		return email
 	end
 
+	def message_hash(subject, email, name, body, bcc=nil)
+		email = whitelist_email(email)
+		message          = {
+			"subject"     => subject,
+			"from_name"   => "It's On Me",
+			"from_email"  => "no-reply@itson.me",
+			"to"          => [{ "email" => email, "name" => name }],
+			"bcc_address" => bcc,
+			"merge_vars"  => [{
+				"rcpt" => email,
+				"vars" => [{ "name" => "body", "content" => body }]
+			}]
+		}
+		message
+	end
+
 	def whitelist_user(user)
 			# if user.email is on blacklist then send email to noreplydrinkboard@gmail.com
 		return whitelist_email(user.email)
@@ -393,5 +310,33 @@ private
 		end
 	end
 
+	def subject template_name, options=nil
+		case template_name
+		when "iom-gift-unopened-giver"
+			"#{options[:receiver_name]} hasn't opened your gift"
+		when "iom-gift-unopened-receiver"
+			"You have gifts waiting for you!"
+		when "iom-boomerang-notice-2"
+			"Boomerang! We're returning this gift to you."
+		end
+	end
+
+	def message_hash_old(subject, email, name, link=nil, bcc=nil)
+		email = whitelist_email(email)
+		message = {
+			"subject"     => subject,
+			"from_name"   => "#{SERVICE_NAME}",
+			"from_email"  => "#{NO_REPLY_EMAIL}",
+			"to"          => [{ "email" => email, "name" => name }],
+			"bcc_address" => bcc,
+			"merge_vars"  =>[
+				{
+					"rcpt" => email,
+					"vars" => [{"name" => "link", "content" => link}]
+				}
+			]
+		}
+		message
+	end
 
 end

@@ -52,9 +52,7 @@ module Email
 
     def invoice_giver
         gift = self
-
         puts "emailing the gift giver for #{gift.id}"
-
         data = {"text"        => 'invoice_giver',
                 "gift_id"     => gift.id
                 }
@@ -69,7 +67,6 @@ module Email
                 "user_id"     => self.id,
                 "link"        => self.setting.generate_email_link
                 }
-        # puts "Here is the data #{data.inspect}"
         route_email_system(data)
     end
 
@@ -77,6 +74,14 @@ module Email
         data = {"text"        => 'reset_password',
                 "user_id"     => user.id
                 }
+        route_email_system(data)
+    end
+
+    def reminder_hasnt_gifted
+        data = {
+            "text"    => "reminder_hasnt_gifted",
+            "user_id" => self.id,
+        }
         route_email_system(data)
     end
 

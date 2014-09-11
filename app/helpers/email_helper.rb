@@ -68,7 +68,7 @@ module EmailHelper
 		</div>".html_safe		
 	end
 
-	def text_for_user_hasnt_gifted user
+	def text_for_reminder_hasnt_gifted user
 		user_first_name = user.first_name
 		"<div style='width:100%; text-align:center;'>
         	<div style='color:#3F3F3F; font-size:30px; font-weight:lighter; padding-top:20px;''>
@@ -106,7 +106,7 @@ module EmailHelper
 		</div>".html_safe	
 	end
 
-	def text_for_user_receipt gift
+	def text_for_invoice_giver gift
 		if gift.receiver_name
 			receiver_info = gift.receiver_name
 		elsif gift.receiver_email
@@ -148,7 +148,7 @@ module EmailHelper
 		</div>".html_safe	
 	end
 
-	def text_for_gift_sale gift
+	def text_for_notify_receiver gift
 		image_url      = gift.provider.image
 		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
 		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
@@ -158,7 +158,13 @@ module EmailHelper
 		provider_name = gift.provider_name
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
 		details       = gift.detail
-		"<div style='padding: 0 100px 20px 100px;'>
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>You received a gift!</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 100px 20px 100px;'>
 			<div>
 				<img src='#{image_url}' style='width: 400px;'>
 			</div>
@@ -182,7 +188,7 @@ module EmailHelper
 		</div>".html_safe
 	end
 
-	def text_for_gift_proto gift
+	def text_for_notify_receiver_proto_join gift
 		image_url      = gift.provider.image
 		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
 		button_text   = "Claim My Gift"
@@ -190,7 +196,13 @@ module EmailHelper
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
 		message       = gift.message
 		details       = gift.detail
-		"<div style='padding: 0 100px 20px 100px;'>
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>You received a gift!</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #99A0AA;'>
+		<div style='padding: 0 100px 20px 100px;'>
 			<div>
 				<img src='#{image_url}' style='width: 400px;'>
 			</div>
@@ -233,7 +245,7 @@ module EmailHelper
 		<hr style='border-bottom:1px solid #99A0AA;'>
 		<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 			<div style='padding-bottom:20px;'>
-				#{merchant.name} added you as a user to #{merchant.name}'s It's On Me account.
+				This is your first step to going live.
 			</div><br/>
 			<div>
 				Visit the link to create your account.
@@ -424,7 +436,7 @@ module EmailHelper
 				</td>
 			</tr>
 			<tr style='height: 100px;'>
-				<td style='text-align: left; font-size: 20px;'>
+				<td style='text-align: left; font-size: 16px;'>
 					#{GiftItem.items_for_email(gift)}
 				</td>
 			</tr>
