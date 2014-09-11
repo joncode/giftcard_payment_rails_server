@@ -1,6 +1,8 @@
 module EmailHelper
 	include TimeHelper
 	include ActionView::Helpers::NumberHelper
+	include ActionView::Helpers::AssetTagHelper
+
 
 	def text_for_welcome_from_dave user
 		string = "Hi #{ user.name },\n\n"
@@ -61,11 +63,11 @@ module EmailHelper
 		<div style='padding: 30px; font-size:14px;'>
 			<div style='padding-bottom:20px;'>
 				Help! I didn't request this.
-			</div>            
+			</div>
 			<div style='padding-bottom:20px;'>
 				If you were not trying to reset your password, just ignore this email. Your account is still secure. Most likely, someone mistyped their email address while trying to reset their own password. If you have concerns, contact us at <a href='mailto:support@itson.me' target='_blank'>support@itson.me</a>
-			</div>            
-		</div>".html_safe		
+			</div>
+		</div>".html_safe
 	end
 
 	def text_for_reminder_hasnt_gifted user
@@ -103,7 +105,7 @@ module EmailHelper
 		</div><br/>
 		<div style='text-align:center;'>
 			#{ app_download_buttons_to_html }
-		</div>".html_safe	
+		</div>".html_safe
 	end
 
 	def text_for_invoice_giver gift
@@ -145,7 +147,7 @@ module EmailHelper
 					<td style='text-align:left;'>#{number_to_currency(gift.grand_total)}</td>
 				</tr>
 			</table>
-		</div>".html_safe	
+		</div>".html_safe
 	end
 
 	def text_for_notify_receiver gift
@@ -154,7 +156,11 @@ module EmailHelper
 		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
 		button_text   = "Claim My Gift"
 		giver_name    = gift.giver_name
-		giver_image   = image_tag(gift.giver.iphone_photo, width: "50", height: "50")
+		if gift.giver.class == "User"
+			giver_image   = image_tag(gift.giver.iphone_photo, width: "50", height: "50")
+		else
+			giver_image   = image_tag('http://res.cloudinary.com/drinkboard/image/upload/v1410454300/avatar_blank.png', width: "50", height: "50")
+		end
 		provider_name = gift.provider_name
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
 		details       = gift.detail
@@ -300,7 +306,7 @@ module EmailHelper
 		</div>
 		<div>
 			#{ merchant_values }
-		</div>".html_safe	
+		</div>".html_safe
 	end
 
 	def text_for_merchant_pending merchant
@@ -334,7 +340,7 @@ module EmailHelper
 		</div>
 		<div>
 			#{ button_to_html(button_url, button_text) }
-		</div>".html_safe	
+		</div>".html_safe
 	end
 
 	def text_for_merchant_approved merchant
@@ -394,7 +400,7 @@ module EmailHelper
 		</div>
 		<div>
 			#{ button_to_html(button_url, button_text) }
-		</div>".html_safe	
+		</div>".html_safe
 	end
 
 	def text_for_merchant_live merchant
@@ -436,7 +442,7 @@ module EmailHelper
 				</td>
 			</tr>
 			<tr style='height: 100px;'>
-				<td style='text-align: left; font-size: 16px;'>
+				<td style='text-align: left; font-size: 15px;'>
 					#{GiftItem.items_for_email(gift)}
 				</td>
 			</tr>
@@ -446,7 +452,7 @@ module EmailHelper
 private
 
 	def button_to_html url, text
-		"<div>                                
+		"<div>
 			<div style='display:block; width: 200px; margin:auto;'>
 				<a href='#{url}' style='color:white; text-decoration:none;background-color:#42C2E8; display: block; padding: 10px 0; text-align:center; border-bottom:2px solid #2B99BB; border-radius: 3px; font-size:20px;'>
 				#{text}

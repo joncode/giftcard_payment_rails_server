@@ -28,7 +28,12 @@ class GiftItem < ActiveRecord::Base
 			if gift.provider.name == "Electric Factory"
 				gift_details = "<li>#{item["quantity"]} tickets - #{item["item_name"]}</li>"
 			else
-				gift_details = "<li>#{item["quantity"]} #{item["item_name"]}</li>"
+				if menu_item = MenuItem.find(item["item_id"])
+					gift_string = "#{item["quantity"]} #{item["item_name"]} - #{menu_item.detail}"
+					gift_details = "<li>" + gift_string.truncate(50) + "</li>"
+				else
+					gift_details = "<li>#{item["quantity"]} #{item["item_name"]}</li>"
+				end
 			end
 			output_str += gift_details
 		end

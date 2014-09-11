@@ -244,13 +244,11 @@ private
 	def request_mandrill_with_template(template_name, message, ditto_ary, template_content=nil)
 		# unless Rails.env.development?
 			puts "``````````````````````````````````````````````"
-			puts "Request Mandrill with #{template_name} #{message}"
 			add_qa_text_to_subject(message)
+			puts "Request Mandrill with #{template_name} #{message}"
 			require 'mandrill'
 			m = Mandrill::API.new(MANDRILL_APIKEY)
 			response = m.messages.send_template(template_name, template_content, message)
-
-			puts
 			puts "Response from Mandrill #{response.inspect}"
 			puts "``````````````````````````````````````````````"
 			Ditto.send_email_create(response, ditto_ary[0], ditto_ary[1])
