@@ -1,9 +1,13 @@
 require 'authorize_net'
 
-class PaymentGatewayCim
+class PaymentGatewayCim             # charge , refund, cancel, void - instance methods
+
+    extend PaymentGatewayStorage    # class methods to manage cards and users
 
     attr_accessor :transaction, :response
     attr_reader :amount, :profile_id, :payment_profile_id, :transaction_id, :unique_id
+
+########   charge using tokenized card instance methods
 
     def initialize(args={})
         @amount             = args["amount"]
@@ -15,7 +19,7 @@ class PaymentGatewayCim
 
     def charge
         @transaction = authorize_net_cim_transaction
-        @response = @transaction.create_transaction_auth_capture(@amount, @profile_id, @payment_profile_id)
+        @response    = @transaction.create_transaction_auth_capture(@amount, @profile_id, @payment_profile_id)
         gateway_hash_response
     end
 
@@ -25,33 +29,6 @@ class PaymentGatewayCim
             "message_text" => response.message_text,
             "profile" => response.profile
         }.to_json
-    end
-
-    def self.create_customer_profile customer_id
-        profile  = AuthorizeNet::CIM::CustomerProfile.new(id: customer_id)
-        gateway  = AuthorizeNet::CIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
-        response = gateway.create_profile(profile)
-        # ditto    = Ditto.tokenize_card(response, card.id)
-        return response
-    end
-
-    def self.create_profile_with_payment_profile card, card_number, customer_id
-        auth_net_card   = AuthorizeNet::CreditCard.new(card_number, card.month_year)
-        payment_profile = AuthorizeNet::CIM::PaymentProfile.new(payment_method: auth_net_card)
-        profile         = AuthorizeNet::CIM::CustomerProfile.new(id: customer_id, payment_profiles: [payment_profile])
-        gateway  = AuthorizeNet::CIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
-        response = gateway.create_profile(profile)
-        ditto    = Ditto.tokenize_card(response, card.id)
-        return response, ditto
-    end
-
-    def self.add_payment_profile card, card_number, cim_profile
-        auth_net_card   = AuthorizeNet::CreditCard.new(card_number, card.month_year)
-        payment_profile = AuthorizeNet::CIM::PaymentProfile.new(payment_method: auth_net_card)
-        gateway = AuthorizeNet::CIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
-        response = gateway.create_payment_profile(payment_profile, cim_profile)
-        ditto    = Ditto.tokenize_card(response, card.id)
-        return response, ditto
     end
 
 private
@@ -68,6 +45,8 @@ private
         hsh["revenue"]         = self.amount
         hsh
     end
+
+
 
     def authorize_net_cim_transaction
         t = AuthorizeNet::CIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)

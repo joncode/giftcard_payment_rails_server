@@ -43,6 +43,13 @@ module CimProfile
         profile_id
     end
 
+    def destroy_card(card, user)
+        if card.cim_token
+            PaymentGatewayCim.delete_payment_profile(card.cim_token, user.cim_profile, user.id)
+        end
+        card.destroy
+    end
+
 end
 
 

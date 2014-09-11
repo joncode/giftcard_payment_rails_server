@@ -10,7 +10,7 @@ class Mdot::V2::CardsController < JsonController
     end
 
     def tokenize
-        profile_id = get_cim_profile(@current_user)
+        profile_id = get_cim_profile(@current_user)   # cim_profile concern
         json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY, "profile_id" => profile_id }
         success(json)
         respond
@@ -51,8 +51,9 @@ class Mdot::V2::CardsController < JsonController
 
     def destroy
         card = @current_user.cards.where(id: params[:id]).first
+
         if card
-            card.destroy
+            destroy_card(card, @current_user)   # cim_profile concern
             success(card.id)
         else
             status = :not_found

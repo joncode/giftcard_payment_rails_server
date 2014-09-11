@@ -52,6 +52,19 @@ class Ditto < ActiveRecord::Base
 			create(response_json: response_json, cat: 600, status: status, notable_id: card_id, notable_type: "Card")
 		end
 
+		def delete_card_token(response, user_id)
+			status        = parse_authorize_net_response(response)
+			response_json = PaymentGatewayCim.response_json(response)
+			create(response_json: response_json, cat: 610, status: status, notable_id: user_id, notable_type: "User")
+		end
+
+		def create_customer_profile(response, customer_id)
+			status        = parse_authorize_net_response(response)
+			response_json = PaymentGatewayCim.response_json(response)
+			user_id = customer_id.to_i - NUMBER_ID
+			create(response_json: response_json, cat: 650, status: status, notable_id: user_id, notable_type: "User")
+		end
+
 		def friends_social_proxy_create response
 			create(response_json: response.to_json, cat: 500, status: response["status"], notable_type: "SocialProxy"  )
 		end
@@ -147,6 +160,7 @@ end
 #  510 - SocialProxy - profile
 #  520 - SocialProxy - create_post
 #  600 - Auth.net - tokenize
+#  650 - Auth.net create cutomer profile
 # 1000 - Receive POS request
 
 

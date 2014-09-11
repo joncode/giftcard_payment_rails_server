@@ -1,6 +1,7 @@
 class AppController < JsonController
     include Email
     include Photo
+    include CimProfile
 
     before_action :authenticate_services, only: [:create_gift]
 
@@ -513,7 +514,7 @@ class AppController < JsonController
 		if user = authenticate_app_user(params["token"])
 			cCard = Card.find(params["data"].to_i)
 			# if cCard.user_id == user.id
-				if cCard.destroy
+				if destroy_card(cCard, user)   # cim_profile concern
 					response["delete"] = "#{cCard.id}"
 				else
 					response["error_server"] = "#{cCard.nickname} #{cCard.id} could not be deleted"

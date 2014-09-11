@@ -28,6 +28,26 @@ class Card < ActiveRecord::Base
 
 #	-------------
 
+	def self.get_cards user
+		cards = Card.where(user_id: user.id)
+		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
+	end
+
+	def self.create_card_from_hash cc_hash
+		card 			= Card.new
+		card.name 		= cc_hash["name"]
+		card.month 		= cc_hash["month"]
+		card.year 		= cc_hash["year"]
+		card.nickname 	= cc_hash["nickname"]
+		card.csv 		= cc_hash["csv"]
+		card.user_id 	= cc_hash["user_id"]
+		card.brand 		= cc_hash["brand"]
+		card.number 	= cc_hash["number"]
+		card
+	end
+
+#	-------------
+
     def create_card_hsh args
 	    hsh = {}
 	    hsh["amount"] 		= args["amount"]
@@ -58,30 +78,22 @@ class Card < ActiveRecord::Base
 		card_hash
 	end
 
+#	-------------
+
+	def destroy
+			# must delete auth.net record
+		log_bars"card.destroy -> Use controllers/concerns/cim_profile :destroy_card(card, user)"
+		super
+	end
+
+#	-------------
+
 	def number
 		@number
 	end
 
 	def number=(number)
 		@number = number
-	end
-
-	def self.create_card_from_hash cc_hash
-		card 			= Card.new
-		card.name 		= cc_hash["name"]
-		card.month 		= cc_hash["month"]
-		card.year 		= cc_hash["year"]
-		card.nickname 	= cc_hash["nickname"]
-		card.csv 		= cc_hash["csv"]
-		card.user_id 	= cc_hash["user_id"]
-		card.brand 		= cc_hash["brand"]
-		card.number 	= cc_hash["number"]
-		card
-	end
-
-	def self.get_cards user
-		cards = Card.where(user_id: user.id)
-		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
 	end
 
 	def month_year
