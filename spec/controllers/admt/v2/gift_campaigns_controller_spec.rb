@@ -208,7 +208,7 @@ describe Admt::V2::GiftCampaignsController do
             run_delayed_jobs
             WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
                 b = JSON.parse(req.body);
-                if b["template_name"] == "iom-gift-notify-receiver"
+                if b["template_name"] == "gift"
                     link = b["message"]["merge_vars"].first["vars"].first["content"];
                     link.match(/signup\/acceptgift\?id=#{abs_gift_id}/)
                 else

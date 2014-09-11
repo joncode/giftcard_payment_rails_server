@@ -162,6 +162,11 @@ FactoryGirl.define do
 
     end
 
+    factory :menu_item do
+       name   "Martini"
+       detail "Served with olives"
+    end
+
     factory :menu_string do
         provider_id   1
         menu          "[{\"section\":\"Signature\",\"items\":[{\"detail\":\"PATRON CITRONGE, MUDDLED JALAPENOS\",\"price\":\"15\",\"item_id\":73,\"item_name\":\"JALAPENO MARGARITA\"},{\"detail\":\"AKVINTA VODKA, REGATTA GINGER BEER, LIME JUICE, SUGAR\",\"price\":\"15\",\"item_id\":72,\"item_name\":\"Moscow Mule \"}]},{\"section\":\"Beer\",\"items\":[{\"detail\":\"\",\"price\":\"8.00\",\"item_id\":98,\"item_name\":\"Corona\"},{\"detail\":\"\",\"price\":\"7.00\",\"item_id\":97,\"item_name\":\"Bud Light\"},{\"detail\":\"\",\"price\":\"8.00\",\"item_id\":99,\"item_name\":\"Stella\"},{\"detail\":\"\",\"price\":\"8.00\",\"item_id\":100,\"item_name\":\"Beck's\"}]},{\"section\":\"Cocktail\",\"items\":[{\"detail\":\"ABSOLUT ORIENT APPLE, GINGER BEER, GINGER ALE, LEMON WEDGE\",\"price\":\"15\",\"item_id\":74,\"item_name\":\"GINGER ROGERS\"},{\"detail\":\"KETEL ONE VODKA, SODA, LIME JUICE, SIMPLE SYRUP, LIME WEDGE\",\"price\":\"15\",\"item_id\":75,\"item_name\":\"KETEL ONE FIZZ\"},{\"detail\":\"CIROC PEACH, MUDDLED RASPBERRIES FRESH LIME JUICE, SOUR \\u0026 CRANBERRY JUICE\",\"price\":\"15\",\"item_id\":76,\"item_name\":\"PINK STARBURST\"}]}]"

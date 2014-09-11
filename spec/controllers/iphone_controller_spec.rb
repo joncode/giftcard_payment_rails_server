@@ -102,9 +102,22 @@ describe IphoneController do
                 RegisterPushJob.stub(:perform).and_return(true)
                 SubscriptionJob.stub(:perform).and_return(true)
                 Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
-                Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"#{SERVICE_NAME}"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}], "bcc_address" => "#{INFO_EMAIL}", "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
-
-
+                template_name    = "user"
+                message          = {
+                    "subject" => "QA - Confirm your email address",
+                    "from_name" => "It's On Me",
+                    "from_email" => "no-reply@itson.me",
+                    "to" => [{
+                        "email" => "neil@gmail.com",
+                        "name" => "Neil"
+                    }],
+                    "bcc_address" => "info@itson.me",
+                    "merge_vars" => [{
+                        "rcpt" => "neil@gmail.com",
+                        "vars" => [{ "name" => "body", "content" => anything }]
+                    }]
+                }
+                Mandrill::API.should_receive(:send_template).with(template_name, nil, message)
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
                 run_delayed_jobs
@@ -117,7 +130,22 @@ describe IphoneController do
                 SubscriptionJob.stub(:perform).and_return(true)
                 RegisterPushJob.stub(:perform).and_return(true)
                 Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
-                Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"#{SERVICE_NAME}"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}], "bcc_address" => "#{INFO_EMAIL}", "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
+                template_name    = "user"
+                message          = {
+                    "subject" => "QA - Confirm your email address",
+                    "from_name" => "It's On Me",
+                    "from_email" => "no-reply@itson.me",
+                    "to" => [{
+                        "email" => "neil@gmail.com",
+                        "name" => "Neil"
+                    }],
+                    "bcc_address" => "info@itson.me",
+                    "merge_vars" => [{
+                        "rcpt" => "neil@gmail.com",
+                        "vars" => [{ "name" => "body", "content" => anything }]
+                    }]
+                }
+                Mandrill::API.should_receive(:send_template).with(template_name, nil, message)
 
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: "FAKE_PN_TOKENFAKE_PN_TOKEN"

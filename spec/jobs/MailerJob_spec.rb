@@ -161,7 +161,8 @@ describe MailerJob do
 
     describe :notify_receiver do
         it "should call mandrill with send_template" do
-            gift = FactoryGirl.create :gift, receiver_email: @receiver.email, giver_id: @giver.id, giver_type: "User", giver_name: @giver.name
+            menu_item = FactoryGirl.create :menu_item
+            gift = FactoryGirl.create :gift, receiver_email: @receiver.email, giver_id: @giver.id, giver_type: "User", giver_name: @giver.name, shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":#{menu_item.id},\"item_name\":\"Original Margarita \"}]"
             body             = text_for_notify_receiver(gift)
             template_name    = "gift"
             message          = {
@@ -192,9 +193,10 @@ describe MailerJob do
 
     describe :notify_receiver_boomerang do
         it "should call mandrill with send_template" do
-            boomgift = FactoryGirl.create :gift, payable: @gift, receiver_name: "Original Giver", receiver_email: "giver@email.com", provider: @gift.provider
+            menu_item = FactoryGirl.create :menu_item
+            boomgift = FactoryGirl.create :gift, payable: @gift, receiver_name: "Original Giver", receiver_email: "giver@email.com", provider: @gift.provider, shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":#{menu_item.id},\"item_name\":\"Original Margarita \"}]"
             template_name = "iom-boomerang-notice-2"
-            items_content = items_text(@gift)
+            items_content = items_text(boomgift)
             template_content = [
                 { "name" => "items_text", "content" => items_content },
                 { "name" => "original_receiver", "content" => "giver@email.com"}]
@@ -219,7 +221,8 @@ describe MailerJob do
 
     describe :notify_receiver_proto_join do
         it "should call mandrill with send_template" do
-            gift = FactoryGirl.create :gift, receiver_email: @receiver.email, giver_id: @giver.id, giver_type: "User", giver_name: @giver.name
+            menu_item = FactoryGirl.create :menu_item
+            gift = FactoryGirl.create :gift, receiver_email: @receiver.email, giver_id: @giver.id, giver_type: "User", giver_name: @giver.name, shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":#{menu_item.id},\"item_name\":\"Original Margarita \"}]"
             body             = text_for_notify_receiver_proto_join(gift)
             template_name    = "gift"
             message          = {
@@ -440,5 +443,5 @@ describe MailerJob do
             d.status.should       == 200
             d.cat.should          == 310
         end
-    end    
+    end
 end
