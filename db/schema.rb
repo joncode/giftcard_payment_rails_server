@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140814013148) do
+ActiveRecord::Schema.define(version: 20140911202244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.string   "answer"
     t.integer  "user_id"
     t.integer  "question_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
@@ -59,8 +59,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.string   "photo"
     t.string   "portrait"
     t.integer  "user_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "owner_id"
     t.string   "next_view"
     t.boolean  "child",       default: false
@@ -149,8 +149,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.string   "year"
     t.string   "csv"
     t.string   "brand"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
@@ -158,8 +158,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
     t.integer  "owner_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "debts", force: true do |t|
@@ -218,8 +218,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.integer  "provider_id"
     t.text     "message"
     t.string   "status",                     default: "unpaid"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "receiver_phone"
     t.string   "facebook_id"
     t.integer  "anon_id"
@@ -242,9 +242,11 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.string   "refund_type"
     t.string   "cost"
     t.text     "detail"
+    t.tsvector "ftmeta"
   end
 
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
+  add_index "gifts", ["ftmeta"], name: "gifts_ftsmeta_idx", using: :gin
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree
   add_index "gifts", ["pay_stat"], name: "index_gifts_on_pay_stat", using: :btree
   add_index "gifts", ["payable_id", "payable_type"], name: "index_gifts_on_payable_id_and_payable_type", using: :btree
@@ -259,8 +261,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.integer  "provider_id",   null: false
     t.string   "full_address"
     t.text     "data",          null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "sections_json"
     t.text     "menu"
   end
@@ -284,8 +286,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.integer  "redeem_id"
     t.integer  "gift_id"
     t.string   "redeem_code"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "server_code"
     t.integer  "server_id"
     t.integer  "provider_id"
@@ -352,8 +354,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.string   "city",            limit: 32
     t.string   "state",           limit: 2
     t.string   "zip",             limit: 16
-    t.datetime "created_at",                                 null: false
-    t.datetime "updated_at",                                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "phone"
     t.string   "email"
     t.string   "twitter"
@@ -410,8 +412,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
   create_table "redeems", force: true do |t|
     t.integer  "gift_id"
     t.string   "redeem_code"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "pos_merchant_id"
   end
 
@@ -420,8 +422,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
     t.integer  "followed_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "pushed",      default: false
   end
 
@@ -436,8 +438,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.integer  "provider_id"
     t.string   "transaction_id"
     t.decimal  "revenue"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.text     "resp_json"
     t.text     "req_json"
     t.integer  "resp_code"
@@ -454,8 +456,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.boolean  "email_invite",                 default: true
     t.boolean  "email_follow_up",              default: true
     t.boolean  "email_receiver_new",           default: true
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "confirm_email_token"
     t.string   "confirm_phone_token"
     t.string   "reset_token"
@@ -496,16 +498,16 @@ ActiveRecord::Schema.define(version: 20140814013148) do
 
   create_table "tags", force: true do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "user_socials", force: true do |t|
     t.integer  "user_id"
     t.string   "type_of"
     t.string   "identifier"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.boolean  "active",     default: true
     t.boolean  "subscribed", default: false
     t.string   "name"
@@ -522,8 +524,8 @@ ActiveRecord::Schema.define(version: 20140814013148) do
     t.boolean  "admin",                              default: false
     t.string   "password_digest",                                    null: false
     t.string   "remember_token",                                     null: false
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "address"
     t.string   "address_2"
     t.string   "city",                    limit: 20
