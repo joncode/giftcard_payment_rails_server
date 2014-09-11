@@ -46,8 +46,9 @@ describe MailerJob do
                 "subject"     => "QA - Reset password request",
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
-                "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],
-                "bcc_address" => nil,
+                "to"          => [
+                    { "email" => @receiver.email, "name" => @receiver.name }
+                ],
                 "merge_vars"  => [{
                     "rcpt" => @receiver.email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -78,11 +79,10 @@ describe MailerJob do
                 "subject" => "QA - Confirm your email address",
                 "from_name" => "It's On Me",
                 "from_email" => "no-reply@itson.me",
-                "to" => [{
-                    "email" => @receiver.email,
-                    "name" => @receiver.name
-                }],
-                "bcc_address" => "info@itson.me",
+                "to" => [
+                    { "email" => @receiver.email, "name" => @receiver.name },
+                    { "email" => "info@itson.me", "name" => "info@itson.me", "type" => "bcc" }
+                ],
                 "merge_vars" => [{
                     "rcpt" => @receiver.email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -138,7 +138,6 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @giver.email, "name" => @giver.name }],
-                "bcc_address" => nil,
                 "merge_vars"  => [{
                     "rcpt" => @giver.email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -170,7 +169,6 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],
-                "bcc_address" => nil,
                 "merge_vars"  => [{
                     "rcpt" => @receiver.email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -230,7 +228,6 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],
-                "bcc_address" => nil,
                 "merge_vars"  => [{
                     "rcpt" => @receiver.email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -261,7 +258,6 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @giver.email, "name" => @giver.name }],
-                "bcc_address" => nil,
                 "merge_vars"  => [{
                     "rcpt" => @giver.email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -292,7 +288,6 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
-                "bcc_address" => "rachel.wenman@itson.me",
                 "merge_vars"  => [{
                     "rcpt" => email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -325,7 +320,6 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
-                "bcc_address" => "rachel.wenman@itson.me",
                 "merge_vars"  => [{
                     "rcpt" => email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -358,8 +352,9 @@ describe MailerJob do
                 "subject"     => "QA - Your It's On Me account is pending approval",
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
-                "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
-                "bcc_address" => "rachel.wenman@itson.me",
+                "to"          => [
+                    { "email" => email, "name" => "#{@merchant.name} Staff" }
+                ],
                 "merge_vars"  => [{
                     "rcpt" => email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -390,8 +385,9 @@ describe MailerJob do
                 "subject"     => "QA - You have been Approved!",
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
-                "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
-                "bcc_address" => "rachel.wenman@itson.me",
+                "to"          => [
+                    { "email" => email, "name" => "#{@merchant.name} Staff" }
+                ],
                 "merge_vars"  => [{
                     "rcpt" => email,
                     "vars" => [{ "name" => "body", "content" => body }]
@@ -422,8 +418,9 @@ describe MailerJob do
                 "subject"     => "QA - Your location is now live",
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
-                "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
-                "bcc_address" => "rachel.wenman@itson.me",
+                "to"          => [
+                    { "email" => email, "name" => "#{@merchant.name} Staff" }
+                ],
                 "merge_vars"  => [{
                     "rcpt" => email,
                     "vars" => [{ "name" => "body", "content" => body }]

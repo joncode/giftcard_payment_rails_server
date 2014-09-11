@@ -120,7 +120,7 @@ module Emailer
 		email    = data["email"]
 		name     = "#{merchant.name} Staff"
 		body     = text_for_merchant_invite(merchant, data["token"])
-		bcc      = "rachel.wenman@itson.me"
+		bcc      = rachel_email_if_production
 
 		template_name = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -135,7 +135,7 @@ module Emailer
 		email        = data["email"]
 		name         = "#{merchant.name} Staff"
 		body         = text_for_merchant_staff_invite(merchant, invitor_name, invite_token)
-		bcc          = "rachel.wenman@itson.me"
+		bcc          = rachel_email_if_production
 
 		template_name = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -148,7 +148,7 @@ module Emailer
 		email    = data["email"]
 		name     = "#{merchant.name} Staff"
 		body     = text_for_merchant_pending(merchant)
-		bcc      = "rachel.wenman@itson.me"
+		bcc      = rachel_email_if_production
 
 		template_name = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -161,7 +161,7 @@ module Emailer
 		email    = data["email"]
 		name     = "#{merchant.name} Staff"
 		body     = text_for_merchant_approved(merchant)
-		bcc      = "rachel.wenman@itson.me"
+		bcc      = rachel_email_if_production
 
 		template_name = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -174,7 +174,7 @@ module Emailer
 		email    = data["email"]
 		name     = "#{merchant.name} Staff"
 		body     = text_for_merchant_live(merchant)
-		bcc      = "rachel.wenman@itson.me"
+		bcc      = rachel_email_if_production
 
 		template_name    = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -287,14 +287,26 @@ private
 			"subject"     => subject,
 			"from_name"   => "It's On Me",
 			"from_email"  => "no-reply@itson.me",
-			"to"          => [{ "email" => email, "name" => name }],
-			"bcc_address" => bcc,
+			"to"          => [
+				{ "email" => email, "name" => name }
+			],
 			"merge_vars"  => [{
 				"rcpt" => email,
 				"vars" => [{ "name" => "body", "content" => body }]
 			}]
 		}
+		if bcc.present?
+			message["to"] << { "email" => bcc, "name" => bcc, "type" => "bcc" }
+		end
 		message
+	end
+
+	def rachel_email_if_production
+		if Rails.env.production?
+			"rachel.wenman@itson.me"
+		else
+			nil
+		end
 	end
 
 	def whitelist_user(user)
