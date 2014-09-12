@@ -20,12 +20,7 @@ module EmailHelper
 		button_url      = link
 		button_text     = "Confirm Email"
 		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-	        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-					<div>Confirm Email</div>
-	        	</div>
-	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			#{header_text("Confirm Email")}
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px;'>
 					Welcome to It's On Me #{user_first_name}! Please click the link to confirm your email address.
@@ -46,12 +41,7 @@ module EmailHelper
 		end
 		button_text     = "Reset Password"
 		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-	        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-					<div>Reset Password</div>
-	        	</div>
-	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			#{header_text("Reset Password")}
 			<div style='padding: 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px;'>
 					Forgot your password? Let's get you a new one.
@@ -78,7 +68,7 @@ module EmailHelper
 					<span>Celebrate</span>
 	        	</div>
 	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			<hr style='border-bottom:1px solid #C9C9C9;'>
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px;'>
 					<div>Hi #{user_first_name},</div><br/>
@@ -126,7 +116,7 @@ module EmailHelper
 					<div>Makin' it rain.</div>
 	        	</div>
 	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			<hr style='border-bottom:1px solid #C9C9C9;'>
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
 					Your gift is being delivered to #{receiver_info}
@@ -168,12 +158,7 @@ module EmailHelper
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
 		details       = gift.detail
 		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-	        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-					<div>You received a gift!</div>
-	        	</div>
-	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			#{header_text("You received a gift!")}
 			<div style='padding: 0 100px 20px 100px;'>
 				<div>
 					<img src='#{image_url}' style='width: 400px;'>
@@ -208,12 +193,7 @@ module EmailHelper
 		message       = gift.message
 		details       = gift.detail
 		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-	        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-					<div>You received a gift!</div>
-	        	</div>
-	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			#{header_text("You received a gift!")}
 			<div style='padding: 0 100px 20px 100px;'>
 				<div>
 					<img src='#{image_url}' style='width: 400px;'>
@@ -251,12 +231,7 @@ module EmailHelper
 		button_url = generate_invite_link(invite_token)
 		button_text = "Get Started"
 		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-	        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-					<div>Welcome to It's On Me</div>
-	        	</div>
-	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			#{header_text("Welcome to It's On Me")}
 			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 				<div style='padding-bottom:20px;'>
 					This is your first step to going live.
@@ -276,12 +251,7 @@ module EmailHelper
 		button_url = generate_invite_link(invite_token)
 		button_text = "Get Started"
 		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-	        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-					<div>Welcome to It's On Me</div>
-	        	</div>
-	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			#{header_text("Welcome to It's On Me")}
 			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 				<div style='padding-bottom:20px;'>
 					#{invitor_name} added you as a user to #{merchant.name}'s It's On Me account.
@@ -301,12 +271,7 @@ module EmailHelper
 		button_url = "http://merchant.itson.me"
 		button_text = "Get Started"
 		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-	        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-					<div>Welcome to It's On Me</div>
-	        	</div>
-	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			#{header_text("Welcome to It's On Me")}
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
 					<div>This is your first step to going live.</div>
@@ -326,12 +291,7 @@ module EmailHelper
 		button_url = "http://merchant.itson.me"
 		button_text = "Login"
 		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-	        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-					<div>Pending Approval</div>
-	        	</div>
-	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			#{header_text("Pending Approval")}
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
 					Thank you for completing your merchant account set-up
@@ -369,7 +329,7 @@ module EmailHelper
 					<div style='padding:10px;'>to the It's On Me family</div>
 	        	</div>
 	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			<hr style='border-bottom:1px solid #C9C9C9;'>
 			<div style='padding: 0 80px 20px 80px; color:#3F3F3F'>
 				<div style='font-weight:bold; font-size:28px; text-align:center;'>
 					What's Next?
@@ -424,12 +384,7 @@ module EmailHelper
 		button_url = "http://merchant.itson.me"
 		button_text = "Login"
 		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-	        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
-					<div>#{ merchant.name } is live!</div>
-	        	</div>
-	    	</div>
-			<hr style='border-bottom:1px solid #99A0AA;'>
+			#{header_text("#{merchant.name} is live!")}
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px;'>
 					#{merchant.name} is live on It's On Me. Login to your merchant center to accept digital gift cards, reward loyal customers, and drive new revenue.
@@ -473,7 +428,16 @@ private
 	def default_style
 		"font-family:verdana; color:#3F3F3F;"
 	end
-	
+
+	def header_text text
+		"<div style='width:100%; text-align:center;'>
+        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+				<div>#{text}</div>
+        	</div>
+    	</div>
+		<hr style='border-bottom:1px solid #C9C9C9;'>"
+	end
+
 	def button_text url, text
 		"<div>
 			<div style='display:block; width: 200px; margin:auto;'>
