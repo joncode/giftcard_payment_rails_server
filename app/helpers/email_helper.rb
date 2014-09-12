@@ -354,7 +354,7 @@ module EmailHelper
         	</div>
     	</div>
 		<hr style='border-bottom:1px solid #99A0AA;'>
-		<div style='padding: 0 80px 20px 80px;'>
+		<div style='padding: 0 80px 20px 80px; color:#3F3F3F'>
 			<div style='font-weight:bold; font-size:20px; text-align:center;'>
 				What's Next?
 			</div><br/>
@@ -376,7 +376,7 @@ module EmailHelper
 								<a href='http://www.itson.me/redemption' target='_blank'>
 									Staff Redemption One Sheets
 								</a> (Print out and hand out)
-							</li>x
+							</li>
 							<li>
 								<a href='http://www.itson.me/preshift' target='_blank'>
 									Pre-Shift Document
@@ -398,7 +398,7 @@ module EmailHelper
 				</tr>
 			</table>
 		</div>
-		<div>
+		<div style='padding:10px;'>
 			#{ button_to_html(button_url, button_text) }
 		</div>".html_safe
 	end
