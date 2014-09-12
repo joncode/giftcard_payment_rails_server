@@ -167,7 +167,7 @@ describe Card do
             args["service"]      = "7.00"
             args["message"]      = "here is the message"
             sale_hsh = card.create_card_hsh args
-            keys = ["number", "month_year", "first_name", "last_name", "amount", "unique_id", "card_id", "cim_token", "cim_profile"]
+            keys = ["number", "month_year", "first_name", "last_name", "amount", "unique_id", "card_id"]
             sale_hsh["number"].should     == "4417121029961508"
             sale_hsh["month_year"].should == "0216"
             compare_keys(sale_hsh, keys)
@@ -211,29 +211,46 @@ describe Card do
             end
         end
 
-        it "should save cid_token nickname and last_four" do
-            cc_hsh = { "user_id"=>772, "cim_token" => "72342934", "nickname"=>"Dango", "brand" => "Visa"}
-            card = Card.create_card_token_with_hash cc_hsh
+    end
+
+    context :deactivate do
+
+        it "should deactivate the card not destory" do
+            giver   = FactoryGirl.create(:user)
+            cc_hsh  = {"month"=>"02", "number"=>"4417121029961508", "user_id"=>giver.id, "name"=>giver.name, "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+            card    = Card.create_card_from_hash cc_hsh
             card.save
-            card.errors.count.should == 0
-            puts card.errors
-            card.class.should    == Card
-            card.user_id.should  == cc_hsh["user_id"]
-            card.brand.should    == 'visa'
-            card.month.should    be_nil
-            card.name.should     be_nil
-            card.year.should     be_nil
-            card.csv.should      be_nil
-            card.nickname.should be_nil
-            card.cim_token.should == "72342934"
+
+            card.deactivate
+
+            card.active.should be_false
+        end
+
+        it "should delete the card from Auth.net" do
+            user = FactoryGirl.create(:user, cim_profile: "7825348")
+            hsh = {"token"=>"25162732", "nickname"=>"Dango Reinhardt", "last_four"=>"7483", "brand" => "MasterCard" , "user_id" => user.id}
+            card_token = CardToken.build_card_token_with_hash hsh
+            card_token.save
+            card = Card.find(card_token.id)
+            AuthorizeNet::CIM::Transaction.should_receive(:delete_payment_profile)
+            card.deactivate
+
+        end
+
+        it "should not message Auth.net if card is not tokenized" do
+            giver   = FactoryGirl.create(:user)
+            cc_hsh  = {"month"=>"02", "number"=>"4417121029961508", "user_id"=>giver.id, "name"=>giver.name, "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+            card    = Card.create_card_from_hash cc_hsh
+            card.save
+            AuthorizeNet::CIM::Transaction.should_not_receive(:delete_payment_profile)
+            card.deactivate
         end
 
     end
 
+end
 
-
-
-end# == Schema Information
+# == Schema Information
 #
 # Table name: cards
 #

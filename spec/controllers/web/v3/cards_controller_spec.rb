@@ -149,6 +149,21 @@ describe Web::V3::CardsController do
             delete :destroy, format: :json, id: 928312
             rrc(404)
         end
+
+        it "should delete the card from Auth.net" do
+            @user.update("cim_profile" => "826735482")
+            stub_request(:post, "https://apitest.authorize.net/xml/v1/request.api").
+                     with(:body => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<deleteCustomerPaymentProfileRequest xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">\n  <merchantAuthentication>\n    <name>948bLpzeE8UY</name>\n    <transactionKey>7f7AZ66axeC386q7</transactionKey>\n  </merchantAuthentication>\n  <customerProfileId>826735482</customerProfileId>\n  <customerPaymentProfileId>72534234</customerPaymentProfileId>\n</deleteCustomerPaymentProfileRequest>\n",
+                          :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'text/xml', 'User-Agent'=>'Ruby'}).
+                     to_return(:status => 200, :body => "", :headers => {})
+            card.update(cim_token: "72534234")
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            delete :destroy, format: :json, id: card.id
+            rrc(200)
+
+            WebMock.should have_requested(:post, "https://apitest.authorize.net/xml/v1/request.api").once
+        end
+
     end
 
 

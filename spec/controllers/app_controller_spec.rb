@@ -238,7 +238,7 @@ describe AppController do
 
         it "should return a list of providers" do
             amount  = Provider.where(active: true).count
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
+            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
             post :brand_merchants, format: :json, data: @brand.id, token: user.remember_token
             rrc_old(200)
             ary = json
@@ -256,7 +256,7 @@ describe AppController do
             end
             Provider.last.update_attribute(:active, false)
             post :providers, format: :json, token: user.remember_token
-            keys =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
+            keys =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live","zinger", "desc"]
             rrc_old(200)
             ary = json
             ary.class.should == Array
@@ -411,6 +411,18 @@ describe AppController do
             rrc_old(404)
         end
 
+        it "should delete the card from Auth.net" do
+            card = FactoryGirl.create(:card, user_id: user.id, cim_token: "27634232")
+            user.update("cim_profile" => "826735482")
+             stub_request(:post, "https://apitest.authorize.net/xml/v1/request.api").
+                     with(:body => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<deleteCustomerPaymentProfileRequest xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">\n  <merchantAuthentication>\n    <name>948bLpzeE8UY</name>\n    <transactionKey>7f7AZ66axeC386q7</transactionKey>\n  </merchantAuthentication>\n  <customerProfileId>826735482</customerProfileId>\n  <customerPaymentProfileId>27634232</customerPaymentProfileId>\n</deleteCustomerPaymentProfileRequest>\n",
+                          :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'text/xml', 'User-Agent'=>'Ruby'}).
+                     to_return(:status => 200, :body => "", :headers => {})
+            post :delete_card, format: :json, token: user.remember_token, data: card.id
+            rrc_old(200)
+
+            WebMock.should have_requested(:post, "https://apitest.authorize.net/xml/v1/request.api").once
+        end
     end
 
     describe :create_redeem do

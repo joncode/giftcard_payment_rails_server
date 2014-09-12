@@ -1,4 +1,5 @@
 class Client::V3::CardsController < MetalController
+    include CimProfile
 
     before_action :authenticate_user
 

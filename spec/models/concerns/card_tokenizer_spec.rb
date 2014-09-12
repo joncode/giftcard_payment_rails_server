@@ -4,6 +4,11 @@ describe :tokenize do
 
 	it "should create profile and payment profile" do
 		user = FactoryGirl.create :user
+		customer_id = user.obscured_id
+		stub_request(:post, "https://apitest.authorize.net/xml/v1/request.api").
+         with(:body => "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<createCustomerProfileRequest xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">\n  <merchantAuthentication>\n    <name>948bLpzeE8UY</name>\n    <transactionKey>7f7AZ66axeC386q7</transactionKey>\n  </merchantAuthentication>\n  <profile>\n    <merchantCustomerId>#{customer_id}</merchantCustomerId>\n    <paymentProfiles>\n      <payment>\n        <creditCard>\n          <cardNumber>4417121029961508</cardNumber>\n          <expirationDate>2017-02</expirationDate>\n        </creditCard>\n      </payment>\n    </paymentProfiles>\n  </profile>\n  <validationMode>none</validationMode>\n</createCustomerProfileRequest>\n",
+              :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'text/xml', 'User-Agent'=>'Ruby'}).
+         to_return(:status => 200, :body => "", :headers => {})
 		card = FactoryGirl.create :card, user_id: user.id
 		card.cim_token.should == nil
 		user.cim_profile.should == nil

@@ -34,7 +34,7 @@ class Web::V3::CardsController < MetalController
     def destroy
         card = @current_user.cards.where(id: params[:id]).first
         if card
-            card.destroy
+            destroy_card(card, @current_user)   # cim_profile concern
             success(card.id)
         else
             status = :not_found

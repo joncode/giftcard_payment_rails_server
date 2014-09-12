@@ -391,7 +391,7 @@ end
 # "network_id": "[gift recipient's facebook id for friend in mention tagging]",
 # "merchant": "[merchant name]",
 # "title": "Pomegranate Mojito",
-# "url": "[http://www.itson.me/signup/acceptgift/[abstractor + gift_id]",
+# "url": "[http://www.itson.me/signup/acceptgift?id=[abstractor + gift_id]",
 # "image": "[gift image url]," // optional and will be populated with the IOM Facebook logo url if not included in the request
 # "share" [true|false] // whether or not to explicitly share on timeline
 # }
