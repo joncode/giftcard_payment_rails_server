@@ -492,7 +492,7 @@ private
 	end
 
 	def generate_invite_link invite_token
-		"#{PUBLIC_URL}/invite?token=#{invite_token}"
+		"#{PUBLIC_URL_MT}/invite?token=#{invite_token}"
 	end
 
 end
