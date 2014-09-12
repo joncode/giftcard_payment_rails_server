@@ -9,12 +9,12 @@ class GiftsFullTextSearch < ActiveRecord::Migration
           CREATE FUNCTION update_gifts_ftmeta() RETURNS trigger AS $$
           begin
             new.ftmeta :=
-              setweight(to_tsvector(cast(new.id as text)), 'A') || 
-              setweight(to_tsvector(concat(new.order_num)), 'B') || 
-              setweight(to_tsvector(concat(new.receiver_email)), 'B') || 
+              setweight(to_tsvector(cast(new.id as text)), 'A') ||
+              setweight(to_tsvector(concat(new.order_num)), 'B') ||
+              setweight(to_tsvector(concat(new.receiver_email)), 'B') ||
               setweight(to_tsvector(concat(new.receiver_name)), 'B') ||
-              setweight(to_tsvector(concat(new.provider_name)), 'C') || 
-              setweight(to_tsvector(concat(new.giver_name)), 'C') || 
+              setweight(to_tsvector(concat(new.provider_name)), 'C') ||
+              setweight(to_tsvector(concat(new.giver_name)), 'C') ||
               setweight(to_tsvector(concat(new.status)), 'D');
             return new;
           end
