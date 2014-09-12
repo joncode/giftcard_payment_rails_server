@@ -30,7 +30,7 @@ module EmailHelper
 				<div style='padding-bottom:20px; font-size:16px;'>
 					Welcome to It's On Me #{user_first_name}! Please click the link to confirm your email address.
 				</div>
-	            #{button_to_html(button_url, button_text)}
+	            #{button_text(button_url, button_text)}
 	        </div>
 		</div>".html_safe
 	end
@@ -57,7 +57,7 @@ module EmailHelper
 					Forgot your password? Let's get you a new one.
 				</div>
 			</div>
-	        #{ button_to_html(button_url, button_text) }
+	        #{ button_text(button_url, button_text) }
 			<div style='padding: 30px; font-size:14px;'>
 				<div style='padding-bottom:20px;'>
 					Help! I didn't request this.
@@ -104,7 +104,7 @@ module EmailHelper
 				</table>
 			</div><br/>
 			<div style='text-align:center;'>
-				#{ app_download_buttons_to_html }
+				#{ app_download_buttons_text }
 	        </div>
 		</div>".html_safe
 	end
@@ -182,7 +182,7 @@ module EmailHelper
 				<div style='padding-bottom:20px; font-size:16px;'>
 					#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. To claim this gift simply click the button and download the app. Use this email address at sign-up to receiver your gift.
 				</div>
-	            #{button_to_html(button_url, button_text)}
+	            #{button_text(button_url, button_text)}
 			</div>
 			<div style='background-color:#E2E2E2; padding: 10px;'>
 				<table>
@@ -222,7 +222,7 @@ module EmailHelper
 				<div style='padding-bottom:20px; font-size:16px;'>
 					#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. To claim this gift simply click the button and download the app. Use this email address at sign-up to receive your gift.
 				</div>
-	            #{button_to_html(button_url, button_text)}
+	            #{button_text(button_url, button_text)}
 			</div>
 			<div style='background-color:#E2E2E2; padding: 10px;'>
 				<table>
@@ -265,9 +265,9 @@ module EmailHelper
 					Visit the link to create your account.
 				</div><br>
 			</div>
-			<div>#{ button_to_html(button_url, button_text) }</div><br/>
+			<div>#{ button_text(button_url, button_text) }</div><br/>
 			<div style='padding-top:30px;'>
-				#{ merchant_values }
+				#{ merchant_values_text }
 	        </div>
 		</div>".html_safe
 	end
@@ -290,9 +290,9 @@ module EmailHelper
 					Visit the link to create your account.
 				</div><br>
 			</div>
-			<div>#{ button_to_html(button_url, button_text) }</div><br/>
+			<div>#{ button_text(button_url, button_text) }</div><br/>
 			<div style='padding-top:30px;'>
-				#{ merchant_values }
+				#{ merchant_values_text }
 	        </div>
 		</div>".html_safe
 	end
@@ -314,10 +314,10 @@ module EmailHelper
 				</div>
 			</div>
 			<div style='padding-bottom: 50px;'>
-				#{ button_to_html(button_url, button_text) }
+				#{ button_text(button_url, button_text) }
 			</div>
 			<div>
-				#{ merchant_values }
+				#{ merchant_values_text }
 	        </div>
 		</div>".html_safe
 	end
@@ -353,7 +353,7 @@ module EmailHelper
 				</table>
 			</div>
 			<div>
-				#{ button_to_html(button_url, button_text) }
+				#{ button_text(button_url, button_text) }
 	        </div>
 		</div>".html_safe
 	end
@@ -415,7 +415,7 @@ module EmailHelper
 				</table>
 			</div>
 			<div style='padding:10px;'>
-				#{ button_to_html(button_url, button_text) }
+				#{ button_text(button_url, button_text) }
 	        </div>
 		</div>".html_safe
 	end
@@ -441,9 +441,9 @@ module EmailHelper
 					</a><br>
 				</div><br>
 			</div>
-			<div>#{ button_to_html(button_url, button_text) }</div><br/>
+			<div>#{ button_text(button_url, button_text) }</div><br/>
 			<div style='padding-top:30px;'>
-				#{ merchant_values }
+				#{ merchant_values_text }
 	        </div>
 		</div>".html_safe
 	end
@@ -474,7 +474,7 @@ private
 		"font-family:verdana; color:#3F3F3F;"
 	end
 	
-	def button_to_html url, text
+	def button_text url, text
 		"<div>
 			<div style='display:block; width: 200px; margin:auto;'>
 				<a href='#{url}' style='color:white; text-decoration:none;background-color:#42C2E8; display: block; padding: 10px 0; text-align:center; border-bottom:2px solid #2B99BB; border-radius: 3px; font-size:20px;'>
@@ -484,7 +484,7 @@ private
 		</div>".html_safe
 	end
 
-	def app_download_buttons_to_html
+	def app_download_buttons_text
 		"<div>
 			<a href='https://itunes.apple.com/us/app/drinkboard-mobile-gifting/id659661295' target='_blank'>
 				<img src='http://gallery.mailchimp.com/d7952b3f9c7215024f55709cf/images/0ef011d7-25b6-4a92-894d-a42376893dcf.png'>
@@ -495,7 +495,7 @@ private
 		</div>".html_safe
 	end
 
-	def merchant_values
+	def merchant_values_text
 		"<table style='width: 100%;'>
 			<tr>
 				<td style='text-align:center; width:33%;'>
