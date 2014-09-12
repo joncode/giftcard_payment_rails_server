@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140820220237) do
+ActiveRecord::Schema.define(version: 20140911202244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -243,9 +243,11 @@ ActiveRecord::Schema.define(version: 20140820220237) do
     t.string   "refund_type"
     t.string   "cost"
     t.text     "detail"
+    t.tsvector "ftmeta"
   end
 
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
+  add_index "gifts", ["ftmeta"], name: "gifts_ftsmeta_idx", using: :gin
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree
   add_index "gifts", ["pay_stat"], name: "index_gifts_on_pay_stat", using: :btree
   add_index "gifts", ["payable_id", "payable_type"], name: "index_gifts_on_payable_id_and_payable_type", using: :btree
