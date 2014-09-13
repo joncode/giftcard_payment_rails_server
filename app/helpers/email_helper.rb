@@ -53,7 +53,7 @@ module EmailHelper
 					Help! I didn't request this.
 				</div>
 				<div style='padding-bottom:20px;'>
-					If you were not trying to reset your password, just ignore this email. Your account is still secure. Most likely, someone mistyped their email address while trying to reset their own password. If you have concerns, contact us at <a href='mailto:support@itson.me' target='_blank'>support@itson.me</a>
+					If you were not trying to reset your password, just ignore this email. Your account is still secure. Most likely, someone mistyped their email address while trying to reset their own password. If you have concerns, contact us at <a href='mailto:support@itson.me' target='_blank' style='color:#3F3F3F'>support@itson.me</a>
 				</div>
 	        </div>
 		</div>".html_safe
@@ -83,7 +83,7 @@ module EmailHelper
 								<div>Find something new to love</div>
 						</td>
 						<td style='text-align:center; width:33%;'>
-							<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946703/green_gift_baocpx.png'></div><br/>
+							<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1410563975/gold_gift_su2ced.png'></div><br/>
 								<div>Make someone's day</div>
 						</td>
 						<td style='text-align:center; width:33%;'>
@@ -123,20 +123,20 @@ module EmailHelper
 				</div>
 				<table style='width: 100%;'>
 					<tr>
-						<td style='text-align:right; padding: 0 10px;'>Location</td>
-						<td style='text-align:left;'>#{gift.provider.name}</td>
+						<td style='text-align:right; padding: 0 10px; width:50%;'>Location</td>
+						<td style='text-align:left; width:50%;'>#{gift.provider.name}</td>
 					</tr>
 					<tr>
-						<td style='text-align:right; padding: 0 10px;'>Gift value</td>
-						<td style='text-align:left;'>#{number_to_currency(gift.total)}</td>
+						<td style='text-align:right; padding: 0 10px; width:50%;'>Gift value</td>
+						<td style='text-align:left; width:50%;'>#{number_to_currency(gift.total)}</td>
 					</tr>
 					<tr>
-						<td style='text-align:right; padding: 0 10px;'>Processing fee</td>
-						<td style='text-align:left;'>#{number_to_currency(gift.service)}</td>
+						<td style='text-align:right; padding: 0 10px; width:50%;'>Processing fee</td>
+						<td style='text-align:left; width:50%;'>#{number_to_currency(gift.service)}</td>
 					</tr>
 					<tr style='font-weight:bold;'>
-						<td style='text-align:right; padding: 0 10px;'>Total</td>
-						<td style='text-align:left;'>#{number_to_currency(gift.grand_total)}</td>
+						<td style='text-align:right; padding: 0 10px; width:50%;'>Total</td>
+						<td style='text-align:left; width:50%;'>#{number_to_currency(gift.grand_total)}</td>
 					</tr>
 				</table>
 	        </div>
@@ -344,22 +344,22 @@ module EmailHelper
 						<td>
 							<ul>
 								<li>
-									<a href='https://www.dropbox.com/s/93tldku5puw3qno/training%20video1st%20draft.mov' target='_blank'>
+									<a href='https://www.dropbox.com/s/93tldku5puw3qno/training%20video1st%20draft.mov' target='_blank' style='color:#3F3F3F;'>
 										Merchant Staff Training Video
 									</a>
 								</li>
 								<li>
-									<a href='http://www.itson.me/redemption' target='_blank'>
+									<a href='http://www.itson.me/redemption' target='_blank' style='color:#3F3F3F;'>
 										Staff Redemption One Sheets
 									</a> (Print out and hand out)
 								</li>
 								<li>
-									<a href='http://www.itson.me/preshift' target='_blank'>
+									<a href='http://www.itson.me/preshift' target='_blank' style='color:#3F3F3F;'>
 										Pre-Shift Document
 									</a> (You can read off and hand out)
 								</li>
 								<li>
-									<a href='http://screencast.com/t/GkAcdwWwn5FS' target='_blank'>
+									<a href='http://screencast.com/t/GkAcdwWwn5FS' target='_blank' style='color:#3F3F3F;'>
 										Merchant Tools Tour!
 									</a> Check Orders and Send Gifts
 								</li>
@@ -431,7 +431,7 @@ private
 
 	def header_text text
 		"<div style='width:100%; text-align:center;'>
-        	<div style='color:#3F3F3F; font-size:20px; padding-top:20px;''>
+        	<div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''>
 				<div>#{text}</div>
         	</div>
     	</div>
