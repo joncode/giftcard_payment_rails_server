@@ -290,10 +290,9 @@ private
 			"to"          => [
 				{ "email" => email, "name" => name }
 			],
-			"merge_vars"  => [{
-				"rcpt" => email,
-				"vars" => [{ "name" => "body", "content" => body }]
-			}]
+			"global_merge_vars" => [
+				{ "name" => "body", "content" => body }
+			]
 		}
 		if bcc.present?
 			message["to"] << { "email" => bcc, "name" => bcc, "type" => "bcc" }
