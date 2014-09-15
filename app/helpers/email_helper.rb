@@ -268,7 +268,7 @@ module EmailHelper
 	end
 
 	def text_for_merchant_welcome merchant
-		button_url = "http://merchant.itson.me"
+		button_url = PUBLIC_URL_MT
 		button_text = "Get Started"
 		"<div style=#{default_style}>
 			#{header_text("Welcome to It's On Me")}
@@ -288,7 +288,7 @@ module EmailHelper
 	end
 
 	def text_for_merchant_pending merchant
-		button_url = "http://merchant.itson.me"
+		button_url = PUBLIC_URL_MT
 		button_text = "Login"
 		"<div style=#{default_style}>
 			#{header_text("Pending Approval")}
@@ -319,7 +319,7 @@ module EmailHelper
 	end
 
 	def text_for_merchant_approved merchant
-		button_url = "http://merchant.itson.me"
+		button_url = PUBLIC_URL_MT
 		button_text = "Login"
 		"<div style=#{default_style}>
 			<div style='width:100%; text-align:center;'>
@@ -381,7 +381,7 @@ module EmailHelper
 	end
 
 	def text_for_merchant_live merchant
-		button_url = "http://merchant.itson.me"
+		button_url = PUBLIC_URL_MT
 		button_text = "Login"
 		"<div style=#{default_style}>
 			#{header_text("#{merchant.name} is live!")}
