@@ -49,10 +49,9 @@ describe MailerJob do
                 "to"          => [
                     { "email" => @receiver.email, "name" => @receiver.name }
                 ],
-                "merge_vars"  => [{
-                    "rcpt" => @receiver.email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -83,10 +82,9 @@ describe MailerJob do
                     { "email" => @receiver.email, "name" => @receiver.name },
                     { "email" => "info@itson.me", "name" => "info@itson.me", "type" => "bcc" }
                 ],
-                "merge_vars" => [{
-                    "rcpt" => @receiver.email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -138,10 +136,9 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @giver.email, "name" => @giver.name }],
-                "merge_vars"  => [{
-                    "rcpt" => @giver.email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -169,10 +166,9 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],
-                "merge_vars"  => [{
-                    "rcpt" => @receiver.email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -204,7 +200,11 @@ describe MailerJob do
                 "from_email" => "no-reply@itson.me",
                 "to" => [{"email"=>"giver@email.com", "name"=>"Original Giver"}],
                 "bcc_address" => "info@itson.me",
-                "merge_vars" => [{"rcpt"=>"giver@email.com", "vars"=>[{"name"=>"link", "content"=>"http://0.0.0.0:3001/signup/acceptgift?id=#{NUMBER_ID + boomgift.id}"}]}] }
+                "merge_vars"  =>[{
+                    "rcpt" => "giver@email.com",
+                    "vars"=> [{"name"=>"link", "content"=>"http://0.0.0.0:3001/signup/acceptgift?id=#{NUMBER_ID + boomgift.id}"}]
+                }]
+            }
             data = { "text" => 'notify_receiver_boomerang', "gift_id" => boomgift.id }
             Mandrill::API.should_receive(:send_template).with(template_name, template_content, message_hash).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -228,10 +228,9 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],
-                "merge_vars"  => [{
-                    "rcpt" => @receiver.email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }],
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ],
                 "tags" => [ gift.provider_name ]
              }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
@@ -258,10 +257,9 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @giver.email, "name" => @giver.name }],
-                "merge_vars"  => [{
-                    "rcpt" => @giver.email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
              }
             data = {
                 "text" => 'invoice_giver',
@@ -288,10 +286,9 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
-                "merge_vars"  => [{
-                    "rcpt" => email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -320,10 +317,9 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
-                "merge_vars"  => [{
-                    "rcpt" => email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -355,10 +351,9 @@ describe MailerJob do
                 "to"          => [
                     { "email" => email, "name" => "#{@merchant.name} Staff" }
                 ],
-                "merge_vars"  => [{
-                    "rcpt" => email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -388,10 +383,9 @@ describe MailerJob do
                 "to"          => [
                     { "email" => email, "name" => "#{@merchant.name} Staff" }
                 ],
-                "merge_vars"  => [{
-                    "rcpt" => email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
@@ -421,10 +415,9 @@ describe MailerJob do
                 "to"          => [
                     { "email" => email, "name" => "#{@merchant.name} Staff" }
                 ],
-                "merge_vars"  => [{
-                    "rcpt" => email,
-                    "vars" => [{ "name" => "body", "content" => body }]
-                }]
+                "global_merge_vars"  => [
+                    { "name" => "body", "content" => body }
+                ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])
             Mandrill::API.stub_chain(:new, :messages){ Mandrill::API }
