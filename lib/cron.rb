@@ -71,11 +71,14 @@ module Cron
                 incorrect += 1
             end
         end
-        puts "Register missing PnTokens"
-        puts "Total UA pn_tokens      = #{ua_key_hsh.keys.count}"
-        puts "Total db pn_tokens      = #{total}"
-        puts "UA has correct tokens   = #{count}"
-        puts "missing tokens are      = #{incorrect}"
+
+        response_string = "Register missing PnTokens\n" +
+        "Total UA pn_tokens      = #{ua_key_hsh.keys.count}\n" +
+        "Total db pn_tokens      = #{total}\n" +
+        "UA has correct tokens   = #{count}\n" +
+        "missing tokens are      = #{incorrect}\n"
+        Ditto.cron_push_create(response_string)
+        puts response_string
     end
 
     def check_update_aliases
@@ -101,11 +104,13 @@ module Cron
                 end
             end
         end
-        puts "check and update Aliases"
-        puts "Total UA pn_tokens      = #{ua_key_hsh.keys.count}"
-        puts "Total db pn_tokens      = #{total}"
-        puts "UA has correct tokens   = #{count}"
-        puts "Incorrect aliases are   = #{incorrect}"
+        response_string = "check and update Aliases\n" +
+        "Total UA pn_tokens      = #{ua_key_hsh.keys.count}\n" +
+        "Total db pn_tokens      = #{total}\n" +
+        "UA has correct tokens   = #{count}\n" +
+        "Incorrect aliases are   = #{incorrect}\n"
+        Ditto.cron_push_create(response_string)
+        puts response_string
     end
 
     def test_ua
