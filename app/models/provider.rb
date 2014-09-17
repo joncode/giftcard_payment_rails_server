@@ -71,16 +71,15 @@ class Provider < ActiveRecord::Base
 
 	def web_serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude]
-		prov_hash["region_id"]      = self.region_id
-		prov_hash["loc_id"]			= self.id
-		prov_hash["photo"]          = self.get_photo
-		prov_hash["logo"]			= self.get_logo
-		prov_hash["address"]        = self.full_address
-		prov_hash["address_street"] = self.address
-		prov_hash["address_city"]   = self.city
-		prov_hash["address_state"]  = self.state
-		prov_hash["address_zip"]    = self.zip
-		prov_hash["live"]           = self.live
+		prov_hash["region_id"]  = self.region_id
+		prov_hash["loc_id"]     = self.id
+		prov_hash["photo"]      = self.get_photo
+		prov_hash["logo"]       = self.get_logo
+		prov_hash["loc_street"] = self.address
+		prov_hash["loc_city"]   = self.city
+		prov_hash["loc_state"]  = self.state
+		prov_hash["loc_zip"]    = self.zip
+		prov_hash["live"]       = self.live
 		prov_hash
 	end
 

@@ -22,7 +22,23 @@ describe Web::V3::RegionsController do
         Provider.last.update(active: false)
         get :merchants, format: :json, id: 2
         rrc(200)
-
+        keys = [
+            "latitude",
+            "live",
+            "loc_city",
+            "loc_id",
+            "loc_state",
+            "loc_street",
+            "loc_zip",
+            "logo",
+            "longitude",
+            "name",
+            "phone",
+            "photo",
+            "region_id"
+        ]
+        provider = json["data"][0]
+        compare_keys(provider, keys)
     end
 
 end
