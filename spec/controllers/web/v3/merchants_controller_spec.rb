@@ -10,7 +10,21 @@ describe Web::V3::MerchantsController do
 
     it "should return all of the providers" do
         get :index, format: :json
-        keys    =  ["name", "phone", "latitude", "longitude", "region_id", "loc_id", "photo", "logo", "address", "address_street", "address_city", "address_state", "address_zip", "live"]
+        keys    =  [
+            "latitude",
+            "live",
+            "loc_city",
+            "loc_id",
+            "loc_state",
+            "loc_street",
+            "loc_zip",
+            "logo",
+            "longitude",
+            "name",
+            "phone",
+            "photo",
+            "region_id"
+        ]
         rrc(200)
         city = json["data"][0]
         compare_keys(city, keys)

@@ -1,3 +1,5 @@
+require 'benchmark'
+
 module UserSerializers
 
     def serialize(token=false)
@@ -71,13 +73,12 @@ module UserSerializers
         usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "zip", "sex"]
         usr_hash["photo"]   = self.get_photo
         usr_hash["user_id"] = self.id
-        ids = ["email", "phone", "facebook_id", "twitter"].each do |id|
-            us = self.user_socials.where(type_of: id)
-            if us.count > 0
-                usr_hash[id] = []
-                us.each do |social|
-                    usr_hash[id] << { "_id" => social.id, "value" => social.identifier }
-                end
+        us = self.user_socials
+        ids = ["email", "phone", "facebook_id", "twitter"]
+        us.each do |social|
+            if ids.include? social.type_of
+                usr_hash[social.type_of] = [] unless usr_hash[social.type_of].present?
+                usr_hash[social.type_of] << { "_id" => social.id, "value" => social.identifier }
             end
         end
         usr_hash

@@ -26,16 +26,19 @@ describe Provider do
         provider = FactoryGirl.create(:provider)
         FactoryGirl.create(:menu_string, provider_id: provider.id)
         p_hsh = provider.web_serialize
-        p_hsh["name"].should        == provider.name
-        p_hsh["city"].should        == provider.city
-        p_hsh["phone"].should       == provider.phone
-        p_hsh["latitude"].should    == provider.latitude
-        p_hsh["longitude"].should   == provider.longitude
-        p_hsh["provider_id"].should == provider.id
-        p_hsh["photo"].should       == provider.get_photo
-        p_hsh["full_address"].should == provider.full_address
-        p_hsh["menu"].should         == JSON.parse(provider.menu_string.data)
-
+        p_hsh["name"].should       == provider.name
+        p_hsh["phone"].should      == provider.phone
+        p_hsh["latitude"].should   == provider.latitude
+        p_hsh["longitude"].should  == provider.longitude
+        p_hsh["region_id"].should  == provider.region_id
+        p_hsh["loc_id"].should     == provider.id
+        p_hsh["photo"].should      == provider.get_photo
+        p_hsh["logo"].should       == provider.get_logo
+        p_hsh["loc_street"].should == provider.address
+        p_hsh["loc_city"].should   == provider.city
+        p_hsh["loc_state"].should  == provider.state
+        p_hsh["loc_zip"].should    == provider.zip
+        p_hsh["live"].should       == provider.live
     end
 
     context "region id validation" do
