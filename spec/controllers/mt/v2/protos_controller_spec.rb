@@ -42,9 +42,9 @@ describe Mt::V2::ProtosController do
 				fake_id += 1
 			end
 			post :gifts, format: :json, id: @pws_proto.id
-			rrc 201
+			rrc 202
 			json["status"].should == 1
-			json["data"].should   == "All gifts have already been created for gift prototype #{@pws_proto.id}"
+			json["data"].should   == "Request for #{@pws_proto.giftables.count} gifts from Factory Provider Staff received."
 		end
 
 		it "should not accept request when proto is not found" do

@@ -213,41 +213,6 @@ describe Card do
 
     end
 
-    context :deactivate do
-
-        it "should deactivate the card not destory" do
-            giver   = FactoryGirl.create(:user)
-            cc_hsh  = {"month"=>"02", "number"=>"4417121029961508", "user_id"=>giver.id, "name"=>giver.name, "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
-            card    = Card.create_card_from_hash cc_hsh
-            card.save
-
-            card.deactivate
-
-            card.active.should be_false
-        end
-
-        it "should delete the card from Auth.net" do
-            user = FactoryGirl.create(:user, cim_profile: "7825348")
-            hsh = {"token"=>"25162732", "nickname"=>"Dango Reinhardt", "last_four"=>"7483", "brand" => "MasterCard" , "user_id" => user.id}
-            card_token = CardToken.build_card_token_with_hash hsh
-            card_token.save
-            card = Card.find(card_token.id)
-            AuthorizeNet::CIM::Transaction.should_receive(:delete_payment_profile)
-            card.deactivate
-
-        end
-
-        it "should not message Auth.net if card is not tokenized" do
-            giver   = FactoryGirl.create(:user)
-            cc_hsh  = {"month"=>"02", "number"=>"4417121029961508", "user_id"=>giver.id, "name"=>giver.name, "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
-            card    = Card.create_card_from_hash cc_hsh
-            card.save
-            AuthorizeNet::CIM::Transaction.should_not_receive(:delete_payment_profile)
-            card.deactivate
-        end
-
-    end
-
 end
 
 # == Schema Information

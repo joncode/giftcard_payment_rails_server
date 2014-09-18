@@ -29,7 +29,11 @@ private
 
 
     def collect_incomplete_gifts
-        Resque.enqueue(CollectIncompleteGiftsV2Job, self.id)
+        if thread_on?
+            Resque.enqueue(CollectIncompleteGiftsV2Job, self.id)
+        else
+            CollectIncompleteGiftsV2Job.perform(self.id)
+        end
     end
 
     def subscribe_mailchimp

@@ -8,7 +8,7 @@ describe Client::V3::CitiesController do
 
     it "should return the cities" do
         get :index, format: :json
-        keys    =  ["name", "state", "city_id", "photo"]
+        keys    =  ["name", "state", "city_id", "photo", "token"]
         rrc(200)
         city = json["data"][0]
         compare_keys(city, keys)

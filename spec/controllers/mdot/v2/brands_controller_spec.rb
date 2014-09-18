@@ -58,7 +58,7 @@ describe Mdot::V2::BrandsController do
         it "should return a list of providers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             amount  = Provider.where(active: true).count
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live"]
+            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live","zinger", "desc"]
             route   = :merchants
             get route, format: :json, id: @brand.id
             rrc(200)

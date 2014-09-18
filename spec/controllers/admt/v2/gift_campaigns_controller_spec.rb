@@ -198,7 +198,6 @@ describe Admt::V2::GiftCampaignsController do
 
         it "should send an email to the receiver_email" do
             ResqueSpec.reset!
-            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             create_hsh = { "payable_id" => @campaign_item.id  }
             post :bulk_create, format: :json, data: create_hsh
@@ -214,7 +213,8 @@ describe Admt::V2::GiftCampaignsController do
                 else
                     true
                 end
-            }.once        end
+            }.once
+        end
 
         it "should send in-network receivers a push notification" do
             ResqueSpec.reset!

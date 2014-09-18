@@ -147,12 +147,14 @@ describe SmsCollector do
         end
 
         it "should match gifts with users when users sign up after gift is made" do
-            relay_stubs
-            number = "3234345839"
+
+            resque_stubs
+            number = "3234345323"
             user = FactoryGirl.create(:user, phone: number)
             run_delayed_jobs
+
             gift = Gift.where(receiver_phone: number).first
-            gift.should_not be_nil
+            gift.should_not         be_nil
             gift.receiver.should == user
         end
     end

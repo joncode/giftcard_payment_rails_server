@@ -5,7 +5,7 @@ class Web::V3::SessionsController < MetalController
     def create
         login_params    = params["data"]
 
-        if login_params["password"]
+        if login_params["password"] && login_params["username"]
             user = normal_login login_params
         else
             user = facebook_login login_params
@@ -14,12 +14,7 @@ class Web::V3::SessionsController < MetalController
         if user
             if user.not_suspended?
 
-                if user.authenticate(login_params["password"])
-                    success user.login_web_serialize
-                else
-                    fail_web fail_web_payload("invalid_email")
-                    status = :not_found
-                end
+                success user.login_web_serialize
 
             else
                 fail_web fail_web_payload("suspended_user")
@@ -53,8 +48,14 @@ private
     def normal_login login_params
         email       = login_params["username"].strip.downcase
         user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: email).references(:users).first
+
         if user_social
-            return user_social.user
+            user = user_social.user
+            if user && user.authenticate(login_params["password"])
+                user
+            else
+                nil
+            end
         else
             return nil
         end

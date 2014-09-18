@@ -1,4 +1,6 @@
-    require 'spec_helper'
+require 'spec_helper'
+
+include MockAndStubs
 
 describe PushJob do
 
@@ -17,20 +19,16 @@ describe PushJob do
         context "notify gift receiver on create" do
 
             it "should send alias & correct badge to Urban Airship" do
-                User.any_instance.stub(:init_confirm_email).and_return(true)
-                User.any_instance.stub(:persist_social_data).and_return(true)
-                RegisterPushJob.stub(:perform).and_return(true)
-                SubscriptionJob.stub(:perform).and_return(true)
-                MailerJob.stub(:perform).and_return(true)
+                resque_stubs
                 user_alias = @pnt.ua_alias
-                prov_name = "Push Testers"
+                prov_name  = "Push Testers"
 
                 6.times do
-                        # these shold not go to push badge count
-                    gift = FactoryGirl.create(:gift, receiver: @user, provider_name: "Notified")
-                    redeem = Redeem.create(gift_id: gift.id)
+                # these shold not go to push badge count
+                    gift       = FactoryGirl.create(:gift, receiver: @user, provider_name: "Notified")
+                    redeem     = Redeem.create(gift_id: gift.id)
                 end
-                @gift     = FactoryGirl.create(:gift, receiver: @user, provider_name: prov_name)
+                @gift      = FactoryGirl.create(:gift, receiver: @user, provider_name: prov_name)
 
                 alert = "#{@gift.giver_name} sent you a gift at #{prov_name}!"
                 good_push_hsh   = {

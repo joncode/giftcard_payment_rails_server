@@ -14,7 +14,7 @@ describe :tokenize do
 		user.cim_profile.should == nil
 		response = AuthorizeNet::CIM::Response.new("111", "111")
 		ditto    = Ditto.new
-		PaymentGatewayCim.should_receive(:create_profile).and_return([response, ditto])
+		PaymentGatewayCim.should_receive(:create_profile_with_payment_profile).and_return([response, ditto])
 		AuthorizeNet::CIM::Response.any_instance.stub(:success?).and_return(true)
 		AuthorizeNet::CIM::Response.any_instance.stub(:profile_id).and_return("11111")
 		AuthorizeNet::CIM::Response.any_instance.stub(:payment_profile_ids).and_return(["22222"])

@@ -234,7 +234,7 @@ class User < ActiveRecord::Base
     end
 
 	def is_perm_deactive?
-		self.perm_deactive == true ? true : false
+		self.perm_deactive
 	end
 
 	def not_suspended?
@@ -376,13 +376,14 @@ private
 	end
 
 	def make_friends
-		log_bars "'make_friends' after save callback on User model commented out 6/23/14"
+		#log_bars "'make_friends' after save callback on User model commented out 6/23/14"
 		# unless Rails.env.production?
 		# 	Resque.enqueue(FriendPushJob, self.id, 1)
 		# end
 	end
 
 	def persist_social_data
+
 		if email_changed? && (email[-3..-1] != "xxx")
 			UserSocial.create(user_id: id, type_of: "email", identifier: email)
 		end
