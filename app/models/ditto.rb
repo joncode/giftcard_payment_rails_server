@@ -31,6 +31,10 @@ class Ditto < ActiveRecord::Base
 			create(response_json: response.to_json, cat: 120, status: status)
 		end
 
+		def cron_push_create(response)
+			create(response_json: response, cat: 2100, notable_type: "UserSocial")
+		end
+
 		def send_email_create(response, obj_id, obj_type)
 			status = parse_mandrill_response(response)
 			create(response_json: response.to_json, cat: 310, status: status, notable_id: obj_id, notable_type: obj_type)
@@ -162,7 +166,8 @@ end
 #  600 - Auth.net - tokenize
 #  650 - Auth.net create cutomer profile
 # 1000 - Receive POS request
-
+# 2xxx - Scheduled Jobs
+# 2100 - Scheduled Job - pn_tokens
 
 # Statuses
 
