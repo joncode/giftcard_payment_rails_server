@@ -32,7 +32,7 @@ class Ditto < ActiveRecord::Base
 		end
 
 		def cron_push_create(response)
-			create(response_json: response, cat: 2100)
+			create(response_json: response, cat: 2100, notable_type: "UserSocial")
 		end
 
 		def send_email_create(response, obj_id, obj_type)
