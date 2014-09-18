@@ -36,89 +36,61 @@ describe Mdot::V2::CardsController do
         end
     end
 
-    describe :tokenize do
-        it_should_behave_like("token authenticated", :get, :tokenize)
+    # describe :create_token do
+    #     it_should_behave_like("token authenticated", :post, :create_token)
 
-        it "should return auth.net key and token and profile_id" do
-            @user.update("cim_profile" => "826735482")
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            get :tokenize, format: :json
-            rrc(200)
-            json["status"].should        == 1
-            json["data"].class.should    == Hash
-            json["data"]["key"].should   == AUTHORIZE_API_LOGIN
-            json["data"]["token"].should == AUTHORIZE_TRANSACTION_KEY
-            json["data"]["profile_id"].should == "826735482"
-        end
+    #     it "should not save incomplete card info" do
+    #         request.env["HTTP_TKN"] = "USER_TOKEN"
+    #         params = {"token"=>"25162732", "nickname"=>"Dango", "brand" => "Amex"}
+    #         post :create_token, format: :json, data: params
+    #         rrc(400)
+    #         json["status"].should        == 0
+    #         json["data"].class.should    == Hash
+    #         json["data"]["error"].keys.should == ["last_four"]
+    #     end
 
-        it "should return auth.net key and token and profile_id if profile_id is not made yet" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            Mdot::V2::CardsController.any_instance.stub(:get_cim_profile).and_return("")
-            get :tokenize, format: :json
-            rrc(200)
-            json["status"].should        == 1
-            json["data"].class.should    == Hash
-            json["data"]["key"].should   == AUTHORIZE_API_LOGIN
-            json["data"]["token"].should == AUTHORIZE_TRANSACTION_KEY
-            json["data"]["profile_id"].should == ""
-        end
-    end
+    #     it "should not save incomplete card info" do
+    #         request.env["HTTP_TKN"] = "USER_TOKEN"
+    #         params = {"token"=>"25162732", "last_four"=>"7483", "brand" => "Amex"}
+    #         post :create_token, format: :json, data: params
+    #         rrc(400)
+    #         json["status"].should        == 0
+    #         json["data"].class.should    == Hash
+    #         json["data"]["error"].keys.should == ["nickname"]
+    #     end
 
-    describe :create_token do
-        it_should_behave_like("token authenticated", :post, :create_token)
+    #     it "should not save incomplete card info" do
+    #         request.env["HTTP_TKN"] = "USER_TOKEN"
+    #         params = {"nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
+    #         post :create_token, format: :json, data: params
+    #         rrc(400)
+    #         json["status"].should        == 0
+    #         json["data"].class.should    == Hash
+    #         json["data"]["error"].keys.should == ["cim_token"]
+    #     end
 
-        it "should not save incomplete card info" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = {"token"=>"25162732", "nickname"=>"Dango", "brand" => "Amex"}
-            post :create_token, format: :json, data: params
-            rrc(400)
-            json["status"].should        == 0
-            json["data"].class.should    == Hash
-            json["data"]["error"].keys.should == ["last_four"]
-        end
+    #     it "should not save incomplete card info" do
+    #         request.env["HTTP_TKN"] = "USER_TOKEN"
+    #         params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483"}
+    #         post :create_token, format: :json, data: params
+    #         rrc(400)
+    #         json["status"].should        == 0
+    #         json["data"].class.should    == Hash
+    #         json["data"]["error"].keys.should == ["brand"]
+    #     end
 
-        it "should not save incomplete card info" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = {"token"=>"25162732", "last_four"=>"7483", "brand" => "Amex"}
-            post :create_token, format: :json, data: params
-            rrc(400)
-            json["status"].should        == 0
-            json["data"].class.should    == Hash
-            json["data"]["error"].keys.should == ["nickname"]
-        end
+    #     it "should accept hash of require fields and return card ID" do
+    #         request.env["HTTP_TKN"] = "USER_TOKEN"
+    #         params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
+    #         post :create_token, format: :json, data: params
 
-        it "should not save incomplete card info" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = {"nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
-            post :create_token, format: :json, data: params
-            rrc(400)
-            json["status"].should        == 0
-            json["data"].class.should    == Hash
-            json["data"]["error"].keys.should == ["cim_token"]
-        end
+    #         rrc(200)
 
-        it "should not save incomplete card info" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483"}
-            post :create_token, format: :json, data: params
-            rrc(400)
-            json["status"].should        == 0
-            json["data"].class.should    == Hash
-            json["data"]["error"].keys.should == ["brand"]
-        end
-
-        it "should accept hash of require fields and return card ID" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
-            post :create_token, format: :json, data: params
-
-            rrc(200)
-
-            card = Card.find_by(user_id: @user.id)
-            json["status"].should == 1
-            json["data"].should   == { "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four, "brand" => "american_express" }
-        end
-    end
+    #         card = Card.find_by(user_id: @user.id)
+    #         json["status"].should == 1
+    #         json["data"].should   == { "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four, "brand" => "american_express" }
+    #     end
+    # end
 
     describe :create do
         it_should_behave_like("token authenticated", :post, :create)

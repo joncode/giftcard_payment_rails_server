@@ -36,92 +36,99 @@ describe Web::V3::CardsController do
         end
     end
 
-    describe :credentials do
-        it_should_behave_like("client-token authenticated", :get, :credentials)
+    # describe :create_token do
+    #     it_should_behave_like("client-token authenticated", :post, :create)
 
-        it "should return auth.net key and token and profile_id" do
-            @user.update("cim_profile" => "826735482")
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
-            get :credentials, format: :json
-            rrc(200)
-            json["status"].should        == 1
-            json["data"].class.should    == Hash
-            json["data"]["key"].should   == AUTHORIZE_API_LOGIN
-            json["data"]["token"].should == AUTHORIZE_TRANSACTION_KEY
-            json["data"]["profile_id"].should == "826735482"
-        end
+    #     it "should not save incomplete card info" do
+    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #         params = {"token"=>"25162732", "nickname"=>"Dango", "brand" => "Amex"}
+    #         post :create_token, format: :json, data: params
+    #         rrc(400)
+    #         json["status"].should        == 0
+    #         json.class.should            == Hash
+    #         json["err"].should   == "INCOMPLETE_INPUT"
+    #         json["msg"].should   == "Missing Card Data"
+    #     end
 
-        it "should return auth.net key and token and profile_id if profile_id is not made yet" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
-            Web::V3::CardsController.any_instance.stub(:get_cim_profile).and_return("")
-            get :credentials, format: :json
-            rrc(200)
-            json["status"].should        == 1
-            json["data"].class.should    == Hash
-            json["data"]["key"].should   == AUTHORIZE_API_LOGIN
-            json["data"]["token"].should == AUTHORIZE_TRANSACTION_KEY
-            json["data"]["profile_id"].should == ""
-        end
-    end
+    #     it "should not save incomplete card info" do
+    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #         params = {"token"=>"25162732", "last_four"=>"7483", "brand" => "Amex"}
+    #         post :create_token, format: :json, data: params
+    #         rrc(400)
+    #         json["status"].should        == 0
+    #         json.class.should            == Hash
+    #         json["err"].should   == "INCOMPLETE_INPUT"
+    #         json["msg"].should   == "Missing Card Data"
+    #     end
+
+    #     it "should not save incomplete card info" do
+    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #         params = {"nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
+    #         post :create_token, format: :json, data: params
+    #         rrc(400)
+    #         json["status"].should        == 0
+    #         json.class.should            == Hash
+    #         json["err"].should   == "INCOMPLETE_INPUT"
+    #         json["msg"].should   == "Missing Card Data"
+    #     end
+
+    #     it "should not save incomplete card info" do
+    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #         params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483"}
+    #         post :create_token, format: :json, data: params
+    #         rrc(400)
+    #         json["status"].should        == 0
+    #         json.class.should            == Hash
+    #         json["err"].should   == "INCOMPLETE_INPUT"
+    #         json["msg"].should   == "Missing Card Data"
+    #     end
+
+    #     it "should accept hash of require fields and return card ID" do
+    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #         params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
+    #         post :create_token, format: :json, data: params
+
+    #         rrc(200)
+
+    #         card = Card.find_by(user_id: @user.id)
+    #         json["status"].should == 1
+    #         json["data"].should   == { "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four, "brand" => "american_express" }
+    #     end
+    # end
 
     describe :create do
         it_should_behave_like("client-token authenticated", :post, :create)
 
-        it "should not save incomplete card info" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
-            params = {"token"=>"25162732", "nickname"=>"Dango", "brand" => "Amex"}
-            post :create, format: :json, data: params
-            rrc(400)
-            json["status"].should        == 0
-            json.class.should            == Hash
-            json["err"].should   == "INCOMPLETE_INPUT"
-            json["msg"].should   == "Missing Card Data"
-        end
-
-        it "should not save incomplete card info" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
-            params = {"token"=>"25162732", "last_four"=>"7483", "brand" => "Amex"}
-            post :create, format: :json, data: params
-            rrc(400)
-            json["status"].should        == 0
-            json.class.should            == Hash
-            json["err"].should   == "INCOMPLETE_INPUT"
-            json["msg"].should   == "Missing Card Data"
-        end
-
-        it "should not save incomplete card info" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
-            params = {"nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
-            post :create, format: :json, data: params
-            rrc(400)
-            json["status"].should        == 0
-            json.class.should            == Hash
-            json["err"].should   == "INCOMPLETE_INPUT"
-            json["msg"].should   == "Missing Card Data"
-        end
-
-        it "should not save incomplete card info" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
-            params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483"}
-            post :create, format: :json, data: params
-            rrc(400)
-            json["status"].should        == 0
-            json.class.should            == Hash
-            json["err"].should   == "INCOMPLETE_INPUT"
-            json["msg"].should   == "Missing Card Data"
-        end
-
         it "should accept hash of require fields and return card ID" do
             request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
-            params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
+            params =  {"month"=>"02", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+
             post :create, format: :json, data: params
 
-            rrc(200)
-
             card = Card.find_by(user_id: @user.id)
+            rrc(200)
             json["status"].should == 1
-            json["data"].should   == { "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four, "brand" => "american_express" }
+            json["data"].should == {"id" => card.id, "card_id" => card.id,"nickname" => card.nickname, "last_four" => card.last_four}
         end
+
+        it "should not save incomplete card info" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            params = {"month"=>"02", "number"=>"4417121029961508", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+
+            post :create, format: :json, data: params
+
+            rrc(400)
+        end
+
+        it "should reject hash with fields not accept" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            params = {"month"=>"02", "number"=>"4417121029961508", "fake" => "FAKE", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+
+            post :create, format: :json, data: params
+
+            rrc(400)
+        end
+
     end
 
     describe :destroy do

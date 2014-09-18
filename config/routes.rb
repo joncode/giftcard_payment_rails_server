@@ -29,7 +29,7 @@ if !Rails.env.production?
           put :redeem
         end
       end
-      resources :cards, only: [:index]
+      resources :cards, only: [:index, :create]
     end
   end
 end
@@ -100,8 +100,8 @@ end
 
       resources :cards,     only: [:index, :create, :destroy] do
         collection do
-          get :tokenize
-          post :create_token
+          #get :tokenize
+          #post :create_token
         end
       end
 
