@@ -5,10 +5,10 @@ describe Pos::V1::OrdersController do
     describe :create do
 
         before(:each) do
-            user = FactoryGirl.create(:user)
+            user     = FactoryGirl.create(:user)
             provider = FactoryGirl.create(:provider, pos_merchant_id: 1233)
-            gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name, status: 'open', provider_id: provider.id)
-            @redeem = Redeem.find_or_create_with_gift(gift)
+            gift     = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name, status: 'open', provider_id: provider.id)
+            @redeem  = Redeem.find_or_create_with_gift(gift)
             user = NEXT_GEN_USER
             pw   = NEXT_GEN_PASS
             request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials(user,pw)

@@ -14,7 +14,7 @@ module DataHelper
             unless json_hsh.has_key?(key)
                 puts "\nMissing this key #{key}\n"
             end
-            json_hsh.has_key?(key).should be_true
+            json_hsh.should have_key(key)
 
             #json_hsh.keys.should include(key)
         end
