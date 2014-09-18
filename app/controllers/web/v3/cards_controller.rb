@@ -13,7 +13,7 @@ class Web::V3::CardsController < MetalController
 
     def credentials
         profile_id = get_cim_profile(@current_user)
-        json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY, "profile_id" => profile_id }
+        json       = mobile_credentials_response(profile_id)   # cim_profile concern
         success(json)
         respond
     end

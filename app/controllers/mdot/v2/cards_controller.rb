@@ -11,7 +11,7 @@ class Mdot::V2::CardsController < JsonController
 
     def tokenize
         profile_id = get_cim_profile(@current_user)   # cim_profile concern
-        json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY, "profile_id" => profile_id }
+        json       = mobile_credentials_response(profile_id)   # cim_profile concern
         success(json)
         respond
     end

@@ -28,6 +28,12 @@ else
     ENV['AUTHORIZE_TRANSACTION_KEY']
 end
 
+AUTHORIZE_MOBILE_DEVICE = if Rails.env.development? or Rails.env.test?
+    '42741F4C-3C79-4C57-BF12-0591BFBB7956'
+else
+    ENV['AUTHORIZE_MOBILE_DEVICE']
+end
+
 MAILCHIMP_APIKEY = if Rails.env.development? or Rails.env.test?
     '925c032769638d199309b7c752c31700-us7'
 else
