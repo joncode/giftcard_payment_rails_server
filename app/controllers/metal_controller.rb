@@ -6,6 +6,14 @@ class MetalController < ActionController::Base
     before_action        :method_start_log_message
     after_action         :method_end_log_message
 
+    def not_found
+        head 404
+    end
+
+    def bad_request
+        head 400
+    end
+
     def respond(status=nil)
         response_code = status || :ok
         respond_to do |format|

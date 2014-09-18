@@ -60,6 +60,8 @@ private
             1
         when "E00027" #The transaction was unsuccessful
             2
+        when "E00007" # invalid login credentials
+            3
         else          #Error/Failure
             3
         end

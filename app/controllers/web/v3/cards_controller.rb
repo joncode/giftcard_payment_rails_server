@@ -11,14 +11,7 @@ class Web::V3::CardsController < MetalController
         respond
     end
 
-    def credentials
-        profile_id = get_cim_profile(@current_user)
-        json = { "key" => AUTHORIZE_API_LOGIN, "token" => AUTHORIZE_TRANSACTION_KEY, "profile_id" => profile_id }
-        success(json)
-        respond
-    end
-
-    def create
+    def create_token
         create_with            = token_params
         create_with["user_id"] = @current_user.id
         card = CardToken.build_card_token_with_hash create_with
@@ -26,6 +19,20 @@ class Web::V3::CardsController < MetalController
             success   card.token_serialize
         else
             fail_web  fail_web_payload("incomplete_info")
+            status = :bad_request
+        end
+        respond(status)
+    end
+
+    def create
+        create_with = card_params
+        create_with["user_id"] = @current_user.id
+        card = Card.create_card_from_hash create_with
+
+        if card.save
+            success card.create_serialize
+        else
+            fail card
             status = :bad_request
         end
         respond(status)
@@ -47,6 +54,10 @@ private
 
     def token_params
         params.require(:data).permit(:nickname, :token, :last_four, :brand)
+    end
+
+    def card_params
+        params.require(:data).permit(:nickname, :number, :brand, :csv, :month, :year, :name)
     end
 
 end

@@ -1,7 +1,5 @@
 module PaymentGatewayStorage
 
-	#  EXTEND THIS MODULE
-
     def create_customer_profile customer_id
         profile  = customer_profile_for customer_id
         response = gateway.create_profile(profile)

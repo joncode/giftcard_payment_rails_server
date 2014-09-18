@@ -21,5 +21,13 @@ module MockAndStubs
         MailerJob.stub(:perform).and_return(true)
     end
 
+    def tokenize_credential_url
+        'https://apitest.authorize.net/xml/v1/request.api'
+    end
+
+    def tokenize_credential_body
+        '<?xml version="1.0" encoding="utf-8"?><mobileDeviceLoginRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="AnetApi/xml/v1/schema/AnetApiSchema.xsd"><merchantAuthentication><name>Dbtestapp1</name><password>10Brown15</password><mobileDeviceId>' + AUTHORIZE_MOBILE_DEVICE + '</mobileDeviceId></merchantAuthentication></mobileDeviceLoginRequest>'
+    end
+
 
 end

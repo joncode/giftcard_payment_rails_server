@@ -43,6 +43,12 @@ module CimProfile
         profile_id
     end
 
+    def mobile_credentials_response(profile_id)
+        # get the session toekn from Auth.net
+        session_token = AUTHORIZE_TRANSACTION_KEY
+        { "key" => AUTHORIZE_MOBILE_DEVICE, "token" => session_token, "profile_id" => profile_id }
+    end
+
     def destroy_card(card, user)
         if card.cim_token
             PaymentGatewayCim.delete_payment_profile(card.cim_token, user.cim_profile, user.id)
