@@ -67,8 +67,8 @@ describe Social do
             social    = FactoryGirl.create :social
             provider1 = FactoryGirl.create :provider
             provider2 = FactoryGirl.create :provider
-            ps1      = FactoryGirl.create :providers_social, provider_id: provider1.id, social_id: social.id
-            ps2      = FactoryGirl.create :providers_social, provider_id: provider2.id, social_id: social.id
+            FactoryGirl.create :providers_social, provider_id: provider1.id, social_id: social.id
+            FactoryGirl.create :providers_social, provider_id: provider2.id, social_id: social.id
             social.providers_socials.count.should == 2
             social.providers.count.should == 2
         end
@@ -76,10 +76,9 @@ describe Social do
             social    = FactoryGirl.create :social
             at_user1 = FactoryGirl.create :at_user
             at_user2 = FactoryGirl.create :at_user
-            ps1      = FactoryGirl.create :at_users_social, at_user_id: at_user1.id, social_id: social.id
-            ps2      = FactoryGirl.create :at_users_social, at_user_id: at_user2.id, social_id: social.id
+            FactoryGirl.create :at_users_social, at_user_id: at_user1.id, social_id: social.id
+            FactoryGirl.create :at_users_social, at_user_id: at_user2.id, social_id: social.id
             social.at_users_socials.count.should == 2
-            social.at_users.count.should == 2
         end
     end
 

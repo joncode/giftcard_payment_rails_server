@@ -6,7 +6,6 @@ class Social < ActiveRecord::Base
 	has_many :providers_socials
 	has_many :providers, through: :providers_socials
 	has_many :at_users_socials
-	has_many :at_users, through: :at_users_socials
 
     belongs_to  :payable,       polymorphic: :true, autosave: :true
 

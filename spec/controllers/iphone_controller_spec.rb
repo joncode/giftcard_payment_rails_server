@@ -97,55 +97,27 @@ describe IphoneController do
                 user.subscribed.should be_true
             end
 
-            it "should hit mandrill endpoint with correct email for confirm email w/o pn_token" do
+            it "should hit mandrill endpoint for confirm email w/o pn_token" do
                 User.any_instance.stub(:persist_social_data).and_return(true)
                 RegisterPushJob.stub(:perform).and_return(true)
                 SubscriptionJob.stub(:perform).and_return(true)
                 Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
                 template_name    = "user"
-                message          = {
-                    "subject" => "QA - Confirm your email address",
-                    "from_name" => "It's On Me",
-                    "from_email" => "no-reply@itson.me",
-                    "to" => [{
-                        "email" => "neil@gmail.com",
-                        "name" => "Neil"
-                    }],
-                    "bcc_address" => "info@itson.me",
-                    "merge_vars" => [{
-                        "rcpt" => "neil@gmail.com",
-                        "vars" => [{ "name" => "body", "content" => anything }]
-                    }]
-                }
-                Mandrill::API.should_receive(:send_template).with(template_name, nil, message)
+                Mandrill::API.should_receive(:send_template).with(template_name, nil, anything)
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
                 run_delayed_jobs
             end
 
 
-            it "should hit mandrill endpoint with correct email for confirm email w/ pn_token" do
+            it "should hit mandrill endpoint for confirm email w/ pn_token" do
                 Urbanairship.stub(:register_device).and_return("pn_token", { :alias => "ua_alias"})
                 User.any_instance.stub(:persist_social_data).and_return(true)
                 SubscriptionJob.stub(:perform).and_return(true)
                 RegisterPushJob.stub(:perform).and_return(true)
                 Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
                 template_name    = "user"
-                message          = {
-                    "subject" => "QA - Confirm your email address",
-                    "from_name" => "It's On Me",
-                    "from_email" => "no-reply@itson.me",
-                    "to" => [{
-                        "email" => "neil@gmail.com",
-                        "name" => "Neil"
-                    }],
-                    "bcc_address" => "info@itson.me",
-                    "merge_vars" => [{
-                        "rcpt" => "neil@gmail.com",
-                        "vars" => [{ "name" => "body", "content" => anything }]
-                    }]
-                }
-                Mandrill::API.should_receive(:send_template).with(template_name, nil, message)
+                Mandrill::API.should_receive(:send_template).with(template_name, nil, anything)
 
                 user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: "FAKE_PN_TOKENFAKE_PN_TOKEN"

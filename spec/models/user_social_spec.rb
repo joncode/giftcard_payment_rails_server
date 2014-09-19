@@ -41,6 +41,7 @@ describe UserSocial do
     end
 
     it "should update user_social.subscribed if subscribe is successful" do
+      Resque.should_receive(:enqueue).with(CollectIncompleteGiftsV2Job, anything)
       Resque.should_receive(:enqueue).with(SubscriptionJob, anything)
       user_social = FactoryGirl.create(:user_social, type_of: "email", identifier:"test@email.com")
     end

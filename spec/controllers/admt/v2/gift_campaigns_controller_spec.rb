@@ -198,6 +198,7 @@ describe Admt::V2::GiftCampaignsController do
 
         it "should send an email to the receiver_email" do
             ResqueSpec.reset!
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             create_hsh = { "payable_id" => @campaign_item.id  }
             post :bulk_create, format: :json, data: create_hsh
@@ -208,12 +209,11 @@ describe Admt::V2::GiftCampaignsController do
             WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
                 b = JSON.parse(req.body);
                 if b["template_name"] == "gift"
-                    link = b["message"]["merge_vars"].first["vars"].first["content"];
-                    link.match(/signup\/acceptgift\?id=#{abs_gift_id}/)
+                    b["message"]["global_merge_vars"].first["content"].include?("#{gift.provider_name}").should == true
                 else
                     true
                 end
-            }.once
+            }.times(3)
         end
 
         it "should send in-network receivers a push notification" do
