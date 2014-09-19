@@ -74,7 +74,7 @@ class Provider < ActiveRecord::Base
 		prov_hash["region_id"]  = self.region_id
 		prov_hash["loc_id"]     = self.id
 		prov_hash["photo"]      = self.get_photo
-		prov_hash["logo"]       = self.get_logo
+		prov_hash["logo"]       = self.get_logo_web
 		prov_hash["loc_street"] = self.address
 		prov_hash["loc_city"]   = self.city
 		prov_hash["loc_state"]  = self.state
@@ -166,6 +166,14 @@ class Provider < ActiveRecord::Base
 	def get_logo
 		if self.merchant
 			self.merchant.get_logo
+		else
+			nil
+		end
+	end
+
+	def get_logo_web
+		if self.merchant && self.merchant.photo_l.present?
+			self.merchant.photo_l
 		else
 			nil
 		end
