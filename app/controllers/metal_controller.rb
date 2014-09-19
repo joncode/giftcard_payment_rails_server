@@ -5,6 +5,7 @@ class MetalController < ActionController::Base
     before_action        :log_request_header
     before_action        :method_start_log_message
     after_action         :method_end_log_message
+    after_filter         :cross_origin_allow_header
 
     def not_found
         head 404
@@ -124,6 +125,15 @@ protected
                 head :unauthorized
             end
         end
+    end
+
+private
+
+    def cross_origin_allow_header
+        headers['Access-Control-Allow-Origin']   = "*"
+        headers['Access-Control-Allow-Methods']  = 'POST, PUT, DELETE, GET, OPTIONS'
+        headers['Access-Control-Request-Method'] = '*'
+        headers['Access-Control-Allow-Headers']  = 'Origin, X-Requested-With, Content-Type, Accept, TKN, Mdot-Version, Android-Version'
     end
 
 end
