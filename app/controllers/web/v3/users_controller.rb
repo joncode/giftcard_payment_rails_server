@@ -3,13 +3,9 @@ class Web::V3::UsersController < MetalCorsController
     # before_action :authenticate_web_general, only: [:create]
 
     def create
-puts "------- in create action"
-puts "------- in create action"
-puts "------- in create action"
-puts "------- in create action"
-puts "------- in create action"
-puts "------- in create action"
+puts "---- in create, before auth"
         authenticate_web_general        
+puts "---- in create, after auth. params are #{params.inspect}"
 		user = User.new(create_user_params)
         if user.save
             success user.profile_with_ids_serialize
@@ -18,15 +14,6 @@ puts "------- in create action"
             fail_web payload
         end
         respond(status)
-    end
-
-    def options
-puts "========================================= in options action"
-puts "========================================= in options action"
-puts "========================================= in options action"
-puts "========================================= in options action"
-puts "========================================= in options action"
-puts "========================================= in options action"
     end
 
 private
