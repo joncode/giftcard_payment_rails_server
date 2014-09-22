@@ -113,6 +113,8 @@ protected
     end
 
     def authenticate_web_general
+puts "------------------- in authenticate_web_general"
+puts "------------------- action #{params.action}"
         token    = request.headers["HTTP_X_AUTH_TOKEN"]
         if (WWW_TOKEN == token)
             puts "Web  -------------    General Token   -----------------------"
