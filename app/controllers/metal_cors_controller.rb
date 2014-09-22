@@ -1,8 +1,14 @@
 class MetalCorsController < MetalController
 
+	before_action :print_params
     after_filter         :cross_origin_allow_header
-
+    after_action :print_params
+    
 private
+
+	def print_params
+		puts "-------- mccontroller params #{params.inspect}"
+	end
 
     def cross_origin_allow_header
         headers['Access-Control-Allow-Origin']   = "*"
