@@ -1,6 +1,6 @@
 class Web::V3::UsersController < MetalCorsController
 
-    before_action :authenticate_web_general
+    before_action :authenticate_web_general, only: [:create]
 
     def create
 		user = User.new(create_user_params)
