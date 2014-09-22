@@ -1,9 +1,10 @@
 class Web::V3::UsersController < MetalCorsController
 
     # before_action :authenticate_web_general, only: [:create]
+    before_action :print_params
 
     def create
-puts "---- in create, before auth"
+puts "---- in create, before auth. params are #{params.inspect}"
         authenticate_web_general        
 puts "---- in create, after auth. params are #{params.inspect}"
 		user = User.new(create_user_params)
@@ -17,6 +18,10 @@ puts "---- in create, after auth. params are #{params.inspect}"
     end
 
 private
+
+    def print_params
+        puts "------- before filter. params are #{params.inspect}"
+    end
 
     def create_user_params
         params.require(:data).permit(["first_name", "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle"])
