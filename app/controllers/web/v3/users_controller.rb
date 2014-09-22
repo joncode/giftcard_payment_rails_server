@@ -1,6 +1,6 @@
 class Web::V3::UsersController < MetalCorsController
 
-    before_action :authenticate_web_general, only: [:create]
+    # before_action :authenticate_web_general, only: [:create]
 
     def create
 puts "------- in create action"
@@ -9,6 +9,7 @@ puts "------- in create action"
 puts "------- in create action"
 puts "------- in create action"
 puts "------- in create action"
+        authenticate_web_general        
 		user = User.new(create_user_params)
         if user.save
             success user.profile_with_ids_serialize
