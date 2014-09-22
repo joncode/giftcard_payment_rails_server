@@ -1,4 +1,4 @@
-class Web::V3::SessionsController < MetalController
+class Web::V3::SessionsController < MetalCorsController
 
     before_action :authenticate_web_general
 

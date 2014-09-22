@@ -1,4 +1,4 @@
-class Web::V3::RegionsController < MetalController
+class Web::V3::RegionsController < MetalCorsController
 
     before_action :authenticate_web_general
 

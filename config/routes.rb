@@ -160,16 +160,23 @@ end
           end
         end
 
+        match 'gifts', to: 'merchants#index', via: [:options]
+        match 'gifts', to: 'merchants#create', via: [:options]
         resources :gifts, only: [:index, :create]
 
+        match 'merchants', to: 'merchants#index', via: [:options]
+        match 'merchants/menu', to: 'merchants#menu', via: [:options]
         resources :merchants, only: [:index] do
           member { get :menu }
         end
 
+        match 'regions', to: 'regions#index', via: [:options]
+        match 'regions/merchants', to: 'regions#merchants', via: [:options]
         resources :regions,   only: [:index] do
           member { get :merchants }
         end
 
+        match 'sessions', to: 'sessions#create', via: [:options]
         resources :sessions,  only: [:create]
 
         match 'users', to: 'users#create', via: [:options]

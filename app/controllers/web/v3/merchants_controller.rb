@@ -1,4 +1,4 @@
-class Web::V3::MerchantsController < MetalController
+class Web::V3::MerchantsController < MetalCorsController
 
     before_action :authenticate_web_general
 

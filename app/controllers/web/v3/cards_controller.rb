@@ -1,4 +1,4 @@
-class Web::V3::CardsController < MetalController
+class Web::V3::CardsController < MetalCorsController
 
     include CimProfile
 

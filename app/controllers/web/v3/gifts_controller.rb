@@ -1,4 +1,4 @@
-class Web::V3::GiftsController < MetalController
+class Web::V3::GiftsController < MetalCorsController
 
     before_action :authenticate_web_user
 
