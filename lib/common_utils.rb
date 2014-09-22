@@ -18,9 +18,9 @@ module CommonUtils
 		if request.headers['Android-Version']
 			puts "HERE IS THE Android-Version HEADER REQUEST #{request.headers['Android-Version']}"
 		end
-		# puts "...................................................................................."
-		# puts request.headers.inspect
-		# puts "...................................................................................."
+		puts "...................................................................................."
+		puts request.headers.inspect
+		puts "...................................................................................."
 		unless Rails.env.production?
 			if request.headers["HTTP_TKN"]
 				puts "HERE IS THE HEADER TOKEN #{request.headers["HTTP_TKN"]}"

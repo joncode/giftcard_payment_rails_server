@@ -152,27 +152,29 @@ end
       resources :merchants, only: [:show]
     end
 
-    namespace :v3 do
-      resources :gifts, only: [:index, :create]
-
-      resources :merchants, only: [:index] do
-        member { get :menu }
-      end
-
-      resources :regions,   only: [:index] do
-        member { get :merchants }
-      end
-
-      resources :sessions,  only: [:create]
-
-      resources :users, only: [:create]
-
-      resources :cards, only: [:create, :index, :destroy] do
-        collection do
-          get :credentials
+    if !Rails.env.production?
+      namespace :v3 do
+        resources :cards, only: [:create, :index, :destroy] do
+          collection do
+            get :credentials
+          end
         end
-      end
 
+        resources :gifts, only: [:index, :create]
+
+        resources :merchants, only: [:index] do
+          member { get :menu }
+        end
+
+        resources :regions,   only: [:index] do
+          member { get :merchants }
+        end
+
+        resources :sessions,  only: [:create]
+
+        match 'users', to: 'users#create', via: [:options]
+        resources :users, only: [:create]
+      end
     end
 
   end
