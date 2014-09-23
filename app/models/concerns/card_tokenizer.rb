@@ -11,7 +11,7 @@ module CardTokenizer
 		    		create_profile_and_payment_profile(self.id)
 			    end
 			rescue
-				puts "\n\n\n----   Card #{card.id} -- does not have a user\n\n\n"
+				puts "\n\n\n----   Card #{self.id} -- does not have a user\n\n\n"
 			end
 		end
     end
