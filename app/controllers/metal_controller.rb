@@ -102,28 +102,4 @@ protected
         end
     end
 
-    def authenticate_web_user
-        token         = request.headers["HTTP_X_AUTH_TOKEN"]
-        @current_user = User.app_authenticate(token)
-        if @current_user
-            puts "Web  -------------   #{@current_user.name}   -----------------------"
-        else
-            head :unauthorized
-        end
-    end
-
-    def authenticate_web_general
-        token    = request.headers["HTTP_X_AUTH_TOKEN"]
-        if (WWW_TOKEN == token)
-            puts "Web  -------------    General Token   -----------------------"
-        else
-            @current_user = User.app_authenticate(token)
-            if @current_user
-                puts "Web  -------------   #{ @current_user.name }   -----------------------"
-            else
-                head :unauthorized
-            end
-        end
-    end
-
 end

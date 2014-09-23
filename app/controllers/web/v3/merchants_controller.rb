@@ -1,6 +1,6 @@
 class Web::V3::MerchantsController < MetalCorsController
 
-    before_action :authenticate_web_general
+    before_action :authenticate_general
 
     def index
         providers = Provider.all

@@ -1,13 +1,13 @@
 class Web::V3::UsersController < MetalCorsController
 
-    # before_action :authenticate_web_general, only: [:create]
+    # before_action :authenticate_general, only: [:create]
     before_action :print_params
 
     def create
 puts "---- in create, before auth. params are #{params.inspect}"
-        authenticate_web_general        
+puts "---- in create, after auth. headers are #{request.headers.inspect}"
+        authenticate_general        
 puts "---- in create, after auth. params are #{params.inspect}"
-puts "---- in create, after auth. 'Content-type' headers are #{request.headers.inspect}"
 puts "---- in create, after auth. 'Content-type' headers are #{request.headers["Content-Type"]}"
 puts "---- in create, after auth. 'Accept' headers are #{request.headers["Accept"]}"
 		user = User.new(create_user_params)

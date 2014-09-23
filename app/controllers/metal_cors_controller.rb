@@ -4,6 +4,39 @@ class MetalCorsController < MetalController
     after_filter         :cross_origin_allow_header
     after_action :print_params
     
+
+protected
+
+    def authenticate_user
+        if token = request.headers["HTTP_X_AUTH_TOKEN"]
+            @current_user = User.app_authenticate(token)
+            if @current_user
+                puts "Web  -------------   #{@current_user.name}   -----------------------"
+            else
+                head :unauthorized
+            end
+        else
+            head :unauthorized
+        end
+    end
+
+    def authenticate_general
+        if token    = request.headers["HTTP_X_AUTH_TOKEN"]
+            if (WWW_TOKEN == token)
+                puts "Web  -------------    General Token   -----------------------"
+            else
+                @current_user = User.app_authenticate(token)
+                if @current_user
+                    puts "Web  -------------   #{ @current_user.name }   -----------------------"
+                else
+                    head :unauthorized
+                end
+            end
+        else
+            head :unauthorized
+        end
+    end
+
 private
 
 	def print_params
@@ -15,29 +48,6 @@ private
         headers['Access-Control-Allow-Methods']  = 'POST, PUT, DELETE, GET, OPTIONS'
         headers['Access-Control-Request-Method'] = '*'
         headers['Access-Control-Allow-Headers']  = 'Origin, X-Requested-With, Content-Type, Accept, TKN, Mdot-Version, Android-Version'
-        headers['Content-Type']                  = "application/json"
-        headers['Accept']                        = "application/json"
     end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
