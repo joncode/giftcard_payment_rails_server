@@ -1,6 +1,6 @@
 class Web::V3::GiftsController < MetalCorsController
 
-    before_action :authenticate_web_user
+    before_action :authenticate_user
 
     def index
         user_id = params[:user_id]

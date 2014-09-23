@@ -2,7 +2,7 @@ class Web::V3::CardsController < MetalCorsController
 
     include CimProfile
 
-    before_action :authenticate_web_user
+    before_action :authenticate_user
 
     rescue_from JSON::ParserError, :with => :bad_request
 

@@ -1,6 +1,6 @@
 class Web::V3::RegionsController < MetalCorsController
 
-    before_action :authenticate_web_general
+    before_action :authenticate_general
 
     def index
         city_list_web = CITY_LIST.map do |city|

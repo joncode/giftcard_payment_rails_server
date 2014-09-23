@@ -1,8 +1,15 @@
 class Web::V3::UsersController < MetalCorsController
 
-    before_action :authenticate_web_general, only: [:create]
+    # before_action :authenticate_general, only: [:create]
+    before_action :print_params
 
     def create
+puts "---- in create, before auth. params are #{params.inspect}"
+puts "---- in create, after auth. headers are #{request.headers.inspect}"
+        authenticate_general        
+puts "---- in create, after auth. params are #{params.inspect}"
+puts "---- in create, after auth. 'Content-type' headers are #{request.headers["Content-Type"]}"
+puts "---- in create, after auth. 'Accept' headers are #{request.headers["Accept"]}"
 		user = User.new(create_user_params)
         if user.save
             success user.profile_with_ids_serialize
@@ -14,6 +21,10 @@ class Web::V3::UsersController < MetalCorsController
     end
 
 private
+
+    def print_params
+        puts "------- before filter. params are #{params.inspect}"
+    end
 
     def create_user_params
         params.require(:data).permit(["first_name", "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle"])
