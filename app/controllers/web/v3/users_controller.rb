@@ -7,6 +7,7 @@ class Web::V3::UsersController < MetalCorsController
 puts "---- in create, before auth. params are #{params.inspect}"
         authenticate_web_general        
 puts "---- in create, after auth. params are #{params.inspect}"
+puts "---- in create, after auth. 'Content-type' headers are #{request.headers.inspect}"
 puts "---- in create, after auth. 'Content-type' headers are #{request.headers["Content-Type"]}"
 puts "---- in create, after auth. 'Accept' headers are #{request.headers["Accept"]}"
 		user = User.new(create_user_params)
