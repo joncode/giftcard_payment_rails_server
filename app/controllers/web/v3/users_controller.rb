@@ -6,7 +6,7 @@ class Web::V3::UsersController < MetalCorsController
     def create
 puts "---- in create, before auth. params are #{params.inspect}"
 puts "---- in create, after auth. headers are #{request.headers.inspect}"
-        authenticate_general        
+        authenticate_general
 puts "---- in create, after auth. params are #{params.inspect}"
 puts "---- in create, after auth. 'Content-type' headers are #{request.headers["Content-Type"]}"
 puts "---- in create, after auth. 'Accept' headers are #{request.headers["Accept"]}"
