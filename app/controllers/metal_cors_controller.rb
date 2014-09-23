@@ -49,7 +49,7 @@ private
         headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Allow-Methods']  = 'POST, PUT, DELETE, GET, OPTIONS'
         headers['Access-Control-Request-Method'] = '*'
-        headers['Access-Control-Allow-Headers']  = 'Origin, X-Requested-With, Content-Type, Accept, HTTP_X_AUTH_TOKEN, Authorization, X_AUTH_TOKEN, http_x_auth_token, x_auth_token, Mdot-Version, Android-Version'
+        headers['Access-Control-Allow-Headers']  = 'Origin, X-Requested-With, Content-Type, Accept, HTTP_X_AUTH_TOKEN, Authorization, x-auth-token, X-AUTH-TOKEN, X_AUTH_TOKEN, http_x_auth_token, x_auth_token, Mdot-Version, Android-Version'
     end
 
 end
