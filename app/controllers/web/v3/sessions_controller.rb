@@ -1,9 +1,8 @@
 class Web::V3::SessionsController < MetalCorsController
 
-    # before_action :authenticate_general
+    before_action :authenticate_general
 
     def create
-        authenticate_general
         login_params    = params["data"]
 
         if login_params["password"] && login_params["username"]

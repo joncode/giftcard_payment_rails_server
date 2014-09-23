@@ -21,6 +21,7 @@ protected
     end
 
     def authenticate_general
+        puts "#{request.headers.inspect}"
         if token    = request.headers["HTTP_X_AUTH_TOKEN"]
             puts "\n\n Auth token == #{token}\n\n"
             if (WWW_TOKEN == token)
@@ -41,7 +42,7 @@ protected
 private
 
 	def print_params
-		puts "-------- mccontroller params #{params.inspect}"
+		puts "-------- mccontroller request #{request.headers.inspect}"
 	end
 
     def cross_origin_allow_header
