@@ -1,7 +1,7 @@
 class MetalCorsController < MetalController
 
-	before_action :print_params
-    after_filter  :cross_origin_allow_header
+	# before_action :print_params
+    after_action  :cross_origin_allow_header
     #after_action  :print_params
 
 
@@ -21,7 +21,7 @@ protected
     end
 
     def authenticate_general
-        puts "#{request.headers.inspect}"
+        puts "\n\n\n#{request.headers.inspect}"
         if token    = request.headers["HTTP_X_AUTH_TOKEN"]
             puts "\n\n Auth token == #{token}\n\n"
             if (WWW_TOKEN == token)
@@ -41,9 +41,9 @@ protected
 
 private
 
-	def print_params
-		puts "-------- mccontroller request #{request.headers.inspect}"
-	end
+	# def print_params
+	# 	puts "-------- mccontroller request #{request.headers.inspect}"
+	# end
 
     def cross_origin_allow_header
         headers['Access-Control-Allow-Origin']   = "*"
