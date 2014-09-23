@@ -2,6 +2,7 @@ class MetalController < ActionController::Base
 
     include CommonUtils
 
+    skip_before_action   :verify_authenticity_token
     before_action        :log_request_header
     before_action        :method_start_log_message
     after_action         :method_end_log_message
