@@ -3,12 +3,16 @@ module CardTokenizer
 
     def tokenize
     	if self.cim_token == nil
-	    	user = self.user
-	    	if user.cim_profile.present?
-	    		add_payment_profile(self.id, user.cim_profile)
-	    	else
-	    		create_profile_and_payment_profile(self.id)
-		    end
+	    	user = User.unscoped.find(self.user_id)
+	    	if user
+		    	if user.cim_profile.present?
+		    		add_payment_profile(self.id, user.cim_profile)
+		    	else
+		    		create_profile_and_payment_profile(self.id)
+			    end
+			else
+				puts "\n\n\n----   Card #{card.id} -- does not have a user\n\n\n"
+			end
 		end
     end
 
