@@ -1,9 +1,11 @@
 class MetalCorsController < MetalController
 
 	# before_action :print_params
-    after_action :cross_origin_allow_header
+    after_filter :cross_origin_allow_header
     #after_action  :print_params
 
+
+protected
 
     def authenticate_user
         if token = request.headers["HTTP_X_AUTH_TOKEN"]
@@ -19,7 +21,7 @@ class MetalCorsController < MetalController
     end
 
     def authenticate_general
-        puts "\n\n\n            authentiate general \n #{request.headers.inspect}\n"
+        puts "\n\n\n#{request.headers.inspect}"
         if token    = request.headers["HTTP_X_AUTH_TOKEN"]
             puts "\n\n Auth token == #{token}\n\n"
             if (WWW_TOKEN == token)
@@ -37,18 +39,17 @@ class MetalCorsController < MetalController
         end
     end
 
-#private
+private
 
 	# def print_params
 	# 	puts "-------- mccontroller request #{request.headers.inspect}"
 	# end
 
     def cross_origin_allow_header
-        puts "\n            cross_origin_allow_header                       "
         headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Allow-Methods']  = 'POST, PUT, DELETE, GET, OPTIONS'
         headers['Access-Control-Request-Method'] = '*'
-        headers['Access-Control-Allow-Headers']  = '*'
+        headers['Access-Control-Allow-Headers']  = 'Origin, X-Requested-With, Content-Type, Accept, x-auth_token, X-AUTH_TOKEN, HTTP_X_AUTH_TOKEN, Authorization, x-auth-token, X-AUTH-TOKEN,X_AUTH_TOKEN, http_x_auth_token, x_auth_token, Mdot-Version, Android-Version'
     end
 
 end
