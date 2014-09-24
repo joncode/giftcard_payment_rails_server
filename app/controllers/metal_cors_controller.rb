@@ -46,6 +46,7 @@ private
 	# end
 
     def cross_origin_allow_header
+        puts "\n            cross_origin_allow_header                       "
         headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Allow-Methods']  = 'POST, PUT, DELETE, GET, OPTIONS'
         headers['Access-Control-Request-Method'] = '*'
