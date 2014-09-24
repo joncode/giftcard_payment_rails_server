@@ -16,7 +16,7 @@ describe Mdot::V2::CitiesController do
         it "should return a list of all active cities serialized when success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
-            keys    =  ["name", "state", "city_id", "photo", "token"]
+            keys    =  CITY_LIST[0].keys
             rrc(200)
             ary = json["data"]
             ary.class.should == Array

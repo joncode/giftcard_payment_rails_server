@@ -6,7 +6,7 @@ class Web::V3::SessionsController < MetalCorsController
         login_params    = params["data"]
 
         if login_params["password"] && login_params["username"]
-            user = normaxl_login login_params
+            user = normal_login login_params
         else
             user = facebook_login login_params
         end
