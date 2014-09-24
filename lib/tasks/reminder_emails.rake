@@ -4,4 +4,8 @@ namespace :db do
     	Reminder.gift_reminder
 	end
 
+	task internal_reminders: :environment do
+		ReminderInternal.send_reminders
+	end
+
 end
