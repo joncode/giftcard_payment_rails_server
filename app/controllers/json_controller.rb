@@ -210,6 +210,7 @@ class JsonController < ActionController::Base
     end
 
     def authenticate_general_token
+        puts "\n\n\n wrong general token \n\n\n"
         token = request.headers["HTTP_TKN"]
         head :unauthorized unless [APP_GENERAL_TOKEN, GENERAL_TOKEN, ANDROID_TOKEN].include?(token)
     end
