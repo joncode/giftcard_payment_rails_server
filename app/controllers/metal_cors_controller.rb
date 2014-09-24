@@ -22,7 +22,7 @@ protected
 
     def authenticate_general
         puts "\nWeb-Pre  -------------    General Token   -----------------------\n"
-        puts "\n\n\n#{request.headers.inspect}"
+        #puts "\n\n\n#{request.headers.inspect}"
         if token    = request.headers["HTTP_X_AUTH_TOKEN"]
             puts "\n\n Auth token == #{token}\n\n"
             if (WWW_TOKEN == token)
