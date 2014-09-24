@@ -5,8 +5,6 @@ class MetalCorsController < MetalController
     #after_action  :print_params
 
 
-protected
-
     def authenticate_user
         if token = request.headers["HTTP_X_AUTH_TOKEN"]
             @current_user = User.app_authenticate(token)
