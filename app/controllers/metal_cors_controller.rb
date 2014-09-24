@@ -50,8 +50,7 @@ private
         headers['Access-Control-Allow-Origin']   = "*"
         headers['Access-Control-Allow-Methods']  = 'POST, PUT, DELETE, GET, OPTIONS'
         headers['Access-Control-Request-Method'] = '*'
-        headers['Access-Control-Allow-Headers']  = 'Origin, Cache-Control, Accept-Encoding, Connection, Content-Length, Cookie, Host, User-Agent, Accept-Language, Referer, cache-control, accept, content-type, X-Requested-With, Content-Type, Accept, x-auth-token, x-auth_token, X-AUTH_TOKEN, HTTP_X_AUTH_TOKEN, Authorization, x-auth-token, X-AUTH-TOKEN, X_AUTH_TOKEN, http_x_auth_token, x_auth_token'
-        #"accept, cache-control, x_auth_token, content-type"
+        headers['Access-Control-Request-Headers']  = 'Origin, Cache-Control, Accept-Encoding, Connection, Content-Length, Cookie, Host, User-Agent, Accept-Language, Referer, cache-control, accept, content-type, X-Requested-With, Content-Type, Accept, x-auth-token, x-auth_token, X-AUTH_TOKEN, x-auth-token, X-AUTH-TOKEN, X_AUTH_TOKEN, x_auth_token'
     end
 
 end
