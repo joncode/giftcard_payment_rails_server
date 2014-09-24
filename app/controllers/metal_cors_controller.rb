@@ -37,7 +37,7 @@ class MetalCorsController < MetalController
         end
     end
 
-private
+#private
 
 	# def print_params
 	# 	puts "-------- mccontroller request #{request.headers.inspect}"
