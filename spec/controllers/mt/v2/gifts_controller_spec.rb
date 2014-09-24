@@ -58,6 +58,7 @@ describe Mt::V2::GiftsController do
         end
 
         it "should create a multple promo gifts and find the provider via the token" do
+            Gift.delete_all
             GiftPromoSocial.create(gift_promo_mock_id: @gp_mock.id, network: "email", network_id: "greg@barry.com")
             GiftPromoSocial.create(gift_promo_mock_id: @gp_mock.id, network: "email", network_id: "harry@barry.com")
             create_hsh = { "gift_promo_mock_id" => @gp_mock.id }

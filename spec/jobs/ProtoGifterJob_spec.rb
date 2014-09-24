@@ -7,6 +7,7 @@ describe ProtoGifterJob do
     describe :perform do
 
    	    before(:each) do
+            Gift.delete_all
 	        proto_with_socials 4
 	        @pj        = ProtoJoin.where(receivable_type: "Social").first
 	        @proto 	   = @pj.proto

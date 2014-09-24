@@ -5,6 +5,7 @@ describe Admt::V2::GiftCampaignsController do
     before(:each) do
         #Gift.delete_all
         AdminUser.delete_all
+        User.delete_all
         @provider      = FactoryGirl.create :provider
         @campaign      = FactoryGirl.create(:campaign, purchaser_type: "AdminGiver", name: "Cinco de Mayo Party!")
         @campaign_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, expires_at: Time.now.to_date, provider_id: @provider.id, value: "10", cost: "8")
