@@ -1,7 +1,7 @@
 class MetalCorsController < MetalController
 
 	# before_action :print_params
-    before_action :cross_origin_allow_header
+    after_action :cross_origin_allow_header
     #after_action  :print_params
 
 
@@ -21,7 +21,7 @@ protected
     end
 
     def authenticate_general
-        puts "\n\n\n#{request.headers.inspect}"
+        puts "\n\n\n            authentiate general \n #{request.headers.inspect}\n"
         if token    = request.headers["HTTP_X_AUTH_TOKEN"]
             puts "\n\n Auth token == #{token}\n\n"
             if (WWW_TOKEN == token)
