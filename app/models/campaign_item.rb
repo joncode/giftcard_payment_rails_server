@@ -24,4 +24,9 @@ class CampaignItem < ActiveRecord::Base
     def owner
        campaign
     end
+
+    def name
+        "#{self.id} - #{self.textword}"
+    end
+
 end
