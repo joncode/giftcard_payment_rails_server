@@ -101,5 +101,17 @@ describe CollectIncompleteGiftsV2Job do
             end
         end
 
+        it "should create a ditto" do
+            Ditto.delete_all
+            user = FactoryGirl.create(:user,
+                facebook_id: "654654654654",
+                twitter: "2123456789",
+                phone: "2223334444",
+                email: "ann@email.com")
+            run_delayed_jobs
+            Ditto.count.should == 4
+            Ditto.first.cat.should == 3500
+        end
+
     end
 end

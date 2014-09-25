@@ -54,7 +54,7 @@ class CollectIncompleteGiftsV2Job
 							# no incomplete gifts found
 			 "ZERO incomplete ghost gifts for  #{user_social.identifier} #{user_social.id}"
 		end
-
+		Ditto.collect_incomplete_gifts_create(response, user_social_id)
 							# log the messages output for the method
 		puts response
 

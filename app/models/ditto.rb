@@ -31,10 +31,6 @@ class Ditto < ActiveRecord::Base
 			create(response_json: response.to_json, cat: 120, status: status)
 		end
 
-		def cron_push_create(response)
-			create(response_json: response, cat: 2100, notable_type: "UserSocial")
-		end
-
 		def send_email_create(response, obj_id, obj_type)
 			status = parse_mandrill_response(response)
 			create(response_json: response.to_json, cat: 310, status: status, notable_id: obj_id, notable_type: obj_type)
@@ -79,6 +75,14 @@ class Ditto < ActiveRecord::Base
 
 		def post_social_proxy_create response
 			create(response_json: response.to_json, cat: 520, status: response["status"], notable_type: "SocialProxy"  )
+		end
+
+		def cron_push_create(response)
+			create(response_json: response, cat: 2100, notable_type: "UserSocial")
+		end
+
+		def collect_incomplete_gifts_create(response, user_social_id)
+			create(response_json: response, cat: 3500, notable_type: "UserSocial", notable_id: user_social_id)
 		end
 
 	private
@@ -154,20 +158,22 @@ end
 
 # CATEGORIES
 
-#  100 - Register Push Pn Token
-#  101 - Unregister Push Pn Token
-#  110 - send push pn token
-#  120 - get device tokens
-#  310 - send transactional email
-#  400 - Register subscribe email to mailchimp
-#  500 - SocialProxy - friends
-#  510 - SocialProxy - profile
-#  520 - SocialProxy - create_post
-#  600 - Auth.net - tokenize
-#  650 - Auth.net create cutomer profile
-# 1000 - Receive POS request
+#  100 - Urbanairship - Register Push Pn Token
+#  101 - Urbanairship - Unregister Push Pn Token
+#  110 - Urbanairship - send push pn token
+#  120 - Urbanairship - get device tokens
+#  310 - Mandrill     - send transactional email
+#  400 - Mailchimp    - Register subscribe email to mailchimp
+#  500 - SocialProxy  - friends
+#  510 - SocialProxy  - profile
+#  520 - SocialProxy  - create_post
+#  600 - Auth.net     - tokenize
+#  650 - Auth.net     - create cutomer profile
+# 1000 - POS          - Receive POS request
 # 2xxx - Scheduled Jobs
 # 2100 - Scheduled Job - pn_tokens
+# 3xxx - Internal Callbacks (not external service)
+# 3500 - CollectIncompleteGifts
 
 # Statuses
 
