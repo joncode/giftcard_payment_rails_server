@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140911202244) do
+ActiveRecord::Schema.define(version: 20140925183944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -516,6 +516,7 @@ ActiveRecord::Schema.define(version: 20140911202244) do
     t.string   "handle"
   end
 
+  add_index "user_socials", ["active", "identifier"], name: "index_user_socials_on_active_and_identifier", using: :btree
   add_index "user_socials", ["active"], name: "index_user_socials_on_active", using: :btree
   add_index "user_socials", ["type_of", "identifier"], name: "index_user_socials_on_type_of_and_identifier", using: :btree
   add_index "user_socials", ["user_id"], name: "index_user_socials_on_user_id", using: :btree
