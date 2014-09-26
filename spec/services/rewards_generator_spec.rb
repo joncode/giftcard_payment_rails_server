@@ -3,6 +3,10 @@ require 'rewards_generator'
 
 describe RewardsGenerator do
 
+    before do
+        Gift.delete_all
+    end
+
     it "should get all the users and campaigns and make gifts" do
         Campaign.delete_all
         CampaignItem.delete_all

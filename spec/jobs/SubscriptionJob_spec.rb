@@ -4,6 +4,7 @@ require 'mandrill'
 describe SubscriptionJob do
 
     before do
+        User.delete_all
         UserSocial.delete_all
         ResqueSpec.reset!
     end
@@ -21,7 +22,7 @@ describe SubscriptionJob do
 
         user_social.reload
         user_social.active.should be_false
-        d                     = Ditto.last
+        d                     = Ditto.where(cat: 400).last
         d.notable_id.should   == user_social.id
         d.notable_type.should == 'UserSocial'
         d.status.should       == 200
@@ -41,7 +42,7 @@ describe SubscriptionJob do
 
         user_social.reload
         user_social.active.should be_false
-        d                     = Ditto.last
+        d                     = Ditto.where(cat: 400).last
         d.notable_id.should   == user_social.id
         d.notable_type.should == 'UserSocial'
         d.status.should       == 200
@@ -58,7 +59,7 @@ describe SubscriptionJob do
         run_delayed_jobs
         user_social.reload
         user_social.subscribed.should == true
-        d                     = Ditto.last
+        d                     = Ditto.where(cat: 400).last
         d.notable_id.should   == user_social.id
         d.notable_type.should == 'UserSocial'
         d.status.should       == 200
@@ -75,7 +76,7 @@ describe SubscriptionJob do
         run_delayed_jobs
         user_social.reload
         user_social.subscribed.should == true
-        d                     = Ditto.last
+        d                     = Ditto.where(cat: 400).last
         d.notable_id.should   == user_social.id
         d.notable_type.should == 'UserSocial'
         d.status.should       == 200

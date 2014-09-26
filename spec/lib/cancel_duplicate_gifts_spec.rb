@@ -49,6 +49,7 @@ end
 describe "undo all cancels" do
 
 	it "should undo dual cancelled gifts" do
+		Gift.delete_all
 		@provider1 = FactoryGirl.create :provider
 		10.times do
 			gift = FactoryGirl.create :gift, receiver_email: "ann@email.com", provider_id: @provider1.id, receiver_id: nil

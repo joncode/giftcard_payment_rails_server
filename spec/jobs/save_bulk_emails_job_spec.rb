@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SaveBulkEmailsJob do
 
 	before(:each) do
+		Social.delete_all
 		@provider = FactoryGirl.create(:provider)
 	end
 
@@ -140,7 +141,7 @@ describe SaveBulkEmailsJob do
 			socials.each do |soc|
 				soc.proto_joins.count.should == 1
 			end
-			
+
 			bulk_email = FactoryGirl.create :bulk_email,
 				data: "[\"ann@email.com\",\"bob@email.com\",\"cam@email.com\"]",
 				proto_id: proto.id

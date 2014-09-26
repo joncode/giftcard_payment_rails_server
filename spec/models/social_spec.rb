@@ -55,6 +55,7 @@ describe Social do
 	end
 
 	it "should enforce network + network_id uniqueness validation" do
+		Social.delete_all
 		Social.create(network: "facebook", network_id: "782364192834")
 		Social.create(network: "facebook", network_id: "782364192834")
 
