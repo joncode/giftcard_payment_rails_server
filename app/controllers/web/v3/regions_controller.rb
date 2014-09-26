@@ -3,7 +3,8 @@ class Web::V3::RegionsController < MetalCorsController
     before_action :authenticate_general
 
     def index
-        city_list_web = CITY_LIST.map do |city|
+        city_list = CITY_LIST.dup
+        city_list_web = city_list.map do |city|
             city["token"] = city["name"].downcase.gsub(/ /, '-')
             city["region_id"] = city.delete("city_id")
             city
