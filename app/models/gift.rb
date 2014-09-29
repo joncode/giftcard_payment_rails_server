@@ -47,6 +47,10 @@ class Gift < ActiveRecord::Base
 
     default_scope -> { where(active: true) } # indexed
 
+    scope :search, ->(str) {
+      where("ftmeta @@ plainto_tsquery(:search)", search: str)
+    }
+
 #/---------------------------------------------------------------------------------------------/
 
     def obscured_id
