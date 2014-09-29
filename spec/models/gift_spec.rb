@@ -770,13 +770,13 @@ describe Gift do
 
     it "should find data via all expected columns" do
       terms = [
-        @user1_gift.id.to_s,
-        "One User",
-        "OneUserOrderNum",
-        "one.user@example.com",
-        "POne PUser",
-        "GOne GUser",
-        "regifted"
+        @user1_gift.id.to_s, #id
+        "One User", #receiver_name
+        "OneUserOrderNum", #order_num
+        "one.user@example.com", #receiver_email
+        "POne PUser", #provider_name
+        "GOne GUser", #giver_name
+        "regifted" #status
       ]
       result = Gift.search(terms.join(" "))
     end
