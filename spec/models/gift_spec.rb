@@ -722,6 +722,31 @@ describe Gift do
 				resp_hsh["status"].should 		== 0
 			end
 		end
+
+  end
+  context "search" do
+    before do
+      @receiver1 = FactoryGirl.create(:user, first_name: "One")
+      @receiver2 = FactoryGirl.create(:user, first_name: "Two")
+      @receiver3 = FactoryGirl.create(:user, first_name: "Three")
+      @user1_gift = FactoryGirl.create(:gift, receiver: @receiver1)
+      @user2_gift = FactoryGirl.create(:gift, receiver: @receiver2)
+      @user3_gift1 = FactoryGirl.create(:gift, receiver: @receiver3)
+      @user3_gift2 = FactoryGirl.create(:gift, receiver: @receiver3)
+    end
+      
+    it "should find gifts for a user" do
+      result = Gift.search(@receiver1.first_name)
+      expect(result.length).to eq(1)
+      expect(result).to include(@user1_gift) 
+    end
+
+    it "should find multiple gifts for user with multiple" do
+      result = Gift.search(@receiver3.first_name)
+      expect(result.length).to eq(2)
+      expect(result).to include(@user3_gift1)
+      expect(result).to include(@user3_gift2)
+    end
 	end
 end
 
