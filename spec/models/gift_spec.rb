@@ -726,10 +726,17 @@ describe Gift do
   end
   context "search" do
     before do
-      @receiver1 = FactoryGirl.create(:user, first_name: "One")
-      @receiver2 = FactoryGirl.create(:user, first_name: "Two")
-      @receiver3 = FactoryGirl.create(:user, first_name: "Three")
-      @user1_gift = FactoryGirl.create(:gift, receiver: @receiver1)
+      @provider1 = FactoryGirl.create(:provider, name: "POne PUser")
+      @giver1 = FactoryGirl.create(:user, first_name: "GOne", last_name: "GUser")
+      @receiver1 = FactoryGirl.create(:user, first_name: "One", last_name: "User", email: "one.user@example.com")
+      @receiver2 = FactoryGirl.create(:user, first_name: "Two", last_name: "User")
+      @receiver3 = FactoryGirl.create(:user, first_name: "Three", last_name: "User")
+      @user1_gift = FactoryGirl.create(:gift, 
+                                       receiver: @receiver1, 
+                                       provider: @provider1, 
+                                       giver: @giver1,
+                                       order_num: "OneUserOrderNum",
+                                       status: "regifted")
       @user2_gift = FactoryGirl.create(:gift, receiver: @receiver2)
       @user3_gift1 = FactoryGirl.create(:gift, receiver: @receiver3)
       @user3_gift2 = FactoryGirl.create(:gift, receiver: @receiver3)
@@ -741,11 +748,37 @@ describe Gift do
       expect(result).to include(@user1_gift) 
     end
 
-    it "should find multiple gifts for user with multiple" do
+    it "should find multiple gifts for user" do
       result = Gift.search(@receiver3.first_name)
       expect(result.length).to eq(2)
       expect(result).to include(@user3_gift1)
       expect(result).to include(@user3_gift2)
+    end
+
+    it "should not find any gifts for data that doesn't exist" do
+      result = Gift.search("not_valid")
+      expect(result.length).to eq(0)
+    end
+    
+    it "should find gifts for multiple users with common data" do
+      result = Gift.search("User")
+      expect(result.length).to eq(4)
+      [@user1_gift, @user2_gift, @user3_gift1, @user3_gift2].each do |gift|
+        expect(result).to include(gift)
+      end
+    end
+
+    it "should find data via all expected columns" do
+      terms = [
+        @user1_gift.id.to_s,
+        "One User",
+        "OneUserOrderNum",
+        "one.user@example.com",
+        "POne PUser",
+        "GOne GUser",
+        "regifted"
+      ]
+      result = Gift.search(terms.join(" "))
     end
 	end
 end
