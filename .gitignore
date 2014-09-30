@@ -33,6 +33,8 @@ latest_staging_db.dump
 /config/database.yml
 .ruby-version
 .ruby-gemset  
+*.swp
+*.swo
 
 /db/*.sqlite3
 /public/system/*

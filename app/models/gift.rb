@@ -47,6 +47,10 @@ class Gift < ActiveRecord::Base
 
     default_scope -> { where(active: true) } # indexed
 
+    scope :search, ->(str) {
+      where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
+    }
+
 #/---------------------------------------------------------------------------------------------/
 
     def obscured_id
@@ -230,7 +234,7 @@ class Gift < ActiveRecord::Base
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
 		self.twitter        = receiver.twitter ? 	 receiver.twitter : nil
 		self.receiver_phone = receiver.phone ? 		 receiver.phone : nil
-		self.receiver_email = receiver.email ? 		 receiver.email : nil
+		self.receiver_email = receiver.email
 	end
 
 	def add_giver sender
