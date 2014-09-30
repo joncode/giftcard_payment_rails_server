@@ -37,8 +37,11 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.3.0.2"
+
+VERSION_NUMBER  = "1.3.0.4"
 VERSION_UPDATED = "9/25/14"
+
+
 
 if Rails.env.test?
     CSV_LIMIT   = 10

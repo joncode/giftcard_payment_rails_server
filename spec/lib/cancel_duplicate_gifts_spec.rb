@@ -4,6 +4,7 @@ require 'cancel_duplicate_gifts'
 
 describe "Should cancel duplicates" do
 	before do
+		Gift.delete_all
 		@provider1 = FactoryGirl.create :provider
 		provider2 = FactoryGirl.create :provider
 		10.times do

@@ -163,6 +163,15 @@ ActiveRecord::Schema.define(version: 20140925183944) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "daily_stats", force: true do |t|
+    t.string   "dash_day_old"
+    t.string   "dash_week_old"
+    t.string   "dash_month_old"
+    t.string   "dash_total"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "debts", force: true do |t|
     t.integer  "owner_id"
     t.string   "owner_type"

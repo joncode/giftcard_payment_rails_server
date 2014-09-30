@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe ReminderInternal do
 	it "should find the correct campaigns and campaign items" do
+		Campaign.delete_all
+		CampaignItem.delete_all
 		today = Date.today
 		campaign1 = FactoryGirl.create :campaign, live_date: 1.month.ago, close_date: (today + 1.day)
 		campaign2 = FactoryGirl.create :campaign, live_date: 1.month.ago, close_date: (today + 1.month)
