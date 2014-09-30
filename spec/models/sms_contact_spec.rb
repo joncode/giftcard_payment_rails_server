@@ -9,12 +9,15 @@ describe SmsContact do
 
 ####  CORE BEHVAIOR
 
-    it "should have a uniqueness validation on textword / phone" do
+    it "should have a uniqueness validation on textword / phone / campaign_id" do
         phone  = FactoryGirl.create(:sms_contact)
-        phone2 = SmsContact.create(textword: phone.textword, phone: phone.phone)
+        phone2 = SmsContact.create(textword: phone.textword, phone: phone.phone, campaign_id: phone.campaign_id)
         phone2.id.should be_nil
         phone2.should_not be_valid
         phone2.should have_at_least(1).error_on(:textword)
+
+        phone3 = SmsContact.create(textword: phone.textword, phone: phone.phone, campaign_id: phone.campaign_id.to_i + 1)
+        phone3.should be_valid
     end
 
     it "should update gift_id with gift save thru association" do
@@ -58,19 +61,19 @@ describe SmsContact do
 
         it "should require an array" do
                 # happy path
-            contacts = SmsContact.bulk_create(contact_hsh_ary)
+            contacts = SmsContact.bulk_create(contact_hsh_ary, 1)
             contacts.class.should == Array
             contacts.count.should == 2
                 # sad path
             hsh = contact_hsh_ary[0]
-            contacts = SmsContact.bulk_create(hsh)
+            contacts = SmsContact.bulk_create(hsh, 1)
             contacts.should == []
         end
 
         #####    Method return value tests
 
         it "should accept array of normalized sms contact hashes return array of SmsContacts" do
-            contacts = SmsContact.bulk_create(contact_hsh_ary)
+            contacts = SmsContact.bulk_create(contact_hsh_ary, 1)
             contacts.class.should == Array
             contacts.count.should == 2
             contacts[0].service_id.should == 1001
@@ -81,16 +84,16 @@ describe SmsContact do
         end
 
         it "should not return un-saved records" do
-            contacts = SmsContact.bulk_create(contact_hsh_ary)
+            contacts = SmsContact.bulk_create(contact_hsh_ary, 1)
             contacts.count.should == 2
-            contacts = SmsContact.bulk_create(contact_hsh_ary)
+            contacts = SmsContact.bulk_create(contact_hsh_ary, 1)
             contacts.count.should == 0
         end
 
         ######  Database Tests
 
         it "should accept array of normalized sms contact hashes and save them" do
-            SmsContact.bulk_create(contact_hsh_ary)
+            SmsContact.bulk_create(contact_hsh_ary, 1)
             contacts = SmsContact.all
             contacts.count.should == 2
 
@@ -102,10 +105,10 @@ describe SmsContact do
         end
 
         it "should not attempt to save unvalid records" do
-            SmsContact.bulk_create(contact_hsh_ary)
+            SmsContact.bulk_create(contact_hsh_ary, 1)
             contacts = SmsContact.all
             contacts.count.should == 2
-            SmsContact.bulk_create(contact_hsh_ary)
+            SmsContact.bulk_create(contact_hsh_ary, 1)
             contacts = SmsContact.all
             contacts.count.should == 2
         end

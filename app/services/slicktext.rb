@@ -35,6 +35,7 @@ class Slicktext
         options.merge!({:basic_auth => KEYS})
         self.resp = self.class.get("/v1/textwords?limit=#{self.limit}", options)
         self.resp["textwords"]
+
     end
 
     def raw_contacts

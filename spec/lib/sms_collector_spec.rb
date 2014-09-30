@@ -208,3 +208,42 @@ describe SmsCollector do
     end
 
 end
+
+describe "Reused Textword Gifting" do
+
+    it "should send a gift for a correct textword" do
+        provider      = FactoryGirl.create :provider
+        campaign      = FactoryGirl.create :campaign
+        campaign_item = FactoryGirl.create :campaign_item, campaign_id: campaign.id, textword: "hamburger", provider_id: provider.id
+        user          = FactoryGirl.create :user, phone: "2223334444"
+        Slicktext.should_receive(:textwords).and_return([{ "word" => "hamburger" }])
+        Slicktext.should_receive(:get).and_return({ "contacts" => [{ "id" => "1", "number" => "2223334444", "subscribedDate" => Time.now.to_s }] })
+        Gift.count.should == 0
+        SmsCollector::sms_promo_run
+        Gift.count.should == 1
+    end
+
+    it "should allow textwords to be reused" do
+        today = Time.now
+        provider       = FactoryGirl.create :provider
+        campaign1      = FactoryGirl.create :campaign, live_date: 10.days.ago, close_date: today + 3.days
+        campaign_item1 = FactoryGirl.create :campaign_item, campaign_id: campaign1.id, textword: "hamburger", provider_id: provider.id
+        user           = FactoryGirl.create :user, phone: "2223334444"
+        Slicktext.should_receive(:textwords).and_return([{ "word" => "hamburger" }])
+        Slicktext.should_receive(:get).and_return({ "contacts" => [{ "id" => "1", "number" => "2223334444", "subscribedDate" => Time.now.to_s }] })
+        Gift.count.should == 0
+        SmsCollector::sms_promo_run
+        Gift.count.should == 1
+
+        #close "hamburger" campaign, and create new campaign with same textword
+        campaign1.update(close_date: 3.days.ago)
+        campaign2      = FactoryGirl.create :campaign, live_date: today, close_date: today + 3.days
+        campaign_item2 = FactoryGirl.create :campaign_item, campaign_id: campaign2.id, textword: "hamburger", provider_id: provider.id
+        Slicktext.should_receive(:textwords).and_return([{ "word" => "hamburger" }])
+        Slicktext.should_receive(:get).and_return({ "contacts" => [{ "id" => "2", "number" => "2223334444", "subscribedDate" => Time.now.to_s }] })
+        Gift.count.should == 1
+        SmsCollector::sms_promo_run
+        Gift.count.should == 2
+    end
+
+end

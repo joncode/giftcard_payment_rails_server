@@ -13,25 +13,22 @@ private
 	def self.sms_promo word_hsh
 		textword = word_hsh["word"]
 
-		campaign_items   = CampaignItem.includes(:campaign).where(textword: textword.to_s)
+		campaign_items = CampaignItem.includes(:campaign).where(textword: textword.to_s).select { |ci| ci.live? }
+		reserve_count  = campaign_items.sum(&:reserve)
 
-		reservable_items = self.keep_live_items_only(campaign_items)
-
-		if (reservable_items.count > 0)
-			self.create_gift_for_multiple_items(reservable_items, word_hsh)
+		if reserve_count > 0
+			self.create_gift_for_multiple_items(campaign_items, word_hsh)
 		else
 			puts "No live campaign Items for #{textword}"
 		end
 	end
 
 	def self.create_gift_for_multiple_items items, word_hsh
-		# go to slicktext and get the phones
-		sms_contacts = self.slicktext_to_sms_contacts(word_hsh)
-			# if there are live contacts
+		campaign_id  = items.first.campaign_id
+		sms_contacts = self.slicktext_to_sms_contacts(word_hsh, campaign_id)
 		sms_contacts.each do |contact|
-			# loop create_gift with campaign items
-			choice_index  	 = rand(items.length)
-			campaign_item_id = items.slice!(choice_index)
+			item_ids         = self.make_reservable_item_ids items 
+			campaign_item_id = item_ids.slice!(rand(item_ids.length))
 			if campaign_item_id
 				self.create_gift(campaign_item_id, contact)
 			else
@@ -50,11 +47,6 @@ private
 		reservable_items
 	end
 
-	def self.keep_live_items_only campaign_items
-		live_items = campaign_items.select { |ci| ci.live? }
-		self.make_reservable_item_ids(live_items)
-	end
-
 	def self.create_gift campaign_item_id, sms_contact
 			# associate the sms_contact with the gift
 		gift_hash = { "receiver_phone" => sms_contact.phone, "payable_id" => campaign_item_id, "sms_contact" => sms_contact }
@@ -66,23 +58,15 @@ private
 		end
 	end
 
-	def self.bulk_create_gifts(sms_contacts, campaign_item)
-		sms_contacts.each do |sms_contact|
-			puts "#{campaign_item.textword} - creating a gift for #{sms_contact.inspect}"
-			gift = self.create_gift(campaign_item, sms_contact)
-		end
-	end
-
-	def self.slicktext_to_sms_contacts(word_hsh)
+	def self.slicktext_to_sms_contacts(word_hsh, campaign_id)
 		textword = word_hsh["word"]
 		sms_obj = Slicktext.new(word_hsh)
 		sms_obj.sms
 		contacts = sms_obj.contacts
 
 		puts "#{textword} - total contacts = #{contacts.count}"
-
-		return_contacts = SmsContact.bulk_create(contacts)
-		sms_contacts    = SmsContact.where(gift_id: nil, textword: textword.to_s)
+		return_contacts = SmsContact.bulk_create(contacts, campaign_id)
+		sms_contacts    = SmsContact.where(gift_id: nil, textword: textword.to_s, campaign_id: campaign_id)
 
 		puts "#{textword} - sms contacts from db to gift = #{sms_contacts.count} | vs | return contacts = #{return_contacts.count}"
 		return sms_contacts
@@ -107,10 +91,3 @@ end
 # going to ST-api once per textword + once for textwords - 5-10 lookups
 # saving contact records that are already in database is a lot of noise
 # going into database to get the contacts when they are already return value of bulk_create
-
-
-
-
-
-
-

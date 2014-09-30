@@ -5,10 +5,11 @@ class SmsContact < ActiveRecord::Base
     validates_with TextwordPhoneValidator, on: :create
     validates :phone, format: { with: VALID_PHONE_REGEX }
 
-    def self.bulk_create contacts_hsh_ary
+    def self.bulk_create contacts_hsh_ary, campaign_id
         return [] unless contacts_hsh_ary.kind_of?(Array)
         puts "Bulk saving to SmsContact"
         return_ary = contacts_hsh_ary.map do |contact_hsh|
+            contact_hsh["campaign_id"] = campaign_id
             r = SmsContact.new(contact_hsh)
             if r.valid?
                 r.save

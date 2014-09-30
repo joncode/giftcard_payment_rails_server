@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140924191849) do
+ActiveRecord::Schema.define(version: 20140929183710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -395,6 +395,7 @@ ActiveRecord::Schema.define(version: 20140924191849) do
   add_index "providers", ["city"], name: "index_providers_on_city", using: :btree
   add_index "providers", ["merchant_id"], name: "index_providers_on_merchant_id", using: :btree
   add_index "providers", ["pos_merchant_id"], name: "index_providers_on_pos_merchant_id", using: :btree
+  add_index "providers", ["region_id"], name: "index_providers_on_region_id", using: :btree
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
 
   create_table "providers_socials", id: false, force: true do |t|
@@ -490,10 +491,11 @@ ActiveRecord::Schema.define(version: 20140924191849) do
     t.string   "textword"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "campaign_id"
   end
 
+  add_index "sms_contacts", ["campaign_id", "textword", "gift_id"], name: "index_sms_contacts_on_campaign_id_and_textword_and_gift_id", using: :btree
   add_index "sms_contacts", ["gift_id"], name: "index_sms_contacts_on_gift_id", using: :btree
-  add_index "sms_contacts", ["subscribed_date"], name: "index_sms_contacts_on_subscribed_date", using: :btree
 
   create_table "socials", force: true do |t|
     t.string   "network_id"
