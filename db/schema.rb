@@ -567,10 +567,12 @@ ActiveRecord::Schema.define(version: 20140929183710) do
     t.string   "confirm",                            default: "00"
     t.boolean  "perm_deactive",                      default: false
     t.string   "cim_profile"
+    t.tsvector "ftmeta"
   end
 
   add_index "users", ["active", "perm_deactive", "remember_token"], name: "index_users_on_active_and_perm_deactive_and_remember_token", using: :btree
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
+  add_index "users", ["ftmeta"], name: "users_ftsmeta_idx", using: :gin
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end

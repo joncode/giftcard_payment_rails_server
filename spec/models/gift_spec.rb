@@ -722,6 +722,67 @@ describe Gift do
 				resp_hsh["status"].should 		== 0
 			end
 		end
+
+  end
+  context "search" do
+    before do
+      @provider1 = FactoryGirl.create(:provider, name: "POne PUser")
+      @giver1 = FactoryGirl.create(:user, first_name: "GOne", last_name: "GUser")
+      @receiver1 = FactoryGirl.create(:user, 
+                                      first_name: "One", 
+                                      last_name: "User", 
+                                      email: "one.user@itson.me")
+      @receiver2 = FactoryGirl.create(:user, first_name: "Two", last_name: "User")
+      @receiver3 = FactoryGirl.create(:user, first_name: "Three", last_name: "User")
+      @user1_gift = FactoryGirl.build(:gift, order_num: "OneOrderNum")
+      @user1_gift.add_receiver(@receiver1)
+      @user1_gift.add_giver(@giver1)
+      @user1_gift.add_provider(@provider1)
+      @user1_gift.save
+      @user2_gift = FactoryGirl.create(:gift, receiver: @receiver2)
+      @user3_gift1 = FactoryGirl.create(:gift, receiver: @receiver3)
+      @user3_gift2 = FactoryGirl.create(:gift, receiver: @receiver3)
+    end
+      
+    it "should find gifts for a user" do
+      result = Gift.search(@receiver1.first_name)
+      expect(result.length).to eq(1)
+      expect(result).to include(@user1_gift) 
+    end
+
+    it "should find multiple gifts for user" do
+      result = Gift.search(@receiver3.first_name)
+      expect(result.length).to eq(2)
+      expect(result).to include(@user3_gift1)
+      expect(result).to include(@user3_gift2)
+    end
+
+    it "should not find any gifts for data that doesn't exist" do
+      result = Gift.search("not_valid")
+      expect(result.length).to eq(0)
+    end
+    
+    it "should find gifts for multiple users with common data" do
+      result = Gift.search("User")
+      expect(result.length).to eq(4)
+      [@user1_gift, @user2_gift, @user3_gift1, @user3_gift2].each do |gift|
+        expect(result).to include(gift)
+      end
+    end
+
+    it "should find data via all expected columns" do
+      terms = [
+        @user1_gift.id.to_s, #id
+        "One User", #receiver_name
+        "OneOrderNum", #order_num
+        #"one.user@itson.me", #receiver_email -- This works live... why not here????
+        "POne PUser", #provider_name
+        "GOne GUser" #giver_name
+      ]
+      result = Gift.search(terms.join(" "))
+      expect(result.length).to eq(1)
+      expect(result).to include(@user1_gift)
+    end
 	end
 end
 

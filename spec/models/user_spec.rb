@@ -726,7 +726,7 @@ describe User do
         #     run_delayed_jobs
         # end
 
-        xit "should not call relationships when user socials are not updated" do
+        it "should not call relationships when user socials are not updated" do
             # create a user with user socials
             user = FactoryGirl.create(:user)
             run_delayed_jobs
@@ -736,6 +736,62 @@ describe User do
             FriendMaker.should_not_receive(:user_create).with(user.id)
             run_delayed_jobs
         end
+    end
+
+    context "search" do
+      before do
+        @user1 = FactoryGirl.create(:user, 
+                                    first_name: "One", 
+                                    last_name: "User", 
+                                    email: "one.user@example.com", 
+                                    address: "123 User St", 
+                                    city: "OneCity",
+                                    state: "OC",
+                                    zip: "12345",
+                                    phone: "2345679955",
+                                    address_2: "another address line"
+                                  )
+        @user2 = FactoryGirl.create(:user, first_name: "Two", last_name: "User")
+        @user3 = FactoryGirl.create(:user, first_name: "Three", last_name: "User")
+      end
+
+      it "should find a user" do
+        result = User.search(@user1.first_name)
+        expect(result.length).to eq(1)
+        expect(result).to include(@user1)
+      end
+
+      it "should find multiple users with common data" do
+        result = User.search(@user1.last_name)
+        expect(result.length).to eq(3)
+        [@user1, @user2, @user3].each do |user|
+          expect(result).to include(user)
+        end
+      end
+
+      it "should not find users that do not exist" do
+        result = User.search("not_valid")
+        expect(result.length).to eq(0)
+      end
+
+      it "should find data via all expected columns" do
+        terms = [
+          @user1.id.to_s, #id
+          "one.user@example.com", #email
+          "One", #first_name
+          "User", #last_name
+          "123 User St", #address
+          "OneCity", #city
+          "oc", #state
+          "12345", #zip
+          "2345679955", #phone
+          "another address line" #address_2
+        ]
+        
+        result = User.search(terms.join(" "))
+        expect(result.length).to eq(1)
+        expect(result).to include(@user1)
+      end
     end
 end
 # == Schema Information
