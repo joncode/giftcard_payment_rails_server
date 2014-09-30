@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
 	end
 
   scope :search, ->(str) {
-    where("ftmeta @@ plainto_tsquery(:search)", search: str)
+    where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
   }
 
 ########   USER SOCIAL METHODS

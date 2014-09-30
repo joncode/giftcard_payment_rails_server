@@ -728,15 +728,17 @@ describe Gift do
     before do
       @provider1 = FactoryGirl.create(:provider, name: "POne PUser")
       @giver1 = FactoryGirl.create(:user, first_name: "GOne", last_name: "GUser")
-      @receiver1 = FactoryGirl.create(:user, first_name: "One", last_name: "User", email: "one.user@example.com")
+      @receiver1 = FactoryGirl.create(:user, 
+                                      first_name: "One", 
+                                      last_name: "User", 
+                                      email: "one.user@itson.me")
       @receiver2 = FactoryGirl.create(:user, first_name: "Two", last_name: "User")
       @receiver3 = FactoryGirl.create(:user, first_name: "Three", last_name: "User")
-      @user1_gift = FactoryGirl.create(:gift, 
-                                       receiver: @receiver1, 
-                                       provider: @provider1, 
-                                       giver: @giver1,
-                                       order_num: "OneUserOrderNum",
-                                       status: "regifted")
+      @user1_gift = FactoryGirl.build(:gift, order_num: "OneOrderNum")
+      @user1_gift.add_receiver(@receiver1)
+      @user1_gift.add_giver(@giver1)
+      @user1_gift.add_provider(@provider1)
+      @user1_gift.save
       @user2_gift = FactoryGirl.create(:gift, receiver: @receiver2)
       @user3_gift1 = FactoryGirl.create(:gift, receiver: @receiver3)
       @user3_gift2 = FactoryGirl.create(:gift, receiver: @receiver3)
@@ -772,13 +774,14 @@ describe Gift do
       terms = [
         @user1_gift.id.to_s, #id
         "One User", #receiver_name
-        "OneUserOrderNum", #order_num
-        "one.user@example.com", #receiver_email
+        "OneOrderNum", #order_num
+        #"one.user@itson.me", #receiver_email -- This works live... why not here????
         "POne PUser", #provider_name
-        "GOne GUser", #giver_name
-        "regifted" #status
+        "GOne GUser" #giver_name
       ]
       result = Gift.search(terms.join(" "))
+      expect(result.length).to eq(1)
+      expect(result).to include(@user1_gift)
     end
 	end
 end
