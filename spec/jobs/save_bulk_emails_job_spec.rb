@@ -4,6 +4,8 @@ describe SaveBulkEmailsJob do
 
 	before(:each) do
 		Social.delete_all
+		ProvidersSocial.delete_all
+		ProtoJoin.delete_all
 		@provider = FactoryGirl.create(:provider)
 	end
 

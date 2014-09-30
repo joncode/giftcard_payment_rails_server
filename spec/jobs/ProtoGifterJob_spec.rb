@@ -31,6 +31,7 @@ describe ProtoGifterJob do
     	# end
 
         it "should recored the correct number of contacts and processed" do
+            Gift.delete_all
             @proto.giftables.count.should == 4
             @proto.contacts.should        == 4
             @proto.processed.should       == 0

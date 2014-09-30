@@ -5,6 +5,10 @@ include ProtoFactory
 describe GiftProtoJoin do
 
     before(:each) do
+        Gift.delete_all
+        ProtoJoin.delete_all
+        Proto.delete_all
+        Social.delete_all
         proto_with_socials 1
         @pj         = ProtoJoin.where(receivable_type: "Social").first
         @gift_hsh  = { 'proto_join' => @pj }
