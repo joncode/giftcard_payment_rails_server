@@ -526,6 +526,7 @@ ActiveRecord::Schema.define(version: 20140929183710) do
     t.string   "handle"
   end
 
+  add_index "user_socials", ["active", "identifier"], name: "index_user_socials_on_active_and_identifier", using: :btree
   add_index "user_socials", ["active"], name: "index_user_socials_on_active", using: :btree
   add_index "user_socials", ["type_of", "identifier"], name: "index_user_socials_on_type_of_and_identifier", using: :btree
   add_index "user_socials", ["user_id"], name: "index_user_socials_on_user_id", using: :btree
