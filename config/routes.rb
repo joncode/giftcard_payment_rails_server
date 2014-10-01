@@ -110,7 +110,7 @@ end
           put :update
         end
       end
-      resources :gifts,     only: [:create] do
+      resources :gifts,     only: [:index, :create] do
         member do
           post :regift
           post :open

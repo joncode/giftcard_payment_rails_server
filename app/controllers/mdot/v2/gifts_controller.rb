@@ -1,8 +1,20 @@
+require 'date'
+
 class Mdot::V2::GiftsController < JsonController
     before_action :authenticate_customer
 
     rescue_from JSON::ParserError, :with => :bad_request
     rescue_from ActiveModel::ForbiddenAttributesError, :with => :bad_request
+
+    def index
+        date_in_seconds = params[:since].present? ? params[:since].to_i : 0
+        last_update     = Time.at(date_in_seconds).to_datetime
+
+        gifts = @current_user.sent.where("updated_at > ?", last_update) + @current_user.received.where("updated_at > ?", last_update)
+        gifts.uniq!
+        success(gifts.serialize_objs(:client))
+        respond
+    end
 
     def archive
         give_gifts, rec_gifts  = Gift.get_archive(@current_user)
