@@ -728,9 +728,9 @@ describe Gift do
     before do
       @provider1 = FactoryGirl.create(:provider, name: "POne PUser")
       @giver1 = FactoryGirl.create(:user, first_name: "GOne", last_name: "GUser")
-      @receiver1 = FactoryGirl.create(:user, 
-                                      first_name: "One", 
-                                      last_name: "User", 
+      @receiver1 = FactoryGirl.create(:user,
+                                      first_name: "One",
+                                      last_name: "User",
                                       email: "one.user@itson.me")
       @receiver2 = FactoryGirl.create(:user, first_name: "Two", last_name: "User")
       @receiver3 = FactoryGirl.create(:user, first_name: "Three", last_name: "User")
@@ -743,11 +743,11 @@ describe Gift do
       @user3_gift1 = FactoryGirl.create(:gift, receiver: @receiver3)
       @user3_gift2 = FactoryGirl.create(:gift, receiver: @receiver3)
     end
-      
+
     it "should find gifts for a user" do
       result = Gift.search(@receiver1.first_name)
       expect(result.length).to eq(1)
-      expect(result).to include(@user1_gift) 
+      expect(result).to include(@user1_gift)
     end
 
     it "should find multiple gifts for user" do
@@ -761,7 +761,7 @@ describe Gift do
       result = Gift.search("not_valid")
       expect(result.length).to eq(0)
     end
-    
+
     it "should find gifts for multiple users with common data" do
       result = Gift.search("User")
       expect(result.length).to eq(4)
