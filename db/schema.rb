@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140925183944) do
+ActiveRecord::Schema.define(version: 20141006204825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,6 +161,15 @@ ActiveRecord::Schema.define(version: 20140925183944) do
     t.integer  "owner_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "daily_stats", force: true do |t|
+    t.string   "dash_day_old"
+    t.string   "dash_week_old"
+    t.string   "dash_month_old"
+    t.string   "dash_total"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "debts", force: true do |t|
@@ -471,6 +480,7 @@ ActiveRecord::Schema.define(version: 20140925183944) do
     t.boolean  "email_reminder_gift_giver",    default: true
   end
 
+  add_index "settings", ["confirm_email_token"], name: "index_settings_on_confirm_email_token", using: :btree
   add_index "settings", ["user_id"], name: "index_settings_on_user_id", using: :btree
 
   create_table "sms_contacts", force: true do |t|
@@ -482,10 +492,11 @@ ActiveRecord::Schema.define(version: 20140925183944) do
     t.string   "textword"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "campaign_id"
   end
 
+  add_index "sms_contacts", ["campaign_id", "textword", "gift_id"], name: "index_sms_contacts_on_campaign_id_and_textword_and_gift_id", using: :btree
   add_index "sms_contacts", ["gift_id"], name: "index_sms_contacts_on_gift_id", using: :btree
-  add_index "sms_contacts", ["subscribed_date"], name: "index_sms_contacts_on_subscribed_date", using: :btree
 
   create_table "socials", force: true do |t|
     t.string   "network_id"
@@ -558,10 +569,12 @@ ActiveRecord::Schema.define(version: 20140925183944) do
     t.string   "confirm",                            default: "00"
     t.boolean  "perm_deactive",                      default: false
     t.string   "cim_profile"
+    t.tsvector "ftmeta"
   end
 
   add_index "users", ["active", "perm_deactive", "remember_token"], name: "index_users_on_active_and_perm_deactive_and_remember_token", using: :btree
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
+  add_index "users", ["ftmeta"], name: "users_ftsmeta_idx", using: :gin
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end
