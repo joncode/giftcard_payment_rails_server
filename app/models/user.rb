@@ -58,6 +58,10 @@ class User < ActiveRecord::Base
 	after_create  :init_confirm_email
 	after_save    :make_friends
 
+	scope :search, ->(str) {
+		where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
+	}
+
 	def self.app_authenticate(token)
 		where(active: true, perm_deactive: false, remember_token: token).first
 	end
@@ -95,9 +99,7 @@ class User < ActiveRecord::Base
 		super
 	end
 
-  scope :search, ->(str) {
-    where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
-  }
+
 
 ########   USER SOCIAL METHODS
 
