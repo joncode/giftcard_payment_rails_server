@@ -37,7 +37,7 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.3.1.8"
+VERSION_NUMBER  = "1.3.1.9"
 VERSION_UPDATED = "10/06/14"
 
 if Rails.env.test?
