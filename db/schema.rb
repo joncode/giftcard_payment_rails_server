@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929183710) do
+ActiveRecord::Schema.define(version: 20141006204825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -480,6 +480,7 @@ ActiveRecord::Schema.define(version: 20140929183710) do
     t.boolean  "email_reminder_gift_giver",    default: true
   end
 
+  add_index "settings", ["confirm_email_token"], name: "index_settings_on_confirm_email_token", using: :btree
   add_index "settings", ["user_id"], name: "index_settings_on_user_id", using: :btree
 
   create_table "sms_contacts", force: true do |t|
