@@ -21,7 +21,7 @@ module UrbanAirshipWrap
 
     def ua_device_tokens
         tokens = Urbanairship.device_tokens_with_limiting
-        puts "UA response --- >  #{tokens}"
+        #puts "UA response --- >  #{tokens}"
         return tokens
     end
 
