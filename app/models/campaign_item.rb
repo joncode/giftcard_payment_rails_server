@@ -9,8 +9,16 @@ class CampaignItem < ActiveRecord::Base
         self.reserve > 0
     end
 
+    def item_is_live?
+        if self.expires_at
+            self.expires_at > Time.now
+        else
+            false
+        end
+    end
+
     def live?
-        has_reserve? && campaign.is_live?
+        has_reserve? && campaign.is_live? && item_is_live?
     end
 
     def status_text

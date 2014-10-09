@@ -27,7 +27,7 @@ private
 		campaign_id  = items.first.campaign_id
 		sms_contacts = self.slicktext_to_sms_contacts(word_hsh, campaign_id)
 		sms_contacts.each do |contact|
-			item_ids         = self.make_reservable_item_ids items 
+			item_ids         = self.make_reservable_item_ids items
 			campaign_item_id = item_ids.slice!(rand(item_ids.length))
 			if campaign_item_id
 				self.create_gift(campaign_item_id, contact)
