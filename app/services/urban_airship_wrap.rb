@@ -25,4 +25,21 @@ module UrbanAirshipWrap
         return tokens
     end
 
+    def format_payload(alert, user, alert_type, badge=nil)
+        badge = badge.present? ? badge : Gift.get_notifications(user)
+        {
+            :aliases => [user.ua_alias],
+            :aps => {
+                :alert => alert,
+                :badge => badge,
+                :sound => 'pn.wav'
+            },
+            :alert_type => alert_type,
+            :android => {
+                :alert => alert
+            }
+        }
+    end
+
+
 end
