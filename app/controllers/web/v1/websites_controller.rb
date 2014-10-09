@@ -1,5 +1,5 @@
 class Web::V1::WebsitesController < JsonController
-    #before_action :authenticate_www_token
+    before_action :authenticate_www_token
 
     def confirm_email
         confirm_token = params[:confirm_token]
