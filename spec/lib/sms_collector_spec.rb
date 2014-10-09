@@ -52,7 +52,7 @@ describe SmsCollector do
             textword = "itsonme"
             provider = FactoryGirl.create(:provider)
             campaign = FactoryGirl.create(:campaign)
-            cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id)
+            cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id, expires_at: (Time.now + 1.month))
 
             Slicktext.stub(:textwords).and_return(TEXTWORDS)
             Slicktext.any_instance.stub(:sms)
@@ -70,9 +70,9 @@ describe SmsCollector do
             provider2 = FactoryGirl.create(:provider, name: "Second one")
             provider3 = FactoryGirl.create(:provider, name: "Third one")
             campaign  = FactoryGirl.create(:campaign)
-            cam_item1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider1.id, updated_at: (Time.now - 60.minutes))
-            cam_item2 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider2.id, updated_at: (Time.now - 50.minutes))
-            cam_item3 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider3.id, updated_at: (Time.now - 40.minutes))
+            cam_item1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider1.id, updated_at: (Time.now - 60.minutes), expires_at: (Time.now + 1.month))
+            cam_item2 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider2.id, updated_at: (Time.now - 50.minutes), expires_at: (Time.now + 1.month))
+            cam_item3 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider3.id, updated_at: (Time.now - 40.minutes), expires_at: (Time.now + 1.month))
 
             ary_of_ids = [cam_item1.id, cam_item2.id, cam_item3.id]
 
@@ -96,9 +96,9 @@ describe SmsCollector do
             provider3 = FactoryGirl.create(:provider, name: "Third one")
             campaign  = FactoryGirl.create(:campaign)
             campaign2  = FactoryGirl.create(:campaign, close_date: (Time.now - 2.days))
-            cam_item1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider1.id, updated_at: (Time.now - 60.minutes))
-            cam_item2 = FactoryGirl.create(:campaign_item, campaign_id: campaign2.id, textword: textword, provider_id: provider2.id, updated_at: (Time.now - 50.minutes))
-            cam_item3 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider3.id, updated_at: (Time.now - 40.minutes))
+            cam_item1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider1.id, updated_at: (Time.now - 60.minutes), expires_at: (Time.now + 1.month))
+            cam_item2 = FactoryGirl.create(:campaign_item, campaign_id: campaign2.id, textword: textword, provider_id: provider2.id, updated_at: (Time.now - 50.minutes), expires_at: (Time.now + 1.month))
+            cam_item3 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider3.id, updated_at: (Time.now - 40.minutes), expires_at: (Time.now + 1.month))
 
             ary_of_ids = [cam_item1.id, cam_item2.id, cam_item3.id]
 
@@ -121,9 +121,9 @@ describe SmsCollector do
             provider2 = FactoryGirl.create(:provider, name: "Second one")
             provider3 = FactoryGirl.create(:provider, name: "Third one")
             campaign  = FactoryGirl.create(:campaign, close_date: (Time.now - 2.days))
-            cam_item1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider1.id, updated_at: (Time.now - 60.minutes))
-            cam_item2 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider2.id, updated_at: (Time.now - 50.minutes))
-            cam_item3 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider3.id, updated_at: (Time.now - 40.minutes))
+            cam_item1 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider1.id, updated_at: (Time.now - 60.minutes), expires_at: (Time.now + 1.month))
+            cam_item2 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider2.id, updated_at: (Time.now - 50.minutes), expires_at: (Time.now + 1.month))
+            cam_item3 = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider3.id, updated_at: (Time.now - 40.minutes), expires_at: (Time.now + 1.month))
 
             ary_of_ids = [cam_item1.id, cam_item2.id, cam_item3.id]
 
@@ -143,7 +143,7 @@ describe SmsCollector do
             textword = "itsonme"
             provider = FactoryGirl.create(:provider)
             campaign = FactoryGirl.create(:campaign)
-            cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id)
+            cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id, expires_at: (Time.now + 1.month))
 
             Slicktext.stub(:textwords).and_return(TEXTWORDS)
             stub_request(:get, @contacts_route)
@@ -196,7 +196,7 @@ describe SmsCollector do
             textword = "itsonme"
             provider = FactoryGirl.create(:provider)
             campaign = FactoryGirl.create(:campaign)
-            cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id )
+            cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, textword: textword, provider_id: provider.id, expires_at: (Time.now + 1.month))
             Slicktext.stub(:textwords).and_return(TEXTWORDS)
             stub_request(:get, @contacts_route)
             Slicktext.any_instance.stub(:contacts).and_return(CONTACTS_RESPONSE)
@@ -214,7 +214,7 @@ describe "Reused Textword Gifting" do
     it "should send a gift for a correct textword" do
         provider      = FactoryGirl.create :provider
         campaign      = FactoryGirl.create :campaign
-        campaign_item = FactoryGirl.create :campaign_item, campaign_id: campaign.id, textword: "hamburger", provider_id: provider.id
+        campaign_item = FactoryGirl.create :campaign_item, campaign_id: campaign.id, textword: "hamburger", provider_id: provider.id, expires_at: (Time.now + 1.month)
         user          = FactoryGirl.create :user, phone: "2223334444"
         Slicktext.should_receive(:textwords).and_return([{ "word" => "hamburger" }])
         Slicktext.should_receive(:get).and_return({ "contacts" => [{ "id" => "1", "number" => "2223334444", "subscribedDate" => Time.now.to_s }] })
@@ -227,7 +227,7 @@ describe "Reused Textword Gifting" do
         today = Time.now
         provider       = FactoryGirl.create :provider
         campaign1      = FactoryGirl.create :campaign, live_date: 10.days.ago, close_date: today + 3.days
-        campaign_item1 = FactoryGirl.create :campaign_item, campaign_id: campaign1.id, textword: "hamburger", provider_id: provider.id
+        campaign_item1 = FactoryGirl.create :campaign_item, campaign_id: campaign1.id, textword: "hamburger", provider_id: provider.id, expires_at: (Time.now + 1.month)
         user           = FactoryGirl.create :user, phone: "2223334444"
         Slicktext.should_receive(:textwords).and_return([{ "word" => "hamburger" }])
         Slicktext.should_receive(:get).and_return({ "contacts" => [{ "id" => "1", "number" => "2223334444", "subscribedDate" => Time.now.to_s }] })
@@ -238,7 +238,7 @@ describe "Reused Textword Gifting" do
         #close "hamburger" campaign, and create new campaign with same textword
         campaign1.update(close_date: 3.days.ago)
         campaign2      = FactoryGirl.create :campaign, live_date: today, close_date: today + 3.days
-        campaign_item2 = FactoryGirl.create :campaign_item, campaign_id: campaign2.id, textword: "hamburger", provider_id: provider.id
+        campaign_item2 = FactoryGirl.create :campaign_item, campaign_id: campaign2.id, textword: "hamburger", provider_id: provider.id, expires_at: (Time.now + 1.month)
         Slicktext.should_receive(:textwords).and_return([{ "word" => "hamburger" }])
         Slicktext.should_receive(:get).and_return({ "contacts" => [{ "id" => "2", "number" => "2223334444", "subscribedDate" => Time.now.to_s }] })
         Gift.count.should == 1

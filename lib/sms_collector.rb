@@ -13,9 +13,10 @@ private
 	def self.sms_promo word_hsh
 		textword = word_hsh["word"]
 
-		campaign_items = CampaignItem.includes(:campaign).where(textword: textword.to_s).select { |ci| ci.live? }
-		reserve_count  = campaign_items.sum(&:reserve)
+		campaign_items = CampaignItem.includes(:campaign).where(textword: textword.to_s)
 
+		campaign_items = campaign_items.select { |ci| ci.live? }
+		reserve_count  = campaign_items.sum(&:reserve)
 		if reserve_count > 0
 			self.create_gift_for_multiple_items(campaign_items, word_hsh)
 		else
