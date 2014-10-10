@@ -17,38 +17,39 @@ class Web::V3::GiftsController < MetalCorsController
 
     def create
         gift_hash = {}
-        case gift_params[:rec_net]
+        gps = gift_params
+        case gps[:rec_net]
         when "em"
-            gift_hash["receiver_email"] = gift_params[:rec_net_id]
+            gift_hash["receiver_email"] = gps[:rec_net_id]
         when "ph"
-            gift_hash["receiver_phone"] = gift_params[:rec_net_id]
+            gift_hash["receiver_phone"] = gps[:rec_net_id]
         when "fb"
             gift_hash["receiver_oauth"] = {}
             gift_hash["receiver_oauth"]["network"] = "facebook"
-            gift_hash["receiver_oauth"]["network_id"] = gift_params[:rec_net_id]
-            gift_hash["receiver_oauth"]["token"]   = gift_params[:rec_token]
-            gift_hash["receiver_oauth"]["photo"]   = gift_params[:rec_photo] if gift_params[:rec_photo]
+            gift_hash["receiver_oauth"]["network_id"] = gps[:rec_net_id]
+            gift_hash["receiver_oauth"]["token"]   = gps[:rec_token]
+            gift_hash["receiver_oauth"]["photo"]   = gps[:rec_photo] if gps[:rec_photo]
         when "io"
             gift_hash["receiver_oauth"] = {}
             gift_hash["receiver_oauth"]["network"] = "itsonme"
-            gift_hash["receiver_oauth"]["network_id"] = gift_params[:rec_net_id]
-            gift_hash["receiver_oauth"]["photo"]   = gift_params[:rec_photo] if gift_params[:rec_photo]
+            gift_hash["receiver_oauth"]["network_id"] = gps[:rec_net_id]
+            gift_hash["receiver_oauth"]["photo"]   = gps[:rec_photo] if gps[:rec_photo]
         when "tw"
             gift_hash["receiver_oauth"] = {}
             gift_hash["receiver_oauth"]["network"] = "twitter"
-            gift_hash["receiver_oauth"]["network_id"] = gift_params[:rec_net_id]
-            gift_hash["receiver_oauth"]["token"]   = gift_params[:rec_token]
-            gift_hash["receiver_oauth"]["secret"]  = gift_params[:rec_secret]
-            gift_hash["receiver_oauth"]["handle"]  = gift_params[:rec_handle]
-            gift_hash["receiver_oauth"]["photo"]   = gift_params[:rec_photo] if gift_params[:rec_photo]
+            gift_hash["receiver_oauth"]["network_id"] = gps[:rec_net_id]
+            gift_hash["receiver_oauth"]["token"]   = gps[:rec_token]
+            gift_hash["receiver_oauth"]["secret"]  = gps[:rec_secret]
+            gift_hash["receiver_oauth"]["handle"]  = gps[:rec_handle]
+            gift_hash["receiver_oauth"]["photo"]   = gps[:rec_photo] if gps[:rec_photo]
         end
-        gift_hash["shoppingCart"]  = gift_params[:items]
+        gift_hash["shoppingCart"]  = gps[:items]
         gift_hash["giver"]         = @current_user
-        gift_hash["credit_card"]   = gift_params[:pay_id]
-        gift_hash["receiver_name"] = gift_params[:rec_name]
-        gift_hash["provider_id"]   = gift_params[:loc_id]
-        gift_hash["value"]         = gift_params[:value]
-        gift_hash["message"]       = gift_params[:msg]
+        gift_hash["credit_card"]   = gps[:pay_id]
+        gift_hash["receiver_name"] = gps[:rec_name]
+        gift_hash["provider_id"]   = gps[:loc_id]
+        gift_hash["value"]         = gps[:value]
+        gift_hash["message"]       = gps[:msg]
         gift = GiftSale.create(gift_hash)
         if gift.id
             success gift.giver_serialize
@@ -61,10 +62,7 @@ class Web::V3::GiftsController < MetalCorsController
 private
 
     def gift_params
-        params.require(:data).permit(
-            :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name,
-            :msg, :cat, :pay_id, :items, :value, :service,
-            :loc_id, :loc_name)
+        params.require(:data).permit(:rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name,:msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
     end
 
 end

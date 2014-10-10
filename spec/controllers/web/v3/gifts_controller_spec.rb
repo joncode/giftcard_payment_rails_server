@@ -59,7 +59,7 @@ def make_gift_hsh gift
         rec_name: gift.receiver_name,
         msg: "hope you enjoy it!",
         cat: 300,
-        items: gift.shoppingCart,
+        items: JSON.parse(gift.shoppingCart),
         value: gift.value,
         service: gift.service,
         loc_id: gift.provider_id,
