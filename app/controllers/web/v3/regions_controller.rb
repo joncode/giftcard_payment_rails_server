@@ -4,7 +4,10 @@ class Web::V3::RegionsController < MetalCorsController
 
     def index
         city_list = CITY_LIST
-        city_list.each {|c| c["region_id"] = c["city_id"]}
+        city_list.each  do |c|
+            c["token"] = c["name"].downcase.gsub(' ', '-')
+            c["region_id"] = c["city_id"]
+        end
         success city_list
         respond
     end
