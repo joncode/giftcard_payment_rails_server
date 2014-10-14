@@ -1,5 +1,13 @@
 module LegacyProvider
 
+    def set_r_sys
+        ps = Provider.all
+        ps.each do |p|
+            p.update_column(:r_sys, 1)
+        end
+        nil
+    end
+
     def check_provider_merchants
 
         ps = Provider.unscoped
