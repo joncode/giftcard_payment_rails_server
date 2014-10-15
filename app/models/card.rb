@@ -33,6 +33,11 @@ class Card < ActiveRecord::Base
 		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
 	end
 
+	def self.get_cards_web user
+		cards = Card.where(user_id: user.id)
+		cards.map { |card| { "user_id" => user.id, "card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
+	end
+
 	def self.create_card_from_hash cc_hash
 		card 			= Card.new
 		card.name 		= cc_hash["name"]
@@ -69,6 +74,13 @@ class Card < ActiveRecord::Base
 	def create_serialize
 		card_hash = self.serializable_hash only: [ "id", "nickname", "last_four" ]
 		card_hash["card_id"] = self.id
+		card_hash
+	end
+
+	def create_serialize_web
+		card_hash = self.serializable_hash only: [ "nickname", "last_four" ]
+		card_hash["card_id"] = self.id
+		card_hash["user_id"] = self.user_id
 		card_hash
 	end
 

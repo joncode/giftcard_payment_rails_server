@@ -4,12 +4,7 @@ class Web::V3::UsersController < MetalCorsController
     before_action :print_params
 
     def create
-puts "---- in create, before auth. params are #{params.inspect}"
-puts "---- in create, after auth. headers are #{request.headers.inspect}"
         authenticate_general
-puts "---- in create, after auth. params are #{params.inspect}"
-puts "---- in create, after auth. 'Content-type' headers are #{request.headers["Content-Type"]}"
-puts "---- in create, after auth. 'Accept' headers are #{request.headers["Accept"]}"
 		user = User.new(create_user_params)
         if user.save
             success user.profile_with_ids_serialize

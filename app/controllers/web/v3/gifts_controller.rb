@@ -52,7 +52,7 @@ class Web::V3::GiftsController < MetalCorsController
         gift_hash["message"]       = gps[:msg]
         gift = GiftSale.create(gift_hash)
         if gift.id
-            success gift.giver_serialize
+            success gift.web_serialize
         else
             fail_web fail_web_payload("not_created_gift", gift.errors)
         end

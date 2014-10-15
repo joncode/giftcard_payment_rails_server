@@ -82,6 +82,13 @@ class MetalController < ActionController::Base
                 msg: "Gift could not be created",
                 data: error_data
             }
+        when "not_created_card"
+            {
+                err: "INVALID_INPUT",
+                msg: "Your credit card information was bad.",
+                data: error_data
+            }
+
         when "incomplete_info"
             {
                 err: "INCOMPLETE_INPUT",
