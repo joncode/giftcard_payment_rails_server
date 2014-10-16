@@ -292,8 +292,6 @@ describe AppController do
                 ary[1]["name"].should == ("Bob's")
             end
         end
-
-
     end
 
     describe :menu_v2 do
@@ -430,22 +428,14 @@ describe AppController do
         let(:giver)     { FactoryGirl.create(:giver) }
         let(:receiver)  { FactoryGirl.create(:receiver) }
 
-        it "should create a redeem for the gift" do
-            gift =  FactoryGirl.build(:gift, status: 'open')
-            gift.add_giver(giver)
-            gift.add_receiver(receiver)
-            gift.save
-            post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
-            gift.redeem.class.should == Redeem
-        end
-
         it "should return the redeem code on success" do
             gift =  FactoryGirl.build(:gift, status: 'open')
             gift.add_giver(giver)
             gift.add_receiver(receiver)
             gift.save
             post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
-            json["success"].should == gift.redeem.redeem_code
+            gift.reload
+            json["success"].should == gift.token.to_s
         end
 
         it "should not allow redeems created for  gifts where user is not receiver" do
@@ -455,7 +445,7 @@ describe AppController do
             gift.add_receiver(other)
             gift.save
             post :create_redeem, format: :json, token: receiver.remember_token, data: gift.id
-            json['error_server'].should == {'Data Transfer Error'=>'Please Reload Gift Center'}
+            json['error_server'].should == "Gift not found"
         end
 
         it "should send a 'your gift is opened' push to the gift giver" do
@@ -488,10 +478,12 @@ describe AppController do
             gift.add_giver(giver)
             gift.add_receiver(receiver)
             gift.save
-            redeem = Redeem.find_or_create_with_gift(gift)
+            gift.notify
             post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
-            gift.order.class.should == Order
-            gift.order.server_code.should == "test"
+            gift.reload
+            gift.server == "test"
+            gift.redeemed_at.should_not be_nil
+            gift.order_num.should_not be_nil
         end
 
         it "should return order_number, server, and total on success" do
@@ -499,12 +491,9 @@ describe AppController do
             gift.add_giver(giver)
             gift.add_receiver(receiver)
             gift.save
-            redeem = Redeem.find_or_create_with_gift(gift)
+            gift.notify
             post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
-            order = gift.order
-            json["success"]["order_number"].should == order.make_order_num
-            json["success"]["total"].should        == gift.total
-            json["success"]["server"].should       == "test"
+            json["success"] == gift.token.to_s
         end
 
         it "should update gift server_code, redeemed_at" do
@@ -512,8 +501,8 @@ describe AppController do
             gift.add_giver(giver)
             gift.add_receiver(receiver)
             gift.save
-            redeem = Redeem.find_or_create_with_gift(gift)
             time = Time.now
+            gift.notify
             gift.redeemed_at.should be_nil
             post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
             gift.reload
@@ -528,7 +517,7 @@ describe AppController do
             gift.add_receiver(receiver)
             gift.save
             post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
-            json["error_server"].should == {"Data Transfer Error"=>"Please Reload Gift Center"}
+            json["error_server"].should == {"Data Transfer Error"=>"Gift #{gift.id} cannot be redeemed"}
         end
 
         it "should return data transfer error if gift not found" do
@@ -546,7 +535,7 @@ describe AppController do
             gift.add_giver(giver)
             gift.add_receiver(other)
             gift.save
-            redeem = Redeem.find_or_create_with_gift(gift)
+            gift.notify
             post :create_order, format: :json, token: receiver.remember_token, data: gift.id, server_code: "test"
             json['error_server'].should == {'Data Transfer Error'=>'Please Reload Gift Center'}
         end
@@ -592,10 +581,9 @@ describe AppController do
         it "should send a list of used gifts" do
             gs = Gift.where(receiver_id: receiver.id)
             gs.each do |gift|
-                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.notify
                 gift.reload
-                order  = Order.init_with_gift(gift, "xyz")
-                order.save
+                gift.redeem_gift( "xyz")
             end
             post :archive, format: :json, token: receiver.remember_token
             json["used"].class.should == Array
@@ -605,10 +593,9 @@ describe AppController do
         it "should send used gifts with receiver keys" do
             gs = Gift.where(receiver_id: receiver.id)
             gs.each do |gift|
-                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.notify
                 gift.reload
-                order  = Order.init_with_gift(gift, "xyz")
-                order.save
+                gift.redeem_gift( "xyz")
             end
             keys = ["giver_id", "giver_name", "message", "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "sales_tax", "live", "latitude", "longitude", "provider_address", "time_ago", "gift_id", "updated_at", "created_at", "redeem_code"]
             post :archive, format: :json, token: receiver.remember_token

@@ -4,24 +4,31 @@ class Pos::V1::OrdersController < JsonController
     rescue_from ActionController::ParameterMissing, :with => :bad_request
 
     def create
-        redeem_code     = create_params["redeem_code"]
-        pos_merchant_id = create_params["pos_merchant_id"]
-        redeem = Redeem.includes(:gift).where(redeem_code: redeem_code.to_s).first
-        if redeem && redeem.gift.provider.pos_merchant_id == pos_merchant_id.to_i
-            order = Order.init_with_pos(create_params, redeem)
-            if order.save
-                status = :ok
-                response_message = success({"voucher_value" => order.gift.value} )
+        param_are       = create_params
+        redeem_code     = param_are["redeem_code"]
+        pos_merchant_id = param_are["pos_merchant_id"]
+        server_code     = param_are["server_code"] || nil
+        provider = Provider.find_by(pos_merchant_id: pos_merchant_id )
+        if provider
+            if gift = Gift.where(provider_id: provider.id, token: redeem_code).first
+                if gift.redeem_gift(server_code)
+                    status = :ok
+                    response_message = success({"voucher_value" => gift.value} )
+                else
+                    status = :ok
+                    response_message = fail("Gift #{gift.token} is already redeemed")
+                end
+
             else
-                status = :bad_request
-                response_message = fail(order)
+                status = :not_found
+                response_message = fail("Error - Gift Conﬁrmation No. is not valid.")
             end
         else
             status = :not_found
-            response_message = fail("Error - Gift Conﬁrmation No. is not valid.")
+            response_message = fail("Not Found")
         end
-        redeem_id              = redeem.id if redeem.present?
-        Ditto.receive_pos_create(params[:data], response_message, redeem_id, status)
+        gift_id = gift ? gift.id : nil
+        Ditto.receive_pos_create(params[:data], response_message, gift_id, status)
         respond(status)
     end
 

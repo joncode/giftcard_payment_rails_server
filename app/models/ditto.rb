@@ -43,7 +43,7 @@ class Ditto < ActiveRecord::Base
 
 		def receive_pos_create(request, response, redeem_id, status)
 			request_response_hash = { request: request, response: response }
-			create(response_json: request_response_hash.to_json, cat: 1000, status: parse_pos_status(status), notable_id: redeem_id, notable_type: 'Redeem')
+			create(response_json: request_response_hash.to_json, cat: 1000, status: parse_pos_status(status), notable_id: redeem_id, notable_type: 'Gift')
 		end
 
 		def tokenize_card(response, card_id)

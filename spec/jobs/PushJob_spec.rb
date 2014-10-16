@@ -26,7 +26,7 @@ describe PushJob do
                 6.times do
                 # these shold not go to push badge count
                     gift       = FactoryGirl.create(:gift, receiver: @user, provider_name: "Notified")
-                    redeem     = Redeem.create(gift_id: gift.id)
+                    gift.notify
                 end
                 @gift      = FactoryGirl.create(:gift, receiver: @user, provider_name: prov_name)
 

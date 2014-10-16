@@ -118,14 +118,12 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should send a list of used gifts" do
-            Redeem.delete_all
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gs = Gift.where(receiver_id: @user.id)
             gs.each do |gift|
-                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.notify
                 gift.reload
-                order  = Order.init_with_gift(gift, "xyz")
-                order.save
+                gift.redeem_gift( "xyz")
             end
             get :archive, format: :json
             json["status"].should == 1
@@ -137,10 +135,9 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gs = Gift.where(receiver_id: @user.id)
             gs.each do |gift|
-                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.notify
                 gift.reload
-                order  = Order.init_with_gift(gift, "xyz")
-                order.save
+                gift.redeem_gift( "xyz")
             end
 
             keys = ["giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at", "completed_at", "cat", "time_ago", "items"]
@@ -303,32 +300,23 @@ describe Mdot::V2::GiftsController do
             @gift.save
         end
 
-        it "should create a redeem for the gift" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            post :open, format: :json, id: @gift.id
-            rrc(200)
-            redeem = @gift.redeem
-            redeem.class.should == Redeem
-        end
-
-
         it "should return a redeem code when gift is already notified" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
             rrc(200)
-            redeem = @gift.redeem
-            redeem.class.should == Redeem
+            @gift.reload
             post :open, format: :json, id: @gift.id
             json["status"].should == 1
-            json["data"].should == redeem.redeem_code
+            json["data"].should == @gift.token
         end
 
         it "should return the redeem code on success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
             rrc(200)
+            @gift.reload
             json["status"].should == 1
-            json["data"].should == @gift.redeem.redeem_code
+            json["data"].should == @gift.token
         end
 
         it "should change the gift status to 'notified'" do
@@ -337,11 +325,6 @@ describe Mdot::V2::GiftsController do
             @gift.reload
             rrc(200)
             @gift.status.should == 'notified'
-        end
-
-        xit "should return validation errors if validation fail" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            json["status"].should == 0
         end
 
         it "should reject request if params are attached" do
@@ -503,24 +486,25 @@ describe Mdot::V2::GiftsController do
             @gift.add_giver(@giver)
             @gift.add_receiver(@user)
             @gift.save
-            redeem = Redeem.find_or_create_with_gift(@gift)
+            @gift.notify
         end
 
-        it "should create an order for the gift" do
+        it "should update the gift" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
+            @gift.redeemed_at.should be_nil
             post :redeem, format: :json, id: @gift.id, server: "test"
-            @gift.order.class.should == Order
-            @gift.order.server_code.should == "test"
+            @gift.reload
+            @gift.server == "test"
+            @gift.order_num.should_not be_nil
+            @gift.redeemed_at.should_not be_nil
         end
 
         it "should return order_number, server, and total on success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: "test"
-            order = @gift.order
             rrc(200)
             json["status"].should == 1
-
-            json["data"]["order_number"].should == order.make_order_num
+            json["data"]["order_number"].should == @gift.token
             json["data"]["total"].should        == @gift.value
             json["data"]["server"].should       == "test"
         end
@@ -532,7 +516,7 @@ describe Mdot::V2::GiftsController do
             rrc(200)
             json["status"].should == 1
 
-            json["data"]["order_number"].should == order.make_order_num
+            json["data"]["order_number"].should == @gift.token
             json["data"]["total"].should        == @gift.value
             json["data"]["server"].should       == ""
         end
@@ -540,11 +524,10 @@ describe Mdot::V2::GiftsController do
         it "should return order_number, server, and total on success when no server key" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id
-            order = @gift.order
             rrc(200)
             json["status"].should == 1
 
-            json["data"]["order_number"].should == order.make_order_num
+            json["data"]["order_number"].should == @gift.token
             json["data"]["total"].should        == @gift.value
             json["data"]["server"].should       == ""
         end
@@ -562,12 +545,11 @@ describe Mdot::V2::GiftsController do
 
         it "should return reload app error on bad gift" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            redeem = Redeem.find_by(gift_id: @gift.id)
-            redeem.destroy
+            @gift.redeem_gift
             post :redeem, format: :json, id: @gift.id, server: "test"
-            rrc(200)
+            rrc(422)
             json["status"].should == 0
-            json["data"].should   == {"Data Transfer Error"=>"Please Reload Gift Center"}
+            json["data"].should   == "Gift #{@gift.token} has already been redeemed"
         end
 
         it "should reject request if request is malformed" do
@@ -588,7 +570,7 @@ describe Mdot::V2::GiftsController do
             @gift.add_giver(@giver)
             @gift.add_receiver(other)
             @gift.save
-            redeem = Redeem.find_or_create_with_gift(@gift)
+            @gift.notify
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: "test"
             rrc(404)

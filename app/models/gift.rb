@@ -56,30 +56,33 @@ class Gift < ActiveRecord::Base
 
     def notify
         if notifiable?
-            current_time   = Time.now.utc
-            include_notify = if self.notified_at.nil?
-                #self.notified_at = current_time
-                ", notified_at = '#{current_time}' "
+            if (self.new_token_at.nil? || self.new_token_at < reset_time)
+                current_time   = Time.now.utc
+                include_notify = if self.notified_at.nil?
+                    #self.notified_at = current_time
+                    ", notified_at = '#{current_time}' "
+                else
+                    ""
+                end
+                #self.new_token_at = current_time
+                include_status = if self.status == 'open'
+                    #self.status = 'notified'
+                    ", status = 'notified' "
+                else
+                    ""
+                end
+                sql = "UPDATE gifts SET token = nextval('gift_token_seq') #{include_status} #{include_notify}, new_token_at = '#{current_time}' WHERE id = #{self.id};"
+                Gift.connection.execute(sql)
+                self.reload
+                true
             else
-                ""
+                true
             end
-            #self.new_token_at = current_time
-            include_status = if self.status == 'open'
-                #self.status = 'notified'
-                ", status = 'notified' "
-            else
-                ""
-            end
-            sql = "UPDATE gifts SET token = nextval('gift_token_seq') #{include_status} #{include_notify}, new_token_at = '#{current_time}' WHERE id = #{self.id};"
-            Gift.connection.execute(sql)
-            true
         end
     end
 
     def notifiable?
-        status_bool = self.status == 'open' || self.status == 'notified'
-        time_bool   = self.new_token_at.nil? || self.new_token_at < reset_time
-        return status_bool && time_bool
+        return self.status == 'open' || self.status == 'notified'
     end
 
     def redeem_gift(server_code=nil)

@@ -79,7 +79,7 @@ class JsonController < ActionController::Base
             else
 
                 gift_obj["total"]    = g.value
-                gift_obj["server"]   = g.order.server_code if g.order
+                gift_obj["server"]   = g.server if g.server
                 if (g.redeem_time > (Time.now  - 1.day))
                     gift_obj["time_ago"] = g.redeem_time.to_formatted_s(:merchant)
                 else
@@ -103,7 +103,7 @@ class JsonController < ActionController::Base
 
     def add_redeem_code obj
         if obj.status == "notified"
-            obj.redeem.redeem_code
+            obj.token
         else
             "none"
         end
