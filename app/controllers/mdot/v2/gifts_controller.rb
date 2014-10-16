@@ -53,6 +53,23 @@ class Mdot::V2::GiftsController < JsonController
         respond
     end
 
+    def notify
+        gift   = @current_user.received.where(id: params[:id]).first
+        return nil if params_bad_request
+        return nil if data_not_found?(gift)
+
+        if gift.notify
+            gift.reload
+            if gift.notified_at >= (Time.now.utc - 1.minute)
+                Relay.send_push_thank_you gift
+            end
+            success gift.token
+        else
+            # un-uesd fail condition
+        end
+        respond
+    end
+
     def redeem
         return nil if params_bad_request(["server"])
         server_code = redeem_params
@@ -60,7 +77,7 @@ class Mdot::V2::GiftsController < JsonController
         return nil if data_not_found?(gift)
         order = Order.init_with_gift(gift, server_code)
         if order.save
-            success({ "order_number" => order.make_order_num , "total" => gift.total,  "server" => order.server_code })
+            success({ "order_number" => order.make_order_num , "total" => gift.value,  "server" => order.server_code })
         else
             fail database_error_redeem
             #status = :bad_request

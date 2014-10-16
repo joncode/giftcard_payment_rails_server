@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141006204825) do
+ActiveRecord::Schema.define(version: 20141015170529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -223,7 +223,6 @@ ActiveRecord::Schema.define(version: 20141006204825) do
     t.string   "provider_name"
     t.integer  "giver_id"
     t.integer  "receiver_id"
-    t.string   "total",          limit: 20
     t.string   "credit_card",    limit: 100
     t.integer  "provider_id"
     t.text     "message"
@@ -232,7 +231,6 @@ ActiveRecord::Schema.define(version: 20141006204825) do
     t.datetime "updated_at",                                    null: false
     t.string   "receiver_phone"
     t.string   "facebook_id"
-    t.integer  "anon_id"
     t.string   "receiver_email"
     t.text     "shoppingCart"
     t.string   "twitter"
@@ -253,6 +251,9 @@ ActiveRecord::Schema.define(version: 20141006204825) do
     t.string   "cost"
     t.text     "detail"
     t.tsvector "ftmeta"
+    t.datetime "notified_at"
+    t.datetime "new_token_at"
+    t.integer  "token"
   end
 
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
@@ -360,27 +361,20 @@ ActiveRecord::Schema.define(version: 20141006204825) do
     t.string   "zinger"
     t.text     "description"
     t.string   "address"
-    t.string   "address_2"
     t.string   "city",            limit: 32
     t.string   "state",           limit: 2
     t.string   "zip",             limit: 16
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
     t.string   "phone"
-    t.string   "email"
-    t.string   "twitter"
-    t.string   "facebook"
-    t.string   "website"
     t.string   "sales_tax"
     t.boolean  "active",                     default: true
     t.float    "latitude"
     t.float    "longitude"
-    t.string   "foursquare_id"
     t.decimal  "rate"
     t.boolean  "menu_is_live",               default: false
     t.integer  "brand_id"
     t.integer  "building_id"
-    t.integer  "sd_location_id"
     t.string   "token"
     t.boolean  "tools",                      default: false
     t.string   "image"
@@ -389,6 +383,7 @@ ActiveRecord::Schema.define(version: 20141006204825) do
     t.boolean  "paused",                     default: true
     t.integer  "pos_merchant_id"
     t.integer  "region_id"
+    t.integer  "r_sys",                      default: 2
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree

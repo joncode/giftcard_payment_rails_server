@@ -7,6 +7,9 @@ class MetalController < ActionController::Base
     before_action        :method_start_log_message
     after_action         :method_end_log_message
 
+    rescue_from JSON::ParserError, :with => :bad_request
+    rescue_from ActiveModel::ForbiddenAttributesError, :with => :bad_request
+
     def not_found
         head 404
     end

@@ -29,7 +29,7 @@ describe Mdot::V2::GiftsController do
             rrc(200)
             json["status"].should == 1
             gift_hsh              = json["data"].first
-            keys = ["created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            keys = ["r_sys","created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             compare_keys(gift_hsh, keys)
         end
 
@@ -222,7 +222,7 @@ describe Mdot::V2::GiftsController do
 
         it "should return receiver serialized gifts" do
 
-            keys = ["giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
+            keys = ["r_sys", "giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
 
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
@@ -378,6 +378,95 @@ describe Mdot::V2::GiftsController do
             Urbanairship.should_receive(:push).with(good_push_hsh)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
+            run_delayed_jobs
+        end
+    end
+
+    describe :notify do
+        it_should_behave_like("token authenticated", :post, :notify, id: 1)
+
+        before(:each) do
+            ResqueSpec.reset!
+            UserSocial.delete_all
+            User.delete_all
+            Provider.delete_all
+            @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
+            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(@user)
+            @gift.save
+        end
+
+        it "should return a redeem code when gift is already notified" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
+            rrc(200)
+            @gift.reload
+            token = @gift.token
+            post :notify, format: :json, id: @gift.id
+            json["status"].should == 1
+            json["data"].should == token
+        end
+
+        it "should return the redeem code on success" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
+            rrc(200)
+            @gift.reload
+            @gift.token.should_not be_nil
+            json["status"].should == 1
+            json["data"].should   == @gift.token
+        end
+
+        it "should change the gift status to 'notified'" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
+            @gift.reload
+            rrc(200)
+            @gift.status.should == 'notified'
+        end
+
+        xit "should return validation errors if validation fail" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            json["status"].should == 0
+        end
+
+        it "should reject request if params are attached" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            fake_params = { "fake" => "FAKE" }
+            post :notify, format: :json, id: @gift.id, faker: fake_params
+            rrc(400)
+        end
+
+        it "should return 404 if gift id not found" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: 0
+            rrc(404)
+        end
+
+        it "should not allow opening gifts that user does not receive" do
+            other = FactoryGirl.create(:receiver)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(other)
+            @gift.save
+
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
+            rrc(404)
+        end
+
+        it "should send a 'your gift is opened' push to the gift giver" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            badge = Gift.get_notifications(@gift.giver)
+            user_alias = @gift.giver.ua_alias
+            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!"}}
+            Urbanairship.should_receive(:push).with(good_push_hsh)
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
             run_delayed_jobs
         end
     end

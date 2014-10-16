@@ -128,7 +128,7 @@ module EmailHelper
 					</tr>
 					<tr>
 						<td style='text-align:right; padding: 0 10px; width:50%;'>Gift value</td>
-						<td style='text-align:left; width:50%;'>#{number_to_currency(gift.total)}</td>
+						<td style='text-align:left; width:50%;'>#{number_to_currency(gift.value)}</td>
 					</tr>
 					<tr>
 						<td style='text-align:right; padding: 0 10px; width:50%;'>Processing fee</td>

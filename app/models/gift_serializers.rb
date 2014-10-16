@@ -41,6 +41,7 @@ module GiftSerializers
         gift_hsh["longitude"]          = provider.longitude
         gift_hsh["live"]               = provider.live_int
         gift_hsh["provider_address"]   = provider.complete_address
+        gift_hsh["r_sys"]              = provider.r_sys
         gift_hsh["gift_id"]            = self.id
         gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
@@ -179,6 +180,7 @@ module GiftSerializers
             gift_hsh["loc_phone"]     = self.provider.phone
             gift_hsh["loc_address"]   = self.provider.complete_address
             gift_hsh["loc_photo"]     = self.provider.short_image_url
+            gift_hsh["r_sys"]         = self.provider.r_sys
         end
         gift_hsh["gift_id"]       = self.id
         remove_nils(gift_hsh)
