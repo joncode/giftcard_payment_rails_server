@@ -29,7 +29,10 @@ describe Client::V3::GiftsController do
             rrc(200)
             json["status"].should == 1
             gift_hsh              = json["data"].first
-            keys = ["created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            keys = ["created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            if gift_hsh["status"] == 'open'
+                keys << 'rec_id'
+            end
             compare_keys(gift_hsh, keys)
         end
 

@@ -23,27 +23,7 @@ describe Web::V3::GiftsController do
             get :index, format: :json
             rrc(200)
             json["data"].count.should == 6
-            keys = [
-              "created_at",
-              "giv_name",
-              "giv_photo",
-              "giv_id",
-              "giv_type",
-              "rec_id",
-              "rec_name",
-              "rec_photo",
-              "items",
-              "value",
-              "status",
-              "expires_at",
-              "cat",
-              "msg",
-              "loc_id",
-              "loc_name",
-              "loc_phone",
-              "loc_address",
-              "gift_id"
-            ]
+            keys = [ "created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             compare_keys(json["data"][0], keys)
         end
 
@@ -105,7 +85,7 @@ describe Web::V3::GiftsController do
             json["err"].should == "INVALID_INPUT"
             json["msg"].should == "Gift could not be created"
             json["data"].should == [
-                { "name" => "receiver_email", "msg" => "is invalid" }
+                { "name" => "receiver email", "msg" => "is invalid" }
             ]
         end
 
@@ -131,7 +111,7 @@ end
 def make_gift_hsh_fail gift
     {
         rec_net: "em",
-        rec_net_id: "bobatemaildotcom",
+        rec_net_id: "bademailatemaildotcom",
         rec_name: gift.receiver_name,
         msg: "hope you enjoy it!",
         cat: 300,

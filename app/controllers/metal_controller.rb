@@ -37,7 +37,7 @@ class MetalController < ActionController::Base
         data_array = []
         if payload[:data].present?
             payload[:data].each do |k, v|
-                data_array << { name: k, msg: v }
+                data_array << { name: k.to_s.humanize.downcase, msg: v }
             end
         end
         @app_response = {
@@ -85,7 +85,7 @@ class MetalController < ActionController::Base
         when "not_created_card"
             {
                 err: "INVALID_INPUT",
-                msg: "Your credit card information was bad.",
+                msg: "We are unable to process credit card.",
                 data: error_data
             }
 
