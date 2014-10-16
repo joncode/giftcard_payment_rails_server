@@ -121,7 +121,7 @@ module GiftSerializers
         gift_hsh["created_at"]      = self.created_at
         gift_hsh["receiver_name"]   = self.receiver_name
         gift_hsh["items"]           = ary_of_shopping_cart_as_hash.count
-        gift_hsh["server"]          = self.server if self.server
+        gift_hsh["server"]          = self.server
         gift_hsh["value"]           = self.value
         gift_hsh["cost"]            = self.cost
         gift_hsh["expires_at"]      = self.expires_at if self.expires_at

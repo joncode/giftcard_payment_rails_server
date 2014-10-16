@@ -166,7 +166,7 @@ describe Ditto do
 				d.status.should        == 200
 				d.cat.should           == 1000
 				d.notable_id.should    == 1
-				d.notable_type.should  == "Redeem"
+				d.notable_type.should  == "Gift"
 			end
 		end
 
