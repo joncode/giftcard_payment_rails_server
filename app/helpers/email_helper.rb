@@ -164,10 +164,10 @@ module EmailHelper
 					<img src='#{image_url}' style='width: 400px;'>
 				</div>
 				#{items_text(gift)}
-				<div style='padding-bottom:20px; font-size:16px;'>
-					#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. To claim this gift simply click the button and download the app. Use this email address at sign-up to receiver your gift.
-				</div>
 	            #{button_text(button_url, button_text)}
+				<div style='padding:20px 0; font-size:16px;'>
+					#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. Click the button and download the It's On Me app to claim your gift.
+				</div>
 			</div>
 			<div style='background-color:#E2E2E2; padding: 10px;'>
 				<table>
@@ -404,7 +404,7 @@ module EmailHelper
 	end
 
 	def items_text gift
-		"<table style='padding-top:0;'>
+		"<table style='padding:0;'>
 			<tr>
 				<td width='320px' style='text-align:left'>
 					<div style='font-size:25px; padding-top:10px;'>$#{gift.value} Gift at #{gift.provider_name}</div>
