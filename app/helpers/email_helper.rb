@@ -165,9 +165,14 @@ module EmailHelper
 				</div>
 				#{items_text(gift)}
 	            #{button_text(button_url, button_text)}
-				<div style='padding:20px 0; font-size:16px;'>
-					#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. Click the button and download the It's On Me app to claim your gift.
-				</div>
+			</div>
+			<div style='padding:10px; font-size:16px;'>
+				<ul style='list-style-type:none;'>
+					<li>#{provider_name} has partnered with It's On Me!</li>
+					<li>Claim your gift, simply click above & download the app.</li>
+					<li>Use this email address at sign-up.</li>
+					<li>- Thanks - It's On Me :)</li>
+				</ul>
 			</div>
 			<div style='background-color:#E2E2E2; padding: 10px;'>
 				<table>
