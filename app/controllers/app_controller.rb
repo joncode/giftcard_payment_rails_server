@@ -416,7 +416,7 @@ class AppController < JsonController
                 gift   = receiver.received.where(id: params["data"].to_i).first
 	  			order = Order.init_with_gift(gift, params["server_code"])
 	  			if order.save
-	  				response["success"] = { "order_number" => order.make_order_num,  "total" => gift.total, "server" => order.server_code }
+	  				response["success"] = { "order_number" => order.make_order_num,  "total" => gift.value, "server" => order.server_code }
 	  			else
 	  				response["error_server"] = database_error_redeem
 	  			end

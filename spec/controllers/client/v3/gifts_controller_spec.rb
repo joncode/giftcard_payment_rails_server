@@ -25,11 +25,12 @@ describe Client::V3::GiftsController do
         it_should_behave_like("client-token authenticated", :get, :index)
 
         it "should serialize the gifts with defined keys" do
+            Gift.where(status: 'incomplete').delete_all
             get :index, format: :json, user_id: @user.id
             rrc(200)
             json["status"].should == 1
             gift_hsh              = json["data"].first
-            keys = ["created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            keys = ["r_sys", "created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             compare_keys(gift_hsh, keys)
         end
 
@@ -84,7 +85,7 @@ describe Client::V3::GiftsController do
             json["status"].should     == 1
             gift_hsh                  = json["data"]
             gift_hsh["status"].should == 'notified'
-            keys = ["expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
+            keys = ["r_sys", "expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
             compare_keys(gift_hsh, keys)
         end
 
@@ -122,7 +123,7 @@ describe Client::V3::GiftsController do
             json["status"].should     == 1
             gift_hsh                  = json["data"]
             gift_hsh["status"].should == 'redeemed'
-            keys = ["expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
+            keys = ["r_sys", "expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
             compare_keys(gift_hsh, keys)
         end
 

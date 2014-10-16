@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141014050235) do
+ActiveRecord::Schema.define(version: 20141015170529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -251,8 +251,9 @@ ActiveRecord::Schema.define(version: 20141014050235) do
     t.string   "cost"
     t.text     "detail"
     t.tsvector "ftmeta"
-    t.datetime "viewed_at"
-    t.datetime "ordered_at"
+    t.datetime "notified_at"
+    t.datetime "new_token_at"
+    t.integer  "token"
   end
 
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
