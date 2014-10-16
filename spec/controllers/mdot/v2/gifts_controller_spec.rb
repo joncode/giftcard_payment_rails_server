@@ -404,10 +404,28 @@ describe Mdot::V2::GiftsController do
             post :notify, format: :json, id: @gift.id
             rrc(200)
             @gift.reload
-            token = @gift.token
             post :notify, format: :json, id: @gift.id
             json["status"].should == 1
-            json["data"].should == token
+            json["data"].should == { "token" =>  @gift.token, "notified_at" => @gift.notified_at.xmlschema, "new_token_at" => @gift.new_token_at.xmlschema }
+        end
+
+        it "should return message when gift is already redeemed" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            @gift.notify
+            @gift.redeem_gift
+            @gift.reload
+            post :notify, format: :json, id: @gift.id
+            rrc(422)
+            json["status"].should == 0
+            json["data"].should == "Gift #{@gift.token} at #{@gift.provider_name} cannot be redeemed"
+
+        end
+
+        it "should not notify incomplete gifts" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            new_gift = FactoryGirl.create(:gift)
+            post :notify, format: :json, id: new_gift.id
+            rrc(404)
         end
 
         it "should return the redeem code on success" do
@@ -417,7 +435,7 @@ describe Mdot::V2::GiftsController do
             @gift.reload
             @gift.token.should_not be_nil
             json["status"].should == 1
-            json["data"].should   == @gift.token
+            json["data"].should   == { "token" =>  @gift.token, "notified_at" => @gift.notified_at.xmlschema, "new_token_at" => @gift.new_token_at.xmlschema }
         end
 
         it "should change the gift status to 'notified'" do
