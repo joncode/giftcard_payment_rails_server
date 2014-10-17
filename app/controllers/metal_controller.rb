@@ -43,7 +43,7 @@ class MetalController < ActionController::Base
                 data_array << { name: k.to_s.humanize.downcase, msg: v }
             end
         else
-            data_array = payload[:data]
+            data_array << payload[:data]
         end
         @app_response = {
             status: 0,
