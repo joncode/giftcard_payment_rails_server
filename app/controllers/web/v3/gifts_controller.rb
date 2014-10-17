@@ -57,7 +57,7 @@ class Web::V3::GiftsController < MetalCorsController
             if gift.kind_of?(Gift)
                 fail_web fail_web_payload("not_created_gift", gift.errors)
             else
-                fail_web { err: "INVALID_INPUT", msg: "Gift could not be created", data: gift}
+                fail_web({ err: "INVALID_INPUT", msg: "Gift could not be created", data: gift})
             end
         end
         respond
