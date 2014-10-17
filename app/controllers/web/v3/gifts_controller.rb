@@ -30,10 +30,7 @@ class Web::V3::GiftsController < MetalCorsController
             gift_hash["receiver_oauth"]["token"]   = gps[:rec_token]
             gift_hash["receiver_oauth"]["photo"]   = gps[:rec_photo] if gps[:rec_photo]
         when "io"
-            gift_hash["receiver_oauth"] = {}
-            gift_hash["receiver_oauth"]["network"] = "itsonme"
-            gift_hash["receiver_oauth"]["network_id"] = gps[:rec_net_id]
-            gift_hash["receiver_oauth"]["photo"]   = gps[:rec_photo] if gps[:rec_photo]
+            gift_hash["receiver_id"] = gps[:rec_net_id]
         when "tw"
             gift_hash["receiver_oauth"] = {}
             gift_hash["receiver_oauth"]["network"] = "twitter"

@@ -90,6 +90,25 @@ describe Web::V3::GiftsController do
             ]
         end
 
+        it "should return correct error messages when gift sale returns a string" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
+            @receiver.update(active: false)
+            gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", provider_id: @provider.id
+            gift_hash = make_gift_hsh(gift)
+            gift_hash["rec_net"] = "io"
+            gift_hash["rec_net_id"] = @receiver.id
+            gift.credit_card = @card.id
+            gift.value = "31.50"
+            post :create, format: :json, data: gift_hash
+            rrc(200)
+            json["status"].should == 0
+            json["err"].should == "INVALID_INPUT"
+            json["msg"].should == "Gift could not be created"
+            json["data"].should == ["User is no longer in the system , please gift to them with phone, email, facebook, or twitter"]
+        end
+
     end
 
 end
