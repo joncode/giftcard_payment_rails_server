@@ -11,7 +11,7 @@ describe AppController do
 
     let(:user) { FactoryGirl.create(:user) }
 
-    describe :relays do
+    describe "relays" do
 
         let(:giver)     { FactoryGirl.create(:giver) }
         let(:receiver)  { FactoryGirl.create(:receiver) }
@@ -103,7 +103,7 @@ describe AppController do
 
     end
 
-    describe :drinkboard_users do
+    describe "drinkboard_users" do
 
         #let(:user) { FactoryGirl.create(:user) }
         let(:deactivated) { FactoryGirl.create(:user, active: false ) }

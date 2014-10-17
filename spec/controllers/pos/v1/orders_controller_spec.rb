@@ -83,7 +83,6 @@ describe Pos::V1::OrdersController do
             json["data"].should == "Error - Gift Conﬁrmation No. is not valid."
         end
 
-
         it "gift has already been redeemed" do
             @gift.redeem_gift
             @gift.status.should == 'redeemed'
@@ -92,8 +91,6 @@ describe Pos::V1::OrdersController do
             json["status"].should == 0
             json["data"].should == "Gift #{@gift.token} is already redeemed"
         end
-
-
 
         context "pos request " do
 

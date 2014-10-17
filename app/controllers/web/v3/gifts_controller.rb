@@ -51,10 +51,14 @@ class Web::V3::GiftsController < MetalCorsController
         gift_hash["value"]         = gps[:value]
         gift_hash["message"]       = gps[:msg]
         gift = GiftSale.create(gift_hash)
-        if gift.id
+        if gift.kind_of?(Gift) && gift.id > 0
             success gift.web_serialize
         else
-            fail_web fail_web_payload("not_created_gift", gift.errors)
+            if gift.kind_of?(Gift)
+                fail_web fail_web_payload("not_created_gift", gift.errors)
+            else
+                fail_web { err: "INVALID_INPUT", msg: "Gift could not be created", data: gift}
+            end
         end
         respond
     end
