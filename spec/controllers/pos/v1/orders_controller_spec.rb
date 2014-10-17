@@ -88,7 +88,7 @@ describe Pos::V1::OrdersController do
             @gift.redeem_gift
             @gift.status.should == 'redeemed'
             post :create, format: :json, data: {"redeem_code" => @gift.token, "pos_merchant_id" => 1233}
-            rrc(200)
+            rrc(422)
             json["status"].should == 0
             json["data"].should == "Gift #{@gift.token} is already redeemed"
         end

@@ -15,7 +15,7 @@ class Pos::V1::OrdersController < JsonController
                     status = :ok
                     response_message = success({"voucher_value" => gift.value} )
                 else
-                    status = :ok
+                    status = :unprocessable_entity
                     response_message = fail("Gift #{gift.token} is already redeemed")
                 end
 
