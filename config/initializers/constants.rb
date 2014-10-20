@@ -9,6 +9,7 @@ if Rails.env.production?
     PUBLIC_URL_AT    = "http://admin.itson.me"
     PUBLIC_URL_MT    = "http://merchant.itson.me"
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
+    HELP_CONTACT     = { "email" => "rachel.wenman@itson.me", "name" => "Rachel"}
 elsif Rails.env.staging?
     PAGE_NAME        = "#{SERVICE_NAME} (staging)"
     TEST_URL         = "http://qa.drinkboardapp.com"
@@ -17,6 +18,7 @@ elsif Rails.env.staging?
     PUBLIC_URL_AT    = "http://qaadmin.itson.me"
     PUBLIC_URL_MT    = "http://qamerchant.itson.me"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
+    HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
 else
     PAGE_NAME        = "Dev #{SERVICE_NAME} (local)"
     TEST_URL         = "http://0.0.0.0:3001"
@@ -25,6 +27,7 @@ else
     PUBLIC_URL_AT    = "http://0.0.0.0:3002"
     PUBLIC_URL_MT    = "http://0.0.0.0:3000"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
+    HELP_CONTACT     = { "email" => "zo@itson.me", "name" => "Craig"}
 end
 
 SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"
@@ -37,8 +40,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.3.2.2"
-VERSION_UPDATED = "10/09/14"
+VERSION_NUMBER  = "1.3.2.3"
+VERSION_UPDATED = "10/20/14"
 
 if Rails.env.test?
     CSV_LIMIT   = 10

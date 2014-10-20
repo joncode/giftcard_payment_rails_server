@@ -8,11 +8,6 @@ class ReminderInternal
 
 	def self.expiring_campaign_reminder
 		today = Time.now.utc.to_date
-		if Rails.env.staging?
-			email = "support@itson.me"
-		elsif Rails.env.production?
-			email = "rachel.wenman@itson.me"
-		end
 		reminder_deadline = today + 2.days
 		live_campaigns = Campaign.where("live_date <= ?", today).where("close_date >= ?", today)
 		live_campaigns.each do |campaign|
@@ -20,20 +15,9 @@ class ReminderInternal
 				data = {
 					subject: "Campaign Expiration Notice",
 					text: "Campaign #{campaign.name} is expiring within 2 days",
-					email: email
+					email: HELP_CONTACT["email"]
 				}
 				self.route_email_system(data)
-			else
-				campaign.campaign_items.each do |ci|
-					if ci.expires_at.present? && ci.expires_at <= reminder_deadline
-						data = {
-							subject: "Campaign Item Expiration Notice",
-							text: "Campaign Item #{ci.name} for Campaign #{campaign.name} is expiring within 2 days",
-							email: email
-						}
-						self.route_email_system(data)
-					end
-				end
 			end
 		end
 	end
@@ -41,8 +25,10 @@ class ReminderInternal
 private
 
 	def self.route_email_system data
-		puts "data in ReminderInternal.rb"
-		Resque.enqueue(MailerInternalJob, data)
+		if Rails.env.production? || Rails.env.test?
+			puts "data in ReminderInternal.rb"
+			Resque.enqueue(MailerInternalJob, data)
+		end
 	end
 
 end
