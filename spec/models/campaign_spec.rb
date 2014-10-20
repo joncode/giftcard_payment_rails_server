@@ -99,8 +99,8 @@ describe Campaign do
         end
 
         it "should have correct name and cname" do
-            campaign.name.should == "ItsOnMe Promotional Staff"
-            campaign.cname.should == "Special Summer Party Campaign"
+            @campaign.name.should == "ItsOnMe Promotional Staff"
+            @campaign.cname.should == "Special Summer Party Campaign"
         end
     end
 

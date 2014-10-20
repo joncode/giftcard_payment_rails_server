@@ -16,7 +16,7 @@ class CampaignItemAt < Admtmodel
     end
 
     def status_text
-        str = "#{campaign.cname} #{self.textword} "
+        str = "#{campaign.cname} - textword (#{self.textword}) "
         return (str + "is live")             if live?
         return (str + "reserve is empty")    if !has_reserve?
         return (str + "has not started yet") if campaign.is_new?

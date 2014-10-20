@@ -72,15 +72,16 @@ module Emailer
     	gift          = Gift.find(data["gift_id"])
 		receiver_name = gift.receiver_name
 		merchant_name = gift.provider_name
+		giver_name    = gift.giver_name ? gift.giver_name : merchant_name
 		if gift.receiver_email
 			email     = whitelist_email(gift.receiver_email)
 		elsif gift.receiver
 			email 	  = whitelist_email(gift.receiver.email)
-		else
+		elsek
 			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
 			return nil
 		end
-		subject  = "The staff at #{merchant_name} sent you a gift"
+		subject  = "The staff at #{giver_name} sent you a gift"
 		body     = text_for_notify_receiver_proto_join(gift)
 
 		template_name   = "gift"
