@@ -38,24 +38,24 @@ describe CampaignItem do
             it "should respond with human readable status_text" do
                 campaign = FactoryGirl.create(:campaign)
                 cam_item = FactoryGirl.create(:campaign_item, reserve: 0, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.status_text.should == "#{campaign.cname} #{cam_item.textword} reserve is empty"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) reserve is empty"
                 cam_item.update(reserve: 1)
-                cam_item.status_text.should == "#{campaign.cname} #{cam_item.textword} is live"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) is live"
                 start_date = Time.now.utc + 1.day
                 campaign = FactoryGirl.create(:campaign, live_date:  start_date)
                 cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.status_text.should == "#{campaign.cname} #{cam_item.textword} has not started yet"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) has not started yet"
                 end_date = Time.now.utc - 1.day
                 campaign = FactoryGirl.create(:campaign, close_date: end_date)
                 cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.status_text.should == "#{campaign.cname} #{cam_item.textword} is closed"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) is closed"
             end
 
             it "should respond with 'is closed' when today is the close date BUG FIX" do
                 campaign = FactoryGirl.create(:campaign, close_date: Time.now.utc)
                 cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id)
 
-                cam_item.status_text.should == "#{campaign.cname} #{cam_item.textword} is closed"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) is closed"
             end
 
         end
