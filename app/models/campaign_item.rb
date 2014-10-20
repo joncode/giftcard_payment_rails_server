@@ -20,7 +20,7 @@ class CampaignItem < ActiveRecord::Base
     end
 
     def status_text
-        str = "#{campaign.name} #{self.textword} "
+        str = "#{campaign.cname} #{self.textword} "
         return (str + "is live")             if live?
         return (str + "reserve is empty")    if !has_reserve?
         return (str + "has not started yet") if campaign.is_new?

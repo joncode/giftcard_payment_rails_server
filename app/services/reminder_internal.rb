@@ -14,7 +14,7 @@ class ReminderInternal
 			if campaign.close_date <= reminder_deadline
 				data = {
 					subject: "Campaign Expiration Notice",
-					text: "Campaign #{campaign.name} is expiring within 2 days",
+					text: "Campaign #{campaign.cname} is expiring within 2 days",
 					email: HELP_CONTACT["email"]
 				}
 				self.route_email_system(data)

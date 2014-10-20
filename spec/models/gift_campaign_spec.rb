@@ -12,6 +12,7 @@ describe GiftCampaign do
             @expiration    = (Time.now + 1.month).to_date
             @campaign      = FactoryGirl.create(:campaign, purchaser_type: "AdminGiver",
                                                            purchaser_id: @admin.id,
+                                                           name: "Special Summer Promotion",
                                                            giver_name: "ItsOnMe Promotional Staff",
                                                            live_date: (Time.now - 1.week).to_date,
                                                            close_date: (Time.now + 1.week).to_date,
@@ -121,14 +122,14 @@ describe GiftCampaign do
             @campaign.update(live_date: (Time.now.utc + 1.day).to_date)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should == 1
-            gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 has not started yet. No gifts can be created."
+            gift.errors.full_messages[0].should == "Special Summer Promotion has not started yet. No gifts can be created."
         end
 
         it "should not create gift if the campaign is closed" do
             @campaign.update(close_date: (Time.now.utc - 1.day).to_date)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should == 1
-            gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 is closed. No gifts can be created."
+            gift.errors.full_messages[0].should == "Special Summer Promotion is closed. No gifts can be created."
         end
 
     end
