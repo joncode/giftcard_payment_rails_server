@@ -4,6 +4,13 @@ else
     AUTH_GATEWAY = :sandbox
 end
 
+
+RESQUE_AUTH = if Rails.env.development? or Rails.env.test?
+    "Dboard77"
+else
+    ENV['RESQUE_AUTH']
+end
+
 CATCH_PHRASE = if Rails.env.development? or Rails.env.test?
     "Theres no place like home"
 else
