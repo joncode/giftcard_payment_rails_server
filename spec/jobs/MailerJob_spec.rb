@@ -158,7 +158,7 @@ describe MailerJob do
     describe :notify_receiver do
         it "should call mandrill with send_template" do
             menu_item = FactoryGirl.create :menu_item
-            gift = FactoryGirl.create :gift, receiver_email: @receiver.email, giver_id: @giver.id, giver_type: "User", giver_name: @giver.name, shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":#{menu_item.id},\"item_name\":\"Original Margarita \"}]"
+            gift = FactoryGirl.create :gift, receiver_email: @receiver.email, giver_id: @giver.id, giver_type: "User", giver_name: @giver.name, shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":#{menu_item.id},\"item_name\":\"Original Margarita \"}]", provider_name: "Fancy Restaurant"
             body             = text_for_notify_receiver(gift)
             template_name    = "gift"
             message          = {
@@ -168,6 +168,9 @@ describe MailerJob do
                 "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],
                 "global_merge_vars"  => [
                     { "name" => "body", "content" => body }
+                ],
+                "tags" => [
+                    "Fancy Restaurant"
                 ]
             }
             Mandrill::API.should_receive(:send_template).with(template_name, nil, message).and_return( [{"email"=>"busseyt2@unlv.nevada.edu", "status"=>"sent", "_id"=>"55f14c81146947de96c19e8d5358ec61", "reject_reason"=>nil}, {"email"=>"info@itson.me", "status"=>"sent", "_id"=>"74d1094af918424dbaa6721a36e6bfa9", "reject_reason"=>nil}])

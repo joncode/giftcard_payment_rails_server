@@ -63,7 +63,8 @@ module Emailer
 		body          = text_for_notify_receiver(gift)
 
 		template_name = "gift"
-		message       = message_hash(subject, email, receiver_name, body)
+		provider_name = gift.provider_name
+		message       = message_hash(subject, email, receiver_name, body, nil, provider_name)
 		request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
     end
 
@@ -281,7 +282,7 @@ private
 		return email
 	end
 
-	def message_hash(subject, email, name, body, bcc=nil)
+	def message_hash(subject, email, name, body, bcc=nil, provider_name=nil)
 		email = whitelist_email(email)
 		message          = {
 			"subject"     => subject,
@@ -296,6 +297,9 @@ private
 		}
 		if bcc.present?
 			message["to"] << { "email" => bcc, "name" => bcc, "type" => "bcc" }
+		end
+		if provider_name.present?
+			message["tags"] = [provider_name]
 		end
 		message
 	end

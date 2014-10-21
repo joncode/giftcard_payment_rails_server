@@ -15,37 +15,39 @@ describe CampaignItem do
 
             it "should combine date checks with reserve to :live?" do
                 campaign = FactoryGirl.create(:campaign)
-                cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id)
+                cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
                 cam_item.live?.should be_true
-                cam_item = FactoryGirl.create(:campaign_item, reserve: 0, campaign_id: campaign.id)
+                cam_item = FactoryGirl.create(:campaign_item, reserve: 0, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
                 cam_item.live?.should be_false
                 start_date = Time.now.utc + 1.day
                 campaign = FactoryGirl.create(:campaign, live_date:  start_date)
-                cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id)
+                cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
                 cam_item.live?.should be_false
                 end_date = Time.now.utc - 1.day
                 campaign = FactoryGirl.create(:campaign, close_date: end_date)
-                cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id)
+                cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
+                cam_item.live?.should be_false
+                campaign = FactoryGirl.create(:campaign)
+                cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id)
                 cam_item.live?.should be_false
             end
-
         end
 
         context "sms messages" do
 
             it "should respond with human readable status_text" do
                 campaign = FactoryGirl.create(:campaign)
-                cam_item = FactoryGirl.create(:campaign_item, reserve: 0, campaign_id: campaign.id)
+                cam_item = FactoryGirl.create(:campaign_item, reserve: 0, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
                 cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} reserve is empty"
                 cam_item.update(reserve: 1)
                 cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} is live"
                 start_date = Time.now.utc + 1.day
                 campaign = FactoryGirl.create(:campaign, live_date:  start_date)
-                cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id)
+                cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
                 cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} has not started yet"
                 end_date = Time.now.utc - 1.day
                 campaign = FactoryGirl.create(:campaign, close_date: end_date)
-                cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id)
+                cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
                 cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} is closed"
             end
 
@@ -80,6 +82,21 @@ describe CampaignItem do
         it "should build from factory" do
             cam_item = FactoryGirl.build :campaign_item
             cam_item.should be_valid
+        end
+
+        context "live status" do
+            it "has reserve, campaign is live, and expires_at in future" do
+                today = Time.now
+                c = FactoryGirl.create :campaign, live_date: 1.week.ago, close_date: today + 1.week
+                ci = FactoryGirl.create :campaign_item, budget: 100, reserve: 100, campaign_id: c.id, expires_at: today + 1.week
+                ci.live?.should == true
+            end
+            it "has reserve, campaign is live, and expires_at is nil and expires_in is positive" do
+                today = Time.now
+                c = FactoryGirl.create :campaign, live_date: 1.week.ago, close_date: today + 1.week
+                ci = FactoryGirl.create :campaign_item, budget: 100, reserve: 100, campaign_id: c.id, expires_at: nil, expires_in: 10
+                ci.live?.should == true
+            end
         end
     end
 
