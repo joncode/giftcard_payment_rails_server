@@ -157,7 +157,7 @@ private
 	    c = cipher
 	    c.encrypt
 	    c.key = key
-	    c.iv = self.iv = generate_iv(PASSPHRASE)
+	    c.iv = self.iv = generate_iv(ENV['CATCH_SLOGAN'])
 	    temp_number = c.update(@number)
 	    temp_number << c.final
 	    self.number_digest = encode_into_base64(temp_number)
