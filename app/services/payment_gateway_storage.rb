@@ -10,7 +10,9 @@ module PaymentGatewayStorage
     def create_profile_with_payment_profile card, card_number, customer_id
         payment_profile = payment_profile_for card, card_number
         profile         = customer_profile_for customer_id, payment_profile
+        # this doesnt work
         response        = gateway.create_profile(profile)
+        #
         ditto           = Ditto.tokenize_card(response, card.id)
         return response, ditto
     end
