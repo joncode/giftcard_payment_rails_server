@@ -16,7 +16,7 @@ class JsonController < ActionController::Base
     GIFT_REPLY      = ["giver_id", "giver_name", "provider_id", "provider_name", "message", "status"]
     MERCHANT_REPLY  = GIFT_REPLY + [ "order_num"]
     ADMIN_REPLY     = GIFT_REPLY + [ "receiver_id", "receiver_name", "service"]
-    BUY_REPLY       = ["total", "receiver_id", "receiver_name", "provider_id", "provider_name", "message", "created_at", "updated_at", "status", "id"]
+    BUY_REPLY       = ["value", "receiver_id", "receiver_name", "provider_id", "provider_name", "message", "created_at", "updated_at", "status", "id"]
 
     def not_found
         head 404
@@ -78,8 +78,8 @@ class JsonController < ActionController::Base
                 gift_obj["time_ago"]   = time_ago_in_words(g.created_at.to_time)
             else
 
-                gift_obj["total"]    = g.total
-                gift_obj["server"]   = g.order.server_code if g.order
+                gift_obj["total"]    = g.value
+                gift_obj["server"]   = g.server if g.server
                 if (g.redeem_time > (Time.now  - 1.day))
                     gift_obj["time_ago"] = g.redeem_time.to_formatted_s(:merchant)
                 else
@@ -92,6 +92,10 @@ class JsonController < ActionController::Base
             gift_obj["created_at"] = g.created_at
 
             gift_obj["redeem_code"]   = add_redeem_code(g)
+            if gift_obj["value"]
+                gift_obj["total"] = gift_obj["value"]
+                gift_obj.delete('value')
+            end
             gifts_ary << gift_obj
         end
         return gifts_ary
@@ -99,7 +103,7 @@ class JsonController < ActionController::Base
 
     def add_redeem_code obj
         if obj.status == "notified"
-            obj.redeem.redeem_code
+            obj.token
         else
             "none"
         end

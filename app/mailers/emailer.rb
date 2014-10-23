@@ -63,8 +63,7 @@ module Emailer
 		body          = text_for_notify_receiver(gift)
 
 		template_name = "gift"
-		provider_name = gift.provider_name
-		message       = message_hash(subject, email, receiver_name, body, nil, provider_name)
+		message       = message_hash(subject, email, receiver_name, body, nil, gift.provider_name)
 		request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
     end
 
@@ -122,7 +121,7 @@ module Emailer
 		email    = data["email"]
 		name     = "#{merchant.name} Staff"
 		body     = text_for_merchant_invite(merchant, data["token"])
-		bcc      = rachel_email_if_production
+		bcc      = bcc_company_email
 
 		template_name = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -137,7 +136,7 @@ module Emailer
 		email        = data["email"]
 		name         = "#{merchant.name} Staff"
 		body         = text_for_merchant_staff_invite(merchant, invitor_name, invite_token)
-		bcc          = rachel_email_if_production
+		bcc          = bcc_company_email
 
 		template_name = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -150,7 +149,7 @@ module Emailer
 		email    = data["email"]
 		name     = "#{merchant.name} Staff"
 		body     = text_for_merchant_pending(merchant)
-		bcc      = rachel_email_if_production
+		bcc      = bcc_company_email
 
 		template_name = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -163,7 +162,7 @@ module Emailer
 		email    = data["email"]
 		name     = "#{merchant.name} Staff"
 		body     = text_for_merchant_approved(merchant)
-		bcc      = rachel_email_if_production
+		bcc      = bcc_company_email
 
 		template_name = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -176,7 +175,7 @@ module Emailer
 		email    = data["email"]
 		name     = "#{merchant.name} Staff"
 		body     = text_for_merchant_live(merchant)
-		bcc      = rachel_email_if_production
+		bcc      = bcc_company_email
 
 		template_name    = "merchant"
 		message       = message_hash(subject, email, name, body, bcc)
@@ -305,7 +304,7 @@ private
 		message
 	end
 
-	def rachel_email_if_production
+	def bcc_company_email
 		if Rails.env.production?
 			"rachel.wenman@itson.me"
 		else

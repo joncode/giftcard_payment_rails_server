@@ -2,19 +2,20 @@ require 'spec_helper'
 
 describe Mt::V2::GiftsController do
 
-    before(:each) do
-        @provider = FactoryGirl.create(:provider)
-        request.env["HTTP_TKN"] = @provider.token
-        @cart = "[{\"price\":\"10\",\"price_promo\":\"7\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
-        @expires_at = Time.now + 1.month
-        @gp_mock = FactoryGirl.create :gift_promo_mock, receiver_name: "Fred Barry",
-                                                        expires_at: @expires_at,
-                                                        shoppingCart: @cart,
-                                                        message: "Check out Our Promotions!"
-        @gp_social = GiftPromoSocial.create(gift_promo_mock_id: @gp_mock.id, network: "email", network_id: "fred@barry.com")
-    end
 
     describe :bulk_create do
+
+        before(:each) do
+            @provider = FactoryGirl.create(:provider)
+            request.env["HTTP_TKN"] = @provider.token
+            @cart = "[{\"price\":\"10\",\"price_promo\":\"7\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
+            @expires_at = Time.now + 1.month
+            @gp_mock = FactoryGirl.create :gift_promo_mock, receiver_name: "Fred Barry",
+                                                            expires_at: @expires_at,
+                                                            shoppingCart: @cart,
+                                                            message: "Check out Our Promotions!"
+            @gp_social = GiftPromoSocial.create(gift_promo_mock_id: @gp_mock.id, network: "email", network_id: "fred@barry.com")
+        end
 
         it_should_behave_like("token authenticated", :post, :bulk_create)
 
@@ -163,4 +164,85 @@ describe Mt::V2::GiftsController do
         end
     end
 
+    describe :redeem do
+        before(:each) do
+            @provider = FactoryGirl.create(:provider)
+            request.env["HTTP_TKN"] = @provider.token
+        end
+
+        it_should_behave_like("token authenticated", :post, :redeem)
+
+        it "should redeem a pending redeem gift" do
+            gift  = FactoryGirl.create(:gift, provider_id: @provider.id, receiver_id: 234, receiver_name: "test name")
+            gift.notify
+            gift.reload
+            notified_time = gift.new_token_at
+            create_hsh = {gift_id: gift.id, token: gift.token, server: "jjg"}
+            post :redeem, format: :json, data: create_hsh
+            rrc 200
+            gift.reload
+            gift.status.should == "redeemed"
+            (notified_time < gift.redeemed_at).should be_true
+            gift.server.should == "jjg"
+            gift.order_num.should_not be_nil
+        end
+
+        it "should return serialized gift on success" do
+            gift  = FactoryGirl.create(:gift, provider_id: @provider.id, receiver_id: 234, receiver_name: "test name")
+            gift.notify
+            gift.reload
+            notified_time = gift.new_token_at
+            create_hsh = {gift_id: gift.id, token: gift.token}
+            post :redeem, format: :json, data: create_hsh
+            rrc 200
+            json["status"].should == 1
+            json["data"].should == { "gift_id" => gift.id, "status" => 'redeemed'}
+        end
+
+        it "should return 404 not found for missing gift" do
+            create_hsh = {gift_id: 100000, token: 4646}
+            post :redeem, format: :json, data: create_hsh
+            rrc 404
+            # json["status"].should == 0
+            # json["data"].should == "Gift 100000 not found"
+        end
+
+        it "will not redeem a gift if token is incorrect" do
+            gift  = FactoryGirl.create(:gift, provider_id: @provider.id, receiver_id: 234, receiver_name: "test name")
+            gift.notify
+            gift.reload
+            notified_time = gift.new_token_at
+            create_hsh = {gift_id: gift.id, token: (gift.token + 1)}
+            post :redeem, format: :json, data: create_hsh
+            rrc 200
+            json["status"].should == 0
+            json["data"].should   == "Token is incorrect for gift #{gift.id}"
+        end
+
+        it "should return 'cannot be redeemed' msg" do
+            gift  = FactoryGirl.create(:gift, provider_id: @provider.id, receiver_id: 234, receiver_name: "test name")
+            create_hsh = {gift_id: gift.id, token: 4646}
+            post :redeem, format: :json, data: create_hsh
+            rrc 200
+            json["status"].should == 0
+            json["data"].should   == "Gift #{gift.id} cannot be redeemed"
+        end
+
+        it "should return 'already redeemed' msg" do
+            today = Time.now.utc - 1.hour
+            gift  = FactoryGirl.create(:gift, provider_id: @provider.id, receiver_id: 234, status: 'notified', receiver_name: "test name", token: 4675, notified_at: today, new_token_at: today)
+            gift.update(status: 'notified')
+            gift.notify
+            gift.redeem_gift
+            gift.reload
+
+            create_hsh = {gift_id: gift.id, token: gift.token}
+            post :redeem, format: :json, data: create_hsh
+            rrc 200
+            json["status"].should == 0
+            json["data"].should   == "Gift #{gift.id} has already been redeemed"
+        end
+
+
+    end
 end

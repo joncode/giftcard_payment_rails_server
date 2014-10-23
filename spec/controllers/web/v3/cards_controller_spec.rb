@@ -24,7 +24,7 @@ describe Web::V3::CardsController do
             json["status"].should == 1
             json["data"].class.should  == Array
             json["data"].count.should  == 4
-            keys = ['user_id', 'card_id', 'last_four', 'nickname']
+            keys = [ 'card_id', 'last_four', 'nickname']
             compare_keys(json["data"][0], keys)
         end
 
@@ -50,7 +50,7 @@ describe Web::V3::CardsController do
             card = Card.find_by(user_id: @user.id)
             rrc(200)
             json["status"].should == 1
-            json["data"].should == { "user_id" => @user.id, "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four }
+            json["data"].should == { "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four }
         end
 
         it "should return correct error message" do
@@ -63,7 +63,7 @@ describe Web::V3::CardsController do
             rrc(400)
             json["status"].should == 0
             json["err"].should == "INVALID_INPUT"
-            json["msg"].should == "Your credit card information was bad."
+            json["msg"].should == "We are unable to process credit card."
             json["data"].should == [
                 { "name" => "year", "msg" => "is not a valid year" },
                 { "name" => "expiration", "msg" => "The expiration date must be in the future." }

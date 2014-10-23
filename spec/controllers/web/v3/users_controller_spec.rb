@@ -35,7 +35,7 @@ describe Web::V3::UsersController do
             json["status"].should == 0
             json["err"].should    == "INVALID_INPUT"
             json["msg"].should    == "User could not be created"
-            json["data"].should   == [{ "name" => "password_confirmation", "msg" => "doesn't match Password" }]
+            json["data"].should   == [{ "name" => "password confirmation", "msg" => "doesn't match Password" }]
         end
 
     end

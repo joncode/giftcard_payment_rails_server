@@ -7,7 +7,7 @@ class Web::V3::CardsController < MetalCorsController
     rescue_from JSON::ParserError, :with => :bad_request
 
     def index
-        success(Card.get_cards_web(@current_user))
+        success(Card.get_cards(@current_user))
         respond
     end
 
@@ -17,7 +17,7 @@ class Web::V3::CardsController < MetalCorsController
         card = Card.create_card_from_hash create_with
 
         if card.save
-            success card.create_serialize_web
+            success card.token_serialize
         else
             fail_web fail_web_payload("not_created_card", card.errors)
             status = :bad_request

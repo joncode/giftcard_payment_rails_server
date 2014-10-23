@@ -114,6 +114,7 @@ end
         member do
           post :regift
           post :open
+          post :notify
           post :redeem
         end
         collection do
@@ -245,6 +246,7 @@ end
       resources :gifts, only: [] do
         collection do
           post :bulk_create
+          post :redeem
         end
       end
       resources :protos,  only: [] do

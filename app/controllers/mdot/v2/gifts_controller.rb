@@ -40,30 +40,63 @@ class Mdot::V2::GiftsController < JsonController
         return nil if params_bad_request
         return nil if data_not_found?(gift)
 
-        time = Time.now.utc - 1.minute
-        redeem = Redeem.find_or_create_with_gift(gift)
-        if redeem
-            if redeem.created_at >= time
+        if gift.notifiable?
+            gift.notify
+            if gift.notified_at >= (Time.now.utc - 1.minute)
                 Relay.send_push_thank_you gift
             end
-            success(redeem.redeem_code)
+            success(gift.token)
         else
-            fail redeem
+            fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            #status = :unprocessable_entity
         end
-        respond
+        respond(status)
+    end
+
+    def notify
+        gift   = @current_user.received.where(id: params[:id]).first
+        return nil if params_bad_request
+        return nil if data_not_found?(gift)
+
+        if gift.notifiable?
+            gift.notify
+            if gift.notified_at >= (Time.now.utc - 1.minute)
+                Relay.send_push_thank_you gift
+            end
+            success({ token:  gift.token, notified_at: gift.notified_at, new_token_at: gift.new_token_at })
+        else
+            fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            status = :unprocessable_entity
+        end
+        respond(status)
     end
 
     def redeem
         return nil if params_bad_request(["server"])
-        server_code = redeem_params
-        gift   = @current_user.received.where(id: params[:id]).first
-        return nil if data_not_found?(gift)
-        order = Order.init_with_gift(gift, server_code)
-        if order.save
-            success({ "order_number" => order.make_order_num , "total" => gift.total,  "server" => order.server_code })
+        request_server = redeem_params
+        gift           = @current_user.received.where(id: params[:id]).first
+
+        if gift
+            if gift.status == 'notified'
+                if true # gift.token == request_params["token"]
+                    gift.redeem_gift(request_server)
+                    # gift.reload
+                    success({ "order_number" => gift.token , "total" => gift.value,  "server" => gift.server })
+                else
+                    fail "Token is incorrect for gift #{params[:id]}"
+                end
+            else
+                fail_message = if gift.status == 'redeemed'
+                    "Gift #{gift.token} has already been redeemed"
+                else
+                    "Gift #{gift.token} cannot be redeemed"
+                end
+                status =  :unprocessable_entity
+                fail fail_message
+            end
         else
             fail database_error_redeem
-            #status = :bad_request
+            status = :not_found
         end
         respond(status)
     end
@@ -158,7 +191,7 @@ private
 
     def redeem_params
         if params["server"].blank?
-            nil
+            ""
         else
             params.require(:server)
         end
