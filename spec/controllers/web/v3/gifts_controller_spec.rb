@@ -31,6 +31,7 @@ describe Web::V3::GiftsController do
 
     describe :create do
         it_should_behave_like("client-token authenticated", :post, :create)
+
         before do
             @user.update(:remember_token => "USER_TOKEN")
             @card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
@@ -38,6 +39,7 @@ describe Web::V3::GiftsController do
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
         end
+
         it "should create a gift" do
             request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
