@@ -5,7 +5,7 @@ class AddRSysToProviders < ActiveRecord::Migration
   end
 
   def down
-	remove_column 	:providers, :r_sys
+	   remove_column 	:providers, :r_sys
   end
 
     def set_r_sys
