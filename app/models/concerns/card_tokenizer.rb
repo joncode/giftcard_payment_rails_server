@@ -6,9 +6,9 @@ module CardTokenizer
     		begin
 	    		user = User.unscoped.find(self.user_id)
 		    	if user.cim_profile.present?
-		    		add_payment_profile(self.id, user.cim_profile)
+		    		add_payment_profile(user.cim_profile)
 		    	else
-		    		create_profile_and_payment_profile(self.id)
+		    		create_profile_and_payment_profile(user)
 			    end
 			rescue
 				puts "\n\n\n----   Card #{self.id} -- does not have a user\n\n\n"
@@ -18,20 +18,42 @@ module CardTokenizer
 
 private
 
-    def create_profile_and_payment_profile card_id
-    	card        = Card.find(card_id)
-    	card_number = card.decrypt!(CATCH_PHRASE).number
-    	user        = card.user
+    def create_profile_and_payment_profile user
+    	card_number = self.decrypt!(CATCH_PHRASE).number
 		customer_id = user.obscured_id
 
-		response, ditto = PaymentGatewayCim.create_profile_with_payment_profile(card, card_number, customer_id)
-		if response.success?
-			if card.update(cim_token: response.payment_profile_ids[0]) && user.update(cim_profile: response.profile_id)
-				puts "==== card updated successfully with Profile ID: #{response.profile_id}, Payment Profile ID: #{response.payment_profile_ids[0]} ==="
+		resp, ditto = PaymentGatewayCim.create_profile_with_payment_profile(self, card_number, customer_id)
+		if resp.success?
+			if self.update(cim_token: resp.payment_profile_ids[0]) && user.update(cim_profile: resp.profile_id)
+				puts "==== card updated successfully with Profile ID: #{resp.profile_id}, Payment Profile ID: #{resp.payment_profile_ids[0]} ==="
 			else
-				puts "------ Active Record failed to save Auth.net response. Response: #{ response.inspect }--------------"
+				puts "------ Active Record failed to save Auth.net resp. Response: #{ resp.inspect }--------------"
 			end
 		else
+				# if this fails because the user.cim_profile already exists then save cim_profile on the user and re-call add_add_payment_profile
+			if resp.response_reason_code == "E00039" || resp.match(/duplicate record with ID/)
+
+                id_match     = resp.message_text.match(/\d+/)
+                profile_id   = id_match.to_s
+
+                if profile_id.length > 5
+	                unless user.update(cim_profile: profile_id)
+	                    # profile Id not persisted to user
+	                    # spin of the resque to re-persist
+	                    add_payment_profile profile_id
+	                end
+                else
+                	profile_id = ""    # reset the bad profile_id
+
+                	# did not get a profile_id from the match
+                	# send an alert to server admin with response
+                end
+            else
+                # another error
+            end
+
+
+
 			puts "------ Failed Transaction with Auth.net Response: #{ response.inspect }--------------"
 			puts "------ profile id #{ response.profile_id if response.profile_id }--------------"
 			puts "------ payment_profile_id #{ response.payment_profile_ids[0] if response.payment_profile_ids }--------------"
@@ -39,14 +61,13 @@ private
 		end
     end
 
-    def add_payment_profile card_id, cim_profile
-    	card        = Card.find(card_id)
-    	card_number = card.decrypt!(CATCH_PHRASE).number
+    def add_payment_profile  cim_profile
+    	card_number = self.decrypt!(CATCH_PHRASE).number
 
-    	response, ditto = PaymentGatewayCim.add_payment_profile(card, card_number, cim_profile)
+    	response, ditto = PaymentGatewayCim.add_payment_profile(self, card_number, cim_profile)
 		if response.success?
 			puts "------ Saving Payment Profile ID: #{response.payment_profile_id}--------------"
-			card.update(cim_token: response.payment_profile_id)
+			self.update(cim_token: response.payment_profile_id)
 		else
 			puts "------ Unable to update card Auth.net Response: #{response.inspect}--------------"
 			puts "------ Ditto ID: #{ ditto.id } --------------"

@@ -83,23 +83,21 @@ describe CampaignItem do
             cam_item = FactoryGirl.build :campaign_item
             cam_item.should be_valid
         end
-   
+
         context "live status" do
-            it "has reserve, campaign is live, and expiration date is set in future" do
+            it "has reserve, campaign is live, and expires_at in future" do
                 today = Time.now
                 c = FactoryGirl.create :campaign, live_date: 1.week.ago, close_date: today + 1.week
                 ci = FactoryGirl.create :campaign_item, budget: 100, reserve: 100, campaign_id: c.id, expires_at: today + 1.week
                 ci.live?.should == true
             end
-            it "has reserve, campaign is live, and expiration date is not set (days from creation)" do
+            it "has reserve, campaign is live, and expires_at is nil and expires_in is positive" do
                 today = Time.now
                 c = FactoryGirl.create :campaign, live_date: 1.week.ago, close_date: today + 1.week
                 ci = FactoryGirl.create :campaign_item, budget: 100, reserve: 100, campaign_id: c.id, expires_at: nil, expires_in: 10
                 ci.live?.should == true
             end
         end
-
-
     end
 
 end

@@ -5,17 +5,10 @@ describe GiftScopes do
     context "provider scopes" do
 
         before(:each) do
-            Provider.delete_all
-            User.delete_all
-            Gift.delete_all
-            Order.delete_all
-            Redeem.delete_all
             @provider = FactoryGirl.create(:provider)
             @number = 10
             @number.times do
                 FactoryGirl.create(:gift,   {:provider => nil, :provider_id => @provider.id, :provider_name => @provider.name }) # 10 incomplete  gifts
-                FactoryGirl.create(:redeem) # 10 notified gifts
-                FactoryGirl.create(:order) # 10 redeemed gifts
                 FactoryGirl.create(:regift, {:provider => nil, :provider_id => @provider.id, :provider_name => @provider.name }) # 10 open gifts
             end
             gs = Gift.all
@@ -24,11 +17,11 @@ describe GiftScopes do
                 g.provider_id   = @provider.id
                 g.save
             end
-            os = Order.all
-            os.each do |o|
-                o.provider_id = @provider.id
-                o.save
-            end
+            # os = Order.all
+            # os.each do |o|
+            #     o.provider_id = @provider.id
+            #     o.save
+            # end
         end
 
         describe :get_provider do
@@ -68,7 +61,7 @@ describe GiftScopes do
                 gift.add_receiver user
                 gift.save
                 gift.reload
-                gift.update_attribute(:status, 'redeemed')
+                gift.update(status: 'redeemed')
 
                 response = Gift.get_archive user
                 response.class.should == Array
@@ -89,7 +82,7 @@ describe GiftScopes do
                     gift.add_receiver user
                     gift.save
                     gift.reload
-                    gift.update_attribute(:status, status)
+                    gift.update(status: status)
                 end
                 response = Gift.get_archive user
                 response[1].count.should == 13
@@ -106,8 +99,8 @@ describe GiftScopes do
                 @user     = FactoryGirl.create(:user)
                 2.times do
                     gift = FactoryGirl.create(:gift, receiver: @user, provider_name: "Redeemed", status: 'redeemed')
-                    redeem = Redeem.create(gift_id: gift.id)
-                    Order.create(gift_id: gift.id, redeem_id: redeem.id)
+                    gift.notify
+                    gift.redeem_gift
                 end
 
                     # these are for the springboard and the in-app badge
@@ -133,24 +126,24 @@ describe GiftScopes do
                 3.times do
                     Sale.any_instance.stub(:resp_code).and_return(1)
                     gift = FactoryGirl.create(:gift, receiver: @user)
-                    Redeem.create(gift_id: gift.id)
+                   gift.notify
                 end
 
                     # do not count these
                 2.times do
                     Sale.any_instance.stub(:resp_code).and_return(2)
                     gift = FactoryGirl.create(:gift, receiver: @user)
-                    Redeem.create(gift_id: gift.id)
+                    gift.notify
                 end
                 2.times do
                     Sale.any_instance.stub(:resp_code).and_return(2)
                     gift = FactoryGirl.create(:gift, receiver: @user)
-                    Redeem.create(gift_id: gift.id)
+                    gift.notify
                 end
                 2.times do
                     Sale.any_instance.stub(:resp_code).and_return(2)
                     gift = FactoryGirl.create(:gift, receiver: @user)
-                    Redeem.create(gift_id: gift.id)
+                    gift.notify
                 end
                 gift_count = Gift.get_notifications @user
                 gift_count.should  == 3

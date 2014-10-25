@@ -7,6 +7,9 @@ class MetalController < ActionController::Base
     before_action        :method_start_log_message
     after_action         :method_end_log_message
 
+    rescue_from JSON::ParserError, :with => :bad_request
+    rescue_from ActiveModel::ForbiddenAttributesError, :with => :bad_request
+
     def not_found
         head 404
     end
@@ -35,10 +38,12 @@ class MetalController < ActionController::Base
 
     def fail_web payload
         data_array = []
-        if payload[:data].present?
+        if payload[:data].present? && !payload[:data].kind_of?(String)
             payload[:data].each do |k, v|
-                data_array << { name: k, msg: v }
+                data_array << { name: k.to_s.humanize.downcase, msg: v }
             end
+        else
+            data_array << payload[:data] unless payload[:data].nil?
         end
         @app_response = {
             status: 0,
@@ -85,7 +90,7 @@ class MetalController < ActionController::Base
         when "not_created_card"
             {
                 err: "INVALID_INPUT",
-                msg: "Your credit card information was bad.",
+                msg: "We are unable to process credit card.",
                 data: error_data
             }
 

@@ -128,7 +128,7 @@ module EmailHelper
 					</tr>
 					<tr>
 						<td style='text-align:right; padding: 0 10px; width:50%;'>Gift value</td>
-						<td style='text-align:left; width:50%;'>#{number_to_currency(gift.total)}</td>
+						<td style='text-align:left; width:50%;'>#{number_to_currency(gift.value)}</td>
 					</tr>
 					<tr>
 						<td style='text-align:right; padding: 0 10px; width:50%;'>Processing fee</td>
@@ -183,7 +183,7 @@ module EmailHelper
 	        </div>
 		</div>".html_safe
 	end
-
+	
 	def text_for_notify_receiver_proto_join gift
 		image_url      = gift.provider.image
 		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
@@ -200,10 +200,15 @@ module EmailHelper
 					<img src='#{image_url}' style='width: 400px;'>
 				</div>
 				#{items_text(gift)}
-				<div style='padding-bottom:20px; font-size:16px;'>
-					#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. To claim this gift simply click the button and download the app. Use this email address at sign-up to receive your gift.
-				</div>
 	            #{button_text(button_url, button_text)}
+			</div>
+			<div style='padding:10px; font-size:16px;'>
+				<ul style='list-style-type:none;'>
+					<li>#{provider_name} has partnered with It's On Me!</li>
+					<li>Claim your gift, simply click above & download the app.</li>
+					<li>Use this email address at sign-up.</li>
+					<li>- Thanks - It's On Me :)</li>
+				</ul>
 			</div>
 			<div style='background-color:#E2E2E2; padding: 10px;'>
 				<table>
@@ -405,7 +410,7 @@ module EmailHelper
 	end
 
 	def items_text gift
-		"<table style='padding-top:0;'>
+		"<table style='padding:0;'>
 			<tr>
 				<td width='320px' style='text-align:left'>
 					<div style='font-size:25px; padding-top:10px;'>$#{gift.value} Gift at #{gift.provider_name}</div>

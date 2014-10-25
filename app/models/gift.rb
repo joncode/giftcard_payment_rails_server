@@ -4,6 +4,7 @@ class Gift < ActiveRecord::Base
 	include Email
 	include GiftSerializers
     include GenericPayableDucktype
+    include RedeemHelper
 
     attr_accessor :receiver_oauth
 
@@ -53,6 +54,50 @@ class Gift < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
+    def notify
+        if notifiable?
+            if (self.new_token_at.nil? || self.new_token_at < reset_time)
+                current_time   = Time.now.utc
+                include_notify = if self.notified_at.nil?
+                    #self.notified_at = current_time
+                    ", notified_at = '#{current_time}' "
+                else
+                    ""
+                end
+                #self.new_token_at = current_time
+                include_status = if self.status == 'open'
+                    #self.status = 'notified'
+                    ", status = 'notified' "
+                else
+                    ""
+                end
+                sql = "UPDATE gifts SET token = nextval('gift_token_seq') #{include_status} #{include_notify}, new_token_at = '#{current_time}' WHERE id = #{self.id};"
+                Gift.connection.execute(sql)
+                self.reload
+                true
+            else
+                true
+            end
+        end
+    end
+
+    def notifiable?
+        return self.status == 'open' || self.status == 'notified'
+    end
+
+    def redeem_gift(server_code=nil)
+        if self.status == 'notified'
+            self.status      = 'redeemed'
+            self.redeemed_at = Time.now.utc
+            self.server      = server_code
+            self.order_num   = make_order_num(self.id)
+            self.save
+        else
+            #=> gift cannot be redeemed, its not notified
+            false
+        end
+    end
+
     def obscured_id
         NUMBER_ID + self.id
     end
@@ -95,12 +140,7 @@ class Gift < ActiveRecord::Base
     end
 
     def total
-        if self.respond_to?(:value)
-            amount = self.value || super
-            string_to_cents amount
-        else
-            string_to_cents super
-        end
+        string_to_cents(self.value)
     end
 
     def total= amount

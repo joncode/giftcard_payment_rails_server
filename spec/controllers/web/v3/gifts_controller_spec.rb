@@ -23,27 +23,7 @@ describe Web::V3::GiftsController do
             get :index, format: :json
             rrc(200)
             json["data"].count.should == 6
-            keys = [
-              "created_at",
-              "giv_name",
-              "giv_photo",
-              "giv_id",
-              "giv_type",
-              "rec_id",
-              "rec_name",
-              "rec_photo",
-              "items",
-              "value",
-              "status",
-              "expires_at",
-              "cat",
-              "msg",
-              "loc_id",
-              "loc_name",
-              "loc_phone",
-              "loc_address",
-              "gift_id"
-            ]
+            keys = ["r_sys", "created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             compare_keys(json["data"][0], keys)
         end
 
@@ -51,6 +31,7 @@ describe Web::V3::GiftsController do
 
     describe :create do
         it_should_behave_like("client-token authenticated", :post, :create)
+
         before do
             @user.update(:remember_token => "USER_TOKEN")
             @card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
@@ -58,6 +39,7 @@ describe Web::V3::GiftsController do
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
         end
+
         it "should create a gift" do
             request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
@@ -87,7 +69,8 @@ describe Web::V3::GiftsController do
                 "loc_name" => @provider.name,
                 "loc_phone" => @provider.phone,
                 "loc_address" => @provider.complete_address,
-                "gift_id" => new_gift.id
+                "gift_id" => new_gift.id,
+                "r_sys" => 2
             }
         end
 
@@ -105,8 +88,27 @@ describe Web::V3::GiftsController do
             json["err"].should == "INVALID_INPUT"
             json["msg"].should == "Gift could not be created"
             json["data"].should == [
-                { "name" => "receiver_email", "msg" => "is invalid" }
+                { "name" => "receiver email", "msg" => "is invalid" }
             ]
+        end
+
+        it "should return correct error messages when gift sale returns a string" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
+            @receiver.update(active: false)
+            gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", provider_id: @provider.id
+            gift_hash = make_gift_hsh(gift)
+            gift_hash["rec_net"] = "io"
+            gift_hash["rec_net_id"] = @receiver.id
+            gift.credit_card = @card.id
+            gift.value = "31.50"
+            post :create, format: :json, data: gift_hash
+            rrc(200)
+            json["status"].should == 0
+            json["err"].should == "INVALID_INPUT"
+            json["msg"].should == "Gift could not be created"
+            json["data"].should == ["User is no longer in the system , please gift to them with phone, email, facebook, or twitter"]
         end
 
     end
@@ -131,7 +133,7 @@ end
 def make_gift_hsh_fail gift
     {
         rec_net: "em",
-        rec_net_id: "bobatemaildotcom",
+        rec_net_id: "bademailatemaildotcom",
         rec_name: gift.receiver_name,
         msg: "hope you enjoy it!",
         cat: 300,
