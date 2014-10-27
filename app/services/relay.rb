@@ -16,7 +16,9 @@ class Relay
         end
 
         def send_push_thank_you gift
-            Resque.enqueue(PushJob, gift.id, true)
+            if gift.notified_at >= (Time.now.utc - 1.minute)
+                Resque.enqueue(PushJob, gift.id, true)
+            end
         end
 
         def send_push_incomplete gift

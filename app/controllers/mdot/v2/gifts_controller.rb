@@ -42,9 +42,7 @@ class Mdot::V2::GiftsController < JsonController
 
         if gift.notifiable?
             gift.notify
-            if gift.notified_at >= (Time.now.utc - 1.minute)
-                Relay.send_push_thank_you gift
-            end
+            Relay.send_push_thank_you gift
             success(gift.token)
         else
             fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
@@ -60,9 +58,7 @@ class Mdot::V2::GiftsController < JsonController
 
         if gift.notifiable?
             gift.notify
-            if gift.notified_at >= (Time.now.utc - 1.minute)
-                Relay.send_push_thank_you gift
-            end
+            Relay.send_push_thank_you gift
             success({ token:  gift.token, notified_at: gift.notified_at, new_token_at: gift.new_token_at })
         else
             fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"

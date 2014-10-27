@@ -390,11 +390,8 @@ class AppController < JsonController
                 gift   = receiver.received.where(id: params["data"].to_i).first
                 if gift
 			        if gift.notifiable?
-
 			            gift.notify
-			            if gift.notified_at >= (Time.now.utc - 1.minute)
-			                Relay.send_push_thank_you gift
-			            end
+			            Relay.send_push_thank_you gift
 		  				response["success"]      = gift.token.to_s
 		  			else
 		  				response["error_server"] = database_error_redeem
