@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141015170529) do
+ActiveRecord::Schema.define(version: 20141027231811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -453,6 +453,17 @@ ActiveRecord::Schema.define(version: 20141015170529) do
   end
 
   add_index "sales", ["provider_id"], name: "index_sales_on_provider_id", using: :btree
+
+  create_table "session_tokens", force: true do |t|
+    t.string   "token"
+    t.integer  "user_id"
+    t.integer  "device_id"
+    t.string   "platform"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "session_tokens", ["token"], name: "index_session_tokens_on_token", using: :btree
 
   create_table "settings", force: true do |t|
     t.integer  "user_id"

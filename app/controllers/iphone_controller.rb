@@ -2,8 +2,8 @@ class IphoneController < AppController
 
 	before_action :authenticate_services,     only: [:regift]
 	rescue_from ActionController::ParameterMissing, :with => :bad_request
-	def create_account
 
+	def create_account
 		data     = permit_data_params
 		pn_token = params["pn_token"] || nil
 
