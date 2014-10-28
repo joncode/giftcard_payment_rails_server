@@ -5,7 +5,7 @@ class ConfirmEmailJob
     def self.perform user_id, email
 		unless Rails.env.development?
 			if email
-				if user = User.find user_id
+				if user = User.find(user_id)
 					user.set_confirm_email
 					user.confirm_email
 				end
