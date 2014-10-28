@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141028210823) do
+ActiveRecord::Schema.define(version: 20141028215448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -580,9 +580,7 @@ ActiveRecord::Schema.define(version: 20141028210823) do
     t.tsvector "ftmeta"
   end
 
-  add_index "users", ["active", "perm_deactive", "remember_token"], name: "index_users_on_active_and_perm_deactive_and_remember_token", using: :btree
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
   add_index "users", ["ftmeta"], name: "users_ftsmeta_idx", using: :gin
-  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end
