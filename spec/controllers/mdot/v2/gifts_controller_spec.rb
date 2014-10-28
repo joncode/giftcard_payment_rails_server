@@ -219,7 +219,7 @@ describe Mdot::V2::GiftsController do
 
         it "should return receiver serialized gifts" do
 
-            keys = ["r_sys", "giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
+            keys = ["value", "r_sys", "giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
 
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
