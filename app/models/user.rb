@@ -274,20 +274,17 @@ class User < ActiveRecord::Base
 	end
 
 	def set_confirm_email
-		settingss 							= get_or_create_settings
-		settingss.confirm_email_token 		= create_token
-		settingss.confirm_email_token_sent_at = Time.now
-		settingss.save
+		settings 							= get_or_create_settings
+		settings.confirm_email_token 		= create_token
+		settings.confirm_email_token_sent_at = Time.now
+		settings.save
 	end
 
 	def init_confirm_email
-		unless Rails.env.development?
-			if self.email
-				set_confirm_email
-				confirm_email
-			else
-				puts "User created without EMAIL !! #{self.id}"
-			end
+		if thread_on?
+			Resque.enqueue(ConfirmEmailJob, self.id, self.email)
+		else
+			ConfirmEmailJob.perform(self.id, self.email)
 		end
 	end
 
@@ -323,10 +320,8 @@ class User < ActiveRecord::Base
 #########   settings methods
 
 	def get_or_create_settings
-		if setting = Setting.find_by(user_id: self.id)
+		if setting = Setting.find_or_create_by(user_id: self.id)
 			return setting
-		else
-			return Setting.create(user_id: self.id)
 		end
 	end
 
