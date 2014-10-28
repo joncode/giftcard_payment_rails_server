@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141027231811) do
+ActiveRecord::Schema.define(version: 20141028210823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -318,6 +318,7 @@ ActiveRecord::Schema.define(version: 20141027231811) do
     t.datetime "updated_at"
   end
 
+  add_index "pn_tokens", ["platform", "pn_token"], name: "index_pn_tokens_on_platform_and_pn_token", using: :btree
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
 
   create_table "proto_joins", force: true do |t|
@@ -459,6 +460,7 @@ ActiveRecord::Schema.define(version: 20141027231811) do
     t.integer  "user_id"
     t.integer  "device_id"
     t.string   "platform"
+    t.string   "push"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

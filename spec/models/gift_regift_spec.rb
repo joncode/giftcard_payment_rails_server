@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe GiftRegift do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     it "should allow regifting to receiver_phone BUG FIX" do
 
 

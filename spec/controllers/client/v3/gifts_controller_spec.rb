@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe Client::V3::GiftsController do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     describe :index do
 
         before(:each) do

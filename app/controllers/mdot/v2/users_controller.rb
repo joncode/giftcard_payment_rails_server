@@ -92,7 +92,7 @@ class Mdot::V2::UsersController < JsonController
 
         user = User.new(create_user_params)
         if user.save
-            user.pn_token = [pn_token, platform] if pn_token
+            user.session_token_obj =  SessionToken.create_token_obj(user, platform, pn_token)
             success user.create_serialize
         else
             fail    user

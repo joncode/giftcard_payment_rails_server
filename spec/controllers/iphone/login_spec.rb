@@ -37,7 +37,10 @@ describe IphoneController do
 
         it "should record user's pn token" do
             token = "912834198qweasdasdfasdfarqwerqwe3439487123"
+            stub_request(:put, "https://q_NVI6G1RRaOU49kKTOZMQ:yQEhRtd1QcCgu5nXWj-2zA@go.urbanairship.com/api/device_tokens/#{token}").with(:body => "{\"alias\":\"user-#{@user.obscured_id}\",\"provider\":\"ios\"}",:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).to_return(:status => 200, :body => "", :headers => {})
             post :login, format: :json, email: "neil@gmail.com", password: "password", pn_token: token
+            # PnToken.any_instance.stub(:register)
+            run_delayed_jobs
             response.status.should         == 200
             pn_token = PnToken.where(pn_token: token).first
             pn_token.pn_token.should == token
@@ -59,6 +62,7 @@ describe IphoneController do
             Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias, :provider => :ios})
 
             post :login, format: :json, email: "neil@gmail.com", password: "password", pn_token: pn_token
+            #PnToken.any_instance.stub(:register)
             run_delayed_jobs # ResqueSpec.perform_all(:push)
         end
 
@@ -107,6 +111,8 @@ describe IphoneController do
             token = "91283419asdfasdfadadsfasdfasdf83439487123"
             post :login_social, format: :json, origin: "f", facebook_id: @user.facebook_id, pn_token: token
             response.status.should         == 200
+            PnToken.any_instance.stub(:register)
+            run_delayed_jobs
             pn_token = PnToken.where(pn_token: token).first
             pn_token.pn_token.should == token
             pn_token.class.should    == PnToken

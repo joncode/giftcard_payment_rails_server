@@ -6,7 +6,8 @@ describe RegisterPushJob do
     describe :perform do
 
         before(:each) do
-             ResqueSpec.reset!
+            ResqueSpec.reset!
+            RegisterPushJob.stub(:ua_register)
             @user     = FactoryGirl.create(:user)
             @pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             @pnt      = PnToken.create(user_id: @user.id, pn_token: @pn_token)
@@ -39,11 +40,13 @@ describe RegisterPushJob do
         ResqueSpec.reset!
         @user     = FactoryGirl.create(:user)
         @pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
+        #stub_request(:put, "https://q_NVI6G1RRaOU49kKTOZMQ:yQEhRtd1QcCgu5nXWj-2zA@go.urbanairship.com/api/apids/FAKE_PN_TOKENFAKE_PN_TOKEN").with(:body => "{\"alias\":\"user-#{@user.obscured_id}\",\"provider\":\"android\"}", :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).to_return(:status => 200, :body => "", :headers => {})
+        #RegisterPushJob.stub(:ua_register)
         @pnt      = PnToken.create(user_id: @user.id, pn_token: @pn_token, platform: "android")
         correct_alias = "user-#{ @user.id + NUMBER_ID }"
 
 
-        Urbanairship.should_receive(:register_device).with(@pn_token, :alias => correct_alias, :provider => :android)
+        Urbanairship.should_receive(:register_device).with("FAKE_PN_TOKENFAKE_PN_TOKEN", :alias => correct_alias, :provider => :android)
         SubscriptionJob.stub(:perform).and_return(true)
         MailerJob.stub(:call_mandrill).and_return(true)
         run_delayed_jobs

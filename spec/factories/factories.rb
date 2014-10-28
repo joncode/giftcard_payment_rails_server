@@ -1,5 +1,11 @@
 FactoryGirl.define do
 
+    factory :session_token do
+         sequence(:token)    { |n|  "Token#{n}" }
+         user_id 123
+
+    end
+
     factory :admin_user do
         sequence(:remember_token)    { |n|  "Token#{n}" }
         sequence(:email)            { |n|  "tester#{n}@gmail.com" }
@@ -31,7 +37,9 @@ FactoryGirl.define do
             end
             phone
         end
-
+        after(:create) do |user|
+            FactoryGirl.create(:session_token, user_id: user.id, token: user.remember_token)
+        end
         factory :giver do
             first_name   "Jon"
             last_name    "Gifter"
@@ -100,6 +108,9 @@ FactoryGirl.define do
         sequence(:remember_token)   { |n| "nope#{n}" }
         sequence(:facebook_id)      { |n| "8ssa#{n}fd332" }
         sequence(:twitter)          { |n| "28sdd3s#{n}f6fd3" }
+        after(:create) do |nobody|
+            FactoryGirl.create(:session_token, user_id: nobody.id, token: nobody.remember_token)
+        end
     end
 
     factory :simple_user, :class => 'User' do
@@ -120,6 +131,7 @@ FactoryGirl.define do
         facebook_id      nil
         twitter          nil
         phone            nil
+
     end
 
     factory :pn_token do

@@ -309,15 +309,7 @@ class User < ActiveRecord::Base
 			value    = value_ary
 			platform = 'ios'
 		end
-		value 		= PnToken.convert_token(value)
-		if pn_token = PnToken.find_by(pn_token: value)
-			if pn_token.user_id != self.id
-				pn_token.user_id = self.id
-				pn_token.save
-			end
-		else
-			PnToken.create!(user_id: self.id, pn_token: value, platform: platform)
-		end
+		PnToken.find_or_create_token(self.id, value, platform)
 	end
 
 	def pn_token
@@ -374,7 +366,7 @@ private
 	def init_user_socials type_ofs, args
 		type_ofs.map do |type_of|
 			us = UserSocial.find_or_create_by(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id, active: true)
-			puts "init_user_socials - Here is the user social #{us.inspect}"
+			#puts "init_user_socials - Here is the user social #{us.inspect}"
 			if us.errors.messages.keys.count > 0
 				puts "here are the errors - #{us.errors.inspect}"
 			end

@@ -6,6 +6,7 @@ class IphoneController < AppController
 	def create_account
 		data     = permit_data_params
 		pn_token = params["pn_token"] || nil
+		platform = 'ios'
 
 		#puts " Here is the PARAMS obj #{params}"
 
@@ -18,7 +19,7 @@ class IphoneController < AppController
 
 		respond_to do |format|
 			if !data.nil? && new_user.save
-				new_user.pn_token = pn_token if pn_token
+				new_user.session_token_obj =  SessionToken.create_token_obj(new_user, platform, pn_token)
 				user_to_app       = {"user_id" => new_user.id, "token" => new_user.remember_token}
 				response          = { "success" => user_to_app }
 			else
@@ -37,6 +38,7 @@ class IphoneController < AppController
 		email     = params["email"].downcase
 		password  = params["password"]
 		pn_token  = params["pn_token"] || nil
+		platform = 'ios'
 
 		if password == "hNgobEA3h_mNeQOPJcVxuA"
 			password = "0"
@@ -48,7 +50,7 @@ class IphoneController < AppController
 			user = User.find_by(email: email)
 			if user && user.authenticate(password)
 				if user.active
-					user.pn_token       = pn_token if pn_token
+					user.session_token_obj =  SessionToken.create_token_obj(user, platform, pn_token)
 					response["user"]    = user.serialize(true)
 				else
 					response["error"]   = "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
@@ -69,6 +71,8 @@ class IphoneController < AppController
 		response  = {}
 		origin    = params["origin"].downcase
 		pn_token  = params["pn_token"] || nil
+		platform = 'ios'
+
 		if origin == 'f'
 			facebook_id = params["facebook_id"]
 		else
@@ -89,7 +93,7 @@ class IphoneController < AppController
 			end
 			if user
 				if user.not_suspended?
-					user.pn_token       = pn_token if pn_token
+					user.session_token_obj =  SessionToken.create_token_obj(user, platform, pn_token)
 					response["user"]    = user.serialize(true)
 				else
 					response["error"] = "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"

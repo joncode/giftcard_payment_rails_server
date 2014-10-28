@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Web::V3::UsersController do
 
     describe :create do

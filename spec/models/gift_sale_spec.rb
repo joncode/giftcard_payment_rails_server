@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe GiftSale do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     context "Full Tests + with Receiver ID" do
 
         before(:each) do

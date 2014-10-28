@@ -190,8 +190,9 @@ describe IphoneController do
             hsh  = json["success"]
             compare_keys(hsh, keys)
             user = User.where(email: email).first
+            st = user.session_tokens.first
             json["success"]["user_id"].should == user.id
-            json["success"]["token"].should   == user.remember_token
+            json["success"]["token"].should   == st.token
         end
 
         it "should not accept missing / invalid required fields" do

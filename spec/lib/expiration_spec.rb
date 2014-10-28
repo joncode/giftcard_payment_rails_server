@@ -2,7 +2,9 @@ require 'spec_helper'
 require 'expiration'
 
 describe "Expiration" do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     describe :expire_gifts do
         before { Gift.delete_all }
 

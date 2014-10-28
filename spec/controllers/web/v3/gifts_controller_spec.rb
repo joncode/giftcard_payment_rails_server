@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Web::V3::GiftsController do
 
     before(:each) do
@@ -33,7 +35,7 @@ describe Web::V3::GiftsController do
         it_should_behave_like("client-token authenticated", :post, :create)
 
         before do
-            @user.update(:remember_token => "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"

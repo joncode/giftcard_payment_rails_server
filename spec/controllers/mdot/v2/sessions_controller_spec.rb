@@ -1,8 +1,12 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Mdot::V2::SessionsController do
 
-    before do
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+        SubscriptionJob.stub(:perform)
         @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: "faceface", twitter: "tweettweet" }
     end
 
@@ -136,6 +140,8 @@ describe Mdot::V2::SessionsController do
             token = "91283419asdfasdfasdfasdfasdfa83439487123"
             post :create, format: :json, email: "neil@gmail.com", password: "password", pn_token: token
             response.status.should   == 200
+            RegisterPushJob.stub(:ua_register)
+            run_delayed_jobs
             pn_token = PnToken.where(pn_token: token).first
             pn_token.pn_token.should == token
             pn_token.class.should    == PnToken
@@ -148,6 +154,8 @@ describe Mdot::V2::SessionsController do
             token = "91283419asdfasdfasdfasdfasdfa83439487123"
             post :create, format: :json, email: "neil@gmail.com", password: "password", pn_token: token, platform: "android"
             response.status.should   == 200
+            RegisterPushJob.stub(:ua_register)
+            run_delayed_jobs
             pn_token = PnToken.where(pn_token: token).first
             pn_token.pn_token.should == token
             pn_token.class.should    == PnToken
@@ -251,6 +259,8 @@ describe Mdot::V2::SessionsController do
             token = "91283419asdfasdfasdfasdfasdfa83439487123"
             post :login_social, format: :json, facebook_id: @user.facebook_id, pn_token: token, platform: 'android'
             response.status.should   == 200
+            PnToken.any_instance.stub(:register)
+            run_delayed_jobs
             pn_token = PnToken.where(pn_token: token).first
             pn_token.pn_token.should == token
             pn_token.class.should    == PnToken

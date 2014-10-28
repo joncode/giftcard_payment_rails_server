@@ -133,7 +133,7 @@ private
 		errors.add(:number, "is not a valid credit card number") unless valid_number?(number)
 		self.brand = brand?(number)
 		errors.add(:brand, "We only accept AmEx, Visa, & MasterCard.") unless (self.brand == 'master' || self.brand == 'visa' || self.brand == 'american_express')
-		puts "error messages = #{errors.messages}"
+		#puts "error messages = #{errors.messages}"
 	end
 
 	def month_and_year_should_be_in_future

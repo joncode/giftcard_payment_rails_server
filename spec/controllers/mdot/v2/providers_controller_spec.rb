@@ -1,12 +1,11 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Mdot::V2::ProvidersController do
 
     before(:each) do
-        unless user = User.find_by(remember_token: "USER_TOKEN")
-            user = FactoryGirl.create(:user)
-            user.update_attribute(:remember_token, "USER_TOKEN")
-        end
+        @user = create_user_with_token "USER_TOKEN"
     end
 
     describe :menu do

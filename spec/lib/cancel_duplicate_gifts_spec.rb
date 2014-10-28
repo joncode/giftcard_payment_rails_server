@@ -3,6 +3,10 @@ require 'cancel_duplicate_gifts'
 
 
 describe "Should cancel duplicates" do
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
+
 	before do
 		Gift.delete_all
 		@provider1 = FactoryGirl.create :provider
@@ -47,7 +51,9 @@ describe "Should cancel duplicates" do
 end
 
 describe "undo all cancels" do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
 	it "should undo dual cancelled gifts" do
 		Gift.delete_all
 		@provider1 = FactoryGirl.create :provider

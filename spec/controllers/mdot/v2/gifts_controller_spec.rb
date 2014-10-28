@@ -1,11 +1,14 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Mdot::V2::GiftsController do
 
     describe :index do
         before(:each) do
-            user = FactoryGirl.create(:user, iphone_photo: "http://photo_urlimportante.com")
-            user.update(remember_token: "USER_TOKEN")
+            User.any_instance.stub(:init_confirm_email)
+            user = create_user_with_token "USER_TOKEN"
+            user.update(iphone_photo: "http://photo_urlimportante.com")
             6.times do
                 FactoryGirl.create(:gift, giver_type: "User", cat: 300, giver_id: user.id, giver_name: user.name, expires_at: Time.now, redeemed_at: Time.now, message: "here is messag", detail: "here is detail")
             end
@@ -78,8 +81,9 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update(remember_token: "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
 
             @number_received = 9
@@ -170,8 +174,9 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN"       )
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @number = 10
             @number.times do |n|
@@ -199,7 +204,7 @@ describe Mdot::V2::GiftsController do
 
         it "should not return gifts with deactivated receivers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            @user.update_attribute(:active, false)
+            @user.update(active: false)
             get :badge, format: :json
             rrc(401)
         end
@@ -291,8 +296,9 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @gift =  FactoryGirl.build(:gift, status: 'open')
             @gift.add_giver(@giver)
@@ -374,7 +380,7 @@ describe Mdot::V2::GiftsController do
             User.delete_all
             Provider.delete_all
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @gift =  FactoryGirl.build(:gift, status: 'open')
             @gift.add_giver(@giver)
@@ -479,8 +485,9 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @gift =  FactoryGirl.build(:gift, status: 'open')
             @gift.add_giver(@giver)
@@ -585,8 +592,9 @@ describe Mdot::V2::GiftsController do
             Gift.delete_all
             User.delete_all
             UserSocial.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @gift =  FactoryGirl.build(:gift, status: 'open', active: true)
             @gift.add_giver(@giver)
@@ -896,8 +904,9 @@ describe Mdot::V2::GiftsController do
             Gift.delete_all
             User.delete_all
             UserSocial.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
-            @user.update(:remember_token => "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
@@ -1205,7 +1214,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "OTHERTOKEN"
             giver = FactoryGirl.create(:giver)
             @user = giver
-            giver.update(remember_token: "OTHERTOKEN")
+            giver = create_user_with_token "OTHERTOKEN", giver
             @card = FactoryGirl.create(:card, :name => @user.name, :user_id => @user.id)
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})

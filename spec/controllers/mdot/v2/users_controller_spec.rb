@@ -1,14 +1,14 @@
 require 'spec_helper'
 require 'mandrill'
 
+include UserSessionFactory
+
 describe Mdot::V2::UsersController do
 
     before(:each) do
         User.delete_all
-        unless @user = User.find_by(remember_token: "USER_TOKEN")
-            @user = FactoryGirl.create(:user)
-            @user.update(remember_token: "USER_TOKEN")
-        end
+        #User.any_instance.stub(:init_confirm_email).and_return(true)
+        @user = create_user_with_token "USER_TOKEN"
     end
 
     describe :index do
@@ -318,8 +318,9 @@ describe Mdot::V2::UsersController do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             email    = "neil@gmail.com"
             user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil", pn_token: "f850c136-b74d-4fd9-a727-9912841e0a1a"}
-
             post :create, format: :json, data: user_hsh
+            PnToken.any_instance.stub(:register)
+            run_delayed_jobs
             rrc(200)
             user = User.where(email: email).first
             user.first_name.should == "Neil"
@@ -393,6 +394,8 @@ describe Mdot::V2::UsersController do
             hsh  = json["data"]
             compare_keys(hsh, keys)
             user = User.where(email: email).first
+            st = user.session_tokens.last
+            user.session_token_obj = st
             json["status"].should == 1
             json["data"].should   == user.create_serialize
         end
@@ -542,6 +545,8 @@ describe Mdot::V2::UsersController do
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             token = "91283419asdfasdfasdfasdfasdfa83439487123"
             post :create, format: :json, data: user_hsh, pn_token: token
+            PnToken.any_instance.stub(:register)
+            run_delayed_jobs
             rrc(200)
             user = User.where(email: "neil@gmail.com").first
             pn_token = PnToken.where(pn_token: token).first

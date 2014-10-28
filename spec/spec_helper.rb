@@ -15,9 +15,12 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 Dir[Rails.root.join("spec/shared/*.rb")].each { |f| require f }
 Dir[Rails.root.join("spec/factories/*.rb")].each { |f| require f }
 
+
+
 alias running proc
 
 RSpec.configure do |config|
+    config.before(:suite) { ActiveRecord::Migration.maintain_test_schema! }
     config.use_transactional_fixtures = false
 
     WebMock.disable_net_connect!(allow_localhost: true)

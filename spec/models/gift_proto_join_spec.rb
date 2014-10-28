@@ -3,7 +3,9 @@ require 'spec_helper'
 include ProtoFactory
 
 describe GiftProtoJoin do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     before(:each) do
         Gift.delete_all
         ProtoJoin.delete_all

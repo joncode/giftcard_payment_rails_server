@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe GiftCampaign do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     context "ItsOnMe Campaign" do
 
         before(:each) do

@@ -5,6 +5,7 @@ class CreateSessionTokens < ActiveRecord::Migration
       t.integer :user_id
       t.integer :device_id
       t.string :platform
+      t.string :push
 
       t.timestamps
     end

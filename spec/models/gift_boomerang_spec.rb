@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe GiftBoomerang do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     before(:each) do
         boom = FactoryGirl.create(:boomerang)
         @user     = FactoryGirl.create(:user)

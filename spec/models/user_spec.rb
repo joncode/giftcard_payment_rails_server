@@ -41,7 +41,7 @@ describe User do
             st = SessionToken.create(user_id: user.id, token: SecureRandom.urlsafe_base64)
             st2 = SessionToken.create(user_id: user.id, token: SecureRandom.urlsafe_base64)
 
-            user.session_tokens.count.should == 2
+            user.session_tokens.count.should == 3
         end
 
         it "should associate gift as giver" do
