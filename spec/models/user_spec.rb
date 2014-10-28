@@ -35,6 +35,15 @@ describe User do
             user.should be_valid
         end
 
+
+        it "should associate with session tokens" do
+            user = FactoryGirl.create(:user)
+            st = SessionToken.create(user_id: user.id, token: SecureRandom.urlsafe_base64)
+            st2 = SessionToken.create(user_id: user.id, token: SecureRandom.urlsafe_base64)
+
+            user.session_tokens.count.should == 2
+        end
+
         it "should associate gift as giver" do
             user = FactoryGirl.create(:user)
             gift = FactoryGirl.create(:gift, giver: user)
@@ -740,11 +749,11 @@ describe User do
 
     context "search" do
       before do
-        @user1 = FactoryGirl.create(:user, 
-                                    first_name: "One", 
-                                    last_name: "User", 
-                                    email: "one.user@example.com", 
-                                    address: "123 User St", 
+        @user1 = FactoryGirl.create(:user,
+                                    first_name: "One",
+                                    last_name: "User",
+                                    email: "one.user@example.com",
+                                    address: "123 User St",
                                     city: "OneCity",
                                     state: "OC",
                                     zip: "12345",
@@ -787,7 +796,7 @@ describe User do
           "2345679955", #phone
           "another address line" #address_2
         ]
-        
+
         result = User.search(terms.join(" "))
         expect(result.length).to eq(1)
         expect(result).to include(@user1)

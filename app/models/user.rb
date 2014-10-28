@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 	include Email
 	include Utility
 
-	attr_accessor :api_v1
+	attr_accessor :api_v1, :session_token_obj
 
 	has_many :proto_joins, as: :receivable
 	has_many :protos, through: :proto_joins
@@ -33,6 +33,7 @@ class User < ActiveRecord::Base
 
 	has_many :friendships, dependent: :destroy
 	has_many :app_contacts, through: :friendships
+	has_many :session_tokens
 
 	has_secure_password
 
@@ -63,7 +64,16 @@ class User < ActiveRecord::Base
 	}
 
 	def self.app_authenticate(token)
-		where(active: true, perm_deactive: false, remember_token: token).first
+		#where(active: true, perm_deactive: false, remember_token: token).first
+		SessionToken.app_authenticate(token)
+	end
+
+	def remember_token
+		if self.session_token_obj.present?
+			self.session_token_obj.token
+		else
+			super
+		end
 	end
 
 #/---------------------------------------------------------------------------------------------/
