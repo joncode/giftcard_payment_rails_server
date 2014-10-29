@@ -3,9 +3,13 @@ ruby '2.1.2'
 
 gem 'rails'
 gem 'pg'
-gem 'unicorn'
+
+#gem 'unicorn'
+gem 'puma'
 gem "rack-timeout"
+
 gem 'httparty', '~> 0.9.0'
+
 gem 'resque', :require => "resque/server"
 gem "resque-retry"
 #gem 'newrelic_rpm'
