@@ -1,5 +1,23 @@
 FactoryGirl.define do
 
+    factory :affiliate do
+        first_name                  "Jimmy"
+        last_name                   "AFfiliate"
+        sequence(:email)            { |n| "affiliate#{n}@gmail.com" }
+        sequence(:phone) do
+            phone = ""
+            10.times do
+              phone += (2..8).to_a.sample.to_s
+            end
+            phone
+        end
+        city        "New York"
+        address     "123 happy st"
+        zip         "11211"
+        state       "NY"
+        url_name  "test_affiliate"
+    end
+
     factory :session_token do
          sequence(:token)    { |n|  "Token#{n}" }
          user_id 123

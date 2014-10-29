@@ -11,10 +11,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141028215448) do
+ActiveRecord::Schema.define(version: 20141029224252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "affiliates", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "phone"
+    t.string   "address"
+    t.string   "state"
+    t.string   "city"
+    t.string   "zip"
+    t.string   "url_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "affiliates", ["url_name"], name: "index_affiliates_on_url_name", using: :btree
+
+  create_table "affiliates_gifts", id: false, force: true do |t|
+    t.integer "affiliate_id"
+    t.integer "gift_id"
+    t.integer "landing_page_id"
+  end
+
+  add_index "affiliates_gifts", ["affiliate_id"], name: "index_affiliates_gifts_on_affiliate_id", using: :btree
+  add_index "affiliates_gifts", ["gift_id"], name: "index_affiliates_gifts_on_gift_id", using: :btree
 
   create_table "answers", force: true do |t|
     t.string   "answer"
@@ -266,6 +291,21 @@ ActiveRecord::Schema.define(version: 20141028215448) do
   add_index "gifts", ["provider_id"], name: "index_gifts_on_provider_id", using: :btree
   add_index "gifts", ["receiver_id"], name: "index_gifts_on_receiver_id", using: :btree
   add_index "gifts", ["status"], name: "index_gifts_on_status", using: :btree
+
+  create_table "landing_pages", force: true do |t|
+    t.integer  "campaign_id"
+    t.integer  "affiliate_id"
+    t.string   "title"
+    t.string   "banner_photo_url"
+    t.integer  "example_item_id"
+    t.json     "page_json"
+    t.string   "sponsor_photo_url"
+    t.string   "link"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "landing_pages", ["link"], name: "index_landing_pages_on_link", using: :btree
 
   create_table "menu_strings", force: true do |t|
     t.integer  "version"
