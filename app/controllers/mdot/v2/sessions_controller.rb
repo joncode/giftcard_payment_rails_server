@@ -14,7 +14,8 @@ class Mdot::V2::SessionsController < JsonController
             @user = user_social.user
             if @user.not_suspended?
                 if @user.authenticate(params['password'])
-                    @user.session_token_obj =  SessionToken.create_token_obj(@user, params['platform'], params['pn_token'])
+                    platform = params['platform']
+                    @user.session_token_obj =  SessionToken.create_token_obj(@user, platform , params['pn_token'])
                     success @user.create_serialize
                 else
                     fail "Invalid email/password combination"
@@ -49,7 +50,8 @@ class Mdot::V2::SessionsController < JsonController
         end
         if @user
             if @user.not_suspended?
-                @user.session_token_obj =  SessionToken.create_token_obj(@user, params['platform'], params['pn_token'])
+                platform = params['platform']
+                @user.session_token_obj =  SessionToken.create_token_obj(@user, platform, params['pn_token'])
                 success @user.create_serialize
             else
                 fail "We're sorry, this account has been suspended.  Please contact #{SUPPORT_EMAIL} for details"
