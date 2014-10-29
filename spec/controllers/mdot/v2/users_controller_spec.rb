@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'mandrill'
 
 include UserSessionFactory
+include MockAndStubs
 
 describe Mdot::V2::UsersController do
 
@@ -238,11 +239,7 @@ describe Mdot::V2::UsersController do
 
             it "should hit mailchimp endpoint with correct email for subscription" do
                 ResqueSpec.reset!
-
-                RegisterPushJob.stub(:perform).and_return(true)
-                MailerJob.stub(:call_mandrill).and_return(true)
-                User.any_instance.stub(:init_confirm_email).and_return(true)
-
+                resque_stubs
                 MailchimpList.any_instance.should_receive(:subscribe).and_return({"email" => "neil@gmail.com" })
 
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
@@ -255,10 +252,8 @@ describe Mdot::V2::UsersController do
             end
 
             it "should hit mandrill endpoint with correct email for confirm email w/o pn_token" do
-
+                resque_stubs
                 User.any_instance.stub(:persist_social_data).and_return(true)
-                RegisterPushJob.stub(:perform).and_return(true)
-                SubscriptionJob.stub(:perform).and_return(true)
                 MailerJob.should_receive(:request_mandrill_with_template).twice
                 Mandrill::API.stub(:new) { Mandrill::API }
                 #Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
@@ -315,6 +310,8 @@ describe Mdot::V2::UsersController do
         end
 
         it "should create user with optional pn_token and save pn_token" do
+            ResqueSpec.reset!
+            resque_stubs
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             email    = "neil@gmail.com"
             user_hsh = { "email" =>  email, password: "password" , password_confirmation: "password", first_name: "Neil", pn_token: "f850c136-b74d-4fd9-a727-9912841e0a1a"}
@@ -541,6 +538,8 @@ describe Mdot::V2::UsersController do
         end
 
         it "should record user's pn token" do
+            ResqueSpec.reset!
+            resque_stubs
             user_hsh = { "email" =>  "neil@gmail.com", password: "password" , password_confirmation: "password", first_name: "Neil"}
             request.env["HTTP_TKN"] = GENERAL_TOKEN
             token = "91283419asdfasdfasdfasdfasdfa83439487123"
