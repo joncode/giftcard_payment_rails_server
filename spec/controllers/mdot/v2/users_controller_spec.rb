@@ -239,7 +239,7 @@ describe Mdot::V2::UsersController do
 
             it "should hit mailchimp endpoint with correct email for subscription" do
                 ResqueSpec.reset!
-                resque_stubs
+                resque_stubs subscribe_email: true
                 MailchimpList.any_instance.should_receive(:subscribe).and_return({"email" => "neil@gmail.com" })
 
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
@@ -252,9 +252,9 @@ describe Mdot::V2::UsersController do
             end
 
             it "should hit mandrill endpoint with correct email for confirm email w/o pn_token" do
-                resque_stubs
-                User.any_instance.stub(:persist_social_data).and_return(true)
-                MailerJob.should_receive(:request_mandrill_with_template).twice
+                resque_stubs mailer_job: true, confirm_email: true
+
+                MailerJob.should_receive(:request_mandrill_with_template).once
                 Mandrill::API.stub(:new) { Mandrill::API }
                 #Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
                 Mandrill::API.any_instance.stub(:messages).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
@@ -285,8 +285,7 @@ describe Mdot::V2::UsersController do
                 ResqueSpec.reset!
                 PnToken.any_instance.stub(:ua_alias).and_return("fake_ua")
                 User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
-                SubscriptionJob.stub(:perform).and_return(true)
-                MailerJob.stub(:call_mandrill).and_return(true)
+                resque_stubs register_push: true
                 pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
                 ua_alias = "fake_ua"
 

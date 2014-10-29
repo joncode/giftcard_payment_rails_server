@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 include UserSessionFactory
+include MockAndStubs
 
 describe Mdot::V2::GiftsController do
 
@@ -470,6 +471,7 @@ describe Mdot::V2::GiftsController do
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             badge = Gift.get_notifications(@gift.giver)
             user_alias = @gift.giver.ua_alias
+            resque_stubs
             good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!"}}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             request.env["HTTP_TKN"] = "USER_TOKEN"
