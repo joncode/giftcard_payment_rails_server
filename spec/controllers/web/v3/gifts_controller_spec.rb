@@ -9,12 +9,12 @@ describe Web::V3::GiftsController do
         Gift.delete_all
     	@user     = FactoryGirl.create :user, iphone_photo: "d|myphoto.jpg"
     	@receiver = FactoryGirl.create :user, first_name: "bob", iphone_photo: "d|myphoto2.jpg"
-        other1    = FactoryGirl.create :user, iphone_photo: "d|myphoto2.jpg"
+        @other1    = FactoryGirl.create :user, iphone_photo: "d|myphoto2.jpg"
     	other2    = FactoryGirl.create :user, iphone_photo: "d|myphoto2.jpg"
         @provider = FactoryGirl.create :provider
-    	3.times { FactoryGirl.create :gift, giver: other1, receiver_name: @user.name, receiver_id: @user.id, provider: @provider}
+    	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: @user.name, receiver_id: @user.id, provider: @provider}
     	3.times { FactoryGirl.create :gift, giver: @user, receiver_name: other2.name, receiver_id: other2.id, provider: @provider}
-    	3.times { FactoryGirl.create :gift, giver: other1, receiver_name: other2.name, receiver_id: other2.id, provider: @provider}
+    	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: other2.name, receiver_id: other2.id, provider: @provider}
     end
 
     describe :index do
@@ -29,6 +29,21 @@ describe Web::V3::GiftsController do
             compare_keys(json["data"][0], keys)
         end
 
+        it "should return the gifts of another user" do
+            request.headers["HTTP_X_AUTH_TOKEN"] = @user.remember_token
+            get :index, format: :json, user_id: @other1.id
+            rrc(200)
+            json["data"].count.should == 6
+            data = json["data"]
+            data.first["giv_id"].should == @other1.id
+        end
+
+        it "should return 404 when other use is not found" do
+            request.headers["HTTP_X_AUTH_TOKEN"] = @user.remember_token
+            get :index, format: :json, user_id: 10000
+            rrc(404)
+
+        end
     end
 
     describe :create do
@@ -112,9 +127,179 @@ describe Web::V3::GiftsController do
             json["msg"].should == "Gift could not be created"
             json["data"].should == ["User is no longer in the system , please gift to them with phone, email, facebook, or twitter"]
         end
-
     end
 
+    describe :notify do
+        it_should_behave_like("client-token authenticated", :patch, :notify, id: 1)
+
+        before(:each) do
+            @user = create_user_with_token "USER_TOKEN", @user
+            @gift = FactoryGirl.create(:gift, receiver_id: @user.id, receiver_name: @user.username)
+        end
+
+        it "should notify an open gift" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            @gift.status.should == 'open'
+            patch :notify, format: :json, id: @gift.id
+            @gift.reload.status.should == 'notified'
+        end
+
+        it "should return token when gift is currently notified" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            @gift.notify
+            patch :notify, format: :json, id: @gift.id
+            rrc(200)
+            json["status"].should               == 1
+            json["data"]["token"].should        == @gift.token
+            json["data"]["new_token_at"].should == @gift.new_token_at.xmlschema
+            json["data"]["notified_at"].should  == @gift.notified_at.xmlschema
+
+        end
+
+        it "should send fail msg when an incomplete gift" do
+            incomplete_gift                  = FactoryGirl.create(:gift)
+            incomplete_gift.status.should    == 'incomplete'
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            patch :notify, format: :json, id: incomplete_gift.id
+            rrc(200)
+            json["status"].should == 0
+            json["err"].should    ==  "NOT_REDEEMABLE"
+            json["msg"].should == "Gift #{incomplete_gift.token} at #{incomplete_gift.provider_name} cannot be redeemed"
+        end
+
+        it "should send fail msg gift is un-redeemable [expired, regifted, cancelled] " do
+            @gift.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: Time.now.utc)
+
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            patch :notify, format: :json, id: @gift.id
+            rrc(200)
+            json["status"].should == 0
+            json["err"].should    ==  "NOT_REDEEMABLE"
+            json["msg"].should == "Gift #{@gift.token} at #{@gift.provider_name} cannot be redeemed"
+        end
+
+        it "should send fail msg gift already redeemed" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            @gift.notify
+            @gift.redeem_gift
+            patch :notify, format: :json, id: @gift.id
+            rrc(200)
+            json["status"].should == 0
+            json["err"].should    ==  "NOT_REDEEMABLE"
+            json["msg"].should == "Gift #{@gift.token} at #{@gift.provider_name} has already been redeemed"
+
+        end
+
+        it "should return 404 if gift is not found" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            patch :notify, format: :json, id: 12412412
+            rrc(404)
+        end
+
+        it "should not allow opening gifts that user does not receive" do
+            other_user = FactoryGirl.create(:user)
+            other_gift = FactoryGirl.create(:gift, receiver_id: other_user.id)
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            patch :notify, format: :json, id: other_gift.id
+            json["status"].should == 0
+            json["err"].should    ==  "NOT_REDEEMABLE"
+            json["msg"].should == "Gift #{other_gift.token} at #{other_gift.provider_name} cannot be redeemed"
+        end
+
+        it "should send a 'your gift is opened' push to the gift giver" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            badge = Gift.get_notifications(@gift.giver)
+            user_alias = @gift.giver.ua_alias
+            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!"}}
+            Urbanairship.should_receive(:push).with(good_push_hsh)
+            patch :notify, format: :json, id: @gift.id
+            run_delayed_jobs
+        end
+    end
+
+    describe :redeem do
+        it_should_behave_like("client-token authenticated", :put, :redeem, id: 1)
+
+        before(:each) do
+            @user = create_user_with_token "USER_TOKEN", @user
+            @gift = FactoryGirl.create(:gift, receiver_id: @user.id, receiver_name: @user.username)
+            @gift.notify
+        end
+
+        it "should redeem a notifed gift" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            @gift.status.should == 'notified'
+            @gift.redeemed_at.should be_nil
+            patch :redeem, format: :json, id: @gift.id
+            rrc(200)
+            json["status"].should == 1
+            json["data"]["token"].should        == @gift.token
+            json["data"]["new_token_at"].should == @gift.new_token_at.xmlschema
+            json["data"]["notified_at"].should  == @gift.notified_at.xmlschema
+            @gift.reload.status.should == 'redeemed'
+            @gift.redeemed_at.should_not be_nil
+        end
+
+        it "should redeem a notifed gift with server initials" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            @gift.status.should == 'notified'
+            @gift.redeemed_at.should be_nil
+            patch :redeem, format: :json, id: @gift.id, data:  "2342"
+            rrc(200)
+            @gift.reload
+            @gift.status.should == 'redeemed'
+            @gift.server.should == '2342'
+            @gift.redeemed_at.should_not be_nil
+        end
+
+        it "should return 404 if gift is not found" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            patch :redeem, format: :json, id: 1234211
+            rrc(404)
+        end
+
+        it "should send fail msg when an incomplete / open gift" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            other_gift = FactoryGirl.create(:gift, receiver_email: @user.email)
+            patch :redeem, format: :json, id: other_gift.id
+            rrc(200)
+            json["status"].should == 0
+            json["err"].should    ==  "NOT_REDEEMABLE"
+            json["msg"].should == "Gift #{other_gift.token} at #{other_gift.provider_name} cannot be redeemed"
+        end
+
+        it "should send fail msg gift already redeemed" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            @gift.redeem_gift
+            patch :redeem, format: :json, id: @gift.id
+            rrc(200)
+            json["status"].should == 0
+            json["err"].should    ==  "NOT_REDEEMABLE"
+            json["msg"].should == "Gift #{@gift.token} at #{@gift.provider_name} has already been redeemed"
+        end
+
+        it "should send fail msg gift is un-redeemable [expired, regifted, cancelled] " do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            @gift.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: Time.now.utc)
+            patch :redeem, format: :json, id: @gift.id
+            rrc(200)
+            json["status"].should == 0
+            json["err"].should    ==  "NOT_REDEEMABLE"
+            json["msg"].should == "Gift #{@gift.token} at #{@gift.provider_name} cannot be redeemed"
+        end
+
+        it "should not allow opening gifts that user does not receive" do
+            other_user = FactoryGirl.create(:user)
+            other_gift = FactoryGirl.create(:gift, receiver_id: other_user.id)
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            patch :redeem, format: :json, id: other_gift.id
+            json["status"].should == 0
+            json["err"].should    ==  "NOT_REDEEMABLE"
+            json["msg"].should == "Gift #{other_gift.token} at #{other_gift.provider_name} cannot be redeemed"
+        end
+    end
 end
 
 def make_gift_hsh gift

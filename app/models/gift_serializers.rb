@@ -178,6 +178,9 @@ module GiftSerializers
             gift_hsh["r_sys"]         = self.provider.r_sys
         end
         gift_hsh["gift_id"]       = self.id
+        gift_hsh["token"]         = self.token
+        gift_hsh["new_token_at"]  = self.new_token_at
+        gift_hsh["notified_at"]   = self.notified_at
         remove_nils(gift_hsh)
     end
 
