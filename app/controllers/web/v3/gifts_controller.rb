@@ -81,7 +81,7 @@ class Web::V3::GiftsController < MetalCorsController
     def redeem
         gift = Gift.find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
-            server_inits = params[:data]
+            server_inits = redeem_params[:server]
             gift.redeem_gift(server_inits)
             success gift.web_serialize
         else
@@ -99,6 +99,10 @@ private
 
     def gift_params
         params.require(:data).permit(:rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name,:msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
+    end
+
+    def redeem_params
+        params.require(:data).permit(:server)
     end
 
 end
