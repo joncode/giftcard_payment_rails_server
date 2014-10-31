@@ -242,7 +242,7 @@ describe Web::V3::GiftsController do
             request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
             @gift.status.should == 'notified'
             @gift.redeemed_at.should be_nil
-            patch :redeem, format: :json, id: @gift.id, data:  "2342"
+            patch :redeem, format: :json, id: @gift.id, data: {"server" => "2342" }
             rrc(200)
             @gift.reload
             @gift.status.should == 'redeemed'
