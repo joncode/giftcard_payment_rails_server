@@ -6,7 +6,7 @@ class SessionToken < ActiveRecord::Base
 	validates_presence_of :token
 
 	def self.app_authenticate(token)
-		st_obj = where(token: token).last
+		st_obj = where(token: token).includes(:user).last
 		if st_obj
 			user = st_obj.user
 			if user.active

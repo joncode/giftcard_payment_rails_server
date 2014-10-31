@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 include UserSessionFactory
+include MocksAndStubs
 
 describe Mdot::V2::SessionsController do
 
@@ -137,16 +138,11 @@ describe Mdot::V2::SessionsController do
 
         it "should record user's pn token" do
             request.env["HTTP_TKN"] = APP_GENERAL_TOKEN
-            token = "91283419asdfasdfasdfasdfasdfa83439487123"
-            post :create, format: :json, email: "neil@gmail.com", password: "password", pn_token: token
+            test_pn_token_persisted do |token|
+                post :create, format: :json, email: "neil@gmail.com", password: "password", pn_token: token
+                'ios'
+            end
             response.status.should   == 200
-            RegisterPushJob.stub(:ua_register)
-            run_delayed_jobs
-            pn_token = PnToken.where(pn_token: token).first
-            pn_token.pn_token.should == token
-            pn_token.class.should    == PnToken
-            pn_token.user_id.should  == @user.id
-            pn_token.platform.should == "ios"
         end
 
         it "should record user's pn token and platform" do
@@ -256,16 +252,11 @@ describe Mdot::V2::SessionsController do
 
         it "should record user's pn token" do
             request.env["HTTP_TKN"] = APP_GENERAL_TOKEN
-            token = "91283419asdfasdfasdfasdfasdfa83439487123"
-            post :login_social, format: :json, facebook_id: @user.facebook_id, pn_token: token, platform: 'android'
+            test_pn_token_persisted do |token|
+                post :login_social, format: :json, facebook_id: @user.facebook_id, pn_token: token, platform: 'android'
+                'android'
+            end
             response.status.should   == 200
-            PnToken.any_instance.stub(:register)
-            run_delayed_jobs
-            pn_token = PnToken.where(pn_token: token).first
-            pn_token.pn_token.should == token
-            pn_token.class.should    == PnToken
-            pn_token.user_id.should  == @user.id
-            pn_token.platform.should == 'android'
         end
 
         it "should not login a paused user" do

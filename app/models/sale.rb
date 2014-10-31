@@ -15,7 +15,6 @@ class Sale < ActiveRecord::Base
 
     def self.charge_card cc_hsh
         if cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
-            cc_hsh = cc_hsh.except("number", "month_year", "first_name", "last_name")
             self.charge_token cc_hsh
         else
             cc_hsh = cc_hsh.except("cim_token", "cim_profile")
@@ -57,21 +56,16 @@ private
     end
 
     def self.charge_token cc_hsh
-        payment_hsh = { }
-        credit_card_data_keys = ["amount", "cim_token", "cim_profile"]
-        credit_card_data_keys << "unique_id" if cc_hsh["unique_id"]
-        credit_card_data_keys.each do |cc_data|
-            payment_hsh[cc_data] = cc_hsh[cc_data]
-            cc_hsh.delete(cc_data)
-        end
-        payment  = PaymentGatewayCim.new(payment_hsh)
-        resp_hsh = payment.charge
-        cc_hsh.merge!(resp_hsh)
-        Sale.new cc_hsh
+        payment_hsh   = {"amount" => cc_hsh["amount"], "cim_token"=> cc_hsh["cim_token"], "cim_profile"=> cc_hsh["cim_profile"],  "unique_id"=> cc_hsh["unique_id"]}
+        payment       = PaymentGatewayCim.new(payment_hsh)
+        resp_hsh      = payment.charge
+
+        sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "provider_id" => cc_hsh["provider_id"]}
+        sale_init_hsh.merge!(resp_hsh)
+        Sale.new sale_init_hsh
     end
 
     def sale_card_last_four
-
         if self.card
             self.card.last_four
         else
@@ -80,7 +74,6 @@ private
         end
     end
 end
-
 
     # required => [ giver_id, provider_id, card_id, number, month_year, first_name, last_name, amount ]
     # optional => unique_id

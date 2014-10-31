@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-include MockAndStubs
+include MocksAndStubs
 
 describe PushJob do
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 include UserSessionFactory
-include MockAndStubs
+include MocksAndStubs
 
 describe Mdot::V2::GiftsController do
 

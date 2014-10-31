@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'mandrill'
 
 include UserSessionFactory
-include MockAndStubs
+include MocksAndStubs
 
 describe Mdot::V2::UsersController do
 
@@ -238,62 +238,36 @@ describe Mdot::V2::UsersController do
         context "external service tests" do
 
             it "should hit mailchimp endpoint with correct email for subscription" do
-                ResqueSpec.reset!
-                resque_stubs subscribe_email: true
-                MailchimpList.any_instance.should_receive(:subscribe).and_return({"email" => "neil@gmail.com" })
-
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
-                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
-                post :create, format: :json, data: user_hsh
-                run_delayed_jobs
-
-                user = UserSocial.find_by(identifier: "neil@gmail.com")
-                user.subscribed.should be_true
+                test_subscribed_email do
+                    user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                    post :create, format: :json, data: user_hsh
+                end
             end
 
             it "should hit mandrill endpoint with correct email for confirm email w/o pn_token" do
-                resque_stubs mailer_job: true, confirm_email: true
-
-                MailerJob.should_receive(:request_mandrill_with_template).once
-                Mandrill::API.stub(:new) { Mandrill::API }
-                #Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
-                Mandrill::API.any_instance.stub(:messages).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
-
-                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
-                post :create, format: :json, data: user_hsh
-                run_delayed_jobs
+                test_confirm_email do
+                    user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                    post :create, format: :json, data: user_hsh
+                end
             end
 
 
             it "should hit mandrill endpoint with correct email for confirm email w/ pn_token" do
-                Urbanairship.stub(:register_device).and_return("pn_token", { :alias => "ua_alias"})
-                User.any_instance.stub(:persist_social_data).and_return(true)
-                SubscriptionJob.stub(:perform).and_return(true)
-                RegisterPushJob.stub(:perform).and_return(true)
-                MailerJob.should_receive(:request_mandrill_with_template).twice
-                Mandrill::API.stub(:new) { Mandrill::API }
-                #Mandrill::API.should_receive(:send_template).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
-                Mandrill::API.any_instance.stub(:messages).with("iom-confirm-email", [{"name"=>"recipient_name", "content"=>"Neil"}, {"name"=>"service_name", "content"=>"ItsOnMe"}], {"subject"=>"Confirm Your Email", "from_name"=>"#{SERVICE_NAME}", "from_email"=>"#{NO_REPLY_EMAIL}", "to"=>[{"email"=>"neil@gmail.com", "name"=>"Neil"}, {"email"=>"#{INFO_EMAIL}", "name"=>""}], "bcc_address"=>nil, "merge_vars"=>[{"rcpt"=>"neil@gmail.com", "vars"=>anything}]})
-                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
-                post :create, format: :json, data: user_hsh, pn_token: "FAKE_PN_TOKENFAKE_PN_TOKEN"
-                run_delayed_jobs
+                test_confirm_email do
+                    user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                    post :create, format: :json, data: user_hsh, pn_token: "FAKE_PN_TOKENFAKE_PN_TOKEN"
+                end
             end
 
             it "should hit urban airship endpoint with correct token and alias" do
-                ResqueSpec.reset!
-                PnToken.any_instance.stub(:ua_alias).and_return("fake_ua")
-                User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
-                resque_stubs register_push: true
-                pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
-                ua_alias = "fake_ua"
-
-                Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias, :provider => :ios })
-                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
                 request.env["HTTP_TKN"] = GENERAL_TOKEN
-                post :create, format: :json, data: user_hsh, pn_token: pn_token
-                run_delayed_jobs # ResqueSpec.perform_all(:push)
+                test_urban_airship_endpoint(:ios) do |pn_token|
+                    user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                    post :create, format: :json, data: user_hsh, pn_token: pn_token
+                end
             end
         end
 

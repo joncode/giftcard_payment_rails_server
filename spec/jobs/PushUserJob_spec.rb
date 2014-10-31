@@ -1,5 +1,5 @@
 require 'spec_helper'
-include MockAndStubs
+include MocksAndStubs
 
 describe PushUserJob do
 

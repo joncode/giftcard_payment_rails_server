@@ -40,12 +40,15 @@ class Mdot::V2::GiftsController < JsonController
         return nil if params_bad_request
         return nil if data_not_found?(gift)
 
-        if gift.notifiable?
-            gift.notify
+        if gift.notify
             Relay.send_push_thank_you gift
             success(gift.token)
         else
-            fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            if !gift.notifiable?
+                fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            else
+                fail gift
+            end
             #status = :unprocessable_entity
         end
         respond(status)

@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 include UserSessionFactory
+include MocksAndStubs
 
 describe Web::V3::GiftsController do
 
@@ -207,15 +208,10 @@ describe Web::V3::GiftsController do
         end
 
         it "should send a 'your gift is opened' push to the gift giver" do
-            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
-            badge = Gift.get_notifications(@gift.giver)
-            user_alias = @gift.giver.ua_alias
-            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!"}}
-            Urbanairship.should_receive(:push).with(good_push_hsh)
-            patch :notify, format: :json, id: @gift.id
-            run_delayed_jobs
+            test_urban_airship_gift_opened(@gift) do
+                patch :notify, format: :json, id: @gift.id
+            end
         end
     end
 

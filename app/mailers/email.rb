@@ -67,7 +67,7 @@ module Email
                 "user_id"     => self.id,
                 "link"        => self.setting.generate_email_link
                 }
-        route_email_system(data)
+        route_email_system(data, false)
     end
 
     def send_reset_password_email user
@@ -87,10 +87,14 @@ module Email
 
 private
 
-    def route_email_system data
+    def route_email_system data, thread_it=true
         puts "data in Email.rb #{data}"
         unless  Rails.env.development?
-            Resque.enqueue(MailerJob, data)
+            if thread_it  # set this to false if you are already on a background thread
+                Resque.enqueue(MailerJob, data)
+            else
+                MailerJob.perform(data)
+            end
         end
     end
 

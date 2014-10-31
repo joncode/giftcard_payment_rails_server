@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include MocksAndStubs
+
 describe IphoneController do
 
     describe :login do
@@ -108,6 +110,7 @@ describe IphoneController do
         end
 
         it "should record user's pn token" do
+            resque_stubs
             token = "91283419asdfasdfadadsfasdfasdf83439487123"
             post :login_social, format: :json, origin: "f", facebook_id: @user.facebook_id, pn_token: token
             response.status.should         == 200
@@ -136,9 +139,7 @@ describe IphoneController do
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             PnToken.any_instance.stub(:ua_alias).and_return("fake_ua")
             User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
-            SubscriptionJob.stub(:perform).and_return(true)
-            MailerJob.stub(:call_mandrill).and_return(true)
-
+            resque_stubs register_push: true
             pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             ua_alias = "fake_ua"
 
