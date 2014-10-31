@@ -5,7 +5,8 @@ include UserSessionFactory
 describe Web::V3::SessionsController do
 
     describe :create do
-    	before do
+
+    	before(:each) do
 			request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
     	end
 

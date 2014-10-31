@@ -18,10 +18,9 @@ FactoryGirl.define do
         url_name  "test_affiliate"
     end
 
-    factory :session_token do
-         sequence(:token)    { |n|  "Token#{n}" }
-         user_id 123
-
+    factory :landing_page do
+        campaign_id 1
+        affiliate_id 1
     end
 
     factory :admin_user do
@@ -131,6 +130,11 @@ FactoryGirl.define do
         end
     end
 
+    factory :session_token do
+         sequence(:token)    { |n|  "Token#{n}" }
+         user_id 123
+    end
+
     factory :simple_user, :class => 'User' do
         first_name                  "Simple"
         last_name                   "User"
@@ -149,7 +153,6 @@ FactoryGirl.define do
         facebook_id      nil
         twitter          nil
         phone            nil
-
     end
 
     factory :pn_token do
