@@ -195,6 +195,15 @@ describe Mdot::V2::GiftsController do
             json["data"]["badge"].should  == @number
         end
 
+        it "should correct badge for notified gifts" do
+            gift = Gift.last
+            gift.notify
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            get :badge, format: :json
+            json["status"].should == 1
+            json["data"]["badge"].should  == @number - 1
+        end
+
         it "should return gifts with deactivated givers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             @giver.update_attribute(:active, false)
@@ -276,6 +285,19 @@ describe Mdot::V2::GiftsController do
                     expect { non_expired_ary_of_ids.include?(g_j["gift_id"]) }.to be_true
                 end
             end
+        end
+
+        context "pn token" do
+
+            it "should get the pn_token and save it if missing" do
+                test_pn_token_persisted("28gf2u3gf013igf023igf083fg") do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    get :badge, format: :json, pn_token: "28gf2u3gf013igf023igf083fg", platform: "ios"
+                    json["status"].should == 1
+                    "ios"
+                end
+            end
+
         end
 
         it "should send gifts when providers are paused / not live / deactivated" do

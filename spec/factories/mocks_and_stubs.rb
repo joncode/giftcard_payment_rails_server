@@ -67,10 +67,10 @@ module MocksAndStubs
         run_delayed_jobs # ResqueSpec.perform_all(:push)
     end
 
-    def test_pn_token_persisted
+    def test_pn_token_persisted token=nil
         # yield block must return the platform
         resque_stubs register_push: true
-        token = "91283419asdfasdfasdfasdfasdfa83439487123"
+        token ||= "91283419asdfasdfasdfasdfasdfa83439487123"
         RegisterPushJob.stub(:ua_register)
         platform = yield(token)
         run_delayed_jobs

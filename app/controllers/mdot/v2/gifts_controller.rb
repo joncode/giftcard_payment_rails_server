@@ -25,9 +25,12 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def badge
+        if params[:pn_token]
+            Resque.enqueue(CreatePnTokenJob, @current_user.id, params[:pn_token], params[:platform])
+        end
         gift_array  = Gift.get_gifts(@current_user)
-        badge       = gift_array.size
-        if badge > 0
+        badge       = gift_array.where(status: 'open').count
+        if gift_array.count > 0
             success({ "badge" => badge, "gifts" => gift_array.serialize_objs(:badge) })
         else
             success({ "badge" => 0 })
