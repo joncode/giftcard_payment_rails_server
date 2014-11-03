@@ -32,6 +32,7 @@ module LandingPageFactory
 			"affiliate_id" => 12441,
 			"title" => "We are a truly awesome bar.",
 			"banner_photo_url" => nil,
+			"link" => "landing_page_link",
 			"example" => {
 				"photo_url" => "http://res.cloudinary.com/drinkboard/image/upload/v1414092460/sample_gift_item_ejpbyl.jpg",
 				"title" => "Original Margarita",

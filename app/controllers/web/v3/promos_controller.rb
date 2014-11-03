@@ -1,6 +1,6 @@
 class Web::V3::PromosController < MetalCorsController
 
-    before_action :authenticate_user
+    before_action :authenticate_general
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
 	def show
@@ -11,7 +11,7 @@ class Web::V3::PromosController < MetalCorsController
 
 	def create
 		input = create_params
-		gift = GiftAffiliate.create(create_params)
+		gift  = GiftAffiliate.create(create_params)
 		if gift.kind_of?(Gift)
 			success gift.web_serialize
 		else

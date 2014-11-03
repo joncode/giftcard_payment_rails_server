@@ -176,7 +176,7 @@ end
 
         resources :sessions,  only: [:create]
 
-        resources :users, only: [:create]
+        resources :users, only: [:create, :update]
       end
     end
 
