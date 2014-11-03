@@ -2,7 +2,6 @@ class Web::V3::UsersController < MetalCorsController
 
     before_action :authenticate_general, only: [:create]
     before_action :authenticate_user , except: [:create]
-    # before_action :print_params
 
     def create
 		user = User.new(create_user_params)
@@ -16,12 +15,13 @@ class Web::V3::UsersController < MetalCorsController
     end
 
     def update
-        user = @current_user
+        user    = @current_user
         updates = update_user_params
         if updates["photo"]
             updates["iphone_photo"] = updates["photo"]
             updates.delete("photo")
         end
+
         error_hsh = {}
 
         if updates["social"].present?
@@ -32,7 +32,6 @@ class Web::V3::UsersController < MetalCorsController
             updates["social"].each do |social|
                 us = user_socials.where(id: social["_id"]).first
                 unless resp = us.update(identifier: social["value"])
-                    #user.errors.add(us.errors.messages)
                     error_hsh.merge!(us.errors.messages)
                 end
             end
