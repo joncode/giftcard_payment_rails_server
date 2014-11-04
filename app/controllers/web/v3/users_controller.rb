@@ -40,8 +40,16 @@ class Web::V3::UsersController < MetalCorsController
             end
             if error_hsh == {}
                 newbies.each do |social|
-                    type_of = "phone" if social["net"] == 'ph'
-                    type_of = "email" if social["net"] == 'em'
+                    type_of = case social["net"]
+                    when 'ph'
+                        "phone"
+                    when 'fb'
+                        "facebook_id"
+                    when 'tw'
+                        "twitter"
+                    when 'em'
+                        "email"
+                    end
                     us = UserSocial.new(user_id: @current_user.id, type_of: type_of, identifier: social["value"])
                     unless us.save
                         error_hsh.merge!(us.errors.messages)
