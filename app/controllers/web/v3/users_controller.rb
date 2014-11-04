@@ -25,14 +25,27 @@ class Web::V3::UsersController < MetalCorsController
         error_hsh = {}
 
         if updates["social"].present?
-            ids = updates["social"].map do |social|
+            updaters = updates["social"].select {|u| u["_id"] }
+            newbies  = updates["social"].select {|u| u["net"] }
+
+            ids = updaters.map do |social|
                 social["_id"]
             end
             user_socials  = UserSocial.where(id: ids)
-            updates["social"].each do |social|
+            updaters.each do |social|
                 us = user_socials.where(id: social["_id"]).first
                 unless resp = us.update(identifier: social["value"])
                     error_hsh.merge!(us.errors.messages)
+                end
+            end
+            if error_hsh == {}
+                newbies.each do |social|
+                    type_of = "phone" if social["net"] == 'ph'
+                    type_of = "email" if social["net"] == 'em'
+                    us = UserSocial.new(user_id: @current_user.id, type_of: type_of, identifier: social["value"])
+                    unless us.save
+                        error_hsh.merge!(us.errors.messages)
+                    end
                 end
             end
             updates.delete("social")
@@ -51,7 +64,7 @@ class Web::V3::UsersController < MetalCorsController
 private
 
     def update_user_params
-        params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => [ "_id", "value" ] )
+        params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => ["net", "_id", "value" ] )
     end
 
     def create_user_params

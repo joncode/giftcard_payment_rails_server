@@ -201,7 +201,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
             json["status"].should == 1
-            json["data"]["badge"].should  == @number - 1
+            json["data"]["badge"].should  == @number
         end
 
         it "should return gifts with deactivated givers" do

@@ -87,6 +87,22 @@ describe Web::V3::UsersController do
             user_social.identifier.should == "5455756879"
         end
 
+        it "should create the individual user socials by id" do
+            user = FactoryGirl.create(:user, last_name: "not_anderson", phone: "4325654895")
+            user_social = UserSocial.where(identifier: "4325654895").first
+            request.headers["HTTP_X_AUTH_TOKEN"] = user.remember_token
+            request_hsh = {
+                social: [{ "net" => 'ph', "value" => "545-575-6879" }, { "_id" => user_social.id, "value" => "(432) 677-8999" }]
+            }
+            patch :update, format: :json, data: request_hsh, id: user.id
+            rrc(200)
+            user_social.reload
+            user_social.identifier.should  == "4326778999"
+            nuser_social                   = UserSocial.where(identifier: "5455756879").first
+            nuser_social.identifier.should == "5455756879"
+            nuser_social.type_of.should    == "phone"
+        end
+
         it "should return email validation errors and not update anything" do
             user = FactoryGirl.create(:user, last_name: "not_anderson", email: "good@rmail.net")
             user_social = UserSocial.where(identifier: "good@rmail.net").first

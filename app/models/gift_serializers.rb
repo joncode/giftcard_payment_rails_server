@@ -76,7 +76,7 @@ module GiftSerializers
         gift_hsh = self.serializable_hash only: ["cat", "giver_id", "giver_name", "message", "detail", "provider_id", "provider_name", "updated_at", "created_at"]
         gift_hsh["completed_at"]       = self.redeemed_at if self.redeemed_at
         gift_hsh["gift_id"]            = self.id
-        gift_hsh["status"]             = self.receiver_status
+        gift_hsh["status"]             = self.status
         gift_hsh["giver_photo"]        = giver.get_photo
 
         unless provider = self.provider
