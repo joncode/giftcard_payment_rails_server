@@ -26,7 +26,7 @@ module GiftSerializers
 
     def badge_serialize
         gift_hsh = self.serializable_hash only: [ :value, :cat, :giver_id, :giver_name, :provider_id, :provider_name, :message, :detail, :updated_at, :created_at]
-        gift_hsh["status"]             = self.receiver_status
+        gift_hsh["status"]             = self.status
         gift_hsh["shoppingCart"]       = self.shoppingCart
         gift_hsh["items"]              = ary_of_shopping_cart_as_hash
         gift_hsh["giver_photo"]        = giver.get_photo
