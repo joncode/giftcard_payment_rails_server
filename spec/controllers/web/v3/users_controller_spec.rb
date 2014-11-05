@@ -47,7 +47,7 @@ describe Web::V3::UsersController do
 
     describe "update" do
 
-        it_should_behave_like("client-token authenticated", :patch, :update, id: 1)
+        it_should_behave_like("client-token authenticated", :patch, :update)
 
         it "should persist the data to the user record" do
             user = FactoryGirl.create(:user, last_name: "not_anderson")
@@ -55,7 +55,7 @@ describe Web::V3::UsersController do
             request_hsh = {
                 last_name: "anderson"
             }
-            patch :update, format: :json, data: request_hsh, id: user.id
+            patch :update, format: :json, data: request_hsh
 
             user.reload
             user.last_name.should == "Anderson"
@@ -67,7 +67,7 @@ describe Web::V3::UsersController do
             request_hsh = {
                 last_name: "anderson"
             }
-            patch :update, format: :json, data: request_hsh, id: user.id
+            patch :update, format: :json, data: request_hsh
             user.reload
             rrc(200)
             json["status"].should == 1
@@ -81,7 +81,7 @@ describe Web::V3::UsersController do
             request_hsh = {
                 social: [{ "_id" => user_social.id, "value" => "545-575-6879" }]
             }
-            patch :update, format: :json, data: request_hsh, id: user.id
+            patch :update, format: :json, data: request_hsh
             rrc(200)
             user_social.reload
             user_social.identifier.should == "5455756879"
@@ -94,7 +94,7 @@ describe Web::V3::UsersController do
             request_hsh = {
                 social: [{ "net" => 'ph', "value" => "545-575-6879" }, { "_id" => user_social.id, "value" => "(432) 677-8999" }]
             }
-            patch :update, format: :json, data: request_hsh, id: user.id
+            patch :update, format: :json, data: request_hsh
             rrc(200)
             user_social.reload
             user_social.identifier.should  == "4326778999"
@@ -111,12 +111,12 @@ describe Web::V3::UsersController do
                 last_name: "new_last_name",
                 social: [{ "_id" => user_social.id, "value" => "newbieramil.net" }]
             }
-            patch :update, format: :json, data: request_hsh, id: user.id
+            patch :update, format: :json, data: request_hsh
             rrc(200)
             json["status"].should == 0
             json["err"].should == "INVALID_INPUT"
             json["msg"].should == "User could not be created"
-            json["data"].should == [{"name"=>"identifier", "msg"=>["is invalid"]}]
+            json["data"].should == [{"name"=>"email", "msg"=>["is invalid"]}]
             user.reload
             user.last_name.should_not == "new_last_name"
             user_social.reload
@@ -129,7 +129,7 @@ describe Web::V3::UsersController do
             request_hsh = {
                 photo: "http://res.cloudinary.com/drinkboard/upload/version/92364029/hnkjfasdoiyfliaeh.jpg"
             }
-            patch :update, format: :json, data: request_hsh, id: user.id
+            patch :update, format: :json, data: request_hsh
 
             user.reload
             user.get_photo.should == "http://res.cloudinary.com/drinkboard/upload/version/92364029/hnkjfasdoiyfliaeh.jpg"
@@ -143,7 +143,7 @@ describe Web::V3::UsersController do
                 last_name: "new_last_name",
                 social: [{ "_id" => user_social.id, "value" => "465-238-942" }]
             }
-            patch :update, format: :json, data: request_hsh, id: user.id
+            patch :update, format: :json, data: request_hsh
             rrc(200)
             json["status"].should == 0
             json["err"].should == "INVALID_INPUT"
