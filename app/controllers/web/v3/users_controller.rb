@@ -19,9 +19,8 @@ class Web::V3::UsersController < MetalCorsController
         updates = update_user_params
         if updates["photo"]
             updates["iphone_photo"] = updates["photo"]
-            updates.delete("photo")
         end
-
+        updates.delete("photo")
         error_hsh = {}
 
         if updates["social"].present?

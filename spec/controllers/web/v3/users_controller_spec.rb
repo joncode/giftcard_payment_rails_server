@@ -155,5 +155,14 @@ describe Web::V3::UsersController do
             user_social.identifier.should == "4325654895"
         end
 
+        it "should accept the photo key" do
+            user = FactoryGirl.create(:user, last_name: "not_anderson", phone: "4325654895")
+            us = FactoryGirl.create(:user_social, user_id: user.id, type_of: "email", identifier: "roger1@rogerson.com")
+            request.headers["HTTP_X_AUTH_TOKEN"] = user.remember_token
+            request_hsh =  {"social"=>[{"_id"=>us.id, "value"=>"roger@rogerson.com"}, {"net"=>"ph", "value"=>"(702) 927-2102"}], "first_name"=>"Roger", "last_name"=>"Rogerson", "birthday"=>nil, "zip"=>nil, "sex"=>nil, "photo"=>nil}
+            patch :update, format: :json, data: request_hsh
+            rrc(200)
+            us.reload.identifier.should == "roger@rogerson.com"
+        end
     end
 end
