@@ -164,24 +164,5 @@ describe Web::V3::UsersController do
             rrc(200)
             us.reload.identifier.should == "roger@rogerson.com"
         end
-
-        it "should unpack shorten photo_urls" do
-
-            user = FactoryGirl.create(:user, last_name: "not_anderson", phone: "4325654895")
-            us = FactoryGirl.create(:user_social, user_id: user.id, type_of: "email", identifier: "roger1@rogerson.com")
-            us2 = FactoryGirl.create(:user_social, user_id: user.id, type_of: "phone", identifier: "4196609594")
-            request.headers["HTTP_X_AUTH_TOKEN"] = user.remember_token
-            request_hsh =  {"social"=>[{"_id"=>us.id, "value"=>"cmcaulay71@hotmail.com"}, {"_id"=>us2.id, "value"=>"6196609595"}], "first_name"=>"Craig", "last_name"=>"Hotmail", "birthday"=>"02/02/72", "zip"=>"91941", "photo"=>"d|v1415049275/dm1yffoishd2jswrt9so.jpg"}
-            patch :update, format: :json, data: request_hsh
-            rrc(200)
-            user.reload
-            us.reload.identifier.should  == "cmcaulay71@hotmail.com"
-            us2.reload.identifier.should == "6196609595"
-            user.first_name.should       == "Craig"
-            user.birthday.should         == "2/2/72"
-            user.zip.should              == "91941"
-            user.last_name.should        == "Hotmail"
-            user.get_photo.should        == user.unshorten_photo_url("d|v1415049275/dm1yffoishd2jswrt9so.jpg")
-        end
     end
 end

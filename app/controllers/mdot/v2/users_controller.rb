@@ -5,11 +5,24 @@ class Mdot::V2::UsersController < JsonController
     rescue_from JSON::ParserError, :with => :bad_request
 
     def index
-        users_scope = if params[:find]
-            User.where(active: true).where('first_name ilike ? OR last_name ilike ?',"%#{params[:find]}%", "%#{params[:find]}%")
+
+        users_scope = if (params[:find] && !params[:find].blank?)
+            ary = params[:find].split(' ')
+            if ary.count == 1
+                User.where(active: true).where('first_name ilike ? OR last_name ilike ?',"%#{params[:find]}%", "%#{params[:find]}%")
+            elsif ary.count == 2
+                User.where(active: true).where('first_name ilike ? AND last_name ilike ?',"%#{ary[0]}%", "%#{ary[1]}%")
+            elsif ary.count > 2
+                first_name = ary[0]
+                last_name  = ary[1] + ' ' + ary[2]
+                User.where(active: true).where('first_name ilike ? AND last_name ilike ?',"%#{first_name}%", "%#{last_name}%")
+            else
+                User.where(active: true)
+            end
         else
             User.where(active: true)
         end
+
         users = users_scope.pluck(:id, :first_name, :last_name, :iphone_photo)
 
         serialized_users = users.map do |u|

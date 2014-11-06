@@ -110,6 +110,30 @@ describe Mdot::V2::UsersController do
             ary.count.should == 0
         end
 
+        it "should return a user when a fist name and last name are submitted BUG FIX" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string           = "Brad Gilbert"
+            user = FactoryGirl.create(:user, first_name: "brad", last_name: "gilbert")
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should       == 1
+            ary                         = json["data"]
+            ary.count.should            == 1
+            ary.first["user_id"].should == user.id
+        end
+
+        it "should return a user when a fist name, middle initial, &  last name are submitted BUG FIX" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string           = "Brad  H. Gilbert"
+            user = FactoryGirl.create(:user, first_name: "brad", last_name: "h. gilbert")
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should       == 1
+            ary                         = json["data"]
+            ary.count.should            == 1
+            ary.first["user_id"].should == user.id
+        end
+
         it "should NOT return users whose last_name does match a :find string but they are deactivated" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "b"
