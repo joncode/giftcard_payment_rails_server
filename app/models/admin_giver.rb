@@ -1,5 +1,6 @@
 class AdminGiver < Admtmodel
-    include Formatter
+    include ShortenPhotoUrlHelper
+
     self.table_name = "users"
 
     has_many :sent,  as: :giver,  class_name: Gift

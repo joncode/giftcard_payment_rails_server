@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
 	include Formatter
 	include Email
 	include Utility
+	include ShortenPhotoUrlHelper
 
 	attr_accessor :api_v1, :session_token_obj
 
@@ -109,8 +110,6 @@ class User < ActiveRecord::Base
 		super
 	end
 
-
-
 ########   USER SOCIAL METHODS
 
 	def new_socials(user_hsh)
@@ -158,6 +157,7 @@ class User < ActiveRecord::Base
     end
 
 ####### USER GETTERS AND SETTERS
+
 	def short_image_url
 		shorten_photo_url(self.iphone_photo)
 	end
