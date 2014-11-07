@@ -1,24 +1,29 @@
 require 'spec_helper'
 require 'cron'
 include Cron
+include MocksAndStubs
 
 describe "Cron" do
 
     describe :register_missing_pn_tokens do
+
         it "should go through urban_airship_wrap" do
+            resque_stubs
             user = FactoryGirl.create :user
             pn_token = FactoryGirl.create :pn_token, user_id: user.id, pn_token: "thisisthetokenandshouldbeverylong", platform: "ios"
             ua_tokens = [{ "device_token" => "11111" }]
             Urbanairship.should_receive(:device_tokens_with_limiting).and_return(ua_tokens)
-            # Ditto.should_receive(:tokens_push_create).and_return(true)
             Urbanairship.should_receive(:register_device).and_return("ua_register_response")
             Ditto.should_receive(:register_push_create).with("ua_register_response", user.id).and_return(true)
             register_missing_pn_tokens
         end
+
     end
 
     describe :check_update_aliases do
+
     	it "should go through urban_airship_wrap" do
+            resque_stubs
 	    	user = FactoryGirl.create :user
 	    	pn_token = FactoryGirl.create :pn_token, user_id: user.id, pn_token: "thisisthetokenandshouldbeverylong", platform: "ios"
             ua_tokens = [{ "device_token" => "11111" }]
@@ -28,6 +33,7 @@ describe "Cron" do
 	    end
 
         it "should unregister and reregister if pn aliases don't match" do
+            resque_stubs
             user = FactoryGirl.create :user
             pn_token = FactoryGirl.create :pn_token, user_id: user.id, pn_token: "thisisthetokenandshouldbeverylong", platform: "ios"
             ua_tokens = [{
@@ -47,6 +53,7 @@ describe "Cron" do
         end
 
         it "should NOT unregister and register if pn tokens match" do
+            resque_stubs
             user = FactoryGirl.create :user
             pn_token = FactoryGirl.create :pn_token, user_id: user.id, pn_token: "thisisthetokenandshouldbeverylong", platform: "ios"
             ua_tokens = [{

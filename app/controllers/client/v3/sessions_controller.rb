@@ -2,7 +2,8 @@ class Client::V3::SessionsController < MetalController
 
     def create
         login    = params["data"]
-    	pn_token = login["pn_token"]
+    	pn_token = login["pn_token"] || nil
+        platform = login["platform"] || 'ios'
 
         if login["password"]
             user, password = normal_login login
@@ -15,7 +16,7 @@ class Client::V3::SessionsController < MetalController
             if user.not_suspended?
                 if login["password"]
                     if user.authenticate(password)
-                        user.pn_token = pn_token if pn_token
+                        user.session_token_obj =  SessionToken.create_token_obj(user, platform, pn_token)
                         success user.login_client_serialize
                     else
                         fail "Invalid email/password combination"

@@ -25,9 +25,12 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def badge
+        if params[:pn_token]
+            Resque.enqueue(CreatePnTokenJob, @current_user.id, params[:pn_token], params[:platform])
+        end
         gift_array  = Gift.get_gifts(@current_user)
-        badge       = gift_array.size
-        if badge > 0
+        badge       = gift_array.count
+        if gift_array.count > 0
             success({ "badge" => badge, "gifts" => gift_array.serialize_objs(:badge) })
         else
             success({ "badge" => 0 })
@@ -40,12 +43,15 @@ class Mdot::V2::GiftsController < JsonController
         return nil if params_bad_request
         return nil if data_not_found?(gift)
 
-        if gift.notifiable?
-            gift.notify
+        if gift.notify
             Relay.send_push_thank_you gift
             success(gift.token)
         else
-            fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            if !gift.notifiable?
+                fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            else
+                fail gift
+            end
             #status = :unprocessable_entity
         end
         respond(status)

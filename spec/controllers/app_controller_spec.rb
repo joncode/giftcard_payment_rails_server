@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe AppController do
-
     before(:each) do
         User.delete_all
         Gift.delete_all
         Provider.delete_all
         Brand.delete_all
+        User.any_instance.stub(:init_confirm_email).and_return(true)
     end
 
     let(:user) { FactoryGirl.create(:user) }

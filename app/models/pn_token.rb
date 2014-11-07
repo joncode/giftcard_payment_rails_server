@@ -26,10 +26,26 @@ class PnToken < ActiveRecord::Base
         "user-#{adj_user_id}"
     end
 
+    def self.find_or_create_token(user_id, value, platform)
+        value       = self.convert_token(value)
+        if pn_token = self.find_by(pn_token: value, platform: platform.to_s)
+            if pn_token.user_id != user_id
+                pn_token.user_id = user_id
+                pn_token.save
+            end
+        else
+            PnToken.create!(user_id: user_id, pn_token: value, platform: platform.to_s)
+        end
+    end
+
 private
 
     def register
-        Resque.enqueue(RegisterPushJob, self.id)
+        if !Rails.env.test?
+            Resque.enqueue(RegisterPushJob, self.id)
+        else
+            RegisterPushJob.perform(self.id)
+        end
     end
 
 end

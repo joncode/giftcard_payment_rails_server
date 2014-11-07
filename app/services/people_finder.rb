@@ -16,6 +16,19 @@ class PeopleFinder
         return new_hsh
     end
 
+    def self.search_db(type_of, identifier)
+        user_social = UserSocial.where(type_of: type_of, identifier: identifier).first
+        if user_social
+            user_social.user
+        else
+            nil
+        end
+    end
+
+    def self.search_socials(network, network_id)
+        Social.where(network: type_of, network_id: identifier).first
+    end
+
 private
 
     def self.search_ids new_hsh
@@ -36,14 +49,6 @@ private
         return nil
     end
 
-    def self.search_db(type_of, identifier)
-        user_social = UserSocial.where(type_of: type_of, identifier: identifier).first
-        if user_social
-            user_social.user
-        else
-            nil
-        end
-    end
 
 end
 

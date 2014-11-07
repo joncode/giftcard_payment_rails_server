@@ -1,12 +1,11 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Mdot::V2::FacebookController do
 
     before(:each) do
-        unless @user = User.find_by(remember_token: "USER_TOKEN")
-            @user    = FactoryGirl.create(:user)
-            @user.update(remember_token: "USER_TOKEN")
-        end
+        @user = create_user_with_token "USER_TOKEN"
         @oauth        = FactoryGirl.create(:oauth_fb, user: @user)
         @oauth_hsh_fb = @oauth.to_proxy
     end

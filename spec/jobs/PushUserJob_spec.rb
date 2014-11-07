@@ -1,5 +1,5 @@
 require 'spec_helper'
-include MockAndStubs
+include MocksAndStubs
 
 describe PushUserJob do
 
@@ -7,6 +7,7 @@ describe PushUserJob do
         User.delete_all
         PnToken.delete_all
         Provider.delete_all
+        RegisterPushJob.stub(:ua_register)
         @user     = FactoryGirl.create(:user)
         @pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
         @pnt      = PnToken.create(user_id: @user.id, pn_token: @pn_token)
@@ -32,7 +33,7 @@ describe PushUserJob do
         }
         run_delayed_jobs
         Urbanairship.should_receive(:push).with(good_push_hsh).and_return({"push_id"=>"39f42812-0665-11e4-bc49-90e2ba272c68"})
-        PushUserJob.perform({ 
+        PushUserJob.perform({
                 "alert" => "This is the message from admin tools",
                 "user_id" => @user.id })
         d                     = Ditto.last

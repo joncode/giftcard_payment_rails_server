@@ -90,7 +90,6 @@ module UserSerializers
         usr_hash["user_id"] = self.id
         usr_hash["token"] = self.remember_token
         usr_hash
-
     end
 
     def update_serialize

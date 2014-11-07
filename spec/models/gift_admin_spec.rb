@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe GiftAdmin do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     before(:each) do
         Provider.delete_all
         @provider = FactoryGirl.create(:provider)

@@ -1,5 +1,5 @@
 class Boomerang < ActiveRecord::Base
-	include Formatter
+	include ShortenPhotoUrlHelper
 
     has_many :gifts,  as: :giver,  class_name: Gift
 

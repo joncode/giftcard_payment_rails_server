@@ -2,7 +2,9 @@ require 'spec_helper'
 require 'boomerang_cron'
 
 describe "BoomerangCron" do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     describe :perform do
 
         before(:each) do

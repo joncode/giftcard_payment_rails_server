@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe "Gift Costs" do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
 	before(:each) do
         @user     = FactoryGirl.create(:user)
         @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
@@ -195,7 +197,7 @@ describe "Gift Costs" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
             gift_campaign.cost.should == "0"
         end
-        
+
         it "should transfer GiftCampaign cost to ReGift" do
             gift_campaign = GiftCampaign.create(@gift_hsh)
             regift_hsh = {}

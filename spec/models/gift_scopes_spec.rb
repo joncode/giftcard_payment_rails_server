@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe GiftScopes do
 
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
+
     context "provider scopes" do
 
         before(:each) do

@@ -3,8 +3,9 @@ class User < ActiveRecord::Base
 	include Formatter
 	include Email
 	include Utility
+	include ShortenPhotoUrlHelper
 
-	attr_accessor :api_v1
+	attr_accessor :api_v1, :session_token_obj
 
 	has_many :proto_joins, as: :receivable
 	has_many :protos, through: :proto_joins
@@ -33,6 +34,7 @@ class User < ActiveRecord::Base
 
 	has_many :friendships, dependent: :destroy
 	has_many :app_contacts, through: :friendships
+	has_many :session_tokens
 
 	has_secure_password
 
@@ -63,7 +65,16 @@ class User < ActiveRecord::Base
 	}
 
 	def self.app_authenticate(token)
-		where(active: true, perm_deactive: false, remember_token: token).first
+		#where(active: true, perm_deactive: false, remember_token: token).first
+		SessionToken.app_authenticate(token)
+	end
+
+	def remember_token
+		if self.session_token_obj.present?
+			self.session_token_obj.token
+		else
+			super
+		end
 	end
 
 #/---------------------------------------------------------------------------------------------/
@@ -98,8 +109,6 @@ class User < ActiveRecord::Base
 		end
 		super
 	end
-
-
 
 ########   USER SOCIAL METHODS
 
@@ -148,6 +157,7 @@ class User < ActiveRecord::Base
     end
 
 ####### USER GETTERS AND SETTERS
+
 	def short_image_url
 		shorten_photo_url(self.iphone_photo)
 	end
@@ -264,20 +274,17 @@ class User < ActiveRecord::Base
 	end
 
 	def set_confirm_email
-		settingss 							= get_or_create_settings
-		settingss.confirm_email_token 		= create_token
-		settingss.confirm_email_token_sent_at = Time.now
-		settingss.save
+		settings 							= get_or_create_settings
+		settings.confirm_email_token 		= create_token
+		settings.confirm_email_token_sent_at = Time.now
+		settings.save
 	end
 
 	def init_confirm_email
-		unless Rails.env.development?
-			if self.email
-				set_confirm_email
-				confirm_email
-			else
-				puts "User created without EMAIL !! #{self.id}"
-			end
+		if thread_on?
+			Resque.enqueue(ConfirmEmailJob, self.id, self.email)
+		else
+			ConfirmEmailJob.perform(self.id, self.email)
 		end
 	end
 
@@ -299,15 +306,7 @@ class User < ActiveRecord::Base
 			value    = value_ary
 			platform = 'ios'
 		end
-		value 		= PnToken.convert_token(value)
-		if pn_token = PnToken.find_by(pn_token: value)
-			if pn_token.user_id != self.id
-				pn_token.user_id = self.id
-				pn_token.save
-			end
-		else
-			PnToken.create!(user_id: self.id, pn_token: value, platform: platform)
-		end
+		PnToken.find_or_create_token(self.id, value, platform)
 	end
 
 	def pn_token
@@ -321,10 +320,8 @@ class User < ActiveRecord::Base
 #########   settings methods
 
 	def get_or_create_settings
-		if setting = Setting.find_by(user_id: self.id)
+		if setting = Setting.find_or_create_by(user_id: self.id)
 			return setting
-		else
-			return Setting.create(user_id: self.id)
 		end
 	end
 
@@ -364,7 +361,7 @@ private
 	def init_user_socials type_ofs, args
 		type_ofs.map do |type_of|
 			us = UserSocial.find_or_create_by(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id, active: true)
-			puts "init_user_socials - Here is the user social #{us.inspect}"
+			#puts "init_user_socials - Here is the user social #{us.inspect}"
 			if us.errors.messages.keys.count > 0
 				puts "here are the errors - #{us.errors.inspect}"
 			end

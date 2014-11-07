@@ -1,15 +1,14 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Mdot::V2::QuestionsController do
 
     before(:each) do
         User.delete_all
         Question.delete_all
         Answer.delete_all
-        unless @user = User.find_by(remember_token: "USER_TOKEN")
-            @user = FactoryGirl.create(:user)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
-        end
+        @user = create_user_with_token "USER_TOKEN"
         qs = [["Day Drinking", "Night Drinking"], ["Red Wine", "White Wine"], ["White Liqours", "Brown Liqours"], ["Straw", "No straw"], ["Light Beer", "Dark Beer"], ["Mimosa", "Bloody Mary"], ["Rare", "Well Done"], ["City Vacation", "Beach Vacation"], ["Shaken", "Stirred"], ["Rocks", "Neat"], ["Sweet", "Sour"], ["Steak", "Fish"]]
         qs.each do |q|
             Question.create(left: q[0], right: q[1])

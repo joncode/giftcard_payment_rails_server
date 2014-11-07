@@ -11,10 +11,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141015170529) do
+ActiveRecord::Schema.define(version: 20141029224252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "affiliates", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "phone"
+    t.string   "address"
+    t.string   "state"
+    t.string   "city"
+    t.string   "zip"
+    t.string   "url_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "affiliates", ["url_name"], name: "index_affiliates_on_url_name", using: :btree
+
+  create_table "affiliates_gifts", id: false, force: true do |t|
+    t.integer "affiliate_id"
+    t.integer "gift_id"
+    t.integer "landing_page_id"
+  end
+
+  add_index "affiliates_gifts", ["affiliate_id"], name: "index_affiliates_gifts_on_affiliate_id", using: :btree
+  add_index "affiliates_gifts", ["gift_id"], name: "index_affiliates_gifts_on_gift_id", using: :btree
 
   create_table "answers", force: true do |t|
     t.string   "answer"
@@ -267,6 +292,21 @@ ActiveRecord::Schema.define(version: 20141015170529) do
   add_index "gifts", ["receiver_id"], name: "index_gifts_on_receiver_id", using: :btree
   add_index "gifts", ["status"], name: "index_gifts_on_status", using: :btree
 
+  create_table "landing_pages", force: true do |t|
+    t.integer  "campaign_id"
+    t.integer  "affiliate_id"
+    t.string   "title"
+    t.string   "banner_photo_url"
+    t.integer  "example_item_id"
+    t.json     "page_json"
+    t.string   "sponsor_photo_url"
+    t.string   "link"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "landing_pages", ["link"], name: "index_landing_pages_on_link", using: :btree
+
   create_table "menu_strings", force: true do |t|
     t.integer  "version"
     t.integer  "provider_id",   null: false
@@ -318,6 +358,7 @@ ActiveRecord::Schema.define(version: 20141015170529) do
     t.datetime "updated_at"
   end
 
+  add_index "pn_tokens", ["platform", "pn_token"], name: "index_pn_tokens_on_platform_and_pn_token", using: :btree
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
 
   create_table "proto_joins", force: true do |t|
@@ -454,6 +495,18 @@ ActiveRecord::Schema.define(version: 20141015170529) do
 
   add_index "sales", ["provider_id"], name: "index_sales_on_provider_id", using: :btree
 
+  create_table "session_tokens", force: true do |t|
+    t.string   "token"
+    t.integer  "user_id"
+    t.integer  "device_id"
+    t.string   "platform"
+    t.string   "push"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "session_tokens", ["token"], name: "index_session_tokens_on_token", using: :btree
+
   create_table "settings", force: true do |t|
     t.integer  "user_id"
     t.boolean  "email_invoice",                default: true
@@ -567,9 +620,7 @@ ActiveRecord::Schema.define(version: 20141015170529) do
     t.tsvector "ftmeta"
   end
 
-  add_index "users", ["active", "perm_deactive", "remember_token"], name: "index_users_on_active_and_perm_deactive_and_remember_token", using: :btree
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
   add_index "users", ["ftmeta"], name: "users_ftsmeta_idx", using: :gin
-  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end

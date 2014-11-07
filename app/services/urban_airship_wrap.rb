@@ -7,8 +7,8 @@ module UrbanAirshipWrap
     end
 
     def ua_register pn_token, user_alias, user_id, platform=nil
-        platform = platform.present? ? platform.to_sym : :ios
-        resp = Urbanairship.register_device(pn_token, :alias => user_alias, :provider =>  platform)
+        platform = platform.present? ? platform : 'ios'
+        resp = Urbanairship.register_device(pn_token, :alias => user_alias, :provider =>  platform.to_sym)
         puts "UA response --- >  #{resp}"
         Ditto.register_push_create(resp, user_id)
     end

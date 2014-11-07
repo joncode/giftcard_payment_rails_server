@@ -1,13 +1,12 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Mdot::V2::ContactsController do
 
     before(:each) do
-        unless @user = User.find_by(remember_token: "USER_TOKEN")
-            @user = FactoryGirl.create(:user)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
-            @hsh = { "672342" => { "first_name" => "tommy" ,"last_name" => "hilfigure", "email" => [ "email1@gmail.com", "email2@yahoo.com"], "phone" => [ "3102974545", "6467586473"], "twitter" => [ "2i134o1234123"], "facebook" => [ "23g2381d103dy1"] }, "22" => { "first_name" => "Jenifer" ,"last_name" => "Bowie", "email" => [ "jenny@facebook.com"], "phone" => ["7824657878"]}}
-        end
+        @user = create_user_with_token "USER_TOKEN"
+        @hsh = { "672342" => { "first_name" => "tommy" ,"last_name" => "hilfigure", "email" => [ "email1@gmail.com", "email2@yahoo.com"], "phone" => [ "3102974545", "6467586473"], "twitter" => [ "2i134o1234123"], "facebook" => [ "23g2381d103dy1"] }, "22" => { "first_name" => "Jenifer" ,"last_name" => "Bowie", "email" => [ "jenny@facebook.com"], "phone" => ["7824657878"]}}
     end
 
     describe :upload do

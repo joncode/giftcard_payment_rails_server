@@ -1,5 +1,5 @@
 class CampaignAt < Admtmodel
-    include Formatter
+    include ShortenPhotoUrlHelper
     self.table_name = "campaigns"
 
     has_many :campaign_items

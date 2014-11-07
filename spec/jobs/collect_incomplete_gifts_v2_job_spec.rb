@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-include MockAndStubs   # gives the :relay_stubs method - email and push stubs
+include MocksAndStubs   # gives the :relay_stubs method - email and push stubs
 
 describe CollectIncompleteGiftsV2Job do
 

@@ -50,7 +50,9 @@ private
 
     def authorize_net_cim_transaction
         t = AuthorizeNet::CIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)
-        puts "HERE IS THE CIM transaction #{t.inspect}"
+        if Rails.env.staging?
+            puts "HERE IS THE CIM transaction #{t.inspect}"
+        end
         t
     end
 

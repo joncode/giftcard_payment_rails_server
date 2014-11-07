@@ -1,6 +1,7 @@
 class Web::V3::GiftsController < MetalCorsController
 
     before_action :authenticate_user
+    rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
     def index
         user_id = params[:user_id]
@@ -60,10 +61,51 @@ class Web::V3::GiftsController < MetalCorsController
         respond
     end
 
+    def notify
+        gift = Gift.find params[:id]
+        if gift.notifiable? && (gift.receiver_id == @current_user.id)
+            gift.notify
+            Relay.send_push_thank_you gift
+            success gift.web_serialize
+        else
+            fail_message = if gift.status == 'redeemed'
+                    "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
+                else
+                    "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+                end
+            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
+        end
+        respond(status)
+    end
+
+    def redeem
+        gift = Gift.find params[:id]
+        if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
+            server_inits = nil
+            if params["data"]
+                server_inits = redeem_params["server"]
+            end
+            gift.redeem_gift(server_inits)
+            success gift.web_serialize
+        else
+            fail_message = if gift.status == 'redeemed'
+                "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
+            else
+                "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            end
+            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
+        end
+        respond(status)
+    end
+
 private
 
     def gift_params
         params.require(:data).permit(:rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name,:msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
+    end
+
+    def redeem_params
+        params.require(:data).permit(:server)
     end
 
 end
