@@ -22,9 +22,9 @@ module SessionsHelper
   end
 
   def admin_user?
-    unless current_user.admin
+    # unless current_user.admin
       redirect_to signin_path, notice: "Please sign in."
-    end
+    # end
   end
 
   def current_user=(user, provider=nil)
