@@ -1,14 +1,13 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Mdot::V2::SettingsController do
 
     before(:each) do
         User.delete_all
         Setting.delete_all
-        unless @user = User.find_by(remember_token: "USER_TOKEN")
-            @user = FactoryGirl.create(:user)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
-        end
+        @user = create_user_with_token "USER_TOKEN"
         @keys = ["email_follow_up", "email_invite", "email_invoice", "email_receiver_new", "email_redeem", "user_id", "email_reminder_gift_receiver", "email_reminder_gift_giver"]
     end
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-include MockAndStubs
+include MocksAndStubs
 
 describe PushJob do
 
@@ -12,21 +12,22 @@ describe PushJob do
             Provider.delete_all
             @user     = FactoryGirl.create(:user)
             @pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
+            RegisterPushJob.stub(:ua_register)
             @pnt      = PnToken.create(user_id: @user.id, pn_token: @pn_token)
-
+            resque_stubs
         end
 
         context "notify gift receiver on create" do
 
             it "should send alias & correct badge to Urban Airship" do
-                resque_stubs
+                ResqueSpec.reset!
                 user_alias = @pnt.ua_alias
                 prov_name  = "Push Testers"
 
                 6.times do
                 # these shold not go to push badge count
                     gift       = FactoryGirl.create(:gift, receiver: @user, provider_name: "Notified")
-                    redeem     = Redeem.create(gift_id: gift.id)
+                    gift.notify
                 end
                 @gift      = FactoryGirl.create(:gift, receiver: @user, provider_name: prov_name)
 
@@ -160,6 +161,7 @@ describe PushJob do
             User.delete_all
             PnToken.delete_all
             Provider.delete_all
+             RegisterPushJob.stub(:ua_register)
         end
 
         it "should send correct payload on push" do

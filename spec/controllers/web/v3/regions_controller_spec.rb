@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Web::V3::RegionsController do
 
     before(:each) do
@@ -9,7 +11,7 @@ describe Web::V3::RegionsController do
 
     it "should return the cities" do
         get :index, format: :json
-        keys    =  ["name", "state", "region_id", "token", "photo"]
+        keys    =  ["name", "state", "region_id", "token", "photo", "city_id"]
         rrc(200)
         city = json["data"][0]
         compare_keys(city, keys)

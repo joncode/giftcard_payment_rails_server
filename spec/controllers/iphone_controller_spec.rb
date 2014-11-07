@@ -1,6 +1,8 @@
 require 'spec_helper'
 require 'mandrill'
 
+include MocksAndStubs
+
 describe IphoneController do
 
     describe :update_photo do
@@ -80,63 +82,32 @@ describe IphoneController do
         context "external service tests" do
 
             it "should hit mailchimp endpoint with correct email for subscription" do
-                ResqueSpec.reset!
-                RegisterPushJob.stub(:perform).and_return(true)
-                MailerJob.stub(:call_mandrill).and_return(true)
-                User.any_instance.stub(:init_confirm_email).and_return(true)
-                #Resque.should_receive(:enqueue).with(SubscriptionJob, anything)
-                #SubscriptionJob.should_receive(:perform).with(anything)
-                #MailchimpList.stub(:new) { MailchimpList }
-                MailchimpList.any_instance.should_receive(:subscribe).and_return({"email" => "neil@gmail.com" })
-
-                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
-                post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-                run_delayed_jobs
-
-                user = UserSocial.find_by(identifier: "neil@gmail.com")
-                user.subscribed.should be_true
+                test_subscribed_email do
+                    user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                    post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
+                end
             end
 
             it "should hit mandrill endpoint for confirm email w/o pn_token" do
-                User.any_instance.stub(:persist_social_data).and_return(true)
-                RegisterPushJob.stub(:perform).and_return(true)
-                SubscriptionJob.stub(:perform).and_return(true)
-                Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
-                template_name    = "user"
-                Mandrill::API.should_receive(:send_template).with(template_name, nil, anything)
-                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
-                post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
-                run_delayed_jobs
+                test_confirm_email do
+                    user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                    post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh
+                end
             end
 
 
             it "should hit mandrill endpoint for confirm email w/ pn_token" do
-                Urbanairship.stub(:register_device).and_return("pn_token", { :alias => "ua_alias"})
-                User.any_instance.stub(:persist_social_data).and_return(true)
-                SubscriptionJob.stub(:perform).and_return(true)
-                RegisterPushJob.stub(:perform).and_return(true)
-                Mandrill::API.stub_chain(:new, :messages) { Mandrill::API }
-                template_name    = "user"
-                Mandrill::API.should_receive(:send_template).with(template_name, nil, anything)
-
-                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
-                post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: "FAKE_PN_TOKENFAKE_PN_TOKEN"
-                run_delayed_jobs
+                test_confirm_email do
+                    user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                    post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: "FAKE_PN_TOKENFAKE_PN_TOKEN"
+                end
             end
 
             it "should hit urban airship endpoint with correct token and alias" do
-                ResqueSpec.reset!
-                PnToken.any_instance.stub(:ua_alias).and_return("fake_ua")
-                User.any_instance.stub(:pn_token).and_return("FAKE_PN_TOKENFAKE_PN_TOKEN")
-                SubscriptionJob.stub(:perform).and_return(true)
-                MailerJob.stub(:call_mandrill).and_return(true)
-                pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
-                ua_alias = "fake_ua"
-
-                Urbanairship.should_receive(:register_device).with(pn_token, { :alias => ua_alias, :provider => :ios})
-                user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
-                post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: pn_token
-                run_delayed_jobs # ResqueSpec.perform_all(:push)
+                test_urban_airship_endpoint(:ios) do |pn_token|
+                    user_hsh = { "email" => "neil@gmail.com" , password: "password" , password_confirmation: "password", first_name: "Neil"}
+                    post :create_account, format: :json, token: GENERAL_TOKEN, data: user_hsh, pn_token: pn_token
+                end
             end
         end
 
@@ -190,8 +161,9 @@ describe IphoneController do
             hsh  = json["success"]
             compare_keys(hsh, keys)
             user = User.where(email: email).first
+            st = user.session_tokens.first
             json["success"]["user_id"].should == user.id
-            json["success"]["token"].should   == user.remember_token
+            json["success"]["token"].should   == st.token
         end
 
         it "should not accept missing / invalid required fields" do

@@ -1,11 +1,15 @@
 require 'spec_helper'
 
+include UserSessionFactory
+include MocksAndStubs
+
 describe Mdot::V2::GiftsController do
 
     describe :index do
         before(:each) do
-            user = FactoryGirl.create(:user, iphone_photo: "http://photo_urlimportante.com")
-            user.update(remember_token: "USER_TOKEN")
+            User.any_instance.stub(:init_confirm_email)
+            user = create_user_with_token "USER_TOKEN"
+            user.update(iphone_photo: "http://photo_urlimportante.com")
             6.times do
                 FactoryGirl.create(:gift, giver_type: "User", cat: 300, giver_id: user.id, giver_name: user.name, expires_at: Time.now, redeemed_at: Time.now, message: "here is messag", detail: "here is detail")
             end
@@ -29,7 +33,7 @@ describe Mdot::V2::GiftsController do
             rrc(200)
             json["status"].should == 1
             gift_hsh              = json["data"].first
-            keys = ["created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            keys = ["r_sys","created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             compare_keys(gift_hsh, keys)
         end
 
@@ -78,8 +82,9 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update(remember_token: "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
 
             @number_received = 9
@@ -118,14 +123,12 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should send a list of used gifts" do
-            Redeem.delete_all
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gs = Gift.where(receiver_id: @user.id)
             gs.each do |gift|
-                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.notify
                 gift.reload
-                order  = Order.init_with_gift(gift, "xyz")
-                order.save
+                gift.redeem_gift( "xyz")
             end
             get :archive, format: :json
             json["status"].should == 1
@@ -137,10 +140,9 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gs = Gift.where(receiver_id: @user.id)
             gs.each do |gift|
-                redeem = Redeem.find_or_create_with_gift(gift)
+                gift.notify
                 gift.reload
-                order  = Order.init_with_gift(gift, "xyz")
-                order.save
+                gift.redeem_gift( "xyz")
             end
 
             keys = ["giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at", "completed_at", "cat", "time_ago", "items"]
@@ -173,8 +175,9 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN"       )
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @number = 10
             @number.times do |n|
@@ -192,6 +195,15 @@ describe Mdot::V2::GiftsController do
             json["data"]["badge"].should  == @number
         end
 
+        it "should correct badge for notified gifts" do
+            gift = Gift.last
+            gift.notify
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            get :badge, format: :json
+            json["status"].should == 1
+            json["data"]["badge"].should  == @number
+        end
+
         it "should return gifts with deactivated givers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             @giver.update_attribute(:active, false)
@@ -202,7 +214,7 @@ describe Mdot::V2::GiftsController do
 
         it "should not return gifts with deactivated receivers" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            @user.update_attribute(:active, false)
+            @user.update(active: false)
             get :badge, format: :json
             rrc(401)
         end
@@ -222,7 +234,7 @@ describe Mdot::V2::GiftsController do
 
         it "should return receiver serialized gifts" do
 
-            keys = ["giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
+            keys = ["value", "r_sys", "giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
 
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
@@ -275,6 +287,19 @@ describe Mdot::V2::GiftsController do
             end
         end
 
+        context "pn token" do
+
+            it "should get the pn_token and save it if missing" do
+                test_pn_token_persisted("28gf2u3gf013igf023igf083fg") do
+                    request.env["HTTP_TKN"] = "USER_TOKEN"
+                    get :badge, format: :json, pn_token: "28gf2u3gf013igf023igf083fg", platform: "ios"
+                    json["status"].should == 1
+                    "ios"
+                end
+            end
+
+        end
+
         it "should send gifts when providers are paused / not live / deactivated" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gift = Gift.find_by(giver_id: @giver)
@@ -294,8 +319,9 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @gift =  FactoryGirl.build(:gift, status: 'open')
             @gift.add_giver(@giver)
@@ -303,32 +329,23 @@ describe Mdot::V2::GiftsController do
             @gift.save
         end
 
-        it "should create a redeem for the gift" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            post :open, format: :json, id: @gift.id
-            rrc(200)
-            redeem = @gift.redeem
-            redeem.class.should == Redeem
-        end
-
-
         it "should return a redeem code when gift is already notified" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
             rrc(200)
-            redeem = @gift.redeem
-            redeem.class.should == Redeem
+            @gift.reload
             post :open, format: :json, id: @gift.id
             json["status"].should == 1
-            json["data"].should == redeem.redeem_code
+            json["data"].should == @gift.token
         end
 
         it "should return the redeem code on success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :open, format: :json, id: @gift.id
             rrc(200)
+            @gift.reload
             json["status"].should == 1
-            json["data"].should == @gift.redeem.redeem_code
+            json["data"].should == @gift.token
         end
 
         it "should change the gift status to 'notified'" do
@@ -337,11 +354,6 @@ describe Mdot::V2::GiftsController do
             @gift.reload
             rrc(200)
             @gift.status.should == 'notified'
-        end
-
-        xit "should return validation errors if validation fail" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            json["status"].should == 0
         end
 
         it "should reject request if params are attached" do
@@ -382,6 +394,114 @@ describe Mdot::V2::GiftsController do
         end
     end
 
+    describe :notify do
+        it_should_behave_like("token authenticated", :post, :notify, id: 1)
+
+        before(:each) do
+            ResqueSpec.reset!
+            UserSocial.delete_all
+            User.delete_all
+            Provider.delete_all
+            @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
+            @user = create_user_with_token "USER_TOKEN", @user
+            @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(@user)
+            @gift.save
+        end
+
+        it "should return a redeem code when gift is already notified" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
+            rrc(200)
+            @gift.reload
+            post :notify, format: :json, id: @gift.id
+            json["status"].should == 1
+            json["data"].should == { "token" =>  @gift.token, "notified_at" => @gift.notified_at.xmlschema, "new_token_at" => @gift.new_token_at.xmlschema }
+        end
+
+        it "should return message when gift is already redeemed" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            @gift.notify
+            @gift.redeem_gift
+            @gift.reload
+            post :notify, format: :json, id: @gift.id
+            rrc(422)
+            json["status"].should == 0
+            json["data"].should == "Gift #{@gift.token} at #{@gift.provider_name} cannot be redeemed"
+
+        end
+
+        it "should not notify incomplete gifts" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            new_gift = FactoryGirl.create(:gift)
+            post :notify, format: :json, id: new_gift.id
+            rrc(404)
+        end
+
+        it "should return the redeem code on success" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
+            rrc(200)
+            @gift.reload
+            @gift.token.should_not be_nil
+            json["status"].should == 1
+            json["data"].should   == { "token" =>  @gift.token, "notified_at" => @gift.notified_at.xmlschema, "new_token_at" => @gift.new_token_at.xmlschema }
+        end
+
+        it "should change the gift status to 'notified'" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
+            @gift.reload
+            rrc(200)
+            @gift.status.should == 'notified'
+        end
+
+        xit "should return validation errors if validation fail" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            json["status"].should == 0
+        end
+
+        it "should reject request if params are attached" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            fake_params = { "fake" => "FAKE" }
+            post :notify, format: :json, id: @gift.id, faker: fake_params
+            rrc(400)
+        end
+
+        it "should return 404 if gift id not found" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: 0
+            rrc(404)
+        end
+
+        it "should not allow opening gifts that user does not receive" do
+            other = FactoryGirl.create(:receiver)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(other)
+            @gift.save
+
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
+            rrc(404)
+        end
+
+        it "should send a 'your gift is opened' push to the gift giver" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            badge = Gift.get_notifications(@gift.giver)
+            user_alias = @gift.giver.ua_alias
+            resque_stubs
+            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!"}}
+            Urbanairship.should_receive(:push).with(good_push_hsh)
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :notify, format: :json, id: @gift.id
+            run_delayed_jobs
+        end
+    end
+
     describe :redeem do
         it_should_behave_like("token authenticated", :post, :redeem, id: 1)
 
@@ -389,31 +509,33 @@ describe Mdot::V2::GiftsController do
             UserSocial.delete_all
             User.delete_all
             Provider.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @gift =  FactoryGirl.build(:gift, status: 'open')
             @gift.add_giver(@giver)
             @gift.add_receiver(@user)
             @gift.save
-            redeem = Redeem.find_or_create_with_gift(@gift)
+            @gift.notify
         end
 
-        it "should create an order for the gift" do
+        it "should update the gift" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
+            @gift.redeemed_at.should be_nil
             post :redeem, format: :json, id: @gift.id, server: "test"
-            @gift.order.class.should == Order
-            @gift.order.server_code.should == "test"
+            @gift.reload
+            @gift.server == "test"
+            @gift.order_num.should_not be_nil
+            @gift.redeemed_at.should_not be_nil
         end
 
         it "should return order_number, server, and total on success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: "test"
-            order = @gift.order
             rrc(200)
             json["status"].should == 1
-
-            json["data"]["order_number"].should == order.make_order_num
+            json["data"]["order_number"].should == @gift.token
             json["data"]["total"].should        == @gift.value
             json["data"]["server"].should       == "test"
         end
@@ -425,7 +547,7 @@ describe Mdot::V2::GiftsController do
             rrc(200)
             json["status"].should == 1
 
-            json["data"]["order_number"].should == order.make_order_num
+            json["data"]["order_number"].should == @gift.token
             json["data"]["total"].should        == @gift.value
             json["data"]["server"].should       == ""
         end
@@ -433,11 +555,10 @@ describe Mdot::V2::GiftsController do
         it "should return order_number, server, and total on success when no server key" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id
-            order = @gift.order
             rrc(200)
             json["status"].should == 1
 
-            json["data"]["order_number"].should == order.make_order_num
+            json["data"]["order_number"].should == @gift.token
             json["data"]["total"].should        == @gift.value
             json["data"]["server"].should       == ""
         end
@@ -455,12 +576,11 @@ describe Mdot::V2::GiftsController do
 
         it "should return reload app error on bad gift" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            redeem = Redeem.find_by(gift_id: @gift.id)
-            redeem.destroy
+            @gift.redeem_gift
             post :redeem, format: :json, id: @gift.id, server: "test"
-            rrc(200)
+            rrc(422)
             json["status"].should == 0
-            json["data"].should   == {"Data Transfer Error"=>"Please Reload Gift Center"}
+            json["data"].should   == "Gift #{@gift.token} has already been redeemed"
         end
 
         it "should reject request if request is malformed" do
@@ -481,7 +601,7 @@ describe Mdot::V2::GiftsController do
             @gift.add_giver(@giver)
             @gift.add_receiver(other)
             @gift.save
-            redeem = Redeem.find_or_create_with_gift(@gift)
+            @gift.notify
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: "test"
             rrc(404)
@@ -496,8 +616,9 @@ describe Mdot::V2::GiftsController do
             Gift.delete_all
             User.delete_all
             UserSocial.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
-            @user.update_attribute(:remember_token, "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
             @gift =  FactoryGirl.build(:gift, status: 'open', active: true)
             @gift.add_giver(@giver)
@@ -807,8 +928,9 @@ describe Mdot::V2::GiftsController do
             Gift.delete_all
             User.delete_all
             UserSocial.delete_all
+            User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password" }
-            @user.update(:remember_token => "USER_TOKEN")
+            @user = create_user_with_token "USER_TOKEN", @user
             @card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
@@ -1116,7 +1238,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "OTHERTOKEN"
             giver = FactoryGirl.create(:giver)
             @user = giver
-            giver.update(remember_token: "OTHERTOKEN")
+            giver = create_user_with_token "OTHERTOKEN", giver
             @card = FactoryGirl.create(:card, :name => @user.name, :user_id => @user.id)
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})

@@ -153,7 +153,6 @@ describe Card do
             card_id = card.id
             card    = nil
             card    = Card.find card_id
-
             args  = {}
             args["giver"]       = giver
             args["provider_id"] = FactoryGirl.create(:provider)
@@ -170,6 +169,7 @@ describe Card do
             keys = ["number", "month_year", "first_name", "last_name", "amount", "unique_id", "card_id"]
             sale_hsh["number"].should     == "4417121029961508"
             sale_hsh["month_year"].should == "0216"
+            sale_hsh["cim_token"].should be_nil
             compare_keys(sale_hsh, keys)
         end
 

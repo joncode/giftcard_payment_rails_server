@@ -15,13 +15,18 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 Dir[Rails.root.join("spec/shared/*.rb")].each { |f| require f }
 Dir[Rails.root.join("spec/factories/*.rb")].each { |f| require f }
 
+
+
 alias running proc
 
 RSpec.configure do |config|
+    config.before(:suite) { ActiveRecord::Migration.maintain_test_schema! }
     config.use_transactional_fixtures = false
 
     WebMock.disable_net_connect!(allow_localhost: true)
     config.include Capybara::DSL
     config.include Capybara::RSpecMatchers
 
+ #    sql = "CREATE SEQUENCE gift_token_seq MINVALUE 1000 MAXVALUE 9999 CACHE 100 CYCLE;"
+	# Gift.connection.execute(sql)
 end

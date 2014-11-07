@@ -1,5 +1,6 @@
 class BizUser < ActiveRecord::Base
-    include Formatter
+    include ShortenPhotoUrlHelper
+
     self.table_name = 'providers'
 
     has_many :sent,  as: :giver,  class_name: Gift

@@ -388,14 +388,17 @@ class AppController < JsonController
   					# get gift from db
   			begin
                 gift   = receiver.received.where(id: params["data"].to_i).first
-
-	  			redeem = Redeem.find_or_create_with_gift(gift)
-	  			if redeem.redeem_code
-                    Relay.send_push_thank_you gift
-	  				response["success"]      = redeem.redeem_code.to_s
-	  			else
-	  				response["error_server"] = database_error_redeem
-	  			end
+                if gift
+			        if gift.notifiable?
+			            gift.notify
+			            Relay.send_push_thank_you gift
+		  				response["success"]      = gift.token.to_s
+		  			else
+		  				response["error_server"] = database_error_redeem
+		  			end
+		  		else
+		  			response["error_server"] = "Gift not found"
+		  		end
 	  		rescue
 	  			response["error_server"]     = database_error_redeem
 	  		end
@@ -414,12 +417,25 @@ class AppController < JsonController
   		if receiver = authenticate_app_user(params["token"])
   			begin
                 gift   = receiver.received.where(id: params["data"].to_i).first
-	  			order = Order.init_with_gift(gift, params["server_code"])
-	  			if order.save
-	  				response["success"] = { "order_number" => order.make_order_num,  "total" => gift.total, "server" => order.server_code }
-	  			else
-	  				response["error_server"] = database_error_redeem
-	  			end
+		        if gift
+		            if gift.status == 'notified'
+		                if true # gift.token == request_params["token"]
+		                    gift.redeem_gift(params["server_code"].to_s)
+		                    response["success"]      =  { "order_number" => gift.token,  "total" => gift.value, "server" => gift.server }
+		                else
+		                    response["error_server"] =  "Token is incorrect for gift #{params[:id]}"
+		                end
+		            else
+		                fail_message = if gift.status == 'redeemed'
+		                    "Gift #{gift.token} has already been redeemed"
+		                else
+		                    "Gift #{gift.id} cannot be redeemed"
+		                end
+		                response["error_server"] =  {"Data Transfer Error"=> fail_message }
+		            end
+		        else
+		        	response["error_server"] = {"Data Transfer Error"=>"Please Reload Gift Center"}
+		        end
 	  		rescue
 	  			response["error_server"] = database_error_redeem
 	  		end
@@ -467,47 +483,16 @@ class AppController < JsonController
     end
 
 	def create_order_emp
-
-		message   = ""
-		response  = {}
-		gift_id 	= params["gift_id"].to_i
-		employee_id = params["employee_id"].to_i
-
-		if gift_id == 0 || employee_id == 0
-			message = "Data not received correctly. "
-			order   = Order.new
-		else
-			order   = Order.new(gift_id: gift_id.to_i, employee_id: employee_id.to_i)
-		end
-		begin
-			user 	= authenticate_app_user(params["token"])
-		rescue
-			message += "Couldn't identify app user. "
-		end
-		begin
-			redeem   = Redeem.find_by(gift_id: gift_id)
-			# putting redeem code in order from redeem altho likely not necessary
-			order.redeem_code = redeem.redeem_code
-		rescue
-			message += " Could not find redeem code via gift_id. "
-		end
-
-
-		response = { "error" => message } if message != ""
-
 		respond_to do |format|
-			if order.save
-				response["success"]      = " Sale Confirmed. Thank you!"
-			else
-				response["error_server"] = stringify_error_messages order
-			end
+
+			response["error_server"] = "Please Update your app"
+			puts "\n\n\n\n OLD APP ALERT ~!!!~ \n\n\n\n"
 			@app_response = "AppC #{response}"
 			format.json { render json: response }
 		end
 	end
 
 	def delete_card
-
 		# message = ""
 		response = {}
 

@@ -17,7 +17,11 @@ class GiftBoomerang < Gift
         gift
     end
 
+
     def original_receiver_social
+
+        #### WHY DOES THIS WRAPPER EXIST AT ALL ?
+
         receiver_social_from_gift(self)
     end
 

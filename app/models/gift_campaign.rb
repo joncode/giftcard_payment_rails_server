@@ -1,4 +1,6 @@
 class GiftCampaign < Gift
+
+    # args = params.require(:data).permit(:receiver_phone, :receiver_email, :payable_id)
     include GiftMessenger
 
     validate   :is_giftable

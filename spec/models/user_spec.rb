@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+include MocksAndStubs
 describe User do
 
     before(:each) do
@@ -33,6 +33,15 @@ describe User do
         it "builds from factory" do
             user = FactoryGirl.create :user
             user.should be_valid
+        end
+
+
+        it "should associate with session tokens" do
+            user = FactoryGirl.create(:user)
+            st = SessionToken.create(user_id: user.id, token: SecureRandom.urlsafe_base64)
+            st2 = SessionToken.create(user_id: user.id, token: SecureRandom.urlsafe_base64)
+
+            user.session_tokens.count.should == 3
         end
 
         it "should associate gift as giver" do
@@ -228,36 +237,24 @@ describe User do
     context "pn_token management" do
 
         it "should hit urban airship endpoint when token created or updated" do
-            ResqueSpec.reset!
-            MailerJob.stub(:perform).and_return(true)
-            SubscriptionJob.stub(:perform).and_return(true)
             pnt  = "162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76"
             user1 = FactoryGirl.create :user, { first_name: "Squatter", email: "KJOOIcode@yahoo.com" }
             user2 = FactoryGirl.create :user, { first_name: "Real", email: "updated@gmail.com" }
-
-            user1.pn_token = [pnt, "android"]
+            platform = 'android'
+            test_urban_airship_endpoint(platform, pnt) do
+                user1.pn_token = [pnt, platform]
+            end
             user1.pn_token.should == [pnt]
 
             user_1_alias = user1.pn_tokens.first.ua_alias
-            puts "User 1 alias = #{user_1_alias}"
-            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_1_alias, :provider => :android })
 
-            run_delayed_jobs
-
-            user2.pn_token = pnt
+            test_urban_airship_endpoint(platform, pnt) do
+                user2.pn_token = [pnt, platform]
+            end
             user2.pn_token.should == [pnt]
-
-            user_2_alias = user2.pn_tokens.first.ua_alias
-            puts "User 2 alias = #{user_2_alias}"
-            Urbanairship.should_receive(:register_device).with(pnt, { :alias => user_2_alias, :provider => :android})
-
-            run_delayed_jobs
         end
 
         it "should send push to gift giver when this user is the receiver of an incomplete gift" do
-            ResqueSpec.reset!
-            MailerJob.stub(:perform).and_return(true)
-            SubscriptionJob.stub(:perform).and_return(true)
             gift = FactoryGirl.create(:gift, receiver_id: nil, receiver_email: "new_push@tarantino.com")
             if gift.status == 'unpaid'
                 gift.update(status: 'incomplete')
@@ -266,20 +263,19 @@ describe User do
             end
             pnt2  = "AWESOMEFUKINTOKENSAWESOMEFUCKINTOKENS"
             giver = gift.giver
-            giver.pn_token = pnt2
+            platform = 'ios'
+            test_urban_airship_endpoint(platform, pnt2) do
+                giver.pn_token = [pnt2, platform]
+            end
             giver.pn_token.should == [pnt2]
 
-            ResqueSpec.reset!
-            MailerJob.stub(:perform).and_return(true)
-            SubscriptionJob.stub(:perform).and_return(true)
-            stub_request(:put, "https://q_NVI6G1RRaOU49kKTOZMQ:yQEhRtd1QcCgu5nXWj-2zA@go.urbanairship.com/api/device_tokens/162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76").to_return(:status => 200, :body => "", :headers => {})
             pnt  = "162cbf28c4c94eeff8dbc3ec489581568768bbdd43c549d089deaa622a833d76"
-            receiver = FactoryGirl.create :user, { first_name: "Quentin", email: "new_push@tarantino.com" }
-            receiver.pn_token = pnt
-            receiver.pn_token.should == [pnt]
-            ua_alias_thing = giver.pn_tokens.first.ua_alias
-            Urbanairship.should_receive(:push).with({:aliases=>[ua_alias_thing], :aps=>{:alert=>"Thank You! Quentin Basic got the app and your gift!", :badge=>0, :sound=>"pn.wav"}, :alert_type=>2,:android=>{:alert=>"Thank You! Quentin Basic got the app and your gift!"}})
-            run_delayed_jobs
+            test_urban_airship_endpoint(platform, pnt) do
+                receiver = FactoryGirl.create :user, { first_name: "Quentin", email: "new_push@tarantino.com"}
+                Urbanairship.should_receive(:push).with({:aliases=>[giver.ua_alias], :aps=>{:alert=>"Thank You! Quentin Basic got the app and your gift!", :badge=>0, :sound=>"pn.wav"}, :alert_type=>2,:android=>{:alert=>"Thank You! Quentin Basic got the app and your gift!"}})
+                receiver.pn_token = [pnt]
+                receiver.pn_token.should == [pnt]
+            end
         end
 
         it "should not send push to gift giver when giver is not a user is the receiver of an incomplete gift" do
@@ -740,11 +736,11 @@ describe User do
 
     context "search" do
       before do
-        @user1 = FactoryGirl.create(:user, 
-                                    first_name: "One", 
-                                    last_name: "User", 
-                                    email: "one.user@example.com", 
-                                    address: "123 User St", 
+        @user1 = FactoryGirl.create(:user,
+                                    first_name: "One",
+                                    last_name: "User",
+                                    email: "one.user@example.com",
+                                    address: "123 User St",
                                     city: "OneCity",
                                     state: "OC",
                                     zip: "12345",
@@ -787,7 +783,7 @@ describe User do
           "2345679955", #phone
           "another address line" #address_2
         ]
-        
+
         result = User.search(terms.join(" "))
         expect(result.length).to eq(1)
         expect(result).to include(@user1)

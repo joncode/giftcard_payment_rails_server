@@ -114,6 +114,7 @@ end
         member do
           post :regift
           post :open
+          post :notify
           post :redeem
         end
         collection do
@@ -138,7 +139,7 @@ end
   end
 
 
-#################          PUBLIC website routes                  /////////////////////////////
+#################          website routes                  /////////////////////////////
 
   namespace :web, defaults: { format: 'json' } do
 
@@ -154,33 +155,32 @@ end
 
     if !Rails.env.production?
       namespace :v3 do
-        resources :cards, only: [:create, :index, :destroy] do
-          collection do
-            get :credentials
+        resources :cards, only: [:create, :index, :destroy]
+
+        resources :promos, only: [:create, :show]
+
+        resources :gifts, only: [:index, :create] do
+          member do
+            patch :notify
+            patch :redeem
           end
         end
 
-        match 'gifts', to: 'merchants#index', via: [:options]
-        match 'gifts', to: 'merchants#create', via: [:options]
-        resources :gifts, only: [:index, :create]
-
-        match 'merchants', to: 'merchants#index', via: [:options]
-        match 'merchants/menu', to: 'merchants#menu', via: [:options]
         resources :merchants, only: [:index] do
           member { get :menu }
         end
 
-        match 'regions', to: 'regions#index', via: [:options]
-        match 'regions/merchants', to: 'regions#merchants', via: [:options]
         resources :regions,   only: [:index] do
           member { get :merchants }
         end
 
-        match 'sessions', to: 'sessions#create', via: [:options]
         resources :sessions,  only: [:create]
 
-        match 'users', to: 'users#create', via: [:options]
-        resources :users, only: [:create]
+        resources :users, only: [:create] do
+          collection do
+            patch :update
+          end
+        end
       end
     end
 
@@ -245,6 +245,7 @@ end
       resources :gifts, only: [] do
         collection do
           post :bulk_create
+          post :redeem
         end
       end
       resources :protos,  only: [] do

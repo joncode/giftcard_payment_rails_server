@@ -33,7 +33,7 @@ private
         card                           = args["card"]
         args["amount"]                 = (args["value"].to_f + set_service_f(args)).to_s
         args["cost"]                   = (args["value"].to_f * 0.85).to_s
-        credit_card_hsh                = card.create_card_hsh args
+        credit_card_hsh                = card.create_card_hsh(args, args["giver"].cim_profile)
         credit_card_hsh["giver_id"]    = card.user_id
         credit_card_hsh["provider_id"] = args["provider_id"]
         args["cat"]                    = set_cat(args)

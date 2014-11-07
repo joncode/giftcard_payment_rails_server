@@ -1,31 +1,17 @@
 require 'spec_helper'
 
+include CampaignFactory
+
 describe GiftCampaign do
+
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
 
     context "ItsOnMe Campaign" do
 
         before(:each) do
-            Provider.delete_all
-            @provider      = FactoryGirl.create(:provider)
-            @admin         = FactoryGirl.create(:admin_user)
-            @admin_giver   = AdminGiver.find(@admin.id)
-            @expiration    = (Time.now + 1.month).to_date
-            @campaign      = FactoryGirl.create(:campaign, purchaser_type: "AdminGiver",
-                                                           purchaser_id: @admin.id,
-                                                           giver_name: "ItsOnMe Promotional Staff",
-                                                           live_date: (Time.now - 1.week).to_date,
-                                                           close_date: (Time.now + 1.week).to_date,
-                                                           expire_date: (Time.now + 1.week).to_date,
-                                                           budget: 100)
-            @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @provider.id,
-                                                                campaign_id: @campaign.id,
-                                                                message: "Enjoy this special gift on us!",
-                                                                detail: "This gift is good until midnight.",
-                                                                expires_at: @expiration,
-                                                                shoppingCart: "[{\"price\":\"10\",\"price_promo\":\"1\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]",
-                                                                budget: 100,
-                                                                value: "30",
-                                                                cost: "3")
+            @campaign, @campaign_item, @provider = admin_campaign_and_item
             @gift_hsh = {}
             @gift_hsh["receiver_name"]  = "Customer Name"
             @gift_hsh["receiver_email"] = "customer@gmail.com"
@@ -51,7 +37,7 @@ describe GiftCampaign do
             gift_campaign.provider_name.should  == @provider.name
             gift_campaign.giver_type.should     == "Campaign"
             gift_campaign.giver_id.should       == @campaign.id
-            gift_campaign.giver_name.should     == "ItsOnMe Promotional Staff"
+            gift_campaign.giver_name.should     == "ItsOnMe Staff"
             gift_campaign.value.should          == "30"
             gift_campaign.cat.should            == 150
             gift_campaign.cost.should           == "3"
@@ -70,7 +56,7 @@ describe GiftCampaign do
 
         it "should correctly set expiration date from expires_at" do
             gift_campaign = GiftCampaign.create @gift_hsh
-            gift_campaign.expires_at.should == @expiration.beginning_of_day.in_time_zone
+            gift_campaign.expires_at.should == (Time.now + 1.month).to_date.beginning_of_day.in_time_zone
         end
 
         it "should set admin campaign gift cat to 150" do
@@ -96,7 +82,7 @@ describe GiftCampaign do
 
         it "should correctly set campaign expire_date from expires_at" do
             gift_campaign = GiftCampaign.create @gift_hsh
-            gift_campaign.giver.expire_date.should == @expiration
+            gift_campaign.giver.expire_date.should == (Time.now + 1.month).to_date
         end
 
         it "should correctly decrement campaign item reserve" do
@@ -121,14 +107,14 @@ describe GiftCampaign do
             @campaign.update(live_date: (Time.now.utc + 1.day).to_date)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should == 1
-            gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 has not started yet. No gifts can be created."
+            gift.errors.full_messages[0].should == "Campaign ItsOnMe Staff 11111 has not started yet. No gifts can be created."
         end
 
         it "should not create gift if the campaign is closed" do
             @campaign.update(close_date: (Time.now.utc - 1.day).to_date)
             gift = GiftCampaign.create @gift_hsh
             gift.errors.count.should == 1
-            gift.errors.full_messages[0].should == "Campaign ItsOnMe Promotional Staff 11111 is closed. No gifts can be created."
+            gift.errors.full_messages[0].should == "Campaign ItsOnMe Staff 11111 is closed. No gifts can be created."
         end
 
     end
@@ -136,26 +122,7 @@ describe GiftCampaign do
     context "Merchant Campaign" do
 
         before(:each) do
-            Provider.delete_all
-            @location      = FactoryGirl.create(:provider, name: "LocationBar")
-            @giver         = FactoryGirl.create(:provider, name: "GiverBar")
-            @biz_user      = BizUser.find(@giver.id)
-            @expiration    = (Time.now + 1.month).to_date
-            @campaign      = FactoryGirl.create(:campaign, purchaser_type: "BizUser",
-                                                           purchaser_id: @giver.id,
-                                                           giver_name: "Giver Promotion Staff",
-                                                           live_date: (Time.now - 1.week).to_date,
-                                                           close_date: (Time.now + 1.week).to_date,
-                                                           expire_date: (Time.now + 1.week).to_date,
-                                                           budget: 100)
-            @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @location.id,
-                                                                campaign_id: @campaign.id,
-                                                                message: "Enjoy this special gift on us!",
-                                                                expires_at: @expiration,
-                                                                shoppingCart: "[{\"price\":\"10\",\"price_promo\":\"8\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]",
-                                                                value: "30",
-                                                                budget: 100,
-                                                                cost:  "0")
+            @campaign, @campaign_item, @location = merchant_campaign_and_item
             @gift_hsh = {}
             @gift_hsh["receiver_name"]  = "Customer Name"
             @gift_hsh["receiver_email"] = "customer@gmail.com"
@@ -181,7 +148,7 @@ describe GiftCampaign do
             gift_campaign.provider_name.should  == "LocationBar"
             gift_campaign.giver_type.should     == "Campaign"
             gift_campaign.giver_id.should       == @campaign.id
-            gift_campaign.giver_name.should     == "Giver Promotion Staff"
+            gift_campaign.giver_name.should     == "GiverBar Staff"
             gift_campaign.value.should          == "30"
             gift_campaign.cat.should            == 250
             gift_campaign.cost.should           == "0"

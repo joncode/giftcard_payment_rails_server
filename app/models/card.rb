@@ -48,24 +48,26 @@ class Card < ActiveRecord::Base
 
 #	-------------
 
-    def create_card_hsh args
+    def create_card_hsh args, cim_profile=nil
 	    hsh = {}
 	    hsh["amount"] 		= args["amount"]
-	    hsh["unique_id"]	= args["unique_id"] if args["unique_id"]
+	    hsh["unique_id"]	= args["unique_id"] #if args["unique_id"]
 	    hsh["card_id"]      = self.id
     	if self.cim_token
-	    	hsh["cim_token"]    = self.cim_token
-	    	hsh["cim_profile"]  = self.user.cim_profile
-    	else
-	    	self.decrypt!(PASSPHRASE)
-	    	hsh["number"]  		= self.number
-	    	hsh["month_year"] 	= self.month_year
-	    	hsh["first_name"]   = self.first_name
-	    	hsh["last_name"] 	= self.last_name
+	    	if hsh["cim_profile"] = (cim_profile || self.user.cim_profile)
+	    		hsh["cim_token"]  = self.cim_token
+				return hsh
+			end
     	end
+    	self.decrypt!(PASSPHRASE)
+    	hsh["number"]  		= self.number
+    	hsh["month_year"] 	= self.month_year
+    	hsh["first_name"]   = self.first_name
+    	hsh["last_name"] 	= self.last_name
 	    hsh
     end
 
+    	# deprecate this function
 	def create_serialize
 		card_hash = self.serializable_hash only: [ "id", "nickname", "last_four" ]
 		card_hash["card_id"] = self.id
@@ -82,7 +84,7 @@ class Card < ActiveRecord::Base
 
 	def destroy
 			# must delete auth.net record
-		log_bars"card.destroy -> Use controllers/concerns/cim_profile :destroy_card(card, user)"
+		log_bars "card.destroy -> Use controllers/concerns/cim_profile :destroy_card(card, user)"
 		super
 	end
 
@@ -132,7 +134,7 @@ private
 		errors.add(:number, "is not a valid credit card number") unless valid_number?(number)
 		self.brand = brand?(number)
 		errors.add(:brand, "We only accept AmEx, Visa, & MasterCard.") unless (self.brand == 'master' || self.brand == 'visa' || self.brand == 'american_express')
-		puts "error messages = #{errors.messages}"
+		#puts "error messages = #{errors.messages}"
 	end
 
 	def month_and_year_should_be_in_future

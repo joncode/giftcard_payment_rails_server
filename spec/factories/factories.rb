@@ -1,5 +1,28 @@
 FactoryGirl.define do
 
+    factory :affiliate do
+        first_name                  "Jimmy"
+        last_name                   "AFfiliate"
+        sequence(:email)            { |n| "affiliate#{n}@gmail.com" }
+        sequence(:phone) do
+            phone = ""
+            10.times do
+              phone += (2..8).to_a.sample.to_s
+            end
+            phone
+        end
+        city        "New York"
+        address     "123 happy st"
+        zip         "11211"
+        state       "NY"
+        url_name  "test_affiliate"
+    end
+
+    factory :landing_page do
+        campaign_id 1
+        affiliate_id 1
+    end
+
     factory :admin_user do
         sequence(:remember_token)    { |n|  "Token#{n}" }
         sequence(:email)            { |n|  "tester#{n}@gmail.com" }
@@ -31,7 +54,9 @@ FactoryGirl.define do
             end
             phone
         end
-
+        after(:create) do |user|
+            FactoryGirl.create(:session_token, user_id: user.id, token: user.remember_token)
+        end
         factory :giver do
             first_name   "Jon"
             last_name    "Gifter"
@@ -100,6 +125,14 @@ FactoryGirl.define do
         sequence(:remember_token)   { |n| "nope#{n}" }
         sequence(:facebook_id)      { |n| "8ssa#{n}fd332" }
         sequence(:twitter)          { |n| "28sdd3s#{n}f6fd3" }
+        after(:create) do |nobody|
+            FactoryGirl.create(:session_token, user_id: nobody.id, token: nobody.remember_token)
+        end
+    end
+
+    factory :session_token do
+         sequence(:token)    { |n|  "Token#{n}" }
+         user_id 123
     end
 
     factory :simple_user, :class => 'User' do

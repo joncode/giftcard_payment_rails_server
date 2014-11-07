@@ -13,8 +13,8 @@ class ProtoGifterJob
 		proto = Proto.find(proto_id)
 
 		if Rails.env.production?
-			batch 	  = 200
-			wait_time = 0.4
+			batch 	  = 250
+			wait_time = 0.3
 		elsif Rails.env.staging?
 			batch 	  = 200
 			wait_time = 0.1

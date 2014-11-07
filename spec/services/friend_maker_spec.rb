@@ -5,6 +5,7 @@ describe FriendMaker do
     context :user_create do
 
         before(:each) do
+            User.any_instance.stub(:init_confirm_email).and_return(true)
             @current = FactoryGirl.create(:user, first_name: "current", last_name: "user", email: "email@friend.com", phone: "6467579999", facebook_id: "123456789", twitter: "9876544321")
             @email_friend    = FactoryGirl.create(:user, first_name: "email", last_name: "friend")
             @multi_friend    = FactoryGirl.create(:user, first_name: "multi", last_name: "friend")

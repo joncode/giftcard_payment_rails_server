@@ -1,17 +1,19 @@
 require 'spec_helper'
 
 describe GiftRegift do
-
+    before(:each) do
+        User.any_instance.stub(:init_confirm_email).and_return(true)
+    end
     it "should allow regifting to receiver_phone BUG FIX" do
 
 
         gift_hsh = {"id"=>5038, "giver_name"=>"Brooklyn Bowl Las Vegas",
             "receiver_name"=>"Jbar Russian", "provider_name"=>"Brooklyn Bowl Las Vegas",
-            "giver_id"=>16, "receiver_id"=>58, "total"=>"120", "credit_card"=>nil,
+            "giver_id"=>16, "receiver_id"=>58, "credit_card"=>nil,
             "provider_id"=>153, "message"=>"Thank you for joining the party! To redeem your tickets please bring a photo ID to the Brooklyn Bowl box office and show them this pass. Must be 21 and over. This prize is non-transferable. \r\n\r\nYou've received two tickets to both the O.A.R and Gogol Bordelo Shows. The tickets are good for either the Friday or Saturday show. \r\nDoors: 5:30 PM \r\nShow: 7:30 PM",
             "status"=>"notified", "created_at"=>"Thu, 24 Apr 2014 22:51:48 EDT -04:00",
             "updated_at"=>"Sat, 26 Apr 2014 00:35:27 EDT -04:00", "receiver_phone"=>"2152000475",
-            "facebook_id"=>nil, "anon_id"=>nil, "receiver_email"=>nil,
+            "facebook_id"=>nil, "receiver_email"=>nil,
             "shoppingCart"=>"[{\"price\":\"30\",\"price_promo\":\"0\",\"quantity\":2,\"section\":\"Show Tickets\",\"item_id\":886,\"item_name\":\"Gogol Bordello\"},{\"price\":\"30\",\"price_promo\":\"0\",\"quantity\":2,\"section\":\"Show Tickets\",\"item_id\":882,\"item_name\":\"O.A.R\"}]",
             "twitter"=>nil, "service"=>nil, "order_num"=>nil, "cat"=>300, "active"=>true,
             "pay_stat"=>"charge_unpaid", "redeemed_at"=>nil, "server"=>nil, "payable_id"=>24,

@@ -12,6 +12,41 @@ module LegacyGift
         nil
     end
 
+    def set_viewed_at
+        Gift.unscoped.find_in_batches do |group|
+            group.each do |gift|
+                if redeem = gift.redeem
+                    gift.update_column(:viewed_at, redeem.created_at)
+                end
+            end
+        end
+        nil
+    end
+
+    def set_ordered_at
+        Gift.unscoped.where(status: 'redeemed').find_in_batches do |group|
+            group.each do |gift|
+                if gift.viewed_at && gift.viewed_at > (gift.redeemed_at - 1.day)
+                    gift.update_column(:ordered_at, gift.viewed_at)
+                else
+                    gift.update_column(:ordered_at, gift.redeemed_at)
+                end
+            end
+        end
+        nil
+    end
+
+    def return_gifts_with_bad_server_codes
+        oss = Order.where('created_at > ?', '2013-10-14 05:27:40.675624')
+        oss.select do |ord|
+            if gift = ord.gift
+                gift.server != ord.server_code
+            else
+                false
+            end
+        end
+    end
+
     def set_legacy_gift_status gift
         case gift.status
         when "unpaid"

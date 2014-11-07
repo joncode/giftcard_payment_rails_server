@@ -1,12 +1,11 @@
 require 'spec_helper'
 
+include UserSessionFactory
+
 describe Mdot::V2::PhotosController do
 
     before(:each) do
-        unless user = User.find_by(remember_token: "USER_TOKEN")
-            user = FactoryGirl.create(:user)
-            user.update_attribute(:remember_token, "USER_TOKEN")
-        end
+        user = create_user_with_token "USER_TOKEN"
         puts "---> user = #{user.inspect}"
     end
 
@@ -23,7 +22,7 @@ describe Mdot::V2::PhotosController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             params_data = "http://res.cloudinary.com/drinkboard/image/upload/v1382464405/myg7nfaccypfaybffljo.jpg"
             post :create, data: params_data, format: :json
-            user_new = User.find_by(remember_token: "USER_TOKEN")
+            user_new = SessionToken.where(token: "USER_TOKEN").first.user
             user_new.iphone_photo.should == params_data
             user_new.get_photo.should    == params_data
         end

@@ -9,7 +9,7 @@ shared_examples_for "gift serializer" do
     end
 
     it "should badge_serialize" do
-        keys = ["items","giver_id", "giver_name", "provider_id", "provider_name", "message", "detail",  "updated_at", "created_at", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "time_ago", "cat" ]
+        keys = ["value", "r_sys",  "items","giver_id", "giver_name", "provider_id", "provider_name", "message", "detail",  "updated_at", "created_at", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "time_ago", "cat" ]
         keys << "expires_at"     if object.expires_at
         hsh  = object.badge_serialize
         compare_keys hsh, keys

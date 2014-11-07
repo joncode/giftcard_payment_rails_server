@@ -24,7 +24,7 @@ shared_examples_for "proxy_auth_required" do |verb, route|
 
     it "should return 407 when oauth credentials are missing" do
         user = FactoryGirl.create(:user)
-        user.update(remember_token: "OAUTH_TOKEN")
+        user = create_user_with_token "OAUTH_TOKEN", user
         request.env["HTTP_TKN"] = "OAUTH_TOKEN"
         puts "-----------#{verb.upcase} | :#{route}  ------------"
         send(verb,route, format: :json)

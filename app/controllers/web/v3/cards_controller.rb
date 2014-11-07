@@ -11,44 +11,44 @@ class Web::V3::CardsController < MetalCorsController
         respond
     end
 
-    def create_token
-        create_with            = token_params
-        create_with["user_id"] = @current_user.id
-        card = CardToken.build_card_token_with_hash create_with
-        if card.save
-            success   card.token_serialize
-        else
-            fail_web  fail_web_payload("incomplete_info")
-            status = :bad_request
-        end
-        respond(status)
-    end
-
     def create
         create_with = card_params
         create_with["user_id"] = @current_user.id
         card = Card.create_card_from_hash create_with
 
         if card.save
-            success card.create_serialize
+            success card.token_serialize
         else
-            fail card
+            fail_web fail_web_payload("not_created_card", card.errors)
             status = :bad_request
         end
         respond(status)
     end
 
-    def destroy
-        card = @current_user.cards.where(id: params[:id]).first
-        if card
-            destroy_card(card, @current_user)   # cim_profile concern
-            success(card.id)
-        else
-            status = :not_found
-        end
+    # def create_token
+    #     create_with            = token_params
+    #     create_with["user_id"] = @current_user.id
+    #     card = CardToken.build_card_token_with_hash create_with
+    #     if card.save
+    #         success   card.token_serialize
+    #     else
+    #         fail_web  fail_web_payload("incomplete_info")
+    #         status = :bad_request
+    #     end
+    #     respond(status)
+    # end
 
-        respond(status)
-    end
+    # def destroy
+    #     card = @current_user.cards.where(id: params[:id]).first
+    #     if card
+    #         destroy_card(card, @current_user)   # cim_profile concern
+    #         success(card.id)
+    #     else
+    #         status = :not_found
+    #     end
+
+    #     respond(status)
+    # end
 
 private
 

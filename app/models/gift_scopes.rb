@@ -29,7 +29,7 @@ module GiftScopes
 #### USER SCOPES
 
     def get_gifts user
-        includes(:provider).includes(:redeem).includes(:giver).where(receiver_id: user.id).where(pay_stat: ["charge_unpaid", "refund_comp"]).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
+        includes(:provider).includes(:giver).where(receiver_id: user.id).where(pay_stat: ["charge_unpaid", "refund_comp"]).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
     end
 
     def get_notifications user
