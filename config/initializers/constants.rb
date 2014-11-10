@@ -10,6 +10,7 @@ if Rails.env.production?
     PUBLIC_URL_MT    = "http://merchant.itson.me"
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
     HELP_CONTACT     = { "email" => "rachel.wenman@itson.me", "name" => "Rachel"}
+    ADMIN_NOTICE_CONTACT = ["david.leibner@itson.me", "rachel.wenman@itson.me"]
 elsif Rails.env.staging?
     PAGE_NAME        = "#{SERVICE_NAME} (staging)"
     TEST_URL         = "http://qa.drinkboardapp.com"
@@ -19,6 +20,7 @@ elsif Rails.env.staging?
     PUBLIC_URL_MT    = "http://qamerchant.itson.me"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
+    ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 else
     PAGE_NAME        = "Dev #{SERVICE_NAME} (local)"
     TEST_URL         = "http://0.0.0.0:3001"
@@ -28,6 +30,7 @@ else
     PUBLIC_URL_MT    = "http://0.0.0.0:3000"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     HELP_CONTACT     = { "email" => "zo@itson.me", "name" => "Craig"}
+    ADMIN_NOTICE_CONTACT = ["zo@itson.me"]
 end
 
 SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"

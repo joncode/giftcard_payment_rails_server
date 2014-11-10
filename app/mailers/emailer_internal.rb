@@ -5,20 +5,18 @@ module EmailerInternal
     	subject = data["subject"]
     	text    = data["text"]
     	email   = data["email"]
+		emails  = email.map { |mail| {"email" => mail, "name" => "IOM Staff (#{mail})"} }
 		if Rails.env.development? || Rails.env.staging?
 			subject_content = subject.insert(0, "QA- ")
 		else
 			subject_content = subject
 		end
         message = {
-        	subject: subject_content,
-        	from_name: "IOM Database",
-        	text: text,
-        	to: [{
-        		email: email,
-        		name: "IoM Staff (#{email})"
-        	}],
-        	from_email: NO_REPLY_EMAIL
+			"subject"    => subject_content,
+			"from_name"  => "IOM Database",
+			"text"       => text,
+			"to"         => emails,
+			"from_email" => NO_REPLY_EMAIL
         }
         request_mandrill_with_message(message).first
     end
