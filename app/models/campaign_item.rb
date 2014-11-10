@@ -10,7 +10,7 @@ class CampaignItem < ActiveRecord::Base
     end
 
     def item_is_live?
-        if self.expires_at && self.expires_at < Time.now
+        if self.expires_at && self.expires_at < Time.now.to_date
             false
         else
             true
