@@ -1,5 +1,6 @@
 class Provider < ActiveRecord::Base
 	include Formatter
+	include ShortenPhotoUrlHelper
 
 	attr_accessor 	:menu
 

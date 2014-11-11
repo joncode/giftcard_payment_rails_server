@@ -545,7 +545,7 @@ describe Gift do
 		  		gift.save
 		  		gift.status.should 				== 'open'
 		  		gift.giver_status.should 		== 'notified'
-		  		gift.receiver_status.should 	== 'notified'
+		  		gift.receiver_status.should 	== 'open'
 		  		gift.bar_status.should 			== 'live'
 		  	end
 
@@ -564,7 +564,7 @@ describe Gift do
 		  	it "should correctly rep notified" do
 		  		gift.status.should 				== 'notified'
 		  		gift.giver_status.should 		== 'notified'
-		  		gift.receiver_status.should 	== 'open'
+		  		gift.receiver_status.should 	== 'notified'
 		  		gift.bar_status.should 			== 'live'
 		  	end
 

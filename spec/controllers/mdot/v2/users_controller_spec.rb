@@ -110,6 +110,30 @@ describe Mdot::V2::UsersController do
             ary.count.should == 0
         end
 
+        it "should return a user when a fist name and last name are submitted BUG FIX" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string           = "Brad Gilbert"
+            user = FactoryGirl.create(:user, first_name: "brad", last_name: "gilbert")
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should       == 1
+            ary                         = json["data"]
+            ary.count.should            == 1
+            ary.first["user_id"].should == user.id
+        end
+
+        it "should return a user when a fist name, middle initial, &  last name are submitted BUG FIX" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            search_string           = "Brad  H. Gilbert"
+            user = FactoryGirl.create(:user, first_name: "brad", last_name: "h. gilbert")
+            get :index, format: :json, find: search_string
+            rrc(200)
+            json["status"].should       == 1
+            ary                         = json["data"]
+            ary.count.should            == 1
+            ary.first["user_id"].should == user.id
+        end
+
         it "should NOT return users whose last_name does match a :find string but they are deactivated" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             search_string = "b"
@@ -174,7 +198,6 @@ describe Mdot::V2::UsersController do
             @user.save
             get :show, format: :json, id: @user.id
             rrc 200
-            puts json["data"]
             json["data"]["email"].count.should == 2
             json["data"]["phone"].count.should == 2
             json["data"]["facebook_id"].count.should == 2
@@ -550,6 +573,13 @@ describe Mdot::V2::UsersController do
 
     describe :update do
         it_should_behave_like("token authenticated", :put, :update)
+
+        it "should quickly update the user BUG FIX" do
+            data = {"first_name"=>"Katrina", "last_name"=>"Veloz", "phone"=>"(702) 956-4646", "email"=>"katrinaveloz@yahoo.com", "facebook_id"=>"100000406143096"}
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            put :update, format: :json, data: data
+            rrc(200)
+        end
 
         it "should require a update_user hash" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
