@@ -27,7 +27,6 @@ class UserSocial < ActiveRecord::Base
 
 private
 
-
     def collect_incomplete_gifts
         if thread_on?
             Resque.enqueue(CollectIncompleteGiftsV2Job, self.id)

@@ -80,24 +80,36 @@ class User < ActiveRecord::Base
 #/---------------------------------------------------------------------------------------------/
 
 	def update args
+
+		# strings the keys
 		args = args.stringify_keys
-		["facebook_id", "twitter"].each do |network|
-			if args[network]
-				args[network] = args[network].to_s
-			end
-		end
-		primary = args.delete("primary")
+
+		# makes sure the values for faceboob_id & twitter are strings
 		us_ary = ["email", "phone", "facebook_id", "twitter"]
 
-		if us_ary.any? { |k| args.has_key? k }
-			type_ofs 	= us_ary.select { |us|  args.has_key? us }
-			reload_args = set_type_ofs type_ofs, args
+		# delete the promary kay and save it in a var
+		primary = args.delete("primary")
+
+		# if those user social keys exist
+		type_ofs = us_ary.select { |us|  args.has_key? us }
+		if type_ofs.count > 0
+			us_ary.each do |network|
+				if args[network]
+					args[network] = args[network].to_s
+				end
+			end
+			# these are the old values on the user = reload args
+			original_user_args = set_type_ofs type_ofs, args
+
 			puts "\nuser.update - here is the args #{args.inspect}"
+
+			# confirm that user is valid after updating just the socials
 			if self.valid?
 				if primary
-					init_user_socials(type_ofs, args)
+					# finds or creates the user socials and returns an array
+					args["user_socials"] = init_user_socials(type_ofs, args)
 				else
-					set_type_ofs type_ofs, reload_args
+					set_type_ofs type_ofs, original_user_args
 					set_user_socials type_ofs, args
 					puts "user.update valid - #{args.inspect}"
 					args.except!("email", "phone", "facebook_id", "twitter")
@@ -350,7 +362,10 @@ private
 		type_ofs.each do |type_of|
 			unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
 				puts "set_user_socials  - #{user_social.errors}"
+
+				# what does this do vv ?
 				user_social.errors
+
 				if us.errors.messages.keys.count > 0
 					puts "here are the errors - #{us.errors.inspect}"
 				end
@@ -359,19 +374,22 @@ private
 	end
 
 	def init_user_socials type_ofs, args
-		type_ofs.map do |type_of|
-			us = UserSocial.find_or_create_by(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id, active: true)
-			#puts "init_user_socials - Here is the user social #{us.inspect}"
-			if us.errors.messages.keys.count > 0
-				puts "here are the errors - #{us.errors.inspect}"
-			end
+		# loop thru social keys
+
+		ary_of_valids = type_ofs.map do |type_of|
+			puts "\n ----  set_type_ofs #{type_of} ------- \n"
+			us = UserSocial.new(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id, active: true)
+		    puts "\n social init_user_socials event - #{us.inspect}\n"
 			us
 		end
+		# return as array of user socials
 	end
 
 	def set_type_ofs type_ofs, args
 		old_args = {}
 		type_ofs.each do |type_of|
+
+			puts "\n ----  set_type_ofs #{type_of} ------- \n"
 			old_args[type_of] = self.send("#{type_of}")
 			self.send("#{type_of}=", args[type_of])
 		end
@@ -386,13 +404,12 @@ private
 	end
 
 	def persist_social_data
-
 		if email_changed? && (email[-3..-1] != "xxx")
-			UserSocial.create(user_id: id, type_of: "email", identifier: email)
+			UserSocial.find_or_create_by(user_id: id, type_of: "email", identifier: email)
 		end
-		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
-		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
-		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)
+		phone_changed? and UserSocial.find_or_create_by(user_id: id, type_of: "phone", identifier: phone)
+		facebook_id_changed? and UserSocial.find_or_create_by(user_id: id, type_of: "facebook_id", identifier: facebook_id.to_s)
+		twitter_changed? and UserSocial.find_or_create_by(user_id: id, type_of: "twitter", identifier: twitter.to_s)
 	end
 
 	def facebook_id_exists?
