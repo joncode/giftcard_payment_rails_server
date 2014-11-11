@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141107024317) do
+ActiveRecord::Schema.define(version: 20141111022409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -561,6 +561,18 @@ ActiveRecord::Schema.define(version: 20141107024317) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "user_points", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "region_id",  default: 0
+    t.integer  "points",     default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_points", ["region_id", "points"], name: "index_user_points_on_region_id_and_points", using: :btree
+  add_index "user_points", ["region_id", "user_id"], name: "index_user_points_on_region_id_and_user_id", using: :btree
+  add_index "user_points", ["region_id"], name: "index_user_points_on_region_id", using: :btree
 
   create_table "user_socials", force: true do |t|
     t.integer  "user_id"

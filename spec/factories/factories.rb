@@ -1,5 +1,12 @@
 FactoryGirl.define do
 
+    factory :user_point do
+        user_id 1
+        region_id 1
+        points 1000
+
+    end
+
     factory :affiliate do
         first_name                  "Jimmy"
         last_name                   "AFfiliate"
