@@ -22,7 +22,7 @@ class GiftSale < Gift
             gift.payable.reason_text
         else
             gift.messenger(:invoice_giver)
-            Resque.enqueue(PointsForSaleJob, self.id)
+            Resque.enqueue(PointsForSaleJob, gift.id)
             gift
         end
     end

@@ -596,10 +596,12 @@ describe User do
             it "allows you to change primary twitter with user social that already exists" do
                 user = FactoryGirl.create(:user, twitter: "111a1a1aa1")
                 FactoryGirl.create :user_social, type_of: "twitter", user_id: user.id, identifier: "222b2b2bb2"
+                user.reload
                 user.user_socials.where(type_of: "twitter").count.should == 2
 
                 user.update(twitter: "222b2b2bb2", primary: true)
                 user.twitter.should == "222b2b2bb2"
+                user.reload
                 user.user_socials.where(type_of: "twitter").count.should == 2
             end
 
