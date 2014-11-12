@@ -153,7 +153,7 @@ Drinkboard::Application.routes.draw do
       resources :merchants, only: [:show]
     end
 
-    if !Rails.env.production?
+    # if !Rails.env.production?
       namespace :v3 do
         resources :cards, only: [:create, :index, :destroy]
 
@@ -182,7 +182,7 @@ Drinkboard::Application.routes.draw do
           end
         end
       end
-    end
+    # end
 
   end
 
