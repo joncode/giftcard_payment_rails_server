@@ -2,10 +2,13 @@ class UserPoint < ActiveRecord::Base
 
 	validates :region_id, :uniqueness => { scope: :user_id }
 
+
+
 	after_save :add_points_to_total
 
 	def add_points(points)
-		self.points +=  points.to_i
+		@added_points = points.to_i
+		self.points   +=  @added_points
 		self.save
 	end
 
@@ -28,9 +31,9 @@ class UserPoint < ActiveRecord::Base
 private
 
 	def add_points_to_total
-		if self.region_id != 0
+		if self.region_id != 0 && @added_points.to_i > 0
 			total_record = UserPoint.find_or_initialize_by(region_id: 0, user_id: self.user_id)
-			total_record.add_points(self.points)
+			total_record.add_points(@added_points)
 		end
 	end
 

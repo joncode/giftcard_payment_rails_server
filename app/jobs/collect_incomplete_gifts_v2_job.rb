@@ -39,6 +39,7 @@ class CollectIncompleteGiftsV2Job
 				if g.update(gift_changes)
 					success += 1
 					PushJob.perform(g.id, true, true)
+					PointsForNewUserJob.perform(g.id)
 				else
 					error   += 1
 				end

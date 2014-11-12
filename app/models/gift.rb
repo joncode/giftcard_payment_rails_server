@@ -91,7 +91,9 @@ class Gift < ActiveRecord::Base
             self.redeemed_at = Time.now.utc
             self.server      = server_code
             self.order_num   = make_order_num(self.id)
-            self.save
+            if self.save
+                Resque.enqueue(PointsForCompletionJob, self.id)
+            end
         else
             #=> gift cannot be redeemed, its not notified
             false
