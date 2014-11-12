@@ -13,23 +13,52 @@ describe CampaignItem do
                 cam_item.has_reserve?.should be_false
             end
 
-            it "should combine date checks with reserve to :live?" do
-                campaign = FactoryGirl.create(:campaign)
-                cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.live?.should be_true
-                cam_item = FactoryGirl.create(:campaign_item, reserve: 0, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.live?.should be_false
-                start_date = Time.now.utc + 1.day
-                campaign = FactoryGirl.create(:campaign, live_date:  start_date)
-                cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.live?.should be_false
-                end_date = Time.now.utc - 1.day
-                campaign = FactoryGirl.create(:campaign, close_date: end_date)
-                cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.live?.should be_false
-                campaign = FactoryGirl.create(:campaign)
-                cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id)
-                cam_item.live?.should be_false
+
+            context "Campaign Live Status" do
+                context "Campaign is live" do
+                    before do
+                        @today = Time.now.utc
+                        @campaign = FactoryGirl.create :campaign, live_date: 1.week.ago, close_date: @today + 1.week
+                    end
+                    it "should be live if item has reserve, and expires in the future" do
+                        cam_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, reserve: 1, expires_at: (@today + 1.week))
+                        cam_item.live?.should be_true
+                    end
+                    it "should NOT be live if item has reserve, and expires in the past" do
+                        cam_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, reserve: 0, expires_at: 1.week.ago)
+                        cam_item.live?.should be_false
+                    end
+                    it "should NOT be live if item has no reserve and expires in the future" do
+                        cam_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, reserve: 0, expires_at: 1.week.ago)
+                        cam_item.live?.should be_false
+                    end
+                    it "should NOT be live if item has no reserve and expires in the past" do
+                        cam_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, reserve: 0, expires_at: 1.week.ago)
+                        cam_item.live?.should be_false
+                    end
+                end
+                context "Campaign is NOT live" do
+                    before do
+                        @today = Time.now.utc
+                        @campaign = FactoryGirl.create :campaign, live_date: 1.week.ago, close_date: @today - 1.week
+                    end
+                    it "should NOT be live if item has reserve, and expires in the future" do
+                        cam_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, reserve: 1, expires_at: (@today + 1.week))
+                        cam_item.live?.should be_false
+                    end
+                    it "should NOT be live if item has reserve, and expires in the past" do
+                        cam_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, reserve: 0, expires_at: 1.week.ago)
+                        cam_item.live?.should be_false
+                    end
+                    it "should NOT be live if item has no reserve and expires in the future" do
+                        cam_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, reserve: 0, expires_at: 1.week.ago)
+                        cam_item.live?.should be_false
+                    end
+                    it "should NOT be live if item has no reserve and expires in the past" do
+                        cam_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, reserve: 0, expires_at: 1.week.ago)
+                        cam_item.live?.should be_false
+                    end
+                end
             end
         end
 
@@ -38,24 +67,24 @@ describe CampaignItem do
             it "should respond with human readable status_text" do
                 campaign = FactoryGirl.create(:campaign)
                 cam_item = FactoryGirl.create(:campaign_item, reserve: 0, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} reserve is empty"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) reserve is empty"
                 cam_item.update(reserve: 1)
-                cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} is live"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) is live"
                 start_date = Time.now.utc + 1.day
                 campaign = FactoryGirl.create(:campaign, live_date:  start_date)
                 cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} has not started yet"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) has not started yet"
                 end_date = Time.now.utc - 1.day
                 campaign = FactoryGirl.create(:campaign, close_date: end_date)
                 cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id, expires_at: (Time.now + 1.month))
-                cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} is closed"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) is closed"
             end
 
             it "should respond with 'is closed' when today is the close date BUG FIX" do
                 campaign = FactoryGirl.create(:campaign, close_date: Time.now.utc)
                 cam_item = FactoryGirl.create(:campaign_item, campaign_id: campaign.id)
 
-                cam_item.status_text.should == "#{campaign.name} #{cam_item.textword} is closed"
+                cam_item.status_text.should == "#{campaign.cname} - textword (#{cam_item.textword}) is closed"
             end
 
         end

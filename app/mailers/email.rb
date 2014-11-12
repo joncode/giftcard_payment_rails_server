@@ -59,6 +59,26 @@ module Email
         route_email_system(data)
     end
 
+    def notify_admin
+        gift = self
+        if gift.shoppingCart
+            items = JSON.parse(gift.shoppingCart).map do |item|
+                "#{item["quantity"]} x #{item["item_name"]}"
+            end
+            items = "of " + items.join(',')
+        end
+        giver_email = gift.giver.email if Gift.where(giver_id: gift.giver_id).present?
+        email_text = "#{gift.giver_name} (#{giver_email}) has sent a $#{gift.value} gift #{items} at #{gift.provider_name} to #{gift.receiver_name}"
+        if gift.value.to_i >= 100
+            data = {
+                "subject" => "$100+ Gift purchase made",
+                "text"    => email_text,
+                "email"   => ADMIN_NOTICE_CONTACT
+            }
+            route_internal_email_system(data)
+        end
+    end
+
 #######   User
 
     def confirm_email
@@ -97,5 +117,13 @@ private
             end
         end
     end
+
+    def route_internal_email_system data
+        puts "data in Email.rb #{data}"
+        unless  Rails.env.development?
+            Resque.enqueue(MailerInternalJob, data)
+        end
+    end
+
 
 end

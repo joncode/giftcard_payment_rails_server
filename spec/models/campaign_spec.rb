@@ -9,6 +9,7 @@ describe Campaign do
         @expiration    = (Time.now + 1.month).to_date
         @campaign      = FactoryGirl.create(:campaign, purchaser_type: "AdminGiver",
                                                        purchaser_id: @admin.id,
+                                                       name: "Special Summer Party Campaign",
                                                        giver_name: "ItsOnMe Promotional Staff",
                                                        live_date: (Time.now - 1.week).to_date,
                                                        close_date: (Time.now + 1.week).to_date,
@@ -97,6 +98,10 @@ describe Campaign do
             @campaign.gift_cat.should == 150
         end
 
+        it "should have correct name and cname" do
+            @campaign.name.should == "ItsOnMe Promotional Staff"
+            @campaign.cname.should == "Special Summer Party Campaign"
+        end
     end
 
 end

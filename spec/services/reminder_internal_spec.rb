@@ -15,7 +15,12 @@ describe ReminderInternal do
 		cmapaign_item3 = FactoryGirl.create :campaign_item, campaign_id: campaign3.id, expires_at: (today + 1.day)
 
 		ResqueSpec.reset!
-		Resque.should_receive(:enqueue).with(MailerInternalJob, anything).exactly(3).times.and_return(true)
+		mail_data = {
+			subject: "Campaign Expiration Notice",
+			text: "Campaign #{campaign1.cname} is expiring within 2 days",
+			email: "zo@itson.me"
+		}
+		Resque.should_receive(:enqueue).with(MailerInternalJob, mail_data).exactly(1).times.and_return(true)
 		ReminderInternal.send_reminders
 	end
 end
