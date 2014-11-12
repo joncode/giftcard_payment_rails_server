@@ -92,7 +92,7 @@ class Gift < ActiveRecord::Base
             self.server      = server_code
             self.order_num   = make_order_num(self.id)
             if self.save
-                Resque.enqueue(PointsForCompletionJob, self.id)
+                #Resque.enqueue(PointsForCompletionJob, self.id)
             end
         else
             #=> gift cannot be redeemed, its not notified
