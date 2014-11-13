@@ -2,8 +2,6 @@ class UserPoint < ActiveRecord::Base
 
 	validates :region_id, :uniqueness => { scope: :user_id }
 
-
-
 	after_save :add_points_to_total
 
 	def add_points(points)

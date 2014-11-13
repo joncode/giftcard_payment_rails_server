@@ -62,7 +62,8 @@ module Email
     def notify_admin
         gift = self
         if gift.shoppingCart
-            items = JSON.parse(gift.shoppingCart).map do |item|
+            items = gift.ary_of_shopping_cart_as_hash
+            items = items.map do |item|
                 "#{item["quantity"]} x #{item["item_name"]}"
             end
             items = "of " + items.join(',')

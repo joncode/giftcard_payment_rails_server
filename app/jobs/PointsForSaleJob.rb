@@ -13,8 +13,11 @@ class PointsForSaleJob
 		user_point = UserPoint.find_or_initialize_by(region_id: region_id, user_id: user.id)
 		event_points = 0
 
+		event_points += (gift.value.to_f * 100).to_i
 
-
+		if gift.facebook_id.present? || gift.twitter.present?
+			event_points += 1000
+		end
 
 		user_point.add_points(event_points)
     end

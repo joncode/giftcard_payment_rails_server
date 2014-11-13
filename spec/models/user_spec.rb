@@ -141,9 +141,9 @@ describe User do
     it "should update multi-socials at the same time" do
         user = FactoryGirl.create(:user, facebook_id: "111111111")
         us_count = user.user_socials.count
-
+        #binding.pry
         user.update(facebook_id: "33333234134", email: "new_email@yahoo.com", phone: "6467334231", primary: true)
-
+        #binding.pry
         us_count_2 = user.user_socials.count
         us_count_2.should == us_count + 3
     end
