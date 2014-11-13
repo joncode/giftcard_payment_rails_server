@@ -61,7 +61,7 @@ class Web::V3::GiftsController < MetalCorsController
         respond
     end
 
-    def open
+    def read
         gift = Gift.find params[:id]
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
             gift.notify(false)

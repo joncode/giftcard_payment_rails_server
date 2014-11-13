@@ -29,7 +29,7 @@ describe CampaignItem do
                 cam_item.live?.should be_false
                 campaign = FactoryGirl.create(:campaign)
                 cam_item = FactoryGirl.create(:campaign_item, reserve: 1, campaign_id: campaign.id)
-                cam_item.live?.should be_false
+                cam_item.live?.should be_true
             end
         end
 
