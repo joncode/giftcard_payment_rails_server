@@ -487,19 +487,6 @@ describe Mdot::V2::GiftsController do
             post :notify, format: :json, id: @gift.id
             rrc(404)
         end
-
-        it "should send a 'your gift is opened' push to the gift giver" do
-            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
-            badge = Gift.get_notifications(@gift.giver)
-            user_alias = @gift.giver.ua_alias
-            resque_stubs
-            good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!",:badge=>badge,:sound=>"pn.wav"},:alert_type=>2,:android =>{:alert => "#{@gift.receiver_name} opened your gift at #{@gift.provider_name}!"}}
-            Urbanairship.should_receive(:push).with(good_push_hsh)
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            post :notify, format: :json, id: @gift.id
-            run_delayed_jobs
-        end
     end
 
     describe :redeem do

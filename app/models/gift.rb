@@ -54,24 +54,29 @@ class Gift < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
-    def notify
+    def notify(redeem=true)
         if notifiable?
             if (self.new_token_at.nil? || self.new_token_at < reset_time)
                 current_time   = Time.now.utc
-                include_notify = if self.notified_at.nil?
-                    #self.notified_at = current_time
-                    ", notified_at = '#{current_time}' "
-                else
-                    ""
-                end
                 #self.new_token_at = current_time
-                include_status = if self.status == 'open'
-                    #self.status = 'notified'
-                    ", status = 'notified' "
+                if redeem
+                    include_status = if self.status == 'open'
+                        #self.status = 'notified'
+                        " status = 'notified' ,"
+                    else
+                        ""
+                    end
+                    include_notify = if self.notified_at.nil?
+                        #self.notified_at = current_time
+                        " notified_at = '#{current_time}' ,"
+                    else
+                        ""
+                    end
+                    sql = "UPDATE gifts SET #{include_status} #{include_notify} token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 else
-                    ""
+                    sql = "UPDATE gifts SET status = 'notified' , notified_at = '#{current_time}' WHERE id = #{self.id};"
                 end
-                sql = "UPDATE gifts SET token = nextval('gift_token_seq') #{include_status} #{include_notify}, new_token_at = '#{current_time}' WHERE id = #{self.id};"
+
                 Gift.connection.execute(sql)
                 self.reload
                 true

@@ -143,6 +143,17 @@ describe Gift do
     		(token_time > (Time.now - 1.hour)).should be_true
     	end
 
+    	it "should notify an open gift and not set the token values" do
+    		gift = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name")
+    		gift.notify(false)
+    		gift.reload
+    		gift.status.should == 'notified'
+    		notif_time = gift.notified_at
+    		(notif_time > (Time.now - 1.hour)).should be_true
+    		gift.token.should be_nil
+    		gift.new_token_at.should be_nil
+    	end
+
     	it "should notify an already notified gift , updating token fields" do
     		yesterday = "2014-10-14 19:36:27"
     		gift = FactoryGirl.create(:gift, receiver_id: 234, status: 'notified', receiver_name: "test name", token: 4675, notified_at: yesterday, new_token_at: yesterday)
