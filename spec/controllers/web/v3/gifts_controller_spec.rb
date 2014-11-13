@@ -130,6 +130,25 @@ describe Web::V3::GiftsController do
         end
     end
 
+    describe :open do
+        it_should_behave_like("client-token authenticated", :patch, :open, id: 1)
+
+        before(:each) do
+            @user = create_user_with_token "USER_TOKEN", @user
+            @gift = FactoryGirl.create(:gift, receiver_id: @user.id, receiver_name: @user.username)
+        end
+
+        it "should notify an open gift" do
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            @gift.status.should == 'open'
+            patch :open, format: :json, id: @gift.id
+            @gift.reload.status.should == 'notified'
+            @gift.token.should be_nil
+        end
+
+
+    end
+
     describe :notify do
         it_should_behave_like("client-token authenticated", :patch, :notify, id: 1)
 

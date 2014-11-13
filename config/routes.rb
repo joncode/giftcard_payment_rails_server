@@ -161,6 +161,7 @@ Drinkboard::Application.routes.draw do
 
         resources :gifts, only: [:index, :create] do
           member do
+            patch :open
             patch :notify
             patch :redeem
           end
