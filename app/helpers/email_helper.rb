@@ -164,9 +164,6 @@ module EmailHelper
 					<img src='#{image_url}' style='width: 400px;'>
 				</div>
 				#{items_text(gift)}
-				<div style='padding-bottom:20px; font-size:16px;'>
-					#{provider_name} has partnered with It's On Me to deliver this gift to some of its favorite customers. To claim this gift simply click the button and download the app. Use this email address at sign-up to receiver your gift.
-				</div>
 	            #{button_text(button_url, button_text)}
 			</div>
 			<div style='background-color:#E2E2E2; padding: 10px;'>
