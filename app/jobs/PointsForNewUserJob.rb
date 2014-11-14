@@ -28,7 +28,7 @@ class PointsForNewUserJob
 			older_gift = Gift.where(receiver_id: gift.receiver_id).limit(1).first
 			if gift == older_gift
 				user       = gift.giver
-				provider   = gift.provider
+				provider   = Provider.unscoped.find(gift.provider_id)
 				region_id  = provider.region_id
 				user_point = UserPoint.find_or_initialize_by(region_id: region_id, user_id: user.id)
 				user_point.add_points(5000)

@@ -16,7 +16,7 @@ class PointsForCompletionJob
 		return if gift.giver_id == gift.receiver_id
 
 		user       = gift.giver
-		provider   = gift.provider
+		provider   = Provider.unscoped.find(gift.provider_id)
 		region_id  = provider.region_id
 
 		user_point = UserPoint.find_or_initialize_by(region_id: region_id, user_id: user.id)
