@@ -8,6 +8,7 @@ class PointsForSaleJob
     	return  if gift.giver_type != "User"
 
 		user       = gift.giver
+		return if user.nil?
 		provider   = Provider.unscoped.find(gift.provider_id)
 		region_id  = provider.region_id
 
