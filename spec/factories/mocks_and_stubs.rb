@@ -19,6 +19,10 @@ module MocksAndStubs
         MailerJob.stub(:perform).and_return(true)                    unless mailer_job
     end
 
+    def push_job_stubs
+        PushJob.stub(:perform).and_return(true)
+    end
+
     def tokenize_credential_url
         'https://apitest.authorize.net/xml/v1/request.api'
     end

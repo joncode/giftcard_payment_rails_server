@@ -5,6 +5,7 @@ class PointsForSaleJob
     def self.perform gift_id
 		gift       = Gift.includes(:giver).includes(:provider).find gift_id
     	return  if gift.cat < 300
+    	return  if gift.giver_type != "User"
 
 		user       = gift.giver
 		provider   = gift.provider
@@ -18,7 +19,6 @@ class PointsForSaleJob
 		if gift.facebook_id.present? || gift.twitter.present?
 			event_points += 1000
 		end
-
 		user_point.add_points(event_points)
     end
 

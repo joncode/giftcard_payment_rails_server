@@ -36,6 +36,7 @@ class User < ActiveRecord::Base
 	has_many :friendships, dependent: :destroy
 	has_many :app_contacts, through: :friendships
 	has_many :session_tokens
+	has_many :user_points
 
 	has_secure_password
 

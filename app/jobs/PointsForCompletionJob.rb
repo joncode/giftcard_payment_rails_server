@@ -5,9 +5,14 @@ class PointsForCompletionJob
     def self.perform gift_id
 		gift       = Gift.includes(:giver).includes(:provider).find gift_id
     	return  if gift.cat < 300
+        return  if gift.giver_type != "User"
 		return  unless ["redeemed", "regifted"].include?(gift.status)
 		return  if gift.redeemed_at.nil?
 
+		if gift.status == 'regifted'
+			new_g = gift.child
+			return if ( new_g && new_g.giver_type != "User" )
+		end
 		user       = gift.giver
 		provider   = gift.provider
 		region_id  = provider.region_id
