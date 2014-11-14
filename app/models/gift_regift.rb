@@ -14,6 +14,7 @@ class GiftRegift < Gift
         gift = super
         if gift.persisted?
             gift.messenger
+            #Resque.enqueue(PointsForCompletionJob, gift.id)
         end
         gift
     end

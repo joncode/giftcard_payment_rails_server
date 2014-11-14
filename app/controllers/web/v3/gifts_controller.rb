@@ -61,11 +61,27 @@ class Web::V3::GiftsController < MetalCorsController
         respond
     end
 
+    def read
+        gift = Gift.find params[:id]
+        if gift.notifiable? && (gift.receiver_id == @current_user.id)
+            gift.notify(false)
+            Relay.send_push_thank_you gift
+            success gift.web_serialize
+        else
+            fail_message = if gift.status == 'redeemed'
+                    "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
+                else
+                    "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+                end
+            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
+        end
+        respond(status)
+    end
+
     def notify
         gift = Gift.find params[:id]
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
             gift.notify
-            Relay.send_push_thank_you gift
             success gift.web_serialize
         else
             fail_message = if gift.status == 'redeemed'

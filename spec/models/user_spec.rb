@@ -141,9 +141,9 @@ describe User do
     it "should update multi-socials at the same time" do
         user = FactoryGirl.create(:user, facebook_id: "111111111")
         us_count = user.user_socials.count
-
+        #binding.pry
         user.update(facebook_id: "33333234134", email: "new_email@yahoo.com", phone: "6467334231", primary: true)
-
+        #binding.pry
         us_count_2 = user.user_socials.count
         us_count_2.should == us_count + 3
     end
@@ -596,10 +596,12 @@ describe User do
             it "allows you to change primary twitter with user social that already exists" do
                 user = FactoryGirl.create(:user, twitter: "111a1a1aa1")
                 FactoryGirl.create :user_social, type_of: "twitter", user_id: user.id, identifier: "222b2b2bb2"
+                user.reload
                 user.user_socials.where(type_of: "twitter").count.should == 2
 
                 user.update(twitter: "222b2b2bb2", primary: true)
                 user.twitter.should == "222b2b2bb2"
+                user.reload
                 user.user_socials.where(type_of: "twitter").count.should == 2
             end
 

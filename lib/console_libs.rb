@@ -10,9 +10,11 @@ require 'legacy_provider'
 require 'cron'
 require 'expiration'
 require 'boomerang_cron'
+require 'legacy_points'
 include Legacy
 include LegacyUser
 include LegacyGift
 include LegacyProvider
 include Cron
 include Dbcall
+include LegacyPoints

@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 	include Email
 	include Utility
 	include ShortenPhotoUrlHelper
+	include UpdateUserMeta
 
 	attr_accessor :api_v1, :session_token_obj
 
@@ -35,6 +36,7 @@ class User < ActiveRecord::Base
 	has_many :friendships, dependent: :destroy
 	has_many :app_contacts, through: :friendships
 	has_many :session_tokens
+	has_many :user_points
 
 	has_secure_password
 
@@ -79,36 +81,6 @@ class User < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
-	def update args
-		args = args.stringify_keys
-		["facebook_id", "twitter"].each do |network|
-			if args[network]
-				args[network] = args[network].to_s
-			end
-		end
-		primary = args.delete("primary")
-		us_ary = ["email", "phone", "facebook_id", "twitter"]
-
-		if us_ary.any? { |k| args.has_key? k }
-			type_ofs 	= us_ary.select { |us|  args.has_key? us }
-			reload_args = set_type_ofs type_ofs, args
-			puts "\nuser.update - here is the args #{args.inspect}"
-			if self.valid?
-				if primary
-					init_user_socials(type_ofs, args)
-				else
-					set_type_ofs type_ofs, reload_args
-					set_user_socials type_ofs, args
-					puts "user.update valid - #{args.inspect}"
-					args.except!("email", "phone", "facebook_id", "twitter")
-				end
-			else
-				puts "user.update errors - #{self.errors}"
-				self.errors
-			end
-		end
-		super
-	end
 
 ########   USER SOCIAL METHODS
 
@@ -346,38 +318,6 @@ class User < ActiveRecord::Base
 
 private
 
-	def set_user_socials type_ofs, args
-		type_ofs.each do |type_of|
-			unless user_social = UserSocial.create(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id)
-				puts "set_user_socials  - #{user_social.errors}"
-				user_social.errors
-				if us.errors.messages.keys.count > 0
-					puts "here are the errors - #{us.errors.inspect}"
-				end
-			end
-		end
-	end
-
-	def init_user_socials type_ofs, args
-		type_ofs.map do |type_of|
-			us = UserSocial.find_or_create_by(type_of: type_of.to_s, identifier: args[type_of], user_id: self.id, active: true)
-			#puts "init_user_socials - Here is the user social #{us.inspect}"
-			if us.errors.messages.keys.count > 0
-				puts "here are the errors - #{us.errors.inspect}"
-			end
-			us
-		end
-	end
-
-	def set_type_ofs type_ofs, args
-		old_args = {}
-		type_ofs.each do |type_of|
-			old_args[type_of] = self.send("#{type_of}")
-			self.send("#{type_of}=", args[type_of])
-		end
-		old_args
-	end
-
 	def make_friends
 		#log_bars "'make_friends' after save callback on User model commented out 6/23/14"
 		# unless Rails.env.production?
@@ -386,13 +326,12 @@ private
 	end
 
 	def persist_social_data
-
 		if email_changed? && (email[-3..-1] != "xxx")
-			UserSocial.create(user_id: id, type_of: "email", identifier: email)
+			UserSocial.find_or_create_by(user_id: id, type_of: "email", identifier: email)
 		end
-		phone_changed? and UserSocial.create(user_id: id, type_of: "phone", identifier: phone)
-		facebook_id_changed? and UserSocial.create(user_id: id, type_of: "facebook_id", identifier: facebook_id)
-		twitter_changed? and UserSocial.create(user_id: id, type_of: "twitter", identifier: twitter)
+		phone_changed? and UserSocial.find_or_create_by(user_id: id, type_of: "phone", identifier: phone)
+		facebook_id_changed? and UserSocial.find_or_create_by(user_id: id, type_of: "facebook_id", identifier: facebook_id.to_s)
+		twitter_changed? and UserSocial.find_or_create_by(user_id: id, type_of: "twitter", identifier: twitter.to_s)
 	end
 
 	def facebook_id_exists?

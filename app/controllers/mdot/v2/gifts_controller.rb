@@ -43,12 +43,12 @@ class Mdot::V2::GiftsController < JsonController
         return nil if params_bad_request
         return nil if data_not_found?(gift)
 
-        if gift.notify
+        if gift.notify(false)
             Relay.send_push_thank_you gift
             success(gift.token)
         else
             if !gift.notifiable?
-                fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+                fail "Gift #{gift.token} at #{gift.provider_name} is #{gift.status}"
             else
                 fail gift
             end
@@ -64,7 +64,6 @@ class Mdot::V2::GiftsController < JsonController
 
         if gift.notifiable?
             gift.notify
-            Relay.send_push_thank_you gift
             success({ token:  gift.token, notified_at: gift.notified_at, new_token_at: gift.new_token_at })
         else
             fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"

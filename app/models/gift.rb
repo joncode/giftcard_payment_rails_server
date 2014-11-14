@@ -54,24 +54,29 @@ class Gift < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
-    def notify
+    def notify(redeem=true)
         if notifiable?
             if (self.new_token_at.nil? || self.new_token_at < reset_time)
                 current_time   = Time.now.utc
-                include_notify = if self.notified_at.nil?
-                    #self.notified_at = current_time
-                    ", notified_at = '#{current_time}' "
-                else
-                    ""
-                end
                 #self.new_token_at = current_time
-                include_status = if self.status == 'open'
-                    #self.status = 'notified'
-                    ", status = 'notified' "
+                if redeem
+                    include_status = if self.status == 'open'
+                        #self.status = 'notified'
+                        " status = 'notified' ,"
+                    else
+                        ""
+                    end
+                    include_notify = if self.notified_at.nil?
+                        #self.notified_at = current_time
+                        " notified_at = '#{current_time}' ,"
+                    else
+                        ""
+                    end
+                    sql = "UPDATE gifts SET #{include_status} #{include_notify} token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 else
-                    ""
+                    sql = "UPDATE gifts SET status = 'notified' , notified_at = '#{current_time}' WHERE id = #{self.id};"
                 end
-                sql = "UPDATE gifts SET token = nextval('gift_token_seq') #{include_status} #{include_notify}, new_token_at = '#{current_time}' WHERE id = #{self.id};"
+
                 Gift.connection.execute(sql)
                 self.reload
                 true
@@ -91,7 +96,12 @@ class Gift < ActiveRecord::Base
             self.redeemed_at = Time.now.utc
             self.server      = server_code
             self.order_num   = make_order_num(self.id)
-            self.save
+            if self.save
+                #Resque.enqueue(PointsForCompletionJob, self.id)
+                true
+            else
+                false
+            end
         else
             #=> gift cannot be redeemed, its not notified
             false
@@ -315,6 +325,15 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def ary_of_shopping_cart_as_hash
+        if self.shoppingCart.kind_of?(String)
+            JSON.parse self.shoppingCart
+        else
+            sc = self.shoppingCart
+            self.shoppingCart = self.shoppingCart.to_json
+            sc
+        end
+    end
 
 ###############
 
@@ -353,16 +372,6 @@ private
 
 	def build_gift_items
         make_gift_items ary_of_shopping_cart_as_hash
-	end
-
-	def ary_of_shopping_cart_as_hash
-        if self.shoppingCart.kind_of?(String)
-            JSON.parse self.shoppingCart
-        else
-            sc = self.shoppingCart
-            self.shoppingCart = self.shoppingCart.to_json
-            sc
-        end
 	end
 
 	def make_gift_items shoppingCart_array
