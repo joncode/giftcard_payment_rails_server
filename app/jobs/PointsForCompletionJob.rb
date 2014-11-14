@@ -13,6 +13,8 @@ class PointsForCompletionJob
 			new_g = gift.child
 			return if ( new_g && new_g.giver_type != "User" )
 		end
+		return if gift.giver_id == gift.receiver_id
+
 		user       = gift.giver
 		provider   = gift.provider
 		region_id  = provider.region_id
