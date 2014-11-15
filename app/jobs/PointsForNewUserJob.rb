@@ -3,7 +3,7 @@ class PointsForNewUserJob
     @queue = :leaderboard
 
     def self.perform gift_ary_or_id
-
+        puts "Gift for PointsForNewUserJob \n #{gift_ary_or_id.inspect}"
     	if gift_ary_or_id.kind_of?(Array) || gift_ary_or_id.kind_of?(Gift::ActiveRecord_Relation)
     		gifts = gift_ary_or_id.select do |gift|
     			( gift.cat > 299 ) && ( gift.receiver_id.present? )
