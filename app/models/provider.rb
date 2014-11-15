@@ -175,11 +175,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def get_logo_web
-		if self.merchant && self.merchant.photo_l.present?
-			self.merchant.photo_l
-		else
-			nil
-		end
+		self.photo_l
 	end
 
 	def get_photo_old
