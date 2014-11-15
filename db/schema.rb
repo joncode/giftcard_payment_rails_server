@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141115205150) do
+ActiveRecord::Schema.define(version: 20141115220012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -282,6 +282,7 @@ ActiveRecord::Schema.define(version: 20141115205150) do
   end
 
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
+  add_index "gifts", ["cat"], name: "index_gifts_on_cat", using: :btree
   add_index "gifts", ["ftmeta"], name: "gifts_ftsmeta_idx", using: :gin
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree
   add_index "gifts", ["pay_stat"], name: "index_gifts_on_pay_stat", using: :btree
