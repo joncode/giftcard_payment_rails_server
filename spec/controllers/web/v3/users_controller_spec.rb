@@ -61,6 +61,16 @@ describe Web::V3::UsersController do
             user.last_name.should == "Anderson"
         end
 
+        it "should reverse the dates of european style dates" do
+            user = FactoryGirl.create(:user, last_name: "not_anderson")
+            request.headers["HTTP_X_AUTH_TOKEN"] = user.remember_token
+            request_hsh = { "first_name"=>"William", "last_name"=>"King", "birthday"=>"13/11/56", "zip"=>"89014"}
+            patch :update, format: :json, data: request_hsh
+
+            user.reload
+            user.birthday.should == "11/13/56"
+        end
+
         it "should return a full json object of the user" do
             user = FactoryGirl.create(:user, last_name: "not_anderson")
             request.headers["HTTP_X_AUTH_TOKEN"] = user.remember_token
