@@ -74,7 +74,7 @@ class Provider < ActiveRecord::Base
 		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude]
 		prov_hash["region_id"]  = self.region_id
 		prov_hash["loc_id"]     = self.id
-		prov_hash["photo"]      = self.get_photo
+		prov_hash["photo"]      = self.get_photo(default: false)
 		prov_hash["logo"]       = self.get_logo_web
 		prov_hash["loc_street"] = self.address
 		prov_hash["loc_city"]   = self.city
@@ -159,8 +159,10 @@ class Provider < ActiveRecord::Base
 
 ######   PHOTO GETTERS
 
-	def get_photo
-		return MERCHANT_DEFAULT_IMG if image.blank?
+	def get_photo default: true
+		if default && image.blank?
+			return MERCHANT_DEFAULT_IMG
+		end
 		image
 	end
 

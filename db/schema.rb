@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141029224252) do
+ActiveRecord::Schema.define(version: 20141115205150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -425,6 +425,7 @@ ActiveRecord::Schema.define(version: 20141029224252) do
     t.integer  "pos_merchant_id"
     t.integer  "region_id"
     t.integer  "r_sys",                      default: 2
+    t.string   "photo_l"
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree
@@ -562,6 +563,18 @@ ActiveRecord::Schema.define(version: 20141029224252) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_points", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "region_id",  default: 0
+    t.integer  "points",     default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_points", ["region_id", "points"], name: "index_user_points_on_region_id_and_points", using: :btree
+  add_index "user_points", ["region_id", "user_id"], name: "index_user_points_on_region_id_and_user_id", using: :btree
+  add_index "user_points", ["region_id"], name: "index_user_points_on_region_id", using: :btree
+
   create_table "user_socials", force: true do |t|
     t.integer  "user_id"
     t.string   "type_of"
@@ -582,40 +595,32 @@ ActiveRecord::Schema.define(version: 20141029224252) do
 
   create_table "users", force: true do |t|
     t.string   "email"
-    t.boolean  "admin",                              default: false
-    t.string   "password_digest",                                    null: false
-    t.string   "remember_token",                                     null: false
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
+    t.string   "password_digest",                                null: false
+    t.string   "remember_token",                                 null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.string   "address"
     t.string   "address_2"
-    t.string   "city",                    limit: 20
-    t.string   "state",                   limit: 2
-    t.string   "zip",                     limit: 16
-    t.string   "credit_number"
+    t.string   "city",                limit: 20
+    t.string   "state",               limit: 2
+    t.string   "zip",                 limit: 16
     t.string   "phone"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "facebook_id"
     t.string   "handle"
-    t.string   "server_code"
     t.string   "twitter"
-    t.boolean  "active",                             default: true
-    t.string   "persona",                            default: ""
-    t.string   "foursquare_id"
-    t.string   "facebook_access_token"
-    t.datetime "facebook_expiry"
-    t.string   "foursquare_access_token"
+    t.boolean  "active",                         default: true
+    t.string   "persona",                        default: ""
     t.string   "sex"
     t.boolean  "is_public"
-    t.boolean  "facebook_auth_checkin"
     t.string   "iphone_photo"
     t.datetime "reset_token_sent_at"
     t.string   "reset_token"
     t.date     "birthday"
     t.string   "origin"
-    t.string   "confirm",                            default: "00"
-    t.boolean  "perm_deactive",                      default: false
+    t.string   "confirm",                        default: "00"
+    t.boolean  "perm_deactive",                  default: false
     t.string   "cim_profile"
     t.tsvector "ftmeta"
   end
