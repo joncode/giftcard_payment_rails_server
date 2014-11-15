@@ -441,6 +441,64 @@ describe GiftSale do
             run_delayed_jobs
         end
 
+        context "Admin Notice for $100+ gift" do
+            it "should send internal email if cost >= $100" do
+                last_gift = FactoryGirl.create :gift
+                auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+                stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+                stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+                stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+                @gift_hsh["value"] = "100.00"
+                gift_id = Gift.maximum(:id).to_i + 1
+                giver_data = {
+                    "text" => "invoice_giver",
+                    "gift_id" => gift_id
+                }
+                receiver_data = {
+                    "text"    => 'notify_receiver',
+                    "gift_id" => gift_id
+                }
+                admin_data = {
+                    "subject" => "$100+ Gift purchase made",
+                    "text"    => "Jimmy Basic (#{@user.email}) has sent a $100 gift of 3 x Budwesier at #{@provider.name} to Sarah Receiver",
+                    "email"   => ["zo@itson.me"]
+                }
+                Resque.should_receive(:enqueue).with(PushJob, gift_id).and_return(true)
+                Resque.should_receive(:enqueue).with(MailerInternalJob, admin_data).and_return(true)
+                Resque.should_receive(:enqueue).with(MailerJob, giver_data).and_return(true)
+                Resque.should_receive(:enqueue).with(MailerJob, receiver_data).and_return(true)
+                gift_sale = GiftSale.create @gift_hsh
+                run_delayed_jobs
+            end
+            it "should NOT send internal email if cost < $100" do
+                last_gift = FactoryGirl.create :gift
+                auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
+                stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
+                stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+                stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+                @gift_hsh["value"] = "99.00"
+                gift_id = Gift.maximum(:id).to_i + 1
+                giver_data = {
+                    "text" => "invoice_giver",
+                    "gift_id" => gift_id
+                }
+                receiver_data = {
+                    "text"    => 'notify_receiver',
+                    "gift_id" => gift_id
+                }
+                admin_data = {
+                    "subject" => "$100+ Gift purchase made",
+                    "text"    => "Jimmy Basic (#{@user.email}) has sent a $99 gift of 3 x Budwesier at #{@provider.name} to Sarah Receiver",
+                    "email"   => ["zo@itson.me"]
+                }
+                Resque.should_not_receive(:enqueue).with(MailerInternalJob, admin_data).and_return(true)
+                Resque.should_receive(:enqueue).with(MailerJob, giver_data).and_return(true)
+                Resque.should_receive(:enqueue).with(MailerJob, receiver_data).and_return(true)
+                Resque.should_receive(:enqueue).with(PushJob, gift_id).and_return(true)
+                gift_sale = GiftSale.create @gift_hsh
+                run_delayed_jobs
+            end
+        end
     end
 end# == Schema Information
 #

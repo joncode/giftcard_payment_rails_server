@@ -45,6 +45,10 @@ class Campaign < ActiveRecord::Base
         self.giver_name
     end
 
+    def cname
+        self.read_attribute(:name)
+    end
+
     def get_photo
         if self.photo_path.present?
             self.photo_path

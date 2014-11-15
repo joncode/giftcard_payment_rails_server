@@ -16,7 +16,6 @@ Dir[Rails.root.join("spec/shared/*.rb")].each { |f| require f }
 Dir[Rails.root.join("spec/factories/*.rb")].each { |f| require f }
 
 
-
 alias running proc
 
 RSpec.configure do |config|

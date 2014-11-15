@@ -6,6 +6,7 @@ module GiftMessenger
             Relay.send_push_notification(self)
             puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name}"
             notify_receiver
+            notify_admin if self.giver_type == "User"
             if invoice
                 invoice_giver
             end

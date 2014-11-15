@@ -223,11 +223,12 @@ describe MailerJob do
     describe :notify_receiver_proto_join do
         it "should call mandrill with send_template" do
             menu_item = FactoryGirl.create :menu_item
-            gift = FactoryGirl.create :gift, receiver_email: @receiver.email, giver_id: @giver.id, giver_type: "User", giver_name: @giver.name, shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":#{menu_item.id},\"item_name\":\"Original Margarita \"}]"
+            giver = FactoryGirl.create :campaign, name: "Special Winter Promotion", giver_name: "Super Restaurant"
+            gift = FactoryGirl.create :gift, receiver_email: @receiver.email, giver_id: giver.id, giver_type: "Campaign", giver_name: giver.name, shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":#{menu_item.id},\"item_name\":\"Original Margarita \"}]"
             body             = text_for_notify_receiver_proto_join(gift)
             template_name    = "gift"
             message          = {
-                "subject"     => "QA - The staff at #{ gift.provider_name } sent you a gift",
+                "subject"     => "QA - The staff at Super Restaurant sent you a gift",
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],

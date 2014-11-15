@@ -96,7 +96,12 @@ class Gift < ActiveRecord::Base
             self.redeemed_at = Time.now.utc
             self.server      = server_code
             self.order_num   = make_order_num(self.id)
-            self.save
+            if self.save
+                Resque.enqueue(PointsForCompletionJob, self.id)
+                true
+            else
+                false
+            end
         else
             #=> gift cannot be redeemed, its not notified
             false
@@ -320,6 +325,15 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def ary_of_shopping_cart_as_hash
+        if self.shoppingCart.kind_of?(String)
+            JSON.parse self.shoppingCart
+        else
+            sc = self.shoppingCart
+            self.shoppingCart = self.shoppingCart.to_json
+            sc
+        end
+    end
 
 ###############
 
@@ -358,16 +372,6 @@ private
 
 	def build_gift_items
         make_gift_items ary_of_shopping_cart_as_hash
-	end
-
-	def ary_of_shopping_cart_as_hash
-        if self.shoppingCart.kind_of?(String)
-            JSON.parse self.shoppingCart
-        else
-            sc = self.shoppingCart
-            self.shoppingCart = self.shoppingCart.to_json
-            sc
-        end
 	end
 
 	def make_gift_items shoppingCart_array

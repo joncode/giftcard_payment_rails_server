@@ -17,11 +17,11 @@ class SessionsController < ApplicationController
         end
         if user && user.authenticate(password)
             sign_in user
-            if user.admin
-              redirect_to admin_path
-            else
+            # if user.admin
+            #   redirect_to admin_path
+            # else
               redirect_to merchants_path
-            end
+            # end
         else
             flash[:error] = 'Invalid email/password combination'
             redirect_to "/signin"

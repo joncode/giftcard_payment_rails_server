@@ -71,6 +71,16 @@ describe Web::V3::UsersController do
             user.birthday.should == "11/13/56"
         end
 
+        it "should return an error when parsing a bad date" do
+            user = FactoryGirl.create(:user, last_name: "not_anderson")
+            request.headers["HTTP_X_AUTH_TOKEN"] = user.remember_token
+            request_hsh = { "first_name"=>"William", "last_name"=>"King", "birthday"=>"131156", "zip"=>"89014"}
+            patch :update, format: :json, data: request_hsh
+
+            rrc(422)
+            json["status"].should == 0
+        end
+
         it "should return a full json object of the user" do
             user = FactoryGirl.create(:user, last_name: "not_anderson")
             request.headers["HTTP_X_AUTH_TOKEN"] = user.remember_token
