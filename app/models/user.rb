@@ -150,7 +150,11 @@ class User < ActiveRecord::Base
 	def birthday= birthday
 		if birthday.kind_of? String
 			if !birthday.empty?
-				bday = Date.strptime(birthday, "%m/%d/%Y")
+				begin
+					bday = Date.strptime(birthday, "%m/%d/%Y")
+				rescue
+					bday = ""
+				end
 			else
 				bday = birthday
 			end

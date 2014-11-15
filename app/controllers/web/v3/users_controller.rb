@@ -78,7 +78,11 @@ private
         bday = birthday
         if birthday.kind_of? String
             if !birthday.empty?
-                bday = Date.strptime(birthday, "%d/%m/%Y")
+                begin
+                    bday = Date.strptime(birthday, "%d/%m/%Y")
+                rescue
+                    ""
+                end
             end
         end
         if bday.kind_of? Date
