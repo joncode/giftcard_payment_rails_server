@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141111022409) do
+ActiveRecord::Schema.define(version: 20141116182833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,7 +281,9 @@ ActiveRecord::Schema.define(version: 20141111022409) do
     t.integer  "token"
   end
 
+  add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
   add_index "gifts", ["active"], name: "index_gifts_on_active", using: :btree
+  add_index "gifts", ["cat"], name: "index_gifts_on_cat", using: :btree
   add_index "gifts", ["ftmeta"], name: "gifts_ftsmeta_idx", using: :gin
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree
   add_index "gifts", ["pay_stat"], name: "index_gifts_on_pay_stat", using: :btree
@@ -425,6 +427,7 @@ ActiveRecord::Schema.define(version: 20141111022409) do
     t.integer  "pos_merchant_id"
     t.integer  "region_id"
     t.integer  "r_sys",                      default: 2
+    t.string   "photo_l"
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree

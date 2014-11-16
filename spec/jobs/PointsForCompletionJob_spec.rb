@@ -9,6 +9,18 @@ describe PointsForCompletionJob do
             @provider = FactoryGirl.create(:provider, region_id: 3)
         end
 
+        it "should not give points when you gift yourself" do
+            user = FactoryGirl.create(:user)
+            gift = FactoryGirl.create :gift, giver_type: "User",  receiver_name: user.name, receiver_id: user.id, giver_id: user.id, payable_type: "Sale", status: "redeemed", provider_id: @provider.id, value: "1", redeemed_at: Time.now + 1.week, cat: 300
+            gift.notify
+            gift.redeem_gift
+            gift.update(redeemed_at: (Time.now + 1.month))
+            resp = PointsForCompletionJob.perform(gift.id)
+            resp.should be_nil
+            ups = UserPoint.where(user_id: user.id)
+            ups.count.should == 0
+        end
+
         it "should not give points for a boomerang" do
             # make a regift sent by boomerang
             # put the  gift thru point system
