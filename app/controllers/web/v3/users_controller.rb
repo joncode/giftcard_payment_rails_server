@@ -23,9 +23,9 @@ class Web::V3::UsersController < MetalCorsController
         updates.delete("photo")
         error_hsh = {}
 
-        if updates["birthday"].present?
-            updates["birthday"] = switch_month_and_days(updates["birthday"])
-        end
+        # if updates["birthday"].present?
+        #     updates["birthday"] = switch_month_and_days(updates["birthday"])
+        # end
 
         if updates["social"].present?
             updaters = updates["social"].select {|u| u["_id"] }
