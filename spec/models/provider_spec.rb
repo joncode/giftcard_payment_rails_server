@@ -32,7 +32,7 @@ describe Provider do
         p_hsh["longitude"].should  == provider.longitude
         p_hsh["region_id"].should  == provider.region_id
         p_hsh["loc_id"].should     == provider.id
-        p_hsh["photo"].should      == provider.get_photo
+        p_hsh["photo"].should      == provider.get_photo(default: false)
         p_hsh["logo"].should       == provider.get_logo
         p_hsh["loc_street"].should == provider.address
         p_hsh["loc_city"].should   == provider.city

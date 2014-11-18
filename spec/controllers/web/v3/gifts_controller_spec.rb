@@ -143,7 +143,7 @@ describe Web::V3::GiftsController do
             @gift.status.should == 'open'
             patch :read, format: :json, id: @gift.id
             @gift.reload.status.should == 'notified'
-            @gift.token.should be_nil
+            @gift.token.should_not be_nil
         end
 
         it "should send a 'your gift is opened' push to the gift giver" do
