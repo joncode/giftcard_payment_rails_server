@@ -1,4 +1,5 @@
-class MtUser < ActiveRecord::Base
+class MtUser < Mtmodel
+	self.table_name = "users"
 
 	has_one  :setting, foreign_key: :user_id
   	has_many :pn_tokens

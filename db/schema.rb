@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141118234645) do
+ActiveRecord::Schema.define(version: 20141119224355) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,22 @@ ActiveRecord::Schema.define(version: 20141118234645) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "attachinary_files", force: true do |t|
+    t.integer  "attachinariable_id"
+    t.string   "attachinariable_type"
+    t.string   "scope"
+    t.string   "public_id"
+    t.string   "version"
+    t.integer  "width"
+    t.integer  "height"
+    t.string   "format"
+    t.string   "resource_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "attachinary_files", ["attachinariable_type", "attachinariable_id", "scope"], name: "by_scoped_parent", using: :btree
 
   create_table "banks", force: true do |t|
     t.integer  "merchant_id"
@@ -213,6 +229,13 @@ ActiveRecord::Schema.define(version: 20141118234645) do
     t.string   "dash_week_old"
     t.string   "dash_month_old"
     t.string   "dash_total"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "data_transfers", force: true do |t|
+    t.json     "model_names"
+    t.json     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -815,6 +838,8 @@ ActiveRecord::Schema.define(version: 20141118234645) do
   end
 
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["ftmeta"], name: "users_ftsmeta_idx", using: :gin
+  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end
