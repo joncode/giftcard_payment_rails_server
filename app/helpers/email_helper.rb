@@ -187,6 +187,7 @@ module EmailHelper
 		button_text   = "Claim My Gift"
 		provider_name = gift.provider_name
 		giver_name    = gift.giver_name ? gift.giver_name : provider_name
+		giver_name_simple = giver_name.sub(" Staff", "")
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
 		message       = gift.message
 		details       = gift.detail
@@ -212,7 +213,7 @@ module EmailHelper
 					<tr>
 						<td style='width:15%;'></td>
 						<td style='width:70%; color:#3F3F3F;'>
-							<div style='color:#8E8D8D'>The staff at #{giver_name}</div>
+							<div style='color:#8E8D8D'>The staff at #{giver_name_simple}</div>
 							<div>#{message}</div><br>
 						</td>
 						<td style='width:15%;'></td>

@@ -74,7 +74,7 @@ class Gift < ActiveRecord::Base
                     end
                     sql = "UPDATE gifts SET #{include_status} #{include_notify} token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 else
-                    sql = "UPDATE gifts SET status = 'notified' , notified_at = '#{current_time}' WHERE id = #{self.id};"
+                    sql = "UPDATE gifts SET status = 'notified', token = nextval('gift_token_seq'), notified_at = '#{current_time}' WHERE id = #{self.id};"
                 end
 
                 Gift.connection.execute(sql)

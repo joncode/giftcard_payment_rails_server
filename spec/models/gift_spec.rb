@@ -150,7 +150,7 @@ describe Gift do
     		gift.status.should == 'notified'
     		notif_time = gift.notified_at
     		(notif_time > (Time.now - 1.hour)).should be_true
-    		gift.token.should be_nil
+    		gift.token.should_not be_nil
     		gift.new_token_at.should be_nil
     	end
 

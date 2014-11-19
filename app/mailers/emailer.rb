@@ -80,7 +80,8 @@ module Emailer
 			puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
 			return nil
 		end
-		subject  = "The staff at #{giver_name} sent you a gift"
+		giver_name_simple = giver_name.sub(" Staff", "")
+		subject  = "The staff at #{giver_name_simple} sent you a gift"
 		body     = text_for_notify_receiver_proto_join(gift)
 
 		template_name   = "gift"
