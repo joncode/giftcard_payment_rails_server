@@ -1,4 +1,4 @@
-class GiftPromoMock < Mtmodel
+class GiftPromoMock < ActiveRecord::Base
 
 	has_many :gift_promo_socials
 

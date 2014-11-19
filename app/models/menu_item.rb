@@ -1,3 +1,2 @@
-class MenuItem < Mtmodel
-
+class MenuItem < ActiveRecord::Base
 end

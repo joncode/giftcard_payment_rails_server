@@ -1,4 +1,4 @@
-class GiftPromoSocial < Mtmodel
+class GiftPromoSocial < ActiveRecord::Base
 
 	belongs_to :gift_promo_mock
 

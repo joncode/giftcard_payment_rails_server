@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141116182833) do
+ActiveRecord::Schema.define(version: 20141118234645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,26 @@ ActiveRecord::Schema.define(version: 20141116182833) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "banks", force: true do |t|
+    t.integer  "merchant_id"
+    t.string   "aba"
+    t.string   "account_number"
+    t.string   "name"
+    t.string   "address"
+    t.string   "city",                  limit: 50
+    t.string   "state",                 limit: 2
+    t.string   "zip",                   limit: 16
+    t.string   "account_name"
+    t.integer  "acct_type"
+    t.string   "country",                          default: "USA"
+    t.string   "public_account_number"
+    t.string   "public_aba"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "banks", ["merchant_id"], name: "index_banks_on_merchant_id", using: :btree
 
   create_table "boomerangs", force: true do |t|
   end
@@ -242,6 +262,25 @@ ActiveRecord::Schema.define(version: 20141116182833) do
 
   add_index "gift_items", ["gift_id"], name: "index_gift_items_on_gift_id", using: :btree
 
+  create_table "gift_promo_mocks", force: true do |t|
+    t.string   "type_of"
+    t.string   "receiver_name"
+    t.datetime "expires_at"
+    t.text     "message"
+    t.text     "shoppingCart"
+    t.text     "detail"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "gift_promo_socials", force: true do |t|
+    t.integer  "gift_promo_mock_id"
+    t.string   "network"
+    t.string   "network_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "gifts", force: true do |t|
     t.string   "giver_name"
     t.string   "receiver_name"
@@ -294,6 +333,24 @@ ActiveRecord::Schema.define(version: 20141116182833) do
   add_index "gifts", ["receiver_id"], name: "index_gifts_on_receiver_id", using: :btree
   add_index "gifts", ["status"], name: "index_gifts_on_status", using: :btree
 
+  create_table "invites", force: true do |t|
+    t.string   "invite_tkn"
+    t.string   "merchant_tkn"
+    t.string   "email"
+    t.integer  "user_id"
+    t.integer  "merchant_id"
+    t.boolean  "active",       default: true
+    t.string   "code"
+    t.integer  "rank",         default: 0
+    t.boolean  "general",      default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "invites", ["invite_tkn"], name: "index_invites_on_invite_tkn", using: :btree
+  add_index "invites", ["merchant_id"], name: "index_invites_on_merchant_id", using: :btree
+  add_index "invites", ["user_id"], name: "index_invites_on_user_id", using: :btree
+
   create_table "landing_pages", force: true do |t|
     t.integer  "campaign_id"
     t.integer  "affiliate_id"
@@ -309,6 +366,25 @@ ActiveRecord::Schema.define(version: 20141116182833) do
 
   add_index "landing_pages", ["link"], name: "index_landing_pages_on_link", using: :btree
 
+  create_table "menu_items", force: true do |t|
+    t.string   "name"
+    t.integer  "section_id"
+    t.integer  "menu_id"
+    t.text     "detail"
+    t.string   "price"
+    t.string   "photo"
+    t.integer  "position"
+    t.boolean  "active",      default: true
+    t.string   "price_promo"
+    t.boolean  "standard",    default: false
+    t.boolean  "promo",       default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "menu_items", ["menu_id"], name: "index_menu_items_on_menu_id", using: :btree
+  add_index "menu_items", ["section_id"], name: "index_menu_items_on_section_id", using: :btree
+
   create_table "menu_strings", force: true do |t|
     t.integer  "version"
     t.integer  "provider_id",   null: false
@@ -321,6 +397,93 @@ ActiveRecord::Schema.define(version: 20141116182833) do
   end
 
   add_index "menu_strings", ["provider_id"], name: "index_menu_strings_on_provider_id", using: :btree
+
+  create_table "menus", force: true do |t|
+    t.string   "merchant_token"
+    t.text     "json"
+    t.integer  "merchant_id"
+    t.integer  "type_of"
+    t.boolean  "edited"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "menus", ["merchant_id"], name: "index_menus_on_merchant_id", using: :btree
+  add_index "menus", ["merchant_token"], name: "index_menus_on_merchant_token", using: :btree
+
+  create_table "merchants", force: true do |t|
+    t.string   "name"
+    t.string   "token"
+    t.string   "zinger"
+    t.text     "description"
+    t.boolean  "active",                                              default: true
+    t.string   "address"
+    t.string   "address_2"
+    t.string   "city",             limit: 50
+    t.string   "state",            limit: 2
+    t.string   "zip",              limit: 16
+    t.string   "phone",            limit: 20
+    t.string   "email"
+    t.string   "website"
+    t.string   "facebook"
+    t.string   "twitter"
+    t.string   "photo"
+    t.string   "photo_l"
+    t.decimal  "rate",                        precision: 8, scale: 3
+    t.decimal  "sales_tax",                   precision: 8, scale: 3
+    t.string   "setup",                                               default: "000010"
+    t.string   "image"
+    t.boolean  "pos",                                                 default: false
+    t.boolean  "tou",                                                 default: false
+    t.integer  "tz",                                                  default: 0
+    t.boolean  "live",                                                default: false
+    t.boolean  "paused",                                              default: true
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "ein"
+    t.integer  "region_id"
+    t.integer  "pos_merchant_id"
+    t.integer  "account_admin_id"
+    t.tsvector "ftmeta"
+    t.integer  "r_sys",                                               default: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
+  add_index "merchants", ["token", "active"], name: "index_merchants_on_token_and_active", using: :btree
+  add_index "merchants", ["token"], name: "index_merchants_on_token", using: :btree
+
+  create_table "mt_users", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "phone"
+    t.string   "sex"
+    t.date     "birthday"
+    t.string   "password_digest"
+    t.string   "remember_token",                                 null: false
+    t.boolean  "admin",                          default: false
+    t.integer  "confirm",                        default: 0
+    t.datetime "reset_token_sent_at"
+    t.string   "reset_token"
+    t.boolean  "active",                         default: true
+    t.integer  "db_user_id"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state",               limit: 2
+    t.string   "zip",                 limit: 16
+    t.string   "facebook_id"
+    t.string   "twitter"
+    t.string   "photo"
+    t.string   "min_photo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mt_users", ["db_user_id"], name: "index_mt_users_on_db_user_id", using: :btree
+  add_index "mt_users", ["email"], name: "index_mt_users_on_email", using: :btree
+  add_index "mt_users", ["remember_token"], name: "index_mt_users_on_remember_token", using: :btree
 
   create_table "oauths", force: true do |t|
     t.integer  "gift_id"
@@ -362,6 +525,20 @@ ActiveRecord::Schema.define(version: 20141116182833) do
 
   add_index "pn_tokens", ["platform", "pn_token"], name: "index_pn_tokens_on_platform_and_pn_token", using: :btree
   add_index "pn_tokens", ["user_id"], name: "index_pn_tokens_on_user_id", using: :btree
+
+  create_table "progresses", force: true do |t|
+    t.integer  "merchant_id"
+    t.integer  "profile",     default: 1
+    t.integer  "bank",        default: 0
+    t.integer  "photo",       default: 0
+    t.integer  "menu",        default: 0
+    t.integer  "staff",       default: 0
+    t.integer  "approval",    default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "progresses", ["merchant_id"], name: "index_progresses_on_merchant_id", using: :btree
 
   create_table "proto_joins", force: true do |t|
     t.integer  "proto_id"
@@ -497,6 +674,16 @@ ActiveRecord::Schema.define(version: 20141116182833) do
   end
 
   add_index "sales", ["provider_id"], name: "index_sales_on_provider_id", using: :btree
+
+  create_table "sections", force: true do |t|
+    t.string   "name"
+    t.integer  "position"
+    t.integer  "menu_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sections", ["menu_id"], name: "index_sections_on_menu_id", using: :btree
 
   create_table "session_tokens", force: true do |t|
     t.string   "token"
