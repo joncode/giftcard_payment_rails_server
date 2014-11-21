@@ -25,7 +25,7 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def badge
-        if params[:pn_token]
+        if params[:pn_token] && params[:pn_token].length > 22
             Resque.enqueue(CreatePnTokenJob, @current_user.id, params[:pn_token], params[:platform])
         end
         gift_array  = Gift.get_gifts(@current_user)
