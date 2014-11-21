@@ -25,6 +25,7 @@ gem 'urbanairship'
 gem 'roo'
 gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
 
+gem 'attachinary'
 
 
 group :development do

@@ -1,3 +1,3 @@
 class MenuItem < Mtmodel
-
+	
 end
