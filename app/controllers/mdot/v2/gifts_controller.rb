@@ -38,7 +38,7 @@ class Mdot::V2::GiftsController < JsonController
         respond
     end
 
-    def open
+    def open  # redeption v1 && v2
         gift   = @current_user.received.where(id: params[:id]).first
         return nil if params_bad_request
         return nil if data_not_found?(gift)
@@ -57,7 +57,9 @@ class Mdot::V2::GiftsController < JsonController
         respond(status)
     end
 
-    def notify
+    def notify  # redemption v2 ONLY
+
+
         gift   = @current_user.received.where(id: params[:id]).first
         return nil if params_bad_request
         return nil if data_not_found?(gift)
@@ -72,7 +74,7 @@ class Mdot::V2::GiftsController < JsonController
         respond(status)
     end
 
-    def redeem
+    def redeem  # redemption v1 ONLY
         return nil if params_bad_request(["server"])
         request_server = redeem_params
         gift           = @current_user.received.where(id: params[:id]).first

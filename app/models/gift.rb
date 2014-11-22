@@ -73,6 +73,8 @@ class Gift < ActiveRecord::Base
                         ""
                     end
                     sql = "UPDATE gifts SET #{include_status} #{include_notify} token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #{self.id};"
+                    # RESQUE -> POST GIFT TO MERCHANTS FIREBASE
+                        # SAVE THGE GIFTS BY MERCHANT ID & RESET_TIME OR CURRENT DATE
                 else
                     sql = "UPDATE gifts SET status = 'notified', token = nextval('gift_token_seq'), notified_at = '#{current_time}' WHERE id = #{self.id};"
                 end
