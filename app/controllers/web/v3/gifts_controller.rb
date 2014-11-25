@@ -10,8 +10,7 @@ class Web::V3::GiftsController < MetalCorsController
         else
             user = @current_user
         end
-        gifts = user.sent + user.received
-        gifts.uniq!
+        gifts = Gift.get_user_activity(user)
         success(gifts.serialize_objs(:web))
         respond
     end
