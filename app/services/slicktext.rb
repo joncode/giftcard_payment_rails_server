@@ -11,7 +11,7 @@ class Slicktext
         options = {}
         options.merge!({:basic_auth => KEYS})
         resp = self.get("/v1/textwords?limit=#{1000}", options)
-        puts "... gotten slicktext textwords - #{resp["textwords"]} ..."
+        puts "... gotten slicktext textwords - #{resp["textwords"][0]} ..."
         resp["textwords"]
     end
 

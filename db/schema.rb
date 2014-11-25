@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141119224355) do
+ActiveRecord::Schema.define(version: 20141125041417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -179,6 +179,7 @@ ActiveRecord::Schema.define(version: 20141119224355) do
   end
 
   add_index "campaign_items", ["campaign_id"], name: "index_campaign_items_on_campaign_id", using: :btree
+  add_index "campaign_items", ["textword"], name: "index_campaign_items_on_textword", using: :btree
 
   create_table "campaigns", force: true do |t|
     t.string   "type_of"
@@ -758,6 +759,7 @@ ActiveRecord::Schema.define(version: 20141119224355) do
 
   add_index "sms_contacts", ["campaign_id", "textword", "gift_id"], name: "index_sms_contacts_on_campaign_id_and_textword_and_gift_id", using: :btree
   add_index "sms_contacts", ["gift_id"], name: "index_sms_contacts_on_gift_id", using: :btree
+  add_index "sms_contacts", ["textword", "phone", "campaign_id"], name: "index_sms_contacts_on_textword_and_phone_and_campaign_id", using: :btree
 
   create_table "socials", force: true do |t|
     t.string   "network_id"
@@ -838,8 +840,6 @@ ActiveRecord::Schema.define(version: 20141119224355) do
   end
 
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["ftmeta"], name: "users_ftsmeta_idx", using: :gin
-  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end
