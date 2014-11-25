@@ -53,7 +53,7 @@ module GiftScopes
     end
 
     def get_user_activity user
-        where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at DESC")
+        includes(:provider).where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at DESC")
     end
 
     def transactions user
