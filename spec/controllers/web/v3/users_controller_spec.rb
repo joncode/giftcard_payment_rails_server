@@ -175,4 +175,102 @@ describe Web::V3::UsersController do
             us.reload.identifier.should == "roger@rogerson.com"
         end
     end
+
+    describe "reset_passord" do
+
+        before(:each) do
+            User.delete_all
+            request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
+            @receiver = FactoryGirl.create(:receiver, email: "findme@gmail.com")
+            ResqueSpec.reset!
+        end
+
+        it_should_behave_like("client-token authenticated", :patch, :reset_password)
+
+        it "should accept Android Token" do
+            request.env["HTTP_TKN"] = ANDROID_TOKEN
+            patch :reset_password, format: :json, data: @receiver.email
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+        end
+
+        it "should send success response for screen for primary email" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            patch :reset_password, format: :json, data: @receiver.email
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+        end
+
+        it "should update the user reset password token and expiration for primary email" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            patch :reset_password, format: :json, data: @receiver.email
+            rrc(200)
+            @receiver.reload
+            @receiver.reset_token.should_not be_nil
+            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
+        end
+
+        it "should send success response for screen for secondary email" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            @receiver.email = "new_email@email.com"
+            @receiver.save
+            patch :reset_password, format: :json, data: "findme@gmail.com"
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+        end
+
+        it "should update the user reset password token and expiration for secondary email" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            @receiver.email = "new_email@email.com"
+            @receiver.save
+            patch :reset_password, format: :json, data: "findme@gmail.com"
+            rrc(200)
+            @receiver.reload
+            @receiver.reset_token.should_not be_nil
+            @receiver.reset_token_sent_at.utc.hour.should == Time.now.utc.hour
+        end
+
+        it "should return error message if email doesn not exist" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            patch :reset_password, format: :json, data: "non-existant@yahoo.com"
+            rrc(404)
+            json["status"].should  == 0
+            json["data"].should == "#{PAGE_NAME} does not have record of that email"
+        end
+
+        it "should only accept email string" do
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            patch :reset_password, format: :json, data: ["non-existant@yahoo.com"]
+            rrc(400)
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            patch :reset_password, format: :json, data: { "email" => "non-existant@yahoo.com"}
+            rrc(400)
+        end
+
+        it "should send the reset password email" do
+            stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            request.env["HTTP_TKN"] = GENERAL_TOKEN
+            patch :reset_password, format: :json, data: @receiver.email
+            rrc(200)
+            json["status"].should  == 1
+            json["data"].should == "Email is Sent , check your inbox"
+
+            run_delayed_jobs
+            email_link = "#{PUBLIC_URL}/account/resetpassword/#{@receiver.reset_token}"
+            WebMock.should have_requested(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").with { |req|
+                puts req.body;
+                b = JSON.parse(req.body);
+                if b["template_name"] == "iom-reset-password"
+                    link = b["message"]["merge_vars"].first["vars"].first["content"];
+                    link.match(/#{email_link}/)
+                else
+                    true
+                end
+
+            }.once
+        end
+    end
 end

@@ -1,4 +1,4 @@
-  SERVICE_NAME = "ItsOnMe"
+SERVICE_NAME = "ItsOnMe"
 
 
 if Rails.env.production?
@@ -43,8 +43,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.3.5.3"
-VERSION_UPDATED = "11/19/14"
+VERSION_NUMBER  = "1.3.5.4"
+VERSION_UPDATED = "12/10/14"
 
 
 if Rails.env.test?

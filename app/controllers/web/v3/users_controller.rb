@@ -1,7 +1,7 @@
 class Web::V3::UsersController < MetalCorsController
-
-    before_action :authenticate_general, only: [:create]
-    before_action :authenticate_user , except: [:create]
+    include Email
+    before_action :authenticate_general, only: [:create, :reset_password]
+    before_action :authenticate_user , except: [:create, :reset_password]
 
     def create
 		user = User.new(create_user_params)
@@ -67,6 +67,21 @@ class Web::V3::UsersController < MetalCorsController
         else
             error_hsh.merge!(user.errors.messages)
             fail_web    fail_web_payload("not_created_user", error_hsh)
+        end
+
+        respond(status)
+    end
+
+    def reset_password
+        return nil if data_not_string?
+        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).references(:users).first
+            user = user_social.user
+            user.update_reset_token
+            send_reset_password_email(user)
+            success "Email is Sent , check your inbox"
+        else
+            fail    "#{PAGE_NAME} does not have record of that email"
+            status = :not_found
         end
 
         respond(status)

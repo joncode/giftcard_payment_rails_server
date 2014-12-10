@@ -18,6 +18,11 @@ class MetalController < ActionController::Base
         head 400
     end
 
+    def data_not_string?(data=nil)
+        data ||= params["data"]
+        head :bad_request unless data.kind_of?(String)
+    end
+
     def respond(status=nil)
         response_code = status || :ok
         respond_to do |format|

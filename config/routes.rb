@@ -2,7 +2,7 @@ Drinkboard::Application.routes.draw do
 
   match '/facebook/checkin', to: "invite#facebook_checkin", via: :post
 
-# if !Rails.env.production?
+if !Rails.env.production?
 #################          Client V3 routes for API                  /////////////////////////////
 
   namespace :client, defaults: { format: 'json' } do
@@ -32,7 +32,7 @@ Drinkboard::Application.routes.draw do
       resources :cards, only: [:index, :create]
     end
   end
-# end
+end
 
 #################          POS V1 routes for API                  /////////////////////////////
 
@@ -153,37 +153,36 @@ Drinkboard::Application.routes.draw do
       resources :merchants, only: [:show]
     end
 
-    # if !Rails.env.production?
-      namespace :v3 do
-        resources :cards, only: [:create, :index, :destroy]
+    namespace :v3 do
+      resources :cards, only: [:create, :index, :destroy]
 
-        resources :promos, only: [:create, :show]
+      resources :promos, only: [:create, :show]
 
-        resources :gifts, only: [:index, :create] do
-          member do
-            patch :read
-            patch :notify
-            patch :redeem
-          end
-        end
-
-        resources :merchants, only: [:index] do
-          member { get :menu }
-        end
-
-        resources :regions,   only: [:index] do
-          member { get :merchants }
-        end
-
-        resources :sessions,  only: [:create]
-
-        resources :users, only: [:create] do
-          collection do
-            patch :update
-          end
+      resources :gifts, only: [:index, :create] do
+        member do
+          patch :read
+          patch :notify
+          patch :redeem
         end
       end
-    # end
+
+      resources :merchants, only: [:index] do
+        member { get :menu }
+      end
+
+      resources :regions,   only: [:index] do
+        member { get :merchants }
+      end
+
+      resources :sessions,  only: [:create]
+
+      resources :users, only: [:create] do
+        collection do
+          patch :update
+          patch :reset_password
+        end
+      end
+    end
 
   end
 
