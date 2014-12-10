@@ -20,18 +20,7 @@ class Admt::V2::GiftsController < JsonController
     def add_receiver
         gift = Gift.find(params[:id])
         user = User.find(params[:data])
-
-        if gift.receiver_id
-                # change the receiver obj
-            gift.remove_receiver
-        else
-                # merge a user with the gift receiver data and add receiver obj
-            rec_hsh  = gift.receiver_info_as_hsh
-            user_hsh = PeopleFinder.sanitize rec_hsh
-            user.new_socials(user_hsh)
-            user.save
-        end
-
+        gift.remove_receiver
         gift.add_receiver(user)
         if gift.save
             success gift.admt_serialize
