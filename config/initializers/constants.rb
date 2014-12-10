@@ -68,14 +68,15 @@ Time::DATE_FORMATS[:only_date]       = "%b %e"
 GIFT_CAT = { 100 => "Admin", 101 => "AdmRegift", 107 => "AdmBoom", 150 => "AdmCamp", 151 => "AdmCampRegift", 157 => "AdmCampBoom", 200 => "Merchant", 201 => "MerchantRegift", 207 => "MerchantBoom", 250 => "MerchCamp", 251 => "MerchCampRegift", 257 => "MerchCampBoom", 300 => "Standard", 301 => "StndRegift", 307 => "StndBoom" }
 
 
-#CITY_LIST =  [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1378747548/las_vegas_xzqlvz.jpg"}, {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1378747548/san_diego_oj3a5w.jpg"}, {"name"=>"Philadelphia", "state"=>"Pennsylvania", "city_id"=>6, "photo"=>"d|v1399501605/Philadelphia_skyline_sunset_jcwnwe.jpg"}, {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1378747548/san_francisco_hv2bsc.jpg"}, {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1393292178/new_york_iriwla.jpg"}, {"name"=>"Santa Barbara", "state"=>"California", "city_id"=>5, "photo"=>"d|v1393292171/santa_barbara_lqln3n.jpg"}]
-
-# if Rails.env.production?
-#     CITY_LIST =  [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1378747548/las_vegas_xzqlvz.jpg"}, {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1378747548/san_diego_oj3a5w.jpg"}, {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1378747548/san_francisco_hv2bsc.jpg"}, {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1393292178/new_york_iriwla.jpg"}, {"name"=>"Santa Barbara", "state"=>"California", "city_id"=>5, "photo"=>"d|v1393292171/santa_barbara_lqln3n.jpg"}]
-# else
-CITY_LIST =  [{"name"=>"COCHON 555 US TOUR", "state"=>"Nationwide", "city_id"=>10, "photo"=>"d|v1417972995/cochon_hr8ixy.png"},{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1378747548/las_vegas_xzqlvz.jpg"}, {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1378747548/san_diego_oj3a5w.jpg"}, {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1378747548/san_francisco_hv2bsc.jpg"}, {"name"=>"Santa Barbara", "state"=>"California", "city_id"=>5, "photo"=>"d|v1393292171/santa_barbara_lqln3n.jpg"}, {"name"=>"Long Beach", "state"=>"California", "city_id"=>7, "photo"=>"d|v1416615199/LongBeach_jtrb0s.jpg"}, {"name"=>"Newport Beach", "state"=>"California", "city_id"=>8, "photo"=>"d|v1416615229/newportbeach_bwwmrq.jpg"}, {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1393292178/new_york_iriwla.jpg"}]
-# end
-
+CITY_LIST =  [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1378747548/las_vegas_xzqlvz.jpg"},
+ {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1378747548/san_diego_oj3a5w.jpg"},
+ {"name"=>"COCHON 555 US TOUR", "state"=>"Nationwide", "city_id"=>10, "photo"=>"d|v1417972995/cochon_hr8ixy.png"},
+ {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1378747548/san_francisco_hv2bsc.jpg"},
+ {"name"=>"Santa Barbara", "state"=>"California", "city_id"=>5, "photo"=>"d|v1393292171/santa_barbara_lqln3n.jpg"},
+  {"name"=>"Long Beach", "state"=>"California", "city_id"=>7, "photo"=>"d|v1416615199/LongBeach_jtrb0s.jpg"},
+  {"name"=>"Newport Beach", "state"=>"California", "city_id"=>8, "photo"=>"d|v1416615229/newportbeach_bwwmrq.jpg"},
+  {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1393292178/new_york_iriwla.jpg"},
+  {"name"=>"Elkhart Lake", "state"=>"Wisconsin", "city_id"=>9, "photo"=>"d|v1418237673/elkheart_tplhzq.jpg"}]
 
 
 
