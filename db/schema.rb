@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141125041417) do
+ActiveRecord::Schema.define(version: 20141211224659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "affiliates", force: true do |t|
     t.string   "first_name"
@@ -217,6 +218,21 @@ ActiveRecord::Schema.define(version: 20141125041417) do
   end
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
+
+  create_table "contacts", force: true do |t|
+    t.integer  "brand_id"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.string   "name"
+    t.string   "email"
+    t.string   "phone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contacts", ["brand_id"], name: "index_contacts_on_brand_id", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
@@ -478,6 +494,24 @@ ActiveRecord::Schema.define(version: 20141125041417) do
   add_index "merchants", ["token", "active"], name: "index_merchants_on_token_and_active", using: :btree
   add_index "merchants", ["token"], name: "index_merchants_on_token", using: :btree
 
+  create_table "mock_payables", force: true do |t|
+    t.decimal  "amount"
+    t.integer  "status",            default: 0
+    t.integer  "merchant_id"
+    t.integer  "provider_id"
+    t.string   "name"
+    t.string   "address"
+    t.integer  "user_id"
+    t.string   "last_payment"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.text     "json_ary_gift_ids"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mock_payables", ["merchant_id"], name: "index_mock_payables_on_merchant_id", using: :btree
+
   create_table "mt_users", force: true do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -522,6 +556,21 @@ ActiveRecord::Schema.define(version: 20141125041417) do
     t.integer  "user_id"
   end
 
+  create_table "operations", force: true do |t|
+    t.integer  "obj_id"
+    t.integer  "user_id"
+    t.integer  "status"
+    t.text     "note"
+    t.text     "response"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "type_of"
+    t.string   "obj_type"
+  end
+
+  add_index "operations", ["obj_id"], name: "index_operations_on_obj_id", using: :btree
+  add_index "operations", ["user_id"], name: "index_operations_on_user_id", using: :btree
+
   create_table "orders", force: true do |t|
     t.integer  "redeem_id"
     t.integer  "gift_id"
@@ -538,6 +587,28 @@ ActiveRecord::Schema.define(version: 20141125041417) do
   end
 
   add_index "orders", ["gift_id"], name: "index_orders_on_gift_id", using: :btree
+
+  create_table "payables", force: true do |t|
+    t.decimal  "amount"
+    t.integer  "status",              default: 0
+    t.integer  "merchant_id"
+    t.integer  "provider_id"
+    t.string   "name"
+    t.string   "address"
+    t.integer  "user_id"
+    t.string   "last_payment"
+    t.datetime "start_date"
+    t.string   "payment_date"
+    t.datetime "end_date"
+    t.text     "json_ary_gift_ids"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "confirmation_number"
+  end
+
+  add_index "payables", ["merchant_id", "payment_date"], name: "index_payables_on_merchant_id_and_payment_date", using: :btree
+  add_index "payables", ["merchant_id"], name: "index_payables_on_merchant_id", using: :btree
+  add_index "payables", ["status"], name: "index_payables_on_status", using: :btree
 
   create_table "pn_tokens", force: true do |t|
     t.integer  "user_id"
@@ -808,38 +879,34 @@ ActiveRecord::Schema.define(version: 20141125041417) do
   add_index "user_socials", ["user_id"], name: "index_user_socials_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "email"
-    t.string   "password_digest",                                null: false
-    t.string   "remember_token",                                 null: false
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.string   "address"
-    t.string   "address_2"
-    t.string   "city",                limit: 20
-    t.string   "state",               limit: 2
-    t.string   "zip",                 limit: 16
-    t.string   "phone"
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "facebook_id"
-    t.string   "handle"
-    t.string   "twitter"
-    t.boolean  "active",                         default: true
-    t.string   "persona",                        default: ""
+    t.string   "email"
+    t.string   "phone"
     t.string   "sex"
-    t.boolean  "is_public"
-    t.string   "iphone_photo"
+    t.date     "birthday"
+    t.string   "password_digest"
+    t.string   "remember_token",                                 null: false
+    t.boolean  "admin",                          default: false
+    t.string   "code"
+    t.integer  "confirm",                        default: 0
     t.datetime "reset_token_sent_at"
     t.string   "reset_token"
-    t.date     "birthday"
-    t.string   "origin"
-    t.string   "confirm",                        default: "00"
-    t.boolean  "perm_deactive",                  default: false
-    t.string   "cim_profile"
-    t.tsvector "ftmeta"
+    t.boolean  "active",                         default: true
+    t.integer  "db_user_id"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state",               limit: 2
+    t.string   "zip",                 limit: 16
+    t.string   "photo"
+    t.string   "min_photo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "last_login"
+    t.integer  "time_zone",                      default: 0
+    t.boolean  "acct",                           default: false
   end
 
-  add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
-  add_index "users", ["ftmeta"], name: "users_ftsmeta_idx", using: :gin
+  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end
