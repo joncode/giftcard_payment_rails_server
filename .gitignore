@@ -8,6 +8,7 @@
 /.bundle
 
 # Ignore all logfiles and tempfiles.
+/log/*
 /log/development.log
 /log/test.log
 log/newrelic_agent.log
