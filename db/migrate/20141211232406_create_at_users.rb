@@ -28,6 +28,6 @@ class CreateAtUsers < ActiveRecord::Migration
 	    t.boolean  "acct",                           default: false
 	  end
 
-	  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
+	  add_index "at_users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
   end
 end
