@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211224659) do
+ActiveRecord::Schema.define(version: 20141211232406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,35 @@ ActiveRecord::Schema.define(version: 20141211224659) do
     t.string   "handle"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "at_users", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "phone"
+    t.string   "sex"
+    t.date     "birthday"
+    t.string   "password_digest"
+    t.string   "remember_token",                                 null: false
+    t.boolean  "admin",                          default: false
+    t.string   "code"
+    t.integer  "confirm",                        default: 0
+    t.datetime "reset_token_sent_at"
+    t.string   "reset_token"
+    t.boolean  "active",                         default: true
+    t.integer  "db_user_id"
+    t.string   "address"
+    t.string   "city"
+    t.string   "state",               limit: 2
+    t.string   "zip",                 limit: 16
+    t.string   "photo"
+    t.string   "min_photo"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "last_login"
+    t.integer  "time_zone",                      default: 0
+    t.boolean  "acct",                           default: false
   end
 
   create_table "at_users_socials", force: true do |t|
@@ -879,34 +908,39 @@ ActiveRecord::Schema.define(version: 20141211224659) do
   add_index "user_socials", ["user_id"], name: "index_user_socials_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
     t.string   "email"
-    t.string   "phone"
-    t.string   "sex"
-    t.date     "birthday"
-    t.string   "password_digest"
+    t.string   "password_digest",                                null: false
     t.string   "remember_token",                                 null: false
-    t.boolean  "admin",                          default: false
-    t.string   "code"
-    t.integer  "confirm",                        default: 0
-    t.datetime "reset_token_sent_at"
-    t.string   "reset_token"
-    t.boolean  "active",                         default: true
-    t.integer  "db_user_id"
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.string   "address"
-    t.string   "city"
+    t.string   "address_2"
+    t.string   "city",                limit: 20
     t.string   "state",               limit: 2
     t.string   "zip",                 limit: 16
-    t.string   "photo"
-    t.string   "min_photo"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "last_login"
-    t.integer  "time_zone",                      default: 0
-    t.boolean  "acct",                           default: false
+    t.string   "phone"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "facebook_id"
+    t.string   "handle"
+    t.string   "twitter"
+    t.boolean  "active",                         default: true
+    t.string   "persona",                        default: ""
+    t.string   "sex"
+    t.boolean  "is_public"
+    t.string   "iphone_photo"
+    t.datetime "reset_token_sent_at"
+    t.string   "reset_token"
+    t.date     "birthday"
+    t.string   "origin"
+    t.string   "confirm",                        default: "00"
+    t.boolean  "perm_deactive",                  default: false
+    t.string   "cim_profile"
+    t.tsvector "ftmeta"
   end
 
+  add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
+  add_index "users", ["ftmeta"], name: "users_ftsmeta_idx", using: :gin
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end
