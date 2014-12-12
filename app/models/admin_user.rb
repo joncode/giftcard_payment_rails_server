@@ -1,5 +1,5 @@
 class AdminUser < Admtmodel
-    self.table_name = "users"
+    self.table_name = "at_users"
 
     def name
         if self.last_name.blank?
