@@ -1,4 +1,4 @@
-class AdminUser < Admtmodel
+class AdminUser < ActiveRecord::Base
     self.table_name = "at_users"
 
     def name

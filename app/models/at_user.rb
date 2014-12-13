@@ -1,5 +1,4 @@
-class AtUser < Admtmodel
-    #self.table_name = "at_users"
+class AtUser < ActiveRecord::Base
 
 	has_many :at_users_socials
 
