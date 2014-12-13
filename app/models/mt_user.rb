@@ -1,5 +1,5 @@
 class MtUser < Mtmodel
-	self.table_name = "users"
+	self.table_name = "mt_users"
 
 	has_one  :setting, foreign_key: :user_id
   	has_many :pn_tokens
