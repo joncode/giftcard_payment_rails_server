@@ -9,9 +9,11 @@ class SessionToken < ActiveRecord::Base
 		st_obj = where(token: token).includes(:user).last
 		if st_obj
 			user = st_obj.user
-			if user.active
+			if user && user.active
 				user.session_token_obj = st_obj
 				return user
+			else
+				return nil
 			end
 		end
 		return nil
