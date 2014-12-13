@@ -1,7 +1,7 @@
 class AdminGiver < Admtmodel
     include ShortenPhotoUrlHelper
 
-    self.table_name = "users"
+    self.table_name = "at_users"
 
     has_many :sent,  as: :giver,  class_name: Gift
     has_many :debts, as: :owner
