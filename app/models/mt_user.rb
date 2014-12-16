@@ -21,4 +21,11 @@ class MtUser < ActiveRecord::Base
     	end
 	end
 
+    def get_photo
+		if self.photo
+			self.photo
+		else
+            nil
+		end
+	end
 end

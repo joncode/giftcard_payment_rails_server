@@ -159,7 +159,7 @@ module GiftSerializers
         gift_hsh["new_token_at"]  = self.new_token_at
         gift_hsh["notified_at"]   = self.notified_at
         gift_hsh["giv_name"]      = self.giver_name
-        gift_hsh["giv_photo"]     = self.giver.short_image_url
+        gift_hsh["giv_photo"]     = self.giver.short_image_url if giver
         gift_hsh["giv_id"]        = self.giver_id
         gift_hsh["giv_type"]      = self.giver_type
         gift_hsh["rec_id"]        = self.receiver_id

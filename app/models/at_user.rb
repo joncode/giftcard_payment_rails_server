@@ -10,4 +10,15 @@ class AtUser < ActiveRecord::Base
 		end
 	end
 
+    def giver
+        AdminGiver.find(self.id)
+    end
+
+    def get_photo
+		if self.photo
+			self.photo
+		else
+            nil
+		end
+	end
 end
