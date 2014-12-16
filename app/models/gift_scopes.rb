@@ -53,7 +53,10 @@ module GiftScopes
     end
 
     def get_user_activity user
-        includes(:provider).where("giver_id = :user OR receiver_id = :user", :user => user.id).order("created_at DESC")
+        giver_gifts = includes(:provider).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(giver_id: user.id, giver_type: "User").order("created_at DESC")
+        rec_gifts   = includes(:provider).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(receiver_id: user.id).order("created_at DESC")
+        puts "#{rec_gifts.count}"
+        (giver_gifts + rec_gifts).uniq { |g| g.id }
     end
 
     def transactions user
