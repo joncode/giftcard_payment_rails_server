@@ -27,7 +27,7 @@ class Web::V3::SessionsController < MetalCorsController
                 payload = fail_web_payload("invalid_facebook")
             end
 			fail_web payload
-            status = :not_found
+            #status = :not_found
         end
         respond(status)
     end
