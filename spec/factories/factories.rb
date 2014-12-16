@@ -267,19 +267,6 @@ FactoryGirl.define do
         end
     end
 
-    factory :gift_promo_mock do |gift|
-        gift.shoppingCart  "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
-        gift.receiver_name "bob"
-        gift.message       "hope you enjoy our gift!"
-        gift.expires_at    Time.now + 1.month
-    end
-
-    factory :gift_promo_social do
-        gift_promo_mock_id 1
-        network            "email"
-        network_id         "bob@email.com"
-    end
-
     factory :card_token do
         nickname    "Factory Joe"
         cim_token   "52873451"

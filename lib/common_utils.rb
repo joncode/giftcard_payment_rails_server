@@ -45,7 +45,7 @@ module CommonUtils
 	end
 
 	def method_start_log_message
-		puts "\n\n\n method start log message\n"
+		#puts "\n\n\n method start log message\n"
 		x = marshal_copy(params)
 		x.delete('controller')
 		x.delete('action')

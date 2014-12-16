@@ -1,4 +1,4 @@
-class Merchant < Mtmodel
+class Merchant < ActiveRecord::Base
 
     has_one :provider
 
