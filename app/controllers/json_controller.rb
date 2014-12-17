@@ -195,7 +195,7 @@ class JsonController < ActionController::Base
 
     def authenticate_admin_tools
         token = request.headers["HTTP_TKN"]
-        @admin_user = AdminUser.find_by(remember_token: token)
+        @admin_user = AtUser.find_by(remember_token: token)
         if @admin_user
             puts "ADMT  -------------   #{@admin_user.name}   -----------------------"
         else

@@ -5,7 +5,7 @@ describe Admt::V2::GiftsController do
     before(:each) do
         #Gift.delete_all
         @provider = FactoryGirl.create(:provider)
-        unless @admin_user = AdminUser.find_by(remember_token: "Token")
+        unless @admin_user = AtUser.find_by(remember_token: "Token")
             @admin_user = FactoryGirl.create(:admin_user, remember_token: "Token")
         end
         @user = FactoryGirl.create(:user)
