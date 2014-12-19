@@ -1,4 +1,4 @@
-require 'resque/plugins/resque_heroku_autoscaler'
+#require 'resque/plugins/resque_heroku_autoscaler'
 
 class SaveBulkEmailsJob
     #extend Resque::Plugins::HerokuAutoscaler

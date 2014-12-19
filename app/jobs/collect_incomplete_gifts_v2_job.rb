@@ -1,4 +1,4 @@
-require 'resque/plugins/resque_heroku_autoscaler'
+#require 'resque/plugins/resque_heroku_autoscaler'
 
 class CollectIncompleteGiftsV2Job
     #extend Resque::Plugins::HerokuAutoscaler

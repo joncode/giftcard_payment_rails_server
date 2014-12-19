@@ -23,8 +23,9 @@ gem 'bcrypt-ruby'
 gem 'activemerchant'
 gem 'urbanairship'
 gem 'roo'
-gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
+#gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
 
+gem 'react-rails', '~> 1.0.0.pre', github: 'reactjs/react-rails'
 gem 'attachinary'
 
 
