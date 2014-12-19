@@ -1,5 +1,5 @@
 Drinkboard::Application.routes.draw do
-
+  root  to: 'react#index'
   match '/facebook/checkin', to: "invite#facebook_checkin", via: :post
 
 if !Rails.env.production?
@@ -265,7 +265,7 @@ end
 
 #################          HTML routes good                       /////////////////////////////
 
-  root                         to: 'sessions#new'
+
   resources :sessions,       only: [:new, :create, :destroy]
   get '/signin',             to: 'sessions#new'
   get '/signout',            to: 'sessions#destroy'
