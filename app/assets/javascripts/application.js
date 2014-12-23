@@ -16,5 +16,6 @@
 //= require minified/external.min
 //= require logger
 //= require routes
+//= require app
 
 
