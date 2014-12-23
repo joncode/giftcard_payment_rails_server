@@ -13,13 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require showdown
-//= require bootstrap
-//= require react
-//= require react_ujs
 //= require minified/external.min
-//= require components
-//= require pace
-//= require app/main
-//= require app/preloader
-//= require app/routes/app/homepage
+//= require logger
+//= require routes
+
+
