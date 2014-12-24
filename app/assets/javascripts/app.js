@@ -581,7 +581,7 @@ var l20n=_RL20n_.l20n,
 	  back: function(e) {
 	    e.preventDefault();
 	    e.stopPropagation();
-	    RRouter.routing.navigate('/app/dashboard');
+	    RRouter.routing.navigate('/app/social');
 	  },
 	  componentWillMount: function() {
 	    $('html').addClass('authentication');
@@ -733,71 +733,77 @@ var l20n=_RL20n_.l20n,
 	      Container({id: "homepage-container"}, 
 	        Button({bsStyle: "deepred", id: "demo-btn", onClick: this.handleNavigation}, "Log In"), 
 	        React.DOM.div(null, 
-	          Hero({className: "text-center hidden-xs", style: {height: 475, backgroundImage: 'url(/imgs/homepage/background.png)', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', overflow: 'hidden'}}, 
-	            React.DOM.img({src: "/imgs/homepage/simplepowerful.png", style: {marginTop: 5}})
+	          Hero({className: "text-center hidden-xs", style: {height: 475, backgroundImage: 'url(/imgs/homepage/backgroundBlue.png)', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', overflow: 'hidden'}}, 
+	            React.DOM.img({src: "/imgs/homepage/pt_top.png", style: {marginTop: 5}})
 	          ), 
-	          Hero({className: "text-center visible-xs", style: {height: 270, backgroundImage: 'url(/imgs/homepage/background.png)', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', overflow: 'hidden'}}, 
-	            React.DOM.img({width: "270", className: "visible-xs", src: "/imgs/homepage/simplepowerful.png", style: {margin: 'auto', marginTop: 30}})
+	          Hero({className: "text-center visible-xs", style: {height: 270, backgroundImage: 'url(/imgs/homepage/backgroundBlue.png)', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', overflow: 'hidden'}}, 
+	            React.DOM.img({width: "270", className: "visible-xs", src: "/imgs/homepage/pt_top.png", style: {margin: 'auto', marginTop: 30}})
 	          )
 	        ), 
+
 	        Hero(null, 
-	          HeroHeader(null, "Don't wait for Web Components"), 
-	          HeroHeader2(null, "Embrace React"), 
+	          HeroHeader(null, "Top Tier Restaurants"), 
+	          HeroHeader2(null, "On Your Website"), 
 	          Grid(null, 
 	            Row(null, 
 	              Col({sm: 7, collapseLeft: true, collapseRight: true}, 
 	                React.DOM.p({style: {marginTop: 60}}, 
-	                  "Facebook recently open-sourced React, a library for building User Interfaces. It uses a Virtual DOM implementation for ultra-high performance."
+	                  "It’s On Me has compiled the best collection of premium, restaurants and bars in the country and and now they are available on your website."
 	                ), 
 	                React.DOM.p(null, 
-	                  "Rubix Admin app uses React for semantic markup coupled with CommonJS for composable Components. The result: ", React.DOM.strong(null, "clean and elegant code.")
+	                  "Drive visitors to make a purchase from your home page, an article, or a blog post targeted at a specific demographic. Your visitors can explore and purchase from some of the best venues in the country ", React.DOM.strong(null, "right from your website.")
 	                )
 	              ), 
 	              Col({sm: 5, collapseLeft: true, collapseRight: true}, 
 	                React.DOM.div({className: "hidden-xs text-right"}, 
-	                  React.DOM.img({src: "/imgs/homepage/reactcode.png"})
+	                  React.DOM.img({src: "/imgs/homepage/pt_yoursite.png"})
 	                ), 
 	                React.DOM.div({className: "visible-xs text-center"}, 
-	                  React.DOM.img({width: "250", src: "/imgs/homepage/reactcode.png"})
+	                  React.DOM.img({width: "250", src: "/imgs/homepage/pt_yoursite.png"})
 	                )
 	              )
 	            )
 	          )
 	        ), 
+
 	        Hero(null, 
-	          HeroHeader2(null, "Bootstrap on Steroids"), 
+	          HeroHeader2(null, "Keep Your Traffic"), 
 	          React.DOM.div({className: "text-center", style: {marginTop: 25, marginBottom: 25}}, 
 	            React.DOM.div({className: "hidden-xs"}, 
-	              React.DOM.img({src: "/imgs/homepage/bootstrapreact.png"})
+	              React.DOM.img({src: "/imgs/homepage/pt_traffic.png"})
 	            ), 
 	            React.DOM.div({className: "visible-xs"}, 
-	              React.DOM.img({width: "250", src: "/imgs/homepage/bootstrapreact.png"})
+	              React.DOM.img({width: "250", src: "/imgs/homepage/pt_traffic.png"})
 	            )
 	          ), 
 	          React.DOM.p({className: "text-center"}, 
-	            "Rubix implements custom React Components for Bootstrap enabling you to write shorter, semantic markup. Say Goodbye to unwieldy classnames and spaghetti code!"
+	            "With the It’s On Me gifting widget on your site you are able to confidently drive affiliate sales without loosing your visitors to another website.  The traffic stays on your page and you get paid a generous affiliate commissions with recurring income opportunities."
 	          )
 	        ), 
+
 	        Hero(null, 
-	          HeroHeader(null, "Internationalization and Localization"), 
-	          HeroHeader2(null, "Mozilla L20n.js"), 
-	          React.DOM.div({className: "text-center", style: {marginTop: 25, marginBottom: 25}}, 
-	            React.DOM.div({className: "hidden-xs"}, 
-	              React.DOM.img({src: "/imgs/homepage/mozflags.png"})
-	            ), 
-	            React.DOM.div({className: "visible-xs"}, 
-	              React.DOM.img({width: "250", src: "/imgs/homepage/mozflags.png"})
+	          HeroHeader(null, "Amazing Affiliate Commissions"), 
+	          Grid(null, 
+	            Row(null, 
+	              Col({sm: 7, collapseLeft: true, collapseRight: true}, 
+	                React.DOM.p({style: {marginTop: 60}}, 
+	                  "We pay you on all sales generated through your affiliate links and gifting widgets. In addition, we continue to pay you on those customers future purchases whether or not those purchase occur through you. See our terms for a complete breakdown."
+	                )
+	              ), 
+	              Col({sm: 5, collapseLeft: true, collapseRight: true}, 
+	                React.DOM.div({className: "hidden-xs text-right"}, 
+	                  React.DOM.img({src: "/imgs/homepage/pt_commissions.png"})
+	                ), 
+	                React.DOM.div({className: "visible-xs text-center"}, 
+	                  React.DOM.img({width: "250", src: "/imgs/homepage/pt_commissions.png"})
+	                )
+	              )
 	            )
-	          ), 
-	          React.DOM.p({className: "text-center"}, 
-	            "Mozilla L20n is a developer friendly framework that places languages in the localizer's hand to create better translations. "
-	          ), 
-	          React.DOM.p({className: "text-center"}, 
-	            "It removes the need for developers to thoroughly understand the specifics of a natural language and provides an opportunity for localizers to create better translations. Rubix ships with custom React component bindings for the framework."
 	          )
 	        ), 
+
 	        Hero(null, 
-	          HeroHeader2(null, "Rubix Charts"), 
+	          HeroHeader2(null, "Reporting"), 
 	          React.DOM.div({className: "text-center", style: {marginTop: 25, marginBottom: 25}}, 
 	            React.DOM.div({className: "hidden-xs"}, 
 	              React.DOM.img({src: "/imgs/homepage/rubixcharts.png"})
@@ -807,42 +813,10 @@ var l20n=_RL20n_.l20n,
 	            )
 	          ), 
 	          React.DOM.p({className: "text-center"}, 
-	            "Rubix Charts is an aesthetically beautiful, hand-crafted charting library created exclusively for Rubix Admin app. We used the awesome D3.JS library to write all the charting components (Line, Area, Stacked, Bar, Column, Pie and Donut) that power Rubix Charts."
+	            "With your affiliate portal you have complete visibility into your sales, commissions, and link performance."
 	          )
 	        ), 
-	        Hero(null, 
-	          HeroHeader(null, "Create complex layouts easily"), 
-	          HeroHeader2(null, "Panels"), 
-	          React.DOM.div({className: "text-center", style: {marginTop: 25, marginBottom: 25}}, 
-	            React.DOM.div({className: "hidden-xs"}, 
-	              React.DOM.img({src: "/imgs/homepage/panels.png"})
-	            ), 
-	            React.DOM.div({className: "visible-xs"}, 
-	              React.DOM.img({width: "250", src: "/imgs/homepage/panels.png"})
-	            )
-	          ), 
-	          React.DOM.p({className: "text-center"}, 
-	            "Rubix Panels empowers developers to create complex layouts in addition to the awesome Grid provided by Twitter Bootstrap. Pretty much every example page showcased in the demo makes use of Panels for layout."
-	          )
-	        ), 
-	        Hero({style: {position: 'relative', zIndex: 2}}, 
-	          HeroHeader(null, "The Asset Pipeline"), 
-	          HeroHeader2(null, "Gulp, Flip and Bless!"), 
-	          React.DOM.div({className: "text-center", style: {marginTop: 25, marginBottom: 25}}, 
-	            React.DOM.div({className: "hidden-xs"}, 
-	              React.DOM.img({src: "/imgs/homepage/assetpipeline.png"})
-	            ), 
-	            React.DOM.div({className: "visible-xs"}, 
-	              React.DOM.img({width: "250", src: "/imgs/homepage/assetpipeline.png"})
-	            )
-	          ), 
-	          React.DOM.p({className: "text-center"}, 
-	            "Gulp is a streaming build system. It's use of streams and code-over-configuration makes for a simpler and more intuitive build system."
-	          ), 
-	          React.DOM.p({className: "text-center"}, 
-	            "Rubix's Asset Pipeline depends entirely on Gulp as its backbone. ", React.DOM.strong(null, "Everything is automated"), ": be it compiling JSX, SASS or even WebFonts! We make use of Twitter's ", React.DOM.strong(null, "css-flip"), " for RTL support and the awesome ", React.DOM.strong(null, "blesscss"), " library for fixing IE9 selectors and stylesheet bug."
-	          )
-	        ), 
+
 	        Hero({className: "subtle-bottom-shadow"}, 
 	          HeroHeader(null, "One Last Thing"), 
 	          HeroHeader2(null, "Fanatical Support!"), 
@@ -850,11 +824,11 @@ var l20n=_RL20n_.l20n,
 	            React.DOM.img({src: "/imgs/homepage/support.png"})
 	          ), 
 	          React.DOM.p({className: "text-center"}, 
-	            "We have already provided extensive documentation on using/implementing Rubix. However, we take this a step further by ensuring version releases (which includes bug fixes, new features etc) for the next 6 months and general support for 1 year."
+	            "We have already provided extensive documentation on using/implementing It’s On Me. However, we take this a step further by offering a dedicated support team to help you in any way."
 	          )
 	        ), 
 	        React.DOM.div(null, 
-	          Hero({className: "text-center", style: {height: 215, backgroundImage: 'url(/imgs/homepage/background.png)', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', overflow: 'hidden', backgroundPosition: '0% 100%'}}, 
+	          Hero({className: "text-center", style: {height: 215, backgroundImage: 'url(/imgs/homepage/backgroundBlue.png)', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', overflow: 'hidden', backgroundPosition: '0% 100%'}}, 
 	            mq({minWidth: 550}, 
 	              React.DOM.h1({className: "fg-white", style: {marginTop: 0, marginBottom: 25, fontWeight: 100}}, "So what are you waiting for?")
 	            ), 
@@ -12954,7 +12928,7 @@ var l20n=_RL20n_.l20n,
 	                          React.DOM.tbody(null, 
 	                            React.DOM.tr(null, 
 	                              React.DOM.td(null, 
-	                                React.DOM.a({href: "/ltr/#/app/reports/locations"}, "Merchant Locations")
+	                                React.DOM.a({href: "/#/app/reports/locations"}, "Merchant Locations")
 	                              ), 
 	                              React.DOM.td(null, 
 	                                "5"
@@ -12965,7 +12939,7 @@ var l20n=_RL20n_.l20n,
 	                            ), 
 	                            React.DOM.tr(null, 
 	                              React.DOM.td(null, 
-	                                React.DOM.a({href: "/ltr/#/app/reports/users"}, "Users")
+	                                React.DOM.a({href: "/#/app/reports/users"}, "Users")
 	                              ), 
 	                              React.DOM.td(null, 
 	                                "300"
@@ -13784,7 +13758,7 @@ var l20n=_RL20n_.l20n,
 	                                "Sept. 12, 2014"
 	                              ), 
 	                              React.DOM.td(null, 
-	                                React.DOM.a({href: "/ltr/#/app/reports/achtransaction"}, "ACH Confirmation #12837528")
+	                                React.DOM.a({href: "/#/app/reports/achtransaction"}, "ACH Confirmation #12837528")
 	                              ), 
 	                              React.DOM.td({className: "text-right"}, "$30.53")
 	                            ), 
@@ -13793,7 +13767,7 @@ var l20n=_RL20n_.l20n,
 	                                "Aug. 15, 2014"
 	                              ), 
 	                              React.DOM.td(null, 
-	                                React.DOM.a({href: "/ltr/#/app/reports/achtransaction"}, "ACH Confirmation #12837528")
+	                                React.DOM.a({href: "/#/app/reports/achtransaction"}, "ACH Confirmation #12837528")
 	                              ), 
 	                              React.DOM.td({className: "text-right"}, "$30.53")
 	                            )
@@ -14481,20 +14455,21 @@ var l20n=_RL20n_.l20n,
 			                            ), 
 			                            Button({style: {marginBottom: 5}, bsStyle: "primary"}, "Create Widget"), ' '
 	                                )
-	                              ), 
-	                              React.DOM.tr(null, 
-	                                React.DOM.td(null, 
-	                                	React.DOM.h4(null, "Copy the code"), 
-	                                  React.DOM.p(null, 
-	                                    "Give the code below to your web developer and have him add it to whichever page you would like your gift menu on."
-	                                  )
-	                                )
 	                              )
 	                            )
 	                          ), 
+	                          React.DOM.hr(null), 
+	                          React.DOM.h4(null, "Copy this code to the bottom of your page HEAD tag (or other scripts region)"), 
+	                          React.DOM.pre(null, 
+	                              React.DOM.code({className: "language-markup"}, 
+	                                "<link rel='stylesheet' type='text/css' href='https://www.itson.me/content/css/widget.css'>\n<script type='text/javascript' src='https://www.itson.me/scripts/widget.js'></script>\n"
+	                              )
+	                          ), 
+	                          React.DOM.br(null), 
+	                          React.DOM.h4(null, "Copy this code to the location on your page where you want the button to appear"), 
 	                          React.DOM.pre(null, 
 	                            React.DOM.code({className: "language-markup"}, 
-	                            "  <iframe src='blank.html' type='text/css' media='screen,print' href='/css/app/blessed/ltr/main-blessed1.css' />\n"
+	                            "<a id='iom-widget' rel='shadowbox[IOM]' href='https://www.itson.me/affiliate' title='Send a Gift in Las Vegas, NV'>\n    <img src='https://www.itson.me/content/favicon.png' /> <br />Send a Gift</a>\n<script type='text/javascript'>IOM.init({ modal: true, viewportPadding: 60 });</script>\n"
 	                            )
 	                          ), 
 	                          React.DOM.br(null)
@@ -23880,10 +23855,10 @@ var l20n=_RL20n_.l20n,
 	var DocUnit = Doc.DocUnit;
 	var DocContainer = Doc.DocContainer;
 
-	var inputgetdomnode = __webpack_require__(134);
-	var inputgetchecked = __webpack_require__(135);
-	var inputsetchecked = __webpack_require__(136);
-	var inputgetvalue = __webpack_require__(137);
+	var inputgetdomnode = __webpack_require__(132);
+	var inputgetchecked = __webpack_require__(133);
+	var inputsetchecked = __webpack_require__(134);
+	var inputgetvalue = __webpack_require__(135);
 
 	var Body = React.createClass({displayName: 'Body',
 	  componentDidMount: function() {
@@ -24051,8 +24026,8 @@ var l20n=_RL20n_.l20n,
 	var DocUnit = Doc.DocUnit;
 	var DocContainer = Doc.DocContainer;
 
-	var textareadomnode = __webpack_require__(132);
-	var textareagetvalue = __webpack_require__(133);
+	var textareadomnode = __webpack_require__(136);
+	var textareagetvalue = __webpack_require__(137);
 
 	var Body = React.createClass({displayName: 'Body',
 	  componentDidMount: function() {
@@ -32158,37 +32133,37 @@ var l20n=_RL20n_.l20n,
 /* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var node = this.refs.textareaelement.getInputDOMNode();\n    console.log(node.getAttribute('rows') === 3);\n  },\n  render: function() {\n    return (\n      <Textarea ref='textareaelement' rows='3' />\n    );\n  }  \n});\n"
+	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var node = this.refs.inputelement.getInputDOMNode();\n    console.log(node.value === 'Default text');\n  },\n  render: function() {\n    return (\n      <Input type='text' ref='inputelement' defaultValue='Default text' />\n    );\n  }  \n});\n"
 
 /***/ },
 /* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var value = this.refs.textareaelement.getValue();\n    console.log(value === 'Default Value');\n  },\n  render: function() {\n    return (\n      <Textarea ref='textareaelement' rows='3' defaultValue='Default Value' />\n    );\n  }  \n});\n"
+	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var checked = this.refs.checkboxelement.getChecked();\n    console.log(checked === true);\n  },\n  render: function() {\n    return (\n      <Input type='checkbox' ref='checkboxelement' defaultChecked />\n    );\n  }  \n});\n"
 
 /***/ },
 /* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var node = this.refs.inputelement.getInputDOMNode();\n    console.log(node.value === 'Default text');\n  },\n  render: function() {\n    return (\n      <Input type='text' ref='inputelement' defaultValue='Default text' />\n    );\n  }  \n});\n"
+	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    this.refs.checkboxelement.setChecked(false);\n    var checked = this.refs.checkboxelement.getChecked();\n    console.log(checked === false);\n  },\n  render: function() {\n    return (\n      <Input type='checkbox' ref='checkboxelement' defaultChecked />\n    );\n  }  \n});\n"
 
 /***/ },
 /* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var checked = this.refs.checkboxelement.getChecked();\n    console.log(checked === true);\n  },\n  render: function() {\n    return (\n      <Input type='checkbox' ref='checkboxelement' defaultChecked />\n    );\n  }  \n});\n"
+	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var value = this.refs.inputelement.getValue();\n    console.log(value === 'Default Value');\n  },\n  render: function() {\n    return (\n      <Input type='text' ref='inputelement' defaultValue='Default Value' />\n    );\n  }  \n});\n"
 
 /***/ },
 /* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    this.refs.checkboxelement.setChecked(false);\n    var checked = this.refs.checkboxelement.getChecked();\n    console.log(checked === false);\n  },\n  render: function() {\n    return (\n      <Input type='checkbox' ref='checkboxelement' defaultChecked />\n    );\n  }  \n});\n"
+	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var node = this.refs.textareaelement.getInputDOMNode();\n    console.log(node.getAttribute('rows') === 3);\n  },\n  render: function() {\n    return (\n      <Textarea ref='textareaelement' rows='3' />\n    );\n  }  \n});\n"
 
 /***/ },
 /* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var value = this.refs.inputelement.getValue();\n    console.log(value === 'Default Value');\n  },\n  render: function() {\n    return (\n      <Input type='text' ref='inputelement' defaultValue='Default Value' />\n    );\n  }  \n});\n"
+	module.exports = "var demo = React.createClass({\n  componentDidMount: function() {\n    var value = this.refs.textareaelement.getValue();\n    console.log(value === 'Default Value');\n  },\n  render: function() {\n    return (\n      <Textarea ref='textareaelement' rows='3' defaultValue='Default Value' />\n    );\n  }  \n});\n"
 
 /***/ },
 /* 138 */
