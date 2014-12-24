@@ -13,7 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require pace/pace
+//= require codemirror/lib/codemirror
+//= require codemirror/mode/javascript/javascript
 //= require minified/external.min
 //= require app
-
-
