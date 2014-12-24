@@ -14,8 +14,6 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require minified/external.min
-//= require logger
-//= require routes
 //= require app
 
 
