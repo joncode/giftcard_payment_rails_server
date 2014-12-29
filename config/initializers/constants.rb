@@ -74,12 +74,10 @@ CITY_LIST =  [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d
  {"name"=>"Santa Barbara", "state"=>"California", "city_id"=>5, "photo"=>"d|v1393292171/santa_barbara_lqln3n.jpg"},
   {"name"=>"Long Beach", "state"=>"California", "city_id"=>7, "photo"=>"d|v1416615199/LongBeach_jtrb0s.jpg"},
   {"name"=>"Newport Beach", "state"=>"California", "city_id"=>8, "photo"=>"d|v1416615229/newportbeach_bwwmrq.jpg"},
+  {"name"=>"Orange County", "state"=>"California", "city_id"=>11, "photo"=>"d|v1419883807/orange_country_pgbmsg.jpg"},
   {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1393292178/new_york_iriwla.jpg"},
   {"name"=>"Elkhart Lake", "state"=>"Wisconsin", "city_id"=>9, "photo"=>"d|v1418237673/elkheart_tplhzq.jpg"},
  {"name"=>"COCHON 555 US TOUR", "state"=>"Nationwide", "city_id"=>10, "photo"=>"d|v1417972995/cochon_hr8ixy.png"}]
-
-
-
 
 
 
