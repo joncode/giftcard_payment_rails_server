@@ -33,9 +33,10 @@ latest_staging_db.dump
 /log/newrelic_agent.log
 /config/database.yml
 .ruby-version
-.ruby-gemset  
+.ruby-gemset
 *.swp
 *.swo
+/node_modules/*
 
 /db/*.sqlite3
 /public/system/*
