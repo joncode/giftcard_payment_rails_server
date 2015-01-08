@@ -151,12 +151,29 @@ class Gift < ActiveRecord::Base
         string_to_cents super
     end
 
+    def service_f
+        self.service.to_f.round(2)
+    end
+
     def total
         string_to_cents(self.value)
     end
 
     def total= amount
         self.value = amount
+    end
+
+    def value_f
+        self.value.to_f.round(2)
+    end
+
+    def fee
+        case self.giver_type
+        when "User"
+            -(value_f * 0.15).round(2)
+        else
+            0.0
+        end
     end
 
     def redeem_time

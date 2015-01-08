@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211232840) do
+ActiveRecord::Schema.define(version: 20150108174133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,8 @@ ActiveRecord::Schema.define(version: 20141211232840) do
     t.integer  "time_zone",                      default: 0
     t.boolean  "acct",                           default: false
   end
+
+  add_index "at_users", ["remember_token"], name: "index_at_users_on_remember_token", using: :btree
 
   create_table "at_users_socials", force: true do |t|
     t.integer  "at_user_id"
@@ -320,6 +322,31 @@ ActiveRecord::Schema.define(version: 20141211232840) do
   add_index "friendships", ["user_id", "app_contact_id"], name: "index_friendships_on_user_id_and_app_contact_id", unique: true, using: :btree
   add_index "friendships", ["user_id"], name: "index_friendships_on_user_id", using: :btree
 
+  create_table "gift_analytics", force: true do |t|
+    t.date     "date_on"
+    t.integer  "created",    default: 0
+    t.integer  "admin",      default: 0
+    t.integer  "merchant",   default: 0
+    t.integer  "campaign",   default: 0
+    t.integer  "purchase",   default: 0
+    t.integer  "boomerang",  default: 0
+    t.integer  "other",      default: 0
+    t.integer  "regifted",   default: 0
+    t.integer  "notified",   default: 0
+    t.integer  "redeemed",   default: 0
+    t.integer  "expired",    default: 0
+    t.integer  "cregifted",  default: 0
+    t.integer  "completed",  default: 0
+    t.integer  "velocity",   default: 0
+    t.integer  "revenue",    default: 0
+    t.integer  "profit",     default: 0
+    t.integer  "retail_v",   default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "gift_analytics", ["date_on"], name: "index_gift_analytics_on_date_on", using: :btree
+
   create_table "gift_items", force: true do |t|
     t.integer "gift_id"
     t.integer "menu_id"
@@ -408,12 +435,13 @@ ActiveRecord::Schema.define(version: 20141211232840) do
     t.string   "email"
     t.integer  "user_id"
     t.integer  "merchant_id"
-    t.boolean  "active",       default: true
+    t.boolean  "active",                   default: true
     t.string   "code"
-    t.integer  "rank",         default: 0
-    t.boolean  "general",      default: false
+    t.integer  "rank",                     default: 0
+    t.boolean  "general",                  default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "clearance",    limit: 225
   end
 
   add_index "invites", ["invite_tkn"], name: "index_invites_on_invite_tkn", using: :btree
