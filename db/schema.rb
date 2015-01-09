@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211232840) do
+ActiveRecord::Schema.define(version: 20150109013522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,8 @@ ActiveRecord::Schema.define(version: 20141211232840) do
     t.integer  "time_zone",                      default: 0
     t.boolean  "acct",                           default: false
   end
+
+  add_index "at_users", ["remember_token"], name: "index_at_users_on_remember_token", using: :btree
 
   create_table "at_users_socials", force: true do |t|
     t.integer  "at_user_id"
@@ -408,12 +410,13 @@ ActiveRecord::Schema.define(version: 20141211232840) do
     t.string   "email"
     t.integer  "user_id"
     t.integer  "merchant_id"
-    t.boolean  "active",       default: true
+    t.boolean  "active",                   default: true
     t.string   "code"
-    t.integer  "rank",         default: 0
-    t.boolean  "general",      default: false
+    t.integer  "rank",                     default: 0
+    t.boolean  "general",                  default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "clearance",    limit: 225
   end
 
   add_index "invites", ["invite_tkn"], name: "index_invites_on_invite_tkn", using: :btree
@@ -511,7 +514,7 @@ ActiveRecord::Schema.define(version: 20141211232840) do
     t.float    "longitude"
     t.string   "ein"
     t.integer  "region_id"
-    t.integer  "pos_merchant_id"
+    t.string   "pos_merchant_id"
     t.integer  "account_admin_id"
     t.tsvector "ftmeta"
     t.integer  "r_sys",                                               default: 2
@@ -725,7 +728,7 @@ ActiveRecord::Schema.define(version: 20141211232840) do
     t.integer  "merchant_id"
     t.boolean  "live",                       default: false
     t.boolean  "paused",                     default: true
-    t.integer  "pos_merchant_id"
+    t.string   "pos_merchant_id"
     t.integer  "region_id"
     t.integer  "r_sys",                      default: 2
     t.string   "photo_l"
