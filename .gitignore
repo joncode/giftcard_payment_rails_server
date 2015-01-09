@@ -33,7 +33,7 @@ latest_staging_db.dump
 /log/newrelic_agent.log
 /config/database.yml
 .ruby-version
-.ruby-gemset  
+.ruby-gemset
 *.swp
 *.swo
 
@@ -45,3 +45,5 @@ latest_staging_db.dump
 **.orig
 rerun.txt
 pickle-email-*.html
+
+/node_modules/*
