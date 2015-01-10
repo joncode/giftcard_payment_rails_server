@@ -113,7 +113,38 @@ class Web::V3::GiftsController < MetalCorsController
         respond(status)
     end
 
+    def pos_redeem
+        gift = Gift.includes(:provider).find params[:id]
+        if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
+            if ticket_num = pos_redeem_params["ticket_num"]
+                resp = gift.pos_redeem(ticket_num, gift.provider.pos_merchant_id)
+                if resp["success"] == true
+                    status = :ok
+                    success({msg: resp["response_text"]})
+                else
+                    status = :ok
+                    fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                end
+            else
+                status = :bad_request
+                fail_web({ err: "NOT_REDEEMABLE", msg: "Ticket Number not found"})
+            end
+        else
+            fail_message = if gift.status == 'redeemed'
+                "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
+            else
+                "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            end
+            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
+        end
+        respond(status)
+    end
+
 private
+
+    def pos_redeem_params
+        params.require(:data).permit(:ticket_num)
+    end
 
     def gift_params
         params.require(:data).permit(:rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name,:msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])

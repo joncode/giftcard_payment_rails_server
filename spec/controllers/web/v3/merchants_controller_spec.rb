@@ -42,4 +42,15 @@ describe Web::V3::MerchantsController do
     	rrc(200)
     	json["data"]["menu"].should == JSON.parse(menu_string.menu)
     end
+
+    describe :receipt_photo_url do
+
+        it "should return the default receipt photo url" do
+            get :receipt_photo_url, id: @provider.id, format: :json
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should == { "receipt_photo_url" => DEFAULT_RECEIPT_IMG_URL}
+
+        end
+    end
 end

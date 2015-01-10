@@ -489,6 +489,70 @@ describe Mdot::V2::GiftsController do
         end
     end
 
+    describe :pos_redeem do
+        it_should_behave_like("token authenticated", :post, :pos_redeem, id: 1)
+
+        before(:each) do
+            UserSocial.delete_all
+            User.delete_all
+            Provider.delete_all
+            User.any_instance.stub(:init_confirm_email)
+            @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
+            @user = create_user_with_token "USER_TOKEN", @user
+            @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(@user)
+            @gift.save
+            @gift.notify
+        end
+
+        it "should update the gift" do
+            Gift.any_instance.stub(:pos_redeem).and_return({"success" => true, "response_code" => "PAID", "response_text" => "Paid in full"})
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            @gift.redeemed_at.should be_nil
+            post :pos_redeem, format: :json, id: @gift.id, ticket_num: "test"
+            json.should == {"status" => 1, "data" =>{ "msg" => 'Paid in full'}}
+        end
+
+        it "should return reload app error on bad gift" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            @gift.redeem_gift
+            post :pos_redeem, format: :json, id: @gift.id, ticket_num: "test"
+            rrc(200)
+            json["status"].should == 0
+            json["data"]["err"].should ==  "NOT_REDEEMABLE"
+            json["data"]["msg"].should == "Gift #{@gift.token} at #{@gift.provider_name} has already been redeemed"
+        end
+
+        it "should reject request if request is malformed" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :pos_redeem, format: :json, id: @gift.id, ticket_num: "test", faker: "FAKE"
+            rrc(400)
+        end
+
+        it "should return data transfer error if @gift not found" do
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :pos_redeem, format: :json, id: 0, ticket_num: "test"
+            rrc(404)
+        end
+
+        it "should not allow redeeming gifts that user does not receive" do
+            other = FactoryGirl.create(:receiver)
+            @gift =  FactoryGirl.build(:gift, status: 'open')
+            @gift.add_giver(@giver)
+            @gift.add_receiver(other)
+            @gift.save
+            @gift.notify
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+            post :pos_redeem, format: :json, id: @gift.id, ticket_num: "test"
+            json["status"].should == 0
+            json["data"]["err"].should ==  "NOT_REDEEMABLE"
+            json["data"]["msg"].should == "Gift #{@gift.token} at #{@gift.provider_name} cannot be redeemed"
+
+        end
+    end
+
     describe :redeem do
         it_should_behave_like("token authenticated", :post, :redeem, id: 1)
 
@@ -593,7 +657,6 @@ describe Mdot::V2::GiftsController do
             post :redeem, format: :json, id: @gift.id, server: "test"
             rrc(404)
         end
-
     end
 
     describe :regift do

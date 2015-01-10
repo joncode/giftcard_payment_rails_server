@@ -1,5 +1,5 @@
 class Mdot::V2::ProvidersController < JsonController
-    
+
     before_action :authenticate_customer
     rescue_from JSON::ParserError, :with => :bad_request
 
@@ -15,4 +15,8 @@ class Mdot::V2::ProvidersController < JsonController
         respond
     end
 
+    def receipt_photo_url
+        success({ "receipt_photo_url" => DEFAULT_RECEIPT_IMG_URL})
+        respond
+    end
 end

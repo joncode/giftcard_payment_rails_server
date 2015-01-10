@@ -110,6 +110,26 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def pos_redeem(ticket_num, pos_merchant_id)
+        pos_hsh = { ticket_num: ticket_num,
+                    gift_card_id: self.obscured_id,
+                    pos_merchant_id: pos_merchant_id,
+                    value: self.value_in_cents }
+        pos_obj = Positronics.new(pos_hsh)
+        resp = pos_obj.redeem
+        resp["success"] = pos_obj.success?
+        if esp["success"]
+            if pos_obj.response["response_code"] == "OVER_PAID"
+                # create a new gift with the extra money
+                # redeem and adjust the orginal gift
+                self.redeem_gift(nil)
+            else
+                self.redeem_gift(nil)
+            end
+        end
+        resp
+    end
+
     def obscured_id
         NUMBER_ID + self.id
     end
@@ -157,6 +177,10 @@ class Gift < ActiveRecord::Base
 
     def total
         string_to_cents(self.value)
+    end
+
+    def value_in_cents
+        self.value.to_f.round(2) * 100
     end
 
     def total= amount

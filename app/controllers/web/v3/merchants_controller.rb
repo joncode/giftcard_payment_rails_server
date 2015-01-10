@@ -15,4 +15,9 @@ class Web::V3::MerchantsController < MetalCorsController
         respond
     end
 
+    def receipt_photo_url
+        success({ "receipt_photo_url" => DEFAULT_RECEIPT_IMG_URL})
+        respond
+    end
+
 end

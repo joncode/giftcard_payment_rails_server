@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150108174133) do
+ActiveRecord::Schema.define(version: 20150109013522) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -539,7 +539,7 @@ ActiveRecord::Schema.define(version: 20150108174133) do
     t.float    "longitude"
     t.string   "ein"
     t.integer  "region_id"
-    t.integer  "pos_merchant_id"
+    t.string   "pos_merchant_id"
     t.integer  "account_admin_id"
     t.tsvector "ftmeta"
     t.integer  "r_sys",                                               default: 2
@@ -753,7 +753,7 @@ ActiveRecord::Schema.define(version: 20150108174133) do
     t.integer  "merchant_id"
     t.boolean  "live",                       default: false
     t.boolean  "paused",                     default: true
-    t.integer  "pos_merchant_id"
+    t.string   "pos_merchant_id"
     t.integer  "region_id"
     t.integer  "r_sys",                      default: 2
     t.string   "photo_l"
