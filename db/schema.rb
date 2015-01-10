@@ -322,6 +322,31 @@ ActiveRecord::Schema.define(version: 20150109013522) do
   add_index "friendships", ["user_id", "app_contact_id"], name: "index_friendships_on_user_id_and_app_contact_id", unique: true, using: :btree
   add_index "friendships", ["user_id"], name: "index_friendships_on_user_id", using: :btree
 
+  create_table "gift_analytics", force: true do |t|
+    t.date     "date_on"
+    t.integer  "created",    default: 0
+    t.integer  "admin",      default: 0
+    t.integer  "merchant",   default: 0
+    t.integer  "campaign",   default: 0
+    t.integer  "purchase",   default: 0
+    t.integer  "boomerang",  default: 0
+    t.integer  "other",      default: 0
+    t.integer  "regifted",   default: 0
+    t.integer  "notified",   default: 0
+    t.integer  "redeemed",   default: 0
+    t.integer  "expired",    default: 0
+    t.integer  "cregifted",  default: 0
+    t.integer  "completed",  default: 0
+    t.integer  "velocity",   default: 0
+    t.integer  "revenue",    default: 0
+    t.integer  "profit",     default: 0
+    t.integer  "retail_v",   default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "gift_analytics", ["date_on"], name: "index_gift_analytics_on_date_on", using: :btree
+
   create_table "gift_items", force: true do |t|
     t.integer "gift_id"
     t.integer "menu_id"
