@@ -26,6 +26,10 @@ RSpec.configure do |config|
     config.include Capybara::DSL
     config.include Capybara::RSpecMatchers
 
- #    sql = "CREATE SEQUENCE gift_token_seq MINVALUE 1000 MAXVALUE 9999 CACHE 100 CYCLE;"
-	# Gift.connection.execute(sql)
+    begin
+    	Gift.exists?
+    rescue
+	    sql = "CREATE SEQUENCE gift_token_seq MINVALUE 1000 MAXVALUE 9999 CACHE 100 CYCLE;"
+		Gift.connection.execute(sql)
+    end
 end

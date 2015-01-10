@@ -40,6 +40,25 @@ describe Mdot::V2::ProvidersController do
         end
     end
 
+    describe :receipt_photo_url do
+
+        it_should_behave_like("token authenticated", :get, :receipt_photo_url, id: 1)
+
+        before(:each) do
+            @provider = FactoryGirl.create(:provider)
+            FactoryGirl.create(:menu_string, provider_id: @provider.id)
+            request.env["HTTP_TKN"] = "USER_TOKEN"
+        end
+
+        it "should return the default receipt photo url" do
+            get :receipt_photo_url, id: @provider.id, format: :json
+            rrc(200)
+            json["status"].should == 1
+            json["data"].should == { "receipt_photo_url" => DEFAULT_RECEIPT_IMG_URL}
+
+        end
+    end
+
     # describe :index do
 
     #     it_should_behave_like("token authenticated", :get, :index)

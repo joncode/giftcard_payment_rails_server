@@ -113,5 +113,21 @@ else
     ENV['NEXT_GEN_PASS']
 end
 
+POSITRONICS_API_KEY = if Rails.env.development? or Rails.env.test?
+    '203d714b6a3642379ce7ccbabe4e9926'
+else
+    ENV['POSITRONICS_API_KEY']
+end
+
+POSITRONICS_API_URL = "https://api.positronics.io/0.1"
+
+
+
+
+
+
+
+
+
 
 

@@ -74,6 +74,34 @@ class Mdot::V2::GiftsController < JsonController
         respond(status)
     end
 
+    def pos_redeem
+        return nil if params_bad_request(["ticket_num"])
+        gift = Gift.includes(:provider).find params[:id]
+        if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
+            if ticket_num = pos_redeem_params
+                resp = gift.pos_redeem(ticket_num, gift.provider.pos_merchant_id)
+                if resp["success"] == true
+                    status = :ok
+                    success({msg: resp["response_text"]})
+                else
+                    status = :ok
+                    fail({ err: resp["response_code"], msg: resp["response_text"]})
+                end
+            else
+                status = :bad_request
+                fail({ err: "NOT_REDEEMABLE", msg: "Ticket Number not found"})
+            end
+        else
+            fail_message = if gift.status == 'redeemed'
+                "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
+            else
+                "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            end
+            fail({ err: "NOT_REDEEMABLE", msg: fail_message})
+        end
+        respond(status)
+    end
+
     def redeem  # redemption v1 ONLY
         return nil if params_bad_request(["server"])
         request_server = redeem_params
@@ -189,6 +217,14 @@ private
             else
                 false
             end
+        end
+    end
+
+    def pos_redeem_params
+        if params["ticket_num"].blank?
+            ""
+        else
+            params.require(:ticket_num)
         end
     end
 

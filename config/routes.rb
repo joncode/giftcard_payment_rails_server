@@ -2,48 +2,6 @@ Drinkboard::Application.routes.draw do
 
   match '/facebook/checkin', to: "invite#facebook_checkin", via: :post
 
-if !Rails.env.production?
-#################          Client V3 routes for API                  /////////////////////////////
-
-  namespace :client, defaults: { format: 'json' } do
-    namespace :v3 do
-
-      resources :sessions,  only: [:create]
-
-      resources :cities,     only: [:index] do
-        member do
-          get :merchants
-        end
-      end
-
-      resources :merchants,     only: [:show] do
-        member do
-          get :menu
-        end
-      end
-
-      resources :users, only: [:index]
-      resources :gifts, only: [:index] do
-        member do
-          put :open
-          put :redeem
-        end
-      end
-      resources :cards, only: [:index, :create]
-    end
-  end
-end
-
-#################          POS V1 routes for API                  /////////////////////////////
-
-  namespace :pos, defaults: { format: 'json' } do
-    namespace :v1 do
-
-      resources :orders, only: [:create]
-
-    end
-  end
-
 #################        Mdot V2 API                              /////////////////////////////
 
   namespace :mdot, defaults: { format: 'json' } do
@@ -116,6 +74,7 @@ end
           post :open
           post :notify
           post :redeem
+          post :pos_redeem
         end
         collection do
           get :archive
@@ -132,6 +91,7 @@ end
       resources :providers,  only: [] do
         member do
           get :menu
+          get :receipt_photo_url
         end
       end
 
@@ -163,11 +123,15 @@ end
           patch :read
           patch :notify
           patch :redeem
+          patch :pos_redeem
         end
       end
 
       resources :merchants, only: [:index] do
-        member { get :menu }
+        member do
+          get :menu
+          get :receipt_photo_url
+        end
       end
 
       resources :regions,   only: [:index] do
@@ -287,6 +251,16 @@ end
   mount Resque::Server, :at => "/resque"
 
 
+#################          POS V1 routes for API                  /////////////////////////////
+
+  namespace :pos, defaults: { format: 'json' } do
+    namespace :v1 do
+
+      resources :orders, only: [:create]
+
+    end
+  end
+
 #################         iOS app & Mdot V1 API                   /////////////////////////////
 
 
@@ -338,4 +312,35 @@ end
 
   get 'emails/template', to: 'emails#template'
 
+  if !Rails.env.production?
+  #################          Client V3 routes for API                  /////////////////////////////
+
+    namespace :client, defaults: { format: 'json' } do
+      namespace :v3 do
+
+        resources :sessions,  only: [:create]
+
+        resources :cities,     only: [:index] do
+          member do
+            get :merchants
+          end
+        end
+
+        resources :merchants,     only: [:show] do
+          member do
+            get :menu
+          end
+        end
+
+        resources :users, only: [:index]
+        resources :gifts, only: [:index] do
+          member do
+            put :open
+            put :redeem
+          end
+        end
+        resources :cards, only: [:index, :create]
+      end
+    end
+  end
 end
