@@ -23,9 +23,11 @@ class Positronics
 	end
 
 	def redeem
+		tic = nil
 		tix = get_tickets_at_location
-		tic = get_ticket_from_tix(tix)
-
+		if tix.class == Array
+			tic = get_ticket_from_tix(tix)
+		end
 		if tic.nil?
 			@code = 404
 		else
@@ -119,12 +121,17 @@ private
 	end
 
 	def get_tickets_at_location
-		response = RestClient.get(
-		    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets",
-		    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
-		)
-		resp = JSON.parse response
-		resp["_embedded"]["tickets"]
+		begin
+			response = RestClient.get(
+			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets",
+			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
+			)
+			resp = JSON.parse response
+			resp["_embedded"]["tickets"]
+		rescue => e
+			resp = e.response.code
+			puts "\n\nPositronics Error code = #{resp}\n\n"
+		end
 	end
 
 	# def redeem_gift_old(value, ticket_num, pos_merchant_id, gift_card_id)
