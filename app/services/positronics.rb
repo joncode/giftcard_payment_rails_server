@@ -7,7 +7,7 @@ class Positronics
 
 	def initialize args
 		puts "Positronics args = #{args.inspect}"
-		@ticket_number   = args["ticket_num"]
+		@ticket_num   = args["ticket_num"]
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
