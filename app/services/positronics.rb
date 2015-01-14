@@ -6,11 +6,12 @@ class Positronics
 	attr_reader :response
 
 	def initialize args
+		puts "Positronics args = #{args.inspect}"
 		@ticket_number   = args["ticket_num"]
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
-		@value           = args["value"].to_i
+		@value           = args["value"]
 		@code 		     = 100
 		@extra           = 0
 		@applied_value   = @value
