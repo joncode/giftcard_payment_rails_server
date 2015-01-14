@@ -82,14 +82,14 @@ class Mdot::V2::GiftsController < JsonController
                 resp = gift.pos_redeem(ticket_num, gift.provider.pos_merchant_id)
                 if resp["success"] == true
                     status = :ok
-                    success({msg: resp["response_text"]})
+                    success(resp["response_text"])
                 else
                     status = :ok
-                    fail({ err: resp["response_code"], msg: resp["response_text"]})
+                    fail(resp["response_text"])
                 end
             else
                 status = :bad_request
-                fail({ err: "NOT_REDEEMABLE", msg: "Ticket Number not found"})
+                fail( "Ticket Number not found on request")
             end
         else
             fail_message = if gift.status == 'redeemed'

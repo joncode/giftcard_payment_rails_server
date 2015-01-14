@@ -180,7 +180,7 @@ class Gift < ActiveRecord::Base
     end
 
     def value_in_cents
-        self.value.to_f.round(2) * 100
+        (self.value.to_f.round(2) * 100).to_i
     end
 
     def total= amount
