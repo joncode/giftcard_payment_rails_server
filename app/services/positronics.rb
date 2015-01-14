@@ -72,13 +72,13 @@ private
 			r_text = "Gift has not been redeemed yet."
 		when 200
 			r_code = "PAID"
-			r_text = "Gift value matched Ticket value, transaction completed."
+			r_text = "#{number_to_currency(@value/100.0)} was applied to your ticket. Transaction completed."
 		when 201
 			r_code = "OVER_PAID"
-			r_text = "Gift Value exceeds the ticket value. #{number_to_currency(@extra/100.0)} remain on the gift."
+			r_text = "Your gift exceeded the ticket value. You will receive a new gift with a balance of #{number_to_currency(@extra/100.0)}."
 		when 206
 			r_code = "APPLIED"
-			r_text = "Ticket Value exceeds the gift value. The gift value will be applied in full. #{number_to_currency(@extra/100.0)} remain on the ticket."
+			r_text = "#{number_to_currency(@value/100.0)} was applied to your ticket. A total of #{number_to_currency(@extra/100.0)} remains to be paid."
 		when 304
 			r_code = "ERROR"
 			r_text = "Ticket Number #{@ticket_num} has already been paid."
