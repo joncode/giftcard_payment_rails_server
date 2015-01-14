@@ -118,7 +118,7 @@ class Gift < ActiveRecord::Base
         pos_obj = Positronics.new(pos_hsh)
         resp = pos_obj.redeem
         resp["success"] = pos_obj.success?
-        if esp["success"]
+        if resp["success"]
             if pos_obj.response["response_code"] == "OVER_PAID"
                 # create a new gift with the extra money
                 # redeem and adjust the orginal gift
