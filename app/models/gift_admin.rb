@@ -8,6 +8,7 @@ class GiftAdmin < Gift
         gift = super
         if gift.persisted?
             gift.messenger
+            Resque.enqueue(GiftCreatedEvent, gift.id)
         end
         gift
     end

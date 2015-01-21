@@ -11,7 +11,7 @@ class Accountant
 			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["loc"])
 
 			debt_amount = gift.location_fee
-			register = create_debt(gift, gift.provider, debt_amount, "loc")
+			register = create_debt(gift, gift.provider.merchant, debt_amount, "loc")
 			register.save
 		end
 
@@ -27,7 +27,7 @@ class Accountant
 			debt_amount =  ((gift.value.to_f * 100).to_i * 0.15) * 0.1
 			register = create_debt(gift, loc_affiliation.affiliate, debt_amount, "aff_loc")
 			register.partner   = loc_affiliation.affiliate
-			#register.affiliation = loc_affiliation
+			register.affiliation = loc_affiliation
 			register.save
 		end
 
@@ -43,7 +43,7 @@ class Accountant
 			debt_amount =  ((gift.value.to_f * 100).to_i * 0.15) * 0.1
 			register = create_debt(gift, user_affiliation.affiliate, debt_amount, "aff_user")
 			register.partner   = user_affiliation.affiliate
-			#egister.affiliation = user_affiliation
+			register.affiliation = user_affiliation
 			register.save
 		end
 

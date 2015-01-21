@@ -21,8 +21,8 @@ describe Accountant do
 			reg.gift_id.should      == g.id
 			reg.origin.should       == "loc"
 			reg.amount.should       == 8500
-			reg.partner_type.should == "Provider"
-			reg.partner_id.should   == m1.provider.id
+			reg.partner_type.should == "Merchant"
+			reg.partner_id.should   == m1.id
 			reg.type_of.should      == "debt"
 		end
 
@@ -44,8 +44,8 @@ describe Accountant do
 			reg.gift_id.should      == g.id
 			reg.origin.should       == "loc"
 			reg.amount.should       == 150
-			reg.partner_type.should == "Provider"
-			reg.partner_id.should   == m1.provider.id
+			reg.partner_type.should == "Merchant"
+			reg.partner_id.should   == m1.id
 			reg.type_of.should      == "debt"
 		end
 
@@ -60,8 +60,8 @@ describe Accountant do
 			reg.gift_id.should      == g.id
 			reg.origin.should       == "loc"
 			reg.amount.should       == 200
-			reg.partner_type.should == "Provider"
-			reg.partner_id.should   == m1.provider.id
+			reg.partner_type.should == "Merchant"
+			reg.partner_id.should   == m1.id
 			reg.type_of.should      == "debt"
 		end
 
@@ -126,7 +126,10 @@ describe Accountant do
 				reg.partner_type.should == "Affiliate"
 				reg.partner_id.should   == a1.id
 				reg.type_of.should      == "debt"
+				a1.reload
 				a1.payout_merchants.should  == 150
+				affiliation = m1.affiliation
+				affiliation.payout.should == 150
 			end
 
 			it "should not create debt if there is no merchant affiliate" do
@@ -182,7 +185,10 @@ describe Accountant do
 				reg.partner_type.should == "Affiliate"
 				reg.partner_id.should   == a1.id
 				reg.type_of.should      == "debt"
+				a1.reload
 				a1.payout_users.should  == 150
+				affiliation = user.affiliation
+				affiliation.payout.should == 150
 			end
 
 			it "should not create debt if there is no user affiliate" do

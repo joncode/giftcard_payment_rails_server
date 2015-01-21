@@ -33,12 +33,16 @@ describe "Affiliate Life Feature" do
 			# make a batch of gifts
 		u_not = FactoryGirl.create(:user)
 		p_not = FactoryGirl.create(:provider)
+
+		ResqueSpec.reset!
+		GiftSale.any_instance.stub(:messenger)
 		g1 = make_gift_sale(u3, u2, "100", p_not.id)
 		g2 = make_gift_sale(u1, u2, "200", m1.provider.id)
 		g3 = make_gift_sale(u2, u_not, "300",  m2.provider.id)
 		g4 = make_gift_sale(u2, u2, "400",  m3.provider.id)
 		g5 = make_gift_sale(u_not, u3, "500",  m1.provider.id)
 		g6 = make_gift_sale(u_not, u1, "600",  m2.provider.id)
+		run_delayed_jobs
 			# REWARDS
 		# a1 					   = 3$ (g2) + 7.5$ (g5)
 		a1.reload
@@ -50,10 +54,12 @@ describe "Affiliate Life Feature" do
 		a2.payout_users.should     == 1050
 		# a3                       = 1.5$ (g1/u3) + 6$ (g4/m3)
 		a3.reload
-		a1.total_merchants.should  == 1
-		a1.payout_merchants.should == 600
-		a2.total_users.should      == 1
-		a2.payout_users.should     == 150
+		a3.total_merchants.should  == 1
+		a3.payout_merchants.should == 600
+		a3.total_users.should      == 1
+		a3.payout_users.should     == 150
+
+
 
 	# make a gift from aff user and aff merchant
 		# TEST
@@ -65,7 +71,5 @@ describe "Affiliate Life Feature" do
 
 	# generate a payment for affiliate
 		# TEST
-
-		binding.pry
 	end
 end
