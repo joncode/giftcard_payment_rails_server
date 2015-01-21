@@ -35,6 +35,19 @@ describe User do
             user.should be_valid
         end
 
+        it "should respond to :affiliate" do
+            u = FactoryGirl.create(:user)
+            a = FactoryGirl.create(:affiliate)
+            u.affiliate = a
+            u.affiliate.should == a
+        end
+
+        it "should respond to :affiliations" do
+            m = FactoryGirl.create(:user)
+            a = FactoryGirl.create(:affiliation)
+            m.affiliation = a
+            m.affiliation.should == a
+        end
 
         it "should associate with session tokens" do
             user = FactoryGirl.create(:user)

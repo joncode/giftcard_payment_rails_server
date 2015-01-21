@@ -25,6 +25,30 @@ FactoryGirl.define do
         url_name  "test_affiliate"
     end
 
+    factory :payment do
+        start_date   (Time.now.utc - 16.days)
+        end_date     (Time.now.utc - 2.days)
+        auth_date    (Time.now + 5.days)
+        conf_num     "h2893f"
+        m_transactions   17
+        m_amount    1100
+        u_transactions   14
+        u_amount   900
+        total         2000
+        paid          false
+        partner_id    123
+        partner_type "Affiliate"
+    end
+
+    factory :register do
+        gift_id      123
+        amount       1000
+        partner_id    45
+        partner_type  "Merchant"
+        origin        "aff_loc"
+        type_of        "debt"
+    end
+
     factory :landing_page do
         campaign_id 1
         affiliate_id 1
@@ -438,5 +462,13 @@ FactoryGirl.define do
         proto_id    1
         provider_id 1
         at_user_id  nil
+    end
+    factory :affiliation do
+        affiliate     FactoryGirl.create(:affiliate)
+        target          FactoryGirl.create(:user)
+        name            "CT"
+        address          nil
+        payout      8900
+        status           1
     end
 end

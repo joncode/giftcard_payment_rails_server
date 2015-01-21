@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150109013522) do
+ActiveRecord::Schema.define(version: 20150121045357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,10 @@ ActiveRecord::Schema.define(version: 20150109013522) do
     t.string   "url_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "total_merchants",  default: 0
+    t.integer  "payout_merchants", default: 0
+    t.integer  "total_users",      default: 0
+    t.integer  "payout_users",     default: 0
   end
 
   add_index "affiliates", ["url_name"], name: "index_affiliates_on_url_name", using: :btree
@@ -41,6 +45,21 @@ ActiveRecord::Schema.define(version: 20150109013522) do
 
   add_index "affiliates_gifts", ["affiliate_id"], name: "index_affiliates_gifts_on_affiliate_id", using: :btree
   add_index "affiliates_gifts", ["gift_id"], name: "index_affiliates_gifts_on_gift_id", using: :btree
+
+  create_table "affiliations", force: true do |t|
+    t.integer  "affiliate_id"
+    t.integer  "target_id"
+    t.string   "target_type"
+    t.string   "name"
+    t.string   "address"
+    t.integer  "payout",       default: 0
+    t.integer  "status",       default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "affiliations", ["affiliate_id", "target_type"], name: "index_affiliations_on_affiliate_id_and_target_type", using: :btree
+  add_index "affiliations", ["affiliate_id"], name: "index_affiliations_on_affiliate_id", using: :btree
 
   create_table "answers", force: true do |t|
     t.string   "answer"
@@ -545,6 +564,7 @@ ActiveRecord::Schema.define(version: 20150109013522) do
     t.integer  "r_sys",                                               default: 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "affiliate_id"
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
@@ -666,6 +686,25 @@ ActiveRecord::Schema.define(version: 20150109013522) do
   add_index "payables", ["merchant_id", "payment_date"], name: "index_payables_on_merchant_id_and_payment_date", using: :btree
   add_index "payables", ["merchant_id"], name: "index_payables_on_merchant_id", using: :btree
   add_index "payables", ["status"], name: "index_payables_on_status", using: :btree
+
+  create_table "payments", force: true do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "auth_date"
+    t.string   "conf_num"
+    t.integer  "m_transactions"
+    t.integer  "m_amount"
+    t.integer  "u_transactions"
+    t.integer  "u_amount"
+    t.integer  "total"
+    t.boolean  "paid"
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "payments", ["partner_id", "partner_type"], name: "index_payments_on_partner_id_and_partner_type", using: :btree
 
   create_table "pn_tokens", force: true do |t|
     t.integer  "user_id"
@@ -796,6 +835,20 @@ ActiveRecord::Schema.define(version: 20150109013522) do
   end
 
   add_index "redeems", ["gift_id"], name: "index_redeems_on_gift_id", using: :btree
+
+  create_table "registers", force: true do |t|
+    t.integer  "gift_id"
+    t.integer  "amount"
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.integer  "origin",       default: 0
+    t.integer  "type_of",      default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "registers", ["created_at", "partner_id", "partner_type"], name: "index_registers_on_created_at_and_partner_id_and_partner_type", using: :btree
+  add_index "registers", ["gift_id", "origin"], name: "index_registers_on_gift_id_and_origin", using: :btree
 
   create_table "relationships", force: true do |t|
     t.integer  "follower_id"
@@ -965,6 +1018,7 @@ ActiveRecord::Schema.define(version: 20150109013522) do
     t.boolean  "perm_deactive",                  default: false
     t.string   "cim_profile"
     t.tsvector "ftmeta"
+    t.string   "affiliate_url_name"
   end
 
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree

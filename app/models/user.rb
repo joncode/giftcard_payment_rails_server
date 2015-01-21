@@ -38,6 +38,9 @@ class User < ActiveRecord::Base
 	has_many :session_tokens
 	has_many :user_points
 
+    has_one :affiliation, as: :target
+    has_one :affiliate,   through: :affiliation
+
 	has_secure_password
 
     validates_with UserSocialValidator
@@ -129,6 +132,19 @@ class User < ActiveRecord::Base
     end
 
 ####### USER GETTERS AND SETTERS
+
+	##########  AFFILIATION DUCKTYPE
+		def name_address_hsh
+			h            = {}
+			h["name"]    = "#{self.first_name[0]}#{self.last_name[0]}"
+			h["address"] = self.city
+			h
+		end
+
+		def create_affiliation(affiliate)
+			self.affiliate_url_name = affiliate.url_name
+		end
+	###########
 
 	def short_image_url
 		shorten_photo_url(self.iphone_photo)

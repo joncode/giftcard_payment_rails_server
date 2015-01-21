@@ -1,6 +1,8 @@
 class Merchant < ActiveRecord::Base
 
     has_one :provider
+    has_one :affiliation, as: :target
+    has_one :affiliate, through: :affiliation
 
     def mode= mode_str
         case mode_str.downcase
@@ -26,7 +28,24 @@ class Merchant < ActiveRecord::Base
         end
     end
 
-end# == Schema Information
+    ##########  AFFILIATION DUCKTYPE
+        def name_address_hsh
+            h            = {}
+            h["name"]    = self.name
+            h["address"] = self.address
+            h
+        end
+
+        def create_affiliation(affiliate)
+            self.affiliate_id = affiliate.id
+        end
+    ###########
+
+end
+
+
+
+# == Schema Information
 #
 # Table name: merchants
 #

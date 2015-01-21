@@ -200,6 +200,18 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def location_fee
+        if self.cat == 300
+            return (self.value.to_f * 100).to_i * 0.85
+        elsif self.cat == 100
+            return (self.cost.to_f * 100).to_i
+        elsif self.cat == 150
+            return (self.cost.to_f * 100).to_i
+        else
+            return 0
+        end
+    end
+
     def redeem_time
         self.redeemed_at || self.created_at
     end
