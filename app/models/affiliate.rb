@@ -6,7 +6,6 @@ class Affiliate < ActiveRecord::Base
 	has_many :payments,     as: :partner
 	has_many :registers,    as: :partner
 
-
 	def create_affiliation(target_type)
 		if target_type == "User"
 			self.total_users += 1

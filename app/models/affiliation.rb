@@ -5,7 +5,7 @@ class Affiliation < ActiveRecord::Base
 	belongs_to :affiliate, autosave: true
 	belongs_to :target, polymorphic: true, autosave: true
 
-	before_validation :set_up_data
+	before_validation :set_up_data, on: :create
 
 	def self.get_merchant_affiliation_for_gift(gift)
 		return nil 	 unless provider = gift.provider
@@ -23,6 +23,7 @@ class Affiliation < ActiveRecord::Base
 		return false if affiliation.payout > 9999
 		affiliation
 	end
+
 private
 
 	def set_up_data

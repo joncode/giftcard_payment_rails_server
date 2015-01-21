@@ -25,7 +25,27 @@ describe Affiliation do
         u.affiliate_url_name.should == a.url_name
         a.total_users.should == 1
         a.total_merchants.should == 0
+    end
 
+    it "should save user & affiliate data with affiliation creation only" do
+        u = FactoryGirl.create(:user, first_name: "Test", last_name: "Biffet", city: "New Amsterdam")
+        a = FactoryGirl.create(:affiliate)
+        u.affiliate = a
+        u.affiliate.should == a
+        affiliation = u.affiliation
+        affiliation.name.should == "TB"
+        affiliation.address.should == "New Amsterdam"
+
+        u.reload
+        a.reload
+        u.affiliate_url_name.should == a.url_name
+        a.total_users.should == 1
+        a.total_merchants.should == 0
+
+        affiliation.payout = 1040
+        affiliation.save
+        a.reload
+        a.total_users.should == 1
     end
 
     it "should save merchant & affiliate data with affiliation creation" do

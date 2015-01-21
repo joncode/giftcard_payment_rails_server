@@ -126,6 +126,7 @@ describe Accountant do
 				reg.partner_type.should == "Affiliate"
 				reg.partner_id.should   == a1.id
 				reg.type_of.should      == "debt"
+				a1.payout_merchants.should  == 150
 			end
 
 			it "should not create debt if there is no merchant affiliate" do
@@ -181,6 +182,7 @@ describe Accountant do
 				reg.partner_type.should == "Affiliate"
 				reg.partner_id.should   == a1.id
 				reg.type_of.should      == "debt"
+				a1.payout_users.should  == 150
 			end
 
 			it "should not create debt if there is no user affiliate" do
