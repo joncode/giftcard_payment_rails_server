@@ -1,7 +1,8 @@
+require 'rest_client'
+
 class Positronics
 
 	include ActionView::Helpers::NumberHelper
-	require 'rest_client'
 
 	attr_reader :response
 

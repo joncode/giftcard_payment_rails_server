@@ -39,6 +39,7 @@ gem 'turbolinks'
 # gem 'pacejs_rails'
 # gem 'attachinary'
 
+gem 'rest-client'
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
@@ -60,7 +61,6 @@ group :test do
   gem 'webmock'
   gem 'resque_spec'
   gem 'database_cleaner'
-  gem 'rest-client'
   gem 'minitest'
 end
 
