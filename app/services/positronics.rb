@@ -8,7 +8,7 @@ class Positronics
 
 	def initialize args
 		puts "Positronics args = #{args.inspect}"
-		@ticket_num   = args["ticket_num"]
+		@ticket_num      = args["ticket_num"].to_i
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
@@ -118,7 +118,7 @@ private
 	end
 
 	def get_ticket_from_tix(tix)
-		tix.select { |t| t["ticket_number"] == @ticket_num }.first
+		tix.select { |t| t["ticket_number"].to_i == @ticket_num }.first
 	end
 
 	def get_tickets_at_location
@@ -128,6 +128,7 @@ private
 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 			)
 			resp = JSON.parse response
+			puts "\n#{resp["_embedded"]["tickets"]}\n"
 			resp["_embedded"]["tickets"]
 		rescue => e
 			resp = e.response.code
