@@ -128,7 +128,7 @@ private
 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 			)
 			resp = JSON.parse response
-			puts "\n#{resp["_embedded"]["tickets"]}\n"
+			#puts "\n#{resp["_embedded"]["tickets"]}\n"
 			resp["_embedded"]["tickets"]
 		rescue => e
 			resp = e.response.code
