@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150121045357) do
+ActiveRecord::Schema.define(version: 20150122222130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -614,8 +614,10 @@ ActiveRecord::Schema.define(version: 20150121045357) do
     t.string   "min_photo"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "affiliate_id"
   end
 
+  add_index "mt_users", ["affiliate_id"], name: "index_mt_users_on_affiliate_id", using: :btree
   add_index "mt_users", ["db_user_id"], name: "index_mt_users_on_db_user_id", using: :btree
   add_index "mt_users", ["email"], name: "index_mt_users_on_email", using: :btree
   add_index "mt_users", ["remember_token"], name: "index_mt_users_on_remember_token", using: :btree
