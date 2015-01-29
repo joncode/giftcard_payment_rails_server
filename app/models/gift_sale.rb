@@ -21,8 +21,10 @@ class GiftSale < Gift
         if gift.pay_stat == "payment_error"
             gift.payable.reason_text
         else
-            gift.messenger(:invoice_giver)
-            Resque.enqueue(GiftCreatedEvent, gift.id)
+            if gift.persisted?
+                gift.messenger(:invoice_giver)
+                Resque.enqueue(GiftCreatedEvent, gift.id)
+            end
             gift
         end
     end
