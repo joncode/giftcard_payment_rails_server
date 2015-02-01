@@ -28,6 +28,8 @@ RSpec.configure do |config|
 
     begin
     	Gift.exists?
+        gift = FactoryGirl.create(:gift, receiver_id: 2, status: 'open')
+        gift.notify
     rescue
 	    sql = "CREATE SEQUENCE gift_token_seq MINVALUE 1000 MAXVALUE 9999 CACHE 100 CYCLE;"
 		Gift.connection.execute(sql)

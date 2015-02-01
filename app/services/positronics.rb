@@ -1,7 +1,7 @@
 require 'rest_client'
 
 class Positronics
-
+	extend PositronicsUtils
 	include ActionView::Helpers::NumberHelper
 
 	attr_reader :response
@@ -17,6 +17,7 @@ class Positronics
 		@extra           = 0
 		@applied_value   = @value
 		@response        = response_from_code
+		@next 			 = nil
 	end
 
 	def success?
@@ -25,7 +26,7 @@ class Positronics
 
 	def redeem
 		tic = nil
-		tix = get_tickets_at_location
+		tix = formulate_tickets_at_location
 		if tix.class == Array
 			tic = get_ticket_from_tix(tix)
 		end
@@ -118,7 +119,43 @@ private
 	end
 
 	def get_ticket_from_tix(tix)
-		tix.select { |t| t["ticket_number"].to_i == @ticket_num }.first
+		found_it = nil
+		found_it = tix.select { |t| t["ticket_number"].to_i == @ticket_num }.first
+		if found_it.nil? && @next.present?
+			tix = get_paginated_tickets
+			if tix.class == Array
+				found_it = get_ticket_from_tix(tix)
+			end
+		end
+		found_it
+	end
+
+	def get_paginated_tickets
+		@next = @next.split('tickets/')[1]
+		begin
+			puts @next.inspect
+			response = RestClient.get(
+			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@next}",
+			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
+			)
+			resp = JSON.parse response
+			@next = resp["_links"]["next"]["href"] || nil
+			resp["_embedded"]["tickets"]
+		rescue => e
+			resp = e.response.code
+			puts "\n\nPositronics Error code = #{resp}\n\n"
+		end
+	end
+
+	def formulate_tickets_at_location
+		@next = nil
+		resp = get_tickets_at_location
+		if resp["_embedded"]["tickets"].present?
+			@next = resp["_links"]["next"]["href"] || nil
+			resp["_embedded"]["tickets"]
+		else
+			resp
+		end
 	end
 
 	def get_tickets_at_location
@@ -127,105 +164,12 @@ private
 			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets",
 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 			)
-			resp = JSON.parse response
-			#puts "\n#{resp["_embedded"]["tickets"]}\n"
-			resp["_embedded"]["tickets"]
+			JSON.parse(response)
 		rescue => e
 			resp = e.response.code
 			puts "\n\nPositronics Error code = #{resp}\n\n"
+			resp
 		end
 	end
-
-	# def redeem_gift_old(value, ticket_num, pos_merchant_id, gift_card_id)
-	# 	value = value.to_i
-	# 	response = RestClient.get(
-	# 	    "#{POSITRONICS_API_URL}/locations/#{pos_merchant_id}/tickets",
-	# 	    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
-	# 	)
-	# 	resp = JSON.parse response
-	# 	tix = resp["_embedded"]["tickets"]
-	# 	tic = nil
-	# 	tic = tix.select { |t| t["ticket_number"] == ticket_num.to_i }.first
-	# 	if value == 0
-	# 		error = "Value entered was not a number"
-	# 	elsif tic.present?
-	# 		if tic["closed_at"].nil?
-	# 			total = tic["totals"]["due"].to_i
-
-	# 			if value.to_i < total.to_i
-	# 				extra = total.to_i - value.to_i
-	# 				text = "Ticket Value exceeds the gift value. The gift value will be applied in full. #{number_to_currency(extra/100.0)} remain on the ticket."
-
-	# 			elsif value.to_i > total.to_i
-	# 				extra = value.to_i - total.to_i
-	# 				text = "Gift Value exceeds the ticket value. #{number_to_currency(extra/100.0)} remain on the gift."
-	# 				value = total.to_i
-	# 			else
-	# 				text = "Gift value matched Ticket value, transaction completed."
-	# 			end
-
-	# 			tic_id = tic["id"]
-	# 			payload = {
-	# 			  "type" => "gift_card",
-	# 			  "amount" => value,
-	# 			  "tip" => 0,
-	# 			  "card_info" => {
-	# 			    "number" => "#{gift_card_id}" 		# String, Required gift card number, as a string.
-	# 			  }
-	# 			}.to_json
-
-	# 			response = RestClient.post(
-	# 			    "#{POSITRONICS_API_URL}/locations/#{pos_merchant_id}/tickets/#{tic_id}/payments/",
-	# 			    payload,
-	# 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
-	# 			)
-	# 			resp = JSON.parse response
-
-	# 			# resp --- what are the conditions here
-
-	# 		else
-	# 			error = "Ticket Number #{ticket_num} has already been paid."
-	# 		end
-	# 	else
-	# 		error = "No Ticket was found for ticket number #{ticket_num}"
-	# 	end
-	# 	return { "error" => error, text => "text"}
-	# end
-
-	# def create
-	# 	payload = {
-	# 		"employee" => "BdTaKT4X",
-	# 		"order_type" => "KxiAaip5",
-	# 		"revenue_center" => "LdiqGibo",
-	# 		"table" => "x4TdoTd8",
-	# 		"guest_count" => 1,
-	# 		"name" => "ItsOnMe ticket",
-	# 		"auto_send" => true
-	# 	}.to_json
-
-	# 	response = RestClient.post( "#{POSITRONICS_API_URL}/locations/EaTaa5c6/tickets", payload, {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY })
-	# 	resp_ticket = JSON.parse response
-
-
-	# 	tic_id = resp_ticket["id"]
-	# 	payload = [
-	# 		{
-	# 		"menu_item" => "recb5cKX",
-	# 		"quantity" => 2,
-	# 		"price_level" => "Bycnrcdy",
-	# 		"comment" => "Burned",
-	# 		"modifiers" => []
-	# 		},
-	# 		{
-	# 		"menu_item" => "gki84ia9",
-	# 		"quantity" => 1,
-	# 		"price_level" => "g4T4dTBj",
-	# 		}
-	# 	].to_json
-
-	# 	response = RestClient.post("#{POSITRONICS_API_URL}/locations/EaTaa5c6/tickets/#{tic_id}/items", payload, {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY})
-	# 	resp = JSON.parse response
-	# end
-
 
 end
