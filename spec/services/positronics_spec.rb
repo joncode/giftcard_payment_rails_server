@@ -9,8 +9,10 @@ describe Positronics do
 			u = FactoryGirl.create(:user)
 			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
 			g.notify
-			g.value_in_cents.should > 9900
-			cents = g.value_in_cents
+      g.balance.should == 10000
+      g.detail.should be_nil
+			g.value_in_cents.should == 10000
+			cents      = g.value_in_cents
 			setter_hsh = {"amount_paid" => 1128, "due" => 0, "gift_balance" => (10000 - 1128), "open" => false, "ticket_num" => 553, "total" => 1128, "closed" => true}
 			Positronics.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
 			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
@@ -18,9 +20,18 @@ describe Positronics do
 			puts resp.inspect
 			resp["success"].should be_true
 			resp["response_code"].should == "OVER_PAID"
-			resp["response_text"].should == "Your gift exceeded the ticket value. You will receive a new gift with a balance of $88.72."
-			g.reload.status.should == 'redeemed'
-			g.redeemed_at.should > 1.hour.ago
+			resp["response_text"].should == "Your gift exceeded the ticket value. Your gift has a balance of $88.72."
+      g.reload.status.should == 'notified'
+      g.redeemed_at.should   == nil
+      g.balance.should       == 8872
+      g.detail.should        == "$11.28 was paid with ticket # 553\n"
+      r = g.redemptions.first
+      r.gift_id.should == g.id
+      r.gift_prev_value.should == 10000
+      r.gift_next_value.should == 8872
+      r.amount.should          == 1128
+      r.type_of.should         == "positronics"
+      r.ticket_id.should       == "o6iBA8Tk"
 		end
 
 		it "should redeem gift when ticket and gift are the same value" do

@@ -1,5 +1,6 @@
 class Gift < ActiveRecord::Base
 	extend  GiftScopes
+    include GiftLifecycle
 	include Formatter
 	include Email
 	include GiftSerializers
@@ -55,81 +56,14 @@ class Gift < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
-    def notify(redeem=true)
-        if notifiable?
-            if (self.new_token_at.nil? || self.new_token_at < reset_time)
-                current_time   = Time.now.utc
-                #self.new_token_at = current_time
-                if redeem
-                    include_status = if self.status == 'open'
-                        #self.status = 'notified'
-                        " status = 'notified' ,"
-                    else
-                        ""
-                    end
-                    include_notify = if self.notified_at.nil?
-                        #self.notified_at = current_time
-                        " notified_at = '#{current_time}' ,"
-                    else
-                        ""
-                    end
-                    sql = "UPDATE gifts SET #{include_status} #{include_notify} token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #{self.id};"
-                    # RESQUE -> POST GIFT TO MERCHANTS FIREBASE
-                        # SAVE THGE GIFTS BY MERCHANT ID & RESET_TIME OR CURRENT DATE
-                else
-                    sql = "UPDATE gifts SET status = 'notified', token = nextval('gift_token_seq'), notified_at = '#{current_time}' WHERE id = #{self.id};"
-                end
-
-                Gift.connection.execute(sql)
-                self.reload
-                true
-            else
-                true
-            end
-        end
-    end
-
-    def notifiable?
-        return self.status == 'open' || self.status == 'notified'
-    end
-
-    def redeem_gift(server_code=nil)
+    def value
         if self.status == 'notified'
-            self.status      = 'redeemed'
-            self.redeemed_at = Time.now.utc
-            self.server      = server_code
-            self.order_num   = make_order_num(self.id)
-            if self.save
-                Resque.enqueue(PointsForCompletionJob, self.id)
-                true
-            else
-                false
-            end
+            string_to_cents(number_to_currency((self.balance/100.0), unit: "" , delimiter: ""))
         else
-            #=> gift cannot be redeemed, its not notified
-            false
+            super
         end
     end
 
-    def pos_redeem(ticket_num, pos_merchant_id)
-        pos_hsh = { "ticket_num" => ticket_num,
-                    "gift_card_id" => self.obscured_id,
-                    "pos_merchant_id" => pos_merchant_id,
-                    "value" => self.value_in_cents }
-        pos_obj = Positronics.new(pos_hsh)
-        resp = pos_obj.redeem
-        resp["success"] = pos_obj.success?
-        if resp["success"]
-            if pos_obj.response["response_code"] == "OVER_PAID"
-                # create a new gift with the extra money
-                # redeem and adjust the orginal gift
-                self.redeem_gift(nil)
-            else
-                self.redeem_gift(nil)
-            end
-        end
-        resp
-    end
 
     def obscured_id
         NUMBER_ID + self.id

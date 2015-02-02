@@ -136,6 +136,19 @@ describe Gift do
     	gift.balance.should == 10000
     end
 
+    it "should display the balance for :value when gift is nofiied" do
+    	gift = FactoryGirl.create(:gift, receiver_id: 123)
+    	gift.update(balance: 4600)
+		gift.reload
+    	gift.value.should == "100"
+    	gift.notify
+    	gift.reload
+    	gift.value.should == "46"
+    	gift.redeem_gift(nil)
+    	gift.reload
+    	gift.value.should == "100"
+    end
+
     describe :notify do
     	it "should notify a open gift and set time fields" do
     		gift = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name")
@@ -162,7 +175,7 @@ describe Gift do
 
     	it "should notify an already notified gift , updating token fields" do
     		yesterday = "2014-10-14 19:36:27"
-    		gift = FactoryGirl.create(:gift, receiver_id: 234, status: 'notified', receiver_name: "test name", token: 4675, notified_at: yesterday, new_token_at: yesterday)
+    		gift = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name", token: 4675, notified_at: yesterday, new_token_at: yesterday)
     		gift.update(status: 'notified')
     		gift.notify
     		gift.reload
@@ -177,7 +190,7 @@ describe Gift do
 
     	it "should not update a gift that is notified with current token" do
     		today = Time.now - 1.hour
-    		gift  = FactoryGirl.create(:gift, receiver_id: 234, status: 'notified', receiver_name: "test name", token: 4675, notified_at: today, new_token_at: today)
+    		gift  = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name", token: 4675, notified_at: today, new_token_at: today)
     		gift.update(status: 'notified')
     		gift.notify
     		gift.reload
@@ -192,7 +205,7 @@ describe Gift do
 
     	it "should redeem a notified gift and set required fields" do
     		today = Time.now.utc - 1.hour
-    		gift  = FactoryGirl.create(:gift, receiver_id: 234, status: 'notified', receiver_name: "test name", token: 4675, notified_at: today, new_token_at: today)
+    		gift  = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name", token: 4675, notified_at: today, new_token_at: today)
     		gift.update(status: 'notified')
     		gift.notify
     		gift.redeem_gift
@@ -204,7 +217,7 @@ describe Gift do
 
      	it "should take an optional servercode" do
     		today = Time.now.utc - 1.hour
-    		gift  = FactoryGirl.create(:gift, receiver_id: 234, status: 'notified', receiver_name: "test name", token: 4675, notified_at: today, new_token_at: today)
+    		gift  = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name", token: 4675, notified_at: today, new_token_at: today)
     		gift.update(status: 'notified')
     		gift.notify
     		gift.redeem_gift("jenny")
@@ -215,7 +228,8 @@ describe Gift do
     	it "should not redeem an un-notified gift" do
     		today = Time.now.utc - 1.hour
     		rt 	  = (Time.now.utc - 30.minutes)
-    		gift  = FactoryGirl.create(:gift, receiver_id: 234, status: 'notified', receiver_name: "test name", token: 4675, notified_at: today, new_token_at: today)
+    		gift  = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name", token: 4675, notified_at: today, new_token_at: today)
+    		gift.notify
     		gift.update(status: 'redeemed', redeemed_at: rt)
     		gift.redeem_gift
     		gift.reload

@@ -4,11 +4,11 @@ class Positronics
 	extend PositronicsUtils
 	include ActionView::Helpers::NumberHelper
 
-	attr_reader :response
+	attr_reader :response, :code, :extra, :applied_value, :ticket_num, :ticket_id
 
 	def initialize args
 		puts "Positronics args = #{args.inspect}"
-		@ticket_num      = args["ticket_num"].to_i
+		@ticket_num      = args["ticket_num"].to_s
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
@@ -77,7 +77,7 @@ private
 			r_text = "#{number_to_currency(@value/100.0)} was applied to your ticket. Transaction completed."
 		when 201
 			r_code = "OVER_PAID"
-			r_text = "Your gift exceeded the ticket value. You will receive a new gift with a balance of #{number_to_currency(@extra/100.0)}."
+			r_text = "Your gift exceeded the ticket value. Your gift has a balance of #{number_to_currency(@extra/100.0)}."
 		when 206
 			r_code = "APPLIED"
 			r_text = "#{number_to_currency(@value/100.0)} was applied to your ticket. A total of #{number_to_currency(@extra/100.0)} remains to be paid."
@@ -120,7 +120,7 @@ private
 
 	def get_ticket_from_tix(tix)
 		found_it = nil
-		found_it = tix.select { |t| t["ticket_number"].to_i == @ticket_num }.first
+		found_it = tix.select { |t| t["ticket_number"].to_s == @ticket_num }.first
 		if found_it.nil? && @next.present?
 			tix = get_paginated_tickets
 			if tix.class == Array
