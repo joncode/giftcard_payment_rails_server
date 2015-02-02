@@ -66,8 +66,6 @@ describe Positronics do
 			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
 			g.notify
 			setter_hsh = {"amount_paid" => 10000, "due" => 1128, "gift_balance" => 0, "open" => true, "ticket_num" => 600, "total" => 11128, "closed" => false}
-			# Positronics.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
-			# Positronics.any_instance.stub(:get_paginated_tickets).and_return(second_page_resp["_embedded"]["tickets"])
 			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
 			stub_request(:get, "https://api.positronics.io/0.1/locations/EaTaa5c6/tickets").
         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Api-Key'=>'203d714b6a3642379ce7ccbabe4e9926', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).

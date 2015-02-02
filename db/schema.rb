@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150122222130) do
+ActiveRecord::Schema.define(version: 20150202204728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -433,6 +433,7 @@ ActiveRecord::Schema.define(version: 20150122222130) do
     t.datetime "notified_at"
     t.datetime "new_token_at"
     t.integer  "token"
+    t.integer  "balance"
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
@@ -837,6 +838,21 @@ ActiveRecord::Schema.define(version: 20150122222130) do
   end
 
   add_index "redeems", ["gift_id"], name: "index_redeems_on_gift_id", using: :btree
+
+  create_table "redemptions", force: true do |t|
+    t.integer  "gift_id"
+    t.integer  "amount",          default: 0
+    t.string   "ticket_id"
+    t.json     "req_json"
+    t.json     "resp_json"
+    t.integer  "type_of",         default: 0
+    t.integer  "gift_prev_value", default: 0
+    t.integer  "gift_next_value", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "redemptions", ["gift_id"], name: "index_redemptions_on_gift_id", using: :btree
 
   create_table "registers", force: true do |t|
     t.integer  "gift_id"
