@@ -130,6 +130,12 @@ describe Gift do
         gift.value.should == "36.50"
     end
 
+    it "should save :balance from value automatically" do
+    	gift = FactoryGirl.create(:gift)
+    	gift.value.should 	== "100"
+    	gift.balance.should == 10000
+    end
+
     describe :notify do
     	it "should notify a open gift and set time fields" do
     		gift = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name")
@@ -325,6 +331,16 @@ describe Gift do
 		gift2.reload
 		gift2.payable.id.should     == gift.id
 		gift2.payable.class.should  == Gift
+	end
+
+	it "should associate with redemptions" do
+		g = FactoryGirl.create(:gift)
+		r = FactoryGirl.create(:redemption, gift_id: g.id)
+		r2 = FactoryGirl.create(:redemption, gift_id: g.id)
+		rs = g.redemptions
+		rs.include?(r).should be_true
+		rs.include?(r2).should be_true
+		rs.count.should == 2
 	end
 
 	it "should set the status of parent Gift to regifted" do

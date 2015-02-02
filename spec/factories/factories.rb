@@ -1,5 +1,14 @@
 FactoryGirl.define do
 
+    factory :redemption do
+        gift_id         123
+        amount          3000
+        ticket_id       "j67HJdwe"
+        type_of         0
+        gift_prev_value 10000
+        gift_next_value 7000
+    end
+
     factory :user_point do
         user_id 1
         region_id 1

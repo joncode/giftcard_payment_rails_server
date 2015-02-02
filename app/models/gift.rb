@@ -19,6 +19,7 @@ class Gift < ActiveRecord::Base
     has_one     :sms_contact,   autosave: true
 	has_many    :gift_items, 	dependent: :destroy
     has_many    :dittos,        as: :notable
+    has_many    :redemptions
     belongs_to  :provider
     belongs_to  :giver,         polymorphic: :true
     belongs_to  :receiver,      class_name: User
@@ -42,9 +43,9 @@ class Gift < ActiveRecord::Base
     before_create :add_provider_name,   :if => :no_provider_name?
     before_create :regift,              :if => :regift?
     before_create :build_gift_items
+    before_create :set_balance
 
     before_create :set_status_and_pay_stat    # must be last before_create
-
 
     default_scope -> { where(active: true) } # indexed
 
@@ -496,6 +497,12 @@ private
             string_to_cents(self.cost)
         else
             "0"
+        end
+    end
+
+    def set_balance
+        if self.balance.nil?
+            self.balance = self.value_in_cents
         end
     end
 end
