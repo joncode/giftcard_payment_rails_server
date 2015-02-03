@@ -138,9 +138,17 @@ private
 			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@next}",
 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 			)
-			resp = JSON.parse response
-			@next = resp["_links"]["next"]["href"]
-			resp["_embedded"]["tickets"]
+			resp = JSON.parse(response)
+			if resp["_embedded"]["tickets"].present?
+				if resp["_links"] && resp["_links"]["next"]
+					@next = resp["_links"]["next"]["href"]
+				else
+					@next = nil
+				end
+				resp["_embedded"]["tickets"]
+			else
+				resp
+			end
 		rescue => e
 			puts "\n\n POSITRONICS ERROR #{e.inspect}"
 			unless e.nil?
@@ -152,9 +160,11 @@ private
 
 	def formulate_tickets_at_location
 		@next = nil
-		resp = get_tickets_at_location
+		resp  = get_tickets_at_location
 		if resp["_embedded"]["tickets"].present?
-			@next = resp["_links"]["next"]["href"]
+			if resp["_links"] && resp["_links"]["next"]
+				@next = resp["_links"]["next"]["href"]
+			end
 			resp["_embedded"]["tickets"]
 		else
 			resp
