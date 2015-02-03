@@ -35,7 +35,7 @@ end
 
 SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"
 
-DEFAULT_RECEIPT_IMG_URL = "d|v1420767965/default_receipt_photo_pqy1i9.png"
+DEFAULT_RECEIPT_IMG_URL = "d|v1420767965/default_receipt_photo_pymjmb.png"
 
 AT_EMAIL       = "@itson.me"
 SUPPORT_EMAIL  = "support#{AT_EMAIL}"
