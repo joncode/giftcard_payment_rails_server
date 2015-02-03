@@ -139,7 +139,7 @@ private
 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 			)
 			resp = JSON.parse(response)
-			if resp["_embedded"]["tickets"].present?
+			if resp.kind_of?(Hash) && resp["_embedded"].present? && resp["_embedded"]["tickets"].present?
 				if resp["_links"] && resp["_links"]["next"]
 					@next = resp["_links"]["next"]["href"]
 				else
@@ -151,9 +151,11 @@ private
 			end
 		rescue => e
 			puts "\n\n POSITRONICS ERROR #{e.inspect}"
+			e
 			unless e.nil?
 				resp = e.response.code
 				puts "\n\nPositronics Error code = #{resp}\n\n"
+				resp
 			end
 		end
 	end
@@ -161,8 +163,8 @@ private
 	def formulate_tickets_at_location
 		@next = nil
 		resp  = get_tickets_at_location
-		if resp["_embedded"]["tickets"].present?
-			if resp["_links"] && resp["_links"]["next"]
+		if resp.kind_of?(Hash) && resp["_embedded"].present? && resp["_embedded"]["tickets"].present?
+			if resp["_links"].present? && resp["_links"]["next"].present?
 				@next = resp["_links"]["next"]["href"]
 			end
 			resp["_embedded"]["tickets"]
@@ -179,9 +181,14 @@ private
 			)
 			JSON.parse(response)
 		rescue => e
-			resp = e.response.code
-			puts "\n\nPositronics Error code = #{resp}\n\n"
-			resp
+			puts "\n\n POSITRONICS ERROR #{e.inspect}"
+			e
+			unless e.nil?
+				resp = e.response.code
+				puts "\n\nPositronics Error code = #{resp}\n\n"
+				resp
+			end
+
 		end
 	end
 
