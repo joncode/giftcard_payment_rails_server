@@ -139,11 +139,14 @@ private
 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 			)
 			resp = JSON.parse response
-			@next = resp["_links"]["next"]["href"] || nil
+			@next = resp["_links"]["next"]["href"]
 			resp["_embedded"]["tickets"]
 		rescue => e
-			resp = e.response.code
-			puts "\n\nPositronics Error code = #{resp}\n\n"
+			puts "\n\n POSITRONICS ERROR #{e.inspect}"
+			unless e.nil?
+				resp = e.response.code
+				puts "\n\nPositronics Error code = #{resp}\n\n"
+			end
 		end
 	end
 
@@ -151,7 +154,7 @@ private
 		@next = nil
 		resp = get_tickets_at_location
 		if resp["_embedded"]["tickets"].present?
-			@next = resp["_links"]["next"]["href"] || nil
+			@next = resp["_links"]["next"]["href"]
 			resp["_embedded"]["tickets"]
 		else
 			resp
