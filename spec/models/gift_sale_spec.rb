@@ -377,7 +377,7 @@ describe GiftSale do
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             response = GiftSale.create @gift_hsh
-
+            Accountant.stub(:merchant).and_return(true)
             run_delayed_jobs
             abs_gift_id = response.id + NUMBER_ID
 
@@ -400,7 +400,7 @@ describe GiftSale do
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-
+            Accountant.stub(:merchant).and_return(true)
             response = GiftSale.create @gift_hsh
             run_delayed_jobs
             abs_gift_id = response.id + NUMBER_ID
@@ -424,6 +424,7 @@ describe GiftSale do
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+            Accountant.stub(:merchant).and_return(true)
             good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@user.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1,:android =>{:alert => "#{@user.name} sent you a gift at #{@provider.name}!"}}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             response = GiftSale.create @gift_hsh
@@ -431,6 +432,7 @@ describe GiftSale do
         end
 
         it "should not message users when payment_error" do
+            Accountant.stub(:merchant).and_return(true)
             auth_response = "3,2,33,This transaction has been declined.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
@@ -448,6 +450,7 @@ describe GiftSale do
                 stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
                 stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
                 stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
+
                 @gift_hsh["value"] = "100.00"
                 gift_id = Gift.maximum(:id).to_i + 1
                 giver_data = {

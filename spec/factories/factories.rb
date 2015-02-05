@@ -61,6 +61,7 @@ FactoryGirl.define do
     factory :landing_page do
         campaign_id 1
         affiliate_id 1
+        link    "itson.me/shop/san-diego/tester_aff"
     end
 
     factory :admin_user do

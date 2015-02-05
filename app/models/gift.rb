@@ -14,13 +14,16 @@ class Gift < ActiveRecord::Base
     RECEIVER_STATUS = { 10 => "incomplete" , 20 => "open", 30 => "notified",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
     BAR_STATUS      = { 10 => "live" ,       20 => "live",     30 => "live",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
 
-	has_one     :redeem, 		dependent: :destroy
-	has_one     :order, 		dependent: :destroy
+	#has_one     :redeem, 		dependent: :destroy
+	#has_one     :order, 		dependent: :destroy
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :sms_contact,   autosave: true
 	has_many    :gift_items, 	dependent: :destroy
     has_many    :dittos,        as: :notable
     has_many    :redemptions
+    has_many    :affiliate_gifts
+    has_many    :affiliates, through: :affiliate_gifts
+    has_many    :landing_pages, through: :affiliate_gifts
     belongs_to  :provider
     belongs_to  :giver,         polymorphic: :true
     belongs_to  :receiver,      class_name: User
@@ -64,6 +67,15 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def link= link
+        lp = LandingPage.where(link: link).first
+        unless lp.nil?
+            lp.gifts += 1
+            self.landing_pages << lp
+            self.affiliates << lp.affiliate
+            lp.save
+        end
+    end
 
     def obscured_id
         NUMBER_ID + self.id
