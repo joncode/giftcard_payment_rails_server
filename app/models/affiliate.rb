@@ -5,6 +5,7 @@ class Affiliate < ActiveRecord::Base
 	has_many :users, 	 through: :affiliations, source: :target, source_type: 'User'
 	has_many :payments,     as: :partner
 	has_many :registers,    as: :partner
+	has_many :landing_pages
 
 	def create_affiliation(target_type)
 		if target_type == "User"

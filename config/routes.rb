@@ -116,7 +116,11 @@ Drinkboard::Application.routes.draw do
     namespace :v3 do
       resources :cards, only: [:create, :index, :destroy]
 
-      resources :promos, only: [:create, :show]
+      resources :promos, only: [:create, :show] do
+        collection do
+          patch :click
+        end
+      end
 
       resources :gifts, only: [:index, :create] do
         member do

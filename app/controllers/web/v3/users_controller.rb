@@ -115,7 +115,7 @@ private
     end
 
     def create_user_params
-        params.require(:data).permit("first_name", "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle")
+        params.require(:data).permit("link", "first_name", "email" , "password", "password_confirmation", "last_name" ,"phone", "twitter", "facebook_id", "iphone_photo", "handle")
     end
 
 end

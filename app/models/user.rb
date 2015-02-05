@@ -69,6 +69,15 @@ class User < ActiveRecord::Base
 		where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
 	}
 
+	def link= link
+		lp = LandingPage.where(link: link).first
+		unless lp.nil?
+			self.affiliate = lp.affiliate
+			lp.users += 1
+			lp.save
+		end
+	end
+
 	def self.app_authenticate(token)
 		#where(active: true, perm_deactive: false, remember_token: token).first
 		SessionToken.app_authenticate(token)

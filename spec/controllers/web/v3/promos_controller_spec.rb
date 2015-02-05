@@ -28,6 +28,21 @@ describe Web::V3::PromosController do
 		end
 	end
 
+	describe "click" do
+
+		it_should_behave_like("client-token authenticated", :patch, :click)
+
+		it "should add count to a link" do
+			request.env["HTTP_X_AUTH_TOKEN"] = create_user_with_token("AUTH_TOKEN").remember_token
+			lp = FactoryGirl.create(:landing_page, link: "testunique", clicks: 22)
+			hsh= { "link" => lp.link}
+			patch :click, format: :json, data: hsh
+			rrc(200)
+			lp.reload
+			lp.clicks.should == 23
+		end
+	end
+
 	describe "create" do
 		it_should_behave_like("client-token authenticated", :post, :create)
 

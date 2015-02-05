@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 include UserSessionFactory
+include AffiliateFactory
 
 describe Web::V3::UsersController do
 
@@ -25,6 +26,37 @@ describe Web::V3::UsersController do
             rrc(200)
             json["status"].should == 1
             json["data"]["email"][0].should == { "_id" => UserSocial.last.id, "value" => "abe@email.com" }
+        end
+
+        it "should create user and associate with an affiliate if link is given" do
+            a1 = make_affiliate("Afff", "One")
+            a1.total_users.should == 0
+            lp = FactoryGirl.create(:landing_page, link: "itson.me/san-diego?aid=twister_ice_tea", clicks: 2, affiliate_id: a1.id)
+            request_hsh = {"first_name" => "First", "email" => "aff@user.com", "password" => "passpass", "password_confirmation"=> "passpass", "last_name" => "archangle", "link" => "itson.me/san-diego?aid=twister_ice_tea" }
+            post :create, format: :json, data: request_hsh
+            rrc(200)
+            json["status"].should == 1
+            a1.reload
+            a1.total_users.should == 1
+            a1.users.count.should == 1
+            lp.reload.users.should == 1
+            u = a1.users.first
+            a1.users.first.should == u
+            u.affiliation.name.should == "FA"
+        end
+
+        it "should fail silently is link is not good" do
+            a1 = make_affiliate("Afff", "One")
+            a1.total_users.should == 0
+            lp = FactoryGirl.create(:landing_page, link: "itson.me/san-diego?aid=twister_ice_tea", clicks: 2, affiliate_id: a1.id)
+            request_hsh = {"first_name" => "First", "email" => "aff@user.com", "password" => "passpass", "password_confirmation"=> "passpass", "last_name" => "archangle", "link" => "itson.me/san-diego?aitwister_ice_tea" }
+            post :create, format: :json, data: request_hsh
+            rrc(200)
+            json["status"].should == 1
+            a1.reload
+            a1.total_users.should == 0
+            a1.users.count.should == 0
+            lp.reload.users.should == 0
         end
 
         it "should return correct error" do
