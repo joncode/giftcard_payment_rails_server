@@ -10,8 +10,7 @@ class Accountant
 
 			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["loc"])
 
-			debt_amount = gift.location_fee
-			register    = create_debt(gift, gift.provider.merchant, debt_amount, "loc")
+			register    = create_debt(gift, gift.provider.merchant, "loc")
 			register.save
 		end
 
@@ -24,8 +23,7 @@ class Accountant
 
 			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["aff_loc"])
 
-			debt_amount =  ((gift.value.to_f * 100).to_i * 0.15) * 0.1
-			register    = create_debt(gift, loc_affiliation.affiliate, debt_amount, "aff_loc")
+			register    = create_debt(gift, loc_affiliation.affiliate, "aff_loc")
 			register.partner     = loc_affiliation.affiliate
 			register.affiliation = loc_affiliation
 			register.save
@@ -40,23 +38,45 @@ class Accountant
 
 			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["aff_user"])
 
-			debt_amount =  ((gift.value.to_f * 100).to_i * 0.15) * 0.1
-			register    = create_debt(gift, user_affiliation.affiliate, debt_amount, "aff_user")
+			register    = create_debt(gift, user_affiliation.affiliate, "aff_user")
 			register.partner     = user_affiliation.affiliate
 			register.affiliation = user_affiliation
 			register.save
 		end
 
+		def affiliate_link gift, link
+			return nil if gift.class != GiftSale
+	        lp = LandingPage.where(link: link).first
+	        unless lp.nil?
+	            lp.gifts += 1
+	            gift.landing_pages << lp
+	            register  = create_debt(gift, lp.affiliate, "aff_link")
+	            register.partner = lp.affiliate
+				register.save
+	            gift.affiliates << lp.affiliate
+	            lp.save
+	        end
+		end
+
 	private
 
-		def create_debt(gift, obj, debt_amount, origin)
+		def debt_amount gift, origin
+			if origin == "loc"
+				gift.location_fee.to_i
+			else
+				(gift.value_in_cents * 0.15 * 0.1).to_i
+			end
+		end
+
+		def create_debt(gift, obj, origin)
 			reg = Register.new
 			reg.partner_type = obj.class.to_s
 			reg.partner_id   = obj.id
 			reg.type_of      = "debt"
 			reg.origin       = origin
 			reg.gift_id      = gift.id
-			reg.amount       = debt_amount.to_i
+			reg.amount       = debt_amount(gift, origin)
+			reg.gift         = gift
 			reg
 		end
 	end

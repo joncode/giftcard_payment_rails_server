@@ -32,7 +32,9 @@ describe "Affiliate Life Feature" do
 		a3.users.first.should == u3
 			# make a batch of gifts
 		u_not = FactoryGirl.create(:user)
-		p_not = FactoryGirl.create(:provider)
+		m_not = make_merchant_provider("Not Merchant")
+		p_not = m_not.provider
+
 
 		ResqueSpec.reset!
 		GiftSale.any_instance.stub(:messenger)
@@ -42,32 +44,31 @@ describe "Affiliate Life Feature" do
 		g4 = make_gift_sale(u2, u2, "400",  m3.provider.id)
 		g5 = make_gift_sale(u_not, u3, "500",  m1.provider.id)
 		g6 = make_gift_sale(u_not, u1, "600",  m2.provider.id)
+		#binding.pry
 		run_delayed_jobs
 			# REWARDS
 		# a1 					   = 3$ (g2) + 7.5$ (g5)
 		a1.reload
 		a1.total_merchants.should  == 1
 		a1.payout_merchants.should == 1050
+		a1.value_merchants.should  == 70000
+		a1.purchase_merchants.should == 2
 		# a2                       = 4.5$ (g3) + 6$ (g4)
 		a2.reload
 		a2.total_users.should      == 1
 		a2.payout_users.should     == 1050
+		a2.value_users.should  	   == 70000
+		a2.purchase_users.should   == 2
 		# a3                       = 1.5$ (g1/u3) + 6$ (g4/m3)
 		a3.reload
 		a3.total_merchants.should  == 1
 		a3.payout_merchants.should == 600
+		a3.value_merchants.should  == 40000
+		a3.purchase_merchants.should == 1
 		a3.total_users.should      == 1
 		a3.payout_users.should     == 150
-
-
-
-	# make a gift from aff user and aff merchant
-		# TEST
-		# debts are created correctly
-		# check data for
-			# reportings summary
-			# reportings locations
-			# reportings users
+		a3.value_users.should  	   == 10000
+		a3.purchase_users.should   == 1
 
 	# generate a payment for affiliate
 		# TEST

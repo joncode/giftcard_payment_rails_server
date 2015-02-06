@@ -68,13 +68,7 @@ class Gift < ActiveRecord::Base
     end
 
     def link= link
-        lp = LandingPage.where(link: link).first
-        unless lp.nil?
-            lp.gifts += 1
-            self.landing_pages << lp
-            self.affiliates << lp.affiliate
-            lp.save
-        end
+        Accountant.affiliate_link(self, link)
     end
 
     def obscured_id
@@ -149,7 +143,7 @@ class Gift < ActiveRecord::Base
 
     def location_fee
         if self.cat == 300
-            return (self.value.to_f * 100).to_i * 0.85
+            return self.value_in_cents * 0.85
         elsif self.cat == 100
             return (self.cost.to_f * 100).to_i
         elsif self.cat == 150

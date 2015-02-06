@@ -19,5 +19,22 @@ class Affiliate < ActiveRecord::Base
 		end
 	end
 
+	def link_gift_created amount, gift
+		self.payout_links	+= amount
+		self.purchase_links	+= 1
+		self.value_links	+= gift.value_in_cents
+	end
+
+	def user_gift_created amount, gift
+		self.payout_users	+= amount
+		self.purchase_users	+= 1
+		self.value_users	+= gift.value_in_cents
+	end
+
+	def merchant_gift_created amount, gift
+		self.payout_merchants	+= amount
+		self.purchase_merchants	+= 1
+		self.value_merchants	+= gift.value_in_cents
+	end
 
 end

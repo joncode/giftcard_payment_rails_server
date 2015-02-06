@@ -15,6 +15,8 @@ describe "Affiliate Feature" do
 			u.save.should be_true
 			a1.reload
 			a1.total_users.should	  == 1
+			a1.payout_links.should 	  == 0
+			a1.value_links.should 	  == 0
 			a1.users.count.should	  == 1
 			a1.users.first.should	  == u
 			lp.reload.users.should	  == 1
@@ -51,9 +53,12 @@ describe "Affiliate Feature" do
 			gift.persisted?.should be_true
 			db_gift  = Gift.find gift.id
 			a1.reload
-			a1.gifts.count.should == 1
-			a1.gifts.first.should == db_gift
-			lp.reload.gifts.should == 1
+			a1.gifts.count.should	 == 1
+			a1.gifts.first.should	 == db_gift
+			lp.reload.gifts.should	 == 1
+			a1.value_links.should	 == gift.value_in_cents
+			a1.purchase_links.should == 1
+			a1.payout_links.should	 == (gift.value_in_cents * 0.15 * 0.1).to_i
 
 			aff_gfts = AffiliateGift.where(gift_id: db_gift.id)
 			aff_gfts.where.not(affiliate_id: nil).first.affiliate_id.should == a1.id
