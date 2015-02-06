@@ -113,6 +113,14 @@ class Web::V3::GiftsController < MetalCorsController
         respond(status)
     end
 
+
+# {
+#                 amount_applied: 8.00,
+#                 total_check_amount: 8.00,
+#                 remaining_check_balance: 0,
+#                 remaining_gift_balance: 12.00
+# }
+
     def pos_redeem
         gift = Gift.includes(:provider).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)

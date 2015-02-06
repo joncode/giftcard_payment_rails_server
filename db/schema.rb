@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150205024701) do
+ActiveRecord::Schema.define(version: 20150206062313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,10 +29,17 @@ ActiveRecord::Schema.define(version: 20150205024701) do
     t.string   "url_name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "total_merchants",  default: 0
-    t.integer  "payout_merchants", default: 0
-    t.integer  "total_users",      default: 0
-    t.integer  "payout_users",     default: 0
+    t.integer  "total_merchants",    default: 0
+    t.integer  "payout_merchants",   default: 0
+    t.integer  "total_users",        default: 0
+    t.integer  "payout_users",       default: 0
+    t.integer  "payout_links",       default: 0
+    t.integer  "value_links",        default: 0
+    t.integer  "value_users",        default: 0
+    t.integer  "value_merchants",    default: 0
+    t.integer  "purchase_links",     default: 0
+    t.integer  "purchase_users",     default: 0
+    t.integer  "purchase_merchants", default: 0
   end
 
   add_index "affiliates", ["url_name"], name: "index_affiliates_on_url_name", using: :btree

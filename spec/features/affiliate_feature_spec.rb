@@ -11,13 +11,13 @@ describe "Affiliate Feature" do
 			a1.total_users.should == 0
 			lp = FactoryGirl.create(:landing_page, link: "itson.me/san-diego?aid=twister_ice_tea", clicks: 2, affiliate_id: a1.id)
 			new_aff_user = {"first_name" => "First", "email" => "aff@user.com", "password" => "passpass", "password_confirmation"=> "passpass", "last_name" => "archangle", "link" => "itson.me/san-diego?aid=twister_ice_tea" }
-			u = User.new(new_aff_user)
+			u  = User.new(new_aff_user)
 			u.save.should be_true
 			a1.reload
-			a1.total_users.should == 1
-			a1.users.count.should == 1
-			a1.users.first.should == u
-			lp.reload.users.should == 1
+			a1.total_users.should	  == 1
+			a1.users.count.should	  == 1
+			a1.users.first.should	  == u
+			lp.reload.users.should	  == 1
 			u.affiliation.name.should == "FA"
 		end
 
@@ -26,10 +26,10 @@ describe "Affiliate Feature" do
 	describe "gifts" do
 
 		it "should associate a gift with affiliate via link" do
-			a1 = make_affiliate("Afff", "One")
+			a1	 = make_affiliate("Afff", "One")
 			a1.gifts.count.should == 0
-			lp = FactoryGirl.create(:landing_page, link: "itson.me/san-diego?aid=twister_ice_tea", clicks: 2, affiliate_id: a1.id)
-			p = FactoryGirl.create(:provider)
+			lp	 = FactoryGirl.create(:landing_page, link: "itson.me/san-diego?aid=twister_ice_tea", clicks: 2, affiliate_id: a1.id)
+			p	 = FactoryGirl.create(:provider)
 			receiver = FactoryGirl.create(:user)
 			card = FactoryGirl.create(:card, user_id: receiver.id)
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{card.first_name},#{card.last_name},,,,,,,,,,,,,,,,,"
@@ -47,9 +47,9 @@ describe "Affiliate Feature" do
             gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             gift_hsh["link"] = "itson.me/san-diego?aid=twister_ice_tea"
 
-			gift = GiftSale.create(gift_hsh)
+			gift     = GiftSale.create(gift_hsh)
 			gift.persisted?.should be_true
-			db_gift = Gift.find gift.id
+			db_gift  = Gift.find gift.id
 			a1.reload
 			a1.gifts.count.should == 1
 			a1.gifts.first.should == db_gift

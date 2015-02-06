@@ -12,7 +12,7 @@ class Affiliation < ActiveRecord::Base
 		return nil 	 unless merchant = provider.merchant
 		return false unless affiliation = merchant.affiliation
 		return false unless affiliation.on?
-		return false if affiliation.payout > 9999
+		return false if affiliation.payout > 999999
 		affiliation
 	end
 
