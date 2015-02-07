@@ -4,7 +4,7 @@ class Positronics
 	extend PositronicsUtils
 	include ActionView::Helpers::NumberHelper
 
-	attr_reader :response, :code, :extra, :applied_value, :ticket_num, :ticket_id
+	attr_reader :response, :code, :extra, :applied_value, :ticket_num, :ticket_id, :check_value
 
 	def initialize args
 		puts "Positronics args = #{args.inspect}"
@@ -16,7 +16,8 @@ class Positronics
 		@code 		     = 100
 		@extra           = 0
 		@applied_value   = @value
-		@response        = response_from_code
+		@check_value 	 = 0
+  		@response        = response_from_code
 		@next 			 = nil
 	end
 
@@ -36,7 +37,7 @@ class Positronics
 			if tic["closed_at"].nil?
 				@ticket_id = tic["id"]
 				total      = tic["totals"]["due"].to_i
-
+				@check_value = total
 				if @value < total.to_i
 					@code  = 206   # ok , the gift has partially covered the ticket cost
 					@extra = total.to_i - @value
@@ -97,7 +98,28 @@ private
 			r_code = "ERROR"
 			r_text = "Server Error.  Please try again later"
 		end
+		if success?
+			success_hsh[:msg] = r_text
+			r_text = success_hsh
+		end
 		{ "response_code" => r_code, "response_text" => r_text}
+	end
+
+	def success_hsh
+		extra_check = 0
+		extra_gift  = 0
+		if @applied_value > @check_value
+			extra_gift = @extra
+		elsif @applied_value < @check_value
+			extra_check = @extra
+		end
+		{
+                amount_applied: @applied_value,
+                total_check_amount: @check_value,
+                remaining_check_balance: extra_check,
+                remaining_gift_balance: extra_gift,
+                msg: ""
+		}
 	end
 
 	def post_redeem
