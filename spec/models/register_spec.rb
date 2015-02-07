@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include GiftModelFactory
+
 describe Register do
 
     context 'associations' do
@@ -15,6 +17,7 @@ describe Register do
 
         it "should update and autosave affiliation payout" do
             u.affiliate = a
+
             Register.create(gift_id: 10, amount: 1140, partner_type: a.class.to_s, partner_id: a.id, origin: :aff_user, type_of: :debt, affiliation: u.affiliation)
             a.reload
             a.payout_users.should == 1140

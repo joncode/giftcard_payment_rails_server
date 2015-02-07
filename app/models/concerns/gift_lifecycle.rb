@@ -61,7 +61,7 @@ module GiftLifecycle
         prev_value   = self.balance
         self.balance -= pos_obj.applied_value
         detail_msg   = self.detail || ""
-        redemption_msg = "#{number_to_currency(pos_obj.applied_value/100.0)} was paid with ticket # #{pos_obj.ticket_num}\n"
+        redemption_msg = "#{number_to_currency(pos_obj.applied_value/100.0)} was paid with check # #{pos_obj.ticket_num}\n"
         self.detail  = redemption_msg + detail_msg
         self.save
         r = Redemption.new

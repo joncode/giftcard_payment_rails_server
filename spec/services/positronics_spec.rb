@@ -20,11 +20,11 @@ describe Positronics do
 			puts resp.inspect
 			resp["success"].should be_true
 			resp["response_code"].should == "OVER_PAID"
-			resp["response_text"].should == "Your gift exceeded the ticket value. Your gift has a balance of $88.72."
+			resp["response_text"].should == "Your gift exceeded the check value. Your gift has a balance of $88.72."
       g.reload.status.should == 'notified'
       g.redeemed_at.should   == nil
       g.balance.should       == 8872
-      g.detail.should        == "$11.28 was paid with ticket # 553\n"
+      g.detail.should        == "$11.28 was paid with check # 553\n"
       r = g.redemptions.first
       r.gift_id.should == g.id
       r.gift_prev_value.should == 10000
@@ -34,7 +34,7 @@ describe Positronics do
       r.ticket_id.should       == "o6iBA8Tk"
 		end
 
-		it "should redeem gift when ticket and gift are the same value" do
+		it "should redeem gift when check and gift are the same value" do
 			p = FactoryGirl.create(:provider, :pos_merchant_id => "EaTaa5c6", :r_sys => 3)
 			u = FactoryGirl.create(:user)
 			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
@@ -47,13 +47,13 @@ describe Positronics do
 			puts resp.inspect
 			resp["success"].should be_true
 			resp["response_code"].should == "PAID"
-			resp["response_text"].should == "$100.00 was applied to your ticket. Transaction completed."
+			resp["response_text"].should == "$100.00 was applied to your check. Transaction completed."
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 
 		end
 
-		it "should redeem gift when gift is less than ticket" do
+		it "should redeem gift when gift is less than check" do
 			p = FactoryGirl.create(:provider, :pos_merchant_id => "EaTaa5c6", :r_sys => 3)
 			u = FactoryGirl.create(:user)
 			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
@@ -66,12 +66,12 @@ describe Positronics do
 			puts resp.inspect
 			resp["success"].should be_true
 			resp["response_code"].should == "APPLIED"
-			resp["response_text"].should == "$100.00 was applied to your ticket. A total of $0.80 remains to be paid."
+			resp["response_text"].should == "$100.00 was applied to your check. A total of $0.80 remains to be paid."
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 		end
 
-		it "should redeem gift when gift is less than ticket" do
+		it "should redeem gift when gift is less than check" do
 			p = FactoryGirl.create(:provider, :pos_merchant_id => "EaTaa5c6", :r_sys => 3)
 			u = FactoryGirl.create(:user)
 			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
@@ -97,7 +97,7 @@ describe Positronics do
 			puts resp.inspect
 			resp["success"].should be_true
 			resp["response_code"].should == "APPLIED"
-			resp["response_text"].should == "$100.00 was applied to your ticket. A total of $11.28 remains to be paid."
+			resp["response_text"].should == "$100.00 was applied to your check. A total of $11.28 remains to be paid."
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 		end
@@ -116,7 +116,7 @@ def payment_more(setter_hsh)
 	    "closed_at" => 1422763846,
 	    "guest_count" => 1,
 	    "id" => "8AiKz6Td",
-	    "name" => "ItsOnMe ticket",
+	    "name" => "ItsOnMe check",
 	    "open" => setter_hsh["open"],
 	    "opened_at" => 1422757650,
 	    "ticket_number" => setter_hsh["ticket_num"],
@@ -158,7 +158,7 @@ def one_page_resp
         "closed_at" => nil,
         "guest_count" => 1,
         "id" => "o6iBA8Tk",
-        "name" => "ItsOnMe ticket",
+        "name" => "ItsOnMe check",
         "open" => true,
         "opened_at" => 1422429323,
         "ticket_number" => 553,

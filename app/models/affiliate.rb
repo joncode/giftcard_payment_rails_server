@@ -22,19 +22,29 @@ class Affiliate < ActiveRecord::Base
 	def link_gift_created amount, gift
 		self.payout_links	+= amount
 		self.purchase_links	+= 1
-		self.value_links	+= gift.value_in_cents
+		self.value_links	+= gift_value_or_calculate_value_from_amount(gift, amount)
 	end
 
 	def user_gift_created amount, gift
 		self.payout_users	+= amount
 		self.purchase_users	+= 1
-		self.value_users	+= gift.value_in_cents
+		self.value_users	+= gift_value_or_calculate_value_from_amount(gift, amount)
 	end
 
 	def merchant_gift_created amount, gift
 		self.payout_merchants	+= amount
 		self.purchase_merchants	+= 1
-		self.value_merchants	+= gift.value_in_cents
+		self.value_merchants	+= gift_value_or_calculate_value_from_amount(gift, amount)
+	end
+
+private
+
+	def gift_value_or_calculate_value_from_amount(gift, amount)
+		if gift.nil?
+			amount * 67
+		else
+			gift.value_in_cents
+		end
 	end
 
 end

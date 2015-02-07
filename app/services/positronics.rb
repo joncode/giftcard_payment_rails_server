@@ -74,19 +74,19 @@ private
 			r_text = "Gift has not been redeemed yet."
 		when 200
 			r_code = "PAID"
-			r_text = "#{number_to_currency(@value/100.0)} was applied to your ticket. Transaction completed."
+			r_text = "#{number_to_currency(@value/100.0)} was applied to your check. Transaction completed."
 		when 201
 			r_code = "OVER_PAID"
-			r_text = "Your gift exceeded the ticket value. Your gift has a balance of #{number_to_currency(@extra/100.0)}."
+			r_text = "Your gift exceeded the check value. Your gift has a balance of #{number_to_currency(@extra/100.0)}."
 		when 206
 			r_code = "APPLIED"
-			r_text = "#{number_to_currency(@value/100.0)} was applied to your ticket. A total of #{number_to_currency(@extra/100.0)} remains to be paid."
+			r_text = "#{number_to_currency(@value/100.0)} was applied to your check. A total of #{number_to_currency(@extra/100.0)} remains to be paid."
 		when 304
 			r_code = "ERROR"
-			r_text = "Ticket Number #{@ticket_num} has already been paid."
+			r_text = "Check Number #{@ticket_num} has already been paid."
 		when 404
 			r_code = "ERROR"
-			r_text = "No Ticket was found for ticket number #{@ticket_num}"
+			r_text = "Your check number #{@ticket_num} cannot be found. Please double check and try again. If this issue persists please contact support@itson.me"
 		when 500
 			r_code = "ERROR"
 			r_text = "Internal Error please contact support@itson.me"
