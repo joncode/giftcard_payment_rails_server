@@ -20,7 +20,7 @@ describe Positronics do
 			puts resp.inspect
 			resp["success"].should be_true
 			resp["response_code"].should == "OVER_PAID"
-			resp["response_text"].should == "Your gift exceeded the check value. Your gift has a balance of $88.72."
+			resp["response_text"][:msg].should == "Your gift exceeded the check value. Your gift has a balance of $88.72."
       g.reload.status.should == 'notified'
       g.redeemed_at.should   == nil
       g.balance.should       == 8872
@@ -47,7 +47,7 @@ describe Positronics do
 			puts resp.inspect
 			resp["success"].should be_true
 			resp["response_code"].should == "PAID"
-			resp["response_text"].should == "$100.00 was applied to your check. Transaction completed."
+			resp["response_text"][:msg].should == "$100.00 was applied to your check. Transaction completed."
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 
@@ -66,7 +66,7 @@ describe Positronics do
 			puts resp.inspect
 			resp["success"].should be_true
 			resp["response_code"].should == "APPLIED"
-			resp["response_text"].should == "$100.00 was applied to your check. A total of $0.80 remains to be paid."
+			resp["response_text"][:msg].should == "$100.00 was applied to your check. A total of $0.80 remains to be paid."
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 		end
@@ -97,7 +97,7 @@ describe Positronics do
 			puts resp.inspect
 			resp["success"].should be_true
 			resp["response_code"].should == "APPLIED"
-			resp["response_text"].should == "$100.00 was applied to your check. A total of $11.28 remains to be paid."
+			resp["response_text"][:msg].should == "$100.00 was applied to your check. A total of $11.28 remains to be paid."
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 		end

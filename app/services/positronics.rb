@@ -99,10 +99,13 @@ private
 			r_text = "Server Error.  Please try again later"
 		end
 		if success?
-			success_hsh[:msg] = r_text
-			r_text = success_hsh
+			hsh = success_hsh
+			hsh[:msg] = r_text
+			response_data = hsh
+		else
+			response_data = r_text
 		end
-		{ "response_code" => r_code, "response_text" => r_text}
+		{ "response_code" => r_code, "response_text" => response_data}
 	end
 
 	def success_hsh
@@ -114,11 +117,10 @@ private
 			extra_check = @extra
 		end
 		{
-                amount_applied: @applied_value,
-                total_check_amount: @check_value,
-                remaining_check_balance: extra_check,
-                remaining_gift_balance: extra_gift,
-                msg: ""
+            amount_applied: @applied_value,
+            total_check_amount: @check_value,
+            remaining_check_balance: extra_check,
+            remaining_gift_balance: extra_gift
 		}
 	end
 
