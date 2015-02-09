@@ -19,8 +19,13 @@ describe Positronics do
 			resp = g.pos_redeem(553, "EaTaa5c6")
 			puts resp.inspect
 			resp["success"].should be_true
-			resp["response_code"].should == "OVER_PAID"
-			resp["response_text"][:msg].should == "Your gift exceeded the check value. Your gift has a balance of $88.72."
+      resp["response_code"].should                           == "OVER_PAID"
+      resp["response_text"][:msg].should                     == "Your gift exceeded the check value. Your gift has a balance of $88.72."
+      resp["response_text"][:amount_applied].should          == 1128
+      resp["response_text"][:total_check_amount].should      == 1128
+      resp["response_text"][:remaining_check_balance].should == 0
+      resp["response_text"][:remaining_gift_balance].should  == 8872
+
       g.reload.status.should == 'notified'
       g.redeemed_at.should   == nil
       g.balance.should       == 8872
@@ -46,8 +51,13 @@ describe Positronics do
 			resp = g.pos_redeem(534, "EaTaa5c6")
 			puts resp.inspect
 			resp["success"].should be_true
-			resp["response_code"].should == "PAID"
-			resp["response_text"][:msg].should == "$100.00 was applied to your check. Transaction completed."
+      resp["response_code"].should                           == "PAID"
+      resp["response_text"][:msg].should                     == "$100.00 was applied to your check. Transaction completed."
+      resp["response_text"][:amount_applied].should          == 10000
+      resp["response_text"][:total_check_amount].should      == 10000
+      resp["response_text"][:remaining_check_balance].should == 0
+      resp["response_text"][:remaining_gift_balance].should  == 0
+
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 
@@ -58,15 +68,20 @@ describe Positronics do
 			u = FactoryGirl.create(:user)
 			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
 			g.notify
-			setter_hsh = {"amount_paid" => 10000, "due" => 1280, "gift_balance" => 0, "open" => true, "ticket_num" => 356, "total" => 10000, "closed" => false}
+			setter_hsh = {"amount_paid" => 10000, "due" => 80, "gift_balance" => 0, "open" => true, "ticket_num" => 356, "total" => 11280, "closed" => false}
 			Positronics.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
 			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
 			g.value_in_cents.should > 9900
 			resp = g.pos_redeem(356, "EaTaa5c6")
 			puts resp.inspect
-			resp["success"].should be_true
-			resp["response_code"].should == "APPLIED"
-			resp["response_text"][:msg].should == "$100.00 was applied to your check. A total of $0.80 remains to be paid."
+      resp["success"].should be_true
+      resp["response_code"].should                           == "APPLIED"
+      resp["response_text"][:msg].should                     == "$100.00 was applied to your check. A total of $0.80 remains to be paid."
+      resp["response_text"][:amount_applied].should          == 10000
+      resp["response_text"][:total_check_amount].should      == 10080
+      resp["response_text"][:remaining_check_balance].should == 80
+      resp["response_text"][:remaining_gift_balance].should  == 0
+
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 		end
@@ -96,8 +111,13 @@ describe Positronics do
 			resp = g.pos_redeem(600, "EaTaa5c6")
 			puts resp.inspect
 			resp["success"].should be_true
-			resp["response_code"].should == "APPLIED"
-			resp["response_text"][:msg].should == "$100.00 was applied to your check. A total of $11.28 remains to be paid."
+      resp["response_code"].should                           == "APPLIED"
+      resp["response_text"][:msg].should                     == "$100.00 was applied to your check. A total of $11.28 remains to be paid."
+      resp["response_text"][:amount_applied].should          == 10000
+      resp["response_text"][:total_check_amount].should      == 11128
+      resp["response_text"][:remaining_check_balance].should == 1128
+      resp["response_text"][:remaining_gift_balance].should  == 0
+
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 		end

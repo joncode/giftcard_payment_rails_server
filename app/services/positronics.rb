@@ -4,7 +4,7 @@ class Positronics
 	extend PositronicsUtils
 	include ActionView::Helpers::NumberHelper
 
-	attr_reader :response, :code, :extra, :applied_value, :ticket_num, :ticket_id, :check_value
+	attr_reader :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value
 
 	def initialize args
 		puts "Positronics args = #{args.inspect}"
@@ -12,10 +12,11 @@ class Positronics
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
-		@value           = args["value"]
+		@value           = args["value"].to_i
 		@code 		     = 100
-		@extra           = 0
-		@applied_value   = @value
+		@extra_value     = 0
+		@extra_gift      = 0
+		@applied_value   = 0
 		@check_value 	 = 0
   		@response        = response_from_code
 		@next 			 = nil
@@ -36,25 +37,29 @@ class Positronics
 		else
 			if tic["closed_at"].nil?
 				@ticket_id = tic["id"]
-				total      = tic["totals"]["due"].to_i
-				@check_value = total
-				if @value < total.to_i
-					@code  = 206   # ok , the gift has partially covered the ticket cost
-					@extra = total.to_i - @value
-				elsif @value > total.to_i
-					@code  = 201    # ok , a new gift has been created for the extra gift value
-					@extra = @value - total.to_i
-					@applied_value = total.to_i
+				@check_value = tic["totals"]["due"].to_i
+
+				if @value < @check_value
+					@code			= 206   # ok , the gift has partially covered the ticket cost
+					@extra_value	= @check_value - @value
+					@applied_value	= @value
+				elsif @value > @check_value
+					@code			= 201    # ok , a new gift has been created for the extra gift value
+					@extra_gift	    = @value - @check_value
+					@applied_value	= @check_value
 				else
 					@code  = 200   # ok , full aceeptance
+					@applied_value	= @value
 				end
 
 				resp = post_redeem
 				case resp
 				when "pos-merchant_id incorrect"
 					@code = 509
+					@applied_value	= 0
 				when "server_missing"
 					@code = 500
+					@applied_value	= 0
 				else
 					# all good
 				end
@@ -62,6 +67,7 @@ class Positronics
 				@code = 304
 			end
 		end
+
 		@response = response_from_code
 		return @response
 	end
@@ -78,10 +84,10 @@ private
 			r_text = "#{number_to_currency(@value/100.0)} was applied to your check. Transaction completed."
 		when 201
 			r_code = "OVER_PAID"
-			r_text = "Your gift exceeded the check value. Your gift has a balance of #{number_to_currency(@extra/100.0)}."
+			r_text = "Your gift exceeded the check value. Your gift has a balance of #{number_to_currency(@extra_gift/100.0)}."
 		when 206
 			r_code = "APPLIED"
-			r_text = "#{number_to_currency(@value/100.0)} was applied to your check. A total of #{number_to_currency(@extra/100.0)} remains to be paid."
+			r_text = "#{number_to_currency(@value/100.0)} was applied to your check. A total of #{number_to_currency(@extra_value/100.0)} remains to be paid."
 		when 304
 			r_code = "ERROR"
 			r_text = "Check Number #{@ticket_num} has already been paid."
@@ -109,18 +115,11 @@ private
 	end
 
 	def success_hsh
-		extra_check = 0
-		extra_gift  = 0
-		if @applied_value > @check_value
-			extra_gift = @extra
-		elsif @applied_value < @check_value
-			extra_check = @extra
-		end
 		{
             amount_applied: @applied_value,
             total_check_amount: @check_value,
-            remaining_check_balance: extra_check,
-            remaining_gift_balance: extra_gift
+            remaining_check_balance: @extra_value,
+            remaining_gift_balance: @extra_gift
 		}
 	end
 
