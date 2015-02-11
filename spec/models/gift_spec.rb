@@ -158,6 +158,11 @@ describe Gift do
 		value	 = "50"
 		gift	 = make_gift_sale(u, u, value, p.id)
 		gift.location_fee.should == 4250
+
+		p.update(payment_plan: :prime)
+		p.prime?.should be_true
+		gift.reload
+		gift.location_fee.should == 4750
     end
 
     describe :notify do

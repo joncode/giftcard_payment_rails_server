@@ -1,5 +1,5 @@
 class AddLocationFeeToProviders < ActiveRecord::Migration
   def change
-    add_column :providers, :location_fee, :integer, default: 0
+    add_column :providers, :payment_plan, :integer, default: 0
   end
 end

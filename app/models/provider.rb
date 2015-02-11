@@ -24,6 +24,8 @@ class Provider < ActiveRecord::Base
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
 
+	enum payment_plan: [ :no_plan, :choice, :prime ]
+
 	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
     def biz_user
@@ -155,6 +157,14 @@ class Provider < ActiveRecord::Base
 			sales_tax.gsub!(' ', '')
 		end
 		super(sales_tax)
+	end
+
+	def location_fee
+		if prime?
+			0.95
+		else
+			0.85
+		end
 	end
 
 ######   PHOTO GETTERS

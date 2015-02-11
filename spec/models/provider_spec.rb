@@ -25,6 +25,10 @@ describe Provider do
     it "should return the location_fee" do
         provider = FactoryGirl.create(:provider)
         provider.location_fee.should == 0.85
+        provider.update(payment_plan: :prime)
+        provider.location_fee.should == 0.95
+        provider.update(payment_plan: :choice)
+        provider.location_fee.should == 0.85
     end
 
     it "should web serialize with menu in json" do

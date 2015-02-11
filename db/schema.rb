@@ -809,7 +809,7 @@ ActiveRecord::Schema.define(version: 20150211213902) do
     t.integer  "region_id"
     t.integer  "r_sys",                      default: 2
     t.string   "photo_l"
-    t.integer  "location_fee",               default: 0
+    t.integer  "payment_plan",               default: 0
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree
