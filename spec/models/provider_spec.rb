@@ -22,6 +22,11 @@ describe Provider do
         provider.biz_user.should == biz_user
     end
 
+    it "should return the location_fee" do
+        provider = FactoryGirl.create(:provider)
+        provider.location_fee.should == 0.85
+    end
+
     it "should web serialize with menu in json" do
         provider = FactoryGirl.create(:provider)
         FactoryGirl.create(:menu_string, provider_id: provider.id)

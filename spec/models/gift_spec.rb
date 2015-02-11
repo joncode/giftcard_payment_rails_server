@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include GiftModelFactory
+include MerchantFactory
 
 describe Gift do
 
@@ -147,6 +149,15 @@ describe Gift do
     	gift.redeem_gift(nil)
     	gift.reload
     	gift.value.should == "100"
+    end
+
+    it "should respond with proper location fee for 95% merchant" do
+		merchant = make_merchant_provider("Location Fee")
+		p = merchant.provider
+		u		 = FactoryGirl.create(:user)
+		value	 = "50"
+		gift	 = make_gift_sale(u, u, value, p.id)
+		gift.location_fee.should == 4250
     end
 
     describe :notify do

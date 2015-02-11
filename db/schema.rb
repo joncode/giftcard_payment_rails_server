@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150206062313) do
+ActiveRecord::Schema.define(version: 20150211213902) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -809,6 +809,7 @@ ActiveRecord::Schema.define(version: 20150206062313) do
     t.integer  "region_id"
     t.integer  "r_sys",                      default: 2
     t.string   "photo_l"
+    t.integer  "location_fee",               default: 0
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree
