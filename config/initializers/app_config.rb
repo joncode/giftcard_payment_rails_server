@@ -2,6 +2,7 @@ require 'yaml'
 require 'common_utils'
 require 'emailer'
 require 'active_record_extensions'
+require 'daily_analytics_creator'
 # require 'gift_utility'
 # require 'production_db_update'
 # include ProductionDbUpdate
