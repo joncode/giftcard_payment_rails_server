@@ -59,13 +59,13 @@ class Gift < ActiveRecord::Base
 
 #/---------------------------------------------------------------------------------------------/
 
-    def value
-        if self.status == 'notified' && self.balance.present?
-            string_to_cents(number_to_currency((self.balance/100.0), unit: "" , delimiter: ""))
-        else
-            super
-        end
-    end
+    # def value
+    #     if self.status == 'notified' && self.balance.present?
+    #         string_to_cents(number_to_currency((self.balance/100.0), unit: "" , delimiter: ""))
+    #     else
+    #         super
+    #     end
+    # end
 
     def link= link
         Accountant.affiliate_link(self, link)
