@@ -51,6 +51,8 @@ class Gift < ActiveRecord::Base
 
     before_create :set_status_and_pay_stat    # must be last before_create
 
+    after_create :set_affiliate_link
+
     default_scope -> { where(active: true) } # indexed
 
     scope :search, ->(str) {
@@ -67,8 +69,14 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def set_affiliate_link
+        if @link.present?
+            Accountant.affiliate_link(self, @link)
+        end
+    end
+
     def link= link
-        Accountant.affiliate_link(self, link)
+        @link = link
     end
 
     def obscured_id

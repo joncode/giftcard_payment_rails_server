@@ -58,6 +58,22 @@ describe Web::V3::GiftsController do
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
         end
 
+        it "should create an affiliate link payment BUG FIX" do
+            a = FactoryGirl.create(:affiliate, url_name: "stewart" )
+            p = FactoryGirl.create(:provider)
+            lp = FactoryGirl.create(:landing_page, link: "qa.itson.me/shop/las-vegas?aid=stewart")
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
+            gc = {"data"=>{"items"=>[{"price"=>"50", "item_name"=>"$50", "item_id"=>389, "quantity"=>2}], "service"=>"5", "value"=>"100", "loc_id"=>p.id, "pay_id"=>@card.id, "rec_name"=>"jongh", "rec_net"=>"em", "rec_net_id"=>"m80dubstation@gmail.com", "msg"=>"testing the affiliate", "link"=>"qa.itson.me/shop/las-vegas?aid=stewart"}}
+            gift_hsh = gc["data"]
+            post :create, format: :json, data: gift_hsh
+            rrc(200)
+            g = Gift.last
+            r = Register.find_by(gift_id: g.id)
+            r.should_not be_nil
+        end
+
         it "should create a gift" do
             request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)

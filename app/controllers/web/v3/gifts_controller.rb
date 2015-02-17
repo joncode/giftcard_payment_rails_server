@@ -47,6 +47,8 @@ class Web::V3::GiftsController < MetalCorsController
         gift_hash["provider_id"]   = gps[:loc_id]
         gift_hash["value"]         = gps[:value]
         gift_hash["message"]       = gps[:msg]
+        gift_hash["link"]          = gps[:link]
+
         gift = GiftSale.create(gift_hash)
         if gift.kind_of?(Gift) && !gift.id.nil?
             success gift.web_serialize
