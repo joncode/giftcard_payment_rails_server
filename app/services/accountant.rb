@@ -3,6 +3,7 @@ class Accountant
 	class << self
 
 		def merchant gift
+			puts "\n Affiliate merchant #{gift.id}\n"
 			return nil if gift.class != Gift
 
 			debt_amount = gift.location_fee
@@ -15,6 +16,7 @@ class Accountant
 		end
 
 		def affiliate_location gift
+			puts "\n Affiliate affiliate_location #{gift.id}\n"
 			return nil if gift.class != Gift
 			return nil if gift.cat   != 300
 
@@ -30,6 +32,7 @@ class Accountant
 		end
 
 		def affiliate_user gift
+			puts "\n Affiliate affiliate_user #{gift.id}\n"
 			return nil if gift.class != Gift
 			return nil if gift.cat   != 300
 
@@ -45,6 +48,7 @@ class Accountant
 		end
 
 		def affiliate_link gift, link
+			puts "\n Affiliate affiliate_link #{gift.id} #{link}\n"
 			return nil if gift.class != GiftSale
 	        lp = LandingPage.where(link: link).first
 	        unless lp.nil?
