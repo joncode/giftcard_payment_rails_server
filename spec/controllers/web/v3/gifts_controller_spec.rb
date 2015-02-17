@@ -74,6 +74,20 @@ describe Web::V3::GiftsController do
             r.should_not be_nil
         end
 
+        it "should create an landing_page if one is not there" do
+            a = FactoryGirl.create(:affiliate, url_name: "stewart" )
+            p = FactoryGirl.create(:provider)
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+            Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
+            Sale.any_instance.stub(:resp_code).and_return(1)
+            gc = {"data"=>{"items"=>[{"price"=>"50", "item_name"=>"$50", "item_id"=>389, "quantity"=>2}], "service"=>"5", "value"=>"100", "loc_id"=>p.id, "pay_id"=>@card.id, "rec_name"=>"jongh", "rec_net"=>"em", "rec_net_id"=>"m80dubstation@gmail.com", "msg"=>"testing the affiliate", "link"=>"qa.itson.me/shop/las-vegas?aid=stewart"}}
+            gift_hsh = gc["data"]
+            post :create, format: :json, data: gift_hsh
+            rrc(200)
+            lp = LandingPage.find_by(link: "qa.itson.me/shop/las-vegas?aid=stewart")
+            lp.should_not be_nil
+        end
+
         it "should create a gift" do
             request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)

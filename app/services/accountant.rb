@@ -51,15 +51,16 @@ class Accountant
 			puts "\n Affiliate affiliate_link #{gift.id} #{link}\n"
 			return nil if gift.class != GiftSale
 	        lp = LandingPage.where(link: link).first
-	        unless lp.nil?
-	            lp.gifts += 1
-	            gift.landing_pages << lp
-	            register  = create_debt(gift, lp.affiliate, "aff_link")
-	            register.partner = lp.affiliate
-				register.save
-	            gift.affiliates << lp.affiliate
-	            lp.save
+	        if lp.nil?
+	        	lp = LandingPage.click(link: link)
 	        end
+            lp.gifts += 1
+            gift.landing_pages << lp
+            register  = create_debt(gift, lp.affiliate, "aff_link")
+            register.partner = lp.affiliate
+			register.save
+            gift.affiliates << lp.affiliate
+            lp.save
 		end
 
 	private
