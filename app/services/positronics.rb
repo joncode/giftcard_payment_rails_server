@@ -125,12 +125,11 @@ private
 
 	def post_redeem
 		payload = {
-		  "type" => "gift_card",
+		  "type" => "3rd_party",
 		  "amount" => @applied_value,
 		  "tip" => 0,
-		  "card_info" => {
-		    "number" => "#{@gift_card_id}" 		# String, Required gift card number, as a string.
-		  }
+		  "tender_type": "500",
+  		  "payment_source": "Gift #{@gift_card_id}"
 		}.to_json
 
 		response = RestClient.post(
