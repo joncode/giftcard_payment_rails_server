@@ -128,8 +128,8 @@ private
 		  "type" => "3rd_party",
 		  "amount" => @applied_value,
 		  "tip" => 0,
-		  "tender_type": "500",
-  		  "payment_source": "Gift #{@gift_card_id}"
+		  "tender_type" => "500",
+  		  "payment_source" => "Gift #{@gift_card_id}"
 		}.to_json
 
 		response = RestClient.post(
