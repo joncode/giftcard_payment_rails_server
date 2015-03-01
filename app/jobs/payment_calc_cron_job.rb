@@ -13,8 +13,8 @@ class PaymentCalcCronJob
 
         registers.each do |reg|
 
+            next unless reg.payment_id.nil? # already paid
             next unless reg.debt?   # payments for debts only
-
             partner = reg.partner
 
             next if partner.nil?  # cannot create a payment if no partner - this is error
