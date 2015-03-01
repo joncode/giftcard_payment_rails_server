@@ -4,7 +4,7 @@ class PaymentCalcCronJob
 
     def self.perform start_date=nil
         puts "\nPAYMENT CALC CRON"
-        return unless should_payment_cron_run?
+        return unless should_payment_cron_run?(start_date)
 
         sd = start_date || Payment.get_start_date_of_payment
         ed = Payment.get_end_date_of_payment(sd)
@@ -43,7 +43,8 @@ class PaymentCalcCronJob
         end
     end
 
-    def self.should_payment_cron_run?
+    def self.should_payment_cron_run?(start_date)
+        return true if start_date
         ed = Payment.get_end_date_of_payment
         DateTime.now.utc.day == ed.day
     end
