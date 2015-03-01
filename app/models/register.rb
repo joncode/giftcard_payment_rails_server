@@ -7,7 +7,21 @@ class Register < ActiveRecord::Base
 	belongs_to :gift
 	before_validation :update_partner
 
+	validates_presence_of :partner
+
 	after_save :save_affiliation
+
+	def payment_type
+		if self.loc? || self.aff_loc?
+			:merchant
+		elsif self.aff_user?
+			:user
+		elsif self.aff_link?
+			:link
+		else
+			:internal
+		end
+	end
 
 private
 
