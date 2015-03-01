@@ -40,4 +40,30 @@ describe GiftAnalytic do
 
 	end
 
-end
+end# == Schema Information
+#
+# Table name: gift_analytics
+#
+#  id         :integer         not null, primary key
+#  date_on    :date
+#  created    :integer         default(0)
+#  admin      :integer         default(0)
+#  merchant   :integer         default(0)
+#  campaign   :integer         default(0)
+#  purchase   :integer         default(0)
+#  boomerang  :integer         default(0)
+#  other      :integer         default(0)
+#  regifted   :integer         default(0)
+#  notified   :integer         default(0)
+#  redeemed   :integer         default(0)
+#  expired    :integer         default(0)
+#  cregifted  :integer         default(0)
+#  completed  :integer         default(0)
+#  velocity   :integer         default(0)
+#  revenue    :integer         default(0)
+#  profit     :integer         default(0)
+#  retail_v   :integer         default(0)
+#  created_at :datetime
+#  updated_at :datetime
+#
+

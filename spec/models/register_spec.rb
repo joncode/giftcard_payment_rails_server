@@ -44,3 +44,18 @@ describe Register do
         affiliate.should be_valid
     end
 end
+# == Schema Information
+#
+# Table name: registers
+#
+#  id           :integer         not null, primary key
+#  gift_id      :integer
+#  amount       :integer
+#  partner_id   :integer
+#  partner_type :string(255)
+#  origin       :integer         default(0)
+#  type_of      :integer         default(0)
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+

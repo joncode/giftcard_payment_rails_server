@@ -35,3 +35,19 @@ private
 	end
 end
 
+# == Schema Information
+#
+# Table name: affiliations
+#
+#  id           :integer         not null, primary key
+#  affiliate_id :integer
+#  target_id    :integer
+#  target_type  :string(255)
+#  name         :string(255)
+#  address      :string(255)
+#  payout       :integer         default(0)
+#  status       :integer         default(0)
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+

@@ -66,3 +66,17 @@ end
   #   t.datetime "created_at"
   #   t.datetime "updated_at"
   # end
+# == Schema Information
+#
+# Table name: app_contacts
+#
+#  id         :integer         not null, primary key
+#  network    :string(255)
+#  network_id :string(255)
+#  name       :string(255)
+#  birthday   :date
+#  handle     :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+

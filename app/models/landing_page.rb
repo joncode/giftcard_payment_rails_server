@@ -15,3 +15,23 @@ class LandingPage < ActiveRecord::Base
 	end
 
 end
+# == Schema Information
+#
+# Table name: landing_pages
+#
+#  id                :integer         not null, primary key
+#  campaign_id       :integer
+#  affiliate_id      :integer
+#  title             :string(255)
+#  banner_photo_url  :string(255)
+#  example_item_id   :integer
+#  page_json         :json
+#  sponsor_photo_url :string(255)
+#  link              :string(255)
+#  created_at        :datetime
+#  updated_at        :datetime
+#  clicks            :integer         default(0)
+#  users             :integer         default(0)
+#  gifts             :integer         default(0)
+#
+

@@ -3,4 +3,12 @@ class AffiliateGift < ActiveRecord::Base
  	belongs_to :gift
  	belongs_to :affiliate
  	belongs_to :landing_page
-end
+end\n# == Schema Information
+#
+# Table name: affiliates_gifts
+#
+#  affiliate_id    :integer
+#  gift_id         :integer
+#  landing_page_id :integer
+#
+

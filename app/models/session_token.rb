@@ -25,3 +25,17 @@ class SessionToken < ActiveRecord::Base
 	end
 
 end
+# == Schema Information
+#
+# Table name: session_tokens
+#
+#  id         :integer         not null, primary key
+#  token      :string(255)
+#  user_id    :integer
+#  device_id  :integer
+#  platform   :string(255)
+#  push       :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+

@@ -50,3 +50,26 @@ private
 	end
 
 end
+# == Schema Information
+#
+# Table name: protos
+#
+#  id            :integer         not null, primary key
+#  message       :text
+#  detail        :text
+#  shoppingCart  :text
+#  value         :string(255)
+#  cost          :string(255)
+#  expires_at    :datetime
+#  created_at    :datetime
+#  updated_at    :datetime
+#  giver_id      :integer
+#  giver_type    :string(255)
+#  giver_name    :string(255)
+#  provider_id   :integer
+#  provider_name :string(255)
+#  cat           :integer
+#  contacts      :integer         default(0)
+#  processed     :integer         default(0)
+#
+

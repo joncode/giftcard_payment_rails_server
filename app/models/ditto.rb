@@ -191,3 +191,17 @@ end
 
 
 
+# == Schema Information
+#
+# Table name: dittos
+#
+#  id            :integer         not null, primary key
+#  response_json :text
+#  status        :integer
+#  cat           :integer
+#  notable_id    :integer
+#  notable_type  :string(255)
+#  created_at    :datetime
+#  updated_at    :datetime
+#
+

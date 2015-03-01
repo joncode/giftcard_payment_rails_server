@@ -18,3 +18,15 @@ describe UserPoint do
 
 	end
 end
+# == Schema Information
+#
+# Table name: user_points
+#
+#  id         :integer         not null, primary key
+#  user_id    :integer
+#  region_id  :integer         default(0)
+#  points     :integer         default(0)
+#  created_at :datetime
+#  updated_at :datetime
+#
+

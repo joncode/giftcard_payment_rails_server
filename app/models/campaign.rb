@@ -69,3 +69,25 @@ private
 end
 
 
+# == Schema Information
+#
+# Table name: campaigns
+#
+#  id             :integer         not null, primary key
+#  type_of        :string(255)
+#  status         :string(255)
+#  name           :string(255)
+#  notes          :text
+#  live_date      :date
+#  close_date     :date
+#  expire_date    :date
+#  purchaser_id   :integer
+#  purchaser_type :string(255)
+#  giver_name     :string(255)
+#  photo          :string(255)
+#  budget         :integer
+#  created_at     :datetime
+#  updated_at     :datetime
+#  photo_path     :string(255)
+#
+

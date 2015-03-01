@@ -10,3 +10,14 @@ end
 
 
 
+# == Schema Information
+#
+# Table name: at_users_socials
+#
+#  id         :integer         not null, primary key
+#  at_user_id :integer
+#  social_id  :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+

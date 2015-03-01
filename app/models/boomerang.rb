@@ -19,4 +19,10 @@ class Boomerang < ActiveRecord::Base
     	Boomerang.first
     end
 
-end
+end# == Schema Information
+#
+# Table name: boomerangs
+#
+#  id :integer         not null, primary key
+#
+

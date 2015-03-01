@@ -1,10 +1,10 @@
 class Register < ActiveRecord::Base
 	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link ]
 	enum type_of: [ :debt, :credit ]
-	attr_accessor :affiliation, :gift
+	attr_accessor :affiliation
 
 	belongs_to :partner,  polymorphic: true, autosave: true
-
+	belongs_to :gift
 	before_validation :update_partner
 
 	after_save :save_affiliation
@@ -29,4 +29,19 @@ private
 		end
 	end
 end
+
+# == Schema Information
+#
+# Table name: registers
+#
+#  id           :integer         not null, primary key
+#  gift_id      :integer
+#  amount       :integer
+#  partner_id   :integer
+#  partner_type :string(255)
+#  origin       :integer         default(0)
+#  type_of      :integer         default(0)
+#  created_at   :datetime
+#  updated_at   :datetime
+#
 

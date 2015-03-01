@@ -146,4 +146,27 @@ describe CampaignItem do
         end
     end
 
-end
+end# == Schema Information
+#
+# Table name: campaign_items
+#
+#  id           :integer         not null, primary key
+#  campaign_id  :integer
+#  provider_id  :integer
+#  giver_id     :integer
+#  giver_name   :string(255)
+#  budget       :integer
+#  reserve      :integer
+#  message      :text
+#  shoppingCart :text
+#  value        :string(255)
+#  cost         :string(255)
+#  expires_at   :date
+#  expires_in   :integer
+#  textword     :string(255)
+#  contract     :boolean
+#  created_at   :datetime
+#  updated_at   :datetime
+#  detail       :text
+#
+

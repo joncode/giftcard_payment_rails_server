@@ -84,3 +84,15 @@ describe Social do
     end
 
 end
+# == Schema Information
+#
+# Table name: socials
+#
+#  id         :integer         not null, primary key
+#  network_id :string(255)
+#  network    :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#  name       :string(255)
+#
+

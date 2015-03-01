@@ -86,3 +86,14 @@ describe BulkContact do
         bulk_contact.should be_valid
     end
 end
+# == Schema Information
+#
+# Table name: bulk_contacts
+#
+#  id         :integer         not null, primary key
+#  user_id    :integer
+#  data       :text
+#  created_at :datetime
+#  updated_at :datetime
+#
+

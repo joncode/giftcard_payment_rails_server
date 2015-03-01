@@ -42,3 +42,14 @@ describe Friendship do
         r2.should be_true
     end
 end
+# == Schema Information
+#
+# Table name: friendships
+#
+#  id             :integer         not null, primary key
+#  user_id        :integer
+#  app_contact_id :integer
+#  created_at     :datetime
+#  updated_at     :datetime
+#
+

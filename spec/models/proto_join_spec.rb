@@ -42,3 +42,17 @@ describe ProtoJoin do
 
 	end
 end
+# == Schema Information
+#
+# Table name: proto_joins
+#
+#  id              :integer         not null, primary key
+#  proto_id        :integer
+#  receivable_id   :integer
+#  receivable_type :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  gift_id         :integer
+#  rec_name        :string(255)
+#
+

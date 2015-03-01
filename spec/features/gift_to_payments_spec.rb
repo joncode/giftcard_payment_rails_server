@@ -5,9 +5,9 @@ include UserFactory
 include MerchantFactory
 include GiftModelFactory
 
-describe "Affiliate Life Feature" do
+describe "Gift To Payment" do
 
-	it "should calculate all values for affiliate" do
+	it "should calculate merchant and affiliate payments" do
 			# make few affiliates
 		a1 = make_affiliate("test", "one")
 		a2 = make_affiliate("nbumberEstaban", "twoGenerates")

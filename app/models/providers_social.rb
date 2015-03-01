@@ -10,3 +10,11 @@ end
 
 
 
+# == Schema Information
+#
+# Table name: providers_socials
+#
+#  provider_id :integer         not null
+#  social_id   :integer         not null
+#
+

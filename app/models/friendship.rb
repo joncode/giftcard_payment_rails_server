@@ -15,3 +15,14 @@ class Friendship < ActiveRecord::Base
         end
     end
 end
+# == Schema Information
+#
+# Table name: friendships
+#
+#  id             :integer         not null, primary key
+#  user_id        :integer
+#  app_contact_id :integer
+#  created_at     :datetime
+#  updated_at     :datetime
+#
+

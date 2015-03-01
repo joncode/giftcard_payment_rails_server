@@ -165,6 +165,12 @@ describe Gift do
 		gift.location_fee.should == 4750
     end
 
+    it "should get its registers" do
+    	g = FactoryGirl.create(:gift)
+    	r = FactoryGirl.create(:register, gift_id: g.id)
+    	g.registers.count.should == 1
+    end
+
     describe :notify do
     	it "should notify a open gift and set time fields" do
     		gift = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name")
@@ -935,7 +941,6 @@ end
 #  provider_name  :string(255)
 #  giver_id       :integer
 #  receiver_id    :integer
-#  total          :string(20)
 #  credit_card    :string(100)
 #  provider_id    :integer
 #  message        :text
@@ -944,7 +949,6 @@ end
 #  updated_at     :datetime        not null
 #  receiver_phone :string(255)
 #  facebook_id    :string(255)
-#  anon_id        :integer
 #  receiver_email :string(255)
 #  shoppingCart   :text
 #  twitter        :string(255)
@@ -963,5 +967,11 @@ end
 #  refund_id      :integer
 #  refund_type    :string(255)
 #  cost           :string(255)
+#  detail         :text
+#  ftmeta         :tsvector
+#  notified_at    :datetime
+#  new_token_at   :datetime
+#  token          :integer
+#  balance        :integer
 #
 

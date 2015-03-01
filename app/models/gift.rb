@@ -24,6 +24,7 @@ class Gift < ActiveRecord::Base
     has_many    :affiliate_gifts
     has_many    :affiliates, through: :affiliate_gifts
     has_many    :landing_pages, through: :affiliate_gifts
+    has_many    :registers
     belongs_to  :provider
     belongs_to  :giver,         polymorphic: :true
     belongs_to  :receiver,      class_name: User
@@ -464,7 +465,6 @@ end
 #  provider_name  :string(255)
 #  giver_id       :integer
 #  receiver_id    :integer
-#  total          :string(20)
 #  credit_card    :string(100)
 #  provider_id    :integer
 #  message        :text
@@ -473,7 +473,6 @@ end
 #  updated_at     :datetime        not null
 #  receiver_phone :string(255)
 #  facebook_id    :string(255)
-#  anon_id        :integer
 #  receiver_email :string(255)
 #  shoppingCart   :text
 #  twitter        :string(255)
@@ -492,5 +491,11 @@ end
 #  refund_id      :integer
 #  refund_type    :string(255)
 #  cost           :string(255)
+#  detail         :text
+#  ftmeta         :tsvector
+#  notified_at    :datetime
+#  new_token_at   :datetime
+#  token          :integer
+#  balance        :integer
 #
 

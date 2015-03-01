@@ -48,3 +48,34 @@ private
 	end
 
 end
+# == Schema Information
+#
+# Table name: affiliates
+#
+#  id                 :integer         not null, primary key
+#  first_name         :string(255)
+#  last_name          :string(255)
+#  email              :string(255)
+#  phone              :string(255)
+#  address            :string(255)
+#  state              :string(255)
+#  city               :string(255)
+#  zip                :string(255)
+#  url_name           :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#  total_merchants    :integer         default(0)
+#  payout_merchants   :integer         default(0)
+#  total_users        :integer         default(0)
+#  payout_users       :integer         default(0)
+#  payout_links       :integer         default(0)
+#  value_links        :integer         default(0)
+#  value_users        :integer         default(0)
+#  value_merchants    :integer         default(0)
+#  purchase_links     :integer         default(0)
+#  purchase_users     :integer         default(0)
+#  purchase_merchants :integer         default(0)
+#  company            :string(255)
+#  website_url        :string(255)
+#
+

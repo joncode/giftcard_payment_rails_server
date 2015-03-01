@@ -33,3 +33,19 @@ private
     #     sms
     # end
 end
+# == Schema Information
+#
+# Table name: sms_contacts
+#
+#  id              :integer         not null, primary key
+#  gift_id         :integer
+#  subscribed_date :datetime
+#  phone           :string(255)
+#  service_id      :integer
+#  service         :string(255)
+#  textword        :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  campaign_id     :integer
+#
+

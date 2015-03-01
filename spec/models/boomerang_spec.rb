@@ -26,3 +26,10 @@ describe Boomerang do
         bgiver.short_image_url.should == "d|v1402519573/boomerang_120x120_clshuw.png"
     end
 end
+# == Schema Information
+#
+# Table name: boomerangs
+#
+#  id :integer         not null, primary key
+#
+
