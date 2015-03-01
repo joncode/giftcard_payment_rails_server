@@ -12,11 +12,11 @@ class PaymentCalcCronJob
 
         registers.each do |reg|
 
-            next unless reg.debt?
+            next unless reg.debt?   # payments for debts only
 
             partner = reg.partner
 
-            next if partner.nil?
+            next if partner.nil?  # cannot create a payment if no partner - this is error
 
             payment = Payment.where(partner: partner, start_date: sd).first_or_initialize
 
@@ -37,6 +37,7 @@ class PaymentCalcCronJob
 
             payment.end_date = ed if payment.end_date.nil?
             payment.total += reg.amount
+            payment.registers << reg
             payment.save
         end
     end

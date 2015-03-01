@@ -15,6 +15,20 @@ describe Register do
             p.partner.should == a
         end
 
+        it "should respond to :payment" do
+            u.affiliate = a
+            r = Register.create(gift_id: 10, amount: 1140, partner: a, origin: :aff_user, type_of: :debt, affiliation: u.affiliation)
+            p = Payment.new(u_transactions: 1, u_amount: 1140, total: 1140, partner: a)
+            p.id.should be_nil
+            r.payment   = p
+            r.save
+            r.reload
+            r.payment_id.should == p.id
+            r.payment.should    == p
+            p2                  = Payment.last
+            p2.id.should        == p.id
+        end
+
         it "should update and autosave affiliation payout" do
             u.affiliate = a
 
@@ -37,6 +51,18 @@ describe Register do
             a.reload
             a.payout_merchants.should == 1140
         end
+    end
+
+    it "should not save without a partner" do
+        r = FactoryGirl.build(:register)
+        r.partner_id = nil
+        r.save
+        r.should have_at_least(1).error_on(:partner)
+        r = nil
+        r = FactoryGirl.build(:register)
+        r.partner_type = nil
+        r.save
+        r.should have_at_least(1).error_on(:partner)
     end
 
     it "builds from factory" do

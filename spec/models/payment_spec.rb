@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe Payment do
-    it "builds from factory" do
-        payment = FactoryGirl.create :payment
-        payment.should be_valid
-    end
 
     context 'associations' do
 
@@ -22,6 +18,21 @@ describe Payment do
             p.affiliate.should == a
         end
 
+        it "should respond to registers" do
+            u = FactoryGirl.create(:user)
+            a = FactoryGirl.create(:affiliate)
+            u.affiliate = a
+            r = Register.create(gift_id: 10, amount: 1140, partner: a, origin: :aff_user, type_of: :debt, affiliation: u.affiliation)
+            p = Payment.new(u_transactions: 1, u_amount: 1140, total: 1140, partner: a)
+            p.registers << r
+            p.registers.should  == [r]
+            r.payment_id.should == p.id
+        end
+    end
+
+    it "builds from factory" do
+        payment = FactoryGirl.create :payment
+        payment.should be_valid
     end
 end
 # == Schema Information

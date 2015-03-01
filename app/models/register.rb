@@ -5,6 +5,7 @@ class Register < ActiveRecord::Base
 
 	belongs_to :partner,  polymorphic: true, autosave: true
 	belongs_to :gift
+	belongs_to :payment
 	before_validation :update_partner
 
 	validates_presence_of :partner
