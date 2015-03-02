@@ -3,7 +3,7 @@ class PaymentCalcCronJob
     @queue = :database
 
     def self.perform start_date=nil
-        puts "\nPAYMENT CALC CRON"
+        puts "\n-------------    PAYMENT CALC CRON     -------------"
         return unless should_payment_cron_run?(start_date)
 
         sd = start_date || Payment.get_start_date_of_payment
