@@ -57,16 +57,16 @@ describe Register do
         r = FactoryGirl.build(:register)
         r.partner_id = nil
         r.save
-        r.should have_at_least(1).error_on(:partner)
+        r.should have_at_least(1).error_on(:partner_id)
         r = nil
         r = FactoryGirl.build(:register)
         r.partner_type = nil
         r.save
-        r.should have_at_least(1).error_on(:partner)
+        r.should have_at_least(1).error_on(:partner_type)
     end
 
     it "builds from factory" do
-        affiliate = FactoryGirl.create :register
+        affiliate = FactoryGirl.build :register
         affiliate.should be_valid
     end
 end
