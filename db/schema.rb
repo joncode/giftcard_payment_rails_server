@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150301210351) do
+ActiveRecord::Schema.define(version: 20150303170157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -712,7 +712,7 @@ ActiveRecord::Schema.define(version: 20150301210351) do
     t.integer  "u_transactions", default: 0
     t.integer  "u_amount",       default: 0
     t.integer  "total",          default: 0
-    t.boolean  "paid"
+    t.boolean  "paid",           default: false
     t.integer  "partner_id"
     t.string   "partner_type"
     t.datetime "created_at"
@@ -721,6 +721,7 @@ ActiveRecord::Schema.define(version: 20150301210351) do
     t.integer  "l_amount",       default: 0
   end
 
+  add_index "payments", ["paid", "start_date"], name: "index_payments_on_paid_and_start_date", using: :btree
   add_index "payments", ["partner_id", "partner_type"], name: "index_payments_on_partner_id_and_partner_type", using: :btree
 
   create_table "pn_tokens", force: true do |t|
