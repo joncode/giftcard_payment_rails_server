@@ -719,6 +719,7 @@ ActiveRecord::Schema.define(version: 20150303170157) do
     t.datetime "updated_at"
     t.integer  "l_transactions", default: 0
     t.integer  "l_amount",       default: 0
+    t.integer  "at_user_id"
   end
 
   add_index "payments", ["paid", "start_date"], name: "index_payments_on_paid_and_start_date", using: :btree
