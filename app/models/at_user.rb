@@ -1,5 +1,5 @@
 class AtUser < ActiveRecord::Base
-
+	has_many :payments
 	has_many :at_users_socials
 
 	def name

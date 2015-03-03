@@ -3,7 +3,7 @@ class Accountant
 	class << self
 
 		def merchant gift
-			puts "\n Affiliate merchant #{gift.id}\n"
+			puts "\n Merchant #{gift.id}\n"
 			return nil if gift.class != Gift
 
 			debt_amount = gift.location_fee

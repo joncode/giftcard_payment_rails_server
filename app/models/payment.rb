@@ -1,6 +1,6 @@
 class Payment < ActiveRecord::Base
-
 	has_many :registers
+    belongs_to :at_user
 	belongs_to :partner,  polymorphic: true
 
 	def affiliate
