@@ -14,6 +14,19 @@ describe Redemption do
 		r.type_of.should == "positronics"
 	end
 
+	it "should autosave with gift" do
+		gift = FactoryGirl.create(:gift)
+		r = FactoryGirl.build(:redemption, gift_id: gift.id)
+		gift.detail = "Test Detail"
+		ary = gift.redemptions
+		gift.redemptions << r
+		gift.save
+		gift.reload
+		gift.redemptions.should == [r]
+		gift.detail.should == "Test Detail"
+		r.reload.gift_id.should == gift.id
+	end
+
 	it "builds from factory" do
 	  	redemption = FactoryGirl.create :redemption
 	  	redemption.should be_valid

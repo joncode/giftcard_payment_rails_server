@@ -46,7 +46,7 @@ module GiftLifecycle
             self.server      = server_code
             self.order_num   = make_order_num(self.id)
             if self.save
-                Resque.enqueue(PointsForCompletionJob, self.id)
+                Resque.enqueue(GiftRedeemedEvent, self.id)
                 true
             else
                 false
@@ -58,19 +58,23 @@ module GiftLifecycle
     end
 
     def partial_redeem(pos_obj)
-        prev_value   = self.balance
-        self.balance -= pos_obj.applied_value
-        detail_msg   = self.detail || ""
+        prev_value     = self.balance
+        self.balance   -= pos_obj.applied_value
+        detail_msg     = self.detail || ""
         redemption_msg = "#{number_to_currency(pos_obj.applied_value/100.0)} was paid with check # #{pos_obj.ticket_num}\n"
-        self.detail  = redemption_msg + detail_msg
-        self.save
-        r = Redemption.new
-        r.gift_id = self.id
+        self.detail    = redemption_msg + detail_msg
+        r                 = Redemption.new
         r.gift_prev_value = prev_value
         r.gift_next_value = self.balance
-        r.amount = pos_obj.applied_value
-        r.ticket_id = pos_obj.ticket_id
-        r.save
+        r.amount          = pos_obj.applied_value
+        r.ticket_id       = pos_obj.ticket_id
+        self.redemptions << r
+        if self.save
+            Resque.enqueue(GiftRedeemedEvent, self.id)
+            true
+        else
+            false
+        end
     end
 
     def pos_redeem(ticket_num, pos_merchant_id)
