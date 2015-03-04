@@ -22,3 +22,10 @@ private
     end
 
 end
+
+# reset_password - MtUser
+#         data = {
+#             "text"        => 'reset_password',
+#             "user_type"   => 'MtUser',
+#             "user_id"     => user.id
+#         }

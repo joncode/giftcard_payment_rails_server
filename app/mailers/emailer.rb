@@ -3,6 +3,7 @@ module Emailer
 
 # Account Emails
 	def reset_password data
+		subdomain = data['subdomain']
 		if data['user_type'] == 'AtUser'
 			user = AtUser.find(data["user_id"])
 		elsif data['user_type'] == 'MtUser'
@@ -11,7 +12,7 @@ module Emailer
 			user = User.find(data["user_id"])
 		end
 		subject  = "Reset password request"
-		body     = text_for_user_reset_password(user)
+		body     = text_for_user_reset_password(user, subdomain)
 
 		template_name = "user"
 		message       = message_hash(subject, user.email, user.name, body)
@@ -277,7 +278,7 @@ private
 					# blacklist is
 		bad_emails = ["test@test.com", "jp@jp.com", "jb@jb.com", "gj@gj.com", "fl@fl.com", "adam@adam.com", "rs@rs.com","kk@gmail.com", "bitmover1@gmail.com", "app@gmail.com", "spnoge@bob.com", "adam@gmail.com", "gifter@sos.me", "taylor@gmail.com"]
 		if bad_emails.include?(email)
-				email = "noreplydrinkboard@gmail.com"
+			email = "noreplydrinkboard@gmail.com"
 		end
 
 		return email

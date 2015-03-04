@@ -8,6 +8,7 @@ if Rails.env.production?
     PUBLIC_URL       = "http://www.itson.me"
     PUBLIC_URL_AT    = "http://admin.itson.me"
     PUBLIC_URL_MT    = "http://merchant.itson.me"
+    PUBLIC_URL_PT    = "http://partner.itson.me"
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
     HELP_CONTACT     = { "email" => "rachel.wenman@itson.me", "name" => "Rachel"}
     ADMIN_NOTICE_CONTACT = ["david.leibner@itson.me", "rachel.wenman@itson.me"]
@@ -18,6 +19,7 @@ elsif Rails.env.staging?
     PUBLIC_URL       = "http://qa.itson.me"
     PUBLIC_URL_AT    = "http://qaadmin.itson.me"
     PUBLIC_URL_MT    = "http://qamerchant.itson.me"
+    PUBLIC_URL_PT    = "http://qapartner.itson.me"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
@@ -27,7 +29,8 @@ else
     MERCHANT_URL     = "http://0.0.0.0:3000"
     PUBLIC_URL       = "http://0.0.0.0:3001"
     PUBLIC_URL_AT    = "http://0.0.0.0:3002"
-    PUBLIC_URL_MT    = "http://0.0.0.0:3000"
+    PUBLIC_URL_MT    = "http://merchant.happyer.dev/"
+    PUBLIC_URL_PT    = "http://partner.happyer.dev/"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     HELP_CONTACT     = { "email" => "zo@itson.me", "name" => "Craig"}
     ADMIN_NOTICE_CONTACT = ["zo@itson.me"]

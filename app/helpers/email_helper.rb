@@ -30,10 +30,14 @@ module EmailHelper
 		</div>".html_safe
 	end
 
-	def text_for_user_reset_password user
+	def text_for_user_reset_password user, subdomain=nil
 		user_first_name = user.first_name
 		if user.class == MtUser
-			button_url  = "#{PUBLIC_URL_MT}/reset_password?token=#{user.reset_token}"
+			if ["partner", "qapartner"].include?(subdomain)
+				button_url  = "#{PUBLIC_URL_PT}/reset_password?token=#{user.reset_token}"
+			else
+				button_url  = "#{PUBLIC_URL_MT}/reset_password?token=#{user.reset_token}"
+			end
 		elsif user.class == AtUser
 			button_url  = "#{PUBLIC_URL_AT}/reset_password?token=#{user.reset_token}"
 		else
@@ -180,7 +184,7 @@ module EmailHelper
 	        </div>
 		</div>".html_safe
 	end
-	
+
 	def text_for_notify_receiver_proto_join gift
 		image_url      = gift.provider.image
 		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
