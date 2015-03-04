@@ -18,14 +18,11 @@ class MailerJob
 private
 
     def self.call_mandrill data
+        puts "data in Email.rb #{data}"
         MailerJob.send(data['text'], data)
     end
 
 end
 
 # reset_password - MtUser
-#         data = {
-#             "text"        => 'reset_password',
-#             "user_type"   => 'MtUser',
-#             "user_id"     => user.id
-#         }
+# {"text"=>"reset_password", "user_type"=>"MtUser", "user_id"=>1, "subdomain"=>"qapartner"}
