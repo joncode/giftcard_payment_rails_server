@@ -150,7 +150,7 @@ describe Accountant do
 
 			it "should not double create register for merchant affiliate" do
 				g = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 300)
-				resp = Accountant.affiliate_location(g)
+				resp  = Accountant.affiliate_location(g)
 				resp2 = Accountant.affiliate_location(g)
 				resp2.should be_true
 				regs  = Register.all
@@ -158,8 +158,8 @@ describe Accountant do
 			end
 
 			it "should not create register for merchant aff when past total payout" do
-				m1.affiliation.update(payout: 10000)
-				g = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 300)
+				m1.affiliation.update(payout: 1000000)
+				g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 300)
 				resp = Accountant.affiliate_location(g)
 				resp.should be_false
 				Register.all.count.should == 0

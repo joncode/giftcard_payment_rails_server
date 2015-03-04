@@ -512,7 +512,7 @@ describe Mdot::V2::GiftsController do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             @gift.redeemed_at.should be_nil
             post :pos_redeem, format: :json, id: @gift.id, ticket_num: "test"
-            json.should == {"status" => 1, "data" =>{ "msg" => 'Paid in full'}}
+            json.should == {"status" => 1, "data" => 'Paid in full'}
         end
 
         it "should return reload app error on bad gift" do
@@ -594,7 +594,7 @@ describe Mdot::V2::GiftsController do
         it "should return order_number, server, and total on success when no server value is included" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             post :redeem, format: :json, id: @gift.id, server: ""
-            order = @gift.order
+
             rrc(200)
             json["status"].should == 1
 

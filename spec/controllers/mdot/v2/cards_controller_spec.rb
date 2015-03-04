@@ -137,7 +137,7 @@ describe Mdot::V2::CardsController do
 
         it "should reject hash with fields not accept" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = {"month"=>"02", "number"=>"4417121029961508", "fake" => "FAKE", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+            params = {"month"=>"02", "number"=>"4417121029961508", "fake" => "FAKE", "year"=>"2018", "csv"=>"910", "nickname"=>"Dango"}
 
             post :create, format: :json, data: params
 
@@ -146,7 +146,7 @@ describe Mdot::V2::CardsController do
 
         it "should return validation errors with 200 code when failed validations" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = {"month"=>"0212312", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
+            params = {"month"=>"0212312", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2018", "csv"=>"910", "nickname"=>"Dango"}
 
             post :create, format: :json, data: params
 
@@ -167,7 +167,7 @@ describe Mdot::V2::CardsController do
 
         it "should accept user id and brand BUG FIX" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
-            params = {"month"=>"1", "number"=>"4417121029961508", "user_id"=>1468, "brand"=>"Visa", "name"=>"Bobby Bobberson", "year"=>"2015", "csv"=>"999", "nickname"=>"Visa"}
+            params = {"month"=>"1", "number"=>"4417121029961508", "user_id"=>1468, "brand"=>"Visa", "name"=>"Bobby Bobberson", "year"=>"2021", "csv"=>"999", "nickname"=>"Visa"}
             post :create, format: :json, data: params
             rrc(200)
             json["status"].should == 1
@@ -177,7 +177,7 @@ describe Mdot::V2::CardsController do
             card.user_id.should     == User.last.id #current user
             card.brand.should       == "visa"
             card.name.should        == "Bobby Bobberson"
-            card.year.should        == "2015"
+            card.year.should        == "2021"
             card.csv.should         == "999"
             card.nickname.should    == "Visa"
         end

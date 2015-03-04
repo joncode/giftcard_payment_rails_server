@@ -99,7 +99,7 @@ describe Web::V3::UsersController do
             request_hsh = { "first_name"=>"William", "last_name"=>"King", "birthday"=>"131156", "zip"=>"89014"}
             patch :update, format: :json, data: request_hsh
 
-            rrc(422)
+            rrc(200)
             json["status"].should == 0
         end
 

@@ -34,7 +34,7 @@ describe Web::V3::SessionsController do
 	        it "should return correct error format for email/password not found" do
 	            request_hsh               = { username: "fakeuser@gmail.com", password: "password"}
 	            post :create, format: :json, data: request_hsh
-	            rrc(404)
+	            rrc(200)
 	            json["status"].should     == 0
 	            json["err"].should == "INVALID_INPUT"
 	            json["msg"].should == "We don't recognize that email and password combination"
@@ -44,7 +44,7 @@ describe Web::V3::SessionsController do
 	        it "should return correct error format for facebook not found" do
 	            request_hsh               = { fb_user_id: "faceface", fb_token: "token"}
 	            post :create, format: :json, data: request_hsh
-	            rrc(404)
+	            rrc(200)
 	            json["status"].should == 0
 	            json["err"].should    == "INVALID_INPUT"
 	            json["msg"].should    == "We don't recognize that facebook account"
