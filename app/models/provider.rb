@@ -23,6 +23,7 @@ class Provider < ActiveRecord::Base
 
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
+    after_save 		:clear_www_cache
 
 	enum payment_plan: [ :no_plan, :choice, :prime ]
 
@@ -201,6 +202,12 @@ class Provider < ActiveRecord::Base
 	end
 
 private
+
+    def clear_www_cache
+        unless Rails.env.test?
+            WwwHttpService.clear_merchant_cache
+        end
+    end
 
 	def make_menu_string
 	    MenuString.create(provider_id: self.id, data: "[]", menu: self.menu)

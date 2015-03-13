@@ -63,7 +63,7 @@ class Admt::V2::ProvidersController < JsonController
         respond
     end
 
-    private
+private
 
     def provider_params
         params.require(:data).permit(:name, :address, :city, :state, :zip, :region_id, :phone, :zinger, :description, :pos_merchant_id)
