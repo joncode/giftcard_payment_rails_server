@@ -27,6 +27,7 @@ capybara-*.html
 /doc/*
 /docs/*
 .rvmrc
+.powrc
 latest.dump
 latest_prod_db.dump
 latest_staging_db.dump
