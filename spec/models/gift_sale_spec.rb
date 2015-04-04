@@ -444,6 +444,7 @@ describe GiftSale do
         end
 
         context "Admin Notice for $100+ gift" do
+
             it "should send internal email if cost >= $100" do
                 last_gift = FactoryGirl.create :gift
                 auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
@@ -464,15 +465,17 @@ describe GiftSale do
                 admin_data = {
                     "subject" => "$100+ Gift purchase made",
                     "text"    => "Jimmy Basic (#{@user.email}) has sent a $100 gift of 3 x Budwesier at #{@provider.name} to Sarah Receiver",
-                    "email"   => ["zo@itson.me"]
+                    "email"   => ["support@itson.me"]
                 }
                 Resque.should_receive(:enqueue).with(PushJob, gift_id).and_return(true)
                 Resque.should_receive(:enqueue).with(MailerInternalJob, admin_data).and_return(true)
                 Resque.should_receive(:enqueue).with(MailerJob, giver_data).and_return(true)
                 Resque.should_receive(:enqueue).with(MailerJob, receiver_data).and_return(true)
+                GiftSale.any_instance.stub(:messenger_publish_gift_created)
                 gift_sale = GiftSale.create @gift_hsh
                 run_delayed_jobs
             end
+
             it "should NOT send internal email if cost < $100" do
                 last_gift = FactoryGirl.create :gift
                 auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
@@ -492,7 +495,7 @@ describe GiftSale do
                 admin_data = {
                     "subject" => "$100+ Gift purchase made",
                     "text"    => "Jimmy Basic (#{@user.email}) has sent a $99 gift of 3 x Budwesier at #{@provider.name} to Sarah Receiver",
-                    "email"   => ["zo@itson.me"]
+                    "email"   => ["support@itson.me"]
                 }
                 Resque.should_not_receive(:enqueue).with(MailerInternalJob, admin_data).and_return(true)
                 Resque.should_receive(:enqueue).with(MailerJob, giver_data).and_return(true)

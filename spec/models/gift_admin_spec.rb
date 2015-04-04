@@ -107,11 +107,6 @@ describe GiftAdmin do
         gift.cat.should == 500
     end
 
-
-    xit "should set the expiration date" do
-
-    end
-
     context "messaging" do
 
         before(:each) do
@@ -139,6 +134,7 @@ describe GiftAdmin do
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            GiftAdmin.any_instance.stub(:messenger_publish_gift_created)
             response = GiftAdmin.create @gift_hsh
 
             run_delayed_jobs
@@ -161,7 +157,7 @@ describe GiftAdmin do
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-
+            GiftAdmin.any_instance.stub(:messenger_publish_gift_created)
             response = GiftAdmin.create @gift_hsh
             run_delayed_jobs
             abs_gift_id = response.id + NUMBER_ID
@@ -178,6 +174,7 @@ describe GiftAdmin do
         end
 
         it "should push notify to app-user recipients" do
+            GiftAdmin.any_instance.stub(:messenger_publish_gift_created)
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})

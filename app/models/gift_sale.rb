@@ -18,12 +18,13 @@ class GiftSale < Gift
             return "We do not have that credit card on record.  Please choose a different card."
         end
         gift = super
+
         if gift.pay_stat == "payment_error"
             gift.payable.reason_text
         else
             if gift.persisted?
                 gift.messenger(:invoice_giver)
-                Resque.enqueue(GiftCreatedEvent, gift.id)
+                gift.messenger_publish_gift_created
             end
             gift
         end

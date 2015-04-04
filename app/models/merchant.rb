@@ -3,6 +3,10 @@ class Merchant < ActiveRecord::Base
     has_one :provider
     has_one :affiliation, as: :target
     has_one :affiliate, through: :affiliation
+    has_many :payments,     as: :partner
+    has_many :registers,    as: :partner
+
+    enum payment_event: [ :creation, :redemption ]
 
     def mode= mode_str
         case mode_str.downcase

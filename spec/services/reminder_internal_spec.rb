@@ -18,7 +18,7 @@ describe ReminderInternal do
 		mail_data = {
 			subject: "Campaign Expiration Notice",
 			text: "Campaign #{campaign1.cname} is expiring within 2 days",
-			email: "zo@itson.me"
+			email: "support@itson.me"
 		}
 		Resque.should_receive(:enqueue).with(MailerInternalJob, mail_data).exactly(1).times.and_return(true)
 		ReminderInternal.send_reminders

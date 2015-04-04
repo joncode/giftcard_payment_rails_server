@@ -56,7 +56,7 @@ describe Admt::V2::ProvidersController do
                                                       state: "NY",
                                                       zip: "22222",
                                                       phone: "2222222222",
-                                                      pos_merchant_id: 11111,
+                                                      pos_merchant_id: "11111",
                                                       zinger: "old zinger",
                                                       description: "old description")
         end
@@ -76,9 +76,9 @@ describe Admt::V2::ProvidersController do
         @provider.phone.should == "3333333333"
       end
       it "should update pos_merchant_id" do
-        put :update, id: @provider.id, format: :json, data: { pos_merchant_id: 33333 }
+        put :update, id: @provider.id, format: :json, data: { pos_merchant_id: "33333" }
         @provider.reload
-        @provider.pos_merchant_id.should == 33333
+        @provider.pos_merchant_id.should == "33333"
       end
       it "should no update unacceptable attributes" do
         put :update, id: @provider.id, format: :json, data: {live: true}

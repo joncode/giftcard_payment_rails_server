@@ -26,6 +26,7 @@ class Provider < ActiveRecord::Base
     after_save 		:clear_www_cache
 
 	enum payment_plan: [ :no_plan, :choice, :prime ]
+	enum payment_event: [ :creation, :redemption ]
 
 	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
@@ -160,12 +161,14 @@ class Provider < ActiveRecord::Base
 		super(sales_tax)
 	end
 
-	def location_fee
-		if prime?
-			0.95
+	def location_fee(convert_these_cents=nil)
+		r_cents = self.rate / 100.0
+		if convert_these_cents
+			(convert_these_cents * r_cents).to_i
 		else
-			0.85
+			r_cents
 		end
+
 	end
 
 ######   PHOTO GETTERS
@@ -233,7 +236,7 @@ end
 #  active          :boolean         default(TRUE)
 #  latitude        :float
 #  longitude       :float
-#  rate            :decimal(, )
+#  rate            :integer 		default(85)
 #  menu_is_live    :boolean         default(FALSE)
 #  brand_id        :integer
 #  building_id     :integer

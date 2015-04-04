@@ -17,24 +17,24 @@ describe Pos::V1::OrdersController do
         end
 
         it "should return 404 not found for bad pos_mechant_id" do
-            post :create, format: :json, data: {"pos_merchant_id" => 1234, "ticket_value" => "13.99", "redeem_code" => @gift.token, "server_code" => "john"}
+            post :create, format: :json, data: {"pos_merchant_id" => "1234", "ticket_value" => "13.99", "redeem_code" => @gift.token, "server_code" => "john"}
             rrc(404)
             json["status"].should == 0
             json["data"].should   == 'Not Found'
         end
 
         it "should have process the request" do
-            post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @gift.token, "server_code" => "john"}
+            post :create, format: :json, data: {"pos_merchant_id" => "1233", "ticket_value" => "13.99", "redeem_code" => @gift.token, "server_code" => "john"}
             rrc(200)
         end
 
         it "should accept redeem code as string" do
-            post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @gift.token.to_s, "server_code" => "john"}
+            post :create, format: :json, data: {"pos_merchant_id" => "1233", "ticket_value" => "13.99", "redeem_code" => @gift.token.to_s, "server_code" => "john"}
             rrc(200)
         end
 
         it "requires http basic authentication" do
-            post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @gift.token, "server_code" => "john"}
+            post :create, format: :json, data: {"pos_merchant_id" => "1233", "ticket_value" => "13.99", "redeem_code" => @gift.token, "server_code" => "john"}
             rrc(200)
         end
 
@@ -42,13 +42,13 @@ describe Pos::V1::OrdersController do
             user = 'dhh'
             pw   = 'secret'
             request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials(user,pw)
-            post :create, format: :json, data: {"pos_merchant_id" => 1233, "ticket_value" => "13.99", "redeem_code" => @gift.token, "server_code" => "john"}
+            post :create, format: :json, data: {"pos_merchant_id" => "1233", "ticket_value" => "13.99", "redeem_code" => @gift.token, "server_code" => "john"}
             rrc(401)
         end
 
         context :bad_request do
             it "should be successful" do
-                post :create, format: :json, data: {"redeem_code" => @gift.token, "pos_merchant_id" => 1233}
+                post :create, format: :json, data: {"redeem_code" => @gift.token, "pos_merchant_id" => "1233"}
                 rrc(200)
             end
 
@@ -71,14 +71,14 @@ describe Pos::V1::OrdersController do
         end
 
         it "should be successful" do
-            post :create, format: :json, data: {"redeem_code" => @gift.token, "pos_merchant_id" => 1233}
+            post :create, format: :json, data: {"redeem_code" => @gift.token, "pos_merchant_id" => "1233"}
             rrc(200)
             json["status"].should == 1
             json["data"].should == { "voucher_value" => @gift.value }
         end
 
         it "can't find gift from redeem_code" do
-            post :create, format: :json, data: {"redeem_code" => "12345", "pos_merchant_id" => 1233}
+            post :create, format: :json, data: {"redeem_code" => "12345", "pos_merchant_id" => "1233"}
             rrc(404)
             json["status"].should == 0
             json["data"].should == "Error - Gift Conﬁrmation No. is not valid."
@@ -87,7 +87,7 @@ describe Pos::V1::OrdersController do
         it "gift has already been redeemed" do
             @gift.redeem_gift
             @gift.status.should == 'redeemed'
-            post :create, format: :json, data: {"redeem_code" => @gift.token, "pos_merchant_id" => 1233}
+            post :create, format: :json, data: {"redeem_code" => @gift.token, "pos_merchant_id" => "1233"}
             rrc(422)
             json["status"].should == 0
             json["data"].should == "Gift #{@gift.token} is already redeemed"
@@ -96,10 +96,10 @@ describe Pos::V1::OrdersController do
         context "pos request " do
 
             it "should create ditto with successful request" do
-                post :create, format: :json, data: {"redeem_code" => @gift.token, "pos_merchant_id" => 1233}
+                post :create, format: :json, data: {"redeem_code" => @gift.token, "pos_merchant_id" => "1233"}
                 rrc(200)
                 ditto = Ditto.last
-                ditto.response_json.should == { 'request'  => { "redeem_code" => @gift.token, 'pos_merchant_id' => 1233 },
+                ditto.response_json.should == { 'request'  => { "redeem_code" => @gift.token, 'pos_merchant_id' => "1233" },
                                                 'response' => { :status => 1, :data => { 'voucher_value'=>'100' } } }.to_json
                 ditto.status.should        == 200
                 ditto.cat.should           == 1000
@@ -108,10 +108,10 @@ describe Pos::V1::OrdersController do
             end
 
             it "should create ditto with bad request (that has passed authentication)" do
-                post :create, format: :json, data: {"redeem_code" => "abcde", "pos_merchant_id" => 1233}
+                post :create, format: :json, data: {"redeem_code" => "abcde", "pos_merchant_id" => "1233"}
                 rrc(404)
                 ditto = Ditto.last
-                ditto.response_json.should == { 'request' => { 'redeem_code' => 'abcde', 'pos_merchant_id' => 1233 },
+                ditto.response_json.should == { 'request' => { 'redeem_code' => 'abcde', 'pos_merchant_id' => "1233" },
                                                 'response' => { :status => 0, :data => 'Error - Gift Conﬁrmation No. is not valid.' }}.to_json
                 ditto.status.should        == 404
                 ditto.cat.should           == 1000

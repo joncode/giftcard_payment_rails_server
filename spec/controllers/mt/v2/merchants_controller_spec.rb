@@ -34,7 +34,7 @@ describe Mt::V2::MerchantsController do
             provider.mode.should        == new_provider_hsh["mode"]
             provider.get_photo.should   == new_provider_hsh["image"]
             provider.r_sys.should       == 1
-            provider.pos_merchant_id.should == 12345
+            provider.pos_merchant_id.should == "12345"
             provider.active.should be_true
         end
 
@@ -89,7 +89,7 @@ describe Mt::V2::MerchantsController do
             phone: "6874567575",
             mode: "live",
             image: "happy_photo_profile.png",
-            pos_merchant_id: 54321
+            pos_merchant_id: "54321"
         }.stringify_keys.each do |type_of, identifier|
 
             it "should update #{type_of}" do

@@ -1,7 +1,8 @@
 class ChangeRateToIntegerOnProviders < ActiveRecord::Migration
   def up
-  	change_column :providers, :rate, :integer, default: 85
-    change_column :merchants, :rate, :integer, default: 85
+    # leaving the rate as big decimal, but adding default
+  	change_column :providers, :rate, :decimal, default: 85
+    change_column :merchants, :rate, :decimal, default: 85
   	set_providers_to_default
   end
 

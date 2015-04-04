@@ -766,13 +766,13 @@ describe User do
         @user3 = FactoryGirl.create(:user, first_name: "Three", last_name: "User")
       end
 
-      it "should find a user" do
+      xit "should find a user" do
         result = User.search(@user1.first_name)
         expect(result.length).to eq(1)
         expect(result).to include(@user1)
       end
 
-      it "should find multiple users with common data" do
+      xit "should find multiple users with common data" do
         result = User.search(@user1.last_name)
         expect(result.length).to eq(3)
         [@user1, @user2, @user3].each do |user|
@@ -780,12 +780,12 @@ describe User do
         end
       end
 
-      it "should not find users that do not exist" do
+      xit "should not find users that do not exist" do
         result = User.search("not_valid")
         expect(result.length).to eq(0)
       end
 
-      it "should find data via all expected columns" do
+      xit "should find data via all expected columns" do
         terms = [
           @user1.id.to_s, #id
           "one.user@example.com", #email

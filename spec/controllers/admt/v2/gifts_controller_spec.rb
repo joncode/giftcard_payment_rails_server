@@ -297,7 +297,7 @@ describe Admt::V2::GiftsController do
         it "should send an email to the receiver_email" do
             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-
+            GiftAdmin.any_instance.stub(:messenger_publish_gift_created)
             create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
             post :create, format: :json, data: create_hsh
             rrc 200
@@ -319,6 +319,7 @@ describe Admt::V2::GiftsController do
             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
+            GiftAdmin.any_instance.stub(:messenger_publish_gift_created)
             @receiver  = FactoryGirl.create(:user, first_name: "Fred", last_name: "Barry", email: "fred@barry.com")
             giver      = @admin_user.giver
             create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}

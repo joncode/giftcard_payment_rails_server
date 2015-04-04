@@ -99,6 +99,7 @@ describe Admt::V2::GiftCampaignsController do
             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            GiftCampaign.any_instance.stub(:messenger_publish_gift_created)
             create_hsh = { "receiver_phone" => "2222222222", "payable_id" => @campaign_item.id  }
             post :create, format: :json, data: create_hsh
             rrc 200
@@ -119,6 +120,7 @@ describe Admt::V2::GiftCampaignsController do
             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
 			stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            GiftCampaign.any_instance.stub(:messenger_publish_gift_created)
             create_hsh = { "receiver_phone" => "2222222222", "payable_id" => @campaign_item.id  }
             post :create, format: :json, data: create_hsh
             rrc 200
@@ -201,6 +203,7 @@ describe Admt::V2::GiftCampaignsController do
             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            GiftCampaign.any_instance.stub(:messenger_publish_gift_created)
             create_hsh = { "payable_id" => @campaign_item.id  }
             post :bulk_create, format: :json, data: create_hsh
             rrc 200
@@ -221,6 +224,7 @@ describe Admt::V2::GiftCampaignsController do
             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
+            GiftCampaign.any_instance.stub(:messenger_publish_gift_created)
             create_hsh = { "payable_id" => @campaign_item.id  }
             post :bulk_create, format: :json, data: create_hsh
             rrc 200

@@ -26,6 +26,20 @@ describe Accountant do
 			reg.type_of.should      == "debt"
 		end
 
+		it "should create dynamic in register for the merchant" do
+			p = m1.provider
+			p.update(rate: 96.5)
+			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 300)
+			resp = Accountant.merchant(g)
+			reg  = Register.last
+			reg.gift_id.should      == g.id
+			reg.origin.should       == "loc"
+			reg.amount.should       == 9650
+			reg.partner_type.should == "Merchant"
+			reg.partner_id.should   == m1.id
+			reg.type_of.should      == "debt"
+		end
+
 		it "should not double create register for merchant" do
 			g     = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 300)
 			resp  = Accountant.merchant(g)

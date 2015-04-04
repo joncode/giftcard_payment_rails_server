@@ -25,9 +25,9 @@ describe Provider do
     it "should return the location_fee" do
         provider = FactoryGirl.create(:provider)
         provider.location_fee.should == 0.85
-        provider.update(payment_plan: :prime)
+        provider.update(payment_plan: :prime, rate: 95)
         provider.location_fee.should == 0.95
-        provider.update(payment_plan: :choice)
+        provider.update(payment_plan: :choice, rate: 85)
         provider.location_fee.should == 0.85
     end
 

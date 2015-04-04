@@ -8,8 +8,9 @@ class Accountant
 
 			debt_amount = gift.location_fee
 			return false unless debt_amount > 0  # no fee , no debt
-
+			return false if gift.status != 'redeemed' && !gift.provider.creation?
 			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["loc"])
+
 
 			register    = create_debt(gift, gift.provider.merchant, "loc")
 			register.save

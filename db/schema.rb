@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150404220359) do
+ActiveRecord::Schema.define(version: 20150404232424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -558,7 +558,7 @@ ActiveRecord::Schema.define(version: 20150404220359) do
     t.string   "twitter"
     t.string   "photo"
     t.string   "photo_l"
-    t.integer  "rate",                                                default: 85
+    t.decimal  "rate",                                                default: 85.0
     t.decimal  "sales_tax",                   precision: 8, scale: 3
     t.string   "setup",                                               default: "000010"
     t.string   "image"
@@ -578,6 +578,7 @@ ActiveRecord::Schema.define(version: 20150404220359) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "affiliate_id"
+    t.integer  "payment_event",                                       default: 0
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
@@ -801,7 +802,7 @@ ActiveRecord::Schema.define(version: 20150404220359) do
     t.boolean  "active",                     default: true
     t.float    "latitude"
     t.float    "longitude"
-    t.integer  "rate",                       default: 85
+    t.decimal  "rate",                       default: 85.0
     t.boolean  "menu_is_live",               default: false
     t.integer  "brand_id"
     t.integer  "building_id"
@@ -816,6 +817,7 @@ ActiveRecord::Schema.define(version: 20150404220359) do
     t.integer  "r_sys",                      default: 2
     t.string   "photo_l"
     t.integer  "payment_plan",               default: 0
+    t.integer  "payment_event",              default: 0
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree
