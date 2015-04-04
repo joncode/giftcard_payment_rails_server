@@ -1,6 +1,7 @@
 class ChangeRateToIntegerOnProviders < ActiveRecord::Migration
   def up
   	change_column :providers, :rate, :integer, default: 85
+    change_column :merchants, :rate, :integer, default: 85
   	set_providers_to_default
   end
 
@@ -10,6 +11,12 @@ class ChangeRateToIntegerOnProviders < ActiveRecord::Migration
 
   def set_providers_to_default
   	ps = Provider.all
-  	ps.each {|p| p.update(rate: 85)}
+    ms = Merchant.all
+    pms_ary = ps + ms
+  	pms_ary.each do |p|
+      if p.rate.nil? || p.rate == 0
+        p.update(rate: 85)
+      end
+    end
   end
 end

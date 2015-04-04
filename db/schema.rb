@@ -558,7 +558,7 @@ ActiveRecord::Schema.define(version: 20150404220359) do
     t.string   "twitter"
     t.string   "photo"
     t.string   "photo_l"
-    t.decimal  "rate",                        precision: 8, scale: 3
+    t.integer  "rate",                                                default: 85
     t.decimal  "sales_tax",                   precision: 8, scale: 3
     t.string   "setup",                                               default: "000010"
     t.string   "image"
