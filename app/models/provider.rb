@@ -204,7 +204,7 @@ class Provider < ActiveRecord::Base
 private
 
     def clear_www_cache
-        unless Rails.env.test?
+        unless Rails.env.test? || Rails.env.development?
             WwwHttpService.clear_merchant_cache
         end
     end
