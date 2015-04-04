@@ -13,12 +13,19 @@ module GiftAnalyticDaily
 	end
 
 	def self.run_cron
+		puts "\n CRON DATE CHECKS"
 		datetime       = Time.now.utc
+		puts "\n datetime.inspect \n"
 		ga_date        = GiftAnalytic.return_date(datetime)
+		puts "\n ga_date.inspect \n"
 		last_date      = ga_date - 1.day
+		puts "\n last_date.inspect \n"
 		last_ga_date   = GiftAnalytic.order(date_on: :desc).limit(1).first.date_on
+		puts "\n last_ga_date.inspect \n"
 		first_date     = last_ga_date + 1.day
+		puts "\n first_date.inspect \n"
 		scope_datetime = first_date.to_datetime.beginning_of_day.change(hour: 14)
+		puts "\n scope_datetime.inspect \n"
 
 		Gift.where('created_at >= ?', scope_datetime).find_in_batches do |group|
 			group.each do |gift|
