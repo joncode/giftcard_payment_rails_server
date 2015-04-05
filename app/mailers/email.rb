@@ -69,7 +69,11 @@ module Email
             items = "of " + items.join(',')
         end
         giver_email = gift.giver.email if Gift.where(giver_id: gift.giver_id).present?
-        email_text = "#{gift.giver_name} (#{giver_email}) has sent a $#{gift.value} gift #{items} at #{gift.provider_name} to #{gift.receiver_name}"
+        origin_text = ""
+        if gift.origin.present?
+            origin_text = 'Gift origin - ' + gift.origin.to_s + '\n'
+        end
+        email_text = "#{origin_text} #{gift.giver_name} (#{giver_email}) has sent a $#{gift.value} gift #{items} at #{gift.provider_name} to #{gift.receiver_name}"
         if gift.value.to_i >= 100
             data = {
                 "subject" => "$100+ Gift purchase made",
