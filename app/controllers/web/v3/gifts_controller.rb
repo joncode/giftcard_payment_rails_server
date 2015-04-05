@@ -47,7 +47,16 @@ class Web::V3::GiftsController < MetalCorsController
         gift_hash["provider_id"]   = gps[:loc_id]
         gift_hash["value"]         = gps[:value]
         gift_hash["message"]       = gps[:msg]
-        gift_hash["link"]          = gps[:link]
+        gift_hash["link"]          = gps[:link] || nil
+        if gps[:origin]
+            gift_hash["origin"] = gps[:origin]
+        else
+            if gift_hash["link"]
+                gift_hash["origin"] = gift_hash["link"]
+            else
+                gift_hash["origin"] = "www.itson.me"
+            end
+        end
 
         gift = GiftSale.create(gift_hash)
         if gift.kind_of?(Gift) && !gift.id.nil?

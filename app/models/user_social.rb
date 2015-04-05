@@ -11,13 +11,14 @@ class UserSocial < ActiveRecord::Base
 
     validates_presence_of :identifier, :type_of, :user_id
 
-    validates :identifier , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
-    validates :identifier , format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
+    validates :identifier , format: { with: VALID_PHONE_REGEX, message: "phone number is invalid" }, if: :is_phone?
+    validates :identifier , format: { with: VALID_EMAIL_REGEX, message: "email is invalid" }, :if => :is_email?
     validates_with MultiTypeIdentifierUniqueValidator
 
     after_create  :subscribe_mailchimp
     after_create  :collect_incomplete_gifts
     after_save    :unsubscribe_mailchimp
+
 
     default_scope -> { where(active: true) }  # indexed
 
@@ -26,6 +27,7 @@ class UserSocial < ActiveRecord::Base
     end
 
 private
+
 
     def collect_incomplete_gifts
         if thread_on?

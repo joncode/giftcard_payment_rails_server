@@ -41,6 +41,7 @@ class Web::V3::UsersController < MetalCorsController
                     error_hsh.merge!(us.errors.messages)
                 end
             end
+
             if error_hsh == {}
                 newbies.each do |social|
                     type_of = case social["net"]
