@@ -145,7 +145,7 @@ class User < ActiveRecord::Base
 	##########  AFFILIATION DUCKTYPE
 		def name_address_hsh
 			h            = {}
-			h["name"]    = "#{self.first_name[0]}#{self.last_name[0]}|#{self.first_name} #{self.last_name}"
+			h["name"]    = "#{self.first_name} #{self.last_name}|#{self.first_name[0]}#{self.last_name[0]}"
 			h["address"] = self.city
 			h
 		end
