@@ -5,6 +5,7 @@ include MerchantFactory
 describe Accountant do
 
 	let(:m1) { make_merchant_provider("thirstys")  }
+	let(:u) { FactoryGirl.create(:user) }
 
 	describe "merchant" do
 
@@ -50,7 +51,9 @@ describe Accountant do
 		end
 
 		it "should use the price promo for 100 cat gift" do
-			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cost: "1.50", cat: 100)
+			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, receiver_id: u.id, value: "100", cost: "1.50", cat: 100)
+			g.notify
+			g.redeem_gift
 			resp = Accountant.merchant(g)
 			regs = Register.all
 			regs.count.should == 1
@@ -64,10 +67,32 @@ describe Accountant do
 		end
 
 		it "should use the price promo for 150 cat gift" do
-			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cost: "2", cat: 150)
+			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, receiver_id: u.id, value: "100", cost: "2", cat: 150)
+			g.notify
+			g.redeem_gift
 			resp  = Accountant.merchant(g)
 			resp2 = Accountant.merchant(g)
 			resp2.should be_true
+			regs = Register.all
+			regs.count.should == 1
+			reg  = regs.first
+			reg.gift_id.should      == g.id
+			reg.origin.should       == "loc"
+			reg.amount.should       == 200
+			reg.partner_type.should == "Merchant"
+			reg.partner_id.should   == m1.id
+			reg.type_of.should      == "debt"
+		end
+
+		it "should only pay the 150 gift on redemption, not creation" do
+			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, receiver_id: u.id, value: "100", cost: "2", cat: 150)
+			g.status.should_not == 'redeemed'
+			resp  = Accountant.merchant(g)
+			regs = Register.all
+			regs.count.should == 0
+			g.notify
+			g.redeem_gift
+			resp  = Accountant.merchant(g)
 			regs = Register.all
 			regs.count.should == 1
 			reg  = regs.first

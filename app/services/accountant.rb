@@ -7,12 +7,20 @@ class Accountant
 			puts "\n Merchant #{gift.id}\n"
 
 			debt_amount = gift.location_fee
-			return false unless debt_amount > 0  # no fee , no debt
+
+ 			# no fee , no debt
+			return false unless debt_amount > 0
+
+			# if provider is not on creation and gift is not on redemption - out of sync exit
 			return false if gift.status != 'redeemed' && !gift.provider.creation?
-			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["loc"])
+
+			# if gift is not a purchase (300), do not pay on anything other than status = redeemed
+			return false if gift.status != 'redeemed' && gift.cat != 300
+
+			return true  if Register.exists?(gift_id: gift.id, origin: Register.origins["loc"])
 
 
-			register    = create_debt(gift, gift.provider.merchant, "loc")
+			register = create_debt(gift, gift.provider.merchant, "loc")
 			register.save
 		end
 
