@@ -46,6 +46,7 @@ module GiftLifecycle
             self.server      = server_code
             self.order_num   = make_order_num(self.id)
             if self.save
+                puts "\n gift #{self.id} is being redeemed\n"
                 Resque.enqueue(GiftRedeemedEvent, self.id)
                 true
             else
