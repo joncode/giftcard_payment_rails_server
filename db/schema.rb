@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150405004244) do
+ActiveRecord::Schema.define(version: 20150409221256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -540,6 +540,20 @@ ActiveRecord::Schema.define(version: 20150405004244) do
 
   add_index "menus", ["merchant_id"], name: "index_menus_on_merchant_id", using: :btree
   add_index "menus", ["merchant_token"], name: "index_menus_on_merchant_token", using: :btree
+
+  create_table "merchant_signups", force: true do |t|
+    t.string   "name"
+    t.string   "position"
+    t.string   "email"
+    t.string   "phone"
+    t.string   "website"
+    t.string   "venue_name"
+    t.string   "venue_url"
+    t.string   "point_of_sale_system"
+    t.string   "message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "merchants", force: true do |t|
     t.string   "name"
