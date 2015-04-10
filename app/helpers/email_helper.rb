@@ -3,7 +3,6 @@ module EmailHelper
 	include ActionView::Helpers::NumberHelper
 	include ActionView::Helpers::AssetTagHelper
 
-
 	def text_for_welcome_from_dave user
 		string = "Hi #{ user.first_name },\n\n"
 		string += "Welcome! I'm the CEO of It's On Me and wanted to welcome you and thank you for joining.\n"

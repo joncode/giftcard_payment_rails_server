@@ -10,7 +10,8 @@ if Rails.env.production?
     PUBLIC_URL_MT    = "http://merchant.itson.me"
     PUBLIC_URL_PT    = "http://partner.itson.me"
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
-    HELP_CONTACT     = { "email" => "david.leibner@itson.me", "name" => "David"}
+    HELP_CONTACT = [{ "email" => "david.leibner@itson.me", "name" => "David"},
+                    { "email" => "support@itson.me", 'name' => 'Craig'}]
     ADMIN_NOTICE_CONTACT = ["david.leibner@itson.me", "support@itson.me"]
 elsif Rails.env.staging?
     PAGE_NAME        = "#{SERVICE_NAME} (staging)"
@@ -21,7 +22,7 @@ elsif Rails.env.staging?
     PUBLIC_URL_MT    = "http://qamerchant.itson.me"
     PUBLIC_URL_PT    = "http://qapartner.itson.me"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
-    HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
+    HELP_CONTACT = [{ "email" => "support@itson.me", "name" => "Craig"}]
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 else
     PAGE_NAME        = "Dev #{SERVICE_NAME} (local)"
@@ -32,7 +33,7 @@ else
     PUBLIC_URL_MT    = "http://merchant.happyer.dev/"
     PUBLIC_URL_PT    = "http://partner.happyer.dev/"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
-    HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
+    HELP_CONTACT = [{ "email" => "jon.gutwillig@itson.me", "name" => "Jon"}]
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 end
 
