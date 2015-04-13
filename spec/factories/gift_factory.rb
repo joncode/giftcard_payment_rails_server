@@ -3,8 +3,8 @@ module GiftFactory
     def make_all_gifts
             # this creates status agnostic tons
         @start_date = Time.now - 1.month
-        @user = FactoryGirl.create :app_user
-        @admin_giver = FactoryGirl.create :user
+        @user = FactoryGirl.create :user
+        @admin_giver = FactoryGirl.create :at_user
         @biz_user = FactoryGirl.create :provider
         @provider = @biz_user
         campaign_admin = FactoryGirl.create :campaign, purchaser_type: "AdminGiver"
@@ -36,7 +36,7 @@ module GiftFactory
 
     def make_gifts_with_children
         #         redeemed  expired regifted    total
-        # origin  13        17      14          44                          
+        # origin  13        17      14          44
         # child1  3         5       6           14
         # child2  0         2       4           6
         # child3  3         0       1           4
@@ -47,7 +47,7 @@ module GiftFactory
         @campaign_item = FactoryGirl.create :campaign_item, campaign_id: @campaign.id, created_at: 10.days.ago
         # 44.times { FactoryGirl.create :app_user }
         gifts_array = []
-        44.times { gifts_array << FactoryGirl.create(:gift_campaign_bulk, payable_type: "CampaignItem", payable_id: @campaign_item.id, giver_type: "Campaign", giver_id: @campaign.id, giver_name: "Party Crew", receiver_name: "Happy", status: "redeemed", shoppingCart: @campaign_item.shoppingCart) }   
+        44.times { gifts_array << FactoryGirl.create(:gift_campaign_bulk, payable_type: "CampaignItem", payable_id: @campaign_item.id, giver_type: "Campaign", giver_id: @campaign.id, giver_name: "Party Crew", receiver_name: "Happy", status: "redeemed", shoppingCart: @campaign_item.shoppingCart) }
         gifts_array[0..12].each do |gift|
             gift.update(status: "redeemed", redeemed_at: @today + 3.days)
         end
@@ -90,7 +90,7 @@ module GiftFactory
         child3_regift = child3_gifts.last
         child3_regift.update(status: "regifted", redeemed_at: @today + 3.days )
         child4_gift = FactoryGirl.create(:gift, payable_type: "Gift", payable_id: child3_regift.id, status: "incomplete")
-        child4_gift.update(status: "expired")   
+        child4_gift.update(status: "expired")
     end
 
     def make_at_dashboard_gifts

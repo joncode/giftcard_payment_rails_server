@@ -156,7 +156,9 @@ describe Accountant do
 			end
 
 			it "should create debt in register for merchant affiliate" do
-				g = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 300)
+				g = FactoryGirl.create(:gift,
+					provider_id: m1.provider.id,
+				value: "100", cat: 300)
 				resp = Accountant.affiliate_location(g)
 				reg  = Register.last
 				reg.gift_id.should      == g.id
