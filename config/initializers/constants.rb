@@ -78,7 +78,6 @@ CITY_LIST =  [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d
  {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1378747548/san_diego_oj3a5w.jpg"},
  {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1378747548/san_francisco_hv2bsc.jpg"},
  {"name"=>"Santa Barbara", "state"=>"California", "city_id"=>5, "photo"=>"d|v1393292171/santa_barbara_lqln3n.jpg"},
-  {"name"=>"Long Beach", "state"=>"California", "city_id"=>7, "photo"=>"d|v1416615199/LongBeach_jtrb0s.jpg"},
   {"name"=>"Newport Beach", "state"=>"California", "city_id"=>8, "photo"=>"d|v1416615229/newportbeach_bwwmrq.jpg"},
   {"name"=>"Orange County", "state"=>"California", "city_id"=>11, "photo"=>"d|v1419883807/orange_country_pgbmsg.jpg"},
   {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1393292178/new_york_iriwla.jpg"},
