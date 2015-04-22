@@ -53,6 +53,7 @@ class Positronics
 				end
 
 				resp = post_redeem
+				puts resp.inspect
 				case resp
 				when "pos-merchant_id incorrect"
 					@code = 509
@@ -132,12 +133,16 @@ private
   		  "payment_source" => "Gift #{@gift_card_id}"
 		}.to_json
 
+		puts "\nPositronics look after:\n"
+		puts payload.inspect
 		response = RestClient.post(
 		    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@ticket_id}/payments/",
 		    payload,
 		    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 		)
-		JSON.parse response
+		r = JSON.parse(response)
+		puts r.inspect
+		r
 	end
 
 	def get_ticket_from_tix(tix)
