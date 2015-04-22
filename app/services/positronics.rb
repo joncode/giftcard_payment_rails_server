@@ -12,6 +12,7 @@ class Positronics
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
+		@tender_type_id  = args["tender_type_id"]
 		@value           = args["value"].to_i
 		@code 		     = 100
 		@extra_value     = 0
@@ -129,7 +130,7 @@ private
 		  "type" => "3rd_party",
 		  "amount" => @applied_value,
 		  "tip" => 0,
-		  "tender_type" => "500",
+		  "tender_type" => @tender_type_id,
   		  "payment_source" => "Gift #{@gift_card_id}"
 		}.to_json
 
