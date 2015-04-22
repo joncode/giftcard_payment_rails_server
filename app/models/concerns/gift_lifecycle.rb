@@ -78,10 +78,15 @@ module GiftLifecycle
         end
     end
 
-    def pos_redeem(ticket_num, pos_merchant_id)
+    def pos_redeem(ticket_num, pos_merchant_id, tender_type_id)
+        return nil if ticket_num.nil?
+        return nil if pos_merchant_id.nil?
+        return nil if tender_type_id.nil?
+
         pos_hsh = { "ticket_num" => ticket_num,
                     "gift_card_id" => self.obscured_id,
                     "pos_merchant_id" => pos_merchant_id,
+                    "tender_type_id" => tender_type_id,
                     "value" => self.balance }
         pos_obj = Positronics.new(pos_hsh)
 
