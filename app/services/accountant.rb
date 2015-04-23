@@ -3,7 +3,7 @@ class Accountant
 	class << self
 
 		def merchant gift
-			return nil if gift.class != Gift
+			return 'Not Gift' if gift.class != Gift
 			puts "\n Merchant #{gift.id}\n"
 
 			debt_amount = gift.location_fee
@@ -21,7 +21,11 @@ class Accountant
 
 
 			register = create_debt(gift, gift.provider.merchant, "loc")
-			register.save
+			if register.save
+				return register.inspect
+			else
+				return register.errors.messages
+			end
 		end
 
 		def affiliate_location gift
