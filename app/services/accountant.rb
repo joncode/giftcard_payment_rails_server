@@ -9,15 +9,15 @@ class Accountant
 			debt_amount = gift.location_fee
 
  			# no fee , no debt
-			return false unless debt_amount > 0
+			return "no Debt Amount" unless debt_amount > 0
 
 			# if provider is not on creation and gift is not on redemption - out of sync exit
-			return false if gift.status != 'redeemed' && !gift.provider.creation?
+			return "Payment time not in sync" if gift.status != 'redeemed' && !gift.provider.creation?
 
 			# if gift is not a purchase (300), do not pay on anything other than status = redeemed
-			return false if gift.status != 'redeemed' && gift.cat != 300
+			return "Not redmption not a purchase" if gift.status != 'redeemed' && gift.cat != 300
 
-			return true  if Register.exists?(gift_id: gift.id, origin: Register.origins["loc"])
+			return "Register exists"  if Register.exists?(gift_id: gift.id, origin: Register.origins["loc"])
 
 
 			register = create_debt(gift, gift.provider.merchant, "loc")
