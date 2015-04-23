@@ -4,9 +4,12 @@ class PaymentCalcCronJob
 
     def self.perform start_date=nil
         puts "\n-------------    PAYMENT CALC CRON     -------------"
+        if start_date.kind_of?(String)
+            start_date = Date.parse(start_date)
+        end
         return "Not running" unless should_payment_cron_run?(start_date)
 
-        sd = Payment.get_start_date_of_payment(start_date)
+        sd = start_date || Payment.get_start_date_of_payment
         ed = Payment.get_end_date_of_payment(sd)
 
         registers = Register.where(created_at: sd ... ed)
