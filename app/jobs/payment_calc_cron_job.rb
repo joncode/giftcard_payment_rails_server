@@ -3,7 +3,7 @@ class PaymentCalcCronJob
     @queue = :database
 
     def self.perform start_date=nil
-        puts "\n-------------    PAYMENT CALC CRON     -------------"
+        puts "\n-------------    PAYMENT CALC CRON  #{start_date}   -------------"
         if start_date.kind_of?(String)
             start_date = Date.parse(start_date)
         end
