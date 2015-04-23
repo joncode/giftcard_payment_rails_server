@@ -85,6 +85,13 @@ describe GiftAdmin do
         gift.cost.should            == "2.46"
     end
 
+    it "should set the prices with promo prices BUG FIX" do
+        @gift_hsh["shoppingCart"] = "[{\"price\":\"6\",\"price_promo\":\"0\",\"quantity\":1,\"section\":\"Beer\",\"item_id\":1867,\"item_name\":\"Singha\"},{\"price\":\"5\",\"price_promo\":\"0\",\"quantity\":1,\"section\":\"Beer\",\"item_id\":1868,\"item_name\":\"Chang\"},{\"price\":\"1\",\"price_promo\":\"1\",\"quantity\":1,\"section\":\"Shot\",\"item_id\":1874,\"item_name\":\"Sake Shot\"}]"
+        gift = GiftAdmin.create @gift_hsh
+        gift.reload
+        gift.cost.should == "1"
+    end
+
     it "should set the cost at 85% of price if promo prices is missing" do
         @gift_hsh["shoppingCart"] = [{"price"=>"4", "quantity"=>2, "section"=>"Beer", "item_id"=>543, "item_name"=>"Corona"}].to_json
         gift = GiftAdmin.create @gift_hsh

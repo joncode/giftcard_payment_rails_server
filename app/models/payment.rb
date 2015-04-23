@@ -22,6 +22,9 @@ class Payment < ActiveRecord::Base
 	end
 
 	def self.get_end_date_of_payment start_date=nil
+		if start_date.kind_of?(String)
+			sd = Date.parse(start_date)
+		end
 		sd = start_date || self.get_start_date_of_payment
 			# run payments every day for QA/dev
 		if Rails.env.production?

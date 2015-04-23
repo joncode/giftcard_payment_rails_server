@@ -9,7 +9,6 @@ module Formatter
     end
 
     def phone_exists?
-
         !self.phone.blank? && self.phone.to_s.length > 9
     end
 

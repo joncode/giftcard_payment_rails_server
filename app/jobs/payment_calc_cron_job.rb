@@ -4,7 +4,7 @@ class PaymentCalcCronJob
 
     def self.perform start_date=nil
         puts "\n-------------    PAYMENT CALC CRON     -------------"
-        return unless should_payment_cron_run?(start_date)
+        return "Not running" unless should_payment_cron_run?(start_date)
 
         sd = start_date || Payment.get_start_date_of_payment
         ed = Payment.get_end_date_of_payment(sd)
