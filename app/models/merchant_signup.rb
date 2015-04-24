@@ -8,7 +8,7 @@ class MerchantSignup < ActiveRecord::Base
 	validates_length_of :position,  :maximum => 100
 	validates_length_of :venue_name,:maximum => 100
 	validates_length_of :venue_url, :maximum => 100
-	validates_length_of :website, 	:maximum => 100
+	validates_length_of :address, 	:maximum => 500
 	validates_length_of :message,   :maximum => 500
 	validates_length_of :point_of_sale_system,  :maximum => 100
 

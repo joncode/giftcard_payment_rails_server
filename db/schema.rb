@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150413231142) do
+ActiveRecord::Schema.define(version: 20150424194325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -554,6 +554,7 @@ ActiveRecord::Schema.define(version: 20150413231142) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "active"
+    t.string   "address"
   end
 
   add_index "merchant_signups", ["active"], name: "index_merchant_signups_on_active", using: :btree
