@@ -45,7 +45,7 @@ class Mt::V2::MerchantsController < JsonController
 private
 
     def merchant_params
-        allowed = ["r_sys", "menu", "latitude", "longitude", "name", "zinger", "description", "address", "city", "state", "zip", "region_id", "phone", "merchant_id", "token", "image", "mode", "pos_merchant_id", "photo_l"]
+        allowed = ["rate", "r_sys", "menu", "latitude", "longitude", "name", "zinger", "description", "address", "city", "state", "zip", "region_id", "phone", "merchant_id", "token", "image", "mode", "pos_merchant_id", "photo_l"]
         params.require(:data).permit(allowed)
     end
 
