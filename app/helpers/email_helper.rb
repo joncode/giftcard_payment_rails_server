@@ -226,6 +226,7 @@ module EmailHelper
 					</tr>
 				</table>
 	        </div>
+	        <hr style='border-bottom:1px solid #C9C9C9;'>
 			#{redemption_method}
 		</div>".html_safe
 	end
