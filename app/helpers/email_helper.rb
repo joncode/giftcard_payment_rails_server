@@ -245,13 +245,13 @@ module EmailHelper
 					</tr>
 					<tr>
 						<td style='width:33%;'>
-							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.png' />
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.png' style='width: 400px;'>
 						</td>
 						<td style='width:33%;'>
-							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.png' />
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.png' style='width: 400px;'>
 						</td>
 						<td style='width:34%;'>
-							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-3.png' />
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-3.png' style='width: 400px;'>
 						</td>
 					</tr>
 				</table>
@@ -271,13 +271,13 @@ module EmailHelper
 					</tr>
 					<tr>
 						<td style='width:33%;'>
-							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-4.png' />
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-4.png' style='width: 400px;'>
 						</td>
 						<td style='width:33%;'>
-							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-5.png' />
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-5.png' style='width: 400px;'>
 						</td>
 						<td style='width:34%;'>
-							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-6.png' />
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-6.png' style='width: 400px;'>
 						</td>
 					</tr>
 				</table>
