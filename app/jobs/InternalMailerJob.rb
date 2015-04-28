@@ -1,5 +1,5 @@
 class InternalMailerJob
-	include EmailerInternal
+	extend EmailerInternal
 
 	@queue = :r_email
 
