@@ -185,7 +185,7 @@ module EmailHelper
 	end
 
 	def text_for_notify_receiver gift
-		image_url      = gift.provider.image
+		image_url     = gift.provider.image
 		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
 		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
 		button_text   = "Claim My Gift"
@@ -198,6 +198,14 @@ module EmailHelper
 		provider_name = gift.provider_name
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
 		details       = gift.detail
+		redemption_method = case gift.provider.r_sys
+		when 1
+			"#{v1_redemption}"
+		when 3
+			"#{pos_redemption}"
+		else
+			"#{v2_redemption}"
+		end
 		"<div style=#{default_style}>
 			#{header_text("You received a gift!")}
 			<div style='padding: 0 100px 20px 100px;'>
@@ -219,7 +227,7 @@ module EmailHelper
 					</tr>
 				</table>
 	        </div>
-			#{v1_redemption}
+			#{redemption_method}
 		</div>".html_safe
 	end
 
@@ -531,6 +539,138 @@ private
 					</td>
 					<td style='width:34%;'>
 						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-6.png' style='width:100%;'>
+					</td>
+				</tr>
+			</table>
+        </div>"
+	end
+
+	def v2_redemption
+		"<div style='background-color:#E2E2E2; width:100%; text-align:center;'>
+    		<div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''>
+				<div>How to redeem this gift</div>
+    		</div>
+		</div>
+		<div style='background-color:#E2E2E2; width:100%; text-align:center;'>
+    		<div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''>
+				<div>Order your items like you normally would.</div>
+				<div>When the bill arrives follow the steps below to use your gift.</div>
+    		</div>
+		</div>
+		<div style='background-color:#E2E2E2; padding: 10px;'>
+			<table>
+				<tr>
+					<td style='width:33%;'>
+						1. Click the Gift Center and open your gift
+					</td>
+					<td style='width:33%;'>
+						2. Click redeem on the gift
+					</td>
+					<td style='width:34%;'>
+						3. The app will give you a redemption code
+					</td>
+				</tr>
+				<tr>
+					<td style='width:33%;'>
+						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.png' style='width:100%;'>
+					</td>
+					<td style='width:33%;'>
+						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.png' style='width:100%;'>
+					</td>
+					<td style='width:34%;'>
+						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180910/redemption_help/V2/V2-3.png' style='width:100%;'>
+					</td>
+				</tr>
+			</table>
+        </div>
+		<div style='background-color:#E2E2E2; padding: 10px;'>
+			<table>
+				<tr>
+					<td style='width:33%;'>
+						4. Write the redemption code on the ItsOnMe line item on your receipt
+					</td>
+					<td style='width:33%;'>
+						5. Give the receipt to your cashier and they will apply the gift value to your bill
+					</td>
+					<td style='width:34%;'>
+						&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td style='width:33%;'>
+						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180911/redemption_help/V2/V2-4.pn' style='width:100%;'>
+					</td>
+					<td style='width:33%;'>
+						&nbsp;
+					</td>
+					<td style='width:34%;'>
+						&nbsp;
+					</td>
+				</tr>
+			</table>
+        </div>"
+	end
+
+	def pos_redemption
+		"<div style='background-color:#E2E2E2; width:100%; text-align:center;'>
+    		<div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''>
+				<div>How to redeem this gift</div>
+    		</div>
+		</div>
+		<div style='background-color:#E2E2E2; width:100%; text-align:center;'>
+    		<div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''>
+				<div>Order your items like you normally would.</div>
+				<div>When the bill arrives follow the steps below to use your gift.</div>
+    		</div>
+		</div>
+		<div style='background-color:#E2E2E2; padding: 10px;'>
+			<table>
+				<tr>
+					<td style='width:33%;'>
+						1. Click the Gift Center and open your gift
+					</td>
+					<td style='width:33%;'>
+						2. Click redeem on the gift
+					</td>
+					<td style='width:34%;'>
+						3. Find your check number on the receipt from the venue
+					</td>
+				</tr>
+				<tr>
+					<td style='width:33%;'>
+						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.png' style='width:100%;'>
+					</td>
+					<td style='width:33%;'>
+						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.png' style='width:100%;'>
+					</td>
+					<td style='width:34%;'>
+						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180799/redemption_help/pos/POS-3.png' style='width:100%;'>
+					</td>
+				</tr>
+			</table>
+        </div>
+		<div style='background-color:#E2E2E2; padding: 10px;'>
+			<table>
+				<tr>
+					<td style='width:33%;'>
+						4. Enter your receipt check number in the app
+					</td>
+					<td style='width:33%;'>
+						5. The app will update and confirm the gift was applied to your bill
+					</td>
+					<td style='width:34%;'>
+						6. Pay the remaining balance on your check and don’t forget to tip
+					</td>
+				</tr>
+				<tr>
+					<td style='width:33%;'>
+						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180800/redemption_help/pos/POS-4.png' style='width:100%;'>
+					</td>
+					<td style='width:33%;'>
+						<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180800/redemption_help/pos/POS-5.png' style='width:100%;'>
+					</td>
+					<td style='width:34%;'>
+						&nbsp;
 					</td>
 				</tr>
 			</table>
