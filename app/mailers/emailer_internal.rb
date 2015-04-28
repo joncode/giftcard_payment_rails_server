@@ -1,11 +1,11 @@
 module EmailerInternal
 
     def mail_notice_submit_merchant_setup merchant_submit_obj
-    	subject = "#{merchant_submit_obj.venue_name} has requested to join"
+    	subject = "#{merchant_submit_obj['venue_name']} has requested to join"
 
         message = { :subject=> subject_creator(subject),
 		            :from_name=> "Merchant Tools",
-		            :text => "Please login to Admin Tools create account for:\n#{merchant_submit_obj.email_body}",
+		            :text => "Please login to Admin Tools create account for:\n#{merchant_submit_obj}",
 		            :to=> HELP_CONTACT,
 		            :from_email => NO_REPLY_EMAIL
 			      }
