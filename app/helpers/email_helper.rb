@@ -219,6 +219,7 @@ module EmailHelper
 					</tr>
 				</table>
 	        </div>
+			#{v1_redemption}
 		</div>".html_safe
 	end
 
@@ -269,7 +270,6 @@ module EmailHelper
 					</tr>
 				</table>
 	        </div>
-	        #{v1_redemption}
 		</div>".html_safe
 	end
 
