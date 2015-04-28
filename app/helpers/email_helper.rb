@@ -146,6 +146,44 @@ module EmailHelper
 		</div>".html_safe
 	end
 
+	def text_for_notify_receiver_wo_redemption gift
+		image_url      = gift.provider.image
+		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
+		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
+		button_text   = "Claim My Gift"
+		giver_name    = gift.giver_name
+		if gift.giver.class == "User"
+			giver_image   = image_tag(gift.giver.iphone_photo, width: "50", height: "50")
+		else
+			giver_image   = image_tag('http://res.cloudinary.com/drinkboard/image/upload/v1410454300/avatar_blank.png', width: "50", height: "50")
+		end
+		provider_name = gift.provider_name
+		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
+		details       = gift.detail
+		"<div style=#{default_style}>
+			#{header_text("You received a gift!")}
+			<div style='padding: 0 100px 20px 100px;'>
+				<div>
+					<img src='#{image_url}' style='width: 400px;'>
+				</div>
+				#{items_text(gift)}
+	            #{button_text(button_url, button_text)}
+			</div>
+			<div style='background-color:#E2E2E2; padding: 10px;'>
+				<table>
+					<tr>
+						<td style='width:15%; padding:10px;'>#{ giver_image }</td>
+						<td style='width:70%;'>
+							<div style='color:#8E8D8D'>#{ giver_name }</div>
+							<div style='color:#3F3F3F;'>#{ gift.message }</div><br>
+						</td>
+						<td style='width:15%;'></td>
+					</tr>
+				</table>
+	        </div>
+		</div>".html_safe
+	end
+
 	def text_for_notify_receiver gift
 		image_url      = gift.provider.image
 		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
@@ -178,6 +216,47 @@ module EmailHelper
 							<div style='color:#3F3F3F;'>#{ gift.message }</div><br>
 						</td>
 						<td style='width:15%;'></td>
+					</tr>
+				</table>
+	        </div>
+			<div style='background-color:#E2E2E2; width:100%; text-align:center;'>
+        		<div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''>
+					<div>How to redeem this gift</div>
+        		</div>
+    		</div>
+			<div style='background-color:#E2E2E2; width:100%; text-align:center;'>
+        		<div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''>
+					<div>Order your items like you normally would.</div>
+					<div>When the bill arrives follow the steps below to use your gift.</div>
+        		</div>
+    		</div>
+			<div style='background-color:#E2E2E2; padding: 10px;'>
+				<table>
+					<tr>
+						<td style='width:33%;'>
+							Click the Gift Center and open your gift
+						</td>
+						<td style='width:33%;'>
+							Click redeem on the gift
+						</td>
+						<td style='width:34%;'>
+							Show your phone to the cashier
+						</td>
+					</tr>
+				</table>
+	        </div>
+			<div style='background-color:#E2E2E2; padding: 10px;'>
+				<table>
+					<tr>
+						<td style='width:33%;'>
+							The cashier will complete the redemption
+						</td>
+						<td style='width:33%;'>
+							The app will give the cashier an order number
+						</td>
+						<td style='width:34%;'>
+							The cashier will apply the gift value to your bill
+						</td>
 					</tr>
 				</table>
 	        </div>

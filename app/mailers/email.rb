@@ -7,7 +7,7 @@ module Email
         obj_email = gift.receiver ? gift.receiver.email : nil
         email     = gift.receiver_email || obj_email
 
-        if !email.blank?
+        unless email.blank?
             puts "emailing the gift receiver for #{gift.id}"
             user_id = gift.receiver_id.nil? ?  'NID' : gift.receiver_id
 
