@@ -243,6 +243,17 @@ module EmailHelper
 							Show your phone to the cashier
 						</td>
 					</tr>
+					<tr>
+						<td style='width:33%;'>
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.png' />
+						</td>
+						<td style='width:33%;'>
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.png' />
+						</td>
+						<td style='width:34%;'>
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-3.png' />
+						</td>
+					</tr>
 				</table>
 	        </div>
 			<div style='background-color:#E2E2E2; padding: 10px;'>
@@ -256,6 +267,17 @@ module EmailHelper
 						</td>
 						<td style='width:34%;'>
 							The cashier will apply the gift value to your bill
+						</td>
+					</tr>
+					<tr>
+						<td style='width:33%;'>
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-4.png' />
+						</td>
+						<td style='width:33%;'>
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-5.png' />
+						</td>
+						<td style='width:34%;'>
+							<img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-6.png' />
 						</td>
 					</tr>
 				</table>
