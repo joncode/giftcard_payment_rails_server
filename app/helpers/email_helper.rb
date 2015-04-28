@@ -198,13 +198,12 @@ module EmailHelper
 		provider_name = gift.provider_name
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
 		details       = gift.detail
-		redemption_method = case gift.provider.r_sys
+		redemption_method = v2_redemption
+		case gift.provider.r_sys
 		when 1
-			"#{v1_redemption}"
+			redemption_method = v1_redemption
 		when 3
-			"#{pos_redemption}"
-		else
-			"#{v2_redemption}"
+			redemption_method = pos_redemption
 		end
 		"<div style=#{default_style}>
 			#{header_text("You received a gift!")}
