@@ -464,7 +464,7 @@ describe GiftSale do
                 }
                 admin_data = {
                     "subject" => "$100+ Gift purchase made",
-                    "text"    => "Jimmy Basic (#{@user.email}) has sent a $100 gift of 3 x Budwesier at #{@provider.name} to Sarah Receiver",
+                    "text"    => " Jimmy Basic (#{@user.email}) has sent a $100 gift of 3 x Budwesier at #{@provider.name} to Sarah Receiver",
                     "email"   => ["support@itson.me"]
                 }
                 Resque.should_receive(:enqueue).with(PushJob, gift_id).and_return(true)

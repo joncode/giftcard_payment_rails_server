@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+include GiftModelFactory
 describe Positronics do
 
 	describe "gift pos_redeem" do
@@ -7,7 +7,7 @@ describe Positronics do
 		it "should redeem gift with correct ticket number" do
 			p = FactoryGirl.create(:provider, :pos_merchant_id => "EaTaa5c6", :r_sys => 3)
 			u = FactoryGirl.create(:user)
-			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
+      g = make_gift_sale(u, u, "100", p.id)
 			g.notify
       g.balance.should == 10000
       g.detail.should be_nil
@@ -16,7 +16,7 @@ describe Positronics do
 			setter_hsh = {"amount_paid" => 1128, "due" => 0, "gift_balance" => (10000 - 1128), "open" => false, "ticket_num" => 553, "total" => 1128, "closed" => true}
 			Positronics.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
 			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
-			resp = g.pos_redeem(553, "EaTaa5c6")
+			resp = g.pos_redeem(553, "EaTaa5c6", "500")
 			puts resp.inspect
 			resp["success"].should be_true
       resp["response_code"].should                           == "OVER_PAID"
@@ -42,13 +42,13 @@ describe Positronics do
 		it "should redeem gift when check and gift are the same value" do
 			p = FactoryGirl.create(:provider, :pos_merchant_id => "EaTaa5c6", :r_sys => 3)
 			u = FactoryGirl.create(:user)
-			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
+      g = make_gift_sale(u, u, "100", p.id)
 			g.notify
 			setter_hsh = {"amount_paid" => 10000, "due" => 0, "gift_balance" => 0, "open" => false, "ticket_num" => 534, "total" => 10000, "closed" => true}
 			Positronics.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
 			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
 			g.value_in_cents.should > 9900
-			resp = g.pos_redeem(534, "EaTaa5c6")
+			resp = g.pos_redeem(534, "EaTaa5c6", "500")
 			puts resp.inspect
 			resp["success"].should be_true
       resp["response_code"].should                           == "PAID"
@@ -66,13 +66,13 @@ describe Positronics do
 		it "should redeem gift when gift is less than check" do
 			p = FactoryGirl.create(:provider, :pos_merchant_id => "EaTaa5c6", :r_sys => 3)
 			u = FactoryGirl.create(:user)
-			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
+      g = make_gift_sale(u, u, "100", p.id)
 			g.notify
 			setter_hsh = {"amount_paid" => 10000, "due" => 80, "gift_balance" => 0, "open" => true, "ticket_num" => 356, "total" => 11280, "closed" => false}
 			Positronics.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
 			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
 			g.value_in_cents.should > 9900
-			resp = g.pos_redeem(356, "EaTaa5c6")
+			resp = g.pos_redeem(356, "EaTaa5c6", "500")
 			puts resp.inspect
       resp["success"].should be_true
       resp["response_code"].should                           == "APPLIED"
@@ -89,7 +89,7 @@ describe Positronics do
 		it "should redeem gift when gift is less than check" do
 			p = FactoryGirl.create(:provider, :pos_merchant_id => "EaTaa5c6", :r_sys => 3)
 			u = FactoryGirl.create(:user)
-			g = FactoryGirl.create(:gift, receiver_id: u.id, :provider_id => p.id)
+      g = make_gift_sale(u, u, "100", p.id)
 			g.notify
 			setter_hsh = {"amount_paid" => 10000, "due" => 1128, "gift_balance" => 0, "open" => true, "ticket_num" => 600, "total" => 11128, "closed" => false}
 			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
@@ -108,7 +108,7 @@ describe Positronics do
 
 
       g.value_in_cents.should > 9900
-			resp = g.pos_redeem(600, "EaTaa5c6")
+			resp = g.pos_redeem(600, "EaTaa5c6", "500")
 			puts resp.inspect
 			resp["success"].should be_true
       resp["response_code"].should                           == "APPLIED"
