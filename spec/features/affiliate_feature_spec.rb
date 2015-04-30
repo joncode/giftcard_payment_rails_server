@@ -20,7 +20,7 @@ describe "Affiliate Feature" do
 			a1.users.count.should	  == 1
 			a1.users.first.should	  == u
 			lp.reload.users.should	  == 1
-			u.affiliation.name.should == "FA"
+			u.affiliation.name.should == "First Archangle"
 		end
 
 	end

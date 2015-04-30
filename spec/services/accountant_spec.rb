@@ -12,7 +12,7 @@ describe Accountant do
 		it "should require a gift" do
 			g    ="Not a gift"
 			resp = Accountant.merchant(g)
-			resp.should be_nil
+			resp.should  == "Not Gift"
 		end
 
 		it "should create debt 85% in register for the merchant" do

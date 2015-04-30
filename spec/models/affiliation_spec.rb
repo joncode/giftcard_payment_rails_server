@@ -17,7 +17,7 @@ describe Affiliation do
         u.affiliate = a
         u.affiliate.should == a
         affiliation = u.affiliation
-        affiliation.name.should == "TB"
+        affiliation.name.should == "Test Biffet"
         affiliation.address.should == "New Amsterdam"
 
         u.reload
@@ -33,7 +33,7 @@ describe Affiliation do
         u.affiliate = a
         u.affiliate.should == a
         affiliation = u.affiliation
-        affiliation.name.should == "TB"
+        affiliation.name.should == "Test Biffet"
         affiliation.address.should == "New Amsterdam"
 
         u.reload
