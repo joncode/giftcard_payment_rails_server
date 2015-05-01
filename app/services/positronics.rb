@@ -126,13 +126,22 @@ private
 	end
 
 	def post_redeem
-		payload = {
-		  "type" => "3rd_party",
-		  "amount" => @applied_value,
-		  "tip" => 0,
-		  "tender_type" => @tender_type_id,
-  		  "payment_source" => "Gift #{@gift_card_id}"
-		}.to_json
+		if Rails.env.production?
+			payload = {
+			  "type" => "3rd_party",
+			  "amount" => @applied_value,
+			  "tip" => 0,
+			  "tender_type" => @tender_type_id,
+	  		  "payment_source" => "Gift #{@gift_card_id}"
+			}.to_json
+		else
+			payload = {
+			  "type" => "3rd_party",
+			  "amount" => @applied_value,
+			  "tip" => 0,
+	  		  "payment_source" => "Gift #{@gift_card_id}"
+			}.to_json
+		end
 
 		puts "\nPositronics look after:\n"
 		puts payload.inspect
