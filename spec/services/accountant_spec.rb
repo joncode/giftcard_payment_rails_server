@@ -107,40 +107,40 @@ describe Accountant do
 		it "should do nothing for 200, 250 , any 7, any 1" do
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 200)
 			resp  = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 201)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 207)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 250)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 251)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 257)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 301)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 307)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 101)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 107)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 151)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 157)
 			resp = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			Register.all.count.should == 0
 		end
 	end
