@@ -870,6 +870,7 @@ describe Gift do
 		end
 
   end
+
   context "search" do
     before do
       @provider1 = FactoryGirl.create(:provider, name: "POne PUser")

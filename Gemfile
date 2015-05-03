@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 ruby '2.1.2'
 
+gem 'activeadmin', github: 'activeadmin'
+
 gem 'rails'
 gem 'pg'
 
@@ -48,8 +50,6 @@ end
 group :development, :test do
   gem "capybara",    "1.1.2"
   gem 'rb-fsevent', '~> 0.9.1'
-  gem "guard"
-  gem "guard-rspec"
   gem "rspec-rails", "~> 2.13.0"
   gem "factory_girl"
   gem "yajl-ruby"
