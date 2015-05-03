@@ -56,7 +56,7 @@ class Gift < ActiveRecord::Base
 
     default_scope -> { where(active: true) } # indexed
 
-    scope :search, ->(str) {
+    scope :meta_search, ->(str) {
       where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
     }
 

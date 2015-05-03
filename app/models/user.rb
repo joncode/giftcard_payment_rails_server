@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
 	after_create  :init_confirm_email
 	after_save    :make_friends
 
-	scope :search, ->(str) {
+	scope :meta_search, ->(str) {
 		where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
 	}
 
