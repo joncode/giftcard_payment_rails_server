@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '2.1.2'
 
 gem 'activeadmin', github: 'activeadmin'
+gem 'devise'
 
 gem 'rails'
 gem 'pg'
