@@ -213,15 +213,16 @@ describe Gift do
 
     	it "should not update a gift that is notified with current token" do
     		today = Time.now - 1.hour
-    		gift  = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name", notified_at: today, new_token_at: today)
-    		gift.update_column(:token, 4675)
-    		gift.update_column(:status, 'notified')
+    		gift  = FactoryGirl.create(:gift, receiver_id: 234, receiver_name: "test name")
     		gift.notify
+    		token = gift.token
+    		time_at = gift.notified_at
     		gift.reload
+    		gift.notify
 			gift.status.should       == 'notified'
-			gift.token.should        == 4675
-			gift.notified_at.should  == today
-			gift.new_token_at.should == today
+			gift.token.should        == token
+			gift.notified_at.should  == time_at
+			gift.new_token_at.should == time_at
     	end
     end
 
