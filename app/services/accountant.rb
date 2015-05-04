@@ -3,6 +3,7 @@ class Accountant
 	class << self
 
 		def merchant gift
+
 			return 'Not Gift' if gift.class != Gift
 			puts "\n Merchant #{gift.id}\n"
 

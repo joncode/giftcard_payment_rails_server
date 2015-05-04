@@ -23,9 +23,15 @@ class Web::V3::UsersController < MetalCorsController
         updates.delete("photo")
         error_hsh = {}
 
-        # if updates["birthday"].present?
-        #     updates["birthday"] = switch_month_and_days(updates["birthday"])
-        # end
+        if updates["birthday"].present?
+            begin
+                r = Date.strptime(updates["birthday"], "%m/%d/%Y")
+            rescue
+                if r.nil?
+                    error_hsh['birthday'] = 'is invalid'
+                end
+            end
+        end
 
         if updates["social"].present?
             updaters = updates["social"].select {|u| u["_id"] }
@@ -62,7 +68,6 @@ class Web::V3::UsersController < MetalCorsController
             end
             updates.delete("social")
         end
-
         if error_hsh == {} && user.update(updates)
             success     user.login_client_serialize
         else
@@ -89,27 +94,6 @@ class Web::V3::UsersController < MetalCorsController
     end
 
 private
-
-    def switch_month_and_days birthday
-        bday = birthday
-        if birthday.kind_of? String
-            if !birthday.empty?
-                begin
-                    bday = Date.strptime(birthday, "%d/%m/%Y")
-                rescue
-                    ""
-                end
-            end
-        end
-        if bday.kind_of? Date
-            m = bday.month
-            d = bday.day
-            y = bday.year
-            "#{m}/#{d}/#{y}"
-        else
-            bday
-        end
-    end
 
     def update_user_params
         params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => ["net", "_id", "value" ] )

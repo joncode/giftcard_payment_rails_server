@@ -18,9 +18,10 @@ class UserPoint < ActiveRecord::Base
 		else
 			[3000,1000,500]
 		end
+
 		if 7.days > delay
 			points_ary[0]
-		elsif 31.days > delay
+		elsif 30.days > delay
 			points_ary[1]
 		else
 			points_ary[2]

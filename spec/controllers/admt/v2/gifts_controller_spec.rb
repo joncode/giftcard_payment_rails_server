@@ -151,66 +151,66 @@ describe Admt::V2::GiftsController do
             resque_stubs
         end
 
-        context "gift has no receiver ID but unique receiver info - merge" do
+        # context "gift has no receiver ID but unique receiver info - merge" do
 
-            it "should merge user_id with receiver id and merge facebook_id" do
-                gift = FactoryGirl.create(:gift, :facebook_id => "100005220484939")
-                user = FactoryGirl.build(:user, :email => "christie.parker@gmail.com", phone: "7025237365")
-                user.save
-                put :add_receiver, id: gift.id, data: user.id, format: :json
-                json["status"].should == 1
-                rrc 200
-                run_delayed_jobs
-                gift.reload
-                gift.receiver_id.should == user.id
-                user = UserSocial.where(identifier: "christie.parker@gmail.com").first.user
-                # user_social = UserSocial.where(identifier: "100005220484939", user_id: user.id)
-                # user_social.count.should == 1
-                user.phone.should       == "7025237365"
-                user.facebook_id.should == "100005220484939"
-            end
+        #     it "should merge user_id with receiver id and merge facebook_id" do
+        #         gift = FactoryGirl.create(:gift, :facebook_id => "100005220484939")
+        #         user = FactoryGirl.build(:user, :email => "christie.parker@gmail.com", phone: "7025237365")
+        #         user.save
+        #         put :add_receiver, id: gift.id, data: user.id, format: :json
+        #         json["status"].should == 1
+        #         rrc 200
+        #         run_delayed_jobs
+        #         gift.reload
+        #         gift.receiver_id.should == user.id
+        #         user = UserSocial.where(identifier: "christie.parker@gmail.com").first.user
+        #         # user_social = UserSocial.where(identifier: "100005220484939", user_id: user.id)
+        #         # user_social.count.should == 1
+        #         user.phone.should       == "7025237365"
+        #         user.facebook_id.should == "100005220484939"
+        #     end
 
-            it "should merge user_id with receiver id and merge twitter" do
-                gift = FactoryGirl.create(:gift, :twitter => "9734658723658")
-                user = FactoryGirl.create(:user, :email => "christie.parker2@gmail.com", phone: "7035237365")
-                put :add_receiver, id: gift.id, data: user.id, format: :json
-                json["status"].should == 1
-                rrc 200
-                run_delayed_jobs
-                gift.reload
-                gift.receiver_id.should == user.id
-                user = UserSocial.where(identifier: "christie.parker2@gmail.com").first.user
-                user.phone.should       == "7035237365"
-                user_social = user.user_socials.where(identifier: "9734658723658").first
-                user_social.should_not be_nil
-            end
+        #     it "should merge user_id with receiver id and merge twitter" do
+        #         gift = FactoryGirl.create(:gift, :twitter => "9734658723658")
+        #         user = FactoryGirl.create(:user, :email => "christie.parker2@gmail.com", phone: "7035237365")
+        #         put :add_receiver, id: gift.id, data: user.id, format: :json
+        #         json["status"].should == 1
+        #         rrc 200
+        #         run_delayed_jobs
+        #         gift.reload
+        #         gift.receiver_id.should == user.id
+        #         user = UserSocial.where(identifier: "christie.parker2@gmail.com").first.user
+        #         user.phone.should       == "7035237365"
+        #         user_social = user.user_socials.where(identifier: "9734658723658").first
+        #         user_social.should_not be_nil
+        #     end
 
-            it "should merge user_id with receiver id and merge receiver_email" do
-                gift = FactoryGirl.create(:gift, :receiver_email => "new@gmail.com")
-                user = FactoryGirl.create(:user, :email => "christie.parker4@gmail.com", phone: "7045237365")
-                put :add_receiver, id: gift.id, data: user.id, format: :json
-                json["status"].should == 1
-                rrc 200
-                run_delayed_jobs
-                gift.reload
-                gift.receiver_id.should == user.id
-                user = UserSocial.where(identifier: "7045237365").first.user
-                user.email.should == "new@gmail.com"
-            end
+        #     it "should merge user_id with receiver id and merge receiver_email" do
+        #         gift = FactoryGirl.create(:gift, :receiver_email => "new@gmail.com")
+        #         user = FactoryGirl.create(:user, :email => "christie.parker4@gmail.com", phone: "7045237365")
+        #         put :add_receiver, id: gift.id, data: user.id, format: :json
+        #         json["status"].should == 1
+        #         rrc 200
+        #         run_delayed_jobs
+        #         gift.reload
+        #         gift.receiver_id.should == user.id
+        #         user = UserSocial.where(identifier: "7045237365").first.user
+        #         user.email.should == "new@gmail.com"
+        #     end
 
-            it "should merge user_id with receiver id and merge receiver_phone" do
-                gift = FactoryGirl.create(:gift, :receiver_phone => "6567876574")
-                user = FactoryGirl.create(:user, :email => "christie.parker4@gmail.com", phone: "7045237365")
-                put :add_receiver, id: gift.id, data: user.id, format: :json
-                json["status"].should == 1
-                rrc 200
-                run_delayed_jobs
-                gift.reload
-                gift.receiver_id.should == user.id
-                user = UserSocial.where(identifier: "7045237365").first.user
-                user.phone.should == "6567876574"
-            end
-        end
+        #     it "should merge user_id with receiver id and merge receiver_phone" do
+        #         gift = FactoryGirl.create(:gift, :receiver_phone => "6567876574")
+        #         user = FactoryGirl.create(:user, :email => "christie.parker4@gmail.com", phone: "7045237365")
+        #         put :add_receiver, id: gift.id, data: user.id, format: :json
+        #         json["status"].should == 1
+        #         rrc 200
+        #         run_delayed_jobs
+        #         gift.reload
+        #         gift.receiver_id.should == user.id
+        #         user = UserSocial.where(identifier: "7045237365").first.user
+        #         user.phone.should == "6567876574"
+        #     end
+        # end
 
         context "gift has the wrong receiver - changing receivers" do
 

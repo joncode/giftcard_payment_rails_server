@@ -51,7 +51,8 @@ describe Accountant do
 		end
 
 		it "should use the price promo for 100 cat gift" do
-			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, receiver_id: u.id, value: "100", cost: "1.50", cat: 100)
+			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, receiver_id: u.id, value: "100", cost: "1.50", cat: 100, status: 'open')
+
 			g.notify
 			g.redeem_gift
 			resp = Accountant.merchant(g)
@@ -67,7 +68,7 @@ describe Accountant do
 		end
 
 		it "should use the price promo for 150 cat gift" do
-			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, receiver_id: u.id, value: "100", cost: "2", cat: 150)
+			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, receiver_id: u.id, value: "100", cost: "2", cat: 150, status: 'open')
 			g.notify
 			g.redeem_gift
 			resp  = Accountant.merchant(g)
@@ -85,7 +86,7 @@ describe Accountant do
 		end
 
 		it "should only pay the 150 gift on redemption, not creation" do
-			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, receiver_id: u.id, value: "100", cost: "2", cat: 150)
+			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, receiver_id: u.id, value: "100", cost: "2", cat: 150, status: 'open')
 			g.status.should_not == 'redeemed'
 			resp  = Accountant.merchant(g)
 			regs = Register.all

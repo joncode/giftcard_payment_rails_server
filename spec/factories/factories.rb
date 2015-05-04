@@ -265,7 +265,7 @@ FactoryGirl.define do
         gift.credit_card     { FactoryGirl.create(:visa).id }
         gift.shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
         gift.message         "Factory Message"
-        gift.pay_stat       "charged"
+        gift.pay_stat       "charge_unpaid"
         gift.payable       { FactoryGirl.create(:sale)}
         gift.expires_at      (Time.now + 1.month)
 

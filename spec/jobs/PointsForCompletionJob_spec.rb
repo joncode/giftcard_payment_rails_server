@@ -71,7 +71,7 @@ describe PointsForCompletionJob do
             gift = FactoryGirl.create :gift, giver_type: "User",  receiver_name: "tet", receiver_id: 123, giver_id: user.id, payable_type: "Sale", status: "redeemed", provider_id: @provider.id, value: "1", redeemed_at: Time.now + 1.week, cat: 300
             gift.notify
             gift.redeem_gift
-            gift.update(redeemed_at: (Time.now + 1.month))
+            gift.update(redeemed_at: (Time.now + 29.days))
             resp = PointsForCompletionJob.perform(gift.id)
             resp.should be_true
             ups = UserPoint.where(user_id: user.id)
