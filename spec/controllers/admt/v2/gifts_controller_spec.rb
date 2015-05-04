@@ -1,4 +1,5 @@
 require 'spec_helper'
+include MocksAndStubs
 
 describe Admt::V2::GiftsController do
 
@@ -146,6 +147,10 @@ describe Admt::V2::GiftsController do
 
         it_should_behave_like("token authenticated", :put, :add_receiver, id: 1)
 
+        before(:each) do
+            resque_stubs
+        end
+
         context "gift has no receiver ID but unique receiver info - merge" do
 
             it "should merge user_id with receiver id and merge facebook_id" do
@@ -155,10 +160,12 @@ describe Admt::V2::GiftsController do
                 put :add_receiver, id: gift.id, data: user.id, format: :json
                 json["status"].should == 1
                 rrc 200
-
+                run_delayed_jobs
                 gift.reload
                 gift.receiver_id.should == user.id
                 user = UserSocial.where(identifier: "christie.parker@gmail.com").first.user
+                # user_social = UserSocial.where(identifier: "100005220484939", user_id: user.id)
+                # user_social.count.should == 1
                 user.phone.should       == "7025237365"
                 user.facebook_id.should == "100005220484939"
             end
@@ -169,7 +176,7 @@ describe Admt::V2::GiftsController do
                 put :add_receiver, id: gift.id, data: user.id, format: :json
                 json["status"].should == 1
                 rrc 200
-
+                run_delayed_jobs
                 gift.reload
                 gift.receiver_id.should == user.id
                 user = UserSocial.where(identifier: "christie.parker2@gmail.com").first.user
@@ -184,7 +191,7 @@ describe Admt::V2::GiftsController do
                 put :add_receiver, id: gift.id, data: user.id, format: :json
                 json["status"].should == 1
                 rrc 200
-
+                run_delayed_jobs
                 gift.reload
                 gift.receiver_id.should == user.id
                 user = UserSocial.where(identifier: "7045237365").first.user
@@ -197,7 +204,7 @@ describe Admt::V2::GiftsController do
                 put :add_receiver, id: gift.id, data: user.id, format: :json
                 json["status"].should == 1
                 rrc 200
-
+                run_delayed_jobs
                 gift.reload
                 gift.receiver_id.should == user.id
                 user = UserSocial.where(identifier: "7045237365").first.user
@@ -219,7 +226,6 @@ describe Admt::V2::GiftsController do
                 good_rec.reload
                 good_rec.email.should_not == "bad@receiver.com"
             end
-
 
         end
 

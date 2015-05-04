@@ -22,6 +22,7 @@ describe AppController do
         user_hsh = { twitter: "875818226", email: "ta@ta.com", phone: "2052920036", first_name: "Addis", last_name: "Dev"}
         provider_hsh = { name: "Artifice", token: "Specialpushtoken" }
         provider = FactoryGirl.create(:provider, provider_hsh)
+
         user = FactoryGirl.create(:user, user_hsh)
         @user = user
         pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
@@ -49,7 +50,6 @@ describe AppController do
 
         post :relays, format: :json, token: user.remember_token
         json["success"]["badge"].should == 1
-
         user_alias = pnt.ua_alias
         good_push_hsh = {:aliases =>["#{user_alias}"],:aps =>{:alert => "#{gift.giver_name} sent you a gift at #{provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1,:android=>{:alert=>"#{gift.giver_name} sent you a gift at #{provider.name}!"}}
         Urbanairship.should_receive(:push).with(good_push_hsh)

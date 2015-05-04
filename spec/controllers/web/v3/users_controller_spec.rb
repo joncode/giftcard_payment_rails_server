@@ -42,7 +42,7 @@ describe Web::V3::UsersController do
             lp.reload.users.should == 1
             u = a1.users.first
             a1.users.first.should == u
-            u.affiliation.name.should == "FA"
+            u.affiliation.name.should == "First Archangle"
         end
 
         it "should fail silently is link is not good" do
@@ -190,7 +190,7 @@ describe Web::V3::UsersController do
             json["status"].should == 0
             json["err"].should == "INVALID_INPUT"
             json["msg"].should == "User could not be created"
-            json["data"].should == [{"name"=>"identifier", "msg"=>["is invalid"]}]
+            json["data"].should == [{"name"=>"identifier", "msg"=>["phone number is invalid"]}]
             user.reload
             user.last_name.should_not == "new_last_name"
             user_social.reload

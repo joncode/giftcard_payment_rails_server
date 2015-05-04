@@ -81,7 +81,7 @@ describe Positronics do
       resp["response_text"][:total_check_amount].should      == 10080
       resp["response_text"][:remaining_check_balance].should == 80
       resp["response_text"][:remaining_gift_balance].should  == 0
-
+      # binding.pry
 			g.reload.status.should == 'redeemed'
 			g.redeemed_at.should > 1.hour.ago
 		end

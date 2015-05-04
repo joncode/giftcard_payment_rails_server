@@ -212,6 +212,7 @@ FactoryGirl.define do
         sequence(:token)   { |n| "tokens#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
+        payment_event :redemption
         sequence(:phone) do
             phone = ""
             10.times do
