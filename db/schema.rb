@@ -11,11 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150424194325) do
+ActiveRecord::Schema.define(version: 20150503232950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
+
+  create_table "active_admin_comments", force: true do |t|
+    t.string   "namespace"
+    t.text     "body"
+    t.string   "resource_id",   null: false
+    t.string   "resource_type", null: false
+    t.integer  "author_id"
+    t.string   "author_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+  add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
 
   create_table "affiliates", force: true do |t|
     t.string   "first_name"
@@ -99,28 +114,39 @@ ActiveRecord::Schema.define(version: 20150424194325) do
     t.string   "sex"
     t.date     "birthday"
     t.string   "password_digest"
-    t.string   "remember_token",                                 null: false
-    t.boolean  "admin",                          default: false
+    t.string   "remember_token",                                    null: false
+    t.boolean  "admin",                             default: false
     t.string   "code"
-    t.integer  "confirm",                        default: 0
+    t.integer  "confirm",                           default: 0
     t.datetime "reset_token_sent_at"
     t.string   "reset_token"
-    t.boolean  "active",                         default: true
+    t.boolean  "active",                            default: true
     t.integer  "db_user_id"
     t.string   "address"
     t.string   "city"
-    t.string   "state",               limit: 2
-    t.string   "zip",                 limit: 16
+    t.string   "state",                  limit: 2
+    t.string   "zip",                    limit: 16
     t.string   "photo"
     t.string   "min_photo"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "last_login"
-    t.integer  "time_zone",                      default: 0
-    t.boolean  "acct",                           default: false
+    t.integer  "time_zone",                         default: 0
+    t.boolean  "acct",                              default: false
+    t.string   "encrypted_password",                default: "",    null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                     default: 0,     null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
   end
 
+  add_index "at_users", ["email"], name: "index_at_users_on_email", unique: true, using: :btree
   add_index "at_users", ["remember_token"], name: "index_at_users_on_remember_token", using: :btree
+  add_index "at_users", ["reset_password_token"], name: "index_at_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "at_users_socials", force: true do |t|
     t.integer  "at_user_id"
