@@ -1,5 +1,4 @@
 class GiftAdmin < Gift
-    include GiftMessenger
     include ShoppingCartHelper
 
     # args = "receiver_name", "receiver_email", "shoppingCart", "message", "detail", "expires_at", "provider_id", "provider_name", "giver"

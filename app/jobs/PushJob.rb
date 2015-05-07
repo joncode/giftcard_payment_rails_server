@@ -8,19 +8,22 @@ class PushJob
 
     def self.perform gift_id, thank_you=false, incomplete=false
         gift        = Gift.find gift_id
-        if !incomplete
-            if thank_you
-                receiver = gift.giver
-                return nil unless receiver.respond_to?(:ua_alias)
-                payload       = self.format_thank_you_payload(gift, receiver)
-            else
-                receiver        = gift.receiver
-                payload         = self.format_payload_receiver(gift, receiver)
-            end
-        else
+        if incomplete
+                # to gift giver -> 'gift is received - receiver created an account'
             receiver = gift.giver
             return nil unless receiver.respond_to?(:ua_alias)
-            payload       = self.format_incomplete_payload(gift, receiver)
+            payload  = self.format_incomplete_payload(gift, receiver)
+        else
+            if thank_you
+                    # to gift giver -> 'user (receiver) has looked at their gift'
+                receiver = gift.giver
+                return nil unless receiver.respond_to?(:ua_alias)
+                payload  = self.format_thank_you_payload(gift, receiver)
+            else
+                    # to gift receiver -> 'you have received a gift'
+                receiver = gift.receiver
+                payload  = self.format_payload_receiver(gift, receiver)
+            end
         end
         puts "SENDING PUSH NOTE for GIFT ID = #{gift_id} | RECEIVER ID = #{receiver.id} | #{payload}"
         self.ua_push(payload, gift_id)

@@ -2,7 +2,7 @@ module Email
 
 #######   Gifts
 
-    def notify_receiver
+    def notify_receiver thread_it=true
         gift = self
         obj_email = gift.receiver ? gift.receiver.email : nil
         email     = gift.receiver_email || obj_email
@@ -14,7 +14,7 @@ module Email
             data = {"text"        => 'notify_receiver',
                     "gift_id"     => gift.id
                     }
-            route_email_system(data)
+            route_email_system(data, thread_it)
         end
     end
 
@@ -113,7 +113,7 @@ module Email
 private
 
     def route_email_system data, thread_it=true
-        puts "data in Email.rb #{data}"
+        puts "data in Email.rb #{data} #{thread_it}"
         unless  Rails.env.development?
             if thread_it  # set this to false if you are already on a background thread
                 Resque.enqueue(MailerJob, data)

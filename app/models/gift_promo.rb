@@ -1,5 +1,4 @@
 class GiftPromo < Gift
-    include GiftMessenger
     include ShoppingCartHelper
 
     def initialize args={}

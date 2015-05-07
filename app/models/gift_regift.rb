@@ -1,5 +1,4 @@
 class GiftRegift < Gift
-    include GiftMessenger
 
     def self.create args={}
         args["receiver_name"] = args["receiver_name"].gsub(/[^0-9a-z ]/i, '') if args["receiver_name"]

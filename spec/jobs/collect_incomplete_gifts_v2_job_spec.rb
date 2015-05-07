@@ -4,6 +4,16 @@ include MocksAndStubs   # gives the :relay_stubs method - email and push stubs
 
 describe CollectIncompleteGiftsV2Job do
 
+    it "should associate the user with any incomplete gifts for twitter and send new receiver email" do
+        resque_stubs mailer_job: true
+        gift = FactoryGirl.create(:gift, twitter: "654654654654", receiver_id: nil)
+        user = FactoryGirl.create(:user, twitter: "654654654654")
+        stub_incomplete_push gift.giver.ua_alias, user.username
+        MailerJob.should_receive(:perform)
+        run_delayed_jobs
+    end
+
+
     describe :perform do
 
         before(:each) do
