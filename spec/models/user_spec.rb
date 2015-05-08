@@ -749,7 +749,7 @@ describe User do
         end
     end
 
-    context "search" do
+    context "meta_search" do
       before do
         @user1 = FactoryGirl.create(:user,
                                     first_name: "One",
@@ -767,13 +767,13 @@ describe User do
       end
 
       xit "should find a user" do
-        result = User.search(@user1.first_name)
+        result = User.meta_search(@user1.first_name)
         expect(result.length).to eq(1)
         expect(result).to include(@user1)
       end
 
       xit "should find multiple users with common data" do
-        result = User.search(@user1.last_name)
+        result = User.meta_search(@user1.last_name)
         expect(result.length).to eq(3)
         [@user1, @user2, @user3].each do |user|
           expect(result).to include(user)
@@ -781,7 +781,7 @@ describe User do
       end
 
       xit "should not find users that do not exist" do
-        result = User.search("not_valid")
+        result = User.meta_search("not_valid")
         expect(result.length).to eq(0)
       end
 
@@ -799,7 +799,7 @@ describe User do
           "another address line" #address_2
         ]
 
-        result = User.search(terms.join(" "))
+        result = User.meta_search(terms.join(" "))
         expect(result.length).to eq(1)
         expect(result).to include(@user1)
       end

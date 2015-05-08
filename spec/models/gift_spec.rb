@@ -872,7 +872,8 @@ describe Gift do
 		end
 
   end
-  context "search" do
+
+  context "meta_search" do
     before do
       @provider1 = FactoryGirl.create(:provider, name: "POne PUser")
       @giver1 = FactoryGirl.create(:user, first_name: "GOne", last_name: "GUser")
@@ -893,25 +894,25 @@ describe Gift do
     end
 
     xit "should find gifts for a user" do
-      result = Gift.search(@receiver1.first_name)
+      result = Gift.meta_search(@receiver1.first_name)
       expect(result.length).to eq(1)
       expect(result).to include(@user1_gift)
     end
 
     xit "should find multiple gifts for user" do
-      result = Gift.search(@receiver3.first_name)
+      result = Gift.meta_search(@receiver3.first_name)
       expect(result.length).to eq(2)
       expect(result).to include(@user3_gift1)
       expect(result).to include(@user3_gift2)
     end
 
     xit "should not find any gifts for data that doesn't exist" do
-      result = Gift.search("not_valid")
+      result = Gift.meta_search("not_valid")
       expect(result.length).to eq(0)
     end
 
     xit "should find gifts for multiple users with common data" do
-      result = Gift.search("User")
+      result = Gift.meta_search("User")
       expect(result.length).to eq(4)
       [@user1_gift, @user2_gift, @user3_gift1, @user3_gift2].each do |gift|
         expect(result).to include(gift)
@@ -927,7 +928,7 @@ describe Gift do
         "POne PUser", #provider_name
         "GOne GUser" #giver_name
       ]
-      result = Gift.search(terms.join(" "))
+      result = Gift.meta_search(terms.join(" "))
       expect(result.length).to eq(1)
       expect(result).to include(@user1_gift)
     end

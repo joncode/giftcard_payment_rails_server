@@ -1,27 +1,41 @@
 class AtUser < ActiveRecord::Base
-	has_many :payments
-	has_many :at_users_socials
+  include Utility
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, 
+    :recoverable, :rememberable, :trackable, :validatable
+  has_many :payments
+  has_many :at_users_socials
 
-	def name
-		if self.last_name.blank?
-			"#{self.first_name}"
-		else
-			"#{self.first_name} #{self.last_name}"
-		end
-	end
+  before_create :create_remember_token  # creates unique remember token for user
 
-    def giver
-        AdminGiver.find(self.id)
+  def name
+    if self.last_name.blank?
+      "#{self.first_name}"
+    else
+      "#{self.first_name} #{self.last_name}"
     end
+  end
 
-    def get_photo
-		if self.photo
-			self.photo
-		else
-            nil
-		end
-	end
-end# == Schema Information
+  def giver
+    AdminGiver.find(self.id)
+  end
+
+  def get_photo
+    if self.photo
+      self.photo
+    else
+      nil
+    end
+  end
+
+  private
+
+  def create_remember_token
+    self.remember_token = create_token
+  end
+end
+# == Schema Information
 #
 # Table name: at_users
 #
