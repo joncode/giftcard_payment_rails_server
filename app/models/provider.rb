@@ -13,7 +13,7 @@ class Provider < ActiveRecord::Base
 	has_many   :protos
 	has_many   :providers_socials
 	has_many   :socials, through: :providers_socials
-	belongs_to :brands
+	belongs_to :brand
 	belongs_to :merchant
 
 	validates_presence_of 	:name, :city, :address, :zip, :region_id, :state, :token
@@ -31,9 +31,17 @@ class Provider < ActiveRecord::Base
 
 	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
-    def biz_user
-        BizUser.find(self.id)
-    end
+  def redemption
+    REDEMPTION_HSH[r_sys]
+  end
+
+  def region
+    REGION_TO_TEXT[region_id]
+  end
+
+  def biz_user
+    BizUser.find(self.id)
+  end
 #/---------------------------------------------------------------------------------------------/
 
 	def self.get_all
