@@ -22,11 +22,7 @@ class AtUser < ActiveRecord::Base
 	end
 
 	def get_photo
-		if self.photo
-			self.photo
-		else
-			nil
-		end
+		self.photo
 	end
 
 end
