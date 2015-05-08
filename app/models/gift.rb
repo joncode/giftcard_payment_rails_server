@@ -6,6 +6,7 @@ class Gift < ActiveRecord::Base
 	include GiftSerializers
     include GenericPayableDucktype
     include RedeemHelper
+    include GiftMessenger
 
     attr_accessor :receiver_oauth
 

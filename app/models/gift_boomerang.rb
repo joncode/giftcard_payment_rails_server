@@ -1,5 +1,4 @@
 class GiftBoomerang < Gift
-    include GiftMessenger
 
     def self.create args={}
 
