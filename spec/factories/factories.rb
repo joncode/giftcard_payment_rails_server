@@ -71,6 +71,8 @@ FactoryGirl.define do
 
     factory :at_user do
         sequence(:remember_token)    { |n|  "Token#{n}" }
+        password                    "specspec"
+        password_confirmation       "specspec"
         sequence(:email)            { |n|  "tester#{n}@gmail.com" }
     end
 
