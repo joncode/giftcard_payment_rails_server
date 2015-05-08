@@ -1,4 +1,5 @@
 class Provider < ActiveRecord::Base
+
 	include Formatter
 	include ShortenPhotoUrlHelper
 

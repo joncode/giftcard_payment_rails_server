@@ -1,13 +1,15 @@
 class AtUser < ActiveRecord::Base
   include Utility
+
+  before_validations :create_remember_token  # creates unique remember token for user
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, 
+  devise :database_authenticatable,
     :recoverable, :rememberable, :trackable, :validatable
   has_many :payments
   has_many :at_users_socials
 
-  before_create :create_remember_token  # creates unique remember token for user
 
   def name
     if self.last_name.blank?
@@ -32,7 +34,9 @@ class AtUser < ActiveRecord::Base
   private
 
   def create_remember_token
-    self.remember_token = create_token
+    if self.remember_token.blank?
+      self.remember_token = create_token
+    end
   end
 end
 # == Schema Information
