@@ -17,6 +17,9 @@ class Web::V3::UsersController < MetalCorsController
     def update
         user    = @current_user
         updates = update_user_params
+        puts '\n'
+        puts updates
+        puts '\n'
         if updates["photo"]
             updates["iphone_photo"] = updates["photo"]
         end
