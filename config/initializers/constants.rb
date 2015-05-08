@@ -87,6 +87,13 @@ CITY_LIST =  [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d
 
 
 
+regions = {}
+CITY_LIST.each do |city|
+    regions[city["name"]] = city["city_id"]
+end
+REGIONS   = regions
+REGION_TO_TEXT = regions.invert
+
 
 
 
