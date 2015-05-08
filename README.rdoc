@@ -1,9 +1,10 @@
-Server Code for the ItsOnMe App
+#Server Code for the ItsOnMe App
 
 
-Spec notes
+##Spec notes
 
 	1) all factory methods are in spec/factories
+
 	2) FactoryGirl.create ?
 		use one of the factories instead, they will give u better data
 
