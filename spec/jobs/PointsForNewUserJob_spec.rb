@@ -19,6 +19,7 @@ describe PointsForNewUserJob do
 
         it "should give points only once to the first giver if multiple gifts go to a new user" do
             push_job_stubs
+            resque_stubs
             user1 = FactoryGirl.create(:user)
             user2 = FactoryGirl.create(:user)
             user3 = FactoryGirl.create(:user)
@@ -44,6 +45,7 @@ describe PointsForNewUserJob do
 
         it "should not give first user points multiple times" do
             push_job_stubs
+            resque_stubs
             user1 = FactoryGirl.create(:user)
             user2 = FactoryGirl.create(:user)
             user3 = FactoryGirl.create(:user)
@@ -78,6 +80,7 @@ describe PointsForNewUserJob do
 
         it "should not give points only once to the first giver if multiple gifts go to a new user if user pre-dates gifts" do
             push_job_stubs
+            resque_stubs
             user1 = FactoryGirl.create(:user)
             user2 = FactoryGirl.create(:user)
             user3 = FactoryGirl.create(:user)
