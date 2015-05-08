@@ -75,25 +75,22 @@ GIFT_CAT = { 100 => "Admin", 101 => "AdmRegift", 107 => "AdmBoom", 150 => "AdmCa
 
 REDEMPTION_HSH = {1 => "V1" , 2 => "V2",  3 => "Pos" }
 
-CITY_LIST =  [{"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1378747548/las_vegas_xzqlvz.jpg"},
- {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1378747548/san_diego_oj3a5w.jpg"},
- {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1378747548/san_francisco_hv2bsc.jpg"},
- {"name"=>"Santa Barbara", "state"=>"California", "city_id"=>5, "photo"=>"d|v1393292171/santa_barbara_lqln3n.jpg"},
+CITY_LIST =  [
+  {"name"=>"Las Vegas", "state"=>"Nevada", "city_id"=>1, "photo"=>"d|v1378747548/las_vegas_xzqlvz.jpg"},
+  {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1393292178/new_york_iriwla.jpg"},
+  {"name"=>"San Diego", "state"=>"California", "city_id"=>3, "photo"=>"d|v1378747548/san_diego_oj3a5w.jpg"},
+  {"name"=>"San Francisco", "state"=>"California", "city_id"=>4, "photo"=>"d|v1378747548/san_francisco_hv2bsc.jpg"},
+  {"name"=>"Santa Barbara", "state"=>"California", "city_id"=>5, "photo"=>"d|v1393292171/santa_barbara_lqln3n.jpg"},
   {"name"=>"Newport Beach", "state"=>"California", "city_id"=>8, "photo"=>"d|v1416615229/newportbeach_bwwmrq.jpg"},
   {"name"=>"Orange County", "state"=>"California", "city_id"=>11, "photo"=>"d|v1419883807/orange_country_pgbmsg.jpg"},
-  {"name"=>"New York", "state"=>"New York", "city_id"=>2, "photo"=>"d|v1393292178/new_york_iriwla.jpg"},
   {"name"=>"Elkhart Lake", "state"=>"Wisconsin", "city_id"=>9, "photo"=>"d|v1418237673/elkheart_tplhzq.jpg"},
- {"name"=>"COCHON 555 US TOUR", "state"=>"Nationwide", "city_id"=>10, "photo"=>"d|v1417972995/cochon_hr8ixy.png"}]
-
-
+  {"name"=>"COCHON 555 US TOUR", "state"=>"Nationwide", "city_id"=>10, "photo"=>"d|v1417972995/cochon_hr8ixy.png"}
+]
 
 regions = {}
-CITY_LIST.each do |city|
-    regions[city["name"]] = city["city_id"]
+CITY_LIST.each do |city_hash|
+  regions[city_hash["name"]] = city_hash["city_id"]
 end
+
 REGIONS   = regions
 REGION_TO_TEXT = regions.invert
-
-
-
-
