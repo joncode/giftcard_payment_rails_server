@@ -86,7 +86,7 @@ class Web::V3::UsersController < MetalCorsController
         if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).references(:users).first
             user = user_social.user
             user.update_reset_token
-            send_reset_password_email(user)
+            send_reset_password_email(user, params["data"])
             success "Email is Sent , check your inbox"
         else
             fail    "#{PAGE_NAME} does not have record of that email"

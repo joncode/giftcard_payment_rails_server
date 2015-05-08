@@ -14,7 +14,8 @@ module Emailer
 		body     = text_for_user_reset_password(user, data['subdomain'])
 
 		template_name = "user"
-		message       = message_hash(subject, user.email, user.name, body)
+		email_address = data["email"] || user.email
+		message       = message_hash(subject, email_address, user.name, body)
 		request_mandrill_with_template(template_name, message, [data["user_id"], user.class.name])
 	end
 

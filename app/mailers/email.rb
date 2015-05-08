@@ -95,9 +95,10 @@ module Email
         route_email_system(data, false)
     end
 
-    def send_reset_password_email user
-        data = {"text"        => 'reset_password',
-                "user_id"     => user.id
+    def send_reset_password_email user, email=nil
+        data = {"text"    => 'reset_password',
+                "user_id" => user.id,
+                "email"   => email
                 }
         route_email_system(data)
     end
