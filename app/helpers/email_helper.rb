@@ -184,53 +184,6 @@ module EmailHelper
 		</div>".html_safe
 	end
 
-	def text_for_notify_receiver gift
-		image_url     = gift.provider.image
-		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
-		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
-		button_text   = "Claim My Gift"
-		giver_name    = gift.giver_name
-		if gift.giver.class == "User"
-			giver_image   = image_tag(gift.giver.iphone_photo, width: "50", height: "50")
-		else
-			giver_image   = image_tag('http://res.cloudinary.com/drinkboard/image/upload/v1410454300/avatar_blank.png', width: "50", height: "50")
-		end
-		provider_name = gift.provider_name
-		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
-		details       = gift.detail
-		redemption_method = v2_redemption
-		case gift.provider.r_sys
-		when 1
-			redemption_method = v1_redemption
-		when 3
-			redemption_method = pos_redemption
-		end
-		"<div style=#{default_style}>
-			#{header_text("You received a gift!")}
-			<div style='padding: 0 100px 20px 100px;'>
-				<div>
-					<img src='#{image_url}' style='width: 400px;'>
-				</div>
-				#{items_text(gift)}
-	            #{button_text(button_url, button_text)}
-			</div>
-			<div style='background-color:#E2E2E2; padding: 10px;'>
-				<table>
-					<tr>
-						<td style='width:15%; padding:10px;'>#{ giver_image }</td>
-						<td style='width:70%;'>
-							<div style='color:#8E8D8D'>#{ giver_name }</div>
-							<div style='color:#3F3F3F;'>#{ gift.message }</div><br>
-						</td>
-						<td style='width:15%;'></td>
-					</tr>
-				</table>
-	        </div>
-	        <hr style='border-bottom:1px solid #C9C9C9;'>
-			#{redemption_method}
-		</div>".html_safe
-	end
-
 	def text_for_notify_receiver_proto_join gift
 		image_url      = gift.provider.image
 		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
@@ -278,6 +231,63 @@ module EmailHelper
 					</tr>
 				</table>
 	        </div>
+		</div>".html_safe
+	end
+
+	def text_for_notify_receiver gift
+		image_url     = gift.provider.image
+		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
+		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
+		button_text   = "Claim My Gift"
+		giver_name    = gift.giver_name
+		if gift.giver.class == "User"
+			giver_image   = image_tag(gift.giver.iphone_photo, width: "50", height: "50")
+		else
+			giver_image   = image_tag('http://res.cloudinary.com/drinkboard/image/upload/v1410454300/avatar_blank.png', width: "50", height: "50")
+		end
+		provider_name = gift.provider_name
+		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
+		details       = gift.detail
+		redemption_method = v2_redemption
+		case gift.provider.r_sys
+		when 1
+			redemption_method = v1_redemption
+		when 3
+			redemption_method = pos_redemption
+		end
+		"<div style=#{default_style}>
+			#{header_text("You received a gift!")}
+			<div style='padding: 0 100px 20px 100px;'>
+				<div>
+					<img src='#{image_url}' style='width: 400px;'>
+				</div>
+				#{items_text(gift)}
+	            #{button_text(button_url, button_text)}
+			</div>
+			<div style='background-color:#E2E2E2; padding: 10px;'>
+				<table>
+					<tr>
+						<td style='width:15%; padding:10px;'>#{ giver_image }</td>
+						<td style='width:70%;'>
+							<div style='color:#8E8D8D'>#{ giver_name }</div>
+							<div style='color:#3F3F3F;'>#{ gift.message }</div><br>
+						</td>
+						<td style='width:15%;'></td>
+					</tr>
+					#{ if gift.details.length > 3}
+					<tr>
+						<td></td>
+						<td>
+							<div style='color:#8E8D8D'>Details</div>
+							<div>This gift expires on #{expires_at}.</div>
+							<div>#{details}</div>
+						</td>
+					</tr>
+					#{end}
+				</table>
+	        </div>
+	        <hr style='border-bottom:1px solid #C9C9C9;'>
+			#{redemption_method}
 		</div>".html_safe
 	end
 
