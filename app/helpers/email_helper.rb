@@ -255,6 +255,17 @@ module EmailHelper
 		when 3
 			redemption_method = pos_redemption
 		end
+		table_row = ""
+		if gift.details.length > 3
+			table_row = "<tr>
+				<td style='width:15%;'></td>
+				<td style='width:70%;'>
+					<div style='color:#8E8D8D'>Details</div>
+					<div>This gift expires on #{expires_at}.</div>
+					<div>#{details}</div>
+				</td>
+			</tr>"
+		end
 		"<div style=#{default_style}>
 			#{header_text("You received a gift!")}
 			<div style='padding: 0 100px 20px 100px;'>
@@ -274,16 +285,7 @@ module EmailHelper
 						</td>
 						<td style='width:15%;'></td>
 					</tr>
-					#{ if gift.details.length > 3}
-					<tr>
-						<td></td>
-						<td>
-							<div style='color:#8E8D8D'>Details</div>
-							<div>This gift expires on #{expires_at}.</div>
-							<div>#{details}</div>
-						</td>
-					</tr>
-					#{end}
+					#{ table_row }
 				</table>
 	        </div>
 	        <hr style='border-bottom:1px solid #C9C9C9;'>
