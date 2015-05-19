@@ -164,7 +164,7 @@ GEM
       money (< 7.0.0)
       nokogiri (~> 1.4)
     orm_adapter (0.5.0)
-    pg (0.17.1)
+    pg (0.18.2)
     polyamorous (1.2.0)
       activerecord (>= 3.0)
     pry (0.10.1)
