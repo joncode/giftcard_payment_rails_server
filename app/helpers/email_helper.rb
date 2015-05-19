@@ -247,7 +247,7 @@ module EmailHelper
 		end
 		provider_name = gift.provider_name
 		expires_at    = make_ordinalized_date_with_day(gift.expires_at)
-		details       = gift.detail
+		details       = gift.detail || ""
 		redemption_method = v2_redemption
 		case gift.provider.r_sys
 		when 1
@@ -255,17 +255,7 @@ module EmailHelper
 		when 3
 			redemption_method = pos_redemption
 		end
-		table_row = ""
-		if gift.details.length > 3
-			table_row = "<tr>
-				<td style='width:15%;'></td>
-				<td style='width:70%;'>
-					<div style='color:#8E8D8D'>Details</div>
-					<div>This gift expires on #{expires_at}.</div>
-					<div>#{details}</div>
-				</td>
-			</tr>"
-		end
+
 		"<div style=#{default_style}>
 			#{header_text("You received a gift!")}
 			<div style='padding: 0 100px 20px 100px;'>
@@ -285,7 +275,7 @@ module EmailHelper
 						</td>
 						<td style='width:15%;'></td>
 					</tr>
-					#{ table_row }
+					#{ detail_table_row(details, expires_at) }
 				</table>
 	        </div>
 	        <hr style='border-bottom:1px solid #C9C9C9;'>
@@ -490,6 +480,21 @@ module EmailHelper
 	end
 
 private
+
+	def detail_table_row(details, expires_at)
+		table_row = ""
+		if details.length > 3
+			table_row = "<tr>
+				<td style='width:15%;'></td>
+				<td style='width:70%;'>
+					<div style='color:#8E8D8D'>Details</div>
+					<div>This gift expires on #{expires_at}.</div>
+					<div>#{details}</div>
+				</td>
+			</tr>"
+		end
+		table_row
+	end
 
 	def v1_redemption
 		"<div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''><div>How to redeem this gift</div></div></div><div style='background-color:#E2E2E2; width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:16px; padding:15px 0 10px 0;''><div>Order your items like you normally would.</div><div>When the bill arrives follow the steps below to use your gift.</div></div></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>1. Click the Gift Center and open your gift</td><td style='width:33%;'>2. Click redeem on the gift</td><td style='width:34%;'>3. Show your phone to the cashier</td></tr><tr><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-1.png' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-2.png' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-3.png' style='width:100%;'></td></tr></table></div><div style='background-color:#E2E2E2; padding: 10px;'><table><tr><td style='width:33%;'>4. The cashier will complete the redemption</td><td style='width:33%;'>5. The app will give the cashier an order number</td><td style='width:34%;'>6. The cashier will apply the gift value to your bill</td></tr><tr><td le='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-4.png' style='width:100%;'></td><td style='width:33%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-5.png' style='width:100%;'></td><td style='width:34%;'><img src='http://res.cloudinary.com/drinkboard/image/upload/v1430180826/redemption_help/V1/V1-6.png' style='width:100%;'></td></tr></table></div>"
