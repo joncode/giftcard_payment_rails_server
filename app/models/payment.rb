@@ -27,7 +27,7 @@ class Payment < ActiveRecord::Base
 		end
 		sd = start_date || self.get_start_date_of_payment
 			# run payments every day for QA/dev
-		if Rails.env.production?
+		if Rails.env.production?|| Rails.env.test?
 			if sd.day == 1
 				return sd + 15.days
 			else

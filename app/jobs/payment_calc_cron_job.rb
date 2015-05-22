@@ -13,10 +13,10 @@ class PaymentCalcCronJob
         ed = Payment.get_end_date_of_payment(sd)
 
         registers = Register.where(created_at: sd ... ed)
-
+        # binding.pry
         registers.each do |reg|
 
-            next unless reg.payment_id.nil? # already paid
+            next if self.already_paid(reg) # already paid
             next unless reg.debt?   # payments for debts only
             partner = reg.partner
 
@@ -46,6 +46,10 @@ class PaymentCalcCronJob
         end
     end
 
+    def self.already_paid reg
+        !reg.payment_id.nil? || reg.gift.nil? || reg.gift.pay_stat == 'settled' || !reg.gift.active || reg.gift.status == 'cancel' || reg.gift.pay_stat == 'payment_error'
+    end
+
     def self.should_payment_cron_run?(start_date)
         return true if start_date
         ed = Payment.get_end_date_of_payment
@@ -53,3 +57,46 @@ class PaymentCalcCronJob
     end
 
 end
+
+# Register needs a Register.get_unpaid_registers
+
+#     create start date and end_date
+
+#     set end_date
+#         if today is before the 16th , end_date is beginning of this month
+#         if today is after the 16th , end_date is the beginning of day on the 16th
+
+#     rs = Register.where.not(payment_id: nil).where(created_at < end_date)
+#         # also, do not get registers beyond the pay period
+
+#     unpaids = rs.select do  |reg|
+#         !(reg.gift.nil? || reg.gift.pay_stat == 'settled' || !reg.gift.active || reg.gift.status == 'cancel' || reg.gift.pay_stat == 'payment_error')
+#     end
+
+#     unpaids.each do |reg|
+
+#         partner = reg.partner
+#         next if partner.nil?  # cannot create a payment if no partner - this is error
+#         payment = Payment.where(partner: partner, paid: false)
+
+#         set start_date
+#             if payment.start_date > register.created_at ?
+#                 set payment_date to include register created_at
+
+#         set end_date
+
+
+
+#         case statement
+#         payment totals and save
+
+
+#     end
+
+
+
+
+
+
+
+
