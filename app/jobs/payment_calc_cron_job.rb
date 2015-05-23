@@ -17,7 +17,7 @@ class PaymentCalcCronJob
         # binding.pry
         registers.each do |reg|
 
-            next if self.already_paid(reg) # already paid
+            next if self.already_paid?(reg) # already paid
             next unless reg.debt?   # payments for debts only
             partner = reg.partner
 
@@ -47,14 +47,36 @@ class PaymentCalcCronJob
         end
     end
 
-    def self.already_paid reg
-        !reg.payment_id.nil? || reg.gift.nil? || reg.gift.pay_stat == 'settled' || !reg.gift.active || reg.gift.status == 'cancel' || reg.gift.pay_stat == 'payment_error'
+    def self.already_paid? reg
+        if !reg.payment_id.nil? || reg.gift.nil? || self.gift_not_payable?(reg.gift)
+            return true
+        end
+        if reg.gift.status == 'regifted'
+            return self.gift_already_paid_via_child?(reg.gift)
+        end
+        return false
     end
 
     def self.should_payment_cron_run?(start_date)
         return true if start_date
         ed = Payment.get_end_date_of_payment
         DateTime.now.utc.day == ed.day
+    end
+
+    def self.gift_already_paid_via_child? parent
+        gift = parent.child
+        if gift.nil?
+            return true
+        end
+        if gift.status == 'regifted'
+            self.gift_already_paid_via_child? gift
+        else
+            self.gift_not_payable? gift
+        end
+    end
+
+    def self.gift_not_payable? gift
+        gift.pay_stat == 'settled' || !gift.active || gift.status == 'cancel' || gift.pay_stat == 'payment_error'
     end
 
 end
