@@ -1,11 +1,17 @@
 module GiftFactory
 
-    def make_all_gifts
+    def make_all_gifts merchant=nil
             # this creates status agnostic tons
         @start_date = Time.now - 1.month
         @user = FactoryGirl.create :user
         @admin_giver = FactoryGirl.create :at_user
-        @biz_user = FactoryGirl.create :provider
+        if merchant
+            merchant_id = merchant.id
+        else
+            @make_all_gifts_merchant = FactoryGirl.create :merchant
+            merchant_id = make_all_gifts_merchant.id
+        end
+        @biz_user = FactoryGirl.create :provider, merchant_id: merchant_id, payment_event: merchant.payment_event
         @provider = @biz_user
         campaign_admin = FactoryGirl.create :campaign, purchaser_type: "AdminGiver"
         campaign_item_admin = FactoryGirl.create :campaign_item, campaign_id: campaign_admin.id

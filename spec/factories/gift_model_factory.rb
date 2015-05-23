@@ -16,4 +16,17 @@ module GiftModelFactory
         stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
         GiftSale.create gift_hsh
     end
+
+    def regift_gift(gift)
+        if gift.status == 'open'
+            gift.notify
+        end
+        gift_hsh = {}
+        gift_hsh["message"]       = "I just REGIFTED!"
+        gift_hsh["name"]          = gift.receiver.name
+        gift_hsh["receiver_id"]   = gift.giver_id
+        gift_hsh["giver"]         = gift.receiver
+        gift_hsh["old_gift_id"]   = gift.id
+        GiftRegift.create(gift_hsh)
+    end
 end

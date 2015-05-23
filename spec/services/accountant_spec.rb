@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 include MerchantFactory
+include GiftModelFactory
 
 describe Accountant do
 
@@ -107,7 +108,7 @@ describe Accountant do
 		it "should do nothing for 200, 250 , any 7, any 1" do
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 200)
 			resp  = Accountant.merchant(g)
-			resp.should == false
+			resp.should == "no Debt Amount"
 			g    = FactoryGirl.create(:gift, provider_id: m1.provider.id, value: "100", cat: 201)
 			resp = Accountant.merchant(g)
 			resp.should == false
@@ -142,6 +143,50 @@ describe Accountant do
 			resp = Accountant.merchant(g)
 			resp.should == false
 			Register.all.count.should == 0
+		end
+
+		it "should pay a redeemed gift if its has NOT already made a register with its parent gift" do
+			m1.redemption!
+			provider = m1.provider
+			provider.redemption!
+
+			gift = make_gift_sale(u, u, '200', provider.id)
+			gift = Gift.find gift.id
+			resp = Accountant.merchant(gift)
+			Register.all.count.should == 0
+			regift = regift_gift(gift)
+			regift = Gift.find regift.id
+			regift.notify
+			regift.redeem_gift
+			resp_regift = Accountant.merchant(regift)
+			reg = Register.last
+			reg.gift_id.should == resp_regift.gift_id
+			Register.all.count.should == 1
+			# resp_regift.should == false
+		end
+
+		it "should NOT pay a redeemed gift if its has already made a register with its parent gift" do
+			# m1.redemption!
+			provider = m1.provider
+			# provider.redemption!
+
+			gift = make_gift_sale(u, u, '200', provider.id)
+			gift = Gift.find gift.id
+			resp = Accountant.merchant(gift)
+			Register.all.count.should == 1
+
+			# m1.creation!
+			# provider.creation!
+			regift = regift_gift(gift)
+			regift = Gift.find regift.id
+			regift.notify
+			regift.redeem_gift
+			resp_regift = Accountant.merchant(regift)
+			Register.all.count.should == 1
+			# resp_regift.should == false
+			reg = Register.last
+			reg.gift_id.should == gift.id
+			resp_regift.should == "Register exists"
 		end
 	end
 

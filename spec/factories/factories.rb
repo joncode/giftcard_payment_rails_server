@@ -260,6 +260,7 @@ FactoryGirl.define do
         gift.receiver_email   "somebody@gmail.com"
         gift.provider        { FactoryGirl.create(:provider) }
         gift.value           "100"
+        gift.cost            "85"
         gift.service         "4"
         gift.credit_card     { FactoryGirl.create(:visa).id }
         gift.shoppingCart    "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":82,\"item_name\":\"Original Margarita \"}]"
