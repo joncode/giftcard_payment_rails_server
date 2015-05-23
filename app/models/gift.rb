@@ -152,11 +152,9 @@ class Gift < ActiveRecord::Base
     end
 
     def location_fee
-        if self.cat == 300
+        if [300,301,307].include? self.cat
             return provider.location_fee(self.value_in_cents)
-        elsif self.cat == 100
-            return (self.cost.to_f * 100).to_i
-        elsif self.cat == 150
+        elsif [100,101,107,150,151,157].include? self.cat
             return (self.cost.to_f * 100).to_i
         else
             return 0

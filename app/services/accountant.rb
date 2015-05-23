@@ -16,17 +16,38 @@ class Accountant
 			return "Payment time not in sync" if gift.status != 'redeemed' && !gift.provider.creation?
 
 			# if gift is not a purchase (300), do not pay on anything other than status = redeemed
-			return "Not redmption not a purchase" if gift.status != 'redeemed' && gift.cat != 300
+			return "Not redemption not a purchase" if gift.status != 'redeemed' && gift.cat != 300
 
-			return "Register exists"  if Register.exists?(gift_id: gift.id, origin: Register.origins["loc"])
+			if gift.status == 'redeemed' && [101, 107, 151, 157, 301, 307].include?(gift.cat)
+				return "Register exists" if gift_parent_has_been_paid?(gift)
+			else
+				return "Register exists" if get_register_for_merchant gift.id
+			end
 
 
 			register = create_debt(gift, gift.provider.merchant, "loc")
 			if register.save
-				return register.inspect
+				return register
 			else
 				return register.errors.messages
 			end
+		end
+
+		def gift_parent_has_been_paid?(gift)
+			if get_register_for_merchant gift.id
+				return true
+			else
+				parent = gift.parent
+				if parent.kind_of?(Gift)
+					gift_parent_has_been_paid?(parent)
+				else
+					return false
+				end
+			end
+		end
+
+		def get_register_for_merchant gift_id
+			Register.exists?(gift_id: gift_id, origin: Register.origins["loc"])
 		end
 
 		def affiliate_location gift
@@ -78,6 +99,8 @@ class Accountant
 		end
 
 	private
+
+
 
 		def debt_amount gift, origin
 			if origin == "loc"
