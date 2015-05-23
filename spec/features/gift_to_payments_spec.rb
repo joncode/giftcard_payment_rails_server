@@ -46,7 +46,7 @@ describe "Gift To Payment" do
 		g4 = make_gift_sale(u2, u2, "400",  m3.provider.id)
 		g5 = make_gift_sale(u_not, u3, "500",  m1.provider.id)
 		g6 = make_gift_sale(u_not, u1, "600",  m2.provider.id)
-		#binding.pry
+			#binding.pry
 		run_delayed_jobs
 			# REWARDS
 		# a1 					   = 3$ (g2) + 7.5$ (g5)

@@ -37,6 +37,18 @@ class Affiliate < ActiveRecord::Base
 		self.value_merchants	+= gift_value_or_calculate_value_from_amount(gift, amount)
 	end
 
+	def account_admin_email
+		self.email
+	end
+
+	def status
+		"live"
+	end
+
+	def name
+		"#{first_name} #{last_name}"
+	end
+
 private
 
 	def gift_value_or_calculate_value_from_amount(gift, amount)

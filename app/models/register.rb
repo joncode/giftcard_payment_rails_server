@@ -6,11 +6,11 @@ class Register < ActiveRecord::Base
 	belongs_to :partner,  polymorphic: true, autosave: true
 	belongs_to :gift
 	belongs_to :payment
-	before_validation :update_partner
+	before_validation :update_partner, on: :create
 
 	validates_presence_of :partner_id, :partner_type
 
-	after_save :save_affiliation
+	after_create :save_affiliation
 
 	def payment_type
 		if self.loc? || self.aff_loc?
