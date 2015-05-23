@@ -10,6 +10,7 @@ class PaymentCalcCronJob
         return "Not running" unless should_payment_cron_run?(start_date)
 
         sd = start_date || Payment.get_start_date_of_payment
+        sd = sd.beginning_of_day
         ed = Payment.get_end_date_of_payment(sd)
 
         registers = Register.where(created_at: sd ... ed)

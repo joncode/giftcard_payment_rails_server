@@ -10,7 +10,7 @@ class Payment < ActiveRecord::Base
 	def self.get_start_date_of_payment
 		now = DateTime.now.utc
 			# run payments every day for QA/dev
-		if Rails.env.production?
+		if Rails.env.production? || Rails.env.development?
 			if now.day > 15
 				return now.beginning_of_month
 			else
@@ -27,7 +27,7 @@ class Payment < ActiveRecord::Base
 		end
 		sd = start_date || self.get_start_date_of_payment
 			# run payments every day for QA/dev
-		if Rails.env.production?|| Rails.env.test?
+		if Rails.env.production? || Rails.env.test? || Rails.env.development?
 			if sd.day == 1
 				return sd + 15.days
 			else
