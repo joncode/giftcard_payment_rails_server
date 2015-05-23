@@ -18,12 +18,7 @@ class Accountant
 			# if gift is not a purchase (300), do not pay on anything other than status = redeemed
 			return "Not redemption not a purchase" if gift.status != 'redeemed' && gift.cat != 300
 
-			if gift.status == 'redeemed' && [101, 107, 151, 157, 301, 307].include?(gift.cat)
-				return "Register exists" if gift_parent_has_been_paid?(gift)
-			else
-				return "Register exists" if get_register_for_merchant gift.id
-			end
-
+			return "Register exists" if gift_parent_has_been_paid? gift
 
 			register = create_debt(gift, gift.provider.merchant, "loc")
 			if register.save
@@ -38,7 +33,7 @@ class Accountant
 				return true
 			else
 				parent = gift.parent
-				if parent.kind_of?(Gift)
+				if !parent.nil? && parent.kind_of?(Gift)
 					gift_parent_has_been_paid?(parent)
 				else
 					return false

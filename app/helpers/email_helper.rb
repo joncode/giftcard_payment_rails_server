@@ -290,11 +290,15 @@ module EmailHelper
 			#{header_text("Welcome to It's On Me")}
 			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 				<div style='padding-bottom:20px;'>
-					This is your first step to going live.
-				</div><br/>
+					You are almost ready to go live on ItsOnMe!
+				</div>
+				<br />
 				<div>
-					Visit the link to create your account.
-				</div><br>
+					Visit this link to create your account and review your venue information.
+					<br />
+					Your ItsOnMe rep is available to answer any questions and walk you through your account.
+				</div>
+				<br />
 			</div>
 			<div>#{ button_text(button_url, button_text) }</div><br/>
 			<div style='padding-top:30px;'>
@@ -330,8 +334,9 @@ module EmailHelper
 			#{header_text("Welcome to It's On Me")}
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
-					<div>This is your first step to going live.</div>
-					<div>Visit this link to create your merchant account.</div>
+					<div>You are almost ready to go live on ItsOnMe!</div>
+					<div>Visit this link to create your account and review your venue information.</div>
+					<div>Your ItsOnMe rep is available to answer any questions and walk you through your account</div>
 				</div>
 			</div>
 			<div style='padding-bottom: 50px;'>
