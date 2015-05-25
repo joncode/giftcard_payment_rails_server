@@ -35,6 +35,16 @@
 		(in :it method)
 			 ` var gift = make_gift_sale(giver, receiver, value, provider_id) `
 
+##Redis notes
+
+	run the redis server
+	1. in the command line
+		redis-server
+	2. start the rails server
+		rs
+	3. start the resque rake task
+		QUEUE=* rake resque:work
+
 == README
 
 This README would normally document whatever steps are necessary to get the

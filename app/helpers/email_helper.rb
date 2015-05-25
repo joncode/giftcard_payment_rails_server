@@ -307,6 +307,70 @@ module EmailHelper
 		</div>".html_safe
 	end
 
+	def text_for_merchant_signup_welcome merchant_signup
+		"<div style=#{default_style}>
+			#{header_text("Welcome to It's On Me")}
+			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
+				<br />
+				<div style='padding-bottom:20px;'>
+					Hi #{merchant_signup['name']},
+				</div>
+				<br />
+				<div style='padding-bottom:20px;'>
+					Thank you for your interest in ItsOnMe®!
+				</div>
+				<br />
+				<div style='padding-bottom:20px;'>
+					On 	<a href='https://www.itson.me/docs/onesheet.pdf' target='_blank'
+							style='color:#4C37FA;'>
+							this one sheet
+						</a>
+					you will see how ItsOnMe®:
+				</div>
+				<div>
+					<ol>
+						<li>Helps bars, restaurants and other local businesses sell
+							more gift cards through increased distribution of
+							their digital gifting menu.
+						</li>
+						<li>Accept digital gift cards with our industry leading POS
+							integration which means zero training for management and staff.
+						</li>
+						<li>Updates marketing capabilities so a venue can drive new
+							and existing customers to their business with no risk and
+							no out of pocket cost.
+						</li>
+						<li>
+							<a href='https://www.itson.me/docs/onesheet.pdf' target='_blank'
+								style='color:#4C37FA;'>
+								See the one sheet
+							</a>
+						</li>
+					</ol>
+				</div>
+				<div>
+					<p>
+						Your personal account representative will be in touch with you
+						in the next 48 hours. We look forward to learning more about your
+						business and how we can help it grow. If you have any questions
+						please don’t hesitate to reach out.
+					</p>
+				</div>
+				<br />
+				<div style='padding-bottom:20px;'>
+					Thank You,
+				</div>
+				<br />
+				<div style='padding-bottom:20px;'>
+					The ItsOnMe® Team
+				</div>
+			</div>
+			<div style='padding-top:30px;'>
+				#{ merchant_values_text }
+	        </div>
+		</div>".html_safe
+	end
+
 	def text_for_merchant_staff_invite merchant, invitor_name, invite_token
 		button_url = generate_invite_link(invite_token)
 		button_text = "Get Started"
@@ -315,10 +379,12 @@ module EmailHelper
 			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 				<div style='padding-bottom:20px;'>
 					#{invitor_name} added you as a user to #{merchant.name}'s It's On Me account.
-				</div><br/>
+				</div>
+				<br/>
 				<div>
 					Visit the link to create your account.
-				</div><br>
+				</div>
+				<br>
 			</div>
 			<div>#{ button_text(button_url, button_text) }</div><br/>
 			<div style='padding-top:30px;'>

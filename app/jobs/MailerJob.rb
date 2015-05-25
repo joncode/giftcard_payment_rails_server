@@ -7,6 +7,7 @@ class MailerJob
     @queue = :r_email
 
     def self.perform(data)
+        puts "\n MailerJob #{data.inspect}"
         begin
             self.call_mandrill(data)
         rescue
@@ -18,7 +19,7 @@ class MailerJob
 private
 
     def self.call_mandrill data
-        puts "data in Email.rb #{data}"
+        puts "data in MailerJob #{data}"
         MailerJob.send(data['text'], data)
     end
 

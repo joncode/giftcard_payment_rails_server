@@ -130,6 +130,24 @@ module Emailer
 		request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
 	end
 
+	def merchant_signup_welcome full_data_obj
+		data = full_data_obj["args"]
+		puts "\n Emailer merchant_signup_welcome #{data.inspect}"
+		# merchant = MerchantSignup.find(data["id"])
+		subject  = "Welcome to It's On Me"
+		email    = data["email"]
+		name     = "#{data['name']} Staff"
+		body     = text_for_merchant_signup_welcome(data)
+		puts body.inspect
+		bcc      = bcc_company_email
+
+		puts "\n Emailer #{body.inspect}"
+
+		template_name = "merchant"
+		message       = message_hash(subject, email, name, body, bcc)
+		request_mandrill_with_template(template_name, message, [data['id'], "Merchant"])
+	end
+
 	def merchant_staff_invite data
 		merchant     = Merchant.find(data["merchant_id"])
 		invitor_name = data["invitor_name"]
@@ -307,11 +325,7 @@ private
 	end
 
 	def bcc_company_email
-		if Rails.env.production?
-			"rachel.wenman@itson.me"
-		else
-			nil
-		end
+		HELP_CONTACT[0]
 	end
 
 	def whitelist_user(user)
