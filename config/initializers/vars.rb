@@ -119,7 +119,7 @@ else
     ENV['POSITRONICS_API_KEY']
 end
 
-POSITRONICS_API_URL = "https://api.positronics.io/0.1"
+POSITRONICS_API_URL = "https://api.omnivore.io/0.1"
 
 
 

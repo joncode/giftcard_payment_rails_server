@@ -30,11 +30,17 @@ class Positronics
 	def redeem
 		tic = nil
 		tix = formulate_tickets_at_location
+
 		if tix.class == Array
 			tic = get_ticket_from_tix(tix)
 		end
+
 		if tic.nil?
-			@code = 404
+			if tix.to_i > 400
+				@code = tix
+			else
+				@code = 404
+			end
 		else
 			if tic["closed_at"].nil?
 				@ticket_id = tic["id"]
@@ -98,7 +104,10 @@ private
 			r_text = "Your check number #{@ticket_num} cannot be found. Please double check and try again. If this issue persists please contact support@itson.me"
 		when 500
 			r_code = "ERROR"
-			r_text = "Internal Error please contact support@itson.me"
+			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
+		when 503
+			r_code = "ERROR"
+			r_text = "Merchant Point of Sale System Unavailable.  Please try again later."
 		when 509
 			r_code = "ERROR"
 			r_text = "Merchant Server Unavailable.  Please try again later."
@@ -136,6 +145,7 @@ private
 
 		puts "\nPositronics look after:\n"
 		puts payload.inspect
+
 		response = RestClient.post(
 		    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@ticket_id}/payments/",
 		    payload,
