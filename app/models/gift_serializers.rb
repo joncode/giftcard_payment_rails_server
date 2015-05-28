@@ -173,11 +173,11 @@ module GiftSerializers
         gift_hsh["msg"]           = self.message
         gift_hsh["loc_id"]        = self.provider_id
         gift_hsh["loc_name"]      = self.provider_name
-        if provider = Provider.unscoped.find(self.provider_id)
-            gift_hsh["loc_phone"]     = self.provider.phone
-            gift_hsh["loc_address"]   = self.provider.complete_address
-            gift_hsh["loc_photo"]     = self.provider.short_image_url
-            gift_hsh["r_sys"]         = self.provider.r_sys
+        if gift_provider = self.provider
+            gift_hsh["loc_phone"]     = gift_provider.phone
+            gift_hsh["loc_address"]   = gift_provider.complete_address
+            gift_hsh["loc_photo"]     = gift_provider.short_image_url
+            gift_hsh["r_sys"]         = gift_provider.r_sys
         end
         gift_hsh["gift_id"]       = self.id
         gift_hsh["token"]         = self.token
