@@ -79,13 +79,18 @@ class Mdot::V2::GiftsController < JsonController
         gift = Gift.includes(:provider).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = pos_redeem_params
-                resp = gift.pos_redeem(ticket_num, gift.provider.pos_merchant_id, gift.provider.tender_type_id)
-                if resp["success"] == true
-                    status = :ok
-                    success(resp["response_text"])
+                if gift.provider.nil?
+                    resp = gift.pos_redeem(ticket_num, gift.provider.pos_merchant_id, gift.provider.tender_type_id)
+                    if resp["success"] == true
+                        status = :ok
+                        success(resp["response_text"])
+                    else
+                        status = :ok
+                        fail(resp["response_text"])
+                    end
                 else
-                    status = :ok
-                    fail(resp["response_text"])
+                    status = :forbidden
+                    fail( "Merchant is currently not active please contact support@itson.me")
                 end
             else
                 status = :bad_request
@@ -223,7 +228,7 @@ private
 
     def pos_redeem_params
         if params["ticket_num"].blank?
-            ""
+            nil
         else
             params.require(:ticket_num)
         end
