@@ -136,13 +136,18 @@ class Web::V3::GiftsController < MetalCorsController
         gift = Gift.includes(:provider).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = pos_redeem_params["ticket_num"]
-                resp = gift.pos_redeem(ticket_num, gift.provider.pos_merchant_id, gift.provider.tender_type_id)
-                if resp["success"] == true
-                    status = :ok
-                    success({msg: resp["response_text"]})
+                if !gift.provider.nil?
+                    resp = gift.pos_redeem(ticket_num, gift.provider.pos_merchant_id, gift.provider.tender_type_id)
+                    if resp["success"] == true
+                        status = :ok
+                        success({msg: resp["response_text"]})
+                    else
+                        status = :ok
+                        fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                    end
                 else
-                    status = :ok
-                    fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                    status = :bad_request
+                    fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
                 end
             else
                 status = :bad_request
