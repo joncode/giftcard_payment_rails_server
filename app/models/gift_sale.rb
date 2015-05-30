@@ -40,10 +40,15 @@ private
         credit_card_hsh["giver_id"]    = card.user_id
         credit_card_hsh["provider_id"] = args["provider_id"]
         args["cat"]                    = set_cat(args)
-        args["payable"] = Sale.charge_card credit_card_hsh
         args.delete("unique_id")
         args.delete("card")
         args.delete("amount")
+        validateGift = Gift.new(args)
+        if validateGift.valid?
+            args["payable"] = Sale.charge_card credit_card_hsh
+        else
+            validateGift
+        end
     end
 
     def set_service_f(args)

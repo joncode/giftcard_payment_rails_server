@@ -4,6 +4,25 @@ describe GiftSale do
     before(:each) do
         User.any_instance.stub(:init_confirm_email).and_return(true)
     end
+
+    context "BUG FIXES" do
+
+        it "should not charge card or try to send emails when gift data cannot create valid gift" do
+            user     = FactoryGirl.create(:user, first_name: 'Shawn', last_name: 'Erbach', email: "shawn.erbachspec@spec.com")
+            card     = FactoryGirl.create(:card, name: user.name, user_id: user.id)
+            request = {"data"=>{"receiver_name"=>"Shawn Erbach", "giver_id"=> user.id, "value"=>"50.00", "service"=>"2.50", "message"=>"Round 2", "credit_card"=>card.id, "receiver_email"=> user.email},
+                        "shoppingCart"=>[{"item_id"=>214, "item_name"=>"$50 Voucher", "category"=>"Gift Vouchers", "price"=>"50", "quantity"=>1}]}
+
+            gift_hsh = request['data']
+            gift_hsh['shoppingCart'] = request['shoppingCart']
+            gift_hsh['giver'] = user
+            gift_response = GiftSale.create(gift_hsh)
+            Sale.should_not_receive(:charge_card)
+            gift_response.errors.messages.keys.should_not be_nil
+            gift_response.kind_of?(Gift).should be_true
+        end
+    end
+
     context "Full Tests + with Receiver ID" do
 
         before(:each) do
