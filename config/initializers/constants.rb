@@ -6,6 +6,7 @@ if Rails.env.production?
     TEST_URL         = "http://www.drinkboardapp.com"
     MERCHANT_URL     = "http://merchtools.herokuapp.com"
     PUBLIC_URL       = "http://www.itson.me"
+    CLEAR_CACHE      = 'https://www.itson.me'
     PUBLIC_URL_AT    = "http://admin.itson.me"
     PUBLIC_URL_MT    = "http://merchant.itson.me"
     PUBLIC_URL_PT    = "http://partner.itson.me"
@@ -17,6 +18,7 @@ elsif Rails.env.staging?
     PAGE_NAME        = "#{SERVICE_NAME} (staging)"
     TEST_URL         = "http://qa.drinkboardapp.com"
     MERCHANT_URL     = "http://merchtoolsdev.herokuapp.com"
+    CLEAR_CACHE      = 'https://qa.itson.me'
     PUBLIC_URL       = "http://qa.itson.me"
     PUBLIC_URL_AT    = "http://qaadmin.itson.me"
     PUBLIC_URL_MT    = "http://qamerchant.itson.me"
@@ -28,6 +30,7 @@ else
     PAGE_NAME        = "Dev #{SERVICE_NAME} (local)"
     TEST_URL         = "http://0.0.0.0:3001"
     MERCHANT_URL     = "http://0.0.0.0:3000"
+    CLEAR_CACHE      = 'http://0.0.0.0:3001'
     PUBLIC_URL       = "http://0.0.0.0:3001"
     PUBLIC_URL_AT    = "http://0.0.0.0:3002"
     PUBLIC_URL_MT    = "http://merchant.happyer.dev/"

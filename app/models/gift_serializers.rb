@@ -173,7 +173,7 @@ module GiftSerializers
         gift_hsh["msg"]           = self.message
         gift_hsh["loc_id"]        = self.provider_id
         gift_hsh["loc_name"]      = self.provider_name
-        if gift_provider = self.provider
+        if gift_provider = Provider.unscoped.where(id: self.provider_id).first
             gift_hsh["loc_phone"]     = gift_provider.phone
             gift_hsh["loc_address"]   = gift_provider.complete_address
             gift_hsh["loc_photo"]     = gift_provider.short_image_url

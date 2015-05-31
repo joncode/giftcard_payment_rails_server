@@ -6,7 +6,7 @@ class WwwHttpService
 		puts "\n clearing www merchant cache"
 		begin
 			resp = RestClient.get(
-			    "#{PUBLIC_IOM}/shop/clearcache",
+			    "#{CLEAR_CACHE}/shop/clearcache",
 			    {:content_type => :html }
 			)
 		rescue => e
