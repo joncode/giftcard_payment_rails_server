@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519005740) do
+ActiveRecord::Schema.define(version: 20150602225027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,16 @@ ActiveRecord::Schema.define(version: 20150519005740) do
     t.string   "handle"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "approvals", force: true do |t|
+    t.text     "request_str"
+    t.string   "unique_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "merchant_id"
+    t.integer  "status",      default: 0
+    t.string   "email"
   end
 
   create_table "at_users", force: true do |t|
@@ -300,6 +310,7 @@ ActiveRecord::Schema.define(version: 20150519005740) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.string   "cim_token"
+    t.string   "zip"
   end
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
@@ -336,6 +347,13 @@ ActiveRecord::Schema.define(version: 20150519005740) do
   end
 
   create_table "data_transfers", force: true do |t|
+    t.json     "model_names"
+    t.json     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "datatransfers", force: true do |t|
     t.json     "model_names"
     t.json     "data"
     t.datetime "created_at"
@@ -579,11 +597,19 @@ ActiveRecord::Schema.define(version: 20150519005740) do
     t.string   "message"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "active"
+    t.boolean  "active",               default: true
     t.string   "address"
   end
 
   add_index "merchant_signups", ["active"], name: "index_merchant_signups_on_active", using: :btree
+
+  create_table "merchant_tools", force: true do |t|
+    t.string   "token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "merchant_tools", ["token"], name: "index_merchant_tools_on_token", using: :btree
 
   create_table "merchants", force: true do |t|
     t.string   "name"

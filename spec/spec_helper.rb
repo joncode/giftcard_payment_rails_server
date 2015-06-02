@@ -32,8 +32,12 @@ RSpec.configure do |config|
         gift.notify
     rescue
 	    sql = "CREATE SEQUENCE gift_token_seq MINVALUE 1000 MAXVALUE 9999 CACHE 100 CYCLE;"
-      Gift.connection.execute(sql)
+        begin
+            Gift.connection.execute(sql)
+        rescue => e
+            puts e
+        end
     ensure
-        gift.destroy!
+        gift.destroy! if gift
     end
 end

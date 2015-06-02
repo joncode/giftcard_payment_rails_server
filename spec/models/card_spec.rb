@@ -81,6 +81,14 @@ describe Card do
             card.errors[:expiration].should == ["Date is not valid"]
         end
 
+        it "should validate that a zip code is a correct" do
+            cc_hsh = {"month"=> "11", "number"=>"4417121029961508", "user_id"=>772, "name"=>"Hiromi Tsuboi", "year"=>"2017", "csv"=>"910", "nickname"=>"Dango", 'zip' => "noZip"}
+            card = Card.create_card_from_hash cc_hsh
+            card.save
+            card.should have_at_least(1).error_on(:zip)
+            card.errors[:zip].should == ["noZip is not a valid zip code"]
+        end
+
 
     end
 

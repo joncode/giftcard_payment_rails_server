@@ -24,6 +24,8 @@ class Card < ActiveRecord::Base
 
 	validates_presence_of :csv, :last_four, :month, :year, :brand, :nickname,  :user_id, :name
 
+	validates :zip, zip_code: true, allow_blank: true
+
 	before_save :crypt_number
 
 	after_create :tokenize_card
@@ -46,6 +48,7 @@ class Card < ActiveRecord::Base
 		card.user_id 	= cc_hash["user_id"]
 		card.brand 		= cc_hash["brand"]
 		card.number 	= cc_hash["number"]
+		card.zip 		= cc_hash['zip']
 		card
 	end
 
