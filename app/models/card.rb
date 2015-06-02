@@ -26,7 +26,10 @@ class Card < ActiveRecord::Base
 
 	before_save :crypt_number
 
+	after_create :tokenize_card
+
 #	-------------
+
 
 	def self.get_cards user
 		cards = Card.where(user_id: user.id)
@@ -127,6 +130,11 @@ class Card < ActiveRecord::Base
 
 private
 
+	def tokenize_card
+		if (Rails.env.staging? || Rails.env.production?)
+            Resque.enqueue(CardTokenizerJob, self.id)
+        end
+	end
 
 	def check_for_credit_card_validity
 		errors.add(:year, "is not a valid year") unless valid_expiry_year?(year.to_i)

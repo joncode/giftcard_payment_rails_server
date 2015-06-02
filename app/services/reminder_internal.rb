@@ -15,7 +15,7 @@ class ReminderInternal
 				data = {
 					subject: "Campaign Expiration Notice",
 					text: "Campaign #{campaign.cname} is expiring within 2 days",
-					email: HELP_CONTACT[0]["email"]
+					email: HELP_CONTACT["email"]
 				}
 				self.route_email_system(data)
 			end

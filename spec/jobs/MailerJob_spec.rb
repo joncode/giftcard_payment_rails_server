@@ -417,7 +417,7 @@ describe MailerJob do
                 "from_name"   => "It's On Me",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [
-                    { "email" => email, "name" => "#{@merchant.name} Staff" }
+                    { "email" => email, "name" => "#{@merchant.name} Staff" },
                 ],
                 "global_merge_vars"  => [
                     { "name" => "body", "content" => body }
