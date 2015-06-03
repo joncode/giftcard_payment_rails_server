@@ -25,10 +25,6 @@ class Mdot::V2::CardsController < JsonController
     def create
         data = convert_if_json
 
-        return nil  if data_not_hash?(data)
-        card_param = strong_params(data)
-        return nil  if hash_empty?(card_param)
-
         create_with = card_params
         create_with["user_id"] = @current_user.id
         card = Card.create_card_from_hash create_with
@@ -61,22 +57,14 @@ private
         params.require(:data).permit(:nickname, :token, :last_four, :brand)
     end
 
-    def strong_params(data_hsh)
-        allowed = ["month", "number", "year", "csv", "nickname", "name"]
-        new_data = data_hsh.select{ |k,v| allowed.include? k }
-        if new_data.count == allowed.count
-            new_data
-        else
-            {}
-        end
-    end
-
     def card_params
-        allowed = ["month", "number", "year", "csv", "nickname", "name", "user_id", "brand"]
+        allowed = ['month', 'number', 'year', 'csv', 'nickname', 'name', 'user_id', 'brand', 'zip']
         if params.require(:data).kind_of?(String)
-            JSON.parse(params.require(:data))
+            data = JSON.parse(params['data'])
+            params['data'] = data
+            params.require('data').permit(allowed)
         else
-            params.require(:data).permit(allowed)
+            params.require('data').permit(allowed)
         end
     end
 

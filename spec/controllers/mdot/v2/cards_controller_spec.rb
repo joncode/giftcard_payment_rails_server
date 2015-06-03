@@ -123,7 +123,7 @@ describe Mdot::V2::CardsController do
             params = "{\"number\":\"4417121029961508\",\"name\":\"Hiromi Tsuboi\",\"year\":\"2016\",\"csv\":\"910\",\"nickname\":\"Dango\"}"
 
             post :create, format: :json, data: params
-            rrc(400)
+            rrc(200)
         end
 
         it "should not save incomplete card info" do
@@ -132,7 +132,7 @@ describe Mdot::V2::CardsController do
 
             post :create, format: :json, data: params
 
-            rrc(400)
+            rrc(200)
         end
 
         it "should reject hash with fields not accept" do

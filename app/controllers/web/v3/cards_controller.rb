@@ -57,7 +57,7 @@ private
     end
 
     def card_params
-        params.require(:data).permit(:nickname, :number, :brand, :csv, :month, :year, :name)
+        params.require(:data).permit(:nickname, :number, :brand, :csv, :month, :year, :name, :zip)
     end
 
 end
