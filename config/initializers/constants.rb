@@ -77,6 +77,6 @@ GIFT_CAT = { 100 => "Admin", 101 => "AdmRegift", 107 => "AdmBoom", 150 => "AdmCa
 
 REDEMPTION_HSH = {1 => "V1" , 2 => "V2",  3 => "Pos" }
 
-CITY_LIST = Region.city.map(&:old_city_json)
+# CITY_LIST = Region.city.map(&:old_city_json)
 
 
