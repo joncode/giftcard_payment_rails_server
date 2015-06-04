@@ -690,7 +690,6 @@ ActiveRecord::Schema.define(version: 20150606014952) do
     t.string   "sex"
     t.date     "birthday"
     t.string   "password_digest"
-    t.string   "remember_token",                                    null: false
     t.boolean  "admin",                             default: false
     t.integer  "confirm",                           default: 0
     t.datetime "reset_token_sent_at"
@@ -722,7 +721,6 @@ ActiveRecord::Schema.define(version: 20150606014952) do
   add_index "mt_users", ["affiliate_id"], name: "index_mt_users_on_affiliate_id", using: :btree
   add_index "mt_users", ["db_user_id"], name: "index_mt_users_on_db_user_id", using: :btree
   add_index "mt_users", ["email"], name: "index_mt_users_on_email", using: :btree
-  add_index "mt_users", ["remember_token"], name: "index_mt_users_on_remember_token", using: :btree
   add_index "mt_users", ["reset_password_token"], name: "index_mt_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "oauths", force: true do |t|
