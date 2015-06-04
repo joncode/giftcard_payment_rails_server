@@ -2,13 +2,26 @@ class Region < ActiveRecord::Base
 
 	enum type_of: [ :city, :neighborhood ]
 
+	has_many :providers
+	has_many :merchants
+
 	validates_presence_of :name
 
 	before_create :make_token
 	before_create :set_type_of
 
+	default_scope -> { where(active: true) }  # indexed w/ city
+
+
 	def as_json(*args)
-	    super.tap { |hash| hash["region_id"] = hash.delete "id" }
+	    super.tap do |hash|
+	    	hash.delete('city_id')
+	    	hash.delete('state_id')
+	    	hash.delete('created_at')
+	    	hash.delete('updated_at')
+	    	hash.delete('active')
+	    	hash["region_id"] = hash.delete 'id'
+	    end
 	end
 
 

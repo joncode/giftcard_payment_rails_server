@@ -686,7 +686,7 @@ private
 
     def region_id_from_name name
         region_hash = CITY_LIST.select { |region_h| region_h["name"] == name }
-        region_hash[0]["city_id"].to_i
+        region_hash[0]["region_id"].to_i
     end
 
 end

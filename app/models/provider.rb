@@ -5,6 +5,8 @@ class Provider < ActiveRecord::Base
 
 	attr_accessor 	:menu
 
+	belongs_to :region
+
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
 	has_many   :sales
@@ -31,17 +33,17 @@ class Provider < ActiveRecord::Base
 
 	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
-  def redemption
-    REDEMPTION_HSH[r_sys]
-  end
+	def redemption
+		REDEMPTION_HSH[r_sys]
+	end
 
-  def region
-    REGION_TO_TEXT[region_id]
-  end
+	# def region
+	# 	REGION_TO_TEXT[region_id]
+	# end
 
-  def biz_user
-    BizUser.find(self.id)
-  end
+	def biz_user
+		BizUser.find(self.id)
+	end
 #/---------------------------------------------------------------------------------------------/
 
 	def self.get_all

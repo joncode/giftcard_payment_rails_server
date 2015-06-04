@@ -6,6 +6,8 @@ class Merchant < ActiveRecord::Base
     has_many :payments,     as: :partner
     has_many :registers,    as: :partner
 
+    belongs_to :region
+
     enum payment_event: [ :creation, :redemption ]
 
     def mode= mode_str

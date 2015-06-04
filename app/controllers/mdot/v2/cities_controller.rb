@@ -24,13 +24,13 @@ private
 
     def region_id_from_name name
         region_hash = CITY_LIST.select { |region_h| region_h["name"] == name }
-        region_hash[0]["city_id"].to_i
+        region_hash[0]["region_id"].to_i
     end
 
     def city_name_from_id id_int
         city_name = nil
         CITY_LIST.each do |city|
-            if city["city_id"] == id_int
+            if city["region_id"] == id_int
                 city_name = city["name"]
                 break
             end

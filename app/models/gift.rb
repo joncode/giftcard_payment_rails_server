@@ -23,7 +23,7 @@ class Gift < ActiveRecord::Base
     has_many    :dittos,        as: :notable
     has_many    :redemptions
     has_many    :affiliate_gifts
-    has_many    :affiliates, through: :affiliate_gifts
+    has_many    :affiliates,    through: :affiliate_gifts
     has_many    :landing_pages, through: :affiliate_gifts
     has_many    :registers
     belongs_to  :provider
