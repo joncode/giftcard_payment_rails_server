@@ -56,3 +56,15 @@ end# == Schema Information
 #  updated_at :datetime
 #
 
+# == Schema Information
+#
+# Table name: pn_tokens
+#
+#  id         :integer         not null, primary key
+#  user_id    :integer
+#  pn_token   :string(255)
+#  platform   :string(255)     default("ios")
+#  created_at :datetime
+#  updated_at :datetime
+#
+

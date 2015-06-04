@@ -58,5 +58,6 @@ end
 #  type_of      :integer         default(0)
 #  created_at   :datetime
 #  updated_at   :datetime
+#  payment_id   :integer
 #
 

@@ -58,7 +58,7 @@ end
 #  active          :boolean         default(TRUE)
 #  latitude        :float
 #  longitude       :float
-#  rate            :decimal(, )
+#  rate            :decimal(, )     default(85.0)
 #  menu_is_live    :boolean         default(FALSE)
 #  brand_id        :integer
 #  building_id     :integer
@@ -73,5 +73,8 @@ end
 #  r_sys           :integer         default(2)
 #  photo_l         :string(255)
 #  payment_plan    :integer         default(0)
+#  payment_event   :integer         default(0)
+#  tender_type_id  :string(255)
+#  website         :string(255)
 #
 

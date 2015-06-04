@@ -103,3 +103,15 @@
 # #  pos_merchant_id :integer
 # #
 
+# == Schema Information
+#
+# Table name: redeems
+#
+#  id              :integer         not null, primary key
+#  gift_id         :integer
+#  redeem_code     :string(255)
+#  created_at      :datetime        not null
+#  updated_at      :datetime        not null
+#  pos_merchant_id :integer
+#
+

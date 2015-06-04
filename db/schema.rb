@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150602225027) do
+ActiveRecord::Schema.define(version: 20150604035558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -952,6 +952,22 @@ ActiveRecord::Schema.define(version: 20150602225027) do
   end
 
   add_index "redemptions", ["gift_id"], name: "index_redemptions_on_gift_id", using: :btree
+
+  create_table "regions", force: true do |t|
+    t.string   "name"
+    t.string   "detail"
+    t.integer  "state_id"
+    t.integer  "city_id"
+    t.string   "photo"
+    t.boolean  "active",     default: true
+    t.integer  "type_of",    default: 0
+    t.string   "token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "regions", ["active"], name: "index_regions_on_active", using: :btree
+  add_index "regions", ["city_id", "active"], name: "index_regions_on_city_id_and_active", using: :btree
 
   create_table "registers", force: true do |t|
     t.integer  "gift_id"

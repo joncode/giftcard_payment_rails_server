@@ -123,5 +123,6 @@ end# == Schema Information
 #  new_token_at   :datetime
 #  token          :integer
 #  balance        :integer
+#  origin         :string(255)
 #
 

@@ -44,15 +44,18 @@ end
 #  end_date       :datetime
 #  auth_date      :datetime
 #  conf_num       :string(255)
-#  m_transactions :integer
-#  m_amount       :integer
-#  u_transactions :integer
-#  u_amount       :integer
-#  total          :integer
-#  paid           :boolean
+#  m_transactions :integer         default(0)
+#  m_amount       :integer         default(0)
+#  u_transactions :integer         default(0)
+#  u_amount       :integer         default(0)
+#  total          :integer         default(0)
+#  paid           :boolean         default(FALSE)
 #  partner_id     :integer
 #  partner_type   :string(255)
 #  created_at     :datetime
 #  updated_at     :datetime
+#  l_transactions :integer         default(0)
+#  l_amount       :integer         default(0)
+#  at_user_id     :integer
 #
 

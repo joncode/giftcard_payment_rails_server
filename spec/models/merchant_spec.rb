@@ -41,7 +41,7 @@ end
 #  twitter          :string(255)
 #  photo            :string(255)
 #  photo_l          :string(255)
-#  rate             :decimal(8, 3)
+#  rate             :decimal(, )     default(85.0)
 #  sales_tax        :decimal(8, 3)
 #  setup            :string(255)     default("000010")
 #  image            :string(255)
@@ -61,5 +61,13 @@ end
 #  created_at       :datetime
 #  updated_at       :datetime
 #  affiliate_id     :integer
+#  payment_event    :integer         default(0)
+#  tender_type_id   :string(255)
+#  pos_sys          :string(255)
+#  prime_amount     :integer
+#  prime_date       :date
+#  contract_date    :date
+#  signup_email     :string(255)
+#  signup_name      :string(255)
 #
 

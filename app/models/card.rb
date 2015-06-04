@@ -230,5 +230,6 @@ end
 #  created_at    :datetime        not null
 #  updated_at    :datetime        not null
 #  cim_token     :string(255)
+#  zip           :string(255)
 #
 
