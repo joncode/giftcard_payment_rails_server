@@ -5,6 +5,8 @@ include UserSessionFactory
 describe Web::V3::RegionsController do
 
     before(:each) do
+        User.delete_all
+        UserSocial.delete_all
         @provider = FactoryGirl.create(:provider, region_id: 2)
         request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
     end

@@ -9,6 +9,7 @@ require 'capybara/rspec'
 require 'webmock/rspec'
 #require 'documentation_helper'
 
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
@@ -27,11 +28,11 @@ RSpec.configure do |config|
     config.include Capybara::RSpecMatchers
 
     begin
-    	Gift.exists?
+        Gift.exists?
         gift = FactoryGirl.create(:gift, receiver_id: 2, status: 'open')
         gift.notify
     rescue
-	    sql = "CREATE SEQUENCE gift_token_seq MINVALUE 1000 MAXVALUE 9999 CACHE 100 CYCLE;"
+        sql = "CREATE SEQUENCE gift_token_seq MINVALUE 1000 MAXVALUE 9999 CACHE 100 CYCLE;"
         begin
             Gift.connection.execute(sql)
         rescue => e
@@ -40,4 +41,10 @@ RSpec.configure do |config|
     ensure
         gift.destroy! if gift
     end
+
+    if CITY_LIST.nil? || CITY_LIST.count == 0
+        load "#{Rails.root}/db/seeds.rb"
+        CITY_LIST = Region.city.map(&:old_city_json)
+    end
+
 end

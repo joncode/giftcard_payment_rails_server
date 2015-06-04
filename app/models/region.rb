@@ -24,6 +24,16 @@ class Region < ActiveRecord::Base
 	    end
 	end
 
+	def old_city_json
+		hsh = {}
+		hsh['name'] = self.name
+		hsh['state'] = self.detail
+		hsh['photo'] = self.photo
+		hsh['region_id'] = self.id
+		hsh['city_id'] = self.id
+		hsh['token'] = self.token
+		hsh
+	end
 
 
 
