@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150604035558) do
+ActiveRecord::Schema.define(version: 20150604061517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -657,6 +657,7 @@ ActiveRecord::Schema.define(version: 20150604035558) do
     t.date     "contract_date"
     t.string   "signup_email"
     t.string   "signup_name"
+    t.integer  "city_id"
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
@@ -898,6 +899,7 @@ ActiveRecord::Schema.define(version: 20150604035558) do
     t.integer  "payment_event",              default: 0
     t.string   "tender_type_id"
     t.string   "website"
+    t.integer  "city_id"
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree
