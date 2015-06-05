@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150604231628) do
+ActiveRecord::Schema.define(version: 20150605232602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -506,20 +506,20 @@ ActiveRecord::Schema.define(version: 20150604231628) do
   create_table "invites", force: true do |t|
     t.string   "invite_tkn"
     t.string   "email"
-    t.integer  "user_id"
-    t.integer  "merchant_id"
+    t.integer  "mt_user_id"
+    t.integer  "company_id"
     t.boolean  "active",                   default: true
     t.integer  "rank",                     default: 0
     t.boolean  "general",                  default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "clearance",    limit: 225
-    t.integer  "affiliate_id"
+    t.string   "company_type"
   end
 
+  add_index "invites", ["company_id"], name: "index_invites_on_company_id", using: :btree
   add_index "invites", ["invite_tkn"], name: "index_invites_on_invite_tkn", using: :btree
-  add_index "invites", ["merchant_id"], name: "index_invites_on_merchant_id", using: :btree
-  add_index "invites", ["user_id"], name: "index_invites_on_user_id", using: :btree
+  add_index "invites", ["mt_user_id"], name: "index_invites_on_mt_user_id", using: :btree
 
   create_table "landing_pages", force: true do |t|
     t.integer  "campaign_id"
