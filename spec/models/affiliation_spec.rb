@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Affiliation do
 
+
 	it "should have status enum" do
         u = FactoryGirl.create(:user, first_name: "Test", last_name: "Biffet", city: "New Amsterdam")
         a = FactoryGirl.create(:affiliate)

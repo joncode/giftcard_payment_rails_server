@@ -1,12 +1,12 @@
 class Invite < ActiveRecord::Base
     include Utility
 
-    belongs_to :mt_user, foreign_key: :user_id
-    belongs_to :merchant
+    belongs_to :mt_user
+    belongs_to :company, polymorphic: true
 
     before_validation       :generate_invite_tkn
     before_validation       :strip_whitespace_and_fix_case
-    validates_presence_of   :invite_tkn, :merchant_id, :email
+    validates_presence_of   :invite_tkn, :company_id, :company_type, :email
     validates_uniqueness_of :invite_tkn
     validates :email , format: { with: VALID_EMAIL_REGEX }
 
@@ -16,7 +16,7 @@ class Invite < ActiveRecord::Base
 
     def serialize
         mt_user = self.mt_user
-        emp  = self.serializable_hash only: [:code, :rank, :general]
+        emp  = self.serializable_hash only: [:rank, :general]
         emp["eid"]          = self.id
         emp["photo"]        = mt_user.photo
         emp["first_name"]   = mt_user.first_name
@@ -28,7 +28,7 @@ class Invite < ActiveRecord::Base
 
     def admt_serialize
         mt_user = self.mt_user
-        emp  = self.serializable_hash only: [:code, :rank, :general]
+        emp  = self.serializable_hash only: [:rank, :general]
         emp["eid"]          = self.id
         emp["photo"]        = mt_user.photo
         emp["first_name"]   = mt_user.first_name
@@ -104,5 +104,3 @@ end
 #  general      :boolean         default(FALSE)
 #
 
-# Employee
-#     code

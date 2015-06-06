@@ -1,5 +1,19 @@
 FactoryGirl.define do
 
+    factory :invite do
+        mt_user_id  100
+        company_id    100
+        company_type   'Merchant'
+        sequence(:email) { |n| "intviteto#{n}@gmailinvite.com" }
+    end
+
+    factory :mt_user do
+        sequence(:remember_token)    { |n|  "Token#{n}" }
+        first_name "Factory"
+        last_name "Mt User"
+        sequence(:email)            { |n|  "tester#{n}@gmail.com" }
+    end
+
     factory :redemption do
         gift_id         123
         amount          3000

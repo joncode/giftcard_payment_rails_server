@@ -9,6 +9,13 @@ describe Affiliate do
 
     context "associations" do
 
+        it "should respond to mt_users" do
+            mtu = FactoryGirl.create(:mt_user)
+            a = FactoryGirl.create(:affiliate)
+            invite = FactoryGirl.create :invite, company_id: a.id, company_type: 'Affiliate', mt_user_id: mtu.id
+            a.mt_users.first.should == mtu
+        end
+
         it "should respond to :merchants" do
             m = FactoryGirl.create(:merchant)
             a = FactoryGirl.create(:affiliate)

@@ -5,6 +5,8 @@ class Merchant < ActiveRecord::Base
     has_one :affiliate, through: :affiliation
     has_many :payments,     as: :partner
     has_many :registers,    as: :partner
+    has_many :invites,  as: :company
+    has_many :mt_users, through: :invites
 
     belongs_to :region
 

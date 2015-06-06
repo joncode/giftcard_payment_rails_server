@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include MerchantFactory
+
 describe Merchant do
 
 	context "associations" do
@@ -16,6 +18,13 @@ describe Merchant do
             a = FactoryGirl.create(:affiliation)
             m.affiliation = a
             m.affiliation.should == a
+        end
+
+        it "should respond to mt_users" do
+            mtu = FactoryGirl.create(:mt_user)
+            m = make_merchant_provider('Test Invite')
+            invite = FactoryGirl.create :invite, company_id: m.id, company_type: 'Merchant', mt_user_id: mtu.id
+            m.mt_users.first.should == mtu
         end
 	end
 end
