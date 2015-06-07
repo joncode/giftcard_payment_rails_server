@@ -51,8 +51,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
-VERSION_NUMBER  = "1.5.4"
-VERSION_UPDATED = "6/2/14"
+VERSION_NUMBER  = "1.5.5"
+VERSION_UPDATED = "6/5/14"
 
 
 if Rails.env.test?
@@ -67,6 +67,10 @@ GENERIC_RECEIVER_NAME = "ItsOnMe User"
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 VALID_PHONE_REGEX = /1?\s*\W?\s*([2-9][0-8][0-9])\s*\W?\s*([2-9][0-9]{2})\s*\W?\s*([0-9]{4})(\se?x?t?(\d*))?/
 # this regex for phone does not work for '(210)-' unusual but possible mistake
+
+# STATUSES
+CLEARANCE_HASH       = {'Staff' => 0, 'Manager' => 50 , "Admin" => 90 }
+CLEARANCE_LEVELS     = CLEARANCE_HASH.keys
 
 Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
