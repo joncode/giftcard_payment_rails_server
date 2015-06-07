@@ -12,6 +12,25 @@ class Region < ActiveRecord::Base
 
 	default_scope -> { where(active: true) }  # indexed w/ city
 
+	def self.all_for_clients
+		cities = Region.city.order(id: :asc).where(active: true)
+		neighborhoods = Region.neighborhood.where(active: true)
+		new_ary = []
+
+		cities.each do |city|
+			new_ary << city
+			new_ary.concat(get_neighborhoods_for_city(city, neighborhoods))
+		end
+		new_ary
+	end
+
+	def self.get_neighborhoods_for_city city, array_of_regions
+		puts city.inspect
+		puts array_of_regions.inspect
+		array_of_regions.select do |region|
+			region.neighborhood? && region.city_id == city.id
+		end
+	end
 
 	def as_json(*args)
 	    super.tap do |hash|

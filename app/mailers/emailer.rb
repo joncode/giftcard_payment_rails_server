@@ -117,6 +117,19 @@ module Emailer
 
 ##### Merchant Tools
 
+	def affiliate_invite data
+		affiliate = Affiliate.find(data["affiliate_id"])
+		subject  = "Welcome to It's On Me"
+		email    = data["email"]
+		name     = "#{affiliate.name} Staff"
+		body     = text_for_affiliate_invite(affiliate, data["token"])
+		bcc      = bcc_company_email
+
+		template_name = "merchant"
+		message       = message_hash(subject, email, name, body, bcc)
+		request_mandrill_with_template(template_name, message, [affiliate.id, "Affiliate"])
+	end
+
 	def merchant_invite data
 		merchant = Merchant.find(data["merchant_id"])
 		subject  = "Welcome to It's On Me"

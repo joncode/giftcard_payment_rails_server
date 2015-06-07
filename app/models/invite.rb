@@ -63,6 +63,14 @@ class Invite < ActiveRecord::Base
         super(level_integer)
     end
 
+    def self.new_invite company, mt_user, rank='Admin'
+        Invite.new({ mt_user_id: mt_user.id,
+                         email: mt_user.email,
+                         rank: rank,
+                         company_id: company.id,
+                         company_type: company.class })
+    end
+
     def self.make_token
         self.new.generate_token
     end

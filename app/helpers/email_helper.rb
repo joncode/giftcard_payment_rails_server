@@ -283,6 +283,30 @@ module EmailHelper
 		</div>".html_safe
 	end
 
+	def text_for_affiliate_invite merchant, invite_token
+		button_url = generate_affiliate_invite_link(invite_token)
+		button_text = "Get Started"
+		"<div style=#{default_style}>
+			#{header_text("Welcome to It's On Me")}
+			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
+				<div style='padding-bottom:20px;'>
+					You are almost ready to go live on ItsOnMe!
+				</div>
+				<br />
+				<div>
+					Visit this link to create your account and review your affiliate information.
+					<br />
+					Your ItsOnMe rep is available to answer any questions and walk you through your account.
+				</div>
+				<br />
+			</div>
+			<div>#{ button_text(button_url, button_text) }</div><br/>
+			<div style='padding-top:30px;'>
+				#{ merchant_values_text }
+	        </div>
+		</div>".html_safe
+	end
+
 	def text_for_merchant_invite merchant, invite_token
 		button_url = generate_invite_link(invite_token)
 		button_text = "Get Started"
@@ -630,6 +654,10 @@ private
 				</td>
 			</tr>
 		</table>"
+	end
+
+	def generate_affiliate_invite_link invite_token
+		"#{PUBLIC_URL_PT}/invite?token=#{invite_token}"
 	end
 
 	def generate_invite_link invite_token
