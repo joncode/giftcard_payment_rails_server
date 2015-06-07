@@ -68,7 +68,7 @@ class Invite < ActiveRecord::Base
                          email: mt_user.email,
                          rank: rank,
                          company_id: company.id,
-                         company_type: company.class })
+                         company_type: company.class.to_s })
     end
 
     def self.make_token
