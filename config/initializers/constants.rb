@@ -51,6 +51,8 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
+#  make migrations to delete mt_user, at_user, user ->  :remember_token
+#  make migration to delete mt_user, at_user, user ->  :password_digest
 VERSION_NUMBER  = "1.5.5"
 VERSION_UPDATED = "6/5/14"
 
