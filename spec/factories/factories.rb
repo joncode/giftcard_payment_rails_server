@@ -225,6 +225,7 @@ FactoryGirl.define do
         zip         "11211"
         state       "NY"
         region_id   2
+        city_id   2
         sequence(:token)   { |n| "tokens#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"

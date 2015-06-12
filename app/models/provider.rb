@@ -51,7 +51,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :zinger]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :zinger, :region_id, :city_id]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
@@ -61,7 +61,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def client_serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :region_id]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :region_id, :city_id]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.short_image_url
 		prov_hash["address"]      = self.complete_address
@@ -86,8 +86,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def web_serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude]
-		prov_hash["region_id"]  = self.region_id
+		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :region_id, :city_id]
 		prov_hash["loc_id"]     = self.id
 		prov_hash["photo"]      = self.get_photo(default: false)
 		prov_hash["logo"]       = self.get_logo_web

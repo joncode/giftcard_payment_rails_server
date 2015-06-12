@@ -9,7 +9,7 @@ class Web::V3::RegionsController < MetalCorsController
     end
 
     def merchants
-        providers = Provider.where(region_id: params[:id])
+        providers = Provider.where(city_id: params[:id])
         success providers.serialize_objs(:web)
         respond
     end

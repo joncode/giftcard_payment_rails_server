@@ -238,7 +238,7 @@ describe AppController do
 
         it "should return a list of providers" do
             amount  = Provider.where(active: true).count
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
+            keys    =  ["region_id", "city_id", "city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
             post :brand_merchants, format: :json, data: @brand.id, token: user.remember_token
             rrc_old(200)
             ary = json
@@ -256,7 +256,7 @@ describe AppController do
             end
             Provider.last.update_attribute(:active, false)
             post :providers, format: :json, token: user.remember_token
-            keys =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live","zinger", "desc"]
+            keys =  ["region_id", "city_id", "city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live","zinger", "desc"]
             rrc_old(200)
             ary = json
             ary.class.should == Array
@@ -267,9 +267,12 @@ describe AppController do
 
         context "should return a list of active providers outside city but in region" do
             it "using region id" do
-                FactoryGirl.create(:provider, name: "Abe's", city: "San Diego", region_id: 3)
-                FactoryGirl.create(:provider, name: "Bob's", city: "La Jolla", region_id: 3)
-                FactoryGirl.create(:provider, name: "Cam's", city: "New York", region_id: 2)
+                p = FactoryGirl.create(:provider, name: "Abe's", city: "San Diego", region_id: 3)
+                p.update(city_id: p.region_id)
+                p = FactoryGirl.create(:provider, name: "Bob's", city: "La Jolla", region_id: 3)
+                p.update(city_id: p.region_id)
+                p = FactoryGirl.create(:provider, name: "Cam's", city: "New York", region_id: 2)
+                p.update(city_id: p.region_id)
                 post :providers, format: :json, token: user.remember_token, city: "3"
                 rrc_old(200)
                 ary = json
@@ -280,9 +283,12 @@ describe AppController do
             end
 
             it "using region name" do
-                FactoryGirl.create(:provider, name: "Abe's", city: "San Diego", region_id: 3)
-                FactoryGirl.create(:provider, name: "Bob's", city: "La Jolla", region_id: 3)
-                FactoryGirl.create(:provider, name: "Cam's", city: "New York", region_id: 2)
+                p = FactoryGirl.create(:provider, name: "Abe's", city: "San Diego", region_id: 3)
+                p.update(city_id: p.region_id)
+                p = FactoryGirl.create(:provider, name: "Bob's", city: "La Jolla", region_id: 3)
+                p.update(city_id: p.region_id)
+                p = FactoryGirl.create(:provider, name: "Cam's", city: "New York", region_id: 2)
+                p.update(city_id: p.region_id)
                 post :providers, format: :json, token: user.remember_token, city: "San Diego"
                 rrc_old(200)
                 ary = json
