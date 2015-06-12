@@ -231,7 +231,7 @@ class JsonController < ActionController::Base
         token         = params["token"]
         @current_user = User.app_authenticate(token)
         if @current_user
-            puts "APP  -------------   #{@current_user.name}   -----------------------"
+            puts "OLDAPIAPP  -------------   #{@current_user.name}   -----------------------"
         else
             head :unauthorized
         end

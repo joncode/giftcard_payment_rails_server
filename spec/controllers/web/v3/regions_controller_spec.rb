@@ -39,7 +39,8 @@ describe Web::V3::RegionsController do
             "name",
             "phone",
             "photo",
-            "region_id"
+            "region_id",
+            "city_id"
         ]
         provider = json["data"][0]
         compare_keys(provider, keys)

@@ -6,6 +6,7 @@ class AppController < JsonController
     before_action :authenticate_services, only: [:create_gift]
 
  	def authenticate_app_user(token)
+ 		puts "OLDAPIAPP authenticate_app_user"
  		if user = User.app_authenticate(token)
  			user
  		else
@@ -276,9 +277,9 @@ class AppController < JsonController
 	    	if  !params["city"] || params["city"] == "all" || params["city"] == "Near Me"
 	    		providers = Provider.all
 	    	elsif params["city"].to_i == 0
-	    		providers = Provider.where(region_id: region_id_from_name(params["city"]))
+	    		providers = Provider.where(city_id: region_id_from_name(params["city"]))
 	    	else
-	    		providers = Provider.where(region_id: params["city"])
+	    		providers = Provider.where(city_id: params["city"])
 	    	end
 	    	providers_array = providers.serialize_objs
 	    	logmsg 			= providers_array[0]

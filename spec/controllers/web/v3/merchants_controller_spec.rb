@@ -25,7 +25,8 @@ describe Web::V3::MerchantsController do
             "name",
             "phone",
             "photo",
-            "region_id"
+            "region_id",
+            "city_id"
         ]
         rrc(200)
         city = json["data"][0]

@@ -106,7 +106,7 @@ describe PaymentCalcCronJob do
 			# r2s[1].amount.should == 57000
 			# r3s[0].amount.should == 38440
 
-			date = DateTime.now - 2.weeks
+			date = DateTime.now - 1.weeks
 
 			PaymentCalcCronJob.perform date
 			ps = Payment.all

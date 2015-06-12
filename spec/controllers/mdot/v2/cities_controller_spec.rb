@@ -41,12 +41,13 @@ describe Mdot::V2::CitiesController do
         it "should return a list of all active providers in city with id = <name> serialized when success" do
             Provider.delete_all
             20.times do
-                FactoryGirl.create(:provider, region_id: 2)
+                FactoryGirl.create(:provider)
             end
+
             Provider.last.update_attribute(:active, false)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: "New York"
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
+            keys    =  ["region_id", "city_id","city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
             rrc(200)
             ary = json["data"]
             ary.class.should == Array
@@ -58,12 +59,12 @@ describe Mdot::V2::CitiesController do
         it "should return a list of all active providers in city with id = <integer> serialized when success" do
             Provider.delete_all
             20.times do
-                FactoryGirl.create(:provider, region_id: 2)
+                FactoryGirl.create(:provider)
             end
             Provider.last.update_attribute(:active, false)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: 2
-            keys    =  ["city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
+            keys    =  ["region_id", "city_id","city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
             rrc(200)
             ary = json["data"]
             ary.class.should == Array
@@ -75,29 +76,35 @@ describe Mdot::V2::CitiesController do
         context "should return providers outside of city but in the region" do
             it "using region id" do
                 Provider.delete_all
-                FactoryGirl.create(:provider, name: "Abe's", city: "San Diego", region_id: 3)
-                FactoryGirl.create(:provider, name: "Bob's", city: "La Jolla", region_id: 3)
-                FactoryGirl.create(:provider, name: "Cam's", city: "New York", region_id: 2)
+                # binding.pry
+                p = FactoryGirl.create(:provider, name: "Abe's")
+                p.update(city: 'San Diego')
+                p = FactoryGirl.create(:provider, name: "Bob's")
+                p.update(city: 'San Diego')
+                FactoryGirl.create(:provider, name: "Cam's")
                 request.env["HTTP_TKN"] = "USER_TOKEN"
-                get :merchants, format: :json, id: 3
+                get :merchants, format: :json, id: 2
                 rrc(200)
                 ary = json["data"]
                 ary.class.should == Array
-                ary.count.should == 2
+                ary.count.should == 3
                 ary[0]["name"].should == ("Abe's")
                 ary[1]["name"].should == ("Bob's")
             end
-            it "using region_id name" do
+            it "using city_id name" do
                 Provider.delete_all
-                FactoryGirl.create(:provider, name: "Abby's", city: "New York", region_id: 2)
-                FactoryGirl.create(:provider, name: "Bobby's", city: "Jersey City", region_id: 2)
-                FactoryGirl.create(:provider, name: "Cammy's", city: "San Diego", region_id: 3)
+                # binding.pry
+                FactoryGirl.create(:provider, name: "Abby's")
+                p = FactoryGirl.create(:provider, name: "Bobby's")
+                p.update(city: "San Diego")
+                p = FactoryGirl.create(:provider, name: "Cammy's")
+                p.update(city: "San Diego")
                 request.env["HTTP_TKN"] = "USER_TOKEN"
                 get :merchants, format: :json, id: "New York"
                 rrc(200)
                 ary = json["data"]
                 ary.class.should == Array
-                ary.count.should == 2
+                ary.count.should == 3
                 ary[0]["name"].should == ("Abby's")
                 ary[1]["name"].should == ("Bobby's")
             end
