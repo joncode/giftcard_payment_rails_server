@@ -18,7 +18,9 @@ class Provider < ActiveRecord::Base
 	belongs_to :brand
 	belongs_to :merchant
 
-	validates_presence_of 	:name, :city, :address, :zip, :region_id, :state, :token
+    before_validation   :set_region_id_to_city_id
+
+	validates_presence_of 	:name, :city, :address, :zip, :region_id, :city_id, :state, :token
 	validates_length_of 	:state , 	:is => 2
 	validates_length_of 	:zip, 		:within => 5..11
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
@@ -215,6 +217,12 @@ class Provider < ActiveRecord::Base
 	end
 
 private
+
+    def set_region_id_to_city_id
+        if self.region_id.to_i == 0
+            self.region_id = self.city_id.to_i
+        end
+    end
 
     def clear_www_cache
         unless Rails.env.test? || Rails.env.development?
