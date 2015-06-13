@@ -8,7 +8,7 @@ describe Client::V3::CitiesController do
 
     it "should return the cities" do
         get :index, format: :json
-        keys    =  CITY_LIST[0].keys
+        keys    =  Region.city.map(&:old_city_json)[0].keys
         rrc(200)
         city = json["data"][0]
         compare_keys(city, keys)

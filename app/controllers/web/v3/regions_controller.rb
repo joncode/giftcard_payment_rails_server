@@ -4,7 +4,7 @@ class Web::V3::RegionsController < MetalCorsController
 
     def index
 
-        success CITY_LIST
+        success Region.city.map(&:old_city_json)
         respond
     end
 

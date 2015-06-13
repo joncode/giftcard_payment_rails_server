@@ -3,7 +3,7 @@ class Client::V3::CitiesController < MetalController
 
 
     def index
-        success CITY_LIST
+        success Region.city.map(&:old_city_json)
         respond
     end
 

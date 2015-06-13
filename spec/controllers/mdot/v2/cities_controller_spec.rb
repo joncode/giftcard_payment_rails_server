@@ -15,11 +15,11 @@ describe Mdot::V2::CitiesController do
         it "should return a list of all active cities serialized when success" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :index, format: :json
-            keys    =  CITY_LIST[0].keys
+            keys    =  Region.city.map(&:old_city_json)[0].keys
             rrc(200)
             ary = json["data"]
             ary.class.should == Array
-            ary.count.should == CITY_LIST.count
+            ary.count.should == Region.city.map(&:old_city_json).count
 
             hsh = ary.first
             compare_keys(hsh, keys)

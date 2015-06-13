@@ -42,9 +42,4 @@ RSpec.configure do |config|
         gift.destroy! if gift
     end
 
-    if CITY_LIST.nil? || CITY_LIST.count == 0
-        load "#{Rails.root}/db/seeds.rb"
-        CITY_LIST = Region.city.map(&:old_city_json)
-    end
-
 end

@@ -3,7 +3,7 @@ class Mdot::V2::CitiesController < JsonController
     rescue_from JSON::ParserError, :with => :bad_request
 
     def index
-        @app_response = CITY_LIST
+        @app_response = Region.city.map(&:old_city_json)
         success @app_response
         respond
     end
@@ -23,13 +23,13 @@ class Mdot::V2::CitiesController < JsonController
 private
 
     def region_id_from_name name
-        region_hash = CITY_LIST.select { |region_h| region_h["name"] == name }
+        region_hash = Region.city.map(&:old_city_json).select { |region_h| region_h["name"] == name }
         region_hash[0]["region_id"].to_i
     end
 
     def city_name_from_id id_int
         city_name = nil
-        CITY_LIST.each do |city|
+        Region.city.map(&:old_city_json).each do |city|
             if city["region_id"] == id_int
                 city_name = city["name"]
                 break

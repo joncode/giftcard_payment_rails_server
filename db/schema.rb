@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150606014952) do
+ActiveRecord::Schema.define(version: 20150613224032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,7 +125,7 @@ ActiveRecord::Schema.define(version: 20150606014952) do
     t.string   "sex"
     t.date     "birthday"
     t.string   "password_digest"
-    t.string   "remember_token",                                    null: false
+    t.string   "remember_token"
     t.boolean  "admin",                             default: false
     t.string   "code"
     t.integer  "confirm",                           default: 0
@@ -658,6 +658,7 @@ ActiveRecord::Schema.define(version: 20150606014952) do
     t.string   "signup_email"
     t.string   "signup_name"
     t.integer  "city_id"
+    t.string   "region_name"
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
@@ -690,17 +691,17 @@ ActiveRecord::Schema.define(version: 20150606014952) do
     t.string   "sex"
     t.date     "birthday"
     t.string   "password_digest"
-    t.string   "remember_token",                                 null: false
-    t.boolean  "admin",                          default: false
-    t.integer  "confirm",                        default: 0
+    t.string   "remember_token"
+    t.boolean  "admin",                             default: false
+    t.integer  "confirm",                           default: 0
     t.datetime "reset_token_sent_at"
     t.string   "reset_token"
-    t.boolean  "active",                         default: true
+    t.boolean  "active",                            default: true
     t.integer  "db_user_id"
     t.string   "address"
     t.string   "city"
-    t.string   "state",               limit: 2
-    t.string   "zip",                 limit: 16
+    t.string   "state",                  limit: 2
+    t.string   "zip",                    limit: 16
     t.string   "facebook_id"
     t.string   "twitter"
     t.string   "photo"
@@ -708,12 +709,22 @@ ActiveRecord::Schema.define(version: 20150606014952) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "affiliate_id"
+    t.string   "encrypted_password",                default: "",    null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                     default: 0,     null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
   end
 
   add_index "mt_users", ["affiliate_id"], name: "index_mt_users_on_affiliate_id", using: :btree
   add_index "mt_users", ["db_user_id"], name: "index_mt_users_on_db_user_id", using: :btree
   add_index "mt_users", ["email"], name: "index_mt_users_on_email", using: :btree
   add_index "mt_users", ["remember_token"], name: "index_mt_users_on_remember_token", using: :btree
+  add_index "mt_users", ["reset_password_token"], name: "index_mt_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "oauths", force: true do |t|
     t.integer  "gift_id"
@@ -900,6 +911,7 @@ ActiveRecord::Schema.define(version: 20150606014952) do
     t.string   "tender_type_id"
     t.string   "website"
     t.integer  "city_id"
+    t.string   "region_name"
   end
 
   add_index "providers", ["active", "paused", "city"], name: "index_providers_on_active_and_paused_and_city", using: :btree
