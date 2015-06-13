@@ -165,6 +165,7 @@ private
             gift_hsh["r_sys"]         = gift_provider.r_sys
             gift_hsh['city_id']       = provider.city_id
             gift_hsh['region_id']     = provider.region_id
+            gift_hsh['region_name']   = provider.region_name
         end
     end
 
@@ -184,6 +185,7 @@ private
         gift_hsh["r_sys"]              = provider.r_sys
         gift_hsh['city_id']            = provider.city_id
         gift_hsh['region_id']          = provider.region_id
+        gift_hsh['region_name']        = provider.region_name
         return gift_hsh
     end
 end

@@ -225,6 +225,7 @@ FactoryGirl.define do
         zip         "11211"
         state       "NY"
         region_id   2
+        region_name "New York"
         city_id   2
         sequence(:token)   { |n| "tokens#{n}" }
         zinger      "its amazing"

@@ -10,6 +10,8 @@ class Merchant < ActiveRecord::Base
 
     belongs_to :region
 
+    before_save     :add_region_name
+
     enum payment_event: [ :creation, :redemption ]
 
     def mode= mode_str
@@ -48,7 +50,15 @@ class Merchant < ActiveRecord::Base
             self.affiliate_id = affiliate.id
         end
     ###########
-
+    #
+    def add_region_name
+        if self.region_id.present? && (self.region_name.nil? || self.region_id_changed?)
+            region = Region.unscoped.where(id: self.region_id).first
+            self.region_name = region.name if region.present?
+        else
+            self.region_name = nil if self.region_id.nil?
+        end
+    end
 end
 
 

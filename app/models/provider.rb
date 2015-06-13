@@ -18,14 +18,13 @@ class Provider < ActiveRecord::Base
 	belongs_to :brand
 	belongs_to :merchant
 
-    before_validation   :set_region_id_to_city_id
-
-	validates_presence_of 	:name, :city, :address, :zip, :region_id, :city_id, :state, :token
+	validates_presence_of 	:name, :city, :address, :zip, :city_id, :state, :token
 	validates_length_of 	:state , 	:is => 2
 	validates_length_of 	:zip, 		:within => 5..11
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
 
+    before_save     :add_region_name
 	before_save 	:extract_phone_digits
 	after_create 	:make_menu_string
     after_save 		:clear_www_cache
@@ -53,7 +52,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :zinger, :region_id, :city_id]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :zinger, :region_id, :region_name,  :city_id]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
 		prov_hash["full_address"] = self.full_address
@@ -63,7 +62,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def client_serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :region_id, :city_id]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :region_id, :region_name,  :city_id]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.short_image_url
 		prov_hash["address"]      = self.complete_address
@@ -88,7 +87,7 @@ class Provider < ActiveRecord::Base
 	end
 
 	def web_serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :region_id, :city_id]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
 		prov_hash["loc_id"]     = self.id
 		prov_hash["photo"]      = self.get_photo(default: false)
 		prov_hash["logo"]       = self.get_logo_web
@@ -218,12 +217,6 @@ class Provider < ActiveRecord::Base
 
 private
 
-    def set_region_id_to_city_id
-        if self.region_id.to_i == 0
-            self.region_id = self.city_id.to_i
-        end
-    end
-
     def clear_www_cache
         unless Rails.env.test? || Rails.env.development?
             WwwHttpService.clear_merchant_cache
@@ -232,6 +225,15 @@ private
 
 	def make_menu_string
 	    MenuString.create(provider_id: self.id, data: "[]", menu: self.menu)
+	end
+
+	def add_region_name
+		if self.region_id.present? && (self.region_name.nil? || self.region_id_changed?)
+			region = Region.unscoped.where(id: self.region_id).first
+			self.region_name = region.name if region.present?
+		else
+			self.region_name = nil if self.region_id.nil?
+		end
 	end
 
 end
