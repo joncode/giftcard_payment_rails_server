@@ -27,4 +27,21 @@ module Expiration
         puts "------------- #{destroyed_sms_contacts} SMS CONTACTS DESTROYED -----------------"
     end
 
+    def self.destroy_expired_cards
+        t = Time.now.utc
+        if t.day == 2   # runs on the 2nd day of each month
+            puts "------------- DESTROY EXPIRED CARDS CRON -----------------"
+            cards_destroyed = 0
+            m = t.month
+            y = t.year
+
+            cs = Card.where('year::int <  ? OR (month::int < ? AND year::int = ?)', y, m ,y)
+            cs.each do |c|
+                c.destroy
+                cards_destroyed += 1
+            end
+            puts "------------- #{cards_destroyed} EXPIRED CARDS DESTROYED -----------------"
+        end
+    end
+
 end

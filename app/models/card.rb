@@ -30,6 +30,7 @@ class Card < ActiveRecord::Base
 
 	after_create :tokenize_card
 
+	default_scope -> { where(active: true) } # indexed
 #	-------------
 
 
@@ -90,8 +91,8 @@ class Card < ActiveRecord::Base
 
 	def destroy
 			# must delete auth.net record
-		log_bars "card.destroy -> Use controllers/concerns/cim_profile :destroy_card(card, user)"
-		super
+		#log_bars "card.destroy -> Use controllers/concerns/cim_profile :destroy_card(card, user)"
+		update_column(:active, false)
 	end
 
 #	-------------
