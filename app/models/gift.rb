@@ -63,6 +63,8 @@ class Gift < ActiveRecord::Base
     belongs_to  :payable,       polymorphic: :true, autosave: :true
     belongs_to  :refund,        polymorphic: :true
 
+#   -------------
+
     attr_accessor :receiver_oauth
 
 #   -------------
