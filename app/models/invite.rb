@@ -81,6 +81,8 @@ class Invite < ActiveRecord::Base
         rank
     end
 
+#      CLEARANCE_HASH       = {'Staff' => 0, 'Manager' => 50 , "Admin" => 90 }
+
     def rank
         CLEARANCE_HASH.key super
     end

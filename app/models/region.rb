@@ -35,8 +35,6 @@ class Region < ActiveRecord::Base
 	end
 
 	def self.get_neighborhoods_for_city city, array_of_regions
-		puts city.inspect
-		puts array_of_regions.inspect
 		array_of_regions.select do |region|
 			region.neighborhood? && region.city_id == city.id
 		end

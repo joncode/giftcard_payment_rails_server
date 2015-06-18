@@ -56,8 +56,13 @@ NUMBER_ID = 649387
 # delete app_controller & iphone_controller
 # get rid of web/v1 & web/v2
 
-VERSION_NUMBER  = "1.5.6"
+
+#  make migrations to delete mt_user, at_user, user ->  :remember_token
+#  make migration to delete mt_user, at_user, user ->  :password_digest
+
+VERSION_NUMBER  = "1.5.7"
 VERSION_UPDATED = "6/12/14"
+
 
 
 if Rails.env.test?
