@@ -42,4 +42,7 @@ RSpec.configure do |config|
         gift.destroy! if gift
     end
 
+    if Region.city.nil? || Region.city.count == 0
+        load "#{Rails.root}/db/seeds.rb"
+    end
 end

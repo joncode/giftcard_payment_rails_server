@@ -32,7 +32,7 @@ describe Client::V3::GiftsController do
             rrc(200)
             json["status"].should == 1
             gift_hsh              = json["data"].first
-            keys = ["city_id", "region_id", "r_sys","created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            keys = ["city_id", "region_id", "region_name", "r_sys","created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             if gift_hsh["status"] == 'open'
                 keys << 'rec_id'
             end
@@ -90,7 +90,7 @@ describe Client::V3::GiftsController do
             json["status"].should     == 1
             gift_hsh                  = json["data"]
             gift_hsh["status"].should == 'notified'
-            keys = ["city_id", "region_id", "r_sys", "expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
+            keys = ["city_id", "region_id", "r_sys", "region_name", "expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
             compare_keys(gift_hsh, keys)
         end
 
@@ -128,7 +128,7 @@ describe Client::V3::GiftsController do
             json["status"].should     == 1
             gift_hsh                  = json["data"]
             gift_hsh["status"].should == 'redeemed'
-            keys = ["city_id", "region_id", "r_sys", "expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
+            keys = ["city_id", "region_id", "r_sys", "region_name", "expires_at", "detail","created_at"  ,"giv_name" ,"giv_photo"   ,"giv_id"      ,"giv_type"    ,"rec_id"      ,"rec_name"    ,"rec_photo"   ,"items"       ,"value"       ,"status"      ,"cat"       ,"msg"         ,"loc_id"     ,"loc_name"    ,"loc_phone"   ,"loc_address" ,"gift_id"]
             compare_keys(gift_hsh, keys)
         end
 

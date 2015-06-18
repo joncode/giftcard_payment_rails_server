@@ -51,10 +51,10 @@ describe Provider do
     end
 
     context "region id validation" do
-        it "should reject provider without region id" do
-            provider = FactoryGirl.build :provider, region_id: nil
+        it "should reject provider without city id" do
+            provider = FactoryGirl.build :provider, city_id: nil
             provider.should_not be_valid
-            provider.errors.full_messages.first.should == "Region can't be blank"
+            provider.errors.full_messages.first.should == "City can't be blank"
         end
         it "should save region id to provider" do
             provider = FactoryGirl.create :provider, region_id: 15

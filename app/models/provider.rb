@@ -7,9 +7,9 @@ class Provider < ActiveRecord::Base
 
 #	-------------
 
-	validates_presence_of 	:name, :city, :address, :zip, :city_id, :state, :token
+	validates_presence_of 	:name, :city, :address, :zip, :city_id, :token
 	validates_length_of 	:state , 	:is => 2
-	validates_length_of 	:zip, 		:within => 5..11
+	validates 				:zip, 	zip_code: true
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
 	validates_uniqueness_of :token
 

@@ -50,7 +50,7 @@ describe Admt::V2::ProvidersController do
 
     describe :update do
         before do
-            @provider = FactoryGirl.create(:provider, name:"old_name",
+            @provider = FactoryGirl.build(:provider, name:"old_name",
                                                       address:"old address",
                                                       city: "old city",
                                                       state: "NY",
@@ -59,6 +59,8 @@ describe Admt::V2::ProvidersController do
                                                       pos_merchant_id: "11111",
                                                       zinger: "old zinger",
                                                       description: "old description")
+            @provider.city_id = 1
+            @provider.save
         end
       it "should update name" do
         put :update, id: @provider.id, format: :json, data: {name: "new_name"}

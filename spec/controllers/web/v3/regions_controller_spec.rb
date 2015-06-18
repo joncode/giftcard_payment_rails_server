@@ -13,7 +13,7 @@ describe Web::V3::RegionsController do
 
     it "should return the cities" do
         get :index, format: :json
-        keys    =  ["name", "state", "region_id", "token", "photo", "city_id"]
+        keys    =  ["name", "state", "region_id", "region_name", "token", "photo", "city_id"]
         rrc(200)
         city = json["data"][0]
         compare_keys(city, keys)
@@ -40,7 +40,7 @@ describe Web::V3::RegionsController do
             "phone",
             "photo",
             "region_id",
-            "city_id"
+            "city_id", "region_name"
         ]
         provider = json["data"][0]
         compare_keys(provider, keys)

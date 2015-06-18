@@ -64,7 +64,7 @@ describe Mdot::V2::CitiesController do
             Provider.last.update_attribute(:active, false)
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: 2
-            keys    =  ["region_id", "city_id","city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
+            keys    =  ["region_id", "region_name", "city_id","city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
             rrc(200)
             ary = json["data"]
             ary.class.should == Array

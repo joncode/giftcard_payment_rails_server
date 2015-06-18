@@ -51,6 +51,10 @@ FEEDBACK_EMAIL = "feedback#{AT_EMAIL}"
 
 NUMBER_ID = 649387
 
+# delete orders model
+# delete redeem model
+# delete app_controller & iphone_controller
+
 VERSION_NUMBER  = "1.5.6"
 VERSION_UPDATED = "6/12/14"
 
