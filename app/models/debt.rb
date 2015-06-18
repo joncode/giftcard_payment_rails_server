@@ -1,9 +1,13 @@
 class Debt < ActiveRecord::Base
 
+    validates :owner, presence: :true
+
+#   -------------
+
     has_one :gift, :as => :payable
     belongs_to :owner, polymorphic: :true
 
-    validates :owner, presence: :true
+#   -------------
 
     def success?
         if self.id

@@ -1,8 +1,13 @@
 class LandingPage < ActiveRecord::Base
 
-	belongs_to :affiliate
 	validates_uniqueness_of :link
 	validates :link, 	length: { minimum: 6 },     on: :create
+
+#   -------------
+
+	belongs_to :affiliate
+
+#   -------------
 
 	def self.click(link: link)
 		affiliate_url_name = link.split('?aid=').last

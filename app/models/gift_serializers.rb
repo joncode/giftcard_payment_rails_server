@@ -1,6 +1,8 @@
 module GiftSerializers
     include ActionView::Helpers::DateHelper
 
+#   -------------
+
     def serialize
         sender      = giver
         unless merchant = self.provider

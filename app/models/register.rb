@@ -1,18 +1,30 @@
 class Register < ActiveRecord::Base
 
-	belongs_to :partner,  polymorphic: true, autosave: true
-		#  Merchant || Affiliate == Partner
-	belongs_to :gift
-	belongs_to :payment
 	before_validation :update_partner, on: :create
+
+#   -------------
 
 	validates_presence_of :partner_id, :partner_type
 
+#   -------------
+
 	after_create :save_affiliation
 
+#   -------------
+
+		#  Merchant || Affiliate == Partner
+	belongs_to :partner,  polymorphic: true, autosave: true
+	belongs_to :gift
+	belongs_to :payment
+
+#   -------------
+
 	attr_accessor :affiliation
+
 	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link ]
 	enum type_of: [ :debt, :credit ]
+
+#   -------------
 
 	def payment_type
 		if self.loc? || self.aff_loc?

@@ -1,16 +1,26 @@
 class Region < ActiveRecord::Base
 
-	enum type_of: [ :city, :neighborhood ]
+	default_scope -> { where(active: true) }  # indexed w/ city
 
-	has_many :providers
-	has_many :merchants
+#   -------------
 
 	validates_presence_of :name
+
+#   -------------
 
 	before_create :make_token
 	before_create :set_type_of
 
-	default_scope -> { where(active: true) }  # indexed w/ city
+#   -------------
+
+	has_many :providers
+	has_many :merchants
+
+#   -------------
+
+	enum type_of: [ :city, :neighborhood ]
+
+#   -------------
 
 	def self.all_for_clients
 		cities = Region.city.order(id: :asc).where(active: true)
@@ -31,6 +41,8 @@ class Region < ActiveRecord::Base
 			region.neighborhood? && region.city_id == city.id
 		end
 	end
+
+#   -------------
 
 	def as_json(*args)
 	    super.tap do |hash|

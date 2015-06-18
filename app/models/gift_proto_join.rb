@@ -1,7 +1,7 @@
 class GiftProtoJoin < Gift
     include GiftMessenger
 
-#####    CLASS METHODS
+#   -------------
 
     def self.create args={}
     	proto, proto_join = self.process_input args

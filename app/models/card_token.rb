@@ -18,12 +18,15 @@ class CardToken < ActiveRecord::Base
 		card
 	end
 
+#   -------------
 
 	def token_serialize
 		card_hash = self.serializable_hash only: [ "nickname", "last_four", "brand" ]
 		card_hash["card_id"] = self.id
 		card_hash
 	end
+
+#   -------------
 
 	def token= token
 		self.cim_token = token
@@ -46,7 +49,9 @@ class CardToken < ActiveRecord::Base
 	end
 
 
-end# == Schema Information
+end
+
+# == Schema Information
 #
 # Table name: cards
 #

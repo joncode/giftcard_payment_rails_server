@@ -16,6 +16,7 @@ class GiftBoomerang < Gift
         gift
     end
 
+#   -------------
 
     def original_receiver_social
 

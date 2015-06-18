@@ -1,19 +1,14 @@
 class Relationship < ActiveRecord::Base
 
-	belongs_to :follower, class_name: "User"
-	belongs_to :followed, class_name: "User"
-
 	validates :follower_id, presence: true
 	validates :followed_id, presence: true
 
-	def save args={}
-		existing = Relationship.where(followed_id: self.followed_id, follower_id: self.follower_id).first
-		if existing.nil?
-			super
-		else
-			true
-		end
-	end
+#   -------------
+
+	belongs_to :follower, class_name: "User"
+	belongs_to :followed, class_name: "User"
+
+#   -------------
 
 	def self.pushed ary
 		ary.each do |r_push|
@@ -26,6 +21,16 @@ class Relationship < ActiveRecord::Base
 		where(followed_id: user_id).where('created_at > ?', t)
 	end
 
+#   -------------
+
+	def save args={}
+		existing = Relationship.where(followed_id: self.followed_id, follower_id: self.follower_id).first
+		if existing.nil?
+			super
+		else
+			true
+		end
+	end
 
 end
 # == Schema Information

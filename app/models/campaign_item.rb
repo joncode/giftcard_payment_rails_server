@@ -1,9 +1,10 @@
 class CampaignItem < ActiveRecord::Base
-    self.table_name = "campaign_items"
 
     has_many :gifts, as: :payable
     belongs_to :campaign
     belongs_to :provider
+
+#   -------------
 
     def has_reserve?
         self.reserve > 0

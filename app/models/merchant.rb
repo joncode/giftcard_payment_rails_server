@@ -2,6 +2,8 @@ class Merchant < ActiveRecord::Base
 
     before_save     :add_region_name
 
+#   -------------
+
     has_one :provider
     has_one :affiliation, as: :target
     has_one :affiliate, through: :affiliation
@@ -9,8 +11,9 @@ class Merchant < ActiveRecord::Base
     has_many :registers,    as: :partner
     has_many :invites,  as: :company
     has_many :mt_users, through: :invites
-
     belongs_to :region
+
+#   -------------
 
     enum payment_event: [ :creation, :redemption ]
 
@@ -29,6 +32,8 @@ class Merchant < ActiveRecord::Base
             puts "#{self.name} #{self.id} was sent mode_str #{mode_str} - update mode broken"
         end
     end
+
+#   -------------
 
     def get_logo
         if photo_l.present?
@@ -50,7 +55,7 @@ class Merchant < ActiveRecord::Base
             self.affiliate_id = affiliate.id
         end
     ###########
-    #
+
     def add_region_name
         if self.region_id.present? && (self.region_name.nil? || self.region_id_changed?)
             region = Region.unscoped.where(id: self.region_id).first

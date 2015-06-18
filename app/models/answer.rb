@@ -1,9 +1,13 @@
 class Answer < ActiveRecord::Base
 
+	validates_presence_of :user_id, :answer, :question_id
+
+#   -------------
+
 	belongs_to :user
 	belongs_to :question
 
-	validates_presence_of :user_id, :answer, :question_id
+#   -------------
 
 	def self.save_these(answered_questions, user)
 		answered_questions.each do |a|
@@ -16,7 +20,7 @@ class Answer < ActiveRecord::Base
 				answer 	   = Answer.create(answer_hsh)
 			end
 		end
-		
+
 	end
 
 end

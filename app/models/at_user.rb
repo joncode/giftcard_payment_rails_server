@@ -5,9 +5,19 @@ class AtUser < ActiveRecord::Base
 	# :confirmable, :lockable, :timeoutable and :omniauthable
 	devise :database_authenticatable,
 		:recoverable, :rememberable, :trackable, :validatable
+
+#   -------------
+
 	has_many :payments
 	has_many :at_users_socials
 
+#   -------------
+
+	def giver
+		AdminGiver.find(self.id)
+	end
+
+#   -------------
 
 	def name
 		if self.last_name.blank?
@@ -15,10 +25,6 @@ class AtUser < ActiveRecord::Base
 		else
 			"#{self.first_name} #{self.last_name}"
 		end
-	end
-
-	def giver
-		AdminGiver.find(self.id)
 	end
 
 	def get_photo

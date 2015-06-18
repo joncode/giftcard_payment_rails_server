@@ -1,6 +1,9 @@
 class CreditAccount < ActiveRecord::Base
 
   has_many :gifts, as: :payable
+
+#   -------------
+
 end
 # == Schema Information
 #

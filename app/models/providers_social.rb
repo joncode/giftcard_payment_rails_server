@@ -1,10 +1,15 @@
 class ProvidersSocial  < ActiveRecord::Base
     self.table_name = "providers_socials"
 
+#   -------------
+
+	validates :social_id, :uniqueness => { scope: :provider_id }
+
+#   -------------
+
     belongs_to :provider
     belongs_to :social
 
-	validates :social_id, :uniqueness => { scope: :provider_id }
 
 end
 

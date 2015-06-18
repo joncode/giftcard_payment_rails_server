@@ -1,12 +1,18 @@
 class Affiliation < ActiveRecord::Base
 
-	enum status: [ :on, :pause, :done, :cancel ]
+	before_validation :set_up_data, on: :create
+
+#   -------------
 
 	belongs_to :affiliate, autosave: true
-	belongs_to :target, polymorphic: true, autosave: true
 		#  Merchant || User == Target
+	belongs_to :target, polymorphic: true, autosave: true
 
-	before_validation :set_up_data, on: :create
+#   -------------
+
+	enum status: [ :on, :pause, :done, :cancel ]
+
+#   -------------
 
 	def self.get_merchant_affiliation_for_gift(gift)
 		return nil 	 unless provider = gift.provider

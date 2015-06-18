@@ -42,6 +42,8 @@ class Sale < ActiveRecord::Base
 
 private
 
+#   -------------
+
     def self.charge_number_then_tokenize cc_hsh
         payment_hsh = {}
         credit_card_data_keys = ["number", "month_year", "first_name", "last_name", "amount"]
@@ -69,6 +71,8 @@ private
         sale_init_hsh.merge!(resp_hsh)
         Sale.new sale_init_hsh
     end
+
+#   -------------
 
     def sale_card_last_four
         if self.card

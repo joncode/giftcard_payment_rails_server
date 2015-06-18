@@ -1,5 +1,8 @@
 class Ditto < ActiveRecord::Base
+
 	belongs_to :notable, polymorphic: true
+
+#   -------------
 
 	def response
 		begin
@@ -8,6 +11,8 @@ class Ditto < ActiveRecord::Base
 			self.response_json
 		end
 	end
+
+#   -------------
 
 	class << self
 

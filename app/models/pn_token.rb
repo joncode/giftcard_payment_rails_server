@@ -1,30 +1,24 @@
 class PnToken < ActiveRecord::Base
 
-    belongs_to :user
-
     validates :pn_token, uniqueness: true, length: { minimum: 23 }
     validates_presence_of :user_id
 
+#   -------------
+
     after_save :register
+
+#   -------------
+
+    belongs_to :user
+
+#   -------------
 
     def pn_token=(token)
         converted_token = convert_token(token)
         super(converted_token)
     end
 
-    def convert_token(token)
-        token.gsub('<','').gsub('>','').gsub(' ','')
-    end
-
-    def self.convert_token(token)
-        token.gsub('<','').gsub('>','').gsub(' ','')
-    end
-
-    def ua_alias
-            # move this to pn_token.rb
-        adj_user_id = self.user_id + NUMBER_ID
-        "user-#{adj_user_id}"
-    end
+#   -------------
 
     def self.find_or_create_token(user_id, value, platform)
         value       = self.convert_token(value)
@@ -36,6 +30,23 @@ class PnToken < ActiveRecord::Base
         else
             PnToken.create!(user_id: user_id, pn_token: value, platform: platform.to_s)
         end
+    end
+
+    def self.convert_token(token)
+        token.gsub('<','').gsub('>','').gsub(' ','')
+    end
+
+#   -------------
+
+
+    def convert_token(token)
+        token.gsub('<','').gsub('>','').gsub(' ','')
+    end
+
+    def ua_alias
+            # move this to pn_token.rb
+        adj_user_id = self.user_id + NUMBER_ID
+        "user-#{adj_user_id}"
     end
 
 private

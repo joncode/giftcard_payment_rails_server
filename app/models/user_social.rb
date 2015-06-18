@@ -27,6 +27,8 @@ class UserSocial < ActiveRecord::Base
     has_many :dittos, as: :notable
     belongs_to :user
 
+#   -------------
+
     def network
         type_of
     end

@@ -1,18 +1,44 @@
 class Invite < ActiveRecord::Base
     include Utility
 
-    belongs_to :mt_user
-    belongs_to :company, polymorphic: true
+    default_scope -> { where(active: true) }
+
+#   -------------
+
 
     before_validation       :generate_invite_tkn
     before_validation       :strip_whitespace_and_fix_case
+
+#   -------------
+
     validates_presence_of   :invite_tkn, :company_id, :company_type, :email
     validates_uniqueness_of :invite_tkn
     validates :email , format: { with: VALID_EMAIL_REGEX }
 
+#   -------------
+
     before_save { |invite| invite.email = email.downcase  }
 
-    default_scope -> { where(active: true) }
+#   -------------
+
+    belongs_to :mt_user
+    belongs_to :company, polymorphic: true
+
+#   -------------
+
+    def self.make_token
+        self.new.generate_token
+    end
+
+    def self.new_invite company, mt_user, rank='Admin'
+        Invite.new({ mt_user_id: mt_user.id,
+                         email: mt_user.email,
+                         rank: rank,
+                         company_id: company.id,
+                         company_type: company.class.to_s })
+    end
+
+#   -------------
 
     def serialize
         mt_user = self.mt_user
@@ -39,6 +65,8 @@ class Invite < ActiveRecord::Base
         return emp
     end
 
+#   -------------
+
     def name
         self.mt_user.name
     end
@@ -61,18 +89,6 @@ class Invite < ActiveRecord::Base
         level = level.capitalize
         level_integer = CLEARANCE_HASH[level] || 0
         super(level_integer)
-    end
-
-    def self.new_invite company, mt_user, rank='Admin'
-        Invite.new({ mt_user_id: mt_user.id,
-                         email: mt_user.email,
-                         rank: rank,
-                         company_id: company.id,
-                         company_type: company.class.to_s })
-    end
-
-    def self.make_token
-        self.new.generate_token
     end
 
 private

@@ -11,6 +11,8 @@ class Affiliate < ActiveRecord::Base
     has_many :invites,  as: :company
     has_many :mt_users, through: :invites
 
+#   -------------
+
 	def create_affiliation(target_type)
 		if target_type == "User"
 			self.total_users += 1

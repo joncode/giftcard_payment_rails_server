@@ -1,8 +1,9 @@
 class GiftAdmin < Gift
     include ShoppingCartHelper
 
-    # args = "receiver_name", "receiver_email", "shoppingCart", "message", "detail", "expires_at", "provider_id", "provider_name", "giver"
+#   -------------
 
+        # args = "receiver_name", "receiver_email", "shoppingCart", "message", "detail", "expires_at", "provider_id", "provider_name", "giver"
     def self.create args={}
         gift = super
         if gift.persisted?

@@ -1,11 +1,17 @@
 class Payment < ActiveRecord::Base
+
+
 	has_many :registers
     belongs_to :at_user
 	belongs_to :partner,  polymorphic: true
 
+#   -------------
+
 	def affiliate
 		self.partner
 	end
+
+#   -------------
 
 	def self.get_start_date_of_payment
 		now = DateTime.now.utc
@@ -37,7 +43,9 @@ class Payment < ActiveRecord::Base
 			return sd + 1.day
 		end
 	end
+
 end
+
 # == Schema Information
 #
 # Table name: payments

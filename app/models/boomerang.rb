@@ -1,7 +1,17 @@
 class Boomerang < ActiveRecord::Base
 	include ShortenPhotoUrlHelper
 
+#   -------------
+
     has_many :gifts,  as: :giver,  class_name: Gift
+
+#   -------------
+
+    def self.giver
+    	Boomerang.first
+    end
+
+#   -------------
 
 	def name
 		"Boomerang"
@@ -15,11 +25,10 @@ class Boomerang < ActiveRecord::Base
 		shorten_photo_url get_photo
 	end
 
-    def self.giver
-    	Boomerang.first
-    end
 
-end# == Schema Information
+end
+
+# == Schema Information
 #
 # Table name: boomerangs
 #

@@ -1,8 +1,12 @@
 class GiftItem < ActiveRecord::Base
 
+	validates_presence_of :price, :quantity, :menu_id
+
+#   -------------
+
 	belongs_to :gift
 
-	validates_presence_of :price, :quantity, :menu_id
+#   -------------
 
 	def self.initFromDictionary menu_item_hash
 		giftItem = GiftItem.new
@@ -12,13 +16,6 @@ class GiftItem < ActiveRecord::Base
 		giftItem.name 	  = menu_item_hash["item_name"]
 		giftItem.detail   = menu_item_hash["detail"]
 		giftItem
-	end
-
-	def prepare_for_shoppingCart
-		item_hash = self.serializable_hash only: [ :quantity, :name, :detail]
-        item_hash["item_id"]   = self.menu_id
-        item_hash["item_name"] = self.name
-        item_hash
 	end
 
 	def self.items_for_email gift
@@ -39,6 +36,15 @@ class GiftItem < ActiveRecord::Base
 		end
 		output_str += "</ul>"
 		output_str
+	end
+
+#   -------------
+
+	def prepare_for_shoppingCart
+		item_hash = self.serializable_hash only: [ :quantity, :name, :detail]
+        item_hash["item_id"]   = self.menu_id
+        item_hash["item_name"] = self.name
+        item_hash
 	end
 end
 

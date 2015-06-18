@@ -1,6 +1,18 @@
 class Proto < ActiveRecord::Base
     include ShoppingCartHelper
 
+#   -------------
+
+	validates_presence_of :cat, :expires_at, :giver_id, :giver_type, :giver_name, :provider_id, :provider_name
+
+#   -------------
+
+	before_save :set_value
+	before_save :set_cost
+
+#   -------------
+
+	#has_many   :receivables, through: :proto_joins, source: :receivable, source_type: "Receivable"
 	has_many   :proto_joins
 	has_many   :users, 		through: :proto_joins, source: :receivable, source_type: 'User'
 	has_many   :socials, 	through: :proto_joins, source: :receivable, source_type: 'Social'
@@ -8,22 +20,6 @@ class Proto < ActiveRecord::Base
 	belongs_to :receivable, polymorphic: true
 	belongs_to :provider
 	belongs_to :giver,      polymorphic: :true
-	#has_many   :receivables, through: :proto_joins, source: :receivable, source_type: "Receivable"
-
-	validates_presence_of :cat, :expires_at, :giver_id, :giver_type, :giver_name, :provider_id, :provider_name
-
-	before_save :set_value
-	before_save :set_cost
-
-	def update_contacts new_amount
-        total_count = self.contacts + new_amount
-        self.update(contacts: total_count)
-	end
-
-	def update_processed new_amount
-        total_processed = self.processed + new_amount
-        self.update(processed: total_processed)
-	end
 
 	def receivables
 			# returns receivables (Users or Socials)
@@ -33,6 +29,18 @@ class Proto < ActiveRecord::Base
 	def giftables
 			# returns proto_join objects
 		ProtoJoin.where(proto_id: self.id, gift_id: nil)
+	end
+
+#   -------------
+
+	def update_contacts new_amount
+        total_count = self.contacts + new_amount
+        self.update(contacts: total_count)
+	end
+
+	def update_processed new_amount
+        total_processed = self.processed + new_amount
+        self.update(processed: total_processed)
 	end
 
 private

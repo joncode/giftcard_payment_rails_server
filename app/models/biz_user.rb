@@ -1,11 +1,14 @@
 class BizUser < ActiveRecord::Base
+    self.table_name = 'providers'
     include ShortenPhotoUrlHelper
 
-    self.table_name = 'providers'
+#   -------------
 
     has_many :sent,  as: :giver,  class_name: Gift
     has_many :protos, as: :giver, class_name: Proto
     has_many :debts, as: :owner
+
+#   -------------
 
         ####### Gift Giver Ducktype
     def name

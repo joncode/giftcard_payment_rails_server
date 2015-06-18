@@ -1,11 +1,15 @@
 class ProtoJoin < ActiveRecord::Base
 
+	validates :proto_id, :uniqueness => { scope: [:receivable_id, :receivable_type, :gift_id] }
+	validates_uniqueness_of :gift_id, allow_nil: true
+
+#   -------------
+
 	belongs_to :gift
 	belongs_to :receivable, polymorphic: true
 	belongs_to :proto
 
-	validates :proto_id, :uniqueness => { scope: [:receivable_id, :receivable_type, :gift_id] }
-	validates_uniqueness_of :gift_id, allow_nil: true
+#   -------------
 
 	def convert_to_gift_receiver(args)
 		receiver = self.receivable
@@ -36,6 +40,7 @@ class ProtoJoin < ActiveRecord::Base
 
 	end
 end
+
 # == Schema Information
 #
 # Table name: proto_joins

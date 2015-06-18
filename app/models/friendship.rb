@@ -1,10 +1,14 @@
 class Friendship < ActiveRecord::Base
 
+    validates :user_id, presence: true
+    validates :app_contact_id, presence: true
+
+#   -------------
+
     belongs_to :user
     belongs_to :app_contact
 
-    validates :user_id, presence: true
-    validates :app_contact_id, presence: true
+#   -------------
 
     def save args={}
         existing = Friendship.where(user_id: self.user_id, app_contact_id: self.app_contact_id).first

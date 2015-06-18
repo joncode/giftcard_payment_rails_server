@@ -1,6 +1,14 @@
 class AdminUser < ActiveRecord::Base
     self.table_name = "at_users"
 
+#   -------------
+
+    def giver
+        AdminGiver.find(self.id)
+    end
+
+#   -------------
+
     def name
         if self.last_name.blank?
           "#{self.first_name}"
@@ -9,9 +17,6 @@ class AdminUser < ActiveRecord::Base
         end
     end
 
-    def giver
-        AdminGiver.find(self.id)
-    end
 end
 
 # == Schema Information

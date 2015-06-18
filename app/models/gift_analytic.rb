@@ -2,6 +2,8 @@ class GiftAnalytic < ActiveRecord::Base
 
 	validates_uniqueness_of :date_on
 
+#   -------------
+
 	def self.return_date(datetime)
 		return nil if datetime.nil?
 		if datetime.hour >= 14
@@ -83,6 +85,8 @@ class GiftAnalytic < ActiveRecord::Base
 		end
 		return [c_return,n_return,r_return]
 	end
+
+#   -------------
 
 	def get_numbers_redeemed(g)
 		self.velocity   += 1

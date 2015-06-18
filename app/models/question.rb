@@ -3,6 +3,8 @@ class Question < ActiveRecord::Base
     has_many :answers
     has_many :users , :through => :answers
 
+#   -------------
+
     def self.get_questions_with_answers(user)
         #puts "in questions w answers"
 
@@ -31,8 +33,6 @@ class Question < ActiveRecord::Base
         end
 
     end
-
-
 
     def self.get_six_new_questions(user)
       	# get the question_id's from the answered questions by users

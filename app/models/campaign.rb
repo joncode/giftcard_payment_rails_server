@@ -1,8 +1,11 @@
 class Campaign < ActiveRecord::Base
-    self.table_name = "campaigns"
     include ShortenPhotoUrlHelper
 
+#   -------------
+
     has_many :campaign_items
+
+#   -------------
 
     def status
         if is_expired?

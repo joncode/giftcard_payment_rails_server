@@ -2,6 +2,8 @@ class BulkContact < ActiveRecord::Base
 
     after_save :process_bulk_contacts
 
+#   -------------
+
     def self.upload(data: data, user_id: user_id)
         start_time_logger = Time.now
         hsh_str = data.to_json
@@ -12,6 +14,8 @@ class BulkContact < ActiveRecord::Base
         puts "BULK DUMP TIME = #{end_time}ms"
         output
     end
+
+#   -------------
 
     def parsed_data
         start_time_logger = Time.now

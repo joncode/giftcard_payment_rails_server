@@ -4,8 +4,12 @@ class GiftCampaign < Gift
 
     validate   :is_giftable
 
+#   -------------
+
     after_save :update_campaign_expire_date
     after_save :decrement_campaign_item_reserve
+
+#   -------------
 
     def self.create args={}
         gift = super

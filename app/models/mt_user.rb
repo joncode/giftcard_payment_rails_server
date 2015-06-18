@@ -6,6 +6,8 @@ class MtUser < ActiveRecord::Base
     has_many :merchants, :through => :invites, source: :company, source_type: 'Merchant'
     has_many :affiliates, :through => :invites, source: :company, source_type: 'Affiliate'
 
+#   -------------
+
     def companies
 		merchants.where(active: true) + affiliates.where(active: true)
     end
@@ -26,6 +28,8 @@ class MtUser < ActiveRecord::Base
 		end
 	end
 
+#   -------------
+
 	def name
     	if self.last_name.blank?
     	  "#{self.first_name}"
@@ -41,7 +45,9 @@ class MtUser < ActiveRecord::Base
             nil
 		end
 	end
+
 end
+
 # == Schema Information
 #
 # Table name: mt_users

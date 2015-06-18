@@ -1,16 +1,19 @@
 class MenuString < ActiveRecord::Base
 
-  	belongs_to :provider
 
-  	validates_uniqueness_of :provider_id
+    validates_uniqueness_of :provider_id
     validates_presence_of   :menu
     validates_with JsonArrayValidator
 
-  	after_save :update_merchant
+#   -------------
 
-    def menu_json
-        JSON.parse self.menu
-    end
+    after_save :update_merchant
+
+#   -------------
+
+  	belongs_to :provider
+
+#   -------------
 
     def self.get_menu_v2_for_provider provider_id
         menu_string = MenuString.find_by(provider_id: provider_id)
@@ -31,6 +34,12 @@ class MenuString < ActiveRecord::Base
             # provider id is incorrect
             nil
         end
+    end
+
+#   -------------
+
+    def menu_json
+        JSON.parse self.menu
     end
 
     def create_new_menu old_menu

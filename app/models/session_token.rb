@@ -1,9 +1,15 @@
 class SessionToken < ActiveRecord::Base
 	extend Utility
 
-	belongs_to :user
+#   -------------
 
 	validates_presence_of :token
+
+#   -------------
+
+	belongs_to :user
+
+#   -------------
 
 	def self.app_authenticate(token)
 		st_obj = where(token: token).includes(:user).last

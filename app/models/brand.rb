@@ -1,17 +1,27 @@
 class Brand < ActiveRecord::Base
 
-	has_many   :providers
-	belongs_to :user
+	default_scope -> { where(active: true) }  # indexed
+
+#   -------------
 
 	validates :name, presence: true, :uniqueness => { case_sensitive: false }
 
+#   -------------
+
 	after_save :update_parent_brand
 
-	default_scope -> { where(active: true) }  # indexed
+#   -------------
+
+	has_many   :providers
+	belongs_to :user
+
+#   -------------
 
 	def self.get_all
 		unscoped.order("name ASC")
 	end
+
+#   -------------
 
 	def serialize
 		brand_hash  = self.serializable_hash only: [ :name, :next_view ]
@@ -27,6 +37,8 @@ class Brand < ActiveRecord::Base
 		brand_hash["active"]   = self.active ? 1 : 0
 		brand_hash
 	end
+
+#   -------------
 
 	def next_view
 		super || "m"

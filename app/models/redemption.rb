@@ -1,8 +1,10 @@
 class Redemption < ActiveRecord::Base
 
-	enum type_of: [ :positronics ]
-
 	belongs_to :gift
+
+#   -------------
+
+	enum type_of: [ :positronics ]
 
 end
 # == Schema Information

@@ -1,6 +1,8 @@
 class GiftPromo < Gift
     include ShoppingCartHelper
 
+#   -------------
+
     def initialize args={}
         super
     end

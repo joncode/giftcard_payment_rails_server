@@ -13,11 +13,15 @@ class Card < ActiveRecord::Base
  	before_validation :convert_number_to_string
 	before_validation :save_last_four
 
+#   -------------
+
 	validate :check_for_credit_card_validity
 	validate :month_and_year_should_be_in_future
 	validate :at_least_two_words_in_name
 	validates_presence_of :csv, :last_four, :month, :year, :brand, :nickname,  :user_id, :name
 	validates :zip, zip_code: true, allow_blank: true
+
+#   -------------
 
 	before_save :crypt_number
 	after_create :tokenize_card
@@ -25,11 +29,19 @@ class Card < ActiveRecord::Base
 #	-------------
 
 	has_many   :sales
-	belongs_to :user
 	has_many   :gifts, 	:through => :sales
 	has_many   :orders,	:through => :sales
+	belongs_to :user
+
+#   -------------
 
 	attr_accessor :iv
+
+	def destroy
+			# must delete auth.net record
+		#log_bars "card.destroy -> Use controllers/concerns/cim_profile :destroy_card(card, user)"
+		update_column(:active, false)
+	end
 
 #	-------------
 
@@ -84,14 +96,6 @@ class Card < ActiveRecord::Base
 		card_hash = self.serializable_hash only: [ "nickname", "last_four" ]
 		card_hash["card_id"] = self.id
 		card_hash
-	end
-
-#	-------------
-
-	def destroy
-			# must delete auth.net record
-		#log_bars "card.destroy -> Use controllers/concerns/cim_profile :destroy_card(card, user)"
-		update_column(:active, false)
 	end
 
 #	-------------
