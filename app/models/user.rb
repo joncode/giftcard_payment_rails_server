@@ -6,42 +6,13 @@ class User < ActiveRecord::Base
 	include ShortenPhotoUrlHelper
 	include UpdateUserMeta
 
-	attr_accessor :api_v1, :session_token_obj
-
-	has_many :proto_joins, as: :receivable
-	has_many :protos, through: :proto_joins
-
-	has_many :dittos, as: :notable
-	has_one  :setting
-	has_many :pn_tokens
-	has_many :brands
-	has_many :orders,    :through => :providers
-	has_many :oauths
-	has_many :app_contacts
-	has_many :sales
-	has_many :cards
-	has_many :answers
-	has_many :questions, :through => :answers
-	has_many :user_socials, 	dependent: :destroy
-    has_many :sent,       as: :giver,  class_name: Gift
-    has_many :received,   foreign_key: :receiver_id, class_name: Gift
-
-	has_many :followed_users, through: :relationships, source: :followed
-	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
-	has_many :reverse_relationships, foreign_key: "followed_id",
-	                              class_name: "Relationship",
-	                              dependent: :destroy
-	has_many :followers, through: :reverse_relationships, source: :follower
-
-	has_many :friendships, dependent: :destroy
-	has_many :app_contacts, through: :friendships
-	has_many :session_tokens
-	has_many :user_points
-
-    has_one :affiliation, as: :target
-    has_one :affiliate,   through: :affiliation
-
 	has_secure_password
+
+	scope :meta_search, ->(str) {
+		where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
+	}
+
+#	-------------
 
     validates_with UserSocialValidator
     validates_with UserFirstNameValidator
@@ -54,20 +25,59 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
+#	-------------
 
+	before_create :create_remember_token      # creates unique remember token for user
 	before_save { |user| user.email      = email.downcase unless is_perm_deactive? }
 	before_save { |user| user.first_name = first_name.titleize if first_name }
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
 	before_save   :extract_phone_digits       # remove all non-digits from phone
-	before_create :create_remember_token      # creates unique remember token for user
 
-	after_save    :persist_social_data, :unless => :is_perm_deactive?
 	after_create  :init_confirm_email
+	after_save    :persist_social_data, :unless => :is_perm_deactive?
 	after_save    :make_friends
 
-	scope :meta_search, ->(str) {
-		where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
-	}
+#	-------------
+
+	has_one  :setting
+    has_one  :affiliation, as: :target
+    has_one  :affiliate,   through: :affiliation
+	has_many :proto_joins, as: :receivable
+	has_many :protos, through: :proto_joins
+	has_many :dittos, as: :notable
+	has_many :pn_tokens
+	has_many :brands
+	has_many :orders,    :through => :providers
+	has_many :oauths
+	has_many :app_contacts
+	has_many :sales
+	has_many :cards
+	has_many :answers
+	has_many :questions, :through => :answers
+	has_many :user_socials, 	dependent: :destroy
+    has_many :sent,       as: :giver,  class_name: Gift
+    has_many :received,   foreign_key: :receiver_id, class_name: Gift
+	has_many :followed_users, through: :relationships, source: :followed
+	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
+	has_many :reverse_relationships, foreign_key: "followed_id",
+	                              class_name: "Relationship",
+	                              dependent: :destroy
+	has_many :followers, through: :reverse_relationships, source: :follower
+	has_many :friendships, dependent: :destroy
+	has_many :app_contacts, through: :friendships
+	has_many :session_tokens
+	has_many :user_points
+
+	attr_accessor :api_v1, :session_token_obj
+
+#	-------------
+
+	def self.app_authenticate(token)
+		#where(active: true, perm_deactive: false, remember_token: token).first
+		SessionToken.app_authenticate(token)
+	end
+
+#	-------------
 
 	def link= link
 		lp = LandingPage.where(link: link).first
@@ -76,11 +86,6 @@ class User < ActiveRecord::Base
 			lp.users += 1
 			lp.save
 		end
-	end
-
-	def self.app_authenticate(token)
-		#where(active: true, perm_deactive: false, remember_token: token).first
-		SessionToken.app_authenticate(token)
 	end
 
 	def remember_token

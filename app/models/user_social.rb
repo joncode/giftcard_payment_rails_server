@@ -1,26 +1,31 @@
 class UserSocial < ActiveRecord::Base
     include ModelValidationHelper
 
-    belongs_to :user
-    has_many :dittos, as: :notable
+    default_scope -> { where(active: true) }  # indexed
+
+#   -------------
 
     before_validation     :reject_xxx_emails
-
     before_validation { |social| social.identifier = strip_and_downcase(identifier)   if is_email? }
     before_validation { |social| social.identifier = extract_phone_digits(identifier) if is_phone? }
 
-    validates_presence_of :identifier, :type_of, :user_id
+#   -------------
 
+    validates_presence_of :identifier, :type_of, :user_id
     validates :identifier , format: { with: VALID_PHONE_REGEX, message: "phone number is invalid" }, if: :is_phone?
     validates :identifier , format: { with: VALID_EMAIL_REGEX, message: "email is invalid" }, :if => :is_email?
     validates_with MultiTypeIdentifierUniqueValidator
+
+#   -------------
 
     after_create  :subscribe_mailchimp
     after_create  :collect_incomplete_gifts
     after_save    :unsubscribe_mailchimp
 
+#   -------------
 
-    default_scope -> { where(active: true) }  # indexed
+    has_many :dittos, as: :notable
+    belongs_to :user
 
     def network
         type_of

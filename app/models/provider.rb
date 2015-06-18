@@ -3,9 +3,24 @@ class Provider < ActiveRecord::Base
 	include Formatter
 	include ShortenPhotoUrlHelper
 
-	attr_accessor 	:menu
+	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
-	belongs_to :region
+#	-------------
+
+	validates_presence_of 	:name, :city, :address, :zip, :city_id, :state, :token
+	validates_length_of 	:state , 	:is => 2
+	validates_length_of 	:zip, 		:within => 5..11
+	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
+	validates_uniqueness_of :token
+
+#	-------------
+
+    before_save     :add_region_name
+	before_save 	:extract_phone_digits
+	after_create 	:make_menu_string
+    after_save 		:clear_www_cache
+
+#	-------------
 
 	has_one    :menu_string, dependent: :destroy
 	has_many   :gifts
@@ -17,39 +32,25 @@ class Provider < ActiveRecord::Base
 	has_many   :socials, through: :providers_socials
 	belongs_to :brand
 	belongs_to :merchant
+	belongs_to :region
 
-	validates_presence_of 	:name, :city, :address, :zip, :city_id, :state, :token
-	validates_length_of 	:state , 	:is => 2
-	validates_length_of 	:zip, 		:within => 5..11
-	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?
-	validates_uniqueness_of :token
-
-    before_save     :add_region_name
-	before_save 	:extract_phone_digits
-	after_create 	:make_menu_string
-    after_save 		:clear_www_cache
+	attr_accessor 	:menu
 
 	enum payment_plan: [ :no_plan, :choice, :prime ]
 	enum payment_event: [ :creation, :redemption ]
 
-	default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
-
-	def redemption
-		REDEMPTION_HSH[r_sys]
-	end
-
-	# def region
-	# 	REGION_TO_TEXT[region_id]
-	# end
-
-	def biz_user
-		BizUser.find(self.id)
-	end
-#/---------------------------------------------------------------------------------------------/
+#	-------------
 
 	def self.get_all
 		unscoped.order("name ASC")
 	end
+
+	def self.allWithinBounds(bounds)
+		puts bounds
+		Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
+	end
+
+#	-------------
 
 	def serialize
 		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :zinger, :region_id, :region_name,  :city_id]
@@ -97,6 +98,20 @@ class Provider < ActiveRecord::Base
 		prov_hash["loc_zip"]    = self.zip
 		prov_hash["live"]       = self.live
 		prov_hash
+	end
+
+#	-------------
+
+	def redemption
+		REDEMPTION_HSH[r_sys]
+	end
+
+	# def region
+	# 	REGION_TO_TEXT[region_id]
+	# end
+
+	def biz_user
+		BizUser.find(self.id)
 	end
 
 #########   STATUS METHODS
@@ -154,10 +169,6 @@ class Provider < ActiveRecord::Base
 		self.orders.where("updated_at > ?", (Time.now - 1.day))
 	end
 
-	def self.allWithinBounds(bounds)
-		puts bounds
-		Provider.where(:latitude => (bounds[:botLat]..bounds[:topLat]), :longitude => (bounds[:leftLng]..bounds[:rightLng]))
-	end
 
 	def sales_tax
 		tax = super

@@ -1,25 +1,56 @@
 class Gift < ActiveRecord::Base
-	extend  GiftScopes
+    extend  GiftScopes
     include GiftLifecycle
-	include Formatter
-	include Email
-	include GiftSerializers
+    include Formatter
+    include Email
+    include GiftSerializers
     include GenericPayableDucktype
     include RedeemHelper
     include GiftMessenger
-
-    attr_accessor :receiver_oauth
-
     TEXT_STATUS_OLD = { "incomplete" => 10, "open" => 20, "notified" => 30, "redeemed" => 40, "regifted" => 50, "expired" => 60, "cancel" => 70 }
     GIVER_STATUS    = { 10 => "incomplete" , 20 => "notified", 30 => "notified", 40 => "complete", 50 => "complete", 60 => "expired", 70 => "cancel" }
     RECEIVER_STATUS = { 10 => "incomplete" , 20 => "open", 30 => "notified",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
     BAR_STATUS      = { 10 => "live" ,       20 => "live",     30 => "live",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
 
-	#has_one     :redeem, 		dependent: :destroy
-	#has_one     :order, 		dependent: :destroy
+    default_scope -> { where(active: true) } # indexed
+    scope :meta_search, ->(str) {
+      where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
+    }
+
+#   -------------
+
+    before_validation :prepare_email
+    before_validation :build_oauth
+    before_validation :format_value
+    before_validation :format_cost
+
+#   -------------
+
+    validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :cat
+    validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
+    validates :receiver_phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
+    validates_with GiftReceiverInfoValidator
+
+#   -------------
+
+    before_create :find_receiver
+    before_create :add_giver_name,      :if => :no_giver_name?
+    before_create :add_provider_name,   :if => :no_provider_name?
+    before_create :regift,              :if => :regift?
+    before_create :build_gift_items
+    before_create :set_balance
+    before_create :set_status_and_pay_stat    # must be last before_create
+    before_save     { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
+    before_save     :extract_phone_digits
+    after_create  :set_affiliate_link
+
+#   -------------
+
+    #has_one     :redeem,       dependent: :destroy
+    #has_one     :order,        dependent: :destroy
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :sms_contact,   autosave: true
-	has_many    :gift_items, 	dependent: :destroy
+    has_many    :gift_items,    dependent: :destroy
     has_many    :dittos,        as: :notable
     has_many    :redemptions
     has_many    :affiliate_gifts
@@ -32,36 +63,9 @@ class Gift < ActiveRecord::Base
     belongs_to  :payable,       polymorphic: :true, autosave: :true
     belongs_to  :refund,        polymorphic: :true
 
-    before_validation :prepare_email
-    before_validation :build_oauth
-    before_validation :format_value
-    before_validation :format_cost
+    attr_accessor :receiver_oauth
 
-    validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :cat
-    validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
-    validates :receiver_phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
-    validates_with GiftReceiverInfoValidator
-
-    before_save { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
-    before_save   :extract_phone_digits
-    before_create :find_receiver
-    before_create :add_giver_name,      :if => :no_giver_name?
-    before_create :add_provider_name,   :if => :no_provider_name?
-    before_create :regift,              :if => :regift?
-    before_create :build_gift_items
-    before_create :set_balance
-
-    before_create :set_status_and_pay_stat    # must be last before_create
-
-    after_create :set_affiliate_link
-
-    default_scope -> { where(active: true) } # indexed
-
-    scope :meta_search, ->(str) {
-      where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
-    }
-
-#/---------------------------------------------------------------------------------------------/
+#   -------------
 
     def value
         if self.status == 'notified' && self.balance.present?

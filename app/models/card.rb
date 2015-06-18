@@ -6,12 +6,7 @@ class Card < ActiveRecord::Base
 	@@CreditCardSecretKey = CCS_KEY
 	PASSPHRASE 		 	  = CATCH_PHRASE
 
-	attr_accessor :iv
-
-	has_many   :sales
-	belongs_to :user
-	has_many   :gifts, 	:through => :sales
-	has_many   :orders,	:through => :sales
+	default_scope -> { where(active: true) } # indexed
 
 #	-------------
 
@@ -21,18 +16,22 @@ class Card < ActiveRecord::Base
 	validate :check_for_credit_card_validity
 	validate :month_and_year_should_be_in_future
 	validate :at_least_two_words_in_name
-
 	validates_presence_of :csv, :last_four, :month, :year, :brand, :nickname,  :user_id, :name
-
 	validates :zip, zip_code: true, allow_blank: true
 
 	before_save :crypt_number
-
 	after_create :tokenize_card
 
-	default_scope -> { where(active: true) } # indexed
 #	-------------
 
+	has_many   :sales
+	belongs_to :user
+	has_many   :gifts, 	:through => :sales
+	has_many   :orders,	:through => :sales
+
+	attr_accessor :iv
+
+#	-------------
 
 	def self.get_cards user
 		cards = Card.where(user_id: user.id)

@@ -1,6 +1,6 @@
 class Campaign < ActiveRecord::Base
-    include ShortenPhotoUrlHelper
     self.table_name = "campaigns"
+    include ShortenPhotoUrlHelper
 
     has_many :campaign_items
 

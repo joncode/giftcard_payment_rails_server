@@ -1,17 +1,16 @@
 class Sale < ActiveRecord::Base
 
+    validates_presence_of :giver_id, :card_id, :resp_code
+
+#   -------------
+
+    has_one :gift, as: :payable
+    has_one :refunded, class_name: "Gift", as: :refund
     belongs_to :provider
     belongs_to :giver, class_name: "User"
     belongs_to :card
 
-    has_one :gift, as: :payable
-    has_one :refunded, class_name: "Gift", as: :refund
-
-    validates_presence_of :giver_id, :card_id, :resp_code
-
-    def success?
-        self.resp_code == 1
-    end
+#   -------------
 
     def self.charge_card cc_hsh
         if cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
@@ -20,6 +19,12 @@ class Sale < ActiveRecord::Base
             cc_hsh = cc_hsh.except("cim_token", "cim_profile")
             self.charge_number_then_tokenize cc_hsh
         end
+    end
+
+#   -------------
+
+    def success?
+        self.resp_code == 1
     end
 
     def void_refund giver_id

@@ -1,5 +1,7 @@
 class Merchant < ActiveRecord::Base
 
+    before_save     :add_region_name
+
     has_one :provider
     has_one :affiliation, as: :target
     has_one :affiliate, through: :affiliation
@@ -9,8 +11,6 @@ class Merchant < ActiveRecord::Base
     has_many :mt_users, through: :invites
 
     belongs_to :region
-
-    before_save     :add_region_name
 
     enum payment_event: [ :creation, :redemption ]
 

@@ -4,6 +4,7 @@ class Affiliation < ActiveRecord::Base
 
 	belongs_to :affiliate, autosave: true
 	belongs_to :target, polymorphic: true, autosave: true
+		#  Merchant || User == Target
 
 	before_validation :set_up_data, on: :create
 
@@ -12,7 +13,7 @@ class Affiliation < ActiveRecord::Base
 		return nil 	 unless merchant = provider.merchant
 		return false unless affiliation = merchant.affiliation
 		return false unless affiliation.on?
-		return false if affiliation.payout > 999999
+		return false if affiliation.payout > 999999   # $10,000 in cents
 		affiliation
 	end
 
@@ -20,7 +21,7 @@ class Affiliation < ActiveRecord::Base
 		return nil 	 unless giver = gift.giver
 		return false unless affiliation = giver.affiliation
 		return false unless affiliation.on?
-		return false if affiliation.payout > 9999
+		return false if affiliation.payout > 9999 	# $1,000 in cents
 		affiliation
 	end
 
