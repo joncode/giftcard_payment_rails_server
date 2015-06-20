@@ -24,6 +24,7 @@ gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
 gem 'bcrypt'
 gem 'activemerchant'
+gem 'gibberish'
 gem 'urbanairship'
 gem 'roo'
 #gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
