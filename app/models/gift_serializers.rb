@@ -165,9 +165,9 @@ private
             gift_hsh["loc_address"]   = gift_provider.complete_address
             gift_hsh["loc_photo"]     = gift_provider.short_image_url
             gift_hsh["r_sys"]         = gift_provider.r_sys
-            gift_hsh['city_id']       = provider.city_id
-            gift_hsh['region_id']     = provider.region_id
-            gift_hsh['region_name']   = provider.region_name
+            gift_hsh['city_id']       = gift_provider.city_id
+            gift_hsh['region_id']     = gift_provider.region_id
+            gift_hsh['region_name']   = gift_provider.region_name
         end
     end
 

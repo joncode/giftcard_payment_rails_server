@@ -95,8 +95,6 @@ class Accountant
 
 	private
 
-
-
 		def debt_amount gift, origin
 			if origin == "loc"
 				gift.location_fee.to_i
