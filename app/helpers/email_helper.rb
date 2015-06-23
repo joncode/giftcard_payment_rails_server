@@ -657,11 +657,11 @@ private
 	end
 
 	def generate_affiliate_invite_link invite_token
-		"#{PUBLIC_URL_PT}/invite?token=#{invite_token}"
+		"#{PUBLIC_URL_PT}/invites?token=#{invite_token}"
 	end
 
 	def generate_invite_link invite_token
-		"#{PUBLIC_URL_MT}/invite?token=#{invite_token}"
+		"#{PUBLIC_URL_MT}/invites?token=#{invite_token}"
 	end
 
 end
