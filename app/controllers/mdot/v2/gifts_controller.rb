@@ -43,8 +43,10 @@ class Mdot::V2::GiftsController < JsonController
         return nil if params_bad_request
         return nil if data_not_found?(gift)
 
+        send_open_push = gift.status == 'open'
+
         if gift.notify(false)
-            Relay.send_push_thank_you gift
+            Relay.send_push_thank_you(gift) if send_open_push
             success(gift.token)
         else
             if !gift.notifiable?
