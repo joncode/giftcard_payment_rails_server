@@ -47,23 +47,13 @@ else
     ENV['MAILCHIMP_APIKEY']
 end
 
-MANDRILL_APIKEY = if Rails.env.test?
-    'pOqNDraZxOFoF44X0pbR-Q'
-elsif Rails.env.development?
-    # 'pOqNDraZxOFoF44X0pbR-Q' #mandrill_apikey_test
-    'oUXP1PDOtP14RMgFytxdGw'
-elsif Rails.env.staging?
-    #ENV['MANDRILL_APIKEY_TEST']
-    ENV['MANDRILL_APIKEY']
-else
-    ENV['MANDRILL_APIKEY']
-end
-
 MAILCHIMP_LIST_ID = if Rails.env.development? or Rails.env.test?
     'b29e278ebe'
 else
     ENV['MAILCHIMP_LIST_ID']
 end
+
+# MANDRILL is located in config/initializers/mandrill.rb
 
 GENERAL_TOKEN = if Rails.env.development? or Rails.env.test?
      "1964f94b3e567a8a82b87f3ccbeb2174"
