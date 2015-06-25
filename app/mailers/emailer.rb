@@ -117,8 +117,11 @@ module Emailer
 
     ##### Merchant Tools
 
+
+    # {"text"=>"affiliate_invite", "email"=>"jon.gutwillig@itson.me", "merchant_id"=>1, "token"=>"CjmuXCeZiz0mYGtooOSMOQ"}
     def affiliate_invite data
-        affiliate = Affiliate.find(data["affiliate_id"])
+        find_id = data['affiliate_id'] || data['merchant_id']
+        affiliate = Affiliate.find(find_id)
         subject  = "Welcome to It's On Me"
         email    = data["email"]
         name     = "#{affiliate.name} Staff"
