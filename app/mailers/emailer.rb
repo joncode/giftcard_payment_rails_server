@@ -11,7 +11,7 @@ module Emailer
             user = User.find(data["user_id"])
         end
         subject  = "Reset password request"
-        body     = text_for_user_reset_password(user, data['subdomain'])
+        body     = text_for_user_reset_password(user, data['token'], data['subdomain'])
 
         template_name = "user"
         email_address = data["email"] || user.email
