@@ -34,6 +34,41 @@ describe Client do
             client.contents(:regions).count.should == 1
         end
 
+        it "should allow deletion of content for client specific" do
+            client = FactoryGirl.create(:client)
+            a = FactoryGirl.create(:affiliate)
+            client.partner = a
+            client.client!
+            client.save
+            m = make_merchant_provider('Test Invite')
+            r = FactoryGirl.create(:region)
+            m.city_id  = r.id
+            m.save
+
+            client.contents(:merchants).count.should == 0
+            client.content = m
+            client.contents(:merchants).count.should == 1
+            client.remove_content = m
+            client.contents(:merchants).count.should == 0
+        end
+
+        it "should allow deletion of content for partner" do
+            client = FactoryGirl.create(:client)
+            a = FactoryGirl.create(:affiliate)
+            client.partner = a
+            client.partner!
+            client.save
+            m = make_merchant_provider('Test Invite')
+            r = FactoryGirl.create(:region)
+            m.city_id  = r.id
+            m.save
+
+            client.contents(:merchants).count.should == 0
+            client.content = m
+            client.contents(:merchants).count.should == 1
+            client.remove_content = m
+            client.contents(:merchants).count.should == 0
+        end
     end
 
     context "validations" do

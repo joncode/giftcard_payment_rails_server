@@ -50,6 +50,15 @@ class Client < ActiveRecord::Base
 		end
 	end
 
+	def remove_content= obj
+		if self.client?
+			client_content = ClientContent.where(client_id: self.id, content_type: obj.class.to_s, content_id: obj.id ).first
+		else
+			client_content = ClientContent.where(client_id: nil, partner_id:  self.partner_id, partner_type: self.partner_type, content_type: obj.class.to_s, content_id: obj.id).first
+		end
+
+		client_content.destroy if client_content
+	end
 
 private
 
