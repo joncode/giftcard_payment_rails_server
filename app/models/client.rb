@@ -12,7 +12,7 @@ class Client < ActiveRecord::Base
 
 #	-------------
 
-	enum ecosystem: [ :full, :client, :company ]
+	enum ecosystem: [ :full, :client, :partner ]
 	enum platform: [:ios, :android, :web_menu, :kiosk, :landing_page]
 
 
@@ -23,8 +23,8 @@ class Client < ActiveRecord::Base
 
 		if self.client?
 			client_contents.include(:merchants).include(:providers).where(client_id: self.id, content_type: 'Merchant')
-		elsif self.company?
-			client_contents.include(:merchants).include(:providers).where(company_id: self.company_id, company_type: self.company_type, content_type: 'Merchant')
+		elsif self.partner?
+			client_contents.include(:merchants).include(:providers).where(partner_id: self.partner_id, partner_type: self.partner_type, content_type: 'Merchant')
 		else
 			# call normal query for table
 		end
@@ -35,8 +35,8 @@ class Client < ActiveRecord::Base
 
 		if self.client?
 			client_contents.include(:merchants).where(client_id: self.id, content_type: 'Merchant')
-		elsif self.company?
-			client_contents.include(:merchants).where(company_id: self.company_id, company_type: self.company_type, content_type: 'Merchant')
+		elsif self.partner?
+			client_contents.include(:merchants).where(partner_id: self.partner_id, partner_type: self.partner_type, content_type: 'Merchant')
 		else
 			# call normal query for table
 		end
@@ -47,8 +47,8 @@ class Client < ActiveRecord::Base
 
 		if self.client?
 			client_contents.include(:users).where(client_id:  self.id, content_type: 'User')
-		elsif self.company?
-			client_contents.include(:users).where(company_id:  self.company_id, company_type: self.company_type, content_type: 'Merchant')
+		elsif self.partner?
+			client_contents.include(:users).where(partner_id:  self.partner_id, partner_type: self.partner_type, content_type: 'Merchant')
 		else
 			# call normal query for table
 		end
@@ -59,8 +59,8 @@ class Client < ActiveRecord::Base
 
 		if self.client?
 			client_contents.include(:gifts).where(client_id: self.id, content_type: 'Gift')
-		elsif self.company?
-			client_contents.include(:gifts).where(company_id:  self.company_id, company_type: self.company_type, content_type: 'Merchant')
+		elsif self.partner?
+			client_contents.include(:gifts).where(partner_id:  self.partner_id, partner_type: self.partner_type, content_type: 'Merchant')
 		else
 			# call normal query for table
 		end
