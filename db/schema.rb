@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150617225808) do
+ActiveRecord::Schema.define(version: 20150626004117) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -318,6 +318,23 @@ ActiveRecord::Schema.define(version: 20150617225808) do
   add_index "cards", ["active"], name: "index_cards_on_active", using: :btree
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
 
+  create_table "clients", force: true do |t|
+    t.string   "name"
+    t.string   "url_name"
+    t.string   "download_url"
+    t.string   "application_key"
+    t.string   "detail"
+    t.integer  "company_id"
+    t.string   "company_type"
+    t.integer  "platform",        default: 0
+    t.boolean  "active",          default: true
+    t.integer  "ecosystem",       default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "clients", ["application_key", "active"], name: "index_clients_on_application_key_and_active", using: :btree
+
   create_table "contacts", force: true do |t|
     t.integer  "brand_id"
     t.string   "address"
@@ -332,6 +349,20 @@ ActiveRecord::Schema.define(version: 20150617225808) do
   end
 
   add_index "contacts", ["brand_id"], name: "index_contacts_on_brand_id", using: :btree
+
+  create_table "contents", force: true do |t|
+    t.integer  "company_id"
+    t.string   "company_type"
+    t.integer  "client_id"
+    t.integer  "content_id"
+    t.string   "content_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contents", ["client_id", "content_id", "content_type"], name: "index_contents_on_client_id_and_content_id_and_content_type", using: :btree
+  add_index "contents", ["client_id", "content_type"], name: "index_contents_on_client_id_and_content_type", using: :btree
+  add_index "contents", ["company_id", "company_type", "content_type"], name: "index_contents_on_company_id_and_company_type_and_content_type", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
