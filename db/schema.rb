@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150626004117) do
+ActiveRecord::Schema.define(version: 20150627051845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -313,6 +313,10 @@ ActiveRecord::Schema.define(version: 20150626004117) do
     t.string   "cim_token"
     t.string   "zip"
     t.boolean  "active",        default: true
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.string   "origin"
+    t.integer  "client_id"
   end
 
   add_index "cards", ["active"], name: "index_cards_on_active", using: :btree
@@ -522,6 +526,10 @@ ActiveRecord::Schema.define(version: 20150626004117) do
     t.integer  "token"
     t.integer  "balance"
     t.string   "origin"
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.integer  "client_id"
+    t.integer  "rec_client_id"
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
@@ -1079,6 +1087,12 @@ ActiveRecord::Schema.define(version: 20150626004117) do
     t.string   "push"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "origin"
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.integer  "client_id"
+    t.datetime "destroyed_at"
+    t.integer  "count"
   end
 
   add_index "session_tokens", ["token"], name: "index_session_tokens_on_token", using: :btree
@@ -1200,6 +1214,9 @@ ActiveRecord::Schema.define(version: 20150626004117) do
     t.string   "cim_profile"
     t.tsvector "ftmeta"
     t.string   "affiliate_url_name"
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.integer  "client_id"
   end
 
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
