@@ -81,14 +81,14 @@ describe Web::V3::UsersController do
 
     describe "update" do
 
-        it_should_behave_like("client-token authenticated", :patch, :update)
-
         before(:each) do
             @client = make_partner_client('Client', 'Tester')
             @user = create_user_with_token "USER_TOKEN", nil, @client
             request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
             request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
         end
+
+        it_should_behave_like("client-token authenticated", :patch, :update)
 
         it "should persist the data to the user record" do
             user = @user

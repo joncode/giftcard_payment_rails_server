@@ -24,14 +24,22 @@ end
 
 
 	def make_affiliate(first, last)
-		FactoryGirl.create(:affiliate,
-			first_name: first.capitalize,
-			last_name: last.capitalize,
-			email: "#{first}@#{last}.com".downcase,
-			url_name: "#{first}_#{last}".downcase)
+		unless a = Affiliate.where(first_name: first.capitalize, last_name: last.capitalize).first
+			a = FactoryGirl.create(:affiliate,
+				first_name: first.capitalize,
+				last_name: last.capitalize,
+				email: "#{first}@#{last}.com".downcase,
+				url_name: "#{first}_#{last}".downcase)
+		end
+		a
 	end
 
 	def make_partner_client(first, last)
 		a = make_affiliate(first,last)
-		FactoryGirl.create(:client, partner_id: a.id, partner_type: a.class.to_s)
+		client = Client.where(partner_id: a.id, partner_type: a.class.to_s).first
+		# binding.pry
+		if client.nil?
+			client = FactoryGirl.create(:client, partner_id: a.id, partner_type: a.class.to_s, url_name: "#{first}_#{last}".downcase)
+		end
+		client
 	end
