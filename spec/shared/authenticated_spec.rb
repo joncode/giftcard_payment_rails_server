@@ -12,6 +12,7 @@ end
 shared_examples_for "client-token authenticated" do |verb, route, params|
 
     it "should not allow unauthenticated access" do
+        request.env['HTTP_X_APPLICATION_KEY'] =  'Bad_Compnay_Key'
         request.env["HTTP_X_AUTH_TOKEN"] = "No_Entrance"
         puts "----------- #{verb} | :#{route} | #{params} ------------"
         send(verb,route, params, format: :json)

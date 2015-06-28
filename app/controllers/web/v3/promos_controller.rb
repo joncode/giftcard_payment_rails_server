@@ -1,6 +1,6 @@
 class Web::V3::PromosController < MetalCorsController
 
-    before_action :authenticate_general
+    before_action :authentication_no_token
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
 	def show

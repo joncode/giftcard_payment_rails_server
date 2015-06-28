@@ -1092,7 +1092,7 @@ ActiveRecord::Schema.define(version: 20150627051845) do
     t.string   "partner_type"
     t.integer  "client_id"
     t.datetime "destroyed_at"
-    t.integer  "count"
+    t.integer  "count",        default: 0
   end
 
   add_index "session_tokens", ["token"], name: "index_session_tokens_on_token", using: :btree

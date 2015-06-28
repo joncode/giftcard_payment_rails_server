@@ -105,6 +105,7 @@ class Accountant
 
 		def create_debt(gift, obj, origin)
 			reg = Register.new
+			# binding.pry
 			reg.partner_type = obj.class.to_s
 			reg.partner_id   = obj.id
 			reg.type_of      = "debt"

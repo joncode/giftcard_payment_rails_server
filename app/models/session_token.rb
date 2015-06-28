@@ -14,6 +14,7 @@ class SessionToken < ActiveRecord::Base
 	def self.app_authenticate(token)
 		st_obj = where(token: token).includes(:user).last
 		if st_obj
+			SessionToken.increment_counter(:count, st_obj.id)
 			user = st_obj.user
 			if user && user.active
 				user.session_token_obj = st_obj

@@ -1,6 +1,6 @@
 class Web::V3::SessionsController < MetalCorsController
 
-    before_action :authenticate_general
+    before_action :authentication_no_token
 
     def create
         login_params    = params["data"]

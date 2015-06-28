@@ -1,6 +1,6 @@
 class Web::V3::GiftsController < MetalCorsController
 
-    before_action :authenticate_user
+    before_action :authentication_token_required
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
     def index

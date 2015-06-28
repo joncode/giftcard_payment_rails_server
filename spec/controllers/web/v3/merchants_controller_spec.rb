@@ -8,6 +8,9 @@ describe Web::V3::MerchantsController do
     	@merchant = FactoryGirl.create :merchant
         @provider = FactoryGirl.create :provider, merchant_id: @merchant.id
         request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
+        @client = make_partner_client('Client', 'Tester')
+        request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
+
     end
 
     it "should return all of the providers" do

@@ -8,6 +8,9 @@ describe Web::V3::GiftsController do
     before(:each) do
         User.delete_all
         Gift.delete_all
+        Client.delete_all
+        SessionToken.delete_all
+        Affiliate.delete_all
     	@user     = FactoryGirl.create :user, iphone_photo: "d|myphoto.jpg"
     	@receiver = FactoryGirl.create :user, first_name: "bob", iphone_photo: "d|myphoto2.jpg"
         @other1    = FactoryGirl.create :user, iphone_photo: "d|myphoto2.jpg"
@@ -16,13 +19,16 @@ describe Web::V3::GiftsController do
     	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: @user.name, receiver_id: @user.id, provider: @provider}
     	3.times { FactoryGirl.create :gift, giver: @user, receiver_name: other2.name, receiver_id: other2.id, provider: @provider}
     	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: other2.name, receiver_id: other2.id, provider: @provider}
+        @client = make_partner_client('Gifts', 'Creator')
+        @user = create_user_with_token "USER_TOKEN", @user, @client
+        request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
+        request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
     end
 
     describe :index do
         it_should_behave_like("client-token authenticated", :post, :create)
 
         it "should return the correct gifts for the user" do
-            request.headers["HTTP_X_AUTH_TOKEN"] = @user.remember_token
             get :index, format: :json
             rrc(200)
             json["data"].count.should == 6
@@ -31,7 +37,6 @@ describe Web::V3::GiftsController do
         end
 
         it "should return the gifts of another user" do
-            request.headers["HTTP_X_AUTH_TOKEN"] = @user.remember_token
             get :index, format: :json, user_id: @other1.id
             rrc(200)
             json["data"].count.should == 6
@@ -40,7 +45,6 @@ describe Web::V3::GiftsController do
         end
 
         it "should return 404 when other use is not found" do
-            request.headers["HTTP_X_AUTH_TOKEN"] = @user.remember_token
             get :index, format: :json, user_id: 10000
             rrc(404)
 
@@ -50,8 +54,8 @@ describe Web::V3::GiftsController do
     describe :create do
         it_should_behave_like("client-token authenticated", :post, :create)
 
-        before do
-            @user = create_user_with_token "USER_TOKEN", @user
+
+        before(:each) do
             @card = FactoryGirl.create(:visa, name: @user.name, user_id: @user.id)
             @cart = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
@@ -62,7 +66,7 @@ describe Web::V3::GiftsController do
             a = FactoryGirl.create(:affiliate, url_name: "stewart" )
             p = FactoryGirl.create(:provider)
             lp = FactoryGirl.create(:landing_page, link: "qa.itson.me/shop/las-vegas?aid=stewart")
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             gc = {"data"=>{"items"=>[{"price"=>"50", "item_name"=>"$50", "item_id"=>389, "quantity"=>2}], "service"=>"5", "value"=>"100", "loc_id"=>p.id, "pay_id"=>@card.id, "rec_name"=>"jongh", "rec_net"=>"em", "rec_net_id"=>"m80dubstation@gmail.com", "msg"=>"testing the affiliate", "link"=>"qa.itson.me/shop/las-vegas?aid=stewart"}}
@@ -77,7 +81,7 @@ describe Web::V3::GiftsController do
         it "should create an landing_page if one is not there" do
             a = FactoryGirl.create(:affiliate, url_name: "stewart" )
             p = FactoryGirl.create(:provider)
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             gc = {"data"=>{"items"=>[{"price"=>"50", "item_name"=>"$50", "item_id"=>389, "quantity"=>2}], "service"=>"5", "value"=>"100", "loc_id"=>p.id, "pay_id"=>@card.id, "rec_name"=>"jongh", "rec_net"=>"em", "rec_net_id"=>"m80dubstation@gmail.com", "msg"=>"testing the affiliate", "link"=>"qa.itson.me/shop/las-vegas?aid=stewart"}}
@@ -89,7 +93,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should create a gift" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", provider_id: @provider.id
@@ -124,7 +128,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should return correct error message on failure" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", provider_id: @provider.id
@@ -142,7 +146,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should return correct error messages when gift sale returns a string" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             @receiver.update(active: false)
@@ -170,7 +174,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should notify an open gift" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.status.should == 'open'
             patch :read, format: :json, id: @gift.id
             @gift.reload.status.should == 'notified'
@@ -178,7 +182,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should send a 'your gift is opened' push to the gift giver" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             test_urban_airship_gift_opened(@gift) do
                 patch :read, format: :json, id: @gift.id
             end
@@ -195,14 +199,14 @@ describe Web::V3::GiftsController do
         end
 
         it "should notify an open gift" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.status.should == 'open'
             patch :notify, format: :json, id: @gift.id
             @gift.reload.status.should == 'notified'
         end
 
         it "should return token when gift is currently notified" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.notify
             patch :notify, format: :json, id: @gift.id
             rrc(200)
@@ -216,7 +220,7 @@ describe Web::V3::GiftsController do
         it "should send fail msg when an incomplete gift" do
             incomplete_gift                  = FactoryGirl.create(:gift)
             incomplete_gift.status.should    == 'incomplete'
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             patch :notify, format: :json, id: incomplete_gift.id
             rrc(200)
             json["status"].should == 0
@@ -227,7 +231,7 @@ describe Web::V3::GiftsController do
         it "should send fail msg gift is un-redeemable [expired, regifted, cancelled] " do
             @gift.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: Time.now.utc)
 
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             patch :notify, format: :json, id: @gift.id
             rrc(200)
             json["status"].should == 0
@@ -236,7 +240,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should send fail msg gift already redeemed" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.notify
             @gift.redeem_gift
             patch :notify, format: :json, id: @gift.id
@@ -248,7 +252,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should return 404 if gift is not found" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             patch :notify, format: :json, id: 12412412
             rrc(404)
         end
@@ -256,7 +260,7 @@ describe Web::V3::GiftsController do
         it "should not allow opening gifts that user does not receive" do
             other_user = FactoryGirl.create(:user)
             other_gift = FactoryGirl.create(:gift, receiver_id: other_user.id)
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             patch :notify, format: :json, id: other_gift.id
             json["status"].should == 0
             json["err"].should    ==  "NOT_REDEEMABLE"
@@ -277,7 +281,7 @@ describe Web::V3::GiftsController do
 
             @gift.provider.update(pos_merchant_id: "tester")
             Gift.any_instance.stub(:pos_redeem).and_return({"success" => true, "response_code" => "PAID", "response_text" => "Paid in full"})
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.status.should == 'notified'
             @gift.redeemed_at.should be_nil
             patch :pos_redeem, format: :json, id: @gift.id, data: {"ticket_num" => "74832" }
@@ -288,13 +292,13 @@ describe Web::V3::GiftsController do
         end
 
         it "should return 404 if gift is not found" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             patch :pos_redeem, format: :json, id: 1234211
             rrc(404)
         end
 
         it "should send fail msg when missing ticket number" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.status.should == 'notified'
             @gift.redeemed_at.should be_nil
             patch :pos_redeem, format: :json, id: @gift.id, data: {"ticket_num" => nil}
@@ -305,7 +309,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should send fail msg when an incomplete / open gift" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             other_gift = FactoryGirl.create(:gift, receiver_email: @user.email)
             patch :pos_redeem, format: :json, id: other_gift.id
             rrc(200)
@@ -315,7 +319,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should send fail msg gift already redeemed" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.redeem_gift
             patch :pos_redeem, format: :json, id: @gift.id
             rrc(200)
@@ -325,7 +329,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should send fail msg gift is un-redeemable [expired, regifted, cancelled] " do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: Time.now.utc)
             patch :pos_redeem, format: :json, id: @gift.id
             rrc(200)
@@ -337,7 +341,7 @@ describe Web::V3::GiftsController do
         it "should not allow opening gifts that user does not receive" do
             other_user = FactoryGirl.create(:user)
             other_gift = FactoryGirl.create(:gift, receiver_id: other_user.id)
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             patch :pos_redeem, format: :json, id: other_gift.id
             json["status"].should == 0
             json["err"].should    ==  "NOT_REDEEMABLE"
@@ -355,7 +359,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should redeem a notifed gift" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.status.should == 'notified'
             @gift.redeemed_at.should be_nil
             patch :redeem, format: :json, id: @gift.id
@@ -369,7 +373,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should redeem a notifed gift with server initials" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.status.should == 'notified'
             @gift.redeemed_at.should be_nil
             patch :redeem, format: :json, id: @gift.id, data: {"server" => "2342" }
@@ -381,13 +385,13 @@ describe Web::V3::GiftsController do
         end
 
         it "should return 404 if gift is not found" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             patch :redeem, format: :json, id: 1234211
             rrc(404)
         end
 
         it "should send fail msg when an incomplete / open gift" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             other_gift = FactoryGirl.create(:gift, receiver_email: @user.email)
             patch :redeem, format: :json, id: other_gift.id
             rrc(200)
@@ -397,7 +401,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should send fail msg gift already redeemed" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.redeem_gift
             patch :redeem, format: :json, id: @gift.id
             rrc(200)
@@ -407,7 +411,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should send fail msg gift is un-redeemable [expired, regifted, cancelled] " do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             @gift.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: Time.now.utc)
             patch :redeem, format: :json, id: @gift.id
             rrc(200)
@@ -419,7 +423,7 @@ describe Web::V3::GiftsController do
         it "should not allow opening gifts that user does not receive" do
             other_user = FactoryGirl.create(:user)
             other_gift = FactoryGirl.create(:gift, receiver_id: other_user.id)
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             patch :redeem, format: :json, id: other_gift.id
             json["status"].should == 0
             json["err"].should    ==  "NOT_REDEEMABLE"

@@ -7,7 +7,9 @@ describe Web::V3::SessionsController do
     describe :create do
 
     	before(:each) do
-			request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
+	        request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
+	        @client = make_partner_client('Client', 'Tester')
+	        request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
     	end
 
         it "should return basic contacts" do

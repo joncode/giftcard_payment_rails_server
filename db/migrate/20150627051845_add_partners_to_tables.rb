@@ -16,6 +16,6 @@ class AddPartnersToTables < ActiveRecord::Migration
   	add_column :session_tokens, :partner_type, :string
   	add_column :session_tokens, :client_id, :integer
   	add_column :session_tokens, :destroyed_at, :datetime
-  	add_column :session_tokens, :count, :integer
+  	add_column :session_tokens, :count, :integer, default: 0
   end
 end

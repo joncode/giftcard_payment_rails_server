@@ -1,7 +1,7 @@
 class Web::V3::UsersController < MetalCorsController
     include Email
-    before_action :authenticate_general, only: [:create, :reset_password]
-    before_action :authenticate_user , except: [:create, :reset_password]
+    before_action :authentication_no_token, only: [:create, :reset_password]
+    before_action :authentication_token_required , except: [:create, :reset_password]
 
     def create
 		user = User.new(create_user_params)
