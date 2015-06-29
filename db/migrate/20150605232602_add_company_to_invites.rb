@@ -4,7 +4,6 @@ class AddCompanyToInvites < ActiveRecord::Migration
 
 		rename_column :invites, :user_id, :mt_user_id
 		rename_column :invites, :merchant_id, :company_id
-		remove_column :invites, :affiliate_id
 		add_column 	  :invites, :company_type, :string
 		set_company_type_to_merchant_for_all
   	end
@@ -13,7 +12,6 @@ class AddCompanyToInvites < ActiveRecord::Migration
 
 		rename_column :invites, :mt_user_id, :user_id
 		rename_column :invites, :company_id, :merchant_id
-		add_column    :invites, :affiliate_id, :integer
 		remove_column :invites, :company_type, :string
 
   	end
