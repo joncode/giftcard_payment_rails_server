@@ -8,6 +8,8 @@ class SessionToken < ActiveRecord::Base
 #   -------------
 
 	belongs_to :user
+	belongs_to :client
+	belongs_to :partner, polymorphic: true
 
 #   -------------
 
@@ -26,9 +28,18 @@ class SessionToken < ActiveRecord::Base
 		return nil
 	end
 
-	def self.create_token_obj (user, platform=nil, pn_token=nil)
+	def self.create_token_obj (user, platform=nil, pn_token=nil, client=nil, partner=nil)
 		Resque.enqueue(CreatePnTokenJob, user.id, pn_token, platform) if pn_token
-		SessionToken.create(user_id: user.id, token: create_session_token, platform: platform, push: pn_token)
+		client_id = client.id if client
+		partner_id = partner.id if partner
+		partner_type = partner.class.to_s if partner
+		SessionToken.create(user_id: user.id,
+							token: create_session_token,
+							platform: platform,
+							push: pn_token,
+							client_id: client_id,
+							partner_id: partner_id,
+							partner_type: partner_type)
 	end
 
 end

@@ -12,4 +12,5 @@ class ClientContent < ActiveRecord::Base
 	belongs_to :content, polymorphic: true
 	belongs_to :partner, polymorphic: true
 
+
 end

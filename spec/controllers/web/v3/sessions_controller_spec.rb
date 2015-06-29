@@ -16,6 +16,10 @@ describe Web::V3::SessionsController do
             user                      = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: "faceface", twitter: "tweettweet" }
             request_hsh               = { username: "neil@gmail.com", password: "password"}
             post :create, format: :json, data: request_hsh
+
+            st = SessionToken.where(user_id: user.id).last
+            st.client.should  == @client
+            st.partner.should == @client.partner
             rrc(200)
             json["status"].should     == 1
             json["data"].class.should == Hash

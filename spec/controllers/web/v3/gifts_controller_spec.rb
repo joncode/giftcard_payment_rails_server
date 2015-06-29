@@ -125,6 +125,10 @@ describe Web::V3::GiftsController do
                 "r_sys" => 2,
                 "city_id"=>2, "region_id"=>2, "region_name"=>"New York"
             }
+            new_gift.client_id.should == @client.id
+            new_gift.partner_id.should == @client.partner.id
+            new_gift.partner_type.should == @client.partner.class.to_s
+            @client.contents(:gifts).first.should == new_gift
         end
 
         it "should return correct error message on failure" do

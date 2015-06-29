@@ -75,6 +75,9 @@ describe Web::V3::PromosController do
            	g = Gift.where(receiver_email: "testy34@gmails.com").first
            	g.class.should == Gift
            	g.payable_id.should == campaign_item.id
+           	g.client_id.should == @client.id
+           	g.partner_id.should == @client.partner.id
+           	g.partner_type.should == @client.partner.class.to_s
 		end
 
 		it "should return fail message when user already has a gift for campaign" do

@@ -26,6 +26,13 @@ describe Web::V3::UsersController do
             }
             post :create, format: :json, data: request_hsh
             rrc(200)
+            u = User.last
+
+            u.client.should == @client
+            u.partner.should == @client.partner
+
+            @client.contents(:users).first.should == u
+
             json["status"].should == 1
             json["data"]["email"][0].should == { "_id" => UserSocial.last.id, "value" => "abe@email.com" }
         end

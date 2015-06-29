@@ -58,8 +58,13 @@ class Web::V3::GiftsController < MetalCorsController
             end
         end
 
+        gift_hash["client_id"]     = @current_client.id
+        gift_hash["partner_id"]    = @current_partner.id
+        gift_hash["partner_type"]  = @current_partner.class.to_s
+
         gift = GiftSale.create(gift_hash)
         if gift.kind_of?(Gift) && !gift.id.nil?
+            # binding.pry
             success gift.web_serialize
         else
             if gift.kind_of?(Gift)

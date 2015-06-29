@@ -54,6 +54,9 @@ describe Web::V3::CardsController do
             rrc(200)
             json["status"].should == 1
             json["data"].should == { "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four }
+
+            card.client.should == @client
+            card.partner.should == @client.partner
         end
 
         it "should return correct error message" do

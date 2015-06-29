@@ -68,6 +68,9 @@ class User < ActiveRecord::Base
 	has_many :session_tokens
 	has_many :user_points
 
+	belongs_to :client
+	belongs_to :partner, polymorphic: true
+
 	attr_accessor :api_v1, :session_token_obj
 
 #	-------------

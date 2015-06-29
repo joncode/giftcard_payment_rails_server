@@ -7,7 +7,7 @@ FactoryGirl.define do
         partner_type   'Affiliate'
         partner_id      100
         platform         0
-        ecosystem        0
+        ecosystem        2
     end
 
     factory :region do
