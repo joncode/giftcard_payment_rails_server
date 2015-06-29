@@ -60,8 +60,8 @@ NUMBER_ID = 649387
 #  make migrations to delete mt_user, at_user, user ->  :remember_token
 #  make migration to delete mt_user, at_user, user ->  :password_digest
 
-VERSION_NUMBER  = "1.5.7"
-VERSION_UPDATED = "6/12/14"
+VERSION_NUMBER  = "1.6.1"
+VERSION_UPDATED = "6/29/15"
 
 
 
