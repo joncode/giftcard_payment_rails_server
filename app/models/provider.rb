@@ -239,12 +239,12 @@ private
 	end
 
 	def add_region_name
-		if self.region_id.present? && (self.region_name.nil? || self.region_id_changed?)
-			region = Region.unscoped.where(id: self.region_id).first
-			self.region_name = region.name if region.present?
-		else
-			self.region_name = nil if self.region_id.nil?
-		end
+		# if self.region_id.present? && (self.region_name.nil? || self.region_id_changed?)
+		# 	region = Region.unscoped.where(id: self.region_id).first
+		# 	self.region_name = region.name if region.present?
+		# else
+		# 	self.region_name = nil if self.region_id.nil?
+		# end
 	end
 
 end
