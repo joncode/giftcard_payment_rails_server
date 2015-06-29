@@ -28,7 +28,11 @@ class Client < ActiveRecord::Base
 		elsif self.partner?
 			cc = ClientContent.includes(:content).where(client_id: nil, partner_id: self.partner_id, partner_type: self.partner_type, content_type: content_symbol.to_s.singularize.capitalize)
 		else
-			return []
+			if content_symbol == :regions
+				return Region.city
+			else content_symbol == :merchants
+				return Provider.all
+			end
 		end
 		cc.map(&:content)
 	end
@@ -46,6 +50,7 @@ class Client < ActiveRecord::Base
 			client_content.client_id = nil
 		end
 
+		# binding.pry
 		if client_content.save
 			if obj.class.to_s == 'Merchant' && obj.city_id
 				if r = Region.where(id: obj.city_id).first
