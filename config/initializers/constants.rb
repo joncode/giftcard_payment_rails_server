@@ -59,6 +59,7 @@ NUMBER_ID = 649387
 
 #  make migrations to delete mt_user, at_user, user ->  :remember_token
 #  make migration to delete mt_user, at_user, user ->  :password_digest
+#  make migration to remove { affiliate_id - password_digest => mt_user }
 
 VERSION_NUMBER  = "1.6.1"
 VERSION_UPDATED = "6/29/15"
