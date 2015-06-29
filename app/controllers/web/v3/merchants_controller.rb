@@ -4,7 +4,8 @@ class Web::V3::MerchantsController < MetalCorsController
 
     def index
         # binding.pry
-        merchants = @current_client.contents(:merchants)
+        arg_scope = proc { Provider.all }
+        merchants = @current_client.contents(:merchants, &arg_scope)
         if !merchants.nil? && merchants.count > 0
             providers = merchants
             if providers[0].class == Merchant

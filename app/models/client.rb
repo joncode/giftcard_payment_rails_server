@@ -28,11 +28,7 @@ class Client < ActiveRecord::Base
 		elsif self.partner?
 			cc = ClientContent.includes(:content).where(client_id: nil, partner_id: self.partner_id, partner_type: self.partner_type, content_type: content_symbol.to_s.singularize.capitalize)
 		else
-			if content_symbol == :regions
-				return Region.city
-			else content_symbol == :merchants
-				return Provider.all
-			end
+			return yield(self)
 		end
 		cc.map(&:content)
 	end
