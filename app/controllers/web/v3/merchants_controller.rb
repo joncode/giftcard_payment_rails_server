@@ -3,7 +3,16 @@ class Web::V3::MerchantsController < MetalCorsController
     before_action :authentication_no_token
 
     def index
-        providers = Provider.all
+        # binding.pry
+        merchants = @current_client.contents(:merchants)
+        if !merchants.nil? && merchants.count > 0
+            providers = merchants
+            if providers[0].class == Merchant
+                providers = providers.map(&:provider)
+            end
+        else
+            providers = []
+        end
         success providers.serialize_objs(:web)
         respond
     end

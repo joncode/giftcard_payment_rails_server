@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+include MerchantFactory
 include UserSessionFactory
 
 describe Web::V3::MerchantsController do
@@ -14,6 +15,17 @@ describe Web::V3::MerchantsController do
     end
 
     it "should return all of the providers" do
+        m1 = make_merchant_provider('Make Content one')
+        m2 = make_merchant_provider('Make Content two')
+        m3 = make_merchant_provider('Make Content three')
+        @client.content = m1
+        @client.content = m2
+        20.times do
+            p = FactoryGirl.create(:provider)
+            p.update(city_id: m1.city_id)
+
+        end
+
         get :index, format: :json
         keys    =  [
             "latitude",
