@@ -7,13 +7,19 @@ describe Web::V3::SessionsController do
     describe :create do
 
     	before(:each) do
-			request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
+	        request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
+	        @client = make_partner_client('Client', 'Tester')
+	        request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
     	end
 
         it "should return basic contacts" do
             user                      = FactoryGirl.create :user, { email: "neil@gmail.com", password: "password", password_confirmation: "password", facebook_id: "faceface", twitter: "tweettweet" }
             request_hsh               = { username: "neil@gmail.com", password: "password"}
             post :create, format: :json, data: request_hsh
+
+            st = SessionToken.where(user_id: user.id).last
+            st.client.should  == @client
+            st.partner.should == @client.partner
             rrc(200)
             json["status"].should     == 1
             json["data"].class.should == Hash

@@ -8,6 +8,9 @@ module AffiliateFactory
 			url_name: "#{first}_#{last}".downcase)
 	end
 
-
+	def make_partner_client(first, last)
+		a = make_affiliate(first,last)
+		FactoryGirl.create(:client, partner_id: a.id, partner_type: a.class.to_s)
+	end
 
 end

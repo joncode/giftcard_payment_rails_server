@@ -42,7 +42,9 @@ class Gift < ActiveRecord::Base
     before_create :set_status_and_pay_stat    # must be last before_create
     before_save     { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
     before_save     :extract_phone_digits
-    after_create  :set_affiliate_link
+
+    after_create :set_affiliate_link
+    after_create :set_client_content
 
 #   -------------
 
@@ -62,6 +64,8 @@ class Gift < ActiveRecord::Base
     belongs_to  :receiver,      class_name: User
     belongs_to  :payable,       polymorphic: :true, autosave: :true
     belongs_to  :refund,        polymorphic: :true
+    belongs_to :client
+    belongs_to :partner, polymorphic: true
 
 #   -------------
 
@@ -348,6 +352,12 @@ class Gift < ActiveRecord::Base
 ###############
 
 private
+
+    def set_client_content
+        if self.client && self.partner
+            self.client.content = self
+        end
+    end
 
     def pre_init args={}
         nil

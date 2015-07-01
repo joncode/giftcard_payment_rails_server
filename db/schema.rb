@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150617225808) do
+ActiveRecord::Schema.define(version: 20150627051845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -313,10 +313,31 @@ ActiveRecord::Schema.define(version: 20150617225808) do
     t.string   "cim_token"
     t.string   "zip"
     t.boolean  "active",        default: true
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.string   "origin"
+    t.integer  "client_id"
   end
 
   add_index "cards", ["active"], name: "index_cards_on_active", using: :btree
   add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
+
+  create_table "clients", force: true do |t|
+    t.string   "name"
+    t.string   "url_name"
+    t.string   "download_url"
+    t.string   "application_key"
+    t.string   "detail"
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.integer  "platform",        default: 0
+    t.boolean  "active",          default: true
+    t.integer  "ecosystem",       default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "clients", ["application_key", "active"], name: "index_clients_on_application_key_and_active", using: :btree
 
   create_table "contacts", force: true do |t|
     t.integer  "brand_id"
@@ -332,6 +353,20 @@ ActiveRecord::Schema.define(version: 20150617225808) do
   end
 
   add_index "contacts", ["brand_id"], name: "index_contacts_on_brand_id", using: :btree
+
+  create_table "contents", force: true do |t|
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.integer  "client_id"
+    t.integer  "content_id"
+    t.string   "content_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "contents", ["client_id", "content_id", "content_type"], name: "index_contents_on_client_id_and_content_id_and_content_type", using: :btree
+  add_index "contents", ["client_id", "content_type"], name: "index_contents_on_client_id_and_content_type", using: :btree
+  add_index "contents", ["partner_id", "partner_type", "content_type"], name: "index_contents_on_partner_id_and_partner_type_and_content_type", using: :btree
 
   create_table "credit_accounts", force: true do |t|
     t.string   "owner"
@@ -491,6 +526,10 @@ ActiveRecord::Schema.define(version: 20150617225808) do
     t.integer  "token"
     t.integer  "balance"
     t.string   "origin"
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.integer  "client_id"
+    t.integer  "rec_client_id"
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
@@ -1048,6 +1087,12 @@ ActiveRecord::Schema.define(version: 20150617225808) do
     t.string   "push"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "origin"
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.integer  "client_id"
+    t.datetime "destroyed_at"
+    t.integer  "count",        default: 0
   end
 
   add_index "session_tokens", ["token"], name: "index_session_tokens_on_token", using: :btree
@@ -1169,6 +1214,9 @@ ActiveRecord::Schema.define(version: 20150617225808) do
     t.string   "cim_profile"
     t.tsvector "ftmeta"
     t.string   "affiliate_url_name"
+    t.integer  "partner_id"
+    t.string   "partner_type"
+    t.integer  "client_id"
   end
 
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree

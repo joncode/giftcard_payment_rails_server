@@ -7,16 +7,68 @@ class MetalCorsController < MetalController
 
 protected
 
+    def authentication_no_token
+        successful = authenticate_client
+        successful = authenticate_general if successful
+        attach_token_to_user if successful
+    end
+
+    def authentication_token_required
+        successful = authenticate_client
+        successful = authenticate_user  if successful
+        confirm_client_owns_token if successful
+    end
+
+    def confirm_client_owns_token
+        sto = @current_user.session_token_obj
+        unless sto.client_id == @current_client.id && sto.partner_id == @current_partner.id && sto.partner_type == @current_partner.class.to_s
+            puts "----  DENIED SESSION TOKEN NOT CLIENT TOKEN ---- (500 Internal)"
+            head :unauthorized
+        end
+
+    end
+
+    def attach_token_to_user
+        if token = request.headers["HTTP_X_AUTH_TOKEN"]
+            if (WWW_TOKEN != token)
+                @current_user = SessionToken.app_authenticate(token)
+            end
+        end
+    end
+
+    def authenticate_client
+        @current_client = nil
+        @current_partner = nil
+        # puts "\n HTTP_X_APPLICATION_KEY = #{request.headers['HTTP_X_APPLICATION_KEY']}"
+        if app_key = request.headers['HTTP_X_APPLICATION_KEY']
+            # binding.pry
+            if @current_client = Client.includes(:partner).find_by(application_key: app_key)
+                @current_partner = @current_client.partner
+            end
+        end
+
+        if @current_client && @current_partner
+            puts "Web  -------------   #{@current_client.name} | #{@current_partner.name}  -------------"
+            return true
+        else
+            head :unauthorized
+            return false
+        end
+    end
+
     def authenticate_user
         if token = request.headers["HTTP_X_AUTH_TOKEN"]
-            @current_user = User.app_authenticate(token)
+            @current_user = SessionToken.app_authenticate(token)
             if @current_user
                 puts "Web  -------------   #{@current_user.name}   -----------------------"
+                return true
             else
                 head :unauthorized
+                return false
             end
         else
             head :unauthorized
+            return false
         end
     end
 
