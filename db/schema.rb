@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150627051845) do
+ActiveRecord::Schema.define(version: 20150701035858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20150627051845) do
     t.string   "company"
     t.string   "website_url"
     t.boolean  "active",             default: true
+    t.integer  "bank_id"
   end
 
   add_index "affiliates", ["url_name"], name: "index_affiliates_on_url_name", using: :btree
@@ -198,6 +199,8 @@ ActiveRecord::Schema.define(version: 20150627051845) do
     t.string   "public_aba"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "owner_id"
+    t.string   "owner_type"
   end
 
   add_index "banks", ["merchant_id"], name: "index_banks_on_merchant_id", using: :btree
@@ -700,6 +703,7 @@ ActiveRecord::Schema.define(version: 20150627051845) do
     t.string   "signup_name"
     t.integer  "city_id"
     t.string   "region_name"
+    t.integer  "bank_id"
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
