@@ -79,9 +79,7 @@ module GiftLifecycle
     end
 
     def pos_redeem(ticket_num, pos_merchant_id, tender_type_id)
-        return nil if ticket_num.nil?
-        return nil if pos_merchant_id.nil?
-        return nil if tender_type_id.nil?
+        return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}  if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
 
         pos_hsh = { "ticket_num" => ticket_num,
                     "gift_card_id" => self.obscured_id,
