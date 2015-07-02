@@ -24,7 +24,11 @@ class Bank < ActiveRecord::Base
 
 #   -------------
 
-    belongs_to :merchant
+    has_many :merchants
+    has_many :affiliates
+
+    belongs_to :owner, polymorphic: true
+
 
     def acct_type=(account_type)
         if account_type == "checking"

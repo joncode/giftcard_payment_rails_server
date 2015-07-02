@@ -46,6 +46,9 @@ private
 		when "ph"
 			new_args["receiver_phone"] = args["rec_net_id"]
 		end
+		new_args['client_id'] = args['client_id']
+		new_args['partner_id'] = args['partner_id']
+		new_args['partner_type'] = args['partner_type']
 		new_args
 	end
 

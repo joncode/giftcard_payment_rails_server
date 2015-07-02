@@ -32,6 +32,8 @@ class Card < ActiveRecord::Base
 	has_many   :gifts, 	:through => :sales
 	has_many   :orders,	:through => :sales
 	belongs_to :user
+	belongs_to :client
+	belongs_to :partner, polymorphic: true
 
 #   -------------
 

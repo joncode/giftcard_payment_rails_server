@@ -11,6 +11,10 @@ class Affiliate < ActiveRecord::Base
     has_many :invites,  as: :company
     has_many :mt_users, through: :invites
 
+    has_many :clients, as: :partner
+
+    belongs_to :bank
+
 #   -------------
 
 	def create_affiliation(target_type)

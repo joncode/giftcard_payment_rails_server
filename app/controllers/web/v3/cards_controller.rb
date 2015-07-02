@@ -2,7 +2,7 @@ class Web::V3::CardsController < MetalCorsController
 
     include CimProfile
 
-    before_action :authenticate_user
+    before_action :authentication_token_required
 
     rescue_from JSON::ParserError, :with => :bad_request
 
@@ -15,6 +15,10 @@ class Web::V3::CardsController < MetalCorsController
         create_with = card_params
         create_with["user_id"] = @current_user.id
         card = Card.create_card_from_hash create_with
+
+        card.client = @current_client
+        card.partner = @current_partner
+        card.origin = "#{@current_partner.id}|#{@current_partner.name}|#{@current_client.id}|#{@current_client.name}"
 
         if card.save
             success card.token_serialize
@@ -38,17 +42,17 @@ class Web::V3::CardsController < MetalCorsController
     #     respond(status)
     # end
 
-    # def destroy
-    #     card = @current_user.cards.where(id: params[:id]).first
-    #     if card
-    #         destroy_card(card, @current_user)   # cim_profile concern
-    #         success(card.id)
-    #     else
-    #         status = :not_found
-    #     end
+    def destroy
+        card = @current_user.cards.where(id: params[:id]).first
+        if card
+            destroy_card(card, @current_user)   # cim_profile concern
+            success(card.id)
+        else
+            status = :not_found
+        end
 
-    #     respond(status)
-    # end
+        respond(status)
+    end
 
 private
 

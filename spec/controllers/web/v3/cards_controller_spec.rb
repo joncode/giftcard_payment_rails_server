@@ -1,23 +1,28 @@
 require 'spec_helper'
 
 include UserSessionFactory
+include AffiliateFactory
 
 describe Web::V3::CardsController do
 
     before(:each) do
-        @user = create_user_with_token "USER_TOKEN"
+        @client = make_partner_client('Client', 'Tester')
+        @user = create_user_with_token "USER_TOKEN", nil, @client
+        request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
+        request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
     end
 
     describe :index do
         it_should_behave_like("client-token authenticated", :get, :index)
 
         it "should return a list of cards for the user" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             FactoryGirl.create(:card, user_id: @user.id)
             FactoryGirl.create(:amex, user_id: @user.id)
             FactoryGirl.create(:visa, user_id: @user.id)
             FactoryGirl.create(:mastercard, user_id: @user.id)
 
+            # binding.pry
             get :index, format: :json
             rrc(200)
             json["status"].should == 1
@@ -28,7 +33,6 @@ describe Web::V3::CardsController do
         end
 
         it "should return an empty array if user has no cards" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
             get :index, format: :json
             rrc(200)
             json["status"].should == 1
@@ -41,7 +45,7 @@ describe Web::V3::CardsController do
         it_should_behave_like("client-token authenticated", :post, :create)
 
         it "should accept hash of require fields and return card ID" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             params =  {"month"=>"02", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
 
             post :create, format: :json, data: params
@@ -50,10 +54,13 @@ describe Web::V3::CardsController do
             rrc(200)
             json["status"].should == 1
             json["data"].should == { "card_id" => card.id, "nickname" => card.nickname, "last_four" => card.last_four }
+
+            card.client.should == @client
+            card.partner.should == @client.partner
         end
 
         it "should return correct error message" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             params =  {"month"=>"02", "number"=>"4417121029961508", "name"=>"Hiromi Tsuboi", "year"=>"2000", "csv"=>"910", "nickname"=>"Dango"}
 
             post :create, format: :json, data: params
@@ -70,7 +77,7 @@ describe Web::V3::CardsController do
         end
 
         it "should not save incomplete card info" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             params = {"month"=>"02", "number"=>"4417121029961508", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
 
             post :create, format: :json, data: params
@@ -79,7 +86,7 @@ describe Web::V3::CardsController do
         end
 
         it "should reject hash with fields not accept" do
-            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+
             params = {"month"=>"02", "number"=>"4417121029961508", "fake" => "FAKE", "year"=>"2016", "csv"=>"910", "nickname"=>"Dango"}
 
             post :create, format: :json, data: params
@@ -93,7 +100,7 @@ describe Web::V3::CardsController do
     #     it_should_behave_like("client-token authenticated", :post, :create)
 
     #     it "should not save incomplete card info" do
-    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #
     #         params = {"token"=>"25162732", "nickname"=>"Dango", "brand" => "Amex"}
     #         post :create_token, format: :json, data: params
     #         rrc(400)
@@ -104,7 +111,7 @@ describe Web::V3::CardsController do
     #     end
 
     #     it "should not save incomplete card info" do
-    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #
     #         params = {"token"=>"25162732", "last_four"=>"7483", "brand" => "Amex"}
     #         post :create_token, format: :json, data: params
     #         rrc(400)
@@ -115,7 +122,7 @@ describe Web::V3::CardsController do
     #     end
 
     #     it "should not save incomplete card info" do
-    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #
     #         params = {"nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
     #         post :create_token, format: :json, data: params
     #         rrc(400)
@@ -126,7 +133,7 @@ describe Web::V3::CardsController do
     #     end
 
     #     it "should not save incomplete card info" do
-    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #
     #         params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483"}
     #         post :create_token, format: :json, data: params
     #         rrc(400)
@@ -137,7 +144,7 @@ describe Web::V3::CardsController do
     #     end
 
     #     it "should accept hash of require fields and return card ID" do
-    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #
     #         params = {"token"=>"25162732", "nickname"=>"Dango", "last_four"=>"7483", "brand" => "Amex"}
     #         post :create_token, format: :json, data: params
 
@@ -155,7 +162,7 @@ describe Web::V3::CardsController do
     #     let(:card) { FactoryGirl.create(:card, user_id: @user.id)  }
 
     #     it "should return card id in delete key on success" do
-    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #
     #         delete :destroy, format: :json, id: card.id
     #         rrc(200)
     #         json["status"].should == 1
@@ -163,14 +170,14 @@ describe Web::V3::CardsController do
     #     end
 
     #     it "should delete the card from the database" do
-    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #
     #         delete :destroy, format: :json, id: card.id
     #         card = Card.where(user_id: @user.id).count
     #         card.should == 0
     #     end
 
     #     it "should return 404 with no ID or wrong ID" do
-    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #
     #         delete :destroy, format: :json, id: 928312
     #         rrc(404)
     #     end
@@ -182,7 +189,7 @@ describe Web::V3::CardsController do
     #                       :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'text/xml', 'User-Agent'=>'Ruby'}).
     #                  to_return(:status => 200, :body => "", :headers => {})
     #         card.update(cim_token: "72534234")
-    #         request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+    #
     #         delete :destroy, format: :json, id: card.id
     #         rrc(200)
 

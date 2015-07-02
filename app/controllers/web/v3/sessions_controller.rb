@@ -1,6 +1,6 @@
 class Web::V3::SessionsController < MetalCorsController
 
-    before_action :authenticate_general
+    before_action :authentication_no_token
 
     def create
         login_params    = params["data"]
@@ -13,7 +13,8 @@ class Web::V3::SessionsController < MetalCorsController
 
         if user
             if user.not_suspended?
-                user.session_token_obj =  SessionToken.create_token_obj(user, 'www', nil)
+                user.session_token_obj =   SessionToken.create_token_obj(user, 'www', nil, @current_client, @current_partner)
+
                 success user.login_web_serialize
 
             else

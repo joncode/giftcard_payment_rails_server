@@ -1,12 +1,16 @@
 class Web::V3::UsersController < MetalCorsController
     include Email
-    before_action :authenticate_general, only: [:create, :reset_password]
-    before_action :authenticate_user , except: [:create, :reset_password]
+    before_action :authentication_no_token, only: [:create, :reset_password]
+    before_action :authentication_token_required , except: [:create, :reset_password]
 
     def create
 		user = User.new(create_user_params)
+        user.client = @current_client
+        user.partner = @current_partner
         if user.save
-            user.session_token_obj =  SessionToken.create_token_obj(user, 'www', nil)
+            user.session_token_obj =  SessionToken.create_token_obj(user, 'www', nil, @current_client, @current_partner)
+            # binding.pry
+            @current_client.content = user
             success user.login_client_serialize
         else
             fail_web fail_web_payload("not_created_user", user.errors)

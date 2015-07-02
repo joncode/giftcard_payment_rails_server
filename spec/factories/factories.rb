@@ -1,5 +1,25 @@
 FactoryGirl.define do
 
+    factory :client do
+        name               "Cool IOS"
+        url_name           'cool_ios_client'
+        download_url       'app_store_url'
+        partner_type   'Affiliate'
+        partner_id      100
+        platform         0
+        ecosystem        2
+    end
+
+    factory :region do
+        name        "Las Vegas"
+        detail       "Sin City"
+        state_id     nil
+        city_id      nil
+        photo        ""
+        token       "las_vegas"
+
+    end
+
     factory :invite do
         mt_user_id  100
         company_id    100

@@ -11,7 +11,9 @@ class Merchant < ActiveRecord::Base
     has_many :registers,    as: :partner
     has_many :invites,  as: :company
     has_many :mt_users, through: :invites
+
     belongs_to :region
+    belongs_to :bank
 
 #   -------------
 
