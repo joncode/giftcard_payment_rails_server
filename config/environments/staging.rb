@@ -11,7 +11,7 @@ Drinkboard::Application.configure do
   config.action_mailer.default_url_options = {:host => "drinkboard.herokuapp.com"}
   config.action_mailer.delivery_method = :smtp
   # Disable Rails's static asset server (Apache or nginx will already do this)
-  config.serve_static_assets = false
+  config.serve_static_files = false
 
   # Compress JavaScripts and CSS
   config.assets.compress = true

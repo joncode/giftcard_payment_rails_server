@@ -1,6 +1,5 @@
 Drinkboard::Application.routes.draw do
-  devise_for :at_users, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)
+
   root  to: 'react#index'
   match '/facebook/checkin', to: "invite#facebook_checkin", via: :post
 
