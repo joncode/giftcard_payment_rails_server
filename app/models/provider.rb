@@ -63,9 +63,10 @@ class Provider < ActiveRecord::Base
 #	-------------
 
 	def serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :zinger, :region_id, :region_name,  :city_id]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :zinger, :region_id, :region_name,  :city_id]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
+		prov_hash['city']		  = self.city_name
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live_int
 		prov_hash["desc"]		  = self.description
@@ -73,9 +74,10 @@ class Provider < ActiveRecord::Base
 	end
 
 	def client_serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :city, :latitude, :longitude, :region_id, :region_name,  :city_id]
+		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["photo"]        = self.short_image_url
+		prov_hash['city']		  = self.city_name
 		prov_hash["address"]      = self.complete_address
 		prov_hash["live"]         = self.live_int.to_i
 		return remove_nils(prov_hash)
@@ -84,9 +86,10 @@ class Provider < ActiveRecord::Base
 	alias :to_hash :serialize
 
 	def admt_serialize
-		prov_hash  = self.serializable_hash only: [:name, :address, :state, :city, :brand_id, :building_id ]
+		prov_hash  = self.serializable_hash only: [:name, :address, :state, :brand_id, :building_id ]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["merchant_id"]  = self.merchant_id
+		prov_hash['city']		  = self.city_name
 		prov_hash["mode"]         = self.mode
 		return prov_hash
 	end

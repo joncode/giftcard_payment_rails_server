@@ -56,7 +56,6 @@ class Accountant
 			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["aff_loc"])
 
 			register    = create_debt(gift, loc_affiliation.affiliate, "aff_loc")
-			register.partner     = loc_affiliation.affiliate
 			register.affiliation = loc_affiliation
 			register.save
 		end
@@ -72,7 +71,6 @@ class Accountant
 			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["aff_user"])
 
 			register    = create_debt(gift, user_affiliation.affiliate, "aff_user")
-			register.partner     = user_affiliation.affiliate
 			register.affiliation = user_affiliation
 			register.save
 		end
@@ -87,7 +85,6 @@ class Accountant
             lp.gifts += 1
             gift.landing_pages << lp
             register  = create_debt(gift, lp.affiliate, "aff_link")
-            register.partner = lp.affiliate
 			register.save
             gift.affiliates << lp.affiliate
             lp.save

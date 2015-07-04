@@ -28,6 +28,7 @@ describe "Affiliate Feature" do
 	describe "gifts" do
 
 		it "should associate a gift with affiliate via link" do
+			Gift.delete_all
 			a1	 = make_affiliate("Afff", "One")
 			a1.gifts.count.should == 0
 			lp	 = FactoryGirl.create(:landing_page, link: "itson.me/san-diego?aid=twister_ice_tea", clicks: 2, affiliate_id: a1.id)
@@ -49,10 +50,12 @@ describe "Affiliate Feature" do
             gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             gift_hsh["link"] = "itson.me/san-diego?aid=twister_ice_tea"
 
+
 			gift     = GiftSale.create(gift_hsh)
 			gift.persisted?.should be_true
 			db_gift  = Gift.find gift.id
 			a1.reload
+			binding.pry
 			a1.gifts.count.should	 == 1
 			a1.gifts.first.should	 == db_gift
 			lp.reload.gifts.should	 == 1

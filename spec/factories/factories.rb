@@ -61,7 +61,7 @@ FactoryGirl.define do
             end
             phone
         end
-        city_name        "New York"
+        city        "New York"
         address     "123 happy st"
         zip         "11211"
         state       "NY"

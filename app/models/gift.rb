@@ -89,6 +89,7 @@ class Gift < ActiveRecord::Base
 
     def link= link
         @link = link
+        self.origin = link
     end
 
     def obscured_id

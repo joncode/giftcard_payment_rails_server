@@ -164,7 +164,6 @@ describe AppController do
             first_name: "Ray",
             last_name:  "Davies",
             email: "ray@davies.com",
-            phone: "5877437859",
             birthday: "10/10/1971",
             sex: "female",
             zip: "85733",
@@ -267,13 +266,13 @@ describe AppController do
 
         context "should return a list of active providers outside city but in region" do
             it "using region id" do
-                p = FactoryGirl.build(:provider, name: "Abe's", city: "San Diego", region_id: 3)
+                p = FactoryGirl.build(:provider, name: "Abe's", city_name: "San Diego", region_id: 3)
                 p.city_id = p.region_id
                 p.save
-                p = FactoryGirl.build(:provider, name: "Bob's", city: "La Jolla", region_id: 3)
+                p = FactoryGirl.build(:provider, name: "Bob's", city_name: "La Jolla", region_id: 3)
                 p.city_id = p.region_id
                 p.save
-                p = FactoryGirl.build(:provider, name: "Cam's", city: "New York", region_id: 2)
+                p = FactoryGirl.build(:provider, name: "Cam's", city_name: "New York", region_id: 2)
                 p.city_id = p.region_id
                 p.save
                 post :providers, format: :json, token: user.remember_token, city: "3"
@@ -286,19 +285,21 @@ describe AppController do
             end
 
             it "using region name" do
-                p = FactoryGirl.create(:provider, name: "Abe's", city: "San Diego", region_id: 3)
+                r = Region.where(name: 'San Diego').first
+                p = FactoryGirl.create(:provider, name: "Abe's", city_name: "San Diego", region_id: r.id)
                 p.update(city_id: p.region_id)
-                p = FactoryGirl.create(:provider, name: "Bob's", city: "La Jolla", region_id: 3)
+                r = Region.where(name: 'San Francisco').first
+                p = FactoryGirl.create(:provider, name: "Bob's", city_name: "San Francisco", region_id: r.id)
                 p.update(city_id: p.region_id)
-                p = FactoryGirl.create(:provider, name: "Cam's", city: "New York", region_id: 2)
+                r = Region.where(name: 'New York').first
+                p = FactoryGirl.create(:provider, name: "Cam's", city_name: "New York", region_id: r.id)
                 p.update(city_id: p.region_id)
                 post :providers, format: :json, token: user.remember_token, city: "San Diego"
                 rrc_old(200)
                 ary = json
                 ary.class.should == Array
-                ary.count.should == 2
+                ary.count.should == 1
                 ary[0]["name"].should == ("Abe's")
-                ary[1]["name"].should == ("Bob's")
             end
         end
     end

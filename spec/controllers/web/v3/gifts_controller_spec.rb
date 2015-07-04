@@ -63,14 +63,15 @@ describe Web::V3::GiftsController do
         end
 
         it "should create an affiliate link payment BUG FIX" do
-            a = FactoryGirl.create(:affiliate, url_name: "stewart" )
+            a = FactoryGirl.create(:affiliate, url_name: "stewarttest_landing_page" )
             p = FactoryGirl.create(:provider)
             lp = FactoryGirl.create(:landing_page, link: "qa.itson.me/shop/las-vegas?aid=stewart")
 
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
-            gc = {"data"=>{"items"=>[{"price"=>"50", "item_name"=>"$50", "item_id"=>389, "quantity"=>2}], "service"=>"5", "value"=>"100", "loc_id"=>p.id, "pay_id"=>@card.id, "rec_name"=>"jongh", "rec_net"=>"em", "rec_net_id"=>"m80dubstation@gmail.com", "msg"=>"testing the affiliate", "link"=>"qa.itson.me/shop/las-vegas?aid=stewart"}}
+            gc = {"data"=>{"items"=>[{"price"=>"50", "item_name"=>"$50", "item_id"=>389, "quantity"=>2}], "service"=>"5", "value"=>"100", "loc_id"=>p.id, "pay_id"=>@card.id, "rec_name"=>"jongh", "rec_net"=>"em", "rec_net_id"=>"m80dubstation@gmail.com", "msg"=>"testing the affiliate", "link"=>"qa.itson.me/shop/las-vegas?aid=stewarttest_landing_page"}}
             gift_hsh = gc["data"]
+
             post :create, format: :json, data: gift_hsh
             rrc(200)
             g = Gift.last

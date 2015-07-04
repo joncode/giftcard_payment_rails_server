@@ -7,7 +7,11 @@ class AffiliateGift < ActiveRecord::Base
  	belongs_to :affiliate
  	belongs_to :landing_page
 
+
 #   -------------
+
+
+
 end
 
 # == Schema Information
