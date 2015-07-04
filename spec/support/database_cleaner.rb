@@ -14,6 +14,9 @@ RSpec.configure do |config|
 
   config.before(:each) do
     DatabaseCleaner.start
+    if Region.city.nil? || Region.city.count == 0
+        load "#{Rails.root}/db/seeds.rb"
+    end
   end
 
   config.after(:each) do

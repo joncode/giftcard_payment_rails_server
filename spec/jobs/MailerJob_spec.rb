@@ -39,8 +39,9 @@ describe MailerJob do
     end
 
     describe :reset_password do
+
         it "should call mandrill with send_template" do
-            body             = text_for_user_reset_password(@receiver)
+            body             = text_for_user_reset_password(@receiver, 'ifq083f08qh3f9qg32')
             template_name    = "user"
             message          = {
                 "subject"     => "QA - Reset password request",

@@ -59,6 +59,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'test-unit'
   gem "launchy"
   gem 'webmock'
   gem 'resque_spec'

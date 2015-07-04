@@ -67,4 +67,4 @@ module ApiRequest
   end
 end
 
-RSpec.configuration.include ApiRequest, example_group: {file_path: RSpec.configuration.escaped_path(%w[spec features])}
+# RSpec.configuration.include ApiRequest, example_group: {file_path: RSpec.configuration.escaped_path(%w[spec features])}

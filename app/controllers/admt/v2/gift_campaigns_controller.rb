@@ -7,10 +7,10 @@ class Admt::V2::GiftCampaignsController < JsonController
 		return nil if collection_bad_request
 		return nil if data_not_hash?(gift_params)
 		c_item_id = gift_params[:payable_id]
-
 		if CampaignItem.exists?(c_item_id)
+			# binding.pry
 			gift = GiftCampaign.create(gift_params)
-			if gift.id.present?
+			if gift.persisted?
 				success gift.promo_serialize
 			else
 				# status = :bad_request

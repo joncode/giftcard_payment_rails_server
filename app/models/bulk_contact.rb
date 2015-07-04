@@ -4,7 +4,7 @@ class BulkContact < ActiveRecord::Base
 
 #   -------------
 
-    def self.upload(data: data, user_id: user_id)
+    def self.upload(data: data_in, user_id: user_id_in)
         start_time_logger = Time.now
         hsh_str = data.to_json
         if !Rails.env.production?

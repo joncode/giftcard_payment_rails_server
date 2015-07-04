@@ -2,17 +2,17 @@ module HttpModel
     extend ActiveSupport::Concern
 
 
-        def get(token: token, route: route)
+        def get(token: token_in, route: route_in)
             return fail_hsh unless (token && route)
             server_request(token, route, nil, "get")
         end
 
-        def post(token: token, route: route, params: nil)
+        def post(token: token_in, route: route_in, params: nil)
             return fail_hsh unless (token && route)
             server_request(token, route, params, "post")
         end
 
-        def put(token: token, route: route, params: nil)
+        def put(token: token_in, route: route_in, params: nil)
             return fail_hsh unless (token && route)
             server_request(token, route, params, "put")
         end

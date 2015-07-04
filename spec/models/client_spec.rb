@@ -102,6 +102,7 @@ describe Client do
         end
 
         it "should allow clients to have same content with different :client_id" do
+            ClientContent.delete_all
             client = FactoryGirl.create(:client)
             a = FactoryGirl.create(:affiliate)
             client.partner = a
@@ -119,7 +120,7 @@ describe Client do
             client.contents(:merchants).count.should == 0
             client.content = m
             client.contents(:merchants).count.should == 1
-            ClientContent.count.should == 2
+            ClientContent.where(content_type: 'Merchant').count.should == 2
         end
     end
 

@@ -23,9 +23,9 @@ describe PointsForNewUserJob do
             user1 = FactoryGirl.create(:user)
             user2 = FactoryGirl.create(:user)
             user3 = FactoryGirl.create(:user)
-            gift1 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", receiver_name: "fab fb test", giver_id: user1.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
-            gift2 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", receiver_name: "fab fb test", giver_id: user2.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
-            gift3 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", receiver_name: "fab fb test", giver_id: user3.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
+            gift1 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", giver_id: user1.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
+            gift2 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", giver_id: user2.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
+            gift3 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", giver_id: user3.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
 
             gift1.update(created_at: 1.month.ago)
             gift2.update(created_at: 1.week.ago)
@@ -49,8 +49,8 @@ describe PointsForNewUserJob do
             user1 = FactoryGirl.create(:user)
             user2 = FactoryGirl.create(:user)
             user3 = FactoryGirl.create(:user)
-            gift1 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", receiver_name: "fab fb test", giver_id: user1.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
-            gift2 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", receiver_name: "fab fb test", giver_id: user2.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
+            gift1 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", giver_id: user1.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
+            gift2 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", giver_id: user2.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
 
             gift1.update(created_at: 1.month.ago)
             gift2.update(created_at: 1.week.ago)
@@ -64,7 +64,7 @@ describe PointsForNewUserJob do
             ups.count.should == 2
             ups.first.points.should == 5000
 
-            gift3 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, twitter: "646464466", receiver_name: "fab fb test", giver_id: user3.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
+            gift3 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, twitter: "646464466", giver_id: user3.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
             # PointsForNewUserJob.perform([gift1, gift2, gift3])
             gift3.update(created_at: 1.day.ago)
             new_user.update(twitter:"646464466")
@@ -84,9 +84,9 @@ describe PointsForNewUserJob do
             user1 = FactoryGirl.create(:user)
             user2 = FactoryGirl.create(:user)
             user3 = FactoryGirl.create(:user)
-            gift1 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", receiver_name: "fab fb test", giver_id: user1.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
-            gift2 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", receiver_name: "fab fb test", giver_id: user2.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
-            gift3 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", receiver_name: "fab fb test", giver_id: user3.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
+            gift1 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", giver_id: user1.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
+            gift2 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", giver_id: user2.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
+            gift3 = FactoryGirl.create :gift, giver_type: "User", receiver_name: "tet", receiver_id: nil, facebook_id: "646464664466", giver_id: user3.id, payable_type: "Sale",  provider_id: @provider.id, value: "100", cat: 300
 
             gift1.update(created_at: (Time.now.utc + 1.month ))
             gift2.update(created_at: (Time.now.utc + 1.week ))

@@ -1,6 +1,6 @@
 class BulkContactProcessor
 
-    def self.process(contacts: contacts, user_id: user_id)
+    def self.process(contacts: contacts_in, user_id: user_id_in)
         start_time_logger = Time.now
         new_relationship = false
         # receive the normalized data
