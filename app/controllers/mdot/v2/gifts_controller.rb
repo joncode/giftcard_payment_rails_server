@@ -179,6 +179,7 @@ class Mdot::V2::GiftsController < JsonController
         return nil if data_not_hash?(gift_hsh)
         return nil if data_not_array?(shoppingCart)
 
+
         gift_hsh = gift_params
         if promotional_gift_params? gift_hsh
             gift_response = "You cannot gift to the #{gift_hsh["receiver_name"]} account"
@@ -189,6 +190,7 @@ class Mdot::V2::GiftsController < JsonController
             gift_hsh["origin"] = request.headers['User-Agent']
             gift_response = GiftSale.create(gift_hsh)
         end
+
 
         if gift_response.kind_of?(Gift)
             if gift_response.id

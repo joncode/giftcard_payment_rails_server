@@ -31,7 +31,9 @@ class GiftSale < Gift
 
 private
 
+
     def pre_init args={}
+
         args["unique_id"] = unique_cc_id(args["receiver_name"], args["provider_id"])
         card                           = args["card"]
         args["amount"]                 = (args["value"].to_f + set_service_f(args)).to_s
@@ -50,6 +52,7 @@ private
             puts "\n\n  GIFT INVALID SUBMITTED 500 Internal \n\n args.inspect \n\n"
             validateGift
         end
+
     end
 
     def set_service_f(args)

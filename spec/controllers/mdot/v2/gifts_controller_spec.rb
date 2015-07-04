@@ -988,12 +988,13 @@ describe Mdot::V2::GiftsController do
 
         end
 
-        it "should set the service when it receives credit card gift and servie == '0'" do
+        it "should set the service when it receives credit card gift and service == '0'" do
             provider = FactoryGirl.create(:provider)
             bug_request =  {"data"=>{"message"=>"I love love love YOU!", "giver_id"=>@user.id.to_s, "value"=>"12.00", "credit_card"=>@card.id, "service"=>"0", "provider_id"=>provider.id.to_s, "receiver_email"=>"camille@sharomi.gmail.com", "receiver_name"=>"Camille Sharoni"}, "shoppingCart"=>[{"item_name"=>"Bee Love", "price"=>"12", "item_id"=>"615", "quantity"=>"1"}]}
             request.env["HTTP_TKN"] = "USER_TOKEN"
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
+
             post :create, format: :json, data: bug_request["data"] , shoppingCart: bug_request["shoppingCart"]
             json["status"].should == 1
             gift = Gift.last

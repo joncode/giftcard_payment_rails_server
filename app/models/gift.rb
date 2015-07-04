@@ -34,14 +34,14 @@ class Gift < ActiveRecord::Base
 #   -------------
 
     before_create :find_receiver
-    before_create :add_giver_name,      :if => :no_giver_name?
-    before_create :add_provider_name,   :if => :no_provider_name?
-    before_create :regift,              :if => :regift?
+    before_create :add_giver_name,      if: :no_giver_name?
+    before_create :add_provider_name,   if: :no_provider_name?
+    before_create :regift,              if: :regift?
     before_create :build_gift_items
     before_create :set_balance
     before_create :set_status_and_pay_stat    # must be last before_create
     before_save     { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
-    before_save     :extract_phone_digits
+    before_save   :extract_phone_digits
 
     after_create :set_affiliate_link
     after_create :set_client_content
@@ -97,6 +97,7 @@ class Gift < ActiveRecord::Base
 
     def initialize args={}
         pre_init(args)
+        args['shoppingCart'] = stringify_shopping_cart_if_array(args['shoppingCart'])
         super
     end
 
@@ -336,6 +337,14 @@ class Gift < ActiveRecord::Base
             end
         else
             nil
+        end
+    end
+
+    def stringify_shopping_cart_if_array shoppingCart
+        if shoppingCart.kind_of?(Array)
+            shoppingCart.to_json
+        else
+            shoppingCart
         end
     end
 
