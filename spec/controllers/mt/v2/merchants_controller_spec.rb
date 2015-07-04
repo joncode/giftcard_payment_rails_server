@@ -18,13 +18,13 @@ describe Mt::V2::MerchantsController do
         end
 
         it "should create new merchant" do
-            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "r_sys" => 1, "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "region_id" => 1, "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon", "pos_merchant_id" => 12345}
+            new_provider_hsh = {'city_id' => 2,"name"=>"Yonaka Modern Japanese", "r_sys" => 1, "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "region_id" => 1, "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon", "pos_merchant_id" => 12345}
             post :create, format: :json, data: new_provider_hsh
             provider = Provider.last
             provider.name.should        == new_provider_hsh["name"]
             provider.description.should == new_provider_hsh["description"]
             provider.zinger.should      == new_provider_hsh["zinger"]
-            provider.city.should        == new_provider_hsh["city"]
+            provider.city_name.should        == new_provider_hsh["city"]
             provider.state.should       == new_provider_hsh["state"]
             provider.zip.should         == new_provider_hsh["zip"]
             provider.address.should     == new_provider_hsh["address"]
@@ -40,7 +40,7 @@ describe Mt::V2::MerchantsController do
 
 
         it "should create new menu_string" do
-            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "region_id" => "1", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
+            new_provider_hsh = {'city_id' => 2,"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "region_id" => "1", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
             new_provider_hsh['menu'] = "[{\"section\":\"Gift Vouchers\",\"items\":[{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"10\",\"item_id\":154,\"item_name\":\"$10\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"25\",\"item_id\":155,\"item_name\":\"$25\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"50\",\"item_id\":156,\"item_name\":\"$50\"}]}]"
             post :create, format: :json, data: new_provider_hsh
             provider                 = Provider.last
@@ -54,7 +54,7 @@ describe Mt::V2::MerchantsController do
         end
 
         it "should save latitude and longitude" do
-            new_provider_hsh = {"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "region_id" => "1", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
+            new_provider_hsh = {'city_id' => 2,"name"=>"Yonaka Modern Japanese", "zinger"=>"A Perfect Bite To Inspire Conversation", "description"=>"We offer a Japanese Tapas style dining with a unique experience through Modern Japanese Cuisine. Yonaka provides a fresh and relaxing atmosphere with highly attentive and informative staff. ", "address"=>"4983 W Flamingo Road, Suite A", "city"=>"Las Vegas", "state"=>"NV", "zip"=>"89103", "region_id" => "1", "phone"=>"7026858358", "merchant_id"=>34, "token"=>"_96WweqJfzLEZNbrtVREiw", "image"=>"blank_photo_profile.png", "mode"=>"coming_soon"}
             new_provider_hsh["latitude"]   = 43.23412141
             new_provider_hsh["longitude"]  = -72.123124124
             post :create, format: :json, data: new_provider_hsh

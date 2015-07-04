@@ -41,6 +41,16 @@ class Provider < ActiveRecord::Base
 
 #	-------------
 
+	def city
+		self.city_name
+	end
+
+	def city= name
+		self.city_name = name
+	end
+
+#	-------------
+
 	def self.get_all
 		unscoped.order("name ASC")
 	end

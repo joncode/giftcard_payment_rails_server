@@ -37,6 +37,16 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    def city
+        self.city_name
+    end
+
+    def city= name
+        self.city_name = name
+    end
+
+#   -------------
+
     def get_logo
         if photo_l.present?
             photo_l

@@ -65,7 +65,7 @@ class JsonController < ActionController::Base
                 end
                 gift_obj["provider_photo"] = provider.get_photo
                 gift_obj["provider_phone"] = provider.phone
-                gift_obj["city"]           = provider.city
+                gift_obj["city"]           = provider.city_name
                 gift_obj["sales_tax"]      = provider.sales_tax
                 gift_obj["live"]           = provider.live_int
                 gift_obj["latitude"]       = provider.latitude

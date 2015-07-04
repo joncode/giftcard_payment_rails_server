@@ -179,7 +179,7 @@ private
         gift_hsh["provider_name"]      = self.provider_name
         gift_hsh["provider_photo"]     = provider.get_photo
         gift_hsh["provider_phone"]     = provider.phone
-        gift_hsh["city"]               = provider.city
+        gift_hsh["city"]               = provider.city_name
         gift_hsh["latitude"]           = provider.latitude
         gift_hsh["longitude"]          = provider.longitude
         gift_hsh["live"]               = provider.live_int

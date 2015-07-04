@@ -14,6 +14,7 @@ class Mdot::V2::CitiesController < JsonController
         else
             region_id = params[:id].to_i
         end
+
         providers = Provider.where(city_id: region_id)
         @app_response = providers.serialize_objs
         success @app_response
@@ -23,6 +24,7 @@ class Mdot::V2::CitiesController < JsonController
 private
 
     def region_id_from_name name
+
         region_hash = Region.city.map(&:old_city_json).select { |region_h| region_h["name"] == name }
         region_hash[0]["region_id"].to_i
     end

@@ -44,7 +44,7 @@ describe Provider do
         p_hsh["photo"].should      == provider.get_photo(default: false)
         p_hsh["logo"].should       == provider.get_logo
         p_hsh["loc_street"].should == provider.address
-        p_hsh["loc_city"].should   == provider.city
+        p_hsh["loc_city"].should   == provider.city_name
         p_hsh["loc_state"].should  == provider.state
         p_hsh["loc_zip"].should    == provider.zip
         p_hsh["live"].should       == provider.live

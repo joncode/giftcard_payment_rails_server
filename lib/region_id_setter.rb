@@ -17,7 +17,7 @@ module RegionIdSetter
 
     	regionless_provider_ids = []
     	providers.each do |provider|
-	        case provider.city.downcase.strip
+	        case provider.city_name.downcase.strip
 	        when "las vegas"
 	            provider.update(region_id: 1)
 	        when "new york"

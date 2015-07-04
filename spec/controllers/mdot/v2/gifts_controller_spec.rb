@@ -1020,7 +1020,7 @@ describe Mdot::V2::GiftsController do
         it "should return 404 + 'credit card not on file' msg when card not found" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             # test that create gift does not create the gift or the sale
-            gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: 99999999999999999999999
+            gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: 999999
             post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
             rrc(404)
             json["status"].should == 0

@@ -61,7 +61,7 @@ FactoryGirl.define do
             end
             phone
         end
-        city        "New York"
+        city_name        "New York"
         address     "123 happy st"
         zip         "11211"
         state       "NY"
@@ -240,7 +240,7 @@ FactoryGirl.define do
 
     factory :provider do
         sequence(:name)    { |n| "ichizos#{n}" }
-        city        "New York"
+        city_name       "New York"
         address     "123 happy st"
         zip         "11211"
         state       "NY"
@@ -419,7 +419,7 @@ FactoryGirl.define do
 
     factory :merchant do
         sequence(:name)    { |n| "ichizos#{n}" }
-        city        "New York"
+        city_name        "New York"
         address     "123 happy st"
         zip         "11211"
         state       "NY"
