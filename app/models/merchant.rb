@@ -1,6 +1,25 @@
 class Merchant < ActiveRecord::Base
 
-    before_save     :add_region_name
+    include Formatter
+
+#   -------------
+
+    before_validation :extract_phone_digits
+    before_validation :strip_whitespace_and_fix_case
+
+#   -------------
+
+    validates_presence_of :name, :address, :city_name, :state, :zip, :city_id
+    validates :phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
+    validates :email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
+    validates :signup_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
+    validates_length_of :zinger, :maximum => 90
+    validates_length_of :description, :maximum => 500
+    validates_length_of :ein, :within => 8..12, allow_blank: :true
+
+#   -------------
+
+    before_save :add_region_name
 
 #   -------------
 
@@ -18,6 +37,8 @@ class Merchant < ActiveRecord::Base
 #   -------------
 
     enum payment_event: [ :creation, :redemption ]
+    enum payment_plan: [ :no_plan, :choice, :prime ]
+
 
     def mode= mode_str
         case mode_str.downcase
@@ -76,6 +97,21 @@ class Merchant < ActiveRecord::Base
             self.region_name = nil if self.region_id.nil?
         end
     end
+
+private
+
+    def strip_whitespace_and_fix_case
+        self.name  = self.name.strip if self.name.present?
+        self.address = self.address.strip if self.address.present?
+        self.zip   = self.zip.strip if self.zip.present?
+        self.ein   = self.ein.strip if self.ein.present?
+        self.email = self.email.downcase.strip if self.email.present?
+        self.city_name  = self.city_name.titleize.strip if self.city_name.present?
+        self.signup_email = self.signup_email.downcase.strip if self.signup_email.present?
+        self.signup_name = self.signup_name.strip if self.signup_name.present?
+    end
+
+
 end
 
 
