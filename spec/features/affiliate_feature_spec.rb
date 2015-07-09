@@ -55,7 +55,7 @@ describe "Affiliate Feature" do
 			gift.persisted?.should be_true
 			db_gift  = Gift.find gift.id
 			a1.reload
-			binding.pry
+			# binding.pry
 			a1.gifts.count.should	 == 1
 			a1.gifts.first.should	 == db_gift
 			lp.reload.gifts.should	 == 1
