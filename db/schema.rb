@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150704185224) do
+ActiveRecord::Schema.define(version: 20150709163918) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -689,6 +689,11 @@ ActiveRecord::Schema.define(version: 20150704185224) do
     t.integer  "city_id"
     t.string   "region_name",      limit: 255
     t.integer  "bank_id"
+    t.boolean  "menu_is_live",                                         default: false
+    t.integer  "brand_id"
+    t.integer  "building_id"
+    t.boolean  "tools",                                                default: false
+    t.integer  "payment_plan",                                         default: 0
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
