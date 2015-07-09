@@ -1,5 +1,5 @@
 class BizUser < ActiveRecord::Base
-    self.table_name = 'providers'
+    self.table_name = 'merchants'
     include ShortenPhotoUrlHelper
 
 #   -------------

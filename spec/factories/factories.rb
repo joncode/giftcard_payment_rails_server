@@ -420,6 +420,7 @@ FactoryGirl.define do
     factory :merchant do
         sequence(:name)    { |n| "ichizos#{n}" }
         city_name        "New York"
+        city_id      1
         address     "123 happy st"
         zip         "11211"
         state       "NY"

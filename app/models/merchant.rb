@@ -1,5 +1,5 @@
 class Merchant < ActiveRecord::Base
-
+    include ShortenPhotoUrlHelper
     include Formatter
 
 #   -------------
@@ -39,6 +39,21 @@ class Merchant < ActiveRecord::Base
     enum payment_event: [ :creation, :redemption ]
     enum payment_plan: [ :no_plan, :choice, :prime ]
 
+    def biz_user
+        BizUser.find(self.id)
+    end
+
+    def mode
+        if self.paused
+            return "paused"
+        else
+            if self.live
+                return "live"
+            else
+                return "coming_soon"
+            end
+        end
+    end
 
     def mode= mode_str
         case mode_str.downcase
@@ -96,6 +111,24 @@ class Merchant < ActiveRecord::Base
         else
             self.region_name = nil if self.region_id.nil?
         end
+    end
+
+    def deactivate
+        self.paused = true
+        self.live   = false
+        self.active = false
+        if self.save
+            true
+        else
+            false
+        end
+    end
+
+    def get_photo default: true
+        if default && image.blank?
+            return MERCHANT_DEFAULT_IMG
+        end
+        image
     end
 
 private

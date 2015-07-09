@@ -14,18 +14,12 @@ class Admt::V2::ProvidersController < JsonController
     # end
 
     def deactivate
-        provider = Provider.unscoped.find(params[:id])
+        merchant = Merchant.unscoped.find(params[:id])
 
-        if provider.deactivate
-            merchant = provider.merchant
-            merchant.active = false
-            if merchant.save
-                success   "#{provider.name} is now deactivated"
-            else
-                success   "#{provider.name} is now deactivated - Merchant tools site still active - please comtact Tech team"
-            end
+        if merchant.deactivate
+            success   "#{merchant.name} is now deactivated"
         else
-            fail      provider
+            fail      merchant
         end
 
         respond
@@ -44,18 +38,12 @@ class Admt::V2::ProvidersController < JsonController
     def update_mode
         mode = ["live", "coming_soon", "paused"]
         if mode.include?(params[:data])
-            provider = Provider.unscoped.find(params[:id])
-            provider.mode = params[:data]
-            if provider.save
-                merchant = provider.merchant
-                merchant.mode = params[:data]
-                if merchant.save
-                    success   "#{provider.name} is now #{provider.mode.humanize}"
-                else
-                    success   "#{provider.name} is now #{provider.mode.humanize} _ Merchant tools update failed - please contact Tech team"
-                end
+            merchant = Merchant.unscoped.find(params[:id])
+            merchant.mode = params[:data]
+            if merchant.save
+                success   "#{merchant.name} is now #{merchant.mode.humanize}"
             else
-                fail      provider
+                fail      merchant
             end
         else
             fail "Incorrect merchant mode sent - < #{params[:data]} >"

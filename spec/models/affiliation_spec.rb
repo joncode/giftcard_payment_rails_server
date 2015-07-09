@@ -50,7 +50,7 @@ describe Affiliation do
     end
 
     it "should save merchant & affiliate data with affiliation creation" do
-        u = FactoryGirl.create(:merchant, name: "Test",  city: "New Amsterdam")
+        u = FactoryGirl.create(:merchant, name: "Test",  city_name: "New Amsterdam")
         a = FactoryGirl.create(:affiliate)
         u.affiliate = a
         u.affiliate.should == a

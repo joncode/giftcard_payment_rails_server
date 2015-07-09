@@ -1,4 +1,5 @@
 class Provider < ActiveRecord::Base
+	self.table_name = 'merchants'
 
 	include Formatter
 	include ShortenPhotoUrlHelper
@@ -7,7 +8,7 @@ class Provider < ActiveRecord::Base
 
 #	-------------
 
-	validates_presence_of 	:name, :city, :address, :zip, :city_id, :token
+	validates_presence_of 	:name, :city_name, :address, :zip, :city_id, :token
 	validates_length_of 	:state , 	:is => 2
 	validates 				:zip, 	zip_code: true
 	validates 				:phone , format: { with: VALID_PHONE_REGEX }, :if => :phone_exists?

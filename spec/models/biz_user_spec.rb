@@ -3,17 +3,17 @@ require 'spec_helper'
 describe BizUser do
 
     it_should_behave_like "giver ducktype" do
-        let(:object) { FactoryGirl.create(:provider).biz_user }
+        let(:object) { FactoryGirl.create(:merchant).biz_user }
     end
 
     it "builds from factory" do
-        provider = FactoryGirl.create :provider
+        provider = FactoryGirl.create :merchant
         biz_user = provider.biz_user
         biz_user.should be_valid
     end
 
     it "should get name and ID from provider" do
-        provider = FactoryGirl.create(:provider)
+        provider = FactoryGirl.create(:merchant)
         biz_user = BizUser.find(provider.id)
 
         biz_user.class.should == BizUser
@@ -22,20 +22,20 @@ describe BizUser do
     end
 
     it "should get adjusted provider name for name" do
-        provider = FactoryGirl.create(:provider)
+        provider = FactoryGirl.create(:merchant)
         biz_user = BizUser.find(provider.id)
         biz_user.name.should == "#{provider.name} Staff"
     end
 
     it "should respond to get_photo with provider photo" do
-        provider = FactoryGirl.create(:provider)
+        provider = FactoryGirl.create(:merchant)
         biz_user = BizUser.find(provider.id)
         photo = provider.get_photo
         biz_user.get_photo.should == photo
     end
 
     it "should associate with a gift as giver" do
-        provider = FactoryGirl.create(:provider)
+        provider = FactoryGirl.create(:merchant)
         biz_user = BizUser.find(provider.id)
         gift     = FactoryGirl.build(:gift)
         gift.giver = biz_user
@@ -47,7 +47,7 @@ describe BizUser do
     end
 
     it "should associate with proto as giver" do
-        provider    = FactoryGirl.create(:provider)
+        provider    = FactoryGirl.create(:merchant)
         biz_user = BizUser.find(provider.id)
         proto        = FactoryGirl.build(:proto)
         proto.giver  = biz_user
@@ -60,7 +60,7 @@ describe BizUser do
     end
 
     it "should associate with Debts" do
-        provider = FactoryGirl.create(:provider)
+        provider = FactoryGirl.create(:merchant)
         biz_user = provider.biz_user
         debt = FactoryGirl.create(:debt, owner: biz_user)
         biz_user.debts.first.class.should == Debt
@@ -68,7 +68,7 @@ describe BizUser do
     end
 
     it "should create debt with service fee only" do
-        provider = FactoryGirl.create(:provider)
+        provider = FactoryGirl.create(:merchant)
         biz_user = provider.biz_user
         debt = biz_user.incur_debt("100.00")
         debt.amount.to_f.should == 15.0
