@@ -15,7 +15,7 @@ module EmailerInternal
         message = { :subject=> subject_creator(subject),
                     :from_name=> "Merchant Tools",
                     :text => text,
-                    :to=> HELP_CONTACT,
+                    :to=> HELP_CONTACT_ARY,
                     :from_email => NO_REPLY_EMAIL
         }
         request_mandrill_with_message(message).first
@@ -26,7 +26,7 @@ module EmailerInternal
         message = { :subject=> subject_creator(subject),
                     :from_name=> "Merchant Tools",
                     :text => "Please login to Admin Tools to start reviewing #{merchant_name}",
-                    :to=> HELP_CONTACT,
+                    :to=> HELP_CONTACT_ARY,
                     :from_email => NO_REPLY_EMAIL
         }
         request_mandrill_with_message(message).first
@@ -37,7 +37,7 @@ module EmailerInternal
         message = { :subject=> subject_creator(subject),
                     :from_name=> "Merchant Tools",
                     :text => "The change should be reflected in Admin Tools",
-                    :to=> HELP_CONTACT,
+                    :to=> HELP_CONTACT_ARY,
                     :from_email => NO_REPLY_EMAIL
         }
         request_mandrill_with_message(message).first
@@ -48,7 +48,7 @@ module EmailerInternal
         message = { :subject=> subject_creator(subject),
                     :from_name=> "Merchant Tools",
                     :text => "Please login to Merchant Tools to review",
-                    :to=> HELP_CONTACT,
+                    :to=> HELP_CONTACT_ARY,
                     :from_email => NO_REPLY_EMAIL
         }
         request_mandrill_with_message(message).first
@@ -60,7 +60,7 @@ module EmailerInternal
         message = { :subject => subject_creator(subject),
                     :from_name => "Merchant Tools",
                     :text => text,
-                    :to => HELP_CONTACT,
+                    :to => HELP_CONTACT_ARY,
                     :from_email => NO_REPLY_EMAIL
         }
         request_mandrill_with_message(message).first
