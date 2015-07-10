@@ -163,6 +163,7 @@ FactoryGirl.define do
         giver_type       "BizUser"
         giver_name       "Factory Provider Staff"
         provider_id     100
+        merchant_id     100
         provider_name   "Factory Provider"
         expires_at      (Time.now + 1.month)
     end
@@ -177,6 +178,7 @@ FactoryGirl.define do
 
     factory :providers_social do
         provider_id 1
+        merchant_id 1
         social_id   1
     end
 
@@ -282,6 +284,7 @@ FactoryGirl.define do
 
     factory :menu_string do
         provider_id   1
+        merchant_id   1
         menu          "[{\"section\":\"Signature\",\"items\":[{\"detail\":\"PATRON CITRONGE, MUDDLED JALAPENOS\",\"price\":\"15\",\"item_id\":73,\"item_name\":\"JALAPENO MARGARITA\"},{\"detail\":\"AKVINTA VODKA, REGATTA GINGER BEER, LIME JUICE, SUGAR\",\"price\":\"15\",\"item_id\":72,\"item_name\":\"Moscow Mule \"}]},{\"section\":\"Beer\",\"items\":[{\"detail\":\"\",\"price\":\"8.00\",\"item_id\":98,\"item_name\":\"Corona\"},{\"detail\":\"\",\"price\":\"7.00\",\"item_id\":97,\"item_name\":\"Bud Light\"},{\"detail\":\"\",\"price\":\"8.00\",\"item_id\":99,\"item_name\":\"Stella\"},{\"detail\":\"\",\"price\":\"8.00\",\"item_id\":100,\"item_name\":\"Beck's\"}]},{\"section\":\"Cocktail\",\"items\":[{\"detail\":\"ABSOLUT ORIENT APPLE, GINGER BEER, GINGER ALE, LEMON WEDGE\",\"price\":\"15\",\"item_id\":74,\"item_name\":\"GINGER ROGERS\"},{\"detail\":\"KETEL ONE VODKA, SODA, LIME JUICE, SIMPLE SYRUP, LIME WEDGE\",\"price\":\"15\",\"item_id\":75,\"item_name\":\"KETEL ONE FIZZ\"},{\"detail\":\"CIROC PEACH, MUDDLED RASPBERRIES FRESH LIME JUICE, SOUR \\u0026 CRANBERRY JUICE\",\"price\":\"15\",\"item_id\":76,\"item_name\":\"PINK STARBURST\"}]}]"
         data          "[]"
     end
@@ -297,7 +300,7 @@ FactoryGirl.define do
         gift.giver_name      "Jon giver"
         gift.receiver_name   "Someone New"
         gift.receiver_email   "somebody@gmail.com"
-        gift.provider        { FactoryGirl.create(:provider) }
+        gift.merchant        { FactoryGirl.create(:merchant) }
         gift.value           "100"
         gift.cost            "85"
         gift.service         "4"
@@ -329,6 +332,7 @@ FactoryGirl.define do
         receiver_name      "Plain Receipient"
         receiver_email     "plain@jaone.com"
         provider_id        10
+        merchant_id        10
         total           "100"
         service         "4"
         pay_stat        "charged"
@@ -410,6 +414,7 @@ FactoryGirl.define do
         gift_id    id
         redeem_id  1
         provider_id 1
+        merchant_id 1
         server_code  "jg"
     end
 
@@ -477,6 +482,7 @@ FactoryGirl.define do
     factory :campaign_item do
         campaign_id     1
         provider_id     1
+        merchant_id     1
         budget          100
         reserve         100
         value           "13"
@@ -512,6 +518,7 @@ FactoryGirl.define do
         processed   false
         proto_id    1
         provider_id 1
+        merchant_id 1
         at_user_id  nil
     end
     factory :affiliation do

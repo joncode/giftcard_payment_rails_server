@@ -1,6 +1,7 @@
 class Merchant < ActiveRecord::Base
     include ShortenPhotoUrlHelper
     include Formatter
+    include MerchantSerializers
 
 #   -------------
 
@@ -71,6 +72,10 @@ class Merchant < ActiveRecord::Base
         end
     end
 
+    def live_int
+        self.live ? "1" : "0"
+    end
+
 #   -------------
 
     def city
@@ -81,7 +86,22 @@ class Merchant < ActiveRecord::Base
         self.city_name = name
     end
 
+
+    def location_fee(convert_these_cents=nil)
+        r_cents = self.rate / 100.0
+        if convert_these_cents
+            (convert_these_cents * r_cents).to_i
+        else
+            r_cents
+        end
+
+    end
+
 #   -------------
+
+    def short_image_url
+        shorten_photo_url(image)
+    end
 
     def get_logo
         if photo_l.present?
@@ -90,6 +110,12 @@ class Merchant < ActiveRecord::Base
             "http://res.cloudinary.com/drinkboard/image/upload/v1408401050/blank_logo_njwzxk.png"
         end
     end
+
+    def get_logo_web
+        self.photo_l
+    end
+
+#   -------------
 
     ##########  AFFILIATION DUCKTYPE
         def name_address_hsh

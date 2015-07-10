@@ -8,7 +8,7 @@ class GiftRegift < Gift
                 return 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
             end
         end
-        args["payable"] = Gift.includes(:provider).includes(:receiver).find(args["old_gift_id"])
+        args["payable"] = Gift.includes(:merchant).includes(:receiver).find(args["old_gift_id"])
 
         gift = super
         if gift.persisted?
@@ -25,7 +25,7 @@ private
         old_gift         = args["payable"]
         args["cat"]      = set_cat(old_gift)
         args["giver"]    = old_gift.receiver
-        args["provider"] = old_gift.provider
+        args["merchant"] = old_gift.merchant
         args["value"]    = old_gift.value
         args["cost"]     = old_gift.cost if old_gift.cost
         args["detail"]   = old_gift.detail

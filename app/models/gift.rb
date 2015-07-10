@@ -26,7 +26,7 @@ class Gift < ActiveRecord::Base
 
 #   -------------
 
-    validates_presence_of :giver, :receiver_name, :provider_id, :value, :shoppingCart, :cat
+    validates_presence_of :giver, :receiver_name, :merchant_id, :value, :shoppingCart, :cat
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
     validates :receiver_phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
     validates_with GiftReceiverInfoValidator
@@ -35,7 +35,7 @@ class Gift < ActiveRecord::Base
 
     before_create :find_receiver
     before_create :add_giver_name,      if: :no_giver_name?
-    before_create :add_provider_name,   if: :no_provider_name?
+    before_create :add_merchant_name,   if: :no_provider_name?
     before_create :regift,              if: :regift?
     before_create :build_gift_items
     before_create :set_balance
@@ -60,6 +60,7 @@ class Gift < ActiveRecord::Base
     has_many    :landing_pages, through: :affiliate_gifts
     has_many    :registers
     belongs_to  :provider
+    belongs_to  :merchant
     belongs_to  :giver,         polymorphic: :true
     belongs_to  :receiver,      class_name: User
     belongs_to  :payable,       polymorphic: :true, autosave: :true
@@ -165,7 +166,7 @@ class Gift < ActiveRecord::Base
 
     def location_fee
         if [300,301,307].include? self.cat
-            return provider.location_fee(self.value_in_cents)
+            return merchant.location_fee(self.value_in_cents)
         elsif [100,101,107,150,151,157].include? self.cat
             return (self.cost.to_f * 100).to_i
         else
@@ -434,9 +435,10 @@ private
 		!self.giver_name.present?
 	end
 
-    def add_provider_name
-        if provider = Provider.find(self.provider_id)
-            self.provider = provider
+    def add_merchant_name
+        if merchant = Merchant.find(self.merchant_id)
+            self.merchant = merchant
+            self.provider_name = merchant.name
         end
     end
 

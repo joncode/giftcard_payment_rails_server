@@ -32,10 +32,10 @@ describe Gift do
 		gift.should have_at_least(1).error_on(:receiver_name)
 	end
 
-	it "requires provider_id" do
-		gift = FactoryGirl.build(:gift, :provider_id => nil)
+	it "requires merchant_id" do
+		gift = FactoryGirl.build(:gift, :merchant_id => nil)
 		gift.should_not be_valid
-		gift.should have_at_least(1).error_on(:provider_id)
+		gift.should have_at_least(1).error_on(:merchant_id)
 	end
 
 	it "requires value" do
@@ -153,14 +153,13 @@ describe Gift do
 
     it "should respond with proper location fee for 95% merchant" do
 		merchant = make_merchant_provider("Location Fee")
-		p = merchant.provider
 		u		 = FactoryGirl.create(:user)
 		value	 = "50"
-		gift	 = make_gift_sale(u, u, value, p.id)
+		gift	 = make_gift_sale(u, u, value, merchant.id)
 		gift.location_fee.should == 4250
 
-		p.update(payment_plan: :prime, rate: 95)
-		p.prime?.should be_true
+		merchant.update(payment_plan: :prime, rate: 95)
+		merchant.prime?.should be_true
 		gift.reload
 		gift.location_fee.should == 4750
     end

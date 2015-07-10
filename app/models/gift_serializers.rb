@@ -5,8 +5,8 @@ module GiftSerializers
 
     def serialize
         sender      = giver
-        unless merchant = self.provider
-            merchant = Provider.unscoped.find(self.provider_id)
+        unless merchant = self.merchant
+            merchant = Merchant.unscoped.find(self.merchant_id)
         end
         gift_hsh                       = {}
         gift_hsh["gift_id"]            = self.id
@@ -72,12 +72,12 @@ module GiftSerializers
     def admt_serialize
         gift_hsh                       = {}
         gift_hsh["gift_id"]            = self.id
-        gift_hsh["provider_id"]        = self.provider_id
-        unless provider = self.provider
-            provider = Provider.unscoped.find(self.provider_id)
+        gift_hsh["provider_id"]        = self.merchant_id
+        unless merchant = self.merchant
+            merchant = Merchant.unscoped.find(self.merchant_id)
         end
         gift_hsh["name"]               = provider_name
-        gift_hsh["merchant_address"]   = provider.full_address
+        gift_hsh["merchant_address"]   = merchant.full_address
         gift_hsh["value"]              = self.value
         gift_hsh["cost"]               = self.cost
         gift_hsh["updated_at"]         = self.updated_at
@@ -158,36 +158,37 @@ module GiftSerializers
 private
 
     def provider_serializer_web_keys gift_hsh
-        gift_hsh["loc_id"]        = self.provider_id
+        gift_hsh["loc_id"]        = self.merchant_id
         gift_hsh["loc_name"]      = self.provider_name
-        if gift_provider = Provider.unscoped.where(id: self.provider_id).first
-            gift_hsh["loc_phone"]     = gift_provider.phone
-            gift_hsh["loc_address"]   = gift_provider.complete_address
-            gift_hsh["loc_photo"]     = gift_provider.short_image_url
-            gift_hsh["r_sys"]         = gift_provider.r_sys
-            gift_hsh['city_id']       = gift_provider.city_id
-            gift_hsh['region_id']     = gift_provider.region_id
-            gift_hsh['region_name']   = gift_provider.region_name
+        if gift_merchant = Merchant.unscoped.where(id: self.merchant_id).first
+            gift_hsh["loc_phone"]     = gift_merchant.phone
+            gift_hsh["loc_address"]   = gift_merchant.complete_address
+            gift_hsh["loc_photo"]     = gift_merchant.short_image_url
+            gift_hsh["r_sys"]         = gift_merchant.r_sys
+            gift_hsh['city_id']       = gift_merchant.city_id
+            gift_hsh['region_id']     = gift_merchant.region_id
+            gift_hsh['region_name']   = gift_merchant.region_name
         end
     end
 
     def provider_serializer_mdot_keys gift_hsh
-        unless provider = self.provider
-            provider = Provider.unscoped.find(self.provider_id)
+        unless merchant = self.merchant
+            merchant = Merchant.unscoped.find(self.merchant_id)
         end
-        gift_hsh["provider_id"]        = self.provider_id
+        gift_hsh["provider_id"]        = self.merchant_id
+        gift_hsh["merchant_id"]        = self.merchant_id
         gift_hsh["provider_name"]      = self.provider_name
-        gift_hsh["provider_photo"]     = provider.get_photo
-        gift_hsh["provider_phone"]     = provider.phone
-        gift_hsh["city"]               = provider.city_name
-        gift_hsh["latitude"]           = provider.latitude
-        gift_hsh["longitude"]          = provider.longitude
-        gift_hsh["live"]               = provider.live_int
-        gift_hsh["provider_address"]   = provider.complete_address
-        gift_hsh["r_sys"]              = provider.r_sys
-        gift_hsh['city_id']            = provider.city_id
-        gift_hsh['region_id']          = provider.region_id
-        gift_hsh['region_name']        = provider.region_name
+        gift_hsh["provider_photo"]     = merchant.get_photo
+        gift_hsh["provider_phone"]     = merchant.phone
+        gift_hsh["city"]               = merchant.city_name
+        gift_hsh["latitude"]           = merchant.latitude
+        gift_hsh["longitude"]          = merchant.longitude
+        gift_hsh["live"]               = merchant.live_int
+        gift_hsh["provider_address"]   = merchant.complete_address
+        gift_hsh["r_sys"]              = merchant.r_sys
+        gift_hsh['city_id']            = merchant.city_id
+        gift_hsh['region_id']          = merchant.region_id
+        gift_hsh['region_name']        = merchant.region_name
         return gift_hsh
     end
 end

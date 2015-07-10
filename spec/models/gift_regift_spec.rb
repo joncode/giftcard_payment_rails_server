@@ -10,7 +10,7 @@ describe GiftRegift do
         gift_hsh = {"id"=>5038, "giver_name"=>"Brooklyn Bowl Las Vegas",
             "receiver_name"=>"Jbar Russian", "provider_name"=>"Brooklyn Bowl Las Vegas",
             "giver_id"=>16, "receiver_id"=>58, "credit_card"=>nil,
-            "provider_id"=>153, "message"=>"Thank you for joining the party! To redeem your tickets please bring a photo ID to the Brooklyn Bowl box office and show them this pass. Must be 21 and over. This prize is non-transferable. \r\n\r\nYou've received two tickets to both the O.A.R and Gogol Bordelo Shows. The tickets are good for either the Friday or Saturday show. \r\nDoors: 5:30 PM \r\nShow: 7:30 PM",
+            "merchant_id"=>153, "message"=>"Thank you for joining the party! To redeem your tickets please bring a photo ID to the Brooklyn Bowl box office and show them this pass. Must be 21 and over. This prize is non-transferable. \r\n\r\nYou've received two tickets to both the O.A.R and Gogol Bordelo Shows. The tickets are good for either the Friday or Saturday show. \r\nDoors: 5:30 PM \r\nShow: 7:30 PM",
             "status"=>"notified", "created_at"=>"Thu, 24 Apr 2014 22:51:48 EDT -04:00",
             "updated_at"=>"Sat, 26 Apr 2014 00:35:27 EDT -04:00", "receiver_phone"=>"2152000475",
             "facebook_id"=>nil, "receiver_email"=>nil,
@@ -76,13 +76,13 @@ describe GiftRegift do
             gift.cost.should == "187.32"
         end
 
-        it "should create gift with old_gift provider" do
+        it "should create gift with old_gift merchant" do
             gift        = GiftRegift.create @gift_hsh
             gift.reload
             gift.message.should       == "I just REGIFTED!"
             gift.receiver_name.should == @receiver.name
             gift.receiver.should      == @receiver
-            gift.provider.should      == @old_gift.provider
+            gift.merchant.should      == @old_gift.merchant
             gift.provider_name.should == @old_gift.provider_name
         end
 
@@ -306,7 +306,7 @@ describe GiftRegift do
 
         it "should NOT reject promo gift regifting" do
             debt        = FactoryGirl.create(:debt)
-            biz_user    = FactoryGirl.create(:provider).biz_user
+            biz_user    = FactoryGirl.create(:merchant).biz_user
             promo       = FactoryGirl.create(:gift, payable_type: "Debt", giver_type: "BizUser", payable_id: debt.id,  giver_id: biz_user.id, receiver: @receiver )
             @gift_hsh["old_gift_id"] = promo.id
             resp        = GiftRegift.create @gift_hsh
@@ -450,13 +450,13 @@ describe GiftRegift do
             @gift_hsh["old_gift_id"]   = @old_gift.id
         end
 
-        it "should create gift with old_gift provider" do
+        it "should create gift with old_gift merchant" do
             gift        = GiftRegift.create @gift_hsh
             gift.reload
             gift.message.should       == "I just REGIFTED!"
             gift.receiver_name.should == @receiver.name
             gift.receiver.should      == @receiver
-            gift.provider.should      == @old_gift.provider
+            gift.merchant.should      == @old_gift.merchant
             gift.provider_name.should == @old_gift.provider_name
             gift.expires_at.should    == @expires_at
             gift.cost.should          == "187.32"
