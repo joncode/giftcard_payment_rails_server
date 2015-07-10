@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150709212817) do
+ActiveRecord::Schema.define(version: 20150710021331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -218,9 +218,11 @@ ActiveRecord::Schema.define(version: 20150709212817) do
   create_table "brands_providers", id: false, force: :cascade do |t|
     t.integer "provider_id"
     t.integer "brand_id"
+    t.integer "merchant_id"
   end
 
   add_index "brands_providers", ["brand_id"], name: "index_brands_providers_on_brand_id", using: :btree
+  add_index "brands_providers", ["merchant_id"], name: "index_brands_providers_on_merchant_id", using: :btree
   add_index "brands_providers", ["provider_id"], name: "index_brands_providers_on_provider_id", using: :btree
 
   create_table "bulk_contacts", force: :cascade do |t|
@@ -238,6 +240,7 @@ ActiveRecord::Schema.define(version: 20150709212817) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "at_user_id"
+    t.integer  "merchant_id"
   end
 
   add_index "bulk_emails", ["at_user_id"], name: "index_bulk_emails_on_at_user_id", using: :btree
@@ -261,6 +264,7 @@ ActiveRecord::Schema.define(version: 20150709212817) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "detail"
+    t.integer  "merchant_id"
   end
 
   add_index "campaign_items", ["campaign_id"], name: "index_campaign_items_on_campaign_id", using: :btree
@@ -518,6 +522,7 @@ ActiveRecord::Schema.define(version: 20150709212817) do
     t.string   "partner_type",   limit: 255
     t.integer  "client_id"
     t.integer  "rec_client_id"
+    t.integer  "merchant_id"
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
@@ -525,6 +530,9 @@ ActiveRecord::Schema.define(version: 20150709212817) do
   add_index "gifts", ["cat"], name: "index_gifts_on_cat", using: :btree
   add_index "gifts", ["ftmeta"], name: "gifts_ftsmeta_idx", using: :gin
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree
+  add_index "gifts", ["merchant_id", "created_at"], name: "index_gifts_on_merchant_id_and_created_at", using: :btree
+  add_index "gifts", ["merchant_id", "status"], name: "index_gifts_on_merchant_id_and_status", using: :btree
+  add_index "gifts", ["merchant_id"], name: "index_gifts_on_merchant_id", using: :btree
   add_index "gifts", ["pay_stat"], name: "index_gifts_on_pay_stat", using: :btree
   add_index "gifts", ["payable_id", "payable_type"], name: "index_gifts_on_payable_id_and_payable_type", using: :btree
   add_index "gifts", ["provider_id", "created_at"], name: "index_gifts_on_provider_id_and_created_at", using: :btree
@@ -597,8 +605,10 @@ ActiveRecord::Schema.define(version: 20150709212817) do
     t.datetime "updated_at",                null: false
     t.string   "sections_json", limit: 255
     t.text     "menu"
+    t.integer  "merchant_id"
   end
 
+  add_index "menu_strings", ["merchant_id"], name: "index_menu_strings_on_merchant_id", using: :btree
   add_index "menu_strings", ["provider_id"], name: "index_menu_strings_on_provider_id", using: :btree
 
   create_table "menus", force: :cascade do |t|
@@ -908,8 +918,10 @@ ActiveRecord::Schema.define(version: 20150709212817) do
     t.integer  "cat"
     t.integer  "contacts",                  default: 0
     t.integer  "processed",                 default: 0
+    t.integer  "merchant_id"
   end
 
+  add_index "protos", ["merchant_id"], name: "index_protos_on_merchant_id", using: :btree
   add_index "protos", ["provider_id"], name: "index_protos_on_provider_id", using: :btree
 
   create_table "providers", force: :cascade do |t|
@@ -959,8 +971,11 @@ ActiveRecord::Schema.define(version: 20150709212817) do
   create_table "providers_socials", id: false, force: :cascade do |t|
     t.integer "provider_id", null: false
     t.integer "social_id",   null: false
+    t.integer "merchant_id"
   end
 
+  add_index "providers_socials", ["merchant_id", "social_id"], name: "index_providers_socials_on_merchant_id_and_social_id", using: :btree
+  add_index "providers_socials", ["merchant_id"], name: "index_providers_socials_on_merchant_id", using: :btree
   add_index "providers_socials", ["provider_id", "social_id"], name: "index_providers_socials_on_provider_id_and_social_id", unique: true, using: :btree
   add_index "providers_socials", ["provider_id"], name: "index_providers_socials_on_provider_id", using: :btree
 
@@ -1059,8 +1074,10 @@ ActiveRecord::Schema.define(version: 20150709212817) do
     t.integer  "resp_code"
     t.string   "reason_text",    limit: 255
     t.integer  "reason_code"
+    t.integer  "merchant_id"
   end
 
+  add_index "sales", ["merchant_id"], name: "index_sales_on_merchant_id", using: :btree
   add_index "sales", ["provider_id"], name: "index_sales_on_provider_id", using: :btree
 
   create_table "sections", force: :cascade do |t|
