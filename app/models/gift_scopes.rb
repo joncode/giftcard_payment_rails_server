@@ -29,7 +29,7 @@ module GiftScopes
 #### USER SCOPES
 
     def get_gifts user
-        includes(:provider).includes(:giver).where(receiver_id: user.id).where(pay_stat: ["charge_unpaid", "refund_comp"]).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
+        includes(:merchant).includes(:giver).where(receiver_id: user.id).where(pay_stat: ["charge_unpaid", "refund_comp"]).where("status = :open OR status = :notified", :open => 'open', :notified => 'notified').order("updated_at DESC")
     end
 
     def get_notifications user
@@ -47,14 +47,14 @@ module GiftScopes
     end
 
     def get_archive user
-        give_gifts = includes(:provider).includes(:receiver).where(giver_id: user).order("created_at DESC")
-        rec_gifts  = includes(:provider).includes(:giver).where(receiver_id: user).where(status: ['regifted','redeemed']).order("redeemed_at DESC")
+        give_gifts = includes(:merchant).includes(:receiver).where(giver_id: user).order("created_at DESC")
+        rec_gifts  = includes(:merchant).includes(:giver).where(receiver_id: user).where(status: ['regifted','redeemed']).order("redeemed_at DESC")
         return give_gifts, rec_gifts
     end
 
     def get_user_activity user
-        giver_gifts = includes(:provider).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(giver_id: user.id, giver_type: "User").order("created_at DESC")
-        rec_gifts   = includes(:provider).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(receiver_id: user.id).order("created_at DESC")
+        giver_gifts = includes(:merchant).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(giver_id: user.id, giver_type: "User").order("created_at DESC")
+        rec_gifts   = includes(:merchant).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(receiver_id: user.id).order("created_at DESC")
         puts "#{rec_gifts.count}"
         (giver_gifts + rec_gifts).uniq { |g| g.id }
     end
@@ -71,20 +71,20 @@ module GiftScopes
 
 ##### PROVIDER SCOPES
 
-    def get_provider provider  #indexed
-        where(provider_id: provider).where("pay_stat not in (?)", ['unpaid']).where("status = :open OR status = :notified OR status = :incomplete", :open => 'open', :notified => 'notified', :incomplete => 'incomplete').order("updated_at DESC")
+    def get_provider merchant  #indexed
+        where(merchant_id: merchant).where("pay_stat not in (?)", ['unpaid']).where("status = :open OR status = :notified OR status = :incomplete", :open => 'open', :notified => 'notified', :incomplete => 'incomplete').order("updated_at DESC")
     end
 
-    def get_history_provider provider #indexed
-        where(provider_id: provider.id, status: "redeemed").order("redeemed_at DESC")
+    def get_history_provider merchant #indexed
+        where(merchant_id: merchant.id, status: "redeemed").order("redeemed_at DESC")
     end
 
-    def get_history_provider_and_range provider, start_date=nil, end_date=nil
+    def get_history_provider_and_range merchant, start_date=nil, end_date=nil
         if start_date && end_date
             start_date = start_date + 4.hours
             end_date   = end_date   + 4.hours
             puts "GETTING the gifts scoped with start time = #{start_date} and end_date = #{end_date}"
-            where(provider_id: provider.id, status: "redeemed").where("redeemed_at >= :start_date AND redeemed_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("redeemed_at DESC")
+            where(merchant_id: merchant.id, status: "redeemed").where("redeemed_at >= :start_date AND redeemed_at <= :end_date", :start_date => start_date, :end_date => end_date ).order("redeemed_at DESC")
         else
             get_history_provider(provider)
         end

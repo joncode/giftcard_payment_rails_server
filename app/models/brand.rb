@@ -13,6 +13,7 @@ class Brand < ActiveRecord::Base
 #   -------------
 
 	has_many   :providers
+	has_many   :merchants
 	belongs_to :user
 
 #   -------------

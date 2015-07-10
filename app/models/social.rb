@@ -5,6 +5,7 @@ class Social < ActiveRecord::Base
 	has_many :protos, through: :proto_joins
 	has_many :providers_socials
 	has_many :providers, through: :providers_socials
+	has_many :merchants, through: :providers_socials
 	has_many :at_users_socials
 
     belongs_to  :payable,       polymorphic: :true, autosave: :true

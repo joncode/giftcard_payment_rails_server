@@ -19,6 +19,7 @@ class Proto < ActiveRecord::Base
 	has_many   :gifts,      through: :proto_joins
 	belongs_to :receivable, polymorphic: true
 	belongs_to :provider
+  	belongs_to :merchant
 	belongs_to :giver,      polymorphic: :true
 
 	def receivables

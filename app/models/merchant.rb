@@ -27,6 +27,12 @@ class Merchant < ActiveRecord::Base
     has_one :provider
     has_one :affiliation, as: :target
     has_one :affiliate, through: :affiliation
+    has_many   :gifts
+    has_many   :sales
+    has_many   :campaign_items
+    has_many   :protos
+    has_many   :providers_socials
+    has_many   :socials, through: :providers_socials
     has_many :payments,     as: :partner
     has_many :registers,    as: :partner
     has_many :invites,  as: :company

@@ -3,6 +3,7 @@ class CampaignItem < ActiveRecord::Base
     has_many :gifts, as: :payable
     belongs_to :campaign
     belongs_to :provider
+    belongs_to :merchant
 
 #   -------------
 

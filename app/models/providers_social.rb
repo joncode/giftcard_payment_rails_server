@@ -9,7 +9,7 @@ class ProvidersSocial  < ActiveRecord::Base
 
     belongs_to :provider
     belongs_to :social
-
+  	belongs_to :merchant
 
 end
 
