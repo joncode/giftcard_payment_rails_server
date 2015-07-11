@@ -8,7 +8,7 @@ module CampaignFactory
 	end
 
 	def admin_campaign_and_item
-		provider      = FactoryGirl.create(:provider)
+		provider      = FactoryGirl.create(:merchant)
 		admin         = FactoryGirl.create(:admin_user)
 		admin_giver   = AdminGiver.find(admin.id)
 		expiration    = (Time.now + 1.month).to_date
@@ -19,7 +19,7 @@ module CampaignFactory
                                                            close_date: (Time.now + 1.week).to_date,
                                                            expire_date: (Time.now + 1.week).to_date,
                                                            budget: 100)
-        campaign_item = FactoryGirl.create(:campaign_item, provider_id: provider.id,
+        campaign_item = FactoryGirl.create(:campaign_item, merchant_id: provider.id,
                                                                 campaign_id: campaign.id,
                                                                 message: "Enjoy this special gift on us!",
                                                                 detail: "This gift is good until midnight.",
@@ -32,8 +32,8 @@ module CampaignFactory
 	end
 
 	def merchant_campaign_and_item
-        provider      = FactoryGirl.create(:provider, name: "LocationBar")
-        giver         = FactoryGirl.create(:provider, name: "GiverBar")
+        provider      = FactoryGirl.create(:merchant, name: "LocationBar")
+        giver         = FactoryGirl.create(:merchant, name: "GiverBar")
         biz_user      = BizUser.find(giver.id)
         expiration    = (Time.now + 1.month).to_date
         campaign      = FactoryGirl.create(:campaign, purchaser_type: "BizUser",
@@ -43,7 +43,7 @@ module CampaignFactory
                                                        close_date: (Time.now + 1.week).to_date,
                                                        expire_date: (Time.now + 1.week).to_date,
                                                        budget: 100)
-        campaign_item = FactoryGirl.create(:campaign_item, provider_id: provider.id,
+        campaign_item = FactoryGirl.create(:campaign_item, merchant_id: provider.id,
                                                             campaign_id: campaign.id,
                                                             message: "Enjoy this special gift on us!",
                                                             expires_at: expiration,

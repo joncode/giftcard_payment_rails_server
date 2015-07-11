@@ -11,7 +11,7 @@ describe PushJob do
             it "should receive correct push message" do
             User.delete_all
             PnToken.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             @user     = FactoryGirl.create(:user)
             @pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             stub_request(:put, "https://q_NVI6G1RRaOU49kKTOZMQ:yQEhRtd1QcCgu5nXWj-2zA@go.urbanairship.com/api/device_tokens/#{@pn_token}").with(:body => "{\"alias\":\"#{@user.ua_alias}\",\"provider\":\"ios\"}", :headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).to_return(:status => 200, :body => "", :headers => {})

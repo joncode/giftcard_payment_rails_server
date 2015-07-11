@@ -9,7 +9,7 @@ describe PushJob do
         before(:each) do
             User.delete_all
             PnToken.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             @user     = FactoryGirl.create(:user)
             @pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"
             RegisterPushJob.stub(:ua_register)
@@ -160,8 +160,8 @@ describe PushJob do
         before(:each) do
             User.delete_all
             PnToken.delete_all
-            Provider.delete_all
-             RegisterPushJob.stub(:ua_register)
+            Merchant.delete_all
+            RegisterPushJob.stub(:ua_register)
         end
 
         it "should send correct payload on push" do
@@ -214,7 +214,7 @@ describe PushJob do
             droid_pnt = PnToken.create(user_id: giver.id, pn_token: "DROIDPN_TOKENFAKE_PN_TOKEN", platform: "android")
             gift      = FactoryGirl.create :gift, giver: giver
             badge     = Gift.get_notifications(giver)
-            alert     = "#{gift.receiver_name} opened your gift at #{gift.provider.name}!"
+            alert     = "#{gift.receiver_name} opened your gift at #{gift.merchant.name}!"
             payload   = {
                 :aliases => [giver.ua_alias],
                 :aps => {

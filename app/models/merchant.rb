@@ -21,12 +21,15 @@ class Merchant < ActiveRecord::Base
 #   -------------
 
     before_save :add_region_name
+    after_create    :make_menu_string
+    after_save      :clear_www_cache
 
 #   -------------
 
     has_one :provider
     has_one :affiliation, as: :target
     has_one :affiliate, through: :affiliation
+    has_one    :menu_string, dependent: :destroy
     has_many   :gifts
     has_many   :sales
     has_many   :campaign_items
@@ -43,12 +46,17 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    attr_accessor   :menu
+
     enum payment_event: [ :creation, :redemption ]
     enum payment_plan: [ :no_plan, :choice, :prime ]
 
     def biz_user
         BizUser.find(self.id)
     end
+
+#   -------------
+
 
     def mode
         if self.paused
@@ -176,6 +184,15 @@ private
         self.signup_name = self.signup_name.strip if self.signup_name.present?
     end
 
+    def clear_www_cache
+        unless Rails.env.test? || Rails.env.development?
+            WwwHttpService.clear_merchant_cache
+        end
+    end
+
+    def make_menu_string
+        MenuString.create(merchant_id: self.id, data: "[]", menu: self.menu)
+    end
 
 end
 

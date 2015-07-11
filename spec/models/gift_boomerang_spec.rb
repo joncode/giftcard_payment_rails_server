@@ -62,7 +62,7 @@ describe GiftBoomerang do
         end
 
         it "should not run add provider" do
-            Gift.any_instance.should_not_receive(:add_provider_name)
+            Gift.any_instance.should_not_receive(:add_merchant_name)
             gift_regift = GiftBoomerang.create @gift_hsh
         end
 

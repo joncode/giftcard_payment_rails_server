@@ -29,7 +29,7 @@ private
 		args['expires_at']    = proto.expires_at
 		args['cat']           = proto.cat
 		args['giver']         = proto.giver
-		args['provider_id']   = proto.provider_id
+		args['merchant_id']   = proto.merchant_id
 		args['provider_name'] = proto.provider_name
 		args['receiver_name'] = GENERIC_RECEIVER_NAME if args['receiver_name'].blank?
 		args

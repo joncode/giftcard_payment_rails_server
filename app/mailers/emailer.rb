@@ -61,6 +61,7 @@ module Emailer
             return nil
         end
         subject       = "#{giver_name} sent you a gift"
+
         body          = text_for_notify_receiver(gift)
 
         template_name = "gift"

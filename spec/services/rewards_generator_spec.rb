@@ -10,14 +10,14 @@ describe RewardsGenerator do
     it "should get all the users and campaigns and make gifts" do
         Campaign.delete_all
         CampaignItem.delete_all
-        provider        = FactoryGirl.create(:provider)
+        provider        = FactoryGirl.create(:merchant)
         user1           = FactoryGirl.create(:user, first_name: "First", last_name: "Laszt")
         user2           = FactoryGirl.create(:user, first_name: "Second", last_name: "Laszt")
         user3           = FactoryGirl.create(:user, first_name: "Third", last_name: "Laszt")
         user4           = FactoryGirl.create(:user, first_name: "Fourth", last_name: "Laszt")
 
         campaign        = FactoryGirl.create(:campaign, budget: 100)
-        campaign_item   = FactoryGirl.create(:campaign_item, textword: 'a', budget: 100, reserve: 100, campaign_id: campaign.id, provider_id: provider.id, value: "13", cost: "8")
+        campaign_item   = FactoryGirl.create(:campaign_item, textword: 'a', budget: 100, reserve: 100, campaign_id: campaign.id, merchant_id: provider.id, value: "13", cost: "8")
 
         response        = RewardsGenerator.make_gifts [campaign_item.id]
         response.should == { status: "Gift Creation Successful", created_gifts_count: 4}
@@ -32,14 +32,14 @@ describe RewardsGenerator do
     end
 
     it "should track the number of gifts and break from loop if reserve is reached" do
-        provider        = FactoryGirl.create(:provider)
+        provider        = FactoryGirl.create(:merchant)
         user1           = FactoryGirl.create(:user, first_name: "First", last_name: "Laszt")
         user2           = FactoryGirl.create(:user, first_name: "Second", last_name: "Laszt")
         user3           = FactoryGirl.create(:user, first_name: "Third", last_name: "Laszt")
         user4           = FactoryGirl.create(:user, first_name: "Fourth", last_name: "Laszt")
 
         campaign        = FactoryGirl.create(:campaign, budget: 3)
-        campaign_item   = FactoryGirl.create(:campaign_item, textword: 'a', budget: 3, reserve: 3, campaign_id: campaign.id, provider_id: provider.id, value: "13", cost: "8")
+        campaign_item   = FactoryGirl.create(:campaign_item, textword: 'a', budget: 3, reserve: 3, campaign_id: campaign.id, merchant_id: provider.id, value: "13", cost: "8")
 
         response        = RewardsGenerator.make_gifts [campaign_item.id]
         response.should == { status: "RewardsGenerator - Campaign items reserve was used up", created_gifts_count: 3}
@@ -53,14 +53,14 @@ describe RewardsGenerator do
     end
 
     it "should track the number of gifts and break from loop if and gifts fail to be created" do
-        provider           = FactoryGirl.create(:provider)
+        provider           = FactoryGirl.create(:merchant)
         user1              = FactoryGirl.create(:user, first_name: "First", last_name: "Laszt")
         user2              = FactoryGirl.create(:user, first_name: "Second", last_name: "Laszt")
         user3              = FactoryGirl.create(:user, first_name: "Third", last_name: "Laszt")
         user4              = FactoryGirl.create(:user, first_name: "Fourth", last_name: "Laszt")
 
         campaign           = FactoryGirl.create(:campaign, budget: 3, status: "expired", close_date: Time.now - 1.day, expire_date: Time.now - 1.day)
-        campaign_item      = FactoryGirl.create(:campaign_item, textword: 'a', budget: 3, reserve: 3, campaign_id: campaign.id, provider_id: provider.id, value: "13", cost: "8")
+        campaign_item      = FactoryGirl.create(:campaign_item, textword: 'a', budget: 3, reserve: 3, campaign_id: campaign.id, merchant_id: provider.id, value: "13", cost: "8")
 
         response           = RewardsGenerator.make_gifts [campaign_item.id]
         response.should    == { status: "RewardsGenerator - Campaign items reserve was used up", created_gifts_count: 0}

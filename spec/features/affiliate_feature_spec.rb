@@ -32,7 +32,7 @@ describe "Affiliate Feature" do
 			a1	 = make_affiliate("Afff", "One")
 			a1.gifts.count.should == 0
 			lp	 = FactoryGirl.create(:landing_page, link: "itson.me/san-diego?aid=twister_ice_tea", clicks: 2, affiliate_id: a1.id)
-			p	 = FactoryGirl.create(:provider)
+			p	 = FactoryGirl.create(:merchant)
 			receiver = FactoryGirl.create(:user)
 			card = FactoryGirl.create(:card, user_id: receiver.id)
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,47.25,CC,auth_capture,,#{card.first_name},#{card.last_name},,,,,,,,,,,,,,,,,"
@@ -42,7 +42,7 @@ describe "Affiliate Feature" do
             gift_hsh["message"]        = "I just Bought a Gift!"
             gift_hsh["receiver_name"]  = receiver.name
             gift_hsh["receiver_id"]    = receiver.id
-            gift_hsh["provider_id"]    = p.id
+            gift_hsh["merchant_id"]    = p.id
             gift_hsh["giver"]          = receiver
             gift_hsh["value"]          = "45.00"
             gift_hsh["service"]        = "2.25"

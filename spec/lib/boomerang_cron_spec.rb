@@ -9,7 +9,7 @@ describe "BoomerangCron" do
 
         before(:each) do
             @user = FactoryGirl.create(:user)
-            @merchant = FactoryGirl.create(:provider)
+            @merchant = FactoryGirl.create(:merchant)
             boom = FactoryGirl.create(:boomerang)
             Gift.delete_all
         end
@@ -17,7 +17,7 @@ describe "BoomerangCron" do
         it "should boomerang gifts that are incomplete and older than 7 days" do
             previous = Time.now - 8.days
             10.times do
-                FactoryGirl.create(:gift_no_association_with_card, created_at: previous, giver_name: @user.name, giver_id: @user.id, giver_type: "User", provider: @merchant)
+                FactoryGirl.create(:gift_no_association_with_card, created_at: previous, giver_name: @user.name, giver_id: @user.id, giver_type: "User", merchant: @merchant)
             end
 
             BoomerangCron::perform
@@ -31,7 +31,7 @@ describe "BoomerangCron" do
             10.times do
                 previous = Time.now - 6.days
 
-                FactoryGirl.create(:gift_no_association_with_card, created_at: previous, giver_name: @user.name, giver_id: @user.id, giver_type: "User", provider: @merchant)
+                FactoryGirl.create(:gift_no_association_with_card, created_at: previous, giver_name: @user.name, giver_id: @user.id, giver_type: "User", merchant: @merchant)
             end
 
             BoomerangCron::perform
@@ -44,7 +44,7 @@ describe "BoomerangCron" do
         it "should ignore boomeranging gifts to deactivated users" do
             previous = Time.now - 8.days
 
-            gift = FactoryGirl.create(:gift_no_association_with_card, created_at: previous, giver_name: @user.name, giver_id: @user.id, giver_type: "User", provider: @merchant)
+            gift = FactoryGirl.create(:gift_no_association_with_card, created_at: previous, giver_name: @user.name, giver_id: @user.id, giver_type: "User", merchant: @merchant)
             user = gift.giver
             user.update(active: false)
 

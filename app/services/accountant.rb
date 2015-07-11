@@ -13,14 +13,14 @@ class Accountant
 			return "no Debt Amount" unless debt_amount > 0
 
 			# if provider is not on creation and gift is not on redemption - out of sync exit
-			return "Payment time not in sync" if gift.status != 'redeemed' && !gift.provider.creation?
+			return "Payment time not in sync" if gift.status != 'redeemed' && !gift.merchant.creation?
 
 			# if gift is not a purchase (300), do not pay on anything other than status = redeemed
 			return "Not redemption not a purchase" if gift.status != 'redeemed' && gift.cat != 300
 
 			return "Register exists" if gift_parent_has_been_paid? gift
 
-			register = create_debt(gift, gift.provider.merchant, "loc")
+			register = create_debt(gift, gift.merchant, "loc")
 			if register.save
 				return register
 			else
@@ -82,6 +82,7 @@ class Accountant
 	        if lp.nil?
 	        	lp = LandingPage.click(link: link)
 	        end
+            # binding.pry
             lp.gifts += 1
             gift.landing_pages << lp
             register  = create_debt(gift, lp.affiliate, "aff_link")

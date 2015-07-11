@@ -2,7 +2,7 @@ module CancelDuplicateGifts
 
     def self.perform provider_id, created_after
         puts "------------- CANCEL DUPLICATE GIFTS CRON -----------------"
-    	gifts = Gift.where(provider_id: provider_id, receiver_id: nil).where.not(status: 'cancel').where("created_at > ?", created_after)
+    	gifts = Gift.where(merchant_id: provider_id, receiver_id: nil).where.not(status: 'cancel').where("created_at > ?", created_after)
 	    duplicates_hsh = gifts.select(:receiver_email).group(:receiver_email).having("count(*) > 1").count
 	    duplicates_hsh.each do |receiver_email, count|
 
@@ -20,7 +20,7 @@ module CancelDuplicateGifts
 
     def self.undo_dual_cancels provider_id, created_after
         puts "------------- START UNDO DUAL CANCELS CRON -----------------"
-        gifts = Gift.where(provider_id: provider_id, receiver_id: nil).where(status: 'cancel').where("created_at > ?", created_after)
+        gifts = Gift.where(merchant_id: provider_id, receiver_id: nil).where(status: 'cancel').where("created_at > ?", created_after)
         duplicates_hsh = gifts.select(:receiver_email).group(:receiver_email).having("count(*) > 1").count
         puts "-------- duplicates hash #{gifts.count}"
         puts "-------- duplicates hash #{duplicates_hsh}"
@@ -35,7 +35,7 @@ module CancelDuplicateGifts
 
     def self.find_duplicates provider_id, created_after
         puts "------------- START FINDING DUPLICATE GIFTS -----------------"
-        gifts = Gift.where(provider_id: provider_id, receiver_id: nil).where.not(status: 'cancel').where("created_at > ?", created_after)
+        gifts = Gift.where(merchant_id: provider_id, receiver_id: nil).where.not(status: 'cancel').where("created_at > ?", created_after)
         duplicates_hsh = gifts.select(:receiver_email).group(:receiver_email).having("count(*) > 1").count
         puts duplicates_hsh
         puts "======== #{duplicates_hsh.count} total emails with duplicates."
@@ -45,4 +45,4 @@ module CancelDuplicateGifts
 end
 
 
-Gift.where(provider_id: 183, receiver_id: nil).where.not(status: 'cancel').where("created_at > ?", 1.day.ago).select(:receiver_email).group(:receiver_email).having("count(*) > 1").count.count
+Gift.where(merchant_id: 183, receiver_id: nil).where.not(status: 'cancel').where("created_at > ?", 1.day.ago).select(:receiver_email).group(:receiver_email).having("count(*) > 1").count.count

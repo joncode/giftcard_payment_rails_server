@@ -15,9 +15,9 @@ describe "Gift To Payment" do
 			# make a few merchants
 		m1 = make_merchant_provider("thirstys")
 		m2 = make_merchant_provider("sushiOne")
-		m2.provider.update(rate: 95)
+		m2.update(rate: 95)
 		m3 = make_merchant_provider("Taco nachos forever")
-		m3.provider.update(rate: 96.1)
+		m3.update(rate: 96.1)
 			# attach a merchant to test affiliate
 		m1.affiliate = a1
 		a1.merchants.first.should == m1
@@ -35,17 +35,17 @@ describe "Gift To Payment" do
 			# make a batch of gifts
 		u_not = FactoryGirl.create(:user)
 		m_not = make_merchant_provider("Not Merchant")
-		p_not = m_not.provider
+		p_not = m_not
 
 
 		ResqueSpec.reset!
 		GiftSale.any_instance.stub(:messenger)
 		g1 = make_gift_sale(u3, u2, "100", p_not.id)
-		g2 = make_gift_sale(u1, u2, "200", m1.provider.id)
-		g3 = make_gift_sale(u2, u_not, "300",  m2.provider.id)
-		g4 = make_gift_sale(u2, u2, "400",  m3.provider.id)
-		g5 = make_gift_sale(u_not, u3, "500",  m1.provider.id)
-		g6 = make_gift_sale(u_not, u1, "600",  m2.provider.id)
+		g2 = make_gift_sale(u1, u2, "200", m1.id)
+		g3 = make_gift_sale(u2, u_not, "300",  m2.id)
+		g4 = make_gift_sale(u2, u2, "400",  m3.id)
+		g5 = make_gift_sale(u_not, u3, "500",  m1.id)
+		g6 = make_gift_sale(u_not, u1, "600",  m2.id)
 			#binding.pry
 		run_delayed_jobs
 			# REWARDS
@@ -93,9 +93,9 @@ describe "Gift To Payment" do
 			# make a few merchants
 		m1 = make_merchant_provider("thirstys")
 		m2 = make_merchant_provider("sushiOne")
-		m2.provider.update(rate: 95)
+		m2.update(rate: 95)
 		m3 = make_merchant_provider("Taco nachos forever")
-		m3.provider.update(rate: 96.1)
+		m3.update(rate: 96.1)
 			# attach a merchant to test affiliate
 		m1.affiliate = a1
 		a1.merchants.first.should == m1
@@ -113,18 +113,18 @@ describe "Gift To Payment" do
 			# make a batch of gifts
 		u_not = FactoryGirl.create(:user)
 		m_not = make_merchant_provider("Not Merchant")
-		p_not = m_not.provider
+		p_not = m_not
 
 
 		ResqueSpec.reset!
 		GiftSale.any_instance.stub(:messenger)
 		GiftSale.any_instance.stub(:messenger_publish_gift_created)
 		g1 = make_gift_sale(u3, u2, "100", p_not.id)
-		g2 = make_gift_sale(u1, u2, "200", m1.provider.id)
-		g3 = make_gift_sale(u2, u_not, "300",  m2.provider.id)
-		g4 = make_gift_sale(u2, u2, "400",  m3.provider.id)
-		g5 = make_gift_sale(u_not, u3, "500",  m1.provider.id)
-		g6 = make_gift_sale(u_not, u1, "600",  m2.provider.id)
+		g2 = make_gift_sale(u1, u2, "200", m1.id)
+		g3 = make_gift_sale(u2, u_not, "300",  m2.id)
+		g4 = make_gift_sale(u2, u2, "400",  m3.id)
+		g5 = make_gift_sale(u_not, u3, "500",  m1.id)
+		g6 = make_gift_sale(u_not, u1, "600",  m2.id)
 		#binding.pry
 		run_delayed_jobs
 
@@ -153,9 +153,9 @@ describe "Gift To Payment" do
 			# make a few merchants
 		m1 = make_merchant_provider("thirstys")
 		m2 = make_merchant_provider("sushiOne")
-		m2.provider.update(rate: 95)
+		m2.update(rate: 95)
 		m3 = make_merchant_provider("Taco nachos forever")
-		m3.provider.update(rate: 96.1)
+		m3.update(rate: 96.1)
 			# attach a merchant to test affiliate
 		m1.affiliate = a1
 		a1.merchants.first.should == m1
@@ -173,17 +173,17 @@ describe "Gift To Payment" do
 			# make a batch of gifts
 		u_not = FactoryGirl.create(:user)
 		m_not = make_merchant_provider("Not Merchant")
-		p_not = m_not.provider
+		p_not = m_not
 
 
 		ResqueSpec.reset!
 		GiftSale.any_instance.stub(:messenger)
 		g1 = make_gift_sale(u3, u2, "100", p_not.id)
-		g2 = make_gift_sale(u1, u2, "200", m1.provider.id)
-		g3 = make_gift_sale(u2, u_not, "300",  m2.provider.id)
-		g4 = make_gift_sale(u2, u2, "400",  m3.provider.id)
-		g5 = make_gift_sale(u_not, u3, "500",  m1.provider.id)
-		g6 = make_gift_sale(u_not, u1, "600",  m2.provider.id)
+		g2 = make_gift_sale(u1, u2, "200", m1.id)
+		g3 = make_gift_sale(u2, u_not, "300",  m2.id)
+		g4 = make_gift_sale(u2, u2, "400",  m3.id)
+		g5 = make_gift_sale(u_not, u3, "500",  m1.id)
+		g6 = make_gift_sale(u_not, u1, "600",  m2.id)
 		#binding.pry
 		run_delayed_jobs
 
@@ -212,13 +212,13 @@ describe "Gift To Payment" do
 		a3 = make_affiliate("rando", "third")
 			# make a few merchants
 		m1 = make_merchant_provider("thirstys")
-		m1.provider.redemption!
+		m1.redemption!
 		m2 = make_merchant_provider("sushiOne")
-		m2.provider.redemption!
-		m2.provider.update(rate: 95)
+		m2.redemption!
+		m2.update(rate: 95)
 		m3 = make_merchant_provider("Taco nachos forever")
-		m3.provider.redemption!
-		m3.provider.update(rate: 96.1)
+		m3.redemption!
+		m3.update(rate: 96.1)
 			# attach a merchant to test affiliate
 		m1.affiliate = a1
 		a1.merchants.first.should == m1
@@ -236,17 +236,17 @@ describe "Gift To Payment" do
 			# make a batch of gifts
 		u_not = FactoryGirl.create(:user)
 		m_not = make_merchant_provider("Not Merchant")
-		p_not = m_not.provider
+		p_not = m_not
 
 
 		ResqueSpec.reset!
 		GiftSale.any_instance.stub(:messenger)
 		g1 = make_gift_sale(u3, u2, "100", p_not.id)
-		g2 = make_gift_sale(u1, u2, "200", m1.provider.id)
-		g3 = make_gift_sale(u2, u_not, "300",  m2.provider.id)
-		g4 = make_gift_sale(u2, u2, "400",  m3.provider.id)
-		g5 = make_gift_sale(u_not, u3, "500",  m1.provider.id)
-		g6 = make_gift_sale(u_not, u1, "600",  m2.provider.id)
+		g2 = make_gift_sale(u1, u2, "200", m1.id)
+		g3 = make_gift_sale(u2, u_not, "300",  m2.id)
+		g4 = make_gift_sale(u2, u2, "400",  m3.id)
+		g5 = make_gift_sale(u_not, u3, "500",  m1.id)
+		g6 = make_gift_sale(u_not, u1, "600",  m2.id)
 		#binding.pry
 		run_delayed_jobs
 

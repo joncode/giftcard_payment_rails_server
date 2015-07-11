@@ -18,25 +18,25 @@ module GiftFactory
         campaign_merchant = FactoryGirl.create :campaign, purchaser_type: "BizUser"
         campaign_item_merchant = FactoryGirl.create :campaign_item, campaign_id: campaign_merchant.id
 
-        @sale                               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Sale", status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 300
-        @sale_regifted_parent               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Sale", status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 300
-        @sale_regifted_child                = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @sale_regifted_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 301
+        @sale                               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Sale", status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 300
+        @sale_regifted_parent               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Sale", status: "regifted", merchant_id: @provider.id, created_at: @start_date + 1.week, cat: 300
+        @sale_regifted_child                = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @sale_regifted_parent.id, status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 301
 
-        @admin                              = FactoryGirl.create :gift, giver_type: "AdminGiver", giver_id: @admin_giver.id, payable_type: "Debt", status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 100
-        @admin_regifted_parent              = FactoryGirl.create :gift, giver_type: "AdminGiver", giver_id: @admin_giver.id, payable_type: "Debt", status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 100
-        @admin_regifted_child               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @admin_regifted_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 101
+        @admin                              = FactoryGirl.create :gift, giver_type: "AdminGiver", giver_id: @admin_giver.id, payable_type: "Debt", status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 100
+        @admin_regifted_parent              = FactoryGirl.create :gift, giver_type: "AdminGiver", giver_id: @admin_giver.id, payable_type: "Debt", status: "regifted", merchant_id: @provider.id, created_at: @start_date + 1.week, cat: 100
+        @admin_regifted_child               = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @admin_regifted_parent.id, status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 101
 
-        @merchant                           = FactoryGirl.create :gift, giver_type: "BizUser", giver_id: @biz_user.id, payable_type: "Debt", status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 200
-        @merchant_regifted_parent           = FactoryGirl.create :gift, giver_type: "BizUser", giver_id: @biz_user.id, payable_type: "Debt", status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 200
-        @merchant_regifted_child            = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @merchant_regifted_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 201
+        @merchant                           = FactoryGirl.create :gift, giver_type: "BizUser", giver_id: @biz_user.id, payable_type: "Debt", status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 200
+        @merchant_regifted_parent           = FactoryGirl.create :gift, giver_type: "BizUser", giver_id: @biz_user.id, payable_type: "Debt", status: "regifted", merchant_id: @provider.id, created_at: @start_date + 1.week, cat: 200
+        @merchant_regifted_child            = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @merchant_regifted_parent.id, status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 201
 
-        @campaign_admin                     = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_admin.id, payable_type: "CampaignItem", payable_id: campaign_item_admin.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 150
-        @campaign_admin_regifted_parent     = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_admin.id, payable_type: "CampaignItem", payable_id: campaign_item_admin.id, status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 150
-        @campaign_admin_regifted_child      = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @campaign_admin_regifted_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 151
+        @campaign_admin                     = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_admin.id, payable_type: "CampaignItem", payable_id: campaign_item_admin.id, status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 150
+        @campaign_admin_regifted_parent     = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_admin.id, payable_type: "CampaignItem", payable_id: campaign_item_admin.id, status: "regifted", merchant_id: @provider.id, created_at: @start_date + 1.week, cat: 150
+        @campaign_admin_regifted_child      = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @campaign_admin_regifted_parent.id, status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 151
 
-        @campaign_merchant                  = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_merchant.id, payable_type: "CampaignItem", payable_id: campaign_item_merchant.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 250
-        @campaign_merchant_regifted_parent  = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_merchant.id, payable_type: "CampaignItem", payable_id: campaign_item_merchant.id, status: "regifted", provider_id: @provider.id, created_at: @start_date + 1.week, cat: 250
-        @campaign_merchant_regifted_child   = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @campaign_merchant_regifted_parent.id, status: "redeemed", provider_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 251
+        @campaign_merchant                  = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_merchant.id, payable_type: "CampaignItem", payable_id: campaign_item_merchant.id, status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 1.week, cat: 250
+        @campaign_merchant_regifted_parent  = FactoryGirl.create :gift, giver_type: "Campaign", giver_id: campaign_merchant.id, payable_type: "CampaignItem", payable_id: campaign_item_merchant.id, status: "regifted", merchant_id: @provider.id, created_at: @start_date + 1.week, cat: 250
+        @campaign_merchant_regifted_child   = FactoryGirl.create :gift, giver_type: "User", giver_id: @user.id, payable_type: "Gift", payable_id: @campaign_merchant_regifted_parent.id, status: "redeemed", merchant_id: @provider.id, redeemed_at: @start_date + 2.weeks, cat: 251
 
     end
 

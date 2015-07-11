@@ -3,7 +3,7 @@ module LandingPageFactory
 	def create_landing_page
 		menu_item_1 = FactoryGirl.create :menu_item, photo: "http://res.cloudinary.com/drinkboard/image/upload/v1414092460/sample_gift_item_ejpbyl.jpg"
 		menu_item_2 = FactoryGirl.create :menu_item
-		provider  = FactoryGirl.create :provider
+		provider  = FactoryGirl.create :merchant
 		campaign = FactoryGirl.create :campaign
 		campaign_item = FactoryGirl.create :campaign_item,
 			campaign_id: campaign.id,
@@ -26,7 +26,7 @@ module LandingPageFactory
 	end
 
 	def landing_page_json_fake
-		provider = FactoryGirl.create :provider
+		provider = FactoryGirl.create :merchant
 		{
 			"campaign_id" => 12,
 			"affiliate_id" => 12441,

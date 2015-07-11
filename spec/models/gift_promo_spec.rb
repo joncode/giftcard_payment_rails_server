@@ -6,13 +6,13 @@ describe GiftPromo do
     end
     before(:each) do
         Provider.delete_all
-        @provider = FactoryGirl.create(:provider)
+        @provider = FactoryGirl.create(:merchant)
         @gift_hsh = {}
         @gift_hsh["detail"]         = "this is good through 9PM"
         @gift_hsh["message"]        = "here is the promo gift"
         @gift_hsh["receiver_name"]  = "Customer Name"
         @gift_hsh["receiver_email"] = "customer@gmail.com"
-        @gift_hsh["provider_id"]    = @provider.id
+        @gift_hsh["merchant_id"]    = @provider.id
         @gift_hsh["provider_name"]  = @provider.name
         @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
     end
@@ -28,25 +28,25 @@ describe GiftPromo do
         gift_promo.message.should        == @gift_hsh["message"]
         gift_promo.receiver_name.should  == "Customer Name"
         gift_promo.receiver_email.should == "customer@gmail.com"
-        gift_promo.provider_id.should    == @provider.id
+        gift_promo.merchant_id.should    == @provider.id
         gift_promo.provider_name.should  == @provider.name
         gift = Gift.find(gift_promo.id)
         gift.class.should          == Gift
         gift.message.should        == @gift_hsh["message"]
         gift.receiver_name.should  == "Customer Name"
         gift.receiver_email.should == "customer@gmail.com"
-        gift.provider_id.should    == @provider.id
+        gift.merchant_id.should    == @provider.id
         gift.provider_name.should  == @provider.name
     end
 
     it "should not run add provider if it has provider ID and name" do
-        Gift.any_instance.should_not_receive(:add_provider_name)
+        Gift.any_instance.should_not_receive(:add_merchant_name)
         gift_promo = GiftPromo.create @gift_hsh
     end
 
     it "should add the provider name to the gift" do
         @gift_hsh.delete("provider_name")
-        Gift.any_instance.should_receive(:add_provider_name)
+        Gift.any_instance.should_receive(:add_merchant_name)
         gift_promo = GiftPromo.create @gift_hsh
     end
 
@@ -108,13 +108,13 @@ describe GiftPromo do
             @user     = FactoryGirl.create(:user)
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver", email: "promo_rec@yahoo.com")
             @card     = FactoryGirl.create(:card, name: @user.name, user_id: @user.id)
-            @provider = FactoryGirl.create(:provider)
+            @provider = FactoryGirl.create(:merchant)
             @biz_user = @provider.biz_user
             @gift_hsh = {}
             @gift_hsh["message"]        = "I just Bought a Gift!"
             @gift_hsh["receiver_name"]  = @receiver.name
             @gift_hsh["receiver_email"] = @receiver.email
-            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["merchant_id"]    = @provider.id
             @gift_hsh["giver"]          = @biz_user
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
@@ -198,7 +198,7 @@ end# == Schema Information
 #  receiver_id    :integer
 #  total          :string(20)
 #  credit_card    :string(100)
-#  provider_id    :integer
+#  merchant_id    :integer
 #  message        :text
 #  status         :string(255)     default("unpaid")
 #  created_at     :datetime        not null
@@ -243,7 +243,7 @@ end# == Schema Information
 #  giver_id       :integer
 #  receiver_id    :integer
 #  credit_card    :string(100)
-#  provider_id    :integer
+#  merchant_id    :integer
 #  message        :text
 #  status         :string(255)     default("unpaid")
 #  created_at     :datetime        not null

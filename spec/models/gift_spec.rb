@@ -86,7 +86,7 @@ describe Gift do
 	end
 
     it "should not run add provider if it has provider ID and name" do
-        Gift.any_instance.should_not_receive(:add_provider_name)
+        Gift.any_instance.should_not_receive(:add_merchant_name)
         gift = FactoryGirl.create(:gift, :provider_name => "Jelly Donut")
     end
 

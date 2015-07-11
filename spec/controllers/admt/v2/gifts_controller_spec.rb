@@ -5,7 +5,7 @@ describe Admt::V2::GiftsController do
 
     before(:each) do
         #Gift.delete_all
-        @provider = FactoryGirl.create(:provider)
+        @merchant = FactoryGirl.create(:merchant)
         unless @admin_user = AtUser.find_by(remember_token: "Token")
             @admin_user = FactoryGirl.create(:admin_user, remember_token: "Token")
         end
@@ -18,7 +18,7 @@ describe Admt::V2::GiftsController do
 
         it_should_behave_like("token authenticated", :put, :update, id: 1)
 
-        let(:gift) { FactoryGirl.create(:gift_no_association, giver: @user, giver_id: @user.id, provider: @provider) }
+        let(:gift) { FactoryGirl.create(:gift_no_association, giver: @user, giver_id: @user.id, merchant: @merchant) }
 
         it "should require a valid gift_id" do
             destroy_id = gift.id
@@ -91,7 +91,7 @@ describe Admt::V2::GiftsController do
 
         context "behavior" do
 
-            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open', value: "134.00") }
+            let(:gift) { FactoryGirl.create(:gift_no_association, merchant: @merchant, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open', value: "134.00") }
 
 
             it "should set the gift 'pay_stat' to 'refund_comp' and not change the gift status" do
@@ -121,7 +121,7 @@ describe Admt::V2::GiftsController do
 
         context "behavior" do
 
-            let(:gift) { FactoryGirl.create(:gift_no_association, provider: @provider, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open', value: "134.00") }
+            let(:gift) { FactoryGirl.create(:gift_no_association, merchant: @merchant, giver: @user, giver_id: @user.id, pay_stat: 'charged', status: 'open', value: "134.00") }
 
             it "should set the gift 'pay_stat' to 'refund_cancel' and gift status to 'cancel' " do
                 auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,345783945,,,#{gift.value},CC,credit,,#{@user.first_name},#{@user.last_name},,,,,,,,,,,,,,,,,"
@@ -236,42 +236,42 @@ describe Admt::V2::GiftsController do
         it_should_behave_like("token authenticated", :post, :create)
 
         it "should 400 when extra or bad keys" do
-            keys = ["receiver_name", "receiver_email", "shoppingCart", "message", "expires_at", "provider_id", "provider_name"]
+            keys = ["receiver_name", "receiver_email", "shoppingCart", "message", "expires_at", "merchant_id", "provider_name"]
 
             # too few keys
             post :create, format: :json, data: { "receiver_name" => "Fred Barry" }
             rrc 400
 
             # too many keys - bad shopping Cart
-            too_many = { "receiver_name" => "Fred Barry", "receiver_email" => "test", "shoppingCart" => "test" , "message" => "test", "value" => "test", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            too_many = { "receiver_name" => "Fred Barry", "receiver_email" => "test", "shoppingCart" => "test" , "message" => "test", "value" => "test", "expires_at"=>"2014-06-12 06:59:59 UTC", "merchant_id" => @merchant.id, "provider_name" => @merchant.name}
             post :create, format: :json, data: too_many
             rrc 400
 
             # correct amount with wrong names - bad shopping Cart
-            too_many = { "name" => "Fred Barry", "email" => "test", "shoppingCart" => "test" , "message" => "test" , "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            too_many = { "name" => "Fred Barry", "email" => "test", "shoppingCart" => "test" , "message" => "test" , "expires_at"=>"2014-06-12 06:59:59 UTC", "merchant_id" => @merchant.id, "provider_name" => @merchant.name}
             post :create, format: :json, data: too_many
             rrc 400
 
             # too many keys - good shopping cart
-            too_many = { "receiver_name" => "Fred Barry", "receiver_email" => "test", "shoppingCart" => @cart , "message" => "test", "value" => "test", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            too_many = { "receiver_name" => "Fred Barry", "receiver_email" => "test", "shoppingCart" => @cart , "message" => "test", "value" => "test", "expires_at"=>"2014-06-12 06:59:59 UTC", "merchant_id" => @merchant.id, "provider_name" => @merchant.name}
             post :create, format: :json, data: too_many
             rrc 400
 
             # correct amount with wrong names - good shopping cart
-            too_many = { "name" => "Fred Barry", "email" => "test", "shoppingCart" => @cart, "message" => "test" , "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            too_many = { "name" => "Fred Barry", "email" => "test", "shoppingCart" => @cart, "message" => "test" , "expires_at"=>"2014-06-12 06:59:59 UTC", "merchant_id" => @merchant.id, "provider_name" => @merchant.name}
             post :create, format: :json, data: too_many
             rrc 400
 
         end
 
         it "should create an admin gift" do
-            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight", "expires_at"=>"2014-06-12 06:59:59 UTC", "merchant_id" => @merchant.id, "provider_name" => @merchant.name}
             post :create, format: :json, data: create_hsh
             rrc 200
             gift = Gift.find_by(receiver_email: "fred@barry.com")
             admin_giver = @admin_user.giver
-            gift.provider.should      == @provider
-            gift.provider_name.should == @provider.name
+            gift.merchant.should      == @merchant
+            gift.provider_name.should == @merchant.name
             gift.giver.should         == admin_giver
             gift.giver_name.should    == admin_giver.name
             gift.expires_at.should    == "2014-06-12 06:59:59 UTC".to_datetime
@@ -284,7 +284,7 @@ describe Admt::V2::GiftsController do
         end
 
         it "should return 200 and a basic serialized gift" do
-            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "merchant_id" => @merchant.id, "provider_name" => @merchant.name}
             post :create, format: :json, data: create_hsh
             rrc 200
             json["status"].should == 1
@@ -293,7 +293,7 @@ describe Admt::V2::GiftsController do
         end
 
         it "should return 400 plus validations message when validations dont pass" do
-            create_hsh = { "receiver_name" => "", "receiver_email" => "test", "shoppingCart" => @cart, "message" => "test", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name }
+            create_hsh = { "receiver_name" => "", "receiver_email" => "test", "shoppingCart" => @cart, "message" => "test", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "merchant_id" => @merchant.id, "provider_name" => @merchant.name }
             post :create, format: :json, data: create_hsh
             rrc 400
             json["status"].should == 0
@@ -304,7 +304,7 @@ describe Admt::V2::GiftsController do
             ResqueSpec.reset!
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
             GiftAdmin.any_instance.stub(:messenger_publish_gift_created)
-            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight", "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight", "expires_at"=>"2014-06-12 06:59:59 UTC", "merchant_id" => @merchant.id, "provider_name" => @merchant.name}
             post :create, format: :json, data: create_hsh
             rrc 200
             gift = Gift.find_by(receiver_email: "fred@barry.com")
@@ -328,20 +328,20 @@ describe Admt::V2::GiftsController do
             GiftAdmin.any_instance.stub(:messenger_publish_gift_created)
             @receiver  = FactoryGirl.create(:user, first_name: "Fred", last_name: "Barry", email: "fred@barry.com")
             giver      = @admin_user.giver
-            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "provider_id" => @provider.id, "provider_name" => @provider.name}
+            create_hsh = { "receiver_name" => "Fred Barry", "receiver_email" => "fred@barry.com", "shoppingCart" => @cart , "message" => "Check out Our Promotions!", "detail" => "Good till midnight",  "expires_at"=>"2014-06-12 06:59:59 UTC", "merchant_id" => @merchant.id, "provider_name" => @merchant.name}
             post :create, format: :json, data: create_hsh
             rrc 200
 
             good_push_hsh = {
                 :aliases => ["#{@receiver.ua_alias}"],
                 :aps => {
-                    :alert => "#{giver.name} sent you a gift at #{@provider.name}!",
+                    :alert => "#{giver.name} sent you a gift at #{@merchant.name}!",
                     :badge => 1,
                     :sound => "pn.wav"
                 },
                 :alert_type => 1,
                 :android => {
-                    :alert => "#{giver.name} sent you a gift at #{@provider.name}!",
+                    :alert => "#{giver.name} sent you a gift at #{@merchant.name}!",
                 }
             }
             Urbanairship.should_receive(:push).with(good_push_hsh)

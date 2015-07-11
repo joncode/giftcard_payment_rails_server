@@ -17,7 +17,8 @@ class GiftPromo < Gift
 private
 
     def pre_init args={}
-        giver           = BizUser.find(args["provider_id"])
+        merchant_id = args['merchant_id'] || args["provider_id"]
+        giver           = BizUser.find(merchant_id)
         args["cat"]     = set_cat(args)
         args["giver"]   = giver
         args["value"]   = calculate_value(args["shoppingCart"])

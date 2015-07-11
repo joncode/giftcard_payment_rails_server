@@ -29,12 +29,12 @@ describe GiftSale do
             @user     = FactoryGirl.create(:user)
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
             @card     = FactoryGirl.create(:card, name: @user.name, user_id: @user.id)
-            @provider = FactoryGirl.create(:provider)
+            @provider = FactoryGirl.create(:merchant)
             @gift_hsh = {}
             @gift_hsh["message"]        = "I just Bought a Gift!"
             @gift_hsh["receiver_name"]  = @receiver.name
             @gift_hsh["receiver_id"]    = @receiver.id
-            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["merchant_id"]    = @provider.id
             @gift_hsh["giver"]          = @user
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
@@ -63,7 +63,7 @@ describe GiftSale do
             gift.value.should           == "45"
             gift.cost.should            == (@gift_hsh["value"].to_f * 0.85).to_s
             gift.service.should         == @gift_hsh["service"]
-            gift.provider.should        == @provider
+            gift.merchant.should        == @provider
             gift.shoppingCart.should    == @gift_hsh["shoppingCart"]
         end
 
@@ -110,7 +110,7 @@ describe GiftSale do
         end
 
         it "should create gift for request bug fix" do
-            req = {"giver_id"=>1, "giver_name"=>"Jimmy Basic", "value"=>"100.00", "service"=>"4.00", "receiver_id"=>1, "receiver_name"=>"Someone New", "provider_id"=>1, "credit_card"=>1}
+            req = {"giver_id"=>1, "giver_name"=>"Jimmy Basic", "value"=>"100.00", "service"=>"4.00", "receiver_id"=>1, "receiver_name"=>"Someone New", "merchant_id"=>1, "credit_card"=>1}
             req["shoppingCart"] = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
             gift        = GiftSale.create @gift_hsh
             gift.reload
@@ -124,12 +124,12 @@ describe GiftSale do
             @user     = FactoryGirl.create(:user)
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
             @card     = FactoryGirl.create(:card, user: @user)
-            @provider = FactoryGirl.create(:provider)
+            @provider = FactoryGirl.create(:merchant)
             @gift_hsh = {}
             @gift_hsh["message"]        = "I just Bought a Gift!"
             @gift_hsh["receiver_name"]  = "Jennifer Receiver"
             @gift_hsh["receiver_email"] = "jenny@gmail.com"
-            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["merchant_id"]    = @provider.id
             @gift_hsh["giver"]          = @user
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
@@ -154,7 +154,7 @@ describe GiftSale do
             gift.giver.should           == @user
             gift.value.should           == "45"
             gift.service.should         == @gift_hsh["service"]
-            gift.provider.should        == @provider
+            gift.merchant.should        == @provider
         end
 
         it "should create a gift via facebook_id" do
@@ -225,12 +225,12 @@ describe GiftSale do
             @user     = FactoryGirl.create(:user)
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
             @card     = FactoryGirl.create(:card, user: @user)
-            @provider = FactoryGirl.create(:provider)
+            @provider = FactoryGirl.create(:merchant)
             @gift_hsh = {}
             @gift_hsh["message"]        = "I just Bought a Gift!"
             @gift_hsh["receiver_name"]  = @receiver.name
             @gift_hsh["receiver_id"]    = @receiver.id
-            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["merchant_id"]    = @provider.id
             @gift_hsh["giver"]          = @user
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
@@ -337,12 +337,12 @@ describe GiftSale do
             @user     = FactoryGirl.create(:user, cim_profile: "11111")
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
             @card     = FactoryGirl.create(:card, user: @user, cim_token: "22222")
-            @provider = FactoryGirl.create(:provider)
+            @provider = FactoryGirl.create(:merchant)
             @gift_hsh = {}
             @gift_hsh["message"]        = "I just Bought a Gift!"
             @gift_hsh["receiver_name"]  = @receiver.name
             @gift_hsh["receiver_id"]    = @receiver.id
-            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["merchant_id"]    = @provider.id
             @gift_hsh["giver"]          = @user
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
@@ -374,12 +374,12 @@ describe GiftSale do
             @user     = FactoryGirl.create(:user)
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
             @card     = FactoryGirl.create(:card, name: @user.name, user_id: @user.id)
-            @provider = FactoryGirl.create(:provider)
+            @provider = FactoryGirl.create(:merchant)
             @gift_hsh = {}
             @gift_hsh["message"]        = "I just Bought a Gift!"
             @gift_hsh["receiver_name"]  = @receiver.name
             @gift_hsh["receiver_id"]    = @receiver.id
-            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["merchant_id"]    = @provider.id
             @gift_hsh["giver"]          = @user
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
@@ -537,7 +537,7 @@ end# == Schema Information
 #  receiver_id    :integer
 #  total          :string(20)
 #  credit_card    :string(100)
-#  provider_id    :integer
+#  merchant_id    :integer
 #  message        :text
 #  status         :string(255)     default("unpaid")
 #  created_at     :datetime        not null

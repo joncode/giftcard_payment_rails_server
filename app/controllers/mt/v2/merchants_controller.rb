@@ -6,11 +6,11 @@ class Mt::V2::MerchantsController < JsonController
     def create
         return nil  if data_not_hash?
 
-        provider     = Provider.new merchant_params
-        if provider.save
-            success provider.id
+        merchant     = Merchant.new merchant_params
+        if merchant.save
+            success merchant.id
         else
-            fail    provider.errors.messages
+            fail    merchant.errors.messages
         end
         respond
     end
@@ -18,18 +18,18 @@ class Mt::V2::MerchantsController < JsonController
     def update
         return nil  if data_not_hash?
 
-        if @provider.update_attributes(merchant_params)
+        if @merchant.update(merchant_params)
             success   "Merchant Update Successful"
         else
-            fail      @provider
+            fail      @merchant
         end
         respond
     end
 
     def menu
         menu_hsh = params["data"]
-        menu_str = @provider.menu_string
-        if menu_str.update_attributes(menu: menu_hsh)
+        menu_str = @merchant.menu_string
+        if menu_str.update(menu: menu_hsh)
             success   "Menu Update Successful"
         else
             fail      menu_str.errors.messages
@@ -45,7 +45,7 @@ class Mt::V2::MerchantsController < JsonController
 private
 
     def merchant_params
-        allowed = ["city_id", "rate", "r_sys", "menu", "latitude", "longitude", "name", "zinger", "description", "address", "city", "state", "zip", "region_id", "phone", "merchant_id", "token", "image", "mode", "pos_merchant_id", "photo_l"]
+        allowed = ["city_id", "rate", "r_sys", "menu", "latitude", "longitude", "name", "zinger", "description", "address", "city", "state", "zip", "region_id", "phone", "token", "image", "mode", "pos_merchant_id", "photo_l"]
 
         params.require(:data).permit(allowed)
     end

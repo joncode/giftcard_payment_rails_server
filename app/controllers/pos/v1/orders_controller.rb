@@ -8,9 +8,9 @@ class Pos::V1::OrdersController < JsonController
         redeem_code     = param_are["redeem_code"]
         pos_merchant_id = param_are["pos_merchant_id"]
         server_code     = param_are["server_code"] || nil
-        provider = Provider.find_by(pos_merchant_id: pos_merchant_id )
-        if provider
-            if gift = Gift.where(provider_id: provider.id, token: redeem_code).first
+        merchant = Merchant.find_by(pos_merchant_id: pos_merchant_id )
+        if merchant
+            if gift = Gift.where(merchant_id: merchant.id, token: redeem_code).first
                 if gift.redeem_gift(server_code)
                     status = :ok
                     response_message = success({"voucher_value" => gift.value} )

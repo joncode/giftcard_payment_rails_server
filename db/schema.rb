@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150711005136) do
+ActiveRecord::Schema.define(version: 20150711044105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -598,7 +598,7 @@ ActiveRecord::Schema.define(version: 20150711005136) do
 
   create_table "menu_strings", force: :cascade do |t|
     t.integer  "version"
-    t.integer  "provider_id",               null: false
+    t.integer  "provider_id"
     t.string   "full_address",  limit: 255
     t.text     "data",                      null: false
     t.datetime "created_at",                null: false
@@ -969,7 +969,7 @@ ActiveRecord::Schema.define(version: 20150711005136) do
   add_index "providers", ["token"], name: "index_providers_on_token", using: :btree
 
   create_table "providers_socials", id: false, force: :cascade do |t|
-    t.integer "provider_id", null: false
+    t.integer "provider_id"
     t.integer "social_id",   null: false
     t.integer "merchant_id"
   end

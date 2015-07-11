@@ -8,8 +8,8 @@ describe Pos::V1::OrdersController do
             Redeem.delete_all
             Gift.delete_all
             user     = FactoryGirl.create(:user)
-            provider = FactoryGirl.create(:provider, pos_merchant_id: 1233)
-            @gift     = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name, status: 'open', provider_id: provider.id)
+            provider = FactoryGirl.create(:merchant, pos_merchant_id: 1233)
+            @gift     = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name, status: 'open', merchant_id: provider.id)
             @gift.notify
             user = NEXT_GEN_USER
             pw   = NEXT_GEN_PASS

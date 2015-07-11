@@ -6,7 +6,7 @@ class Web::V1::WebsitesController < JsonController
         if setting = Setting.where(confirm_email_token: confirm_token).first
             if  setting.confirm_email_token_sent_at > (Time.now - 10.days)
                 # update the setting to be confirmed
-                if setting.update_attribute(:confirm_email_flag, true)
+                if setting.update(confirm_email_flag: true)
                     # send success back
                     success "email confirmed"
                 else

@@ -1,4 +1,10 @@
 class BulkEmail < ActiveRecord::Base
+
+	def merchant_id
+		super || self.provider_id
+	end
+
+
 end
 # == Schema Information
 #

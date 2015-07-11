@@ -8,13 +8,12 @@ describe MailerJob do
     before(:each) do
         ResqueSpec.reset!
         @merchant = FactoryGirl.create :merchant
-        @provider = FactoryGirl.create :provider, name: "Merchies", merchant_id: @merchant
         @giver = FactoryGirl.create :user, first_name: "Givie", last_name: "Giverson", email: "givie@email.com"
         @receiver = FactoryGirl.create :user, first_name: "Receivy", last_name: "Receiverson", email: "receivy@email.com"
         @gift = FactoryGirl.create :gift, receiver_email: @receiver.email,
                                           receiver_name: @receiver.name,
                                           receiver_id: @receiver.id,
-                                          provider: @provider,
+                                          merchant: @merchant,
                                           giver: @giver,
                                           giver_name: @giver.name
         @gift_item = FactoryGirl.create :gift_item, { gift_id: @gift.id}
@@ -192,7 +191,7 @@ describe MailerJob do
     describe :notify_receiver_boomerang do
         it "should call mandrill with send_template" do
             menu_item = FactoryGirl.create :menu_item
-            boomgift = FactoryGirl.create :gift, payable: @gift, receiver_name: "Original Giver", receiver_email: "giver@email.com", provider: @gift.provider, shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":#{menu_item.id},\"item_name\":\"Original Margarita \"}]"
+            boomgift = FactoryGirl.create :gift, payable: @gift, receiver_name: "Original Giver", receiver_email: "giver@email.com", merchant: @gift.merchant, shoppingCart: "[{\"detail\":null,\"price\":13,\"quantity\":1,\"item_id\":#{menu_item.id},\"item_name\":\"Original Margarita \"}]"
             template_name = "iom-boomerang-notice-2"
             items_content = items_text(boomgift)
             template_content = [

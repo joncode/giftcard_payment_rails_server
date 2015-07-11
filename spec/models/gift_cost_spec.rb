@@ -7,7 +7,7 @@ describe "Gift Costs" do
 	before(:each) do
         @user     = FactoryGirl.create(:user)
         @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver")
-        @provider = FactoryGirl.create(:provider)
+        @provider = FactoryGirl.create(:merchant)
 	end
 
 	after(:all) do
@@ -22,7 +22,7 @@ describe "Gift Costs" do
             @gift_hsh["message"]        = "I just Bought a Gift!"
             @gift_hsh["receiver_name"]  = @receiver.name
             @gift_hsh["receiver_id"]    = @receiver.id
-            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["merchant_id"]    = @provider.id
             @gift_hsh["giver"]          = @user
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
@@ -56,7 +56,7 @@ describe "Gift Costs" do
 	        @gift_hsh["message"]        = "here is the promo gift"
 	        @gift_hsh["receiver_name"]  = @receiver.name
 	        @gift_hsh["receiver_email"] = @receiver.email
-	        @gift_hsh["provider_id"]    = @provider.id
+	        @gift_hsh["merchant_id"]    = @provider.id
 	        @gift_hsh["provider_name"]  = @provider.name
 	        @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"price_promo\":\"8\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
         end
@@ -100,7 +100,7 @@ describe "Gift Costs" do
 	        @gift_hsh["message"]        = "here is the admin gift"
 	        @gift_hsh["receiver_name"]  = @receiver.name
 	        @gift_hsh["receiver_email"] = @receiver.email
-	        @gift_hsh["provider_id"]    = @provider.id
+	        @gift_hsh["merchant_id"]    = @provider.id
 	        @gift_hsh["provider_name"]  = @provider.name
 	        @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"price_promo\":\"7\",\"quantity\":1,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
 	    end
@@ -136,7 +136,7 @@ describe "Gift Costs" do
                                                            close_date: (Time.now + 1.week).to_date,
                                                            expire_date: (Time.now + 1.week).to_date,
                                                            budget: 100)
-            @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @provider.id,
+            @campaign_item = FactoryGirl.create(:campaign_item, merchant_id: @provider.id,
                                                                 campaign_id: @campaign.id,
                                                                 message: "Enjoy this special gift on us!",
                                                                 expires_at: @expiration,
@@ -179,7 +179,7 @@ describe "Gift Costs" do
                                                            close_date: (Time.now + 1.week).to_date,
                                                            expire_date: (Time.now + 1.week).to_date,
                                                            budget: 100)
-            @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @provider.id,
+            @campaign_item = FactoryGirl.create(:campaign_item, merchant_id: @provider.id,
                                                                 campaign_id: @campaign.id,
                                                                 message: "Enjoy this special gift on us!",
                                                                 expires_at: @expiration,

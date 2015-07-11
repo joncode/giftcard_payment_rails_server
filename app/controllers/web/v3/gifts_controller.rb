@@ -44,7 +44,7 @@ class Web::V3::GiftsController < MetalCorsController
         gift_hash["giver"]         = @current_user
         gift_hash["credit_card"]   = gps[:pay_id]
         gift_hash["receiver_name"] = gps[:rec_name]
-        gift_hash["provider_id"]   = gps[:loc_id]
+        gift_hash["merchant_id"]   = gps[:loc_id]
         gift_hash["value"]         = gps[:value]
         gift_hash["message"]       = gps[:msg]
         gift_hash["link"]          = gps[:link] || nil
@@ -61,7 +61,6 @@ class Web::V3::GiftsController < MetalCorsController
         gift_hash["client_id"]     = @current_client.id
         gift_hash["partner_id"]    = @current_partner.id
         gift_hash["partner_type"]  = @current_partner.class.to_s
-
         gift = GiftSale.create(gift_hash)
         if gift.kind_of?(Gift) && !gift.id.nil?
             # binding.pry
@@ -141,8 +140,8 @@ class Web::V3::GiftsController < MetalCorsController
         gift = Gift.includes(:provider).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = pos_redeem_params["ticket_num"]
-                if !gift.provider.nil?
-                    resp = gift.pos_redeem(ticket_num, gift.provider.pos_merchant_id, gift.provider.tender_type_id)
+                if !gift.merchant.nil?
+                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id)
                     if resp["success"] == true
                         status = :ok
                         success({msg: resp["response_text"]})
@@ -176,7 +175,7 @@ private
     end
 
     def gift_params
-        params.require(:data).permit(:link, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name,:msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
+        params.require(:data).permit(:merchant_id, :link, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name,:msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
     end
 
     def redeem_params

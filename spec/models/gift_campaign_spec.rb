@@ -33,7 +33,7 @@ describe GiftCampaign do
             gift_campaign.message.should        == "Enjoy this special gift on us!"
             gift_campaign.receiver_name.should  == "Customer Name"
             gift_campaign.receiver_email.should == "customer@gmail.com"
-            gift_campaign.provider_id.should    == @provider.id
+            gift_campaign.merchant_id.should    == @provider.id
             gift_campaign.provider_name.should  == @provider.name
             gift_campaign.giver_type.should     == "Campaign"
             gift_campaign.giver_id.should       == @campaign.id
@@ -144,7 +144,7 @@ describe GiftCampaign do
             gift_campaign.message.should        == "Enjoy this special gift on us!"
             gift_campaign.receiver_name.should  == "Customer Name"
             gift_campaign.receiver_email.should == "customer@gmail.com"
-            gift_campaign.provider_id.should    == @location.id
+            gift_campaign.merchant_id.should    == @location.id
             gift_campaign.provider_name.should  == "LocationBar"
             gift_campaign.giver_type.should     == "Campaign"
             gift_campaign.giver_id.should       == @campaign.id
@@ -248,7 +248,7 @@ end# == Schema Information
 #  receiver_id    :integer
 #  total          :string(20)
 #  credit_card    :string(100)
-#  provider_id    :integer
+#  merchant_id    :integer
 #  message        :text
 #  status         :string(255)     default("unpaid")
 #  created_at     :datetime        not null
@@ -287,7 +287,7 @@ end# == Schema Information
 #  giver_id       :integer
 #  receiver_id    :integer
 #  credit_card    :string(100)
-#  provider_id    :integer
+#  merchant_id    :integer
 #  message        :text
 #  status         :string(255)     default("unpaid")
 #  created_at     :datetime        not null

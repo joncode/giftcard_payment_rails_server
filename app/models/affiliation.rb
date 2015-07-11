@@ -15,8 +15,7 @@ class Affiliation < ActiveRecord::Base
 #   -------------
 
 	def self.get_merchant_affiliation_for_gift(gift)
-		return nil 	 unless provider = gift.provider
-		return nil 	 unless merchant = provider.merchant
+		return nil 	 unless merchant = gift.merchant
 		return false unless affiliation = merchant.affiliation
 		return false unless affiliation.on?
 		return false if affiliation.payout > 999999   # $10,000 in cents

@@ -205,9 +205,9 @@ class JsonController < ActionController::Base
 
     def authenticate_merchant_tools
         token = request.headers["HTTP_TKN"]
-        @provider = Provider.unscoped.find_by(token: token)
-        if @provider
-            puts "MT  -------------   #{@provider.name}   -----------------------"
+        @merchant = Merchant.unscoped.find_by(token: token)
+        if @merchant
+            puts "MT  -------------   #{@merchant.name}   -----------------------"
         else
             head :unauthorized
         end

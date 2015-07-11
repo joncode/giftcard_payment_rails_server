@@ -47,7 +47,7 @@ describe GiftProtoJoin do
             gift.detail.should         == proto.detail
             gift.message.should        == proto.message
             gift.receiver_name.should  == GENERIC_RECEIVER_NAME
-            gift.provider_id.should    == proto.provider_id
+            gift.merchant_id.should    == proto.merchant_id
             gift.provider_name.should  == proto.provider_name
         end
 
@@ -66,7 +66,7 @@ describe GiftProtoJoin do
             gift.message.should        == proto.message
             gift.receiver_name.should  == user.name
             gift.receiver_id.should    == user.id
-            gift.provider_id.should    == proto.provider_id
+            gift.merchant_id.should    == proto.merchant_id
             gift.provider_name.should  == proto.provider_name
         end
 
@@ -169,7 +169,7 @@ end
 #  giver_id       :integer
 #  receiver_id    :integer
 #  credit_card    :string(100)
-#  provider_id    :integer
+#  merchant_id    :integer
 #  message        :text
 #  status         :string(255)     default("unpaid")
 #  created_at     :datetime        not null

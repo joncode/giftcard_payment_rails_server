@@ -18,9 +18,9 @@ describe PaymentCalcCronJob do
 				# make a few merchants
 			m1 = make_merchant_provider("thirstys")
 			m2 = make_merchant_provider("sushiOne")
-			m2.provider.update(rate: 95)
+			m2.update(rate: 95)
 			m3 = make_merchant_provider("Taco nachos forever")
-			m3.provider.update(rate: 96.1)
+			m3.update(rate: 96.1)
 				# attach a merchant to test affiliate
 			m1.affiliate = a1
 			a1.merchants.first.should == m1
@@ -38,17 +38,16 @@ describe PaymentCalcCronJob do
 				# make a batch of gifts
 			u_not = FactoryGirl.create(:user)
 			m_not = make_merchant_provider("Not Merchant")
-			p_not = m_not.provider
-
+			p_not = m_not
 
 			ResqueSpec.reset!
 			GiftSale.any_instance.stub(:messenger)
 			g1 = make_gift_sale(u3, u2, "100", p_not.id)
-			g2 = make_gift_sale(u1, u2, "200", m1.provider.id)
-			g3 = make_gift_sale(u2, u_not, "300",  m2.provider.id)
-			g4 = make_gift_sale(u2, u2, "400",  m3.provider.id)
-			g5 = make_gift_sale(u_not, u3, "500",  m1.provider.id)
-			g6 = make_gift_sale(u_not, u1, "600",  m2.provider.id)
+			g2 = make_gift_sale(u1, u2, "200", m1.id)
+			g3 = make_gift_sale(u2, u_not, "300",  m2.id)
+			g4 = make_gift_sale(u2, u2, "400",  m3.id)
+			g5 = make_gift_sale(u_not, u3, "500",  m1.id)
+			g6 = make_gift_sale(u_not, u1, "600",  m2.id)
 
 				# do not include settled gifts
 			g7 = make_gift_sale(u_not, u_not, "100", p_not.id)
@@ -112,7 +111,7 @@ describe PaymentCalcCronJob do
 			ps = Payment.all
 			ps.count.should == 7
 
-			settled_gift_payment = p_not.merchant.payments.first
+			settled_gift_payment = p_not.payments.first
 			settled_gift_payment.total.should == 8500
 
 		end

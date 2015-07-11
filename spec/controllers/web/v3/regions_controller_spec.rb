@@ -8,9 +8,9 @@ describe Web::V3::RegionsController do
     before(:each) do
         User.delete_all
         UserSocial.delete_all
-        # @provider = FactoryGirl.create(:provider, region_id: 2)
+        # @merchant = FactoryGirl.create(:provider, region_id: 2)
         m = make_merchant_provider('Make Content three')
-        @provider = m.provider
+        @merchant = m
         request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
         @client = make_partner_client('Client', 'Tester')
         request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
@@ -92,11 +92,11 @@ describe Web::V3::RegionsController do
         @client.content = m1
         @client.content = m2
         20.times do
-            p = FactoryGirl.create(:provider)
-            p.update(city_id: m1.city_id)
+            m = FactoryGirl.create(:merchant)
+            m.update(city_id: m1.city_id)
 
         end
-        Provider.last.update(active: false)
+        Merchant.last.update(active: false)
         get :merchants, format: :json, id: m1.city_id
         rrc(200)
         keys = [
@@ -115,8 +115,8 @@ describe Web::V3::RegionsController do
             "region_id",
             "city_id", "region_name"
         ]
-        provider = json["data"][0]
-        compare_keys(provider, keys)
+        merchant = json["data"][0]
+        compare_keys(merchant, keys)
     end
 
 end

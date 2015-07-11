@@ -3,14 +3,14 @@ class PointsForSaleJob
     @queue = :leaderboard
 
     def self.perform gift_id
-		gift       = Gift.includes(:giver).includes(:provider).find gift_id
+		gift       = Gift.includes(:giver).includes(:merchant).find gift_id
         puts "Gift for PointsForSaleJob \n #{gift.inspect}"
     	return  if gift.cat < 300
     	return  if gift.giver_type != "User"
 
 		user       = gift.giver
 		return if user.nil?
-		provider   = Provider.unscoped.find(gift.provider_id)
+		provider   = Merchant.unscoped.find(gift.merchant_id)
 		region_id  = provider.region_id
 
 		user_point = UserPoint.find_or_initialize_by(region_id: region_id, user_id: user.id)

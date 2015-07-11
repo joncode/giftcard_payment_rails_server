@@ -15,10 +15,10 @@ describe Web::V3::GiftsController do
     	@receiver = FactoryGirl.create :user, first_name: "bob", iphone_photo: "d|myphoto2.jpg"
         @other1    = FactoryGirl.create :user, iphone_photo: "d|myphoto2.jpg"
     	other2    = FactoryGirl.create :user, iphone_photo: "d|myphoto2.jpg"
-        @provider = FactoryGirl.create :provider
-    	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: @user.name, receiver_id: @user.id, provider: @provider}
-    	3.times { FactoryGirl.create :gift, giver: @user, receiver_name: other2.name, receiver_id: other2.id, provider: @provider}
-    	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: other2.name, receiver_id: other2.id, provider: @provider}
+        @merchant = FactoryGirl.create :merchant
+    	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: @user.name, receiver_id: @user.id, merchant: @merchant}
+    	3.times { FactoryGirl.create :gift, giver: @user, receiver_name: other2.name, receiver_id: other2.id, merchant: @merchant}
+    	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: other2.name, receiver_id: other2.id, merchant: @merchant}
         @client = make_partner_client('Gifts', 'Creator')
         @user = create_user_with_token "USER_TOKEN", @user, @client
         request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
@@ -32,7 +32,7 @@ describe Web::V3::GiftsController do
             get :index, format: :json
             rrc(200)
             json["data"].count.should == 6
-            keys = ["city_id", "region_name", "region_id", "r_sys", "created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            keys = [ "city_id", "region_name", "region_id", "r_sys", "created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             compare_keys(json["data"][0], keys)
         end
 
@@ -64,7 +64,7 @@ describe Web::V3::GiftsController do
 
         it "should create an affiliate link payment BUG FIX" do
             a = FactoryGirl.create(:affiliate, url_name: "stewarttest_landing_page" )
-            p = FactoryGirl.create(:provider)
+            p = FactoryGirl.create(:merchant)
             lp = FactoryGirl.create(:landing_page, link: "qa.itson.me/shop/las-vegas?aid=stewart")
 
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
@@ -81,7 +81,7 @@ describe Web::V3::GiftsController do
 
         it "should create an landing_page if one is not there" do
             a = FactoryGirl.create(:affiliate, url_name: "stewart" )
-            p = FactoryGirl.create(:provider)
+            p = FactoryGirl.create(:merchant)
 
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
@@ -97,7 +97,7 @@ describe Web::V3::GiftsController do
 
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
-            gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", provider_id: @provider.id
+            gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", merchant_id: @merchant.id
             gift_hash = make_gift_hsh(gift)
             gift.credit_card = @card.id
             gift.value = "31.50"
@@ -106,6 +106,7 @@ describe Web::V3::GiftsController do
             new_gift = Gift.last
             json["status"].should == 1
             json["data"].class.should == Hash
+
             json["data"].should == {
                 "created_at" => new_gift.created_at.to_json.gsub("\"", ""),
                 "giv_name" => "Jimmy Basic",
@@ -118,13 +119,15 @@ describe Web::V3::GiftsController do
                 "status" => "incomplete",
                 "cat" => 300,
                 "msg" => "hope you enjoy it!",
-                "loc_id" => @provider.id,
-                "loc_name" => @provider.name,
-                "loc_phone" => @provider.phone,
-                "loc_address" => @provider.complete_address,
+                "loc_id" => @merchant.id,
+                "loc_name" => @merchant.name,
+                "loc_phone" => @merchant.phone,
+                "loc_address" => @merchant.complete_address,
                 "gift_id" => new_gift.id,
-                "r_sys" => 2,
-                "city_id"=>2, "region_id"=>2, "region_name"=>"New York"
+                "r_sys"=>2,
+                "city_id"=>1,
+                "region_id"=>2,
+                "region_name"=>"New York"
             }
             new_gift.client_id.should == @client.id
             new_gift.partner_id.should == @client.partner.id
@@ -136,7 +139,7 @@ describe Web::V3::GiftsController do
 
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
-            gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", provider_id: @provider.id
+            gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", merchant_id: @merchant.id
             gift_hash = make_gift_hsh_fail(gift)
             gift.credit_card = @card.id
             gift.value = "31.50"
@@ -155,7 +158,7 @@ describe Web::V3::GiftsController do
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             @receiver.update(active: false)
-            gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", provider_id: @provider.id
+            gift = FactoryGirl.build :gift, receiver_id: @receiver.id, receiver_name: "bob", credit_card: @card, message: "Dont forget about me", merchant_id: @merchant.id
             gift_hash = make_gift_hsh(gift)
             gift_hash["rec_net"] = "io"
             gift_hash["rec_net_id"] = @receiver.id
@@ -284,7 +287,7 @@ describe Web::V3::GiftsController do
 
         it "should redeem a notifed gift" do
 
-            @gift.provider.update(pos_merchant_id: "tester")
+            @gift.merchant.update(pos_merchant_id: "tester")
             Gift.any_instance.stub(:pos_redeem).and_return({"success" => true, "response_code" => "PAID", "response_text" => "Paid in full"})
 
             @gift.status.should == 'notified'
@@ -447,7 +450,7 @@ def make_gift_hsh gift
         items: JSON.parse(gift.shoppingCart),
         value: gift.value,
         service: gift.service,
-        loc_id: gift.provider_id,
+        loc_id: gift.merchant_id,
         pay_id: @card.id
     }
 end
@@ -462,7 +465,7 @@ def make_gift_hsh_fail gift
         items: JSON.parse(gift.shoppingCart),
         value: gift.value,
         service: gift.service,
-        loc_id: gift.provider_id,
+        loc_id: gift.merchant_id,
         pay_id: @card.id
     }
 end

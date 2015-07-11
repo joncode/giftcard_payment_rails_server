@@ -102,7 +102,7 @@ describe GiftRegift do
         end
 
         it "should not run add provider or regifted" do
-            Gift.any_instance.should_not_receive(:add_provider_name)
+            Gift.any_instance.should_not_receive(:add_merchant_name)
             Gift.any_instance.should_not_receive(:regifted)
             gift_regift = GiftRegift.create @gift_hsh
         end

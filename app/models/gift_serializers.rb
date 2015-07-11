@@ -187,8 +187,8 @@ private
         gift_hsh["provider_address"]   = merchant.complete_address
         gift_hsh["r_sys"]              = merchant.r_sys
         gift_hsh['city_id']            = merchant.city_id
-        gift_hsh['region_id']          = merchant.region_id
-        gift_hsh['region_name']        = merchant.region_name
+        gift_hsh['region_id']          = merchant.region_id if merchant.region_id
+        gift_hsh['region_name']        = merchant.region_name if merchant.region_name
         return gift_hsh
     end
 end

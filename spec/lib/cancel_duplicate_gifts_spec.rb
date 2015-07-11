@@ -9,28 +9,28 @@ describe "Should cancel duplicates" do
 
 	before do
 		Gift.delete_all
-		@provider1 = FactoryGirl.create :provider
-		provider2 = FactoryGirl.create :provider
+		@provider1 = FactoryGirl.create :merchant
+		provider2 = FactoryGirl.create :merchant
 		10.times do
-			FactoryGirl.create :gift, receiver_email: "ann@email.com", provider_id: @provider1.id, receiver_id: nil
+			FactoryGirl.create :gift, receiver_email: "ann@email.com", merchant_id: @provider1.id, receiver_id: nil
 		end
 		10.times do
-			FactoryGirl.create :gift, receiver_email: "ann@email.com", provider_id: provider2.id, receiver_id: nil
+			FactoryGirl.create :gift, receiver_email: "ann@email.com", merchant_id: provider2.id, receiver_id: nil
 		end
 		15.times do
-			FactoryGirl.create :gift, receiver_email: "bob@email.com", provider_id: @provider1.id, receiver_id: nil
+			FactoryGirl.create :gift, receiver_email: "bob@email.com", merchant_id: @provider1.id, receiver_id: nil
 		end
 		15.times do
-			gift = FactoryGirl.create :gift, receiver_email: "bob@email.com", provider_id: @provider1.id, receiver_id: nil
+			gift = FactoryGirl.create :gift, receiver_email: "bob@email.com", merchant_id: @provider1.id, receiver_id: nil
 			gift.update(created_at: 1.month.ago)
 		end
 		20.times do
-			FactoryGirl.create :gift, receiver_email: "cam@email.com", provider_id: @provider1.id, receiver_id: nil
+			FactoryGirl.create :gift, receiver_email: "cam@email.com", merchant_id: @provider1.id, receiver_id: nil
 		end
 		20.times do
-			FactoryGirl.create :gift, receiver_email: "cam@email.com", provider_id: @provider1.id, receiver_id: 1
+			FactoryGirl.create :gift, receiver_email: "cam@email.com", merchant_id: @provider1.id, receiver_id: 1
 		end
-		FactoryGirl.create :gift, receiver_email: "dan@email.com", provider_id: @provider1.id, receiver_id: nil
+		FactoryGirl.create :gift, receiver_email: "dan@email.com", merchant_id: @provider1.id, receiver_id: nil
 	end
 
 	it "should find the duplicate gifts" do
@@ -40,7 +40,7 @@ describe "Should cancel duplicates" do
 	it "should update the correct gifts" do
 		CancelDuplicateGifts.perform(@provider1.id, 1.day.ago)
 		Gift.count.should == 91
-		scoped_gifts = Gift.where(provider_id: @provider1.id, receiver_id: nil).where("created_at > ?", 1.week.ago)
+		scoped_gifts = Gift.where(merchant_id: @provider1.id, receiver_id: nil).where("created_at > ?", 1.week.ago)
 		scoped_gifts.count.should == 46
 		scoped_gifts.where(status: "cancel", pay_stat: "payment_error").count.should == 42
 		scoped_gifts.where(receiver_email: "ann@email.com").where.not(status: "cancel").count.should == 1
@@ -58,14 +58,14 @@ describe "undo all cancels" do
 		Gift.delete_all
 		@provider1 = FactoryGirl.create :provider
 		10.times do
-			gift = FactoryGirl.create :gift, receiver_email: "ann@email.com", provider_id: @provider1.id, receiver_id: nil
+			gift = FactoryGirl.create :gift, receiver_email: "ann@email.com", merchant_id: @provider1.id, receiver_id: nil
 			gift.update(status: "cancel")
 		end
 		10.times do
-			FactoryGirl.create :gift, receiver_email: "bob@email.com", provider_id: @provider1.id, receiver_id: nil, status: "incomplete"
+			FactoryGirl.create :gift, receiver_email: "bob@email.com", merchant_id: @provider1.id, receiver_id: nil, status: "incomplete"
 		end
 		10.times do
-			gift = FactoryGirl.create :gift, receiver_email: "cam@email.com", provider_id: @provider1.id, receiver_id: nil
+			gift = FactoryGirl.create :gift, receiver_email: "cam@email.com", merchant_id: @provider1.id, receiver_id: nil
 			gift.update(status: "cancel")
 		end
 		CancelDuplicateGifts.undo_dual_cancels(@provider1.id, 1.day.ago)

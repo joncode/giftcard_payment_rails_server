@@ -6,7 +6,7 @@ describe PushUserJob do
     before(:each) do
         User.delete_all
         PnToken.delete_all
-        Provider.delete_all
+        Merchant.delete_all
         RegisterPushJob.stub(:ua_register)
         @user     = FactoryGirl.create(:user)
         @pn_token = "FAKE_PN_TOKENFAKE_PN_TOKEN"

@@ -3,8 +3,8 @@ class Web::V2::MerchantsController < JsonController
     rescue_from JSON::ParserError, :with => :bad_request
 
     def show
-        if provider = Provider.includes(:menu_string).where(merchant_id: params[:id]).first
-            success provider.web_serialize
+        if merchant = Merchant.includes(:menu_string).where(id: params[:id]).first
+            success merchant.web_serialize
         else
             fail    data_not_found
         end

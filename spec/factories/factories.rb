@@ -433,6 +433,14 @@ FactoryGirl.define do
         sequence(:token)   { |n| "token#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
+
+        sequence(:phone) do
+            phone = ""
+            10.times do
+              phone += (2..8).to_a.sample.to_s
+            end
+            phone
+        end
     end
 
     factory :brand do
@@ -521,6 +529,7 @@ FactoryGirl.define do
         merchant_id 1
         at_user_id  nil
     end
+
     factory :affiliation do
         affiliate     FactoryGirl.create(:affiliate)
         target          FactoryGirl.create(:user)

@@ -6,9 +6,9 @@ describe Admt::V2::GiftCampaignsController do
         #Gift.delete_all
         AdminUser.delete_all
         User.delete_all
-        @provider      = FactoryGirl.create :provider
+        @merchant      = FactoryGirl.create :merchant
         @campaign      = FactoryGirl.create(:campaign, purchaser_type: "AdminGiver", name: "Cinco de Mayo Party!")
-        @campaign_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, expires_at: Time.now.to_date, provider_id: @provider.id, value: "10", cost: "8")
+        @campaign_item = FactoryGirl.create(:campaign_item, campaign_id: @campaign.id, expires_at: Time.now.to_date, merchant_id: @merchant.id, value: "10", cost: "8")
         @admin_user    = FactoryGirl.create(:admin_user, remember_token: "Token")
         @user          = FactoryGirl.create(:user, email: "bob@bob.com", phone: "2222222222")
         request.env["HTTP_TKN"] = "Token"
@@ -42,8 +42,8 @@ describe Admt::V2::GiftCampaignsController do
 
             gift        = Gift.find_by(receiver_phone: "2222222222")
 
-            gift.provider.should      == @provider
-            gift.provider_name.should == @provider.name
+            gift.merchant.should      == @merchant
+            gift.provider_name.should == @merchant.name
 
             gift.giver_type.should     == "Campaign"
             gift.giver_id.should       == @campaign.id
@@ -63,8 +63,8 @@ describe Admt::V2::GiftCampaignsController do
 
             gift        = Gift.find_by(receiver_email: "bob@bob.com")
 
-            gift.provider.should      == @provider
-            gift.provider_name.should == @provider.name
+            gift.merchant.should      == @merchant
+            gift.provider_name.should == @merchant.name
 
             gift.giver_type.should     == "Campaign"
             gift.giver_id.should       == @campaign.id
@@ -128,13 +128,13 @@ describe Admt::V2::GiftCampaignsController do
             good_push_hsh = {
                 :aliases => ["#{@user.ua_alias}"],
                 :aps => {
-                    :alert => "#{@campaign.name} sent you a gift at #{@provider.name}!",
+                    :alert => "#{@campaign.name} sent you a gift at #{@merchant.name}!",
                     :badge => 1,
                     :sound =>"pn.wav"
                 },
                 :alert_type=>1,
                 :android => {
-                    :alert => "#{@campaign.name} sent you a gift at #{@provider.name}!",
+                    :alert => "#{@campaign.name} sent you a gift at #{@merchant.name}!",
                 }
             }
             Urbanairship.should_receive(:push).with(good_push_hsh)
@@ -171,8 +171,8 @@ describe Admt::V2::GiftCampaignsController do
             post :bulk_create, format: :json, data: create_hsh
             rrc 200
             gift = Gift.find_by(receiver_id: @user_2.id)
-            gift.provider.should      == @provider
-            gift.provider_name.should == @provider.name
+            gift.merchant.should      == @merchant
+            gift.provider_name.should == @merchant.name
             gift.giver_type.should     == "Campaign"
             gift.giver_id.should       == @campaign.id
             gift.receiver_name.should  == "Dos Equis"

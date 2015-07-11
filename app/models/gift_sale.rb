@@ -34,13 +34,15 @@ private
 
     def pre_init args={}
 
-        args["unique_id"] = unique_cc_id(args["receiver_name"], args["provider_id"])
+        merchant_id = args['merchant_id'] || args["provider_id"]
+
+        args["unique_id"] = unique_cc_id(args["receiver_name"], merchant_id)
         card                           = args["card"]
         args["amount"]                 = (args["value"].to_f + set_service_f(args)).to_s
         args["cost"]                   = (args["value"].to_f * 0.85).to_s
         credit_card_hsh                = card.create_card_hsh(args, args["giver"].cim_profile)
         credit_card_hsh["giver_id"]    = card.user_id
-        credit_card_hsh["provider_id"] = args["provider_id"]
+        credit_card_hsh["merchant_id"] = merchant_id
         args["cat"]                    = set_cat(args)
         args.delete("unique_id")
         args.delete("card")
