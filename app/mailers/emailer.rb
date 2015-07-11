@@ -218,10 +218,8 @@ module Emailer
         request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
     end
 
-    ##### OLD EMAILERS
-
     def notify_receiver_boomerang data
-        gift 			  = GiftBoomerang.find(data["gift_id"])
+        gift              = GiftBoomerang.find(data["gift_id"])
         original_receiver = gift.original_receiver_social
 
         template_name    = "iom-boomerang-notice-2"
@@ -229,14 +227,14 @@ module Emailer
         if gift.receiver_email
             email         = gift.receiver_email
         elsif gift.receiver
-            email 		  = gift.receiver.email
+            email         = gift.receiver.email
         else
             puts "NOTIFY RECEIVER BOOMERANG CALLED WITHOUT RECEIVER EMAIL"
             return nil
         end
 
         items_text       = items_text(gift)
-        adjusted_id 	 = NUMBER_ID + gift.id
+        adjusted_id      = NUMBER_ID + gift.id
         link             = "#{PUBLIC_URL}/signup/acceptgift?id=#{adjusted_id}"
         bcc              = "info@itson.me"
         template_content = [
@@ -245,6 +243,8 @@ module Emailer
         message          = message_hash_old(subject(template_name), email, recipient_name, link, bcc)
         request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"], template_content)
     end
+
+    ##### OLD EMAILERS
 
     def reminder_gift_giver recipient, receiver_name
         ###----> remind giver to remind recipient, after one month , cron job

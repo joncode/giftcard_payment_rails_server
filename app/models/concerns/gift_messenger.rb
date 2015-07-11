@@ -1,5 +1,6 @@
 module GiftMessenger
     extend ActiveSupport::Concern
+    include Email
 
     def messenger(invoice=false)
         if self.success? && thread_on?

@@ -165,13 +165,13 @@ class Provider < ActiveRecord::Base
 		image
 	end
 
-	def get_logo
-		if self.merchant
-			self.get_logo
-		else
-			nil
-		end
-	end
+    def get_logo
+        if photo_l.present?
+            photo_l
+        else
+            "http://res.cloudinary.com/drinkboard/image/upload/v1408401050/blank_logo_njwzxk.png"
+        end
+    end
 
 	def get_logo_web
 		self.photo_l

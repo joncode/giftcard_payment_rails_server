@@ -35,7 +35,7 @@ private
         args["giver"]    = boom
         args["message"]  = boomerang_message(old_gift)
         args["detail"]   = old_gift.detail
-        args["provider"] = old_gift.provider
+        args["merchant"] = old_gift.merchant
         args["value"]    = old_gift.value
         args["service"]  = old_gift.service
         args["cost"]     = old_gift.cost if old_gift.cost

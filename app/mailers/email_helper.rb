@@ -129,7 +129,7 @@ module EmailHelper
         <table style='width: 100%;'>
           <tr>
             <td style='text-align:right; padding: 0 10px; width:50%;'>Location</td>
-          <td style='text-align:left; width:50%;'>#{gift.provider.name}</td>
+          <td style='text-align:left; width:50%;'>#{gift.merchant.name}</td>
           </tr>
           <tr>
             <td style='text-align:right; padding: 0 10px; width:50%;'>Gift value</td>
@@ -149,7 +149,7 @@ module EmailHelper
   end
 
   def text_for_notify_receiver_wo_redemption gift
-    image_url      = gift.provider.image
+    image_url      = gift.merchant.image
     giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
     button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
     button_text   = "Claim My Gift"
@@ -187,7 +187,7 @@ module EmailHelper
   end
 
   def text_for_notify_receiver_proto_join gift
-    image_url      = gift.provider.image
+    image_url      = gift.merchant.image
     button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
     button_text   = "Claim My Gift"
     provider_name = gift.provider_name
@@ -237,7 +237,7 @@ module EmailHelper
   end
 
   def text_for_notify_receiver gift
-    image_url     = gift.provider.image
+    image_url     = gift.merchant.image
     giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
     button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
     button_text   = "Claim My Gift"
@@ -251,7 +251,7 @@ module EmailHelper
     expires_at    = make_ordinalized_date_with_day(gift.expires_at)
     details       = gift.detail || ""
     redemption_method = v2_redemption
-          case gift.provider.r_sys
+          case gift.merchant.r_sys
           when 1
             redemption_method = v1_redemption
           when 3

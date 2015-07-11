@@ -68,7 +68,7 @@ class MenuString < ActiveRecord::Base
   	end
 
     def self.compile_menu_to_menu_string(provider_id)
-        menu_string = MenuString.find_by(provider_id: provider_id)
+        menu_string = MenuString.find_by(merchant_id: provider_id)
         if !menu_string
             menu_string = MenuString.new
             menu_string_data = menu_string.generate_new_menu_string(provider_id)
@@ -85,9 +85,9 @@ private
 
     def update_merchant
         unless self.menu.nil?
-            if provider = Provider.unscoped.find(self.provider_id)
+            if provider = Merchant.unscoped.find(self.merchant_id)
                 if not provider.menu_is_live
-                    provider.update_attribute(:menu_is_live, true)
+                    provider.update(menu_is_live: true)
                 end
             end
         end
@@ -97,8 +97,8 @@ private
 
 			# remake menu string from menu
 	def generate_new_menu_string(provider_id)
-		self.full_address 	= Provider.find(provider_id).complete_address
-		self.provider_id 	= provider_id
+		self.full_address 	= Merchant.find(provider_id).complete_address
+		self.merchant_id 	= provider_id
 		return self.generate_menu_string(provider_id)
 	end
 
@@ -109,7 +109,7 @@ private
 		self.version 		= 2
 		sections_array 		= Menu.get_sections(provider_id)
 		self.sections_json 	= sections_array.to_json
-		self.provider_id 	= provider_id if !self.provider_id
+		self.merchant_id 	= provider_id if !self.merchant_id
 
 		if self.save
 			puts "MENU STRING FOR #{provider_id} SAVED"

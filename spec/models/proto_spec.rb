@@ -35,10 +35,10 @@ describe Proto do
 			proto.should have_at_least(1).error_on(:expires_at)
 		end
 
-		it "requires provider_id" do
-			proto = FactoryGirl.build(:proto, :provider_id => nil)
+		it "requires merchant_id" do
+			proto = FactoryGirl.build(:proto, :merchant_id => nil)
 			proto.should_not be_valid
-			proto.should have_at_least(1).error_on(:provider_id)
+			proto.should have_at_least(1).error_on(:merchant_id)
 		end
 
 		it "requires provider_name" do
@@ -143,7 +143,7 @@ describe Proto do
 		it "should associate with giver" do
 			social                  = FactoryGirl.create(:social)
 			proto                   = FactoryGirl.create(:proto)
-			provider                = FactoryGirl.create(:provider)
+			provider                = FactoryGirl.create(:merchant)
 			proto.giver = provider.biz_user
 			proto.socials << social
 			proto.save
@@ -156,13 +156,13 @@ describe Proto do
 		it "should associate with provider" do
 			social                = FactoryGirl.create(:social)
 			proto                 = FactoryGirl.create(:proto)
-			provider              = FactoryGirl.create(:provider)
-			proto.provider_id     = provider.id
+			provider              = FactoryGirl.create(:merchant)
+			proto.merchant_id     = provider.id
 			proto.provider_name   = provider.name
 			proto.socials << social
 			proto.save
 			proto                 = Proto.last
-			proto.provider.should == provider
+			proto.merchant.should == provider
 		end
 
 	end
@@ -189,7 +189,7 @@ end
 #  giver_id      :integer
 #  giver_type    :string(255)
 #  giver_name    :string(255)
-#  provider_id   :integer
+#  merchant_id   :integer
 #  provider_name :string(255)
 #  cat           :integer
 #  contacts      :integer         default(0)

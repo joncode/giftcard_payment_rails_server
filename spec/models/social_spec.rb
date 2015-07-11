@@ -66,12 +66,12 @@ describe Social do
     context "Associations" do
         it "should have many providers_socials" do
             social    = FactoryGirl.create :social
-            provider1 = FactoryGirl.create :provider
-            provider2 = FactoryGirl.create :provider
-            FactoryGirl.create :providers_social, provider_id: provider1.id, social_id: social.id
-            FactoryGirl.create :providers_social, provider_id: provider2.id, social_id: social.id
+            provider1 = FactoryGirl.create :merchant
+            provider2 = FactoryGirl.create :merchant
+            FactoryGirl.create :providers_social, merchant_id: provider1.id, social_id: social.id
+            FactoryGirl.create :providers_social, merchant_id: provider2.id, social_id: social.id
             social.providers_socials.count.should == 2
-            social.providers.count.should == 2
+            social.merchants.count.should == 2
         end
         it "should have many at_users_socials" do
             social    = FactoryGirl.create :social

@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 describe GiftAdmin do
+
     before(:each) do
         User.any_instance.stub(:init_confirm_email).and_return(true)
     end
+
     before(:each) do
-        Provider.delete_all
-        @provider = FactoryGirl.create(:provider)
+        Merchant.delete_all
+        @merchant = FactoryGirl.create(:merchant)
         @admin    = FactoryGirl.create(:admin_user)
         @giver    = @admin.giver
         @gift_hsh = {}
@@ -14,8 +16,8 @@ describe GiftAdmin do
         @gift_hsh["message"]        = "here is the admin gift"
         @gift_hsh["receiver_name"]  = "Customer Name"
         @gift_hsh["receiver_email"] = "customer@gmail.com"
-        @gift_hsh["provider_id"]    = @provider.id
-        @gift_hsh["provider_name"]  = @provider.name
+        @gift_hsh["merchant_id"]    = @merchant.id
+        @gift_hsh["provider_name"]  = @merchant.name
         @gift_hsh["shoppingCart"]   = "[{\"price\":\"10\",\"quantity\":3,\"section\":\"beer\",\"item_id\":782,\"item_name\":\"Budwesier\"}]"
     end
 
@@ -35,15 +37,15 @@ describe GiftAdmin do
         gift_admin.message.should        == @gift_hsh["message"]
         gift_admin.receiver_name.should  == "Customer Name"
         gift_admin.receiver_email.should == "customer@gmail.com"
-        gift_admin.provider_id.should    == @provider.id
-        gift_admin.provider_name.should  == @provider.name
+        gift_admin.merchant_id.should    == @merchant.id
+        gift_admin.provider_name.should  == @merchant.name
         gift = Gift.find(gift_admin.id)
         gift.class.should          == Gift
         gift.message.should        == @gift_hsh["message"]
         gift.receiver_name.should  == "Customer Name"
         gift.receiver_email.should == "customer@gmail.com"
-        gift.provider_id.should    == @provider.id
-        gift.provider_name.should  == @provider.name
+        gift.merchant_id.should    == @merchant.id
+        gift.provider_name.should  == @merchant.name
     end
 
     it "should set the giver to 'ItsOnMe Staff' giver" do
@@ -120,14 +122,14 @@ describe GiftAdmin do
             @user     = FactoryGirl.create(:user)
             @receiver = FactoryGirl.create(:user, first_name: "Sarah", last_name: "Receiver", email: "promo_rec@yahoo.com")
             @card     = FactoryGirl.create(:card, name: @user.name, user_id: @user.id)
-            @provider = FactoryGirl.create(:provider)
+            @merchant = FactoryGirl.create(:merchant)
             @admin_user = FactoryGirl.create(:admin_user)
             @giver    = @admin_user.giver
             @gift_hsh = {}
             @gift_hsh["message"]        = "I just Bought a Gift!"
             @gift_hsh["receiver_name"]  = @receiver.name
             @gift_hsh["receiver_email"] = @receiver.email
-            @gift_hsh["provider_id"]    = @provider.id
+            @gift_hsh["provider_id"]    = @merchant.id
             @gift_hsh["giver"]          = @giver
             @gift_hsh["value"]          = "45.00"
             @gift_hsh["service"]        = "2.25"
@@ -185,7 +187,7 @@ describe GiftAdmin do
             stub_request(:post, "https://q_NVI6G1RRaOU49kKTOZMQ:Lugw6dSXT6-e5mruDtO14g@go.urbanairship.com/api/push/").to_return(:status => 200, :body => "", :headers => {})
             stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
             stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@giver.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1, :android =>{:alert => "#{@giver.name} sent you a gift at #{@provider.name}!"}}
+            good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@giver.name} sent you a gift at #{@merchant.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1, :android =>{:alert => "#{@giver.name} sent you a gift at #{@merchant.name}!"}}
             Urbanairship.should_receive(:push).with(good_push_hsh)
             response = GiftAdmin.create @gift_hsh
             run_delayed_jobs
@@ -194,7 +196,7 @@ describe GiftAdmin do
         # it "should not message users when payment_error" do
         #     stub_request(:post, "https://us7.api.mailchimp.com/2.0/lists/subscribe.json").to_return(:status => 200, :body => "{}", :headers => {})
         #     stub_request(:post, "https://mandrillapp.com/api/1.0/messages/send-template.json").to_return(:status => 200, :body => "{}", :headers => {})
-        #     good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@giver.name} sent you a gift at #{@provider.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
+        #     good_push_hsh = {:aliases =>["#{@receiver.ua_alias}"],:aps =>{:alert => "#{@giver.name} sent you a gift at #{@merchant.name}!",:badge=>1,:sound=>"pn.wav"},:alert_type=>1}
         #     Urbanairship.should_not_receive(:push).with(good_push_hsh)
         #     GiftAdmin.create @gift_hsh
         #     run_delayed_jobs

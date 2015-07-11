@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150710224559) do
+ActiveRecord::Schema.define(version: 20150711005136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -974,9 +974,8 @@ ActiveRecord::Schema.define(version: 20150710224559) do
     t.integer "merchant_id"
   end
 
-  add_index "providers_socials", ["merchant_id", "social_id"], name: "index_providers_socials_on_merchant_id_and_social_id", using: :btree
+  add_index "providers_socials", ["merchant_id", "social_id"], name: "index_providers_socials_on_merchant_id_and_social_id", unique: true, using: :btree
   add_index "providers_socials", ["merchant_id"], name: "index_providers_socials_on_merchant_id", using: :btree
-  add_index "providers_socials", ["provider_id", "social_id"], name: "index_providers_socials_on_provider_id_and_social_id", unique: true, using: :btree
   add_index "providers_socials", ["provider_id"], name: "index_providers_socials_on_provider_id", using: :btree
 
   create_table "providers_tags", id: false, force: :cascade do |t|

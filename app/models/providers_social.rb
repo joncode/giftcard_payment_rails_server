@@ -3,7 +3,7 @@ class ProvidersSocial  < ActiveRecord::Base
 
 #   -------------
 
-	validates :social_id, :uniqueness => { scope: :provider_id }
+	validates :social_id, :uniqueness => { scope: :merchant_id }
 
 #   -------------
 

@@ -42,7 +42,7 @@ describe GiftBoomerang do
             gift.message.should       == "Here is the gift you sent to 215-266-7474. They never created an account, so we’re returning this gift to you. Use Regift to try your friend again, send it to a new friend, or use the gift yourself!"
             gift.receiver_name.should == @user.name
             gift.receiver.should      == @user
-            gift.provider.should      == @old_gift.provider
+            gift.merchant.should      == @old_gift.merchant
             gift.provider_name.should == @old_gift.provider_name
         end
 

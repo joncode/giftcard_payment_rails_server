@@ -240,7 +240,7 @@ FactoryGirl.define do
         platform "ios"
     end
 
-    factory :provider do
+    factory :provider, :class => 'Merchant' do
         sequence(:name)    { |n| "ichizos#{n}" }
         city_name       "New York"
         address     "123 happy st"

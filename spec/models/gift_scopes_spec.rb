@@ -9,21 +9,21 @@ describe GiftScopes do
     context "provider scopes" do
 
         before(:each) do
-            @provider = FactoryGirl.create(:provider)
+            @provider = FactoryGirl.create(:merchant)
             @number = 10
             @number.times do
-                FactoryGirl.create(:gift,   {:provider => nil, :provider_id => @provider.id, :provider_name => @provider.name }) # 10 incomplete  gifts
-                FactoryGirl.create(:regift, {:provider => nil, :provider_id => @provider.id, :provider_name => @provider.name }) # 10 open gifts
+                FactoryGirl.create(:gift,   {:merchant => nil, :merchant_id => @provider.id, :provider_name => @provider.name }) # 10 incomplete  gifts
+                FactoryGirl.create(:regift, {:merchant => nil, :merchant_id => @provider.id, :provider_name => @provider.name }) # 10 open gifts
             end
             gs = Gift.all
             gs.each do |g|
                 g.provider_name = @provider.name
-                g.provider_id   = @provider.id
+                g.merchant_id   = @provider.id
                 g.save
             end
             # os = Order.all
             # os.each do |o|
-            #     o.provider_id = @provider.id
+            #     o.merchant_id = @provider.id
             #     o.save
             # end
         end
@@ -99,7 +99,7 @@ describe GiftScopes do
             it "should return correct badges for in-app and for springboard" do
 
                 User.delete_all
-                Provider.delete_all
+                Merchant.delete_all
                 @user     = FactoryGirl.create(:user)
                 2.times do
                     gift = FactoryGirl.create(:gift, receiver: @user, provider_name: "Redeemed", status: 'redeemed')

@@ -55,7 +55,7 @@ private
     end
 
 	def self.provider_active_and_live? gift
-		provider = gift.provider
+		provider = gift.merchant
 		if provider.active == true && provider.mode == "live"
 			true
 		else

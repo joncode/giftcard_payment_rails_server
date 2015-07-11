@@ -68,7 +68,7 @@ private
         payment       = PaymentGatewayCim.new(payment_hsh)
         resp_hsh      = payment.charge
 
-        sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "provider_id" => cc_hsh["provider_id"]}
+        sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"]}
         sale_init_hsh.merge!(resp_hsh)
         Sale.new sale_init_hsh
     end

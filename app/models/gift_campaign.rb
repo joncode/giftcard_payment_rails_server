@@ -23,14 +23,14 @@ class GiftCampaign < Gift
 private
 
     def pre_init args={}
-        campaign_item         = CampaignItem.includes(:campaign).includes(:provider).where(id: args["payable_id"]).first
+        campaign_item         = CampaignItem.includes(:campaign).includes(:merchant).where(id: args["payable_id"]).first
         campaign              = campaign_item.campaign
-        provider              = campaign_item.provider
+        merchant              = campaign_item.merchant
         args["cat"]           = campaign.gift_cat
         args["giver"]         = campaign
         args["giver_name"]    = campaign.name
-        args["provider"]      = provider
-        args["provider_name"] = provider.name
+        args["merchant"]      = merchant
+        args["provider_name"] = merchant.name
         args["payable"]       = campaign_item
         args["receiver_name"] = campaign.name if args["receiver_name"].nil?
         args["message"]       = campaign_item.message

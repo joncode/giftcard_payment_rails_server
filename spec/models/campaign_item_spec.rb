@@ -114,9 +114,9 @@ describe CampaignItem do
         end
 
         it "should belongs_to a provider" do
-            p = FactoryGirl.create(:provider)
-            cam_item = FactoryGirl.create( :campaign_item, provider_id: p.id)
-            cam_item.provider.should == p
+            p = FactoryGirl.create(:merchant)
+            cam_item = FactoryGirl.create( :campaign_item, merchant_id: p.id)
+            cam_item.merchant.should == p
         end
 
         it "should have a shoppingCart" do
@@ -152,7 +152,7 @@ end# == Schema Information
 #
 #  id           :integer         not null, primary key
 #  campaign_id  :integer
-#  provider_id  :integer
+#  merchant_id  :integer
 #  giver_id     :integer
 #  giver_name   :string(255)
 #  budget       :integer

@@ -115,6 +115,11 @@ class Gift < ActiveRecord::Base
 
     def provider= provider_obj
         self.provider_name = provider_obj.name if provider_obj
+        self.merchant = provider_obj
+    end
+
+    def merchant= provider_obj
+        self.provider_name = provider_obj.name if provider_obj
         super
     end
 

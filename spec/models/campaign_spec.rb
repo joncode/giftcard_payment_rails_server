@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Campaign do
 
     before(:each) do
-        @provider      = FactoryGirl.create(:provider)
+        @merchant      = FactoryGirl.create(:merchant)
         @admin         = FactoryGirl.create(:admin_user)
         @admin_giver   = AdminGiver.find(@admin.id)
         @expiration    = (Time.now + 1.month).to_date
@@ -15,7 +15,7 @@ describe Campaign do
                                                        close_date: (Time.now + 1.week).to_date,
                                                        expire_date: (Time.now + 1.week).to_date,
                                                        budget: 100)
-        @campaign_item = FactoryGirl.create(:campaign_item, provider_id: @provider.id,
+        @campaign_item = FactoryGirl.create(:campaign_item, merchant_id: @merchant.id,
                                                             campaign_id: @campaign.id,
                                                             message: "Enjoy this special gift on us!",
                                                             expires_at: @expiration,

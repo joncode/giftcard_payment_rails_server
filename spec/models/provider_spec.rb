@@ -3,12 +3,12 @@ require 'spec_helper'
 describe Provider do
 
     it "builds from factory" do
-        provider = FactoryGirl.create :provider
+        provider = FactoryGirl.create :merchant
         provider.should be_valid
     end
 
     it "should associate with many gifts as merchant" do
-        provider = FactoryGirl.create(:provider)
+        provider = FactoryGirl.create(:merchant)
         gift = FactoryGirl.create(:gift, provider: provider)
 
         provider.reload
@@ -17,13 +17,13 @@ describe Provider do
     end
 
     it "should return its BizUser" do
-        provider = FactoryGirl.create(:provider)
+        provider = FactoryGirl.create(:merchant)
         biz_user = BizUser.find(provider.id)
         provider.biz_user.should == biz_user
     end
 
     it "should return the location_fee" do
-        provider = FactoryGirl.create(:provider)
+        provider = FactoryGirl.create(:merchant)
         provider.location_fee.should == 0.85
         provider.update(payment_plan: :prime, rate: 95)
         provider.location_fee.should == 0.95
@@ -32,8 +32,8 @@ describe Provider do
     end
 
     it "should web serialize with menu in json" do
-        provider = FactoryGirl.create(:provider)
-        FactoryGirl.create(:menu_string, provider_id: provider.id)
+        provider = FactoryGirl.create(:merchant)
+        FactoryGirl.create(:menu_string, merchant_id: provider.id)
         p_hsh = provider.web_serialize
         p_hsh["name"].should       == provider.name
         p_hsh["phone"].should      == provider.phone
@@ -42,7 +42,7 @@ describe Provider do
         p_hsh["region_id"].should  == provider.region_id
         p_hsh["loc_id"].should     == provider.id
         p_hsh["photo"].should      == provider.get_photo(default: false)
-        p_hsh["logo"].should       == provider.get_logo
+        p_hsh["logo"].should       == provider.get_logo_web
         p_hsh["loc_street"].should == provider.address
         p_hsh["loc_city"].should   == provider.city_name
         p_hsh["loc_state"].should  == provider.state
@@ -52,12 +52,12 @@ describe Provider do
 
     context "region id validation" do
         it "should reject provider without city id" do
-            provider = FactoryGirl.build :provider, city_id: nil
+            provider = FactoryGirl.build :merchant, city_id: nil
             provider.should_not be_valid
             provider.errors.full_messages.first.should == "City can't be blank"
         end
         it "should save region id to provider" do
-            provider = FactoryGirl.create :provider, region_id: 15
+            provider = FactoryGirl.create :merchant, region_id: 15
             provider.should be_valid
             provider.region_id.should == 15
         end
@@ -65,11 +65,11 @@ describe Provider do
 
     context "socials associations" do
         it "should have many providers_socials" do
-            provider = FactoryGirl.create :provider
+            provider = FactoryGirl.create :merchant
             social1  = FactoryGirl.create :social
             social2  = FactoryGirl.create :social
-            ps1      = FactoryGirl.create :providers_social, provider_id: provider.id, social_id: social1.id
-            ps2      = FactoryGirl.create :providers_social, provider_id: provider.id, social_id: social2.id
+            ps1      = FactoryGirl.create :providers_social, merchant_id: provider.id, social_id: social1.id
+            ps2      = FactoryGirl.create :providers_social, merchant_id: provider.id, social_id: social2.id
             provider.providers_socials.count.should == 2
             provider.socials.count.should == 2
         end

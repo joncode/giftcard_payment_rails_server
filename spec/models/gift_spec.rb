@@ -306,7 +306,7 @@ describe Gift do
 	end
 
 	it "should associate with a BizUser as giver" do
-		biz_user = FactoryGirl.create(:provider).biz_user
+		biz_user = FactoryGirl.create(:merchant).biz_user
 
 		gift = FactoryGirl.create(:gift, giver: biz_user)
 
@@ -329,15 +329,15 @@ describe Gift do
 	end
 
 	it "should associate with provider" do
-		provider = FactoryGirl.create(:provider)
-		gift = FactoryGirl.create(:gift, provider: provider)
+		merchant = FactoryGirl.create(:merchant)
+		gift = FactoryGirl.create(:gift, merchant: merchant)
 
 		gift.reload
-		gift.provider.id.should    == provider.id
-		gift.provider.name.should  == provider.name
-		gift.provider_id.should    == provider.id
-		gift.provider_name.should  == provider.name
-		gift.provider.class.should == Provider
+		gift.merchant.id.should    == merchant.id
+		gift.merchant.name.should  == merchant.name
+		gift.merchant_id.should    == merchant.id
+		gift.provider_name.should  == merchant.name
+		gift.merchant.class.should == Merchant
 	end
 
 	it "should associate with a Sale as payment" do
@@ -481,11 +481,11 @@ describe Gift do
 	        auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,157.00,CC,auth_capture,,#{card.first_name},#{card.last_name},,,,,,,,,,,,,,,,,"
 	        stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
 
-	        provider = FactoryGirl.create(:provider)
+	        provider = FactoryGirl.create(:merchant)
 
 	        args = {}
 	        args["giver_id"]    = user.id
-	        args["provider_id"] = provider.id
+	        args["merchant_id"] = provider.id
 	        args["card_id"]     = card.id
 	        args["number"]      = card.number
 	        args["month_year"]  = card.month_year
@@ -494,7 +494,7 @@ describe Gift do
 	        args["amount"]      = "157.00"
 	        args["unique_id"]   = "UNIQUE_GIFT_ID"
 	        sale = Sale.charge_card args
-	        gift = FactoryGirl.build(:gift, giver: user, provider: provider)
+	        gift = FactoryGirl.build(:gift, giver: user, merchant: provider)
 	        gift.payable = sale
 	        gift.save
 
@@ -504,14 +504,14 @@ describe Gift do
 
 	        sale.giver.should    == gift.giver
 
-	        sale.provider_id.should == gift.provider_id
+	        sale.merchant_id.should == gift.merchant_id
 	    end
 	end
 
 	context "receiver Information" do
 
 		let(:giver) { FactoryGirl.create(:user, first_name: "Howard", last_name: "Stern", email: "howard@stern.com")}
-		let(:provider) { FactoryGirl.create(:provider) }
+		let(:provider) { FactoryGirl.create(:merchant) }
 
 		it "should find a receiver via email & secondary email and add to gift" do
 			user = FactoryGirl.create(:user, first_name: "Tommy", last_name: "Trash", email: "tony@email.com")
@@ -581,7 +581,7 @@ describe Gift do
 	context "status" do
 
 		let(:giver) { FactoryGirl.create(:user, first_name: "Howard", last_name: "Stern", email: "howard@stern.com")}
-		let(:provider) { FactoryGirl.create(:provider) }
+		let(:provider) { FactoryGirl.create(:merchant) }
 		let(:gift) { FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: "George Washington", receiver_phone: "8326457787") }
 
 		context	"incomplete" do
