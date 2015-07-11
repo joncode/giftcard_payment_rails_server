@@ -8,8 +8,8 @@ describe AppController do
             Provider.delete_all
             @r = Region.find_by(name: 'New York')
             @user            = FactoryGirl.create :user
-            @first_provider  = FactoryGirl.create :provider, city_id: @r.id
-            @second_provider = FactoryGirl.create :provider, city_id: @r.id
+            @first_provider  = FactoryGirl.create :merchant, city_id: @r.id
+            @second_provider = FactoryGirl.create :merchant, city_id: @r.id
         end
 
         it "should send all providers with correct scope" do

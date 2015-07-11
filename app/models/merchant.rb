@@ -3,6 +3,8 @@ class Merchant < ActiveRecord::Base
     include Formatter
     include MerchantSerializers
 
+    default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
+
 #   -------------
 
     before_validation :extract_phone_digits
@@ -20,7 +22,7 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
-    before_save :add_region_name
+    before_save     :add_region_name
     after_create    :make_menu_string
     after_save      :clear_www_cache
 
@@ -43,6 +45,7 @@ class Merchant < ActiveRecord::Base
 
     belongs_to :region
     belongs_to :bank
+    belongs_to :brand
 
 #   -------------
 
@@ -90,6 +93,17 @@ class Merchant < ActiveRecord::Base
         self.live ? "1" : "0"
     end
 
+    def deactivate
+        self.paused = true
+        self.live   = false
+        self.active = false
+        if self.save
+            true
+        else
+            false
+        end
+    end
+
 #   -------------
 
     def city
@@ -129,6 +143,13 @@ class Merchant < ActiveRecord::Base
         self.photo_l
     end
 
+    def get_photo default: true
+        if default && image.blank?
+            return MERCHANT_DEFAULT_IMG
+        end
+        image
+    end
+
 #   -------------
 
     ##########  AFFILIATION DUCKTYPE
@@ -144,6 +165,10 @@ class Merchant < ActiveRecord::Base
         end
     ###########
 
+
+
+private
+
     def add_region_name
         if self.region_id.present? && (self.region_name.nil? || self.region_id_changed?)
             region = Region.unscoped.where(id: self.region_id).first
@@ -152,26 +177,6 @@ class Merchant < ActiveRecord::Base
             self.region_name = nil if self.region_id.nil?
         end
     end
-
-    def deactivate
-        self.paused = true
-        self.live   = false
-        self.active = false
-        if self.save
-            true
-        else
-            false
-        end
-    end
-
-    def get_photo default: true
-        if default && image.blank?
-            return MERCHANT_DEFAULT_IMG
-        end
-        image
-    end
-
-private
 
     def strip_whitespace_and_fix_case
         self.name  = self.name.strip if self.name.present?

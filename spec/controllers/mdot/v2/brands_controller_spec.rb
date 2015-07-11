@@ -17,7 +17,7 @@ describe Mdot::V2::BrandsController do
                 FactoryGirl.create(:brand, name: "Newbiee#{index}")
             end
             brand = Brand.last
-            brand.update_attribute(:active, false)
+            brand.update(active: false)
         end
 
         it "should return a list of brands" do
@@ -36,39 +36,42 @@ describe Mdot::V2::BrandsController do
     end
 
     describe :merchants do
+
         it_should_behave_like("token authenticated",   :get, :merchants, id: 1)
 
         before(:each) do
             Brand.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             @brand = FactoryGirl.create(:brand, name: "newbie")
             20.times do |index|
                 if index.even?
-                    FactoryGirl.create(:provider, brand_id: @brand.id)
+                    FactoryGirl.create(:merchant, brand_id: @brand.id)
                 else
-                    FactoryGirl.create(:provider, building_id: @brand.id)
+                    FactoryGirl.create(:merchant, building_id: @brand.id)
                 end
             end
-            provider = Provider.last
-            provider.update_attribute(:active, false)
+            merchant = Merchant.last
+            merchant.update(active: false)
+            request.env["HTTP_TKN"] = "USER_TOKEN"
         end
 
-        it "should return a list of providers" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
-            amount  = Provider.where(active: true).count
-            keys    =  ["region_id", "region_name", "city_id", "city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live","zinger", "desc"]
+        it "should return a list of merchants" do
+            amount  = Merchant.where(active: true).count
+            keys    =  ["region_id", "region_name", "city_id", "city", "latitude",
+                "longitude", "name", "phone", "provider_id", "photo", "full_address",
+                 "live","zinger", "desc", 'merchant_id']
             route   = :merchants
             get route, format: :json, id: @brand.id
             rrc(200)
             ary = json["data"]
             ary.class.should == Array
+
             ary.count.should == amount
             hsh = ary.first
             compare_keys(hsh, keys)
         end
 
         it "should return 404 when brand not found via ID" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
             get :merchants, format: :json, id: 100000
             rrc(404)
         end

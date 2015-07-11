@@ -33,17 +33,17 @@ describe Mdot::V2::CitiesController do
 
         it "should return a list of all active providers in city with id = <name> serialized when success" do
             r = Region.find_by(name: 'New York')
-            Provider.delete_all
+            Merchant.delete_all
             20.times do
-                p = FactoryGirl.build(:provider)
+                p = FactoryGirl.build(:merchant)
                 p.city_id = r.id
                 p.save
             end
 
-            Provider.last.update(active: false)
+            Merchant.last.update(active: false)
 
             get :merchants, format: :json, id: "New York"
-            keys    =  ["region_name","region_id", "city_id","city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
+            keys    =  [ 'merchant_id',"region_name","region_id", "city_id","city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
             rrc(200)
             ary = json["data"]
             ary.class.should == Array
@@ -54,16 +54,16 @@ describe Mdot::V2::CitiesController do
 
         it "should return a list of all active providers in city with id = <integer> serialized when success" do
             r = Region.find_by(name: 'New York')
-            Provider.delete_all
+            Merchant.delete_all
             20.times do
-                p = FactoryGirl.build(:provider)
+                p = FactoryGirl.build(:merchant)
                 p.city_id = r.id
                 p.save
             end
-            Provider.last.update(active: false)
+            Merchant.last.update(active: false)
 
             get :merchants, format: :json, id: r.id
-            keys    =  ["region_id", "region_name", "city_id","city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
+            keys    =  [ 'merchant_id',"region_id", "region_name", "city_id","city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
             rrc(200)
             ary = json["data"]
             ary.class.should == Array
@@ -76,32 +76,33 @@ describe Mdot::V2::CitiesController do
 
             it "using region id" do
 
-                Provider.delete_all
+                Merchant.delete_all
                 # binding.pry
-                p = FactoryGirl.create(:provider, name: "Abe's")
-                p.update(city: 'San Diego')
-                p = FactoryGirl.create(:provider, name: "Bob's")
-                p.update(city: 'San Diego')
-                FactoryGirl.create(:provider, name: "Cam's")
+                r = Region.find_by(name: 'San Diego')
+                p = FactoryGirl.create(:merchant, name: "Abe's")
+                p.update(city_name: 'San Diego', city_id: r.id)
+                p = FactoryGirl.create(:merchant, name: "Bob's")
+                p.update(city_name: 'San Diego', city_id: r.id)
+                FactoryGirl.create(:merchant, name: "Cam's")
 
-                get :merchants, format: :json, id: 2
+                get :merchants, format: :json, id: r.id
                 rrc(200)
                 ary = json["data"]
                 ary.class.should == Array
-                ary.count.should == 3
+                ary.count.should == 2
                 ary[0]["name"].should == ("Abe's")
                 ary[1]["name"].should == ("Bob's")
             end
 
             it "using city name" do
                 r = Region.find_by(name: 'San Diego')
-                Provider.delete_all
+                Merchant.delete_all
                 # binding.pry
-                FactoryGirl.create(:provider, name: "Abby's")
-                p = FactoryGirl.create(:provider, name: "Bobby's")
-                p.update(city: "San Diego", city_id: r.id)
-                p = FactoryGirl.create(:provider, name: "Cammy's")
-                p.update(city: "San Diego", city_id: r.id)
+                FactoryGirl.create(:merchant, name: "Abby's")
+                p = FactoryGirl.create(:merchant, name: "Bobby's")
+                p.update(city_name: "San Diego", city_id: r.id)
+                p = FactoryGirl.create(:merchant, name: "Cammy's")
+                p.update(city_name: "San Diego", city_id: r.id)
 
                 get :merchants, format: :json, id: "San Diego"
                 rrc(200)

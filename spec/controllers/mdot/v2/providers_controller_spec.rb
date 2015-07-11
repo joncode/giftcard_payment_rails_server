@@ -12,17 +12,17 @@ describe Mdot::V2::ProvidersController do
         it_should_behave_like("token authenticated", :get, :menu, id: 1)
 
         before(:each) do
-            @provider = FactoryGirl.create(:provider)
-            FactoryGirl.create(:menu_string, provider_id: @provider.id)
+            @merchant = FactoryGirl.create(:merchant)
+            FactoryGirl.create(:menu_string, merchant_id: @merchant.id)
             request.env["HTTP_TKN"] = "USER_TOKEN"
         end
 
         it "should return the provider menu in version 2 format only" do
-            get :menu, id: @provider.id, format: :json
+            get :menu, id: @merchant.id, format: :json
             rrc(200)
             json["status"].should == 1
             provider_id = json["data"]["provider_id"]
-            provider_id.should == @provider.id
+            provider_id.should == @merchant.id
             menu = json["data"]["menu"]
             menu.class.should == Array
             keys = ["section", "items"]
@@ -45,13 +45,13 @@ describe Mdot::V2::ProvidersController do
         it_should_behave_like("token authenticated", :get, :receipt_photo_url, id: 1)
 
         before(:each) do
-            @provider = FactoryGirl.create(:provider)
-            FactoryGirl.create(:menu_string, provider_id: @provider.id)
+            @merchant = FactoryGirl.create(:merchant)
+            FactoryGirl.create(:menu_string, merchant_id: @merchant.id)
             request.env["HTTP_TKN"] = "USER_TOKEN"
         end
 
         it "should return the default receipt photo url" do
-            get :receipt_photo_url, id: @provider.id, format: :json
+            get :receipt_photo_url, id: @merchant.id, format: :json
             rrc(200)
             json["status"].should == 1
             json["data"].should == { "receipt_photo_url" => DEFAULT_RECEIPT_IMG_URL}
@@ -65,7 +65,7 @@ describe Mdot::V2::ProvidersController do
 
     #     it "should return a list of all active providers serialized when success" do
     #         20.times do
-    #             FactoryGirl.create(:provider)
+    #             FactoryGirl.create(:merchant)
     #         end
     #         Provider.last.update_attribute(:active, false)
     #         request.env["HTTP_TKN"] = "USER_TOKEN"

@@ -1,7 +1,7 @@
 class MenuString < ActiveRecord::Base
 
 
-    validates_uniqueness_of :provider_id
+    validates_uniqueness_of :merchant_id
     validates_presence_of   :menu
     validates_with JsonArrayValidator
 
@@ -16,8 +16,8 @@ class MenuString < ActiveRecord::Base
 
 #   -------------
 
-    def self.get_menu_v2_for_provider provider_id
-        menu_string = MenuString.find_by(provider_id: provider_id)
+    def self.get_menu_v2_for_provider merchant_id
+        menu_string = MenuString.find_by(merchant_id: merchant_id)
         if menu_string
             if menu_string.menu
                 return JSON.parse menu_string.menu
@@ -52,14 +52,14 @@ class MenuString < ActiveRecord::Base
 
 #########    DEPRECATED - these will not work with menu now sourced on merchant tools
 
-   	def self.get_menu_for_provider(provider_id)
+   	def self.get_menu_for_provider(merchant_id)
 
-  		menu_string = MenuString.find_by(provider_id: provider_id)
+  		menu_string = MenuString.find_by(merchant_id: merchant_id)
   		if !menu_string
 			menu_string      = MenuString.new
-			menu_string_data = menu_string.generate_new_menu_string(provider_id)
+			menu_string_data = menu_string.generate_new_menu_string(merchant_id)
 		elsif menu_string.version == 1
-  			menu_string_data = menu_string.generate_menu_string(provider_id)
+  			menu_string_data = menu_string.generate_menu_string(merchant_id)
 
 		else
 			menu_string_data = menu_string.data
@@ -67,13 +67,13 @@ class MenuString < ActiveRecord::Base
 		return menu_string_data
   	end
 
-    def self.compile_menu_to_menu_string(provider_id)
-        menu_string = MenuString.find_by(merchant_id: provider_id)
+    def self.compile_menu_to_menu_string(merchant_id)
+        menu_string = MenuString.find_by(merchant_id: merchant_id)
         if !menu_string
             menu_string = MenuString.new
-            menu_string_data = menu_string.generate_new_menu_string(provider_id)
+            menu_string_data = menu_string.generate_new_menu_string(merchant_id)
         else
-            menu_string_data = menu_string.generate_menu_string(provider_id)
+            menu_string_data = menu_string.generate_menu_string(merchant_id)
         end
 
         return true
@@ -84,10 +84,10 @@ class MenuString < ActiveRecord::Base
 private
 
     def update_merchant
-        unless self.menu.nil?
-            if provider = Merchant.unscoped.find(self.merchant_id)
-                if not provider.menu_is_live
-                    provider.update(menu_is_live: true)
+        if self.menu.present?
+            if merchant = Merchant.unscoped.find(self.merchant_id)
+                if merchant.menu_is_live == false
+                    merchant.update(menu_is_live: true)
                 end
             end
         end
@@ -96,25 +96,25 @@ private
 ####### DEPRECATED - these will not work with menu now sourced on merchant tools
 
 			# remake menu string from menu
-	def generate_new_menu_string(provider_id)
-		self.full_address 	= Merchant.find(provider_id).complete_address
-		self.merchant_id 	= provider_id
-		return self.generate_menu_string(provider_id)
+	def generate_new_menu_string(merchant_id)
+		self.full_address 	= Merchant.find(merchant_id).complete_address
+		self.merchant_id 	= merchant_id
+		return self.generate_menu_string(merchant_id)
 	end
 
-	def generate_menu_string(provider_id)
-		menu_string_data = Menu.get_full_menu_array(provider_id).to_json
+	def generate_menu_string(merchant_id)
+		menu_string_data = Menu.get_full_menu_array(merchant_id).to_json
         puts "IN GENERATE MENU STRING - SHOULD NEVER BE HERE !!!"
 		self.data           = menu_string_data
 		self.version 		= 2
-		sections_array 		= Menu.get_sections(provider_id)
+		sections_array 		= Menu.get_sections(merchant_id)
 		self.sections_json 	= sections_array.to_json
-		self.merchant_id 	= provider_id if !self.merchant_id
+		self.merchant_id 	= merchant_id if !self.merchant_id
 
 		if self.save
-			puts "MENU STRING FOR #{provider_id} SAVED"
+			puts "MENU STRING FOR #{merchant_id} SAVED"
 		else
-			puts "FAILED !! MENU STRING FOR #{provider_id} FAILED !! "
+			puts "FAILED !! MENU STRING FOR #{merchant_id} FAILED !! "
 		end
 		return menu_string_data
 	end

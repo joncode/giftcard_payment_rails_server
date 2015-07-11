@@ -69,13 +69,13 @@ class Brand < ActiveRecord::Base
 		super new_url
 	end
 
-	def providers
-		merchants = Provider.where("brand_id = ? OR building_id = ?", self.id, self.id)
+	def merchants
+		merchants = Merchant.where("brand_id = ? OR building_id = ?", self.id, self.id)
 		if self.child
 			# getting the merchants connected to child brands
 			children = self.brands
 			children.each do |child|
-				child_merchants = Provider.where("brand_id = ? OR building_id = ?", child.id, child.id)
+				child_merchants = Merchant.where("brand_id = ? OR building_id = ?", child.id, child.id)
 				merchants.concat child_merchants
 			end
 		end
@@ -87,7 +87,7 @@ class Brand < ActiveRecord::Base
 	end
 
 	def owner
-		Brand.find owner_id if owner_id
+		Brand.find(owner_id) if owner_id
 	end
 
 	def city_state_zip
@@ -99,7 +99,7 @@ private
 	def update_parent_brand
 		if self.owner_id
 			owner_brand = Brand.find(self.owner_id)
-			owner_brand.update_attribute(:child, true) unless owner_brand.child
+			owner_brand.update(child: true) unless owner_brand.child
 			puts "Updated owner brand = #{owner_brand.id}"
 		end
 	end

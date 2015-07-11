@@ -107,28 +107,28 @@ describe Web::V3::GiftsController do
             json["status"].should == 1
             json["data"].class.should == Hash
 
-            json["data"].should == {
-                "created_at" => new_gift.created_at.to_json.gsub("\"", ""),
-                "giv_name" => "Jimmy Basic",
-                "giv_photo" => "d|myphoto.jpg",
-                "giv_id" => @user.id,
-                "giv_type" => "User",
-                "rec_name" => "bob",
-                "items" => [{"detail"=>nil, "price"=>13, "quantity"=>1, "item_id"=>82, "item_name"=>"Original Margarita "}],
-                "value" => new_gift.value,
-                "status" => "incomplete",
-                "cat" => 300,
-                "msg" => "hope you enjoy it!",
-                "loc_id" => @merchant.id,
-                "loc_name" => @merchant.name,
-                "loc_phone" => @merchant.phone,
-                "loc_address" => @merchant.complete_address,
-                "gift_id" => new_gift.id,
-                "r_sys"=>2,
-                "city_id"=>1,
-                "region_id"=>2,
-                "region_name"=>"New York"
-            }
+
+            json["data"]["items"].should == [{"detail"=>nil, "price"=>13, "quantity"=>1, "item_id"=>82, "item_name"=>"Original Margarita "}]
+            json["data"]["created_at" ].should == new_gift.created_at.to_json.gsub("\"", "")
+            json["data"]["giv_name" ].should == "Jimmy Basic"
+            json["data"]["giv_photo" ].should == "d|myphoto.jpg"
+            json["data"]["giv_id" ].should == @user.id
+            json["data"]["giv_type" ].should == "User"
+            json["data"]["rec_name" ].should == "bob"
+            json["data"]["value" ].should == new_gift.value
+            json["data"]["status" ].should == "incomplete"
+            json["data"]["cat" ].should == 300
+            json["data"]["msg" ].should == "hope you enjoy it!"
+            json["data"]["loc_id" ].should == @merchant.id
+            json["data"]["loc_name" ].should == @merchant.name
+            json["data"]["loc_phone" ].should == @merchant.phone
+            json["data"]["loc_address" ].should == @merchant.complete_address
+            json["data"]["gift_id" ].should == new_gift.id
+            json["data"]["r_sys"].should ==@merchant.r_sys
+            json["data"]["city_id"].should == @merchant.city_id
+            json["data"]["region_id"].should == @merchant.region_id
+            json["data"]["region_name"].should == "New York"
+
             new_gift.client_id.should == @client.id
             new_gift.partner_id.should == @client.partner.id
             new_gift.partner_type.should == @client.partner.class.to_s

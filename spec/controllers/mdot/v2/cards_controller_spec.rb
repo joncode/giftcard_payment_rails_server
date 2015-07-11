@@ -9,6 +9,7 @@ describe Mdot::V2::CardsController do
     end
 
     describe :index do
+
         it_should_behave_like("token authenticated", :get, :index)
 
         it "should return a list of cards for the user" do
@@ -92,6 +93,7 @@ describe Mdot::V2::CardsController do
     # end
 
     describe :create do
+
         it_should_behave_like("token authenticated", :post, :create)
 
         it "should accept json'd hash of require fields and return card ID" do
@@ -185,6 +187,7 @@ describe Mdot::V2::CardsController do
     end
 
     describe :destroy do
+
         it_should_behave_like("token authenticated", :delete, :destroy, id: 1)
 
         let(:card) { FactoryGirl.create(:card, user_id: @user.id)  }

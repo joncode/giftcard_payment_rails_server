@@ -9,7 +9,7 @@ describe AppController do
 
     it "should create gift for self using old API - should send push notification to UrbanAirship with correct badge - should send badge update to phone with correct badge - should send the push notification first - receiver email second - giver invoice third" do
         ResqueSpec.reset!
-        Provider.delete_all
+        Merchant.delete_all
         User.delete_all
 
         User.any_instance.stub(:init_confirm_email).and_return(true)
@@ -21,7 +21,7 @@ describe AppController do
 
         user_hsh = { twitter: "875818226", email: "ta@ta.com", phone: "2052920036", first_name: "Addis", last_name: "Dev"}
         provider_hsh = { name: "Artifice", token: "Specialpushtoken" }
-        provider = FactoryGirl.create(:provider, provider_hsh)
+        provider = FactoryGirl.create(:merchant, provider_hsh)
 
         user = FactoryGirl.create(:user, user_hsh)
         @user = user
@@ -45,7 +45,7 @@ describe AppController do
 
         post :create_gift, format: :json, gift: params , origin: "d", shoppingCart: cart , token: user.remember_token
 
-        gift = user.sent.where(provider_id: provider.id ).first
+        gift = user.sent.where(merchant_id: provider.id ).first
         gift.twitter.should == "875818226"
 
         post :relays, format: :json, token: user.remember_token

@@ -9,7 +9,7 @@ class Mdot::V2::BrandsController < JsonController
 
     def merchants
         brand = Brand.find(params[:id])
-        success(brand.providers.serialize_objs)
+        success(brand.merchants.serialize_objs)
         respond
     end
 

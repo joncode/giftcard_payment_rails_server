@@ -6,6 +6,7 @@ include MocksAndStubs
 describe Mdot::V2::GiftsController do
 
     describe :index do
+
         before(:each) do
             User.any_instance.stub(:init_confirm_email)
             user = create_user_with_token "USER_TOKEN"
@@ -76,12 +77,13 @@ describe Mdot::V2::GiftsController do
     end
 
     describe :archive do
+
         it_should_behave_like("token authenticated", :get, :archive)
 
         before(:each) do
             UserSocial.delete_all
             User.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
             @user = create_user_with_token "USER_TOKEN", @user
@@ -115,7 +117,7 @@ describe Mdot::V2::GiftsController do
         it "should send sent gifts (purchaser) with giver keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
 
-            keys = [ "region_name", "r_sys", "city_id", "region_id" , "created_at", "message", "detail", "provider_id", "expires_at", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "cat", "time_ago", "items"]
+            keys = ["merchant_id", "region_name", "r_sys", "city_id", "region_id" , "created_at", "message", "detail", "merchant_id", "expires_at", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "cat", "time_ago", "items"]
 
             get :archive, format: :json
             gift_hsh = json["data"]["sent"][0]
@@ -145,7 +147,11 @@ describe Mdot::V2::GiftsController do
                 gift.redeem_gift( "xyz")
             end
 
-            keys = ["r_sys", "region_name",  "city_id", "region_id", "giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at", "completed_at", "cat", "time_ago", "items"]
+            keys = ["r_sys", "region_name",  "city_id", "region_id", "giver_id", "giver_name",
+                "message", "detail","expires_at",  "merchant_id", "provider_name", "status",
+                "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live",
+                "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at",
+                "completed_at", "cat", "time_ago", "items", "provider_id"]
 
             post :archive, format: :json
             gift_hsh = json["data"]["used"][0]
@@ -174,7 +180,7 @@ describe Mdot::V2::GiftsController do
         before(:each) do
             UserSocial.delete_all
             User.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
             @user = create_user_with_token "USER_TOKEN", @user
@@ -234,7 +240,11 @@ describe Mdot::V2::GiftsController do
 
         it "should return receiver serialized gifts" do
 
-            keys = ["city_id", "region_name",  "region_id","value", "r_sys", "giver_id", "giver_name", "message", "detail","expires_at",  "provider_id", "provider_name", "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "latitude", "longitude", "live", "provider_address", "gift_id", "updated_at", "created_at", "cat", "time_ago", "items"]
+            keys = ["city_id", "region_name",  "region_id","value", "r_sys", "giver_id",
+                "giver_name", "message", "detail","expires_at",  "merchant_id", "provider_name",
+                 "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone",
+                  "city", "latitude", "longitude", "live", "provider_address", "gift_id",
+                  "updated_at", "created_at", "cat", "time_ago", "items", "provider_id"]
 
             request.env["HTTP_TKN"] = "USER_TOKEN"
             get :badge, format: :json
@@ -303,7 +313,7 @@ describe Mdot::V2::GiftsController do
         it "should send gifts when providers are paused / not live / deactivated" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
             gift = Gift.find_by(giver_id: @giver)
-            provider = gift.provider
+            provider = gift.merchant
             provider.deactivate
 
             get :badge, format: :json
@@ -318,7 +328,7 @@ describe Mdot::V2::GiftsController do
             ResqueSpec.reset!
             UserSocial.delete_all
             User.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
             @user = create_user_with_token "USER_TOKEN", @user
@@ -401,7 +411,7 @@ describe Mdot::V2::GiftsController do
             ResqueSpec.reset!
             UserSocial.delete_all
             User.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
             @user = create_user_with_token "USER_TOKEN", @user
             @giver = FactoryGirl.create(:giver, email: "badged@gmail.com", twitter: "12f3", facebook_id: "79823d64", active: true)
@@ -495,7 +505,7 @@ describe Mdot::V2::GiftsController do
         before(:each) do
             UserSocial.delete_all
             User.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
             @user = create_user_with_token "USER_TOKEN", @user
@@ -559,7 +569,7 @@ describe Mdot::V2::GiftsController do
         before(:each) do
             UserSocial.delete_all
             User.delete_all
-            Provider.delete_all
+            Merchant.delete_all
             User.any_instance.stub(:init_confirm_email)
             @user = FactoryGirl.create(:user, email: "badge@gmail.com", twitter: "123", facebook_id: "7982364", active: true)
             @user = create_user_with_token "USER_TOKEN", @user
@@ -986,12 +996,12 @@ describe Mdot::V2::GiftsController do
             auth_response = "1,1,1,This transaction has been approved.,JVT36N,Y,2202633834,,,31.50,CC,auth_capture,,#{@card.first_name},#{@card.last_name},,,,,,,,,,,,,,,,,"
             stub_request(:post, "https://test.authorize.net/gateway/transact.dll").to_return(:status => 200, :body => auth_response, :headers => {})
 
+            request.env["HTTP_TKN"] = "USER_TOKEN"
         end
 
         it "should set the service when it receives credit card gift and service == '0'" do
-            provider = FactoryGirl.create(:provider)
+            provider = FactoryGirl.create(:merchant)
             bug_request =  {"data"=>{"message"=>"I love love love YOU!", "giver_id"=>@user.id.to_s, "value"=>"12.00", "credit_card"=>@card.id, "service"=>"0", "provider_id"=>provider.id.to_s, "receiver_email"=>"camille@sharomi.gmail.com", "receiver_name"=>"Camille Sharoni"}, "shoppingCart"=>[{"item_name"=>"Bee Love", "price"=>"12", "item_id"=>"615", "quantity"=>"1"}]}
-            request.env["HTTP_TKN"] = "USER_TOKEN"
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
 
@@ -1002,7 +1012,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should correctly create and save gift to databse" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             # test that create gift does not create the gift or the sale
@@ -1018,7 +1028,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return 404 + 'credit card not on file' msg when card not found" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             # test that create gift does not create the gift or the sale
             gift = FactoryGirl.build :gift, receiver_id: @user.id, credit_card: 999999
             post :create, format: :json, data: make_gift_hsh(gift) , shoppingCart: @cart
@@ -1030,7 +1040,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should successfully create gift and return giver_serialized obj + 200 OK" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             # test that create gift does not create the gift or the sale
@@ -1060,7 +1070,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should successfully create gift and return giver_serialized obj + 200 OK" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             # test that create gift does not create the gift or the sale
             gift = FactoryGirl.build :gift, { receiver_id: @user.id, credit_card: @card.id }
 
@@ -1087,9 +1097,9 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should create incomplete gift with phone BUG FIX" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             geep = FactoryGirl.create(:gift)
-            data         = {"receiver_name"=>"Stewart Christensen", "value"=>"7.00", "service"=>"0.35", "message"=>"Testing contact", "credit_card"=> @card.id, "provider_name"=>-1, "provider_id"=>geep.provider_id, "receiver_phone"=>"(702) 672-8462", "receiver_email"=>"stewart.christensen2@facebook.com"}
+            data         = {"receiver_name"=>"Stewart Christensen", "value"=>"7.00", "service"=>"0.35", "message"=>"Testing contact", "credit_card"=> @card.id, "provider_name"=>-1, "provider_id"=>geep.merchant_id, "receiver_phone"=>"(702) 672-8462", "receiver_email"=>"stewart.christensen2@facebook.com"}
             shoppingCart = [{"item_id"=>240, "item_name"=>"Dogfish Head 60 Minute", "price"=>"7", "quantity"=>1}]
             post :create, format: :json, data: data, shoppingCart: shoppingCart
             rrc(200)
@@ -1110,10 +1120,11 @@ describe Mdot::V2::GiftsController do
             facebook_id: "123",
             twitter: "999"
          }.stringify_keys.each do |type_of, identifier|
+
             it "should find user account for old #{type_of}" do
                 Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
                 Sale.any_instance.stub(:resp_code).and_return(1)
-                request.env["HTTP_TKN"] = "USER_TOKEN"
+
                 @user.update_attribute(type_of, identifier)
                 if (type_of == "phone") || (type_of == "email")
                     key = "receiver_#{type_of}"
@@ -1127,6 +1138,8 @@ describe Mdot::V2::GiftsController do
                 rrc(200)
                 json["status"].should == 1
                 json["data"].has_key?('gift_id').should be_true
+                json["data"].has_key?('provider_id').should be_true
+
                 new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
             end
@@ -1134,7 +1147,7 @@ describe Mdot::V2::GiftsController do
             it "should look thru multiple unique ids for a user object with #{type_of}" do
                 Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
                 Sale.any_instance.stub(:resp_code).and_return(1)
-                request.env["HTTP_TKN"] = "USER_TOKEN"
+
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
@@ -1154,7 +1167,7 @@ describe Mdot::V2::GiftsController do
             it "should look thru not full gift of unique ids for a user object with #{type_of}" do
                 Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
                 Sale.any_instance.stub(:resp_code).and_return(1)
-                request.env["HTTP_TKN"] = "USER_TOKEN"
+
                 # add one unique id to the user record
                 @user.update_attribute(type_of, identifier)
                 # create a gift with multiple new social ids
@@ -1172,6 +1185,7 @@ describe Mdot::V2::GiftsController do
                 rrc(200)
                 json["status"].should == 1
                 json["data"].has_key?('gift_id').should be_true
+                json["data"].has_key?('provider_id').should be_true
                 # check that the :action assign the user_id to receiver_id and saves the gift
                 new_gift = Gift.find(json["data"]["gift_id"])
                 new_gift.receiver_id.should == @user.id
@@ -1183,8 +1197,8 @@ describe Mdot::V2::GiftsController do
             it "should make incomplete gift with new network ID oauth credentials" do
                 Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
                 Sale.any_instance.stub(:resp_code).and_return(1)
-                provider = FactoryGirl.create :provider
-                request.env["HTTP_TKN"] = "USER_TOKEN"
+                provider = FactoryGirl.create :merchant
+
                 gift_hsh = {}
                 gift_hsh["message"]        = "I just Bought a Gift!"
                 gift_hsh["receiver_name"]  = "Oauth Friend"
@@ -1207,7 +1221,7 @@ describe Mdot::V2::GiftsController do
         # Git should validate total and service
 
         it "it should not allow gift creating for de-activated givers" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
 
             deactivated_user = FactoryGirl.create :user, { active: true}
             @user.update(active: false)
@@ -1219,14 +1233,14 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should reject requests with extra keys" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             gift = FactoryGirl.create :gift, { receiver_id: @user.id }
             post :create, format: :json, data: make_gift_json(gift) , shoppingCart: @cart, faker: "FAKE"
             rrc(400)
         end
 
         it "should not allow gift creating for de-activated receivers" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             giver = FactoryGirl.create(:giver)
             giver.update(remember_token: "USER_TOKEN" )
             deactivated_user = FactoryGirl.create :receiver, { active: false}
@@ -1241,7 +1255,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should not charge the card when gift receiver is deactivated" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             giver = FactoryGirl.create(:giver)
             deactivated_user = FactoryGirl.create :receiver, { active: false}
             gift = FactoryGirl.build :gift, { receiver_id: deactivated_user.id }
@@ -1253,7 +1267,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should not allow gift creation for non-app users -- AdminGiver" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             giver       = FactoryGirl.create(:giver)
             admin_user  = FactoryGirl.create(:admin_user)
             receiver    = admin_user.giver
@@ -1269,9 +1283,9 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should not allow gift creation for non-app users -- BizUser" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             giver    = FactoryGirl.create(:giver)
-            provider = FactoryGirl.create(:provider)
+            provider = FactoryGirl.create(:merchant)
             receiver = provider.biz_user
             gift     = FactoryGirl.build :gift
             gift_hsh = make_gift_hsh(gift)
@@ -1309,7 +1323,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return 'that credit_card does not exist' when cant find credit card" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
             gift = FactoryGirl.build :gift, { receiver_id: receiver.id }
@@ -1324,7 +1338,7 @@ describe Mdot::V2::GiftsController do
         it "should accept stringified JSON'd 'gift" do
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
             gift = FactoryGirl.build :gift
@@ -1340,7 +1354,7 @@ describe Mdot::V2::GiftsController do
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
 
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             giver = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
             gift = FactoryGirl.build(:gift, credit_card: @card.id)
@@ -1350,7 +1364,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should return 400 if gift and shoppingCart are not hash - stringified and non-stringified" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             giver    = FactoryGirl.create(:giver)
             receiver = FactoryGirl.create(:receiver)
             gift     = FactoryGirl.build :gift, { receiver_id: receiver.id }
@@ -1374,9 +1388,9 @@ describe Mdot::V2::GiftsController do
         end
 
         it "should accept joe meek's JSON" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             Gift.delete_all
-            @provider = Provider.last || FactoryGirl.create(:provider)
+            @provider = Merchant.last || FactoryGirl.create(:merchant)
             req_json= {"gift"=>{"receiver_name"=>"Jon Guty", "twitter" => "23874628734",  "value"=>"20.00", "service"=>"1.00", "message"=>"4 ass juices. Shopping cart total changed to value", "credit_card"=> @card.id, "provider_id"=> @provider.id , "provider_name"=>"Double Down Saloon"}, "shoppingCart"=>[{"item_id"=>257, "item_name"=>"Ass Juice", "price"=>"5", "quantity"=>4}]}
             data = req_json["gift"]
             sc = req_json["shoppingCart"]
@@ -1386,7 +1400,7 @@ describe Mdot::V2::GiftsController do
         end
 
         it "gifts should have correct values/costs" do
-            request.env["HTTP_TKN"] = "USER_TOKEN"
+
             Sale.any_instance.stub(:auth_capture).and_return(AuthResponse.new)
             Sale.any_instance.stub(:resp_code).and_return(1)
             gift = FactoryGirl.build :gift, receiver_id: @user.id, value: "100", service: "5"
@@ -1412,7 +1426,7 @@ describe Mdot::V2::GiftsController do
                 receiver_id:    gift.receiver_id,
                 receiver_name:  gift.receiver_name,
                 message:        gift.message,
-                provider_id:    gift.provider.id,
+                provider_id:    gift.merchant.id,
                 credit_card:    gift.credit_card
             }
         end
@@ -1432,7 +1446,7 @@ describe Mdot::V2::GiftsController do
                 value:          gift.value,
                 service:        gift.service,
                 receiver_name:  gift.receiver_name,
-                provider_id:    gift.provider.id,
+                provider_id:    gift.merchant.id,
                 credit_card:    gift.credit_card
             }.merge(missing_hsh).to_json
         end
@@ -1443,7 +1457,7 @@ describe Mdot::V2::GiftsController do
                 value:          gift.value,
                 service:        gift.service,
                 receiver_name:  gift.receiver_name,
-                provider_id:    gift.provider.id,
+                provider_id:    gift.merchant.id,
                 credit_card:    gift.credit_card
             }.to_json
         end

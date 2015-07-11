@@ -6,7 +6,7 @@ class Mdot::V2::PhotosController < JsonController
         return nil if params_bad_request
         return nil if data_blank?
         return nil if data_not_string?
-        if @current_user.update_attributes(iphone_photo: photo_params)
+        if @current_user.update(iphone_photo: photo_params)
             success @current_user.update_serialize
         else
             fail    @current_user

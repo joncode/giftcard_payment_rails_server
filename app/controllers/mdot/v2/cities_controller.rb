@@ -15,8 +15,8 @@ class Mdot::V2::CitiesController < JsonController
             region_id = params[:id].to_i
         end
 
-        providers = Provider.where(city_id: region_id)
-        @app_response = providers.serialize_objs
+        merchants = Merchant.where(city_id: region_id)
+        @app_response = merchants.serialize_objs
         success @app_response
         respond
     end

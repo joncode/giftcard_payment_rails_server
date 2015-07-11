@@ -430,9 +430,12 @@ FactoryGirl.define do
         zip         "11211"
         state       "NY"
         region_id   2
+        region_name 'New York'
         sequence(:token)   { |n| "token#{n}" }
         zinger      "its amazing"
         description "get all the japanese culinary delights that are so hard to find in America"
+        live     true
+        paused   false
 
         sequence(:phone) do
             phone = ""

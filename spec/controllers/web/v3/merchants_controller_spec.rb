@@ -7,7 +7,6 @@ describe Web::V3::MerchantsController do
 
     before(:each) do
     	@merchant = FactoryGirl.create :merchant
-        @provider = FactoryGirl.create :provider, merchant_id: @merchant.id
         request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
         @client = make_partner_client('Client', 'Tester')
         request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
@@ -21,7 +20,7 @@ describe Web::V3::MerchantsController do
         @client.content = m1
         @client.content = m2
         20.times do
-            p = FactoryGirl.create(:provider)
+            p = FactoryGirl.create(:merchant)
             p.update(city_id: m1.city_id)
 
         end
@@ -52,9 +51,9 @@ describe Web::V3::MerchantsController do
         menu_string = FactoryGirl.create(
         	:menu_string,
         	menu: "[{\"section\":\"Signature\",\"items\":[{\"detail\":\"PATRON CITRONGE, MUDDLED JALAPENOS\",\"price\":\"15\",\"item_id\":73,\"item_name\":\"JALAPENO MARGARITA\"}] }]",
-        	provider_id: @provider.id
+        	merchant_id: @merchant.id
 		)
-    	get :menu, format: :json, id: @provider.id
+    	get :menu, format: :json, id: @merchant.id
     	rrc(200)
     	json["data"]["menu"].should == JSON.parse(menu_string.menu)
     end
@@ -62,7 +61,7 @@ describe Web::V3::MerchantsController do
     describe :receipt_photo_url do
 
         it "should return the default receipt photo url" do
-            get :receipt_photo_url, id: @provider.id, format: :json
+            get :receipt_photo_url, id: @merchant.id, format: :json
             rrc(200)
             json["status"].should == 1
             json["data"].should == { "receipt_photo_url" => DEFAULT_RECEIPT_IMG_URL}

@@ -14,7 +14,7 @@ describe Web::V3::RegionsController do
         request.headers["HTTP_X_AUTH_TOKEN"] = WWW_TOKEN
         @client = make_partner_client('Client', 'Tester')
         request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
-         if Region.city.nil? || Region.city.count == 0
+        if Region.city.nil? || Region.city.count == 0
             load "#{Rails.root}/db/seeds.rb"
         end
     end
@@ -53,12 +53,12 @@ describe Web::V3::RegionsController do
         @client.content = m1
         @client.content = m2
         20.times do
-            p = FactoryGirl.create(:provider)
+            p = FactoryGirl.create(:merchant)
             p.update(city_id: m1.city_id)
 
         end
 
-        Provider.last.update(active: false)
+        Merchant.last.update(active: false)
         get :merchants, format: :json, id: m1.city_id
         rrc(200)
         # binding.pry

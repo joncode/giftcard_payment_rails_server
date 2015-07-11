@@ -4,7 +4,7 @@ describe AppController do
     before(:each) do
         User.delete_all
         Gift.delete_all
-        Provider.delete_all
+        Merchant.delete_all
         Brand.delete_all
         User.any_instance.stub(:init_confirm_email).and_return(true)
     end
@@ -94,7 +94,7 @@ describe AppController do
 
         it "should send gifts when providers are paused / not live / deactivated" do
             gift = Gift.find_by(giver_id: giver)
-            provider = gift.provider
+            provider = gift.merchant
             provider.deactivate
 
             post :relays, format: :json, token: receiver.remember_token
@@ -226,18 +226,18 @@ describe AppController do
             @brand = FactoryGirl.create(:brand, name: "Green Bay Packers")
             20.times do |index|
                 if index.even?
-                    FactoryGirl.create(:provider, brand_id: @brand.id)
+                    FactoryGirl.create(:merchant, brand_id: @brand.id)
                 else
-                    FactoryGirl.create(:provider, building_id: @brand.id)
+                    FactoryGirl.create(:merchant, building_id: @brand.id)
                 end
             end
-            provider = Provider.last
+            provider = Merchant.last
             provider.update_attribute(:active, false)
         end
 
         it "should return a list of providers" do
-            amount  = Provider.where(active: true).count
-            keys    =  ["region_id","region_name",  "city_id", "city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
+            amount  = Merchant.where(active: true).count
+            keys    =  ['merchant_id',"region_id","region_name",  "city_id", "city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live", "zinger", "desc"]
             post :brand_merchants, format: :json, data: @brand.id, token: user.remember_token
             rrc_old(200)
             ary = json
@@ -251,11 +251,11 @@ describe AppController do
     describe :providers do
         it "should return a list of all active providers serialized when success" do
             20.times do
-                FactoryGirl.create(:provider)
+                FactoryGirl.create(:merchant)
             end
-            Provider.last.update_attribute(:active, false)
+            Merchant.last.update_attribute(:active, false)
             post :providers, format: :json, token: user.remember_token
-            keys =  ["region_id","region_name", "city_id", "city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live","zinger", "desc"]
+            keys =  ['merchant_id',"region_id","region_name", "city_id", "city", "latitude", "longitude", "name", "phone", "provider_id", "photo", "full_address", "live","zinger", "desc"]
             rrc_old(200)
             ary = json
             ary.class.should == Array
@@ -266,13 +266,13 @@ describe AppController do
 
         context "should return a list of active providers outside city but in region" do
             it "using region id" do
-                p = FactoryGirl.build(:provider, name: "Abe's", city_name: "San Diego", region_id: 3)
+                p = FactoryGirl.build(:merchant, name: "Abe's", city_name: "San Diego", region_id: 3)
                 p.city_id = p.region_id
                 p.save
-                p = FactoryGirl.build(:provider, name: "Bob's", city_name: "La Jolla", region_id: 3)
+                p = FactoryGirl.build(:merchant, name: "Bob's", city_name: "La Jolla", region_id: 3)
                 p.city_id = p.region_id
                 p.save
-                p = FactoryGirl.build(:provider, name: "Cam's", city_name: "New York", region_id: 2)
+                p = FactoryGirl.build(:merchant, name: "Cam's", city_name: "New York", region_id: 2)
                 p.city_id = p.region_id
                 p.save
                 post :providers, format: :json, token: user.remember_token, city: "3"
@@ -286,13 +286,13 @@ describe AppController do
 
             it "using region name" do
                 r = Region.where(name: 'San Diego').first
-                p = FactoryGirl.create(:provider, name: "Abe's", city_name: "San Diego", region_id: r.id)
+                p = FactoryGirl.create(:merchant, name: "Abe's", city_name: "San Diego", region_id: r.id)
                 p.update(city_id: p.region_id)
                 r = Region.where(name: 'San Francisco').first
-                p = FactoryGirl.create(:provider, name: "Bob's", city_name: "San Francisco", region_id: r.id)
+                p = FactoryGirl.create(:merchant, name: "Bob's", city_name: "San Francisco", region_id: r.id)
                 p.update(city_id: p.region_id)
                 r = Region.where(name: 'New York').first
-                p = FactoryGirl.create(:provider, name: "Cam's", city_name: "New York", region_id: r.id)
+                p = FactoryGirl.create(:merchant, name: "Cam's", city_name: "New York", region_id: r.id)
                 p.update(city_id: p.region_id)
                 post :providers, format: :json, token: user.remember_token, city: "San Diego"
                 rrc_old(200)
@@ -307,8 +307,8 @@ describe AppController do
     describe :menu_v2 do
 
         before(:each) do
-            @provider = FactoryGirl.create(:provider)
-            FactoryGirl.create(:menu_string, provider_id: @provider.id)
+            @provider = FactoryGirl.create(:merchant)
+            FactoryGirl.create(:menu_string, merchant_id: @provider.id)
         end
 
         it "should return the provider menu in version 2 format only" do

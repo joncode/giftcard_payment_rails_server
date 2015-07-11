@@ -59,9 +59,9 @@ class JsonController < ActionController::Base
             if !order_num
                 # in MERCHANT_REPLY
                 gift_obj["giver_photo"]    = g.giver.get_photo
-                provider                   = g.provider
+                provider                   = g.merchant
                 unless provider
-                    provider = Provider.unscoped.find(g.provider_id)
+                    provider = Merchant.unscoped.find(g.merchant_id)
                 end
                 gift_obj["provider_photo"] = provider.get_photo
                 gift_obj["provider_phone"] = provider.phone
