@@ -195,6 +195,21 @@ FactoryGirl.define do
         response_json   "[{\"email\":\"robertn@yahoo.com\",\"status\":\"sent\",\"_id\":\"5606dc2b9e9b46ad967a0bf38fdda61b\",\"reject_reason\":null},{\"email\":\"info@itson.me\",\"status\":\"sent\",\"_id\":\"1d17c18a68d345b7a1021902f053d7be\",\"reject_reason\":null}]"
     end
 
+    factory :bank do
+        account_name     "test account"
+        aba              "222222222"
+        account_number   "5555555555"
+        name             "First Bank of New York"
+        address          "1 First Avenue"
+        city             "New York"
+        state            "NY"
+        zip              "11111"
+        country          "USA"
+        acct_type        'checking'
+        owner_id        1000
+        owner_type       'Merchant'
+    end
+
     factory :nobody, :class => 'User' do
         first_name                  "No"
         last_name                   "One"
