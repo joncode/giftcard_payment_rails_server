@@ -65,7 +65,7 @@ class ProviderToMerchant
 			m.save
 			nil
 		end
-		pp @diffs
+		puts @diffs
 		nil
 	end
 
