@@ -1,5 +1,8 @@
 class ProviderToMerchant
 
+
+	class Provider < ActiveRecord::Base; end
+
 	attr_reader :diffs, :compare, :no_providers
 
 	def initialize
