@@ -20,7 +20,7 @@ class MakeBanksPolymorphicWithPartners < ActiveRecord::Migration
 	def set_owner_type
 		Bank.all.each  do |b|
 			b.update(owner_type: 'Merchant', owner_id: b.merchant_id)
-			m = Merchant.find(b.merchant_id)
+			m = Merchant.unscoped.find(b.merchant_id)
 			m.update(bank_id: b.id)
 		end
 	end
