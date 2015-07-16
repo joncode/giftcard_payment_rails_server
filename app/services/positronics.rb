@@ -230,6 +230,25 @@ class Positronics
 		end
 	end
 
+	def get_ticket
+		begin
+			response = RestClient.get(
+			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@ticket_num}",
+			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
+			)
+			JSON.parse(response)
+		rescue => e
+			puts "\n\n POSITRONICS ERROR #{e.inspect}"
+			e
+			unless e.nil?
+				resp = e.response.code
+				puts "\n\nPositronics Error code = #{resp}\n\n"
+				resp
+			end
+
+		end
+	end
+
 	def get_tickets_at_location
 		begin
 			response = RestClient.get(
