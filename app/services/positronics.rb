@@ -211,7 +211,7 @@ class Positronics
 		end
 	end
 
-	def get_tickets_at_location
+	def get_all_tickets_at_location
 		begin
 			response = RestClient.get(
 			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets",
@@ -230,7 +230,7 @@ class Positronics
 		end
 	end
 
-	def get_open_tickets_at_location
+	def get_tickets_at_location
 		begin
 			response = RestClient.get(
 			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets?where=eq(open,true)",
