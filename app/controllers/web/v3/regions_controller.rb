@@ -11,7 +11,7 @@ class Web::V3::RegionsController < MetalCorsController
 
     def merchants
         # binding.pry
-        arg_scope = proc { Merchant.all }
+        arg_scope = proc { Merchant.where(active: true, paused: false) }
         merchants = @current_client.contents(:merchants, &arg_scope)
         if !merchants.nil? && merchants.count > 0
             merchants_in_city = merchants.select{ |m| m.city_id == params[:id].to_i}
