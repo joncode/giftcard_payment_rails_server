@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150716063144) do
+ActiveRecord::Schema.define(version: 20150721221012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -594,6 +594,7 @@ ActiveRecord::Schema.define(version: 20150716063144) do
     t.boolean  "promo",                   default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "pos_item_id"
   end
 
   add_index "menu_items", ["menu_id"], name: "index_menu_items_on_menu_id", using: :btree
@@ -711,6 +712,7 @@ ActiveRecord::Schema.define(version: 20150716063144) do
     t.integer  "payment_plan",                                         default: 0
     t.integer  "menu_id"
     t.integer  "promo_menu_id"
+    t.integer  "client_id"
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
