@@ -22,7 +22,7 @@ class MakeMenusPolymorphicWithPartners < ActiveRecord::Migration
 	end
 
 	def set_owner_type
-		sql = "UPDATE menus SET owner_type = 'Merchant', owner_id = merchant_id , json = (SELECT menu FROM menu_strings ms WHERE ms.merchant_id = menus.merchant_id)"
+		sql = "UPDATE menus SET owner_type = 'Merchant', owner_id = merchant_id , json = (SELECT menu FROM menu_strings ms WHERE ms.merchant_id = menus.merchant_id LIMIT 1)"
 		ActiveRecord::Base.connection.execute(sql)
 
 		sql = "UPDATE merchants SET menu_id = (SELECT id FROM menus ms WHERE ms.merchant_id = merchants.id AND ms.type_of = 1),  promo_menu_id = (SELECT id FROM menus ms WHERE ms.merchant_id = merchants.id AND ms.type_of = 2)"
