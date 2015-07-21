@@ -30,7 +30,7 @@ class Client < ActiveRecord::Base
 		else
 			return yield(self)
 		end
-		cc.map(&:content)
+		cc.map(&:content).compact
 	end
 
 	def content= obj
