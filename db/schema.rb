@@ -1021,6 +1021,7 @@ ActiveRecord::Schema.define(version: 20150721221012) do
     t.integer  "gift_next_value",             default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "merchant_id"
   end
 
   add_index "redemptions", ["gift_id"], name: "index_redemptions_on_gift_id", using: :btree
