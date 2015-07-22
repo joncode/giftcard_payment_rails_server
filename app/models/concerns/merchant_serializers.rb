@@ -53,6 +53,14 @@ module MerchantSerializers
 		prov_hash
 	end
 
+	def redemption_serialize
+		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
+		prov_hash["loc_id"]     = self.id
+		prov_hash["photo"]      = self.get_photo(default: false)
+		prov_hash["logo"]       = self.get_logo_web
+		prov_hash["loc_street"] = self.address
+		prov_hash
+	end
 
 
 end

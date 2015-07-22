@@ -34,7 +34,7 @@ describe Mdot::V2::GiftsController do
             rrc(200)
             json["status"].should == 1
             gift_hsh              = json["data"].first
-            keys = ["city_id", "region_id",  "region_name", "r_sys","created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            keys = ['multi_loc',"city_id", "region_id",  "region_name", "r_sys","created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             compare_keys(gift_hsh, keys)
         end
 
@@ -117,7 +117,7 @@ describe Mdot::V2::GiftsController do
         it "should send sent gifts (purchaser) with giver keys" do
             request.env["HTTP_TKN"] = "USER_TOKEN"
 
-            keys = ["merchant_id", "region_name", "r_sys", "city_id", "region_id" , "created_at", "message", "detail", "merchant_id", "expires_at", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "cat", "time_ago", "items"]
+            keys = ['multi_loc',"merchant_id", "region_name", "r_sys", "city_id", "region_id" , "created_at", "message", "detail", "merchant_id", "expires_at", "provider_name", "receiver_id", "receiver_name", "status", "cost", "value", "updated_at", "shoppingCart", "receiver_photo", "provider_photo", "provider_phone", "city", "live", "latitude", "longitude", "provider_address", "gift_id", "cat", "time_ago", "items"]
 
             get :archive, format: :json
             gift_hsh = json["data"]["sent"][0]
@@ -147,7 +147,7 @@ describe Mdot::V2::GiftsController do
                 gift.redeem_gift( "xyz")
             end
 
-            keys = ["r_sys", "region_name",  "city_id", "region_id", "giver_id", "giver_name",
+            keys = ['multi_loc',"r_sys", "region_name",  "city_id", "region_id", "giver_id", "giver_name",
                 "message", "detail","expires_at",  "merchant_id", "provider_name", "status",
                 "shoppingCart", "giver_photo", "provider_photo", "provider_phone", "city", "live",
                 "latitude", "longitude", "provider_address", "gift_id", "updated_at", "created_at",
@@ -240,7 +240,7 @@ describe Mdot::V2::GiftsController do
 
         it "should return receiver serialized gifts" do
 
-            keys = ["city_id", "region_name",  "region_id","value", "r_sys", "giver_id",
+            keys = ['multi_loc',"city_id", "region_name",  "region_id","value", "r_sys", "giver_id",
                 "giver_name", "message", "detail","expires_at",  "merchant_id", "provider_name",
                  "status", "shoppingCart", "giver_photo", "provider_photo", "provider_phone",
                   "city", "latitude", "longitude", "live", "provider_address", "gift_id",

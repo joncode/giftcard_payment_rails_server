@@ -39,12 +39,24 @@ module GiftLifecycle
         return self.status == 'open' || self.status == 'notified'
     end
 
-    def redeem_gift(server_code=nil)
+    def redeem_gift(server_code=nil, loc_id=nil)
+        # if loc_id - do multi loc redemption
         if self.status == 'notified'
             self.status      = 'redeemed'
             self.redeemed_at = Time.now.utc
             self.server      = server_code
             self.order_num   = make_order_num(self.id)
+            r                = Redemption.new
+            if loc_id.to_i > 0 && loc_id != self.merchant_id
+                r.merchant_id = loc_id
+            else
+                r.merchant_id = self.merchant_id
+            end
+            r.gift_prev_value = self.value_in_cents
+            r.gift_next_value = 0
+            r.amount          = self.value_in_cents
+            r.ticket_id       = nil
+            self.redemptions << r
             if self.save
                 puts "\n gift #{self.id} is being redeemed\n"
                 Resque.enqueue(GiftRedeemedEvent, self.id)
@@ -58,13 +70,18 @@ module GiftLifecycle
         end
     end
 
-    def partial_redeem(pos_obj)
+    def partial_redeem(pos_obj, loc_id=nil)
         prev_value     = self.balance
         self.balance   -= pos_obj.applied_value
         detail_msg     = self.detail || ""
         redemption_msg = "#{number_to_currency(pos_obj.applied_value/100.0)} was paid with check # #{pos_obj.ticket_num}\n"
         self.detail    = redemption_msg + detail_msg
-        r                 = Redemption.new
+        r              = Redemption.new
+        if loc_id.to_i > 0 && loc_id != self.merchant_id
+            r.merchant_id = loc_id
+        else
+            r.merchant_id = self.merchant_id
+        end
         r.gift_prev_value = prev_value
         r.gift_next_value = self.balance
         r.amount          = pos_obj.applied_value
@@ -78,7 +95,8 @@ module GiftLifecycle
         end
     end
 
-    def pos_redeem(ticket_num, pos_merchant_id, tender_type_id)
+    def pos_redeem(ticket_num, pos_merchant_id, tender_type_id, loc_id=nil)
+        # if loc_id - do multi loc redemption
         return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}  if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
 
         pos_hsh = { "ticket_num" => ticket_num,
@@ -92,9 +110,9 @@ module GiftLifecycle
         resp["success"] = pos_obj.success?
         if resp["success"]
             if pos_obj.code == 201
-                self.partial_redeem(pos_obj)
+                self.partial_redeem(pos_obj, loc_id)
             elsif pos_obj.code == 200 || pos_obj.code == 206
-                self.redeem_gift(nil)
+                self.redeem_gift(nil, loc_id)
             end
         end
         resp

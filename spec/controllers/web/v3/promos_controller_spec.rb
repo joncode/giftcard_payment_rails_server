@@ -61,7 +61,7 @@ describe Web::V3::PromosController do
 			post :create, format: :json, data: hsh
             rrc(200)
             json["status"].should == 1
-            keys = ["city_id", "region_id","r_sys", "region_name", "created_at", "giv_name", "giv_photo", "detail", "giv_id", "giv_type", "rec_name", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            keys = ['multi_loc',"city_id", "region_id","r_sys", "region_name", "created_at", "giv_name", "giv_photo", "detail", "giv_id", "giv_type", "rec_name", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             compare_keys(json["data"], keys)
 		end
 

@@ -96,7 +96,7 @@ class Web::V3::GiftsController < MetalCorsController
         gift = Gift.find params[:id]
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
             gift.notify
-            success gift.web_serialize
+            success gift.notify_serialize
         else
             fail_message = if gift.status == 'redeemed'
                     "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
@@ -114,8 +114,9 @@ class Web::V3::GiftsController < MetalCorsController
             server_inits = nil
             if params["data"]
                 server_inits = redeem_params["server"]
+                loc_id = redeem_params["loc_id"]
             end
-            gift.redeem_gift(server_inits)
+            gift.redeem_gift(server_inits, loc_id)
             success gift.web_serialize
         else
             fail_message = if gift.status == 'redeemed'
@@ -141,7 +142,7 @@ class Web::V3::GiftsController < MetalCorsController
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = pos_redeem_params["ticket_num"]
                 if !gift.merchant.nil?
-                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id)
+                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, pos_redeem_params["loc_id"])
                     if resp["success"] == true
                         status = :ok
                         success({msg: resp["response_text"]})
@@ -171,7 +172,7 @@ class Web::V3::GiftsController < MetalCorsController
 private
 
     def pos_redeem_params
-        params.require(:data).permit(:ticket_num)
+        params.require(:data).permit(:ticket_num, :loc_id)
     end
 
     def gift_params
@@ -179,7 +180,7 @@ private
     end
 
     def redeem_params
-        params.require(:data).permit(:server)
+        params.require(:data).permit(:server, :loc_id)
     end
 
 end

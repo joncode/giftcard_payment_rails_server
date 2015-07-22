@@ -46,6 +46,7 @@ class Merchant < ActiveRecord::Base
     belongs_to :region
     belongs_to :bank
     belongs_to :brand
+    belongs_to :client
 
 #   -------------
 
