@@ -122,7 +122,7 @@ class Positronics
 		else
 			response_data = r_text
 		end
-		{ "response_code" => r_code, "response_text" => response_data}
+		{ "response_code" => r_code, "response_text" => response_data }
 	end
 
 	def success_hsh
@@ -208,25 +208,6 @@ class Positronics
 			resp["_embedded"]["tickets"]
 		else
 			resp
-		end
-	end
-
-	def get_all_tickets_at_location
-		begin
-			response = RestClient.get(
-			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets",
-			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
-			)
-			JSON.parse(response)
-		rescue => e
-			puts "\n\n POSITRONICS ERROR #{e.inspect}"
-			e
-			unless e.nil?
-				resp = e.response.code
-				puts "\n\nPositronics Error code = #{resp}\n\n"
-				resp
-			end
-
 		end
 	end
 

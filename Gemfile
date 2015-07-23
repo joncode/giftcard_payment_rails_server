@@ -12,7 +12,7 @@ gem "rack-timeout"
 
 gem 'httparty', '~> 0.9.0'
 
-gem 'bcrypt-ruby', '~> 3.0.0'
+gem 'bcrypt-ruby', '~> 3.1.5'
 gem 'resque', :require => "resque/server"
 gem "resque-retry"
 #gem 'newrelic_rpm'
@@ -22,7 +22,6 @@ gem 'mailchimp-api'
 # gem 'json'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
-gem 'bcrypt'
 gem 'activemerchant'
 gem 'gibberish'
 gem 'urbanairship'
