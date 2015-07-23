@@ -67,8 +67,8 @@ NUMBER_ID = 649387
 #  make migration to delete mt_user, at_user, user ->  :password_digest
 #  make migration to remove { affiliate_id - password_digest => mt_user }
 
-VERSION_NUMBER  = "1.6.3"
-VERSION_UPDATED = "7/11/15"
+VERSION_NUMBER  = "1.6.3.2"
+VERSION_UPDATED = "7/23/15"
 
 
 
