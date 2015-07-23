@@ -12,7 +12,7 @@ gem "rack-timeout"
 
 gem 'httparty', '~> 0.9.0'
 
-gem 'bcrypt-ruby', '~> 3.1.5'
+gem 'bcrypt', '~> 3.1'
 gem 'resque', :require => "resque/server"
 gem "resque-retry"
 #gem 'newrelic_rpm'
