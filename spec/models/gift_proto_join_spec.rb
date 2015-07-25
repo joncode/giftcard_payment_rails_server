@@ -3,10 +3,9 @@ require 'spec_helper'
 include ProtoFactory
 
 describe GiftProtoJoin do
+
     before(:each) do
         User.any_instance.stub(:init_confirm_email).and_return(true)
-    end
-    before(:each) do
         Gift.delete_all
         ProtoJoin.delete_all
         Proto.delete_all
@@ -49,6 +48,25 @@ describe GiftProtoJoin do
             gift.receiver_name.should  == GENERIC_RECEIVER_NAME
             gift.merchant_id.should    == proto.merchant_id
             gift.provider_name.should  == proto.provider_name
+        end
+
+        it "should create gift with whitespace at end of receiver_email" do
+            pws_provider = FactoryGirl.create(:merchant)
+            pws_giver    = FactoryGirl.create(:campaign)
+            pws_proto    = FactoryGirl.create(:proto, merchant: pws_provider, giver: pws_giver, contacts: 1)
+
+            social = FactoryGirl.create(:social)
+            social.update_column(:network_id, 'test@whitepsace.com  ')
+
+            pws_proto.socials << social.reload
+            pj         = ProtoJoin.where(receivable_type: "Social", receivable_id: social.id).first
+            gift_hsh   = { 'proto_join' => pj }
+            proto = pj.proto
+            gift_proto = GiftProtoJoin.create(gift_hsh)
+            gift_proto.class.should    == GiftProtoJoin
+            gift_proto.should be_valid
+            gift       = Gift.find(gift_proto.id)
+            gift.should be_valid
         end
 
         it "should create and return gift for user" do

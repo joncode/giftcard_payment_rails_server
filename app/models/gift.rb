@@ -7,6 +7,7 @@ class Gift < ActiveRecord::Base
     include GenericPayableDucktype
     include RedeemHelper
     include GiftMessenger
+    include ModelValidationHelper
 
     TEXT_STATUS_OLD = { "incomplete" => 10, "open" => 20, "notified" => 30, "redeemed" => 40, "regifted" => 50, "expired" => 60, "cancel" => 70 }
     GIVER_STATUS    = { 10 => "incomplete" , 20 => "notified", 30 => "notified", 40 => "complete", 50 => "complete", 60 => "expired", 70 => "cancel" }
@@ -20,6 +21,8 @@ class Gift < ActiveRecord::Base
 
 #   -------------
 
+    before_validation { |gift| gift.receiver_email = strip_and_downcase(receiver_email)   if receiver_email.kind_of?(String) }
+    before_validation { |gift| gift.receiver_phone = extract_phone_digits(receiver_phone)   if receiver_phone.kind_of?(String) }
     before_validation :prepare_email
     before_validation :build_oauth
     before_validation :format_value
@@ -41,8 +44,6 @@ class Gift < ActiveRecord::Base
     before_create :build_gift_items
     before_create :set_balance
     before_create :set_status_and_pay_stat    # must be last before_create
-    before_save     { |gift| gift.receiver_email = receiver_email.downcase if receiver_email }
-    before_save   :extract_phone_digits
 
     after_create :set_affiliate_link
     after_create :set_client_content
