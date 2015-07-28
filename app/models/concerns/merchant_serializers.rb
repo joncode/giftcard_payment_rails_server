@@ -69,10 +69,10 @@ private
         if self.client.present?
             arg_scope = proc { ["All"] }
             redemption_merchants = self.client.contents(:merchants, &arg_scope)
-            if redemptions_merchants != ["All"]
-                redemptions_merchants = redemptions_merchants.serialize_objs(:redemption)
+            if redemption_merchants != ["All"]
+                redemption_merchants = redemption_merchants.serialize_objs(:redemption)
             end
-            prov_hash['redeem_locs'] = redemptions_merchants
+            prov_hash['redeem_locs'] = redemption_merchants
         end
     end
 
