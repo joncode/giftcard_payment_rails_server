@@ -1,13 +1,11 @@
-#require 'resque/plugins/resque_heroku_autoscaler'
-
 class PushJob
     extend UrbanAirshipWrap
-    #extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :push
 
     def self.perform gift_id, thank_you=false, incomplete=false
-        gift        = Gift.find gift_id
+        gift = Gift.find gift_id
+
         if incomplete
                 # to gift giver -> 'gift is received - receiver created an account'
             receiver = gift.giver
