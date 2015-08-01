@@ -107,7 +107,7 @@ class Positronics
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
 		when 503
 			r_code = "ERROR"
-			r_text = "Merchant Point of Sale System Unavailable.  Please try again later."
+			r_text = "Merchant Point of Sale System Unavailable.  Please try again after a few minutes."
 		when 509
 			r_code = "ERROR"
 			r_text = "Merchant Server Unavailable.  Please try again later."
@@ -146,14 +146,24 @@ class Positronics
 		puts "\nPositronics look after:\n"
 		puts payload.inspect
 
-		response = RestClient.post(
-		    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@ticket_id}/payments/",
-		    payload,
-		    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
-		)
-		r = JSON.parse(response)
-		puts r.inspect
-		r
+		begin
+			response = RestClient.post(
+			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets/#{@ticket_id}/payments/",
+			    payload,
+			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
+			)
+			r = JSON.parse(response)
+			puts r.inspect
+			r
+		rescue => e
+			puts "\n\n POSITRONICS ERROR #{e.inspect}"
+			e
+			unless e.nil?
+				resp = e.response.code
+				puts "\n\nPositronics Error code = #{resp}\n #{e.inspect}\n #{response.inspect}\n"
+				resp
+			end
+		end
 	end
 
 	def get_ticket_from_tix(tix)
