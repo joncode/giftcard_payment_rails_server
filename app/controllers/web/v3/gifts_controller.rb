@@ -66,7 +66,7 @@ class Web::V3::GiftsController < MetalCorsController
             # binding.pry
             success gift.web_serialize
         else
-            if gift.kind_of?(Gift)
+            if gift.kind_of?(Gift) && gift.persisted?
                 fail_web fail_web_payload("not_created_gift", gift.errors)
             else
                 fail_web({ err: "INVALID_INPUT", msg: "Gift could not be created", data: gift})

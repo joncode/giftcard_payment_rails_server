@@ -25,7 +25,7 @@ class Web::V3::PromosController < MetalCorsController
 		input['partner_id'] = @current_partner.id
 		input['partner_type'] = @current_partner.class.to_s
 		gift  = GiftAffiliate.create(input)
-		if gift.kind_of?(Gift)
+		if gift.kind_of?(Gift) && gift.persisted?
 			success gift.web_serialize
 		else
 			fail_web({ err: "INVALID_INPUT", msg: "Gift could not be created", data: gift})

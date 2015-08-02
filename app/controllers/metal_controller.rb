@@ -43,13 +43,27 @@ class MetalController < ActionController::Base
 
     def fail_web payload
         data_array = []
-        if payload[:data].present? && !payload[:data].kind_of?(String)
+
+        if payload[:data].present? || !payload[:data].kind_of?(Hash) || !payload[:data].kind_of?(String) || !payload[:data].kind_of?(Array)
+
+            if payload[:data].respond_to?(:errors)
+                data_array = payload[:data].errors.full_messages.join(',')
+            else
+                data_array = payload[:data].inspect
+            end
+
+        elsif payload[:data].present? && !payload[:data].kind_of?(String)
+
             payload[:data].each do |k, v|
                 data_array << { name: k.to_s.humanize.downcase, msg: v }
             end
+
         else
+
             data_array << payload[:data] unless payload[:data].nil?
+
         end
+
         @app_response = {
             status: 0,
             err:    payload[:err],
