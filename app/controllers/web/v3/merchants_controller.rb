@@ -12,9 +12,9 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
     def menu
-        menu        = MenuString.get_menu_v2_for_provider(params[:id])
-        menu_string = MenuString.find_by(merchant_id: params[:id])
-        success({ "menu" => menu_string.menu_json, "loc_id" => menu_string.merchant_id })
+        merchant = Merchant.find(params[:id])
+        menu = Menu.find(merchant.menu_id)
+        success({ "menu" => menu, "loc_id" => merchant.id })
         respond
     end
 
