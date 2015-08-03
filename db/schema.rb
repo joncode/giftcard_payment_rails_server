@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150721221012) do
+ActiveRecord::Schema.define(version: 20150802234327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -268,6 +268,7 @@ ActiveRecord::Schema.define(version: 20150721221012) do
     t.datetime "updated_at"
     t.text     "detail"
     t.integer  "merchant_id"
+    t.boolean  "brand_card",               default: false
   end
 
   add_index "campaign_items", ["campaign_id"], name: "index_campaign_items_on_campaign_id", using: :btree
@@ -526,6 +527,7 @@ ActiveRecord::Schema.define(version: 20150721221012) do
     t.integer  "client_id"
     t.integer  "rec_client_id"
     t.integer  "merchant_id"
+    t.boolean  "brand_card",                 default: false
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
