@@ -14,7 +14,7 @@ class Web::V3::MerchantsController < MetalCorsController
     def menu
         merchant = Merchant.find(params[:id])
         menu = Menu.find(merchant.menu_id)
-        success({ "menu" => menu, "loc_id" => merchant.id })
+        success({ "menu" => menu.json, "loc_id" => merchant.id })
         respond
     end
 
