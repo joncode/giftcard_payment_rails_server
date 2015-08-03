@@ -39,6 +39,7 @@ private
         args["shoppingCart"]  = campaign_item.shoppingCart
         args["value"]         = campaign_item.value
         args["cost"]          = campaign_item.cost
+        args["brand_card"]    = campaign_item.brand_card
     end
 
     def expires_at_calc expires_at, expires_in
