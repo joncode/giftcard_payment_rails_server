@@ -95,7 +95,7 @@ module GiftLifecycle
         end
     end
 
-    def pos_redeem(ticket_num, pos_merchant_id, tender_type_id, loc_id=nil)
+    def pos_redeem(ticket_num, pos_merchant_id, tender_type_id, loc_id=nil, brand_card=false)
         # if loc_id - do multi loc redemption
         return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}  if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
 
@@ -103,7 +103,9 @@ module GiftLifecycle
                     "gift_card_id" => self.obscured_id,
                     "pos_merchant_id" => pos_merchant_id,
                     "tender_type_id" => tender_type_id,
-                    "value" => self.balance }
+                    "value" => self.balance,
+                    "brand_card" => brand_card }
+
         pos_obj = Positronics.new(pos_hsh)
 
         resp    = pos_obj.redeem

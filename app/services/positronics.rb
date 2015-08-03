@@ -4,7 +4,7 @@ class Positronics
 	extend PositronicsUtils
 	include ActionView::Helpers::NumberHelper
 
-	attr_reader :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value
+	attr_reader :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card
 
 	def initialize args
 		puts "Positronics args = #{args.inspect}"
@@ -14,6 +14,7 @@ class Positronics
 		@pos_merchant_id = args["pos_merchant_id"]
 		@tender_type_id  = args["tender_type_id"]
 		@value           = args["value"].to_i
+		@brand_card      = args['brand_card']
 		@code 		     = 100
 		@extra_value     = 0
 		@extra_gift      = 0
