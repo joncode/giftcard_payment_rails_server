@@ -20,6 +20,18 @@ FactoryGirl.define do
 
     end
 
+    factory :section do
+        menu_id   1
+        position  1
+        name      "bob"
+    end
+
+    factory :menu do
+        merchant_id 1
+        type_of     1
+    end
+
+
     factory :invite do
         mt_user_id  100
         company_id    100
@@ -295,6 +307,7 @@ FactoryGirl.define do
     factory :menu_item do
        name   "Martini"
        detail "Served with olives"
+       menu_item_id '200-500'
     end
 
     factory :menu_string do

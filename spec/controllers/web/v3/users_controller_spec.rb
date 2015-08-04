@@ -171,7 +171,7 @@ describe Web::V3::UsersController do
             json["status"].should == 0
             json["err"].should == "INVALID_INPUT"
             json["msg"].should == "User could not be created"
-            json["data"].should == [{"name"=>"identifier", "msg"=>["email is invalid"]}]
+            json["data"].should == [{"name"=>"email", "msg"=>"email is invalid"}]
             user.reload
             user.last_name.should_not == "new_last_name"
             user_social.reload
@@ -202,7 +202,7 @@ describe Web::V3::UsersController do
             json["status"].should == 0
             json["err"].should == "INVALID_INPUT"
             json["msg"].should == "User could not be created"
-            json["data"].should == [{"name"=>"identifier", "msg"=>["phone number is invalid"]}]
+            json["data"].should == [{"name"=>"phone", "msg"=>"phone number is invalid"}]
             user.reload
             user.last_name.should_not == "new_last_name"
             user_social.reload

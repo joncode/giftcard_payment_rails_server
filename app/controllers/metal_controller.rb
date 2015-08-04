@@ -41,27 +41,38 @@ class MetalController < ActionController::Base
         @app_response = { status: 0, data: payload }
     end
 
+    def make_data_ary payload_msgs
+        data_array = []
+        payload_msgs.each do |k, v|
+
+            v = v.join(',') if v.kind_of?(Array)
+
+            if k == :identifier
+                k = v.match(/\A\w+\b/)[0]
+            end
+
+            data_array << { name: k.to_s.humanize.downcase, msg: v }
+        end
+        return data_array
+    end
+
     def fail_web payload
         data_array = []
 
-        if payload[:data].present? || !payload[:data].kind_of?(Hash) || !payload[:data].kind_of?(String) || !payload[:data].kind_of?(Array)
+        # binding.pry
 
-            if payload[:data].respond_to?(:errors)
-                data_array = payload[:data].errors.full_messages.join(',')
+        if payload[:data].present? && !payload[:data].kind_of?(Hash) && !payload[:data].kind_of?(String) && !payload[:data].kind_of?(Array)
+
+            if payload[:data].respond_to?(:messages)
+                data_array = make_data_ary(payload[:data].messages)
             else
-                data_array = payload[:data].inspect
+                data_array = make_data_ary(payload[:data].errors.messages)
             end
 
         elsif payload[:data].present? && !payload[:data].kind_of?(String)
-
-            payload[:data].each do |k, v|
-                data_array << { name: k.to_s.humanize.downcase, msg: v }
-            end
-
+            data_array = make_data_ary(payload[:data])
         else
-
             data_array << payload[:data] unless payload[:data].nil?
-
         end
 
         @app_response = {

@@ -49,13 +49,15 @@ describe Web::V3::MerchantsController do
 
     it "should return the provider's menu" do
         menu_string = FactoryGirl.create(
-        	:menu_string,
-        	menu: "[{\"section\":\"Signature\",\"items\":[{\"detail\":\"PATRON CITRONGE, MUDDLED JALAPENOS\",\"price\":\"15\",\"item_id\":73,\"item_name\":\"JALAPENO MARGARITA\"}] }]",
+        	:menu,
+        	json: "[{\"section\":\"Signature\",\"items\":[{\"detail\":\"PATRON CITRONGE, MUDDLED JALAPENOS\",\"price\":\"15\",\"item_id\":73,\"item_name\":\"JALAPENO MARGARITA\"}] }]",
         	merchant_id: @merchant.id
 		)
+        @merchant.update(menu_id: menu_string.id)
+
     	get :menu, format: :json, id: @merchant.id
     	rrc(200)
-    	json["data"]["menu"].should == JSON.parse(menu_string.menu)
+    	json["data"]["menu"].should == JSON.parse(menu_string.json)
     end
 
     describe :receipt_photo_url do

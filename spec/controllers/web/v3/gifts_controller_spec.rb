@@ -32,7 +32,7 @@ describe Web::V3::GiftsController do
             get :index, format: :json
             rrc(200)
             json["data"].count.should == 6
-            keys = ['multi_loc', "city_id", "region_name", "region_id", "r_sys", "created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
+            keys = ["brand_card",'multi_loc', "city_id", "region_name", "region_id", "r_sys", "created_at", "giv_name", "giv_photo", "giv_id", "giv_type", "rec_id", "rec_name", "rec_photo", "items", "value", "status", "expires_at", "cat", "msg", "loc_id", "loc_name", "loc_phone", "loc_address", "gift_id"]
             compare_keys(json["data"][0], keys)
         end
 
