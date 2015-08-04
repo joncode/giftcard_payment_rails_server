@@ -335,7 +335,7 @@ FactoryGirl.define do
     end
 
     factory :gift_item do |gi|
-        gi.menu_id    1
+        gi.menu_item_id    1
         gi.price      "10"
         gi.quantity   1
         gi.name       "Beer"

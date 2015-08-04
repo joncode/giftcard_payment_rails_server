@@ -45,7 +45,8 @@ class Omnivore
 		end
 
 		if tic.nil?
-			if tix.to_i > 400
+			puts "Omnivore tix when no tic #{tix.inspect}"
+			if tix.respond_to?(:to_i) && tix.to_i > 399
 				@code = tix
 			else
 				@code = 404
@@ -53,43 +54,54 @@ class Omnivore
 		else
 			if tic["closed_at"].nil?
 				@ticket_id = tic["id"]
-				@check_value = tic["totals"]["due"].to_i
-
-				if @value < @check_value
-					@code			= 206   # ok , the gift has partially covered the ticket cost
-					@extra_value	= @check_value - @value
-					@applied_value	= @value
-				elsif @value > @check_value
-					@code			= 201    # ok , a new gift has been created for the extra gift value
-					@extra_gift	    = @value - @check_value
-					@applied_value	= @check_value
+				if @brand_card
+					if tic['menu_items'] && tic['menu_items']['menu_item_id'] && @brand_card_ids.include?(tic['menu_items']['menu_item_id'])
+						# success brand card
+						apply_ticket_value tic
+					else
+						# fail brand card
+						@code = 401
+					end
 				else
-					@code  = 200   # ok , full aceeptance
-					@applied_value	= @value
-				end
-
-				resp = post_redeem
-				puts resp.inspect
-				case resp
-				when "pos-merchant_id incorrect"
-					@code = 509
-					@applied_value	= 0
-				when "server_missing"
-					@code = 500
-					@applied_value	= 0
-				else
-					# all good
+					apply_ticket_value tic
 				end
 			else
 				@code = 304
 			end
 		end
 
-		@response = response_from_code
-		return @response
+		return @response = response_from_code
 	end
 
-# private
+	def apply_ticket_value tic
+		@check_value = tic["totals"]["due"].to_i
+
+		if @value < @check_value
+			@code			= 206   # ok , the gift has partially covered the ticket cost
+			@extra_value	= @check_value - @value
+			@applied_value	= @value
+		elsif @value > @check_value
+			@code			= 201    # ok , a new gift has been created for the extra gift value
+			@extra_gift	    = @value - @check_value
+			@applied_value	= @check_value
+		else
+			@code  = 200   # ok , full aceeptance
+			@applied_value	= @value
+		end
+
+		resp = post_redeem
+		puts resp.inspect
+		case resp
+		when "pos_merchant_id incorrect"
+			@code = 509
+			@applied_value	= 0
+		when "server_missing"
+			@code = 500
+			@applied_value	= 0
+		else
+			# all good
+		end
+	end
 
 	def response_from_code
 		case @code
@@ -111,6 +123,9 @@ class Omnivore
 		when 404
 			r_code = "ERROR"
 			r_text = "Your check number #{@ticket_num} cannot be found. Please double check and try again. If this issue persists please contact support@itson.me"
+		when 401
+			r_code = "ERROR"
+			r_text = "This gift card is only good for the specific item.  We did not find the specific on the ticket."
 		when 500
 			r_code = "ERROR"
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"

@@ -67,7 +67,7 @@ describe Gift do
 		gift.save
 		items = JSON.parse gift.shoppingCart
 		gift.gift_items.count.should == items.count
-		gift.gift_items.first.menu_id.should == items.first["item_id"]
+		gift.gift_items.first.menu_item_id.should == items.first["item_id"]
 	end
 
 	it "should save sale as payable on create" do

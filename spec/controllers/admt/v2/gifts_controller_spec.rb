@@ -288,7 +288,7 @@ describe Admt::V2::GiftsController do
             post :create, format: :json, data: create_hsh
             rrc 200
             json["status"].should == 1
-            keys = ["value", "cost", "receiver_name", "receiver_email", "shoppingCart", "status", "updated_at", "created_at", "items", "expires_at", "cat", "detail"]
+            keys = ['brand_card',"value", "cost", "receiver_name", "receiver_email", "shoppingCart", "status", "updated_at", "created_at", "items", "expires_at", "cat", "detail"]
             compare_keys(json["data"], keys)
         end
 

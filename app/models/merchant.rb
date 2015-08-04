@@ -58,6 +58,14 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
+    def menu_string
+        menu = Menu.find(self.menu_id)
+        if menu
+            JSON.parse(menu.json)
+        else
+            []
+        end
+    end
 
     def mode
         if self.paused
