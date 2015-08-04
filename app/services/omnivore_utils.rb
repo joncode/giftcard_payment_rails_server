@@ -1,4 +1,4 @@
-module PositronicsUtils
+module OmnivoreUtils
     extend ActiveSupport::Concern
 
     def tickets(loc_id, next_link=nil)
@@ -20,15 +20,6 @@ module PositronicsUtils
     		hsh["tickets"] = []
     	end
     	hsh
-    end
-
-    def get resource, obj_id=nil, meth=nil
-    	obj_id = obj_id.present? ? (obj_id + "/") : nil
-    	response = RestClient.get(
-		    "#{POSITRONICS_API_URL}/#{resource}/#{obj_id}#{meth}",
-		    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
-		)
-		JSON.parse response
     end
 
 end

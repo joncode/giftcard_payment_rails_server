@@ -95,18 +95,20 @@ module GiftLifecycle
         end
     end
 
-    def pos_redeem(ticket_num, pos_merchant_id, tender_type_id, loc_id=nil, brand_card=false)
+    def pos_redeem(ticket_num, pos_merchant_id, tender_type_id, loc_id=nil)
         # if loc_id - do multi loc redemption
         return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}  if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
+
+        brand_card_ids_ary = self.brand_card_ids
 
         pos_hsh = { "ticket_num" => ticket_num,
                     "gift_card_id" => self.obscured_id,
                     "pos_merchant_id" => pos_merchant_id,
                     "tender_type_id" => tender_type_id,
                     "value" => self.balance,
-                    "brand_card" => brand_card }
+                    "brand_card_ids_ary" => brand_card_ids_ary }
 
-        pos_obj = Positronics.new(pos_hsh)
+        pos_obj = Omnivore.new(pos_hsh)
 
         resp    = pos_obj.redeem
         resp["success"] = pos_obj.success?
@@ -118,6 +120,18 @@ module GiftLifecycle
             end
         end
         resp
+    end
+
+    def brand_card_ids
+        if self.brand_card
+            cart_ary = self.ary_of_shopping_cart_as_hash
+            brand_card_ids = cart_ary.map do |item|
+                item['pos_item_id']
+            end
+            return brand_card_ids.compact!
+        else
+            return []
+        end
     end
 
 end

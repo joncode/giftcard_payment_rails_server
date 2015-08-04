@@ -1,20 +1,28 @@
 require 'rest_client'
 
-class Positronics
-	extend PositronicsUtils
+class Omnivore
+	extend OmnivoreUtils
 	include ActionView::Helpers::NumberHelper
 
-	attr_reader :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card
+	attr_reader :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card, :brand_card_ids
 
 	def initialize args
-		puts "Positronics args = #{args.inspect}"
+		puts "Omnivore args = #{args.inspect}"
+
+		if  args['brand_card_ids_ary'].nil? || args['brand_card_ids_ary'].length == 0
+			@brand_card = false
+			@brand_card_ids  = []
+		else
+			@brand_card = true
+			@brand_card_ids = args['brand_card_ids_ary']
+		end
+
 		@ticket_num      = args["ticket_num"].to_s
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
 		@tender_type_id  = args["tender_type_id"]
 		@value           = args["value"].to_i
-		@brand_card      = args['brand_card']
 		@code 		     = 100
 		@extra_value     = 0
 		@extra_gift      = 0
@@ -144,7 +152,7 @@ class Positronics
   		  "payment_source" => "Gift #{@gift_card_id}"
 		}.to_json
 
-		puts "\nPositronics look after:\n"
+		puts "\nOmnivore look after:\n"
 		puts payload.inspect
 
 		begin
@@ -161,7 +169,7 @@ class Positronics
 			e
 			unless e.nil?
 				resp = e.response.code
-				puts "\n\nPositronics Error code = #{resp}\n #{e.inspect}\n #{response.inspect}\n"
+				puts "\n\nOmnivore Error code = #{resp}\n #{e.inspect}\n #{response.inspect}\n"
 				resp
 			end
 		end
@@ -203,7 +211,7 @@ class Positronics
 			e
 			unless e.nil?
 				resp = e.response.code
-				puts "\n\nPositronics Error code = #{resp}\n\n"
+				puts "\n\nOmnivore Error code = #{resp}\n\n"
 				resp
 			end
 		end
@@ -234,10 +242,56 @@ class Positronics
 			e
 			unless e.nil?
 				resp = e.response.code
-				puts "\n\nPositronics Error code = #{resp}\n\n"
+				puts "\n\nOmnivore Error code = #{resp}\n\n"
 				resp
 			end
 
 		end
+	end
+
+    def get resource, obj_id=nil, meth=nil
+    	obj_id = obj_id.present? ? (obj_id + "/") : nil
+
+        begin
+            response = RestClient.get(
+                "#{POSITRONICS_API_URL}/#{resource}/#{obj_id}#{meth}",
+                {:content_type => :json, :'Api-Key' =>  POSITRONICS_API_KEY }
+            )
+            r = JSON.parse(response)
+            # puts r.inspect + "\n ^^^ utils get"
+            @code = 200
+            @response = { "response_code" => "SUCCESS", "response_text" => "#{resource}/#{obj_id}#{meth}", "status" => 200, "data" => r }
+            r
+        rescue => e
+            puts "\n\n POSITRONICS ERROR #{e.inspect}"
+            unless e.nil?
+                resp = e.response.code
+                @code = resp
+                puts "\n\nOmnivore Error code = #{resp}\n #{e.inspect} \n#{e.response}\n"
+                @response = { "response_code" => "ERROR", "response_text" => e.response['error'], "status" => @code, "data" => [] }
+            end
+            e
+        end
+
+    end
+
+	def menu_items
+		r = get('locations', @pos_merchant_id, "menu/items")
+		puts "\n here is the response"
+		puts r.inspect
+		if @code == 200
+	        items =  r["_embedded"]["menu_items"].map do |m|
+	        	if m['price'].to_i > 0
+		            mi = { name: m["name"], price: m["price"], pos_menu_item_id: m["id"] }
+		            puts "\nhere #{mi.inspect}"
+		            mi
+		        else
+		        	nil
+		        end
+	        end
+	        @response['data'] = items.compact.sort_by{|item| item[:name].downcase }
+	    else
+	    	@response
+	    end
 	end
 end

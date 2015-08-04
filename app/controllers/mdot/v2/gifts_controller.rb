@@ -82,8 +82,7 @@ class Mdot::V2::GiftsController < JsonController
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = pos_redeem_params
                 if !gift.merchant.nil?
-                    pos_item_id_ary = gift.get_pos_menu_ids
-                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, nil, gift.brand_card)
+                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id)
                     if resp["success"] == true
                         status = :ok
                         success(resp["response_text"])

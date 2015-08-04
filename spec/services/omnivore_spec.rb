@@ -1,6 +1,6 @@
 require 'spec_helper'
 include GiftModelFactory
-describe Positronics do
+describe Omnivore do
 
 	describe "gift pos_redeem" do
 
@@ -17,8 +17,8 @@ describe Positronics do
 			g.value_in_cents.should == 10000
 			cents      = g.value_in_cents
 			setter_hsh = {"amount_paid" => 1128, "due" => 0, "gift_balance" => (10000 - 1128), "open" => false, "ticket_num" => 553, "total" => 1128, "closed" => true}
-			Positronics.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
-			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
+			Omnivore.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
+			Omnivore.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
 			resp = g.pos_redeem(553, "EaTaa5c6", "500")
 			puts resp.inspect
 			resp["success"].should be_true
@@ -51,8 +51,8 @@ describe Positronics do
       end
       g.notify
 			setter_hsh = {"amount_paid" => 10000, "due" => 0, "gift_balance" => 0, "open" => false, "ticket_num" => 534, "total" => 10000, "closed" => true}
-			Positronics.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
-			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
+			Omnivore.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
+			Omnivore.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
 			g.value_in_cents.should > 9900
 			resp = g.pos_redeem(534, "EaTaa5c6", "500")
 			puts resp.inspect
@@ -78,8 +78,8 @@ describe Positronics do
       end
       g.notify
 			setter_hsh = {"amount_paid" => 10000, "due" => 80, "gift_balance" => 0, "open" => true, "ticket_num" => 356, "total" => 11280, "closed" => false}
-			Positronics.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
-			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
+			Omnivore.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
+			Omnivore.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
 			g.value_in_cents.should > 9900
 			resp = g.pos_redeem(356, "EaTaa5c6", "500")
 			puts resp.inspect
@@ -104,7 +104,7 @@ describe Positronics do
       end
       g.notify
 			setter_hsh = {"amount_paid" => 10000, "due" => 1128, "gift_balance" => 0, "open" => true, "ticket_num" => 600, "total" => 11128, "closed" => false}
-			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
+			Omnivore.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
 			stub_request(:get, "https://api.omnivore.io/0.1/locations/EaTaa5c6/tickets?where=eq(open,true)").
         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Api-Key'=>'203d714b6a3642379ce7ccbabe4e9926', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => one_page_resp.to_json, :headers => {})

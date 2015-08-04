@@ -142,7 +142,7 @@ class Web::V3::GiftsController < MetalCorsController
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = pos_redeem_params["ticket_num"]
                 if !gift.merchant.nil?
-                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, pos_redeem_params["loc_id"], gift.brand_card)
+                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, pos_redeem_params["loc_id"])
                     if resp["success"] == true
                         status = :ok
                         success({msg: resp["response_text"]})
