@@ -69,6 +69,33 @@ describe Omnivore do
 
 		end
 
+    it "should redeem BRADN CARD when ticket has menu item id correct" do
+      p = FactoryGirl.create(:provider, :pos_merchant_id => "EaTaa5c6", :r_sys => 3)
+      u = FactoryGirl.create(:user)
+      g = make_gift_sale(u, u, "100", p.id)
+      if g.status != 'open'
+        g.update_column(:status, 'open')
+      end
+      g.notify
+      setter_hsh = {"amount_paid" => 10000, "due" => 0, "gift_balance" => 0, "open" => false, "ticket_num" => 534, "total" => 10000, "closed" => true}
+      Omnivore.any_instance.stub(:get_tickets_at_location).and_return(one_page_resp)
+      Omnivore.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
+      g.value_in_cents.should > 9900
+      resp = g.pos_redeem(534, "EaTaa5c6", "500")
+      puts resp.inspect
+      resp["success"].should be_true
+      resp["response_code"].should                           == "PAID"
+      resp["response_text"][:msg].should                     == "$100.00 was applied to your check. Transaction completed."
+      resp["response_text"][:amount_applied].should          == 10000
+      resp["response_text"][:total_check_amount].should      == 10000
+      resp["response_text"][:remaining_check_balance].should == 0
+      resp["response_text"][:remaining_gift_balance].should  == 0
+
+      g.reload.status.should == 'redeemed'
+      g.redeemed_at.should > 1.hour.ago
+
+    end
+
 		it "should redeem gift when gift is less than check" do
 			p = FactoryGirl.create(:provider, :pos_merchant_id => "EaTaa5c6", :r_sys => 3)
 			u = FactoryGirl.create(:user)
