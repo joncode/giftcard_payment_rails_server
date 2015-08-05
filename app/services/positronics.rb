@@ -8,7 +8,7 @@ class Positronics
 
 	def initialize args
 		puts "Positronics args = #{args.inspect}"
-		@ticket_num      = args["ticket_num"].to_s
+		@ticket_num      = strip_leading_zeros args["ticket_num"].to_s
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
@@ -21,6 +21,10 @@ class Positronics
 		@check_value 	 = 0
   		@response        = response_from_code
 		@next 			 = nil
+	end
+
+	def strip_leading_zeros str
+		str.match(/^[0-9]*$/) ? str.to_i.to_s : str
 	end
 
 	def success?
