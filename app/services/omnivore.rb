@@ -17,7 +17,7 @@ class Omnivore
 			@brand_card_ids = args['brand_card_ids_ary']
 		end
 
-		@ticket_num      = args["ticket_num"].to_s
+		@ticket_num      = strip_leading_zeros args["ticket_num"].to_s
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
@@ -30,6 +30,10 @@ class Omnivore
 		@check_value 	 = 0
   		@response        = response_from_code
 		@next 			 = nil
+	end
+
+	def strip_leading_zeros str
+		str.match(/^[0-9]*$/) ? str.to_i.to_s : str
 	end
 
 	def success?
@@ -55,12 +59,14 @@ class Omnivore
 			if tic["closed_at"].nil?
 				@ticket_id = tic["id"]
 				if @brand_card
-					if tic['menu_items'] && tic['menu_items']['menu_item_id'] && @brand_card_ids.include?(tic['menu_items']['menu_item_id'])
-						# success brand card
-						apply_ticket_value tic
-					else
-						# fail brand card
-						@code = 401
+					# fail brand card in advance
+					@code = 401
+					parent_item_ary = tic['_embedded']['items']
+					parent_item_ary.each do |p_item|
+						if p_item['_embedded']['menu_item'] && p_item['_embedded']['menu_item']['id'] && @brand_card_ids.include?(p_item['_embedded']['menu_item']['id'])
+							# success brand card
+							apply_ticket_value tic
+						end
 					end
 				else
 					apply_ticket_value tic

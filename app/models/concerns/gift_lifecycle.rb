@@ -99,14 +99,12 @@ module GiftLifecycle
         # if loc_id - do multi loc redemption
         return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}  if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
 
-        brand_card_ids_ary = self.brand_card_ids
-
         pos_hsh = { "ticket_num" => ticket_num,
                     "gift_card_id" => self.obscured_id,
                     "pos_merchant_id" => pos_merchant_id,
                     "tender_type_id" => tender_type_id,
                     "value" => self.balance,
-                    "brand_card_ids_ary" => brand_card_ids_ary }
+                    "brand_card_ids_ary" => self.brand_card_ids }
 
         pos_obj = Omnivore.new(pos_hsh)
 
@@ -128,7 +126,7 @@ module GiftLifecycle
             brand_card_ids = cart_ary.map do |item|
                 item['pos_item_id']
             end
-            return brand_card_ids.compact!
+            return brand_card_ids.compact
         else
             return []
         end
