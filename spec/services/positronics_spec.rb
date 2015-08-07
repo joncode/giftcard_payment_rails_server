@@ -105,7 +105,7 @@ describe Positronics do
       g.notify
 			setter_hsh = {"amount_paid" => 10000, "due" => 1128, "gift_balance" => 0, "open" => true, "ticket_num" => 600, "total" => 11128, "closed" => false}
 			Positronics.any_instance.stub(:post_redeem).and_return(payment_more(setter_hsh))
-			stub_request(:get, "https://api.omnivore.io/0.1/locations/EaTaa5c6/tickets").
+			stub_request(:get, "https://api.omnivore.io/0.1/locations/EaTaa5c6/tickets?where=eq(open,true)").
         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Api-Key'=>'203d714b6a3642379ce7ccbabe4e9926', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => one_page_resp.to_json, :headers => {})
       both_page_resp = one_page_resp

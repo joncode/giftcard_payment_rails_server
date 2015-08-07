@@ -40,7 +40,7 @@ class Positronics
 		end
 
 		if tic.nil?
-			if tix.to_i > 400
+			if tix.to_i > 399
 				@code = tix
 			else
 				@code = 404
@@ -64,7 +64,9 @@ class Positronics
 				end
 
 				resp = post_redeem
+				puts "Here is the post_redeem response"
 				puts resp.inspect
+
 				case resp
 				when "pos-merchant_id incorrect"
 					@code = 509
@@ -72,9 +74,18 @@ class Positronics
 				when "server_missing"
 					@code = 500
 					@applied_value	= 0
+				when "The point of sale rejected the request"
+					@code = 503
+					@applied_value	= 0
 				else
 					# all good
 				end
+
+				if !resp.kind_of?(Hash) && resp.to_i > 399
+					@code = resp.to_i
+					@applied_value = 0
+				end
+
 			else
 				@code = 304
 			end
@@ -103,6 +114,9 @@ class Positronics
 		when 304
 			r_code = "ERROR"
 			r_text = "Check Number #{@ticket_num} has already been paid."
+		when 400
+			r_code = "ERROR"
+			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
 		when 404
 			r_code = "ERROR"
 			r_text = "Your check number #{@ticket_num} cannot be found. Please double check and try again. If this issue persists please contact support@itson.me"
