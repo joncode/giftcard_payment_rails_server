@@ -1,22 +1,13 @@
 require 'rest_client'
 
-class Omnivore
-	extend OmnivoreUtils
+class Positronics
+	extend PositronicsUtils
 	include ActionView::Helpers::NumberHelper
 
-	attr_reader :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card, :brand_card_ids
+	attr_reader :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value
 
 	def initialize args
-		puts "Omnivore args = #{args.inspect}"
-
-		if  args['brand_card_ids_ary'].nil? || args['brand_card_ids_ary'].length == 0
-			@brand_card = false
-			@brand_card_ids  = []
-		else
-			@brand_card = true
-			@brand_card_ids = args['brand_card_ids_ary']
-		end
-
+		puts "Positronics args = #{args.inspect}"
 		@ticket_num      = strip_leading_zeros args["ticket_num"].to_s
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
@@ -49,8 +40,7 @@ class Omnivore
 		end
 
 		if tic.nil?
-			puts "Omnivore tix when no tic #{tix.inspect}"
-			if tix.respond_to?(:to_i) && tix.to_i > 399
+			if tix.to_i > 399
 				@code = tix
 			else
 				@code = 404
@@ -58,65 +48,54 @@ class Omnivore
 		else
 			if tic["closed_at"].nil?
 				@ticket_id = tic["id"]
+				@check_value = tic["totals"]["due"].to_i
 
-				if @brand_card
-					# fail brand card in advance
-					@code = 401
-					parent_item_ary = tic['_embedded']['items']
-					parent_item_ary.each do |p_item|
-						if p_item['_embedded']['menu_item'] && p_item['_embedded']['menu_item']['id'] && @brand_card_ids.include?(p_item['_embedded']['menu_item']['id'])
-							# success brand card
-							apply_ticket_value tic
-						end
-					end
+				if @value < @check_value
+					@code			= 206   # ok , the gift has partially covered the ticket cost
+					@extra_value	= @check_value - @value
+					@applied_value	= @value
+				elsif @value > @check_value
+					@code			= 201    # ok , a new gift has been created for the extra gift value
+					@extra_gift	    = @value - @check_value
+					@applied_value	= @check_value
 				else
-					apply_ticket_value tic
+					@code  = 200   # ok , full aceeptance
+					@applied_value	= @value
 				end
+
+				resp = post_redeem
+				puts "Here is the post_redeem response"
+				puts resp.inspect
+
+				case resp
+				when "pos-merchant_id incorrect"
+					@code = 509
+					@applied_value	= 0
+				when "server_missing"
+					@code = 500
+					@applied_value	= 0
+				when "The point of sale rejected the request"
+					@code = 503
+					@applied_value	= 0
+				else
+					# all good
+				end
+
+				if !resp.kind_of?(Hash) && resp.to_i > 399
+					@code = resp.to_i
+					@applied_value = 0
+				end
+
 			else
 				@code = 304
 			end
 		end
 
-		return @response = response_from_code
+		@response = response_from_code
+		return @response
 	end
 
-	def apply_ticket_value tic
-		@check_value = tic["totals"]["due"].to_i
-
-		if @value < @check_value
-			@code			= 206   # ok , the gift has partially covered the ticket cost
-			@extra_value	= @check_value - @value
-			@applied_value	= @value
-		elsif @value > @check_value
-			@code			= 201    # ok , a new gift has been created for the extra gift value
-			@extra_gift	    = @value - @check_value
-			@applied_value	= @check_value
-		else
-			@code  = 200   # ok , full aceeptance
-			@applied_value	= @value
-		end
-
-		resp = post_redeem
-		puts "Here is the post_redeem response"
-		puts resp.inspect
-
-		case resp
-		when "pos-merchant_id incorrect"
-			@code = 509
-			@applied_value	= 0
-		when "server_missing"
-			@code = 500
-			@applied_value	= 0
-		when "The point of sale rejected the request"
-			@code = 503
-			@applied_value	= 0
-		end
-
-		if !resp.kind_of?(Hash) && resp.to_i > 399
-			@code = resp.to_i
-			@applied_value = 0
-		end
-	end
+# private
 
 	def response_from_code
 		case @code
@@ -141,9 +120,6 @@ class Omnivore
 		when 404
 			r_code = "ERROR"
 			r_text = "Your check number #{@ticket_num} cannot be found. Please double check and try again. If this issue persists please contact support@itson.me"
-		when 401
-			r_code = "ERROR"
-			r_text = "This gift card is only good for the specific item.  We did not find the specific on the ticket."
 		when 500
 			r_code = "ERROR"
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
@@ -164,7 +140,7 @@ class Omnivore
 		else
 			response_data = r_text
 		end
-		{ "response_code" => r_code, "response_text" => response_data }
+		{ "response_code" => r_code, "response_text" => response_data}
 	end
 
 	def success_hsh
@@ -185,7 +161,7 @@ class Omnivore
   		  "payment_source" => "Gift #{@gift_card_id}"
 		}.to_json
 
-		puts "\nOmnivore look after:\n"
+		puts "\nPositronics look after:\n"
 		puts payload.inspect
 
 		begin
@@ -202,7 +178,7 @@ class Omnivore
 			e
 			unless e.nil?
 				resp = e.response.code
-				puts "\n\nOmnivore Error code = #{resp}\n #{e.inspect}\n #{response.inspect}\n"
+				puts "\n\nPositronics Error code = #{resp}\n #{e.inspect}\n #{response.inspect}\n"
 				resp
 			end
 		end
@@ -244,7 +220,7 @@ class Omnivore
 			e
 			unless e.nil?
 				resp = e.response.code
-				puts "\n\nOmnivore Error code = #{resp}\n\n"
+				puts "\n\nPositronics Error code = #{resp}\n\n"
 				resp
 			end
 		end
@@ -263,6 +239,25 @@ class Omnivore
 		end
 	end
 
+	def get_all_tickets_at_location
+		begin
+			response = RestClient.get(
+			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets",
+			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
+			)
+			JSON.parse(response)
+		rescue => e
+			puts "\n\n POSITRONICS ERROR #{e.inspect}"
+			e
+			unless e.nil?
+				resp = e.response.code
+				puts "\n\nPositronics Error code = #{resp}\n\n"
+				resp
+			end
+
+		end
+	end
+
 	def get_tickets_at_location
 		begin
 			response = RestClient.get(
@@ -275,56 +270,10 @@ class Omnivore
 			e
 			unless e.nil?
 				resp = e.response.code
-				puts "\n\nOmnivore Error code = #{resp}\n\n"
+				puts "\n\nPositronics Error code = #{resp}\n\n"
 				resp
 			end
 
 		end
-	end
-
-    def get resource, obj_id=nil, meth=nil
-    	obj_id = obj_id.present? ? (obj_id + "/") : nil
-
-        begin
-            response = RestClient.get(
-                "#{POSITRONICS_API_URL}/#{resource}/#{obj_id}#{meth}",
-                {:content_type => :json, :'Api-Key' =>  POSITRONICS_API_KEY }
-            )
-            r = JSON.parse(response)
-            # puts r.inspect + "\n ^^^ utils get"
-            @code = 200
-            @response = { "response_code" => "SUCCESS", "response_text" => "#{resource}/#{obj_id}#{meth}", "status" => 200, "data" => r }
-            r
-        rescue => e
-            puts "\n\n POSITRONICS ERROR #{e.inspect}"
-            unless e.nil?
-                resp = e.response.code
-                @code = resp
-                puts "\n\nOmnivore Error code = #{resp}\n #{e.inspect} \n#{e.response}\n"
-                @response = { "response_code" => "ERROR", "response_text" => e.response['error'], "status" => @code, "data" => [] }
-            end
-            e
-        end
-
-    end
-
-	def menu_items
-		r = get('locations', @pos_merchant_id, "menu/items")
-		puts "\n here is the response"
-		puts r.inspect
-		if @code == 200
-	        items =  r["_embedded"]["menu_items"].map do |m|
-	        	if m['price'].to_i > 0
-		            mi = { name: m["name"], price: m["price"], pos_menu_item_id: m["id"] }
-		            puts "\nhere #{mi.inspect}"
-		            mi
-		        else
-		        	nil
-		        end
-	        end
-	        @response['data'] = items.compact.sort_by{|item| item[:name].downcase }
-	    else
-	    	@response
-	    end
 	end
 end
