@@ -6,10 +6,8 @@ class Mdot::V2::ProvidersController < JsonController
 
     def menu
         merchant = Merchant.find(params[:id])
-        menu = Menu.find(merchant.menu_id)
-        if menu
-            menu_string = JSON.parse(menu.json)
-            success({ "provider_id" => params[:id].to_i, "menu" => menu_string })
+        if menu = merchant.menu_string
+            success({ "provider_id" => params[:id].to_i, "menu" => menu })
         else
             not_found
             return nil
