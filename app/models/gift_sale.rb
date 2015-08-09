@@ -47,7 +47,7 @@ private
         if validateGift.valid?
             args["payable"] = Sale.charge_card credit_card_hsh
         else
-            puts "\n\n  GIFT INVALID SUBMITTED 500 Internal \n\n args.inspect \n\n"
+            puts "\n\n  GIFT INVALID SUBMITTED 500 Internal \n\n #{args.inspect} \n\n"
             validateGift
         end
     end
