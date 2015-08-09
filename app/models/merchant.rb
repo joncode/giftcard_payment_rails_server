@@ -59,9 +59,12 @@ class Merchant < ActiveRecord::Base
 #   -------------
 
     def menu_string
-        menu = Menu.find(self.menu_id)
-        if menu
-            JSON.parse(menu.json)
+        if menu = Menu.find(self.menu_id)
+            begin
+                JSON.parse(menu.json)
+            rescue
+                []
+            end
         else
             []
         end
