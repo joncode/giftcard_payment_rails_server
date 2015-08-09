@@ -171,7 +171,7 @@ class Positronics
 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 			)
 			r = JSON.parse(response)
-			puts r.inspect
+			# puts r.inspect
 			r
 		rescue => e
 			puts "\n\n POSITRONICS ERROR #{e.inspect}"
