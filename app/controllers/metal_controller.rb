@@ -72,14 +72,16 @@ class MetalController < ActionController::Base
         elsif payload[:data].present? && !payload[:data].kind_of?(String)
             data_array = make_data_ary(payload[:data])
         else
-            data_array << payload[:data] unless payload[:data].nil?
+            if payload[:data].present?
+                data_array << { msg: payload[:data] }
+            end
         end
 
         @app_response = {
             status: 0,
             err:    payload[:err],
             msg:    payload[:msg],
-            data:   data_array.map{ |da| { msg: da }}
+            data:   data_array
         }
     end
 
