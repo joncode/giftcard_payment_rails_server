@@ -79,7 +79,7 @@ class MetalController < ActionController::Base
             status: 0,
             err:    payload[:err],
             msg:    payload[:msg],
-            data:   data_array
+            data:   { msg: data_array }
         }
     end
 
