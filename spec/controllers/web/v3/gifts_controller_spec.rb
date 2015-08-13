@@ -215,6 +215,17 @@ describe Web::V3::GiftsController do
             @gift.reload.status.should == 'notified'
         end
 
+
+        it "should notify an open gift with a loc_id" do
+
+            merchant = FactoryGirl.create(:merchant)
+
+            @gift.status.should == 'open'
+            patch :notify, format: :json, id: @gift.id, data: { loc_id: merchant.id}
+            @gift.reload.status.should == 'notified'
+            @gift.merchant_id.should == merchant.id
+        end
+
         it "should return token when gift is currently notified" do
 
             @gift.notify

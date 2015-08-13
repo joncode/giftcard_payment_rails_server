@@ -96,7 +96,10 @@ class Web::V3::GiftsController < MetalCorsController
     def notify
         gift = Gift.find params[:id]
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
-            gift.notify
+            if params["data"]
+                loc_id = redeem_params["loc_id"]
+            end
+            gift.notify(true, loc_id)
             success gift.notify_serialize
         else
             fail_message = if gift.status == 'redeemed'
@@ -171,6 +174,10 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
 private
+
+    def notify_params
+        params.require(:data).permit(:loc_id)
+    end
 
     def pos_redeem_params
         params.require(:data).permit(:ticket_num, :loc_id)

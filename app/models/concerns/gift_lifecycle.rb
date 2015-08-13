@@ -1,7 +1,7 @@
 module GiftLifecycle
     extend ActiveSupport::Concern
 
-    def notify(redeem=true)
+    def notify(redeem=true, loc_id=nil)
         if notifiable?
             if (self.new_token_at.nil? || self.new_token_at < reset_time)
                 current_time   = Time.now.utc
@@ -28,6 +28,7 @@ module GiftLifecycle
 
                 Gift.connection.execute(sql)
                 self.reload
+                self.update(merchant_id: loc_id.to_i) if (loc_id && loc_id.to_i > 0)
                 true
             else
                 true
