@@ -153,10 +153,13 @@ class Merchant < ActiveRecord::Base
     end
 
     def get_photo default: true
-        if default && image.blank?
-            return MERCHANT_DEFAULT_IMG
+        if photo
+            unshorten_photo_url(photo)
+        elsif image
+            image
+        else
+            MERCHANT_DEFAULT_IMG
         end
-        image
     end
 
 #   -------------
