@@ -136,6 +136,7 @@ Drinkboard::Application.routes.draw do
         member do
           get :menu
           get :receipt_photo_url
+          get :redeem_locations
         end
       end
 
@@ -317,35 +318,4 @@ Drinkboard::Application.routes.draw do
 
   get 'emails/template', to: 'emails#template'
 
-  if !Rails.env.production?
-  #################          Client V3 routes for API                  /////////////////////////////
-
-    namespace :client, defaults: { format: 'json' } do
-      namespace :v3 do
-
-        resources :sessions,  only: [:create]
-
-        resources :cities,     only: [:index] do
-          member do
-            get :merchants
-          end
-        end
-
-        resources :merchants,     only: [:show] do
-          member do
-            get :menu
-          end
-        end
-
-        resources :users, only: [:index]
-        resources :gifts, only: [:index] do
-          member do
-            put :open
-            put :redeem
-          end
-        end
-        resources :cards, only: [:index, :create]
-      end
-    end
-  end
 end

@@ -17,6 +17,18 @@ class Web::V3::MerchantsController < MetalCorsController
         respond
     end
 
+    def redeem_locations
+        merchant = Merchant.find(params[:id])
+        if client = merchant.client
+            redeems = client.contents(:merchants)
+            serialized = redeems.map(&:web_serialize)
+            success(serialized)
+        else
+            success([ merchant.web_serialize ])
+        end
+        respond
+    end
+
     def receipt_photo_url
         success({ "receipt_photo_url" => DEFAULT_RECEIPT_IMG_URL})
         respond

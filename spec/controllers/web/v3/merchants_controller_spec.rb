@@ -60,6 +60,38 @@ describe Web::V3::MerchantsController do
     	json["data"]["menu"].should == JSON.parse(menu_string.json)
     end
 
+    describe :redeem_locations do
+
+        it "should send the list of redemption locations if merchant has client" do
+
+            m1 = make_merchant_provider('Make Content one')
+            m2 = make_merchant_provider('Make Content two')
+            m3 = make_merchant_provider('Make Content three')
+            @client.content = m1
+            @client.content = m2
+            @client.content = m3
+            @merchant.client = @client
+            @merchant.save
+            get :redeem_locations, format: :json, id: @merchant.id
+            rrc(200)
+            json["data"].length.should == 3
+            example_loc = json["data"][0]['loc_id']
+            [m1.id, m2.id, m3.id].include?(example_loc).should be_true
+        end
+
+        it "should send itself in array if merchant does not have client" do
+
+            m4 = make_merchant_provider('Make Content four')
+
+            get :redeem_locations, format: :json, id: m4.id
+            rrc(200)
+            json["data"].length.should == 1
+            json['data'][0]['loc_id'].should == m4.id
+
+        end
+
+    end
+
     describe :receipt_photo_url do
 
         it "should return the default receipt photo url" do
