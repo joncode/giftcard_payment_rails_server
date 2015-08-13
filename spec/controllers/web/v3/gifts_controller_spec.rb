@@ -29,6 +29,7 @@ describe Web::V3::GiftsController do
         it_should_behave_like("client-token authenticated", :post, :create)
 
         it "should return the correct gifts for the user" do
+            @client.full!
             get :index, format: :json
             rrc(200)
             json["data"].count.should == 6
@@ -37,6 +38,7 @@ describe Web::V3::GiftsController do
         end
 
         it "should return the gifts of another user" do
+            @client.full!
             get :index, format: :json, user_id: @other1.id
             rrc(200)
             json["data"].count.should == 6
@@ -169,7 +171,7 @@ describe Web::V3::GiftsController do
             json["status"].should == 0
             json["err"].should == "INVALID_INPUT"
             json["msg"].should == "Gift could not be created"
-            json["data"].should == ["User is no longer in the system , please gift to them with phone, email, facebook, or twitter"]
+            json["data"].should == [{"msg"=>"User is no longer in the system , please gift to them with phone, email, facebook, or twitter"}]
         end
     end
 

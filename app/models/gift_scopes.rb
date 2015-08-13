@@ -55,8 +55,17 @@ module GiftScopes
     def get_user_activity user
         giver_gifts = includes(:merchant).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(giver_id: user.id, giver_type: "User").order("created_at DESC")
         rec_gifts   = includes(:merchant).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(receiver_id: user.id).order("created_at DESC")
-        puts "#{rec_gifts.count}"
         (giver_gifts + rec_gifts).uniq { |g| g.id }
+    end
+
+    def get_user_activity_in_client user, client
+        if client.nil? || client.full?
+            get_user_activity user
+        else
+            giver_gifts = includes(:merchant).includes(:giver).where(active: true, client_id: client.id, giver_id: user.id, giver_type: "User").where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
+            rec_gifts   = includes(:merchant).includes(:giver).where(active: true, client_id: client.id, receiver_id: user.id).where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
+            (giver_gifts + rec_gifts).uniq { |g| g.id }
+        end
     end
 
     def transactions user
