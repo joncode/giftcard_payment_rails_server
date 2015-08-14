@@ -92,7 +92,7 @@ describe Web::V3::PromosController do
 			json["status"].should == 0
 			json["err"].should == "INVALID_INPUT"
 			json["msg"].should == "Gift could not be created"
-			json["data"].should == ["Sorry, #{email} has already received a gift.  Each person is limited to one gift per campaign."]
+			json["data"].should == [{"msg"=>"Sorry, #{email} has already received a gift.  Each person is limited to one gift per campaign."}]
 		end
 
 	end

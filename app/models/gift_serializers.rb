@@ -204,7 +204,7 @@ private
         if gift_merchant = Merchant.unscoped.where(id: self.merchant_id).first
             if gift_merchant.client.present?
                 arg_scope = proc { ["All"] }
-                redemption_merchants = gift_merchant.client.contents(:merchants, &arg_scope)
+                redemptions_merchants = gift_merchant.client.contents(:merchants, &arg_scope)
                 if redemptions_merchants != ["All"]
                     redemptions_merchants = redemptions_merchants.serialize_objs(:redemption)
                 end
