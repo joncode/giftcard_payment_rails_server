@@ -83,7 +83,7 @@ class Mdot::V2::GiftsController < JsonController
             if ticket_num = pos_redeem_params
                 if !gift.merchant.nil?
                     resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id)
-                    if resp["success"] == true
+                    if resp.kind_of?(Hash) && resp["success"] == true
                         status = :ok
                         success(resp["response_text"])
                     else
