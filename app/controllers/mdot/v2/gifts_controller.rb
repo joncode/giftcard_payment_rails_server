@@ -83,7 +83,10 @@ class Mdot::V2::GiftsController < JsonController
             if ticket_num = pos_redeem_params
                 if !gift.provider.nil?
                     resp = gift.pos_redeem(ticket_num, gift.provider.pos_merchant_id, gift.provider.tender_type_id)
-                    if resp["success"] == true
+                    if !resp.kind_of?(Hash)
+                        status = :bad_request
+                        fail( "Merchant is currently not active please contact support@itson.me")
+                    elsif resp["success"] == true
                         status = :ok
                         success(resp["response_text"])
                     else
