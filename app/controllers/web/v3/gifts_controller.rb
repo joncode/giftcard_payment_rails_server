@@ -147,7 +147,10 @@ class Web::V3::GiftsController < MetalCorsController
             if ticket_num = pos_redeem_params["ticket_num"]
                 if !gift.merchant.nil?
                     resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, pos_redeem_params["loc_id"])
-                    if resp["success"] == true
+                    if !resp.kind_of?(Hash)
+                        status = :bad_request
+                        fail({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+                    elsif resp["success"] == true
                         status = :ok
                         success({msg: resp["response_text"]})
                     else
