@@ -52,7 +52,7 @@ protected
             @current_client = Client.new(hsh)
             @current_client.partner_id = 28
             @current_client.partner_type = 'Affiliate'
-            @current_client.platform = :web_men
+            @current_client.platform = :web_menu
         end
 
         if @current_client && @current_partner
