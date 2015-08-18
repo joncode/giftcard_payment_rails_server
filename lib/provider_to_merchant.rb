@@ -41,8 +41,8 @@ class ProviderToMerchant
 				if m_field != p_field && p_field.present?
 
 					# convering all the nils and blanks
-					# puts m_field
-					# puts p_field
+					puts m_field
+					puts p_field
 
 					if m_field.blank? && !p_field.blank?
 						m.send("#{c}=", p_field)
