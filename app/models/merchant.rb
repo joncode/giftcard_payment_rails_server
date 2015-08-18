@@ -196,7 +196,7 @@ private
         self.zip   = self.zip.strip if self.zip.present?
         self.ein   = self.ein.strip if self.ein.present?
         self.email = self.email.downcase.strip if self.email.present?
-        self.city_name  = self.city_name.titleize.strip if self.city_name.present?
+        # self.city_name  = self.city_name.titleize.strip if self.city_name.present?
         self.signup_email = self.signup_email.downcase.strip if self.signup_email.present?
         self.signup_name = self.signup_name.strip if self.signup_name.present?
     end
