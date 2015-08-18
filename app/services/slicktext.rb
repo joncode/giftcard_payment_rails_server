@@ -13,10 +13,12 @@ class Slicktext
         resp = self.get("/v1/textwords?limit=#{1000}", options)
         if resp.nil? || resp['textwords'].nil?
             puts "... gotten slicktext textwords - no textwords"
+            []
         else
             puts "... gotten slicktext textwords - #{resp["textwords"][0]} ..."
+            resp["textwords"]
         end
-        resp["textwords"]
+
     end
 
     def initialize word_hsh={}, limit=1000
