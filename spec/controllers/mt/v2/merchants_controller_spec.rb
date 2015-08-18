@@ -43,11 +43,11 @@ describe Mt::V2::MerchantsController do
             new_merchant_hsh['menu'] = "[{\"section\":\"Gift Vouchers\",\"items\":[{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"10\",\"item_id\":154,\"item_name\":\"$10\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"25\",\"item_id\":155,\"item_name\":\"$25\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"50\",\"item_id\":156,\"item_name\":\"$50\"}]}]"
             post :create, format: :json, data: new_merchant_hsh
             merchant                 = Merchant.last
-            menu_string              = MenuString.last
+            menu_string              = merchant.menu
             response.response_code.should   == 200
-            menu_string.merchant_id.should  == merchant.id
-            menu_string.menu.should_not     be_nil
-            menu_string.menu.should         == new_merchant_hsh["menu"]
+            menu_string.id.should  == merchant.menu_id
+            menu_string.json.should_not     be_nil
+            menu_string.json.should         == new_merchant_hsh["menu"]
             json["status"].should           == 1
             json["data"].should             == merchant.id
         end
@@ -118,47 +118,45 @@ describe Mt::V2::MerchantsController do
         before(:each) do
             @merchant = FactoryGirl.create(:merchant)
             request.env["HTTP_TKN"] = @merchant.token
-            FactoryGirl.create(:menu_string, merchant_id: @merchant.id)
+            menu = FactoryGirl.create(:menu, merchant_id: @merchant.id)
+            @merchant.update(menu_id: menu.id)
         end
 
         it_should_behave_like("token authenticated", :put, :menu, id: 1)
 
         it "should update menu string" do
-            menu_string = @merchant.menu_string
             menu_json = "[{\"section\":\"Gift Vouchers\",\"items\":[{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"10\",\"item_id\":154,\"item_name\":\"$10\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"25\",\"item_id\":155,\"item_name\":\"$25\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"50\",\"item_id\":156,\"item_name\":\"$50\"}]}]"
             put :menu, id: @merchant.id, format: :json, data: menu_json
             rrc(200)
-            new_menu_string = MenuString.last
-            new_menu_string.menu.should_not be_nil
-            new_menu_string.menu.should     == menu_json
+            @merchant.reload
+            new_menu_string = @merchant.menu
+            new_menu_string.json.should_not be_nil
+            new_menu_string.json.should     == JSON.parse(menu_json).to_s
         end
 
         it "should return success msg if success" do
-            menu_string = @merchant.menu_string
             menu_json = "[{\"section\":\"Gift Vouchers\",\"items\":[{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"10\",\"item_id\":154,\"item_name\":\"$10\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"25\",\"item_id\":155,\"item_name\":\"$25\"},{\"detail\":\"The entire gift amount must be used at one time.\\n\\t    Unused portions of this gift cannot be saved, transferred, or redeemed for cash.\",\"price\":\"50\",\"item_id\":156,\"item_name\":\"$50\"}]}]"
             put :menu, id: @merchant.id, format: :json, data: menu_json
             rrc(200)
-            new_menu_string = MenuString.last
+            @merchant.reload
             json["status"].should  == 1
             json["data"].should   == "Menu Update Successful"
         end
 
         it "should return fail msg if menu is nil" do
-            menu_string = @merchant.menu_string
             menu_json = nil
             put :menu, id: @merchant.id, format: :json, data: menu_json
             rrc(200)
             json["status"].should         == 0
-            json["data"].class.should     == Hash
+            json["data"].class.should     == String
         end
 
         it "should return fail msg if menu is not a json'd array" do
-            menu_string = @merchant.menu_string
             menu_json = "Menu Data"
             put :menu, id: @merchant.id, format: :json, data: menu_json
             rrc(200)
             json["status"].should         == 0
-            json["data"].class.should     == Hash
+            json["data"].class.should     == String
         end
     end
 

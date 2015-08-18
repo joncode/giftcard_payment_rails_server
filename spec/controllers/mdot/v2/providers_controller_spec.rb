@@ -13,7 +13,8 @@ describe Mdot::V2::ProvidersController do
 
         before(:each) do
             @merchant = FactoryGirl.create(:merchant)
-            FactoryGirl.create(:menu_string, merchant_id: @merchant.id)
+            menu = FactoryGirl.create(:menu, merchant_id: @merchant.id)
+            @merchant.update(menu_id: menu.id)
             request.env["HTTP_TKN"] = "USER_TOKEN"
         end
 

@@ -6,9 +6,18 @@ class Mt::V2::MerchantsController < JsonController
     def create
         return nil  if data_not_hash?
 
-        merchant     = Merchant.new merchant_params
+        hsh = merchant_params
+        menu_string = hsh.delete('menu')
+
+        merchant     = Merchant.new hsh
         if merchant.save
-            success merchant.id
+            menu = Menu.new(json: menu_string)
+            if menu.save
+                merchant.update(menu_id: menu.id)
+                success merchant.id
+            else
+                success "Menu was not saved"
+            end
         else
             fail    merchant.errors.messages
         end
@@ -28,11 +37,21 @@ class Mt::V2::MerchantsController < JsonController
 
     def menu
         menu_hsh = params["data"]
-        menu_str = @merchant.menu_string
-        if menu_str.update(menu: menu_hsh)
+        menu = @merchant.menu
+
+        menu_data = ""
+        begin
+            menu_data = JSON.parse(menu_hsh)
+        rescue
+            # do nothing
+        end
+
+        if !menu_data.kind_of?(Array)
+            fail       "Data Not Menu"
+        elsif menu.update(json: menu_data)
             success   "Menu Update Successful"
         else
-            fail      menu_str.errors.messages
+            fail      menu.errors.messages
         end
 
         respond
@@ -46,7 +65,7 @@ private
 
     def merchant_params
 
-        allowed = ["city_id", "rate", "r_sys", "menu_id", "latitude", "longitude", "name", "zinger", "description", "address", "city", "state", "zip", "region_id", "phone", "token", "image", "mode", "pos_merchant_id", "photo_l"]
+        allowed = ["menu", "city_id", "rate", "r_sys", "menu_id", "latitude", "longitude", "name", "zinger", "description", "address", "city", "state", "zip", "region_id", "phone", "token", "image", "mode", "pos_merchant_id", "photo_l"]
 
         params.require(:data).permit(allowed)
     end

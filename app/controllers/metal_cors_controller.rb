@@ -40,11 +40,19 @@ protected
         @current_client = nil
         @current_partner = nil
         # puts "\n HTTP_X_APPLICATION_KEY = #{request.headers['HTTP_X_APPLICATION_KEY']}"
-        if app_key = request.headers['HTTP_X_APPLICATION_KEY']
+        app_key = request.headers['HTTP_X_APPLICATION_KEY']
+        if !app_key.blank?
             # binding.pry
             if @current_client = Client.includes(:partner).find_by(application_key: app_key)
                 @current_partner = @current_client.partner
             end
+        else
+            @current_partner = Affiliate.find(28)
+            hsh = {name: "Web Gifting Menu", url_name: "gift_menu", download_url: "www.itson.me/gift_menu", detail: "Its On Me Web Gifting Menu Portal"}
+            @current_client = Client.new(hsh)
+            @current_client.partner_id = 28
+            @current_client.partner_type = 'Affiliate'
+            @current_client.platform = :web_men
         end
 
         if @current_client && @current_partner

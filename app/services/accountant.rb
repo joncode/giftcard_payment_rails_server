@@ -82,7 +82,6 @@ class Accountant
 	        if lp.nil?
 	        	lp = LandingPage.click(link: link)
 	        end
-            # binding.pry
             lp.gifts += 1
             gift.landing_pages << lp
             register  = create_debt(gift, lp.affiliate, "aff_link")
