@@ -44,13 +44,19 @@ class ProviderToMerchant
 					puts m_field
 					puts p_field
 
-					if m_field.blank? && !p_field.blank?
-						m.send("#{c}=", p_field)
-					elsif p_field.kind_of?(String) && p_field.match(m_field) && m_field[0...2] == 'd|'
-						# updating the photos
-						m.send("#{c}=", p_field)
-					elsif c == 'address'
+					begin
 
+						if m_field.blank? && !p_field.blank?
+							m.send("#{c}=", p_field)
+						elsif p_field.kind_of?(String) && p_field.match(m_field) && m_field[0...2] == 'd|'
+							# updating the photos
+							m.send("#{c}=", p_field)
+						elsif c == 'address'
+
+						end
+
+					rescue
+						m.send("#{c}=", p_field)
 					end
 
 
