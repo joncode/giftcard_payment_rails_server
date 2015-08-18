@@ -12,7 +12,7 @@ class Merchant < ActiveRecord::Base
 
 #   -------------
 
-    validates_presence_of :name, :address, :city_name, :state, :zip, :city_id
+    validates_presence_of :name, :address, :state, :zip, :city_id
     validates :phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
     validates :email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
     validates :signup_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
