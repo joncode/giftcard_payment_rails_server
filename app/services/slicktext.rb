@@ -11,7 +11,11 @@ class Slicktext
         options = {}
         options.merge!({:basic_auth => KEYS})
         resp = self.get("/v1/textwords?limit=#{1000}", options)
-        puts "... gotten slicktext textwords - #{resp["textwords"][0]} ..."
+        if resp.nil? || resp['textwords'].nil?
+            puts "... gotten slicktext textwords - no textwords"
+        else
+            puts "... gotten slicktext textwords - #{resp["textwords"][0]} ..."
+        end
         resp["textwords"]
     end
 
