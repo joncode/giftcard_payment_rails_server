@@ -40,7 +40,7 @@ class Positronics
 		end
 
 		if tic.nil?
-			if tix.to_i > 399
+			if !tix.kind_of?(Array) && tix.to_i > 399
 				@code = tix
 			else
 				@code = 404
