@@ -9,7 +9,7 @@ class AppContactOld < ActiveRecord::Base
     validates :network_id, presence: true
     validates :user_id, presence: true
 
-    def self.upload(contacts: nil, user: user, proxy_contacts: nil)
+    def self.upload(contacts: nil, user: user_obj, proxy_contacts: nil)
         start_time_logger = Time.now
         current_user_id = user.id
         if proxy_contacts.nil?
