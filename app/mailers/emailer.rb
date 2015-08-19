@@ -135,7 +135,7 @@ module Emailer
     end
 
     def merchant_invite data
-        merchant = Merchant.find(data["merchant_id"])
+        merchant = Merchant.unscoped.find(data["merchant_id"])
         subject  = "Welcome to It's On Me"
         email    = data["email"]
         name     = "#{merchant.name} Staff"
@@ -166,7 +166,7 @@ module Emailer
     end
 
     def merchant_staff_invite data
-        merchant     = Merchant.find(data["merchant_id"])
+        merchant     = Merchant.unscoped.find(data["merchant_id"])
         invitor_name = data["invitor_name"]
         invite_token = data["token"]
         subject      = "Welcome to It's On Me"
@@ -181,7 +181,7 @@ module Emailer
     end
 
     def merchant_pending data
-        merchant = Merchant.find(data["merchant_id"])
+        merchant = Merchant.unscoped.find(data["merchant_id"])
         subject  = "Your It's On Me account is pending approval"
         email    = data["email"]
         name     = "#{merchant.name} Staff"
@@ -194,7 +194,7 @@ module Emailer
     end
 
     def merchant_approved data
-        merchant = Merchant.find(data["merchant_id"])
+        merchant = Merchant.unscoped.find(data["merchant_id"])
         subject  = "You have been Approved!"
         email    = data["email"]
         name     = "#{merchant.name} Staff"
@@ -207,7 +207,7 @@ module Emailer
     end
 
     def merchant_live data
-        merchant = Merchant.find(data["merchant_id"])
+        merchant = Merchant.unscoped.find(data["merchant_id"])
         subject  = "Your location is now live"
         email    = data["email"]
         name     = "#{merchant.name} Staff"
