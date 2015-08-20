@@ -10,7 +10,9 @@ class LandingPage < ActiveRecord::Base
 #   -------------
 
 	def self.click(link: link_in)
-		affiliate_url_name = link.split('?aid=').last
+		l2 = link.split('/')
+		affiliate_url_name = l2.last.split('-').first
+		# affiliate_url_name = link.split('?aid=').last
 		aff = Affiliate.where(url_name: affiliate_url_name).first
 		lp = self.find_or_initialize_by(link: link)
 		lp.clicks += 1
