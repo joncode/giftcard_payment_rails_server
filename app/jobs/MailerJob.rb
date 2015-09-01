@@ -10,8 +10,8 @@ class MailerJob
         puts "\n MailerJob #{data.inspect}"
         begin
             self.call_mandrill(data)
-        rescue
-            puts "No #{data['text']} email ERROR - MailerJob[14]"
+        rescue => error
+            puts "No #{data['text']} email ERROR - MailerJob[14] - #{error}"
         end
     end
 

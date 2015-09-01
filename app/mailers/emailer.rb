@@ -49,26 +49,8 @@ module Emailer
     ####### Gift Emails
 
     def notify_receiver data
-        # GiftTemplateMain.notify_receiver(data["gift_id"])
-        gift          = Gift.find(data["gift_id"])
-        if gift.receiver_email
-            email     = gift.receiver_email
-        elsif gift.receiver
-            email     = gift.receiver.email
-        else
-            puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
-            return nil
-        end
-        subject       = "#{gift.giver_name} sent you a gift"
-
-        template_name = "Gift: 08.2015 New Template Play"
-        pteg_affiliate_id = Rails.env.staging? ? 20 : 29
-        if gift.partner_type == 'Affiliate' && gift.partner_id == pteg_affiliate_id
-            template_name = 'gift-pteg'
-        end
-
-        message       = new_message_hash( gift, subject, email, gift.receiver_name, nil)
-        request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
+        template = GiftTemplateMainMailer.new(data["gift_id"])
+        template.notify_receiver
     end
 
     def notify_receiver_proto_join data
@@ -92,6 +74,36 @@ module Emailer
         message         = message_hash(subject, email, receiver_name, body)
         message["tags"] = [ merchant_name ]
         request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
+    end
+
+
+    def notify_receiver_boomerang data
+        template = BoomerangMailer.new(data["gift_id"])
+        template.notify_receiver
+
+        # gift              = GiftBoomerang.find(data["gift_id"])
+        # original_receiver = gift.original_receiver_social
+
+        # template_name    = "iom-boomerang-notice-2"
+        # recipient_name   = gift.receiver_name
+        # if gift.receiver_email
+        #     email         = gift.receiver_email
+        # elsif gift.receiver
+        #     email         = gift.receiver.email
+        # else
+        #     puts "NOTIFY RECEIVER BOOMERANG CALLED WITHOUT RECEIVER EMAIL"
+        #     return nil
+        # end
+
+        # items_text       = items_text(gift)
+        # adjusted_id      = NUMBER_ID + gift.id
+        # link             = "#{PUBLIC_URL}/signup/acceptgift?id=#{adjusted_id}"
+        # bcc              = "info@itson.me"
+        # template_content = [
+        #     { "name" => "items_text", "content" => items_text },
+        #     { "name" => "original_receiver", "content" => original_receiver}]
+        # message          = message_hash_old(subject(template_name), email, recipient_name, link, bcc)
+        # request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"], template_content)
     end
 
     def invoice_giver data
@@ -221,63 +233,37 @@ module Emailer
         request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
     end
 
-    def notify_receiver_boomerang data
-        gift              = GiftBoomerang.find(data["gift_id"])
-        original_receiver = gift.original_receiver_social
-
-        template_name    = "iom-boomerang-notice-2"
-        recipient_name   = gift.receiver_name
-        if gift.receiver_email
-            email         = gift.receiver_email
-        elsif gift.receiver
-            email         = gift.receiver.email
-        else
-            puts "NOTIFY RECEIVER BOOMERANG CALLED WITHOUT RECEIVER EMAIL"
-            return nil
-        end
-
-        items_text       = items_text(gift)
-        adjusted_id      = NUMBER_ID + gift.id
-        link             = "#{PUBLIC_URL}/signup/acceptgift?id=#{adjusted_id}"
-        bcc              = "info@itson.me"
-        template_content = [
-            { "name" => "items_text", "content" => items_text },
-            { "name" => "original_receiver", "content" => original_receiver}]
-        message          = message_hash_old(subject(template_name), email, recipient_name, link, bcc)
-        request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"], template_content)
-    end
-
     ##### OLD EMAILERS
 
-    def reminder_gift_giver recipient, receiver_name
-        ###----> remind giver to remind recipient, after one month , cron job
-        template_name    = "iom-gift-unopened-giver"
-        user_name        = recipient.name #user/purchaser receiving the email
-        template_content = [{"name" => "user_name", "content" => user_name},
-                            {"name" => "receiver_name", "content" => receiver_name},
-                            {"name" => "service_name", "content" => SERVICE_NAME}]
-        email            = recipient.email
-        name             = recipient.name
-        link             = nil
-        bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
-        message          = message_hash_old(subject(template_name, options = {receiver_name: receiver_name}), email, name, link, bcc)
-        request_mandrill_with_template(template_name, message, [recipient.id, "User"], template_content)
-    end
+    # def reminder_gift_giver recipient, receiver_name
+    #     ###----> remind giver to remind recipient, after one month , cron job
+    #     template_name    = "iom-gift-unopened-giver"
+    #     user_name        = recipient.name #user/purchaser receiving the email
+    #     template_content = [{"name" => "user_name", "content" => user_name},
+    #                         {"name" => "receiver_name", "content" => receiver_name},
+    #                         {"name" => "service_name", "content" => SERVICE_NAME}]
+    #     email            = recipient.email
+    #     name             = recipient.name
+    #     link             = nil
+    #     bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
+    #     message          = message_hash_old(subject(template_name, options = {receiver_name: receiver_name}), email, name, link, bcc)
+    #     request_mandrill_with_template(template_name, message, [recipient.id, "User"], template_content)
+    # end
 
-    def reminder_gift_receiver data
-        ###----> after a month , you have a gift you havent used , use it or re-gift it
-        recipient        = User.find(data["user_id"])
-        template_name    = "iom-gift-unopened-receiver"
-        user_name        = recipient.name #user/purchaser receiving the email
-        template_content = [{"name" => "user_name", "content" => user_name},
-                            {"name" => "service_name", "content" => SERVICE_NAME}]
-        email            = recipient.email
-        name             = recipient.name
-        link             = nil
-        bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
-        message          = message_hash_old(subject(template_name), email, name, link, bcc)
-        request_mandrill_with_template(template_name, message, [recipient.id, "User"], template_content)
-    end
+    # def reminder_gift_receiver data
+    #     ###----> after a month , you have a gift you havent used , use it or re-gift it
+    #     recipient        = User.find(data["user_id"])
+    #     template_name    = "iom-gift-unopened-receiver"
+    #     user_name        = recipient.name #user/purchaser receiving the email
+    #     template_content = [{"name" => "user_name", "content" => user_name},
+    #                         {"name" => "service_name", "content" => SERVICE_NAME}]
+    #     email            = recipient.email
+    #     name             = recipient.name
+    #     link             = nil
+    #     bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
+    #     message          = message_hash_old(subject(template_name), email, name, link, bcc)
+    #     request_mandrill_with_template(template_name, message, [recipient.id, "User"], template_content)
+    # end
 
 private
 
@@ -335,50 +321,6 @@ private
         end
     end
 
-    def new_message_hash(gift, subject, email, name, bcc=nil)
-        merchant = gift.merchant
-        if merchant.nil?
-            puts 'NO MErchant'
-            return nil
-        end
-        email = whitelist_email(email)
-        message          = {
-            "subject"     => subject,
-            "from_name"   => "It's On Me",
-            "from_email"  => "no-reply@itson.me",
-            "to"          => [
-                { "email" => email, "name" => name }
-            ],
-            "global_merge_vars" => [
-                { "name" => "merchant_email_adjusted_photo", "content" => merchant_email_adjusted_photo(merchant.get_photo) },
-                { "name" => "gift_id", "content" => gift.obscured_id },
-                { "name" => "message", "content" => blank_merge_var(gift.message) },
-                { "name" => "merchant_name", "content" => merchant.name },
-                { "name" => "merchant_address", "content" => merchant.complete_address },
-                { "name" => "gift_items", "content" => GiftItem.items_for_email(gift) },
-                { "name" => "gift_detail", "content" => blank_merge_var(gift.detail) },
-                {'name' => 'expiration', 'content' => expired_merge_var(gift.expires_at) }
-            ]
-        }
-
-        # puts message
-        if bcc.present?
-            message["to"] << { "email" => bcc, "name" => bcc, "type" => "bcc" }
-        end
-        if merchant.name.present?
-            message["tags"] = [merchant.name]
-        end
-        message
-    end
-
-    def merchant_email_adjusted_photo merchant_photo_url
-        str = 'http://res.cloudinary.com/drinkboard/image/upload/b_rgb:0d0d0d,bo_0px_solid_rgb:000,c_crop,co_rgb:090909,h_180,o_40,q_100,w_600'
-        mp_str = merchant_photo_url.split('upload')[1]
-        # puts (str + mp_str)
-        str + mp_str
-        # http://res.cloudinary.com/drinkboard/image/upload/b_rgb:0d0d0d,bo_0px_solid_rgb:000,c_crop,co_rgb:090909,h_180,o_40,q_100,w_600/v1439771625/email_elements/littleOwl_bgImg_hdr.jpg
-    end
-
     def message_hash(subject, email, name, body, bcc=nil, provider_name=nil)
         email = whitelist_email(email)
         message          = {
@@ -416,33 +358,17 @@ private
         end
     end
 
-    def subject template_name, options=nil
-        case template_name
-        when "iom-gift-unopened-giver"
-            "#{options[:receiver_name]} hasn't opened your gift"
-        when "iom-gift-unopened-receiver"
-            "You have gifts waiting for you!"
-        when "iom-boomerang-notice-2"
-            "Boomerang! We're returning this gift to you."
-        end
-    end
+    # def subject template_name, options=nil
+    #     case template_name
+    #     when "iom-gift-unopened-giver"
+    #         "#{options[:receiver_name]} hasn't opened your gift"
+    #     when "iom-gift-unopened-receiver"
+    #         "You have gifts waiting for you!"
+    #     when "iom-boomerang-notice-2"
+    #         "Boomerang! We're returning this gift to you."
+    #     end
+    # end
 
-    def message_hash_old(subject, email, name, link=nil, bcc=nil)
-        email = whitelist_email(email)
-        message = {
-            "subject"     => subject,
-            "from_name"   => "#{SERVICE_NAME}",
-            "from_email"  => "#{NO_REPLY_EMAIL}",
-            "to"          => [{ "email" => email, "name" => name }],
-            "bcc_address" => bcc,
-            "merge_vars"  =>[
-                {
-                    "rcpt" => email,
-                    "vars" => [{"name" => "link", "content" => link}]
-                }
-            ]
-        }
-        message
-    end
+
 
 end
