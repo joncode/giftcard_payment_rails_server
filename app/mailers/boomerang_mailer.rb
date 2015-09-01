@@ -5,7 +5,7 @@ class BoomerangMailer
 
 	def initialize(gift_id)
 		@gift = GiftBoomerang.find(gift_id)
-		@bcc  = nil
+		@bcc  = "info@itson.me"
 	end
 
     def notify_receiver
@@ -23,7 +23,6 @@ class BoomerangMailer
         end
 
         items_text       = items_text(gift)
-        bcc              = "info@itson.me"
         template_content = [
             { "name" => "items_text", "content" => items_text },
             { "name" => "original_receiver", "content" => original_receiver}]
