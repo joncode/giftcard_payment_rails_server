@@ -6,6 +6,8 @@ ruby '2.2.2'
 gem 'rails'
 gem 'pg'
 
+gem 'excon', '~> 0.44.4'
+
 #gem 'unicorn'
 gem 'puma'
 gem "rack-timeout"

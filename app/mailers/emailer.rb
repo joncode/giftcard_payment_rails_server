@@ -50,8 +50,6 @@ module Emailer
 
     def notify_receiver data
         gift          = Gift.find(data["gift_id"])
-        receiver_name = gift.receiver_name
-        giver_name    = gift.giver_name
         if gift.receiver_email
             email     = gift.receiver_email
         elsif gift.receiver
@@ -60,12 +58,15 @@ module Emailer
             puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
             return nil
         end
-        subject       = "#{giver_name} sent you a gift"
+        subject       = "#{gift.giver_name} sent you a gift"
 
-        body          = text_for_notify_receiver(gift)
+        template_name = "Gift: 08.2015 New Template Play"
+        pteg_affiliate_id = Rails.env.staging? ? 20 : 29
+        if gift.partner_type == 'Affiliate' && gift.partner_id == pteg_affiliate_id
+            template_name = 'gift-pteg'
+        end
 
-        template_name = "gift"
-        message       = message_hash(subject, email, receiver_name, body, nil, gift.provider_name)
+        message       = new_message_hash( gift, subject, email, gift.receiver_name, nil)
         request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
     end
 
@@ -277,13 +278,13 @@ module Emailer
         request_mandrill_with_template(template_name, message, [recipient.id, "User"], template_content)
     end
 
-    private
+private
 
     def request_mandrill_with_template(template_name, message, ditto_ary, template_content=nil)
         # unless Rails.env.development?
         puts "``````````````````````````````````````````````"
         add_qa_text_to_subject(message)
-        puts "Request Mandrill with #{template_name} #{message}"
+        puts "Emailer[286] - Request Mandrill with TemplateName: '#{template_name}' \nMessage:\n#{message} \nContent:\n#{template_content}"
         m = MANDRILL_CLIENT
         response = m.messages.send_template(template_name, template_content, message)
         puts "Response from Mandrill #{response.inspect}"
@@ -295,7 +296,7 @@ module Emailer
 
     def request_mandrill_with_message message, ditto_ary
         puts "``````````````````````````````````````````````"
-        puts "Request Mandrill with #{message}"
+        puts " Emailer[298] - Request Mandrill with #{message}"
         add_qa_text_to_subject(message)
         m = MANDRILL_CLIENT
         response = m.messages.send message
@@ -315,6 +316,52 @@ module Emailer
         end
 
         return email
+    end
+
+    def new_message_hash(gift, subject, email, name, bcc=nil)
+        merchant = gift.merchant
+        if merchant.nil?
+            puts 'NO MErchant'
+            return nil
+        end
+        email = whitelist_email(email)
+        puts email
+        message          = {
+            "subject"     => subject,
+            "from_name"   => "It's On Me",
+            "from_email"  => "no-reply@itson.me",
+            "to"          => [
+                { "email" => email, "name" => name }
+            ],
+            "global_merge_vars" => [
+                { "name" => "merchant_email_adjusted_photo", "content" => merchant_email_adjusted_photo(merchant.get_photo) },
+                { "name" => "gift_id", "content" => gift.obscured_id },
+                { "name" => "message", "content" => gift.message },
+                { "name" => "merchant_name", "content" => merchant.name },
+                { "name" => "merchant_address", "content" => merchant.complete_address },
+                { "name" => "gift_items", "content" => GiftItem.items_for_email(gift) },
+                { "name" => "gift_detail", "content" => gift.detail },
+            ]
+        }
+        if gift.expires_at.present?
+           message["global_merge_vars"].push({'name' => 'expiration', 'content' => "<div style='font-size:15px; color:#8E8D8D;'>Gift Expires: #{make_date_s(gift.expires_at)}</div>" })
+        end
+        # puts message
+        if bcc.present?
+            message["to"] << { "email" => bcc, "name" => bcc, "type" => "bcc" }
+        end
+        if merchant.name.present?
+            message["tags"] = [merchant.name]
+        end
+        message
+    end
+
+    def merchant_email_adjusted_photo merchant_photo_url
+        str = 'http://res.cloudinary.com/drinkboard/image/upload/b_rgb:0d0d0d,bo_0px_solid_rgb:000,c_crop,co_rgb:090909,h_180,o_40,q_100,w_600'
+        mp_str = merchant_photo_url.split('upload')[1]
+        # puts (str + mp_str)
+        str + mp_str
+        # http://res.cloudinary.com/drinkboard/image/upload/b_rgb:0d0d0d,bo_0px_solid_rgb:000,c_crop,co_rgb:090909,h_180,o_40,q_100,w_600/v1439771625/email_elements/littleOwl_bgImg_hdr.jpg
     end
 
     def message_hash(subject, email, name, body, bcc=nil, provider_name=nil)
