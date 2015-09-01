@@ -49,6 +49,7 @@ module Emailer
     ####### Gift Emails
 
     def notify_receiver data
+        # GiftTemplateMain.notify_receiver(data["gift_id"])
         gift          = Gift.find(data["gift_id"])
         if gift.receiver_email
             email     = gift.receiver_email
@@ -318,6 +319,22 @@ private
         return email
     end
 
+    def blank_merge_var(str)
+        if str.blank?
+            "&nbsp;".html_safe
+        else
+            str
+        end
+    end
+
+    def expired_merge_var(datetime_string)
+        if datetime_string.blank?
+            "&nbsp;".html_safe
+        else
+            "<div style='font-size:15px; color:#8E8D8D;'>Gift Expires: #{make_date_s(datetime_string)}</div>".html_safe
+        end
+    end
+
     def new_message_hash(gift, subject, email, name, bcc=nil)
         merchant = gift.merchant
         if merchant.nil?
@@ -325,7 +342,6 @@ private
             return nil
         end
         email = whitelist_email(email)
-        puts email
         message          = {
             "subject"     => subject,
             "from_name"   => "It's On Me",
@@ -336,16 +352,15 @@ private
             "global_merge_vars" => [
                 { "name" => "merchant_email_adjusted_photo", "content" => merchant_email_adjusted_photo(merchant.get_photo) },
                 { "name" => "gift_id", "content" => gift.obscured_id },
-                { "name" => "message", "content" => gift.message },
+                { "name" => "message", "content" => blank_merge_var(gift.message) },
                 { "name" => "merchant_name", "content" => merchant.name },
                 { "name" => "merchant_address", "content" => merchant.complete_address },
                 { "name" => "gift_items", "content" => GiftItem.items_for_email(gift) },
-                { "name" => "gift_detail", "content" => gift.detail },
+                { "name" => "gift_detail", "content" => blank_merge_var(gift.detail) },
+                {'name' => 'expiration', 'content' => expired_merge_var(gift.expires_at) }
             ]
         }
-        if gift.expires_at.present?
-           message["global_merge_vars"].push({'name' => 'expiration', 'content' => "<div style='font-size:15px; color:#8E8D8D;'>Gift Expires: #{make_date_s(gift.expires_at)}</div>" })
-        end
+
         # puts message
         if bcc.present?
             message["to"] << { "email" => bcc, "name" => bcc, "type" => "bcc" }
