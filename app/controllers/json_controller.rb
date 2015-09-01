@@ -187,7 +187,7 @@ class JsonController < ActionController::Base
     end
 
     def fail payload
-        unless payload.kind_of?(Hash) || payload.kind_of?(String) || payload.kind_of?(Array)
+        unless payload.kind_of?(Hash) || payload.kind_of?(String) || payload.kind_of?(Array) || payload.nil?
             payload   = { "error" => payload.errors.messages }
         end
         @app_response = { status: 0, data: payload }
