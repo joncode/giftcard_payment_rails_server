@@ -84,10 +84,13 @@ class Accountant
 	        end
             lp.gifts += 1
             gift.landing_pages << lp
-            register  = create_debt(gift, lp.affiliate, "aff_link")
-			register.save
-            gift.affiliates << lp.affiliate
-            lp.save
+            # binding.pry
+            if lp.affiliate.present?
+	            register  = create_debt(gift, lp.affiliate, "aff_link")
+				register.save
+	            gift.affiliates << lp.affiliate
+	            lp.save
+	        end
 		end
 
 	private

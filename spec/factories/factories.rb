@@ -465,6 +465,7 @@ FactoryGirl.define do
         description "get all the japanese culinary delights that are so hard to find in America"
         live     true
         paused   false
+        tender_type_id '500'
 
         sequence(:phone) do
             phone = ""

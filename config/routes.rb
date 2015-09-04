@@ -128,7 +128,6 @@ Drinkboard::Application.routes.draw do
           patch :read
           patch :notify
           patch :redeem
-          patch :pos_redeem
         end
       end
 

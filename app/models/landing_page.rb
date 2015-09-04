@@ -14,6 +14,7 @@ class LandingPage < ActiveRecord::Base
 		affiliate_url_name = l2.last.split('-').first
 		# affiliate_url_name = link.split('?aid=').last
 		aff = Affiliate.where(url_name: affiliate_url_name).first
+		# binding.pry
 		lp = self.find_or_initialize_by(link: link)
 		lp.clicks += 1
 		lp.affiliate = aff if lp.affiliate_id.nil?

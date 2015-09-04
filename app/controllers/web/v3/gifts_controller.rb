@@ -112,28 +112,6 @@ class Web::V3::GiftsController < MetalCorsController
         respond(status)
     end
 
-    def redeem
-        gift = Gift.find params[:id]
-        if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
-            server_inits = nil
-            if params["data"]
-                server_inits = redeem_params["server"]
-                loc_id = redeem_params["loc_id"]
-            end
-            gift.redeem_gift(server_inits, loc_id)
-            success gift.web_serialize
-        else
-            fail_message = if gift.status == 'redeemed'
-                "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
-            else
-                "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
-            end
-            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
-        end
-        respond(status)
-    end
-
-
 # {
 #                 amount_applied: 8.00,
 #                 total_check_amount: 8.00,
@@ -141,12 +119,27 @@ class Web::V3::GiftsController < MetalCorsController
 #                 remaining_gift_balance: 12.00
 # }
 
-    def pos_redeem
-        gift = Gift.includes(:provider).find params[:id]
+    def redeem
+        gift = Gift.find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
-            if ticket_num = pos_redeem_params["ticket_num"]
-                if !gift.merchant.nil?
-                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, pos_redeem_params["loc_id"])
+            if params['data']
+                server_inits = redeem_params["server"]
+                loc_id = redeem_params["loc_id"]
+                if  loc_id.nil?
+                    merchant = gift.merchant
+                else
+                    merchant = Merchant.find(loc_id)
+                end
+            else
+                merchant = gift.merchant
+            end
+
+            if merchant.nil?
+                status = :bad_request
+                fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+            elsif merchant.r_sys == 3
+                if ticket_num = redeem_params["ticket_num"]
+                    resp = gift.pos_redeem(ticket_num, merchant.pos_merchant_id, merchant.tender_type_id, loc_id)
                     if !resp.kind_of?(Hash)
                         status = :bad_request
                         fail({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
@@ -159,11 +152,11 @@ class Web::V3::GiftsController < MetalCorsController
                     end
                 else
                     status = :bad_request
-                    fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+                    fail_web({ err: "NOT_REDEEMABLE", msg: "Ticket Number not found"})
                 end
             else
-                status = :bad_request
-                fail_web({ err: "NOT_REDEEMABLE", msg: "Ticket Number not found"})
+                gift.redeem_gift(server_inits, loc_id)
+                success gift.web_serialize
             end
         else
             fail_message = if gift.status == 'redeemed'
@@ -191,7 +184,7 @@ private
     end
 
     def redeem_params
-        params.require(:data).permit(:server, :loc_id)
+        params.require(:data).permit(:server, :loc_id, :ticket_num)
     end
 
 end
