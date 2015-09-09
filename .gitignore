@@ -38,6 +38,7 @@ latest_staging_db.dump
 *.swp
 *.swo
 /node_modules/*
+urbanairship.log
 
 /db/*.sqlite3
 /public/system/*
