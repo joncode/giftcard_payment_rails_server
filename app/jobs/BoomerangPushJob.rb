@@ -1,8 +1,5 @@
-#require 'resque/plugins/resque_heroku_autoscaler'
-
 class BoomerangPushJob
     extend UrbanAirshipWrap
-    #extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :push
 
@@ -34,6 +31,4 @@ private
             }
         }
     end
-
-
 end
