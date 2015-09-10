@@ -49,7 +49,7 @@ class Web::V3::PromosController < MetalCorsController
 		input['detail'] = "Redbull Perfect Pour Thank You gift."
 		gift  = GiftPromo.create(input)
 		if gift.kind_of?(Gift) && gift.persisted?
-			success gift.web_serialize
+			success ({ gift_id: gift.id, email: gift.receiver_email, loc_id: gift.merchant_id })
 		else
 			status = :bad_request
 			fail_web({ err: "INVALID_INPUT", msg: "Gift could not be created", data: gift})
