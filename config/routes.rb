@@ -120,6 +120,7 @@ Drinkboard::Application.routes.draw do
       resources :promos, only: [:create, :show] do
         collection do
           patch :click
+          post :redbull
         end
       end
 

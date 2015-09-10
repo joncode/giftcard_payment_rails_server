@@ -83,7 +83,7 @@ protected
     def authenticate_general
         #puts "\n\n\n#{request.headers.inspect}"
         if token    = request.headers["HTTP_X_AUTH_TOKEN"]
-            if (WWW_TOKEN == token)
+            if ([REDBULL_TOKEN, WWW_TOKEN].include?(token))
                 puts "Web  -------------    General Token   -----------------------"
             else
                 @current_user = User.app_authenticate(token)

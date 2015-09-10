@@ -3,16 +3,14 @@ class GiftPromo < Gift
 
 #   -------------
 
-    def initialize args={}
-        super
+    def self.create(args)
+        gift = super
+        if gift.persisted?
+            gift.messenger
+        end
+        gift
     end
 
-    def save
-        if response = super
-            self.messenger
-        end
-        response
-    end
 
 private
 
