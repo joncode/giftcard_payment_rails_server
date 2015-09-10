@@ -1,20 +1,20 @@
-#require 'resque/plugins/resque_heroku_autoscaler'
-
 class BoomerangPushJob
     extend UrbanAirshipWrap
-    #extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :push
 
     def self.perform gift_id
         gift        = Gift.find gift_id
 
-        receiver    = gift.receiver
-        badge       = Gift.get_notifications(receiver)
-        payload     = self.format_payload(gift, receiver, badge)
+        receiver = gift.giver
+        return nil unless receiver.respond_to?(:ua_alias)
+        # badge       = Gift.get_notifications(receiver)
+        # payload     = self.format_payload(gift, receiver, badge)
 
-        puts "SENDING BoomerangPushJob NOTE for GIFT ID = #{gift_id} | #{payload}"
-        self.ua_push(payload, gift_id)
+        alert = "Boomerang! We are returning this gift to you because your friend never created an account"
+        puts "SENDING BoomerangPushJob NOTE for GIFT ID = #{gift_id} | #{alert}"
+        self.send_push(receiver, alert, gift_id)
+        return true
 
     end
 
@@ -34,6 +34,4 @@ private
             }
         }
     end
-
-
 end

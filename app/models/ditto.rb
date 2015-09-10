@@ -135,14 +135,20 @@ class Ditto < ActiveRecord::Base
 
 		def parse_ua_response(response)
 			return 500 if response.nil?
-			if response.has_key?("error_code")
-				if response["error_code"] == 40001
-					return 422
-				else
-					return 400
-				end
-			end
-			200
+
+            case response
+            when Urbanairship::Push::PushResponse
+                response.status_code
+            else
+                if response.has_key?("error_code")
+                    if response["error_code"] == 40001
+                        return 422
+                    else
+                        return 400
+                    end
+                end
+                200
+            end
 		end
 
 		def parse_pos_status(status)
