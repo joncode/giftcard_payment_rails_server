@@ -70,7 +70,7 @@ end
 REDBULL_TOKEN = if Rails.env.development? or Rails.env.test?
      "O0LgUixWOE7Dec1Y_INA6Q"
 else
-    ENV['WWW_TOKEN']
+    ENV['REDBULL_TOKEN']
 end
 
 APP_GENERAL_TOKEN = if Rails.env.development? or Rails.env.test?
