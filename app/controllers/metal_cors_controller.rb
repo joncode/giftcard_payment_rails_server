@@ -30,7 +30,7 @@ protected
 
     def attach_token_to_user
         if token = request.headers["HTTP_X_AUTH_TOKEN"]
-            if (WWW_TOKEN != token)
+            if (![REDBULL_TOKEN, WWW_TOKEN].include?(token))
                 @current_user = SessionToken.app_authenticate(token)
             end
         end
