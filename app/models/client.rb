@@ -26,7 +26,7 @@ class Client < ActiveRecord::Base
 		if self.client?
 			cc = ClientContent.includes(:content).unscoped.where(client_id: self.id, content_type: content_symbol.to_s.singularize.capitalize)
 		elsif self.partner?
-			cc = ClientContent.includes(:content).where(client_id: nil, partner_id: self.partner_id, partner_type: self.partner_type, content_type: content_symbol.to_s.singularize.capitalize)
+			cc = ClientContent.includes(:content).unscoped.where(client_id: nil, partner_id: self.partner_id, partner_type: self.partner_type, content_type: content_symbol.to_s.singularize.capitalize)
 		else
 			return yield(self)
 		end
