@@ -204,7 +204,7 @@ class Mdot::V2::GiftsController < JsonController
             end
         else
             fail gift_response
-            status = :not_found
+            # status = :not_found
         end
 
         respond(status)

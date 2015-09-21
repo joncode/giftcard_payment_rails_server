@@ -7,20 +7,20 @@ module UrbanAirshipWrap
         push.device_types = UA.all
 
         resp = push.send_push
-        puts "APNS push sent via ALIAS! #{resp}"
+        puts "APNS push sent via ALIAS! #{resp.inspect}"
         Ditto.send_push_create(resp, gift_id, 'Gift')
     end
 
     def ua_register pn_token, user_alias, user_id, platform=nil
         platform = platform.present? ? platform : 'ios'
         resp = UA_CLIENT.register_device(pn_token, :alias => user_alias, :provider =>  platform.to_sym)
-        puts "UA response --- >  #{resp}"
+        puts "UA response --- >  #{resp.inspect}"
         Ditto.register_push_create(resp, user_id)
     end
 
     def ua_unregister pn_token, user_id
         resp = UA_CLIENT.unregister_device(pn_token)
-        puts "UA response --- >  #{resp}"
+        puts "UA response --- >  #{resp.inspect}"
         Ditto.unregister_push_create(resp, user_id)
     end
 
