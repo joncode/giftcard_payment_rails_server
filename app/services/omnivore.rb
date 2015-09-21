@@ -143,7 +143,7 @@ class Omnivore
 			r_text = "Your check number #{@ticket_num} cannot be found. Please double check and try again. If this issue persists please contact support@itson.me"
 		when 401
 			r_code = "ERROR"
-			r_text = "This gift card is only good for the specific item.  We did not find the specific on the ticket."
+			r_text = "This gift card is only redeemable for the exact item mentioned. Please order the correct item to use this gift card."
 		when 500
 			r_code = "ERROR"
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
