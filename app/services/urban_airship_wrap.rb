@@ -3,9 +3,9 @@ module UrbanAirshipWrap
     def send_push(user, alert, gift_id)
         pnts = user.pn_tokens
         resp = []
-        pnts.each do |pn_token|
+        pnts.each do |pn_token_obj|
             push = UA_CLIENT.create_push
-            push.audience = UA.device_token(pn_token)
+            push.audience = UA.device_token(pn_token_obj.pn_token)
             push.notification = UA.notification(alert: alert)
             push.device_types = UA.all
             resp << push.send_push
