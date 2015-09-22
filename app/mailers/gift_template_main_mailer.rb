@@ -52,7 +52,7 @@ class GiftTemplateMainMailer
                 { "name" => "merchant_name", "content" => merchant.name },
                 { "name" => "merchant_address", "content" => merchant.complete_address },
                 { "name" => "gift_items", "content" => GiftItem.items_for_email(@gift) },
-                { "name" => "gift_detail", "content" => blank_merge_var(@gift.detail) },
+                { "name" => "gift_detail", "content" => gift_detail_var(@gift.detail) },
                 { 'name' => 'expiration', 'content' => expired_merge_var(@gift.expires_at) }
             ]
         }
@@ -73,6 +73,14 @@ class GiftTemplateMainMailer
         # puts (str + mp_str)
         str + mp_str
         # http://res.cloudinary.com/drinkboard/image/upload/b_rgb:0d0d0d,bo_0px_solid_rgb:000,c_crop,co_rgb:090909,h_180,o_40,q_100,w_600/v1439771625/email_elements/littleOwl_bgImg_hdr.jpg
+    end
+
+    def gift_detail_var(str)
+        if str.blank?
+            ""
+        else
+           "<div style='visibility:visible;font-size:12px;'>#{str}</div>"
+        end
     end
 
     def blank_merge_var(str)
