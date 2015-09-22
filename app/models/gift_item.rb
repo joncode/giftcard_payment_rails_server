@@ -26,8 +26,8 @@ class GiftItem < ActiveRecord::Base
 				gift_details = "<li>#{item["quantity"]} tickets - #{item["item_name"]}</li>"
 			else
 				if menu_item = MenuItem.where(id: item["item_id"]).last
-					gift_string = "#{item["quantity"]} #{item["item_name"]} - #{menu_item.detail}"
-					gift_details = "<li>" + gift_string.truncate(50) + "</li>"
+					gift_string = "#{item['quantity']} #{item['item_name']}"
+					gift_details = "<li>" + gift_string.truncate(50) + "</li><li>#{menu_item.detail}</li>"
 				else
 					gift_details = "<li>#{item["quantity"]} #{item["item_name"]}</li>"
 				end
