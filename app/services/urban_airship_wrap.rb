@@ -1,12 +1,16 @@
 module UrbanAirshipWrap
 
     def send_push(user, alert, gift_id)
-        push = UA_CLIENT.create_push
-        push.audience = UA.alias(user.ua_alias)
-        push.notification = UA.notification(alert: alert)
-        push.device_types = UA.all
+        pnts = user.pn_tokens
+        resp = []
+        pnts.each do |pn_token|
+            push = UA_CLIENT.create_push
+            push.audience = UA.device_token(pn_token)
+            push.notification = UA.notification(alert: alert)
+            push.device_types = UA.all
+            resp << push.send_push
+        end
 
-        resp = push.send_push
         puts "APNS push sent via ALIAS! #{resp.inspect}"
         Ditto.send_push_create(resp, gift_id, 'Gift')
     end
