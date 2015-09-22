@@ -5,7 +5,11 @@ module UrbanAirshipWrap
         resp = []
         pnts.each do |pn_token_obj|
             push = UA_CLIENT.create_push
-            push.audience = UA.device_token(pn_token_obj.pn_token)
+            if pn_token_obj.platform == 'ios'
+                push.audience = UA.device_token(pn_token_obj.pn_token)
+            elsif pn_token_obj.platform == 'android'
+                push.audience = UA.apid(pn_token_obj.pn_token)
+            end
             push.notification = UA.notification(alert: alert)
             push.device_types = UA.all
             resp << push.send_push
