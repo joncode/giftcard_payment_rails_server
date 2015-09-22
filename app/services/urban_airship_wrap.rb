@@ -12,7 +12,7 @@ module UrbanAirshipWrap
         end
 
         puts "APNS push sent via ALIAS! #{resp.inspect}"
-        Ditto.send_push_create(resp, gift_id, 'Gift')
+        Ditto.send_push_create(resp[0], gift_id, 'Gift')
     end
 
     def ua_register pn_token, user_alias, user_id, platform=nil
