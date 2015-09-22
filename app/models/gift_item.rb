@@ -22,18 +22,22 @@ class GiftItem < ActiveRecord::Base
 		sc 		   = JSON.parse gift.shoppingCart
 		output_str = "<ul style='list-style-type:none;'>"
 		sc.each do |item|
-			if gift.provider_name == "Electric Factory"
-				gift_details = "<li>#{item["quantity"]} tickets - #{item["item_name"]}</li>"
-			else
-				if menu_item = MenuItem.where(id: item["item_id"]).last
-					gift_string = "#{item['quantity']} #{item['item_name']}"
-					gift_details = "<li>" + gift_string.truncate(50) + "</li><li>#{menu_item.detail}</li>"
+
+			if menu_item = MenuItem.where(id: item["item_id"]).last
+				if menu_item.name[0] == '$' && menu_item.name.length < 5
+					item_name = "#{menu_item.name} Voucher"
 				else
-					gift_details = "<li>#{item["quantity"]} #{item["item_name"]}</li>"
+					item_name = menu_item.name
 				end
+				gift_string = "#{item['quantity']} #{item_name}"
+				gift_details = "<li>" + gift_string.truncate(50) + "</li>"
+			else
+				gift_details = "<li>#{item['quantity']} #{item['item_name']}</li>"
 			end
+
 			output_str += gift_details
 		end
+
 		output_str += "</ul>"
 		output_str
 	end

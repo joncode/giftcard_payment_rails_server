@@ -17,7 +17,7 @@ class GiftTemplateMainMailer
             puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
             return nil
         end
-        subject       = "#{@gift.giver_name} sent you a @gift"
+        subject       = "#{@gift.giver_name} sent you a Gift!"
 
         template_name = "Gift: 08.2015 New Template Play"
         pteg_affiliate_id = Rails.env.staging? ? 20 : 29
@@ -53,7 +53,7 @@ class GiftTemplateMainMailer
                 { "name" => "merchant_address", "content" => merchant.complete_address },
                 { "name" => "gift_items", "content" => GiftItem.items_for_email(@gift) },
                 { "name" => "gift_detail", "content" => blank_merge_var(@gift.detail) },
-                {'name' => 'expiration', 'content' => expired_merge_var(@gift.expires_at) }
+                { 'name' => 'expiration', 'content' => expired_merge_var(@gift.expires_at) }
             ]
         }
 
