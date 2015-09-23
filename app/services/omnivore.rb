@@ -30,6 +30,7 @@ class Omnivore
 		@check_value 	 = 0
   		@response        = response_from_code
 		@next 			 = nil
+		@brand_card_applied = false
 	end
 
 	def strip_leading_zeros str
@@ -66,7 +67,10 @@ class Omnivore
 					parent_item_ary.each do |p_item|
 						if p_item['_embedded']['menu_item'] && p_item['_embedded']['menu_item']['id'] && @brand_card_ids.include?(p_item['_embedded']['menu_item']['id'])
 							# success brand card
-							apply_ticket_value tic
+							if @brand_card_applied == false
+								@brand_card_applied = true
+								apply_ticket_value tic
+							end
 						end
 					end
 				else
