@@ -443,7 +443,7 @@ private
 	end
 
     def add_merchant_name
-        if merchant = Merchant.find(self.merchant_id)
+        if merchant = Merchant.unscoped.find(self.merchant_id)
             self.merchant = merchant
             self.provider_name = merchant.name
         end
