@@ -18,7 +18,7 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
     def redeem_locations
-        merchant = Merchant.find(params[:id])
+        merchant = Merchant.unscoped.find(params[:id])
         if client = merchant.client
             redeems = client.contents(:merchants)
             serialized = redeems.map(&:web_serialize)
