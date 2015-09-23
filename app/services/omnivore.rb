@@ -207,6 +207,7 @@ class Omnivore
 			unless e.nil?
 				resp = e.response.code
 				puts "\n\nOmnivore Error code = #{resp}\n #{e.inspect}\n #{response.inspect}\n"
+				puts " Error Hash == " + { "code" => e.code, "error" => e.error}.inspect
 				resp
 			end
 		end
