@@ -9,7 +9,7 @@ class MenuItem < ActiveRecord::Base
 			MenuItem.create(price: amount.to_s,
 				menu_id: menu_id,
 				section_id: voucher_section.id,
-				name: "$#{amount.to_s} gift voucher",
+				name: "$#{amount.to_s} Gift Voucher",
 				detail: "The entire gift amount must be used at one time. Unused portions of this gift cannot be saved, transferred, or redeemed for cash.",
 				standard: false,
 				promo: false
