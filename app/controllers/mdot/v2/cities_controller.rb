@@ -15,7 +15,7 @@ class Mdot::V2::CitiesController < JsonController
             region_id = params[:id].to_i
         end
 
-        merchants = Merchant.where(city_id: region_id)
+        merchants = Merchant.where(active: true, paused: false, city_id: region_id).order("name ASC")
         @app_response = merchants.serialize_objs
         success @app_response
         respond

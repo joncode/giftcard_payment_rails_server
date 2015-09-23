@@ -4,7 +4,7 @@ class Web::V3::MerchantsController < MetalCorsController
 
     def index
         # binding.pry
-        arg_scope = proc { Merchant.all }
+        arg_scope = proc { Merchant.where(active: true).where(paused: false).order("name ASC") }
         merchants = @current_client.contents(:merchants, &arg_scope)
 
         success merchants.serialize_objs(:web)

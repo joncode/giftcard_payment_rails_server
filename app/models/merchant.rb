@@ -3,7 +3,7 @@ class Merchant < ActiveRecord::Base
     include Formatter
     include MerchantSerializers
 
-    default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
+    # default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
 #   -------------
 
