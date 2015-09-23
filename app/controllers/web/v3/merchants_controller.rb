@@ -12,7 +12,7 @@ class Web::V3::MerchantsController < MetalCorsController
     end
 
     def menu
-        merchant = Merchant.find(params[:id])
+        merchant = Merchant.unscoped.find(params[:id])
         success({ "menu" =>  merchant.menu_string, "loc_id" => merchant.id })
         respond
     end
