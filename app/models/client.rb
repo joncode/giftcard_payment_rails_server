@@ -25,14 +25,14 @@ class Client < ActiveRecord::Base
 			# content_cymbol = :gifts, :merchants, :regions, :users, :providers
 		if self.client?
 			cc = ClientContent.where(client_id: self.id, content_type: content_symbol.to_s.singularize.capitalize)
-			content_objects = cc.map {|clientcontent| clientcontent.content_type.constantize.unscoped.where(id: clientcontent.content_id) }
+			return cc.map {|clientcontent| clientcontent.content_type.constantize.unscoped.where(id: clientcontent.content_id) }
 		elsif self.partner?
 			cc = ClientContent.where(client_id: nil, partner_id: self.partner_id, partner_type: self.partner_type, content_type: content_symbol.to_s.singularize.capitalize)
-			content_objects = cc.map {|clientcontent| clientcontent.content_type.constantize.unscoped.where(id: clientcontent.content_id) }
+			return cc.map {|clientcontent| clientcontent.content_type.constantize.unscoped.where(id: clientcontent.content_id) }
 		else
 			return yield(self)
 		end
-		cc.map(&:content).compact
+		# cc.map(&:content).compact
 	end
 
 	def content= obj
