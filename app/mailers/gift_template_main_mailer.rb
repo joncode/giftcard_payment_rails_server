@@ -71,7 +71,7 @@ class GiftTemplateMainMailer
         str = 'http://res.cloudinary.com/drinkboard/image/upload/b_rgb:0d0d0d,bo_0px_solid_rgb:000,c_crop,co_rgb:090909,h_180,o_40,q_100,w_600'
         mp_str = merchant_photo_url.split('upload')[1]
         # puts (str + mp_str)
-        str + mp_str
+        str + mp_str.to_s
         # http://res.cloudinary.com/drinkboard/image/upload/b_rgb:0d0d0d,bo_0px_solid_rgb:000,c_crop,co_rgb:090909,h_180,o_40,q_100,w_600/v1439771625/email_elements/littleOwl_bgImg_hdr.jpg
     end
 
