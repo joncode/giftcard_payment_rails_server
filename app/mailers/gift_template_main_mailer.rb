@@ -25,22 +25,27 @@ class GiftTemplateMainMailer
             template_name = 'gift-pteg'
         end
         puts template_name
-        message       = make_dynamic_variables(subject, email)
+        message       = make_dynamic_variables(subject, email, template_name)
         request_mandrill_with_template(template_name, message, [@gift.id, "Gift"])
     end
 
 ############ PRIVATE
 
-    def make_dynamic_variables(subject, email)
+    def make_dynamic_variables(subject, email, template_name)
         merchant = @gift.merchant
         if merchant.nil?
             puts 'NO Merchant - make_dynamic_variables'
             return nil
         end
+        if template_name == 'gift-pteg'
+            from_name = "Pt's Entertainment Group via It's On Me"
+        else
+            from_name = "It's On Me"
+        end
         email = whitelist_email(email)
         message          = {
             "subject"     => subject,
-            "from_name"   => "It's On Me",
+            "from_name"   => from_name,
             "from_email"  => "no-reply@itson.me",
             "to"          => [
                 { "email" => email, "name" => @gift.receiver_name }
