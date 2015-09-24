@@ -59,10 +59,7 @@ module GiftLifecycle
             r.ticket_id       = nil
             self.redemptions << r
             if self.save
-                puts "\n gift #{self.id} is being redeemed\n #{r.inspect} \n #{r.errors}"
-                if r.id.nil?
-                    r.save
-                end
+                puts "\n gift #{self.id} is being redeemed\n"
                 Resque.enqueue(GiftRedeemedEvent, self.id)
                 true
             else
