@@ -24,7 +24,7 @@ class LandingPage < ActiveRecord::Base
 	end
 
 	def self.parse_link link_str
-		link_str.gsub('https://itson.me/promos/', '').gsub('#/', '').gsub('/', '')
+		link_str.gsub('https://www.itson.me/promos/', '').gsub('www.itson.me/promos/').gsub('#/', '').gsub('/', '')
 	end
 
 end
