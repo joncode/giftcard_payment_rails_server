@@ -3,7 +3,7 @@
 class CollectIncompleteGiftsV2Job
     #extend Resque::Plugins::HerokuAutoscaler
 
-    @queue = :after_save
+    @queue = :aafter_save
 
     def self.perform user_social_id
     	puts "\n CollectIncompleteGiftsV2Job \n"
