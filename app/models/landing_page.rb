@@ -10,7 +10,7 @@ class LandingPage < ActiveRecord::Base
 #   -------------
 
 	def self.click(link: link_in)
-		l2 = parse_link(link)
+		l2 = self.parse_link(link)
 		affiliate_url_name = l2.last.split('-').first
 		# affiliate_url_name = link.split('?aid=').last
 		aff = Affiliate.where(url_name: affiliate_url_name).first
@@ -23,7 +23,7 @@ class LandingPage < ActiveRecord::Base
 		lp
 	end
 
-	def parse_link link_str
+	def self.parse_link link_str
 		link_str.gsub('https://itson.me/promos/', '').gsub('#/', '').gsub('/', '')
 	end
 
