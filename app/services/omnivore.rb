@@ -2,6 +2,7 @@ require 'rest_client'
 
 class Omnivore
 	include ActionView::Helpers::NumberHelper
+	extend OmnivoreUtils
 
 	attr_reader :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card, :brand_card_ids
 
@@ -352,4 +353,5 @@ class Omnivore
 	    	@response
 	    end
 	end
+
 end
