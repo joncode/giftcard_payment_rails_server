@@ -13,8 +13,8 @@ class Web::V3::SessionsController < MetalCorsController
 
         if user
             if user.not_suspended?
-                user.session_token_obj =   SessionToken.create_token_obj(user, 'www', nil, @current_client, @current_partner)
-                @current_client.content = user
+                user.session_token_obj =  SessionToken.create_token_obj(user, 'www', nil, @current_client, @current_partner)
+                # @current_client.content = user --- in Resque in create_token_obj
                 success user.login_web_serialize
 
             else

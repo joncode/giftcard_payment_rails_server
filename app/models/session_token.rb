@@ -33,6 +33,7 @@ class SessionToken < ActiveRecord::Base
 		client_id = client.id if client
 		partner_id = partner.id if partner
 		partner_type = partner.class.to_s if partner
+		Resque.enqueue(ClientContentUsersJob, client_id, user.id) if client
 		SessionToken.create(user_id: user.id,
 							token: create_session_token,
 							platform: platform,
