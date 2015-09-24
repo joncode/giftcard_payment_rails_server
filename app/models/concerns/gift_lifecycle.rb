@@ -45,7 +45,7 @@ module GiftLifecycle
         if self.status == 'notified'
             self.status      = 'redeemed'
             self.redeemed_at = Time.now.utc
-            self.server      = server_code
+            self.server      = server_code if server_code
             self.order_num   = make_order_num(self.id)
             r                = Redemption.new
             if loc_id.to_i > 0 && loc_id != self.merchant_id
@@ -59,7 +59,10 @@ module GiftLifecycle
             r.ticket_id       = nil
             self.redemptions << r
             if self.save
-                puts "\n gift #{self.id} is being redeemed\n"
+                puts "\n gift #{self.id} is being redeemed\n #{r.inspect}"
+                if r.id.nil?
+                    r.save
+                end
                 Resque.enqueue(GiftRedeemedEvent, self.id)
                 true
             else
