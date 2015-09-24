@@ -83,6 +83,7 @@ class Accountant
 	        	lp = LandingPage.click(link: link)
 	        end
             lp.gifts += 1
+            lp.users += 1
             gift.landing_pages << lp
             # binding.pry
             if lp.affiliate.present?
