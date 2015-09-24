@@ -76,8 +76,8 @@ class Accountant
 		end
 
 		def affiliate_link gift, link
-			return nil if gift.class != GiftSale
 			puts "\n Affiliate affiliate_link #{gift.id} #{link}\n"
+			# return nil if gift.class != GiftSale
 	        lp = LandingPage.where(link: link).first
 	        if lp.nil?
 	        	lp = LandingPage.click(link: link)

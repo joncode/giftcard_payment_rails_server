@@ -49,6 +49,7 @@ private
 		new_args['client_id'] = args['client_id']
 		new_args['partner_id'] = args['partner_id']
 		new_args['partner_type'] = args['partner_type']
+		new_args['link'] = args['link']
 		new_args
 	end
 

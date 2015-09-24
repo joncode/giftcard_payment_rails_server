@@ -23,6 +23,10 @@ class LandingPage < ActiveRecord::Base
 		lp
 	end
 
+	def self.create_gift(link: link_in)
+		l2 = self.parse_link(link)
+	end
+
 	def self.parse_link link_str
 		link_str.gsub('www.itson.me/promos/', '').gsub('#/', '').gsub('/', '')
 	end
