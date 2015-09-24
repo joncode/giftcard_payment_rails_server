@@ -10,16 +10,21 @@ class LandingPage < ActiveRecord::Base
 #   -------------
 
 	def self.click(link: link_in)
-		l2 = link.split('/')
+		l2 = parse_link(link)
 		affiliate_url_name = l2.last.split('-').first
 		# affiliate_url_name = link.split('?aid=').last
 		aff = Affiliate.where(url_name: affiliate_url_name).first
 		# binding.pry
-		lp = self.find_or_initialize_by(link: l2.last)
+		lp = self.find_or_initialize_by(link: l2)
+
 		lp.clicks += 1
 		lp.affiliate = aff if lp.affiliate_id.nil?
 		lp.save
 		lp
+	end
+
+	def parse_link link_str
+		link_str.gsub('https://itson.me/promos/', '').gsub('#/', '').gsub('/', '')
 	end
 
 end
