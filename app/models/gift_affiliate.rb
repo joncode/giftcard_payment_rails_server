@@ -29,7 +29,7 @@ private
 			Gift.where(giver_id: campaign.id, giver_type: "Campaign", receiver_phone: args["rec_net_id"]).count
 		end
 		unless  (u_gifts + n_gifts) == 0
-			return "Sorry, #{args["rec_net_id"]} has already received a gift.  Each person is limited to one gift per campaign."
+			# return "Sorry, #{args["rec_net_id"]} has already received a gift.  Each person is limited to one gift per campaign."
 		end
 		nil
 	end

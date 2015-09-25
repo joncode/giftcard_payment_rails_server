@@ -340,6 +340,16 @@ class Omnivore
     	get('locations',@pos_merchant_id, "tickets/#{ticket_uniq}" )
     end
 
+    def get_brand_card_ids(ticked_id_added)
+    	raw = get_ticket(ticked_id_added)
+    	items = raw['_embedded']['items']
+
+    	brand_card_ids_ary = items.map do |item_raw|
+    		item_raw['_embedded']['menu_item']['id']
+    	end
+    	brand_card_ids_ary
+    end
+
 	def menu_items
 		r = get('locations', @pos_merchant_id, "menu/items")
 		puts "\n here is the response"
