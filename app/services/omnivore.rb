@@ -1,8 +1,8 @@
 require 'rest_client'
 
 class Omnivore
-	include ActionView::Helpers::NumberHelper
 	extend OmnivoreUtils
+	include ActionView::Helpers::NumberHelper
 
 	attr_accessor :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id
 
@@ -45,7 +45,7 @@ class Omnivore
 	# def direct_redeem
 	# 	@ticket_id = @ticket_num
 	# 	if @brand_card
-	# 		brand_card_ids = get_brand_card_ids
+	# 		brand_card_ids = get_brand_card_ids_from_pos
 	# 		brand_card_ids.each do |pos_id|
 	# 			@brand_card_ids.include?(pos_id)
 	# 			@brand_card_applied = true
@@ -359,7 +359,14 @@ class Omnivore
     	get('locations',@pos_merchant_id, "tickets/#{ticket_uniq}" )
     end
 
-    def get_brand_card_ids(ticked_id_added=nil)
+    def brand_card_good(raw_ticket)
+    	items = raw['_embedded']['items']
+    	brand_card_ids_ary = items.map do |item_raw|
+    		item_raw['_embedded']['menu_item']['id']
+    	end
+    end
+
+    def get_brand_card_ids_from_pos(ticked_id_added=nil)
     	raw = get_ticket(ticked_id_added)
     	items = raw['_embedded']['items']
 
