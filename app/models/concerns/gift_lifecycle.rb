@@ -109,7 +109,11 @@ module GiftLifecycle
 
         pos_obj = Omnivore.new(pos_hsh)
 
-        resp    = pos_obj.redeem
+        # if pos_merchant_id == "6Tjg7ain"
+        #     resp  = pos_obj.direct_redeem
+        # else
+            resp    = pos_obj.redeem
+        # end
         resp["success"] = pos_obj.success?
         if resp["success"]
             if pos_obj.code == 201

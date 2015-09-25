@@ -42,6 +42,25 @@ class Omnivore
 		(200..299).cover?(@code)
 	end
 
+	# def direct_redeem
+	# 	@ticket_id = @ticket_num
+	# 	if @brand_card
+	# 		brand_card_ids = get_brand_card_ids
+	# 		brand_card_ids.each do |pos_id|
+	# 			@brand_card_ids.include?(pos_id)
+	# 			@brand_card_applied = true
+	# 			break
+	# 		end
+	# 		if @brand_card_applied
+	# 			resp = post_redeem
+	# 		else
+	# 			# BAD brand card message
+	# 		end
+	# 	else
+	# 		resp = post_redeem
+	# 	end
+	# end
+
 	def redeem
 		tic = nil
 		tix = formulate_tickets_at_location
@@ -340,7 +359,7 @@ class Omnivore
     	get('locations',@pos_merchant_id, "tickets/#{ticket_uniq}" )
     end
 
-    def get_brand_card_ids(ticked_id_added)
+    def get_brand_card_ids(ticked_id_added=nil)
     	raw = get_ticket(ticked_id_added)
     	items = raw['_embedded']['items']
 
