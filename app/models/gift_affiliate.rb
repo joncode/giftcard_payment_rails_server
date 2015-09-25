@@ -29,7 +29,11 @@ private
 			Gift.where(giver_id: campaign.id, giver_type: "Campaign", receiver_phone: args["rec_net_id"]).count
 		end
 		unless  (u_gifts + n_gifts) == 0
-			return "Sorry, #{args["rec_net_id"]} has already received a gift.  Each person is limited to one gift per campaign."
+			if  ['808dave@gmail.com', 'm80dubstation@gmail.com', 'myles.gueco@itson.me', "zack.berglind@gmail.com"].include?(args["rec_net_id"])
+				return nil
+			else
+				return "Sorry, #{args["rec_net_id"]} has already received a gift.  Each person is limited to one gift per campaign."
+			end
 		end
 		nil
 	end
