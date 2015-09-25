@@ -32,6 +32,7 @@ private
         args["shoppingCart"] = old_gift.shoppingCart
         args["pay_stat"]   = old_gift.pay_stat
         args["expires_at"] = old_gift.expires_at
+        args['brand_card'] = old_gift.brand_card
         user_to_gift_key_names args
     end
 
