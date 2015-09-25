@@ -4,7 +4,7 @@ class Omnivore
 	include ActionView::Helpers::NumberHelper
 	extend OmnivoreUtils
 
-	attr_reader :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card, :brand_card_ids
+	attr_accessor :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id
 
 	def initialize args
 		puts "Omnivore args = #{args.inspect}"
@@ -21,6 +21,7 @@ class Omnivore
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
+		@loc_id = args["pos_merchant_id"]
 		@tender_type_id  = args["tender_type_id"]
 		@value           = args["value"].to_i
 		@code 		     = 100
@@ -332,6 +333,11 @@ class Omnivore
     		hsh["tickets"] = []
     	end
     	hsh
+    end
+
+    def get_ticket(ticked_id_added=nil)
+    	ticket_uniq = ticked_id_added || @ticked_id || @ticket_num
+    	get('locations',@pos_merchant_id, "tickets/#{ticket_uniq}" )
     end
 
 	def menu_items
