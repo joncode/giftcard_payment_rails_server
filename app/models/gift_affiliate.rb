@@ -21,12 +21,12 @@ private
 		campaign = CampaignItem.find(args["c_item_id"]).campaign
 
 		if user = self.find_user(args)
-			u_gifts = Gift.where(giver_id: campaign.id, giver_type: "Campaign", receiver_id: user.id).count
+			u_gifts = Gift.where(giver_id: campaign.id, giver_type: "Campaign", receiver_id: user.id).where('created_at > ?', Time.now - 15.hours).count
 		end
 		n_gifts = if args["rec_net"] == 'em'
-			Gift.where(giver_id: campaign.id, giver_type: "Campaign", receiver_email: args["rec_net_id"]).count
+			Gift.where(giver_id: campaign.id, giver_type: "Campaign", receiver_email: args["rec_net_id"]).where('created_at > ?', Time.now - 15.hours).count
 		elsif args["rec_net"] == 'ph'
-			Gift.where(giver_id: campaign.id, giver_type: "Campaign", receiver_phone: args["rec_net_id"]).count
+			Gift.where(giver_id: campaign.id, giver_type: "Campaign", receiver_phone: args["rec_net_id"]).where('created_at > ?', Time.now - 15.hours).count
 		end
 		unless  (u_gifts + n_gifts) == 0
 			if  ['juliet.asker83@gmail.com','melissa.asker@yahoo.com','808dave@gmail.com', 'm80dubstation@gmail.com', 'myles.gueco@itson.me', "zack.berglind@gmail.com"].include?(args["rec_net_id"])
