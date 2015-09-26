@@ -87,7 +87,7 @@ class Web::V3::UsersController < MetalCorsController
 
     def reset_password
         return nil if data_not_string?
-        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"]).references(:users).first
+        if user_social = UserSocial.includes(:user).where(type_of: 'email', identifier: params["data"].downcase).references(:users).first
             user = user_social.user
             user.update_reset_token
             send_reset_password_email(user, params["data"])
