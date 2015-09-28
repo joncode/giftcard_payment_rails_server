@@ -30,6 +30,7 @@ gem 'urbanairship', '~> 3.0'
 gem 'roo'
 #gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
 
+gem "koala", "~> 2.2"
 gem 'therubyracer', platforms: :ruby
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
