@@ -45,8 +45,7 @@ module UserSerializers
                     usr_hash[id] = []
                 end
                 us.each do |social|
-                    hsh = { "_id" => social.id, "value" => social.identifier }
-                    usr_hash[id] << hsh
+                    usr_hash[id] << { "_id" => social.id, "value" => social.identifier }
                 end
             end
         end
