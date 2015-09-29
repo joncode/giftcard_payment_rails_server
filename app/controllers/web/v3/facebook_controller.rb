@@ -1,7 +1,7 @@
 class Web::V3::FacebookController < JsonController
 
-    before_action :authentication_no_token
-    before_action :get_current_user_fb_oauth, except: :oauth
+    # before_action :authentication_no_token
+    # before_action :get_current_user_fb_oauth, except: :oauth
 
     rescue_from JSON::ParserError, :with => :bad_request
 
