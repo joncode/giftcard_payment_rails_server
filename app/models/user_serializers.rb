@@ -39,13 +39,13 @@ module UserSerializers
         ids = ["email", "phone", "facebook_id", "twitter"].each do |id|
             us = self.user_socials.where(type_of: id)
             if us.count > 0
+                network = id
                 if id == 'facebook_id'
-                    usr_hash['facebook'] = []
-                else
-                    usr_hash[id] = []
+                    network = 'facebook'
                 end
+                usr_hash[network] = []
                 us.each do |social|
-                    usr_hash[id] << { "_id" => social.id, "value" => social.identifier }
+                    usr_hash[network] << { "_id" => social.id, "value" => social.identifier }
                 end
             end
         end
