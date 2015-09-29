@@ -2,6 +2,7 @@ class Web::V3::TwitterController < JsonController
 
     # before_action :authenticate_customer
     # before_action :get_current_user_tw_oauth, except: :oauth
+    before_action :authentication_token_required
     rescue_from JSON::ParserError, :with => :bad_request
 
     def friends
