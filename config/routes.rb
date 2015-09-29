@@ -123,7 +123,20 @@ Drinkboard::Application.routes.draw do
           post :redbull
         end
       end
-
+      resources :facebook,     only: [:create] do
+        collection do
+          # get   :friends
+          # get   :profile
+          post  :oauth
+        end
+      end
+      resources :twitter,     only: [:create] do
+        collection do
+          # get   :friends
+          # get   :profile
+          post  :oauth
+        end
+      end
       resources :gifts, only: [:index, :create] do
         member do
           patch :read
