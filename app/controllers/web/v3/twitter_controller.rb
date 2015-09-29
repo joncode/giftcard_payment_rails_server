@@ -61,9 +61,30 @@ class Web::V3::TwitterController < JsonController
         oauth = Oauth.create(oauth_hsh)
 
         if oauth.persisted?
-            success oauth.id.to_s
+            save_user = false
+
+            if @current_user.twitter != oauth.network_id
+                @current_user.twitter = oauth.network_id
+                save_user = true
+            end
+
+            if oauth_hsh["photo"].present? && @current_user.get_photo == BLANK_AVATAR_URL
+                @current_user.iphone_photo = oauth_hsh["photo"]
+                save_user = true
+            end
+
+            if save_user
+                if @current_user.save
+                    success @current_user.login_client_serialize
+                else
+                    fail_web    fail_web_payload("not_created_user", @current_user.errors.messages)
+                end
+            else
+                success @current_user.login_client_serialize
+            end
+
         else
-            fail    oauth
+            fail_web    fail_web_payload("invalid_twitter", oauth.errors.messages)
             status = :bad_request
         end
         respond(status)

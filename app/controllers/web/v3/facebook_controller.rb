@@ -59,28 +59,43 @@ class Web::V3::FacebookController < JsonController
         oauth_hsh["network"] = "facebook"
         oauth_hsh["user_id"] = @current_user.id
         oauth = Oauth.create(oauth_hsh)
-        save_user = false
-
-        if oauth_hsh['gender'].present? && @current_user.sex.nil?
-            @current_user.sex = oauth_hsh['gender']
-            save_user = true
-            oauth_hsh.delete('gender')
-        end
-
-        if oauth_hsh['birthday'].present? && @current_user.birthday.nil?
-            puts oauth_hsh['birthday'].inspect
-            @current_user.birthday = oauth_hsh['birthday']
-            save_user = true
-            oauth_hsh.delete('birthday')
-        end
-
         if oauth.persisted?
-            if save_user
-                @current_user.save
+            save_user = false
+
+            if oauth_hsh['gender'].present? && @current_user.sex.nil?
+                @current_user.sex = oauth_hsh['gender']
+                oauth_hsh.delete('gender')
+                save_user = true
             end
-            success oauth.id.to_s
+
+            if oauth_hsh['birthday'].present? && @current_user.birthday.nil?
+                puts oauth_hsh['birthday'].inspect
+                @current_user.birthday = oauth_hsh['birthday']
+                oauth_hsh.delete('birthday')
+                save_user = true
+            end
+
+            if @current_user.facebook_id != oauth.network_id
+                @current_user.facebook_id = oauth.network_id
+                save_user = true
+            end
+
+            if oauth_hsh["photo"].present? && @current_user.get_photo == BLANK_AVATAR_URL
+                @current_user.iphone_photo = oauth_hsh["photo"]
+                save_user = true
+            end
+
+            if save_user
+                if @current_user.save
+                    success @current_user.login_client_serialize
+                else
+                    fail_web    fail_web_payload("not_created_user", @current_user.errors.messages)
+                end
+            else
+                success @current_user.login_client_serialize
+            end
         else
-            fail    oauth
+            fail_web    fail_web_payload("invalid_facebook", oauth.errors.messages)
             status = :bad_request
         end
         respond(status)
