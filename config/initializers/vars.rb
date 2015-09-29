@@ -41,6 +41,18 @@ else
     ENV['AUTHORIZE_MOBILE_DEVICE']
 end
 
+FACEBOOK_APP_ID = if Rails.env.development? or Rails.env.test?
+    '1010660852318410'
+else
+    ENV['FACEBOOK_APP_ID']
+end
+
+FACEBOOK_APP_SECRET = if Rails.env.development? or Rails.env.test?
+    '4a04ff8b8f97e0830089e1953ebbfdfb'
+else
+    ENV['FACEBOOK_APP_SECRET']
+end
+
 MAILCHIMP_APIKEY = if Rails.env.development? or Rails.env.test?
     '925c032769638d199309b7c752c31700-us7'
 else
