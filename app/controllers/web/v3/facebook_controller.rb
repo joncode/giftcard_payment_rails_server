@@ -58,22 +58,23 @@ class Web::V3::FacebookController < MetalCorsController
         oauth_hsh = oauth_params
         oauth_hsh["network"] = "facebook"
         oauth_hsh["user_id"] = @current_user.id
+        save_user = false
+
+        if oauth_hsh['sex'].present? && @current_user.sex.nil?
+            @current_user.sex = oauth_hsh['sex']
+            oauth_hsh.delete('sex')
+            save_user = true
+        end
+
+        if oauth_hsh['birthday'].present? && @current_user.birthday.nil?
+            puts oauth_hsh['birthday'].inspect
+            @current_user.birthday = oauth_hsh['birthday']
+            oauth_hsh.delete('birthday')
+            save_user = true
+        end
+
         oauth = Oauth.create(oauth_hsh)
         if oauth.persisted?
-            save_user = false
-
-            if oauth_hsh['gender'].present? && @current_user.sex.nil?
-                @current_user.sex = oauth_hsh['gender']
-                oauth_hsh.delete('gender')
-                save_user = true
-            end
-
-            if oauth_hsh['birthday'].present? && @current_user.birthday.nil?
-                puts oauth_hsh['birthday'].inspect
-                @current_user.birthday = oauth_hsh['birthday']
-                oauth_hsh.delete('birthday')
-                save_user = true
-            end
 
             if @current_user.facebook_id != oauth.network_id
                 @current_user.facebook_id = oauth.network_id
