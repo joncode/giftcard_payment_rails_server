@@ -62,16 +62,16 @@ class Web::V3::FacebookController < MetalCorsController
 
         if oauth_hsh['sex'].present? && @current_user.sex.nil?
             @current_user.sex = oauth_hsh['sex']
-            oauth_hsh.delete('sex')
             save_user = true
         end
+        oauth_hsh.delete('sex')
 
         if oauth_hsh['birthday'].present? && @current_user.birthday.nil?
             puts oauth_hsh['birthday'].inspect
             @current_user.birthday = oauth_hsh['birthday']
-            oauth_hsh.delete('birthday')
             save_user = true
         end
+        oauth_hsh.delete('birthday')
 
         oauth = Oauth.create(oauth_hsh)
         if oauth.persisted?
