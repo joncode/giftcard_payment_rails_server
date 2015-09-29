@@ -1,4 +1,4 @@
-class Web::V3::FacebookController < JsonController
+class Web::V3::FacebookController < MetalCorsController
 
     # before_action :authentication_no_token
     # before_action :get_current_user_fb_oauth, except: :oauth
