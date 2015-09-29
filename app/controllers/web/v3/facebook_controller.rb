@@ -104,7 +104,7 @@ class Web::V3::FacebookController < JsonController
 private
 
     def oauth_params
-        params.require(:data).permit(:token, :net_id, :photo, :gender, :birthday)
+        params.require(:data).permit(:token, :net_id, :photo, :sex, :birthday)
     end
 end
 
