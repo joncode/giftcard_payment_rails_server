@@ -103,7 +103,7 @@ class Web::V3::UsersController < MetalCorsController
 private
 
     def update_user_params
-        params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => ["net", "_id", "value" ] )
+        params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => ["net", "_id", "value" ], oauth: [:token, :secret, :net, :net_id, :handle, :photo] )
     end
 
     def create_user_params

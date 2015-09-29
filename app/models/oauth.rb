@@ -15,6 +15,10 @@ class Oauth < ActiveRecord::Base
 
 #   -------------
 
+    def net_id= network_id
+        self.network_id = network_id
+    end
+
     def self.initFromDictionary hsh
         oauth = Oauth.new
         oauth.token      = hsh["token"]
