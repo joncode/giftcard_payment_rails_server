@@ -2,7 +2,7 @@ class Web::V3::FacebookController < MetalCorsController
 
     # before_action :authentication_no_token
     # before_action :get_current_user_fb_oauth, except: :oauth
-    before_action :authentication_token_required
+    before_action :authentication_token_required, except: [:oauth_init, :callback_url]
     rescue_from JSON::ParserError, :with => :bad_request
 
     def friends
