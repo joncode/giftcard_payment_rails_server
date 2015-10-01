@@ -55,8 +55,8 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def oauth_init
-        @oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url')
-        redirect_url = @oauth.url_for_oauth_code(scope: ['public_profile', 'user_friends', 'email'])
+        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url.json')
+        redirect_url = oauth.url_for_oauth_code(scope: ['public_profile', 'user_friends', 'email'])
         # success redirect_url
         # respond(:found)
         redirect_to redirect_url
@@ -64,14 +64,19 @@ class Web::V3::FacebookController < MetalCorsController
 
     def callback_url
         puts params.inspect
-        @oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url')
-        oauth_access_token = @oauth.get_access_token(params['code'])
-        @graph = Koala::Facebook::API.new(oauth_access_token)
-        profile = @graph.get_object("me")
+        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url.json')
+        oauth_access_token = oauth.get_access_token(params['code'])
+        graph = Koala::Facebook::API.new(oauth_access_token)
+        profile = graph.get_object("me")
         puts profile.inspect
-        # success profile
-        # respond
-        head 200, content_type: "text/html"
+        if social_id.present?
+            user_social = UserSocial.includes(:user).where(type_of: 'facebook_id', identifier: profile['id']).first
+            @user       = user_social ? user_social.user : nil
+            success @user.create_serialize
+        else
+            fail profile
+        end
+        respond
     end
 
     def oauth
