@@ -68,8 +68,9 @@ class Web::V3::FacebookController < MetalCorsController
         @graph = Koala::Facebook::API.new(oauth_access_token)
         profile = @graph.get_object("me")
         puts profile.inspect
-        success profile
-        respond
+        # success profile
+        # respond
+        head 200, content_type: "text/html"
     end
 
     def oauth
