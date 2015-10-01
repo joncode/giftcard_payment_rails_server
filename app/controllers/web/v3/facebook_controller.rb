@@ -55,7 +55,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def oauth_init
-        @oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, 'https://api.itson.me/web/v3/facebook/callback_url')
+        @oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url')
         redirect_url = @oauth.url_for_oauth_code(scope: ['public_profile', 'user_friends', 'email'])
         # success redirect_url
         # respond(:found)
