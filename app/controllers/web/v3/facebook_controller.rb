@@ -63,7 +63,8 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def callback_url
-        puts params.inspect
+        success params.inspect
+        respond
     end
 
     def oauth
