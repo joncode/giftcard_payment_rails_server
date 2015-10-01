@@ -128,6 +128,8 @@ Drinkboard::Application.routes.draw do
           # get   :friends
           # get   :profile
           post  :oauth
+          get :oauth_init
+          get :callback_url
         end
       end
       resources :twitter,     only: [:create] do
