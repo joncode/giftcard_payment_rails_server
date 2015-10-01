@@ -55,7 +55,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def oauth_init
-        return_url = params['return_url']
+        return_url = params['return_url'] || 'www.google.com'
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url?return_url=' + return_url)
         redirect_url = oauth.url_for_oauth_code(scope: ['public_profile', 'user_friends', 'email'])
         # success redirect_url
@@ -75,10 +75,10 @@ class Web::V3::FacebookController < MetalCorsController
             user_social = UserSocial.includes(:user).where(type_of: 'facebook_id', identifier: profile['id']).first
             @user       = user_social ? user_social.user : nil
             # success @user.login_client_serialize
-            redirect_to redirect_url
+            redirect_to return_url
         else
             # fail profile
-            redirect_to redirect_url
+            redirect_to return_url
         end
         respond
     end
