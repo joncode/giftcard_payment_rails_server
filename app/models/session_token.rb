@@ -16,7 +16,7 @@ class SessionToken < ActiveRecord::Base
 	def self.app_authenticate(token)
 		st_obj = where(token: token).includes(:user).last
 		if st_obj
-			st_obj.increment(:count)
+			st_obj.increment!(:count)
 			user = st_obj.user
 			if user && user.active
 				user.session_token_obj = st_obj
@@ -40,7 +40,8 @@ class SessionToken < ActiveRecord::Base
 							push: pn_token,
 							client_id: client_id,
 							partner_id: partner_id,
-							partner_type: partner_type)
+							partner_type: partner_type,
+							count: 1)
 	end
 
 end
