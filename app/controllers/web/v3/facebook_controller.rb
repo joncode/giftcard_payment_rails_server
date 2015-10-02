@@ -152,7 +152,9 @@ class Web::V3::FacebookController < MetalCorsController
 private
 
     def callback_url_generator token_value
-        return  API_URL + "/facebook/callback_url?token=" + token_value
+        url = API_URL + "/facebook/callback_url?token=" + token_value
+        puts "\n\n #{url.inspect} \n\n"
+        return url
     end
 
     def ecnew rp
