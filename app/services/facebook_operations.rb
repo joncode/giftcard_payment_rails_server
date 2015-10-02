@@ -97,7 +97,7 @@ class FacebookOperations
 
 		if Oauth.create(oauth_args).persisted?
 			if session_token_obj
-				user.session_token_obj =  SessionToken.create_token_obj(user, 'www', nil, @current_client, @current_partner)
+				user.session_token_obj =  SessionToken.create_token_obj(user, 'fb', nil, @current_client, @current_partner)
 			end
 			return { 'success' => true, 'user' => user }
 		else
