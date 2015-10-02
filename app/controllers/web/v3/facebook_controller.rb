@@ -70,7 +70,7 @@ class Web::V3::FacebookController < MetalCorsController
         oauth_access_token = oauth.get_access_token(params['code'])
         graph = Koala::Facebook::API.new(oauth_access_token)
         profile = graph.get_object("me")
-        return_params = dcnew(params['token'])
+        return_params = decrypt_token(params['token'])
         puts profile.inspect
         puts return_params.inspect
         if profile['id'].present?
@@ -160,12 +160,14 @@ private
 
     def generate_token rp
         crypt = ActiveSupport::MessageEncryptor.new(Rails.configuration.secret_key_base, 'Facebook')
-        crypt.encrypt_and_sign(rp.to_json)
+        not_url_safe_token = crypt.encrypt_and_sign(rp.to_json)
+        url_encode(not_url_safe_token)
     end
 
-    def dcnew token
+    def decrypt_token url_safe_token
+        not_url_safe_token = URI.decode(url_safe_token)
         crypt = ActiveSupport::MessageEncryptor.new(Rails.configuration.secret_key_base, 'Facebook')
-        decrypted_back = crypt.decrypt_and_verify(token)
+        decrypted_back = crypt.decrypt_and_verify(not_url_safe_token)
         JSON.parse decrypted_back
     end
 
