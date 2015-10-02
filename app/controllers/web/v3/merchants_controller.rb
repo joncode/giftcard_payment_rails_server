@@ -3,11 +3,16 @@ class Web::V3::MerchantsController < MetalCorsController
     before_action :authentication_no_token
 
     def index
-        # binding.pry
-        arg_scope = proc { Merchant.where(active: true).where(paused: false).order("name ASC") }
-        merchants = @current_client.contents(:merchants, &arg_scope)
-
-        success merchants.serialize_objs(:web)
+        cache_resp = RedisWrap.get_merchants(@current_client.id)
+        if !cache_resp
+            arg_scope = proc { Merchant.where(active: true).where(paused: false).order("name ASC") }
+            merchants = @current_client.contents(:merchants, &arg_scope)
+            merchants_serialized = merchants.serialize_objs(:web)
+            RedisWrap.set_merchants(@current_client.id, merchants_serialized)
+            success merchants_serialized
+        else
+            success cache_resp
+        end
         respond
     end
 
