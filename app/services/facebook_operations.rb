@@ -1,9 +1,8 @@
 class FacebookOperations
 
-
 	def self.login oauth_access_token, facebook_profile, user_social=nil
 		if user_social.nil?
-			user_social = UserSocial.includes(:user).where(active: true, type_of: 'facebook_id', identifier: facebook_profile['id']).first
+			user_social = UserSocial.includes(:user).where(identifier: facebook_profile['id'], type_of: 'facebook_id').first
 		end
 		if user_social.present?
 			if user = user_social.user
@@ -18,7 +17,7 @@ class FacebookOperations
 	end
 
 	def self.create_account oauth_access_token, facebook_profile
-		user_social = UserSocial.includes(:user).where(active: true, type_of: 'facebook_id', identifier: facebook_profile['id']).first
+		user_social = UserSocial.includes(:user).where(identifier: facebook_profile['id'], type_of: 'facebook_id').first
 		if user_social.present?
 			self.login oauth_access_token, facebook_profile, user_social
 		else
@@ -29,7 +28,7 @@ class FacebookOperations
 	end
 
 	def self.attach_account oauth_access_token, facebook_profile, user
-		user_social = UserSocial.includes(:user).where(active: true, type_of: 'facebook_id', identifier: facebook_profile['id']).first
+		user_social = UserSocial.includes(:user).where(identifier: facebook_profile['id'], type_of: 'facebook_id').first
 		if user_social.present? && user_social.user.id == user.id
 			add_facebook_info_to_user(facebook_profile, user)
 			return make_oauth_args(oauth_access_token, facebook_profile, user, false)
