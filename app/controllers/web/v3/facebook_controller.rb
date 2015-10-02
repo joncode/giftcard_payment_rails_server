@@ -76,7 +76,7 @@ class Web::V3::FacebookController < MetalCorsController
         puts profile.inspect
         puts return_params.inspect
         if profile['id'].present?
-            case params['operation']
+            case return_params['operation']
             when 'login'
                 resp = FacebookOperations.login(oauth_access_token, profile)
             when 'create'
@@ -91,7 +91,7 @@ class Web::V3::FacebookController < MetalCorsController
                     resp = FacebookOperations.attach_account(oauth_access_token, profile, @current_user)
                 end
             else
-                resp = { 'success' => false , 'error' => 'No operation specify' }
+                resp = { 'success' => false , 'error' => 'No operation specified' }
             end
             if resp['success']
                 user = resp['user']
