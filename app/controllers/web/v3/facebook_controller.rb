@@ -76,11 +76,14 @@ class Web::V3::FacebookController < MetalCorsController
         puts profile.inspect
         puts return_params.inspect
         if profile['id'].present?
+            add_token = false
             case return_params['operation']
             when 'login'
                 resp = FacebookOperations.login(oauth_access_token, profile)
+                add_token = true
             when 'create'
                 resp = FacebookOperations.create_account(oauth_access_token, profile)
+                add_token = true
             when 'attach'
                 @current_user = SessionToken.app_authenticate(return_params['auth'])
                 @current_client = Client.includes(:partner).find_by(application_key: return_params['client'])
@@ -95,8 +98,8 @@ class Web::V3::FacebookController < MetalCorsController
             end
             if resp['success']
                 user = resp['user']
-                if user.session_token_obj.present?
-                    session_token_param = "&session_token=#{user.session_token_obj}"
+                if user.session_token_obj.present? && add_token
+                    session_token_param = "&session_token=#{user.session_token_obj.token}"
                 else
                     session_token_param = ""
                 end
