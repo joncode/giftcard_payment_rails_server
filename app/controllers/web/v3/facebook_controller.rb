@@ -75,6 +75,7 @@ class Web::V3::FacebookController < MetalCorsController
         graph = Koala::Facebook::API.new(oauth_access_token)
         profile = graph.get_object("me")
         puts profile.inspect
+        puts "\n\n #{return_url}\n\n"
         if profile['id'].present?
             user_social = UserSocial.includes(:user).where(type_of: 'facebook_id', identifier: profile['id']).first
             @user       = user_social ? user_social.user : nil
