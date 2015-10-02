@@ -203,6 +203,7 @@ private
 
     def clear_www_cache
         unless Rails.env.test? || Rails.env.development?
+            RedisWrap.clear_cache(self.region_id)
             WwwHttpService.clear_merchant_cache
         end
     end

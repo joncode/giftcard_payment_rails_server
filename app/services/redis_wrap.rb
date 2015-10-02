@@ -66,4 +66,22 @@ class RedisWrap
 		redis.set("client:#{client_id}:regions:#{region_id}", merchants_serialized.to_json)
 	end
 
+	def self.clear_cache(region_id)
+		redis = Resque.redis
+		if region_id.to_i > 0
+			regions = redis.keys("*regions:#{region_id}")
+		else
+			regions = []
+		end
+		merchants = redis.keys("*merchants")
+		ary_of_keys = regions + merchants
+		ary_of_keys.each{ |key| redis.del(key) }
+	end
+
 end
+
+
+
+ # redis.keys('*regions*')
+ # redis.keys('client*')
+ # ary_of_keys.each { |key| redis.del(key) }
