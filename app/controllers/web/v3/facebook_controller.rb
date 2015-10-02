@@ -80,10 +80,10 @@ class Web::V3::FacebookController < MetalCorsController
             user_social = UserSocial.includes(:user).where(type_of: 'facebook_id', identifier: profile['id']).first
             @user       = user_social ? user_social.user : nil
             # success @user.login_client_serialize
-            redirect_to return_url
+            redirect_to URI.decode(return_url)
         else
             # fail profile
-            redirect_to return_url
+            redirect_to URI.decode(return_url)
         end
         # respond
     end
