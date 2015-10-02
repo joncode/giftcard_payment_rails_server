@@ -57,7 +57,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def oauth_init
-        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, ecnew(params))
+        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(generate_token(params)))
         redirect_url = oauth.url_for_oauth_code(scope: ['public_profile', 'user_friends', 'email'])
         # success redirect_url
         # respond(:found)
@@ -65,6 +65,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def callback_url
+        puts "\n TOKEN ----- \n#{params['token']} \n ----------  #{params['code']}  \n"
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(params['token']))
         oauth_access_token = oauth.get_access_token(params['code'])
         graph = Koala::Facebook::API.new(oauth_access_token)
@@ -152,15 +153,14 @@ class Web::V3::FacebookController < MetalCorsController
 private
 
     def callback_url_generator token_value
-        url = API_URL + "/facebook/callback_url?token=" + token_value
-        puts "\n\n #{url.inspect} \n\n"
+        url = API_URL + "/facebook/callback_url?token=" + token_value.to_s
+        puts "\n\n ---------   \n#{url.inspect}  \n\n ---------- \n"
         return url
     end
 
-    def ecnew rp
+    def generate_token rp
         crypt = ActiveSupport::MessageEncryptor.new(Rails.configuration.secret_key_base, 'Facebook')
-        encrypted_data = crypt.encrypt_and_sign(rp.to_json)
-        callback_url_generator(encrypted_data)
+        crypt.encrypt_and_sign(rp.to_json)
     end
 
     def dcnew token
