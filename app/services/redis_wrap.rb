@@ -22,6 +22,28 @@ class RedisWrap
 		redis.set("client:#{client_id}:merchants", merchants_serialized.to_json)
 	end
 
+	def self.get_menu(menu_id)
+		redis = Resque.redis
+		menu_json = redis.get("menu:#{menu_id}")
+		if menu_json.nil?
+			return false
+		else
+			begin
+				puts 'REDISWRAP - menus - reading from cache'
+				JSON.parse(menu_json)
+			rescue
+				puts "\nReading from - menus - cache fail - #{menu_json}\n"
+				false
+			end
+		end
+	end
+
+	def self.set_menu(menu_id, menu_serialized)
+		redis = Resque.redis
+		puts "\n setting - menus - cache for #{menu_id}\n"
+		redis.set("menu:#{menu_id}", menu_serialized.to_json)
+	end
+
 	def self.get_cities(client_id)
 		redis = Resque.redis
 		cities_json = redis.get("client:#{client_id}:cities")
