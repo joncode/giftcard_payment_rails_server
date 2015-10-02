@@ -82,7 +82,14 @@ class Web::V3::FacebookController < MetalCorsController
             when 'create'
                 resp = FacebookOperations.create_account(oauth_access_token, profile)
             when 'attach'
-                resp = FacebookOperations.attach_account(oauth_access_token, profile, @current_user)
+                @current_user = SessionToken.app_authenticate(return_params['auth'])
+                @current_client = Client.includes(:partner).find_by(application_key: return_params['client'])
+                @current_partner = @current_client.partner
+                if @current_user.nil?
+                    resp = { 'success' => false , 'error' => 'Could not authenticate user' }
+                else
+                    resp = FacebookOperations.attach_account(oauth_access_token, profile, @current_user)
+                end
             else
                 resp = { 'success' => false , 'error' => 'No operation specify' }
             end
