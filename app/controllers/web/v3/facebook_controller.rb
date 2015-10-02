@@ -83,6 +83,8 @@ class Web::V3::FacebookController < MetalCorsController
                 resp = FacebookOperations.create_account(oauth_access_token, profile)
             when 'attach'
                 resp = FacebookOperations.attach_account(oauth_access_token, profile, @current_user)
+            else
+                resp = { 'success' => false , 'error' => 'No operation specify' }
             end
             if resp['success']
                 user = resp['user']
