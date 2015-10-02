@@ -57,9 +57,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def oauth_init
-        return_url = params['return_url'] || 'https://www.itson.me'
-        return_url = url_encode(return_url)
-        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url?return_url=' + return_url)
+        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(params))
         redirect_url = oauth.url_for_oauth_code(scope: ['public_profile', 'user_friends', 'email'])
         # success redirect_url
         # respond(:found)
@@ -67,24 +65,37 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def callback_url
-        puts params.inspect
-        return_url = params['return_url'] || 'https://www.itson.me'
-        return_url = url_encode(return_url)
-        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url?return_url=' + return_url)
+        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(params))
         oauth_access_token = oauth.get_access_token(params['code'])
         graph = Koala::Facebook::API.new(oauth_access_token)
         profile = graph.get_object("me")
         puts profile.inspect
-        puts "\n\n #{return_url}\n\n"
+        puts "\n\n #{params['return_url']}\n\n"
         if profile['id'].present?
-            user_social = UserSocial.includes(:user).where(type_of: 'facebook_id', identifier: profile['id']).first
-            @user       = user_social ? user_social.user : nil
-            # success @user.login_client_serialize
-            response.set_cookie(profile)
-            redirect_to URI.decode(return_url)
+            case params['operation']
+            when 'login'
+                resp = FacebookOperations.login(oauth_access_token, profile)
+            when 'create'
+                resp = FacebookOperations.create_account(oauth_access_token, profile)
+            when 'attach'
+                resp = FacebookOperations.attach_account(oauth_access_token, profile, @current_user)
+            end
+            if resp['success']
+                user = resp['user']
+                if user.session_token_obj.present?
+                    cookies[:iom_session_token] = user.session_token_obj
+                end
+                profile['network'] = 'facebook'
+                cookies[:iom_social_profile] = profile
+                redirect_to params['return_url']
+            else
+                response.set_cookie(resp)
+                redirect_to params['return_url']
+            end
         else
             # fail profile
-            redirect_to URI.decode(return_url)
+            response.set_cookie(profile)
+            redirect_to params['return_url']
         end
         # respond
     end
@@ -138,6 +149,18 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
 private
+
+    def callback_url_generator request_params
+        operation = request_params['operation']   # login, create, attach
+        if operation == 'attach'
+            attach_user = "&user_id=#{request_params['user_id']}"
+        else
+            attach_user = ''
+        end
+        return_url = request_params['return_url'] || 'https://www.itson.me'
+        return_url = url_encode(return_url)
+        return  API_URL + '/facebook/callback_url?return_url=' + return_url + '&operation=' + operation + attach_user
+    end
 
     def oauth_params
         params.require(:data).permit(:token, :net_id, :photo, :sex, :birthday)

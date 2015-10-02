@@ -31,7 +31,7 @@ class Oauth < ActiveRecord::Base
     end
 
     def self.create args={}
-        oauth = self.where(gift_id: nil, user_id: args["user_id"], network: args["network"], network_id: args["network_id"]).first
+        oauth = self.where(gift_id: args["gift_id"], user_id: args["user_id"], network: args["network"], network_id: args["network_id"]).first
         if oauth.nil?
             super
         else
