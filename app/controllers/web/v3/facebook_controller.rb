@@ -65,12 +65,14 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def callback_url
+        decoded_token = params['token']
+        url_safe_token = url_encode(decoded_token)
         puts "\n TOKEN ----- \n#{params['token']} \n  CODE ----------  \n#{params['code']}  \n"
-        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(params['token']))
+        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(url_safe_token))
         oauth_access_token = oauth.get_access_token(params['code'])
         graph = Koala::Facebook::API.new(oauth_access_token)
         profile = graph.get_object("me")
-        return_params = decrypt_token(params['token'])
+        return_params = decrypt_token(url_safe_token)
         puts profile.inspect
         puts return_params.inspect
         if profile['id'].present?
