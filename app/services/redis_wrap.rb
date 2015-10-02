@@ -44,4 +44,26 @@ class RedisWrap
 		redis.set("client:#{client_id}:cities", cities_serialized.to_json)
 	end
 
+	def self.get_region_merchants(client_id, region_id)
+		redis = Resque.redis
+		merchants_json = redis.get("client:#{client_id}:regions:#{region_id}")
+		if merchants_json.nil?
+			return false
+		else
+			begin
+				puts 'REDISWRAP - regions - reading from cache'
+				JSON.parse(merchants_json)
+			rescue
+				puts "\nReading from - regions - cache fail - #{merchants_json}\n"
+				false
+			end
+		end
+	end
+
+	def self.set_region_merchants(client_id, merchants_serialized, region_id)
+		redis = Resque.redis
+		puts "\n setting - regions - cache for client #{client_id} #{region_id}\n"
+		redis.set("client:#{client_id}:regions:#{region_id}", merchants_serialized.to_json)
+	end
+
 end
