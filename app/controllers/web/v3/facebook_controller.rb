@@ -164,6 +164,7 @@ private
         puts "\n raw token \n #{not_url_safe_token}"
         safe_token = url_encode(not_url_safe_token)
         puts "\n safe token \n #{safe_token}"
+        return safe_token
     end
 
     def decrypt_token url_safe_token
