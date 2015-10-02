@@ -163,6 +163,7 @@ Drinkboard::Application.routes.draw do
 
       resources :users, only: [:create] do
         collection do
+          get   :refresh
           patch :update
           patch :reset_password
         end

@@ -3,6 +3,11 @@ class Web::V3::UsersController < MetalCorsController
     before_action :authentication_no_token, only: [:create, :reset_password]
     before_action :authentication_token_required , except: [:create, :reset_password]
 
+    def refresh
+        success @current_user.login_client_serialize
+        respond
+    end
+
     def create
 		user = User.new(create_user_params)
         user.client = @current_client
