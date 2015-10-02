@@ -28,7 +28,7 @@ class SessionToken < ActiveRecord::Base
 		return nil
 	end
 
-	def self.create_token_obj (user, platform=nil, pn_token=nil, client=nil, partner=nil)
+	def self.create_token_obj(user, platform=nil, pn_token=nil, client=nil, partner=nil)
 		Resque.enqueue(CreatePnTokenJob, user.id, pn_token, platform) if pn_token
 		client_id = client.id if client
 		partner_id = partner.id if partner

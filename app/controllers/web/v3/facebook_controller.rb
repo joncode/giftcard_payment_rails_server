@@ -57,7 +57,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def oauth_init
-        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(params))
+        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, ecnew(params))
         redirect_url = oauth.url_for_oauth_code(scope: ['public_profile', 'user_friends', 'email'])
         # success redirect_url
         # respond(:found)
@@ -65,12 +65,13 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def callback_url
-        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(params))
+        oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(params['token']))
         oauth_access_token = oauth.get_access_token(params['code'])
         graph = Koala::Facebook::API.new(oauth_access_token)
         profile = graph.get_object("me")
+        return_params = dcnew(params['token'])
         puts profile.inspect
-        puts "\n\n #{params['return_url']}\n\n"
+        puts return_params.inspect
         if profile['id'].present?
             case params['operation']
             when 'login'
@@ -87,15 +88,15 @@ class Web::V3::FacebookController < MetalCorsController
                 end
                 profile['network'] = 'facebook'
                 cookies[:iom_social_profile] = profile
-                redirect_to params['return_url']
+                redirect_to return_params['return_url']
             else
                 response.set_cookie(resp)
-                redirect_to params['return_url']
+                redirect_to return_params['return_url']
             end
         else
             # fail profile
             response.set_cookie(profile)
-            redirect_to params['return_url']
+            redirect_to return_params['return_url']
         end
         # respond
     end
@@ -150,17 +151,42 @@ class Web::V3::FacebookController < MetalCorsController
 
 private
 
-    def callback_url_generator request_params
-        operation = request_params['operation']   # login, create, attach
-        if operation == 'attach'
-            attach_user = "&user_id=#{request_params['user_id']}"
-        else
-            attach_user = ''
-        end
-        return_url = request_params['return_url'] || 'https://www.itson.me'
-        return_url = url_encode(return_url)
-        return  API_URL + '/facebook/callback_url?return_url=' + return_url + '&operation=' + operation + attach_user
+    def callback_url_generator token_value
+        return  API_URL + "/facebook/callback_url?token=" + token_value
     end
+
+    def ecnew rp
+        crypt = ActiveSupport::MessageEncryptor.new(Rails.configuration.secret_key_base, 'Facebook')
+        encrypted_data = crypt.encrypt_and_sign(rp.to_json)
+        callback_url_generator(encrypted_data)
+    end
+
+    def dcnew token
+        crypt = ActiveSupport::MessageEncryptor.new(Rails.configuration.secret_key_base, 'Facebook')
+        decrypted_back = crypt.decrypt_and_verify(token)
+        JSON.parse decrypted_back
+    end
+
+    # def encrypt_callback_url request_params
+    #     c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+    #     c.encrypt
+    #     c.key = Digest::SHA256.digest('facebook callback')
+    #     c.iv = Base64.encode64(Digest::SHA1.hexdigest('fb rules')).chomp
+    #     temp_number = c.update(request_params.to_json)
+    #     temp_number << c.final
+    #     encrypted_data = Base64.encode64(temp_number).chomp
+    #     return API_URL + "/facebook/callback_url?token=" + encrypted_data
+    # end
+
+    # def decrypt_callback_url request_params
+    #     c = OpenSSL::Cipher::Cipher.new("aes-256-cbc")
+    #     c.decrypt
+    #     c.key = Digest::SHA256.digest('facebook callback')
+    #     c.iv = Base64.encode64(Digest::SHA1.hexdigest('fb rules')).chomp
+    #     d = c.update(Base64.decode64(request_params['token']))
+    #     d << c.final
+    #     JSON.parse d
+    # end
 
     def oauth_params
         params.require(:data).permit(:token, :net_id, :photo, :sex, :birthday)
