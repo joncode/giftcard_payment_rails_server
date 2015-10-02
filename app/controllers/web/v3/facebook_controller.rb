@@ -80,6 +80,7 @@ class Web::V3::FacebookController < MetalCorsController
             user_social = UserSocial.includes(:user).where(type_of: 'facebook_id', identifier: profile['id']).first
             @user       = user_social ? user_social.user : nil
             # success @user.login_client_serialize
+            response.set_cookie(profile)
             redirect_to URI.decode(return_url)
         else
             # fail profile
@@ -122,7 +123,7 @@ class Web::V3::FacebookController < MetalCorsController
 
             if save_user
                 if @current_user.save
-                    success @current_user.login_client_serialize
+                    success     @current_user.login_client_serialize
                 else
                     fail_web    fail_web_payload("not_created_user", @current_user.errors.messages)
                 end

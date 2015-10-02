@@ -5,6 +5,22 @@ include AffiliateFactory
 
 describe Web::V3::UsersController do
 
+    describe 'refresh' do
+
+        before(:each) do
+            @client = make_partner_client('Client', 'Tester')
+            @user = create_user_with_token "USER_TOKEN", nil, @client
+            request.env['HTTP_X_APPLICATION_KEY'] = @client.application_key
+            request.env["HTTP_X_AUTH_TOKEN"] = "USER_TOKEN"
+        end
+
+        it "should return serialized user" do
+            get :refresh, format: :json
+            rrc(200)
+        end
+
+    end
+
     describe "create" do
 
     	before(:each) do
