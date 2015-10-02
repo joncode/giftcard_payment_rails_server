@@ -1,9 +1,11 @@
 class Web::V3::FacebookController < MetalCorsController
+    include ERB::Util
 
     # before_action :authentication_no_token
     # before_action :get_current_user_fb_oauth, except: :oauth
     before_action :authentication_token_required, except: [:oauth_init, :callback_url]
     rescue_from JSON::ParserError, :with => :bad_request
+
 
     def friends
         # sproxy = SocialProxy.new(@user_oauth.to_proxy)
@@ -56,6 +58,7 @@ class Web::V3::FacebookController < MetalCorsController
 
     def oauth_init
         return_url = params['return_url'] || 'https://www.itson.me'
+        return_url = url_encode(return_url)
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url?return_url=' + return_url)
         redirect_url = oauth.url_for_oauth_code(scope: ['public_profile', 'user_friends', 'email'])
         # success redirect_url
@@ -66,6 +69,7 @@ class Web::V3::FacebookController < MetalCorsController
     def callback_url
         puts params.inspect
         return_url = params['return_url'] || 'https://www.itson.me'
+        return_url = url_encode(return_url)
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, API_URL + '/facebook/callback_url?return_url=' + return_url)
         oauth_access_token = oauth.get_access_token(params['code'])
         graph = Koala::Facebook::API.new(oauth_access_token)
