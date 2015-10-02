@@ -4,8 +4,15 @@ class Web::V3::RegionsController < MetalCorsController
 
     def index
         # binding.pry
-        arg_scope = proc { Region.city }
-        success @current_client.contents(:regions, &arg_scope).map(&:old_city_json)
+        cache_resp = RedisWrap.get_cities(@current_client.id)
+        if !cache_resp
+            arg_scope = proc { Region.city }
+            cities_serialized = @current_client.contents(:regions, &arg_scope).map(&:old_city_json)
+            RedisWrap.set_cities(@current_client.id, cities_serialized)
+            success cities_serialized
+        else
+            success cache_resp
+        end
         respond
     end
 

@@ -7,10 +7,10 @@ class RedisWrap
 			return false
 		else
 			begin
-				puts 'REDISWRAP - reading from cache'
+				puts 'REDISWRAP - merchants - reading from cache'
 				JSON.parse(merchants_json)
 			rescue
-				puts "\nReading from cache fail - #{merchants_json}\n"
+				puts "\nReading from - merchants - cache fail - #{merchants_json}\n"
 				false
 			end
 		end
@@ -18,8 +18,30 @@ class RedisWrap
 
 	def self.set_merchants(client_id, merchants_serialized)
 		redis = Resque.redis
-		puts "\n setting cache for client #{client_id}\n"
+		puts "\n setting - merchants - cache for client #{client_id}\n"
 		redis.set("client:#{client_id}:merchants", merchants_serialized.to_json)
+	end
+
+	def self.get_cities(client_id)
+		redis = Resque.redis
+		cities_json = redis.get("client:#{client_id}:cities")
+		if cities_json.nil?
+			return false
+		else
+			begin
+				puts 'REDISWRAP - cities - reading from cache'
+				JSON.parse(cities_json)
+			rescue
+				puts "\nReading from - cities - cache fail - #{cities_json}\n"
+				false
+			end
+		end
+	end
+
+	def self.set_cities(client_id, cities_serialized)
+		redis = Resque.redis
+		puts "\n setting - cities - cache for client #{client_id}\n"
+		redis.set("client:#{client_id}:cities", cities_serialized.to_json)
 	end
 
 end
