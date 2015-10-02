@@ -96,18 +96,21 @@ class Web::V3::FacebookController < MetalCorsController
             if resp['success']
                 user = resp['user']
                 if user.session_token_obj.present?
-                    cookies[:iom_session_token] = user.session_token_obj
+                    session_token_param = "&session_token=#{user.session_token_obj}"
+                else
+                    session_token_param = ""
                 end
-                profile['network'] = 'facebook'
-                cookies[:iom_social_profile] = profile
-                redirect_to return_params['return_url']
+                facebook_param = "?facebook_id=#{profile['id']}"
+                full_response_url = return_params['return_url'] + facebook_param + session_token_param
+                redirect_to full_response_url
             else
-                cookies[:iom_error] = resp
-                redirect_to return_params['return_url']
+                error_param = "?error=#{url_encode(resp['error'])}"
+                full_response_url = return_params['return_url'] + error_param
+                redirect_to full_response_url
             end
         else
             # fail profile
-            response.set_cookie(profile)
+            full_response_url = return_params['return_url'] + "?error=no_facebook_profile"
             redirect_to return_params['return_url']
         end
         # respond
