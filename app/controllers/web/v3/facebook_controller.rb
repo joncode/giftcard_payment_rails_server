@@ -95,7 +95,7 @@ class Web::V3::FacebookController < MetalCorsController
                 cookies[:iom_social_profile] = profile
                 redirect_to return_params['return_url']
             else
-                response.set_cookie(resp)
+                cookies[:iom_error] = resp
                 redirect_to return_params['return_url']
             end
         else
