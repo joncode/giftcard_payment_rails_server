@@ -50,7 +50,7 @@ module MerchantSerializers
 		prov_hash["loc_state"]  = self.state
 		prov_hash["loc_zip"]    = self.zip
 		prov_hash["live"]       = self.live
-		multi_redemption_web_keys prov_hash
+		# multi_redemption_web_keys prov_hash
 		prov_hash
 	end
 
