@@ -15,7 +15,7 @@ class RedisWrap
 			get_key("client:#{client_id}:region:#{region_id}")
 		end
 
-		def set_region_merchants(client_id, _serialized, region_id)
+		def set_region_merchants(client_id, region_id, _serialized)
 			set_key("client:#{client_id}:region:#{region_id}", _serialized)
 		end
 
