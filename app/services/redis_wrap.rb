@@ -86,7 +86,7 @@ class RedisWrap
 				return false
 			else
 				begin
-					puts '  REDISWRAP - get_key - #{key} reading from cache'
+					puts "  REDISWRAP - get_key - #{key} reading from cache"
 					JSON.parse(value_json_str)
 				rescue
 					puts "\n  REDISWRAP get_key - #{key} - cache FAIL - #{value_json_str}\n"
