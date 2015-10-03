@@ -27,14 +27,14 @@ module UserSerializers
 
     def client_serialize
         usr_hash  = self.serializable_hash only: ["first_name", "last_name"]
-        usr_hash["photo"]   = self.short_image_url
+        usr_hash["photo"]   = self.get_photo
         usr_hash["user_id"] = self.id
         remove_nils(usr_hash)
     end
 
     def login_client_serialize
         usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "zip", "sex"]
-        usr_hash["photo"]   = self.short_image_url
+        usr_hash["photo"]   = self.get_photo
         usr_hash["user_id"] = self.id
         ids = ["email", "phone", "facebook_id", "twitter"].each do |id|
             us = self.user_socials.where(type_of: id)
