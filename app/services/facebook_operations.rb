@@ -7,7 +7,7 @@ class FacebookOperations
 		if user_social.present?
 			if user = user_social.user
 				add_facebook_info_to_user(facebook_profile, user)
-				return make_oauth_args(oauth_access_token, facebook_profile, user, true)
+				return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 			else
 				return { 'success' => false, 'error' => 'User not Found' }
 			end
@@ -23,7 +23,7 @@ class FacebookOperations
 		else
 			user = User.new
 			add_facebook_info_to_user(facebook_profile, user)
-			return make_oauth_args(oauth_access_token, facebook_profile, user, true)
+			return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 		end
 	end
 
@@ -31,12 +31,12 @@ class FacebookOperations
 		user_social = UserSocial.includes(:user).where(identifier: facebook_profile['id'], type_of: 'facebook_id').first
 		if user_social.present? && user_social.user.id == user.id
 			add_facebook_info_to_user(facebook_profile, user)
-			return make_oauth_args(oauth_access_token, facebook_profile, user, false)
+			return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 		elsif user_social.present? && user_social.user.id != user.id
 			return { 'success' => false, 'error' => 'Facebook Account is authorized on a different user account' }
 		else
 			add_facebook_info_to_user(facebook_profile, user)
-			return make_oauth_args(oauth_access_token, facebook_profile, user, false)
+			return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 		end
 	end
 
@@ -77,7 +77,7 @@ class FacebookOperations
 		user.save
 	end
 
-	def self.make_oauth_args(oauth_access_token, facebook_profile, user, session_token_obj=false)
+	def self.make_oauth_args(oauth_access_token, facebook_profile, user)
 		#  id         :integer         not null, primary key
 		#  gift_id    :integer
 		#  token      :string(255)
@@ -96,9 +96,6 @@ class FacebookOperations
 			token: oauth_access_token, photo: "http://graph.facebook.com/#{facebook_profile['id']}/picture"}
 
 		if Oauth.create(oauth_args).persisted?
-			if session_token_obj
-				user.session_token_obj =  SessionToken.create_token_obj(user, 'fb', nil, @current_client, @current_partner)
-			end
 			return { 'success' => true, 'user' => user }
 		else
 			return { 'success' => false, 'error' => 'Unable to Save Oauth Token' }
