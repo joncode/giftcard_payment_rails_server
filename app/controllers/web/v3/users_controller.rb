@@ -14,7 +14,6 @@ class Web::V3::UsersController < MetalCorsController
         user.partner = @current_partner
         if user.save
             user.session_token_obj =  SessionToken.create_token_obj(user, 'www', nil, @current_client, @current_partner)
-            # binding.pry
             # @current_client.content = user --- in Resque in create_token_obj
             success user.login_client_serialize
         else

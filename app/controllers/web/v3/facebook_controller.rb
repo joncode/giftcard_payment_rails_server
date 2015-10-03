@@ -102,6 +102,7 @@ class Web::V3::FacebookController < MetalCorsController
                 user = resp['user']
                 if add_token
                     user.session_token_obj =  SessionToken.create_token_obj(user, 'fb', nil, @current_client, @current_partner)
+                    SessionBeginJob.perform(@current_client.id, user) if return_params['operation'] == 'login'
                     session_token_param = "&session_token=#{user.session_token_obj.token}"
                 else
                     session_token_param = ""

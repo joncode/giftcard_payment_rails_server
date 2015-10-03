@@ -1,109 +1,130 @@
 class RedisWrap
 
-	def self.get_merchants(client_id)
-		redis = Resque.redis
-		merchants_json = redis.get("client:#{client_id}:merchants")
-		if merchants_json.nil?
-			return false
-		else
-			begin
-				puts 'REDISWRAP - merchants - reading from cache'
-				JSON.parse(merchants_json)
-			rescue
-				puts "\n REDISWRAP Reading from - merchants - cache fail - #{merchants_json}\n"
-				false
+	class << self
+
+		def clear_merchants_caches(region_id)
+			clear_all_keys("*region:#{region_id}")
+			clear_all_keys("*merchants")
+		end
+
+		def clear_all_user_gifts(user_id)
+			clear_all_keys("*user:#{user_id}:gifts")
+		end
+
+		def get_region_merchants(client_id, region_id)
+			get_key("client:#{client_id}:region:#{region_id}")
+		end
+
+		def set_region_merchants(client_id, _serialized, region_id)
+			set_key("client:#{client_id}:region:#{region_id}", _serialized)
+		end
+
+		def get_merchants(client_id)
+			get_key("client:#{client_id}:merchants")
+		end
+
+		def set_merchants(client_id, _serialized)
+			set_key("client:#{client_id}:merchants", _serialized)
+		end
+
+		def get_cities(client_id)
+			get_key("client:#{client_id}:cities")
+		end
+
+		def set_cities(client_id, _serialized)
+			set_key("client:#{client_id}:cities", _serialized)
+		end
+
+		def get_menu(menu_id)
+			get_key("menu:#{menu_id}")
+		end
+
+		def set_menu(menu_id, _serialized)
+			set_key("menu:#{menu_id}", _serialized)
+		end
+
+		def get_profile(client_id, user_id)
+			get_key("client:#{client_id}user:#{user_id}:profile")
+		end
+
+		def set_profile(client_id, user_id, _serialized)
+			set_key(("client:#{client_id}user:#{user_id}:profile", _serialized, 1800)
+		end
+
+		def clear_profile(client_id, user_id)
+			clear_key("client:#{client_id}user:#{user_id}:profile")
+		end
+
+		def get_user_gifts(client_id, user_id)
+			get_key("client:#{client_id}user:#{user_id}:gifts")
+		end
+
+		def set_user_gifts(client_id, user_id, _serialized)
+			set_key(("client:#{client_id}user:#{user_id}:gifts", _serialized, 1800)
+		end
+
+		def clear_user_gifts(client_id, user_id)
+			clear_key("client:#{client_id}user:#{user_id}:gifts")
+		end
+
+		def get_badge(client_id, user_id)
+			get_key("client:#{client_id}user:#{user_id}:badge")
+		end
+
+		def set_badge(client_id, user_id, _serialized)
+			set_key(("client:#{client_id}user:#{user_id}:badge", _serialized, 1800)
+		end
+
+		def clear_badge(client_id, user_id)
+			clear_key("client:#{client_id}user:#{user_id}:badge")
+		end
+
+		def get_key(key)
+			redis = Resque.redis
+			value_json_str = redis.get(key)
+			if value_json_str.nil?
+				return false
+			else
+				begin
+					puts '  REDISWRAP - get_key - #{key} reading from cache'
+					JSON.parse(value_json_str)
+				rescue
+					puts "\n  REDISWRAP get_key - #{key} - cache FAIL - #{value_json_str}\n"
+					false
+				end
 			end
 		end
-	end
 
-	def self.set_merchants(client_id, merchants_serialized)
-		redis = Resque.redis
-		puts "\n REDISWRAP setting - merchants - cache for client #{client_id}\n"
-		redis.set("client:#{client_id}:merchants", merchants_serialized.to_json)
-	end
+		def set_key(key, value_hsh, seconds_to_live=nil)
+			redis = Resque.redis
+			puts "\n REDISWRAP set_with_key - #{key} \n"
+			redis.set(key, value_hsh.to_json)
+			seconds_to_live ? redis.expire(key, seconds_to_live) : redis.expire(key)
+		end
 
-	def self.get_menu(menu_id)
-		redis = Resque.redis
-		menu_json = redis.get("menu:#{menu_id}")
-		if menu_json.nil?
-			return false
-		else
-			begin
-				puts 'REDISWRAP - menus - reading from cache'
-				JSON.parse(menu_json)
-			rescue
-				puts "\n REDISWRAP Reading from - menus - cache fail - #{menu_json}\n"
-				false
+		def clear_key(redis_key)
+			puts "\nREDISWRAP clear - #{redis_key} \n"
+			redis = Resque.redis
+			redis.del(redis_key)
+		end
+
+		def clear_all_keys(key_range_str)
+			redis = Resque.redis
+			ary = redis.del(redis_key)
+			if ary.kind_of?(Array) && ary.length > 0
+				res = ary.map { |k| redis.del(k) }
+			else
+				# no matches
 			end
+			puts "\nREDISWRAP clear all keys - #{key_range_str} #{res} \n"
 		end
-	end
 
-	def self.set_menu(menu_id, menu_serialized)
-		redis = Resque.redis
-		puts "\n REDISWRAP setting - menus - cache for #{menu_id}\n"
-		redis.set("menu:#{menu_id}", menu_serialized.to_json)
-	end
-
-	def self.get_cities(client_id)
-		redis = Resque.redis
-		cities_json = redis.get("client:#{client_id}:cities")
-		if cities_json.nil?
-			return false
-		else
-			begin
-				puts 'REDISWRAP - cities - reading from cache'
-				JSON.parse(cities_json)
-			rescue
-				puts "\n REDISWRAP Reading from - cities - cache fail - #{cities_json}\n"
-				false
-			end
-		end
-	end
-
-	def self.set_cities(client_id, cities_serialized)
-		redis = Resque.redis
-		puts "\n REDISWRAP setting - cities - cache for client #{client_id}\n"
-		redis.set("client:#{client_id}:cities", cities_serialized.to_json)
-	end
-
-	def self.get_region_merchants(client_id, region_id)
-		redis = Resque.redis
-		merchants_json = redis.get("client:#{client_id}:regions:#{region_id}")
-		if merchants_json.nil?
-			return false
-		else
-			begin
-				puts 'REDISWRAP - regions - reading from cache'
-				JSON.parse(merchants_json)
-			rescue
-				puts "\n REDISWRAP Reading from - regions - cache fail - #{merchants_json}\n"
-				false
-			end
-		end
-	end
-
-	def self.set_region_merchants(client_id, merchants_serialized, region_id)
-		redis = Resque.redis
-		puts "\n REDISWRAP setting - regions - cache for client #{client_id} #{region_id}\n"
-		redis.set("client:#{client_id}:regions:#{region_id}", merchants_serialized.to_json)
-	end
-
-	def self.clear_cache(region_id)
-		redis = Resque.redis
-		if region_id.to_i > 0
-			regions = redis.keys("*regions:#{region_id}")
-		else
-			regions = []
-		end
-		merchants = redis.keys("*merchants")
-		ary_of_keys = regions + merchants
-		ary_of_keys.each{ |key| redis.del(key) }
 	end
 
 end
 
 
 
- # redis.keys('*regions*')
+ # redis.keys('*region*')
  # redis.keys('client*')
  # ary_of_keys.each { |key| redis.del(key) }

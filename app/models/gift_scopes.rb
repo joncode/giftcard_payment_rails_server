@@ -58,7 +58,8 @@ module GiftScopes
         (giver_gifts + rec_gifts).uniq { |g| g.id }
     end
 
-    def get_user_activity_in_client user, client
+    def get_user_activity_in_client user, client_or_id
+        client = client_or_id.kind_of?(Client) ? client_or_id : Client.find(client_or_id)
         if client.nil? || client.full?
             get_user_activity user
         else

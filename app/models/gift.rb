@@ -48,6 +48,8 @@ class Gift < ActiveRecord::Base
     after_create :set_affiliate_link
     after_create :set_client_content
 
+    after_save :fire_after_save_queue
+
 #   -------------
 
     #has_one     :redeem,       dependent: :destroy
@@ -488,6 +490,11 @@ private
             self.balance = self.value_in_cents
         end
     end
+
+    def fire_after_save_queue
+        Resque.enqueue(GiftAfterSave, self.id)
+    end
+
 end
 # == Schema Information
 #
