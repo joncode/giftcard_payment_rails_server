@@ -21,7 +21,7 @@ class UserSocial < ActiveRecord::Base
     after_create  :subscribe_mailchimp
     after_create  :collect_incomplete_gifts
     after_save    :unsubscribe_mailchimp
-
+    after_save    :fire_after_save_queue
 #   -------------
 
     has_many :dittos, as: :notable
@@ -69,6 +69,9 @@ private
         end
     end
 
+    def fire_after_save_queue
+        Resque.enqueue(UserAfterSaveJob, self.user_id)
+    end
 end
 
 # == Schema Information
