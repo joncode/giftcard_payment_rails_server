@@ -15,8 +15,8 @@ class Web::V3::GiftsController < MetalCorsController
             gifts = Gift.get_user_activity_in_client(user, @current_client)
                 ##### DO NOT CHANGE THIS -- >  gifts.serialize_objs(:web) !! without changing GiftAfterSave
             _serialized = gifts.serialize_objs(:web)
-            success(_serialized)
             RedisWrap.set_user_gifts(@current_client.id, @current_user.id, _serialized)
+            success(_serialized)
         else
             success cache_resp
         end
