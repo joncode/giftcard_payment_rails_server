@@ -67,14 +67,16 @@ class Web::V3::FacebookController < MetalCorsController
     def callback_url
         decoded_token = params['token']
         url_safe_token = url_encode(decoded_token)
-        puts "\n TOKEN ----- \n#{params['token']} \n  CODE ----------  \n#{params['code']}  \n"
+        # puts "\n TOKEN ----- \n#{params['token']} \n  CODE ----------  \n#{params['code']}  \n"
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(url_safe_token))
         oauth_access_token = oauth.get_access_token(params['code'])
         graph = Koala::Facebook::API.new(oauth_access_token)
         profile = graph.get_object("me")
-        return_params = decrypt_token(url_safe_token)
         puts profile.inspect
+
+        return_params = decrypt_token(url_safe_token)
         puts return_params.inspect
+
         if profile['id'].present?
             add_token = false
             case return_params['operation']
@@ -171,16 +173,16 @@ private
 
     def callback_url_generator token_value
         url = API_URL + "/facebook/callback_url?token=" + token_value
-        puts "\n\n ---------   \n#{url.inspect}  \n\n ---------- \n"
+        # puts "\n\n ---------   \n#{url.inspect}  \n\n ---------- \n"
         return url
     end
 
     def generate_token rp
         crypt = ActiveSupport::MessageEncryptor.new(Rails.configuration.secret_key_base, 'Facebook')
         not_url_safe_token = crypt.encrypt_and_sign(rp.to_json)
-        puts "\n raw token \n #{not_url_safe_token}"
+        # puts "\n raw token \n #{not_url_safe_token}"
         safe_token = url_encode(not_url_safe_token)
-        puts "\n safe token \n #{safe_token}"
+        # puts "\n safe token \n #{safe_token}"
         return safe_token
     end
 
