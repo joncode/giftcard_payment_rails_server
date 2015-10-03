@@ -86,7 +86,7 @@ class Web::V3::FacebookController < MetalCorsController
                 resp = FacebookOperations.login(oauth_access_token, profile)
                 add_token = true
             when 'create'
-                resp = FacebookOperations.create_account(oauth_access_token, profile)
+                resp = FacebookOperations.create_account(oauth_access_token, profile, @current_client, @current_partner )
                 add_token = true
             when 'attach'
                 @current_user = SessionToken.app_authenticate(return_params['auth'])

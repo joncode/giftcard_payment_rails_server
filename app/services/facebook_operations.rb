@@ -16,12 +16,14 @@ class FacebookOperations
 		end
 	end
 
-	def self.create_account oauth_access_token, facebook_profile
+	def self.create_account oauth_access_token, facebook_profile, client, partner
 		user_social = UserSocial.includes(:user).where(identifier: facebook_profile['id'], type_of: 'facebook_id').first
 		if user_social.present?
 			self.login oauth_access_token, facebook_profile, user_social
 		else
-			user = User.new
+			user = User.new(origin: 'facebook')
+			user.partner = partner
+			user.client = client
 			add_facebook_info_to_user(facebook_profile, user)
 			return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 		end
