@@ -70,7 +70,7 @@ class Web::V3::FacebookController < MetalCorsController
         # puts "\n TOKEN ----- \n#{params['token']} \n  CODE ----------  \n#{params['code']}  \n"
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(url_safe_token))
         oauth_access_token = oauth.get_access_token(params['code'])
-        graph = Koala::Facebook::API.new(oauth_access_token)
+        graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
         profile = graph.get_object("me")
         puts profile.inspect
 
