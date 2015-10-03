@@ -21,7 +21,7 @@ class FacebookOperations
 		if user_social.present?
 			self.login oauth_access_token, facebook_profile, user_social
 		else
-			user = User.new(origin: 'facebook')
+			user = User.new(origin: 'fb')
 			user.partner = partner
 			user.client = client
 			add_facebook_info_to_user(facebook_profile, user)
