@@ -99,7 +99,7 @@ class RedisWrap
 			redis = Resque.redis
 			puts "\n REDISWRAP set_with_key - #{key} \n"
 			redis.set(key, value_hsh.to_json)
-			seconds_to_live ? redis.expire(key, seconds_to_live) : redis.expire(key)
+			seconds_to_live ? redis.expire(key, seconds_to_live) : nil
 		end
 
 		def clear_key(redis_key)
