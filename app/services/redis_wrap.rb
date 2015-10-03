@@ -48,7 +48,7 @@ class RedisWrap
 		end
 
 		def set_profile(client_id, user_id, _serialized)
-			set_key(("client:#{client_id}user:#{user_id}:profile", _serialized, 1800)
+			set_key("client:#{client_id}user:#{user_id}:profile", _serialized, 1800)
 		end
 
 		def clear_profile(client_id, user_id)
@@ -60,7 +60,7 @@ class RedisWrap
 		end
 
 		def set_user_gifts(client_id, user_id, _serialized)
-			set_key(("client:#{client_id}user:#{user_id}:gifts", _serialized, 1800)
+			set_key("client:#{client_id}user:#{user_id}:gifts", _serialized, 1800)
 		end
 
 		def clear_user_gifts(client_id, user_id)
@@ -72,7 +72,7 @@ class RedisWrap
 		end
 
 		def set_badge(client_id, user_id, _serialized)
-			set_key(("client:#{client_id}user:#{user_id}:badge", _serialized, 1800)
+			set_key("client:#{client_id}user:#{user_id}:badge", _serialized, 1800)
 		end
 
 		def clear_badge(client_id, user_id)
