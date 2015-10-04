@@ -6,7 +6,7 @@ class SessionBeginJob
 
 		user = user_or_user_id.kind_of?(User) ? user_or_user_id : User.find(user_or_user_id)
 		if user
-			RedisWrap.set_profile(client_id, user.id, user.login_client_serialize)
+			RedisWrap.set_profile(user.id, user.login_client_serialize)
 		end
 
 	end

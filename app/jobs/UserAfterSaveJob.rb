@@ -7,7 +7,7 @@ class UserAfterSaveJob
 
 		user = user_or_user_id.kind_of?(User) ? user_or_user_id : User.find(user_or_user_id)
 		if user
-			RedisWrap.set_profile(client_id, user_id, user.login_client_serialize)
+			RedisWrap.set_profile(user_id, user.login_client_serialize)
 		end
 
 	end

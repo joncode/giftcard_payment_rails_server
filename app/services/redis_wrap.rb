@@ -43,16 +43,16 @@ class RedisWrap
 			set_key("menu:#{menu_id}", _serialized)
 		end
 
-		def get_profile(client_id, user_id)
-			get_key("client:#{client_id}:user:#{user_id}:profile")
+		def get_profile(user_id)
+			get_key("user:#{user_id}:profile")
 		end
 
-		def set_profile(client_id, user_id, _serialized)
-			set_key("client:#{client_id}:user:#{user_id}:profile", _serialized, 1800)
+		def set_profile(user_id, _serialized)
+			set_key("user:#{user_id}:profile", _serialized, 1800)
 		end
 
-		def clear_profile(client_id, user_id)
-			clear_key("client:#{client_id}:user:#{user_id}:profile")
+		def clear_profile(user_id)
+			clear_key("user:#{user_id}:profile")
 		end
 
 		def get_user_gifts(client_id, user_id)
