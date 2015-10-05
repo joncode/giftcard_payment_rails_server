@@ -492,6 +492,7 @@ private
     end
 
     def fire_after_save_queue
+        puts " --- GIFT AFTER SAVE --- "
         Resque.enqueue(GiftAfterSave, self.id)
     end
 
