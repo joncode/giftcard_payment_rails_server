@@ -371,6 +371,11 @@ class Gift < ActiveRecord::Base
 
 ###############
 
+    def fire_after_save_queue
+        puts " --- GIFT AFTER SAVE --- #{self.id}"
+        Resque.enqueue(GiftAfterSaveJob, self.id)
+    end
+
 private
 
     def set_client_content
@@ -489,11 +494,6 @@ private
         if self.balance.nil?
             self.balance = self.value_in_cents
         end
-    end
-
-    def fire_after_save_queue
-        puts " --- GIFT AFTER SAVE --- "
-        Resque.enqueue(GiftAfterSaveJob, self.id)
     end
 
 end

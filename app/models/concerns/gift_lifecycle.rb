@@ -29,6 +29,7 @@ module GiftLifecycle
                 Gift.connection.execute(sql)
                 self.reload
                 self.update(merchant_id: loc_id.to_i) if (loc_id && loc_id.to_i > 0)
+                self.fire_after_save_queue
                 true
             else
                 true
