@@ -11,8 +11,9 @@ class GiftAfterSaveJob
     		gift = Gift.includes(:giver).includes(:receiver).find(gift_or_gift_id)
     	end
         [gift.giver, gift.receiver].each do |person|
-            gifts = Gift.get_user_activity_in_client(person, gift.client_id)
-            RedisWrap.set_user_gifts(gift.client_id, person.id, gifts.serialize_objs(:web))
+            client_id = gift.client_id || 1
+            gifts = Gift.get_user_activity_in_client(person, client_id)
+            RedisWrap.set_user_gifts(client_id, person.id, gifts.serialize_objs(:web))
         end
 
 	end
