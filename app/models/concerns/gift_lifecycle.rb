@@ -1,12 +1,12 @@
 module GiftLifecycle
     extend ActiveSupport::Concern
 
-    def notify(redeem=true, loc_id=nil)
+    def notify(already_notified=true, loc_id=nil)
         if notifiable?
             if (self.new_token_at.nil? || self.new_token_at < reset_time)
                 current_time   = Time.now.utc
                 #self.new_token_at = current_time
-                if redeem
+                if already_notified
                     include_status = if self.status == 'open'
                         #self.status = 'notified'
                         " status = 'notified' ,"
