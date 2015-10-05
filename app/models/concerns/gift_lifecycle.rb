@@ -40,6 +40,14 @@ module GiftLifecycle
         return self.status == 'open' || self.status == 'notified'
     end
 
+    def unredeem
+        if self.status == 'redeemed'
+            self.update(status: 'notified' , redeemed_at: nil, order_num: nil)
+            # delete any redemption registers
+            # do not allow un-redemption if the gift is settled
+        end
+    end
+
     def redeem_gift(server_code=nil, loc_id=nil)
         # if loc_id - do multi loc redemption
         if self.status == 'notified'
