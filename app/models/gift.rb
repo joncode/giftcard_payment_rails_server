@@ -48,7 +48,7 @@ class Gift < ActiveRecord::Base
     after_create :set_affiliate_link
     after_create :set_client_content
 
-    after_save :fire_after_save_queue
+    # after_save :fire_after_save_queue
 
 #   -------------
 
@@ -371,9 +371,9 @@ class Gift < ActiveRecord::Base
 
 ###############
 
-    def fire_after_save_queue
+    def fire_after_save_queue(client_id)
         puts " REDISWRAP --- GIFT AFTER SAVE --- #{self.id}"
-        Resque.enqueue(GiftAfterSaveJob, self.id)
+        Resque.enqueue(GiftAfterSaveJob, self.id, client_id)
     end
 
 private

@@ -72,6 +72,7 @@ class Web::V3::GiftsController < MetalCorsController
         gift = GiftSale.create(gift_hash)
         if gift.kind_of?(Gift) && !gift.id.nil?
             # binding.pry
+            gift.fire_after_save_queue(@current_client)
             success gift.web_serialize
         else
             if gift.kind_of?(Gift) && gift.persisted?
@@ -88,6 +89,7 @@ class Web::V3::GiftsController < MetalCorsController
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
             gift.notify(false)
             Relay.send_push_thank_you gift
+            gift.fire_after_save_queue(@current_client)
             success gift.web_serialize
         else
             fail_message = if gift.status == 'redeemed'
@@ -107,6 +109,7 @@ class Web::V3::GiftsController < MetalCorsController
                 loc_id = redeem_params["loc_id"]
             end
             gift.notify(true, loc_id)
+            gift.fire_after_save_queue(@current_client)
             success gift.notify_serialize
         else
             fail_message = if gift.status == 'redeemed'
@@ -151,6 +154,7 @@ class Web::V3::GiftsController < MetalCorsController
                         status = :bad_request
                         fail({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
                     elsif resp["success"] == true
+                        gift.fire_after_save_queue(@current_client)
                         status = :ok
                         success({msg: resp["response_text"]})
                     else
@@ -163,6 +167,7 @@ class Web::V3::GiftsController < MetalCorsController
                 end
             else
                 gift.redeem_gift(server_inits, loc_id)
+                gift.fire_after_save_queue(@current_client)
                 success gift.web_serialize
             end
         else
