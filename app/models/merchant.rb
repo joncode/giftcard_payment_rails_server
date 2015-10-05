@@ -2,6 +2,7 @@ class Merchant < ActiveRecord::Base
     include ShortenPhotoUrlHelper
     include Formatter
     include MerchantSerializers
+    include RedeemHelper
 
     # default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
@@ -57,6 +58,13 @@ class Merchant < ActiveRecord::Base
     end
 
 #   -------------
+
+    def pending_redeems
+        gifts = Gift.where(merchant_id: self.id, status: ['notified', 'redeemed']).where('new_token_at > ?', reset_time)
+        notified_gifts = gifts.where(status: 'notified').order("created_at DESC")
+        redeemed_gifts = gifts.where(status: 'redeemed').order("redeemed_at DESC")
+        notified_gifts + redeemed_gifts
+    end
 
     def menu_string
         begin

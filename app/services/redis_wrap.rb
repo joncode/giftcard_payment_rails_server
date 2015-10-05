@@ -2,14 +2,44 @@ class RedisWrap
 
 	class << self
 
+
+########  Clear Caches
+
 		def clear_merchants_caches(region_id)
 			clear_all_keys("*region:#{region_id}")
 			clear_all_keys("*merchants")
 		end
 
+		def clear_menu_cache(menu_id)
+			clear_key("menu:#{menu_id}")
+		end
+
+		def clear_client_cache(client_id)
+			clear_all_keys("clients:#{client_id}*")
+		end
+
+		def clear_region_cache(region_id)
+			clear_all_keys("*regions:#{region_id}")
+			clear_all_keys("*cities")
+		end
+
 		def clear_all_user_gifts(user_id)
 			clear_all_keys("*user:#{user_id}:gifts")
 		end
+
+		def clear_user_gifts(client_id, user_id)
+			clear_key("client:#{client_id}:user:#{user_id}:gifts")
+		end
+
+		def clear_badge(client_id, user_id)
+			clear_key("client:#{client_id}:user:#{user_id}:badge")
+		end
+
+		def clear_profile(user_id)
+			clear_key("user:#{user_id}:profile")
+		end
+
+########  Getters / Setters
 
 		def get_region_merchants(client_id, region_id)
 			get_key("client:#{client_id}:region:#{region_id}")
@@ -51,20 +81,12 @@ class RedisWrap
 			set_key("user:#{user_id}:profile", _serialized, 1800)
 		end
 
-		def clear_profile(user_id)
-			clear_key("user:#{user_id}:profile")
-		end
-
 		def get_user_gifts(client_id, user_id)
 			get_key("client:#{client_id}:user:#{user_id}:gifts")
 		end
 
 		def set_user_gifts(client_id, user_id, _serialized)
 			set_key("client:#{client_id}:user:#{user_id}:gifts", _serialized, 1800)
-		end
-
-		def clear_user_gifts(client_id, user_id)
-			clear_key("client:#{client_id}:user:#{user_id}:gifts")
 		end
 
 		def get_badge(client_id, user_id)
@@ -75,9 +97,8 @@ class RedisWrap
 			set_key("client:#{client_id}:user:#{user_id}:badge", _serialized, 1800)
 		end
 
-		def clear_badge(client_id, user_id)
-			clear_key("client:#{client_id}:user:#{user_id}:badge")
-		end
+
+#############   Utility Methods
 
 		def get_key(key)
 			redis = Resque.redis
@@ -110,7 +131,7 @@ class RedisWrap
 
 		def clear_all_keys(key_range_str)
 			redis = Resque.redis
-			ary = redis.del(redis_key)
+			ary = redis.keys(key_range_str)
 			if ary.kind_of?(Array) && ary.length > 0
 				res = ary.map { |k| redis.del(k) }
 			else
@@ -125,6 +146,6 @@ end
 
 
 
- # redis.keys('*region*')
+ # redis.keys('*regions*')
  # redis.keys('client*')
  # ary_of_keys.each { |key| redis.del(key) }
