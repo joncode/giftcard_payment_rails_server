@@ -372,7 +372,7 @@ class Gift < ActiveRecord::Base
 ###############
 
     def fire_after_save_queue
-        puts " --- GIFT AFTER SAVE --- #{self.id}"
+        puts " REDISWRAP --- GIFT AFTER SAVE --- #{self.id}"
         Resque.enqueue(GiftAfterSaveJob, self.id)
     end
 

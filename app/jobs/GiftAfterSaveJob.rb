@@ -3,7 +3,7 @@ class GiftAfterSaveJob
 	@queue = :after_save
 
     def self.perform gift_or_gift_id
-    	puts "\n gift #{gift_or_gift_id} is in GiftAfterSaveJob.rb\n"
+    	puts "\n REDISWRAP gift #{gift_or_gift_id} is in GiftAfterSaveJob.rb\n"
 
     	if gift_or_gift_id.class == Gift
     		gift = gift_or_gift_id
