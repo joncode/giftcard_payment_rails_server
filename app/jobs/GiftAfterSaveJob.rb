@@ -15,6 +15,9 @@ class GiftAfterSaveJob
             gifts = Gift.get_user_activity_in_client(person, client_id)
             puts "setting cache for #{client_id} - #{gift.id}"
             RedisWrap.set_user_gifts(client_id, person.id, gifts.serialize_objs(:web))
+            if gift.giver_id == gift.receiver_id
+                break
+            end
         end
 
 	end
