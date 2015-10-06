@@ -1,6 +1,6 @@
 module UrbanAirshipWrap
 
-    def send_test_push(user)
+    def self.send_test_push(user)
         pnts = user.pn_tokens
         resp = []
         pnts.each do |pn_token_obj|
