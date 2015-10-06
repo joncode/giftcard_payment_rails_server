@@ -1,5 +1,24 @@
 module UrbanAirshipWrap
 
+    def send_test_push(user)
+        pnts = user.pn_tokens
+        resp = []
+        pnts.each do |pn_token_obj|
+            push = UA_CLIENT.create_push
+            if pn_token_obj.platform == 'ios'
+                push.audience = UA.device_token(pn_token_obj.pn_token)
+            elsif pn_token_obj.platform == 'android'
+                push.audience = UA.apid(pn_token_obj.pn_token)
+            end
+            push.notification = UA.notification(alert: "#{user.first_name}, Testing push #{Time.now.utc}")
+            push.device_types = UA.all
+            resp << push.send_push
+        end
+
+        puts "APNS push sent via ALIAS! #{resp.inspect}"
+    end
+
+
     def send_push(user, alert, gift_id)
         pnts = user.pn_tokens
         resp = []
