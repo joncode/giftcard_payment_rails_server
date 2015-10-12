@@ -33,7 +33,7 @@ module GiftSerializers
         gift_hsh["status"]             = self.status
         gift_hsh["shoppingCart"]       = self.shoppingCart
         gift_hsh["items"]              = ary_of_shopping_cart_as_hash
-        gift_hsh["giver_photo"]        = giver.get_photo
+        gift_hsh["giver_photo"]        = giver ? giver.get_photo : nil
 
         merchant_serializer_mdot_keys gift_hsh
         gift_hsh["gift_id"]            = self.id

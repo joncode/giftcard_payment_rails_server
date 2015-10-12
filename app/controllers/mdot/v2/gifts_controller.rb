@@ -30,7 +30,7 @@ class Mdot::V2::GiftsController < JsonController
         end
         gift_array  = Gift.get_gifts(@current_user)
         badge       = gift_array.count
-        if gift_array.count > 0
+        if badge > 0
             success({ "badge" => badge, "gifts" => gift_array.serialize_objs(:badge) })
         else
             success({ "badge" => 0 })
