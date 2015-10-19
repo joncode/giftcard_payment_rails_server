@@ -40,6 +40,7 @@ protected
         @current_client = nil
         @current_partner = nil
         # puts "\n HTTP_X_APPLICATION_KEY = #{request.headers['HTTP_X_APPLICATION_KEY']}"
+        puts request.headers.inspect
         app_key = request.headers['HTTP_X_APPLICATION_KEY']
         if !app_key.blank?
             # binding.pry
