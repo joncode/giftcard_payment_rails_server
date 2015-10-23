@@ -48,26 +48,18 @@ module GiftLifecycle
         end
     end
 
-    def redeem_gift(server_code=nil, loc_id=nil)
+    def redeem_gift(server_code=nil, loc_id=nil, r_sys_type_of=:v1)
         # if loc_id - do multi loc redemption
         if self.status == 'notified'
             self.status      = 'redeemed'
+            self.balance     = 0
             self.redeemed_at = Time.now.utc
             self.server      = server_code if server_code
             self.order_num   = make_order_num(self.id)
-            r                = Redemption.new
-            if loc_id.to_i > 0 && loc_id != self.merchant_id
-                r.merchant_id = loc_id
-            else
-                r.merchant_id = self.merchant_id
-            end
-            r.gift_prev_value = self.value_in_cents
-            r.gift_next_value = 0
-            r.amount          = self.value_in_cents
-            r.ticket_id       = nil
+            r = Redemption.init_with_gift(self, loc_id, r_sys_type_of)
             self.redemptions << r
             if self.save
-                puts "\n gift #{self.id} is being redeemed\n"
+                puts "\n gift #{self.id} is being redeemed with redemption #{r.id}\n"
                 Resque.enqueue(GiftRedeemedEvent, self.id)
                 true
             else
@@ -85,12 +77,7 @@ module GiftLifecycle
         detail_msg     = self.detail || ""
         redemption_msg = "#{number_to_currency(pos_obj.applied_value/100.0)} was paid with check # #{pos_obj.ticket_num}\n"
         self.detail    = redemption_msg + detail_msg
-        r              = Redemption.new
-        if loc_id.to_i > 0 && loc_id != self.merchant_id
-            r.merchant_id = loc_id
-        else
-            r.merchant_id = self.merchant_id
-        end
+        r = Redemption.init_with_gift(self, loc_id, :positronics)
         r.gift_prev_value = prev_value
         r.gift_next_value = self.balance
         r.amount          = pos_obj.applied_value
@@ -127,7 +114,7 @@ module GiftLifecycle
             if pos_obj.code == 201
                 self.partial_redeem(pos_obj, loc_id)
             elsif pos_obj.code == 200 || pos_obj.code == 206
-                self.redeem_gift(nil, loc_id)
+                self.redeem_gift(nil, loc_id, :positronics)
             end
         end
         resp
