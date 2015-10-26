@@ -23,7 +23,7 @@ class PaymentCalcCronJob
 
             next if partner.nil?  # cannot create a payment if no partner - this is error
 
-            payment = Payment.where(partner: partner, start_date: sd).first_or_initialize
+            payment = Payment.where(bank_id: partner.bank_id, start_date: sd).first_or_initialize
 
             case reg.payment_type
             when :merchant
