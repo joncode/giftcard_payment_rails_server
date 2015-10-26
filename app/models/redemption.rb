@@ -8,6 +8,7 @@ class Redemption < ActiveRecord::Base
 
 	def self.init_with_gift(gift, loc_id=nil, r_type_of=nil)
         r = Redemption.new
+        r.gift_id = gift.id
         r.amount          = gift.value_in_cents
         r.gift_prev_value = gift.value_in_cents
         r.gift_next_value = 0
