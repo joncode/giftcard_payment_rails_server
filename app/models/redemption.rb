@@ -15,10 +15,10 @@ class Redemption < ActiveRecord::Base
         r.ticket_id       = nil
         r.merchant_id = loc_id || gift.merchant_id
         if r_type_of.nil?
-        	if loc_id == gift.merchant_id
-        		r.type_of = self.convert_r_sys_to_type_of(gift.merchant.r_sys)
-        	else
+        	if loc_id.present? && loc_id != gift.merchant_id
 	        	r.type_of = self.convert_r_sys_to_type_of(Merchant.where(id: loc_id).pluck(:r_sys).first)
+        	else
+        		r.type_of = self.convert_r_sys_to_type_of(gift.merchant.r_sys)
 	        end
         else
 	        r.type_of = r_type_of
