@@ -1,6 +1,5 @@
 module ProductionDbUpdate
 
-
     def run_db_update
         update_gifts
         regift_payables
