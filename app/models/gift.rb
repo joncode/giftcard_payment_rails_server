@@ -45,7 +45,6 @@ class Gift < ActiveRecord::Base
     before_create :set_balance
     before_create :set_status_and_pay_stat    # must be last before_create
 
-    after_create :set_affiliate_link
     after_create :set_client_content
 
     # after_save :fire_after_save_queue
@@ -83,12 +82,6 @@ class Gift < ActiveRecord::Base
             string_to_cents(number_to_currency((self.balance/100.0), unit: "" , delimiter: ""))
         else
             super
-        end
-    end
-
-    def set_affiliate_link
-        if @link.present?
-            Accountant.affiliate_link(self, @link)
         end
     end
 
@@ -167,7 +160,7 @@ class Gift < ActiveRecord::Base
     def fee
         case self.giver_type
         when "User"
-            -(value_f * 0.15).round(2)
+            -(self.value_f * (1 - self.merchant.location_fee.to_f)).round(2)
         else
             0.0
         end

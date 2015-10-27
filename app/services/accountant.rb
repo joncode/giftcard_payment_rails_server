@@ -7,10 +7,10 @@ class Accountant
 			return 'Not Gift' if gift.class != Gift
 			puts "\n Merchant #{gift.id}\n"
 
-			debt_amount = gift.location_fee
+			location_fee_amount = gift.location_fee
 
  			# no fee , no debt
-			return "no Debt Amount" unless debt_amount > 0
+			return "no Location Fee" unless location_fee_amount > 0
 
 			# if provider is not on creation and gift is not on redemption - out of sync exit
 			return "Payment time not in sync" if gift.status != 'redeemed' && !gift.merchant.creation?
@@ -75,8 +75,9 @@ class Accountant
 			register.save
 		end
 
-		def affiliate_link gift, link
+		def affiliate_link gift, link=nil
 			puts "\n Affiliate affiliate_link #{gift.id} #{link}\n"
+			return "No link" if link.nil?
 			# return nil if gift.class != GiftSale
 	        lp = LandingPage.where(link: link).first
 	        if lp.nil?

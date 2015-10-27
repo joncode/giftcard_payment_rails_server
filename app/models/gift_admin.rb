@@ -18,8 +18,8 @@ private
     def pre_init args={}
         args["cat"]     = set_cat(args)
         args["value"]   = calculate_value(args["shoppingCart"])
-        args["cost"]    = calculate_cost(args["shoppingCart"])
         args["merchant_id"] = args['provider_id'] if args['provider_id'].present? && args['merchant_id'].nil?
+        args["cost"]    = calculate_cost(args["shoppingCart"], Merchant.find(args["merchant_id"]))
         args.delete("provider_id")
         giver = args["giver"]
         args["payable"] = giver.new_debt(args["value"])

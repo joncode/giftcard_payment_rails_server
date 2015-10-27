@@ -37,8 +37,22 @@ class BizUser < ActiveRecord::Base
 
     def new_debt amount
         decimal_amount = BigDecimal(amount)
-        service_fee    = decimal_amount * 0.15
+        service_fee    = decimal_amount * itsonme_fee
         Debt.new(owner: self, amount: service_fee)
+    end
+
+    def location_fee(convert_these_cents=nil)
+        r_cents = self.rate / 100.0
+        if convert_these_cents
+            (convert_these_cents * r_cents).to_i
+        else
+            r_cents
+        end
+
+    end
+
+    def itsonme_fee
+        (1 - self.location_fee.to_f).round(2)
     end
 
 end
