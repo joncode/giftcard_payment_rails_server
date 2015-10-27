@@ -41,7 +41,7 @@ class Mdot::V2::UsersController < JsonController
     end
 
     def refresh
-        success @current_user.profile_serialize
+        success @current_user.create_serialize
         respond
     end
 
