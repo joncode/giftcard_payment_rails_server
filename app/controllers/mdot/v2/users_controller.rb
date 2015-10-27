@@ -1,6 +1,6 @@
 class Mdot::V2::UsersController < JsonController
     include Email
-    before_action :authenticate_customer,      only: [:index, :update, :show, :deactivate_user_social, :profile, :socials]
+    before_action :authenticate_customer,      only: [:index, :update, :refresh, :show, :deactivate_user_social, :profile, :socials]
     before_action :authenticate_general_token, only: [:create, :reset_password]
     rescue_from JSON::ParserError, :with => :bad_request
 
@@ -37,6 +37,11 @@ class Mdot::V2::UsersController < JsonController
 
     def profile
         success @current_user.profile_with_ids_serialize
+        respond
+    end
+
+    def refresh
+        success @current_user.profile_serialize
         respond
     end
 
