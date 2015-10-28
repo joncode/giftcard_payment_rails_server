@@ -26,6 +26,10 @@ class Register < ActiveRecord::Base
 
 #   -------------
 
+	def create_credit
+
+	end
+
 	def payment_type
 		if self.loc? || self.aff_loc?
 			:merchant
