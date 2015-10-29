@@ -10,7 +10,7 @@ class GiftDeactivatedEvent
             if registers.length == 0
                 gift_parent = gift.parent
 
-                if gift_parent.kind_of?(Gift) && gift_parent.id !== previous_gift_id
+                if gift_parent.kind_of?(Gift) && gift_parent.id != previous_gift_id
                     # regift of a another gift
                     self.perform(gift_parent.id, gift_id)
                 end
@@ -27,7 +27,7 @@ class GiftDeactivatedEvent
             registers = Register.where(gift_id: gift_id)
             if registers.length == 0
                 gift_parent = gift.parent
-                if gift_parent.kind_of?(Gift) && gift_parent.id !== previous_gift_id
+                if gift_parent.kind_of?(Gift) && gift_parent.id != previous_gift_id
                     # regift of a another gift
                     self.perform(gift_parent.id, gift_id)
                 else
