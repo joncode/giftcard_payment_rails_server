@@ -1,9 +1,9 @@
 class Payment < ActiveRecord::Base
 
-
-	has_many :registers
     belongs_to :at_user
 	belongs_to :partner,  polymorphic: true
+	has_many :registers
+	has_many :gifts, through: :registers
 
 #   -------------
 
@@ -12,6 +12,36 @@ class Payment < ActiveRecord::Base
 	end
 
 #   -------------
+
+	def self.get_current_payment_for_partner(partner_obj, start_date)
+        if partner_obj.bank_id.present?
+            payment = where(bank_id: partner_obj.bank_id, start_date: start_date).first_or_initialize
+        else
+                # bank-less payment record
+            payment = where(partner: partner_obj, start_date: start_date).first_or_initialize
+        end
+        if payment.new_record?
+            # get previous balance off previous payment
+            last = self.get_last_payment_for_partner(partner_obj)
+            if last && last.total < 0
+                payment.previous_total = last.total
+                payment.total = last.total
+            end
+        end
+        return payment
+	end
+
+	def self.get_last_payment_for_partner(partner_obj)
+        if partner_obj.bank_id.present?
+            last = where(bank_id: partner_obj.bank_id).order(start_date: :desc).limit(1).first
+            if last.nil?
+                last = where(partner: partner_obj).order(start_date: :desc).limit(1).first
+            end
+        else
+            last = where(partner: partner_obj).order(start_date: :desc).limit(1).first
+        end
+        return last
+	end
 
 	def self.get_start_date_of_payment
 		now = DateTime.now.utc

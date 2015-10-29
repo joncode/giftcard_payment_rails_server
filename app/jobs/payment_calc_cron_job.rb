@@ -18,35 +18,33 @@ class PaymentCalcCronJob
         registers.each do |reg|
 
             next if self.already_paid?(reg) # already paid
-            next unless reg.debt?   # payments for debts only
             partner = reg.partner
 
             next if partner.nil?  # cannot create a payment if no partner - this is error
+            payment = Payment.get_current_payment_for_partner(partner, sd)
 
-            if partner.bank_id.present?
-                payment = Payment.where(bank_id: partner.bank_id, start_date: sd).first_or_initialize
+            if reg.debt?
+                case reg.payment_type
+                when :merchant
+                    payment.m_transactions += 1
+                    payment.m_amount += reg.amount
+                when :user
+                    payment.u_transactions += 1
+                    payment.u_amount += reg.amount
+                when :link
+                    payment.l_transactions += 1
+                    payment.l_amount += reg.amount
+                else
+                    puts "PAYMENT / REGISTER ORIGIN UNKNOWN ERROR 500 Internal -- #{reg.inspect}"
+                    next
+                end
+
+                payment.total += reg.amount
             else
-                    # bank-less payment record
-                payment = Payment.where(partner: partner, start_date: sd).first_or_initialize
+                # register is a Credit
+                payment.total -= reg.amount
             end
-
-            case reg.payment_type
-            when :merchant
-                payment.m_transactions += 1
-                payment.m_amount += reg.amount
-            when :user
-                payment.u_transactions += 1
-                payment.u_amount += reg.amount
-            when :link
-                payment.l_transactions += 1
-                payment.l_amount += reg.amount
-            else
-                puts "PAYMENT / REGISTER ORIGIN UNKNOWN ERROR 500 Internal -- #{reg.inspect}"
-                next
-            end
-
             payment.end_date = ed if payment.end_date.nil?
-            payment.total += reg.amount
             payment.registers << reg
             payment.save
         end
