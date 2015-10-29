@@ -7,7 +7,7 @@ module Expiration
             date = Time.now.utc.to_date
 
             if (date >= gift.expires_at.to_date)
-                gift.update(status: "expired", redeemed_at: Time.now.utc)
+                gift.expire_gift
                 "-------------  Expired gift ID = #{gift.id}  -------------"
                 expired_gifts += 1
             end
