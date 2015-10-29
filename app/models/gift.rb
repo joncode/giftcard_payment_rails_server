@@ -270,13 +270,16 @@ class Gift < ActiveRecord::Base
 #/-------------------------------------re gift db methods-----------------------------/
 
 	def parent
-        self.payable
-        #Gift.find(self.regift_id)
+        gift_parent = self.payable
+        if gift_parent.kind_of?(Gift)
+            gift_parent
+        else
+            nil
+        end
 	end
 
 	def child
         Gift.where(payable_id: self.id, payable_type: "Gift").first
-        #Gift.find_by(regift_id: self.id)
 	end
 
 #/-------------------------------------data population methods-----------------------------/

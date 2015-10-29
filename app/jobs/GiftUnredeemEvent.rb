@@ -3,20 +3,27 @@ class GiftUnredeemEvent
 
     def self.perform gift_id
     	puts "\n gift #{gift_id} is being GiftUnredeemEvent job\n"
-    	gift = Gift.find gift_id
+    	gift = Gift.unscoped.find gift_id
 
-        registers = Register.where(gift_id: gift_id)
-        registers.each do |r|
-            if gift.merchant.creation? && r.loc?
-                next
-            else
-                if r.payment.nil?
-                    r.destroy
+        if ['redeemed', 'notified'].include?(gift.status)
+            Register.where(gift_id: gift_id).each do |r|
+                if gift.merchant.creation? && r.loc?
+                    next
                 else
-                    r.create_credit
+                    if r.payment.nil?
+                        r.destroy
+                    else
+                        r.create_credit
+                    end
                 end
             end
+            if gift.status == 'redeemed'
+                gift.update(status: 'notified' , redeemed_at: nil, order_num: nil)
+                GiftAfterSaveJob.perform(gift)
+            end
+        	# puts PointsForCompletionJob.perform gift_id
+        else
+            puts "500 Internal - CANNOT UNREDEEM GIFT #{gift_id}"
         end
-    	puts PointsForCompletionJob.perform gift_id
     end
 end

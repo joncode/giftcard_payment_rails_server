@@ -27,7 +27,12 @@ class Register < ActiveRecord::Base
 #   -------------
 
 	def create_credit
-
+		Register.create(amount: self.amount,
+			partner_type: self.partner_type,
+			partner_id: self.partner_id,
+			origin: self.origin,
+			type_of: 1,
+			gift_id: self.gift_id)
 	end
 
 	def payment_type
