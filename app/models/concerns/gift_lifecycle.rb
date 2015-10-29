@@ -42,9 +42,8 @@ module GiftLifecycle
 
     def unredeem
         if self.status == 'redeemed'
+            Resque.enqueue(GiftUnredeemEvent, self.id)
             self.update(status: 'notified' , redeemed_at: nil, order_num: nil)
-            # delete any redemption registers
-            # do not allow un-redemption if the gift is settled
         end
     end
 
