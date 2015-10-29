@@ -8,7 +8,7 @@ class GiftAfterSaveJob
     	if gift_or_gift_id.class == Gift
     		gift = gift_or_gift_id
     	else
-    		gift = Gift.includes(:giver).includes(:receiver).find(gift_or_gift_id)
+    		gift = Gift.unscoped.includes(:giver).includes(:receiver).find(gift_or_gift_id)
     	end
         [gift.giver, gift.receiver].each do |person|
             if person.kind_of?(User)
