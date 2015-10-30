@@ -33,8 +33,8 @@ private
 
     def pre_init args={}
 
-        merchant = Merchant.find(merchant_id)
         merchant_id = args['merchant_id'] || args["provider_id"]
+        merchant = Merchant.find(merchant_id)
         args['merchant_id'] = merchant_id
         args["unique_id"] = unique_cc_id(args["receiver_name"], merchant_id)
         card                           = args["card"]
