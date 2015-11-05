@@ -367,7 +367,7 @@ class Gift < ActiveRecord::Base
 
 ###############
 
-    def fire_after_save_queue(client_id)
+    def fire_after_save_queue(client_id=nil)
         if client_id.respond_to?(:id)
             client_id = client_id.id
         end
