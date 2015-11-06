@@ -2,8 +2,14 @@ class Payment < ActiveRecord::Base
 
     belongs_to :at_user
 	belongs_to :partner,  polymorphic: true
+	belongs_to :bank
 	has_many :registers
 	has_many :gifts, through: :registers
+
+#   -------------
+
+	# before_create :set_partner_to_bank_owner
+
 
 #   -------------
 
@@ -73,6 +79,17 @@ class Payment < ActiveRecord::Base
 			return sd + 1.day
 		end
 	end
+
+private
+
+
+	def set_partner_to_bank_owner
+		if self.partner_id.nil? && self.bank_id.present?
+
+
+		end
+	end
+
 
 end
 

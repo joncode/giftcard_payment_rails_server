@@ -26,6 +26,7 @@ class Bank < ActiveRecord::Base
 
     has_many :merchants
     has_many :affiliates
+    has_many :payments
 
     belongs_to :owner, polymorphic: true
 
