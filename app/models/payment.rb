@@ -1,5 +1,9 @@
 class Payment < ActiveRecord::Base
 
+	before_create :set_partner_to_bank_owner
+
+#   -------------
+
 	has_many :registers
 	has_many :gifts, through: :registers
 
@@ -9,10 +13,6 @@ class Payment < ActiveRecord::Base
 
 #   -------------
 
-	before_create :set_partner_to_bank_owner
-
-
-#   -------------
 
 	def affiliate
 		self.partner
