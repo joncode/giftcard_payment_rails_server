@@ -59,7 +59,7 @@ module GiftLifecycle
             self.redemptions << r
             if self.save
                 puts "\n gift #{self.id} is being redeemed with redemption #{r.id}\n"
-                Resque.enqueue(GiftRedeemedEvent, self.id)
+                Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
                 true
             else
                 false
@@ -83,7 +83,8 @@ module GiftLifecycle
         r.ticket_id       = pos_obj.ticket_id
         self.redemptions << r
         if self.save
-            Resque.enqueue(GiftRedeemedEvent, self.id)
+            puts "\n gift #{self.id} is partial redeemed with redemption #{r.id} with value #{pos_obj.applied_value}\n"
+            Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
             true
         else
             false

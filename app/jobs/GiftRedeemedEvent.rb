@@ -1,8 +1,8 @@
 class GiftRedeemedEvent
     @queue = :after_save
 
-    def self.perform gift_id
-    	puts "\n gift #{gift_id} is being GiftRedeemedEvent.job\n"
+    def self.perform gift_id, redemption_id=nil
+    	puts "\n gift #{gift_id} / redemption #{redemption_id} is being GiftRedeemedEvent.job\n"
     	gift = Gift.find gift_id
     	puts Accountant.merchant(gift)
     	puts Accountant.affiliate_location(gift)
