@@ -29,7 +29,7 @@ class Accountant
 		end
 
 		def gift_parent_has_been_paid?(gift)
-			if get_register_for_merchant gift.id
+			if gift_paid_already?(gift.id, Register.origins["loc"])
 				return true
 			else
 				parent = gift.parent
@@ -41,8 +41,8 @@ class Accountant
 			end
 		end
 
-		def get_register_for_merchant gift_id
-			Register.exists?(gift_id: gift_id, origin: Register.origins["loc"])
+		def gift_paid_already? gift_id, origin_type
+			Register.exists?(gift_id: gift_id, origin: origin_type)
 		end
 
 		def affiliate_location gift
@@ -53,7 +53,7 @@ class Accountant
 			loc_affiliation = Affiliation.get_merchant_affiliation_for_gift(gift)
 			return loc_affiliation if loc_affiliation.class != Affiliation
 
-			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["aff_loc"])
+			return true if gift_paid_already?(gift.id, Register.origins["aff_loc"])
 
 			register    = create_debt(gift, loc_affiliation.affiliate, "aff_loc")
 			register.affiliation = loc_affiliation
@@ -68,7 +68,7 @@ class Accountant
 			user_affiliation = Affiliation.get_user_affiliation_for_gift(gift)
 			return user_affiliation if user_affiliation.class != Affiliation
 
-			return true if Register.exists?(gift_id: gift.id, origin: Register.origins["aff_user"])
+			return true if gift_paid_already?(gift.id, Register.origins["aff_user"])
 
 			register    = create_debt(gift, user_affiliation.affiliate, "aff_user")
 			register.affiliation = user_affiliation
