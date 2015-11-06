@@ -26,13 +26,18 @@ class Register < ActiveRecord::Base
 
 #   -------------
 
-	def create_credit
-		Register.create(amount: self.amount,
-			partner_type: self.partner_type,
-			partner_id: self.partner_id,
-			origin: self.origin,
-			type_of: 1,
-			gift_id: self.gift_id)
+	def reverse_charge
+		if self.payment.nil?
+			self.destroy
+		else
+			type_of_value = self.debt? ? 1 : 0
+			Register.create(amount: self.amount,
+				partner_type: self.partner_type,
+				partner_id: self.partner_id,
+				origin: self.origin,
+				type_of: type_of_value,
+				gift_id: self.gift_id)
+		end
 	end
 
 	def payment_type

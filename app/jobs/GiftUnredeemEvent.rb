@@ -10,11 +10,7 @@ class GiftUnredeemEvent
                 if gift.merchant.creation? && r.loc?
                     next
                 else
-                    if r.payment.nil?
-                        r.destroy
-                    else
-                        r.create_credit
-                    end
+                    r.reverse_charge
                 end
             end
             if gift.status == 'redeemed'

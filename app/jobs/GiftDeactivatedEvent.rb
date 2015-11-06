@@ -15,7 +15,7 @@ class GiftDeactivatedEvent
                     self.perform(gift_parent.id, gift_id)
                 end
             else
-                registers.each {|r| r.payment.nil? ? r.destroy : r.create_credit }
+                registers.each {|r| r.reverse_charge }
                 if gift.status != 'cancel'
                     gift.status = 'cancel'
                     gift.redeemed_at = Time.now.utc if gift.redeemed_at.nil?
@@ -36,7 +36,7 @@ class GiftDeactivatedEvent
                     self.perform(regift.id, gift_id)
                 end
             else
-                registers.each {|r| r.payment.nil? ? r.destroy : r.create_credit }
+                registers.each {|r| r.reverse_charge }
             end
         else
             # gift is already completed
