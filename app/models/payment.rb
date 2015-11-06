@@ -1,14 +1,15 @@
 class Payment < ActiveRecord::Base
 
-    belongs_to :at_user
-	belongs_to :partner,  polymorphic: true
-	belongs_to :bank
 	has_many :registers
 	has_many :gifts, through: :registers
 
+    belongs_to :at_user
+	belongs_to :partner,  polymorphic: true
+	belongs_to :bank
+
 #   -------------
 
-	# before_create :set_partner_to_bank_owner
+	before_create :set_partner_to_bank_owner
 
 
 #   -------------
@@ -80,13 +81,13 @@ class Payment < ActiveRecord::Base
 		end
 	end
 
+
 private
 
 
 	def set_partner_to_bank_owner
 		if self.partner_id.nil? && self.bank_id.present?
-
-
+			self.partner = self.bank.owner
 		end
 	end
 
