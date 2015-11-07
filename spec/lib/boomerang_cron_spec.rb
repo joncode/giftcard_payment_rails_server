@@ -14,8 +14,8 @@ describe "BoomerangCron" do
             Gift.delete_all
         end
 
-        it "should boomerang gifts that are incomplete and older than 7 days" do
-            previous = Time.now - 8.days
+        it "should boomerang gifts that are incomplete and older than 14 days" do
+            previous = Time.now - 15.days
             10.times do
                 FactoryGirl.create(:gift_no_association_with_card, created_at: previous, giver_name: @user.name, giver_id: @user.id, giver_type: "User", merchant: @merchant)
             end
@@ -27,9 +27,9 @@ describe "BoomerangCron" do
             boomeranged_gifts.count.should == 10
         end
 
-        it "should not boomerang gifts that are incomplete and younger than 7 days" do
+        it "should not boomerang gifts that are incomplete and younger than 14 days" do
             10.times do
-                previous = Time.now - 6.days
+                previous = Time.now - 13.days
 
                 FactoryGirl.create(:gift_no_association_with_card, created_at: previous, giver_name: @user.name, giver_id: @user.id, giver_type: "User", merchant: @merchant)
             end

@@ -18,7 +18,7 @@ module GiftScopes
     end
 
     def boomerangable
-        boom_time = 7.days
+        boom_time = 14.days
         if Rails.env.staging?
             boom_time = 1.days
         end
