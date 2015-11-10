@@ -126,8 +126,8 @@ Drinkboard::Application.routes.draw do
       end
       resources :facebook,     only: [:create] do
         collection do
-          # get   :friends
-          # get   :profile
+          get   :friends
+          get   :profile
           post  :oauth
           get :oauth_init
           get :callback_url

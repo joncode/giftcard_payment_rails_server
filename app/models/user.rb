@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
     validates_with UserSocialValidator
     validates_with UserFirstNameValidator
 	validates :first_name, 	presence: true, length: {  maximum: 50 }
-	validates :last_name, 	length: { maximum: 50 }, 	:unless => :social_media
+	validates :last_name, 	length: { maximum: 50 }, allow_blank: true
 	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, allow_blank: true
 	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :unless => :is_perm_deactive?
 	validates :password, 	length: { minimum: 6 },     on: :create
@@ -33,9 +33,10 @@ class User < ActiveRecord::Base
 	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 
-	after_create  :init_confirm_email
 	after_save    :persist_social_data, :unless => :is_perm_deactive?
 	after_save    :make_friends
+	after_create  :fire_after_create_event
+	after_create  :init_confirm_email
     after_save 	  :fire_after_save_queue
 
 #	-------------
@@ -103,7 +104,13 @@ class User < ActiveRecord::Base
 #/---------------------------------------------------------------------------------------------/
 
 
+	def current_oauth network_name='facebook'
+		self.oauths.where(network: network_name).order(created_at: :desc).first
+	end
+
 ########   USER SOCIAL METHODS
+
+
 
 	def new_socials(user_hsh)
 			# used by Admt::V2::GiftsController to add receiver info to a gift with the add receiver button
@@ -380,18 +387,16 @@ private
 		!self.twitter.blank?
 	end
 
-	def social_media
-		return true if self.origin == 'f'
-		return true if self.origin == 't'
-		return false
-	end
-
 	def create_remember_token
 		self.remember_token = create_token
 	end
 
 	def fire_after_save_queue
         Resque.enqueue(UserAfterSaveJob, self.id)
+	end
+
+	def fire_after_create_event
+		Resque.enqueue(UserAfterCreateEvent, self.id)
 	end
 
 end

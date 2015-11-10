@@ -8,52 +8,46 @@ class Web::V3::FacebookController < MetalCorsController
 
 
     def friends
-        # sproxy = SocialProxy.new(@user_oauth.to_proxy)
-        # sproxy.friends
-
-        # if sproxy.status == 200
-        #     if sproxy.data.count > 0
-        #         BulkContact.upload(data: sproxy.data, user_id: @current_user.id)
-        #     end
-        #     success sproxy.data
-        #     respond(status)
-        # else
-        #     fail    sproxy.data.to_s
-        #     @app_response["msg"] = sproxy.msg
-        #     status = sproxy.status
-        #     respond(status)
-        # end
+        oauth_obj = @current_user.current_oauth
+        if oauth_obj.kind_of?(Oauth)
+            graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
+            success graph.get_connections('me','friends')
+            respond
+        else
+            fail    "Facebook profile not found"
+            @app_response["msg"] = "Facebook profile not found"
+            status = 404
+            respond(status)
+        end
 
     end
 
     def profile
-        # sproxy = SocialProxy.new(@user_oauth.to_proxy)
-        # sproxy.profile
-
-        # if sproxy.status == 200
-        #     success sproxy.data
-        #     respond(status)
-        # else
-        #     fail    sproxy.data.to_s
-        #     @app_response["msg"] = sproxy.msg
-        #     status = sproxy.status
-        #     respond(status)
-        # end
+        oauth_obj = @current_user.current_oauth
+        if oauth_obj.kind_of?(Oauth)
+            graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
+            success graph.get_object("me")
+            respond
+        else
+            fail    "Facebook profile not found"
+            @app_response["msg"] = "Facebook profile not found"
+            status = 404
+            respond(status)
+        end
     end
 
     def create
-        # sproxy = SocialProxy.new(@user_oauth.to_proxy)
-        # sproxy.create_post params["data"]
-
-        # if sproxy.status == 200
-        #     success sproxy.data
-        #     respond(status)
-        # else
-        #     fail    sproxy.data.to_s
-        #     @app_response["msg"] = sproxy.msg
-        #     status = sproxy.status
-        #     respond(status)
-        # end
+        oauth_obj = @current_user.current_oauth
+        if oauth_obj.kind_of?(Oauth)
+            graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
+            success graph.get_object("me")
+            respond
+        else
+            fail    "Facebook profile not found"
+            @app_response["msg"] = "Facebook profile not found"
+            status = 404
+            respond(status)
+        end
     end
 
     def oauth_init
