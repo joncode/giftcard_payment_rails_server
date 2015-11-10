@@ -1,6 +1,6 @@
 #require 'resque/plugins/resque_heroku_autoscaler'
 
-class CreateGiftNotifySocial
+class GiftCreateNotifySocial
     #extend Resque::Plugins::HerokuAutoscaler
 
     @queue = :push
@@ -19,7 +19,7 @@ class CreateGiftNotifySocial
             oauth_obj = giver.current_oauth
             graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
             post_id_hsh = graph.put_wall_post( "You've Received a Gift!", post_hsh)
-            puts "POSTED TO FACEBOOK WALL CreateGiftNotifySocial#{post_id_hsh}\n"
+            puts "POSTED TO FACEBOOK WALL GiftCreateNotifySocial#{post_id_hsh}\n"
 
         end
     end

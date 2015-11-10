@@ -60,7 +60,7 @@ private
 
     def notify_socials
         if self.gift_id.present?
-            Resque.enqueue(CreateGiftNotifySocial, self.gift_id)
+            Resque.enqueue(GiftCreateNotifySocial, self.gift_id)
         end
     end
 end

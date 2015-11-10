@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-# describe CreateGiftNotifySocialJob do
+# describe GiftCreateNotifySocialJob do
 
     describe :perform do
 
