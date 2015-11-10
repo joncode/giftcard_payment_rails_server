@@ -1,13 +1,38 @@
 class FacebookOperations
 
+	def self.get_graph gift
+		giver = gift.giver
+		oauth_obj = giver.current_oauth
+        Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
+	end
+
 	def self.post_gift_to_wall gift_id
 		gift = Gift.find gift_id
 		gift_obscured_id = gift.obscured_id
-		giver = gift.giver
-		oauth_obj = giver.current_oauth
-        graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
+		graph = self.get_graph(gift)
         post_id_hsh = graph.put_wall_post( "Here is  Gift for you:)", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" }, gift.facebook_id)
-		puts "POSTED TO FACEBOOK WALL #{post_id_hsh}\n"
+		puts "POSTED TO FACEBOOK WALL post_gift_to_wall #{post_id_hsh}\n"
+	end
+
+	def self.notify_gift gift
+        oauth = gift.oauth
+        cart = JSON.parse gift.shoppingCart
+        post_hsh = { "merchant"  => gift.provider_name,
+        	"title" => cart[0]["item_name"],
+        	"url" => "#{PUBLIC_URL}/signup/acceptgift?id=#{gift.obscured_id}" }
+        # social_proxy = SocialProxy.new(oauth.to_proxy)
+        # social_proxy.create_post(post_hsh)
+        # puts "------ #{social_proxy.msg}"
+
+        graph = self.get_graph(gift)
+        post_id_hsh = graph.put_wall_post( "You've Received a Gift!", post_hsh, gift.facebook_id)
+        puts "POSTED TO FACEBOOK WALL notify_gift #{post_id_hsh}\n"
+	end
+
+	def self.put_conn gift
+        graph = self.get_graph(gift)
+        post_id_hsh = graph.put_connections(g.facebook_id, subject: "Gifted!", message: g.message, link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" )
+		puts "POSTED TO FACEBOOK WALL put_conn #{post_id_hsh}\n"
 	end
 
 	def self.login oauth_access_token, facebook_profile, user_social=nil
