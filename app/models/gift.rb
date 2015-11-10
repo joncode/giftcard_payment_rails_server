@@ -402,6 +402,7 @@ private
             giver_oauth_obj = self.giver.current_oauth
             if giver_oauth_obj.kind_of?(Oauth)
                 self.receiver_oauth['token'] = giver_oauth_obj.token
+                self.receiver_oauth['photo'] = self.display_photo
             end
             puts "-----------  Receiver Oauth is present ---------------"
             self.oauth = Oauth.initFromDictionary self.receiver_oauth
