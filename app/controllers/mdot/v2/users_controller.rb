@@ -110,7 +110,13 @@ class Mdot::V2::UsersController < JsonController
 
         user = User.new(create_user_params)
         if user.save
-            user.session_token_obj =  SessionToken.create_token_obj(user, platform, pn_token)
+            if platform != 'android'
+                @current_client  = Client.find(IOS_CLIENT_ID)
+            else
+                @current_client  = Client.find(ANDROID_CLIENT_ID)
+            end
+            @current_partner = @current_client.partner
+            user.session_token_obj =  SessionToken.create_token_obj(user, platform, pn_token,  @current_client, @current_partner)
             success user.create_serialize
         else
             fail    user

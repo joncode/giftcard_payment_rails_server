@@ -10,6 +10,8 @@ if Rails.env.production?
     PUBLIC_URL_AT    = "http://admin.itson.me"
     PUBLIC_URL_MT    = "http://merchant.itson.me"
     PUBLIC_URL_PT    = "http://partner.itson.me"
+    IOS_CLIENT_ID = 5
+    ANDROID_CLIENT_ID = 4
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
     API_URL          = "https://api.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "david.leibner@itson.me", "name" => "David"}
@@ -25,6 +27,8 @@ elsif Rails.env.staging?
     PUBLIC_URL_AT    = "http://qaadmin.itson.me"
     PUBLIC_URL_MT    = "http://qamerchant.itson.me"
     PUBLIC_URL_PT    = "http://qapartner.itson.me"
+    IOS_CLIENT_ID = 8
+    ANDROID_CLIENT_ID = 6
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
@@ -40,6 +44,8 @@ else
     PUBLIC_URL_AT    = "http://0.0.0.0:3002"
     PUBLIC_URL_MT    = "http://merchant.happyer.dev/"
     PUBLIC_URL_PT    = "http://partner.happyer.dev/"
+    IOS_CLIENT_ID = 5
+    ANDROID_CLIENT_ID = 4
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "jon.gutwillig@itson.me", "name" => "Jon"}
