@@ -42,6 +42,7 @@ class Web::V3::FacebookController < MetalCorsController
         oauth_obj = @current_user.current_oauth
         if oauth_obj.kind_of?(Oauth)
             graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
+            post_id_hsh = graph.put_wall_post('Replacing the Social Proxy')
             success graph.get_object("me")
             respond
         else

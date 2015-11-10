@@ -1,4 +1,5 @@
 class MenuItem < ActiveRecord::Base
+	include ShortenPhotoUrlHelper
 	belongs_to :section
 	belongs_to :menu
 
@@ -17,6 +18,10 @@ class MenuItem < ActiveRecord::Base
 		else
 			item
 		end
+	end
+
+	def photo_url
+		unshorten_photo_url self.photo
 	end
 
     def serialize_to_app(quantity=nil)
