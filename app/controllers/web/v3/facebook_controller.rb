@@ -66,58 +66,64 @@ class Web::V3::FacebookController < MetalCorsController
         url_safe_token = url_encode(decoded_token)
         # puts "\n TOKEN ----- \n#{params['token']} \n  CODE ----------  \n#{params['code']}  \n"
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(url_safe_token))
-        oauth_access_token = oauth.get_access_token(params['code'])
-        graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
-        profile = graph.get_object("me")
-        puts profile.inspect
-
-        return_params = decrypt_token(url_safe_token)
-        puts return_params.inspect
-
-        if profile['id'].present?
-            add_token = false
-            @current_client = Client.includes(:partner).find_by(application_key: return_params['client'])
-            @current_partner = @current_client.partner
-            case return_params['operation']
-            when 'login'
-                resp = FacebookOperations.login(oauth_access_token, profile)
-                add_token = true
-            when 'create'
-                resp = FacebookOperations.create_account(oauth_access_token, profile, @current_client, @current_partner )
-                add_token = true
-            when 'attach'
-                @current_user = SessionToken.app_authenticate(return_params['auth'])
-                if @current_user.nil?
-                    resp = { 'success' => false , 'error' => 'Could not authenticate user' }
-                else
-                    resp = FacebookOperations.attach_account(oauth_access_token, profile, @current_user)
-                end
-            else
-                resp = { 'success' => false , 'error' => 'No operation specified' }
-            end
-            if resp['success']
-                user = resp['user']
-                if add_token
-                    user.session_token_obj =  SessionToken.create_token_obj(user, 'fb', nil, @current_client, @current_partner)
-                    SessionBeginJob.perform(@current_client.id, user) if return_params['operation'] == 'login'
-                    session_token_param = "&session_token=#{user.session_token_obj.token}"
-                else
-                    session_token_param = ""
-                end
-                facebook_param = "?facebook_id=#{profile['id']}"
-                full_response_url = return_params['return_url'] + facebook_param + session_token_param
-                redirect_to full_response_url
-            else
-                error_param = "?error=#{url_encode(resp['error'])}"
-                full_response_url = return_params['return_url'] + error_param
-                redirect_to full_response_url
-            end
+        if params['error'].present?
+            error_param = "?error=#{url_encode(resp['error'])}&error_reason=#{url_encode(resp['error_reason'])}"
+            full_response_url = return_params['return_url'] + error_param
+            redirect_to full_response_url
         else
-            # fail profile
-            full_response_url = return_params['return_url'] + "?error=no_facebook_profile"
-            redirect_to return_params['return_url']
+            oauth_access_token = oauth.get_access_token(params['code'])
+            graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
+            profile = graph.get_object("me")
+            puts profile.inspect
+
+            return_params = decrypt_token(url_safe_token)
+            puts return_params.inspect
+
+            if profile['id'].present?
+                add_token = false
+                @current_client = Client.includes(:partner).find_by(application_key: return_params['client'])
+                @current_partner = @current_client.partner
+                case return_params['operation']
+                when 'login'
+                    resp = FacebookOperations.login(oauth_access_token, profile)
+                    add_token = true
+                when 'create'
+                    resp = FacebookOperations.create_account(oauth_access_token, profile, @current_client, @current_partner )
+                    add_token = true
+                when 'attach'
+                    @current_user = SessionToken.app_authenticate(return_params['auth'])
+                    if @current_user.nil?
+                        resp = { 'success' => false , 'error' => 'Could not authenticate user' }
+                    else
+                        resp = FacebookOperations.attach_account(oauth_access_token, profile, @current_user)
+                    end
+                else
+                    resp = { 'success' => false , 'error' => 'No operation specified' }
+                end
+                if resp['success']
+                    user = resp['user']
+                    if add_token
+                        user.session_token_obj =  SessionToken.create_token_obj(user, 'fb', nil, @current_client, @current_partner)
+                        SessionBeginJob.perform(@current_client.id, user) if return_params['operation'] == 'login'
+                        session_token_param = "&session_token=#{user.session_token_obj.token}"
+                    else
+                        session_token_param = ""
+                    end
+                    facebook_param = "?facebook_id=#{profile['id']}"
+                    full_response_url = return_params['return_url'] + facebook_param + session_token_param
+                    redirect_to full_response_url
+                else
+                    error_param = "?error=#{url_encode(resp['error'])}"
+                    full_response_url = return_params['return_url'] + error_param
+                    redirect_to full_response_url
+                end
+            else
+                # fail profile
+                full_response_url = return_params['return_url'] + "?error=no_facebook_profile"
+                redirect_to return_params['return_url']
+            end
+            # respond
         end
-        # respond
     end
 
     def oauth
