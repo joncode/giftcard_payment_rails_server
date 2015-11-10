@@ -6,7 +6,7 @@ class FacebookOperations
 		giver = gift.giver
 		oauth_obj = giver.current_oauth
         graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
-        post_id_hsh = graph.put_wall_post( "Here is  Gift for you:)", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" })
+        post_id_hsh = graph.put_wall_post( "Here is  Gift for you:)", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" }, gift.facebook_id)
 		puts "POSTED TO FACEBOOK WALL #{post_id_hsh}\n"
 	end
 
