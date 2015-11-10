@@ -1,5 +1,15 @@
 class FacebookOperations
 
+	def self.post_gift_to_wall gift_id
+		gift = Gift.find gift_id
+		gift_obscured_id = gift.obscured_id
+		giver = gift.giver
+		oauth_obj = giver.current_oauth
+        graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
+        post_id_hsh = graph.put_wall_post( "You've Received a Gift!", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" })
+		puts "POSTED TO FACEBOOK WALL #{post_id_hsh}\n"
+	end
+
 	def self.login oauth_access_token, facebook_profile, user_social=nil
 		if user_social.nil?
 			user_social = UserSocial.includes(:user).where(identifier: facebook_profile['id'], type_of: 'facebook_id').first

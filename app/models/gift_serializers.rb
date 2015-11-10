@@ -25,6 +25,8 @@ module GiftSerializers
         gift_hsh["cat"]                = self.cat
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
 
+        gift_hsh['display_photo'] = self.display_photo
+
         gift_hsh
     end
 

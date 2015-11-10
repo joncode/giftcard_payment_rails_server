@@ -23,6 +23,19 @@ class Web::V3::GiftsController < MetalCorsController
         respond
     end
 
+    def show
+
+            # remove the permalink add-number from the id
+        id = params[:id].to_i - NUMBER_ID
+
+        if gift = Gift.find(id)
+            success gift.serialize
+        else
+            fail_web { "error" => "Incorrect Data Received"}
+        end
+        respond
+    end
+
     def create
         gift_hash = {}
         gps = gift_params

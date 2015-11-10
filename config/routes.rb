@@ -140,7 +140,7 @@ Drinkboard::Application.routes.draw do
           post  :oauth
         end
       end
-      resources :gifts, only: [:index, :create] do
+      resources :gifts, only: [:index, :create, :show] do
         member do
           patch :read
           patch :notify

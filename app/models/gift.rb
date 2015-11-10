@@ -77,6 +77,10 @@ class Gift < ActiveRecord::Base
 
 #   -------------
 
+    def display_photo
+        self.merchant.get_photo
+    end
+
     def value
         if self.status == 'notified' && self.balance.present?
             string_to_cents(number_to_currency((self.balance/100.0), unit: "" , delimiter: ""))

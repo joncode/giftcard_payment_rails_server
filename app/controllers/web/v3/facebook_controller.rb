@@ -42,8 +42,8 @@ class Web::V3::FacebookController < MetalCorsController
         oauth_obj = @current_user.current_oauth
         if oauth_obj.kind_of?(Oauth)
             graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
-            post_id_hsh = graph.put_wall_post('Replacing the Social Proxy')
-            success graph.get_object("me")
+            post_id_hsh = graph.put_wall_post( "You've Received a Gift!", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" })
+            success 'Facebook Post Successful'
             respond
         else
             fail    "Facebook profile not found"
