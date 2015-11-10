@@ -1,5 +1,7 @@
 class FacebookOperations
 
+
+
 	def self.get_graph gift
 		giver = gift.giver
 		oauth_obj = giver.current_oauth
