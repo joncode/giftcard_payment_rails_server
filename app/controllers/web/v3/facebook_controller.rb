@@ -86,6 +86,7 @@ class Web::V3::FacebookController < MetalCorsController
                 case return_params['operation']
                 when 'login'
                     resp = FacebookOperations.login(oauth_access_token, profile)
+                    puts resp.inspect
                     add_token = true
                 when 'create'
                     resp = FacebookOperations.create_account(oauth_access_token, profile, @current_client, @current_partner )
