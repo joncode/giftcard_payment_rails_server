@@ -23,10 +23,12 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def profile
+        query_str = params['facebook_id'].nil? ? 'me' : 'facebook_id'
+
         oauth_obj = @current_user.current_oauth
         if oauth_obj.kind_of?(Oauth)
             graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
-            success graph.get_object("me")
+            success graph.get_object(query_str)
             respond
         else
             fail    "Facebook profile not found"
