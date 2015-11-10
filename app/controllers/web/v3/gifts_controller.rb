@@ -31,7 +31,7 @@ class Web::V3::GiftsController < MetalCorsController
         if gift = Gift.find(id)
             success gift.serialize
         else
-            fail_web { "error" => "Incorrect Data Received"}
+            fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found"})
         end
         respond
     end
