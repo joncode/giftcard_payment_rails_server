@@ -12,7 +12,6 @@ if Rails.env.production?
     PUBLIC_URL_PT    = "http://partner.itson.me"
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
     API_URL          = "https://api.itson.me/web/v3"
-    AFFILIATE_ID = 28
     HELP_CONTACT     = { "email" => "david.leibner@itson.me", "name" => "David"}
     HELP_CONTACT_ARY     = [{ "email" => "david.leibner@itson.me", "name" => "David"}]
 
@@ -28,7 +27,6 @@ elsif Rails.env.staging?
     PUBLIC_URL_PT    = "http://qapartner.itson.me"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
-    AFFILIATE_ID = 17
     HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
     HELP_CONTACT_ARY     = [{ "email" => "support@itson.me", "name" => "Craig"}]
 
@@ -44,7 +42,6 @@ else
     PUBLIC_URL_PT    = "http://partner.happyer.dev/"
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
-    AFFILIATE_ID = 28
     HELP_CONTACT     = { "email" => "jon.gutwillig@itson.me", "name" => "Jon"}
     HELP_CONTACT_ARY     = [{ "email" => "jon.gutwillig@itson.me", "name" => "Jon"}]
 

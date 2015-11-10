@@ -48,12 +48,8 @@ protected
                 @current_partner = @current_client.partner
             end
         else
-            @current_partner = Affiliate.find(AFFILIATE_ID)
-            hsh = {name: "Web Gifting Menu", url_name: "gift_menu", download_url: "www.itson.me/gift_menu", detail: "Its On Me Web Gifting Menu Portal"}
-            @current_client = Client.new(hsh)
-            @current_client.partner_id = AFFILIATE_ID
-            @current_client.partner_type = 'Affiliate'
-            @current_client.platform = :web_menu
+            @current_client = Client.find(1)
+            @current_partner = @current_client.partner
         end
 
         if @current_client && @current_partner
