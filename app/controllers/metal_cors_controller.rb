@@ -51,7 +51,7 @@ protected
             @current_partner = Affiliate.find(28)
             hsh = {name: "Web Gifting Menu", url_name: "gift_menu", download_url: "www.itson.me/gift_menu", detail: "Its On Me Web Gifting Menu Portal"}
             @current_client = Client.new(hsh)
-            @current_client.partner_id = 28
+            @current_client.partner_id = AFFILIATE_ID
             @current_client.partner_type = 'Affiliate'
             @current_client.platform = :web_menu
         end
