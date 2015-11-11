@@ -10,7 +10,7 @@ class FacebookOperations
 		gift = Gift.find gift_id
 		gift_obscured_id = gift.obscured_id
 		graph = self.get_graph(gift)
-        post_id_hsh = graph.put_wall_post( "Here is  Gift for you:)", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" }, gift.facebook_id)
+        post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:)", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" })
 		puts "POSTED TO FACEBOOK WALL post_gift_to_wall #{post_id_hsh}\n"
 		return { 'success' => true, 'post' => post_id_hsh }
 	end
