@@ -15,15 +15,6 @@ class FacebookOperations
 		return { 'success' => true, 'post' => post_id_hsh }
 	end
 
-	def self.full_try gift
-		gift_obscured_id = gift.obscured_id
-		graph = self.get_graph(gift)
-		hsh = { link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}", message: "Lets do this @[#{gift.facebook_id}]", privacy: { 'value' => 'EVERYONE'}, explicitly_shared: 'true', gift: "https://graph.facebook.com/v2.5/me/itsonme_test:send" }
-        post_id_hsh = graph.put_connections(gift.facebook_id, 'links', hsh)
-		puts "POSTED TO FACEBOOK WALL full_try #{post_id_hsh}\n"
-		return { 'success' => true, 'post' => post_id_hsh }
-	end
-
 	def self.notify_gift gift
         oauth = gift.oauth
         cart = JSON.parse gift.shoppingCart
@@ -40,10 +31,19 @@ class FacebookOperations
         return { 'success' => true, 'post' => post_id_hsh }
 	end
 
+	def self.full_try gift
+		gift_obscured_id = gift.obscured_id
+		graph = self.get_graph(gift)
+		hsh = { link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}", message: "Lets do this @[#{gift.facebook_id}]", privacy: { 'value' => 'EVERYONE'}, explicitly_shared: 'true', gift: "https://graph.facebook.com/v2.5/me/itsonme_test:send" }
+        post_id_hsh = graph.put_connections(gift.facebook_id, 'links', hsh)
+		puts "POSTED TO FACEBOOK WALL full_try #{post_id_hsh}\n"
+		return { 'success' => true, 'post' => post_id_hsh }
+	end
+
 	def self.put_conn gift
 		gift_obscured_id = gift.obscured_id
         graph = self.get_graph(gift)
-        post_id_hsh = graph.put_connections('me', 'feed', subject: "Gifted!", message: "@[#{gift.facebook_id}] #{gift.message}", privacy: "EVERYONE", link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" )
+        post_id_hsh = graph.put_connections('me', 'feed', subject: "Gifted!", message: "@[#{gift.facebook_id}] #{gift.message}", privacy: { 'value' => 'EVERYONE'}, link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" )
 		puts "POSTED TO FACEBOOK WALL put_conn #{post_id_hsh}\n"
 		return { 'success' => true, 'post' => post_id_hsh }
 	end
