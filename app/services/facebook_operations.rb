@@ -121,8 +121,7 @@ class FacebookOperations
 		if user.save
 			user
 		else
-			puts ''
-			puts user.errors.full_messages
+			puts user.errors.full_messages.inspect
 			user
 		end
 	end
