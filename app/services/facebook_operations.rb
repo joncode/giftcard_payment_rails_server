@@ -66,7 +66,7 @@ class FacebookOperations
 			if user.persisted?
 				return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 			else
-				return { 'success' => false, 'error' => user.errors.full_messages}
+				return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
 			end
 		end
 	end
