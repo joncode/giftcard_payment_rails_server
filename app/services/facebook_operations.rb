@@ -6,6 +6,13 @@ class FacebookOperations
         Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
 	end
 
+	def self.graph_call gift
+        graph = self.get_graph(gift)
+		post_id_hsh = graph.graph_call('v2.5/me/itsonme_test:send', { gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}", message: "#{gift.message} @[#{gift.facebook_id}] #{Time.now}", privacy: { 'value' => 'EVERYONE'}, 'fb:explicitly_shared' => 'true'}, 'post')
+		puts "POSTED TO FACEBOOK WALL graph_call #{post_id_hsh}\n"
+		return { 'success' => true, 'post' => post_id_hsh }
+	end
+
 	def self.post_gift_to_wall gift_id, user=:giver
 		gift = Gift.find gift_id
 		gift_obscured_id = gift.obscured_id
