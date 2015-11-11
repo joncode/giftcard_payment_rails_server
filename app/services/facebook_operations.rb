@@ -6,27 +6,36 @@ class FacebookOperations
         Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
 	end
 
-	def self.post_gift_to_wall gift_id
+	def self.post_gift_to_wall gift_id, user=:giver
 		gift = Gift.find gift_id
 		gift_obscured_id = gift.obscured_id
 		graph = self.get_graph(gift)
-        post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:)", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" })
+
+    	if user == :giver
+        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) giver ", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" })
+		else
+			post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) receiver", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" }, gift.facebook_id)
+		end
 		puts "POSTED TO FACEBOOK WALL post_gift_to_wall #{post_id_hsh}\n"
 		return { 'success' => true, 'post' => post_id_hsh }
 	end
 
-	def self.notify_gift gift
+	def self.notify_gift gift, user=:giver
         oauth = gift.oauth
         cart = JSON.parse gift.shoppingCart
         post_hsh = { "merchant"  => gift.provider_name,
         	"title" => cart[0]["item_name"],
-        	"url" => "#{PUBLIC_URL}/signup/acceptgift?id=#{gift.obscured_id}" }
+        	"link" => "#{PUBLIC_URL}/signup/acceptgift?id=#{gift.obscured_id}" }
         # social_proxy = SocialProxy.new(oauth.to_proxy)
         # social_proxy.create_post(post_hsh)
         # puts "------ #{social_proxy.msg}"
 
         graph = self.get_graph(gift)
-        post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], You've Received a Gift!", post_hsh)
+        if user == :giver
+        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], You've Received a Gift! giver", post_hsh)
+        else
+        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], You've Received a Gift! receiver", post_hsh, gift.facebook_id)
+        end
         puts "POSTED TO FACEBOOK WALL notify_gift #{post_id_hsh}\n"
         return { 'success' => true, 'post' => post_id_hsh }
 	end
