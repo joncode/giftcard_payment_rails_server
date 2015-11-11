@@ -5,7 +5,7 @@ class GiftCreatedEvent
     	puts "\n gift #{gift_id} is being GiftCreatedEvent.job\n"
     	gift = Gift.find gift_id
     	if gift.facebook_id.present?
-    		FacebookOperations.post_gift_to_wall(gift_id)
+    		FacebookOperations.graph_call(gift_id)
     	end
     	Accountant.merchant(gift)
     	PointsForSaleJob.perform gift_id

@@ -6,7 +6,7 @@ class Oauth < ActiveRecord::Base
 
 #   -------------
 
-    after_save :notify_socials
+    # after_save :notify_socials
 
 #   -------------
 
