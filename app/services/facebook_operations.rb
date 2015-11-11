@@ -8,7 +8,12 @@ class FacebookOperations
 
 	def self.graph_call gift
         graph = self.get_graph(gift)
-		post_id_hsh = graph.graph_call('v2.5/me/itsonme_test:send', { gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}", message: "#{gift.message} @[#{gift.facebook_id}] #{Time.now}", privacy: { 'value' => 'EVERYONE'}, 'fb:explicitly_shared' => 'true'}, 'post')
+        if Rails.env.production?
+        	search_query = 'itsonme'
+        else
+        	search_query = 'itsonme_test'
+        end
+		post_id_hsh = graph.graph_call("v2.5/me/#{search_query}:send", { gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}", message: "#{gift.message} @[#{gift.facebook_id}] #{Time.now}", privacy: { 'value' => 'EVERYONE'}, 'fb:explicitly_shared' => 'true'}, 'post')
 		puts "POSTED TO FACEBOOK WALL graph_call #{post_id_hsh}\n"
 		return { 'success' => true, 'post' => post_id_hsh }
 	end
