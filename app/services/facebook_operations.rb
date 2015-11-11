@@ -62,8 +62,12 @@ class FacebookOperations
 			user = User.new(origin: 'fb')
 			user.partner = partner
 			user.client = client
-			add_facebook_info_to_user(facebook_profile, user)
-			return self.make_oauth_args(oauth_access_token, facebook_profile, user)
+			user = add_facebook_info_to_user(facebook_profile, user)\
+			if user.persisted?
+				return self.make_oauth_args(oauth_access_token, facebook_profile, user)
+			else
+				return { 'success' => false, 'error' => user.errors }
+			end
 		end
 	end
 
@@ -114,7 +118,13 @@ class FacebookOperations
 			user.password = temp_password
 			user.password_confirmation = temp_password
 		end
-		user.save
+		if user.save
+			user
+		else
+			puts ''
+			puts user.errors.full_messages
+			user
+		end
 	end
 
 	def self.make_oauth_args(oauth_access_token, facebook_profile, user)
