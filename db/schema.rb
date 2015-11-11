@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20151029012031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "affiliates", force: :cascade do |t|
     t.string   "first_name",         limit: 255
@@ -846,7 +847,7 @@ ActiveRecord::Schema.define(version: 20151029012031) do
     t.integer  "previous_total",             default: 0
   end
 
-  add_index "payments", ["bank_id", "start_date"], name: "index_payments_on_bank_id_and_start_date", unique: true, using: :btree
+  add_index "payments", ["bank_id", "start_date"], name: "index_payments_on_bank_id_and_start_date", using: :btree
   add_index "payments", ["paid", "start_date"], name: "index_payments_on_paid_and_start_date", using: :btree
   add_index "payments", ["partner_id", "partner_type"], name: "index_payments_on_partner_id_and_partner_type", using: :btree
 

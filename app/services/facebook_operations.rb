@@ -1,7 +1,5 @@
 class FacebookOperations
 
-
-
 	def self.get_graph gift
 		giver = gift.giver
 		oauth_obj = giver.current_oauth
@@ -14,6 +12,7 @@ class FacebookOperations
 		graph = self.get_graph(gift)
         post_id_hsh = graph.put_wall_post( "Here is  Gift for you:)", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" }, gift.facebook_id)
 		puts "POSTED TO FACEBOOK WALL post_gift_to_wall #{post_id_hsh}\n"
+		return { 'success' => true, 'post' => post_id_hsh }
 	end
 
 	def self.notify_gift gift
@@ -29,12 +28,14 @@ class FacebookOperations
         graph = self.get_graph(gift)
         post_id_hsh = graph.put_wall_post( "You've Received a Gift!", post_hsh, gift.facebook_id)
         puts "POSTED TO FACEBOOK WALL notify_gift #{post_id_hsh}\n"
+        return { 'success' => true, 'post' => post_id_hsh }
 	end
 
 	def self.put_conn gift
         graph = self.get_graph(gift)
         post_id_hsh = graph.put_connections(g.facebook_id, subject: "Gifted!", message: g.message, link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" )
 		puts "POSTED TO FACEBOOK WALL put_conn #{post_id_hsh}\n"
+		return { 'success' => true, 'post' => post_id_hsh }
 	end
 
 	def self.login oauth_access_token, facebook_profile, user_social=nil
@@ -128,6 +129,8 @@ class FacebookOperations
 		#  created_at :datetime
 		#  updated_at :datetime
 		#  user_id    :integer
+		puts "make_oauth_args"
+		puts "#{oauth_access_token} - #{facebook_profile} - #{user}"
 		if user.id.nil?
 			user.reload
 		end
