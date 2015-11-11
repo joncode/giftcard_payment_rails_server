@@ -32,8 +32,9 @@ class FacebookOperations
 	end
 
 	def self.put_conn gift
+		gift_obscured_id = gift.obscured_id
         graph = self.get_graph(gift)
-        post_id_hsh = graph.put_connections(g.facebook_id, subject: "Gifted!", message: g.message, link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" )
+        post_id_hsh = graph.put_connections(g.facebook_id, subject: "Gifted!", message: gift.message, link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" )
 		puts "POSTED TO FACEBOOK WALL put_conn #{post_id_hsh}\n"
 		return { 'success' => true, 'post' => post_id_hsh }
 	end
