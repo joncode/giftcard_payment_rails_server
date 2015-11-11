@@ -13,7 +13,11 @@ class FacebookOperations
         else
         	search_query = 'itsonme_test'
         end
-		post_id_hsh = graph.graph_call("v2.5/me/#{search_query}:send", { gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}", message: "#{gift.message} @[#{gift.facebook_id}] #{Time.now}", privacy: { 'value' => 'EVERYONE'}, 'fb:explicitly_shared' => 'true'}, 'post')
+		post_id_hsh = graph.graph_call("v2.5/me/#{search_query}:send", { tags: "#{gift.facebook_id}",
+			gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}",
+			message: "#{gift.message} @[#{gift.facebook_id}] #{Time.now}",
+			privacy: { 'value' => 'EVERYONE'},
+			'fb:explicitly_shared' => 'true'}, 'post')
 		puts "POSTED TO FACEBOOK WALL graph_call #{post_id_hsh}\n"
 		return { 'success' => true, 'post' => post_id_hsh }
 	end
