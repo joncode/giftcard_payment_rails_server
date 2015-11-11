@@ -9,7 +9,7 @@ gem 'pg'
 gem 'excon', '~> 0.44.4'
 
 #gem 'unicorn'
-gem 'puma'
+gem 'puma', '~> 2.15.0'
 gem "rack-timeout"
 
 gem 'httparty', '~> 0.9.0'
