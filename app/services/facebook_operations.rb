@@ -43,11 +43,11 @@ class FacebookOperations
 	def self.full_try gift, user=:giver
 		gift_obscured_id = gift.obscured_id
 		graph = self.get_graph(gift)
-		hsh = { gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}", message: "Lets do this @[#{gift.facebook_id}]", privacy: { 'value' => 'EVERYONE'}, explicitly_shared: 'true', link: "https://graph.facebook.com/v2.5/me/itsonme_test:send" }
+		hsh = { gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}", message: "Lets do this @[jon.gifter] #{Time.now}", privacy: { 'value' => 'EVERYONE'}, 'fb:explicitly_shared' => 'true'}
         if user == :giver
-	        post_id_hsh = graph.put_connections('me', 'itsonme_test:send', hsh)
+	        post_id_hsh = graph.put_connections('me', '/me/itsonme_test:send', hsh)
     	else
-	        post_id_hsh = graph.put_connections(gift.facebook_id, 'itsonme_test:send', hsh)
+	        post_id_hsh = graph.put_connections(gift.facebook_id, '/me/itsonme_test:send', hsh)
     	end
 		puts "POSTED TO FACEBOOK WALL full_try #{post_id_hsh}\n"
 		return { 'success' => true, 'post' => post_id_hsh }
