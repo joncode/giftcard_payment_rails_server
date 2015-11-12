@@ -4,7 +4,7 @@ class GiftCreatedEvent
     def self.perform gift_id
     	puts "\n gift #{gift_id} is being GiftCreatedEvent.job\n"
     	gift = Gift.find gift_id
-        FacebookOperations.notify_receiver_from_giver(gift)
+        FacebookOps.notify_receiver_from_giver(gift)
     	Accountant.merchant(gift)
     	PointsForSaleJob.perform gift_id
     end
