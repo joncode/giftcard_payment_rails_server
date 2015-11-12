@@ -1,4 +1,4 @@
-class FacebookOperations
+class FacebookOps
 
 	def self.notify_receiver_from_giver(gift)
     	if gift.facebook_id.present?
