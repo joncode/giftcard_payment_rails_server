@@ -13,5 +13,3 @@ class GiftReceiverInfoValidator < ActiveModel::Validator
     end
 
 end
-
-

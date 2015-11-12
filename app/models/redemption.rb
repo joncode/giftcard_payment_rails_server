@@ -4,6 +4,10 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
+    validates_with RedemptionTotalValueValidator
+
+#   -------------
+
 	enum type_of: [ :positronics, :v2, :v1 ]
 
 	def self.init_with_gift(gift, loc_id=nil, r_type_of=nil)

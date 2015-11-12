@@ -6,10 +6,6 @@ class Oauth < ActiveRecord::Base
 
 #   -------------
 
-    # after_save :notify_socials
-
-#   -------------
-
     belongs_to :gift
     belongs_to :user
 
@@ -58,11 +54,6 @@ private
         self.network == "twitter"
     end
 
-    def notify_socials
-        if self.gift_id.present?
-            Resque.enqueue(GiftCreateNotifySocial, self.gift_id)
-        end
-    end
 end
 # == Schema Information
 #

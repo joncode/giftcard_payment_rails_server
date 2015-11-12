@@ -26,8 +26,4 @@ module GiftMessenger
         notify_receiver_proto_join
     end
 
-    def messenger_publish_gift_created
-        Resque.enqueue(GiftCreatedEvent, self.id)
-    end
-
 end

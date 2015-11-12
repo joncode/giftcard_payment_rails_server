@@ -48,6 +48,7 @@ class Gift < ActiveRecord::Base
     after_create :set_client_content
 
     after_create :fire_after_save_queue
+    after_create :fire_gift_create_event
 
 #   -------------
 
@@ -379,7 +380,12 @@ class Gift < ActiveRecord::Base
         Resque.enqueue(GiftAfterSaveJob, self.id, client_id)
     end
 
+    def fire_gift_create_event
+        Resque.enqueue(GiftCreatedEvent, self.id)
+    end
+
 private
+
 
     def set_client_content
         if self.client && self.partner

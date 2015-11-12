@@ -66,11 +66,13 @@ class Web::V3::FacebookController < MetalCorsController
         url_safe_token = url_encode(decoded_token)
         # puts "\n TOKEN ----- \n#{params['token']} \n  CODE ----------  \n#{params['code']}  \n"
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(url_safe_token))
-        if params['error'].present? || params['error_code'].present?
+        if params['error'].present? || params['error_code'].present? || params['error_subcode']
             if params['error']
                 error_param = "?error=#{url_encode(resp['error'])}&error_reason=#{url_encode(resp['error_reason'])}"
-            else
+            elsif params['error_code']
                 error_param = "?error=#{url_encode(resp['error_code'])}&error_reason=#{url_encode(resp['error_message'])}"
+            else
+                error_param = "?error=#{url_encode(resp['error_subcode'])}&error_reason=#{url_encode(resp['message'])}"
             end
             full_response_url = return_params['return_url'] + error_param
             redirect_to full_response_url

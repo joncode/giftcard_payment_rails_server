@@ -1,5 +1,17 @@
 class FacebookOperations
 
+	def self.notify_receiver_from_giver(gift)
+    	if gift.facebook_id.present?
+    		self.graph_call(gift)
+    	else
+            oa = gift.oauth
+            if oa.present? && oa.network == 'facebook'
+                gift.update(facebook_id: oa.network_id)
+                self.graph_call(gift)
+            end
+        end
+	end
+
 	def self.taggable_friends user
 		oauth_obj = user.current_oauth
 		friends = graph.graph_call("v2.5/me/taggable_friends", { limit: 1000 })

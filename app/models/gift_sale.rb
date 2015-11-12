@@ -23,7 +23,6 @@ class GiftSale < Gift
         else
             if gift.persisted?
                 gift.messenger(:invoice_giver)
-                gift.messenger_publish_gift_created
             end
             gift
         end

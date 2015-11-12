@@ -4,15 +4,7 @@ class GiftCreatedEvent
     def self.perform gift_id
     	puts "\n gift #{gift_id} is being GiftCreatedEvent.job\n"
     	gift = Gift.find gift_id
-    	if gift.facebook_id.present?
-    		FacebookOperations.graph_call(gift)
-    	else
-            oa = gift.oauth
-            if oa.present? && oa.network == 'facebook'
-                gift.update(facebook_id: oa.network_id)
-                FacebookOperations.graph_call(gift)
-            end
-        end
+        FacebookOperations.notify_receiver_from_giver(gift)
     	Accountant.merchant(gift)
     	PointsForSaleJob.perform gift_id
     end

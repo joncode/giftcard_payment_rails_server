@@ -8,7 +8,6 @@ class GiftAdmin < Gift
         gift = super
         if gift.persisted?
             gift.messenger
-            gift.messenger_publish_gift_created
         end
         gift
     end
