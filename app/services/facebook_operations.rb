@@ -1,5 +1,14 @@
 class FacebookOperations
 
+	def self.taggable_friends user
+		oauth_obj = user.current_oauth
+		friends = graph.graph_call("v2.5/me/taggable_friends", { limit: 1000 })
+		if friends.count == 700
+			# call the pagination link
+		end
+		friends
+	end
+
 	def self.get_graph gift
 		giver = gift.giver
 		oauth_obj = giver.current_oauth
