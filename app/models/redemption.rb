@@ -4,7 +4,7 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-    validates_with RedemptionTotalValueValidator
+    # validates_with RedemptionTotalValueValidator
 
 #   -------------
 
