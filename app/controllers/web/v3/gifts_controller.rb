@@ -162,6 +162,7 @@ class Web::V3::GiftsController < MetalCorsController
                 fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
             elsif merchant.r_sys == 3
                 if ticket_num = redeem_params["ticket_num"]
+                    gift.rec_client_id = @current_client.id
                     resp = gift.pos_redeem(ticket_num, merchant.pos_merchant_id, merchant.tender_type_id, loc_id)
                     if !resp.kind_of?(Hash)
                         status = :bad_request
@@ -179,6 +180,7 @@ class Web::V3::GiftsController < MetalCorsController
                     fail_web({ err: "NOT_REDEEMABLE", msg: "Ticket Number not found"})
                 end
             else
+                gift.rec_client_id = @current_client.id
                 gift.redeem_gift(server_inits, loc_id)
                 gift.fire_after_save_queue(@current_client)
                 success gift.web_serialize

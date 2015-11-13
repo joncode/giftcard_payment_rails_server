@@ -27,6 +27,7 @@ private
         args["giver"]    = old_gift.receiver
         args["merchant"] = old_gift.merchant
         args["value"]    = old_gift.value
+        args['balance'] = old_gift.balance
         args["cost"]     = old_gift.cost if old_gift.cost
         args["detail"]   = old_gift.detail
         args["shoppingCart"] = old_gift.shoppingCart

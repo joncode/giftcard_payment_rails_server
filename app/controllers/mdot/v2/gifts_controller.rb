@@ -82,6 +82,7 @@ class Mdot::V2::GiftsController < JsonController
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = pos_redeem_params
                 if !gift.merchant.nil?
+                    gift.rec_client_id = @current_user.session_token_obj.client_id
                     resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id)
                     if !resp.kind_of?(Hash)
                         status = :bad_request
@@ -120,6 +121,7 @@ class Mdot::V2::GiftsController < JsonController
         if gift
             if gift.status == 'notified'
                 if true # gift.token == request_params["token"]
+                    gift.rec_client_id = @current_user.session_token_obj.client_id
                     gift.redeem_gift(request_server)
                     # gift.reload
                     success({ "order_number" => gift.token , "total" => gift.value,  "server" => gift.server })
@@ -153,8 +155,13 @@ class Mdot::V2::GiftsController < JsonController
             new_gift_hsh = data["receiver"]
         end
 
+        new_gift_hsh["receiver_oauth"] = params['data']["receiver_oauth"]
         new_gift_hsh["message"]     = data["message"]
         new_gift_hsh["old_gift_id"] = params[:id]
+        new_gift_hsh["origin"] = request.headers['User-Agent']
+        new_gift_hsh['client_id'] = @current_user.session_token_obj.client_id
+        new_gift_hsh['partner_id'] = @current_user.session_token_obj.partner_id
+        new_gift_hsh['partner_type'] = @current_user.session_token_obj.partner_type
         gift_response = GiftRegift.create(new_gift_hsh)
 
         if gift_response.kind_of?(Gift)
@@ -191,6 +198,9 @@ class Mdot::V2::GiftsController < JsonController
             gift_hsh["giver"]        = @current_user
             gift_hsh["receiver_oauth"] = params['data']["receiver_oauth"]
             gift_hsh["origin"] = request.headers['User-Agent']
+            gift_hsh['client_id'] = @current_user.session_token_obj.client_id
+            gift_hsh['partner_id'] = @current_user.session_token_obj.partner_id
+            gift_hsh['partner_type'] = @current_user.session_token_obj.partner_type
             gift_response = GiftSale.create(gift_hsh)
         end
 
@@ -250,8 +260,9 @@ private
     end
 
     def regift_params
-        params.require(:data).permit(:message, receiver: [:name, :receiver_id,
-            :email, :phone, :facebook_id, :twitter, :receiver_email, :receiver_phone])
+        params.require(:data).permit(:message,
+            receiver: [:name, :receiver_id, :email, :phone, :facebook_id, :twitter, :receiver_email, :receiver_phone],
+            receiver_oauth: [:token, :secret, :network, :network_id, :handle, :photo])
     end
 
     def gift_params
