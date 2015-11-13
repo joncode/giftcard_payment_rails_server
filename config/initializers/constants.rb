@@ -12,6 +12,7 @@ if Rails.env.production?
     PUBLIC_URL_PT    = "http://partner.itson.me"
     IOS_CLIENT_ID = 5
     ANDROID_CLIENT_ID = 4
+    WBG_CLIENT_ID = 1
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
     API_URL          = "https://api.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "david.leibner@itson.me", "name" => "David"}
@@ -29,6 +30,7 @@ elsif Rails.env.staging?
     PUBLIC_URL_PT    = "http://qapartner.itson.me"
     IOS_CLIENT_ID = 8
     ANDROID_CLIENT_ID = 6
+    WBG_CLIENT_ID = 1
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
@@ -46,6 +48,7 @@ else
     PUBLIC_URL_PT    = "http://partner.happyer.dev/"
     IOS_CLIENT_ID = 5
     ANDROID_CLIENT_ID = 4
+    WBG_CLIENT_ID = 1
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "jon.gutwillig@itson.me", "name" => "Jon"}

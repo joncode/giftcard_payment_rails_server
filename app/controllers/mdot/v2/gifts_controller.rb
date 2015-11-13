@@ -60,8 +60,6 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def notify  # redemption v2 ONLY
-
-
         gift   = @current_user.received.where(id: params[:id]).first
         return nil if params_bad_request
         return nil if data_not_found?(gift)

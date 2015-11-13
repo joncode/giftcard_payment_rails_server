@@ -86,6 +86,7 @@ class Mdot::V2::UsersController < JsonController
     end
 
     def create
+        platform = nil
         return nil  if data_not_hash?(params["data"])
         return nil  if hash_empty?(params["data"])
         params["data"] = if params["data"].kind_of?(String)
@@ -110,11 +111,7 @@ class Mdot::V2::UsersController < JsonController
 
         user = User.new(create_user_params)
         if user.save
-            if platform != 'android'
-                @current_client  = Client.find(IOS_CLIENT_ID)
-            else
-                @current_client  = Client.find(ANDROID_CLIENT_ID)
-            end
+            @current_client = Client.legacy_client(platform, request.headers['User-Agent'])
             @current_partner = @current_client.partner
             user.session_token_obj =  SessionToken.create_token_obj(user, platform, pn_token,  @current_client, @current_partner)
             success user.create_serialize

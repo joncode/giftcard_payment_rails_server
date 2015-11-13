@@ -68,6 +68,19 @@ class Client < ActiveRecord::Base
 		client_content.destroy if client_content
 	end
 
+#	-------------
+
+	def self.legacy_client platform, agent_str=''
+        if platform == 'android' || agent_str.match(/Android/)
+            self.find(ANDROID_CLIENT_ID)
+        elsif platform == 'ios' || agent_str.match(/iPhone/)
+        	self.find(IOS_CLIENT_ID)
+        else
+        	self.find(WBG_CLIENT_ID)
+        end
+	end
+
+
 private
 
 	def create_unique_application_key
