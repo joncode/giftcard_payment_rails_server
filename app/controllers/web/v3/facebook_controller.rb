@@ -14,9 +14,8 @@ class Web::V3::FacebookController < MetalCorsController
         else
             fail(resp['error'])
             @app_response["msg"] = resp['error']
-            status = 404
         end
-        respond(status)
+        respond
     end
 
     def taggable_friends
@@ -26,9 +25,8 @@ class Web::V3::FacebookController < MetalCorsController
         else
             fail(resp['error'])
             @app_response["msg"] = resp['error']
-            status = 404
         end
-        respond(status)
+        respond
     end
 
     def profile
@@ -38,9 +36,8 @@ class Web::V3::FacebookController < MetalCorsController
         else
             fail(resp['error'])
             @app_response["msg"] = resp['error']
-            status = 404
         end
-        respond(status)
+        respond
     end
 
     def create
