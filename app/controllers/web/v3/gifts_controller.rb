@@ -38,7 +38,7 @@ class Web::V3::GiftsController < MetalCorsController
 
     def regift
         gift_hsh = {}
-        gps = gift_params
+        gps = regift_params
         set_receiver(gps, gift_hsh)
         set_origin(gps, gift_hsh)
         gift_hsh["message"]     = data["message"]
