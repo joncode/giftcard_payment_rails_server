@@ -82,6 +82,7 @@ NUMBER_ID = 649387
 VERSION_NUMBER  = "1.6.3.2"
 VERSION_UPDATED = "7/23/15"
 
+TIME_ZONES = {0 => "Pacific Time (US & Canada)", 1 => "Mountain Time (US & Canada)", 2 => "Central Time (US & Canada)", 3 => "Eastern Time (US & Canada)"}
 
 
 if Rails.env.test?

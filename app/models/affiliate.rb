@@ -1,4 +1,5 @@
 class Affiliate < ActiveRecord::Base
+    include CompanyDuckType
 
 	has_many :affiliations
 	has_many :merchants, through: :affiliations, source: :target, source_type: 'Merchant'

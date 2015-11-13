@@ -1,4 +1,5 @@
 class Merchant < ActiveRecord::Base
+    include CompanyDuckType
     include ShortenPhotoUrlHelper
     include Formatter
     include MerchantSerializers
