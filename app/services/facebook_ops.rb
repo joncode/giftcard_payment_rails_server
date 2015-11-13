@@ -12,13 +12,47 @@ class FacebookOps
         end
 	end
 
-	def self.taggable_friends user
-		graph = self.graph_call(nil, user)
-		friends = graph.graph_call("v2.5/me/taggable_friends", { limit: 1000 })
+	def self.profile user, facebook_id
+		query_str = facebook_id.nil? ? 'me' : facebook_id
+		graph = self.get_graph(nil, user)
+		begin
+			profile = graph.get_object(query_str)
+		rescue => e
+			puts e.response_body
+			error_message = e.fb_error_user_msg || e.fb_error_message || e.response_body
+			return { 'success' => false, 'error' => error_message }
+		end
+		return { 'success' => true, 'data' => profile }
+	end
+
+	def self.app_friends user
+		graph = self.get_graph(nil, user)
+		begin
+			friends = graph.get_connections('me','friends')
+		rescue => e
+			puts e.response_body
+			error_message = e.fb_error_user_msg || e.fb_error_message || e.response_body
+			return { 'success' => false, 'error' => error_message }
+		end
 		if friends.count == 700
 			# call the pagination link
 		end
-		friends
+		return { 'success' => true, 'data' => friends }
+	end
+
+	def self.taggable_friends user
+		graph = self.get_graph(nil, user)
+		begin
+			friends = graph.graph_call("v2.5/me/taggable_friends", { limit: 1000 })
+		rescue => e
+			puts e.response_body
+			error_message = e.fb_error_user_msg || e.fb_error_message || e.response_body
+			return { 'success' => false, 'error' => error_message }
+		end
+		if friends.count == 700
+			# call the pagination link
+		end
+		return { 'success' => true, 'data' => friends }
 	end
 
 	def self.get_graph gift=nil, user=nil

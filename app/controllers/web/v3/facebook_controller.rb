@@ -10,28 +10,53 @@ class Web::V3::FacebookController < MetalCorsController
     def friends
         oauth_obj = @current_user.current_oauth
         if oauth_obj.kind_of?(Oauth)
-            graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
-            success graph.get_connections('me','friends')
+            resp = FacebookOps.app_friends(@current_user)
+            if resp['success']
+                success(resp['data'])
+            else
+                fail(resp['error'])
+            end
             respond
         else
             fail    "Facebook profile not found"
-            @app_response["msg"] = "Facebook profile not found"
+            @app_response["msg"] = "Please re-authenticate Facebook"
+            status = 404
+            respond(status)
+        end
+    end
+
+    def taggable_friends
+        oauth_obj = @current_user.current_oauth
+        if oauth_obj.kind_of?(Oauth)
+            resp = FacebookOps.taggable_friends(@current_user)
+            if resp['success']
+                success(resp['data'])
+            else
+                fail(resp['error'])
+            end
+            respond
+        else
+            fail    "Facebook profile not found"
+            @app_response["msg"] = "Please re-authenticate Facebook"
             status = 404
             respond(status)
         end
     end
 
     def profile
-        query_str = params['facebook_id'].nil? ? 'me' : 'facebook_id'
 
         oauth_obj = @current_user.current_oauth
         if oauth_obj.kind_of?(Oauth)
-            graph = Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
-            success graph.get_object(query_str)
+            resp = FacebookOps.profile(@current_user, params['facebook_id'])
+            if resp['success']
+                success(resp['data'])
+            else
+                fail(resp['error'])
+            end
             respond
         else
             fail    "Facebook profile not found"
-            @app_response["msg"] = "Facebook profile not found"
+            @app_response["msg"] = "Please re-authenticate Facebook"
             status = 404
             respond(status)
         end
@@ -46,7 +71,7 @@ class Web::V3::FacebookController < MetalCorsController
             respond
         else
             fail    "Facebook profile not found"
-            @app_response["msg"] = "Facebook profile not found"
+            @app_response["msg"] = "Please re-authenticate Facebook"
             status = 404
             respond(status)
         end
@@ -54,7 +79,7 @@ class Web::V3::FacebookController < MetalCorsController
 
     def oauth_init
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(generate_token(params)))
-        redirect_url = oauth.url_for_oauth_code(scope: ['public_profile', 'user_friends', 'email', 'user_birthday', 'publish_actions', 'user_location'])
+        redirect_url = oauth.url_for_oauth_code(scope: ['taggable_friends','user_posts','public_profile', 'user_friends', 'email', 'user_birthday', 'publish_actions', 'user_location'])
         # success redirect_url
         # respond(:found)
         redirect_to redirect_url
