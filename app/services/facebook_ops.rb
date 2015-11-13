@@ -6,7 +6,7 @@ class FacebookOps
 		puts err.response_body
 		error_message = err.fb_error_user_msg || err.fb_error_message || err.response_body
 		if error_message.match(/access token/)
-			return "Looks like we have a problem with facebook authorization, please re-connect to facebook."
+			return "Looks like we have a problem with facebook authorization, please re-connect to facebook. (If you continue to see this message, upgrade your app)"
 		end
 		error_message
 	end
@@ -19,7 +19,7 @@ class FacebookOps
 		if oauth_obj.kind_of?(Oauth)
 	        Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
 	    else
-	    	return { 'success' => false, 'error' => "Facebook profile token expired. Please re-authenticate Facebook" }
+	    	return { 'success' => false, 'error' => "Facebook profile token expired. Please re-authenticate Facebook. (If you continue to see this message, upgrade your app)" }
 	    end
 	end
 
