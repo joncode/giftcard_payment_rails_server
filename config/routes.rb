@@ -145,6 +145,7 @@ Drinkboard::Application.routes.draw do
           patch :read
           patch :notify
           patch :redeem
+          post :regift
         end
       end
 

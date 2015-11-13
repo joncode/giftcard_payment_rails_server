@@ -36,53 +36,46 @@ class Web::V3::GiftsController < MetalCorsController
         respond
     end
 
-    def create
-        gift_hash = {}
+    def regift
+        gift_hsh = {}
         gps = gift_params
-        case gps[:rec_net]
-        when "em"
-            gift_hash["receiver_email"] = gps[:rec_net_id]
-        when "ph"
-            gift_hash["receiver_phone"] = gps[:rec_net_id]
-        when "fb"
-            gift_hash["receiver_oauth"] = {}
-            gift_hash["receiver_oauth"]["network"] = "facebook"
-            gift_hash["receiver_oauth"]["network_id"] = gps[:rec_net_id]
-            gift_hash["receiver_oauth"]["token"]   = gps[:rec_token]
-            gift_hash["receiver_oauth"]["photo"]   = gps[:rec_photo] if gps[:rec_photo]
-        when "io"
-            gift_hash["receiver_id"] = gps[:rec_net_id]
-        when "tw"
-            gift_hash["receiver_oauth"] = {}
-            gift_hash["receiver_oauth"]["network"] = "twitter"
-            gift_hash["receiver_oauth"]["network_id"] = gps[:rec_net_id]
-            gift_hash["receiver_oauth"]["token"]   = gps[:rec_token]
-            gift_hash["receiver_oauth"]["secret"]  = gps[:rec_secret]
-            gift_hash["receiver_oauth"]["handle"]  = gps[:rec_handle]
-            gift_hash["receiver_oauth"]["photo"]   = gps[:rec_photo] if gps[:rec_photo]
-        end
-        gift_hash["shoppingCart"]  = gps[:items]
-        gift_hash["giver"]         = @current_user
-        gift_hash["credit_card"]   = gps[:pay_id]
-        gift_hash["receiver_name"] = gps[:rec_name]
-        gift_hash["merchant_id"]   = gps[:loc_id]
-        gift_hash["value"]         = gps[:value]
-        gift_hash["message"]       = gps[:msg]
-        gift_hash["link"]          = gps[:link] || nil
-        if gps[:origin]
-            gift_hash["origin"] = gps[:origin]
-        else
-            if gift_hash["link"]
-                gift_hash["origin"] = gift_hash["link"]
-            else
-                gift_hash["origin"] = "www.itson.me"
-            end
-        end
+        set_receiver(gps, gift_hsh)
+        set_origin(gps, gift_hsh)
+        gift_hsh["message"]     = data["message"]
+        gift_hsh["old_gift_id"] = params[:id]
 
-        gift_hash["client_id"]     = @current_client.id
-        gift_hash["partner_id"]    = @current_partner.id
-        gift_hash["partner_type"]  = @current_partner.class.to_s
-        gift = GiftSale.create(gift_hash)
+        gift_response = GiftRegift.create(gift_hsh)
+        if gift_response.kind_of?(Gift)
+            if gift_response.id.nil?
+                fail_web fail_web_payload("not_created_gift", gift_response.errors)
+                if gift_response.errors.messages == {:receiver=> ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]}
+                    status = :bad_request
+                end
+            else
+                gift.fire_after_save_queue(@current_client)
+                success gift.web_serialize
+            end
+        else
+            fail_web({ err: "INVALID_INPUT", msg: "Gift could not be created", data: gift})
+            status = :forbidden
+        end
+        respond(status)
+    end
+
+    def create
+        gift_hsh = {}
+        gps = gift_params
+        set_receiver(gps, gift_hsh)
+        set_origin(gps, gift_hsh)
+        gift_hsh["shoppingCart"]  = gps[:items]
+        gift_hsh["giver"]         = @current_user
+        gift_hsh["credit_card"]   = gps[:pay_id]
+
+        gift_hsh["merchant_id"]   = gps[:loc_id]
+        gift_hsh["value"]         = gps[:value]
+        gift_hsh["message"]       = gps[:msg]
+
+        gift = GiftSale.create(gift_hsh)
         if gift.kind_of?(Gift) && !gift.id.nil?
             # binding.pry
             gift.fire_after_save_queue(@current_client)
@@ -198,12 +191,60 @@ class Web::V3::GiftsController < MetalCorsController
 
 private
 
+    def set_origin gps, gift_hsh
+        gift_hsh["link"]          = gps[:link] || nil
+        if gps[:origin]
+            gift_hsh["origin"] = gps[:origin]
+        else
+            if gift_hsh["link"]
+                gift_hsh["origin"] = gift_hsh["link"]
+            else
+                gift_hsh["origin"] = request.headers['User-Agent']
+            end
+        end
+        gift_hsh["client_id"]     = @current_client.id
+        gift_hsh["partner_id"]    = @current_partner.id
+        gift_hsh["partner_type"]  = @current_partner.class.to_s
+    end
+
+    def set_receiver gps, gift_hsh
+        gift_hsh["receiver_name"] = gps[:rec_name]
+        case gps[:rec_net]
+        when "em"
+            gift_hsh["receiver_email"] = gps[:rec_net_id]
+        when "ph"
+            gift_hsh["receiver_phone"] = gps[:rec_net_id]
+        when "fb"
+            gift_hsh["receiver_oauth"] = {}
+            gift_hsh["receiver_oauth"]["network"] = "facebook"
+            gift_hsh["receiver_oauth"]["network_id"] = gps[:rec_net_id]
+            gift_hsh["receiver_oauth"]["token"]   = gps[:rec_token]
+            gift_hsh["receiver_oauth"]["photo"]   = gps[:rec_photo]
+            gift_hsh['facebook_id'] = gps[:rec_net_id]
+        when "io"
+            gift_hsh["receiver_id"] = gps[:rec_net_id]
+        when "tw"
+            gift_hsh["receiver_oauth"] = {}
+            gift_hsh["receiver_oauth"]["network"] = "twitter"
+            gift_hsh["receiver_oauth"]["network_id"] = gps[:rec_net_id]
+            gift_hsh["receiver_oauth"]["token"]   = gps[:rec_token]
+            gift_hsh["receiver_oauth"]["secret"]  = gps[:rec_secret]
+            gift_hsh["receiver_oauth"]["handle"]  = gps[:rec_handle]
+            gift_hsh["receiver_oauth"]["photo"]   = gps[:rec_photo]
+            gift_hsh['twitter'] = gps[:rec_net_id]
+        end
+    end
+
     def notify_params
         params.require(:data).permit(:loc_id)
     end
 
     def pos_redeem_params
         params.require(:data).permit(:ticket_num, :loc_id)
+    end
+
+    def regift_params
+        params.require(:data).permit(:link, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :msg, :cat)
     end
 
     def gift_params
