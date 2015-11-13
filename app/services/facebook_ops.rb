@@ -1,5 +1,70 @@
 class FacebookOps
 
+#   -------------  Utilities
+
+	def self.parse_error err
+		puts e.response_body
+		error_message = err.fb_error_user_msg || err.fb_error_message || err.response_body
+		if error_message.match(/access token/)
+			return "Looks like we have a problem with facebook authorization, please re-connect to facebook."
+		end
+		error_message
+	end
+
+	def self.get_graph gift=nil, user=nil
+		if gift
+			user = gift.giver
+		end
+		oauth_obj = user.current_oauth
+		if oauth_obj.kind_of?(Oauth)
+	        Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
+	    else
+	    	return { 'success' => false, 'error' => "Facebook profile token expired. Please re-authenticate Facebook" }
+	    end
+	end
+
+#   -------------  Basic Graph Queries
+
+	def self.profile user, facebook_id=nil
+		graph = self.get_graph(nil, user)
+		return graph if graph.kind_of?(Hash) && !graph['success']
+		begin
+			query_str = facebook_id || 'me'
+			profile = graph.get_object(query_str)
+		rescue => e
+			return { 'success' => false, 'error' => self.parse_error(e) }
+		end
+		return { 'success' => true, 'data' => profile }
+	end
+
+	def self.app_friends user
+		graph = self.get_graph(nil, user)
+		return graph if graph.kind_of?(Hash) && !graph['success']
+		begin
+			friends = graph.get_connections('me','friends')
+		rescue => e
+			return { 'success' => false, 'error' => self.parse_error(e) }
+		end
+		if friends.count == 700
+			# call the pagination link
+		end
+		return { 'success' => true, 'data' => friends }
+	end
+
+	def self.taggable_friends user
+		graph = self.get_graph(nil, user)
+		return graph if graph.kind_of?(Hash) && !graph['success']
+		begin
+			friends = graph.graph_call("v2.5/me/taggable_friends", { limit: 1000 })
+		rescue => e
+			return { 'success' => false, 'error' => self.parse_error(e) }
+		end
+		if friends.count == 700
+			# call the pagination link
+		end
+		return { 'success' => true, 'data' => friends }
+	end
+
 	def self.notify_receiver_from_giver(gift)
     	if gift.facebook_id.present?
     		self.graph_call(gift)
@@ -12,56 +77,7 @@ class FacebookOps
         end
 	end
 
-	def self.profile user, facebook_id
-		query_str = facebook_id.nil? ? 'me' : facebook_id
-		graph = self.get_graph(nil, user)
-		begin
-			profile = graph.get_object(query_str)
-		rescue => e
-			puts e.response_body
-			error_message = e.fb_error_user_msg || e.fb_error_message || e.response_body
-			return { 'success' => false, 'error' => error_message }
-		end
-		return { 'success' => true, 'data' => profile }
-	end
-
-	def self.app_friends user
-		graph = self.get_graph(nil, user)
-		begin
-			friends = graph.get_connections('me','friends')
-		rescue => e
-			puts e.response_body
-			error_message = e.fb_error_user_msg || e.fb_error_message || e.response_body
-			return { 'success' => false, 'error' => error_message }
-		end
-		if friends.count == 700
-			# call the pagination link
-		end
-		return { 'success' => true, 'data' => friends }
-	end
-
-	def self.taggable_friends user
-		graph = self.get_graph(nil, user)
-		begin
-			friends = graph.graph_call("v2.5/me/taggable_friends", { limit: 1000 })
-		rescue => e
-			puts e.response_body
-			error_message = e.fb_error_user_msg || e.fb_error_message || e.response_body
-			return { 'success' => false, 'error' => error_message }
-		end
-		if friends.count == 700
-			# call the pagination link
-		end
-		return { 'success' => true, 'data' => friends }
-	end
-
-	def self.get_graph gift=nil, user=nil
-		if gift
-			user = gift.giver
-		end
-		oauth_obj = user.current_oauth
-        Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
-	end
+#   -------------  Wall Posting
 
 	def self.graph_call gift
         graph = self.get_graph(gift)
@@ -79,60 +95,7 @@ class FacebookOps
 		return { 'success' => true, 'post' => post_id_hsh }
 	end
 
-	def self.post_gift_to_wall gift_id, user=:giver
-		gift = Gift.find gift_id
-		gift_obscured_id = gift.obscured_id
-		graph = self.get_graph(gift)
-
-    	if user == :giver
-        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) giver ", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" })
-		else
-			post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) receiver", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" }, gift.facebook_id)
-		end
-		puts "POSTED TO FACEBOOK WALL post_gift_to_wall #{post_id_hsh}\n"
-		return { 'success' => true, 'post' => post_id_hsh }
-	end
-
-	def self.notify_gift gift, user=:giver
-        oauth = gift.oauth
-        cart = JSON.parse gift.shoppingCart
-        post_hsh = { "merchant"  => gift.provider_name,
-        	"title" => cart[0]["item_name"],
-        	"link" => "#{PUBLIC_URL}/signup/acceptgift?id=#{gift.obscured_id}" }
-        # social_proxy = SocialProxy.new(oauth.to_proxy)
-        # social_proxy.create_post(post_hsh)
-        # puts "------ #{social_proxy.msg}"
-
-        graph = self.get_graph(gift)
-        if user == :giver
-        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], You've Received a Gift! giver", post_hsh)
-        else
-        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], You've Received a Gift! receiver", post_hsh, gift.facebook_id)
-        end
-        puts "POSTED TO FACEBOOK WALL notify_gift #{post_id_hsh}\n"
-        return { 'success' => true, 'post' => post_id_hsh }
-	end
-
-	def self.full_try gift, user=:giver
-		gift_obscured_id = gift.obscured_id
-		graph = self.get_graph(gift)
-		hsh = { gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}", message: "Lets do this @[jon.gifter] #{Time.now}", privacy: { 'value' => 'EVERYONE'}, 'fb:explicitly_shared' => 'true'}
-        if user == :giver
-	        post_id_hsh = graph.put_connections('me', '/me/itsonme_test:send', hsh)
-    	else
-	        post_id_hsh = graph.put_connections(gift.facebook_id, '/me/itsonme_test:send', hsh)
-    	end
-		puts "POSTED TO FACEBOOK WALL full_try #{post_id_hsh}\n"
-		return { 'success' => true, 'post' => post_id_hsh }
-	end
-
-	def self.put_conn gift
-		gift_obscured_id = gift.obscured_id
-        graph = self.get_graph(gift)
-        post_id_hsh = graph.put_connections('me', 'itsonme_test:send', subject: "Gifted!", message: "@[#{gift.facebook_id}] #{gift.message}", privacy: { 'value' => 'EVERYONE'}, link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" )
-		puts "POSTED TO FACEBOOK WALL put_conn #{post_id_hsh}\n"
-		return { 'success' => true, 'post' => post_id_hsh }
-	end
+#   -------------  Login / Connect to Account
 
 	def self.login oauth_access_token, facebook_profile, user_social=nil
 		if user_social.nil?
@@ -180,7 +143,7 @@ class FacebookOps
 		end
 	end
 
-## PRIVATE API
+#   -------------  PRIVATE API
 
 	def self.add_facebook_info_to_user(facebook_profile, user)
 		# {"id"=>"503107738",
@@ -250,5 +213,60 @@ class FacebookOps
 
 	end
 
-
 end
+
+
+	# def self.post_gift_to_wall gift_id, user=:giver
+	# 	gift = Gift.find gift_id
+	# 	gift_obscured_id = gift.obscured_id
+	# 	graph = self.get_graph(gift)
+
+ #    	if user == :giver
+ #        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) giver ", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" })
+	# 	else
+	# 		post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) receiver", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" }, gift.facebook_id)
+	# 	end
+	# 	puts "POSTED TO FACEBOOK WALL post_gift_to_wall #{post_id_hsh}\n"
+	# 	return { 'success' => true, 'post' => post_id_hsh }
+	# end
+
+	# def self.notify_gift gift, user=:giver
+ #        oauth = gift.oauth
+ #        cart = JSON.parse gift.shoppingCart
+ #        post_hsh = { "merchant"  => gift.provider_name,
+ #        	"title" => cart[0]["item_name"],
+ #        	"link" => "#{PUBLIC_URL}/signup/acceptgift?id=#{gift.obscured_id}" }
+ #        # social_proxy = SocialProxy.new(oauth.to_proxy)
+ #        # social_proxy.create_post(post_hsh)
+ #        # puts "------ #{social_proxy.msg}"
+
+ #        graph = self.get_graph(gift)
+ #        if user == :giver
+ #        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], You've Received a Gift! giver", post_hsh)
+ #        else
+ #        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], You've Received a Gift! receiver", post_hsh, gift.facebook_id)
+ #        end
+ #        puts "POSTED TO FACEBOOK WALL notify_gift #{post_id_hsh}\n"
+ #        return { 'success' => true, 'post' => post_id_hsh }
+	# end
+
+	# def self.full_try gift, user=:giver
+	# 	gift_obscured_id = gift.obscured_id
+	# 	graph = self.get_graph(gift)
+	# 	hsh = { gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}", message: "Lets do this @[jon.gifter] #{Time.now}", privacy: { 'value' => 'EVERYONE'}, 'fb:explicitly_shared' => 'true'}
+ #        if user == :giver
+	#         post_id_hsh = graph.put_connections('me', '/me/itsonme_test:send', hsh)
+ #    	else
+	#         post_id_hsh = graph.put_connections(gift.facebook_id, '/me/itsonme_test:send', hsh)
+ #    	end
+	# 	puts "POSTED TO FACEBOOK WALL full_try #{post_id_hsh}\n"
+	# 	return { 'success' => true, 'post' => post_id_hsh }
+	# end
+
+	# def self.put_conn gift
+	# 	gift_obscured_id = gift.obscured_id
+ #        graph = self.get_graph(gift)
+ #        post_id_hsh = graph.put_connections('me', 'itsonme_test:send', subject: "Gifted!", message: "@[#{gift.facebook_id}] #{gift.message}", privacy: { 'value' => 'EVERYONE'}, link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" )
+	# 	puts "POSTED TO FACEBOOK WALL put_conn #{post_id_hsh}\n"
+	# 	return { 'success' => true, 'post' => post_id_hsh }
+	# end

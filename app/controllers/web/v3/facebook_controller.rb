@@ -8,58 +8,39 @@ class Web::V3::FacebookController < MetalCorsController
 
 
     def friends
-        oauth_obj = @current_user.current_oauth
-        if oauth_obj.kind_of?(Oauth)
-            resp = FacebookOps.app_friends(@current_user)
-            if resp['success']
-                success(resp['data'])
-            else
-                fail(resp['error'])
-            end
-            respond
+        resp = FacebookOps.app_friends(@current_user)
+        if resp['success']
+            success(resp['data'])
         else
-            fail    "Facebook profile not found"
-            @app_response["msg"] = "Please re-authenticate Facebook"
+            fail(resp['error'])
+            @app_response["msg"] = resp['error']
             status = 404
-            respond(status)
         end
+        respond(status)
     end
 
     def taggable_friends
-        oauth_obj = @current_user.current_oauth
-        if oauth_obj.kind_of?(Oauth)
-            resp = FacebookOps.taggable_friends(@current_user)
-            if resp['success']
-                success(resp['data'])
-            else
-                fail(resp['error'])
-            end
-            respond
+        resp = FacebookOps.taggable_friends(@current_user)
+        if resp['success']
+            success(resp['data'])
         else
-            fail    "Facebook profile not found"
-            @app_response["msg"] = "Please re-authenticate Facebook"
+            fail(resp['error'])
+            @app_response["msg"] = resp['error']
             status = 404
-            respond(status)
         end
+        respond(status)
     end
 
     def profile
-
-        oauth_obj = @current_user.current_oauth
-        if oauth_obj.kind_of?(Oauth)
-            resp = FacebookOps.profile(@current_user, params['facebook_id'])
-            if resp['success']
-                success(resp['data'])
-            else
-                fail(resp['error'])
-            end
-            respond
+        resp = FacebookOps.profile(@current_user, params['facebook_id'])
+        if resp['success']
+            success(resp['data'])
         else
-            fail    "Facebook profile not found"
-            @app_response["msg"] = "Please re-authenticate Facebook"
+            fail(resp['error'])
+            @app_response["msg"] = resp['error']
             status = 404
-            respond(status)
         end
+        respond(status)
     end
 
     def create
@@ -70,7 +51,7 @@ class Web::V3::FacebookController < MetalCorsController
             success 'Facebook Post Successful'
             respond
         else
-            fail    "Facebook profile not found"
+            fail    "Facebook profile token expired"
             @app_response["msg"] = "Please re-authenticate Facebook"
             status = 404
             respond(status)
