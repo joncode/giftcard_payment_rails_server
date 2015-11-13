@@ -13,7 +13,7 @@ class FacebookOps
 	end
 
 	def self.taggable_friends user
-		oauth_obj = user.current_oauth
+		graph = self.graph_call(nil, user)
 		friends = graph.graph_call("v2.5/me/taggable_friends", { limit: 1000 })
 		if friends.count == 700
 			# call the pagination link
@@ -21,9 +21,11 @@ class FacebookOps
 		friends
 	end
 
-	def self.get_graph gift
-		giver = gift.giver
-		oauth_obj = giver.current_oauth
+	def self.get_graph gift=nil, user=nil
+		if gift
+			user = gift.giver
+		end
+		oauth_obj = user.current_oauth
         Koala::Facebook::API.new(oauth_obj.token, FACEBOOK_APP_SECRET)
 	end
 

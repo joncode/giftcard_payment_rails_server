@@ -19,7 +19,6 @@ class Web::V3::FacebookController < MetalCorsController
             status = 404
             respond(status)
         end
-
     end
 
     def profile
