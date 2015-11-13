@@ -3,7 +3,7 @@ class FacebookOps
 #   -------------  Utilities
 
 	def self.parse_error err
-		puts e.response_body
+		puts err.response_body
 		error_message = err.fb_error_user_msg || err.fb_error_message || err.response_body
 		if error_message.match(/access token/)
 			return "Looks like we have a problem with facebook authorization, please re-connect to facebook."
