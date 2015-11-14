@@ -25,4 +25,5 @@ module CompanyDuckType
         TIME_ZONES[self.tz]
     end
 
+    alias_method :timezone, :time_zone
 end
