@@ -6,6 +6,12 @@ class Web::V3::FacebookController < MetalCorsController
     before_action :authentication_token_required, except: [:oauth_init, :callback_url]
     rescue_from JSON::ParserError, :with => :bad_request
 
+    def shared
+        user_id = params[:user_id]
+        menu_item_id = params[:menu_item_id]
+        user_action = params[:user_action]
+        share_id = params[:facebook_share_id]
+    end
 
     def friends
         resp = FacebookOps.app_friends(@current_user)
@@ -75,11 +81,11 @@ class Web::V3::FacebookController < MetalCorsController
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(url_safe_token))
         if params['error'].present? || params['error_code'].present? || params['error_subcode']
             if params['error']
-                error_param = "?error=#{url_encode(resp['error'])}&error_reason=#{url_encode(resp['error_reason'])}"
+                error_param = "?error=#{url_encode(params['error'])}&error_reason=#{url_encode(params['error_reason'])}"
             elsif params['error_code']
-                error_param = "?error=#{url_encode(resp['error_code'])}&error_reason=#{url_encode(resp['error_message'])}"
+                error_param = "?error=#{url_encode(params['error_code'])}&error_reason=#{url_encode(params['error_message'])}"
             else
-                error_param = "?error=#{url_encode(resp['error_subcode'])}&error_reason=#{url_encode(resp['message'])}"
+                error_param = "?error=#{url_encode(params['error_subcode'])}&error_reason=#{url_encode(params['message'])}"
             end
             full_response_url = return_params['return_url'] + error_param
             redirect_to full_response_url

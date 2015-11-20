@@ -24,7 +24,6 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
     def show
-
             # remove the permalink add-number from the id
         id = params[:id].to_i - NUMBER_ID
 
