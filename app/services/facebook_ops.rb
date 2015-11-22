@@ -1,5 +1,7 @@
 class FacebookOps
 
+	FACEBOOK_OPS_PAGE_LIMIT = 1000
+
 #   -------------  Utilities
 
 	def self.parse_error err
@@ -55,14 +57,23 @@ class FacebookOps
 		graph = self.get_graph(nil, user)
 		return graph if graph.kind_of?(Hash) && !graph['success']
 		begin
-			friends = graph.graph_call("v2.5/me/taggable_friends", { limit: 1000 })
+			friends = graph.graph_call("v2.5/me/taggable_friends", { limit: FACEBOOK_OPS_PAGE_LIMIT })
 		rescue => e
 			return { 'success' => false, 'error' => self.parse_error(e) }
 		end
-		if friends.count == 700
-			# call the pagination link
+		if friends.count == FACEBOOK_OPS_PAGE_LIMIT
+			friends = self.more_taggable_friends(friends)
 		end
 		return { 'success' => true, 'data' => friends }
+	end
+
+	def self.more_taggable_friends(friends)
+		more_friends = friends.next_page
+		friends = friends + more_friends
+		if more_friends.count == FACEBOOK_OPS_PAGE_LIMIT
+			self.more_taggable_friends(friends)
+		end
+		friends
 	end
 
 	def self.notify_receiver_from_giver(gift)

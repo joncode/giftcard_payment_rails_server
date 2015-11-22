@@ -87,6 +87,7 @@ class Web::V3::FacebookController < MetalCorsController
             else
                 error_param = "?error=#{url_encode(params['error_subcode'])}&error_reason=#{url_encode(params['message'])}"
             end
+            return_params = {}
             full_response_url = return_params['return_url'] + error_param
             redirect_to full_response_url
         else
