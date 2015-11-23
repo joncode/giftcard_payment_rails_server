@@ -134,7 +134,7 @@ module GiftLifecycle
 
     def expire_gift
         self.update(status: "expired", redeemed_at: Time.now.utc)
-        self.fire_after_save_queue(gift.client_id)
+        self.fire_after_save_queue(self.client_id)
     end
 
 
