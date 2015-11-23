@@ -1,6 +1,6 @@
 class MerchantsFullTextSearch < ActiveRecord::Migration
   def change
-    # add_column :merchants, :ftmeta, :tsvector
+    add_column :merchants, :ftmeta, :tsvector
 
 
     reversible do |dir|
@@ -37,9 +37,9 @@ class MerchantsFullTextSearch < ActiveRecord::Migration
           UPDATE merchants SET id=id;
         SQL
 
-        # execute <<-SQL
-          # CREATE INDEX merchants_ftsmeta_idx ON merchants USING gin(ftmeta)
-        # SQL
+        execute <<-SQL
+          CREATE INDEX merchants_ftsmeta_idx ON merchants USING gin(ftmeta)
+        SQL
 
       end
       dir.down do
