@@ -30,7 +30,7 @@ class UserAfterCreateEvent
 				merchant_id: merchant.id,
 				giver_name: "PT's Entertainment Group",
 				detail: "Valid until December 1st, Only valid at locations with Newcastle on draft.",
-				message: "Enjoy this Newcastle Draft on us!",
+				message: "Enjoy this Newcastle Draft on us! Valid until December 1st, Only valid at locations with Newcastle on draft.",
 				receiver_name: user.email,
 				provider_name: merchant.name,
 				giver_id: merchant.id,
