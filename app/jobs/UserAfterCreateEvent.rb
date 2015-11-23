@@ -48,6 +48,7 @@ class UserAfterCreateEvent
 			gift.shoppingCart = sc
 			if gift.save
 				puts "PTEG user gifted"
+				gift.messenger
 			else
 				puts "500 Internal #{gift.errors}"
 			end
