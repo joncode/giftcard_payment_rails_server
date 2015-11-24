@@ -44,11 +44,13 @@ class UserAfterCreateEvent
 				partner_id: client.partner_id,
 				partner_type: client.partner_type,
 				origin: "New User Created")
+
 			gift.shoppingCart = sc
+
+			gift.send_internal_email
 			if gift.save
 				puts "PTEG user gifted"
 				gift.messenger
-				gift.send_internal_email
 			else
 				puts "500 Internal #{gift.errors}"
 			end
