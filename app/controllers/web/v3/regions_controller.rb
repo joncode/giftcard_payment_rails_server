@@ -6,7 +6,7 @@ class Web::V3::RegionsController < MetalCorsController
         # binding.pry
         cache_resp = RedisWrap.get_cities(@current_client.id)
         if !cache_resp
-            arg_scope = proc { Region.city }
+            arg_scope = proc { Region.city.order(position: :asc) }
             cities_serialized = @current_client.contents(:regions, &arg_scope).map(&:old_city_json)
             RedisWrap.set_cities(@current_client.id, cities_serialized)
             success cities_serialized
