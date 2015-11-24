@@ -22,6 +22,10 @@ class Region < ActiveRecord::Base
 
 #   -------------
 
+	def self.city
+		Region.where(type_of: 0).order(position: :asc)
+	end
+
 	def self.all_for_clients
 		cities = Region.city.order(id: :asc).where(active: true)
 		neighborhoods = Region.neighborhood.where(active: true)
