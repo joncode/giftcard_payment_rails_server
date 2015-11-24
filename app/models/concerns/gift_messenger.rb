@@ -14,6 +14,10 @@ module GiftMessenger
         end
     end
 
+    def send_internal_email
+        notify_developers
+    end
+
     def messenger_boomerang
         Relay.send_boomerang_push_notification(self)
         puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name}"

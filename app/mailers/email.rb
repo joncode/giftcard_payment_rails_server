@@ -84,6 +84,18 @@ module Email
         end
     end
 
+    def notify_developers
+        gift = self
+
+        data = {
+            "subject" => "PTEG gift created",
+            "text"    => "#{gift.inspect}",
+            "email"   => "jon.gutwillig@itson.me"
+        }
+        route_internal_email_system(data)
+
+    end
+
 #######   User
 
     def confirm_email
