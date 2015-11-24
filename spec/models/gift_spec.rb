@@ -582,7 +582,7 @@ describe Gift do
 
 		let(:giver) { FactoryGirl.create(:user, first_name: "Howard", last_name: "Stern", email: "howard@stern.com")}
 		let(:provider) { FactoryGirl.create(:merchant) }
-		let(:gift) { FactoryGirl.create(:gift_no_association, giver: giver, provider: provider, receiver_name: "George Washington", receiver_phone: "8326457787") }
+		let(:gift) { FactoryGirl.create(:gift_no_association, giver: giver, merchant: provider, receiver_name: "George Washington", receiver_phone: "8326457787") }
 
 		context	"incomplete" do
 
@@ -711,6 +711,12 @@ describe Gift do
 	        it_should_behave_like "gift serializer" do
 	            let(:object) { gift }
 	        end
+
+	        it "should set expiration to time zone of merchant" do
+
+
+	        end
+
 	  	end
 	end
 
