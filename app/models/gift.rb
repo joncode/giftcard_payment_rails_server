@@ -384,14 +384,13 @@ class Gift < ActiveRecord::Base
         Resque.enqueue(GiftCreatedEvent, self.id)
     end
 
-private
-
-
     def set_client_content
         if self.client && self.partner
             self.client.content = self
         end
     end
+
+private
 
     def pre_init args={}
         nil

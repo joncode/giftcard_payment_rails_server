@@ -24,7 +24,6 @@ class UserAfterCreateEvent
 			menu_item = MenuItem.find 4326
 			hsh = menu_item.serialize_to_app(1)
 			sc = [hsh].to_json
-			# user = User.find 8248
 
 			gift = Gift.new(
 				merchant_id: merchant.id,
