@@ -15,7 +15,7 @@ class UserAfterCreateEvent
 	end
 
 	def self.gift_user_for_pt user
-		s = Social.where(network_id: user.email, network: 'email').where('created_at > ?', DateTime.new(2015, 11,21))
+		s = Social.where(network_id: user.email, network: 'email').where('created_at > ?', DateTime.new(2015, 11, 21))
 		if s.count > 0
 			puts "PTEG user on list"
 			merchant = Merchant.find 410
