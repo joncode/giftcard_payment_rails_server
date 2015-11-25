@@ -6,7 +6,7 @@ class CollectIncompleteGiftsV2Job
     @queue = :aafter_save
 
     def self.perform user_social_id
-    	puts "\n CollectIncompleteGiftsV2Job \n"
+    	puts "\n CollectIncompleteGiftsV2Job #{user_social_id}\n"
     	raise "Method Argument must be an integer" if user_social_id.to_i == 0
 
     	user_social = UserSocial.find(user_social_id)

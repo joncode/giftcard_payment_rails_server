@@ -57,12 +57,13 @@ private
 
     def receiver_social_from_gift gift
         if gift.receiver_email.present?
-            gift.receiver_email
+            str = gift.receiver_email
         elsif gift.receiver_phone.present?
-            number_to_phone(gift.receiver_phone)
+            str = number_to_phone(gift.receiver_phone)
         else
-            gift.receiver_name
+            str = ''
         end
+        gift.receiver_name.to_s + ' ' + str
     end
 
     def remove_receiver_data_and_add_old_gift_giver_as_receiver(args)
