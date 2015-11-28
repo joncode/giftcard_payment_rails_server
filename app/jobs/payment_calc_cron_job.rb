@@ -14,6 +14,7 @@ class PaymentCalcCronJob
         ed = Payment.get_end_date_of_payment(sd)
 
         registers = Register.where(created_at: sd ... ed)
+        # registers = Register.where('payment_id IS NULL AND created_at < ?', ed)
         # binding.pry
         registers.each do |reg|
 

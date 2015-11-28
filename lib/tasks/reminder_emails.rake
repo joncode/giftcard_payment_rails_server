@@ -1,11 +1,15 @@
-namespace :db do
+namespace :reminders do
 
     task gift_reminder: :environment do
     	Reminder.gift_reminder
 	end
 
-	task internal_reminders: :environment do
+	task internal: :environment do
 		ReminderInternal.send_reminders
+	end
+
+	task incomplete_gifts: :environment do
+		ReminderIncompleteGifts.perform
 	end
 
 end
