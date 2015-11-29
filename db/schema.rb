@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124220443) do
+ActiveRecord::Schema.define(version: 20151129021357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1122,6 +1122,13 @@ ActiveRecord::Schema.define(version: 20151124220443) do
 
   add_index "settings", ["confirm_email_token"], name: "index_settings_on_confirm_email_token", using: :btree
   add_index "settings", ["user_id"], name: "index_settings_on_user_id", using: :btree
+
+  create_table "shares", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "menu_item_id"
+    t.string  "user_action"
+    t.string  "network_id"
+  end
 
   create_table "sms_contacts", force: :cascade do |t|
     t.integer  "gift_id"
