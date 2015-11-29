@@ -10,7 +10,20 @@ class Web::V3::FacebookController < MetalCorsController
         user_id = params[:user_id]
         menu_item_id = params[:menu_item_id]
         user_action = params[:user_action]
-        share_id = params[:facebook_share_id]
+        network_id = params[:facebook_share_id]
+        s = Share.where(network_id: network_id).first
+        if s.nil?
+            # make new share
+            s = Share.create(user_id: user_id,
+                        menu_item_id: menu_item_id,
+                        user_action: 'share',
+                        network_id: network_id)
+        else
+            # add count to share
+            s.increment!(:count)
+        end
+        success
+        respond
     end
 
     def friends
