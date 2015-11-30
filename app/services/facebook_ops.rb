@@ -52,6 +52,7 @@ class FacebookOps
 			taggable_friends['data'].each do |f|
 				f['is_taggable'] = true
 				f['photo'] = f['picture']['data']['url']
+				f.delete('picture')
 			end
 			friends = app_friends['data'] + taggable_friends['data']
 			return { 'success' => true, 'data' => friends }
