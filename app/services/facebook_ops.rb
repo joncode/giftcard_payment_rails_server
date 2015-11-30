@@ -45,11 +45,11 @@ class FacebookOps
 		app_friends = self.app_friends user
 		taggable_friends = self.taggable_friends user
 		if app_friends['success'] && taggable_friends['success']
-			app_friends.each do |f|
+			app_friends['data'].each do |f|
 				f['is_taggable'] = false
 				f['photo'] = "http://graph.facebook.com/#{f['id']}/picture?type=square"
 			end
-			taggable_friends.each do |f|
+			taggable_friends['data'].each do |f|
 				f['is_taggable'] = true
 				f['photo'] = f['picture']['data']['url']
 			end
