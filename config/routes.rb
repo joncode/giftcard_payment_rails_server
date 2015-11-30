@@ -132,6 +132,7 @@ Drinkboard::Application.routes.draw do
           post  :oauth
           get :oauth_init
           get :callback_url
+          post :share
         end
       end
       resources :twitter,     only: [:create] do

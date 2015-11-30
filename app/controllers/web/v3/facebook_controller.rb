@@ -3,26 +3,31 @@ class Web::V3::FacebookController < MetalCorsController
 
     # before_action :authentication_no_token
     # before_action :get_current_user_fb_oauth, except: :oauth
-    before_action :authentication_token_required, except: [:oauth_init, :callback_url]
+    before_action :authentication_token_required, except: [ :oauth_init, :callback_url, :share ]
     rescue_from JSON::ParserError, :with => :bad_request
 
-    def shared
+    def share
         user_id = params[:user_id]
         menu_item_id = params[:menu_item_id]
         user_action = params[:user_action]
         network_id = params[:facebook_share_id]
-        s = Share.where(network_id: network_id).first
-        if s.nil?
-            # make new share
-            s = Share.create(user_id: user_id,
-                        menu_item_id: menu_item_id,
-                        user_action: 'share',
-                        network_id: network_id)
+        if network_id.nil?
+            @app_response["msg"] = "Facebook Share ID not received"
+            fail(@app_response["msg"])
         else
-            # add count to share
-            s.increment!(:count)
+            s = Share.where(network_id: network_id).first
+            if s.nil?
+                # make new share
+                s = Share.create(user_id: user_id,
+                            menu_item_id: menu_item_id,
+                            user_action: 'share',
+                            network_id: network_id)
+            else
+                # add count to share
+                s.increment!(:count)
+            end
+            success("share saved #{network_id}")
         end
-        success
         respond
     end
 
