@@ -127,12 +127,13 @@ Drinkboard::Application.routes.draw do
       resources :facebook,     only: [:create] do
         collection do
           get   :friends
-          get :taggable_friends
+          get   :app_friends
+          get   :taggable_friends
           get   :profile
           post  :oauth
-          get :oauth_init
-          get :callback_url
-          post :share
+          get   :oauth_init
+          get   :callback_url
+          post  :share
         end
       end
       resources :twitter,     only: [:create] do

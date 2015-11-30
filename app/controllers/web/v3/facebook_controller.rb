@@ -31,8 +31,19 @@ class Web::V3::FacebookController < MetalCorsController
         respond
     end
 
-    def friends
+    def app_friends
         resp = FacebookOps.app_friends(@current_user)
+        if resp['success']
+            success(resp['data'])
+        else
+            fail(resp['error'])
+            @app_response["msg"] = resp['error']
+        end
+        respond
+    end
+
+    def friends
+        resp = FacebookOps.friends(@current_user)
         if resp['success']
             success(resp['data'])
         else

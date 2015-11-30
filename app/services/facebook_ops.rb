@@ -39,6 +39,19 @@ class FacebookOps
 		return { 'success' => true, 'data' => profile }
 	end
 
+	def self.friends user
+		graph = self.get_graph(nil, user)
+		return graph if graph.kind_of?(Hash) && !graph['success']
+		app_friends = self.app_friends user
+		taggable_friends = self.taggable_friends user
+		if app_friends['success'] && taggable_friends['success']
+			friends = app_friends['data'] + taggable_friends['data']
+			return { 'success' => true, 'data' => friends }
+		else
+			return { 'success' => false, 'error' => 'Error on facebook friends' }
+		end
+	end
+
 	def self.app_friends user
 		graph = self.get_graph(nil, user)
 		return graph if graph.kind_of?(Hash) && !graph['success']
@@ -47,7 +60,7 @@ class FacebookOps
 		rescue => e
 			return { 'success' => false, 'error' => self.parse_error(e) }
 		end
-		if friends.count == 700
+		if friends.count == FACEBOOK_OPS_PAGE_LIMIT
 			# call the pagination link
 		end
 		return { 'success' => true, 'data' => friends }
