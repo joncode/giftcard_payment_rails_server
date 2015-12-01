@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151129041308) do
+ActiveRecord::Schema.define(version: 20151201231722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1132,6 +1132,7 @@ ActiveRecord::Schema.define(version: 20151129041308) do
     t.string  "user_action"
     t.string  "network_id"
     t.integer "count",        default: 0
+    t.integer "gift_id"
   end
 
   create_table "sms_contacts", force: :cascade do |t|

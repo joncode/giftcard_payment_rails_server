@@ -42,7 +42,7 @@ class FacebookOps
 	def self.get_feed user, datetime=nil
 		graph = self.get_graph(nil, user)
 		datetime = DateTime.now - 15.days if datetime.nil?
-		graph.graph_call("v2.5/me/feed?fields=application,link&include_hidden=true&since=#{datetime.to_i}&limit=1000")
+		graph.graph_call("v2.5/me/feed?fields=name,message,application,link&include_hidden=true&since=#{datetime.to_i}&limit=1000")
 	end
 
 	def self.friends user
@@ -105,15 +105,33 @@ class FacebookOps
 	end
 
 	def self.notify_receiver_from_giver(gift)
+		post_id_hsh = nil
     	if gift.facebook_id.present?
-    		self.wall_post(gift)
+    		post_id_hsh = self.wall_post(gift)
     	else
             oa = gift.oauth
             if oa.present? && oa.network == 'facebook'
                 gift.update(facebook_id: oa.network_id)
-                self.wall_post(gift)
+                post_id_hsh = self.wall_post(gift)
             end
         end
+        if post_id_hsh.present?
+	        post_id_hsh = post_id_hsh[0] if post_id_hsh.kind_of?(Array)
+	        post_id = post_id_hsh['id']
+	        share = Share.new
+	        share.network_id = post_id
+	        share.user_action = 'gift_notify'
+	        share.count = 1
+	        share.gift_id = gift.id
+	        if share.save
+	        	puts "Share is saved #{share.inspect}"
+	        else
+	        	puts "500 Internal SHARE NOT SAVED #{share.inspect} #{share.errors.inspect}"
+	        end
+	        { 'success' => true, 'data' => share }
+	    else
+	    	{ 'success' => false, 'data' => "not a Facebook Gift" }
+	    end
 	end
 
 #   -------------  Wall Posting
@@ -130,7 +148,7 @@ class FacebookOps
 			message: " @[#{gift.facebook_id}], #{gift.message}",
 			privacy: { 'value' => 'EVERYONE'},
 			'fb:explicitly_shared' => 'true'}, 'post')
-		puts "POSTED TO FACEBOOK WALL graph_call #{post_id_hsh}\n"
+		puts "POSTED TO FACEBOOK WALL graph_call #{post_id_hsh.inspect}\n"
 		return { 'success' => true, 'post' => post_id_hsh }
 	end
 

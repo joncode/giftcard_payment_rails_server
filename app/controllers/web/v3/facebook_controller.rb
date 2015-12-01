@@ -21,7 +21,8 @@ class Web::V3::FacebookController < MetalCorsController
                 s = Share.create(user_id: user_id,
                             menu_item_id: menu_item_id,
                             user_action: 'share',
-                            network_id: network_id)
+                            network_id: network_id,
+                            count: 1)
             else
                 # add count to share
                 s.increment!(:count)
