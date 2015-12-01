@@ -93,7 +93,7 @@ class Web::V3::FacebookController < MetalCorsController
 
     def oauth_init
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(generate_token(params)))
-        scope_ary = ['taggable_friends','user_posts','public_profile', 'user_friends', 'email', 'user_birthday', 'publish_actions', 'user_location']
+        scope_ary = FacebookOps.permissions
         redirect_url = oauth.url_for_oauth_code(scope: scope_ary )
         # success redirect_url
         # respond(:found)

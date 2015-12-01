@@ -4,6 +4,10 @@ class FacebookOps
 
 #   -------------  Utilities
 
+	def self.permissions
+		 ['user_posts','public_profile', 'user_friends', 'email', 'user_birthday', 'publish_actions', 'user_location']
+	end
+
 	def self.parse_error err
 		puts "500 Internal " + err.response_body
 		error_message = err.fb_error_user_msg || err.fb_error_message || err.response_body
