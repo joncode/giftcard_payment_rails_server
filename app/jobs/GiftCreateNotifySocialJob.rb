@@ -12,4 +12,4 @@ class GiftCreateNotifySocial
         end
     end
 
-endk
+end
