@@ -39,6 +39,12 @@ class FacebookOps
 		return { 'success' => true, 'data' => profile }
 	end
 
+	def self.get_feed user
+		graph = self.get_graph(nil, user)
+		dt = DateTime.now - 15.days
+		graph.graph_call("v2.5/me/feed?fields=application,link&include_hidden=true&since=#{dt.to_i}&limit=1000")
+	end
+
 	def self.friends user
 		graph = self.get_graph(nil, user)
 		return graph if graph.kind_of?(Hash) && !graph['success']
