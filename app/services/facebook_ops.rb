@@ -39,10 +39,10 @@ class FacebookOps
 		return { 'success' => true, 'data' => profile }
 	end
 
-	def self.get_feed user
+	def self.get_feed user, datetime=nil
 		graph = self.get_graph(nil, user)
-		dt = DateTime.now - 15.days
-		graph.graph_call("v2.5/me/feed?fields=application,link&include_hidden=true&since=#{dt.to_i}&limit=1000")
+		datetime = DateTime.now - 15.days if datetime.nil?
+		graph.graph_call("v2.5/me/feed?fields=application,link&include_hidden=true&since=#{datetime.to_i}&limit=1000")
 	end
 
 	def self.friends user
