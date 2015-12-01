@@ -100,19 +100,19 @@ class FacebookOps
 
 	def self.notify_receiver_from_giver(gift)
     	if gift.facebook_id.present?
-    		self.graph_call(gift)
+    		self.wall_post(gift)
     	else
             oa = gift.oauth
             if oa.present? && oa.network == 'facebook'
                 gift.update(facebook_id: oa.network_id)
-                self.graph_call(gift)
+                self.wall_post(gift)
             end
         end
 	end
 
 #   -------------  Wall Posting
 
-	def self.graph_call gift
+	def self.wall_post gift
         graph = self.get_graph(gift)
         if Rails.env.production?
         	search_query = 'itsonme'
