@@ -48,7 +48,7 @@ class FacebookOps
 		datetime = DateTime.now - 15.days if datetime.nil?
 		begin
 			fd = graph.graph_call("v2.5/me/feed?fields=name,message,application,link&include_hidden=true&since=#{datetime.to_i}&limit=1000")
-			{ 'success' => false, 'data' => fd }
+			{ 'success' => true, 'data' => fd }
 		rescue => e
 			puts "500 Internal FacebookOps.get_feed for user ID = #{user.id} #{e.inspect}"
 			{ 'success' => false, 'data' => self.parse_error(e) }
