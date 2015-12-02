@@ -92,7 +92,10 @@ class CollectIncompleteGiftsV2Job
 				if gift_ary.count == 0
 					return []
 				else
-					return gift_ary.map { |ogi| Gift.find_with_obscured_id ogi }
+					gifts = gift_ary.map { |ogi| Gift.find_with_obscured_id ogi }
+					gifts_incomplete = gifts.select {|g| g.status == 'incomplete' }
+					puts "Here is FB incomplete gifs #{gifts_incomplete.inspect} - #{gifts.count}"
+					return gifts_incomplete
 				end
 			end
 		end
