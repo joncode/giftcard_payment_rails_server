@@ -1,5 +1,6 @@
 SERVICE_NAME = "ItsOnMe"
 
+FBO = FacebookOps
 
 if Rails.env.production?
     PAGE_NAME        = SERVICE_NAME

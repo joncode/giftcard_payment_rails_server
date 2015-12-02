@@ -115,19 +115,18 @@ class FacebookOps
 	end
 
 	def self.notify_receiver_from_giver(gift)
-		post_id_hsh = nil
+		wall_post_res = nil
     	if gift.facebook_id.present?
-    		post_id_hsh = self.wall_post(gift)
+    		wall_post_res = self.wall_post(gift)
     	else
             oa = gift.oauth
             if oa.present? && oa.network == 'facebook'
                 gift.update(facebook_id: oa.network_id)
-                post_id_hsh = self.wall_post(gift)
+                wall_post_res = self.wall_post(gift)
             end
         end
-        if post_id_hsh.present?
-	        post_id_hsh = post_id_hsh[0] if post_id_hsh.kind_of?(Array)
-	        post_id = post_id_hsh['id']
+        if wall_post_res.present?
+	        post_id = wall_post_res['data']['id']
 	        share = Share.new
 	        share.network_id = post_id
 	        share.user_action = 'gift_notify'
@@ -159,7 +158,7 @@ class FacebookOps
 			privacy: { 'value' => 'EVERYONE'},
 			'fb:explicitly_shared' => 'true'}, 'post')
 		puts "POSTED TO FACEBOOK WALL graph_call #{post_id_hsh.inspect}\n"
-		return { 'success' => true, 'post' => post_id_hsh }
+		return { 'success' => true, 'data' => post_id_hsh }
 	end
 
 #   -------------  Login / Connect to Account
