@@ -43,6 +43,9 @@ class FacebookOps
 
 	def self.get_feed user, datetime=nil
 		graph = self.get_graph(nil, user)
+		if graph.kind_of?(Hash) && graph['success'] == false
+			return graph
+		end
 		datetime = DateTime.now - 15.days if datetime.nil?
 		begin
 			fd = graph.graph_call("v2.5/me/feed?fields=name,message,application,link&include_hidden=true&since=#{datetime.to_i}&limit=1000")
