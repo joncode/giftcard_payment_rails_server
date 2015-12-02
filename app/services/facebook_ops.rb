@@ -1,7 +1,5 @@
 class FacebookOps
 
-	FACEBOOK_OPS_PAGE_LIMIT = 1000
-
 #   -------------  Utilities
 
 	def self.permissions
@@ -147,12 +145,7 @@ class FacebookOps
 
 	def self.wall_post gift
         graph = self.get_graph(gift)
-        if Rails.env.production?
-        	search_query = 'itsonme'
-        else
-        	search_query = 'itsonme_test'
-        end
-		post_id_hsh = graph.graph_call("v2.5/me/#{search_query}:send", { tags: "#{gift.facebook_id}",
+		post_id_hsh = graph.graph_call("v2.5/me/#{FB_NAMESPACE}:send", { tags: "#{gift.facebook_id}",
 			gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}",
 			message: " @[#{gift.facebook_id}], #{gift.message}",
 			privacy: { 'value' => 'EVERYONE'},

@@ -1,7 +1,5 @@
 SERVICE_NAME = "ItsOnMe"
 
-FBO = FacebookOps
-
 if Rails.env.production?
     PAGE_NAME        = SERVICE_NAME
     TEST_URL         = "http://www.drinkboardapp.com"
@@ -57,6 +55,14 @@ else
 
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 end
+
+if Rails.env.production?
+    FB_NAMESPACE = 'itsonme'
+else
+    FB_NAMESPACE = 'itsonme_test'
+end
+FACEBOOK_OPS_PAGE_LIMIT = 1000
+FBO = FacebookOps
 
 SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"
 

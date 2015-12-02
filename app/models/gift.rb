@@ -99,6 +99,10 @@ class Gift < ActiveRecord::Base
         NUMBER_ID + self.id
     end
 
+    def self.find_with_obscured_id obscured_id
+        find(obscured_id.to_i - NUMBER_ID)
+    end
+
     def initialize args={}
         pre_init(args)
         args['shoppingCart'] = stringify_shopping_cart_if_array(args['shoppingCart'])
