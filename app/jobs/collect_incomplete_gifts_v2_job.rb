@@ -10,6 +10,7 @@ class CollectIncompleteGiftsV2Job
     	raise "Method Argument must be an integer" if user_social_id.to_i == 0
 
     	user_social = UserSocial.find(user_social_id)
+		user = user_social.user
 
     	case user_social.type_of
     	when 'email'
@@ -18,6 +19,8 @@ class CollectIncompleteGiftsV2Job
     		gifts = Gift.where(status: 'incomplete', receiver_phone: user_social.identifier)
     	when 'facebook_id'
     		gifts = Gift.where(status: 'incomplete', facebook_id: user_social.identifier)
+    		gifts2 = self.match_facebook_gifts user
+			gifts = gifts.to_a + gifts2
     	when 'twitter'
     		gifts = Gift.where(status: 'incomplete', twitter: user_social.identifier)
     	end
@@ -27,7 +30,6 @@ class CollectIncompleteGiftsV2Job
 			error   = 0
 			success = 0
 
-			user = user_social.user
 			gifts.each do |g|
 				gift_changes                  = {}
 				gift_changes[:status]         = "open"
@@ -35,6 +37,9 @@ class CollectIncompleteGiftsV2Job
 				gift_changes[:receiver_email] = user.email if user.email
 				gift_changes[:receiver_id]    = user.id
 				gift_changes[:receiver_name]  = user.username
+				if user_social.type_of == 'facebook_id'
+					gift_changes[:facebook_id] = user_social.identifier
+				end
 
 				if g.update(gift_changes)
 					success += 1
@@ -62,6 +67,35 @@ class CollectIncompleteGiftsV2Job
 							# log the messages output for the method
 		puts response
 
+    end
+
+    def self.match_facebook_gifts user
+		res = FacebookOps.get_feed u
+		if res['success'] == false
+			return []
+		else
+			fd = res['data']
+			fsmall = fd.select { |ff| ff['application'].present? && ff['application']['id'] == FACEBOOK_APP_ID && ff['link'].match(/acceptgift/) }
+			if fsmall.count == 0
+				return []
+			else
+				gift_ary = []
+				fsmall.each do |ff|
+					link = ff['link']
+					our_url = link.split('?')[0]
+					gift_id_str = our_url.match /\d+/
+					if gift_id_str
+						gift_ary << gift_id_str[0].to_i
+					end
+				end
+				gift_ary.uniq!
+				if gift_ary.count == 0
+					return []
+				else
+					return gift_ary.map { |ogi| Gift.find_with_obscured_id ogi }
+				end
+			end
+		end
     end
 
 end
