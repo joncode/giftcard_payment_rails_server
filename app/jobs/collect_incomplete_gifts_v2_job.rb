@@ -70,7 +70,7 @@ class CollectIncompleteGiftsV2Job
     end
 
     def self.match_facebook_gifts user
-		res = FacebookOps.get_feed u
+		res = FacebookOps.get_feed user
 		if res['success'] == false
 			return []
 		else
