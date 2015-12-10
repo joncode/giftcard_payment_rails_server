@@ -686,7 +686,7 @@ private
     end
 
     def region_id_from_name name
-        region_hash = Region.city.map(&:old_city_json).select { |region_h| region_h["name"] == name }
+        region_hash = Region.index.map(&:old_city_json).select { |region_h| region_h["name"] == name }
         region_hash[0]["region_id"].to_i
     end
 

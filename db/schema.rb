@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151201231722) do
+ActiveRecord::Schema.define(version: 20151210194524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -696,6 +696,13 @@ ActiveRecord::Schema.define(version: 20151201231722) do
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
   add_index "merchants", ["token", "active"], name: "index_merchants_on_token_and_active", using: :btree
   add_index "merchants", ["token"], name: "index_merchants_on_token", using: :btree
+
+  create_table "merchants_regions", id: false, force: :cascade do |t|
+    t.integer "region_id",   null: false
+    t.integer "merchant_id", null: false
+  end
+
+  add_index "merchants_regions", ["region_id"], name: "index_merchants_regions_on_region_id", using: :btree
 
   create_table "mock_payables", force: :cascade do |t|
     t.decimal  "amount"

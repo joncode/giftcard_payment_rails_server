@@ -26,7 +26,7 @@ class CollectIncompleteGiftsV2Job
     	end
 
 						# update incomplete gifts to open gifts with receiver info
-		response   = if gifts.count > 0
+		response = if gifts.count > 0
 			error   = 0
 			success = 0
 

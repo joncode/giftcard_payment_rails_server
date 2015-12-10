@@ -1,4 +1,4 @@
-class ProvidersSocial  < ActiveRecord::Base
+class ProvidersSocial < ActiveRecord::Base
     self.table_name = "providers_socials"
 
 #   -------------

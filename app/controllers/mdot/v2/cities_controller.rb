@@ -3,7 +3,7 @@ class Mdot::V2::CitiesController < JsonController
     rescue_from JSON::ParserError, :with => :bad_request
 
     def index
-        @app_response = Region.city.map(&:old_city_json)
+        @app_response = Region.index.map(&:old_city_json)
         success @app_response
         respond
     end
@@ -15,7 +15,8 @@ class Mdot::V2::CitiesController < JsonController
             region_id = params[:id].to_i
         end
 
-        merchants = Merchant.where(active: true, paused: false, city_id: region_id).order("name ASC")
+        region = Region.find region_id
+        merchants = region.merchants
         @app_response = merchants.serialize_objs
         success @app_response
         respond
@@ -24,14 +25,13 @@ class Mdot::V2::CitiesController < JsonController
 private
 
     def region_id_from_name name
-
-        region_hash = Region.city.map(&:old_city_json).select { |region_h| region_h["name"] == name }
+        region_hash = Region.index.map(&:old_city_json).select { |region_h| region_h["name"] == name }
         region_hash[0]["region_id"].to_i
     end
 
     def city_name_from_id id_int
         city_name = nil
-        Region.city.map(&:old_city_json).each do |city|
+        Region.index.map(&:old_city_json).each do |city|
             if city["region_id"] == id_int
                 city_name = city["name"]
                 break

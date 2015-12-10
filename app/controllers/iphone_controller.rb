@@ -111,7 +111,7 @@ class IphoneController < AppController
 
 	def cities
 
-		response = Region.city.map(&:old_city_json).map {|h| h.delete("token"); h }
+		response = Region.index.map(&:old_city_json).map {|h| h.delete("token"); h }
 		respond_to do |format|
 			@app_response = "iPhoneC #{response}"
 			format.json { render json: response }

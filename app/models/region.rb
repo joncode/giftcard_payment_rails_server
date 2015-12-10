@@ -13,14 +13,25 @@ class Region < ActiveRecord::Base
 
 #   -------------
 
-	has_many :providers
-	has_many :merchants
+	enum type_of: [ :city, :neighborhood, :list ]
 
 #   -------------
 
-	enum type_of: [ :city, :neighborhood ]
+	def merchants
+		if self.city?
+			Merchant.where(active: true, paused: false, city_id: self.id).order("name ASC")
+		elsif self.neighborhood?
+			Merchant.where(active: true, paused: false, region_id: self.id).order("name ASC")
+		else # self.list
+			Merchant.find_by_sql("SELECT m.* FROM merchants AS m, merchants_regions AS mr WHERE m.active = true AND m.paused = false AND m.id = mr.merchant_id AND mr.region_id = #{self.id} ORDER BY m.name ASC")
+		end
+	end
 
 #   -------------
+
+	def self.index
+		Region.find_by_sql("SELECT * FROM regions WHERE active = true and position IS NOT NULL ORDER BY position ASC")
+	end
 
 	def self.city
 		Region.where(type_of: 0).order(position: :asc)
