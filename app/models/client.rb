@@ -18,21 +18,29 @@ class Client < ActiveRecord::Base
 	enum platform: [:ios, :android, :web_menu, :kiosk, :landing_page]
 
 
+# return Merchant.find_by_sql("SELECT merchants.* FROM contents , merchants WHERE contents.client_id IS NULL AND contents.partner_type = 'Affiliate' AND contents.partner_id = 29
+	# AND contents.content_type = 'Merchant' AND merchants.id = contents.content_id")
 
 #	-------------
 
 	def contents content_symbol
-			# content_cymbol = :gifts, :merchants, :regions, :users, :providers
-		if self.client?
-			cc = ClientContent.includes(:content).where(client_id: self.id, content_type: content_symbol.to_s.singularize.capitalize)
-			return cc.map {|clientcontent| clientcontent.content_type.constantize.unscoped.where(id: clientcontent.content_id).first }
-		elsif self.partner?
-			cc = ClientContent.includes(:content).where(client_id: nil, partner_id: self.partner_id, partner_type: self.partner_type, content_type: content_symbol.to_s.singularize.capitalize)
-			return cc.map {|clientcontent| clientcontent.content_type.constantize.unscoped.where(id: clientcontent.content_id).first }
-		else
+		if self.full?
 			return yield(self)
 		end
-		# cc.map(&:content).compact
+
+			# content_symbol = :gifts, :merchants, :regions, :users
+		constant_symbol = content_symbol.to_s.singularize.capitalize
+		client_id_query = "contents.client_id "
+		if self.client?
+			client_id_query += " = #{self.id} "
+		elsif self.partner?
+			client_id_query += " IS NULL "
+		end
+		query = "SELECT #{content_symbol}.* FROM contents , #{content_symbol} \
+		WHERE #{client_id_query} AND contents.partner_type = '#{self.partner_type}' \
+		AND contents.partner_id = #{self.partner_id} AND contents.content_type = '#{constant_symbol}' \
+		AND #{content_symbol}.id = contents.content_id"
+		return constant_symbol.constantize.find_by_sql(query)
 	end
 
 	def content= obj
