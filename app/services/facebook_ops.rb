@@ -62,16 +62,21 @@ class FacebookOps
 		app_friends = self.app_friends user
 		taggable_friends = self.taggable_friends user
 		if app_friends['success'] && taggable_friends['success']
+			app_friend_names = []
 			app_friends['data'].each do |f|
 				f['is_taggable'] = false
 				f['photo'] = "http://graph.facebook.com/#{f['id']}/picture?type=square"
+				app_friend_names << f['name']
 			end
+			app_removed_taggable_friends = []
 			taggable_friends['data'].each do |f|
-				f['is_taggable'] = true
-				f['photo'] = f['picture']['data']['url']
-				f.delete('picture')
+				unless app_friend_names.include?(f['name'])
+					hsh = { 'name' => f['name'], 'is_taggable' => true, 'id' => f['id'] }
+					hsh['photo'] = f['picture']['data']['url']
+					app_removed_taggable_friends << hsh
+				end
 			end
-			friends = app_friends['data'] + taggable_friends['data']
+			friends = app_friends['data'] + app_removed_taggable_friends
 			return { 'success' => true, 'data' => friends }
 		else
 			return { 'success' => false, 'error' => 'Error on facebook friends' }
