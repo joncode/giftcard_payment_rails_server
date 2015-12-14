@@ -15,4 +15,17 @@ module ShoppingCartHelper
             end
         end
     end
+
+    def items
+        cart_ary.count
+    end
+
+    def cart_ary
+        begin
+            JSON.parse(self.shoppingCart)
+        rescue
+            []
+        end
+    end
+
 end

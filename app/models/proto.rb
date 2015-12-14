@@ -35,13 +35,11 @@ class Proto < ActiveRecord::Base
 #   -------------
 
 	def update_contacts new_amount
-        total_count = self.contacts + new_amount
-        self.update(contacts: total_count)
+        self.increment!(:contacts, new_amount)
 	end
 
 	def update_processed new_amount
-        total_processed = self.processed + new_amount
-        self.update(processed: total_processed)
+        self.increment!(:processed, new_amount)
 	end
 
 private

@@ -67,7 +67,11 @@ module Emailer
             return nil
         end
         giver_name_simple = giver_name.sub(" Staff", "")
-        subject  = "The staff at #{giver_name_simple} sent you a gift"
+        if gift.payable.kind_of?(Proto) && gift.payable.split
+            subject  = "The staff at #{giver_name_simple} sent you #{gift.payable.items} gifts"
+        else
+            subject  = "The staff at #{giver_name_simple} sent you a gift"
+        end
         body     = text_for_notify_receiver_proto_join(gift)
 
         template_name   = "gift"

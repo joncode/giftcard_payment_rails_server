@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151210194524) do
+ActiveRecord::Schema.define(version: 20151214232938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -919,6 +919,7 @@ ActiveRecord::Schema.define(version: 20151210194524) do
     t.integer  "contacts",                  default: 0
     t.integer  "processed",                 default: 0
     t.integer  "merchant_id"
+    t.boolean  "split",                     default: false
   end
 
   add_index "protos", ["merchant_id"], name: "index_protos_on_merchant_id", using: :btree
