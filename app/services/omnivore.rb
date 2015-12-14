@@ -4,7 +4,7 @@ class Omnivore
 	extend OmnivoreUtils
 	include ActionView::Helpers::NumberHelper
 
-	attr_accessor :response, :code, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id
+	attr_accessor :response, :code, :pos_merchant_id, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id
 
 	def initialize args
 		puts "Omnivore args = #{args.inspect}"
@@ -307,8 +307,8 @@ class Omnivore
 		end
 	end
 
-    def get resource, obj_id=nil, meth=nil
-    	obj_id = obj_id.present? ? (obj_id + "/") : nil
+    def get resource=:locations, obj_id=@pos_merchant_id, meth=nil
+    	obj_id = obj_id.present? ? (obj_id + "/") : ''
 
         begin
             response = RestClient.get(
