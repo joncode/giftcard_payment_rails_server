@@ -7,8 +7,9 @@ class FacebookOps
 	end
 
 	def self.parse_error err
-		puts "500 Internal " + err.response_body
+		print "500 Internal " + err.inspect
 		error_message = err.fb_error_user_msg || err.fb_error_message || err.response_body
+		puts error_message.inspect + " FacebookOps.parse_error"
 		if error_message.match(/access token/)
 			return "Looks like we have a problem with facebook authorization, please re-connect to facebook. (If you continue to see this message, upgrade your app)"
 		end
