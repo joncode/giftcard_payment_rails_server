@@ -17,11 +17,11 @@ class GiftProtoJoin < Gift
 	    			hsh[:value] = calculate_value(hsh[:shoppingCart])
 					if proto_join.gift_id.present?
 							# make new proto join to link to next gift
-			        	pjn = proto_join.clone
-			        	pjn.created_at = nil
-			        	pjn.updated_at = nil
-			        	pjn.id = nil
-			        	proto_join = pjn
+						pjn = ProtoJoin.new(gift_id: nil,
+							receivable_type: proto_join.receivable_type,
+							receivable_id: proto_join.receivable_id,
+							proto_id: proto.id)
+						proto_join = pjn
 					end
 	    			args = self.pre_init(proto, proto_join, hsh)
 	    			gift = super
