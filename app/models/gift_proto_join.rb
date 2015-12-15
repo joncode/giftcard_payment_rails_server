@@ -8,7 +8,7 @@ class GiftProtoJoin < Gift
     	proto, proto_join = self.process_input args
     	if proto.split
     		merchant = proto.merchant
-    		p.cart_ary.each do |item_hsh|
+    		proto.cart_ary.each do |item_hsh|
     			item_hsh['quantity'].to_i.times do
     				ih = item_hsh.clone
     				ih['quantity'] = 1
