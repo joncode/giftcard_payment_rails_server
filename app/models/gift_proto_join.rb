@@ -6,7 +6,7 @@ class GiftProtoJoin < Gift
 
     def self.create args={}
     	proto, proto_join = self.process_input args
-    	if proto.split && proto.items > 1
+    	if proto.split
     		merchant = proto.merchant
     		p.cart_ary.each do |item_hsh|
     			item_hsh['quantity'].to_i.times do
