@@ -1,6 +1,6 @@
 class GiftProtoJoin < Gift
+    extend ShoppingCartHelper
     include GiftMessenger
-    include ShoppingCartHelper
 
 #   -------------
 
