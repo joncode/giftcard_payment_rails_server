@@ -43,6 +43,7 @@ class CollectIncompleteGiftsV2Job
 
 				if g.update(gift_changes)
 					success += 1
+					g.clear_caches
 					GiftOpenedEvent.perform(g)
 				else
 					error   += 1

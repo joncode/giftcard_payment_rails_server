@@ -376,6 +376,11 @@ class Gift < ActiveRecord::Base
 
 ###############
 
+    def clear_caches
+        RedisWrap.clear_all_user_gifts(self.giver_id)
+        RedisWrap.clear_all_user_gifts(self.receiver_id)
+    end
+
     def fire_after_save_queue(client_id=nil)
         if client_id.respond_to?(:id)
             client_id = client_id.id
