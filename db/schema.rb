@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151214232938) do
+ActiveRecord::Schema.define(version: 20151216213426) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20151214232938) do
     t.integer  "pos_merchant_id"
     t.integer  "promo_menu_id"
     t.integer  "tz",                             default: 0
+    t.string   "features"
   end
 
   add_index "affiliates", ["url_name"], name: "index_affiliates_on_url_name", using: :btree
