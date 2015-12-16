@@ -199,6 +199,7 @@ class Mdot::V2::GiftsController < JsonController
             gift_hsh['client_id'] = @current_user.session_token_obj.client_id
             gift_hsh['partner_id'] = @current_user.session_token_obj.partner_id
             gift_hsh['partner_type'] = @current_user.session_token_obj.partner_type
+            puts gift_hsh.inspect
             gift_response = GiftSale.create(gift_hsh)
         end
 
