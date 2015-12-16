@@ -106,6 +106,9 @@ class Web::V3::FacebookController < MetalCorsController
         # puts "\n TOKEN ----- \n#{params['token']} \n  CODE ----------  \n#{params['code']}  \n"
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(url_safe_token))
         if params['error'].present? || params['error_code'].present? || params['error_subcode']
+            # {"token"=>"[FILTERED]",
+            # "error_code"=>"1349127",
+            # "error_message"=>"We could not log you in: You can't log in to this app because you do not meet this app's requirements for country, age or other criteria."}
             if params['error']
                 error_param = "?error=#{url_encode(params['error'])}&error_reason=#{url_encode(params['error_reason'])}"
             elsif params['error_code']
@@ -113,8 +116,8 @@ class Web::V3::FacebookController < MetalCorsController
             else
                 error_param = "?error=#{url_encode(params['error_subcode'])}&error_reason=#{url_encode(params['message'])}"
             end
-            return_params = {}
-            full_response_url = return_params['return_url'] + error_param
+            return_params = decrypt_token(url_safe_token)
+            full_response_url = return_params['return_url'].to_s + error_param
             redirect_to full_response_url
         else
             oauth_access_token = oauth.get_access_token(params['code'])
