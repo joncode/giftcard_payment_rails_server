@@ -8,7 +8,7 @@ class GiftCreatedEvent
     	begin
 	        FacebookOps.notify_receiver_from_giver(gift)
     	rescue
-
+            puts "500 Internal GiftCreatedEvent failed on facebook"
     	end
     	PointsForSaleJob.perform gift_id
     end

@@ -132,7 +132,7 @@ class FacebookOps
                 wall_post_res = self.wall_post(gift)
             end
         end
-        if wall_post_res.present?
+        if wall_post_res.present? && wall_post_res['success']
 	        post_id = wall_post_res['data']['id']
 	        share = Share.new
 	        share.network_id = post_id
@@ -146,7 +146,11 @@ class FacebookOps
 	        end
 	        { 'success' => true, 'data' => share }
 	    else
-	    	{ 'success' => false, 'data' => "not a Facebook Gift" }
+	    	if wall_post_res['error'].present?
+	    		wall_post_res
+	    	else
+		    	{ 'success' => false, 'data' => "not a Facebook Gift" }
+		    end
 	    end
 	end
 
@@ -154,12 +158,16 @@ class FacebookOps
 
 	def self.wall_post gift
         graph = self.get_graph(gift)
-		post_id_hsh = graph.graph_call("v2.5/me/#{FB_NAMESPACE}:send", { tags: "#{gift.facebook_id}",
-			gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}",
-			message: " @[#{gift.facebook_id}], #{gift.message}",
-			privacy: { 'value' => 'EVERYONE'},
-			'fb:explicitly_shared' => 'true'}, 'post')
-		puts "POSTED TO FACEBOOK WALL graph_call #{post_id_hsh.inspect}\n"
+		begin
+			post_id_hsh = graph.graph_call("v2.5/me/#{FB_NAMESPACE}:send", { tags: "#{gift.facebook_id}",
+				gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}",
+				message: " @[#{gift.facebook_id}], #{gift.message}",
+				privacy: { 'value' => 'EVERYONE'},
+				'fb:explicitly_shared' => 'true'}, 'post')
+			puts "POSTED TO FACEBOOK WALL graph_call #{post_id_hsh.inspect}\n"
+		rescue => e
+			return { 'success' => false, 'error' => self.parse_error(e) }
+		end
 		return { 'success' => true, 'data' => post_id_hsh }
 	end
 
