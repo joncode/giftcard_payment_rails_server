@@ -7,13 +7,13 @@ class Web::V3::FacebookController < MetalCorsController
     rescue_from JSON::ParserError, :with => :bad_request
 
     def share
-        user_id = params[:user_id]
-        menu_item_id = params[:menu_item_id]
-        user_action = params[:user_action]
-        network_id = params[:facebook_share_id]
+        user_id = params[:data][:user_id]
+        menu_item_id = params[:data][:menu_item_id]
+        user_action = params[:data][:user_action]
+        network_id = params[:data][:facebook_share_id]
         if network_id.nil?
+            fail(params)
             @app_response["msg"] = "Facebook Share ID not received"
-            fail(@app_response["msg"])
         else
             s = Share.where(network_id: network_id).first
             if s.nil?
