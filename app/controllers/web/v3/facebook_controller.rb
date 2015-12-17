@@ -12,8 +12,7 @@ class Web::V3::FacebookController < MetalCorsController
         user_action = params[:data][:user_action]
         network_id = params[:data][:facebook_share_id]
         if network_id.nil?
-            fail(params)
-            @app_response["msg"] = "Facebook Share ID not received"
+            fail("Facebook Share ID not received")
         else
             s = Share.where(network_id: network_id).first
             if s.nil?
