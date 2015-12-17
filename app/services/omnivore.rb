@@ -21,7 +21,7 @@ class Omnivore
 		@ticket_id       = nil
 		@gift_card_id    = args["gift_card_id"]
 		@pos_merchant_id = args["pos_merchant_id"]
-		@loc_id = args["pos_merchant_id"]
+		@loc_id 		 = args["pos_merchant_id"]
 		@tender_type_id  = args["tender_type_id"]
 		@value           = args["value"].to_i
 		@code 		     = 100
@@ -209,7 +209,7 @@ class Omnivore
   		  "payment_source" => "Gift #{@gift_card_id}"
 		}.to_json
 
-		puts "\nOmnivore look after:\n"
+		puts "\nOmnivore payload:\n"
 		puts payload.inspect
 
 		begin
@@ -397,3 +397,12 @@ class Omnivore
 	end
 
 end
+
+
+# Rack::Timeout::RequestTimeoutException (Request waited 0ms, then ran for longer than 19000ms):
+#   app/services/omnivore.rb:216:in `post_redeem'
+#   app/services/omnivore.rb:123:in `apply_ticket_value'
+# [0ce1fc67-ba95-4aba-af57-690cca04d96f] Completed 500 Internal Server Error in 18999ms (ActiveRecord: 9.8ms)
+#   app/services/omnivore.rb:97:in `redeem'
+#   app/models/concerns/gift_lifecycle.rb:110:in `pos_redeem'
+#   app/controllers/mdot/v2/gifts_controller.rb:84:in `pos_redeem'

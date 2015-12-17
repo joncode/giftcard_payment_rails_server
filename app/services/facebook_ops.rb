@@ -130,6 +130,8 @@ class FacebookOps
             if oa.present? && oa.network == 'facebook'
                 gift.update(facebook_id: oa.network_id)
                 wall_post_res = self.wall_post(gift)
+            else
+            	return { 'success' => false, 'data' => "not a Facebook Gift" }
             end
         end
         if wall_post_res.present? && wall_post_res['success']
@@ -144,12 +146,12 @@ class FacebookOps
 	        else
 	        	puts "500 Internal SHARE NOT SAVED #{share.inspect} #{share.errors.inspect}"
 	        end
-	        { 'success' => true, 'data' => share }
+	        return { 'success' => true, 'data' => share }
 	    else
 	    	if wall_post_res['error'].present?
 	    		wall_post_res
 	    	else
-		    	{ 'success' => false, 'data' => "not a Facebook Gift" }
+		    	return { 'success' => false, 'data' => "not a Facebook Gift" }
 		    end
 	    end
 	end
