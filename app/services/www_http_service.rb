@@ -3,7 +3,7 @@ require 'rest_client'
 class WwwHttpService
 
 	def self.clear_merchant_cache
-		puts "\n clearing www merchant cache"
+		puts "\n #{Rails.env} clearing web merchant cache"
 		begin
 			resp = RestClient.get(
 			    "#{CLEAR_CACHE}/shop/clearcache",
