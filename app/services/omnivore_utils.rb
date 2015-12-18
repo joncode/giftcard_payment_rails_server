@@ -7,7 +7,8 @@ module OmnivoreUtils
                     "pos_merchant_id" => gift.merchant.pos_merchant_id,
                     "tender_type_id" => gift.merchant.tender_type_id,
                     "value" => new_value,
-                    "brand_card_ids_ary" => gift.brand_card_ids }
+                    "brand_card_ids_ary" => gift.brand_card_ids
+                    "direct_redeem" => gift.merchant.pos_direct }
         new(pos_hsh)
 	end
 

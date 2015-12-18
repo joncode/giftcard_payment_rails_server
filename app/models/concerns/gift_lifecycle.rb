@@ -95,20 +95,16 @@ module GiftLifecycle
         # if loc_id - do multi loc redemption
         return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}  if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
 
-        pos_hsh = { "ticket_num" => ticket_num,
-                    "gift_card_id" => self.obscured_id,
-                    "pos_merchant_id" => pos_merchant_id,
-                    "tender_type_id" => tender_type_id,
-                    "value" => self.balance,
-                    "brand_card_ids_ary" => self.brand_card_ids }
+        # pos_hsh = { "ticket_num" => ticket_num,
+        #             "gift_card_id" => self.obscured_id,
+        #             "pos_merchant_id" => pos_merchant_id,
+        #             "tender_type_id" => tender_type_id,
+        #             "value" => self.balance,
+        #             "brand_card_ids_ary" => self.brand_card_ids }
+        # pos_obj = Omnivore.new(pos_hsh)
+        pos_obj = Omnivore.init_with_gift(self, ticket_num)
+        resp    = pos_obj.redeem
 
-        pos_obj = Omnivore.new(pos_hsh)
-
-        # if pos_merchant_id == "6Tjg7ain"
-        #     resp  = pos_obj.direct_redeem
-        # else
-            resp    = pos_obj.redeem
-        # end
         resp["success"] = pos_obj.success?
         if resp["success"]
             if pos_obj.code == 201

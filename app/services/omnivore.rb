@@ -9,7 +9,7 @@ class Omnivore
 	def initialize args
 		puts "Omnivore args = #{args.inspect}"
 
-		if  args['brand_card_ids_ary'].nil? || args['brand_card_ids_ary'].length == 0
+		if args['brand_card_ids_ary'].nil? || args['brand_card_ids_ary'].length == 0
 			@brand_card = false
 			@brand_card_ids  = []
 		else
@@ -32,6 +32,7 @@ class Omnivore
   		@response        = response_from_code
 		@next 			 = nil
 		@brand_card_applied = false
+		@direct_redeem = args["direct_redeem"] || false
 	end
 
 	def strip_leading_zeros str
@@ -42,24 +43,24 @@ class Omnivore
 		(200..299).cover?(@code)
 	end
 
-	# def direct_redeem
-	# 	@ticket_id = @ticket_num
-	# 	if @brand_card
-	# 		brand_card_ids = get_brand_card_ids_from_pos
-	# 		brand_card_ids.each do |pos_id|
-	# 			@brand_card_ids.include?(pos_id)
-	# 			@brand_card_applied = true
-	# 			break
-	# 		end
-	# 		if @brand_card_applied
-	# 			resp = post_redeem
-	# 		else
-	# 			# BAD brand card message
-	# 		end
-	# 	else
-	# 		resp = post_redeem
-	# 	end
-	# end
+	def direct_redeem
+		@ticket_id = @ticket_num
+		if @brand_card
+			brand_card_ids = get_brand_card_ids_from_pos
+			brand_card_ids.each do |pos_id|
+				@brand_card_ids.include?(pos_id)
+				@brand_card_applied = true
+				break
+			end
+			if @brand_card_applied
+				resp = post_redeem
+			else
+				# BAD brand card message
+			end
+		else
+			resp = post_redeem
+		end
+	end
 
 	def redeem
 		tic = nil
