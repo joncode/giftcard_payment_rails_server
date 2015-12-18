@@ -4,7 +4,9 @@ class Omnivore
 	extend OmnivoreUtils
 	include ActionView::Helpers::NumberHelper
 
-	attr_accessor :response, :code, :pos_merchant_id, :applied_value, :ticket_num, :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id
+	attr_accessor :response, :code, :pos_merchant_id, :applied_value, :ticket_num,
+	 :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id,
+	 :direct_redeem
 
 	def initialize args
 		puts "Omnivore args = #{args.inspect}"
@@ -33,6 +35,10 @@ class Omnivore
 		@next 			 = nil
 		@brand_card_applied = false
 		@direct_redeem = args["direct_redeem"] || false
+	end
+
+	def direct?
+		@direct_redeem
 	end
 
 	def strip_leading_zeros str
