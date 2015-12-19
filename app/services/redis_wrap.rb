@@ -101,6 +101,7 @@ class RedisWrap
 #############   Utility Methods
 
 		def get_key(key)
+			begin
 				redis = Resque.redis
 				value_json_str = redis.get(key)
 				if value_json_str.nil?
