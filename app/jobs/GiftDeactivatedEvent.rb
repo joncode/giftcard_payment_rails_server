@@ -33,7 +33,7 @@ class GiftDeactivatedEvent
                 else
                     # original gift, look for registers on children
                     regift = gift.child
-                    self.perform(regift.id, gift_id)
+                    self.perform(regift.id, gift_id) unless regift.nil?
                 end
             else
                 registers.each {|r| r.reverse_charge }

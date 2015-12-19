@@ -11,7 +11,7 @@ class Omnivore
 	def initialize args
 		puts "Omnivore args = #{args.inspect}"
 
-		if args['brand_card_ids_ary'].nil? || args['brand_card_ids_ary'].length == 0
+		if args['brand_card_ids_ary'].blank?
 			@brand_card = false
 			@brand_card_ids  = []
 		else
@@ -295,10 +295,10 @@ class Omnivore
 		end
 	end
 
-	def get_tickets_at_location
+	def get_tickets_at_location loc_id=@pos_merchant_id
 		begin
 			response = RestClient.get(
-			    "#{POSITRONICS_API_URL}/locations/#{@pos_merchant_id}/tickets?where=eq(open,true)",
+			    "#{POSITRONICS_API_URL}/locations/#{loc_id}/tickets?where=eq(open,true)",
 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 			)
 			JSON.parse(response)

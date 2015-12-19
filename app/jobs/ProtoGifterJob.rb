@@ -26,10 +26,10 @@ class ProtoGifterJob
 		proto.giftables.find_in_batches(batch_size: batch) do |group_ary|
 			group_ary.each do |proto_join|
 				gift = GiftProtoJoin.create({ "proto_join" => proto_join, "proto" => proto})
-				puts "\n proto has created gift ... "
+				puts "\n proto has created gift ... gift = #{gift.inspect}"
 
-				if gift.errors.messages.count > 0
-					puts "Gift Error = #{gift.errors.messages} for #{gift.inspect}"
+				if !gift || !gift.persisted?
+					puts "Gift Error = #{gift.errors.messages}" if gift.respond_to?(:errors)
 				end
 
 				sleep wait_time

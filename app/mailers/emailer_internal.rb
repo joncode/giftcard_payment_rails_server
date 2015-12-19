@@ -1,6 +1,7 @@
 module EmailerInternal
 
     def mail_notice_submit_merchant_setup merchant_submit_obj
+        puts "MerchantSignup Email #{merchant_submit_obj.inspect}"
         subject = "#{merchant_submit_obj['venue_name']} has requested to join"
         signup_obj = nil
         text = "Please login to Admin Tools create account for:\n#{merchant_submit_obj}"
