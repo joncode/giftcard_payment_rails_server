@@ -101,19 +101,17 @@ class RedisWrap
 #############   Utility Methods
 
 		def get_key(key)
-			begin
-				redis = Resque.redis
-				value_json_str = redis.get(key)
-				if value_json_str.nil?
-					return false
-				else
-					puts "REDISWRAP - get_key - #{key} reading from cache"
-					return JSON.parse(value_json_str)
-				end 
-			rescue
-				puts "\nREDISWRAP get_key - #{key} - 500 Internal cache FAIL - #{value_json_str}\n"
-				return false
+			redis = Resque.redis
+			value_json_str = redis.get(key)
+			if value_json_str.nil?
+				false
+			else
+				puts "REDISWRAP - get_key - #{key} reading from cache"
+				JSON.parse(value_json_str)
 			end
+		rescue
+			puts "\nREDISWRAP get_key - #{key} - 500 Internal cache FAIL - #{value_json_str}\n"
+			false
 		end
 
 		def set_key(key, value_hsh, seconds_to_live=nil)
