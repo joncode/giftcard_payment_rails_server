@@ -1,5 +1,7 @@
 require 'rest_client'
 
+#  WwwHttpService.clear_merchant_cache
+
 class WwwHttpService
 
 	def self.clear_merchant_cache

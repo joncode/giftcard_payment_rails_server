@@ -7,13 +7,14 @@ module ShoppingCartHelper
 
     def calculate_cost shoppingCart_string, merchant
         sc = JSON.parse shoppingCart_string
-        sc.sum do |z|
+        cost_f = sc.sum do |z|
             if z["price_promo"].present? && (z["price_promo"].to_f < (z["price"].to_f * merchant.location_fee))
                 z["price_promo"].to_f * z["quantity"].to_i
             else
                 z["price"].to_f * merchant.location_fee.to_f * z["quantity"].to_i
             end
         end
+        cost_f.to_s
     end
 
     def items
