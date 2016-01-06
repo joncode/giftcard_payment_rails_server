@@ -23,8 +23,8 @@ class GiftProtoJoin < Gift
 							proto_id: proto.id)
 						proto_join = pjn
 					end
-	    			args = self.pre_init(proto, proto_join, hsh)
-	    			gift = super
+	    			args = self.create_args(proto, proto_join, hsh)
+	    			gift = super args
 	    			if gift.persisted?
 			            proto_join.gift_id = gift.id
 			            proto_join.save
@@ -37,8 +37,8 @@ class GiftProtoJoin < Gift
             gift.messenger_proto_join if gift.persisted?
         	gift
     	else
-    		args = self.pre_init(proto, proto_join)
-        	gift = super
+    		args = self.create_args(proto, proto_join)
+        	gift = super args
 	        if gift.persisted?
 	            proto_join.update(gift_id: gift.id)
 	            proto.increment!(:processed)
@@ -50,7 +50,7 @@ class GiftProtoJoin < Gift
 
 private
 
-	def self.pre_init proto, proto_join, individual_item_hsh=nil
+	def self.create_args proto, proto_join, individual_item_hsh=nil
 
 		args = {}
 		proto_join.convert_to_gift_receiver(args)
