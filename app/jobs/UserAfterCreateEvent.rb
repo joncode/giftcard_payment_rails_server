@@ -9,7 +9,7 @@ class UserAfterCreateEvent
 
 		if user.client_id == 2
 			puts "PTEG user created"
-			self.gift_user_for_pt user
+			# self.gift_user_for_pt user
 		end
 
 	end
