@@ -12,6 +12,12 @@ class Accountant
  			# no fee , no debt
 			return "no Location Fee" unless location_fee_amount > 0
 
+			# gift is created but error on payment
+			return "Payment Error" if ['payment_error', 'refund_cancel'].include?(gift.pay_stat)
+
+			# gift is cancelled
+			return "Gift is cancelled" if ['cancel', 'expired'].include?(gift.status)
+
 			# if provider is not on creation and gift is not on redemption - out of sync exit
 			return "Payment time not in sync" if gift.status != 'redeemed' && !gift.merchant.creation?
 
@@ -50,6 +56,12 @@ class Accountant
 			puts "\n Affiliate affiliate_location #{gift.id}\n"
 			return nil if gift.cat   != 300
 
+			# gift is created but error on payment
+			return nil if ['payment_error', 'refund_cancel'].include?(gift.pay_stat)
+
+			# gift is cancelled
+			return nil if ['cancel', 'expired'].include?(gift.status)
+
 			loc_affiliation = Affiliation.get_merchant_affiliation_for_gift(gift)
 			return loc_affiliation if loc_affiliation.class != Affiliation
 
@@ -64,6 +76,12 @@ class Accountant
 			return nil if gift.class != Gift
 			puts "\n Affiliate affiliate_user #{gift.id}\n"
 			return nil if gift.cat   != 300
+
+			# gift is created but error on payment
+			return nil if ['payment_error', 'refund_cancel'].include?(gift.pay_stat)
+
+			# gift is cancelled
+			return nil if ['cancel', 'expired'].include?(gift.status)
 
 			user_affiliation = Affiliation.get_user_affiliation_for_gift(gift)
 			return user_affiliation if user_affiliation.class != Affiliation
@@ -96,6 +114,7 @@ class Accountant
 		end
 
 	private
+
 
 		def debt_amount gift, origin
 			if origin == "loc"
