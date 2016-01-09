@@ -131,6 +131,11 @@ class MetalController < ActionController::Base
                 err: "INCOMPLETE_INPUT",
                 msg: "Missing Card Data"
             }
+        when "client_deactivated"
+            {
+                err: "CLIENT_DEACTIVTED",
+                msg: "Client is not currently active"
+            }
         end
     end
 
