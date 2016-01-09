@@ -47,8 +47,8 @@ class Gift < ActiveRecord::Base
 
     after_create :set_client_content
 
-    after_create :fire_after_save_queue
-    after_create :fire_gift_create_event
+    after_commit :fire_after_save_queue, on: :create
+    after_commit :fire_gift_create_event, on: :create
 
 #   -------------
 

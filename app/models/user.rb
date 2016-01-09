@@ -36,8 +36,9 @@ class User < ActiveRecord::Base
 	after_save    :persist_social_data, :unless => :is_perm_deactive?
 	after_save    :make_friends
 	after_create  :init_confirm_email
-    after_save 	  :fire_after_save_queue
-	after_create  :fire_after_create_event
+
+    after_commit  :fire_after_save_queue
+	after_commit  :fire_after_create_event, on: :create
 
 #	-------------
 
