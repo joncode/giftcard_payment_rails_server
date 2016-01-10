@@ -141,7 +141,7 @@ module Emailer
     def affiliate_invite data
         find_id = data['affiliate_id'] || data['merchant_id']
         affiliate = Affiliate.find(find_id)
-        subject  = "Welcome to It's On Me"
+        subject  = "Welcome to ItsOnMe"
         email    = data["email"]
         name     = "#{affiliate.name} Staff"
         body     = text_for_affiliate_invite(affiliate, data["token"])
@@ -154,7 +154,7 @@ module Emailer
 
     def merchant_invite data
         merchant = Merchant.unscoped.find(data["merchant_id"])
-        subject  = "Welcome to It's On Me"
+        subject  = "Welcome to ItsOnMe"
         email    = data["email"]
         name     = "#{merchant.name} Staff"
         body     = text_for_merchant_invite(merchant, data["token"])
@@ -169,7 +169,7 @@ module Emailer
         data = full_data_obj["args"]
         puts "\n Emailer merchant_signup_welcome #{data.inspect}"
         # merchant = MerchantSignup.find(data["id"])
-        subject  = "Welcome to It's On Me"
+        subject  = "Welcome to ItsOnMe"
         email    = data["email"]
         name     = "#{data['name']} Staff"
         body     = text_for_merchant_signup_welcome(data)
@@ -187,7 +187,7 @@ module Emailer
         merchant     = Merchant.unscoped.find(data["merchant_id"])
         invitor_name = data["invitor_name"]
         invite_token = data["token"]
-        subject      = "Welcome to It's On Me"
+        subject      = "Welcome to ItsOnMe"
         email        = data["email"]
         name         = "#{merchant.name} Staff"
         body         = text_for_merchant_staff_invite(merchant, invitor_name, invite_token)
@@ -200,7 +200,7 @@ module Emailer
 
     def merchant_pending data
         merchant = Merchant.unscoped.find(data["merchant_id"])
-        subject  = "Your It's On Me account is pending approval"
+        subject  = "Your ItsOnMe account is pending approval"
         email    = data["email"]
         name     = "#{merchant.name} Staff"
         body     = text_for_merchant_pending(merchant)
@@ -329,7 +329,7 @@ private
         email = whitelist_email(email)
         message          = {
             "subject"     => subject,
-            "from_name"   => "It's On Me",
+            "from_name"   => "ItsOnMe",
             "from_email"  => "no-reply@itson.me",
             "to"          => [
                 { "email" => email, "name" => name }

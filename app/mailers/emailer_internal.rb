@@ -85,24 +85,24 @@ module EmailerInternal
     private
 
     def default_email_msg_for_brand_reps(merchant)
-        subj = "We're on It's On Me and I'd like to introduce you to their team"
-        body = "I would like to set up a meeting between you and David Leibner from It's On Me (#{WWW_URL}). The meeting can be just the two of you or all three of us.\n"
-        body += "We have placed ourselves on the It's On Me platform to help increase our sales and marketing opportunities and would love to see how you think we can all work together to help increase our sales (and yours).\n\n"
-        body += "What is It's On Me?\n\n"
+        subj = "We're on ItsOnMe and I'd like to introduce you to their team"
+        body = "I would like to set up a meeting between you and David Leibner from ItsOnMe (#{WWW_URL}). The meeting can be just the two of you or all three of us.\n"
+        body += "We have placed ourselves on the ItsOnMe platform to help increase our sales and marketing opportunities and would love to see how you think we can all work together to help increase our sales (and yours).\n\n"
+        body += "What is ItsOnMe?\n\n"
         body += "For my Business\n\n"
         body += "It’s On Me is a turn-key mobile gifting and marketing platform.\n\n"
         body += "There is a real-time mobile solution for almost all goods and services consumers use today.\n"
         body += " - Need a cab or limo right now? ... Uber\n"
         body += " - Need a hotel room right now? ... Hotels Tonight\n"
         body += " - Need a reservation right now? ... Open Table\n"
-        body += " - Need to send a friend, client or loved on a gift right now? ... introducing It's On Me\n\n"
-        body += "See how It's On Me drives your business revenue.\n\n"
+        body += " - Need to send a friend, client or loved on a gift right now? ... introducing ItsOnMe\n\n"
+        body += "See how ItsOnMe drives your business revenue.\n\n"
         body += "For Consumers\n\n"
-        body += "It's On Me is the coolest new way to send someone a gift in real time.\n"
+        body += "ItsOnMe is the coolest new way to send someone a gift in real time.\n"
         body += " - Consumers spent $134 Billion dollars in gift cards last year.\n"
         body += " - Social Media platforms like Facebook are sending out 50 million birthday alerts a day, every single day.\n"
         body += " - Consumers are ready and looking for a Real-Time Gifting solution allowing them to say 'Thanks' or 'Congrats' to anyone, anywhere, anytime.\n"
-        body += " - Who is using It's On Me to gift in real time? These people are. (#{WWW_URL}who)\n\n"
+        body += " - Who is using ItsOnMe to gift in real time? These people are. (#{WWW_URL}who)\n\n"
         body += "From co-op dollars to bar buys I believe there is a better way for us to work together driving more people into this venue and directing them to your products. I think Rachel can share with you many of the programs that have been working so far and maybe we can figure something out for us."
         return subj, body
     end

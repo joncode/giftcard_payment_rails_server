@@ -38,9 +38,9 @@ class GiftTemplateMainMailer
             return nil
         end
         if template_name == 'gift-pteg'
-            from_name = "Pt's Entertainment Group via It's On Me"
+            from_name = "Pt's Entertainment Group via ItsOnMe"
         else
-            from_name = "It's On Me"
+            from_name = "ItsOnMe"
         end
         email = whitelist_email(email)
         message          = {
