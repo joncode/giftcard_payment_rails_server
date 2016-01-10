@@ -44,7 +44,7 @@ describe MailerJob do
             template_name    = "user"
             message          = {
                 "subject"     => "QA - Reset password request",
-                "from_name"   => "It's On Me",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [
                     { "email" => @receiver.email, "name" => @receiver.name }
@@ -76,7 +76,7 @@ describe MailerJob do
             template_name    = "user"
             message          = {
                 "subject" => "QA - Confirm your email address",
-                "from_name" => "It's On Me",
+                "from_name" => "ItsOnMe",
                 "from_email" => "no-reply@itson.me",
                 "to" => [
                     { "email" => @receiver.email, "name" => @receiver.name },
@@ -133,7 +133,7 @@ describe MailerJob do
             template_name    = "user"
             message          = {
                 "subject"     => "QA - Make someone's day",
-                "from_name"   => "It's On Me",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @giver.email, "name" => @giver.name }],
                 "global_merge_vars"  => [
@@ -163,7 +163,7 @@ describe MailerJob do
             template_name    = "gift"
             message          = {
                 "subject"     => "QA - #{ @giver.name } sent you a gift",
-                "from_name"   => "It's On Me",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],
                 "global_merge_vars"  => [
@@ -229,7 +229,7 @@ describe MailerJob do
             template_name    = "gift"
             message          = {
                 "subject"     => "QA - The staff at Super Restaurant sent you a gift",
-                "from_name"   => "It's On Me",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @receiver.email, "name" => @receiver.name }],
                 "global_merge_vars"  => [
@@ -258,7 +258,7 @@ describe MailerJob do
             template_name    = "user"
             message          = {
                 "subject"     => "QA - Gift purchase receipt",
-                "from_name"   => "It's On Me",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => @giver.email, "name" => @giver.name }],
                 "global_merge_vars"  => [
@@ -286,8 +286,8 @@ describe MailerJob do
             body             = text_for_merchant_invite(@merchant, "thetoken")
             template_name    = "merchant"
             message          = {
-                "subject"     => "QA - Welcome to It's On Me",
-                "from_name"   => "It's On Me",
+                "subject"     => "QA - Welcome to ItsOnMe",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
                 "global_merge_vars"  => [
@@ -317,8 +317,8 @@ describe MailerJob do
             body             = text_for_merchant_staff_invite(@merchant, "Abe", "thetoken")
             template_name    = "merchant"
             message          = {
-                "subject"     => "QA - Welcome to It's On Me",
-                "from_name"   => "It's On Me",
+                "subject"     => "QA - Welcome to ItsOnMe",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [{ "email" => email, "name" => "#{@merchant.name} Staff" }],
                 "global_merge_vars"  => [
@@ -349,8 +349,8 @@ describe MailerJob do
             body             = text_for_merchant_pending(@merchant)
             template_name    = "merchant"
             message          = {
-                "subject"     => "QA - Your It's On Me account is pending approval",
-                "from_name"   => "It's On Me",
+                "subject"     => "QA - Your ItsOnMe account is pending approval",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [
                     { "email" => email, "name" => "#{@merchant.name} Staff" }
@@ -382,7 +382,7 @@ describe MailerJob do
             template_name    = "merchant"
             message          = {
                 "subject"     => "QA - You have been Approved!",
-                "from_name"   => "It's On Me",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [
                     { "email" => email, "name" => "#{@merchant.name} Staff" }
@@ -414,7 +414,7 @@ describe MailerJob do
             template_name    = "merchant"
             message          = {
                 "subject"     => "QA - Your location is now live",
-                "from_name"   => "It's On Me",
+                "from_name"   => "ItsOnMe",
                 "from_email"  => "no-reply@itson.me",
                 "to"          => [
                     { "email" => email, "name" => "#{@merchant.name} Staff" },

@@ -5,8 +5,8 @@ module EmailHelper
 
 	def text_for_welcome_from_dave user
 		string = "Hi #{ user.first_name },\n\n"
-		string += "Welcome! I'm the CEO of It's On Me and wanted to welcome you and thank you for joining.\n"
-		string += "It's On Me is the easiest way to say, 'Thank you, this round is on me.'\n\n"
+		string += "Welcome! I'm the CEO of ItsOnMe and wanted to welcome you and thank you for joining.\n"
+		string += "ItsOnMe is the easiest way to say, 'Thank you, this round is on me.'\n\n"
 		string += "If you have any feedback on what you like/dislike or want to change, please let us know.\n\n"
 		string += "You can find us on Twitter(http://twitter.com/itsonme), Facebook(http://www.facebook.com/itsonme), or email us at feedback@itson.me\n\n"
 		string += "Cheers,\n\n"
@@ -22,7 +22,7 @@ module EmailHelper
 		#{header_text("Confirm Email")}
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px;'>
-					Welcome to It's On Me #{user_first_name}! Please click the link to confirm your email address.
+					Welcome to ItsOnMe #{user_first_name}! Please click the link to confirm your email address.
 				</div>
 		#{button_text(button_url, button_text)}
 					</div>
@@ -77,7 +77,7 @@ module EmailHelper
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px;'>
 					<div>Hi #{user_first_name},</div><br/>
-					<div>It's a good day to make someone happy. Use It's On Me to send a gift and say you're awesome, congrats, or thank you.</div>
+					<div>It's a good day to make someone happy. Use ItsOnMe to send a gift and say you're awesome, congrats, or thank you.</div>
 				</div>
 			</div>
 			<div style='padding-bottom:50px;'>
@@ -207,10 +207,10 @@ module EmailHelper
 			</div>
 			<div style='padding:10px; font-size:16px;'>
 				<ul style='list-style-type:none;'>
-					<li>#{provider_name} has partnered with It's On Me!</li>
+					<li>#{provider_name} has partnered with ItsOnMe!</li>
 					<li>Claim your gift, simply click above & download the app.</li>
 					<li>Use this email address at sign-up.</li>
-					<li>- Thanks - It's On Me :)</li>
+					<li>- Thanks - ItsOnMe :)</li>
 				</ul>
 			</div>
 			<div style='background-color:#E2E2E2; padding: 10px;'>
@@ -289,7 +289,7 @@ module EmailHelper
 		button_url = generate_affiliate_invite_link(invite_token)
 		button_text = "Get Started"
 					"<div style=#{default_style}>
-					#{header_text("Welcome to It's On Me")}
+					#{header_text("Welcome to ItsOnMe")}
 			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 				<div style='padding-bottom:20px;'>
 					You are almost ready to go live on ItsOnMe!
@@ -313,7 +313,7 @@ module EmailHelper
 		button_url = generate_invite_link(invite_token)
 		button_text = "Get Started"
 		"<div style=#{default_style}>
-		#{header_text("Welcome to It's On Me")}
+		#{header_text("Welcome to ItsOnMe")}
 			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 				<div style='padding-bottom:20px;'>
 					You are almost ready to go live on ItsOnMe!
@@ -335,7 +335,7 @@ module EmailHelper
 
 	def text_for_merchant_signup_welcome merchant_signup
 		"<div style=#{default_style}>
-		#{header_text("Welcome to It's On Me")}
+		#{header_text("Welcome to ItsOnMe")}
 			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 				<br />
 				<div style='padding-bottom:20px;'>
@@ -401,10 +401,10 @@ module EmailHelper
 		button_url = generate_invite_link(invite_token)
 		button_text = "Get Started"
 		"<div style=#{default_style}>
-		#{header_text("Welcome to It's On Me")}
+		#{header_text("Welcome to ItsOnMe")}
 			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 				<div style='padding-bottom:20px;'>
-		#{invitor_name} added you as a user to #{merchant.name}'s It's On Me account.
+		#{invitor_name} added you as a user to #{merchant.name}'s ItsOnMe account.
 				</div>
 				<br/>
 				<div>
@@ -423,7 +423,7 @@ module EmailHelper
 			button_url = PUBLIC_URL_MT + '/login'
 			button_text = "Get Started"
 			"<div style=#{default_style}>
-			#{header_text("Welcome to It's On Me")}
+			#{header_text("Welcome to ItsOnMe")}
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
 					<div>You are almost ready to go live on ItsOnMe!</div>
@@ -479,7 +479,7 @@ module EmailHelper
 						<div style='font-size:28px; padding-top:20px;''>
 					<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946702/blue_location_icon_vnmf3j.png'></div>
 					<div style='font-weight:bold;padding-top:10px'>Welcome</div>
-					<div style='padding:10px;'>to the It's On Me family</div>
+					<div style='padding:10px;'>to the ItsOnMe family</div>
 						</div>
 				</div>
 			<hr style='border-bottom:1px solid #C9C9C9;'>
@@ -540,7 +540,7 @@ module EmailHelper
 			#{header_text("#{merchant.name} is live!")}
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px;'>
-			#{merchant.name} is live on It's On Me. Login to your merchant center to accept digital gift cards, reward loyal customers, and drive new revenue.
+			#{merchant.name} is live on ItsOnMe. Login to your merchant center to accept digital gift cards, reward loyal customers, and drive new revenue.
 				</div>
 				<div>
 					Need help? Email us at
