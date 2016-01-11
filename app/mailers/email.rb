@@ -74,9 +74,9 @@ module Email
             origin_text = 'Gift origin - ' + gift.origin.to_s + '\n'
         end
         email_text = "#{origin_text} #{gift.giver_name} (#{giver_email}) has sent a $#{gift.value} gift #{items} at #{gift.provider_name} to #{gift.receiver_name}"
-        if gift.value.to_i >= 100
+        if gift.value.to_i >= 35
             data = {
-                "subject" => "$100+ Gift purchase made",
+                "subject" => "$35+ Gift purchase made",
                 "text"    => email_text,
                 "email"   => ADMIN_NOTICE_CONTACT
             }
