@@ -8,6 +8,7 @@ class GiftProtoJoin < Gift
     	proto, proto_join = self.process_input args
     	if proto.split
     		merchant = proto.merchant
+
     		proto.cart_ary.each do |item_hsh|
     			item_hsh['quantity'].to_i.times do
     				ih = item_hsh.clone
@@ -15,6 +16,7 @@ class GiftProtoJoin < Gift
 	    			hsh = { shoppingCart: [ih].to_json }
 	    			hsh[:cost] = calculate_cost(hsh[:shoppingCart], merchant)
 	    			hsh[:value] = calculate_value(hsh[:shoppingCart])
+
 					if proto_join.gift_id.present?
 							# make new proto join to link to next gift
 						pjn = ProtoJoin.new(gift_id: nil,
@@ -23,17 +25,21 @@ class GiftProtoJoin < Gift
 							proto_id: proto.id)
 						proto_join = pjn
 					end
+
 	    			args = self.create_args(proto, proto_join, hsh)
 	    			gift = super args
+
 	    			if gift.persisted?
 			            proto_join.gift_id = gift.id
 			            proto_join.save
 			            proto.increment!(:processed)
 			        else
 			        	# proto is bad
+			        	puts "500 Internal - BAD PROTO GIFT #{gift.inspect}"
 			        end
 			    end
     		end
+
             gift.messenger_proto_join if gift.persisted?
         	gift
     	else
