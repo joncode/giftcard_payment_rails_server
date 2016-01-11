@@ -8,7 +8,7 @@ class GiftProtoJoin < Gift
     	proto, proto_join = self.process_input args
     	if proto.split
     		merchant = proto.merchant
-
+    		outside_gift = nil
     		proto.cart_ary.each do |item_hsh|
     			item_hsh['quantity'].to_i.times do
     				ih = item_hsh.clone
@@ -33,6 +33,7 @@ class GiftProtoJoin < Gift
 			            proto_join.gift_id = gift.id
 			            proto_join.save
 			            proto.increment!(:processed)
+			            outside_gift = gift
 			        else
 			        	# proto is bad
 			        	puts "500 Internal - BAD PROTO GIFT #{gift.inspect}"
@@ -40,8 +41,8 @@ class GiftProtoJoin < Gift
 			    end
     		end
 
-            gift.messenger_proto_join if gift.persisted?
-        	gift
+            outside_gift.messenger_proto_join if outside_gift.persisted?
+        	outside_gift
     	else
     		args = self.create_args(proto, proto_join)
         	gift = super args
