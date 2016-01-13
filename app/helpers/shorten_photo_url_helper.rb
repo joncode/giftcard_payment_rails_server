@@ -14,4 +14,16 @@ module ShortenPhotoUrlHelper
         return photo_url
     end
 
+    def secure_photo_url photo_url
+        if photo_url.kind_of?(String) && photo_url.include?("http:")
+            photo_url.gsub!("http:", "https:")
+        end
+        return photo_url
+    end
+
+    def sort_photo photo_url
+        unshorten_photo_url photo_url
+        secure_photo_url photo_url
+    end
+
 end

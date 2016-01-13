@@ -24,8 +24,10 @@ class Web::V3::RegionsController < MetalCorsController
             arg_scope = proc { region.merchants }
             merchants = @current_client.contents(:merchants, &arg_scope)
             if !merchants.nil? && merchants.count > 0
-                merchants_in_city = merchants.select{ |m| m.city_id == region_id }
-                cities_serialized = merchants_in_city.serialize_objs(:web)
+                if region.city?
+                    merchants = merchants.select{ |m| m.city_id == region_id }
+                end
+                cities_serialized = merchants.serialize_objs(:web)
                 RedisWrap.set_region_merchants(@current_client.id, region_id, cities_serialized)
                 success cities_serialized
             else
