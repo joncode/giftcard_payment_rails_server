@@ -1,7 +1,9 @@
 class ReactController < ApplicationController
 
+	http_basic_authenticate_with name: "dhh", password: "secret", only: :index
+
 	def  index
-		puts "In the react controller #index"
+		puts "Developer Tools #index"
 	end
 
 
