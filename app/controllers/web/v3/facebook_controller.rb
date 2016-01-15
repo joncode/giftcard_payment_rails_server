@@ -119,7 +119,14 @@ class Web::V3::FacebookController < MetalCorsController
             full_response_url = return_params['return_url'].to_s + error_param
             redirect_to full_response_url
         else
-            oauth_access_token = oauth.get_access_token(params['code'])
+            begin
+                oauth_access_token = oauth.get_access_token(params['code'])
+            rescue
+                puts "500 Internal - here are the params #{params.inspect}"
+                error_param = "?error=400&error_reason=invalid_verification_code_format"
+                full_response_url = return_params['return_url'].to_s + error_param
+                redirect_to full_response_url
+            end
             graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
             profile = graph.get_object("me")
             puts profile.inspect
