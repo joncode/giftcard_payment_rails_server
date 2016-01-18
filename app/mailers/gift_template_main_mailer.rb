@@ -49,6 +49,13 @@ class GiftTemplateMainMailer
             email_rec_name = @gift.receiver_name
         end
 
+        if @gift.giver_type == "User" && @gift.receiver_id.nil?
+            important_msg = "<span style='color:#23a9e1;'>Important:</span>Claim this gift within 14 days or it will be returned to sender.".html_safe
+        elsif @gift.expires_at.present?
+            important_msg = "<span style='color:#23a9e1;'>Important:</span>This gift will expire. Please claim and use before #{make_date_s(@gift.expires_at)}".html_safe
+        else
+            important_msg = "Enjoy and have fun!".html_safe
+        end
 
         message          = {
             "subject"     => subject,
@@ -66,7 +73,8 @@ class GiftTemplateMainMailer
                 { "name" => "gift_items", "content" => GiftItem.items_for_email(@gift) },
                 { "name" => "gift_detail", "content" => gift_detail_var(@gift.detail) },
                 { 'name' => 'expiration', 'content' => expired_merge_var(@gift.expires_at) },
-                { 'name' => 'receiver_name', 'content' => email_rec_name }
+                { 'name' => 'receiver_name', 'content' => email_rec_name },
+                { 'name' => 'important', 'content' => important_msg }
             ]
         }
 
