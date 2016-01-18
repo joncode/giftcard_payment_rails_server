@@ -19,7 +19,7 @@ class GiftTemplateMainMailer
         end
         subject       = "#{@gift.giver_name} sent you a Gift!"
 
-        template_name = "Gift: 08.2015 New Template Play"
+        template_name = "basic_simple_42"
         pteg_affiliate_id = Rails.env.staging? ? 20 : 29
         if @gift.partner_type == 'Affiliate' && @gift.partner_id == pteg_affiliate_id
             template_name = 'gift-pteg'
@@ -43,6 +43,13 @@ class GiftTemplateMainMailer
             from_name = "ItsOnMe"
         end
         email = whitelist_email(email)
+        if @gift.receiver_email && !@gift.receiver_id
+            email_rec_name = @gift.receiver_email
+        else
+            email_rec_name = @gift.receiver_name
+        end
+
+
         message          = {
             "subject"     => subject,
             "from_name"   => from_name,
@@ -58,7 +65,8 @@ class GiftTemplateMainMailer
                 { "name" => "merchant_address", "content" => merchant.complete_address },
                 { "name" => "gift_items", "content" => GiftItem.items_for_email(@gift) },
                 { "name" => "gift_detail", "content" => gift_detail_var(@gift.detail) },
-                { 'name' => 'expiration', 'content' => expired_merge_var(@gift.expires_at) }
+                { 'name' => 'expiration', 'content' => expired_merge_var(@gift.expires_at) },
+                { 'name' => 'receiver_name', 'content' => email_rec_name }
             ]
         }
 
