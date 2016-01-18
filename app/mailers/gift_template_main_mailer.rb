@@ -74,7 +74,8 @@ class GiftTemplateMainMailer
                 { "name" => "gift_detail", "content" => gift_detail_var(@gift.detail) },
                 { 'name' => 'expiration', 'content' => expired_merge_var(@gift.expires_at) },
                 { 'name' => 'receiver_name', 'content' => email_rec_name },
-                { 'name' => 'important', 'content' => important_msg }
+                { 'name' => 'important', 'content' => important_msg },
+                { 'name' => 'gift_link', 'content' => "#{PUBLIC_URL}/signup/acceptgift?id=#{@gift.obscured_id}" }
             ]
         }
 
