@@ -105,14 +105,15 @@ module EmailHelper
 	end
 
 	def text_for_invoice_giver gift
-		if gift.receiver_name
-			receiver_info = gift.receiver_name
-		elsif gift.receiver_email
-			receiver_info = gift.receiver_name
-		elsif gift.receiver_phone
-			receiver_info = gift.receiver_name
-		else
-			receiver_info = gift.receiver_name
+		receiver_info = gift.receiver_name
+		if !gift.receiver_email.blank?
+			receiver_info += " email: " + gift.receiver_email
+		elsif !gift.receiver_phone.blank?
+			receiver_info += " phone: " + gift.receiver_phone
+		elsif !gift.facebook_id.blank?
+			receiver_info += " via facebook"
+		elsif !gift.twitter.blank?
+			receiver_info += " via twitter"
 		end
 		"<div style=#{default_style}>
 			<div style='width:100%; text-align:center;'>
