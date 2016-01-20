@@ -32,7 +32,6 @@ class Payment < ActiveRecord::Base
             last = self.get_last_payment_for_partner(partner_obj)
             if last && last.total < 0
                 payment.previous_total = last.total
-                payment.total = last.total
             end
         end
         return payment

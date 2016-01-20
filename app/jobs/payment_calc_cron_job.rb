@@ -39,11 +39,16 @@ class PaymentCalcCronJob
                     puts "PAYMENT / REGISTER ORIGIN UNKNOWN ERROR 500 Internal -- #{reg.inspect}"
                     next
                 end
-
-                payment.total += reg.amount
+                payment.revenue += reg.amount
             else
-                # register is a Credit - reg.amount returns a negative value
-                payment.total += reg.amount
+                # register is a Credit - reg.amount returns a negative value - saved on payment on a positive
+                payment.refund += reg.amount
+            end
+            payment.total = payment.revenue + payment.refund + payment.previous_total
+            if payment.total > 0
+                payment.payment_amount = payment.total
+            else
+                payment.payment_amount = 0
             end
             payment.end_date = ed if payment.end_date.nil?
             payment.registers << reg
