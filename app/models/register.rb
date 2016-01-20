@@ -40,6 +40,19 @@ class Register < ActiveRecord::Base
 		end
 	end
 
+	def amount
+		if credit?
+			return -super
+		end
+		if gift.nil? && debt?
+			return 0
+		end
+		if payment_id.nil? && ['cancel','expired'].include?(gift.status) && debt?
+			return 0
+		end
+		super
+	end
+
 	def payment_type
 		if self.loc? || self.aff_loc?
 			:merchant

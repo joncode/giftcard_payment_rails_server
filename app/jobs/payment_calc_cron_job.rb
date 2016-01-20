@@ -42,8 +42,8 @@ class PaymentCalcCronJob
 
                 payment.total += reg.amount
             else
-                # register is a Credit
-                payment.total -= reg.amount
+                # register is a Credit - reg.amount returns a negative value
+                payment.total += reg.amount
             end
             payment.end_date = ed if payment.end_date.nil?
             payment.registers << reg
@@ -51,8 +51,18 @@ class PaymentCalcCronJob
         end
     end
 
+    def self.should_payment_cron_run?(start_date)
+        return true if start_date
+        ed = Payment.get_end_date_of_payment
+        DateTime.now.utc.day == ed.day
+    end
+
     def self.already_paid? reg
-        if !reg.payment_id.nil? || reg.gift.nil? || self.gift_not_payable?(reg.gift)
+        return true if reg.payment_id.present?
+        if reg.credit?
+            return false
+        end
+        if reg.gift.nil? || self.gift_not_payable?(reg.gift)
             return true
         end
         if reg.gift.status == 'regifted'
@@ -61,10 +71,8 @@ class PaymentCalcCronJob
         return false
     end
 
-    def self.should_payment_cron_run?(start_date)
-        return true if start_date
-        ed = Payment.get_end_date_of_payment
-        DateTime.now.utc.day == ed.day
+    def self.gift_not_payable? gift
+        gift.pay_stat == 'settled' || !gift.active || gift.status == 'cancel' || gift.pay_stat == 'payment_error'
     end
 
     def self.gift_already_paid_via_child? parent
@@ -77,10 +85,6 @@ class PaymentCalcCronJob
         else
             self.gift_not_payable? gift
         end
-    end
-
-    def self.gift_not_payable? gift
-        gift.pay_stat == 'settled' || !gift.active || gift.status == 'cancel' || gift.pay_stat == 'payment_error'
     end
 
 end
