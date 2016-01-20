@@ -5,8 +5,8 @@ module GiftSerializers
 
     def serialize
         sender      = giver
-        unless merchant = self.merchant
-            merchant = Merchant.unscoped.find(self.merchant_id)
+        unless gift_merchant = self.merchant
+            gift_merchant = Merchant.unscoped.find(self.merchant_id)
         end
         gift_hsh                       = {}
         gift_hsh["gift_id"]            = self.id
@@ -18,9 +18,9 @@ module GiftSerializers
         gift_hsh["detail"]            = detail
         gift_hsh["shoppingCart"]       = self.shoppingCart
         gift_hsh["items"]              = ary_of_shopping_cart_as_hash
-        gift_hsh["merchant_name"]      = merchant.name
-        gift_hsh["merchant_address"]   = merchant.full_address
-        gift_hsh["merchant_phone"]     = merchant.phone
+        gift_hsh["merchant_name"]      = gift_merchant.name
+        gift_hsh["merchant_address"]   = gift_merchant.full_address
+        gift_hsh["merchant_phone"]     = gift_merchant.phone
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
         gift_hsh["cat"]                = self.cat
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
@@ -83,11 +83,11 @@ module GiftSerializers
         gift_hsh                       = {}
         gift_hsh["gift_id"]            = self.id
         gift_hsh["provider_id"]        = self.merchant_id
-        unless merchant = self.merchant
-            merchant = Merchant.unscoped.find(self.merchant_id)
+        unless gift_merchant = self.merchant
+            gift_merchant = Merchant.unscoped.find(self.merchant_id)
         end
         gift_hsh["name"]               = provider_name
-        gift_hsh["merchant_address"]   = merchant.full_address
+        gift_hsh["merchant_address"]   = gift_merchant.full_address
         gift_hsh["value"]              = self.value
         gift_hsh["cost"]               = self.cost
         gift_hsh["updated_at"]         = self.updated_at
@@ -235,24 +235,24 @@ private
     end
 
     def merchant_serializer_mdot_keys gift_hsh
-        unless merchant = self.merchant
-            merchant = Merchant.unscoped.find(self.merchant_id)
+        unless gift_merchant = self.merchant
+            gift_merchant = Merchant.unscoped.find(self.merchant_id)
         end
         gift_hsh["provider_id"]        = self.merchant_id
         gift_hsh["merchant_id"]        = self.merchant_id
         gift_hsh["provider_name"]      = self.provider_name
-        gift_hsh["provider_photo"]     = merchant.get_photo
-        gift_hsh["provider_phone"]     = merchant.phone
-        gift_hsh["city"]               = merchant.city_name
-        gift_hsh["latitude"]           = merchant.latitude
-        gift_hsh["longitude"]          = merchant.longitude
-        gift_hsh["live"]               = merchant.live_int
-        gift_hsh["provider_address"]   = merchant.complete_address
-        gift_hsh["r_sys"]              = merchant.r_sys
-        gift_hsh['city_id']            = merchant.city_id
-        gift_hsh['region_id']          = merchant.region_id if merchant.region_id
-        gift_hsh['region_name']        = merchant.region_name if merchant.region_name
-        if merchant.client.present?
+        gift_hsh["provider_photo"]     = gift_merchant.get_photo
+        gift_hsh["provider_phone"]     = gift_merchant.phone
+        gift_hsh["city"]               = gift_merchant.city_name
+        gift_hsh["latitude"]           = gift_merchant.latitude
+        gift_hsh["longitude"]          = gift_merchant.longitude
+        gift_hsh["live"]               = gift_merchant.live_int
+        gift_hsh["provider_address"]   = gift_merchant.complete_address
+        gift_hsh["r_sys"]              = gift_merchant.r_sys
+        gift_hsh['city_id']            = gift_merchant.city_id
+        gift_hsh['region_id']          = gift_merchant.region_id if gift_merchant.region_id
+        gift_hsh['region_name']        = gift_merchant.region_name if gift_merchant.region_name
+        if gift_merchant.client.present?
             gift_hsh['multi_loc'] = 'yes'
         else
             gift_hsh['multi_loc'] = 'no'
