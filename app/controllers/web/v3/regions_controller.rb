@@ -27,9 +27,9 @@ class Web::V3::RegionsController < MetalCorsController
                 if region.city?
                     merchants = merchants.select{ |m| m.city_id == region_id }
                 end
-                cities_serialized = merchants.serialize_objs(:web)
-                RedisWrap.set_region_merchants(@current_client.id, region_id, cities_serialized)
-                success cities_serialized
+                merchants_serialized = merchants.serialize_objs(:web)
+                RedisWrap.set_region_merchants(@current_client.id, region_id, merchants_serialized)
+                success merchants_serialized
             else
                 status = :not_found
                 fail_web({ err: "NOT_FOUND", msg: 'No merchants found'})
