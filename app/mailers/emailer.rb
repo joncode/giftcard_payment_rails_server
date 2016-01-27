@@ -54,60 +54,39 @@ module Emailer
     end
 
     def notify_receiver_proto_join data
-        gift          = Gift.find(data["gift_id"])
-        receiver_name = gift.receiver_name
-        merchant_name = gift.provider_name
-        giver_name    = gift.giver_name ? gift.giver_name : merchant_name
-        if gift.receiver_email
-            email     = whitelist_email(gift.receiver_email)
-        elsif gift.receiver
-            email 	  = whitelist_email(gift.receiver.email)
-            elsek
-            puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
-            return nil
-        end
-        giver_name_simple = giver_name.sub(" Staff", "")
-        if gift.payable.kind_of?(Proto) && gift.payable.split
-            subject  = "The staff at #{giver_name_simple} sent you #{gift.payable.items} gifts"
-        else
-            subject  = "The staff at #{giver_name_simple} sent you a gift"
-        end
-        body     = text_for_notify_receiver_proto_join(gift)
+        template = GiftTemplateMainMailer.new(data["gift_id"])
+        template.notify_receiver
 
-        template_name   = "gift"
-        message         = message_hash(subject, email, receiver_name, body)
-        message["tags"] = [ merchant_name ]
-        request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
+        # gift          = Gift.find(data["gift_id"])
+        # receiver_name = gift.receiver_name
+        # merchant_name = gift.provider_name
+        # giver_name    = gift.giver_name ? gift.giver_name : merchant_name
+        # if gift.receiver_email
+        #     email     = whitelist_email(gift.receiver_email)
+        # elsif gift.receiver
+        #     email 	  = whitelist_email(gift.receiver.email)
+        # else
+        #     puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
+        #     return nil
+        # end
+        # giver_name_simple = giver_name.sub(" Staff", "")
+        # if gift.payable.kind_of?(Proto) && gift.payable.split
+        #     subject  = "The staff at #{giver_name_simple} sent you #{gift.payable.items} gifts"
+        # else
+        #     subject  = "The staff at #{giver_name_simple} sent you a gift"
+        # end
+        # body     = text_for_notify_receiver_proto_join(gift)
+
+        # template_name   = "gift"
+        # message         = message_hash(subject, email, receiver_name, body)
+        # message["tags"] = [ merchant_name ]
+        # request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
     end
 
 
     def notify_receiver_boomerang data
         template = BoomerangMailer.new(data["gift_id"])
         template.notify_receiver
-
-        # gift              = GiftBoomerang.find(data["gift_id"])
-        # original_receiver = gift.original_receiver_social
-
-        # template_name    = "iom-boomerang-notice-2"
-        # recipient_name   = gift.receiver_name
-        # if gift.receiver_email
-        #     email         = gift.receiver_email
-        # elsif gift.receiver
-        #     email         = gift.receiver.email
-        # else
-        #     puts "NOTIFY RECEIVER BOOMERANG CALLED WITHOUT RECEIVER EMAIL"
-        #     return nil
-        # end
-
-        # items_text       = items_text(gift)
-        # adjusted_id      = NUMBER_ID + gift.id
-        # link             = "#{PUBLIC_URL}/signup/acceptgift?id=#{adjusted_id}"
-        # bcc              = "info@itson.me"
-        # template_content = [
-        #     { "name" => "items_text", "content" => items_text },
-        #     { "name" => "original_receiver", "content" => original_receiver}]
-        # message          = message_hash_old(subject(template_name), email, recipient_name, link, bcc)
-        # request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"], template_content)
     end
 
     def invoice_giver data
