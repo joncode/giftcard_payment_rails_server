@@ -11,7 +11,7 @@ class RedisCacheControl
 				# rebuild each merchant cache
 			rebuild_merchants
 				# rebuild each menu cache
-			rebuild_menu
+			rebuild_menus
 		end
 
 		def rebuild_menus
