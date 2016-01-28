@@ -5,13 +5,13 @@ class RedisCacheControl
 
 		def perform
 				# rebuild the cities cache
-			self.rebuild_regions
+			rebuild_regions
 				# rebuild merchants in each city /  list
-			self.rebuild_region_merchants
+			rebuild_region_merchants
 				# rebuild each merchant cache
-			self.rebuild_merchants
+			rebuild_merchants
 				# rebuild each menu cache
-			self.rebuild_menu
+			rebuild_menu
 		end
 
 		def rebuild_menus
@@ -22,7 +22,7 @@ class RedisCacheControl
 		end
 
 		def rebuild_merchants
-			Clients.all.each do |client|
+			Client.all.each do |client|
 	            arg_scope = proc { Merchant.where(active: true).where(paused: false).order("name ASC") }
 	            merchants = client.contents(:merchants, &arg_scope)
 	            merchants_serialized = merchants.serialize_objs(:web)
@@ -42,7 +42,7 @@ class RedisCacheControl
 		def rebuild_region_merchants
 			Region.index.each do |region|
             	arg_scope = proc { region.merchants }
-            	Clients.all.each do |client|
+            	Client.all.each do |client|
 	            	merchants = client.contents(:merchants, &arg_scope)
 	            	if !merchants.nil? && merchants.count > 0
 	                	if region.city?
