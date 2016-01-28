@@ -28,15 +28,15 @@ class RedisWrap
 		end
 
 		def clear_user_gifts(client_id, user_id)
-			clear_key("user:#{user_id}:gifts")
+			clear_all_keys("user:#{user_id}:gifts")
 		end
 
 		def clear_badge(client_id, user_id)
-			clear_key("user:#{user_id}:badge")
+			clear_all_keys("user:#{user_id}:badge")
 		end
 
 		def clear_profile(user_id)
-			clear_key("user:#{user_id}:profile")
+			clear_all_keys("user:#{user_id}:profile")
 		end
 
 ########  Getters / Setters
