@@ -12,6 +12,7 @@ class RedisCacheControl
 			rebuild_merchants
 				# rebuild each menu cache
 			rebuild_menus
+			return 'RedisCacheControl.perform 200 OK'
 		end
 
 		def rebuild_menus
