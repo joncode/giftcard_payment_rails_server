@@ -59,14 +59,19 @@ module GiftScopes
         (giver_gifts + rec_gifts).uniq { |g| g.id }
     end
 
-    def get_user_activity_in_client user, client_or_id
+    def get_user_activity_in_client user, client_or_id=nil
         if client_or_id.nil?
             get_user_activity user
         else
             client = client_or_id.kind_of?(Client) ? client_or_id : Client.find(client_or_id)
             if client.full?
                 get_user_activity user
-            else
+            elsif client.partner?
+                partner = client.partner
+                giver_gifts = includes(:merchant).includes(:giver).where(active: true, partner_type: partner.class.to_s, partner_id: partner.id, giver_id: user.id, giver_type: "User").where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
+                rec_gifts   = includes(:merchant).includes(:giver).where(active: true, partner_type: partner.class.to_s, partner_id: partner.id, receiver_id: user.id).where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
+                (giver_gifts + rec_gifts).uniq { |g| g.id }
+            else    # client.client?
                 giver_gifts = includes(:merchant).includes(:giver).where(active: true, client_id: client.id, giver_id: user.id, giver_type: "User").where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
                 rec_gifts   = includes(:merchant).includes(:giver).where(active: true, client_id: client.id, receiver_id: user.id).where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
                 (giver_gifts + rec_gifts).uniq { |g| g.id }
