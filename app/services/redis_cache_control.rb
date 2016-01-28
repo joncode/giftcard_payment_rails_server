@@ -46,7 +46,7 @@ class RedisCacheControl
 	            	merchants = client.contents(:merchants, &arg_scope)
 	            	if !merchants.nil? && merchants.count > 0
 	                	if region.city?
-	                    	merchants = merchants.select{ |m| m.city_id == region_id }
+	                    	merchants = merchants.select{ |m| m.city_id == region.id }
 	                	end
 	                	merchants_serialized = merchants.serialize_objs(:web)
 		                RedisWrap.set_region_merchants(client.id, region_id, merchants_serialized) unless (merchants_serialized == [])
