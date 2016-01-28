@@ -4,7 +4,7 @@ class Web::V3::MerchantsController < MetalCorsController
 
     def index
         cache_resp = RedisWrap.get_merchants(@current_client.id)
-        if !cache_resp
+        if !cache_resp || (cache_resp == [])
             arg_scope = proc { Merchant.where(active: true).where(paused: false).order("name ASC") }
             merchants = @current_client.contents(:merchants, &arg_scope)
             merchants_serialized = merchants.serialize_objs(:web)
@@ -20,7 +20,7 @@ class Web::V3::MerchantsController < MetalCorsController
         merchant_id = params[:id].to_i
         merchant = Merchant.unscoped.find(merchant_id)
         cache_resp = RedisWrap.get_menu(merchant.menu_id)
-        if !cache_resp
+        if !cache_resp || (cache_resp == [])
             menu_responses = { "menu" =>  merchant.menu_string, "loc_id" => merchant.id }
             RedisWrap.set_menu(merchant.menu_id, menu_responses)
             success menu_responses

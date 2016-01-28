@@ -5,7 +5,7 @@ class Web::V3::RegionsController < MetalCorsController
     def index
         # binding.pry
         cache_resp = RedisWrap.get_cities(@current_client.id)
-        if !cache_resp
+        if !cache_resp || (cache_resp == [])
             arg_scope = proc { Region.index }
             cities_serialized = @current_client.contents(:regions, &arg_scope).map(&:old_city_json)
             RedisWrap.set_cities(@current_client.id, cities_serialized)
@@ -19,7 +19,7 @@ class Web::V3::RegionsController < MetalCorsController
     def merchants
         region_id = params[:id].to_i
         cache_resp = RedisWrap.get_region_merchants(@current_client.id, region_id)
-        if !cache_resp
+        if !cache_resp || (cache_resp == [])
             region = Region.find region_id
             arg_scope = proc { region.merchants }
             merchants = @current_client.contents(:merchants, &arg_scope)
