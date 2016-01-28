@@ -114,7 +114,7 @@ class RedisWrap
 			false
 		end
 
-		def set_key(key, value_hsh, seconds_to_live=nil)
+		def set_key(key, value_hsh, seconds_to_live=87000)
 			redis = Resque.redis
 			puts "\n REDISWRAP set_with_key - #{key} \n"
 			redis.set(key, value_hsh.to_json)
