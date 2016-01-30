@@ -117,7 +117,7 @@ Drinkboard::Application.routes.draw do
 
     namespace :v3 do
       resources :cards, only: [:create, :index, :destroy]
-      resources :clients, only: [:show]
+      resources :clients, only: [:show, :index]
 
       resources :promos, only: [:create, :show] do
         collection do
