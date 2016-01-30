@@ -5,7 +5,7 @@ class Web::V3::ClientsController < MetalCorsController
 
 	def show
 		slug = params[:id]
-		client = Client.find_by(url_name: slug)
+		client = Client.find_by_sql("select * from clients where url_name = '#{slug}' OR download_url = '#{slug}' limit 1").first
 		if client && client.active
 			# success serialize
 			success client
