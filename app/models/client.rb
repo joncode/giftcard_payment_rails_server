@@ -8,7 +8,7 @@ class Client < ActiveRecord::Base
 #	-------------
 
     validates_presence_of :name, :url_name, :application_key, :partner_id, :partner_type
-    validates_uniqueness_of :url_name, :application_key
+    validates_uniqueness_of :url_name, :application_key, :download_url
 
 #	-------------
 
