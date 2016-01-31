@@ -12,6 +12,8 @@ class RedisCacheMonitor
 				# go thru each cache key
 			cache_keys.each do |key|
 
+				puts "RedisCacheMonitor - checking #{key}"
+
 					# get the current cache data in stringified JSON
 				current_cache = redis.get(key)
 					# generate fresh cache string in stringified JSON
@@ -19,6 +21,7 @@ class RedisCacheMonitor
 
 					# compare the cache stringified JSON
 				if fresh_cache.blank? || (current_cache == fresh_cache)
+					puts "RedisCacheMonitor - #{key} 304"
 					next
 				else
 						# if not the same

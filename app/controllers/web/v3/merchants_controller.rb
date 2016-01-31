@@ -25,7 +25,7 @@ class Web::V3::MerchantsController < MetalCorsController
             RedisWrap.set_menu(merchant.menu_id, cache_resp)
         end
 
-        success { "menu" =>  cache_resp, "loc_id" => merchant.id }
+        success({ "menu" => cache_resp, "loc_id" => merchant.id })
         respond
     end
 
