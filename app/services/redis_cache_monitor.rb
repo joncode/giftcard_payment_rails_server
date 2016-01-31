@@ -12,6 +12,8 @@ class RedisCacheMonitor
 				# find the redis keys used for API caches
 			cache_keys = select_only_cache_keys redis
 				# go thru each cache key
+
+			bust_www_cache = false
 			cache_keys.each do |key|
 
 				puts "RedisCacheMonitor - checking #{key}"
@@ -20,6 +22,8 @@ class RedisCacheMonitor
 				current_cache = redis.get(key)
 					# generate fresh cache string in stringified JSON
 				fresh_cache = fresh_cache_from_database(key)
+
+
 
 					# compare the cache stringified JSON
 				if fresh_cache.blank? || (current_cache == fresh_cache)
@@ -41,10 +45,11 @@ class RedisCacheMonitor
 		                "email"   => "jon.gutwillig@itson.me"
 					}
 					notify_developers(email_data_hsh)
+					bust_www_cache = true if seconds_to_live.nil?
 				end
 
 			end
-
+			WwwHttpService.clear_merchant_cache if bust_www_cache
 		end
 
 		def fresh_cache_from_database key
