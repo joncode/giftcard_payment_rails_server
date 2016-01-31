@@ -1,3 +1,5 @@
+# RedisCacheMonitor.perform
+
 class RedisCacheMonitor
 	extend Email
 
@@ -93,6 +95,9 @@ class RedisCacheMonitor
 				puts "500 Internal - RedisCacheMonitor:92 - unhandled key #{key}"
 				nil
 			end
+		rescue
+			puts "500 Internal - failure key #{key}"
+			nil
 		end
 
 		def select_only_cache_keys redis
