@@ -47,7 +47,7 @@ class RedisCacheMonitor
 
 		def fresh_cache_from_database key
 				# get the data from psql
-			ary = ck.split(':')
+			ary = key.split(':')
 			obj1 = ary[0].singularize.capitalize.constantize.find ary[1]
 			if obj1.kind_of?(Menu)
 				obj1.json
