@@ -16,9 +16,9 @@ class RedisCacheControl
 		end
 
 		def rebuild_menus
-			Merchant.all.each do |merchant|
-	            menu_responses = { "menu" =>  merchant.menu_string, "loc_id" => merchant.id }
-	            RedisWrap.set_menu(merchant.menu_id, menu_responses) unless (menu_responses == [])
+			Menu.all.each do |menu|
+	            menu_response = JSON.parse(menu.json)
+	            RedisWrap.set_menu(menu.menu_id, menu_response) unless (menu_response.blank?)
 	        end
 		end
 

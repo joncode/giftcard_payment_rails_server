@@ -70,6 +70,7 @@ GEM
       safe_yaml (~> 1.0.0)
     database_cleaner (1.5.0)
     diff-lcs (1.2.5)
+    diffy (3.1.0)
     erubis (2.7.0)
     excon (0.44.4)
     execjs (2.6.0)
@@ -267,6 +268,7 @@ DEPENDENCIES
   bcrypt (~> 3.1)
   capybara (= 1.1.2)
   database_cleaner
+  diffy
   excon (~> 0.44.4)
   factory_girl
   gibberish

@@ -19,7 +19,7 @@ class RedisWrap
 		end
 
 		def clear_region_cache(region_id)
-			clear_all_keys("*regions:#{region_id}")
+			clear_all_keys("*region:#{region_id}")
 			clear_all_keys("*cities")
 		end
 
@@ -115,6 +115,9 @@ class RedisWrap
 		end
 
 		def set_key(key, value_hsh, seconds_to_live=87000)
+			if value_hsh.blank?
+				return nil
+			end
 			redis = Resque.redis
 			puts "\n REDISWRAP set_with_key - #{key} \n"
 			redis.set(key, value_hsh.to_json)

@@ -46,6 +46,7 @@ gem 'turbolinks'
 # gem 'attachinary'
 
 gem 'rest-client'
+gem 'diffy'
 
 group :development do
 	gem 'annotate', '~> 2.4.1.beta'
