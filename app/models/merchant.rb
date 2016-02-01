@@ -25,7 +25,7 @@ class Merchant < ActiveRecord::Base
 #   -------------
 
     before_save     :add_region_name
-    after_save      :clear_www_cache
+    after_commit :clear_www_cache
 
 #   -------------
 
@@ -211,8 +211,9 @@ private
     end
 
     def clear_www_cache
-        unless Rails.env.test? || Rails.env.development?
-            RedisWrap.clear_merchants_caches(self.region_id)
+        if !Rails.env.development?
+            RedisWrap.clear_merchants_caches(self.region_id) if self.region_id
+            RedisWrap.clear_merchants_caches(self.city_id) if self.city_id
             WwwHttpService.clear_merchant_cache
         end
     end

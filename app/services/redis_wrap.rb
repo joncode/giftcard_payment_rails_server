@@ -1,3 +1,11 @@
+#######################
+
+####  DO NOT UPDATE THIS FILE OUTSIDE OF drinkboard !!!   ####
+
+####  Update in drinkboard and copy to MT & ADMT   ####
+
+#######################
+
 class RedisWrap
 
 	class << self
