@@ -79,7 +79,7 @@ module EmailerInternal
         message = {
             "subject"    => subject_creator(subject),
             "from_name"  => "IOM Database",
-            "text"       => text,
+            "html"       => text,
             "to"         => emails,
             "from_email" => NO_REPLY_EMAIL
         }
