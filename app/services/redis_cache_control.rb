@@ -17,8 +17,12 @@ class RedisCacheControl
 
 		def rebuild_menus
 			Menu.all.each do |menu|
-	            menu_response = JSON.parse(menu.json)
-	            RedisWrap.set_menu(menu.id, menu_response) unless (menu_response.blank?)
+				begin
+	            	menu_response = JSON.parse(menu.json)
+	            	RedisWrap.set_menu(menu.id, menu_response) unless (menu_response.blank?)
+	            rescue
+	            	next
+	            end
 	        end
 		end
 
