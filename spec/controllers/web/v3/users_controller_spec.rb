@@ -142,7 +142,7 @@ describe Web::V3::UsersController do
             user.reload
             rrc(200)
             json["status"].should == 1
-            json["data"].should == user.login_web_serialize
+            json["data"].should == user.login_client_serialize
         end
 
         it "should update the individual user socials by id" do

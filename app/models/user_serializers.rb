@@ -54,10 +54,6 @@ module UserSerializers
         usr_hash
     end
 
-    def login_web_serialize
-        login_client_serialize
-    end
-
     def profile_serialize
         usr_hash  = self.serializable_hash only: ["first_name", "last_name", "birthday", "zip", "sex"]
         usr_hash["photo"]   = self.get_photo
