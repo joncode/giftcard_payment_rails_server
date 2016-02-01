@@ -36,7 +36,7 @@ class RedisWrap
 		end
 
 		def clear_user_gifts(client_id, user_id)
-			clear_all_keys("user:#{user_id}:gifts")
+			clear_all_keys("*user:#{user_id}:gifts")
 		end
 
 		def clear_badge(client_id, user_id)
