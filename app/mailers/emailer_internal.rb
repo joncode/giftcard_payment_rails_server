@@ -69,7 +69,6 @@ module EmailerInternal
 
     def send_notice data
         subject = data["subject"]
-        text    = data["text"]
         if data['email'].kind_of?(String)
             email = [data['email']]
         else
@@ -79,10 +78,11 @@ module EmailerInternal
         message = {
             "subject"    => subject_creator(subject),
             "from_name"  => "IOM Database",
-            "html"       => text,
             "to"         => emails,
             "from_email" => NO_REPLY_EMAIL
         }
+        message['text'] = data["text"] if data["text"].present?
+        message['html'] = data['html'].html_safe if data['html'].present?
         request_mandrill_with_message(message).first
     end
 

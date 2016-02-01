@@ -48,13 +48,13 @@ class RedisCacheMonitor
 					RedisWrap.set_key(key, JSON.parse(fresh_cache), seconds_to_live)
 						# diff the cache strings
 					html_diff = Diffy::Diff.new(current_cache, fresh_cache).to_s
-					html_diff = html_diff.gsub('<del>','<div>').gsub('<ins>','<div>').gsub('</del>','</div>').gsub('</ins>','</div>')
+					html_diff = html_diff.gsub('<del>','<h3>Old Cache</h3><div>').gsub('<ins>','<h3>New Cache</h3><div>').gsub('</del>','</div>').gsub('</ins>','</div>')
 					html_diff = "<h2>#{key}</h2>" + html_diff
 						# send an email to tech with the 2 strings and the diff
 					puts "500 Internal RedisCacheMonitor:47 | cache diff = #{html_diff} |"
 					email_data_hsh = {
 		                "subject" => "RedisCacheMonitor - CACHE ERROR FOUND #{key}",
-		                "text"    => html_diff.html_safe,
+		                "html"    => html_diffy,
 		                "email"   => "jon.gutwillig@itson.me"
 					}
 					notify_developers(email_data_hsh)
