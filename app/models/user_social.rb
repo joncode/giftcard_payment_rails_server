@@ -18,10 +18,11 @@ class UserSocial < ActiveRecord::Base
 
 #   -------------
 
-    after_create  :subscribe_mailchimp
-    after_create  :collect_incomplete_gifts
-    after_save    :unsubscribe_mailchimp
-    after_save    :fire_after_save_queue
+    after_commit :collect_incomplete_gifts, on: :create
+    after_commit :subscribe_mailchimp, on: :create
+    after_commit :fire_after_save_queue
+    after_commit :unsubscribe_mailchimp
+
 #   -------------
 
     has_many :dittos, as: :notable
@@ -35,6 +36,13 @@ class UserSocial < ActiveRecord::Base
 
 private
 
+    def fire_after_save_queue
+        if thread_on?
+            Resque.enqueue(UserAfterSaveJob, self.user_id)
+        else
+            UserAfterSaveJob.perform(self.user_id)
+        end
+    end
 
     def collect_incomplete_gifts
         if thread_on?
@@ -69,9 +77,6 @@ private
         end
     end
 
-    def fire_after_save_queue
-        Resque.enqueue(UserAfterSaveJob, self.user_id)
-    end
 end
 
 # == Schema Information
