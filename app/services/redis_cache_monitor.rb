@@ -49,6 +49,7 @@ class RedisCacheMonitor
 						# diff the cache strings
 					html_diff = Diffy::Diff.new(current_cache, fresh_cache).to_s
 					html_diff = html_diff.gsub('<del>','<div>').gsub('<ins>','<div>').gsub('</del>','</div>').gsub('</ins>','</div>')
+					html_diff = "<h2>#{key}</h2>" + html_diff
 						# send an email to tech with the 2 strings and the diff
 					puts "500 Internal RedisCacheMonitor:47 | cache diff = #{html_diff} |"
 					email_data_hsh = {
