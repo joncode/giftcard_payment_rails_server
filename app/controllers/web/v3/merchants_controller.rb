@@ -19,10 +19,14 @@ class Web::V3::MerchantsController < MetalCorsController
     def menu
         merchant = Merchant.unscoped.find(params[:id].to_i)
 
-        cache_resp = RedisWrap.get_menu(merchant.menu_id)
-        if !cache_resp || (cache_resp == [])
-            cache_resp = merchant.menu_string
-            RedisWrap.set_menu(merchant.menu_id, cache_resp)
+        if merchant.menu_id.nil?
+            cache_resp = []
+        else
+            cache_resp = RedisWrap.get_menu(merchant.menu_id)
+            if !cache_resp || (cache_resp == [])
+                cache_resp = merchant.menu_string
+                RedisWrap.set_menu(merchant.menu_id, cache_resp)
+            end
         end
 
         success({ "menu" => cache_resp, "loc_id" => merchant.id })

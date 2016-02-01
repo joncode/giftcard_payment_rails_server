@@ -6,6 +6,8 @@ class RedisCacheMonitor
 	class << self
 
 		def perform
+			log_level = Rails.logger.level
+			Rails.logger.level = 1
 			Diffy::Diff.default_format = :html
 			redis = Resque.redis
 
@@ -20,14 +22,24 @@ class RedisCacheMonitor
 
 					# get the current cache data in stringified JSON
 				current_cache = redis.get(key)
+				if current_cache.blank? || (current_cache == "[]")
+					puts "RedisCacheMonitor:25 - #{key} Key Deleted"
+					redis.del(key)
+				end
+
+				if redis.ttl(key) == -1
+					puts "RedisCacheMonitor:29 - #{key} Expiration Added"
+					redis.expire(key, 87000)
+				end
 					# generate fresh cache string in stringified JSON
 				fresh_cache = fresh_cache_from_database(key)
 
-
-
 					# compare the cache stringified JSON
-				if fresh_cache.blank? || (current_cache == fresh_cache)
-					puts "RedisCacheMonitor - #{key} 304"
+				if fresh_cache.blank?
+					puts "RedisCacheMonitor:33 - #{key} Value blank 404 - Not Found"
+					next
+				elsif (current_cache == fresh_cache)
+					puts "RedisCacheMonitor:36 - #{key} 304 - Not Modified"
 					next
 				else
 						# if not the same
@@ -38,7 +50,7 @@ class RedisCacheMonitor
 					html_diff = Diffy::Diff.new(current_cache, fresh_cache).to_s
 					html_diff = html_diff.gsub('<del>','').gsub('<ins>','').gsub('</del>','').gsub('</ins>','')
 						# send an email to tech with the 2 strings and the diff
-					puts "500 Internal RedisCacheMonitor:31 | cache diff = #{html_diff} |"
+					puts "500 Internal RedisCacheMonitor:47 | cache diff = #{html_diff} |"
 					email_data_hsh = {
 		                "subject" => "RedisCacheMonitor - CACHE ERROR FOUND",
 		                "text"    => html_diff,
@@ -50,6 +62,7 @@ class RedisCacheMonitor
 
 			end
 			WwwHttpService.clear_merchant_cache if bust_www_cache
+			Rails.logger.level = log_level
 		end
 
 		def fresh_cache_from_database key
@@ -63,7 +76,7 @@ class RedisCacheMonitor
 				if ary[2] == 'profile'
 					user.login_client_serialize.to_json
 				else
-					puts "500 Internal - RedisCacheMonitor:54 - unhandled item(2) #{ary[2]}"
+					puts "500 Internal - RedisCacheMonitor:72 - unhandled item(2) #{ary[2]}"
 					nil
 				end
 			elsif obj1.kind_of?(Client)
@@ -89,7 +102,7 @@ class RedisCacheMonitor
 			            gifts = Gift.get_user_activity_in_client(user, client)
 			            gifts.serialize_objs(:web).to_json
 					else
-						puts "500 Internal - RedisCacheMonitor:83 - unhandled key #{key}"
+						puts "500 Internal - RedisCacheMonitor:98 - unhandled key #{key}"
 						nil
 					end
 				elsif ary[2].match /merchant/
@@ -97,7 +110,7 @@ class RedisCacheMonitor
 		            client.contents(:merchants, &arg_scope).serialize_objs(:web).to_json
 		        end
 			else
-				puts "500 Internal - RedisCacheMonitor:92 - unhandled key #{key}"
+				puts "500 Internal - RedisCacheMonitor:106 - unhandled key #{key}"
 				nil
 			end
 		rescue
