@@ -53,7 +53,7 @@ class RedisCacheMonitor
 					puts "500 Internal RedisCacheMonitor:47 | cache diff = #{html_diff} |"
 					email_data_hsh = {
 		                "subject" => "RedisCacheMonitor - CACHE ERROR FOUND #{key}",
-		                "text"    => html_diff,
+		                "text"    => html_diff.html_safe,
 		                "email"   => "jon.gutwillig@itson.me"
 					}
 					notify_developers(email_data_hsh)
