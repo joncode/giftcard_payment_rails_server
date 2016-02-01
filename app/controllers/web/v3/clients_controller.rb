@@ -2,10 +2,9 @@ class Web::V3::ClientsController < MetalCorsController
 
 	before_action :authenticate_general
 
-
-	def show
+	def index
 		slug = params[:id]
-		client = Client.find_by(url_name: slug)
+		client = Client.where("url_name = :q OR download_url = :q", q: slug).first
 		if client && client.active
 			# success serialize
 			success client

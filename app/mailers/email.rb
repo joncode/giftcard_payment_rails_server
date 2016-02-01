@@ -84,14 +84,16 @@ module Email
         end
     end
 
-    def notify_developers
+    def notify_developers data=nil
         gift = self
 
-        data = {
-            "subject" => "PTEG gift created",
-            "text"    => "#{gift.inspect}",
-            "email"   => "jon.gutwillig@itson.me"
-        }
+        if data.nil?
+            data = {
+                "subject" => "PTEG gift created",
+                "text"    => "#{gift.inspect}",
+                "email"   => "jon.gutwillig@itson.me"
+            }
+        end
         route_internal_email_system(data)
 
     end

@@ -70,7 +70,11 @@ module EmailerInternal
     def send_notice data
         subject = data["subject"]
         text    = data["text"]
-        email   = data["email"]
+        if data['email'].kind_of?(String)
+            email = [data['email']]
+        else
+            email   = data["email"]
+        end
         emails  = email.map { |mail| {"email" => mail, "name" => "IOM Staff (#{mail})"} }
         message = {
             "subject"    => subject_creator(subject),

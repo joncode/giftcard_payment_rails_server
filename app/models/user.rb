@@ -97,6 +97,9 @@ class User < ActiveRecord::Base
 	def remember_token
 		if self.session_token_obj.present?
 			self.session_token_obj.token
+		elsif sst = SessionToken.where(user_id: self.id).order(created_at: :desc).limit(1).first
+			self.session_token_obj = sst
+			sst.token
 		else
 			super
 		end
