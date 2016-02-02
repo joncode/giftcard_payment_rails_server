@@ -15,7 +15,7 @@ if Rails.env.production?
     SOCIAL_PROXY_URL = "http://m.itson.me/api"
     API_URL          = "https://api.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "david.leibner@itson.me", "name" => "David"}
-    HELP_CONTACT_ARY     = [{ "email" => "david.leibner@itson.me", "name" => "David"}]
+    HELP_CONTACT_ARY     = [{ "email" => "david.leibner@itson.me", "name" => "David"}, { "email" => "support@itson.me", "name" => "Craig"}]
 
     ADMIN_NOTICE_CONTACT = ["david.leibner@itson.me", "support@itson.me"]
 elsif Rails.env.staging?
@@ -33,7 +33,7 @@ elsif Rails.env.staging?
     SOCIAL_PROXY_URL = "http://qam.itson.me/api"
     API_URL          = "https://qaapi.itson.me/web/v3"
     HELP_CONTACT     = { "email" => "support@itson.me", "name" => "Craig"}
-    HELP_CONTACT_ARY     = [{ "email" => "support@itson.me", "name" => "Craig"}]
+    HELP_CONTACT_ARY     = [{ "email" => "support@itson.me", "name" => "Craig"},{ "email" => "jon.gutwillig@itson.me", "name" => "Jon"}]
 
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 else

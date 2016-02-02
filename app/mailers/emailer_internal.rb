@@ -1,5 +1,7 @@
 module EmailerInternal
 
+    # MerchantSignup Email {"id"=>44, "name"=>"Amy Ayers", "position"=>"owner", "email"=>"julepsrichmond@gmail.com", "phone"=>"804377-3968", "website"=>nil, "venue_name"=>"Julep's New Southern Cuisine", "venue_url"=>"www.juleps.net", "point_of_sale_system"=>"Orydx", "message"=>"I am very interested in determining how to get this set up with my website!", "created_at"=>"2016-02-01T20:53:52.947Z", "updated_at"=>"2016-02-01T20:53:52.947Z", "active"=>true, "address"=>"420 East Grace Street, Richmond, VA 23219"}
+
     def mail_notice_submit_merchant_setup merchant_submit_obj
         puts "MerchantSignup Email #{merchant_submit_obj.inspect}"
         subject = "#{merchant_submit_obj['venue_name']} has requested to join"
