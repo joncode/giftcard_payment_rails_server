@@ -106,15 +106,15 @@ class RedisWrap
 		end
 
         def get_user_keys
-            Resque.redis.keys.select { |k| k.match /user/ }
+            Resque.redis.keys.select { |k| k.match /user/ }.sort
         end
 
         def get_region_keys
-        	Resque.redis.keys.select { |k| k.match /region/ }
+        	Resque.redis.keys.select { |k| k.match /region/ }.sort
         end
 
         def get_menu_keys
-        	Resque.redis.keys.select { |k| k.match /menu/ }
+        	Resque.redis.keys.select { |k| k.match /menu/ }.sort
         end
 
 #############   Utility Methods
