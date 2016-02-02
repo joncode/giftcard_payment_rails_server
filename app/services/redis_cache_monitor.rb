@@ -18,7 +18,7 @@ class RedisCacheMonitor
 			bust_www_cache = false
 			cache_keys.each do |key|
 
-				puts "RedisCacheMonitor - checking #{key}"
+				print "RedisCacheMonitor - check #{key}"
 
 					# get the current cache data in stringified JSON
 				current_cache = redis.get(key)
@@ -39,7 +39,7 @@ class RedisCacheMonitor
 					puts "RedisCacheMonitor:33 - #{key} Value blank 404 - Not Found"
 					next
 				elsif (current_cache == fresh_cache)
-					puts "RedisCacheMonitor:36 - #{key} 304 - Not Modified"
+					# puts "RedisCacheMonitor:36 - #{key} 304 - Not Modified"
 					next
 				else
 						# if not the same
@@ -50,10 +50,10 @@ class RedisCacheMonitor
 					html_diff = Diffy::Diff.new(current_cache, fresh_cache).to_s
 					html_diff = html_diff.gsub('<del>','<h3>Old Cache</h3><div>').gsub('<ins>','<h3>New Cache</h3><div>').gsub('</del>','</div>').gsub('</ins>','</div>')
 					html_diff = "<h2>#{key}</h2>" + html_diff
+
 						# send an email to tech with the 2 strings and the diff
-					puts "500 Internal RedisCacheMonitor:47 | cache diff = #{html_diff} |"
 					email_data_hsh = {
-		                "subject" => "RedisCacheMonitor - CACHE ERROR FOUND #{key}",
+		                "subject" => "RedisCacheMonitor - CACHE ERROR #{key}",
 		                "html"    => html_diff,
 		                "email"   => "jon.gutwillig@itson.me"
 					}
@@ -115,7 +115,7 @@ class RedisCacheMonitor
 				nil
 			end
 		rescue
-			puts "500 Internal - failure key #{key}"
+			puts "500 Internal - RedisCacheMonitor - failure key #{key}"
 			nil
 		end
 
