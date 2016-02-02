@@ -124,7 +124,7 @@ module EmailerInternal
     def request_mandrill_with_message message
         if Rails.env.staging? || Rails.env.production?
             puts "``````````````````````````````````````````````"
-            puts " EmailerInternal[120] - Request Mandrill with #{message}"
+            puts " EmailerInternal[120] - request_mandrill_with_message"
 
             require 'mandrill'
             m        = Mandrill::API.new
