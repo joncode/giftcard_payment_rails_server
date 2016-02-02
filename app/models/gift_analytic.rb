@@ -85,6 +85,7 @@ class GiftAnalytic < ActiveRecord::Base
 				r_ga.get_numbers_redeemed(gift)
 				r_return = r_ga.save
 			end
+
 			return [c_return,n_return,r_return]
 		end
 

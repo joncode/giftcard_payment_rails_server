@@ -105,6 +105,17 @@ class RedisWrap
 			set_key("client:#{client_id}:user:#{user_id}:badge", _serialized, 1800)
 		end
 
+        def get_user_keys
+            Resque.redis.keys.select { |k| k.match /user/ }
+        end
+
+        def get_region_keys
+        	Resque.redis.keys.select { |k| k.match /region/ }
+        end
+
+        def get_menu_keys
+        	Resque.redis.keys.select { |k| k.match /menu/ }
+        end
 
 #############   Utility Methods
 
