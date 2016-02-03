@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108014901) do
+ActiveRecord::Schema.define(version: 20160203215111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -567,6 +567,24 @@ ActiveRecord::Schema.define(version: 20160108014901) do
   end
 
   add_index "landing_pages", ["link"], name: "index_landing_pages_on_link", using: :btree
+
+  create_table "list_items", force: :cascade do |t|
+    t.integer  "owner_id"
+    t.string   "owner_type"
+    t.integer  "list_step_id"
+    t.string   "state",        default: ""
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "list_steps", force: :cascade do |t|
+    t.string   "name"
+    t.string   "type_of"
+    t.string   "owner_type"
+    t.integer  "position",   default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "menu_items", force: :cascade do |t|
     t.string   "name",        limit: 255
