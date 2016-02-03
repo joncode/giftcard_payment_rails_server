@@ -25,7 +25,7 @@ class Merchant < ActiveRecord::Base
 #   -------------
 
     before_save     :add_region_name
-    after_commit :clear_www_cache
+    after_commit :clear_www_cache, on: [:create, :update, :destroy]
 
 #   -------------
 

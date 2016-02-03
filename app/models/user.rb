@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
 	after_save    :make_friends
 
 	after_commit  :init_confirm_email, on: :create
-    after_commit  :fire_after_save_queue
+    after_commit  :fire_after_save_queue, on: [:create, :update, :destroy]
 	after_commit  :fire_after_create_event, on: :create
 
 #	-------------
