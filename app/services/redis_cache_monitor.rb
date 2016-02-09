@@ -18,7 +18,7 @@ class RedisCacheMonitor
 			bust_www_cache = false
 			cache_keys.each do |key|
 
-				print "RedisCacheMonitor - check #{key}"
+				# puts "RedisCacheMonitor - check #{key}"
 
 					# get the current cache data in stringified JSON
 				current_cache = redis.get(key)

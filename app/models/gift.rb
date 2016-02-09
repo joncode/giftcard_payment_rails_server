@@ -381,12 +381,12 @@ class Gift < ActiveRecord::Base
         RedisWrap.clear_all_user_gifts(self.receiver_id)
     end
 
-    def fire_after_save_queue(client_id=nil)
-        if client_id.respond_to?(:id)
-            client_id = client_id.id
+    def fire_after_save_queue(sent_client_id=nil)
+        if sent_client_id.respond_to?(:id)
+            sent_client_id = sent_client_id.id
         end
-        puts " REDISWRAP --- GIFT AFTER SAVE --- #{self.id} - #{client_id}"
-        Resque.enqueue(GiftAfterSaveJob, self.id, client_id)
+        puts " REDISWRAP --- GIFT AFTER SAVE --- #{self.id} - #{sent_client_id}"
+        Resque.enqueue(GiftAfterSaveJob, self.id, sent_client_id)
     end
 
     def fire_gift_create_event
