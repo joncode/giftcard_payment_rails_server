@@ -59,6 +59,7 @@ class RedisCacheMonitor
 					}
 					notify_developers(email_data_hsh)
 					bust_www_cache = true if seconds_to_live.nil?
+					fresh_cache = nil
 				end
 
 			end

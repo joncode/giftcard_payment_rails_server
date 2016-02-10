@@ -76,6 +76,7 @@ private
 		args['message']       = proto.message
 		args['detail']        = proto.detail
 		args['expires_at']    = proto.expires_at
+		args['scheduled_at'] = proto.scheduled_at
 		args['cat']           = proto.cat
 		args['giver']         = proto.giver
 		args['merchant_id']   = proto.merchant_id

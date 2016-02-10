@@ -271,7 +271,7 @@ private
             params.require(:data).permit(:message, :detail, :giver_id, :giver_name,
                 :value, :service, :receiver_id, :receiver_email, :facebook_id,
                 :twitter, :receiver_phone, :provider_name, :receiver_name,
-                :provider_id, :credit_card,
+                :provider_id, :credit_card, :scheduled_at,
                 receiver_oauth: [:token, :secret, :network, :network_id, :handle, :photo])
         end
     end

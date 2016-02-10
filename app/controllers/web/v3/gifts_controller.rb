@@ -73,6 +73,7 @@ class Web::V3::GiftsController < MetalCorsController
         gift_hsh["merchant_id"]   = gps[:loc_id]
         gift_hsh["value"]         = gps[:value]
         gift_hsh["message"]       = gps[:msg]
+        gift_hsh["scheduled_at"]  = gps[:scheduled_at]
 
         gift = GiftSale.create(gift_hsh)
         if gift.kind_of?(Gift) && !gift.id.nil?
@@ -247,7 +248,7 @@ private
     end
 
     def gift_params
-        params.require(:data).permit(:merchant_id, :link, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name,:msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
+        params.require(:data).permit(:merchant_id, :link, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :scheduled_at, :msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
     end
 
     def redeem_params

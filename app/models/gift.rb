@@ -7,6 +7,7 @@ class Gift < ActiveRecord::Base
     include GenericPayableDucktype
     include RedeemHelper
     include GiftMessenger
+    include GiftScheduler
     include ModelValidationHelper
 
     TEXT_STATUS_OLD = { "incomplete" => 10, "open" => 20, "notified" => 30, "redeemed" => 40, "regifted" => 50, "expired" => 60, "cancel" => 70 }
@@ -450,10 +451,14 @@ private
 	################  data validation methods
 
     def set_status
-        if self.receiver_id.nil?
-            self.status = "incomplete"
+        if self.scheduled_at.present? && self.scheduled_at > DateTime.now.utc
+            self.status = "schedule"
         else
-            self.status = 'open'
+            if self.receiver_id.nil?
+                self.status = "incomplete"
+            else
+                self.status = 'open'
+            end
         end
     end
 
@@ -468,32 +473,32 @@ private
 	end
 
 	def no_giver_name?
-		!self.giver_name.present?
+		self.giver_name.blank?
 	end
 
     def add_merchant_name
-        if merchant = Merchant.unscoped.find(self.merchant_id)
-            self.merchant = merchant
-            self.provider_name = merchant.name
+        if m = Merchant.unscoped.find(self.merchant_id)
+            self.merchant = m
+            self.provider_name = m.name
         end
     end
 
     def no_provider_name?
-        !self.provider_name.present?
+        self.provider_name.blank?
     end
 
     def find_receiver
         if self.receiver_id.nil?
-            user = PeopleFinder.find receiver_info_as_hsh
-            if user
-                self.receiver = user
+            found_user = PeopleFinder.find receiver_info_as_hsh
+            if found_user
+                self.receiver = found_user
             end
         end
     end
 
     def regift
         old_gift = self.payable
-        old_gift.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: Time.now.utc)
+        old_gift.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: DateTime.now.utc)
     end
 
     def regift?

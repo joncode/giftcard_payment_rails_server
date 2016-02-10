@@ -35,6 +35,7 @@ private
         args["message"]       = campaign_item.message
         args["detail"]        = campaign_item.detail
         args["expires_at"]    = expires_at_calc(campaign_item.expires_at, campaign_item.expires_in)
+        args['scheduled_at']  = campaign_item.scheduled_at
         args["shoppingCart"]  = campaign_item.shoppingCart
         args["value"]         = campaign_item.value
         args["cost"]          = campaign_item.cost

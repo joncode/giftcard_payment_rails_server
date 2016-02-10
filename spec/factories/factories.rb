@@ -3,7 +3,7 @@ FactoryGirl.define do
     factory :client do
         name               "Cool IOS"
         url_name           'cool_ios_client'
-        download_url       'app_store_url'
+        sequence(:download_url)  { |n|  "www.download#{n}.com" }
         partner_type   'Affiliate'
         partner_id      100
         platform         0
