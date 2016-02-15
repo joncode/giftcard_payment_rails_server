@@ -20,6 +20,7 @@ module UrbanAirshipWrap
 
 
     def send_push(user, alert, gift_id)
+        puts "SENDING PUSH NOTE for GIFT ID = #{gift_id} | PUSH_RECEIVER ID = #{user.id} | #{alert}"
         pnts = user.pn_tokens
         resp = []
         pnts.each do |pn_token_obj|
