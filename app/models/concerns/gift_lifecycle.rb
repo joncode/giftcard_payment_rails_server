@@ -29,6 +29,7 @@ module GiftLifecycle
                 Gift.connection.execute(sql)
                 self.reload
                 self.update(merchant_id: loc_id.to_i) if (loc_id && loc_id.to_i > 0)
+                Resque.enqueue(GiftAfterSaveJob, self.id)
                 true
             else
                 true
