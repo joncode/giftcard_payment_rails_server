@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160203215111) do
+ActiveRecord::Schema.define(version: 20160210181207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -261,6 +261,7 @@ ActiveRecord::Schema.define(version: 20160203215111) do
     t.text     "detail"
     t.integer  "merchant_id"
     t.boolean  "brand_card",               default: false
+    t.datetime "scheduled_at"
   end
 
   add_index "campaign_items", ["campaign_id"], name: "index_campaign_items_on_campaign_id", using: :btree
@@ -514,6 +515,7 @@ ActiveRecord::Schema.define(version: 20160203215111) do
     t.integer  "rec_client_id"
     t.integer  "merchant_id"
     t.boolean  "brand_card",                 default: false
+    t.datetime "scheduled_at"
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
@@ -941,6 +943,7 @@ ActiveRecord::Schema.define(version: 20160203215111) do
     t.integer  "processed",                 default: 0
     t.integer  "merchant_id"
     t.boolean  "split",                     default: false
+    t.datetime "scheduled_at"
   end
 
   add_index "protos", ["merchant_id"], name: "index_protos_on_merchant_id", using: :btree

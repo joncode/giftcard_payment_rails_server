@@ -10,7 +10,7 @@ class GiftOpenedEvent
     		gift = Gift.find(gift_or_gift_id)
     	end
 
-    	PushJob.perform(gift.id, true, true)
+    	PushJob.perform(gift.id, :gift_receiver_created_account)
     	gift.notify_receiver(false)
     end
 end

@@ -55,7 +55,7 @@ class Admt::V2::GiftsController < JsonController
     def create
         return nil if collection_bad_request
         return nil if data_not_hash?(params["data"])
-        allowed = ["receiver_name", "receiver_email", "shoppingCart", "message", "detail", "expires_at", "merchant_id", "provider_name"]
+        allowed = ["receiver_name", "receiver_email", "shoppingCart", "message", "detail", "expires_at", "scheduled_at", "merchant_id", "provider_name"]
         return nil if reject_if_not_exactly(allowed)
         convert_if_json(params["data"]["shoppingCart"])
         gift_hsh = gift_create_params(allowed)

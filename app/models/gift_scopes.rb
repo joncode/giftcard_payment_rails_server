@@ -55,7 +55,7 @@ module GiftScopes
 
     def get_user_activity user
         giver_gifts = includes(:merchant).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(giver_id: user.id, giver_type: "User").order("created_at DESC")
-        rec_gifts   = includes(:merchant).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error']).where(receiver_id: user.id).order("created_at DESC")
+        rec_gifts   = includes(:merchant).includes(:giver).where(active: true).where.not(pay_stat: ['unpaid', 'payment_error'], status: 'schedule').where(receiver_id: user.id).order("created_at DESC")
         (giver_gifts + rec_gifts).uniq { |g| g.id }
     end
 
@@ -69,18 +69,18 @@ module GiftScopes
             elsif client.partner?
                 partner = client.partner
                 giver_gifts = includes(:merchant).includes(:giver).where(active: true, partner_type: partner.class.to_s, partner_id: partner.id, giver_id: user.id, giver_type: "User").where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
-                rec_gifts   = includes(:merchant).includes(:giver).where(active: true, partner_type: partner.class.to_s, partner_id: partner.id, receiver_id: user.id).where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
+                rec_gifts   = includes(:merchant).includes(:giver).where(active: true, partner_type: partner.class.to_s, partner_id: partner.id, receiver_id: user.id).where.not(pay_stat: ['unpaid', 'payment_error'], status: 'schedule').order("created_at DESC")
                 (giver_gifts + rec_gifts).uniq { |g| g.id }
             else    # client.client?
                 giver_gifts = includes(:merchant).includes(:giver).where(active: true, client_id: client.id, giver_id: user.id, giver_type: "User").where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
-                rec_gifts   = includes(:merchant).includes(:giver).where(active: true, client_id: client.id, receiver_id: user.id).where.not(pay_stat: ['unpaid', 'payment_error']).order("created_at DESC")
+                rec_gifts   = includes(:merchant).includes(:giver).where(active: true, client_id: client.id, receiver_id: user.id).where.not(pay_stat: ['unpaid', 'payment_error'], status: 'schedule').order("created_at DESC")
                 (giver_gifts + rec_gifts).uniq { |g| g.id }
             end
         end
     end
 
     def transactions user
-        gifts_raw = where(giver_id: user.id, status: ["open","redeemed", "notified", "incomplete"]).order("created_at DESC")
+        gifts_raw = where(giver_id: user.id, status: ["open","redeemed", "notified", "incomplete", 'schedule']).order("created_at DESC")
         gifts_raw.map do |g|
             gift_hash               = g.serializable_hash only: [ :provider_name, :total, :receiver_name]
             gift_hash["gift_id"]    = g.id

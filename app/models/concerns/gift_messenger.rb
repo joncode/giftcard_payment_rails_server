@@ -4,14 +4,25 @@ module GiftMessenger
 
     def messenger(invoice=false)
         if self.success? && thread_on?
-            Relay.send_push_notification(self)
             puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name}"
-            notify_receiver
+
+            send_receiver_notification if self.status != 'schedule'
+
             notify_admin if self.giver_type == "User"
             if invoice
                 invoice_giver
             end
         end
+    end
+
+    def send_receiver_notification
+        Relay.send_push_notification(self)
+        notify_receiver
+    end
+
+    def send_gift_delivered_notifications
+        send_receiver_notification
+        Relay.send_gift_delivered(self)
     end
 
     def send_internal_email
