@@ -197,7 +197,7 @@ class JsonController < ActionController::Base
         token = request.headers["HTTP_TKN"]
         @admin_user = AtUser.find_by(remember_token: token)
         if @admin_user
-            puts "ADMT  -------------   #{@admin_user.name}   -----------------------"
+            puts "ADMT  -------------   #{@admin_user.name} #{@admin_user.id}  -----------------------"
         else
             head :unauthorized
         end
@@ -207,7 +207,7 @@ class JsonController < ActionController::Base
         token = request.headers["HTTP_TKN"]
         @merchant = Merchant.unscoped.find_by(token: token)
         if @merchant
-            puts "MT  -------------   #{@merchant.name}   -----------------------"
+            puts "MT  -------------   #{@merchant.name} #{@merchant.id}  -----------------------"
         else
             head :unauthorized
         end
@@ -231,7 +231,7 @@ class JsonController < ActionController::Base
         token         = params["token"]
         @current_user = User.app_authenticate(token)
         if @current_user
-            puts "OLDAPIAPP  -------------   #{@current_user.name}   -----------------------"
+            puts "OLDAPIAPP  -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
         else
             head :unauthorized
         end
@@ -241,7 +241,7 @@ class JsonController < ActionController::Base
         token         = request.headers["HTTP_TKN"]
         @current_user = User.app_authenticate(token)
         if @current_user
-            puts "APP  -------------   #{@current_user.name}   -----------------------"
+            puts "APP  -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
         else
             head :unauthorized
         end

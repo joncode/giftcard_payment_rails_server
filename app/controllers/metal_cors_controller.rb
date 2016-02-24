@@ -55,7 +55,7 @@ protected
         end
 
         if @current_client && @current_partner
-            puts "Web  -------------   #{@current_client.name} | #{@current_partner.name}  -------------"
+            puts "Web  -------------   #{@current_client.name} #{@current_client.id} | #{@current_partner.name} #{@current_partner.id} -------------"
             return true
         else
             head :unauthorized
@@ -67,7 +67,7 @@ protected
         if token = request.headers["HTTP_X_AUTH_TOKEN"]
             @current_user = SessionToken.app_authenticate(token)
             if @current_user
-                puts "Web  -------------   #{@current_user.name}   -----------------------"
+                puts "Web  -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
                 return true
             else
                 head :unauthorized
@@ -87,7 +87,7 @@ protected
             else
                 @current_user = User.app_authenticate(token)
                 if @current_user
-                    puts "Web  -------------   #{ @current_user.name }   -----------------------"
+                    puts "Web  -------------   #{ @current_user.name } #{ @current_user.id }   -----------------------"
                 else
                     head :unauthorized
                 end

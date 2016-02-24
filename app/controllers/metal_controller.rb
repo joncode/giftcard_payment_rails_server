@@ -146,7 +146,7 @@ protected
         token         = request.headers["HTTP_X_AUTH_TOKEN"]
         @current_user = User.app_authenticate(token)
         if @current_user
-            puts "APP  -------------   #{@current_user.name}   -----------------------"
+            puts "APP  -------------   #{@current_user.name} #{@current_user.id}  -----------------------"
         else
             head :unauthorized
         end
