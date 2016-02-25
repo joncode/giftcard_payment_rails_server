@@ -66,7 +66,7 @@ FBO = FacebookOps
 
 SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"
 
-DEFAULT_RECEIPT_IMG_URL = "d|v1420767965/default_receipt_photo_pymjmb.png"
+DEFAULT_RECEIPT_IMG_URL = "https://res.cloudinary.com/drinkboard/image/upload/v1420767965/default_receipt_photo_pymjmb.png"
 
 AT_EMAIL       = "@itson.me"
 SUPPORT_EMAIL  = "support#{AT_EMAIL}"
@@ -98,7 +98,7 @@ else
     CSV_LIMIT   = 5000
 end
 
-BLANK_AVATAR_URL = "http://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
+BLANK_AVATAR_URL = "https://res.cloudinary.com/drinkboard/image/upload/v1398470766/avatar_blank_cvblvd.png"
 GENERIC_RECEIVER_NAME = "ItsOnMe User"
 
 VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -112,6 +112,7 @@ CLEARANCE_LEVELS     = CLEARANCE_HASH.keys
 Time::DATE_FORMATS[:merchant]        = "%I:%M %p"
 Time::DATE_FORMATS[:merchant_date]   = "%b %e %I:%M %p"
 Time::DATE_FORMATS[:only_date]       = "%b %e"
+Time::DATE_FORMATS[:url_date]       = "%Y-%m-%d"
 
 #GIFT_CAT = { 0 => "NULL", 100 => "Admin", 101 => "AdminRegift", 150 => "AdminCampaign", 151 => "AdminCampaignRegift", 200 => "Merchant", 201 => "MerchantRegift", 250 => "MerchantCampaign", 251 => "MerchantCampaignRegift", 300 => "Standard", 301 => "StandardRegift" }
 GIFT_CAT = { 100 => "Admin", 101 => "AdmRegift", 107 => "AdmBoom", 150 => "AdmCamp", 151 => "AdmCampRegift", 157 => "AdmCampBoom", 200 => "Merchant", 201 => "MerchantRegift", 207 => "MerchantBoom", 250 => "MerchCamp", 251 => "MerchCampRegift", 257 => "MerchCampBoom", 300 => "Standard", 301 => "StndRegift", 307 => "StndBoom" }

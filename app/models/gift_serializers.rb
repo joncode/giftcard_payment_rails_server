@@ -24,6 +24,7 @@ module GiftSerializers
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
         gift_hsh["cat"]                = self.cat
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
+        gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
 
         gift_hsh['display_photo'] = self.display_photo
 
@@ -42,6 +43,7 @@ module GiftSerializers
         gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
+        gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
 
         gift_hsh
     end
@@ -58,6 +60,7 @@ module GiftSerializers
         gift_hsh["items"]              = ary_of_shopping_cart_as_hash
         gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
+        gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
 
         gift_hsh
@@ -74,6 +77,7 @@ module GiftSerializers
         gift_hsh["items"]              = ary_of_shopping_cart_as_hash
         gift_hsh["time_ago"]           = time_ago_in_words(self.redeem_time.to_time)
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
+        gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
 
         gift_hsh
@@ -93,6 +97,7 @@ module GiftSerializers
         gift_hsh["updated_at"]         = self.updated_at
         gift_hsh["pay_type"]           = self.payable_type
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
+        gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh["cat"]                = self.cat
         gift_hsh["detail"]             = self.detail
         gift_hsh
@@ -109,6 +114,7 @@ module GiftSerializers
         gift_hsh["value"]           = self.value
         gift_hsh["cost"]            = self.cost
         gift_hsh["expires_at"]      = self.expires_at if self.expires_at
+        gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh["cat"]             = self.cat
         gift_hsh["completed_at"]    = self.redeemed_at if self.redeemed_at
         gift_hsh["detail"]          = self.detail
@@ -130,6 +136,7 @@ module GiftSerializers
         gift_hsh["cost"]            = self.cost
         gift_hsh["status"]          = self.giver_status
         gift_hsh["expires_at"]      = self.expires_at if self.expires_at
+        gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh["cat"]             = self.cat
         gift_hsh["completed_at"]    = self.redeemed_at if self.redeemed_at
         gift_hsh["detail"]          = self.detail
@@ -159,7 +166,7 @@ module GiftSerializers
         gift_hsh["detail"]        = self.detail
         gift_hsh["msg"]           = self.message
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
-
+        gift_hsh["scheduled_at"]  = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         merchant_serializer_web_keys gift_hsh
         gift_hsh["gift_id"]       = self.id
         gift_hsh["token"]         = self.token
@@ -190,7 +197,7 @@ module GiftSerializers
         gift_hsh["cat"]           = self.cat
         gift_hsh["detail"]        = self.detail
         gift_hsh["msg"]           = self.message
-
+        gift_hsh["scheduled_at"]  = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         merchant_serializer_web_keys gift_hsh
         multi_redemption_web_keys gift_hsh
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
