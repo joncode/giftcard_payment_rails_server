@@ -54,7 +54,7 @@ class Admt::V2::ProvidersController < JsonController
 private
 
     def provider_params
-        params.require(:data).permit(:website, :tender_type_id, :rate, :name, :address, :city, :state, :zip, :region_id, :city_id, :phone, :zinger, :description, :pos_merchant_id)
+        params.require(:data).permit(:website, :tz, :tender_type_id, :rate, :name, :address, :city, :state, :zip, :region_id, :city_id, :phone, :zinger, :description, :pos_merchant_id)
     end
 
 
