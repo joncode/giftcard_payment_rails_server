@@ -294,6 +294,15 @@ class Gift < ActiveRecord::Base
 
 #/-------------------------------------data population methods-----------------------------/
 
+    def find_receiver
+        if self.receiver_id.nil?
+            found_user = PeopleFinder.find receiver_info_as_hsh
+            if found_user
+                self.receiver = found_user
+            end
+        end
+    end
+
 	def remove_receiver
 		self.status         = 'incomplete'
 		self.receiver_id    = nil
@@ -485,15 +494,6 @@ private
 
     def no_provider_name?
         self.provider_name.blank?
-    end
-
-    def find_receiver
-        if self.receiver_id.nil?
-            found_user = PeopleFinder.find receiver_info_as_hsh
-            if found_user
-                self.receiver = found_user
-            end
-        end
     end
 
     def regift
