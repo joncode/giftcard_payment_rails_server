@@ -460,7 +460,7 @@ private
 	################  data validation methods
 
     def set_status
-        if self.scheduled_at.present? && self.scheduled_at > DateTime.now.utc
+        if self.scheduled_at.present? && (self.scheduled_at + 18.hours) > DateTime.now.utc
             self.status = "schedule"
         else
             if self.receiver_id.nil?
