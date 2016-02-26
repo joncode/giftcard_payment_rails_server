@@ -36,6 +36,7 @@ class Web::V3::ClientsController < MetalCorsController
 			else
 				domain = url_id
 			end
+			domain = domain.gsub('-','')
 			ms = Merchant.where('website ilike ?', "%#{domain}%")
 			if ms.length == 1
 				merchant = ms.first
