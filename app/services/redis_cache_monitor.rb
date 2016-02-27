@@ -55,7 +55,7 @@ class RedisCacheMonitor
 					email_data_hsh = {
 		                "subject" => "RedisCacheMonitor - CACHE ERROR #{key}",
 		                "html"    => html_diff,
-		                "email"   => "jon.gutwillig@itson.me"
+		                "email"   => "devops@itson.me"
 					}
 					notify_developers(email_data_hsh)
 					bust_www_cache = true if seconds_to_live.nil?
