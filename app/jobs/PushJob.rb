@@ -6,6 +6,7 @@ class PushJob
     def self.perform gift_id, push_type='gift_receiver_notification'
         gift = Gift.find gift_id
 
+        push_type = push_type.to_s
         case push_type
         when 'gift_receiver_notification'
                 # notify receiver of gift push
