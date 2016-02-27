@@ -13,8 +13,8 @@ class Web::V3::ClientsController < MetalCorsController
 			fail_web fail_web_payload("client_deactivated")
 		else
 			# client does not exist
-			client = match_client_to_url(slug)
-			email_developers(client, slug)
+			# client = match_client_to_url(slug)
+			# email_developers(client, slug)
 			if client.kind_of?(Client)
 				success client
 			else
@@ -40,7 +40,7 @@ class Web::V3::ClientsController < MetalCorsController
 			ms = Merchant.where('website ilike ?', "%#{domain}%")
 			if ms.length == 1
 				merchant = ms.first
-				client = Client.new(platform: :menu_widget, ecosystem: :full,  data_type: :merchant)
+				client = Client.new(platform: :menu_widget, ecosystem: :partner,  data_type: :merchant)
 				client.download_url = merchant.website
 				client.partner_id = merchant.id
 				client.partner_type = merchant.class.to_s
@@ -48,6 +48,7 @@ class Web::V3::ClientsController < MetalCorsController
 				client.name = merchant.name + " Web Menu Widget"
 				client.detail = "Web client widget for #{merchant.name} website"
 				if client.save
+					# add merchant to client
 					return client
 				else
 					puts "---------  Errors: #{client.errors.messages} #{url_id}  ---------"
