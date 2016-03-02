@@ -15,11 +15,11 @@ class Web::V3::ClientsController < MetalCorsController
 			# client does not exist
 			# client = match_client_to_url(slug)
 			# email_developers(client, slug)
-			if client.kind_of?(Client)
-				success client
-			else
+			# if client.kind_of?(Client)
+			# 	success client
+			# else
 				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
-			end
+			# end
 		end
 		respond
 	end
@@ -48,7 +48,7 @@ class Web::V3::ClientsController < MetalCorsController
 				client.name = merchant.name + " Web Menu Widget"
 				client.detail = "Web client widget for #{merchant.name} website"
 				if client.save
-					# add merchant to client
+					client.content = merchant
 					return client
 				else
 					puts "---------  Errors: #{client.errors.messages} #{url_id}  ---------"
