@@ -3,4 +3,5 @@ class Menu < ActiveRecord::Base
     has_many :sections, dependent: :destroy
     has_many :merchants
 
+    belongs_to :owner, polymorphic: true
 end
