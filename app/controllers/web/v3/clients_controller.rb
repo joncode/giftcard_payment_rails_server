@@ -56,7 +56,7 @@ class Web::V3::ClientsController < MetalCorsController
 					return client.errors.messages
 				end
 			elsif ms.length == 0
-				unknown_client_id = Rails.env.staging? 12 : 8
+				unknown_client_id = Rails.env.staging? ? 12 : 8
 				return Client.find(unknown_client_id)  # itsonme unknown url data client = 8
 			else
 				# multiple merchants
