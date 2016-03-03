@@ -13,13 +13,13 @@ class Web::V3::ClientsController < MetalCorsController
 			fail_web fail_web_payload("client_deactivated")
 		else
 			# client does not exist
-			# client = match_client_to_url(slug)
-			# email_developers(client, slug)
-			# if client.kind_of?(Client)
-			# 	success client
-			# else
+			client = match_client_to_url(slug)
+			email_developers(client, slug)
+			if client.kind_of?(Client)
+				success client
+			else
 				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
-			# end
+			end
 		end
 		respond
 	end
@@ -56,7 +56,8 @@ class Web::V3::ClientsController < MetalCorsController
 					return client.errors.messages
 				end
 			elsif ms.length == 0
-				return Client.find(8)  # itsonme unknown url data client = 8
+				unknown_client_id = Rails.env.staging? 12 : 8
+				return Client.find(unknown_client_id)  # itsonme unknown url data client = 8
 			else
 				# multiple merchants
 				return "Multiple Merchants #{ms.inspect}"
