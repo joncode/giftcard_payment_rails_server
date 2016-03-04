@@ -7,6 +7,9 @@ class Client < ActiveRecord::Base
 
 #	-------------
 
+    after_save      :clear_cache
+
+#	-------------
     validates_presence_of :name, :url_name, :application_key, :partner_id, :partner_type
     validates_uniqueness_of :url_name, :application_key, :download_url
 
@@ -49,7 +52,8 @@ AND #{content_symbol}.id = contents.content_id"
 		else
 			class_name = obj.class.to_s.singularize.capitalize
 		end
-		client_content = ClientContent.new(partner_id:  self.partner_id, partner_type: self.partner_type, content_type: class_name, content_id: obj.id)
+		client_content = ClientContent.new(partner_id:  self.partner_id, partner_type: self.partner_type,
+			content_type: class_name, content_id: obj.id)
 		if self.client?
 			client_content.client_id = self.id
 		else
@@ -64,13 +68,16 @@ AND #{content_symbol}.id = contents.content_id"
 				end
 			end
 		end
+		return client_content
 	end
 
 	def remove_content= obj
 		if self.client?
-			client_content = ClientContent.where(client_id: self.id, content_type: obj.class.to_s, content_id: obj.id ).first
+			client_content = ClientContent.where(client_id: self.id, content_type: obj.class.to_s,
+				content_id: obj.id ).first
 		else
-			client_content = ClientContent.where(client_id: nil, partner_id:  self.partner_id, partner_type: self.partner_type, content_type: obj.class.to_s, content_id: obj.id).first
+			client_content = ClientContent.where(client_id: nil, partner_id:  self.partner_id,
+				partner_type: self.partner_type, content_type: obj.class.to_s, content_id: obj.id).first
 		end
 
 		client_content.destroy if client_content
@@ -107,4 +114,10 @@ private
 		self.application_key = create_session_token
 	end
 
+    def clear_cache
+        unless Rails.env.test? || Rails.env.development?
+            RedisWrap.clear_client_cache(self.id)
+            # WwwHttpService.clear_merchant_cache
+        end
+    end
 end
