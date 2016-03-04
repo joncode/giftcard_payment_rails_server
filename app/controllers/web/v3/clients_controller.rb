@@ -37,6 +37,7 @@ class Web::V3::ClientsController < MetalCorsController
 
 		if ary_of_slugs.length == 0
 			# no data for client
+			clients = ["No arrays of slugs", "no data"]
 			fail_web({ err: "INVALID_INPUT", msg: "No Data"})
 		else
 			clients = Client.find_with_url ary_of_slugs
@@ -50,6 +51,7 @@ class Web::V3::ClientsController < MetalCorsController
 				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
 			end
 		end
+		email_developers(clients, ary_of_slugs) unless clients.length == 1
 		respond
 	end
 
