@@ -100,9 +100,9 @@ AND #{content_symbol}.id = contents.content_id"
 		sql = "url_name ilike "
 		ary_of_slugs.each_with_index do |slug, index|
 			if index == 0
-				sql += "'%#{slug}%'"
+				sql += " '%#{slug}%' OR download_url ilike '%#{slug}%' "
 			else
-				sql += " OR url_name ilike '%#{slug}%'"
+				sql += " OR url_name ilike '%#{slug}%' OR download_url ilike '%#{slug}%' "
 			end
 		end
 		where(sql)
