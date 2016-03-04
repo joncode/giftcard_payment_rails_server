@@ -128,6 +128,7 @@ class Web::V3::ClientsController < MetalCorsController
 
 
 	def client_create_params
+		puts "------------- \n #{params.inspect} ----------"
 		params.require(:data).permit(:ref, :slug1,  :slug2)
 	end
 end
