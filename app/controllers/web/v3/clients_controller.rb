@@ -51,7 +51,7 @@ class Web::V3::ClientsController < MetalCorsController
 				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
 			end
 		end
-		email_developers(clients, slug) unless clients.length == 1
+		email_developers(clients, ary_of_slugs) unless clients.length == 1
 		respond
 	end
 
