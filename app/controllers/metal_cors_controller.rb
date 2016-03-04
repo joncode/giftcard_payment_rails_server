@@ -80,7 +80,8 @@ protected
     end
 
     def authenticate_general
-        #puts "\n\n\n#{request.headers.inspect}"
+        # puts "\n\n\n#{request.headers.inspect}"
+        puts "--------------" + params.inspect
         if token    = request.headers["HTTP_X_AUTH_TOKEN"]
             if ([REDBULL_TOKEN, WWW_TOKEN].include?(token))
                 puts "Web  -------------    General Token   -----------------------"
