@@ -5,23 +5,64 @@ class Web::V3::ClientsController < MetalCorsController
 	def index
 		slug = params[:id]
 		client = Client.where("url_name = :q OR download_url = :q", q: slug).first
-		if client && client.active
+		if client # && client.active
 			# success serialize
 			success client
-		elsif client && !client.active
-			# return deactivated client message
-			fail_web fail_web_payload("client_deactivated")
+		# elsif client && !client.active
+		# 	# return deactivated client message
+		# 	fail_web fail_web_payload("client_deactivated")
 		else
 			# client does not exist
-			client = match_client_to_url(slug)
+			# client = match_client_to_url(slug)
 			email_developers(client, slug)
-			if client.kind_of?(Client)
+			if client.kind_of?(Client) && client.active
 				success client
 			else
 				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
 			end
 		end
 		respond
+	end
+
+	def create
+		hsh = client_create_params
+
+		ref = hsh[:ref]
+		slug1 = hsh[:slug1]
+		slug2 = hsh[:slug2]
+		ary_of_slugs = [ ref, slug1, slug2 ]
+		ary_of_slugs = ary_of_slugs.map { |a| remove_unwanted_url_parts(a) }
+		ary_of_slugs = ary_of_slugs.reject(&:empty?)
+
+
+		if ary_of_slugs.length == 0
+			# no data for client
+			fail_web({ err: "INVALID_INPUT", msg: "No Data"})
+		else
+			clients = Client.find_with_url ary_of_slugs
+
+			if clients.length == 1
+				client = clients[0]
+				success client
+			elsif clients.length == 0
+				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
+			else # clients.length > 1
+				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
+			end
+		end
+		respond
+	end
+
+	def remove_unwanted_url_parts slug
+		ary_split = slug.to_s.split('.')
+		if ary_split.length == 3
+			domain = ary_split[1]
+		elsif ary_split.length == 2
+			domain = ary_split[0]
+		else
+			domain = slug.to_s
+		end
+		domain = domain.gsub('-','')
 	end
 
 	def match_client_to_url url_id
@@ -85,4 +126,8 @@ class Web::V3::ClientsController < MetalCorsController
 		notify_developers(email_data_hsh)
 	end
 
+
+	def client_create_params
+		params.require(:data).permit(:ref, :slug1,  :slug2)
+	end
 end

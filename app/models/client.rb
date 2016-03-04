@@ -21,7 +21,7 @@ class Client < ActiveRecord::Base
 # return Merchant.find_by_sql("SELECT merchants.* FROM contents , merchants WHERE contents.client_id IS NULL AND contents.partner_type = 'Affiliate' AND contents.partner_id = 29
 	# AND contents.content_type = 'Merchant' AND merchants.id = contents.content_id")
 
-#	-------------
+#	-------------   INSTANCE METHODS
 
 	def contents content_symbol
 		if self.full?
@@ -37,9 +37,9 @@ class Client < ActiveRecord::Base
 			client_id_query += " IS NULL "
 		end
 		query = "SELECT #{content_symbol}.* FROM contents , #{content_symbol} \
-		WHERE #{client_id_query} AND contents.partner_type = '#{self.partner_type}' \
-		AND contents.partner_id = #{self.partner_id} AND contents.content_type = '#{constant_symbol}' \
-		AND #{content_symbol}.id = contents.content_id"
+WHERE #{client_id_query} AND contents.partner_type = '#{self.partner_type}' \
+AND contents.partner_id = #{self.partner_id} AND contents.content_type = '#{constant_symbol}' \
+AND #{content_symbol}.id = contents.content_id"
 		return constant_symbol.constantize.find_by_sql(query)
 	end
 
@@ -76,18 +76,30 @@ class Client < ActiveRecord::Base
 		client_content.destroy if client_content
 	end
 
-#	-------------
+#	-------------  CLASS METHODS
 
 	def self.legacy_client platform, agent_str=''
         if platform == 'android' || agent_str.match(/Android/)
-            self.find(ANDROID_CLIENT_ID)
+            find(ANDROID_CLIENT_ID)
         elsif platform == 'ios' || agent_str.match(/iPhone/)
-        	self.find(IOS_CLIENT_ID)
+        	find(IOS_CLIENT_ID)
         else
-        	self.find(WBG_CLIENT_ID)
+        	find(WBG_CLIENT_ID)
         end
 	end
 
+	def self.find_with_url ary_of_slugs
+		ary_of_slugs = [ary_of_slugs] if ary_of_slugs.kind_of?(String)
+		sql = "url_name ilike "
+		ary_of_slugs.each_with_index do |slug, index|
+			if index == 0
+				sql += "'%#{slug}%'"
+			else
+				sql += " OR url_name ilike '%#{slug}%'"
+			end
+		end
+		where(sql)
+	end
 
 private
 

@@ -8,7 +8,11 @@ class FacebookOps
 
 	def self.parse_error err
 		print "500 Internal " + err.inspect
-		error_message = err.fb_error_user_msg || err.fb_error_message || err.response_body
+		if err.kind_of?(Hash)
+			error_message = err['fb_error_user_msg'] || err['fb_error_message'] || err['response_body']
+		else
+			error_message = err.fb_error_user_msg || err.fb_error_message || err.response_body
+		end
 		puts error_message.inspect + " FacebookOps.parse_error"
 		if error_message.match(/access token/)
 			return "Looks like we have a problem with facebook authorization, please re-connect to facebook. (If you continue to see this message, upgrade your app)"
@@ -149,7 +153,7 @@ class FacebookOps
 	        return { 'success' => true, 'data' => share }
 	    else
 	    	if wall_post_res['error'].present?
-	    		wall_post_res
+	    		return wall_post_res
 	    	else
 		    	return { 'success' => false, 'data' => "not a Facebook Gift" }
 		    end
