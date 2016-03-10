@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304003256) do
+ActiveRecord::Schema.define(version: 20160310165311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -210,16 +210,6 @@ ActiveRecord::Schema.define(version: 20160304003256) do
 
   add_index "brands", ["active"], name: "index_brands_on_active", using: :btree
 
-  create_table "brands_providers", id: false, force: :cascade do |t|
-    t.integer "provider_id"
-    t.integer "brand_id"
-    t.integer "merchant_id"
-  end
-
-  add_index "brands_providers", ["brand_id"], name: "index_brands_providers_on_brand_id", using: :btree
-  add_index "brands_providers", ["merchant_id"], name: "index_brands_providers_on_merchant_id", using: :btree
-  add_index "brands_providers", ["provider_id"], name: "index_brands_providers_on_provider_id", using: :btree
-
   create_table "bulk_contacts", force: :cascade do |t|
     t.integer  "user_id"
     t.text     "data"
@@ -366,22 +356,6 @@ ActiveRecord::Schema.define(version: 20160304003256) do
     t.datetime "updated_at",             null: false
   end
 
-  create_table "daily_stats", force: :cascade do |t|
-    t.string   "dash_day_old",   limit: 255
-    t.string   "dash_week_old",  limit: 255
-    t.string   "dash_month_old", limit: 255
-    t.string   "dash_total",     limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "data_transfers", force: :cascade do |t|
-    t.json     "model_names"
-    t.json     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "debts", force: :cascade do |t|
     t.integer  "owner_id"
     t.string   "owner_type", limit: 255
@@ -451,25 +425,6 @@ ActiveRecord::Schema.define(version: 20160304003256) do
   end
 
   add_index "gift_items", ["gift_id"], name: "index_gift_items_on_gift_id", using: :btree
-
-  create_table "gift_promo_mocks", force: :cascade do |t|
-    t.string   "type_of",       limit: 255
-    t.string   "receiver_name", limit: 255
-    t.datetime "expires_at"
-    t.text     "message"
-    t.text     "shoppingCart"
-    t.text     "detail"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "gift_promo_socials", force: :cascade do |t|
-    t.integer  "gift_promo_mock_id"
-    t.string   "network",            limit: 255
-    t.string   "network_id",         limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "gifts", force: :cascade do |t|
     t.string   "giver_name",     limit: 255
