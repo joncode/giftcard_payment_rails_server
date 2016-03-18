@@ -186,6 +186,16 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def override_fee override_obj
+        if [300,301,307].include? self.cat
+            return merchant.override_fee(self.value_in_cents)
+        elsif [100,101,107,150,151,157].include? self.cat
+            return 0
+        else
+            return 0
+        end
+    end
+
     def redeem_time
         self.redeemed_at || self.created_at
     end
@@ -280,9 +290,8 @@ class Gift < ActiveRecord::Base
 #/-------------------------------------re gift db methods-----------------------------/
 
 	def parent
-        gift_parent = self.payable
-        if gift_parent.kind_of?(Gift)
-            gift_parent
+        if self.payable_type == 'Gift'
+            self.payable
         else
             nil
         end

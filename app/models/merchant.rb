@@ -140,8 +140,21 @@ class Merchant < ActiveRecord::Base
         else
             r_cents
         end
-
     end
+
+    def override_fee(convert_these_cents=nil)
+        if self.rate == 90
+            o_rate = 7
+        else
+            o_rate = 3
+        end
+        if convert_these_cents
+            (convert_these_cents * o_rate / 100)
+        else
+            o_rate / 100.0
+        end
+    end
+
 
 #   -------------
 

@@ -1,120 +1,114 @@
 class Accountant
 
+	# ASSUMPTIONS
+		# when a merchant is on redemption, a partial redemption triggers a full payment of the gift amount
+			# this is to keep things simple with gifts and registers
+
+
 	class << self
 
+#-------     EVENTED API METHODS
+
+		def gift_created_event gift
+			return nil unless gift.class.to_s.match /Gift/
+			return nil if gift.cat != 300
+			return "Gift status not approved" if !gift_status_approved?(gift)
+			return "Payment time not in sync" if !gift.merchant.creation?
+
+			puts merchant(gift)
+    		puts affiliate_location(gift)
+		end
+
+		def gift_redeemed_event gift
+			return nil unless gift.class.to_s.match /Gift/
+			return "Gift status not approved" if !gift_status_approved?(gift)
+			return "Payment time not in sync" if gift.status != 'redeemed'
+
+    		puts merchant(gift)
+    		puts affiliate_location(gift)
+    		# puts affiliate_user(gift)
+    		# puts affiliate_link(gift, gift.origin)
+		end
+
+#-------      BEHAVIOR METHODS
+
 		def merchant gift
-
-			return 'Not Gift' if gift.class != Gift
-			puts "\n Merchant #{gift.id}\n"
-
-			location_fee_amount = gift.location_fee
-
- 			# no fee , no debt
-			return "no Location Fee" unless location_fee_amount > 0
-
-			# gift is created but error on payment
-			return "Payment Error" if ['payment_error', 'refund_cancel'].include?(gift.pay_stat)
-
-			# gift is cancelled
-			return "Gift is cancelled" if ['cancel', 'expired'].include?(gift.status)
-
-			# if provider is not on creation and gift is not on redemption - out of sync exit
-			return "Payment time not in sync" if gift.status != 'redeemed' && !gift.merchant.creation?
 
 			# if gift is not a purchase (300), do not pay on anything other than status = redeemed
 			return "Not redemption not a purchase" if gift.status != 'redeemed' && gift.cat != 300
 
-			return "Register exists" if gift_parent_has_been_paid? gift
+			register = Register.init_debt(gift, gift.merchant, gift.location_fee, "loc")
+			return "Register exists" if register.nil?
 
-			register = create_debt(gift, gift.merchant, "loc")
 			if register.save
-				return register
+				return "Register #{register.id}"
 			else
 				return register.errors.messages
 			end
 		end
 
-		def gift_parent_has_been_paid?(gift)
-			if gift_paid_already?(gift.id, Register.origins["loc"])
-				return true
+		def affiliate_location gift
+
+			merchant = gift.merchant
+			affiliate = Affiliate.where(id: merchant.affiliate_id).first
+			# nil or not found
+			return "No Location Affiliation" if affiliate.nil?
+
+			register = Register.init_debt(gift, affiliate, merchant.override_fee(gift.value_in_cents), "aff_loc")
+			return "Register exists" if register.nil?
+
+			if register.save
+				return "Register #{register.id}"
 			else
-				parent = gift.parent
-				if !parent.nil? && parent.kind_of?(Gift)
-					gift_parent_has_been_paid?(parent)
-				else
-					return false
-				end
+				return register.errors.messages
 			end
 		end
 
-		def gift_paid_already? gift_id, origin_type
-			Register.exists?(gift_id: gift_id, origin: origin_type)
-		end
+		# def affiliate_user gift
 
-		def affiliate_location gift
-			return nil if gift.class != Gift
-			puts "\n Affiliate affiliate_location #{gift.id}\n"
-			return nil if gift.cat   != 300
+		# 	user_affiliation = Affiliation.get_user_affiliation_for_gift(gift)
+		# 	return user_affiliation if user_affiliation.class != Affiliation
 
-			# gift is created but error on payment
-			return nil if ['payment_error', 'refund_cancel'].include?(gift.pay_stat)
+		# 	return true if gift_paid_already?(gift.id, "aff_user")
 
-			# gift is cancelled
-			return nil if ['cancel', 'expired'].include?(gift.status)
+		# 	register    = create_debt(gift, user_affiliation.affiliate, "aff_user")
+		# 	register.affiliation = user_affiliation
+		# 	register.save
+		# end
 
-			loc_affiliation = Affiliation.get_merchant_affiliation_for_gift(gift)
-			return loc_affiliation if loc_affiliation.class != Affiliation
+		# def affiliate_link gift, link=nil
+		# 	puts "\n Affiliate affiliate_link #{gift.id} #{link}\n"
+		# 	return "No link" if link.nil?
+		# 	# return nil if gift.class != GiftSale
+	 #        lp = LandingPage.where(link: link).first
+	 #        if lp.nil?
+	 #        	lp = LandingPage.click(link: link)
+	 #        end
+  #           lp.gifts += 1
+  #           lp.users += 1
+  #           gift.landing_pages << lp
+  #           # binding.pry
+  #           if lp.affiliate.present?
+	 #            register  = create_debt(gift, lp.affiliate, "aff_link")
+		# 		register.save
+	 #            gift.affiliates << lp.affiliate
+	 #            lp.save
+	 #        end
+		# end
 
-			return true if gift_paid_already?(gift.id, Register.origins["aff_loc"])
-
-			register    = create_debt(gift, loc_affiliation.affiliate, "aff_loc")
-			register.affiliation = loc_affiliation
-			register.save
-		end
-
-		def affiliate_user gift
-			return nil if gift.class != Gift
-			puts "\n Affiliate affiliate_user #{gift.id}\n"
-			return nil if gift.cat   != 300
-
-			# gift is created but error on payment
-			return nil if ['payment_error', 'refund_cancel'].include?(gift.pay_stat)
-
-			# gift is cancelled
-			return nil if ['cancel', 'expired'].include?(gift.status)
-
-			user_affiliation = Affiliation.get_user_affiliation_for_gift(gift)
-			return user_affiliation if user_affiliation.class != Affiliation
-
-			return true if gift_paid_already?(gift.id, Register.origins["aff_user"])
-
-			register    = create_debt(gift, user_affiliation.affiliate, "aff_user")
-			register.affiliation = user_affiliation
-			register.save
-		end
-
-		def affiliate_link gift, link=nil
-			puts "\n Affiliate affiliate_link #{gift.id} #{link}\n"
-			return "No link" if link.nil?
-			# return nil if gift.class != GiftSale
-	        lp = LandingPage.where(link: link).first
-	        if lp.nil?
-	        	lp = LandingPage.click(link: link)
-	        end
-            lp.gifts += 1
-            lp.users += 1
-            gift.landing_pages << lp
-            # binding.pry
-            if lp.affiliate.present?
-	            register  = create_debt(gift, lp.affiliate, "aff_link")
-				register.save
-	            gift.affiliates << lp.affiliate
-	            lp.save
-	        end
-		end
+#-------      UTILITY METHODS
 
 	private
 
+		def gift_status_approved? gift
+			# gift is created but error on payment
+			return false if ['payment_error', 'refund_cancel'].include?(gift.pay_stat)
+
+			# gift is cancelled
+			return false if ['cancel', 'expired'].include?(gift.status)
+
+			return true
+		end
 
 		def debt_amount gift, origin
 			if origin == "loc"
