@@ -1,6 +1,6 @@
 class GiftItem < ActiveRecord::Base
 
-	validates_presence_of :price, :quantity, :menu_item_id
+	validates_presence_of :price, :price_cents, :quantity, :menu_item_id
 
 #   -------------
 
@@ -12,6 +12,7 @@ class GiftItem < ActiveRecord::Base
 		giftItem = GiftItem.new
 		giftItem.menu_item_id  = menu_item_hash["item_id"]
 		giftItem.price    = menu_item_hash["price"]
+		giftItem.price_cents = menu_item_hash["price_cents"]
 		giftItem.quantity = menu_item_hash["quantity"]
 		giftItem.name 	  = menu_item_hash["item_name"]
 		giftItem.detail   = menu_item_hash["detail"]
@@ -44,12 +45,6 @@ class GiftItem < ActiveRecord::Base
 
 #   -------------
 
-	def prepare_for_shoppingCart
-		item_hash = self.serializable_hash only: [ :quantity, :name, :detail]
-        item_hash["item_id"]   = self.menu_item_id
-        item_hash["item_name"] = self.name
-        item_hash
-	end
 end
 
 # == Schema Information

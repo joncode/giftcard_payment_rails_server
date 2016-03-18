@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310165311) do
+ActiveRecord::Schema.define(version: 20160318025527) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -422,6 +422,8 @@ ActiveRecord::Schema.define(version: 20160310165311) do
     t.integer "quantity"
     t.string  "name",         limit: 255
     t.text    "detail"
+    t.string  "ccy",                      default: "USD"
+    t.integer "price_cents"
   end
 
   add_index "gift_items", ["gift_id"], name: "index_gift_items_on_gift_id", using: :btree
@@ -545,20 +547,23 @@ ActiveRecord::Schema.define(version: 20160310165311) do
   end
 
   create_table "menu_items", force: :cascade do |t|
-    t.string   "name",        limit: 255
+    t.string   "name",              limit: 255
     t.integer  "section_id"
     t.integer  "menu_id"
     t.text     "detail"
-    t.string   "price",       limit: 255
-    t.string   "photo",       limit: 255
+    t.string   "price",             limit: 255
+    t.string   "photo",             limit: 255
     t.integer  "position"
-    t.boolean  "active",                  default: true
-    t.string   "price_promo", limit: 255
-    t.boolean  "standard",                default: false
-    t.boolean  "promo",                   default: false
+    t.boolean  "active",                        default: true
+    t.string   "price_promo",       limit: 255
+    t.boolean  "standard",                      default: false
+    t.boolean  "promo",                         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "pos_item_id"
+    t.string   "ccy",                           default: "USD"
+    t.integer  "price_cents"
+    t.integer  "price_promo_cents"
   end
 
   add_index "menu_items", ["menu_id"], name: "index_menu_items_on_menu_id", using: :btree

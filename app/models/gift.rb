@@ -64,7 +64,7 @@ class Gift < ActiveRecord::Base
     has_many    :affiliates,    through: :affiliate_gifts
     has_many    :landing_pages, through: :affiliate_gifts
     has_many    :registers
-    belongs_to  :provider
+    # belongs_to  :provider
     belongs_to  :merchant
     belongs_to  :giver,         polymorphic: :true
     belongs_to  :receiver,      class_name: User
@@ -342,10 +342,10 @@ class Gift < ActiveRecord::Base
 		self.giver_name = sender.name
 	end
 
-	def add_provider provider
-		self.provider_id   = provider.id
-		self.provider_name = provider.name
-	end
+	# def add_provider provider
+	# 	self.provider_id   = provider.id
+	# 	self.provider_name = provider.name
+	# end
 
 	def add_anonymous_giver giver_id
 		anon_user       = User.find_by(phone:  '5555555555')
@@ -375,6 +375,8 @@ class Gift < ActiveRecord::Base
         end
     end
 
+##########  shopping cart methods
+
     def stringify_shopping_cart_if_array shoppingCart
         if shoppingCart.kind_of?(Array)
             shoppingCart.to_json
@@ -390,6 +392,16 @@ class Gift < ActiveRecord::Base
             sc = self.shoppingCart
             self.shoppingCart = self.shoppingCart.to_json
             sc
+        end
+    end
+
+    def build_gift_items
+        make_gift_items ary_of_shopping_cart_as_hash
+    end
+
+    def make_gift_items shoppingCart_array
+        self.gift_items = shoppingCart_array.map do |item|
+            GiftItem.initFromDictionary(item)
         end
     end
 
@@ -428,7 +440,7 @@ private
         nil
     end
 
-    ##########  oauth callback
+##########  oauth callback
 
     def build_oauth
         if self.receiver_oauth.present?
@@ -454,19 +466,7 @@ private
         end
     end
 
-	##########  shopping cart methods
-
-	def build_gift_items
-        make_gift_items ary_of_shopping_cart_as_hash
-	end
-
-	def make_gift_items shoppingCart_array
-		self.gift_items = shoppingCart_array.map do |item|
-			GiftItem.initFromDictionary(item)
-		end
-	end
-
-	################  data validation methods
+################  data validation methods
 
     def set_status
         if self.scheduled_at.present? && (self.scheduled_at + 18.hours) > DateTime.now.utc
