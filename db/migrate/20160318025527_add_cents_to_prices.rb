@@ -1,9 +1,9 @@
 class AddCentsToPrices < ActiveRecord::Migration
 	def change
-		add_column :gift_items, :ccy,  :string, default: "USD"
+		add_column :gift_items, :ccy,  :string, default: "USD", limit: 6
 		add_column :gift_items, :price_cents,  :integer
 
-		add_column :menu_items, :ccy, :string, default: "USD"
+		add_column :menu_items, :ccy, :string, default: "USD", limit: 6
 		add_column :menu_items, :price_cents, :integer
 		add_column :menu_items, :price_promo_cents, :integer
 		move_strings_to_cents

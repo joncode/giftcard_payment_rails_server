@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160318025527) do
+ActiveRecord::Schema.define(version: 20160318075409) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20160318025527) do
     t.integer  "promo_menu_id"
     t.integer  "tz",                             default: 0
     t.string   "features"
+    t.string   "ccy",                limit: 6,   default: "USD"
   end
 
   add_index "affiliates", ["url_name"], name: "index_affiliates_on_url_name", using: :btree
@@ -474,6 +475,7 @@ ActiveRecord::Schema.define(version: 20160318025527) do
     t.integer  "merchant_id"
     t.boolean  "brand_card",                 default: false
     t.datetime "scheduled_at"
+    t.string   "ccy",            limit: 6,   default: "USD"
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
@@ -675,6 +677,7 @@ ActiveRecord::Schema.define(version: 20160318025527) do
     t.integer  "promo_menu_id"
     t.integer  "client_id"
     t.boolean  "pos_direct",                                           default: false
+    t.string   "ccy",              limit: 6,                           default: "USD"
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
@@ -1030,6 +1033,7 @@ ActiveRecord::Schema.define(version: 20160318025527) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "payment_id"
+    t.string   "ccy",          limit: 6,   default: "USD"
   end
 
   add_index "registers", ["created_at", "partner_id", "partner_type"], name: "index_registers_on_created_at_and_partner_id_and_partner_type", using: :btree
