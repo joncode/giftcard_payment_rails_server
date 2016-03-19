@@ -4,7 +4,7 @@ class Web::V3::ClientsController < MetalCorsController
 
 	def index
 		slug = params[:id]
-		client = Client.where("url_name = :q OR download_url = :q", q: slug).first
+		client = Client.where("active = 't' AND url_name = :q OR download_url = :q", q: slug).first
 		if client # && client.active
 			# success serialize
 			success client
@@ -130,7 +130,6 @@ class Web::V3::ClientsController < MetalCorsController
 
 
 	def client_create_params
-		puts "------------- \n #{params.inspect} ----------"
 		params.require(:data).permit(:ref, :slug1,  :slug2)
 	end
 end
