@@ -19,8 +19,13 @@ class GiftTemplateMainMailer
         end
         subject       = "#{@gift.giver_name} sent you a Gift!"
 
-        template_name = "basic_simple_42"
-        pteg_affiliate_id = Rails.env.staging? ? 20 : 29
+        if Rails.env.staging?
+            template_name = "basic_simple_42-revised"
+            pteg_affiliate_id = 20
+        else
+            template_name = "basic_simple_42"
+            pteg_affiliate_id = 29
+        end
         if @gift.partner_type == 'Affiliate' && @gift.partner_id == pteg_affiliate_id
             template_name = 'gift-pteg'
         end
