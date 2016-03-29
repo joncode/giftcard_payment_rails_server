@@ -423,7 +423,7 @@ ActiveRecord::Schema.define(version: 20160318075409) do
     t.integer "quantity"
     t.string  "name",         limit: 255
     t.text    "detail"
-    t.string  "ccy",                      default: "USD"
+    t.string  "ccy",          limit: 6,   default: "USD"
     t.integer "price_cents"
   end
 
@@ -563,7 +563,7 @@ ActiveRecord::Schema.define(version: 20160318075409) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "pos_item_id"
-    t.string   "ccy",                           default: "USD"
+    t.string   "ccy",               limit: 6,   default: "USD"
     t.integer  "price_cents"
     t.integer  "price_promo_cents"
   end
