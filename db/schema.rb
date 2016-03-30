@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160310165311) do
+ActiveRecord::Schema.define(version: 20160330200446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20160310165311) do
     t.integer  "promo_menu_id"
     t.integer  "tz",                             default: 0
     t.string   "features"
+    t.string   "ccy",                limit: 6,   default: "USD"
   end
 
   add_index "affiliates", ["url_name"], name: "index_affiliates_on_url_name", using: :btree
@@ -316,6 +317,7 @@ ActiveRecord::Schema.define(version: 20160310165311) do
     t.datetime "updated_at"
     t.integer  "data_type",       default: 0
     t.integer  "data_id"
+    t.integer  "clicks",          default: 0
   end
 
   add_index "clients", ["application_key", "active"], name: "index_clients_on_application_key_and_active", using: :btree
@@ -422,6 +424,8 @@ ActiveRecord::Schema.define(version: 20160310165311) do
     t.integer "quantity"
     t.string  "name",         limit: 255
     t.text    "detail"
+    t.string  "ccy",          limit: 6,   default: "USD"
+    t.integer "price_cents"
   end
 
   add_index "gift_items", ["gift_id"], name: "index_gift_items_on_gift_id", using: :btree
@@ -472,6 +476,7 @@ ActiveRecord::Schema.define(version: 20160310165311) do
     t.integer  "merchant_id"
     t.boolean  "brand_card",                 default: false
     t.datetime "scheduled_at"
+    t.string   "ccy",            limit: 6,   default: "USD"
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
@@ -545,20 +550,23 @@ ActiveRecord::Schema.define(version: 20160310165311) do
   end
 
   create_table "menu_items", force: :cascade do |t|
-    t.string   "name",        limit: 255
+    t.string   "name",              limit: 255
     t.integer  "section_id"
     t.integer  "menu_id"
     t.text     "detail"
-    t.string   "price",       limit: 255
-    t.string   "photo",       limit: 255
+    t.string   "price",             limit: 255
+    t.string   "photo",             limit: 255
     t.integer  "position"
-    t.boolean  "active",                  default: true
-    t.string   "price_promo", limit: 255
-    t.boolean  "standard",                default: false
-    t.boolean  "promo",                   default: false
+    t.boolean  "active",                        default: true
+    t.string   "price_promo",       limit: 255
+    t.boolean  "standard",                      default: false
+    t.boolean  "promo",                         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "pos_item_id"
+    t.string   "ccy",               limit: 6,   default: "USD"
+    t.integer  "price_cents"
+    t.integer  "price_promo_cents"
   end
 
   add_index "menu_items", ["menu_id"], name: "index_menu_items_on_menu_id", using: :btree
@@ -670,6 +678,7 @@ ActiveRecord::Schema.define(version: 20160310165311) do
     t.integer  "promo_menu_id"
     t.integer  "client_id"
     t.boolean  "pos_direct",                                           default: false
+    t.string   "ccy",              limit: 6,                           default: "USD"
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
@@ -1025,6 +1034,7 @@ ActiveRecord::Schema.define(version: 20160310165311) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "payment_id"
+    t.string   "ccy",          limit: 6,   default: "USD"
   end
 
   add_index "registers", ["created_at", "partner_id", "partner_type"], name: "index_registers_on_created_at_and_partner_id_and_partner_type", using: :btree
