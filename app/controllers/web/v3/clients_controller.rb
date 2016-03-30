@@ -69,7 +69,7 @@ class Web::V3::ClientsController < MetalCorsController
 		else
 			domain = slug.to_s
 		end
-		domain = domain.gsub('-','')
+		domain
 	end
 
 	def match_client_to_url url_id
