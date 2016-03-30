@@ -32,7 +32,7 @@ class Web::V3::ClientsController < MetalCorsController
 		slug2 = hsh[:slug2]
 		ary_of_slugs = [ ref, slug1, slug2 ]
 		ary_of_slugs = ary_of_slugs.map { |a| remove_unwanted_url_parts(a) }
-		ary_of_slugs = ary_of_slugs.reject(&:empty?)
+		ary_of_slugs = ary_of_slugs.reject(&:blank?)
 
 		if ary_of_slugs.length == 0
 			# no data for client
