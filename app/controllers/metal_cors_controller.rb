@@ -45,7 +45,7 @@ protected
         app_key = request.headers['HTTP_X_APPLICATION_KEY']
         if !app_key.blank?
             # binding.pry
-            if @current_client = Client.includes(:partner).find_by(application_key: app_key)
+            if @current_client = Client.includes(:partner).find_by(application_key: app_key, active: true)
                 @current_partner = @current_client.partner
             end
         else
