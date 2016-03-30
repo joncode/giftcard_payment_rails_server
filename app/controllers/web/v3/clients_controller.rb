@@ -34,7 +34,6 @@ class Web::V3::ClientsController < MetalCorsController
 		ary_of_slugs = ary_of_slugs.map { |a| remove_unwanted_url_parts(a) }
 		ary_of_slugs = ary_of_slugs.reject(&:empty?)
 
-
 		if ary_of_slugs.length == 0
 			# no data for client
 			clients = ["No arrays of slugs", "no data"]
@@ -56,6 +55,12 @@ class Web::V3::ClientsController < MetalCorsController
 	end
 
 	def remove_unwanted_url_parts slug
+		return nil if slug.blank?
+			# if hyphen it is a region name must be ignored
+			#  due to merchant URL's often contain region names
+			# ie table34lasvegas.com contains lasvegas
+		return nil if slug.match(/-/)
+			# remove all unwanted characters
 		ary_split = slug.to_s.split('.')
 		if ary_split.length == 3
 			domain = ary_split[1]
