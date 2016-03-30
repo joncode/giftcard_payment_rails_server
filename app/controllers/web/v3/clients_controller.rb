@@ -7,6 +7,7 @@ class Web::V3::ClientsController < MetalCorsController
 		client = Client.where("active = 't' AND url_name = :q OR download_url = :q", q: slug).first
 		if client # && client.active
 			# success serialize
+			client.increment!(:clicks)
 			success client
 		# elsif client && !client.active
 		# 	# return deactivated client message
@@ -16,6 +17,7 @@ class Web::V3::ClientsController < MetalCorsController
 			# client = match_client_to_url(slug)
 			email_developers(client, slug)
 			if client.kind_of?(Client) && client.active
+				client.increment!(:clicks)
 				success client
 			else
 				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
@@ -43,6 +45,7 @@ class Web::V3::ClientsController < MetalCorsController
 
 			if clients.length == 1
 				client = clients[0]
+				client.increment!(:clicks)
 				success client
 			elsif clients.length == 0
 				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
