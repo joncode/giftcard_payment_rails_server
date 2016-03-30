@@ -26,6 +26,10 @@ class Client < ActiveRecord::Base
 
 #	-------------   INSTANCE METHODS
 
+	def click
+		self.increment!(:clicks)
+	end
+
 	def contents content_symbol
 		if self.full?
 			return yield(self)

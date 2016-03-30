@@ -13,10 +13,14 @@ class SessionToken < ActiveRecord::Base
 
 #   -------------
 
+	def click
+		self.increment!(:count)
+	end
+
 	def self.app_authenticate(token)
 		st_obj = where(token: token).includes(:user).last
 		if st_obj
-			st_obj.increment!(:count)
+			st_obj.click
 			user = st_obj.user
 			if user && user.active
 				user.session_token_obj = st_obj

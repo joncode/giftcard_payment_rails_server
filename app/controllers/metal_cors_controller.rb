@@ -55,6 +55,7 @@ protected
         end
 
         if @current_client && @current_partner
+            @current_client.click
             puts "Web  -------------   #{@current_client.name} #{@current_client.id} | #{@current_partner.name} #{@current_partner.id} -------------"
             return true
         else
