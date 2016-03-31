@@ -6,7 +6,7 @@ class AddCentsToPrices < ActiveRecord::Migration
 		add_column :menu_items, :ccy, :string, default: "USD", limit: 6
 		add_column :menu_items, :price_cents, :integer
 		add_column :menu_items, :price_promo_cents, :integer
-		move_strings_to_cents
+		# move_strings_to_cents
 	end
 
 	def move_strings_to_cents
