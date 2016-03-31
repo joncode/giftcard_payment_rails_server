@@ -65,7 +65,7 @@ private
 
     def merchant_params
 
-        allowed = ["menu", "city_id", "rate", "r_sys", "menu_id", "latitude", "longitude", "name", "zinger", "description", "address", "city", "state", "zip", "region_id", "phone", "token", "image", "mode", "pos_merchant_id", "photo_l"]
+        allowed = ["ccy", "menu", "city_id", "rate", "r_sys", "menu_id", "latitude", "longitude", "name", "zinger", "description", "address", "city", "state", "zip", "region_id", "phone", "token", "image", "mode", "pos_merchant_id", "photo_l"]
 
         params.require(:data).permit(allowed)
     end

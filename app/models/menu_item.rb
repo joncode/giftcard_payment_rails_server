@@ -25,7 +25,7 @@ class MenuItem < ActiveRecord::Base
 	end
 
     def serialize_to_app(quantity=nil)
-        item_hash = self.serializable_hash only: [ :photo, :detail, :price, :price_promo, :pos_item_id ]
+        item_hash = self.serializable_hash only: [ :photo, :detail, :price, :price_cents, :price_promo_cents, :price_promo, :pos_item_id ]
         item_hash["item_id"]   = self.id
         item_hash["item_name"] = self.name
         if quantity.present?

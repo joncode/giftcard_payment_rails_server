@@ -1,30 +1,80 @@
 class Register < ActiveRecord::Base
 
+
 	before_validation :update_partner, on: :create
 
+
 #   -------------
+
 
 	validates_presence_of :partner_id, :partner_type
 
+
 #   -------------
+
 
 	after_create :save_affiliation
 
+
 #   -------------
+
 
 		#  Merchant || Affiliate == Partner
 	belongs_to :partner,  polymorphic: true, autosave: true
 	belongs_to :gift
 	belongs_to :payment
 
+
 #   -------------
+
 
 	attr_accessor :affiliation
 
 	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link ]
 	enum type_of: [ :debt, :credit ]
 
+
 #   -------------
+
+
+	def self.init_debt gift_obj, partner_obj, pay_amount, origin_type
+		return nil if gift_and_parents_paid_already?(gift_obj, origin_type)
+		return nil unless (pay_amount.to_i > 0)
+		reg = Register.new
+		reg.partner_type = partner_obj.class.to_s
+		reg.partner_id   = partner_obj.id
+		reg.type_of      = "debt"
+		reg.origin       = origin_type
+		reg.gift_id      = gift_obj.id
+		reg.amount       = pay_amount
+		reg.gift         = gift_obj
+		reg
+	end
+
+	def self.paid_already? gift_obj, origin_type
+		if origins[origin_type].nil?
+			puts "500 Internal - WRONG ORIGIN TYPE Register[29] #{origin_type} - #{gift_id}"
+			return true
+		end
+		exists?(gift_id: gift_obj.id, origin: origins[origin_type])
+	end
+
+	def self.gift_and_parents_paid_already?(gift_obj, origin_type)
+		if paid_already?(gift_obj, origin_type)
+			return true
+		else
+			parent = gift_obj.parent
+			if parent.kind_of?(Gift)
+				gift_and_parents_paid_already?(parent, origin_type)
+			else
+				return false
+			end
+		end
+	end
+
+
+#   -------------
+
 
 	def reverse_charge
 		if self.payment.nil?
