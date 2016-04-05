@@ -60,7 +60,7 @@ class Affiliate < ActiveRecord::Base
 
 private
 
-	def gift_value_or_calculate_value_from_amount(gift, amount)
+	def gift_value_or_calculate_value_from_amount(gift=nil, amount)
 		if gift.nil?
 			amount * 67
 		else
