@@ -40,7 +40,8 @@ class Web::V3::GiftsController < MetalCorsController
         gps = regift_params
         set_receiver(gps, gift_hsh)
         set_origin(gps, gift_hsh)
-        gift_hsh["message"]     = gps["message"]
+        gift_hsh["message"]       = gps[:msg]
+        gift_hsh["scheduled_at"]  = gps[:scheduled_at]
         gift_hsh["old_gift_id"] = params[:id]
 
         gift_response = GiftRegift.create(gift_hsh)
