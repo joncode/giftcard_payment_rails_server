@@ -28,10 +28,10 @@ class Register < ActiveRecord::Base
 #   -------------
 
 
-	attr_accessor :affiliation
-
+	FEE_TYPES = { iom: "ItsOnMe", loc: "Location Fee", aff_user: "User Override", aff_loc: "Commission Fee", aff_link: "Promo Link" }
 	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link ]
 	enum type_of: [ :debt, :credit ]
+	attr_accessor :affiliation
 
 
 #   -------------
@@ -44,10 +44,11 @@ class Register < ActiveRecord::Base
 
 	def self.make gift_obj, pay_amount, credit_debt='debt', partner_obj=nil, origin_type='loc'
 		return nil unless (pay_amount.to_i > 0)
+		return nil if origin_type != 'loc' && partner_obj.nil?
 		if origin_type == 'loc' && partner_obj.nil?
 			partner_obj = gift_obj.merchant
 		end
-		reg = Register.new
+		reg = new
 		reg.partner_type = partner_obj.class.to_s
 		reg.partner_id = partner_obj.id
 		reg.type_of = credit_debt
@@ -121,6 +122,10 @@ class Register < ActiveRecord::Base
 		else
 			:internal
 		end
+	end
+
+	def fee_type
+		FEE_TYPES[origin.to_sym]
 	end
 
 private
