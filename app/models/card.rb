@@ -54,12 +54,12 @@ class Card < ActiveRecord::Base
 
 	def self.create_card_from_hash cc_hash
 		card 			= Card.new
+		card.user_id 	= cc_hash["user_id"]
 		card.name 		= cc_hash["name"]
 		card.month 		= cc_hash["month"]
 		card.year 		= cc_hash["year"]
 		card.nickname 	= cc_hash["nickname"]
 		card.csv 		= cc_hash["csv"]
-		card.user_id 	= cc_hash["user_id"]
 		card.brand 		= cc_hash["brand"]
 		card.number 	= cc_hash["number"]
 		card.zip 		= cc_hash['zip']
@@ -68,11 +68,13 @@ class Card < ActiveRecord::Base
 
 #	-------------
 
-    def create_card_hsh args, cim_profile=nil
+    def sale_hsh_from_card card_amount, unique_id, cim_profile=nil, merchant_id
 	    hsh = {}
-	    hsh["amount"] 		= args["amount"]
-	    hsh["unique_id"]	= args["unique_id"] #if args["unique_id"]
-	    hsh["card_id"]      = self.id
+	    hsh["amount"] = card_amount
+	    hsh["unique_id"] = unique_id #if args["unique_id"]
+	    hsh["card_id"] = self.id
+	    hsh["giver_id"] = self.user_id
+	    hsh["merchant_id"] = merchant_id
     	if self.cim_token
 	    	if hsh["cim_profile"] = (cim_profile || self.user.cim_profile)
 	    		hsh["cim_token"]  = self.cim_token

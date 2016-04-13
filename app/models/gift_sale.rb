@@ -11,20 +11,20 @@ class GiftSale < Gift
             end
         end
 
-        args["card"]  = args["giver"].cards.where(id: args["credit_card"]).first
+        @card = args["giver"].cards.where(id: args["credit_card"]).first
 
-        if args["card"].nil?
+        if @card.nil?
             return "We do not have that credit card on record.  Please choose a different card."
         end
         gift = super
 
         if gift.pay_stat == "payment_error"
-            gift.payable.reason_text || 'payment_error - credit card system down , please try again shortly'
+            return gift.payable.reason_text || 'payment_error - credit card system down , please try again shortly'
         else
             if gift.persisted?
                 gift.messenger(:invoice_giver)
             end
-            gift
+            return gift
         end
     end
 
@@ -32,23 +32,29 @@ private
 
     def pre_init args={}
 
+        args["cat"] = set_cat(args["cat"])
+
         merchant_id = args['merchant_id'] || args["provider_id"]
         merchant = Merchant.find(merchant_id)
         args['merchant_id'] = merchant_id
-        args["unique_id"] = unique_cc_id(args["receiver_name"], merchant_id)
-        card                           = args["card"]
-        args["amount"]                 = (args["value"].to_f + set_service_f(args)).to_s
-        args["cost"]                   = (args["value"].to_f * merchant.location_fee.to_f).to_s
-        credit_card_hsh                = card.create_card_hsh(args, args["giver"].cim_profile)
-        credit_card_hsh["giver_id"]    = card.user_id
-        credit_card_hsh["merchant_id"] = merchant_id
-        args["cat"]                    = set_cat(args)
-        args.delete("unique_id")
-        args.delete("card")
-        args.delete("amount")
+
+            # this should occur in Gift.rb
+        args["cost"] = (args["value"].to_f * merchant.location_fee.to_f).to_s
+        args['service'] = float_to_cents(args["value"].to_f * 0.05)
+
         validateGift = Gift.new(args)
         if validateGift.valid?
-            args["payable"] = Sale.charge_card credit_card_hsh
+
+            charge_amount = (args["value"].to_f + args['service'].to_f)).to_s
+            unique_charge_id = unique_cc_id(args["receiver_name"], merchant_id, @card.user_id)
+            card_to_sale_hsh = @card.sale_hsh_from_card(
+                    charge_amount,
+                    unique_charge_id,
+                    args["giver"].cim_profile,
+                    merchant_id
+                )
+            args["payable"] = Sale.charge_card card_to_sale_hsh
+
         else
             puts "\n  GIFT INVALID SUBMITTED 500 Internal \n #{args.inspect} \n"
             validateGift
@@ -56,19 +62,13 @@ private
 
     end
 
-    def set_service_f(args)
-        service_f       = args["value"].to_f * 0.05
-        args['service'] = float_to_cents(service_f)
-        service_f
+    def unique_cc_id receiver_name, merchant_id, user_id
+        "r-#{receiver_name}+m-#{merchant_id}+u-#{user_id}".gsub(' ','_')
     end
 
-    def unique_cc_id receiver_name, provider_id
-        "#{receiver_name}_#{provider_id}".gsub(' ','_')
-    end
-
-    def set_cat args
-        if args["cat"] && args["cat"].class == Fixnum
-            args["cat"]
+    def set_cat args_cat
+        if args_cat && args_cat.class == Fixnum
+            args_cat
         else
             300
         end

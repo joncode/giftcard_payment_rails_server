@@ -1,7 +1,7 @@
 class PeopleFinder
 
-    def self.find hash
-        new_hsh = self.sanitize hash
+    def self.find hsh
+        new_hsh = self.sanitize hsh
         self.search_ids new_hsh
     end
 

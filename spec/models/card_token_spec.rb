@@ -39,13 +39,13 @@ describe Card do
 
 	context "gift sale process - card methods used" do
 
-		it "should respond to card.create_card_hsh" do
+		it "should respond to card.sale_hsh_from_card" do
 			user = FactoryGirl.create(:user, cim_profile: "7825348")
 			hsh = {"token"=>"25162732", "nickname"=>"Dango Reinhardt", "last_four"=>"7483", "brand" => "MasterCard" , "user_id" => user.id}
 			card_token = CardToken.build_card_token_with_hash hsh
 			card_token.save
 			card = Card.find(card_token.id)
-			card_hsh = card.create_card_hsh({ "amount" => "105.00" , "unique_id" => "receiver_name_78"})
+			card_hsh = card.sale_hsh_from_card({ "amount" => "105.00" , "unique_id" => "receiver_name_78"})
 			card_hsh["cim_token"]   = "25162732"
 			card_hsh["cim_profile"] = user.cim_profile
 		end

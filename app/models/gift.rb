@@ -10,10 +10,9 @@ class Gift < ActiveRecord::Base
     include GiftScheduler
     include ModelValidationHelper
 
-    TEXT_STATUS_OLD = { "incomplete" => 10, "open" => 20, "notified" => 30, "redeemed" => 40, "regifted" => 50, "expired" => 60, "cancel" => 70 }
-    GIVER_STATUS    = { 10 => "incomplete" , 20 => "notified", 30 => "notified", 40 => "complete", 50 => "complete", 60 => "expired", 70 => "cancel" }
-    RECEIVER_STATUS = { 10 => "incomplete" , 20 => "open", 30 => "notified",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
-    BAR_STATUS      = { 10 => "live" ,       20 => "live",     30 => "live",     40 => "redeemed", 50 => "regifted", 60 => "expired", 70 => "cancel" }
+    GIVER_STATUS    = { "incomplete" => "incomplete" , "open" => "notified", "notified" => "notified", "redeemed" => "complete", "regifted" => "complete", "expired" => "expired", "cancel" => "cancel" }
+    RECEIVER_STATUS = { "incomplete" => "incomplete" , "open" => "open", "notified" => "notified",     "redeemed" => "redeemed", "regifted" => "regifted", "expired" => "expired", "cancel" => "cancel" }
+    BAR_STATUS      = { "incomplete" => "live" ,       "open" => "live",     "notified" => "live",     "redeemed" => "redeemed", "regifted" => "regifted", "expired" => "expired", "cancel" => "cancel" }
 
     default_scope -> { where(active: true) } # indexed
     scope :meta_search, ->(str) {
@@ -39,12 +38,13 @@ class Gift < ActiveRecord::Base
 #   -------------
 
     before_create :find_receiver
-    before_create :add_giver_name,      if: :no_giver_name?
-    before_create :add_merchant_name,   if: :no_provider_name?
-    before_create :regift,              if: :regift?
+    before_create :add_giver_name
+    before_create :add_merchant_name
+    before_create :regift
     before_create :build_gift_items
     before_create :set_balance
-    before_create :set_status_and_pay_stat    # must be last before_create
+    before_create :set_pay_stat    # must be last before_create
+    before_create :set_status    # must be last before_create
 
     after_create :set_client_content
 
@@ -200,36 +200,32 @@ class Gift < ActiveRecord::Base
         self.redeemed_at || self.created_at
     end
 
+
 #/-----------------------------------------------Status---------------------------------------/
 
-    def stat_int
-        TEXT_STATUS_OLD[self.status]
-    end
 
     def receiver_status
-        RECEIVER_STATUS[stat_int]
+        RECEIVER_STATUS[self.status]
     end
 
     def giver_status
-        GIVER_STATUS[stat_int]
+        GIVER_STATUS[self.status]
     end
 
     def bar_status
-        BAR_STATUS[stat_int]
+        BAR_STATUS[self.status]
     end
 
-    def set_status_and_pay_stat
+    def set_pay_stat
         case self.resp_code
         when 1
           # Approved
             if self.pay_stat != 'refund_comp'
                 self.pay_stat = "charge_unpaid"
             end
-            set_status
         when 2
           # Declined
             self.pay_stat = "payment_error"
-            self.status = "cancel"
         when 3
           # Error
             if self.reason_code == 11
@@ -237,15 +233,28 @@ class Gift < ActiveRecord::Base
             else
                 self.pay_stat = "payment_error"
             end
-            self.status = "cancel"
         when 4
           # Held for Review
             self.pay_stat = "payment_error"
-            self.status = "cancel"
         else
           # not a listed error code
             self.pay_stat = "payment_error"
+        end
+    end
+
+    def set_status
+        if self.pay_stat == "payment_error"
             self.status = "cancel"
+        else
+            if self.scheduled_at.present? && (self.scheduled_at + 18.hours) > DateTime.now.utc
+                self.status = "schedule"
+            else
+                if self.receiver_id.nil?
+                    self.status = "incomplete"
+                else
+                    self.status = 'open'
+                end
+            end
         end
     end
 
@@ -289,6 +298,17 @@ class Gift < ActiveRecord::Base
 
 #/-------------------------------------re gift db methods-----------------------------/
 
+
+    def regift
+        if regift?
+            self.payable.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: DateTime.now.utc)
+        end
+    end
+
+    def regift?
+        self.payable.class == Gift
+    end
+
 	def parent
         if self.payable_type == 'Gift'
             self.payable
@@ -301,7 +321,22 @@ class Gift < ActiveRecord::Base
         Gift.where(payable_id: self.id, payable_type: "Gift").first
 	end
 
+    def get_first_regifting_parent
+        if self.payable_type == "Gift"
+            parent = self.payable
+            if parent.payable_type == "Gift"
+                parent.get_first_regifting_parent
+            else
+                parent
+            end
+        else
+            nil
+        end
+    end
+
+
 #/-------------------------------------data population methods-----------------------------/
+
 
     def find_receiver
         if self.receiver_id.nil?
@@ -342,11 +377,6 @@ class Gift < ActiveRecord::Base
 		self.giver_name = sender.name
 	end
 
-	# def add_provider provider
-	# 	self.provider_id   = provider.id
-	# 	self.provider_name = provider.name
-	# end
-
 	def add_anonymous_giver giver_id
 		anon_user       = User.find_by(phone:  '5555555555')
 		self.add_giver anon_user
@@ -362,20 +392,9 @@ class Gift < ActiveRecord::Base
         rec_hsh
     end
 
-    def get_first_regifting_parent
-        if self.payable_type == "Gift"
-            parent = self.payable
-            if parent.payable_type == "Gift"
-                parent.get_first_regifting_parent
-            else
-                parent
-            end
-        else
-            nil
-        end
-    end
 
 ##########  shopping cart methods
+
 
     def stringify_shopping_cart_if_array shoppingCart
         if shoppingCart.kind_of?(Array)
@@ -405,11 +424,14 @@ class Gift < ActiveRecord::Base
         end
     end
 
+
 ###############
 
-    def clear_caches
-        RedisWrap.clear_all_user_gifts(self.giver_id)
-        RedisWrap.clear_all_user_gifts(self.receiver_id)
+
+    def set_client_content
+        if self.client && self.partner
+            self.client.content = self
+        end
     end
 
     def fire_after_save_queue(sent_client_id=nil)
@@ -420,15 +442,16 @@ class Gift < ActiveRecord::Base
         Resque.enqueue(GiftAfterSaveJob, self.id, sent_client_id)
     end
 
+    def clear_caches
+        RedisWrap.clear_all_user_gifts(self.giver_id) if self.giver_type == 'User'
+        RedisWrap.clear_all_user_gifts(self.receiver_id)
+    end
+
     def fire_gift_create_event
         Resque.enqueue(GiftCreatedEvent, self.id)
     end
 
-    def set_client_content
-        if self.client && self.partner
-            self.client.content = self
-        end
-    end
+
 
 private
 
@@ -466,52 +489,29 @@ private
         end
     end
 
+
 ################  data validation methods
 
-    def set_status
-        if self.scheduled_at.present? && (self.scheduled_at + 18.hours) > DateTime.now.utc
-            self.status = "schedule"
-        else
-            if self.receiver_id.nil?
-                self.status = "incomplete"
-            else
-                self.status = 'open'
-            end
-        end
-    end
 
     def prepare_email
         self.receiver_email = nil if self.receiver_id
     end
 
 	def add_giver_name
-		if giver = User.find(self.giver_id)
-			self.giver_name = giver.username
-		end
-	end
-
-	def no_giver_name?
-		self.giver_name.blank?
+        if self.giver_name.blank?
+    		if giver = User.find(self.giver_id)
+    			self.giver_name = giver.username
+    		end
+        end
 	end
 
     def add_merchant_name
-        if m = Merchant.unscoped.find(self.merchant_id)
-            self.merchant = m
-            self.provider_name = m.name
+        if self.provider_name.blank?
+            if m = Merchant.unscoped.find(self.merchant_id)
+                self.merchant = m
+                self.provider_name = m.name
+            end
         end
-    end
-
-    def no_provider_name?
-        self.provider_name.blank?
-    end
-
-    def regift
-        old_gift = self.payable
-        old_gift.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: DateTime.now.utc)
-    end
-
-    def regift?
-        self.payable.class == Gift
     end
 
     def format_value

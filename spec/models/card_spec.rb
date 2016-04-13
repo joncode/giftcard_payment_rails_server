@@ -173,7 +173,7 @@ describe Card do
             args["value"]        = "150.00"
             args["service"]      = "7.00"
             args["message"]      = "here is the message"
-            sale_hsh = card.create_card_hsh args
+            sale_hsh = card.sale_hsh_from_card args
             keys = ["number", "month_year", "first_name", "last_name", "amount", "unique_id", "card_id"]
             sale_hsh["number"].should     == "4417121029961508"
             sale_hsh["month_year"].should == "0216"
