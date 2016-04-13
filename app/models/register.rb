@@ -39,15 +39,22 @@ class Register < ActiveRecord::Base
 
 	def self.init_debt gift_obj, partner_obj, pay_amount, origin_type
 		return nil if gift_and_parents_paid_already?(gift_obj, origin_type)
+		make gift_obj, pay_amount, 'debt', partner_obj, origin_type
+	end
+
+	def self.make gift_obj, pay_amount, credit_debt='debt', partner_obj=nil, origin_type='loc'
 		return nil unless (pay_amount.to_i > 0)
+		if origin_type == 'loc' && partner_obj.nil?
+			partner_obj = gift_obj.merchant
+		end
 		reg = Register.new
 		reg.partner_type = partner_obj.class.to_s
-		reg.partner_id   = partner_obj.id
-		reg.type_of      = "debt"
-		reg.origin       = origin_type
-		reg.gift_id      = gift_obj.id
-		reg.amount       = pay_amount
-		reg.gift         = gift_obj
+		reg.partner_id = partner_obj.id
+		reg.type_of = credit_debt
+		reg.origin = origin_type
+		reg.amount = pay_amount
+		reg.gift_id = gift_obj.id
+		reg.ccy = gift_obj.ccy
 		reg
 	end
 
@@ -86,7 +93,8 @@ class Register < ActiveRecord::Base
 				partner_id: self.partner_id,
 				origin: self.origin,
 				type_of: type_of_value,
-				gift_id: self.gift_id)
+				gift_id: self.gift_id,
+				ccy: self.ccy)
 		end
 	end
 
