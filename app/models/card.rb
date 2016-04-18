@@ -45,6 +45,19 @@ class Card < ActiveRecord::Base
 		update_column(:active, false)
 	end
 
+	def expired?
+		t = DateTime.now.utc
+		ex_year = self.year.to_i
+		ex_month = self.month.to_i
+		if t.year > ex_year  # card expired before this year
+			return true
+		elsif t.year == ex_year && t.month > ex_month  # card expired this year before this month
+			return true
+		else
+			return false
+		end
+	end
+
 #	-------------
 
 	def self.get_cards user

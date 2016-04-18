@@ -11,11 +11,16 @@ class GiftSale < Gift
             end
         end
 
-        @card = args["giver"].cards.where(id: args["credit_card"]).first
+        @card = args["giver"].cards.unscoped.where(id: args["credit_card"]).first
 
         if @card.nil?
             return "We do not have that credit card on record.  Please choose a different card."
+        elsif @card.expired?
+            return "Card #{self.nickname} is expired. PLease choose or upload a new card."
+        elsif !@card.active
+            return "Card #{self.nickname} is deactivated. PLease choose or upload a new card."
         end
+
         gift = super
 
         if gift.pay_stat == "payment_error"
