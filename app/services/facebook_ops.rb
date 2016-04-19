@@ -164,6 +164,7 @@ class FacebookOps
 
 	def self.wall_post gift
         graph = self.get_graph(gift)
+        return graph if graph.kind_of?(Hash)
 		begin
 			post_id_hsh = graph.graph_call("v2.5/me/#{FB_NAMESPACE}:send", { tags: "#{gift.facebook_id}",
 				gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}",
