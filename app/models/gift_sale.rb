@@ -50,7 +50,7 @@ private
         validateGift = Gift.new(args)
         if validateGift.valid?
 
-            charge_amount = (args["value"].to_f + args['service'].to_f)).to_s
+            charge_amount = (args["value"].to_f + args['service'].to_f).to_s
             unique_charge_id = unique_cc_id(args["receiver_name"], merchant_id, @card.user_id)
             card_to_sale_hsh = @card.sale_hsh_from_card(
                     charge_amount,
