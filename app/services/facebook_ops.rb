@@ -7,7 +7,7 @@ class FacebookOps
 	end
 
 	def self.parse_error err
-		print "500 Internal " + err.inspect
+		print "500 Internal (self.parse_error) " + err.inspect
 		if err.kind_of?(Hash)
 			error_message = err['fb_error_user_msg'] || err['fb_error_message'] || err['response_body']
 		else
