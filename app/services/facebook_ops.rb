@@ -7,7 +7,7 @@ class FacebookOps
 	end
 
 	def self.parse_error err
-		print "500 Internal " + err.inspect
+		print "500 Internal (self.parse_error) " + err.inspect
 		if err.kind_of?(Hash)
 			error_message = err['fb_error_user_msg'] || err['fb_error_message'] || err['response_body']
 		else
@@ -36,7 +36,7 @@ class FacebookOps
 
 	def self.profile user, facebook_id=nil
 		graph = self.get_graph(nil, user)
-		return graph if graph.kind_of?(Hash) && !graph['success']
+		return graph if graph.kind_of?(Hash)
 		begin
 			query_str = facebook_id || 'me'
 			profile = graph.get_object(query_str)
@@ -48,9 +48,7 @@ class FacebookOps
 
 	def self.get_feed user, datetime=nil
 		graph = self.get_graph(nil, user)
-		if graph.kind_of?(Hash) && graph['success'] == false
-			return graph
-		end
+		return graph if graph.kind_of?(Hash)
 		datetime = DateTime.now - 15.days if datetime.nil?
 		begin
 			fd = graph.graph_call("v2.5/me/feed?fields=name,message,application,link&include_hidden=true&since=#{datetime.to_i}&limit=1000")
@@ -63,7 +61,7 @@ class FacebookOps
 
 	def self.friends user
 		graph = self.get_graph(nil, user)
-		return graph if graph.kind_of?(Hash) && !graph['success']
+		return graph if graph.kind_of?(Hash)
 		app_friends = self.app_friends user
 		taggable_friends = self.taggable_friends user
 		if app_friends['success'] && taggable_friends['success']
@@ -90,7 +88,7 @@ class FacebookOps
 
 	def self.app_friends user
 		graph = self.get_graph(nil, user)
-		return graph if graph.kind_of?(Hash) && !graph['success']
+		return graph if graph.kind_of?(Hash)
 		begin
 			friends = graph.get_connections('me','friends')
 		rescue => e
@@ -104,7 +102,7 @@ class FacebookOps
 
 	def self.taggable_friends user
 		graph = self.get_graph(nil, user)
-		return graph if graph.kind_of?(Hash) && !graph['success']
+		return graph if graph.kind_of?(Hash)
 		begin
 			friends = graph.graph_call("v2.5/me/taggable_friends", { limit: FACEBOOK_OPS_PAGE_LIMIT })
 		rescue => e

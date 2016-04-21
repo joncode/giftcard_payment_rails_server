@@ -9,7 +9,7 @@ class GiftCreatedEvent
             res = FacebookOps.notify_receiver_from_giver(gift)
             puts "Facebook reponse #{res.inspect}"
         rescue => e
-            puts "500 Internal GiftCreatedEvent failed on facebook #{e.inspect}"
+            puts "500 Internal (GiftCreatedEvent) failed on facebook #{e.inspect}"
         end
     	PointsForSaleJob.perform gift_id
     end
