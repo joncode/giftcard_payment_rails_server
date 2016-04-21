@@ -2,7 +2,7 @@ class GiftDeactivatedEvent
     @queue = :after_save
 
     def self.perform gift_id, previous_gift_id=nil
-    	puts "\n gift #{gift_id} is being GiftUnredeemEvent job\n"
+    	puts "\n gift #{gift_id} is being GiftDeactivatedEvent job\n"
     	gift = Gift.unscoped.find gift_id
 
         if ['incomplete','schedule', 'open', 'notified'].include?(gift.status)
