@@ -47,8 +47,8 @@ private
         args["cost"] = (args["value"].to_f * merchant.location_fee.to_f).to_s
         args['service'] = float_to_cents(args["value"].to_f * 0.05)
 
-        # validateGift = Gift.new(args)
-        if self.valid?
+        validateGift = Gift.new(args)
+        if validateGift.valid?
 
             charge_amount = (args["value"].to_f + args['service'].to_f).to_s
             unique_charge_id = unique_cc_id(args["receiver_name"], merchant_id, @card.user_id)
@@ -62,7 +62,7 @@ private
 
         else
             puts "\n  GIFT INVALID SUBMITTED 500 Internal \n #{args.inspect} \n"
-            self
+            validateGift
         end
 
     end
