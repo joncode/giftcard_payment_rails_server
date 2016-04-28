@@ -20,7 +20,9 @@ class UserAfterCreateEvent
 
 			puts "PTEG user on list"
 			merchant = Merchant.find 410
+
 			## THINGS THAT MATTER PER GIFT
+			## IT SHOULD CALCULATE THE VALUE / COST / BALANCE AUTOMATICALLY
 
 			giver_name_for_gift = "PT's Entertainment Group"
 
@@ -43,9 +45,9 @@ class UserAfterCreateEvent
 				receiver_name: user.email,
 				receiver_email: user.email,
 				cat: 200,
-				value: "6",
+				value: "5",
 				cost: "0",
-				balance: 600,
+				balance: 500,
 				expires_at: expires_at,
 				client_id: user.client_id,
 				partner_id: user.partner_id,
