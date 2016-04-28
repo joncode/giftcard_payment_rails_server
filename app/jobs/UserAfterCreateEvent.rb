@@ -7,7 +7,7 @@ class UserAfterCreateEvent
 
 		user = user_or_user_id.kind_of?(User) ? user_or_user_id : User.find(user_or_user_id)
 
-		if user.client_id == 2
+		if user.partner_id == 29 && u.partner_type == "Affiliate"
 			puts "PTEG user created"
 			self.gift_user_for_pt user
 		end
@@ -17,10 +17,9 @@ class UserAfterCreateEvent
 	def self.gift_user_for_pt user
 		s = Social.where(network_id: user.email, network: 'email').where('created_at > ?', DateTime.new(2016, 4, 20))
 		if s.count > 0
+
 			puts "PTEG user on list"
 			merchant = Merchant.find 410
-			client = Client.find 2
-
 			## THINGS THAT MATTER PER GIFT
 
 			giver_name_for_gift = "PT's Entertainment Group"
@@ -48,9 +47,9 @@ class UserAfterCreateEvent
 				cost: "0",
 				balance: 600,
 				expires_at: expires_at,
-				client_id: 2,
-				partner_id: client.partner_id,
-				partner_type: client.partner_type,
+				client_id: user.client_id,
+				partner_id: user.partner_id,
+				partner_type: user.partner_type,
 				origin: "New User Created")
 
 			gift.shoppingCart = sc
