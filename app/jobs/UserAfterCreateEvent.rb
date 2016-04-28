@@ -7,7 +7,7 @@ class UserAfterCreateEvent
 
 		user = user_or_user_id.kind_of?(User) ? user_or_user_id : User.find(user_or_user_id)
 
-		if user.partner_id == 29 && u.partner_type == "Affiliate"
+		if user && user.partner_id == 29 && user.partner_type == "Affiliate"
 			puts "PTEG user created"
 			self.gift_user_for_pt user
 		end
