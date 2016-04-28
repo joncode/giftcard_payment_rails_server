@@ -9,37 +9,45 @@ class UserAfterCreateEvent
 
 		if user.client_id == 2
 			puts "PTEG user created"
-			# self.gift_user_for_pt user
+			self.gift_user_for_pt user
 		end
 
 	end
 
 	def self.gift_user_for_pt user
-		s = Social.where(network_id: user.email, network: 'email').where('created_at > ?', DateTime.new(2015, 11, 21))
+		s = Social.where(network_id: user.email, network: 'email').where('created_at > ?', DateTime.new(2016, 4, 20))
 		if s.count > 0
 			puts "PTEG user on list"
 			merchant = Merchant.find 410
 			client = Client.find 2
 
-			menu_item = MenuItem.find 4326
+			## THINGS THAT MATTER PER GIFT
+
+			giver_name_for_gift = "PT's Entertainment Group"
+
+			menu_item = MenuItem.find 5448
 			hsh = menu_item.serialize_to_app(1)
 			sc = [hsh].to_json
 
+			detail = "This gift is good until June 30th, please enjoy before then."
+			msg = "Thank you for downloading the PT's Entertainment Group mobile app and signing up for eGifting powered by ItsOnMe. Enjoy our gift to you of $5 off your bill."
+			expires_at = DateTime.new(2016, 7, 1)
+
 			gift = Gift.new(
 				merchant_id: merchant.id,
-				giver_name: "PT's Entertainment Group",
-				detail: "Valid until December 1st, Only valid at locations with Newcastle on draft.",
-				message: "Enjoy this Newcastle Draft on us! Valid until December 1st, Only valid at locations with Newcastle on draft.",
-				receiver_name: user.email,
 				provider_name: merchant.name,
 				giver_id: merchant.id,
+				giver_name: giver_name_for_gift,
+				giver_type: "BizUser",
+				detail: detail,
+				message: msg,
+				receiver_name: user.email,
 				receiver_email: user.email,
 				cat: 200,
-				giver_type: "BizUser",
 				value: "6",
 				cost: "0",
 				balance: 600,
-				expires_at: DateTime.new(2015, 12,1),
+				expires_at: expires_at,
 				client_id: 2,
 				partner_id: client.partner_id,
 				partner_type: client.partner_type,
