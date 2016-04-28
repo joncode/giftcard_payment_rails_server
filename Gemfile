@@ -14,6 +14,8 @@ gem "rack-timeout"
 
 gem 'httparty', '~> 0.9.0'
 
+gem 'rack-cors', :require => 'rack/cors'
+
 gem 'bcrypt', '~> 3.1'
 gem 'resque', :require => "resque/server"
 gem "resque-retry"

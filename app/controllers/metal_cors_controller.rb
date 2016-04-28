@@ -1,7 +1,7 @@
 class MetalCorsController < MetalController
 
 	# before_action :print_params
-    after_action :cross_origin_allow_header
+    # after_action :cross_origin_allow_header
 
 
 

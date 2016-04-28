@@ -132,6 +132,7 @@ GEM
       slop (~> 3.4)
     puma (2.15.3)
     rack (1.6.4)
+    rack-cors (0.4.0)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -285,6 +286,7 @@ DEPENDENCIES
   pg
   pry
   puma (~> 2.15.0)
+  rack-cors
   rack-timeout
   rails
   rails_12factor
