@@ -31,7 +31,8 @@ class UserAfterCreateEvent
 			sc = [hsh].to_json
 
 			detail = "This gift is good until June 30th, please enjoy before then."
-			msg = "Thank you for downloading the PT's Entertainment Group mobile app and signing up for eGifting powered by ItsOnMe. Enjoy our gift to you of $5 off your bill."
+			msg = "Thank you for downloading the PT's Entertainment Group mobile app and signing up for eGifting powered by ItsOnMe. \
+			Enjoy our gift to you of $5 off your bill.  This gift is good until June 30th, please enjoy before then."
 			expires_at = DateTime.new(2016, 7, 1)
 
 			gift = Gift.new(
@@ -56,8 +57,8 @@ class UserAfterCreateEvent
 
 			gift.shoppingCart = sc
 
-			gift.send_internal_email
 			if gift.save
+				gift.send_internal_email
 				puts "PTEG user gifted"
 				gift.messenger
 			else
