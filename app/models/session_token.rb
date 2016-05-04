@@ -33,6 +33,15 @@ class SessionToken < ActiveRecord::Base
 	end
 
 	def self.create_token_obj(user, platform=nil, pn_token=nil, client=nil, partner=nil)
+		if platform.nil? && client
+			if client.id == IOS_CLIENT_ID
+				platform = 'ios'
+			elsif client.id == ANDROID_CLIENT_ID
+				platform = 'android'
+			elsif client.id == WBG_CLIENT_ID
+				platform = 'www'
+			end
+		end
 		Resque.enqueue(CreatePnTokenJob, user.id, pn_token, platform) if pn_token
 		client_id = client.id if client
 		partner_id = partner.id if partner
