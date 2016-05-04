@@ -95,7 +95,7 @@ AND #{content_symbol}.id = contents.content_id"
         elsif platform == 'ios' || agent_str.match(/iPhone/)
         	find(IOS_CLIENT_ID)
         else
-        	find(WBG_CLIENT_ID)
+        	find(IOS_CLIENT_ID)
         end
 	end
 
