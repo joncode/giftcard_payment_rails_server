@@ -110,9 +110,11 @@ class Mdot::V2::UsersController < JsonController
         end
 
         user = User.new(create_user_params)
+        @current_client = Client.legacy_client(platform, request.headers['User-Agent'])
+        @current_partner = @current_client.partner
+        user.client = @current_client
+        user.partner = @current_partner
         if user.save
-            @current_client = Client.legacy_client(platform, request.headers['User-Agent'])
-            @current_partner = @current_client.partner
             user.session_token_obj =  SessionToken.create_token_obj(user, platform, pn_token,  @current_client, @current_partner)
             success user.create_serialize
         else
