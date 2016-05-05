@@ -77,7 +77,7 @@ class Gift < ActiveRecord::Base
 #   -------------
 
 
-    attr_accessor :receiver_oauth
+    attr_accessor :receiver_oauth, :card
 
 
 #   -------------
