@@ -15,13 +15,13 @@ class GiftSale < Gift
             end
         end
 
-        @card = args["giver"].cards.unscoped.where(id: args["credit_card"]).first
+        args['card'] = args["giver"].cards.unscoped.where(id: args["credit_card"]).first
 
-        if @card.nil?
+        if args['card'].nil?
             return "We do not have that credit card on record.  Please choose a different card."
-        elsif @card.expired?
+        elsif args['card'].expired?
             return "Card #{self.nickname} is expired. Please choose or upload a new card."
-        elsif !@card.active
+        elsif !args['card'].active
             return "Card #{self.nickname} is deactivated. Please choose or upload a new card."
         end
 
@@ -55,13 +55,14 @@ private
         if validateGift.valid?
 
             charge_amount = (args["value"].to_f + args['service'].to_f).to_s
-            unique_charge_id = unique_cc_id(args["receiver_name"], merchant_id, @card.user_id)
-            card_to_sale_hsh = @card.sale_hsh_from_card(
+            unique_charge_id = unique_cc_id(args["receiver_name"], merchant_id, args['card'].user_id)
+            card_to_sale_hsh = args['card'].sale_hsh_from_card(
                     charge_amount,
                     unique_charge_id,
                     args["giver"].cim_profile,
                     merchant_id
                 )
+            args.delete('card')
             args["payable"] = Sale.charge_card card_to_sale_hsh
 
         else
