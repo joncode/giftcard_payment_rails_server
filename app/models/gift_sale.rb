@@ -4,12 +4,6 @@ class GiftSale < Gift
 #   -------------
 
 
-    attr_accessor :card
-
-
-#   -------------
-
-
     def self.create args={}
         args["receiver_name"] = args["receiver_name"].gsub(/[^0-9a-z ]/i, '') if args["receiver_name"]
         if args["receiver_id"]

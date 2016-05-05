@@ -73,11 +73,15 @@ class Gift < ActiveRecord::Base
     belongs_to :client
     belongs_to :partner, polymorphic: true
 
-#   -------------
-
-    attr_accessor :receiver_oauth
 
 #   -------------
+
+
+    attr_accessor :receiver_oauth, :card
+
+
+#   -------------
+
 
     def display_photo
         self.merchant.get_photo
