@@ -36,12 +36,11 @@ class Web::V3::MerchantsController < MetalCorsController
     def redeem_locations
         merchant = Merchant.unscoped.find(params[:id])
         if client = merchant.client
-            redeems = client.contents(:merchants)
-            serialized = redeems.map(&:web_serialize)
-            success(serialized)
+            serialized = client.contents(:merchants).map(&:web_serialize)
         else
-            success([ merchant.web_serialize ])
+            serialized = [ merchant ].map(&:web_serialize)
         end
+        success(serialized)
         respond
     end
 

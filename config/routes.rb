@@ -94,6 +94,7 @@ Drinkboard::Application.routes.draw do
         member do
           get :menu
           get :receipt_photo_url
+          get :redeem_locations
         end
       end
 
