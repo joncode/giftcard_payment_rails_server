@@ -74,7 +74,7 @@ module Email
             origin_text = 'Gift origin - ' + gift.origin.to_s + '\n'
         end
         email_text = "#{origin_text} #{gift.giver_name} (#{giver_email}) has sent a $#{gift.value} gift #{items} at #{gift.provider_name} to #{gift.receiver_name}"
-        if gift.value.to_i >= 35
+        if gift.value.to_i >= 35 && Rails.env.production?
             data = {
                 "subject" => "$35+ Gift purchase made",
                 "text"    => email_text,
