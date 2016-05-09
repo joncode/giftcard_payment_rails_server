@@ -247,7 +247,7 @@ private
             params.require(:server)
         elsif params["ticket_num"].present?
             params.require(:ticket_num)
-        elsif params['data'].pressent?
+        elsif params['data'].present?
             params.require(:data).permit(:server, :loc_id, :ticket_num)
         else
             {}
