@@ -112,10 +112,8 @@ class Web::V3::GiftsController < MetalCorsController
     def notify
         gift = Gift.find params[:id]
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
-            if params["data"]
-                loc_id = redeem_params["loc_id"]
-            end
-            gift.notify(true, loc_id)
+            loc_id = redeem_params["loc_id"]
+            gift.notify(true, loc_id, @current_client.id)
             gift.fire_after_save_queue(@current_client)
             success gift.notify_serialize
         else
@@ -234,14 +232,6 @@ private
             gift_hsh["receiver_oauth"]["photo"]   = gps[:rec_photo]
             gift_hsh['twitter'] = gps[:rec_net_id]
         end
-    end
-
-    def notify_params
-        params.require(:data).permit(:loc_id)
-    end
-
-    def pos_redeem_params
-        params.require(:data).permit(:ticket_num, :loc_id)
     end
 
     def regift_params

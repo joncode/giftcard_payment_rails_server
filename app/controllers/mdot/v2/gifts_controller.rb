@@ -65,7 +65,7 @@ class Mdot::V2::GiftsController < JsonController
         return nil if data_not_found?(gift)
 
         if gift.notifiable?
-            gift.notify
+            gift.notify(true, redeem_params["loc_id"],  @current_user.session_token_obj.client_id)
             success({ token:  gift.token, notified_at: gift.notified_at, new_token_at: gift.new_token_at })
         else
             fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
@@ -78,10 +78,10 @@ class Mdot::V2::GiftsController < JsonController
         return nil if params_bad_request(["ticket_num"])
         gift = Gift.includes(:merchant).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
-            if ticket_num = pos_redeem_params
+            if ticket_num = redeem_params["ticket_num"]
                 if !gift.merchant.nil?
                     gift.rec_client_id = @current_user.session_token_obj.client_id
-                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id)
+                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, redeem_params['loc_id'])
                     if !resp.kind_of?(Hash)
                         status = :bad_request
                         fail( "Merchant is currently not active please contact support@itson.me")
@@ -120,7 +120,7 @@ class Mdot::V2::GiftsController < JsonController
             if gift.status == 'notified'
                 if true # gift.token == request_params["token"]
                     gift.rec_client_id = @current_user.session_token_obj.client_id
-                    gift.redeem_gift(request_server)
+                    gift.redeem_gift(request_server, redeem_params['loc_id'])
                     # gift.reload
                     success({ "order_number" => gift.token , "total" => gift.value,  "server" => gift.server })
                 else
@@ -242,20 +242,8 @@ private
         end
     end
 
-    def pos_redeem_params
-        if params["ticket_num"].blank?
-            nil
-        else
-            params.require(:ticket_num)
-        end
-    end
-
     def redeem_params
-        if params["server"].blank?
-            ""
-        else
-            params.require(:server)
-        end
+        params.require(:data).permit(:server, :loc_id, :ticket_num)
     end
 
     def regift_params

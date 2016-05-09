@@ -1,7 +1,7 @@
 module GiftLifecycle
     extend ActiveSupport::Concern
 
-    def notify(already_notified=true, loc_id=nil)
+    def notify(already_notified=true, loc_id=nil, client_id=nil)
         if notifiable?
             if (self.new_token_at.nil? || self.new_token_at < reset_time)
                 current_time   = Time.now.utc
@@ -27,8 +27,14 @@ module GiftLifecycle
                 end
 
                 Gift.connection.execute(sql)
-                self.reload
-                self.update(merchant_id: loc_id.to_i) if (loc_id && loc_id.to_i > 0)
+                reload
+                if client_id
+                    self.rec_client_id = client_id
+                    self.merchant_id = loc_id.to_i if (loc_id.to_i > 0)
+                    save
+                else
+                    update(merchant_id: loc_id.to_i) if (loc_id.to_i > 0)
+                end
                 Resque.enqueue(GiftAfterSaveJob, self.id)
                 true
             else
