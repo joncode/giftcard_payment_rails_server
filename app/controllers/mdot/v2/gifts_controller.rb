@@ -243,7 +243,11 @@ private
     end
 
     def redeem_params
-        params.require(:data).permit(:server, :loc_id, :ticket_num)
+        if params['data']
+            params.require(:data).permit(:server, :loc_id, :ticket_num)
+        else
+            {}
+        end
     end
 
     def regift_params
