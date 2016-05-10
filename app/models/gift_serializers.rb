@@ -32,7 +32,7 @@ module GiftSerializers
     end
 
     def badge_serialize
-        gift_hsh = self.serializable_hash only: [ :value, :cat, :giver_id, :giver_name, :message, :detail, :updated_at, :created_at]
+        gift_hsh = self.serializable_hash only: [ :ccy, :value, :cat, :giver_id, :giver_name, :message, :detail, :updated_at, :created_at]
         gift_hsh["status"]             = self.status
         gift_hsh["shoppingCart"]       = self.shoppingCart
         gift_hsh["items"]              = ary_of_shopping_cart_as_hash
