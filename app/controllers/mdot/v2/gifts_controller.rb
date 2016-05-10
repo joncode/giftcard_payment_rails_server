@@ -61,7 +61,6 @@ class Mdot::V2::GiftsController < JsonController
 
     def notify  # redemption v2 ONLY
         gift   = @current_user.received.where(id: params[:id]).first
-        return nil if params_bad_request
         return nil if data_not_found?(gift)
 
         if gift.notifiable?
@@ -75,7 +74,6 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def pos_redeem
-        return nil if params_bad_request(["ticket_num"])
         gift = Gift.includes(:merchant).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = redeem_params["ticket_num"]
@@ -112,7 +110,6 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def redeem  # redemption v1 ONLY
-        return nil if params_bad_request(["server"])
         request_server = redeem_params
         gift           = @current_user.received.where(id: params[:id]).first
 
