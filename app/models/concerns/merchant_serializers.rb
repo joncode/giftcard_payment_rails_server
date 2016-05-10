@@ -1,7 +1,7 @@
 module MerchantSerializers
 
 	def serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :zinger, :region_id, :region_name,  :city_id]
+		prov_hash  = self.serializable_hash only: [ :r_sys, :name, :phone, :latitude, :longitude, :zinger, :region_id, :region_name,  :city_id]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["merchant_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
@@ -13,7 +13,7 @@ module MerchantSerializers
 	end
 
 	def client_serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
+		prov_hash  = self.serializable_hash only: [ :r_sys, :name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["merchant_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo(default: false)
@@ -26,7 +26,7 @@ module MerchantSerializers
 	alias :to_hash :serialize
 
 	def admt_serialize
-		prov_hash  = self.serializable_hash only: [:name, :address, :state, :brand_id, :building_id ]
+		prov_hash  = self.serializable_hash only: [ :r_sys, :name, :address, :state, :brand_id, :building_id ]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["merchant_id"]  = self.id
 		prov_hash['city']		  = self.city_name
@@ -35,13 +35,13 @@ module MerchantSerializers
 	end
 
 	def merchantize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :sales_tax, :token, :address, :city_name, :state, :zip, :zinger, :description]
+		prov_hash  = self.serializable_hash only: [ :r_sys, :name, :phone, :sales_tax, :token, :address, :city_name, :state, :zip, :zinger, :description]
 		prov_hash["photo"] = self.get_photo
 		return prov_hash
 	end
 
 	def web_serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
+		prov_hash  = self.serializable_hash only: [ :r_sys, :name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
 		prov_hash["loc_id"]     = self.id
 		prov_hash["photo"]      = self.get_photo(default: false)
 		prov_hash["logo"]       = self.get_logo_web
@@ -55,7 +55,7 @@ module MerchantSerializers
 	end
 
 	def redemption_serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
+		prov_hash  = self.serializable_hash only: [ :r_sys, :name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
 		prov_hash["loc_id"]     = self.id
 		prov_hash["photo"]      = self.get_photo(default: false)
 		prov_hash["logo"]       = self.get_logo_web
