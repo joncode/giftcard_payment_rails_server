@@ -5,36 +5,32 @@ module GiftLifecycle
         if notifiable?
             if (self.new_token_at.nil? || self.new_token_at < reset_time)
                 current_time   = Time.now.utc
-                #self.new_token_at = current_time
-                if already_notified
-                    include_status = if self.status == 'open'
-                        #self.status = 'notified'
-                        " status = 'notified' ,"
-                    else
-                        ""
-                    end
-                    include_notify = if self.notified_at.nil?
-                        #self.notified_at = current_time
-                        " notified_at = '#{current_time}' ,"
-                    else
-                        ""
-                    end
-                    sql = "UPDATE gifts SET #{include_status} #{include_notify} token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #{self.id};"
-                    # RESQUE -> POST GIFT TO MERCHANTS FIREBASE
-                        # SAVE THGE GIFTS BY MERCHANT ID & RESET_TIME OR CURRENT DATE
-                else
-                    sql = "UPDATE gifts SET status = 'notified', token = nextval('gift_token_seq'), notified_at = '#{current_time}' WHERE id = #{self.id};"
-                end
+
+                include_status = if self.status == 'open'
+                    #self.status = 'notified'
+                    " status = 'notified' ,"
+                else ; "" ; end
+
+                include_notify = if self.notified_at.nil?
+                    #self.notified_at = current_time
+                    " notified_at = '#{current_time}' ,"
+                else ; "" ; end
+
+                include_rec_client_id = if (client_id.to_i > 0)
+                    " rec_client_id = #{client_id.to_i} ,"
+                else ; "" ; end
+
+                change_merchant = if (loc_id.to_i > 0)
+                    " merchant_id = #{loc_id.to_i} ,"
+                else ; "" ; end
+
+                sql = "UPDATE gifts SET #{include_status} #{include_notify} \
+#{include_rec_client_id} #{change_merchant} token = nextval('gift_token_seq'),
+new_token_at = '#{current_time}' WHERE id = #{self.id};"
 
                 Gift.connection.execute(sql)
                 reload
-                if client_id
-                    self.rec_client_id = client_id
-                    self.merchant_id = loc_id.to_i if (loc_id.to_i > 0)
-                    save
-                else
-                    update(merchant_id: loc_id.to_i) if (loc_id.to_i > 0)
-                end
+
                 Resque.enqueue(GiftAfterSaveJob, self.id)
                 true
             else
