@@ -229,7 +229,7 @@ class Omnivore
 			# puts r.inspect
 			r
 		rescue => e
-			puts "\n\n POSITRONICS ERROR #{e.inspect}"
+			puts "\n\n 232 POSITRONICS ERROR #{e.inspect}"
 			e
 			unless e.nil?
 				resp = e.response.code
@@ -272,7 +272,7 @@ class Omnivore
 				resp
 			end
 		rescue => e
-			puts "\n\n POSITRONICS ERROR #{e.inspect}"
+			puts "\n\n 275 POSITRONICS ERROR #{e.inspect}"
 			e
 			unless e.nil?
 				resp = e.response.code
@@ -303,7 +303,7 @@ class Omnivore
 			)
 			JSON.parse(response)
 		rescue => e
-			puts "\n\n POSITRONICS ERROR #{e.inspect}"
+			puts "\n\n 306 POSITRONICS ERROR #{e.inspect}"
 			e
 			unless e.nil?
 				resp = e.response.code
@@ -328,7 +328,7 @@ class Omnivore
             @response = { "response_code" => "SUCCESS", "response_text" => "#{resource}/#{obj_id}#{meth}", "status" => 200, "data" => r }
             r
         rescue => e
-            puts "\n\n POSITRONICS ERROR #{e.inspect}"
+            puts "\n\n 331 POSITRONICS ERROR #{e.inspect}"
             unless e.nil?
                 resp = e.response.code
                 @code = resp
