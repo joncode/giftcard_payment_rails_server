@@ -23,6 +23,7 @@ gem "resque-retry"
 gem 'authorize-net'
 gem 'mandrill-api', "~> 1.0.35"
 gem 'mailchimp-api'
+gem 'twilio-ruby'
 # gem 'json'
 gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
 gem 'rails_12factor'
