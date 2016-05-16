@@ -41,7 +41,7 @@ module MerchantSerializers
 	end
 
 	def web_serialize
-		prov_hash  = self.serializable_hash only: [ :ccy, :r_sys, :name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
+		prov_hash  = self.serializable_hash only: [ :zinger, :ccy, :r_sys, :name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
 		prov_hash["loc_id"]     = self.id
 		prov_hash["photo"]      = self.get_photo(default: false)
 		prov_hash["logo"]       = self.get_logo_web
@@ -50,6 +50,7 @@ module MerchantSerializers
 		prov_hash["loc_state"]  = self.state
 		prov_hash["loc_zip"]    = self.zip
 		prov_hash["live"]       = self.live
+		prov_hash["detail"]		= self.description
 		# multi_redemption_web_keys prov_hash
 		prov_hash
 	end
