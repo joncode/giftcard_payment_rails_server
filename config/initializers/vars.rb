@@ -4,23 +4,16 @@ else
     AUTH_GATEWAY = :sandbox
 end
 
-
-RESQUE_AUTH = if Rails.env.development? or Rails.env.test?
-    "Dboard77"
+APP_GENERAL_TOKEN = if Rails.env.development? or Rails.env.test?
+     "0NFXbWsyP3Mj2Mroj_utsA"
 else
-    ENV['RESQUE_AUTH']
+    ENV['APP_GENERAL_TOKEN']
 end
 
-CATCH_PHRASE = if Rails.env.development? or Rails.env.test?
-    "Theres no place like home"
+ANDROID_TOKEN = if Rails.env.development? or Rails.env.test?
+     "e7f122d463e7ca786a150a33e21216a1"
 else
-    ENV['CATCH_PHRASE']
-end
-
-CCS_KEY = if Rails.env.development? or Rails.env.test?
-    "Yes yes yes"
-else
-    ENV['CCS_KEY']
+    ENV['ANDROID_TOKEN']
 end
 
 AUTHORIZE_API_LOGIN = if Rails.env.development? or Rails.env.test?
@@ -41,6 +34,18 @@ else
     ENV['AUTHORIZE_MOBILE_DEVICE']
 end
 
+CATCH_PHRASE = if Rails.env.development? or Rails.env.test?
+    "Theres no place like home"
+else
+    ENV['CATCH_PHRASE']
+end
+
+CCS_KEY = if Rails.env.development? or Rails.env.test?
+    "Yes yes yes"
+else
+    ENV['CCS_KEY']
+end
+
 FACEBOOK_APP_ID = if Rails.env.development? or Rails.env.test?
     '1010660852318410'
 else
@@ -51,6 +56,12 @@ FACEBOOK_APP_SECRET = if Rails.env.development? or Rails.env.test?
     '4a04ff8b8f97e0830089e1953ebbfdfb'
 else
     ENV['FACEBOOK_APP_SECRET']
+end
+
+GENERAL_TOKEN = if Rails.env.development? or Rails.env.test?
+     "1964f94b3e567a8a82b87f3ccbeb2174"
+else
+    ENV['GENERAL_TOKEN']
 end
 
 MAILCHIMP_APIKEY = if Rails.env.development? or Rails.env.test?
@@ -64,50 +75,7 @@ MAILCHIMP_LIST_ID = if Rails.env.development? or Rails.env.test?
 else
     ENV['MAILCHIMP_LIST_ID']
 end
-
 # MANDRILL is located in config/initializers/mandrill.rb
-
-GENERAL_TOKEN = if Rails.env.development? or Rails.env.test?
-     "1964f94b3e567a8a82b87f3ccbeb2174"
-else
-    ENV['GENERAL_TOKEN']
-end
-
-WWW_TOKEN = if Rails.env.development? or Rails.env.test?
-     "nj3tOdJOaZa-qFx0FhCLRQ"
-else
-    ENV['WWW_TOKEN']
-end
-
-REDBULL_TOKEN = if Rails.env.development? or Rails.env.test?
-     "O0LgUixWOE7Dec1Y_INA6Q"
-else
-    ENV['REDBULL_TOKEN']
-end
-
-APP_GENERAL_TOKEN = if Rails.env.development? or Rails.env.test?
-     "0NFXbWsyP3Mj2Mroj_utsA"
-else
-    ENV['APP_GENERAL_TOKEN']
-end
-
-ANDROID_TOKEN = if Rails.env.development? or Rails.env.test?
-     "e7f122d463e7ca786a150a33e21216a1"
-else
-    ENV['ANDROID_TOKEN']
-end
-
-SOCIAL_PROXY_TOKEN = if Rails.env.development? or Rails.env.test?
-    "OYDvisC4qke6y5KPytkIBg"
-else
-    ENV['SOCIAL_PROXY_TOKEN']
-end
-
-SLICKTEXT_PRIVATE =  if Rails.env.development? or Rails.env.test?
-    "0cc8841e131a2ecdc690a4d2e7b5a676255e26a8"
-else
-    ENV['SLICKTEXT_PRIVATE']
-end
 
 NEXT_GEN_USER = if Rails.env.development? or Rails.env.test?
     'jfwwejfkslopwe'
@@ -128,6 +96,50 @@ else
 end
 
 POSITRONICS_API_URL = "https://api.omnivore.io/0.1"
+
+REDBULL_TOKEN = if Rails.env.development? or Rails.env.test?
+     "O0LgUixWOE7Dec1Y_INA6Q"
+else
+    ENV['REDBULL_TOKEN']
+end
+
+RESQUE_AUTH = if Rails.env.development? or Rails.env.test?
+    "Dboard77"
+else
+    ENV['RESQUE_AUTH']
+end
+
+SOCIAL_PROXY_TOKEN = if Rails.env.development? or Rails.env.test?
+    "OYDvisC4qke6y5KPytkIBg"
+else
+    ENV['SOCIAL_PROXY_TOKEN']
+end
+
+SLICKTEXT_PRIVATE =  if Rails.env.development? or Rails.env.test?
+    "0cc8841e131a2ecdc690a4d2e7b5a676255e26a8"
+else
+    ENV['SLICKTEXT_PRIVATE']
+end
+
+TWILIO_ACCOUNT_SID = if Rails.env.development? or Rails.env.test?
+    "ACbb70b5328755e8444166bbc82babdcb9"
+else
+    ENV['TWILIO_ACCOUNT_SID']
+end
+
+TWILIO_AUTH_TOKEN = if Rails.env.development? or Rails.env.test?
+    "1ffccabdc95b0669400062f1a700a8cf"
+else
+    ENV['TWILIO_AUTH_TOKEN']
+end
+
+TWILIO_PHONE_NUMBER = "+13107364884"
+
+WWW_TOKEN = if Rails.env.development? or Rails.env.test?
+     "nj3tOdJOaZa-qFx0FhCLRQ"
+else
+    ENV['WWW_TOKEN']
+end
 
 
 

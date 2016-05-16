@@ -1,4 +1,4 @@
-class FacebookOps
+class OpsFacebook
 
 #   -------------  Utilities
 
@@ -13,7 +13,7 @@ class FacebookOps
 		else
 			error_message = err.fb_error_user_msg || err.fb_error_message || err.response_body
 		end
-		puts error_message.inspect + " FacebookOps.parse_error"
+		puts error_message.inspect + " OpsFacebook.parse_error"
 		if error_message.match(/access token/)
 			return "Looks like we have a problem with facebook authorization, please re-connect to facebook. (If you continue to see this message, upgrade your app)"
 		end
@@ -54,7 +54,7 @@ class FacebookOps
 			fd = graph.graph_call("v2.5/me/feed?fields=name,message,application,link&include_hidden=true&since=#{datetime.to_i}&limit=1000")
 			{ 'success' => true, 'data' => fd }
 		rescue => e
-			puts "500 Internal FacebookOps.get_feed for user ID = #{user.id} #{e.inspect}"
+			puts "500 Internal OpsFacebook.get_feed for user ID = #{user.id} #{e.inspect}"
 			{ 'success' => false, 'data' => self.parse_error(e) }
 		end
 	end

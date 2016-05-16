@@ -8,7 +8,7 @@ class GiftCreateNotifySocial
     def self.perform gift_id
         puts " -------------   Notify Social Create Gift Via Facebook  --------------------"
         if gift = Gift.find(gift_id)
-            FacebookOps.wall_post(gift)
+            OpsFacebook.wall_post(gift)
         end
     end
 

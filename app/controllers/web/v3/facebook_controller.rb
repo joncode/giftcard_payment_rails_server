@@ -32,7 +32,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def app_friends
-        resp = FacebookOps.app_friends(@current_user)
+        resp = OpsFacebook.app_friends(@current_user)
         if resp['success']
             success(resp['data'])
         else
@@ -43,7 +43,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def friends
-        resp = FacebookOps.friends(@current_user)
+        resp = OpsFacebook.friends(@current_user)
         if resp['success']
             success(resp['data'])
         else
@@ -54,7 +54,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def taggable_friends
-        resp = FacebookOps.taggable_friends(@current_user)
+        resp = OpsFacebook.taggable_friends(@current_user)
         if resp['success']
             success(resp['data'])
         else
@@ -65,7 +65,7 @@ class Web::V3::FacebookController < MetalCorsController
     end
 
     def profile
-        resp = FacebookOps.profile(@current_user, params['facebook_id'])
+        resp = OpsFacebook.profile(@current_user, params['facebook_id'])
         if resp['success']
             success(resp['data'])
         else
@@ -92,7 +92,7 @@ class Web::V3::FacebookController < MetalCorsController
 
     def oauth_init
         oauth = Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET, callback_url_generator(generate_token(params)))
-        scope_ary = FacebookOps.permissions
+        scope_ary = OpsFacebook.permissions
         redirect_url = oauth.url_for_oauth_code(scope: scope_ary )
         # success redirect_url
         # respond(:found)
@@ -140,18 +140,18 @@ class Web::V3::FacebookController < MetalCorsController
                 @current_partner = @current_client.partner
                 case return_params['operation']
                 when 'login'
-                    resp = FacebookOps.login(oauth_access_token, profile)
+                    resp = OpsFacebook.login(oauth_access_token, profile)
                     puts resp.inspect
                     add_token = true
                 when 'create'
-                    resp = FacebookOps.create_account(oauth_access_token, profile, @current_client, @current_partner )
+                    resp = OpsFacebook.create_account(oauth_access_token, profile, @current_client, @current_partner )
                     add_token = true
                 when 'attach'
                     @current_user = SessionToken.app_authenticate(return_params['auth'])
                     if @current_user.nil?
                         resp = { 'success' => false , 'error' => 'Could not authenticate user' }
                     else
-                        resp = FacebookOps.attach_account(oauth_access_token, profile, @current_user)
+                        resp = OpsFacebook.attach_account(oauth_access_token, profile, @current_user)
                     end
                 else
                     resp = { 'success' => false , 'error' => 'No operation specified' }

@@ -7,17 +7,25 @@ class GiftCreatedEvent
     	Accountant.gift_created_event(gift)
 
         notify_via_facebook gift
-
+        notify_via_text gift
 
     	PointsForSaleJob.perform gift_id
     end
 
     def self.notify_via_facebook gift
         begin
-            res = FacebookOps.notify_receiver_from_giver(gift)
+            res = OpsFacebook.notify_receiver_from_giver(gift)
             puts "Facebook reponse #{res.inspect}"
         rescue => e
             puts "500 Internal (GiftCreatedEvent) failed on facebook #{e.inspect}"
         end
     end
+
+    def self.notify_via_text gift
+        if !gift.receiver_phone.blank?
+            msg = "You've received a Gift!\n#{gift.invite_link}"
+            resp = OpsTwilio.text(gift.receiver_phone, msg)
+        end
+    end
+
 end

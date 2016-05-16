@@ -81,7 +81,7 @@ class GiftTemplateMainMailer
                 { 'name' => 'receiver_name', 'content' => email_rec_name },
                 { 'name' => 'giver_name', 'content' => @gift.giver_name },
                 { 'name' => 'important', 'content' => important_msg },
-                { 'name' => 'gift_link', 'content' => "#{PUBLIC_URL}/signup/acceptgift?id=#{@gift.obscured_id}" }
+                { 'name' => 'gift_link', 'content' => @gift.invite_link }
             ]
         }
 

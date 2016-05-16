@@ -5,21 +5,26 @@ class OpsTwilio
 	class << self
 
 
-		def send_text
+		def text to_number, msg
 
+			account_sid = TWILIO_ACCOUNT_SID
+			auth_token = TWILIO_AUTH_TOKEN
 
-			account_sid = "{{ account_sid }}" # Your Account SID from www.twilio.com/console
-			auth_token = "{{ auth_token }}"   # Your Auth Token from www.twilio.com/console
+			twilio_number = TWILIO_PHONE_NUMBER
+
+			to_number.gsub!(/[^0-9]/, '')
+			to_number = '1' + to_number if to_number.length == 10
+			receiver_phone = "+" + to_number
 
 			begin
-			    @client = Twilio::REST::Client.new account_sid, auth_token
-			    message = @client.account.messages.create(:body => "Hello from Ruby",
-			        :to => "+12345678901",    # Replace with your phone number
-			        :from => "+12345678901")  # Replace with your Twilio number
+			    client = Twilio::REST::Client.new account_sid, auth_token
+			    message = client.account.messages.create(
+			    	:body => msg,
+			        :to => receiver_phone,
+			        :from => twilio_number)
 			rescue Twilio::REST::RequestError => e
-			    puts e.message
+			    puts e.message.to_s + "\nOpsTwilio(26)"
 			end
-
 
 		end
 

@@ -21,8 +21,8 @@ module GiftMessenger
     end
 
     def send_gift_delivered_notifications
-        send_receiver_notification
         Relay.send_gift_delivered(self)
+        send_receiver_notification
     end
 
     def send_internal_email
@@ -39,6 +39,10 @@ module GiftMessenger
         Relay.send_push_notification(self)
         puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name}"
         notify_receiver_proto_join
+    end
+
+    def invite_link
+        "#{PUBLIC_URL}/signup/acceptgift?id=#{self.obscured_id}"
     end
 
 end

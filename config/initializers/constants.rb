@@ -62,7 +62,7 @@ else
     FB_NAMESPACE = 'itsonme_test'
 end
 FACEBOOK_OPS_PAGE_LIMIT = 1000
-FBO = FacebookOps
+FBO = OpsFacebook
 
 SLICKTEXT_PUBLIC  = "pub_fa0f3e7f9ddaeefc89ca3d40d93c2472"
 
