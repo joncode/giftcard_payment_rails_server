@@ -16,7 +16,7 @@ class Events::CallbacksController < MetalCorsController
 
 private
 
-	def decide_what_to_do from:, msg:, req:
+	def decide_what_to_do from, msg, req
 		if code = Message.merchant_redemption msg
 			mt_user = get_mt_user_with_number from
 			if mt_user
