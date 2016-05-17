@@ -8,35 +8,45 @@ class Events::CallbacksController < MetalCorsController
 
 		# msg = Message.create(params)
 
-		decide_what_to_do(from_number, msg, params)
+		dispatch_message(from_number, msg, params)
 
 		head :ok
 	end
 
-
-	def decide_what_to_do from, msg, req
+	def dispatch_message from, msg, req
 		if code = Message.merchant_redemption(msg)
-			mt_user = get_mt_user_with_number from
-			if mt_user
-				gift = find_gift_if_mt_user_has_notified_gifts(mt_user, code)
-				if gift
-					OpsTwilio.text to: from, msg: "Gift #{code} is #{gift.value_s}"
-				else
-					OpsTwilio.text to: from, msg: "No Gift was found for code = #{code}"
-				end
-			else
-				OpsTwilio.text to: from, msg: "No User was found for #{from}"
-			end
+			redemption_msg from, code
 		elsif msg.downcase == 'support'
-			mt_user = get_mt_user_with_number from
-			if mt_user
-				OpsTwilio.text to: from, msg: "Text redemption code to see value of gift"
-			else
-				OpsTwilio.text to: from, msg: "This is ItsOnMe Support , how may we assist you?"
-			end
+			basic_support from
 		elsif ["+12152000475","+17029727139"].include?(from)
 			flip_phones from, msg
 		end
+	end
+
+	def redemption_msg from, code
+		mt_user = get_mt_user_with_number from
+		if mt_user
+			# gift = find_gift_if_mt_user_has_notified_gifts(mt_user, code)
+			gift = Gift.last
+			if gift
+				msg ="Gift #{code} is #{gift.value_s}"
+			else
+				msg ="No Gift was found for code = #{code}"
+			end
+		else
+			msg ="No User was found for #{from}"
+		end
+		OpsTwilio.text to: from, msg: msg
+	end
+
+	def basic_support from
+		mt_user = get_mt_user_with_number from
+		if mt_user
+			msg = "Text redemption code to see value of gift"
+		else
+			msg =  "This is ItsOnMe Support , how may we assist you?"
+		end
+		OpsTwilio.text to: from, msg: msg
 	end
 
 	def flip_phones from_number, msg
