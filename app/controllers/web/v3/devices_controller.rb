@@ -1,6 +1,7 @@
 class Web::V3::DevicesController < MetalCorsController
 
-	before_action :authentication_token_required
+    before_action :authentication_no_token, only: [:config]
+    before_action :authentication_token_required , only: [:create]
 
 
 	def create
