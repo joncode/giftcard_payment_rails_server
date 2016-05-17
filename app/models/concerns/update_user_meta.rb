@@ -8,7 +8,7 @@ module UpdateUserMeta
 		# makes sure the values for faceboob_id & twitter are strings
 		us_ary = ["email", "phone", "facebook_id", "twitter"]
 
-		# delete the promary kay and save it in a var
+		# delete the primary kay and save it in a var
 		primary = args.delete("primary")
 
 		# if those user social keys exist

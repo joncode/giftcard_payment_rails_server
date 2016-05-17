@@ -3,8 +3,25 @@ class Web::V3::UsersController < MetalCorsController
     before_action :authentication_no_token, only: [:create, :reset_password]
     before_action :authentication_token_required , except: [:create, :reset_password]
 
-    def index
+    rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
+    def socials
+        social_id = destroy_user_social_params["_id"]
+        us = UserSocial.find_by user_id: @current_user.id, id: social_id
+
+        if us.update(active: false)
+            success("Delete Succeeded")
+        else
+            fail_web({
+                err: "DELETE_FAILED",
+                msg: us.errors.full_messages
+            })
+        end
+
+        respond
+    end
+
+    def index
         serialized_users = User.search_name(params[:find])
 
         success serialized_users
@@ -113,6 +130,10 @@ class Web::V3::UsersController < MetalCorsController
     end
 
 private
+
+    def destroy_user_social_params
+        params.require(:data).permit("_id")
+    end
 
     def update_user_params
         params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => ["net", "_id", "value" ], oauth: [:token, :secret, :net, :net_id, :handle, :photo] )
