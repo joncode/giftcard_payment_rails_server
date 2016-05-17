@@ -25,7 +25,7 @@ class Events::CallbacksController < MetalCorsController
 					OpsTwilio.text to: from, msg: "No Gift was found for code = #{code}"
 				end
 			else
-				OpsTwilio.text to: from, msg: "No Merchant Tools user was found for this number"
+				OpsTwilio.text to: from, msg: "No User was found for #{from}"
 			end
 
 		elsif ["+12152000475","+17029727139"].include?(from)
