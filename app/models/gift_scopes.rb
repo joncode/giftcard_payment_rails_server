@@ -13,7 +13,7 @@ module GiftScopes
         query = "SELECT g.* FROM gifts g, invites i , merchants m \
 WHERE i.mt_user_id = #{mt_user_id} AND i.company_type = 'Merchant' AND m.id = i.company_id \
 AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_time}'"
-        return find_by_sql(query)
+        return find_by_sql(query).first
     end
 
     def get_all
