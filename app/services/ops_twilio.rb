@@ -12,9 +12,9 @@ class OpsTwilio
 
 			twilio_number = TWILIO_PHONE_NUMBER
 
-			to_number.gsub!(/[^0-9]/, '')
-			to_number = '1' + to_number if to_number.length == 10
-			receiver_phone = "+" + to_number
+			to.gsub!(/[^0-9]/, '')
+			to = '1' + to if to.length == 10
+			receiver_phone = "+" + to
 
 			begin
 			    client = Twilio::REST::Client.new account_sid, auth_token
