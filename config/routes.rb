@@ -120,6 +120,10 @@ Drinkboard::Application.routes.draw do
 			resources :cards, only: [:create, :index, :destroy]
 			resources :clients, only: [:index, :create]
 
+			resources :devices, only: [ :create ] do
+				collection { get :config }
+			end
+
 			resources :promos, only: [:create, :show] do
 				collection do
 					patch :click
@@ -166,9 +170,7 @@ Drinkboard::Application.routes.draw do
 				member { get :merchants }
 			end
 
-			resources :sessions,  only: [:create] do
-				collection { get :device_config }
-			end
+			resources :sessions,  only: [:create]
 
 			resources :users, only: [ :create, :index ] do
 				collection do
