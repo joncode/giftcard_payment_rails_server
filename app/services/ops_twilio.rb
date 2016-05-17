@@ -5,7 +5,7 @@ class OpsTwilio
 	class << self
 
 
-		def text to_number, msg
+		def text to:, msg:
 
 			account_sid = TWILIO_ACCOUNT_SID
 			auth_token = TWILIO_AUTH_TOKEN
