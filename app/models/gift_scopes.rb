@@ -1,5 +1,5 @@
 module GiftScopes
-
+    include RedeemHelper
 ##### GIFT SCOPES
 
     def pending_redeems_for merchant
