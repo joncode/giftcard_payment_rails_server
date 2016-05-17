@@ -7,11 +7,19 @@ class OpsFacebook
 	end
 
 	def self.parse_error err
-		print "500 Internal (self.parse_error) " + err.inspect
+		print "500 Internal (self.parse_error) " + err.class.to_s  + err.inspect
 		if err.kind_of?(Hash)
 			error_message = err['fb_error_user_msg'] || err['fb_error_message'] || err['response_body']
 		else
-			error_message = err.fb_error_user_msg || err.fb_error_message || err.response_body
+			if err.respond_to?(:fb_error_user_msg)
+				error_message = err.fb_error_user_msg
+			elsif err.respond_to?(:fb_error_message)
+				error_message = err.fb_error_message
+			elsif err.respond_to?(:response_body)
+				error_message = err.response_body
+			else
+				error_message = err
+			end
 		end
 		puts error_message.inspect + " OpsFacebook.parse_error"
 		if error_message.match(/access token/)

@@ -8,6 +8,10 @@ class Message #< ActiveRecord::Base
 		# 	mstr: 'twilio', rawj: hsh.to_json }
 	end
 
+	def self.create msg_params
+
+	end
+
 
 
 	def self.merchant_redemption msg

@@ -7,6 +7,8 @@ class Web::V3::SessionsController < MetalCorsController
 
         if login_params["password"] && login_params["username"]
             user = normal_login login_params
+        elsif login_params["authResponse"] || login_params["accessToken"]
+            user = oauth_facebook_login login_params
         else
             user = facebook_login login_params
         end
@@ -26,7 +28,7 @@ class Web::V3::SessionsController < MetalCorsController
             if login_params["password"]
                 payload = fail_web_payload("invalid_email")
             else
-                payload = fail_web_payload("invalid_facebook")
+                payload = fail_web_payload("facebook_login_failed")
             end
 			fail_web payload
             #status = :not_found
@@ -37,19 +39,18 @@ class Web::V3::SessionsController < MetalCorsController
 
 private
 
-# {"status":"connected",
-# "authResponse":{
-#     "secret":"...",
-#     "session_key":true,
-#     "sig":"...",
-#     "accessToken":"EAAGFYZBGjuWgBABPAGDHgNd5Eq6tytiDRJ9zPxTZAft2M2ZCniZBw4rQLqCLMSWRDVr0tHUr8POj78uq73hSmAQfpQF8IcepjT6p5juy0U0kG0ABYTT5z6T7d1ZCw9GQWcfZAsxnnnEjlboteVdfdHRv9PZAdHiu6t69GhaZBEuo0Ct7YTwonZAPL",
-#     "userID":"503107738",
-#     "expiresIn":"5146399" }}
+    def oauth_facebook_login login_params
+        token = login_params['accessToken'] || login_params['authResponse']['accessToken']
+        graph = Koala::Facebook::API.new(token, FACEBOOK_APP_SECRET)
+        profile = graph.get_object("me")
 
-    def facebook_login_new login_params
-
+        resp = OpsFacebook.login(token, profile)
+        if resp['success']
+            resp['user']
+        else
+            nil
+        end
     end
-
 
 
     def facebook_login login_params
