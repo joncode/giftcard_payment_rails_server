@@ -27,7 +27,13 @@ class Events::CallbacksController < MetalCorsController
 			else
 				OpsTwilio.text to: from, msg: "No User was found for #{from}"
 			end
-
+		elsif msg.downcase == 'help'
+			mt_user = get_mt_user_with_number from
+			if mt_user
+				OpsTwilio.text to: from, msg: "Text redemption code to see value of gift"
+			else
+				OpsTwilio.text to: from, msg: "This is ItsOnMe Support , how may we assist you?"
+			end
 		elsif ["+12152000475","+17029727139"].include?(from)
 			flip_phones from, msg
 		end
