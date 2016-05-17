@@ -37,6 +37,20 @@ class Web::V3::SessionsController < MetalCorsController
 
 private
 
+# {"status":"connected",
+# "authResponse":{
+#     "secret":"...",
+#     "session_key":true,
+#     "sig":"...",
+#     "accessToken":"EAAGFYZBGjuWgBABPAGDHgNd5Eq6tytiDRJ9zPxTZAft2M2ZCniZBw4rQLqCLMSWRDVr0tHUr8POj78uq73hSmAQfpQF8IcepjT6p5juy0U0kG0ABYTT5z6T7d1ZCw9GQWcfZAsxnnnEjlboteVdfdHRv9PZAdHiu6t69GhaZBEuo0Ct7YTwonZAPL",
+#     "userID":"503107738",
+#     "expiresIn":"5146399" }}
+
+    def facebook_login_new login_params
+
+    end
+
+
 
     def facebook_login login_params
         facebook_id    = login_params["fb_user_id"]
