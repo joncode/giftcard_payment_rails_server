@@ -133,7 +133,11 @@ else
     ENV['TWILIO_AUTH_TOKEN']
 end
 
-TWILIO_PHONE_NUMBER = "+13107364884"
+TWILIO_PHONE_NUMBER = if Rails.env.development? or Rails.env.test?
+    "+13107364884"
+else
+    ENV['TWILIO_PHONE_NUMBER']
+end
 
 WWW_TOKEN = if Rails.env.development? or Rails.env.test?
      "nj3tOdJOaZa-qFx0FhCLRQ"
