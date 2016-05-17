@@ -166,7 +166,9 @@ Drinkboard::Application.routes.draw do
         member { get :merchants }
       end
 
-      resources :sessions,  only: [:create]
+      resources :sessions,  only: [:create] do
+        collection { get :device_config }
+      end
 
       resources :users, only: [:create] do
         collection do

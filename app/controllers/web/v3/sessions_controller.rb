@@ -34,7 +34,28 @@ class Web::V3::SessionsController < MetalCorsController
         respond(status)
     end
 
+    def device_config
+        config_hsh = {
+            version: VERSION_NUMBER,
+            service_name: SERVICE_NAME,
+            public_url: PUBLIC_URL,
+            support: {
+                email: SUPPORT_EMAIL,
+                phone: TWILIO_PHONE_NUMBER
+            },
+            photos: {
+                blank_avatar_url: BLANK_AVATAR_URL,
+                receipt_image_url: DEFAULT_RECEIPT_IMG_URL,
+            },
+            ccy: CCY
+        }
+        success config_hsh
+        respond
+    end
+
+
 private
+
 
     def facebook_login login_params
         facebook_id    = login_params["fb_user_id"]

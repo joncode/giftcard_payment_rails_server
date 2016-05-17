@@ -24,7 +24,7 @@ class Web::V3::CardsController < MetalCorsController
             success card.token_serialize
         else
             fail_web fail_web_payload("not_created_card", card.errors)
-            status = :bad_request
+            # status = :bad_request
         end
         respond(status)
     end
