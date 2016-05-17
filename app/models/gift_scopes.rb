@@ -12,7 +12,7 @@ module GiftScopes
     def find_gift_for_mt_user_and_code(mt_user_id, code)
         query = "SELECT g.* FROM gifts g, invites i , merchants m \
 WHERE i.mt_user_id = #{mt_user_id} AND i.company_type = 'Merchant' AND m.id = i.company_id \
-AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > #{reset_time}"
+AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_time}'"
         return find_by_sql(query)
     end
 
