@@ -3,6 +3,14 @@ class Web::V3::UsersController < MetalCorsController
     before_action :authentication_no_token, only: [:create, :reset_password]
     before_action :authentication_token_required , except: [:create, :reset_password]
 
+    def index
+
+        serialized_users = User.search_name(params[:find])
+
+        success serialized_users
+        respond
+    end
+
     def refresh
         success @current_user.login_client_serialize
         respond

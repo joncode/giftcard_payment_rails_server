@@ -170,7 +170,7 @@ Drinkboard::Application.routes.draw do
         collection { get :device_config }
       end
 
-      resources :users, only: [:create] do
+      resources :users, only: [ :create, :index ] do
         collection do
           get   :refresh
           patch :update

@@ -82,6 +82,32 @@ class User < ActiveRecord::Base
 
 #	-------------
 
+	def self.search_name(find_text)
+		users_scope =  if find_text.blank?
+			where(active: true)
+		else
+            ary = find_text.split(' ')
+            if ary.count == 1
+                where(active: true).where('first_name ilike ? OR last_name ilike ?',"%#{find_text}%", "%#{find_text}%")
+            elsif ary.count == 2
+                where(active: true).where('first_name ilike ? AND last_name ilike ?',"%#{ary[0]}%", "%#{ary[1]}%")
+            elsif ary.count > 2
+	            first_name = ary[0]
+                last_name  = ary[1] + ' ' + ary[2]
+                where(active: true).where('first_name ilike ? AND last_name ilike ?',"%#{first_name}%", "%#{last_name}%")
+            end
+		end
+
+        users = users_scope.pluck(:id, :first_name, :last_name, :iphone_photo)
+        users.map do |u|
+            if u[3].nil?
+                { "user_id" => u[0] , "first_name" => u[1] , "last_name" => u[2]  }
+            else
+                { "user_id" => u[0] , "photo" => u[3] , "first_name" => u[1] , "last_name" => u[2]  }
+            end
+        end
+	end
+
 	def self.app_authenticate(token)
 		#where(active: true, perm_deactive: false, remember_token: token).first
 		SessionToken.app_authenticate(token)
