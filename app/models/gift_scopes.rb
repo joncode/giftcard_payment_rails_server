@@ -2,6 +2,20 @@ module GiftScopes
 
 ##### GIFT SCOPES
 
+    def pending_redeems_for merchant
+        gifts = where(merchant_id: merchant.id, status: ['notified', 'redeemed']).where('new_token_at > ?', reset_time)
+        notified_gifts = gifts.where(status: 'notified').order("created_at DESC")
+        redeemed_gifts = gifts.where(status: 'redeemed').order("redeemed_at DESC")
+        notified_gifts + redeemed_gifts
+    end
+
+    def find_gift_for_mt_user_and_code(mt_user_id, code)
+        query = "SELECT g.* FROM gifts g, invites i , merchants m \
+WHERE i.mt_user_id = #{mt_user_id} AND i.company_type = 'Merchant' AND m.id = i.company_id \
+AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > #{reset_time}"
+        return find_by_sql(query)
+    end
+
     def get_all
         order("updated_at DESC")
     end

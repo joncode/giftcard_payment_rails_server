@@ -8,6 +8,10 @@ class MtUser < ActiveRecord::Base
 
 #   -------------
 
+	def self.get_phone_notification number
+		where(phone: number).first
+	end
+
     def companies
 		merchants.where(active: true) + affiliates.where(active: true)
     end

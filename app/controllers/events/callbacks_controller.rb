@@ -1,26 +1,48 @@
 class Events::CallbacksController < MetalCorsController
 
+	include MtSmsRedeem
+
 	def receive_sms
 		msg = params['Body']
 		from_number = params['From']
+
+		# msg = Message.create(params)
+
+		decide_what_to_do(from_number, msg, params)
+
+		head :ok
+	end
+
+
+private
+
+	def decide_what_to_do from:, msg:, req:
+		if code = Message.merchant_redemption msg
+			mt_user = get_mt_user_with_number from
+			if mt_user
+				gift = find_gift_if_mt_user_has_notified_gifts(mt_user, code)
+				if gift
+					OpsTwilio.text to: from, msg: "We are redeeming #{gift.id} - #{code}"
+				else
+					OpsTwilio.text to: from, msg: "No Gift was found for code = #{code}"
+				end
+			else
+				OpsTwilio.text to: from, msg: "No Merchant Tools user was found for this number"
+			end
+
+		elsif ["+12152000475","+17029727139"].include?(from)
+			flip_phones from, msg
+		end
+	end
+
+	def flip_phones from_number, msg
 		if from_number == "+17029727139"
 			to_number = "+12152000475"
 		else
 			to_number = "+17029727139"
 		end
 		OpsTwilio.text to: to_number, msg: msg
-
-		head :ok
 	end
-
-
-
-private
-
-
-	# def twilio_params
-	# 	params.
-	# end
 
 
 end
