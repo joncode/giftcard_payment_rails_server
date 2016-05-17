@@ -20,7 +20,7 @@ class Events::CallbacksController < MetalCorsController
 			if mt_user
 				gift = find_gift_if_mt_user_has_notified_gifts(mt_user, code)
 				if gift
-					OpsTwilio.text to: from, msg: "We are redeeming #{gift.id} - #{code}"
+					OpsTwilio.text to: from, msg: "Gift #{code} is #{gift.value_s}"
 				else
 					OpsTwilio.text to: from, msg: "No Gift was found for code = #{code}"
 				end

@@ -95,6 +95,10 @@ class Gift < ActiveRecord::Base
         end
     end
 
+    def value_s
+        CCY[self.ccy]['symbol'] + ' ' +  self.value
+    end
+
     def link= link
         @link = link
         self.origin = link
