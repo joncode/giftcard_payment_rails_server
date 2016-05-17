@@ -1,11 +1,11 @@
-class Messages #< ActiveRecord::Base
+class Message #< ActiveRecord::Base
 
 	attr_accessor :body, :from, :sms_id
 
 
 	def init_twilio hsh, user_id
-		new {body: hsh['Body'], from: hsh['From'], sms_id: hsh['SmsSid'],
-			mstr: 'twilio', rawj: hsh.to_json }
+		# new {body: hsh['Body'], from: hsh['From'], sms_id: hsh['SmsSid'],
+		# 	mstr: 'twilio', rawj: hsh.to_json }
 	end
 
 
