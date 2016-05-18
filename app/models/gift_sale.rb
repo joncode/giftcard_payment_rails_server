@@ -20,9 +20,9 @@ class GiftSale < Gift
         if args['card'].nil?
             return "We do not have that credit card on record.  Please choose a different card."
         elsif args['card'].expired?
-            return "Card #{self.nickname} is expired. Please choose or upload a new card."
+            return "Card #{args['card'].nickname} is expired. Please choose or upload a new card."
         elsif !args['card'].active
-            return "Card #{self.nickname} is deactivated. Please choose or upload a new card."
+            return "Card #{args['card'].nickname} is deactivated. Please choose or upload a new card."
         end
 
         gift = super
