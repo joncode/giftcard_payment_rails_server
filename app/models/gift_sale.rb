@@ -46,6 +46,7 @@ private
         merchant_id = args['merchant_id'] || args["provider_id"]
         merchant = Merchant.find(merchant_id)
         args['merchant_id'] = merchant_id
+        args['ccy'] = merchant.ccy
 
             # this should occur in Gift.rb
         args["cost"] = (args["value"].to_f * merchant.location_fee.to_f).to_s
@@ -144,4 +145,37 @@ end
 #  balance        :integer
 #  origin         :string(255)
 #
+
+
+ # {"data"=>
+ #    {"items"=>
+ #        [{"price"=>"50",
+ #            "item_name"=>"18 Holes of Golf",
+ #            "item_id"=>3999, "quantity"=>1}],
+ #     "service"=>"2.5", "value"=>"50",
+ #     "loc_id"=>379, "pay_id"=>e,
+ #     "rec_name"=>"Sam", "msg"=>nil,
+ #     "rec_net"=>"em", "rec_net_id"=>"sam@smith.com"}
+ # }
+
+# {"receiver_name"=>"Jonny",
+#     "receiver_email"=>"m80dubstation@gmail.com",
+#  "link"=>nil, "origin"=>"RestSharp 104.1.0.0",
+#  "client_id"=>1, "partner_id"=>17, "partner_type"=>"Affiliate",
+#  "shoppingCart"=>[{"price"=>"50",
+#  "quantity"=>1, "item_id"=>3999, "item_name"=>"18 Holes of Golf"}],
+
+#   "giver"=><User id: 841, email: "sam@smith.com", password_digest: "$2a$10$peQPtVbQxvpZMik2VgdNq.3FjlJqTr/0gUf/fGGcWx5...",
+#   remember_token: "5JsfTzBasqrPAxafJa7VXw", created_at: "2015-10-05 01:08:20", updated_at: "2016-05-16 07:54:07",
+#   address: nil, address_2: nil, city: nil, state: nil, zip: "98101", phone: nil, first_name: "Sam",
+#   last_name: "Smith", facebook_id: "503107738", handle: nil, twitter: nil, active: true, persona: "",
+#   sex: "male", is_public: nil, iphone_photo: "https://graph.facebook.com/503107738/picture",
+#   reset_token_sent_at: "2016-05-16 07:54:07", reset_token: "26e44b504db13c9300bf6d9027a7cbe7",
+#   birthday: "1982-06-12", origin: nil, confirm: "00", perm_deactive: false, cim_profile: "37679558",
+#   ftmeta: "'841':1A '98101':5C 'sam':3B 'sam@smith.com':2B 's...", affiliate_url_name: nil, partner_id: 17,
+#   partner_type: "Affiliate", client_id: 1>,
+
+# "credit_card"=>566, "merchant_id"=>379, "value"=>"50",
+#  "message"=>"testing multi currency",
+#  "scheduled_at"=>nil}
 
