@@ -44,8 +44,13 @@ private
 
     def oauth_facebook_login login_params
         token = login_params['accessToken'] || login_params['authResponse']['accessToken']
-        graph = Koala::Facebook::API.new(token, FACEBOOK_APP_SECRET)
-        profile = graph.get_object("me")
+        begin
+            graph = Koala::Facebook::API.new(token, FACEBOOK_APP_SECRET)
+            profile = graph.get_object("me")
+        rescue
+            graph = Koala::Facebook::API.new(token)
+            profile = graph.get_object("me")
+        end
 
         OpsFacebook.login(token, profile)
     end

@@ -127,8 +127,13 @@ class Web::V3::FacebookController < MetalCorsController
                 full_response_url = return_params['return_url'].to_s + error_param
                 redirect_to full_response_url
             end
-            graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
-            profile = graph.get_object("me")
+            begin
+                graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
+                profile = graph.get_object("me")
+            rescue
+                graph = Koala::Facebook::API.new(oauth_access_token)
+                profile = graph.get_object("me")
+            end
             puts profile.inspect
 
             return_params = decrypt_token(url_safe_token)
