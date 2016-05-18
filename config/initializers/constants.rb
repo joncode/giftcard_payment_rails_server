@@ -56,6 +56,8 @@ else
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 end
 
+HELP_DESK_URL = 'https://itsonmeapp.zendesk.com/hc/en-us/categories/200160205-App-Users'
+
 if Rails.env.production?
     FB_NAMESPACE = 'itsonme'
 else

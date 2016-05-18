@@ -30,7 +30,8 @@ class Web::V3::DevicesController < MetalCorsController
             public_url: PUBLIC_URL,
             support: {
                 email: SUPPORT_EMAIL,
-                phone: TWILIO_PHONE_NUMBER
+                phone: TWILIO_PHONE_NUMBER,
+                help_desk_url: HELP_DESK_URL
             },
             photos: {
                 blank_avatar_url: BLANK_AVATAR_URL,
