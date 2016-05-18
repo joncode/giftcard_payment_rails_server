@@ -40,6 +40,8 @@ class SessionToken < ActiveRecord::Base
 				platform = 'android'
 			elsif client.id == WBG_CLIENT_ID
 				platform = 'www'
+			else
+				platform = 'www'
 			end
 		end
 		Resque.enqueue(CreatePnTokenJob, user.id, pn_token, platform) if pn_token

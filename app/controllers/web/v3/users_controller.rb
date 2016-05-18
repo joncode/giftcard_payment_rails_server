@@ -33,12 +33,29 @@ class Web::V3::UsersController < MetalCorsController
         respond
     end
 
+    def facebook
+        create_params = params["data"]
+        token = login_params['accessToken'] || login_params['authResponse']['accessToken']
+        graph = Koala::Facebook::API.new(token, FACEBOOK_APP_SECRET)
+        profile = graph.get_object("me")
+        resp = OpsFacebook.create_account(token, profile, @current_client,  @current_partner)
+        if resp['success']
+            user = resp['user']
+            user.session_token_obj =  SessionToken.create_token_obj(user, nil, nil, @current_client, @current_partner)
+            # @current_client.content = user --- in Resque in create_token_obj
+            success user.login_client_serialize
+        else
+            fail_web fail_web_payload("not_created_user", resp['error'])
+        end
+        respond(status)
+    end
+
     def create
 		user = User.new(create_user_params)
         user.client = @current_client
         user.partner = @current_partner
         if user.save
-            user.session_token_obj =  SessionToken.create_token_obj(user, 'www', nil, @current_client, @current_partner)
+            user.session_token_obj =  SessionToken.create_token_obj(user, nil, nil, @current_client, @current_partner)
             # @current_client.content = user --- in Resque in create_token_obj
             success user.login_client_serialize
         else

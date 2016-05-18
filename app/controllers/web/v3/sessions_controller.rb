@@ -8,7 +8,8 @@ class Web::V3::SessionsController < MetalCorsController
         if login_params["password"] && login_params["username"]
             user = normal_login login_params
         elsif login_params["authResponse"] || login_params["accessToken"]
-            user = oauth_facebook_login login_params
+            resp = oauth_facebook_login login_params
+            user = resp['user'] if resp['success']
         else
             user = facebook_login login_params
         end
@@ -25,10 +26,12 @@ class Web::V3::SessionsController < MetalCorsController
                 status = :unauthorized
             end
         else
-            if login_params["password"]
+            if login_params["password"] && login_params["username"]
                 payload = fail_web_payload("invalid_email")
+            elsif login_params["authResponse"] || login_params["accessToken"]
+                payload = fail_web_payload(resp['error'])
             else
-                payload = fail_web_payload("facebook_login_failed")
+                payload = fail_web_payload(user.errors)
             end
 			fail_web payload
             #status = :not_found
@@ -44,12 +47,7 @@ private
         graph = Koala::Facebook::API.new(token, FACEBOOK_APP_SECRET)
         profile = graph.get_object("me")
 
-        resp = OpsFacebook.login(token, profile)
-        if resp['success']
-            resp['user']
-        else
-            nil
-        end
+        OpsFacebook.login(token, profile)
     end
 
 
