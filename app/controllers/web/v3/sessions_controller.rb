@@ -3,7 +3,7 @@ class Web::V3::SessionsController < MetalCorsController
     before_action :authentication_no_token
 
     def create
-        login_params    = params["data"]
+        login_params = params["data"]
 
         if login_params['authReponse']
             login_params['authResponse'] = login_params['authReponse']

@@ -85,18 +85,21 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         r.amount          = pos_obj.applied_value
         r.ticket_id       = pos_obj.ticket_id
         self.redemptions << r
-        if self.save
+        if save
             puts "\n gift #{self.id} is partial redeemed with redemption #{r.id} with value #{pos_obj.applied_value}\n"
             Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
             true
         else
+            puts "\n gift #{self.id} failed redemption #{gift.errors.message.inspect} #{r.errors.message.inspect}\n"
             false
         end
     end
 
     def pos_redeem(ticket_num, pos_merchant_id, tender_type_id, loc_id=nil)
         # if loc_id - do multi loc redemption
-        return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}  if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
+        if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
+            return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}
+        end
 
         # pos_hsh = { "ticket_num" => ticket_num,
         #             "gift_card_id" => self.obscured_id,
@@ -106,14 +109,13 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         #             "brand_card_ids_ary" => self.brand_card_ids }
         # pos_obj = Omnivore.new(pos_hsh)
         pos_obj = Omnivore.init_with_gift(self, ticket_num)
-        resp    = pos_obj.redeem
+        resp = pos_obj.redeem
 
-        resp["success"] = pos_obj.success?
-        if resp["success"]
+        if pos_obj.success?
             if pos_obj.code == 201
-                self.partial_redeem(pos_obj, loc_id)
+                partial_redeem(pos_obj, loc_id)
             elsif pos_obj.code == 200 || pos_obj.code == 206
-                self.redeem_gift(nil, loc_id, :positronics)
+                redeem_gift(nil, loc_id, :positronics)
             end
         end
         resp
