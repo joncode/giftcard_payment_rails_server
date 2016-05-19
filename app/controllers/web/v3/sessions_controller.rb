@@ -9,6 +9,7 @@ class Web::V3::SessionsController < MetalCorsController
             user = normal_login login_params
         elsif login_params["authResponse"] || login_params["accessToken"]
             resp = oauth_facebook_login login_params
+            puts "\nHere is oauth facebook login #{resp}\n"
             user = resp['user'] if resp['success']
         else
             user = facebook_login login_params
@@ -27,14 +28,18 @@ class Web::V3::SessionsController < MetalCorsController
             end
         else
             if login_params["password"] && login_params["username"]
-                payload = fail_web_payload("invalid_email")
+                fail_web fail_web_payload("invalid_email")
             elsif login_params["authResponse"] || login_params["accessToken"]
-                payload = fail_web_payload(resp['error'])
+                if resp['error']
+                    fail_web fail_web_payload(resp['error'])
+                else
+                    fail_web fail_web_payload('facebook login error')
+                end
             else
-                payload = fail_web_payload('facebook login error')
+                fail_web fail_web_payload('facebook login error')
             end
-			fail_web payload
-            #status = :not_found
+			# fail_web payload
+            # status = :not_found
         end
         respond(status)
     end
