@@ -65,6 +65,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
                 true
             else
+                puts "\n (68) gift #{self.id} failed redemption #{gift.errors.message.inspect} #{r.errors.message.inspect}\n"
                 false
             end
         else
@@ -90,7 +91,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
             true
         else
-            puts "\n gift #{self.id} failed redemption #{gift.errors.message.inspect} #{r.errors.message.inspect}\n"
+            puts "\n (94) gift #{self.id} failed redemption #{gift.errors.message.inspect} #{r.errors.message.inspect}\n"
             false
         end
     end
@@ -110,6 +111,8 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         # pos_obj = Omnivore.new(pos_hsh)
         pos_obj = Omnivore.init_with_gift(self, ticket_num)
         resp = pos_obj.redeem
+
+        puts "\nHere is the pos_redeem resp = #{resp.inspect}\n"
 
         if pos_obj.success?
             if pos_obj.code == 201
