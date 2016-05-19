@@ -193,11 +193,15 @@ class OpsFacebook
 		if user_social.present?
 			if user = user_social.user
 
-				user = add_facebook_info_to_user(facebook_profile, user)
-				if user.save
-					return self.make_oauth_args(oauth_access_token, facebook_profile, user)
+				if user.facebook_id.blank?
+					user = add_facebook_info_to_user(facebook_profile, user)
+					if user.save
+						return self.make_oauth_args(oauth_access_token, facebook_profile, user)
+					else
+						return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
+					end
 				else
-					return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
+					return self.make_oauth_args(oauth_access_token, facebook_profile, user)
 				end
 
 			else
