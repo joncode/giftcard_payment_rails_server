@@ -136,6 +136,13 @@ class MetalController < ActionController::Base
                 err: "CLIENT_DEACTIVTED",
                 msg: "Client is not currently active"
             }
+        else
+            if error_name.kind_of?(String)
+                {
+                    err: error_name.gsub(' ', '_').upcase,
+                    msg: error_name
+                }
+            end
         end
     end
 
