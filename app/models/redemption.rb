@@ -5,7 +5,7 @@ class Redemption < ActiveRecord::Base
 #   -------------
 
 	if Rails.env.staging?
-	    validates_with RedemptionTotalValueValidator
+	    # validates_with RedemptionTotalValueValidator
 	end
 
 #   -------------
