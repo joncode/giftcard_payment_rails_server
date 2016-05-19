@@ -91,7 +91,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
             true
         else
-            puts "\n (94) gift #{self.id} failed redemption #{self.errors.message.inspect} #{r.errors.message.inspect}\n"
+            puts "\n (94) gift #{self.id} failed redemption #{self.errors.messages.inspect} #{r.errors.messages.inspect}\n"
             false
         end
     end
