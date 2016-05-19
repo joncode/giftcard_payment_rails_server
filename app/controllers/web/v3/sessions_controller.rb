@@ -31,7 +31,7 @@ class Web::V3::SessionsController < MetalCorsController
             elsif login_params["authResponse"] || login_params["accessToken"]
                 payload = fail_web_payload(resp['error'])
             else
-                payload = fail_web_payload(user.errors)
+                payload = fail_web_payload('facebook login error')
             end
 			fail_web payload
             #status = :not_found
@@ -52,6 +52,7 @@ private
             profile = graph.get_object("me")
         end
 
+        puts "Here is the profile response #{profile}"
         OpsFacebook.login(token, profile)
     end
 
