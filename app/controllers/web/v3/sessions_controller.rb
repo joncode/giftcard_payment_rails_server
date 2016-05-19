@@ -5,6 +5,10 @@ class Web::V3::SessionsController < MetalCorsController
     def create
         login_params    = params["data"]
 
+        if login_params['authReponse']
+            login_params['authResponse'] = login_params['authReponse']
+        end
+
         if login_params["password"] && login_params["username"]
             user = normal_login login_params
         elsif login_params["authResponse"] || login_params["accessToken"]
