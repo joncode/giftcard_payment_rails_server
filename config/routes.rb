@@ -5,6 +5,7 @@ Drinkboard::Application.routes.draw do
 
 #################        Mdot V2 API                              /////////////////////////////
 
+
 	namespace :events, defaults: { format: 'json' } do
 		resources :callbacks,  only: [] do
 			collection do
