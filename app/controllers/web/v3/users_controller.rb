@@ -1,7 +1,7 @@
 class Web::V3::UsersController < MetalCorsController
     include Email
-    before_action :authentication_no_token, only: [:create, :reset_password]
-    before_action :authentication_token_required , except: [:create, :reset_password]
+    before_action :authentication_no_token, only: [:create, :reset_password, :facebook]
+    before_action :authentication_token_required , except: [:create, :reset_password, :facebook]
 
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
@@ -35,7 +35,7 @@ class Web::V3::UsersController < MetalCorsController
 
     def facebook
         create_params = params["data"]
-        token = login_params['accessToken'] || login_params['authResponse']['accessToken']
+        token = create_params['accessToken'] || create_params['authResponse']['accessToken']
         begin
             graph = Koala::Facebook::API.new(token, FACEBOOK_APP_SECRET)
             profile = graph.get_object("me")
@@ -151,7 +151,9 @@ class Web::V3::UsersController < MetalCorsController
         respond(status)
     end
 
+
 private
+
 
     def destroy_user_social_params
         params.require(:data).permit("_id")
