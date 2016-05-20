@@ -1,7 +1,7 @@
 module MerchantSerializers
 
 	def serialize
-		prov_hash  = self.serializable_hash only: [:name, :phone, :latitude, :longitude, :zinger, :region_id, :region_name,  :city_id]
+		prov_hash  = self.serializable_hash only: [:r_sys, :name, :phone, :latitude, :longitude, :zinger, :region_id, :region_name,  :city_id]
 		prov_hash["provider_id"]  = self.id
 		prov_hash["merchant_id"]  = self.id
 		prov_hash["photo"]        = self.get_photo
