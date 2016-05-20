@@ -128,7 +128,7 @@ class Omnivore
 		end
 
 		resp = post_redeem
-		puts "Here is the post_redeem response"
+		puts "Omnivore:apply_ticket_value Here is the post_redeem response"
 		puts resp.inspect
 
 		case resp
@@ -216,7 +216,7 @@ class Omnivore
   		  "payment_source" => "Gift #{@gift_card_id}"
 		}.to_json
 
-		puts "\nOmnivore payload:\n"
+		puts "\nOmnivore:post_redeem payload:\n"
 		puts payload.inspect
 
 		begin

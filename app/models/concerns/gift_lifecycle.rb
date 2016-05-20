@@ -113,6 +113,9 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             elsif omnivore.code == 200 || omnivore.code == 206
                 redeem_gift(nil, loc_id, :positronics)
             end
+            resp['success'] = true
+        else
+            resp['success'] = false
         end
         resp
     end
