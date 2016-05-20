@@ -23,6 +23,7 @@ module GiftSerializers
         gift_hsh["merchant_phone"]     = gift_merchant.phone
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
         gift_hsh["cat"]                = self.cat
+        gift_hsh["ccy"]                = self.ccy
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
         gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
 
@@ -49,7 +50,7 @@ module GiftSerializers
     end
 
     def giver_serialize
-        gift_hsh = self.serializable_hash only: [ "cat", "created_at", "message", "detail", "receiver_id", "receiver_name", "value", "cost", "updated_at"]
+        gift_hsh = self.serializable_hash only: [ "cat",  "ccy", "created_at", "message", "detail", "receiver_id", "receiver_name", "value", "cost", "updated_at"]
         gift_hsh["completed_at"]       = self.redeemed_at if self.redeemed_at
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.giver_status
@@ -67,7 +68,7 @@ module GiftSerializers
     end
 
     def receiver_serialize
-        gift_hsh = self.serializable_hash only: ["cat", "giver_id", "giver_name", "message", "detail", "provider_id", "provider_name", "updated_at", "created_at"]
+        gift_hsh = self.serializable_hash only: ["cat", "ccy", "giver_id", "giver_name", "message", "detail", "provider_id", "provider_name", "updated_at", "created_at"]
         gift_hsh["completed_at"]       = self.redeemed_at if self.redeemed_at
         gift_hsh["gift_id"]            = self.id
         gift_hsh["status"]             = self.status
@@ -99,6 +100,7 @@ module GiftSerializers
         gift_hsh["expires_at"]         = self.expires_at if self.expires_at
         gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh["cat"]                = self.cat
+        gift_hsh["ccy"]                = self.ccy
         gift_hsh["detail"]             = self.detail
         gift_hsh
     end
@@ -116,6 +118,7 @@ module GiftSerializers
         gift_hsh["expires_at"]      = self.expires_at if self.expires_at
         gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh["cat"]             = self.cat
+        gift_hsh["ccy"]             = self.ccy
         gift_hsh["completed_at"]    = self.redeemed_at if self.redeemed_at
         gift_hsh["detail"]          = self.detail
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
@@ -138,6 +141,7 @@ module GiftSerializers
         gift_hsh["expires_at"]      = self.expires_at if self.expires_at
         gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh["cat"]             = self.cat
+        gift_hsh["ccy"]             = self.ccy
         gift_hsh["completed_at"]    = self.redeemed_at if self.redeemed_at
         gift_hsh["detail"]          = self.detail
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
@@ -163,6 +167,7 @@ module GiftSerializers
         gift_hsh["value"]         = self.value
         gift_hsh["status"]        = self.status
         gift_hsh["cat"]           = self.cat
+        gift_hsh["ccy"]           = self.ccy
         gift_hsh["detail"]        = self.detail
         gift_hsh["msg"]           = self.message
         gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
@@ -195,6 +200,7 @@ module GiftSerializers
         gift_hsh["value"]         = self.value
         gift_hsh["status"]        = self.status
         gift_hsh["cat"]           = self.cat
+        gift_hsh["ccy"]           = self.ccy
         gift_hsh["detail"]        = self.detail
         gift_hsh["msg"]           = self.message
         gift_hsh["scheduled_at"]  = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
