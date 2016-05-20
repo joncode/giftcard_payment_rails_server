@@ -40,6 +40,22 @@ class OpsFacebook
 	    end
 	end
 
+	def self.reset_token
+		facebook_oauth ||= Koala::Facebook::OAuth.new(client_id, FACEBOOK_APP_SECRET)
+
+		# Checks the saved expiry time against the current time
+		if facebook_token_expired?
+
+			# Get the new token
+			new_token = facebook_oauth.exchange_access_token_info(token_secret)
+
+			# Save the new token and its expiry over the old one
+			self.token_secret = new_token['access_token']
+			self.token_expiry = new_token['expires']
+			save
+		end
+	end
+
 #   -------------  Basic Graph Queries
 
 	def self.profile user, facebook_id=nil
