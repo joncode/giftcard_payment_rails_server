@@ -46,7 +46,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
     def unredeem
         if self.status == 'redeemed'
             Resque.enqueue(GiftUnredeemEvent, self.id)
-            self.update(status: 'notified' , redeemed_at: nil, order_num: nil)
+            update(status: 'notified' , redeemed_at: nil, order_num: nil)
         end
     end
 
@@ -60,7 +60,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             self.order_num   = make_order_num(self.id)
             r = Redemption.init_with_gift(self, loc_id, r_sys_type_of)
             self.redemptions << r
-            if self.save
+            if save
                 puts "\n gift #{self.id} is being redeemed with redemption #{r.id}\n"
                 Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
                 true
@@ -102,22 +102,15 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}
         end
 
-        # pos_hsh = { "ticket_num" => ticket_num,
-        #             "gift_card_id" => self.obscured_id,
-        #             "pos_merchant_id" => pos_merchant_id,
-        #             "tender_type_id" => tender_type_id,
-        #             "value" => self.balance,
-        #             "brand_card_ids_ary" => self.brand_card_ids }
-        # pos_obj = Omnivore.new(pos_hsh)
-        pos_obj = Omnivore.init_with_gift(self, ticket_num)
-        resp = pos_obj.redeem
+        omnivore = Omnivore.init_with_gift(self, ticket_num)
+        resp = omnivore.redeem
 
         puts "\nHere is the pos_redeem resp = #{resp.inspect}\n"
 
-        if pos_obj.success?
-            if pos_obj.code == 201
-                partial_redeem(pos_obj, loc_id)
-            elsif pos_obj.code == 200 || pos_obj.code == 206
+        if omnivore.success?
+            if omnivore.code == 201
+                partial_redeem(omnivore, loc_id)
+            elsif omnivore.code == 200 || omnivore.code == 206
                 redeem_gift(nil, loc_id, :positronics)
             end
         end
@@ -137,8 +130,8 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
     end
 
     def expire_gift
-        self.update(status: "expired", redeemed_at: Time.now.utc)
-        self.fire_after_save_queue(self.client_id)
+        update(status: "expired", redeemed_at: Time.now.utc)
+        fire_after_save_queue(self.client_id)
     end
 
 
