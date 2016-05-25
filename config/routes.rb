@@ -187,6 +187,7 @@ Drinkboard::Application.routes.draw do
 					patch :update
 					patch :reset_password
 					post :facebook
+					patch :attach_facebook
 				end
 				member do
 					delete :socials
