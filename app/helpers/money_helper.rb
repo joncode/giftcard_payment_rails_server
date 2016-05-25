@@ -29,6 +29,7 @@ module MoneyHelper
     end
 
     def currency_to_cents currency_str
+        return nil if currency_str.nil?
         amount = currency_str.gsub('$', '')
         amount = amount.split('.')
         if amount.count == 2

@@ -44,7 +44,7 @@ module CimProfile
     end
 
     def mobile_credentials_response(profile_id)
-        # get the session toekn from Auth.net
+        # get the session token from Auth.net
         session_token = AUTHORIZE_TRANSACTION_KEY
         { "key" => AUTHORIZE_MOBILE_DEVICE, "token" => session_token, "profile_id" => profile_id }
     end

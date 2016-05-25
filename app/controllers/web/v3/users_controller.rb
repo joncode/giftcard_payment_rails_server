@@ -33,17 +33,37 @@ class Web::V3::UsersController < MetalCorsController
         respond
     end
 
-    def facebook
-        create_params = params["data"]
-        token = create_params['accessToken'] || create_params['authResponse']['accessToken']
+    def attach_facebook
+        oauth_access_token = params["data"]['accessToken'] || params["data"]['authResponse']['accessToken']
         begin
-            graph = Koala::Facebook::API.new(token, FACEBOOK_APP_SECRET)
+            graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
             profile = graph.get_object("me")
         rescue
-            graph = Koala::Facebook::API.new(token)
+            graph = Koala::Facebook::API.new(oauth_access_token)
             profile = graph.get_object("me")
         end
-        resp = OpsFacebook.create_account(token, profile, @current_client,  @current_partner)
+        resp = OpsFacebook.attach_account(oauth_access_token, profile, @current_user)
+        if resp['success']
+            user = resp['user']
+            # @current_client.content = user --- in Resque in create_token_obj
+            success user.login_client_serialize
+        else
+            fail_web fail_web_payload("unable_to_attach_facebook", resp['error'])
+        end
+        respond
+    end
+
+    #####   CREATE ACCOUNT WITH FACEBOOK
+    def facebook
+        oauth_access_token = params["data"]['accessToken'] || params["data"]['authResponse']['accessToken']
+        begin
+            graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
+            profile = graph.get_object("me")
+        rescue
+            graph = Koala::Facebook::API.new(oauth_access_token)
+            profile = graph.get_object("me")
+        end
+        resp = OpsFacebook.create_account(oauth_access_token, profile, @current_client,  @current_partner)
         if resp['success']
             user = resp['user']
             user.session_token_obj =  SessionToken.create_token_obj(user, nil, nil, @current_client, @current_partner)
@@ -52,7 +72,7 @@ class Web::V3::UsersController < MetalCorsController
         else
             fail_web fail_web_payload("not_created_user", resp['error'])
         end
-        respond(status)
+        respond
     end
 
     def create
@@ -66,7 +86,7 @@ class Web::V3::UsersController < MetalCorsController
         else
             fail_web fail_web_payload("not_created_user", user.errors)
         end
-        respond(status)
+        respond
     end
 
     def update
