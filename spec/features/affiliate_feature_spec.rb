@@ -59,9 +59,9 @@ describe "Affiliate Feature" do
 			a1.gifts.count.should	 == 1
 			a1.gifts.first.should	 == db_gift
 			lp.reload.gifts.should	 == 1
-			a1.value_links.should	 == gift.value_in_cents
+			a1.value_links.should	 == gift.value_cents
 			a1.purchase_links.should == 1
-			a1.payout_links.should	 == (gift.value_in_cents * 0.15 * 0.1).to_i
+			a1.payout_links.should	 == (gift.value_cents * 0.15 * 0.1).to_i
 
 			aff_gfts = AffiliateGift.where(gift_id: db_gift.id)
 			aff_gfts.where.not(affiliate_id: nil).first.affiliate_id.should == a1.id

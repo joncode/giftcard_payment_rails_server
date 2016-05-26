@@ -54,7 +54,7 @@ class Accountant
 			# nil or not found
 			return "No Location Affiliation" if affiliate.nil?
 
-			register = Register.init_debt(gift, affiliate, merchant.override_fee(gift.value_in_cents), "aff_loc")
+			register = Register.init_debt(gift, affiliate, merchant.override_fee(gift.value_cents), "aff_loc")
 			return "Register exists" if register.nil?
 
 			if register.save
@@ -114,7 +114,7 @@ class Accountant
 			if origin == "loc"
 				gift.location_fee.to_i
 			else
-				(gift.value_in_cents * 0.15 * 0.1).to_i
+				(gift.value_cents * 0.15 * 0.1).to_i
 			end
 		end
 

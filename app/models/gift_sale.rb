@@ -50,7 +50,7 @@ private
 
             # this should occur in Gift.rb
         args["cost"] = (args["value"].to_f * merchant.location_fee.to_f).to_s
-        args['service'] = float_to_cents(args["value"].to_f * 0.05)
+        args['service'] = float_to_money(args["value"].to_f * 0.05)
 
         validateGift = Gift.new(args)
         if validateGift.valid?

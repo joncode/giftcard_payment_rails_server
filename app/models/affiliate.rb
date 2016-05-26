@@ -64,7 +64,7 @@ private
 		if gift.nil?
 			amount * 67
 		else
-			gift.value_in_cents
+			gift.value_cents
 		end
 	end
 

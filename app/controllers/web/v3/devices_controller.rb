@@ -31,9 +31,10 @@ class Web::V3::DevicesController < MetalCorsController
             },
             photos: {
                 blank_avatar_url: BLANK_AVATAR_URL,
-                receipt_image_url: DEFAULT_RECEIPT_IMG_URL,
+                receipt_image_url: DEFAULT_RECEIPT_IMG_URL
             },
-            ccy: CCY
+            ccy: CCY,
+            service_percent: 0.05
         }
         success config_hsh
         respond

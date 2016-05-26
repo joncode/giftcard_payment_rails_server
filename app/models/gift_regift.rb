@@ -26,7 +26,7 @@ private
         args["cat"]      = set_cat(old_gift)
         args["giver"]    = old_gift.receiver
         args["merchant"] = old_gift.merchant
-        if old_gift.value_in_cents == old_gift.balance
+        if old_gift.value_cents == old_gift.balance
             args["value"] = old_gift.value
             args['balance'] = old_gift.balance
         else

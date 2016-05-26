@@ -134,15 +134,15 @@ module EmailHelper
 					</tr>
 					<tr>
 						<td style='text-align:right; padding: 0 10px; width:50%;'>Gift value</td>
-					<td style='text-align:left; width:50%;'>#{number_to_currency(gift.value)}</td>
+					<td style='text-align:left; width:50%;'>#{gift.value_s}</td>
 					</tr>
 					<tr>
 						<td style='text-align:right; padding: 0 10px; width:50%;'>Processing fee</td>
-					<td style='text-align:left; width:50%;'>#{number_to_currency(gift.service)}</td>
+					<td style='text-align:left; width:50%;'>#{gift.service_s}</td>
 					</tr>
 					<tr style='font-weight:bold;'>
 						<td style='text-align:right; padding: 0 10px; width:50%;'>Total</td>
-					<td style='text-align:left; width:50%;'>#{number_to_currency(gift.grand_total)}</td>
+					<td style='text-align:left; width:50%;'>#{gift.purchase_total}</td>
 					</tr>
 				</table>
 					</div>

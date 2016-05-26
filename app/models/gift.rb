@@ -2,6 +2,7 @@ class Gift < ActiveRecord::Base
     extend  GiftScopes
     include GiftLifecycle
     include Formatter
+    include MoneyHelper
     include Email
     include GiftSerializers
     include GenericPayableDucktype
@@ -53,8 +54,6 @@ class Gift < ActiveRecord::Base
 
 #   -------------
 
-    #has_one     :redeem,       dependent: :destroy
-    #has_one     :order,        dependent: :destroy
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :sms_contact,   autosave: true
     has_many    :gift_items,    dependent: :destroy
@@ -64,7 +63,7 @@ class Gift < ActiveRecord::Base
     has_many    :affiliates,    through: :affiliate_gifts
     has_many    :landing_pages, through: :affiliate_gifts
     has_many    :registers
-    # belongs_to  :provider
+
     belongs_to  :merchant
     belongs_to  :giver,         polymorphic: :true
     belongs_to  :receiver,      class_name: User
@@ -79,6 +78,11 @@ class Gift < ActiveRecord::Base
 
     attr_accessor :receiver_oauth, :card
 
+    def initialize args={}
+        pre_init(args)
+        args['shoppingCart'] = stringify_shopping_cart_if_array(args['shoppingCart'])
+        super
+    end
 
 #   -------------
 
@@ -87,17 +91,7 @@ class Gift < ActiveRecord::Base
         self.merchant.get_photo
     end
 
-    def value
-        if self.status == 'notified' && self.balance.present?
-            string_to_cents(number_to_currency((self.balance/100.0), unit: "" , delimiter: ""))
-        else
-            super
-        end
-    end
-
-    def value_s
-        CCY[self.ccy]['symbol'] + ' ' +  self.value
-    end
+#   -------------
 
     def link= link
         @link = link
@@ -112,11 +106,7 @@ class Gift < ActiveRecord::Base
         find(obscured_id.to_i - NUMBER_ID)
     end
 
-    def initialize args={}
-        pre_init(args)
-        args['shoppingCart'] = stringify_shopping_cart_if_array(args['shoppingCart'])
-        super
-    end
+#   -------------
 
     def receiver= user_obj
         self.receiver_name = user_obj.name if user_obj
@@ -146,33 +136,57 @@ class Gift < ActiveRecord::Base
         self.receiver_phone = phone_number
     end
 
-    def grand_total
-        pre_round = self.value.to_f + self.service.to_f
-        float_to_cents(pre_round.round(2))
-    end
+#   -------------
+
 
     def service
-        string_to_cents super
+        super
+    end
+
+    def service_s
+        display_money cents: service_cents, ccy: self.ccy
     end
 
     def service_f
-        self.service.to_f.round(2)
+        string_to_float self.service
+    end
+
+    def service_cents
+        currency_to_cents self.service
+    end
+
+    def purchase_total
+        pre_round = self.value_cents + self.service_cents
+        display_money cents: pre_round, ccy: self.ccy
     end
 
     def total
-        string_to_cents(self.value)
-    end
-
-    def value_in_cents
-        (self.value.to_f.round(2) * 100).to_i
+        display_money cents: self.value_cents
     end
 
     def total= amount
         self.value = amount
     end
 
+    def value
+        if self.status == 'notified' && self.balance.present?
+            display_money cents: balance
+        else
+            super
+        end
+    end
+
+    def value_s
+        display_money cents: value_cents, ccy: self.ccy
+    end
+
+    def value_cents
+        currency_to_cents(self.value)
+    end
+    alias_method :value_in_cents, :value_cents
+
     def value_f
-        self.value.to_f.round(2)
+        string_to_float self.value
     end
 
     def fee
@@ -223,6 +237,8 @@ class Gift < ActiveRecord::Base
     def bar_status
         BAR_STATUS[self.status]
     end
+
+#   -------------
 
     def set_pay_stat
         case self.resp_code
@@ -523,12 +539,12 @@ private
     end
 
     def format_value
-        self.value = string_to_cents(self.value)
+        self.value = string_to_money(self.value)
     end
 
     def format_cost
         self.cost = if self.cost.present?
-            string_to_cents(self.cost)
+            string_to_money(self.cost)
         else
             "0"
         end

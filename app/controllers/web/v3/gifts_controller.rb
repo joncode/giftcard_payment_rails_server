@@ -210,6 +210,9 @@ private
 
     def set_receiver gps, gift_hsh
         gift_hsh["receiver_name"] = gps[:rec_name]
+        gift_hsh["receiver_phone"] = gps[:rec_phone]
+        gift_hsh["receiver_email"] = gps[:rec_email]
+
         case gps[:rec_net]
         when "em"
             gift_hsh["receiver_email"] = gps[:rec_net_id]
@@ -241,7 +244,7 @@ private
     end
 
     def gift_params
-        params.require(:data).permit(:merchant_id, :link, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :scheduled_at, :msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
+        params.require(:data).permit(:merchant_id, :link, :rec_email, :rec_phone, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :scheduled_at, :msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
     end
 
     def redeem_params
