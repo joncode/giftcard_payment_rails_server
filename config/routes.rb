@@ -258,6 +258,9 @@ Drinkboard::Application.routes.draw do
 					post :bulk_create
 					post :redeem
 				end
+				member do
+					post :proto_join
+				end
 			end
 			resources :protos,  only: [] do
 				member  do

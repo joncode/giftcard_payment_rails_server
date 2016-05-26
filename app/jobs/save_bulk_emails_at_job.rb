@@ -26,7 +26,7 @@ class SaveBulkEmailsAtJob
     def self.save_social_import(email, at_user_id, proto_id)
         downcased_email = strip_and_downcase(email)
         puts "\n\n in save social import :process #{Time.now} #{downcased_email}"
-        social = Social.find_or_create_by(network: "email", network_id: downcased_email)
+        social = Social.find_or_create_by_email(downcased_email)
         if social.errors.messages.count > 0
             puts "#{social.network_id} is not a valid email - #{social.errors.full_messages}"
         else

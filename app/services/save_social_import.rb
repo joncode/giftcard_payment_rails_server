@@ -4,7 +4,7 @@ class SaveSocialImport
 	def self.perform email, merchant_id, proto_id
         downcased_email = strip_and_downcase(email)
         puts "\n\n in save social import :process #{Time.now} #{downcased_email}"
-        social = Social.find_or_create_by(network: "email", network_id: downcased_email)
+        social = Social.find_or_create_by_email(downcased_email)
 
 
         if social.errors.messages.count > 0

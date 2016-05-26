@@ -16,6 +16,7 @@ class GiftProtoJoin < Gift
 	    			hsh = { shoppingCart: [ih].to_json }
 	    			hsh[:cost] = calculate_cost(hsh[:shoppingCart], merchant)
 	    			hsh[:value] = calculate_value(hsh[:shoppingCart])
+	    			hsh[:ccy] = ih['ccy'] || 'USD'
 
 					if proto_join.gift_id.present?
 							# make new proto join to link to next gift
@@ -48,7 +49,7 @@ class GiftProtoJoin < Gift
         	gift = super args
 	        if gift.persisted?
 	            proto_join.update(gift_id: gift.id)
-	            proto.increment!(:processed)
+	            proto.update_processed
 	            gift.messenger_proto_join
 	        end
         	gift
@@ -61,29 +62,40 @@ private
 
 		args = {}
 		proto_join.convert_to_gift_receiver(args)
+
 		args['giver']         = proto.giver
 		if individual_item_hsh.present?
 			args['cost']          = individual_item_hsh[:cost]
 			args['value']         = individual_item_hsh[:value]
 			args['shoppingCart']  = individual_item_hsh[:shoppingCart]
+			args['ccy']  		  = individual_item_hsh[:ccy]
 		else
 			args['cost']          = proto.cost
 			args['value']         = proto.value
 			args['shoppingCart']  = proto.shoppingCart
+			args['ccy']  		  = proto.ccy
 		end
+
+		args['giver']         = proto.giver
+		args['merchant_id']   = proto.merchant_id
+		args['provider_name'] = proto.provider_name
 
 		args['payable']       = proto
 		args['message']       = proto.message
 		args['detail']        = proto.detail
-		args['expires_at']    = proto.expires_at
-		args['scheduled_at'] = proto.scheduled_at
+		args['expires_at']    = expires_at_calc(proto.expires_at, proto.expires_in)
+		args['scheduled_at']  = proto.scheduled_at
 		args['cat']           = proto.cat
-		args['giver']         = proto.giver
-		args['merchant_id']   = proto.merchant_id
-		args['provider_name'] = proto.provider_name
-		args['receiver_name'] = GENERIC_RECEIVER_NAME if args['receiver_name'].blank?
 		args
 	end
+
+    def self.expires_at_calc expires_at, expires_in
+        if expires_at.present?
+            expires_at
+        elsif expires_in.present?
+            DateTime.now.utc.to_date + expires_in.days
+        end
+    end
 
 	def self.process_input args
 		bad_input = true

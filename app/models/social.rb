@@ -8,18 +8,30 @@ class Social < ActiveRecord::Base
 	has_many :merchants, through: :providers_socials
 	has_many :at_users_socials
 
-    belongs_to  :payable,       polymorphic: :true, autosave: :true
+    belongs_to  :payable, polymorphic: :true, autosave: :true
 
     before_validation { |social| social.network_id = strip_and_downcase(network_id)   if is_email? }
 	before_validation { |social| social.network_id = extract_phone_digits(network_id) if is_phone? }
 
 	validates_presence_of :network, :network_id
-    validates :network_id , format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
-    validates :network_id , format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
+    validates :network_id, format: { with: VALID_PHONE_REGEX }, :if => :is_phone?
+    validates :network_id, format: { with: VALID_EMAIL_REGEX }, :if => :is_email?
 
     validates :network_id, :uniqueness => { scope: :network }
 
+#	-------------
+
+    def self.find_or_create_by_email email
+        find_or_create_by(network: "email", network_id: email)
+    end
+
+    def self.find_or_create_by_phone phone
+        find_or_create_by(network: "phone", network_id: phone)
+    end
+
 end
+
+
 # == Schema Information
 #
 # Table name: socials

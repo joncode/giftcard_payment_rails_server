@@ -32,13 +32,17 @@ class Proto < ActiveRecord::Base
 		ProtoJoin.where(proto_id: self.id, gift_id: nil)
 	end
 
+    def ccy
+    	"USD"
+    end
+
 #   -------------
 
-	def update_contacts new_amount
+	def update_contacts new_amount=1
         self.increment!(:contacts, new_amount)
 	end
 
-	def update_processed new_amount
+	def update_processed new_amount=1
         self.increment!(:processed, new_amount)
 	end
 
