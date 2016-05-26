@@ -5,21 +5,16 @@ class Web::V3::DevicesController < MetalCorsController
 
 
 	def create
-		begin
-			if @current_user.pn_token = [token_params[:token], token_params[:platform]]
-				success "Token Saved"
-			else
-				fail_web({
-	                err: "TOKEN_NOT_SAVED",
-	                msg: "Data Not Token"
-	            })
-			end
-		rescue
+        pnt = PnToken.find_or_create_token(@current_user.id, token_params[:token], token_params[:platform])
+        if pnt.persisted?
+			success "Token Saved"
+		else
 			fail_web({
                 err: "TOKEN_NOT_SAVED",
-                msg: "Data Corrupted"
+                msg: "Data Not Token"
             })
 		end
+
 		respond
 	end
 
