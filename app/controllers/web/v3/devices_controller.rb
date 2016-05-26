@@ -6,7 +6,7 @@ class Web::V3::DevicesController < MetalCorsController
 
 	def create
         puts token_params.inspect
-        pnt = PnToken.find_or_create_token(@current_user.id, token_params[:token], token_params[:platform])
+        pnt = PnToken.find_or_create_token(@current_user.id, token_params['token'], token_params['platform'])
         if pnt.persisted?
 			success "Token Saved"
 		else
@@ -44,7 +44,7 @@ private
 
 
 	def token_params
-		require(:data).permit(:token, :platform)
+		require('data').permit('token', 'platform')
 	end
 
 
