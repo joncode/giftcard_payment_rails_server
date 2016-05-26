@@ -6,8 +6,7 @@ class Web::V3::UsersController < MetalCorsController
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
     def socials
-        social_id = destroy_user_social_params["_id"]
-        us = UserSocial.find_by user_id: @current_user.id, id: social_id
+        us = UserSocial.find_by user_id: @current_user.id, id: params[:id]
 
         if us.update(active: false)
             success("Delete Succeeded")
@@ -174,10 +173,6 @@ class Web::V3::UsersController < MetalCorsController
 
 private
 
-
-    def destroy_user_social_params
-        params.require(:data).permit("_id")
-    end
 
     def update_user_params
         params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => ["net", "_id", "value" ], oauth: [:token, :secret, :net, :net_id, :handle, :photo] )
