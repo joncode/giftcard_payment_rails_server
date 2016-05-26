@@ -8,7 +8,7 @@ class Web::V3::UsersController < MetalCorsController
     def socials
         us = UserSocial.find_by(user_id: @current_user.id, id: params[:id])
 
-        if us
+        if us.nil?
             raise ActiveRecord::RecordNotFound
         elsif us.update(active: false)
             success("Delete Succeeded")
