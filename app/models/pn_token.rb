@@ -28,6 +28,7 @@ class PnToken < ActiveRecord::Base
                 pn_token.user_id = user_id
                 pn_token.save
             end
+            pn_token
         else
             PnToken.create(user_id: user_id, pn_token: value, platform: platform.to_s)
         end
