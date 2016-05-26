@@ -6,9 +6,11 @@ class Web::V3::UsersController < MetalCorsController
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
     def socials
-        us = UserSocial.find_by user_id: @current_user.id, id: params[:id]
+        us = UserSocial.find_by(user_id: @current_user.id, id: params[:id])
 
-        if us.update(active: false)
+        if us
+            raise ActiveRecord::RecordNotFound
+        elsif us.update(active: false)
             success("Delete Succeeded")
         else
             fail_web({
