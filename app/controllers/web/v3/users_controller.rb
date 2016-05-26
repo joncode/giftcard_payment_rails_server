@@ -78,6 +78,9 @@ class Web::V3::UsersController < MetalCorsController
 
     def create
 		user = User.new(create_user_params)
+
+        user.iphone_photo = nil if user.iphone_photo.match(/avatar_blank/)
+
         user.client = @current_client
         user.partner = @current_partner
         if user.save
