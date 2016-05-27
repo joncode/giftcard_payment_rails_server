@@ -8,6 +8,7 @@ class Web::V3::DevicesController < MetalCorsController
         puts token_params.inspect
         pnt = PnToken.find_or_create_token(@current_user.id, token_params[:token], token_params[:platform])
         if pnt.persisted?
+            @current_session.update(push: pnt.pn_token)
 			success "Token Saved"
 		else
 			fail_web({
