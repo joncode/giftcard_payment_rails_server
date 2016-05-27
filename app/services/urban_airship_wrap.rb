@@ -29,7 +29,7 @@ module UrbanAirshipWrap
 
         if googe_push_tokens.count > 0
             r = OpsGooglePush.send_push(googe_push_tokens, { message: alert,
-                    title: 'New ItsOnMe!',
+                    title: 'New ItsOnMe Gift!',
                     action: 'VIEW_GIFT',
                     args: { gift_id: gift_id }
                 })

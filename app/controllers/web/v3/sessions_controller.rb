@@ -1,6 +1,7 @@
 class Web::V3::SessionsController < MetalCorsController
 
-    before_action :authentication_no_token
+    before_action :authentication_no_token, only: [:create]
+    before_action :authentication_token_required, except: [:create]
 
     def create
         login_params = params["data"]
@@ -47,6 +48,14 @@ class Web::V3::SessionsController < MetalCorsController
         respond(status)
     end
 
+    def logout
+        if @current_session.update(destroyed_at: Time.now.utc)
+            success "Logout complete"
+        else
+            fail_web fail_web_payload("Logout Failed")
+        end
+        respond(status)
+    end
 
 private
 

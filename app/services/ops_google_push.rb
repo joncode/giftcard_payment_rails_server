@@ -5,30 +5,61 @@ class OpsGooglePush
 	class << self
 
 		def send_push pn_token_or_array, alert
-			unless pn_token_or_array.kind_of?(Array)
-				pn_token_or_array = [pn_token_or_array]
-			end
+			pn_tokens = parse_input(pn_token_or_array)
+			registration_ids = format_push_ids(pn_tokens)
+			msg = format_payload(alert)
 
+			r = perform(registration_ids, msg)
+			update_canonical_id(r, pn_tokens)
+			r
+		end
+
+		def get_canonical_id pn_token
+			pn_tokens = parse_input(pn_token)
+			registration_ids = format_push_ids(pn_tokens)
+			msg = format_payload({ action: 'VERIFY_ID' })
+			r = perform(registration_ids, msg)
+			if r[:canonical_ids][0].present? && r[:canonical_ids][0][:new].present?
+				r[:canonical_ids][0][:new]
+			else
+				nil
+			end
+		end
+
+		def perform(registration_ids, msg)
+			gcm = GCM.new(GCM_API_KEY)
+			r = gcm.send(registration_ids, msg)
+			puts "SENDING PUSH GCM #{r.inspect}"
+			r
+		end
+
+		def format_push_ids pn_tokens
 			registration_ids = []
-			pn_token_or_array.each do |pn_token|
+			pn_tokens.each do |pn_token|
 				if pn_token.canonical_id.present?
 					registration_ids << pn_token.canonical_id
 				else
 					registration_ids << pn_token.pn_token
 				end
 			end
+			registration_ids.uniq
+		end
 
+		def format_payload alert
 			if alert.kind_of?(String)
-				msg =  { data: { message: alert, title: 'ItsOnMe App' } }
+				{ data: { message: alert, title: 'ItsOnMe App' } }
 			else
-				msg = { data: alert }
+				{ data: alert }
 			end
+		end
 
-			gcm = GCM.new(GCM_API_KEY)
-			r = gcm.send(registration_ids.uniq!, msg)
-			puts "SENDING PUSH GCM #{r.inspect}"
-			update_canonical_id r, pn_token_or_array
-			r
+		def parse_input pn_token_or_array
+			if pn_token_or_array.kind_of?(Array)
+				pn_token_or_array
+			else
+					# PnToken Object
+				[pn_token_or_array]
+			end
 		end
 
 		def update_canonical_id r, pn_tokens

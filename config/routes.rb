@@ -179,7 +179,11 @@ Drinkboard::Application.routes.draw do
 				member { get :merchants }
 			end
 
-			resources :sessions,  only: [:create]
+			resources :sessions,  only: [:create] do
+				collection do
+					post :logout
+				end
+			end
 
 			resources :users, only: [ :create, :index ] do
 				collection do

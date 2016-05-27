@@ -21,23 +21,44 @@ class PnToken < ActiveRecord::Base
 #   -------------
 
     def self.find_or_create_token(user_id, value, platform, device_id=nil)
+        canonical_id = nil
+        if platform == 'android'
+            pnt = PnToken.new(user_id: user_id, pn_token: value, platform: platform.to_s, device_id: device_id)
+            canonical_id = OpsGooglePush.get_canonical_id(pnt)
+        end
+
         puts "PnToken -self.find_or_create_token(#{user_id}, #{value}, #{platform})- "
         value       = self.convert_token(value)
-        if pn_token = self.find_by(pn_token: value, platform: platform.to_s)
+
+        pn_token = self.find_by(pn_token: value, platform: platform.to_s)
+        if pn_token.nil? && canonical_id.present?
+            pn_token = self.find_by(canonical_id: canonical_id, platform: platform.to_s)
+        end
+
+        if pn_token
+            save = false
+            if canonical_id.present? && pn_token.canonical_id.nil?
+                pn_token.canonical_id = canonical_id
+                save = true
+            end
+            if device_id.present? && pn_token.device_id.nil?
+                pn_token.device_id = device_id
+                save = true
+            end
             if pn_token.user_id != user_id
                 pn_token.user_id = user_id
-                if device_id.present? && pn_token.device_id.nil?
-                    pn_token.device_id = device_id
-                end
-                pn_token.save
-            else
-                if device_id.present? && pn_token.device_id.nil?
-                    pn_token.update(device_id: device_id)
-                end
+                save = true
             end
+            pn_token.save if save
             pn_token
         else
-            PnToken.create(user_id: user_id, pn_token: value, platform: platform.to_s, device_id: device_id)
+            PnToken.create(canonical_id: canonical_id,
+                user_id: user_id,
+                pn_token: value,
+                platform: platform.to_s,
+                device_id: device_id,
+                canonical_id: canonical_id
+            )
         end
     end
 
