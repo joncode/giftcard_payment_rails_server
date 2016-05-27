@@ -23,7 +23,7 @@ class GiftCreatedEvent
 
     def self.notify_via_text gift
         if !gift.receiver_phone.blank?
-            msg = "You've received a Gift!\n#{gift.invite_link}"
+            msg = "#{gift.giver_name} sent #{gift.value_s} gift at #{gift.merchant_name} \n Click here to Claim \n#{gift.invite_link}"
             resp = OpsTwilio.text to: gift.receiver_phone, msg: msg
         end
     end

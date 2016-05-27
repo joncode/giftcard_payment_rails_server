@@ -124,6 +124,10 @@ class Gift < ActiveRecord::Base
         super
     end
 
+    def merchant_name
+        self.provider_name
+    end
+
     def phone
         self.receiver_phone
     end
