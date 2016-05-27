@@ -24,7 +24,6 @@ class Gift < ActiveRecord::Base
 
     before_validation { |gift| gift.receiver_email = strip_and_downcase(receiver_email)   if receiver_email.kind_of?(String) }
     before_validation { |gift| gift.receiver_phone = extract_phone_digits(receiver_phone)   if receiver_phone.kind_of?(String) }
-    before_validation :prepare_email
     before_validation :build_oauth
     before_validation :format_value
     before_validation :format_cost
@@ -516,10 +515,6 @@ private
 
 ################  data validation methods
 
-
-    def prepare_email
-        self.receiver_email = nil if self.receiver_id
-    end
 
 	def add_giver_name
         if self.giver_name.blank?

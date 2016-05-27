@@ -200,52 +200,52 @@ Drinkboard::Application.routes.draw do
 #################          ADMIN TOOLS routes for API              /////////////////////////////
 
 	namespace :admt, defaults: { format: 'json' } do
-			namespace :v2 do
+		namespace :v2 do
 
-					resources :gifts,     only: [:update, :create] do         # biz logic
-						member do
-							post :refund                  # biz logic
-							post :refund_cancel           # biz logic
-							put  :add_receiver
-						end
-					end
-
-					resources :gift_campaigns, only: [:create] do
-						collection { post :bulk_create }
-					end
-
-					resources :protos,  only: [] do
-						member  do
-							post :gifts
-						end
-					end
-
-					resources :users,     only: [:update] do         # biz logic
-						member do
-							post :deactivate
-							post :suspend
-							put :deactivate_social
-							post :deactivate_gifts
-						end
-					end
-
-					# resources :user_socials, only: [:create, :update]
-
-					resources :brands,    only: [:create, :update]   # biz logic
-
-					resources :emailers, only: [] do
-						collection do
-							post :call_emailer
-						end
-					end
-
-					resources :providers, only: [:create, :update] do
-						member do
-							post :update_mode             # biz logic
-							post :deactivate              # biz logic
-						end
-					end
+			resources :gifts,     only: [:update, :create] do         # biz logic
+				member do
+					post :refund                  # biz logic
+					post :refund_cancel           # biz logic
+					put  :add_receiver
+				end
 			end
+
+			resources :gift_campaigns, only: [:create] do
+				collection { post :bulk_create }
+			end
+
+			resources :protos,  only: [] do
+				member  do
+					post :gifts
+				end
+			end
+
+			resources :users,     only: [:update] do         # biz logic
+				member do
+					post :deactivate
+					post :suspend
+					put :deactivate_social
+					post :deactivate_gifts
+				end
+			end
+
+			# resources :user_socials, only: [:create, :update]
+
+			resources :brands,    only: [:create, :update]   # biz logic
+
+			resources :emailers, only: [] do
+				collection do
+					post :call_emailer
+				end
+			end
+
+			resources :providers, only: [:create, :update] do
+				member do
+					post :update_mode             # biz logic
+					post :deactivate              # biz logic
+				end
+			end
+		end
 	end
 
 #################          MERCHANT TOOLS routes for API          /////////////////////////////

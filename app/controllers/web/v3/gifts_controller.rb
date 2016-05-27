@@ -210,8 +210,8 @@ private
 
     def set_receiver gps, gift_hsh
         gift_hsh["receiver_name"] = gps[:rec_name]
-        gift_hsh["receiver_phone"] = gps[:rec_phone]
-        gift_hsh["receiver_email"] = gps[:rec_email]
+        gift_hsh["receiver_phone"] = gps[:rec_phone] if !gps[:rec_phone].blank?
+        gift_hsh["receiver_email"] = gps[:rec_email] if !gps[:rec_email].blank?
 
         case gps[:rec_net]
         when "em"
