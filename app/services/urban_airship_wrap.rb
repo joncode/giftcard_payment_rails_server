@@ -18,9 +18,9 @@ module UrbanAirshipWrap
                         googe_push_tokens << pn_token_obj
                     else
                         r = send_push_with_urban_airship(pn_token_obj, alert)
+                        puts "PUSH SUCCEEDED |#{pn_token_obj.id}| - #{r.inspect}"
                     end
                 end
-                puts "PUSH SUCCEEDED |#{pn_token_obj.id}| - #{r.inspect}"
                 resp << r
             rescue
                 puts "500 Internal PUSH FAILED - #{user.id} - #{pn_token_obj.id}"
@@ -33,7 +33,7 @@ module UrbanAirshipWrap
                     action: 'VIEW_GIFT',
                     args: { gift_id: gift_id }
                 })
-            puts "PUSH SUCCEEDED |#{pn_token_obj.id}| - #{r.inspect}"
+            puts "PUSH SUCCEEDED |#{googe_push_tokens.map(&:id)}| - #{r.inspect}"
             resp << r
         end
 
