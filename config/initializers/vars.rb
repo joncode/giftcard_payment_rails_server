@@ -78,6 +78,12 @@ else
     ENV['FACEBOOK_APP_SECRET']
 end
 
+GCM_API_KEY = if local_env
+    'AIzaSyA55nK5a30YQ51L3h1SSZbLlUNZC_GkheQ'
+else
+    ENV['GCM_API_KEY']
+end
+
 GENERAL_TOKEN = if local_env
      "1964f94b3e567a8a82b87f3ccbeb2174"
 else
