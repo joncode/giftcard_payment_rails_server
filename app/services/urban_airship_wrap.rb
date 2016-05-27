@@ -14,13 +14,15 @@ module UrbanAirshipWrap
                 end
                 push.notification = UA.notification(alert: alert)
                 push.device_types = UA.all
-                resp << push.send_push
+                r = push.send_push
+                puts "PUSH TOKEN |#{pn_token_obj.id}| - #{r.inspect}"
+                resp << r
             rescue
                 puts "500 Internal PUSH FAILED - #{user.id} - #{pn_token_obj.id}"
             end
         end
 
-        puts "APNS push sent via ALIAS! #{resp.inspect}"
+        puts "APNS push sent via TOKENS! #{resp.inspect}"
         Ditto.send_push_create(resp[0], gift_id, 'Gift')
     end
 

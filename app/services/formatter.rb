@@ -12,18 +12,6 @@ module Formatter
         !self.phone.blank? && self.phone.to_s.length > 9
     end
 
-    def float_to_cents float
-        string_to_cents float.to_s
-    end
-
-    def string_to_cents str
-        new_str = number_to_currency(str,  :format => "%n")
-        if new_str && new_str[-3..-1] == ".00"
-            new_str[-3..-1] = ""
-        end
-        new_str
-    end
-
     def format_datetime datetime
         datetime and datetime.to_formatted_s :merchant_date
     end
