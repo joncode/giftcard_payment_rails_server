@@ -26,11 +26,10 @@ class OpsGooglePush
 
 
 		def update_canonical_id r, pn_token
-			if r[:canonical_ids][0].present?
-				&& r[:canonical_ids][0][:new] != pn_token.pn_token
-					&& pn_token.canonical_id.nil?
-
-				pn_token.update(canonical_id: r[:canonical_ids][0][:new])
+			if r[:canonical_ids][0].present? && (r[:canonical_ids][0][:new] != pn_token.pn_token)
+				if pn_token.canonical_id.nil?
+					pn_token.update(canonical_id: r[:canonical_ids][0][:new])
+				end
 			end
 		end
 
