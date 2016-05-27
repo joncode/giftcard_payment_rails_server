@@ -4,7 +4,7 @@ class Web::V3::SessionsController < MetalCorsController
 
     def create
         login_params = params["data"]
-
+        device_id = login_params['device_id']
         if login_params['authReponse']
             login_params['authResponse'] = login_params['authReponse']
         end
@@ -21,7 +21,7 @@ class Web::V3::SessionsController < MetalCorsController
 
         if user
             if user.not_suspended?
-                user.session_token_obj =  SessionToken.create_token_obj(user, 'www', nil, @current_client, @current_partner)
+                user.session_token_obj =  SessionToken.create_token_obj(user, nil, nil, @current_client, @current_partner, device_id)
                 # @current_client.content = user --- in Resque in create_token_obj
                 SessionBeginJob.perform(@current_client.id, user)
                 success user.login_client_serialize

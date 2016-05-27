@@ -32,7 +32,7 @@ class SessionToken < ActiveRecord::Base
 		return nil
 	end
 
-	def self.create_token_obj(user, platform=nil, pn_token=nil, client=nil, partner=nil)
+	def self.create_token_obj(user, platform=nil, pn_token=nil, client=nil, partner=nil, device_id=nil)
 		if platform.nil? && client
 			if client.id == IOS_CLIENT_ID
 				platform = 'ios'
@@ -56,6 +56,7 @@ class SessionToken < ActiveRecord::Base
 							client_id: client_id,
 							partner_id: partner_id,
 							partner_type: partner_type,
+							device_id: device_id,
 							count: 1)
 	end
 
