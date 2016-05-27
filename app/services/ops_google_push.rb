@@ -8,9 +8,9 @@ class OpsGooglePush
 			gcm = GCM.new(GCM_API_KEY)
 
 			if alert.kind_of?(String)
-				msg =  { data: { message: alert } }
+				msg =  { data: { message: alert, title: 'ItsOnMe App'} } }
 			else
-				msg = alert
+				msg = { data: alert }
 			end
 
 			if pn_token.canonical_id.present?

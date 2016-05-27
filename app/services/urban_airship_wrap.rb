@@ -14,7 +14,7 @@ module UrbanAirshipWrap
                     r = push.send_push
                 elsif pn_token_obj.platform == 'android'
                     # is the token for the new APP ?
-                    r = OpsGooglePush.send_push(pn_token_obj, alert)
+                    r = OpsGooglePush.send_push(pn_token_obj, { messaage: alert, title: 'New ItsOnMe!'})
                 end
                 puts "PUSH SUCCEEDED |#{pn_token_obj.id}| - #{r.inspect}"
                 resp << r
