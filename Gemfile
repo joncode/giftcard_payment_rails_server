@@ -30,6 +30,7 @@ gem 'rails_12factor'
 gem 'activemerchant'
 gem 'gibberish'
 gem 'urbanairship', '~> 3.0'
+gem 'gcm'
 gem 'roo'
 #gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
 

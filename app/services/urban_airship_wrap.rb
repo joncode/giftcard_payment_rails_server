@@ -15,7 +15,7 @@ module UrbanAirshipWrap
                 push.notification = UA.notification(alert: alert)
                 push.device_types = UA.all
                 r = push.send_push
-                puts "PUSH TOKEN |#{pn_token_obj.id}| - #{r.inspect}"
+                puts "PUSH SUCCEEDED |#{pn_token_obj.id}| - #{r.inspect}"
                 resp << r
             rescue
                 puts "500 Internal PUSH FAILED - #{user.id} - #{pn_token_obj.id}"
