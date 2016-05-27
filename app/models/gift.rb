@@ -10,10 +10,7 @@ class Gift < ActiveRecord::Base
     include GiftMessenger
     include GiftScheduler
     include ModelValidationHelper
-
-    GIVER_STATUS    = { "incomplete" => "incomplete" , "open" => "notified", "notified" => "notified", "redeemed" => "complete", "regifted" => "complete", "expired" => "expired", "cancel" => "cancel" }
-    RECEIVER_STATUS = { "incomplete" => "incomplete" , "open" => "open", "notified" => "notified",     "redeemed" => "redeemed", "regifted" => "regifted", "expired" => "expired", "cancel" => "cancel" }
-    BAR_STATUS      = { "incomplete" => "live" ,       "open" => "live",     "notified" => "live",     "redeemed" => "redeemed", "regifted" => "regifted", "expired" => "expired", "cancel" => "cancel" }
+    include ShoppingCartHelper
 
     default_scope -> { where(active: true) } # indexed
     scope :meta_search, ->(str) {
@@ -199,7 +196,7 @@ class Gift < ActiveRecord::Base
 
     def location_fee
         if [300,301,307].include? self.cat
-            return merchant.location_fee(self.value_in_cents)
+            return merchant.location_fee(self.value_cents)
         elsif [100,101,107,150,151,157].include? self.cat
             return (self.cost.to_f * 100).to_i
         else
@@ -209,7 +206,7 @@ class Gift < ActiveRecord::Base
 
     def override_fee override_obj
         if [300,301,307].include? self.cat
-            return merchant.override_fee(self.value_in_cents)
+            return merchant.override_fee(self.value_cents)
         elsif [100,101,107,150,151,157].include? self.cat
             return 0
         else
@@ -224,20 +221,6 @@ class Gift < ActiveRecord::Base
 
 #/-----------------------------------------------Status---------------------------------------/
 
-
-    def receiver_status
-        RECEIVER_STATUS[self.status]
-    end
-
-    def giver_status
-        GIVER_STATUS[self.status]
-    end
-
-    def bar_status
-        BAR_STATUS[self.status]
-    end
-
-#   -------------
 
     def set_pay_stat
         case self.resp_code
@@ -419,14 +402,6 @@ class Gift < ActiveRecord::Base
 ##########  shopping cart methods
 
 
-    def stringify_shopping_cart_if_array shoppingCart
-        if shoppingCart.kind_of?(Array)
-            shoppingCart.to_json
-        else
-            shoppingCart
-        end
-    end
-
     def ary_of_shopping_cart_as_hash
         if self.shoppingCart.kind_of?(String)
             JSON.parse self.shoppingCart
@@ -547,7 +522,7 @@ private
 
     def set_balance
         if self.balance.nil?
-            self.balance = self.value_in_cents
+            self.balance = self.value_cents
         end
     end
 

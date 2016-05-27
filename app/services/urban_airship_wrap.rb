@@ -1,5 +1,3 @@
-'APA91bGrDojis1jdvoC2frtAbmet44V-IQnvsM86FAtjRS5yEHBZDv0AOtIEXlrpHz8-pEex30CGeGyuXgXlssqCHbCXuO1HG9IX0b6LXZ0fYaUOrmmEJzJ36kR2Ha2qNDGhz_W3YaW1'
-
 module UrbanAirshipWrap
 
     def send_push(user, alert, gift_id)

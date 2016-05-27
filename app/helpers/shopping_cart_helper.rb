@@ -29,4 +29,12 @@ module ShoppingCartHelper
         end
     end
 
+    def stringify_shopping_cart_if_array shoppingCart
+        if shoppingCart.kind_of?(Array)
+            shoppingCart.to_json
+        else
+            shoppingCart
+        end
+    end
+
 end
