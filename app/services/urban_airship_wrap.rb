@@ -13,7 +13,7 @@ module UrbanAirshipWrap
                     push.device_types = UA.all
                     r = push.send_push
                 elsif pn_token_obj.platform == 'android'
-                    r = OpsGooglePush.send_push_to_token(pn_token_obj, alert)
+                    r = OpsGooglePush.send_push(pn_token_obj, alert)
                 end
                 puts "PUSH SUCCEEDED |#{pn_token_obj.id}| - #{r.inspect}"
                 resp << r

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160523031309) do
+ActiveRecord::Schema.define(version: 20160527034514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -851,10 +851,12 @@ ActiveRecord::Schema.define(version: 20160523031309) do
 
   create_table "pn_tokens", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "pn_token",   limit: 255
-    t.string   "platform",   limit: 255, default: "ios"
+    t.string   "pn_token",     limit: 255
+    t.string   "platform",     limit: 255, default: "ios"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "canonical_id"
+    t.string   "device_id"
   end
 
   add_index "pn_tokens", ["platform", "pn_token"], name: "index_pn_tokens_on_platform_and_pn_token", using: :btree

@@ -20,17 +20,24 @@ class PnToken < ActiveRecord::Base
 
 #   -------------
 
-    def self.find_or_create_token(user_id, value, platform)
+    def self.find_or_create_token(user_id, value, platform, device_id=nil)
         puts "PnToken -self.find_or_create_token(#{user_id}, #{value}, #{platform})- "
         value       = self.convert_token(value)
         if pn_token = self.find_by(pn_token: value, platform: platform.to_s)
             if pn_token.user_id != user_id
                 pn_token.user_id = user_id
+                if device_id.present? && pn_token.device_id.nil?
+                    pn_token.device_id = device_id
+                end
                 pn_token.save
+            else
+                if device_id.present? && pn_token.device_id.nil?
+                    pn_token.update(device_id: device_id)
+                end
             end
             pn_token
         else
-            PnToken.create(user_id: user_id, pn_token: value, platform: platform.to_s)
+            PnToken.create(user_id: user_id, pn_token: value, platform: platform.to_s, device_id: device_id)
         end
     end
 
