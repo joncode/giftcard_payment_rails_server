@@ -25,7 +25,7 @@ class OpsGooglePush
 			end
 
 			gcm = GCM.new(GCM_API_KEY)
-			r = gcm.send(registration_ids, msg)
+			r = gcm.send(registration_ids.uniq!, msg)
 			puts "SENDING PUSH GCM #{r.inspect}"
 			update_canonical_id r, pn_token_or_array
 			r
