@@ -19,7 +19,7 @@ class OpsGooglePush
 				registration_ids = [pn_token.pn_token] # an array of one or more client registration tokens
 			end
 			r = gcm.send(registration_ids, msg)
-
+			puts "SENDING PUSH GCM #{r.inspect}"
 			update_canonical_id r, pn_token
 			r
 		end

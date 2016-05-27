@@ -13,6 +13,7 @@ module UrbanAirshipWrap
                     push.device_types = UA.all
                     r = push.send_push
                 elsif pn_token_obj.platform == 'android'
+                    # is the token for the new APP ?
                     r = OpsGooglePush.send_push(pn_token_obj, alert)
                 end
                 puts "PUSH SUCCEEDED |#{pn_token_obj.id}| - #{r.inspect}"
