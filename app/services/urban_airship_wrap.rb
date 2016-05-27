@@ -6,15 +6,15 @@ module UrbanAirshipWrap
         resp = []
         pnts.each do |pn_token_obj|
             begin
-                push = UA_CLIENT.create_push
                 if pn_token_obj.platform == 'ios'
+                    push = UA_CLIENT.create_push
                     push.audience = UA.device_token(pn_token_obj.pn_token)
+                    push.notification = UA.notification(alert: alert)
+                    push.device_types = UA.all
+                    r = push.send_push
                 elsif pn_token_obj.platform == 'android'
-                    push.audience = UA.apid(pn_token_obj.pn_token)
+                    r = OpsGooglePush.send_push_to_token(pn_token_obj, alert)
                 end
-                push.notification = UA.notification(alert: alert)
-                push.device_types = UA.all
-                r = push.send_push
                 puts "PUSH SUCCEEDED |#{pn_token_obj.id}| - #{r.inspect}"
                 resp << r
             rescue
