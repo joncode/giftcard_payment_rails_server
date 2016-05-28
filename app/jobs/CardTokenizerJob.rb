@@ -4,7 +4,7 @@ require 'card_tokenizer'
 class CardTokenizerJob
     #extend Resque::Plugins::HerokuAutoscaler
 
-    @queue = :subscription
+    @queue = :after_save
 
     def self.perform card_id
         puts "==== Starting CardTokenizerJob for Card #{card_id} ===="

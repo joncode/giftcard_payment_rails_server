@@ -1,4 +1,5 @@
 class Card < ActiveRecord::Base
+	extend CardTesters
 	include CardTokenizer
  	include ActiveMerchant::Billing::CreditCardMethods
 	include ActiveMerchant::Billing::CreditCardMethods::ClassMethods
@@ -61,12 +62,12 @@ class Card < ActiveRecord::Base
 #	-------------
 
 	def self.get_cards user
-		cards = Card.where(user_id: user.id)
+		cards = where(user_id: user.id)
 		cards.map { |card| {"card_id" => card.id, "last_four" => card.last_four, "nickname" => card.nickname} }
 	end
 
 	def self.create_card_from_hash cc_hash
-		card 			= Card.new
+		card 			= new
 		card.user_id 	= cc_hash["user_id"]
 		card.name 		= cc_hash["name"]
 		card.month 		= cc_hash["month"]
@@ -88,6 +89,7 @@ class Card < ActiveRecord::Base
 	    hsh["card_id"] = self.id
 	    hsh["giver_id"] = self.user_id
 	    hsh["merchant_id"] = merchant_id
+	    hsh['trans_token'] = self.trans_token
     	if self.cim_token
 	    	if hsh["cim_profile"] = (cim_profile || self.user.cim_profile)
 	    		hsh["cim_token"]  = self.cim_token
@@ -97,10 +99,14 @@ class Card < ActiveRecord::Base
     	self.decrypt!(PASSPHRASE)
     	hsh["number"]  		= self.number
     	hsh["month_year"] 	= self.month_year
+    	hsh["month"] 		= self.month
+    	hsh["year"] 		= self.year
     	hsh["first_name"]   = self.first_name
     	hsh["last_name"] 	= self.last_name
+    	hsh["cvv"] 			= self.csv
 	    hsh
     end
+
 
     	# deprecate this function
 	def create_serialize

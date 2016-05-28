@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160527034514) do
+ActiveRecord::Schema.define(version: 20160528020756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -288,8 +288,8 @@ ActiveRecord::Schema.define(version: 20160527034514) do
     t.string   "year",          limit: 255
     t.string   "csv",           limit: 255
     t.string   "brand",         limit: 255
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.string   "cim_token",     limit: 255
     t.string   "zip",           limit: 255
     t.boolean  "active",                    default: true
@@ -297,6 +297,8 @@ ActiveRecord::Schema.define(version: 20160527034514) do
     t.string   "partner_type"
     t.string   "origin"
     t.integer  "client_id"
+    t.string   "ccy",           limit: 6,   default: "USD"
+    t.string   "trans_token"
   end
 
   add_index "cards", ["active"], name: "index_cards_on_active", using: :btree

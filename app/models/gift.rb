@@ -80,6 +80,7 @@ class Gift < ActiveRecord::Base
         super
     end
 
+
 #   -------------
 
 
@@ -135,6 +136,7 @@ class Gift < ActiveRecord::Base
     def phone= phone_number
         self.receiver_phone = phone_number
     end
+
 
 #   -------------
 

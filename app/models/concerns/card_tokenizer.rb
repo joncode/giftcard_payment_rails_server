@@ -2,9 +2,10 @@ module CardTokenizer
     extend ActiveSupport::Concern
 
     def tokenize
+		user = User.unscoped.find(self.user_id)
+		transarmor_tokenize(user)
     	if self.cim_token == nil
     		begin
-	    		user = User.unscoped.find(self.user_id)
 		    	if user.cim_profile.present?
 		    		add_payment_profile(user.cim_profile)
 		    	else
@@ -16,7 +17,21 @@ module CardTokenizer
 		end
     end
 
-private
+	def transarmor_tokenize user
+    	card_hsh = {}
+		card_hsh["first_name"] = self.first_name
+		card_hsh["last_name"] = self.last_name
+		card_hsh["number"] = self.decrypt!(CATCH_PHRASE).number
+		card_hsh["month"] = self.month
+		card_hsh["year"] = self.year
+		card_hsh["cvv"] = self.csv
+		r = OpsFirstData.tokenize card_hsh
+		if r[:status] == 1
+			self.update(trans_token: r[:data])
+		else
+			puts "------ Failed Transaction with First Data Transarmour Response: #{ r.inspect }--------------"
+		end
+	end
 
     def create_profile_and_payment_profile user
     	card_number = self.decrypt!(CATCH_PHRASE).number
@@ -51,8 +66,6 @@ private
             else
                 # another error
             end
-
-
 
 			puts "------ Failed Transaction with Auth.net Response: #{ response.inspect }--------------"
 			puts "------ profile id #{ response.profile_id if response.profile_id }--------------"
