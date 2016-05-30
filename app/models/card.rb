@@ -89,6 +89,9 @@ class Card < ActiveRecord::Base
 	    hsh["card_id"] = self.id
 	    hsh["giver_id"] = self.user_id
 	    hsh["merchant_id"] = merchant_id
+	    if hsh['trans_token'].nil?
+	    	self.transarmor_tokenize
+	    end
 	    hsh['trans_token'] = self.trans_token
     	if self.cim_token
 	    	if hsh["cim_profile"] = (cim_profile || self.user.cim_profile)

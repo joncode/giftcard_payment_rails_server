@@ -3,7 +3,7 @@ module CardTokenizer
 
     def tokenize
 		user = User.unscoped.find(self.user_id)
-		transarmor_tokenize(user)
+		transarmor_tokenize
     	if self.cim_token == nil
     		begin
 		    	if user.cim_profile.present?
@@ -17,7 +17,7 @@ module CardTokenizer
 		end
     end
 
-	def transarmor_tokenize user
+	def transarmor_tokenize
     	card_hsh = {}
 		card_hsh["first_name"] = self.first_name
 		card_hsh["last_name"] = self.last_name
