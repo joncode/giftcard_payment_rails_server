@@ -14,6 +14,7 @@ class Sale < ActiveRecord::Base
 #   -------------
 
     def self.charge_card cc_hsh, ccy='USD'
+        "\n Sale.charge_card #{cc_hsh.inspect} #{ccy}\n"
         if ccy == 'USD'
             if cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
                 self.charge_cim_token cc_hsh
@@ -68,7 +69,7 @@ private
     end
 
     def self.charge_trans_token cc_hsh
-        resp_hsh = OpsFirstData.purchase cc_hsh['trans_token'], cc_hsh["amount"]
+        resp_hsh = OpsFirstData.purchase cc_hsh['trans_token'], (cc_hsh["amount"]*100).to_i
 
         sale_init_hsh = { "card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"] }
         sale_init_hsh.merge!(resp_hsh)

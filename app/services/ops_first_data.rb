@@ -26,6 +26,7 @@ class OpsFirstData
 #	-------------
 
 		def purchase token, amount
+			"\n OpsFirstData.purchase Here is the amount - should be in cents #{amount}"
 			r = gateway.purchase amount, token
 			if r.success?
 				gateway_hash_response r
