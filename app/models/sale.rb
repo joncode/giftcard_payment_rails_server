@@ -14,7 +14,7 @@ class Sale < ActiveRecord::Base
 #   -------------
 
     def self.charge_card cc_hsh, ccy='USD'
-        "\n Sale.charge_card #{cc_hsh.inspect} #{ccy}\n"
+        puts "\n Sale.charge_card #{cc_hsh.inspect} #{ccy}\n"
         if ccy == 'USD'
             if cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
                 self.charge_cim_token cc_hsh
