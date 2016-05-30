@@ -30,7 +30,7 @@ class OpsFirstData
 			if amount.kind_of?(String)
 				amount = currency_to_cents(amount)
 			end
-			puts "\n OpsFirstData.purchase Here is the amount - should be in cents #{amount.to_s}"
+			puts "\n OpsFirstData.purchase Here is the amount - should be in cents #{amount.to_s} - #{token.inspect}"
 			r = gateway.purchase amount, token
 			if r.success?
 				gateway_hash_response r
