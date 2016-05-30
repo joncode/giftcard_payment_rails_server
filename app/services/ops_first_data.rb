@@ -28,7 +28,7 @@ class OpsFirstData
 		def purchase token, amount
 			# amount is in cents
 			if amount.kind_of?(String)
-				amount = (string_to_float(amount)*100).to_i
+				amount = currency_to_cents(amount)
 			end
 			puts "\n OpsFirstData.purchase Here is the amount - should be in cents #{amount.to_s}"
 			r = gateway.purchase amount, token
