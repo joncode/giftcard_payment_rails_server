@@ -52,7 +52,7 @@ class PnToken < ActiveRecord::Base
             pn_token.save if save
             pn_token
         else
-            PnToken.create(canonical_id: canonical_id,
+            PnToken.create(
                 user_id: user_id,
                 pn_token: value,
                 platform: platform.to_s,

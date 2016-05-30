@@ -33,7 +33,7 @@ protected
         if token = request.headers["HTTP_X_AUTH_TOKEN"]
             if (![REDBULL_TOKEN, WWW_TOKEN].include?(token))
                 @current_user = SessionToken.app_authenticate(token)
-                @current_session = @current_user.session_token_obj
+                @current_session = @current_user.session_token_obj if @current_user
             end
         end
     end
