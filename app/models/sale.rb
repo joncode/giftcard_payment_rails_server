@@ -69,7 +69,7 @@ private
     end
 
     def self.charge_trans_token cc_hsh
-        resp_hsh = OpsFirstData.purchase cc_hsh['trans_token'], (cc_hsh["amount"]*100).to_i
+        resp_hsh = OpsFirstData.purchase cc_hsh['trans_token'], cc_hsh["amount"]
 
         sale_init_hsh = { "card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"] }
         sale_init_hsh.merge!(resp_hsh)
