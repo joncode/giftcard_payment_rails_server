@@ -26,11 +26,31 @@ module UrbanAirshipWrap
         end
 
         if googe_push_tokens.count > 0
-            r = OpsGooglePush.send_push(googe_push_tokens, { message: alert,
-                    title: 'New ItsOnMe Gift!',
-                    action: 'VIEW_GIFT',
-                    args: { gift_id: gift_id }
-                })
+
+            if alert.match(/has been delivered/)
+                hsh = { message: alert,
+                        title: 'ItsOnMe Gift Delivered!',
+                        args: { gift_id: gift_id }
+                    }
+            elsif alert.match(/opened your gift/)
+                hsh = { message: alert,
+                        title: 'ItsOnMe Gift Opened!',
+                        args: { gift_id: gift_id }
+                    }
+            elsif alert.match(/got the app/)
+                hsh = { message: alert,
+                        title: 'Thank You!',
+                        args: { gift_id: gift_id }
+                    }
+            else
+                hsh = { message: alert,
+                        title: 'New ItsOnMe Gift!',
+                        action: 'VIEW_GIFT',
+                        args: { gift_id: gift_id }
+                    }
+            end
+
+            r = OpsGooglePush.send_push(googe_push_tokens, hsh)
             puts "PUSH SUCCEEDED |#{googe_push_tokens.map(&:id)}| - #{r.inspect}"
             resp << r
         end
