@@ -4,6 +4,7 @@ module GiftLifecycle
     def notify(already_notified=true, loc_id=nil, client_id=nil)
         if notifiable?
             if (self.new_token_at.nil? || self.new_token_at < reset_time)
+
                 current_time   = Time.now.utc
 
                 include_status = if self.status == 'open'
@@ -24,9 +25,15 @@ module GiftLifecycle
                     " merchant_id = #{loc_id.to_i} ,"
                 else ; "" ; end
 
-                sql = "UPDATE gifts SET #{include_status} #{include_notify} \
-#{include_rec_client_id} #{change_merchant} token = nextval('gift_token_seq'),
+                if already_notified
+                    sql = "UPDATE gifts SET #{include_status} #{include_notify} \
+#{include_rec_client_id} #{change_merchant} token = nextval('gift_token_seq'), \
 new_token_at = '#{current_time}' WHERE id = #{self.id};"
+
+                else
+                    sql = "UPDATE gifts SET #{include_status} #{include_notify} \
+#{include_rec_client_id} #{change_merchant} token = nextval('gift_token_seq') WHERE id = #{self.id};"
+                end
 
                 Gift.connection.execute(sql)
                 reload
