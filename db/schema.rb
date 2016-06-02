@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160528020756) do
+ActiveRecord::Schema.define(version: 20160602203434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1094,7 +1094,7 @@ ActiveRecord::Schema.define(version: 20160528020756) do
   create_table "session_tokens", force: :cascade do |t|
     t.string   "token",        limit: 255
     t.integer  "user_id"
-    t.integer  "device_id"
+    t.string   "device_id"
     t.string   "platform",     limit: 255
     t.string   "push",         limit: 255
     t.datetime "created_at"
