@@ -9,7 +9,7 @@ class UserAfterCreateEvent
 
 		if user && user.partner_id == 29 && user.partner_type == "Affiliate"
 			puts "PTEG user created"
-			self.gift_user_for_pt user
+			# self.gift_user_for_pt user
 		end
 
 	end
