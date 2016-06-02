@@ -23,9 +23,12 @@ class GiftCreatedEvent
 
     def self.notify_via_text gift
         if !gift.receiver_phone.blank?
-            msg = "#{gift.giver_name} sent #{gift.value_s} gift at #{gift.merchant_name} \n Click here to Claim \n#{gift.invite_link}"
+            msg = "#{gift.giver_name} has sent you a #{gift.value_s} eGift Card
+at #{gift.merchant_name} with ItsOnMe® - the eGifting app.\n
+Click here to claim your gift.\n #{gift.invite_link}"
             resp = OpsTwilio.text to: gift.receiver_phone, msg: msg
         end
     end
 
 end
+
