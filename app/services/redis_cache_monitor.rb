@@ -96,8 +96,8 @@ class RedisCacheMonitor
 		            	nil
 		            end
 				elsif ary[2].match /cities/
-		            arg_scope = proc { Region.index }
-		            client.contents(:regions, &arg_scope).map(&:old_city_json).to_json
+		            arg_scope = proc { Region.index_with_inactives }
+		            client.contents(:regions, &arg_scope).map(&:city_with_active_json).to_json
 				elsif ary[2].match /user/
 					user = User.find ary[3]
 					if ary[4].match /gift/

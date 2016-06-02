@@ -33,6 +33,10 @@ class Region < ActiveRecord::Base
 		Region.find_by_sql("SELECT * FROM regions WHERE active = true and position IS NOT NULL ORDER BY position ASC")
 	end
 
+	def self.index_with_inactives
+		Region.find_by_sql("SELECT * FROM regions WHERE active = true and type_of IN (0,2) ORDER BY position ASC")
+	end
+
 	def self.city
 		Region.where(type_of: 0).order(position: :asc)
 	end
@@ -79,6 +83,17 @@ class Region < ActiveRecord::Base
 		hsh
 	end
 
+	def city_with_active_json
+		hsh = {}
+		hsh['name'] = self.name
+		hsh['state'] = self.detail
+		hsh['photo'] = self.photo
+		hsh['region_id'] = self.id
+		hsh['city_id'] = self.id
+		hsh['token'] = self.token
+		hsh['active'] = (self.neighborhood? || self.position.present?)  ? true : false
+		hsh
+	end
 
 
 private

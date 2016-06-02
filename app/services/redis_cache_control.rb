@@ -38,8 +38,8 @@ class RedisCacheControl
 
 		def rebuild_regions
 			Client.all.each do |client|
-	            arg_scope = proc { Region.index }
-		        cities_serialized = client.contents(:regions, &arg_scope).map(&:old_city_json)
+	            arg_scope = proc { Region.index_with_inactives }
+		        cities_serialized = client.contents(:regions, &arg_scope).map(&:city_with_active_json)
 	            RedisWrap.set_cities(client.id, cities_serialized) unless (cities_serialized == [])
 	        end
 		end
