@@ -89,10 +89,6 @@ class Card < ActiveRecord::Base
 	    hsh["card_id"] = self.id
 	    hsh["giver_id"] = self.user_id
 	    hsh["merchant_id"] = merchant_id
-	    # if hsh['trans_token'].nil?
-	    # 	self.transarmor_tokenize
-	    # end
-	    # hsh['trans_token'] = self.trans_token
     	if self.cim_token
 	    	if hsh["cim_profile"] = (cim_profile || self.user.cim_profile)
 	    		hsh["cim_token"]  = self.cim_token
@@ -102,11 +98,8 @@ class Card < ActiveRecord::Base
     	self.decrypt!(PASSPHRASE)
     	hsh["number"]  		= self.number
     	hsh["month_year"] 	= self.month_year
-    	# hsh["month"] 		= self.month
-    	# hsh["year"] 		= self.year
     	hsh["first_name"]   = self.first_name
     	hsh["last_name"] 	= self.last_name
-    	hsh["cvv"] 			= self.csv
 	    hsh
     end
 
