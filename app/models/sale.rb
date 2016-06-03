@@ -15,16 +15,16 @@ class Sale < ActiveRecord::Base
 
     def self.charge_card cc_hsh, ccy='USD'
         puts "\n Sale.charge_card #{cc_hsh.inspect} #{ccy}\n"
-        if ccy == 'USD'
+        # if ccy == 'USD'
             if cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
                 self.charge_cim_token cc_hsh
             else
                 cc_hsh = cc_hsh.except("cim_token", "cim_profile")
                 self.charge_number_then_tokenize cc_hsh
             end
-        else
-            self.charge_trans_token cc_hsh
-        end
+        # else
+        #     self.charge_trans_token cc_hsh
+        # end
     end
 
 #   -------------
