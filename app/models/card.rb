@@ -102,8 +102,8 @@ class Card < ActiveRecord::Base
     	self.decrypt!(PASSPHRASE)
     	hsh["number"]  		= self.number
     	hsh["month_year"] 	= self.month_year
-    	hsh["month"] 		= self.month
-    	hsh["year"] 		= self.year
+    	# hsh["month"] 		= self.month
+    	# hsh["year"] 		= self.year
     	hsh["first_name"]   = self.first_name
     	hsh["last_name"] 	= self.last_name
     	hsh["cvv"] 			= self.csv
