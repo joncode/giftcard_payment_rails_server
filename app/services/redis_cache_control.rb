@@ -1,5 +1,7 @@
 class RedisCacheControl
 
+	# RedisCacheControl.rebuild_regions
+
 	class << self
 
 
