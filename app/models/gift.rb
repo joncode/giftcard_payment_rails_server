@@ -47,6 +47,7 @@ class Gift < ActiveRecord::Base
 
     after_commit :fire_after_save_queue, on: :create
     after_commit :fire_gift_create_event, on: :create
+    after_commit :developer_notify, on: :create
 
 #   -------------
 
@@ -532,6 +533,12 @@ private
         end
     end
 
+    def developer_notify
+        if self.cost.present? && self.cost.length > 6
+            notify_developers
+            puts "500 INTERNAL - COST IS WRONG ON GIFT ! "
+        end
+    end
 
 end
 # == Schema Information
