@@ -49,7 +49,7 @@ private
         args['ccy'] = merchant.ccy
 
             # this should occur in Gift.rb
-        args["cost"] = (args["value"].to_f * merchant.location_fee.to_f).to_s
+        args["cost"] = (args["value"].to_f * merchant.location_fee.to_f).round(2).to_s
         args['service'] = float_to_money(args["value"].to_f * 0.05)
 
         validateGift = Gift.new(args)
