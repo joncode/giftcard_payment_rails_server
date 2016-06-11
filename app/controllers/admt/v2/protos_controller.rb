@@ -14,7 +14,8 @@ class Admt::V2::ProtosController < JsonController
         	success "Request for #{number} gifts from #{proto.giver_name} received."
         	status = 202
         end
-    	respond(status)	end
+    	respond(status)
+    end
 
 
 end
