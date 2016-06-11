@@ -89,7 +89,7 @@ module Email
 
         if data.nil?
             data = {
-                "subject" => "PTEG gift created",
+                "subject" => "Notify Developers",
                 "text"    => "#{gift.inspect}",
                 "email"   => "jon.gutwillig@itson.me"
             }
