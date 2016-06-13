@@ -247,17 +247,8 @@ class OpsFacebook
 
 	def self.attach_account oauth_access_token, facebook_profile, user
 		user_social = UserSocial.includes(:user).where(identifier: facebook_profile['id'], type_of: 'facebook_id').first
-		if user_social.present? && user_social.user.id == user.id
 
-			user = add_facebook_info_to_user(facebook_profile, user)
-
-			if user.save
-				return self.make_oauth_args(oauth_access_token, facebook_profile, user)
-			else
-				return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
-			end
-
-		elsif user_social.present? && user_social.user.id != user.id
+		if user_social.present? && user_social.user.id != user.id
 			return { 'success' => false, 'error' => 'Facebook Account is authorized on a different user account' }
 		else
 

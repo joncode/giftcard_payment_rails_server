@@ -4,7 +4,7 @@ class ClientTokenChangeJob
 
     def self.perform session_token_id, client_id
     	sst = SessionToken.find session_token_id
-    	client = Client.find client_id
+    	# client = Client.find client_id
     	if sst.client_id == 2
 
     		if [6,7].include?(client_id)
@@ -15,7 +15,7 @@ class ClientTokenChangeJob
 
     	else
 
-    		puts " ClientTokenChangeJob ----  DENIED SESSION TOKEN NOT CLIENT TOKEN ---- (500 Internal)"
+    		puts " ClientTokenChangeJob -  DENIED SESSION TOKEN (#{session_token_id}) NOT CLIENT TOKEN (#{client_id}) -- (500 Internal)"
 
     	end
 
