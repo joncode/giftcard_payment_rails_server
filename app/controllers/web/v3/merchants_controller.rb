@@ -79,7 +79,7 @@ private
     end
 
     def merchant_signup_params
-        params.require(:merchant_signup).permit('address', "venue_name", "venue_url",
+        params.require(:data).permit('address', "venue_name", "venue_url",
              "point_of_sale_system", "name", "email", "phone", "position", "message")
     end
 
