@@ -8,7 +8,7 @@ class Web::V3::MerchantsController < MetalCorsController
         if submit_obj.save
             mail_notice_submit_merchant_setup(submit_obj)
             mail_merchant_signup_welcome(submit_obj)
-            success
+            success submit_obj
         else
             fail_web({
                 err: "INVALID_INPUT",
