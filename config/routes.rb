@@ -173,6 +173,9 @@ Drinkboard::Application.routes.draw do
 					get :receipt_photo_url
 					get :redeem_locations
 				end
+				collection do
+					post :signup
+				end
 			end
 
 			resources :regions,   only: [:index] do

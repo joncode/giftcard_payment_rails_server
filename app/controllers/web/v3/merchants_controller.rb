@@ -2,6 +2,23 @@ class Web::V3::MerchantsController < MetalCorsController
 
     before_action :authentication_no_token
 
+    def signup
+        submit_obj = MerchantSignup.new(merchant_signup_params)
+
+        if submit_obj.save
+            mail_notice_submit_merchant_setup(submit_obj)
+            mail_merchant_signup_welcome(submit_obj)
+            success
+        else
+            fail_web({
+                err: "INVALID_INPUT",
+                msg: submit_obj.errors.full_messages
+            })
+        end
+
+        respond
+    end
+
     def index
 
         cache_resp = RedisWrap.get_merchants(@current_client.id)
@@ -47,6 +64,23 @@ class Web::V3::MerchantsController < MetalCorsController
     def receipt_photo_url
         success({ "receipt_photo_url" => DEFAULT_RECEIPT_IMG_URL})
         respond
+    end
+
+private
+
+    def mail_notice_submit_merchant_setup merchant_submit_obj
+        data = { 'method' => 'mail_notice_submit_merchant_setup', 'args' => merchant_submit_obj }
+        Resque.enqueue(InternalMailerJob, data)
+    end
+
+    def mail_merchant_signup_welcome merchant_submit_obj
+        data = { 'text' => 'merchant_signup_welcome', 'args' => merchant_submit_obj }
+        Resque.enqueue(MailerJob, data)
+    end
+
+    def merchant_signup_params
+        params.require(:merchant_signup).permit('address', "venue_name", "venue_url",
+             "point_of_sale_system", "name", "email", "phone", "position", "message")
     end
 
 end
