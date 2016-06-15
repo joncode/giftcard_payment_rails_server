@@ -46,6 +46,7 @@ class Web::V3::UsersController < MetalCorsController
         resp = OpsFacebook.attach_account(oauth_access_token, profile, @current_user)
         if resp['success']
             user = resp['user']
+            # user.reload
             # @current_client.content = user --- in Resque in create_token_obj
             success user.login_client_serialize
         else
