@@ -113,7 +113,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}
         end
 
-        omnivore = Omnivore.init_with_gift(self, ticket_num)
+        omnivore = Omnivore.init_with_gift(self, ticket_num, nil, loc_id)
         resp = omnivore.redeem
 
         puts "\nHere is the pos_redeem resp = #{resp.inspect}\n"
