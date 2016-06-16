@@ -9,6 +9,7 @@ module MerchantSerializers
 		prov_hash["full_address"] = self.full_address
 		prov_hash["live"]         = self.live_int
 		prov_hash["desc"]		  = self.description
+		add_multi_loc(prov_hash)
 		return prov_hash
 	end
 
@@ -20,6 +21,7 @@ module MerchantSerializers
 		prov_hash['city']		  = self.city_name
 		prov_hash["address"]      = self.complete_address
 		prov_hash["live"]         = self.live_int.to_i
+		add_multi_loc(prov_hash)
 		return remove_nils(prov_hash)
 	end
 
@@ -51,6 +53,7 @@ module MerchantSerializers
 		prov_hash["loc_zip"]    = self.zip
 		prov_hash["live"]       = self.live
 		prov_hash["detail"]		= self.description
+		add_multi_loc(prov_hash)
 		# multi_redemption_web_keys prov_hash
 		prov_hash
 	end
@@ -65,6 +68,14 @@ module MerchantSerializers
 	end
 
 private
+
+	def add_multi_loc prov_hash
+        if self.client.present?
+            prov_hash['multi_loc'] = 'yes'
+        else
+            prov_hash['multi_loc'] = 'no'
+        end
+	end
 
 	def multi_redemption_web_keys prov_hash
         if self.client.present?
