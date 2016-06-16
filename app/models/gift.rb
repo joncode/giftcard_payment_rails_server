@@ -507,6 +507,11 @@ private
 	end
 
     def add_merchant_name
+        if self.merchant.client.present?
+            if p = self.merchant.client.partner
+                self.provider_name = p.name
+            end
+        end
         if self.provider_name.blank?
             if m = Merchant.unscoped.find(self.merchant_id)
                 self.merchant = m

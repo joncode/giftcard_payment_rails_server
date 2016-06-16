@@ -55,7 +55,11 @@ class Affiliate < ActiveRecord::Base
 	end
 
 	def name
-		"#{first_name} #{last_name}"
+		if self.last_name.blank?
+			self.first_name
+		else
+			"#{self.first_name} #{self.last_name}"
+		end
 	end
 
 private
