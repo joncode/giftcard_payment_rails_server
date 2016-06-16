@@ -105,6 +105,10 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
 
     def pos_redeem(ticket_num, pos_merchant_id, tender_type_id, loc_id=nil)
         # if loc_id - do multi loc redemption
+
+        puts "\n HERE IN POS REDEEM - \n ticket_number = #{ticket_num} , pos_merchant_id = #{pos_merchant_id} \
+, tender_type_id = #{tender_type_id} , loc_id = |#{loc_id}|"
+
         if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
             return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}
         end
