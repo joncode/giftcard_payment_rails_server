@@ -1,7 +1,7 @@
 module OmnivoreUtils
 
 	def init_with_gift gift, ticket_num, value=nil, loc_id=nil
-        if loc_id.present?
+        if loc_id.to_i > 0
             merchant = Merchant.unscoped.find(loc_id)
         else
             merchant = gift.merchant
