@@ -13,8 +13,22 @@ class GiftUnredeemEvent
                     r.reverse_charge
                 end
             end
+
             if gift.status == 'redeemed'
-                gift.update(status: 'notified' , redeemed_at: nil, order_num: nil)
+                if gift.notified_at.nil?
+                    if gift.receiver_id.nil?
+                        gift.update(status: 'incomplete', redeemed_at: nil, order_num: nil)
+                    else
+                        gift.update(status: 'open', redeemed_at: nil, order_num: nil)
+                    end
+                else
+                    gift.update(status: 'notified' , redeemed_at: nil, order_num: nil)
+                end
+                if gift.merchant.redemption?
+                    gift.redemptions.each do |redemption|
+                        redemption.destroy
+                    end
+                end
                 GiftAfterSaveJob.perform(gift)
             end
         	# puts PointsForCompletionJob.perform gift_id
