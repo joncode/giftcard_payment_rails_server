@@ -22,13 +22,14 @@ class ProtoJoin < ActiveRecord::Base
 			args['receiver_id']   = receiver.id
 		elsif receiver.kind_of?(Social)
 			# set the name and the correct args key
+			args['receiver_name'] = receiver.name
 			case receiver.network
 			when 'email'
 				args['receiver_email'] 	= receiver.network_id
-				args['receiver_name']   = receiver.network_id
+				args['receiver_name'] = receiver.network_id if args['receiver_name'].blank?
 			when 'phone'
 				args['receiver_phone'] 	= receiver.network_id
-				args['receiver_name']  = number_to_phone(receiver.network_id, area_code: true)
+				args['receiver_name'] = number_to_phone(receiver.network_id, area_code: true) if args['receiver_name'].blank?
 			when 'facebook_id'
 				args['facebook_id'] 	= receiver.network_id
 			when 'facebook'

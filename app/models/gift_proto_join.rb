@@ -23,7 +23,8 @@ class GiftProtoJoin < Gift
 						pjn = ProtoJoin.new(gift_id: nil,
 							receivable_type: proto_join.receivable_type,
 							receivable_id: proto_join.receivable_id,
-							proto_id: proto.id)
+							proto_id: proto.id,
+							rec_name: proto_join.rec_name)
 						proto_join = pjn
 					end
 
