@@ -9,8 +9,9 @@ class Web::V3::UsersController < MetalCorsController
         us = UserSocial.find_by(user_id: @current_user.id, id: params[:id])
 
         raise ActiveRecord::RecordNotFound if us.nil?
-        @current_user.deactivate_social(us.type_of, us.identifier)
-        if !us.active
+        resp_social = @current_user.deactivate_social(us.type_of, us.identifier)
+
+        if !resp_social.active
             success("Delete Succeeded")
         else
             fail_web({

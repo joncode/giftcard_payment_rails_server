@@ -188,6 +188,7 @@ class User < ActiveRecord::Base
         else
         	user_social.update(active: false)
         end
+        user_social
     end
 
 ####### USER GETTERS AND SETTERS
