@@ -16,13 +16,13 @@ class ProtoJoin < ActiveRecord::Base
 	def convert_to_gift_receiver(args)
 		receiver = self.receivable
 		receiver = receiver.user if receiver.kind_of?(UserSocial)
+		args['receiver_name'] = self.rec_name
+		args['receiver_name'] = receiver.name if args['receiver_name'].blank?
 		if receiver.kind_of?(User)
 			# set the name and the id
-			args['receiver_name'] = receiver.name
 			args['receiver_id']   = receiver.id
 		elsif receiver.kind_of?(Social)
 			# set the name and the correct args key
-			args['receiver_name'] = receiver.name
 			case receiver.network
 			when 'email'
 				args['receiver_email'] 	= receiver.network_id
