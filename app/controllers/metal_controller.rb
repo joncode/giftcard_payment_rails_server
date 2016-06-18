@@ -136,6 +136,12 @@ class MetalController < ActionController::Base
                 err: "CLIENT_DEACTIVTED",
                 msg: "Client is not currently active"
             }
+        when "unable_to_attach_facebook"
+            {
+                err: "UNABLE_TO_ATTACH_FACEBOOK_PROFILE",
+                msg: "Unable to attach Facebook Profile",
+                data: error_data
+            }
         else
             if error_name.kind_of?(String)
                 {
