@@ -41,7 +41,7 @@ class OpsFacebook
 	end
 
 	def self.reset_token
-		facebook_oauth ||= Koala::Facebook::OAuth.new(client_id, FACEBOOK_APP_SECRET)
+		facebook_oauth ||= Koala::Facebook::OAuth.new(FACEBOOK_APP_ID, FACEBOOK_APP_SECRET)
 
 		# Checks the saved expiry time against the current time
 		if facebook_token_expired?
