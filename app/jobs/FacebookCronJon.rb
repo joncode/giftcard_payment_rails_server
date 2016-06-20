@@ -7,11 +7,12 @@ class FacebookCronJob
 		os.each do |o|
 			begin
 				graph = Koala::Facebook::API.new(o.token, FACEBOOK_APP_SECRET)
+				p = graph.get_object("me")
 			rescue
 				puts "NO SECRET #{o.id}"
 				graph = Koala::Facebook::API.new(o.token)
+				p = graph.get_object("me")
 			end
-			p = graph.get_object("me")
 			puts p.inspect
 			resp = facebook_oauth.exchange_access_token_info o.token
 			puts resp.inspect
