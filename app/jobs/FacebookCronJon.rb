@@ -8,20 +8,24 @@ class FacebookCronJob
 			good = true
 			begin
 				graph = Koala::Facebook::API.new(o.token, FACEBOOK_APP_SECRET)
-				p = graph.get_object("me")
-			rescue
+				puts graph.get_object("me")
+			rescue => e
+				puts e.inspect
 				begin
 					puts "NO SECRET #{o.id}"
 					graph = Koala::Facebook::API.new(o.token)
-					p = graph.get_object("me")
-				rescue
+					puts graph.get_object("me")
+				rescue => e
+					puts e.inpect
 					puts "TOKEN IS BROKEN #{o.id}"
 					good = false
 				end
 			end
-			puts p.inspect
-			resp = facebook_oauth.exchange_access_token_info o.token if good
-			puts resp.inspect
+			begin
+				puts facebook_oauth.exchange_access_token_info o.token if good
+			rescue => e
+				puts e.inspect
+			end
 		end
 	end
 
