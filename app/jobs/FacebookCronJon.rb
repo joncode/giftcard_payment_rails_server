@@ -16,7 +16,7 @@ class FacebookCronJob
 					graph = Koala::Facebook::API.new(o.token)
 					puts graph.get_object("me")
 				rescue => e
-					puts e.inpect
+					puts e.inspect
 					puts "TOKEN IS BROKEN #{o.id}"
 					good = false
 				end
