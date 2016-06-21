@@ -8,21 +8,24 @@ class OpsFacebook
 
 	def self.parse_error err
 		print "500 Internal (self.parse_error) " + err.class.to_s  + err.inspect
-		if err.kind_of?(Hash)
-			error_message = err['fb_error_user_msg'] || err['fb_error_message'] || err['response_body']
+
+		error_message = if err.respond_to?(:fb_error_user_msg)
+			err.fb_error_user_msg
+		elsif err.respond_to?(:fb_error_message)
+			err.fb_error_message
+		elsif err.respond_to?(:response_body)
+			err.response_body
+		elsif err.respond_to?(:messsage)
+			err.messsage
+		elsif err.respond_to?(:fb_error_user_title)
+			err.fb_error_user_title
+		elsif err.kind_of?(Hash)
+			err['fb_error_user_msg'] || err['fb_error_message'] || err['response_body'] || err['message']
 		else
-			if err.respond_to?(:fb_error_user_msg)
-				error_message = err.fb_error_user_msg
-			elsif err.respond_to?(:fb_error_message)
-				error_message = err.fb_error_message
-			elsif err.respond_to?(:response_body)
-				error_message = err.response_body
-			else
-				error_message = err
-			end
+			err
 		end
 		puts error_message.inspect + " OpsFacebook.parse_error"
-		if error_message.match(/access token/)
+		if error_message.nil? || error_message.match(/access token/)
 			return "Looks like we have a problem with facebook authorization, please re-connect to facebook. (If you continue to see this message, upgrade your app)"
 		end
 		error_message
