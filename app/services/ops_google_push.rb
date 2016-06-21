@@ -19,9 +19,10 @@ class OpsGooglePush
 			registration_ids = format_push_ids(pn_tokens)
 			msg = format_payload({ action: 'VERIFY_ID' })
 			r = perform(registration_ids, msg)
-			if r[:canonical_ids][0].present? && r[:canonical_ids][0][:new].present?
+			if r && r[:canonical_ids][0].present? && r[:canonical_ids][0][:new].present?
 				r[:canonical_ids][0][:new]
 			else
+				puts "500 Internal - Bad GCM Token #{pn_token}"
 				nil
 			end
 		end

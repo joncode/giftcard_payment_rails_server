@@ -15,7 +15,7 @@ class ClientTokenChangeJob
 
     	else
 
-    		puts " ClientTokenChangeJob -  DENIED SESSION TOKEN (#{session_token_id}) NOT CLIENT TOKEN (#{client_id}) -- (500 Internal)"
+    		#puts " ClientTokenChangeJob -  DENIED SESSION TOKEN (#{session_token_id}) NOT CLIENT TOKEN (#{client_id}) -- (500 Internal)"
 
     	end
 

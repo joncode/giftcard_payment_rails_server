@@ -19,6 +19,7 @@ class PointsForCompletionJob
 
 		user       = gift.giver
 		return if user.nil?
+
 		merchant   = gift.merchant
 		region_id  = merchant.region_id
 
