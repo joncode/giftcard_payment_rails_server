@@ -1,5 +1,11 @@
 class FacebookCronJob
 
+	@queue = :subscription
+
+	def self.perform
+		check_tokens
+	end
+
 
 	def self.check_oauth_tokens
 		os = Oauth.all
