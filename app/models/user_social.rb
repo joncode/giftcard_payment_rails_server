@@ -36,6 +36,7 @@ class UserSocial < ActiveRecord::Base
 
     def set_reauth(msg: "Please Reauthorize your Facebook account")
         puts "Reauth #{self.id} " + msg.inspect
+        update(status: 'reauth', msg: msg)
     end
 
 private

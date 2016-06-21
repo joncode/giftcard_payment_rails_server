@@ -138,8 +138,12 @@ class User < ActiveRecord::Base
 #/---------------------------------------------------------------------------------------------/
 
 
-	def current_oauth network_name='facebook'
-		self.oauths.where(network: network_name).order(created_at: :desc).first
+	def current_oauth(net_name: 'facebook', net_id: nil)
+		if net_id.nil?
+			self.oauths.where(network: net_name).order(created_at: :desc).first
+		else
+			self.oauths.where(network: net_name, network_id: net_id).order(created_at: :desc).first
+		end
 	end
 
 ########   USER SOCIAL METHODS

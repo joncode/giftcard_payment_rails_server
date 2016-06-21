@@ -46,11 +46,20 @@ module UserSerializers
                 end
                 usr_hash[net_id] = []
                 us.each do |social|
-                    usr_hash[net_id] << { "_id" => social.id, "value" => social.identifier }
+                    if social.status == 'live'
+                        usr_hash[net_id] << { "_id" => social.id,
+                            "value" => social.identifier,
+                            'status' => social.status }
+                    else
+                        usr_hash[net_id] << { "_id" => social.id,
+                            "value" => social.identifier,
+                            'status' => social.status,
+                            'msg' => social.msg }
+                    end
                 end
             end
         end
-        usr_hash["token"]   = self.remember_token
+        usr_hash["token"] = self.remember_token
         usr_hash
     end
 

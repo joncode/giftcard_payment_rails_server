@@ -212,12 +212,12 @@ class OpsFacebook
 				if user.facebook_id.blank?
 					user = add_facebook_info_to_user(facebook_profile, user)
 					if user.save
-						return self.make_oauth_args(oauth_access_token, facebook_profile, user)
+						return self.make_oauth_args(oauth_access_token, facebook_profile, user, user_social)
 					else
 						return { 'success' => false, 'error' => user.errors.full_messages.join('. ')}
 					end
 				else
-					return self.make_oauth_args(oauth_access_token, facebook_profile, user)
+					return self.make_oauth_args(oauth_access_token, facebook_profile, user, user_social)
 				end
 
 			else
@@ -300,7 +300,7 @@ class OpsFacebook
 		return user
 	end
 
-	def self.make_oauth_args(oauth_access_token, facebook_profile, user)
+	def self.make_oauth_args(oauth_access_token, facebook_profile, user, user_social=nil)
 		#  id         :integer         not null, primary key
 		#  gift_id    :integer
 		#  token      :string(255)
@@ -321,6 +321,12 @@ class OpsFacebook
 			token: oauth_access_token, photo: "http://graph.facebook.com/#{facebook_profile['id']}/picture"}
 
 		if Oauth.create(oauth_args).persisted?
+			if user_social.nil?
+				user_social = user.user_socials.where(type_of: 'facebook_id',
+					identifier: facebook_profile['id'],
+					active: true).first
+			end
+			user_social.update(status: 'live', msg: nil) unless user_social.blank?
 			return { 'success' => true, 'user' => user }
 		else
 			return { 'success' => false, 'error' => 'Unable to Save Oauth Token' }
