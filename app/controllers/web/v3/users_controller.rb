@@ -76,17 +76,25 @@ class Web::V3::UsersController < MetalCorsController
             graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
             profile = graph.get_object("me")
         rescue
-            graph = Koala::Facebook::API.new(oauth_access_token)
-            profile = graph.get_object("me")
+            begin
+                graph = Koala::Facebook::API.new(oauth_access_token)
+                profile = graph.get_object("me")
+            rescue
+                no_authorized_facebook = true
+            end
         end
-        resp = OpsFacebook.attach_account(oauth_access_token, profile, @current_user)
-        if resp['success']
-            user = resp['user']
-            # user.reload
-            # @current_client.content = user --- in Resque in create_token_obj
-            success user.login_client_serialize
+        if no_authorized_facebook
+            fail_web fail_web_payload("authorize_app_with_facebook", "Error validating access token: The user has not authorized application")
         else
-            fail_web fail_web_payload("unable_to_attach_facebook", resp['error'])
+            resp = OpsFacebook.attach_account(oauth_access_token, profile, @current_user)
+            if resp['success']
+                user = resp['user']
+                # user.reload
+                # @current_client.content = user --- in Resque in create_token_obj
+                success user.login_client_serialize
+            else
+                fail_web fail_web_payload("unable_to_attach_facebook", resp['error'])
+            end
         end
         respond
     end
@@ -98,17 +106,25 @@ class Web::V3::UsersController < MetalCorsController
             graph = Koala::Facebook::API.new(oauth_access_token, FACEBOOK_APP_SECRET)
             profile = graph.get_object("me")
         rescue
-            graph = Koala::Facebook::API.new(oauth_access_token)
-            profile = graph.get_object("me")
+            begin
+                graph = Koala::Facebook::API.new(oauth_access_token)
+                profile = graph.get_object("me")
+            rescue
+                no_authorized_facebook = true
+            end
         end
-        resp = OpsFacebook.create_account(oauth_access_token, profile, @current_client, @current_partner)
-        if resp['success']
-            user = resp['user']
-            user.session_token_obj =  SessionToken.create_token_obj(user, nil, nil, @current_client, @current_partner)
-            # @current_client.content = user --- in Resque in create_token_obj
-            success user.login_client_serialize
+        if no_authorized_facebook
+            fail_web fail_web_payload("authorize_app_with_facebook", "Error validating access token: The user has not authorized application")
         else
-            fail_web fail_web_payload("not_created_user", resp['error'])
+            resp = OpsFacebook.create_account(oauth_access_token, profile, @current_client, @current_partner)
+            if resp['success']
+                user = resp['user']
+                user.session_token_obj =  SessionToken.create_token_obj(user, nil, nil, @current_client, @current_partner)
+                # @current_client.content = user --- in Resque in create_token_obj
+                success user.login_client_serialize
+            else
+                fail_web fail_web_payload("not_created_user", resp['error'])
+            end
         end
         respond
     end
