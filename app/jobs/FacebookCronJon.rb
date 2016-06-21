@@ -34,7 +34,7 @@ class FacebookCronJob
 		uss = UserSocial.where(type_of: 'facebook_id', active: true)
 
 		uss.each do |us|
-			o = us.user.current_oath
+			o = us.user.current_oauth
 			err = nil
 			begin
 				graph = Koala::Facebook::API.new(o.token)
