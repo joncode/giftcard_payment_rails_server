@@ -34,6 +34,10 @@ class UserSocial < ActiveRecord::Base
         type_of
     end
 
+    def set_reauth(msg: "Please Reauthorize your Facebook account")
+        puts "Reauth #{self.id} " + msg.inspect
+    end
+
 private
 
     def fire_after_save_queue
