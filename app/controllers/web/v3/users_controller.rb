@@ -66,7 +66,7 @@ class Web::V3::UsersController < MetalCorsController
             graph = Koala::Facebook::API.new(oauth_access_token)
             profile = graph.get_object("me")
         end
-        resp = OpsFacebook.create_account(oauth_access_token, profile, @current_client,  @current_partner)
+        resp = OpsFacebook.create_account(oauth_access_token, profile, @current_client, @current_partner)
         if resp['success']
             user = resp['user']
             user.session_token_obj =  SessionToken.create_token_obj(user, nil, nil, @current_client, @current_partner)

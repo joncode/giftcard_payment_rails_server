@@ -31,7 +31,7 @@ class FacebookCronJob
 
 	def self.check_tokens
 
-		uss = UserSocial.where(type_of: 'facebook_id', active: true)
+		uss = UserSocial.where(type_of: 'facebook_id', status: 'live', active: true)
 
 		generic_msg = "Please Re-authorize your Facebook account credentials"
 
