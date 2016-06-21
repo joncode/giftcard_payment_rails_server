@@ -20,7 +20,7 @@ class OpsFacebook
 		elsif err.respond_to?(:fb_error_user_title)
 			err.fb_error_user_title
 		elsif err.kind_of?(Hash)
-			err['fb_error_user_msg'] || err['fb_error_message'] || err['response_body'] || err['message']
+			(err['fb_error_user_msg'] || err['fb_error_message'] || err['response_body'] || err['message'])
 		else
 			err
 		end
