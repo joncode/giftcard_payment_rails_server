@@ -144,10 +144,17 @@ class MetalController < ActionController::Base
             }
         else
             if error_name.kind_of?(String)
-                {
-                    err: error_name.gsub(' ', '_').upcase,
-                    msg: error_name
-                }
+                if error_data
+                    {
+                        err: error_name.gsub(' ', '_').upcase,
+                        msg: error_data
+                    }
+                else
+                    {
+                        err: error_name.gsub(' ', '_').upcase,
+                        msg: error_name
+                    }
+                end
             end
         end
     end
