@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160621010727) do
+ActiveRecord::Schema.define(version: 20160621214921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1201,6 +1201,7 @@ ActiveRecord::Schema.define(version: 20160621010727) do
     t.string   "handle",     limit: 255
     t.string   "status",                 default: "live"
     t.string   "msg"
+    t.string   "code"
   end
 
   add_index "user_socials", ["active", "identifier"], name: "index_user_socials_on_active_and_identifier", using: :btree

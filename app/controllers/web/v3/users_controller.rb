@@ -5,6 +5,41 @@ class Web::V3::UsersController < MetalCorsController
 
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
+    def activate
+        us = UserSocial.find_by(user_id: @current_user.id, id: params[:id])
+
+        if us.status == 'live'
+            success("#{us.display_net_id} is alreaday activated.")
+        else
+            resp = us.get_auth_code
+            if resp['success']
+                success("Activation Message is being sent to #{us.display_net_id}.")
+            else
+                fail_web({
+                    err: "ACTIVATION_FAILED",
+                    msg: resp['error']
+                })
+            end
+        end
+
+        respond
+    end
+
+    def authorize
+        str_code = params[:id].gsub(/[^0-9.]/, '')
+        us = UserSocial.find_by(user_id: @current_user.id, code: str_code)
+
+        if us.authorize
+            success("#{us.display_net_id} Authorize Successful.")
+        else
+            fail_web({
+                err: "AUTHORIZE_FAILED",
+                msg: us.errors.full_messages
+            })
+        end
+        respond
+    end
+
     def socials
         us = UserSocial.find_by(user_id: @current_user.id, id: params[:id])
 

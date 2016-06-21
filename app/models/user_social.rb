@@ -1,11 +1,12 @@
 class UserSocial < ActiveRecord::Base
+    include ActionView::Helpers::NumberHelper
     include ModelValidationHelper
 
     default_scope -> { where(active: true) }  # indexed
 
 #   -------------
 
-    before_validation     :reject_xxx_emails
+    before_validation :reject_xxx_emails
     before_validation { |social| social.identifier = strip_and_downcase(identifier)   if is_email? }
     before_validation { |social| social.identifier = extract_phone_digits(identifier) if is_phone? }
 
@@ -15,6 +16,10 @@ class UserSocial < ActiveRecord::Base
     validates :identifier , format: { with: VALID_PHONE_REGEX, message: "phone number is invalid" }, if: :is_phone?
     validates :identifier , format: { with: VALID_EMAIL_REGEX, message: "email is invalid" }, :if => :is_email?
     validates_with MultiTypeIdentifierUniqueValidator
+
+#   -------------
+
+    before_create :set_user_auth_required
 
 #   -------------
 
@@ -30,8 +35,33 @@ class UserSocial < ActiveRecord::Base
 
 #   -------------
 
+    def phone?
+        self.type_of == 'phone'
+    end
+
+    def display_net_id
+        if phone?
+            number_to_phone(self.identifier, area_code: true)
+        else
+            self.identifier
+        end
+    end
+
+    def network_id
+        identifier
+    end
+
     def network
         type_of
+    end
+
+#   -------------
+
+    def authorize
+        self.status = 'live'
+        self.msg = "Authorized #{DateTime.now.utc} #{self.code}"
+        self.code = nil
+        save
     end
 
     def set_reauth(msg: "Please Reauthorize your Facebook account")
@@ -39,7 +69,63 @@ class UserSocial < ActiveRecord::Base
         update(status: 'reauth', msg: msg)
     end
 
+    def set_user_auth_required
+        if self.type_of == 'phone'
+            self.status = 'user_auth_required'
+            self.msg = 'Please sms authorize phone'
+        elsif self.type_of == 'email'
+            self.status = 'user_auth_required'
+            self.msg = 'Please confirm email'
+        end
+    end
+
+    def get_auth_code
+        if !self.active
+            return { success: false,
+                error: "#{display_net_id} is deactivated. Cannot Activate" }
+        end
+
+        if self.status == 'live'
+            return { success: true,
+                error: "#{display_net_id} is alreaday activated." }
+        end
+
+        int_code = make_integer_code
+        if self.update(code: int_code.to_s,
+                status: 'activate',
+                msg: "Waiting for user authorization")
+
+            if phone?
+                OpsTwilio.text(self.identifier, "Your ItsOnMe code is #{hyphen_code(int_code)}")
+            end
+
+            return { success: true,
+                error: "#{display_net_id} is activated." }
+        else
+            return { success: false,
+                error: "#{display_net_id} #{self.errors.full_messages}. Cannot Activate" }
+        end
+    end
+
+    def hyphen_code int_code
+        c = int_code.to_s
+        x = c[0..2]
+        y = c[3..5]
+        x + '-' + y
+    end
+
+    def make_integer_code
+        int_code = rand(900000) + 100000
+        us = UserSocial.where(code: int_code).first
+        if us.length == 0
+            return int_code
+        else
+            return make_integer_code
+        end
+    end
+
 private
+
 
     def fire_after_save_queue
         if thread_on?

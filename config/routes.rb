@@ -198,6 +198,8 @@ Drinkboard::Application.routes.draw do
 				end
 				member do
 					delete :socials
+					get :activate
+					post :authorize
 				end
 			end
 		end

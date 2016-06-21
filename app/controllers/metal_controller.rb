@@ -1,5 +1,5 @@
 class MetalController < ActionController::Base
-
+    include ActionView::Helpers::NumberHelper
     include CommonUtils
 
     skip_before_action   :verify_authenticity_token
