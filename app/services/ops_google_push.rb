@@ -24,7 +24,7 @@ class OpsGooglePush
 			else
 				body = r[:body]
 				data = JSON.parse body
-				if r["success"] != 1
+				if data["success"] != 1
 					puts "500 Internal - Bad GCM Token #{pn_token.pn_token}"
 					nil
 				end
