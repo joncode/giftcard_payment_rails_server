@@ -15,8 +15,8 @@ class OpsFacebook
 			err.fb_error_message
 		elsif err.respond_to?(:response_body)
 			err.response_body
-		elsif err.respond_to?(:messsage)
-			err.messsage
+		elsif err.respond_to?(:message)
+			err.message
 		elsif err.respond_to?(:fb_error_user_title)
 			err.fb_error_user_title
 		elsif err.kind_of?(Hash)
