@@ -109,7 +109,7 @@ class OpsFacebook
 			friends = app_friends['data'] + app_removed_taggable_friends
 			return { 'success' => true, 'data' => friends }
 		else
-			return { 'success' => false, 'error' => 'Error on facebook friends' }
+			return { 'success' => false, 'error' => 'Please reconnect your Facebook profile.' }
 		end
 	end
 
