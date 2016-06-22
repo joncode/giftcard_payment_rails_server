@@ -22,8 +22,12 @@ class OpsGooglePush
 			if r && r[:canonical_ids][0].present? && r[:canonical_ids][0][:new].present?
 				r[:canonical_ids][0][:new]
 			else
-				puts "500 Internal - Bad GCM Token #{pn_token}"
-				nil
+				body = r[:body]
+				data = JSON.parse body
+				if data["success"] != 1
+					puts "500 Internal - Bad GCM Token #{pn_token.pn_token}"
+					nil
+				end
 			end
 		end
 
