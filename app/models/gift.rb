@@ -81,6 +81,38 @@ class Gift < ActiveRecord::Base
         super
     end
 
+#   -------------
+
+    def paper_id
+        @paper_id ||= set_paper_id
+    end
+
+    def set_paper_id
+        gid = self.id
+        gstr = gid.to_s.reverse
+        x = ""
+        [gstr[0], gstr[5], gstr[2], gstr[1], gstr[4], gstr[3]].each {|a| x += a || '0' }
+        'LT-' + x[0..2] + '-' + x[3..5]
+    end
+
+    def self.find_paper paper_id
+        gid = self.id_from_paper paper_id
+        find gid
+    end
+
+    def self.id_from_paper paper_id
+        paper_nums = paper_id.to_s.gsub(/[^0-9]/, '')
+        gid = paper_nums[1] + paper_nums[4] + paper_nums[5] + paper_nums[2] + paper_nums[3] + paper_nums[0]
+        gid.to_i
+    end
+
+    def obscured_id
+        NUMBER_ID + self.id
+    end
+
+    def self.find_with_obscured_id obscured_id
+        find(obscured_id.to_i - NUMBER_ID)
+    end
 
 #   -------------
 
@@ -96,13 +128,6 @@ class Gift < ActiveRecord::Base
         self.origin = link
     end
 
-    def obscured_id
-        NUMBER_ID + self.id
-    end
-
-    def self.find_with_obscured_id obscured_id
-        find(obscured_id.to_i - NUMBER_ID)
-    end
 
 #   -------------
 
