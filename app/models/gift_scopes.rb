@@ -38,7 +38,7 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
     end
 
     def boomerangable
-        boom_time = 14.days
+        boom_time = 30.days
         if Rails.env.staging?
             boom_time = 1.days
         end
