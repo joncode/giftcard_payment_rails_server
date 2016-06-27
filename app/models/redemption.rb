@@ -10,7 +10,7 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-	enum type_of: [ :positronics, :v2, :v1 ]
+	enum type_of: [ :pos, :v2, :v1, :paper ]
 
 	def self.init_with_gift(gift, loc_id=nil, r_type_of=nil)
         r = Redemption.new
@@ -39,7 +39,7 @@ class Redemption < ActiveRecord::Base
 		when 2
 			:v2
 		when 3
-			:positronics
+			:pos
 		end
 	end
 

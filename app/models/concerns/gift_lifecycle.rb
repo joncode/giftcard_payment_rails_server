@@ -87,7 +87,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         detail_msg     = self.detail || ""
         redemption_msg = "#{number_to_currency(pos_obj.applied_value/100.0)} was paid with check # #{pos_obj.ticket_num}\n"
         self.detail    = redemption_msg + detail_msg
-        r = Redemption.init_with_gift(self, loc_id, :positronics)
+        r = Redemption.init_with_gift(self, loc_id, :pos)
         r.gift_prev_value = prev_value
         r.gift_next_value = self.balance
         r.amount          = pos_obj.applied_value
@@ -122,7 +122,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             if omnivore.code == 201
                 partial_redeem(omnivore, loc_id)
             elsif omnivore.code == 200 || omnivore.code == 206
-                redeem_gift(nil, loc_id, :positronics)
+                redeem_gift(nil, loc_id, :pos)
             end
             resp['success'] = true
         else
