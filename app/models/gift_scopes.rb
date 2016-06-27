@@ -40,7 +40,7 @@ AND g.merchant_id = m.id  AND g.token = #{code} AND g.new_token_at > '#{reset_ti
     def boomerangable
         boom_time = 30.days
         if Rails.env.staging?
-            boom_time = 1.days
+            boom_time = 30.days
         end
         boom_time  = Time.now.utc - boom_time
         where("active AND status = 'incomplete' AND giver_type = 'User' AND (created_at < ?) AND giver_id != 62", boom_time)
