@@ -92,7 +92,7 @@ private
 
     def self.expires_at_calc expires_at, expires_in
         if expires_at.present?
-            expires_at
+            expires_at + 1.day
         elsif expires_in.present?
             DateTime.now.utc.to_date + expires_in.days
         end
