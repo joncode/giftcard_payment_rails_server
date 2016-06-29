@@ -15,16 +15,17 @@ class Sale < ActiveRecord::Base
 
     def self.charge_card cc_hsh, ccy='USD'
         puts "\n Sale.charge_card #{cc_hsh.inspect} #{ccy}\n"
-        # if ccy == 'USD'
-            if cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
-                self.charge_cim_token cc_hsh
-            else
-                cc_hsh = cc_hsh.except("cim_token", "cim_profile")
-                self.charge_number_then_tokenize cc_hsh
-            end
-        # else
-        #     self.charge_trans_token cc_hsh
-        # end
+
+        if cc_hsh['stripe_id'].present?
+            cc_hsh['ccy'] = ccy
+            self.charge_stripe cc_hsh
+        elsif cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
+            self.charge_cim_token cc_hsh
+        else
+            cc_hsh = cc_hsh.except("cim_token", "cim_profile")
+            self.charge_number_then_tokenize cc_hsh
+        end
+
     end
 
 #   -------------
@@ -50,6 +51,12 @@ private
 
 #   -------------
 
+    def self.charge_stripe cc_hsh
+        o = OpsStripe.new cc_hsh
+        o.purchase
+        o
+    end
+
     def self.charge_number_then_tokenize cc_hsh
         payment_hsh = {}
         credit_card_data_keys = ["number", "month_year", "first_name", "last_name", "amount"]
@@ -68,13 +75,13 @@ private
         Sale.new cc_hsh
     end
 
-    def self.charge_trans_token cc_hsh
-        resp_hsh = OpsFirstData.purchase cc_hsh['trans_token'], cc_hsh["amount"]
+    # def self.charge_trans_token cc_hsh
+    #     resp_hsh = OpsFirstData.purchase cc_hsh['trans_token'], cc_hsh["amount"]
 
-        sale_init_hsh = { "card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"] }
-        sale_init_hsh.merge!(resp_hsh)
-        Sale.new sale_init_hsh
-    end
+    #     sale_init_hsh = { "card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"] }
+    #     sale_init_hsh.merge!(resp_hsh)
+    #     Sale.new sale_init_hsh
+    # end
 
     def self.charge_cim_token cc_hsh
         payment_hsh   = {"amount" => cc_hsh["amount"], "cim_token"=> cc_hsh["cim_token"], "cim_profile"=> cc_hsh["cim_profile"],  "unique_id"=> cc_hsh["unique_id"]}

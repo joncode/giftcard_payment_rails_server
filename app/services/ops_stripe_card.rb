@@ -1,7 +1,7 @@
 require 'stripe'
 
 class OpsStripeCard
-	extend MoneyHelper
+	include MoneyHelper
 
 	attr_reader :response, :success, :request_id, :error, :error_message, :error_code, :error_key,
 		:http_status, :customer_id, :card_id, :card, :country, :ccy, :brand

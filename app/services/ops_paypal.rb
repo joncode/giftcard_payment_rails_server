@@ -2,7 +2,7 @@ require 'paypal-sdk-rest'
 include PayPal::SDK::REST
 
 class OpsPaypal
-	extend MoneyHelper
+	include MoneyHelper
 
 	attr_accessor :response, :obj
 

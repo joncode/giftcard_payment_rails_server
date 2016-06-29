@@ -114,7 +114,11 @@ class Card < ActiveRecord::Base
 	    hsh["card_id"] = self.id
 	    hsh["giver_id"] = self.user_id
 	    hsh["merchant_id"] = merchant_id
-    	if self.cim_token
+	    if self.stripe_id
+	    	hsh['stripe_id'] = self.stripe_id
+	    	hsh['stripe_user_id'] = self.stripe_user_id
+	    	return hsh
+    	elsif self.cim_token
 	    	if hsh["cim_profile"] = (cim_profile || self.user.cim_profile)
 	    		hsh["cim_token"]  = self.cim_token
 				return hsh
