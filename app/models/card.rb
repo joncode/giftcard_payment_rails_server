@@ -43,6 +43,7 @@ class Card < ActiveRecord::Base
 		card_owner = self.user
 		customer_id = card_owner.stripe_id
 		o = OpsStripeCard.new(customer_id, self)
+		o.add_customer = card_owner
 		r = o.tokenize
 		puts o.inspect
 		if o.success
@@ -58,7 +59,8 @@ class Card < ActiveRecord::Base
 		else
 			# didnt work
 			# error
-			errors.add(o.error_key, o.error_message)
+			errors.add(o.error_key.to_sym, o.error_message)
+			return false
 		end
 
 	end

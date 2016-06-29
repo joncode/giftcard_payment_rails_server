@@ -4,31 +4,38 @@ class OpsStripeCard
 	include MoneyHelper
 
 	attr_reader :response, :success, :request_id, :error, :error_message, :error_code, :error_key,
-		:http_status, :customer_id, :card_id, :card, :country, :ccy, :brand
+		:http_status, :customer_id, :card_id, :card, :country, :ccy, :brand,
+		:description, :user
 
 	def initialize customer_id=nil, card_init=nil
 		Stripe.api_key = STRIPE_SECRET
 		@success = false
+		@http_status = 100
 		@error = nil
 		@error_message = nil
 		@error_key = nil
 		@error_code = nil
-		@http_status = 100
 		@response = nil
 		@request_id = nil
-		@customer_id = customer_id
-		@card_id = nil
+		@description = nil
 		@card = nil
 		@country = nil
-		@ccy = nil
 		@brand = nil
+		@card_id = nil
+		@customer_id = customer_id
 		if card_init
+			@ccy = card_init.ccy
 			@card_init = stripe_hsh_with_card(card_init)
 		else
+			@ccy = nil
 			@card_init = nil
 		end
 	end
 
+	def add_customer= user
+		@user = user
+		@description = "ItsOnMe-#{user.id}"
+	end
 
 #	-------------
 
@@ -60,6 +67,8 @@ class OpsStripeCard
 				name: card_hsh["name"]
 			}
 
+		@description = "Customer for #{card_hsh['name']}" if @description.nil?
+
 		if customer_id
 			begin
 				customer = Stripe::Customer.retrieve(customer_id)
@@ -72,10 +81,20 @@ class OpsStripeCard
 			@response = customer.sources.create(source: src_obj)
 			process_card_validation @response
 		else
+
 			@response = Stripe::Customer.create(
-				description: "Customer for #{card_hsh["name"]}",
-				source: src_obj
+				description: @description,
+				source: src_obj,
+				email: @user.email,
+				metadata: {
+					first_name: @user.first_name,
+					last_name: @user.last_name,
+					card_name: card_hsh["name"],
+					phone: @user.phone,
+					currency: @ccy
+				}
 			)
+
 			@customer_id = @response.id
 			process_card_validation @response.sources.first
 		end
@@ -152,7 +171,7 @@ class OpsStripeCard
 				@error_code = 'invalid_request'
 			end
 			@http_status = e.http_status
-			@error_key = @error_code
+			@error_key = @error_code.to_sym
 		else
 			@http_status = 500
 			@error_code = "ops_stripe_error"
