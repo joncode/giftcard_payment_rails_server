@@ -3,7 +3,7 @@ module CardTesters
 
 
     def tvisa
-    	Card.new(number: '4111111111111111', csv: '186', nickname: 'Test Visa', brand: 'visa', month: DateTime.now.month, year: DateTime.now.year )
+    	Card.new(zip: '90036', number: '4111111111111111', csv: '186',name: 'Test Visa', nickname: 'Test Visa', month: DateTime.now.month, year: DateTime.now.year )
     end
 
     def hvisa
@@ -19,7 +19,7 @@ module CardTesters
     end
 
     def tmaster
-    	Card.new(number: '5555555555554444', csv: '200', nickname: 'Test Master', brand: 'master', month: DateTime.now.month, year: DateTime.now.year )
+    	Card.new(zip: '90036', number: '5555555555554444', csv: '200',name: 'Test Master', nickname: 'Test Master', month: DateTime.now.month, year: DateTime.now.year )
     end
 
     def hmaster
@@ -35,7 +35,7 @@ module CardTesters
     end
 
     def tamex
-    	Card.new(number: '378282246310005', csv: '4242', nickname: 'Test AmEx', brand: 'american_express', month: DateTime.now.month, year: DateTime.now.year )
+    	Card.new(zip: '90036', number: '378282246310005', csv: '4242',name: 'Test AmEx', nickname: 'Test AmEx', month: DateTime.now.month, year: DateTime.now.year )
     end
 
     def hamex
@@ -51,7 +51,7 @@ module CardTesters
     end
 
     # def tjcb
-    # 	Card.new(number: '4111111111111111', csv: '186', nickname: 'Test Visa', brand: 'visa', month: DateTime.now.month, year: DateTime.now.year )
+    # 	Card.new(zip: '90036', number: '4111111111111111', csv: '186', nickname: 'Test Visa', brand: 'visa', month: DateTime.now.month, year: DateTime.now.year )
 
     # end
 

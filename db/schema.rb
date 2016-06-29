@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160621214921) do
+ActiveRecord::Schema.define(version: 20160629041041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -280,25 +280,29 @@ ActiveRecord::Schema.define(version: 20160621214921) do
 
   create_table "cards", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "nickname",      limit: 255
-    t.string   "name",          limit: 255
-    t.string   "number_digest", limit: 255
-    t.string   "last_four",     limit: 255
-    t.string   "month",         limit: 255
-    t.string   "year",          limit: 255
-    t.string   "csv",           limit: 255
-    t.string   "brand",         limit: 255
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.string   "cim_token",     limit: 255
-    t.string   "zip",           limit: 255
-    t.boolean  "active",                    default: true
+    t.string   "nickname",       limit: 255
+    t.string   "name",           limit: 255
+    t.string   "number_digest",  limit: 255
+    t.string   "last_four",      limit: 255
+    t.string   "month",          limit: 255
+    t.string   "year",           limit: 255
+    t.string   "csv",            limit: 255
+    t.string   "brand",          limit: 255
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.string   "cim_token",      limit: 255
+    t.string   "zip",            limit: 255
+    t.boolean  "active",                     default: true
     t.integer  "partner_id"
     t.string   "partner_type"
     t.string   "origin"
     t.integer  "client_id"
-    t.string   "ccy",           limit: 6,   default: "USD"
+    t.string   "ccy",            limit: 6,   default: "USD"
     t.string   "trans_token"
+    t.string   "country"
+    t.string   "stripe_user_id"
+    t.string   "stripe_id"
+    t.string   "address"
   end
 
   add_index "cards", ["active"], name: "index_cards_on_active", using: :btree
@@ -1243,6 +1247,7 @@ ActiveRecord::Schema.define(version: 20160621214921) do
     t.integer  "partner_id"
     t.string   "partner_type"
     t.integer  "client_id"
+    t.string   "stripe_id"
   end
 
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree

@@ -12,7 +12,9 @@ class User < ActiveRecord::Base
 		where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
 	}
 
+
 #	-------------
+
 
     validates_with UserSocialValidator
     validates_with UserFirstNameValidator
@@ -25,7 +27,9 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
 
+
 #	-------------
+
 
 	before_create :create_remember_token      # creates unique remember token for user
 	before_save { |user| user.email      = email.downcase unless is_perm_deactive? }
