@@ -3,7 +3,6 @@ module CardTokenizer
 
     def tokenize
 		user = User.unscoped.find(self.user_id)
-		# transarmor_tokenize
     	if self.cim_token == nil
     		begin
 		    	if user.cim_profile.present?
@@ -17,21 +16,21 @@ module CardTokenizer
 		end
     end
 
-	def transarmor_tokenize
-    	card_hsh = {}
-		card_hsh["first_name"] = self.first_name
-		card_hsh["last_name"] = self.last_name
-		card_hsh["number"] = self.decrypt!(CATCH_PHRASE).number
-		card_hsh["month"] = self.month
-		card_hsh["year"] = self.year
-		card_hsh["cvv"] = self.csv
-		r = OpsFirstData.tokenize card_hsh
-		if r[:status] == 1
-			self.update(trans_token: r[:data])
-		else
-			puts "------ Failed Transaction with First Data Transarmour Response: #{ r.inspect }--------------"
-		end
-	end
+	# def transarmor_tokenize
+ #    	card_hsh = {}
+	# 	card_hsh["first_name"] = self.first_name
+	# 	card_hsh["last_name"] = self.last_name
+	# 	card_hsh["number"] = self.decrypt!(CATCH_PHRASE).number
+	# 	card_hsh["month"] = self.month
+	# 	card_hsh["year"] = self.year
+	# 	card_hsh["cvv"] = self.csv
+	# 	r = OpsFirstData.tokenize card_hsh
+	# 	if r[:status] == 1
+	# 		self.update(trans_token: r[:data])
+	# 	else
+	# 		puts "------ Failed Transaction with First Data Transarmour Response: #{ r.inspect }--------------"
+	# 	end
+	# end
 
     def create_profile_and_payment_profile user
     	card_number = self.decrypt!(CATCH_PHRASE).number

@@ -1,5 +1,5 @@
-require 'paypal-sdk-rest'
-include PayPal::SDK::REST
+# require 'paypal-sdk-rest'
+# include PayPal::SDK::REST
 # PayPal::SDK.load("config/paypal.yml", Rails.env)
 # PayPal::SDK.logger = Rails.logger
 
