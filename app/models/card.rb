@@ -42,7 +42,7 @@ class Card < ActiveRecord::Base
 	def send_to_stripe
 		card_owner = self.user
 		customer_id = card_owner.stripe_id
-		o = OpsStripe.new(customer_id, self)
+		o = OpsStripeCard.new(customer_id, self)
 		r = o.tokenize
 		puts o.inspect
 		if o.success
