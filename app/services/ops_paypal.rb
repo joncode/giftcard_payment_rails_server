@@ -15,7 +15,7 @@ class OpsPaypal
 	def purchase token, amount_cents, ccy
 		return nil if (token.blank? || ccy.blank? || amount_cents.to_i == 0)
 
-		total = amount_cents / 100
+		total = display_money cents: amount_cents
 
 		@obj = Payment.new({
 			intent: "sale",
