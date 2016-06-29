@@ -17,14 +17,9 @@ class OpsStripe
 		@ccy = cc_hsh['ccy'].downcase
 		@amount = currency_to_cents(cc_hsh['amount'])
 		@unique_id = cc_hsh['unique_id']
+		@cvc_check_skip = true
 		@success = false
-		@error = nil
-		@error_message = nil
-		@error_key = nil
-		@error_code = nil
 		@http_status = 100
-		@response = nil
-		@request_id = nil
 		@resp_code = 0
 	end
 
@@ -54,22 +49,24 @@ class OpsStripe
 		end
     end
 
-	def process_card_success card
+	def process_charge_success card
 		@request_id = @response.id
     	if @response.status == 'succeeded'
     		@success = true
     		@http_status = 200
     		@resp_code = 1
     	elsif @response.status == 'pending'
-    		@success = false
-    		@http_status = 201
-    		@resp_code = 4
+    		@success = true
+    		@http_status = 200
+    		@resp_code = 1
     		@error_message = 'Transaction pending approval'
+    		OpsTwilio.text to: DEVELOPER_TEXT, msg: "PENDING ON STRIPE #{@request_id}"
     	else  # failed
     		@success = false
     		@http_status = 400
     		@resp_code = 2
     		@error_message = "Transaction failed."
+    		process_card_validation card
 		end
 	end
 
@@ -85,7 +82,7 @@ class OpsStripe
 			idempotency_key: @unique_id
 		}
 		@response = Stripe::Charge.create(@request)
-		process_card_validation @response.source
+		process_charge_success @response.source
 	rescue => e
 		process_error e
 	end

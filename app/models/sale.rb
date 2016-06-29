@@ -20,6 +20,9 @@ class Sale < ActiveRecord::Base
         #    "card_id"=>980193262, "giver_id"=>45, "merchant_id"=>"590",
         #    "cim_profile"=>"123944998", "cim_token"=>"283107841"} USD
 
+
+        cc_hsh.stringify_keys!
+
         if cc_hsh['stripe_id'].present?
             cc_hsh['ccy'] = ccy
             self.charge_stripe cc_hsh
@@ -36,8 +39,12 @@ class Sale < ActiveRecord::Base
         o = OpsStripe.new cc_hsh
         o.purchase
 
-        hsh = o.gateway_hash_response
-        Sale.new hsh
+        puts o.inspect
+
+        sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"]}
+        resp_hsh = o.gateway_hash_response
+        sale_init_hsh.merge!(resp_hsh)
+        Sale.new sale_init_hsh
 
     end
 

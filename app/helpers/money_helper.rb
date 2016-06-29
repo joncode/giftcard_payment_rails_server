@@ -64,7 +64,7 @@ module MoneyHelper
 	end
 
 	def remove_currency_symbol currency_str
-		return currency_str unless currency_str.kind_of?(String)
+		return currency_str.to_s unless currency_str.kind_of?(String)
 		currency_str.gsub(/[^0-9.]/, '')
 	end
 

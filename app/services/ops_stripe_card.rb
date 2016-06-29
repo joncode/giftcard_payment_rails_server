@@ -15,6 +15,7 @@ class OpsStripeCard
 		@success = false
 		@http_status = 100
 		@customer_id = customer_id
+		@cvc_check_skip = false
 		if card_init
 			@ccy = card_init.ccy if card_init.respond_to?(:ccy)
 			@card_init = stripe_hsh_with_card(card_init)
