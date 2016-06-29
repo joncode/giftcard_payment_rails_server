@@ -5,36 +5,38 @@ class OpsStripeCard
 
 	attr_reader :response, :success, :request_id, :error, :error_message, :error_code, :error_key,
 		:http_status, :customer_id, :card_id, :card, :country, :ccy, :brand,
-		:description, :user
+		:description, :email, :first_name, :last_name, :phone
 
 	def initialize customer_id=nil, card_init=nil
 		Stripe.api_key = STRIPE_SECRET
 		@success = false
 		@http_status = 100
-		@error = nil
-		@error_message = nil
-		@error_key = nil
-		@error_code = nil
-		@response = nil
-		@request_id = nil
-		@description = nil
-		@card = nil
-		@country = nil
-		@brand = nil
-		@card_id = nil
 		@customer_id = customer_id
 		if card_init
-			@ccy = card_init.ccy
+			@ccy = card_init.ccy if card_init.respond_to?(:ccy)
 			@card_init = stripe_hsh_with_card(card_init)
-		else
-			@ccy = nil
-			@card_init = nil
 		end
 	end
 
 	def add_customer= user
-		@user = user
+		@email = user.email
+		@first_name = user.first_name
+		@last_name = user.last_name
+		@phone = user.phone
 		@description = "ItsOnMe-#{user.id}"
+	end
+
+	def to_db
+		if @success
+			@response.to_json
+		else
+			if @error.present?
+				@error.to_json
+			else
+				{ error_key: @error_key, error_message: @error_message ,
+					request_id: @request_id, error_code: @error_code }.to_json
+			end
+		end
 	end
 
 #	-------------
@@ -85,12 +87,12 @@ class OpsStripeCard
 			@response = Stripe::Customer.create(
 				description: @description,
 				source: src_obj,
-				email: @user.email,
+				email: @email,
 				metadata: {
-					first_name: @user.first_name,
-					last_name: @user.last_name,
+					first_name: @first_name,
+					last_name: @last_name,
 					card_name: card_hsh["name"],
-					phone: @user.phone,
+					phone: @phone,
 					currency: @ccy
 				}
 			)
@@ -107,9 +109,6 @@ class OpsStripeCard
 	def process_card_success r
 		@success = true
 		@http_status = 200
-		@country = r.country
-		@ccy = set_ccy r.country
-		@brand = r.brand.downcase
 	end
 
 	def set_ccy country
@@ -119,6 +118,9 @@ class OpsStripeCard
 	def process_card_validation r
 		@card_id = r.id
 		@card = r
+		@country = r.country
+		@ccy = set_ccy(r.country)
+		@brand = r.brand.downcase if r.brand.respond_to?(:downcase)
 		if (r.address_zip_check == 'pass') && (r.address_line1_check == 'pass') && (r.cvc_check == 'pass')
 			process_card_success r
 		elsif (r.address_zip_check == 'pass') && (r.address_line1_check.nil?) && (r.cvc_check == 'pass')
@@ -186,7 +188,7 @@ class OpsStripeCard
 	def test_card_numbers
 		tcs = { '4000008260000000' => 'GB card', '4000001240000000' => 'Canada Card', '4000000000000119' => 'processing error',
 			'4000000000000069' => 'expired code', '4000000000000127' => 'incorrect_cvc', '4100000000000019' => 'fraud',
-			'4000000000000002' => 'declined code', '4000000000000341' => 'cannot cahnge customer object',
+			'4000000000000002' => 'declined code', '4000000000000341' => 'cannot change customer object',
 			'4000000000000101' => 'cvc declined', '4000000000000044' => 'unavailable_validations',
 			'4000000000000036' => 'zip fail', '4000000000000028' => 'address fail', '4000000000000010' => 'addresss and zip fail',
 			'4000000000000093' => 'intl pricing different', '4000000000000077' => 'add to available balance',

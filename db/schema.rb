@@ -303,6 +303,7 @@ ActiveRecord::Schema.define(version: 20160629041041) do
     t.string   "stripe_user_id"
     t.string   "stripe_id"
     t.string   "address"
+    t.text     "resp_json"
   end
 
   add_index "cards", ["active"], name: "index_cards_on_active", using: :btree

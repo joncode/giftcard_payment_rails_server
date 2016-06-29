@@ -46,23 +46,34 @@ class Card < ActiveRecord::Base
 		o.add_customer = card_owner
 		r = o.tokenize
 		puts o.inspect
+		# add stripe data to card & user
+		if customer_id.nil?
+			self.user.stripe_id = o.customer_id
+		end
+		self.stripe_id = o.card_id
+		self.stripe_user_id = o.customer_id || customer_id
+		self.country = o.country if o.country
+		self.ccy = o.ccy if o.ccy
+		self.brand = o.brand if o.brand
+		self.resp_json = o.to_db
 		if o.success
 			# worked
-			if customer_id.nil?
-				self.user.stripe_id = o.customer_id
-			end
-			self.stripe_id = o.card_id
-			self.stripe_user_id = o.customer_id
-			self.country = o.country
-			self.ccy = o.ccy
-			self.brand = o.brand
 		else
 			# didnt work
 			# error
+			self.active = false
 			errors.add(o.error_key.to_sym, o.error_message)
-			return false
+			# return false
 		end
 
+	end
+
+	def response
+		begin
+			JSON.parse self.resp_json
+		rescue
+			nil
+		end
 	end
 
 	attr_accessor :iv

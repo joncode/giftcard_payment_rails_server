@@ -13,3 +13,33 @@ ActiveRecord::Base.class_eval do
 	end
 
 end
+
+
+module ActiveRecordExtension
+
+	extend ActiveSupport::Concern
+
+	# add your instance methods here
+	# def foo
+	#    "foo"
+	# end
+
+  	# add your static(class) methods here
+  	module ClassMethods
+
+	    def f obj_id
+	      	find obj_id
+	    end
+
+	    def w args
+	    	resp = where(args)
+	    	if resp.length == 1
+	    		resp.first
+	    	else
+	    		resp
+			end
+	    end
+  	end
+end
+
+ActiveRecord::Base.send(:include, ActiveRecordExtension)

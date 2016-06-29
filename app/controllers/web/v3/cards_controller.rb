@@ -19,8 +19,8 @@ class Web::V3::CardsController < MetalCorsController
         card.client = @current_client
         card.partner = @current_partner
         card.origin = "#{@current_partner.id}|#{@current_partner.name}|#{@current_client.id}|#{@current_client.name}"
-
-        if card.save
+        card.save
+        if card.errors.nil?
             success card.token_serialize
         else
             fail_web fail_web_payload("not_created_card", card.errors)
