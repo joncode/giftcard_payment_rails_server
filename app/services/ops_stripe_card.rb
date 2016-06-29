@@ -2,10 +2,13 @@ require 'stripe'
 
 class OpsStripeCard
 	include MoneyHelper
+	include OpsStripeHelper
+		# OpsStripeHelper = :to_db, :process_card_validation, :process_card_success, :process_error,
+		#  :address_validation_error, :cvc_validation_error, :unavailable_validations, :set_ccy
 
 	attr_reader :response, :success, :request_id, :error, :error_message, :error_code, :error_key,
 		:http_status, :customer_id, :card_id, :card, :country, :ccy, :brand,
-		:description, :email, :first_name, :last_name, :phone
+		:description, :email, :first_name, :last_name, :phone, :resp_code
 
 	def initialize customer_id=nil, card_init=nil
 		Stripe.api_key = STRIPE_SECRET
@@ -26,21 +29,6 @@ class OpsStripeCard
 		@description = "ItsOnMe-#{user.id}"
 	end
 
-	def to_db
-		if @success
-			@response.to_json
-		else
-			if @error.present?
-				@error.to_json
-			else
-				{ error_key: @error_key, error_message: @error_message ,
-					request_id: @request_id, error_code: @error_code }.to_json
-			end
-		end
-	end
-
-#	-------------
-
 	def stripe_hsh_with_card card
 		if Rails.env.production?
 			@card_init = {	month: card.month,
@@ -55,6 +43,8 @@ class OpsStripeCard
 			@card_init = tc
 		end
 	end
+
+#	-------------
 
 	def tokenize card_hsh=@card_init, customer_id=@customer_id
 		card_hsh.stringify_keys!
@@ -106,82 +96,6 @@ class OpsStripeCard
 
 #	-------------
 
-	def process_card_success r
-		@success = true
-		@http_status = 200
-	end
-
-	def set_ccy country
-		{'US' => 'USD', 'CA' => 'CAD', 'GB' => 'GBP'}[country]
-	end
-
-	def process_card_validation r
-		@card_id = r.id
-		@card = r
-		@country = r.country
-		@ccy = set_ccy(r.country)
-		@brand = r.brand.downcase if r.brand.respond_to?(:downcase)
-		if (r.address_zip_check == 'pass') && (r.address_line1_check == 'pass') && (r.cvc_check == 'pass')
-			process_card_success r
-		elsif (r.address_zip_check == 'pass') && (r.address_line1_check.nil?) && (r.cvc_check == 'pass')
-			process_card_success r
-		elsif (r.address_zip_check == 'fail')
-			address_validation_error
-		elsif (r.address_line1_check == 'fail')
-			address_validation_error
-		elsif (r.cvc_check == 'fail')
-			cvc_validation_error
-		else
-			unavailable_validations
-		end
-		r
-	end
-
-	def unavailable_validations
-		@success = false
-		@error_message = "Credit card company failed to validate this card. Please use another card."
-		@error_code = 'unavailable_validations'
-		@http_status = 402
-		@error_key = :validation
-	end
-
-	def cvc_validation_error
-		@success = false
-		@error_message = "The card security code is incorrect."
-		@error_code = 'incorrect_cvc'
-		@http_status = 402
-		@error_key = :cvc
-	end
-
-	def address_validation_error
-		@success = false
-		@error_message = 'Invalid address or postal code'
-		@error_code = 'address_zip_error'
-		@http_status = 402
-		@error_key = :address
-	end
-
-	def process_error e
-		@error = e
-		@success = false
-		if e.respond_to?(:request_id)
-			@error_message = e.message
-			@request_id = e.request_id
-			if e.respond_to?(:code)
-				@error_code = e.code
-			else
-				@error_code = 'invalid_request'
-			end
-			@http_status = e.http_status
-			@error_key = @error_code.to_sym
-		else
-			@http_status = 500
-			@error_code = "ops_stripe_error"
-			@error_message = e.message
-			@error_key = :internal
-		end
-		e
-	end
 
 #	-------------  TEST CARDS
 

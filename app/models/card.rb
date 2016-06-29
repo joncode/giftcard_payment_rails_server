@@ -56,9 +56,7 @@ class Card < ActiveRecord::Base
 		self.ccy = o.ccy if o.ccy
 		self.brand = o.brand if o.brand
 		self.resp_json = o.to_db
-		if o.success
-			# worked
-		else
+		unless o.success
 			# didnt work
 			# error
 			self.active = false
@@ -69,11 +67,9 @@ class Card < ActiveRecord::Base
 	end
 
 	def response
-		begin
-			JSON.parse self.resp_json
-		rescue
-			nil
-		end
+		JSON.parse self.resp_json
+	rescue
+		nil
 	end
 
 	attr_accessor :iv

@@ -16,6 +16,10 @@ class Sale < ActiveRecord::Base
     def self.charge_card cc_hsh, ccy='USD'
         puts "\n Sale.charge_card #{cc_hsh.inspect} #{ccy}\n"
 
+        #{"amount"=>"27.3", "unique_id"=>"r-David_Leibner+m-590+u-45",
+        #    "card_id"=>980193262, "giver_id"=>45, "merchant_id"=>"590",
+        #    "cim_profile"=>"123944998", "cim_token"=>"283107841"} USD
+
         if cc_hsh['stripe_id'].present?
             cc_hsh['ccy'] = ccy
             self.charge_stripe cc_hsh
@@ -28,11 +32,34 @@ class Sale < ActiveRecord::Base
 
     end
 
+    def self.charge_stripe cc_hsh
+        o = OpsStripe.new cc_hsh
+        o.purchase
+
+        hsh = o.gateway_hash_response
+        Sale.new hsh
+
+    end
+
 #   -------------
 
     def success?
         self.resp_code == 1
     end
+
+    def response
+        JSON.parse self.resp_json
+    rescue
+        nil
+    end
+
+    def request
+        JSON.parse self.req_json
+    rescue
+        nil
+    end
+
+#   -------------
 
     def void_refund giver_id
         payment_hsh = {}
@@ -47,15 +74,10 @@ class Sale < ActiveRecord::Base
         Sale.new resp_hsh
     end
 
-private
 
 #   -------------
 
-    def self.charge_stripe cc_hsh
-        o = OpsStripe.new cc_hsh
-        o.purchase
-        o
-    end
+private
 
     def self.charge_number_then_tokenize cc_hsh
         payment_hsh = {}

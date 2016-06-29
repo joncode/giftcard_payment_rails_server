@@ -266,11 +266,7 @@ class Gift < ActiveRecord::Base
             self.pay_stat = "payment_error"
         when 3
           # Error
-            if self.reason_code == 11
-                self.pay_stat = "payment_error"
-            else
-                self.pay_stat = "payment_error"
-            end
+            self.pay_stat = "payment_error"
         when 4
           # Held for Review
             self.pay_stat = "payment_error"

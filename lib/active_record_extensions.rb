@@ -27,6 +27,10 @@ module ActiveRecordExtension
   	# add your static(class) methods here
   	module ClassMethods
 
+  		def l
+  			last
+  		end
+
 	    def f obj_id
 	      	find obj_id
 	    end

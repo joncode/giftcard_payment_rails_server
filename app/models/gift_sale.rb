@@ -74,7 +74,7 @@ private
     end
 
     def unique_cc_id receiver_name, merchant_id, user_id
-        "r-#{receiver_name}+m-#{merchant_id}+u-#{user_id}".gsub(' ','_')
+        "r-#{receiver_name}|m-#{merchant_id}|u-#{user_id}".gsub(' ','_')
     end
 
     def set_cat args_cat
