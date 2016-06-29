@@ -8,6 +8,10 @@ gem 'pg'
 
 gem 'excon', '~> 0.44.4'
 
+gem 'paypal-sdk-rest'
+gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
+
+
 #gem 'unicorn'
 gem 'puma', '~> 2.15.0'
 gem "rack-timeout"

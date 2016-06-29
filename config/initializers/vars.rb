@@ -147,6 +147,12 @@ else
     ENV['SLICKTEXT_PRIVATE']
 end
 
+STRIPE_SECRET = if local_env
+    'sk_test_UMvfuiV9aOOdq0H0xUeJWT3m'
+else
+    ENV["STRIPE_SECRET"]
+end
+
 TWILIO_ACCOUNT_SID = if local_env
     "ACbb70b5328755e8444166bbc82babdcb9"
 else

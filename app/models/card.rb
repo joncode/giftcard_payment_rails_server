@@ -19,11 +19,12 @@ class Card < ActiveRecord::Base
 	validate :check_for_credit_card_validity
 	validate :month_and_year_should_be_in_future
 	validate :at_least_two_words_in_name
-	validates_presence_of :csv, :last_four, :month, :year, :brand, :nickname,  :user_id, :name
+	validates_presence_of :csv, :last_four, :month, :year, :nickname,  :user_id, :name
 	validates :zip, zip_code: true, allow_blank: true
 
 #   -------------
 
+	before_save :send_to_stripe, on: :create
 	before_save :crypt_number
 	after_create :tokenize_card
 
@@ -32,11 +33,35 @@ class Card < ActiveRecord::Base
 	has_many   :sales
 	has_many   :gifts, 	:through => :sales
 	has_many   :orders,	:through => :sales
-	belongs_to :user
+	belongs_to :user, autosave: true
 	belongs_to :client
 	belongs_to :partner, polymorphic: true
 
 #   -------------
+
+	def send_to_stripe
+		card_owner = self.user
+		customer_id = card_owner.stripe_id
+		o = OpsStripeCard.new(customer_id, self)
+		r = o.tokenize
+		puts o.inspect
+		if o.success
+			# worked
+			if customer_id.nil?
+				self.user.stripe_id = o.customer_id
+			end
+			self.stripe_id = o.card_id
+			self.stripe_user_id = o.customer_id
+			self.country = o.country
+			self.ccy = o.ccy
+			self.brand = o.brand
+		else
+			# didnt work
+			# error
+			errors.add(o.error_key, o.error_message)
+		end
+
+	end
 
 	attr_accessor :iv
 
@@ -166,8 +191,8 @@ private
 		errors.add(:year, "is not a valid year") unless valid_expiry_year?(year.to_i)
 		errors.add(:month, "is not a valid month") unless valid_month?(month.to_i)
 		errors.add(:number, "is not a valid credit card number") unless valid_number?(number)
-		self.brand = brand?(number)
-		errors.add(:brand, "We only accept AmEx, Visa, & MasterCard.") unless (self.brand == 'master' || self.brand == 'visa' || self.brand == 'american_express')
+		# self.brand = brand?(number)
+		# errors.add(:brand, "We only accept AmEx, Visa, & MasterCard.") unless (self.brand == 'master' || self.brand == 'visa' || self.brand == 'american_express')
 		#puts "error messages = #{errors.messages}"
 	end
 
