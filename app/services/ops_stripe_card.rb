@@ -177,7 +177,7 @@ class OpsStripeCard
 			'5200828282828210' => 'MasterCard (debit)', '5555555555554444' => 'mastercard', '4000056655665556' => 'visa debt',
 			'4012888888881881' => 'visa good', '4242424242424242' => 'visa good 2' }
 		number = tcs.keys.sample
-		puts "\nOpsStripeCard - chosen #{tcs[number]} #{number}\n"
+		puts "\nOpsStripeCard - chosen #{tcs[number]} #{number}\n\n"
 		number
 	end
 
