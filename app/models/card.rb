@@ -97,12 +97,28 @@ class Card < ActiveRecord::Base
 	end
 
 	def update_with_duplicate_cim_token
-		c2 = Card.where(number_digest: self.number_digest,
-					month: self.month,
-					csv: self.csv,
-					year: self.year).where.not(cim_token: nil).first
-		if c2
-			self.update_column(:cim_token, c2.cim_token)
+		chosen = nil
+		cards = { 0 => nil, 1  => nil, 2 => nil }
+		cs = Card.where(user_id: self.user_id, number_digest: self.number_digest).where.not(cim_token: nil)
+		cs.each do |other_card|
+			score = 0
+			score += 1 if other_card.month == self.month
+			score += 1 if other_card.year == self.year
+			score += 1 if other_card.csv == self.csv
+			if score == 3
+				chosen = other_card
+				break
+			else
+				if cards[score].nil? || (cards[score].year.to_i < other_card.year.to_i)
+					cards[score] = other_card
+				end
+			end
+		end
+		if !chosen
+			chosen = cards[2] || cards[1] || cards[0]
+		end
+		if chosen
+			self.update_column(:cim_token, chosen.cim_token)
 		else
 			puts "\nCard -update_with_duplicate_cim_token- unable to find cim for #{self.id}"
 		end

@@ -56,7 +56,7 @@ else
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 end
 
-DEVELOPER_TEXT = '7029727139'
+DEVELOPER_TEXT = '2152000475'
 HELP_DESK_URL = 'https://itsonmeapp.zendesk.com/hc/en-us/categories/200160205-App-Users'
 
 if Rails.env.production?
