@@ -96,6 +96,16 @@ class Card < ActiveRecord::Base
 		end
 	end
 
+	def update_with_duplicate_cim_token
+		c2 = Card.where(number_digest: self.number_digest,
+					month: self.month,
+					csv: self.csv,
+					year: self.year).where.not(cim_token: nil).first
+		if c2
+			self.update_column(:cim_token, c2.cim_token)
+		end
+	end
+
 #	-------------
 
 	def self.get_cards user

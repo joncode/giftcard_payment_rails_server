@@ -12,7 +12,7 @@ module CardTokenizer
 		    		create_profile_and_payment_profile(user)
 			    end
 			rescue
-				puts "\n\n\n----   Card #{self.id} -- does not have a user\n\n\n"
+				puts "\n\n\n----   Card #{self.id} -- failed Auth.net tokenize\n\n\n"
 			end
 		end
     end
@@ -87,13 +87,7 @@ module CardTokenizer
 
 			rj = PaymentGatewayCim.response_json(response)
 			if rj.response['message_code'] == "E00039"  # duplicate cim_token already exists
-				c2 = Card.where(number_digest: self.number_digest,
-					month: self.month,
-					csv: self.csv,
-					year: self.year).where.not(cim_token: nil).first
-				if c2
-					self.update_column(:cim_token, c2.cim_token)
-				end
+				self.update_with_duplicate_cim_token
 			end
 		end
 
