@@ -570,8 +570,9 @@ private
 
     def developer_notify
         if self.cost.present? && self.cost.length > 6
-            notify_developers
+            # notify_developers
             puts "500 INTERNAL - COST IS WRONG ON GIFT ! "
+            OpsTwilio.text to: DEVELOPER_TEXT, msg: "Cost is wrong on gift #{self.id}"
         end
     end
 

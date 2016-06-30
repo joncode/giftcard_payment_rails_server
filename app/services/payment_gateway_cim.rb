@@ -31,22 +31,18 @@ class PaymentGatewayCim             # charge , refund, cancel, void - instance m
         }.to_json
     end
 
-private
-
     def gateway_hash_response
         hsh = {}
-        hsh["transaction_id"]  = self.transaction_id
+        hsh["transaction_id"]  = self.response.direct_response.transaction_id
         hsh["resp_json"]       = PaymentGatewayCim.response_json(self.response)
         hsh["req_json"]        = self.transaction.fields.to_json
-        message_code           = self.response.message_code
-        hsh["resp_code"]       = message_code_to_resp_code(message_code)
-        hsh["reason_text"]     = self.response.message_text
+        # message_code           = self.response.message_code
+        hsh["resp_code"]       = self.response.direct_response.response_code
+        hsh["reason_text"]     = self.response.direct_response.response_reason_text
         hsh["reason_code"]     = 1
         hsh["revenue"]         = self.amount
         hsh
     end
-
-
 
     def authorize_net_cim_transaction
         t = AuthorizeNet::CIM::Transaction.new(AUTHORIZE_API_LOGIN, AUTHORIZE_TRANSACTION_KEY, :gateway => AUTH_GATEWAY)

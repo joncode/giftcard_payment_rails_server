@@ -54,9 +54,6 @@ private
     def gateway_hash_response
         hsh = {}
         hsh["transaction_id"]  = self.response.transaction_id
-        if self.response.transaction_id.nil?
-            hsh["transaction_id"] = self.response.direct_response.fields[:transaction_id]
-        end
         hsh["resp_json"]       = self.response.fields.to_json
         raw_request            = self.transaction.fields
         card_num               = raw_request[:card_num]

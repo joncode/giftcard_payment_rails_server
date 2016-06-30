@@ -13,6 +13,10 @@ class Sale < ActiveRecord::Base
 
 #   -------------
 
+    after_commit :notify_developers_for_missing_data
+
+#   -------------
+
     def self.charge_card cc_hsh
         puts "\n Sale.charge_card #{cc_hsh.inspect}\n"
 
@@ -156,6 +160,13 @@ private
             req["card_num"][4..7]
         end
     end
+
+    def notify_developers_for_missing_data
+        if self.transaction_id.nil?
+            OpsTwilio.text to: DEVELOPER_TEXT, msg: "Sale w/o Transaction ID #{self.id}"
+        end
+    end
+
 end
 
     # required => [ giver_id, provider_id, card_id, number, month_year, first_name, last_name, amount ]
