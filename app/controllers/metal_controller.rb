@@ -121,7 +121,7 @@ class MetalController < ActionController::Base
             }
         when "not_created_card"
             if error_data[0][:msg].present?
-                error_data  = error_data[0][:msg]
+                error_data = [{ msg: error_data[0][:msg]}]
             end
             {
                 err: "INVALID_INPUT",
