@@ -77,6 +77,7 @@ class Sale < ActiveRecord::Base
 #   -------------
 
     def void_refund
+        return "Missing Transaction ID - Please refund in #{self.gateway}" if self.transaction_id.nil?
         if self.gateway == 'stripe'
             o = OpsStripe.new
             o.refund(self.transaction_id)

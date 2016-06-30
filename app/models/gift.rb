@@ -300,6 +300,9 @@ class Gift < ActiveRecord::Base
         end
 
         refund = self.payable.void_refund
+        if refund.kind_of?(String)
+            return { 'status' => 0, 'msg' => refund }
+        end
         refund.gift_id = self.id
         resp_hsh = {}
         if refund.success?
