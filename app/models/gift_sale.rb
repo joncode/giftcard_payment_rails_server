@@ -59,7 +59,7 @@ private
             unique_charge_id = unique_cc_id(args["receiver_name"], merchant_id, args['card'].user_id)
             card_to_sale_hsh = args['card'].sale_hsh(
                     charge_amount,
-                    ccy,
+                    args['ccy'],
                     unique_charge_id,
                     args["giver"].cim_profile,
                     merchant_id
