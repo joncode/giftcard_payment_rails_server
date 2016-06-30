@@ -296,10 +296,11 @@ class Gift < ActiveRecord::Base
 
     def void_refund cancel=true
         if !self.payable.respond_to?(:void_refund)
-            return { status: 0 , msg: "You cannot refund a gift made with a #{self.payable_type}"}
+            return { 'status' => 0 , 'msg' => "You cannot refund a gift made with a #{self.payable_type}"}
         end
 
         refund = self.payable.void_refund
+        refund.gift_id = self.id
         resp_hsh = {}
         if refund.success?
             self.refund = refund
@@ -310,16 +311,16 @@ class Gift < ActiveRecord::Base
                 self.redeemed_at = DateTime.now.utc
             end
             if save
-                return { status: 1, msg: refund.reason_text }
+                return { 'status' => 1, 'msg' => refund.reason_text }
             else
-                return { status: 0 , msg: "Gift failed to save refund #{self.errors.full_messages}"}
+                return { 'status' => 0 , 'msg' => "Gift failed to save refund #{self.errors.full_messages}"}
             end
         else
             if refund.save
-                return { status: 0 , msg: "Refund Failed #{refund.reason_text} REFUND ID = #{refund.id}."}
+                return { 'status' => 0 , 'msg' => "Refund Failed #{refund.reason_text} REFUND ID = #{refund.id}."}
             else
-                return { status: 0 ,
-                    msg: "Refund Failed #{refund.reason_text} - #{refund.errors.full_messages} \
+                return { 'status' => 0 ,
+                    'msg' => "Refund Failed #{refund.reason_text} - #{refund.errors.full_messages} \
                             REFUND_TRANSACTION = #{refund.transaction_id}."
                 }
             end

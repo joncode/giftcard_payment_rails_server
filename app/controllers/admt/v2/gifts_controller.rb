@@ -33,7 +33,7 @@ class Admt::V2::GiftsController < JsonController
     def refund
         gift = Gift.includes(:payable).find params[:id]
         resp_hsh = gift.void_refund_live
-        if  resp_hsh["status"] > 0
+        if resp_hsh["status"] > 0
             success "Gift is #{gift.pay_stat}"
         else
             fail resp_hsh["msg"]
@@ -44,7 +44,7 @@ class Admt::V2::GiftsController < JsonController
     def refund_cancel
         gift = Gift.includes(:payable).find params[:id]
         resp_hsh = gift.void_refund_cancel
-        if  resp_hsh["status"] > 0
+        if resp_hsh["status"] > 0
             success "Gift is #{gift.pay_stat} and cancelled"
         else
             fail resp_hsh["msg"]
