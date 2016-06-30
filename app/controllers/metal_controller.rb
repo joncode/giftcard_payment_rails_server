@@ -120,7 +120,8 @@ class MetalController < ActionController::Base
                 data: error_data
             }
         when "not_created_card"
-            if error_data[0][:msg].present?
+            puts  "\nHere is ERROR DATA " + error_data.inspect
+            if error_data.kind_of?(Array) && error_data[0][:msg].present?
                 error_data = [{ msg: error_data[0][:msg]}]
             end
             {
