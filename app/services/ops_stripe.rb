@@ -10,12 +10,12 @@ class OpsStripe
 		:http_status, :customer_id, :card_id, :ccy, :amount, :unique_id, :resp_code
 
 
-	def initialize cc_hsh
+	def initialize cc_hsh={}
 		Stripe.api_key = STRIPE_SECRET
 		@customer_id = cc_hsh['stripe_user_id']
 		@card_id = cc_hsh['stripe_id']
-		@ccy = cc_hsh['ccy'].downcase
-		@amount = currency_to_cents(cc_hsh['amount'])
+		@ccy = cc_hsh['ccy'].downcase if cc_hsh['ccy'].respond_to?(:downcase)
+		@amount = currency_to_cents(cc_hsh['amount']) if cc_hsh['amount']
 		@unique_id = cc_hsh['unique_id']
 		@cvc_check_skip = true
 		@success = false
@@ -36,13 +36,16 @@ class OpsStripe
 		}
 		@response = Stripe::Charge.create(@request)
 		process_charge_success @response.source
+		@response
 	rescue => e
 		process_error e
 	end
 
 	def refund charge_id
-		@response = Stripe::Refund.create(charge: charge_id)
+		@request = { charge: charge_id }
+		@response = Stripe::Refund.create(@request)
 		process_refund_response
+		@response
 	rescue => e
 		process_error e
 	end
@@ -52,6 +55,7 @@ class OpsStripe
     def gateway_hash_response r=@response
         hsh = {}
        	set_response_code hsh
+       	hsh['gateway'] = 'stripe'
         hsh["resp_json"]       = to_db
         hsh["req_json"]        = @request.to_json
     	hsh["transaction_id"]  = @request_id

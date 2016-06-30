@@ -64,8 +64,8 @@ class Gift < ActiveRecord::Base
     belongs_to  :merchant
     belongs_to  :giver,         polymorphic: :true
     belongs_to  :receiver,      class_name: User
-    belongs_to  :payable,       polymorphic: :true, autosave: :true
-    belongs_to  :refund,        polymorphic: :true
+    belongs_to  :payable,       polymorphic: :true, autosave: true
+    belongs_to  :refund,        polymorphic: :true, autosave: true
     belongs_to :client
     belongs_to :partner, polymorphic: true
 
@@ -294,39 +294,44 @@ class Gift < ActiveRecord::Base
 
 #/----------------------------------payable ducktype refund -----------------------------/
 
-    def void_refund_cancel
-        payment_ducktype = self.payable
-        self.refund      = payment_ducktype.void_refund(self.giver_id)
-
-        resp_hsh = {}
-        if self.refund.success?
-            self.status      = 'cancel'
-            self.pay_stat    = "refund_cancel"
-            self.redeemed_at = Time.now.utc
-            resp_hsh["msg"]  = refund.reason_text
-            resp_hsh["status"] = 1
-        else
-            resp_hsh["msg"] = "#{refund.reason_text} ID = #{self.id}."
-            resp_hsh["status"] = 0
+    def void_refund cancel=true
+        if !self.payable.respond_to?(:void_refund)
+            return { status: 0 , msg: "You cannot refund a gift made with a #{self.payable_type}"}
         end
-        self.save
-        resp_hsh
+
+        refund = self.payable.void_refund
+        resp_hsh = {}
+        if refund.success?
+            self.refund = refund
+            self.pay_stat = "refund_comp"
+            if cancel
+                self.status      = 'cancel'
+                self.pay_stat    = "refund_cancel"
+                self.redeemed_at = DateTime.now.utc
+            end
+            if save
+                return { status: 1, msg: refund.reason_text }
+            else
+                return { status: 0 , msg: "Gift failed to save refund #{self.errors.full_messages}"}
+            end
+        else
+            if refund.save
+                return { status: 0 , msg: "Refund Failed #{refund.reason_text} REFUND ID = #{refund.id}."}
+            end
+                return { status: 0 ,
+                    msg: "Refund Failed #{refund.reason_text} - #{refund.errors.full_messages} \
+                            REFUND_TRANSACTION = #{refund.transaction_id}."
+                }
+            else
+        end
+    end
+
+    def void_refund_cancel
+        void_refund
     end
 
     def void_refund_live
-        payment_ducktype = self.payable
-        self.refund      = payment_ducktype.void_refund(self.giver_id)
-        resp_hsh = {}
-        if self.refund.success?
-            self.pay_stat   = "refund_comp"
-            resp_hsh["msg"] = refund.reason_text
-            resp_hsh["status"] = 1
-        else
-            resp_hsh["msg"] = "#{refund.reason_text} ID = #{self.id}."
-            resp_hsh["status"] = 0
-        end
-        self.save
-        resp_hsh
+        void_refund(false)
     end
 
 

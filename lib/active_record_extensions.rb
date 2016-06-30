@@ -35,6 +35,15 @@ module ActiveRecordExtension
 	      	find obj_id
 	    end
 
+	    def wi args
+	    	resp = where("#{args.keys.first} ilike '%#{args.values.first}%'")
+	    	if resp.length == 1
+	    		resp.first
+	    	else
+	    		resp
+			end
+	    end
+
 	    def w args
 	    	resp = where(args)
 	    	if resp.length == 1

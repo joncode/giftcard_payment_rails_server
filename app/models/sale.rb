@@ -1,6 +1,6 @@
 class Sale < ActiveRecord::Base
     include MoneyHelper
-    validates_presence_of :giver_id, :card_id, :resp_code
+    validates_presence_of :giver_id, :card_id, :resp_code, :gateway
 
 #   -------------
 
@@ -13,22 +13,23 @@ class Sale < ActiveRecord::Base
 
 #   -------------
 
-    def self.charge_card cc_hsh, ccy='USD'
-        puts "\n Sale.charge_card #{cc_hsh.inspect} #{ccy}\n"
+    def self.charge_card cc_hsh
+        puts "\n Sale.charge_card #{cc_hsh.inspect}\n"
 
-        #{"amount"=>"27.3", "unique_id"=>"r-David_Leibner+m-590+u-45",
+        # {"amount"=>"27.3", "unique_id"=>"r-David_Leibner+m-590+u-45",
         #    "card_id"=>980193262, "giver_id"=>45, "merchant_id"=>"590",
-        #    "cim_profile"=>"123944998", "cim_token"=>"283107841"} USD
+        #    "cim_profile"=>"123944998", "cim_token"=>"283107841", 'ccy'=>'USD'}
 
 
         cc_hsh.stringify_keys!
 
         if cc_hsh['stripe_id'].present?
-            cc_hsh['ccy'] = ccy
             self.charge_stripe cc_hsh
         elsif cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
+            cc_hsh.delete('ccy')
             self.charge_cim_token cc_hsh
         else
+            cc_hsh.delete('ccy')
             cc_hsh = cc_hsh.except("cim_token", "cim_profile")
             self.charge_number_then_tokenize cc_hsh
         end
@@ -75,17 +76,28 @@ class Sale < ActiveRecord::Base
 
 #   -------------
 
-    def void_refund giver_id
-        payment_hsh = {}
-        payment_hsh["trans_id"]  = self.transaction_id
-        payment_hsh["last_four"] = sale_card_last_four
-        payment_hsh["amount"]    = self.revenue
-        payment  = PaymentGateway.new(payment_hsh)
-        resp_hsh = payment.refund
-        resp_hsh["card_id"]  = self.card_id
-        resp_hsh["giver_id"] = giver_id
-
-        Sale.new resp_hsh
+    def void_refund
+        if self.gateway == 'stripe'
+            o = OpsStripe.new
+            o.refund(self.transaction_id)
+            resp_hsh = o.gateway_hash_response
+            s = Sale.new resp_hsh
+            s.gateway = 'stripe'
+        else
+            payment_hsh = {}
+            payment_hsh["trans_id"]  = self.transaction_id
+            payment_hsh["last_four"] = sale_card_last_four
+            payment_hsh["amount"]    = self.revenue
+            payment  = PaymentGateway.new(payment_hsh)
+            resp_hsh = payment.refund
+            s = Sale.new resp_hsh
+            s.gateway = 'authorize'
+        end
+        s.giver_id = self.giver_id
+        s.card_id = self.card_id
+        s.merchant_id = self.merchant_id
+        s.gift_id = self.gift_id
+        s
     end
 
 

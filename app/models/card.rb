@@ -119,9 +119,10 @@ class Card < ActiveRecord::Base
 
 #	-------------
 
-    def sale_hsh_from_card card_amount, unique_id, cim_profile=nil, merchant_id
+    def sale_hsh card_amount, ccy, unique_id, cim_profile=nil, merchant_id
 	    hsh = {}
 	    hsh["amount"] = card_amount
+	    hsh['ccy'] = ccy
 	    hsh["unique_id"] = unique_id #if args["unique_id"]
 	    hsh["card_id"] = self.id
 	    hsh["giver_id"] = self.user_id

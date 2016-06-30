@@ -57,14 +57,15 @@ private
 
             charge_amount = (args["value"].to_f + args['service'].to_f).to_s
             unique_charge_id = unique_cc_id(args["receiver_name"], merchant_id, args['card'].user_id)
-            card_to_sale_hsh = args['card'].sale_hsh_from_card(
+            card_to_sale_hsh = args['card'].sale_hsh(
                     charge_amount,
+                    ccy,
                     unique_charge_id,
                     args["giver"].cim_profile,
                     merchant_id
                 )
             args.delete('card')
-            args["payable"] = Sale.charge_card card_to_sale_hsh, args['ccy']
+            args["payable"] = Sale.charge_card card_to_sale_hsh
 
         else
             puts "\n  GIFT INVALID SUBMITTED 500 Internal \n #{args.inspect} \n"

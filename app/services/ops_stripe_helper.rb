@@ -70,6 +70,9 @@ module OpsStripeHelper
 			end
 			@http_status = e.http_status
 			@error_key = @error_code
+			if @error_key == "card_declined"
+				@resp_code = 2
+			end
 		else
 			@http_status = 500
 			@error_code = "ops_stripe_error"
