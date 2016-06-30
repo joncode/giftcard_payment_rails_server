@@ -107,10 +107,12 @@ class Card < ActiveRecord::Base
 			score += 1 if other_card.csv == self.csv
 			if score == 3
 				chosen = other_card
+				puts "Card -update_with_duplicate_cim_token- score of 3"
 				break
 			else
 				if cards[score].nil? || (cards[score].year.to_i < other_card.year.to_i)
 					cards[score] = other_card
+					puts "Card -update_with_duplicate_cim_token- score of #{score}"
 				end
 			end
 		end
@@ -118,6 +120,7 @@ class Card < ActiveRecord::Base
 			chosen = cards[2] || cards[1] || cards[0]
 		end
 		if chosen
+			puts "Card -update_with_duplicate_cim_token- Replace #{self.id} with cim_token #{chosen.id}"
 			self.update_column(:cim_token, chosen.cim_token)
 		else
 			puts "\nCard -update_with_duplicate_cim_token- unable to find cim for #{self.id}"
