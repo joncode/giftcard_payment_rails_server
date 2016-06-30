@@ -11,8 +11,8 @@ module CardTokenizer
 		    	else
 		    		create_profile_and_payment_profile(user)
 			    end
-			rescue
-				puts "\n\n\n----   Card #{self.id} -- failed Auth.net tokenize\n\n\n"
+			rescue => e
+				puts "\n\n\n----   Card #{self.id} -- failed Auth.net tokenize -- #{e.inspect}\n\n\n"
 			end
 		end
     end
@@ -34,6 +34,7 @@ module CardTokenizer
 	# end
 
     def create_profile_and_payment_profile user
+    	puts "\n------  create_profile_and_payment_profile #{user.id}"
     	card_number = self.decrypt!(CATCH_PHRASE).number
 		customer_id = user.obscured_id
 
@@ -75,6 +76,7 @@ module CardTokenizer
     end
 
     def add_payment_profile  cim_profile
+    	puts "\n------  add_payment_profile #{cim_profile}"
     	card_number = self.decrypt!(CATCH_PHRASE).number
 
     	response, ditto = PaymentGatewayCim.add_payment_profile(self, card_number, cim_profile)

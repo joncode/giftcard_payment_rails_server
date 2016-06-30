@@ -103,6 +103,8 @@ class Card < ActiveRecord::Base
 					year: self.year).where.not(cim_token: nil).first
 		if c2
 			self.update_column(:cim_token, c2.cim_token)
+		else
+			puts "\nCard -update_with_duplicate_cim_token- unable to find cim for #{self.id}"
 		end
 	end
 
