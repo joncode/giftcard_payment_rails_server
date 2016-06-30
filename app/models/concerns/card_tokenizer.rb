@@ -84,9 +84,18 @@ module CardTokenizer
 		else
 			puts "------ Unable to update card Auth.net Response: #{response.inspect}--------------"
 			puts "------ Ditto ID: #{ ditto.id } --------------"
+
+			rj = PaymentGatewayCim.response_json(response)
+			if rj.response['message_code'] == "E00039"  # duplicate cim_token already exists
+				c2 = Card.where(number_digest: self.number_digest,
+					month: self.month,
+					csv: self.csv,
+					year: self.year).where.not(cim_token: nil).first
+				if c2
+					self.update_column(:cim_token, c2.cim_token)
+				end
+			end
 		end
-		# card is gettign tokenized that is failing stripe auth
-#------ Unable to update card Auth.net Response: #<AuthorizeNet::CIM::Response:0x007fee092c53e0 @raw_response=#<Net::HTTPOK 200 OK readbody=true>, @transaction=#<AuthorizeNet::CIM::Transaction:0x007fee092e5d70 @fields={:method=>"CC", :card_num=>"5555555555554444", :exp_date=>"1120", :validation_mode=>:none, :customer_profile_id=>"40871063"}, @api_login_id="948bLpzeE8UY", @api_transaction_key="7f7AZ66axeC386q7", @response=#<AuthorizeNet::CIM::Response:0x007fee092c53e0 ...>, @type="createCustomerPaymentProfileRequest", @verify_ssl=false, @reference_id=nil, @gateway="https://apitest.authorize.net/xml/v1/request.api", @delim_char=",", @encap_char=nil, @custom_fields={}, @xml="<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<createCustomerPaymentProfileRequest xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\">\n  <merchantAuthentication>\n    <name>948bLpzeE8UY</name>\n    <transactionKey>7f7AZ66axeC386q7</transactionKey>\n  </merchantAuthentication>\n  <customerProfileId>40871063</customerProfileId>\n  <paymentProfile>\n    <payment>\n      <creditCard>\n        <cardNumber>5555555555554444</cardNumber>\n        <expirationDate>2020-11</expirationDate>\n      </creditCard>\n    </payment>\n  </paymentProfile>\n  <validationMode>none</validationMode>\n</createCustomerPaymentProfileRequest>\n">, @root=#<Nokogiri::XML::Element:0x3ff70496289c name="createCustomerPaymentProfileResponse" namespace=#<Nokogiri::XML::Namespace:0x3ff704962518 href="AnetApi/xml/v1/schema/AnetApiSchema.xsd"> children=[#<Nokogiri::XML::Element:0x3ff7048dfcf8 name="messages" namespace=#<Nokogiri::XML::Namespace:0x3ff704962518 href="AnetApi/xml/v1/schema/AnetApiSchema.xsd"> children=[#<Nokogiri::XML::Element:0x3ff704959940 name="resultCode" namespace=#<Nokogiri::XML::Namespace:0x3ff704962518 href="AnetApi/xml/v1/schema/AnetApiSchema.xsd"> children=[#<Nokogiri::XML::Text:0x3ff7048df53c "Error">]>, #<Nokogiri::XML::Element:0x3ff7048df348 name="message" namespace=#<Nokogiri::XML::Namespace:0x3ff704962518 href="AnetApi/xml/v1/schema/AnetApiSchema.xsd"> children=[#<Nokogiri::XML::Element:0x3ff7049589b4 name="code" namespace=#<Nokogiri::XML::Namespace:0x3ff704962518 href="AnetApi/xml/v1/schema/AnetApiSchema.xsd"> children=[#<Nokogiri::XML::Text:0x3ff7048de9c0 "E00039">]>, #<Nokogiri::XML::Element:0x3ff704953c34 name="text" namespace=#<Nokogiri::XML::Namespace:0x3ff704962518 href="AnetApi/xml/v1/schema/AnetApiSchema.xsd"> children=[#<Nokogiri::XML::Text:0x3ff7048de448 "A duplicate customer payment profile already exists.">]>]>]>, #<Nokogiri::XML::Element:0x3ff7049526cc name="customerProfileId" namespace=#<Nokogiri::XML::Namespace:0x3ff704962518 href="AnetApi/xml/v1/schema/AnetApiSchema.xsd"> children=[#<Nokogiri::XML::Text:0x3ff7048dbd4c "40871063">]>, #<Nokogiri::XML::Element:0x3ff70494bd40 name="customerPaymentProfileId" namespace=#<Nokogiri::XML::Namespace:0x3ff704962518 href="AnetApi/xml/v1/schema/AnetApiSchema.xsd"> children=[#<Nokogiri::XML::Text:0x3ff7048db7fc "37500731">]>]>, @result_code="Error", @message_code="E00039", @message_text="A duplicate customer payment profile already exists.", @reference_id=nil, @customer_profile_id="40871063", @customer_payment_profile_id="37500731", @customer_payment_profile_id_list=nil, @customer_shipping_address_id_list=nil, @customer_address_id=nil, @validation_direct_response_list=nil, @validation_direct_response=nil, @direct_response=nil, @customer_profile_id_list=nil, @address=nil, @payment_profile=nil, @profile=nil>--------------
 
 	end
 
