@@ -64,6 +64,7 @@ private
         hsh["reason_text"]     = self.response.response_reason_text
         hsh["reason_code"]     = self.response.response_reason_code.to_i
         hsh["revenue"]         = self.response.fields[:amount]
+        hsh['gateway'] = 'authorize'
         hsh
     end
 
@@ -76,6 +77,7 @@ private
         hsh["reason_text"]     = self.response.response_reason_text
         hsh["reason_code"]     = self.response.response_reason_code.to_i
         hsh["revenue"]         = self.response.fields[:amount]
+        hsh['gateway'] = 'authorize'
         hsh
     end
 
