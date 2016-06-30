@@ -1,7 +1,7 @@
 module MoneyHelper
   include  ActionView::Helpers::NumberHelper
 
-  # moeny is a string with cents when there are cents , otherwise just dollar
+  # money is a string with cents when there are cents , otherwise just dollar
   # ie.  "8.50"  or "8" - but not "8.5" or "8.00"
 
   # currency is money with a $

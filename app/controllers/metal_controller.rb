@@ -120,6 +120,9 @@ class MetalController < ActionController::Base
                 data: error_data
             }
         when "not_created_card"
+            if error_data[0][:msg].present?
+                error_data  = error_data[0][:msg]
+            end
             {
                 err: "INVALID_INPUT",
                 msg: "We are unable to process credit card.",
