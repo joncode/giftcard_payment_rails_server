@@ -25,6 +25,30 @@ class OpsStripe
 
 #	-------------
 
+	def purchase
+		@request = {
+			amount: @amount,
+			currency: @ccy,
+			customer: @customer_id,
+			source: @card_id,
+			description: "Purchase #{@unique_id}",
+			idempotency_key: @unique_id
+		}
+		@response = Stripe::Charge.create(@request)
+		process_charge_success @response.source
+	rescue => e
+		process_error e
+	end
+
+	def refund charge_id
+		@response = Stripe::Refund.create(charge: charge_id)
+		process_refund_response
+	rescue => e
+		process_error e
+	end
+
+#	-------------
+
     def gateway_hash_response r=@response
         hsh = {}
        	set_response_code hsh
@@ -36,6 +60,7 @@ class OpsStripe
         else
         	hsh["revenue"] = display_money(cents: @amount)
         end
+        puts hsh.inspect
         hsh
     end
 
@@ -46,6 +71,26 @@ class OpsStripe
     		hsh["reason_text"] = "This transaction has been approved."
 		else
 			hsh["reason_text"] = @error_message
+		end
+    end
+
+    def process_refund_response
+		@request_id = @response.id
+    	if @response.status == 'succeeded'
+    		@success = true
+    		@http_status = 200
+    		@resp_code = 1
+    	elsif @response.status == 'pending'
+    		@success = true
+    		@http_status = 200
+    		@resp_code = 1
+    		@error_message = 'Transaction pending approval'
+    		OpsTwilio.text to: DEVELOPER_TEXT, msg: "PENDING ON STRIPE #{@request_id}"
+    	else  # failed
+    		@success = false
+    		@http_status = 400
+    		@resp_code = 2
+    		@error_message = "Transaction failed."
 		end
     end
 
@@ -70,29 +115,6 @@ class OpsStripe
 		end
 	end
 
-#	-------------
-
-	def purchase
-		@request = {
-			amount: @amount,
-			currency: @ccy,
-			customer: @customer_id,
-			source: @card_id,
-			description: "Purchase #{@unique_id}",
-			idempotency_key: @unique_id
-		}
-		@response = Stripe::Charge.create(@request)
-		process_charge_success @response.source
-	rescue => e
-		process_error e
-	end
-
-	def refund charge_id
-		@response = Stripe::Refund.create(charge: charge_id)
-		@success = true
-	rescue => e
-		process_error e
-	end
 
 
 

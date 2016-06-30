@@ -1,5 +1,5 @@
 class Sale < ActiveRecord::Base
-
+    include MoneyHelper
     validates_presence_of :giver_id, :card_id, :resp_code
 
 #   -------------
@@ -44,11 +44,18 @@ class Sale < ActiveRecord::Base
         sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"]}
         resp_hsh = o.gateway_hash_response
         sale_init_hsh.merge!(resp_hsh)
-        Sale.new sale_init_hsh
-
+        s  = Sale.new sale_init_hsh
+        s.gateway = 'stripe'
+        s
     end
 
 #   -------------
+
+    def revenue= amount_str
+        rev = amount_str.to_s
+        self.revenue_cents = currency_to_cents(rev)
+        super rev
+    end
 
     def success?
         self.resp_code == 1
@@ -101,7 +108,9 @@ private
         unless Rails.env.test?
             Resque.enqueue(CardTokenizerJob, card_id)
         end
-        Sale.new cc_hsh
+        s = Sale.new cc_hsh
+        s.gateway = 'authorize'
+        s
     end
 
     # def self.charge_trans_token cc_hsh
@@ -119,7 +128,9 @@ private
 
         sale_init_hsh = {"card_id" => cc_hsh["card_id"], "giver_id" => cc_hsh["giver_id"], "merchant_id" => cc_hsh["merchant_id"]}
         sale_init_hsh.merge!(resp_hsh)
-        Sale.new sale_init_hsh
+        s = Sale.new sale_init_hsh
+        s.gateway = 'authorize'
+        s
     end
 
 #   -------------
