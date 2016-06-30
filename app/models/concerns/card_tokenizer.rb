@@ -84,12 +84,12 @@ module CardTokenizer
 			puts "------ Saving Payment Profile ID: #{response.payment_profile_id}--------------"
 			self.update(cim_token: response.payment_profile_id)
 		else
-			puts "------ Unable to update card Auth.net Response: #{response.inspect}--------------"
 			puts "------ Ditto ID: #{ ditto.id } --------------"
 
 			if PaymentGatewayCim.duplicate?(response.message_code) # duplicate cim_token already exists
 				self.update_with_duplicate_cim_token
 			else
+				puts "------ Unable to update card Auth.net Response: #{response.inspect}--------------"
 				OpsTwilio.text_devs msg: "New Authorize.net error - Ditto = #{ditto.id}"
 			end
 		end
