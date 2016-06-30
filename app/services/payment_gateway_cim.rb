@@ -52,6 +52,10 @@ class PaymentGatewayCim             # charge , refund, cancel, void - instance m
         t
     end
 
+    def self.duplicate? message_code
+        message_code == "E00039"
+    end
+
     def message_code_to_resp_code message_code
         case message_code
         when "I00001" #Successful
@@ -60,6 +64,8 @@ class PaymentGatewayCim             # charge , refund, cancel, void - instance m
             2
         when "E00007" # invalid login credentials
             3
+        when "E00039"  # duplicate profile exists
+            4
         else          #Error/Failure
             3
         end
