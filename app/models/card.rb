@@ -24,7 +24,7 @@ class Card < ActiveRecord::Base
 
 #   -------------
 
-	before_save :send_to_stripe, on: :create
+	before_create :send_to_stripe
 	before_save :crypt_number
 	after_create :tokenize_card
 
@@ -40,6 +40,9 @@ class Card < ActiveRecord::Base
 #   -------------
 
 	def send_to_stripe
+		if self.stripe_id
+			return true
+		end
 		card_owner = self.user
 		customer_id = card_owner.stripe_id
 		o = OpsStripeCard.new(customer_id, self)
