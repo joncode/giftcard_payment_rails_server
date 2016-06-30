@@ -85,9 +85,9 @@ class Sale < ActiveRecord::Base
             s.gateway = 'stripe'
         else
             payment_hsh = {}
-            payment_hsh["trans_id"]  = self.transaction_id
+            payment_hsh["transaction_id"] = self.transaction_id
             payment_hsh["last_four"] = sale_card_last_four
-            payment_hsh["amount"]    = self.revenue
+            payment_hsh["amount"] = self.revenue
             payment  = PaymentGateway.new(payment_hsh)
             resp_hsh = payment.refund
             s = Sale.new resp_hsh
