@@ -317,12 +317,12 @@ class Gift < ActiveRecord::Base
         else
             if refund.save
                 return { status: 0 , msg: "Refund Failed #{refund.reason_text} REFUND ID = #{refund.id}."}
-            end
+            else
                 return { status: 0 ,
                     msg: "Refund Failed #{refund.reason_text} - #{refund.errors.full_messages} \
                             REFUND_TRANSACTION = #{refund.transaction_id}."
                 }
-            else
+            end
         end
     end
 
