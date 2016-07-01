@@ -14,6 +14,7 @@ class Alert < ActiveRecord::Base
 	attr_accessor :target
 
 	def self.perform alert_name, target
+		puts "Alert - perfom #{alert_name} #{target}"
 		alert = find_by(name: alert_name)
 		alert.target = target
 		AlertContact.perform alert

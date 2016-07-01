@@ -10,6 +10,7 @@ class AlertMessage < ActiveRecord::Base
 	after_commit :send_message
 
 	def self.run alert_contact
+		puts "AlertMessage - perfom #{alert_contact.inspect}"
 		# save pre message to DB
 		create(target_id: alert_contact.target.id,
 			target_type: alert_contact.target.class.to_s,

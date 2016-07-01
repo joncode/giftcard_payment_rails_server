@@ -11,6 +11,7 @@ class AlertContact < ActiveRecord::Base
 	attr_accessor :alert, :target, :note
 
 	def self.perform alert
+		puts "AlertContact - perfom #{alert.inspect}"
 		if alert.note.nil? && alert.system == 'admin'
 			alert_contacts = where(alert_id: alert.id)
 		else
