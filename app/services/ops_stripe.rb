@@ -89,7 +89,7 @@ class OpsStripe
     		@http_status = 200
     		@resp_code = 1
     		@error_message = 'Transaction pending approval'
-    		OpsTwilio.text to: DEVELOPER_TEXT, msg: "PENDING ON STRIPE #{@request_id}"
+    		OpsTwilio.text_devs msg: "PENDING ON STRIPE #{@request_id}"
     	else  # failed
     		@success = false
     		@http_status = 400
@@ -109,7 +109,7 @@ class OpsStripe
     		@http_status = 200
     		@resp_code = 1
     		@error_message = 'Transaction pending approval'
-    		OpsTwilio.text to: DEVELOPER_TEXT, msg: "PENDING ON STRIPE #{@request_id}"
+    		OpsTwilio.text_devs msg: "PENDING ON STRIPE #{@request_id}"
     	else  # failed
     		@success = false
     		@http_status = 400

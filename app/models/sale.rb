@@ -163,7 +163,7 @@ private
 
     def notify_developers_for_missing_data
         if self.transaction_id.nil?
-            OpsTwilio.text to: DEVELOPER_TEXT, msg: "Sale w/o Transaction ID #{self.id}"
+            OpsTwilio.text_devs msg: "Sale w/o Transaction ID #{self.id}"
         end
     end
 

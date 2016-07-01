@@ -24,8 +24,10 @@ class OpsTwilio
 			    	:body => msg,
 			        :to => receiver_phone,
 			        :from => twilio_number)
+			    return { status: 1, data: message }
 			rescue Twilio::REST::RequestError => e
 			    puts e.message.to_s + "\nOpsTwilio(28) 500 Internal"
+			    return { status: 0, data: e }
 			end
 
 		end

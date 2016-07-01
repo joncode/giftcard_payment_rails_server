@@ -117,6 +117,18 @@ class OpsStripeCard
 		number
 	end
 
+	def random
+		{
+			month: '04',
+			year: '2021',
+			number: '6011000990139424',
+			csv: '233',
+			zip: '90023',
+			name: 'Testing Random',
+			address_line: '900 S las Vegas Blvd'
+		}
+	end
+
 	def tc
 		{
 			month: '04',
