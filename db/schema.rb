@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160630001822) do
+ActiveRecord::Schema.define(version: 20160701044926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,37 @@ ActiveRecord::Schema.define(version: 20160630001822) do
 
   add_index "affiliations", ["affiliate_id", "target_type"], name: "index_affiliations_on_affiliate_id_and_target_type", using: :btree
   add_index "affiliations", ["affiliate_id"], name: "index_affiliations_on_affiliate_id", using: :btree
+
+  create_table "alert_contacts", force: :cascade do |t|
+    t.integer  "note_id"
+    t.string   "note_type"
+    t.integer  "alert_id"
+    t.string   "net"
+    t.string   "net_id"
+    t.string   "status",     default: "live"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  create_table "alert_messages", force: :cascade do |t|
+    t.integer  "alert_contact_id"
+    t.integer  "target_id"
+    t.string   "target_type"
+    t.string   "status",           default: "unsent"
+    t.string   "reason"
+    t.string   "msg"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  create_table "alerts", force: :cascade do |t|
+    t.string   "name"
+    t.string   "system"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "alerts", ["name"], name: "index_alerts_on_name", using: :btree
 
   create_table "answers", force: :cascade do |t|
     t.string   "answer",      limit: 255

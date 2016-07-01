@@ -150,13 +150,13 @@ class MetalController < ActionController::Base
             if error_name.kind_of?(String)
                 if error_data
                     {
-                        err: error_name.gsub(' ', '_').upcase,
+                        # err: error_name.gsub(' ', '_').upcase,
                         msg: error_data
                     }
                 else
                     {
-                        err: error_name.gsub(' ', '_').upcase,
-                        msg: error_name
+                        # err: error_name.gsub(' ', '_').upcase,
+                        msg: error_name.gsub(' ', '_').upcase
                     }
                 end
             end
