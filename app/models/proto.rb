@@ -3,7 +3,7 @@ class Proto < ActiveRecord::Base
 
 #   -------------
 
-	validates_presence_of :cat, :expires_at, :giver_id, :giver_type, :giver_name, :merchant_id, :provider_name
+	validates_presence_of :cat, :giver_id, :giver_type, :giver_name, :merchant_id, :provider_name
 
 #   -------------
 

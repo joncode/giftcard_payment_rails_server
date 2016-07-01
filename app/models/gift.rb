@@ -61,11 +61,11 @@ class Gift < ActiveRecord::Base
     has_many    :landing_pages, through: :affiliate_gifts
     has_many    :registers
 
-    belongs_to  :merchant
-    belongs_to  :giver,         polymorphic: :true
-    belongs_to  :receiver,      class_name: User
-    belongs_to  :payable,       polymorphic: :true, autosave: true
-    belongs_to  :refund,        polymorphic: :true, autosave: true
+    belongs_to :merchant
+    belongs_to :giver,         polymorphic: :true
+    belongs_to :receiver,      class_name: User
+    belongs_to :payable,       polymorphic: :true, autosave: true
+    belongs_to :refund,        polymorphic: :true, autosave: true
     belongs_to :client
     belongs_to :partner, polymorphic: true
 

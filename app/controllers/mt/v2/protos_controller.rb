@@ -19,5 +19,4 @@ class Mt::V2::ProtosController < JsonController
     	respond(status)
     end
 
-
 end
