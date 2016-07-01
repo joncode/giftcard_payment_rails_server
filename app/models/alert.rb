@@ -8,6 +8,9 @@ class Alert < ActiveRecord::Base
 
 	validates_presence_of :name, :system
 
+	has_many :alert_contacts
+	has_many :alert_messages, through: :alert_contacts
+
 	attr_accessor :target
 
 	def self.perform alert_name, target
@@ -17,11 +20,11 @@ class Alert < ActiveRecord::Base
 	end
 
 	def note
-		note_for(alert_name, target)
+		note_for(self.name, target)
 	end
 
 	def msg
-		message_for(name, target)
+		message_for(self.name, target)
 	end
 
 end

@@ -5,12 +5,14 @@ class AlertMessage < ActiveRecord::Base
 
 	validates_presence_of :target_id, :target_type, :alert_contact_id, :msg, :status
 
+	belongs_to :alert_contact
+
 	after_commit :send_message
 
-	def self.perfom alert_contact
+	def self.run alert_contact
 		# save pre message to DB
 		create(target_id: alert_contact.target.id,
-			target_type: alert_contact.target.type,
+			target_type: alert_contact.target.class.to_s,
 			alert_contact_id: alert_contact.id,
 			msg: alert_contact.alert.msg,
 			status: 'unsent' )
