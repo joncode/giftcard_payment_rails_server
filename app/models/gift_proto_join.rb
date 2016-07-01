@@ -84,17 +84,17 @@ private
 		args['payable']       = proto
 		args['message']       = proto.message
 		args['detail']        = proto.detail
-		args['expires_at']    = expires_at_calc(proto.expires_at, proto.expires_in)
+		args['expires_at']    = expires_at_calc(proto)
 		args['scheduled_at']  = proto.scheduled_at
 		args['cat']           = proto.cat
 		args
 	end
 
-    def self.expires_at_calc expires_at, expires_in
-        if expires_at.present?
-            expires_at + 1.day
-        elsif expires_in.present?
-            DateTime.now.utc.to_date + expires_in.days
+    def self.expires_at_calc proto
+        if proto.expires_at
+            proto.expires_at + 1.day
+        elsif proto.expires_in
+            DateTime.now.utc + proto.days
         end
     end
 

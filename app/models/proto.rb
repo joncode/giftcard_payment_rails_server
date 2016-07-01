@@ -36,6 +36,20 @@ class Proto < ActiveRecord::Base
     	"USD"
     end
 
+	def days= days_int
+		@days = days_int
+		self.expires_in = days_int.days.to_i
+	end
+
+	def days
+		return @days if @days
+		if @days.nil? && self.expires_in.nil?
+			return nil
+		else
+			self.expires_in / 24 / 60 / 60
+		end
+	end
+
 #   -------------
 
 	def update_contacts new_amount=1
