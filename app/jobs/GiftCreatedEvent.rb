@@ -10,6 +10,9 @@ class GiftCreatedEvent
         notify_via_text gift
 
     	PointsForSaleJob.perform gift_id
+        if gift.cat == 300
+            Alert.perform('"GIFT_PURCHASED_SYS"', gift)
+        end
     end
 
     def self.notify_via_facebook gift
