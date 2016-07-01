@@ -2,7 +2,9 @@
 
 
 FBO = OpsFacebook
-OMNI = Omnivore
+S = OpsStripe
+SC = OpsStripeCard
+O = Omnivore
 U = User
 G = Gift
 M = Merchant
