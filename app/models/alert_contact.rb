@@ -1,7 +1,14 @@
 class AlertContact < ActiveRecord::Base
+	include ModelValidationHelper
+	include ActionView::Helpers::NumberHelper
 	# example AlertContact
 	# { id: r.id, note_id: 45, note_type: 'Merchant', alert_id: a.id, net: 'phone', net_id: '2154948383',
 	# status: ['live', 'mute', 'stop'] }
+
+#   -------------
+
+    before_validation { |contact| contact.net_id = strip_and_downcase(net_id) if email? }
+	before_validation { |contact| contact.net_id = extract_phone_digits(net_id) if phone? }
 
 #   -------------
 
@@ -13,11 +20,36 @@ class AlertContact < ActiveRecord::Base
 
 	has_many :alert_messages
 	alias_method :messages, :alert_messages
+
 	belongs_to :alert
 
 #   -------------
 
 	attr_accessor :target, :note
+
+	ALERT_MUTE_HOURS = 12.hours
+
+#   -------------
+
+	def self.statuses
+		['live', 'mute', 'stop']
+	end
+
+	def form_update p
+		if !p[:email].blank? && !p[:phone].blank?
+			# both fields filled out - use existing :net
+			email = p[:email] if email?
+			email = p[:phone] if phone?
+		else
+			# email
+			email = p[:email] unless p[:email].blank?
+
+			# phone
+			phone = p[:phone] unless p[:phone].blank?
+		end
+		self.status = p[:status] if AlertContact.statuses.include?(p[:status])
+		self
+	end
 
 #   -------------
 
@@ -38,8 +70,21 @@ class AlertContact < ActiveRecord::Base
 		end
 	end
 
+	def receiving_messages?
+		return true if self.status == 'live'
+		if self.status == 'mute' && (self.updated_at < ALERT_MUTE_HOURS.ago)
+			update(status: 'live')
+			return true
+		end
+		return false
+	end
+
+	def unmute_at
+		self.updated_at + ALERT_MUTE_HOURS
+	end
+
 	def send_message
-		if self.status == 'live'
+		if self.receiving_messages?
 			AlertMessage.run(self)
 		end
 	end
@@ -47,19 +92,25 @@ class AlertContact < ActiveRecord::Base
 #   -------------
 
 	def user
-		if self.user_type.nil?
-			nil
-		else
-			self.user_type.constantize.find self.user_id
-		end
+		self.user_type.constantize.find self.user_id
 	end
 
 	def user_name
-		if self.user
-			self.user.name
+		return self.user.name if self.user
+		""
+	end
+
+	def net_id display=false
+		if display
+			display_net_id
 		else
-			""
+			super()
 		end
+	end
+
+	def display_net_id
+		return self.net_id if !self.phone?
+		number_to_phone(self.net_id)
 	end
 
 #   -------------
@@ -69,15 +120,12 @@ class AlertContact < ActiveRecord::Base
 	end
 
 	def phone= number
-		num_regex =
 		self.net_id = number
 		self.net = 'phone'
 	end
 
 	def phone
-		if self.net == 'phone'
-			self.net_id
-		end
+		self.net_id if self.net == 'phone'
 	end
 
 	def email?
@@ -90,9 +138,7 @@ class AlertContact < ActiveRecord::Base
 	end
 
 	def email
-		if self.net == 'email'
-			self.net_id
-		end
+		self.net_id if self.net == 'email'
 	end
 
 end
