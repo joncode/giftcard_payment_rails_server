@@ -22,6 +22,10 @@ class AlertMessage < ActiveRecord::Base
 		self.alert_contact.alert
 	end
 
+	def target
+		@target ||= (self.target_type.constantize.find(self.target_id))
+	end
+
 #   -------------
 
 	def self.run alert_contact, status=nil

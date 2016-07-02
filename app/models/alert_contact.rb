@@ -70,6 +70,12 @@ class AlertContact < ActiveRecord::Base
 		end
 	end
 
+#   -------------
+
+	def unmute_at
+		self.updated_at + ALERT_MUTE_HOURS
+	end
+
 	def receiving_messages?
 		return true if self.status == 'live'
 		if self.status == 'mute' && (self.updated_at < ALERT_MUTE_HOURS.ago)
@@ -77,10 +83,6 @@ class AlertContact < ActiveRecord::Base
 			return true
 		end
 		return false
-	end
-
-	def unmute_at
-		self.updated_at + ALERT_MUTE_HOURS
 	end
 
 	def send_message
@@ -93,14 +95,21 @@ class AlertContact < ActiveRecord::Base
 
 #   -------------
 
+	def user= user
+		self.user_id = user.id
+		self.user_type = user.class.to_s
+	end
+
 	def user
-		self.user_type.constantize.find self.user_id
+		@user ||= (self.user_type.constantize.find(self.user_id))
 	end
 
 	def user_name
 		return self.user.name if self.user
 		""
 	end
+
+#   -------------
 
 	def net_id display=false
 		if display
@@ -129,6 +138,8 @@ class AlertContact < ActiveRecord::Base
 	def phone
 		self.net_id if self.net == 'phone'
 	end
+
+#   -------------
 
 	def email?
 		self.net == 'email'
