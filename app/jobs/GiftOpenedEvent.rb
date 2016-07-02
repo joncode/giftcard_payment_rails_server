@@ -12,5 +12,9 @@ class GiftOpenedEvent
 
     	PushJob.perform(gift.id, 'gift_receiver_created_account')
     	gift.notify_receiver(false)
+
+        if (gift.receiver.created_at - gift.created_at) <  30.minutes
+            Alert.perform("GIFT_FRAUD_DETECTED_SYS", gift)
+        end
     end
 end

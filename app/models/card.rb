@@ -28,6 +28,8 @@ class Card < ActiveRecord::Base
 	before_save :crypt_number
 	after_create :tokenize_card
 
+	after_commit :card_fraud_detection
+
 #	-------------
 
 	has_many   :sales
@@ -239,6 +241,17 @@ class Card < ActiveRecord::Base
 
 	def last_four
 		new_record? ? save_last_four : read_attribute(:last_four)
+	end
+
+	def card_fraud_detection
+		cs = Card.where(user_id: self.user_id).where("created_at > #{15.minutes.ago}")
+		if cs.count > 1
+			return Alert.perform("CARD_FRAUD_DETECTED_SYS", self.user)
+		end
+		cs = Card.where(user_id: self.user_id).where("created_at > #{1.hour.ago}")
+		if cs.count > 2
+			return Alert.perform("CARD_FRAUD_DETECTED_SYS", self.user)
+		end
 	end
 
 private
