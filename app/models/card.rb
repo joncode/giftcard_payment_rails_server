@@ -64,6 +64,7 @@ class Card < ActiveRecord::Base
 			# error
 			self.active = false
 			errors.add(o.error_key.to_sym, o.error_message)
+			@error_message = o.error_message
 			# return false
 		end
 
@@ -75,7 +76,20 @@ class Card < ActiveRecord::Base
 		nil
 	end
 
-	attr_accessor :iv
+	attr_accessor :iv, :error_message
+
+	def error_message= err
+		if @error_message.nil?
+			@error_message = nil
+		else
+			@error_message += ', ' + err.to_s
+		end
+	end
+
+	def error_message
+		return @error_message unless @error_message.nil?
+		self.errors.full_messages.join(', ')
+	end
 
 	def destroy
 			# must delete auth.net record
@@ -236,24 +250,36 @@ private
 	end
 
 	def check_for_credit_card_validity
-		errors.add(:year, "is not a valid year") unless valid_expiry_year?(year.to_i)
-		errors.add(:month, "is not a valid month") unless valid_month?(month.to_i)
-		errors.add(:number, "is not a valid credit card number") unless valid_number?(number)
-		# self.brand = brand?(number)
-		# errors.add(:brand, "We only accept AmEx, Visa, & MasterCard.") unless (self.brand == 'master' || self.brand == 'visa' || self.brand == 'american_express')
-		#puts "error messages = #{errors.messages}"
+		unless valid_expiry_year?(year.to_i)
+			errors.add(:year, "is not a valid year")
+			@error_message = "Year is not valid"
+		end
+		unless valid_month?(month.to_i)
+			errors.add(:month, "is not a valid month")
+			@error_message = "Month is not valid"
+		end
+		unless valid_number?(number)
+			errors.add(:number, "is not a valid credit card number")
+			@error_message = "Card number is not valid"
+		end
 	end
 
 	def month_and_year_should_be_in_future
 		if (Date.new(year.to_i, month.to_i, 1) >> 1) < Date.today
-		 errors.add(:expiration,"The expiration date must be in the future.") and return false
+			errors.add(:expiration,"The expiration date must be in the future")
+			@error_message = "Expiration date must be in the future"
+			return false
 		end
-		rescue ArgumentError => e
-		errors.add(:expiration,"Date is not valid") and return false
+	rescue ArgumentError => e
+		errors.add(:expiration,"Date is not valid")
+		@error_message = "Date is not valid"
+		return false
 	end
 
 	def at_least_two_words_in_name
-		errors.add(:name, "must be two words long.") and return false if name and name.split.size < 2
+		errors.add(:name, "must be two words long.")
+		@error_message = "Cardholder name must be two words long"
+		return false if name and name.split.size < 2
 	end
 
 

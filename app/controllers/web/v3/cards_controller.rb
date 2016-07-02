@@ -23,7 +23,7 @@ class Web::V3::CardsController < MetalCorsController
         if card.active
             success card.token_serialize
         else
-            fail_web fail_web_payload("not_created_card", card.errors.messages)
+            fail_web fail_web_payload("not_created_card", card.error_message)
             # status = :bad_request
         end
         respond(status)
