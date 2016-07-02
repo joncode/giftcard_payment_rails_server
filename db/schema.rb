@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160701044926) do
+ActiveRecord::Schema.define(version: 20160702043956) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,8 @@ ActiveRecord::Schema.define(version: 20160701044926) do
     t.string   "system"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "title"
+    t.string   "detail"
   end
 
   add_index "alerts", ["name"], name: "index_alerts_on_name", using: :btree
@@ -1282,6 +1284,8 @@ ActiveRecord::Schema.define(version: 20160701044926) do
     t.string   "partner_type"
     t.integer  "client_id"
     t.string   "stripe_id"
+    t.integer  "user_id"
+    t.string   "user_type"
   end
 
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree
