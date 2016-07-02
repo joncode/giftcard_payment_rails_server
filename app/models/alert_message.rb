@@ -47,7 +47,13 @@ class AlertMessage < ActiveRecord::Base
 		if alert_contact.net == 'phone'
 			r = OpsTwilio.text to: alert_contact.net_id, msg: self.msg
 		elsif alert_contact.net == 'email'
-			# send email message
+			email_data_hsh = {
+				"subject" => "ItsOnMe Alert",
+				"html"    => "<div><h2>You've received and alert</h2><p>#{self.msg}</p></div>".html_safe,
+				"email"   => alert_contact.net_id
+			}
+			puts email_data_hsh.inspect
+			notify_developers(email_data_hsh)
 		else
 			self.update(status: 'failed', reason: 'alert_contact.net does not exist')
 		end
