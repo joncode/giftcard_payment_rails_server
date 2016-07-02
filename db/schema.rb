@@ -87,6 +87,8 @@ ActiveRecord::Schema.define(version: 20160702043956) do
     t.string   "status",     default: "live"
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.integer  "user_id"
+    t.string   "user_type"
   end
 
   create_table "alert_messages", force: :cascade do |t|
@@ -1284,8 +1286,6 @@ ActiveRecord::Schema.define(version: 20160702043956) do
     t.string   "partner_type"
     t.integer  "client_id"
     t.string   "stripe_id"
-    t.integer  "user_id"
-    t.string   "user_type"
   end
 
   add_index "users", ["active", "perm_deactive"], name: "index_users_on_active_and_perm_deactive", using: :btree

@@ -5,7 +5,7 @@ class AlertMessage < ActiveRecord::Base
 
 #   -------------
 
-	after_commit :send_message
+	after_commit :send_message, on: :create
 
 #   -------------
 
@@ -23,8 +23,6 @@ class AlertMessage < ActiveRecord::Base
 	end
 
 #   -------------
-
-	after_commit :send_message
 
 	def self.run alert_contact
 		puts "AlertMessage - perfom #{alert_contact.inspect}"
