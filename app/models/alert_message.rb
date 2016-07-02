@@ -24,14 +24,15 @@ class AlertMessage < ActiveRecord::Base
 
 #   -------------
 
-	def self.run alert_contact
+	def self.run alert_contact, status=nil
 		puts "AlertMessage - perfom #{alert_contact.inspect}"
 		# save pre message to DB
+		status ||= 'unsent'
 		create(target_id: alert_contact.target.id,
 			target_type: alert_contact.target.class.to_s,
 			alert_contact_id: alert_contact.id,
 			msg: alert_contact.alert.msg,
-			status: 'unsent' )
+			status: status )
 		# execute send message on background queue
 		# update pre message with results
 	end

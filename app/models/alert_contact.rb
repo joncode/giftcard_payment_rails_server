@@ -86,6 +86,8 @@ class AlertContact < ActiveRecord::Base
 	def send_message
 		if self.receiving_messages?
 			AlertMessage.run(self)
+		else
+			AlertMessage.run(self, self.status) if self.status == 'mute'
 		end
 	end
 
