@@ -6,12 +6,23 @@ class Alert < ActiveRecord::Base
 	# { id: a.id, action: 'merchant', name: 'USE_GIFT_PRESSED', msg: 'Customer is trying to redeem a gift now',
 	#  system: 'merchant', retry_code: 0 }
 
+#   -------------
+
 	validates_presence_of :name, :system
 
+#   -------------
+
 	has_many :alert_contacts
+	alias_method :contacts, :alert_contacts
+
 	has_many :alert_messages, through: :alert_contacts
+	alias_method :messages, :alert_messages
+
+#   -------------
 
 	attr_accessor :target
+
+#   -------------
 
 	def self.perform alert_name, target
 		puts "Alert - perfom #{alert_name} #{target}"

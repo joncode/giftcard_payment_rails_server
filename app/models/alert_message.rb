@@ -3,9 +3,26 @@ class AlertMessage < ActiveRecord::Base
 	# { id: m.id, target_id: 41672, target_type: 'Gift', alert_contact_id: 34, msg: 'Gift has been purchased'
 	# status: ['unsent', 'sent', 'failed'], reason: 'Number does not exist' }
 
+#   -------------
+
+	after_commit :send_message
+
+#   -------------
+
 	validates_presence_of :target_id, :target_type, :alert_contact_id, :msg, :status
 
+#   -------------
+
 	belongs_to :alert_contact
+	alias_method :contact, :alert_contact
+
+#   -------------
+
+	def alert
+		self.alert_contact.alert
+	end
+
+#   -------------
 
 	after_commit :send_message
 

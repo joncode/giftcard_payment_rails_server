@@ -3,12 +3,21 @@ class AlertContact < ActiveRecord::Base
 	# { id: r.id, note_id: 45, note_type: 'Merchant', alert_id: a.id, net: 'phone', net_id: '2154948383',
 	# status: ['live', 'mute', 'stop'] }
 
+#   -------------
+
 	validates_presence_of :net, :net_id, :alert_id
 
-	belongs_to :alert
-	has_many :alert_messages
+#   -------------
 
-	attr_accessor :alert, :target, :note
+	has_many :alert_messages
+	alias_method :messages, :alert_messages
+	belongs_to :alert
+
+#   -------------
+
+	attr_accessor :target, :note
+
+#   -------------
 
 	def self.perform alert
 		puts "AlertContact - perfom #{alert.inspect}"
