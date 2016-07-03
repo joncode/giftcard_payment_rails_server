@@ -314,6 +314,7 @@ class Gift < ActiveRecord::Base
                 self.redeemed_at = DateTime.now.utc
             end
             if save
+                Resque.enqueue(GiftRefundedEvent, self.id)
                 return { 'status' => 1, 'msg' => refund.reason_text }
             else
                 return { 'status' => 0 , 'msg' => "Gift failed to save refund #{self.errors.full_messages}"}
