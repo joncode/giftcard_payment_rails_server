@@ -36,18 +36,19 @@ class AlertContact < ActiveRecord::Base
 	end
 
 	def form_update p
-		if !p[:email].blank? && !p[:phone].blank?
+		p.stringify_keys!
+		if !p['email'].blank? && !p['phone'].blank?
 			# both fields filled out - use existing :net
-			email = p[:email] if email?
-			email = p[:phone] if phone?
+			self.email = p['email'] if email?
+			self.phone = p['phone'] if phone?
 		else
 			# email
-			email = p[:email] unless p[:email].blank?
+			self.email = p['email'] unless p['email'].blank?
 
 			# phone
-			phone = p[:phone] unless p[:phone].blank?
+			self.phone = p['phone'] unless p['phone'].blank?
 		end
-		self.status = p[:status] if AlertContact.statuses.include?(p[:status])
+		self.status = p['status'] if AlertContact.statuses.include?(p['status'])
 		self
 	end
 
