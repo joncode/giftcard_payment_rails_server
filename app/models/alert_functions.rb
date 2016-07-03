@@ -40,7 +40,7 @@ module AlertFunctions
 			"Alert- Gift fraud possible for #{target.giver_name} - ID(#{target.id}"
 		else
 			msg = "Alert- #{title_for(name)}"
-			msg += "for #{target.class} - #{target.id}" if target
+			msg += " for #{target.class} - #{target.id}" if target
 		end
 	end
 
