@@ -3,8 +3,29 @@ module AlertFunctions
 
 	def create_alert name
 		OpsTwilio.text_devs msg: "Alert Auto-generated for #{name}"
-		create({name: name, system: "admin",
-			title: name.humanize, detail: "This is an alert for #{name.humanize.downcase} - (Auto-generated)."})
+
+		create({name: name, system: system_for(name),
+			title: title_for(name), detail: "This is an alert for #{title_for(name)} - (Auto-generated)."})
+	end
+
+	def system_for name
+		a = name.split('_')
+		case a.last
+		when "SYS"
+			'admin'
+		when "PT"
+			'partner'
+		when "MT"
+			'merchant'
+		else
+			'admin'
+		end
+	end
+
+	def title_for name
+		a = name.split('_')
+		a.pop
+		a.join(' ').titleize
 	end
 
 	def message_for name, target
@@ -17,6 +38,9 @@ module AlertFunctions
 			"Alert- Card fraud possible for #{target.name} - ID(#{target.id}"
 		when 'GIFT_FRAUD_DETECTED_SYS'
 			"Alert- Gift fraud possible for #{target.giver_name} - ID(#{target.id}"
+		else
+			msg = "Alert- #{title_for(name)}"
+			msg += "for #{target.class} - #{target.id}" if target
 		end
 	end
 
@@ -29,6 +53,8 @@ module AlertFunctions
 		when 'CARD_FRAUD_DETECTED_SYS'
 			target
 		when 'GIFT_FRAUD_DETECTED_SYS'
+			target
+		else
 			target
 		end
 	end
