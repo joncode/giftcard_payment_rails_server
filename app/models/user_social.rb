@@ -23,7 +23,7 @@ class UserSocial < ActiveRecord::Base
 
 #   -------------
 
-    after_commit :collect_incomplete_gifts, on: :create
+    after_save :collect_incomplete_gifts
     after_commit :subscribe_mailchimp, on: :create
     after_commit :fire_after_save_queue, on: [:create, :update, :destroy]
     after_commit :unsubscribe_mailchimp, on: [:create, :update, :destroy]
@@ -136,10 +136,13 @@ private
     end
 
     def collect_incomplete_gifts
-        if thread_on?
-            Resque.enqueue(CollectIncompleteGiftsV2Job, self.id)
-        else
-            CollectIncompleteGiftsV2Job.perform(self.id)
+        if self.identifier_changed? && self.active
+            puts "Identifier changed, re-running CollectIncompleteGiftsV2Job (140)"
+            if thread_on?
+                Resque.enqueue(CollectIncompleteGiftsV2Job, self.id)
+            else
+                CollectIncompleteGiftsV2Job.perform(self.id)
+            end
         end
     end
 
