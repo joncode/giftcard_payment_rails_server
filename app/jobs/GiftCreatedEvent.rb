@@ -12,6 +12,8 @@ class GiftCreatedEvent
     	PointsForSaleJob.perform gift_id
         if gift.cat == 300
             Alert.perform("GIFT_PURCHASED_SYS", gift)
+            Alert.perform("GIFT_PURCHASED_PT", gift)
+            Alert.perform("GIFT_PURCHASED_MT", gift)
         end
     end
 

@@ -39,6 +39,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 reload
 
                 Resque.enqueue(GiftAfterSaveJob, self.id)
+                Alert.perform("GIFT_NOTIFIED_MT", self) if self.status == 'notified'
                 true
             else
                 true
