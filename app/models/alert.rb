@@ -25,7 +25,11 @@ class Alert < ActiveRecord::Base
 #   -------------
 
 	def self.perform alert_name, target
-		puts "Alert - perfom #{alert_name} #{target}"
+		if target.respond_to?(:id)
+			puts "Alert - perfom #{alert_name} #{target.id}"
+		else
+			puts "Alert - perfom #{alert_name} #{target}"
+		end
 		alert = find_by(name: alert_name)
 		if alert.nil?
 			alert = create_alert(alert_name)
