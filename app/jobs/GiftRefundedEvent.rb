@@ -11,7 +11,7 @@ class GiftRefundedEvent
 	    	registers = gift.registers
 			registers.each {|r| r.reverse_charge }
 
-    	elsif gift.pay_stat == 'refund_live'
+    	elsif gift.pay_stat == 'refund_comp'
 	    	# if gift is refund_live
 	    		# leave the registers
 
