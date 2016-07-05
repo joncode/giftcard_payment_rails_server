@@ -8,7 +8,7 @@ gem 'pg'
 
 gem 'excon', '~> 0.44.4'
 
-gem 'paypal-sdk-rest'
+#gem 'paypal-sdk-rest'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
 
