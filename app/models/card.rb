@@ -248,6 +248,7 @@ class Card < ActiveRecord::Base
 	end
 
 	def card_fraud_detection
+		puts "IN Fraud detections for #{self.inspect}"
 		cs = Card.where(user_id: self.user_id).where('created_at > ?', 15.minutes.ago)
 		if cs.count > 1
 			return Alert.perform("CARD_FRAUD_DETECTED_SYS", self.user)
