@@ -1,4 +1,5 @@
 class Alert < ActiveRecord::Base
+	extend AlertFunctions
 	include AlertFunctions
 	# example Alert
 	# { id: a.id, action: 'merchant', name: 'GIFT_PURCHASED', msg: 'Gift has been purchased', system: 'merchant',
