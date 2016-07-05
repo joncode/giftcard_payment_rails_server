@@ -39,7 +39,7 @@ class OpsStripe
 			customer: @customer_id,
 			source: @card_id,
 			description: "Gift-Purchase-#{@unique_id}",
-			idempotency_key: @unique_id
+			idempotency_key: @unique_id,
             metadata: {
                 first_name: @first_name,
                 last_name: @last_name,
