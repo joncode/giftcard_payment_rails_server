@@ -248,11 +248,11 @@ class Card < ActiveRecord::Base
 	end
 
 	def card_fraud_detection
-		cs = Card.where(user_id: self.user_id).where("created_at > #{15.minutes.ago}")
+		cs = Card.where(user_id: self.user_id).where("created_at > #{(DateTime.now.utc - 15.minutes)}")
 		if cs.count > 1
 			return Alert.perform("CARD_FRAUD_DETECTED_SYS", self.user)
 		end
-		cs = Card.where(user_id: self.user_id).where("created_at > #{1.hour.ago}")
+		cs = Card.where(user_id: self.user_id).where("created_at > #{(DateTime.now.utc - 1.hour.ago)}")
 		if cs.count > 2
 			return Alert.perform("CARD_FRAUD_DETECTED_SYS", self.user)
 		end
