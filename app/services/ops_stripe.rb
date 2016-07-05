@@ -23,6 +23,13 @@ class OpsStripe
 		@resp_code = 0
 	end
 
+    def add_customer= user
+        @email = user.email
+        @first_name = user.first_name
+        @last_name = user.last_name
+        @phone = user.phone
+    end
+
 #	-------------
 
 	def purchase
@@ -31,8 +38,15 @@ class OpsStripe
 			currency: @ccy,
 			customer: @customer_id,
 			source: @card_id,
-			description: "Purchase #{@unique_id}",
+			description: "Gift-Purchase-#{@unique_id}",
 			idempotency_key: @unique_id
+            metadata: {
+                first_name: @first_name,
+                last_name: @last_name,
+                email: @email,
+                phone: @phone,
+                currency: @ccy
+            }
 		}
 		@response = Stripe::Charge.create(@request)
 		process_charge_success @response.source

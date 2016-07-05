@@ -17,7 +17,7 @@ class Sale < ActiveRecord::Base
 
 #   -------------
 
-    def self.charge_card cc_hsh
+    def self.charge_card cc_hsh, giver=nil
         puts "\n Sale.charge_card #{cc_hsh.inspect}\n"
 
         # {"amount"=>"27.3", "unique_id"=>"r-David_Leibner+m-590+u-45",
@@ -28,7 +28,7 @@ class Sale < ActiveRecord::Base
         cc_hsh.stringify_keys!
 
         if cc_hsh['stripe_id'].present?
-            self.charge_stripe cc_hsh
+            self.charge_stripe cc_hsh, giver
         elsif cc_hsh["cim_profile"].present? && cc_hsh["cim_token"].present?
             cc_hsh.delete('ccy')
             self.charge_cim_token cc_hsh
@@ -40,8 +40,9 @@ class Sale < ActiveRecord::Base
 
     end
 
-    def self.charge_stripe cc_hsh
+    def self.charge_stripe cc_hsh, giver=nil
         o = OpsStripe.new cc_hsh
+        o.add_customer = giver if giver
         o.purchase
 
         puts o.inspect
