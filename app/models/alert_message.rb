@@ -54,7 +54,12 @@ class AlertMessage < ActiveRecord::Base
 				"email"   => alert_contact.net_id
 			}
 			puts email_data_hsh.inspect
-			notify_developers(email_data_hsh)
+			res = notify_developers(email_data_hsh)
+			if res
+				r = { status: 1 , data: "Success" }
+			else
+				r = { status: 0, data: res.inspect }
+			end
 		else
 			self.update(status: 'failed', reason: 'alert_contact.net does not exist')
 		end
@@ -63,5 +68,7 @@ class AlertMessage < ActiveRecord::Base
 		else
 			self.update(status: 'failed', reason: "Failed to deliver message #{r[:data].inspect}")
 		end
+	rescue => e
+		self.update(status: 'failed', reason: e.inspect)
 	end
 end
