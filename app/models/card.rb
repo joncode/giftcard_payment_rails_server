@@ -270,14 +270,17 @@ private
 		unless valid_expiry_year?(year.to_i)
 			errors.add(:year, "is not a valid year")
 			@error_message = "Year is not valid"
+			self.active = false
 		end
 		unless valid_month?(month.to_i)
 			errors.add(:month, "is not a valid month")
 			@error_message = "Month is not valid"
+			self.active = false
 		end
 		unless valid_number?(number)
 			errors.add(:number, "is not a valid credit card number")
 			@error_message = "Card number is not valid"
+			self.active = false
 		end
 	end
 
@@ -285,18 +288,20 @@ private
 		if (Date.new(year.to_i, month.to_i, 1) >> 1) < Date.today
 			errors.add(:expiration,"The expiration date must be in the future")
 			@error_message = "Expiration date must be in the future"
-			return false
+			self.active = false
 		end
 	rescue ArgumentError => e
 		errors.add(:expiration,"Date is not valid")
 		@error_message = "Date is not valid"
-		return false
+		self.active = false
 	end
 
 	def at_least_two_words_in_name
-		errors.add(:name, "must be two words long.")
-		@error_message = "Cardholder name must be two words long"
-		return false if name and name.split.size < 2
+		if name and name.split.size < 2
+			errors.add(:name, "must be two words long.")
+			@error_message = "Cardholder name must be two words long"
+			self.active = false
+		end
 	end
 
 

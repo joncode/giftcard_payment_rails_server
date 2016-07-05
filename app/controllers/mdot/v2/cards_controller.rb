@@ -30,7 +30,7 @@ class Mdot::V2::CardsController < JsonController
         card = Card.create_card_from_hash create_with
         card.save
         puts "HERE IS THE CARD #{card.inspect} #{card.errors.full_messages} #{card.error_message}"
-        if card.active
+        if card.active && card.persisted?
             success card.create_serialize
         else
             fail card

@@ -20,7 +20,7 @@ class Web::V3::CardsController < MetalCorsController
         card.partner = @current_partner
         card.origin = "#{@current_partner.id}|#{@current_partner.name}|#{@current_client.id}|#{@current_client.name}"
         card.save
-        if card.active
+        if card.active && card.persisted?
             success card.token_serialize
         else
             fail_web fail_web_payload("not_created_card", card.error_message)
