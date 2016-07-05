@@ -1,7 +1,7 @@
 module AlertFunctions
 	include MoneyHelper
 
-	def create_alert name
+	def self.create_alert name
 		puts "\nCreating alert for #{name}"
 		OpsTwilio.text_devs msg: "Alert Auto-generated for #{name}"
 
