@@ -15,6 +15,8 @@ class Client < ActiveRecord::Base
 
 #	-------------
 
+	has_many :gifts
+
 	belongs_to :partner,  polymorphic: true
 
 	enum ecosystem: [ :full, :client, :partner ]
