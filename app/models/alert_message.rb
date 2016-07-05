@@ -1,4 +1,5 @@
 class AlertMessage < ActiveRecord::Base
+    include Email
 	# example AlertMessage
 	# { id: m.id, target_id: 41672, target_type: 'Gift', alert_contact_id: 34, msg: 'Gift has been purchased'
 	# status: ['unsent', 'sent', 'failed'], reason: 'Number does not exist' }
