@@ -41,6 +41,23 @@ class Card < ActiveRecord::Base
 
 #   -------------
 
+	attr_accessor :iv, :error_message
+
+	def error_message= err
+		if @error_message.nil?
+			@error_message = nil
+		else
+			@error_message += ', ' + err.to_s
+		end
+	end
+
+	def error_message
+		return @error_message unless @error_message.nil?
+		self.errors.full_messages.join(', ')
+	end
+
+#	-------------
+
 	def send_to_stripe
 		if self.stripe_id
 			return true
@@ -78,20 +95,7 @@ class Card < ActiveRecord::Base
 		nil
 	end
 
-	attr_accessor :iv, :error_message
-
-	def error_message= err
-		if @error_message.nil?
-			@error_message = nil
-		else
-			@error_message += ', ' + err.to_s
-		end
-	end
-
-	def error_message
-		return @error_message unless @error_message.nil?
-		self.errors.full_messages.join(', ')
-	end
+#	-------------
 
 	def destroy
 			# must delete auth.net record

@@ -29,6 +29,7 @@ class Mdot::V2::CardsController < JsonController
         create_with["user_id"] = @current_user.id
         card = Card.create_card_from_hash create_with
         card.save
+        puts "HERE IS THE CARD #{card.inspect} #{card.errors.full_messages} #{card.error_message}"
         if card.active
             success card.create_serialize
         else

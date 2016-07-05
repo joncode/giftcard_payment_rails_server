@@ -37,7 +37,7 @@ class OpsStripeCard
 				number: card.number,
 				csv: card.csv,
 				zip: card.zip,
-				name: card.name,
+				name: card.name
 				# address_line: card.address
 			}
 		else
