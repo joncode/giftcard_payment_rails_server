@@ -55,7 +55,7 @@ module OmnivoreUtils
                 { status: 1, data: klass.new(resp[:data]) }
             end
         else
-            { status: 0, data: RestError.new(resp[:data]) }
+            { status: 0, data: RestError.new(e: resp[:error], r: resp[:res]) }
         end
     end
 
@@ -97,9 +97,9 @@ module OmnivoreUtils
             puts "\n\OmnivoreUtils Error code = #{e.inspect}\n\n"
             if e.nil?
                 response = { "response_code" => "ERROR", "response_text" => 'Contact Support', "code" => 400, "data" => [] }
-                return { status: 0, data: response }
+                return { status: 0, data: response, res: response }
             else
-                return { status: 0, data: e }
+                return { status: 0, data: e, error: error }
             end
         end
     end
