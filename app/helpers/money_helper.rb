@@ -1,10 +1,11 @@
 module MoneyHelper
-  include  ActionView::Helpers::NumberHelper
+	include  ActionView::Helpers::NumberHelper
 
-  # money is a string with cents when there are cents , otherwise just dollar
-  # ie.  "8.50"  or "8" - but not "8.5" or "8.00"
+	# money is a string with cents when there are cents , otherwise just dollar
+	# ie.  "8.50"  or "8" - but not "8.5" or "8.00"
 
-  # currency is money with a $
+	# currency is money with a $ or other ccy symbol
+
 
  	def string_to_float str
  		str.to_f.round(2)
@@ -19,27 +20,27 @@ module MoneyHelper
 	end
 
 	def display_money cents: nil, ccy: nil, zeros: false, dollar_f: nil, string: nil
-		if cents.present?
-			value = cents
+		value = if cents.present?
+			cents
 		elsif dollar_f.present?
-			value = dollar_f * 100
+			dollar_f * 100
 		elsif string.present?
-			value = currency_to_cents(string)
+			string_to_float(string) * 100
 		else
-			value = cents
+			cents
 		end
 		cents_to_currency value, !zeros, ccy
 	end
 
-	#### DO NOT CALL :cents_to_currency CALL :display_money INSTEAD
+    #### DO NOT CALL :cents_to_currency CALL :display_money INSTEAD
 	def cents_to_currency cents, remove_zeros=true, ccy=nil
 		return nil if cents.blank?
 		new_str = number_to_currency(cents/100.0,  :format => "%n", :negative_format => "(%n)")
 		if remove_zeros
-			if new_str && new_str[-3..-1] == ".00"
-				new_str[-3..-1] = ""
-			end
-		end
+	        if new_str && new_str[-3..-1] == ".00"
+	            new_str[-3..-1] = ""
+	        end
+	    end
 		if ccy
 			CCY[ccy]['symbol'] + new_str
 		else
@@ -64,13 +65,11 @@ module MoneyHelper
 	end
 
 	def remove_currency_symbol currency_str
-		return currency_str.to_s unless currency_str.kind_of?(String)
+		return currency_str unless currency_str.kind_of?(String)
 		currency_str.gsub(/[^0-9.]/, '')
 	end
 
 end
-
-
 
 
 

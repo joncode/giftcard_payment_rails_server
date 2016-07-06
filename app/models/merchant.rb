@@ -58,6 +58,10 @@ class Merchant < ActiveRecord::Base
         BizUser.find(self.id)
     end
 
+    def zone
+        TIME_ZONES[self.tz]
+    end
+
 #   -------------
 
     def pending_redeems

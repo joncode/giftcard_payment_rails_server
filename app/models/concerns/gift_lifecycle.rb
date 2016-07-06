@@ -1,5 +1,6 @@
 module GiftLifecycle
     extend ActiveSupport::Concern
+    include MoneyHelper
 
     def notify(already_notified=true, loc_id=nil, client_id=nil)
         if notifiable?
@@ -58,7 +59,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         end
     end
 
-    def redeem_gift(server_code=nil, loc_id=nil, r_sys_type_of=:v1)
+    def redeem_gift(server_code=nil, loc_id=nil, r_sys_type_of=1)
         # if loc_id - do multi loc redemption
         if self.status == 'notified'
             self.status      = 'redeemed'
@@ -82,13 +83,36 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         end
     end
 
+    def redeem_gift_for_amount(amount, redemption_merchant, server_code)
+        prev_value     = self.balance
+        self.balance   -= amount
+        detail_msg     = self.detail || ""
+        redemption_msg = "#{number_to_currency(amount/100.0)} was paid on \
+#{TimeGem.change_time_to_zone(Time.now.utc, redemption_merchant.zone)}\n"
+        self.detail    = redemption_msg + detail_msg
+        r = Redemption.init_with_gift(self, redemption_merchant.id, redemption_merchant.r_sys)
+        r.gift_prev_value = prev_value
+        r.gift_next_value = self.balance
+        r.amount          = amount
+        # r.ticket_id       = pos_obj.ticket_id
+        self.redemptions << r
+        if save
+            puts "\n gift #{self.id} is partial redeemed with redemption #{r.id} with value #{amount}\n"
+            Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
+            true
+        else
+            puts "\n (94) gift #{self.id} failed redemption #{self.errors.messages.inspect} #{r.errors.messages.inspect}\n"
+            false
+        end
+    end
+
     def partial_redeem(pos_obj, loc_id=nil)
         prev_value     = self.balance
         self.balance   -= pos_obj.applied_value
         detail_msg     = self.detail || ""
         redemption_msg = "#{number_to_currency(pos_obj.applied_value/100.0)} was paid with check # #{pos_obj.ticket_num}\n"
         self.detail    = redemption_msg + detail_msg
-        r = Redemption.init_with_gift(self, loc_id, :pos)
+        r = Redemption.init_with_gift(self, loc_id, 3)
         r.gift_prev_value = prev_value
         r.gift_next_value = self.balance
         r.amount          = pos_obj.applied_value
@@ -104,17 +128,17 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         end
     end
 
-    def pos_redeem(ticket_num, pos_merchant_id, tender_type_id, loc_id=nil)
+    def pos_redeem(ticket_num, pos_merchant_id, tender_type_id, loc_id=nil, amount=nil)
         # if loc_id - do multi loc redemption
 
         puts "\n HERE IN POS REDEEM - \n ticket_number = #{ticket_num} , pos_merchant_id = #{pos_merchant_id} \
-, tender_type_id = #{tender_type_id} , loc_id = |#{loc_id}|"
+, tender_type_id = #{tender_type_id} , loc_id = |#{loc_id}|, amount = |#{amount}|"
 
         if ticket_num.nil? || pos_merchant_id.nil? || tender_type_id.nil?
             return {'success' => false, "response_text" => "Data missing please contact support@itson.me"}
         end
 
-        omnivore = Omnivore.init_with_gift(self, ticket_num, nil, loc_id)
+        omnivore = Omnivore.init_with_gift(self, ticket_num, amount, loc_id)
         resp = omnivore.redeem
 
         puts "\nHere is the pos_redeem resp = #{resp.inspect}\n"

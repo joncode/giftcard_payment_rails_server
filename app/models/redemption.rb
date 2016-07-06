@@ -12,7 +12,7 @@ class Redemption < ActiveRecord::Base
 
 	enum type_of: [ :pos, :v2, :v1, :paper ]
 
-	def self.init_with_gift(gift, loc_id=nil, r_type_of=nil)
+	def self.init_with_gift(gift, loc_id=nil, r_sys=nil)
         r = Redemption.new
         r.gift_id = gift.id
         r.amount          = gift.value_cents
@@ -27,7 +27,7 @@ class Redemption < ActiveRecord::Base
         		r.type_of = self.convert_r_sys_to_type_of(gift.merchant.r_sys)
 	        end
         else
-	        r.type_of = r_type_of
+	        r.type_of = self.convert_r_sys_to_type_of(r_sys)
         end
         r
 	end
@@ -40,6 +40,8 @@ class Redemption < ActiveRecord::Base
 			:v2
 		when 3
 			:pos
+		when 4
+			:paper
 		end
 	end
 
