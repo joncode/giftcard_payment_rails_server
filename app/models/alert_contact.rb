@@ -33,7 +33,7 @@ class AlertContact < ActiveRecord::Base
 
 	def self.perform alert
 		puts "AlertContact - perfom #{alert.inspect}"
-		if alert.note.nil? && alert.system == 'admin'
+		if alert.system == 'admin'
 			alert_contacts = where(alert_id: alert.id)
 		else
 			alert_contacts = where(note_id: alert.note.id, note_type: alert.note.class.to_s, alert_id: alert.id)
