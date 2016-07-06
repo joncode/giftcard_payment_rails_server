@@ -13,6 +13,8 @@ class Card < ActiveRecord::Base
 
  	before_validation :convert_number_to_string
 	before_validation :save_last_four
+	before_validation :upcase_zip
+
 
 #   -------------
 
@@ -355,6 +357,12 @@ private
 
 	def convert_number_to_string
    		@number     = @number.to_s
+   	end
+
+   	def upcase_zip
+   		if self.zip.present?
+	   		self.zip = self.zip.upcase
+	   	end
    	end
 end
 

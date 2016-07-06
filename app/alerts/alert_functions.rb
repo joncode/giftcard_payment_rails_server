@@ -29,7 +29,10 @@ module AlertFunctions
 		a.join(' ').titleize
 	end
 
-	def message_for name, target
+	def message_for name=self.name , target=nil
+		res = (name + '_ALERT').titleize.gsub(' ','').constantize
+		res.message_for target
+	rescue
 		case name
 		when 'GIFT_PURCHASED_SYS'
 			"Gift has been purchased for #{display_money(ccy: target.ccy, cents: target.value_cents)}"
@@ -45,7 +48,7 @@ module AlertFunctions
 		end
 	end
 
-	def note_for name , target
+	def note_for name=self.name , target=nil
 		case name
 		when 'GIFT_PURCHASED_SYS'
 			nil

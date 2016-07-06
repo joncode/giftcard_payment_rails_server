@@ -25,7 +25,7 @@ class Alert < ActiveRecord::Base
 
 #   -------------
 
-	def self.perform alert_name, target
+	def self.perform alert_name, target=nil
 		if target.respond_to?(:id)
 			puts "Alert - perfom #{alert_name} #{target.id}"
 		else
@@ -46,5 +46,6 @@ class Alert < ActiveRecord::Base
 	def msg
 		message_for(self.name, target)
 	end
+	alias_method :message, :msg
 
 end

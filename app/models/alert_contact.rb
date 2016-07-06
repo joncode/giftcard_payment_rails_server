@@ -31,6 +31,25 @@ class AlertContact < ActiveRecord::Base
 
 #   -------------
 
+	def self.perform alert
+		puts "AlertContact - perfom #{alert.inspect}"
+		if alert.note.nil? && alert.system == 'admin'
+			alert_contacts = where(alert_id: alert.id)
+		else
+			alert_contacts = where(note_id: alert.note.id, note_type: alert.note.class.to_s, alert_id: alert.id)
+		end
+		alert_contacts.each do |alert_contact|
+
+			alert_contact.alert = alert
+			alert_contact.target = alert.target
+			alert_contact.note = alert.note
+			alert_contact.send_message
+
+		end
+	end
+
+#   -------------
+
 	def self.statuses
 		['live', 'mute', 'stop']
 	end
@@ -50,25 +69,6 @@ class AlertContact < ActiveRecord::Base
 		end
 		self.status = p['status'] if AlertContact.statuses.include?(p['status'])
 		self
-	end
-
-#   -------------
-
-	def self.perform alert
-		puts "AlertContact - perfom #{alert.inspect}"
-		if alert.note.nil? && alert.system == 'admin'
-			alert_contacts = where(alert_id: alert.id)
-		else
-			alert_contacts = where(note_id: alert.note.id, note_type: alert.note.class.to_s, alert_id: alert.id)
-		end
-		alert_contacts.each do |alert_contact|
-
-			alert_contact.alert = alert
-			alert_contact.target = alert.target
-			alert_contact.note = alert.note
-			alert_contact.send_message
-
-		end
 	end
 
 #   -------------
