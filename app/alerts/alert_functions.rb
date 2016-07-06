@@ -39,12 +39,12 @@ module AlertFunctions
 		when 'GIFT_PURCHASED'
 			"Gift has been purchased for #{display_money(ccy: target.ccy, cents: target.value_cents)}"
 		when 'CARD_FRAUD_DETECTED_SYS'
-			"Alert- Card fraud possible for #{target.name} - ID(#{target.id}"
+			"Alert- Card fraud possible - Too many card upload attemps for #{target.name} - ID(#{target.id})"
 		when 'GIFT_FRAUD_DETECTED_SYS'
-			"Alert- Gift fraud possible for #{target.giver_name} - ID(#{target.id}"
+			"Alert- Gift fraud possible - gift receiver connected in less than 30 minutes for #{target.giver_name} - ID(#{target.id})"
 		else
 			msg = "Alert- #{title_for(name)}"
-			msg += " for #{target.class} - #{target.id}" if target
+			msg += " for #{target.class} - ID(#{target.id})" if target
 		end
 	end
 
