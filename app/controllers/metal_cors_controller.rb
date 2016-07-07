@@ -71,7 +71,7 @@ protected
             if @current_user
                 @current_session = @current_user.session_token_obj
                 if request.request_uri
-                    puts "Web  #{request.request_uri} -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
+                    puts "Web  #{request.original_fullpath} -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
                 else
                     puts "Web  -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
                 end
