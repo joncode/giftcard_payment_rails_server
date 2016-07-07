@@ -70,11 +70,8 @@ protected
             @current_user = SessionToken.app_authenticate(token)
             if @current_user
                 @current_session = @current_user.session_token_obj
-                if request.request_uri
-                    puts "Web  #{request.original_fullpath} -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
-                else
-                    puts "Web  -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
-                end
+                puts "Web  #{request.original_fullpath} -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
+
                 return true
             else
                 head :unauthorized
