@@ -241,7 +241,7 @@ class JsonController < ActionController::Base
         token         = request.headers["HTTP_TKN"]
         @current_user = User.app_authenticate(token)
         if @current_user
-            puts "APP  -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
+            puts "APP #{request.original_fullpath}  -------------   #{@current_user.name} #{@current_user.id}   -----------------------"
         else
             head :unauthorized
         end
