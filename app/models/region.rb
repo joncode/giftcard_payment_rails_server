@@ -91,7 +91,7 @@ class Region < ActiveRecord::Base
 		hsh['region_id'] = self.id
 		hsh['city_id'] = self.id
 		hsh['token'] = self.token
-		hsh['active'] = (self.neighborhood? || self.position.present?)  ? true : false
+		hsh['active'] = (self.neighborhood? || self.position.present?)
 		hsh
 	end
 
