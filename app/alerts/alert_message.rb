@@ -35,17 +35,18 @@ class AlertMessage < ActiveRecord::Base
 		status ||= 'unsent'
 		target_id = alert_contact.target ? alert_contact.target.id : nil
 		target_type = alert_contact.target ? alert_contact.target.class.to_s : nil
-		if alert_contact.net == 'phone'
-			message = alert_contact.alert.text_msg
+
+		message = if alert_contact.net == 'phone'
+			alert_contact.alert.text_msg
 		elsif alert_contact.net == 'email'
-			message = alert_contact.alert.email_msg
+			alert_contact.alert.email_msg
 		else
-			message = alert_contact.alert.msg
+			alert_contact.alert.msg
 		end
 		create(target_id: target_id,
 			target_type: target_type,
 			alert_contact_id: alert_contact.id,
-			msg: alert_contact.alert.msg,
+			msg: message,
 			status: status )
 		# execute send message on background queue
 		# update pre message with results
