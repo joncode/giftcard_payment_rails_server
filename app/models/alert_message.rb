@@ -33,8 +33,10 @@ class AlertMessage < ActiveRecord::Base
 		puts "AlertMessage - perfom #{alert_contact.inspect}"
 		# save pre message to DB
 		status ||= 'unsent'
-		create(target_id: alert_contact.target.id,
-			target_type: alert_contact.target.class.to_s,
+		target_id = alert_contact.target ? alert_contact.target.id : nil
+		target_type = alert_contact.target ? alert_contact.target.class.to_s : nil
+		create(target_id: target_id,
+			target_type: target_type,
 			alert_contact_id: alert_contact.id,
 			msg: alert_contact.alert.msg,
 			status: status )
