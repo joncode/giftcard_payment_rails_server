@@ -10,7 +10,7 @@ class AlertMessage < ActiveRecord::Base
 
 #   -------------
 
-	validates_presence_of :target_id, :target_type, :alert_contact_id, :msg, :status
+	validates_presence_of :alert_contact_id, :msg, :status
 
 #   -------------
 

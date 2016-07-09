@@ -43,7 +43,7 @@ class AlertContact < ActiveRecord::Base
 			alert_contact.alert = alert
 			alert_contact.target = alert.target
 			alert_contact.note = alert.note
-			alert_contact.send_message
+			puts alert_contact.send_message.inspect
 
 		end
 	end
