@@ -53,14 +53,14 @@ class AlertMessage < ActiveRecord::Base
 	end
 
 	def send_message
-		return if self.status != 'unsent'
+		return self.status if self.status != 'unsent'
 		alert_contact = self.alert_contact
 		if alert_contact.net == 'phone'
 			r = OpsTwilio.text to: alert_contact.net_id, msg: self.msg
 		elsif alert_contact.net == 'email'
 			email_data_hsh = {
 				"subject" => "ItsOnMe Alert",
-				"html"    => "<div><h2>You've received and alert</h2><p>#{self.msg}</p></div>".html_safe,
+				"html"    => "<div><h2>You've received an alert</h2><p>#{self.msg}</p></div>".html_safe,
 				"email"   => alert_contact.net_id
 			}
 			puts email_data_hsh.inspect
@@ -71,7 +71,7 @@ class AlertMessage < ActiveRecord::Base
 				r = { status: 0, data: res.inspect }
 			end
 		else
-			self.update(status: 'failed', reason: 'alert_contact.net does not exist')
+			self.update(status: 'failed', reason: "#{alert_contact.net} does not exist")
 		end
 		if r[:status] == 1
 			self.update(status: 'sent')
