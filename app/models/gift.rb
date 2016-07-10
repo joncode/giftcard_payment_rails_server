@@ -102,7 +102,7 @@ class Gift < ActiveRecord::Base
 
     def self.id_from_paper paper_id
         paper_nums = paper_id.to_s.gsub(/[^0-9]/, '')
-        gid = paper_nums[1] + paper_nums[4] + paper_nums[5] + paper_nums[2] + paper_nums[3] + paper_nums[0]
+        gid = (paper_nums[1] || '0') + (paper_nums[4] || '0') + (paper_nums[5] || '0') + (paper_nums[2] || '0') + (paper_nums[3] || '0') + (paper_nums[0] || '0')
         gid.to_i
     end
 
