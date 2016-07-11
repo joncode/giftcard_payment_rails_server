@@ -108,12 +108,6 @@ class Register < ActiveRecord::Base
 		if credit?
 			return -super
 		end
-		if gift.nil? && debt?
-			return 0
-		end
-		if payment_id.nil? && ['cancel','expired'].include?(gift.status) && debt?
-			return 0
-		end
 		super
 	end
 
