@@ -10,7 +10,7 @@ class AlertMessage < ActiveRecord::Base
 
 #   -------------
 
-	validates_presence_of :target_id, :target_type, :alert_contact_id, :msg, :status
+	validates_presence_of :alert_contact_id, :msg, :status
 
 #   -------------
 
@@ -24,33 +24,44 @@ class AlertMessage < ActiveRecord::Base
 	end
 
 	def target
-		@target ||= (self.target_type.constantize.find(self.target_id))
+		return nil if self.target_type.nil?
+		@target ||= self.target_type.constantize.unscoped.where(id: self.target_id).first
 	end
 
 #   -------------
 
-	def self.run alert_contact, status=nil
+	def self.run alert_contact, status='unsent'
 		puts "AlertMessage - perfom #{alert_contact.inspect}"
 		# save pre message to DB
-		status ||= 'unsent'
-		create(target_id: alert_contact.target.id,
-			target_type: alert_contact.target.class.to_s,
+
+		target_id = alert_contact.target ? alert_contact.target.id : nil
+		target_type = alert_contact.target ? alert_contact.target.class.to_s : nil
+
+		message = if alert_contact.net == 'phone'
+			alert_contact.alert.text_msg
+		elsif alert_contact.net == 'email'
+			alert_contact.alert.email_msg
+		else
+			alert_contact.alert.msg
+		end
+		create(target_id: target_id,
+			target_type: target_type,
 			alert_contact_id: alert_contact.id,
-			msg: alert_contact.alert.msg,
+			msg: message,
 			status: status )
 		# execute send message on background queue
 		# update pre message with results
 	end
 
 	def send_message
-		return if self.status != 'unsent'
+		return self.status if self.status != 'unsent'
 		alert_contact = self.alert_contact
 		if alert_contact.net == 'phone'
 			r = OpsTwilio.text to: alert_contact.net_id, msg: self.msg
 		elsif alert_contact.net == 'email'
 			email_data_hsh = {
 				"subject" => "ItsOnMe Alert",
-				"html"    => "<div><h2>You've received and alert</h2><p>#{self.msg}</p></div>".html_safe,
+				"html"    => "<div><h2>You've received an alert</h2><p>#{self.msg}</p></div>".html_safe,
 				"email"   => alert_contact.net_id
 			}
 			puts email_data_hsh.inspect
@@ -61,7 +72,7 @@ class AlertMessage < ActiveRecord::Base
 				r = { status: 0, data: res.inspect }
 			end
 		else
-			self.update(status: 'failed', reason: 'alert_contact.net does not exist')
+			self.update(status: 'failed', reason: "#{alert_contact.net} does not exist")
 		end
 		if r[:status] == 1
 			self.update(status: 'sent')

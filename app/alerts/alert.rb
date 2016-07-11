@@ -43,6 +43,14 @@ class Alert < ActiveRecord::Base
 		note_for(self.name, target)
 	end
 
+	def text_msg
+		message_for(self.name, target, 'phone')
+	end
+
+	def email_msg
+		message_for(self.name, target, 'email')
+	end
+
 	def msg
 		message_for(self.name, target)
 	end

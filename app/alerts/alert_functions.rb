@@ -29,9 +29,9 @@ module AlertFunctions
 		a.join(' ').titleize
 	end
 
-	def message_for name=self.name , target=nil
+	def message_for name=self.name , target=nil, network=nil
 		res = (name + '_ALERT').titleize.gsub(' ','').constantize
-		res.message_for target
+		res.message_for target, network
 	rescue
 		case name
 		when 'GIFT_PURCHASED_SYS'
