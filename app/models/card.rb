@@ -64,6 +64,9 @@ class Card < ActiveRecord::Base
 		if self.stripe_id
 			return true
 		end
+		if self.persisted? && self.number.blank?
+			decrypt!(PASSPHRASE)
+		end
 		card_owner = self.user
 		customer_id = card_owner.stripe_id
 		o = OpsStripeCard.new(customer_id, self)
@@ -88,7 +91,7 @@ class Card < ActiveRecord::Base
 			@error_message = o.error_message
 			# return false
 		end
-
+		o
 	end
 
 	def response
