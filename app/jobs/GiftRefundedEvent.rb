@@ -18,7 +18,6 @@ class GiftRefundedEvent
 	    	# if gift is refund_live
 	    		# leave the registers
 
-
     	end
 
     end
