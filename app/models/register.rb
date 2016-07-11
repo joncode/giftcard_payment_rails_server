@@ -86,10 +86,10 @@ class Register < ActiveRecord::Base
 
 	def reverse_charge
 		if self.payment.nil?
-			self.destroy
+			reg = self.destroy
 		else
 			type_of_value = self.debt? ? 1 : 0
-			Register.create(amount: self.amount,
+			reg = Register.create(amount: self.amount,
 				partner_type: self.partner_type,
 				partner_id: self.partner_id,
 				origin: self.origin,
@@ -97,6 +97,9 @@ class Register < ActiveRecord::Base
 				gift_id: self.gift_id,
 				ccy: self.ccy)
 		end
+		puts "Register -reverse_charge- #{reg.inspect}"
+		OpsTwilio.text_devs msg: "Zero Value refund create for register ID #{reg.id}"
+		reg
 	end
 
 	def amount

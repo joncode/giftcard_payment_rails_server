@@ -6,7 +6,7 @@ class GiftDeactivatedEvent
     	gift = Gift.unscoped.find gift_id
 
         if ['incomplete','schedule', 'open', 'notified'].include?(gift.status)
-            registers = Register.where(gift_id: gift_id)
+            registers = gift.registers
             if registers.length == 0
                 gift_parent = gift.parent
 
@@ -24,7 +24,7 @@ class GiftDeactivatedEvent
                 end
             end
         elsif gift.status == 'regifted'
-            registers = Register.where(gift_id: gift_id)
+            registers = gift.registers
             if registers.length == 0
                 gift_parent = gift.parent
                 if gift_parent.kind_of?(Gift) && gift_parent.id != previous_gift_id

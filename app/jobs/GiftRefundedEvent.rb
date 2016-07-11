@@ -9,14 +9,12 @@ class GiftRefundedEvent
 	    	# if gift is refund_cancel
 	    		# refund the gift registers
 	    	registers = gift.registers
-			registers.each do |r|
-                reg = r.reverse_charge
-                puts "Here is the register #{reg.inspect}"
-            end
+			registers.each {|r| r.reverse_charge }
 
     	elsif gift.pay_stat == 'refund_comp'
 	    	# if gift is refund_live
 	    		# leave the registers
+
 
     	end
 
