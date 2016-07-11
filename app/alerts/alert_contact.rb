@@ -102,6 +102,7 @@ class AlertContact < ActiveRecord::Base
 	end
 
 	def user
+		return nil if self.user_type.nil?
 		@user ||= (self.user_type.constantize.find(self.user_id))
 	end
 
@@ -111,6 +112,16 @@ class AlertContact < ActiveRecord::Base
 	end
 
 #   -------------
+
+	def net_id= net_id
+		net_id = net_id.to_s
+		if net_id.match VALID_PHONE_REGEX
+			self.net = 'phone'
+		elsif net_id.match VALID_EMAIL_REGEX
+			self.net = 'email'
+		end
+		super net_id
+	end
 
 	def net_id display=false
 		if display

@@ -9,3 +9,6 @@ U = User
 G = Gift
 M = Merchant
 C = Card
+A = Alert
+AC = AlertContact
+AM = AlertMessage

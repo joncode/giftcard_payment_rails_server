@@ -24,15 +24,16 @@ class AlertMessage < ActiveRecord::Base
 	end
 
 	def target
-		@target ||= (self.target_type.constantize.find(self.target_id))
+		return nil if self.target_type.nil?
+		@target ||= self.target_type.constantize.unscoped.where(id: self.target_id).first
 	end
 
 #   -------------
 
-	def self.run alert_contact, status=nil
+	def self.run alert_contact, status='unsent'
 		puts "AlertMessage - perfom #{alert_contact.inspect}"
 		# save pre message to DB
-		status ||= 'unsent'
+
 		target_id = alert_contact.target ? alert_contact.target.id : nil
 		target_type = alert_contact.target ? alert_contact.target.class.to_s : nil
 
