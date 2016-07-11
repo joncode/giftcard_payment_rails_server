@@ -98,7 +98,9 @@ class Register < ActiveRecord::Base
 				ccy: self.ccy)
 		end
 		puts "Register -reverse_charge- #{reg.inspect}"
-		OpsTwilio.text_devs msg: "Zero Value refund create for register ID #{reg.id}"
+		if reg.amount.to_i == 0
+			OpsTwilio.text_devs msg: "Zero Value refund create for register ID #{reg.id}"
+		end
 		reg
 	end
 
