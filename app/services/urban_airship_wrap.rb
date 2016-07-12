@@ -27,17 +27,17 @@ module UrbanAirshipWrap
 
         if googe_push_tokens.count > 0
 
-            if alert.match(/has been delivered/)
+            if alert.to_s.match(/has been delivered/)
                 hsh = { message: alert,
                         title: 'ItsOnMe Gift Delivered!',
                         args: { gift_id: gift_id }
                     }
-            elsif alert.match(/opened your gift/)
+            elsif alert.to_s.match(/opened your gift/)
                 hsh = { message: alert,
                         title: 'ItsOnMe Gift Opened!',
                         args: { gift_id: gift_id }
                     }
-            elsif alert.match(/got the app/)
+            elsif alert.to_s.match(/got the app/)
                 hsh = { message: alert,
                         title: 'Thank You!',
                         args: { gift_id: gift_id }
