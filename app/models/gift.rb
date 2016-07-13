@@ -381,6 +381,19 @@ class Gift < ActiveRecord::Base
 
 #/-------------------------------------data population methods-----------------------------/
 
+    def delivery_method
+        if !self.receiver_phone.blank?
+            'phone'
+        elsif !self.receiver_email.blank?
+            'email'
+        elsif !self.facebook_id.blank?
+            'facebook'
+        elsif !self.twitter.blank?
+            'twitter'
+        else
+            'email'
+        end
+    end
 
     def find_receiver
         if self.receiver_id.nil?

@@ -26,6 +26,11 @@ module GiftSerializers
         gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
 
         gift_hsh['display_photo'] = self.display_photo
+        # new email fields
+        gift_hsh["receiver_id"] = self.receiver_id
+        gift_hsh["delivery_method"] = self.delivery_method
+        gift_hsh["delivery_email"] = self.receiver_email
+        gift_hsh["delivery_phone"] = self.receiver_phone
 
         gift_hsh
     end
