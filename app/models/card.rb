@@ -103,8 +103,7 @@ class Card < ActiveRecord::Base
 #	-------------
 
 	def destroy
-			# must delete auth.net record
-		#log_bars "card.destroy -> Use controllers/concerns/cim_profile :destroy_card(card, user)"
+			# DO NOT DELETE CARD RECORDS
 		update_column(:active, false)
 	end
 

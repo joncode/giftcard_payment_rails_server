@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160629041041) do
+ActiveRecord::Schema.define(version: 20160712214411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -926,6 +926,8 @@ ActiveRecord::Schema.define(version: 20160629041041) do
     t.datetime "updated_at"
     t.integer  "gift_id"
     t.string   "rec_name",        limit: 255
+    t.integer  "send_user_id"
+    t.string   "send_user_type"
   end
 
   add_index "proto_joins", ["gift_id"], name: "index_proto_joins_on_gift_id", using: :btree
@@ -958,6 +960,8 @@ ActiveRecord::Schema.define(version: 20160629041041) do
     t.integer  "expires_in"
     t.integer  "value_cents"
     t.integer  "cost_cents"
+    t.string   "title"
+    t.string   "desc"
   end
 
   add_index "protos", ["merchant_id"], name: "index_protos_on_merchant_id", using: :btree
@@ -1116,6 +1120,8 @@ ActiveRecord::Schema.define(version: 20160629041041) do
     t.string   "reason_text",    limit: 255
     t.integer  "reason_code"
     t.integer  "merchant_id"
+    t.integer  "revenue_cents"
+    t.string   "gateway"
   end
 
   add_index "sales", ["merchant_id"], name: "index_sales_on_merchant_id", using: :btree

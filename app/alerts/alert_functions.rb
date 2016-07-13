@@ -36,8 +36,6 @@ module AlertFunctions
 		case name
 		when 'GIFT_PURCHASED_SYS'
 			"Gift has been purchased for #{display_money(ccy: target.ccy, cents: target.value_cents)}"
-		when 'GIFT_PURCHASED'
-			"Gift has been purchased for #{display_money(ccy: target.ccy, cents: target.value_cents)}"
 		when 'CARD_FRAUD_DETECTED_SYS'
 			"Alert- Card fraud possible - Too many card upload attemps for #{target.name} - ID(#{target.id})"
 		when 'GIFT_FRAUD_DETECTED_SYS'
@@ -52,8 +50,6 @@ module AlertFunctions
 		case name
 		when 'GIFT_PURCHASED_SYS'
 			nil
-		when 'GIFT_PURCHASED'
-			target.merchant
 		when 'CARD_FRAUD_DETECTED_SYS'
 			target
 		when 'GIFT_FRAUD_DETECTED_SYS'
