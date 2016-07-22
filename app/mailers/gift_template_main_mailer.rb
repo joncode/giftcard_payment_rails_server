@@ -17,10 +17,10 @@ class GiftTemplateMainMailer
             puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
             return nil
         end
-        subject       = "#{@gift.giver_name} sent you a Gift!"
+        subject = "#{@gift.giver_name} sent you a Gift!"
 
         if Rails.env.staging?
-            template_name = "basic_simple_42-revised"
+            template_name = "new-gift-notification-071316"
             pteg_affiliate_id = 20
         else
             template_name = "basic_simple_42-revised"
@@ -30,7 +30,7 @@ class GiftTemplateMainMailer
             template_name = 'gift-pteg'
         end
         puts template_name
-        message       = make_dynamic_variables(subject, email, template_name)
+        message = make_dynamic_variables(subject, email, template_name)
         request_mandrill_with_template(template_name, message, [@gift.id, "Gift"])
     end
 
@@ -81,7 +81,8 @@ class GiftTemplateMainMailer
                 { 'name' => 'receiver_name', 'content' => email_rec_name },
                 { 'name' => 'giver_name', 'content' => @gift.giver_name },
                 { 'name' => 'important', 'content' => important_msg },
-                { 'name' => 'gift_link', 'content' => @gift.invite_link }
+                { 'name' => 'gift_link', 'content' => @gift.invite_link },
+                { 'name' => 'paper_id', 'content' => @gift.paper_id }
             ]
         }
 
