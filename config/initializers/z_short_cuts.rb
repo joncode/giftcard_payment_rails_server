@@ -12,4 +12,5 @@ C = Card
 A = Alert
 AC = AlertContact
 AM = AlertMessage
+AF = Affiliate
 
