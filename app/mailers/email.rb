@@ -61,20 +61,20 @@ module Email
 
     def notify_admin
         gift = self
-        if gift.shoppingCart
-            items = gift.ary_of_shopping_cart_as_hash
-            items = items.map do |item|
-                "#{item["quantity"]} x #{item["item_name"]}"
-            end
-            items = "of " + items.join(',')
-        end
-        giver_email = gift.giver.email if Gift.where(giver_id: gift.giver_id).present?
-        origin_text = ""
-        if gift.origin.present?
-            origin_text = 'Gift origin - ' + gift.origin.to_s + '\n'
-        end
-        email_text = "#{origin_text} #{gift.giver_name} (#{giver_email}) has sent a $#{gift.value} gift #{items} at #{gift.provider_name} to #{gift.receiver_name}"
         if gift.value.to_i >= 35 && Rails.env.production?
+            if gift.shoppingCart
+                items = gift.ary_of_shopping_cart_as_hash
+                items = items.map do |item|
+                    "#{item["quantity"]} x #{item["item_name"]}"
+                end
+                items = "of " + items.join(',')
+            end
+            giver_email = gift.giver.email if Gift.where(giver_id: gift.giver_id).present?
+            origin_text = ""
+            if gift.origin.present?
+                origin_text = 'Gift origin - ' + gift.origin.to_s + '\n'
+            end
+            email_text = "#{origin_text} #{gift.giver_name} (#{giver_email}) has sent a $#{gift.value} gift #{items} at #{gift.provider_name} to #{gift.receiver_name}"
             data = {
                 "subject" => "$35+ Gift purchase made",
                 "text"    => email_text,

@@ -31,6 +31,10 @@ module ActiveRecordExtension
   			last
   		end
 
+  		def fi
+  			first
+  		end
+
 	    def f obj_id
 	      	find obj_id
 	    end

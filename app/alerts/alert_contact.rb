@@ -33,11 +33,9 @@ class AlertContact < ActiveRecord::Base
 
 	def self.perform alert
 		puts "AlertContact - perfom #{alert.inspect}"
-		if alert.system == 'admin'
-			alert_contacts = where(alert_id: alert.id)
-		else
-			alert_contacts = where(note_id: alert.note.id, note_type: alert.note.class.to_s, alert_id: alert.id)
-		end
+
+		alert_contacts = alert.alert_contacts
+
 		alert_contacts.each do |alert_contact|
 
 			alert_contact.alert = alert
@@ -73,6 +71,14 @@ class AlertContact < ActiveRecord::Base
 
 #   -------------
 
+	def send_message
+		if self.receiving_messages?
+			AlertMessage.run(self)
+		else
+			AlertMessage.run(self, self.status) if self.status == 'mute'
+		end
+	end
+
 	def unmute_at
 		self.updated_at + ALERT_MUTE_HOURS
 	end
@@ -84,14 +90,6 @@ class AlertContact < ActiveRecord::Base
 			return true
 		end
 		return false
-	end
-
-	def send_message
-		if self.receiving_messages?
-			AlertMessage.run(self)
-		else
-			AlertMessage.run(self, self.status) if self.status == 'mute'
-		end
 	end
 
 #   -------------

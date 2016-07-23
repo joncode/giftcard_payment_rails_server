@@ -1,6 +1,5 @@
 class Alert < ActiveRecord::Base
-	extend AlertFunctions
-	include AlertFunctions
+	include MoneyHelper
 	# example Alert
 	# { id: a.id, action: 'merchant', name: 'GIFT_PURCHASED', msg: 'Gift has been purchased', system: 'merchant',
 	#  retry_code: 0 }
@@ -13,9 +12,6 @@ class Alert < ActiveRecord::Base
 
 #   -------------
 
-	has_many :alert_contacts
-	alias_method :contacts, :alert_contacts
-
 	has_many :alert_messages, through: :alert_contacts
 	alias_method :messages, :alert_messages
 
@@ -25,35 +21,123 @@ class Alert < ActiveRecord::Base
 
 #   -------------
 
+	def alert_contacts
+		if self.system == 'admin'
+			AlertContact.where(alert_id: self.id, user_type: 'AtUser')
+		else
+			contacts = []
+			merchant = self.note
+			merchant_mtus = merchant.mt_users.to_a
+			affiliate_mtus = []
+			if merchant.affiliate_id.present?
+				if a = Affiliate.where(id: merchant.affiliate_id).first
+					affiliate_mtus = a.mt_users.to_a
+				end
+			end
+			mtus = affiliate_mtus.concat(merchant_mtus)
+			mtus.each do |mtu|
+				cts = AlertContact.where(user_id: mtu.id, user_type: mtu.class.to_s, alert_id: self.id).to_a
+				contacts.concat(cts)
+			end
+			contacts
+		end
+	end
+
+#   -------------
+
+	def self.alert_object name
+		begin
+			(name + '_ALERT').titleize.gsub(' ','').constantize
+		rescue
+			Alert
+		end
+	end
+
+	def self.get_alert alert_name
+		alert_klass = alert_object(alert_name)
+
+		alert = alert_klass.find_by(name: alert_name)
+		alert = alert_klass.create_alert(alert_name) if alert.nil?
+
+		alert
+	end
+
 	def self.perform alert_name, target=nil
 		if target.respond_to?(:id)
 			puts "Alert - perfom #{alert_name} #{target.id}"
 		else
 			puts "Alert - perfom #{alert_name} #{target}"
 		end
-		alert = find_by(name: alert_name)
-		if alert.nil?
-			alert = create_alert(alert_name)
-		end
+
+		alert = get_alert(alert_name)
+
 		alert.target = target
 		AlertContact.perform alert
 	end
 
+#   -------------
+
 	def note
-		note_for(self.name, target)
+		case self.name
+		when 'GIFT_PURCHASED_SYS'
+			nil
+		else
+			self.target
+		end
 	end
 
 	def text_msg
-		message_for(self.name, target, 'phone')
+		msg
 	end
 
 	def email_msg
-		message_for(self.name, target, 'email')
+		msg
 	end
 
 	def msg
-		message_for(self.name, target)
+		case self.name
+		when 'GIFT_PURCHASED_SYS'
+			msg = "Alert- Gift has been purchased for #{display_money(ccy: self.target.ccy, cents: self.target.value_cents)}"
+		when 'CARD_FRAUD_DETECTED_SYS'
+			msg = "Alert- Card fraud possible - Too many card upload attemps for #{self.target.name} - ID(#{self.target.id})"
+		when 'GIFT_FRAUD_DETECTED_SYS'
+			msg = "Alert- Gift fraud possible - gift receiver connected in less than 30 minutes for #{self.target.giver_name}\
+ - ID(#{self.target.id})"
+		else
+			msg = "Alert- #{Alert.title_for(name)}"
+			msg += " for #{self.target.class} - ID(#{self.target.id})" if self.target
+		end
+		msg
 	end
-	alias_method :message, :msg
+
+#   -------------
+
+	def self.create_alert name
+		puts "\nCreating alert for #{name}"
+		OpsTwilio.text_devs msg: "Alert Auto-generated for #{name}"
+
+		create({name: name, system: system_for(name), title: title_for(name),
+			detail: "This is an alert for #{title_for(name)} - (Auto-generated)."})
+	end
+
+	def self.system_for name
+		a = name.split('_')
+		case a.last
+		when "SYS"
+			'admin'
+		when "PT"
+			'partner'
+		when "MT"
+			'merchant'
+		else
+			'admin'
+		end
+	end
+
+	def self.title_for name
+		a = name.split('_')
+		a.pop
+		a.join(' ').titleize
+	end
 
 end
