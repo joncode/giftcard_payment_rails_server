@@ -96,13 +96,12 @@ class Alert < ActiveRecord::Base
 
 	def msg
 		case self.name
-		when 'GIFT_PURCHASED_SYS'
-			msg = "Alert- Gift has been purchased for #{display_money(ccy: self.target.ccy, cents: self.target.value_cents)}"
 		when 'CARD_FRAUD_DETECTED_SYS'
 			msg = "Alert- Card fraud possible - Too many card upload attemps for #{self.target.name} - ID(#{self.target.id})"
 		when 'GIFT_FRAUD_DETECTED_SYS'
-			msg = "Alert- Gift fraud possible - gift receiver connected in less than 30 minutes for #{self.target.giver_name}\
- - ID(#{self.target.id})"
+			msg = "Alert- Gift(#{self.target.id}) fraud possible - Received by #{self.target.receiver_name} \
+- ID(#{self.target.receiver_id}) less than 30 minutes from purchase by giver #{self.target.giver_name} (#{self.target.giver_id}) \
+#{display_money(cents: self.target.value_cents, ccy: self.target.ccy)}"
 		else
 			msg = "Alert- #{Alert.title_for(name)}"
 			msg += " for #{self.target.class} - ID(#{self.target.id})" if self.target

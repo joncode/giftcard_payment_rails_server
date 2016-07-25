@@ -23,7 +23,9 @@ class Region < ActiveRecord::Base
 		elsif self.neighborhood?
 			Merchant.where(active: true, paused: false, region_id: self.id).order("name ASC")
 		else # self.list
-			Merchant.find_by_sql("SELECT m.* FROM merchants AS m, merchants_regions AS mr WHERE m.active = true AND m.paused = false AND m.id = mr.merchant_id AND mr.region_id = #{self.id} ORDER BY m.name ASC")
+			Merchant.find_by_sql("SELECT m.* FROM merchants AS m, merchants_regions AS mr \
+WHERE m.active = true AND m.paused = false AND m.id = mr.merchant_id AND mr.region_id = #{self.id} \
+ORDER BY m.name ASC")
 		end
 	end
 
