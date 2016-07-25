@@ -39,7 +39,7 @@ end
 # table list_items
 # 	id (int) primary key
 # 	owner_id (int)
-# 	owner_type (string) - :merchant, :affiliate, :user, :at_user, :mt_user, :step
+# 	owner_type (string) - :merchant, :affiliate, :user, :at_user, :mt_user, :list_step
 # 	list_step_id (int)
 # 	state (string) default ""
 # 		- "", yes, denied, n/a
