@@ -45,15 +45,23 @@ class Web::V3::ClientsController < MetalCorsController
 
 			if clients.length == 1
 				client = clients[0]
-				client.click
-				success client
 			elsif clients.length == 0
 				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
-			else # clients.length > 1
-				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
+			else # clients.length > 1 menu widget and golf advisor widget
+				if client = clients.where("download_url ilike '%#{ref}%'").first
+					# menu widget
+				elsif client = clients.where("download_url ilike '%www.golfadvisor.com%'").first
+					# golf advisor
+				else
+					fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
+				end
+			end
+			if client
+				client.click
+				success client
 			end
 		end
-		email_developers(clients, ary_of_slugs) unless clients.length == 1
+		email_developers(clients, ary_of_slugs) unless client
 		respond
 	end
 

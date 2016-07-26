@@ -119,7 +119,7 @@ module EmailHelper
 			<div style='width:100%; text-align:center;'>
 			<div style='color:#3F3F3F; font-size:30px; font-weight:lighter;'>
 			<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946711/receipt-header_hnqrpi.png'></div><br/>
-			<div>Makin' it rain.</div>
+			<div>Thanks for gifting local with ItsOnMe!</div>
 						</div>
 				</div>
 			<hr style='border-bottom:1px solid #C9C9C9;'>

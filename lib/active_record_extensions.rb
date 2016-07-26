@@ -35,6 +35,10 @@ module ActiveRecordExtension
   			first
   		end
 
+  		def uf obj_id
+			unscoped.find obj_id
+  		end
+
 	    def f obj_id
 	      	find obj_id
 	    end
