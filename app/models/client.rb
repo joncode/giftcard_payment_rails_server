@@ -103,6 +103,7 @@ AND #{content_symbol}.id = contents.content_id"
 
 	def self.find_with_url ary_of_slugs
 		ary_of_slugs = [ary_of_slugs] if ary_of_slugs.kind_of?(String)
+		ary_of_slugs = ary_of_slugs.reject(&:blank?)
 		sql = "active = 't' AND url_name ilike "
 		ary_of_slugs.each_with_index do |slug, index|
 			if index == 0

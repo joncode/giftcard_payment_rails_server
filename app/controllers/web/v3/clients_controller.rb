@@ -34,7 +34,6 @@ class Web::V3::ClientsController < MetalCorsController
 		slug2 = hsh[:slug2]
 		ary_of_slugs = [ ref, slug1, slug2 ]
 		ary_of_slugs = ary_of_slugs.map { |a| remove_unwanted_url_parts(a) }
-		ary_of_slugs = ary_of_slugs.reject(&:blank?)
 
 		if ary_of_slugs.length == 0
 			# no data for client
@@ -43,15 +42,29 @@ class Web::V3::ClientsController < MetalCorsController
 		else
 			clients = Client.find_with_url ary_of_slugs
 
+			client = nil
 			if clients.length == 1
 				client = clients[0]
 			elsif clients.length == 0
 				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
 			else # clients.length > 1 menu widget and golf advisor widget
-				if client = clients.where("download_url ilike '%#{ref}%'").first
+				val = nil
+				ary_of_slugs.each do |sl|
+					next if sl.nil?
+					if sl.match(/_menu_ga/)
+						# golf advisor slug
+						val = sl
+						break
+					elsif sl.match(/_menu/)
+						#standard menu widget
+						val = sl
+						break
+					end
+				end
+				if val
+					client = clients.where("url_name = '#{val}'").first
+				elsif client = clients.where("download_url ilike '%#{ref}%'").first
 					# menu widget
-				elsif client = clients.where("download_url ilike '%www.golfadvisor.com%'").first
-					# golf advisor
 				else
 					fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
 				end
@@ -80,6 +93,7 @@ class Web::V3::ClientsController < MetalCorsController
 		else
 			domain = slug.to_s
 		end
+		return nil if domain == 'itson'
 		domain
 	end
 
