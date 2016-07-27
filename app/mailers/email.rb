@@ -87,7 +87,7 @@ module Email
     def notify_developers data=nil
         gift = self
 
-        if data.nil?
+        unless data
             data = {
                 "subject" => "Notify Developers",
                 "text"    => "#{gift.inspect}",
@@ -140,7 +140,7 @@ private
 
     def route_internal_email_system data
         puts "data in Email.rb route_internal_email_system"
-        unless  Rails.env.development?
+        unless Rails.env.development?
             Resque.enqueue(MailerInternalJob, data)
         end
     end

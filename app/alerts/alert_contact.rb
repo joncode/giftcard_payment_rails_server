@@ -37,12 +37,14 @@ class AlertContact < ActiveRecord::Base
 		alert_contacts = alert.alert_contacts
 
 		alert_contacts.each do |alert_contact|
-
-			alert_contact.alert = alert
-			alert_contact.target = alert.target
-			alert_contact.note = alert.note
-			puts alert_contact.send_message.inspect
-
+			begin
+				alert_contact.alert = alert
+				alert_contact.target = alert.target
+				alert_contact.note = alert.note
+				puts alert_contact.send_message.inspect
+			rescue => e
+				puts "Message SEND ERROR #{e.inspect} for #{alert_contact.id} #{alert.id}"
+			end
 		end
 	end
 

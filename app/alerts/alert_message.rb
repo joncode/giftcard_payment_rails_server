@@ -65,7 +65,8 @@ class AlertMessage < ActiveRecord::Base
 				"email"   => alert_contact.net_id
 			}
 			puts email_data_hsh.inspect
-			res = notify_developers(email_data_hsh)
+			email_obj = EmailAlerts.new(email_data_hsh)
+			res = email_obj.send_email
 			if res
 				r = { status: 1 , data: "Success" }
 			else
