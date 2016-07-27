@@ -61,7 +61,7 @@ class AlertMessage < ActiveRecord::Base
 		elsif alert_contact.net == 'email'
 			email_data_hsh = {
 				"subject" => "ItsOnMe Alert",
-				"html"    => "<div><h2>You've received an alert</h2><p>#{self.msg}</p></div>".html_safe,
+				"html"    => "<div><p>#{self.msg}</p></div>".html_safe,
 				"email"   => alert_contact.net_id
 			}
 			puts email_data_hsh.inspect
