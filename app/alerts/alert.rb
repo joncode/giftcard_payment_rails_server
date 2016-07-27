@@ -39,7 +39,7 @@ class Alert < ActiveRecord::Base
 				cts = AlertContact.where(user_id: mtu.id, user_type: mtu.class.to_s, alert_id: self.id).to_a
 				contacts.concat(cts)
 			end
-			admin_users = MtUser.where(admin: true)
+			admin_users = MtUser.where(admin: true, active: true)
 			admin_users.each do |mtu|
 				cts = AlertContact.where(user_id: mtu.id, user_type: mtu.class.to_s, alert_id: self.id).to_a
 				contacts.concat(cts)
