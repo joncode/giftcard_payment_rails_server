@@ -19,9 +19,14 @@ class AlertContact < ActiveRecord::Base
 #   -------------
 
 	has_many :alert_messages
-	alias_method :messages, :alert_messages
 
 	belongs_to :alert
+
+	def alert
+		a = Alert.find self.alert_id
+		a.target = self.target
+		a
+	end
 
 #   -------------
 
