@@ -24,6 +24,12 @@ class AlertContact < ActiveRecord::Base
 
 	belongs_to :alert
 
+	def alert
+		a = Alert.find self.alert_id
+		a.target = self.target
+		a
+	end
+
 #   -------------
 
 	attr_accessor :target, :note

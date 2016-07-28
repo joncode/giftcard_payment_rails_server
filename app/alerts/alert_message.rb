@@ -16,10 +16,18 @@ class AlertMessage < ActiveRecord::Base
 
 	belongs_to :alert_contact
 
+	def alert_contact
+		ac = super
+		ac.target ||= self.target
+		ac
+	end
+
 #   -------------
 
 	def alert
-		self.alert_contact.alert
+		a = self.alert_contact.alert
+		a.target ||= self.target
+		a
 	end
 
 	def target
