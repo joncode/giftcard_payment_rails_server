@@ -5,6 +5,8 @@ class AlertContact < ActiveRecord::Base
 	# { id: r.id, note_id: 45, note_type: 'Merchant', alert_id: a.id, net: 'phone', net_id: '2154948383',
 	# status: ['live', 'mute', 'stop'] }
 
+	default_scope -> { where(active: true) }
+
 #   -------------
 
     before_validation { |contact| contact.net_id = strip_and_downcase(net_id) if email? }
@@ -19,7 +21,6 @@ class AlertContact < ActiveRecord::Base
 #   -------------
 
 	has_many :alert_messages
-	alias_method :messages, :alert_messages
 
 	belongs_to :alert
 
@@ -28,6 +29,11 @@ class AlertContact < ActiveRecord::Base
 	attr_accessor :target, :note
 
 	ALERT_MUTE_HOURS = 12.hours
+
+	def destroy
+			# DO NOT DELETE RECORDS
+		update_column(:active, false)
+	end
 
 #   -------------
 

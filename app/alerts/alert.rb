@@ -82,6 +82,11 @@ class Alert < ActiveRecord::Base
 
 #   -------------
 
+	def destroy
+			# DO NOT DELETE RECORDS
+		update_column(:active, false)
+	end
+
 	def note
 		case self.name
 		when 'GIFT_PURCHASED_SYS'

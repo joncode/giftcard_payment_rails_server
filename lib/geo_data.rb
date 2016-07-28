@@ -11,11 +11,11 @@ class GeoData
 		place.max_longitude = country.max_longitude if (place.max_longitude.nil? || (country.max_longitude.to_f > place.max_longitude))
 		if place.latitude.nil?
 			place.latitude = country.latitude_dec.to_f
-			recalc_la = false
+			recalc_la = false unless country.latitude_dec.nil?
 		end
 		if place.longitude.nil?
 			place.longitude = country.longitude_dec.to_f
-			recalc_lo = false
+			recalc_lo = false unless country.longitude_dec.nil?
 		end
 			# average the lat and long based on new dimensions
 		if recalc_la

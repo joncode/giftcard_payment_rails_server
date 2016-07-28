@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160727042420) do
+ActiveRecord::Schema.define(version: 20160728221739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20160727042420) do
     t.datetime "updated_at",                  null: false
     t.integer  "user_id"
     t.string   "user_type"
+    t.boolean  "active",     default: true
   end
 
   create_table "alert_messages", force: :cascade do |t|
@@ -100,15 +101,17 @@ ActiveRecord::Schema.define(version: 20160727042420) do
     t.string   "msg"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.boolean  "active",           default: true
   end
 
   create_table "alerts", force: :cascade do |t|
     t.string   "name"
     t.string   "system"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.string   "title"
     t.string   "detail"
+    t.boolean  "active",     default: true
   end
 
   add_index "alerts", ["name"], name: "index_alerts_on_name", using: :btree

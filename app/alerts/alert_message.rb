@@ -15,7 +15,6 @@ class AlertMessage < ActiveRecord::Base
 #   -------------
 
 	belongs_to :alert_contact
-	alias_method :contact, :alert_contact
 
 #   -------------
 
@@ -26,6 +25,11 @@ class AlertMessage < ActiveRecord::Base
 	def target
 		return nil if self.target_type.nil?
 		@target ||= self.target_type.constantize.unscoped.where(id: self.target_id).first
+	end
+
+	def destroy
+			# DO NOT DELETE RECORDS
+		update_column(:active, false)
 	end
 
 #   -------------
