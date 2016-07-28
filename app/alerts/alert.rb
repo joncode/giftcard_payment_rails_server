@@ -23,28 +23,19 @@ class Alert < ActiveRecord::Base
 
 	def alert_contacts
 		if self.system == 'admin'
-			AlertContact.where(alert_id: self.id, user_type: 'AtUser')
+			AlertContact.where(active: true, alert_id: self.id, user_type: 'AtUser')
 		else
-			contacts = []
+			raise "Alert has no TARGET!" unless self.target
+			merchant = self.note.merchant if self.note.kind_of?(Gift)
 			merchant = self.note
-			merchant_mtus = merchant.mt_users.to_a
-			affiliate_mtus = []
+			mtus = AlertContact.where(active: true, note_id: merchant.id, note_type: merchant.class.to_s, alert_id: self.id)
+			ptus = []
 			if merchant.affiliate_id.present?
 				if a = Affiliate.where(id: merchant.affiliate_id).first
-					affiliate_mtus = a.mt_users.to_a
+					ptus = AlertContact.where(active: true, note_id: a.id, note_type: a.class.to_s, alert_id: self.id)
 				end
 			end
-			mtus = affiliate_mtus.concat(merchant_mtus)
-			mtus.each do |mtu|
-				cts = AlertContact.where(user_id: mtu.id, user_type: mtu.class.to_s, alert_id: self.id).to_a
-				contacts.concat(cts)
-			end
-			admin_users = MtUser.where(admin: true, active: true)
-			admin_users.each do |mtu|
-				cts = AlertContact.where(user_id: mtu.id, user_type: mtu.class.to_s, alert_id: self.id).to_a
-				contacts.concat(cts)
-			end
-			contacts
+			mtus.concat(ptus)
 		end
 	end
 
