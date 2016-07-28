@@ -14,13 +14,14 @@ class Events::CallbacksController < MetalCorsController
 	end
 
 	def dispatch_message from, msg, req
-		if code = Message.merchant_redemption(msg)
-			redemption_msg from, code
-		elsif msg.downcase == 'support'
-			basic_support from
-		elsif ["+12152000475","+17029727139"].include?(from)
-			flip_phones from, msg
-		end
+		# if code = Message.merchant_redemption(msg)
+		# 	redemption_msg from, code
+		# elsif msg.downcase == 'support'
+		# 	basic_support from
+		# elsif ["+12152000475","+17029727139"].include?(from)
+		# 	flip_phones from, msg
+		# end
+		OpsTwilio.text_devs msg: "Text -> #{req.inspect}"
 	end
 
 	def redemption_msg from, code
