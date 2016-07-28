@@ -13,4 +13,6 @@ A = Alert
 AC = AlertContact
 AM = AlertMessage
 AF = Affiliate
+P = Place
+PLG = PlaceGraph
 

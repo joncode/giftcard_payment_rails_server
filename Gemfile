@@ -11,6 +11,10 @@ gem 'excon', '~> 0.44.4'
 #gem 'paypal-sdk-rest'
 gem 'stripe', :git => 'https://github.com/stripe/stripe-ruby'
 
+gem 'countries'
+gem 'tzinfo', '~> 1.2', '>= 1.2.2'
+gem 'tzinfo-data'
+gem 'zip-codes'
 
 #gem 'unicorn'
 gem 'puma', '~> 2.15.0'

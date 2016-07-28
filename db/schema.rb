@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160712214411) do
+ActiveRecord::Schema.define(version: 20160727042420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -890,6 +890,49 @@ ActiveRecord::Schema.define(version: 20160712214411) do
   add_index "payments", ["bank_id", "start_date"], name: "index_payments_on_bank_id_and_start_date", using: :btree
   add_index "payments", ["paid", "start_date"], name: "index_payments_on_paid_and_start_date", using: :btree
   add_index "payments", ["partner_id", "partner_type"], name: "index_payments_on_partner_id_and_partner_type", using: :btree
+
+  create_table "place_graphs", force: :cascade do |t|
+    t.integer  "place_id"
+    t.string   "place_type"
+    t.integer  "parent_id"
+    t.string   "parent_type"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "place_graphs", ["parent_id"], name: "index_place_graphs_on_parent_id", using: :btree
+  add_index "place_graphs", ["place_id", "parent_id"], name: "index_place_graphs_on_place_id_and_parent_id", unique: true, using: :btree
+  add_index "place_graphs", ["place_id", "parent_type"], name: "index_place_graphs_on_place_id_and_parent_type", using: :btree
+  add_index "place_graphs", ["place_id"], name: "index_place_graphs_on_place_id", using: :btree
+  add_index "place_graphs", ["place_type", "parent_id"], name: "index_place_graphs_on_place_type_and_parent_id", using: :btree
+
+  create_table "places", force: :cascade do |t|
+    t.string   "abbr"
+    t.string   "name"
+    t.string   "detail"
+    t.string   "photo"
+    t.boolean  "active",        default: true
+    t.boolean  "unique",        default: true
+    t.string   "type_of"
+    t.string   "sub_type"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.float    "min_latitude"
+    t.float    "min_longitude"
+    t.float    "max_latitude"
+    t.float    "max_longitude"
+    t.float    "xaxis"
+    t.float    "yaxis"
+    t.float    "zaxis"
+    t.string   "ccy"
+    t.string   "tz"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "places", ["abbr", "type_of"], name: "index_places_on_abbr_and_type_of", using: :btree
+  add_index "places", ["abbr"], name: "index_places_on_abbr", using: :btree
+  add_index "places", ["type_of"], name: "index_places_on_type_of", using: :btree
 
   create_table "pn_tokens", force: :cascade do |t|
     t.integer  "user_id"

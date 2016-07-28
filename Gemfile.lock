@@ -73,8 +73,12 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
+    countries (1.2.5)
+      currencies (~> 0.4.2)
+      i18n_data (~> 0.7.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
+    currencies (0.4.2)
     database_cleaner (1.5.0)
     diff-lcs (1.2.5)
     diffy (3.1.0)
@@ -96,6 +100,7 @@ GEM
       multi_json (~> 1.0)
       multi_xml
     i18n (0.7.0)
+    i18n_data (0.7.0)
     jquery-rails (4.0.5)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -254,6 +259,8 @@ GEM
       multi_json (>= 1.3.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2016.6)
+      tzinfo (>= 1.0.0)
     uglifier (2.7.2)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -272,6 +279,7 @@ GEM
     xpath (0.1.4)
       nokogiri (~> 1.3)
     yajl-ruby (1.2.1)
+    zip-codes (0.2.1)
 
 PLATFORMS
   ruby
@@ -283,6 +291,7 @@ DEPENDENCIES
   awesome_print
   bcrypt (~> 3.1)
   capybara (= 1.1.2)
+  countries
   database_cleaner
   diffy
   excon (~> 0.44.4)
@@ -318,10 +327,13 @@ DEPENDENCIES
   therubyracer
   turbolinks
   twilio-ruby
+  tzinfo (~> 1.2, >= 1.2.2)
+  tzinfo-data
   uglifier (>= 1.3.0)
   urbanairship (~> 3.0)
   webmock
   yajl-ruby
+  zip-codes
 
 BUNDLED WITH
    1.10.6
