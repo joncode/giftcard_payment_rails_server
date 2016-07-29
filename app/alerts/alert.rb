@@ -29,11 +29,13 @@ class Alert < ActiveRecord::Base
 			merchant = self.note.merchant if self.note.kind_of?(Gift)
 			merchant = self.note
 
-			mtus = AlertContact.where(active: true, note_id: merchant.id, note_type: merchant.class.to_s, alert_id: self.id)
+			mtus = AlertContact.where(active: true, note_id: merchant.id, note_type: merchant.class.to_s,
+				alert_id: self.id)
 			ptus = []
 			if merchant.affiliate_id.present?
 				if a = Affiliate.where(id: merchant.affiliate_id).first
-					ptus = AlertContact.where(active: true, note_id: a.id, note_type: a.class.to_s, alert_id: self.id)
+					ptus = AlertContact.where(active: true, note_id: a.id, note_type: a.class.to_s,
+						alert_id: self.id)
 
 				end
 			end
@@ -79,6 +81,8 @@ class Alert < ActiveRecord::Base
 		end
 
 		alert = get_alert(alert_name)
+
+		return unless alert && alert.active
 
 		alert.target = target
 		AlertContact.perform alert
