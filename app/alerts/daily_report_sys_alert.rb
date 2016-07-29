@@ -9,7 +9,8 @@ class DailyReportSysAlert < Alert
 Gift purchases: #{@purchases}\n\
 MerchantTools gifts: #{@merchant_gifts}\n\
 New Merchants: #{@merchants}\n\
-New Users: #{@users}"
+New Users: #{@users}\n\
+Redemptions: #{@redemptions}"
 	end
 
 	def email_msg
@@ -18,7 +19,9 @@ New Users: #{@users}"
 <p><ul><li>Gift purchases: #{@purchases}</li>\
 <li>MerchantTools gifts: #{@merchant_gifts}</li>\
 <li>New Merchants: #{@merchants}</li>\
-<li>New Users: #{@users}</li></ul></p></div>".html_safe
+<li>New Users: #{@users}</li>\
+<li>Redemptions: #{@redemptions}</li>\
+</ul></p></div>".html_safe
 	end
 
 	def msg
@@ -33,6 +36,7 @@ New Users: #{@users}"
 		@merchant_gifts ||= Gift.where(cat: [200, 250]).where('created_at > ?', time_period).count
 		@merchants ||= Merchant.where('created_at > ?', time_period).count
 		@users ||= User.where('created_at > ?', time_period).count
+		@redemptions ||= Gift.where("status = 'redeemed' AND redeemed_at > ?", time_period).count
 	end
 
 end
