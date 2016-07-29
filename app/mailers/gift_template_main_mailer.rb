@@ -80,6 +80,7 @@ class GiftTemplateMainMailer
                 { 'name' => 'expiration', 'content' => expired_merge_var(@gift.expires_at) },
                 { 'name' => 'receiver_name', 'content' => email_rec_name },
                 { 'name' => 'giver_name', 'content' => @gift.giver_name },
+                { 'name' => 'giver_first_name', 'content' => @gift.giver.first_name },
                 { 'name' => 'important', 'content' => important_msg },
                 { 'name' => 'gift_link', 'content' => @gift.invite_link },
                 { 'name' => 'paper_id', 'content' => @gift.paper_id }

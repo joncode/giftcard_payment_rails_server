@@ -57,7 +57,7 @@ class RedisCacheMonitor
 		                "html"    => html_diff,
 		                "email"   => "devops@itson.me"
 					}
-					notify_developers(email_data_hsh)
+					# notify_developers(email_data_hsh)
 					bust_www_cache = true if seconds_to_live.nil?
 					fresh_cache = nil
 				end
