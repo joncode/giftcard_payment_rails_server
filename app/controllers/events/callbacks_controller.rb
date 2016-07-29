@@ -1,5 +1,5 @@
 class Events::CallbacksController < MetalCorsController
-	respond_to :json
+	# respond_to :json
 	include MtSmsRedeem
 
 	def receive_sms
@@ -10,11 +10,11 @@ class Events::CallbacksController < MetalCorsController
 
 		dispatch_message(from_number, msg, params)
 
-		respond_with :ok
+		# respond_with :ok
 
-		# respond_to do |format|
-	 #     	format.json
-	 #    end
+		respond_to do |format|
+	     	format.json
+	    end
 	end
 
 	def dispatch_message from, msg, req
