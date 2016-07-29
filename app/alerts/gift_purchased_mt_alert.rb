@@ -35,7 +35,7 @@ class GiftPurchasedMtAlert < Alert
             end
             items = "of " + items.join(',')
         end
-		@data = "#{gift.giver_name} has sent a #{display_money(cents: gift.value_cents, ccy: gift.ccy)} gift #{items}\
+		@data = "#{gift.giver_name} has sent a #{gift.value_s} gift #{items}\
  at #{gift.provider_name} to #{gift.receiver_name}"
 	end
 
