@@ -23,7 +23,7 @@ class GiftTemplateMainMailer
             template_name = "new-gift-notification-071316"
             pteg_affiliate_id = 20
         else
-            template_name = "basic_simple_42-revised"
+            template_name = "new-gift-notification-071316"
             pteg_affiliate_id = 29
         end
         if @gift.partner_type == 'Affiliate' && @gift.partner_id == pteg_affiliate_id
