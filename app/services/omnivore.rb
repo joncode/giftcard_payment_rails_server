@@ -131,20 +131,22 @@ class Omnivore
 		puts "Omnivore:apply_ticket_value Here is the post_redeem response"
 		puts resp.inspect
 
-		if resp.match(/Update call succeeded/)
-			# @code = 200
-			# @applied_value handled above ^
-		else
-			case resp
-			when "pos-merchant_id incorrect"
-				@code = 509
-				@applied_value	= 0
-			when "server_missing"
-				@code = 500
-				@applied_value	= 0
-			when "The point of sale rejected the request"
-				@code = 503
-				@applied_value	= 0
+		if resp.kind_of?(String)
+			if resp.match(/Update call succeeded/)
+				# @code = 200
+				# @applied_value handled above ^
+			else
+				case resp
+				when "pos-merchant_id incorrect"
+					@code = 509
+					@applied_value	= 0
+				when "server_missing"
+					@code = 500
+					@applied_value	= 0
+				when "The point of sale rejected the request"
+					@code = 503
+					@applied_value	= 0
+				end
 			end
 		end
 
