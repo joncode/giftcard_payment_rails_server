@@ -1,18 +1,21 @@
 class GiftCreatedEvent
+
     @queue = :after_save
 
     def self.perform gift_id
     	puts "\n gift #{gift_id} is being GiftCreatedEvent.job\n"
     	gift = Gift.find gift_id
-    	Accountant.gift_created_event(gift)
+        if gift.pay_stat != "payment_error"
+            Accountant.gift_created_event(gift)
 
-        notify_via_facebook gift
-        notify_via_text gift
+            notify_via_facebook gift
+            notify_via_text gift
 
-    	PointsForSaleJob.perform gift_id
-        if gift.cat == 300
-            Alert.perform("GIFT_PURCHASED_SYS", gift)
-            Alert.perform("GIFT_PURCHASED_MT", gift)
+            PointsForSaleJob.perform gift_id
+            if gift.cat == 300
+                Alert.perform("GIFT_PURCHASED_SYS", gift)
+                Alert.perform("GIFT_PURCHASED_MT", gift)
+            end
         end
     end
 
