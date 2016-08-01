@@ -115,7 +115,7 @@ class Alert < ActiveRecord::Base
 	def msg
 		case self.name
 		when 'CARD_FRAUD_DETECTED_SYS'
-			msg = "Alert- Card fraud possible - Too many card upload attemps for #{self.target.name} - ID(#{self.target.id})"
+			msg = "Alert- Card fraud possible - fraud activity by #{self.target.name} - ID(#{self.target.id})"
 		when 'GIFT_FRAUD_DETECTED_SYS'
 			msg = "Alert- Gift(#{self.target.id}) fraud possible - Received by #{self.target.receiver_name} \
 - ID(#{self.target.receiver_id}) less than 30 minutes from purchase by giver #{self.target.giver_name} (#{self.target.giver_id}) \
