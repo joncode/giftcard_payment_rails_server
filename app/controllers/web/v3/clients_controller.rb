@@ -55,6 +55,10 @@ class Web::V3::ClientsController < MetalCorsController
 						# golf advisor slug
 						val = sl
 						break
+					elsif sl.match(/_gnow/)
+						# golf now slug
+						val = sl
+						break
 					elsif sl.match(/_menu/)
 						#standard menu widget
 						val = sl
