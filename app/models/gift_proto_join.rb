@@ -52,6 +52,9 @@ class GiftProtoJoin < Gift
 	            proto_join.update(gift_id: gift.id)
 	            proto.update_processed
 	            gift.messenger_proto_join
+	            if gift.status == 'schedule'
+	            	# send you've received scheduled gift email / text
+	            end
 	        end
         	gift
         end
@@ -85,9 +88,19 @@ private
 		args['message']       = proto.message
 		args['detail']        = proto.detail
 		args['expires_at']    = expires_at_calc(proto)
-		args['scheduled_at']  = proto.scheduled_at
+		args['scheduled_at']  = scheduled_at_calc(proto)
 		args['cat']           = proto.cat
 		args
+	end
+
+	def self.scheduled_at_calc proto
+        if proto.scheduled_at
+            proto.scheduled_at
+        elsif proto.start_in
+            DateTime.now.utc + proto.start_in.days
+        else
+        	nil
+        end
 	end
 
     def self.expires_at_calc proto
@@ -95,6 +108,8 @@ private
             proto.expires_at + 1.day
         elsif proto.expires_in
             DateTime.now.utc + proto.days
+        else
+        	nil
         end
     end
 
