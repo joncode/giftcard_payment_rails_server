@@ -52,14 +52,14 @@ module GiftMessenger
 at #{self.merchant_name} with ItsOnMe® - the eGifting app.\n
 The gift is scheduled to arrive on #{schedule_time}\n
 Use this phone number when you make your account to connect the gift\n
-Click here to download the app.\n #{PUBLIC_URL}/download"
+Click here to download the app.\n #{CLEAR_CACHE}/download"
             resp = OpsTwilio.text to: self.receiver_phone, msg: msg
         elsif !self.receiver_email.blank?
              msg = "<h2>#{self.giver_name} has sent you a #{self.value_s} eGift Card
 at #{self.merchant_name} with ItsOnMe® - the eGifting app.</h2>
 <p>The gift is scheduled to arrive on #{schedule_time}</p>
 <p>Use this email when you make your account to connect the gift</p>
-<p>Click here to download the app. #{PUBLIC_URL}/download</p>"
+<p>Click here to download the app. #{CLEAR_CACHE}/download</p>"
             email_data_hsh = {
                 "subject" => "ItsOnMe Promotional Gift",
                 "html"    => "<div>#{msg}</div>".html_safe,

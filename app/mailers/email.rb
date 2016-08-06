@@ -80,7 +80,7 @@ module Email
                 "text"    => email_text,
                 "email"   => ADMIN_NOTICE_CONTACT
             }
-            route_internal_email_system(data)
+            #route_internal_email_system(data)
         end
     end
 

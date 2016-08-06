@@ -275,7 +275,7 @@ private
         message          = {
             "subject"     => subject,
             "from_name"   => "ItsOnMe",
-            "from_email"  => "no-reply@itson.me",
+            "from_email"  => NO_REPLY_EMAIL,
             "to"          => [
                 { "email" => email, "name" => name }
             ],
