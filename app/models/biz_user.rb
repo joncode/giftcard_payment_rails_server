@@ -15,6 +15,10 @@ class BizUser < ActiveRecord::Base
         "#{super} Staff"
     end
 
+    def first_name
+        name
+    end
+
     def get_photo
         return MERCHANT_DEFAULT_IMG if image.blank?
         image

@@ -7,6 +7,10 @@ class Campaign < ActiveRecord::Base
 
 #   -------------
 
+    def first_name
+        name
+    end
+
     def status
         if is_expired?
             "expired"

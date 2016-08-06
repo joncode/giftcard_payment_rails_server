@@ -21,7 +21,7 @@ module GiftMessenger
     end
 
     def send_gift_delivered_notifications
-        if gift.payable == "Proto"
+        if self.payable == "Proto"
             messenger_proto_join
             notify_via_text self
         else
