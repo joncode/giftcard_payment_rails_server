@@ -54,6 +54,7 @@ class GiftProtoJoin < Gift
 	            gift.messenger_proto_join
 	            if gift.status == 'schedule'
 	            	# send you've received scheduled gift email / text
+	            	gift.messenger_promo_gift_scheduled
 	            end
 	        end
         	gift

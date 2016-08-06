@@ -14,7 +14,7 @@ class EmailAlerts
         if data['email'].kind_of?(String)
             email = [data['email']]
         else
-            email   = data["email"]
+            email = data["email"]
         end
         emails  = email.map { |mail| {"email" => mail, "name" => "ItsOnMe Staff (#{mail})"} }
         message = {
