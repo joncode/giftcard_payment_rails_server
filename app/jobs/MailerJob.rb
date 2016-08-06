@@ -11,7 +11,7 @@ class MailerJob
         begin
             self.call_mandrill(data)
         rescue => error
-            puts "No #{data['text']} email ERROR - MailerJob[14] - #{error}"
+            puts "500 Internal No #{data['text']} email ERROR - MailerJob[14] - #{error}"
         end
     end
 
