@@ -34,7 +34,7 @@ class GiftProtoJoin < Gift
 	    			if gift.persisted?
 			            proto_join.gift_id = gift.id
 			            proto_join.save
-			            proto.increment!(:processed)
+			            proto.update_processed
 			            outside_gift = gift
 			        else
 			        	# proto is bad
@@ -42,8 +42,6 @@ class GiftProtoJoin < Gift
 			        end
 			    end
     		end
-
-            outside_gift.messenger_proto_join if outside_gift.persisted?
         	outside_gift
     	else
     		args = self.create_args(proto, proto_join)
@@ -51,14 +49,18 @@ class GiftProtoJoin < Gift
 	        if gift.persisted?
 	            proto_join.update(gift_id: gift.id)
 	            proto.update_processed
-	            gift.messenger_proto_join
-	            if gift.status == 'schedule'
-	            	# send you've received scheduled gift email / text
-	            	gift.messenger_promo_gift_scheduled
-	            end
 	        end
-        	gift
         end
+        gift = outside_gift if outside_gift
+        if gift.persisted?
+        	if gift.status == 'schedule'
+            	# send you've received scheduled gift email / text
+            	gift.messenger_promo_gift_scheduled
+            else
+	            gift.messenger_proto_join
+            end
+		end
+    	gift
     end
 
 private
