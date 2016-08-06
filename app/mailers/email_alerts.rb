@@ -54,6 +54,12 @@ class EmailAlerts
         end
     end
 
+    def add_qa_text_to_subject message
+        unless Rails.env.production?
+            message["subject"].insert(0, "QA - ")
+        end
+    end
+
     def request_mandrill_with_template(message)
         if Rails.env.staging? || Rails.env.production?
             # unless Rails.env.development?
