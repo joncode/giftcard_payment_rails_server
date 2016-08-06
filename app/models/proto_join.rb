@@ -25,17 +25,17 @@ class ProtoJoin < ActiveRecord::Base
 			# set the name and the correct args key
 			case receiver.network
 			when 'email'
-				args['receiver_email'] 	= receiver.network_id
+				args['receiver_email'] = receiver.network_id
 				args['receiver_name'] = receiver.network_id if args['receiver_name'].blank?
 			when 'phone'
-				args['receiver_phone'] 	= receiver.network_id
+				args['receiver_phone'] = receiver.network_id
 				args['receiver_name'] = number_to_phone(receiver.network_id) if args['receiver_name'].blank?
 			when 'facebook_id'
-				args['facebook_id'] 	= receiver.network_id
+				args['facebook_id'] = receiver.network_id
 			when 'facebook'
-				args['facebook_id'] 	= receiver.network_id
+				args['facebook_id'] = receiver.network_id
 			when 'twitter'
-				args['twitter'] 		= receiver.network_id
+				args['twitter'] = receiver.network_id
 			end
 		end
 		args['receiver_name'] = GENERIC_RECEIVER_NAME if args['receiver_name'].blank?
