@@ -59,9 +59,8 @@ Click here to download the app.\n #{CLEAR_CACHE}/download"
 at #{self.merchant_name} with ItsOnMe® - the eGifting app.</h2>
 <p>The gift is scheduled to arrive on #{schedule_time}</p>
 <p>Use this email when you make your account to connect the gift</p>
-<p><a href='#{CLEAR_CACHE}/download' target='_blank' \
-style='color:#fff;display:inline-block;width:90%;padding: 5px 5px;text-transform:uppercase;font-weight:bold;color:#fff;text-decoration:none!important;'>\
-Click here to download the app</a></p>"
+<p>Click this button to download the app</p>
+<div bgcolor='#3bb1d9' align='center' style='font-family:'Trebuchet MS', Verdana, sans-serif;font-size:24px;padding: 10px 5px;'><a href='#{CLEAR_CACHE}/download' target='_blank' style='color:#fff;display:inline-block;width:90%;padding: 5px 5px;text-transform:uppercase;font-weight:bold;color:#fff;text-decoration:none!important;'>Download App</a></div>"
             email_data_hsh = {
                 "subject" => "ItsOnMe Promotional Gift",
                 "html"    => "<div>#{msg}</div>".html_safe,
