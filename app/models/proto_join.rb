@@ -29,7 +29,7 @@ class ProtoJoin < ActiveRecord::Base
 				args['receiver_name'] = receiver.network_id if args['receiver_name'].blank?
 			when 'phone'
 				args['receiver_phone'] 	= receiver.network_id
-				args['receiver_name'] = number_to_phone(receiver.network_id, area_code: true) if args['receiver_name'].blank?
+				args['receiver_name'] = number_to_phone(receiver.network_id) if args['receiver_name'].blank?
 			when 'facebook_id'
 				args['facebook_id'] 	= receiver.network_id
 			when 'facebook'
