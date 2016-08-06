@@ -21,8 +21,23 @@ module GiftMessenger
     end
 
     def send_gift_delivered_notifications
-        Relay.send_gift_delivered(self)
-        send_receiver_notification
+        if gift.payable == "Proto"
+            messenger_proto_join
+            notify_via_text self
+        else
+            Relay.send_gift_delivered(self)
+            send_receiver_notification
+            notify_via_text self
+        end
+    end
+
+    def notify_via_text gift
+        if !gift.receiver_phone.blank?
+            msg = "#{gift.giver_name} has sent you a #{gift.value_s} eGift Card
+at #{gift.merchant_name} with ItsOnMe® - the eGifting app.\n
+Click here to claim your gift.\n #{gift.invite_link}"
+            resp = OpsTwilio.text to: gift.receiver_phone, msg: msg
+        end
     end
 
     def send_internal_email

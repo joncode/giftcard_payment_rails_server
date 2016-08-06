@@ -9,7 +9,7 @@ class GiftCreatedEvent
             Accountant.gift_created_event(gift)
 
             notify_via_facebook gift
-            notify_via_text gift
+            notify_via_text(gift) unless gift.status == 'schedule'
 
             PointsForSaleJob.perform gift_id
             if gift.cat == 300
