@@ -25,7 +25,7 @@ class GiftItem < ActiveRecord::Base
 		sc.each do |item|
 
 			if menu_item = MenuItem.where(id: item["item_id"]).last
-				if menu_item.name[0] == '$' && menu_item.name.length < 5
+				if (menu_item.name[0] == '$') && (menu_item.name.length < 5)
 					item_name = "#{menu_item.name} Voucher"
 				else
 					item_name = menu_item.name

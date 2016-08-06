@@ -33,13 +33,13 @@ class BoomerangMailer
 ############ PRIVATE
 
     def items_text gift
-        expiration_row = ''
+        expiration_row = ""
         if gift.expires_at.present?
             expiration_row = "<tr><td><div style='font-size:15px; color:#8E8D8D;'>Gift Expires: #{make_date_s(gift.expires_at)}</div></td></tr>"
         end
-        "<table style='padding:0;'><tr><td width='320px' style='text-align:left'><div style='font-size:25px; padding-top:10px;'>$#{gift.value} Gift at #{gift.provider_name}</div></td></tr>"
-        + expiration_row
-        + "<tr style='height: 100px;'><td style='text-align: left; font-size: 15px;'>#{GiftItem.items_for_email(gift)}</td></tr></table>".html_safe
+        "<table style='padding:0;'><tr><td width='320px' style='text-align:left'><div style='font-size:25px; padding-top:10px;'>
+#{gift.value_s} Gift at #{gift.merchant_name}</div></td></tr>#{expiration_row}<tr style='height: 100px;'>
+<td style='text-align: left; font-size: 15px;'>#{GiftItem.items_for_email(gift)}</td></tr></table>".html_safe
     end
 
     def make_dynamic_variables(email, name)
