@@ -62,7 +62,7 @@ at #{self.merchant_name} with ItsOnMe® - the eGifting app.</h2>
 <p>Click here to download the app. #{CLEAR_CACHE}/download</p>"
             email_data_hsh = {
                 "subject" => "ItsOnMe Promotional Gift",
-                "html"    => "<div style='padding:20px;'>#{msg}</div>".html_safe,
+                "html"    => "<div>#{msg}</div>".html_safe,
                 "email"   => self.receiver_email
             }
             puts email_data_hsh.inspect
