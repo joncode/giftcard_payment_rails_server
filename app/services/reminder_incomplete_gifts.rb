@@ -7,6 +7,8 @@ class ReminderIncompleteGifts
 		day_twelve = (seven_days_ago - 5.days).day
         Gift.where(status: "incomplete").find_each do |gift|
 
+            next if gift.created_at < 13.days.ago
+
         	if gift.created_at.day == day_seven || gift.created_at.day == day_twelve
                 gift.notify_receiver
                 "-------------  300 CRON Reminder Incomplete Gifts = #{gift.id}  -------------"
