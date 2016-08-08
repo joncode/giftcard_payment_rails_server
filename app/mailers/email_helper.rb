@@ -118,7 +118,7 @@ module EmailHelper
 		"<div style=#{default_style}><div style='width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:30px; font-weight:lighter;'>
 			<div>Thanks for gifting local with ItsOnMe!</div></div></div>
 			<hr style='border-bottom:1px solid #C9C9C9;' />
-			<div style='padding: 0 80px 20px 80px;'>
+			<div style='padding: 0 40px 20px 40px;'>
 				<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
 					Your gift is being delivered to #{receiver_info}
 				</div>
