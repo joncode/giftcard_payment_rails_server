@@ -33,12 +33,18 @@ class PaymentGatewayCim             # charge , refund, cancel, void - instance m
 
     def gateway_hash_response
         hsh = {}
-        hsh["transaction_id"]  = self.response.direct_response.transaction_id
+        if self.response.direct_response.nil?   # inconsistent response from Auth.net
+            hsh["transaction_id"]  = self.transaction_id
+            message_code           = self.response.message_code
+            hsh["resp_code"]       = message_code_to_resp_code(message_code)
+            hsh["reason_text"]     = self.response.message_text
+        else
+            hsh["transaction_id"]  = self.response.direct_response.transaction_id
+            hsh["resp_code"]       = self.response.direct_response.response_code
+            hsh["reason_text"]     = self.response.direct_response.response_reason_text
+        end
         hsh["resp_json"]       = PaymentGatewayCim.response_json(self.response)
         hsh["req_json"]        = self.transaction.fields.to_json
-        # message_code           = self.response.message_code
-        hsh["resp_code"]       = self.response.direct_response.response_code
-        hsh["reason_text"]     = self.response.direct_response.response_reason_text
         hsh["reason_code"]     = 1
         hsh["revenue"]         = self.amount
         hsh
