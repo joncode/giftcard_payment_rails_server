@@ -34,6 +34,7 @@ class PaymentGatewayCim             # charge , refund, cancel, void - instance m
     def gateway_hash_response
         hsh = {}
         if self.response.direct_response.nil?   # inconsistent response from Auth.net
+            puts "500 Internal HERE IS THE inconsistent response #{self.response.inspect}"
             hsh["transaction_id"]  = self.transaction_id
             message_code           = self.response.message_code
             hsh["resp_code"]       = message_code_to_resp_code(message_code)
