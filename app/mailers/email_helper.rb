@@ -115,14 +115,9 @@ module EmailHelper
 		elsif !gift.twitter.blank?
 			receiver_info += " via twitter"
 		end
-		"<div style=#{default_style}>
-			<div style='width:100%; text-align:center;'>
-			<div style='color:#3F3F3F; font-size:30px; font-weight:lighter;'>
-			<div><img src='http://res.cloudinary.com/drinkboard/image/upload/v1409946711/receipt-header_hnqrpi.png'></div><br/>
-			<div>Thanks for gifting local with ItsOnMe!</div>
-						</div>
-				</div>
-			<hr style='border-bottom:1px solid #C9C9C9;'>
+		"<div style=#{default_style}><div style='width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:30px; font-weight:lighter;'>
+			<div>Thanks for gifting local with ItsOnMe!</div></div></div>
+			<hr style='border-bottom:1px solid #C9C9C9;' />
 			<div style='padding: 0 80px 20px 80px;'>
 				<div style='padding-bottom:20px; font-size:16px; text-align:center;'>
 					Your gift is being delivered to #{receiver_info}
@@ -144,8 +139,7 @@ module EmailHelper
 						<td style='text-align:right; padding: 0 10px; width:50%;'>Total</td>
 					<td style='text-align:left; width:50%;'>#{gift.purchase_total}</td>
 					</tr>
-				</table>
-					</div>
+				</table></div>
 		</div>".html_safe
 	end
 
