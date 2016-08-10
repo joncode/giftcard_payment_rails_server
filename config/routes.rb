@@ -30,6 +30,7 @@ Drinkboard::Application.routes.draw do
 					get :profile
 					get :refresh
 					put :socials
+					post :authorize
 				end
 			end
 			resources :facebook,     only: [:create] do

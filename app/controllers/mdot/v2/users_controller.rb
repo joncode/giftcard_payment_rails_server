@@ -4,6 +4,34 @@ class Mdot::V2::UsersController < JsonController
     before_action :authenticate_general_token, only: [:create, :reset_password]
     rescue_from JSON::ParserError, :with => :bad_request
 
+    def authorize
+        str_code = authorize_params[:code].gsub(/[^0-9.]/, '')
+        if str_code.blank?
+            # promo campaign keyword
+            proto = Proto.find_by promo_code: str_code
+            pj = ProtoJoin.create_with_proto_and_rec(proto, current_user)
+            if pj.persisted?
+                gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
+                if gift.persisted?
+                    success("Gift created with keyword #{str_code}"
+                else
+                    fail gift
+                end
+            else
+                fail "Could not send gift to user"
+            end
+        else
+            # 2-factor auth code
+            us = UserSocial.find_by(user_id: @current_user.id, code: str_code)
+            if us.authorize
+                success("#{us.display_net_id} Authorize Successful.")
+            else
+                fail "Authorization failed"
+            end
+        end
+        respond
+    end
+
     def index
 
         users_scope = if (params[:find] && !params[:find].blank?)
@@ -174,8 +202,12 @@ class Mdot::V2::UsersController < JsonController
 
 private
 
+    def authorize_params
+        params.require(:data).permit(:code)
+    end
+
     def socials_user_params
-        params.require(:data).permit( :first_name , :last_name, :sex , :zip, :birthday, social: [ :_id, :value ] )
+        params.require(:data).permit( :first_name, :last_name, :sex , :zip, :birthday, social: [ :_id, :value ] )
     end
 
     def update_user_params

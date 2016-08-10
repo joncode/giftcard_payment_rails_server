@@ -13,6 +13,14 @@ class ProtoJoin < ActiveRecord::Base
 
 #   -------------
 
+	def self.create_with_proto_and_rec(proto, rec)
+		create(proto_id: proto.id,
+			receivable_type: rec.class.to_s,
+			receivable_id: rec.id,
+			rec_name: rec.name)
+
+	end
+
 	def convert_to_gift_receiver(args)
 		receiver = self.receivable
 		receiver = receiver.user if receiver.kind_of?(UserSocial)
