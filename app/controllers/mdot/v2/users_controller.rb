@@ -9,7 +9,7 @@ class Mdot::V2::UsersController < JsonController
         if str_code.blank?
             # promo campaign keyword
             proto = Proto.find_by promo_code: str_code
-            pj = ProtoJoin.create_with_proto_and_rec(proto, current_user)
+            pj = ProtoJoin.create_with_proto_and_rec(proto, @current_user)
             if pj.persisted?
                 gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
                 if gift.persisted?
