@@ -11,7 +11,6 @@ class Mdot::V2::UsersController < JsonController
             proto = Proto.find_by promo_code: str_code
             if !proto.kind_of?(Proto)
                 fail "couldn't find item for keyword #{authorize_params[:code]}"
-                status = :not_found
             else
                 pj = ProtoJoin.create_with_proto_and_rec(proto, @current_user)
                 if pj.persisted?
@@ -34,7 +33,7 @@ class Mdot::V2::UsersController < JsonController
                 fail "Authorization failed"
             end
         end
-        respond(status)
+        respond
     end
 
     def index
