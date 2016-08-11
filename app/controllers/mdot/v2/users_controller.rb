@@ -9,16 +9,21 @@ class Mdot::V2::UsersController < JsonController
         if str_code.blank?
             # promo campaign keyword
             proto = Proto.find_by promo_code: str_code
-            pj = ProtoJoin.create_with_proto_and_rec(proto, @current_user)
-            if pj.persisted?
-                gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
-                if gift.persisted?
-                    success("Gift created with keyword #{str_code}")
-                else
-                    fail gift
-                end
+            if !proto.kind_of?(Proto)
+                fail "couldn't find item for keyword #{authorize_params[:code]}"
+                status = :not_found
             else
-                fail "Could not send gift to user"
+                pj = ProtoJoin.create_with_proto_and_rec(proto, @current_user)
+                if pj.persisted?
+                    gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
+                    if gift.persisted?
+                        success("Gift created with keyword #{str_code}")
+                    else
+                        fail gift
+                    end
+                else
+                    fail "Could not send gift to user"
+                end
             end
         else
             # 2-factor auth code
@@ -29,7 +34,7 @@ class Mdot::V2::UsersController < JsonController
                 fail "Authorization failed"
             end
         end
-        respond
+        respond(status)
     end
 
     def index
