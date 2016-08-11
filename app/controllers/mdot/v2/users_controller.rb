@@ -13,7 +13,7 @@ class Mdot::V2::UsersController < JsonController
             if pj.persisted?
                 gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
                 if gift.persisted?
-                    success("Gift created with keyword #{str_code}"
+                    success("Gift created with keyword #{str_code}")
                 else
                     fail gift
                 end
