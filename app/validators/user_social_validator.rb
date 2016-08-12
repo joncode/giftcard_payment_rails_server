@@ -24,7 +24,8 @@ private
         if record.active
             UserSocial.where(active: true).each do |us|
                 if us.type_of == attribute && us.identifier == record.send(attribute) && us.user_id != record.id
-                    return record.errors[attribute.to_sym] << "is already in use. Please email support@itson.me for assistance if this is in error"
+                    record.errors[attribute.to_sym] << "#{us.identifier} already has an account. Use that account or email support@itson.me for help."
+                    break
                 end
             end
         end
