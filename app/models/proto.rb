@@ -22,6 +22,14 @@ class Proto < ActiveRecord::Base
   	belongs_to :merchant
 	belongs_to :giver,      polymorphic: :true
 
+	def gifting?
+		return false unless self.active
+		return false unless self.live
+		return false if (!self.expires_at.nil? && (DateTime.now.utc > self.expires_at))
+		return false if (!self.maximum.nil? && (self.processed >= self.maximum))
+		return true
+	end
+
 	def receivables
 			# returns receivables (Users or Socials)
 		self.users + self.socials

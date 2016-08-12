@@ -216,7 +216,53 @@ class Mdot::V2::GiftsController < JsonController
         respond(status)
     end
 
+    def promo
+        # promo campaign keyword
+        str_code = promo_params[:code]
+        protos = Proto.where(promo_code: str_code)
+        fail_msg = "couldn't find item for keyword #{str_code}"
+        if protos.empty?
+            fail fail_msg
+        else
+            gifts = []
+            protos.each do |proto|
+                if proto.gifting?
+                    pj = ProtoJoin.create_with_proto_and_rec(proto, @current_user)
+                    if pj.persisted?
+                        gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
+                        gifts << gift
+                    end
+                else
+                    fail_msg = "we're sorry but this promo has reached capacity and is no longer live"
+                end
+            end
+            if gifts.empty?
+                fail fail_msg
+            else
+                good = 0
+                gifts.each do |g|
+                    if g.persisted?
+                        good += 1
+                    else
+                        fail_gift = g
+                    end
+                end
+                if good > 0
+                    success("#{good} #{'gift'.pluralize(good)} created with keyword #{str_code}")
+                else
+                    fail fail_gift
+                end
+            end
+        end
+
+        respond
+    end
+
 private
+
+    def promo_params
+        params.require(:data).permit(:code)
+    end
 
     def promotional_gift_params? params_hsh
         if params_hsh["receiver_id"].nil?

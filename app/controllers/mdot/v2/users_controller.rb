@@ -1,39 +1,19 @@
 class Mdot::V2::UsersController < JsonController
     include Email
-    before_action :authenticate_customer,      only: [:index, :update, :refresh, :show, :deactivate_user_social, :profile, :socials]
+    before_action :authenticate_customer,      only: [:index, :update, :refresh, :show, :deactivate_user_social, :profile, :socials, :authorize]
     before_action :authenticate_general_token, only: [:create, :reset_password]
     rescue_from JSON::ParserError, :with => :bad_request
 
     def authorize
         str_code = authorize_params[:code].gsub(/[^0-9.]/, '')
-        if str_code.blank?
-            # promo campaign keyword
-            str_code = authorize_params[:code]
-            proto = Proto.find_by promo_code: str_code
-            if !proto.kind_of?(Proto)
-                fail "couldn't find item for keyword #{authorize_params[:code]}"
-            else
-                pj = ProtoJoin.create_with_proto_and_rec(proto, @current_user)
-                if pj.persisted?
-                    gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
-                    if gift.persisted?
-                        success("Gift created with keyword #{str_code}")
-                    else
-                        fail gift
-                    end
-                else
-                    fail "Could not send gift to user"
-                end
-            end
+        # 2-factor auth code
+        us = UserSocial.find_by(user_id: @current_user.id, code: str_code)
+        if us.authorize
+            success("#{us.display_net_id} Authorize Successful.")
         else
-            # 2-factor auth code
-            us = UserSocial.find_by(user_id: @current_user.id, code: str_code)
-            if us.authorize
-                success("#{us.display_net_id} Authorize Successful.")
-            else
-                fail "Authorization failed"
-            end
+            fail "Authorization failed"
         end
+
         respond
     end
 
