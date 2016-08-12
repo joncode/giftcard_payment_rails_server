@@ -20,12 +20,12 @@ class User < ActiveRecord::Base
     validates_with UserFirstNameValidator
 	validates :first_name, 	presence: true, length: {  maximum: 50 }
 	validates :last_name, 	length: { maximum: 50 }, allow_blank: true
-	validates :phone , 		format: { with: VALID_PHONE_REGEX }, uniqueness: true, allow_blank: true
-	validates :email , 		format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }, :unless => :is_perm_deactive?
+	validates :phone , 		format: { with: VALID_PHONE_REGEX }, allow_blank: true
+	validates :email , 		format: { with: VALID_EMAIL_REGEX }, unless: :is_perm_deactive?
 	validates :password, 	length: { minimum: 6 },     on: :create
 	validates :password_confirmation, presence: true,   on: :create
-	validates :facebook_id, uniqueness: true, 			:if => :facebook_id_exists?
-	validates :twitter,     uniqueness: true, 		    :if => :twitter_exists?
+	validates :facebook_id, uniqueness: true, 			if: :facebook_id_exists?
+	validates :twitter,     uniqueness: true, 		    if: :twitter_exists?
 
 
 #	-------------
