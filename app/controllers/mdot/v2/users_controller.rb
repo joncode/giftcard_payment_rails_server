@@ -8,6 +8,7 @@ class Mdot::V2::UsersController < JsonController
         str_code = authorize_params[:code].gsub(/[^0-9.]/, '')
         if str_code.blank?
             # promo campaign keyword
+            str_code = authorize_params[:code]
             proto = Proto.find_by promo_code: str_code
             if !proto.kind_of?(Proto)
                 fail "couldn't find item for keyword #{authorize_params[:code]}"
