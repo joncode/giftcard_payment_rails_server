@@ -21,13 +21,16 @@ class UserSocialValidator < ActiveModel::Validator
 private
 
     def validator_method(record, attribute)
+        valid = true
         if record.active
             UserSocial.where(active: true).each do |us|
                 if us.type_of == attribute && us.identifier == record.send(attribute) && us.user_id != record.id
                     record.errors[attribute.to_sym] << "#{us.identifier} already has an account. Use that account or email support@itson.me for help."
+                    valid = false
                     break
                 end
             end
         end
+        return valid
     end
 end
