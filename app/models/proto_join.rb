@@ -2,6 +2,7 @@ class ProtoJoin < ActiveRecord::Base
 	include MoneyHelper
 
 
+	validates_presence_of :proto_id, :receivable_id, :receivable_type
 	validates :proto_id, :uniqueness => { scope: [:receivable_id, :receivable_type, :gift_id] }, if: :proto_not_camp?
 	validates :proto_id, :uniqueness => { scope: [:receivable_id, :receivable_type] }, if: :proto_camp?
 	validates_uniqueness_of :gift_id, allow_nil: true
@@ -19,7 +20,6 @@ class ProtoJoin < ActiveRecord::Base
 			receivable_type: rec.class.to_s,
 			receivable_id: rec.id,
 			rec_name: rec.name)
-
 	end
 
 	def convert_to_gift_receiver(args)
@@ -54,11 +54,11 @@ class ProtoJoin < ActiveRecord::Base
 private
 
 	def proto_not_camp?
-		!self.camp
+		self.proto && !self.proto.camp
 	end
 
 	def proto_camp?
-		self.camp
+		self.proto && self.proto.camp
 	end
 
 end
