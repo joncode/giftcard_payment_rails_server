@@ -231,6 +231,8 @@ class Mdot::V2::GiftsController < JsonController
                     if pj.persisted?
                         gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
                         gifts << gift
+                    else
+                        fail_msg = pj
                     end
                 else
                     fail_msg = "we're sorry but this promo has reached capacity and is no longer live"
