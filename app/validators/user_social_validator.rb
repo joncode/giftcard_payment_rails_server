@@ -1,21 +1,23 @@
 class UserSocialValidator < ActiveModel::Validator
 
     def validate(record)
+        resp = true
         if record.email_changed?
-            validator_method(record, "email")
+            resp = validator_method(record, "email")
         end
 
         if record.phone_changed?
-            validator_method(record, "phone")
+            resp = validator_method(record, "phone")
         end
 
         if record.twitter_changed?
-            validator_method(record, "twitter")
+            resp = validator_method(record, "twitter")
         end
 
         if record.facebook_id_changed?
-            validator_method(record, "facebook_id")
+            resp = validator_method(record, "facebook_id")
         end
+        return resp
     end
 
 private
