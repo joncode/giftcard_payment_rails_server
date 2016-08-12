@@ -219,7 +219,7 @@ class Mdot::V2::GiftsController < JsonController
     def promo
         # promo campaign keyword
         str_code = promo_params[:code]
-        protos = Proto.where(promo_code: str_code)
+        protos = Proto.where(active: true, promo_code: str_code)
         fail_msg = "couldn't find item for keyword #{str_code}"
         if protos.empty?
             fail fail_msg
