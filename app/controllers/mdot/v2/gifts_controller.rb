@@ -240,15 +240,26 @@ class Mdot::V2::GiftsController < JsonController
                 fail fail_msg
             else
                 good = 0
+                scheduled = 0
                 gifts.each do |g|
                     if g.persisted?
                         good += 1
+                        scheduled += 1 if ( g.status == 'schedule' )
                     else
                         fail_gift = g
                     end
                 end
                 if good > 0
-                    success("#{good} #{'gift'.pluralize(good)} created with keyword #{str_code}")
+                    if scheduled == 0
+                        success_msg = "#{good} #{'gift'.pluralize(good)} delivered now with keyword #{str_code}"
+                    elsif scheduled == good
+                        success_msg = "#{good} #{'gift'.pluralize(good)} created with keyword #{str_code} scheduled for later delivery"
+                    else
+                        delivery_now = good - scheduled
+                        success_msg = "#{delivery_now} #{'gift'.pluralize(delivery_now)} delivered now with keyword #{str_code}.\n"
+                        success_msg += "#{scheduled} #{'gift'.pluralize(scheduled)} scheduled for later delivery"
+                    end
+                    success(success_msg)
                 else
                     fail fail_gift
                 end
