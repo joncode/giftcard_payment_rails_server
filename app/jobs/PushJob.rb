@@ -8,6 +8,15 @@ class PushJob
 
         push_type = push_type.to_s
         case push_type
+        when 'gift_scheduled_notification'
+            push_receiver = gift.receiver
+
+            if gift.giver_type == "BizUser"
+                alert = "#{gift.giver_name} sent you a gift! Scheduled to arrive on #{gift.schedule_time}"
+            else
+                alert = "#{gift.giver_name} sent you a gift at #{gift.provider_name}! Scheduled to arrive on #{gift.schedule_time}"
+            end
+
         when 'gift_receiver_notification'
                 # notify receiver of gift push
                 # to gift receiver -> 'you have received a gift'

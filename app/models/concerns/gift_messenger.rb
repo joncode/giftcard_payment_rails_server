@@ -60,16 +60,24 @@ Click here to claim your gift.\n #{gift.invite_link}"
         "#{PUBLIC_URL}/signup/acceptgift?id=#{self.obscured_id}"
     end
 
+    def schedule_time
+        TimeGem.change_time_to_zone(self.scheduled_at, self.merchant.timezone).to_formatted_s(:only_date)
+    end
+
     def messenger_promo_gift_scheduled
-        schedule_time = TimeGem.change_time_to_zone(self.scheduled_at, self.merchant.timezone).to_formatted_s(:only_date)
+        Relay.send_scheduled_gift_notification(self)
+
         if !self.receiver_phone.blank?
+
             msg = "#{self.giver_name} has sent you a #{self.value_s} eGift Card
 at #{self.merchant_name} with ItsOnMe® - the eGifting app.\n
 The gift is scheduled to arrive on #{schedule_time}\n
 Use this phone number when you make your account to connect the gift\n
 Click here to download the app.\n #{CLEAR_CACHE}/download"
             resp = OpsTwilio.text to: self.receiver_phone, msg: msg
+
         elsif !self.receiver_email.blank?
+
              msg = "<h2>#{self.giver_name} has sent you a #{self.value_s} eGift Card
 at #{self.merchant_name} with ItsOnMe® - the eGifting app.</h2>
 <p>The gift is scheduled to arrive on #{schedule_time}</p>
