@@ -232,7 +232,13 @@ class Mdot::V2::GiftsController < JsonController
                         gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
                         gifts << gift
                     else
-                        fail_msg = pj if (fail_msg != "we're sorry but this promo has reached capacity and is no longer live")
+                        if (fail_msg != "we're sorry but this promo has reached capacity and is no longer live")
+                            if pj.errors.messages.values.join(' ').match(/has already been take/)
+                                fail_msg = "You have already received this promotion for keyword #{str_code}"
+                            else
+                                fail_msg = pj.errors.full_messages.gsub('Proto', 'Promo Gift')
+                            end
+                        end
                     end
                 else
                     fail_msg = "we're sorry but this promo has reached capacity and is no longer live"
