@@ -2,7 +2,8 @@ class ProtoJoin < ActiveRecord::Base
 	include MoneyHelper
 
 
-	validates :proto_id, :uniqueness => { scope: [:receivable_id, :receivable_type, :gift_id] }
+	validates :proto_id, :uniqueness => { scope: [:receivable_id, :receivable_type, :gift_id] }, if: :proto_not_camp?
+	validates :proto_id, :uniqueness => { scope: [:receivable_id, :receivable_type] }, if: :proto_camp?
 	validates_uniqueness_of :gift_id, allow_nil: true
 
 #   -------------
@@ -49,6 +50,17 @@ class ProtoJoin < ActiveRecord::Base
 		args['receiver_name'] = GENERIC_RECEIVER_NAME if args['receiver_name'].blank?
 		args
 	end
+
+private
+
+	def proto_not_camp?
+		!self.camp
+	end
+
+	def proto_camp?
+		self.camp
+	end
+
 end
 
 # == Schema Information

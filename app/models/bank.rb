@@ -9,10 +9,10 @@ class Bank < ActiveRecord::Base
 
 #   -------------
 
-    validates :aba, length: { is: 9, :if => :aba_changed? }, confirmation: true
-    validates :aba_confirmation, presence: true,            :if => :aba_changed?
-    validates :account_number, length: { within: 6..14, :if => :account_number_changed? }, confirmation: true
-    validates :account_number_confirmation, presence: true, :if => :account_number_changed?
+    validates :aba, length: { is: 9, if: :aba_changed? }, confirmation: true
+    validates :aba_confirmation, presence: true, if: :aba_changed?
+    validates :account_number, length: { within: 6..14, if: :account_number_changed? }, confirmation: true
+    validates :account_number_confirmation, presence: true, if: :account_number_changed?
     validates_length_of :state , :is => 2
     validates_length_of :zip, :within => 5..10
     validates_presence_of :merchant_id, :name, :address, :city, :account_name, :acct_type, :aba, :account_number

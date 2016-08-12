@@ -13,7 +13,7 @@ class Omnivore
 
 		if args['brand_card_ids_ary'].blank?
 			@brand_card = false
-			@brand_card_ids  = []
+			@brand_card_ids = []
 		else
 			@brand_card = true
 			@brand_card_ids = args['brand_card_ids_ary']
