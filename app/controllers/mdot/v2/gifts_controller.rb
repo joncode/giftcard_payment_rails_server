@@ -259,12 +259,12 @@ class Mdot::V2::GiftsController < JsonController
                 end
                 if good > 0
                     if scheduled == 0
-                        success_msg = "#{good} #{'gift'.pluralize(good)} is in your gift center now.\nKeyword #{str_code}"
+                        success_msg = "#{good} #{'gift'.pluralize(good)} in your gift center now.\nKeyword #{str_code}"
                     elsif scheduled == good
                         success_msg = "#{good} #{'gift'.pluralize(good)} scheduled for later delivery.\nKeyword #{str_code}"
                     else
                         delivery_now = good - scheduled
-                        success_msg = "#{delivery_now} #{'gift'.pluralize(delivery_now)} is in your gift center now.\n"
+                        success_msg = "#{delivery_now} #{'gift'.pluralize(delivery_now)} in your gift center now.\n"
                         success_msg += "#{scheduled} #{'gift'.pluralize(scheduled)} scheduled for later delivery.\nKeyword #{str_code}"
                     end
                     success(success_msg)
