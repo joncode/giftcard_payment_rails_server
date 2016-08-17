@@ -1,5 +1,6 @@
 class Proto < ActiveRecord::Base
     include ShoppingCartHelper
+    include MoneyHelper
 
 #   -------------
 
@@ -8,7 +9,9 @@ class Proto < ActiveRecord::Base
 #   -------------
 
 	before_save :set_value
+	before_save :set_value_cents
 	before_save :set_cost
+	before_save :set_cost_cents
 
 #   -------------
 
@@ -21,6 +24,14 @@ class Proto < ActiveRecord::Base
 	belongs_to :provider
   	belongs_to :merchant
 	belongs_to :giver,      polymorphic: :true
+
+	def gifting?
+		return false unless self.active
+		return false unless self.live
+		return false if (!self.expires_at.nil? && (DateTime.now.utc > self.expires_at))
+		return false if (!self.maximum.nil? && (self.processed >= self.maximum))
+		return true
+	end
 
 	def receivables
 			# returns receivables (Users or Socials)
@@ -60,7 +71,21 @@ class Proto < ActiveRecord::Base
         self.increment!(:processed, new_amount)
 	end
 
+#   -------------
+
+    def value_cents
+    	super || set_value_cents
+    end
+
+    def cost_cents
+    	super || set_cost_cents
+    end
+
 private
+
+	def set_value_cents
+		self.value_cents = currency_to_cents(self.value)
+	end
 
 	def set_value
 		if self.shoppingCart.kind_of?(String)
@@ -72,6 +97,10 @@ private
 		if self.cost.nil?
 			self.cost = "0"
 		end
+	end
+
+	def set_cost_cents
+		self.cost_cents = currency_to_cents(self.cost)
 	end
 
 end

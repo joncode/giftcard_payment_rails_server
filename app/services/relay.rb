@@ -11,6 +11,15 @@ class Relay
 
 		end
 
+        def send_scheduled_gift_notification gift
+
+            if gift.receiver_id
+                puts "\nNotify Receiver Scheduled via Push #{gift.receiver_name}"
+                Resque.enqueue(PushJob, gift.id, 'gift_scheduled_notification')
+            end
+
+        end
+
         def send_boomerang_push_notification(gift)
             Resque.enqueue(BoomerangPushJob, gift.id)
         end

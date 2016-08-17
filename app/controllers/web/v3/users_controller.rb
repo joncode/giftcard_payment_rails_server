@@ -9,7 +9,7 @@ class Web::V3::UsersController < MetalCorsController
         us = UserSocial.find_by(user_id: @current_user.id, id: params[:id])
 
         if us.status == 'live'
-            success("#{us.display_net_id} is alreaday activated.")
+            success("#{us.display_net_id} is already activated.")
         else
             resp = us.get_auth_code
             if resp['success']
@@ -26,7 +26,7 @@ class Web::V3::UsersController < MetalCorsController
     end
 
     def authorize
-        str_code = params[:id].gsub(/[^0-9.]/, '')
+        str_code = authorize_params[:code].gsub(/[^0-9.]/, '')
         us = UserSocial.find_by(user_id: @current_user.id, code: str_code)
 
         if us.authorize
@@ -231,6 +231,9 @@ class Web::V3::UsersController < MetalCorsController
 
 private
 
+    def authorize_params
+        params.require(:data).permit(:code)
+    end
 
     def update_user_params
         params.require(:data).permit("first_name", "last_name", "sex", "birthday", "zip", "photo", "social" => ["net", "_id", "value" ], oauth: [:token, :secret, :net, :net_id, :handle, :photo] )

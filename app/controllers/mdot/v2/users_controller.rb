@@ -1,8 +1,21 @@
 class Mdot::V2::UsersController < JsonController
     include Email
-    before_action :authenticate_customer,      only: [:index, :update, :refresh, :show, :deactivate_user_social, :profile, :socials]
+    before_action :authenticate_customer,      only: [:index, :update, :refresh, :show, :deactivate_user_social, :profile, :socials, :authorize]
     before_action :authenticate_general_token, only: [:create, :reset_password]
     rescue_from JSON::ParserError, :with => :bad_request
+
+    def authorize
+        str_code = authorize_params[:code].gsub(/[^0-9.]/, '')
+        # 2-factor auth code
+        us = UserSocial.find_by(user_id: @current_user.id, code: str_code)
+        if us.authorize
+            success("#{us.display_net_id} Authorize Successful.")
+        else
+            fail "Authorization failed"
+        end
+
+        respond
+    end
 
     def index
 
@@ -174,8 +187,12 @@ class Mdot::V2::UsersController < JsonController
 
 private
 
+    def authorize_params
+        params.require(:data).permit(:code)
+    end
+
     def socials_user_params
-        params.require(:data).permit( :first_name , :last_name, :sex , :zip, :birthday, social: [ :_id, :value ] )
+        params.require(:data).permit( :first_name, :last_name, :sex , :zip, :birthday, social: [ :_id, :value ] )
     end
 
     def update_user_params

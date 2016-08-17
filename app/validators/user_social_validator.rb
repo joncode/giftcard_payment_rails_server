@@ -1,32 +1,38 @@
 class UserSocialValidator < ActiveModel::Validator
 
     def validate(record)
-        if record.email_changed?
-            validator_method(record, "email")
+        resp = true
+        if resp && record.email_changed?
+            resp = validator_method(record, "email")
         end
 
-        if record.phone_changed?
-            validator_method(record, "phone")
+        if resp && record.phone_changed?
+            resp = validator_method(record, "phone")
         end
 
-        if record.twitter_changed?
-            validator_method(record, "twitter")
+        if resp && record.twitter_changed?
+            resp = validator_method(record, "twitter")
         end
 
-        if record.facebook_id_changed?
-            validator_method(record, "facebook_id")
+        if resp && record.facebook_id_changed?
+            resp = validator_method(record, "facebook_id")
         end
+        return resp
     end
 
 private
 
     def validator_method(record, attribute)
+        valid = true
         if record.active
             UserSocial.where(active: true).each do |us|
-                if us.type_of == attribute && us.identifier == record.send(attribute) && us.user_id != record.id
-                    return record.errors[attribute.to_sym] << "is already in use. Please email support@itson.me for assistance if this is in error"
+                if (us.type_of == attribute) && (us.identifier == record.send(attribute)) && (us.user_id != record.id)
+                    record.errors[attribute.to_sym] << "#{us.identifier} already has an account. Use that account or email support@itson.me for help."
+                    valid = false
                 end
+                break if !valid
             end
         end
+        return valid
     end
 end

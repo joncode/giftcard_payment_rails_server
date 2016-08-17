@@ -99,7 +99,7 @@ private
 	def self.scheduled_at_calc proto
         if proto.scheduled_at
             proto.scheduled_at
-        elsif proto.start_in
+        elsif proto.start_in.to_i > 0
             DateTime.now.utc + proto.start_in.days
         else
         	nil
@@ -109,7 +109,7 @@ private
     def self.expires_at_calc proto
         if proto.expires_at
             proto.expires_at + 1.day
-        elsif proto.expires_in
+        elsif proto.expires_in.to_i > 0
             DateTime.now.utc + proto.days
         else
         	nil

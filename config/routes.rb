@@ -30,6 +30,7 @@ Drinkboard::Application.routes.draw do
 					get :profile
 					get :refresh
 					put :socials
+					post :authorize
 				end
 			end
 			resources :facebook,     only: [:create] do
@@ -90,6 +91,7 @@ Drinkboard::Application.routes.draw do
 				collection do
 					get :archive
 					get :badge         # old method names -> update or relay
+					post :promo
 				end
 			end
 			resources :photos,     only: [:create]
