@@ -280,18 +280,18 @@ module EmailHelper
 		</div>".html_safe
 	end
 
-	def text_for_affiliate_invite merchant, invite_token
+	def text_for_affiliate_invite company, invite_token
 		button_url = generate_affiliate_invite_link(invite_token)
 		button_text = "Get Started"
 					"<div style=#{default_style}>
-					#{header_text("Welcome to ItsOnMe")}
+					#{header_text("Welcome to ItsOnMe - Partner Tools")}
 			<div style='padding: 0 80px 20px 80px; font-size:16px;'>
 				<div style='padding-bottom:20px;'>
-					You are almost ready to go live on ItsOnMe!
+					You have been invited to ItsOnMe by #{company.name}!
 				</div>
 				<br />
 				<div>
-					Visit this link to create your account and review your affiliate information.
+					Visit this link to create your account and review your account information.
 					<br />
 					Your ItsOnMe rep is available to answer any questions and walk you through your account.
 				</div>
