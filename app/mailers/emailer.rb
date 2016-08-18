@@ -46,7 +46,7 @@ module Emailer
         request_mandrill_with_message(message, [data["user_id"], "User"])
     end
 
-    ####### Gift Emails
+####### Gift Emails
 
     def notify_receiver data
         template = GiftTemplateMainMailer.new(data["gift_id"])
@@ -56,31 +56,6 @@ module Emailer
     def notify_receiver_proto_join data
         template = GiftTemplateMainMailer.new(data["gift_id"])
         template.notify_receiver
-
-        # gift          = Gift.find(data["gift_id"])
-        # receiver_name = gift.receiver_name
-        # merchant_name = gift.provider_name
-        # giver_name    = gift.giver_name ? gift.giver_name : merchant_name
-        # if gift.receiver_email
-        #     email     = whitelist_email(gift.receiver_email)
-        # elsif gift.receiver
-        #     email 	  = whitelist_email(gift.receiver.email)
-        # else
-        #     puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
-        #     return nil
-        # end
-        # giver_name_simple = giver_name.sub(" Staff", "")
-        # if gift.payable.kind_of?(Proto) && gift.payable.split
-        #     subject  = "The staff at #{giver_name_simple} sent you #{gift.payable.items} gifts"
-        # else
-        #     subject  = "The staff at #{giver_name_simple} sent you a gift"
-        # end
-        # body     = text_for_notify_receiver_proto_join(gift)
-
-        # template_name   = "gift"
-        # message         = message_hash(subject, email, receiver_name, body)
-        # message["tags"] = [ merchant_name ]
-        # request_mandrill_with_template(template_name, message, [data["gift_id"], "Gift"])
     end
 
 
@@ -113,14 +88,15 @@ module Emailer
         request_mandrill_with_template(template_name, message, [user.id, "User"])
     end
 
-    ##### Merchant Tools
+##### Merchant Tools
 
+    # {"text"=>"affiliate_invite", "email"=>"jon.gutwillig@itson.me", "affiliate_id"=>1, "merchant_id"=>1,
+    # "company_type" => 'Affiliate', "token"=>"CjmuXCeZiz0mYGtooOSMOQ"}
 
-    # {"text"=>"affiliate_invite", "email"=>"jon.gutwillig@itson.me", "merchant_id"=>1, "token"=>"CjmuXCeZiz0mYGtooOSMOQ"}
     def affiliate_invite data
         find_id = data['affiliate_id'] || data['merchant_id']
         affiliate = Affiliate.find(find_id)
-        subject  = "Welcome to ItsOnMe"
+        subject  = "Welcome to ItsOnMe - Partner Tools"
         email    = data["email"]
         name     = "#{affiliate.name} Staff"
         body     = text_for_affiliate_invite(affiliate, data["token"])
@@ -133,7 +109,7 @@ module Emailer
 
     def merchant_invite data
         merchant = Merchant.unscoped.find(data["merchant_id"])
-        subject  = "Welcome to ItsOnMe"
+        subject  = "Welcome to ItsOnMe - Merchant Tools"
         email    = data["email"]
         name     = "#{merchant.name} Staff"
         body     = text_for_merchant_invite(merchant, data["token"])
@@ -142,6 +118,25 @@ module Emailer
         template_name = "merchant"
         message       = message_hash(subject, email, name, body, bcc)
         request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
+    end
+
+    def merchant_staff_invite data
+        if data['company_type'] == "Affiliate"
+            affiliate_invite data
+        else
+            merchant     = Merchant.unscoped.find(data["merchant_id"])
+            invitor_name = data["invitor_name"]
+            invite_token = data["token"]
+            subject      = "Welcome to ItsOnMe - Merchant Tools"
+            email        = data["email"]
+            name         = "#{merchant.name} Staff"
+            body         = text_for_merchant_staff_invite(merchant, invitor_name, invite_token)
+            bcc          = bcc_company_email
+
+            template_name = "merchant"
+            message       = message_hash(subject, email, name, body, bcc)
+            request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
+        end
     end
 
     def merchant_signup_welcome full_data_obj
@@ -160,21 +155,6 @@ module Emailer
         template_name = "merchant"
         message       = message_hash(subject, email, name, body, bcc)
         request_mandrill_with_template(template_name, message, [data['id'], "Merchant"])
-    end
-
-    def merchant_staff_invite data
-        merchant     = Merchant.unscoped.find(data["merchant_id"])
-        invitor_name = data["invitor_name"]
-        invite_token = data["token"]
-        subject      = "Welcome to ItsOnMe"
-        email        = data["email"]
-        name         = "#{merchant.name} Staff"
-        body         = text_for_merchant_staff_invite(merchant, invitor_name, invite_token)
-        bcc          = bcc_company_email
-
-        template_name = "merchant"
-        message       = message_hash(subject, email, name, body, bcc)
-        request_mandrill_with_template(template_name, message, [merchant.id, "Merchant"])
     end
 
     def merchant_pending data
