@@ -34,6 +34,7 @@ class Web::V3::ClientsController < MetalCorsController
 		slug2 = hsh[:slug2]
 		ary_of_slugs = [ ref, slug1, slug2 ]
 		ary_of_slugs = ary_of_slugs.map { |a| remove_unwanted_url_parts(a) }
+		ary_of_slugs.compact!
 
 		if ary_of_slugs.length == 0
 			# no data for client
@@ -41,8 +42,8 @@ class Web::V3::ClientsController < MetalCorsController
 			fail_web({ err: "INVALID_INPUT", msg: "No Data"})
 		else
 			clients = Client.find_with_url ary_of_slugs
-
 			client = nil
+
 			if clients.length == 1
 				client = clients[0]
 			elsif clients.length == 0
@@ -87,7 +88,7 @@ class Web::V3::ClientsController < MetalCorsController
 			# if hyphen it is a region name must be ignored
 			#  due to merchant URL's often contain region names
 			# ie table34lasvegas.com contains lasvegas
-		return nil if slug.match(/-/)
+		return nil if slug.match(/-/) && !slug.match(/_-_/)
 			# remove all unwanted characters
 		ary_split = slug.to_s.split('.')
 		if ary_split.length == 3

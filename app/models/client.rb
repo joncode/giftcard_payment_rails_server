@@ -106,6 +106,7 @@ AND #{content_symbol}.id = contents.content_id"
 		ary_of_slugs = ary_of_slugs.reject(&:blank?)
 		sql = "active = 't' AND url_name ilike "
 		ary_of_slugs.each_with_index do |slug, index|
+			next if slug.blank?
 			if index == 0
 				sql += " '#{slug}%' OR download_url ilike '#{slug}%' "
 			else
