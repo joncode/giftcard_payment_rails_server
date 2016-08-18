@@ -581,9 +581,9 @@ ActiveRecord::Schema.define(version: 20160810015639) do
     t.integer  "target_id"
     t.string   "target_type"
     t.integer  "position"
-    t.boolean  "active"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.boolean  "active",      default: true
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "list_items", force: :cascade do |t|
@@ -608,7 +608,7 @@ ActiveRecord::Schema.define(version: 20160810015639) do
     t.string   "owner_type"
     t.integer  "owner_id"
     t.string   "token"
-    t.boolean  "active"
+    t.boolean  "active",      default: true
     t.string   "template"
     t.string   "name"
     t.string   "zinger"
@@ -617,8 +617,8 @@ ActiveRecord::Schema.define(version: 20160810015639) do
     t.string   "logo"
     t.integer  "total_items"
     t.string   "item_types"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
   create_table "menu_items", force: :cascade do |t|

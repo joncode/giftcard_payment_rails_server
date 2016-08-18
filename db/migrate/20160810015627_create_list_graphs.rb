@@ -5,7 +5,7 @@ class CreateListGraphs < ActiveRecord::Migration
       t.integer :target_id
       t.string :target_type
       t.integer :position
-      t.boolean :active
+      t.boolean :active, default: true
 
       t.timestamps null: false
     end

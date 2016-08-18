@@ -4,7 +4,7 @@ class CreateLists < ActiveRecord::Migration
       t.string :owner_type
       t.integer :owner_id
       t.string :token
-      t.boolean :active
+      t.boolean :active, default: true
       t.string :template
       t.string :name
       t.string :zinger
