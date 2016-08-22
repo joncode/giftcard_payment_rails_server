@@ -3,6 +3,21 @@ module Formatters
 
 ########      CONTACT / DETAILS
 
+    def make_name(data_hash)
+        if data_hash["last_name"].present?
+            data_hash["first_name"] + " " + data_hash["last_name"]
+        else
+            data_hash["first_name"] || data_hash['email'] || 'User'
+        end
+    end
+
+    def make_url_string str
+        if str.kind_of?(String)
+            str = str.downcase.gsub(' ','_').gsub('&', 'and').gsub(/[^a-zA-Z0-9_-]/, '')
+        end
+        str
+    end
+
     def extract_phone_digits
         extract_digits self.phone
     end

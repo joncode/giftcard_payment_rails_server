@@ -15,4 +15,6 @@ AM = AlertMessage
 AF = Affiliate
 P = Place
 PLG = PlaceGraph
+L = List
+LG = ListGraph
 

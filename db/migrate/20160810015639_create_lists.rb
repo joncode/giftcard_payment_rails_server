@@ -16,5 +16,7 @@ class CreateLists < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_index :lists, :token
+    add_index :lists, [:owner_id, :owner_type]
   end
 end

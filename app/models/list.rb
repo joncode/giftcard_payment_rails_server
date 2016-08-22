@@ -10,6 +10,7 @@ class List < ActiveRecord::Base
 	validates_presence_of :token, :name, :owner_type, :owner_id
 	validates_uniqueness_of :token, allow_blank: false
 
+	has_many :list_graphs
 	belongs_to :owner, polymorphic: true
 
 #   -------------
@@ -44,17 +45,16 @@ class List < ActiveRecord::Base
 		return 0 if @offset.nil?
 	end
 
-
 	def items
-		[]
+		list_graphs.map(&:item)
 	end
 
 	def item_count
-		items.length
+		@item_count ||= items.length
 	end
 
 	def total_items
-		self.items.length
+		@total_items ||= items.length
 	end
 
 	def prev_offset
@@ -62,7 +62,7 @@ class List < ActiveRecord::Base
 	end
 
 	def next_offset
-		return nil if self.total_items < (self.item_count + self.offset)
+		return nil if total_items < (item_count + self.offset)
 		"https://api.itson.me/lists/#{self.token}?action=next&offset=#{self.offset}"
 	end
 

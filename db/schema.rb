@@ -586,6 +586,9 @@ ActiveRecord::Schema.define(version: 20160810015639) do
     t.datetime "updated_at",                null: false
   end
 
+  add_index "list_graphs", ["list_id", "active"], name: "index_list_graphs_on_list_id_and_active", using: :btree
+  add_index "list_graphs", ["list_id"], name: "index_list_graphs_on_list_id", using: :btree
+
   create_table "list_items", force: :cascade do |t|
     t.integer  "owner_id"
     t.string   "owner_type"
@@ -620,6 +623,9 @@ ActiveRecord::Schema.define(version: 20160810015639) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end
+
+  add_index "lists", ["owner_id", "owner_type"], name: "index_lists_on_owner_id_and_owner_type", using: :btree
+  add_index "lists", ["token"], name: "index_lists_on_token", using: :btree
 
   create_table "menu_items", force: :cascade do |t|
     t.string   "name",              limit: 255

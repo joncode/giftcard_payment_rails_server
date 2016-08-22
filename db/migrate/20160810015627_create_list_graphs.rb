@@ -9,5 +9,7 @@ class CreateListGraphs < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_index :list_graphs, :list_id
+    add_index :list_graphs, [:list_id, :active]
   end
 end
