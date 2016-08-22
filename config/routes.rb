@@ -135,12 +135,6 @@ Drinkboard::Application.routes.draw do
 				collection { get :config }
 			end
 
-			resources :promos, only: [:create, :show] do
-				collection do
-					patch :click
-					post :redbull
-				end
-			end
 			resources :facebook,     only: [:create] do
 				collection do
 					get   :friends
@@ -153,13 +147,7 @@ Drinkboard::Application.routes.draw do
 					post  :share
 				end
 			end
-			resources :twitter,     only: [:create] do
-				collection do
-					# get   :friends
-					# get   :profile
-					post  :oauth
-				end
-			end
+
 			resources :gifts, only: [:index, :create, :show] do
 				member do
 					patch :read
@@ -168,6 +156,8 @@ Drinkboard::Application.routes.draw do
 					post :regift
 				end
 			end
+
+			resources :lists, only: [ :index, :show ]
 
 			resources :merchants, only: [:index, :show] do
 				member do
@@ -180,6 +170,13 @@ Drinkboard::Application.routes.draw do
 				end
 			end
 
+			resources :promos, only: [:create, :show] do
+				collection do
+					patch :click
+					post :redbull
+				end
+			end
+
 			resources :regions,   only: [:index] do
 				member { get :merchants }
 			end
@@ -187,6 +184,14 @@ Drinkboard::Application.routes.draw do
 			resources :sessions,  only: [:create] do
 				collection do
 					post :logout
+				end
+			end
+
+			resources :twitter,     only: [:create] do
+				collection do
+					# get   :friends
+					# get   :profile
+					post  :oauth
 				end
 			end
 
