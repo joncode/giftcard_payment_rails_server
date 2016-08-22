@@ -169,7 +169,7 @@ Drinkboard::Application.routes.draw do
 				end
 			end
 
-			resources :merchants, only: [:index] do
+			resources :merchants, only: [:index, :show] do
 				member do
 					get :menu
 					get :receipt_photo_url
