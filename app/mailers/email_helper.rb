@@ -531,24 +531,11 @@ module EmailHelper
 	def text_for_merchant_live merchant
 		button_url = PUBLIC_URL_MT + '/login'
 		button_text = "Login"
-		"<div style=#{default_style}>
-			#{header_text("#{merchant.name} is live!")}
-			<div style='padding: 0 80px 20px 80px;'>
-				<div style='padding-bottom:20px; font-size:16px;'>
-			#{merchant.name} is live on ItsOnMe. Login to your merchant center to accept digital gift cards, reward loyal customers, and drive new revenue.
-				</div>
-				<div>
-					Need help? Email us at
-					<a href='mailto:merchant@itson.me' target='_blank' style='color:#3F3F3F; text-decoration:underline;'>
-						merchant@itson.me
-					</a><br>
-				</div><br>
-			</div>
-			<div>#{ button_text(button_url, button_text) }</div><br/>
-			<div style='padding-top:30px;'>
-			#{ merchant_values_text }
-					</div>
-		</div>".html_safe
+		"<div style=#{default_style}>#{header_text("#{merchant.name} is live!")}
+<div style='padding: 0 80px 20px 80px;'><div style='padding-bottom:20px; font-size:16px;'>
+#{merchant.name} is live on ItsOnMe. Login to your merchant center to accept digital gift cards, reward loyal customers, and drive new revenue.
+</div><div>Need help? Email us at<a href='mailto:merchant@itson.me' target='_blank' style='color:#3F3F3F; text-decoration:underline;'>
+merchant@itson.me</a><br /></div><br /></div><div>#{ button_text(button_url, button_text) }</div><br/><div style='padding-top:30px;'>#{ merchant_values_text }</div></div>".html_safe
 	end
 
 	def items_text gift
@@ -589,7 +576,7 @@ private
 	end
 
 	def header_text text
-		"<div style='width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;''><div>#{text}</div></div></div><hr style='border-bottom:1px solid #C9C9C9;'>"
+		"<div style='width:100%; text-align:center;'><div style='color:#3F3F3F; font-size:20px; padding:15px 0 10px 0;'><div>#{text}</div></div></div><hr style='border-bottom:1px solid #C9C9C9; padding: 0 5px;'>".html_safe
 	end
 
 	def button_text url, text
