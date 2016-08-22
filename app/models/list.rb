@@ -14,10 +14,8 @@ class List < ActiveRecord::Base
 
 #   -------------
 
-	def self.find_by_owner client
-
-
-
+	def self.find_by_owner owner
+		find_by owner_id: owner.id, owner_type: owner.class.to_s
 	end
 
 #   -------------
