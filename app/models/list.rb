@@ -17,13 +17,11 @@ class List < ActiveRecord::Base
 
 	def self.find_by_owner owner
 		if owner.kind_of?(Client)
-			if self.client?
+			if owner.client?
 				find_by owner_id: owner.id, owner_type: owner.class.to_s
-			elsif self.partner?
+			else
 				partner = owner.partner
 				find_by owner_id: partner.id, owner_type: partner.class.to_s
-			else
-				find(1)
 			end
 		else
 			find_by owner_id: owner.id, owner_type: owner.class.to_s
