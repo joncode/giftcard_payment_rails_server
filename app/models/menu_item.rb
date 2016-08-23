@@ -61,12 +61,26 @@ class MenuItem < ActiveRecord::Base
 	    	owner_type: self.owner_type, owner_id: self.owner_id,
 	    	owner: self.owner_list_serialize,
 	     		# LIST META DATA
-	    	type: 'menu_item', id: self.id,
-	    	href: itsonme_url, api_url: api_url, active: self.active,
+	    	type: 'menu_item', id: self.id, active: self.active,
+	    	href: itsonme_url, api_url: api_url, shop_url: shop_url,
 	        	# LIST PRESENTATION DATA
 	    	name: self.name, zinger: self.section_name, detail: self.detail,
 	        photo: self.photo, ccy: self.ccy, price: self.price
    		}
+    end
+
+    def shop_url
+        owner = self.owner
+        if owner.kind_of?(Merchant)
+            region = Region.unscoped.where(id: owner.city_id).first
+        else
+            m = Merchant.where(menu_id: self.menu_id).first
+            region = Region.unscoped.where(id: m.city_id).first
+        end
+        return nil if region.nil?
+        city_token = region.token
+        merchant_token = make_url_string(owner.name)
+        "#{CLEAR_CACHE}/shop/#{city_token}/#{merchant_token}/#{self.id}"
     end
 
     def api_url
