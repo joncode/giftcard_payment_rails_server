@@ -56,21 +56,11 @@ class List < ActiveRecord::Base
 	end
 
 	def as_json args=nil
-		{
-	    		# LIST OWNER DATA
-	    	owner_type: self.owner_type, owner_id: self.owner_id,
-	     		# LIST META DATA
-	    	type: type, list_id: list_id, id: self.id, token: self.token,
-	    	href: itsonme_url, api_url: api_url, active: self.active,
-	        	# LIST PRESENTATION DATA
-	    	template: self.template, name: self.name, zinger: self.zinger, detail: self.detail,
-	        photo: self.photo, logo: self.logo, item_type: self.item_type,
-	        	# PAGINATION
-	        total_items: total_items, item_count: item_count, offset: offset,
+		list_serialize.merge({item_count: item_count, offset: offset,
 	        prev: prev_offset, next: next_offset,
 	        	# ARRAY
 	        items: items.serialize_objs(:list)
-   		}
+   		})
 	end
 
 #   -------------

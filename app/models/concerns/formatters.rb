@@ -13,14 +13,14 @@ module Formatters
 
     def make_url_string str
         if str.kind_of?(String)
-            str = str.downcase.gsub(' ','_').gsub('-','_').gsub('___','_').gsub('__','_').gsub('&', 'and').gsub(/[^a-zA-Z0-9_-]/, '')
+            str = str.gsub('&', 'and').gsub('@', 'at').parameterize.tr('-','_')
         end
         str
     end
 
-    def make_hyphen_url_string str
+    def make_slug str
         if str.kind_of?(String)
-            str = str.downcase.gsub(' ','-').gsub('_','-').gsub('&', 'and').gsub(/[^a-zA-Z0-9_-]/, '')
+            str = str.gsub('&', 'and').gsub('@', 'at').parameterize
         end
         str
     end
