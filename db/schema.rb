@@ -619,7 +619,7 @@ ActiveRecord::Schema.define(version: 20160810015639) do
     t.string   "photo"
     t.string   "logo"
     t.integer  "total_items"
-    t.string   "item_types"
+    t.string   "item_type"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
   end

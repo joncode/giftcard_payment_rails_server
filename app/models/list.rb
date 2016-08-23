@@ -74,7 +74,7 @@ class List < ActiveRecord::Base
 
 	def set_token_from_name
 		self.name ||= "List #{self.owner.name} #{rand(983741)}"
-		self.token = "#{make_url_string(self.name)}"
+		self.token = "#{make_hyphen_url_string(self.name)}"
 	end
 
 #   -------------

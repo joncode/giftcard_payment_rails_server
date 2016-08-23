@@ -18,6 +18,13 @@ module Formatters
         str
     end
 
+    def make_hyphen_url_string str
+        if str.kind_of?(String)
+            str = str.downcase.gsub(' ','-').gsub('&', 'and').gsub(/[^a-zA-Z0-9_-]/, '')
+        end
+        str
+    end
+
     def extract_phone_digits
         extract_digits self.phone
     end

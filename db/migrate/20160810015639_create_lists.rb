@@ -12,7 +12,7 @@ class CreateLists < ActiveRecord::Migration
       t.string :photo
       t.string :logo
       t.integer :total_items
-      t.string :item_types
+      t.string :item_type
 
       t.timestamps null: false
     end
