@@ -17,6 +17,7 @@ class MenuItem < ActiveRecord::Base
 
 #   -------------
 
+
 	def self.get_voucher_for_amount(menu_id, amount='40')
 		voucher_section = Section.get_voucher(menu_id)
 		item = where(price: amount.to_s, section_id: voucher_section.id).first
@@ -61,24 +62,19 @@ class MenuItem < ActiveRecord::Base
 	    	owner: self.owner_list_serialize,
 	     		# LIST META DATA
 	    	type: 'menu_item', id: self.id,
-	    	href: nil, active: self.active,
+	    	href: itsonme_url, api_url: api_url, active: self.active,
 	        	# LIST PRESENTATION DATA
 	    	name: self.name, zinger: self.section_name, detail: self.detail,
 	        photo: self.photo, ccy: self.ccy, price: self.price
    		}
     end
 
+    def api_url
+    	"#{APIURL}/menu_items/#{self.token}"
+    end
+
     def itsonme_url
-        owner = self.owner
-        if owner.kind_of?(Merchant)
-            region = Region.find owner.city_id
-        else
-            m = Merchant.find_by(menu_id: self.menu_id)
-            region = Region.find m.city_id
-        end
-        city_token = region.token
-        merchant_token = owner.make_url_string(owner.name)
-        "#{PUBLIC_IOM}share/#{city_token}/#{merchant_token}/#{self.id}"
+        "#{CLEAR_CACHE}/share/menu_items/#{self.token}"
     end
 
 #   -------------

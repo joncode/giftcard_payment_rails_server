@@ -204,6 +204,13 @@ class Merchant < ActiveRecord::Base
     ###########
 
 
+    def itsonme_url
+        "#{CLEAR_CACHE}/share/merchants/#{self.id}"
+    end
+
+    def api_url
+        "#{APIURL}/merchants/#{self.id}"
+    end
 
 private
 

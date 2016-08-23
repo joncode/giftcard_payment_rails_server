@@ -59,6 +59,8 @@ module MerchantSerializers
 		prov_hash["live"]      = self.live
 		prov_hash["detail"]	= self.description
 		prov_hash["status"]    = self.mode
+		prov_hash["href"]    = self.itsonme_url
+		prov_hash["api_url"]    = self.api_url
 		add_multi_loc(prov_hash)
 		# multi_redemption_web_keys prov_hash
 		prov_hash

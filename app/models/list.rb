@@ -46,7 +46,7 @@ class List < ActiveRecord::Base
 	    	owner_type: self.owner_type, owner_id: self.owner_id,
 	     		# LIST META DATA
 	    	type: type, list_id: list_id, id: self.id, token: self.token,
-	    	href: href, active: self.active,
+	    	href: itsonme_url, api_url: api_url, active: self.active,
 	        	# LIST PRESENTATION DATA
 	    	template: self.template, name: self.name, zinger: self.zinger, detail: self.detail,
 	        photo: self.photo, logo: self.logo, item_type: self.item_type,
@@ -117,8 +117,12 @@ class List < ActiveRecord::Base
 		'list'
 	end
 
-	def href
-		"https://api.itson.me/web/v3/lists/#{self.token}"
+    def itsonme_url
+        "#{CLEAR_CACHE}/share/lists/#{self.token}"
+    end
+
+	def api_url
+		"#{APIURL}/lists/#{self.token}"
 	end
 
 	def destroy
