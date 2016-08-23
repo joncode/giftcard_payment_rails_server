@@ -13,12 +13,12 @@ class Web::V3::ListsController < MetalCorsController
     end
 
     def show
-    	id_or_url_slug = params[:id]
-    	l_id = id_or_url_slug.to_i
-    	if l_id == 0
-    		list = List.find_by token: id_or_url_slug
+    	id_or_slug = params[:id]
+    	l_id = id_or_slug.gsub(/[0-9]/, '').length
+    	if l_id != 0
+    		list = List.find_by token: id_or_slug
     	else
-	    	list = List.find id_or_url_slug
+	    	list = List.find id_or_slug
 	    end
     	if list.kind_of?(List)
 			success list
