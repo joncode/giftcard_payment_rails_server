@@ -1,7 +1,21 @@
 class MenuItem < ActiveRecord::Base
 	include ShortenPhotoUrlHelper
+    include Formatters
+
+#   -------------
+
 	belongs_to :section
 	belongs_to :menu
+
+#   -------------
+
+	after_save :set_token
+
+#   -------------
+
+	validates_uniqueness_of :token, allow_blank: true
+
+#   -------------
 
 	def self.get_voucher_for_amount(menu_id, amount='40')
 		voucher_section = Section.get_voucher(menu_id)
@@ -44,6 +58,7 @@ class MenuItem < ActiveRecord::Base
 		{
 	    		# LIST OWNER DATA
 	    	owner_type: self.owner_type, owner_id: self.owner_id,
+	    	owner: self.owner_list_serialize,
 	     		# LIST META DATA
 	    	type: 'menu_item', id: self.id,
 	    	href: nil, active: self.active,
@@ -95,6 +110,22 @@ class MenuItem < ActiveRecord::Base
             ''
         end
     end
+
+    def owner_list_serialize
+    	if o = owner
+    		o.list_serialize
+    	else
+    		{}
+    	end
+    end
+
+#   -------------
+
+	def set_token
+		if self.token.nil?
+			self.token = "#{self.id}_#{make_url_string(self.name)}"
+		end
+	end
 
 end
 # == Schema Information

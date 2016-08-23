@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160810015639) do
+ActiveRecord::Schema.define(version: 20160823040305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -645,6 +645,7 @@ ActiveRecord::Schema.define(version: 20160810015639) do
     t.string   "ccy",               limit: 6,   default: "USD"
     t.integer  "price_cents"
     t.integer  "price_promo_cents"
+    t.string   "token"
   end
 
   add_index "menu_items", ["menu_id"], name: "index_menu_items_on_menu_id", using: :btree
