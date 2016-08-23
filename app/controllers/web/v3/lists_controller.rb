@@ -14,8 +14,7 @@ class Web::V3::ListsController < MetalCorsController
 
     def show
     	id_or_slug = params[:id]
-    	l_id = id_or_slug.gsub(/[0-9]/, '').length
-    	if l_id != 0
+    	if id_or_slug.gsub(/[0-9]/, '').length != 0
     		list = List.find_by token: id_or_slug
     	else
 	    	list = List.find id_or_slug
