@@ -4,7 +4,7 @@ class ListGraph < ActiveRecord::Base
 
 #   -------------
 
-	validates_presence_of :list_id, :item_id, :item_type
+	validates_presence_of :item_id, :item_type
 
 #   -------------
 
@@ -12,9 +12,8 @@ class ListGraph < ActiveRecord::Base
 
 #   -------------
 
-	belongs_to :item, foreign_key: :item_id, foreign_type: :item_type, polymorphic: true
 	belongs_to :list
-
+	belongs_to :item, foreign_key: :item_id, foreign_type: :item_type, polymorphic: true
 
 #   -------------
 

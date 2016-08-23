@@ -1,9 +1,18 @@
 class List < ActiveRecord::Base
 	include Formatters
 
-	attr_accessor :offset
+
+    auto_strip_attributes :name, :zinger, :detail
+    auto_strip_attributes :photo, :logo, unshorten_photo_url: true
+
+#   -------------
 
 	before_validation :set_token_from_name
+
+#   -------------
+
+	validates_presence_of :token, :name, :owner_type, :owner_id
+	validates_uniqueness_of :token, conditions: -> { where(active: true) }
 
 #   -------------
 
@@ -13,11 +22,10 @@ class List < ActiveRecord::Base
 
 #   -------------
 
-	validates_presence_of :token, :name, :owner_type, :owner_id
-	validates_uniqueness_of :token, allow_blank: false
-
-	has_many :list_graphs
+	has_many :list_graphs, dependent: :destroy
 	belongs_to :owner, polymorphic: true
+
+	attr_accessor :offset
 
 #   -------------
 
@@ -34,8 +42,12 @@ class List < ActiveRecord::Base
 		end
 	end
 
+	def self.templates
+		['lists', 'merchants', 'menu_items']
+	end
+
 	def self.index
-		limit(100)
+		where(active: true).limit(100)
 	end
 
 #   -------------
@@ -55,7 +67,7 @@ class List < ActiveRecord::Base
    		}
 	end
 
-	def as_json args=nil
+	def as_json(*args)
 		list_serialize.merge({item_count: item_count, offset: offset,
 	        prev: prev_offset, next: next_offset,
 	        	# ARRAY
@@ -64,6 +76,10 @@ class List < ActiveRecord::Base
 	end
 
 #   -------------
+
+	def token
+		super || "#{make_url_string(self.name)}"
+	end
 
 	def offset
 		return 0 if @offset.nil?
@@ -92,10 +108,7 @@ class List < ActiveRecord::Base
 
 #   -------------
 
-	def set_token_from_name
-		self.name ||= "List #{self.owner.name} #{rand(777)}"
-		self.token = "#{make_url_string(self.name)}" if self.token.nil?
-	end
+
 
 #   -------------
 
@@ -129,8 +142,14 @@ class List < ActiveRecord::Base
 
 private
 
+	def set_token_from_name
+		self.token = "#{make_slug(self.name)}" if self.token.nil?
+	end
+
 	def set_item_type
-		self.item_type = items.first.class.name.underscore
+		if self.item_type.nil? && items.length > 0
+			self.item_type = items.first.class.name.underscore
+		end
 	end
 
 	def set_total_items

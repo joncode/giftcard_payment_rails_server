@@ -119,7 +119,7 @@ class MenuItem < ActiveRecord::Base
 
     def set_token
         if self.token.nil?
-            self.update_column(:token, make_url_string("#{self.id}_#{self.name}"))
+            self.update_column(:token, make_slug("#{self.id}-#{self.name}"))
         end
     end
 

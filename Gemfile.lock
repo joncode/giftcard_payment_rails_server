@@ -53,6 +53,8 @@ GEM
     arel (6.0.3)
     authorize-net (1.5.2)
       nokogiri (~> 1.4)
+    auto_strip_attributes (2.1.0)
+      activerecord (>= 3.0)
     awesome_print (1.6.1)
     bcrypt (3.1.10)
     builder (3.2.2)
@@ -288,6 +290,7 @@ DEPENDENCIES
   activemerchant
   annotate (~> 2.4.1.beta)
   authorize-net
+  auto_strip_attributes (~> 2.1)
   awesome_print
   bcrypt (~> 3.1)
   capybara (= 1.1.2)
