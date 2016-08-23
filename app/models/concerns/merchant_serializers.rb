@@ -43,6 +43,10 @@ module MerchantSerializers
 		return prov_hash
 	end
 
+	def list_serialize
+		web_serialize
+	end
+
 	def web_serialize
 		prov_hash  = self.serializable_hash only: [ :zinger, :ccy, :r_sys, :name, :phone, :latitude, :longitude, :region_id, :region_name,  :city_id]
 		prov_hash["loc_id"]     = self.id
