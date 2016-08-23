@@ -21,7 +21,7 @@ class List < ActiveRecord::Base
 
 #   -------------
 
-	def as_json
+	def as_json args=nil
 		{
 	    		# LIST OWNER DATA
 	    	owner_type: self.owner_type, owner_id: self.owner_id,
@@ -30,12 +30,12 @@ class List < ActiveRecord::Base
 	    	href: href, active: self.active,
 	        	# LIST PRESENTATION DATA
 	    	template: self.template, name: self.name, zinger: self.zinger, detail: self.detail,
-	        photo: self.photo, logo: self.logo, item_types: self.item_types,
+	        photo: self.photo, logo: self.logo, item_type: self.item_type,
 	        	# PAGINATION
-	        total_items: total_items, item_count: item_count, offset: self.offset,
+	        total_items: total_items, item_count: item_count, offset: offset,
 	        prev: prev_offset, next: next_offset,
 	        	# ARRAY
-	        items: items
+	        items: items.serialize_objs(:web)
    		}
 	end
 
@@ -58,11 +58,11 @@ class List < ActiveRecord::Base
 	end
 
 	def prev_offset
-		return nil if self.offset == 0
+		return nil if offset == 0
 	end
 
 	def next_offset
-		return nil if total_items < (item_count + self.offset)
+		return nil if total_items >= (item_count + offset)
 		"https://api.itson.me/lists/#{self.token}?action=next&offset=#{self.offset}"
 	end
 
@@ -110,7 +110,7 @@ end
 #     	type: 'list', list_id: 235, id: 235, token: 'list-token',  href: 'https://api.itson.me/web/v3/lists/list-token', active: true,
 #         	# LIST PRESENTATION DATA
 #     	template: 'merchants', name: 'List Name', zinger: 'longer text about this list', detail: 'paragraph about list',
-#         photo: /photo_url/, logo: /logo_url/, item_types: 'merchants',
+#         photo: /photo_url/, logo: /logo_url/, item_type: 'merchants',
 #         	# PAGINATION
 #         total_items: 20, item_count: 10, offset: 0, prev: nil, next: 'https://api.itson.me/lists/list-token?action=next&offset=10',
 #         	# ARRAY
