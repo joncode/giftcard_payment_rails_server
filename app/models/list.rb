@@ -7,6 +7,12 @@ class List < ActiveRecord::Base
 
 #   -------------
 
+	before_save :set_item_type
+	before_save :set_total_items
+	before_save :set_template
+
+#   -------------
+
 	validates_presence_of :token, :name, :owner_type, :owner_id
 	validates_uniqueness_of :token, allow_blank: false
 
@@ -26,6 +32,10 @@ class List < ActiveRecord::Base
 		else
 			find_by owner_id: owner.id, owner_type: owner.class.to_s
 		end
+	end
+
+	def self.index
+		limit(100)
 	end
 
 #   -------------
@@ -74,7 +84,7 @@ class List < ActiveRecord::Base
 	end
 
 	def item_count
-		@item_count ||= items.length
+		@total_items ||= items.length
 	end
 
 	def total_items
@@ -92,13 +102,9 @@ class List < ActiveRecord::Base
 
 #   -------------
 
-	def self.index
-		limit(100)
-	end
-
 	def set_token_from_name
-		self.name ||= "List #{self.owner.name} #{rand(983741)}"
-		self.token = "#{make_url_string(self.name)}"
+		self.name ||= "List #{self.owner.name} #{rand(777)}"
+		self.token = "#{make_url_string(self.name)}" if self.token.nil?
 	end
 
 #   -------------
@@ -121,6 +127,32 @@ class List < ActiveRecord::Base
 	end
 
 #   -------------
+
+	def get_photo
+		self.photo
+	end
+
+
+private
+
+	def set_item_type
+		self.item_type = items.first.class.name.underscore
+	end
+
+	def set_total_items
+		self.total_items = total_items
+	end
+
+	def set_template
+		return true unless self.template.nil?
+		if self.item_type == 'list'
+			self.template = 'lists'
+		elsif self.item_type == 'menu_item'
+			self.template = 'menu_items'
+		else
+			self.template = 'merchants'
+		end
+	end
 
 end
 

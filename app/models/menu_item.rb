@@ -34,6 +34,68 @@ class MenuItem < ActiveRecord::Base
         return item_hash
     end
 
+    def section_name
+    	if sec = section
+    		sec.name
+    	end
+    end
+
+    def list_serialize
+		{
+	    		# LIST OWNER DATA
+	    	owner_type: self.owner_type, owner_id: self.owner_id,
+	     		# LIST META DATA
+	    	type: 'menu_item', id: self.id,
+	    	href: nil, active: self.active,
+	        	# LIST PRESENTATION DATA
+	    	name: self.name, zinger: self.section_name, detail: self.detail,
+	        photo: self.photo, ccy: self.ccy, price: self.price
+   		}
+    end
+
+    def itsonme_url
+        owner = self.owner
+        if owner.kind_of?(Merchant)
+            region = Region.find owner.city_id
+        else
+            m = Merchant.find_by(menu_id: self.menu_id)
+            region = Region.find m.city_id
+        end
+        city_token = region.token
+        merchant_token = owner.make_url_string(owner.name)
+        "#{PUBLIC_IOM}share/#{city_token}/#{merchant_token}/#{self.id}"
+    end
+
+#   -------------
+
+    def owner_type
+    	if o = owner
+    		o.class.name
+    	end
+    end
+
+    def owner_id
+    	if o = owner
+    		o.id
+    	end
+    end
+
+    def owner
+        if mi = self.menu
+            mi.owner
+        else
+            nil
+        end
+    end
+
+    def owner_name
+        if o = owner
+            o.name
+        else
+            ''
+        end
+    end
+
 end
 # == Schema Information
 #
