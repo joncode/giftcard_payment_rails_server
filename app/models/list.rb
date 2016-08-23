@@ -30,6 +30,21 @@ class List < ActiveRecord::Base
 
 #   -------------
 
+	def list_serialize
+		{
+	    		# LIST OWNER DATA
+	    	owner_type: self.owner_type, owner_id: self.owner_id,
+	     		# LIST META DATA
+	    	type: type, list_id: list_id, id: self.id, token: self.token,
+	    	href: href, active: self.active,
+	        	# LIST PRESENTATION DATA
+	    	template: self.template, name: self.name, zinger: self.zinger, detail: self.detail,
+	        photo: self.photo, logo: self.logo, item_type: self.item_type,
+	        	# PAGINATION
+	        total_items: total_items
+   		}
+	end
+
 	def as_json args=nil
 		{
 	    		# LIST OWNER DATA
