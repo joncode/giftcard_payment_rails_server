@@ -1,4 +1,4 @@
-class Web::V3::MerchantsController < MetalCorsController
+class Web::V3::ListsController < MetalCorsController
 
     before_action :authentication_no_token
 
