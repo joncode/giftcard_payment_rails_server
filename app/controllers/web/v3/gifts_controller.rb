@@ -23,6 +23,19 @@ class Web::V3::GiftsController < MetalCorsController
         respond
     end
 
+    def promo
+        # promo campaign keyword
+        str_code = promo_params[:code]
+        resp = GiftPromoCode.perform @current_user, str_code
+
+        if resp[:status] > 0
+            success resp[:data]
+        else
+            fail_web({ err: "INVALID_INPUT", msg: resp[:data]})
+        end
+        respond
+    end
+
     def show
             # remove the permalink add-number from the id
         id = params[:id].to_i - NUMBER_ID
@@ -261,6 +274,10 @@ private
             gift_hsh["receiver_oauth"]["photo"]   = gps[:rec_photo]
             gift_hsh['twitter'] = gps[:rec_net_id]
         end
+    end
+
+    def promo_params
+        params.require(:data).permit(:code)
     end
 
     def regift_params

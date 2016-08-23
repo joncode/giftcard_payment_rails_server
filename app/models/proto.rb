@@ -4,6 +4,10 @@ class Proto < ActiveRecord::Base
 
 #   -------------
 
+    auto_strip_attributes :message, :detail, :promo_code, :title, :desc
+
+#   -------------
+
 	validates_presence_of :cat, :giver_id, :giver_type, :giver_name, :merchant_id, :provider_name
 
 #   -------------
@@ -24,6 +28,8 @@ class Proto < ActiveRecord::Base
 	belongs_to :provider
   	belongs_to :merchant
 	belongs_to :giver,      polymorphic: :true
+
+#   -------------
 
 	def gifting?
 		return false unless self.active

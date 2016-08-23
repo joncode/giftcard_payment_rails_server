@@ -155,6 +155,9 @@ Drinkboard::Application.routes.draw do
 					patch :redeem
 					post :regift
 				end
+				collection do
+					post :promo
+				end
 			end
 
 			resources :lists, only: [ :index, :show ]

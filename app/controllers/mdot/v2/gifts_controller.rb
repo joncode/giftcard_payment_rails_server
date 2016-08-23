@@ -219,61 +219,13 @@ class Mdot::V2::GiftsController < JsonController
     def promo
         # promo campaign keyword
         str_code = promo_params[:code]
-        protos = Proto.where(active: true, promo_code: str_code)
-        fail_msg = "couldn't find item for keyword #{str_code}"
-        if protos.empty?
-            fail fail_msg
-        else
-            gifts = []
-            protos.each do |proto|
-                if proto.gifting?
-                    pj = ProtoJoin.create_with_proto_and_rec(proto, @current_user)
-                    if pj.persisted?
-                        gift = GiftProtoJoin.create({ "proto_join" => pj, "proto" => proto})
-                        gifts << gift
-                    else
-                        if (fail_msg != "we're sorry but this promo has reached capacity and is no longer live")
-                            if pj.errors.messages.values.join(' ').match(/has already been take/)
-                                fail_msg = "You have already received this promotion for keyword #{str_code}"
-                            else
-                                fail_msg = pj.errors.full_messages.gsub('Proto', 'Promo Gift')
-                            end
-                        end
-                    end
-                else
-                    fail_msg = "we're sorry but this promo has reached capacity and is no longer live"
-                end
-            end
-            if gifts.empty?
-                fail fail_msg
-            else
-                good = 0
-                scheduled = 0
-                gifts.each do |g|
-                    if g.persisted?
-                        good += 1
-                        scheduled += 1 if ( g.status == 'schedule' )
-                    else
-                        fail_gift = g
-                    end
-                end
-                if good > 0
-                    if scheduled == 0
-                        success_msg = "#{good} #{'gift'.pluralize(good)} in your gift center now.\nKeyword #{str_code}"
-                    elsif scheduled == good
-                        success_msg = "#{good} #{'gift'.pluralize(good)} scheduled for later delivery.\nKeyword #{str_code}"
-                    else
-                        delivery_now = good - scheduled
-                        success_msg = "#{delivery_now} #{'gift'.pluralize(delivery_now)} in your gift center now.\n"
-                        success_msg += "#{scheduled} #{'gift'.pluralize(scheduled)} scheduled for later delivery.\nKeyword #{str_code}"
-                    end
-                    success(success_msg)
-                else
-                    fail fail_gift
-                end
-            end
-        end
+        resp = GiftPromoCode.perform @current_user, str_code
 
+        if resp[:status] > 0
+            success resp[:data]
+        else
+            fail resp[:data]
+        end
         respond
     end
 
