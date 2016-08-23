@@ -44,7 +44,11 @@ module MerchantSerializers
 	end
 
 	def list_serialize
-		web_serialize
+		hsh = web_serialize
+		hsh["href"] = self.itsonme_url
+		hsh["api_url"] = self.api_url
+		hsh['type'] = 'merchant'
+		hsh
 	end
 
 	def web_serialize
@@ -59,8 +63,7 @@ module MerchantSerializers
 		prov_hash["live"]      = self.live
 		prov_hash["detail"]	= self.description
 		prov_hash["status"]    = self.mode
-		prov_hash["href"]    = self.itsonme_url
-		prov_hash["api_url"]    = self.api_url
+
 		add_multi_loc(prov_hash)
 		# multi_redemption_web_keys prov_hash
 		prov_hash
