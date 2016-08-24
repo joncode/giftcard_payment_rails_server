@@ -4,7 +4,8 @@ class Proto < ActiveRecord::Base
 
 #   -------------
 
-    auto_strip_attributes :message, :detail, :promo_code, :title, :desc
+    auto_strip_attributes :message, :detail, :title, :desc
+    auto_strip_attributes :promo_code, downcase: true, letter_numbers: true
 
 #   -------------
 
