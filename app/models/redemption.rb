@@ -10,7 +10,7 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-	enum type_of: [ :pos, :v2, :v1, :paper ]
+	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
 
 	def self.init_with_gift(gift, loc_id=nil, r_sys=nil)
         r = Redemption.new
@@ -33,6 +33,7 @@ class Redemption < ActiveRecord::Base
 	end
 
 	def self.convert_r_sys_to_type_of(r_sys)
+		return r_sys if [ :pos, :v2, :v1, :paper, :zapper ].include?(r_sys)
 		case r_sys
 		when 1
 			:v1
@@ -42,6 +43,8 @@ class Redemption < ActiveRecord::Base
 			:pos
 		when 4
 			:paper
+		when 5
+			:zapper
 		end
 	end
 

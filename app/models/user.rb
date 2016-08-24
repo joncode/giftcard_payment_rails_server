@@ -6,15 +6,19 @@ class User < ActiveRecord::Base
 	include ShortenPhotoUrlHelper
 	include UpdateUserMeta
 
+#   -------------
+
+    auto_strip_attributes :first_name, :last_name, :email, :zip, :city, :address
+
+#   -------------
+
 	has_secure_password
 
 	scope :meta_search, ->(str) {
 		where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
 	}
 
-
 #	-------------
-
 
     validates_with UserSocialValidator
     validates_with UserFirstNameValidator
@@ -27,14 +31,12 @@ class User < ActiveRecord::Base
 	validates :facebook_id, uniqueness: true, 			if: :facebook_id_exists?
 	validates :twitter,     uniqueness: true, 		    if: :twitter_exists?
 
-
 #	-------------
-
 
 	before_create :create_remember_token      # creates unique remember token for user
 	before_save { |user| user.email      = email.downcase unless is_perm_deactive? }
 	before_save { |user| user.first_name = first_name.titleize if first_name }
-	before_save { |user| user.last_name  = NameCase(last_name)   if last_name  }
+	before_save { |user| user.last_name  = NameCase(last_name) if last_name  }
 	before_save   :extract_phone_digits       # remove all non-digits from phone
 
 	after_save    :persist_social_data, :unless => :is_perm_deactive?

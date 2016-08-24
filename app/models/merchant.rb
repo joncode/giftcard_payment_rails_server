@@ -7,9 +7,6 @@ class Merchant < ActiveRecord::Base
 
     # default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
-    def r_sys
-        5
-    end
 
 #   -------------
 
