@@ -156,6 +156,7 @@ class Web::V3::GiftsController < MetalCorsController
                 server_inits = redeem_params["server"]
                 amount = redeem_params["amount"]
                 ticket_num = redeem_params["ticket_num"]
+                qrcode = redeem_params["qrcode"]
                 loc_id = redeem_params["loc_id"]
                 merchant = Merchant.find(loc_id) if loc_id.present?
             end
@@ -178,6 +179,9 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
                 status = :bad_request
                 fail_web({ err: "NOT_REDEEMABLE",
                     msg: "Merchant is not active currently.  Please contact support@itson.me"})
+            elsif merchant.r_sys == 5
+                status = :ok
+                success({msg: "Received QR Code of #{qrcode}"})
             elsif merchant.r_sys == 3
                 if ticket_num
 
@@ -290,7 +294,7 @@ private
 
     def redeem_params
         if params['data']
-            params.require(:data).permit(:server, :loc_id, :ticket_num, :amount)
+            params.require(:data).permit(:server, :loc_id, :ticket_num, :amount, :qrcode)
         else
             {}
         end
