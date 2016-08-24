@@ -27,7 +27,6 @@ class GiftPromoCode
                     end
                 else
                     fail_msg = "we're sorry but this promo has reached capacity and is no longer live"
-                    return { status: 0, data: fail_msg }
                 end
             end
             if gifts.empty?
