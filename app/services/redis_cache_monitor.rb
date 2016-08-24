@@ -125,7 +125,7 @@ class RedisCacheMonitor
 			all_keys = redis.keys
 			all_keys.select do |key|
 				if key.match /user/
-					true
+					false
 				elsif key.match /merchant/
 					true
 				elsif key.match /region/
