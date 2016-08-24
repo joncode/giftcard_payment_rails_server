@@ -13,6 +13,7 @@ class Gift < ActiveRecord::Base
     include ShoppingCartHelper
 
     default_scope -> { where(active: true) } # indexed
+
     scope :meta_search, ->(str) {
       where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
     }

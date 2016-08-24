@@ -1,22 +1,16 @@
 class GiftTemplateMainMailer
 	include Emailer
 
-	attr_reader :gift, :bcc
+	attr_reader :gift, :bcc, :email
 
 	def initialize(gift_id)
 		@gift = Gift.find(gift_id)
+        @email = destination_email
 		@bcc  = nil
 	end
 
     def notify_receiver
-        if @gift.receiver_email
-            email     = @gift.receiver_email
-        elsif @gift.receiver
-            email     = @gift.receiver.email
-        else
-            puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
-            return nil
-        end
+        return [{"email"=>nil, "status"=>"unsent", "reject_reason"=>"NO ReCEIVER EMAIL"}] if @email.nil?
         subject = "#{@gift.giver_name} sent you a Gift!"
 
         if Rails.env.staging?
@@ -30,11 +24,22 @@ class GiftTemplateMainMailer
             template_name = 'gift-pteg'
         end
         puts template_name
-        message = make_dynamic_variables(subject, email, template_name)
+        message = make_dynamic_variables(subject, @email, template_name)
         request_mandrill_with_template(template_name, message, [@gift.id, "Gift"])
     end
 
 ############ PRIVATE
+
+    def destination_email gift=@gift
+        if gift.receiver_email
+            gift.receiver_email
+        elsif gift.receiver
+            gift.receiver.email
+        else
+            puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
+            return nil
+        end
+    end
 
     def make_dynamic_variables(subject, email, template_name)
         merchant = @gift.merchant
