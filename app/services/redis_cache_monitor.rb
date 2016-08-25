@@ -83,6 +83,7 @@ class RedisCacheMonitor
 				end
 			elsif obj1.kind_of?(Client)
 				client = obj1
+				return nil if !client.active || (client.clicks == 0)
 				if ary[2].match /region/
 					region = Region.find ary[3]
 	            	arg_scope = proc { region.merchants }

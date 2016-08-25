@@ -30,6 +30,7 @@ class RedisCacheControl
 
 		def rebuild_merchants
 			Client.all.each do |client|
+				next if !client.active || (client.clicks == 0)
 	            arg_scope = proc { Merchant.where(active: true).where(paused: false).order("name ASC") }
 	            merchants = client.contents(:merchants, &arg_scope)
 	            merchants_serialized = merchants.serialize_objs(:web)
@@ -40,6 +41,7 @@ class RedisCacheControl
 
 		def rebuild_regions
 			Client.all.each do |client|
+				next if !client.active || (client.clicks == 0)
 	            arg_scope = proc { Region.index_with_inactives }
 		        cities_serialized = client.contents(:regions, &arg_scope).map(&:city_with_active_json)
 	            RedisWrap.set_cities(client.id, cities_serialized) unless (cities_serialized == [])
@@ -50,6 +52,7 @@ class RedisCacheControl
 			Region.index.each do |region|
             	arg_scope = proc { region.merchants }
             	Client.all.each do |client|
+            		next if !client.active || (client.clicks == 0)
 	            	merchants = client.contents(:merchants, &arg_scope)
 	            	if !merchants.nil? && merchants.count > 0
 	                	if region.city?
