@@ -5,10 +5,10 @@ AutoStripAttributes::Config.setup do
 		unshorten_photo_url value
 	end
 	set_filter downcase: false do |value|
-		value.downcase
+		value.respond_to?(:downcase) ? value.downcase : value
 	end
 	set_filter letter_numbers: false do |value|
-		value.gsub(/[^a-zA-Z0-9]/, '')
+		value.respond_to?(:gsub) ? value.gsub(/[^a-zA-Z0-9]/, '') : value
 	end
 	filters_enabled[:squish] = true
 end
