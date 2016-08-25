@@ -58,6 +58,7 @@ class Gift < ActiveRecord::Base
 
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :sms_contact,   autosave: true
+    has_one     :proto_join
     has_many    :gift_items,    dependent: :destroy
     has_many    :dittos,        as: :notable
     has_many    :redemptions

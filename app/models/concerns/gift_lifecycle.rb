@@ -169,8 +169,15 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
     end
 
     def expire_gift
-        update(status: "expired", redeemed_at: Time.now.utc)
-        fire_after_save_queue(self.client_id)
+        if update(status: "expired", redeemed_at: Time.now.utc)
+            if self.payable_type == 'Proto'
+                pj = self.proto_join
+                if pj && self.payable.camp
+                    pj.update(gift_id: nil)
+                end
+            end
+            fire_after_save_queue(self.client_id)
+        end
     end
 
 
