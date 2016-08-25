@@ -1,20 +1,16 @@
 class Affiliate < ActiveRecord::Base
     include CompanyDuckType
 
+#   -------------
+
+	has_many :affiliate_gifts
 	has_many :affiliations
+	has_many :gifts, through: :affiliate_gifts
+	has_many :landing_pages
 	has_many :merchants, through: :affiliations, source: :target, source_type: 'Merchant'
-	has_many :users, 	 through: :affiliations, source: :target, source_type: 'User'
 	has_many :payments,     as: :partner
 	has_many :registers,    as: :partner
-	has_many :landing_pages
-	has_many :affiliate_gifts
-	has_many :gifts, through: :affiliate_gifts
-    has_many :invites,  as: :company
-    has_many :mt_users, through: :invites
-
-    has_many :clients, as: :partner
-
-    belongs_to :bank
+	has_many :users, 	 through: :affiliations, source: :target, source_type: 'User'
 
 #   -------------
 

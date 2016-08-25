@@ -2,6 +2,10 @@ module CompanyDuckType
     extend ActiveSupport::Concern
 
     included do
+        has_many :clients,     as: :partner
+        has_many :invites,  as: :company
+        has_many :mt_users, through: :invites
+
         belongs_to :bank
         belongs_to :menu
         belongs_to :promo_menu
