@@ -25,11 +25,12 @@ class OpsZapper
 #   -------------
 
 	attr_accessor :value, :ccy, :customer, :qr_code, :gift_card_id, :transaction_ref, :code, :applied_value, :ticket_id,
-		 :response, :extra_value, :extra_gift, :check_value
+		 :extra_value, :extra_gift, :check_value, :redemption_id, :request
 
 	def initialize args
+		@request = args
 		# args = { "qr_code" => qr_code, "gift_card_id" => gift.obscured_id,
-		#  "value" => new_value, "ccy" => gift.ccy, "gift" => gift }
+		#  "value" => redemption.amount, "ccy" => gift.ccy, "redemption_id" => redemption.id }
 		@code = 100
 		@qr_code = args['qr_code']
 		@gift_card_id = args['gift_card_id']
@@ -40,24 +41,30 @@ class OpsZapper
 		@check_value 	 = 0
 		@ccy = args['ccy']
 		@customer = args['customer']
+		@redemption_id = args['redemption_id']
 		@transaction_ref = "Redemption-#{args['redemption_id']}"
 		@ticket_id = nil
-		@response = response_from_code
+		@merchant_site_id = 12
 	end
 
 	def success?
 		(200..299).cover?(@code)
 	end
 
+	def response
+		response_from_code
+	end
+
 #   -------------
 
-	def self.make_request_hsh gift, qr_code, value
+	def self.make_request_hsh gift, qr_code, value, redemption_id
 		{
 			"qr_code" => qr_code,
             "gift_card_id" => gift.obscured_id,
             "value" => value,
             "ccy" => gift.ccy,
-            'customer' => customer(gift.receiver)
+            'customer' => customer(gift.receiver),
+            'redemption_id' => redemption_id
         }
 	end
 
@@ -77,14 +84,14 @@ class OpsZapper
 		route = "payments/CreateCustomerAndInitiatePayment"
 		payload = payment
 		post_zapper route, payload
-		return @response = response_from_code
+		return response
 	end
 
 	def check_result
-		merchantsiteid = "Merchant Site ID"
-		posReference = "ItsOnMe unique reference"
-		route = "payments/GetMultiplePaymentStatusByPosReferences?merchantsiteId=#{merchantsiteid}&posreference=#{posReference}"
+		posReference = @transaction_ref
+		route = "payments/GetMultiplePaymentStatusByPosReferences?merchantsiteId=#{@merchant_site_id}&posreference=#{posReference}"
 		get_zapper route
+		return response
 	end
 
 #   -------------
@@ -120,73 +127,60 @@ class OpsZapper
 
 	def post_zapper route, payload
 		puts "\n ZAPPER payload = #{payload}\n"
-		resp = {
-				# Action indicator None = 1, RedirectToZapper = 2
-			"ActionIndicator" => 2,
-				# MerchantSite Identifier
-			"MerchantSiteId" => 12,
-			"ErrorDescription" => nil,
-			"OriginalAmount" => 2600,
-			"VoucherAmount" => 3700,
-			"RequiredAmount" => 200,
-			"CurrencyISOCode" => "USD",
-				#  unique Zapper Transaction Identifier
-			"ZapperId" => "HLVZRWTUBP7L",
-				#  ID to be used for refunds
-			"PaymentId" => 785123,
-				# IOM Unique transaction reference number
-			"TransactionReference" => "6ae8b2cf-9efd-4881-8387-746487aa3518"
-		}
-		apply_ticket_value(resp)
-		# begin
-		# 	response = RestClient.post(
-		# 	    "#{ZAPPER_API_URL}/#{route}",
-		# 	    payload,
-		# 	    { :content_type => :json, :'Bearer' => ZAPPER_API_KEY }
-		# 	)
-  #           puts "\n Here is ZAPPER response #{response.inspect}\n\n"
-  #           resp = JSON.parse response
-  #           apply_ticket_value(resp)
-  #           # return resp
-		# rescue => e
-  #           puts "\n 500 Internal ZAPPER Error code = #{e.inspect}\n\n"
-  #           if e.nil?
-  #           	@code = 400
-  #           else
-  #           	if e.http_code == 401
-  #           		@code = 400
-  #           	else
-  #           		@code = e.http_code
-  #           	end
-  #           end
-		# end
-	end
-
-    def get_zapper route
-        begin
-            response = RestClient.get(
-                "#{ZAPPER_API_URL}/#{route}",
-                { :content_type => :json, :'Api-Key' => ZAPPER_API_KEY }
-            )
+		return example_redeem
+		begin
+			response = RestClient.post(
+			    "#{ZAPPER_API_URL}/#{route}",
+			    payload,
+			    { :content_type => :json, :'Authorization' => ZAPPER_API_KEY }
+			)
             puts "\n Here is ZAPPER response #{response.inspect}\n\n"
             resp = JSON.parse response
             apply_ticket_value(resp)
-            return resp
+		rescue => e
+            puts "\n 500 Internal ZAPPER Error code = #{e.inspect}\n\n"
+            if e.nil?
+            	@code = 400
+            else
+            	if e.http_code == 401
+            		@code = 400
+            	else
+            		@code = e.http_code
+            	end
+            end
+		end
+	end
+
+    def get_zapper route
+		puts "\n ZAPPER payload = #{payload}\n"
+		return example_check
+        begin
+            response = RestClient.get(
+                "#{ZAPPER_API_URL}/#{route}",
+                { :content_type => :json, :'Authorization' => ZAPPER_API_KEY }
+            )
+            puts "\n Here is ZAPPER response #{response.inspect}\n\n"
+            resp = JSON.parse response
+            apply_ticket_success(resp)
         rescue => e
             puts "\n 500 Internal ZAPPER Error code = #{e.inspect}\n\n"
             if e.nil?
             	@code = 400
-                response = { "response_code" => "ERROR", "response_text" => 'Contact Support', "code" => 400, "data" => [] }
-                return { status: 0, data: RestError.new(r: response), res: response }
             else
-            	@code = e.http_code
-                return { status: 0, data: RestError.new(e: e), error: e }
+            	if e.http_code == 401
+            		@code = 400
+            	else
+            		@code = e.http_code
+            	end
             end
         end
     end
 
 #   -------------
 
+	def apply_ticket_success(resp)
+		resp
+	end
 
 	def apply_ticket_value resp
 		@ticket_id = resp['ZapperId']
@@ -203,7 +197,10 @@ class OpsZapper
 			@code  = 200   # ok , full aceeptance
 			@applied_value	= @value
 		end
+		resp
 	end
+
+#   -------------
 
 	def response_from_code
 		case @code
@@ -249,15 +246,13 @@ class OpsZapper
 			r_text = "Server Error.  Please try again later"
 		end
 		if success?
-			success_value = true
 			hsh = success_hsh
 			hsh[:msg] = r_text
 			response_data = hsh
 		else
-			success_value = false
 			response_data = r_text
 		end
-		{ "response_code" => r_code, "response_text" => response_data, 'success' => success_value }
+		{ "response_code" => r_code, "response_text" => response_data, 'success' => success? }
 	end
 
 	def success_hsh
@@ -267,6 +262,56 @@ class OpsZapper
             remaining_check_balance: @extra_value,
             remaining_gift_balance: @extra_gift
 		}
+	end
+
+
+#   -------------
+
+
+	def example_redeem
+		resp = {
+				# Action indicator None = 1, RedirectToZapper = 2
+			"ActionIndicator" => 2,
+				# MerchantSite Identifier
+			"MerchantSiteId" => 12,
+			"ErrorDescription" => nil,
+			"OriginalAmount" => 2600,
+			"VoucherAmount" => 3700,
+			"RequiredAmount" => 200,
+			"CurrencyISOCode" => "USD",
+				#  unique Zapper Transaction Identifier
+			"ZapperId" => "HLVZRWTUBP7L",
+				#  ID to be used for refunds
+			"PaymentId" => 785123,
+				# IOM Unique transaction reference number
+			"TransactionReference" => "6ae8b2cf-9efd-4881-8387-746487aa3518"
+		}
+		apply_ticket_value(resp)
+	end
+
+	def example_check
+		{
+			"errorDescription" => nil,
+			"errorId" => 0,
+			"statusId" => 1,
+			"status" => "Success",
+			"message" => nil,
+			"data" => [
+				{"PosReference" => "ZAPPER01",
+					"PaymentItems" =>
+					[{"PaymentStatusId" => 1,
+						"PaymentStatus" => "Success",
+						"InvoiceAmount" => 12.5700,
+						"ZapperDiscountAmount" => 0.0000,
+						"TipAmount" => 1.5700,
+						"AmountPaid" => 14.1400,
+						"ErrorId" => nil,
+						"ErrorDescription" => ""
+					}]
+				}],
+			"authenticationToken":"00000000-0000-0000-0000-000000000000"
+		}
+		apply_ticket_success(resp)
 	end
 
 end

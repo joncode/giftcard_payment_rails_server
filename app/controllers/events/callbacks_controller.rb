@@ -1,6 +1,11 @@
 class Events::CallbacksController < MetalCorsController
-
 	include MtSmsRedeem
+
+	after_filter :set_content_type, only: :receive_sms
+
+	def set_content_type
+		self.content_type = "text/plain; charset=utf-8"
+	end
 
 	def receive_sms
 		msg = params['Body']
@@ -16,7 +21,14 @@ class Events::CallbacksController < MetalCorsController
 
 	def zappernotify
 		note = zapper_params
-		success 'ok'
+		note = note.stringify_keys
+		r_id = note['Reference'].to_i
+		r = Redemption.find r_id
+		if r.update(status: 'redeemed')
+			success 'ok'
+		else
+			# what to do here - zapper failed
+		end
 		respond
 	end
 

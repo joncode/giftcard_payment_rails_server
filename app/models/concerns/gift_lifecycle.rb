@@ -54,7 +54,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
 
 #   -------------
 
-    def redeem_gift(server_code=nil, loc_id=nil, r_sys_type_of=1)
+    def redeem_gift(server_code=nil, loc_id=nil, r_sys_type_of=1, pos_obj=nil)
         # if loc_id - do multi loc redemption
         if self.status == 'notified'
             self.status      = 'redeemed'
@@ -63,6 +63,14 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             self.server      = server_code if server_code
             self.order_num   = make_order_num(self.id)
             r = Redemption.init_with_gift(self, loc_id, r_sys_type_of)
+            begin
+                if pos_obj
+                    r.req_json = pos_obj.request.as_json if r.req_json.nil?
+                    r.resp_json = pos_obj.response.as_json
+                end
+            rescue => e
+                OpsTwilio.text_devs msg: "Request/Response JSON not working"
+            end
             self.redemptions << r
             if save
                 puts "\n gift #{self.id} is being redeemed with redemption #{r.id}\n"
@@ -112,6 +120,14 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         r.gift_next_value = self.balance
         r.amount          = pos_obj.applied_value
         r.ticket_id       = pos_obj.ticket_id
+        begin
+            if pos_obj
+                r.req_json = pos_obj.request.as_json if r.req_json.nil?
+                r.resp_json = pos_obj.response.as_json
+            end
+        rescue => e
+            OpsTwilio.text_devs msg: "Request/Response JSON not working"
+        end
         self.redemptions << r
         if save
             puts "\n gift #{self.id} is partial redeemed with redemption #{r.id} with value #{pos_obj.applied_value}\n"
@@ -142,7 +158,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             if omnivore.code == 201
                 partial_redeem(omnivore, loc_id)
             elsif omnivore.code == 200 || omnivore.code == 206
-                redeem_gift(nil, loc_id, :pos)
+                redeem_gift(nil, loc_id, :pos, pos_obj)
             end
             resp['success'] = true
         else
@@ -172,7 +188,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 if zapper_obj.code == 201
                     partial_redeem(zapper_obj, loc_id)
                 elsif zapper_obj.code == 200 || zapper_obj.code == 206
-                    redeem_gift(nil, loc_id, :zapper)
+                    redeem_gift(nil, loc_id, :zapper, zapper_obj)
                 end
                 # r.gift_next_value = <value_of_gift_minus_redemption_amount>
                 # r.ticket_id = <ticket_id from zapper to identify ticket>

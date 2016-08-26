@@ -7,9 +7,10 @@ class Omnivore
 
 	attr_accessor :response, :code, :pos_merchant_id, :applied_value, :ticket_num,
 	 :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id,
-	 :direct_redeem, :ccy
+	 :direct_redeem, :ccy, :request
 
 	def initialize args
+		@request = args
 		puts "Omnivore args = #{args.inspect}"
 
 		if args['brand_card_ids_ary'].blank?
