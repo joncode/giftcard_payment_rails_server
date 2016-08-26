@@ -14,6 +14,14 @@ class Events::CallbacksController < MetalCorsController
 		respond
 	end
 
+	def zappernotify
+		note = zapper_params
+		success 'ok'
+		respond
+	end
+
+# -----------   Twilio Service Methods
+
 	def dispatch_message from, msg, req
 		# if code = Message.merchant_redemption(msg)
 		# 	redemption_msg from, code
@@ -59,7 +67,11 @@ class Events::CallbacksController < MetalCorsController
 		OpsTwilio.text to: to_number, msg: msg
 	end
 
+private
 
+	def zapper_params
+		params.require(:data).permit("Reference", "PaymentStatusId", "PSPData", "Amount", "ZapperId", "UpdatedDate")
+	end
 end
 
 

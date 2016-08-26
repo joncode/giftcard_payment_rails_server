@@ -3,10 +3,11 @@ require 'rest_client'
 class Omnivore
 	extend OmnivoreUtils
 	include ActionView::Helpers::NumberHelper
+	include MoneyHelper
 
 	attr_accessor :response, :code, :pos_merchant_id, :applied_value, :ticket_num,
 	 :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id,
-	 :direct_redeem
+	 :direct_redeem, :ccy
 
 	def initialize args
 		puts "Omnivore args = #{args.inspect}"
@@ -35,6 +36,7 @@ class Omnivore
 		@next 			 = nil
 		@brand_card_applied = false
 		@direct_redeem = args["direct_redeem"] || false
+		@ccy = 'USD'
 	end
 
 	def direct?
@@ -163,13 +165,13 @@ class Omnivore
 			r_text = "Gift has not been redeemed yet."
 		when 200
 			r_code = "PAID"
-			r_text = "#{number_to_currency(@value/100.0)} was applied to your check. Transaction completed."
+			r_text = "#{display_money(ccy: @ccy, cents: @value)} was applied to your check. Transaction completed."
 		when 201
 			r_code = "OVER_PAID"
-			r_text = "Your gift exceeded the check value. Your gift has a balance of #{number_to_currency(@extra_gift/100.0)}."
+			r_text = "Your gift exceeded the check value. Your gift has a balance of #{display_money(ccy: @ccy, cents: @extra_gift)}."
 		when 206
 			r_code = "APPLIED"
-			r_text = "#{number_to_currency(@value/100.0)} was applied to your check. A total of #{number_to_currency(@extra_value/100.0)} remains to be paid."
+			r_text = "#{display_money(ccy: @ccy, cents: @value)} was applied to your check. A total of #{display_money(ccy: @ccy, cents: @extra_value)} remains to be paid."
 		when 304
 			r_code = "ERROR"
 			r_text = "Check Number #{@ticket_num} has already been paid."
@@ -220,7 +222,7 @@ class Omnivore
 		  "amount" => @applied_value,
 		  "tip" => 0,
 		  "tender_type" => @tender_type_id,
-  		  "payment_source" => "Gift #{@gift_card_id}"
+  		  "payment_source" => "Gift-#{@gift_card_id}"
 		}.to_json
 
 		puts "\nOmnivore:post_redeem payload:\n"

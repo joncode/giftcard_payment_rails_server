@@ -52,12 +52,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         return self.status == 'open' || self.status == 'notified'
     end
 
-    def unredeem
-        if self.status == 'redeemed'
-            Resque.enqueue(GiftUnredeemEvent, self.id)
-            update(status: 'notified' , redeemed_at: nil, order_num: nil)
-        end
-    end
+#   -------------
 
     def redeem_gift(server_code=nil, loc_id=nil, r_sys_type_of=1)
         # if loc_id - do multi loc redemption
@@ -156,6 +151,54 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         resp
     end
 
+    def zapper_redeem qr_code, merchant, amount=nil
+
+        # generate a redemption and transaction code (redemptionID)
+        # DO we need advanced code to determine what the possible amounts are ?
+
+        amount = amount || self.balance
+
+        zapper_request = OpsZapper.make_request_hsh(self, qr_code, amount)
+
+        r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'incomplete',
+                gift_prev_value: gift.value_cents, gift_next_value: gift.value_cents,
+                req_json: zapper_request, merchant_id: merchant.id )
+
+        if r.save
+            zapper_request['redemption_id'] = r.id
+            zapper_obj = OpsZapper.new(zapper_request)
+            resp = zapper_obj.redeem_gift
+            if zapper_obj.success?
+                if zapper_obj.code == 201
+                    partial_redeem(zapper_obj, loc_id)
+                elsif zapper_obj.code == 200 || zapper_obj.code == 206
+                    redeem_gift(nil, loc_id, :zapper)
+                end
+                # r.gift_next_value = <value_of_gift_minus_redemption_amount>
+                # r.ticket_id = <ticket_id from zapper to identify ticket>
+                # r.status = 'redeemed'
+                # self.balance = <new gift balance>
+                # self.status = 'redeemed' if gift is finished
+                resp['success'] = true
+            else
+                resp['success'] = false
+            end
+        else
+            return { 'success' => false , err: "SERVER_UNAVAILABLE", msg: "database unavailable" }
+        end
+    end
+
+#   -------------
+
+    def unredeem
+        if self.status == 'redeemed'
+            Resque.enqueue(GiftUnredeemEvent, self.id)
+            update(status: 'notified' , redeemed_at: nil, order_num: nil)
+        end
+    end
+
+#   -------------
+
     def brand_card_ids
         if self.brand_card
             cart_ary = self.ary_of_shopping_cart_as_hash
@@ -167,6 +210,8 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             return []
         end
     end
+
+#   -------------
 
     def expire_gift
         if update(status: "expired", redeemed_at: Time.now.utc)

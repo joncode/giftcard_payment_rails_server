@@ -10,6 +10,7 @@ Drinkboard::Application.routes.draw do
 		resources :callbacks,  only: [] do
 			collection do
 				post :receive_sms
+				post :zappernotify
 			end
 		end
 	end

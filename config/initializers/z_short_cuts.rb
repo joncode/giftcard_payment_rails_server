@@ -1,21 +1,23 @@
 #####    Code short cuts
 
 
-FBO = OpsFacebook
-S = OpsStripe
-SC = OpsStripeCard
-O = Omnivore
-U = User
-G = Gift
-M = Merchant
-C = Card
-A = Alert
+AL = Alert
 AC = AlertContact
 AM = AlertMessage
-AF = Affiliate
-P = Place
-PLG = PlaceGraph
+A = Affiliate
+CA = Card
+C = Client
+FBO = OpsFacebook
+G = Gift
 L = List
 LG = ListGraph
+M = Merchant
 MI = MenuItem
+O = Omnivore
+OZ = OpsZapper
+P = Place
+PLG = PlaceGraph
+S = OpsStripe
+SC = OpsStripeCard
+U = User
 

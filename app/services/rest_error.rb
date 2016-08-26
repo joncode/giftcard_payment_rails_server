@@ -2,7 +2,7 @@ class RestError
 
 	attr_reader :code, :message, :error
 
-	def initialize e:, r:
+	def initialize e: nil, r: nil
 		if e
 			@code = e.http_code
 			if e.response && e.response.respond_to?(:message)

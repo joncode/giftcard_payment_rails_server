@@ -99,7 +99,7 @@ module OmnivoreUtils
                 response = { "response_code" => "ERROR", "response_text" => 'Contact Support', "code" => 400, "data" => [] }
                 return { status: 0, data: response, res: response }
             else
-                return { status: 0, data: e, error: error }
+                return { status: 0, data: e, error: e }
             end
         end
     end

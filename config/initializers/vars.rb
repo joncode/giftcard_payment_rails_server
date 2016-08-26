@@ -177,6 +177,17 @@ else
     ENV['WWW_TOKEN']
 end
 
+ZAPPER_API_URL = if local_env
+    'https://zapqa.zapzapadmin.com/zappersandbox/api'
+else
+    ENV['ZAPPER_API_URL']
+end
+
+ZAPPER_API_KEY = if local_env
+    "BEARER_TOKEN"
+else
+    ENV["ZAPPER_API_KEY"]
+end
 
 
 
