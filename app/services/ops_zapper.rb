@@ -127,12 +127,12 @@ class OpsZapper
 
 	def post_zapper route, payload
 		puts "\n ZAPPER payload = #{payload}\n"
-		return example_redeem
+		# return example_redeem
 		begin
 			response = RestClient.post(
 			    "#{ZAPPER_API_URL}/#{route}",
 			    payload,
-			    { :content_type => :json, :'Authorization' => ZAPPER_API_KEY }
+			    { :content_type => 'application/x-www-form-urlencoded', :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
 			)
             puts "\n Here is ZAPPER response #{response.inspect}\n\n"
             resp = JSON.parse response
@@ -151,13 +151,40 @@ class OpsZapper
 		end
 	end
 
+    def get_token
+		# puts "\n ZAPPER payload = #{route}\n"
+		# return example_check
+        begin
+            response = RestClient.get(
+                "#{ZAPPER_API_URL}/oauth/token",
+                { :content_type => 'application/x-www-form-urlencoded' }
+            )
+            puts "\n Here is ZAPPER response #{response.inspect}\n\n"
+            resp = JSON.parse response
+
+            # apply_ticket_success(resp)
+        rescue => e
+            puts "\n 500 Internal ZAPPER Error code = #{e.inspect}\n\n"
+            if e.nil?
+            	@code = 400
+            else
+            	if e.http_code == 401
+            		@code = 400
+            	else
+            		@code = e.http_code
+            	end
+            end
+        end
+    end
+
+
     def get_zapper route
-		puts "\n ZAPPER payload = #{payload}\n"
-		return example_check
+		puts "\n ZAPPER payload = #{route}\n"
+		# return example_check
         begin
             response = RestClient.get(
                 "#{ZAPPER_API_URL}/#{route}",
-                { :content_type => :json, :'Authorization' => ZAPPER_API_KEY }
+                { :content_type => 'application/x-www-form-urlencoded', :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
             )
             puts "\n Here is ZAPPER response #{response.inspect}\n\n"
             resp = JSON.parse response
@@ -290,7 +317,7 @@ class OpsZapper
 	end
 
 	def example_check
-		{
+		resp = {
 			"errorDescription" => nil,
 			"errorId" => 0,
 			"statusId" => 1,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160823040305) do
+ActiveRecord::Schema.define(version: 20160827082048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -575,6 +575,19 @@ ActiveRecord::Schema.define(version: 20160823040305) do
   end
 
   add_index "landing_pages", ["link"], name: "index_landing_pages_on_link", using: :btree
+
+  create_table "legals", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "business_tax_id"
+    t.string   "personal_id"
+    t.string   "entity_type",     default: "company"
+    t.string   "date_of_birth"
+    t.integer  "company_id"
+    t.string   "company_type"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
 
   create_table "list_graphs", force: :cascade do |t|
     t.integer  "list_id"
