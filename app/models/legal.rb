@@ -26,7 +26,7 @@ class Legal < ActiveRecord::Base
 		# do nothing
 	end
 
-	def self.tos_accept_at = val
+	def self.tos_accept_at= val
 		# do nothing
 	end
 
