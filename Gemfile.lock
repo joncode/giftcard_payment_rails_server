@@ -139,10 +139,10 @@ GEM
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
-    namecase (1.1.0)
+    namecase (2.0.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
-    pg (0.18.3)
+    pg (0.18.4)
     power_assert (0.2.4)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -310,7 +310,7 @@ DEPENDENCIES
   mailchimp-api
   mandrill-api (~> 1.0.35)
   minitest
-  namecase (~> 1.1.0)
+  namecase (~> 2.0.0)
   pg
   pry
   puma (~> 2.15.0)

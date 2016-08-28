@@ -33,7 +33,7 @@ gem 'mandrill-api', "~> 1.0.35"
 gem 'mailchimp-api'
 gem 'twilio-ruby'
 # gem 'json'
-gem "namecase", "~> 1.1.0"       # capitalizes names like "McDonald" correctly
+gem "namecase", "~> 2.0.0"       # capitalizes names like "McDonald" correctly
 gem "auto_strip_attributes", "~> 2.1"
 gem 'rails_12factor'
 gem 'activemerchant'

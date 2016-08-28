@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20160827082048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
+  enable_extension "pgcrypto"
 
   create_table "affiliates", force: :cascade do |t|
     t.string   "first_name",         limit: 255
@@ -576,7 +577,7 @@ ActiveRecord::Schema.define(version: 20160827082048) do
 
   add_index "landing_pages", ["link"], name: "index_landing_pages_on_link", using: :btree
 
-  create_table "legals", force: :cascade do |t|
+  create_table "legals", id: :uuid, default: "gen_random_uuid()", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "business_tax_id"
@@ -585,6 +586,10 @@ ActiveRecord::Schema.define(version: 20160827082048) do
     t.string   "date_of_birth"
     t.integer  "company_id"
     t.string   "company_type"
+    t.string   "merchant_ein"
+    t.boolean  "tos"
+    t.datetime "tos_accept_at"
+    t.inet     "tos_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end

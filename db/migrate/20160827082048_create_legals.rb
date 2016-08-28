@@ -1,6 +1,7 @@
 class CreateLegals < ActiveRecord::Migration
+  enable_extension 'pgcrypto' unless extension_enabled?('pgcrypto')
   def change
-    create_table :legals do |t|
+    create_table :legals, id: :uuid, default: 'gen_random_uuid()' do |t|
       t.string :first_name
       t.string :last_name
       t.string :business_tax_id
@@ -9,6 +10,10 @@ class CreateLegals < ActiveRecord::Migration
       t.string :date_of_birth
       t.integer :company_id
       t.string :company_type
+      t.string :merchant_ein
+      t.boolean :tos
+      t.datetime :tos_accept_at
+      t.inet :tos_ip
 
       t.timestamps null: false
     end

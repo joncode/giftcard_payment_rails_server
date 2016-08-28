@@ -1,6 +1,11 @@
 class Affiliate < ActiveRecord::Base
     include CompanyDuckType
 
+
+#   -------------
+
+    auto_strip_attributes :first_name, :company, :last_name, :email, :zip, :city, :address
+
 #   -------------
 
 	has_many :affiliate_gifts
