@@ -9,7 +9,7 @@ namespace :reminders do
 	end
 
 	task incomplete_gifts: :environment do
-		ReminderIncompleteGifts.perform
+		# ReminderIncompleteGifts.perform
 	end
 
 end

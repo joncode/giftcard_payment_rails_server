@@ -317,19 +317,4 @@ end
     #     request_mandrill_with_template(template_name, message, [recipient.id, "User"], template_content)
     # end
 
-    # def reminder_gift_receiver data
-    #     ###----> after a month , you have a gift you havent used , use it or re-gift it
-    #     recipient        = User.find(data["user_id"])
-    #     template_name    = "iom-gift-unopened-receiver"
-    #     user_name        = recipient.name #user/purchaser receiving the email
-    #     template_content = [{"name" => "user_name", "content" => user_name},
-    #                         {"name" => "service_name", "content" => SERVICE_NAME}]
-    #     email            = recipient.email
-    #     name             = recipient.name
-    #     link             = nil
-    #     bcc              = nil # add email if necessary. Currently, info@db.com is the only automatic default cc.
-    #     message          = message_hash_old(subject(template_name), email, name, link, bcc)
-    #     request_mandrill_with_template(template_name, message, [recipient.id, "User"], template_content)
-    # end
-
 
