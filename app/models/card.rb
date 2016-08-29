@@ -9,6 +9,13 @@ class Card < ActiveRecord::Base
 
 	default_scope -> { where(active: true) } # indexed
 
+#   -------------
+
+    # uid = <user_id>
+    # cs = C.unscoped.where(user_id: uid)
+    # lcon
+    # pattr [:number_digest, :csv, :zip, :month, :year] , cs
+
 #	-------------
 
  	before_validation :convert_number_to_string

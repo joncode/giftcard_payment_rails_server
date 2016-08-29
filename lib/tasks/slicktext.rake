@@ -4,7 +4,7 @@ namespace :promo do
 
     desc "slicktext promo"
     task slicktext: :environment do
-        SmsCollector::sms_promo_run
+        # SmsCollector::sms_promo_run
     end
 
 end
