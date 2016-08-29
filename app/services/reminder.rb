@@ -5,15 +5,12 @@ class Reminder
         puts "----------------------Reminder Cron --------------------------"
 
         Gift.where(status: ["incomplete", "open", "notified"]).find_each do |gift|
-            today = DateTime.now.utc
-            day = gift.created_at.day
-
             [3,7,12,21,30,60,90,120,150,180,210,240,270,300,330,360].each do |d|
 
                 if gift.created_at < d.days.ago && gift.created_at > (d + 1).days.ago
 
                     puts "reminder for gift ID = #{gift.id}"
-                    if gift.merchant_active_and_live? gift
+                    if merchant_active_and_live? gift
                         if gift.receiver
                             gift.notify_receiver if gift.receiver.not_suspended?
                         else
@@ -21,8 +18,7 @@ class Reminder
                         end
                     end
                     break
-                else
-                    gift.created_at > d.days.ago
+                elsif gift.created_at > d.days.ago
                     break
                 end
             end
@@ -42,4 +38,6 @@ private
 			false
 		end
 	end
+
 end
+
