@@ -28,6 +28,11 @@ class Mdot::V2::CardsController < JsonController
         create_with = card_params
         create_with["user_id"] = @current_user.id
         card = Card.create_card_from_hash create_with
+        @current_client = Client.legacy_client(platform, request.headers['User-Agent'])
+        @current_partner = @current_client.partner
+        card.client = @current_client
+        card.partner = @current_partner
+        card.origin = "#{@current_partner.id}|#{@current_partner.name}|#{@current_client.id}|#{@current_client.name}"
         card.save
         puts "HERE IS THE CARD #{card.inspect} #{card.errors.full_messages} #{card.error_message}"
         if card.active && card.persisted?
