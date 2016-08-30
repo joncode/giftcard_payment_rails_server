@@ -16,12 +16,15 @@ class Card < ActiveRecord::Base
     # lcon
     # pattr [:number_digest, :csv, :zip, :month, :year] , cs
 
+#   -------------
+
+    auto_strip_attributes :name, :nickname
+
 #	-------------
 
  	before_validation :convert_number_to_string
 	before_validation :save_last_four
 	before_validation :upcase_zip
-
 
 #   -------------
 
