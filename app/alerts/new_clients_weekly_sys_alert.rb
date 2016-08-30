@@ -16,9 +16,9 @@ class NewClientsWeeklySysAlert < Alert
 	def email_msg
 		table_rows = get_data
 		if table_rows.length == 0
-			return "<h3>This week's live GolfNow / ItsOnMe Golf Courses</h3><div><hr /><p>No new golf courses this week</p></div>"
+			return "<h3>ItsOnMe Golf Course Additions Report</h3><div><hr /><p>No new golf courses this week</p></div>"
 		end
-		top_html = "<h3>This week's live GolfNow / ItsOnMe Golf Courses</h3><div><hr />"
+		top_html = "<h3>ItsOnMe Golf Course Additions Report</h3><div><hr />"
 
 
 		bottom_html = "</div>"
