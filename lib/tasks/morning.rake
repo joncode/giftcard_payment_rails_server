@@ -11,8 +11,8 @@ namespace :morning do
 		end
 
         if DateTime.now.utc.wednesday?
-            puts "MORNING CRON #{DateTime.now.utc} - NEW_CLIENT_WEEKLY_SYS"
-            puts Alert.perform('NEW_CLIENT_WEEKLY_SYS')
+            puts "MORNING CRON #{DateTime.now.utc} - NEW_CLIENTS_WEEKLY_SYS"
+            puts Alert.perform('NEW_CLIENTS_WEEKLY_SYS')
         end
 
     end
