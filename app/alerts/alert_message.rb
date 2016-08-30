@@ -85,14 +85,14 @@ class AlertMessage < ActiveRecord::Base
 				r = { status: 0, data: res.inspect }
 			end
 		else
-			self.update(status: 'failed', reason: "#{alert_contact.net} does not exist")
+			update(status: 'failed', reason: "#{alert_contact.net} does not exist")
 		end
 		if r[:status] == 1
-			self.update(status: 'sent')
+			update(status: 'sent')
 		else
-			self.update(status: 'failed', reason: "Failed to deliver message #{r[:data].inspect}")
+			update(status: 'failed', reason: "Failed to deliver message #{r[:data].inspect}")
 		end
 	rescue => e
-		self.update(status: 'failed', reason: e.inspect)
+		update(status: 'failed', reason: e.inspect)
 	end
 end

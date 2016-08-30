@@ -62,29 +62,6 @@ class AlertContact < ActiveRecord::Base
 
 #   -------------
 
-	def self.statuses
-		['live', 'mute', 'stop']
-	end
-
-	def form_update p
-		p.stringify_keys!
-		if !p['email'].blank? && !p['phone'].blank?
-			# both fields filled out - use existing :net
-			self.email = p['email'] if email?
-			self.phone = p['phone'] if phone?
-		else
-			# email
-			self.email = p['email'] unless p['email'].blank?
-
-			# phone
-			self.phone = p['phone'] unless p['phone'].blank?
-		end
-		self.status = p['status'] if AlertContact.statuses.include?(p['status'])
-		self
-	end
-
-#   -------------
-
 	def send_message
 		if self.receiving_messages?
 			AlertMessage.run(self)
@@ -104,6 +81,29 @@ class AlertContact < ActiveRecord::Base
 			return true
 		end
 		return false
+	end
+
+#   -------------
+
+	def self.statuses
+		['live', 'mute', 'stop']
+	end
+
+	def form_update p
+		p.stringify_keys!
+		if !p['email'].blank? && !p['phone'].blank?
+			# both fields filled out - use existing :net
+			self.email = p['email'] if email?
+			self.phone = p['phone'] if phone?
+		else
+			# email
+			self.email = p['email'] unless p['email'].blank?
+
+			# phone
+			self.phone = p['phone'] unless p['phone'].blank?
+		end
+		self.status = p['status'] if AlertContact.statuses.include?(p['status'])
+		self
 	end
 
 #   -------------

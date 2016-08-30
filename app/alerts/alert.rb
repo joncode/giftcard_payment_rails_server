@@ -21,6 +21,23 @@ class Alert < ActiveRecord::Base
 
 #   -------------
 
+	def self.perform alert_name, target=nil
+		if target.respond_to?(:id)
+			puts "Alert - perfom #{alert_name} #{target.id}"
+		else
+			puts "Alert - perfom #{alert_name} #{target}"
+		end
+
+		alert = get_alert(alert_name)
+
+		return unless alert && alert.active
+
+		alert.target = target
+		AlertContact.perform alert
+	end
+
+#   -------------
+
 	def alert_contacts
 		if self.system == 'admin'
 			AlertContact.where(active: true, alert_id: self.id, user_type: 'AtUser')
@@ -69,23 +86,6 @@ class Alert < ActiveRecord::Base
 
 	def subclass
 		Alert.get_alert self.name, false
-	end
-
-#   -------------
-
-	def self.perform alert_name, target=nil
-		if target.respond_to?(:id)
-			puts "Alert - perfom #{alert_name} #{target.id}"
-		else
-			puts "Alert - perfom #{alert_name} #{target}"
-		end
-
-		alert = get_alert(alert_name)
-
-		return unless alert && alert.active
-
-		alert.target = target
-		AlertContact.perform alert
 	end
 
 #   -------------
