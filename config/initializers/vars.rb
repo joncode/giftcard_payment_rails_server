@@ -184,7 +184,7 @@ else
 end
 
 ZAPPER_API_KEY = if local_env
-    "BEARER_TOKEN"
+    "CFAEDF21-296B-4CF1-B9F0-79AC9F09911C"
 else
     ENV["ZAPPER_API_KEY"]
 end
