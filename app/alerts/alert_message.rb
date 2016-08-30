@@ -56,6 +56,7 @@ class AlertMessage < ActiveRecord::Base
 		else
 			alert_contact.alert.msg
 		end
+		return if message.blank?
 		create(target_id: target_id,
 			target_type: target_type,
 			alert_contact_id: alert_contact.id,
