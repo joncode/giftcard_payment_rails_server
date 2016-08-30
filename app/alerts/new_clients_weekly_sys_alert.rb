@@ -33,6 +33,7 @@ class NewClientsWeeklySysAlert < Alert
 #   -------------
 
 	def get_data
+		# @merchant_ids = { <merchant_id> => <merchant_object>, ... }
 		@merchant_ids ||= get_merchant_ids
 		return "" if !@merchant_ids.kind_of?(Hash) || @merchant_ids.keys.length == 0
 		email_str = ""

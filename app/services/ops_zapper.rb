@@ -21,6 +21,7 @@ class OpsZapper
 	else
 		ZAPPER_NOTIFY_URL = "https://qaapi.itson.me/events/callbacks/zappernotify"
 	end
+	ZAP_REQ_URL = "https://zapapi.zapzap.mobi/zapperpointofsale/api" || ZAPPER_API_URL
 
 #   -------------
 
@@ -88,8 +89,7 @@ class OpsZapper
 	end
 
 	def check_result
-		posReference = @transaction_ref
-		route = "payments/GetMultiplePaymentStatusByPosReferences?merchantsiteId=#{@merchant_site_id}&posreference=#{posReference}"
+		route = "payments/GetMultiplePaymentStatusByPosReferences?merchantsiteId=#{@merchant_site_id}&posreference=#{@transaction_ref}"
 		get_zapper route
 		return response
 	end
@@ -125,29 +125,40 @@ class OpsZapper
 
 #   -------------
 
-	def post_zapper route, payload
-		puts "\n ZAPPER payload = #{payload}\n"
-		# return example_redeem
-		begin
-			response = RestClient.post(
-			    "#{ZAPPER_API_URL}/#{route}",
-			    payload,
-			    { :content_type => 'application/x-www-form-urlencoded', :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
-			)
-            puts "\n Here is ZAPPER response #{response.inspect}\n\n"
-            resp = JSON.parse response
-            apply_ticket_value(resp)
-		rescue => e
-            puts "\n 500 Internal ZAPPER Error code = #{e.inspect}\n\n"
-            if e.nil?
-            	@code = 400
-            else
+	def handle_error e
+		puts "\n 500 Internal ZAPPER Error code = #{e.class.to_s}|#{e.inspect}\n\n"
+        if e.nil?
+        	@code = 400
+        else
+        	if e.kind_of?(Errno::ETIMEDOUT)
+        		# timeout error
+        		@code = 509
+        	else
             	if e.http_code == 401
             		@code = 400
             	else
             		@code = e.http_code
             	end
             end
+        end
+	end
+
+#   -------------
+
+	def post_zapper route, payload
+		puts "\n ZAPPER payload = #{payload}\n"
+		# return example_redeem
+		begin
+			response = RestClient.post(
+			    "#{ZAP_REQ_URL}/#{route}",
+			    payload,
+			    { :content_type => :json, :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
+			)
+            puts "\n Here is ZAPPER response #{response.inspect}\n\n"
+            resp = JSON.parse response
+            apply_ticket_value(resp)
+		rescue => e
+			handle_error(e)
 		end
 	end
 
@@ -156,24 +167,15 @@ class OpsZapper
 		# return example_check
         begin
             response = RestClient.get(
-                "#{ZAPPER_API_URL}/oauth/token",
-                { :content_type => 'application/x-www-form-urlencoded' }
+                "#{ZAP_REQ_URL}/oauth/token",
+                { :content_type => :json, :'Authorization' => "Bearer #{ZAPPER_API_KEY}"  }
             )
             puts "\n Here is ZAPPER response #{response.inspect}\n\n"
             resp = JSON.parse response
 
             # apply_ticket_success(resp)
         rescue => e
-            puts "\n 500 Internal ZAPPER Error code = #{e.inspect}\n\n"
-            if e.nil?
-            	@code = 400
-            else
-            	if e.http_code == 401
-            		@code = 400
-            	else
-            		@code = e.http_code
-            	end
-            end
+            handle_error(e)
         end
     end
 
@@ -183,23 +185,18 @@ class OpsZapper
 		# return example_check
         begin
             response = RestClient.get(
-                "#{ZAPPER_API_URL}/#{route}",
-                { :content_type => 'application/x-www-form-urlencoded', :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
+                "#{ZAP_REQ_URL}/#{route}",
+                { :content_type => :json, :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
             )
             puts "\n Here is ZAPPER response #{response.inspect}\n\n"
             resp = JSON.parse response
+   #          resp = Hash.from_xml(response)["message"]["param"].inject({}) do |result, elem|
+			# 	result[elem["name"]] = elem["value"]
+			# 	result
+			# end
             apply_ticket_success(resp)
         rescue => e
-            puts "\n 500 Internal ZAPPER Error code = #{e.inspect}\n\n"
-            if e.nil?
-            	@code = 400
-            else
-            	if e.http_code == 401
-            		@code = 400
-            	else
-            		@code = e.http_code
-            	end
-            end
+            handle_error(e)
         end
     end
 
@@ -253,7 +250,7 @@ class OpsZapper
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
 		when 404
 			r_code = "ERROR"
-			r_text = "Your QR code cannot be found. Please re-scan and try again. If this issue persists please contact support@itson.me"
+			r_text = "Your QR-Code cannot be found. Please re-scan and try again. If this issue persists please contact support@itson.me"
 		when 401
 			r_code = "ERROR"
 			r_text = "This gift card is only redeemable for the exact item mentioned. Please order the correct item to use this gift card."
@@ -342,15 +339,23 @@ class OpsZapper
 	end
 
 end
+
+
+# "merchantSiteID" = "Zapper Merchant Location ID. It is only required should you need to poll to verify the status of a transaction"
+# "ZapperID" = "a unique transaction response. The customer can use this to query the payment as we send an email with this reference in it"
+
+
+
+
 # https://2.zap.pe
 
 # ------------------------        CREATE PAYMENT
 
-# route -> ZAPPER_API_URL/payments/CreateCustomerAndInitiatePayment
+# route -> ZAP_REQ_URL/payments/CreateCustomerAndInitiatePayment
 
 
 
 # ------------------------               POLL FOR RESPONSE
 
 
-# route -> ZAPPER_API_URL/payments/GetMultiplePaymentStatusByPosReferences?merchantsiteId={merchantsiteID}&posreference={posReference}
+# route -> ZAP_REQ_URL/payments/GetMultiplePaymentStatusByPosReferences?merchantsiteId={merchantsiteID}&posreference={posReference}
