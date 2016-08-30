@@ -67,17 +67,15 @@ class FacebookCronJob
 						puts "FacebookCronJob (55) error " + e.inspect
 					end
 
-
 					if e.fb_error_code == 100
 						# invalid app secret
 						us.set_reauth(msg: generic_msg)
 					elsif e.fb_error_code == 1
 						# The access token does not belong to application 1010660852318410
 						us.set_reauth(msg: generic_msg)
-					elsif e.fb_error_code == 190 && e.fb_error_subcode == 463
-						#Error validating access token: Session has expired on Sunday, 14-Feb-16 15:08:25 PST.
-						#The current time is Monday, 20-Jun-16 14:34:01 PDT.
-						us.set_reauth(msg: e.fb_error_message)
+					elsif e.fb_error_code == 190 && e.fb_error_subcode == 458
+						# Error validating access token: The user has not authorized application 428139010570600
+						us.set_reauth(msg: "The Facebook user has not authorized the ItsOnMe application" )
 					elsif e.fb_error_code == 190 && e.fb_error_subcode == 460
 						#Error validating access token: Session does not match current stored session.
 						#This may be because the user changed the password since the time the session was
@@ -85,6 +83,13 @@ class FacebookCronJob
 
 						# Error validating access token: The session has been invalidated because the user has changed the password.
 						us.set_reauth(msg: e.fb_error_message)
+					elsif e.fb_error_code == 190 && e.fb_error_subcode == 463
+						#Error validating access token: Session has expired on Sunday, 14-Feb-16 15:08:25 PST.
+						#The current time is Monday, 20-Jun-16 14:34:01 PDT.
+						us.set_reauth(msg: e.fb_error_message)
+					elsif e.fb_error_code == 190 && e.fb_error_subcode == 464
+						# Error validating access token: Sessions for the user are not allowed because the user is not a confirmed user.
+						us.set_reauth(msg: generic_msg)
 					else
 						#Invalid OAuth access token.
 						us.set_reauth(msg: generic_msg)
