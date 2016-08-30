@@ -4,7 +4,7 @@ class GiftPromoCode
 		return { status: 0, data: 'User Missing' } unless user.kind_of?(User)
 		return { status: 0, data: 'Code Missing' } unless (str_code.kind_of?(String) && !str_code.blank?)
 		str_code = str_code.strip.downcase
-        protos = Proto.where(active: true, promo_code: str_code)
+        protos = Proto.where(active: true, promo_code: [ str_code, str_code.gsub(/\s+/, "") ])
         fail_msg = "couldn't find item for keyword #{str_code}"
         if protos.empty?
             return { status: 0, data: fail_msg }
