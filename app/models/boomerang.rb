@@ -13,6 +13,10 @@ class Boomerang < ActiveRecord::Base
 
 #   -------------
 
+	def first_name
+		"ItsOnMe Return to Sender"
+	end
+
 	def name
 		"Boomerang"
 	end
