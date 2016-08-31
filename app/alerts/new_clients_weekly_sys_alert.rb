@@ -74,7 +74,7 @@ class NewClientsWeeklySysAlert < Alert
 		# look thru those clients for ones that are less than a week old
 		email_merchant_ids = {}
 		ms.each do |m|
-			tt = 2.weeks.ago
+			tt = 1.week.ago
 			cs = m.clients
 			cs.each do |client|
 				if client.clicks == 0 && client.created_at > tt
