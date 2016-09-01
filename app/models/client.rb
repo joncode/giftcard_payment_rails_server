@@ -20,7 +20,7 @@ class Client < ActiveRecord::Base
 	belongs_to :partner,  polymorphic: true
 
 	enum ecosystem: [ :full, :client, :partner ]
-	enum platform: [ :ios, :android, :menu_widget, :kiosk, :landing_page, :menu_facebook ]
+	enum platform: [ :ios, :android, :menu_widget, :kiosk, :landing_page, :menu_facebook, :redemption ]
 	enum data_type: [ :merchant, :region, :overview, :menu, :promo, :unknown, :list ]
 
 # return Merchant.find_by_sql("SELECT merchants.* FROM contents , merchants WHERE contents.client_id IS NULL AND contents.partner_type = 'Affiliate' AND contents.partner_id = 29
