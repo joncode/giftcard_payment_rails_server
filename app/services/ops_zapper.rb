@@ -12,21 +12,28 @@ require 'rest_client'
 # what does the syncronous resonse look like
 # does I have to send in  a loction identifier or a tender type key identifer or does the qr code handle that , ie is qr code unique for all locations ?
 
+RestClient.log = 'stdout'
 
 class OpsZapper
 	include MoneyHelper
 
+	SUC_5 = "http://2.zap.pe?t=6&i=71:71:7[34%7C5%7C11,66%7CITSONME_5%7C10:10[39%7CUSD"
+	SUC_25 = "http://2.zap.pe?t=6&i=71:71:7[34|25|11,66|ITSONME_25|10:10[39|USD"
+	SUC_100 = "http://2.zap.pe?t=6&i=71:71:7[34|100|11,66|ITSONME_100|10:10[39|USD"
+	ERRC = "http://2.zap.pe?t=6&i=71:71:7[34%7C25%7C11,66%7CITSONME_FAIL%7C10:10[39%7CGBP"
+	CHOOSE_QR = [SUC_5,SUC_25,SUC_100,ERRC]
 	if Rails.env.production?
 		ZAPPER_NOTIFY_URL = "https://api.itson.me/events/callbacks/zappernotify"
 	else
 		ZAPPER_NOTIFY_URL = "https://qaapi.itson.me/events/callbacks/zappernotify"
 	end
-	ZAP_REQ_URL = "https://zapapi.zapzap.mobi/zapperpointofsale/api" || ZAPPER_API_URL
+	# ZAP_REQ_URL = "https://zapapi.zapzap.mobi/zapperpointofsale/api"
+	ZAP_REQ_URL = ZAPPER_API_URL
 
 #   -------------
 
 	attr_accessor :value, :ccy, :customer, :qr_code, :gift_card_id, :transaction_ref, :code, :applied_value, :ticket_id,
-		 :extra_value, :extra_gift, :check_value, :redemption_id, :request
+		 :extra_value, :extra_gift, :check_value, :redemption_id, :request, :h
 
 	def initialize args
 		@request = args
@@ -60,7 +67,7 @@ class OpsZapper
 
 	def self.make_request_hsh gift, qr_code, value, redemption_id
 		{
-			"qr_code" => qr_code,
+			"qr_code" => CHOOSE_QR.sample,
             "gift_card_id" => gift.obscured_id,
             "value" => value,
             "ccy" => gift.ccy,
@@ -148,12 +155,14 @@ class OpsZapper
 	def post_zapper route, payload
 		puts "\n ZAPPER payload = #{payload}\n"
 		# return example_redeem
+		puts "POST #{ZAP_REQ_URL}/#{route}"
 		begin
 			response = RestClient.post(
 			    "#{ZAP_REQ_URL}/#{route}",
 			    payload,
-			    { :content_type => :json, :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
+			    { content_type: 'application/json', accept: :json, :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
 			)
+			@h = response
             puts "\n Here is ZAPPER response #{response.inspect}\n\n"
             resp = JSON.parse response
             apply_ticket_value(resp)

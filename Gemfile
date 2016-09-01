@@ -42,7 +42,8 @@ gem 'urbanairship', '~> 3.0'
 gem 'gcm'
 gem 'roo'
 #gem 'resque-heroku-autoscaler', "~> 0.3.1.15", git: 'https://github.com/joncode/resque-heroku-autoscaler.git'
-
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
 gem "koala", "~> 2.2"
 gem 'therubyracer', platforms: :ruby
 gem 'uglifier', '>= 1.3.0'
