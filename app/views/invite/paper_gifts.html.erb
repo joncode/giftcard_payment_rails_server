@@ -1,0 +1,104 @@
+<style type="text/css">
+	h2 { padding-top: 10px; }
+	table { border-collapse:collapse; border: none; }
+	ul {
+		list-style-type: none;
+	}
+	td {
+		padding-top: 10px;
+   		border:none;
+	}
+	.merchant_image {
+		border:5px solid #333;
+		border-radius: 10px !important;
+		height: 300px;
+	}
+	.user_image {
+		border:2px solid #333;
+		border-radius: 10px !important;
+		height: 60px;
+	}
+	.logo_icon {
+		padding-top: 10px;
+	}
+	.top-bar { display: none !important; }
+</style>
+
+<div style="border: 10px solid #000; border-radius: 10px !important; padding: 20px;">
+<table border="0" cellpadding="0" cellspacing="0">
+	<tbody>
+		<% if @gift.giver_type == "User" %>
+		<tr>
+			<td style="float:left; padding-top: 0 !important">
+				<%= image_tag @gift.giver.get_photo,  class: "user_image" %>
+			</td>
+			<td><span>From: </span>
+				<span style="font-size: 18px; padding-top: 10px; font-weight: bold; font-family: 'Arial Rounded MT Bold';""><%= @gift.giver_name %></span>
+			</td>
+		</tr>
+		<% end %>
+		<tr>
+			<td><%= image_tag @gift.merchant.get_photo,  class: "merchant_image" %></td>
+			<td>
+				<ul>
+					<li>
+						<p>
+						<%= image_tag 'Icon-60.png', class: "logo_icon" %>
+						<h1 style="font-size: 400%; color: #28A9E0;">
+						<span>ItsOnMe Gift Certificate</span>
+						</h1></p>
+					</li>
+					<li>
+						<h2 style="font-size: 36px;font-weight: bold; font-family: 'Arial Rounded MT Bold';"><b><%= @gift.merchant.name %></b></h2>
+					</li>
+					<li>
+						<%= @gift.merchant.html_complete_address %>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'>
+				<ul>
+					<li>
+						<h2 style="font-weight: bold; font-family: 'Arial Rounded MT Bold';">
+							<%= display_money(string: @gift.value, ccy: @gift.ccy) %> (<%= @gift.value.to_i.to_words.titleize %> <%= CCY[@gift.ccy]['name'] %>s)
+						</h2>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ul style="padding-top: 20px;">
+					<li>
+						<div style="background-color: #E5E6E7;border: 5px solid #000; border-radius: 10px !important; paadding: 20px;">
+							<h2><b><%= @gift.paper_id %></b></h2>
+						</div>
+					</li>
+					<li style='text-align: center;'>
+						<div><i style="font-size: 150%;">gift voucher ID</i></div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li>
+						<p style="font-size: 18px; padding-top: 10px;"><div><b>Need help?<b></div> Text > 310-235-3835 or Email  > support@itson.me</p>
+					</li>
+					<li>
+						<span style="margin-bottom: 15px; padding: 15px;">Powered by</span>
+						<div><%#= image_tag 'IOM-2.0-MC-Navy-Aqua-small.png', width: '100' %></div>
+						<div><%= image_tag 'IOM_APP_HEADER_LOGO.png', width: '100' %></div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+
+
+
+

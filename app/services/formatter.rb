@@ -32,6 +32,10 @@ module Formatter
         "#{self.city}, #{self.state} #{self.zip}"
     end
 
+    def html_complete_address
+        "#{self.address}<br />#{self.city}, #{self.state} #{self.zip}".html_safe
+    end
+
     def remove_nils(hsh)
         hsh.delete_if { |k, v| v.nil? }
     end

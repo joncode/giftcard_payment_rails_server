@@ -44,7 +44,6 @@ module Formatters
 
     def html_complete_address
         "#{self.address}<br />#{self.city}, #{self.state} #{self.zip}".html_safe
-
     end
 
 private

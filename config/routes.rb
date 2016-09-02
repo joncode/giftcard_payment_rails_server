@@ -3,6 +3,10 @@ Drinkboard::Application.routes.draw do
 	root  to: 'react#index'
 	match '/facebook/checkin', to: "invite#facebook_checkin", via: :post
 
+    if !Rails.env.production?
+        get   '/paper_gifts/:id',  to: 'invite#paper_gifts'
+    end
+
 #################        Mdot V2 API                              /////////////////////////////
 
 

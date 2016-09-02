@@ -1,0 +1,121 @@
+<style type="text/css">
+	h2 { padding-top: 10px; }
+	table { border-collapse:collapse; border: none; padding: 0; margin: 0;}
+	td {
+		padding-top: 10px;
+   		border:none;
+	}
+	ul {
+		list-style-type: none;
+	}
+	.merchant_image {
+		border:5px solid #333;
+		border-radius: 10px !important;
+		height: 100px;
+	}
+	.user_image {
+		border:2px solid #333;
+		border-radius: 10px !important;
+		height: 44px;
+	}
+	.logo_icon {
+		height: 30px;
+		padding-top: 10px;
+		padding-left: 60px;
+		float:right;
+	}
+	.top-bar { display: none !important; }
+</style>
+
+<div style="border: 10px solid #000; border-radius: 20px !important; padding: 20px;">
+<table border="0" cellpadding="0" cellspacing="0">
+	<tbody>
+		<% if @gift.giver_type == "User" %>
+		<tr>
+			<td style="float:left; padding-top: 0 !important">
+				<%= wicked_pdf_image_tag(grayscale_photo(@gift.giver.get_photo),  class: "user_image") %>
+			</td>
+			<td>
+				<ul>
+					<li><i>From: </i>
+						<span style="font-size: 14px; padding-top: 5px; font-weight: bold; font-family: 'Arial Rounded MT Bold';"">
+							<i><%= @gift.giver_name %></i>
+						</span>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<% end %>
+		<tr>
+			<td><%= wicked_pdf_image_tag(grayscale_photo(@gift.merchant.get_photo),  class: "merchant_image") %></td>
+			<td>
+				<ul>
+					<li>
+						<p>
+							<%= wicked_pdf_image_tag 'Icon-60.png', class: "logo_icon" %>
+							<h1 style="font-size: 100%; color: #28A9E0;">
+								<span style="font-size: 24px;font-weight: bold;">ItsOnMe Gift Certificate</span>
+							</h1>
+						</p>
+					</li>
+					<li>
+						<h2 style="font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';"><b><%= @gift.merchant.name %></b></h2>
+					</li>
+					<li>
+						<div style="text-align:center;"><%= @gift.merchant.html_complete_address %></div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td colspan='2'>
+				<ul>
+<!-- 					<li style="text-align: center;"><i style="text-align: center; font-size: 130%;">To: <%= @gift.receiver_name %></i>
+					</li> -->
+					<li>
+						<h2 style="text-align: center; font-weight: bold; font-family: 'Arial Rounded MT Bold';">
+							<%= display_money(string: @gift.value, ccy: @gift.ccy) %> (<%= @gift.value.to_i.to_words.titleize %> <%= CCY[@gift.ccy]['name'] %>s)
+						</h2>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ul style="padding-top: 10px;">
+					<li>
+						<div style="background-color: #E5E6E7;border: 5px solid #000; border-radius: 10px !important;">
+							<h2><b style="padding: 60px;line-height: inherit;box-sizing: border-box;"><%= @gift.paper_id %></b></h2>
+						</div>
+					</li>
+					<li style='text-align: center;'>
+						<div><i style="font-size: 130%;">gift voucher ID</i></div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li>
+						<p style="font-size: 12px; padding-top: 5px;">
+							<div style="text-align: right;"><b>Need help?<b></div>
+							<div style="text-align: right;">Text > 310-235-3835</div>
+							<div style="text-align: right;">Email > support@itson.me</div>
+							<div style="text-align: right;">Web > www.itson.me</div>
+						</p>
+					</li>
+					<li>
+						<div style="text-align: right; padding: 5px;">Powered by</div>
+
+						<div style="text-align: right;"><%= wicked_pdf_image_tag 'IOM_APP_HEADER_LOGO.png', width: '80' %></div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+
+
+
+

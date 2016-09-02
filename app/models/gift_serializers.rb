@@ -4,7 +4,7 @@ module GiftSerializers
 #   -------------
 
     def serialize
-        sender      = giver
+        sender = giver
         unless gift_merchant = self.merchant
             gift_merchant = Merchant.unscoped.find(self.merchant_id)
         end
@@ -17,14 +17,14 @@ module GiftSerializers
         gift_hsh["message"]            = message
         gift_hsh["detail"]            = detail
         money_and_items gift_hsh
+        gift_hsh["cat"] = self.cat
+        gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
+        gift_hsh["expires_at"] = self.expires_at if self.expires_at
+        gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
+
         gift_hsh["merchant_name"]      = gift_merchant.name
         gift_hsh["merchant_address"]   = gift_merchant.full_address
         gift_hsh["merchant_phone"]     = gift_merchant.phone
-        gift_hsh["expires_at"]         = self.expires_at if self.expires_at
-        gift_hsh["cat"]                = self.cat
-        gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
-        gift_hsh["scheduled_at"] = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
-
         gift_hsh['display_photo'] = self.display_photo
         # new email fields
         gift_hsh["receiver_id"] = self.receiver_id
@@ -217,8 +217,8 @@ private
         gift_hsh['value_cents'] = self.value_cents
         gift_hsh['value'] = self.value
         gift_hsh["shoppingCart"]  = self.shoppingCart
-        gift_hsh["items"]         = ary_of_shopping_cart_as_hash
-        gift_hsh["ccy"]           = self.ccy
+        gift_hsh["items"] = ary_of_shopping_cart_as_hash
+        gift_hsh["ccy"] = self.ccy
     end
 
     def multi_redemption_web_keys gift_hsh

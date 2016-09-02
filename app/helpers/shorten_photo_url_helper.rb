@@ -26,4 +26,8 @@ module ShortenPhotoUrlHelper
         secure_photo_url photo_url
     end
 
+    def grayscale_photo photo_url
+        photo_url.gsub!('upload', 'upload/e_grayscale')
+    end
+
 end
