@@ -31,12 +31,13 @@ module GiftMessenger
         end
     end
 
-    def notify_via_text gift
-        if !gift.receiver_phone.blank?
-            msg = "#{gift.giver_name} has sent you a #{gift.value_s} eGift Card
-at #{gift.merchant_name} with ItsOnMe® - the eGifting app.\n
-Click here to claim your gift.\n #{gift.invite_link}"
-            resp = OpsTwilio.text to: gift.receiver_phone, msg: msg
+    def notify_via_text
+        if !self.receiver_phone.blank?
+            puts "texting the gift receiver for #{self.id}"
+            msg = "#{self.giver_name} has sent you a #{self.value_s} eGift Card
+at #{self.merchant_name} with ItsOnMe® - the eGifting app.\n
+Click here to claim your gift.\n #{self.invite_link}"
+            resp = OpsTwilio.text to: self.receiver_phone, msg: msg
         end
     end
 

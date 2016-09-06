@@ -250,7 +250,7 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
 private
 
     def set_origin gps, gift_hsh
-        gift_hsh["link"]          = gps[:link] || nil
+        gift_hsh["link"] = gps[:link] || nil
         if gps[:origin]
             gift_hsh["origin"] = gps[:origin]
         else

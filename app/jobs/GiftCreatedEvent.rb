@@ -9,7 +9,7 @@ class GiftCreatedEvent
             Accountant.gift_created_event(gift)
 
             notify_via_facebook gift
-            notify_via_text(gift) unless gift.status == 'schedule'
+            gift.notify_via_text unless gift.status == 'schedule'
 
             PointsForSaleJob.perform gift_id
             if gift.cat == 300
@@ -25,15 +25,6 @@ class GiftCreatedEvent
             puts "Facebook reponse #{res.inspect}"
         rescue => e
             puts "500 Internal (GiftCreatedEvent) failed on facebook #{e.inspect}"
-        end
-    end
-
-    def self.notify_via_text gift
-        if !gift.receiver_phone.blank?
-            msg = "#{gift.giver_name} has sent you a #{gift.value_s} eGift Card
-at #{gift.merchant_name} with ItsOnMe® - the eGifting app.\n
-Click here to claim your gift.\n #{gift.invite_link}"
-            resp = OpsTwilio.text to: gift.receiver_phone, msg: msg
         end
     end
 

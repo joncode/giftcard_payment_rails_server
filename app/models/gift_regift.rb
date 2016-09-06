@@ -5,7 +5,7 @@ class GiftRegift < Gift
         if args["receiver_id"]
             receiver = User.unscoped.find(args["receiver_id"])
             if receiver.active == false
-                return 'User is no longer in the system , please gift to them with phone, email, facebook, or twitter'
+                return 'User is no longer in the system , please gift to them with phone, email, or facebook'
             end
         end
         args["payable"] = Gift.includes(:merchant).includes(:receiver).find(args["old_gift_id"])
