@@ -77,13 +77,17 @@ class OpsZapper
 	end
 
 	def self.customer user
-		{
+		h = {
 			"FirstName" => user.first_name,
 			"LastName" => user.last_name,
 			"PhoneNumber" => user.phone,
 			"CountryISOCode" => 'US',
 			"EmailAddress" => user.email
 		}
+		if h["PhoneNumber"].nil?
+			h["PhoneNumber"] = TWILIO_PHONE_NUMBER
+		end
+		h
 	end
 
 #   -------------
