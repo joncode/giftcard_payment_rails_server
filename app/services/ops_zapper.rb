@@ -1,4 +1,5 @@
 require 'rest_client'
+require "base64"
 
 # Questions :
 
@@ -21,6 +22,7 @@ class OpsZapper
 	SUC_25 = "http://2.zap.pe?t=6&i=71:71:7[34|25|11,66|ITSONME_25|10:10[39|USD"
 	SUC_100 = "http://2.zap.pe?t=6&i=71:71:7[34|100|11,66|ITSONME_100|10:10[39|USD"
 	ERRC = "http://2.zap.pe?t=6&i=71:71:7[34%7C25%7C11,66%7CITSONME_FAIL%7C10:10[39%7CGBP"
+
 	CHOOSE_QR = [SUC_5,SUC_25,SUC_100,ERRC]
 	if Rails.env.production?
 		ZAPPER_NOTIFY_URL = "https://api.itson.me/events/callbacks/zappernotify"
@@ -33,7 +35,7 @@ class OpsZapper
 #   -------------
 
 	attr_accessor :value, :ccy, :customer, :qr_code, :gift_card_id, :transaction_ref, :code, :applied_value, :ticket_id,
-		 :extra_value, :extra_gift, :check_value, :redemption_id, :request, :h
+		 :extra_value, :extra_gift, :check_value, :redemption_id, :request, :h, :json, :err_desc
 
 	def initialize args
 		@request = args
@@ -42,7 +44,7 @@ class OpsZapper
 		@code = 100
 		@qr_code = args['qr_code']
 		@gift_card_id = args['gift_card_id']
-		@value 			 = args['value'].to_i
+		@value 			 = 1000
 		@applied_value 	 = 0
 		@extra_value     = 0
 		@extra_gift      = 0
@@ -67,9 +69,9 @@ class OpsZapper
 
 	def self.make_request_hsh gift, qr_code, value, redemption_id
 		{
-			"qr_code" => CHOOSE_QR.sample,
+			"qr_code" => Base64.encode64(SUC_25),
             "gift_card_id" => gift.obscured_id,
-            "value" => value,
+            "value" => 1000,
             "ccy" => gift.ccy,
             'customer' => customer(gift.receiver),
             'redemption_id' => redemption_id
@@ -85,7 +87,7 @@ class OpsZapper
 			"EmailAddress" => user.email
 		}
 		if h["PhoneNumber"].nil?
-			h["PhoneNumber"] = TWILIO_PHONE_NUMBER
+			h["PhoneNumber"] = TWILIO_PHONE_NUMBER.gsub(/[^0-9.]/, '')
 		end
 		h
 	end
@@ -163,12 +165,13 @@ class OpsZapper
 		begin
 			response = RestClient.post(
 			    "#{ZAP_REQ_URL}/#{route}",
-			    payload,
+			    payload.to_json,
 			    { content_type: 'application/json', accept: :json, :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
 			)
 			@h = response
             puts "\n Here is ZAPPER response #{response.inspect}\n\n"
             resp = JSON.parse response
+            @json = resp
             apply_ticket_value(resp)
 		rescue => e
 			handle_error(e)
@@ -183,8 +186,10 @@ class OpsZapper
                 "#{ZAP_REQ_URL}/oauth/token",
                 { :content_type => :json, :'Authorization' => "Bearer #{ZAPPER_API_KEY}"  }
             )
+			@h = response
             puts "\n Here is ZAPPER response #{response.inspect}\n\n"
             resp = JSON.parse response
+            @json = resp
 
             # apply_ticket_success(resp)
         rescue => e
@@ -222,18 +227,26 @@ class OpsZapper
 	def apply_ticket_value resp
 		@ticket_id = resp['ZapperId']
 		@check_value = resp['VoucherAmount'].to_i
-		if @value < @check_value
-			@code			= 206   # ok , the gift has partially covered the ticket cost
-			@extra_value	= @check_value - @value
-			@applied_value	= @value
-		elsif @value > @check_value
-			@code			= 201    # ok , a new gift has been created for the extra gift value
-			@extra_gift	    = @value - @check_value
-			@applied_value	= @check_value
+		if @check_value == 0
+			@err_desc = resp["ErrorDescription"]
+			@code = 402
+			@applied_value = 0
+			@extra_value = @value
 		else
-			@code  = 200   # ok , full aceeptance
-			@applied_value	= @value
+			if @value < @check_value
+				@code			= 206   # ok , the gift has partially covered the ticket cost
+				@extra_value	= @check_value - @value
+				@applied_value	= @value
+			elsif @value > @check_value
+				@code			= 201    # ok , a new gift has been created for the extra gift value
+				@extra_gift	    = @value - @check_value
+				@applied_value	= @check_value
+			else
+				@code  = 200   # ok , full aceeptance
+				@applied_value	= @value
+			end
 		end
+
 		resp
 	end
 
@@ -267,6 +280,9 @@ class OpsZapper
 		when 401
 			r_code = "ERROR"
 			r_text = "This gift card is only redeemable for the exact item mentioned. Please order the correct item to use this gift card."
+		when 402
+			r_code = "ERROR"
+			r_text = @err_desc
 		when 500
 			r_code = "ERROR"
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
@@ -287,6 +303,7 @@ class OpsZapper
 			hsh[:msg] = r_text
 			response_data = hsh
 		else
+			@err_desc = r_text if @err_desc.nil?
 			response_data = r_text
 		end
 		{ "response_code" => r_code, "response_text" => response_data, 'success' => success? }
@@ -310,7 +327,7 @@ class OpsZapper
 				# Action indicator None = 1, RedirectToZapper = 2
 			"ActionIndicator" => 2,
 				# MerchantSite Identifier
-			"MerchantSiteId" => 12,
+			"MerchantSiteId" => 71,
 			"ErrorDescription" => nil,
 			"OriginalAmount" => 2600,
 			"VoucherAmount" => 3700,
