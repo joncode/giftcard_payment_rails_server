@@ -158,7 +158,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             if omnivore.code == 201
                 partial_redeem(omnivore, loc_id)
             elsif omnivore.code == 200 || omnivore.code == 206
-                redeem_gift(nil, loc_id, :pos, pos_obj)
+                redeem_gift(nil, loc_id, :pos, omnivore)
             end
             resp['success'] = true
         else
