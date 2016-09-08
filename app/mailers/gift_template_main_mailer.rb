@@ -74,7 +74,7 @@ class GiftTemplateMainMailer
             "to"          => [
                 { "email" => email, "name" => @gift.receiver_name }
             ],
-            {"headers" => { "Reply-To" => @gift.giver.email },
+            "headers" => { "Reply-To" => @gift.giver.email },
             "global_merge_vars" => [
                 { "name" => "merchant_email_adjusted_photo", "content" => merchant_email_adjusted_photo(merchant.get_photo) },
                 { "name" => "gift_id", "content" => @gift.obscured_id },
