@@ -15,7 +15,7 @@ class Events::CallbacksController < MetalCorsController
 
 		dispatch_message(from_number, params, msg, from_number)
 
-		@app_response = "You've reached ItsOnMe!  One of our people will be texting you shortly.  Thank you:)"
+		@app_response = "You've reached ItsOnMe!  One of our people will be texting you shortly.  Thank you for your patience :)"
 		respond
 	end
 
@@ -42,7 +42,7 @@ class Events::CallbacksController < MetalCorsController
 		# elsif ["+12152000475","+17029727139"].include?(from)
 		# 	flip_phones from, msg
 		# end
-		OpsTwilio.text_devs msg: "Text -> #{from_number} \n #{msg}"
+		OpsTwilio.text_devs msg: "TEXT-IN -> #{from_number} \n #{msg}"
 	end
 
 	def redemption_msg from, code
