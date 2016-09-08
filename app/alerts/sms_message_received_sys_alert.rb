@@ -11,12 +11,12 @@ class SmsMessageReceivedSysAlert < Alert
 
 	def text_msg
 		get_data
-		"SMS Recieved Alert\n#{@data}"
+		"#{@data}"
 	end
 
 	def email_msg
 		get_data
-		"<div><h2>SMS Recieved Alert</h2><p>#{@data}</p></div>".html_safe
+		"<div><h2>SMS Received Alert</h2><p>#{@data}</p></div>".html_safe
 	end
 
 	def msg
@@ -29,7 +29,7 @@ class SmsMessageReceivedSysAlert < Alert
 		twilio_msg = self.target
 		msg = twilio_msg['Body']
 		from_number = twilio_msg['From']
-		@data = "ALERT_TEXT_IN -> #{from_number} \n #{msg}"
+		@data = "FROM: #{from_number}\n #{msg}"
 	end
 
 end
