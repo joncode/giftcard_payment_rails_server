@@ -13,7 +13,7 @@ class Events::CallbacksController < MetalCorsController
 
 		# msg = Message.create(params)
 
-		dispatch_message(from_number, msg, params)
+		dispatch_message(from_number, params, msg, from_number)
 
 		success 'ok'
 		respond
@@ -34,7 +34,7 @@ class Events::CallbacksController < MetalCorsController
 
 # -----------   Twilio Service Methods
 
-	def dispatch_message from, msg, req
+	def dispatch_message from, req, msg, from_number
 		# if code = Message.merchant_redemption(msg)
 		# 	redemption_msg from, code
 		# elsif msg.downcase == 'support'
@@ -42,7 +42,7 @@ class Events::CallbacksController < MetalCorsController
 		# elsif ["+12152000475","+17029727139"].include?(from)
 		# 	flip_phones from, msg
 		# end
-		OpsTwilio.text_devs msg: "Text -> #{req.inspect}"
+		OpsTwilio.text_devs msg: "Text -> #{from_number} \n #{msg}"
 	end
 
 	def redemption_msg from, code
