@@ -3,6 +3,10 @@ class SmsMessageReceivedSysAlert < Alert
 #############   THIS FILE IS AN ADMIN COPY OF GiftPurchasedMtAlert
 #######
 
+	def note
+		self.target
+	end
+
 #   -------------
 
 	def text_msg
