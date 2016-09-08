@@ -46,8 +46,10 @@ class AlertMessage < ActiveRecord::Base
 		puts "AlertMessage - perfom #{alert_contact.inspect}"
 		# save pre message to DB
 
-		target_id = alert_contact.target ? alert_contact.target.id : nil
-		target_type = alert_contact.target ? alert_contact.target.class.to_s : nil
+		if alert_contact.target.respond_to?(:id)
+			target_id = alert_contact.target ? alert_contact.target.id : nil
+			target_type = alert_contact.target ? alert_contact.target.class.to_s : nil
+		end
 
 		message = if alert_contact.net == 'phone'
 			alert_contact.alert.text_msg
