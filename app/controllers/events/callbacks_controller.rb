@@ -15,7 +15,7 @@ class Events::CallbacksController < MetalCorsController
 
 		dispatch_message(from_number, params, msg, from_number)
 
-		@app_response = "You've reached ItsOnMe!  One of our people will be texting you shortly.  Thank you for your patience :)"
+		@app_response = "You've reached ItsOnMe!  One of our people will be texting you shortly.  Thank you, we're here to help :)"
 		respond
 	end
 
