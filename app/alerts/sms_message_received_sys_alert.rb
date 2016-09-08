@@ -1,4 +1,4 @@
-class SmsMEssageReceivedSysAlert < Alert
+class SmsMessageReceivedSysAlert < Alert
 
 #############   THIS FILE IS AN ADMIN COPY OF GiftPurchasedMtAlert
 #######
