@@ -11,7 +11,7 @@ class SmsMessageReceivedSysAlert < Alert
 
 	def text_msg
 		get_data
-		"#{@data}"
+		"SMS Received Alert\n#{@data}"
 	end
 
 	def email_msg

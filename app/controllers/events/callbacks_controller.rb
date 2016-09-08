@@ -42,7 +42,6 @@ class Events::CallbacksController < MetalCorsController
 		# elsif ["+12152000475","+17029727139"].include?(from)
 		# 	flip_phones from, msg
 		# end
-		OpsTwilio.text_devs msg: "TEXT-IN -> #{from_number} \n #{msg}"
 		Alert.perform("SMS_MESSAGE_RECEIVED_SYS", req)
 	end
 
