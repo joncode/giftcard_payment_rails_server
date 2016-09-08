@@ -43,6 +43,7 @@ class Events::CallbacksController < MetalCorsController
 		# 	flip_phones from, msg
 		# end
 		OpsTwilio.text_devs msg: "TEXT-IN -> #{from_number} \n #{msg}"
+		Alert.perform("SMS_MESSAGE_RECEIVED_SYS", req)
 	end
 
 	def redemption_msg from, code
