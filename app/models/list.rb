@@ -35,7 +35,7 @@ class List < ActiveRecord::Base
 				find_by owner_id: owner.id, owner_type: owner.class.to_s
 			else
 				partner = owner.partner
-				find_by owner_id: partner.id, owner_type: partner.class.to_s, token: 'master'
+				find_by owner_id: partner.id, owner_type: partner.class.to_s
 			end
 		else
 			find_by owner_id: owner.id, owner_type: owner.class.to_s

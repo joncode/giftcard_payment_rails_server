@@ -67,13 +67,14 @@ class GiftTemplateMainMailer
             important_msg = "Enjoy and have fun!".html_safe
         end
 
-        message          = {
+        message = {
             "subject"     => subject,
             "from_name"   => from_name,
             "from_email"  => "no-reply@itson.me",
             "to"          => [
                 { "email" => email, "name" => @gift.receiver_name }
             ],
+            {"headers" => { "Reply-To" => @gift.giver.email },
             "global_merge_vars" => [
                 { "name" => "merchant_email_adjusted_photo", "content" => merchant_email_adjusted_photo(merchant.get_photo) },
                 { "name" => "gift_id", "content" => @gift.obscured_id },
@@ -92,10 +93,11 @@ class GiftTemplateMainMailer
             ]
         }
 
-        if @gift.giver && @gift.giver.email
-            message["headers"] = { "Reply-To" => @gift.giver.email }
-        end
+        # if @gift.giver && @gift.giver.email
+        #     message["headers"] = { "Reply-To" => @gift.giver.email }
+        # end
 
+        puts "GiftTemplateMainMailer::notify_receiver MESSSAGE for gift #{@gift.id}"
         puts message
         if @bcc.present?
             message["to"] << { "email" => @bcc, "name" => @bcc, "type" => "bcc" }
