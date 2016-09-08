@@ -92,6 +92,10 @@ class GiftTemplateMainMailer
             ]
         }
 
+        if @gift.giver && @gift.giver.email
+            message["headers"] = { "Reply-To" => @gift.giver.email }
+        end
+
         puts message
         if @bcc.present?
             message["to"] << { "email" => @bcc, "name" => @bcc, "type" => "bcc" }
