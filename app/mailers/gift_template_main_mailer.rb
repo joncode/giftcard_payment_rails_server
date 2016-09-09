@@ -1,18 +1,28 @@
 class GiftTemplateMainMailer
 	include Emailer
 
-	attr_reader :gift, :bcc, :email, :message
+	attr_reader :gift, :bcc, :email, :message, :subject, :template
+
+#   -------------
 
 	def initialize(gift_id)
 		@gift = Gift.find(gift_id)
         @email = destination_email
 		@bcc  = nil
-	end
+        @subject = "#{@gift.giver_name} sent you a Gift!"
+        @template = get_template_name
+    end
+
+#   -------------
 
     def notify_receiver
         return [{"email"=>nil, "status"=>"unsent", "reject_reason"=>"NO ReCEIVER EMAIL"}] if @email.nil?
-        subject = "#{@gift.giver_name} sent you a Gift!"
+        request_mandrill_with_template(@template, make_message, [@gift.id, "Gift"])
+    end
 
+#   -------------
+
+    def get_template_name
         if Rails.env.staging?
             template_name = "new-gift-notification-071316"
             pteg_affiliate_id = 20
@@ -24,36 +34,38 @@ class GiftTemplateMainMailer
             template_name = 'gift-pteg'
         end
         puts template_name
-        message = make_dynamic_variables(subject, @email, template_name)
-        request_mandrill_with_template(template_name, message, [@gift.id, "Gift"])
+        template_name
     end
 
-############ PRIVATE
+    def from_name
+        if @template == 'gift-pteg'
+            from_name = "Pt's Entertainment Group via ItsOnMe"
+        else
+            from_name = "ItsOnMe"
+        end
+    end
 
     def destination_email gift=@gift
         if gift.receiver_email
-            gift.receiver_email
+            whitelist_email(gift.receiver_email)
         elsif gift.receiver
-            gift.receiver.email
+            whitelist_email(gift.receiver.email)
         else
             puts "NOTIFY RECEIVER CALLED WITHOUT RECEIVER EMAIL"
             return nil
         end
     end
 
-    def make_dynamic_variables(subject, email, template_name)
+#   -------------
+
+    def make_message
         merchant = @gift.merchant
         if merchant.nil?
-            puts 'NO Merchant - make_dynamic_variables'
+            puts 'NO Merchant - make_message'
             return nil
         end
-        if template_name == 'gift-pteg'
-            from_name = "Pt's Entertainment Group via ItsOnMe"
-        else
-            from_name = "ItsOnMe"
-        end
-        email = whitelist_email(email)
-        if @gift.receiver_email && !@gift.receiver_id
+
+        if @gift.receiver_email && !@gift.receiver_id && @gift.receiver_name.nil?
             email_rec_name = @gift.receiver_email
         else
             email_rec_name = @gift.receiver_name
@@ -68,11 +80,11 @@ class GiftTemplateMainMailer
         end
 
         message = {
-            "subject"     => subject,
+            "subject"     => @subject,
             "from_name"   => from_name,
             "from_email"  => "no-reply@itson.me",
             "to"          => [
-                { "email" => email, "name" => @gift.receiver_name }
+                { "email" => @email, "name" => @gift.receiver_name }
             ],
             "global_merge_vars" => [
                 { "name" => "merchant_email_adjusted_photo", "content" => merchant_email_adjusted_photo(merchant.get_photo) },
@@ -96,8 +108,8 @@ class GiftTemplateMainMailer
             message["headers"] = { "Reply-To" => @gift.giver.email }
         end
         @message = message
-        puts "GiftTemplateMainMailer::notify_receiver MESSSAGE for gift #{@gift.id}"
-        puts message
+        puts "GiftTemplateMainMailer::notify_receiver MESSSAGE for gift #{@gift.id}\n #{message}"
+
         if @bcc.present?
             message["to"] << { "email" => @bcc, "name" => @bcc, "type" => "bcc" }
         end
@@ -106,6 +118,8 @@ class GiftTemplateMainMailer
         end
         message
     end
+
+#   -------------
 
     def merchant_email_adjusted_photo merchant_photo_url
         str = 'http://res.cloudinary.com/drinkboard/image/upload/b_rgb:0d0d0d,bo_0px_solid_rgb:000,c_crop,co_rgb:090909,h_180,o_40,q_100,w_600'
