@@ -1,7 +1,7 @@
 class GiftTemplateMainMailer
 	include Emailer
 
-	attr_reader :gift, :bcc, :email
+	attr_reader :gift, :bcc, :email, :message
 
 	def initialize(gift_id)
 		@gift = Gift.find(gift_id)
@@ -74,7 +74,6 @@ class GiftTemplateMainMailer
             "to"          => [
                 { "email" => email, "name" => @gift.receiver_name }
             ],
-            "headers" => { "Reply-To" => @gift.giver.email },
             "global_merge_vars" => [
                 { "name" => "merchant_email_adjusted_photo", "content" => merchant_email_adjusted_photo(merchant.get_photo) },
                 { "name" => "gift_id", "content" => @gift.obscured_id },
@@ -93,10 +92,10 @@ class GiftTemplateMainMailer
             ]
         }
 
-        # if @gift.giver && @gift.giver.email
-        #     message["headers"] = { "Reply-To" => @gift.giver.email }
-        # end
-
+        if @gift.giver_type == 'User' && @gift.giver && @gift.giver.email
+            message["headers"] = { "Reply-To" => @gift.giver.email }
+        end
+        @message = message
         puts "GiftTemplateMainMailer::notify_receiver MESSSAGE for gift #{@gift.id}"
         puts message
         if @bcc.present?
