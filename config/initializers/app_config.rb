@@ -70,7 +70,7 @@ end
 class Object
 
     def mets
-        self.methods - Object.methods
+        (self.methods - Object.methods).sort_by { |m| m }
     end
 
 end
