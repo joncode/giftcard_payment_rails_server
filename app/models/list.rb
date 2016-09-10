@@ -32,13 +32,13 @@ class List < ActiveRecord::Base
 	def self.find_by_owner owner
 		if owner.kind_of?(Client)
 			if owner.client?
-				find_by owner_id: owner.id, owner_type: owner.class.to_s
+				includes(:list_graphs).find_by owner_id: owner.id, owner_type: owner.class.to_s
 			else
 				partner = owner.partner
-				find_by owner_id: partner.id, owner_type: partner.class.to_s
+				includes(:list_graphs).find_by owner_id: partner.id, owner_type: partner.class.to_s
 			end
 		else
-			find_by owner_id: owner.id, owner_type: owner.class.to_s
+			includes(:list_graphs).find_by owner_id: owner.id, owner_type: owner.class.to_s
 		end
 	end
 
