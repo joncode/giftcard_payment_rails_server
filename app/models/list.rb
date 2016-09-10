@@ -23,6 +23,9 @@ class List < ActiveRecord::Base
 #   -------------
 
 	has_many :list_graphs, dependent: :destroy
+	has_many :merchants, through: :list_graphs, source: :item, source_type: 'Merchant'
+	has_many :menu_items, through: :list_graphs, source: :item, source_type: 'MenuItem'
+	has_many :lists, through: :list_graphs, source: :item, source_type: 'List'
 	belongs_to :owner, polymorphic: true
 
 	attr_accessor :offset
@@ -32,13 +35,13 @@ class List < ActiveRecord::Base
 	def self.find_by_owner owner
 		if owner.kind_of?(Client)
 			if owner.client?
-				find_by owner_id: owner.id, owner_type: owner.class.to_s
+				includes(:list_graphs).find_by owner_id: owner.id, owner_type: owner.class.to_s
 			else
 				partner = owner.partner
-				find_by owner_id: partner.id, owner_type: partner.class.to_s
+				includes(:list_graphs).find_by owner_id: partner.id, owner_type: partner.class.to_s
 			end
 		else
-			find_by owner_id: owner.id, owner_type: owner.class.to_s
+			includes(:list_graphs).find_by owner_id: owner.id, owner_type: owner.class.to_s
 		end
 	end
 
@@ -86,7 +89,15 @@ class List < ActiveRecord::Base
 	end
 
 	def items
-		list_graphs.map(&:item)
+		if self.item_type == 'merchant'
+			merchants
+		elsif self.item_type == 'menu_item'
+			menu_items
+		elsif self.item_type == 'list'
+			lists
+		else
+			merchants + menu_items + lists
+		end
 	end
 
 	def item_count
