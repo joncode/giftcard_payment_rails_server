@@ -5,6 +5,7 @@ class ListGraph < ActiveRecord::Base
 #   -------------
 
 	validates_presence_of :item_id, :item_type
+	validates_uniqueness_of :list_id, scope: [:item_id, :item_type]
 
 #   -------------
 

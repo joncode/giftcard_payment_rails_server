@@ -45,8 +45,12 @@ class List < ActiveRecord::Base
 		end
 	end
 
+	def self.item_types
+		['list', 'merchant', 'menu_item']
+	end
+
 	def self.templates
-		['lists', 'merchants', 'menu_items']
+		item_types.map(&:pluralize)
 	end
 
 	def self.index
@@ -79,10 +83,6 @@ class List < ActiveRecord::Base
 	end
 
 #   -------------
-
-	def token
-		super || "#{make_url_string(self.name)}"
-	end
 
 	def offset
 		return 0 if @offset.nil?
@@ -119,7 +119,27 @@ class List < ActiveRecord::Base
 
 #   -------------
 
+	def sort_items old_ind, new_ind
+			# Redux style re-sorter
+		oc = Array.new(self.list_graphs)
+			# remove item from old array and shorten array
+		item = oc[old_ind]
+		oc[old_ind] = nil
+		oc.compact!
+			# make arrays out of pieces before/after new insert location
+		new1 = oc[0 ... new_ind]
+		new2 = oc[(new_ind) .. oc.length]
+			# insert item in between
+		newAry = new1 + [item] + new2
 
+			# update all positions based on new array indexes
+		newAry.each_with_index do |lg, index|
+			if lg.position != index
+				lg.update(position: index)
+			end
+		end
+		return self
+	end
 
 #   -------------
 
@@ -154,7 +174,7 @@ class List < ActiveRecord::Base
 private
 
 	def set_token_from_name
-		self.token = "#{make_slug(self.name)}" if self.token.nil?
+		self.token = make_slug(self.name) if self.token.nil?
 	end
 
 	def set_item_type
@@ -169,13 +189,12 @@ private
 
 	def set_template
 		return true unless self.template.nil?
-		if self.item_type == 'list'
-			self.template = 'lists'
-		elsif self.item_type == 'menu_item'
-			self.template = 'menu_items'
+		if List.item_types.include?(self.item_type)
+			self.template = self.item_type.pluralize
 		else
-			self.template = 'merchants'
+			self.template = nil
 		end
+		true
 	end
 
 end
