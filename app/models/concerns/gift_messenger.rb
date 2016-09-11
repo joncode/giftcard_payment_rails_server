@@ -66,9 +66,35 @@ Click here to claim your gift.\n #{self.invite_link}"
     end
 
     def messenger_promo_gift_scheduled
-        Relay.send_scheduled_gift_notification(self)
+        # Relay.send_scheduled_gift_notification(self)
 
-        if !self.receiver_phone.blank?
+        if self.receiver_id && self.receiver
+
+            rec = self.receiver
+            if !rec.phone.blank?
+
+                msg = "#{self.giver_name} has sent you a #{self.value_s} eGift Card
+at #{self.merchant_name} with ItsOnMe®\n
+The gift is scheduled to arrive on #{schedule_time}"
+                resp = OpsTwilio.text to: rec.phone, msg: msg
+
+            else
+
+                 msg = "<h2>#{self.giver_name} has sent you a #{self.value_s} eGift Card
+at #{self.merchant_name} with ItsOnMe®</h2>
+<p>The gift is scheduled to arrive on #{schedule_time}</p>
+#{cta_button}"
+                email_data_hsh = {
+                    "subject" => "ItsOnMe Promotional Gift",
+                    "html"    => "<div>#{msg}</div>".html_safe,
+                    "email"   => rec.email
+                }
+                puts email_data_hsh.inspect
+                email_obj = EmailAlerts.new(email_data_hsh)
+                res = email_obj.send_email
+            end
+
+        elsif !self.receiver_phone.blank?
 
             msg = "#{self.giver_name} has sent you a #{self.value_s} eGift Card
 at #{self.merchant_name} with ItsOnMe® - the eGifting app.\n
