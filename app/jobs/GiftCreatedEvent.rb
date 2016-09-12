@@ -11,7 +11,7 @@ class GiftCreatedEvent
             notify_via_facebook gift
             gift.notify_via_text unless gift.status == 'schedule'
 
-            PointsForSaleJob.perform gift_id
+            # PointsForSaleJob.perform gift_id
             if gift.cat == 300
                 Alert.perform("GIFT_PURCHASED_SYS", gift)
                 Alert.perform("GIFT_PURCHASED_MT", gift)
