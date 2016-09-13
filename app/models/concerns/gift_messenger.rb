@@ -6,12 +6,11 @@ module GiftMessenger
         if self.success? && thread_on?
             puts "#{self.class} -messenger- Notify Receiver via email #{self.receiver_name}"
 
-            send_receiver_notification if self.status != 'schedule'
-
-            notify_admin if self.giver_type == "User"
             if invoice
                 invoice_giver
             end
+            # notify_admin if self.giver_type == "User"
+            send_receiver_notification if self.status != 'schedule'
         end
     end
 
@@ -23,11 +22,11 @@ module GiftMessenger
     def send_gift_delivered_notifications
         if self.payable == "Proto"
             messenger_proto_join
-            notify_via_text self
+            notify_via_text
         else
             Relay.send_gift_delivered(self)
             send_receiver_notification
-            notify_via_text self
+            notify_via_text
         end
     end
 
