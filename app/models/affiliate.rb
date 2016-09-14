@@ -63,6 +63,27 @@ class Affiliate < ActiveRecord::Base
 		end
 	end
 
+	def list_serialize
+		hsh = web_serialize
+		hsh['type'] = 'super_merchant'
+		hsh
+	end
+
+	def web_serialize
+		prov_hash  = {}
+		prov_hash["loc_id"]     = self.id
+		prov_hash["name"]     = self.company
+		prov_hash["ccy"]     = self.ccy
+		prov_hash["loc_street"] = self.address
+		prov_hash["loc_city"]   = self.city
+		prov_hash["loc_state"]  = self.state
+		prov_hash["loc_zip"]    = self.zip
+		prov_hash["live"]      = true
+		prov_hash["status"]    = status
+		prov_hash['multi_loc'] = 'yes'
+		prov_hash
+	end
+
 private
 
 	def gift_value_or_calculate_value_from_amount(gift=nil, amount)
