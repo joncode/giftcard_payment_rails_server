@@ -6,6 +6,7 @@ class RedisCacheMonitor
 	class << self
 
 		def perform
+			return nil
 			log_level = Rails.logger.level
 			Rails.logger.level = 1
 			Diffy::Diff.default_format = :html
