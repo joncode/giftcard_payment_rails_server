@@ -3,7 +3,9 @@ class GiftNotificationJob
 	@queue = :push
 
     def self.perform args
-    	return if ( args[:gift_id].to_i == 0 ) || ( ['invoice', 'receiver'].include?(args[:type]) )
+        puts "\nGiftNotificationJob - perform- #{args.inspect}\n"
+    	return if (args[:gift_id].to_i == 0)
+        return if !(['invoice', 'receiver'].include?(args[:type]))
     	gift = Gift.find args[:gift_id]
     	note_type = args[:type]
 
