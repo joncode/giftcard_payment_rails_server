@@ -86,6 +86,7 @@ class RedisCacheMonitor
 				return nil if !client.active || (client.clicks == 0)
 				if ary[2].match /region/
 					region = Region.find ary[3]
+					puts "FRESH CACHE REGION = #{region.id}"
 	            	arg_scope = proc { region.merchants }
 	            	merchants = client.contents(:merchants, &arg_scope)
 	            	if !merchants.nil? && merchants.count > 0
