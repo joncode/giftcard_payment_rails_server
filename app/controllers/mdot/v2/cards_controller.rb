@@ -24,7 +24,7 @@ class Mdot::V2::CardsController < JsonController
 
     def create
         data = convert_if_json
-
+        platform = 'ios'
         create_with = card_params
         create_with["user_id"] = @current_user.id
         card = Card.create_card_from_hash create_with
