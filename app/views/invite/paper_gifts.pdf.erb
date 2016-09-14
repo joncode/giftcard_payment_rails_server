@@ -33,7 +33,11 @@
 		<% if @gift.giver_type == "User" %>
 		<tr>
 			<td style="float:left; padding-top: 0 !important">
-				<%= wicked_pdf_image_tag(grayscale_photo(@gift.giver.get_photo),  class: "user_image") %>
+				<% if @gift.giver.get_photo.nil? || @gift.giver.get_photo.mathc(/avatar_blank/) %>
+					<%= wicked_pdf_image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "logo_icon" %>
+				<% else %>
+					<%= wicked_pdf_image_tag(grayscale_photo(@gift.giver.get_photo),  class: "user_image") %>
+				<% end %>
 			</td>
 			<td>
 				<ul>

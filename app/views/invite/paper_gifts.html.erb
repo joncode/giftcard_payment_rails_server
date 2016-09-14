@@ -30,7 +30,11 @@
 		<% if @gift.giver_type == "User" %>
 		<tr>
 			<td style="float:left; padding-top: 0 !important">
-				<%= image_tag @gift.giver.get_photo,  class: "user_image" %>
+				<% if @gift.giver.get_photo.nil? || @gift.giver.get_photo.mathc(/avatar_blank/) %>
+					<%= image_tag 'Icon-60.png', class: "logo_icon" %>
+				<% else %>
+					<%= image_tag @gift.giver.get_photo,  class: "user_image" %>
+				<% end %>
 			</td>
 			<td><span>From: </span>
 				<span style="font-size: 18px; padding-top: 10px; font-weight: bold; font-family: 'Arial Rounded MT Bold';""><%= @gift.giver_name %></span>
