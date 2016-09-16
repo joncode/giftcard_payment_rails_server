@@ -69,7 +69,7 @@ class NewClientsWeeklySysAlert < Alert
 		golfnow = Affiliate.find golf_now_id
 		# find all the merchants for golf now
 		# exclude all the merchants that are not live
-		ms = Merchant.where(paused: false, live: true, affiliate_id: golf_now_id)
+		ms = Merchant.where(paused: false, live: true, active: true, affiliate_id: golf_now_id)
 		# look thru each merchant for clients with 0 clicks
 		# look thru those clients for ones that are less than a week old
 		email_merchant_ids = {}
