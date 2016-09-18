@@ -67,7 +67,7 @@ class OpsZapper
 
 #   -------------
 
-	def self.make_request_hsh gift, qr_code, value, redemption_id
+	def self.make_request_hsh gift, qr_code, value, redemption_id=nil
 		{
 			"qr_code" => Base64.encode64(SUC_25),
             "gift_card_id" => gift.obscured_id,
