@@ -74,7 +74,7 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def pos_redeem
-        puts "IN GIFTS _POS_REDEEM_ POS REDEEM #{params.inspect}"
+        puts "IN MDOT GIFTS _POS_REDEEM_ POS REDEEM #{params.inspect}"
         gift = Gift.includes(:merchant).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = redeem_params["ticket_num"]
@@ -111,7 +111,7 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def redeem  # redemption v1 ONLY
-        puts "IN GIFTS _REDEEM_ OLD REDEEM #{params.inspect}"
+        puts "IN MDOT GIFTS _REDEEM_ OLD REDEEM #{params.inspect}"
         request_server = redeem_params
         gift = @current_user.received.where(id: params[:id]).first
 
@@ -264,7 +264,7 @@ private
         elsif params["ticket_num"].present?
             params.require(:ticket_num)
         elsif params['data'].present?
-            params.require(:data).permit(:server, :loc_id, :ticket_num, :qrcode)
+            params.require(:data).permit(:server, :loc_id, :ticket_num)
         else
             {}
         end
