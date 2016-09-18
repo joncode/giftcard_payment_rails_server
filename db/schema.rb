@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160827082048) do
+ActiveRecord::Schema.define(version: 20160918222802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -577,7 +577,7 @@ ActiveRecord::Schema.define(version: 20160827082048) do
 
   add_index "landing_pages", ["link"], name: "index_landing_pages_on_link", using: :btree
 
-  create_table "legals", id: :uuid, default: "gen_random_uuid()", force: :cascade do |t|
+  create_table "legals", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "business_tax_id"
@@ -1161,6 +1161,7 @@ ActiveRecord::Schema.define(version: 20160827082048) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "merchant_id"
+    t.string   "status",                      default: "done"
   end
 
   add_index "redemptions", ["gift_id"], name: "index_redemptions_on_gift_id", using: :btree
