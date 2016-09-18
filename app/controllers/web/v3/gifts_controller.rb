@@ -184,7 +184,7 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
                         # ZAPPER Redemption
                     resp = gift.zapper_redeem( qrcode, merchant, amount)
                     if !resp.kind_of?(Hash)
-                        status = :bad_request
+                        # status = :bad_request
                         fail({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
                     elsif resp["success"] == true
                         gift.fire_after_save_queue(@current_client)

@@ -194,7 +194,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 # r.ticket_id = <ticket_id from zapper to identify ticket>
                 # r.status = 'redeemed'
                 # self.balance = <new gift balance>
-                # self.status = 'redeemed' if gift is finished
+                # self.status = 'done' if gift is finished
                 resp['success'] = true
             else
                 resp['success'] = false
