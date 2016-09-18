@@ -177,7 +177,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         zapper_request = OpsZapper.make_request_hsh(self, qr_code, amount)
 
         r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'incomplete',
-                gift_prev_value: gift.value_cents, gift_next_value: gift.value_cents,
+                gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
                 req_json: zapper_request, merchant_id: merchant.id )
 
         if r.save
