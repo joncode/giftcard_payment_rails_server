@@ -31,7 +31,7 @@ class Events::CallbacksController < MetalCorsController
 			# OpsTwilio.text_devs
 		end
 		if true # r.update(status: 'redeemed')
-			success 'ok'
+			success({ ref: ref, pay_stat: pay_stat, amount: amount})
 		else
 			# what to do here - zapper failed
 		end

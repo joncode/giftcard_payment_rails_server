@@ -44,7 +44,7 @@ class OpsZapper
 		@code = 100
 		@qr_code = args['qr_code']
 		@gift_card_id = args['gift_card_id']
-		@value 			 = 1000
+		@value 			 = args['value']
 		@applied_value 	 = 0
 		@extra_value     = 0
 		@extra_gift      = 0
@@ -225,11 +225,13 @@ class OpsZapper
 		resp
 	end
 
+
 	def apply_ticket_value resp
-		@ticket_id = resp['ZapperId']
-		@check_value = resp['VoucherAmount'].to_i
-		if @check_value == 0
-			@err_desc = resp["ErrorDescription"]
+		@ticket_id = resp['ZapperId'] + '-' + resp['PaymentId'].to_s
+		@check_value = resp['OriginalBillAmount'].to_i
+		@err_desc = resp["ErrorDescription"]
+
+		if @err_desc.blank?
 			@code = 402
 			@applied_value = 0
 			@extra_value = @value
