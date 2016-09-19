@@ -62,8 +62,16 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             self.redeemed_at = Time.now.utc
             self.server      = server_code if server_code
             self.order_num   = make_order_num(self.id)
-            r = Redemption.init_with_gift(self, loc_id, r_sys_type_of) if redemption.nil?
-            r = redemption if !redemption.nil?
+            if redemption.nil?
+                r = Redemption.init_with_gift(self, loc_id, r_sys_type_of)
+            else
+                r = redemption
+                r.reload
+                if r.status == 'done'
+                    Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
+                    return true
+                end
+            end
             begin
                 if pos_obj
                     r.req_json = pos_obj.request.as_json if r.req_json.nil?
@@ -117,8 +125,17 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         detail_msg     = self.detail || ""
         redemption_msg = "#{number_to_currency(pos_obj.applied_value/100.0)} was paid with check # #{pos_obj.ticket_num}\n"
         self.detail    = redemption_msg + detail_msg
-        r = Redemption.init_with_gift(self, loc_id, 3) if redemption.nil?
-        r = redemption if !redemption.nil?
+        if redemption.nil?
+            r = Redemption.init_with_gift(self, loc_id, r_sys_type_of)
+        else
+            r = redemption
+            r.reload
+            if r.status == 'done'
+                # already redeemed
+                Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
+                return true
+            end
+        end
         r.gift_prev_value = prev_value
         r.gift_next_value = self.balance
         r.amount          = pos_obj.applied_value
