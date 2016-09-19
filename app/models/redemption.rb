@@ -10,6 +10,20 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
+    def response
+        JSON.parse self.resp_json
+    rescue
+        nil
+    end
+
+    def request
+        JSON.parse self.req_json
+    rescue
+        nil
+    end
+
+#   -------------
+
 	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
 
 	def self.init_with_gift(gift, loc_id=nil, r_sys=nil)

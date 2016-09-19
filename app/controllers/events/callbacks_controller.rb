@@ -27,7 +27,7 @@ class Events::CallbacksController < MetalCorsController
 			r = Redemption.find redemption_id
 			puts "found redemption #{r.id}"
 			gift = r.gift
-			zapper_request = JSON.parse(r.req_json)
+			zapper_request = r.request
             zapper_request['redemption_id'] = 'rd_' + r.id.to_s
             zapper_obj = OpsZapper.new(zapper_request)
             zapper_obj.apply_callback_response(params)
