@@ -22,8 +22,8 @@ class OpsZapper
 	SUC_25 = "http://2.zap.pe?t=6&i=71:71:7[34|25|11,66|ITSONME_25|10:10[39|USD"
 	SUC_100 = "http://2.zap.pe?t=6&i=71:71:7[34|100|11,66|ITSONME_100|10:10[39|USD"
 	ERRC = "http://2.zap.pe?t=6&i=71:71:7[34%7C25%7C11,66%7CITSONME_FAIL%7C10:10[39%7CGBP"
-
 	CHOOSE_QR = [SUC_5,SUC_25,SUC_100,ERRC]
+
 	if Rails.env.production?
 		ZAPPER_NOTIFY_URL = "https://api.itson.me/events/callbacks/zappernotify"
 	else
@@ -188,26 +188,6 @@ class OpsZapper
 			handle_error(e)
 		end
 	end
-
-    def get_token
-		# puts "\n ZAPPER payload = #{route}\n"
-		# return example_check
-        begin
-            response = RestClient.get(
-                "#{ZAP_REQ_URL}/oauth/token",
-                { :content_type => :json, :'Authorization' => "Bearer #{ZAPPER_API_KEY}"  }
-            )
-			@h = response
-            puts "\n Here is ZAPPER response #{response.inspect}\n\n"
-            resp = JSON.parse response
-            @json = resp
-
-            # apply_ticket_success(resp)
-        rescue => e
-            handle_error(e)
-        end
-    end
-
 
     def get_zapper route
 		puts "\n ZAPPER payload = #{route}\n"
