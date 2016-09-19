@@ -33,9 +33,9 @@ class Events::CallbacksController < MetalCorsController
             zapper_obj.apply_callback_response(params)
 	        if zapper_obj.success?
 		        if zapper_obj.code == 201
-		            gift.partial_redeem(zapper_obj, gift.merchant.id)
+		            gift.partial_redeem(zapper_obj, gift.merchant.id, r)
 		        elsif zapper_obj.code == 200 || zapper_obj.code == 206
-		            gift.redeem_gift(nil, gift.merchant.id, :zapper, zapper_obj)
+		            gift.redeem_gift(nil, gift.merchant.id, :zapper, zapper_obj, r)
 		        end
 				success({ ref: ref })
 			else
