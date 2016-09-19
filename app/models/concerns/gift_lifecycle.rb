@@ -81,6 +81,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             rescue => e
                 OpsTwilio.text_devs msg: "Request/Response JSON not working"
             end
+            r.status = 'done'
             self.redemptions << r
             if save
                 puts "\n gift #{self.id} is being redeemed with redemption #{r.id}\n"
@@ -107,6 +108,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         r.gift_prev_value = prev_value
         r.gift_next_value = self.balance
         r.amount          = amount
+        r.status = 'done'
         # r.ticket_id       = pos_obj.ticket_id
         self.redemptions << r
         if save
@@ -140,6 +142,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         r.gift_next_value = self.balance
         r.amount          = pos_obj.applied_value
         r.ticket_id       = pos_obj.ticket_id
+        r.status = 'done'
         begin
             if pos_obj
                 r.req_json = pos_obj.request.as_json if r.req_json.nil?
