@@ -21,19 +21,26 @@ class Events::CallbacksController < MetalCorsController
 
 	def zappernotify
 		ref = params['Reference']
-		pay_stat = params['PaymentStatusId'].to_i
-		amount = params['Amount'].to_f * 100
+
 		if ref
-			gift_id = ref.split('_')[1]
-			gift = Gift.find gift_id
-			puts "found gift #{gift.id}"
-			# r = Redemption.find r_id
-			# OpsTwilio.text_devs
-		end
-		if true # r.update(status: 'redeemed')
-			success({ ref: ref, pay_stat: pay_stat, amount: amount})
-		else
-			# what to do here - zapper failed
+			redemption_id = ref.split('_')[1]
+			r = Redemption.find redemption_id
+			puts "found redemption #{r.id}"
+			gift = r.gift
+			zapper_request = JSON.parse(r.req_json)
+            zapper_request['redemption_id'] = 'rd_' + r.id.to_s
+            zapper_obj = OpsZapper.new(zapper_request)
+            zapper_obj.apply_callback_response(params)
+	        if zapper_obj.success?
+		        if zapper_obj.code == 201
+		            gift.partial_redeem(zapper_obj, gift.merchant.id)
+		        elsif zapper_obj.code == 200 || zapper_obj.code == 206
+		            gift.redeem_gift(nil, gift.merchant.id, :zapper, zapper_obj)
+		        end
+				success({ ref: ref })
+			else
+				fail({ ref: ref })
+			end
 		end
 		respond
 	end

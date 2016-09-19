@@ -179,12 +179,12 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
 
         zapper_request = OpsZapper.make_request_hsh(self, qr_code, amount, unique_id)
 
-        # r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'incomplete',
-        #         gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
-        #         req_json: zapper_request, merchant_id: merchant.id )
+        r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'incomplete',
+                gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
+                req_json: zapper_request, merchant_id: merchant.id )
 
-        # if r.save
-            # zapper_request['redemption_id'] = r.id
+        if r.save
+            zapper_request['redemption_id'] = 'rd_' + r.id.to_s
             zapper_obj = OpsZapper.new(zapper_request)
             resp = zapper_obj.redeem_gift
             if zapper_obj.success?
@@ -202,9 +202,9 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             else
                 resp['success'] = false
             end
-        # else
-        #     return { 'success' => false , err: "SERVER_UNAVAILABLE", msg: "database unavailable" }
-        # end
+        else
+            return { 'success' => false , err: "SERVER_UNAVAILABLE", msg: "database unavailable" }
+        end
         puts "ZAPPER resp = #{resp.inspect}"
         resp
     end

@@ -227,7 +227,7 @@ class OpsZapper
 
 
 	def apply_ticket_value resp
-		@ticket_id = resp['ZapperId'] + '-' + resp['PaymentId'].to_s
+		@ticket_id = resp['ZapperId']
 		@check_value = resp['OriginalBillAmount'].to_i
 		@err_desc = resp["ErrorDescription"]
 
@@ -250,6 +250,37 @@ class OpsZapper
 			end
 		end
 
+		resp
+	end
+
+	def apply_callback_response resp
+# {"Reference"=>"rd_41663_4cbd", "PaymentStatusId"=>1, "PSPData"=>nil, "Amount"=>12.0,
+# "ZapperId"=>"HLVYMTLFNFMU", "UpdatedDate"=>"2016-09-19T03:40:54.5047296Z"}
+		@ticket_id = resp['ZapperId']
+		@check_value = resp['OriginalBillAmount'].to_i
+		@err_desc = resp["ErrorDescription"]
+
+		pay_stat =resp['PaymentStatusId'].to_i
+		@check_value = params['Amount'].to_f * 100
+
+		if pay_stat != 1
+			@code = 402
+			@applied_value = 0
+			@extra_value = @value
+		else
+			if @value < @check_value
+				@code			= 206   # ok , the gift has partially covered the ticket cost
+				@extra_value	= @check_value - @value
+				@applied_value	= @value
+			elsif @value > @check_value
+				@code			= 201    # ok , a new gift has been created for the extra gift value
+				@extra_gift	    = @value - @check_value
+				@applied_value	= @check_value
+			else
+				@code  = 200   # ok , full aceeptance
+				@applied_value	= @value
+			end
+		end
 		resp
 	end
 
