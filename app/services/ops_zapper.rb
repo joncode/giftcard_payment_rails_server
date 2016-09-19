@@ -69,11 +69,17 @@ class OpsZapper
 		response_from_code
 	end
 
+	def self.strip_qr_code qr_code
+		x = Base64.encode64(qr_code)
+		x.chomp! if (x[-1..-1] == "\n")
+		x
+	end
+
 #   -------------
 
 	def self.make_request_hsh gift, qr_code, value, redemption_id=nil
 		{
-			"qr_code" => Base64.encode64(qr_code),
+			"qr_code" => strip_qr_code(qr_code),
             "gift_card_id" => 'gi_' + gift.obscured_id.to_s,
             "value" => value,
             "ccy" => gift.ccy,
