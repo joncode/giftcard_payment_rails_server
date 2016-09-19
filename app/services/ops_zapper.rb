@@ -207,8 +207,10 @@ class OpsZapper
                 "#{ZAP_REQ_URL}/#{route}",
                 { :content_type => :json, :'Authorization' => "Bearer #{ZAPPER_API_KEY}" }
             )
+            @h = response
             puts "\n Here is ZAPPER response #{response.inspect}\n\n"
             resp = JSON.parse response
+			@json = resp
    #          resp = Hash.from_xml(response)["message"]["param"].inject({}) do |result, elem|
 			# 	result[elem["name"]] = elem["value"]
 			# 	result
@@ -258,13 +260,13 @@ class OpsZapper
 	def apply_callback_response resp
 # {"Reference"=>"rd_41663_4cbd", "PaymentStatusId"=>1, "PSPData"=>nil, "Amount"=>12.0,
 # "ZapperId"=>"HLVYMTLFNFMU", "UpdatedDate"=>"2016-09-19T03:40:54.5047296Z"}
+		@json = resp
 		@ticket_id = resp['ZapperId']
 		@check_value = resp['OriginalBillAmount'].to_i
 		@err_desc = resp["ErrorDescription"]
 
 		pay_stat =resp['PaymentStatusId'].to_i
 		@check_value = resp['Amount'].to_f * 100
-
 		if pay_stat != 1
 			@code = 402
 			@applied_value = 0
@@ -342,7 +344,7 @@ class OpsZapper
 			@err_desc = r_text if @err_desc.nil?
 			response_data = r_text
 		end
-		{ "response_code" => r_code, "response_text" => response_data, 'success' => success? }
+		{ "response_code" => r_code, "response_text" => response_data, 'success' => success?, 'api' => @json }
 	end
 
 	def success_hsh
