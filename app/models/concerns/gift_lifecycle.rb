@@ -101,7 +101,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         prev_value     = self.balance
         self.balance   -= amount
         detail_msg     = self.detail || ""
-        redemption_msg = "#{number_to_currency(amount/100.0)} was paid on \
+        redemption_msg = "#{display_money(cents: amount, ccy: self.ccy)} was paid on \
 #{TimeGem.change_time_to_zone(Time.now.utc, redemption_merchant.zone)}\n"
         self.detail    = redemption_msg + detail_msg
         r = Redemption.init_with_gift(self, redemption_merchant.id, redemption_merchant.r_sys)
@@ -125,7 +125,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         prev_value     = self.balance
         self.balance   -= pos_obj.applied_value
         detail_msg     = self.detail || ""
-        redemption_msg = "#{number_to_currency(pos_obj.applied_value/100.0)} was paid with check # #{pos_obj.ticket_num}\n"
+        redemption_msg = "#{display_money(cents: pos_obj.applied_value, ccy: pos_obj.ccy)} was paid with check # #{pos_obj.ticket_num}\n"
         self.detail    = redemption_msg + detail_msg
         if redemption.nil?
             r = Redemption.init_with_gift(self, loc_id, r_sys_type_of)
