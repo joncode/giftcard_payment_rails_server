@@ -68,7 +68,6 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 r = redemption
                 r.reload
                 if r.status == 'done'
-                    Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
                     return true
                 end
             end
@@ -135,7 +134,6 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             r.reload
             if r.status == 'done'
                 # already redeemed
-                Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
                 return true
             end
         end

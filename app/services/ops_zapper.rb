@@ -57,6 +57,10 @@ class OpsZapper
 		@merchant_site_id = 12
 	end
 
+	def ticket_num
+		@ticket_id
+	end
+
 	def success?
 		(200..299).cover?(@code)
 	end
