@@ -67,6 +67,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 if pos_obj
                     r.req_json = pos_obj.request.as_json if r.req_json.nil?
                     r.resp_json = pos_obj.response.as_json
+                    r.ticket_id = pos_obj.ticket_id
                 end
             rescue => e
                 OpsTwilio.text_devs msg: "Request/Response JSON not working"
@@ -130,11 +131,11 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         end
         self.redemptions << r
         if save
-            puts "\n gift #{self.id} is partial redeemed with redemption #{r.id} with value #{pos_obj.applied_value}\n"
+            puts "\n (134) gift #{self.id} is partial redeemed with redemption #{r.id} with value #{pos_obj.applied_value}\n"
             Resque.enqueue(GiftRedeemedEvent, self.id, r.id)
             true
         else
-            puts "\n (94) gift #{self.id} failed redemption #{self.errors.messages.inspect} #{r.errors.messages.inspect}\n"
+            puts "\n (138) gift #{self.id} failed redemption #{self.errors.messages.inspect} #{r.errors.messages.inspect}\n"
             false
         end
     end
@@ -174,21 +175,23 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
 
         amount = amount || self.balance
 
-        zapper_request = OpsZapper.make_request_hsh(self, qr_code, amount)
+        unique_id = self.id.to_s + '-' + SecureRandom.hex(2)
 
-        r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'incomplete',
-                gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
-                req_json: zapper_request, merchant_id: merchant.id )
+        zapper_request = OpsZapper.make_request_hsh(self, qr_code, amount, unique_id)
 
-        if r.save
-            zapper_request['redemption_id'] = r.id
+        # r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'incomplete',
+        #         gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
+        #         req_json: zapper_request, merchant_id: merchant.id )
+
+        # if r.save
+            # zapper_request['redemption_id'] = r.id
             zapper_obj = OpsZapper.new(zapper_request)
             resp = zapper_obj.redeem_gift
             if zapper_obj.success?
                 if zapper_obj.code == 201
-                    partial_redeem(zapper_obj, loc_id)
+                    partial_redeem(zapper_obj, merchant.id)
                 elsif zapper_obj.code == 200 || zapper_obj.code == 206
-                    redeem_gift(nil, loc_id, :zapper, zapper_obj)
+                    redeem_gift(nil, merchant.id, :zapper, zapper_obj)
                 end
                 # r.gift_next_value = <value_of_gift_minus_redemption_amount>
                 # r.ticket_id = <ticket_id from zapper to identify ticket>
@@ -199,9 +202,11 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             else
                 resp['success'] = false
             end
-        else
-            return { 'success' => false , err: "SERVER_UNAVAILABLE", msg: "database unavailable" }
-        end
+        # else
+        #     return { 'success' => false , err: "SERVER_UNAVAILABLE", msg: "database unavailable" }
+        # end
+        puts "ZAPPER resp = #{resp.inspect}"
+        resp
     end
 
 #   -------------
