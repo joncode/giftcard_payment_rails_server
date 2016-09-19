@@ -175,7 +175,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
 
         amount = amount || self.balance
 
-        unique_id = self.id.to_s + '-' + SecureRandom.hex(2)
+        unique_id = 'rd_' + self.id.to_s + '_' + SecureRandom.hex(2)
 
         zapper_request = OpsZapper.make_request_hsh(self, qr_code, amount, unique_id)
 

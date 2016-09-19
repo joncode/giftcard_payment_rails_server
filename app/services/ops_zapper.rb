@@ -52,7 +52,7 @@ class OpsZapper
 		@ccy = args['ccy']
 		@customer = args['customer']
 		@redemption_id = args['redemption_id']
-		@transaction_ref = "Redemption-#{args['redemption_id']}"
+		@transaction_ref = args['redemption_id']
 		@ticket_id = nil
 		@merchant_site_id = 12
 	end
@@ -70,7 +70,7 @@ class OpsZapper
 	def self.make_request_hsh gift, qr_code, value, redemption_id=nil
 		{
 			"qr_code" => Base64.encode64(qr_code),
-            "gift_card_id" => gift.obscured_id,
+            "gift_card_id" => 'gi_' + gift.obscured_id,
             "value" => value,
             "ccy" => gift.ccy,
             'customer' => customer(gift.receiver),
@@ -126,9 +126,9 @@ class OpsZapper
 	def voucher value=@value, ccy=@ccy, gift_card_id=@gift_card_id
 		{
 				# Identifier is unique gift/redemption ID in our system
-			"Identifier" => "Gift-#{gift_card_id}",
+			"Identifier" => gift_card_id,
 				# customer readable gift/redemption description
-			"Description" => "ItsOnMe-Gift-#{gift_card_id}",
+			"Description" => "ItsOnMe Gift Redemption - #{@redemption_id}",
 				# amount in cents
 			"Amount" => value,
 				# ccy iso code - ISO 3166 (ALPHA-3)
