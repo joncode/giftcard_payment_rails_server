@@ -11,15 +11,11 @@ class Redemption < ActiveRecord::Base
 #   -------------
 
     def response
-        JSON.parse self.resp_json
-    rescue
-        nil
+        self.resp_json
     end
 
     def request
-        JSON.parse self.req_json
-    rescue
-        nil
+        self.req_json
     end
 
 #   -------------
