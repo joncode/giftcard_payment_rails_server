@@ -86,7 +86,7 @@ class OpsZapper
 			"CountryISOCode" => 'US',
 			"EmailAddress" => user.email
 		}
-		if h["PhoneNumber"].nil?
+		if h["PhoneNumber"].blank?
 			h["PhoneNumber"] = TWILIO_PHONE_NUMBER.gsub(/[^0-9.]/, '')
 		end
 		h

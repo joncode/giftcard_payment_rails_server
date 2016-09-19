@@ -26,9 +26,11 @@ class Events::CallbacksController < MetalCorsController
 		if ref
 			gift_id = ref.split('_')[1]
 			gift = Gift.find gift_id
-			r = Redemption.find r_id
+			puts "found gift #{gift.id}"
+			# r = Redemption.find r_id
+			# OpsTwilio.text_devs
 		end
-		if r.update(status: 'redeemed')
+		if true # r.update(status: 'redeemed')
 			success 'ok'
 		else
 			# what to do here - zapper failed
