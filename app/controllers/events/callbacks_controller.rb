@@ -20,10 +20,14 @@ class Events::CallbacksController < MetalCorsController
 	end
 
 	def zappernotify
-		note = zapper_params
-		note = note.stringify_keys
-		r_id = note['Reference'].to_i
-		r = Redemption.find r_id
+		ref = params['Reference']
+		pay_stat = params['PaymentStatusId'].to_i
+		amount = params['Amount'].to_f * 100
+		if ref
+			gift_id = ref.split('_')[1]
+			gift = Gift.find gift_id
+			r = Redemption.find r_id
+		end
 		if r.update(status: 'redeemed')
 			success 'ok'
 		else
