@@ -82,6 +82,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 OpsTwilio.text_devs msg: "Request/Response JSON not working"
             end
             r.status = 'done'
+            r.gift_next_value = self.balance
             self.redemptions << r
             if save
                 puts "\n gift #{self.id} is being redeemed with redemption #{r.id}\n"
@@ -211,9 +212,9 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
             resp = zapper_obj.redeem_gift
             if zapper_obj.success?
                 if zapper_obj.code == 201
-                    partial_redeem(zapper_obj, merchant.id)
+                    partial_redeem(zapper_obj, merchant.id, r)
                 elsif zapper_obj.code == 200 || zapper_obj.code == 206
-                    redeem_gift(nil, merchant.id, :zapper, zapper_obj)
+                    redeem_gift(nil, merchant.id, :zapper, zapper_obj, r)
                 end
                 # r.gift_next_value = <value_of_gift_minus_redemption_amount>
                 # r.ticket_id = <ticket_id from zapper to identify ticket>
