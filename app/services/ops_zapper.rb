@@ -228,13 +228,15 @@ class OpsZapper
 
 	def apply_ticket_value resp
 		@ticket_id = resp['ZapperId']
-		@check_value = resp['OriginalBillAmount'].to_i
 		@err_desc = resp["ErrorDescription"]
+		pay_stat =resp['PaymentStatusId'].to_i
+		@check_value = resp['OriginalBillAmount'].to_i
 
-		if @err_desc.blank?
+		if !@err_desc.blank? || pay_stat != 1
 			@code = 402
 			@applied_value = 0
 			@extra_value = @value
+			@err_desc = "Error Processing QR Code" if @err_desc.blank?
 		else
 			if @value < @check_value
 				@code			= 206   # ok , the gift has partially covered the ticket cost
@@ -261,7 +263,7 @@ class OpsZapper
 		@err_desc = resp["ErrorDescription"]
 
 		pay_stat =resp['PaymentStatusId'].to_i
-		@check_value = params['Amount'].to_f * 100
+		@check_value = resp['Amount'].to_f * 100
 
 		if pay_stat != 1
 			@code = 402
