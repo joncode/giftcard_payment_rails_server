@@ -22,27 +22,31 @@ class Web::V3::CoursesController < MetalCorsController
                     # closing this API off for non-Golfnow
             fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
         else
-            start_date = TimeGem.string_to_datetime(params[:start_date]).beginning_of_day
-            end_date = TimeGem.string_to_datetime(params[:end_date]).beginning_of_day
+            begin
+                start_date = TimeGem.string_to_datetime(params[:start_date]).beginning_of_day
+                end_date = TimeGem.string_to_datetime(params[:end_date]).beginning_of_day
 
-            gs = Gift.get_purchases_for_affiliate(GOLFNOW_ID, start_date, end_date)
+                gs = Gift.get_purchases_for_affiliate(GOLFNOW_ID, start_date, end_date)
 
-            resp = {}
-            gs.each do |gift|
-                client = gift.client
-                if client.nil? && resp['Missing'].nil?
-                    resp['NA'] = { start_date: params[:start_date], end_date: params[:end_date], url: 'no_client', revenue: 0 }
-                elsif resp[client.id].nil?
-                    resp[client.id] = { start_date: params[:start_date], end_date: params[:end_date], url: client.url_name, revenue: 0 }
+                resp = {}
+                gs.each do |gift|
+                    client = gift.client
+                    if client.nil? && resp['Missing'].nil?
+                        resp['NA'] = { start_date: params[:start_date], end_date: params[:end_date], url: 'no_client', revenue: 0 }
+                    elsif resp[client.id].nil?
+                        resp[client.id] = { start_date: params[:start_date], end_date: params[:end_date], url: client.url_name, revenue: 0 }
+                    end
+                    if client.nil?
+                        resp['NA'][:revenue] += gift.value_cents
+                    else
+                        resp[client.id][:revenue] += gift.value_cents
+                    end
                 end
-                if client.nil?
-                    resp['NA'][:revenue] += gift.value_cents
-                else
-                    resp[client.id][:revenue] += gift.value_cents
-                end
+                ary_resp = resp.values
+                success(ary_resp)
+            rescue => e
+                fail_web({ err: "INVALID_INPUT", msg: "Data could not be proccessed"})
             end
-            ary_resp = resp.values
-            success(ary_resp)
         end
         respond
     end
