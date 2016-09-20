@@ -135,6 +135,9 @@ Drinkboard::Application.routes.draw do
 		namespace :v3 do
 			resources :cards, only: [:create, :index, :destroy]
 			resources :clients, only: [:index, :create]
+			resources :courses, only: [:index] do
+				collection { get :revenue }
+			end
 
 			resources :devices, only: [ :create ] do
 				collection { get :config }

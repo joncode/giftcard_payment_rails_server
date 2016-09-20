@@ -3,7 +3,7 @@ class MetalCorsController < MetalController
 	# before_action :print_params
     # after_action :cross_origin_allow_header
 
-
+    PUBLIC_TOKENS = [WWW_TOKEN, GOLFNOW_TOKEN]
 
 protected
 
@@ -31,7 +31,7 @@ protected
 
     def attach_token_to_user
         if token = request.headers["HTTP_X_AUTH_TOKEN"]
-            if (![REDBULL_TOKEN, WWW_TOKEN].include?(token))
+            if (!PUBLIC_TOKENS.include?(token))
                 @current_user = SessionToken.app_authenticate(token)
                 @current_session = @current_user.session_token_obj if @current_user
             end
@@ -86,8 +86,8 @@ protected
     def authenticate_general
         # puts "\n\n\n#{request.headers.inspect}"
         puts "--------------" + params.inspect
-        if token    = request.headers["HTTP_X_AUTH_TOKEN"]
-            if ([REDBULL_TOKEN, WWW_TOKEN].include?(token))
+        if token = request.headers["HTTP_X_AUTH_TOKEN"]
+            if (PUBLIC_TOKENS.include?(token))
                 puts "Web  -------------    General Token   -----------------------"
             else
                 @current_user = User.app_authenticate(token)

@@ -6,6 +6,14 @@ module GiftScopes
 
 #   -------------
 
+    def get_purchases_for_affiliate affiliate_id, start_date, end_date
+        query = "SELECT g.* FROM gifts g, merchants m, affiliates a \
+WHERE m.affiliate_id = a.id AND g.merchant_id = m.id AND g.cat = 300 \
+AND a.id = #{affiliate_id} AND (g.status NOT IN ('cancel', 'expired')) AND g.active = 't' \
+AND (g.created_at >= '#{start_date}' AND g.created_at < '#{end_date}')"
+        Gift.find_by_sql(query)
+    end
+
     def pending_redeems_for merchant
         gifts = where(merchant_id: merchant.id, status: ['notified', 'redeemed']).where('new_token_at > ?', reset_time)
         notified_gifts = gifts.where(status: 'notified').order("created_at DESC")

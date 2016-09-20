@@ -78,6 +78,12 @@ else
     ENV['FACEBOOK_APP_SECRET']
 end
 
+GOLFNOW_TOKEN = if local_env
+    'G4PWlKoalSdFGJ5q5FbScw'
+else
+    ENV['GOLFNOW_TOKEN']
+end
+
 GCM_API_KEY = if local_env
     'AIzaSyA55nK5a30YQ51L3h1SSZbLlUNZC_GkheQ'
 else

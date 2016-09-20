@@ -3,6 +3,10 @@ class Client < ActiveRecord::Base
 
 #	-------------
 
+    auto_strip_attributes :name, :detail, :download_url, :url_name
+
+#	-------------
+
 	before_validation :create_unique_application_key, on: :create
 
 #	-------------
@@ -10,8 +14,10 @@ class Client < ActiveRecord::Base
     after_save      :clear_cache
 
 #	-------------
+
     validates_presence_of :name, :url_name, :application_key, :partner_id, :partner_type
-    validates_uniqueness_of :url_name, :application_key, :download_url
+    validates_uniqueness_of :url_name, :application_key, scope: :active
+    validates_uniqueness_of :download_url, scope: [:active, :platform], allow_nil: true
 
 #	-------------
 

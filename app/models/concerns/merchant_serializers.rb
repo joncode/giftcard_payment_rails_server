@@ -43,6 +43,19 @@ module MerchantSerializers
 		return prov_hash
 	end
 
+	def golf_serialize
+		hsh = {}
+		hsh['CourseID'] = self.id
+		hsh['CourseName'] = self.name
+		hsh['CourseAddress'] = self.address
+		hsh['CourseCity'] = self.city_name
+		hsh['CourseStateProv'] = self.state
+		hsh['CoursePostalCode'] = self.zip
+		hsh['CourseLatitude'] = self.latitude
+		hsh['CourseLongitude'] = self.longitude
+		return hsh
+	end
+
 	def list_serialize
 		hsh = web_serialize
 		hsh["href"] = self.itsonme_url
