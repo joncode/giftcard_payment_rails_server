@@ -45,6 +45,7 @@ class Web::V3::CoursesController < MetalCorsController
                 ary_resp = resp.values
                 success(ary_resp)
             rescue => e
+                puts "500 Internal golfnow api error - #{e.inspect}"
                 fail_web({ err: "INVALID_INPUT", msg: "Data could not be proccessed"})
             end
         end
