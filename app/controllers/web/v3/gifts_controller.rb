@@ -301,7 +301,7 @@ private
     end
 
     def regift_params
-        params.require(:data).permit(:link, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :msg, :cat)
+        params.require(:data).permit(:link, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :msg, :cat, :scheduled_at)
     end
 
     def gift_params

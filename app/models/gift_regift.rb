@@ -24,17 +24,18 @@ private
         args.delete("old_gift_id")
         old_gift         = args["payable"]
         args["cat"]      = set_cat(old_gift)
-        args["giver"]    = old_gift.receiver
+        args["giver"]    = old_gift.receiver if !args["giver"].kind_of?(User)
         args["merchant"] = old_gift.merchant
+        args["detail"]   = old_gift.detail
         if old_gift.value_cents == old_gift.balance
             args["value"] = old_gift.value
             args['balance'] = old_gift.balance
         else
             args["value"] = (old_gift.balance.to_f/100).to_s
             args['balance'] = old_gift.balance
+            args['detail'] = nil
         end
         args["cost"]     = old_gift.cost if old_gift.cost
-        args["detail"]   = old_gift.detail
         args["shoppingCart"] = old_gift.shoppingCart
         args["pay_stat"]   = old_gift.pay_stat
         args["expires_at"] = old_gift.expires_at

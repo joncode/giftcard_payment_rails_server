@@ -15,7 +15,7 @@ class Gift < ActiveRecord::Base
     default_scope -> { where(active: true) } # indexed
 
     scope :meta_search, ->(str) {
-      where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
+        where("ftmeta @@ plainto_tsquery(:search)", search: str.downcase)
     }
 
 #   -------------
@@ -24,8 +24,8 @@ class Gift < ActiveRecord::Base
 
 #   -------------
 
-    before_validation { |gift| gift.receiver_email = strip_and_downcase(receiver_email)   if receiver_email.kind_of?(String) }
-    before_validation { |gift| gift.receiver_phone = extract_phone_digits(receiver_phone)   if receiver_phone.kind_of?(String) }
+    before_validation { |gift| gift.receiver_email = strip_and_downcase(receiver_email)  if receiver_email.kind_of?(String) }
+    before_validation { |gift| gift.receiver_phone = extract_phone_digits(receiver_phone)  if receiver_phone.kind_of?(String) }
     before_validation :build_oauth
     before_validation :format_value
     before_validation :format_cost
@@ -430,20 +430,14 @@ class Gift < ActiveRecord::Base
 		end
 		self.receiver_name  = receiver.name
 		self.facebook_id    = receiver.facebook_id ? receiver.facebook_id : nil
-		self.twitter        = receiver.twitter ? 	 receiver.twitter : nil
-		self.receiver_phone = receiver.phone ? 		 receiver.phone : nil
+		self.twitter        = receiver.twitter ? receiver.twitter : nil
+		self.receiver_phone = receiver.phone ? receiver.phone : nil
 		self.receiver_email = receiver.email
 	end
 
 	def add_giver sender
 		self.giver   	= sender
 		self.giver_name = sender.name
-	end
-
-	def add_anonymous_giver giver_id
-		anon_user       = User.find_by(phone:  '5555555555')
-		self.add_giver anon_user
-		self.anon_id    = giver_id
 	end
 
     def receiver_info_as_hsh

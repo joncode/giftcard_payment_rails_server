@@ -43,7 +43,11 @@ class TimeGem
     def self.string_to_datetime datetime_obj, time_zone_str="UTC"
         if datetime_obj.kind_of?(String)
             datetime_obj = datetime_obj.gsub('/', '-')
-            datetime_obj = DateTime.strptime(datetime_obj + " #{time_zone_str}", "#{DATE_FORMAT} %Z")
+            if datetime_obj.split('-')[2].length == 4
+                datetime_obj = DateTime.strptime(datetime_obj + " #{time_zone_str}",  "#{"%m-%d-%Y"} %Z")
+            else
+                datetime_obj = DateTime.strptime(datetime_obj + " #{time_zone_str}",  "#{DATE_FORMAT} %Z")
+            end
         end
         datetime_obj
     end

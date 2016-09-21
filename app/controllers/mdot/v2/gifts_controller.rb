@@ -142,6 +142,8 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def regift
+        # {"data"=>{"message"=>"Happy happy birthday babe! Love u!",
+        # "receiver"=>{"name"=>"Scott Saunders", "receiver_email"=>"vistademo@gmail.com"}}, "id"=>"361997"}
         return nil if params_bad_request
         data = regift_params
 
