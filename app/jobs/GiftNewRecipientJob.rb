@@ -23,7 +23,7 @@ class GiftNewRecipientJob
             regift_args = {}
             regift_args["message"]        = args[:message]
             regift_args["name"]           = args[:receiver_name]
-            regift_args["email"]          = args[:receiver_email] unless args[:receiver_phone].blank?
+            regift_args["email"]          = args[:receiver_email] unless args[:receiver_email].blank?
             regift_args["phone"]          = args[:receiver_phone] unless args[:receiver_phone].blank?
             regift_args["giver"]          = gift.receiver
             regift_args["old_gift_id"]    = gift.id
@@ -36,7 +36,7 @@ class GiftNewRecipientJob
             regift_args = {}
             regift_args["message"]        = args[:message]
             regift_args["name"]           = args[:receiver_name]
-            regift_args["email"]          = args[:receiver_email] unless args[:receiver_phone].blank?
+            regift_args["email"]          = args[:receiver_email] unless args[:receiver_email].blank?
             regift_args["phone"]          = args[:receiver_phone] unless args[:receiver_phone].blank?
             regift_args["giver"]          = gift.giver
             regift_args["old_gift_id"]    = gift.id
@@ -51,7 +51,7 @@ class GiftNewRecipientJob
 			gift.remove_receiver
 				# update the gift receiver info to reflect the new
 	        gift.receiver_name = args[:receiver_name]
-	        gift.receiver_email = args[:receiver_email] unless args[:receiver_phone].blank?
+	        gift.receiver_email = args[:receiver_email] unless args[:receiver_email].blank?
 	        gift.receiver_phone = args[:receiver_phone] unless args[:receiver_phone].blank?
 
 				# set schedule_at
