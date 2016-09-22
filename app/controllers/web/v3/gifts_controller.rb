@@ -57,11 +57,11 @@ class Web::V3::GiftsController < MetalCorsController
         gift_hsh["scheduled_at"] = gps[:scheduled_at]
         gift_hsh["old_gift_id"] = params[:id]
 
-        gift_response = GiftRegift.create(gift_hsh)
-        if gift_response.kind_of?(Gift)
-            if gift_response.id.nil?
-                fail_web fail_web_payload("not_created_gift", gift_response.errors)
-                if gift_response.errors.messages == {:receiver=> ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]}
+        gift = GiftRegift.create(gift_hsh)
+        if gift.kind_of?(Gift)
+            if gift.id.nil?
+                fail_web fail_web_payload("not_created_gift", gift.errors)
+                if gift.errors.messages == {:receiver=> ["No unique receiver data. Cannot process gift. Please re-log in if this is an error."]}
                     status = :bad_request
                 end
             else
