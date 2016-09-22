@@ -1,7 +1,10 @@
 class Web::V3::GiftsController < MetalCorsController
     include MoneyHelper
     before_action :authentication_token_required, except: [:show]
+
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
+
+    rescue_from Timeout::Error, :with => :rescue_from_timeout
 
     def index
         user_id = params[:user_id]
@@ -316,4 +319,7 @@ private
         end
     end
 
+    def rescue_from_timeout(exception)
+        head :reset_content
+    end
 end
