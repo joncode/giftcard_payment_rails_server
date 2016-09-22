@@ -21,3 +21,4 @@ class GiftScheduledJob
     end
 
 end
+

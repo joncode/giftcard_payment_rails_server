@@ -66,6 +66,7 @@ module Emailer
 
     def invoice_giver data
         gift    = Gift.find(data["gift_id"])
+        return if gift.giver_type != 'User'
         subject = "Gift purchase receipt"
         email   = gift.giver.email
         name    = gift.giver_name
