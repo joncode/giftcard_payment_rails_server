@@ -8,7 +8,7 @@ class GiftNewRecipientJob
 
     	args.symbolize_keys!
 
-    	return "BAD ARGS FAIL" if ['change_info','giver_new_send','receiver_new_send'].includes?(args[:action_type])
+    	return "BAD ARGS FAIL" if ['change_info','giver_new_send','receiver_new_send'].include?(args[:action_type])
 
     	gift = Gift.unscoped.find(args[:gift_id])
 
