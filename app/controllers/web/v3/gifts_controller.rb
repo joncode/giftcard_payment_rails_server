@@ -323,11 +323,11 @@ private
 
     def rescue_from_timeout(exception)
 
+        puts "\n IN GIFTSCONTROLLERTIMEOUT - #{@current_redemption.inspect}"
         status = :ok
         if @current_redemption.nil?
             fail_web({ err: "REQUEST_TIMEOUT", msg: 'Server is slow, please retry'})
         else
-            puts "\n IN GIFTSCONTROLLERTIMEOUT - #{@current_redemption.inspect}"
             @current_redemption.reload
             puts "\n IN GIFTSCONTROLLERRELOAD - #{@current_redemption.inspect}"
             if @current_redemption.status == 'done' && @current_redemption.response.kind_of?(Hash)
