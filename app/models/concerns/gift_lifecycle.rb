@@ -195,7 +195,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
 
         unique_id = 'rd_' + self.id.to_s + '_' + SecureRandom.hex(2)
 
-        zapper_request = OpsZapper.make_request_hsh(self, qr_code, amount, unique_id)
+        zapper_request = OpsZapper.make_request_hsh(self, qrcode, amount, unique_id)
 
         r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'incomplete',
                 gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
@@ -228,13 +228,13 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         resp
     end
 
-    def zapper_redeem qr_code, merchant, amount=nil
+    def zapper_redeem qrcode, merchant, amount=nil
 
         amount = amount || self.balance
 
         unique_id = 'rd_' + self.id.to_s + '_' + SecureRandom.hex(2)
 
-        zapper_request = OpsZapper.make_request_hsh(self, qr_code, amount, unique_id)
+        zapper_request = OpsZapper.make_request_hsh(self, qrcode, amount, unique_id)
 
         r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'incomplete',
                 gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
