@@ -323,8 +323,9 @@ private
 
     def rescue_from_timeout(exception)
 
+        status = :ok
         if @current_redemption.nil?
-            head :request_timeout
+            fail_web({ err: "REQUEST_TIMEOUT", msg: 'Server is slow, please retry'})
         else
             puts "\n IN GIFTSCONTROLLERTIMEOUT - #{@current_redemption.inspect}"
             @current_redemption.reload
@@ -333,16 +334,14 @@ private
                 resp = @current_redemption.response
                 if resp["success"] == true
                     gift.fire_after_save_queue(@current_client)
-                    status = :ok
                     success({msg: resp["response_text"]})
                 else
-                    status = :ok
                     fail_web({ err: resp["response_code"], msg: resp["response_text"]})
                 end
-                respond(status)
             else
-                head :reset_content
+                fail_web({ err: "RESET_CONTENT", msg: 'Data is processing please refresh screen'})
             end
         end
+        respond(status)
     end
 end
