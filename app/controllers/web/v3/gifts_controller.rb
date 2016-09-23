@@ -185,7 +185,9 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
             elsif merchant.r_sys == 5
                 if qrcode
                         # ZAPPER Redemption
-                    resp = gift.zapper_redeem( qrcode, merchant, amount)
+                    @current_redemption = gift.zapper_redemption( qrcode, merchant, amount )
+                    resp = gift.zapper_redeem_async(@current_redemption)
+                    # resp = gift.zapper_redeem( qrcode, merchant, amount )
                     if !resp.kind_of?(Hash)
                         # status = :bad_request
                         fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
@@ -320,6 +322,27 @@ private
     end
 
     def rescue_from_timeout(exception)
-        head :reset_content
+
+        if @current_redemption.nil?
+            head :request_timeout
+        else
+            puts "\n IN GIFTSCONTROLLERTIMEOUT - #{@current_redemption.inspect}"
+            @current_redemption.reload
+            puts "\n IN GIFTSCONTROLLERRELOAD - #{@current_redemption.inspect}"
+            if @current_redemption.status == 'done' && @current_redemption.response.kind_of?(Hash)
+                resp = @current_redemption.response
+                if resp["success"] == true
+                    gift.fire_after_save_queue(@current_client)
+                    status = :ok
+                    success({msg: resp["response_text"]})
+                else
+                    status = :ok
+                    fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                end
+                respond(status)
+            else
+                head :reset_content
+            end
+        end
     end
 end

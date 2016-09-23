@@ -189,10 +189,46 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         resp
     end
 
-    def zapper_redeem qr_code, merchant, amount=nil
+    def zapper_redemption( qrcode, merchant, amount )
 
-        # generate a redemption and transaction code (redemptionID)
-        # DO we need advanced code to determine what the possible amounts are ?
+        amount = amount || self.balance
+
+        unique_id = 'rd_' + self.id.to_s + '_' + SecureRandom.hex(2)
+
+        zapper_request = OpsZapper.make_request_hsh(self, qr_code, amount, unique_id)
+
+        r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'incomplete',
+                gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
+                req_json: zapper_request, merchant_id: merchant.id )
+
+        if r.save
+            return r
+        else
+            return { 'success' => false , err: "SERVER_UNAVAILABLE", msg: "database unavailable" }
+        end
+    end
+
+    def zapper_redeem_async(redemption)
+        r = redemption
+        zapper_request = r.request
+        zapper_request['redemption_id'] = 'rd_' + r.id.to_s
+        zapper_obj = OpsZapper.new(zapper_request)
+        resp = zapper_obj.redeem_gift
+        if zapper_obj.success?
+            if zapper_obj.code == 201
+                partial_redeem(zapper_obj, merchant.id, r)
+            elsif zapper_obj.code == 200 || zapper_obj.code == 206
+                redeem_gift(nil, merchant.id, :zapper, zapper_obj, r)
+            end
+            resp['success'] = true
+        else
+            resp['success'] = false
+        end
+        puts "ZAPPER resp = #{resp.inspect}"
+        resp
+    end
+
+    def zapper_redeem qr_code, merchant, amount=nil
 
         amount = amount || self.balance
 
@@ -214,11 +250,6 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
                 elsif zapper_obj.code == 200 || zapper_obj.code == 206
                     redeem_gift(nil, merchant.id, :zapper, zapper_obj, r)
                 end
-                # r.gift_next_value = <value_of_gift_minus_redemption_amount>
-                # r.ticket_id = <ticket_id from zapper to identify ticket>
-                # r.status = 'redeemed'
-                # self.balance = <new gift balance>
-                # self.status = 'done' if gift is finished
                 resp['success'] = true
             else
                 resp['success'] = false
