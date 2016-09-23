@@ -29,6 +29,8 @@ class Gift < ActiveRecord::Base
     before_validation :build_oauth
     before_validation :format_value
     before_validation :format_cost
+    before_validation :set_expires_at
+    before_validation :set_scheduled_at
 
 #   -------------
 
@@ -286,8 +288,23 @@ class Gift < ActiveRecord::Base
         if self.pay_stat == "payment_error"
             self.status = "cancel"
         else
-            if self.scheduled_at.present? && (self.scheduled_at + 18.hours) > DateTime.now.utc
-                self.status = "schedule"
+            if self.scheduled_at.present? && (self.scheduled_at.to_date >= DateTime.now.utc.to_date)
+                # scheduler runs at 14:30 UTC
+                if self.scheduled_at.to_date > DateTime.now.utc.to_date
+                    self.status = "schedule"
+                else # self.scheduled_at.to_date == DateTime.now.utc.to_date
+                    if DateTime.now.utc.hour > 14
+                        # if its after 14 UTC and scheduled_at is same day as today .. deliver now
+                        if self.receiver_id.nil?
+                            self.status = "incomplete"
+                        else
+                            self.status = 'open'
+                        end
+                    else
+                        # if its before 14 UTC and scheduled at is same day as today .. schedule
+                        self.status = "schedule"
+                    end
+                end
             else
                 if self.receiver_id.nil?
                     self.status = "incomplete"
@@ -579,6 +596,22 @@ private
     def set_balance
         if self.balance.nil?
             self.balance = self.value_cents
+        end
+    end
+
+    def set_scheduled_at
+            # have to set expires_at to 12 p, (noon) day of delivery
+            # schedule cron runs at UTC 14:30
+        if self.scheduled_at.respond_to?(:midday)
+            self.scheduled_at = self.scheduled_at.midday
+        end
+    end
+
+    def set_expires_at
+            # have to set expires_at to 12 p, (noon) day of expiration ... that is so it will display correct on android (which applys timezone)
+            # expiration cron pulls the hours off and just uses the date
+        if self.expires_at.respond_to?(:midday)
+            self.expires_at = self.expires_at.midday
         end
     end
 

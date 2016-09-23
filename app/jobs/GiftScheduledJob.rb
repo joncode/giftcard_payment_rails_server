@@ -53,3 +53,11 @@ end
 # end
 # end
 # end
+
+# ps = Proto.where(id: a)
+# ps.each do |p|
+# p.update_column :expires_at, t
+# end
+
+# p.update_column :expires_in, nil
+# p.update_column(:start_in, 0) if (p.start_in.to_i != 0)
