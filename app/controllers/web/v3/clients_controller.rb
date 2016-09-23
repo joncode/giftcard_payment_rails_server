@@ -90,15 +90,15 @@ class Web::V3::ClientsController < MetalCorsController
 			# ie table34lasvegas.com contains lasvegas
 		if slug.match(/-/) && !slug.match(/_-_/)
 			# see if new golfnow URL
-			ary = slug.to_s.split('-')
-			s1 = ary[0]
-			s2 = ary[1]
-			return nil if s1.nil? || s2.nil?
-			if (s1.to_i > 0) && (s1.length == s1.to_i.to_s.length) && (s2.to_i > 0) && (s2.length == s2.to_i.to_s.length)
-				domain = slug
-			else
-				return nil
-			end
+			# ary = slug.to_s.split('-')
+			# s1 = ary[0]
+			# s2 = ary[1]
+			# return nil if s1.nil? || s2.nil?
+			# if (s1.to_i > 0) && (s1.length == s1.to_i.to_s.length) && (s2.to_i > 0) && (s2.length == s2.to_i.to_s.length)
+			# 	domain = slug
+			# else
+			# 	return nil
+			# end
 		end
 			# remove all unwanted characters
 		ary_split = slug.to_s.split('.')
