@@ -5,6 +5,7 @@ class Web::V3::GiftsController < MetalCorsController
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
     rescue_from Timeout::Error, :with => :rescue_from_timeout
+    rescue_from Rack::Timeout::RequestTimeoutException, :with => :rescue_from_timeout
 
     def index
         user_id = params[:user_id]
