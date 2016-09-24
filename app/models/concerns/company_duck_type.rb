@@ -30,4 +30,5 @@ module CompanyDuckType
     end
 
     alias_method :timezone, :time_zone
+
 end

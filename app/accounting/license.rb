@@ -1,4 +1,5 @@
 class License < ActiveRecord::Base
+	extend LicenseMaker
 	# 	might be based on live date of the contract, might be based on live date of the locations
 
 	# note -  text field to dump the results of each successful register request
@@ -9,10 +10,29 @@ class License < ActiveRecord::Base
 	# ENUM :recurring_type 'monthly', 'annual'
 	# ENUM :origin  'subscription', 'promo'
 	# ENUM :amount_action  'single', 'multiple' , 'variable_merchant', 'variable_redemption'
+	# ENUM :charge_type 'card', 'ach', 'wire', 'check'
+
 
 #   -------------
 
-	belongs_to :partner
+	validates_inclusion_of :notify_day, :in => 1..30, allow_blank: true, message: 'can either be blank or 1 - 30'
+	validates_presence_of :partner_type, :partner_id, :origin, :amount_action,
+		:charge_type, :status, :recurring_type
+
+#   -------------
+
+	before_create :set_expires_at
+	before_create :set_ccy
+	before_create :set_process_dates
+
+#   -------------
+
+	attr_accessor :over_type, :tab
+
+#   -------------
+
+	has_many :registers
+	belongs_to :partner, polymorphic: true
 
 #   -------------
 
@@ -20,10 +40,19 @@ class License < ActiveRecord::Base
 		where(status: 'live')
 	end
 
+
+	def self.statuses
+		['pending', 'live', 'expired', 'cancel', 'stop']
+	end
+
+	def self.charge_types
+		['card', 'ach', 'wire', 'check']
+	end
+
 #   -------------
 
 	def count_merchants
-		Merchant.count_for_affiliate(partner.id)
+		Merchant.count_for(partner)
 	end
 
 	def count_redemptions
@@ -36,8 +65,8 @@ class License < ActiveRecord::Base
 
 #   -------------
 
-	def ccy
-		self.ccy || 'USD'
+	def percentage
+		self.percent / 100
 	end
 
 	def charge_amount
@@ -46,7 +75,7 @@ class License < ActiveRecord::Base
 		when 'variable_merchant'
 			(count_merchants * self.amount)
 		when 'variable_redemption'
-			(total_promo_redemptions * self.percent) # round up / down ??
+			(total_promo_redemptions * self.percentage).to_i
 		else
 			self.amount
 		end
@@ -132,6 +161,30 @@ class License < ActiveRecord::Base
 		end
 	end
 
+private
+
+	def set_expires_at
+		if self.live_at
+			self.expires_at = self.live_at + 1.year
+		elsif self.partner.respond_to?(:live_at)
+			self.live_at = self.partner.live_at
+			self.expires_at = self.live_at + 1.year
+		end
+	end
+
+	def set_ccy
+		if self.ccy.nil? && self.partner
+			self.ccy = self.partner.ccy
+		end
+	end
+
+	def set_process_dates
+		if self.recurring_type == 'annual'
+			self.process_month = self.live_at.month
+			self.process_day = self.live_at.day
+		end
+	end
+
 end
 
 #<Register id: 8659, gift_id: 362204, amount: 900, partner_id: 75, partner_type: "Merchant",
@@ -151,250 +204,6 @@ end
 # reg
 
 
-# --------------------------------------------------------------------
-
-# Wolfgang Puck License
-#  	fixed monthly subscription fees , compounding licenses
-
-
-# id: '238ry1f-23fg12-12312',
-# status: 'live',
-# partner_id: 56,
-# partner_type: 'Affiliate',
-# live_date: '10/01/2016',
-# end_date: '10/01/2017',
-# origin: 'subscription',
-# response: {
-# 	line_item: {
-# 		name: 'Subscription Fee',
-# 		detail: '%@ locations',
-# 		detail_action: 'count_merchants'
-# 	}
-# 	payment_date: {
-# 		recurring_type: 'monthly',
-# 		process_day: 5,
-# 		weekday: 'monday',
-# 		notify_day: 2,
-# 		charge_type: 'Card',
-# 		charge_id: 234 # card.id
-# 	}
-# 	amount: {
-# 		cents: 4000,
-# 		ccy: "USD",
-# 		type: 'variable_merchant'
-# 	}
-# }
-
-
-# id: '13851y24-1237891-123',
-# status: 'live',
-# partner_id: 56,
-# partner_type: 'Affiliate',
-# live_date: '10/01/2016',
-# end_date: '10/01/2017',
-# origin: 'promo',
-# response: {
-# 	line_item: {
-# 		name: 'Promotions Fee',
-# 		detail: '%@ promotional gift redemptions',
-# 		detail_action: 'count_redemptions'
-# 	}
-# 	payment_date: {
-# 		recurring_type: 'monthly',
-# 		process_day: 5,
-# 		weekday: 'monday',
-# 		notify_day: 2,
-# 		charge_type: 'credit_card',
-# 		charge_id: 234 # card.id
-# 	}
-# 	amount: {
-# 		percentage: 0.05,
-# 		ccy: "USD",
-# 		type: 'variable_redemption'
-# 	}
-# }
-
-# --------------------------------------------------------------------
-
-# GolfNow License
-# 	fixed monthly subscription fees , compounding licenses
-
-# id: '4534q5-439fy189-234',
-# status: 'live',
-# partner_id: 31,
-# partner_type: 'Affiliate',
-# live_date: '2/01/2016',
-# end_date: '2/01/2017',
-# auto_renew: false,
-# origin: 'subscription',
-# response: {
-# 	line_item: {
-# 		name: 'Subscription Fee',
-# 		detail: '300 golf courses'
-# 	}
-# 	payment_date: {
-# 		recurring_type: 'annual',
-# 		process_day: 5,
-# 		weekday: 'monday',
-# 		notify_day: 2,
-# 		charge_type: 'check',
-# 		charge_id: nil
-# 	}
-# 	amount: {
-# 		cents: 7500000,
-# 		ccy: "USD",
-# 		type: 'multiple',
-# 		units: 300
-# 	}
-# }
-
-# id: '9234fg23-23yf9g3-2hg3f71',
-# status: 'live',
-# partner_id: 31,
-# partner_type: 'Affiliate',
-# live_date: '2/01/2016',
-# end_date: '2/01/2017',
-# auto_renew: false,
-# origin: 'subscription',
-# response: {
-# 	line_item: {
-# 		name: 'Subscription Fee',
-# 		detail: '100 golf courses - tier 2'
-# 	}
-# 	payment_date: {
-# 		recurring_type: 'annual',
-# 		process_month: 2,
-# 		process_day: 1,
-# 		charge_type: 'check',
-# 		charge_id: nil
-# 	}
-# 	amount: {
-# 		cents: 2500000,
-# 		ccy: "USD",
-# 		type: 'multiple',
-# 		units: 100
-# 	}
-# }
-
-# --------------------------------------------------------------------
-
-# Border Grill
-# 	variable monthly subscription fees
-
-# id: '238ry1f-23fg12-12312',
-# status: 'live',
-# partner_id: 22,
-# partner_type: 'Affiliate',
-# live_date: '6/01/2016',
-# end_date: '6/01/2017',
-# origin: 'subscription',
-# response: {
-# 	line_item: {
-# 		name: 'Subscription Fee',
-# 		detail: '%@ locations',
-# 		detail_action: 'count_merchants'
-# 	}
-# 	payment_date: {
-# 		recurring_type: 'monthly',
-# 		process_day: 5,
-# 		weekday: 'monday',
-# 		notify_day: 2,
-# 		charge_type: 'ach',
-# 		charge_id: nil
-# 	}
-# 	amount: {
-# 		cents: 10000,
-# 		ccy: "USD",
-# 		type: 'variable_merchant'
-# 	}
-# }
-
-# --------------------------------------------------------------------
-
-# Basic Merchant
-# 	fixed monthly subscription fees , one license
-
-# id: '81324681-1241-12414',
-# status: 'live',
-# partner_id: 3264,
-# partner_type: 'Merchant',
-# live_date: '10/01/2016',
-# end_date: '10/01/2017',
-# origin: 'subscription',
-# response: {
-# 	line_item: {
-# 		name: 'Subscription Fee',
-# 		detail: 'single locations'
-# 	}
-# 	payment_date: {
-# 		recurring_type: 'monthly',
-# 		process_day: 5,
-# 		weekday: 'monday',
-# 		notify_day: 5,
-# 		charge_type: 'Card',
-# 		charge_id: 8574 # card.id
-# 	}
-# 	amount: {
-# 		cents: 3000,
-# 		ccy: "USD",
-# 		type: 'single'
-# 	}
-# }
-
-# --------------------------------------------------------------------
-
-
-# rg model License status partner_type partner_id:integer live_date:date
-# end_date:date auto_renew:boolean origin line_items:json payment:json amount:json note:text
-
-
-
-# id: '238ry1f-23fg12-12312',
-# status: 'live',
-# partner_id: 56,
-# partner_type: 'Affiliate',
-# live_date: '10/01/2016',
-# end_date: '10/01/2017',
-# origin: 'subscription',
-# name: 'Subscription Fee',
-# detail: '%@ locations',
-# detail_action: 'count_merchants'
-# amount: 4000,
-# ccy: "USD",
-# units: nil,
-# amount_action: 'variable_merchant'
-# recurring_type: 'monthly',
-# weekday: 'monday',
-# process_day: 5,
-# process_month: nil,
-# notify_day: 2,
-# charge_type: 'Card',
-# charge_id: 234 # card.id
-
-
-# id: '9234fg23-23yf9g3-2hg3f71',
-# status: 'live',
-# partner_id: 31,
-# partner_type: 'Affiliate',
-# live_date: '2/01/2016',
-# end_date: '2/01/2017',
-# auto_renew: false,
-# origin: 'subscription',
-# name: 'Subscription Fee',
-# detail: '100 golf courses - tier 2',
-# detail_action: nil,
-# amount: 2500000,
-# percent: nil,
-# amount_action: 'multiple',
-# units: 100,
-# ccy: "USD",
-# recurring_type: 'annual',
-# weekday: nil,
-# process_month: 2,
-# process_day: 1,
-# notify_day: nil,
-# charge_type: 'check',
-# charge_id: nil
 
       # t.string :partner_type
       # t.integer :partner_id

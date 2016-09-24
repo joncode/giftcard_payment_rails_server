@@ -58,6 +58,32 @@ class Redemption < ActiveRecord::Base
 		end
 	end
 
+	def self.count_promo_redemptions_for(partner, start_date, end_date)
+        redemptions = promo_redemptions_for(partner, start_date, end_date)
+        redemptions.length
+	end
+
+	def self.total_promo_redemptions_for(partner, start_date, end_date)
+		#- which returns an integer of cents redeemed in time period
+        redemptions = promo_redemptions_for(partner, start_date, end_date)
+        redemptions.map(&:amount).sum
+	end
+
+	def self.promo_redemptions_for(partner, start_date, end_date)
+		if partner.kind_of?(Affiliate)
+			specifc_query = "g.merchant_id = m.id AND m.affiliate_id = #{partner.id}"
+			setup_vars = ", merchants m "
+		else
+			specifc_query = "g.merchant_id = #{partner.id}"
+			setup_vars = ''
+		end
+
+		query = "SELECT r.* FROM redemptions r, gifts g #{setup_vars} \
+WHERE (g.cat >=  200 AND g.cat <  300) AND r.gift_id = g.id AND g.status = 'redeemed' AND r.status = 'done' \
+AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{end_date}')"
+        find_by_sql(query)
+	end
+
 end
 # == Schema Information
 #

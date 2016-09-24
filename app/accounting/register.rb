@@ -23,13 +23,13 @@ class Register < ActiveRecord::Base
 	belongs_to :partner,  polymorphic: true, autosave: true
 	belongs_to :gift
 	belongs_to :payment
-
+	belongs_to :license
 
 #   -------------
 
 
 	FEE_TYPES = { iom: "ItsOnMe", loc: "Location Fee", aff_user: "User Override", aff_loc: "Commission Fee", aff_link: "Promo Link" }
-	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link ]
+	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link, :subs, :promo ]
 	enum type_of: [ :debt, :credit ]
 	attr_accessor :affiliation
 

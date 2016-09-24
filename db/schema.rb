@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160924044608) do
+ActiveRecord::Schema.define(version: 20160924131123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -807,6 +807,7 @@ ActiveRecord::Schema.define(version: 20160924044608) do
     t.integer  "client_id"
     t.boolean  "pos_direct",                                           default: false
     t.string   "ccy",              limit: 6,                           default: "USD"
+    t.date     "live_at"
   end
 
   add_index "merchants", ["ftmeta"], name: "merchants_ftsmeta_idx", using: :gin
@@ -971,6 +972,7 @@ ActiveRecord::Schema.define(version: 20160924044608) do
     t.integer  "revenue",                    default: 0
     t.integer  "refund",                     default: 0
     t.integer  "payment_amount",             default: 0
+    t.string   "type_of",                    default: "payment"
   end
 
   add_index "payments", ["bank_id", "start_date"], name: "index_payments_on_bank_id_and_start_date", using: :btree
@@ -1225,6 +1227,8 @@ ActiveRecord::Schema.define(version: 20160924044608) do
     t.datetime "updated_at"
     t.integer  "payment_id"
     t.string   "ccy",          limit: 6,   default: "USD"
+    t.string   "note"
+    t.uuid     "license_id"
   end
 
   add_index "registers", ["created_at", "partner_id", "partner_type"], name: "index_registers_on_created_at_and_partner_id_and_partner_type", using: :btree

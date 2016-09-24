@@ -58,24 +58,24 @@ class Gift < ActiveRecord::Base
 
 #   -------------
 
-    has_one     :oauth,         validate: true,     dependent: :destroy
-    has_one     :sms_contact,   autosave: true
-    has_one     :proto_join
-    has_many    :gift_items,    dependent: :destroy
-    has_many    :dittos,        as: :notable
-    has_many    :redemptions
     has_many    :affiliate_gifts
     has_many    :affiliates,    through: :affiliate_gifts
+    has_many    :dittos,        as: :notable
+    has_many    :gift_items,    dependent: :destroy
     has_many    :landing_pages, through: :affiliate_gifts
+    has_one     :oauth,         validate: true,     dependent: :destroy
+    has_one     :proto_join
+    has_many    :redemptions
     has_many    :registers
+    has_one     :sms_contact,   autosave: true
 
-    belongs_to :merchant
-    belongs_to :giver,         polymorphic: :true
-    belongs_to :receiver,      class_name: User
-    belongs_to :payable,       polymorphic: :true, autosave: true
-    belongs_to :refund,        polymorphic: :true, autosave: true
     belongs_to :client
+    belongs_to :giver,         polymorphic: :true
+    belongs_to :merchant
     belongs_to :partner, polymorphic: true
+    belongs_to :payable,       polymorphic: :true, autosave: true
+    belongs_to :receiver,      class_name: User
+    belongs_to :refund,        polymorphic: :true, autosave: true
 
 
 #   -------------

@@ -12,6 +12,7 @@ class Affiliate < ActiveRecord::Base
 	has_many :affiliations
 	has_many :gifts, through: :affiliate_gifts
 	has_many :landing_pages
+    has_many :licenses, as: :partner
 	has_many :merchants, through: :affiliations, source: :target, source_type: 'Merchant'
 	has_many :payments,     as: :partner
 	has_many :registers,    as: :partner

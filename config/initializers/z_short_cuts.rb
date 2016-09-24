@@ -10,6 +10,7 @@ C = Client
 FBO = OpsFacebook
 G = Gift
 L = List
+LI = License
 LG = ListGraph
 M = Merchant
 MI = MenuItem

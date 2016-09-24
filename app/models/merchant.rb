@@ -7,6 +7,8 @@ class Merchant < ActiveRecord::Base
 
     # default_scope -> { where(active: true).where(paused: false).order("name ASC") }  # indexed w/ city
 
+    scope :live_scope, -> { where(active: true, paused: false, live: true) }
+    scope :coming_scope, -> { where(active: true, paused: false, live: false) }
 
 #   -------------
 
@@ -36,6 +38,7 @@ class Merchant < ActiveRecord::Base
 
     has_many :campaign_items
     has_many :gifts
+    has_many :licenses, as: :partner
     has_many :payments,     as: :partner
     has_many :protos
     has_many :providers_socials
@@ -68,6 +71,16 @@ class Merchant < ActiveRecord::Base
         redeemed_gifts = gifts.where(status: 'redeemed').order("redeemed_at DESC")
         notified_gifts + redeemed_gifts
     end
+
+    def self.count_for(partner)
+        if partner.kind_of?(Affiliate)
+            live_scope.where(affiliate_id: partner.id).count
+        elsif partner.kind_of?(Merchant)
+            1
+        end
+    end
+
+#   -------------
 
     def menu_string
         begin
