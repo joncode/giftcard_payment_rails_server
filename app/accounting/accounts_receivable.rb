@@ -50,8 +50,8 @@ class AccountsReceivable
 				end
 			end
 			invoices = []
-			invoice_obj.each do |k , ary|
-				invoices << make_invoice ary
+			invoice_obj.each do |k,registers|
+				invoices << make_invoice(registers)
 			end
 				# 	3. notify the receiving company
 			invoice.each do |invoice|
