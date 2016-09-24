@@ -30,7 +30,7 @@ class License < ActiveRecord::Base
 		Redemption.count_promo_redemptions_for(partner, start_date, end_date)
 	end
 
-	def total_promo_redemptions_for(partner)
+	def total_promo_redemptions
 		Redemption.total_promo_redemptions_for(partner, start_date, end_date)
 	end
 
@@ -46,7 +46,7 @@ class License < ActiveRecord::Base
 		when 'variable_merchant'
 			(count_merchants * self.amount)
 		when 'variable_redemption'
-			(total_promo_redemptions_for(self.partner) * self.percent) # round up / down ??
+			(total_promo_redemptions * self.percent) # round up / down ??
 		else
 			self.amount
 		end
