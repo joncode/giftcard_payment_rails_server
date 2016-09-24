@@ -6,6 +6,7 @@ class AccountsReceivableCronJob
 
     def self.perform
 
+
 		# A. auto-renew , alert and update variable amount licenses
 		AccountsReceivable.check_licenses
 
@@ -14,5 +15,7 @@ class AccountsReceivableCronJob
 
 		# D. process the payment
 		AccountsReceivable.process
+	rescue => e
+		puts "500 Internal AccountsReceivableCronJob #{e.inspect}"
     end
 end
