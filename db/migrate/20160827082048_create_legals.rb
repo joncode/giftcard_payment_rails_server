@@ -1,5 +1,5 @@
 class CreateLegals < ActiveRecord::Migration
-  enable_extension 'pgcrypto' unless extension_enabled?('pgcrypto')
+  # enable_extension 'pgcrypto' unless extension_enabled?('pgcrypto')
   def change
     create_table :legals do |t|
       t.string :first_name

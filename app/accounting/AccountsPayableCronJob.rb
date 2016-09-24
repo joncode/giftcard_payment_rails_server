@@ -1,4 +1,4 @@
-class PaymentCalcCronJob
+class AccountsPayableCronJob
 
     @queue = :database
 

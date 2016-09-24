@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160918222802) do
+ActiveRecord::Schema.define(version: 20160924044608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pg_stat_statements"
   enable_extension "pgcrypto"
+  enable_extension "uuid-ossp"
 
   create_table "affiliates", force: :cascade do |t|
     t.string   "first_name",         limit: 255
@@ -593,6 +594,36 @@ ActiveRecord::Schema.define(version: 20160918222802) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
   end
+
+  create_table "licenses", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "status"
+    t.string   "partner_type"
+    t.integer  "partner_id"
+    t.date     "live_at"
+    t.date     "expires_at"
+    t.string   "origin"
+    t.string   "name"
+    t.string   "detail"
+    t.string   "detail_action"
+    t.string   "amount_action"
+    t.integer  "amount"
+    t.integer  "percent"
+    t.integer  "units"
+    t.string   "ccy"
+    t.string   "recurring_type"
+    t.string   "weekday"
+    t.integer  "process_month"
+    t.integer  "process_day"
+    t.integer  "notify_day"
+    t.string   "charge_type"
+    t.integer  "charge_id"
+    t.text     "note"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "licenses", ["partner_type", "partner_id"], name: "index_licenses_on_partner_type_and_partner_id", using: :btree
+  add_index "licenses", ["status"], name: "index_licenses_on_status", using: :btree
 
   create_table "list_graphs", force: :cascade do |t|
     t.integer  "list_id"

@@ -2,7 +2,7 @@ namespace :payments do
 
     desc "PAYMENT CALCULATOR"
     task calc: :environment do
-        PaymentCalcCronJob::perform
+        AccountsPayableCronJob::perform
     end
 
 end

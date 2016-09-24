@@ -6,7 +6,7 @@ include UserFactory
 include MerchantFactory
 include GiftModelFactory
 
-describe PaymentCalcCronJob do
+describe AccountsPayableCronJob do
 
     describe :perform do
 
@@ -107,7 +107,7 @@ describe PaymentCalcCronJob do
 
 			date = DateTime.now - 1.weeks
 
-			PaymentCalcCronJob.perform date
+			AccountsPayableCronJob.perform date
 			ps = Payment.all
 			ps.count.should == 7
 
