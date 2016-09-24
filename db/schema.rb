@@ -607,7 +607,7 @@ ActiveRecord::Schema.define(version: 20160924044608) do
     t.string   "detail_action"
     t.string   "amount_action"
     t.integer  "amount"
-    t.integer  "percent"
+    t.float    "percent"
     t.integer  "units"
     t.string   "ccy"
     t.string   "recurring_type"

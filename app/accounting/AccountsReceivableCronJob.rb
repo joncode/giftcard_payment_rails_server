@@ -6,10 +6,13 @@ class AccountsReceivableCronJob
 
     def self.perform
 
-        # B. generate the recurring registers
-        AccountsReceivable.make_registers_and_invoices
+		# A. auto-renew , alert and update variable amount licenses
+		AccountsReceivable.check_licenses
 
-        # D. process the payment
-        AccountsReceivable.process
+		# B. generate the recurring registers
+		AccountsReceivable.make_registers_and_invoices
+
+		# D. process the payment
+		AccountsReceivable.process
     end
 end
