@@ -188,11 +188,11 @@ class Gift < ActiveRecord::Base
     end
 
     def service_cents
-        currency_to_cents self.service
+        currency_to_cents(self.service)
     end
 
     def purchase_total
-        pre_round = self.value_cents + self.service_cents
+        pre_round = self.value_cents.to_i + self.service_cents.to_i
         display_money cents: pre_round, ccy: self.ccy
     end
 
