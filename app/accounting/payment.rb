@@ -29,10 +29,10 @@ class Payment < ActiveRecord::Base
 
 	def self.get_current_payment_for_partner(partner_obj, start_date)
         if partner_obj.bank_id.present?
-            payment = where(bank_id: partner_obj.bank_id, start_date: start_date).first_or_initialize
+            payment = where(bank_id: partner_obj.bank_id, start_date: start_date, type_of: 'payment').first_or_initialize
         else
                 # bank-less payment record
-            payment = where(partner: partner_obj, start_date: start_date).first_or_initialize
+            payment = where(partner: partner_obj, start_date: start_date, type_of: 'payment').first_or_initialize
         end
         if payment.new_record?
             # get previous balance off previous payment
@@ -46,12 +46,12 @@ class Payment < ActiveRecord::Base
 
 	def self.get_last_payment_for_partner(partner_obj)
         if partner_obj.bank_id.present?
-            last = where(bank_id: partner_obj.bank_id).order(start_date: :desc).limit(1).first
+            last = where(bank_id: partner_obj.bank_id).order(start_date: :desc, type_of: 'payment').limit(1).first
             if last.nil?
-                last = where(partner: partner_obj).order(start_date: :desc).limit(1).first
+                last = where(partner: partner_obj).order(start_date: :desc, type_of: 'payment').limit(1).first
             end
         else
-            last = where(partner: partner_obj).order(start_date: :desc).limit(1).first
+            last = where(partner: partner_obj).order(start_date: :desc, type_of: 'payment').limit(1).first
         end
         return last
 	end

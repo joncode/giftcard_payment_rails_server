@@ -16,7 +16,11 @@ class AddLicenseColumnsToOtherTables < ActiveRecord::Migration
 
   	def set_live_at
   		ms = Merchant.live_scope.each do |m|
-  			m.update_column(:live_at, (m.created_at.to_date + 14.days))
+  			if m.created_at < 14.days.ago
+  				m.update_column(:live_at, (m.created_at.to_date + 14.days))
+  			else
+  				m.update_column(:live_at, m.updated_at.to_date)
+  			end
   		end
   	end
 end
