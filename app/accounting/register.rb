@@ -3,21 +3,11 @@ class Register < ActiveRecord::Base
 
 	before_validation :update_partner, on: :create
 
-
-#   -------------
-
-
 	validates_presence_of :partner_id, :partner_type
-
-
-#   -------------
-
 
 	after_create :save_affiliation
 
-
 #   -------------
-
 
 		#  Merchant || Affiliate == Partner
 	belongs_to :partner,  polymorphic: true, autosave: true
@@ -27,12 +17,37 @@ class Register < ActiveRecord::Base
 
 #   -------------
 
-
 	FEE_TYPES = { iom: "ItsOnMe", loc: "Location Fee", aff_user: "User Override", aff_loc: "Commission Fee", aff_link: "Promo Link" }
-	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link, :subs, :promo ]
+	enum origin:  [ :iom, :loc, :aff_user, :aff_loc, :aff_link, :subscription, :promo ]
 	enum type_of: [ :debt, :credit ]
 	attr_accessor :affiliation
 
+
+
+#   -------------
+
+
+#   -------------
+
+	def self.get_unpaid_invoices
+		where(paid: false).where.not(license_id: nil)
+	end
+
+	def self.init_with_charge_object charge_object
+		#<Register id: 8659, gift_id: 362204, amount: 900, partner_id: 75, partner_type: "Merchant",
+		# origin: 1, type_of: 0, created_at: "2016-09-13 18:43:05", updated_at: "2016-09-13 18:43:05", payment_id: nil, ccy: "USD">
+		charge_object.symbolize_keys!
+		reg = new
+		reg.partner_type = charge_object[:partner_type]
+		reg.partner_id = charge_object[:partner_id]
+		reg.type_of = charge_object[:type] # charge / refund
+		reg.origin = charge_object[:origin]
+		reg.amount = charge_object[:amount]
+		reg.ccy = charge_object[:ccy]
+		reg.license_id = charge_object[:license_id]
+		reg.note = charge_object[:name] + '|' + charge_object[:detail]
+		reg
+	end
 
 #   -------------
 

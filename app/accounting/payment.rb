@@ -1,5 +1,8 @@
 class Payment < ActiveRecord::Base
 
+
+	# ENUM :type_of 'invocie', 'payment'
+
 	before_create :set_partner_to_bank_owner
 
 #   -------------
@@ -19,6 +22,10 @@ class Payment < ActiveRecord::Base
 	end
 
 #   -------------
+
+	def self.get_unpaid_invoices
+		where(paid: false, type_of: 'invoice')
+	end
 
 	def self.get_current_payment_for_partner(partner_obj, start_date)
         if partner_obj.bank_id.present?

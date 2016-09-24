@@ -3,7 +3,7 @@ module LicenseMaker
 	def monthly_basic(partner = nil)
 		l = new
 		l.over_type = 'Monthly Basic'
-		l.status = 'pending'
+		l.status = 'live'
 		l.origin = 'subscription'
 		l.name = 'Monthly Single Subscription'
 		l.detail = 'single location'
@@ -30,7 +30,7 @@ module LicenseMaker
 	def annual_basic(partner = nil)
 		l = new
 		l.over_type = 'Annual Basic'
-		l.status = 'pending'
+		l.status = 'live'
 		l.origin = 'subscription'
 		l.name = 'Annual Single Subscription'
 		l.detail = 'single location'
@@ -57,7 +57,7 @@ module LicenseMaker
 	def monthly_variable(partner = nil)
 		l = new
 		l.over_type = 'Monthly Variable'
-		l.status = 'pending'
+		l.status = 'live'
 		l.origin = 'subscription'
 		l.name = 'Monthly Multiple Subscription'
 		l.detail = 'locations'
@@ -84,7 +84,7 @@ module LicenseMaker
 	def annual_fill_up(partner = nil)
 		l = new
 		l.over_type = 'Annual Subscription Fill Up'
-		l.status = 'pending'
+		l.status = 'live'
 		l.origin = 'subscription'
 		l.name = 'Annual Subscription Package'
 		l.detail = 'locations'
@@ -111,7 +111,7 @@ module LicenseMaker
 	def monthly_promo_gift(partner = nil)
 		l = new
 		l.over_type = 'Monthly Promo Gift'
-		l.status = 'pending'
+		l.status = 'live'
 		l.origin = 'promo'
 		l.name = 'Monthly Promotions Package'
 		l.detail = 'promotional gift redemptions'

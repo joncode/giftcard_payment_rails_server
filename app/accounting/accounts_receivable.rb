@@ -61,27 +61,27 @@ class AccountsReceivable
 
 		def self.make_invoice registers
 				# 	2. make the time period
-			inv = Invoice.new
-			inv.amount = 0
-			inv.paid = false
-			if inv.save
+			invoice = Payment.new
+			invoice.type_of = 'invoice'
+			invoice.amount = 0
+			invoice.paid = false
+			if invoice.save
 				registers.each do |reg|
-					inv.start_date = reg.license.start_date if inv.start_date.nil?
-					inv.end_date = reg.license.end_date if inv.end_date.nil?
-					inv.payment_date = reg.license.payment_date if inv.payment_date.nil?
+					invoice.start_date = reg.license.start_date if invoice.start_date.nil?
+					invoice.end_date = reg.license.end_date if invoice.end_date.nil?
 
 					# 	1. total the registers
-					inv.amount += reg.amount
+					invoice.amount += reg.amount
 				end
 			else
-				msg = "INVOICE FAIL #{inv.errors.full_messages}"
+				msg = "INVOICE FAIL #{invoice.errors.full_messages}"
 				puts msg.inspect
 				OpsTwilio.text_devs msg: msg
 			end
 		end
 
 		def self.process
-			Invoice.get_unpaid.each do |invoice|
+			Payment.get_unpaid_invoices.each do |invoice|
 				# 	1. get the payment from the database
 				# 	2. charge / process the payment
 				# 	3. update the payment with transaction ID info
