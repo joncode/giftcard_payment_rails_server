@@ -8,8 +8,8 @@ Drinkboard::Application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  config.action_mailer.default_url_options = {:host => "drinkboard.herokuapp.com"}
-  config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.default_url_options = {:host => "drinkboard.herokuapp.com"}
+  # config.action_mailer.delivery_method = :smtp
   # Disable Rails's static asset server (Apache or nginx will already do this)
   config.serve_static_files = false
 
@@ -57,7 +57,7 @@ Drinkboard::Application.configure do
   # config.assets.precompile += %w( search.js )
 
   # Disable delivery errors, bad email addresses will be ignored
-  config.action_mailer.raise_delivery_errors = true
+  # config.action_mailer.raise_delivery_errors = true
 
   # Enable threaded mode
   # config.threadsafe!
