@@ -2,6 +2,7 @@ namespace :payments do
 
     desc "PAYMENT CALCULATOR"
     task calc: :environment do
+    	require 'accounting/AccountsReceivableCronJob'
     	begin
 	    	AccountsReceivableCronJob.perform
 	    rescue => e
