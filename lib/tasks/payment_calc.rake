@@ -1,6 +1,3 @@
-require 'accounting/AccountsReceivableCronJob'
-require 'accounting/AccountsPayableCronJob'
-
 namespace :payments do
 
     desc "PAYMENT CALCULATOR"
