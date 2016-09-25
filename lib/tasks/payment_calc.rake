@@ -1,3 +1,6 @@
+require 'accounting/AccountsReceivableCronJob'
+require 'accounting/AccountsPayableCronJob'
+
 namespace :payments do
 
     desc "PAYMENT CALCULATOR"
@@ -7,7 +10,11 @@ namespace :payments do
 	    rescue => e
 	    	puts "500 Internal PAYMENT CALCULATOR #{e.inspect}"
 	    end
-        AccountsPayableCronJob::perform
+	    begin
+		    AccountsPayableCronJob::perform
+	    rescue => e
+	    	puts "500 Internal PAYMENT CALCULATOR 2 #{e.inspect}"
+	    end
     end
 
 end
