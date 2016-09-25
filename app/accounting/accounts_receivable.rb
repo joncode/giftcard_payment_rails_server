@@ -18,7 +18,7 @@ class AccountsReceivable
 			end
 			# MUST calculate all the licenses before
 			# C. generate the invoice and send
-			AccountsReceivable.make_invoices
+			invoice_and_notify
 		end
 
 		def register license
