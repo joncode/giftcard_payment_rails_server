@@ -3,6 +3,7 @@ class AccountsReceivable
 	class << self
 
 		def check_licenses
+			puts "AR - check_licenses"
 			# get all the merchants and make sure they have a license
 			# get all the partners and make sure they have licenses
 				# count up all golfnow licenses and make sure they are covered
@@ -12,6 +13,7 @@ class AccountsReceivable
 		end
 
 		def make_registers_and_invoices
+			puts "AR - make_registers_and_invoices"
 				# 	1. gets all the licenses
 			License.get_live.each do |license|
 				register license
@@ -22,6 +24,7 @@ class AccountsReceivable
 		end
 
 		def register license
+			puts "AR - register"
 			return nil unless license.make_register_today?
 				# 	2. asks the license for a charge object
 			hsh = license.charge_object
@@ -39,6 +42,7 @@ class AccountsReceivable
 		end
 
 		def invoice_and_notify
+			puts "AR - invoice_and_notify"
 				# 	1. gets all the licenses
 			invoice_obj = {}
 			Register.get_unpaid_invoices.each do |register|
@@ -54,12 +58,13 @@ class AccountsReceivable
 				invoices << make_invoice(registers)
 			end
 				# 	3. notify the receiving company
-			invoice.each do |invoice|
+			invoices.each do |invoice|
 				invoice.notify_customer
 			end
 		end
 
 		def self.make_invoice registers
+			puts "AR - make_invoice"
 				# 	2. make the time period
 			invoice = Payment.new
 			invoice.type_of = 'invoice'
@@ -81,6 +86,7 @@ class AccountsReceivable
 		end
 
 		def self.process
+			puts "AR - process"
 			Payment.get_unpaid_invoices.each do |invoice|
 				# 	1. get the payment from the database
 				# 	2. charge / process the payment
