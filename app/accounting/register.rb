@@ -30,7 +30,7 @@ class Register < ActiveRecord::Base
 #   -------------
 
 	def self.get_unpaid_invoices
-		where(paid: false).where.not(license_id: nil)
+		where(partner_id: nil, gift_id: nil).where.not(license_id: nil)
 	end
 
 	def self.init_with_charge_object charge_object

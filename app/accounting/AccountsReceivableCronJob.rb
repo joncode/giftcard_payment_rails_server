@@ -5,7 +5,7 @@ class AccountsReceivableCronJob
     @queue = :subscription
 
     def self.perform
-
+    	puts "AccountsReceivableCronJob"
 
 		# A. auto-renew , alert and update variable amount licenses
 		AccountsReceivable.check_licenses
