@@ -108,7 +108,7 @@ private
 
     def self.expires_at_calc proto
         if proto.expires_at
-            proto.expires_at + 1.day
+            proto.expires_at
         elsif proto.expires_in.to_i > 0
             DateTime.now.utc + proto.days
         else
