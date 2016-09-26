@@ -2,7 +2,7 @@ namespace :payments do
 
     desc "PAYMENT CALCULATOR"
     task calc: :environment do
-    	require '../../app/accounting/AccountsReceivableCronJob'
+    	Dir[Rails.root.join("app/accounting/*.rb")].each { |f| require f }
     	begin
 	    	AccountsReceivableCronJob.perform
 	    rescue => e
