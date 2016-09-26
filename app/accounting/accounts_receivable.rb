@@ -63,7 +63,7 @@ class AccountsReceivable
 			end
 		end
 
-		def self.make_invoice registers
+		def make_invoice registers
 			puts "AR - make_invoice"
 				# 	2. make the time period
 			invoice = Payment.new
@@ -85,7 +85,7 @@ class AccountsReceivable
 			end
 		end
 
-		def self.process
+		def process
 			puts "AR - process"
 			Payment.get_unpaid_invoices.each do |invoice|
 				# 	1. get the payment from the database
