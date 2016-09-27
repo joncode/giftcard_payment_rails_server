@@ -33,8 +33,6 @@ module OpsStripeHelper
 			process_card_success card
 		elsif !@cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil?) && (card.cvc_check == 'pass')
 			process_card_success card
-		elsif !@cvc_check_skip && (card.address_zip_check.nil?) && (card.address_line1_check.nil?) && (card.cvc_check == 'pass')
-			process_card_success card
 		elsif @cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check.nil?)
 			# do nothing
 		elsif @cvc_check_skip && (card.address_zip_check == 'pass') && (card.address_line1_check == 'pass')
