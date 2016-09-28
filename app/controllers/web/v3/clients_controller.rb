@@ -29,57 +29,67 @@ class Web::V3::ClientsController < MetalCorsController
 	def create
 		hsh = client_create_params
 
-		ref = hsh[:ref]
-		slug1 = hsh[:slug1]
-		slug2 = hsh[:slug2]
-		ary_of_slugs = [ ref, slug1, slug2 ]
-		ary_of_slugs = ary_of_slugs.map { |a| remove_unwanted_url_parts(a) }
-		ary_of_slugs.compact!
+		if hsh[:slug2].blank?
+			# get the client with slug 1 as url_name
+			client = Client.where(url_name: hsh[:slug1].to_s.downcase).first
+		end
 
-		if ary_of_slugs.length == 0
-			# no data for client
-			clients = ["No arrays of slugs", "no data"]
-			fail_web({ err: "INVALID_INPUT", msg: "No Data"})
-		else
-			clients = Client.find_with_url ary_of_slugs
-			client = nil
+		if client.nil?
+				# old legacy system
+			ref = hsh[:ref]
+			slug1 = hsh[:slug1]
+			slug2 = hsh[:slug2]
+			ary_of_slugs = [ ref, slug1, slug2 ]
+			ary_of_slugs = ary_of_slugs.map { |a| remove_unwanted_url_parts(a) }
+			ary_of_slugs.compact!
 
-			if clients.length == 1
-				client = clients[0]
-			elsif clients.length == 0
-				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
-			else # clients.length > 1 menu widget and golf advisor widget
-				val = nil
-				ary_of_slugs.each do |sl|
-					next if sl.nil?
-					if sl.match(/_menu_ga/)
-						# golf advisor slug
-						val = sl
-						break
-					elsif sl.match(/_gnow/)
-						# golf now slug
-						val = sl
-						break
-					elsif sl.match(/_menu/)
-						#standard menu widget
-						val = sl
-						break
+			if ary_of_slugs.length == 0
+				# no data for client
+				clients = ["No arrays of slugs", "no data"]
+				fail_web({ err: "INVALID_INPUT", msg: "No Data"})
+			else
+				clients = Client.find_with_url ary_of_slugs
+				client = nil
+
+				if clients.length == 1
+					client = clients[0]
+				elsif clients.length == 0
+					fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
+				else # clients.length > 1 menu widget and golf advisor widget
+					val = nil
+					ary_of_slugs.each do |sl|
+						next if sl.nil?
+						if sl.match(/_menu_ga/)
+							# golf advisor slug
+							val = sl
+							break
+						elsif sl.match(/_gnow/)
+							# golf now slug
+							val = sl
+							break
+						elsif sl.match(/_menu/)
+							#standard menu widget
+							val = sl
+							break
+						end
+					end
+					if val
+						client = clients.where("url_name = '#{val}'").first
+					elsif client = clients.where("download_url ilike '%#{ref}%'").first
+						# menu widget
+					else
+						fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
 					end
 				end
-				if val
-					client = clients.where("url_name = '#{val}'").first
-				elsif client = clients.where("download_url ilike '%#{ref}%'").first
-					# menu widget
-				else
-					fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
-				end
-			end
-			if client
-				client.click
-				success client
+
 			end
 		end
-		email_developers(clients, ary_of_slugs) unless client
+		if client
+			client.click
+			success client
+		else
+			email_developers(clients, ary_of_slugs)
+		end
 		respond
 	end
 
@@ -89,18 +99,19 @@ class Web::V3::ClientsController < MetalCorsController
 			#  due to merchant URL's often contain region names
 			# ie table34lasvegas.com contains lasvegas
 		if slug.match(/-/) && !slug.match(/_-_/)
-			if Rails.env.staging?
-			# see if new golfnow URL
-				ary = slug.to_s.split('-')
-				s1 = ary[0]
-				s2 = ary[1]
-				return nil if s1.nil? || s2.nil?
-				if (s1.to_i > 0) && (s1.length == s1.to_i.to_s.length) && (s2.to_i > 0) && (s2.length == s2.to_i.to_s.length)
-					domain = slug
-				else
-					return nil
-				end
-			end
+			# dont need this if slug2 is blank for all single url widgets
+			# if Rails.env.staging?
+			# # see if new golfnow URL
+			# 	ary = slug.to_s.split('-')
+			# 	s1 = ary[0]
+			# 	s2 = ary[1]
+			# 	return nil if s1.nil? || s2.nil?
+			# 	if (s1.to_i > 0) && (s1.length == s1.to_i.to_s.length) && (s2.to_i > 0) && (s2.length == s2.to_i.to_s.length)
+			# 		domain = slug
+			# 	else
+			return nil
+			# 	end
+			# end
 		end
 			# remove all unwanted characters
 		ary_split = slug.to_s.split('.')
