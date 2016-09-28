@@ -253,6 +253,24 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
         respond(status)
     end
 
+    def current_redemption
+        gift = Gift.find params[:id]
+        @current_redemption = Redemption.where(gift_id: gift.id).where('created_at > ?', 2.minutes.ago).last
+        puts "\n IN current_redemption - #{@current_redemption.inspect}"
+        if @current_redemption.status == 'done' && @current_redemption.response.kind_of?(Hash)
+            resp = @current_redemption.response
+            if resp["success"] == true
+                gift.fire_after_save_queue(@current_client)
+                success({msg: resp["response_text"]})
+            else
+                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+            end
+        else
+            fail_web({ err: "RESET_CONTENT", msg: 'Data is processing please refresh screen'})
+        end
+        respond(:ok)
+    end
+
 private
 
     def set_origin gps, gift_hsh

@@ -161,6 +161,7 @@ Drinkboard::Application.routes.draw do
 					patch :read
 					patch :notify
 					patch :redeem
+					get :current_redemption
 					post :regift
 				end
 				collection do
