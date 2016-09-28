@@ -40,23 +40,24 @@ class NewClientsWeeklySysAlert < Alert
 		@merchant_ids.each do |k,v|
 			m = v
 			cs = m.clients
-			gnc = nil
-			gac = nil
+			gn_str = ""
+			ga_str = ""
 			cs.each do |client|
-				if client.url_name.match(/_gnow/)
-					gnc = client
-				elsif client.url_name.match(/_menu_ga/)
-					gac = client
+				type = ClientUrlMatcher.gen_type(client.url_name)
+				case type
+				when :golf_now
+					gnc_url = client.url_name
+					gn_str = "<li style='color:blue;'>GolfNow URL</li><li>- <span style='color:blue;'>#{gnc_url}</span></li>"
+				when :golf_advisor
+					gac_url = client.url_name
+					ga_str = "<li style='color:green;'>Golf Advisor URL</li><li>- <span style='color:green;'>#{gac_url}</span></li>"
 				end
 			end
-			email_str += "<ul style='list-style: none;'>\
-<li>Golf Course: <span>#{m.name}</span></li>\
-<li>Website: <span>#{m.website}</span></li>\
-<li style='color:blue;'>GolfNow URL</li>\
-<li>- <span style='color:blue;'>#{gnc.url_name}</span></li>\
-<li style='color:green;'>Golf Advisor URL</li>\
-<li>- <span style='color:green;'>#{gac.url_name}</span></li>\
-</ul><hr />"
+			if gn_str.blank? && ga_str.blank?
+				gn_str = "<li style='color:red;'>No URLs</li>"
+			end
+			email_str += "<ul style='list-style: none;'><li>Golf Course: <span>#{m.name}</span></li>\
+<li>Website: <span>#{m.website}</span></li>#{gn_str}#{ga_str}</ul><hr />"
 		end
 		email_str
 	end

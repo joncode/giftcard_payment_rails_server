@@ -55,7 +55,7 @@ class AlertContact < ActiveRecord::Base
 				alert_contact.note = alert.note
 				puts alert_contact.send_message.inspect
 			rescue => e
-				puts "Message SEND ERROR #{e.inspect} for #{alert_contact.id} #{alert.id}"
+				puts "500 Internal Message SEND ERROR #{e.inspect} for #{alert_contact.id} #{alert.id}"
 			end
 		end
 	end

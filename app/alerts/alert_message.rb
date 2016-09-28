@@ -79,7 +79,7 @@ class AlertMessage < ActiveRecord::Base
 				"html"    => "<div><p>#{self.msg}</p></div>".html_safe,
 				"email"   => alert_contact.net_id
 			}
-			puts email_data_hsh.inspect
+			# puts 'AlertMessage' + email_data_hsh.inspect
 			email_obj = EmailAlerts.new(email_data_hsh)
 			res = email_obj.send_email
 			if res
