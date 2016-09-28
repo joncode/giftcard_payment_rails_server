@@ -59,6 +59,11 @@ else
     ADMIN_NOTICE_CONTACT = ["support@itson.me"]
 end
 
+GOLFNOW_COM = 331
+GOLFADVISOR_COM = 13326
+GOLFCOURSE_WEBSITE = 74
+GOLFFACEBOOK_TAB = 62
+
 QRURL = "https://2.zap.pe"
 DEVELOPER_TEXT = '2152000475'
 HELP_DESK_URL = 'https://itsonmeapp.zendesk.com/hc/en-us/categories/200160205-App-Users'

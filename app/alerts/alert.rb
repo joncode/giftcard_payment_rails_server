@@ -23,9 +23,9 @@ class Alert < ActiveRecord::Base
 
 	def self.perform alert_name, target=nil
 		if target.respond_to?(:id)
-			puts "Alert - perfom #{alert_name} #{target.id}"
+			puts "Alert.rb.perfom #{alert_name} #{target.id}"
 		else
-			puts "Alert - perfom #{alert_name} #{target}"
+			puts "Alert.rb.perfom #{alert_name} #{target}"
 		end
 
 		alert = get_alert(alert_name)
