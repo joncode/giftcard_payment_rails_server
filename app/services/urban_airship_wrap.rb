@@ -9,17 +9,18 @@ module UrbanAirshipWrap
             begin
                 if pn_token_obj.platform == 'ios'
                     r = send_push_with_apns(pn_token_obj, alert)
+                    resp << r
                 elsif pn_token_obj.platform == 'android'
                     # is the token for the new APP ?
                     if pn_token_obj.pn_token.length > 40
                         # new google push
                         googe_push_tokens << pn_token_obj
                     else
-                        r = send_push_with_urban_airship(pn_token_obj, alert)
-                        puts "500 Internal - PUSH NO PLATFORM |#{pn_token_obj.id}| - #{r.inspect}"
+                        pn_token_obj.destroy
+                        # r = send_push_with_urban_airship(pn_token_obj, alert)
+                        # puts "500 Internal - PUSH NO PLATFORM |#{pn_token_obj.id}| - #{r.inspect}"
                     end
                 end
-                resp << r
             rescue
                 puts "500 Internal PUSH FAILED - #{user.id} - #{pn_token_obj.id}"
             end
