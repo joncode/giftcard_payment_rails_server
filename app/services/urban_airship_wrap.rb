@@ -56,11 +56,12 @@ module UrbanAirshipWrap
             resp << r
         end
 
-        puts "APNS push sent via TOKENS! #{resp.inspect}"
+        puts "UrbanAirshipWrap push sent via TOKENS! #{resp.inspect}"
         Ditto.send_push_create(resp[0], gift_id, 'Gift')
     end
 
     def send_push_with_apns(pnt, alert)
+        puts "SEND APNS push |#{pnt.id}| - #{alert}"
         n = APNS::Notification.new(pnt.pn_token, alert)
         APNS.send_notifications([n])
     end
