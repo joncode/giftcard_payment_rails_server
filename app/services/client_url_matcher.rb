@@ -16,19 +16,19 @@ class ClientUrlMatcher
 			type = nil
 			if client_url_name.match(/-/)
 				cid = c[0..1]
-				type = case cid
+				case cid
 				when GOLFNOW_COM.to_s[0..1]
-					:golf_now
+					type = :golf_now
 				when GOLFADVISOR_COM.to_s[0..1]
-					:golf_advisor
+					type = :golf_advisor
 				when GOLFCOURSE_WEBSITE.to_s[0..1]
-					:website_menu
+					type = :website_menu
 				when GOLFFACEBOOK_TAB.to_s[0..1]
-					:fb_tab
+					type = :fb_tab
 				end
 			end
 			if type.nil?
-				type = legacy_type client_url_name
+				type = legacy_type(client_url_name)
 			end
 			type
 		end
@@ -57,11 +57,3 @@ end
 
 
 
-
-
-
-
-
-
-
-end
