@@ -22,12 +22,27 @@ class Accountant
 		def gift_redeemed_event gift
 			return nil unless gift.class.to_s.match /Gift/
 			return "Gift status not approved" if !gift_status_approved?(gift)
-			return "Payment time not in sync" if gift.status != 'redeemed'
+			if gift.status != 'redeemed'
+				return gift_partial_redemption_event(gift)
+			end
 
     		puts merchant(gift)
     		puts affiliate_location(gift)
     		# puts affiliate_user(gift)
     		# puts affiliate_link(gift, gift.origin)
+		end
+
+		def gift_partial_redemption_event gift
+			return "Payment time not in sync" if gift.cat >= 200 && gift.cat < 300
+			redemptions = gift.redemptions
+			registers = gift.registers
+			tot_redemptions = redemptions.map(&:amount).sum
+			tot_registers = registers.map(&:amount).sum
+			discrepency = tot_redemptions - tot_registers
+			msg = "500 Internal - Accountant - partial_redemption- #{gift.id} - Discrepency = #{discrepency}"
+			puts msg.inspect
+			OpsTwilio.text_devs(msg: msg)
+			return "Partial Redemption Necessary"
 		end
 
 #-------      BEHAVIOR METHODS
@@ -110,25 +125,25 @@ class Accountant
 			return true
 		end
 
-		def debt_amount gift, origin
-			if origin == "loc"
-				gift.location_fee.to_i
-			else
-				(gift.value_cents * 0.15 * 0.1).to_i
-			end
-		end
+		# def debt_amount gift, origin
+		# 	if origin == "loc"
+		# 		gift.location_fee.to_i
+		# 	else
+		# 		(gift.value_cents * 0.15 * 0.1).to_i
+		# 	end
+		# end
 
-		def create_debt(gift, obj, origin)
-			reg = Register.new
-			# binding.pry
-			reg.partner_type = obj.class.to_s
-			reg.partner_id   = obj.id
-			reg.type_of      = "debt"
-			reg.origin       = origin
-			reg.gift_id      = gift.id
-			reg.amount       = debt_amount(gift, origin)
-			reg.gift         = gift
-			reg
-		end
+		# def create_debt(gift, obj, origin)
+		# 	reg = Register.new
+		# 	# binding.pry
+		# 	reg.partner_type = obj.class.to_s
+		# 	reg.partner_id   = obj.id
+		# 	reg.type_of      = "debt"
+		# 	reg.origin       = origin
+		# 	reg.gift_id      = gift.id
+		# 	reg.amount       = debt_amount(gift, origin)
+		# 	reg.gift         = gift
+		# 	reg
+		# end
 	end
 end
