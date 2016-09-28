@@ -29,7 +29,7 @@ class Web::V3::ClientsController < MetalCorsController
 	def create
 		hsh = client_create_params
 
-		if hsh[:slug2].blank?
+		if hsh[:slug2].blank? && !hsh[:slug1].blank?
 			# get the client with slug 1 as url_name
 			client = Client.where(url_name: hsh[:slug1].to_s.downcase).first
 		end
