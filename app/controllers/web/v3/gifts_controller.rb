@@ -229,7 +229,7 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
                     status = :bad_request
                     fail_web({ err: "NOT_REDEEMABLE", msg: "Ticket Number not found"})
                 end
-            else  # r_sys 1 || 2
+            else  # r_sys 1
 
                         # non-POS redepmtion
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160924131123) do
+ActiveRecord::Schema.define(version: 20160929224807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -524,6 +524,7 @@ ActiveRecord::Schema.define(version: 20160924131123) do
     t.boolean  "brand_card",                 default: false
     t.datetime "scheduled_at"
     t.string   "ccy",            limit: 6,   default: "USD"
+    t.string   "hex_id"
   end
 
   add_index "gifts", ["active", "pay_stat"], name: "index_gifts_on_active_and_pay_stat", using: :btree
