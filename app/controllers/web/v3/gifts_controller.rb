@@ -1,6 +1,6 @@
 class Web::V3::GiftsController < MetalCorsController
     include MoneyHelper
-    before_action :authentication_token_required, except: [:show]
+    before_action :authentication_token_required, except: [:show, :hex]
 
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
