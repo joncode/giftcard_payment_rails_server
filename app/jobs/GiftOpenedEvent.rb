@@ -16,5 +16,7 @@ class GiftOpenedEvent
         if gift.cat == 300 && (gift.receiver.created_at - gift.created_at) <  30.minutes
             Alert.perform("GIFT_FRAUD_DETECTED_SYS", gift)
         end
+
+        PointsForNewUserJob.perform([gift])
     end
 end

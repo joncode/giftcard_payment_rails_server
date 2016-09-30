@@ -49,10 +49,6 @@ class CollectIncompleteGiftsV2Job
 					error   += 1
 				end
 			end
-
-			if success > 0
-				PointsForNewUserJob.perform(gifts)
-			end
 							# build success & error messages for reference
 			if  error  == 0
 				"#{success} incomplete ghost gift(s) updated SUCCESSfully on create of #{user.username} #{user.id}"

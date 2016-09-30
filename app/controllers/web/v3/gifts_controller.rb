@@ -46,6 +46,7 @@ class Web::V3::GiftsController < MetalCorsController
 
     def associate
         gift = Gift.find_by(hex_id: params[:id])
+        raise ActiveRecord::RecordNotFound if gift.nil?
 
         if gift.receiver_id == @current_user.id
             success gift.serialize
@@ -62,6 +63,7 @@ class Web::V3::GiftsController < MetalCorsController
                 socials.each do |social|
                     social.save
                 end
+                Resque.enqueue(GiftOpenedEvent, gift.id)
                 success gift.serialize
             else
                 fail_web({ err: "INVALID_INPUT", msg: gift.errors.full_messages })
