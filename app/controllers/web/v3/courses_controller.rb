@@ -10,7 +10,7 @@ class Web::V3::CoursesController < MetalCorsController
             fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
         else
             # ms = Merchant.where(affiliate_id: golfnow_id, active: true, live: true, paused: false).where('live_at > ?', 3.days.ago )
-            ms = Merchant.where(affiliate_id: GOLFNOW_ID, active: true, live: true, paused: false).where('updated_at > ?', 3.days.ago )
+            ms = Merchant.where(affiliate_id: GOLFNOW_ID, active: true, live: true, paused: false)
             resp = ms.map { |m| m.golf_serialize }
             success(resp)
         end
