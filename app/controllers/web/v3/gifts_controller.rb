@@ -30,7 +30,11 @@ class Web::V3::GiftsController < MetalCorsController
     def promo
         # promo campaign keyword
         str_code = promo_params[:code]
-        resp = GiftPromoCode.perform @current_user, str_code
+        if str_code == "pteg"
+            resp = UserAfterCreateEvent.gift_user_for_pt(@current_user, @current_client)
+        else
+            resp = GiftPromoCode.perform(@current_user, str_code)
+        end
 
         if resp[:status] > 0
             success resp[:data]

@@ -14,9 +14,19 @@ class UserAfterCreateEvent
 
 	end
 
-	def self.gift_user_for_pt user
+	def self.gift_user_for_pt user, client=nil
 		# s = Social.where(network_id: user.email, network: 'email').where('created_at > ?', DateTime.new(2016, 4, 20))
 		if user.email.present?
+
+			if client.kind_of?(Client)
+				client_id = client.id
+				partner_id = client.partner_id
+				partner_type = client.partner_type
+			else
+				client_id = user.client_id
+				partner_id = user.partner_id
+				partner_type = user.partner_type
+			end
 
 			puts "PTEG user on list"
 			merchant = Merchant.find 410
@@ -50,9 +60,9 @@ class UserAfterCreateEvent
 				cost: "0",
 				balance: 500,
 				expires_at: expires_at,
-				client_id: user.client_id,
-				partner_id: user.partner_id,
-				partner_type: user.partner_type,
+				client_id: client_id,
+				partner_id: partner_id,
+				partner_type: partner_type,
 				origin: "New User Created")
 
 			gift.shoppingCart = sc
@@ -61,9 +71,13 @@ class UserAfterCreateEvent
 				gift.send_internal_email
 				puts "PTEG user gifted"
 				gift.messenger
+				return { status: 1, data: "Success Gift created"}
 			else
 				puts "500 Internal #{gift.errors}"
+				return { status: 0, data: "Unable to create gift "}
 			end
+		else
+			return { status: 0, data: "User does not have an email"}
 		end
 	end
 
