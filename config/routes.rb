@@ -164,6 +164,7 @@ Drinkboard::Application.routes.draw do
 					get :current_redemption
 					post :regift
 					get :hex
+					patch :associate
 				end
 				collection do
 					post :promo
