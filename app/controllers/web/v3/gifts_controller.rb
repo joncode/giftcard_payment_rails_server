@@ -44,11 +44,39 @@ class Web::V3::GiftsController < MetalCorsController
         respond
     end
 
+    def associate
+        gift = Gift.find_by(hex_id: params[:id])
+
+        if gift.receiver_id == @current_user.id
+            success gift.serialize
+        elsif gift.receiver_id.nil?
+            socials = []
+            if gift.receiver_email.present?
+                socials << UserSocial.new(user_id: @current_user.id, type_of: 'email', identifier: gift.receiver_email)
+            end
+            if gift.receiver_phone.present?
+                socials << UserSocial.new(user_id: @current_user.id, type_of: 'phone', identifier: gift.receiver_phone)
+            end
+            gift.add_receiver @current_user
+            if gift.save
+                socials.each do |social|
+                    social.save
+                end
+                success gift.serialize
+            else
+                fail_web({ err: "INVALID_INPUT", msg: gift.errors.full_messages })
+            end
+        else
+            fail_web({ err: "INVALID_INPUT", msg: "Gift is associatd with another account." })
+        end
+        respond
+    end
+
     def hex
         if gift = Gift.find_by(hex_id: params[:id])
             success gift.serialize
         else
-            fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found"})
+            fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })
         end
         respond
     end
@@ -60,7 +88,7 @@ class Web::V3::GiftsController < MetalCorsController
         if gift = Gift.find(id)
             success gift.serialize
         else
-            fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found"})
+            fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })
         end
         respond
     end
