@@ -45,7 +45,7 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
     def hex
-        if gift = Gift.find(params[:id])
+        if gift = Gift.find_by(hex_id: params[:id])
             success gift.serialize
         else
             fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found"})
