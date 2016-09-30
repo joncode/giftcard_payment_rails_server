@@ -30,7 +30,7 @@ class Web::V3::GiftsController < MetalCorsController
     def promo
         # promo campaign keyword
         str_code = promo_params[:code]
-        if str_code == "pteg"
+        if str_code == "pteg" && Rails.env.staging?
             resp = UserAfterCreateEvent.gift_user_for_pt(@current_user, @current_client)
         else
             resp = GiftPromoCode.perform(@current_user, str_code)

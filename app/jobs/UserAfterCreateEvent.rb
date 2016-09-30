@@ -7,9 +7,9 @@ class UserAfterCreateEvent
 
 		user = user_or_user_id.kind_of?(User) ? user_or_user_id : User.find(user_or_user_id)
 
-		if user && user.partner_id == 29 && user.partner_type == "Affiliate"
+		if user && user.partner_id == 29 && user.partner_type == "Affiliate" && Rails.env.staging?
 			puts "PTEG user created"
-			# self.gift_user_for_pt user
+			self.gift_user_for_pt user
 		end
 
 	end
@@ -43,7 +43,7 @@ class UserAfterCreateEvent
 			detail = "This gift is good until June 30th, please enjoy before then."
 			msg = "Thank you for downloading the PT's Entertainment Group mobile app and signing up for eGifting powered by ItsOnMe. \
 			Enjoy our gift to you of $5 off your bill.  This gift is good until June 30th, please enjoy before then."
-			expires_at = DateTime.new(2016, 7, 1)
+			expires_at = DateTime.new(2017, 7, 1)
 
 			gift = Gift.new(
 				merchant_id: merchant.id,
