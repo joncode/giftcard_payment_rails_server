@@ -31,10 +31,12 @@ class Gift < ActiveRecord::Base
     before_validation :format_cost
     before_validation :set_expires_at
     before_validation :set_scheduled_at
+    before_validation :set_unique_hex_id, on: :create
 
 #   -------------
 
     validates_presence_of :giver, :receiver_name, :merchant_id, :value, :shoppingCart, :cat
+    # validates_uniqueness_of :hex_id
     validates :receiver_email , format: { with: VALID_EMAIL_REGEX }, allow_blank: :true
     validates :receiver_phone , format: { with: VALID_PHONE_REGEX }, allow_blank: :true
     validates_with GiftReceiverInfoValidator
@@ -517,9 +519,13 @@ class Gift < ActiveRecord::Base
         Resque.enqueue(GiftCreatedEvent, self.id)
     end
 
+    def set_unique_hex_id
+        self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id)
+    end
 
 
 private
+
 
     def pre_init args={}
         nil
@@ -557,6 +563,7 @@ private
 
 
 ################  data validation methods
+
 
 
 	def add_giver_name

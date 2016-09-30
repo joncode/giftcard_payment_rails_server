@@ -40,6 +40,15 @@ class Web::V3::GiftsController < MetalCorsController
         respond
     end
 
+    def hex
+        if gift = Gift.find(params[:id])
+            success gift.serialize
+        else
+            fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found"})
+        end
+        respond
+    end
+
     def show
             # remove the permalink add-number from the id
         id = params[:id].to_i - NUMBER_ID

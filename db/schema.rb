@@ -532,14 +532,12 @@ ActiveRecord::Schema.define(version: 20160929224807) do
   add_index "gifts", ["cat"], name: "index_gifts_on_cat", using: :btree
   add_index "gifts", ["ftmeta"], name: "gifts_ftsmeta_idx", using: :gin
   add_index "gifts", ["giver_id"], name: "index_gifts_on_giver_id", using: :btree
+  add_index "gifts", ["hex_id"], name: "index_gifts_on_hex_id", using: :btree
   add_index "gifts", ["merchant_id", "created_at"], name: "index_gifts_on_merchant_id_and_created_at", using: :btree
   add_index "gifts", ["merchant_id", "status"], name: "index_gifts_on_merchant_id_and_status", using: :btree
   add_index "gifts", ["merchant_id"], name: "index_gifts_on_merchant_id", using: :btree
   add_index "gifts", ["pay_stat"], name: "index_gifts_on_pay_stat", using: :btree
   add_index "gifts", ["payable_id", "payable_type"], name: "index_gifts_on_payable_id_and_payable_type", using: :btree
-  add_index "gifts", ["provider_id", "created_at"], name: "index_gifts_on_provider_id_and_created_at", using: :btree
-  add_index "gifts", ["provider_id", "status"], name: "index_gifts_on_provider_id_and_status", using: :btree
-  add_index "gifts", ["provider_id"], name: "index_gifts_on_provider_id", using: :btree
   add_index "gifts", ["receiver_id"], name: "index_gifts_on_receiver_id", using: :btree
   add_index "gifts", ["status"], name: "index_gifts_on_status", using: :btree
 
