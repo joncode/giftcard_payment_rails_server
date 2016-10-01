@@ -46,12 +46,12 @@ class Payment < ActiveRecord::Base
 
 	def self.get_last_payment_for_partner(partner_obj)
         if partner_obj.bank_id.present?
-            last = where(bank_id: partner_obj.bank_id).order(start_date: :desc, type_of: 'payment').limit(1).first
+            last = where(bank_id: partner_obj.bank_id, type_of: 'payment').order(start_date: :desc).limit(1).first
             if last.nil?
-                last = where(partner: partner_obj).order(start_date: :desc, type_of: 'payment').limit(1).first
+                last = where(partner: partner_obj, type_of: 'payment').order(start_date: :desc).limit(1).first
             end
         else
-            last = where(partner: partner_obj).order(start_date: :desc, type_of: 'payment').limit(1).first
+            last = where(partner: partner_obj, type_of: 'payment').order(start_date: :desc).limit(1).first
         end
         return last
 	end
