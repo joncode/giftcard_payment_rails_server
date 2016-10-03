@@ -140,27 +140,32 @@ module GiftSerializers
         gift_hsh
     end
 
+    def refresh_serialize
+        gift_hsh = client_serialize
+
+            # new email fields
+        gift_hsh["delivery_method"] = self.delivery_method
+        gift_hsh["delivery_email"] = self.receiver_email
+        gift_hsh["delivery_phone"] = self.receiver_phone
+        gift_hsh
+    end
+
     def client_serialize
-        gift_hsh                  = {}
+        gift_hsh = {}
         basic_data gift_hsh
         money_and_items gift_hsh
-        gift_hsh["completed_at"]  = self.redeemed_at
-        gift_hsh["new_token_at"]  = self.new_token_at
+        merchant_serializer_web_keys gift_hsh
+        giver_data gift_hsh
+        receiver_data gift_hsh
+        gift_hsh["scheduled_at"]  = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh["notified_at"]   = self.notified_at
-        gift_hsh["giv_name"]      = self.giver_name
-        gift_hsh["giv_photo"]     = self.giver.get_photo if giver
-        gift_hsh["giv_id"]        = self.giver_id
-        gift_hsh["giv_type"]      = self.giver_type
-        gift_hsh["rec_id"]        = self.receiver_id
-        gift_hsh["rec_name"]      = self.receiver_name
-        gift_hsh["rec_photo"]     = self.receiver.get_photo if receiver
+        gift_hsh["new_token_at"]  = self.new_token_at
+        gift_hsh["completed_at"]  = self.redeemed_at
         gift_hsh["detail"]        = self.detail
         gift_hsh["msg"]           = self.message
-        gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
-        gift_hsh["scheduled_at"]  = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
         gift_hsh["token"]         = self.token
-        merchant_serializer_web_keys gift_hsh
-        remove_nils(gift_hsh)
+        # remove_nils(gift_hsh)
+        gift_hsh
     end
 
     def web_serialize
@@ -168,30 +173,26 @@ module GiftSerializers
     end
 
     def notify_serialize
-        gift_hsh                  = {}
-        basic_data gift_hsh
-        money_and_items gift_hsh
-        gift_hsh["completed_at"]  = self.redeemed_at
-        gift_hsh["new_token_at"]  = self.new_token_at
-        gift_hsh["notified_at"]   = self.notified_at
+        gift_hsh = client_serialize
+        multi_redemption_web_keys gift_hsh
+        gift_hsh
+    end
+
+private
+
+
+    def giver_data gift_hsh
         gift_hsh["giv_name"]      = self.giver_name
         gift_hsh["giv_photo"]     = self.giver.get_photo if giver
         gift_hsh["giv_id"]        = self.giver_id
         gift_hsh["giv_type"]      = self.giver_type
+    end
+
+    def receiver_data gift_hsh
         gift_hsh["rec_id"]        = self.receiver_id
         gift_hsh["rec_name"]      = self.receiver_name
         gift_hsh["rec_photo"]     = self.receiver.get_photo if receiver
-        gift_hsh["detail"]        = self.detail
-        gift_hsh["msg"]           = self.message
-        gift_hsh["scheduled_at"]  = self.scheduled_at.to_formatted_s(:url_date) if (self.scheduled_at && (self.status == 'schedule'))
-        gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
-        gift_hsh["token"]         = self.token
-        merchant_serializer_web_keys gift_hsh
-        multi_redemption_web_keys gift_hsh
-        remove_nils(gift_hsh)
     end
-
-private
 
     def basic_data gift_hsh
         gift_hsh["gift_id"]  = self.id
@@ -207,6 +208,10 @@ private
         gift_hsh["shoppingCart"]  = self.shoppingCart
         gift_hsh["items"] = ary_of_shopping_cart_as_hash
         gift_hsh["ccy"] = self.ccy
+        gift_hsh['brand_card'] = self.brand_card ? 'yes' : 'no'
+        if Rails.env.staging?
+            gift_hsh['item_photo'] = self.item_photo
+        end
     end
 
     def multi_redemption_web_keys gift_hsh
@@ -223,12 +228,13 @@ private
     end
 
     def merchant_serializer_web_keys gift_hsh
-        gift_hsh["loc_id"]        = self.merchant_id
-        gift_hsh["loc_name"]      = self.provider_name
-        if gift_merchant = Merchant.unscoped.where(id: self.merchant_id).first
+        if gift_merchant = (self.merchant || Merchant.unscoped.where(id: self.merchant_id).first)
+            gift_hsh["loc_name"]     = gift_merchant.name
             gift_hsh["loc_phone"]     = gift_merchant.phone
             gift_hsh["loc_address"]   = gift_merchant.complete_address
             gift_hsh["loc_photo"]     = gift_merchant.get_photo
+            gift_hsh['display_photo'] = gift_merchant.get_photo
+            gift_hsh['loc_logo']      = gift_merchant.get_logo_web
             gift_hsh["r_sys"]         = gift_merchant.r_sys
             gift_hsh['city_id']       = gift_merchant.city_id
             gift_hsh['region_id']     = gift_merchant.region_id
@@ -239,6 +245,9 @@ private
                 gift_hsh['multi_loc'] = 'no'
             end
         end
+        gift_hsh["loc_id"] = self.merchant_id
+        gift_hsh["loc_name"] = self.provider_name if gift_hsh["loc_name"].blank?
+        gift_hsh
     end
 
     def merchant_serializer_mdot_keys gift_hsh

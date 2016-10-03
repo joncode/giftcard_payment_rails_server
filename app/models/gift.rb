@@ -131,6 +131,11 @@ class Gift < ActiveRecord::Base
         self.merchant.get_photo
     end
 
+    def item_photo
+         # this should get an item photo
+        'http://res.cloudinary.com/drinkboard/image/upload/v1473460212/xca6kbzgrxzvtef8bkrs.jpg'
+    end
+
 #   -------------
 
     def link= link
@@ -408,15 +413,15 @@ class Gift < ActiveRecord::Base
 
     def delivery_method
         if !self.receiver_phone.blank?
-            'phone'
+            'ph'
         elsif !self.receiver_email.blank?
-            'email'
+            'em'
         elsif !self.facebook_id.blank?
-            'facebook'
+            'fb'
         elsif !self.twitter.blank?
-            'twitter'
+            'tw'
         else
-            'email'
+            'em'
         end
     end
 

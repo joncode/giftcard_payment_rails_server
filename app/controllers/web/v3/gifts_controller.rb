@@ -1,6 +1,6 @@
 class Web::V3::GiftsController < MetalCorsController
     include MoneyHelper
-    before_action :authentication_token_required, except: [:show, :hex]
+    before_action :authentication_token_required, except: [:show, :hex, :detail]
 
     rescue_from ActiveRecord::RecordNotFound, :with => :not_found
 
@@ -64,7 +64,7 @@ class Web::V3::GiftsController < MetalCorsController
                     social.save
                 end
                 Resque.enqueue(GiftOpenedEvent, gift.id)
-                success gift.serialize
+                success gift.refresh_serialize
             else
                 fail_web({ err: "INVALID_INPUT", msg: gift.errors.full_messages })
             end
@@ -76,7 +76,19 @@ class Web::V3::GiftsController < MetalCorsController
 
     def hex
         if gift = Gift.find_by(hex_id: params[:id])
-            success gift.serialize
+            success gift.refresh_serialize
+        else
+            fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })
+        end
+        respond
+    end
+
+    def detail
+            # remove the permalink add-number from the id
+        id = params[:id].to_i - NUMBER_ID
+
+        if gift = Gift.find(id)
+            success gift.refresh_serialize
         else
             fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })
         end
