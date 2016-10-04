@@ -492,7 +492,7 @@ class Gift < ActiveRecord::Base
             begin
                 ary = JSON.parse(scart)
             rescue
-                ary = []
+                return
             end
         elsif scart.kind_of?(Array)
             ary = scart

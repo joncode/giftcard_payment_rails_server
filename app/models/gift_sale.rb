@@ -41,6 +41,9 @@ private
 
     def pre_init args={}
 
+        if args["shoppingCart"].kind_of?(Array)
+            args["shoppingCart"] = args["shoppingCart"].to_json
+        end
         args["cat"] = set_cat(args["cat"])
 
         merchant_id = args['merchant_id'] || args["provider_id"]
