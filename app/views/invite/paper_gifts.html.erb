@@ -36,7 +36,7 @@
 
 <body>
 
-<div style="width: 900px; border: 10px solid #000; border-radius: 10px !important; padding: 20px;">
+<div style="width: 800px; border: 10px solid #000; border-radius: 10px !important; padding: 20px;">
 <table border="0" cellpadding="0" cellspacing="0">
 	<tbody>
 		<% if @gift.giver_type == "User" %>
@@ -83,7 +83,7 @@
 			<td colspan='2'>
 				<ul>
 					<li>
-						<h2 style="font-weight: bold; font-family: 'Arial Rounded MT Bold';">
+						<h2 style="text-align: center;font-weight: bold; font-family: 'Arial Rounded MT Bold';">
 							<%= display_money(string: @gift.value, ccy: @gift.ccy) %> (<%= @gift.value.to_i.to_words.titleize %> <%= CCY[@gift.ccy]['name'] %>s)
 						</h2>
 					</li>
