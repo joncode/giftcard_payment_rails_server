@@ -57,7 +57,7 @@ Click here to claim your gift.\n #{self.invite_link}"
     end
 
     def invite_link
-        "#{PUBLIC_URL}/signup/acceptgift?id=#{self.obscured_id}"
+        "#{PUBLIC_URL}/hi/#{self.hex_id}"
     end
 
     def schedule_time
