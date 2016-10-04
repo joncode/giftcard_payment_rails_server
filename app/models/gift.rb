@@ -32,6 +32,7 @@ class Gift < ActiveRecord::Base
     before_validation :set_expires_at
     before_validation :set_scheduled_at
     before_validation :set_unique_hex_id, on: :create
+    before_validation :build_gift_items
 
 #   -------------
 
@@ -47,7 +48,6 @@ class Gift < ActiveRecord::Base
     before_create :add_giver_name
     before_create :add_merchant_name
     before_create :regift
-    before_create :build_gift_items
     before_create :set_balance
     before_create :set_pay_stat    # must be last before_create
     before_create :set_status    # must be last before_create
@@ -87,7 +87,6 @@ class Gift < ActiveRecord::Base
 
     def initialize args={}
         pre_init(args)
-        args['shoppingCart'] = stringify_shopping_cart_if_array(args['shoppingCart'])
         super
     end
 
@@ -132,8 +131,8 @@ class Gift < ActiveRecord::Base
     end
 
     def item_photo
-         # this should get an item photo
-        'http://res.cloudinary.com/drinkboard/image/upload/v1473460212/xca6kbzgrxzvtef8bkrs.jpg'
+        item_with_photo = self.cart_ary.find { |i| i['photo'].present? }
+        item_with_photo['photo']
     end
 
 #   -------------
@@ -488,13 +487,54 @@ class Gift < ActiveRecord::Base
     end
 
     def build_gift_items
-        make_gift_items ary_of_shopping_cart_as_hash
-    end
-
-    def make_gift_items shoppingCart_array
-        self.gift_items = shoppingCart_array.map do |item|
-            GiftItem.initFromDictionary(item)
+        # 1. format data into an array
+        scart = self.shoppingCart
+        if scart.kind_of?(String)
+            begin
+                ary = JSON.parse(scart)
+            rescue
+                ary = []
+            end
+        elsif scart.kind_of?(Array)
+            ary = scart
+        else
+            return
         end
+        ary.each { |hsh| hsh.stringify_keys! }
+
+        # 2. get Menu Items
+        mhsh = {}
+        mids = ary.map{ |h| h['item_id'] }
+        MenuItem.where(id: mids).each { |item| mhsh[item.id] = item }
+
+        # 3. create a consistent shopping cart &  make the giftItems
+        gift_item_ary = []
+        new_cart = []
+        ary.each do |item_hsh|
+            item_id = item_hsh['item_id']
+            quantity = item_hsh['quantity']
+            mitem = mhsh[item_id]
+            if item_hsh['price'].to_f > mitem.price.to_f
+                    # price is now lower than customer thinks it will be
+                    # ignore
+                new_hsh = mitem.serialize_to_app(quantity)
+            elsif item_hsh['price'].to_f == mitem.price.to_f
+                    # all good
+                new_hsh = mitem.serialize_to_app(quantity)
+            elsif item_hsh['price'].to_f < mitem.price.to_f
+                    # new price is greater than customer price
+                OpsTwilio.text_devs msg: "Menu Item Price is wrong on gift - menu item #{mitem.id} #{mitem.price} at Q #{quantity} - item price = #{item_hsh['price']}"
+                hsh = mitem.serialize_to_app(quantity)
+                hsh['price'] = item_hsh['price']
+                new_hsh = hsh
+            end
+            new_cart << new_hsh
+            new_gift_item = GiftItem.initFromDictionary(new_hsh)
+            gift_item_ary << new_gift_item
+        end
+
+        # 4. stringify - pre-compile shoppingCart and save on attibute
+        self.shoppingCart = new_cart.to_json
     end
 
 

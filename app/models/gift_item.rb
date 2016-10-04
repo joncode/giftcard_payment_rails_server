@@ -24,6 +24,7 @@ class GiftItem < ActiveRecord::Base
 		giftItem.quantity = menu_item_hash["quantity"]
 		giftItem.name = menu_item_hash["item_name"]
 		giftItem.detail = menu_item_hash["detail"]
+		giftItem.ccy = menu_item_hash["ccy"]
 		giftItem
 	end
 

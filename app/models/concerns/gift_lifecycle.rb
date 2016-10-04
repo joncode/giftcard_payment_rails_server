@@ -274,8 +274,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
 
     def brand_card_ids
         if self.brand_card
-            cart_ary = self.ary_of_shopping_cart_as_hash
-            brand_card_ids = cart_ary.map do |item|
+            brand_card_ids = self.cart_ary.map do |item|
                 item['pos_item_id']
             end
             return brand_card_ids.compact
