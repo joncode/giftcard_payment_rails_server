@@ -97,11 +97,9 @@ class Gift < ActiveRecord::Base
     end
 
     def set_paper_id
-        gid = self.id
-        gstr = gid.to_s.reverse
-        x = ""
-        [gstr[0], gstr[5], gstr[2], gstr[1], gstr[4], gstr[3]].each {|a| x += a || '0' }
-        'LT-' + x[0..2] + '-' + x[3..5]
+        hx = self.hex_id
+        hx = hx.upcase
+        hx[0..1] + '-' + hx[2..4] + '-' + hx[5..8]
     end
 
     def self.find_paper paper_id
@@ -132,7 +130,8 @@ class Gift < ActiveRecord::Base
 
     def item_photo
         item_with_photo = self.cart_ary.find { |i| i['photo'].present? }
-        item_with_photo['photo']
+        return item_with_photo['photo'] if item_with_photo.kind_of?(Hash)
+        return nil
     end
 
 #   -------------
