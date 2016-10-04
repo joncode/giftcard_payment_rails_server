@@ -13,9 +13,9 @@ require "base64"
 # what does the syncronous resonse look like
 # does I have to send in  a loction identifier or a tender type key identifer or does the qr code handle that , ie is qr code unique for all locations ?
 
-RestClient.log = 'stdout'
 
 class OpsZapper
+	RestClient.log = 'stdout' unless Rails.env.production?
 	include MoneyHelper
 
 	SUC_5 = "http://2.zap.pe?t=6&i=71:71:7[34%7C5%7C11,66%7CITSONME_5%7C10:10[39%7CUSD"
