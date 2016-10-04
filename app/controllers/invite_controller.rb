@@ -15,7 +15,7 @@ class InviteController < ApplicationController
     def paper_gifts
     	puts "PAPER GIFT REQUEST #{params.inspect}"
         @gift = Gift.includes(:merchant).find_by(hex_id: params[:id])
-        if ['incomplete', 'open', 'notified', 'schedule'].include?(@gift.status)
+        if @gift.kind_of?(Gift) && ['incomplete', 'open', 'notified', 'schedule'].include?(@gift.status)
 	        respond_to do |format|
 	            format.html
 	            format.pdf do
