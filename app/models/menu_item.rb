@@ -44,7 +44,7 @@ class MenuItem < ActiveRecord::Base
         item_hash = self.serializable_hash only: [ :photo, :detail, :price, :price_cents, :ccy ]
         item_hash["item_id"]   = self.id
         item_hash["item_name"] = self.name
-        item_hash["pos_item_id"] = self.pos_item_id if self.pos_item_id
+        item_hash["pos_item_id"] = self.pos_item_id if self.pos_item_id.present?
         if quantity.present?
             item_hash['quantity'] = quantity
         end
