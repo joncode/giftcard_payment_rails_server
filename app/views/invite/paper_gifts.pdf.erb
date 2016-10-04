@@ -36,7 +36,7 @@
 				<% if @gift.giver.get_photo.nil? || @gift.giver.get_photo.match(/avatar_blank/) %>
 					<%= wicked_pdf_image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "logo_icon" %>
 				<% else %>
-					<%= wicked_pdf_image_tag(grayscale_photo(@gift.giver.get_photo),  class: "user_image") %>
+					<%= wicked_pdf_image_tag(@gift.giver.get_photo,  class: "user_image") %>
 				<% end %>
 			</td>
 			<td>
@@ -51,7 +51,7 @@
 		</tr>
 		<% end %>
 		<tr>
-			<td><%= wicked_pdf_image_tag(grayscale_photo(@gift.merchant.get_photo),  class: "merchant_image") %></td>
+			<td><%= wicked_pdf_image_tag(@gift.merchant.get_photo,  class: "merchant_image") %></td>
 			<td>
 				<ul>
 					<li>
