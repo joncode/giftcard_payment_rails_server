@@ -13,20 +13,14 @@ class InviteController < ApplicationController
     def paper_gifts
         @no_sidebar = true
 
-        if "XpI2fWYozeoqHykHAYTizg" == params[:id]
+        @gift = Gift.find params[:id]
+        respond_to do |format|
+            format.html
+            format.pdf do
+                render pdf: "paper_gifts"
+            end
+        end
 
-	        @gift = Gift.find 362230
-	        respond_to do |format|
-	            format.html
-	            format.pdf do
-	                render pdf: "paper_gifts"
-	            end
-	        end
-	    else
-
-	    	head :ok
-
-	    end
     end
 
 	def show
