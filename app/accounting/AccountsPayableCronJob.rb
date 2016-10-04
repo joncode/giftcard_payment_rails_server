@@ -7,7 +7,7 @@ class AccountsPayableCronJob
         if start_date.kind_of?(String)
             start_date = Date.parse(start_date)
         end
-        return "Not running" unless should_payment_cron_run?(start_date)
+        return "AccountsPayableCronJob - Not running" unless should_payment_cron_run?(start_date)
 
         sd = start_date || Payment.get_start_date_of_payment
         sd = sd.beginning_of_day
@@ -54,6 +54,7 @@ class AccountsPayableCronJob
             payment.registers << reg
             payment.save
         end
+        return 'AccountsPayableCronJob - Completed'
     end
 
     def self.should_payment_cron_run?(start_date)
