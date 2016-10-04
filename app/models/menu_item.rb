@@ -4,6 +4,7 @@ class MenuItem < ActiveRecord::Base
 
 #   -------------
 
+    has_many :gift_items
 	belongs_to :section
 	belongs_to :menu
 
