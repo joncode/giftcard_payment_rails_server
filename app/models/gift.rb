@@ -32,7 +32,6 @@ class Gift < ActiveRecord::Base
     before_validation :set_expires_at
     before_validation :set_scheduled_at
     before_validation :set_unique_hex_id, on: :create
-    before_validation :build_gift_items
 
 #   -------------
 
@@ -47,6 +46,7 @@ class Gift < ActiveRecord::Base
     before_create :find_receiver
     before_create :add_giver_name
     before_create :add_merchant_name
+    before_create :build_gift_items
     before_create :regift
     before_create :set_balance
     before_create :set_pay_stat    # must be last before_create
