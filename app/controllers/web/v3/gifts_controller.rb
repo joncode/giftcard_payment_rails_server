@@ -45,7 +45,7 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
     def associate
-        gift = Gift.find_by(hex_id: params[:id])
+        gift = Gift.includes(:merchant).find_by(hex_id: params[:id])
         raise ActiveRecord::RecordNotFound if gift.nil?
 
         if gift.receiver_id == @current_user.id
@@ -75,7 +75,7 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
     def hex
-        if gift = Gift.find_by(hex_id: params[:id])
+        if gift = Gift.includes(:merchant).find_by(hex_id: params[:id])
             success gift.refresh_serialize
         else
             fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })
@@ -87,7 +87,7 @@ class Web::V3::GiftsController < MetalCorsController
             # remove the permalink add-number from the id
         id = params[:id].to_i - NUMBER_ID
 
-        if gift = Gift.find(id)
+        if gift = Gift.includes(:merchant).find(id)
             success gift.refresh_serialize
         else
             fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })
@@ -99,7 +99,7 @@ class Web::V3::GiftsController < MetalCorsController
             # remove the permalink add-number from the id
         id = params[:id].to_i - NUMBER_ID
 
-        if gift = Gift.find(id)
+        if gift = Gift.includes(:merchant).find(id)
             success gift.serialize
         else
             fail_web({ err: "INVALID_INPUT", msg: "Gift could not be found" })
@@ -166,7 +166,7 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
     def read
-        gift = Gift.find params[:id]
+        gift = Gift.includes(:merchant).find params[:id]
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
             gift.notify(false)
             Relay.send_push_thank_you gift
@@ -184,7 +184,7 @@ class Web::V3::GiftsController < MetalCorsController
     end
 
     def notify
-        gift = Gift.find params[:id]
+        gift = Gift.includes(:merchant).find params[:id]
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
             # amount = redeem_params["amount"].to_i
@@ -210,15 +210,17 @@ class Web::V3::GiftsController < MetalCorsController
 # }
 
     def redeem
-        gift = Gift.find params[:id]
+        gift = Gift.includes(:merchant).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if params['data']
                 server_inits = redeem_params["server"]
                 amount = redeem_params["amount"]
                 ticket_num = redeem_params["ticket_num"]
                 qrcode = redeem_params["qrcode"]
-                loc_id = redeem_params["loc_id"]
-                merchant = Merchant.find(loc_id) if loc_id.present?
+                loc_id = (redeem_params["loc_id"].to_i > 0) ? redeem_params["loc_id"].to_i : nil
+                if (loc_id.present? && loc_id != gift.merchant_id)
+                    merchant = Merchant.find(loc_id)
+                end
             end
             merchant = gift.merchant if merchant.nil?
             gift.rec_client_id = @current_client.id
