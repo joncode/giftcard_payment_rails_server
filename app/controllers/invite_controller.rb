@@ -2,6 +2,8 @@ class InviteController < ApplicationController
 	layout 'user_mailer' , except: [:show, :invite, :invite_friend]
 	layout 'html_good', only: [ :facebook_checkin]
 
+# ------------------------
+
 	def facebook_checkin
 		puts " *************    FACEBOOK CHECKIN   ********"
 		puts params.inspect
@@ -11,17 +13,17 @@ class InviteController < ApplicationController
 	end
 
     def paper_gifts
-        @no_sidebar = true
-
-        @gift = Gift.find params[:id]
+    	puts "PAPER GIFT REQUEST #{params.inspect}"
+        @gift = Gift.includes(:merchant).find_by(hex_id: params[:id])
         respond_to do |format|
             format.html
             format.pdf do
                 render pdf: "paper_gifts"
             end
         end
-
     end
+
+# ------------------------
 
 	def show
 

@@ -31,7 +31,7 @@
 		<tr>
 			<td style="float:left; padding-top: 0 !important">
 				<% if @gift.giver.get_photo.nil? || @gift.giver.get_photo.match(/avatar_blank/) %>
-					<%= image_tag 'Icon-60.png', class: "logo_icon" %>
+					<%= image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "logo_icon" %>
 				<% else %>
 					<%= image_tag @gift.giver.get_photo,  class: "user_image" %>
 				<% end %>
@@ -47,7 +47,7 @@
 				<ul>
 					<li>
 						<p>
-						<%= image_tag 'Icon-60.png', class: "logo_icon" %>
+						<%= image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "logo_icon" %>
 						<h1 style="font-size: 400%; color: #28A9E0;">
 						<span>ItsOnMe Gift Certificate</span>
 						</h1></p>
