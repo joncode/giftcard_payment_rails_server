@@ -15,12 +15,16 @@ class InviteController < ApplicationController
     def paper_gifts
     	puts "PAPER GIFT REQUEST #{params.inspect}"
         @gift = Gift.includes(:merchant).find_by(hex_id: params[:id])
-        respond_to do |format|
-            format.html
-            format.pdf do
-                render pdf: "paper_gifts"
-            end
-        end
+        if ['incomplete', 'open', 'notified', 'schedule'].include?(@gift.status)
+	        respond_to do |format|
+	            format.html
+	            format.pdf do
+	                render pdf: "paper_gifts"
+	            end
+	        end
+	    else
+	    	raise ActiveRecord::RecordNotFound
+	    end
     end
 
 # ------------------------
