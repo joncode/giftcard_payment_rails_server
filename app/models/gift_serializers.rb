@@ -232,6 +232,10 @@ private
             gift_hsh["loc_name"]     = gift_merchant.name
             gift_hsh["loc_phone"]     = gift_merchant.phone
             gift_hsh["loc_address"]   = gift_merchant.complete_address
+            gift_hsh["loc_street"]   = gift_merchant.address
+            gift_hsh["loc_city"]   = gift_merchant.city_name
+            gift_hsh["loc_state"]   = gift_merchant.state
+            gift_hsh["loc_zip"]   = gift_merchant.zip
             gift_hsh["loc_photo"]     = gift_merchant.get_photo
             gift_hsh['display_photo'] = gift_merchant.get_photo
             gift_hsh['loc_logo']      = gift_merchant.get_logo_web
