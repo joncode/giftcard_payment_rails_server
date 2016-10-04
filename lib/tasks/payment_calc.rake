@@ -9,7 +9,7 @@ namespace :payments do
 	    	puts "500 Internal PAYMENT CALCULATOR #{e.inspect}"
 	    end
 	    begin
-		    AccountsPayableCronJob::perform
+		    puts AccountsPayableCronJob::perform
 	    rescue => e
 	    	puts "500 Internal PAYMENT CALCULATOR 2 #{e.inspect}"
 	    end
