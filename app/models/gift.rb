@@ -63,7 +63,7 @@ class Gift < ActiveRecord::Base
     has_many    :affiliate_gifts
     has_many    :affiliates,    through: :affiliate_gifts
     has_many    :dittos,        as: :notable
-    has_many    :gift_items,    dependent: :destroy
+    has_many    :gift_items,    dependent: :destroy, autosave: true
     has_many    :landing_pages, through: :affiliate_gifts
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :proto_join
