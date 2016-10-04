@@ -1,21 +1,29 @@
 class GiftItem < ActiveRecord::Base
+	extend MoneyHelper
+	include MoneyHelper
+
 
 	validates_presence_of :price, :price_cents, :quantity, :menu_item_id
 
+
 #   -------------
+
 
 	belongs_to :gift
+	belongs_to :menu_item
+
 
 #   -------------
+
 
 	def self.initFromDictionary menu_item_hash
 		giftItem = GiftItem.new
-		giftItem.menu_item_id  = menu_item_hash["item_id"]
-		giftItem.price    = menu_item_hash["price"]
-		giftItem.price_cents = menu_item_hash["price_cents"]
+		giftItem.menu_item_id = menu_item_hash["item_id"]
+		giftItem.price = menu_item_hash["price"]
+		giftItem.price_cents = menu_item_hash["price_cents"] || currency_to_cents(menu_item_hash["price"])
 		giftItem.quantity = menu_item_hash["quantity"]
-		giftItem.name 	  = menu_item_hash["item_name"]
-		giftItem.detail   = menu_item_hash["detail"]
+		giftItem.name = menu_item_hash["item_name"]
+		giftItem.detail = menu_item_hash["detail"]
 		giftItem
 	end
 
@@ -58,5 +66,6 @@ end
 #  quantity :integer
 #  name     :string(255)
 #  detail   :text
-#
+#  ccy :string
+#  price_cents :integer
 
