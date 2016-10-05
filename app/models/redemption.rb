@@ -1,5 +1,11 @@
 class Redemption < ActiveRecord::Base
 
+#   -------------
+
+    before_validation :set_unique_hex_id, on: :create
+
+#   -------------
+
 	belongs_to :gift
 
 #   -------------
@@ -22,6 +28,8 @@ class Redemption < ActiveRecord::Base
 
 	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
 
+#   -------------
+
 	def self.init_with_gift(gift, loc_id=nil, r_sys=nil)
         r = Redemption.new
         r.gift_id = gift.id
@@ -40,6 +48,21 @@ class Redemption < ActiveRecord::Base
 	        r.type_of = self.convert_r_sys_to_type_of(r_sys)
         end
         r
+	end
+
+	def self.convert_type_of_to_r_sys(typ)
+		case typ
+		when 'pos'
+			3
+		when 'v1'
+			1
+		when 'v2'
+			2
+		when 'paper'
+			4
+		when 'zapper'
+			5
+		end
 	end
 
 	def self.convert_r_sys_to_type_of(r_sys)
@@ -84,6 +107,9 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
         find_by_sql(query)
 	end
 
+    def set_unique_hex_id
+        self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id)
+    end
 end
 # == Schema Information
 #

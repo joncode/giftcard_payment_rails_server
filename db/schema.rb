@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160929224807) do
+ActiveRecord::Schema.define(version: 20161005004504) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -368,6 +368,7 @@ ActiveRecord::Schema.define(version: 20160929224807) do
   end
 
   add_index "clients", ["application_key", "active"], name: "index_clients_on_application_key_and_active", using: :btree
+  add_index "clients", ["url_name", "active"], name: "index_clients_on_url_name_and_active", using: :btree
 
   create_table "contacts", force: :cascade do |t|
     t.integer  "brand_id"
@@ -1194,6 +1195,12 @@ ActiveRecord::Schema.define(version: 20160929224807) do
     t.datetime "updated_at"
     t.integer  "merchant_id"
     t.string   "status",                      default: "done"
+    t.integer  "r_sys"
+    t.integer  "client_id"
+    t.integer  "token"
+    t.datetime "new_token_at"
+    t.string   "hex_id"
+    t.boolean  "active",                      default: true
   end
 
   add_index "redemptions", ["gift_id"], name: "index_redemptions_on_gift_id", using: :btree
