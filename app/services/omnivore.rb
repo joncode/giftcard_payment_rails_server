@@ -40,6 +40,10 @@ class Omnivore
 		@ccy = 'USD'
 	end
 
+	def r_sys
+		3
+	end
+
 	def direct?
 		@direct_redeem
 	end

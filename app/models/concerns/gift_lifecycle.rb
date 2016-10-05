@@ -128,7 +128,7 @@ new_token_at = '#{current_time}' WHERE id = #{self.id};"
         redemption_msg = "#{display_money(cents: pos_obj.applied_value, ccy: pos_obj.ccy)} was paid with check # #{pos_obj.ticket_num}\n"
         self.detail    = redemption_msg + detail_msg
         if redemption.nil?
-            r = Redemption.init_with_gift(self, loc_id, r_sys_type_of)
+            r = Redemption.init_with_gift(self, loc_id, pos_obj.r_sys)
         else
             r = redemption
             r.reload
