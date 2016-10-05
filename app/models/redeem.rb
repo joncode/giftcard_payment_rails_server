@@ -6,6 +6,25 @@ class Redeem
 	def self.start(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant)
 		puts "Redeem.start"
 
+		redeems = Redemption.where(gift_id: gift.id, active: true, status: ['done', 'pending']).order_(created_at: :desc)
+
+			# check for existing pending redemptions
+		already_have_one = nil
+		redeems.each do |redeem|
+			if redeem.status = 'pending'
+				if gift.original_value == redeem.amount
+					# full redemption return
+					already_have_one = response(redeem, gift)
+					break
+				else
+					# pending
+					already_have_one = response(redeem, gift)
+					break
+				end
+			end
+		end
+		return already_have_one unless already_have_one.nil?
+
 			# set data and reject invalid submissions
 		return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'} unless gift.kind_of?(Gift)
 		api = "SCRIPT" if api.nil?
@@ -39,7 +58,7 @@ class Redeem
 			# confirm that the gift has available balance to redeem
 		redeemed_amt = 0
 		reserved_amt = 0
-		Redemption.where(gift_id: gift.id, active: true, status: ['done', 'pending']).each do |r|
+		redeems.each do |r|
 			if r.status == 'done'
 				redeemed_amt += r.amount
 			elsif r.status == 'pending'
@@ -90,16 +109,21 @@ class Redeem
 			# save the data
 		if redemption.save
 			puts redemption.inspect
-			gift.token = redemption.token
-			gift.new_token_at = redemption.new_token_at
-			gift.save
-			Resque.enqueue(GiftAfterSaveJob, gift.id)
-			return { 'success' => true, 'redemption' => redemption, 'gift' => gift, 'response_code' => "PENDING",
-				"response_text" => success_hsh(redemption), 'token' => redemption.token }
+			return response(redemption, gift)
 		else
 			puts redemption.inspect
 			return { 'success' => false, "response_code" => "INVALID_INPUT", "response_text" =>  redemption.errors.full_messages }
 		end
+	end
+
+	def self.response redemption, gift
+		gift.token = redemption.token if gift.token != redemption.token
+		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
+		if gift.save
+			Resque.enqueue(GiftAfterSaveJob, gift.id)
+		end
+		return { 'success' => true, 'redemption' => redemption, 'gift' => gift, 'response_code' => "PENDING",
+			"response_text" => success_hsh(redemption), 'token' => redemption.token }
 	end
 
 
