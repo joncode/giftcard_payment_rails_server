@@ -11,7 +11,7 @@ module GiftLifecycle
                 self.rec_client_id = client_id
             end
             if save
-                Relay.send_push_thank_you(gift) if send_open_push
+                Relay.send_push_thank_you(self) if send_open_push
                 true
             else
                 false
@@ -331,7 +331,7 @@ token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #
             Gift.connection.execute(sql)
             reload
 
-            Relay.send_push_thank_you(gift) if send_open_push
+            Relay.send_push_thank_you(self) if send_open_push
             true
         else
             false
