@@ -61,7 +61,7 @@ class Mdot::V2::GiftsController < JsonController
     def notify  # redemption v2 ONLY
         gift   = @current_user.received.where(id: params[:id]).first
         return nil if data_not_found?(gift)
-        resp = Redeem.start(gift: gift, loc_id: loc_id, client_id: @current_client.id, api: "mdot/v2/gifts/#{gift.id}/notify")
+        resp = Redeem.start(gift: gift, loc_id: redeem_params["loc_id"], client_id: @current_client.id, api: "mdot/v2/gifts/#{gift.id}/notify")
         if resp['success']
             gift = resp['gift']
             redeem = resp['redemption']
