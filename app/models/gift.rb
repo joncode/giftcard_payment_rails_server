@@ -507,8 +507,8 @@ class Gift < ActiveRecord::Base
         gift_item_ary = []
         new_cart = []
         ary.each do |item_hsh|
-            item_id = item_hsh['item_id']
-            quantity = item_hsh['quantity']
+            item_id = item_hsh['item_id'].to_i
+            quantity = item_hsh['quantity'].to_i
             mitem = mhsh[item_id]
             if item_hsh['price'].to_f > mitem.price.to_f
                     # price is now lower than customer thinks it will be

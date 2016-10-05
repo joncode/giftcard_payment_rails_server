@@ -1,7 +1,9 @@
 class Redeem
 	extend MoneyHelper
 
+
 #   -------------
+
 
 	def self.start(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant)
 		puts "Redeem.start"
