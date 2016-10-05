@@ -97,7 +97,7 @@ AND #{content_symbol}.id = contents.content_id"
 
 #	-------------  CLASS METHODS
 
-	def self.legacy_client platform, agent_str=''
+	def self.legacy_client platform=nil, agent_str=''
         if platform == 'android' || agent_str.match(/Android/)
             find(ANDROID_CLIENT_ID)
         elsif platform == 'ios' || agent_str.match(/iPhone/)
