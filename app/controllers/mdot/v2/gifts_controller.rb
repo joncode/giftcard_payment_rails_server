@@ -2,6 +2,7 @@ require 'date'
 
 class Mdot::V2::GiftsController < JsonController
     before_action :authenticate_customer
+    before_action :set_current_client, except: [ :index, :archive, :badge, :redeem, :pos_redeem, :promo ]
 
     rescue_from JSON::ParserError, :with => :bad_request
     rescue_from ActiveModel::ForbiddenAttributesError, :with => :bad_request
@@ -43,10 +44,8 @@ class Mdot::V2::GiftsController < JsonController
         return nil if params_bad_request
         return nil if data_not_found?(gift)
 
-        send_open_push = gift.status == 'open'
 
-        if gift.notify(false)
-            Relay.send_push_thank_you(gift) if send_open_push
+        if gift.read(@current_client.id)
             success(gift.token)
         else
             if !gift.notifiable?
@@ -64,7 +63,7 @@ class Mdot::V2::GiftsController < JsonController
         return nil if data_not_found?(gift)
 
         if gift.notifiable?
-            gift.notify(true, redeem_params["loc_id"],  @current_user.session_token_obj.client_id)
+            gift.notify(redeem_params["loc_id"], @current_client.id)
             success({ token:  gift.token, notified_at: gift.notified_at, new_token_at: gift.new_token_at })
         else
             fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
@@ -79,7 +78,6 @@ class Mdot::V2::GiftsController < JsonController
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = redeem_params["ticket_num"]
                 if !gift.merchant.nil?
-                    gift.rec_client_id = @current_user.session_token_obj.client_id
                     resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, redeem_params['loc_id'])
                     if !resp.kind_of?(Hash)
                         status = :bad_request
@@ -118,7 +116,6 @@ class Mdot::V2::GiftsController < JsonController
         if gift
             if gift.status == 'notified'
                 if true # gift.token == request_params["token"]
-                    gift.rec_client_id = @current_user.session_token_obj.client_id
                     gift.redeem_gift(request_server, redeem_params['loc_id'])
                     # gift.reload
                     success({ "order_number" => gift.token , "total" => gift.value,  "server" => gift.server })
@@ -158,9 +155,9 @@ class Mdot::V2::GiftsController < JsonController
         new_gift_hsh["message"]     = data["message"]
         new_gift_hsh["old_gift_id"] = params[:id]
         new_gift_hsh["origin"] = request.headers['User-Agent']
-        new_gift_hsh['client_id'] = @current_user.session_token_obj.client_id
-        new_gift_hsh['partner_id'] = @current_user.session_token_obj.partner_id
-        new_gift_hsh['partner_type'] = @current_user.session_token_obj.partner_type
+        new_gift_hsh['client_id'] = @current_client.id
+        new_gift_hsh['partner_id'] = @current_client.partner_id
+        new_gift_hsh['partner_type'] = @current_client.partner_type
         gift_response = GiftRegift.create(new_gift_hsh)
 
         if gift_response.kind_of?(Gift)
@@ -197,9 +194,9 @@ class Mdot::V2::GiftsController < JsonController
             gift_hsh["giver"]        = @current_user
             gift_hsh["receiver_oauth"] = params['data']["receiver_oauth"]
             gift_hsh["origin"] = request.headers['User-Agent']
-            gift_hsh['client_id'] = @current_user.session_token_obj.client_id
-            gift_hsh['partner_id'] = @current_user.session_token_obj.partner_id
-            gift_hsh['partner_type'] = @current_user.session_token_obj.partner_type
+            gift_hsh['client_id'] = @current_client.id
+            gift_hsh['partner_id'] = @current_client.partner_id
+            gift_hsh['partner_type'] = @current_client.partner_type
             puts gift_hsh.inspect
             gift_response = GiftSale.create(gift_hsh)
         end
@@ -234,6 +231,10 @@ class Mdot::V2::GiftsController < JsonController
     end
 
 private
+
+    def set_current_client
+        @current_client = Client.legacy_client(platform, request.headers['User-Agent'])
+    end
 
     def promo_params
         params.require(:data).permit(:code)

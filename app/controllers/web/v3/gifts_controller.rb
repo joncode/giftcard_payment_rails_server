@@ -168,8 +168,7 @@ class Web::V3::GiftsController < MetalCorsController
     def read
         gift = Gift.includes(:merchant).find params[:id]
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
-            gift.notify(false)
-            Relay.send_push_thank_you gift
+            gift.read(@current_client.id)
             gift.fire_after_save_queue(@current_client)
             success gift.web_serialize
         else
@@ -188,7 +187,7 @@ class Web::V3::GiftsController < MetalCorsController
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
             # amount = redeem_params["amount"].to_i
-            gift.notify(true, loc_id, @current_client.id)
+            gift.notify(loc_id, @current_client.id)
             gift.fire_after_save_queue(@current_client)
             success gift.notify_serialize
         else

@@ -1,6 +1,7 @@
 module UrbanAirshipWrap
 
     def send_push(user, alert, gift_id)
+        return if Rails.env.development?
         puts "SENDING PUSH NOTE for GIFT ID = #{gift_id} | PUSH_RECEIVER ID = #{user.id} | #{alert}"
         pnts = user.pn_tokens
         resp = []

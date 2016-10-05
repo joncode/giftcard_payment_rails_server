@@ -3,6 +3,7 @@ class Redemption < ActiveRecord::Base
 #   -------------
 
     before_validation :set_unique_hex_id, on: :create
+    before_validation :set_unique_token, on: :create
 
 #   -------------
 
@@ -107,10 +108,17 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
         find_by_sql(query)
 	end
 
+	def set_unique_token
+		self.token = UniqueIdMaker.four_digit_token(self.class, :hex_id, { status: 'incomplete', active: true })
+		self.new_token_at = DateTime.now.utc
+	end
+
     def set_unique_hex_id
         self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id)
     end
+
 end
+
 # == Schema Information
 #
 # Table name: redemptions
