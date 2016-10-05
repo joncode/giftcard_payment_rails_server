@@ -61,11 +61,13 @@ class Mdot::V2::GiftsController < JsonController
     def notify  # redemption v2 ONLY
         gift   = @current_user.received.where(id: params[:id]).first
         return nil if data_not_found?(gift)
-
-        if gift.old_notify(redeem_params["loc_id"], @current_client.id)
-            success({ token:  gift.token, notified_at: gift.notified_at, new_token_at: gift.new_token_at })
+        resp = Redeem.start(gift: gift, loc_id: loc_id, client_id: @current_client.id, api: "mdot/v2/gifts/#{gift.id}/notify")
+        if resp['success']
+            gift = resp['gift']
+            redeem = resp['redemption']
+            success({ token:  resp['token'], notified_at: gift.notified_at, new_token_at: redeem.new_token_at })
         else
-            fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+            fail "Gift at #{gift.provider_name} cannot be redeemed"
             status = :unprocessable_entity
         end
         respond(status)

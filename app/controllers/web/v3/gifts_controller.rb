@@ -189,7 +189,7 @@ class Web::V3::GiftsController < MetalCorsController
         gift = Gift.includes(:merchant).find params[:id]
         if (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
-            resp = Redeem.start(gift: gift, loc_id: loc_id, client_id: @current_client, api: "web/v3/gifts/#{gift.id}/notify")
+            resp = Redeem.start(gift: gift, loc_id: loc_id, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/notify")
             if resp['success']
                 gift = resp['gift']
                 gift.fire_after_save_queue(@current_client)
@@ -208,7 +208,7 @@ class Web::V3::GiftsController < MetalCorsController
         if (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
             amount = redeem_params["amount"]
-            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client, api: "web/v3/gifts/#{gift.id}/start_redemption")
+            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/start_redemption")
             if resp['success']
                 gift.fire_after_save_queue(@current_client)
                 success({ msg: resp["response_text"], token: resp["response_code"], gift: resp['gift'].notify_serialize })

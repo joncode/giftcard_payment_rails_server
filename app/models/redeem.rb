@@ -10,6 +10,9 @@ class Redeem
 		return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'} unless gift.kind_of?(Gift)
 		api = "SCRIPT" if api.nil?
 		# OpsTwilio.text_devs(msg: "gift #{gift.id} notify has no client_id") if client_id.nil?
+		if client_id.kind_of?(Client)
+			client_id = client_id.id
+		end
 		request_hsh = { loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of }
 		puts request_hsh.inspect
 
@@ -92,7 +95,7 @@ class Redeem
 			gift.save
 			Resque.enqueue(GiftAfterSaveJob, gift.id)
 			return { 'success' => true, 'redemption' => redemption, 'gift' => gift, 'response_code' => "PENDING",
-				"response_text" => success_hsh(redemption) }
+				"response_text" => success_hsh(redemption), 'token' => redemption.token }
 		else
 			puts redemption.inspect
 			return { 'success' => false, "response_code" => "INVALID_INPUT", "response_text" =>  redemption.errors.full_messages }
