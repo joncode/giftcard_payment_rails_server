@@ -6,18 +6,18 @@ class Redeem
 	def self.start(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant)
 		puts "Redeem.start"
 
-		redeems = Redemption.where(gift_id: gift.id, active: true, status: ['done', 'pending']).order_(created_at: :desc)
+		redeems = Redemption.where(gift_id: gift.id, active: true, status: ['done', 'pending']).order(created_at: :desc)
 
 			# check for existing pending redemptions
 		already_have_one = nil
 		redeems.each do |redeem|
 			if redeem.status = 'pending'
-				if gift.original_value == redeem.amount
-					# full redemption return
+				if (gift.balance == redeem.amount) || (gift.original_value == redeem.amount)
+					# full redemption - no more redmeptions allowed
 					already_have_one = response(redeem, gift)
 					break
 				else
-					# pending
+					# pending exists but we could make another, what are criteria ?
 					already_have_one = response(redeem, gift)
 					break
 				end
