@@ -15,7 +15,7 @@ class ClientUrlMatcher
 		def specific_type client_url_name
 			type = nil
 			if client_url_name.match(/-/)
-				cid = c[0..1]
+				cid = client_url_name[0..1]
 				case cid
 				when GOLFNOW_COM.to_s[0..1]
 					type = :golf_now
