@@ -13,10 +13,11 @@ class Redeem
 		request_hsh = { loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of }
 		puts request_hsh.inspect
 
+		amount = gift.balance if amount.nil?
 		if !amount.kind_of?(Integer)
 			return { 'success' => false, "response_code" => 'INVALID_INPUT',
 				"response_text" => "Amount #{amount} is not denominated in #{CCY[gift.ccy]['subunit'].pluralize(2)}" }
-		elsif amount.nil? || amount == gift.balance
+		elsif amount == gift.balance
 			gift_prev_value = gift.balance
 			amount = gift.balance
 			gift_next_value = 0

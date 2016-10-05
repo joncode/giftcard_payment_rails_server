@@ -206,18 +206,15 @@ class Web::V3::GiftsController < MetalCorsController
         if gift.notifiable? && (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
             amount = redeem_params["amount"]
-            if amount.to_i == amount
-                # gift.notify(loc_id, @current_client.id)
-                resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client, api: "web/v3/gifts/#{gift.id}/redeem_for_less")
-                if resp['success']
-                    gift.fire_after_save_queue(@current_client)
-                    success({ msg: resp["response_text"], token: resp["response_code"]. gift: resp['gift'].notify_serialize })
-                else
-                    status = :ok
-                    fail_web({ err: resp["response_code"], msg: resp["response_text"]})
-                end
+
+            # gift.notify(loc_id, @current_client.id)
+            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client, api: "web/v3/gifts/#{gift.id}/redeem_for_less")
+            if resp['success']
+                gift.fire_after_save_queue(@current_client)
+                success({ msg: resp["response_text"], token: resp["response_code"]. gift: resp['gift'].notify_serialize })
             else
-                fail_web({ err: "INVALID_INPUT", msg: "Amount #{amount} is not an integer"})
+                status = :ok
+                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
             end
         else
             fail_message = if gift.status == 'redeemed'
