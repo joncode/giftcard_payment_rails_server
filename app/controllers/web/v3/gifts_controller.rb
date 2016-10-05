@@ -201,6 +201,34 @@ class Web::V3::GiftsController < MetalCorsController
         respond(status)
     end
 
+    def redeem_for_less
+        gift = Gift.includes(:merchant).find params[:id]
+        if gift.notifiable? && (gift.receiver_id == @current_user.id)
+            loc_id = redeem_params["loc_id"]
+            amount = redeem_params["amount"]
+            if amount.to_i == amount
+                # gift.notify(loc_id, @current_client.id)
+                resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client, api: "web/v3/gifts/#{gift.id}/redeem_for_less")
+                if resp['success']
+                    gift.fire_after_save_queue(@current_client)
+                    success({ msg: resp["response_text"], token: resp["response_code"]. gift: resp['gift'].notify_serialize })
+                else
+                    status = :ok
+                    fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                end
+            else
+                fail_web({ err: "INVALID_INPUT", msg: "Amount #{amount} is not an integer"})
+            end
+        else
+            fail_message = if gift.status == 'redeemed'
+                    "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
+                else
+                    "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+                end
+            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
+        end
+        respond(status)
+    end
 # {
 #                 amount_applied: 8.00,
 #                 total_check_amount: 8.00,
@@ -243,19 +271,23 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
             elsif merchant.r_sys == 5
                 if qrcode
                         # ZAPPER Redemption
-                    @current_redemption = gift.zapper_redemption( qrcode, merchant, amount )
-                    resp = gift.zapper_redeem_async(@current_redemption)
-                    # resp = gift.zapper_redeem( qrcode, merchant, amount )
-                    if !resp.kind_of?(Hash)
-                        # status = :bad_request
-                        fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
-                    elsif resp["success"] == true
-                        gift.fire_after_save_queue(@current_client)
-                        status = :ok
-                        success({msg: resp["response_text"]})
+                    res = gift.zapper_redemption( qrcode, merchant, amount )
+                    @current_redemption = res['redemption']
+                    if @current_redemption
+                        resp = gift.zapper_redeem_async(@current_redemption)
+                        if !resp.kind_of?(Hash)
+                            # status = :bad_request
+                            fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+                        elsif resp["success"] == true
+                            gift.fire_after_save_queue(@current_client)
+                            status = :ok
+                            success({msg: resp["response_text"]})
+                        else
+                            status = :ok
+                            fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                        end
                     else
-                        status = :ok
-                        fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                        fail_web({ err: res["response_code"], msg: res["response_text"]})
                     end
                 else
                     status = :bad_request

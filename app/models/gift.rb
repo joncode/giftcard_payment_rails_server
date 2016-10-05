@@ -194,6 +194,10 @@ class Gift < ActiveRecord::Base
         display_money cents: pre_round, ccy: self.ccy
     end
 
+    def original_value
+        currency_to_cents(calculate_value(self.shoppingCart).to_s)
+    end
+
     def total
         display_money cents: self.value_cents
     end

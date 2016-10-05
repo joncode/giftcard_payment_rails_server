@@ -1,4 +1,5 @@
 class Redemption < ActiveRecord::Base
+	include MoneyHelper
 
 #   -------------
 
@@ -17,22 +18,13 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-    def response
-        self.resp_json
-    end
-
-    def request
-        self.req_json
-    end
-
-#   -------------
-
 	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
+
 
 #   -------------
 
 	def self.init_with_gift(gift, loc_id=nil, r_sys=nil)
-        r = Redemption.new
+        r = new
         r.gift_id = gift.id
         r.amount          = gift.value_cents
         r.gift_prev_value = gift.value_cents
@@ -51,8 +43,65 @@ class Redemption < ActiveRecord::Base
         r
 	end
 
+	def serialize
+		self.serializable_hash except: [ :active ]
+	end
+
+#   -------------
+
+	attr_accessor :ccy
+	def ccy
+		@ccy || self.gift.ccy
+	end
+
+	def amount_words(currency=nil)
+		if currency.nil?
+			currency = ccy
+		end
+		cents_to_words(self.amount, currency)
+	end
+
+    def response
+        self.resp_json
+    end
+
+    def request
+        self.req_json
+    end
+
+#   -------------
+
+	def self.count_promo_redemptions_for(partner, start_date, end_date)
+        redemptions = promo_redemptions_for(partner, start_date, end_date)
+        redemptions.length
+	end
+
+	def self.total_promo_redemptions_for(partner, start_date, end_date)
+		#- which returns an integer of cents redeemed in time period
+        redemptions = promo_redemptions_for(partner, start_date, end_date)
+        redemptions.map(&:amount).sum
+	end
+
+	def self.promo_redemptions_for(partner, start_date, end_date)
+		if partner.kind_of?(Affiliate)
+			specifc_query = "g.merchant_id = m.id AND m.affiliate_id = #{partner.id}"
+			setup_vars = ", merchants m "
+		else
+			specifc_query = "g.merchant_id = #{partner.id}"
+			setup_vars = ''
+		end
+
+		query = "SELECT r.* FROM redemptions r, gifts g #{setup_vars} \
+WHERE (g.cat >=  200 AND g.cat <  300) AND r.gift_id = g.id AND g.status = 'redeemed' AND r.status = 'done' \
+AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{end_date}')"
+        find_by_sql(query)
+	end
+
+
+#   -------------
+
 	def self.convert_type_of_to_r_sys(typ)
-		case typ
+		case typ.to_s
 		when 'pos'
 			3
 		when 'v1'
@@ -82,34 +131,10 @@ class Redemption < ActiveRecord::Base
 		end
 	end
 
-	def self.count_promo_redemptions_for(partner, start_date, end_date)
-        redemptions = promo_redemptions_for(partner, start_date, end_date)
-        redemptions.length
-	end
-
-	def self.total_promo_redemptions_for(partner, start_date, end_date)
-		#- which returns an integer of cents redeemed in time period
-        redemptions = promo_redemptions_for(partner, start_date, end_date)
-        redemptions.map(&:amount).sum
-	end
-
-	def self.promo_redemptions_for(partner, start_date, end_date)
-		if partner.kind_of?(Affiliate)
-			specifc_query = "g.merchant_id = m.id AND m.affiliate_id = #{partner.id}"
-			setup_vars = ", merchants m "
-		else
-			specifc_query = "g.merchant_id = #{partner.id}"
-			setup_vars = ''
-		end
-
-		query = "SELECT r.* FROM redemptions r, gifts g #{setup_vars} \
-WHERE (g.cat >=  200 AND g.cat <  300) AND r.gift_id = g.id AND g.status = 'redeemed' AND r.status = 'done' \
-AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{end_date}')"
-        find_by_sql(query)
-	end
+#   -------------
 
 	def set_unique_token
-		self.token = UniqueIdMaker.four_digit_token(self.class, :hex_id, { status: 'incomplete', active: true })
+		self.token = UniqueIdMaker.four_digit_token(self.class, :hex_id, { status: 'pending', active: true })
 		self.new_token_at = DateTime.now.utc
 	end
 

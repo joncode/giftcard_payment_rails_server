@@ -53,7 +53,7 @@ class BoomerangMailer
             "merge_vars"  =>[
                 {
                     "rcpt" => email,
-                    "vars" => [{"name" => "link", "content" => "#{PUBLIC_URL}/signup/acceptgift?id=#{@gift.obscured_id}"}]
+                    "vars" => [{"name" => "link", "content" => "#{@gift.invite_link}"}]
                 }
             ]
         }

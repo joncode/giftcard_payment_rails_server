@@ -146,7 +146,7 @@ module EmailHelper
 	def text_for_notify_receiver_wo_redemption gift
 		image_url      = gift.merchant.image
 		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
-		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
+		button_url    = "#{gift.invite_link}"
 		button_text   = "Claim My Gift"
 		giver_name    = gift.giver_name
 					if gift.giver.class == "User"
@@ -183,7 +183,7 @@ module EmailHelper
 
 	def text_for_notify_receiver_proto_join gift
 		image_url      = gift.merchant.image
-		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
+		button_url    = "#{gift.invite_link}"
 		button_text   = "Claim My Gift"
 		provider_name = gift.provider_name
 		giver_name    = gift.giver_name ? gift.giver_name : provider_name
@@ -234,7 +234,7 @@ module EmailHelper
 	def text_for_notify_receiver gift
 		image_url     = gift.merchant.get_photo
 		giver_image   = gift.giver.iphone_photo if gift.giver.class == "User"
-		button_url    = "#{PUBLIC_URL}/signup/acceptgift?id=#{NUMBER_ID + gift.id}"
+		button_url    = "#{gift.invite_link}"
 		button_text   = "Claim My Gift"
 		giver_name    = gift.giver_name
 		if gift.giver.class == "User"

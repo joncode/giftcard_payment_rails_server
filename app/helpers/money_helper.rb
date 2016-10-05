@@ -6,6 +6,19 @@ module MoneyHelper
 
 	# currency is money with a $ or other ccy symbol
 
+	def cents_to_words(cents, ccy='USD')
+		amt = cents
+		dollars = amt/100.0
+		if dollars == dollars.to_i
+			# no cents
+			"#{dollars.to_i.to_words.titleize} #{CCY[ccy]['name'].pluralize(dollars.to_i)}"
+		else
+			ary = flo.to_s.split(CCY[ccy]["decimal_mark"])
+			dollars = ary[0].to_i
+			cents = ary[1].to_i
+			"#{dollars.to_words.titleize} #{CCY[ccy]['name'].pluralize(dollars)} & #{cents.to_words.titleize} #{CCY[ccy]['subunit'].pluralize(cents)}"
+		end
+	end
 
  	def string_to_float str
  		str.to_f.round(2)

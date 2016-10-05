@@ -88,7 +88,7 @@
 					</li> -->
 					<li>
 						<h2 style="text-align: center; font-weight: bold; font-family: 'Arial Rounded MT Bold';">
-							<%= display_money(string: @gift.value, ccy: @gift.ccy) %> (<%= @gift.value.to_i.to_words.titleize %> <%= CCY[@gift.ccy]['name'] %>s)
+							<%= display_money(cents: @redemption.amount, ccy: @gift.ccy) %> (<%= @redemption.amount_words(@gift.ccy) %>)
 						</h2>
 					</li>
 				</ul>
@@ -99,7 +99,7 @@
 				<ul style="padding-top: 10px;">
 					<li>
 						<div style="background-color: #E5E6E7;border: 5px solid #000; border-radius: 10px !important;">
-							<h2><b style="padding: 60px;line-height: inherit;box-sizing: border-box;"><%= @gift.paper_id %></b></h2>
+							<h2><b style="padding: 60px;line-height: inherit;box-sizing: border-box;"><%= @redemption.hex_id %></b></h2>
 						</div>
 					</li>
 					<li style='text-align: center;'>

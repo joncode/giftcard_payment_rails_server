@@ -1203,7 +1203,10 @@ ActiveRecord::Schema.define(version: 20161005004504) do
     t.boolean  "active",                      default: true
   end
 
+  add_index "redemptions", ["gift_id", "status", "active"], name: "index_redemptions_on_gift_id_and_status_and_active", using: :btree
   add_index "redemptions", ["gift_id"], name: "index_redemptions_on_gift_id", using: :btree
+  add_index "redemptions", ["hex_id"], name: "index_redemptions_on_hex_id", using: :btree
+  add_index "redemptions", ["token", "status", "active"], name: "index_redemptions_on_token_and_status_and_active", using: :btree
 
   create_table "regions", force: :cascade do |t|
     t.string   "name",       limit: 255

@@ -342,13 +342,13 @@ end
 
 	# def self.post_gift_to_wall gift_id, user=:giver
 	# 	gift = Gift.find gift_id
-	# 	gift_obscured_id = gift.obscured_id
+	# 	gift_obscured_id = gift.hex_id
 	# 	graph = self.get_graph(gift)
 
  #    	if user == :giver
- #        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) giver ", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" })
+ #        	post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) giver ", { :link => "#{PUBLIC_URL}/hi/#{gift_obscured_id}" })
 	# 	else
-	# 		post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) receiver", { :link => "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" }, gift.facebook_id)
+	# 		post_id_hsh = graph.put_wall_post( "@[#{gift.facebook_id}], here is  Gift for you:) receiver", { :link => "#{PUBLIC_URL}/hi/#{gift_obscured_id}" }, gift.facebook_id)
 	# 	end
 	# 	puts "POSTED TO FACEBOOK WALL post_gift_to_wall #{post_id_hsh}\n"
 	# 	return { 'success' => true, 'post' => post_id_hsh }
@@ -359,7 +359,7 @@ end
  #        cart = JSON.parse gift.shoppingCart
  #        post_hsh = { "merchant"  => gift.provider_name,
  #        	"title" => cart[0]["item_name"],
- #        	"link" => "#{PUBLIC_URL}/signup/acceptgift?id=#{gift.obscured_id}" }
+ #        	"link" => "#{gift.invite_link}" }
  #        # social_proxy = SocialProxy.new(oauth.to_proxy)
  #        # social_proxy.create_post(post_hsh)
  #        # puts "------ #{social_proxy.msg}"
@@ -375,9 +375,9 @@ end
 	# end
 
 	# def self.full_try gift, user=:giver
-	# 	gift_obscured_id = gift.obscured_id
+	# 	gift_obscured_id = gift.hex_id
 	# 	graph = self.get_graph(gift)
-	# 	hsh = { gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}", message: "Lets do this @[jon.gifter] #{Time.now}", privacy: { 'value' => 'EVERYONE'}, 'fb:explicitly_shared' => 'true'}
+	# 	hsh = { gift: "#{PUBLIC_URL}/hi/#{gift_obscured_id}", message: "Lets do this @[jon.gifter] #{Time.now}", privacy: { 'value' => 'EVERYONE'}, 'fb:explicitly_shared' => 'true'}
  #        if user == :giver
 	#         post_id_hsh = graph.put_connections('me', '/me/itsonme_test:send', hsh)
  #    	else
@@ -388,9 +388,9 @@ end
 	# end
 
 	# def self.put_conn gift
-	# 	gift_obscured_id = gift.obscured_id
+	# 	gift_obscured_id = gift.hex_id
  #        graph = self.get_graph(gift)
- #        post_id_hsh = graph.put_connections('me', 'itsonme_test:send', subject: "Gifted!", message: "@[#{gift.facebook_id}] #{gift.message}", privacy: { 'value' => 'EVERYONE'}, link: "#{PUBLIC_URL}/signup/acceptgift/#{gift_obscured_id}" )
+ #        post_id_hsh = graph.put_connections('me', 'itsonme_test:send', subject: "Gifted!", message: "@[#{gift.facebook_id}] #{gift.message}", privacy: { 'value' => 'EVERYONE'}, link: "#{PUBLIC_URL}/hi/#{gift_obscured_id}" )
 	# 	puts "POSTED TO FACEBOOK WALL put_conn #{post_id_hsh}\n"
 	# 	return { 'success' => true, 'post' => post_id_hsh }
 	# end

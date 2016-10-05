@@ -16,11 +16,18 @@ class InviteController < ApplicationController
     	puts "PAPER GIFT REQUEST #{params.inspect}"
         @gift = Gift.includes(:merchant).find_by(hex_id: params[:id])
         if @gift.kind_of?(Gift) && ['incomplete', 'open', 'notified', 'schedule'].include?(@gift.status)
-	        respond_to do |format|
-	            format.html
-	            format.pdf do
-	                render pdf: "paper_gifts"
-	            end
+	        resp = Redeem.start(gift: @gift, loc_id: nil, amount: nil, client_id: nil, api: "/papergifts/#{params[:id]}", type_of: :paper)
+	        if resp['success']
+	        	@redemption = resp['redemption']
+	        	@gift = resp['gift']
+		        respond_to do |format|
+		            format.html
+		            format.pdf do
+		                render pdf: "paper_gifts"
+		            end
+		        end
+	        else
+	        	render :text => resp['response_text']
 	        end
 	    else
 	    	raise ActiveRecord::RecordNotFound
