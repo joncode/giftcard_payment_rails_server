@@ -23,6 +23,9 @@ class GiftDeactivatedEvent
                     GiftAfterSaveJob.perform(gift)
                 end
             end
+            gift.redemptions.each do |redemption|
+                redemption.update(active: false)
+            end
         elsif gift.status == 'regifted'
             registers = gift.registers
             if registers.length == 0

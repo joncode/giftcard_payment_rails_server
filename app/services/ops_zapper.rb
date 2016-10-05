@@ -57,6 +57,10 @@ class OpsZapper
 		@merchant_site_id = 12
 	end
 
+	def r_sys
+		5
+	end
+
 	def ticket_num
 		@ticket_id
 	end

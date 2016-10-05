@@ -9,6 +9,7 @@ class Redemption < ActiveRecord::Base
 #   -------------
 
 	belongs_to :gift
+	belongs_to :client
 
 #   -------------
 
@@ -117,7 +118,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 
 	def self.convert_r_sys_to_type_of(r_sys)
 		return r_sys if [ :pos, :v2, :v1, :paper, :zapper ].include?(r_sys)
-		case r_sys
+		case r_sys.to_i
 		when 1
 			:v1
 		when 2

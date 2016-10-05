@@ -22,6 +22,7 @@ class Client < ActiveRecord::Base
 #	-------------
 
 	has_many :gifts
+	has_many :redemptions
 
 	belongs_to :partner,  polymorphic: true
 
