@@ -338,41 +338,5 @@ token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #
         end
     end
 
-    def old_notify(loc_id=nil, client_id=nil)
-        if notifiable?
-            if (self.new_token_at.nil? || self.new_token_at < reset_time)
-
-                current_time   = Time.now.utc
-
-                include_status = if self.status == 'open'
-                    #self.status = 'notified'
-                    " status = 'notified' ,"
-                else ; "" ; end
-
-                include_notify = if self.notified_at.nil?
-                    #self.notified_at = current_time
-                    " notified_at = '#{current_time}' ,"
-                else ; "" ; end
-
-                change_merchant = if (loc_id.to_i > 0)
-                    " merchant_id = #{loc_id.to_i} ,"
-                else ; "" ; end
-
-                sql = "UPDATE gifts SET #{include_status} #{include_notify} #{change_merchant} \
-token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #{self.id};"
-
-                Gift.connection.execute(sql)
-                reload
-
-                Resque.enqueue(GiftAfterSaveJob, self.id)
-                # Alert.perform("GIFT_NOTIFIED_MT", self) if self.status == 'notified'
-                true
-            else
-                true
-            end
-        else
-            false
-        end
-    end
 
 end

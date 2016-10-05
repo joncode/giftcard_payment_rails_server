@@ -64,8 +64,7 @@ class Mdot::V2::GiftsController < JsonController
         resp = Redeem.start(gift: gift, loc_id: redeem_params["loc_id"], client_id: @current_client.id, api: "mdot/v2/gifts/#{gift.id}/notify")
         if resp['success']
             gift = resp['gift']
-            redeem = resp['redemption']
-            success({ token:  resp['token'], notified_at: gift.notified_at, new_token_at: redeem.new_token_at })
+            success({ token:  gift.token, notified_at: gift.notified_at, new_token_at: gift.new_token_at })
         else
             fail "Gift at #{gift.provider_name} cannot be redeemed"
             status = :unprocessable_entity

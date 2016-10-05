@@ -8,6 +8,48 @@ class Redeem
 	def self.start(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant)
 		puts "Redeem.start"
 
+			# set data and reject invalid submissions
+		return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'} unless gift.kind_of?(Gift)
+		api = "SCRIPT" if api.nil?
+		# OpsTwilio.text_devs(msg: "gift #{gift.id} notify has no client_id") if client_id.nil?
+		if client_id.kind_of?(Client)
+			client_id = client_id.id
+		end
+		request_hsh = { loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of }
+		puts request_hsh.inspect
+
+#   -------------
+
+			# set the redemption location - and adjust the gift.merchant_id
+		loc_id = loc_id.to_i
+		loc_id = gift.merchant_id if loc_id == 0
+
+		if loc_id != gift.merchant_id
+			merchant = Merchant.find(loc_id)
+		else
+			merchant = gift.merchant
+		end
+
+		if type_of == :merchant
+			r_sys = merchant.r_sys
+		else
+			r_sys = Redemption.convert_type_of_to_r_sys(type_of)
+		end
+
+			# V1 & POS & Zapper redemption currently make their own redemptiosn
+		if (r_sys == 3) || (r_sys == 5) || (r_sys == 1)
+			gift.notify
+			return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => nil }
+		end
+				# DO I NEED TO CONFIRM THAT GIFT IS GOOD HERE ?
+		if merchant.mode != 'live'
+			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "#{merchant.name} is not currently live" }
+		else
+			gift.merchant_id = loc_id
+		end
+
+#   -------------
+
 		redeems = Redemption.where(gift_id: gift.id, active: true, status: ['done', 'pending']).order(created_at: :desc)
 
 			# check for existing pending redemptions
@@ -27,15 +69,7 @@ class Redeem
 		end
 		return already_have_one unless already_have_one.nil?
 
-			# set data and reject invalid submissions
-		return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'} unless gift.kind_of?(Gift)
-		api = "SCRIPT" if api.nil?
-		# OpsTwilio.text_devs(msg: "gift #{gift.id} notify has no client_id") if client_id.nil?
-		if client_id.kind_of?(Client)
-			client_id = client_id.id
-		end
-		request_hsh = { loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of }
-		puts request_hsh.inspect
+#   -------------
 
 		amount = gift.balance if amount.nil?
 		if !amount.kind_of?(Integer)
@@ -77,28 +111,6 @@ class Redeem
 				"response_text" => "Due to pending redemptions, the amount you entered is more than current available balance #{display_money(cents: available_amt, ccy: gift.ccy)} " }
 		end
 
-#   -------------
-
-			# set the redemption location - and adjust the gift.merchant_id
-		loc_id = loc_id.to_i
-		loc_id = gift.merchant_id if loc_id == 0
-
-		if loc_id != gift.merchant_id
-			merchant = Merchant.find(loc_id)
-		else
-			merchant = gift.merchant
-		end
-				# DO I NEED TO CONFIRM THAT GIFT IS GOOD HERE ?
-		if merchant.mode != 'live'
-			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "#{merchant.name} is not currently live" }
-		else
-			gift.merchant_id = loc_id
-		end
-		if type_of == :merchant
-			r_sys = merchant.r_sys
-		else
-			r_sys = Redemption.convert_type_of_to_r_sys(type_of)
-		end
 
 #   -------------
 
