@@ -56,10 +56,6 @@ Click here to claim your gift.\n #{self.invite_link}"
         notify_receiver_proto_join
     end
 
-    def invite_link
-        "#{PUBLIC_URL}/hi/#{self.hex_id}"
-    end
-
     def schedule_time
         TimeGem.change_time_to_zone(self.scheduled_at, self.merchant.timezone).to_formatted_s(:only_date)
     end

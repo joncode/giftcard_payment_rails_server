@@ -72,7 +72,7 @@ class CollectIncompleteGiftsV2Job
 			return []
 		else
 			fd = res['data']
-			fsmall = fd.select { |ff| ff['application'].present? && ff['application']['id'] == FACEBOOK_APP_ID && ff['link'].match(/acceptgift/) }
+			fsmall = fd.select { |ff| ff['application'].present? && ff['application']['id'] == FACEBOOK_APP_ID && (ff['link'].match(/acceptgift/) || ff['link'].match(/www.itson.me\/hi/)) }
 			if fsmall.count == 0
 				return []
 			else

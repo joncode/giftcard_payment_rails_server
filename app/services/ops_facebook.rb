@@ -192,7 +192,7 @@ class OpsFacebook
         return graph if graph.kind_of?(Hash)
 		begin
 			post_id_hsh = graph.graph_call("v2.5/me/#{FB_NAMESPACE}:send", { tags: "#{gift.facebook_id}",
-				gift: "#{PUBLIC_URL}/signup/acceptgift/#{gift.obscured_id}",
+				gift: "#{gift.invite_link}",
 				message: " @[#{gift.facebook_id}], #{gift.message}",
 				privacy: { 'value' => 'EVERYONE'},
 				'fb:explicitly_shared' => 'true'}, 'post')
