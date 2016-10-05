@@ -234,7 +234,7 @@ class Mdot::V2::GiftsController < JsonController
 private
 
     def set_current_client
-        @current_client = Client.legacy_client(platform, request.headers['User-Agent'])
+        @current_client = Client.legacy_client(nil, request.headers['User-Agent'])
     end
 
     def promo_params
