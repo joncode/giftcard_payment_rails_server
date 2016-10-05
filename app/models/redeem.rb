@@ -4,7 +4,7 @@ class Redeem
 #   -------------
 
 	def self.start(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant)
-		puts "Redeem.perform"
+		puts "Redeem.start"
 
 			# set data and reject invalid submissions
 		return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'} unless gift.kind_of?(Gift)

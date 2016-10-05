@@ -211,7 +211,7 @@ class Web::V3::GiftsController < MetalCorsController
             resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client, api: "web/v3/gifts/#{gift.id}/redeem_for_less")
             if resp['success']
                 gift.fire_after_save_queue(@current_client)
-                success({ msg: resp["response_text"], token: resp["response_code"]. gift: resp['gift'].notify_serialize })
+                success({ msg: resp["response_text"], token: resp["response_code"], gift: resp['gift'].notify_serialize })
             else
                 status = :ok
                 fail_web({ err: resp["response_code"], msg: resp["response_text"]})
