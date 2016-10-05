@@ -45,7 +45,7 @@ class Mdot::V2::GiftsController < JsonController
         return nil if data_not_found?(gift)
 
 
-        if gift.read(@current_client.id)
+        if gift.old_read(@current_client.id)
             success(gift.token)
         else
             if !gift.notifiable?
@@ -62,8 +62,7 @@ class Mdot::V2::GiftsController < JsonController
         gift   = @current_user.received.where(id: params[:id]).first
         return nil if data_not_found?(gift)
 
-        if gift.notifiable?
-            gift.notify(redeem_params["loc_id"], @current_client.id)
+        if gift.old_notify(redeem_params["loc_id"], @current_client.id)
             success({ token:  gift.token, notified_at: gift.notified_at, new_token_at: gift.new_token_at })
         else
             fail "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"

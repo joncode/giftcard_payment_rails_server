@@ -1,5 +1,6 @@
 class AccountsPayableCronJob
 
+    # AccountsPayableCronJob.perform
     @queue = :database
 
     def self.perform start_date=nil

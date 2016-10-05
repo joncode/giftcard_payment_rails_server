@@ -160,7 +160,7 @@ Drinkboard::Application.routes.draw do
 				member do
 					patch :read
 					patch :notify
-					patch :redeem_for_less
+					patch :start_redemption
 					patch :redeem
 					get :current_redemption
 					post :regift

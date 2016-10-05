@@ -167,62 +167,57 @@ class Web::V3::GiftsController < MetalCorsController
 
     def read
         gift = Gift.includes(:merchant).find params[:id]
-        if gift.notifiable? && (gift.receiver_id == @current_user.id)
-            gift.read(@current_client.id)
-            gift.fire_after_save_queue(@current_client)
-            success gift.web_serialize
+        if (gift.receiver_id == @current_user.id)
+            if gift.read(@current_client.id)
+                gift.fire_after_save_queue(@current_client)
+                success gift.web_serialize
+            else
+                fail_message = if gift.status == 'redeemed'
+                        "Gift at #{gift.provider_name} has already been redeemed"
+                    else
+                        "Gift at #{gift.provider_name} cannot be redeemed"
+                    end
+                fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
+            end
         else
-            fail_message = if gift.status == 'redeemed'
-                    "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
-                else
-                    "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
-                end
-            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed"})
         end
         respond(status)
     end
 
     def notify
         gift = Gift.includes(:merchant).find params[:id]
-        if gift.notifiable? && (gift.receiver_id == @current_user.id)
+        if (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
-            # amount = redeem_params["amount"].to_i
-            gift.notify(loc_id, @current_client.id)
-            gift.fire_after_save_queue(@current_client)
-            success gift.notify_serialize
+            resp = Redeem.start(gift: gift, loc_id: loc_id, client_id: @current_client, api: "web/v3/gifts/#{gift.id}/notify")
+            if resp['success']
+                gift = resp['gift']
+                gift.fire_after_save_queue(@current_client)
+                success gift.notify_serialize
+            else
+                fail_web({ err: "NOT_REDEEMABLE", msg: resp["response_text"]})
+            end
         else
-            fail_message = if gift.status == 'redeemed'
-                    "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
-                else
-                    "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
-                end
-            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"})
         end
         respond(status)
     end
 
-    def redeem_for_less
+    def start_redemption
         gift = Gift.includes(:merchant).find params[:id]
-        if gift.notifiable? && (gift.receiver_id == @current_user.id)
+        if (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
             amount = redeem_params["amount"]
-
-            # gift.notify(loc_id, @current_client.id)
-            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client, api: "web/v3/gifts/#{gift.id}/redeem_for_less")
+            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client, api: "web/v3/gifts/#{gift.id}/start_redemption")
             if resp['success']
                 gift.fire_after_save_queue(@current_client)
                 success({ msg: resp["response_text"], token: resp["response_code"], gift: resp['gift'].notify_serialize })
-            else
+            elseok
                 status = :ok
                 fail_web({ err: resp["response_code"], msg: resp["response_text"]})
             end
         else
-            fail_message = if gift.status == 'redeemed'
-                    "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
-                else
-                    "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
-                end
-            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed"})
         end
         respond(status)
     end
