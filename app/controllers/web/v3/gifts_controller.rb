@@ -213,7 +213,7 @@ class Web::V3::GiftsController < MetalCorsController
                 gift = resp['gift']
                 gift.fire_after_save_queue(@current_client)
                 success({ msg: resp["response_text"], token: resp["response_code"], gift: gift.web_serialize, redemption: resp['redemption'].serialize })
-            elseok
+            else
                 status = :ok
                 fail_web({ err: resp["response_code"], msg: resp["response_text"]})
             end
@@ -222,12 +222,6 @@ class Web::V3::GiftsController < MetalCorsController
         end
         respond(status)
     end
-# {
-#                 amount_applied: 8.00,
-#                 total_check_amount: 8.00,
-#                 remaining_check_balance: 0,
-#                 remaining_gift_balance: 12.00
-# }
 
     def redeem
         gift = Gift.includes(:merchant).find params[:id]
