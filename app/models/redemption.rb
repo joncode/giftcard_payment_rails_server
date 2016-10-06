@@ -1,6 +1,8 @@
 class Redemption < ActiveRecord::Base
 	include MoneyHelper
 
+    default_scope -> { where(active: true) } # indexed
+
 #   -------------
 
     before_validation :set_unique_hex_id, on: :create
@@ -45,7 +47,7 @@ class Redemption < ActiveRecord::Base
 	end
 
 	def serialize
-		self.serializable_hash except: [ :active ]
+		self.serializable_hash except: [ :active, :client_id ]
 	end
 
 #   -------------
@@ -140,7 +142,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 	end
 
     def set_unique_hex_id
-        self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id)
+        self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, 'rd_')
     end
 
 end

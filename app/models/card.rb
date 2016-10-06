@@ -38,7 +38,7 @@ class Card < ActiveRecord::Base
 
 	before_create :send_to_stripe
 	before_save :crypt_number
-	after_create :tokenize_card
+	# after_create :tokenize_card
 
 	after_commit :card_fraud_detection
 
@@ -82,7 +82,7 @@ class Card < ActiveRecord::Base
 		o = OpsStripeCard.new(customer_id, self)
 		o.add_customer = card_owner
 		r = o.tokenize
-		puts o.inspect
+		puts o.inspect unless Rails.env.production?
 		# add stripe data to card & user
 		if customer_id.nil?
 			self.user.stripe_id = o.customer_id

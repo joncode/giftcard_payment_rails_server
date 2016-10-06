@@ -203,26 +203,6 @@ class Web::V3::GiftsController < MetalCorsController
         respond(status)
     end
 
-    def start_redemption
-        gift = Gift.includes(:merchant).find params[:id]
-        if (gift.receiver_id == @current_user.id)
-            loc_id = redeem_params["loc_id"]
-            amount = redeem_params["amount"]
-            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/start_redemption")
-            if resp['success']
-                gift = resp['gift']
-                gift.fire_after_save_queue(@current_client)
-                success({ msg: resp["response_text"], token: resp["response_code"], gift: gift.web_serialize, redemption: resp['redemption'].serialize })
-            else
-                status = :ok
-                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
-            end
-        else
-            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed"})
-        end
-        respond(status)
-    end
-
     def redeem
         gift = Gift.includes(:merchant).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
@@ -327,6 +307,33 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
             fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
         end
         respond(status)
+    end
+
+    def start_redemption
+        gift = Gift.includes(:merchant).find params[:id]
+        if (gift.receiver_id == @current_user.id)
+            loc_id = redeem_params["loc_id"]
+            amount = redeem_params["amount"]
+            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/start_redemption")
+            if resp['success']
+                gift = resp['gift']
+                gift.fire_after_save_queue(@current_client)
+                success({ msg: resp["response_text"], token: resp["response_code"], gift: gift.web_serialize, redemption: resp['redemption'].serialize })
+            else
+                status = :ok
+                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+            end
+        else
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed"})
+        end
+        respond(status)
+    end
+
+    def redemptions
+        gift = Gift.find params[:id]
+        _serialized = gift.redemptions.serialize_objs
+        success(_serialized)
+        respond
     end
 
     def current_redemption

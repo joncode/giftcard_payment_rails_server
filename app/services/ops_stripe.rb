@@ -78,7 +78,7 @@ class OpsStripe
         else
         	hsh["revenue"] = display_money(cents: @amount)
         end
-        puts hsh.inspect
+        puts hsh.inspect unless Rails.env.production?
         hsh
     end
 

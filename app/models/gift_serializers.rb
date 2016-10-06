@@ -168,6 +168,10 @@ module GiftSerializers
         gift_hsh
     end
 
+    def webs
+        web_serialize
+    end
+
     def web_serialize
         client_serialize
     end

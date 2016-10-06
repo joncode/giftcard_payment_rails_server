@@ -46,6 +46,7 @@ class Gift < ActiveRecord::Base
     before_create :find_receiver
     before_create :add_giver_name
     before_create :add_merchant_name
+    before_create :reject_double_click
     before_create :build_gift_items
     before_create :regift
     before_create :set_balance
@@ -561,7 +562,7 @@ class Gift < ActiveRecord::Base
     end
 
     def set_unique_hex_id
-        self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id)
+        self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, 'gf_')
     end
 
 
@@ -663,6 +664,18 @@ private
         end
     end
 
+    def reject_double_click
+        x = { merchant_id: self.merchant_id, value: self.value, receiver_name: self.receiver_name, cat: self.cat }
+        puts x.inspect
+        # if resp is false , save is stopped , therefore exists must be true
+        resp = !Gift.where(x).where('created_at > ?', 1.minute.ago).exists?
+        puts "HERE IS DOUBLE CLICK RESP #{resp}"
+        unless resp
+            errors.add(:duplicate_gift_submitted, "- Our system detected a second identical gift attempt.  Please wait 1 minute if this is in error")
+        end
+        return resp
+    end
+
     def developer_notify
         if self.cost.present? && self.cost.length > 6
             # notify_developers
@@ -670,6 +683,8 @@ private
             OpsTwilio.text_devs msg: "Cost is wrong on gift #{self.id}"
         end
     end
+
+
 
 end
 # == Schema Information
