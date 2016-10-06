@@ -23,6 +23,14 @@ class Redemption < ActiveRecord::Base
 
 	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
 
+    def paper_id
+        @paper_id ||= set_paper_id
+    end
+
+    def set_paper_id
+        hx = self.hex_id.gsub('_', '-').upcase
+        hx[0..6] + '-' + hx[7..10]
+    end
 
 #   -------------
 

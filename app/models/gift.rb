@@ -102,9 +102,8 @@ class Gift < ActiveRecord::Base
     end
 
     def set_paper_id
-        hx = self.hex_id
-        hx = hx.upcase
-        hx[0..1] + '-' + hx[2..4] + '-' + hx[5..8]
+        hx = self.hex_id.gsub('_', '-').upcase
+        hx[0..6] + '-' + hx[7..10]
     end
 
     def obscured_id
