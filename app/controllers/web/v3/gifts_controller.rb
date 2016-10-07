@@ -318,7 +318,8 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
             if resp['success']
                 gift = resp['gift']
                 gift.fire_after_save_queue(@current_client)
-                success({ msg: resp["response_text"], token: resp["response_code"], gift: gift.web_serialize, redemption: resp['redemption'].serialize })
+                redemption = resp['redemption'].serialize if resp['redemption'].kind_of?(Redemption)
+                success({ msg: resp["response_text"], token: resp["response_code"], gift: gift.web_serialize, redemption: redemption })
             else
                 status = :ok
                 fail_web({ err: resp["response_code"], msg: resp["response_text"]})
