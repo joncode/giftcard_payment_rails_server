@@ -2,6 +2,21 @@ class Redeem
 	extend MoneyHelper
 
 
+	def self.complete(redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil)
+		puts "Redeem.complete"
+		return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'} unless redemption.kind_of?(Redemption)
+		if client_id.kind_of?(Client)
+			client_id = client_id.id
+		end
+			# confirm the specfic data is present
+		if redemption.r_sys == 3 && ticket_num.blank?
+			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "Ticket Number not found" }
+		end
+		if redemption.r_sys == 5 && qr_code.blank?
+			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "QR Code not found" }
+		end
+	end
+
 #   -------------
 
 
@@ -62,10 +77,12 @@ class Redeem
 				else
 					if (gift.balance == redeem.amount) || (gift.original_value == redeem.amount)
 						# full redemption - no more redmeptions allowed
+						puts "Redemption FOUND #{redemption.id}"
 						already_have_one = response(redeem, gift)
 						break
 					else
 						# pending exists but we could make another, what are criteria ?
+						puts "Redemption FOUND (partial) #{redemption.id}"
 						already_have_one = response(redeem, gift)
 						break
 					end
@@ -126,7 +143,7 @@ class Redeem
 
 			# save the data
 		if redemption.save
-			puts redemption.inspect
+			puts "Redemption SAVED #{redemption.id}"
 			return response(redemption, gift)
 		else
 			puts redemption.inspect
@@ -135,6 +152,7 @@ class Redeem
 	end
 
 	def self.response redemption, gift
+		puts redemption.inspect
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
 		redemption.resp_json = {'response_code' => "PENDING", "response_text" => success_hsh(redemption) }

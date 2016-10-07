@@ -40,7 +40,11 @@ class Redemption < ActiveRecord::Base
     alias_method :token_fresh?, :fresh?
 
 	def redeemable?
-		self.status == 'pending' && fresh?
+		if self.r_sys == 2 || self.type_of == Redemption.convert_r_sys_to_type_of(2).to_s
+			self.status == 'pending' && fresh?
+		else
+			self.status == 'pending'
+		end
 	end
 
 #   -------------

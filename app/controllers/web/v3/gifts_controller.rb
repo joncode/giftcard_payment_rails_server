@@ -217,7 +217,7 @@ class Web::V3::GiftsController < MetalCorsController
                 end
             end
             merchant = gift.merchant if merchant.nil?
-            gift.rec_client_id = @current_client.id
+            gift.rec_client_id = @current_client.id if gift.rec_client_id.nil?
 
             if amount.nil?
                 amount = gift.balance
@@ -299,7 +299,7 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
                 success gift.web_serialize
             end
         else
-            fail_message = if gift.status == 'redeemed'
+            fail_message = if (gift.status == 'redeemed' && (gift.receiver_id == @current_user.id))
                 "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
             else
                 "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
@@ -309,8 +309,58 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
         respond(status)
     end
 
+    def complete_redemption
+        gift = Gift.includes(:merchant).find params[:id]
+        puts "\n IN complete_redemption - #{params.inspect}"
+        if (gift.receiver_id == @current_user.id)
+                # set the data
+            redemption_id = (redemption_params["redemption_id"].to_i > 0) ? redemption_params["redemption_id"].to_i : nil
+            server_inits = redemption_params["server"]
+            ticket_num = redemption_params["ticket_num"]
+            qrcode = redemption_params["qrcode"]
+                # amount && loc_id are on the redemption
+            amount = redemption_params["amount"]
+            loc_id = (redemption_params["loc_id"].to_i > 0) ? redemption_params["loc_id"].to_i : gift.merchant_id
+            if (loc_id.present? && loc_id != gift.merchant_id)
+                merchant = Merchant.find(loc_id)
+            else
+                merchant = gift.merchant
+            end
+
+                # find the redemption
+            if redemption_id.present?
+                @current_redemption = Redemption.find(redemption_id)
+                if @current_redemption.redeemable? && @current_redemption.gift_id == gift.id
+
+                    resp = Redeem.complete(redemption: @current_redemption, client_id: @current_client.id,
+                        qr_code: qrcode, ticket_num: ticket_num, server: server_inits)
+
+                    if !resp.kind_of?(Hash)
+                        status = :bad_request
+                        fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+                    elsif resp["success"] == true
+                        gift.fire_after_save_queue(@current_client)
+                        status = :ok
+                        success({msg: resp["response_text"]})
+                    else
+                        status = :ok
+                        fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                    end
+                else
+                    fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed (B651) " })
+                end
+            else
+                fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed (R897)" })
+            end
+        else
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed (A134)" })
+        end
+        respond(status)
+    end
+
     def start_redemption
         gift = Gift.includes(:merchant).find params[:id]
+        puts "\n IN start_redemption - #{params.inspect}"
         if (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
             amount = redeem_params["amount"]
@@ -414,6 +464,10 @@ private
 
     def gift_params
         params.require(:data).permit(:merchant_id, :link, :rec_email, :rec_phone, :rec_net, :rec_net_id, :rec_token, :rec_secret, :rec_handle, :rec_photo, :rec_name, :scheduled_at, :msg, :cat, :pay_id, :value, :service, :loc_id, :loc_name, :items =>["detail", "price", "quantity", "item_id", "item_name"])
+    end
+
+    def redemption_params
+        params.require(:data).permit(:server, :loc_id, :ticket_num, :amount, :qrcode, :redemption_id)
     end
 
     def redeem_params

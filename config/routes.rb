@@ -164,6 +164,7 @@ Drinkboard::Application.routes.draw do
 					get :current_redemption
 					get :redemptions
 					patch :start_redemption
+					patch :complete_redemption
 					post :regift
 					get :hex
 					get :detail
