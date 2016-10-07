@@ -33,8 +33,21 @@ class TimeGem
 
 	DATE_FORMAT = "%Y-%m-%d"
     OUTPUT_FORMAT = "%Y-%-m-%-d"
+    Time::DATE_FORMATS[:human] = "%b %e, %Y"
 
 #   -------------    CLASS METHODS
+
+    def self.month_name dt
+        dt.strftime("%B")
+    end
+
+    def self.day_name dt
+        dt.strftime("%A")
+    end
+
+    def self.dt_to_s dt
+        dt.to_formatted_s(:human)
+    end
 
     def self.datetime_to_string dt
         dt.strftime("#{OUTPUT_FORMAT}")

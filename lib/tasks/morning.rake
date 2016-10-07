@@ -10,6 +10,11 @@ namespace :morning do
 			Alert.perform('WEEKLY_REPORT_SYS')
 		end
 
+        if DateTime.now.utc.day == 2
+            puts "MORNING CRON #{DateTime.now.utc} - MONTHLY_REPORT_SYS"
+            Alert.perform('MONTHLY_REPORT_SYS')
+        end
+
         if DateTime.now.utc.wednesday?
             puts "MORNING CRON #{DateTime.now.utc} - NEW_CLIENTS_WEEKLY_SYS"
             Alert.perform('NEW_CLIENTS_WEEKLY_SYS')
