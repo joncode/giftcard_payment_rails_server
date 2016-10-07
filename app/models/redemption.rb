@@ -1,5 +1,8 @@
 class Redemption < ActiveRecord::Base
+	include RedeemHelper
 	include MoneyHelper
+
+	# STATUS ENUM : 'pending', 'done', 'expired'
 
     default_scope -> { where(active: true) } # indexed
 
@@ -30,6 +33,15 @@ class Redemption < ActiveRecord::Base
     def set_paper_id
         hx = self.hex_id.gsub('_', '-').upcase
         hx[0..6] + '-' + hx[7..10]
+    end
+
+    def stale?
+    	return true if self.new_token_at.nil?
+    	answer = (self.new_token_at < reset_time)
+    	if answer && self.status == 'pending'
+    		self.update_column :status, 'expired'
+    	end
+    	return answer
     end
 
 #   -------------

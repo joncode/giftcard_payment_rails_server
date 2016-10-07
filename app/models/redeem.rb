@@ -55,15 +55,20 @@ class Redeem
 			# check for existing pending redemptions
 		already_have_one = nil
 		redeems.each do |redeem|
-			if redeem.status = 'pending'
-				if (gift.balance == redeem.amount) || (gift.original_value == redeem.amount)
-					# full redemption - no more redmeptions allowed
-					already_have_one = response(redeem, gift)
-					break
+			if redeem.status == 'pending'
+				if redeem.stale?
+					# expire and skip
+					next
 				else
-					# pending exists but we could make another, what are criteria ?
-					already_have_one = response(redeem, gift)
-					break
+					if (gift.balance == redeem.amount) || (gift.original_value == redeem.amount)
+						# full redemption - no more redmeptions allowed
+						already_have_one = response(redeem, gift)
+						break
+					else
+						# pending exists but we could make another, what are criteria ?
+						already_have_one = response(redeem, gift)
+						break
+					end
 				end
 			end
 		end
