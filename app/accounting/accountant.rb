@@ -36,12 +36,13 @@ class Accountant
 			return "Payment time not in sync" if gift.cat >= 200 && gift.cat < 300
 			redemptions = gift.redemptions
 			registers = gift.registers
+				# this will never == ?????
 			tot_redemptions = redemptions.map(&:amount).sum
 			tot_registers = registers.map(&:amount).sum
 			discrepency = tot_redemptions - tot_registers
 			msg = "500 Internal - Accountant - partial_redemption- #{gift.id} - Discrepency = #{discrepency}"
 			puts msg.inspect
-			OpsTwilio.text_devs(msg: msg)
+			# OpsTwilio.text_devs(msg: msg)
 			return "Partial Redemption Necessary"
 		end
 
