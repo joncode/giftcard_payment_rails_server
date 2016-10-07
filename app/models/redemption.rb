@@ -3,6 +3,7 @@ class Redemption < ActiveRecord::Base
 	include MoneyHelper
 
 	# STATUS ENUM : 'pending', 'done', 'expired'
+	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
 
     default_scope -> { where(active: true) } # indexed
 
@@ -24,7 +25,25 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
+    def stale?
+    	return true if self.new_token_at.nil?
+    	answer = (self.new_token_at < reset_time)
+    	if answer && self.status == 'pending'
+    		self.update_column :status, 'expired'
+    	end
+    	return answer
+    end
+
+    def fresh?
+    	!stale?
+    end
+    alias_method :token_fresh?, :fresh?
+
+	def redeemable?
+		self.status == 'pending' && fresh?
+	end
+
+#   -------------
 
     def paper_id
         @paper_id ||= set_paper_id
@@ -35,13 +54,35 @@ class Redemption < ActiveRecord::Base
         hx[0..6] + '-' + hx[7..10]
     end
 
-    def stale?
-    	return true if self.new_token_at.nil?
-    	answer = (self.new_token_at < reset_time)
-    	if answer && self.status == 'pending'
-    		self.update_column :status, 'expired'
-    	end
-    	return answer
+    def self.paper_to_hex paper_id
+        hex_id = paper_id[0..6] + paper_id[8..11]
+        hex_id.gsub('-','_').downcase
+    end
+
+    def self.find_paper paper_id
+        where(hex_id: paper_to_hex(paper_id)).first
+    end
+
+#   -------------
+
+	attr_accessor :ccy
+	def ccy
+		@ccy || self.gift.ccy
+	end
+
+	def amount_words(currency=nil)
+		if currency.nil?
+			currency = ccy
+		end
+		cents_to_words(self.amount, currency)
+	end
+
+    def response
+        self.resp_json
+    end
+
+    def request
+        self.req_json
     end
 
 #   -------------
@@ -70,29 +111,26 @@ class Redemption < ActiveRecord::Base
 		self.serializable_hash except: [ :active, :client_id ]
 	end
 
+
 #   -------------
 
-	attr_accessor :ccy
-	def ccy
-		@ccy || self.gift.ccy
-	end
+	def self.get_for_partner partner, start_datetime=nil, end_datetime=nil
+		return [] if !partner.respond_to?(:id)
+		end_datetime = DateTime.now.utc if end_datetime.nil?
+		start_datetime = (end_datetime - 1.year) if start_datetime.nil?
+		if partner.kind_of?(Affiliate)
 
-	def amount_words(currency=nil)
-		if currency.nil?
-			currency = ccy
+			query = "select r.*, m.name AS merchant_name FROM redemptions r, gifts g, affiliates a, merchants m \
+WHERE g.partner_type = '#{partner.class.to_s}' AND g.partner_id = a.id AND r.gift_id = g.id AND a.id = #{partner.id} \
+AND g.status = 'redeemed' AND m.id = r.merchant_id AND \
+r.created_at >= '#{start_datetime}' AND r.created_at < '#{end_datetime}' \
+ORDER BY created_at desc"
+
+			return find_by_sql(query)
+		else
+			return where(merchant_id: partner.id, created_at: start_datetime ... end_datetime).order(created_at: :desc).to_a
 		end
-		cents_to_words(self.amount, currency)
 	end
-
-    def response
-        self.resp_json
-    end
-
-    def request
-        self.req_json
-    end
-
-#   -------------
 
 	def self.count_promo_redemptions_for(partner, start_date, end_date)
         redemptions = promo_redemptions_for(partner, start_date, end_date)
