@@ -2,7 +2,7 @@ module GiftScheduler
     extend ActiveSupport::Concern
 
 
-    def schedule_gift
+    def deliver_now
     	# see if user info has an account
     	self.find_receiver
 

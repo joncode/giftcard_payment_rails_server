@@ -6,7 +6,7 @@ class GiftScheduledJob
         Gift.where(status: "schedule").where('scheduled_at < ?', DateTime.now.utc).find_each do |gift|
 
             begin
-                if gift.schedule_gift
+                if gift.deliver_now
     	            "-------------  Scheduled gift ID = #{gift.id}  -------------"
     	            sent_gifts += 1
     	        else

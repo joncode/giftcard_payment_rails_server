@@ -118,7 +118,6 @@ class Redeem
 		redemption = Redemption.new( gift_id: gift.id, type_of: Redemption.convert_r_sys_to_type_of(merchant.r_sys), r_sys: merchant.r_sys,
 			amount: amount, gift_prev_value: gift_prev_value, gift_next_value: gift_next_value, status: 'pending',
 			client_id: client_id, merchant_id: merchant.id, req_json: request_hsh )
-		redemption.resp_json = {'response_code' => "PENDING", "response_text" => success_hsh(redemption) }
 
 			# save the data
 		if redemption.save
@@ -133,6 +132,8 @@ class Redeem
 	def self.response redemption, gift
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
+		redemption.resp_json = {'response_code' => "PENDING", "response_text" => success_hsh(redemption) }
+		gift.redemptions << redemption
 		if gift.save
 			Resque.enqueue(GiftAfterSaveJob, gift.id)
 		end
