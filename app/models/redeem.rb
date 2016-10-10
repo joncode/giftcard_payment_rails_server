@@ -1,28 +1,30 @@
 class Redeem
 	extend MoneyHelper
 
-		#   -------------
+#   -------------
 
-	def self.complete(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
+	def self.apply(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
 		puts "Redeem.complete"
 
 			# set data and reject invalid submissions
 		if !redemption.kind_of?(Redemption)
-			return { 'success' => false, "response_text" =>  "Redemption not found", "response_code" => 'INVALID_INPUT'}
+			return { 'success' => false, "response_text" => "Redemption not found. Please contact support@itson.me", "response_code" => 'INVALID_INPUT'}
 		end
 
 		if redemption.status == 'done'
 			resp = redemption.response
 			resp['success'] = true
 			resp['redemption'] = redemption
-			resp['gift'] = redmeption.gift
+			resp['gift'] = redemption.gift
+			resp['pos_obj'] = nil
 			return resp
 		end
 
 		if !gift.kind_of?(Gift)
 			gift = redemption.gift
 			if !gift.kind_of?(Gift)
-				return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'}
+					# gift has been cancelled / deactivated
+				return { 'success' => false, "response_text" =>  "Gift has been deactivated. Please contact support@itson.me", "response_code" => 'INVALID_INPUT'}
 			end
 		end
 
@@ -33,13 +35,14 @@ class Redeem
 		puts request_hsh.inspect
 
 		merchant = redemption.merchant
+		if redemption.r_sys != nil
 
 			# confirm the specfic data is present
 		if redemption.r_sys == 3 && ticket_num.blank?
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "Ticket Number not found" }
 		end
 		if redemption.r_sys == 5
-			if callback_params.blank? && qr_code.blank?
+			if callback_params.blank? && (qr_code.blank? || callback_params.nil?)
 				return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "QR Code not found" }
 			end
 		end
@@ -50,7 +53,7 @@ class Redeem
 		case redemption.r_sys
 		when 1   # V1
 			# there is no POS for V1 - always works
-			pos_obj, resp = v1_redemption(server=nil, redemption, gift)
+			pos_obj, resp = internal_redemption(server=nil, redemption, gift)
 		when 2   # V2
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "Give code #{redemption.token} to server to redeem." }
 		when 3   # OMNIVORE
@@ -67,21 +70,43 @@ class Redeem
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }
 		end
 
+		return { 'success' => true, 'pos_obj' => pos_obj, 'gift' => gift, 'redemption' => redemption }
+	end
+
+	def self.complete(redemption: nil, gift: nil, pos_obj: nil, client_id=nil)
+
+			# set data and reject invalid submissions
+		if pos_obj.nil? || !pos_obj.respond_to?(:applied_value)
+			return { 'success' => false, "response_text" => "System unavailable, please retry in a minute.", "response_code" => 'INVALID_INPUT'}
+		end
+		if !redemption.kind_of?(Redemption)
+			return { 'success' => false, "response_text" => "Redemption not found. Please contact support@itson.me", "response_code" => 'INVALID_INPUT'}
+		end
+		if !gift.kind_of?(Gift)
+			gift = redemption.gift
+			if !gift.kind_of?(Gift)
+					# gift has been cancelled / deactivated
+				return { 'success' => false, "response_text" =>  "Gift has been deactivated. Please contact support@itson.me", "response_code" => 'INVALID_INPUT'}
+			end
+		end
+		if client_id.kind_of?(Client
+			client_id = client_id.id
+		end
+		request_hsh = { pos_obj: pos_object.as_json, gift_id: gift.id, redemption_id: redemption.id, client_id: client_id }
+		puts request_hsh.inspect
+
+
 		#   -------------
 
 			# update the redemption and the gift
+		resp = pos_obj.response || {}
+		resp['pos_obj'] = pos_obj
+		redemption.client_id = client_id if redemption.client_id.nil?
+		redemption.resp_json = pos_obj.response
+		redemption.ticket_id = pos_obj.ticket_id
 
-		if !pos_obj.success?
-				# failure is in the response already
-			resp['success'] = false
-			resp['redemption'] = redemption
-			resp['gift'] = gift
-			return resp
-		else
+		if pos_obj.success?
 			# set the actual amount, gift_next_value, gift/redemption statuses, redemption.req_json , redemption.resp_json
-			redemption.client_id = client_id if redemption.client_id.nil?
-			redemption.resp_json = pos_obj.response
-			redemption.ticket_id = pos_obj.ticket_id
 			redemption.status = 'done'
 			if pos_obj.applied_value != redemption.amount
 					# redemption needs to be re-calculated
@@ -101,30 +126,46 @@ class Redeem
 			end
 			gift.detail = redemption.msg + '\n' + gift.detail.to_s
 			gift.balance = redemption.gift_next_value
-			if gift.save
-				Resque.enqueue(GiftAfterSaveJob, gift.id)
-				resp = redemption.response
-				resp['success'] = true
-				resp['redemption'] = redemption
-				resp['gift'] = redmeption.gift
-				return resp
-			else
-				# gift / redemption didnt save , but charge went thru
-				mg =  "REDEEM - 500 Internal - POS SUCCESS / DB FAIL redemption #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n REDEEM-redemption.errors.messages.inspect}\n"
-				puts mg
-				OpsTwilio.text_devs(msg: mg)
-				# what to do here  ??
+			resp['success'] = true
+		else
+			# why is there a failure
+			# must remove the redemption and allow for a new one
+				# must release the hold on the gift card value
+			# must set the status of the redemption to something reasonable
+			# return a message to the user that makes sense
+			# make sure that response is on the redemption in case of db-async
 
-			end
+				# failure is in the response already
+			redemption.amount = 0
+			redemption.status = 'failed'
+			redemption.gift_next_value = redemption.gift_prev_value
+			gift.balance = gift.balance + (redemption.gift_prev_value - redemption.gift_next_value)
+			resp = redemption.response
+			resp['success'] = false
+		end
+
+		if gift.save
+			Resque.enqueue(GiftAfterSaveJob, gift.id) if pos_obj.success?
+		else
+			# gift / redemption didnt save , but charge went thru
+			mg =  "REDEEM - 500 Internal - POS SUCCESS / DB FAIL redemption #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n REDEEM-redemption.errors.messages.inspect}\n"
+			puts mg
+			OpsTwilio.text_devs(msg: mg)
+			resp['system_errors'] = gift.errors.full_messages
+			# what to do here  ??
+				# pos has returned and processed a value , but our system is not storing due likely to bug
+				# how to return to customer without issue , while getting bug fixed and data sorted immediately
 
 		end
 
-
+		resp['redemption'] = redemption
+		resp['gift'] = redemption.gift
+		return resp
 	end
 
-		#   -------------
+#   -------------
 
-	def self.v1_redemption(server=nil, redemption, gift)
+	def self.internal_redemption(server=nil, redemption, gift)
 			# OpsInternalPos is defined at bottom of this file
 		v1_pos_obj = OpsInternalPos.new(redemption, gift)
 		redemption.req_json = v1_pos_obj.make_request_hsh
@@ -155,21 +196,24 @@ class Redeem
         return [ zapper_obj, zapper_obj.response ]
 	end
 
-		#   -------------
+
+#   -------------
 
 
 	def self.start(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant)
 		puts "Redeem.start"
 
+		request_hsh = { loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of }
+		puts request_hsh.inspect
+
 			# set data and reject invalid submissions
-		return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'} unless gift.kind_of?(Gift)
+		if !gift.kind_of?(Gift)
+			return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'}
+		end
 		api = "SCRIPT" if api.nil?
-		# OpsTwilio.text_devs(msg: "gift #{gift.id} notify has no client_id") if client_id.nil?
 		if client_id.kind_of?(Client)
 			client_id = client_id.id
 		end
-		request_hsh = { loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of }
-		puts request_hsh.inspect
 
 		#   -------------
 
@@ -214,7 +258,7 @@ class Redeem
 					next
 				else
 					if (gift.balance == redeem.amount) || (gift.original_value == redeem.amount)
-						# full redemption - no more redmeptions allowed
+						# full redemption - no more redemptions allowed
 						puts "Redemption FOUND #{redemption.id}"
 						already_have_one = response(redeem, gift)
 						break
@@ -273,7 +317,7 @@ class Redeem
 		#   -------------
 
 			# initialize a Redemption record
-		redemption = Redemption.new( gift_id: gift.id, type_of: Redemption.convert_r_sys_to_type_of(merchant.r_sys), r_sys: merchant.r_sys,
+		redemption = Redemption.new( gift_id: gift.id, type_of: Redemption.convert_r_sys_to_type_of(r_sys), r_sys: r_sys,
 			amount: amount, gift_prev_value: gift_prev_value, gift_next_value: gift_next_value, status: 'pending',
 			client_id: client_id, merchant_id: merchant.id, start_req: request_hsh )
 
@@ -287,7 +331,7 @@ class Redeem
 		end
 	end
 
-		#   -------------
+#   -------------
 
 	def self.response redemption, gift
 		puts redemption.inspect
@@ -302,7 +346,7 @@ class Redeem
 			"response_text" => success_hsh(redemption), 'token' => redemption.token }
 	end
 
-		#   -------------
+#   -------------
 
 	def self.success_hsh redemption
 		{
@@ -315,39 +359,7 @@ class Redeem
 
 end
 
-		#   -------------    	OpsInternalPos DEFINITION    	-------------
 
-OpsInternalPos = Struct.new(:redemption, :gift, :server) do
-
-	def success?
-		true
-	end
-
-	def ticket_id
-		server
-	end
-
-	def applied_value
-		redemption.amount
-	end
-
-		#   -------------
-
-	def response
-		redemption.generic_response
-	end
-
-	def make_request_hsh
-		{
-			"server" => server,
-            "gift_card_id" => gift.hex_id,
-            "value" => redemption.amount,
-            "ccy" => redemption.ccy,
-            'redemption_id' => redemption.hex_id
-        }
-	end
-
-end
 
 
 
