@@ -110,7 +110,7 @@ token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #
     def redeem_gift_for_amount(amount, redemption_merchant, server_code)
         prev_value     = self.balance
         self.balance   -= amount
-        detail_msg     = self.detail || ""
+        detail_msg     = self.detail.to_s
         redemption_msg = "#{display_money(cents: amount, ccy: self.ccy)} was paid on \
 #{TimeGem.change_time_to_zone(Time.now.utc, redemption_merchant.zone)}\n"
         self.detail    = redemption_msg + detail_msg
@@ -221,7 +221,7 @@ token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #
     def zapper_redeem_async(redemption)
         r = redemption
         zapper_request = r.request
-        zapper_request['redemption_id'] = 'rd_' + r.id.to_s
+        zapper_request['redemption_id'] = r.hex_id
         zapper_obj = OpsZapper.new(zapper_request)
         resp = zapper_obj.redeem_gift
         if zapper_obj.success?

@@ -84,7 +84,7 @@ class OpsZapper
 	def self.make_request_hsh gift, qr_code, value, redemption_id=nil
 		{
 			"qr_code" => strip_qr_code(qr_code),
-            "gift_card_id" => 'gi_' + gift.obscured_id.to_s,
+            "gift_card_id" => gift.hex_id,
             "value" => value,
             "ccy" => gift.ccy,
             'customer' => customer(gift.receiver),
@@ -259,7 +259,7 @@ class OpsZapper
 		@check_value = resp['OriginalBillAmount'].to_i
 		@err_desc = resp["ErrorDescription"]
 
-		pay_stat =resp['PaymentStatusId'].to_i
+		pay_stat = resp['PaymentStatusId'].to_i
 		@check_value = resp['Amount'].to_f * 100
 		if pay_stat != 1
 			@code = 402

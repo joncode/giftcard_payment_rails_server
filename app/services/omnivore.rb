@@ -221,14 +221,18 @@ class Omnivore
 		}
 	end
 
+	def make_request_hsh
+		{
+			"type" => "3rd_party",
+			"amount" => @applied_value,
+			"tip" => 0,
+			"tender_type" => @tender_type_id,
+			"payment_source" => @gift_card_id
+		}
+	end
+
 	def post_redeem
-		payload = {
-		  "type" => "3rd_party",
-		  "amount" => @applied_value,
-		  "tip" => 0,
-		  "tender_type" => @tender_type_id,
-  		  "payment_source" => "Gift-#{@gift_card_id}"
-		}.to_json
+		payload = make_request_hsh.to_json
 
 		puts "\nOmnivore:post_redeem payload:\n"
 		puts payload.inspect

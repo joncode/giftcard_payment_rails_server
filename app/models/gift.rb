@@ -53,6 +53,8 @@ class Gift < ActiveRecord::Base
     before_create :set_pay_stat    # must be last before_create
     before_create :set_status    # must be last before_create
 
+    before_save   :set_redeemed_at
+
     after_create :set_client_content
 
     after_commit :fire_after_save_queue, on: :create
@@ -336,7 +338,6 @@ class Gift < ActiveRecord::Base
             if cancel
                 self.status      = 'cancel'
                 self.pay_stat    = "refund_cancel"
-                self.redeemed_at = DateTime.now.utc
             end
             if save
                 Resque.enqueue(GiftRefundedEvent, self.id)
@@ -370,7 +371,7 @@ class Gift < ActiveRecord::Base
 
     def regift
         if regift?
-            self.payable.update(status: 'regifted', pay_stat: "charge_regifted", redeemed_at: DateTime.now.utc)
+            self.payable.update(status: 'regifted', pay_stat: "charge_regifted")
         end
     end
 
@@ -652,6 +653,12 @@ private
             # schedule cron runs at UTC 14:30
         if self.scheduled_at.respond_to?(:midday)
             self.scheduled_at = self.scheduled_at.midday
+        end
+    end
+
+    def set_redeemed_at
+        if ['cancel', 'expired', 'regifted', 'redeemed'].include?(status) && redeemed_at.nil?
+            self.redeemed_at == Time.now.utc
         end
     end
 

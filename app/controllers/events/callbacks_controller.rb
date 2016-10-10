@@ -23,15 +23,14 @@ class Events::CallbacksController < MetalCorsController
 		ref = params['Reference']
 
 		if ref
-			redemption_id = ref.split('_')[1]
-			r = Redemption.find redemption_id
+			r = Redemption.find ref
 			if r.status == 'done'
 				success({ ref: ref, redemption: 'done' })
 			else
 				puts "found redemption #{r.id}"
 				gift = r.gift
 				zapper_request = r.request
-	            zapper_request['redemption_id'] = 'rd_' + r.id.to_s
+	            zapper_request['redemption_id'] = r.hex_id
 	            zapper_obj = OpsZapper.new(zapper_request)
 	            zapper_obj.apply_callback_response(params)
 		        if zapper_obj.success?

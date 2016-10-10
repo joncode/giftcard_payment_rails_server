@@ -11,11 +11,21 @@ class Redemption < ActiveRecord::Base
 
     before_validation :set_unique_hex_id, on: :create
     before_validation :set_unique_token, on: :create
+    before_validation :set_r_sys
 
 #   -------------
 
-	belongs_to :gift
+	validates_presence_of :gift_id, :r_sys, :amount, :token, :hex_id, :merchant_id
+
+#   -------------
+
+    before_save :set_done_at
+
+#   -------------
+
 	belongs_to :client
+	belongs_to :gift
+	belongs_to :merchant
 
 #   -------------
 
@@ -26,10 +36,10 @@ class Redemption < ActiveRecord::Base
 #   -------------
 
     def stale?
-    	return true if self.new_token_at.nil?
-    	answer = (self.new_token_at < reset_time)
-    	if answer && self.status == 'pending'
-    		self.update_column :status, 'expired'
+    	return true if new_token_at.nil?
+    	answer = (new_token_at < reset_time)
+    	if answer && status == 'pending'
+    		update_column :status, 'expired'
     	end
     	return answer
     end
@@ -40,10 +50,10 @@ class Redemption < ActiveRecord::Base
     alias_method :token_fresh?, :fresh?
 
 	def redeemable?
-		if self.r_sys == 2 || self.type_of == Redemption.convert_r_sys_to_type_of(2).to_s
-			self.status == 'pending' && fresh?
+		if r_sys == 2 || type_of == Redemption.convert_r_sys_to_type_of(2).to_s
+			status == 'pending' && fresh?
 		else
-			self.status == 'pending'
+			status == 'pending'
 		end
 	end
 
@@ -54,7 +64,7 @@ class Redemption < ActiveRecord::Base
     end
 
     def set_paper_id
-        hx = self.hex_id.gsub('_', '-').upcase
+        hx = hex_id.gsub('_', '-').upcase
         hx[0..6] + '-' + hx[7..10]
     end
 
@@ -71,22 +81,52 @@ class Redemption < ActiveRecord::Base
 
 	attr_accessor :ccy
 	def ccy
-		@ccy || self.gift.ccy
+		@ccy || gift.ccy
 	end
 
 	def amount_words(currency=nil)
 		if currency.nil?
 			currency = ccy
 		end
-		cents_to_words(self.amount, currency)
+		cents_to_words(amount, currency)
 	end
 
     def response
-        self.resp_json
+        resp_json
     end
 
     def request
-        self.req_json
+        req_json
+    end
+
+    def generic_response
+		{ "response_code" => apply_code, "response_text"=>{"amount_applied" => amount, 'previous_gift_balance' => gift_prev_value,
+			'remaining_gift_balance' => gift_next_value, 'msg' => msg } }
+    end
+
+    def apply_code
+    	if gift_next_value == 0
+    		"PAID"
+    	else
+    		"APPLIED"
+    	end
+    end
+
+    def message
+    	if status == 'done'
+	    	done_at = Time.now.utc if done_at.nil?
+	    	"#{display_money(cents: amount, ccy: self.ccy)} was paid on #{TimeGem.change_time_to_zone(done_at, merchant.zone).to_formatted_s(:merchant_date)}"
+	   		"#{display_money(cents: amount, ccy: ccy)} was paid with check # #{ticket_id}\n"
+	   	end
+    end
+
+    def msg
+    	str = ticket_id.present? ? "(#{ticket_id})" : ''
+    	if gift_next_value == 0
+    		"#{display_money(cents: amount, ccy: ccy)} was applied #{str}. Gift has been fully used."
+    	else
+	    	"#{display_money(cents: amount, ccy: ccy)} was applied #{str}. #{display_money(cents: gift_next_value, ccy: ccy)} remains on the gift."
+	    end
     end
 
 #   -------------
@@ -101,18 +141,18 @@ class Redemption < ActiveRecord::Base
         r.merchant_id = loc_id || gift.merchant_id
         if r_sys.nil?
         	if loc_id.present? && loc_id != gift.merchant_id
-	        	r.type_of = self.convert_r_sys_to_type_of(Merchant.where(id: loc_id).pluck(:r_sys).first)
+	        	r.type_of = convert_r_sys_to_type_of(Merchant.where(id: loc_id).pluck(:r_sys).first)
         	else
-        		r.type_of = self.convert_r_sys_to_type_of(gift.merchant.r_sys)
+        		r.type_of = convert_r_sys_to_type_of(gift.merchant.r_sys)
 	        end
         else
-	        r.type_of = self.convert_r_sys_to_type_of(r_sys)
+	        r.type_of = convert_r_sys_to_type_of(r_sys)
         end
         r
 	end
 
 	def serialize
-		self.serializable_hash except: [ :active, :client_id ]
+		serializable_hash except: [ :active, :client_id ]
 	end
 
 
@@ -198,13 +238,23 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 
 #   -------------
 
+	def set_done_at
+		if status == 'done' && done_at.nil?
+			done_at == DateTime.now.utc
+		end
+	end
+
+	def set_r_sys
+		r_sys = Redemption.convert_type_of_to_r_sys(type_of) if r_sys.nil?
+	end
+
 	def set_unique_token
-		self.token = UniqueIdMaker.four_digit_token(self.class, :hex_id, { status: 'pending', active: true })
-		self.new_token_at = DateTime.now.utc
+		token = UniqueIdMaker.four_digit_token(Redemption, :hex_id, { status: 'pending', active: true })
+		new_token_at = DateTime.now.utc
 	end
 
     def set_unique_hex_id
-        self.hex_id = UniqueIdMaker.eight_digit_hex(self.class, :hex_id, 'rd_')
+        hex_id = UniqueIdMaker.eight_digit_hex(Redemption, :hex_id, 'rd_')
     end
 
 end

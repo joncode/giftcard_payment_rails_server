@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161005004504) do
+ActiveRecord::Schema.define(version: 20161007232149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1201,6 +1201,10 @@ ActiveRecord::Schema.define(version: 20161005004504) do
     t.datetime "new_token_at"
     t.string   "hex_id"
     t.boolean  "active",                      default: true
+    t.json     "start_req"
+    t.json     "start_res"
+    t.datetime "request_at"
+    t.datetime "response_at"
   end
 
   add_index "redemptions", ["gift_id", "status", "active"], name: "index_redemptions_on_gift_id_and_status_and_active", using: :btree

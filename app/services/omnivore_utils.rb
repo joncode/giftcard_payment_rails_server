@@ -1,14 +1,16 @@
 module OmnivoreUtils
 
-	def init_with_gift gift, ticket_num, value=nil, loc_id=nil
-        if loc_id.to_i > 0
-            merchant = Merchant.unscoped.find(loc_id)
-        else
-            merchant = gift.merchant
+	def init_with_gift gift, ticket_num, amount=nil, loc_id=nil, merchant=nil
+        if !merchant.kind_of?(Merchant)
+            if loc_id.to_i > 0
+                merchant = Merchant.unscoped.find(loc_id)
+            else
+                merchant = gift.merchant
+            end
         end
-		new_value = value || gift.balance
+		new_value = amount || gift.balance
 		pos_hsh = { "ticket_num" => ticket_num,
-                    "gift_card_id" => gift.obscured_id,
+                    "gift_card_id" => gift.hex_id,
                     "pos_merchant_id" => merchant.pos_merchant_id,
                     "tender_type_id" => merchant.tender_type_id,
                     "value" => new_value,
