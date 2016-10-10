@@ -19,7 +19,7 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-    before_save :set_done_at
+    before_save :set_response_at
 
 #   -------------
 
@@ -114,8 +114,8 @@ class Redemption < ActiveRecord::Base
 
     def message
     	if status == 'done'
-	    	done_at = Time.now.utc if done_at.nil?
-	    	"#{display_money(cents: amount, ccy: self.ccy)} was paid on #{TimeGem.change_time_to_zone(done_at, merchant.zone).to_formatted_s(:merchant_date)}"
+	    	response_at = Time.now.utc if response_at.nil?
+	    	"#{display_money(cents: amount, ccy: self.ccy)} was paid on #{TimeGem.change_time_to_zone(response_at, merchant.zone).to_formatted_s(:merchant_date)}"
 	   		"#{display_money(cents: amount, ccy: ccy)} was paid with check # #{ticket_id}\n"
 	   	end
     end
@@ -238,9 +238,9 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 
 #   -------------
 
-	def set_done_at
-		if status == 'done' && done_at.nil?
-			done_at == DateTime.now.utc
+	def set_response_at
+		if status == 'done' && response_at.nil?
+			response_at == DateTime.now.utc
 		end
 	end
 
