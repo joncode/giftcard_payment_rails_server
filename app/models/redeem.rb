@@ -242,10 +242,10 @@ class Redeem
 		end
 
 			# V1 & POS & Zapper redemption currently make their own redemptiosn
-		if  (r_sys == 3) || (r_sys == 5)
-			gift.notify
-			return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => nil }
-		end
+		# if  (r_sys == 3) || (r_sys == 5)
+		# 	gift.notify
+		# 	return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => nil }
+		# end
 				# DO I NEED TO CONFIRM THAT GIFT IS GOOD HERE ?
 		if merchant.mode != 'live'
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "#{merchant.name} is not currently live" }
@@ -332,7 +332,7 @@ class Redeem
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
 		gift.balance = redemption.gift_next_value
-		redemption.start_res = {'response_code' => "PENDING", "response_text" => success_hsh(redemption) }
+		redemption.start_res = { 'response_code' => "PENDING", "response_text" => success_hsh(redemption) }
 		gift.redemptions << redemption
 		if gift.save
 			Resque.enqueue(GiftAfterSaveJob, gift.id)
