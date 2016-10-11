@@ -176,6 +176,35 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
+	def self.get_all_live_redemptions gift
+		where(gift_id: gift.id, active: true, status: ['done', 'pending']).order(created_at: :desc)
+	end
+
+	def self.current_pending_redemption redeems
+		redemption = nil
+		redeems.each do |redeem|
+			if redeem.status == 'pending'
+				if redeem.stale?
+					# expire and skip
+					next
+				else
+					if (gift.balance == redeem.amount) || (gift.original_value == redeem.amount)
+						# full redemption - no more redemptions allowed
+						puts "Redemption FOUND #{redeem.id}"
+						redemption = redeem
+						break
+					else
+						# pending exists but we could make another, what are criteria ?
+						puts "Redemption FOUND (partial) #{redeem.id}"
+						redemption = redeem
+						break
+					end
+				end
+			end
+		end
+		return redemption
+	end
+
 	def self.get_for_partner partner, start_datetime=nil, end_datetime=nil
 		return [] if !partner.respond_to?(:id)
 		end_datetime = DateTime.now.utc if end_datetime.nil?

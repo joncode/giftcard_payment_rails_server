@@ -255,31 +255,14 @@ class Redeem
 
 		  # -------------
 
-		redeems = Redemption.where(gift_id: gift.id, active: true, status: ['done', 'pending']).order(created_at: :desc)
 
 			# check for existing pending redemptions
 		already_have_one = nil
-		redeems.each do |redeem|
-			if redeem.status == 'pending'
-				if redeem.stale?
-					# expire and skip
-					next
-				else
-					if (gift.balance == redeem.amount) || (gift.original_value == redeem.amount)
-						# full redemption - no more redemptions allowed
-						puts "Redemption FOUND #{redeem.id}"
-						already_have_one = response(redeem, gift)
-						break
-					else
-						# pending exists but we could make another, what are criteria ?
-						puts "Redemption FOUND (partial) #{redeem.id}"
-						already_have_one = response(redeem, gift)
-						break
-					end
-				end
-			end
+		redeems = Redemption.get_all_live_redemptions(gift)
+		already_have_one = Redemption.current_pending_redemption(redeems)
+		if already_have_one.present?
+			return response(redeem, gift)
 		end
-		return already_have_one unless already_have_one.nil?
 
 		  # -------------
 
