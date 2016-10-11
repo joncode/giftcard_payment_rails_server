@@ -25,23 +25,27 @@ class Events::CallbacksController < MetalCorsController
 		if ref
 			r = Redemption.find ref
 			if r.status == 'done'
-				success({ ref: ref, redemption: 'done' })
+				success({ ref: ref, status: r.status })
 			else
 				puts "found redemption #{r.id}"
 				gift = r.gift
-				zapper_request = r.request
-	            zapper_request['redemption_id'] = r.hex_id
-	            zapper_obj = OpsZapper.new(zapper_request)
-	            zapper_obj.apply_callback_response(params)
-		        if zapper_obj.success?
-			        if zapper_obj.code == 201
-			            gift.partial_redeem(zapper_obj, gift.merchant.id, r)
-			        elsif zapper_obj.code == 200 || zapper_obj.code == 206
-			            gift.redeem_gift(nil, gift.merchant.id, :zapper, zapper_obj, r)
-			        end
-					success({ ref: ref })
+				resp = Redeem.apply(redemption: r, callback_params: params)
+				rc = Redeem.complete(redemption: resp['redemption'], pos_obj: resp['pos_obj'])
+				# zapper_request = r.request
+	   #          zapper_request['redemption_id'] = r.hex_id
+	   #          zapper_obj = OpsZapper.new(zapper_request)
+	   #          zapper_obj.apply_callback_response(params)
+	   			# zapper_obj = rc['pos_obj']
+		     #    if zapper_obj.success?
+			    #     if zapper_obj.code == 201
+			    #         gift.partial_redeem(zapper_obj, gift.merchant.id, r)
+			    #     elsif zapper_obj.code == 200 || zapper_obj.code == 206
+			    #         gift.redeem_gift(nil, gift.merchant.id, :zapper, zapper_obj, r)
+			    #     end
+			   	if rc['success']
+					success({ ref: ref, status: r.status  })
 				else
-					fail({ ref: ref })
+					fail({ ref: ref, status: r.status  })
 				end
 			end
 		end
