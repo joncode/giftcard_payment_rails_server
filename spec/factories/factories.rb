@@ -133,10 +133,10 @@ FactoryGirl.define do
         last_name                   "Basic"
         password                    "specspec"
         password_confirmation       "specspec"
-        sequence(:email)            { |n| "thisguy#{n}@gmail.com" }
+        sequence(:email)            { |n| "#{['f','g','y','t','d','h','c'].sample}thisguy#{n}@gmail.com" }
         sequence(:remember_token)   { |n| "token#{n}" }
-        sequence(:facebook_id)      { |n| "98a#{n}fd332" }
-        sequence(:twitter)          { |n| "283s#{n}f6fd3" }
+        # sequence(:facebook_id)      { |n| "98a#{n}fd332" }
+        # sequence(:twitter)          { |n| "283s#{n}f6fd3" }
         sequence(:phone) do
             phone = ""
             10.times do

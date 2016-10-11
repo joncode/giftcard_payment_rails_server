@@ -1,117 +1,37 @@
-# require 'spec_helper'
+require 'spec_helper'
+include UserSessionFactory
+include MocksAndStubs
 
-# describe Redeem do
+describe Redeem do
 
-# 	it "validates uniqueness of pos_mechant_id & redeem_code" do
-# 		redeem = FactoryGirl.create(:redeem, redeem_code: "unique", pos_merchant_id: 12312)
-# 		redeem_valid = FactoryGirl.build(:redeem, redeem_code: "unique", pos_merchant_id: 845794)
+    before(:each) do
+        User.delete_all
+        UserSocial.delete_all
+        Gift.delete_all
+        Client.delete_all
+        SessionToken.delete_all
+    	@user     = FactoryGirl.create :user, facebook_id: nil, iphone_photo: "https://res.cloudinary.com/drinkboard/image/upload/v1398470766/myphoto.jpg"
+    	@receiver = @user
+        @other1    = @user
+    	other2    = @user
+    	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: @user.name, receiver_id: @user.id, merchant: @merchant}
+    	3.times { FactoryGirl.create :gift, giver: @user, receiver_name: other2.name, receiver_id: other2.id, merchant: @merchant}
+    	3.times { FactoryGirl.create :gift, giver: @other1, receiver_name: other2.name, receiver_id: other2.id, merchant: @merchant}
+        @client = make_partner_client('Gifts', 'Creator')
+        @user = create_user_with_token "USER_TOKEN", @user, @client
+    end
 
-# 		redeem_invalid = FactoryGirl.build(:redeem, redeem_code: "unique", pos_merchant_id: 12312)
-# 		redeem_valid.redeem_code = redeem.redeem_code
-# 		redeem_valid.should be_valid
-# 		redeem_valid.should_not have_at_least(1).error_on(:redeem_code)
-# 		redeem_invalid.redeem_code = redeem.redeem_code
-# 		redeem_invalid.should_not be_valid
-# 		redeem_invalid.should have_at_least(1).error_on(:redeem_code)
-# 	end
+    it "should process v1 redemptions" do
+    	@merchant.update(r_sys: 1)
+    	gift = Gift.last
+    	resp = Redeem.start(gift: gift, amount: gift.value_cents, client_id: @client.id, api: "web/v3/gifts/#{gift.id}/start_redemption")
+    	puts resp.inspect
+    	resp['success'].should be_false
+    	resp['gift'].should be_nil
+    	resp['redemption'].should be_nil
+    end
 
-
-# 	it "should not validate uniqueness of redeem_code if pos_mechant_id is nil" do
-# 		redeem = FactoryGirl.create(:redeem, redeem_code: "unique", pos_merchant_id: nil)
-# 		redeem_valid = FactoryGirl.build(:redeem, redeem_code: "unique", pos_merchant_id: nil)
-
-# 		redeem_invalid = FactoryGirl.build(:redeem, redeem_code: "unique", pos_merchant_id: nil)
-# 		redeem_valid.redeem_code = redeem.redeem_code
-# 		redeem_valid.should be_valid
-# 		redeem_valid.should_not have_at_least(1).error_on(:redeem_code)
-# 		redeem_invalid.redeem_code = redeem.redeem_code
-# 		redeem_invalid.should be_valid
-# 		redeem_invalid.should_not have_at_least(1).error_on(:redeem_code)
-# 	end
-
-# 	it "should auto store the pos_merchant_id when provider has one" do
-# 		provider = FactoryGirl.create(:provider, pos_merchant_id: 11111)
-# 		gift     = FactoryGirl.create(:gift, provider_id: provider.id)
-# 		redeem   = Redeem.find_or_create_with_gift(gift)
-# 		redeem.pos_merchant_id.should == provider.pos_merchant_id
-# 	end
-
-# 	it "builds from factory" do
-# 	  	redeem = FactoryGirl.create :redeem
-# 	  	redeem.should be_valid
-# 	end
-
-# 	it "requires gift_id" do
-# 		redeem = FactoryGirl.build(:redeem, :gift_id => nil)
-# 		redeem.should_not be_valid
-# 		redeem.should have_at_least(1).error_on(:gift_id)
-# 	end
-
-# 	it "validates uniqueness of gift_id" do
-# 		previous = FactoryGirl.create(:order)
-# 		order = FactoryGirl.build(:order, :gift_id => previous.gift_id)
-# 		order.should_not be_valid
-# 		order.should have_at_least(1).error_on(:gift_id)
-# 			#order.errors.full_messages.should include("Validation msg about gift id")
-# 	end
-
-# 	it "should not change already redeemed gifts" do
-# 		user = FactoryGirl.create(:user)
-# 		gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name)
-# 		redeem  = Redeem.find_or_create_with_gift(gift)
-# 		redeem2 = Redeem.find_or_create_with_gift(gift)
-# 		redeem.should == gift.reload.redeem
-# 		order = Order.init_with_gift(gift)
-# 		order.save
-# 		gift.reload
-# 		gift.status.should == 'redeemed'
-# 		redeem3 = Redeem.find_or_create_with_gift(gift)
-# 		redeem3.should == redeem
-# 	end
-
-# 	it "should save the gift with the redeem and change the status to notified" do
-# 		user = FactoryGirl.create(:user)
-# 		gift = FactoryGirl.create(:gift, receiver_id: user.id, receiver_name: user.name)
-# 		redeem = Redeem.find_or_create_with_gift(gift)
-# 		gift.reload
-# 		gift.status.should == 'notified'
-# 	end
-# end
+end
 
 
-
-#   # validates :gift_id   , presence: true, uniqueness: true# == Schema Information
-# #
-# # Table name: redeems
-# #
-# #  id          :integer         not null, primary key
-# #  gift_id     :integer
-# #  redeem_code :string(255)
-# #  created_at  :datetime        not null
-# #  updated_at  :datetime        not null
-# #
-
-# # == Schema Information
-# #
-# # Table name: redeems
-# #
-# #  id              :integer         not null, primary key
-# #  gift_id         :integer
-# #  redeem_code     :string(255)
-# #  created_at      :datetime        not null
-# #  updated_at      :datetime        not null
-# #  pos_merchant_id :integer
-# #
-
-# == Schema Information
-#
-# Table name: redeems
-#
-#  id              :integer         not null, primary key
-#  gift_id         :integer
-#  redeem_code     :string(255)
-#  created_at      :datetime        not null
-#  updated_at      :datetime        not null
-#  pos_merchant_id :integer
-#
 

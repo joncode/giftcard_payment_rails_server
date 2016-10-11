@@ -8,7 +8,8 @@ class Redeem
 
 			# set data and reject invalid submissions
 		if !redemption.kind_of?(Redemption)
-			return { 'success' => false, "response_text" => "Redemption not found. Please contact support@itson.me", "response_code" => 'INVALID_INPUT'}
+			return { 'success' => false, "response_code" => 'INVALID_INPUT',
+				"response_text" => "Redemption not found. Please contact support@itson.me" }
 		end
 
 		if redemption.status == 'done'
@@ -24,25 +25,26 @@ class Redeem
 			gift = redemption.gift
 			if !gift.kind_of?(Gift)
 					# gift has been cancelled / deactivated
-				return { 'success' => false, "response_text" =>  "Gift has been deactivated. Please contact support@itson.me", "response_code" => 'INVALID_INPUT'}
+				return { 'success' => false, "response_code" => 'INVALID_INPUT',
+					"response_text" =>  "Gift has been deactivated. Please contact support@itson.me" }
 			end
 		end
 
 		if client_id.kind_of?(Client)
 			client_id = client_id.id
 		end
-		request_hsh = { gift_id: gift.id, redemption_id: redemption.id, qr_code: qr_code, ticket_num: ticket_num, server: server, client_id: client_id }
+		request_hsh = { gift_id: gift.id, redemption_id: redemption.id, qr_code: qr_code,
+			ticket_num: ticket_num, server: server, client_id: client_id }
 		puts request_hsh.inspect
 
 		merchant = redemption.merchant
-		if redemption.r_sys != nil
 
 			# confirm the specfic data is present
 		if redemption.r_sys == 3 && ticket_num.blank?
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "Ticket Number not found" }
 		end
 		if redemption.r_sys == 5
-			if callback_params.blank? && (qr_code.blank? || callback_params.nil?)
+			if callback_params.blank? && (qr_code.blank? || callback_params.blank?)
 				return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "QR Code not found" }
 			end
 		end
@@ -53,27 +55,30 @@ class Redeem
 		case redemption.r_sys
 		when 1   # V1
 			# there is no POS for V1 - always works
-			pos_obj, resp = internal_redemption(server=nil, redemption, gift)
+			pos_obj, resp = internal_redemption( server, redemption, gift )
 		when 2   # V2
-			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "Give code #{redemption.token} to server to redeem." }
+			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+				"response_text" =>  "Give code #{redemption.token} to server to redeem." }
 		when 3   # OMNIVORE
 			pos_obj, resp = omnivore_redemption( gift, ticket_num, redemption.amount, merchant )
 		when 4   # PAPER
-			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "Give Voucher ID to server to redeem." }
+			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+				"response_text" =>  "Give Voucher ID to server to redeem." }
 		when 5   # ZAPPER
 			if callback_params.present?
-				pos_obj, resp = zapper_callback_redemption( gift, qrcode, amount, redemption )
-			else
 				pos_obj, resp = zapper_sync_redemption( gift, callback_params, redemption )
+			else
+				pos_obj, resp = zapper_callback_redemption( gift, qrcode, amount, redemption )
 			end
 		else
-			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }
+			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+				"response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }
 		end
 
 		return { 'success' => true, 'pos_obj' => pos_obj, 'gift' => gift, 'redemption' => redemption }
 	end
 
-	def self.complete(redemption: nil, gift: nil, pos_obj: nil, client_id=nil)
+	def self.complete(redemption: nil, gift: nil, pos_obj: nil, client_id: nil)
 
 			# set data and reject invalid submissions
 		if pos_obj.nil? || !pos_obj.respond_to?(:applied_value)
@@ -89,7 +94,7 @@ class Redeem
 				return { 'success' => false, "response_text" =>  "Gift has been deactivated. Please contact support@itson.me", "response_code" => 'INVALID_INPUT'}
 			end
 		end
-		if client_id.kind_of?(Client
+		if client_id.kind_of?(Client)
 			client_id = client_id.id
 		end
 		request_hsh = { pos_obj: pos_object.as_json, gift_id: gift.id, redemption_id: redemption.id, client_id: client_id }
@@ -215,7 +220,7 @@ class Redeem
 			client_id = client_id.id
 		end
 
-		#   -------------
+		  # -------------
 
 			# set the redemption location - and adjust the gift.merchant_id
 		loc_id = loc_id.to_i
@@ -245,7 +250,7 @@ class Redeem
 			gift.merchant_id = loc_id
 		end
 
-		#   -------------
+		  # -------------
 
 		redeems = Redemption.where(gift_id: gift.id, active: true, status: ['done', 'pending']).order(created_at: :desc)
 
@@ -273,7 +278,7 @@ class Redeem
 		end
 		return already_have_one unless already_have_one.nil?
 
-		#   -------------
+		  # -------------
 
 		amount = gift.balance if amount.nil?
 		if !amount.kind_of?(Integer)
@@ -292,7 +297,7 @@ class Redeem
 				"response_text" => "The amount you entered is more than the current balance on the gift of #{display_money(cents: gift.balance, ccy: gift.ccy)}" }
 		end
 
-		#   -------------
+		  # -------------
 
 			# confirm that the gift has available balance to redeem
 		redeemed_amt = 0
@@ -314,7 +319,7 @@ class Redeem
 				"response_text" => "Due to pending redemptions, the amount you entered is more than current available balance #{display_money(cents: available_amt, ccy: gift.ccy)} " }
 		end
 
-		#   -------------
+		  # -------------
 
 			# initialize a Redemption record
 		redemption = Redemption.new( gift_id: gift.id, type_of: Redemption.convert_r_sys_to_type_of(r_sys), r_sys: r_sys,

@@ -71,6 +71,7 @@ class Card < ActiveRecord::Base
 #	-------------
 
 	def send_to_stripe
+		return true if Rails.env.test?
 		if self.stripe_id
 			return true
 		end

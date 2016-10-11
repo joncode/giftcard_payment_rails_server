@@ -246,7 +246,7 @@ private
     end
 
     def clear_www_cache
-        if !Rails.env.development?
+        if !Rails.env.development? || !Rails.env.test?
             RedisWrap.clear_merchants_caches(self.region_id) if self.region_id
             RedisWrap.clear_merchants_caches(self.city_id) if self.city_id
             WwwHttpService.clear_merchant_cache
