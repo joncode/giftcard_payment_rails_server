@@ -327,8 +327,10 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
             if (gift.receiver_id == @current_user.id)
                 if @current_redemption.redeemable? && @current_redemption.gift_id == gift.id
 
-                    resp = Redeem.complete(gift: gift, redemption: @current_redemption, client_id: @current_client.id,
-                        qr_code: qrcode, ticket_num: ticket_num, server: server_inits)
+                    ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode, ticket_num: ticket_num, server: server_inits,
+                        client_id: @current_client.id)
+                    resp = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'],
+                        pos_obj: ra['pos_obj'], client_id: @current_client.id)
 
                     if !resp.kind_of?(Hash)
                         status = :bad_request
