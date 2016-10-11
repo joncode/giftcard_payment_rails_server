@@ -33,6 +33,7 @@ class Redeem
 		if client_id.kind_of?(Client)
 			client_id = client_id.id
 		end
+		puts "REDEEM.apply RequestHsh\n"
 		request_hsh = { gift_id: gift.id, redemption_id: redemption.id, qr_code: qr_code,
 			ticket_num: ticket_num, server: server, client_id: client_id }
 		puts request_hsh.inspect
@@ -74,7 +75,7 @@ class Redeem
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }
 		end
-
+		redemption.save
 		return { 'success' => true, 'pos_obj' => pos_obj, 'gift' => gift, 'redemption' => redemption }
 	end
 
@@ -98,19 +99,15 @@ class Redeem
 		if client_id.kind_of?(Client)
 			client_id = client_id.id
 		end
-		request_hsh = { pos_obj: pos_obj.as_json, gift_id: gift.id, redemption_id: redemption.id, client_id: client_id }
+		puts "REDEEM.complete RequestHsh\n"
+		request_hsh = { pos_obj: pos_obj.inspect, gift_id: gift.id, redemption_id: redemption.id, client_id: client_id }
 		puts request_hsh.inspect
 
 
 		#   -------------
 
-			# update the redemption and the gift
-		resp = pos_obj.response || {}
-		resp['pos_obj'] = pos_obj
 		redemption.client_id = client_id if redemption.client_id.nil?
-		redemption.resp_json = pos_obj.response
-		redemption.ticket_id = pos_obj.ticket_id
-
+			# update the redemption and the gift
 		if pos_obj.success?
 			# set the actual amount, gift_next_value, gift/redemption statuses, redemption.req_json , redemption.resp_json
 			redemption.status = 'done'
@@ -130,8 +127,7 @@ class Redeem
 				gift.status = 'redeemed'
 			end
 			gift.detail = redemption.msg + '\n' + gift.detail.to_s
-			gift.balance = redemption.gift_next_value
-			resp['success'] = true
+
 		else
 			# why is there a failure
 			# must remove the redemption and allow for a new one
@@ -140,13 +136,21 @@ class Redeem
 
 			redemption.amount = 0
 			redemption.status = 'failed'
-			redemption.gift_next_value = redemption.gift_prev_value
 			gift.balance = gift.balance + (redemption.gift_prev_value - redemption.gift_next_value)
-			resp = redemption.response
-			resp['success'] = false
+			redemption.gift_next_value = redemption.gift_prev_value
+
 		end
 
-		gift.redemptions << redemption
+		resp = pos_obj.response
+		resp['success'] = pos_obj.success?
+		resp['pos_obj'] = pos_obj
+
+		r_hsh = { "response_code" => pos_obj.response['response_code'], "success" => pos_obj.success?,
+			 "response_text" => pos_obj.response['response_text'] }
+		redemption.resp_json = r_hsh
+		redemption.ticket_id = pos_obj.ticket_id
+
+		# gift.redemptions << redemption
 		if gift.save
 			Resque.enqueue(GiftAfterSaveJob, gift.id) if pos_obj.success?
 		else
@@ -206,8 +210,7 @@ class Redeem
 
 
 	def self.start(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant)
-		puts "Redeem.start"
-
+		puts "REDEEM.start RequestHsh\n"
 		request_hsh = { loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of }
 		puts request_hsh.inspect
 
@@ -345,6 +348,7 @@ class Redeem
 		gift.notified_at = Time.now.utc if gift.notified_at.nil?
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
+		gift.balance = redemption.gift_next_value
 		redemption.start_res = {'response_code' => "PENDING", "response_text" => success_hsh(redemption) }
 		gift.redemptions << redemption
 		if gift.save

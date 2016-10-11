@@ -25,7 +25,7 @@ class Redemption < ActiveRecord::Base
 #   -------------
 
 	belongs_to :client
-	belongs_to :gift
+	belongs_to :gift, autosave: true
 	belongs_to :merchant
 
 #   -------------
@@ -101,16 +101,27 @@ class Redemption < ActiveRecord::Base
     end
 
     def generic_response
-		{ "response_code" => apply_code, "response_text"=>{"amount_applied" => self.amount, 'previous_gift_balance' => self.gift_prev_value,
-			'remaining_gift_balance' => self.gift_next_value, 'msg' => msg } }
+    	if status == 'done'
+			{ "response_code" => apply_code, "response_text"=>{"amount_applied" => self.amount, 'previous_gift_balance' => self.gift_prev_value,
+				'remaining_gift_balance' => self.gift_next_value, 'msg' => msg } }
+		else
+			{ "response_code" => apply_code, "response_text"=>{"amount_applied" => 0, 'previous_gift_balance' => self.gift_prev_value,
+				'remaining_gift_balance' => self.gift_prev_value, 'msg' => msg } }
+		end
     end
 
     def apply_code
-    	if self.gift_next_value == 0
-    		"PAID"
-    	else
-    		"APPLIED"
-    	end
+    	if self.status == 'done'
+	    	if self.amount == 0
+	    		"ERROR"
+	    	elsif self.gift_next_value == 0
+	    		"PAID"
+	    	else
+	    		"APPLIED"
+	    	end
+	    else
+	    	self.status.upcase
+	    end
     end
 
     def message
@@ -118,15 +129,21 @@ class Redemption < ActiveRecord::Base
 	    	self.response_at = Time.now.utc if response_at.nil?
 	    	"#{display_money(cents: self.amount, ccy: ccy)} was paid on #{TimeGem.change_time_to_zone(self.response_at, merchant.zone).to_formatted_s(:merchant_date)}"
 	   		"#{display_money(cents: self.amount, ccy: ccy)} was paid with check # #{self.ticket_id}\n"
-	   	end
+	    else
+		   	"Redemption is #{apply_code}"
+	    end
     end
 
     def msg
-    	str = ticket_id.present? ? "(#{ticket_id})" : ''
-    	if self.gift_next_value == 0
-    		"#{display_money(cents: amount, ccy: ccy)} was applied #{str}. Gift has been fully used."
-    	else
-	    	"#{display_money(cents: amount, ccy: ccy)} was applied #{str}. #{display_money(cents: self.gift_next_value, ccy: ccy)} remains on the gift."
+    	if status == 'done'
+	    	str = ticket_id.present? ? "(#{ticket_id})" : ''
+	    	if self.gift_next_value == 0
+	    		"#{display_money(cents: amount, ccy: ccy)} was applied #{str}. Gift has been fully used."
+	    	else
+		    	"#{display_money(cents: amount, ccy: ccy)} was applied #{str}. #{display_money(cents: self.gift_next_value, ccy: ccy)} remains on the gift."
+		    end
+	    else
+		   	"Redemption is #{apply_code}"
 	    end
     end
 
@@ -240,7 +257,7 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 #   -------------
 
 	def set_response_at
-		if self.status == 'done' && self.response_at.nil?
+		if self.resp_json.present? && self.response_at.nil?
 			self.response_at = DateTime.now.utc
 		end
 	end

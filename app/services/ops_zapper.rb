@@ -73,6 +73,11 @@ class OpsZapper
 		response_from_code
 	end
 
+	def inspect
+		{ success: success?, ticket_id: ticket_num, applied_value: @applied_value,
+			response: response }
+	end
+
 #   -------------
 
 	def self.strip_qr_code qr_code
