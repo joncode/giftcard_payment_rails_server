@@ -200,30 +200,33 @@ module Emailer
 private
 
     def request_mandrill_with_template(template_name, message, ditto_ary, template_content=nil)
-        # unless Rails.env.development?
-        puts "``````````````````````````````````````````````"
-        add_qa_text_to_subject(message)
-        puts "Emailer[286] - Request Mandrill with TemplateName: '#{template_name}' \nMessage:\n#{message} \nContent:\n#{template_content}"
-        m = MANDRILL_CLIENT
-        response = m.messages.send_template(template_name, template_content, message)
-        puts "Response from Mandrill #{response.inspect}"
-        puts "``````````````````````````````````````````````"
-        Ditto.send_email_create(response, ditto_ary[0], ditto_ary[1])
-        response
-        # end
+        if Rails.env.staging? || Rails.env.production?
+            # unless Rails.env.development?
+            puts "``````````````````````````````````````````````"
+            add_qa_text_to_subject(message)
+            puts "Emailer[286] - Request Mandrill with TemplateName: '#{template_name}' \nMessage:\n#{message} \nContent:\n#{template_content}"
+            m = MANDRILL_CLIENT
+            response = m.messages.send_template(template_name, template_content, message)
+            puts "Response from Mandrill #{response.inspect}"
+            puts "``````````````````````````````````````````````"
+            Ditto.send_email_create(response, ditto_ary[0], ditto_ary[1])
+            response
+        end
     end
 
     def request_mandrill_with_message message, ditto_ary
-        puts "``````````````````````````````````````````````"
-        puts " Emailer[298] - Request Mandrill with #{message}"
-        add_qa_text_to_subject(message)
-        m = MANDRILL_CLIENT
-        response = m.messages.send message
-        puts
-        puts "Here is the Mandrill response = #{response.first}"
-        puts "``````````````````````````````````````````````"
-        Ditto.send_email_create(response, ditto_ary[0], ditto_ary[1])
-        return response
+        if Rails.env.staging? || Rails.env.production?
+            puts "``````````````````````````````````````````````"
+            puts " Emailer[298] - Request Mandrill with #{message}"
+            add_qa_text_to_subject(message)
+            m = MANDRILL_CLIENT
+            response = m.messages.send message
+            puts
+            puts "Here is the Mandrill response = #{response.first}"
+            puts "``````````````````````````````````````````````"
+            Ditto.send_email_create(response, ditto_ary[0], ditto_ary[1])
+            return response
+        end
     end
 
     def whitelist_email(email)

@@ -4,7 +4,7 @@ class Redeem
 #   -------------
 
 	def self.apply(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
-		puts "Redeem.complete"
+		puts "Redeem.apply"
 
 			# set data and reject invalid submissions
 		if !redemption.kind_of?(Redemption)
@@ -55,7 +55,7 @@ class Redeem
 		case redemption.r_sys
 		when 1   # V1
 			# there is no POS for V1 - always works
-			pos_obj, resp = internal_redemption( server, redemption, gift )
+			pos_obj, resp = internal_redemption( redemption, gift, server )
 		when 2   # V2
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Give code #{redemption.token} to server to redeem." }
@@ -79,6 +79,7 @@ class Redeem
 	end
 
 	def self.complete(redemption: nil, gift: nil, pos_obj: nil, client_id: nil)
+		puts "Redeem.complete"
 
 			# set data and reject invalid submissions
 		if pos_obj.nil? || !pos_obj.respond_to?(:applied_value)
@@ -97,7 +98,7 @@ class Redeem
 		if client_id.kind_of?(Client)
 			client_id = client_id.id
 		end
-		request_hsh = { pos_obj: pos_object.as_json, gift_id: gift.id, redemption_id: redemption.id, client_id: client_id }
+		request_hsh = { pos_obj: pos_obj.as_json, gift_id: gift.id, redemption_id: redemption.id, client_id: client_id }
 		puts request_hsh.inspect
 
 
@@ -125,7 +126,6 @@ class Redeem
 					OpsTwilio.text_devs(msg: "Gift has been OVER-REDEEEMED #{redemption.id}")
 				end
 			end
-			gift.redemptions << redemption
 			if (redemption.gift_next_value <= 0)
 				gift.status = 'redeemed'
 			end
@@ -137,10 +137,7 @@ class Redeem
 			# must remove the redemption and allow for a new one
 				# must release the hold on the gift card value
 			# must set the status of the redemption to something reasonable
-			# return a message to the user that makes sense
-			# make sure that response is on the redemption in case of db-async
 
-				# failure is in the response already
 			redemption.amount = 0
 			redemption.status = 'failed'
 			redemption.gift_next_value = redemption.gift_prev_value
@@ -149,11 +146,14 @@ class Redeem
 			resp['success'] = false
 		end
 
+		gift.redemptions << redemption
 		if gift.save
 			Resque.enqueue(GiftAfterSaveJob, gift.id) if pos_obj.success?
 		else
 			# gift / redemption didnt save , but charge went thru
-			mg =  "REDEEM - 500 Internal - POS SUCCESS / DB FAIL redemption #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n REDEEM-redemption.errors.messages.inspect}\n"
+			mg =  "REDEEM - 500 Internal - POS SUCCESS / DB FAIL redemption\
+			 #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
+			  REDEEM-#{redemption.errors.messages.inspect}\n"
 			puts mg
 			OpsTwilio.text_devs(msg: mg)
 			resp['system_errors'] = gift.errors.full_messages
@@ -170,9 +170,9 @@ class Redeem
 
 #   -------------
 
-	def self.internal_redemption(server=nil, redemption, gift)
+	def self.internal_redemption(redemption, gift, server)
 			# OpsInternalPos is defined at bottom of this file
-		v1_pos_obj = OpsInternalPos.new(redemption, gift)
+		v1_pos_obj = OpsInternalPos.new(redemption, gift, server)
 		redemption.req_json = v1_pos_obj.make_request_hsh
 		return [ v1_pos_obj, v1_pos_obj.response ]
 	end
@@ -239,7 +239,7 @@ class Redeem
 		end
 
 			# V1 & POS & Zapper redemption currently make their own redemptiosn
-		if (r_sys == 1) || (r_sys == 3) || (r_sys == 5)
+		if  (r_sys == 3) || (r_sys == 5)
 			gift.notify
 			return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => nil }
 		end
@@ -264,12 +264,12 @@ class Redeem
 				else
 					if (gift.balance == redeem.amount) || (gift.original_value == redeem.amount)
 						# full redemption - no more redemptions allowed
-						puts "Redemption FOUND #{redemption.id}"
+						puts "Redemption FOUND #{redeem.id}"
 						already_have_one = response(redeem, gift)
 						break
 					else
 						# pending exists but we could make another, what are criteria ?
-						puts "Redemption FOUND (partial) #{redemption.id}"
+						puts "Redemption FOUND (partial) #{redeem.id}"
 						already_have_one = response(redeem, gift)
 						break
 					end
@@ -332,7 +332,8 @@ class Redeem
 			return response(redemption, gift)
 		else
 			puts redemption.inspect
-			return { 'success' => false, "response_code" => "INVALID_INPUT", "response_text" =>  redemption.errors.full_messages }
+			return { 'success' => false, "response_code" => "INVALID_INPUT",
+				"response_text" =>  redemption.errors.full_messages, 'gift' => gift, 'redemption' => redemption }
 		end
 	end
 
@@ -340,6 +341,8 @@ class Redeem
 
 	def self.response redemption, gift
 		puts redemption.inspect
+		gift.status = 'notified'
+		gift.notified_at = Time.now.utc if gift.notified_at.nil?
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
 		redemption.start_res = {'response_code' => "PENDING", "response_text" => success_hsh(redemption) }

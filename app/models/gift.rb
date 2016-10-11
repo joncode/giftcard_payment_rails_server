@@ -70,7 +70,7 @@ class Gift < ActiveRecord::Base
     has_many    :landing_pages, through: :affiliate_gifts
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :proto_join
-    has_many    :redemptions
+    has_many    :redemptions, autosave: true
     has_many    :registers
     has_one     :sms_contact,   autosave: true
 
@@ -657,8 +657,8 @@ private
     end
 
     def set_redeemed_at
-        if ['cancel', 'expired', 'regifted', 'redeemed'].include?(status) && redeemed_at.nil?
-            self.redeemed_at == Time.now.utc
+        if ['cancel', 'expired', 'regifted', 'redeemed'].include?(status) && self.redeemed_at.nil?
+            self.redeemed_at = Time.now.utc
         end
     end
 

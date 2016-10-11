@@ -6,7 +6,9 @@ class OpsTwilio
 
 
 		def text to:, msg:
-
+			if Rails.env.development? || Rails.env.test?
+				return {status: 1, data: "Text send to #{to}"}
+			end
 			account_sid = TWILIO_ACCOUNT_SID
 			auth_token = TWILIO_AUTH_TOKEN
 
