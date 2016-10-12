@@ -182,7 +182,7 @@ class Redemption < ActiveRecord::Base
 
 	def self.current_pending_redemption gift, redeems=nil
 		if redeems.nil?
-			where(gift_id: gift.id, active: true, status: 'pending').order(created_at: :desc)
+			redeems = where(gift_id: gift.id, active: true, status: 'pending').order(created_at: :desc)
 		end
 		redemption = nil
 		redeems.each do |redeem|

@@ -97,8 +97,8 @@ NUMBER_ID = 649387
 #  make migration to delete mt_user, at_user, user ->  :password_digest
 #  make migration to remove { affiliate_id - password_digest => mt_user }
 
-VERSION_NUMBER  = "1.7.0"
-VERSION_UPDATED = "8/24/16"
+VERSION_NUMBER  = "2.0.0"
+VERSION_UPDATED = "10/11/16"
 
 TIME_ZONES = {0 => "Pacific Time (US & Canada)", 1 => "Mountain Time (US & Canada)", 2 => "Central Time (US & Canada)", 3 => "Eastern Time (US & Canada)"}
 
