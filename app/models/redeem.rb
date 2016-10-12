@@ -80,6 +80,14 @@ class Redeem
 		end
 		redemption.save
 		return { 'success' => true, 'pos_obj' => pos_obj, 'gift' => gift, 'redemption' => redemption }
+	rescue => e
+		mg = "RESCUE IN REDEEM.appply - 500 Internal - FAIL APPLY redemption\n "
+		mg |=  " #{redemption.id} failed \n #{e.inspect} \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
+			  REDEEM-#{redemption.errors.messages.inspect}\n"
+		puts mg
+		# OpsTwilio.text_devs(msg: mg)
+		return { 'success' => false, "response_code" => "ERROR", 'system_errors' => e.inspect,
+				"response_text" =>  "System Error, unable to apply redemption. Pease try again later" }
 	end
 
 	def self.complete(redemption: nil, gift: nil, pos_obj: nil, client_id: nil)
@@ -165,7 +173,7 @@ class Redeem
 			 #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
 			  REDEEM-#{redemption.errors.messages.inspect}\n"
 			puts mg
-			OpsTwilio.text_devs(msg: mg)
+			# OpsTwilio.text_devs(msg: mg)
 			resp['system_errors'] = gift.errors.full_messages
 			# what to do here  ??
 				# pos has returned and processed a value , but our system is not storing due likely to bug
@@ -174,7 +182,20 @@ class Redeem
 		end
 
 		resp['redemption'] = redemption
-		resp['gift'] = redemption.gift
+		resp['gift'] = gift
+		return resp
+	rescue => e
+		mg =  "RESCUE IN REDEEM.complete - 500 Internal - POS SUCCESS / DB FAIL redemption\n"
+		mg += " #{redemption.id} failed \n #{e.inspect} \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
+			  REDEEM-#{redemption.errors.messages.inspect}\n"
+		puts mg
+		# OpsTwilio.text_devs(msg: mg)
+		resp = pos_obj.response
+		resp['success'] = pos_obj.success?
+		resp['pos_obj'] = pos_obj
+		resp['redemption'] = redemption.reload
+		resp['gift'] = gift.reload
+		resp['system_errors'] = e.inspect
 		return resp
 	end
 

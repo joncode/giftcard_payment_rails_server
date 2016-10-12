@@ -375,7 +375,7 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
                 end
 
                 if @current_redemption.present?
-                     ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
+                    ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
                         ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
                     resp = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'],
                         pos_obj: ra['pos_obj'], client_id: @current_client.id)
