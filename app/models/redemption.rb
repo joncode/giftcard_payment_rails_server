@@ -44,7 +44,7 @@ class Redemption < ActiveRecord::Base
     		update_column :status, 'expired'
     		return true
     	end
-    	return stale_true
+    	return (stale_true && self.status != 'pending')
     end
 
     def fresh?
