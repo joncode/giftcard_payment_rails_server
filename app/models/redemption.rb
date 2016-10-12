@@ -180,7 +180,10 @@ class Redemption < ActiveRecord::Base
 		where(gift_id: gift.id, active: true, status: ['done', 'pending']).order(created_at: :desc)
 	end
 
-	def self.current_pending_redemption redeems
+	def self.current_pending_redemption gift, redeems=nil
+		if redeems.nil?
+			where(gift_id: gift.id, active: true, status: 'pending').order(created_at: :desc)
+		end
 		redemption = nil
 		redeems.each do |redeem|
 			if redeem.status == 'pending'

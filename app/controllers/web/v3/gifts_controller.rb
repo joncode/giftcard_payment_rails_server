@@ -341,18 +341,18 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
                 fail_web({ err: "NOT_REDEEMABLE",
                     msg: "Merchant is not active currently.  Please contact support@itson.me"})
             else
-                redeems = Redemption.get_all_live_redemptions(gift)
-                @current_redemption = Redemption.current_pending_redemption(redeems)
+                @current_redemption = Redemption.current_pending_redemption(gift)
                 if @current_redemption.nil?
-                    resp = Redeem.start(gift: gift, amount: amount, loc_id: loc_id, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
+                    resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
+                        client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
                     if resp['success']
                         @current_redemption = resp['redemption']
                     end
                 end
 
                 if @current_redemption.present?
-                     ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode, ticket_num: ticket_num, server: server_inits,
-                        client_id: @current_client.id)
+                     ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
+                        ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
                     resp = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'],
                         pos_obj: ra['pos_obj'], client_id: @current_client.id)
                     if !resp.kind_of?(Hash)
@@ -400,12 +400,22 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
             # find the redemption
         if redemption_id.present?
             @current_redemption = Redemption.includes([:merchant, :gift]).find(redemption_id)
+            if @current_redemption.nil?
+                @current_redemption = Redemption.current_pending_redemption(gift)
+                if @current_redemption.nil?
+                    resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
+                        client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
+                    if resp['success']
+                        @current_redemption = resp['redemption']
+                    end
+                end
+            end
             gift = @current_redemption.gift
             if (gift.receiver_id == @current_user.id)
                 if @current_redemption.redeemable? && @current_redemption.gift_id == gift.id
 
-                    ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode, ticket_num: ticket_num, server: server_inits,
-                        client_id: @current_client.id)
+                    ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
+                        ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
                     resp = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'],
                         pos_obj: ra['pos_obj'], client_id: @current_client.id)
 
@@ -438,7 +448,8 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
         if (gift.receiver_id == @current_user.id)
             loc_id = redeem_params["loc_id"]
             amount = redeem_params["amount"]
-            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/start_redemption")
+            resp = Redeem.start(gift: gift, loc_id: loc_id, amount: amount, client_id: @current_client.id,
+                api: "web/v3/gifts/#{gift.id}/start_redemption")
             if resp['success']
                 gift = resp['gift']
                 gift.fire_after_save_queue(@current_client)

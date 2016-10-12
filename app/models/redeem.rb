@@ -209,7 +209,7 @@ class Redeem
 #   -------------
 
 
-	def self.start(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant)
+	def self.start(gift: nil, loc_id: nil, amount: nil, client_id: nil, api: nil, type_of: :merchant, sync: false)
 		puts "REDEEM.start RequestHsh\n"
 		request_hsh = { loc_id: loc_id, amount: amount, client_id: client_id, api: api, type_of: type_of }
 		puts request_hsh.inspect
@@ -242,10 +242,13 @@ class Redeem
 		end
 
 			# V1 & POS & Zapper redemption currently make their own redemptiosn
-		# if  (r_sys == 3) || (r_sys == 5)
-		# 	gift.notify
-		# 	return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => nil }
-		# end
+		unless sync
+			if (r_sys == 1) || (r_sys == 3) || (r_sys == 5)
+				gift.notify
+				return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => nil }
+			end
+		end
+
 				# DO I NEED TO CONFIRM THAT GIFT IS GOOD HERE ?
 		if merchant.mode != 'live'
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "#{merchant.name} is not currently live" }
@@ -259,7 +262,7 @@ class Redeem
 			# check for existing pending redemptions
 		already_have_one = nil
 		redeems = Redemption.get_all_live_redemptions(gift)
-		already_have_one = Redemption.current_pending_redemption(redeems)
+		already_have_one = Redemption.current_pending_redemption(gift, redeems)
 		if already_have_one.present?
 			return response(redeem, gift)
 		end
