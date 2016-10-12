@@ -11,7 +11,7 @@ class Omnivore
 
 	def initialize args
 		@request = args
-		puts "Omnivore args = #{args.inspect}"
+		puts "Omnivore.initialize args = #{args.inspect}"
 
 		if args['brand_card_ids_ary'].blank?
 			@brand_card = false
@@ -227,6 +227,15 @@ class Omnivore
 	end
 
 	def make_request_hsh
+		h = omnivore_payload
+		h['pos_merchant_id'] = @pos_merchant_id
+		h['ticket_id'] = @ticket_id
+		h['ticket_num'] = @ticket_num
+		h['request'] = @request
+		h
+	end
+
+	def omnivore_payload
 		{
 			"type" => "3rd_party",
 			"amount" => @applied_value,
@@ -237,7 +246,7 @@ class Omnivore
 	end
 
 	def post_redeem
-		payload = make_request_hsh.to_json
+		payload = omnivore_payload.to_json
 
 		puts "\nOmnivore:post_redeem payload:\n"
 		puts payload.inspect
