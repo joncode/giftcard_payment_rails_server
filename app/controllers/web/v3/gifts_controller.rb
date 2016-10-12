@@ -365,13 +365,11 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
                 fail_web({ err: "NOT_REDEEMABLE",
                     msg: "Merchant is not active currently.  Please contact support@itson.me"})
             else
-                @current_redemption = Redemption.current_pending_redemption(gift)
-                if @current_redemption.nil?
-                    resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
-                        client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
-                    if resp['success']
-                        @current_redemption = resp['redemption']
-                    end
+                puts "gifts controller getting current_redemption"
+                resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
+                    client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
+                if resp['success']
+                    @current_redemption = resp['redemption']
                 end
 
                 if @current_redemption.present?
