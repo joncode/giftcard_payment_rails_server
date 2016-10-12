@@ -43,11 +43,13 @@ class Redeem
 
 			# confirm the specfic data is present
 		if redemption.r_sys == 3 && ticket_num.blank?
-			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "Ticket Number not found" }
+			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+				"response_text" =>  "Ticket Number not found" }
 		end
 		if redemption.r_sys == 5
 			if callback_params.blank? && (qr_code.blank? || callback_params.blank?)
-				return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "QR Code not found" }
+				return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+					"response_text" =>  "QR Code not found" }
 			end
 		end
 
@@ -85,16 +87,19 @@ class Redeem
 
 			# set data and reject invalid submissions
 		if pos_obj.nil? || !pos_obj.respond_to?(:applied_value)
-			return { 'success' => false, "response_text" => "System unavailable, please retry in a minute.", "response_code" => 'INVALID_INPUT'}
+			return { 'success' => false, "response_code" => 'INVALID_INPUT',
+				"response_text" => "System unavailable, please retry in a minute."}
 		end
 		if !redemption.kind_of?(Redemption)
-			return { 'success' => false, "response_text" => "Redemption not found. Please contact support@itson.me", "response_code" => 'INVALID_INPUT'}
+			return { 'success' => false, "response_code" => 'INVALID_INPUT',
+				"response_text" => "Redemption not found. Please contact support@itson.me"}
 		end
 		if !gift.kind_of?(Gift)
 			gift = redemption.gift
 			if !gift.kind_of?(Gift)
 					# gift has been cancelled / deactivated
-				return { 'success' => false, "response_text" =>  "Gift has been deactivated. Please contact support@itson.me", "response_code" => 'INVALID_INPUT'}
+				return { 'success' => false, "response_code" => 'INVALID_INPUT',
+					"response_text" =>  "Gift has been deactivated. Please contact support@itson.me"}
 			end
 		end
 		if client_id.kind_of?(Client)
@@ -254,7 +259,8 @@ class Redeem
 
 				# DO I NEED TO CONFIRM THAT GIFT IS GOOD HERE ?
 		if merchant.mode != 'live'
-			return { 'success' => false, "response_code" => "NOT_REDEEMABLE", "response_text" =>  "#{merchant.name} is not currently live" }
+			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+				"response_text" => "#{merchant.name} is not currently live" }
 		else
 			gift.merchant_id = loc_id
 		end

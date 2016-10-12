@@ -455,8 +455,8 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
                         gift.fire_after_save_queue(@current_client)
                         status = :ok
                         success({ msg: resp["response_text"], code: resp["response_code"], gift: gift.web_serialize,
-                            token: redemption.token, redemption: redemption })
-                   else
+                            token: @current_redemption.token, redemption: @current_redemption })
+                    else
                         status = :ok
                         fail_web({ err: resp["response_code"], msg: resp["response_text"]})
                     end
