@@ -216,7 +216,7 @@ class Web::V3::GiftsController < MetalCorsController
                 gift.fire_after_save_queue(@current_client)
                 redemption = resp['redemption'].serialize if resp['redemption'].kind_of?(Redemption)
                 success({ msg: resp["response_text"], code: resp["response_code"], gift: gift.web_serialize,
-                    token: redemption.token, redemption: redemption })
+                    token: gift.token, redemption: redemption })
             else
                 status = :ok
                 fail_web({ err: resp["response_code"], msg: resp["response_text"]})
