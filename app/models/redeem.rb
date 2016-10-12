@@ -123,7 +123,7 @@ class Redeem
 					OpsTwilio.text_devs(msg: "POS Redemption HIGHER than redemption amount #{redemption.id}")
 				end
 				redemption.amount = pos_obj.applied_value
-				redemption.gift_next_value = (redemtion.gift_prev_value - redemption.amount)
+				redemption.gift_next_value = (redemption.gift_prev_value - redemption.amount)
 				if redemption.gift_next_value < 0
 					redemption.gift_next_value = 0
 					OpsTwilio.text_devs(msg: "Gift has been OVER-REDEEEMED #{redemption.id}")
