@@ -19,6 +19,17 @@ module OmnivoreUtils
         new(pos_hsh)
 	end
 
+    def init_with_redemption redemption, ticket_num, merchant
+        pos_hsh = { "ticket_num" => ticket_num,
+                    "gift_card_id" => redemption.hex_id,
+                    "pos_merchant_id" => merchant.pos_merchant_id,
+                    "tender_type_id" => merchant.tender_type_id,
+                    "value" => redemption.amount,
+                    "brand_card_ids_ary" => [],
+                    "direct_redeem" => merchant.pos_direct }
+        new(pos_hsh)
+    end
+
 #   -------------
 
     def location(_id)

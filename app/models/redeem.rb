@@ -189,7 +189,8 @@ class Redeem
 
 	def self.omnivore_redemption(redemption, gift, ticket_num, amount, merchant)
 		# gift.pos_redeem(ticket_num, pos_merchant_id, tender_type_id, merchant_id, amount)
-		omnivore = Omnivore.init_with_gift( gift, ticket_num, amount, nil, merchant )
+		# omnivore = Omnivore.init_with_gift( gift, ticket_num, amount, nil, merchant )
+		omnivore = Omnivore.init_with_redemption( redemption, ticket_num, merchant )
 		redemption.req_json = omnivore.make_request_hsh
 		resp = omnivore.redeem
 		return [ omnivore, resp ]
