@@ -38,11 +38,13 @@ class Redemption < ActiveRecord::Base
 
     def stale?
     	return true if self.new_token_at.nil?
-    	answer = (self.new_token_at < reset_time)
-    	if answer && status == 'pending'
+    	stale_true = (self.new_token_at < reset_time)
+    	if stale_true && status == 'pending'
+    			# stale tokens should not be on pending redemptions
     		update_column :status, 'expired'
+    		return true
     	end
-    	return answer
+    	return stale_true
     end
 
     def fresh?
