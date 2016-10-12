@@ -241,7 +241,9 @@ class Redeem
 			r_sys = Redemption.convert_type_of_to_r_sys(type_of)
 		end
 
-			# V1 & POS & Zapper redemption currently make their own redemptiosn
+			# V1 & POS & Zapper redemption currently make their own redemptions
+			# if sync is true it means this method is used to create the redemption for ALL R-sys
+			# otherwise just notify the gift and send it down
 		unless sync
 			if (r_sys == 1) || (r_sys == 3) || (r_sys == 5)
 				gift.notify
