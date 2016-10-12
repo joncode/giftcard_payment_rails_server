@@ -101,7 +101,7 @@ class Redemption < ActiveRecord::Base
     end
 
     def generic_response
-    	if status == 'done'
+    	if ['pending', 'done'].include?(self.status)
 			{ "response_code" => apply_code, "response_text"=>{"amount_applied" => self.amount, 'previous_gift_balance' => self.gift_prev_value,
 				'remaining_gift_balance' => self.gift_next_value, 'msg' => msg } }
 		else
