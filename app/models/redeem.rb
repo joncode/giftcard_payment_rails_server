@@ -1,6 +1,7 @@
 class Redeem
 	extend MoneyHelper
 
+
 #   -------------
 
 	def self.apply(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
@@ -186,7 +187,7 @@ class Redeem
 		omnivore = Omnivore.init_with_gift( gift, ticket_num, amount, nil, merchant )
 		redemption.req_json = omnivore.make_request_hsh
 		resp = omnivore.redeem
-		return [ omivore, resp ]
+		return [ omnivore, resp ]
 	end
 
 	def self.zapper_sync_redemption(redemption, gift, qrcode, amount )
