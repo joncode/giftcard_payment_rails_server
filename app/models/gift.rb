@@ -93,6 +93,10 @@ class Gift < ActiveRecord::Base
         super
     end
 
+    def self.index
+        []
+    end
+
 #   -------------
 
     def invite_link

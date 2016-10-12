@@ -119,6 +119,10 @@ class User < ActiveRecord::Base
 		SessionToken.app_authenticate(token)
 	end
 
+    def self.index
+        []
+    end
+
 #	-------------
 
 	def link= link

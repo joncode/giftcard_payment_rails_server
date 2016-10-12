@@ -41,7 +41,11 @@ class Client < ActiveRecord::Base
 
 	def contents content_symbol
 		if self.full?
-			return yield(self)
+			if block_given?
+				return yield(self)
+			else
+				return content_symbol.to_s.singularize.capitalize.constantize.index
+			end
 		end
 
 			# content_symbol = :gifts, :merchants, :regions, :users

@@ -63,6 +63,10 @@ class Merchant < ActiveRecord::Base
         TIME_ZONES[self.tz]
     end
 
+    def self.index
+        live_scope
+    end
+
 #   -------------
 
     def pending_redeems
