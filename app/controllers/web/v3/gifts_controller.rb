@@ -421,20 +421,25 @@ Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
         amount = redemption_params["amount"]
         loc_id = (redemption_params["loc_id"].to_i > 0) ? redemption_params["loc_id"].to_i : nil
 
+        @current_redemption = nil
             # find the redemption
         if redemption_id.present?
             @current_redemption = Redemption.includes([:merchant, :gift]).find(redemption_id)
+        else
+            gift = Gift.includes(:merchant).find(params[:id])
+            @current_redemption = Redemption.current_pending_redemption(gift)
             if @current_redemption.nil?
-                @current_redemption = Redemption.current_pending_redemption(gift)
-                if @current_redemption.nil?
-                    resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
-                        client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
-                    if resp['success']
-                        @current_redemption = resp['redemption']
-                    end
+                resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
+                    client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
+                if resp['success']
+                    @current_redemption = resp['redemption']
                 end
+            else
+                # what if current pending R != amount or loc ?
             end
-            gift = @current_redemption.gift
+        end
+        if @current_redemption.present?
+            gift ||= @current_redemption.gift
             if (gift.receiver_id == @current_user.id)
                 if @current_redemption.redeemable? && @current_redemption.gift_id == gift.id
 
