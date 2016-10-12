@@ -61,15 +61,15 @@ class Redeem
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Give code #{redemption.token} to server to redeem." }
 		when 3   # OMNIVORE
-			pos_obj, resp = omnivore_redemption( gift, ticket_num, redemption.amount, merchant )
+			pos_obj, resp = omnivore_redemption( redemption, gift, ticket_num, redemption.amount, merchant )
 		when 4   # PAPER
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Give Voucher ID to server to redeem." }
 		when 5   # ZAPPER
 			if callback_params.present?
-				pos_obj, resp = zapper_sync_redemption( gift, callback_params, redemption )
+				pos_obj, resp = zapper_callback_redemption( redemption, gift, callback_params )
 			else
-				pos_obj, resp = zapper_callback_redemption( gift, qrcode, amount, redemption )
+				pos_obj, resp = zapper_sync_redemption( redemption, gift, qrcode, amount )
 			end
 		else
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
@@ -181,7 +181,7 @@ class Redeem
 		return [ v1_pos_obj, v1_pos_obj.response ]
 	end
 
-	def self.omnivore_redemption(gift, ticket_num, amount, merchant)
+	def self.omnivore_redemption(redemption, gift, ticket_num, amount, merchant)
 		# gift.pos_redeem(ticket_num, pos_merchant_id, tender_type_id, merchant_id, amount)
 		omnivore = Omnivore.init_with_gift( gift, ticket_num, amount, nil, merchant )
 		redemption.req_json = omnivore.make_request_hsh
@@ -189,7 +189,7 @@ class Redeem
 		return [ omivore, resp ]
 	end
 
-	def self.zapper_sync_redemption( gift, qrcode, amount, redemption )
+	def self.zapper_sync_redemption(redemption, gift, qrcode, amount )
 		zapper_request = OpsZapper.make_request_hsh( gift, qrcode, amount, redemption.hex_id )
 		redemption.req_json = zapper_request
 		zapper_obj = OpsZapper.new( zapper_request )
@@ -197,7 +197,7 @@ class Redeem
 		return [ zapper_obj, resp ]
 	end
 
-	def self.zapper_callback_redemption( gift, callback_params, redemption )
+	def self.zapper_callback_redemption(redemption, gift, callback_params )
 		zapper_request = r.request
         zapper_request['redemption_id'] = r.hex_id
         zapper_obj = OpsZapper.new( zapper_request )
