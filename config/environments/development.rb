@@ -25,7 +25,7 @@ Drinkboard::Application.configure do
 
 
   # Prepend all log lines with the following tags
-  config.log_tags = [ :uuid, :request_id, :remote_ip]
+  config.log_tags = [ :uuid, :remote_ip]
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin

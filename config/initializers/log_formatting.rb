@@ -1,5 +1,9 @@
-# Rails.logger = Logger.new(STDOUT)
-# ActiveRecord::Base.logger = Logger.new(STDOUT)
+if Rails.env.development?
+
+	Rails.logger = Logger.new(STDOUT)
+	ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+end
 
 def puts str=nil
     @system_logger ||= Rails.logger
