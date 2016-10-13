@@ -2,7 +2,7 @@ module ShoppingCartHelper
 
     def calculate_value shoppingCart_string
         sc = JSON.parse shoppingCart_string
-        sc.sum {|z| z["price"].to_i * z["quantity"].to_i }.to_s
+        sc.sum {|z| z["price"].to_f * z["quantity"].to_i }.to_s
     end
 
     def calculate_cost shoppingCart_string, merchant
