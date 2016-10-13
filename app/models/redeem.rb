@@ -73,7 +73,7 @@ class Redeem
 				"response_text" =>  "Ticket Number not found" }
 		end
 		if redemption.r_sys == 5
-			if callback_params.blank? && (qr_code.blank? || callback_params.blank?)
+			if callback_params.blank? && qr_code.blank?   # both blank we have no unique data
 				return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 					"response_text" =>  "QR Code not found" }
 			end
@@ -124,7 +124,7 @@ class Redeem
 
 	def self.complete(redemption: nil, gift: nil, pos_obj: nil, client_id: nil)
 		puts "Redeem.complete"
-		puts pos_obj.inspect
+		puts "POSObject = " + pos_obj.inspect
 
 			# set data and reject invalid submissions
 		if pos_obj.nil? || !pos_obj.respond_to?(:applied_value)
