@@ -46,7 +46,7 @@ class Omnivore
 
 	def inspect
 		{ success: success?, ticket_id: @ticket_num, applied_value: @applied_value,
-			response: response, request: make_request_hsh }
+			response: response, request: make_request_hsh }.to_s
 	end
 
 	def direct?

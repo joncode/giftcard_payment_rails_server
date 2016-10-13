@@ -4,7 +4,7 @@ OpsInternalPos = Struct.new(:redemption, :gift, :server) do
 
 	def inspect
 		{ success: success?, ticket_id: ticket_id, applied_value: applied_value,
-			response: response, request: make_request_hsh }
+			response: response, request: make_request_hsh }.to_s
 	end
 
 	def success?

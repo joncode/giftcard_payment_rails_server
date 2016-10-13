@@ -75,7 +75,7 @@ class OpsZapper
 
 	def inspect
 		{ success: success?, ticket_id: ticket_num, applied_value: @applied_value,
-			response: response }
+			response: response }.to_s
 	end
 
 #   -------------
