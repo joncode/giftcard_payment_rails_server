@@ -227,112 +227,6 @@ class Web::V3::GiftsController < MetalCorsController
         respond(status)
     end
 
-    def redeem_old
-        gift = Gift.includes(:merchant).find params[:id]
-        if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
-            if params['data']
-                server_inits = redeem_params["server"]
-                amount = redeem_params["amount"]
-                ticket_num = redeem_params["ticket_num"]
-                qrcode = redeem_params["qrcode"]
-                loc_id = (redeem_params["loc_id"].to_i > 0) ? redeem_params["loc_id"].to_i : nil
-                if (loc_id.present? && loc_id != gift.merchant_id)
-                    merchant = Merchant.find(loc_id)
-                end
-            end
-            merchant = gift.merchant if merchant.nil?
-            gift.rec_client_id = @current_client.id if gift.rec_client_id.nil?
-
-            if amount.nil?
-                amount = gift.balance
-            else
-                amount = amount.to_i
-            end
-
-            if amount > gift.balance  # amount value
-                status = :bad_request
-                fail_web({ err: "NOT_REDEEMABLE",
-                    msg: "Redeem amount of #{display_money(cents: amount, ccy: gift.ccy)} too high. \
-                        Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
-
-            elsif merchant.nil?
-                status = :bad_request
-                fail_web({ err: "NOT_REDEEMABLE",
-                    msg: "Merchant is not active currently.  Please contact support@itson.me"})
-            elsif merchant.r_sys == 5
-                if qrcode
-                        # ZAPPER Redemption
-                    res = gift.zapper_redemption( qrcode, merchant, amount )
-                    @current_redemption = res['redemption']
-                    if @current_redemption
-                        resp = gift.zapper_redeem_async(@current_redemption)
-                        if !resp.kind_of?(Hash)
-                            # status = :bad_request
-                            fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
-                        elsif resp["success"] == true
-                            gift.fire_after_save_queue(@current_client)
-                            status = :ok
-                            success({msg: resp["response_text"]})
-                        else
-                            status = :ok
-                            fail_web({ err: resp["response_code"], msg: resp["response_text"]})
-                        end
-                    else
-                        fail_web({ err: res["response_code"], msg: res["response_text"]})
-                    end
-                else
-                    status = :bad_request
-                    fail_web({ err: "NOT_REDEEMABLE", msg: "QR code not found"})
-                end
-            elsif merchant.r_sys == 3
-                if ticket_num
-
-                        # POS Redemption
-                    resp = gift.pos_redeem(ticket_num,
-                            merchant.pos_merchant_id,
-                            merchant.tender_type_id,
-                            loc_id,
-                            amount)
-
-                    if !resp.kind_of?(Hash)
-                        status = :bad_request
-                        fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
-                    elsif resp["success"] == true
-                        gift.fire_after_save_queue(@current_client)
-                        status = :ok
-                        success({msg: resp["response_text"]})
-                    else
-                        status = :ok
-                        fail_web({ err: resp["response_code"], msg: resp["response_text"]})
-                    end
-                else
-                    status = :bad_request
-                    fail_web({ err: "NOT_REDEEMABLE", msg: "Ticket Number not found"})
-                end
-            else  # r_sys 1
-
-                        # non-POS redepmtion
-
-                if amount != gift.value_cents
-                    gift.redeem_gift_for_amount(amount, merchant, server_inits)
-                else
-                    gift.redeem_gift(server_inits, loc_id)
-                end
-
-                gift.fire_after_save_queue(@current_client)
-                success gift.web_serialize
-            end
-        else
-            fail_message = if (gift.status == 'redeemed' && (gift.receiver_id == @current_user.id))
-                "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
-            else
-                "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
-            end
-            fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
-        end
-        respond(status)
-    end
-
     def redeem
         gift = Gift.includes(:merchant).find params[:id]
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
@@ -380,7 +274,7 @@ class Web::V3::GiftsController < MetalCorsController
             fail_message = if (gift.status == 'redeemed' && (gift.receiver_id == @current_user.id))
                 "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
             else
-                "Gift #{gift.token} at #{gift.provider_name} cannot be redeemed"
+                "Gift at #{gift.provider_name} cannot be redeemed"
             end
             fail_web({ err: "NOT_REDEEMABLE", msg: fail_message})
         end
@@ -407,7 +301,7 @@ class Web::V3::GiftsController < MetalCorsController
             @current_redemption = Redemption.current_pending_redemption(gift)
             if @current_redemption.nil?
                 resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
-                    client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
+                    client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/complete_redemption")
                 if resp['success']
                     @current_redemption = resp['redemption']
                 end
@@ -415,9 +309,9 @@ class Web::V3::GiftsController < MetalCorsController
                 # what if current pending R != amount or loc ?
             end
         end
-        if @current_redemption.present?
+        if @current_redemption.present? && @current_redemption.gift_id == params[:id].to_i
             gift ||= @current_redemption.gift
-            if (gift.receiver_id == @current_user.id)
+            if (gift.receiver_id == @current_user.id) && (gift.status != 'redeemed')
                 if @current_redemption.redeemable? && @current_redemption.gift_id == gift.id
 
                     ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
@@ -441,10 +335,14 @@ class Web::V3::GiftsController < MetalCorsController
                     fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed (B651) " })
                 end
             else
-                fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed (A134)" })
+                if (gift.receiver_id != @current_user.id)
+                    fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed (R897)" })
+                else
+                    fail_web({ err: "ALREADY_REDEEMED", msg: "Gift #{gift.token} at #{gift.provider_name} has already been redeemed" })
+                end
             end
         else
-            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} cannot be redeemed (R897)" })
+            fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app" })
         end
         respond(status)
     end
@@ -564,6 +462,8 @@ private
                 else
                     fail_web({ err: resp["response_code"], msg: resp["response_text"]})
                 end
+            elsif @current_redemption.status == 'pending'
+                fail_web({ err: "RESET_CONTENT", msg: "Redemption is processing, gift value will set to #{display_money(cents: @current_redemption.gift_next_value, ccy: @current_redemption.ccy)} after redemption approved"})
             else
                 fail_web({ err: "RESET_CONTENT", msg: 'Data is processing please refresh screen'})
             end
