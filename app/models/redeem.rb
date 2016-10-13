@@ -7,7 +7,7 @@ class Redeem
 		rds = gift.redemptions.where(status: ['pending','done'])
 		total_redeemed_or_held_amt = rds.map(&:amount).sum
 		gift.balance = gift.original_value - total_redeemed_or_held_amt
-		if rds.select{ |r| r.status == 'done'}.length > 0
+		if rds.select{ |r| r.status == 'pending'}.length > 0
 			gift.status == 'notified'
 		else
 			set_gift_current_status(gift)
