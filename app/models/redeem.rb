@@ -268,20 +268,19 @@ class Redeem
 		resp['redemption'] = redemption
 		resp['gift'] = gift
 		return resp
-	rescue => e
-		mg =  "RESCUE IN REDEEM.complete - 500 Internal - POS SUCCESS / DB FAIL redemption\n #{e.inspect}"
-		puts mg
-		mg = " #{redemption.id} failed  \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
-			  REDEEM-#{redemption.errors.messages.inspect}\n"
-		puts mg
-		# OpsTwilio.text_devs(msg: mg)
-		resp = pos_obj.response
-		resp['success'] = pos_obj.success?
-		resp['pos_obj'] = pos_obj
-		resp['redemption'] = redemption.reload
-		resp['gift'] = gift.reload
-		resp['system_errors'] = e.inspect
-		return resp
+	# rescue => e
+	# 	mg =  "RESCUE IN REDEEM.complete - 500 Internal - POS SUCCESS / DB FAIL redemption\n #{e.inspect}"
+	# 	puts mg
+	# 	mg = " #{redemption.id} failed  \nPOS-#{pos_obj.inspect}\n"
+	# 	puts mg
+	# 	# OpsTwilio.text_devs(msg: mg)
+	# 	resp = pos_obj.response
+	# 	resp['success'] = pos_obj.success?
+	# 	resp['pos_obj'] = pos_obj
+	# 	resp['redemption'] = redemption.reload
+	# 	resp['gift'] = gift.reload
+	# 	resp['system_errors'] = e.inspect
+	# 	return resp
 	end
 
 
