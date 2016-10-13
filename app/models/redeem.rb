@@ -108,15 +108,15 @@ class Redeem
 		hsh = { 'success' => true, 'pos_obj' => pos_obj, 'gift' => gift, 'redemption' => redemption }
 		puts hsh.inspect
 		return hsh
-	rescue => e
-		mg = "RESCUE IN REDEEM.appply - 500 Internal - FAIL APPLY redemption\n#{e.inspect} "
-		puts mg
-		mg =  " #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
-			  REDEEM-#{redemption.errors.messages.inspect}\n"
-		puts mg
-		# OpsTwilio.text_devs(msg: mg)
-		return { 'success' => false, "response_code" => "ERROR", 'system_errors' => e.inspect,
-				"response_text" =>  "System Error, unable to apply redemption. Pease try again later" }
+	# rescue => e
+	# 	mg = "RESCUE IN REDEEM.appply - 500 Internal - FAIL APPLY redemption\n#{e.inspect} "
+	# 	puts mg
+	# 	mg =  " #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
+	# 		  REDEEM-#{redemption.errors.messages.inspect}\n"
+	# 	puts mg
+	# 	# OpsTwilio.text_devs(msg: mg)
+	# 	return { 'success' => false, "response_code" => "ERROR", 'system_errors' => e.inspect,
+	# 			"response_text" =>  "System Error, unable to apply redemption. Pease try again later" }
 	end
 
 #   -------------
