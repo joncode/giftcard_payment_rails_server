@@ -98,7 +98,7 @@ class Redeem
 			if callback_params.present?
 				pos_obj, resp = zapper_callback_redemption( redemption, gift, callback_params )
 			else
-				pos_obj, resp = zapper_sync_redemption( redemption, gift, qrcode, amount )
+				pos_obj, resp = zapper_sync_redemption( redemption, gift, qr_code, amount )
 			end
 		else
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
@@ -109,8 +109,9 @@ class Redeem
 		puts hsh.inspect
 		return hsh
 	rescue => e
-		mg = "RESCUE IN REDEEM.appply - 500 Internal - FAIL APPLY redemption\n "
-		mg |=  " #{redemption.id} failed \n #{e.inspect} \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
+		mg = "RESCUE IN REDEEM.appply - 500 Internal - FAIL APPLY redemption\n#{e.inspect} "
+		puts mg
+		mg =  " #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
 			  REDEEM-#{redemption.errors.messages.inspect}\n"
 		puts mg
 		# OpsTwilio.text_devs(msg: mg)
@@ -232,9 +233,9 @@ class Redeem
 		resp['gift'] = gift
 		return resp
 	rescue => e
-		mg =  "RESCUE IN REDEEM.complete - 500 Internal - POS SUCCESS / DB FAIL redemption\n"
+		mg =  "RESCUE IN REDEEM.complete - 500 Internal - POS SUCCESS / DB FAIL redemption\n #{e.inspect}"
 		puts mg
-		mg = " #{redemption.id} failed \n #{e.inspect} \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
+		mg = " #{redemption.id} failed  \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
 			  REDEEM-#{redemption.errors.messages.inspect}\n"
 		puts mg
 		# OpsTwilio.text_devs(msg: mg)
@@ -265,8 +266,8 @@ class Redeem
 		return [ omnivore, resp ]
 	end
 
-	def self.zapper_sync_redemption(redemption, gift, qrcode, amount )
-		zapper_request = OpsZapper.make_request_hsh( gift, qrcode, amount, redemption.hex_id )
+	def self.zapper_sync_redemption(redemption, gift, qr_code, amount )
+		zapper_request = OpsZapper.make_request_hsh( gift, qr_code, amount, redemption.hex_id )
 		redemption.req_json = zapper_request
 		zapper_obj = OpsZapper.new( zapper_request )
 		resp = zapper_obj.redeem_gift
@@ -274,8 +275,8 @@ class Redeem
 	end
 
 	def self.zapper_callback_redemption(redemption, gift, callback_params )
-		zapper_request = r.request
-        zapper_request['redemption_id'] = r.hex_id
+		zapper_request = redemption.request
+        zapper_request['redemption_id'] = redemption.hex_id
         zapper_obj = OpsZapper.new( zapper_request )
         zapper_obj.apply_callback_response(callback_params)
         return [ zapper_obj, zapper_obj.response ]
