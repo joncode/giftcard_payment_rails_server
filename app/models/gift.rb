@@ -682,7 +682,8 @@ private
     end
 
     def reject_double_click
-        x = { merchant_id: self.merchant_id, value: self.value, receiver_name: self.receiver_name, cat: self.cat }
+        return true if self.cat < 300
+        x = { merchant_id: self.merchant_id, value: self.value, receiver_name: self.receiver_name, cat: 300 }
         puts x.inspect
         # if resp is false , save is stopped , therefore exists must be true
         resp = !Gift.where(x).where('created_at > ?', 1.minute.ago).exists?
