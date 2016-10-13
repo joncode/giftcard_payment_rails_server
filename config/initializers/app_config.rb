@@ -10,14 +10,6 @@ yaml_data = YAML::load(ERB.new(IO.read(File.join(Rails.root, 'config', 'applicat
 APP_CONFIG = ENV["RAILS_ENV"] == "development" ? HashWithIndifferentAccess.new(yaml_data)[:development] : HashWithIndifferentAccess.new(yaml_data)[:production]
 
 
-
-# ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
-
-def puts str=nil
-    @system_logger ||= ActiveSupport::Logger.new(STDOUT)
-    @system_logger.info(str.to_s)
-end
-
 def thread_on?
 
     if Rails.env.development?

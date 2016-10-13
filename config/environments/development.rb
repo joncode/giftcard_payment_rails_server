@@ -20,6 +20,7 @@ Drinkboard::Application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
+  # config.logger = ActiveSupport::Logger.new(STDOUT)
   config.log_level = :debug
 
 

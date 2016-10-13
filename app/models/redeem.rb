@@ -246,7 +246,7 @@ class Redeem
 		if redemption.save
 			set_gift_current_balance_and_status(gift)
 			if gift.save
-				puts "Save sucess"
+				puts "Redeem.complete Save success"
 				Resque.enqueue(GiftAfterSaveJob, gift.id) if pos_obj.success?
 			else
 				mg =  "REDEEM - 500 Internal - GIFT SAVED FAILED #{gift.errors.messages}"
