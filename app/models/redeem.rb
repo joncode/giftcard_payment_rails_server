@@ -104,7 +104,7 @@ class Redeem
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
 				"response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }
 		end
-		redemption.save
+		# redemption.save
 		hsh = { 'success' => true, 'pos_obj' => pos_obj, 'gift' => gift, 'redemption' => redemption }
 		puts hsh.inspect
 		return hsh
@@ -117,6 +117,42 @@ class Redeem
 		# OpsTwilio.text_devs(msg: mg)
 		return { 'success' => false, "response_code" => "ERROR", 'system_errors' => e.inspect,
 				"response_text" =>  "System Error, unable to apply redemption. Pease try again later" }
+	end
+
+#   -------------
+
+	def self.internal_redemption(redemption, gift, server)
+			# OpsInternalPos is defined at bottom of this file
+		v1_pos_obj = OpsInternalPos.new(redemption, gift, server)
+		redemption.request = v1_pos_obj.make_request_hsh
+		redemption.save
+		return [ v1_pos_obj, v1_pos_obj.response ]
+	end
+
+	def self.omnivore_redemption(redemption, gift, ticket_num, amount, merchant)
+		# gift.pos_redeem(ticket_num, pos_merchant_id, tender_type_id, merchant_id, amount)
+		# omnivore = Omnivore.init_with_gift( gift, ticket_num, amount, nil, merchant )
+		omnivore = Omnivore.init_with_redemption( redemption, ticket_num, merchant )
+		redemption.request = omnivore.make_request_hsh
+		redemption.save
+		resp = omnivore.redeem
+		return [ omnivore, resp ]
+	end
+
+	def self.zapper_sync_redemption(redemption, gift, qr_code, amount )
+		zapper_request = OpsZapper.make_request_hsh( gift, qr_code, amount, redemption.hex_id )
+		redemption.request = zapper_request
+		redemption.save
+		zapper_obj = OpsZapper.new( zapper_request )
+		resp = zapper_obj.redeem_gift
+		return [ zapper_obj, resp ]
+	end
+
+	def self.zapper_callback_redemption(redemption, gift, callback_params )
+		zapper_request = redemption.request
+        zapper_obj = OpsZapper.new( zapper_request )
+        zapper_obj.apply_callback_response(callback_params)
+        return [ zapper_obj, zapper_obj.response ]
 	end
 
 
@@ -246,40 +282,6 @@ class Redeem
 		resp['gift'] = gift.reload
 		resp['system_errors'] = e.inspect
 		return resp
-	end
-
-#   -------------
-
-	def self.internal_redemption(redemption, gift, server)
-			# OpsInternalPos is defined at bottom of this file
-		v1_pos_obj = OpsInternalPos.new(redemption, gift, server)
-		redemption.req_json = v1_pos_obj.make_request_hsh
-		return [ v1_pos_obj, v1_pos_obj.response ]
-	end
-
-	def self.omnivore_redemption(redemption, gift, ticket_num, amount, merchant)
-		# gift.pos_redeem(ticket_num, pos_merchant_id, tender_type_id, merchant_id, amount)
-		# omnivore = Omnivore.init_with_gift( gift, ticket_num, amount, nil, merchant )
-		omnivore = Omnivore.init_with_redemption( redemption, ticket_num, merchant )
-		redemption.req_json = omnivore.make_request_hsh
-		resp = omnivore.redeem
-		return [ omnivore, resp ]
-	end
-
-	def self.zapper_sync_redemption(redemption, gift, qr_code, amount )
-		zapper_request = OpsZapper.make_request_hsh( gift, qr_code, amount, redemption.hex_id )
-		redemption.req_json = zapper_request
-		zapper_obj = OpsZapper.new( zapper_request )
-		resp = zapper_obj.redeem_gift
-		return [ zapper_obj, resp ]
-	end
-
-	def self.zapper_callback_redemption(redemption, gift, callback_params )
-		zapper_request = redemption.request
-        zapper_request['redemption_id'] = redemption.hex_id
-        zapper_obj = OpsZapper.new( zapper_request )
-        zapper_obj.apply_callback_response(callback_params)
-        return [ zapper_obj, zapper_obj.response ]
 	end
 
 
