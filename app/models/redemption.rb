@@ -102,6 +102,17 @@ class Redemption < ActiveRecord::Base
         self.req_json
     end
 
+#   -------------
+
+	def success_hsh
+		{
+            previous_gift_balance: self.gift_prev_value,
+            amount_applied: self.amount,
+            remaining_gift_balance: self.gift_next_value,
+            msg: "Give code #{self.token} to your server"
+		}
+	end
+
     def generic_response
     	if ['pending', 'done'].include?(self.status)
 			{ "response_code" => apply_code, "response_text"=>{"amount_applied" => self.amount, 'previous_gift_balance' => self.gift_prev_value,

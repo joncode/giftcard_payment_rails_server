@@ -2,6 +2,28 @@ class Redeem
 	extend MoneyHelper
 
 
+
+	def self.set_gift_current_balance(gift)
+		rds = gift.redemptions.where(status: ['pending','done'])
+		total_redeemed_or_held_amt = rds.map(&:amount).sum
+		gift.balance = gift.original_value - total_redeemed_or_held_amt
+		set_gift_current_status(gift)
+	end
+
+	def self.set_gift_current_status(gift)
+		return if ['incomplete', 'open', 'notified', 'redeemeed'].include?(gift.status)
+		if gift.balance == 0 && gift.redeemed_at.present? && gift.receiver_id
+			gift.status == 'redeemed'
+		elsif gift.notified_at.present? && gift.receiver_id
+			gift.status == 'notified'
+		elsif gift.receiver_id
+			gift.status == 'open'
+		else
+			gift.status == 'incomplete'
+		end
+	end
+
+
 #   -------------
 
 	def self.apply(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
@@ -120,6 +142,8 @@ class Redeem
 		puts "REDEEM.complete RequestHsh\n"
 		request_hsh = { pos_obj: pos_obj.inspect, gift_id: gift.id, redemption_id: redemption.id, client_id: client_id }
 		puts request_hsh.inspect
+		puts redemption.inspect
+		puts gift.inspect
 
 
 		#   -------------
@@ -135,28 +159,20 @@ class Redeem
 					OpsTwilio.text_devs(msg: "POS Redemption HIGHER than redemption amount #{redemption.id}")
 				end
 				redemption.amount = pos_obj.applied_value
+
 				redemption.gift_next_value = (redemption.gift_prev_value - redemption.amount)
 				if redemption.gift_next_value < 0
 					redemption.gift_next_value = 0
 					OpsTwilio.text_devs(msg: "Gift has been OVER-REDEEEMED #{redemption.id}")
 				end
+			end
 
-					# has the gift balance been decremented due to redemption ?
-				if (gift.balance == redemption.gift_prev_value)
-					gift.balance -= pos_obj.applied_value
-				end
-			end
-			if (gift.balance <= 0)
-				OpsTwilio.text_devs(msg: "Gift has been OVER-REDEEEMED #{redemption.id}") if (gift.balance < 0)
-				gift.balance = 0
-				gift.status = 'redeemed'
-			end
 			if pos_obj.response['response_text'].kind_of?(Hash) && !pos_obj.response['response_text'][:msg].blank?
 				new_detail = pos_obj.response['response_text'][:msg]
 			else
 				new_detail = redemption.msg
 			end
-			gift.detail = new_detail + gift.detail.to_s
+			gift.detail = new_detail + '\n' + gift.detail.to_s
 
 		else
 			puts "FAILURE POS_OBJECT"
@@ -164,15 +180,11 @@ class Redeem
 			# must remove the redemption and allow for a new one
 				# must release the hold on the gift card value
 			# must set the status of the redemption to something reasonable
-
-				# has the gift balance been decremented due to redemption ?
-			if (gift.balance == redemption.gift_next_value)
-				gift.balance = gift.balance + (redemption.gift_prev_value - redemption.gift_next_value)
-			end
 			redemption.amount = 0
 			redemption.status = 'failed'
 
 		end
+
 		redemption.client_id = client_id if redemption.client_id.nil?
 		redemption.ticket_id = pos_obj.ticket_id
 		r_hsh = { "response_code" => pos_obj.response['response_code'], "success" => pos_obj.success?,
@@ -185,18 +197,25 @@ class Redeem
 
 		puts "Saving redemption & gift resp = #{resp.inspect}"
 
-		if redemption.save && gift.save
-			puts "Save sucess"
-			Resque.enqueue(GiftAfterSaveJob, gift.id) if pos_obj.success?
+		if redemption.save
+			set_gift_current_balance(gift)
+			set_gift_current_status(gift)
+			if gift.save
+				puts "Save sucess"
+				Resque.enqueue(GiftAfterSaveJob, gift.id) if pos_obj.success?
+			else
+				mg =  "REDEEM - 500 Internal - GIFT SAVED FAILED #{gift.errors.messages}"
+				puts mg
+				resp['system_errors'] = gift.errors.full_messages
+			end
 		else
 			# gift / redemption didnt save , but charge went thru
 			mg =  "REDEEM - 500 Internal - POS SUCCESS / DB FAIL redemption"
 			puts mg
-			mg = " #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
-			  REDEEM-#{redemption.errors.messages.inspect}\n"
+			mg = " #{redemption.id} failed \nPOS-#{pos_obj.inspect}\nREDEEM-#{redemption.errors.messages.inspect}\n"
 			puts mg
 			# OpsTwilio.text_devs(msg: mg)
-			resp['system_errors'] = gift.errors.full_messages
+			resp['system_errors'] = redemption.errors.full_messages
 			# what to do here  ??
 				# pos has returned and processed a value , but our system is not storing due likely to bug
 				# how to return to customer without issue , while getting bug fixed and data sorted immediately
@@ -320,7 +339,10 @@ class Redeem
 		if already_have_one.present?
 			if sync
 				if already_have_one.merchant_id == gift.merchant_id
-					already_have_one.update(status: 'cancel')
+					already_have_one.status = 'cancel'
+					already_have_one.response =  { 'response_code' => 'SYSTEM_CANCEL',
+						'response_text' => "Removed for next redemption via #{api}" }
+					already_have_one.save
 				end
 			else
 				return response(already_have_one, gift)
@@ -334,8 +356,8 @@ class Redeem
 			return { 'success' => false, "response_code" => 'INVALID_INPUT',
 				"response_text" => "Amount #{amount} is not denominated in #{CCY[gift.ccy]['subunit'].pluralize(2)}" }
 		elsif amount == gift.balance
-			gift_prev_value = gift.balance
 			amount = gift.balance
+			gift_prev_value = gift.balance
 			gift_next_value = 0
 		elsif amount < gift.balance
 			amount = amount
@@ -377,7 +399,7 @@ class Redeem
 
 			# save the data
 		if redemption.save
-			puts "Redemption SAVED #{redemption.id}"
+			puts "Redemption SAVED #{redemption.inspect}"
 			return response(redemption, gift)
 		else
 			puts redemption.inspect
@@ -389,29 +411,20 @@ class Redeem
 #   -------------
 
 	def self.response redemption, gift
-		puts redemption.inspect
 		gift.status = 'notified'
 		gift.notified_at = Time.now.utc if gift.notified_at.nil?
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
-		gift.balance = redemption.gift_next_value
-		redemption.start_res = { 'response_code' => "PENDING", "response_text" => success_hsh(redemption) }
+		set_gift_current_balance(gift)
+		redemption.start_res = { 'response_code' => "PENDING", "response_text" => redemption.success_hsh }
 		gift.redemptions << redemption
 		if gift.save
 			Resque.enqueue(GiftAfterSaveJob, gift.id)
 		end
 		return { 'success' => true, 'redemption' => redemption, 'gift' => gift, 'response_code' => "PENDING",
-			"response_text" => success_hsh(redemption), 'token' => redemption.token }
+			"response_text" => redemption.success_hsh, 'token' => redemption.token }
 	end
 
-	def self.success_hsh redemption
-		{
-            previous_gift_balance: redemption.gift_prev_value,
-            amount_applied: redemption.amount,
-            remaining_gift_balance: redemption.gift_next_value,
-            msg: "Give code #{redemption.token} to your server"
-		}
-	end
 
 end
 
