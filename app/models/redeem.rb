@@ -16,7 +16,7 @@ class Redeem
 
 	def self.set_gift_current_status(gift)
 		return if ['incomplete', 'open', 'notified', 'redeemeed'].include?(gift.status)
-		if gift.balance == 0 && gift.redeemed_at.present? && gift.receiver_id
+		if gift.balance == 0
 			gift.status == 'redeemed'
 		elsif gift.notified_at.present? && gift.receiver_id
 			gift.status == 'notified'
