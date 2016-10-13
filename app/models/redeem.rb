@@ -62,7 +62,7 @@ class Redeem
 		end
 		puts "REDEEM.apply RequestHsh\n"
 		request_hsh = { gift_id: gift.id, redemption_id: redemption.id, qr_code: qr_code,
-			ticket_num: ticket_num, server: server, client_id: client_id }
+			ticket_num: ticket_num, server: server, client_id: client_id, callback: callback_params }
 		puts request_hsh.inspect
 
 		merchant = redemption.merchant
@@ -183,11 +183,13 @@ class Redeem
 		if client_id.kind_of?(Client)
 			client_id = client_id.id
 		end
+		puts "-------------------------------------"
 		puts "REDEEM.complete RequestHsh\n"
 		request_hsh = { pos_obj: pos_obj.inspect, gift_id: gift.id, redemption_id: redemption.id, client_id: client_id }
 		puts request_hsh.inspect
 		puts redemption.inspect
 		puts gift.inspect
+		puts "-------------------------------------"
 
 
 		#   -------------
@@ -231,9 +233,9 @@ class Redeem
 
 		redemption.client_id = client_id if redemption.client_id.nil?
 		redemption.ticket_id = pos_obj.ticket_id
-		r_hsh = { "response_code" => pos_obj.response['response_code'], "success" => pos_obj.success?,
-			 "response_text" => pos_obj.response['response_text'] }
-		redemption.resp_json = r_hsh
+		r_hsh = { "response_code" => pos_obj.response['response_code'], "success" => pos_obj.response['success'],
+			 "response_text" => pos_obj.response['response_text'], 'api' => pos_obj.response['api'] }
+		redemption.response = r_hsh
 
 		resp = pos_obj.response
 		resp['success'] = pos_obj.success?

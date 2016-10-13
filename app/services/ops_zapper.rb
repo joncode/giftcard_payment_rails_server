@@ -265,7 +265,7 @@ class OpsZapper
 		@err_desc = resp["ErrorDescription"]
 
 		pay_stat = resp['PaymentStatusId'].to_i
-		@check_value = resp['Amount'].to_f * 100
+		@check_value = (resp['Amount'].to_f * 100).to_i
 		if pay_stat != 1
 			@code = 402
 			@applied_value = 0

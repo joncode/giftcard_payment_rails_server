@@ -214,7 +214,7 @@ class Omnivore
 		else
 			response_data = r_text
 		end
-		{ "response_code" => r_code, "response_text" => response_data }
+		{ "response_code" => r_code, "response_text" => response_data, 'success' => success?, 'api' => @json }
 	end
 
 	def success_hsh
@@ -257,9 +257,9 @@ class Omnivore
 			    payload,
 			    {:content_type => :json, :'Api-Key' => POSITRONICS_API_KEY }
 			)
-			r = JSON.parse(response)
+			@json = JSON.parse(response)
 			# puts r.inspect
-			r
+			@json
 		rescue => e
 			puts "\n\n 232 POSITRONICS ERROR #{e.inspect}"
 			e
