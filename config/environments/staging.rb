@@ -42,7 +42,7 @@ Drinkboard::Application.configure do
 
 
   # Prepend all log lines with the following tags
-  config.log_tags = [ :uuid ]
+  config.log_tags = [ :uuid, :request_id, :remote_ip]
 
   # Use a different logger for distributed setups
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
