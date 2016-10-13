@@ -346,7 +346,7 @@ class Redeem
 			if sync
 				if already_have_one.merchant_id == gift.merchant_id
 					already_have_one.status = 'cancel'
-					already_have_one.response =  { 'response_code' => 'SYSTEM_CANCEL',
+					already_have_one.resp_json =  { 'response_code' => 'SYSTEM_CANCEL',
 						'response_text' => "Removed for next redemption via #{api}" }
 					already_have_one.save
 				end

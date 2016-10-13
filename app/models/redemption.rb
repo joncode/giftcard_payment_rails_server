@@ -94,12 +94,22 @@ class Redemption < ActiveRecord::Base
 		cents_to_words(self.amount, currency)
 	end
 
+#   -------------
+
     def response
         self.resp_json
     end
 
+    def response= obj
+    	self.resp_json = obj
+    end
+
     def request
         self.req_json
+    end
+
+    def request= obj
+    	self.req_json = obj
     end
 
 #   -------------
