@@ -3,11 +3,15 @@ class Redeem
 
 
 
-	def self.set_gift_current_balance(gift)
+	def self.set_gift_current_balance_and_status(gift)
 		rds = gift.redemptions.where(status: ['pending','done'])
 		total_redeemed_or_held_amt = rds.map(&:amount).sum
 		gift.balance = gift.original_value - total_redeemed_or_held_amt
-		set_gift_current_status(gift)
+		if rds.select{ |r| r.status == 'done'}.length > 0
+			gift.status == 'notified'
+		else
+			set_gift_current_status(gift)
+		end
 	end
 
 	def self.set_gift_current_status(gift)
@@ -198,8 +202,7 @@ class Redeem
 		puts "Saving redemption & gift resp = #{resp.inspect}"
 
 		if redemption.save
-			set_gift_current_balance(gift)
-			set_gift_current_status(gift)
+			set_gift_current_balance_and_status(gift)
 			if gift.save
 				puts "Save sucess"
 				Resque.enqueue(GiftAfterSaveJob, gift.id) if pos_obj.success?
@@ -415,7 +418,7 @@ class Redeem
 		gift.notified_at = Time.now.utc if gift.notified_at.nil?
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
-		set_gift_current_balance(gift)
+		set_gift_current_balance_and_status(gift)
 		redemption.start_res = { 'response_code' => "PENDING", "response_text" => redemption.success_hsh }
 		gift.redemptions << redemption
 		if gift.save
