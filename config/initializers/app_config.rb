@@ -13,9 +13,9 @@ APP_CONFIG = ENV["RAILS_ENV"] == "development" ? HashWithIndifferentAccess.new(y
 
 # ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
 
-def puts str
+def puts str=nil
     @system_logger ||= ActiveSupport::Logger.new(STDOUT)
-    @system_logger.info(str)
+    @system_logger.info(str.to_s)
 end
 
 def thread_on?
