@@ -7,7 +7,7 @@ class Redeem
 		rds = gift.redemptions.where(status: ['pending','done'])
 		total_redeemed_or_held_amt = rds.map(&:amount).sum
 		gift.balance = gift.original_value - total_redeemed_or_held_amt
-		if rds.select{ |r| r.status == 'pending'}.length > 0
+		if gift.balance == 0 && rds.select{ |r| r.status == 'pending'}.length > 0
 			gift.status == 'notified'
 		else
 			set_gift_current_status(gift)
@@ -15,7 +15,7 @@ class Redeem
 	end
 
 	def self.set_gift_current_status(gift)
-		return if ['incomplete', 'open', 'notified', 'redeemeed'].include?(gift.status)
+		return unless ['incomplete', 'open', 'notified', 'redeemeed'].include?(gift.status)
 		if gift.balance == 0
 			gift.status == 'redeemed'
 		elsif gift.notified_at.present? && gift.receiver_id

@@ -5,10 +5,9 @@ module GiftLifecycle
     def read(client_id)
         if notifiable?
             send_open_push = (self.status == 'open')
-            if self.status == 'open' || self.notified_at.nil? || self.rec_client_id.nil?
+            self.rec_client_id = client_id if self.rec_client_id.nil?
+            if self.status == 'open' || self.notified_at.nil?
                 self.status = 'notified'
-                self.notified_at = DateTime.now.utc
-                self.rec_client_id = client_id
             end
             if save
                 Relay.send_push_thank_you(self) if send_open_push
