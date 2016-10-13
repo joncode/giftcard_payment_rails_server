@@ -318,7 +318,13 @@ class Redeem
 		redeems = Redemption.get_all_live_redemptions(gift)
 		already_have_one = Redemption.current_pending_redemption(gift, redeems)
 		if already_have_one.present?
-			return response(redeem, gift)
+			if sync
+				if already_have_one.merchant_id == gift.merchant_id
+					already_have_one.update(status: 'cancel')
+				end
+			else
+				return response(already_have_one, gift)
+			end
 		end
 
 		  # -------------
