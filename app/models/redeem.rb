@@ -90,6 +90,10 @@ class Redeem
 				"response_text" =>  "System Error, unable to apply redemption. Pease try again later" }
 	end
 
+
+#   -------------
+
+
 	def self.complete(redemption: nil, gift: nil, pos_obj: nil, client_id: nil)
 		puts "Redeem.complete"
 
@@ -120,9 +124,9 @@ class Redeem
 
 		#   -------------
 
-		redemption.client_id = client_id if redemption.client_id.nil?
 			# update the redemption and the gift
 		if pos_obj.success?
+			puts "SUCCESS POS_OBJECT"
 			# set the actual amount, gift_next_value, gift/redemption statuses, redemption.req_json , redemption.resp_json
 			redemption.status = 'done'
 			if pos_obj.applied_value != redemption.amount
@@ -136,41 +140,59 @@ class Redeem
 					redemption.gift_next_value = 0
 					OpsTwilio.text_devs(msg: "Gift has been OVER-REDEEEMED #{redemption.id}")
 				end
+
+					# has the gift balance been decremented due to redemption ?
+				if (gift.balance == redemption.gift_prev_value)
+					gift.balance -= pos_obj.applied_value
+				end
 			end
-			if (redemption.gift_next_value <= 0)
+			if (gift.balance <= 0)
+				OpsTwilio.text_devs(msg: "Gift has been OVER-REDEEEMED #{redemption.id}") if (gift.balance < 0)
+				gift.balance = 0
 				gift.status = 'redeemed'
 			end
-			gift.detail = redemption.msg + '\n' + gift.detail.to_s
+			if pos_obj.response['response_text'].kind_of?(Hash) && !pos_obj.response['response_text'][:msg].blank?
+				new_detail = pos_obj.response['response_text'][:msg]
+			else
+				new_detail = redemption.msg
+			end
+			gift.detail = new_detail + gift.detail.to_s
 
 		else
+			puts "FAILURE POS_OBJECT"
 			# why is there a failure
 			# must remove the redemption and allow for a new one
 				# must release the hold on the gift card value
 			# must set the status of the redemption to something reasonable
 
+				# has the gift balance been decremented due to redemption ?
+			if (gift.balance == redemption.gift_next_value)
+				gift.balance = gift.balance + (redemption.gift_prev_value - redemption.gift_next_value)
+			end
 			redemption.amount = 0
 			redemption.status = 'failed'
-			gift.balance = gift.balance + (redemption.gift_prev_value - redemption.gift_next_value)
-			redemption.gift_next_value = redemption.gift_prev_value
 
 		end
+		redemption.client_id = client_id if redemption.client_id.nil?
+		redemption.ticket_id = pos_obj.ticket_id
+		r_hsh = { "response_code" => pos_obj.response['response_code'], "success" => pos_obj.success?,
+			 "response_text" => pos_obj.response['response_text'] }
+		redemption.resp_json = r_hsh
 
 		resp = pos_obj.response
 		resp['success'] = pos_obj.success?
 		resp['pos_obj'] = pos_obj
 
-		r_hsh = { "response_code" => pos_obj.response['response_code'], "success" => pos_obj.success?,
-			 "response_text" => pos_obj.response['response_text'] }
-		redemption.resp_json = r_hsh
-		redemption.ticket_id = pos_obj.ticket_id
+		puts "Saving redemption & gift resp = #{resp.inspect}"
 
-		# gift.redemptions << redemption
-		if gift.save
+		if redemption.save && gift.save
+			puts "Save sucess"
 			Resque.enqueue(GiftAfterSaveJob, gift.id) if pos_obj.success?
 		else
 			# gift / redemption didnt save , but charge went thru
-			mg =  "REDEEM - 500 Internal - POS SUCCESS / DB FAIL redemption\
-			 #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
+			mg =  "REDEEM - 500 Internal - POS SUCCESS / DB FAIL redemption"
+			puts mg
+			mg = " #{redemption.id} failed \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
 			  REDEEM-#{redemption.errors.messages.inspect}\n"
 			puts mg
 			# OpsTwilio.text_devs(msg: mg)
@@ -186,7 +208,8 @@ class Redeem
 		return resp
 	rescue => e
 		mg =  "RESCUE IN REDEEM.complete - 500 Internal - POS SUCCESS / DB FAIL redemption\n"
-		mg += " #{redemption.id} failed \n #{e.inspect} \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
+		puts mg
+		mg = " #{redemption.id} failed \n #{e.inspect} \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
 			  REDEEM-#{redemption.errors.messages.inspect}\n"
 		puts mg
 		# OpsTwilio.text_devs(msg: mg)
@@ -374,8 +397,6 @@ class Redeem
 		return { 'success' => true, 'redemption' => redemption, 'gift' => gift, 'response_code' => "PENDING",
 			"response_text" => success_hsh(redemption), 'token' => redemption.token }
 	end
-
-#   -------------
 
 	def self.success_hsh redemption
 		{
