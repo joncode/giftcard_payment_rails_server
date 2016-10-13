@@ -98,7 +98,7 @@ class Redeem
 			if callback_params.present?
 				pos_obj, resp = zapper_callback_redemption( redemption, gift, callback_params )
 			else
-				pos_obj, resp = zapper_sync_redemption( redemption, gift, qr_code, amount )
+				pos_obj, resp = zapper_sync_redemption( redemption, gift, qr_code, redemption.amount )
 			end
 		else
 			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
