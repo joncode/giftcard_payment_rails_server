@@ -53,6 +53,7 @@ class Gift < ActiveRecord::Base
     before_create :set_pay_stat    # must be last before_create
     before_create :set_status    # must be last before_create
 
+    before_save   :set_notified_at
     before_save   :set_redeemed_at
 
     after_create :set_client_content
@@ -660,8 +661,14 @@ private
         end
     end
 
+    def set_notified_at
+        if self.status == 'notified' && self.notified_at.nil?
+            self.notified_at = Time.now.utc
+        end
+    end
+
     def set_redeemed_at
-        if ['cancel', 'expired', 'regifted', 'redeemed'].include?(status) && self.redeemed_at.nil?
+        if ['cancel', 'expired', 'regifted', 'redeemed'].include?(self.status) && self.redeemed_at.nil?
             self.redeemed_at = Time.now.utc
         end
     end

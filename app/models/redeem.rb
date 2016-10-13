@@ -414,8 +414,6 @@ class Redeem
 #   -------------
 
 	def self.response redemption, gift
-		gift.status = 'notified'
-		gift.notified_at = Time.now.utc if gift.notified_at.nil?
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
 		set_gift_current_balance_and_status(gift)
