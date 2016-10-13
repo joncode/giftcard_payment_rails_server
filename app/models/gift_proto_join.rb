@@ -38,7 +38,7 @@ class GiftProtoJoin < Gift
 			            outside_gift = gift
 			        else
 			        	# proto is bad
-			        	puts "500 Internal - BAD PROTO GIFT #{gift.inspect}"
+			        	puts "500 Internal - BAD PROTO GIFT #{gift.inspect} - #{gift.errors.messages}"
 			        end
 			    end
     		end
