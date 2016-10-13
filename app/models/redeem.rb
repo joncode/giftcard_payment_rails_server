@@ -31,7 +31,7 @@ class Redeem
 #   -------------
 
 	def self.apply(gift: nil, redemption: nil, qr_code: nil, ticket_num: nil, server: nil, client_id: nil, callback_params: nil)
-		puts "Redeem.apply"
+		puts "REDEEM.apply"
 
 			# set data and reject invalid submissions
 		if !redemption.kind_of?(Redemption)
@@ -105,7 +105,9 @@ class Redeem
 				"response_text" =>  "Unsupported redemption type (#{redemption.r_sys})" }
 		end
 		redemption.save
-		return { 'success' => true, 'pos_obj' => pos_obj, 'gift' => gift, 'redemption' => redemption }
+		hsh = { 'success' => true, 'pos_obj' => pos_obj, 'gift' => gift, 'redemption' => redemption }
+		puts hsh.inspect
+		return hsh
 	rescue => e
 		mg = "RESCUE IN REDEEM.appply - 500 Internal - FAIL APPLY redemption\n "
 		mg |=  " #{redemption.id} failed \n #{e.inspect} \nPOS-#{pos_obj.inspect}\n Gift-#{gift.errors.messages.inspect}\n\
@@ -122,6 +124,7 @@ class Redeem
 
 	def self.complete(redemption: nil, gift: nil, pos_obj: nil, client_id: nil)
 		puts "Redeem.complete"
+		puts pos_obj.inspect
 
 			# set data and reject invalid submissions
 		if pos_obj.nil? || !pos_obj.respond_to?(:applied_value)
@@ -176,7 +179,7 @@ class Redeem
 			else
 				new_detail = redemption.msg
 			end
-			gift.detail = new_detail + '\n' + gift.detail.to_s
+			gift.detail = new_detail + ' \n ' + gift.detail.to_s
 
 		else
 			puts "FAILURE POS_OBJECT"
