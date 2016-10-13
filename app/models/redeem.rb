@@ -367,8 +367,9 @@ class Redeem
 			gift_prev_value = gift.balance
 			gift_next_value = (gift.balance - amount)
 		elsif amount > gift.balance
+			puts "Amount == #{amount} / balance == #{gift.balance}"
 			return { 'success' => false, "response_code" =>  'INVALID_INPUT',
-				"response_text" => "The amount you entered is more than the current balance on the gift of #{display_money(cents: gift.balance, ccy: gift.ccy)}" }
+				"response_text" => "The amount (#{display_money(cents: amount, ccy: gift.ccy)}) received is more than the current value on the gift (#{display_money(cents: gift.balance, ccy: gift.ccy)})" }
 		end
 
 		  # -------------
