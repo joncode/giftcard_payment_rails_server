@@ -252,7 +252,7 @@ class Web::V3::GiftsController < MetalCorsController
             if amount > gift.balance  # amount value
                 status = :bad_request
                 fail_web({ err: "NOT_REDEEMABLE",
-                    msg: "Redeem amount of #{display_money(cents: amount, ccy: gift.ccy)} to high. \
+                    msg: "Redeem amount of #{display_money(cents: amount, ccy: gift.ccy)} too high. \
                         Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
 
             elsif merchant.nil?
@@ -342,61 +342,40 @@ class Web::V3::GiftsController < MetalCorsController
                 ticket_num = redeem_params["ticket_num"]
                 qrcode = redeem_params["qrcode"]
                 loc_id = (redeem_params["loc_id"].to_i > 0) ? redeem_params["loc_id"].to_i : nil
-                if (loc_id.present? && loc_id != gift.merchant_id)
-                    merchant = Merchant.find(loc_id)
-                end
-            end
-            gift.rec_client_id = @current_client.id if gift.rec_client_id.nil?
-            merchant = gift.merchant if merchant.nil?
-            if amount.nil?
-                amount = gift.balance
-            else
-                amount = amount.to_i
             end
 
-            if amount > gift.original_value  # amount value
-                status = :bad_request
-                fail_web({ err: "NOT_REDEEMABLE",
-                    msg: "Redeem amount of #{display_money(cents: amount, ccy: gift.ccy)} to high. \
-Only #{display_money(cents: gift.balance, ccy: gift.ccy)} remains on gift.}"})
+            puts "gifts controller getting current_redemption"
+            resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
+                client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
+            if resp['success']
+                @current_redemption = resp['redemption']
+            end
 
-            elsif merchant.nil?
-                status = :bad_request
-                fail_web({ err: "NOT_REDEEMABLE",
-                    msg: "Merchant is not active currently.  Please contact support@itson.me"})
-            else
-                puts "gifts controller getting current_redemption"
-                resp = Redeem.start(sync: true, gift: gift, amount: amount, loc_id: loc_id,
-                    client_id: @current_client.id, api: "web/v3/gifts/#{gift.id}/redeem")
-                if resp['success']
-                    @current_redemption = resp['redemption']
-                end
-
-                if @current_redemption.present?
-                    ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
-                        ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
-                    resp = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'],
-                        pos_obj: ra['pos_obj'], client_id: @current_client.id)
-                    if !resp.kind_of?(Hash)
-                        status = :bad_request
-                        fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
-                    elsif resp["success"] == true
-                        gift.fire_after_save_queue(@current_client)
-                        status = :ok
-                        if @current_redemption.r_sys == 1
-                            success gift.web_serialize
-                        else
-                            success({msg: resp["response_text"]})
-                        end
+            if @current_redemption.present?
+                ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
+                    ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
+                resp = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'],
+                    pos_obj: ra['pos_obj'], client_id: @current_client.id)
+                if !resp.kind_of?(Hash)
+                    status = :bad_request
+                    fail_web({ err: "NOT_REDEEMABLE", msg: "Merchant is not active currently.  Please contact support@itson.me"})
+                elsif resp["success"] == true
+                    gift.fire_after_save_queue(@current_client)
+                    status = :ok
+                    if @current_redemption.r_sys == 1
+                        success gift.web_serialize
                     else
-                        status = :ok
-                        fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                        success({msg: resp["response_text"]})
                     end
                 else
                     status = :ok
                     fail_web({ err: resp["response_code"], msg: resp["response_text"]})
                 end
+            else
+                status = :ok
+                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
             end
+
         else
             fail_message = if (gift.status == 'redeemed' && (gift.receiver_id == @current_user.id))
                 "Gift #{gift.token} at #{gift.provider_name} has already been redeemed"
