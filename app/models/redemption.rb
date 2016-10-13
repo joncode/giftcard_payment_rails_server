@@ -30,18 +30,13 @@ class Redemption < ActiveRecord::Base
 
 #   -------------
 
-	if Rails.env.staging?
-	    # validates_with RedemptionTotalValueValidator
-	end
-
-#   -------------
-
     def stale?
     	return true if self.new_token_at.nil?
     	stale_true = (self.new_token_at < reset_time)
     	if stale_true && status == 'pending'
     			# stale tokens should not be on pending redemptions
-    		update_column :status, 'expired'
+    		remove_pending 'expired', { 'response_code' => 'SYSTEM_EXPIRE',
+						'response_text' => "Token #{elf.token} stale #{DateTime.now.utc} - #{self.new_token_at}" }
     		return true
     	end
     	return (stale_true && self.status != 'pending')
@@ -57,6 +52,18 @@ class Redemption < ActiveRecord::Base
 			status == 'pending' && fresh?
 		else
 			status == 'pending'
+		end
+	end
+
+	def remove_pending cancel_type, response
+		return nil if ['expired', 'cancel', 'failed'].include?(cancel_type)
+		self.status = cancel_type
+		self.response = response
+		save
+		gift = self.gift
+		if gift
+			Redeem.set_gift_current_balance_and_status(gift)
+			gift.save
 		end
 	end
 
