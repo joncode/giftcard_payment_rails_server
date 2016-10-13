@@ -4,7 +4,7 @@ class Redeem
 
 
 	def self.set_gift_current_balance_and_status(gift)
-		rds = gift.redemptions.where(status: ['pending','done'])
+		rds = Redemption.get_all_live_redemptions(gift)
 		total_redeemed_or_held_amt = rds.map(&:amount).sum
 		gift.balance = gift.original_value - total_redeemed_or_held_amt
 		if gift.balance == 0 && rds.select{ |r| r.status == 'pending'}.length > 0
@@ -359,13 +359,17 @@ class Redeem
 
 		  # -------------
 
-		amount = gift.balance if amount.nil?
+		set_gift_current_balance_and_status(gift)
+		if amount.nil?
+			amount = gift.balance
+		end
+
 		if !amount.kind_of?(Integer)
 			return { 'success' => false, "response_code" => 'INVALID_INPUT',
 				"response_text" => "Amount #{amount} is not denominated in #{CCY[gift.ccy]['subunit'].pluralize(2)}" }
 		elsif amount == 0
 			return { 'success' => false, "response_code" => 'INVALID_INPUT',
-				"response_text" => "Amount of 0.0 captured is not a redeemable value" }
+				"response_text" => "Gift Amount (#{display_money(cents: amount, ccy: gift.ccy)}) is not a redeemable value" }
 		elsif amount == gift.balance
 			amount = gift.balance
 			gift_prev_value = gift.balance
