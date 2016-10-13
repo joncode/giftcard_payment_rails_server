@@ -10,14 +10,33 @@ yaml_data = YAML::load(ERB.new(IO.read(File.join(Rails.root, 'config', 'applicat
 APP_CONFIG = ENV["RAILS_ENV"] == "development" ? HashWithIndifferentAccess.new(yaml_data)[:development] : HashWithIndifferentAccess.new(yaml_data)[:production]
 
 
-class Array
 
-    def serialize_objs api=nil
-        serialize_type = api ? "#{api}_serialize" : "serialize"
-        map { |o| o.send serialize_type }
+# ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
+
+def puts str
+    @system_logger ||= ActiveSupport::Logger.new(STDOUT)
+    @system_logger.info(str)
+end
+
+def thread_on?
+
+    if Rails.env.development?
+        false
+    else
+        true
     end
 
 end
+
+class Object
+
+    def mets
+        (self.methods - Object.methods).sort_by { |m| m }
+    end
+
+end
+
+
 
 class ActiveSupport::TimeWithZone
 
@@ -38,9 +57,15 @@ def lcon
     puts "loading rails console scripts [lcon]"
 end
 
-# if !Rails.env.production?
-#     ActiveRecord::Base.logger = Logger.new(STDOUT)
-# end
+class Array
+
+    def serialize_objs api=nil
+        serialize_type = api ? "#{api}_serialize" : "serialize"
+        map { |o| o.send serialize_type }
+    end
+
+end
+
 
 if Rails.env.test?
     ActiveRecord::Base.logger = nil #Logger.new(STDOUT)
@@ -55,25 +80,6 @@ def log_bars text
     puts "===================================================="
 end
 
-
-
-def thread_on?
-
-    if Rails.env.development?
-        false
-    else
-        true
-    end
-
-end
-
-class Object
-
-    def mets
-        (self.methods - Object.methods).sort_by { |m| m }
-    end
-
-end
 
 
 

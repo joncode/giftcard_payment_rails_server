@@ -14,11 +14,17 @@ Drinkboard::Application.configure do
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = {:host => "0.0.0.0", :port => "3000"}
+  # config.action_mailer.raise_delivery_errors = true
+  # config.action_mailer.default_url_options = {:host => "0.0.0.0", :port => "3000"}
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
+
+  config.log_level = :debug
+
+
+  # Prepend all log lines with the following tags
+  config.log_tags = [ :uuid ]
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
