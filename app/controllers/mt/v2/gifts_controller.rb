@@ -2,27 +2,53 @@ class Mt::V2::GiftsController < JsonController
     before_action :authenticate_merchant_tools
     rescue_from JSON::ParserError, :with => :bad_request
 
+
     def redeem
-        request_params = redeem_params
-        gift_id        = request_params["gift_id"]
-        gift           = Gift.find(gift_id)
-        if gift.status == 'notified'
-            if gift.token == request_params["token"]
-                gift.redeem_gift(request_params["server"])
-                success({ "gift_id" => gift.id, "status" => gift.status})
-            else
-                fail "Token is incorrect for gift #{gift_id}"
-            end
+        redemption = Redemption.find_by(id: redeem_params["redemption_id"])
+        if redemption.nil?
+            fail "Redemption not found"
         else
-            fail_message = if gift.status == 'redeemed'
-                "Gift #{gift_id} has already been redeemed"
+            if redemption.status == 'pending'
+                ra = Redeem.apply(redemption: redemption, server: redeem_params['mt_user_id'])
+                rc = Redeem.complete(redemption: ra['redemption'], pos_obj: ra['pos_obj'], gift: ra['gift'])
+                if rc['success']
+                    success(rc['response_text'])
+                else
+                    fail rc['response_text']
+                end
             else
-                "Gift #{gift_id} cannot be redeemed"
+                fail_message = if redemption.status == 'done'
+                    "Redemption #{redemption.token} has already been redeemed"
+                else
+                    "Redemption #{redemption.token} is #{redemption.status}"
+                end
+                fail fail_message
             end
-            fail fail_message
         end
         respond(status)
     end
+
+    # def redeem_old
+    #     request_params = redeem_params
+    #     gift_id        = request_params["gift_id"]
+    #     gift           = Gift.find(gift_id)
+    #     if gift.status == 'notified'
+    #         if gift.token == request_params["token"]
+    #             gift.redeem_gift(request_params["server"])
+    #             success({ "gift_id" => gift.id, "status" => gift.status})
+    #         else
+    #             fail "Token is incorrect for gift #{gift_id}"
+    #         end
+    #     else
+    #         fail_message = if gift.status == 'redeemed'
+    #             "Gift #{gift_id} has already been redeemed"
+    #         else
+    #             "Gift #{gift_id} cannot be redeemed"
+    #         end
+    #         fail fail_message
+    #     end
+    #     respond(status)
+    # end
 
     def proto_join
         pj = ProtoJoin.find create_with_proto_join_params[:proto_join_id]
@@ -46,7 +72,7 @@ private
     end
 
     def redeem_params
-        params.require(:data).permit(:gift_id, :token, :server)
+        params.require(:data).permit :redemption_id, :mt_user_id #:gift_id, :token, :server
     end
 
 end

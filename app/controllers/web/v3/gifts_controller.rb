@@ -245,7 +245,7 @@ class Web::V3::GiftsController < MetalCorsController
                 @current_redemption = resp['redemption']
             end
 
-            if @current_redemption.present?
+            if @current_redemption.present? && @current_redemption.r_sys != 2 && @current_redemption.gift_id == params[:id].to_i
                 ra = Redeem.apply(gift: gift, redemption: @current_redemption, qr_code: qrcode,
                     ticket_num: ticket_num, server: server_inits, client_id: @current_client.id)
                 resp = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'],
@@ -267,7 +267,7 @@ class Web::V3::GiftsController < MetalCorsController
                 end
             else
                 status = :ok
-                fail_web({ err: resp["response_code"], msg: resp["response_text"]})
+                fail_web({ err: "NOT_REDEEMABLE", msg: "Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app" })
             end
 
         else
@@ -309,7 +309,7 @@ class Web::V3::GiftsController < MetalCorsController
                 # what if current pending R != amount or loc ?
             end
         end
-        if @current_redemption.present? && @current_redemption.gift_id == params[:id].to_i
+        if @current_redemption.present? && @current_redemption.r_sys != 2 && @current_redemption.gift_id == params[:id].to_i
             gift ||= @current_redemption.gift
             if (gift.receiver_id == @current_user.id) && (gift.status != 'redeemed')
                 if @current_redemption.redeemable? && @current_redemption.gift_id == gift.id

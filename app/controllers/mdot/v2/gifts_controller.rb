@@ -85,7 +85,7 @@ class Mdot::V2::GiftsController < JsonController
                     if resp['success']
                         @current_redemption = resp['redemption']
                     end
-                    if @current_redemption.present?
+                    if @current_redemption.present? && [3,5].include?(@current_redemption.r_sys) && @current_redemption.gift_id == params[:id].to_i
                         ra = Redeem.apply(gift: gift, redemption: @current_redemption, ticket_num: ticket_num)
                         rc = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'], pos_obj: ra['pos_obj'])
                         if !rc.kind_of?(Hash)
@@ -99,7 +99,7 @@ class Mdot::V2::GiftsController < JsonController
                             fail(rc["response_text"])
                         end
                     else
-                        fail(rc["response_text"])
+                        fail("Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app")
                     end
 
                     # resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, redeem_params['loc_id'])
@@ -144,7 +144,7 @@ class Mdot::V2::GiftsController < JsonController
                 if resp['success']
                     @current_redemption = resp['redemption']
                 end
-                if @current_redemption.present?
+                if @current_redemption.present? && @current_redemption.r_sys == 1 && @current_redemption.gift_id == params[:id].to_i
                     ra = Redeem.apply(gift: gift, redemption: @current_redemption, server: request_server)
                     rc = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'], pos_obj: ra['pos_obj'])
                     if !rc.kind_of?(Hash)
@@ -156,7 +156,7 @@ class Mdot::V2::GiftsController < JsonController
                         fail rc["response_text"]
                     end
                 else
-                    fail rc["response_text"]
+                    fail("Gift at #{gift.provider_name} has a technical issue.  Please contact support at support@itson.me or on Get Help tab in app")
                 end
 
             else

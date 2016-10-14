@@ -87,8 +87,7 @@ class Redeem
 			# there is no POS for V1 - always works
 			pos_obj, resp = internal_redemption( redemption, gift, server )
 		when 2   # V2
-			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
-				"response_text" =>  "Give code #{redemption.token} to server to redeem." }
+			pos_obj, resp = internal_redemption( redemption, gift, server )
 		when 3   # OMNIVORE
 			pos_obj, resp = omnivore_redemption( redemption, gift, ticket_num, redemption.amount, merchant )
 		when 4   # PAPER
