@@ -347,13 +347,18 @@ class Redeem
 		redeems = Redemption.get_all_live_redemptions(gift)
 		already_have_one = Redemption.current_pending_redemption(gift, redeems)
 		if already_have_one.present?
-			if sync
-				if already_have_one.merchant_id == gift.merchant_id
-					already_have_one.remove_pending( 'cancel',
-						{ 'response_code' => 'SYSTEM_CANCEL', 'response_text' => "Removed for next redemption via #{api}" })
-				end
+			if already_have_one.r_sys == 4 # paper gift
+				return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+					"response_text" => "Gift has been converted to a Paper Gift Certificate." }
 			else
-				return response(already_have_one, gift)
+				if sync
+					if already_have_one.merchant_id == gift.merchant_id
+						already_have_one.remove_pending( 'cancel',
+							{ 'response_code' => 'SYSTEM_CANCEL', 'response_text' => "Removed for next redemption via #{api}" })
+					end
+				else
+					return response(already_have_one, gift)
+				end
 			end
 		end
 
