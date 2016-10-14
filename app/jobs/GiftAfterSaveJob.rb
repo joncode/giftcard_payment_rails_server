@@ -4,7 +4,7 @@ class GiftAfterSaveJob
 
     def self.perform gift_or_gift_id, client_id=1
     	puts "\n REDISWRAP gift #{gift_or_gift_id}|#{client_id} is in GiftAfterSaveJob.rb\n"
-
+        return
     	if gift_or_gift_id.class == Gift
     		gift = gift_or_gift_id
     	else
