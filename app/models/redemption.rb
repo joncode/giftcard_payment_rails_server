@@ -33,7 +33,7 @@ class Redemption < ActiveRecord::Base
     def stale?
     	return true if self.new_token_at.nil?
     	stale_true = (self.new_token_at < reset_time)
-    	if stale_true && status == 'pending'
+    	if stale_true && self.status == 'pending' && self.r_sys != 4
     			# stale tokens should not be on pending redemptions
     		remove_pending 'expired', { 'response_code' => 'SYSTEM_EXPIRE',
 						'response_text' => "Token #{elf.token} stale #{DateTime.now.utc} - #{self.new_token_at}" }
@@ -56,7 +56,8 @@ class Redemption < ActiveRecord::Base
 	end
 
 	def remove_pending cancel_type, response
-		return nil if ['expired', 'cancel', 'failed'].include?(cancel_type)
+		return nil if self.status != 'pending'
+		return nil unless ['expired', 'cancel', 'failed'].include?(cancel_type)
 		self.status = cancel_type
 		self.response = response
 		save
