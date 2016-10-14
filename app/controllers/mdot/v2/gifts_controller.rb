@@ -1,8 +1,9 @@
 require 'date'
 
 class Mdot::V2::GiftsController < JsonController
+    include MoneyHelper
     before_action :authenticate_customer
-    before_action :set_current_client, except: [ :index, :archive, :badge, :redeem, :pos_redeem, :promo ]
+    before_action :set_current_client, except: [ :index, :archive, :badge, :promo ]
 
     rescue_from JSON::ParserError, :with => :bad_request
     rescue_from ActiveModel::ForbiddenAttributesError, :with => :bad_request
@@ -78,17 +79,40 @@ class Mdot::V2::GiftsController < JsonController
         if (gift.status == 'notified') && (gift.receiver_id == @current_user.id)
             if ticket_num = redeem_params["ticket_num"]
                 if !gift.merchant.nil?
-                    resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, redeem_params['loc_id'])
-                    if !resp.kind_of?(Hash)
-                        status = :bad_request
-                        fail( "Merchant is currently not active please contact support@itson.me")
-                    elsif resp["success"] == true
-                        status = :ok
-                        success(resp["response_text"])
-                    else
-                        status = :ok
-                        fail(resp["response_text"])
+
+                    resp = Redeem.start(sync: true, gift: gift, loc_id: redeem_params['loc_id'],
+                        client_id: @current_client.id, api: "mdot/v2/gifts/#{gift.id}/pos_redeem")
+                    if resp['success']
+                        @current_redemption = resp['redemption']
                     end
+                    if @current_redemption.present?
+                        ra = Redeem.apply(gift: gift, redemption: @current_redemption, ticket_num: ticket_num)
+                        rc = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'], pos_obj: ra['pos_obj'])
+                        if !rc.kind_of?(Hash)
+                            status = :bad_request
+                            fail("Merchant is not active currently. Please contact support@itson.me")
+                        elsif rc["success"] == true
+                            status = :ok
+                            success(resp["response_text"])
+                        else
+                            status = :ok
+                            fail(rc["response_text"])
+                        end
+                    else
+                        fail(rc["response_text"])
+                    end
+
+                    # resp = gift.pos_redeem(ticket_num, gift.merchant.pos_merchant_id, gift.merchant.tender_type_id, redeem_params['loc_id'])
+                    # if !resp.kind_of?(Hash)
+                    #     status = :bad_request
+                    #     fail( "Merchant is currently not active please contact support@itson.me")
+                    # elsif resp["success"] == true
+                    #     status = :ok
+                    #     success(resp["response_text"])
+                    # else
+                    #     status = :ok
+                    #     fail(resp["response_text"])
+                    # end
                 else
                     status = :bad_request
                     fail( "Merchant is currently not active please contact support@itson.me")
@@ -109,19 +133,57 @@ class Mdot::V2::GiftsController < JsonController
     end
 
     def redeem  # redemption v1 ONLY
+        puts "IN MDOT GIFTS _REDEEM_ V1 REDEEM #{params.inspect}"
+        request_server = redeem_params
+        gift = @current_user.received.where(id: params[:id]).first
+
+        if gift
+            if gift.status == 'notified'
+                resp = Redeem.start(sync: true, gift: gift, loc_id: redeem_params['loc_id'],
+                    client_id: @current_client.id, api: "mdot/v2/gifts/#{gift.id}/redeem")
+                if resp['success']
+                    @current_redemption = resp['redemption']
+                end
+                if @current_redemption.present?
+                    ra = Redeem.apply(gift: gift, redemption: @current_redemption, server: request_server)
+                    rc = Redeem.complete(redemption: ra['redemption'], gift: ra['gift'], pos_obj: ra['pos_obj'])
+                    if !rc.kind_of?(Hash)
+                        fail "Merchant is not active currently. Please contact support@itson.me"
+                    elsif rc["success"] == true
+                        success({ "order_number" => rc['redemption'].token , "total" => cents_to_currency(rc['redemption'].amount),  "server" => rc['redemption'].ticket_id })
+                    else
+                        fail rc["response_text"]
+                    end
+                else
+                    fail rc["response_text"]
+                end
+
+            else
+                fail_message = if gift.status == 'redeemed'
+                    "Gift #{gift.token} has already been redeemed"
+                else
+                    "Gift #{gift.token} cannot be redeemed"
+                end
+                status =  :unprocessable_entity
+                fail fail_message
+            end
+        else
+            fail database_error_redeem
+            status = :not_found
+        end
+        respond(status)
+    end
+
+    def redeem_old  # redemption v1 ONLY
         puts "IN MDOT GIFTS _REDEEM_ OLD REDEEM #{params.inspect}"
         request_server = redeem_params
         gift = @current_user.received.where(id: params[:id]).first
 
         if gift
             if gift.status == 'notified'
-                if true # gift.token == request_params["token"]
-                    gift.redeem_gift(request_server, redeem_params['loc_id'])
-                    # gift.reload
-                    success({ "order_number" => gift.token , "total" => gift.value,  "server" => gift.server })
-                else
-                    fail "Token is incorrect for gift #{params[:id]}"
-                end
+                gift.redeem_gift(request_server, redeem_params['loc_id'])
+                # gift.reload
+                success({ "order_number" => gift.token , "total" => gift.value,  "server" => gift.server })
             else
                 fail_message = if gift.status == 'redeemed'
                     "Gift #{gift.token} has already been redeemed"
