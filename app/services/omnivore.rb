@@ -61,6 +61,24 @@ class Omnivore
 		(200..299).cover?(@code)
 	end
 
+	def json api=@json
+		return { 'json_error' => api } unless api.kind_of?(Hash)
+		hsh = {}
+		api.keys.each do |key|
+			next if key[0] == '_'
+			value = api[key]
+			if api[key].kind_of?(Hash)
+				value = {}
+				api[key].keys.each do |k|
+					next if k[0] == '_'
+					value[k] = api[key][k]
+				end
+			end
+			hsh[key] = value
+		end
+		hsh
+	end
+
 	def direct_redeem
 		@ticket_id = @ticket_num
 		if @brand_card
@@ -214,7 +232,7 @@ class Omnivore
 		else
 			response_data = r_text
 		end
-		{ "response_code" => r_code, "response_text" => response_data, 'success' => success?, 'api' => @json }
+		{ "response_code" => r_code, "response_text" => response_data, 'success' => success?, 'api' => json }
 	end
 
 	def success_hsh

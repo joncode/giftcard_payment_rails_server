@@ -326,7 +326,7 @@ class Redeem
 			# otherwise just notify the gift and send it down
 		unless sync
 			if (r_sys == 1) || (r_sys == 3) || (r_sys == 5)
-				gift.notify
+				gift.notify(loc_id, client_id)
 				return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => nil }
 			end
 		end
@@ -432,6 +432,7 @@ class Redeem
 	def self.response redemption, gift
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
+		gift.rec_client_id = redemption.client_id if gift.rec_client_id.nil?
 		set_gift_current_balance_and_status(gift)
 		redemption.start_res = { 'response_code' => "PENDING", "response_text" => redemption.success_hsh }
 		gift.redemptions << redemption

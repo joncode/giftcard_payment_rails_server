@@ -150,6 +150,7 @@ class Mdot::V2::GiftsController < JsonController
                     if !rc.kind_of?(Hash)
                         fail "Merchant is not active currently. Please contact support@itson.me"
                     elsif rc["success"] == true
+                        status = :ok
                         success({ "order_number" => rc['redemption'].token , "total" => cents_to_currency(rc['redemption'].amount),  "server" => rc['redemption'].ticket_id })
                     else
                         fail rc["response_text"]
