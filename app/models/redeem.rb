@@ -348,8 +348,13 @@ class Redeem
 		already_have_one = Redemption.current_pending_redemption(gift, redeems)
 		if already_have_one.present?
 			if already_have_one.r_sys == 4 # paper gift
-				return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
-					"response_text" => "Gift has been converted to a Paper Gift Certificate." }
+					 # paper gifts can be re-drawn with this code
+				if api.present? && api.match(gift.hex_id)
+					return { 'success' => true, "gift" => gift, "redemption" => already_have_one }
+				else
+					return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+						"response_text" => "Gift has been converted to a Paper Gift Certificate." }
+				end
 			else
 				if sync
 					if already_have_one.merchant_id == gift.merchant_id

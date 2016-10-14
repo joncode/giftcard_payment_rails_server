@@ -4,86 +4,79 @@
 <html lang="en">
 <head>
     <title>ItsOnMe Gift Certificate</title>
-		<style type="text/css">
-			h2 { padding-top: 10px; }
-			table { border-collapse:collapse; border: none; padding: 0; margin: 0;}
-			td {
-				padding-top: 10px;
-		   		border:none;
-			}
-			ul {
-				list-style-type: none;
-			}
-			.merchant_image {
-				border:5px solid #333;
-				border-radius: 10px !important;
-				height: 100px;
-			}
-			.user_image {
-				border:2px solid #333;
-				border-radius: 10px !important;
-				height: 44px;
-			}
-			.logo_icon {
-				height: 30px;
-				padding-top: 10px;
-				padding-left: 60px;
-				float:right;
-			}
-			.top-bar { display: none !important; }
-		</style>
+	<style type="text/css">
+		h2 { padding-top: 10px; }
+		table { border-collapse:collapse; border: none; padding: 0; margin: 0; width:96%;}
+		td {
+			padding-top: 10px;
+	   		border:none;
+		}
+		ul {
+			list-style-type: none;
+		}
+		.merchant_image {
+			border:5px solid #333;
+			border-radius: 10px !important;
+			height: 200px;
+			margin-left: 50px;
+		}
+		.user_image {
+			border:2px solid #333;
+			border-radius: 10px !important;
+			height: 44px;
+		}
+		.logo_icon {
+			height: 30px;
+			padding-top: 10px;
+			padding-left: 60px;
+			float:right;
+		}
+		.top-bar { display: none !important; }
+	</style>
 </head>
 
 <body>
 
-<div style="width: 800px; border: 10px solid #000; border-radius: 10px !important; padding: 20px;">
+
+<div style="border: 10px solid #000; border-radius: 20px !important; width: 650px; padding: 10px 0 10px 20px !important;">
 <table border="0" cellpadding="0" cellspacing="0">
 	<tbody>
-		<% if @gift.giver_type == "User" %>
 		<tr>
-			<td style="float:left; padding-top: 0 !important">
-				<% if @gift.giver.get_photo.nil? || @gift.giver.get_photo.match(/avatar_blank/) %>
-					<%= image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "logo_icon" %>
-				<% else %>
-					<%= image_tag @gift.giver.get_photo,  class: "user_image" %>
-				<% end %>
-			</td>
 			<td>
-				<ul>
-					<li><i>From: </i>
-						<span style="font-size: 18px; padding-top: 5px; font-weight: bold; font-family: 'Arial Rounded MT Bold';"">
-							<i><%= @gift.giver_name %></i>
-						</span>
-					</li>
-				</ul>
+				<p style='text-align: center;'>
+					<span style='float:left;padding-right:10px;'><%= image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "" %></span>
+					<h1 style="color: #28A9E0;">
+						<span style="font-size: 35px;font-weight: bold;font-family: 'Arial Rounded MT Bold';margin-top:4px;">ItsOn.Me</span>
+					</h1>
+				</p>
 			</td>
-		</tr>
-		<% end %>
-		<tr>
-			<td><%= image_tag @gift.merchant.get_photo,  class: "merchant_image" %></td>
-			<td>
-				<ul>
-					<li>
-						<p>
-						<%= image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "logo_icon" %>
-						<h1 style="font-size: 250%; color: #28A9E0;">
-						<span>ItsOnMe Gift Certificate</span>
-						</h1></p>
-					</li>
-					<li>
-						<h2 style="font-size: 36px;font-weight: bold; font-family: 'Arial Rounded MT Bold';"><b><%= @gift.merchant.name %></b></h2>
-					</li>
-					<li>
-						<%= @gift.merchant.html_complete_address %>
-					</li>
-				</ul>
-			</td>
+			<td>&nbsp;</td>
 		</tr>
 		<tr>
 			<td colspan='2'>
 				<ul>
+					<li style="margin-left: 10px;">
+						<%= image_tag(@gift.merchant.get_photo,  class: "merchant_image") %>
+					</li>
 					<li>
-						<h2 style="text-align: center;font-weight: bold; font-family: 'Arial Rounded MT Bold';">
+						<h2 style="text-align:center;font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';"><b><%= @gift.merchant.name %></b></h2>
+					</li>
+					<li>
+						<div style="text-align:center;"><%= @gift.merchant.html_complete_address %></div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr style="background-color: #eeeeee;">
+			<td colspan='2'>
+				<ul>
+<!-- 					<li style="text-align: center;"><i style="text-align: center; font-size: 130%;">To: <%= @gift.receiver_name %></i>
+					</li> -->
+					<li>
+					<h2 style="text-align:center;font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';"><b><%= @gift.message %></b></h2>
+					</li>
+					<li>
+						<h2 style="text-align: center; font-weight: bold; font-family: 'Arial Rounded MT Bold';">
 							<%= display_money(cents: @redemption.amount, ccy: @gift.ccy) %> (<%= @redemption.amount_words(@gift.ccy) %>)
 						</h2>
 					</li>
@@ -92,25 +85,33 @@
 		</tr>
 		<tr>
 			<td>
-				<ul style="padding-top: 20px;">
+				<ul style="padding-top: 10px;">
 					<li style='text-align: center;'>
-						<div style="background-color: #E5E6E7;border: 5px solid #000; border-radius: 10px !important; padding: 20px;">
-							<h2><b style="text-align: center; line-height: inherit;box-sizing: border-box;"><%= @redemption.paper_id %></b></h2>
+						<div style="background-color: #E5E6E7;border: 5px solid #000; border-radius: 10px !important;">
+							<h2><b style="padding: 50px;line-height: inherit;box-sizing: border-box;"><%= @redemption.paper_id %></b></h2>
 						</div>
 					</li>
 					<li style='text-align: center;'>
-						<div><i style="font-size: 150%;">gift voucher ID</i></div>
+						<div><i style="font-size: 130%;">gift voucher ID</i></div>
 					</li>
 				</ul>
 			</td>
 			<td>
 				<ul>
 					<li>
-						<p style="font-size: 18px; padding-top: 10px;"><div><b>Need help?</b></div> Text > 310-235-3835 or Email  > support@itson.me</p>
+						<p style="font-size: 12px; padding-top: 5px;">
+							<div style="text-align: right;"><b>Need help?</b></div>
+							<div style="text-align: right;">Text > 310-235-3835</div>
+							<div style="text-align: right;">Email > support@itson.me</div>
+							<div style="text-align: right;">Web > www.itson.me</div>
+						</p>
 					</li>
 					<li>
-						<span style="margin-bottom: 15px; padding: 15px;">Powered by</span>
-						<div><%= image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847303/email_elements/IOM_APP_HEADER_LOGO.png', width: '100' %></div>
+						<div style="text-align: right; padding: 5px;">Powered by</div>
+
+						<div style="text-align: right;">
+							<%= image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847303/email_elements/IOM_APP_HEADER_LOGO.png', width: '80' %>
+						</div>
 					</li>
 				</ul>
 			</td>
@@ -119,7 +120,7 @@
 </table>
 </div>
 
+
 </body>
-
-
 </html>
+

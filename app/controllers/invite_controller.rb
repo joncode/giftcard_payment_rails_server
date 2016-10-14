@@ -17,6 +17,7 @@ class InviteController < ApplicationController
         @gift = Gift.includes(:merchant).find_by(hex_id: params[:id])
         if @gift.kind_of?(Gift) && ['incomplete', 'open', 'notified', 'schedule'].include?(@gift.status)
 	        resp = Redeem.start(gift: @gift, loc_id: nil, amount: nil, client_id: nil, api: "/papergifts/#{params[:id]}", type_of: :paper)
+	        # puts resp.inspect
 	        if resp['success']
 	        	@redemption = resp['redemption']
 	        	@gift = resp['gift']

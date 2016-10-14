@@ -6,7 +6,7 @@
     <title>ItsOnMe Gift Certificate</title>
 	<style type="text/css">
 		h2 { padding-top: 10px; }
-		table { border-collapse:collapse; border: none; padding: 0; margin: 0;}
+		table { border-collapse:collapse; border: none; padding: 0; margin: 0; width:96%;}
 		td {
 			padding-top: 10px;
 	   		border:none;
@@ -17,7 +17,8 @@
 		.merchant_image {
 			border:5px solid #333;
 			border-radius: 10px !important;
-			height: 100px;
+			height: 200px;
+			margin-left: 50px;
 		}
 		.user_image {
 			border:2px solid #333;
@@ -37,43 +38,30 @@
 <body>
 
 
-<div style="border: 10px solid #000; border-radius: 20px !important; padding: 20px;">
+<div style="border: 10px solid #000; border-radius: 20px !important; width: 650px; padding: 10px 0 10px 20px !important;">
 <table border="0" cellpadding="0" cellspacing="0">
 	<tbody>
-		<% if @gift.giver_type == "User" %>
 		<tr>
-			<td style="float:left; padding-top: 0 !important">
-				<% if @gift.giver.get_photo.nil? || @gift.giver.get_photo.match(/avatar_blank/) %>
-					<%= wicked_pdf_image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "logo_icon" %>
-				<% else %>
-					<%= wicked_pdf_image_tag(@gift.giver.get_photo,  class: "user_image") %>
-				<% end %>
-			</td>
 			<td>
-				<ul>
-					<li><i>From: </i>
-						<span style="font-size: 14px; padding-top: 5px; font-weight: bold; font-family: 'Arial Rounded MT Bold';"">
-							<i><%= @gift.giver_name %></i>
-						</span>
-					</li>
-				</ul>
+				<p style='text-align: center;'>
+					<span style='float:left;padding-right:10px;'><%= wicked_pdf_image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "" %></span>
+					<h1 style="color: #28A9E0;">
+						<span style="font-size: 35px;font-weight: bold;font-family: 'Arial Rounded MT Bold';margin-top:4px;">ItsOn.Me</span>
+					</h1>
+				</p>
 			</td>
+			<td>&nbsp;</td>
 		</tr>
-		<% end %>
 		<tr>
-			<td><%= wicked_pdf_image_tag(@gift.merchant.get_photo,  class: "merchant_image") %></td>
-			<td>
+			<td colspan='2'>
 				<ul>
-					<li>
-						<p>
-							<%= wicked_pdf_image_tag 'http://res.cloudinary.com/drinkboard/image/upload/v1472847395/email_elements/Icon-60.png', class: "logo_icon" %>
-							<h1 style="font-size: 100%; color: #28A9E0;">
-								<span style="font-size: 24px;font-weight: bold;">ItsOnMe Gift Certificate</span>
-							</h1>
-						</p>
+					<li style="margin-left: 10px;">
+						<%= wicked_pdf_image_tag(@gift.merchant.get_photo,  class: "merchant_image") %>
 					</li>
 					<li>
-						<h2 style="font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';"><b><%= @gift.merchant.name %></b></h2>
+						<h2 style="text-align:center;font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';">
+							<b><%= @gift.merchant.name %></b>
+						</h2>
 					</li>
 					<li>
 						<div style="text-align:center;"><%= @gift.merchant.html_complete_address %></div>
@@ -81,11 +69,14 @@
 				</ul>
 			</td>
 		</tr>
-		<tr>
+		<tr style="background-color: #eeeeee;">
 			<td colspan='2'>
 				<ul>
 <!-- 					<li style="text-align: center;"><i style="text-align: center; font-size: 130%;">To: <%= @gift.receiver_name %></i>
 					</li> -->
+					<li>
+					<h2 style="text-align:center;font-size: 18px;font-weight: bold; font-family: 'Arial Rounded MT Bold';"><b><%= @gift.message %></b></h2>
+					</li>
 					<li>
 						<h2 style="text-align: center; font-weight: bold; font-family: 'Arial Rounded MT Bold';">
 							<%= display_money(cents: @redemption.amount, ccy: @gift.ccy) %> (<%= @redemption.amount_words(@gift.ccy) %>)
@@ -97,7 +88,7 @@
 		<tr>
 			<td>
 				<ul style="padding-top: 10px;">
-					<li>
+					<li style='text-align: center;'>
 						<div style="background-color: #E5E6E7;border: 5px solid #000; border-radius: 10px !important;">
 							<h2><b style="padding: 50px;line-height: inherit;box-sizing: border-box;"><%= @redemption.paper_id %></b></h2>
 						</div>
@@ -134,4 +125,6 @@
 
 </body>
 </html>
+
+
 
