@@ -93,7 +93,7 @@ class Mdot::V2::GiftsController < JsonController
                             fail("Merchant is not active currently. Please contact support@itson.me")
                         elsif rc["success"] == true
                             status = :ok
-                            success(resp["response_text"])
+                            success(rc["response_text"])
                         else
                             status = :ok
                             fail(rc["response_text"])
