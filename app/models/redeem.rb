@@ -96,8 +96,7 @@ class Redeem
 		when 3   # OMNIVORE
 			pos_obj, resp = omnivore_redemption( redemption, gift, ticket_num, redemption.amount, merchant )
 		when 4   # PAPER
-			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
-				"response_text" =>  "Give Voucher ID to server to redeem." }
+			pos_obj, resp = internal_redemption( redemption, gift, server )
 		when 5   # ZAPPER
 			if callback_params.present?
 				pos_obj, resp = zapper_callback_redemption( redemption, gift, callback_params )
