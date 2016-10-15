@@ -6,6 +6,9 @@ class Redemption < ActiveRecord::Base
 	enum type_of: [ :pos, :v2, :v1, :paper, :zapper ]
 
     default_scope -> { where(active: true) } # indexed
+    scope :live_scope, -> (gift) { where(gift_id: gift.id, status: ['done', 'pending']).order(created_at: :desc) }
+    scope :pending_scope, -> (gift) { where(gift_id: gift.id, status: 'pending').order(created_at: :desc) }
+    scope :get_live_scope, -> { where(status: ['done', 'pending']).order(created_at: :desc) }
 
 #   -------------
 
@@ -60,11 +63,12 @@ class Redemption < ActiveRecord::Base
 		return nil unless ['expired', 'cancel', 'failed'].include?(cancel_type)
 		self.status = cancel_type
 		self.response = response
-		save
-		gift = self.gift
-		if gift
-			Redeem.set_gift_current_balance_and_status(gift)
-			gift.save
+		if save
+			gift = self.gift
+			if gift
+				Redeem.set_gift_current_balance_and_status(gift)
+				gift.save
+			end
 		end
 	end
 
@@ -209,12 +213,12 @@ class Redemption < ActiveRecord::Base
 #   -------------
 
 	def self.get_all_live_redemptions gift
-		where(gift_id: gift.id, active: true, status: ['done', 'pending']).order(created_at: :desc)
+		live_scope(gift)
 	end
 
 	def self.current_pending_redemption gift, redeems=nil
 		if redeems.nil?
-			redeems = where(gift_id: gift.id, active: true, status: 'pending').order(created_at: :desc)
+			redeems = pending_scope(gift)
 		end
 		redemption = nil
 		redeems.each do |redeem|

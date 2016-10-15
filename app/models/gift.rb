@@ -71,7 +71,7 @@ class Gift < ActiveRecord::Base
     has_many    :landing_pages, through: :affiliate_gifts
     has_one     :oauth,         validate: true,     dependent: :destroy
     has_one     :proto_join
-    has_many    :redemptions, autosave: true
+    has_many    :redemptions, -> { get_live_scope }, autosave: true
     has_many    :registers
     has_one     :sms_contact,   autosave: true
 
@@ -203,7 +203,7 @@ class Gift < ActiveRecord::Base
     end
 
     def original_value
-        currency_to_cents(calculate_value(self.shoppingCart).to_s)
+        @original_value ||= currency_to_cents(calculate_value(self.shoppingCart).to_s)
     end
 
     def total

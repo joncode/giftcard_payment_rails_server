@@ -4,20 +4,25 @@ class Redeem
 
 
 	def self.set_gift_current_balance_and_status(gift)
-		rds = Redemption.get_all_live_redemptions(gift)
-		total_redeemed_or_held_amt = rds.map(&:amount).sum
+		set_balance(gift)
+		set_gift_current_status(gift)
+	end
+
+	def self.set_balance(gift)
+		total_redeemed_or_held_amt = gift.redemptions.reload.map(&:amount).sum
 		gift.balance = gift.original_value - total_redeemed_or_held_amt
-		if gift.balance == 0 && rds.select{ |r| r.status == 'pending'}.length > 0
-			gift.status = 'notified'
-		else
-			set_gift_current_status(gift)
-		end
 	end
 
 	def self.set_gift_current_status(gift)
 		return unless ['incomplete', 'open', 'notified', 'redeemeed'].include?(gift.status)
 		if gift.balance == 0
-			gift.status = 'redeemed'
+			if gift.redemptions.select{ |r| r.status == 'pending'}.length > 0
+				gift.status = 'notified'
+			else
+				gift.status = 'redeemed'
+			end
+		elsif gift.balance != gift.original_value
+			gift.status = 'notified'
 		elsif gift.notified_at.present? && gift.receiver_id
 			gift.status = 'notified'
 		elsif gift.receiver_id
@@ -296,6 +301,14 @@ class Redeem
 			# set data and reject invalid submissions
 		if !gift.kind_of?(Gift)
 			return { 'success' => false, "response_text" =>  "Gift not found", "response_code" => 'INVALID_INPUT'}
+		elsif !gift.notifiable?
+			if gift.status == 'redeemed'
+				return { 'success' => false, "response_code" => 'ALREADY_REDEEMED',
+					"response_text" => "Gift #{gift.token} at #{gift.provider_name} has already been redeemed" }
+			else
+				return { 'success' => false, "response_code" => 'NOT_REDEEMABLE',
+					"response_text" =>  "Gift cannot be redeemed (#{gift.status})" }
+			end
 		end
 		api = "SCRIPT" if api.nil?
 		if client_id.kind_of?(Client)
@@ -326,18 +339,17 @@ class Redeem
 		unless sync
 			if (r_sys == 1) || (r_sys == 3) || (r_sys == 5)
 				gift.notify(loc_id, client_id)
-				return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => nil }
+				return { 'success' => true, "gift" => gift, "response_code" => gift.token, "response_text" => 'Cannot Start asynchronous redemption' }
 			end
 		end
 
 				# DO I NEED TO CONFIRM THAT GIFT IS GOOD HERE ?
-		if merchant.mode != 'live'
-			return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
-				"response_text" => "#{merchant.name} is not currently live" }
-		else
-			gift.merchant_id = loc_id
-		end
+		# if merchant.mode != 'live'
+		# 	return { 'success' => false, "response_code" => "NOT_REDEEMABLE",
+		# 		"response_text" => "#{merchant.name} is not currently live" }
+		# end
 
+		gift.merchant_id = loc_id
 		  # -------------
 
 
@@ -370,6 +382,8 @@ class Redeem
 		set_gift_current_balance_and_status(gift)
 		if amount.nil?
 			amount = gift.balance
+		else
+			amount = amount.to_i
 		end
 
 		if !amount.kind_of?(Integer)
@@ -434,6 +448,7 @@ class Redeem
 #   -------------
 
 	def self.response redemption, gift
+		gift.status = 'notified'
 		gift.token = redemption.token if gift.token != redemption.token
 		gift.new_token_at = redemption.new_token_at if gift.new_token_at != redemption.new_token_at
 		gift.rec_client_id = redemption.client_id if gift.rec_client_id.nil?
