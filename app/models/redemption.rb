@@ -36,7 +36,7 @@ class Redemption < ActiveRecord::Base
     	if stale_true && self.status == 'pending' && self.r_sys != 4
     			# stale tokens should not be on pending redemptions
     		remove_pending 'expired', { 'response_code' => 'SYSTEM_EXPIRE',
-						'response_text' => "Token #{elf.token} stale #{DateTime.now.utc} - #{self.new_token_at}" }
+						'response_text' => "Token #{self.token} stale #{DateTime.now.utc} - #{self.new_token_at}" }
     		return true
     	end
     	return (stale_true && self.status != 'pending')
