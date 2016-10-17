@@ -281,7 +281,7 @@ class OpsZapper
 	def set_extra_gift
 		if (@original_gift_value - @applied_value) > 0
 			@extra_gift	= @original_gift_value - @applied_value
-			@code = 201 if @code != 206
+			@code = 201 if @code == 200
 		else
 			@extra_gift	= 0
 		end
