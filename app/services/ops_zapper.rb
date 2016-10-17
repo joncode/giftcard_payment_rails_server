@@ -247,6 +247,7 @@ class OpsZapper
 		else
 			@applied_value = resp['VoucherAmount'].to_i
 			@extra_value = resp['RequiredAmount'].to_i
+			@code = (@extra_value > 0) ? 206 : 200
 		end
 		set_extra_gift
 		resp
@@ -280,6 +281,7 @@ class OpsZapper
 	def set_extra_gift
 		if (@original_gift_value - @applied_value) > 0
 			@extra_gift	= @original_gift_value - @applied_value
+			@code = 201 if @code != 206
 		else
 			@extra_gift	= 0
 		end

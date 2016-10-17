@@ -149,22 +149,14 @@ class Omnivore
 			@code			= 206   # ok , the gift has partially covered the ticket cost
 			@applied_value	= @value
 			@extra_value	= @check_value - @applied_value
-			@extra_gift = @original_gift_value - @applied_value
 		elsif @value > @check_value
 			@code			= 201    # ok , a new gift has been created for the extra gift value
 			@applied_value	= @check_value
-			@extra_gift	    = @original_gift_value - @applied_value
 		else
 			@code  = 200   # ok , full aceeptance
 			@applied_value	= @value
-			@extra_gift	= @original_gift_value - @applied_value
 		end
-
-		if (@original_gift_value - @applied_value) > 0
-			@extra_gift	= @original_gift_value - @applied_value
-		else
-			@extra_gift	= 0
-		end
+		set_extra_gift
 
 		resp = post_redeem
 		puts "Omnivore:apply_ticket_value Here is the post_redeem response"
@@ -192,6 +184,15 @@ class Omnivore
 		if !resp.kind_of?(Hash) && resp.to_i > 399
 			@code = resp.to_i
 			@applied_value = 0
+		end
+	end
+
+	def set_extra_gift
+		if (@original_gift_value - @applied_value) > 0
+			@extra_gift	= @original_gift_value - @applied_value
+			@code = 201 if @code != 206
+		else
+			@extra_gift	= 0
 		end
 	end
 
