@@ -247,7 +247,9 @@ class Omnivore
 			e
 			unless e.nil?
 				resp = e.response.code
-				puts "\n\nOmnivore Error code = #{resp}\n #{e.inspect}\n #{response.inspect}\n"
+				msg =  "\n\nOmnivore Error code = #{resp}\n #{e.inspect}\n #{response.inspect}\n"
+				OpsTwilio.text_devs msg: msg
+				puts msp
 				puts " Error Hash == " + { "code" => e.response.code, "error" => e.response['error']}.inspect
 				resp
 			end
@@ -290,7 +292,9 @@ class Omnivore
 			e
 			unless e.nil?
 				resp = e.response.code
-				puts "\n\nOmnivore Error code = #{resp}\n\n"
+				msg =  "\n\nOmnivore Error code = #{resp}\n\n"
+				OpsTwilio.text_devs msg: msg
+				puts msg
 				resp
 			end
 		end
