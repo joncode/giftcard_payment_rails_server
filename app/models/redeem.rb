@@ -221,7 +221,7 @@ class Redeem
 			else
 				new_detail = redemption.msg
 			end
-			gift.detail = new_detail + ' \n ' + gift.detail.to_s
+			gift.detail = new_detail + '. ' + gift.detail.to_s
 
 		else
 			puts "FAILURE POS_OBJECT"

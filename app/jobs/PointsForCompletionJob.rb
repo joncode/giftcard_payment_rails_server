@@ -4,7 +4,7 @@ class PointsForCompletionJob
 
     def self.perform gift_id
 		gift       = Gift.includes(:giver).includes(:merchant).find gift_id
-    	puts "Gift for PointsForCompletionJob \n #{gift.inspect}"
+    	puts "Gift for PointsForCompletionJob \n #{gift.id}"
 
     	return  if gift.cat < 300
         return  if gift.giver_type != "User"

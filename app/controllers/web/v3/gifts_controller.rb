@@ -358,7 +358,7 @@ class Web::V3::GiftsController < MetalCorsController
         gift = Gift.find params[:id]
         @current_redemption = Redemption.where(gift_id: gift.id).where('created_at > ?', 2.minutes.ago).last
         puts "\n IN current_redemption - #{@current_redemption.inspect}"
-        if @current_redemption.status == 'done' && @current_redemption.response.kind_of?(Hash)
+        if @current_redemption && @current_redemption.status == 'done' && @current_redemption.response.kind_of?(Hash)
             resp = @current_redemption.response
             if resp["success"] == true
                 gift.fire_after_save_queue(@current_client)
