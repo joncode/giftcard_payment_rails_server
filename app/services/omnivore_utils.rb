@@ -13,6 +13,7 @@ module OmnivoreUtils
                     "gift_card_id" => gift.hex_id,
                     "pos_merchant_id" => merchant.pos_merchant_id,
                     "tender_type_id" => merchant.tender_type_id,
+                    "gift_current_value" => gift.balance,
                     "value" => new_value,
                     "brand_card_ids_ary" => gift.brand_card_ids,
                     "direct_redeem" => merchant.pos_direct }
@@ -24,6 +25,7 @@ module OmnivoreUtils
                     "gift_card_id" => redemption.hex_id,
                     "pos_merchant_id" => merchant.pos_merchant_id,
                     "tender_type_id" => merchant.tender_type_id,
+                    "gift_current_value" => redemption.gift_prev_value,
                     "value" => redemption.amount,
                     "brand_card_ids_ary" => [],
                     "direct_redeem" => merchant.pos_direct }

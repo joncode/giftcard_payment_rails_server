@@ -44,9 +44,9 @@ class OpsZapper
 		@code = 100
 		@qr_code = args['qr_code']
 		@gift_card_id = args['gift_card_id']
-		@value 			 = args['value']
+		@value 			 = args['value'].to_i
 		@applied_value 	 = 0
-		@original_gift_value = args["gift_current_value"]
+		@original_gift_value = args["gift_current_value"] || @value
 		@extra_value     = 0
 		@extra_gift      = 0
 		@check_value 	 = 0
@@ -247,13 +247,8 @@ class OpsZapper
 		else
 			@applied_value = resp['VoucherAmount'].to_i
 			@extra_value = resp['RequiredAmount'].to_i
-			if (@original_gift_value - @applied_value) > 0
-				@extra_gift = @original_gift_value - @applied_value
-			else
-				@extra_gift = 0
-			end
 		end
-
+		set_extra_gift
 		resp
 	end
 
@@ -264,7 +259,7 @@ class OpsZapper
 		@ticket_id = resp['ZapperId']
 		@err_desc = resp["ErrorDescription"]
 		@applied_value = (resp['Amount'].to_f * 100).to_i
-		# NO CHECK_VALUE on async response
+			# NO CHECK_VALUE on async response
 		@check_value = @applied_value
 		pay_stat = resp['PaymentStatusId'].to_i
 
@@ -277,13 +272,17 @@ class OpsZapper
 		else
 			@code  = 200   # ok , full aceeptance
 			@extra_value = 0
-			if (@original_gift_value - @applied_value) > 0
-				@extra_gift = @original_gift_value - @applied_value
-			else
-				@extra_gift = 0
-			end
 		end
+		set_extra_gift
 		resp
+	end
+
+	def set_extra_gift
+		if (@original_gift_value - @applied_value) > 0
+			@extra_gift	= @original_gift_value - @applied_value
+		else
+			@extra_gift	= 0
+		end
 	end
 
 #   -------------

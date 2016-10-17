@@ -7,7 +7,7 @@ class Omnivore
 
 	attr_accessor :response, :code, :pos_merchant_id, :applied_value, :ticket_num,
 	 :ticket_id, :check_value, :brand_card, :brand_card_ids, :loc_id, :tender_type_id,
-	 :direct_redeem, :ccy, :request
+	 :direct_redeem, :ccy, :request, :original_gift_value
 
 	def initialize args
 		@request = args
@@ -28,6 +28,7 @@ class Omnivore
 		@loc_id 		 = args["pos_merchant_id"]
 		@tender_type_id  = args["tender_type_id"]
 		@value           = args["value"].to_i
+		@original_gift_value = args["gift_current_value"] || @value
 		@code 		     = 100
 		@extra_value     = 0
 		@extra_gift      = 0
@@ -146,15 +147,23 @@ class Omnivore
 
 		if @value < @check_value
 			@code			= 206   # ok , the gift has partially covered the ticket cost
-			@extra_value	= @check_value - @value
 			@applied_value	= @value
+			@extra_value	= @check_value - @applied_value
+			@extra_gift = @original_gift_value - @applied_value
 		elsif @value > @check_value
 			@code			= 201    # ok , a new gift has been created for the extra gift value
-			@extra_gift	    = @value - @check_value
 			@applied_value	= @check_value
+			@extra_gift	    = @original_gift_value - @applied_value
 		else
 			@code  = 200   # ok , full aceeptance
 			@applied_value	= @value
+			@extra_gift	= @original_gift_value - @applied_value
+		end
+
+		if (@original_gift_value - @applied_value) > 0
+			@extra_gift	= @original_gift_value - @applied_value
+		else
+			@extra_gift	= 0
 		end
 
 		resp = post_redeem
@@ -193,25 +202,28 @@ class Omnivore
 			r_text = "Gift has not been redeemed yet."
 		when 200
 			r_code = "PAID"
-			r_text = "#{display_money(ccy: @ccy, cents: @value)} was applied to your check. Transaction completed."
+			r_text = "#{display_money(ccy: @ccy, cents: @applied_value)} was applied to your check. Transaction completed."
 		when 201
 			r_code = "OVER_PAID"
-			r_text = "Your gift exceeded the check value. Your gift has a balance of #{display_money(ccy: @ccy, cents: @extra_gift)}."
+			r_text = "Your gift exceeded the check value.  #{display_money(ccy: @ccy, cents: @applied_value)} was applied to your check.  Your gift has a balance of #{display_money(ccy: @ccy, cents: @extra_gift)}."
 		when 206
 			r_code = "APPLIED"
-			r_text = "#{display_money(ccy: @ccy, cents: @value)} was applied to your check. A total of #{display_money(ccy: @ccy, cents: @extra_value)} remains to be paid."
+			r_text = "#{display_money(ccy: @ccy, cents: @applied_value)} was applied to your check. A total of #{display_money(ccy: @ccy, cents: @extra_value)} remains to be paid."
 		when 304
 			r_code = "ERROR"
 			r_text = "Check Number #{@ticket_num} has already been paid."
 		when 400
 			r_code = "ERROR"
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
-		when 404
-			r_code = "ERROR"
-			r_text = "Your check number #{@ticket_num} cannot be found. Please double check and try again. If this issue persists please contact support@itson.me"
 		when 401
 			r_code = "ERROR"
 			r_text = "This gift card is only redeemable for the exact item mentioned. Please order the correct item to use this gift card."
+		when 402
+			r_code = "ERROR"
+			r_text = @err_desc
+		when 404
+			r_code = "ERROR"
+			r_text = "Your check number #{@ticket_num} cannot be found. Please double check and try again. If this issue persists please contact support@itson.me"
 		when 500
 			r_code = "ERROR"
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
