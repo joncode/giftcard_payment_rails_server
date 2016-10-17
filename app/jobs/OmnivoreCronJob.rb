@@ -1,6 +1,6 @@
-require 'ops_twilio'
 
 class OmnivoreCronJob
+	require 'ops_twilio'
 
 	@queue = :subscription
 
