@@ -35,6 +35,7 @@ class Redemption < ActiveRecord::Base
 
     def stale?
     	return true if self.new_token_at.nil?
+    	return true if self.status != 'pending'
     	stale_true = (self.new_token_at < reset_time)
     	if stale_true && self.status == 'pending' && self.r_sys != 4
     			# stale tokens should not be on pending redemptions
@@ -42,7 +43,7 @@ class Redemption < ActiveRecord::Base
 						'response_text' => "Token #{self.token} stale #{DateTime.now.utc} - #{self.new_token_at}" }
     		return true
     	end
-    	return (stale_true && self.status != 'pending')
+    	return stale_true
     end
 
     def fresh?
