@@ -25,6 +25,8 @@ class Redemption < ActiveRecord::Base
     before_save :set_request_at
     before_save :set_response_at
 
+    after_commit :remove_token_from_gift
+
 #   -------------
 
 	belongs_to :client
@@ -351,6 +353,17 @@ AND #{specifc_query} AND (r.created_at >= '#{start_date}' AND r.created_at < '#{
 
     def set_unique_hex_id
         self.hex_id = UniqueIdMaker.eight_digit_hex(Redemption, :hex_id, 'rd_')
+    end
+
+    def remove_token_from_gift
+    	if self.status != 'pending' && self.r_sys == 2
+    		g = self.gift
+    		if g.token == self.token && g.status == 'notified'
+    			g.token == nil
+    			g.new_token_at = nil
+    			g.save
+			end
+    	end
     end
 
 end
