@@ -35,7 +35,7 @@ class OpsZapper
 #   -------------
 
 	attr_accessor :value, :ccy, :customer, :qr_code, :gift_card_id, :transaction_ref, :code, :applied_value, :ticket_id,
-		 :extra_value, :extra_gift, :check_value, :redemption_id, :request, :h, :json, :err_desc
+		 :extra_value, :extra_gift, :check_value, :redemption_id, :request, :h, :json, :err_desc, :original_gift_value
 
 	def initialize args
 		@request = args
@@ -46,6 +46,7 @@ class OpsZapper
 		@gift_card_id = args['gift_card_id']
 		@value 			 = args['value']
 		@applied_value 	 = 0
+		@original_gift_value = args["gift_current_value"]
 		@extra_value     = 0
 		@extra_gift      = 0
 		@check_value 	 = 0
@@ -86,11 +87,12 @@ class OpsZapper
 		x
 	end
 
-	def self.make_request_hsh gift, qr_code, value, redemption_id=nil
+	def self.make_request_hsh gift, qr_code, redeem_amount, redemption_id=nil
 		{
 			"qr_code" => strip_qr_code(qr_code),
             "gift_card_id" => gift.hex_id,
-            "value" => value,
+            "value" => redeem_amount,
+            "gift_current_value" => gift.balance,
             "ccy" => gift.ccy,
             'customer' => customer(gift.receiver),
             'redemption_id' => redemption_id
@@ -226,12 +228,16 @@ class OpsZapper
 		resp
 	end
 
-
 	def apply_ticket_value resp
+# "api"=>{"TransactionReference"=>"rd_cf2da1fb", "PaymentStatusId"=>1, "ActionIndicator"=>2,
+#  "ErrorDescription"=>nil, "OriginalBillAmount"=>2500, "VoucherAmount"=>30, "RequiredAmount"=>2470,
+#   "CurrencyISOCode"=>"USD", "ZapperId"=>"HLVFBATHT0B6", "PaymentId"=>"129585",
+#    "POSReference"=>"ITSONME_25_3", "MerchantSiteId"=>71}}
 		@ticket_id = resp['ZapperId']
 		@err_desc = resp["ErrorDescription"]
-		pay_stat =resp['PaymentStatusId'].to_i
 		@check_value = resp['OriginalBillAmount'].to_i
+		pay_stat =resp['PaymentStatusId'].to_i
+
 
 		if !@err_desc.blank? || pay_stat != 1
 			@code = 402
@@ -239,17 +245,12 @@ class OpsZapper
 			@extra_value = @value
 			@err_desc = "Error Processing QR Code" if @err_desc.blank?
 		else
-			if @value < @check_value
-				@code			= 206   # ok , the gift has partially covered the ticket cost
-				@extra_value	= @check_value - @value
-				@applied_value	= @value
-			elsif @value > @check_value
-				@code			= 201    # ok , a new gift has been created for the extra gift value
-				@extra_gift	    = @value - @check_value
-				@applied_value	= @check_value
+			@applied_value = resp['VoucherAmount'].to_i
+			@extra_value = resp['RequiredAmount'].to_i
+			if (@original_gift_value - @applied_value) > 0
+				@extra_gift = @original_gift_value - @applied_value
 			else
-				@code  = 200   # ok , full aceeptance
-				@applied_value	= @value
+				@extra_gift = 0
 			end
 		end
 
@@ -261,27 +262,25 @@ class OpsZapper
 # "ZapperId"=>"HLVYMTLFNFMU", "UpdatedDate"=>"2016-09-19T03:40:54.5047296Z"}
 		@json = resp
 		@ticket_id = resp['ZapperId']
-		@check_value = resp['OriginalBillAmount'].to_i
 		@err_desc = resp["ErrorDescription"]
-
+		@applied_value = (resp['Amount'].to_f * 100).to_i
+		# NO CHECK_VALUE on async response
+		@check_value = @applied_value
 		pay_stat = resp['PaymentStatusId'].to_i
-		@check_value = (resp['Amount'].to_f * 100).to_i
+
+
 		if pay_stat != 1
 			@code = 402
 			@applied_value = 0
 			@extra_value = @value
+			@err_desc = "Error Processing QR Code" if @err_desc.blank?
 		else
-			if @value < @check_value
-				@code			= 206   # ok , the gift has partially covered the ticket cost
-				@extra_value	= @check_value - @value
-				@applied_value	= @value
-			elsif @value > @check_value
-				@code			= 201    # ok , a new gift has been created for the extra gift value
-				@extra_gift	    = @value - @check_value
-				@applied_value	= @check_value
+			@code  = 200   # ok , full aceeptance
+			@extra_value = 0
+			if (@original_gift_value - @applied_value) > 0
+				@extra_gift = @original_gift_value - @applied_value
 			else
-				@code  = 200   # ok , full aceeptance
-				@applied_value	= @value
+				@extra_gift = 0
 			end
 		end
 		resp
@@ -296,13 +295,13 @@ class OpsZapper
 			r_text = "Gift has not been redeemed yet."
 		when 200
 			r_code = "PAID"
-			r_text = "#{display_money(cents: @value, ccy: @ccy)} was applied to your check. Transaction completed."
+			r_text = "#{display_money(cents: @applied_value, ccy: @ccy)} was applied to your check. Transaction completed."
 		when 201
 			r_code = "OVER_PAID"
-			r_text = "Your gift exceeded the check value. Your gift has a balance of #{display_money(cents: @extra_gift, ccy: @ccy)}."
+			r_text = "Your gift exceeded the check value.  #{display_money(cents: @applied_value, ccy: @ccy)} was applied to your check.  Your gift has a balance of #{display_money(cents: @extra_gift, ccy: @ccy)}."
 		when 206
 			r_code = "APPLIED"
-			r_text = "#{display_money(cents: @value, ccy: @ccy)} was applied to your check. A total of #{display_money(cents: @extra_value, ccy: @ccy)} remains to be paid."
+			r_text = "#{display_money(cents: @applied_value, ccy: @ccy)} was applied to your check. A total of #{display_money(cents: @extra_value, ccy: @ccy)} remains to be paid."
 		when 304
 			r_code = "ERROR"
 			r_text = "Check Number #{@ticket_id} has already been paid."
@@ -311,15 +310,15 @@ class OpsZapper
 				# OpsTwilio.text_devs msg: "400 Error on Zapper"
 			r_code = "ERROR"
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
-		when 404
-			r_code = "ERROR"
-			r_text = "Your QR-Code cannot be found. Please re-scan and try again. If this issue persists please contact support@itson.me"
 		when 401
 			r_code = "ERROR"
 			r_text = "This gift card is only redeemable for the exact item mentioned. Please order the correct item to use this gift card."
 		when 402
 			r_code = "ERROR"
 			r_text = @err_desc
+		when 404
+			r_code = "ERROR"
+			r_text = "Your QR-Code cannot be found. Please re-scan and try again. If this issue persists please contact support@itson.me"
 		when 500
 			r_code = "ERROR"
 			r_text = "Internal Error Point of Sale System Unavailable. Please try again later or contact support@itson.me"
