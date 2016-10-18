@@ -28,17 +28,18 @@ class AccountsReceivable
 			return nil unless license.make_register_today?
 				# 	2. asks the license for a charge object
 			hsh = license.charge_object
+			puts hsh.inspect
 				# 	3. makes a register with the charge object
-			reg = Register.create_with_charge_object(hsh)
-				# 	4. saves the register
-			if reg.save
-				# success
-			else
-				msg = "REGISTER FAIL #{reg.errors.full_messages}"
-				puts msg.inspect
-				OpsTwilio.text_devs msg: msg
-			end
-			reg
+			# reg = Register.create_with_charge_object(hsh)
+			# 	# 	4. saves the register
+			# if reg.save
+			# 	# success
+			# else
+			# 	msg = "REGISTER FAIL #{reg.errors.full_messages}"
+			# 	puts msg.inspect
+			# 	OpsTwilio.text_devs msg: msg
+			# end
+			# reg
 		end
 
 		def invoice_and_notify
