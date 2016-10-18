@@ -358,9 +358,12 @@ class Web::V3::GiftsController < MetalCorsController
         gift = Gift.find params[:id]
         @current_redemption = Redemption.where(gift_id: gift.id).where('created_at > ?', 2.minutes.ago).last
         puts "\n IN current_redemption - #{@current_redemption.inspect}"
-        if @current_redemption && @current_redemption.status == 'done' && @current_redemption.response.kind_of?(Hash)
+        if @current_redemption && @current_redemption.status == 'done'
             resp = @current_redemption.response
-            if resp["success"] == true
+            if !resp.kind_of?(Hash)
+                gift.fire_after_save_queue(@current_client)
+                success({ msg: "Redemption succeeded!"})
+            elsif resp["success"] == true
                 gift.fire_after_save_queue(@current_client)
                 success({msg: resp["response_text"]})
             else
@@ -454,18 +457,24 @@ private
         else
             @current_redemption.reload
             puts "\n IN GIFTSCONTROLLERRELOAD - #{@current_redemption.inspect}"
-            if @current_redemption.status == 'done' && @current_redemption.response.kind_of?(Hash)
+            if @current_redemption.status == 'done'
+                gift = @current_redemption.gift
                 resp = @current_redemption.response
-                if resp["success"] == true
+
+                if !resp.kind_of?(Hash)
                     gift.fire_after_save_queue(@current_client)
-                    success({msg: resp["response_text"]})
+                    success({ msg: "Redemption succeeded!"})
+                elsif resp["success"] == true
+                    gift.fire_after_save_queue(@current_client)
+                    success({ msg: resp["response_text"], code: resp["response_code"], gift: gift.web_serialize,
+                            token: @current_redemption.token, redemption: @current_redemption })
                 else
                     fail_web({ err: resp["response_code"], msg: resp["response_text"]})
                 end
             elsif @current_redemption.status == 'pending'
                 fail_web({ err: "RESET_CONTENT", msg: "Redemption is processing, gift value will set to #{display_money(cents: @current_redemption.gift_next_value, ccy: @current_redemption.ccy)} after redemption approved"})
             else
-                fail_web({ err: "RESET_CONTENT", msg: 'Data is processing please refresh screen'})
+                fail_web({ err: "NOT_REDEEMABLE", msg: "Redemptions is #{@current_redemption.status}"})
             end
         end
         respond(status)
