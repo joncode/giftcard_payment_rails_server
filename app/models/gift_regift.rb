@@ -26,7 +26,9 @@ private
         args["cat"]      = set_cat(old_gift)
         args["giver"]    = old_gift.receiver if !args["giver"].kind_of?(User)
         args["merchant"] = old_gift.merchant
-        args["detail"]   = old_gift.detail
+        if old_gift.payable_type == 'Proto'
+            args["detail"]   = old_gift.payable.detail
+        end
         if old_gift.value_cents == old_gift.balance
             args["value"] = old_gift.value
             args['balance'] = old_gift.balance
