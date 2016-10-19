@@ -28,15 +28,11 @@ private
         args["merchant"] = old_gift.merchant
         if old_gift.payable_type == 'Proto'
             args["detail"]   = old_gift.payable.detail
-        end
-        if old_gift.value_cents == old_gift.balance
-            args["value"] = old_gift.value
-            args['balance'] = old_gift.balance
         else
-            args["value"] = (old_gift.balance.to_f/100).to_s
-            args['balance'] = old_gift.balance
             args['detail'] = nil
         end
+        args["value"] = (old_gift.balance.to_f/100).to_s
+        args['balance'] = old_gift.balance
         args["cost"]     = old_gift.cost if old_gift.cost
         args["shoppingCart"] = old_gift.shoppingCart
         args["pay_stat"]   = old_gift.pay_stat
