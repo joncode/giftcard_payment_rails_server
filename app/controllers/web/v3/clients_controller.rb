@@ -29,57 +29,69 @@ class Web::V3::ClientsController < MetalCorsController
 	def create
 		hsh = client_create_params
 
-		ref = hsh[:ref]
-		slug1 = hsh[:slug1]
-		slug2 = hsh[:slug2]
-		ary_of_slugs = [ ref, slug1, slug2 ]
-		ary_of_slugs = ary_of_slugs.map { |a| remove_unwanted_url_parts(a) }
-		ary_of_slugs.compact!
+        if hsh[:slug2].blank? && !hsh[:slug1].blank?
+            	# get the client with slug 1 as url_name
+        	client = ClientUrlMatcher.get_client(hsh[:slug1.to_s)
+        end
 
-		if ary_of_slugs.length == 0
-			# no data for client
-			clients = ["No arrays of slugs", "no data"]
-			fail_web({ err: "INVALID_INPUT", msg: "No Data"})
-		else
-			clients = Client.find_with_url ary_of_slugs
-			client = nil
+        if client.nil?
+			ref = hsh[:ref]
+			slug1 = hsh[:slug1]
+			slug2 = hsh[:slug2]
+			ary_of_slugs = [ ref, slug1, slug2 ]
+			ary_of_slugs = ary_of_slugs.map { |a| remove_unwanted_url_parts(a) }
+			ary_of_slugs.compact!
 
-			if clients.length == 1
-				client = clients[0]
-			elsif clients.length == 0
-				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
-			else # clients.length > 1 menu widget and golf advisor widget
-				val = nil
-				ary_of_slugs.each do |sl|
-					next if sl.nil?
-					if sl.match(/_menu_ga/)
-						# golf advisor slug
-						val = sl
-						break
-					elsif sl.match(/_gnow/)
-						# golf now slug
-						val = sl
-						break
-					elsif sl.match(/_menu/)
-						#standard menu widget
-						val = sl
-						break
+			if ary_of_slugs.length == 0
+				# no data for client
+				clients = ["No arrays of slugs", "no data"]
+				fail_web({ err: "INVALID_INPUT", msg: "No Data"})
+			else
+				clients = Client.find_with_url ary_of_slugs
+				client = nil
+
+				if clients.length == 1
+					client = clients[0]
+				elsif clients.length == 0
+					fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
+				else # clients.length > 1 menu widget and golf advisor widget
+					val = nil
+					ary_of_slugs.each do |sl|
+						next if sl.nil?
+						if sl.match(/_menu_ga/)
+							# golf advisor slug
+							val = sl
+							break
+						elsif sl.match(/_gnow/)
+							# golf now slug
+							val = sl
+							break
+						elsif sl.match(/_menu/)
+							#standard menu widget
+							val = sl
+							break
+						end
+					end
+					if val
+						client = clients.where("url_name = '#{val}'").first
+					elsif client = clients.where("download_url ilike '%#{ref}%'").first
+						# menu widget
+					else
+						fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
 					end
 				end
-				if val
-					client = clients.where("url_name = '#{val}'").first
-				elsif client = clients.where("download_url ilike '%#{ref}%'").first
-					# menu widget
-				else
-					fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
-				end
-			end
-			if client
-				client.click
-				success client
 			end
 		end
-		email_developers(clients, ary_of_slugs) unless client
+
+
+		if client
+			client.click
+			success client
+			Resque.enqueue(DittoJob, 'clients#create', 200, hsh, client.id, client.class.to_s)
+		else
+			# email_developers(clients, ary_of_slugs)
+			Resque.enqueue(DittoJob, 'clients#create', 422, hsh)
+		end
 		respond
 	end
 
