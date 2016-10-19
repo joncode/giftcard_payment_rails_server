@@ -203,7 +203,12 @@ class Gift < ActiveRecord::Base
     end
 
     def original_value
-        @original_value ||= currency_to_cents(calculate_value(self.shoppingCart).to_s)
+        return @original_value if @original_value.present?
+        if self.payable_type == "Gift"
+            @original_value = self.parent.balance
+        else
+            @original_value = currency_to_cents(calculate_value(self.shoppingCart).to_s)
+        end
     end
 
     def total
@@ -387,7 +392,12 @@ class Gift < ActiveRecord::Base
 
 	def parent
         if self.payable_type == 'Gift'
-            self.payable
+            g = self.payable
+            if g.nil?
+                Gift.unscoped.where(id: self.payable_id).first
+            else
+                g
+            end
         else
             nil
         end

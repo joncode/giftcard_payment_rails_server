@@ -69,6 +69,7 @@ class Redemption < ActiveRecord::Base
 		return nil unless ['expired', 'cancel', 'failed'].include?(cancel_type)
 		self.status = cancel_type
 		self.response = response
+		self.gift_next_value = self.gift_prev_value
 		if save
 			gift = self.gift
 			if gift
