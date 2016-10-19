@@ -8,6 +8,7 @@ class Web::V3::ClientsController < MetalCorsController
 		if client # && client.active
 			# success serialize
 			client.click
+			Resque.enqueue(DittoJob, 'clients#index', 200, params, client.id, client.class.to_s)
 			success client
 		# elsif client && !client.active
 		# 	# return deactivated client message
@@ -15,13 +16,10 @@ class Web::V3::ClientsController < MetalCorsController
 		else
 			# client does not exist
 			# client = match_client_to_url(slug)
-			email_developers(client, slug)
-			if client.kind_of?(Client) && client.active
-				client.click
-				success client
-			else
-				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
-			end
+			# email_developers(client, slug)
+			Resque.enqueue(DittoJob, 'clients#index', 422, params)
+			fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
+
 		end
 		respond
 	end
