@@ -40,26 +40,26 @@ class Web::V3::DevicesController < MetalCorsController
                 receipt_image_url: DEFAULT_RECEIPT_IMG_URL
             },
             redemption_policies: [
-               {
-                   header: "Redemption Policy",
-                   items: [
-                       "The gift amount may be partially redeemed or used all at once.",
-                       "Unused portions of this gift cannot be exchanged for cash."
-                   ]
-               },
-               {
-                   header: "How To Redeem",
-                   items: [
-                       "The gift is a form of payment, it does not need to be presented prior to ordering. Think of it as a credit or gift card.",
-                       "This gift does not guarantee you a reservation or the ability to order.",
-                       "If you are under age or do not have proper ID, you may be refused service.",
-                       "At checkout inform the cashier or server that you have ItsOnMe for all or part of your bill."
-                   ]
-               },
-               {
-                   footer: "Don’t Forget to Tip!"
-               }
-            ],
+                   {
+                       header: "Redemption Policy",
+                       items: [
+                           "The gift amount may be partially redeemed or used all at once.",
+                           "Unused portions of this gift cannot be exchanged for cash."
+                       ]
+                   },
+                   {
+                       header: "How To Redeem",
+                       items: [
+                           "The gift is a form of payment, it does not need to be presented prior to ordering. Think of it as a credit or gift card.",
+                           "This gift does not guarantee you a reservation or the ability to order.",
+                           "If you are under age or do not have proper ID, you may be refused service.",
+                           "At checkout inform the cashier or server that you have ItsOnMe for all or part of your bill."
+                       ]
+                   },
+                   {
+                       footer: "Don’t Forget to Tip!"
+                   }
+                ],
             ccy: CCY,
             service_percent: 0.05
         }
