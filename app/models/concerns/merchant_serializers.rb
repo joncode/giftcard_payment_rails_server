@@ -53,6 +53,7 @@ module MerchantSerializers
 		hsh['CoursePostalCode'] = self.zip
 		hsh['CourseLatitude'] = self.latitude
 		hsh['CourseLongitude'] = self.longitude
+		hsh['GolfNowFacilityID'] = self.building_id if self.building_id
 		return hsh
 	end
 
