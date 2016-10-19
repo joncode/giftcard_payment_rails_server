@@ -32,9 +32,11 @@ class OpsGolfnow
 			else
 				puts "matched items #{ms.length.to_s}"
 			end
+			ms.each { |m| puts m.name }
 			ms.each do |m|
 				if m.building_id
 					if h['id'] == m.building_id
+						puts "MATCHED"
 						break
 					else
 						next
@@ -59,7 +61,7 @@ class OpsGolfnow
 						if (mat || hn == mn) && ms.length == 1
 							puts "--------- ADDING #{m.name} -------------"
 							m.update building_id: h['id'].to_i
-							@auto_add << { h: h, m: m, d: "VERYCLOSE|#{mat}|#{hn == mn}", ms: ms.length }
+							@auto_add << { h: h, m: { id: m.id, name: m.name }, d: "VERYCLOSE|#{mat}|#{hn == mn}", ms: ms.length }
 							next
 						end
 					else
@@ -76,13 +78,13 @@ class OpsGolfnow
 							if (mat || hn.downcase == mn.downcase) && ms.length == 1
 								puts "--------- ADDING #{m.name} -------------"
 								m.update building_id: h['id'].to_i
-								@auto_add << { h: h, m: m, d: distance, ms: ms.length }
+								@auto_add << { h: h, m: { id: m.id, name: m.name }, d: distance, ms: ms.length }
 								next
 							end
 						end
 						if (close_lat * 69) > 20 || (close_long * 69) > 20
 							puts "--------- AUTO SKIP #{h['name']} #{m.name} -------------"
-							@auto_skip << { h: h, m: m, d: distance }
+							@auto_skip << { h: h, m: { id: m.id, name: m.name }, d: distance, ms: ms.length  }
 							next
 						end
 					end
@@ -101,7 +103,7 @@ class OpsGolfnow
 				res.chomp!
 				if res == 'y'
 					m.update building_id: h['id'].to_i
-					@user_add << { h: h, m: m, d: distance, ms: ms.length }
+					@user_add << { h: h, m: { id: m.id, name: m.name }, d: distance, ms: ms.length }
 				end
 			end
 		end
