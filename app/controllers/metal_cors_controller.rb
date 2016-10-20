@@ -50,7 +50,7 @@ protected
                 @current_partner = @current_client.partner
             end
         else
-            puts "500 Internal - authenticate_client TRAINING WHEELS"
+            puts "No 'HTTP_X_APPLICATION_KEY' - authenticate_client TRAINING WHEELS"
             @current_client = Client.find(1)
             @current_partner = @current_client.partner
         end
