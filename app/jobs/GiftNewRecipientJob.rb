@@ -58,9 +58,9 @@ class GiftNewRecipientJob
 				# set schedule_at
 			if sched_date.present?
 				gift.scheduled_at = sched_date
-				gift.status = 'schedule'
 			end
 
+            gift.set_status
 	        if gift.save
 				# send new gift receiver email/sms notifications if not scheduled
 	            GiftNotificationJob.perform('receiver', gift.id) if gift.status != 'schedule'
