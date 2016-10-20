@@ -238,10 +238,9 @@ class OpsZapper
 		@check_value = resp['OriginalBillAmount'].to_i
 		@extra_value = resp['RequiredAmount'].to_i
 
-		if resp['VoucherAmount'].to_i > @check_value
+		@applied_value = resp['VoucherAmount'].to_i
+		if @applied_value > @check_value
 			@applied_value = @check_value
-		else
-			@applied_value = resp['VoucherAmount'].to_i
 		end
 
 		pay_stat =resp['PaymentStatusId'].to_i
