@@ -236,17 +236,21 @@ class OpsZapper
 		@ticket_id = resp['ZapperId']
 		@err_desc = resp["ErrorDescription"]
 		@check_value = resp['OriginalBillAmount'].to_i
+		@extra_value = resp['RequiredAmount'].to_i
+
+		if resp['VoucherAmount'].to_i > @check_value
+			@applied_value = @check_value
+		else
+			@applied_value = resp['VoucherAmount'].to_i
+		end
+
 		pay_stat =resp['PaymentStatusId'].to_i
-
-
 		if !@err_desc.blank? || pay_stat != 1
 			@code = 402
 			@applied_value = 0
 			@extra_value = @value
 			@err_desc = "Error Processing QR Code" if @err_desc.blank?
 		else
-			@applied_value = resp['VoucherAmount'].to_i
-			@extra_value = resp['RequiredAmount'].to_i
 			@code = (@extra_value > 0) ? 206 : 200
 		end
 		set_extra_gift

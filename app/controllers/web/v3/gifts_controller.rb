@@ -472,7 +472,7 @@ private
                     fail_web({ err: resp["response_code"], msg: resp["response_text"]})
                 end
             elsif @current_redemption.status == 'pending'
-                fail_web({ err: "RESET_CONTENT", msg: "Redemption is processing, gift value will set to #{display_money(cents: @current_redemption.gift_next_value, ccy: @current_redemption.ccy)} after redemption approved"})
+                fail_web({ err: "RESET_CONTENT", msg: "Redemption is processing, gift value will update after redemption is approved"})
             else
                 fail_web({ err: "NOT_REDEEMABLE", msg: "Redemptions is #{@current_redemption.status}"})
             end
