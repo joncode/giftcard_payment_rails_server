@@ -16,6 +16,14 @@ class Ditto < ActiveRecord::Base
 
 	class << self
 
+		def save_response response, status, notable_id=nil, notable_type=nil
+			if notable_id
+				create(response_json: response.to_json, cat: 700, status: status, notable_id: notable_id, notable_type: notable_type)
+			else
+				create(response_json: response.to_json, cat: 700, status: status)
+			end
+		end
+
 		def register_push_create(response, user_id)
 			status = parse_ua_response(response)
 			create(response_json: response.to_json, cat: 100, status: status, notable_id: user_id, notable_type: 'User')
@@ -180,6 +188,7 @@ end
 #  520 - SocialProxy  - create_post
 #  600 - Auth.net     - tokenize
 #  650 - Auth.net     - create cutomer profile
+#  700 - DittoJob sender in args
 # 1000 - POS          - Receive POS request
 # 2xxx - Scheduled Jobs
 # 2100 - Scheduled Job - pn_tokens

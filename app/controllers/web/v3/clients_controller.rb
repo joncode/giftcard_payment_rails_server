@@ -8,20 +8,11 @@ class Web::V3::ClientsController < MetalCorsController
 		if client # && client.active
 			# success serialize
 			client.click
+			Resque.enqueue(DittoJob, 'clients#index', 200, params, client.id, client.class.to_s)
 			success client
-		# elsif client && !client.active
-		# 	# return deactivated client message
-		# 	fail_web fail_web_payload("client_deactivated")
 		else
-			# client does not exist
-			# client = match_client_to_url(slug)
-			email_developers(client, slug)
-			if client.kind_of?(Client) && client.active
-				client.click
-				success client
-			else
-				fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
-			end
+			Resque.enqueue(DittoJob, 'clients#index', 422, params)
+			fail_web({ err: "INVALID_INPUT", msg: "Client could not be found"})
 		end
 		respond
 	end
@@ -29,13 +20,13 @@ class Web::V3::ClientsController < MetalCorsController
 	def create
 		hsh = client_create_params
 
-		if hsh[:slug2].blank? && !hsh[:slug1].blank?
-			# get the client with slug 1 as url_name
-			client = Client.where(url_name: hsh[:slug1].to_s.downcase).first
-		end
+        if hsh[:slug2].blank? && !hsh[:slug1].blank?
+            	# get the client with slug 1 as url_name
+        	client = ClientUrlMatcher.get_client(hsh[:slug1].to_s)
+        end
 
-		if client.nil?
-				# old legacy system
+        if client.nil?
+
 			ref = hsh[:ref]
 			slug1 = hsh[:slug1]
 			slug2 = hsh[:slug2]
@@ -87,8 +78,9 @@ class Web::V3::ClientsController < MetalCorsController
 		if client
 			client.click
 			success client
+			Resque.enqueue(DittoJob, 'clients#create', 200, hsh, client.id, client.class.to_s)
 		else
-			email_developers(clients, ary_of_slugs)
+			Resque.enqueue(DittoJob, 'clients#create', 422, hsh)
 		end
 		respond
 	end

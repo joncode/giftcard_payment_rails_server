@@ -56,7 +56,7 @@ class NewClientsWeeklySysAlert < Alert
 			if gn_str.blank? && ga_str.blank?
 				gn_str = "<li style='color:red;'>No URLs</li>"
 			end
-			email_str += "<ul style='list-style: none;'><li>Golf Course: <span>#{m.name}</span></li>\
+			email_str += "<ul style='list-style: none;'><li>Golf Course: <span>#{m.name}</span></li><li>FID-#{m.building_id}<li>\
 <li>Website: <span>#{m.website}</span></li>#{gn_str}#{ga_str}</ul><hr />"
 		end
 		email_str

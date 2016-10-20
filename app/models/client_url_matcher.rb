@@ -7,6 +7,16 @@ class ClientUrlMatcher
 
 	class << self
 
+		def get_client slug
+			ary = slug.split('-')
+			return nil if ary.length < 3
+
+			if [GOLFNOW_COM, GOLFADVISOR_COM, GOLFCOURSE_WEBSITE, GOLFFACEBOOK_TAB].include?(ary[0].to_i)
+					# matched client to channel ID
+				Client.where("url_name like '#{ary[0]}-#{ary[1]}%'").first
+			end
+		end
+
 		def gen_type client_url_name
 			type = specific_type(client_url_name)
 			type.to_s.gsub('_legacy', '').to_sym
