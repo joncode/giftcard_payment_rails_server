@@ -92,7 +92,7 @@ class OpsZapper
 			"qr_code" => strip_qr_code(qr_code),
             "gift_card_id" => gift.hex_id,
             "value" => redeem_amount,
-            "gift_current_value" => redemption.prev_gift_balance,
+            "gift_current_value" => redemption.gift_prev_value,
             "ccy" => gift.ccy,
             'customer' => customer(gift.receiver),
             'redemption_id' => redemption.id
