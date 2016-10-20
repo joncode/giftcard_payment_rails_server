@@ -5,10 +5,10 @@ if Rails.env.development?
 
 end
 
-def puts str=nil
-    @system_logger ||= Rails.logger
-    @system_logger.info(str.to_s)
-end
+# def puts str=nil
+#     @system_logger ||= Rails.logger
+#     @system_logger.info(str.to_s)
+# end
 
 
 
