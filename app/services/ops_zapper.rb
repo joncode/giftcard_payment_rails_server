@@ -95,7 +95,7 @@ class OpsZapper
             "gift_current_value" => redemption.gift_prev_value,
             "ccy" => gift.ccy,
             'customer' => customer(gift.receiver),
-            'redemption_id' => redemption.id
+            'redemption_id' => redemption.hex_id
         }
 	end
 

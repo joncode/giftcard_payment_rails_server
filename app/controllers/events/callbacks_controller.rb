@@ -24,17 +24,22 @@ class Events::CallbacksController < MetalCorsController
 
 		if ref
 			r = Redemption.find_by(hex_id: ref)
-			if r.status == 'done'
-				success({ ref: ref, status: r.status })
-			else
-				puts "found redemption #{r.id}"
-				ra = Redeem.apply(redemption: r, callback_params: params)
-				rc = Redeem.complete(redemption: ra['redemption'], pos_obj: ra['pos_obj'], gift: ra['gift'])
-			   	if rc['success']
-					success({ ref: ref, status: rc['redemption'].status  })
+			if r.nil?
+				if r.status == 'done'
+					success({ ref: ref, status: r.status })
 				else
-					fail({ ref: ref, status: r.status  })
+					puts "found redemption #{r.id}"
+					ra = Redeem.apply(redemption: r, callback_params: params)
+					rc = Redeem.complete(redemption: ra['redemption'], pos_obj: ra['pos_obj'], gift: ra['gift'])
+				   	if rc['success']
+						success({ ref: ref, status: rc['redemption'].status  })
+					else
+						fail({ ref: ref, status: r.status  })
+					end
 				end
+			else
+				puts "500 Internal - BUG ON ZAPPER ASYNC #{params.inspect}"
+				fail({ ref: ref, status: 'failed'  })
 			end
 		end
 		respond
