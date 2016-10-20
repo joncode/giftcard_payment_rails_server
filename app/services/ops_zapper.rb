@@ -238,9 +238,13 @@ class OpsZapper
 		@check_value = resp['OriginalBillAmount'].to_i
 		@extra_value = resp['RequiredAmount'].to_i
 
-		@applied_value = resp['VoucherAmount'].to_i
-		if @applied_value > @check_value
-			@applied_value = @check_value
+		if resp['RequiredAmount'].nil?
+			@applied_value = resp['VoucherAmount'].to_i
+			if @applied_value > @check_value
+				@applied_value == @check_value
+			end
+		else
+			@applied_value = @check_value - @extra_value
 		end
 
 		pay_stat =resp['PaymentStatusId'].to_i
@@ -249,6 +253,8 @@ class OpsZapper
 			@applied_value = 0
 			@extra_value = @value
 			@err_desc = "Error Processing QR Code" if @err_desc.blank?
+		elsif @applied_value == 0
+			@code = 304
 		else
 			@code = (@extra_value > 0) ? 206 : 200
 		end
@@ -273,6 +279,9 @@ class OpsZapper
 			@applied_value = 0
 			@extra_value = @value
 			@err_desc = "Error Processing QR Code" if @err_desc.blank?
+		elsif @applied_value == 0
+			@code  = 304   # already paid
+			@extra_value = 0
 		else
 			@code  = 200   # ok , full aceeptance
 			@extra_value = 0
