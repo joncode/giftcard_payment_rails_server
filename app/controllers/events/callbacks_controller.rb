@@ -24,7 +24,7 @@ class Events::CallbacksController < MetalCorsController
 
 		if ref
 			r = Redemption.find_by(hex_id: ref)
-			if r.nil?
+			if r.present?
 				if r.status == 'done'
 					success({ ref: ref, status: r.status })
 				else
