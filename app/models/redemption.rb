@@ -33,6 +33,10 @@ class Redemption < ActiveRecord::Base
 	belongs_to :gift, autosave: true
 	belongs_to :merchant
 
+	def gift
+		Gift.unscoped.find self.gift_id
+	end
+
 #   -------------
 
     def stale?
