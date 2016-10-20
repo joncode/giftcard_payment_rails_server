@@ -54,6 +54,7 @@ class GiftNewRecipientJob
 	        gift.receiver_email = args[:receiver_email] unless args[:receiver_email].blank?
 	        gift.receiver_phone = args[:receiver_phone] unless args[:receiver_phone].blank?
 
+            gift.find_receiver
 				# set schedule_at
 			if sched_date.present?
 				gift.scheduled_at = sched_date
