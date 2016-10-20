@@ -25,7 +25,7 @@ class Redemption < ActiveRecord::Base
     before_save :set_request_at
     before_save :set_response_at
 
-    after_commit :remove_token_from_gift
+    # after_commit :remove_token_from_gift
 
 #   -------------
 
