@@ -46,7 +46,7 @@ class OpsZapper
 		@gift_card_id = args['gift_card_id']
 		@value 			 = args['value'].to_i
 		@applied_value 	 = 0
-		@original_gift_value = args["gift_current_value"] || @value
+		@original_gift_value = args["gift_current_value"]
 		@extra_value     = 0
 		@extra_gift      = 0
 		@check_value 	 = 0
@@ -87,15 +87,15 @@ class OpsZapper
 		x
 	end
 
-	def self.make_request_hsh gift, qr_code, redeem_amount, redemption_id=nil
+	def self.make_request_hsh gift, qr_code, redeem_amount, redemption
 		{
 			"qr_code" => strip_qr_code(qr_code),
             "gift_card_id" => gift.hex_id,
             "value" => redeem_amount,
-            "gift_current_value" => gift.balance,
+            "gift_current_value" => redemption.prev_gift_balance,
             "ccy" => gift.ccy,
             'customer' => customer(gift.receiver),
-            'redemption_id' => redemption_id
+            'redemption_id' => redemption.id
         }
 	end
 

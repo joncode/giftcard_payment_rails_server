@@ -202,15 +202,13 @@ token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #
 
         amount = amount || self.balance
 
-        unique_id = 'rd_' + self.id.to_s + '_' + SecureRandom.hex(2)
-
-        zapper_request = OpsZapper.make_request_hsh(self, qrcode, amount, unique_id)
-
         r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'pending',
-                gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
-                req_json: zapper_request, merchant_id: merchant.id )
+                gift_prev_value: self.value_cents, gift_next_value: self.value_cents, merchant_id: merchant.id )
 
         if r.save
+            zapper_request = OpsZapper.make_request_hsh(self, qrcode, amount, r)
+            r.request = zapper_request
+            r.save
             return { 'success' => true , "redemption" => r }
         else
             return { 'success' => false , "response_code" => "SERVER_UNAVAILABLE", "response_text" => "database unavailable" }
@@ -243,13 +241,15 @@ token = nextval('gift_token_seq'), new_token_at = '#{current_time}' WHERE id = #
 
         unique_id = 'rd_' + self.id.to_s + '_' + SecureRandom.hex(2)
 
-        zapper_request = OpsZapper.make_request_hsh(self, qrcode, amount, unique_id)
 
         r = Redemption.new(gift_id: self.id, amount: amount, type_of: :zapper, status: 'pending',
-                gift_prev_value: self.value_cents, gift_next_value: self.value_cents,
-                req_json: zapper_request, merchant_id: merchant.id )
+                gift_prev_value: self.value_cents, gift_next_value: self.value_cents, merchant_id: merchant.id )
 
         if r.save
+            zapper_request = OpsZapper.make_request_hsh(self, qrcode, amount, r)
+            r.request = zapper_request
+            r.save
+
             zapper_request['redemption_id'] = 'rd_' + r.id.to_s
             zapper_obj = OpsZapper.new(zapper_request)
             resp = zapper_obj.redeem_gift

@@ -143,7 +143,7 @@ class Redeem
 	end
 
 	def self.zapper_sync_redemption(redemption, gift, qr_code, amount )
-		zapper_request = OpsZapper.make_request_hsh( gift, qr_code, amount, redemption.hex_id )
+		zapper_request = OpsZapper.make_request_hsh( gift, qr_code, amount, redemption )
 		redemption.request = zapper_request
 		redemption.save
 		zapper_obj = OpsZapper.new( zapper_request )
@@ -322,6 +322,7 @@ class Redeem
 
 		if loc_id != gift.merchant_id
 			merchant = Merchant.find(loc_id)
+			gift.merchant = merchant
 		else
 			merchant = gift.merchant
 		end
@@ -348,7 +349,7 @@ class Redeem
 		# 		"response_text" => "#{merchant.name} is not currently live" }
 		# end
 
-		gift.merchant_id = loc_id
+
 		  # -------------
 
 
